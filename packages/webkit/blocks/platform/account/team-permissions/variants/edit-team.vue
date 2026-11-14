@@ -1,12 +1,15 @@
 <script setup lang="ts">
   import Alert from '@aziontech/webkit/alert'
   import Avatar from '@aziontech/webkit/avatar'
+  import Brand from '@aziontech/webkit/brand'
+  import Breadcrumb from '@aziontech/webkit/breadcrumb-root'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import Checkbox from '@aziontech/webkit/checkbox'
   import Combobox from '@aziontech/webkit/combobox'
   import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
   import Field from '@aziontech/webkit/field'
+  import GlobalHeader from '@aziontech/webkit/global-header'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
   import PageHeader from '@aziontech/webkit/page-header'
@@ -29,6 +32,11 @@
     label: string
     resources: PermissionResource[]
   }
+
+  const breadcrumb = [
+    { label: 'Teams and permissions', href: '/account/teams' },
+    { label: 'Edit Team' }
+  ]
 
   const groups: PermissionGroup[] = [
     {
@@ -237,8 +245,49 @@
 </script>
 
 <template>
-  <div class="flex flex-1 flex-col">
-    <div class="flex flex-1 flex-col">
+  <div class="flex h-dvh flex-col bg-(--bg-canvas)">
+    <GlobalHeader aria-label="Console">
+      <GlobalHeader.Left>
+        <IconButton
+          icon="pi pi-chevron-left"
+          aria-label="Back to Teams and permissions"
+          kind="outlined"
+          size="small"
+          href="/account/teams"
+        />
+        <GlobalHeader.Brand>
+          <a
+            href="/home"
+            aria-label="Azion home"
+            class="inline-flex shrink-0 items-center self-center rounded-(--shape-elements) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
+          >
+            <Brand
+              kind="default"
+              size="small"
+            />
+          </a>
+        </GlobalHeader.Brand>
+        <Breadcrumb :items="breadcrumb" />
+      </GlobalHeader.Left>
+      <GlobalHeader.Middle />
+      <GlobalHeader.Right>
+        <button
+          type="button"
+          aria-label="Account settings"
+          class="rounded-full transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
+        >
+          <Avatar
+            label="name@example.com"
+            size="medium"
+            kind="square"
+          />
+        </button>
+      </GlobalHeader.Right>
+    </GlobalHeader>
+
+    <main
+      class="animate-page-enter motion-reduce:animate-none flex min-h-0 flex-1 flex-col overflow-auto"
+    >
       <form
         class="flex min-h-0 flex-1 flex-col"
         aria-labelledby="edit-team-title"
@@ -605,7 +654,7 @@
           </template>
         </SaveBar>
       </form>
-    </div>
+    </main>
 
     <ConfirmDialog
       v-model:open="deleteOpen"
