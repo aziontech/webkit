@@ -19,7 +19,7 @@ The card a create flow hands its column to once the user has pressed Deploy. The
 
 ### A. Deployment card — `Card` (required)
 
-`Card :padded="false"` at the full width of the flow's column. The header names the run in one word, Deployment, or Provisioning when the flow provisions rather than deploys. The content opens on the cloning splash: the source and the destination glyphs, then one line naming the repository and the scope it is cloned into. Once the first step starts, the content becomes the pipeline: a Logs row with the step count, one `Accordion` item per step with its status glyph, its time and its own `LogView`, and a flush `Progress` on the bottom edge while the run goes. Only the step in flight is open; finished steps collapse.
+`Card :padded="false"` at the full width of the flow's column. The header names the run in one word, Deployment, or Provisioning when the flow provisions rather than deploys. The content opens on the cloning splash, which fades in: a small source tile (the Git provider glyph), a dashed connector whose dashes march toward the destination (`animate-flow-dash`, still under `motion-reduce`) and a large destination tile, with one polite live line for screen readers naming the repository and the scope it is cloned into. The splash fades out as the first step starts. Once the first step starts, the content becomes the pipeline: a Logs row with the step count, one `Accordion` item per step with its status glyph, its time and its own `LogView`, and a flush `Progress` on the bottom edge while the run goes. Only the step in flight is open; finished steps collapse.
 
 ### B. Run status — `StatusIndicator` (required)
 
@@ -45,7 +45,7 @@ Sits in the card header, opposite the title. While the run goes it is a loading 
 
 - **Card title:** one noun naming the run, e.g. "Deployment" or "Provisioning".
 - **Run status:** the progressive form of the verb with `…` only while in progress, e.g. "Building…" in prose, "Building" as an indicator label.
-- **Splash line:** fragments naming source and destination, e.g. "Cloning acme/web-app to acme".
+- **Splash line:** the screen-reader line names source and destination in fragments, e.g. "Cloning acme/web-app to acme".
 - **Outcome tag:** one or two words stating the result, e.g. "Completed", "Failed".
 - **Pending steps:** say they have not started, e.g. "Waiting to start…".
 - **Errors:** the log output says what failed; the step title names the step in sentence case, e.g. "Routing rules".
@@ -55,13 +55,13 @@ Sits in the card header, opposite the title. While the run goes it is a loading 
 
 - The status label is text, not only a colour or a spinner; screen readers hear Building, then the outcome.
 - The progress bar has an accessible name, e.g. "Deployment progress", and the logs region an `aria-label`.
-- Decorative glyphs in the splash and in step rows carry `aria-hidden="true"`; the status of each step is also given in words.
+- The splash tiles and connector are one `aria-hidden` group; its meaning is the visually hidden live line. Decorative glyphs in the splash and in step rows carry `aria-hidden="true"`; the status of each step is also given in words.
 - Step headers are keyboard-operable accordion triggers; opening a step does not move focus.
 - New log lines do not steal focus or announce one by one; the step change and the outcome are what is announced.
 
 ## States
 
-- Initial: Deploy was just pressed; the cloning splash with a Building indicator, before the first step starts.
+- Initial: Deploy was just pressed; the cloning splash (source tile, marching connector, destination tile) with a Building indicator, before the first step starts.
 - Running: two steps done with their times, the current step spinning and open on its lines, the step count shown and the progress bar on the bottom edge.
 - Finished: every step checked and collapsed, a Completed tag, the progress bar retired, just before the success screen.
 - Failed: the failing step open on its error output with a Failed tag, the later steps Skipped, and the Phased or Complete switch in the header.

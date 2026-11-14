@@ -18,66 +18,51 @@
     </template>
 
     <template #content>
-      <div
-        class="flex min-h-(--size-96) flex-col items-center justify-center gap-(--spacing-xl) p-(--spacing-lg)"
+      <Transition
+        appear
+        enter-active-class="animate-fade-in motion-reduce:animate-none"
+        leave-active-class="animate-fade-out motion-reduce:animate-none"
       >
-        <div
-          class="w-(--size-64) overflow-hidden rounded-(--shape-card) border border-(--primary) bg-(--bg-surface)"
-        >
-          <div class="flex items-center gap-(--spacing-xxs) border-b border-(--border-default)">
-            <span class="size-2 rounded-full bg-(--danger)" />
-            <span class="size-2 rounded-full bg-(--warning)" />
-            <span class="size-2 rounded-full bg-(--success)" />
-          </div>
-          <div class="flex flex-col gap-(--spacing-sm) p-(--spacing-md)">
-            <div class="h-3 w-3/4 rounded-(--shape-flat) bg-(--bg-surface-raised)" />
-            <div class="flex items-center justify-center gap-(--spacing-lg) py-(--spacing-sm)">
-              <span
-                class="flex size-12 items-center justify-center rounded-(--shape-elements) border border-(--border-default) bg-(--bg-canvas) text-(--text-default)"
-              >
-                <i
-                  class="ai ai-github text-body-lg"
-                  aria-hidden="true"
-                />
-              </span>
-              <span
-                class="flex size-12 items-center justify-center rounded-(--shape-elements) border border-(--border-selected) bg-(--bg-canvas) text-(--primary)"
-              >
-                <i
-                  class="pi pi-server text-body-lg"
-                  aria-hidden="true"
-                />
-              </span>
-            </div>
-            <div class="h-3 w-3/4 rounded-(--shape-flat) bg-(--bg-surface-raised)" />
+        <div class="flex h-60 items-center justify-center p-(--spacing-lg)">
+          <p
+            class="sr-only"
+            aria-live="polite"
+          >
+            Cloning acme/web-app to acme
+          </p>
+          <div
+            class="flex items-center"
+            aria-hidden="true"
+          >
+            <span
+              class="flex size-10 shrink-0 items-center justify-center rounded-(--shape-card) border border-(--border-default) bg-(--bg-canvas) text-(--text-default)"
+            >
+              <i class="ai ai-github text-body-lg leading-none" />
+            </span>
+            <svg
+              class="h-0.5 w-20 shrink-0 text-(--primary)"
+              viewBox="0 0 80 2"
+              preserveAspectRatio="none"
+            >
+              <line
+                x1="0"
+                y1="1"
+                x2="80"
+                y2="1"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-dasharray="2 4"
+                class="animate-flow-dash motion-reduce:animate-none"
+              />
+            </svg>
+            <span
+              class="flex size-20 shrink-0 items-center justify-center rounded-(--shape-card) border border-(--border-default) bg-(--bg-canvas) text-(--primary)"
+            >
+              <i class="ai ai-azion text-heading-lg leading-none" />
+            </span>
           </div>
         </div>
-
-        <div
-          class="flex max-w-(--container-lg) flex-wrap items-center justify-center gap-(--spacing-xs) text-label-sm text-(--text-default)"
-        >
-          <span>Cloning</span>
-          <span
-            class="inline-flex items-center gap-(--spacing-xs) rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface-raised) px-(--spacing-xs) py-(--spacing-xxs)"
-          >
-            <i
-              class="ai ai-github text-[length:inherit] leading-none"
-              aria-hidden="true"
-            />
-            acme/web-app
-          </span>
-          <span class="text-(--text-muted)">to</span>
-          <span
-            class="inline-flex items-center gap-(--spacing-xs) rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface-raised) px-(--spacing-xs) py-(--spacing-xxs)"
-          >
-            <i
-              class="ai ai-github text-[length:inherit] leading-none"
-              aria-hidden="true"
-            />
-            acme
-          </span>
-        </div>
-      </div>
+      </Transition>
     </template>
   </Card>
 </template>
