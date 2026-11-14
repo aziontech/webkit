@@ -1,6 +1,5 @@
 <script setup lang="ts">
-  import { useEventListener } from '@vueuse/core'
-  import { computed, onScopeDispose, useAttrs, useId } from 'vue'
+  import { computed, onMounted, onScopeDispose, useAttrs, useId } from 'vue'
 
   import { useTranslate } from '../../../composables/use-locale/use-translate'
   import * as en from '../../../i18n/messages/en'
@@ -72,8 +71,9 @@
     })
   }
 
-  useEventListener(globalThis.window, 'hashchange', onHashChange)
+  onMounted(() => window.addEventListener('hashchange', onHashChange))
   onScopeDispose(() => {
+    if (typeof window !== 'undefined') window.removeEventListener('hashchange', onHashChange)
     if (frame !== null) cancelAnimationFrame(frame)
   })
 </script>
