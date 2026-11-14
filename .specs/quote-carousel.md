@@ -3,13 +3,13 @@ name: quote-carousel
 category: marketing
 structure: monolithic
 status: implemented
-spec_version: 1
+spec_version: 2
 figma:
   url: https://www.figma.com/design/QEbHSTFDWfh4VHkBp6NWN3/Azion.com?node-id=13136-296065
   node_id: 13136:296065
-checksum: 74029185db5aeda3454b45cfe4675e3e5575d36aa128b056e62c05830c25d584
+checksum: 906064601e76f6ac4a1ee9019e956bc30b6d695317e9bb0b9c68a2b03cd2242b
 created: 2026-09-24
-last_updated: 2026-11-09
+last_updated: 2026-11-14
 ---
 
 # QuoteCarousel — Component Spec
@@ -57,23 +57,23 @@ The cards sit edge to edge with no gutter — each draws its own hairline and th
 
 ```vue
 <script setup>
-import QuoteCarousel from '@aziontech/webkit/quote-carousel'
-import SectionTitle from '@aziontech/webkit/section-title'
+  import QuoteCarousel from '@aziontech/webkit/quote-carousel'
+  import SectionTitle from '@aziontech/webkit/section-title'
 
-const testimonials = [
-  {
-    text: 'With Azion, we scale proprietary AI models without managing infrastructure — inspecting millions of websites daily and automating the fastest threat takedown in the market.',
-    name: 'Fabio Ramos',
-    jobTitle: 'CEO',
-    mark: 'axur'
-  },
-  {
-    text: 'Azion keeps our filing season stable at a scale our own infrastructure never held, and we ship changes to the edge in minutes.',
-    name: 'Vitor Torres',
-    jobTitle: 'CEO',
-    mark: 'contabilizei'
-  }
-]
+  const testimonials = [
+    {
+      text: 'With Azion, we scale proprietary AI models without managing infrastructure — inspecting millions of websites daily and automating the fastest threat takedown in the market.',
+      name: 'Fabio Ramos',
+      jobTitle: 'CEO',
+      mark: 'axur'
+    },
+    {
+      text: 'Azion keeps our filing season stable at a scale our own infrastructure never held, and we ship changes to the edge in minutes.',
+      name: 'Vitor Torres',
+      jobTitle: 'CEO',
+      mark: 'contabilizei'
+    }
+  ]
 </script>
 
 <template>
@@ -91,10 +91,10 @@ const testimonials = [
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `items` | `QuoteCarouselItem[]` | `[]` | false | The testimonials rendered as cards, in order; each item is `{ text, name?, jobTitle?, photo?, mark? }` — the quotation, who said it, the rest of the attribution, their likeness and the registry name of the company's mark. |
-| `ariaLabel` | `string` | `''` | false | Accessible name for the scrollable row of testimonials, announced before its contents. |
+| Prop        | Type                  | Default | Required | JSDoc                                                                                                                                                                                                                                                                                                                                                                                  |
+| ----------- | --------------------- | ------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `items`     | `QuoteCarouselItem[]` | `[]`    | false    | The testimonials rendered as cards, in order; each item is `{ text, name?, jobTitle?, photo?, logo?, logoAlt?, mark? }` — the quotation, who said it, the rest of the attribution, their likeness, the URL of the company's logo (wins over `mark`) with its alternative text, and the registry name of the company's mark. The same `logo` / `mark` pair as `quote` and `quote-tabs`. |
+| `ariaLabel` | `string`              | `''`    | false    | Accessible name for the scrollable row of testimonials, announced before its contents.                                                                                                                                                                                                                                                                                                 |
 
 ## Events
 
@@ -115,25 +115,25 @@ const testimonials = [
 ## Motion & Animations
 
 | Trigger | Animation / Transition | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback |
-|---|---|---|---|
-| _none_ | — | — | — |
+| ------- | ---------------------- | ------------------------------------------------- | ----------------------- |
+| _none_  | —                      | —                                                 | —                       |
 
 <!-- The band adds no motion of its own. The track's smooth scrolling and its
      `motion-reduce:scroll-auto` fallback belong to `carousel`, and are declared there. -->
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| card surface, border, padding | inherited from `carousel`'s `Carousel.Item` |
-| card header gap (likeness to mark) | `var(--spacing-md)` |
-| mark ink | `var(--text-default)` |
+| Region                             | Token (DESIGN.md)                           |
+| ---------------------------------- | ------------------------------------------- |
+| card surface, border, padding      | inherited from `carousel`'s `Carousel.Item` |
+| card header gap (likeness to mark) | `var(--spacing-md)`                         |
+| mark ink                           | `var(--text-default)`                       |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 
