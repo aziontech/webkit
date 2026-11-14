@@ -1,18 +1,29 @@
 <script setup lang="ts">
   import Chart, { type ChartSeries } from '@aziontech/webkit/chart'
   import ChartCard from '@aziontech/webkit/chart-card'
+  import Dialog from '@aziontech/webkit/dialog'
+  import DialogClose from '@aziontech/webkit/dialog-close'
+  import DialogContent from '@aziontech/webkit/dialog-content'
+  import DialogDescription from '@aziontech/webkit/dialog-description'
+  import DialogOverlay from '@aziontech/webkit/dialog-overlay'
+  import DialogPortal from '@aziontech/webkit/dialog-portal'
+  import DialogTitle from '@aziontech/webkit/dialog-title'
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
   import EmptyState from '@aziontech/webkit/empty-state'
   import Hint from '@aziontech/webkit/hint'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
   import PageHeader from '@aziontech/webkit/page-header'
+  import PanelContent from '@aziontech/webkit/panel-content'
+  import PanelHeader from '@aziontech/webkit/panel-header'
   import StatTile from '@aziontech/webkit/stat-tile'
   import TableRoot, { type TableColumn } from '@aziontech/webkit/table-root'
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
+  import { toast } from '@aziontech/webkit/toast'
   import ToggleGroup, { type ToggleGroupOption } from '@aziontech/webkit/toggle-group'
   import Tooltip from '@aziontech/webkit/tooltip'
-  import { ref } from 'vue'
+  import { type CsvColumn, downloadCsv, toCsv } from '@aziontech/webkit/utils/csv'
+  import { computed, ref } from 'vue'
 
   type FigureFormat = 'count' | 'bytes' | 'percentage'
 
@@ -178,6 +189,153 @@
   const statusForm = ref('line')
   const activeIndex = ref<number | null>(null)
   const search = ref('')
+
+  interface CardQuery {
+    dataset: string
+    fields: string[]
+    orderBy: string
+  }
+
+  const periodStart = '2026-11-13T11:00:00Z'
+  const periodEnd = '2026-11-14T10:59:59Z'
+
+  const cardQuery = (report: CardQuery) =>
+    [
+      'query {',
+      `  ${report.dataset}(`,
+      '    limit: 5000',
+      '    aggregate: { sum: requests }',
+      `    filter: { tsRange: { begin: "${periodStart}", end: "${periodEnd}" } }`,
+      `    orderBy: [${report.orderBy}]`,
+      '  ) {',
+      ...report.fields.map((field) => `    ${field}`),
+      '  }',
+      '}'
+    ].join('\n')
+
+  const copyQuery = async (report: CardQuery) => {
+    try {
+      await globalThis.navigator.clipboard.writeText(cardQuery(report))
+      toast.success('Query copied.', {
+        description: 'Paste it into any GraphQL client that sends your token.'
+      })
+    } catch {
+      toast.error('The query could not be copied.')
+    }
+  }
+
+  type CardId = 'requests' | 'status-codes' | 'countries' | 'hosts'
+
+  const queries: Record<CardId, CardQuery> = {
+    requests: { dataset: 'httpMetrics', fields: ['ts', 'requests'], orderBy: 'ts_ASC' },
+    'status-codes': {
+      dataset: 'httpMetrics',
+      fields: ['ts', 'status', 'requests'],
+      orderBy: 'ts_ASC'
+    },
+    countries: {
+      dataset: 'httpMetrics',
+      fields: ['country', 'requests'],
+      orderBy: 'requests_DESC'
+    },
+    hosts: {
+      dataset: 'httpMetrics',
+      fields: ['host', 'service', 'requests'],
+      orderBy: 'requests_DESC'
+    }
+  }
+
+  interface CardReport extends CardQuery {
+    label: string
+    description: string
+    columns: CsvColumn[]
+    rows: () => object[]
+  }
+
+  const seriesRows = (series: readonly ChartSeries[], axis: readonly (string | Date)[]) =>
+    axis.map((label, index) => ({
+      ts: label instanceof Date ? label.toISOString() : label,
+      ...Object.fromEntries(series.map((entry) => [entry.id, entry.values[index] ?? '']))
+    }))
+
+  const expanded = ref(false)
+  const expandedId = ref<CardId>('requests')
+  const expandedReport = computed(() => reports[expandedId.value])
+
+  const openExpanded = (id: CardId) => {
+    expandedId.value = id
+    expanded.value = true
+  }
+
+  const onCardOption = (id: CardId, value: string | number) => {
+    const report = reports[id]
+    if (value === 'query') {
+      copyQuery(report)
+      return
+    }
+    const filename = `${id}-last-24-hours.csv`
+    downloadCsv(filename, toCsv({ columns: report.columns, rows: report.rows() }))
+    toast.success('CSV exported.', { description: filename })
+  }
+
+  const reports: Record<CardId, CardReport> = {
+    requests: {
+      ...queries.requests,
+      label: 'Requests over time',
+      description: 'Sum of requests served by every service, per interval.',
+      columns: [
+        { id: 'ts', header: 'Time' },
+        { id: 'requests', header: 'Requests' }
+      ],
+      rows: () => seriesRows(requests, labels)
+    },
+    'status-codes': {
+      ...queries['status-codes'],
+      label: 'Status codes',
+      description: 'Sum of requests per status class. Switch to Bar to stack the classes.',
+      columns: [
+        { id: 'ts', header: 'Time' },
+        { id: '2xx', header: 'Status 2xx' },
+        { id: '3xx', header: 'Status 3xx' },
+        { id: '4xx', header: 'Status 4xx' },
+        { id: '5xx', header: 'Status 5xx' }
+      ],
+      rows: () => seriesRows(statusCodes, labels)
+    },
+    countries: {
+      ...queries.countries,
+      label: 'Requests by country',
+      description: 'Sum of requests per country of origin, top countries first.',
+      columns: [
+        { id: 'country', header: 'Country' },
+        { id: 'requests', header: 'Requests' }
+      ],
+      rows: () =>
+        countries.map((country, index) => ({
+          country,
+          requests: countryRequests[0]?.values[index] ?? ''
+        }))
+    },
+    hosts: {
+      ...queries.hosts,
+      label: 'Top hosts',
+      description: 'Hosts that served the most requests in the period, with their service.',
+      columns: [
+        { id: 'host', header: 'Host' },
+        { id: 'service', header: 'Service' },
+        { id: 'requests', header: 'Requests' }
+      ],
+      rows: () => hosts
+    }
+  }
+
+  const expandedForm = computed({
+    get: () => (expandedId.value === 'status-codes' ? statusForm.value : requestsForm.value),
+    set: (value: string) => {
+      if (expandedId.value === 'status-codes') statusForm.value = value
+      else requestsForm.value = value
+    }
+  })
 </script>
 
 <template>
@@ -250,9 +408,13 @@
                   kind="transparent"
                   size="small"
                   aria-label="Expand Requests over time"
+                  @click="openExpanded('requests')"
                 />
               </Tooltip>
-              <DropdownMenu placement="bottom-end">
+              <DropdownMenu
+                placement="bottom-end"
+                @select="(_event, value) => onCardOption('requests', value)"
+              >
                 <DropdownMenu.Trigger>
                   <IconButton
                     icon="pi pi-ellipsis-h"
@@ -269,6 +431,7 @@
                   <DropdownMenu.Option
                     value="export"
                     label="Export CSV"
+                    disabled
                   />
                 </DropdownMenu.Group>
               </DropdownMenu>
@@ -332,9 +495,13 @@
                   kind="transparent"
                   size="small"
                   aria-label="Expand Status codes"
+                  @click="openExpanded('status-codes')"
                 />
               </Tooltip>
-              <DropdownMenu placement="bottom-end">
+              <DropdownMenu
+                placement="bottom-end"
+                @select="(_event, value) => onCardOption('status-codes', value)"
+              >
                 <DropdownMenu.Trigger>
                   <IconButton
                     icon="pi pi-ellipsis-h"
@@ -351,6 +518,7 @@
                   <DropdownMenu.Option
                     value="export"
                     label="Export CSV"
+                    disabled
                   />
                 </DropdownMenu.Group>
               </DropdownMenu>
@@ -404,9 +572,13 @@
                   kind="transparent"
                   size="small"
                   aria-label="Expand Requests by country"
+                  @click="openExpanded('countries')"
                 />
               </Tooltip>
-              <DropdownMenu placement="bottom-end">
+              <DropdownMenu
+                placement="bottom-end"
+                @select="(_event, value) => onCardOption('countries', value)"
+              >
                 <DropdownMenu.Trigger>
                   <IconButton
                     icon="pi pi-ellipsis-h"
@@ -423,6 +595,7 @@
                   <DropdownMenu.Option
                     value="export"
                     label="Export CSV"
+                    disabled
                   />
                 </DropdownMenu.Group>
               </DropdownMenu>
@@ -472,9 +645,13 @@
                   kind="transparent"
                   size="small"
                   aria-label="Expand Top hosts"
+                  @click="openExpanded('hosts')"
                 />
               </Tooltip>
-              <DropdownMenu placement="bottom-end">
+              <DropdownMenu
+                placement="bottom-end"
+                @select="(_event, value) => onCardOption('hosts', value)"
+              >
                 <DropdownMenu.Trigger>
                   <IconButton
                     icon="pi pi-ellipsis-h"
@@ -491,6 +668,7 @@
                   <DropdownMenu.Option
                     value="export"
                     label="Export CSV"
+                    disabled
                   />
                 </DropdownMenu.Group>
               </DropdownMenu>
@@ -557,5 +735,119 @@
         </ChartCard>
       </div>
     </div>
+    <Dialog
+      v-model:open="expanded"
+      size="large"
+    >
+      <DialogPortal>
+        <DialogOverlay />
+        <DialogContent>
+          <PanelHeader class="w-full">
+            <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+              <DialogTitle>{{ expandedReport.label }}</DialogTitle>
+              <DialogDescription>{{ expandedReport.description }}</DialogDescription>
+            </div>
+            <DialogClose />
+          </PanelHeader>
+          <PanelContent>
+            <div class="flex min-w-0 flex-col gap-(--spacing-md)">
+              <div v-if="expandedId === 'requests' || expandedId === 'status-codes'">
+                <ToggleGroup
+                  v-model="expandedForm"
+                  :options="forms"
+                  size="small"
+                  :aria-label="`Chart form for ${expandedReport.label}`"
+                />
+              </div>
+              <Chart
+                key="chart-1"
+                v-if="expandedId === 'requests'"
+                :series="requests"
+                :labels="labels"
+                :format-value="formatters.count"
+                :height="420"
+                empty-title="No traffic yet"
+                empty-description="Metrics appear here once a service serves requests."
+                :aria-label="expandedReport.label"
+              >
+                <Chart.Grid />
+                <Chart.Axis kind="y" />
+                <Chart.Axis kind="x" />
+                <Chart.Bar v-if="requestsForm === 'bar'" />
+                <Chart.Area v-else />
+                <Chart.Crosshair />
+                <Chart.Tooltip />
+                <Chart.Legend totals />
+              </Chart>
+              <Chart
+                key="chart-2"
+                v-else-if="expandedId === 'status-codes'"
+                :series="statusCodes"
+                :labels="labels"
+                :format-value="formatters.count"
+                :height="420"
+                empty-title="No traffic yet"
+                empty-description="Metrics appear here once a service serves requests."
+                :aria-label="expandedReport.label"
+              >
+                <Chart.Grid />
+                <Chart.Axis kind="y" />
+                <Chart.Axis kind="x" />
+                <Chart.Bar
+                  v-if="statusForm === 'bar'"
+                  stacked
+                />
+                <Chart.Line v-else />
+                <Chart.Crosshair />
+                <Chart.Tooltip />
+                <Chart.Legend totals />
+              </Chart>
+              <Chart
+                key="chart-3"
+                v-else-if="expandedId === 'countries'"
+                :series="countryRequests"
+                :labels="countries"
+                orientation="horizontal"
+                :format-value="formatters.count"
+                :height="420"
+                empty-title="No traffic yet"
+                empty-description="Metrics appear here once a service serves requests."
+                :aria-label="expandedReport.label"
+              >
+                <Chart.Grid />
+                <Chart.Axis kind="y" />
+                <Chart.Axis kind="x" />
+                <Chart.Bar labeled />
+                <Chart.Tooltip />
+              </Chart>
+              <TableRoot
+                v-else
+                :data="hosts"
+                :columns="hostColumns"
+                row-key="id"
+                enable-sorting
+                paginated
+                :page-size="10"
+                header-kind="compact"
+                bordered
+              >
+                <template #empty>
+                  <EmptyState
+                    size="small"
+                    icon="pi pi-chart-line"
+                    title="No traffic yet"
+                    description="Metrics appear here once a service serves requests."
+                  />
+                </template>
+
+                <template #cell-requests="{ row }">
+                  <span class="tabular-nums">{{ formatters.count(row.requests) }}</span>
+                </template>
+              </TableRoot>
+            </div>
+          </PanelContent>
+        </DialogContent>
+      </DialogPortal>
+    </Dialog>
   </div>
 </template>

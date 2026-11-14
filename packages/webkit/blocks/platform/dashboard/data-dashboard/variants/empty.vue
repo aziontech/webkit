@@ -1,18 +1,29 @@
 <script setup lang="ts">
   import Chart, { type ChartSeries } from '@aziontech/webkit/chart'
   import ChartCard from '@aziontech/webkit/chart-card'
+  import Dialog from '@aziontech/webkit/dialog'
+  import DialogClose from '@aziontech/webkit/dialog-close'
+  import DialogContent from '@aziontech/webkit/dialog-content'
+  import DialogDescription from '@aziontech/webkit/dialog-description'
+  import DialogOverlay from '@aziontech/webkit/dialog-overlay'
+  import DialogPortal from '@aziontech/webkit/dialog-portal'
+  import DialogTitle from '@aziontech/webkit/dialog-title'
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
   import EmptyState from '@aziontech/webkit/empty-state'
   import Hint from '@aziontech/webkit/hint'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
   import PageHeader from '@aziontech/webkit/page-header'
+  import PanelContent from '@aziontech/webkit/panel-content'
+  import PanelHeader from '@aziontech/webkit/panel-header'
   import StatTile from '@aziontech/webkit/stat-tile'
   import TableRoot, { type TableColumn } from '@aziontech/webkit/table-root'
   import Tag from '@aziontech/webkit/tag'
+  import { toast } from '@aziontech/webkit/toast'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
   import Tooltip from '@aziontech/webkit/tooltip'
-  import { ref } from 'vue'
+  import { type CsvColumn, downloadCsv, toCsv } from '@aziontech/webkit/utils/csv'
+  import { computed, ref } from 'vue'
 
   const compact = new Intl.NumberFormat('en-US', { notation: 'compact', maximumFractionDigits: 1 })
 
@@ -170,6 +181,133 @@
     { label: 'Line', value: 'line' },
     { label: 'Bar', value: 'bar' }
   ]
+
+  interface CardQuery {
+    dataset: string
+    fields: string[]
+    orderBy: string
+  }
+
+  const periodStart = '2026-11-13T00:00:00Z'
+  const periodEnd = '2026-11-13T23:59:59Z'
+
+  const cardQuery = (report: CardQuery) =>
+    [
+      'query {',
+      `  ${report.dataset}(`,
+      '    limit: 5000',
+      '    aggregate: { sum: requests }',
+      `    filter: { tsRange: { begin: "${periodStart}", end: "${periodEnd}" } }`,
+      `    orderBy: [${report.orderBy}]`,
+      '  ) {',
+      ...report.fields.map((field) => `    ${field}`),
+      '  }',
+      '}'
+    ].join('\n')
+
+  const copyQuery = async (report: CardQuery) => {
+    try {
+      await globalThis.navigator.clipboard.writeText(cardQuery(report))
+      toast.success('Query copied.', {
+        description: 'Paste it into any GraphQL client that sends your token.'
+      })
+    } catch {
+      toast.error('The query could not be copied.')
+    }
+  }
+
+  type CardId = 'comparison' | 'projects' | 'usage'
+
+  const queries: Record<CardId, CardQuery> = {
+    comparison: {
+      dataset: 'usageMetrics',
+      fields: ['ts', 'dataTransferred', 'previousDataTransferred'],
+      orderBy: 'ts_ASC'
+    },
+    projects: {
+      dataset: 'usageMetrics',
+      fields: ['project', 'dataTransferred'],
+      orderBy: 'dataTransferred_DESC'
+    },
+    usage: {
+      dataset: 'usageMetrics',
+      fields: ['project', 'requests', 'dataTransferred'],
+      orderBy: 'requests_DESC'
+    }
+  }
+
+  interface CardReport extends CardQuery {
+    label: string
+    description: string
+    columns: CsvColumn[]
+    rows: () => object[]
+  }
+
+  const seriesRows = (series: readonly ChartSeries[], axis: readonly (string | Date)[]) =>
+    axis.map((label, index) => ({
+      ts: label instanceof Date ? label.toISOString() : label,
+      ...Object.fromEntries(series.map((entry) => [entry.id, entry.values[index] ?? '']))
+    }))
+
+  const expanded = ref(false)
+  const expandedId = ref<CardId>('comparison')
+  const expandedReport = computed(() => reports[expandedId.value])
+
+  const openExpanded = (id: CardId) => {
+    expandedId.value = id
+    expanded.value = true
+  }
+
+  const onCardOption = (id: CardId, value: string | number) => {
+    const report = reports[id]
+    if (value === 'query') {
+      copyQuery(report)
+      return
+    }
+    const filename = `${id}-last-24-hours.csv`
+    downloadCsv(filename, toCsv({ columns: report.columns, rows: report.rows() }))
+    toast.success('CSV exported.', { description: filename })
+  }
+
+  const reports: Record<CardId, CardReport> = {
+    comparison: {
+      ...queries.comparison,
+      label: 'Data transferred, this period vs previous',
+      description:
+        'Data delivered by every project in the selected period, drawn over the same span of the previous period.',
+      columns: [
+        { id: 'ts', header: 'Time' },
+        { id: 'current', header: 'This period' },
+        { id: 'previous', header: 'Previous period' }
+      ],
+      rows: () => seriesRows(comparison.series, comparison.labels)
+    },
+    projects: {
+      ...queries.projects,
+      label: 'Data transferred by project',
+      description: 'The projects that delivered the most data in the period.',
+      columns: [
+        { id: 'project', header: 'Project' },
+        { id: 'dataTransferred', header: 'Data transferred' }
+      ],
+      rows: () =>
+        ranking.labels.map((project, index) => ({
+          project,
+          dataTransferred: ranking.series[0]?.values[index] ?? ''
+        }))
+    },
+    usage: {
+      ...queries.usage,
+      label: 'Usage by project',
+      description: 'Requests and data transferred per project in the period.',
+      columns: [
+        { id: 'project', header: 'Project' },
+        { id: 'requests', header: 'Requests' },
+        { id: 'dataTransferred', header: 'Data transferred' }
+      ],
+      rows: () => rows
+    }
+  }
 </script>
 
 <template>
@@ -243,9 +381,13 @@
                   kind="transparent"
                   size="small"
                   aria-label="Expand Data transferred, this period vs previous"
+                  @click="openExpanded('comparison')"
                 />
               </Tooltip>
-              <DropdownMenu placement="bottom-end">
+              <DropdownMenu
+                placement="bottom-end"
+                @select="(_event, value) => onCardOption('comparison', value)"
+              >
                 <DropdownMenu.Trigger>
                   <IconButton
                     icon="pi pi-ellipsis-h"
@@ -262,6 +404,7 @@
                   <DropdownMenu.Option
                     value="export"
                     label="Export CSV"
+                    disabled
                   />
                 </DropdownMenu.Group>
               </DropdownMenu>
@@ -315,9 +458,13 @@
                   kind="transparent"
                   size="small"
                   aria-label="Expand Data transferred by project"
+                  @click="openExpanded('projects')"
                 />
               </Tooltip>
-              <DropdownMenu placement="bottom-end">
+              <DropdownMenu
+                placement="bottom-end"
+                @select="(_event, value) => onCardOption('projects', value)"
+              >
                 <DropdownMenu.Trigger>
                   <IconButton
                     icon="pi pi-ellipsis-h"
@@ -334,6 +481,7 @@
                   <DropdownMenu.Option
                     value="export"
                     label="Export CSV"
+                    disabled
                   />
                 </DropdownMenu.Group>
               </DropdownMenu>
@@ -382,9 +530,13 @@
                   kind="transparent"
                   size="small"
                   aria-label="Expand Usage by project"
+                  @click="openExpanded('usage')"
                 />
               </Tooltip>
-              <DropdownMenu placement="bottom-end">
+              <DropdownMenu
+                placement="bottom-end"
+                @select="(_event, value) => onCardOption('usage', value)"
+              >
                 <DropdownMenu.Trigger>
                   <IconButton
                     icon="pi pi-ellipsis-h"
@@ -401,6 +553,7 @@
                   <DropdownMenu.Option
                     value="export"
                     label="Export CSV"
+                    disabled
                   />
                 </DropdownMenu.Group>
               </DropdownMenu>
@@ -467,5 +620,98 @@
         </ChartCard>
       </div>
     </div>
+    <Dialog
+      v-model:open="expanded"
+      size="large"
+    >
+      <DialogPortal>
+        <DialogOverlay />
+        <DialogContent>
+          <PanelHeader class="w-full">
+            <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+              <DialogTitle>{{ expandedReport.label }}</DialogTitle>
+              <DialogDescription>{{ expandedReport.description }}</DialogDescription>
+            </div>
+            <DialogClose />
+          </PanelHeader>
+          <PanelContent>
+            <div class="flex min-w-0 flex-col gap-(--spacing-md)">
+              <template v-if="expandedId === 'comparison'">
+                <div>
+                  <ToggleGroup
+                    v-model="form"
+                    :options="FORMS"
+                    size="small"
+                    :aria-label="`Chart form for ${expandedReport.label}`"
+                  />
+                </div>
+                <Chart
+                  :series="comparison.series"
+                  :labels="comparison.labels"
+                  :format-value="formatBytes"
+                  :height="420"
+                  empty-title="No usage yet"
+                  empty-description="Usage appears here once a project serves requests."
+                  :aria-label="expandedReport.label"
+                >
+                  <Chart.Grid />
+                  <Chart.Axis kind="y" />
+                  <Chart.Axis kind="x" />
+                  <Chart.Bar
+                    v-if="form === 'bar'"
+                    stacked
+                  />
+                  <Chart.Line v-else />
+                  <Chart.Crosshair />
+                  <Chart.Tooltip />
+                  <Chart.Legend totals />
+                </Chart>
+              </template>
+              <Chart
+                v-else-if="expandedId === 'projects'"
+                :series="ranking.series"
+                :labels="ranking.labels"
+                orientation="horizontal"
+                :format-value="formatBytes"
+                :height="420"
+                empty-title="No usage yet"
+                empty-description="Usage appears here once a project serves requests."
+                :aria-label="expandedReport.label"
+              >
+                <Chart.Grid />
+                <Chart.Axis kind="y" />
+                <Chart.Axis kind="x" />
+                <Chart.Bar labeled />
+                <Chart.Tooltip />
+              </Chart>
+              <TableRoot
+                v-else
+                :data="rows"
+                :columns="columns"
+                row-key="id"
+                enable-sorting
+                paginated
+                :page-size="10"
+                header-kind="compact"
+                bordered
+              >
+                <template #empty>
+                  <EmptyState
+                    size="small"
+                    icon="pi pi-chart-line"
+                    title="No usage yet"
+                    description="Usage appears here once a project serves requests."
+                  />
+                </template>
+
+                <template #cell-requests="{ row }">
+                  <span class="tabular-nums">{{ formatCount(row.requests) }}</span>
+                </template>
+              </TableRoot>
+            </div>
+          </PanelContent>
+        </DialogContent>
+      </DialogPortal>
+    </Dialog>
   </div>
 </template>

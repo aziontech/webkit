@@ -62,14 +62,25 @@ Switches a time series between Line and Bar. Only on time series, never on a ran
 
 Names each icon-only control on hover and focus (`Expand`, `More options`).
 
-### H. Expand — `IconButton` (optional)
+### H. Expand — `IconButton`, `Dialog`, `DialogPortal`, `DialogOverlay`, `DialogContent`, `PanelHeader`, `DialogTitle`, `DialogDescription`, `DialogClose`, `PanelContent` (optional)
 
 Opens the card at full size. Icon-only, with an `aria-label` that names the card
-(`Expand Requests over time`).
+(`Expand Requests over time`). It opens one large `Dialog` for the page: the card title as the
+`DialogTitle`, its Hint sentence as the `DialogDescription`, the same Line or Bar `ToggleGroup`
+(time series only, sharing the card's choice), and the chart at a 420px plot, or the table with ten
+rows per page. Closing it returns focus to the Expand button that opened it. While the page loads or
+after it failed there is nothing to enlarge, so Expand is disabled.
 
-### I. More options — `DropdownMenu` (optional)
+### I. More options — `DropdownMenu`, `toast` (optional)
 
-`Copy query` and `Export CSV`. Secondary actions go here so the header stays one line.
+`Copy query` and `Export CSV`. Secondary actions go here so the header stays one line. Copy query
+writes the GraphQL query behind the card (dataset, sum aggregation, the period as `tsRange`, the
+order and the fields) to the clipboard and confirms with a success toast (`Query copied.`), or an
+error toast when the clipboard is not available. Export CSV serializes the card's rows with
+`toCsv` and saves them with `downloadCsv` from `@aziontech/webkit/utils/csv` as
+`<card>-last-24-hours.csv`, then confirms with `CSV exported.` and the file name. Export CSV is
+disabled when the card has no rows (Empty, Loading, Failed); Copy query always works. The app
+mounts the toast region; this page body never renders a `Toaster`.
 
 ### J. Charts — `Chart` (required)
 
@@ -121,6 +132,7 @@ In the Metrics variant one page holds the dashboards of several products. A `Pag
 - **Tile labels:** the metric name only. `Data transferred`, never `Data transferred (GB)`; the unit belongs to the value.
 - **Hint:** one sentence ending with a period. `Requests that ended in a server error. A rise is a regression.`
 - **Menu items:** verb first. `Copy query`, `Export CSV`.
+- **Toasts:** `Query copied.` / `Paste it into any GraphQL client that sends your token.`; `The query could not be copied.`; `CSV exported.` with the file name.
 - **Metrics:** title `Real-time metrics`; tab labels are product names; aggregation tags name the math (`Sum`, `Median`, `Percentile`).
 - **Empty state:** `No traffic yet` / `Metrics appear here once a service serves requests.`
 - **No-match state:** `No matching rows` / `Change the search.`
@@ -128,6 +140,7 @@ In the Metrics variant one page holds the dashboards of several products. A `Pag
 ## Accessibility
 
 - Every icon-only control has an `aria-label` that names its card, plus a `Tooltip`.
+- The expanded `Dialog` traps focus, closes on Escape and returns focus to the Expand button; its title and description name the card.
 - The `ToggleGroup` is labelled with the card it controls.
 - The search `Input` has an `aria-label` equal to its placeholder, since there is no visible label.
 - Figures use `tabular-nums`; deltas carry a sign and a word, not color alone.
@@ -140,6 +153,7 @@ In the Metrics variant one page holds the dashboards of several products. A `Pag
 - Loading: every tile, chart and the table hold their place with a `Skeleton`; the grid does not reflow.
 - Empty: no traffic in the period; tiles show a dash with no delta or trend, and each card keeps its box with an `EmptyState`.
 - Metrics: real-time metrics per product, a `PageTabs` strip of products and a `Period` `Select` in the header; each product shows four tiles and four area, line or stacked bar cards.
+- Expanded: the Requests over time card open in the large `Dialog`, with the Line or Bar choice and a 420px plot.
 - Failed: the request for the period failed; tiles show a dash, and every card keeps its header with a danger `Alert` that names what did not load and offers Retry.
 
 ## Related

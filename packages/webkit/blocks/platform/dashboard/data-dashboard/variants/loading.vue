@@ -10,6 +10,7 @@
   import StatTile from '@aziontech/webkit/stat-tile'
   import TableRoot, { type TableColumn } from '@aziontech/webkit/table-root'
   import Tag from '@aziontech/webkit/tag'
+  import { toast } from '@aziontech/webkit/toast'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { ref } from 'vue'
@@ -281,6 +282,64 @@
     { label: 'Line', value: 'line' },
     { label: 'Bar', value: 'bar' }
   ]
+
+  interface CardQuery {
+    dataset: string
+    fields: string[]
+    orderBy: string
+  }
+
+  const periodStart = '2026-11-13T00:00:00Z'
+  const periodEnd = '2026-11-13T23:59:59Z'
+
+  const cardQuery = (report: CardQuery) =>
+    [
+      'query {',
+      `  ${report.dataset}(`,
+      '    limit: 5000',
+      '    aggregate: { sum: requests }',
+      `    filter: { tsRange: { begin: "${periodStart}", end: "${periodEnd}" } }`,
+      `    orderBy: [${report.orderBy}]`,
+      '  ) {',
+      ...report.fields.map((field) => `    ${field}`),
+      '  }',
+      '}'
+    ].join('\n')
+
+  const copyQuery = async (report: CardQuery) => {
+    try {
+      await globalThis.navigator.clipboard.writeText(cardQuery(report))
+      toast.success('Query copied.', {
+        description: 'Paste it into any GraphQL client that sends your token.'
+      })
+    } catch {
+      toast.error('The query could not be copied.')
+    }
+  }
+
+  type CardId = 'comparison' | 'projects' | 'usage'
+
+  const queries: Record<CardId, CardQuery> = {
+    comparison: {
+      dataset: 'usageMetrics',
+      fields: ['ts', 'dataTransferred', 'previousDataTransferred'],
+      orderBy: 'ts_ASC'
+    },
+    projects: {
+      dataset: 'usageMetrics',
+      fields: ['project', 'dataTransferred'],
+      orderBy: 'dataTransferred_DESC'
+    },
+    usage: {
+      dataset: 'usageMetrics',
+      fields: ['project', 'requests', 'dataTransferred'],
+      orderBy: 'requests_DESC'
+    }
+  }
+
+  const onCardOption = (id: CardId, value: string | number) => {
+    if (value === 'query') copyQuery(queries[id])
+  }
 </script>
 
 <template>
@@ -354,9 +413,13 @@
                   kind="transparent"
                   size="small"
                   aria-label="Expand Data transferred, this period vs previous"
+                  disabled
                 />
               </Tooltip>
-              <DropdownMenu placement="bottom-end">
+              <DropdownMenu
+                placement="bottom-end"
+                @select="(_event, value) => onCardOption('comparison', value)"
+              >
                 <DropdownMenu.Trigger>
                   <IconButton
                     icon="pi pi-ellipsis-h"
@@ -373,6 +436,7 @@
                   <DropdownMenu.Option
                     value="export"
                     label="Export CSV"
+                    disabled
                   />
                 </DropdownMenu.Group>
               </DropdownMenu>
@@ -426,9 +490,13 @@
                   kind="transparent"
                   size="small"
                   aria-label="Expand Data transferred by project"
+                  disabled
                 />
               </Tooltip>
-              <DropdownMenu placement="bottom-end">
+              <DropdownMenu
+                placement="bottom-end"
+                @select="(_event, value) => onCardOption('projects', value)"
+              >
                 <DropdownMenu.Trigger>
                   <IconButton
                     icon="pi pi-ellipsis-h"
@@ -445,6 +513,7 @@
                   <DropdownMenu.Option
                     value="export"
                     label="Export CSV"
+                    disabled
                   />
                 </DropdownMenu.Group>
               </DropdownMenu>
@@ -493,9 +562,13 @@
                   kind="transparent"
                   size="small"
                   aria-label="Expand Usage by project"
+                  disabled
                 />
               </Tooltip>
-              <DropdownMenu placement="bottom-end">
+              <DropdownMenu
+                placement="bottom-end"
+                @select="(_event, value) => onCardOption('usage', value)"
+              >
                 <DropdownMenu.Trigger>
                   <IconButton
                     icon="pi pi-ellipsis-h"
@@ -512,6 +585,7 @@
                   <DropdownMenu.Option
                     value="export"
                     label="Export CSV"
+                    disabled
                   />
                 </DropdownMenu.Group>
               </DropdownMenu>
