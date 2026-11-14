@@ -25,10 +25,16 @@ describe('Skeleton', () => {
     expect(getByTestId('my-placeholder')).toBeTruthy()
   })
 
-  it('defaults to the shape geometry', () => {
+  it('defaults to the rectangle geometry', () => {
     const { getByTestId } = render(Skeleton)
 
-    expect(getByTestId('feedback-skeleton').getAttribute('data-kind')).toBe('shape')
+    expect(getByTestId('feedback-skeleton').getAttribute('data-kind')).toBe('rectangle')
+  })
+
+  it('renders the deprecated kind="shape" as a rectangle', () => {
+    const { getByTestId } = render(Skeleton, { props: { kind: 'shape' } })
+
+    expect(getByTestId('feedback-skeleton').getAttribute('data-kind')).toBe('rectangle')
   })
 
   it('reflects kind="circle" on data-kind', () => {
@@ -94,7 +100,7 @@ describe('Skeleton', () => {
     const { getByTestId } = render(Default)
     const el = getByTestId('feedback-skeleton')
 
-    expect(el.getAttribute('data-kind')).toBe('shape')
+    expect(el.getAttribute('data-kind')).toBe('rectangle')
     expect(el.hasAttribute('data-animated')).toBe(true)
   })
 
@@ -102,7 +108,7 @@ describe('Skeleton', () => {
     const { getAllByTestId } = render(Types)
     const kinds = getAllByTestId('feedback-skeleton').map((el) => el.getAttribute('data-kind'))
 
-    expect(kinds).toContain('shape')
+    expect(kinds).toContain('rectangle')
     expect(kinds).toContain('circle')
   })
 

@@ -5,7 +5,7 @@
 <template>
   <div class="flex flex-wrap items-center gap-4">
     <Skeleton
-      kind="shape"
+      kind="rectangle"
       width="240px"
       height="100px"
     />

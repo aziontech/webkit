@@ -4,7 +4,7 @@
 
 <template>
   <Skeleton
-    kind="shape"
+    kind="rectangle"
     width="240px"
     height="100px"
     :animated="false"
