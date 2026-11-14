@@ -17,7 +17,6 @@ export const MARKET_ALIASES = {
   'locale-provider': 'webkit-provider',
   modal: 'dialog',
   notification: 'toast',
-  'radio-group': 'radio-button',
   'segmented-control': 'toggle-group',
   sheet: 'drawer',
   snackbar: 'toast',
