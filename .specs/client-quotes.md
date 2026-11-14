@@ -3,10 +3,10 @@ name: client-quotes
 category: sections
 structure: monolithic
 status: implemented
-spec_version: 2
+spec_version: 3
 created: 2026-11-04
 last_updated: 2026-11-14
-checksum: 6626de74e1a9cbc6677269b4c0b28f9a166515eb1cace4cd0fd7def0020b6edb
+checksum: 9aa83b6bfb2d09efa0fd1ae3c451752a99524172f849277e2ab478fee68fd8ef
 ---
 
 # ClientQuotes — Component Spec
@@ -77,7 +77,7 @@ The client-stories band: a framed `quote-tabs` carousel of customer quotes, each
 | `ariaLabel`        | `string`             | `''`        | false    | Accessible name of the quote carousel.                                                                                                                                          |
 | `items`            | `ClientQuotesItem[]` | `[]`        | false    | The quotes, in order; each is `{ text, name?, jobTitle?, mark?, logo?, clientName?, photo? }` where `mark` is a registry mark name and `logo` a mark URL named by `clientName`. |
 | `primaryAction`    | `ClientQuotesAction` | `undefined` | false    | Button under the quotes; `{ label, href, trailing? }`. Omitted when absent.                                                                                                     |
-| `autoplay`         | `boolean`            | `true`      | false    | Advances to the next quote on a timer, as `quote-tabs` does; pauses under the pointer or keyboard focus and never runs under reduced motion.                                    |
+| `autoplay`         | `boolean`            | `true`      | false    | Advances to the next quote on a timer, as `quote-tabs` does, with its visible pause control; pauses under the pointer or keyboard focus and never runs under reduced motion.    |
 | `autoplayInterval` | `number`             | `5000`      | false    | Milliseconds each quote is held before the band advances.                                                                                                                       |
 
 ## v-model

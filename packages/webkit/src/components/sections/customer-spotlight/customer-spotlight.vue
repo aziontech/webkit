@@ -35,18 +35,24 @@
 
   interface Props {
     /** The cards, in reading order; a card opens while hovered or focused. */
-    cards?: CustomerSpotlightCard[]
+    items?: CustomerSpotlightCard[]
     /** Accessible name of the list; empty uses the built-in "Customer stories". */
     ariaLabel?: string
     /** Label revealed under the description while the card is open; empty uses the built-in "Read story". */
+    linkLabel?: string
+    /** @deprecated since 6.0 — use `items`. Removed in 7.0. */
+    cards?: CustomerSpotlightCard[]
+    /** @deprecated since 6.0 — use `linkLabel`. Removed in 7.0. */
     storyLabel?: string
     /** In-page id set on the band so a hash link can target it. */
     anchor?: string
   }
 
   const props = withDefaults(defineProps<Props>(), {
-    cards: () => [],
+    items: () => [],
     ariaLabel: '',
+    linkLabel: '',
+    cards: () => [],
     storyLabel: '',
     anchor: ''
   })
@@ -59,7 +65,8 @@
   )
 
   const listName = computed(() => props.ariaLabel || t('customerSpotlight.list'))
-  const story = computed(() => props.storyLabel || t('customerSpotlight.story'))
+  const story = computed(() => props.linkLabel || props.storyLabel || t('customerSpotlight.story'))
+  const list = computed(() => (props.items.length ? props.items : props.cards))
 
   const active = ref(-1)
   const panels = ref<HTMLElement[]>([])
@@ -86,7 +93,7 @@
 
   const flushOf = (index: number) => {
     if (index === 0) return 'left'
-    if (index === props.cards.length - 1) return 'right'
+    if (index === list.value.length - 1) return 'right'
     return false
   }
 
@@ -108,12 +115,12 @@
 </script>
 
 <template>
-  <section
-    v-if="cards.length"
+  <div
+    v-if="list.length"
     v-bind="$attrs"
     :id="anchor || undefined"
+    class="scroll-mt-(--spacing-xxl)"
     :data-testid="testId"
-    :aria-label="listName"
   >
     <SectionModule
       :divided="false"
@@ -130,7 +137,7 @@
           @focusout="onLeave"
         >
           <li
-            v-for="(card, index) in cards"
+            v-for="(card, index) in list"
             :key="card.name"
             :data-state="active === index ? 'open' : 'closed'"
             class="group/spot aspect-[948/960] min-w-0 lg:flex-1 lg:not-first:-ms-px"
@@ -188,5 +195,5 @@
         </ul>
       </FrameBox>
     </SectionModule>
-  </section>
+  </div>
 </template>

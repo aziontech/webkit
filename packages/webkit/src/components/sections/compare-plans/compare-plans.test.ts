@@ -209,6 +209,20 @@ describe('ComparePlans', () => {
     )
   })
 
+  it('closes a band with its action, and still reads the deprecated link', () => {
+    const closed = (key: 'action' | 'link') =>
+      band({
+        primaryAction: undefined,
+        sections: [{ ...sections[0], [key]: { label: 'See rates', href: '/pricing/rates' } }]
+      })
+    for (const key of ['action', 'link'] as const) {
+      const { getByRole, container, unmount } = closed(key)
+      expect(getByRole('link', { name: 'See rates' })).toHaveAttribute('href', '/pricing/rates')
+      expect(container.querySelectorAll('[data-closing]')).toHaveLength(0)
+      unmount()
+    }
+  })
+
   it('draws the closing rule on the last row only when no closing link follows it', () => {
     const lastRow = (container: Element) =>
       Array.from(container.querySelectorAll('tbody tr')).at(-1) as HTMLElement

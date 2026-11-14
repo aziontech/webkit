@@ -3,18 +3,18 @@ name: banner-art
 category: marketing
 structure: monolithic
 status: implemented
-spec_version: 1
+spec_version: 2
 template: 2
-checksum: faf4a15958ad13b1fee1bda306b8b61faa1430b071f730ba6be3d84928161356
+checksum: 7f3d3144e1d57bd2abb410ad0afdd9594af3644fb80fcad8447d9bb260a4b308
 created: 2026-11-11
-last_updated: 2026-11-11
+last_updated: 2026-11-14
 ---
 
 # BannerArt — Component Spec
 
 ## Purpose
 
-The decorative backdrop a site, hub or docs band stands on, for a `Hero` `background` slot or any band with `relative overflow-hidden`: `globe` hangs half a globe past the page's inline-end rule over the dot lattice, `map` insets the world map beside the copy, `network` lays the map full bleed with its PoPs lit, the sample's `MapMesh` traffic crossing between them (`NetworkMap` `traffic`: links and packets, the links alone as the still frame under reduced motion) and a scrim over the copy column. From the design sample's `shared/ui/banners` (GlobeBanner, MapBanner, NetworkBanner), drawn with WebKit's own `SpinningGlobe` and `NetworkMap` so there is one map and one globe in the system. The inventory's "`Banner` `art` variants" became this sibling component under `marketing/banner`: `Banner` is an announcement band with its own surfaces, and a backdrop layer is a different thing.
+The decorative backdrop a site, hub or docs band stands on, for a `Hero` `background` slot or any band with `relative overflow-hidden`: `globe` hangs half a globe past the page's inline-end rule over the dot lattice, `map` insets the world map beside the copy, `network` lays the map full bleed with its PoPs lit, the sample's `MapMesh` traffic crossing between them (`NetworkMap` `traffic`: links and packets, the links alone as the still frame under reduced motion) and a scrim over the copy column. From the design sample's `shared/ui/banners` (GlobeBanner, MapBanner, NetworkBanner), drawn with WebKit's own `SpinningGlobe` and `NetworkMap` so there is one map and one globe in the system. The inventory's "`Banner` `art` variants" became this sibling component, `marketing/banner-art`: `Banner` is an announcement band with its own surfaces, and a backdrop layer is a different thing.
 
 ## When to use
 
@@ -53,7 +53,7 @@ The decorative backdrop a site, hub or docs band stands on, for a `Hero` `backgr
     max-width="site"
   >
     <template #background>
-      <BannerArt art="network" />
+      <BannerArt kind="network" />
     </template>
     <HeroTitle title="Close to every user" />
   </Hero>
@@ -62,10 +62,11 @@ The decorative backdrop a site, hub or docs band stands on, for a `Hero` `backgr
 
 ## Props
 
-| Prop       | Type        | Default  | Required   | JSDoc                                                                                 |
-| ---------- | ----------- | -------- | ---------- | ------------------------------------------------------------------------------------- |
-| `art`      | `'globe' \\ | 'map' \\ | 'network'` | `'map'`                                                                               | false | Which backdrop to draw. |
-| `animated` | `boolean`   | `true`   | false      | Spins the globe or pulses the PoPs; a still frame when false or under reduced motion. |
+| Prop       | Type                  | Default | Required | JSDoc                                                                                      |
+| ---------- | --------------------- | ------- | -------- | ------------------------------------------------------------------------------------------ |
+| `kind`     | `BannerArtKind`       | `'map'` | false    | Which backdrop to draw: `globe`, `map` or `network`.                                       |
+| `art`      | `BannerArtKind \| ''` | `''`    | false    | @deprecated since 6.0 — use `kind`. Removed in 7.0. When set, it still picks the backdrop. |
+| `animated` | `boolean`             | `true`  | false    | Spins the globe or pulses the PoPs; a still frame when false or under reduced motion.      |
 
 ## Events
 
@@ -77,11 +78,11 @@ The decorative backdrop a site, hub or docs band stands on, for a `Hero` `backgr
 
 ## States
 
-- `data-art` mirrors `art`.
+- `data-kind` mirrors the backdrop drawn; `data-art` carries the same value for one major, deprecated with `art`.
 
 ## Motion & Animations
 
-From `SpinningGlobe` (rotation, stopped under reduced motion) and `NetworkMap` (`animate-pulse` with `motion-reduce:animate-none`).
+From `SpinningGlobe` (rotation, stopped under reduced motion) and `NetworkMap` (its own PoP pulse, stopped under reduced motion).
 
 ## Tokens
 

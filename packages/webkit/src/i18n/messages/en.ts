@@ -1233,6 +1233,17 @@ export const customerSpotlight = {
   story: 'Read story'
 } as const
 
+export const autoplayControl = {
+  pauseRotation: 'Pause rotation',
+  resumeRotation: 'Resume rotation',
+  pauseScrolling: 'Pause scrolling',
+  resumeScrolling: 'Resume scrolling'
+} as const
+
+export const closingCallToActionNewsletter = {
+  email: 'Email address'
+} as const
+
 export const sectionCommand = {
   command: 'Command',
   prompt: 'Prompt',
@@ -1437,5 +1448,7 @@ export const en = {
   sectionCommand,
   searchTrigger,
   copyPromptButton,
-  docAgentCard
+  docAgentCard,
+  autoplayControl,
+  closingCallToActionNewsletter
 }

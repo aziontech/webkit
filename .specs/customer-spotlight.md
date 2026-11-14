@@ -3,11 +3,11 @@ name: customer-spotlight
 category: sections
 structure: monolithic
 status: implemented
-spec_version: 1
+spec_version: 2
 template: 2
-checksum: 514745c7dadef996cadb2e28cd4c1d68f55051c669cab377f298cdc3009b446e
+checksum: d3ed73400530b4f6fe54aeb34d280a054833a4dc8dfdce79efb0db6d6dcc5cac
 created: 2026-11-11
-last_updated: 2026-11-12
+last_updated: 2026-11-14
 ---
 
 # CustomerSpotlight — Component Spec
@@ -47,7 +47,7 @@ A row of client cards, each painted in the client's own colours with its reverse
 
 <template>
   <CustomerSpotlight
-    :cards="[
+    :items="[
       {
         name: 'Agibank',
         logo: agibankLogo,
@@ -61,12 +61,14 @@ A row of client cards, each painted in the client's own colours with its reverse
 
 ## Props
 
-| Prop         | Type                      | Default | Required | JSDoc                                                                                                                                               |
-| ------------ | ------------------------- | ------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `cards`      | `CustomerSpotlightCard[]` | `[]`    | false    | The cards, in reading order; each is `{ name, logo, logoWidth?, href, description, brand? }`; `brand` (`{ base, glow }`) defaults to the client registry's colours for `name`. A card opens while hovered or focused. |
-| `ariaLabel`  | `string`                  | `''`    | false    | Accessible name of the list; empty uses the built-in "Customer stories".                                                                            |
-| `storyLabel` | `string`                  | `''`    | false    | Label revealed under the description while the card is open; empty uses the built-in "Read story".                                                  |
-| `anchor`     | `string`                  | `''`    | false    | In-page id set on the band so a hash link can target it.                                                                                            |
+| Prop         | Type                      | Default | Required | JSDoc                                                                                                                                                                                                                 |
+| ------------ | ------------------------- | ------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `items`      | `CustomerSpotlightCard[]` | `[]`    | false    | The cards, in reading order; each is `{ name, logo, logoWidth?, href, description, brand? }`; `brand` (`{ base, glow }`) defaults to the client registry's colours for `name`. A card opens while hovered or focused. |
+| `ariaLabel`  | `string`                  | `''`    | false    | Accessible name of the list; empty uses the built-in "Customer stories".                                                                                                                                              |
+| `linkLabel`  | `string`                  | `''`    | false    | Label revealed under the description while the card is open; empty uses the built-in "Read story".                                                                                                                    |
+| `cards`      | `CustomerSpotlightCard[]` | `[]`    | false    | @deprecated since 6.0 — use `items`. Removed in 7.0. Read only when `items` is empty.                                                                                                                                 |
+| `storyLabel` | `string`                  | `''`    | false    | @deprecated since 6.0 — use `linkLabel`. Removed in 7.0. Read only when `linkLabel` is empty.                                                                                                                         |
+| `anchor`     | `string`                  | `''`    | false    | In-page id set on the band so a hash link can target it.                                                                                                                                                              |
 
 ## Events
 
@@ -78,7 +80,7 @@ A row of client cards, each painted in the client's own colours with its reverse
 
 ## States
 
-- Renders nothing without cards.
+- Renders nothing without items.
 - Each item carries `data-state=open|closed`; one is open at a time on large screens.
 
 ## Motion & Animations
@@ -104,6 +106,7 @@ The logo rises and the story panel slides in with `duration-moderate-02 ease-pro
 
 ## Accessibility (WCAG 2.1 AA)
 
+- The root is a plain block, not a landmark: the list carries the one accessible name, so assistive technology never hears it twice.
 - A list of links; each link name is "<story label>, <client>: <story line>", so the logo image is decorative (`alt=""`).
 - Focus opens the card the same way hover does; the focus ring is drawn inside the card.
 - Contrast of the story line: `--text-default` on `--bg-canvas`.
@@ -113,9 +116,9 @@ The logo rises and the story panel slides in with `duration-moderate-02 ease-pro
 | Key                       | English source     | Override prop |
 | ------------------------- | ------------------ | ------------- |
 | `customerSpotlight.list`  | `Customer stories` | `ariaLabel`   |
-| `customerSpotlight.story` | `Read story`       | `storyLabel`  |
+| `customerSpotlight.story` | `Read story`       | `linkLabel`   |
 
-- Client names, logos and story lines are content passed through `cards`.
+- Client names, logos and story lines are content passed through `items`.
 
 ## Right-to-left
 

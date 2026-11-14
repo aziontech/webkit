@@ -1,0 +1,19 @@
+{
+  "_id": "hero-band",
+  "props": {
+    "kind": "title-band",
+    "size": "large",
+    "eyebrow": "Cache",
+    "title": "Deliver content fast, worldwide",
+    "description": "Serve cached content close to users. Cut origin load and keep applications fast during traffic spikes.",
+    "primaryAction": {
+      "label": "Start for free",
+      "href": "https://console.azion.com/signup/"
+    },
+    "secondaryAction": {
+      "label": "Docs",
+      "href": "https://www.azion.com/en/documentation/",
+      "trailing": true
+    }
+  }
+}

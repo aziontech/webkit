@@ -9,6 +9,26 @@ import { expectNoA11yViolations } from '../../../test/axe'
 import ProcessScroll from './process-scroll.vue'
 
 describe('ProcessScroll', () => {
+  it('carries the fallback testid and lets a consumer testid win', () => {
+    const { getByTestId, unmount } = render(ProcessScroll, {
+      props: { title: 'T', steps: [{ title: 'a', description: 'b' }] }
+    })
+    expect(getByTestId('sections-process-scroll')).toBeInTheDocument()
+    unmount()
+    const custom = render(ProcessScroll, {
+      props: { title: 'T', steps: [{ title: 'a', description: 'b' }] },
+      attrs: { 'data-testid': 'custom' }
+    })
+    expect(custom.getByTestId('custom')).toBeInTheDocument()
+  })
+
+  it('sets the anchor as the band id on the band root', () => {
+    const { getByTestId } = render(ProcessScroll, {
+      props: { title: 'T', steps: [{ title: 'a', description: 'b' }], anchor: 'steps' }
+    })
+    expect(getByTestId('sections-process-scroll')).toHaveAttribute('id', 'steps')
+  })
+
   it('renders nothing without a title or steps', () => {
     const { queryByTestId } = render(ProcessScroll, { props: { title: 'T' } })
     expect(queryByTestId('sections-process-scroll')).toBeNull()

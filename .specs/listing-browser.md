@@ -3,11 +3,11 @@ name: listing-browser
 category: sections
 structure: monolithic
 status: implemented
-spec_version: 3
+spec_version: 4
 template: 2
 created: 2026-11-05
 last_updated: 2026-11-14
-checksum: 63880daf2b3601081539f2e6040f4ba94442441bafe6b9a3534efa3dfa8f65a3
+checksum: aaca5a288594d091a820d531c4d19c40810a7c44d663c1747b152294dfc3fd21
 ---
 
 # ListingBrowser — Component Spec
@@ -203,7 +203,8 @@ _none_
 ## Performance
 
 - Bundle budget: the `./listing-browser` entry in `.size-limit.json`, initial chunk only.
-- Runtime budget: filtering a few hundred rows on each keystroke stays under one frame.
+- Runtime budget: `listing-browser-1k` in `perf-budgets.json` (mount 1k grouped rows, then search them), measured by `src/test/performance.test.ts`.
+- The phone list and the table are both rendered and switched by CSS at the small breakpoint, so every matching row is in the DOM twice; the budget covers that.
 - Heavy parts: none; marks load lazily, and the applied-filter `Chip`s load in their own chunk the first time a filter is applied.
 
 ## Examples

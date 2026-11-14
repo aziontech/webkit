@@ -39,7 +39,7 @@
 
   defineSlots<{
     /** Replaces the rendered answer for every item, so an answer can carry a link or richer content. */
-    answer(props: { item: FaqItem }): unknown
+    answer?(props: { item: FaqItem }): unknown
   }>()
 
   const attrs = useAttrs()

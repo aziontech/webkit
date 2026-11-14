@@ -2,11 +2,12 @@
 name: platform-directory
 category: sections
 structure: monolithic
+template: 2
 status: implemented
-spec_version: 2
+spec_version: 3
 created: 2026-11-05
 last_updated: 2026-11-14
-checksum: 27adf0f4d37f1b6f8ea9e9e7d66080f3366d5a7f81cc6c7a2f54f842f7261169
+checksum: 144b5d4ef9da3e29c62dad4e980143677ee2d63b05e034fc94fe9d5c26218bad
 ---
 
 # PlatformDirectory — Component Spec
@@ -135,6 +136,26 @@ _none_
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): owned by the composed components.
 - `motion-reduce:transition-none motion-reduce:transform-none` — the row hover belongs to `column-navigation`, which carries its own reduced-motion fallback; this band adds no motion.
 - Touch target ≥40×40 px — each row is a full-width link taller than 40 px.
+
+## Internationalization
+
+- No built-in strings: every visible string arrives through props.
+
+## Right-to-left
+
+- Layout: logical utilities and the composed components' own mirroring, so the directory cells fill from the inline start.
+- Icons: action chevrons mirror (owned by `button`).
+- Keyboard: unchanged.
+
+## Responsive
+
+- One cell per row on phones (`mobileColumns: 1`); from the grid's breakpoints the cells fill the computed track count, wide cells spanning two tracks from small and large.
+- No horizontal scroll at 320 px.
+
+## Performance
+
+- Bundle budget: 5 KB for `./platform-directory` gzip in `.size-limit.json`.
+- Renders static cells and links; no state, timers or observers.
 
 ## Examples
 

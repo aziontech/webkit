@@ -55,7 +55,11 @@
     items?: CapabilityGridItem[]
     /** Capabilities per row from the large breakpoint up. */
     columns?: CapabilityGridColumns
-    /** Buttons under the section title; each is `{ label, href, trailing?, target?, kind? }`; without `kind` the first is secondary and the rest outlined. */
+    /** First button under the section title, secondary; shown only with a label and a link. */
+    primaryAction?: CapabilityGridAction
+    /** Second button under the section title, outlined; shown only with a label and a link. */
+    secondaryAction?: CapabilityGridAction
+    /** @deprecated since 6.0 — use `primaryAction` / `secondaryAction`. Removed in 7.0. */
     actions?: CapabilityGridAction[]
     /** In-page id set on the band so a hash link can target it. */
     anchor?: string
@@ -69,6 +73,8 @@
     description: '',
     items: () => [],
     columns: 3,
+    primaryAction: undefined,
+    secondaryAction: undefined,
     actions: () => [],
     anchor: '',
     titleKind: 'centered'
@@ -81,6 +87,22 @@
   )
 
   const headingLevel = computed(() => (props.title ? 3 : 2))
+
+  const shown = (action: CapabilityGridAction | undefined): action is CapabilityGridAction =>
+    Boolean(action?.label && action.href)
+
+  const buttons = computed<CapabilityGridAction[]>(() => {
+    if (props.primaryAction || props.secondaryAction) {
+      const named: CapabilityGridAction[] = []
+      if (shown(props.primaryAction)) named.push({ ...props.primaryAction, kind: 'secondary' })
+      if (shown(props.secondaryAction)) named.push({ ...props.secondaryAction, kind: 'outlined' })
+      return named
+    }
+    return props.actions.map((action, index) => ({
+      ...action,
+      kind: action.kind ?? (index === 0 ? 'secondary' : 'outlined')
+    }))
+  })
 </script>
 
 <template>
@@ -88,6 +110,7 @@
     v-if="items.length"
     v-bind="$attrs"
     :id="anchor || undefined"
+    class="scroll-mt-(--spacing-xxl)"
     :data-testid="testId"
     :aria-label="title || undefined"
   >
@@ -106,16 +129,16 @@
           :description="description"
         >
           <template
-            v-if="actions.length"
+            v-if="buttons.length"
             #actions
           >
             <Button
-              v-for="(action, index) in actions"
+              v-for="action in buttons"
               :key="action.label"
               :label="action.label"
               :href="action.href"
               :target="action.target"
-              :kind="action.kind ?? (index === 0 ? 'secondary' : 'outlined')"
+              :kind="action.kind"
               size="large"
               :icon="action.trailing ? 'pi pi-chevron-right' : ''"
               icon-position="trailing"

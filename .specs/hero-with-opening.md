@@ -3,10 +3,10 @@ name: hero-with-opening
 category: sections
 structure: monolithic
 status: implemented
-spec_version: 2
+spec_version: 3
 created: 2026-11-05
 last_updated: 2026-11-14
-checksum: c0bc6a85aca4025c777ac32bd340798baed43b46bdd0401f428a7a19f8ed5e6b
+checksum: 24622c464bd91f807654f1810df72dbc5fc2fe1014e4b3c8b5ccb340fcf24091
 template: 2
 ---
 
@@ -83,6 +83,7 @@ The opening band of a product page followed straight by its arguments: a large c
 | `primaryAction`   | `HeroWithOpeningAction`      | `undefined` | false    | First button under the headline; `{ label, href, trailing?, target? }`. Shown only with a label and a link.                                                                                  |
 | `secondaryAction` | `HeroWithOpeningAction`      | `undefined` | false    | Second, outlined button beside the first; `{ label, href, trailing?, target? }`. Shown only with a label and a link.                                                                         |
 | `items`           | `HeroWithOpeningItem[]`      | `[]`        | false    | The arguments in reading order, three to a row; each is `{ icon, title, description }`. The grid renders only when there are items.                                                          |
+| `anchor`          | `string`                     | `''`        | false    | In-page id set on the band so a hash link can target it.                                                                                                                                     |
 
 ## Events
 

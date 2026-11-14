@@ -2,12 +2,14 @@
 name: use-case-links
 category: sections
 structure: monolithic
+template: 2
 status: implemented
-spec_version: 1
+spec_version: 2
 created: 2026-11-04
-last_updated: 2026-11-12
-checksum: d85a992f4be59d280816a04f923d9d554ca02885cbb8ef2394a3c59dbdb8d3d6
+last_updated: 2026-11-14
+checksum: 49d031f0623dd648b98719334d1092c8e2acd4bcf5e1e04679b53049070309b5
 ---
+
 # UseCaseLinks — Component Spec
 
 ## Purpose
@@ -40,7 +42,7 @@ The use-case directory band of a solution page: a left-aligned section title ove
 
 ```vue
 <script setup>
-import UseCaseLinks from '@aziontech/webkit/use-case-links'
+  import UseCaseLinks from '@aziontech/webkit/use-case-links'
 </script>
 
 <template>
@@ -49,8 +51,18 @@ import UseCaseLinks from '@aziontech/webkit/use-case-links'
     title="What teams use Application Accelerator for"
     description="Cache what standard CDN caching cannot, with the methods, query strings and cookies you choose."
     :items="[
-      { icon: 'pi pi-code', title: 'Accelerate REST and GraphQL APIs', description: 'Cache API responses with query string and cookie-based segmentation.', href: '/solutions/api-gateway' },
-      { icon: 'pi pi-bolt', title: 'Reduce API latency', description: 'Short TTLs for rapidly changing data endpoints.', href: '/docs' }
+      {
+        icon: 'pi pi-code',
+        title: 'Accelerate REST and GraphQL APIs',
+        description: 'Cache API responses with query string and cookie-based segmentation.',
+        href: '/solutions/api-gateway'
+      },
+      {
+        icon: 'pi pi-bolt',
+        title: 'Reduce API latency',
+        description: 'Short TTLs for rapidly changing data endpoints.',
+        href: '/docs'
+      }
     ]"
   />
 </template>
@@ -58,12 +70,13 @@ import UseCaseLinks from '@aziontech/webkit/use-case-links'
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `eyebrow` | `string` | `''` | false | Overline above the section title. |
-| `title` | `string` | `''` | false | Headline of the band, rendered by the left-aligned section title as its `h2`; the band renders no header when empty. |
-| `description` | `string` | `''` | false | Supporting sentence under the headline. |
-| `items` | `UseCaseLinksItem[]` | `[]` | false | The use cases rendered as linked topics in a three-column divider grid, in order; each item is `{ icon, title, description, href? }`; an item without `href` renders as a plain, unlinked topic. |
+| Prop          | Type                 | Default | Required | JSDoc                                                                                                                                                                                            |
+| ------------- | -------------------- | ------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `eyebrow`     | `string`             | `''`    | false    | Overline above the section title.                                                                                                                                                                |
+| `title`       | `string`             | `''`    | false    | Headline of the band, rendered by the left-aligned section title as its `h2`; the band renders no header when empty.                                                                             |
+| `description` | `string`             | `''`    | false    | Supporting sentence under the headline.                                                                                                                                                          |
+| `items`       | `UseCaseLinksItem[]` | `[]`    | false    | The use cases rendered as linked topics in a three-column divider grid, in order; each item is `{ icon, title, description, href? }`; an item without `href` renders as a plain, unlinked topic. |
+| `anchor`      | `string`             | `''`    | false    | In-page id set on the band so a hash link can target it.                                                                                                                                         |
 
 ## Events
 
@@ -87,17 +100,17 @@ _none_
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| cell fill | `var(--bg-canvas)` |
-| cell inset | `var(--spacing-xl)` |
+| Region                | Token (DESIGN.md)       |
+| --------------------- | ----------------------- |
+| cell fill             | `var(--bg-canvas)`      |
+| cell inset            | `var(--spacing-xl)`     |
 | frame rules and marks | `var(--border-default)` |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 
@@ -107,6 +120,26 @@ _none_
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): typography and colours belong to `section-title` and `topic`.
 - `motion-reduce:transition-none motion-reduce:transform-none` — `topic`'s hover carries its own fallback; this band adds no motion.
 - Touch target ≥40×40 px — each topic link spans its whole cell.
+
+## Internationalization
+
+- No built-in strings: the eyebrow, title, description and items are marketing copy passed through props.
+
+## Right-to-left
+
+- Layout: the left-aligned section title and the composed `card-grid` use logical utilities, so "left" reads as the inline start.
+- Icons: none mirrored.
+- Keyboard: unchanged.
+
+## Responsive
+
+- The link cells stack on phones; the balanced `card-grid` widens at the small breakpoint and reaches three columns from large.
+- No horizontal scroll at 320 px.
+
+## Performance
+
+- Bundle budget: 5 KB for `./use-case-links` gzip in `.size-limit.json`.
+- Renders static link cells; no state, timers or observers.
 
 ## Examples
 

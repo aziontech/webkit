@@ -74,7 +74,7 @@
     error: 'We could not send your message. Try again.'
   }
 
-  const carouselMarks = [
+  const tickerMarks = [
     'global-fashion-group',
     'herospark',
     'itau',
@@ -89,7 +89,7 @@
   ]
 
   const onSubmit = (event, values) => {
-    console.log(event.type, values)
+    console.warn(event.type, values)
   }
 </script>
 
@@ -104,8 +104,8 @@
     :fields="fields"
     submit-label="Request immediate contact"
     :messages="messages"
-    carousel-label="Trusted by teams running critical workloads"
-    :carousel-marks="carouselMarks"
+    ticker-label="Trusted by teams running critical workloads"
+    :ticker-marks="tickerMarks"
     @submit="onSubmit"
   />
 </template>

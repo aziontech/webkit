@@ -48,7 +48,9 @@
   })
 
   const slots = defineSlots<{
+    /** Replaces the description with richer content; falls back to the description prop. */
     default?(): unknown
+    /** The section's calls to action, under the headline. */
     actions?(): unknown
   }>()
 

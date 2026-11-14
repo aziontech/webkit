@@ -14,6 +14,36 @@ const items = [
 ]
 
 describe('CapabilityGrid', () => {
+  it('links the primary and secondary actions, secondary then outlined', () => {
+    const { getByRole } = render(CapabilityGrid, {
+      props: {
+        items,
+        title: 'T',
+        primaryAction: { label: 'Start now', href: '/signup' },
+        secondaryAction: { label: 'Docs', href: '/docs' }
+      }
+    })
+    expect(getByRole('link', { name: 'Start now' })).toHaveAttribute('href', '/signup')
+    expect(getByRole('link', { name: 'Start now' })).toHaveAttribute('data-kind', 'secondary')
+    expect(getByRole('link', { name: 'Docs' })).toHaveAttribute('data-kind', 'outlined')
+  })
+
+  it('still reads the deprecated actions when no named action is set', () => {
+    const { getByRole } = render(CapabilityGrid, {
+      props: { items, title: 'T', actions: [{ label: 'Docs', href: '/docs' }] }
+    })
+    expect(getByRole('link', { name: 'Docs' })).toHaveAttribute('href', '/docs')
+    const both = render(CapabilityGrid, {
+      props: {
+        items,
+        title: 'T',
+        actions: [{ label: 'Old', href: '/old' }],
+        primaryAction: { label: 'New', href: '/new' }
+      }
+    })
+    expect(both.queryByRole('link', { name: 'Old' })).toBeNull()
+  })
+
   it('renders nothing without items', () => {
     const { queryByTestId } = render(CapabilityGrid, { props: { title: 'T' } })
     expect(queryByTestId('sections-capability-grid')).toBeNull()

@@ -3,10 +3,10 @@ name: big-numbers
 category: marketing
 structure: monolithic
 status: implemented
-spec_version: 2
-checksum: c7cab719fead9edc69a1f7e812e5d0f407e45b43823ea10f01b09d96f63d3505
+spec_version: 3
+checksum: 84a65c49f35780df43d4412f665f770493e4252b6c197422f555253cf466c2a6
 created: 2026-09-22
-last_updated: 2026-11-11
+last_updated: 2026-11-14
 ---
 
 # Big Numbers — Component Spec
@@ -68,7 +68,7 @@ A band of headline figures — throughput, uptime, points of presence — set in
 
 | Prop    | Type                             | Default    | Required | JSDoc                                                                                                                                                                                                      |
 | ------- | -------------------------------- | ---------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `items` | `BigNumberItem[]`                | `[]`       | false    | The figures rendered as cells, in order; each item is `{ value, label, prefix?, suffix? }` where `value` is the figure, `label` its caption, and `prefix` / `suffix` the qualifier and unit set beside it. |
+| `items` | `BigNumbersItem[]`               | `[]`       | false    | The figures rendered as cells, in order; each item is `{ value, label, prefix?, suffix? }` where `value` is the figure, `label` its caption, and `prefix` / `suffix` the qualifier and unit set beside it. |
 | `size`  | `'small' \| 'medium' \| 'large'` | `'medium'` | false    | Size token; picks the big-number scale the figures are set at.                                                                                                                                             |
 
 ## Events

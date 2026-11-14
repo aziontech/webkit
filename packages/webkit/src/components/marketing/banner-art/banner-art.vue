@@ -1,9 +1,9 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
-  import SpinningGlobe from '../../../../assets/globe/spinning-globe.vue'
-  import NetworkMap from '../../../content/network-map/network-map.vue'
-  import TextureMaterial from '../../texture-material/texture-material.vue'
+  import SpinningGlobe from '../../../assets/globe/spinning-globe.vue'
+  import NetworkMap from '../../content/network-map/network-map.vue'
+  import TextureMaterial from '../texture-material/texture-material.vue'
 
   defineOptions({ name: 'BannerArt', inheritAttrs: false })
 
@@ -12,13 +12,16 @@
 
   interface Props {
     /** Which backdrop to draw. */
-    art?: BannerArtKind
+    kind?: BannerArtKind
+    /** @deprecated since 6.0 — use `kind`. Removed in 7.0. */
+    art?: BannerArtKind | ''
     /** Spins the globe or pulses the PoPs; a still frame when false or under reduced motion. */
     animated?: boolean
   }
 
-  withDefaults(defineProps<Props>(), {
-    art: 'map',
+  const props = withDefaults(defineProps<Props>(), {
+    kind: 'map',
+    art: '',
     animated: true
   })
 
@@ -27,17 +30,20 @@
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? 'marketing-banner-art'
   )
+
+  const backdrop = computed<BannerArtKind>(() => props.art || props.kind)
 </script>
 
 <template>
   <div
     v-bind="$attrs"
     :data-testid="testId"
-    :data-art="art"
+    :data-kind="backdrop"
+    :data-art="backdrop"
     aria-hidden="true"
     class="pointer-events-none absolute inset-0 z-0 overflow-hidden [container-type:size]"
   >
-    <template v-if="art === 'globe'">
+    <template v-if="backdrop === 'globe'">
       <TextureMaterial />
       <div
         class="absolute inset-0 mx-auto flex w-full max-w-(--layout-measure-site) items-center justify-end"
@@ -55,7 +61,7 @@
       </div>
     </template>
 
-    <template v-else-if="art === 'map'">
+    <template v-else-if="backdrop === 'map'">
       <div class="absolute inset-y-0 end-0 w-full md:w-3/5">
         <NetworkMap
           region="atlantic"

@@ -67,12 +67,15 @@
     subjects?: SubjectLibrarySubject[]
     /** Call to action across the grid's last two cells; `{ eyebrow, title, titleMuted, description, primaryAction, secondaryAction }` where each action is `{ label, href, trailing?, target? }`. Omitted when absent. */
     closing?: SubjectLibraryClosing
+    /** Accessible name of the band; empty leaves the section unnamed. */
+    ariaLabel?: string
   }
 
   const props = withDefaults(defineProps<Props>(), {
     anchor: '',
     subjects: () => [],
-    closing: undefined
+    closing: undefined,
+    ariaLabel: ''
   })
 
   const attrs = useAttrs()
@@ -102,6 +105,7 @@
     v-bind="$attrs"
     :id="anchor || undefined"
     :data-testid="testId"
+    :aria-label="ariaLabel || undefined"
     class="scroll-mt-(--spacing-xxl)"
   >
     <SectionModule

@@ -51,7 +51,7 @@
     title="Every AI request through one control point"
     description="Every client calls one endpoint. Firewall stops abuse, then a function checks the key, routes the call, and logs it."
     position="bottom"
-    :interval="8000"
+    :autoplay-interval="8000"
     :tabs="tabs"
     :primary-action="primaryAction"
   />

@@ -3,11 +3,11 @@ name: capability-grid
 category: sections
 structure: monolithic
 status: implemented
-spec_version: 1
+spec_version: 2
 template: 2
-checksum: 4f7d0194cec10a5c90f7dc39f153ab935da10b1cc9504c5a01e2b7f7fa169780
+checksum: 2909396a884ca81d8561e8e23798a63f88b0e6bd9daed1fe82f1b5734c2d0207
 created: 2026-11-11
-last_updated: 2026-11-12
+last_updated: 2026-11-14
 ---
 
 # CapabilityGrid — Component Spec
@@ -66,16 +66,18 @@ A framed grid of product capabilities under an optional section title: each cell
 
 ## Props
 
-| Prop          | Type                     | Default | Required | JSDoc                                                                                                                                               |
-| ------------- | ------------------------ | ------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `eyebrow`     | `string`                 | `''`    | false    | Overline above the title.                                                                                                                           |
-| `title`       | `string`                 | `''`    | false    | Headline over the grid, rendered as the band `h2`; without it the grid is bare and each capability heading is an `h2`.                              |
-| `description` | `string`                 | `''`    | false    | One or two sentences under the title.                                                                                                               |
-| `items`       | `CapabilityGridItem[]`   | `[]`    | false    | The capabilities, in order; each is `{ title, description, icon?, points? }`. The band renders nothing when empty.                                  |
-| `columns`     | `CapabilityGridColumns`  | `3`     | false    | Capabilities per row from the large breakpoint up.                                                                                                  |
-| `actions`     | `CapabilityGridAction[]` | `[]`    | false    | Buttons under the section title; each is `{ label, href, trailing?, target?, kind? }`; without `kind` the first is secondary and the rest outlined. |
-| `anchor`      | `string`                 | `''`    | false    | In-page id set on the band so a hash link can target it.                                                                                            |
-| `titleKind`   | `SectionTitleKind`       | `'centered'` | false | Layout of the section title: `centered` stacks and centers it, `left` stacks it at the start edge, `horizontal` sets the headline and its description in two columns. |
+| Prop              | Type                     | Default      | Required | JSDoc                                                                                                                                                                                                                              |
+| ----------------- | ------------------------ | ------------ | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `eyebrow`         | `string`                 | `''`         | false    | Overline above the title.                                                                                                                                                                                                          |
+| `title`           | `string`                 | `''`         | false    | Headline over the grid, rendered as the band `h2`; without it the grid is bare and each capability heading is an `h2`.                                                                                                             |
+| `description`     | `string`                 | `''`         | false    | One or two sentences under the title.                                                                                                                                                                                              |
+| `items`           | `CapabilityGridItem[]`   | `[]`         | false    | The capabilities, in order; each is `{ title, description, icon?, points? }`. The band renders nothing when empty.                                                                                                                 |
+| `columns`         | `CapabilityGridColumns`  | `3`          | false    | Capabilities per row from the large breakpoint up.                                                                                                                                                                                 |
+| `primaryAction`   | `CapabilityGridAction`   | `undefined`  | false    | First button under the section title, `secondary`; `{ label, href, trailing?, target? }`. Shown only with a label and a link.                                                                                                      |
+| `secondaryAction` | `CapabilityGridAction`   | `undefined`  | false    | Second button under the section title, `outlined`; same shape. Shown only with a label and a link.                                                                                                                                 |
+| `actions`         | `CapabilityGridAction[]` | `[]`         | false    | @deprecated since 6.0 — use `primaryAction` / `secondaryAction`. Removed in 7.0. Read only when neither is set; each is `{ label, href, trailing?, target?, kind? }`, without `kind` the first is secondary and the rest outlined. |
+| `anchor`          | `string`                 | `''`         | false    | In-page id set on the band so a hash link can target it.                                                                                                                                                                           |
+| `titleKind`       | `SectionTitleKind`       | `'centered'` | false    | Layout of the section title: `centered` stacks and centers it, `left` stacks it at the start edge, `horizontal` sets the headline and its description in two columns.                                                              |
 
 ## Events
 

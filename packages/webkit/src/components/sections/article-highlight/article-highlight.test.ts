@@ -209,6 +209,28 @@ describe('ArticleHighlight', () => {
     await waitFor(() => expect(steps).toContain(1), { timeout: 2000 })
   })
 
+  it('offers a pause control while autoplay runs that stops and resumes the rotation', async () => {
+    const { getByTestId, getAllByRole, findByRole, getByRole } = band({
+      autoplay: true,
+      autoplayInterval: 200
+    })
+
+    const root = highlightOf(getByTestId)
+    const control = await findByRole('button', { name: 'Pause rotation' })
+    await fireEvent.click(control)
+    await leave(getByTestId)
+    expect(root).toHaveAttribute('data-paused')
+    expect(root.hasAttribute('data-autoplay')).toBe(false)
+    const selected = () =>
+      getAllByRole('tab').findIndex((tab) => tab.getAttribute('aria-selected') === 'true')
+    const held = selected()
+    await new Promise((resolve) => setTimeout(resolve, 500))
+    expect(selected()).toBe(held)
+
+    await fireEvent.click(getByRole('button', { name: 'Resume rotation' }))
+    await waitFor(() => expect(root.hasAttribute('data-autoplay')).toBe(true))
+  })
+
   it('pauses while the pointer is over the band', async () => {
     const { getByTestId, getAllByRole } = band({ autoplay: true, autoplayInterval: 200 })
 

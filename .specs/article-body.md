@@ -3,12 +3,13 @@ name: article-body
 category: sections
 structure: monolithic
 status: implemented
-spec_version: 2
+spec_version: 3
 template: 2
 created: 2026-11-05
 last_updated: 2026-11-14
-checksum: 5795dc559e97a1eaa8d30bc7e7e124ff99232aac4a88f003da5834b1eb52785d
+checksum: 23b31077b972da4b2e6c02730dbdaf1941f0c7af930696003557faa243d0e340
 ---
+
 # ArticleBody — Component Spec
 
 ## Purpose
@@ -38,7 +39,7 @@ The reading page of an article. A brand banner sits over a three-column grid: th
 
 ```vue
 <script setup>
-import ArticleBody from '@aziontech/webkit/article-body'
+  import ArticleBody from '@aziontech/webkit/article-body'
 </script>
 
 <template>
@@ -57,24 +58,30 @@ import ArticleBody from '@aziontech/webkit/article-body'
       { label: 'Success cases', href: '/success-cases' },
       { label: 'Magalu Ensures High Availability at Scale with Azion', current: true }
     ]"
-    :share="{ title: 'Share this article', copyLink: 'Copy link', shareX: 'Share on X', shareLinkedIn: 'Share on LinkedIn' }"
+    :share="{
+      title: 'Share this article',
+      copyLink: 'Copy link',
+      shareX: 'Share on X',
+      shareLinkedIn: 'Share on LinkedIn'
+    }"
   />
 </template>
 ```
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `eyebrow` | `string` | `''` | false | Overline above the headline. |
-| `article` | `ArticleBodyArticle` | `—` | true | The piece being read: its `title` (the page h1), `description`, `date`, `readTime`, canonical `href`, and optionally `author` (the writers' names) and `authors` (each a `name` and an `avatar` photo URL). |
-| `trail` | `ArticleBodyCrumb[]` | `[]` | false | The breadcrumb over the headline, each a `label` and an `href`, the last one marked `current`. |
-| `body` | `string` | `''` | false | The article as markdown; its `##` and `###` headings feed the outline. |
-| `banner` | `string` | `''` | false | URL of the image over the masthead; the banner frame is omitted when empty. |
-| `share` | `ArticleBodyShare` | `undefined` | false | Labels of the share group: its `title`, `copyLink`, `shareX` and `shareLinkedIn`, optional `copyFeed` with the `feed` URL it copies, and optional toast messages `copiedLink`, `copiedFeed` and `copiedPage`; the group is omitted when absent. |
-| `community` | `ArticleBodyCommunity` | `undefined` | false | The community group: a `title` and `links`, each a `label`, an `href` and an `icon`; omitted when absent. |
-| `copyPage` | `ArticleBodyCopyPage` | `undefined` | false | The copy-page split button: its `label` and a `menu` of entries, each a `value`, a `label` and an `icon`; omitted when absent. |
-| `assistants` | `Record<string, string>` | `{}` | false | URL templates of the assistants the copy-page menu opens, keyed by menu `value`; `{prompt}` in a template is replaced by the encoded prompt to read the article. |
+| Prop         | Type                     | Default     | Required | JSDoc                                                                                                                                                                                                                                           |
+| ------------ | ------------------------ | ----------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `eyebrow`    | `string`                 | `''`        | false    | Overline above the headline.                                                                                                                                                                                                                    |
+| `article`    | `ArticleBodyArticle`     | `—`         | true     | The piece being read: its `title` (the page h1), `description`, `date`, `readTime`, canonical `href`, and optionally `author` (the writers' names) and `authors` (each a `name` and an `avatar` photo URL).                                     |
+| `trail`      | `ArticleBodyCrumb[]`     | `[]`        | false    | The breadcrumb over the headline, each a `label` and an `href`, the last one marked `current`.                                                                                                                                                  |
+| `body`       | `string`                 | `''`        | false    | The article as markdown; its `##` and `###` headings feed the outline.                                                                                                                                                                          |
+| `banner`     | `string`                 | `''`        | false    | URL of the image over the masthead; the banner frame is omitted when empty.                                                                                                                                                                     |
+| `share`      | `ArticleBodyShare`       | `undefined` | false    | Labels of the share group: its `title`, `copyLink`, `shareX` and `shareLinkedIn`, optional `copyFeed` with the `feed` URL it copies, and optional toast messages `copiedLink`, `copiedFeed` and `copiedPage`; the group is omitted when absent. |
+| `community`  | `ArticleBodyCommunity`   | `undefined` | false    | The community group: a `title` and `links`, each a `label`, an `href` and an `icon`; omitted when absent.                                                                                                                                       |
+| `copyPage`   | `ArticleBodyCopyPage`    | `undefined` | false    | The copy-page split button: its `label` and a `menu` of entries, each a `value`, a `label` and an `icon`; omitted when absent.                                                                                                                  |
+| `assistants` | `Record<string, string>` | `{}`        | false    | URL templates of the assistants the copy-page menu opens, keyed by menu `value`; `{prompt}` in a template is replaced by the encoded prompt to read the article.                                                                                |
+| `anchor`     | `string`                 | `''`        | false    | In-page id set on the band so a hash link can target it.                                                                                                                                                                                        |
 
 ## Events
 
@@ -97,26 +104,26 @@ import ArticleBody from '@aziontech/webkit/article-body'
 
 ## Motion & Animations
 
-| Trigger | Animation / Transition | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback |
-|---|---|---|---|
-| hover colour of a community link | `transition-colors duration-fast-02 ease-productive-entrance` | inline (matches catalog) | `motion-reduce:transition-none` |
+| Trigger                          | Animation / Transition                                        | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback         |
+| -------------------------------- | ------------------------------------------------------------- | ------------------------------------------------- | ------------------------------- |
+| hover colour of a community link | `transition-colors duration-fast-02 ease-productive-entrance` | inline (matches catalog)                          | `motion-reduce:transition-none` |
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| banner fill | `var(--bg-canvas)` |
-| rail headings | `text-heading-xs`, `var(--text-default)` |
+| Region                     | Token (DESIGN.md)                                                |
+| -------------------------- | ---------------------------------------------------------------- |
+| banner fill                | `var(--bg-canvas)`                                               |
+| rail headings              | `text-heading-xs`, `var(--text-default)`                         |
 | byline and community links | `text-body-sm`, `var(--text-muted)`, hover `var(--text-default)` |
-| author names | `text-body-sm`, `var(--text-default)` |
-| avatar ring | `var(--bg-canvas)` |
-| focus ring | `var(--ring-color)` |
+| author names               | `text-body-sm`, `var(--text-default)`                            |
+| avatar ring                | `var(--bg-canvas)`                                               |
+| focus ring                 | `var(--ring-color)`                                              |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 
@@ -130,14 +137,14 @@ import ArticleBody from '@aziontech/webkit/article-body'
 
 ## Internationalization
 
-| Key | English source | Override prop |
-|---|---|---|
-| `articleBody.copiedLink` | `Link copied` | `share.copiedLink` |
-| `articleBody.copiedFeed` | `Feed link copied` | `share.copiedFeed` |
-| `articleBody.copiedPage` | `Page copied as markdown` | `share.copiedPage` |
-| `articleBody.copyFailed` | `Could not copy` | — |
-| `articleBody.copyFailedHint` | `Your browser blocked clipboard access.` | — |
-| `articleBody.assistantPrompt` | `Read {url} so I can ask questions about it.` | — |
+| Key                           | English source                                | Override prop      |
+| ----------------------------- | --------------------------------------------- | ------------------ |
+| `articleBody.copiedLink`      | `Link copied`                                 | `share.copiedLink` |
+| `articleBody.copiedFeed`      | `Feed link copied`                            | `share.copiedFeed` |
+| `articleBody.copiedPage`      | `Page copied as markdown`                     | `share.copiedPage` |
+| `articleBody.copyFailed`      | `Could not copy`                              | —                  |
+| `articleBody.copyFailedHint`  | `Your browser blocked clipboard access.`      | —                  |
+| `articleBody.assistantPrompt` | `Read {url} so I can ask questions about it.` | —                  |
 
 - Every other string (labels, trail, the article) arrives through props.
 - Formatting: none; the date and read time arrive pre-formatted.

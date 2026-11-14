@@ -3,11 +3,11 @@ name: listing-table
 category: sections
 structure: monolithic
 status: implemented
-spec_version: 2
+spec_version: 3
 template: 2
 created: 2026-11-05
 last_updated: 2026-11-14
-checksum: a30e32c6763e14f633891e3985b22f1e49724ad97ac8cad3d6ff7dae77d7d98a
+checksum: 3abeae4f1e9cb29638e678f555ecbfdf5727cce0c7f662797a5362a729106664
 ---
 # ListingTable — Component Spec
 
@@ -137,8 +137,8 @@ _none_
 ## Performance
 
 - Bundle budget: the `./listing-table` entry in `.size-limit.json`.
-- Runtime budget: none: static.
-- Heavy parts: none.
+- Runtime budget: `listing-table-1k` in `perf-budgets.json` (mount and replace 1k rows), measured by `src/test/performance.test.ts`.
+- Heavy parts: the phone list and the table are both rendered and switched by CSS at the small breakpoint, so the DOM carries every row twice; the table composes the `table` root, which brings its state engine. Keep the listing to the dozens of rows a page shows and link to the full listing with `primaryAction`.
 
 ## Examples
 

@@ -73,6 +73,11 @@ describe('ClosingCallToActionNewsletter', () => {
     expect(field(getByLabelText).getAttribute('placeholder')).toBe(form.placeholder)
   })
 
+  it('labels the email field with a built-in name when there is no title', () => {
+    const { getByLabelText } = band({ title: '' })
+    expect(getByLabelText('Email address', { selector: 'input' })).toBeInTheDocument()
+  })
+
   it('puts type="email" and autocomplete="email" on the <input>, not on the field wrapper', () => {
     const { getByLabelText } = band()
     const input = field(getByLabelText)

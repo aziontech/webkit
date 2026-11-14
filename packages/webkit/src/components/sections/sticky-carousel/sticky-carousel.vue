@@ -73,12 +73,13 @@
   <div
     v-if="title && items.length"
     v-bind="$attrs"
+    :id="anchor || undefined"
     ref="runway"
     :data-testid="testId"
+    class="scroll-mt-(--spacing-xxl)"
     :style="{ height: runwayHeight || undefined, '--sticky-carousel-offset': headerOffset }"
   >
     <div
-      :id="anchor || undefined"
       ref="pinned"
       class="flex flex-col lg:motion-safe:sticky lg:motion-safe:top-(--sticky-carousel-offset) lg:motion-safe:h-[calc(100dvh-var(--sticky-carousel-offset))]"
     >

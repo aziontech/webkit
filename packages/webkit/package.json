@@ -1415,8 +1415,8 @@
       "default": "./src/components/marketing/banner/banner.vue"
     },
     "./banner-art": {
-      "types": "./types/components/marketing/banner/banner-art/banner-art.vue.d.ts",
-      "default": "./src/components/marketing/banner/banner-art/banner-art.vue"
+      "types": "./types/components/marketing/banner-art/banner-art.vue.d.ts",
+      "default": "./src/components/marketing/banner-art/banner-art.vue"
     },
     "./hero": {
       "types": "./types/components/marketing/hero/index.d.ts",

@@ -12,8 +12,8 @@
       description="Run code, AI, data, and security on 100+ data centers worldwide."
       :primary-action="{ label: 'Start for free', href: '/signup' }"
       :secondary-action="{ label: 'Talk to a specialist', href: '/contact', trailing: true }"
-      carousel-label="Trusted by teams running critical workloads"
-      :carousel-marks="['global-fashion-group', 'herospark', 'itau', 'nzn', 'netshoes']"
+      ticker-label="Trusted by teams running critical workloads"
+      :ticker-marks="['global-fashion-group', 'herospark', 'itau', 'nzn', 'netshoes']"
     />
     <HeroBand
       kind="title-band"
@@ -31,8 +31,8 @@
       description="Run AI inference close to users on Azion’s distributed infrastructure."
       :primary-action="{ label: 'Start for free', href: '/signup' }"
       :secondary-action="{ label: 'Talk to a specialist', href: '/contact' }"
-      carousel-label="Trusted by teams running critical workloads"
-      :carousel-marks="['global-fashion-group', 'herospark', 'itau', 'nzn', 'netshoes']"
+      ticker-label="Trusted by teams running critical workloads"
+      :ticker-marks="['global-fashion-group', 'herospark', 'itau', 'nzn', 'netshoes']"
     />
     <HeroBand
       kind="copy-beside-art"
@@ -42,8 +42,8 @@
       :primary-action="{ label: 'Talk to a specialist', href: '/contact', trailing: true }"
       illustration="global-network"
       illustration-aria-label="A global network of Azion data centers"
-      carousel-label="Trusted by teams running critical workloads"
-      :carousel-marks="['agibank', 'radware', 'america-movil', 'gpa', 'fourbank']"
+      ticker-label="Trusted by teams running critical workloads"
+      :ticker-marks="['agibank', 'radware', 'america-movil', 'gpa', 'fourbank']"
     />
     <HeroBand
       kind="copy-on-top-art"

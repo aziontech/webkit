@@ -93,6 +93,11 @@ describe('ArticleBody', () => {
     expect(getByTestId(TESTID)).toBeInTheDocument()
   })
 
+  it('sets the anchor as the band id', () => {
+    const { getByTestId } = render(ArticleBody, { props: { article, anchor: 'band' } })
+    expect(getByTestId(TESTID)).toHaveAttribute('id', 'band')
+  })
+
   it('lets a consumer data-testid win over the fallback', () => {
     const { getByTestId, queryByTestId } = render(ArticleBody, {
       props: { article },

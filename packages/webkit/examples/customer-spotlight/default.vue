@@ -4,7 +4,7 @@
   import arezzoExtendedReversed from '@aziontech/webkit/assets/arezzo-extended-reversed.svg'
   import CustomerSpotlight from '@aziontech/webkit/customer-spotlight'
 
-  const cards = [
+  const items = [
     {
       name: 'Agibank',
       logo: agibankExtendedReversed,
@@ -27,5 +27,5 @@
 </script>
 
 <template>
-  <CustomerSpotlight :cards="cards" />
+  <CustomerSpotlight :items="items" />
 </template>

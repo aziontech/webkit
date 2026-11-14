@@ -27,6 +27,44 @@ const panel = (props: Record<string, unknown> = {}) =>
   })
 
 describe('ConsolePanel', () => {
+  it('sets the anchor as the band id and names the band by its title', () => {
+    const { getByTestId, getByRole } = panel({ anchor: 'console' })
+    expect(getByTestId('sections-console-panel')).toHaveAttribute('id', 'console')
+    expect(getByRole('region', { name: 'Console' })).toBe(getByTestId('sections-console-panel'))
+  })
+
+  it('links the primary and secondary actions, secondary then outlined', () => {
+    const { getByRole } = panel({
+      primaryAction: { label: 'Start now', href: '/signup' },
+      secondaryAction: { label: 'Talk to sales', href: '/contact' }
+    })
+    const first = getByRole('link', { name: 'Start now' })
+    const second = getByRole('link', { name: 'Talk to sales' })
+    expect(first).toHaveAttribute('href', '/signup')
+    expect(second).toHaveAttribute('href', '/contact')
+    expect(first).toHaveAttribute('data-kind', 'secondary')
+    expect(second).toHaveAttribute('data-kind', 'outlined')
+  })
+
+  it('drops an action with no link', () => {
+    const { queryAllByRole } = panel({ primaryAction: { label: 'Start now', href: '' } })
+    expect(queryAllByRole('link')).toHaveLength(0)
+  })
+
+  it('still reads the deprecated actions when no named action is set', () => {
+    const { getByRole, queryByRole } = panel({
+      actions: [{ label: 'Docs', href: '/docs' }]
+    })
+    expect(getByRole('link', { name: 'Docs' })).toHaveAttribute('href', '/docs')
+    const both = panel({
+      actions: [{ label: 'Old', href: '/old' }],
+      primaryAction: { label: 'New', href: '/new' }
+    })
+    expect(both.queryByRole('link', { name: 'Old' })).toBeNull()
+    expect(both.getByRole('link', { name: 'New' })).toBeInTheDocument()
+    expect(queryByRole('link', { name: 'Old' })).toBeNull()
+  })
+
   it('hands the first tab to the scene slot', () => {
     const { getByTestId } = panel()
     expect(getByTestId('probe')).toHaveTextContent('a')

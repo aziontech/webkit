@@ -21,7 +21,7 @@ Add this entry to the `sections` array of the page JSON. `_id` picks the block a
 - `eyebrow`, `title` and `description` make the section title.
 - `tabs` are up to three features, each a `title`, a `description` and its media: a `code` file, or an `illustration` name and its `illustrationLabel`. Give each a `value` when the band draws a `scene`.
 - `scene` is a live scene drawn for every tab without code, `{ component, props? }`; it gets the open tab's `value` as `tab`.
-- `interval` is how long each tab holds, in milliseconds (5200 by default); `copyAriaLabel` names the copy button of a code file.
+- `autoplayInterval` is how long each tab holds, in milliseconds (5200 by default); `copyAriaLabel` names the copy button of a code file.
 - `primaryAction` is the button beside the section title (a small link under the frame when there is no title), a `label`, an `href` and `trailing` for the chevron. Leave it out to drop it.
 
 Example:

@@ -2,11 +2,12 @@
 name: use-cases
 category: sections
 structure: monolithic
+template: 2
 status: implemented
-spec_version: 1
+spec_version: 2
 created: 2026-11-04
-last_updated: 2026-11-04
-checksum: fda9b5b2d6caea261759ce9746c573211e05dabbcd97d3ba57f271fcb70271db
+last_updated: 2026-11-14
+checksum: 45a552f2c8a0db8cc206b2285c1cb9e15672c4af518d88f1440e22b91b1a3061
 ---
 
 # UseCases — Component Spec
@@ -42,7 +43,7 @@ The "what teams use it for" band of a product page: a three-column frame whose f
 
 ```vue
 <script setup>
-import UseCases from '@aziontech/webkit/use-cases'
+  import UseCases from '@aziontech/webkit/use-cases'
 </script>
 
 <template>
@@ -52,8 +53,16 @@ import UseCases from '@aziontech/webkit/use-cases'
     description="Teams use it to:"
     :primary-action="{ label: 'Docs', href: '/docs', trailing: true }"
     :items="[
-      { icon: 'pi pi-comments', title: 'RAG Applications', description: 'Build topic-specific chatbots with the data stored in SQL Database.' },
-      { icon: 'pi pi-search', title: 'Search Applications', description: 'Power search with vector similarity queries on stored embeddings.' }
+      {
+        icon: 'pi pi-comments',
+        title: 'RAG Applications',
+        description: 'Build topic-specific chatbots with the data stored in SQL Database.'
+      },
+      {
+        icon: 'pi pi-search',
+        title: 'Search Applications',
+        description: 'Power search with vector similarity queries on stored embeddings.'
+      }
     ]"
   />
 </template>
@@ -61,13 +70,14 @@ import UseCases from '@aziontech/webkit/use-cases'
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `eyebrow` | `string` | `''` | false | Overline above the headline in the title cell, closed by the blinking cursor. |
-| `title` | `string` | `''` | false | Headline of the band, rendered as its `h2` in the title cell. |
-| `description` | `string` | `''` | false | One-line lead under the headline. |
-| `primaryAction` | `UseCasesAction` | `undefined` | false | Button pinned to the foot of the title cell; `{ label, href, trailing? }` where `trailing` adds the chevron. Omitted when absent. |
-| `items` | `UseCasesItem[]` | `[]` | false | The use cases rendered as frame cells, in order; each item is `{ icon, title, description }`. |
+| Prop            | Type             | Default     | Required | JSDoc                                                                                                                             |
+| --------------- | ---------------- | ----------- | -------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| `eyebrow`       | `string`         | `''`        | false    | Overline above the headline in the title cell, closed by the blinking cursor.                                                     |
+| `title`         | `string`         | `''`        | false    | Headline of the band, rendered as its `h2` in the title cell.                                                                     |
+| `description`   | `string`         | `''`        | false    | One-line lead under the headline.                                                                                                 |
+| `primaryAction` | `UseCasesAction` | `undefined` | false    | Button pinned to the foot of the title cell; `{ label, href, trailing? }` where `trailing` adds the chevron. Omitted when absent. |
+| `items`         | `UseCasesItem[]` | `[]`        | false    | The use cases rendered as frame cells, in order; each item is `{ icon, title, description }`.                                     |
+| `anchor`        | `string`         | `''`        | false    | In-page id set on the band so a hash link can target it.                                                                          |
 
 ## Events
 
@@ -89,22 +99,22 @@ _none_
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| typography (headline) | `.text-heading-lg` |
-| typography (lead) | `.text-body-md` |
-| headline text | `var(--text-default)` |
-| lead text | `var(--text-muted)` |
-| title cell rhythm | `var(--spacing-md)` |
-| lead to action gap | `var(--spacing-xl)` |
+| Region                | Token (DESIGN.md)       |
+| --------------------- | ----------------------- |
+| typography (headline) | `.text-heading-lg`      |
+| typography (lead)     | `.text-body-md`         |
+| headline text         | `var(--text-default)`   |
+| lead text             | `var(--text-muted)`     |
+| title cell rhythm     | `var(--spacing-md)`     |
+| lead to action gap    | `var(--spacing-xl)`     |
 | frame rules and marks | `var(--border-default)` |
-| cell fill | `var(--bg-canvas)` |
+| cell fill             | `var(--bg-canvas)`      |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 
@@ -114,6 +124,26 @@ _none_
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): headline `var(--text-default)`, lead `var(--text-muted)`; icon colours are `topic`'s.
 - `motion-reduce:transition-none motion-reduce:transform-none` — the overline cursor and the button's hover belong to `overline` and `button`, which carry their own reduced-motion fallback; this band adds no motion.
 - Touch target ≥40×40 px — the action is a large `button`.
+
+## Internationalization
+
+- No built-in strings: the eyebrow, title, description, items and action label are marketing copy passed through props.
+
+## Right-to-left
+
+- Layout: the composed `card-grid`, `frame-box` and `topic` use logical utilities, so the intro cell sits at the inline start.
+- Icons: the trailing chevron of the action is the `button`'s own and follows its mirroring.
+- Keyboard: unchanged.
+
+## Responsive
+
+- Below large the intro cell and the use cases stack in one column; from large the intro cell spans two rows beside the use cases.
+- No horizontal scroll at 320 px.
+
+## Performance
+
+- Bundle budget: 7 KB for `./use-cases` gzip in `.size-limit.json`.
+- Renders a handful of static cells; no state, timers or observers.
 
 ## Examples
 

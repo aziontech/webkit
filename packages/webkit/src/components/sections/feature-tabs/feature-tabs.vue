@@ -63,7 +63,11 @@
     tabs?: FeatureTabsTab[]
     /** Live scene drawn as the media of every tab without code, `{ component, props? }` naming a webkit scene asset; it receives the tab's `value` as `tab` and whether the tab is open as `active`. */
     scene?: FeatureTabsScene
+    /** Opens the next tab on a timer, with the composed tabs' visible pause control. */
+    autoplay?: boolean
     /** Milliseconds each tab holds before the next one opens. */
+    autoplayInterval?: number
+    /** @deprecated since 6.0 — use `autoplayInterval`. Removed in 7.0. */
     interval?: number
     /** Accessible name of the copy button on each tab's code file; empty keeps the code block's own. */
     copyAriaLabel?: string
@@ -78,7 +82,9 @@
     description: '',
     tabs: () => [],
     scene: undefined,
-    interval: 5200,
+    autoplay: true,
+    autoplayInterval: 5200,
+    interval: 0,
     copyAriaLabel: '',
     primaryAction: undefined
   })
@@ -159,7 +165,8 @@
             :texture="hasCode ? 'pixelate' : 'none'"
             texture-size="small"
             texture-fade="top"
-            :autoplay-interval="interval"
+            :autoplay="autoplay"
+            :autoplay-interval="interval || autoplayInterval"
           >
             <template #media="{ index, active }">
               <div

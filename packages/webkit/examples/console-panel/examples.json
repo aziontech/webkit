@@ -12,5 +12,19 @@
       "summary": "`kind=\"diagram\"` lets the scene keep its own height, centered on the texture, with an action under the title instead of tabs.",
       "file": "diagram.vue"
     }
-  ]
+  ],
+  "site": [
+    {
+      "name": "Default",
+      "summary": "",
+      "file": "site-default.vue",
+      "json": "site-default.json"
+    }
+  ],
+  "siteTitle": "Templates/Marketing/Console Panel/ConsolePanel",
+  "sitePreview": {
+    "layout": "fullscreen",
+    "background": "dark"
+  },
+  "siteStories": ["Default", "DefaultJson"]
 }

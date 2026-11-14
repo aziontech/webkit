@@ -30,6 +30,6 @@
     description="The same function, written and deployed from wherever you already work."
     :tabs="tabs"
     :scene="{ component: 'ProductWidget', props: { name: 'functions-start' } }"
-    :interval="6000"
+    :autoplay-interval="6000"
   />
 </template>

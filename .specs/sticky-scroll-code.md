@@ -2,11 +2,12 @@
 name: sticky-scroll-code
 category: sections
 structure: monolithic
+template: 2
 status: implemented
-spec_version: 2
+spec_version: 3
 created: 2026-11-05
 last_updated: 2026-11-14
-checksum: ae45211e8f7d7e89a78fb1aa878e902cf5a9fe2934c110ab95c51bd03f01f2f8
+checksum: 2c4747e72781f7f6d80114333cfea77fade3bfc37c64741095d708ee745d75d8
 ---
 # StickyScrollCode — Component Spec
 
@@ -108,6 +109,26 @@ _none_
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): owned by `section-title`, `sticky-stack` and `code-block`.
 - `motion-reduce:transition-none motion-reduce:transform-none` — the band adds no motion; the sample's line entrance is owned by `code-block`.
 - Touch target ≥40×40 px — not applicable to the small item button, which is supplementary to the item's copy.
+
+## Internationalization
+
+- No built-in strings: every visible string arrives through props.
+
+## Right-to-left
+
+- Layout: logical utilities and the composed components' own mirroring, so the stack of claims with code fill from the inline start.
+- Icons: action chevrons mirror (owned by `button`).
+- Keyboard: unchanged.
+
+## Responsive
+
+- Below large the claims stack, each with its code under it (the composed `sticky-stack` does not pin); from large the stack pins under the site header and the code frame keeps a fixed height.
+- No horizontal scroll at 320 px; long code lines scroll inside the `code-block`.
+
+## Performance
+
+- Bundle budget: 36 KB for `./sticky-scroll-code` gzip in `.size-limit.json`, initial chunk only.
+- Scroll tracking is `sticky-stack`'s, a passive listener batched on `requestAnimationFrame` and released on unmount.
 
 ## Examples
 

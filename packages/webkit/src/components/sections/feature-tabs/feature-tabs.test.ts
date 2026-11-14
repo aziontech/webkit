@@ -1,5 +1,6 @@
 import { fireEvent, render } from '@testing-library/vue'
-import { describe, expect, it } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
+import { nextTick } from 'vue'
 
 import { expectNoA11yViolations } from '../../../test/axe'
 import FeatureTabs from './feature-tabs.vue'
@@ -174,6 +175,37 @@ describe('FeatureTabs', () => {
     expect(queryByRole('heading', { level: 2 })).toBeNull()
     expect(queryByTestId('marketing-media-tabs')).toBeNull()
     expect(queryByRole('link')).toBeNull()
+  })
+
+  describe('autoplay timing', () => {
+    afterEach(() => {
+      vi.useRealTimers()
+    })
+
+    const activeAfter = async (props: Record<string, unknown>, ms: number) => {
+      vi.useFakeTimers()
+      const { container } = band(props)
+      vi.advanceTimersByTime(ms)
+      await nextTick()
+      return tabButtons(container).findIndex((button) => button.getAttribute('aria-current'))
+    }
+
+    it('holds each tab for autoplayInterval', async () => {
+      expect(await activeAfter({ autoplayInterval: 1000 }, 1000)).toBe(1)
+    })
+
+    it('still reads the deprecated interval', async () => {
+      expect(await activeAfter({ interval: 1000 }, 1000)).toBe(1)
+    })
+
+    it('stays on the first tab with autoplay off', async () => {
+      expect(await activeAfter({ autoplay: false, autoplayInterval: 1000 }, 3000)).toBe(0)
+    })
+
+    it('carries the composed pause control', () => {
+      const { getByRole } = band()
+      expect(getByRole('button', { name: 'Pause rotation' })).toBeInTheDocument()
+    })
   })
 
   it('has no a11y violations', async () => {

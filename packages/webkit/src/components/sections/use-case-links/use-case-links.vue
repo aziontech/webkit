@@ -33,13 +33,16 @@
     description?: string
     /** The use cases rendered as linked topics in a three-column divider grid, in order; each item is `{ icon, title, description, href? }`; an item without `href` renders as a plain, unlinked topic. */
     items?: UseCaseLinksItem[]
+    /** In-page id set on the band so a hash link can target it. */
+    anchor?: string
   }
 
   const props = withDefaults(defineProps<Props>(), {
     eyebrow: '',
     title: '',
     description: '',
-    items: () => []
+    items: () => [],
+    anchor: ''
   })
 
   const attrs = useAttrs()
@@ -56,6 +59,8 @@
 <template>
   <section
     v-bind="$attrs"
+    :id="anchor || undefined"
+    class="scroll-mt-(--spacing-xxl)"
     :data-testid="testId"
     :aria-label="title || undefined"
   >

@@ -58,11 +58,17 @@
     offset?: string
     /** Height of the window under the content, where the brand strip and the floor texture stand; any CSS length. */
     bottomHeight?: string
-    /** Stand the brand strip on the band's floor, under the `bottom` window. */
+    /** Stand the brand ticker on the band's floor, under the `bottom` window. */
+    ticker?: boolean
+    /** Registry names of the marks the ticker shows, in order. */
+    tickerMarks?: string[]
+    /** Overline above the brand ticker, stating the claim the marks make. */
+    tickerLabel?: string
+    /** @deprecated since 6.0 — use `ticker`. Removed in 7.0. */
     carousel?: boolean
-    /** Registry names of the marks the strip shows, in order. */
+    /** @deprecated since 6.0 — use `tickerMarks`. Removed in 7.0. */
     carouselMarks?: string[]
-    /** Overline above the brand strip, stating the claim the marks make. */
+    /** @deprecated since 6.0 — use `tickerLabel`. Removed in 7.0. */
     carouselLabel?: string
   }
 
@@ -81,6 +87,9 @@
     mediaAlign: 'center',
     offset: '',
     bottomHeight: '',
+    ticker: false,
+    tickerMarks: () => [],
+    tickerLabel: '',
     carousel: false,
     carouselMarks: () => [],
     carouselLabel: ''
@@ -105,6 +114,10 @@
   const hasBackdrop = () => Boolean(slots.background) || props.texture !== 'none'
   const hasMedia = () => Boolean(slots.media)
   const hasFloorTexture = computed(() => props.floorTexture !== 'none')
+
+  const showTicker = computed(() => props.ticker || props.carousel)
+  const marks = computed(() => (props.tickerMarks.length ? props.tickerMarks : props.carouselMarks))
+  const marksLabel = computed(() => props.tickerLabel || props.carouselLabel)
 </script>
 
 <template>
@@ -182,7 +195,7 @@
     </div>
 
     <div
-      v-if="slots.bottom || hasFloorTexture || carousel"
+      v-if="slots.bottom || hasFloorTexture || showTicker"
       class="relative w-full shrink-0 [background-color:var(--banner-floor-bg,transparent)] [z-index:var(--banner-z-bottom,1)]"
     >
       <div
@@ -206,13 +219,13 @@
       </div>
 
       <div
-        v-if="carousel"
+        v-if="showTicker"
         class="w-full [background-color:var(--banner-floor-bg,var(--bg-canvas))]"
       >
         <Ticker
           :data-width="maxWidth"
-          :marks="carouselMarks"
-          :label="carouselLabel"
+          :marks="marks"
+          :label="marksLabel"
           size="small"
           class="mx-auto w-full px-(--layout-boundary-inline) py-(--spacing-xl) data-[width=3xl]:max-w-(--container-3xl) data-[width=4xl]:max-w-(--container-4xl) data-[width=5xl]:max-w-(--container-5xl) data-[width=6xl]:max-w-(--container-6xl) data-[width=7xl]:max-w-(--container-7xl) data-[width=site]:max-w-(--layout-measure-site) data-[width=full]:max-w-none"
         />

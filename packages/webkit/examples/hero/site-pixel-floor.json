@@ -13,8 +13,8 @@
       "label": "Talk to a specialist",
       "href": "https://www.azion.com/en/contact/"
     },
-    "carouselLabel": "Trusted by teams running critical workloads",
-    "carouselMarks": [
+    "tickerLabel": "Trusted by teams running critical workloads",
+    "tickerMarks": [
       "global-fashion-group",
       "herospark",
       "itau",

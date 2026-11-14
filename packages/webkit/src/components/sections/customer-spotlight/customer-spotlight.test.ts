@@ -11,6 +11,51 @@ import WebkitProvider from '../../utils/webkit-provider/webkit-provider.vue'
 import CustomerSpotlight from './customer-spotlight.vue'
 
 describe('CustomerSpotlight', () => {
+  const one = [{ name: 'Acme', logo: '/acme.svg', href: '/customers/acme', description: 'Story.' }]
+
+  it('carries the fallback testid and lets a consumer testid win', () => {
+    const { getByTestId, unmount } = render(CustomerSpotlight, { props: { items: one } })
+    expect(getByTestId('sections-customer-spotlight')).toBeInTheDocument()
+    unmount()
+    const custom = render(CustomerSpotlight, {
+      props: { items: one },
+      attrs: { 'data-testid': 'custom' }
+    })
+    expect(custom.getByTestId('custom')).toBeInTheDocument()
+  })
+
+  it('sets the anchor as the band id', () => {
+    const { getByTestId } = render(CustomerSpotlight, { props: { items: one, anchor: 'stories' } })
+    expect(getByTestId('sections-customer-spotlight')).toHaveAttribute('id', 'stories')
+  })
+
+  it('names the band once, on the list', () => {
+    const { getAllByRole, queryByRole } = render(Default)
+    expect(queryByRole('region')).toBeNull()
+    expect(getAllByRole('list', { name: 'Customer stories' })).toHaveLength(1)
+  })
+
+  it('still reads the deprecated cards and storyLabel', () => {
+    const { getByRole } = render(CustomerSpotlight, {
+      props: { cards: one, storyLabel: 'See the case' }
+    })
+    expect(getByRole('link')).toHaveAttribute('href', '/customers/acme')
+    expect(getByRole('link').getAttribute('aria-label')).toMatch(/^See the case, Acme/)
+  })
+
+  it('prefers items and linkLabel over the deprecated names', () => {
+    const { getByRole } = render(CustomerSpotlight, {
+      props: {
+        items: one,
+        cards: [{ ...one[0], href: '/old' }],
+        linkLabel: 'Read it',
+        storyLabel: 'Old'
+      }
+    })
+    expect(getByRole('link')).toHaveAttribute('href', '/customers/acme')
+    expect(getByRole('link').getAttribute('aria-label')).toMatch(/^Read it, Acme/)
+  })
+
   it('renders nothing without cards', () => {
     const { queryByTestId } = render(CustomerSpotlight)
     expect(queryByTestId('sections-customer-spotlight')).toBeNull()
@@ -66,7 +111,7 @@ describe('CustomerSpotlight', () => {
   it('paints a card left without brand in the client registry colours for its name', () => {
     const card = { name: 'Agibank', logo: '/agibank.svg', href: '/a', description: 'Story.' }
     const faceOf = (cards: object[]) => {
-      const { getByRole, unmount } = render(CustomerSpotlight, { props: { cards } })
+      const { getByRole, unmount } = render(CustomerSpotlight, { props: { items: cards } })
       const style = getByRole('link')
         .querySelector('div[aria-hidden="true"]')
         ?.getAttribute('style')

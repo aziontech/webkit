@@ -51,6 +51,16 @@ describe('QuoteCarousel', () => {
     expect(queryByTestId(TESTID)).toBeNull()
   })
 
+  it('draws an item logo in place of its mark, named by logoAlt', () => {
+    const { getByRole, container } = render(QuoteCarousel, {
+      props: {
+        items: [{ ...ITEMS[0], logo: '/logos/acme.svg', logoAlt: 'Acme' }]
+      }
+    })
+    expect(getByRole('img', { name: 'Acme' })).toHaveAttribute('src', '/logos/acme.svg')
+    expect(container.querySelector('[data-mark]')).toBeNull()
+  })
+
   it('renders one card per item, in the order given', () => {
     const { container } = render(QuoteCarousel, { props: { items: ITEMS } })
     const cards = [...container.querySelectorAll('li')]

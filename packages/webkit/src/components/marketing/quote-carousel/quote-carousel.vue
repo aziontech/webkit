@@ -22,12 +22,16 @@
     jobTitle?: string
     /** URL of the person's likeness; without one the card draws their initials. */
     photo?: string
-    /** Registry name of the company mark; an unregistered name is written as its own wordmark. */
+    /** Registry name of the company mark, used when there is no logo; an unregistered name is written as its own wordmark. */
     mark?: string
+    /** URL of the company logo, drawn as-is in its own colours; wins over mark. */
+    logo?: string
+    /** Alternative text for the logo; falls back to the registry's label for mark. */
+    logoAlt?: string
   }
 
   interface Props {
-    /** The testimonials rendered as cards, in order; each item is `{ text, name, jobTitle?, photo?, mark? }` — the quotation, who said it, their role, their likeness and the registry name of their company's mark. */
+    /** The testimonials rendered as cards, in order; each item is `{ text, name, jobTitle?, photo?, logo?, logoAlt?, mark? }` — the quotation, who said it, their role, their likeness, the URL of their company's logo with its alternative text, and the registry name of their company's mark. */
     items?: QuoteCarouselItem[]
     /** Accessible name for the scrollable row of testimonials, announced before its contents. */
     ariaLabel?: string
@@ -55,7 +59,7 @@
 
   const cards = computed(() =>
     props.items.map((item, index) => {
-      const loader = item.mark ? resolveBrandMark(item.mark) : null
+      const loader = item.mark && !item.logo ? resolveBrandMark(item.mark) : null
       if (item.mark && loader && !loaded.has(item.mark)) {
         loaded.set(item.mark, defineAsyncComponent(loader))
       }
@@ -100,9 +104,17 @@
                 size="large"
               />
             </span>
+            <img
+              v-if="card.logo"
+              :src="card.logo"
+              :alt="card.logoAlt || card.label"
+              loading="lazy"
+              decoding="async"
+              class="h-8 w-auto max-w-(--size-48) object-contain"
+            />
             <component
               :is="card.art"
-              v-if="card.art"
+              v-else-if="card.art"
               :data-mark="card.mark"
               class="h-8 w-auto max-w-(--size-48) text-(--text-default)"
             />

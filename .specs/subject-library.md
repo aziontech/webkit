@@ -2,11 +2,12 @@
 name: subject-library
 category: sections
 structure: monolithic
+template: 2
 status: implemented
-spec_version: 1
+spec_version: 2
 created: 2026-11-05
-last_updated: 2026-11-12
-checksum: 4be688f7aa3c2a85dc3af39fe13209e8117623b6cb72b7e51bd71131c08654e0
+last_updated: 2026-11-14
+checksum: d21f5665740a4eb384feacaf4f2ee72b31d7e3e55051241e78e29fd3b24b5810
 ---
 
 # SubjectLibrary — Component Spec
@@ -41,7 +42,7 @@ A library of learning subjects in a divider grid: each subject is one framed car
 
 ```vue
 <script setup>
-import SubjectLibrary from '@aziontech/webkit/subject-library'
+  import SubjectLibrary from '@aziontech/webkit/subject-library'
 </script>
 
 <template>
@@ -69,11 +70,12 @@ import SubjectLibrary from '@aziontech/webkit/subject-library'
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `anchor` | `string` | `''` | false | In-page `id` of the band, the target of a `#hash` link. |
-| `subjects` | `SubjectLibrarySubject[]` | `[]` | false | The subject cards, in order; each is `{ slug, title, description, articles }` where every article is `{ label, href }`. Subjects without a title or a linked article are skipped. |
-| `closing` | `SubjectLibraryClosing` | `undefined` | false | Call to action across the grid's last two cells; `{ eyebrow, title, titleMuted, description, primaryAction, secondaryAction }` where each action is `{ label, href, trailing?, target? }`. Omitted when absent. |
+| Prop        | Type                      | Default     | Required | JSDoc                                                                                                                                                                                                           |
+| ----------- | ------------------------- | ----------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `anchor`    | `string`                  | `''`        | false    | In-page `id` of the band, the target of a `#hash` link.                                                                                                                                                         |
+| `subjects`  | `SubjectLibrarySubject[]` | `[]`        | false    | The subject cards, in order; each is `{ slug, title, description, articles }` where every article is `{ label, href }`. Subjects without a title or a linked article are skipped.                               |
+| `closing`   | `SubjectLibraryClosing`   | `undefined` | false    | Call to action across the grid's last two cells; `{ eyebrow, title, titleMuted, description, primaryAction, secondaryAction }` where each action is `{ label, href, trailing?, target? }`. Omitted when absent. |
+| `ariaLabel` | `string`                  | `''`        | false    | Accessible name of the band; empty leaves the section unnamed. Set it so the band is a named region landmark.                                                                                                   |
 
 ## Events
 
@@ -91,41 +93,59 @@ import SubjectLibrary from '@aziontech/webkit/subject-library'
 
 ## Motion & Animations
 
-| Trigger | Animation / Transition | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback |
-|---|---|---|---|
-| hover on an article link | `transition-colors duration-150 ease-out` | inline (matches catalog) | `motion-reduce:transition-none` |
+| Trigger                  | Animation / Transition                    | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback         |
+| ------------------------ | ----------------------------------------- | ------------------------------------------------- | ------------------------------- |
+| hover on an article link | `transition-colors duration-150 ease-out` | inline (matches catalog)                          | `motion-reduce:transition-none` |
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| typography (subject title) | `.text-heading-sm` |
-| typography (description, articles) | `.text-body-sm` |
-| subject title | `var(--text-default)` |
-| description and article links | `var(--text-muted)` |
-| article link hover | `var(--text-default)` |
-| card fill | `var(--bg-canvas)` |
-| closing cell fill | `var(--bg-surface-raised)` |
-| card inset | `var(--spacing-xl)` |
-| card rhythm | `var(--spacing-lg)` |
-| focus ring | `var(--ring-color)` |
+| Region                             | Token (DESIGN.md)          |
+| ---------------------------------- | -------------------------- |
+| typography (subject title)         | `.text-heading-sm`         |
+| typography (description, articles) | `.text-body-sm`            |
+| subject title                      | `var(--text-default)`      |
+| description and article links      | `var(--text-muted)`        |
+| article link hover                 | `var(--text-default)`      |
+| card fill                          | `var(--bg-canvas)`         |
+| closing cell fill                  | `var(--bg-surface-raised)` |
+| card inset                         | `var(--spacing-xl)`        |
+| card rhythm                        | `var(--spacing-lg)`        |
+| focus ring                         | `var(--ring-color)`        |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 
 - Visible focus: each article link draws `focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring-color)`; the closing buttons own theirs.
 - Keyboard map: `Tab` moves through the article links in reading order, then the closing actions; `Enter` follows one. Nothing else in the band is interactive.
-- ARIA: the band is a `<section>` carrying `anchor` as its `id`; each subject is an `h3` over a `role="list"` of links; the closing cell is `call-to-action`'s own section, named by its title.
+- ARIA: the band is a `<section>` carrying `anchor` as its `id` and named by `ariaLabel` when set, so it becomes a region landmark; each subject is an `h3` over a `role="list"` of links; the closing cell is `call-to-action`'s own section, named by its title.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): titles `var(--text-default)`, descriptions and links `var(--text-muted)`.
 - `motion-reduce:transition-none motion-reduce:transform-none` — the article link colour transition carries `motion-reduce:transition-none`.
 - Touch target ≥40×40 px — the closing actions are large `button`s; article links are inline text links inside a list.
 
-## Examples
+## Internationalization
+
+- No built-in strings: subject titles, descriptions, article labels, the closing copy and `ariaLabel` arrive through props.
+
+## Right-to-left
+
+- Layout: the composed `card-grid` and `call-to-action` use logical utilities, so the grid fills from the inline start.
+- Icons: the closing buttons' chevrons mirror (owned by `button`).
+- Keyboard: unchanged.
+
+## Responsive
+
+- One subject per row on phones (`mobileColumns: 1`), three columns from the grid's breakpoint up; the closing cell spans two cells from the small breakpoint.
+- No horizontal scroll at 320 px.
+
+## Performance
+
+- Bundle budget: 7.5 KB for `./subject-library` gzip in `.size-limit.json`.
+- Renders static cards and links; no state, timers or observers.
 
 - Default
 

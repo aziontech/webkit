@@ -2,6 +2,9 @@
   import { usePreferredReducedMotion } from '@vueuse/core'
   import { computed, onMounted, onScopeDispose, ref, useAttrs, watch } from 'vue'
 
+  import { useTranslate } from '../../../composables/use-locale/use-translate'
+  import * as en from '../../../i18n/messages/en'
+  import IconButton from '../../actions/icon-button/icon-button.vue'
   import FrameBox from '../../layout/frame-box/frame-box.vue'
   import TextureMaterial, {
     type TextureMaterialFade,
@@ -42,7 +45,7 @@
     size?: MediaTabsSize
     /** What moves the selection as the reader points at a row. A click always selects, on either setting. */
     selectOn?: MediaTabsSelectOn
-    /** Advances to the next tab on a timer; pauses under the pointer or keyboard focus, restarts its count on a click, and never runs under reduced motion. */
+    /** Advances to the next tab on a timer, with a visible pause control; pauses under the pointer or keyboard focus, restarts its count on a click, and never runs under reduced motion. */
     autoplay?: boolean
     /** Milliseconds each tab is held before the band advances. */
     autoplayInterval?: number
@@ -70,23 +73,27 @@
   })
 
   const emit = defineEmits<{
-    /** The selection moved; the DOM event that moved it, then the index now shown. */
+    /** @deprecated since 6.0 — use `v-model` (`update:modelValue`). Removed in 7.0. The reader moved the selection; the DOM event that moved it, then the index now shown. */
     'tab-change': [event: Event, index: number]
   }>()
 
+  /** Index of the tab shown; moved by a click, a hover or the autoplay timer. */
+  const activeIndex = defineModel<number>({ default: 0 })
+
   defineSlots<{
     /** The tab's medium; replaces the image built from the item's own source. */
-    media(props: { item: MediaTabsItem; index: number; active: boolean }): unknown
+    media?(props: { item: MediaTabsItem; index: number; active: boolean }): unknown
   }>()
 
   const attrs = useAttrs()
   const reducedMotion = usePreferredReducedMotion()
+  const { t } = useTranslate({ autoplayControl: en.autoplayControl })
 
   const PROGRESS_TICK_MS = 100
   const MAX_TABS = { vertical: 3, horizontal: 5 } as const
 
-  const activeIndex = ref(0)
   const elapsed = ref(0)
+  const paused = ref(false)
   const pointerInside = ref(false)
   const focusInside = ref(false)
   let ticker: ReturnType<typeof globalThis.setInterval> | null = null
@@ -108,7 +115,11 @@
   )
 
   const autoplayRunning = computed(
-    () => autoplayEnabled.value && !pointerInside.value && !focusInside.value
+    () => autoplayEnabled.value && !paused.value && !pointerInside.value && !focusInside.value
+  )
+
+  const pauseLabel = computed(() =>
+    paused.value ? t('autoplayControl.resumeRotation') : t('autoplayControl.pauseRotation')
   )
 
   const progress = computed(() =>
@@ -183,6 +194,10 @@
     move(event, index)
   }
 
+  function togglePause(): void {
+    paused.value = !paused.value
+  }
+
   function select(event: globalThis.MouseEvent, index: number): void {
     pointerInside.value = false
     move(event, index)
@@ -198,7 +213,8 @@
     :data-size="size"
     :data-select-on="selectOn"
     :data-autoplay="autoplayRunning || null"
-    class="group/media-tabs [--media-tabs-row:calc(var(--spacing-xl)*4.5)] data-[size=small]:[--media-tabs-row:calc(var(--spacing-xl)*3)] data-[size=large]:[--media-tabs-row:calc(var(--spacing-xl)*6)]"
+    :data-paused="(autoplayEnabled && paused) || null"
+    class="group/media-tabs relative [--media-tabs-row:calc(var(--spacing-xl)*4.5)] data-[size=small]:[--media-tabs-row:calc(var(--spacing-xl)*3)] data-[size=large]:[--media-tabs-row:calc(var(--spacing-xl)*6)]"
     @pointerenter="enterPointer"
     @pointerleave="leavePointer"
     @focusin="enterFocus"
@@ -317,5 +333,14 @@
         </div>
       </FrameBox>
     </div>
+    <IconButton
+      v-if="hasItems && autoplayEnabled"
+      :icon="paused ? 'pi pi-play' : 'pi pi-pause'"
+      :aria-label="pauseLabel"
+      kind="outlined"
+      size="small"
+      class="absolute end-(--spacing-xs) top-(--spacing-xs) z-20"
+      @click="togglePause"
+    />
   </div>
 </template>

@@ -1147,5 +1147,14 @@ export const es: Messages = {
       'Un prompt le enseña la plataforma a cualquier agente de código: los nombres actuales de los productos, la documentación en vivo a través del servidor MCP de Azion y despliegues reales con la CLI.',
     asideTitle: '¿Prefieres la ruta guiada?',
     action: 'Configurar agente'
+  },
+  autoplayControl: {
+    pauseRotation: 'Pausar rotación',
+    resumeRotation: 'Reanudar rotación',
+    pauseScrolling: 'Pausar desplazamiento',
+    resumeScrolling: 'Reanudar desplazamiento'
+  },
+  closingCallToActionNewsletter: {
+    email: 'Correo electrónico'
   }
 }

@@ -2,11 +2,12 @@
 name: network-section
 category: sections
 structure: monolithic
+template: 2
 status: implemented
-spec_version: 2
+spec_version: 3
 created: 2026-11-04
 last_updated: 2026-11-14
-checksum: 8484c5c7b2c55768b4cce60e88e699486c28fe37eae58aa3d65e69af5bce4d2a
+checksum: 6d7aeaeba965919a16b51b11bf11db397cc773ad4b6158fe17516a07889dd69d
 ---
 
 # NetworkSection — Component Spec
@@ -151,6 +152,27 @@ _none_
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): lead `var(--text-muted)`, claims `var(--text-default)` on a tinted canvas; the map sits at low opacity behind the copy and never under the text column on large screens.
 - `motion-reduce:transition-none motion-reduce:transform-none` — the map animation belongs to `network-map`, which carries its own reduced-motion fallback; this band adds no motion.
 - Touch target ≥40×40 px — not applicable, nothing is interactive.
+
+## Internationalization
+
+- No built-in strings: every visible string arrives through props.
+
+## Right-to-left
+
+- Layout: logical utilities and the composed components' own mirroring, so the network map, title, chips and floor fill from the inline start.
+- Icons: action chevrons mirror (owned by `button`).
+- Keyboard: unchanged.
+
+## Responsive
+
+- Below medium the map is drawn as a strip under the copy (the full-height map column is hidden); from medium the map sits behind the copy, its fade widened between medium and large.
+- The floor follows `card-grid`: outcomes take one column per entry, benefits up to three, stats the `big-numbers` row.
+- No horizontal scroll at 320 px.
+
+## Performance
+
+- Bundle budget: 26.25 KB for `./network-section` gzip in `.size-limit.json`, initial chunk only (the map and the floors' composed parts load in their own chunks).
+- No timers or observers of its own; the map's PoP pulse is `network-map`'s and stops under reduced motion.
 
 ## Examples
 

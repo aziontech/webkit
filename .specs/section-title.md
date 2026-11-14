@@ -3,13 +3,13 @@ name: section-title
 category: marketing
 structure: monolithic
 status: implemented
-spec_version: 3
-checksum: 800e113f5759eb5c4be9216807957805252819fe8656303ef0c2a1a7c2a566ec
+spec_version: 4
+checksum: 7ea497bcb269619a269a3aa57670d87715e43e8d92836b293116e3c0f94ade8d
 figma:
   url: https://www.figma.com/design/QEbHSTFDWfh4VHkBp6NWN3/Azion.com?node-id=7495-24338
   node_id: 7495:24338
 created: 2026-08-11
-last_updated: 2026-11-09
+last_updated: 2026-11-14
 ---
 
 # Section Title — Component Spec
@@ -40,6 +40,7 @@ The framed header row that opens a page section: an optional overline, the secti
 ## Best practices
 
 - Leave `framed` on when the header is a brick of its own in a page column; turn it off when a band composes the header inside a frame it already draws, so the rule and the padding are not drawn twice.
+- `framed` defaults to `true` here, unlike `call-to-action`, `faq` and `media-split`, where it defaults to `false`: a section title most often opens a page section as its own brick, while those components are most often composed inside a band's frame. The default stays as it is because flipping it would change every existing page; pass `framed` explicitly when composing.
 
 - Keep one `section-title` per section, and let it own the section's `h2` so the page keeps one document outline. `size` changes the headline's step on the type scale, never its heading level — a page with a `large` and a `small` header still reads as two `h2`s.
 - Leave `size` at `medium` for an ordinary section opener. Reach for `large` only where the headline is the band's whole statement, and for `small` where the header opens a subsection inside a band that already has one.

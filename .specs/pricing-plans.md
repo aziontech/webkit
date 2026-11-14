@@ -2,11 +2,12 @@
 name: pricing-plans
 category: sections
 structure: monolithic
+template: 2
 status: implemented
-spec_version: 2
+spec_version: 3
 created: 2026-11-05
 last_updated: 2026-11-14
-checksum: 5de0f481a99a4bbd2d1124fb4ea330a79adc4b82497319acf794b452c325888c
+checksum: 212b3e70d68476d0b4be64aa8eac8374af8c2cd43dc7b22622919862b2580067
 ---
 
 # PricingPlans — Component Spec
@@ -134,6 +135,26 @@ _none_
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): text colours are the tokens above.
 - `motion-reduce:transition-none motion-reduce:transform-none` — the toggle indicator belongs to `toggle-group` and the price fade to `card-pricing`, each with its own reduced-motion fallback; this band adds no motion of its own.
 - Touch target ≥40×40 px — the toggle and the buttons are `large`.
+
+## Internationalization
+
+- No built-in strings: every visible string arrives through props.
+
+## Right-to-left
+
+- Layout: logical utilities and the composed components' own mirroring, so the plan cards fill from the inline start.
+- Icons: action chevrons mirror (owned by `button`).
+- Keyboard: unchanged.
+
+## Responsive
+
+- The plan cards follow `card-grid`: stacked on phones, side by side as the grid widens; the billing `toggle-group` stays above them.
+- No horizontal scroll at 320 px.
+
+## Performance
+
+- Bundle budget: 22.3 KB for `./pricing-plans` gzip in `.size-limit.json`.
+- The billing switch is local state; no timers or observers.
 
 ## Examples
 

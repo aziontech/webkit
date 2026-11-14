@@ -45,6 +45,8 @@
     primaryAction?: UseCasesAction
     /** The use cases rendered as frame cells, in order; each item is `{ icon, title, description }`. */
     items?: UseCasesItem[]
+    /** In-page id set on the band so a hash link can target it. */
+    anchor?: string
   }
 
   const props = withDefaults(defineProps<Props>(), {
@@ -52,7 +54,8 @@
     title: '',
     description: '',
     primaryAction: undefined,
-    items: () => []
+    items: () => [],
+    anchor: ''
   })
 
   const attrs = useAttrs()
@@ -72,6 +75,8 @@
 <template>
   <section
     v-bind="$attrs"
+    :id="anchor || undefined"
+    class="scroll-mt-(--spacing-xxl)"
     :data-testid="testId"
     :aria-labelledby="hasHeading ? headingId : undefined"
   >

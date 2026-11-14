@@ -157,8 +157,15 @@ describe('HeroBand', () => {
     expect(queryAllByRole('link')).toHaveLength(0)
   })
 
+  it('still reads the deprecated carouselMarks and carouselLabel', async () => {
+    const { findByTestId } = band({ carouselMarks: MARKS, carouselLabel: 'Old label' })
+    expect(await findByTestId('marketing-ticker', {}, { timeout: 5000 })).toHaveTextContent(
+      'Old label'
+    )
+  })
+
   it('renders the client strip only when it has marks', async () => {
-    const withMarks = band({ carouselMarks: MARKS, carouselLabel: 'Trusted by teams' })
+    const withMarks = band({ tickerMarks: MARKS, tickerLabel: 'Trusted by teams' })
 
     await waitFor(() => expect(withMarks.getByTestId('marketing-ticker')).toBeInTheDocument(), {
       timeout: 5000
