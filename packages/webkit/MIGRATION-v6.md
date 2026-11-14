@@ -247,6 +247,9 @@ Two slot functions changed with them. The `Table.Filter` default slot's `apply`,
 `AttributeEditor` `row` and `row-actions` slots pass `remove(event)`. Bind them to a click
 (`@click="remove"`) or pass the event on (`@click="(event) => apply(event)"`).
 
+The `AttributeEditor` `row` slot also passes `move(event, offset)` for reorderable lists
+(`reorderable`); a slot that ignores it needs no change.
+
 ### `Item` drops `asChild`: set `href` or `clickable`
 
 `Item` no longer merges its row onto a slotted child. It renders its own root: an anchor when
@@ -313,6 +316,8 @@ Some marketing sections render differently with the same props. Pass the old val
 the old look.
 
 - `FeatureWidgets`: `columns` defaults to `2` (was `3`).
+- `NetworkSection`: a `claims` entry can be a string, as before, or a `NetworkSectionClaim`
+  object; string claims render as they did.
 - `FeatureTabs`: the title sits beside the tabs on one row, the tabs are `medium`, and the action is
   a `Button`.
 - `MediaSplitBand`: at the medium breakpoint the copy aligns to the top of the media, and a lone
