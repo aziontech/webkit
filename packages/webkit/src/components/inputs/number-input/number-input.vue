@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup lang="ts" generic="TNullable extends boolean = false">
   import { computed, useAttrs } from 'vue'
 
   import { useFieldControl } from '../../../composables/use-field-control'
@@ -7,54 +7,64 @@
   import { PASSWORD_MANAGER_IGNORE } from '../../../utils/autofill'
 
   export type NumberInputSize = 'small' | 'medium' | 'large'
+  /** The model type: number, or number or null when nullable is set. */
+  export type NumberInputValue<TNullable extends boolean = false> = TNullable extends true
+    ? number | null
+    : number
 
   defineOptions({
     name: 'NumberInput',
     inheritAttrs: false
   })
 
-  interface Props {
-    /** Text shown when the input is empty. */
-    placeholder?: string
-    /** Size token; affects height, padding, and typography. */
-    size?: NumberInputSize
-    /** Disables interaction and applies disabled tokens. */
-    disabled?: boolean
-    /** Marks the field as read-only; spinner buttons are inert. */
-    readonly?: boolean
-    /** Applies the invalid border/ring tokens. */
-    invalid?: boolean
-    /** Marks the field as required for assistive tech. */
-    required?: boolean
-    /** Minimum allowed value; spinner stops at this bound. */
-    min?: number
-    /** Maximum allowed value; spinner stops at this bound. */
-    max?: number
-    /** Increment used by the spinner buttons and arrow keys. */
-    step?: number
-    /** Renders the chevron-up/chevron-down spinner controls. */
-    showButtons?: boolean
-  }
-
-  const props = withDefaults(defineProps<Props>(), {
-    placeholder: '',
-    size: 'medium',
-    disabled: false,
-    readonly: false,
-    invalid: false,
-    required: false,
-    min: undefined,
-    max: undefined,
-    step: 1,
-    showButtons: true
-  })
+  const props = withDefaults(
+    defineProps<{
+      /** Text shown when the input is empty. */
+      placeholder?: string
+      /** Size token; affects height, padding, and typography. */
+      size?: NumberInputSize
+      /** Disables interaction and applies disabled tokens. */
+      disabled?: boolean
+      /** Marks the field as read-only; spinner buttons are inert. */
+      readonly?: boolean
+      /** Applies the invalid border/ring tokens. */
+      invalid?: boolean
+      /** Marks the field as required for assistive tech. */
+      required?: boolean
+      /** Minimum allowed value; spinner stops at this bound. */
+      min?: number
+      /** Maximum allowed value; spinner stops at this bound. */
+      max?: number
+      /** Increment used by the spinner buttons and arrow keys. */
+      step?: number
+      /** Renders the chevron-up/chevron-down spinner controls. */
+      showButtons?: boolean
+      /** Lets a cleared field emit null instead of falling back to min or 0. */
+      nullable?: TNullable
+    }>(),
+    {
+      placeholder: '',
+      size: 'medium',
+      disabled: false,
+      readonly: false,
+      invalid: false,
+      required: false,
+      min: undefined,
+      max: undefined,
+      step: 1,
+      showButtons: true,
+      nullable: false as never
+    }
+  )
 
   const emit = defineEmits<{
-    change: [value: number]
+    change: [value: NumberInputValue<TNullable>]
   }>()
 
-  /** v-model value (always numeric; cleared input falls back to `min ?? 0`). */
-  const model = defineModel<number>({ default: 0 })
+  /** v-model value; a cleared input falls back to min or 0, or emits null when nullable. */
+  const model = defineModel<NumberInputValue<TNullable>>({
+    default: 0 as NumberInputValue<TNullable>
+  })
 
   defineSlots<{
     prefix(): unknown
@@ -87,7 +97,12 @@
     return rest
   })
 
+  const isNullable = computed(() => props.nullable !== false)
+
   const fallback = (): number => props.min ?? 0
+
+  const toModel = (value: number | null): NumberInputValue<TNullable> =>
+    value as NumberInputValue<TNullable>
 
   const clamp = (value: number): number => {
     let next = value
@@ -96,10 +111,11 @@
     return next
   }
 
-  const readValue = (event: Event): number => {
+  const readValue = (event: Event): NumberInputValue<TNullable> => {
     const target = event.target as HTMLInputElement | null
     const raw = target?.valueAsNumber ?? Number.NaN
-    return clamp(Number.isNaN(raw) ? fallback() : raw)
+    if (Number.isNaN(raw) && isNullable.value) return toModel(null)
+    return toModel(clamp(Number.isNaN(raw) ? fallback() : raw))
   }
 
   const handleInput = (event: Event) => {
@@ -112,14 +128,19 @@
 
   const canInteract = computed(() => !isDisabled.value && !props.readonly)
 
+  const stepBy = (delta: number): NumberInputValue<TNullable> => {
+    const current: number | null = model.value
+    return toModel(clamp(current === null ? fallback() : current + delta))
+  }
+
   const handleIncrement = () => {
     if (!canInteract.value) return
-    model.value = clamp(model.value + props.step)
+    model.value = stepBy(props.step)
   }
 
   const handleDecrement = () => {
     if (!canInteract.value) return
-    model.value = clamp(model.value - props.step)
+    model.value = stepBy(-props.step)
   }
 </script>
 

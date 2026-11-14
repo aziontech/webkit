@@ -7,9 +7,9 @@ spec_version: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3714-10789&m=dev
   node_id: 3714:10789
-checksum: 1fa3f7cfa8d65e281ed4d7d3e6cfd966a88bf53d1904b14d8199bff7ac398ef3
+checksum: 6a3d84aec10a532d94cd6ede7ae0ae4943865322f219202f1e384e7a5d03c40a
 created: 2026-06-22
-last_updated: 2026-11-13
+last_updated: 2026-11-14
 ---
 
 # Input Number — Component Spec
@@ -35,6 +35,7 @@ Numeric input field with optional increment/decrement spinner buttons. Use when 
 
 - Set `min` / `max` / `step` to constrain input rather than validating after the fact.
 - Use `inputmode="numeric"` semantics for mobile keyboards.
+- Set `nullable` on an optional field (a port, a limit) so a cleared field stays unset (`null`) instead of falling back to `min ?? 0`.
 
 ## Usage
 
@@ -57,32 +58,54 @@ Numeric input field with optional increment/decrement spinner buttons. Use when 
 </template>
 ```
 
+An optional field binds a `number | null` model and sets `nullable`:
+
+```vue
+<script setup>
+  import { ref } from 'vue'
+  import NumberInput from '@aziontech/webkit/number-input'
+
+  const port = ref(null)
+</script>
+
+<template>
+  <NumberInput
+    v-model="port"
+    nullable
+    :min="1"
+    :max="65535"
+    placeholder="Default port"
+  />
+</template>
+```
+
 ## Props
 
-| Prop          | Type                             | Default     | Required | JSDoc                                                    |
-| ------------- | -------------------------------- | ----------- | -------- | -------------------------------------------------------- |
-| `placeholder` | `string`                         | `''`        | false    | Text shown when the input is empty.                      |
-| `size`        | `'small' \| 'medium' \| 'large'` | `'medium'`  | false    | Size token; affects height, padding, and typography.     |
-| `disabled`    | `boolean`                        | `false`     | false    | Disables interaction and applies disabled tokens.        |
-| `readonly`    | `boolean`                        | `false`     | false    | Marks the field as read-only; spinner buttons are inert. |
-| `invalid`     | `boolean`                        | `false`     | false    | Applies the invalid border/ring tokens.                  |
-| `required`    | `boolean`                        | `false`     | false    | Marks the field as required for assistive tech.          |
-| `min`         | `number \| undefined`            | `undefined` | false    | Minimum allowed value; spinner stops at this bound.      |
-| `max`         | `number \| undefined`            | `undefined` | false    | Maximum allowed value; spinner stops at this bound.      |
-| `step`        | `number`                         | `1`         | false    | Increment used by the spinner buttons and arrow keys.    |
-| `showButtons` | `boolean`                        | `true`      | false    | Renders the chevron-up/chevron-down spinner controls.    |
+| Prop          | Type                             | Default     | Required | JSDoc                                                               |
+| ------------- | -------------------------------- | ----------- | -------- | ------------------------------------------------------------------- |
+| `placeholder` | `string`                         | `''`        | false    | Text shown when the input is empty.                                 |
+| `size`        | `'small' \| 'medium' \| 'large'` | `'medium'`  | false    | Size token; affects height, padding, and typography.                |
+| `disabled`    | `boolean`                        | `false`     | false    | Disables interaction and applies disabled tokens.                   |
+| `readonly`    | `boolean`                        | `false`     | false    | Marks the field as read-only; spinner buttons are inert.            |
+| `invalid`     | `boolean`                        | `false`     | false    | Applies the invalid border/ring tokens.                             |
+| `required`    | `boolean`                        | `false`     | false    | Marks the field as required for assistive tech.                     |
+| `min`         | `number \| undefined`            | `undefined` | false    | Minimum allowed value; spinner stops at this bound.                 |
+| `max`         | `number \| undefined`            | `undefined` | false    | Maximum allowed value; spinner stops at this bound.                 |
+| `step`        | `number`                         | `1`         | false    | Increment used by the spinner buttons and arrow keys.               |
+| `showButtons` | `boolean`                        | `true`      | false    | Renders the chevron-up/chevron-down spinner controls.               |
+| `nullable`    | `boolean`                        | `false`     | false    | Lets a cleared field emit null instead of falling back to min or 0. |
 
 ## v-model
 
-| Model     | Type     | Default | Emits               | Notes                                                                                                                                                   |
-| --------- | -------- | ------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `v-model` | `number` | `0`     | `update:modelValue` | The value via `defineModel`, always numeric and clamped to `min`/`max`; updates on typing and on the spinner. A cleared field falls back to `min ?? 0`. |
+| Model     | Type                                        | Default | Emits               | Notes                                                                                                                                                                                                                                                                                                                                                                              |
+| --------- | ------------------------------------------- | ------- | ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `v-model` | `number` (`number \| null` with `nullable`) | `0`     | `update:modelValue` | The value via `defineModel`, clamped to `min`/`max`; updates on typing and on the spinner. A cleared field falls back to `min ?? 0`; with `nullable` it emits `null` and shows the placeholder, and the spinner on a `null` value starts at `min ?? 0` (clamped). The component is generic over `nullable`, so the model and `change` are typed `number` unless `nullable` is set. |
 
 ## Events
 
-| Event    | Payload  | Notes                                                    |
-| -------- | -------- | -------------------------------------------------------- |
-| `change` | `number` | Emitted when the user commits the value (blur or Enter). |
+| Event    | Payload                                     | Notes                                                                                                       |
+| -------- | ------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| `change` | `number` (`number \| null` with `nullable`) | Emitted when the user commits the value (blur or Enter); `null` when a `nullable` field is committed empty. |
 
 ## Slots
 
@@ -93,7 +116,7 @@ Numeric input field with optional increment/decrement spinner buttons. Use when 
 
 ## States
 
-- Visual states: `default`, `hover`, `focus-visible`, `disabled`, `invalid`, `filled`
+- Visual states: `default`, `hover`, `focus-visible`, `disabled`, `invalid`, `filled`, `empty` (a `nullable` field whose value is `null` shows the placeholder)
 - `data-disabled` mirrors the `disabled` prop
 - `data-invalid` mirrors the `invalid` prop
 - `data-size` mirrors the `size` prop
@@ -152,6 +175,7 @@ Numeric input field with optional increment/decrement spinner buttons. Use when 
 - Sizes — composite story rendering every `size` value side-by-side.
 - Disabled
 - Invalid — justified: invalid is a primary visual state in Figma (8 of 27 variants) and the consumer needs a copy-pasteable example with the danger border applied.
+- Optional — justified: `nullable` changes the model contract (a cleared field emits `null`), and an optional port needs a copy-pasteable example of that contract.
 
 ## Constraints — DO NOT
 

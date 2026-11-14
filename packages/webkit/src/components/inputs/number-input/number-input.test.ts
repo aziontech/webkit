@@ -5,6 +5,7 @@ import { defineComponent, h, nextTick, ref } from 'vue'
 import Default from '../../../../examples/number-input/default.vue'
 import Disabled from '../../../../examples/number-input/disabled.vue'
 import Invalid from '../../../../examples/number-input/invalid.vue'
+import Optional from '../../../../examples/number-input/optional.vue'
 import Sizes from '../../../../examples/number-input/sizes.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import NumberInput from './number-input.vue'
@@ -140,6 +141,117 @@ describe('NumberInput', () => {
       value.value = 6
       await nextTick()
       expect(input.value).toBe('6')
+    })
+  })
+
+  describe('nullable', () => {
+    it('emits null on update:modelValue when a nullable field is cleared', async () => {
+      const { getByTestId, emitted } = render(NumberInput, {
+        props: { modelValue: 8080, nullable: true, min: 1 }
+      })
+      const input = getByTestId('number-input') as HTMLInputElement
+
+      await fireEvent.update(input, '')
+
+      const events = emitted()['update:modelValue']
+      expect(events[events.length - 1]).toEqual([null])
+    })
+
+    it('emits change with null when a nullable field is committed empty', async () => {
+      const { getByTestId, emitted } = render(NumberInput, {
+        props: { modelValue: 8080, nullable: true }
+      })
+      const input = getByTestId('number-input') as HTMLInputElement
+
+      input.value = ''
+      await fireEvent.change(input)
+
+      const events = emitted()['change']
+      expect(events[events.length - 1]).toEqual([null])
+    })
+
+    it('renders a null value as an empty field with the placeholder', () => {
+      const { getByTestId } = render(NumberInput, {
+        props: { modelValue: null, nullable: true, placeholder: 'Default port' }
+      })
+      const input = getByTestId('number-input') as HTMLInputElement
+      expect(input.value).toBe('')
+      expect(input.getAttribute('placeholder')).toBe('Default port')
+    })
+
+    it('still clamps a typed value when nullable', async () => {
+      const { getByTestId, emitted } = render(NumberInput, {
+        props: { modelValue: null, nullable: true, max: 10 }
+      })
+
+      await fireEvent.update(getByTestId('number-input'), '50')
+
+      const events = emitted()['update:modelValue']
+      expect(events[events.length - 1]).toEqual([10])
+    })
+
+    it.each([
+      ['Increment', 1, 1],
+      ['Decrement', 1, 1],
+      ['Increment', undefined, 0],
+      ['Decrement', undefined, 0]
+    ] as const)('%s on a null value with min=%s starts at %s', async (label, min, expected) => {
+      const { getByLabelText, emitted } = render(NumberInput, {
+        props: { modelValue: null, nullable: true, min, step: 5 }
+      })
+
+      await fireEvent.click(getByLabelText(label))
+
+      expect(emitted()['update:modelValue']).toEqual([[expected]])
+    })
+
+    it('round-trips a controlled null model through clear and spinner', async () => {
+      const value = ref<number | null>(3)
+      const Host = defineComponent({
+        setup: () => () =>
+          h(NumberInput, {
+            modelValue: value.value,
+            nullable: true,
+            min: 1,
+            'onUpdate:modelValue': (next: number | null) => {
+              value.value = next
+            }
+          })
+      })
+      const { getByTestId, getByLabelText } = render(Host)
+      const input = getByTestId('number-input') as HTMLInputElement
+
+      await fireEvent.update(input, '')
+      expect(value.value).toBeNull()
+      expect(input.value).toBe('')
+
+      await fireEvent.click(getByLabelText('Increment'))
+      expect(value.value).toBe(1)
+      await nextTick()
+      expect(input.value).toBe('1')
+    })
+
+    it('treats the bare nullable attribute as true', async () => {
+      const Host = defineComponent({
+        setup: () => () => h(NumberInput, { modelValue: 5, nullable: '' })
+      })
+      const { getByTestId } = render(Host)
+
+      await fireEvent.update(getByTestId('number-input'), '')
+
+      expect((getByTestId('number-input') as HTMLInputElement).value).toBe('')
+    })
+
+    it('keeps the non-nullable fallback when nullable is not set', async () => {
+      const { getByTestId, emitted } = render(NumberInput, { props: { modelValue: 5, min: 2 } })
+      const input = getByTestId('number-input') as HTMLInputElement
+
+      await fireEvent.update(input, '')
+      input.value = ''
+      await fireEvent.change(input)
+
+      expect(emitted()['update:modelValue']).toEqual([[2]])
+      expect(emitted()['change']).toEqual([[2]])
     })
   })
 
@@ -340,6 +452,12 @@ describe('NumberInput', () => {
     it('renders the Disabled story with a disabled input', () => {
       const { getByTestId } = render(Disabled)
       expect((getByTestId('number-input') as HTMLInputElement).disabled).toBe(true)
+    })
+
+    it('renders the Optional story empty with no axe violations', async () => {
+      const { container, getByTestId } = render(Optional)
+      expect((getByTestId('number-input') as HTMLInputElement).value).toBe('')
+      await expectNoA11yViolations(container)
     })
 
     it('renders the Invalid story with aria-invalid', () => {
