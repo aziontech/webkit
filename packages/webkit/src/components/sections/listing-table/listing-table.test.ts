@@ -1,3 +1,4 @@
+import userEvent from '@testing-library/user-event'
 import { render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
@@ -114,6 +115,54 @@ describe('ListingTable', () => {
     ).toEqual(
       columns.map((column) => rows[1]!.values[column.key as keyof (typeof rows)[1]['values']])
     )
+  })
+
+  it('follows the row link when the row is clicked outside it, keeping modifier keys', async () => {
+    const user = userEvent.setup()
+    const { getAllByRole, getByTitle } = band()
+
+    const link = getAllByRole('link').find(
+      (candidate) =>
+        candidate.closest('[role="cell"]') && candidate.textContent?.trim() === rows[1]!.values.role
+    )!
+    const clicks: MouseEvent[] = []
+    link.addEventListener('click', (event) => {
+      event.preventDefault()
+      clicks.push(event)
+    })
+
+    await user.click(getByTitle(rows[1]!.values.type))
+    expect(clicks).toHaveLength(1)
+
+    await user.keyboard('{Control>}')
+    await user.click(getByTitle(rows[1]!.values.team))
+    await user.keyboard('{/Control}')
+    expect(clicks).toHaveLength(2)
+    expect(clicks[1]!.ctrlKey).toBe(true)
+  })
+
+  it('does not forward a click on the link itself', async () => {
+    const { getAllByRole } = band()
+
+    const link = getAllByRole('link').find(
+      (candidate) =>
+        candidate.closest('[role="cell"]') && candidate.textContent?.trim() === rows[0]!.values.role
+    )!
+    let count = 0
+    link.addEventListener('click', (event) => {
+      event.preventDefault()
+      count += 1
+    })
+
+    await userEvent.click(link)
+    expect(count).toBe(1)
+  })
+
+  it('gives each metadata cell its full value as a tooltip', () => {
+    const { getByTitle } = band()
+
+    expect(getByTitle(rows[0]!.values.team).textContent).toBe(rows[0]!.values.team)
+    expect(getByTitle(rows[0]!.values.type).textContent).toBe(rows[0]!.values.type)
   })
 
   it('renders the phone list with the first column as title and the second as description', () => {

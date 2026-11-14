@@ -93,6 +93,23 @@
   const descriptionKey = computed(() => props.columns[1]?.key ?? '')
 
   const lastIndex = computed(() => props.columns.length - 1)
+
+  const followRow = (event: MouseEvent): void => {
+    const target = event.target as Element | null
+    if (!target || target.closest('a, button')) return
+    if (window.getSelection()?.toString()) return
+    const link = (event.currentTarget as Element | null)?.querySelector('a[href]')
+    link?.dispatchEvent(
+      new MouseEvent('click', {
+        bubbles: true,
+        cancelable: true,
+        ctrlKey: event.ctrlKey,
+        metaKey: event.metaKey,
+        shiftKey: event.shiftKey,
+        altKey: event.altKey
+      })
+    )
+  }
 </script>
 
 <template>
@@ -142,7 +159,7 @@
                 </ItemTitle>
                 <ItemDescription
                   v-if="descriptionKey && row.values[descriptionKey]"
-                  class="line-clamp-none! text-pretty"
+                  class="line-clamp-none! text-overline-sm! text-pretty"
                 >
                   {{ row.values[descriptionKey] }}
                 </ItemDescription>
@@ -187,7 +204,8 @@
             <TableRow
               v-for="row in rows"
               :key="row.href"
-              class="cursor-pointer hover:[--table-row-bg:var(--bg-canvas)]"
+              class="cursor-pointer hover:[--table-row-bg:var(--bg-hover)]!"
+              @click="followRow"
             >
               <TableCell
                 v-for="(column, index) in columns"
@@ -195,7 +213,7 @@
                 :grow="column.grow"
                 :align="column.align"
                 :principal="index === 0"
-                class="py-(--spacing-lg)! data-[first]:ps-(--spacing-xl)! data-[last]:pe-(--spacing-xl)! data-[value]:text-(--text-muted)"
+                class="py-(--spacing-lg)! data-[first]:ps-(--spacing-xl)! data-[last]:pe-(--spacing-xl)! data-[value]:text-overline-sm! data-[value]:text-(--text-muted)"
                 :data-first="index === 0 || null"
                 :data-last="index === lastIndex || null"
                 :data-value="index > 0 || null"
@@ -206,7 +224,12 @@
                   class="text-label-lg text-(--text-default)"
                   >{{ row.values[column.key] }}</a
                 >
-                <template v-else>{{ row.values[column.key] }}</template>
+                <span
+                  v-else
+                  class="min-w-0 truncate"
+                  :title="row.values[column.key]"
+                  >{{ row.values[column.key] }}</span
+                >
               </TableCell>
             </TableRow>
           </TableBody>
