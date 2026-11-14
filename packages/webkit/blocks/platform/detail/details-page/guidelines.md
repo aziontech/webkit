@@ -68,7 +68,8 @@ For a resource made from the CLI, the `platform/detail/get-started` section foll
 - Don't add a second primary button to the tab row or the summary card.
 - Don't spread the facts across several cards; one summary card holds them in bands.
 - Don't hide the live address behind the actions menu; it is the card's primary link.
-- Don't render empty facts as blank space; show the action that fills them, e.g. Connect Git repository under Source.
+- Don't render empty facts as blank space; show the action that fills them, e.g. Connect Git repository under Source, or a muted word (None, Not deployed) when nothing can fill them yet.
+- Don't show Visit for a resource that has no address yet.
 
 ## Copy
 
@@ -102,6 +103,11 @@ For a resource made from the CLI, the `platform/detail/get-started` section foll
 - DeploymentDetail: a deployment that went live, the success banner, the Deployment details card and the Deployment logs card.
 - DeploymentFailed: a deployment the rules rejected, the danger banner with Redeploy, Visit disabled and the logs open on the failed step.
 - Application: a whole application page body, with working tabs. Overview is the summary card; Versions and Deployments are a small `SectionHeader` over a flush `TableRoot`; Topology draws the request path with `TopologyDiagram` (domain, workload, firewall, application, function instance). Binding or removing the firewall or the function only stages the change: the node turns dashed with a Staged status, a polite status line names it, and the tab row shows the count as a warning `Tag` beside Deploy. Deploy opens a `Drawer` that lists each staged change as from and to, then runs on its own: a loading toast, then the async-submit toast with **Edit** (back to the Topology tab) and **Redeploy**, never View deployments.
+- FirstDeploy: the summary cards before and during the first deploy. A resource never deployed shows Not deployed yet in place of the address, None, Not deployed and Not yet as muted values, Connect Git Repository and Project upload under Source, and no Visit; a service on its first deploy reads Deploying · Build with a loading `StatusIndicator`, and one that serves nothing reads Inactive.
+- Invocation: the summary card of one function invocation, with the function link, the copyable invocation ID and its status, Replay, the Recent switcher, the Invocation actions menu, the Started, Completed, Duration and Location facts, and the triggering request with its outcome.
+- DeploymentQueued: a deployment waiting for a runner, the info banner, Visit disabled, Queued in the details and the logs header, and a not-started `EmptyState` in the logs card with no Phased or Complete switch.
+- ResourceBuildConnected: the Build tab of a resource with a connected repository, its link and a danger Disconnect, the Production branch and Preview branch rows, the Build configuration and Deployment bands, and the save bar once a value changes.
+- ApplicationBuild: an application page body with Overview, Versions, Build and Deployments. Dragging files over the page raises the dashed drop target of `platform/states/project-intake`; dropping them or Deploy opens a deploy `Drawer` naming the source, and the run reports through the async-submit toast with Edit and Redeploy. Leaving the Build tab with unsaved changes asks first in a `ConfirmDialog`.
 
 ## Related
 
@@ -111,5 +117,7 @@ For a resource made from the CLI, the `platform/detail/get-started` section foll
 - `platform/detail/deployment-logs` — the steps inside the Deployment logs card.
 - `platform/detail/version-detail` — where a row of the Versions tab leads.
 - `platform/create/deploy-drawer` — the drawer the Deploy action opens.
+- `platform/states/project-intake` — the drop target an application page raises while files hover over it.
+- `platform/detail/invocations` — the page an invocation summary opens, with its request path, trace and logs.
 - `platform/edit/edit-resource` — the service Settings tab.
 - `shells/console` — the `ConsoleLayout` this page body renders in; see `skills/webkit-navigation` and `skills/webkit-layout`.
