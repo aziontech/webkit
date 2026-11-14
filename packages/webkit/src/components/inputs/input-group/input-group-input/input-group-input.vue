@@ -6,10 +6,10 @@
 
   defineOptions({ name: 'InputGroupInput', inheritAttrs: false })
 
-  export type InputGroupInputType = 'text' | 'email' | 'number'
+  export type InputGroupInputType = 'text' | 'email' | 'number' | 'password'
 
   export interface Props {
-    /** Native input type, the same restricted set as Input. */
+    /** Native input type: the restricted set of Input, plus password to mask a secret value. */
     type?: InputGroupInputType
     /** Placeholder shown when the input is empty. */
     placeholder?: string

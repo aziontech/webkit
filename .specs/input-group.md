@@ -3,11 +3,11 @@ name: input-group
 category: inputs
 structure: composition
 status: implemented
-spec_version: 6
+spec_version: 7
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3714-10802
   node_id: 3714:10802
-checksum: 7d7f0fe6e7da36d8f435ad3c41294543410403eff53f6877fedb97e37d57f41b
+checksum: a400918892324ce1567e4c2a0c80add2cabea248335f24c3ba02a3f4c5aae923
 created: 2026-07-01
 last_updated: 2026-11-14
 ---
@@ -143,7 +143,7 @@ Public members of the compound:
 | -------------------- | ----------------------- | ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | Root                 | — (the compound itself) | `@aziontech/webkit/input-group-root`  | The container. Orchestrates borders, seams, focus ring, and states.                                                                                                                                                                                                                                                      |
 | `<InputGroup.Addon>` | `Addon`                 | `@aziontech/webkit/input-group-addon` | Static-content island (icon, text like `https://`, `.com`, `$`) rendered with the darker `--bg-canvas` fill and muted text.                                                                                                                                                                                             |
-| `<InputGroup.Input>` | `Input`                 | `@aziontech/webkit/input-group-input` | Borderless middle `<input>`, with the same inline padding as `Input` (`--spacing-sm`). Props: `modelValue` (`''`), `type` (`'text' | 'email' | 'number'`, default `'text'`, the same restricted set as `Input`), `placeholder` (`''`), `autocomplete`, `disabled`, `readonly`, `required`, `invalid` (all `false`); emits `update:modelValue`. Reads `id`, `aria-describedby`, `invalid`, `disabled` and `required` from an enclosing `Field` (an explicit prop/attribute wins). |
+| `<InputGroup.Input>` | `Input`                 | `@aziontech/webkit/input-group-input` | Borderless middle `<input>`, with the same inline padding as `Input` (`--spacing-sm`). Props: `modelValue` (`''`), `type` (`'text' | 'email' | 'number' | 'password'`, default `'text'`: the restricted set of `Input`, plus `password` to mask a secret value that a reveal control in an addon toggles back to `text`), `placeholder` (`''`), `autocomplete`, `disabled`, `readonly`, `required`, `invalid` (all `false`); emits `update:modelValue`. Reads `id`, `aria-describedby`, `invalid`, `disabled` and `required` from an enclosing `Field` (an explicit prop/attribute wins). |
 
 The root reads `invalid`, `disabled` and `required` from an enclosing `Field` too, OR-ed with its own props, so a `Field`'s state styles the whole group. The root then provides the Field context to its children with `invalid` and `disabled` OR-ed with the group's own (the parent Field's id, description, title and `required` pass through), so the group's state reaches the controls inside.
 
