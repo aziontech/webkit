@@ -44,6 +44,7 @@ export type AttributeEditorRowScope<TItem = AttributeEditorItem> = {
   remove: (event: MouseEvent | KeyboardEvent) => void
   removable: boolean
   removeLabel: string
+  move: (event: MouseEvent | KeyboardEvent, offset: number) => void
 }
 
 export type AttributeEditorRowActionsScope<TItem = AttributeEditorItem> = {

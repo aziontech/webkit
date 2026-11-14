@@ -16,6 +16,11 @@
       "name": "CustomCells",
       "summary": "A `Select` and a `Switch` replace the default inputs through the `cell-<key>` slots; each control still sits inside the cell's `Field` with its label.",
       "file": "custom-cells.vue"
+    },
+    {
+      "name": "Reorderable",
+      "summary": "Request headers set top to bottom: drag a row by its grip, use Move up and Move down, or press Alt+Arrow Up and Alt+Arrow Down inside a row. Each move is announced and focus stays on the moved row.",
+      "file": "reorderable.vue"
     }
   ]
 }

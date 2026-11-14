@@ -62,7 +62,11 @@
     "tls version",
     "mutual authentication",
     "mtls",
-    "autenticação mútua"
+    "autenticação mútua",
+    "waf settings",
+    "waf rule set",
+    "threat sensitivity",
+    "configurações do waf"
   ],
   "skills": ["webkit-form", "webkit-errors", "webkit-layout", "webkit-ux-heuristics"],
   "primary": {
@@ -79,6 +83,11 @@
       "name": "PolicySettings",
       "summary": "A security policy’s Settings tab, with the Documentation action in the heading: General, Modules with DDoS Protection locked on, Debug rules and Status.",
       "file": "variants/policy-settings.vue"
+    },
+    {
+      "name": "WafSettings",
+      "summary": "A WAF rule set's Main Settings tab: General with the Name, Status with Active and a Mode Select (Blocking or Learning), and a Threats section with one row per threat family, each a Sensitivity Select beside a Switch; turning a threat off disables its Sensitivity. Any change raises the SaveBar, and Save confirms in a toast.",
+      "file": "variants/waf-settings.vue"
     },
     {
       "name": "ResourceSettings",

@@ -704,6 +704,7 @@
                   :group-limit="5"
                   :min-items="1"
                   :disabled="submitting"
+                  reorderable
                   size="large"
                   add-button-label="Add condition"
                   add-group-label="Add OR group"

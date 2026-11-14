@@ -34,7 +34,16 @@ export const attributeEditor = {
   removed: 'Item {index} removed.',
   group: 'Group {index}',
   and: 'and',
-  or: 'or'
+  or: 'or',
+  reorder: 'Reorder item {index}',
+  reorderHint: 'Drag, or press Arrow Up or Arrow Down to move.',
+  moveUp: 'Move item {index} up',
+  moveDown: 'Move item {index} down',
+  moved: 'Item {from} moved to position {to}.',
+  reorderGroup: 'Reorder group {index}',
+  moveGroupUp: 'Move group {index} up',
+  moveGroupDown: 'Move group {index} down',
+  groupMoved: 'Group {from} moved to position {to}.'
 } as const
 
 export const avatar = {
