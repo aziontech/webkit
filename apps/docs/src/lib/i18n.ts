@@ -54,16 +54,110 @@ const en = {
   light: 'Light',
   dark: 'Dark',
   value: 'Value',
-  heroTitle: 'WebKit',
-  heroLead:
-    "Azion's Vue 3 design system. Every page here renders the real files: component examples, blocks and tokens.",
-  browseComponents: 'Browse components',
-  browseBlocks: 'Browse blocks',
   notFound: 'Page not found',
   notFoundLead: 'There is no page at this address.',
   backHome: 'Back to the start',
   filter: 'Filter',
-  count: 'items'
+  count: 'items',
+  assets: 'Assets',
+  icons: 'Icons',
+  start: 'Start',
+  homeNav: 'Home',
+  gettingStarted: 'Getting started',
+  copiedValue: 'Copied to the clipboard',
+  copyFailed: 'Could not copy',
+  copyHint: 'Select a token, class or value to copy it.',
+  token: 'Token',
+  usage: 'Usage',
+  usedBy: 'Used by',
+  tailwind: 'Tailwind',
+  cssVariable: 'CSS variable',
+  base: 'Base',
+  live: 'Live',
+  referenceOnly: 'Reference only',
+  view: 'View',
+  tableView: 'Table',
+  themeView: 'Light and dark',
+  architectureTitle: 'Three layers of tokens',
+  architectureLead:
+    'Components read only the semantic layer, so one theme switch repaints every screen.',
+  layerPrimitivesTitle: 'Primitives',
+  layerPrimitivesText: 'Raw palettes, radii, type and effects. The same in every theme.',
+  layerThemeTitle: 'Theme',
+  layerThemeText:
+    'Light and dark roles built from the primitives: surfaces, text, borders, status.',
+  layerSemanticTitle: 'Semantic',
+  layerSemanticText: 'Responsive bundles components use: type styles and the spacing rhythm.',
+  semanticColors: 'Semantic colors',
+  primitivePalette: 'Primitive palette',
+  primitivePaletteLead:
+    'The raw scales behind the theme. Read them for reference; style with the semantic tokens.',
+  playgroundTitle: 'Color explorer',
+  playgroundLead: 'Pick a token to see it at size, with its light and dark values.',
+  category: 'Category',
+  categoryTheme: 'Theme',
+  categoryBackground: 'Background',
+  categoryText: 'Text',
+  categoryBorder: 'Border',
+  current: 'Current',
+  sampleText: 'The edge is where your users are',
+  spacingRhythm: 'Semantic rhythm',
+  spacingRhythmLead:
+    'Each step grows with the screen. The value in effect at this width is marked.',
+  spacingScale: 'Numeric scale',
+  iconsSearch: 'Search icons',
+  iconsSize: 'Preview size',
+  iconsAzion: 'Azion icons',
+  iconsAzionLead: 'Product and technology icons drawn for Azion.',
+  iconsColor: 'Colored icons',
+  iconsColorLead: 'Brand and framework marks in their own colors. They do not take the text color.',
+  iconsPrime: 'PrimeIcons',
+  iconsPrimeLead: 'General interface icons.',
+  iconsEmpty: 'No icons match that search',
+  iconsEmptyLead: 'Try another name or keyword.',
+  iconsCopy: 'Copy the class',
+  assetsLead: 'The brand lockups, product illustrations and line figures WebKit ships.',
+  brand: 'Brand',
+  brandLead:
+    'The Azion lockups of Brand. Keep the mark clear and unmodified, and pick the lockup that fits the space.',
+  brandDefault: 'The AZION wordmark, for most surfaces.',
+  brandReduced: 'The A glyph, for tight spaces such as avatars and favicons.',
+  brandExtended: 'The wordmark with the technologies tagline.',
+  illustrations: 'Illustrations',
+  illustrationsLead:
+    'Product scenes drawn as inline SVG and repainted from the theme. Pass the name to Illustration.',
+  lineFigures: 'Line figures',
+  lineFiguresLead:
+    'Isometric figures that answer the pointer, one per product. Pass the name to LineFigure.',
+  iconsAssetLead: 'Every class of @aziontech/icons, searchable, with click to copy.',
+  openIcons: 'Open the icon gallery',
+  homeEyebrow: 'WebKit',
+  homeTitle: 'One design system. Every component, ready to compose.',
+  homeLead:
+    'Explore @aziontech/webkit: every component live, the blocks built from them, the foundations underneath and the brand assets. Tokens, accessibility and dark mode built in.',
+  startWithAgents: 'Start with agents',
+  agentPrompt:
+    "Build my UI with the Azion design system. Install @aziontech/webkit, @aziontech/theme and @aziontech/icons, run npx @aziontech/webkit init, import the theme once, and compose the app from WebKit's Vue components and design tokens instead of hand-rolled UI, following each component's documented props and compound API.",
+  exploreTitle: 'Explore the docs',
+  exploreLead: 'Four ways in: the foundations, every component, the blocks and the brand assets.',
+  exploreFoundations: 'Tokens, color, type, icons, languages, right-to-left and accessibility.',
+  exploreComponents: 'Every component by category, rendered live from its first example.',
+  exploreBlocks: 'Whole screens built from the components, in a resizable frame.',
+  exploreAssets: 'The brand lockups, product illustrations and line figures.',
+  whyTitle: 'One kit powers every Azion interface',
+  whyLead:
+    '{components} components, {examples} live examples and {blocks} blocks: the same pieces behind the Azion Console, shaped by the teams who use them every day.',
+  whyQualityTitle: 'Design for quality and speed',
+  whyQualityBody:
+    'Foundations you can trust and speed you can feel. Teams stop rebuilding the basics and ship the ideas that matter.',
+  whyPeopleTitle: 'Built by the people who use it',
+  whyPeopleBody:
+    'Designers and engineers who build at Azion shape it. It gets sharper every time it goes to work in the real product.',
+  whyNextTitle: 'Ready for what comes next',
+  whyNextBody:
+    'Opinionated foundations with composable patterns, so the system keeps pace as the craft changes.',
+  openComponent: 'Open',
+  categoryLead: '{count} components'
 }
 
 type Messages = typeof en
@@ -114,15 +208,107 @@ const ptBR: Messages = {
   light: 'Claro',
   dark: 'Escuro',
   value: 'Valor',
-  heroLead:
-    'O design system Vue 3 da Azion. Cada página renderiza os arquivos reais: exemplos, blocos e tokens.',
-  browseComponents: 'Ver componentes',
-  browseBlocks: 'Ver blocos',
   notFound: 'Página não encontrada',
   notFoundLead: 'Não há página neste endereço.',
   backHome: 'Voltar ao início',
   filter: 'Filtrar',
-  count: 'itens'
+  count: 'itens',
+  assets: 'Recursos',
+  icons: 'Ícones',
+  start: 'Início',
+  homeNav: 'Início',
+  gettingStarted: 'Primeiros passos',
+  copiedValue: 'Copiado para a área de transferência',
+  copyFailed: 'Não foi possível copiar',
+  copyHint: 'Selecione um token, classe ou valor para copiá-lo.',
+  usage: 'Uso',
+  usedBy: 'Usado por',
+  cssVariable: 'Variável CSS',
+  live: 'Ativo',
+  referenceOnly: 'Só referência',
+  view: 'Visualização',
+  tableView: 'Tabela',
+  themeView: 'Claro e escuro',
+  architectureTitle: 'Três camadas de tokens',
+  architectureLead:
+    'Os componentes leem só a camada semântica, então uma troca de tema repinta todas as telas.',
+  layerPrimitivesTitle: 'Primitivos',
+  layerPrimitivesText: 'Paletas, raios, tipografia e efeitos brutos. Iguais em todo tema.',
+  layerThemeTitle: 'Tema',
+  layerThemeText:
+    'Papéis claros e escuros feitos dos primitivos: superfícies, texto, bordas, status.',
+  layerSemanticTitle: 'Semântica',
+  layerSemanticText:
+    'Pacotes responsivos que os componentes usam: estilos de texto e o ritmo de espaçamento.',
+  semanticColors: 'Cores semânticas',
+  primitivePalette: 'Paleta primitiva',
+  primitivePaletteLead:
+    'As escalas brutas por trás do tema. Leia como referência; estilize com os tokens semânticos.',
+  playgroundTitle: 'Explorador de cores',
+  playgroundLead: 'Escolha um token para vê-lo em tamanho grande, com os valores claro e escuro.',
+  category: 'Categoria',
+  categoryTheme: 'Tema',
+  categoryBackground: 'Fundo',
+  categoryText: 'Texto',
+  categoryBorder: 'Borda',
+  current: 'Atual',
+  sampleText: 'A borda é onde seus usuários estão',
+  spacingRhythm: 'Ritmo semântico',
+  spacingRhythmLead: 'Cada passo cresce com a tela. O valor em vigor nesta largura fica marcado.',
+  spacingScale: 'Escala numérica',
+  iconsSearch: 'Buscar ícones',
+  iconsSize: 'Tamanho da prévia',
+  iconsAzion: 'Ícones Azion',
+  iconsAzionLead: 'Ícones de produtos e tecnologias desenhados para a Azion.',
+  iconsColor: 'Ícones coloridos',
+  iconsColorLead: 'Marcas e frameworks nas próprias cores. Não seguem a cor do texto.',
+  iconsPrime: 'PrimeIcons',
+  iconsPrimeLead: 'Ícones gerais de interface.',
+  iconsEmpty: 'Nenhum ícone corresponde a essa busca',
+  iconsEmptyLead: 'Tente outro nome ou palavra-chave.',
+  iconsCopy: 'Copiar a classe',
+  assetsLead: 'As marcas, ilustrações de produto e figuras de linha que o WebKit entrega.',
+  brand: 'Marca',
+  brandLead:
+    'As versões da marca Azion do Brand. Mantenha a marca limpa e sem alterações e escolha a versão que cabe no espaço.',
+  brandDefault: 'O logotipo AZION, para a maioria das superfícies.',
+  brandReduced: 'O glifo A, para espaços pequenos como avatares e favicons.',
+  brandExtended: 'O logotipo com a assinatura de tecnologias.',
+  illustrations: 'Ilustrações',
+  illustrationsLead:
+    'Cenas de produto em SVG inline, repintadas pelo tema. Passe o nome para Illustration.',
+  lineFigures: 'Figuras de linha',
+  lineFiguresLead:
+    'Figuras isométricas que respondem ao ponteiro, uma por produto. Passe o nome para LineFigure.',
+  iconsAssetLead: 'Todas as classes de @aziontech/icons, com busca e clique para copiar.',
+  openIcons: 'Abrir a galeria de ícones',
+  homeTitle: 'Um design system. Todos os componentes, prontos para compor.',
+  homeLead:
+    'Explore @aziontech/webkit: todos os componentes ao vivo, os blocos feitos com eles, os fundamentos por baixo e os recursos da marca. Tokens, acessibilidade e modo escuro incluídos.',
+  startWithAgents: 'Começar com agentes',
+  exploreTitle: 'Explore a documentação',
+  exploreLead:
+    'Quatro entradas: os fundamentos, todos os componentes, os blocos e os recursos da marca.',
+  exploreFoundations:
+    'Tokens, cor, tipografia, ícones, idiomas, direita para a esquerda e acessibilidade.',
+  exploreComponents:
+    'Todos os componentes por categoria, renderizados ao vivo pelo primeiro exemplo.',
+  exploreBlocks: 'Telas inteiras feitas com os componentes, num quadro redimensionável.',
+  exploreAssets: 'As versões da marca, ilustrações de produto e figuras de linha.',
+  whyTitle: 'Um kit move todas as interfaces da Azion',
+  whyLead:
+    '{components} componentes, {examples} exemplos ao vivo e {blocks} blocos: as mesmas peças do Azion Console, moldadas pelas equipes que as usam todo dia.',
+  whyQualityTitle: 'Feito para qualidade e velocidade',
+  whyQualityBody:
+    'Fundamentos confiáveis e velocidade que se sente. As equipes param de refazer o básico e entregam o que importa.',
+  whyPeopleTitle: 'Feito por quem usa',
+  whyPeopleBody:
+    'Designers e engenheiros que constroem na Azion dão forma a ele. Fica melhor a cada vez que vai para o produto real.',
+  whyNextTitle: 'Pronto para o que vem',
+  whyNextBody:
+    'Fundamentos opinativos com padrões componíveis, para o sistema acompanhar a evolução do ofício.',
+  openComponent: 'Abrir',
+  categoryLead: '{count} componentes'
 }
 
 const es: Messages = {
@@ -171,15 +357,109 @@ const es: Messages = {
   light: 'Claro',
   dark: 'Oscuro',
   value: 'Valor',
-  heroLead:
-    'El design system Vue 3 de Azion. Cada página renderiza los archivos reales: ejemplos, bloques y tokens.',
-  browseComponents: 'Ver componentes',
-  browseBlocks: 'Ver bloques',
   notFound: 'Página no encontrada',
   notFoundLead: 'No hay ninguna página en esta dirección.',
   backHome: 'Volver al inicio',
   filter: 'Filtrar',
-  count: 'elementos'
+  count: 'elementos',
+  assets: 'Recursos',
+  icons: 'Iconos',
+  start: 'Inicio',
+  homeNav: 'Inicio',
+  gettingStarted: 'Primeros pasos',
+  copiedValue: 'Copiado al portapapeles',
+  copyFailed: 'No se pudo copiar',
+  copyHint: 'Selecciona un token, clase o valor para copiarlo.',
+  usage: 'Uso',
+  usedBy: 'Usado por',
+  cssVariable: 'Variable CSS',
+  live: 'Activo',
+  referenceOnly: 'Solo referencia',
+  view: 'Vista',
+  tableView: 'Tabla',
+  themeView: 'Claro y oscuro',
+  architectureTitle: 'Tres capas de tokens',
+  architectureLead:
+    'Los componentes solo leen la capa semántica, así que un cambio de tema repinta todas las pantallas.',
+  layerPrimitivesTitle: 'Primitivos',
+  layerPrimitivesText: 'Paletas, radios, tipografía y efectos en bruto. Iguales en todo tema.',
+  layerThemeTitle: 'Tema',
+  layerThemeText:
+    'Roles claros y oscuros hechos con los primitivos: superficies, texto, bordes, estado.',
+  layerSemanticTitle: 'Semántica',
+  layerSemanticText:
+    'Paquetes responsivos que usan los componentes: estilos de texto y el ritmo de espaciado.',
+  semanticColors: 'Colores semánticos',
+  primitivePalette: 'Paleta primitiva',
+  primitivePaletteLead:
+    'Las escalas en bruto detrás del tema. Léelas como referencia; aplica estilos con los tokens semánticos.',
+  playgroundTitle: 'Explorador de colores',
+  playgroundLead: 'Elige un token para verlo en grande, con sus valores claro y oscuro.',
+  category: 'Categoría',
+  categoryTheme: 'Tema',
+  categoryBackground: 'Fondo',
+  categoryText: 'Texto',
+  categoryBorder: 'Borde',
+  current: 'Actual',
+  sampleText: 'El borde es donde están tus usuarios',
+  spacingRhythm: 'Ritmo semántico',
+  spacingRhythmLead:
+    'Cada paso crece con la pantalla. El valor vigente en este ancho queda marcado.',
+  spacingScale: 'Escala numérica',
+  iconsSearch: 'Buscar iconos',
+  iconsSize: 'Tamaño de la vista previa',
+  iconsAzion: 'Iconos de Azion',
+  iconsAzionLead: 'Iconos de productos y tecnologías dibujados para Azion.',
+  iconsColor: 'Iconos de color',
+  iconsColorLead: 'Marcas y frameworks en sus propios colores. No toman el color del texto.',
+  iconsPrime: 'PrimeIcons',
+  iconsPrimeLead: 'Iconos generales de interfaz.',
+  iconsEmpty: 'Ningún icono coincide con esa búsqueda',
+  iconsEmptyLead: 'Prueba otro nombre o palabra clave.',
+  iconsCopy: 'Copiar la clase',
+  assetsLead:
+    'Las versiones de la marca, ilustraciones de producto y figuras de línea que trae WebKit.',
+  brand: 'Marca',
+  brandLead:
+    'Las versiones de la marca Azion de Brand. Mantén la marca limpia y sin cambios, y elige la versión que cabe en el espacio.',
+  brandDefault: 'El logotipo AZION, para la mayoría de las superficies.',
+  brandReduced: 'El glifo A, para espacios pequeños como avatares y favicons.',
+  brandExtended: 'El logotipo con el lema de tecnologías.',
+  illustrations: 'Ilustraciones',
+  illustrationsLead:
+    'Escenas de producto en SVG en línea, repintadas por el tema. Pasa el nombre a Illustration.',
+  lineFigures: 'Figuras de línea',
+  lineFiguresLead:
+    'Figuras isométricas que responden al puntero, una por producto. Pasa el nombre a LineFigure.',
+  iconsAssetLead: 'Todas las clases de @aziontech/icons, con búsqueda y clic para copiar.',
+  openIcons: 'Abrir la galería de iconos',
+  homeTitle: 'Un design system. Todos los componentes, listos para componer.',
+  homeLead:
+    'Explora @aziontech/webkit: todos los componentes en vivo, los bloques hechos con ellos, los fundamentos debajo y los recursos de la marca. Tokens, accesibilidad y modo oscuro incluidos.',
+  startWithAgents: 'Empezar con agentes',
+  exploreTitle: 'Explora la documentación',
+  exploreLead:
+    'Cuatro entradas: los fundamentos, todos los componentes, los bloques y los recursos de la marca.',
+  exploreFoundations:
+    'Tokens, color, tipografía, iconos, idiomas, derecha a izquierda y accesibilidad.',
+  exploreComponents:
+    'Todos los componentes por categoría, renderizados en vivo desde su primer ejemplo.',
+  exploreBlocks: 'Pantallas enteras hechas con los componentes, en un marco redimensionable.',
+  exploreAssets: 'Las versiones de la marca, ilustraciones de producto y figuras de línea.',
+  whyTitle: 'Un kit impulsa todas las interfaces de Azion',
+  whyLead:
+    '{components} componentes, {examples} ejemplos en vivo y {blocks} bloques: las mismas piezas del Azion Console, moldeadas por los equipos que las usan cada día.',
+  whyQualityTitle: 'Diseñado para calidad y velocidad',
+  whyQualityBody:
+    'Fundamentos fiables y una velocidad que se nota. Los equipos dejan de rehacer lo básico y entregan lo que importa.',
+  whyPeopleTitle: 'Hecho por quienes lo usan',
+  whyPeopleBody:
+    'Lo moldean diseñadores e ingenieros que construyen en Azion. Mejora cada vez que se usa en el producto real.',
+  whyNextTitle: 'Listo para lo que viene',
+  whyNextBody:
+    'Fundamentos con criterio y patrones componibles, para que el sistema siga el ritmo del oficio.',
+  openComponent: 'Abrir',
+  categoryLead: '{count} componentes'
 }
 
 const CATALOGS: Record<string, Messages> = { en, 'pt-BR': ptBR, es }
@@ -191,3 +471,9 @@ export const LOCALES = [
 ]
 
 export const messages = computed(() => CATALOGS[settings.locale] ?? en)
+
+export function format(template: string, values: Record<string, string | number>): string {
+  return template.replace(/\{(\w+)\}/g, (match, key: string) =>
+    key in values ? String(values[key]) : match
+  )
+}

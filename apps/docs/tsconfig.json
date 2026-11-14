@@ -13,6 +13,7 @@
     "paths": {
       "virtual:docs-index": ["./src/lib/virtual/docs-index.d.ts"],
       "virtual:docs-tokens": ["./src/lib/virtual/docs-tokens.d.ts"],
+      "virtual:docs-assets": ["./src/lib/virtual/docs-assets.d.ts"],
       "virtual:docs-component-loaders": ["./src/lib/virtual/docs-component-loaders.d.ts"]
     }
   },

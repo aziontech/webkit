@@ -8,7 +8,7 @@
   import { ref } from 'vue'
 
   import { LOCALES } from '../lib/i18n'
-  import TokenList from './TokenList.vue'
+  import TokenTable from './tokens/TokenTable.vue'
 
   defineProps<{ kind: 'locale' | 'direction' | 'devices' }>()
 
@@ -63,14 +63,18 @@
     class="flex flex-col gap-(--spacing-md)"
   >
     <h2 class="text-heading-sm">Breakpoints</h2>
-    <TokenList
+    <TokenTable
       :tokens="tokens.breakpoints"
+      kind="breakpoint"
       sample="none"
+      caption="Breakpoints"
     />
     <h2 class="text-heading-sm">Containers and layout measures</h2>
-    <TokenList
+    <TokenTable
       :tokens="tokens.containers"
+      kind="container"
       sample="none"
+      caption="Containers and layout measures"
     />
   </section>
 </template>

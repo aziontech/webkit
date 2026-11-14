@@ -36,6 +36,7 @@ export type ComponentIndexItem = {
   import: string
   exampleDir: string | null
   exampleCount: number
+  firstExample: string | null
   llms: string | null
 }
 
@@ -61,7 +62,23 @@ export type DocsIndex = {
   version: string
 }
 
-export type Token = { name: string; value: string; dark?: string }
+export type TokenUsage = { job: string; usedBy: string }
+
+export type Token = {
+  name: string
+  value: string
+  dark?: string
+  usage?: TokenUsage
+  responsive?: Record<string, string>
+}
+
+export type IconAsset = { name: string; class: string; set: string; keywords: string }
+
+export type DocsAssets = {
+  icons: IconAsset[]
+  illustrations: string[]
+  lineFigures: { name: string; label: string }[]
+}
 
 export type DocsTokens = {
   semantic: { id: string; vars: Token[] }[]
