@@ -3,10 +3,12 @@
   "accordion-root": { "value": "modelValue" },
   "alert": { "severity": { "to": "severity", "values": { "error": "danger" } } },
   "button": { "kind": { "to": "kind", "values": { "text": "transparent" } } },
+  "chart-legend": { "totals": "total" },
   "code-block": { "border": "bordered", "value": "modelValue", "showLineNumbers": "lineNumbers" },
   "doc-card": { "overline": "eyebrow", "link": "linkLabel" },
   "doc-card-group": { "mobileCols": "mobileColumns" },
   "doc-tooltip": { "headline": "title", "cta": "linkLabel" },
+  "flow-anchor": { "type": "side" },
   "item": {
     "kind": { "to": "kind", "values": { "outline": "outlined" } },
     "asChild": {
@@ -32,14 +34,20 @@
       "removed": "each NavigationMenu part renders a fixed element (nav, ul, li, a or button, div, span); wrap the part or style it instead of swapping its element."
     }
   },
+  "pick-list": { "dataKey": "trackBy" },
+  "pick-list-root": { "dataKey": "trackBy" },
   "quote-tabs": { "autoPlay": "autoplay", "autoPlayInterval": "autoplayInterval" },
   "severity-tag": { "level": "severity" },
   "shell-mockup": { "still": { "to": "animated", "values": { "true": "false", "false": "true" } } },
   "shell-mockup-root": {
     "still": { "to": "animated", "values": { "true": "false", "false": "true" } }
   },
-  "table": { "border": "bordered" },
-  "table-root": { "border": "bordered" },
+  "table": { "border": "bordered", "rowsPerPageOptions": "pageSizeOptions" },
+  "table-cell-link": { "moreNoun": "noun" },
+  "table-header": {
+    "kind": { "to": "density", "values": { "default": "comfortable", "compact": "compact" } }
+  },
+  "table-root": { "border": "bordered", "rowsPerPageOptions": "pageSizeOptions" },
   "tabs": { "value": "modelValue" },
   "theme-switcher": { "value": "modelValue" }
 }
