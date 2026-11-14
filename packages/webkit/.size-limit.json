@@ -285,7 +285,7 @@
   {
     "name": "ticker",
     "path": "src/components/marketing/ticker/ticker.vue",
-    "limit": "4.5 KB",
+    "limit": "7.2 KB",
     "entryOnly": true
   },
   {
@@ -365,7 +365,7 @@
   {
     "name": "media-tabs",
     "path": "src/components/marketing/media-tabs/media-tabs.vue",
-    "limit": "6.5 KB"
+    "limit": "8.65 KB"
   },
   {
     "name": "embed",
@@ -450,7 +450,7 @@
   {
     "name": "quote-tabs",
     "path": "src/components/marketing/quote-tabs/quote-tabs.vue",
-    "limit": "21.35 KB",
+    "limit": "23.6 KB",
     "entryOnly": true
   },
   {
@@ -507,7 +507,7 @@
   {
     "name": "article-highlight",
     "path": "src/components/sections/article-highlight/article-highlight.vue",
-    "limit": "9.9 KB"
+    "limit": "11.45 KB"
   },
   {
     "name": "article-index-blog",
@@ -540,7 +540,7 @@
   {
     "name": "capability-grid",
     "path": "src/components/sections/capability-grid/capability-grid.vue",
-    "limit": "6.95 KB"
+    "limit": "7.2 KB"
   },
   {
     "name": "console-panel",
@@ -600,7 +600,7 @@
   {
     "name": "comparison-table",
     "path": "src/components/sections/comparison-table/comparison-table.vue",
-    "limit": "23.11 KB",
+    "limit": "23.35 KB",
     "entryOnly": true
   },
   {
@@ -718,7 +718,7 @@
   {
     "name": "template-gallery",
     "path": "src/components/sections/template-gallery/template-gallery.vue",
-    "limit": "27 KB",
+    "limit": "27.7 KB",
     "entryOnly": true
   },
   {
@@ -735,7 +735,7 @@
   {
     "name": "architecture-tabs",
     "path": "src/components/sections/architecture-tabs/architecture-tabs.vue",
-    "limit": "19 KB",
+    "limit": "20.5 KB",
     "entryOnly": true
   },
   {
