@@ -1,6 +1,7 @@
 import userEvent from '@testing-library/user-event'
 import { render, waitFor, within } from '@testing-library/vue'
 import { afterEach, describe, expect, it } from 'vitest'
+import { page } from 'vitest/browser'
 import { nextTick } from 'vue'
 
 import { expectNoA11yViolations } from '../../../test/axe'
@@ -193,6 +194,23 @@ describe('SiteNav', () => {
       timeout: OPEN_TIMEOUT
     })
     await waitFor(() => expect(document.activeElement).toBe(opener), { timeout: OPEN_TIMEOUT })
+  })
+
+  it('closes the sheet when the viewport reaches xl', async () => {
+    await page.viewport(414, 896)
+    const { getByRole } = nav()
+
+    await userEvent.click(getByRole('button', { name: 'Open navigation' }))
+    await waitFor(() => body().getByRole('dialog', { name: 'Menu' }), { timeout: OPEN_TIMEOUT })
+
+    try {
+      await page.viewport(1440, 900)
+      await waitFor(() => expect(body().queryByRole('dialog', { name: 'Menu' })).toBeNull(), {
+        timeout: OPEN_TIMEOUT
+      })
+    } finally {
+      await page.viewport(414, 896)
+    }
   })
 
   it('emits search from the search trigger, which carries the ⌘K / Ctrl K shortcut', async () => {
