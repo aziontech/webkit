@@ -307,6 +307,25 @@ the save strategies are `platform/settings/settings-form`, the two details pages
 [`src/cli/migrations/v6-blocks.json`](./src/cli/migrations/v6-blocks.json); `get_pattern` still
 answers an old id with the new block and a `note`. Code you already copied does not change.
 
+### Marketing section defaults
+
+Some marketing sections render differently with the same props. Pass the old value where you need
+the old look.
+
+- `FeatureWidgets`: `columns` defaults to `2` (was `3`).
+- `FeatureTabs`: the title sits beside the tabs on one row, the tabs are `medium`, and the action is
+  a `Button`.
+- `MediaSplitBand`: at the medium breakpoint the copy aligns to the top of the media, and a lone
+  action is `outlined`.
+- `MediaSplitStack`: band headings are `h3` under the section title.
+- `SitePage`: no trailing gap after a closing band.
+- `ClientMosaic`: a cell mark on a `white` or `primary` fill defaults to `logoTreatment: 'knockout'`
+  (set `'as-is'` to keep its colours).
+- `ArticleBody`: the share group's copy link button copies the page URL (`location.href`, then
+  `article.href`).
+- `ArticleIndexBlog`, `ArticleIndexResourceHub`, `StoryLibrary`: with `moreLabel` set the list pages
+  by `pageSize` (default `12`), and the load-more button shows only while more remain.
+
 ### Right-to-left
 
 Components, blocks and examples use logical utilities only, so a page under `dir="rtl"` mirrors:
