@@ -29,9 +29,8 @@
         :components="components"
       />
     </DocProse>
-    <DocOnThisPage
-      :items="headings"
-      class="md:w-(--container-3xs)"
-    />
+    <div class="md:w-(--container-3xs)">
+      <DocOnThisPage :items="headings" />
+    </div>
   </div>
 </template>
