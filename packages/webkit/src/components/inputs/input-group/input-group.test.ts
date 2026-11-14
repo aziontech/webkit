@@ -1,5 +1,6 @@
-import { render } from '@testing-library/vue'
+import { fireEvent, render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
+import { defineComponent, h, ref } from 'vue'
 
 import BothAddons from '../../../../examples/input-group/both-addons.vue'
 import Default from '../../../../examples/input-group/default.vue'
@@ -10,7 +11,8 @@ import Sizes from '../../../../examples/input-group/sizes.vue'
 import WithButton from '../../../../examples/input-group/with-button.vue'
 import WithSelect from '../../../../examples/input-group/with-select.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
-import InputGroup, { InputGroupAddon } from './index'
+import Field from '../field/field.vue'
+import InputGroup, { InputGroupAddon, InputGroupInput } from './index'
 
 // The middle input is a consumer-provided raw <input>; aria-label gives it an
 // accessible name so composed trees are axe-clean (the group does not name it).
@@ -20,6 +22,7 @@ describe('InputGroup', () => {
   describe('compound API', () => {
     it('attaches Addon to the compound root for dot-notation', () => {
       expect(InputGroup.Addon).toBe(InputGroupAddon)
+      expect(InputGroup.Input).toBe(InputGroupInput)
     })
   })
 
@@ -60,7 +63,7 @@ describe('InputGroup', () => {
   })
 
   describe('invalid', () => {
-    it('sets data-invalid and aria-invalid="true" on the root', () => {
+    it('sets data-invalid on the root and aria-invalid on the input, not on the group', () => {
       const { getByTestId } = render(InputGroup, {
         props: { invalid: true },
         slots: { default: LABELLED_INPUT }
@@ -68,7 +71,15 @@ describe('InputGroup', () => {
 
       const root = getByTestId('input-group')
       expect(root.getAttribute('data-invalid')).toBe('true')
-      expect(root.getAttribute('aria-invalid')).toBe('true')
+      expect(root.getAttribute('aria-invalid')).toBeNull()
+    })
+
+    it('marks InputGroup.Input invalid', () => {
+      const { getByRole } = render({
+        components: { InputGroup, InputGroupInput },
+        template: '<InputGroup invalid><InputGroupInput aria-label="Domain" /></InputGroup>'
+      })
+      expect(getByRole('textbox', { name: 'Domain' }).getAttribute('aria-invalid')).toBe('true')
     })
 
     it('omits both attributes when invalid is false', () => {
@@ -154,13 +165,45 @@ describe('InputGroup', () => {
       expect(root.getAttribute('aria-disabled')).toBe('true')
     })
 
-    it('does not propagate disabled to child controls (each child owns its own)', () => {
-      const { getByPlaceholderText } = render(InputGroup, {
-        props: { disabled: true },
-        slots: { default: LABELLED_INPUT }
+    it('disables InputGroup.Input and leaves a raw input to its own disabled', () => {
+      const { getByRole, getByPlaceholderText } = render({
+        components: { InputGroup, InputGroupInput },
+        template:
+          '<InputGroup disabled><InputGroupInput aria-label="Host" /><input aria-label="Domain" placeholder="domain" /></InputGroup>'
       })
-
+      expect((getByRole('textbox', { name: 'Host' }) as HTMLInputElement).disabled).toBe(true)
       expect((getByPlaceholderText('domain') as HTMLInputElement).disabled).toBe(false)
+    })
+
+    it('keeps the enclosing Field id and description on InputGroup.Input', () => {
+      const { getByRole } = render({
+        components: { Field, InputGroup, InputGroupInput },
+        template: '<Field><InputGroup><InputGroupInput aria-label="Host" /></InputGroup></Field>'
+      })
+      expect(getByRole('textbox', { name: 'Host' }).id).toMatch(/^field-/)
+    })
+  })
+
+  describe('InputGroup.Input', () => {
+    it('round-trips v-model and takes the restricted type', async () => {
+      const value = ref('example.com')
+      const Host = defineComponent({
+        setup: () => () =>
+          h(InputGroup, null, () =>
+            h(InputGroupInput, {
+              'aria-label': 'Host',
+              type: 'email',
+              modelValue: value.value,
+              'onUpdate:modelValue': (next: string) => (value.value = next)
+            })
+          )
+      })
+      const { getByRole } = render(Host)
+      const input = getByRole('textbox', { name: 'Host' }) as HTMLInputElement
+      expect(input.type).toBe('email')
+      expect(input.value).toBe('example.com')
+      await fireEvent.update(input, 'acme.example.com')
+      expect(value.value).toBe('acme.example.com')
     })
   })
 

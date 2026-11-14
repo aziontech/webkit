@@ -6,7 +6,11 @@
 
   defineOptions({ name: 'InputGroupInput', inheritAttrs: false })
 
+  export type InputGroupInputType = 'text' | 'email' | 'number'
+
   interface Props {
+    /** Native input type, the same restricted set as Input. */
+    type?: InputGroupInputType
     /** Placeholder shown when the input is empty. */
     placeholder?: string
     /** Native autocomplete token; omitted when unset. */
@@ -22,6 +26,7 @@
   }
 
   const props = withDefaults(defineProps<Props>(), {
+    type: 'text',
     placeholder: '',
     autocomplete: undefined,
     disabled: false,
@@ -63,6 +68,7 @@
   <input
     :id="controlId"
     :aria-describedby="describedBy"
+    :type="type"
     :value="model"
     :placeholder="placeholder"
     :autocomplete="autocomplete"
@@ -73,7 +79,7 @@
     :aria-required="isRequired || undefined"
     :data-testid="testId"
     v-bind="{ ...autofillHints, ...$attrs }"
-    class="h-full w-full min-w-0 flex-1 border-0 bg-transparent px-(--spacing-md) text-label-sm text-(--text-default) outline-none placeholder:text-(--text-muted) focus:ring-0 disabled:cursor-not-allowed disabled:text-(--text-disabled)"
+    class="h-full w-full min-w-0 flex-1 border-0 bg-transparent px-(--spacing-sm) text-label-sm text-(--text-default) outline-none placeholder:text-(--text-muted) focus:ring-0 disabled:cursor-not-allowed disabled:text-(--text-disabled)"
     @input="handleInput"
   />
 </template>
