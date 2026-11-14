@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest'
 
 import RulesList from '../../blocks/platform/view/rules-list/rules-list.vue'
 import EditRule from '../../blocks/platform/view/rules-list/variants/edit-rule.vue'
+import LoadFailed from '../../blocks/platform/view/rules-list/variants/load-failed.vue'
 import ReviewChanges from '../../blocks/platform/view/rules-list/variants/review-changes.vue'
 import Searching from '../../blocks/platform/view/rules-list/variants/searching.vue'
 import { useToastRegion } from './toast-region'
@@ -10,12 +11,12 @@ import { useToastRegion } from './toast-region'
 useToastRegion()
 
 const namesIn = (root: HTMLElement, phase: string) =>
-  Array.from(root.querySelectorAll(`[data-reorder-row^="${phase}"] a[data-rule-name]`)).map((a) =>
+  Array.from(root.querySelectorAll(`[data-reorder-row^="${phase}"] [data-rule-name]`)).map((a) =>
     a.textContent?.trim()
   )
 
 const requestNames = (root: HTMLElement) =>
-  Array.from(root.querySelectorAll('a[data-rule-name]')).map((a) => a.textContent?.trim())
+  Array.from(root.querySelectorAll('[data-rule-name]')).map((a) => a.textContent?.trim())
 
 describe('platform/view/rules-list block', () => {
   it('moves a rule with the arrow keys on its Table grip, announces it and keeps focus on the moved rule', async () => {
@@ -203,5 +204,28 @@ describe('platform/view/rules-list block', () => {
     const adding = document.querySelector('[role="dialog"]') as HTMLElement
     expect(adding.textContent).toContain('Add Rule')
     expect(adding.querySelector<HTMLInputElement>('#rule-name')!.value).toBe('')
+  })
+
+  it('names each rule with a link button that emits edit with the event and the rule', async () => {
+    const view = render(RulesList)
+    await fireEvent.click(view.getByRole('button', { name: 'Edit Docs rewrite' }))
+    const [event, rule] = view.emitted('edit')![0] as [MouseEvent, { name: string }]
+    expect(event).toBeInstanceOf(MouseEvent)
+    expect(rule.name).toBe('Docs rewrite')
+  })
+
+  it('offers Clear search in a phase the search empties', async () => {
+    const view = render(RulesList)
+    await fireEvent.update(view.getByRole('textbox', { name: 'Search rules' }), 'kubernetes')
+    const clear = await waitFor(() => view.getAllByRole('button', { name: 'Clear search' }))
+    await fireEvent.click(clear[0])
+    await waitFor(() => expect(view.queryAllByRole('button', { name: 'Clear search' })).toEqual([]))
+  })
+
+  it('replaces the phases with a danger alert whose Retry emits retry when the rules fail to load', async () => {
+    const view = render(LoadFailed)
+    expect(view.getByRole('button', { name: 'Add Rule' }).hasAttribute('disabled')).toBe(true)
+    await fireEvent.click(view.getByRole('button', { name: 'Retry' }))
+    expect(view.emitted('retry')).toHaveLength(1)
   })
 })

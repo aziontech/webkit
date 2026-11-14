@@ -768,11 +768,6 @@
     ]
   }
 
-  const GRIP_CLASS =
-    'inline-flex shrink-0 cursor-grab items-center justify-center rounded-(--shape-button) text-(--text-muted) outline-none transition-colors hover:bg-(--bg-hover) hover:text-(--text-default) focus-visible:ring-2 focus-visible:ring-(--ring-color) active:cursor-grabbing motion-reduce:transition-none'
-  const dragRowClass =
-    "relative rounded-(--shape-card) transition-[opacity,transform,outline-color] data-dragging:opacity-70 data-dragging:scale-[0.98] data-dragging:outline-dashed data-dragging:outline-2 data-dragging:outline-(--accent) data-drop:before:pointer-events-none data-drop:before:absolute data-drop:before:inset-x-0 data-drop:before:-top-(--spacing-xxs) data-drop:before:border-t-2 data-drop:before:border-(--accent) data-drop:before:content-['']"
-
   const byValue = Object.fromEntries(catalog.map((behavior) => [behavior.value, behavior]))
   const operatorLabel = (value: string) => OPERATORS.find((o) => o.value === value)?.label ?? ''
   const takesArgument = (operator: string) => operator !== 'exists' && operator !== 'does-not-exist'
@@ -1115,6 +1110,7 @@
             icon="pi pi-plus"
             kind="outlined"
             size="medium"
+            :disabled="loading"
             @click="addRule()"
           />
         </template>
@@ -1265,15 +1261,14 @@
                       </template>
                       <template #cell-name="{ row }">
                         <div class="flex min-w-0 items-center gap-(--spacing-xxs)">
-                          <button
-                            type="button"
+                          <Button
+                            kind="link"
+                            :label="row.name"
                             data-rule-name
                             :aria-label="`Edit ${row.name}`"
-                            class="min-w-0 cursor-pointer truncate rounded-(--shape-button) border-0 bg-transparent p-0 text-start text-body-sm text-(--text-default) underline-offset-2 outline-none hover:underline focus-visible:ring-2 focus-visible:ring-(--ring-color)"
+                            class="min-w-0 truncate"
                             @click="openRule(row)"
-                          >
-                            {{ row.name }}
-                          </button>
+                          />
                           <Tag
                             v-if="row.locked"
                             label="Default"
@@ -1312,11 +1307,20 @@
                         >
                       </template>
                       <template #empty>
-                        <p
-                          class="m-0 px-(--spacing-md) py-(--spacing-lg) text-center text-body-sm text-(--text-muted)"
+                        <EmptyState
+                          size="small"
+                          icon="pi pi-search"
+                          :title="`No ${group.label.toLowerCase()} rule matches “${search.trim()}”`"
                         >
-                          No {{ group.label.toLowerCase() }} rule matches “{{ search.trim() }}”.
-                        </p>
+                          <template #actions>
+                            <Button
+                              label="Clear search"
+                              kind="outlined"
+                              size="small"
+                              @click="search = ''"
+                            />
+                          </template>
+                        </EmptyState>
                       </template>
                     </TableRoot>
                     <EmptyState
@@ -1660,10 +1664,7 @@
                               data-drag-row
                               :data-dragging="isDragging('behavior', bIdx) || null"
                               :data-drop="isDropTarget('behavior', bIdx) || null"
-                              :class="[
-                                'grid grid-cols-1 items-start gap-(--spacing-xs) sm:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_auto]',
-                                dragRowClass
-                              ]"
+                              class="relative grid grid-cols-1 items-start gap-(--spacing-xs) rounded-(--shape-card) transition-[opacity,scale,outline-color] motion-reduce:transition-none data-dragging:scale-[0.98] data-dragging:opacity-70 data-dragging:outline-2 data-dragging:outline-(--accent) data-dragging:outline-dashed data-drop:before:pointer-events-none data-drop:before:absolute data-drop:before:inset-x-0 data-drop:before:-top-(--spacing-xxs) data-drop:before:border-t-2 data-drop:before:border-(--accent) data-drop:before:content-[''] sm:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_auto]"
                               @dragenter.prevent="onDragEnter('behavior', bIdx)"
                               @dragover.prevent
                               @drop="dropOnBehavior(bIdx)"
@@ -1809,7 +1810,7 @@
                                   tabindex="0"
                                   aria-label="Drag to reorder behavior, or use arrow keys"
                                   draggable="true"
-                                  :class="[GRIP_CLASS, 'size-10']"
+                                  class="inline-flex size-10 shrink-0 cursor-grab items-center justify-center rounded-(--shape-button) text-(--text-muted) outline-none transition-colors hover:bg-(--bg-hover) hover:text-(--text-default) focus-visible:ring-2 focus-visible:ring-(--ring-color) active:cursor-grabbing motion-reduce:transition-none"
                                   @dragstart="onDragStart('behavior', bIdx, $event)"
                                   @dragend="onDragEnd"
                                   @keydown.up.prevent="moveBehavior(bIdx, -1)"
