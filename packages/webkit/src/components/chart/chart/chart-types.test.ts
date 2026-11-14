@@ -63,6 +63,24 @@ describe('Chart types', () => {
     expect(scatter.querySelector('circle')?.getAttribute('fill')).toBe('var(--chart-series-1)')
   })
 
+  it('draws the active scatter point as one overlay dot per series', async () => {
+    const view = mount({}, () => [h(ChartScatter)])
+    await measured(view)
+    const scatter = view.getByTestId('chart-chart__scatter')
+    expect(scatter.querySelectorAll('[data-active]')).toHaveLength(0)
+    const plot = plotOf(view)
+    plot.focus()
+    await fireEvent.keyDown(plot, { key: 'ArrowRight' })
+    const active = scatter.querySelectorAll('circle[data-active]')
+    expect(active.length).toBeGreaterThan(0)
+    expect(Array.from(active).every((dot) => dot.getAttribute('r') === '6')).toBe(true)
+    expect(
+      Array.from(scatter.querySelectorAll('circle:not([data-active])')).every(
+        (dot) => dot.getAttribute('r') === '4'
+      )
+    ).toBe(true)
+  })
+
   it('places numeric labels by value on a linear label scale', async () => {
     const view = mount(
       {

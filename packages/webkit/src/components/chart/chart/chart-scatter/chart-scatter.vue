@@ -44,6 +44,17 @@
     }))
   })
 
+  const activeDots = computed(() => {
+    const index = ctx.activeIndex.value
+    if (index === null) return new Map<string, { x: number; y: number }>()
+    return new Map(
+      groups.value.flatMap((group) => {
+        const dot = group.dots.find((entry) => entry.index === index)
+        return dot ? [[group.id, { x: dot.x, y: dot.y }] as const] : []
+      })
+    )
+  })
+
   const dimmed = (id: string) => ctx.emphasized.value !== null && ctx.emphasized.value !== id
 </script>
 
@@ -68,11 +79,21 @@
       <circle
         v-for="dot in group.dots"
         :key="dot.index"
+        v-memo="[dot.x, dot.y, group.color]"
         :cx="dot.x"
         :cy="dot.y"
-        :r="ctx.activeIndex.value === dot.index ? 6 : 4"
+        r="4"
         :fill="group.color"
-        :data-active="ctx.activeIndex.value === dot.index || null"
+        stroke="var(--bg-surface)"
+        stroke-width="1.5"
+      />
+      <circle
+        v-if="activeDots.get(group.id)"
+        :cx="activeDots.get(group.id)?.x"
+        :cy="activeDots.get(group.id)?.y"
+        r="6"
+        :fill="group.color"
+        data-active
         stroke="var(--bg-surface)"
         stroke-width="1.5"
       />
