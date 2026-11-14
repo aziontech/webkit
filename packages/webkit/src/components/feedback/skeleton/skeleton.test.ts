@@ -74,13 +74,13 @@ describe('Skeleton', () => {
     expect(el.style.height).toBe('1rem')
   })
 
-  it.each(['shape', 'circle'] as const)('renders the %s geometry', (kind) => {
+  it.each(['rectangle', 'circle'] as const)('renders the %s geometry', (kind) => {
     const { getByTestId } = render(Skeleton, { props: { kind } })
 
     expect(getByTestId('feedback-skeleton').getAttribute('data-kind')).toBe(kind)
   })
 
-  it('has no a11y violations for the default shape', async () => {
+  it('has no a11y violations for the default rectangle', async () => {
     const { container } = render(Skeleton, {
       props: { width: '240px', height: '100px' }
     })
