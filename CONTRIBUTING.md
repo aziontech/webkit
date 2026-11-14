@@ -476,4 +476,4 @@ There is no manual release step. If you need a merge that does not produce a rel
 
 ## Questions
 
-Open a draft PR or a GitHub issue; tag a CODEOWNER from [`.github/CODEOWNERS`](./.github/CODEOWNERS).
+Open a draft PR or a GitHub issue; tag a code owner from [`CODEOWNERS`](./CODEOWNERS).

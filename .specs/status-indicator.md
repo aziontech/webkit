@@ -3,8 +3,8 @@ name: status-indicator
 category: feedback
 structure: monolithic
 status: implemented
-spec_version: 2
-checksum: dc1d47e20933673403ac36db2348b3124305692f5e48a887a21ecdd77b815050
+spec_version: 3
+checksum: f8b4dfdd541a3eaaf8dbb54a1c6bd0dff309e3b829a12f1a586f203c8ac80fc5
 created: 2026-05-22
 last_updated: 2026-11-14
 ---
@@ -24,7 +24,7 @@ Shows the settled or transitional state of one resource as a colored dot (or a s
 
 - A count or a very short label attached to another element → use `badge`.
 - A category or status chip with an optional icon → use `tag`.
-- A page or section notice with copy and actions → use `message`.
+- A page or section notice with copy and actions → use `alert`.
 - Measurable progress → use `progress`.
 
 ## Related

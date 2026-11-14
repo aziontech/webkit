@@ -1,7 +1,7 @@
 # Test Architecture — Overview
 
 > **@aziontech/webkit monorepo** · snapshot of July 2026, visual layer updated November 2026 (M2.5: Storybook removed)
-> Companion doc: [`OVERVIEW_LINT.md`](./OVERVIEW_LINT.md) (static-quality layers) · Deep audit: [`TESTING_AUDIT_2026-07-02.md`](./TESTING_AUDIT_2026-07-02.md)
+> Companion doc: [`OVERVIEW_LINT.md`](./OVERVIEW_LINT.md) (static-quality layers)
 
 ## TL;DR
 
@@ -126,7 +126,7 @@ Conventions that matter:
 
 ### 2.4 The mandatory surface — what every test must cover
 
-Fixed by [`.claude/rules/testing.md`](../.claude/rules/testing.md); this is the **floor**, not the ceiling:
+Fixed by [`.claude/rules/testing.md`](../rules/testing.md); this is the **floor**, not the ceiling:
 
 | #   | Surface          | Assertion                                                                   |
 | --- | ---------------- | --------------------------------------------------------------------------- |
@@ -236,13 +236,13 @@ Two mechanisms, verified in CI (`governance.yml` → build job):
 
 ## 6. Enforcement & scaffolding — how the floor stays enforced
 
-| Mechanism                                                 | Kind                         | What it does                                                                                                                 |
-| --------------------------------------------------------- | ---------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
-| [`.claude/rules/testing.md`](../.claude/rules/testing.md) | Rule (source of truth)       | Fixes the browser-mode requirement, the 10-surface floor, and the hard prohibitions                                          |
-| `enforce-test-exists.mjs`                                 | Claude Code PostToolUse hook | Warns when a root `.vue` is written without a co-located `<name>.test.ts`                                                    |
-| `component-scaffold` skill                                | Generator                    | Every new component is born with a starter test (render + testid override + axe) that the author expands to the full surface |
-| `validate-references.mjs`                                 | Claude Code PreToolUse hook  | Blocks test files whose imports don't resolve (e.g. a vite alias instead of a relative path)                                 |
-| `package-webkit-test.yml` gate                            | CI                           | No PR merges with a red shard                                                                                                |
+| Mechanism                                         | Kind                         | What it does                                                                                                                 |
+| ------------------------------------------------- | ---------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| [`.claude/rules/testing.md`](../rules/testing.md) | Rule (source of truth)       | Fixes the browser-mode requirement, the 10-surface floor, and the hard prohibitions                                          |
+| `enforce-test-exists.mjs`                         | Claude Code PostToolUse hook | Warns when a root `.vue` is written without a co-located `<name>.test.ts`                                                    |
+| `component-scaffold` skill                        | Generator                    | Every new component is born with a starter test (render + testid override + axe) that the author expands to the full surface |
+| `validate-references.mjs`                         | Claude Code PreToolUse hook  | Blocks test files whose imports don't resolve (e.g. a vite alias instead of a relative path)                                 |
+| `package-webkit-test.yml` gate                    | CI                           | No PR merges with a red shard                                                                                                |
 
 ---
 

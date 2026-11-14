@@ -31,7 +31,7 @@ The construction standards themselves (props, styling, testing, …) are catalog
 
 ## 1. ESLint Configuration
 
-**File:** root [`eslint.config.js`](../../../eslint.config.js) — the repo-wide flat config. `packages/webkit/eslint.config.js` is a one-line re-export of it, so running ESLint from the package resolves the exact same rule set.
+**File:** root [`eslint.config.js`](../../eslint.config.js) — the repo-wide flat config. `packages/webkit/eslint.config.js` is a one-line re-export of it, so running ESLint from the package resolves the exact same rule set.
 
 ### What Was Implemented
 
@@ -70,7 +70,7 @@ All rules are set to `error` level. This enforces:
 
 ## 2. Stylelint Configuration
 
-**File:** root [`.stylelintrc.json`](../../../.stylelintrc.json) — the single repo-wide config (there is no per-package stylelint config).
+**File:** root [`.stylelintrc.json`](../../.stylelintrc.json) — the single repo-wide config (there is no per-package stylelint config).
 
 ### What Was Implemented
 
@@ -96,7 +96,7 @@ Stylelint configuration with SCSS support and Vue integration.
 
 ## 3. TypeScript Configuration
 
-**Files:** root [`tsconfig.base.json`](../../../tsconfig.base.json) (shared strictness) + [`packages/webkit/tsconfig.json`](../tsconfig.json) (extends the base, adds declaration emit).
+**Files:** root [`tsconfig.base.json`](../../tsconfig.base.json) (shared strictness) + [`packages/webkit/tsconfig.json`](../../packages/webkit/tsconfig.json) (extends the base, adds declaration emit).
 
 ### What Was Implemented
 
@@ -120,7 +120,7 @@ Test files (`*.test.ts`, `src/test/`) and Code Connect files (`*.figma.ts`) are 
 
 ## 4. Type Coverage
 
-**File:** [`packages/webkit/type-coverage.json`](../type-coverage.json)
+**File:** [`packages/webkit/type-coverage.json`](../../packages/webkit/type-coverage.json)
 
 ### What Was Implemented
 
@@ -147,7 +147,7 @@ Type coverage configuration enforcing a 95% type safety threshold (the `type-cov
 
 ## 5. Prettier Ignore
 
-**Files:** [`packages/webkit/.prettierignore`](../.prettierignore) + the root [`.prettierignore`](../../../.prettierignore)
+**Files:** [`packages/webkit/.prettierignore`](../../packages/webkit/.prettierignore) + the root [`.prettierignore`](../../.prettierignore)
 
 ### What Was Implemented
 
@@ -257,7 +257,7 @@ Husky Git hooks: lint-staged on `pre-commit`, commitlint on `commit-msg`.
 
 ## 8. GitHub Actions Workflow
 
-**File:** [`/.github/workflows/governance.yml`](../../../.github/workflows/governance.yml)
+**File:** [`/.github/workflows/governance.yml`](../../.github/workflows/governance.yml)
 
 ### What Was Implemented
 
@@ -311,11 +311,11 @@ The `lint-canaries/` fixtures each violate exactly one lint rule on purpose. The
 
 #### Build Job Details
 
-| Step                              | Reason                                                                                                                                                                                                                                                                                                                                                                                                                                   |
-| --------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Depends on lint + types**       | Only builds if linting and type checking pass. Prevents wasting CI time on broken code.                                                                                                                                                                                                                                                                                                                                                  |
-| **Publish safety (`pack:check`)** | `npm pack --dry-run` must list **no** `*.test.ts` / `src/test/**` files — tests never ship to npm. `.d.ts` declarations are **not** built in this job: they are generated at publish time by the release workflow ([`package-webkit.yml`](../../../.github/workflows/package-webkit.yml) runs `vue-tsc --declaration --emitDeclarationOnly` immediately before `npm publish`, triggered by release-please's `release: published` event). |
-| **Bundle budget (`size`)**        | Every budgeted export entry is compiled (Vite + plugin-vue, vue externalized) and its gzipped size compared against `.size-limit.json`. Budgets only ratchet down.                                                                                                                                                                                                                                                                       |
+| Step                              | Reason                                                                                                                                                                                                                                                                                                                                                                                                                                |
+| --------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Depends on lint + types**       | Only builds if linting and type checking pass. Prevents wasting CI time on broken code.                                                                                                                                                                                                                                                                                                                                               |
+| **Publish safety (`pack:check`)** | `npm pack --dry-run` must list **no** `*.test.ts` / `src/test/**` files — tests never ship to npm. `.d.ts` declarations are **not** built in this job: they are generated at publish time by the release workflow ([`package-webkit.yml`](../../.github/workflows/package-webkit.yml) runs `vue-tsc --declaration --emitDeclarationOnly` immediately before `npm publish`, triggered by release-please's `release: published` event). |
+| **Bundle budget (`size`)**        | Every budgeted export entry is compiled (Vite + plugin-vue, vue externalized) and its gzipped size compared against `.size-limit.json`. Budgets only ratchet down.                                                                                                                                                                                                                                                                    |
 
 #### Tests Job Details (Vitest browser mode)
 

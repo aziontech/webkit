@@ -3,13 +3,13 @@ name: empty-state
 category: feedback
 structure: monolithic
 status: implemented
-spec_version: 2
+spec_version: 3
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=446-864
   node_id: 446:864
-checksum: 441065fb3f34752859582c664a9cd819a2514bf4fdd37f12a373e1420e2c3e91
+checksum: 2ecdd2501f66823527bd4f6a2897c20f8295cc3b885fc9845073224375cc3d93
 created: 2026-06-25
-last_updated: 2026-11-12
+last_updated: 2026-11-14
 ---
 
 # Empty State — Component Spec
@@ -26,7 +26,7 @@ Centered placeholder shown when a resource list or section has no content yet. S
 ## When NOT to use
 
 - The data is still loading → use `skeleton`.
-- An inline warning or error about content that is present → use `message`.
+- An inline warning or error about content that is present → use `alert`.
 - The empty body of a data-driven `table` → use the `table` `empty` slot, which already renders this block by default.
 
 ## Related

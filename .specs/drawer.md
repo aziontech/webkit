@@ -3,8 +3,8 @@ name: drawer
 category: overlay
 structure: composition
 status: implemented
-spec_version: 2
-checksum: 8cf1b1131be096c376f07994b15f4eb42ceed6d586a6c679a19b5bf89e37501b
+spec_version: 3
+checksum: 593b368f60425f249a75c71c451288354bd1958ee1ca5aa3e2ed96b53e81a418
 created: 2026-05-22
 last_updated: 2026-11-14
 ---
@@ -13,7 +13,7 @@ last_updated: 2026-11-14
 
 ## Purpose
 
-Layered surface above the page (modal, drawer, menu). Lives at `packages/webkit/src/components/overlay/drawer/`.
+A panel that slides in from an edge of the screen and keeps the page behind it in view. It holds secondary work that is too large or too long-lived for a dialog: filters, a long form, the details of a row, a navigation list. It traps focus while open, closes on Escape and on an overlay click when `dismissible`, and returns focus to its trigger.
 
 ## When to use
 

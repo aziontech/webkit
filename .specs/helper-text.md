@@ -3,13 +3,13 @@ name: helper-text
 category: inputs
 structure: monolithic
 status: implemented
-spec_version: 1
+spec_version: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=600-5603
   node_id: 600:5603
-checksum: 0494bc2d3bd0df14aa90458e2866bb6ffa5f7c03454e31691305fe8a4cbcab03
+checksum: 4ba97c1b9da4c889e0077ef2bd341cfe3853e86e9e6f213bd241992c91435910
 created: 2026-06-15
-last_updated: 2026-11-10
+last_updated: 2026-11-14
 ---
 
 # HelperText — Component Spec
@@ -27,7 +27,7 @@ Auxiliary text rendered below a form input to communicate guidance (`helper`), v
 
 - A standard form field → use `field`, whose `Field.Description` / `Field.Error` render this helper and wire it to the control.
 - The field name or required marker above the input → use `label`.
-- Feedback about a whole form or page rather than one field → use `message`.
+- Feedback about a whole form or page rather than one field → use `alert`.
 
 ## Related
 

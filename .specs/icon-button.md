@@ -3,9 +3,9 @@ name: icon-button
 category: actions
 structure: monolithic
 status: implemented
-spec_version: 2
+spec_version: 3
 template: 2
-checksum: 674d631637437c93f3e2469f93199cecf55ae9f3237f9b22590ba6c433acdeb4
+checksum: e74b7dbb7c6289ec1c3f3da2664bac22f01e68e4707d43f75f60ba312945472e
 created: 2026-05-22
 last_updated: 2026-11-14
 ---
@@ -14,7 +14,7 @@ last_updated: 2026-11-14
 
 ## Purpose
 
-Interactive control for user actions. Lives at `packages/webkit/src/components/actions/icon-button/`.
+A square control that triggers an action with a glyph and no visible text: close, refresh, delete, more. It shares the variants, sizes and loading state of `Button`, takes its accessible name from `aria-label`, can swap between two icons in place, and renders as an anchor when `href` is set.
 
 ## When to use
 

@@ -21,6 +21,7 @@ const shared = {
   'surface-950': tokenRef('primitives.gray.950')
 }
 
+/** @deprecated since 5.3 — the `--surface-*` CSS variables: use the semantic `--bg-*` / `--border-*` / `--text-*` roles, or `--color-gray-*` for a fixed ramp step. Removed in 6.0. */
 export const surfaces = {
   light: shared,
   dark: shared

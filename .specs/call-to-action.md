@@ -3,10 +3,10 @@ name: call-to-action
 category: marketing
 structure: monolithic
 status: implemented
-spec_version: 2
-checksum: 3bd06945d048ea152709303f2bf33144fdb8f94d37066bcfeaf78a73754a2ec0
+spec_version: 3
+checksum: 664aaa09e197ed557abe302326ac71f04b4c9faef591e4e694df50af54e86786
 created: 2026-09-22
-last_updated: 2026-10-20
+last_updated: 2026-11-14
 ---
 
 # Call To Action — Component Spec
@@ -34,7 +34,7 @@ Four registers. `panel` sets the copy and its controls on one surface, as a row 
 
 - To open a section with a headline and optional actions → use `section-title`, which draws a header rule rather than a panel.
 - For the page's leading statement and primary CTAs → use `hero`, whose `Hero.Title` owns the `h1`.
-- For a dismissible or time-bound announcement → use `message`.
+- For a dismissible or time-bound announcement → use `alert`.
 - For a close that sits quietly in the column → use `split` or `panel`; `primary` fills a whole brand-coloured band and should appear once per page.
 - For a plan's call to action inside pricing → use `card-pricing`, which owns its own action row.
 

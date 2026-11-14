@@ -3,13 +3,13 @@ name: section-gap
 category: marketing
 structure: monolithic
 status: implemented
-spec_version: 3
-checksum: e4ae44080276a7424c4eb26f86935b797a9d3c2f8e8b15d295b7dfc5897c66ec
+spec_version: 4
+checksum: e46f3ec0c8d1b833904812e08f182335d60a21ac86f59abe469f8351221bb992
 figma:
   url: https://www.figma.com/design/QEbHSTFDWfh4VHkBp6NWN3/Azion.com?node-id=8869-10008
   node_id: 8869:10008
 created: 2026-08-11
-last_updated: 2026-11-09
+last_updated: 2026-11-14
 ---
 
 # Section Gap — Component Spec
@@ -27,7 +27,7 @@ The empty registration frame that divides two page sections. On a page with no m
 ## When NOT to use
 
 - To space two elements inside a section → use the layout's own `gap-(--spacing-*)` utility.
-- To draw a single separating line with no air → use `divider` instead.
+- To draw a single separating line with no air → use `separator` instead.
 - When the gap must hold content (a headline, a CTA) → use `section-title`, or a `frame-box` you fill yourself.
 
 ## Related

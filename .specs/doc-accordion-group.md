@@ -3,11 +3,11 @@ name: doc-accordion-group
 category: documentation
 structure: monolithic
 status: implemented
-spec_version: 1
+spec_version: 2
 template: 2
-checksum: 0fb7e1d4fad1a8870daf42b379f3ed5467b01ab992f029cf27b1641560e22dc6
+checksum: cdbb0fa1a3538b3250ac4686819023baacbf0e0add22ee759aeed110146bb061
 created: 2026-11-11
-last_updated: 2026-11-11
+last_updated: 2026-11-14
 ---
 
 # DocAccordionGroup — Component Spec
@@ -58,9 +58,9 @@ The FAQ and "expand for detail" block of a documentation page. It reads the `tit
 
 ## Props
 
-| Prop   | Type         | Default     | Required   | JSDoc |
-| ------ | ------------ | ----------- | ---------- | ----- |
-| `type` | `'single' \\ | 'multiple'` | `'single'` | false | Whether one or several entries can be open at once. |
+| Prop   | Type                     | Default    | Required | JSDoc                                               |
+| ------ | ------------------------ | ---------- | -------- | --------------------------------------------------- |
+| `type` | `'single' \| 'multiple'` | `'single'` | false    | Whether one or several entries can be open at once. |
 
 ## Events
 

@@ -1,3 +1,4 @@
+/** @deprecated since 5.3 — the `--height-*` CSS variables: use the Tailwind `h-*` utilities or `calc(var(--spacing) * n)`. Removed in 6.0. */
 export const height = {
   2: '8px',
   3: '12px',

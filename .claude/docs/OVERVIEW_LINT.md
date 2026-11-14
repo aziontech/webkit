@@ -51,7 +51,7 @@ Each layer catches what the previous one missed: hooks stop AI-generated drift a
 
 ## 2. ESLint — correctness linting
 
-**Config:** single **flat config** (ESLint 9) at the repo root, [`eslint.config.js`](../eslint.config.js). `packages/webkit/eslint.config.js` just re-exports it — one ruleset, no per-package drift.
+**Config:** single **flat config** (ESLint 9) at the repo root, [`eslint.config.js`](../../eslint.config.js). `packages/webkit/eslint.config.js` just re-exports it — one ruleset, no per-package drift.
 
 ### 2.1 Parser chain
 
@@ -126,7 +126,7 @@ Every ESLint invocation — script, lint-staged, CI — runs with **`--max-warni
 
 ## 3. Prettier — formatting
 
-**Config:** [`.prettierrc.json`](../.prettierrc.json). Formatting is Prettier's job alone — ESLint has no stylistic rules to fight it, so no `eslint-config-prettier` shim is wired into the flat config.
+**Config:** [`.prettierrc.json`](../../.prettierrc.json). Formatting is Prettier's job alone — ESLint has no stylistic rules to fight it, so no `eslint-config-prettier` shim is wired into the flat config.
 
 | Option                    | Value    | Meaning                                                                                                               |
 | ------------------------- | -------- | --------------------------------------------------------------------------------------------------------------------- |
@@ -144,7 +144,7 @@ Every ESLint invocation — script, lint-staged, CI — runs with **`--max-warni
 
 ## 4. Stylelint — CSS/SCSS linting
 
-**Config:** [`.stylelintrc.json`](../.stylelintrc.json), scanning `packages/webkit/**/*.{css,scss,vue}`.
+**Config:** [`.stylelintrc.json`](../../.stylelintrc.json), scanning `packages/webkit/**/*.{css,scss,vue}`.
 
 Context: the styling rule forbids `<style>` blocks and component-local CSS inside webkit components — so Stylelint is the **backstop** for the few legitimate stylesheets (e.g. `styles/country-flags.css`, legacy components) and any `<style>` block that would sneak in.
 
@@ -183,7 +183,7 @@ Two complementary gates:
 
 ## 6. commitlint — the commit message contract
 
-**Config:** [`commitlint.config.js`](../commitlint.config.js), run by husky on every `commit-msg`.
+**Config:** [`commitlint.config.js`](../../commitlint.config.js), run by husky on every `commit-msg`.
 
 Commits aren't just style here — they **drive releases**. release-please reads the same header format to compute version bumps — and because merges to `main` are squash merges, the commit it parses is the **PR title**. commitlint's job is making sure a header that passes locally also releases correctly.
 
@@ -207,7 +207,7 @@ feat(webkit)!: drop tone prop                 ← “!” = breaking = major
 
 **Other rules:** type required and lower-case, scope lower-case, subject required, header ≤ 100 chars, subject-case unrestricted. A **leading** ticket tag (`[ENG-…] feat: …`) is rejected — release-please cannot parse it, so it would release **nothing** (the #804 incident) — and `[NO-ISSUE]` is rejected anywhere: no ticket → no tag.
 
-**The sync invariant** ([`release-types.md`](../.claude/rules/release-types.md)): this type list must stay **identical** in four places — `commitlint.config.js`, [`release-please-config.json`](../release-please-config.json) (stock `node` release type, no per-type bump customization), `CONTRIBUTING.md`, and the `/open-pr` + `/create-branch` flows. A type added in one place and not the others produces commits that pass lint but silently don't release.
+**The sync invariant** ([`release-types.md`](../rules/release-types.md)): this type list must stay **identical** in four places — `commitlint.config.js`, [`release-please-config.json`](../../release-please-config.json) (stock `node` release type, no per-type bump customization), `CONTRIBUTING.md`, and the `/open-pr` + `/create-branch` flows. A type added in one place and not the others produces commits that pass lint but silently don't release.
 
 ---
 
@@ -240,7 +240,7 @@ flowchart LR
 
 ## 8. CI — the governance pipeline
 
-**Workflow:** [`.github/workflows/governance.yml`](../.github/workflows/governance.yml) · PRs and pushes to `main` and `dev` · path-filtered to `packages/webkit/**` (jobs short-circuit as "skipped" when nothing relevant changed, so required checks stay green).
+**Workflow:** [`.github/workflows/governance.yml`](../../.github/workflows/governance.yml) · PRs and pushes to `main` and `dev` · path-filtered to `packages/webkit/**` (jobs short-circuit as "skipped" when nothing relevant changed, so required checks stay green).
 
 ```mermaid
 flowchart TB
@@ -267,7 +267,7 @@ What each job contributes:
 | **lint**             | ESLint (0 warnings) · Stylelint · `prettier --check`                                    | re-runs Layer 1/2 from a clean checkout — local bypasses can't merge                           |
 | **types**            | `vue-tsc` · type-coverage ≥95%                                                          | the type gates of §5, enforced on every PR                                                     |
 | **security**         | `pnpm audit` (high+) · TruffleHog verified-secret scan · `depcheck` (continue-on-error) | vulnerable deps and committed secrets block; unused deps are advisory                          |
-| **build**            | `pack:dry` + `pack:check`                                                               | publish safety — the npm tarball is valid and ships zero test files                            |
+| **build**            | `pack:check`                                                                            | publish safety — the npm tarball is valid and ships zero test files                            |
 | **site**             | `docs:build` + `demos:build`                                                            | the docs site prerendering every route is a smoke test over every example, block and component |
 | **governance-check** | aggregates all of the above                                                             | the **single required status** for branch protection                                           |
 

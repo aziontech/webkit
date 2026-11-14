@@ -3,9 +3,9 @@ name: button
 category: actions
 structure: monolithic
 status: implemented
-spec_version: 3
+spec_version: 4
 template: 2
-checksum: 65100cf52d4292e55f4061967430728919805da6411f96b4f30da73229aa86d4
+checksum: 165fe16e19105e00f919b42d63add458a6c2fefea9a1f6098c5efdafe4d121ea
 created: 2026-05-22
 last_updated: 2026-11-14
 ---
@@ -14,7 +14,7 @@ last_updated: 2026-11-14
 
 ## Purpose
 
-Interactive control for user actions. Lives at `packages/webkit/src/components/actions/button/`.
+The labelled control that triggers an action. `kind` ranks the action in its view (one `primary`, the rest `secondary`, `outlined`, `transparent`, `danger` for a destructive one, or `link` for an action that reads as a link), `size` fits it to its context, and `loading` and `disabled` cover the states in between. With `href` it renders an anchor that looks the same, so a call to action that navigates needs no second component.
 
 ## When to use
 

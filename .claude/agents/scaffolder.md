@@ -41,7 +41,7 @@ You are the `scaffolder` sub-agent. You execute the `component-scaffold` skill v
 ```json
 {
   "files_written": [
-    "packages/webkit/src/components/webkit/<category>/<name>/<name>.vue",
+    "packages/webkit/src/components/<category>/<name>/<name>.vue",
     "packages/webkit/package.json"
   ],
   "exports_added": ["./<category>/<name>"],

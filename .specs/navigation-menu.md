@@ -3,11 +3,11 @@ name: navigation-menu
 category: navigation
 structure: composition
 status: implemented
-spec_version: 4
+spec_version: 5
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3374-6191
   node_id: 3374:6191
-checksum: 9f6109c573bd54cbb8f801d4d1ea1ada16ba5032aae6131343ce3ac2a0747863
+checksum: 05926531a324903b42b435947b90f754d4c25688db87c4ab6d72a3d9e1144357
 created: 2026-05-22
 last_updated: 2026-11-14
 ---
@@ -16,7 +16,7 @@ last_updated: 2026-11-14
 
 ## Purpose
 
-Helps users move between views or sections. Lives at `packages/webkit/src/components/navigation/navigation-menu/`.
+The top bar of a site: a row of links and triggers whose items open large panels of grouped links (product and solution menus). The items share one hover-intent timing, one keyboard model and one animated popup that resizes and slides between panels, inside a `navigation` landmark.
 
 ## When to use
 
@@ -27,7 +27,7 @@ Helps users move between views or sections. Lives at `packages/webkit/src/compon
 ## When NOT to use
 
 - It is the persistent vertical navigation of an app → use `sidebar` with `menu`.
-- It is a list of actions or options opened from a button → use `dropdown`.
+- It is a list of actions or options opened from a button → use `dropdown-menu`.
 - It shows where the current page sits in a hierarchy → use `breadcrumb`.
 - It is the marketing site's whole navigation bar → use `site-nav`, which already composes this menu.
 

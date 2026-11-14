@@ -3,10 +3,10 @@ name: quote
 category: marketing
 structure: monolithic
 status: implemented
-spec_version: 1
-checksum: 9e8035039bfd7e07a2155352a4f1e1cdb860af69fe6335f78b6a290523fbec61
+spec_version: 2
+checksum: 5cba11fe7e7a6c9e756f3c6ad6134de37337d0062f176c303bb46a80af4d5b9b
 created: 2026-09-22
-last_updated: 2026-11-11
+last_updated: 2026-11-14
 ---
 
 # Quote — Component Spec
@@ -33,7 +33,7 @@ The register changes the weight and the arrangement, never the anatomy: every re
 
 - For a measured figure rather than a statement → use `big-numbers`.
 - For an inline aside or callout inside documentation → use `doc-callout`.
-- For a dismissible or status message → use `message`.
+- For a dismissible or status message → use `alert`.
 - For a logo row with no quotation → compose the marks directly; a `quote` without `text` is not a logo wall.
 
 ## Related

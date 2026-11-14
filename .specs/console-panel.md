@@ -3,9 +3,9 @@ name: console-panel
 category: sections
 structure: monolithic
 status: implemented
-spec_version: 2
+spec_version: 3
 template: 2
-checksum: 123fb675014d63ee34fed4406944fa9a98b0aa4e5ca1112d76753ee33a2951ff
+checksum: be6d199b0576f2542a62832957e0a66d14711f84a18522beda614c0c01297559
 created: 2026-11-11
 last_updated: 2026-11-14
 ---
@@ -62,24 +62,24 @@ A full-width framed panel that presents a product scene (a console mock or a dia
 
 ## Props
 
-| Prop              | Type                   | Default      | Required    | JSDoc                                                                                                                                                                                                                              |
-| ----------------- | ---------------------- | ------------ | ----------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `kind`            | `'console' \\          | 'diagram'`   | `'console'` | false                                                                                                                                                                                                                              | What the panel frames: `console` crops and fades a console mock at a fixed aspect, `diagram` lets a scene keep its own height. |
-| `titleKind`       | `SectionTitleKind`     | `'centered'` | false       | Layout of the headline block.                                                                                                                                                                                                      |
-| `titlePadding`    | `SectionTitlePadding`  | `'medium'`   | false       | Vertical padding of the headline block.                                                                                                                                                                                            |
-| `size`            | `SectionTitleSize`     | `'medium'`   | false       | Step of the headline on the heading scale.                                                                                                                                                                                         |
-| `anchor`          | `string`               | `''`         | false       | In-page id set on the band so a hash link can target it.                                                                                                                                                                           |
-| `eyebrow`         | `string`               | `''`         | false       | Overline above the title.                                                                                                                                                                                                          |
-| `title`           | `string`               | `''`         | false       | Headline of the band, rendered as its `h2`.                                                                                                                                                                                        |
-| `description`     | `string`               | `''`         | false       | One or two sentences under the headline.                                                                                                                                                                                           |
-| `texture`         | `TextureMaterialKind`  | `'pixelate'` | false       | Texture the panel is grounded with.                                                                                                                                                                                                |
-| `textureFade`     | `TextureMaterialFade`  | `'top'`      | false       | Axis the texture fades out along.                                                                                                                                                                                                  |
-| `tabs`            | `ConsolePanelTab[]`    | `[]`         | false       | Tabs over the frame, each `{ value, title }`; each plays its own beat of the scene.                                                                                                                                                |
-| `tabsAriaLabel`   | `string`               | `''`         | false       | Accessible name of the tab control; empty uses the built-in "Console views".                                                                                                                                                       |
-| `crop`            | `number`               | `0`          | false       | Share of the scene height clipped off its bottom, from 0 to 0.5, from the medium breakpoint up.                                                                                                                                    |
-| `primaryAction`   | `ConsolePanelAction`   | `undefined`  | false       | First button under the headline, `secondary`; `{ label, href, trailing?, target? }`. Shown only with a label and a link.                                                                                                           |
-| `secondaryAction` | `ConsolePanelAction`   | `undefined`  | false       | Second button under the headline, `outlined`; same shape. Shown only with a label and a link.                                                                                                                                      |
-| `actions`         | `ConsolePanelAction[]` | `[]`         | false       | @deprecated since 6.0 — use `primaryAction` / `secondaryAction`. Removed in 7.0. Read only when neither is set; each is `{ label, href, trailing?, target?, kind? }`, without `kind` the first is secondary and the rest outlined. |
+| Prop              | Type                     | Default      | Required | JSDoc                                                                                                                                                                                                                              |
+| ----------------- | ------------------------ | ------------ | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `kind`            | `'console' \| 'diagram'` | `'console'`  | false    | What the panel frames: `console` crops and fades a console mock at a fixed aspect, `diagram` lets a scene keep its own height.                                                                                                     |
+| `titleKind`       | `SectionTitleKind`       | `'centered'` | false    | Layout of the headline block.                                                                                                                                                                                                      |
+| `titlePadding`    | `SectionTitlePadding`    | `'medium'`   | false    | Vertical padding of the headline block.                                                                                                                                                                                            |
+| `size`            | `SectionTitleSize`       | `'medium'`   | false    | Step of the headline on the heading scale.                                                                                                                                                                                         |
+| `anchor`          | `string`                 | `''`         | false    | In-page id set on the band so a hash link can target it.                                                                                                                                                                           |
+| `eyebrow`         | `string`                 | `''`         | false    | Overline above the title.                                                                                                                                                                                                          |
+| `title`           | `string`                 | `''`         | false    | Headline of the band, rendered as its `h2`.                                                                                                                                                                                        |
+| `description`     | `string`                 | `''`         | false    | One or two sentences under the headline.                                                                                                                                                                                           |
+| `texture`         | `TextureMaterialKind`    | `'pixelate'` | false    | Texture the panel is grounded with.                                                                                                                                                                                                |
+| `textureFade`     | `TextureMaterialFade`    | `'top'`      | false    | Axis the texture fades out along.                                                                                                                                                                                                  |
+| `tabs`            | `ConsolePanelTab[]`      | `[]`         | false    | Tabs over the frame, each `{ value, title }`; each plays its own beat of the scene.                                                                                                                                                |
+| `tabsAriaLabel`   | `string`                 | `''`         | false    | Accessible name of the tab control; empty uses the built-in "Console views".                                                                                                                                                       |
+| `crop`            | `number`                 | `0`          | false    | Share of the scene height clipped off its bottom, from 0 to 0.5, from the medium breakpoint up.                                                                                                                                    |
+| `primaryAction`   | `ConsolePanelAction`     | `undefined`  | false    | First button under the headline, `secondary`; `{ label, href, trailing?, target? }`. Shown only with a label and a link.                                                                                                           |
+| `secondaryAction` | `ConsolePanelAction`     | `undefined`  | false    | Second button under the headline, `outlined`; same shape. Shown only with a label and a link.                                                                                                                                      |
+| `actions`         | `ConsolePanelAction[]`   | `[]`         | false    | @deprecated since 6.0 — use `primaryAction` / `secondaryAction`. Removed in 7.0. Read only when neither is set; each is `{ label, href, trailing?, target?, kind? }`, without `kind` the first is secondary and the rest outlined. |
 
 ## Events
 
@@ -87,9 +87,9 @@ A full-width framed panel that presents a product scene (a console mock or a dia
 
 ## Slots
 
-| Slot    | Scope             | Notes        |
-| ------- | ----------------- | ------------ |
-| `scene` | `{ tab: string \\ | undefined }` | The scene the band presents; `tab` is the selected tab value (undefined without tabs). |
+| Slot    | Scope                          | Notes                                                                                  |
+| ------- | ------------------------------ | -------------------------------------------------------------------------------------- |
+| `scene` | `{ tab: string \| undefined }` | The scene the band presents; `tab` is the selected tab value (undefined without tabs). |
 
 ## States
 

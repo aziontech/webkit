@@ -23,13 +23,13 @@
       "name": "Default",
       "summary": "The library at rest: no search and no facet applied, six stories in a three-column grid and the load-more button.",
       "file": "site-default.vue",
-      "json": "site-default.json"
+      "json": "site-story-library.json"
     },
     {
       "name": "NoResults",
       "summary": "Nothing matches: the grid gives way to the empty state, whose action clears every filter.",
       "file": "site-no-results.vue",
-      "json": "site-no-results.json"
+      "json": "site-story-library.json"
     }
   ],
   "siteTitle": "Templates/Marketing/Listings/StoryLibrary",

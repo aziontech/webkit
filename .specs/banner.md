@@ -3,10 +3,10 @@ name: banner
 category: marketing
 structure: monolithic
 status: implemented
-spec_version: 2
-checksum: 2cc6b033a3f88e31a1a25d92d1dc94b94e49dfbeea0ec460a3efb2421e9c65d4
+spec_version: 3
+checksum: dca460a048b4c1b12c75c0f01ed709f9827935d0bc3adbc10fc529426af927f7
 created: 2026-09-22
-last_updated: 2026-09-26
+last_updated: 2026-11-14
 ---
 
 # Banner — Component Spec
@@ -25,7 +25,7 @@ A split promotional band: the announcement and its actions in the wide leading c
 
 - For the closing ask at the end of a page or section → use `call-to-action`, a single-column panel.
 - For the page's leading statement → use `hero`, whose `Hero.Title` owns the `h1`.
-- For a dismissible or status-bearing notice inside the product → use `message`.
+- For a dismissible or status-bearing notice inside the product → use `alert`.
 - For a feature tile in a grid → use `topic` in a `card-grid`.
 
 ## Related

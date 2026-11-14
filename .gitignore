@@ -63,7 +63,6 @@ yarn.lock
 !packages/webkit/src/components/navigation/navigation-menu/composables/use-transition-status.d.ts
 !packages/webkit/src/components/navigation/navigation-menu/presets/animations.d.ts
 !packages/webkit/src/components/navigation/navigation-menu/presets/styles.d.ts
-!packages/webkit/src/components/overlay/composables/use-overlay-mobile.d.ts
 !packages/webkit/src/components/overlay/drawer/presets/sizes.d.ts
 !packages/webkit/src/components/overlay/panel/presets/sizes.d.ts
 !packages/webkit/src/components/overlay/presets/bottom-sheet-transitions.d.ts

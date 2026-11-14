@@ -3,11 +3,11 @@ name: select
 category: inputs
 structure: composition
 status: implemented
-spec_version: 4
+spec_version: 5
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3714-10801
   node_id: 3714:10801
-checksum: 7fafb901f4df543daa302d2e0d2c7e7c6bb3a7fffbc1ee1622e6295b8f45888e
+checksum: da36cf4215a5ee1010174fecc7e4af5a8fd2352c919636e50cb40f3e5a95cf59
 created: 2026-06-15
 last_updated: 2026-11-14
 ---
@@ -31,7 +31,7 @@ Aligned with Figma frames `3714:10801` (trigger states) and `3899:29361` (option
 - A select with a visible label and helper/error text in a form → put it inside a `field`; the trigger picks up the field's id, description and state.
 - The field is always multi-pick → use `multi-select`.
 - Two to five options that fit on screen → use horizontal `field`s with a `radio-button`, or `radio-cards` for cards.
-- The list triggers actions or navigation instead of holding a value → use `dropdown`.
+- The list triggers actions or navigation instead of holding a value → use `dropdown-menu`.
 
 ## Related
 

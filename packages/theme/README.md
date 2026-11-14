@@ -36,7 +36,7 @@ That single import provides:
 
 - the `@font-face` declarations for the Azion type system (no separate font imports needed);
 - every primitive CSS variable (colors, spacing, shape, typography, effects, breakpoints);
-- the semantic light/dark variables (`--primary`, `--text-default`, `--surface-0`…);
+- the semantic light/dark variables (`--primary`, `--text-default`, `--bg-surface`…);
 - text-style utilities (`text-heading-2xl`, `text-big-number-md`, …) with responsive sizes;
 - animation utilities and their `@keyframes` (consumers pair every motion class with a `motion-reduce:` fallback).
 
@@ -163,6 +163,19 @@ Use them directly:
 ```
 
 Utility equivalents are generated in the same stylesheet (e.g. `@utility text-default`), so `class="text-default"` works wherever Tailwind runs.
+
+### Deprecated variables
+
+These variables still ship in 5.x and are removed in 6.0. Nothing in WebKit reads them.
+
+| Deprecated                                     | Use instead                                                                                                                                                                  |
+| ---------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `--surface-0` … `--surface-950` (18 variables) | a semantic role (`--bg-canvas`, `--bg-surface`, `--border-default`, `--text-muted`…), or `--color-gray-<step>` for a fixed ramp step (`--surface-0` is `--color-base-white`) |
+| `--height-2` … `--height-96` (28 variables)    | the Tailwind `h-<n>` utilities, or `calc(var(--spacing) * <n>)`                                                                                                              |
+| `--width-3xs` … `--width-7xl` (13 variables)   | `--container-3xs` … `--container-7xl` (same values)                                                                                                                          |
+| `--z-input-popup`                              | `--z-input-overlay`                                                                                                                                                          |
+
+The `--color-surface-*` primitive ramp and the `--illustration-*` roles stay.
 
 ## Breakpoints and container sizes
 

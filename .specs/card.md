@@ -3,12 +3,12 @@ name: card
 category: content
 structure: monolithic
 status: implemented
-spec_version: 4
+spec_version: 5
 template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=562-6473
   node_id: 562:6473
-checksum: 1f5e1234362b4cf29b6ccc62929929a809bcb9d589f38767fc06b23617375559
+checksum: edcbd6f7bf3c44612acbe270f45eca44f6996aa86c6a6f8054cde1ffea30b3a3
 created: 2026-05-22
 last_updated: 2026-11-14
 ---
@@ -17,7 +17,7 @@ last_updated: 2026-11-14
 
 ## Purpose
 
-Displays content or metadata in the UI. Lives at `packages/webkit/src/components/content/card/`.
+A bordered surface that groups related content under a title, with a header, a body and an optional footer the consumer composes. The default kind holds a settings block, a summary or a form section; `kind="integration"` lays the card out as a catalog tile with a logo, a vendor, a description, badges and an installed state.
 
 ## When to use
 

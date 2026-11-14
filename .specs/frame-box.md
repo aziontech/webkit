@@ -3,11 +3,11 @@ name: frame-box
 category: layout
 structure: monolithic
 status: implemented
-spec_version: 1
-checksum: bc9fd63eca45e99c4e24863e22c61a8bdd969aa0c9d3ea9d73aa74f628e6c0fd
+spec_version: 2
+checksum: a528a716b7f93dede67648885ac63b26a6757068095cfaec5e20ff71c591e0e5
 style_seam: true
 created: 2026-08-11
-last_updated: 2026-11-09
+last_updated: 2026-11-14
 ---
 
 # Frame Box — Component Spec
@@ -25,7 +25,7 @@ The registration frame: a hairline box with a small square set inside each corne
 ## When NOT to use
 
 - For a card-shaped surface with padding, a header and a footer → use `card` instead.
-- For a single separating line between two blocks → use `divider` instead.
+- For a single separating line between two blocks → use `separator` instead.
 - For the empty framed band that separates two sections → use `section-gap`, which is this frame configured for that one job.
 
 ## Related

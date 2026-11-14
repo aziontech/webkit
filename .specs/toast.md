@@ -3,12 +3,12 @@ name: toast
 category: feedback
 structure: composition
 status: implemented
-spec_version: 2
+spec_version: 3
 setup: "One-time app-level wiring before the first toast() call — service (recommended): import { ToastPlugin } from '@aziontech/webkit/toast' and chain .use(ToastPlugin) onto createApp() in the app entry; the plugin mounts the toast region automatically. Alternative: mount a Toaster component once near the app root. `webkit doctor` flags toast usage with no wired region."
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=478-938
   node_id: 478:938
-checksum: 657d187493e00cb3e2f3166866f54d6932fc1bc6d8032cbef9e1e693984f451b
+checksum: 2079db939ef5467f120f16c512858ad0d8178597cf21209928839755a20edcbd
 created: 2026-06-23
 last_updated: 2026-11-14
 ---
@@ -29,7 +29,7 @@ The card surface, typography, and severity icons follow the Figma design (see `f
 
 ## When NOT to use
 
-- The message must stay visible next to the content it concerns → use `message`.
+- The message must stay visible next to the content it concerns → use `alert`.
 - The user must decide something before continuing → use `dialog`.
 - Validation feedback for a single field → use `helper-text`.
 

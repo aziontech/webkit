@@ -53,14 +53,14 @@ The dot-notation **must** use a PascalCase root binding (`Table`). `table` (lowe
 - **No per-component `package.json`.** Components and sub-components do **not** ship a local `package.json`. The root `packages/webkit/package.json#exports` map points every public path directly at a source file, so a per-folder `package.json` (`main`/`module`/`types`/`browser`) would never be consulted for resolution. `sideEffects` is declared once at the root (`["**/*.vue", "**/*.css"]`).
 - **Root export** in `packages/webkit/package.json#exports` points the component's public path at `index.ts` (not the root `.vue`):
   ```json
-  "./data/table": "./src/components/data/table/index.ts"
+  "./table": "./src/components/data/table/index.ts"
   ```
 - **Standalone root export (tree-shaking)** — alongside the compound, add a flat `<name>-root` key pointing **directly at the root `.vue`**, bypassing `index.ts`:
   ```json
-  "./data/table-root": "./src/components/data/table/table.vue"
+  "./table-root": "./src/components/data/table/table.vue"
   ```
   The compound path cannot be tree-shaken: `Object.assign(Table, { Row, Cell, ... })` in `index.ts` references every sub-component, so a bundler retains them all even when the consumer only renders `<Table>`. The `-root` key resolves straight to the root `.vue`, so a root-only import pulls in nothing else. Sub-components are already individually importable; this gives the **root** the same tree-shakeable path. The compound (`./table` → `index.ts`) still leads the docs — the `-root` key is the opt-in for consumers who want only the root.
-- **Sub-component exports stay flat and unchanged** — one entry per public sub-component pointing at its `.vue` (`"./data/table-row": ".../table-row/table-row.vue"`).
+- **Sub-component exports stay flat and unchanged** — one entry per public sub-component pointing at its `.vue` (`"./table-row": ".../table-row/table-row.vue"`); keys are flat, the category stays in the source path only (see [`imports.md`](./imports.md)).
 - **The package ships source and is consumed as source** (the exports map points at `./src/...`, and `.vue` files already import `.ts` such as `injection-key.ts`). A `.ts` index is therefore safe — the consumer's build transpiles it the same way it transpiles every `.vue` and the shared `injection-key.ts`. `.d.ts` files are gitignored and generated at publish time by the publish workflow ([`package-webkit.yml`](../../.github/workflows/package-webkit.yml) runs `vue-tsc --declaration --emitDeclarationOnly` right before `npm publish`, on release-please's `release: published`), not in dev or CI.
 
 ## Naming — anatomy, not generic convention

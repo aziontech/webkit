@@ -3,11 +3,11 @@ name: tabs
 category: navigation
 structure: composition
 status: implemented
-spec_version: 5
+spec_version: 6
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3374-6191
   node_id: 3374:6191
-checksum: aae5235c5e0f71d22c59a08a26e64a06df567a773c44d3df35414b7d3ba2f7a5
+checksum: a79b03bc6731277b8d34353d16dfc74e95c700fdbb018b66f5a2b5db3a3a0878
 created: 2026-05-22
 last_updated: 2026-11-14
 ---
@@ -16,7 +16,7 @@ last_updated: 2026-11-14
 
 ## Purpose
 
-Helps users move between views or sections. Lives at `packages/webkit/src/components/navigation/tabs/`.
+Switches between peer views of one page or panel, showing one at a time: Overview, Settings and Logs on a resource page. The tab row scrolls with edge fades when it outgrows its container, items can be closable or marked dirty, and the list follows the WAI-ARIA tabs pattern with arrow-key navigation.
 
 ## When to use
 

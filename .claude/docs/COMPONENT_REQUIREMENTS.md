@@ -881,9 +881,9 @@ Authoring the `.figma.ts` file works without the token; only publishing needs it
 
 **Where to put `FIGMA_ACCESS_TOKEN`:**
 
-- **Locally:** copy [`packages/webkit/.env.example`](../.env.example) to `packages/webkit/.env` (gitignored) and fill `FIGMA_ACCESS_TOKEN=...`. Alternatively, `export FIGMA_ACCESS_TOKEN=...` in your shell or pass it inline: `FIGMA_ACCESS_TOKEN=... pnpm --filter webkit run figma:publish`. Generate the token at <https://www.figma.com/developers/api#access-tokens> (requires a Dev Mode seat with Code Connect enabled on the Figma org).
+- **Locally:** copy [`packages/webkit/.env.example`](../../packages/webkit/.env.example) to `packages/webkit/.env` (gitignored) and fill `FIGMA_ACCESS_TOKEN=...`. Alternatively, `export FIGMA_ACCESS_TOKEN=...` in your shell or pass it inline: `FIGMA_ACCESS_TOKEN=... pnpm --filter webkit run figma:publish`. Generate the token at <https://www.figma.com/developers/api#access-tokens> (requires a Dev Mode seat with Code Connect enabled on the Figma org).
 - **CI (GitHub Actions):** add `FIGMA_ACCESS_TOKEN` as a repository secret (`Settings → Secrets and variables → Actions`) and reference it via `env: { FIGMA_ACCESS_TOKEN: ${{ secrets.FIGMA_ACCESS_TOKEN }} }` in the workflow step that calls `figma:publish`.
-- **Never** commit the token. `.env` and `.env.*` are gitignored at the repo root; only [`.env.example`](../.env.example) is versioned.
+- **Never** commit the token. `.env` and `.env.*` are gitignored at the repo root; only [`.env.example`](../../packages/webkit/.env.example) is versioned.
 
 ### 13. Examples — canonical pattern
 
@@ -1062,7 +1062,7 @@ The spec lists which `kind` / `size` examples exist. Do **not** add visual permu
 
 #### DRY
 
-- [ ] Reusable utilities extracted to `composables/`, `components/webkit/utils/`, or `packages/theme/`.
+- [ ] Reusable utilities extracted to `composables/`, `components/utils/`, or `packages/theme/`.
 - [ ] No inline custom animation/class when a shared alternative exists.
 
 #### Acessibilidade
