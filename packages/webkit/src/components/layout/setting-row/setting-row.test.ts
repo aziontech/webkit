@@ -8,6 +8,7 @@ import CompactRows from '../../../../examples/setting-row/compact-rows.vue'
 import Default from '../../../../examples/setting-row/default.vue'
 import Nested from '../../../../examples/setting-row/nested.vue'
 import Stackable from '../../../../examples/setting-row/stackable.vue'
+import WithHint from '../../../../examples/setting-row/with-hint.vue'
 import WithMessage from '../../../../examples/setting-row/with-message.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import ItemList from '../../content/item/item-list.vue'
@@ -89,6 +90,32 @@ describe('SettingRow', () => {
     expect(on.getByTestId('layout-setting-row').hasAttribute('data-stackable')).toBe(true)
   })
 
+  it('renders a Hint beside the title when hint is set', () => {
+    const hint = 'The edge serves the cached copy until this many seconds pass.'
+    const { getByTestId, getByRole } = within(
+      render(inList({ title: 'Cache TTL', hint })).container
+    )
+
+    const glyph = getByTestId('layout-setting-row__hint__trigger')
+    expect(getByTestId('layout-setting-row__title').contains(glyph)).toBe(true)
+    expect(getByRole('button', { name: hint })).toBe(glyph)
+  })
+
+  it('renders no Hint when hint is empty', () => {
+    const { queryByTestId, queryByRole } = within(render(inList({ title: 'Name' })).container)
+
+    expect(queryByTestId('layout-setting-row__hint__trigger')).toBeNull()
+    expect(queryByRole('button')).toBeNull()
+  })
+
+  it('keeps the whole description in the DOM for assistive technology', () => {
+    const description =
+      'The first sentence says what it does. The second adds detail. The third adds even more detail that a two-line clamp would hide on screen.'
+    const { getByTestId } = within(render(inList({ title: 'Name', description })).container)
+
+    expect(getByTestId('layout-setting-row__description').textContent?.trim()).toBe(description)
+  })
+
   it('renders rich title and description slots', () => {
     const { getByTestId } = within(
       render(
@@ -109,11 +136,15 @@ describe('SettingRow', () => {
       .map((el) => el.dataset['level'])
     expect(levels).toEqual(['0', '0', '1', '1', '1', '2'])
     expect(within(render(Stackable).container).getAllByRole('textbox')).toHaveLength(2)
+    expect(
+      within(render(WithHint).container).getAllByTestId('layout-setting-row__hint__trigger')
+    ).toHaveLength(2)
   })
 
   it('has no accessibility violations', async () => {
     await expectNoA11yViolations(render(Default).container)
     await expectNoA11yViolations(render(Nested).container)
+    await expectNoA11yViolations(render(WithHint).container)
   })
 })
 

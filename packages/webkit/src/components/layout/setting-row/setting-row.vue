@@ -6,6 +6,7 @@
   import ItemContent from '../../content/item/item-content.vue'
   import ItemDescription from '../../content/item/item-description.vue'
   import ItemTitle from '../../content/item/item-title.vue'
+  import Hint from '../../inputs/hint/hint.vue'
 
   /** Where the control sits: `field` in a right cell capped at the 3xs container, `compact` hard right at its natural width, `stacked` under the copy at the full measure. */
   export type SettingRowKind = 'field' | 'compact' | 'stacked'
@@ -28,19 +29,22 @@
     level?: SettingRowLevel
     /** Below the md container of the row, move a field control under the copy at full width. */
     stackable?: boolean
+    /** Extra guidance in a Hint glyph beside the title; empty renders no glyph. */
+    hint?: string
   }
 
   withDefaults(defineProps<Props>(), {
     description: '',
     kind: 'field',
     level: 0,
-    stackable: false
+    stackable: false,
+    hint: ''
   })
 
   defineSlots<{
     /** The control, plus the HelperText message under it when there is one. */
     default(): unknown
-    /** Rich title content (a Tag, a Hint); replaces the title prop. */
+    /** Rich title content (a Tag); replaces the title prop. */
     title(): unknown
     /** Rich description content (links, inline code); replaces the description prop. */
     description(): unknown
@@ -75,6 +79,11 @@
         >
           <ItemTitle :data-testid="`${testId}__title`">
             <slot name="title">{{ title }}</slot>
+            <Hint
+              v-if="hint"
+              :text="hint"
+              :data-testid="`${testId}__hint`"
+            />
           </ItemTitle>
           <ItemDescription
             v-if="$slots['description'] || description"

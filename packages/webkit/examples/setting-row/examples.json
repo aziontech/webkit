@@ -23,6 +23,11 @@
       "file": "nested.vue"
     },
     {
+      "name": "WithHint",
+      "summary": "Cache rows whose description stays one sentence while `hint` carries the longer explanation in a Hint glyph beside the title, reachable on hover or focus.",
+      "file": "with-hint.vue"
+    },
+    {
       "name": "Stackable",
       "summary": "A drawer-width card: the Name row keeps its two columns with the description clamped, while the Address row sets `stackable` so its long URL field drops under the copy at full width.",
       "file": "stackable.vue"

@@ -3,10 +3,10 @@ name: setting-row
 category: layout
 structure: monolithic
 status: implemented
-checksum: 9d7e80672f31933ae0b01d4a4d607ab6a80462d435087aa2962bd8d5bcc4e5f6
+checksum: c17d618aaba27d3874f57de763f635312a0af9c6acc65a5898fa5127fb5f0e0f
 spec_version: 1
 created: 2026-11-10
-last_updated: 2026-11-12
+last_updated: 2026-11-14
 ---
 
 # SettingRow — Component Spec
@@ -43,6 +43,7 @@ One setting inside a flush `Card`: an `Item` whose content carries the title and
 - Let a tall control (an input group of three nameservers, a textarea) sit beside the copy: the title stays at the top of the row.
 - Do not wrap the row or its copy in your own flex box to change the alignment or to stack it; use `kind` and `stackable`.
 - Do not set `stackable` on a `compact` row: a switch or a button always stays at the end side.
+- Keep the description to the one sentence that says what the setting does, and put the rest of a longer explanation in `hint`: the description clamps to two lines, and the Hint glyph beside the title reveals the full text on hover or focus.
 
 ## Usage
 
@@ -98,6 +99,7 @@ One setting inside a flush `Card`: an `Item` whose content carries the title and
 | `kind`        | `'field' \| 'compact' \| 'stacked'` | `'field'` | false    | Where the control sits relative to the copy.                                      |
 | `level`       | `0 \| 1 \| 2`                       | `0`       | false    | Indent depth under a rule, for a setting that only applies when its parent is on. |
 | `stackable`   | `boolean`                           | `false`   | false    | Below the md container of the row, move a field control under the copy at full width. |
+| `hint`        | `string`                            | `''`      | false    | Extra guidance in a Hint glyph beside the title; empty renders no glyph.          |
 
 ## Events
 
@@ -108,12 +110,12 @@ One setting inside a flush `Card`: an `Item` whose content carries the title and
 | Slot          | Scope | Notes                                                                           |
 | ------------- | ----- | ------------------------------------------------------------------------------- |
 | `default`     | —     | The control, plus the HelperText message under it when there is one.            |
-| `title`       | —     | Rich title content (a Tag, a Hint); replaces the `title` prop.                  |
+| `title`       | —     | Rich title content (a Tag); replaces the `title` prop. The `hint` glyph still renders after it. |
 | `description` | —     | Rich description content (links, inline code); replaces the `description` prop. |
 
 ## States
 
-- Visual states: `default`
+- Visual states: `default`, `hinted` (a `Hint` glyph after the title when `hint` is set)
 - `data-row-kind` mirrors `kind` and `data-level` mirrors `level` on the root; `data-stackable` is set when `stackable` is on
 - Alignment: the copy and the control align to the top of the row, so a title stays level with the first line of a tall control.
 - Responsive: the row is the `@container/setting-row`. By default the row keeps its two columns at every width: the copy shrinks (the description clamps to two lines with an ellipsis) and a `field` control keeps the end cell, capped at the 3xs container. With `stackable`, below `@md` of the row a `field` control moves under the copy at full width.
@@ -141,6 +143,7 @@ _none_
 - Visible focus: owned by the control in the default slot.
 - Keyboard map: `Tab` reaches the control; the row is not interactive.
 - ARIA: the row is an `Item` (a `listitem` inside `Item.List`); the control carries `aria-label` equal to the title, and a message is linked with `aria-describedby`.
+- Truncation: the two-line clamp of the description is visual only; the full text stays in the DOM, so assistive technology reads all of it. For sighted users, `hint` is the way to the full explanation: its glyph is a focusable button whose accessible name and tooltip are the hint text, reachable with `Tab` and revealed on hover or focus.
 - Contrast ≥4.5:1 for the title and the muted description.
 
 ## Examples
@@ -149,6 +152,7 @@ _none_
 - CompactRows — switches and a button; justified because `compact` changes where the control sits.
 - WithMessage — a field with its required message; justified because the message placement is part of the contract.
 - Nested — `level` 1 and 2; justified because the indent rule is a distinct rendered state.
+- WithHint — a row whose one-sentence description is backed by a longer `hint` beside the title; justified because the Hint glyph is a distinct rendered state.
 - Stackable — a narrow drawer-width card whose Origin URL row sets `stackable` beside a default row; justified because the opt-in stacked layout is a distinct rendered state.
 
 ## Constraints — DO NOT
