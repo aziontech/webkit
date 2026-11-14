@@ -5,6 +5,7 @@ export type FoundationPage = {
   tokens?: 'color' | 'spacing' | 'typography' | 'radius' | 'shadows' | 'motion' | 'z-index'
   markdown?: string
   demo?: 'locale' | 'direction' | 'devices'
+  view?: 'icons'
 }
 
 export const FOUNDATIONS: FoundationPage[] = [
@@ -57,6 +58,13 @@ export const FOUNDATIONS: FoundationPage[] = [
     title: 'Z-index',
     summary: 'Stacking layers for fields, popups and overlays.',
     tokens: 'z-index'
+  },
+  {
+    slug: 'icons',
+    title: 'Icons',
+    summary:
+      'Every class of @aziontech/icons: Azion, colored and PrimeIcons. Select one to copy it.',
+    view: 'icons'
   },
   {
     slug: 'i18n',
