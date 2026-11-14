@@ -3,17 +3,18 @@ name: article-highlight
 category: sections
 structure: monolithic
 status: implemented
-spec_version: 1
+spec_version: 2
+template: 2
 created: 2026-11-05
-last_updated: 2026-11-12
-checksum: 3d4a0d039bb9283c5c35c75ef4fc4122550e7310fcd02da28fed629df1b35719
+last_updated: 2026-11-14
+checksum: 598890fb608cc236f1cb0871f52c7b519e82a1997027cccdf831c3c80ff7af81
 ---
 
 # ArticleHighlight — Component Spec
 
 ## Purpose
 
-The band that opens a blog under its hero. One article is shown large — its cover beside its overline, headline, deck, read time and a button into it — over a wall of the highlight articles that acts as its selector. The wall is a tablist and the large article its panel; selecting a title on the wall swaps the panel, and every article is drawn invisibly under the panel so the band keeps the height of its tallest article and never jumps. With four or more articles the wall runs four across. It is a page section — the site places it from a `{ _id: 'article-highlight', props }` entry and binds `props` straight onto it — and it composes `section-module`, `frame-box`, `card-grid` and `button`; the selection is local state.
+The band that opens a blog under its hero. One article is shown large — its cover beside its overline, headline, deck, read time and a button into it — over a wall of the highlight articles that acts as its selector. The wall is a tablist and the large article its panel; selecting a title on the wall swaps the panel with a short slide in the direction of travel, and every article is drawn invisibly under the panel so the band keeps the height of its tallest article and never jumps. With four or more articles the wall runs four across. It is a page section — the site places it from a `{ _id: 'article-highlight', props }` entry and binds `props` straight onto it — and it composes `section-module`, `frame-box`, `card-grid` and `button`; the selection is local state. With `autoplay` the band advances on its own every `autoplayInterval`, drawing a primary progress line at the panel's foot, and pauses while the pointer is over it or keyboard focus is inside it; it never autoplays under reduced motion or with one article. With `fill`, from `lg` the band fills the first viewport under the sticky site header.
 
 ## When to use
 
@@ -70,6 +71,9 @@ The band that opens a blog under its hero. One article is shown large — its co
 | `items`       | `ArticleHighlightItem[]` | `[]`    | false    | The highlight articles in wall order, the one at the bound index (the first by default) selected on load; each is `{ key, href, image, highlightImage?, meta, title, description, readTime }`. |
 | `actionLabel` | `string`                 | `''`    | false    | Label of the button into the selected article; the button is omitted when empty.                                                                       |
 | `ariaLabel`   | `string`                 | `''`    | false    | Accessible name of the wall of titles.                                                                                                                 |
+| `autoplay`    | `boolean`                | `false` | false    | Advances to the next article every `autoplayInterval`, pausing under hover and keyboard focus; off under reduced motion and with one article.          |
+| `autoplayInterval` | `number`            | `6000`  | false    | Milliseconds each article is held before the band advances.                                                                                            |
+| `fill`        | `boolean`                | `false` | false    | From `lg` up, the band fills the first viewport under the sticky site header.                                                                          |
 
 ## v-model
 
@@ -90,7 +94,10 @@ The band that opens a blog under its hero. One article is shown large — its co
 - Visual states: `default`, `hover` (a wall title lights, the panel cover scales up), `focus-visible` (inset ring), `selected` (`data-active` on the selected wall title)
 - `data-columns` on the wall: one column per article from `lg`, three at least and five at most
 - Empty: when `items` is empty the band renders nothing
-- The band has no timer: the selected article changes only on a click, an arrow key or a bound `modelValue`
+- Without `autoplay` the band has no timer: the selected article changes only on a click, an arrow key or a bound `modelValue`
+- Autoplay: with `autoplay`, more than one article and no reduced-motion preference, the band advances (wrapping to the first) every `autoplayInterval` ms after mount and writes the index back through `v-model`; `data-autoplay` is set while it runs; a progress line (`var(--primary)`, `aria-hidden`) grows along the panel's foot from the inline start; pointer hover over the band or a `:focus-visible` element inside it pauses it, and leaving resumes it; any selection restarts the count
+- Direction: `data-direction` on the panel is `forward` or `back` (from the arrow key, the autoplay step, or the index change) and drives an out-in slide of the panel's article, mirrored under `rtl`
+- Fill: `data-fill` is set; from `lg` the band's height is the viewport minus `var(--layout-header-height)` and the section gaps, the panel takes the free height and its cover drops its fixed aspect; under 50 rem of viewport height the copy tightens and the deck hides
 - Reflow: the hidden layout sizer is `min-w-0`, so the panel never grows past a 320 px box.
 
 ## Motion & Animations
@@ -101,6 +108,9 @@ The band that opens a blog under its hero. One article is shown large — its co
 | hover fill of the panel copy   | `transition-colors duration-fast-02 ease-productive-entrance`                       | inline (matches catalog)                          | `motion-reduce:transition-none`        |
 | selection fill of a wall title | `transition-colors duration-moderate-01 ease-out`                                   | inline (matches catalog)                          | `motion-reduce:transition-none`        |
 | hover wash of a wall title     | `before:transition-opacity before:duration-fast-02 before:ease-productive-entrance` | inline (matches catalog)                          | `motion-reduce:before:transition-none` |
+| panel article entering on selection | `transition-[translate,opacity] duration-moderate-01 ease-productive-entrance` | inline (matches catalog)                          | `motion-reduce:transition-none`        |
+| panel article leaving on selection  | `transition-[translate,opacity] duration-moderate-01 ease-productive-exit`     | inline (matches catalog)                          | `motion-reduce:transition-none`        |
+| autoplay progress line         | `transition-[width] duration-fast-01 ease-linear`                                   | inline (matches catalog)                          | `motion-reduce:transition-none`        |
 
 ## Tokens
 
@@ -120,6 +130,7 @@ The band that opens a blog under its hero. One article is shown large — its co
 
 ## Accessibility (WCAG 2.1 AA)
 
+- Autoplay (WCAG 2.2.2): off by default; when on it pauses while the pointer is over the band or keyboard focus is inside it, never runs under `prefers-reduced-motion: reduce`, and the panel is not a live region, so an advance is never announced.
 - Visible focus: the panel headline link and every wall title show an inset `focus-visible` ring.
 - Keyboard map: on the wall, `ArrowRight` / `ArrowDown` select the next title, `ArrowLeft` / `ArrowUp` the previous one (wrapping), `Home` the first and `End` the last; selection follows focus and only the selected title is in the tab order (roving `tabindex`).
 - ARIA: the wall is a `tablist` named by `ariaLabel`, each title a `tab` with `aria-selected` and `aria-controls`; the panel is a `tabpanel` labelled by the selected tab; the panel headline is an `h2` whose link covers the article; the invisible sizer is `aria-hidden` and `inert`; covers are decorative (`alt=""`). Ids come from `useId`.
@@ -134,10 +145,36 @@ The band that opens a blog under its hero. One article is shown large — its co
 - Keyboard: `ArrowRight`/`ArrowLeft` move between the highlighted articles, swapped under `dir="rtl"` (`logicalArrowKey`).
 - User data: article titles in another script keep their own direction.
 
+## Internationalization
+
+- Built-in strings: none. Every visible string arrives through props.
+- Formatting: none; dates and read times arrive pre-formatted.
+
+## Right-to-left
+
+- Layout: logical utilities only (`border-e`, `start-0`, `text-start`); the progress line grows from the inline start.
+- Icons: the button's chevron mirrors (owned by `button`).
+- Keyboard: arrow keys follow the reading direction through `logicalArrowKey` (`ArrowLeft` is next under `rtl`); the slide direction mirrors with `rtl:`.
+- User data: none.
+
+## Responsive
+
+- Container queries: none; from `lg` the panel splits cover and copy and the wall runs one column per article (three to five).
+- Narrow (< `lg`): the cover stacks over the copy and the wall stacks to one column; `fill` has no effect.
+- Touch: every wall title is a full-cell button; autoplay pauses only under hover or keyboard focus, and a tap selects.
+- Reflow: no horizontal scroll at 320 px; the hidden sizer is `min-w-0`.
+
+## Performance
+
+- Bundle budget: the `./article-highlight` entry in `.size-limit.json`.
+- Runtime budget: the autoplay ticker runs every 100 ms only while autoplay runs, and stops on pause and unmount.
+- Heavy parts: none.
+
 ## Examples
 
 - Default
 - Selected — `v-model` opens the band on the second article.
+- Autoplay — `autoplay` with `fill`: the band advances on its own with its progress line and fills the first viewport from `lg` (the blog's opening layout).
 
 ## Constraints — DO NOT
 

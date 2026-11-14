@@ -492,7 +492,7 @@
   {
     "name": "article-highlight",
     "path": "src/components/sections/article-highlight/article-highlight.vue",
-    "limit": "8.3 KB"
+    "limit": "10.25 KB"
   },
   {
     "name": "article-index-blog",
