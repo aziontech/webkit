@@ -47,6 +47,11 @@
       "name": "Expired",
       "summary": "Nobody decided in time: the card reads Request expired and the assistant says nothing was deployed.",
       "file": "variants/expired.vue"
+    },
+    {
+      "name": "Failed",
+      "summary": "The approved deployment fails: the deployment call reads failed, and the assistant says what failed and that production still serves the previous version, with Retry beside Copy.",
+      "file": "variants/failed.vue"
     }
   ]
 }

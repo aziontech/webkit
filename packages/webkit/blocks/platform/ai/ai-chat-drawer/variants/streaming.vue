@@ -10,7 +10,6 @@
   import Drawer from '@aziontech/webkit/drawer'
   import DrawerClose from '@aziontech/webkit/drawer-close'
   import DrawerContent from '@aziontech/webkit/drawer-content'
-  import DrawerOverlay from '@aziontech/webkit/drawer-overlay'
   import DrawerPortal from '@aziontech/webkit/drawer-portal'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
   import EmptyState from '@aziontech/webkit/empty-state'
@@ -260,7 +259,7 @@
         >
           <template #actions>
             <Button
-              label="Ask AI"
+              label="Agent"
               kind="outlined"
               size="medium"
               icon="ai ai-ask-azion"
@@ -302,7 +301,6 @@
       size="medium"
     >
       <DrawerPortal>
-        <DrawerOverlay />
         <DrawerContent>
           <div class="flex min-h-0 flex-1 flex-col">
             <PanelHeader class="w-full">

@@ -5,7 +5,7 @@ The generative AI assistant beside the work: the reader is on a resource page �
 ## When to use
 
 - A resource or list page where questions are about what is on screen: why a metric moved, what a setting does, how to fix a status.
-- A global Ask AI entry point in the console header, when the reader should keep their place.
+- A global Agent entry point in the console header, when the reader should keep their place.
 - A short exchange that ends back on the page (the reader acts on the answer there).
 
 ## When not to use
@@ -19,15 +19,15 @@ The generative AI assistant beside the work: the reader is on a resource page �
 
 ### A. Page behind — `PageHeader`, `Card`, `KeyValuePairs`, `StatusIndicator`
 
-The resource page the reader is on. The assistant's support prompts and answers refer to it, so keep it visible behind the overlay.
+The resource page the reader is on. The assistant's support prompts and answers refer to it, so keep it visible and undimmed: the drawer has no overlay.
 
 ### B. Entry point — `Button`
 
-An outlined Ask AI `Button` with the assistant mark in the page header actions, `aria-expanded` while the drawer is open. A console-wide entry point lives in the global header instead.
+An outlined Agent `Button` with the assistant mark in the page header actions, `aria-expanded` while the drawer is open. A console-wide entry point lives in the global header instead.
 
-### C. Drawer frame — `Drawer`, `DrawerPortal`, `DrawerOverlay`, `DrawerContent`
+### C. Drawer frame — `Drawer`, `DrawerPortal`, `DrawerContent`
 
-A medium right-side `Drawer`. Escape, the overlay and the close button dismiss it; the conversation survives closing and reopening during the visit.
+A medium right-side `Drawer` with no `DrawerOverlay`, so the resource page beside it stays undimmed and readable while the reader asks about it. Escape and the close button dismiss it. Inside `ConsoleLayout` on a wide screen, put the same conversation in the layout's tools region (`v-model:tools-open`, as the console Notifications do) and keep the drawer for narrow screens; the conversation survives closing and reopening during the visit.
 
 ### D. Header — `PanelHeader`, `DrawerTitle`, `Tag`, `IconButton`, `DrawerClose`
 
@@ -69,7 +69,7 @@ At the foot of the drawer above a divider: four rows at most, a placeholder that
 
 ## Copy
 
-- **Entry point:** `Ask AI`.
+- **Entry point:** `Agent`, the name the console header's `ButtonHighlight` gives the same assistant; the panel title says what it is, `AI assistant`.
 - **Drawer title:** `AI assistant`, with the Preview tag while in preview.
 - **Empty state:** "Ask about <resource>" and one sentence saying the assistant reads this resource's settings and metrics.
 - **Placeholder:** "Ask about <resource>".
@@ -78,8 +78,8 @@ At the foot of the drawer above a divider: four rows at most, a placeholder that
 
 ## Accessibility
 
-- The drawer traps focus while open and returns it to Ask AI when it closes; `DrawerTitle` names the dialog.
-- Ask AI exposes `aria-expanded`.
+- The drawer traps focus while open and returns it to Agent when it closes; `DrawerTitle` names the dialog.
+- Agent exposes `aria-expanded`.
 - The log is a named `role="log"` with live behavior off; finished responses are announced once through the conversation's polite region.
 - New chat is an icon button with an accessible name; it is disabled while the thread is empty.
 - Keyboard order inside the drawer: header controls, log, message actions, follow-ups, composer.

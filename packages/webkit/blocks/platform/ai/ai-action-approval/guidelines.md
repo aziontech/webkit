@@ -37,9 +37,9 @@ The question names the action and its target, with the command or tool in code. 
 
 After approval, the call appears as a running `ToolCall` under the card and completes or fails in place; a denial records it as denied.
 
-### F. Outcome — `ChatMessage`, `CopyButton`
+### F. Outcome — `ChatMessage`, `CopyButton`, `Button`
 
-A new response that says what changed (or that nothing ran), with Copy in its actions.
+A new response that says what changed (or that nothing ran), with Copy in its actions. When the approved action fails or is stopped, the response says what failed and that the previous version still serves, and an outlined Retry `Button` beside Copy runs the action again; an action never ends in silence.
 
 ## Do
 
@@ -83,6 +83,7 @@ A new response that says what changed (or that nothing ran), with Copy in its ac
 - Approved: the card approved, the deployment completed and the assistant's report.
 - Denied: the card denied, the call recorded as denied and the assistant's acknowledgement.
 - Expired: the request expired and the assistant says nothing ran.
+- Failed: the approved deployment failed; the call reads failed and the assistant says what failed and that `b-4790` still serves, with Retry.
 
 ## Related
 

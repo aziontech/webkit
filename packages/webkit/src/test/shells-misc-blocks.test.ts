@@ -5,6 +5,8 @@ import CreationHeader from '../../blocks/headers/creation-header/creation-header
 import DocsHeader from '../../blocks/headers/docs-header/docs-header.vue'
 import ResourceHeader from '../../blocks/headers/resource-header/resource-header.vue'
 import SecondLevel from '../../blocks/headers/resource-header/variants/second-level.vue'
+import ApprovalFailed from '../../blocks/platform/ai/ai-action-approval/variants/failed.vue'
+import AiChatDrawer from '../../blocks/platform/ai/ai-chat-drawer/ai-chat-drawer.vue'
 import Login from '../../blocks/platform/auth/auth.vue'
 import CheckInbox from '../../blocks/platform/auth/variants/check-inbox.vue'
 import EmailAlreadyRegistered from '../../blocks/platform/auth/variants/email-already-registered.vue'
@@ -213,5 +215,25 @@ describe('platform/settings/settings-form', () => {
     await waitFor(() => expect(save.disabled).toBe(false))
     await fireEvent.click(save)
     await waitFor(() => expect(save.disabled).toBe(true), { timeout: 2000 })
+  })
+})
+
+describe('platform/ai', () => {
+  it('ai-action-approval Failed: says what failed and offers Retry', async () => {
+    const view = render(ApprovalFailed)
+    await waitFor(() =>
+      expect(view.container.textContent).toContain('still serves the previous version')
+    )
+    await fireEvent.click(view.getByRole('button', { name: 'Retry' }))
+    await waitFor(() =>
+      expect(view.container.textContent).not.toContain('failed while uploading the build')
+    )
+  })
+
+  it('ai-chat-drawer opens the assistant from Agent without dimming the page', async () => {
+    const view = render(AiChatDrawer)
+    await fireEvent.click(view.getByRole('button', { name: 'Agent' }))
+    await waitFor(() => expect(document.querySelector('[role="dialog"]')).not.toBeNull())
+    expect(document.querySelector('[data-testid$="__backdrop"]')).toBeNull()
   })
 })
