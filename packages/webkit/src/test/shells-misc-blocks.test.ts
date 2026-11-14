@@ -16,6 +16,9 @@ import Submitting from '../../blocks/platform/auth/variants/submitting.vue'
 import DeleteWithConfirmation from '../../blocks/platform/delete/delete-with-confirmation/delete-with-confirmation.vue'
 import DeleteFailed from '../../blocks/platform/delete/delete-with-confirmation/variants/failed.vue'
 import SettingsForm from '../../blocks/platform/settings/settings-form/settings-form.vue'
+import ProjectIntake from '../../blocks/platform/states/project-intake/project-intake.vue'
+import Initializing from '../../blocks/platform/states/project-intake/variants/initializing.vue'
+import UploadFailed from '../../blocks/platform/states/project-intake/variants/upload-failed.vue'
 import ConsoleShell from '../../blocks/shells/console/console.vue'
 import AccountSwitch from '../../blocks/shells/console/variants/account-switch.vue'
 import Notifications from '../../blocks/shells/console/variants/notifications.vue'
@@ -235,5 +238,36 @@ describe('platform/ai', () => {
     await fireEvent.click(view.getByRole('button', { name: 'Agent' }))
     await waitFor(() => expect(document.querySelector('[role="dialog"]')).not.toBeNull())
     expect(document.querySelector('[data-testid$="__backdrop"]')).toBeNull()
+  })
+})
+
+describe('platform/states/project-intake', () => {
+  it('offers Choose a folder as the keyboard way in', () => {
+    const view = render(ProjectIntake)
+    expect(view.getByRole('button', { name: 'Choose a folder' })).toBeTruthy()
+    expect(
+      view.container.querySelector('[aria-hidden="true"] h1, [aria-hidden="true"] p')
+    ).toBeNull()
+  })
+
+  it('Initializing: each row says its status in words, and the page adds no live region', () => {
+    const view = render(Initializing)
+    const rows = Array.from(view.container.querySelectorAll('[data-testid$="__row"]'))
+    expect(rows).toHaveLength(5)
+    expect(rows[0].textContent).toContain('Done')
+    expect(rows[4].textContent).toContain('Waiting')
+    expect(view.container.querySelector('[aria-live="polite"]:not([data-testid])')).toBeNull()
+  })
+
+  it('UploadFailed: Retry clears the failure', async () => {
+    const view = render(UploadFailed)
+    expect(view.container.textContent).toContain('1 file could not be uploaded')
+    const alertRetry = Array.from(
+      view.container.querySelectorAll('[role="alert"] button, [role="status"] button')
+    ).find((b) => b.textContent?.trim() === 'Retry') as HTMLButtonElement
+    await fireEvent.click(alertRetry ?? (buttonByText('Retry') as HTMLButtonElement))
+    await waitFor(() =>
+      expect(view.container.textContent).not.toContain('1 file could not be uploaded')
+    )
   })
 })
