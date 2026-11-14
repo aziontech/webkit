@@ -34,7 +34,7 @@
     },
     {
       "name": "Resizable",
-      "summary": "",
+      "summary": "The `resize` prop on each axis: `vertical` (the default), `horizontal`, `both` and `none`.",
       "file": "resizable.vue"
     }
   ]

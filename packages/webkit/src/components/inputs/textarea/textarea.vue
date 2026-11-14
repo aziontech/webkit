@@ -8,7 +8,8 @@
     inheritAttrs: false
   })
 
-  type TextareaResize = 'vertical' | 'horizontal' | 'both' | 'none'
+  /** Axes the user can drag to resize the field. */
+  export type TextareaResize = 'vertical' | 'horizontal' | 'both' | 'none'
 
   interface Props {
     /** Placeholder shown when the field is empty. */
@@ -21,7 +22,9 @@
     invalid?: boolean
     /** Marks the field as required and sets aria-required. */
     required?: boolean
-    /** Which axes the user can drag to resize the field. */
+    /** Which axes the user can drag to resize the field, named after the CSS resize property. */
+    resize?: TextareaResize
+    /** @deprecated since 6.0 — use `resize`. Removed in 7.0. */
     resizable?: TextareaResize
     /** Sets the value and placeholder in the monospace code face, for pasted zone files, certificates, JSON and lists of IPs. */
     monospace?: boolean
@@ -33,6 +36,7 @@
     readonly: false,
     invalid: false,
     required: false,
+    resize: 'vertical',
     resizable: 'vertical',
     monospace: false
   })
@@ -101,7 +105,7 @@
     :data-readonly="readonly || null"
     :data-monospace="monospace || null"
     :data-filled="isFilled || null"
-    :data-resize="resizable"
+    :data-resize="resize !== 'vertical' ? resize : resizable"
     class="relative block min-w-0 min-h-[80px] px-(--spacing-sm) py-(--spacing-sm) rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface) text-body-xs text-(--text-default) data-[monospace]:text-body-code-sm placeholder:text-(--text-muted) transition-colors duration-150 ease-out motion-reduce:transition-none [&:not(:focus):not([data-disabled]):not([data-readonly])]:hover:border-(--border-strong) focus:outline-none focus-visible:outline-none focus:ring-2 focus:ring-(--ring-color) focus:ring-offset-2 focus:ring-offset-(--bg-canvas) data-[invalid]:border-(--danger-border) data-[required]:border-(--warning-border) data-[disabled]:bg-(--bg-disabled) data-[disabled]:text-(--text-disabled) data-[disabled]:placeholder:text-(--text-disabled) data-[disabled]:cursor-not-allowed data-[disabled]:hover:border-(--border-default) data-[disabled]:focus:ring-0 data-[disabled]:focus:ring-offset-0 data-[readonly]:cursor-default data-[resize=vertical]:resize-y data-[resize=horizontal]:resize-x data-[resize=both]:resize data-[resize=none]:resize-none"
     :class="attrs.class"
     @input="handleInput"
