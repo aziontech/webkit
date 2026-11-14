@@ -1,6 +1,8 @@
 <script setup lang="ts">
+  import Alert from '@aziontech/webkit/alert'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
+  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
   import HelperText from '@aziontech/webkit/helper-text'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
@@ -9,11 +11,12 @@
   import Select from '@aziontech/webkit/select'
   import SettingRow from '@aziontech/webkit/setting-row'
   import SettingsSection from '@aziontech/webkit/settings-section'
+  import Skeleton from '@aziontech/webkit/skeleton'
   import Switch from '@aziontech/webkit/switch'
   import Tag from '@aziontech/webkit/tag'
   import Textarea from '@aziontech/webkit/textarea'
   import { toast } from '@aziontech/webkit/toast'
-  import { computed, nextTick, reactive, ref } from 'vue'
+  import { computed, nextTick, reactive, ref, useId } from 'vue'
 
   const form = reactive({
     accountName: 'Acme',
@@ -27,8 +30,7 @@
     city: 'sf',
     address: '100 Market Street',
     apartment: 'Suite 400',
-    allowSocialLogin: true,
-    enforceMfa: false
+    allowSocialLogin: true
   })
   const saving = ref(false)
   const baseline = ref(JSON.stringify(form))
@@ -71,6 +73,40 @@
       toast.success('Profile saved.', { id: SAVE_TOAST })
     }, 900)
   }
+  const loading = ref(false)
+  const loadFailed = ref(false)
+  const retryLoad = () => {
+    loadFailed.value = false
+    loading.value = true
+    setTimeout(() => {
+      loading.value = false
+    }, 700)
+  }
+
+  const deleteOpen = ref(false)
+  const deleteConfirmation = ref('')
+  const deleting = ref(false)
+  const deleteLabelId = useId()
+  const savedName = computed<string>(() => JSON.parse(baseline.value).accountName)
+  const canDelete = computed(
+    () => deleteConfirmation.value.trim() === savedName.value && !deleting.value
+  )
+  const openDelete = () => {
+    deleteConfirmation.value = ''
+    deleteOpen.value = true
+  }
+  const confirmDelete = () => {
+    if (!canDelete.value) return
+    deleting.value = true
+    setTimeout(() => {
+      deleting.value = false
+      deleteOpen.value = false
+      toast.success('Account scheduled for deletion.', {
+        description: 'You get an email to confirm it; nothing is deleted before then.'
+      })
+    }, 800)
+  }
+
   const discard = () => {
     Object.assign(form, JSON.parse(baseline.value))
     Object.assign(errors, { accountName: '', billingEmails: '' })
@@ -119,6 +155,7 @@
     {
       key: 'github',
       name: 'GitHub',
+      href: 'https://github.com/settings/installations',
       icon: 'ai ai-github',
       connected: true,
       tag: 'Active',
@@ -129,6 +166,7 @@
     {
       key: 'gitlab',
       name: 'GitLab',
+      href: 'https://gitlab.com/-/profile/applications',
       icon: 'ai-cor ai-gitlab',
       connected: false,
       tag: '',
@@ -138,6 +176,7 @@
     {
       key: 'bitbucket',
       name: 'Bitbucket',
+      href: 'https://bitbucket.org/account/settings/app-authorizations/',
       icon: 'ai-cor ai-bitbucket',
       connected: false,
       tag: '',
@@ -182,7 +221,46 @@
               description="Manage your identity, company details, address, and sign-in preferences."
               size="small"
             />
+            <div
+              v-if="loading"
+              class="mt-(--layout-section-gap) flex min-w-0 flex-col gap-(--layout-section-gap)"
+              aria-busy="true"
+              aria-label="Loading the profile"
+            >
+              <Card
+                v-for="section in 3"
+                :key="section"
+              >
+                <template #content>
+                  <div class="flex flex-col gap-(--spacing-md)">
+                    <Skeleton
+                      v-for="row in 3"
+                      :key="row"
+                      height="2.5rem"
+                    />
+                  </div>
+                </template>
+              </Card>
+            </div>
+            <div
+              v-else-if="loadFailed"
+              class="mt-(--layout-section-gap)"
+            >
+              <Alert severity="danger">
+                The profile could not be loaded. Nothing was changed; try again.
+                <template #action>
+                  <Button
+                    type="button"
+                    label="Retry"
+                    kind="secondary"
+                    size="small"
+                    @click="retryLoad"
+                  />
+                </template>
+              </Alert>
+            </div>
             <fieldset
+              v-else
               class="mx-0 mt-(--layout-section-gap) flex min-w-0 flex-col border-0 p-0"
               :disabled="saving"
             >
@@ -397,26 +475,15 @@
                         />
                       </SettingRow>
                       <SettingRow
-                        title="Enforce multi-factor authentication"
-                        description="MFA is required on login for every user linked to this account."
-                        kind="compact"
-                      >
-                        <Switch
-                          v-model="form.enforceMfa"
-                          aria-label="Enforce multi-factor authentication"
-                          :disabled="saving"
-                        />
-                      </SettingRow>
-                      <SettingRow
-                        title="Authenticator devices"
-                        description="Manage the devices and recovery codes registered for this account."
+                        title="Multi-factor authentication"
+                        description="Require MFA for everyone in the account, see who has set it up and reset a lost device on the MFA management page."
                         kind="compact"
                       >
                         <Button
-                          type="button"
-                          label="Manage"
+                          label="Manage MFA"
                           kind="outlined"
                           size="medium"
+                          href="/account/security/mfa"
                         />
                       </SettingRow>
                     </Item.List>
@@ -441,10 +508,7 @@
                             class="flex size-8 shrink-0 items-center justify-center overflow-hidden rounded-(--shape-elements) border-(length:--border-width-default) border-(--border-muted) bg-(--bg-surface-raised)"
                           >
                             <i
-                              :class="[
-                                provider.icon,
-                                'text-body-lg leading-none text-(--text-default)'
-                              ]"
+                              :class="[provider.icon, 'text-body-lg text-(--text-default)']"
                               aria-hidden="true"
                             />
                           </span>
@@ -463,11 +527,13 @@
                         </Item.Content>
                         <Item.Actions>
                           <Button
-                            type="button"
                             :label="provider.action"
+                            :aria-label="`${provider.action} ${provider.name}`"
                             kind="outlined"
                             size="medium"
                             :icon="provider.connected ? undefined : 'pi pi-external-link'"
+                            :href="provider.href"
+                            target="_blank"
                           />
                         </Item.Actions>
                       </Item>
@@ -559,6 +625,7 @@
                           kind="danger"
                           size="medium"
                           icon="pi pi-trash"
+                          @click="openDelete"
                         />
                       </SettingRow>
                     </Item.List>
@@ -598,5 +665,55 @@
         </Transition>
       </form>
     </div>
+
+    <ConfirmDialog
+      v-model:open="deleteOpen"
+      kind="danger"
+      title="Delete account"
+      size="medium"
+    >
+      <div class="flex flex-col gap-(--spacing-md)">
+        <Alert
+          severity="warning"
+          label="Once confirmed, this action can't be reversed."
+        />
+        <p class="m-0 text-body-sm text-(--text-muted)">
+          The account, its applications, domains, users and invoices are deleted with all their
+          data.
+        </p>
+        <p
+          :id="deleteLabelId"
+          class="m-0 text-body-sm text-(--text-default)"
+        >
+          Type <code class="text-label-code-sm">{{ savedName }}</code> to confirm.
+        </p>
+        <Input
+          v-model="deleteConfirmation"
+          :aria-labelledby="deleteLabelId"
+          autocomplete="off"
+          class="w-full"
+          @keydown.enter.prevent="confirmDelete"
+        />
+      </div>
+      <template #actions="{ close }">
+        <Button
+          type="button"
+          label="Cancel"
+          kind="outlined"
+          size="medium"
+          :disabled="deleting"
+          @click="close"
+        />
+        <Button
+          type="button"
+          label="Delete account"
+          kind="danger"
+          size="medium"
+          :disabled="!canDelete"
+          :loading="deleting"
+          @click="confirmDelete"
+        />
+      </template>
+    </ConfirmDialog>
   </div>
 </template>
