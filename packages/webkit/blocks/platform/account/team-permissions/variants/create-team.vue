@@ -1,11 +1,11 @@
 <script setup lang="ts">
   import Alert from '@aziontech/webkit/alert'
-  import Avatar from '@aziontech/webkit/avatar'
   import Brand from '@aziontech/webkit/brand'
   import Breadcrumb from '@aziontech/webkit/breadcrumb-root'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import Checkbox from '@aziontech/webkit/checkbox'
+  import EmptyState from '@aziontech/webkit/empty-state'
   import Field from '@aziontech/webkit/field'
   import GlobalHeader from '@aziontech/webkit/global-header'
   import IconButton from '@aziontech/webkit/icon-button'
@@ -14,6 +14,7 @@
   import SaveBar from '@aziontech/webkit/save-bar'
   import SettingsSection from '@aziontech/webkit/settings-section'
   import Switch from '@aziontech/webkit/switch'
+  import Table from '@aziontech/webkit/table'
   import Textarea from '@aziontech/webkit/textarea'
   import { toast } from '@aziontech/webkit/toast'
   import { computed, nextTick, reactive, ref } from 'vue'
@@ -128,6 +129,10 @@
     selected.value = [...allIds]
     errors.permissions = ''
   }
+  const clearQuery = () => {
+    query.value = ''
+    focusById('team-permissions-filter')
+  }
   const clearAll = () => {
     selected.value = []
   }
@@ -180,19 +185,6 @@
         <Breadcrumb :items="breadcrumb" />
       </GlobalHeader.Left>
       <GlobalHeader.Middle />
-      <GlobalHeader.Right>
-        <button
-          type="button"
-          aria-label="Account settings"
-          class="rounded-full transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
-        >
-          <Avatar
-            label="name@example.com"
-            size="medium"
-            kind="square"
-          />
-        </button>
-      </GlobalHeader.Right>
     </GlobalHeader>
 
     <main
@@ -301,99 +293,90 @@
                         :label="errors.permissions"
                       />
 
-                      <div
-                        class="overflow-x-auto rounded-(--shape-elements) border border-(--border-muted)"
+                      <EmptyState
+                        v-if="!visibleGroups.length"
+                        size="small"
+                        icon="pi pi-search"
+                        title="No matching permissions"
+                        :description="`No permission matches “${query}”.`"
                       >
-                        <table class="w-full border-collapse text-start">
-                          <caption class="sr-only">
-                            Permissions granted by this team
-                          </caption>
-                          <thead>
-                            <tr class="bg-(--bg-surface-raised)">
-                              <th
-                                scope="col"
-                                class="px-(--spacing-md) py-(--spacing-xs) text-start text-label-sm text-(--text-muted)"
-                              >
-                                Resource
-                              </th>
-                              <th
-                                scope="col"
-                                class="w-20 px-(--spacing-xs) py-(--spacing-xs) text-center text-label-sm text-(--text-muted)"
-                              >
-                                View
-                              </th>
-                              <th
-                                scope="col"
-                                class="w-20 px-(--spacing-xs) py-(--spacing-xs) text-center text-label-sm text-(--text-muted)"
-                              >
-                                Edit
-                              </th>
-                            </tr>
-                          </thead>
-                          <tbody
-                            v-for="group in visibleGroups"
-                            :key="group.label"
-                          >
-                            <tr class="border-t border-(--border-muted)">
-                              <th
-                                scope="rowgroup"
-                                colspan="3"
-                                class="px-(--spacing-md) py-(--spacing-xs) text-start"
-                              >
-                                <Field orientation="horizontal">
-                                  <Checkbox
-                                    binary
-                                    :model-value="groupState(group).all"
-                                    :indeterminate="groupState(group).some"
-                                    @update:model-value="(checked) => toggleGroup(group, checked)"
-                                  />
-                                  <Field.Label>
-                                    <span class="text-label-md">{{ group.label }}</span>
-                                  </Field.Label>
-                                </Field>
-                              </th>
-                            </tr>
-                            <tr
-                              v-for="resource in group.resources"
-                              :key="resource.key"
-                              class="border-t border-(--border-muted)"
-                            >
-                              <th
-                                scope="row"
-                                class="ps-(--spacing-xxl) pe-(--spacing-md) py-(--spacing-xs) text-start text-body-sm font-normal text-(--text-default)"
-                              >
-                                {{ resource.label }}
-                              </th>
-                              <td
-                                v-for="action in ACTIONS"
-                                :key="action"
-                                class="px-(--spacing-xs) py-(--spacing-xs) text-center"
-                              >
-                                <Checkbox
-                                  v-if="has(resource, action)"
-                                  binary
-                                  :model-value="isChecked(`${resource.key}.${action}`)"
-                                  :aria-label="`${action === 'view' ? 'View' : 'Edit'} ${resource.label}`"
-                                  @update:model-value="
-                                    (checked) => setChecked(`${resource.key}.${action}`, checked)
-                                  "
-                                />
-                                <span
-                                  v-else
-                                  class="text-body-sm text-(--text-muted)"
-                                  >–<span class="sr-only">Not available</span></span
-                                >
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                        <p
-                          v-if="!visibleGroups.length"
-                          class="px-(--spacing-md) py-(--spacing-lg) text-center text-body-sm text-(--text-muted)"
+                        <template #actions>
+                          <Button
+                            type="button"
+                            label="Clear filter"
+                            kind="outlined"
+                            size="small"
+                            @click="clearQuery"
+                          />
+                        </template>
+                      </EmptyState>
+                      <Table
+                        v-else
+                        bordered
+                      >
+                        <Table.Caption class="sr-only"
+                          >Permissions granted by this team</Table.Caption
                         >
-                          No permission matches “{{ query }}”.
-                        </p>
-                      </div>
+                        <Table.Header>
+                          <Table.Row>
+                            <Table.HeadCell principal>Resource</Table.HeadCell>
+                            <Table.HeadCell align="center">View</Table.HeadCell>
+                            <Table.HeadCell align="center">Edit</Table.HeadCell>
+                          </Table.Row>
+                        </Table.Header>
+                        <Table.Body
+                          v-for="group in visibleGroups"
+                          :key="group.label"
+                        >
+                          <Table.Row>
+                            <Table.Cell principal>
+                              <Field orientation="horizontal">
+                                <Checkbox
+                                  binary
+                                  :model-value="groupState(group).all"
+                                  :indeterminate="groupState(group).some"
+                                  @update:model-value="(checked) => toggleGroup(group, checked)"
+                                />
+                                <Field.Label>
+                                  <span class="text-label-md">{{ group.label }}</span>
+                                </Field.Label>
+                              </Field>
+                            </Table.Cell>
+                            <Table.Cell align="center" />
+                            <Table.Cell align="center" />
+                          </Table.Row>
+                          <Table.Row
+                            v-for="resource in group.resources"
+                            :key="resource.key"
+                          >
+                            <Table.Cell principal>
+                              <span class="ps-(--spacing-xl) text-body-sm text-(--text-default)">{{
+                                resource.label
+                              }}</span>
+                            </Table.Cell>
+                            <Table.Cell
+                              v-for="action in ACTIONS"
+                              :key="action"
+                              align="center"
+                            >
+                              <Checkbox
+                                v-if="has(resource, action)"
+                                binary
+                                :model-value="isChecked(`${resource.key}.${action}`)"
+                                :aria-label="`${action === 'view' ? 'View' : 'Edit'} ${resource.label}`"
+                                @update:model-value="
+                                  (checked) => setChecked(`${resource.key}.${action}`, checked)
+                                "
+                              />
+                              <span
+                                v-else
+                                class="text-body-sm text-(--text-muted)"
+                                >–<span class="sr-only">Not available</span></span
+                              >
+                            </Table.Cell>
+                          </Table.Row>
+                        </Table.Body>
+                      </Table>
                       <p class="text-body-xs text-(--text-muted)">
                         Edit includes View: checking Edit checks View, and clearing View clears
                         Edit.
