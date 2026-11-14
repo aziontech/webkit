@@ -8,7 +8,7 @@
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],
- "purpose": "One claim beside its picture, on its own frame: the copy cell with its overline, headline and sentence on one side, and the media on a raised, pixel-textured surface on the other. It is a page section — the site places it from a `{ _id: 'media-split-band', props }` entry and binds `props` straight onto it — and it composes `section-module`, a framed `media-split`, `button`, `illustration`, `product-widget`, `diagram` and the webkit scene assets. The media is a scene, a product console widget, a request-flow diagram, an image (cover or framed) or an illustration; with one action the whole band links to it, with two the band stays unlinked.",
+ "purpose": "One claim beside its picture, on its own frame: the copy cell with its overline, headline and sentence on one side, and the media on a raised, pixel-textured surface on the other. It is a page section — the site places it from a `{ _id: 'media-split-band', props }` entry and binds `props` straight onto it — and it composes `section-module`, a framed `media-split`, `button`, `illustration`, `product-widget`, `diagram` and the webkit scene assets. The media is a scene, a product console widget, a request-flow diagram, an image (cover or framed) or an illustration; with one action the whole band links to it (unless `linked` is off), with two the band stays unlinked. The media sits beside the copy, or under it when `orientation` is `vertical`.",
  "setup": null,
  "useWhen": [
   "To make one point beside one picture and move on (a values statement, a single product claim)."
@@ -26,9 +26,19 @@
   "On a product page prefer `widget` or `diagram`: they show the product itself. Do not drop to `media-split` and its `media` slot to place one.",
   "Set `image.framed` for a picture that is an object rather than a scene (a badge, a logo, a screenshot): it sits whole on a rounded, bordered plate inset in the cell instead of covering it.",
   "Use `size=\"large\"` for a band that carries only its headline and description.",
+  "Use `orientation=\"vertical\"` for a wide scene that needs the full width of the frame under the copy.",
+  "Turn `linked` off when the media holds controls of its own, so a click in it is not taken as a click on the band.",
+  "Set `anchor` when another part of the page links to the band.",
   "Give an `image` its `width` and `height` so the page reserves its box before it loads."
  ],
  "props": [
+  {
+   "name": "anchor",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "In-page id set on the band so a `#hash` link can scroll to it."
+  },
   {
    "name": "eyebrow",
    "type": "string",
@@ -55,14 +65,35 @@
    "type": "MediaSplitBandSize",
    "default": "'medium'",
    "required": "false",
-   "doc": "Type scale of the copy; `large` sets the headline at heading-xl and centres the copy beside the media."
+   "doc": "Type scale of the copy; `large` sets the headline at heading-xl and centres the copy beside the media, `medium` aligns it to the top of the media."
+  },
+  {
+   "name": "orientation",
+   "type": "MediaSplitBandOrientation",
+   "default": "'horizontal'",
+   "required": "false",
+   "doc": "Axis the band splits on; `vertical` stacks the media under the copy for a wide scene."
+  },
+  {
+   "name": "texture",
+   "type": "TextureMaterialKind",
+   "default": "'pixelate'",
+   "required": "false",
+   "doc": "Texture painted under the media: `dots`, `grid`, `lines`, `dither`, `pixelate` or `none`."
+  },
+  {
+   "name": "linked",
+   "type": "boolean",
+   "default": "true",
+   "required": "false",
+   "doc": "Links the whole band to a lone action; turn it off when the media holds controls of its own."
   },
   {
    "name": "scene",
    "type": "MediaSplitBandScene",
    "default": "undefined",
    "required": "false",
-   "doc": "Scene drawn in the media cell, `{ component }` naming a webkit scene asset; wins over every other media."
+   "doc": "Scene drawn in the media cell, `{ component, props? }` naming a webkit scene asset and the props bound onto it; wins over every other media."
   },
   {
    "name": "widget",
@@ -104,7 +135,7 @@
    "type": "MediaSplitBandAction",
    "default": "undefined",
    "required": "false",
-   "doc": "First button under the copy; `{ label, href, trailing?, target? }`. When it is the only action, the whole band links to it."
+   "doc": "First button under the copy; `{ label, href, trailing?, target? }`. When it is the only action it renders outlined with a trailing chevron, and the whole band links to it."
   },
   {
    "name": "secondaryAction",
@@ -135,6 +166,10 @@
   {
    "name": "Product media",
    "sfc": "<script setup>\n  import MediaSplitBand from '@aziontech/webkit/media-split-band'\n</script>\n\n<template>\n  <MediaSplitBand\n    eyebrow=\"Real-Time Events\"\n    title=\"Filter every request as it happens\"\n    description=\"Narrow the event stream by status, path or country, and read the matching requests seconds after they arrive.\"\n    widget=\"real-time-events-filter\"\n    :primary-action=\"{\n      label: 'Learn more',\n      href: '/en/products/real-time-events/',\n      trailing: true\n    }\"\n  />\n  <MediaSplitBand\n    eyebrow=\"Cache\"\n    title=\"Serve repeat requests from the nearest location\"\n    description=\"Cached responses never travel back to your origin, so it handles a fraction of the traffic.\"\n    diagram=\"cache\"\n  />\n</template>"
+  },
+  {
+   "name": "Vertical",
+   "sfc": "<script setup>\n  import MediaSplitBand from '@aziontech/webkit/media-split-band'\n</script>\n\n<template>\n  <MediaSplitBand\n    anchor=\"topology\"\n    eyebrow=\"Workloads\"\n    title=\"Read the whole request path on one screen\"\n    description=\"The domains, the application and the firewall a workload serves, drawn as one chain you can follow from left to right.\"\n    orientation=\"vertical\"\n    texture=\"dots\"\n    :linked=\"false\"\n    :scene=\"{ component: 'ProductWidget', props: { name: 'workload-topology' } }\"\n    :primary-action=\"{ label: 'Docs', href: '/docs/workloads' }\"\n  />\n</template>"
   }
  ],
  "docs": "components/media-split-band.md"

@@ -17,6 +17,7 @@
  "useWhen": [
   "Showing build, deploy or CI output as timestamped lines the reader can search, filter to warnings, and copy.",
   "A log shell whose toolbar and footer vary by screen — compose `LogViewHeader`, `LogViewContent` and `LogViewFooter` in the order you need, or drop the ones you don't.",
+  "A run log with levels (`debug`, `info`, `warn`, `error`), such as what a function printed during a test run: set `level` on each line and `levels` on the root, and the header filters by level with a count per level.",
   "A log that is still loading from the server — set `loading` to show a spinner and `loading-label` in place of the body."
  ],
  "avoidWhen": [
@@ -31,6 +32,7 @@
  ],
  "bestPractices": [
   "Give every line a stable `id` and a `type` (`text`, `folder`, `framework-version`, `success`, `warning`); the type drives the line's rendering and the warnings filter.",
+  "For a run log, give each line a `level` and put the run offset (`120 ms`, `1.24 s`) in `time`; pass the levels the run can print as `levels` so every level is offered even when it has no line yet. Bind `v-model:level` when the app needs the chosen level.",
   "Bind `v-model:search` and `v-model:warnings-only` when the app needs the filter state; otherwise leave them unbound and the header manages them.",
   "Set `:bordered=\"false\"` when the log sits inside a surface that already frames it (an accordion panel, a drawer).",
   "The copy control hides while `disabled` or `loading`, or when there is nothing to copy; listen to `@copy` for the copied text instead of reading the clipboard.",
@@ -87,6 +89,13 @@
    "doc": "Label shown beneath the spinner while `loading`. Empty uses the locale catalog (`Loading…`)."
   },
   {
+   "name": "levels",
+   "type": "LogViewLineLevel[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "Levels the header offers as filter toggles, each with its line count; a level with no line is still offered. Empty hides the level filter."
+  },
+  {
    "name": "search",
    "type": "string",
    "default": "''",
@@ -99,6 +108,13 @@
    "default": "false",
    "required": "false",
    "doc": "Two-way value (`v-model:warningsOnly`)."
+  },
+  {
+   "name": "level",
+   "type": "LogViewLineLevel | ''",
+   "default": "''",
+   "required": "false",
+   "doc": "Two-way value (`v-model:level`)."
   }
  ],
  "events": [

@@ -32,7 +32,9 @@
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
 | `eyebrow` | `string` | `''` | false | Short overline above the headline. |
-| `title` | `string` | `''` | false | Page headline, rendered as the page `h1`; the band renders nothing when empty. A title longer than 45 characters widens the headline column. |
+| `highlight` | `string` | `''` | false | Opening words of the headline, painted in the brand accent; reads as one sentence with `title`. |
+| `title` | `string` | `''` | false | Page headline, rendered as the page `h1`; the band renders nothing when empty. Without `titleLength`, a title longer than 45 characters widens the headline column. |
+| `titleLength` | `HeroWithOpeningTitleLength` | `undefined` | false | Length of the headline: `short` keeps it on the narrow `xl` column, `long` widens it to `4xl` so it breaks into two lines instead of three; unset, the column follows the 45-character rule. |
 | `description` | `string` | `''` | false | Sentence under the headline. |
 | `primaryAction` | `HeroWithOpeningAction` | `undefined` | false | First button under the headline; `{ label, href, trailing?, target? }`. Shown only with a label and a link. |
 | `secondaryAction` | `HeroWithOpeningAction` | `undefined` | false | Second, outlined button beside the first; `{ label, href, trailing?, target? }`. Shown only with a label and a link. |
@@ -45,7 +47,8 @@
 ## States
 
 - Visual states: `default`
-- The headline column is `xl` wide for a title of up to 45 characters and `4xl` wide for a longer one
+- The headline column is `xl` wide for `titleLength: 'short'` and `4xl` wide for `'long'`; unset, it is `xl` for a title of up to 45 characters (counting `highlight`) and `4xl` for a longer one
+- `highlight` opens the headline in the brand accent; the hero is named by the whole headline (`highlight` and `title`)
 - Empty: when `title` is empty the band renders nothing but its root; when `items` is empty the grid and its closing gap are omitted
 - Each action renders only with a label and a link
 
@@ -57,6 +60,26 @@
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): owned by `hero-title`, `button` and `topic`.
 - `motion-reduce:transition-none motion-reduce:transform-none` — the band adds no motion.
 - Touch target ≥40×40 px — the large buttons meet it.
+
+## Right-to-left
+
+- Layout: logical utilities only; the centred headline and the three-column grid mirror under `dir="rtl"`.
+- Icons: the trailing chevron on an action mirrors with `button`; the argument icons are not mirrored.
+- Keyboard: no arrow-key handling.
+- User data: none.
+
+## Internationalization
+
+No built-in strings: every visible text is a prop from the page JSON; the `//` eyebrow prefix is a glyph, not a word.
+
+- Formatting: none.
+
+## Responsive
+
+- Container queries: none of its own; `card-grid` sets the arguments three to a row from `lg`, two from `sm` and one below it.
+- Narrow (≤ 640 px): the headline wraps on the full column and the arguments stack.
+- Touch: the large buttons meet 40 px; nothing depends on hover.
+- Reflow: no horizontal scroll at 320 px and 200 % zoom.
 
 ## Examples
 
@@ -71,6 +94,50 @@
   <HeroWithOpening
     eyebrow="Firewall"
     title="Programmable firewall for distributed applications"
+    description="Protect users, applications, and networks with rules you program, from layer 3 to layer 7."
+    :primary-action="{ label: 'Start for free', href: 'https://console.azion.com/signup/' }"
+    :secondary-action="{
+      label: 'Docs',
+      href: 'https://www.azion.com/en/documentation/',
+      trailing: true
+    }"
+    :items="[
+      {
+        icon: 'pi pi-shield',
+        title: 'Programmable rule engine',
+        description:
+          'Define custom rules and behaviors across OSI layers L3-L7 to control traffic before it reaches your applications.'
+      },
+      {
+        icon: 'pi pi-code',
+        title: 'Extensible with Functions',
+        description:
+          'Run custom JavaScript security code and marketplace integrations on Azion’s distributed infrastructure.'
+      },
+      {
+        icon: 'pi pi-sync',
+        title: 'Real-time synchronization',
+        description:
+          'Rules sync automatically across every data center. SIEM integration keeps threat intelligence flowing.'
+      }
+    ]"
+  />
+</template>
+```
+
+### Highlight
+
+```vue
+<script setup>
+  import HeroWithOpening from '@aziontech/webkit/hero-with-opening'
+</script>
+
+<template>
+  <HeroWithOpening
+    eyebrow="Firewall"
+    highlight="Programmable"
+    title="firewall rules for every application you run"
+    title-length="long"
     description="Protect users, applications, and networks with rules you program, from layer 3 to layer 7."
     :primary-action="{ label: 'Start for free', href: 'https://console.azion.com/signup/' }"
     :secondary-action="{

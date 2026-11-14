@@ -35,11 +35,25 @@
    "doc": "Short overline above the headline."
   },
   {
+   "name": "highlight",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Opening words of the headline, painted in the brand accent; reads as one sentence with `title`."
+  },
+  {
    "name": "title",
    "type": "string",
    "default": "''",
    "required": "false",
-   "doc": "Page headline, rendered as the page `h1`; the band renders nothing when empty. A title longer than 45 characters widens the headline column."
+   "doc": "Page headline, rendered as the page `h1`; the band renders nothing when empty. Without `titleLength`, a title longer than 45 characters widens the headline column."
+  },
+  {
+   "name": "titleLength",
+   "type": "HeroWithOpeningTitleLength",
+   "default": "undefined",
+   "required": "false",
+   "doc": "Length of the headline: `short` keeps it on the narrow `xl` column, `long` widens it to `4xl` so it breaks into two lines instead of three; unset, the column follows the 45-character rule."
   },
   {
    "name": "description",
@@ -83,6 +97,10 @@
   {
    "name": "Default",
    "sfc": "<script setup>\n  import HeroWithOpening from '@aziontech/webkit/hero-with-opening'\n</script>\n\n<template>\n  <HeroWithOpening\n    eyebrow=\"Firewall\"\n    title=\"Programmable firewall for distributed applications\"\n    description=\"Protect users, applications, and networks with rules you program, from layer 3 to layer 7.\"\n    :primary-action=\"{ label: 'Start for free', href: 'https://console.azion.com/signup/' }\"\n    :secondary-action=\"{\n      label: 'Docs',\n      href: 'https://www.azion.com/en/documentation/',\n      trailing: true\n    }\"\n    :items=\"[\n      {\n        icon: 'pi pi-shield',\n        title: 'Programmable rule engine',\n        description:\n          'Define custom rules and behaviors across OSI layers L3-L7 to control traffic before it reaches your applications.'\n      },\n      {\n        icon: 'pi pi-code',\n        title: 'Extensible with Functions',\n        description:\n          'Run custom JavaScript security code and marketplace integrations on Azion’s distributed infrastructure.'\n      },\n      {\n        icon: 'pi pi-sync',\n        title: 'Real-time synchronization',\n        description:\n          'Rules sync automatically across every data center. SIEM integration keeps threat intelligence flowing.'\n      }\n    ]\"\n  />\n</template>"
+  },
+  {
+   "name": "Highlight",
+   "sfc": "<script setup>\n  import HeroWithOpening from '@aziontech/webkit/hero-with-opening'\n</script>\n\n<template>\n  <HeroWithOpening\n    eyebrow=\"Firewall\"\n    highlight=\"Programmable\"\n    title=\"firewall rules for every application you run\"\n    title-length=\"long\"\n    description=\"Protect users, applications, and networks with rules you program, from layer 3 to layer 7.\"\n    :primary-action=\"{ label: 'Start for free', href: 'https://console.azion.com/signup/' }\"\n    :secondary-action=\"{\n      label: 'Docs',\n      href: 'https://www.azion.com/en/documentation/',\n      trailing: true\n    }\"\n    :items=\"[\n      {\n        icon: 'pi pi-shield',\n        title: 'Programmable rule engine',\n        description:\n          'Define custom rules and behaviors across OSI layers L3-L7 to control traffic before it reaches your applications.'\n      },\n      {\n        icon: 'pi pi-code',\n        title: 'Extensible with Functions',\n        description:\n          'Run custom JavaScript security code and marketplace integrations on Azion’s distributed infrastructure.'\n      },\n      {\n        icon: 'pi pi-sync',\n        title: 'Real-time synchronization',\n        description:\n          'Rules sync automatically across every data center. SIEM integration keeps threat intelligence flowing.'\n      }\n    ]\"\n  />\n</template>"
   }
  ],
  "docs": "components/hero-with-opening.md"

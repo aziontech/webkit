@@ -16,6 +16,7 @@
 - Bind `v-model` to the route (or a ref) and render the section below from it.
 - Keep the labels to one word where possible.
 - Put only actions that apply to the whole resource in `actions`; page-level actions go in the `page-header`.
+- Set `column` to the column the page body uses (`form` over a settings form, `data` over a list) so the tabs start where the content starts.
 
 ## Don’t
 
@@ -34,6 +35,7 @@
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
+| `column` | `'full' \| 'data' \| 'form' \| 'focused'` | `'full'` | false | The page column the tab row lines up with: the full width, or the data, form or focused column below it. |
 | `modelValue` | `TabsValue \| null` | `null` | false | Two-way value (`v-model`). |
 
 ## Slots
@@ -50,6 +52,7 @@
 ## States
 
 - Visual states: `default`; the tab states are owned by `tabs`
+- `data-column` mirrors the `column` prop on the root. The strip and its rule stay full bleed; with `data`, `form` or `focused` the tab row inside is capped at the same measure as the page column it sits over (`layout-column`, `layout-column-form`, `layout-column-focused`) and centred, so the first tab lines up with the content below. `full` leaves the row at the page boundary inset.
 
 ## Accessibility
 
@@ -57,6 +60,26 @@
 - Keyboard map: the tablist follows `tabs` (arrows move between tabs, `Home`/`End` jump); `Tab` leaves the tablist for the actions.
 - ARIA: `role="tablist"` and `role="tab"` come from `tabs`.
 - Contrast ≥4.5:1, owned by `tabs`.
+
+## Right-to-left
+
+- Layout: logical utilities only (`-ms-`, `margin-inline` from the column utilities); the tabs start at the inline start and the actions sit at the inline end.
+- Icons: none of its own.
+- Keyboard: owned by `tabs` (the arrow keys follow the reading direction).
+- User data: none.
+
+## Internationalization
+
+No built-in strings: the tab labels and the actions come from the consumer's slots.
+
+- Formatting: none.
+
+## Responsive
+
+- Container queries: none; the column utilities cap the tab row at the page column's measure and fall back to the full width below it.
+- Narrow (≤ 640 px or a narrow container): the tablist scrolls inline inside its own region (owned by `tabs`); the actions keep their size at the inline end.
+- Touch: tab targets are owned by `tabs`; no hover-only affordance.
+- Reflow: no page-level horizontal scroll at 320 px and 200 % zoom; only the tablist scrolls.
 
 ## Examples
 
@@ -132,6 +155,37 @@
         icon="pi pi-cloud-upload"
       />
     </template>
+  </PageTabs>
+</template>
+```
+
+### FormColumn
+
+```vue
+<script setup>
+  import PageTabs from '@aziontech/webkit/page-tabs'
+  import Tabs from '@aziontech/webkit/tabs'
+  import { ref } from 'vue'
+
+  const activeTab = ref('general')
+  const tabs = [
+    { value: 'general', label: 'General' },
+    { value: 'members', label: 'Members' },
+    { value: 'billing', label: 'Billing' }
+  ]
+</script>
+
+<template>
+  <PageTabs
+    v-model="activeTab"
+    column="form"
+  >
+    <Tabs.Item
+      v-for="tab in tabs"
+      :key="tab.value"
+      :value="tab.value"
+      :label="tab.label"
+    />
   </PageTabs>
 </template>
 ```

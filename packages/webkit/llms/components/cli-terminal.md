@@ -1,6 +1,6 @@
 # Cli Terminal
 
-> The Azion CLI band of a product page: a horizontal section title with one outlined button, over a terminal session on the pixelate texture that runs off the frame's bottom rule, its lines entering one after another. It is a page section — the site places it from a `{ _id: 'cli-terminal', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `button`, `frame-box`, `texture-material` and `code-block`.
+> The Azion CLI band of a product page: a horizontal section title with one outlined button, over a terminal on the pixelate texture that runs off the frame's bottom rule. The terminal is either a recorded Azion CLI session typed live by a `product-widget` (`script`), in a fixed-height stage that rises in when it scrolls into view, or a static session whose lines enter one after another (`session`). It is a page section — the site places it from a `{ _id: 'cli-terminal', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `button`, `frame-box`, `texture-material`, `product-widget` and `code-block`.
 
 - Import: `import CliTerminal from '@aziontech/webkit/cli-terminal'`
 - Category: sections · Surface: marketing · Structure: monolithic
@@ -14,6 +14,8 @@
 
 - Keep the session to a few commands and their output; comment the output lines so the copied text still runs.
 - Name the copy button with `copyAriaLabel` so a screen reader says what it copies.
+- Prefer `script` on a product page: `start` types the first-project session, `deploy` the deploy session. Use `session` for a command set the recordings do not cover.
+- Set `anchor` when a hero button scrolls to this band.
 
 ## Don’t
 
@@ -30,26 +32,29 @@
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
+| `anchor` | `string` | `''` | false | In-page id set on the band so a `#hash` link can scroll to it. |
 | `eyebrow` | `string` | `''` | false | Overline above the section title. |
 | `title` | `string` | `''` | false | Headline of the band, rendered by the horizontal section title as its `h2`; the band renders no header when empty. |
 | `description` | `string` | `''` | false | Supporting sentence beside the headline. |
-| `session` | `string` | `''` | false | The terminal session shown under the header, commands and their output verbatim, highlighted as bash; the band renders nothing when empty. |
+| `script` | `CliTerminalScript` | `undefined` | false | Recorded Azion CLI session the terminal types live: `start` or `deploy`; wins over `session`. |
+| `session` | `string` | `''` | false | The terminal session shown under the header when no `script` is set, commands and their output verbatim, highlighted as bash; the band renders nothing when neither is set. |
 | `copyAriaLabel` | `string` | `''` | false | Accessible name of the session's copy button; empty keeps the code block's own. |
 | `primaryAction` | `CliTerminalAction` | `undefined` | false | Outlined button in the section title; `{ label, href, trailing?, target? }`. Omitted when absent. |
 
 ## States
 
 - Visual states: `default`; the copy button and the button own their hover and focus states
-- Empty: when `session` is empty the band renders nothing — not the header, not the frame
+- Empty: when neither `script` nor `session` is set the band renders nothing — not the header, not the frame
+- `script` draws the `product-widget` `cli-terminal-start` or `cli-terminal-deploy` in a stage 18rem tall (24rem from `md` up); `data-entered` is set on the stage the first time a fifth of it is on screen, and the stage rises, grows and fades in. The widget types its session while on screen and shows its finished state under reduced motion (owned by `product-widget`). Without `script` the `session` renders as a `code-block`
 - The header renders only when `title` is set
 
 ## Accessibility
 
-- Visible focus: owned by `code-block` (copy button) and `button`.
+- Visible focus: owned by `code-block` (copy button) and `button`; the `script` terminal has no focusable parts.
 - Keyboard map: `Tab` reaches the button and the copy button; `Enter` follows the button.
-- ARIA: the band is a `<section>` named by its title (`aria-label`) when one is set; the headline is the section title's `h2`; the copy button is named by `copyAriaLabel`.
+- ARIA: the band is a `<section>` named by its title (`aria-label`) when one is set; the headline is the section title's `h2`; the copy button is named by `copyAriaLabel`; the `script` terminal is an `aria-hidden` picture of the console (owned by `product-widget`), so the headline carries the meaning.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): owned by `section-title`, `code-block` and `button`.
-- `motion-reduce:transition-none motion-reduce:transform-none` — the band adds no motion; the session's line entrance is owned by `code-block` and draws at once under reduced motion.
+- `motion-reduce:transition-none` — the `script` stage's entrance is skipped under reduced motion and the stage is drawn at rest; the session's line entrance is owned by `code-block` and draws at once under reduced motion.
 - Touch target ≥40×40 px: the large button.
 
 ## Examples
@@ -77,6 +82,31 @@
     description="Link a project, deploy it, and curl the domain the CLI hands back. Builds run on your machine with --local, or on Azion."
     :session="session"
     copy-aria-label="Copy the deploy session"
+    :primary-action="primaryAction"
+  />
+</template>
+```
+
+### Script
+
+```vue
+<script setup>
+  import CliTerminal from '@aziontech/webkit/cli-terminal'
+
+  const primaryAction = {
+    label: 'Install the CLI',
+    href: 'https://www.azion.com/en/documentation/products/azion-cli/overview/',
+    trailing: true
+  }
+</script>
+
+<template>
+  <CliTerminal
+    anchor="cli"
+    eyebrow="Azion CLI"
+    title="Deploy your first function in two commands"
+    description="Link a project, deploy it, and curl the domain the CLI hands back. Builds run on your machine with --local, or on Azion."
+    script="deploy"
     :primary-action="primaryAction"
   />
 </template>

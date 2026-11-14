@@ -74,6 +74,13 @@
    "default": "[]",
    "required": "false",
    "doc": "The columns of the topology, left to right; each is `{ nodes }`, the cards top to bottom, each `{ eyebrow, icon, title, label, severity, lit? }`. A card without `title` is skipped, and the scene renders only when a level has a card."
+  },
+  {
+   "name": "anchor",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "In-page id set on the band so a `#hash` link can scroll to it."
   }
  ],
  "events": [],

@@ -5,7 +5,7 @@
 - Surface: product
 - Source: `blocks/platform/dashboard/security-dashboard/security-dashboard.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/dashboard/security-dashboard")`
-- Components: [Alert](../../../components/alert.md), [BarList](../../../components/bar-list.md), [Button](../../../components/button.md), [Chart](../../../components/chart.md), [ChartCard](../../../components/chart-card.md), [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [Hint](../../../components/hint.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [Item](../../../components/item.md), [Link](../../../components/link.md), [PageHeader](../../../components/page-header.md), [Skeleton](../../../components/skeleton.md), [StatTile](../../../components/stat-tile.md), `TableRoot`, [Tag](../../../components/tag.md), [ToggleGroup](../../../components/toggle-group.md), [Tooltip](../../../components/tooltip.md)
+- Components: [Alert](../../../components/alert.md), [BarList](../../../components/bar-list.md), [Button](../../../components/button.md), [Chart](../../../components/chart.md), [ChartCard](../../../components/chart-card.md), [Dialog](../../../components/dialog.md), `DialogClose`, `DialogContent`, `DialogDescription`, `DialogOverlay`, `DialogPortal`, `DialogTitle`, [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [Hint](../../../components/hint.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [Item](../../../components/item.md), [Link](../../../components/link.md), [PageHeader](../../../components/page-header.md), `PanelContent`, `PanelHeader`, [Skeleton](../../../components/skeleton.md), [StatTile](../../../components/stat-tile.md), `TableRoot`, [Tag](../../../components/tag.md), [Toast](../../../components/toast.md), [ToggleGroup](../../../components/toggle-group.md), [Tooltip](../../../components/tooltip.md), `utils/csv`
 - Skills: `webkit-data-viz`, `webkit-tables`, `webkit-ui-states`
 
 ## Asked as
@@ -67,13 +67,20 @@ Only on `Matched requests over time`.
 
 Names Expand and More options.
 
-### H. Expand — `IconButton` (optional)
+### H. Expand — `IconButton`, `Dialog`, `DialogPortal`, `DialogOverlay`, `DialogContent`, `PanelHeader`, `DialogTitle`, `DialogDescription`, `DialogClose`, `PanelContent` (optional)
 
-Its `aria-label` names the card (`Expand Matched requests over time`).
+Its `aria-label` names the card (`Expand Matched requests over time`). It opens one large `Dialog`
+with the card title, its Hint sentence as the description, and the region at full size: the matched
+requests chart at a 420px plot with the same Line or Bar choice, the breakdown `BarList`, or the
+source IP table at ten rows per page. Closing it returns focus to Expand. Disabled while loading and
+after a failure.
 
-### I. More options — `DropdownMenu` (optional)
+### I. More options — `DropdownMenu`, `toast` (optional)
 
-`Copy query` and `Export CSV`.
+`Copy query` copies the card's GraphQL query (`securityMetrics`, the period as `tsRange`) and
+confirms with `Query copied.`; `Export CSV` saves the card's rows with `toCsv` and `downloadCsv`
+from `@aziontech/webkit/utils/csv` and confirms with `CSV exported.` and the file name. Export is
+disabled while loading and after a failure; the app mounts the toast region.
 
 ### J. Matched requests — `Chart` (required)
 
@@ -133,6 +140,7 @@ replaces the whole grid with one bordered `EmptyState` and its `Add rule set` bu
 
 - Every icon-only control has an `aria-label` that names its card, plus a `Tooltip`.
 - The search `Input` has an `aria-label` equal to its placeholder.
+- The expanded `Dialog` traps focus, closes on Escape and returns focus to the Expand button.
 - Severity is a word in the `Tag`, not color alone.
 - Figures use `tabular-nums`.
 
@@ -165,6 +173,13 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
   import BarList from '@aziontech/webkit/bar-list'
   import Chart, { type ChartSeries } from '@aziontech/webkit/chart'
   import ChartCard from '@aziontech/webkit/chart-card'
+  import Dialog from '@aziontech/webkit/dialog'
+  import DialogClose from '@aziontech/webkit/dialog-close'
+  import DialogContent from '@aziontech/webkit/dialog-content'
+  import DialogDescription from '@aziontech/webkit/dialog-description'
+  import DialogOverlay from '@aziontech/webkit/dialog-overlay'
+  import DialogPortal from '@aziontech/webkit/dialog-portal'
+  import DialogTitle from '@aziontech/webkit/dialog-title'
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
   import EmptyState from '@aziontech/webkit/empty-state'
   import Hint from '@aziontech/webkit/hint'
@@ -173,12 +188,16 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
   import Item from '@aziontech/webkit/item'
   import Link from '@aziontech/webkit/link'
   import PageHeader from '@aziontech/webkit/page-header'
+  import PanelContent from '@aziontech/webkit/panel-content'
+  import PanelHeader from '@aziontech/webkit/panel-header'
   import StatTile from '@aziontech/webkit/stat-tile'
   import TableRoot, { type TableColumn } from '@aziontech/webkit/table-root'
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
+  import { toast } from '@aziontech/webkit/toast'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
   import Tooltip from '@aziontech/webkit/tooltip'
-  import { ref } from 'vue'
+  import { type CsvColumn, downloadCsv, toCsv } from '@aziontech/webkit/utils/csv'
+  import { computed, ref } from 'vue'
 
   interface AttentionEntry {
     id: string
@@ -396,6 +415,145 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
   const form = ref('line')
   const activeIndex = ref<number | null>(null)
   const search = ref('')
+
+  interface CardQuery {
+    dataset: string
+    fields: string[]
+    orderBy: string
+  }
+
+  const periodStart = '2026-11-09T00:00:00Z'
+  const periodEnd = '2026-11-09T23:59:59Z'
+
+  const cardQuery = (report: CardQuery) =>
+    [
+      'query {',
+      `  ${report.dataset}(`,
+      '    limit: 5000',
+      '    aggregate: { sum: requests }',
+      `    filter: { tsRange: { begin: "${periodStart}", end: "${periodEnd}" } }`,
+      `    orderBy: [${report.orderBy}]`,
+      '  ) {',
+      ...report.fields.map((field) => `    ${field}`),
+      '  }',
+      '}'
+    ].join('\n')
+
+  const copyQuery = async (report: CardQuery) => {
+    try {
+      await globalThis.navigator.clipboard.writeText(cardQuery(report))
+      toast.success('Query copied.', {
+        description: 'Paste it into any GraphQL client that sends your token.'
+      })
+    } catch {
+      toast.error('The query could not be copied.')
+    }
+  }
+
+  type CardId = 'matched' | 'categories' | 'countries' | 'ips'
+
+  const queries: Record<CardId, CardQuery> = {
+    matched: {
+      dataset: 'securityMetrics',
+      fields: ['ts', 'action', 'requests'],
+      orderBy: 'ts_ASC'
+    },
+    categories: {
+      dataset: 'securityMetrics',
+      fields: ['attackCategory', 'requests'],
+      orderBy: 'requests_DESC'
+    },
+    countries: {
+      dataset: 'securityMetrics',
+      fields: ['country', 'requests'],
+      orderBy: 'requests_DESC'
+    },
+    ips: {
+      dataset: 'securityMetrics',
+      fields: ['remoteAddress', 'asn', 'country', 'attackCategory', 'requests'],
+      orderBy: 'requests_DESC'
+    }
+  }
+
+  interface CardReport extends CardQuery {
+    label: string
+    description: string
+    columns: CsvColumn[]
+    rows: () => object[]
+  }
+
+  const seriesRows = (series: readonly ChartSeries[], axis: readonly (string | Date)[]) =>
+    axis.map((label, index) => ({
+      ts: label instanceof Date ? label.toISOString() : label,
+      ...Object.fromEntries(series.map((entry) => [entry.id, entry.values[index] ?? '']))
+    }))
+
+  const expanded = ref(false)
+  const expandedId = ref<CardId>('matched')
+  const expandedReport = computed(() => reports[expandedId.value])
+
+  const openExpanded = (id: CardId) => {
+    expandedId.value = id
+    expanded.value = true
+  }
+
+  const onCardOption = (id: CardId, value: string | number) => {
+    const report = reports[id]
+    if (value === 'query') {
+      copyQuery(report)
+      return
+    }
+    const filename = `${id}-last-24-hours.csv`
+    downloadCsv(filename, toCsv({ columns: report.columns, rows: report.rows() }))
+    toast.success('CSV exported.', { description: filename })
+  }
+
+  const reports: Record<CardId, CardReport> = {
+    matched: {
+      ...queries.matched,
+      label: 'Matched requests over time',
+      description: 'Requests that matched a rule: blocked, or logged and allowed through.',
+      columns: [
+        { id: 'ts', header: 'Time' },
+        { id: 'blocked', header: 'Blocked' },
+        { id: 'logged', header: 'Logged' }
+      ],
+      rows: () => seriesRows(matchedRequests, labels)
+    },
+    categories: {
+      ...queries.categories,
+      label: 'Blocked requests by attack category',
+      description: 'Blocked requests, broken down by the attack category of the rule they matched.',
+      columns: [
+        { id: 'name', header: 'Attack category' },
+        { id: 'value', header: 'Blocked requests' }
+      ],
+      rows: () => categories
+    },
+    countries: {
+      ...queries.countries,
+      label: 'Blocked requests by country',
+      description: 'Blocked requests, broken down by the country they came from.',
+      columns: [
+        { id: 'name', header: 'Country' },
+        { id: 'value', header: 'Blocked requests' }
+      ],
+      rows: () => countries
+    },
+    ips: {
+      ...queries.ips,
+      label: 'Top source IPs by blocked requests',
+      description: 'The addresses blocked most often, with their network and main attack.',
+      columns: [
+        { id: 'remoteAddress', header: 'IP address' },
+        { id: 'asn', header: 'Network' },
+        { id: 'country', header: 'Country' },
+        { id: 'category', header: 'Main attack' },
+        { id: 'requests', header: 'Blocked requests' }
+      ],
+      rows: () => ipRows
+    }
+  }
 </script>
 
 <template>
@@ -491,9 +649,13 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
                   kind="transparent"
                   size="small"
                   aria-label="Expand Matched requests over time"
+                  @click="openExpanded('matched')"
                 />
               </Tooltip>
-              <DropdownMenu placement="bottom-end">
+              <DropdownMenu
+                placement="bottom-end"
+                @select="(_event, value) => onCardOption('matched', value)"
+              >
                 <DropdownMenu.Trigger>
                   <IconButton
                     icon="pi pi-ellipsis-h"
@@ -620,9 +782,13 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
                   kind="transparent"
                   size="small"
                   aria-label="Expand Blocked requests by attack category"
+                  @click="openExpanded('categories')"
                 />
               </Tooltip>
-              <DropdownMenu placement="bottom-end">
+              <DropdownMenu
+                placement="bottom-end"
+                @select="(_event, value) => onCardOption('categories', value)"
+              >
                 <DropdownMenu.Trigger>
                   <IconButton
                     icon="pi pi-ellipsis-h"
@@ -682,9 +848,13 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
                   kind="transparent"
                   size="small"
                   aria-label="Expand Blocked requests by country"
+                  @click="openExpanded('countries')"
                 />
               </Tooltip>
-              <DropdownMenu placement="bottom-end">
+              <DropdownMenu
+                placement="bottom-end"
+                @select="(_event, value) => onCardOption('countries', value)"
+              >
                 <DropdownMenu.Trigger>
                   <IconButton
                     icon="pi pi-ellipsis-h"
@@ -745,9 +915,13 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
                   kind="transparent"
                   size="small"
                   aria-label="Expand Top source IPs by blocked requests"
+                  @click="openExpanded('ips')"
                 />
               </Tooltip>
-              <DropdownMenu placement="bottom-end">
+              <DropdownMenu
+                placement="bottom-end"
+                @select="(_event, value) => onCardOption('ips', value)"
+              >
                 <DropdownMenu.Trigger>
                   <IconButton
                     icon="pi pi-ellipsis-h"
@@ -817,6 +991,88 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
         </ChartCard>
       </div>
     </div>
+    <Dialog
+      v-model:open="expanded"
+      size="large"
+    >
+      <DialogPortal>
+        <DialogOverlay />
+        <DialogContent>
+          <PanelHeader class="w-full">
+            <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+              <DialogTitle>{{ expandedReport.label }}</DialogTitle>
+              <DialogDescription>{{ expandedReport.description }}</DialogDescription>
+            </div>
+            <DialogClose />
+          </PanelHeader>
+          <PanelContent>
+            <div class="flex min-w-0 flex-col gap-(--spacing-md)">
+              <template v-if="expandedId === 'matched'">
+                <div>
+                  <ToggleGroup
+                    v-model="form"
+                    :options="forms"
+                    size="small"
+                    :aria-label="`Chart form for ${expandedReport.label}`"
+                  />
+                </div>
+                <Chart
+                  :series="matchedRequests"
+                  :labels="labels"
+                  :format-value="formatCount"
+                  :height="420"
+                  empty-title="No matched requests in this period"
+                  empty-description="Nothing was recorded in this period."
+                  :aria-label="expandedReport.label"
+                >
+                  <Chart.Grid />
+                  <Chart.Axis kind="y" />
+                  <Chart.Axis kind="x" />
+                  <Chart.Bar
+                    v-if="form === 'bar'"
+                    stacked
+                  />
+                  <Chart.Line v-else />
+                  <Chart.Crosshair />
+                  <Chart.Tooltip />
+                  <Chart.Legend totals />
+                </Chart>
+              </template>
+              <BarList
+                v-else-if="expandedId === 'categories' || expandedId === 'countries'"
+                :items="expandedId === 'categories' ? categories : countries"
+                :format-value="formatCount"
+                empty-title="No blocked requests in this period"
+                :aria-label="expandedReport.label"
+              />
+              <TableRoot
+                v-else
+                :data="ipRows"
+                :columns="ipColumns"
+                row-key="id"
+                enable-sorting
+                paginated
+                :page-size="10"
+                header-kind="compact"
+                bordered
+              >
+                <template #empty>
+                  <EmptyState
+                    size="small"
+                    icon="pi pi-shield"
+                    title="No blocked requests in this period"
+                    description="Nothing was recorded in this period."
+                  />
+                </template>
+                <template #cell-requests="{ row }">
+                  <span class="tabular-nums">{{ formatCount(row.requests) }}</span>
+                </template>
+              </TableRoot>
+            </div>
+          </PanelContent>
+        </DialogContent>
+      </DialogPortal>
+    </Dialog>
   </div>
 </template>
 ```

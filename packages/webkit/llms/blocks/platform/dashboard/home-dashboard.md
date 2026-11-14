@@ -5,12 +5,12 @@
 - Surface: product
 - Source: `blocks/platform/dashboard/home-dashboard/home-dashboard.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/dashboard/home-dashboard")`
-- Components: `claudeMark`, `codexMark`, `cursorMark`, `geminiMark`, [Button](../../../components/button.md), [Card](../../../components/card.md), [DropdownMenu](../../../components/dropdown-menu.md), [IconButton](../../../components/icon-button.md), [Illustration](../../../components/illustration.md), [Input](../../../components/input.md), [Item](../../../components/item.md), [Popover](../../../components/popover.md), [SearchTrigger](../../../components/search-trigger.md), [Spinner](../../../components/spinner.md), [StatTile](../../../components/stat-tile.md), [StatTileGroup](../../../components/stat-tile-group.md), [Tooltip](../../../components/tooltip.md), `use-console-layout`
+- Components: `claudeMark`, `codexMark`, `cursorMark`, `geminiMark`, [Button](../../../components/button.md), [Card](../../../components/card.md), [DropdownMenu](../../../components/dropdown-menu.md), `DropdownMenuGroup`, `DropdownMenuOption`, [Hint](../../../components/hint.md), [IconButton](../../../components/icon-button.md), [Illustration](../../../components/illustration.md), [Input](../../../components/input.md), [Item](../../../components/item.md), [Link](../../../components/link.md), [Logo](../../../components/logo.md), [Popover](../../../components/popover.md), [SearchTrigger](../../../components/search-trigger.md), [Spinner](../../../components/spinner.md), [StatTile](../../../components/stat-tile.md), [StatTileGroup](../../../components/stat-tile-group.md), [Table](../../../components/table.md), `TableRoot`, [Tag](../../../components/tag.md), [Toast](../../../components/toast.md), [Tooltip](../../../components/tooltip.md), `use-console-layout`
 - Skills: `webkit-layout`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
 
-home; home page; home dashboard; console home; usage overview; página inicial; início do console; first access; home empty state; new account home; welcome screen; first run; brand-new account; getting started home; primeiro acesso; tela de boas-vindas; home vazia
+home; home page; home dashboard; console home; usage overview; página inicial; início do console; first access; home empty state; new account home; welcome screen; first run; brand-new account; getting started home; primeiro acesso; tela de boas-vindas; home vazia; classic overview; overview dashboard; account summary; recent activity; monthly usage; visão geral
 
 The Console's Home page: the first screen a signed-in user lands on. Its job
 is to get them back to work fast. For an account that owns resources it shows a short usage band and
@@ -71,6 +71,26 @@ The `Projects`, `Resources`, `Domains` and `Recents` panels in a region labelled
 is one full-width link to the resource, with its actions menu revealed on hover and focus. An empty
 panel says `Nothing here yet.` (`Nothing opened here yet.` for Recents).
 
+### G. Classic summary — `StatTile`, `Card`, `IconButton`, `Tooltip` (optional)
+
+Variant Summary only; it adds `Hint`, `TableRoot`, `Table`, `Tag` and `Link` to the page: the classic overview for readers who want figures and tables on Home instead of
+resource panels. A main column and, from `xl`, an aside rail of `--container-xs` beside it (below
+`xl` the aside follows the main column).
+
+- **Metrics**: an `h2` with a `Hint` on what the figures cover, four `StatTile`s with a `Hint` in the
+  aside (label, figure, unit; no delta and no sparkline), and the window they cover as a muted caption
+  aligned to the end (`Jul 14, 2026, 6:56 PM – Jul 14, 2026, 7:56 PM UTC`).
+- **Resources**: an `h2` with a `Hint`, then an unpadded `Card` around a compact `TableRoot` of the
+  resources changed last (name, domain as `Table.CellLink`, status as a small `Tag`, `Table.CellTime`
+  with the author, `Table.CellActions`), and a `View all DNS zones` `Link` in the card footer.
+- **Recent activity**: an unpadded `Card` around a compact `TableRoot` of the last five operations
+  (date, operation, type, resource, author email); `Created` and `Deleted` read as small success and
+  danger `Tag`s, any other operation as plain text. `View all activity` in the footer.
+- **Aside**: a `Monthly usage` `Card` with a key and value list and `View all usage`, then a
+  `Marketplace trends` `Card` featuring one template (mark, name `Link`, one sentence, vendor and
+  version) with Previous and Next `IconButton`s and position dots in the footer; the position is
+  announced politely (`Template 2 of 3: Image optimizer`).
+
 ## Do
 
 - Greet by first name in a muted heading; it is the only personal line on the page.
@@ -98,6 +118,7 @@ panel says `Nothing here yet.` (`Nothing opened here yet.` for Recents).
 - **Agent card:** imperative title plus one sentence. `Set up your coding agent` / `Give your editor a prompt that teaches it to build and deploy here.`
 - **Empty panel:** `Nothing here yet.`
 - **Prompt label:** `Search resources, pages and commands`.
+- **Summary:** section headings `Metrics`, `Resources`, `Recent activity`; card titles `Monthly usage`, `Marketplace trends`; footer links `View all <thing>` in sentence case (`View all DNS zones`).
 
 ## Accessibility
 
@@ -111,6 +132,7 @@ panel says `Nothing here yet.` (`Nothing opened here yet.` for Recents).
 
 - Default: populated Home for an account that owns resources (usage band, agent card, resource panels).
 - Empty: a brand-new account; the first-access screen with the greeting, the command prompt that opens the palette, and the three doors (create a project, add a domain with an availability check, set up an agent).
+- Summary: the classic overview; metric tiles with the window caption, the resources and recent activity tables, and the aside with monthly usage and a featured marketplace template.
 
 ## Related
 
@@ -123,6 +145,7 @@ panel says `Nothing here yet.` (`Nothing opened here yet.` for Recents).
 
 - `Default` — primary (the code below)
 - `Empty` — Home for a brand-new account: the first-access screen. Inside ConsoleLayout, clicking the prompt (or pressing Enter on it) opens the layout's command palette; type a domain such as example.com (taken) or acme.example.com (available) into the second door to run the availability check.
+- `Summary` — The classic overview: four metric StatTiles with a Hint on each label and the window they cover in a caption, a resources TableRoot card and a Recent activity TableRoot card, each with a View all footer Link, beside an aside of a Monthly usage list card and a Marketplace trends card that pages through featured templates with Previous and Next.
 
 Each variant is the same screen in another state: `get_pattern("platform/dashboard/home-dashboard", { variant })`, or the file under `blocks/platform/dashboard/home-dashboard/variants/`.
 
@@ -138,6 +161,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
   import IconButton from '@aziontech/webkit/icon-button'
   import Item from '@aziontech/webkit/item'
+  import Logo from '@aziontech/webkit/logo'
   import StatTile from '@aziontech/webkit/stat-tile'
   import StatTileGroup from '@aziontech/webkit/stat-tile-group'
   import Tooltip from '@aziontech/webkit/tooltip'
@@ -292,10 +316,10 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
   ]
 
   const agentMarks = [
-    { name: 'claude', src: claudeMark, mono: false },
-    { name: 'codex', src: codexMark, mono: true },
-    { name: 'gemini', src: geminiMark, mono: false },
-    { name: 'cursor', src: cursorMark, mono: true }
+    { name: 'Claude', src: claudeMark, mono: false },
+    { name: 'Codex', src: codexMark, mono: true },
+    { name: 'Gemini', src: geminiMark, mono: false },
+    { name: 'Cursor', src: cursorMark, mono: true }
   ]
 
   const agentOnboardingVisible = ref(true)
@@ -368,16 +392,12 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
                       :key="agent.name"
                       class="flex size-8 shrink-0 items-center justify-center overflow-hidden rounded-(--shape-elements) border-(length:--border-width-default) border-(--border-muted) bg-(--bg-surface-raised)"
                     >
-                      <span
-                        v-if="agent.mono"
-                        class="size-(--size-4) shrink-0 bg-current text-(--text-default) mask-(--agent-mark) mask-contain mask-center mask-no-repeat"
-                        :style="{ '--agent-mark': `url('${agent.src}')` }"
-                      />
-                      <img
-                        v-else
+                      <Logo
+                        :name="agent.name"
                         :src="agent.src"
-                        alt=""
-                        class="size-(--size-4) shrink-0"
+                        :kind="agent.mono ? 'current' : 'color'"
+                        decorative
+                        class="size-(--size-4) text-(--text-default)"
                       />
                     </span>
                   </span>

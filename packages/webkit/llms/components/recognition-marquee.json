@@ -60,6 +60,13 @@
    "default": "[]",
    "required": "false",
    "doc": "The recognitions, in order; each is `{ text, reportName, date?, firmName, logo, logoLight? }` where `logo` is the firm's mark on the dark theme and `logoLight` the one on the light theme."
+  },
+  {
+   "name": "anchor",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "In-page id set on the band so a `#hash` link can scroll to it."
   }
  ],
  "events": [],

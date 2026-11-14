@@ -54,6 +54,7 @@
 
 - Visual states: `default`; the sheet is `open` or closed (local state, owned by `drawer`)
 - Closing the sheet resets its drill path; following a leaf of the tree closes the sheet
+- The sheet closes on its own when the viewport reaches `xl` (80rem), where the bar shows every entry and the menu button is gone
 - The bar reads its own inline inset on mount and on resize, so the four-column panel's collision padding lands it on the page column's leading edge
 - Each panel's column count is mirrored on `data-columns` and drives its track count; only a four-column panel is stretched to the page column
 - An absent `contact`, `primaryAction` or `secondaryAction` is omitted from the bar and the sheet
@@ -68,15 +69,40 @@
 - `motion-reduce:transition-none` on the mark link; the sheet and the panels own their reduced-motion fallbacks.
 - Touch target ≥40×40 px — the medium buttons and icon buttons meet it.
 
+## Right-to-left
+
+- Layout: logical utilities only; the bar, the panels and the sheet mirror under `dir="rtl"`, and the sheet slides from the end edge as `drawer` places it.
+- Icons: the menu, search and arrow glyphs belong to the composed components; the drill-in chevrons mirror as `menu` draws them; the mark is not mirrored.
+- Keyboard: the mega-menu and the sheet tree own their arrow keys and follow the direction.
+- User data: none.
+
+## Internationalization
+
+| Key              | English source  | Override prop |
+| ---------------- | --------------- | ------------- |
+| `siteNav.open`   | Open navigation | —             |
+| `siteNav.home`   | Azion home      | —             |
+| `siteNav.search` | Search          | —             |
+| `siteNav.menu`   | Menu            | —             |
+
+- Formatting: none; menu, link and action labels are the page's own text.
+
+## Responsive
+
+- Container queries: none; the bar switches at viewport breakpoints.
+- Narrow (below `xl`, 80rem): the menus, links and contact leave the bar for the sheet behind the menu button; below `sm` the secondary action steps out unless `secondaryActionOnPhones`. Reaching `xl` while the sheet is open closes it.
+- Touch: medium buttons and icon buttons meet 40 px; the mega-menu opens on click as well as hover.
+- Reflow: no horizontal scroll at 320 px and 200 % zoom; the sheet scrolls inside `scroll-area`.
+
 ## Usage
 
 ```vue
 <script setup>
-import Command from '@aziontech/webkit/command'
-import SiteNav from '@aziontech/webkit/site-nav'
-import { ref } from 'vue'
+  import Command from '@aziontech/webkit/command'
+  import SiteNav from '@aziontech/webkit/site-nav'
+  import { ref } from 'vue'
 
-const searchOpen = ref(false)
+  const searchOpen = ref(false)
 </script>
 
 <template>
@@ -86,7 +112,20 @@ const searchOpen = ref(false)
       {
         value: 'developer',
         label: 'Developer',
-        columns: [[{ label: 'Docs', items: [{ label: 'Azion Docs', description: 'Documentation and technical references', href: '/docs' }] }]]
+        columns: [
+          [
+            {
+              label: 'Docs',
+              items: [
+                {
+                  label: 'Azion Docs',
+                  description: 'Documentation and technical references',
+                  href: '/docs'
+                }
+              ]
+            }
+          ]
+        ]
       }
     ]"
     :links="[{ label: 'Pricing', href: '/pricing' }]"

@@ -35,6 +35,7 @@
 | `ariaLabel` | `string` | `''` | false | Accessible name of the scrolling region. |
 | `duration` | `number` | `0` | false | Seconds one loop of the strip takes; `0` paces it at twelve seconds per item. |
 | `items` | `RecognitionMarqueeItem[]` | `[]` | false | The recognitions, in order; each is `{ text, reportName, date?, firmName, logo, logoLight? }` where `logo` is the firm's mark on the dark theme and `logoLight` the one on the light theme. |
+| `anchor` | `string` | `''` | false | In-page id set on the band so a `#hash` link can scroll to it. |
 
 ## States
 
@@ -57,6 +58,19 @@
 - Motion: under `dir="rtl"` the marquee track starts offset (`rtl:translate-x-1/2`) and the animation runs reversed; `motion-reduce` stops it in both.
 - Keyboard: no horizontal arrow-key logic.
 - User data: none.
+
+## Internationalization
+
+No built-in strings: every visible and announced text is a prop from the page JSON.
+
+- Formatting: none.
+
+## Responsive
+
+- Container queries: none: the strip is a fixed-height row that loops horizontally.
+- Narrow (below `sm`): each card is 85 % of the viewport wide, capped at `--container-md`.
+- Touch: the strip is one focusable region; hover pauses the loop on a pointer device and focus pauses it on any device.
+- Reflow: the strip clips inside its frame, so the page never scrolls horizontally at 320 px and 200 % zoom.
 
 ## Examples
 

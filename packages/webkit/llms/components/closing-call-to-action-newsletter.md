@@ -40,6 +40,7 @@
 | `loading` | `boolean` | `false` | false | The site is sending the address: the field is disabled, the button shows its loading state and a submit is ignored. |
 | `submitted` | `boolean` | `false` | false | The site sent the address: the form gives way to `form.successMessage`. |
 | `error` | `boolean` | `false` | false | The site could not send the address: `form.errorMessage` shows under the form. |
+| `hatch` | `boolean` | `true` | false | Draws the hatched closing frame under the band; turn it off when another closing band stacks directly below and draws the shared frame. |
 
 ## Events
 
@@ -54,6 +55,7 @@
 - `loading` (prop): the field is disabled, the button shows its loading state and a submit emits nothing
 - `submitted` (prop): the form is replaced by a success `Alert` with `form.successMessage`, which takes focus when focus was in the form
 - `error` (prop): a danger `Alert` with `form.errorMessage` shows under the form, which stays editable
+- `hatch` off: the band renders without its closing frame, so the closing band stacked below draws the page's one close
 
 ## Accessibility
 
@@ -63,6 +65,26 @@
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): headline and ask `var(--text-default)`.
 - `motion-reduce:transition-none motion-reduce:transform-none` — the band adds no motion; the texture and the button carry their own fallback.
 - Touch target ≥40×40 px — the field and the button are large.
+
+## Right-to-left
+
+- Layout: logical utilities only; the lead side and the form mirror under `dir="rtl"`.
+- Icons: the button glyph follows `button`; the texture and the mark are not mirrored.
+- Keyboard: no arrow-key handling.
+- User data: the email field is `type="email"` and renders the address as typed.
+
+## Internationalization
+
+No built-in strings: the ask, the button label and every message are props from the page JSON (`title`, `form.*`).
+
+- Formatting: none.
+
+## Responsive
+
+- Container queries: none; the lead side and the form stack below `lg`.
+- Narrow (below `lg`): the headline sits over the form, the field and the button share the row and the message drops under them.
+- Touch: the field and the button are large; nothing depends on hover.
+- Reflow: no horizontal scroll at 320 px and 200 % zoom.
 
 ## Examples
 

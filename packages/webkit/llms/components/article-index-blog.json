@@ -8,7 +8,7 @@
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],
- "purpose": "Every article of the blog as one ruled list, with the controls to narrow it on one row: a category picker and a search field. Each article is a row — its cover on the left, and on the right its overline, headline, a two-line deck and its writers with the byline pinned to the foot; the row is one link named by its headline, and from `lg` up a read cue rises into its end on hover or keyboard focus. The category and the search combine; a load-more button closes the list. It is a page section — the site places it from a `{ _id: 'article-index-blog', props }` entry and binds `props` straight onto it — and it composes `section-module`, `frame-box`, `toggle-group`, `input`, `avatar` and `button`; the selected category and the search term are local state.",
+ "purpose": "Every article of the blog as one ruled list, with the controls to narrow it on one row: a category picker and a search field. Each article is a row — its cover on the left, and on the right its overline, headline, a two-line deck and its writers with the byline pinned to the foot; the row is one link named by its headline, and from `lg` up a read cue rises into its end on hover or keyboard focus. The category and the search combine; a load-more button reveals the next page, and when nothing matches an empty state offers to clear every filter. It is a page section — the site places it from a `{ _id: 'article-index-blog', props }` entry and binds `props` straight onto it — and it composes `section-module`, `frame-box`, `toggle-group`, `input`, `avatar`, `empty-state` and `button`; the selected category, the search term and the page count are local state. A row without a cover draws its client's mark in one flat ink that follows the theme.",
  "setup": null,
  "useWhen": [
   "For the blog's full list of posts, filtered by category and searched by text."
@@ -23,6 +23,8 @@
  ],
  "bestPractices": [
   "List the articles newest first; file every article under at least one of `categories`.",
+  "Set `empty` so a reader who filters everything away gets a way back; without it the list just disappears.",
+  "Set `leading` to the number of articles a highlight band above already shows, so they are not listed twice until the reader filters.",
   "Keep the category list short enough to scroll on one row: the picker keeps every label at its full width and the row scrolls sideways on a phone instead of squeezing the labels."
  ],
  "props": [
@@ -34,11 +36,18 @@
    "doc": "In-page id set on the band so a `#hash` link can scroll to it."
   },
   {
+   "name": "title",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Headline beside the controls, rendered as the band's `h2`; it also names the band."
+  },
+  {
    "name": "items",
    "type": "ArticleIndexBlogItem[]",
    "default": "[]",
    "required": "false",
-   "doc": "The articles, newest first; each is `{ key, href, image, meta, title, description, authors?, byline?, categories? }`."
+   "doc": "The articles, newest first; each is `{ key, href, image?, mark?, meta, title, description?, authors?, byline?, categories?, external? }`."
   },
   {
    "name": "categories",
@@ -80,7 +89,42 @@
    "type": "string",
    "default": "''",
    "required": "false",
-   "doc": "Label of the load-more button under the list; the button is omitted when empty."
+   "doc": "Label of the load-more button under the list; without it every match is listed and no button renders."
+  },
+  {
+   "name": "pageSize",
+   "type": "number",
+   "default": "12",
+   "required": "false",
+   "doc": "Rows listed per page when `moreLabel` is set; the load-more button reveals the next page."
+  },
+  {
+   "name": "leading",
+   "type": "number",
+   "default": "0",
+   "required": "false",
+   "doc": "Leading articles left out until a filter applies, because a band above already shows them."
+  },
+  {
+   "name": "empty",
+   "type": "ArticleIndexBlogEmpty",
+   "default": "undefined",
+   "required": "false",
+   "doc": "Copy of the state when nothing matches: `{ title, description?, action? }`; `action` labels a button that clears every filter."
+  },
+  {
+   "name": "rowKind",
+   "type": "ArticleIndexBlogRowKind",
+   "default": "'byline'",
+   "required": "false",
+   "doc": "Row layout: `byline` pins the writers to the foot of the copy, `centered` centres the copy."
+  },
+  {
+   "name": "categoryParam",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Name of a URL query parameter that preselects a category on load and scrolls the band into view; off when empty."
   },
   {
    "name": "ariaLabel",
@@ -98,6 +142,10 @@
   {
    "name": "Default",
    "sfc": "<script setup>\n  import ArticleIndexBlog from '@aziontech/webkit/article-index-blog'\n  import placeholderImage from '@aziontech/webkit/assets/placeholder-image.svg'\n</script>\n\n<template>\n  <ArticleIndexBlog\n    anchor=\"posts\"\n    all-label=\"All articles\"\n    category-label=\"Category\"\n    row-label=\"Read article\"\n    more-label=\"Load more\"\n    aria-label=\"Articles\"\n    :categories=\"['Developers', 'Security', 'Company news', 'Serverless']\"\n    :search=\"{ placeholder: 'Search articles', label: 'Search articles' }\"\n    :items=\"[\n      {\n        key: 'ship-portfolio-two-commands-azion-cli',\n        href: '/blog/ship-portfolio-two-commands-azion-cli',\n        image: placeholderImage,\n        meta: 'Developers • SEP 25, 2026',\n        title: 'How I Shipped My Portfolio in Just Two Commands',\n        description:\n          'See how a portfolio site went from template to live URL with just azion init and azion deploy.',\n        authors: [{ name: 'Patrick Menoti' }],\n        byline: 'Patrick Menoti · 9 min read',\n        categories: ['Developers']\n      },\n      {\n        key: 'how-to-reduce-ai-agent-latency',\n        href: '/blog/how-to-reduce-ai-agent-latency',\n        image: placeholderImage,\n        meta: 'Serverless • SEP 23, 2026',\n        title: 'How Do You Reduce AI Agent Latency?',\n        description:\n          'Learn where latency builds up in AI agents and how to reduce delays across inference, tools, memory, and state.',\n        authors: [{ name: 'Marilia Bafutto Costa' }],\n        byline: 'Marilia Bafutto Costa · 8 min read',\n        categories: ['Serverless']\n      },\n      {\n        key: 'cloudflare-alternatives-and-competitors',\n        href: '/blog/cloudflare-alternatives-and-competitors',\n        image: placeholderImage,\n        meta: 'Security • SEP 22, 2026',\n        title: 'Best Cloudflare Alternatives and Competitors',\n        description:\n          'Compare six Cloudflare alternatives for CDN delivery, security, and application hosting.',\n        authors: [{ name: 'Vitor Eltz' }],\n        byline: 'Vitor Eltz · 13 min read',\n        categories: ['Security']\n      }\n    ]\"\n  />\n</template>"
+  },
+  {
+   "name": "Empty",
+   "sfc": "<script setup>\n  import ArticleIndexBlog from '@aziontech/webkit/article-index-blog'\n  import placeholderImage from '@aziontech/webkit/assets/placeholder-image.svg'\n</script>\n\n<template>\n  <ArticleIndexBlog\n    anchor=\"posts\"\n    title=\"All articles\"\n    all-label=\"All articles\"\n    category-label=\"Category\"\n    row-label=\"Read article\"\n    more-label=\"Load more\"\n    aria-label=\"Articles\"\n    :categories=\"['Developers', 'Security']\"\n    :search=\"{ placeholder: 'Search articles', label: 'Search articles' }\"\n    :empty=\"{\n      title: 'No articles match these filters',\n      description: 'Try another category or a shorter search.',\n      action: 'View all articles'\n    }\"\n    :items=\"[\n      {\n        key: 'ship-a-site-in-two-commands',\n        href: '/blog/ship-a-site-in-two-commands',\n        image: placeholderImage,\n        meta: 'Developers • SEP 25, 2026',\n        title: 'Ship a Site in Two Commands',\n        description: 'From a template to a live URL with one command to start and one to deploy.',\n        authors: [{ name: 'Jane Doe' }],\n        byline: 'Jane Doe · 9 min read',\n        categories: ['Developers']\n      }\n    ]\"\n  />\n</template>"
   }
  ],
  "docs": "components/article-index-blog.md"

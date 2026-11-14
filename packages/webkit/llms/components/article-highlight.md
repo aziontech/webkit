@@ -1,6 +1,6 @@
 # Article Highlight
 
-> The band that opens a blog under its hero. One article is shown large — its cover beside its overline, headline, deck, read time and a button into it — over a wall of the highlight articles that acts as its selector. The wall is a tablist and the large article its panel; selecting a title on the wall swaps the panel, and every article is drawn invisibly under the panel so the band keeps the height of its tallest article and never jumps. With four or more articles the wall runs four across. It is a page section — the site places it from a `{ _id: 'article-highlight', props }` entry and binds `props` straight onto it — and it composes `section-module`, `frame-box`, `card-grid` and `button`; the selection is local state.
+> The band that opens a blog under its hero. One article is shown large — its cover beside its overline, headline, deck, read time and a button into it — over a wall of the highlight articles that acts as its selector. The wall is a tablist and the large article its panel; selecting a title on the wall swaps the panel with a short slide in the direction of travel, and every article is drawn invisibly under the panel so the band keeps the height of its tallest article and never jumps. With four or more articles the wall runs four across. It is a page section — the site places it from a `{ _id: 'article-highlight', props }` entry and binds `props` straight onto it — and it composes `section-module`, `frame-box`, `card-grid` and `button`; the selection is local state. With `autoplay` the band advances on its own every `autoplayInterval`, drawing a primary progress line at the panel's foot, and pauses while the pointer is over it or keyboard focus is inside it; it never autoplays under reduced motion or with one article. With `fill`, from `lg` the band fills the first viewport under the sticky site header.
 
 - Import: `import ArticleHighlight from '@aziontech/webkit/article-highlight'`
 - Category: sections · Surface: marketing · Structure: monolithic
@@ -35,6 +35,9 @@
 | `items` | `ArticleHighlightItem[]` | `[]` | false | The highlight articles in wall order, the one at the bound index (the first by default) selected on load; each is `{ key, href, image, highlightImage?, meta, title, description, readTime }`. |
 | `actionLabel` | `string` | `''` | false | Label of the button into the selected article; the button is omitted when empty. |
 | `ariaLabel` | `string` | `''` | false | Accessible name of the wall of titles. |
+| `autoplay` | `boolean` | `false` | false | Advances to the next article every `autoplayInterval`, pausing under hover and keyboard focus; off under reduced motion and with one article. |
+| `autoplayInterval` | `number` | `6000` | false | Milliseconds each article is held before the band advances. |
+| `fill` | `boolean` | `false` | false | From `lg` up, the band fills the first viewport under the sticky site header. |
 | `modelValue` | `number` | `0` | false | Two-way value (`v-model`). |
 
 ## v-model
@@ -48,11 +51,15 @@
 - Visual states: `default`, `hover` (a wall title lights, the panel cover scales up), `focus-visible` (inset ring), `selected` (`data-active` on the selected wall title)
 - `data-columns` on the wall: one column per article from `lg`, three at least and five at most
 - Empty: when `items` is empty the band renders nothing
-- The band has no timer: the selected article changes only on a click, an arrow key or a bound `modelValue`
+- Without `autoplay` the band has no timer: the selected article changes only on a click, an arrow key or a bound `modelValue`
+- Autoplay: with `autoplay`, more than one article and no reduced-motion preference, the band advances (wrapping to the first) every `autoplayInterval` ms after mount and writes the index back through `v-model`; `data-autoplay` is set while it runs; a progress line (`var(--primary)`, `aria-hidden`) grows along the panel's foot from the inline start; pointer hover over the band or a `:focus-visible` element inside it pauses it, and leaving resumes it; any selection restarts the count
+- Direction: `data-direction` on the panel is `forward` or `back` (from the arrow key, the autoplay step, or the index change) and drives an out-in slide of the panel's article, mirrored under `rtl`
+- Fill: `data-fill` is set; from `lg` the band's height is the viewport minus `var(--layout-header-height)` and the section gaps, the panel takes the free height and its cover drops its fixed aspect; under 50 rem of viewport height the copy tightens and the deck hides
 - Reflow: the hidden layout sizer is `min-w-0`, so the panel never grows past a 320 px box.
 
 ## Accessibility
 
+- Autoplay (WCAG 2.2.2): off by default; when on it pauses while the pointer is over the band or keyboard focus is inside it, never runs under `prefers-reduced-motion: reduce`, and the panel is not a live region, so an advance is never announced.
 - Visible focus: the panel headline link and every wall title show an inset `focus-visible` ring.
 - Keyboard map: on the wall, `ArrowRight` / `ArrowDown` select the next title, `ArrowLeft` / `ArrowUp` the previous one (wrapping), `Home` the first and `End` the last; selection follows focus and only the selected title is in the tab order (roving `tabindex`).
 - ARIA: the wall is a `tablist` named by `ariaLabel`, each title a `tab` with `aria-selected` and `aria-controls`; the panel is a `tabpanel` labelled by the selected tab; the panel headline is an `h2` whose link covers the article; the invisible sizer is `aria-hidden` and `inert`; covers are decorative (`alt=""`). Ids come from `useId`.
@@ -66,6 +73,18 @@
 - Icons: the external-link arrow does not mirror.
 - Keyboard: `ArrowRight`/`ArrowLeft` move between the highlighted articles, swapped under `dir="rtl"` (`logicalArrowKey`).
 - User data: article titles in another script keep their own direction.
+
+## Internationalization
+
+- Built-in strings: none. Every visible string arrives through props.
+- Formatting: none; dates and read times arrive pre-formatted.
+
+## Responsive
+
+- Container queries: none; from `lg` the panel splits cover and copy and the wall runs one column per article (three to five).
+- Narrow (< `lg`): the cover stacks over the copy and the wall stacks to one column; `fill` has no effect.
+- Touch: every wall title is a full-cell button; autoplay pauses only under hover or keyboard focus, and a tap selects.
+- Reflow: no horizontal scroll at 320 px; the hidden sizer is `min-w-0`.
 
 ## Examples
 
@@ -145,6 +164,71 @@
 <template>
   <ArticleHighlight
     v-model="selected"
+    anchor="articles"
+    action-label="Read article"
+    aria-label="Highlight articles"
+    :items="[
+      {
+        key: 'ship-portfolio-two-commands-azion-cli',
+        href: '/blog/ship-portfolio-two-commands-azion-cli',
+        image: placeholderImage,
+        highlightImage: placeholderImage,
+        meta: 'Developers • SEP 25, 2026',
+        title: 'How I Shipped My Portfolio in Just Two Commands',
+        description:
+          'See how a portfolio site went from template to live URL with just azion init and azion deploy.',
+        readTime: '9 min read'
+      },
+      {
+        key: 'how-to-reduce-ai-agent-latency',
+        href: '/blog/how-to-reduce-ai-agent-latency',
+        image: placeholderImage,
+        highlightImage: placeholderImage,
+        meta: 'Serverless • SEP 23, 2026',
+        title: 'How Do You Reduce AI Agent Latency?',
+        description:
+          'Learn where latency builds up in AI agents and how to reduce delays across inference, tools, memory, and state.',
+        readTime: '8 min read'
+      },
+      {
+        key: 'cloudflare-alternatives-and-competitors',
+        href: '/blog/cloudflare-alternatives-and-competitors',
+        image: placeholderImage,
+        highlightImage: placeholderImage,
+        meta: 'Security • SEP 22, 2026',
+        title: 'Best Cloudflare Alternatives and Competitors',
+        description:
+          'Compare six Cloudflare alternatives for CDN delivery, security, and application hosting.',
+        readTime: '13 min read'
+      },
+      {
+        key: 'which-azion-plan-is-right-for-your-project',
+        href: '/blog/which-azion-plan-is-right-for-your-project',
+        image: placeholderImage,
+        highlightImage: placeholderImage,
+        meta: 'Company news • SEP 22, 2026',
+        title: 'Which Azion Plan Is Right for Your Project?',
+        description: 'Compare Azion’s Hobby, Pro, and Enterprise plans.',
+        readTime: '7 min read'
+      }
+    ]"
+  />
+</template>
+```
+
+### Autoplay
+
+```vue
+<script setup>
+  import ArticleHighlight from '@aziontech/webkit/article-highlight'
+  import placeholderImage from '@aziontech/webkit/assets/placeholder-image.svg'
+</script>
+
+<template>
+  <ArticleHighlight
+    autoplay
+    :autoplay-interval="6000"
+    fill
     anchor="articles"
     action-label="Read article"
     aria-label="Highlight articles"

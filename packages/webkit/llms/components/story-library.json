@@ -8,7 +8,7 @@
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],
- "purpose": "Every success story of a company as one filterable library. A left-aligned title sits over a toolbar — a search field and one searchable select per facet (industry, solution, product) on one row — then a grid of story cards and a load-more button. Each card is one link named by its company: the client mark in a single ink, the story's category as an overline, its description and a read cue whose arrow nudges on hover. The grid runs one column on phones, two from `sm` and three from `lg`. Search and facets combine; when nothing matches, an empty state offers to clear every filter. It is a page section — the site places it from a `{ _id: 'story-library', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `frame-box`, `input`, `select`, `button` and `empty-state`; the search, the facet selections and each select's own option search are local state.",
+ "purpose": "Every success story of a company as one filterable library. A left-aligned title sits over a toolbar — a search field and one select per facet (industry, solution, product) on one row, each starting with an option that clears it — then a grid of story cards and a load-more button that reveals the next page. Below `lg` the toolbar folds to the search field (with its shorter placeholder) and a filter button that reveals the selects, with each applied facet listed under it as a removable chip. A select with more than seven options gains an option search. Each card is one link named by its company: the client mark in a single ink, the story's category as an overline, its description and a read cue whose arrow nudges on hover. The grid runs one column on phones, two from `sm` and three from `lg`. Search and facets combine; when nothing matches, an empty state offers to clear every filter. It is a page section — the site places it from a `{ _id: 'story-library', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `frame-box`, `input`, `select`, `chip`, `button` and `empty-state`; the search, the facet selections, each select's own option search and the page count are local state, and facets can be seeded from the URL query.",
  "setup": null,
  "useWhen": [
   "To list every success story with search and facet filters."
@@ -46,7 +46,7 @@
    "type": "StoryLibraryItem[]",
    "default": "[]",
    "required": "false",
-   "doc": "The stories, in order; each is `{ key, href, client, category, description, facets? }`."
+   "doc": "The stories, in order; each is `{ key, href, client, category, description, facets?, external? }`; an `external` story opens in a new tab."
   },
   {
    "name": "facets",
@@ -60,7 +60,7 @@
    "type": "StoryLibrarySearch",
    "default": "undefined",
    "required": "false",
-   "doc": "The search field's `placeholder` and accessible `label`; the field is omitted when absent."
+   "doc": "The search field's `placeholder`, optional `shortPlaceholder` (below `lg`) and accessible `label`; the field is omitted when absent."
   },
   {
    "name": "empty",
@@ -81,7 +81,28 @@
    "type": "string",
    "default": "''",
    "required": "false",
-   "doc": "Label of the load-more button under the grid; the button is omitted when empty."
+   "doc": "Label of the load-more button under the grid; without it every match is listed and no button renders."
+  },
+  {
+   "name": "pageSize",
+   "type": "number",
+   "default": "12",
+   "required": "false",
+   "doc": "Stories listed per page when `moreLabel` is set; the load-more button reveals the next page."
+  },
+  {
+   "name": "filterLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Label of the filter button below `lg`; empty uses the locale catalog (`Filters`)."
+  },
+  {
+   "name": "seedFromQuery",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Seeds each facet on mount from the URL query parameter named by its `key` when the value is one of its options."
   },
   {
    "name": "ariaLabel",
@@ -103,6 +124,10 @@
   {
    "name": "NoResults",
    "sfc": "<script setup>\n  import StoryLibrary from '@aziontech/webkit/story-library'\n</script>\n\n<template>\n  <StoryLibrary\n    anchor=\"cases\"\n    title=\"Companies building with Azion\"\n    aria-label=\"Success stories\"\n    :items=\"[]\"\n    :facets=\"[\n      {\n        key: 'industry',\n        label: 'Industry',\n        allLabel: 'All industries',\n        options: [\n          { value: 'Media', label: 'Media' },\n          { value: 'Retail', label: 'Retail' },\n          { value: 'Tech', label: 'Tech' }\n        ]\n      },\n      {\n        key: 'solution',\n        label: 'Solution',\n        allLabel: 'All solutions',\n        options: [\n          { value: 'Build', label: 'Build' },\n          { value: 'Deploy', label: 'Deploy' },\n          { value: 'Secure', label: 'Secure' }\n        ]\n      }\n    ]\"\n    :search=\"{ placeholder: 'Search by company or story', label: 'Search success stories' }\"\n    :empty=\"{ title: 'No stories match these filters.', action: 'View all success stories' }\"\n  />\n</template>"
+  },
+  {
+   "name": "Paged",
+   "sfc": "<script setup>\n  import axurExtendedReversed from '@aziontech/webkit/assets/axur-extended-reversed.svg'\n  import exameExtendedReversed from '@aziontech/webkit/assets/exame-extended-reversed.svg'\n  import gpaExtendedReversed from '@aziontech/webkit/assets/gpa-extended-reversed.svg'\n  import StoryLibrary from '@aziontech/webkit/story-library'\n</script>\n\n<template>\n  <StoryLibrary\n    anchor=\"cases\"\n    title=\"Companies building with Azion\"\n    aria-label=\"Success stories\"\n    link-label=\"Read story\"\n    more-label=\"Load more\"\n    :page-size=\"2\"\n    :items=\"[\n      {\n        key: 'case-gpa',\n        href: '/site/success-cases/gpa',\n        client: { name: 'GPA', logo: gpaExtendedReversed },\n        category: 'Retail',\n        description:\n          'Grupo Pão de Açúcar (GPA) solved a targeted DNS attack, secured 100+ critical applications in 15 days, and reduced costs by 30%.',\n        facets: { industry: ['Retail'], solution: ['Secure'] }\n      },\n      {\n        key: 'case-axur',\n        href: '/site/success-cases/axur',\n        client: { name: 'Axur', logo: axurExtendedReversed },\n        category: 'Tech',\n        description:\n          'See how moving AI inference off managed infrastructure unlocked the fastest automatic takedown in the market.',\n        facets: { industry: ['Tech'], solution: ['Build', 'Secure'] }\n      },\n      {\n        key: 'case-exame',\n        href: '/site/success-cases/exame',\n        client: { name: 'Exame', logo: exameExtendedReversed },\n        category: 'Media',\n        description:\n          'Faster content delivery and resilient infrastructure enabled Exame to handle large traffic spikes during major news events.',\n        facets: { industry: ['Media'], solution: ['Build', 'Deploy'] }\n      }\n    ]\"\n    :facets=\"[\n      {\n        key: 'industry',\n        label: 'Industry',\n        allLabel: 'All industries',\n        options: [\n          { value: 'Media', label: 'Media' },\n          { value: 'Retail', label: 'Retail' },\n          { value: 'Tech', label: 'Tech' }\n        ]\n      },\n      {\n        key: 'solution',\n        label: 'Solution',\n        allLabel: 'All solutions',\n        options: [\n          { value: 'Build', label: 'Build' },\n          { value: 'Deploy', label: 'Deploy' },\n          { value: 'Secure', label: 'Secure' }\n        ]\n      }\n    ]\"\n    :search=\"{\n      placeholder: 'Search by company or story',\n      shortPlaceholder: 'Search stories',\n      label: 'Search success stories'\n    }\"\n    :empty=\"{ title: 'No stories match these filters.', action: 'View all success stories' }\"\n  />\n</template>"
   }
  ],
  "docs": "components/story-library.md"

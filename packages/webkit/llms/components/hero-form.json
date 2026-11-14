@@ -65,6 +65,41 @@
    "doc": "Sentence under the headline."
   },
   {
+   "name": "descriptionLink",
+   "type": "HeroFormLink",
+   "default": "undefined",
+   "required": "false",
+   "doc": "A link continuing the description inline, such as a phone line; `{ label, href }`. Omitted when absent."
+  },
+  {
+   "name": "descriptionAfter",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Copy after the inline link, closing the description's sentence."
+  },
+  {
+   "name": "primaryAction",
+   "type": "HeroFormAction",
+   "default": "undefined",
+   "required": "false",
+   "doc": "First button under the copy; `{ label, href, trailing?, target? }`. Shown only with a label and a link."
+  },
+  {
+   "name": "secondaryAction",
+   "type": "HeroFormAction",
+   "default": "undefined",
+   "required": "false",
+   "doc": "Second, outlined button beside the first; `{ label, href, trailing?, target? }`. Shown only with a label and a link."
+  },
+  {
+   "name": "anchor",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "In-page id set on the band so a `#hash` link can scroll to it."
+  },
+  {
    "name": "items",
    "type": "HeroFormItem[]",
    "default": "[]",

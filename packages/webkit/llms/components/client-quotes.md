@@ -32,6 +32,7 @@
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
+| `anchor` | `string` | `''` | false | In-page id set on the band so a hash link can target it. |
 | `ariaLabel` | `string` | `''` | false | Accessible name of the quote carousel. |
 | `items` | `ClientQuotesItem[]` | `[]` | false | The quotes, in order; each is `{ text, name?, jobTitle?, mark?, logo?, clientName?, photo? }` where `mark` is a registry mark name and `logo` a mark URL named by `clientName`. |
 | `primaryAction` | `ClientQuotesAction` | `undefined` | false | Button under the quotes; `{ label, href, trailing? }`. Omitted when absent. |
@@ -45,9 +46,9 @@
 
 ## v-model
 
-| Model | Type | Default | Emits | Notes |
-|---|---|---|---|---|
-| `v-model` | `number` | `0` | `update:modelValue` | Index of the selected quote, passed through to `quote-tabs`; left unbound the band starts on the first quote. A click, an arrow key or the timer writes the new index back. |
+| Model     | Type     | Default | Emits               | Notes                                                                                                                                                                       |
+| --------- | -------- | ------- | ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `v-model` | `number` | `0`     | `update:modelValue` | Index of the selected quote, passed through to `quote-tabs`; left unbound the band starts on the first quote. A click, an arrow key or the timer writes the new index back. |
 
 ## States
 

@@ -13,7 +13,10 @@
 ## Do
 
 - Give every row a `definition`; the info popover is where a reader learns what the capability means.
-- Ship both `competitor.logo` (dark theme) and `competitor.logoLight` (light theme); with one file it shows in both, with none the name shows as text.
+- Pass the competitor's entry from `@aziontech/webkit/assets/competitor-registry` (`competitor('Akamai')`): its `logo` and `logoLight` render on first paint, server render included.
+- With only a `name`, the band looks the name up in the competitor registry once the page is interactive (the registry loads on demand, outside the band's bundle) and shows the name as text until then, or for a platform the registry does not hold.
+- For a platform outside the registry, ship both `competitor.logo` (dark theme) and `competitor.logoLight` (light theme), or one file with its `artwork`.
+- Set `anchor` when a page links to the table (`#compare`).
 - Keep `caption` equal to the title; it is the table's accessible name.
 
 ## Don’t
@@ -26,11 +29,13 @@
 
 - [compare-plans](compare-plans.md) — the plan-by-plan matrix of Pricing.
 - [tooltip](tooltip.md) — names each support glyph on hover and focus.
+- [logo](logo.md) — draws the competitor's mark right on both themes.
 
 ## Props
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
+| `anchor` | `string` | `''` | false | In-page id set on the band so a hash link can target it. |
 | `eyebrow` | `string` | `''` | false | Overline above the section title. |
 | `title` | `string` | `''` | false | Headline of the band, rendered by the section title as its `h2` and naming the band; no header renders when empty. |
 | `caption` | `string` | `''` | false | Screen-reader caption naming the table. |
@@ -38,24 +43,48 @@
 | `fullLabel` | `string` | `''` | false | Tooltip and screen-reader text of a full-support cell. |
 | `partialLabel` | `string` | `''` | false | Tooltip and screen-reader text of a partial-support cell. |
 | `noneLabel` | `string` | `''` | false | Tooltip and screen-reader text of an unsupported cell. |
-| `competitor` | `ComparisonTableCompetitor` | `—` | true | The platform compared with Azion; `{ name, logo?, logoLight? }` where `logo` is the dark-theme file and `logoLight` the light-theme one. |
+| `competitor` | `ComparisonTableCompetitor` | `—` | true | The platform compared with Azion; `{ name, logo?, logoLight?, artwork? }` where `logo` is the dark-theme file and `logoLight` the light-theme one. With only a `name`, the logo is taken from the competitor registry once the page is interactive, and the name is the column head until then or when the registry has no entry. |
 | `groups` | `ComparisonTableGroup[]` | `[]` | false | The categories, in order; each is `{ title, rows }` and a row is `{ capability, definition?, azion?, competitor? }` with each level `full`, `partial` or `none` (missing reads as `none`). |
 
 ## States
 
 - Visual states: `default`
 - A support cell is one of `full`, `partial` or `none`, mirrored on the glyph's `data-support`
-- Without a competitor logo the header shows the competitor name as text
+- The competitor head is a `Logo` (`data-testid="sections-comparison-table__competitor-logo"`) whose `data-route` is `pair` (light/dark files), `single` (one file) or `wordmark` (the name as text: no logo and no registry entry, or before the registry loads)
+- Not applicable: `loading`, `error`, `disabled`, `readonly`, `invalid`, `open`/`closed` (the popovers own their open state)
 - Empty: when `groups` is empty the band renders nothing but its root — no header, no table
 
 ## Accessibility
 
 - Visible focus: owned by the composed `icon-button` and `tooltip` triggers.
 - Keyboard map: `Tab` reaches each definition's info button; `Enter` / `Space` opens its popover and `Esc` closes it (owned by `popover`).
-- ARIA: the band is a `<section>` named by its title (`aria-label`) when one is set; the table carries a `caption`, `scope="col"` heads, a `scope="colgroup"` head per category and a `scope="row"` head per capability, so each value is announced with its row and column. The glyphs are `aria-hidden` and every cell carries its level as `sr-only` text; each logo has the platform name as `alt`.
+- ARIA: the band is a `<section>` named by its title (`aria-label`) when one is set; the table carries a `caption`, `scope="col"` heads, a `scope="colgroup"` head per category and a `scope="row"` head per capability, so each value is announced with its row and column. The glyphs are `aria-hidden` and every cell carries its level as `sr-only` text; the competitor logo is a `Logo` named by the platform, inside a head cell that carries the same name.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): text and glyph colours are the tokens above.
 - `motion-reduce:transition-none motion-reduce:transform-none` — the popover and tooltip carry their own reduced-motion fallback; this band adds no motion.
 - Touch target ≥40×40 px — the info button is a small `icon-button`, a secondary affordance next to the capability name.
+
+## Right-to-left
+
+- Layout: logical utilities only (`border-s`, `ps-`/`pe-`); the Azion and competitor columns follow the reading direction.
+- Icons: the support glyphs and the info glyph are not mirrored; logos are never mirrored.
+- Keyboard: `Tab` order follows the DOM.
+- User data: the competitor name drawn as a wordmark is wrapped in `dir="auto"` by `Logo`.
+
+## Internationalization
+
+| Key                     | English source       | Override prop |
+| ----------------------- | -------------------- | ------------- |
+| `comparisonTable.about` | `About {capability}` | —             |
+
+- The column and level labels (`columnLabel`, `fullLabel`, `partialLabel`, `noneLabel`), the caption and every capability are content the page passes.
+- Formatting: none.
+
+## Responsive
+
+- Container queries: none; the head row's logos step up from 12 px to 16 px (`sm`) and 24 px (`md`).
+- Narrow: the capability column keeps its text, the two platform columns narrow to their glyphs.
+- Touch: the info button is a small `icon-button`, a secondary affordance next to the capability name.
+- Reflow: no horizontal scroll at 320 px; the head row stays pinned under the site header.
 
 ## Examples
 
@@ -255,6 +284,60 @@
     partial-label="Partial support"
     none-label="Not available"
     :competitor="competitor"
+    :groups="groups"
+  />
+</template>
+```
+
+### Registry
+
+```vue
+<script setup>
+  import ComparisonTable from '@aziontech/webkit/comparison-table'
+
+  const groups = [
+    {
+      title: 'Security',
+      rows: [
+        {
+          capability: 'Web application firewall',
+          definition: 'Rules that inspect requests and block attacks before they reach the origin.',
+          azion: 'full',
+          competitor: 'full'
+        },
+        {
+          capability: 'Bot management',
+          definition: 'Detecting and blocking automated traffic.',
+          azion: 'full',
+          competitor: 'partial'
+        }
+      ]
+    },
+    {
+      title: 'Compute',
+      rows: [
+        {
+          capability: 'Functions on every location',
+          definition: 'Code runs on every location of the network, not only in a few regions.',
+          azion: 'full',
+          competitor: 'none'
+        }
+      ]
+    }
+  ]
+</script>
+
+<template>
+  <ComparisonTable
+    anchor="compare"
+    eyebrow="Comparison"
+    title="Azion vs Fastly"
+    caption="Azion vs Fastly"
+    column-label="Capability"
+    full-label="Full support"
+    partial-label="Partial support"
+    none-label="Not supported"
+    :competitor="{ name: 'Fastly' }"
     :groups="groups"
   />
 </template>

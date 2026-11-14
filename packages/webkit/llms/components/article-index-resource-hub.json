@@ -8,7 +8,7 @@
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],
- "purpose": "Every resource of a hub as one ruled list, with a headline and one searchable dropdown per facet (content type, category, industry) on one row that wraps when it runs out of room. Each resource is a row — its cover on the left, and on the right its overline, headline and a two-line deck centred in the row; the row is one link named by its headline, and from `lg` up a read cue rises into its end on hover or keyboard focus. The facets combine; a load-more button closes the list. It is a page section — the site places it from a `{ _id: 'article-index-resource-hub', props }` entry and binds `props` straight onto it — and it composes `section-module`, `frame-box`, `select`, `input` and `button`; the facet selections and each dropdown's option search are local state.",
+ "purpose": "Every resource of a hub as one ruled list, with a headline and one dropdown per facet (content type, category, industry) on one row that wraps when it runs out of room. Each resource is a row — its cover on the left, and on the right its overline, headline and a two-line deck centred in the row; the row is one link named by its headline, and from `lg` up a read cue rises into its end on hover or keyboard focus. The facets combine; a dropdown with more than seven options gains an option search; a load-more button reveals the next page, and when nothing matches an empty state offers to clear every facet. It is a page section — the site places it from a `{ _id: 'article-index-resource-hub', props }` entry and binds `props` straight onto it — and it composes `section-module`, `frame-box`, `select`, `input`, `empty-state` and `button`; the facet selections, each dropdown's option search and the page count are local state. A row without a cover draws its client's mark in one flat ink that follows the theme.",
  "setup": null,
  "useWhen": [
   "For a resource hub that mixes content types (e-books, posts, comparisons, stories), filtered by facet."
@@ -23,7 +23,8 @@
  ],
  "bestPractices": [
   "Give every item a `facets` entry per facet `key` it can be filtered by; an item without one never matches a selection on that facet.",
-  "Keep each facet's `options` to values some item carries."
+  "Keep each facet's `options` to values some item carries.",
+  "Set `empty` so a reader who filters everything away gets a way back; without it the list just disappears."
  ],
  "props": [
   {
@@ -45,7 +46,7 @@
    "type": "ArticleIndexResourceHubItem[]",
    "default": "[]",
    "required": "false",
-   "doc": "The resources, in order; each is `{ key, href, image, meta, title, description, facets? }`."
+   "doc": "The resources, in order; each is `{ key, href, image?, mark?, meta, title, description?, facets?, external? }`."
   },
   {
    "name": "facets",
@@ -66,7 +67,35 @@
    "type": "string",
    "default": "''",
    "required": "false",
-   "doc": "Label of the load-more button under the list; the button is omitted when empty."
+   "doc": "Label of the load-more button under the list; without it every match is listed and no button renders."
+  },
+  {
+   "name": "pageSize",
+   "type": "number",
+   "default": "12",
+   "required": "false",
+   "doc": "Rows listed per page when `moreLabel` is set; the load-more button reveals the next page."
+  },
+  {
+   "name": "leading",
+   "type": "number",
+   "default": "0",
+   "required": "false",
+   "doc": "Leading resources left out until a facet applies, because a band above already shows them."
+  },
+  {
+   "name": "empty",
+   "type": "ArticleIndexResourceHubEmpty",
+   "default": "undefined",
+   "required": "false",
+   "doc": "Copy of the state when nothing matches: `{ title, description?, action? }`; `action` labels a button that resets every facet."
+  },
+  {
+   "name": "rowKind",
+   "type": "ArticleIndexResourceHubRowKind",
+   "default": "'centered'",
+   "required": "false",
+   "doc": "Row layout: `centered` centres the copy, `byline` spreads it to the foot of the row."
   },
   {
    "name": "ariaLabel",
@@ -84,6 +113,10 @@
   {
    "name": "Default",
    "sfc": "<script setup>\n  import ArticleIndexResourceHub from '@aziontech/webkit/article-index-resource-hub'\n</script>\n\n<template>\n  <ArticleIndexResourceHub\n    anchor=\"resources\"\n    title=\"Explore all resources\"\n    row-label=\"Read article\"\n    more-label=\"Load more\"\n    aria-label=\"Resources\"\n    :facets=\"[\n      {\n        key: 'contentType',\n        label: 'Content type',\n        allLabel: 'All content types',\n        options: ['E-books', 'Blog', 'Comparisons']\n      },\n      {\n        key: 'industry',\n        label: 'Industry',\n        allLabel: 'All industries',\n        options: ['Financial', 'Retail', 'Tech']\n      }\n    ]\"\n    :items=\"[\n      {\n        key: 'security-applications-apis-ai-agents',\n        href: 'https://www.azion.com/en/lp/security-applications-apis-ai-agents/',\n        image: 'https://www.azion.com/assets/content/blog/uploads/Rich%20contentsdark.png',\n        meta: 'E-books • OCT 15, 2026',\n        title: 'Security for applications, APIs, and AI agents',\n        description:\n          'Learn how to bring security policies into deployment, automate protection, and monitor traffic.',\n        facets: { contentType: ['E-books'] }\n      },\n      {\n        key: 'azion-mcp-servers-generally-available',\n        href: 'https://www.azion.com/en/blog/azion-mcp-servers-generally-available/',\n        image: 'https://www.azion.com/assets/content/blog/uploads/mcp-ga/Azion-MCP.svg',\n        meta: 'Blog • OCT 14, 2026',\n        title: 'Azion MCP servers: Connect Your Coding Agent to Azion',\n        description: 'Azion MCP servers connect coding agents to the Azion documentation and API.',\n        facets: { contentType: ['Blog'] }\n      },\n      {\n        key: 'cloudflare-to-azion-alternative-guide',\n        href: 'https://www.azion.com/en/lp/cloudflare-to-azion-alternative-guide/',\n        image: 'https://www.azion.com/assets/content/lp/uploads/og-image/og-img-cf-to-azion.png',\n        meta: 'Comparisons • OCT 3, 2026',\n        title: 'Cloudflare Alternative Comparison: Azion vs Cloudflare',\n        description: 'Azion vs Cloudflare: the same platform on every plan.',\n        facets: { contentType: ['Comparisons'] }\n      }\n    ]\"\n  />\n</template>"
+  },
+  {
+   "name": "Empty",
+   "sfc": "<script setup>\n  import ArticleIndexResourceHub from '@aziontech/webkit/article-index-resource-hub'\n  import netshoesExtendedReversed from '@aziontech/webkit/assets/netshoes-extended-reversed.svg'\n  import placeholderImage from '@aziontech/webkit/assets/placeholder-image.svg'\n</script>\n\n<template>\n  <ArticleIndexResourceHub\n    anchor=\"resources\"\n    title=\"Explore all resources\"\n    row-label=\"Read article\"\n    more-label=\"Load more\"\n    aria-label=\"Resources\"\n    :empty=\"{\n      title: 'No resources match these filters',\n      description: 'Try another content type or industry.',\n      action: 'View all resources'\n    }\"\n    :facets=\"[\n      {\n        key: 'contentType',\n        label: 'Content type',\n        allLabel: 'All content types',\n        options: ['E-books', 'Blog']\n      },\n      {\n        key: 'industry',\n        label: 'Industry',\n        allLabel: 'All industries',\n        options: ['Retail', 'Tech']\n      }\n    ]\"\n    :items=\"[\n      {\n        key: 'storefront-performance',\n        href: '/resources/storefront-performance',\n        image: placeholderImage,\n        meta: 'E-books • OCT 15, 2026',\n        title: 'Storefront Performance for Retail Teams',\n        description: 'Cut page weight and keep checkout fast during peak traffic.',\n        facets: { contentType: ['E-books'], industry: ['Retail'] }\n      },\n      {\n        key: 'netshoes-blocks-threats',\n        href: 'https://example.com/stories/netshoes',\n        mark: { name: 'Netshoes', logo: netshoesExtendedReversed },\n        meta: 'Blog • OCT 3, 2026',\n        title: 'Netshoes Blocks Threats on Its Storefront',\n        description: 'How a retail team kept checkout fast while blocking attacks.',\n        facets: { contentType: ['Blog'], industry: ['Retail'] },\n        external: true\n      }\n    ]\"\n  />\n</template>"
   }
  ],
  "docs": "components/article-index-resource-hub.md"

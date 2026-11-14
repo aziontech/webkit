@@ -10,12 +10,14 @@
 
 - Identify a person next to their name: comment threads, member lists, "Last modified" cells, quotes.
 - The user entry in a header or account menu.
+- The mark of an organization or account that has no logo: `pattern="marble"` draws a soft generated mark seeded by its name, the same for the same name everywhere (account switcher, create organization, onboarding).
 
 ## Do
 
 - Pass initials in `label` (`"JD"`); it keeps the first two characters, so a full name shows its first two letters, not initials.
 - Set `alt` to the person's name ("Jane Doe"). With `src` it is the image's `alt`; without an image it names the initials or icon fallback (`role="img"`), so a screen reader hears "Jane Doe", not "JD". Without `alt` the name falls back to the initials, then "Avatar" for an image or "User avatar" for the icon.
-- Content precedence is `src`, then `label`, then `icon` (default `pi pi-user`).
+- Content precedence is `src`, then `pattern`, then `label`, then `icon` (default `pi pi-user`).
+- For a generated mark, pass the full name in `label` (`"Acme Inc."`) with `pattern="marble"`: the name seeds the shapes, so one organization keeps one mark. Pass `colors` to pick its palette (three theme colors, such as an accent the person chose); do not inline your own generator or a data-URL image.
 - size` maps to 24 / 32 / 48 px with `medium` as the default; `kind` is `circle` (default) or `square`.
 
 ## Don’t
@@ -41,6 +43,8 @@
 | `icon` | `string` | `'pi pi-user'` | false | Icon class for the fallback when no image or label (PrimeIcons class). |
 | `kind` | `AvatarKind` | `'circle'` | false | Visual shape of the avatar container. |
 | `size` | `AvatarSize` | `'medium'` | false | Size preset matching Figma sm / md / lg (24 / 32 / 48 px). |
+| `pattern` | `AvatarPattern` | `undefined` | false | Generated fallback drawn when there is no image: `marble` blends three soft shapes seeded by `label` (or `alt`). |
+| `colors` | `string[]` | `['var(--text-primary)', 'var(--primary)', 'var(--warning)']` | false | CSS colors the generated pattern paints with, in order; theme tokens such as `var(--primary)`. |
 
 ## Assets
 
@@ -49,15 +53,38 @@
 ## States
 
 - Visual states: `default`, `hover`, `focus-visible`, `active`, `disabled`
+- Content: `image` (`src`), `pattern` (`pattern` set, no `src`), `label` (initials), `icon`. `data-pattern` mirrors `pattern` on the root while the pattern renders.
+- Marble: three layers seeded by a 32-bit string hash of `label` (falling back to `alt`): a filled square, then two blurred shapes translated, rotated and scaled by the seed, the last blended with `overlay`. Each layer takes the color at `(seed + layer) % colors.length`. The same seed and colors always draw the same mark, on the server and in the browser.
 
 ## Accessibility
 
-- Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`
-- Keyboard map: `Tab` focuses; `Enter`/`Space` activates; `Escape` closes overlays where applicable.
-- ARIA: root uses appropriate roles (`button`, `dialog`, `status`, etc.) per sub-component.
-- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state.
-- `motion-reduce:transition-none motion-reduce:transform-none` on animated states.
-- Touch target ≥40×40 px where the control is interactive.
+- Visible focus: none; the avatar is not focusable. A parent control (account menu trigger) owns focus.
+- Keyboard map: none.
+- ARIA: with `src` the `img` carries `alt`; without it the root is `role="img"` with `aria-label` (see Internationalization), and the initials, icon or pattern inside are presentational (`aria-hidden` on the icon and the pattern SVG).
+- Contrast ≥4.5:1 for the initials on `var(--bg-surface-raised)`; the generated pattern is decorative and carries no text.
+
+## Right-to-left
+
+- Layout: none; the avatar is a square box with centred content.
+- Icons: the fallback icon and the generated pattern are not mirrored (the pattern is a mark, not a direction).
+- Keyboard: none; the avatar is not interactive.
+- User data: the initials and the name in the accessible name come from the consumer; no wrapper is needed for a two-character label.
+
+## Internationalization
+
+| Key                    | English source | Override prop |
+| ---------------------- | -------------- | ------------- |
+| `avatar.imageAlt`      | Avatar         | `alt`         |
+| `avatar.fallbackLabel` | User avatar    | `alt`         |
+
+- Formatting: none. With `pattern`, the accessible name is `alt`, then the full `label`, then `avatar.fallbackLabel`.
+
+## Responsive
+
+- Container queries: none: fixed size (24 / 32 / 48 px from `size`).
+- Narrow (≤ 640 px or a narrow container): nothing changes; the avatar does not shrink (`shrink-0`).
+- Touch: not interactive; a parent control owns the target size.
+- Reflow: fixed size, no horizontal scroll.
 
 ## Examples
 

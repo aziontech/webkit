@@ -1,16 +1,16 @@
 # AnalyticsDashboard (`platform/dashboard/analytics-dashboard`)
 
-> The analytics dashboard pattern: KPI tiles, charts and a table that all read the same period, so one change of range moves every region together. A row of four StatTiles (requests, data transferred, success rate and status 5xx, each with a sparkline and its change against the previous period) sits over a 12-column grid of ChartCards. Requests over time spans the grid as an area Chart, status codes as a multi-series line and requests by country as labeled horizontal bars share a row, and a searchable, paginated TableRoot of top hosts closes it. Every card carries the same header: title with a Hint, the aggregation and variation Tags, a Line or Bar ToggleGroup for time series, an Expand IconButton, and a DropdownMenu with Copy query and Export CSV. Built from `PageHeader`, `StatTile`, `ChartCard`, `Chart`, `TableRoot`, `Tag`, `Hint`, `ToggleGroup`, `IconButton`, `Tooltip`, `DropdownMenu`, `Input` and `EmptyState`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
+> The analytics dashboard pattern: KPI tiles, charts and a table that all read the same period, so one change of range moves every region together. A row of four StatTiles (requests, data transferred, success rate and status 5xx, each with a sparkline and its change against the previous period) sits over a 12-column grid of ChartCards. Requests over time spans the grid as an area Chart, status codes as a multi-series line and requests by country as labeled horizontal bars share a row, and a searchable, paginated TableRoot of top hosts closes it. Every card carries the same header: title with a Hint, the aggregation and variation Tags, a Line or Bar ToggleGroup for time series, an Expand IconButton that opens the card in a large Dialog, and a DropdownMenu whose Copy query copies the card's GraphQL query and Export CSV downloads its rows, each confirmed by a toast. Built from `PageHeader`, `StatTile`, `ChartCard`, `Chart`, `TableRoot`, `Tag`, `Hint`, `ToggleGroup`, `IconButton`, `Tooltip`, `DropdownMenu`, `Dialog`, `toast`, `Input` and `EmptyState`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
 
 - Surface: product
 - Source: `blocks/platform/dashboard/analytics-dashboard/analytics-dashboard.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/dashboard/analytics-dashboard")`
-- Components: [Alert](../../../components/alert.md), [Chart](../../../components/chart.md), [ChartCard](../../../components/chart-card.md), [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [Hint](../../../components/hint.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [PageHeader](../../../components/page-header.md), [PageTabs](../../../components/page-tabs.md), [Select](../../../components/select.md), [StatTile](../../../components/stat-tile.md), `TableRoot`, [Tabs](../../../components/tabs.md), [Tag](../../../components/tag.md), [ToggleGroup](../../../components/toggle-group.md), [Tooltip](../../../components/tooltip.md)
+- Components: [Alert](../../../components/alert.md), [Chart](../../../components/chart.md), [ChartCard](../../../components/chart-card.md), [Dialog](../../../components/dialog.md), `DialogClose`, `DialogContent`, `DialogDescription`, `DialogOverlay`, `DialogPortal`, `DialogTitle`, [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [Hint](../../../components/hint.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [Link](../../../components/link.md), [PageHeader](../../../components/page-header.md), [PageTabs](../../../components/page-tabs.md), `PanelContent`, `PanelHeader`, [Select](../../../components/select.md), [StatTile](../../../components/stat-tile.md), `TableRoot`, [Tabs](../../../components/tabs.md), [Tag](../../../components/tag.md), [Toast](../../../components/toast.md), [ToggleGroup](../../../components/toggle-group.md), [Tooltip](../../../components/tooltip.md), `utils/csv`
 - Skills: `webkit-data-viz`, `webkit-tables`, `webkit-ui-states`
 
 ## Asked as
 
-metrics; metric panel; kpi tiles; sparkline; real-time metrics; analytics dashboard; painel de métricas; indicadores; analytics; traffic analytics; requests over time; period comparison; painel analítico; análise de tráfego; real-time metrics per product; product metrics; metrics by product; period filter; métricas por produto; métricas en tiempo real
+metrics; metric panel; kpi tiles; sparkline; real-time metrics; analytics dashboard; painel de métricas; indicadores; analytics; traffic analytics; requests over time; period comparison; painel analítico; análise de tráfego; real-time metrics per product; product metrics; metrics by product; period filter; métricas por produto; métricas en tiempo real; expand chart; chart dialog; export csv; copy query; metrics overview; metrics landing; sub-dashboards; status class filter; visão geral de métricas
 
 The page a developer or operator opens to see how much traffic their services handled and how well
 they handled it: requests, data transferred, success rate and server errors for the period, then the
@@ -74,14 +74,25 @@ Switches a time series between Line and Bar. Only on time series, never on a ran
 
 Names each icon-only control on hover and focus (`Expand`, `More options`).
 
-### H. Expand — `IconButton` (optional)
+### H. Expand — `IconButton`, `Dialog`, `DialogPortal`, `DialogOverlay`, `DialogContent`, `PanelHeader`, `DialogTitle`, `DialogDescription`, `DialogClose`, `PanelContent` (optional)
 
 Opens the card at full size. Icon-only, with an `aria-label` that names the card
-(`Expand Requests over time`).
+(`Expand Requests over time`). It opens one large `Dialog` for the page: the card title as the
+`DialogTitle`, its Hint sentence as the `DialogDescription`, the same Line or Bar `ToggleGroup`
+(time series only, sharing the card's choice), and the chart at a 420px plot, or the table with ten
+rows per page. Closing it returns focus to the Expand button that opened it. While the page loads or
+after it failed there is nothing to enlarge, so Expand is disabled.
 
-### I. More options — `DropdownMenu` (optional)
+### I. More options — `DropdownMenu`, `toast` (optional)
 
-`Copy query` and `Export CSV`. Secondary actions go here so the header stays one line.
+`Copy query` and `Export CSV`. Secondary actions go here so the header stays one line. Copy query
+writes the GraphQL query behind the card (dataset, sum aggregation, the period as `tsRange`, the
+order and the fields) to the clipboard and confirms with a success toast (`Query copied.`), or an
+error toast when the clipboard is not available. Export CSV serializes the card's rows with
+`toCsv` and saves them with `downloadCsv` from `@aziontech/webkit/utils/csv` as
+`<card>-last-24-hours.csv`, then confirms with `CSV exported.` and the file name. Export CSV is
+disabled when the card has no rows (Empty, Loading, Failed); Copy query always works. The app
+mounts the toast region; this page body never renders a `Toaster`.
 
 ### J. Charts — `Chart` (required)
 
@@ -108,6 +119,25 @@ Each card keeps its box with its own empty state: `No traffic yet` /
 
 In the Metrics variant one page holds the dashboards of several products. A `PageTabs` strip of `Tabs.Item`s under the `PageHeader` switches the product (`Applications`, `Functions`, `Firewall`, `DNS`, `Data stream`); each product brings its own four tiles and four cards, and the header description changes with it. One `Select` in the header actions (`Last hour`, `Last 24 hours`, `Last 7 days`, `Last 30 days`), named `Period` by its `aria-label`, drives every tile, card and the comparison label of the deltas (`vs previous 7 days`). The interval of the points follows the period: 5 minutes for an hour, 2 hours for a day, a day for a week, 3 days for a month. The period stays when the product changes.
 
+### O. Sub-dashboards and breakdowns — `ToggleGroup`, `Input`, `TableRoot`, `EmptyState` (optional)
+
+In the Metrics variant a product with more than one dashboard shows a medium `ToggleGroup` under the
+product tabs, named `<Product> dashboards`. Applications offers `Overview`, `Status codes` and
+`Request breakdown`; Firewall offers `Overview` and `Denied sources`. A dashboard picks which cards
+it shows and adds breakdown cards: a full-width `ChartCard` with a search `Input` and a paginated
+`TableRoot` (five rows, sorted columns). The status breakdown adds a second `ToggleGroup` that
+filters by status class (`All`, `2xx`, `3xx`, `4xx`, `5xx`). Changing the product returns to its
+Overview; the period stays.
+
+### P. Overview landing — `StatTile`, `ChartCard`, `IconButton`, `Tooltip` (optional)
+
+The MetricsOverview variant is the page before the product dashboards. Six `StatTile`s across
+products, then six highlight cards in two columns. Each card keeps the full header (Sum, Line or
+Bar, Expand, the more-options menu) and ends in a `ChartCard.Footer` holding one medium `Link`
+without icon, `Open <Product> dashboard`, to the product dashboard and view the card came from.
+The header actions hold the `Period` `Select` and an outlined Refresh `IconButton` in a `Tooltip`;
+Refresh holds the charts at reduced opacity (`refetching`) while the data reloads.
+
 ## Do
 
 - Keep the KPI row to the four numbers the reader checks first; put the rest in cards.
@@ -125,6 +155,7 @@ In the Metrics variant one page holds the dashboards of several products. A `Pag
 - Don't use status colors for categorical series such as countries or hosts.
 - Don't sum a rate or a percentile in a legend total; Metrics turns totals off for those cards.
 - Don't nest product tabs inside a card; the product is a page-level choice.
+- Don't put a product's sub-dashboard switch inside a card; it sits under the product tabs and changes the whole page.
 
 ## Copy
 
@@ -133,6 +164,8 @@ In the Metrics variant one page holds the dashboards of several products. A `Pag
 - **Tile labels:** the metric name only. `Data transferred`, never `Data transferred (GB)`; the unit belongs to the value.
 - **Hint:** one sentence ending with a period. `Requests that ended in a server error. A rise is a regression.`
 - **Menu items:** verb first. `Copy query`, `Export CSV`.
+- **Overview:** footer links read `Open <Product> dashboard`; breakdown searches name what they match (`Search addresses, networks or countries`).
+- **Toasts:** `Query copied.` / `Paste it into any GraphQL client that sends your token.`; `The query could not be copied.`; `CSV exported.` with the file name.
 - **Metrics:** title `Real-time metrics`; tab labels are product names; aggregation tags name the math (`Sum`, `Median`, `Percentile`).
 - **Empty state:** `No traffic yet` / `Metrics appear here once a service serves requests.`
 - **No-match state:** `No matching rows` / `Change the search.`
@@ -140,6 +173,7 @@ In the Metrics variant one page holds the dashboards of several products. A `Pag
 ## Accessibility
 
 - Every icon-only control has an `aria-label` that names its card, plus a `Tooltip`.
+- The expanded `Dialog` traps focus, closes on Escape and returns focus to the Expand button; its title and description name the card.
 - The `ToggleGroup` is labelled with the card it controls.
 - The search `Input` has an `aria-label` equal to its placeholder, since there is no visible label.
 - Figures use `tabular-nums`; deltas carry a sign and a word, not color alone.
@@ -151,7 +185,9 @@ In the Metrics variant one page holds the dashboards of several products. A `Pag
 - Default: the populated dashboard for the period.
 - Loading: every tile, chart and the table hold their place with a `Skeleton`; the grid does not reflow.
 - Empty: no traffic in the period; tiles show a dash with no delta or trend, and each card keeps its box with an `EmptyState`.
-- Metrics: real-time metrics per product, a `PageTabs` strip of products and a `Period` `Select` in the header; each product shows four tiles and four area, line or stacked bar cards.
+- Metrics: real-time metrics per product, a `PageTabs` strip of products and a `Period` `Select` in the header; each product shows four tiles and four area, line or stacked bar cards, and products with sub-dashboards switch them with a `ToggleGroup`, adding breakdown table cards.
+- Expanded: the Requests over time card open in the large `Dialog`, with the Line or Bar choice and a 420px plot.
+- MetricsOverview: six cross-product tiles and six highlight cards, each with a footer link to its product dashboard.
 - Failed: the request for the period failed; tiles show a dash, and every card keeps its header with a danger `Alert` that names what did not load and offers Retry.
 
 ## Related
@@ -169,7 +205,9 @@ In the Metrics variant one page holds the dashboards of several products. A `Pag
 - `Loading` — While the first response loads, every tile, chart and the table hold their place with a Skeleton, so the grid does not reflow when data arrives.
 - `Empty` — No traffic in the period. The tiles show a dash with no delta or trend, and each card keeps its box with an EmptyState that says nothing was recorded.
 - `Failed` — The request for the period failed: the tiles read as dashes, and every card keeps its header with a danger Alert that names what did not load and offers Retry.
-- `Metrics` — Real-time metrics per product: a PageTabs strip switches between Applications, Functions, Firewall, DNS and Data stream, and a Period Select in the page header (Last hour, Last 24 hours, Last 7 days, Last 30 days) drives every region. Each product shows its own four StatTiles with sparkline and change against the previous period, over four ChartCards of area, line or stacked bar Charts that share one crosshair.
+- `Metrics` — Real-time metrics per product: a PageTabs strip switches between Applications, Functions, Firewall, DNS and Data stream, and a Period Select in the page header (Last hour, Last 24 hours, Last 7 days, Last 30 days) drives every region. Each product shows its own four StatTiles with sparkline and change against the previous period, over four ChartCards of area, line or stacked bar Charts that share one crosshair. Products with more than one dashboard add a ToggleGroup under the tabs: Applications switches between Overview, Status codes (the status card over a status and upstream status table with search and an All, 2xx, 3xx, 4xx, 5xx status-class filter) and Request breakdown (an IP address table with search); Firewall adds Denied sources. Every card menu copies its GraphQL query and exports its rows as CSV.
+- `Expanded` — The Requests over time card opened from its Expand button: a large Dialog with the card title and its description, the Line or Bar ToggleGroup shared with the card, and the chart at a 420px plot (the table card opens with ten rows per page). Closing it returns focus to Expand. Every card's menu works: Copy query copies the card's GraphQL query and Export CSV downloads its rows, each confirmed by a toast.
+- `MetricsOverview` — The real-time metrics landing page across products: a Period Select and a Refresh button in the page header, six StatTiles (requests, data transferred, cache offload, status 5xx, requests denied, function invocations) with sparkline and change, and six highlight ChartCards from Applications, Firewall and Functions. Each card keeps the full header (Sum Tag, Line or Bar ToggleGroup, Expand into a large Dialog, Copy query and Export CSV) and ends in a footer Link to its product dashboard (Open Applications dashboard).
 
 Each variant is the same screen in another state: `get_pattern("platform/dashboard/analytics-dashboard", { variant })`, or the file under `blocks/platform/dashboard/analytics-dashboard/variants/`.
 
@@ -179,18 +217,29 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
 <script setup lang="ts">
   import Chart, { type ChartSeries } from '@aziontech/webkit/chart'
   import ChartCard from '@aziontech/webkit/chart-card'
+  import Dialog from '@aziontech/webkit/dialog'
+  import DialogClose from '@aziontech/webkit/dialog-close'
+  import DialogContent from '@aziontech/webkit/dialog-content'
+  import DialogDescription from '@aziontech/webkit/dialog-description'
+  import DialogOverlay from '@aziontech/webkit/dialog-overlay'
+  import DialogPortal from '@aziontech/webkit/dialog-portal'
+  import DialogTitle from '@aziontech/webkit/dialog-title'
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
   import EmptyState from '@aziontech/webkit/empty-state'
   import Hint from '@aziontech/webkit/hint'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
   import PageHeader from '@aziontech/webkit/page-header'
+  import PanelContent from '@aziontech/webkit/panel-content'
+  import PanelHeader from '@aziontech/webkit/panel-header'
   import StatTile from '@aziontech/webkit/stat-tile'
   import TableRoot, { type TableColumn } from '@aziontech/webkit/table-root'
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
+  import { toast } from '@aziontech/webkit/toast'
   import ToggleGroup, { type ToggleGroupOption } from '@aziontech/webkit/toggle-group'
   import Tooltip from '@aziontech/webkit/tooltip'
-  import { ref } from 'vue'
+  import { type CsvColumn, downloadCsv, toCsv } from '@aziontech/webkit/utils/csv'
+  import { computed, ref } from 'vue'
 
   type FigureFormat = 'count' | 'bytes' | 'percentage'
 
@@ -455,6 +504,153 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
   const statusForm = ref('line')
   const activeIndex = ref<number | null>(null)
   const search = ref('')
+
+  interface CardQuery {
+    dataset: string
+    fields: string[]
+    orderBy: string
+  }
+
+  const periodStart = '2026-11-13T11:00:00Z'
+  const periodEnd = '2026-11-14T10:59:59Z'
+
+  const cardQuery = (report: CardQuery) =>
+    [
+      'query {',
+      `  ${report.dataset}(`,
+      '    limit: 5000',
+      '    aggregate: { sum: requests }',
+      `    filter: { tsRange: { begin: "${periodStart}", end: "${periodEnd}" } }`,
+      `    orderBy: [${report.orderBy}]`,
+      '  ) {',
+      ...report.fields.map((field) => `    ${field}`),
+      '  }',
+      '}'
+    ].join('\n')
+
+  const copyQuery = async (report: CardQuery) => {
+    try {
+      await globalThis.navigator.clipboard.writeText(cardQuery(report))
+      toast.success('Query copied.', {
+        description: 'Paste it into any GraphQL client that sends your token.'
+      })
+    } catch {
+      toast.error('The query could not be copied.')
+    }
+  }
+
+  type CardId = 'requests' | 'status-codes' | 'countries' | 'hosts'
+
+  const queries: Record<CardId, CardQuery> = {
+    requests: { dataset: 'httpMetrics', fields: ['ts', 'requests'], orderBy: 'ts_ASC' },
+    'status-codes': {
+      dataset: 'httpMetrics',
+      fields: ['ts', 'status', 'requests'],
+      orderBy: 'ts_ASC'
+    },
+    countries: {
+      dataset: 'httpMetrics',
+      fields: ['country', 'requests'],
+      orderBy: 'requests_DESC'
+    },
+    hosts: {
+      dataset: 'httpMetrics',
+      fields: ['host', 'service', 'requests'],
+      orderBy: 'requests_DESC'
+    }
+  }
+
+  interface CardReport extends CardQuery {
+    label: string
+    description: string
+    columns: CsvColumn[]
+    rows: () => object[]
+  }
+
+  const seriesRows = (series: readonly ChartSeries[], axis: readonly (string | Date)[]) =>
+    axis.map((label, index) => ({
+      ts: label instanceof Date ? label.toISOString() : label,
+      ...Object.fromEntries(series.map((entry) => [entry.id, entry.values[index] ?? '']))
+    }))
+
+  const expanded = ref(false)
+  const expandedId = ref<CardId>('requests')
+  const expandedReport = computed(() => reports[expandedId.value])
+
+  const openExpanded = (id: CardId) => {
+    expandedId.value = id
+    expanded.value = true
+  }
+
+  const onCardOption = (id: CardId, value: string | number) => {
+    const report = reports[id]
+    if (value === 'query') {
+      copyQuery(report)
+      return
+    }
+    const filename = `${id}-last-24-hours.csv`
+    downloadCsv(filename, toCsv({ columns: report.columns, rows: report.rows() }))
+    toast.success('CSV exported.', { description: filename })
+  }
+
+  const reports: Record<CardId, CardReport> = {
+    requests: {
+      ...queries.requests,
+      label: 'Requests over time',
+      description: 'Sum of requests served by every service, per interval.',
+      columns: [
+        { id: 'ts', header: 'Time' },
+        { id: 'requests', header: 'Requests' }
+      ],
+      rows: () => seriesRows(requests, labels)
+    },
+    'status-codes': {
+      ...queries['status-codes'],
+      label: 'Status codes',
+      description: 'Sum of requests per status class. Switch to Bar to stack the classes.',
+      columns: [
+        { id: 'ts', header: 'Time' },
+        { id: '2xx', header: 'Status 2xx' },
+        { id: '3xx', header: 'Status 3xx' },
+        { id: '4xx', header: 'Status 4xx' },
+        { id: '5xx', header: 'Status 5xx' }
+      ],
+      rows: () => seriesRows(statusCodes, labels)
+    },
+    countries: {
+      ...queries.countries,
+      label: 'Requests by country',
+      description: 'Sum of requests per country of origin, top countries first.',
+      columns: [
+        { id: 'country', header: 'Country' },
+        { id: 'requests', header: 'Requests' }
+      ],
+      rows: () =>
+        countries.map((country, index) => ({
+          country,
+          requests: countryRequests[0]?.values[index] ?? ''
+        }))
+    },
+    hosts: {
+      ...queries.hosts,
+      label: 'Top hosts',
+      description: 'Hosts that served the most requests in the period, with their service.',
+      columns: [
+        { id: 'host', header: 'Host' },
+        { id: 'service', header: 'Service' },
+        { id: 'requests', header: 'Requests' }
+      ],
+      rows: () => hosts
+    }
+  }
+
+  const expandedForm = computed({
+    get: () => (expandedId.value === 'status-codes' ? statusForm.value : requestsForm.value),
+    set: (value: string) => {
+      if (expandedId.value === 'status-codes') statusForm.value = value
+      else requestsForm.value = value
+    }
+  })
 </script>
 
 <template>
@@ -527,9 +723,13 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
                   kind="transparent"
                   size="small"
                   aria-label="Expand Requests over time"
+                  @click="openExpanded('requests')"
                 />
               </Tooltip>
-              <DropdownMenu placement="bottom-end">
+              <DropdownMenu
+                placement="bottom-end"
+                @select="(_event, value) => onCardOption('requests', value)"
+              >
                 <DropdownMenu.Trigger>
                   <IconButton
                     icon="pi pi-ellipsis-h"
@@ -609,9 +809,13 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
                   kind="transparent"
                   size="small"
                   aria-label="Expand Status codes"
+                  @click="openExpanded('status-codes')"
                 />
               </Tooltip>
-              <DropdownMenu placement="bottom-end">
+              <DropdownMenu
+                placement="bottom-end"
+                @select="(_event, value) => onCardOption('status-codes', value)"
+              >
                 <DropdownMenu.Trigger>
                   <IconButton
                     icon="pi pi-ellipsis-h"
@@ -681,9 +885,13 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
                   kind="transparent"
                   size="small"
                   aria-label="Expand Requests by country"
+                  @click="openExpanded('countries')"
                 />
               </Tooltip>
-              <DropdownMenu placement="bottom-end">
+              <DropdownMenu
+                placement="bottom-end"
+                @select="(_event, value) => onCardOption('countries', value)"
+              >
                 <DropdownMenu.Trigger>
                   <IconButton
                     icon="pi pi-ellipsis-h"
@@ -749,9 +957,13 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
                   kind="transparent"
                   size="small"
                   aria-label="Expand Top hosts"
+                  @click="openExpanded('hosts')"
                 />
               </Tooltip>
-              <DropdownMenu placement="bottom-end">
+              <DropdownMenu
+                placement="bottom-end"
+                @select="(_event, value) => onCardOption('hosts', value)"
+              >
                 <DropdownMenu.Trigger>
                   <IconButton
                     icon="pi pi-ellipsis-h"
@@ -834,6 +1046,120 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
         </ChartCard>
       </div>
     </div>
+    <Dialog
+      v-model:open="expanded"
+      size="large"
+    >
+      <DialogPortal>
+        <DialogOverlay />
+        <DialogContent>
+          <PanelHeader class="w-full">
+            <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+              <DialogTitle>{{ expandedReport.label }}</DialogTitle>
+              <DialogDescription>{{ expandedReport.description }}</DialogDescription>
+            </div>
+            <DialogClose />
+          </PanelHeader>
+          <PanelContent>
+            <div class="flex min-w-0 flex-col gap-(--spacing-md)">
+              <div v-if="expandedId === 'requests' || expandedId === 'status-codes'">
+                <ToggleGroup
+                  v-model="expandedForm"
+                  :options="forms"
+                  size="small"
+                  :aria-label="`Chart form for ${expandedReport.label}`"
+                />
+              </div>
+              <Chart
+                key="chart-1"
+                v-if="expandedId === 'requests'"
+                :series="requests"
+                :labels="labels"
+                :format-value="formatters.count"
+                :height="420"
+                empty-title="No traffic yet"
+                empty-description="Metrics appear here once a service serves requests."
+                :aria-label="expandedReport.label"
+              >
+                <Chart.Grid />
+                <Chart.Axis kind="y" />
+                <Chart.Axis kind="x" />
+                <Chart.Bar v-if="requestsForm === 'bar'" />
+                <Chart.Area v-else />
+                <Chart.Crosshair />
+                <Chart.Tooltip />
+                <Chart.Legend totals />
+              </Chart>
+              <Chart
+                key="chart-2"
+                v-else-if="expandedId === 'status-codes'"
+                :series="statusCodes"
+                :labels="labels"
+                :format-value="formatters.count"
+                :height="420"
+                empty-title="No traffic yet"
+                empty-description="Metrics appear here once a service serves requests."
+                :aria-label="expandedReport.label"
+              >
+                <Chart.Grid />
+                <Chart.Axis kind="y" />
+                <Chart.Axis kind="x" />
+                <Chart.Bar
+                  v-if="statusForm === 'bar'"
+                  stacked
+                />
+                <Chart.Line v-else />
+                <Chart.Crosshair />
+                <Chart.Tooltip />
+                <Chart.Legend totals />
+              </Chart>
+              <Chart
+                key="chart-3"
+                v-else-if="expandedId === 'countries'"
+                :series="countryRequests"
+                :labels="countries"
+                orientation="horizontal"
+                :format-value="formatters.count"
+                :height="420"
+                empty-title="No traffic yet"
+                empty-description="Metrics appear here once a service serves requests."
+                :aria-label="expandedReport.label"
+              >
+                <Chart.Grid />
+                <Chart.Axis kind="y" />
+                <Chart.Axis kind="x" />
+                <Chart.Bar labeled />
+                <Chart.Tooltip />
+              </Chart>
+              <TableRoot
+                v-else
+                :data="hosts"
+                :columns="hostColumns"
+                row-key="id"
+                enable-sorting
+                paginated
+                :page-size="10"
+                header-kind="compact"
+                bordered
+              >
+                <template #empty>
+                  <EmptyState
+                    size="small"
+                    icon="pi pi-chart-line"
+                    title="No traffic yet"
+                    description="Metrics appear here once a service serves requests."
+                  />
+                </template>
+
+                <template #cell-requests="{ row }">
+                  <span class="tabular-nums">{{ formatters.count(row.requests) }}</span>
+                </template>
+              </TableRoot>
+            </div>
+          </PanelContent>
+        </DialogContent>
+      </DialogPortal>
+    </Dialog>
   </div>
 </template>
 ```

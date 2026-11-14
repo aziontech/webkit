@@ -36,7 +36,7 @@
 | `eyebrow` | `string` | `''` | false | Overline above the section title. |
 | `title` | `string` | `''` | false | Headline of the band, rendered by the centered section title as its `h2`; the band renders no header when empty. |
 | `description` | `string` | `''` | false | Supporting sentence under the headline. |
-| `tiles` | `FeatureTilesTile[]` | `[]` | false | The tiles rendered as frame cells, in order; each is `{ title, description, image?, illustration?, scale? }` where `image` is a picture URL, `illustration` a registry name drawn fluid, and `scale` its media scale. |
+| `tiles` | `FeatureTilesTile[]` | `[]` | false | The tiles rendered as frame cells, in order; each is `{ title, description, image?, alt?, illustration?, scale? }` where `image` is a picture URL, `alt` its alternative text (empty keeps the picture decorative), `illustration` a registry name drawn fluid, and `scale` its media scale. |
 
 ## Assets
 
@@ -48,12 +48,13 @@
 - `data-kind` mirrors the `kind` prop and drives the column count and the frame marks
 - Empty: when `tiles` is empty the band renders nothing — not the header, not the frame
 - The header renders only when `title` is set
+- A tile picture carries its `alt`; without one it is decorative (`alt=""`, `aria-hidden`)
 
 ## Accessibility
 
 - Visible focus: nothing in the band is interactive.
 - Keyboard map: none.
-- ARIA: the band is a `<section>` named by its title (`aria-label`) when one is set; the headline is the section title's `h2` and each tile's heading is `media-tile`'s; illustrations are decorative and named by the tile's heading.
+- ARIA: the band is a `<section>` named by its title (`aria-label`) when one is set; the headline is the section title's `h2` and each tile's heading is `media-tile`'s; illustrations are decorative and named by the tile's heading; a tile picture is named by its `alt`, or hidden from assistive technology when `alt` is empty.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): owned by `section-title` and `media-tile`.
 - `motion-reduce:transition-none motion-reduce:transform-none` — the band adds no motion.
 - Touch target ≥40×40 px — not applicable, nothing is interactive.

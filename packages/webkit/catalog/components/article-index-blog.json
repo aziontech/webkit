@@ -1,5 +1,5 @@
 {
- "purpose": "Every article of the blog as one ruled list, with the controls to narrow it on one row: a category picker and a search field. Each article is a row — its cover on the left, and on the right its overline, headline, a two-line deck and its writers with the byline pinned to the foot; the row is one link named by its headline, and from `lg` up a read cue rises into its end on hover or keyboard focus. The category and the search combine; a load-more button closes the list. It is a page section — the site places it from a `{ _id: 'article-index-blog', props }` entry and binds `props` straight onto it — and it composes `section-module`, `frame-box`, `toggle-group`, `input`, `avatar` and `button`; the selected category and the search term are local state.",
+ "purpose": "Every article of the blog as one ruled list, with the controls to narrow it on one row: a category picker and a search field. Each article is a row — its cover on the left, and on the right its overline, headline, a two-line deck and its writers with the byline pinned to the foot; the row is one link named by its headline, and from `lg` up a read cue rises into its end on hover or keyboard focus. The category and the search combine; a load-more button reveals the next page, and when nothing matches an empty state offers to clear every filter. It is a page section — the site places it from a `{ _id: 'article-index-blog', props }` entry and binds `props` straight onto it — and it composes `section-module`, `frame-box`, `toggle-group`, `input`, `avatar`, `empty-state` and `button`; the selected category, the search term and the page count are local state. A row without a cover draws its client's mark in one flat ink that follows the theme.",
  "useWhen": [
   "For the blog's full list of posts, filtered by category and searched by text."
  ],
@@ -13,6 +13,8 @@
  ],
  "bestPractices": [
   "List the articles newest first; file every article under at least one of `categories`.",
+  "Set `empty` so a reader who filters everything away gets a way back; without it the list just disappears.",
+  "Set `leading` to the number of articles a highlight band above already shows, so they are not listed twice until the reader filters.",
   "Keep the category list short enough to scroll on one row: the picker keeps every label at its full width and the row scrolls sideways on a phone instead of squeezing the labels."
  ]
 }

@@ -1,6 +1,6 @@
 # TemplateBrowser (`platform/view/template-browser`)
 
-> The template catalog people start a project from: a medium page heading with the outlined Documentation action, one `PropertyFilter` that searches the name and the description and filters by Category and Framework, then one section per category (Frameworks, Starters, Functions) with a grid of template tiles. Each tile is a `Card` with the framework mark, the name as a button that opens the preview, two lines of description and the framework `Tag`; the whole tile is the target. The preview is a medium right `Drawer`: the mark and the name in the header, the description, a `KeyValuePairs` of framework, category, repository and last update, and the template's README in a `Card` through `DocProse`; its footer holds View repository and the primary Deploy, which leads to the deploy template flow (`platform/create/deploy-template`), where the deploy runs and reports by toast. The filter lives in the URL through `useCollection`. A search that matches nothing shows No matching templates with Clear filters; while the catalog loads the tiles are skeletons; a catalog that fails to load shows a danger `Alert` with Retry and an Import from Git way out. Built from `PageHeader`, `Button`, `PropertyFilter`, `Card`, `Tag`, `EmptyState`, `Drawer`, `DrawerPortal`, `DrawerOverlay`, `DrawerContent`, `DrawerTitle`, `DrawerClose`, `PanelHeader`, `PanelContent`, `PanelFooter`, `KeyValuePairs` and `DocProse`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
+> The template catalog people start a project from: a medium page heading with the outlined Documentation action, one `PropertyFilter` that searches the name and the description and filters by Category and Framework, then one section per category (Frameworks, Starters, Functions) with a grid of template tiles. Each tile is a `Card` with the framework mark, the name as a button that opens the preview, two lines of description and the framework `Tag`; the whole tile is the target. The preview is a medium right `Drawer`: the mark and the name in the header, the description, a `KeyValuePairs` of framework, category, repository and last update, and the template's README in a `Card` through `DocProse`; its footer holds View repository and the primary Deploy, which leads to the deploy template flow (`platform/create/deploy-template`), where the deploy runs and reports by toast. The filter lives in the URL through `useCollection`. A search that matches nothing shows No matching templates with Clear filters; while the catalog loads the tiles are skeletons; a catalog that fails to load shows a danger `Alert` with Retry and an Import from Git way out. Hovering or focusing a tile turns the mark from grey to colour and lights a glow drawn from the mark. Built from `PageHeader`, `Button`, `PropertyFilter`, `Card`, `Tag`, `EmptyState`, `Drawer`, `DrawerPortal`, `DrawerOverlay`, `DrawerContent`, `DrawerTitle`, `DrawerClose`, `PanelHeader`, `PanelContent`, `PanelFooter`, `KeyValuePairs` and `DocProse`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
 
 - Surface: product
 - Source: `blocks/platform/view/template-browser/template-browser.vue` in `@aziontech/webkit`
@@ -43,7 +43,7 @@ One `PropertyFilter` bound with `v-bind="propertyFilterProps"` from `useCollecti
 
 ### C. Category sections — `Card`, `Tag` (required)
 
-One `section` per category that still has matches, labelled by its `h2` in the muted small label style (Frameworks, Starters, Functions), each with a `ul` grid of one to four tiles a row by width. A tile is a `Card` with the framework mark in a 40 px raised box (grey until hover, the `grayscale` to colour shift of the design), the name as an `h3` that holds a button with `aria-haspopup="dialog"`, two lines of description and a small secondary `Tag` with the framework. The button's stretched `after` box makes the whole tile one target, draws the translucent hover wash and the focus ring inside the tile, and leaves the `Card` surface untouched. Tiles in a row share a height.
+One `section` per category that still has matches, labelled by its `h2` in the muted small label style (Frameworks, Starters, Functions), each with a `ul` grid of one to four tiles a row by width. A tile is a `Card` with the framework mark in a 40 px raised box (grey until the tile is hovered or focused, the `grayscale` to colour shift of the design; colour marks use `ai-cor`, and the black Next.js mark inverts in dark), the name as an `h3` that holds a button with `aria-haspopup="dialog"`, two lines of description and a small secondary `Tag` with the framework. The button's stretched `after` box makes the whole tile one target, draws the translucent hover wash and the focus ring inside the tile, and leaves the `Card` surface untouched. Hovering or focusing a tile also lights a soft glow from its top start corner: an `aria-hidden` span under the content (the `Card` carries `isolate`, the span clips to the card's shape) holds a second copy of the tile's mark, scaled up, blurred and faded. A colour mark (`ai-cor`) glows in its own colours; a one-colour font mark takes `text-(--primary)`, so the glow needs no colour value in the data. Tiles in a row share a height.
 
 ### D. No matching templates — `EmptyState`, `Button` (required)
 
@@ -76,7 +76,7 @@ A `section` labelled by its "README" heading, with the template's README in a `C
 - Don't deploy from the tile or the drawer without the deploy flow; the template needs a scope, a repository name and its settings.
 - Don't put a Deploy button on every tile; the preview is where a person confirms the choice.
 - Don't page the catalog or add preferences; a grouped list of tens of items reads better whole.
-- Don't colour the tile per framework; the mark carries the brand and the surface stays neutral.
+- Don't colour the tile per framework at rest; the surface stays neutral and the brand shows only in the mark and the glow drawn from it.
 - Don't hide the filter while loading or after a failure; disable it, so the page keeps its shape.
 - Don't show the README as raw markdown or in a code block.
 
@@ -97,6 +97,7 @@ A `section` labelled by its "README" heading, with the template's README in a `C
 - Each category is a `section` labelled by its heading and holds a `ul`, so the count of templates is announced.
 - The tile's target is a real `button` with `aria-haspopup="dialog"`, named by the template name; the description and the framework follow it in reading order.
 - The focus ring is drawn inside the tile on the stretched target, so it is never clipped by the grid.
+- The glow and the colour mark follow keyboard focus as well as hover, and both are decorative.
 - The drawer traps focus, is named by `DrawerTitle`, closes on Escape and returns focus to the tile that opened it.
 - The `PropertyFilter` is named by its `aria-label` and announces the match count after each change.
 - The loading band is `aria-busy`; the failure `Alert` is announced and its Retry is a button.
@@ -113,7 +114,7 @@ A `section` labelled by its "README" heading, with the template's README in a `C
 
 - `platform/create/deploy-template` — where Deploy leads; it owns the form, the run and the async-submit toast.
 - `platform/states/async-submit` — the toast and inline outcome every deploy follows.
-- `platform/view/marketplace` — the marketplace page whose Templates tab opens this catalog, and its integrations.
+- `platform/view/marketplace` — the marketplace page, whose first tab is a flat searchable grid of the same template tiles, and its integrations.
 - `platform/create/create-hub` — the creation hub that links here for "Start from a template".
 - `Card` and `useCollection` — see `skills/webkit-lists`.
 
@@ -170,6 +171,10 @@ Each variant is the same screen in another state: `get_pattern("platform/view/te
 
   type Framework = keyof typeof FRAMEWORKS
 
+  const MARKS: Partial<Record<Framework, string>> = {
+    next: '[[data-theme=dark]_&]:invert'
+  }
+
   interface Template {
     id: string
     title: string
@@ -206,7 +211,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/te
       'Next.js Starter',
       'frameworks',
       'next',
-      'ai ai-next',
+      'ai-cor ai-next',
       'A Next.js app with server rendering and static pages, ready to deploy.',
       'Oct 28, 2026'
     ),
@@ -215,7 +220,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/te
       'Astro Blog',
       'frameworks',
       'astro',
-      'ai ai-astro',
+      'ai-cor ai-astro',
       'A content-first blog with Markdown posts, an RSS feed and a sitemap.',
       'Oct 21, 2026'
     ),
@@ -224,7 +229,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/te
       'Nuxt Storefront',
       'frameworks',
       'nuxt',
-      'ai ai-nuxt',
+      'ai-cor ai-nuxt',
       'A product catalog with a cart, rendered on the server and cached close to buyers.',
       'Oct 14, 2026'
     ),
@@ -233,7 +238,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/te
       'Angular Dashboard',
       'frameworks',
       'angular',
-      'ai ai-angular',
+      'ai-cor ai-angular',
       'A single-page admin dashboard with routing and lazy-loaded modules.',
       'Sep 30, 2026'
     ),
@@ -404,15 +409,24 @@ Each variant is the same screen in another state: `get_pattern("platform/view/te
                 :key="item.id"
                 class="group flex min-w-0"
               >
-                <Card class="w-full">
+                <Card class="isolate w-full">
                   <template #content>
+                    <span
+                      aria-hidden="true"
+                      class="pointer-events-none absolute inset-0 -z-1 overflow-hidden rounded-(--shape-card) opacity-0 transition-opacity duration-moderate-01 ease-productive-entrance group-focus-within:opacity-100 group-hover:opacity-100 motion-reduce:transition-none"
+                    >
+                      <i
+                        :class="[item.icon, MARKS[item.framework]]"
+                        class="absolute start-(--spacing-xl) top-(--spacing-xl) scale-600 text-body-lg leading-none text-(--primary) opacity-25 blur-sm"
+                      />
+                    </span>
                     <div class="flex flex-col items-start gap-(--spacing-md)">
                       <span
                         class="flex size-10 shrink-0 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
                       >
                         <i
-                          :class="item.icon"
-                          class="text-body-lg leading-none text-(--text-default) grayscale transition group-hover:grayscale-0 motion-reduce:transition-none"
+                          :class="[item.icon, MARKS[item.framework]]"
+                          class="text-body-lg leading-none text-(--text-default) grayscale transition duration-moderate-01 ease-productive-entrance group-focus-within:grayscale-0 group-hover:grayscale-0 motion-reduce:transition-none"
                           aria-hidden="true"
                         />
                       </span>
@@ -460,7 +474,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/te
                 class="flex size-10 shrink-0 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
               >
                 <i
-                  :class="selected.icon"
+                  :class="[selected.icon, MARKS[selected.framework]]"
                   class="text-body-lg leading-none text-(--text-default)"
                   aria-hidden="true"
                 />

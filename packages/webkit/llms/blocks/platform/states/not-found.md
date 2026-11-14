@@ -1,11 +1,11 @@
 # NotFound (`platform/states/not-found`)
 
-> The page an app renders when it cannot show the address the user asked for. The primary is the 404: the content region centring an EmptyState whose figure is the large 404 numeral art, the title Page not found, one sentence that says the address leads nowhere, and two actions, Go to home (primary) and Docs (outlined, new tab). A visually hidden h1 names the error code the figure shows. Variants cover 403 (no access, with Switch account), 500 (a failure on the server, with Try again, System status and an error reference for support) and a resource that does not exist inside the console (bordered EmptyState in the content column with Back to the list). Built from `EmptyState`, `Button` and the `svg/error-404` and `svg/error-403` figures. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
+> The page an app renders when it cannot show the address the user asked for. The primary is the 404: the content region centring an EmptyState whose figure is the animated azion-404 line figure (a still frame under reduced motion), the title Page not found, one sentence that says the address leads nowhere, and two actions, Go to home (primary) and Docs (outlined, new tab). A visually hidden h1 names the error code the figure shows. Variants cover 403 (no access, with Switch account), 500 (a failure on the server, with Try again, System status and an error reference for support) and a resource that does not exist inside the console (bordered EmptyState in the content column with Back to the list). Built from `EmptyState`, `Button`, `LineFigure` (azion-404) and the `svg/error-403` figure. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
 
 - Surface: product
 - Source: `blocks/platform/states/not-found/not-found.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/states/not-found")`
-- Components: [Button](../../../components/button.md), [EmptyState](../../../components/empty-state.md), `Error403`, `Error404`
+- Components: [Button](../../../components/button.md), [EmptyState](../../../components/empty-state.md), [LineFigure](../../../components/line-figure.md), `Error403`
 - Skills: `webkit-ui-states`, `webkit-errors`, `webkit-microcopy`
 
 ## Asked as
@@ -33,9 +33,9 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 
 ## Building blocks
 
-### A. Figure — `Error404` (`@aziontech/webkit/svg/error-404`)
+### A. Figure — `LineFigure` (`@aziontech/webkit/line-figure`)
 
-The large numeral art in the `EmptyState` icon slot, 192 px wide on phones and 256 px from `sm`. It is decorative: the `EmptyState` icon wrapper is `aria-hidden`, and the hidden `h1` names the code. Forbidden uses `Error403`. ServerError and ResourceNotFound use the `EmptyState` icon tile (`pi pi-exclamation-triangle`, `pi pi-search`) because no numeral art exists for them.
+The 404 is the `azion-404` line figure in the `EmptyState` icon slot, 256 px wide on phones and 320 px from `sm`, with `play` so it walks through its answer on its own until a pointer or focus arrives (a still frame under reduced motion). It is decorative: the `EmptyState` icon wrapper is `aria-hidden`, and the hidden `h1` names the code. Forbidden uses the `Error403` numeral art (`@aziontech/webkit/svg/error-403`). ServerError and ResourceNotFound use the `EmptyState` icon tile (`pi pi-exclamation-triangle`, `pi pi-search`) because no numeral art exists for them.
 
 ### B. Message — `EmptyState` (required)
 
@@ -80,7 +80,7 @@ Two at most, side by side, wrapping on narrow screens. The way out is primary (`
 
 ## States
 
-- Default: 404, the 404 numeral art, Page not found, Go to home and Docs.
+- Default: 404, the animated azion-404 line figure, Page not found, Go to home and Docs.
 - Forbidden: 403, the 403 numeral art, You don't have access to this page, Go to home and Switch account.
 - ServerError: 500, the warning icon tile, Something went wrong on our side, Try again, System status and the error reference.
 - ResourceNotFound: a bordered EmptyState in the console's content column naming the missing service and its ID, with Back to services.
@@ -108,7 +108,7 @@ Each variant is the same screen in another state: `get_pattern("platform/states/
 <script setup lang="ts">
   import Button from '@aziontech/webkit/button'
   import EmptyState from '@aziontech/webkit/empty-state'
-  import Error404 from '@aziontech/webkit/svg/error-404'
+  import LineFigure from '@aziontech/webkit/line-figure'
 </script>
 
 <template>
@@ -122,7 +122,12 @@ Each variant is the same screen in another state: `get_pattern("platform/states/
         description="There is nothing deployed at this address. Check the URL or head back to the start."
       >
         <template #icon>
-          <Error404 class="h-auto w-48 sm:w-64" />
+          <div class="w-64 sm:w-80">
+            <LineFigure
+              name="azion-404"
+              play
+            />
+          </div>
         </template>
         <template #actions>
           <div class="flex flex-wrap items-center justify-center gap-(--spacing-xs)">

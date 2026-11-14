@@ -1,0 +1,14 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "The Filter button opens a drill-in menu: pick a field, then its values. Author is a `multi` field with avatars, Status a `single` field and Last modified a `date` field with periods and a custom range. `FilterMenu.Chips` below shows each applied field; activate a chip to reopen the menu at that field, or remove it to clear the field.",
+   "sfc": "<script setup>\n  import FilterMenu from '@aziontech/webkit/filter-menu'\n  import { ref } from 'vue'\n\n  const fields = [\n    {\n      id: 'owner',\n      label: 'Author',\n      options: [\n        { value: 'jane', label: 'Jane Doe', avatar: '' },\n        { value: 'john', label: 'John Smith', avatar: '' },\n        { value: 'priya', label: 'Priya Patel', avatar: '' }\n      ]\n    },\n    {\n      id: 'status',\n      label: 'Status',\n      kind: 'single',\n      options: [\n        { value: 'live', label: 'Live' },\n        { value: 'inactive', label: 'Inactive' }\n      ]\n    },\n    { id: 'modified', label: 'Last modified', kind: 'date' }\n  ]\n\n  const filters = ref({ owner: ['jane', 'priya'] })\n</script>\n\n<template>\n  <div class=\"flex flex-col gap-(--spacing-sm)\">\n    <FilterMenu\n      v-model=\"filters\"\n      :fields=\"fields\"\n    />\n    <FilterMenu.Chips\n      v-model=\"filters\"\n      :fields=\"fields\"\n    />\n  </div>\n</template>"
+  },
+  {
+   "name": "Sizes",
+   "summary": "The trigger at every `size`: `small`, `medium` (the default) and `large`, each with one filter applied so the count shows.",
+   "sfc": "<script setup>\n  import FilterMenu from '@aziontech/webkit/filter-menu'\n  import { ref } from 'vue'\n\n  const fields = [\n    {\n      id: 'status',\n      label: 'Status',\n      options: [\n        { value: 'live', label: 'Live' },\n        { value: 'inactive', label: 'Inactive' }\n      ]\n    }\n  ]\n\n  const small = ref({ status: ['live'] })\n  const medium = ref({ status: ['live'] })\n  const large = ref({ status: ['live'] })\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-center gap-(--spacing-md)\">\n    <FilterMenu\n      v-model=\"small\"\n      :fields=\"fields\"\n      size=\"small\"\n    />\n    <FilterMenu\n      v-model=\"medium\"\n      :fields=\"fields\"\n      size=\"medium\"\n    />\n    <FilterMenu\n      v-model=\"large\"\n      :fields=\"fields\"\n      size=\"large\"\n    />\n  </div>\n</template>"
+  }
+ ]
+}

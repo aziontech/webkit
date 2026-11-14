@@ -132,6 +132,13 @@
    "default": "'Label'",
    "required": "false",
    "doc": "action Label."
+  },
+  {
+   "name": "animated",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Fades the old price out and the new one in when the price changes, such as on a billing-period switch."
   }
  ],
  "events": [],

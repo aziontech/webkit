@@ -1,6 +1,6 @@
 # CreateHub (`platform/create/create-hub`)
 
-> The Creation Center, where a project starts: the creation header with a single current crumb and a back control to Home, a large page heading whose lead also offers to pick a file or a folder, then two columns side by side from the large breakpoint. On the left, Import from GitHub: a dashed EmptyState with Continue with GitHub until an account is connected, then an account Select with an Add GitHub account option, a search that also takes a repository URL, and a flush list of repositories with an Import button each, shown as skeleton rows while a scope loads. On the right, Start from template: a Filter button over a faded ScrollArea holding Recommended framework cards in three columns, then the starter templates, one per kind of resource, and every other framework as two-column cards with the vendor beside the title. Dragging a folder onto the page shows the drop target plotted in ProjectIntake. Built from `PageHeader`, `GlobalHeader`, `Breadcrumb`, `EmptyState`, `Link`, `Select`, `Input`, `Card`, `Item`, `Skeleton`, `ScrollArea` and `Button`.
+> The Creation Center, where a project starts: the creation header with a single current crumb and a back control to Home, a large page heading whose lead also offers to pick a file or a folder, then two columns side by side from the large breakpoint. On the left, Import from GitHub: a dashed EmptyState with Continue with GitHub until an account is connected, then an account Select with an Add GitHub account option, a search that also takes a repository URL, and a flush list of repositories with an Import button each, shown as skeleton rows while a scope loads. On the right, Start from template: a Filter button over a faded ScrollArea holding Recommended framework cards in three columns, then the starter templates, one per kind of resource, and every other framework as two-column cards with the vendor beside the title. Dragging a folder onto the page shows the drop target plotted in ProjectIntake. Each Recommended card turns its mark from grey to colour and lights a glow drawn from its mark on hover and focus. Built from `PageHeader`, `GlobalHeader`, `Breadcrumb`, `EmptyState`, `Link`, `Select`, `Input`, `Card`, `Item`, `Skeleton`, `ScrollArea` and `Button`.
 
 - Surface: product
 - Source: `blocks/platform/create/create-hub/create-hub.vue` in `@aziontech/webkit`
@@ -52,7 +52,7 @@ A flush `Card` with an `Item` list, one small row per repository: glyph, name, i
 
 ### F. Template gallery — `Button`, `ScrollArea`, `Card` (required)
 
-Under the Start from template heading, an outlined medium Filter `Button`, then a faded `ScrollArea` with an `aria-label`. Inside, sections in fixed order: Recommended framework cards in three columns from the large breakpoint, the starter templates one per kind of resource, then every other framework in two columns with the vendor beside the title. Each template is a whole `Card` acting as a button with its glyph, title and one sentence.
+Under the Start from template heading, an outlined medium Filter `Button`, then a faded `ScrollArea` with an `aria-label`. Inside, sections in fixed order: Recommended framework cards in three columns from the large breakpoint, the starter templates one per kind of resource, then every other framework in two columns with the vendor beside the title. Each template is a whole `Card` acting as a button with its glyph, title and one sentence. A Recommended card shows its framework mark in grey until it is hovered or focused, then in colour, and lights a soft glow from its top start corner drawn from the mark: an `aria-hidden` span under the content (the `Card` carries `isolate`) holds a scaled, blurred, faded copy of the mark, so a colour mark glows in its own colours and a one-colour mark in `text-(--primary)`.
 
 ## Do
 
@@ -919,11 +919,20 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
                               class="flex group relative min-h-(--size-44) cursor-pointer"
                             >
                               <Card
-                                class="w-full"
+                                class="isolate w-full"
                                 role="button"
                                 tabindex="0"
                               >
                                 <template #content>
+                                  <span
+                                    aria-hidden="true"
+                                    class="pointer-events-none absolute inset-0 -z-1 overflow-hidden rounded-(--shape-card) opacity-0 transition-opacity duration-moderate-01 ease-productive-entrance group-focus-within:opacity-100 group-hover:opacity-100 motion-reduce:transition-none"
+                                  >
+                                    <i
+                                      :class="[item.icon, item.markClass]"
+                                      class="absolute start-(--spacing-xl) top-(--spacing-xl) scale-600 text-body-lg leading-none text-(--primary) opacity-25 blur-sm"
+                                    />
+                                  </span>
                                   <div
                                     class="relative z-10 flex flex-col items-start gap-(--spacing-md) text-start"
                                   >
@@ -932,7 +941,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
                                     >
                                       <i
                                         :class="[item.icon, item.markClass]"
-                                        class="text-body-lg leading-none text-(--text-default) grayscale transition duration-moderate-01 ease-productive-entrance group-hover:grayscale-0 motion-reduce:transition-none"
+                                        class="text-body-lg leading-none text-(--text-default) grayscale transition duration-moderate-01 ease-productive-entrance group-focus-within:grayscale-0 group-hover:grayscale-0 motion-reduce:transition-none"
                                         aria-hidden="true"
                                       />
                                     </span>

@@ -1,16 +1,16 @@
 # Auth (`platform/auth`)
 
-> The signed-out screens of a platform app, frame included: a full-height page with the signed-out `GlobalHeader` (the product mark and a Documentation button) over a centred column that holds one `Card` and the prompt and terms under it. It serves /login, /signup and /signup/verify. The Google and GitHub buttons lead the card, over an “or” `Separator`. Each field is a `Field` whose `Field.Label` sits over an `Input`, or over a `PasswordInput` with `PasswordRequirements`; a `HelperText` appears only after the primary action, saying whether the field is empty or malformed. The rest is `Button`, `IconButton` in a `Tooltip`, a `Tag` and a `Alert`. Errors follow one rule: auth never toasts. Each error story is one endpoint response, and every outcome lands in the same small `Alert` at the top of the card, above the fields. What changes is the severity and what it carries: nothing after a 401, because the fields under it are the recovery; Retry when nobody can fix it (503, 500, timeout); the Sign in and reset-your-password links when the address is already registered (409). Built from `PageHeader`, `GlobalHeader`, `Tag`, `Card`, `Alert`, `Input`, `Field`, `PasswordInput`, `PasswordRequirements`, `HelperText` and `Button`. A full page routed outside ConsoleLayout.
+> The signed-out screens of a platform app, frame included: a full-height page with the signed-out `GlobalHeader` (the product mark and a Documentation button) over a centred column that holds one `Card` and the prompt and terms under it. It serves /login, /signup and /signup/verify. The Google and GitHub buttons lead the card, over an “or” `Separator`. Each field is a `Field` whose `Field.Label` sits over an `Input`, or over a `PasswordInput` with `PasswordRequirements`; a `HelperText` appears only after the primary action, saying whether the field is empty or malformed. The rest is `Button`, `IconButton` in a `Tooltip`, a `Tag` and a `Alert`. Errors follow one rule: auth never toasts. Each error story is one endpoint response, and every outcome lands in the same small `Alert` at the top of the card, above the fields. What changes is the severity and what it carries: nothing after a 401, because the fields under it are the recovery; Retry when nobody can fix it (503, 500, timeout); the Sign in and reset-your-password links when the address is already registered (409). Built from `PageHeader`, `GlobalHeader`, `Tag`, `Card`, `Alert`, `Input`, `Field`, `PasswordInput`, `PasswordRequirements`, `HelperText` and `Button`. The card column slides in from the inline start with a fade on mount (`starting:` styles, `duration-slow-01`, `ease-expressive-entrance`, none under reduced motion), and the card height eases between steps. A full page routed outside ConsoleLayout.
 
 - Surface: product
 - Source: `blocks/platform/auth/auth.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/auth")`
-- Components: [Alert](../../components/alert.md), [Brand](../../components/brand.md), [Button](../../components/button.md), [Card](../../components/card.md), [CopyButton](../../components/copy-button.md), [Field](../../components/field.md), [GlobalHeader](../../components/global-header.md), [HelperText](../../components/helper-text.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [OtpInput](../../components/otp-input.md), [PageHeader](../../components/page-header.md), [PasswordInput](../../components/password-input.md), [PasswordRequirements](../../components/password-requirements.md), [QrCode](../../components/qr-code.md), [Separator](../../components/separator.md), [Tag](../../components/tag.md), [Tooltip](../../components/tooltip.md)
+- Components: [Alert](../../components/alert.md), [Brand](../../components/brand.md), [Button](../../components/button.md), [Card](../../components/card.md), [CopyButton](../../components/copy-button.md), [Field](../../components/field.md), [GlobalHeader](../../components/global-header.md), [HelperText](../../components/helper-text.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [OtpInput](../../components/otp-input.md), [PageHeader](../../components/page-header.md), [PasswordInput](../../components/password-input.md), [PasswordRequirements](../../components/password-requirements.md), [QrCode](../../components/qr-code.md), [Separator](../../components/separator.md), [Skeleton](../../components/skeleton.md), [Tag](../../components/tag.md), [Tooltip](../../components/tooltip.md)
 - Skills: `webkit-form`, `webkit-errors`, `webkit-microcopy`
 
 ## Asked as
 
-login; log in; sign in; signin; login page; authentication; auth; forgot password; reset password; new password; entrar; tela de login; acessar conta; esqueci a senha; redefinir senha; signup; sign up; register; registration; create account; new account; free account; cadastro; cadastrar; criar conta; tela de cadastro; registrar; check inbox; check your email; verify email; email verification; confirm email; verification sent; resend email; verificar e-mail; confirmar e-mail; confira seu e-mail; session expired; auth errors; sessão expirada; erro de login; mfa; multi-factor authentication; two-factor authentication; 2fa; authenticator app; one-time code; verification code; totp; recovery code; autenticação em dois fatores; autenticação multifator; código de verificação; código de autenticação
+login; log in; sign in; signin; login page; authentication; auth; forgot password; reset password; new password; entrar; tela de login; acessar conta; esqueci a senha; redefinir senha; signup; sign up; register; registration; create account; new account; free account; cadastro; cadastrar; criar conta; tela de cadastro; registrar; check inbox; check your email; verify email; email verification; confirm email; verification sent; resend email; verificar e-mail; confirmar e-mail; confira seu e-mail; session expired; auth errors; sessão expirada; erro de login; mfa; multi-factor authentication; two-factor authentication; 2fa; authenticator app; one-time code; verification code; totp; recovery code; autenticação em dois fatores; autenticação multifator; código de verificação; código de autenticação; loading sign-in providers; providers loading; carregando provedores de login
 
 The signed-out screens of a platform app: sign in, sign up, reset password and check your inbox, frame included. The user has one job here, to get into their account, and one object on the page to do it with: a single card under the signed-out bar. Every step of the flow (`email`, `password`, `reset`, `sent`, `new-password`) swaps the contents of that card in place, and every answer the server gives, success included, lands in one `Alert` inside it. Auth never toasts. It is a full page with its own focused header: the app routes it outside `ConsoleLayout`, never into the layout's default slot.
 
@@ -110,6 +110,9 @@ Live checklist bound to the new password (`:value`), driven by `DEFAULT_PASSWORD
 - Keep the credentials after a 503, a 500 or a timeout; Retry re-sends the same request.
 - Carry the email between steps (sign in to reset, reset back to sign in) so the user never types it twice.
 - Release the in-flight lock on every outcome so Retry can run again.
+- Enter the card column once, on mount: it slides in from the inline start with a fade (`starting:-translate-x-6 starting:opacity-0`, `rtl:starting:translate-x-6`, `transition-[translate,opacity] duration-slow-01 ease-expressive-entrance`). Steps inside the card do not replay it.
+- Let the card height follow the step: a `ResizeObserver` on the form sets the wrapper height, which eases with `transition-[height] duration-moderate-02 ease-productive-entrance` and clips only while it moves.
+- While the identity providers load, hold their place with two `Skeleton` bars of the buttons' height in a `role="status"` region named `Preparing sign-in providers`; keep email sign-in usable.
 
 - On a code screen, put the code in one `OtpInput` (autofill reads `autocomplete="one-time-code"`), submit on `complete`, and keep a Verify button.
 - Give every QR code a typed alternative: the setup key with a copy button.
@@ -122,6 +125,7 @@ Live checklist bound to the new password (`:value`), driven by `DEFAULT_PASSWORD
 - Don't put client-side validation in the `Alert`; it belongs on the field.
 - Don't call a timeout a failure (`danger`) or say the account was not created; the request may have landed.
 - Don't stack notices: a new outcome replaces the one in the slot.
+- Don't hide or disable the email field while the providers load, and don't show a spinner in place of the provider buttons.
 
 - Don't split a one-time code into separate inputs or move focus between them by hand; `OtpInput` is one field.
 - Don't toast a rejected code; it is the field's reason, and the field is cleared and focused.
@@ -139,6 +143,7 @@ Live checklist bound to the new password (`:value`), driven by `DEFAULT_PASSWORD
 - **Timeout notice:** names the unknown, never a failure: `The server did not answer in time. Your session may already be open.`
 - **409 notice:** the fact plus the two exits as links: `This email is already registered. Sign in or reset your password.`
 - **Session expired:** `Your session expired. Sign in again to pick up where you left off.`
+- **Providers loading:** the status name says what is happening, no ellipsis: `Preparing sign-in providers`.
 - **Action in a notice:** `Retry`, never "Try again".
 
 ## Accessibility
@@ -150,6 +155,8 @@ Live checklist bound to the new password (`:value`), driven by `DEFAULT_PASSWORD
 - After a submit with errors, focus the first field that needs attention; after a 401, the password.
 - The notice uses the `Alert` role from the component; don't add a second live region for the same message.
 - Every transition sets `motion-reduce:transition-none` and `motion-reduce:transform-none`.
+- Under reduced motion the column appears in place (no slide, no fade) and the card height jumps.
+- The provider placeholder is announced once by its status name; the `Skeleton` bars are decorative.
 - Social buttons are `type="button"` so Enter in the email field submits the email, not a provider.
 
 - MFA: the code field is named by its label (`Authentication code`, `Recovery code`) and described by the reason when rejected; the QR code is an image named after the account, and the setup key is real text.
@@ -159,6 +166,7 @@ Live checklist bound to the new password (`:value`), driven by `DEFAULT_PASSWORD
 - Login: the sign-in flow on the email step, with Google and GitHub over the `or` divider; the same file walks through password, reset, sent and new-password.
 - SignUp: create an account with a work email (and a password checked by `PasswordRequirements`), Google or GitHub.
 - SessionExpired: opens on the password step for the same email, with an info notice that clears on the next action.
+- ProvidersLoading: the Login card while the identity providers load; two `Skeleton` bars in a `role="status"` region (`Preparing sign-in providers`) replace Google and GitHub over the `or` divider, and the email step works meanwhile.
 - CheckInbox: the `/signup/verify` card: where the link went, the resend prompt and a secondary Return to sign in.
 - IncorrectCredentials: 401 on Sign in; a danger notice above both fields, no action, the password cleared and focused.
 - ServiceUnavailable: 503 on Sign in; a warning notice with Retry, credentials kept.
@@ -189,6 +197,7 @@ Live checklist bound to the new password (`:value`), driven by `DEFAULT_PASSWORD
 - `Login` — primary (the code below)
 - `SignUp` — The sign-up screen: create an account with a work email, Google or GitHub.
 - `SessionExpired` — The /login screen after a session expires: it opens on the password step for the same email, with an info Alert that clears on the next action.
+- `ProvidersLoading` — The /login screen while the identity providers load: two `Skeleton` bars in a `role="status"` region named Preparing sign-in providers take the place of the Google and GitHub buttons; email sign-in works meanwhile.
 - `CheckInbox` — The /signup/verify screen: where the verification link went, the resend prompt, and a secondary Return to sign in action.
 - `IncorrectCredentials` — 401 on Sign in: a danger message above both fields with no action, and the password cleared.
 - `ServiceUnavailable` — 503 on Sign in: a warning message that keeps the credentials and carries Retry, the only move left.
@@ -220,7 +229,7 @@ Each variant is the same screen in another state: `get_pattern("platform/auth", 
   import Separator from '@aziontech/webkit/separator'
   import Tag from '@aziontech/webkit/tag'
   import Tooltip from '@aziontech/webkit/tooltip'
-  import { computed, nextTick, reactive, ref } from 'vue'
+  import { computed, nextTick, onMounted, onScopeDispose, reactive, ref } from 'vue'
 
   const expiredEmail = ''
 
@@ -240,6 +249,25 @@ Each variant is the same screen in another state: `get_pattern("platform/auth", 
     newPassword: '',
     confirmPassword: ''
   })
+
+  const cardContent = ref<HTMLElement | null>(null)
+  const cardHeight = ref(0)
+  const resizing = ref(false)
+  let resizeObserver: ResizeObserver | null = null
+
+  const onCardResize = ([entry]: ResizeObserverEntry[]) => {
+    const next = Math.round(entry.contentRect.height)
+    if (cardHeight.value && next !== cardHeight.value) resizing.value = true
+    cardHeight.value = next
+  }
+
+  onMounted(() => {
+    if (typeof ResizeObserver === 'undefined' || !cardContent.value) return
+    resizeObserver = new ResizeObserver(onCardResize)
+    resizeObserver.observe(cardContent.value)
+  })
+
+  onScopeDispose(() => resizeObserver?.disconnect())
 
   const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
@@ -379,287 +407,299 @@ Each variant is the same screen in another state: `get_pattern("platform/auth", 
     <main class="flex min-h-0 flex-1 flex-col overflow-y-auto lg:overflow-hidden">
       <div class="layout-column-site flex flex-1 flex-col lg:min-h-0">
         <div class="flex flex-1 flex-col py-(--spacing-xl) lg:min-h-0 lg:overflow-y-auto">
-          <div class="m-auto flex w-full flex-col items-center gap-(--spacing-md)">
+          <div
+            class="m-auto flex w-full flex-col items-center gap-(--spacing-md) transition-[translate,opacity] duration-slow-01 ease-expressive-entrance starting:-translate-x-6 starting:opacity-0 rtl:starting:translate-x-6 motion-reduce:transition-none"
+          >
             <Card
               class="w-full max-w-(--container-sm)"
               :padded="false"
             >
               <template #content>
                 <div class="p-(--spacing-lg)">
-                  <form
-                    class="flex flex-col gap-(--spacing-lg)"
-                    aria-label="Sign in to your account"
-                    novalidate
-                    @submit.prevent="handlePrimary"
+                  <div
+                    :style="cardHeight ? { height: `${cardHeight}px` } : undefined"
+                    :data-resizing="resizing || null"
+                    class="transition-[height] duration-moderate-02 ease-productive-entrance motion-safe:data-resizing:overflow-hidden motion-reduce:transition-none"
+                    @transitionend.self="resizing = false"
                   >
-                    <header class="flex flex-col gap-(--spacing-xxs)">
-                      <h1 class="text-heading-sm text-(--text-default)">
-                        {{ heading.title }}
-                      </h1>
-                      <p
-                        v-if="heading.description"
-                        class="text-body-sm text-(--text-muted)"
-                      >
-                        {{ heading.description }}
-                      </p>
-                    </header>
-
-                    <Alert
-                      v-if="expiredNotice"
-                      key="expired"
-                      severity="info"
-                      size="small"
-                      label="Your session expired. Sign in again to pick up where you left off."
-                    />
-                    <Alert
-                      v-else-if="signedIn"
-                      key="signed-in"
-                      severity="success"
-                      size="small"
-                      label="Signed in."
-                    />
-
-                    <div class="flex flex-col">
-                      <div
-                        v-if="step === 'email'"
-                        class="flex flex-col gap-(--spacing-lg) pb-(--spacing-lg)"
-                      >
-                        <div class="flex flex-col gap-(--spacing-sm)">
-                          <Button
-                            type="button"
-                            label="Continue with Google"
-                            kind="outlined"
-                            size="large"
-                            icon="ai-cor ai-google"
-                            class="w-full"
-                          />
-                          <Button
-                            type="button"
-                            label="Continue with GitHub"
-                            kind="outlined"
-                            size="large"
-                            icon="ai ai-github"
-                            class="w-full"
-                          />
-                        </div>
-
-                        <Separator label="or" />
-                      </div>
-
-                      <div
-                        v-if="step === 'email'"
-                        class="motion-reduce:transition-none motion-reduce:transform-none"
-                      >
-                        <Field :required="!!errors.email && !email.trim()">
-                          <Field.Label for="login-email">Email</Field.Label>
-                          <Input
-                            id="login-email"
-                            v-model="email"
-                            type="email"
-                            name="email"
-                            size="large"
-                            autocomplete="username"
-                            class="w-full"
-                            placeholder="myemail@example.com"
-                            :required="!!errors.email && !email.trim()"
-                            :invalid="!!errors.email && !!email.trim()"
-                            :aria-describedby="errors.email ? 'login-email-error' : undefined"
-                            @update:model-value="errors.email = ''"
-                          />
-                          <HelperText
-                            v-if="errors.email"
-                            id="login-email-error"
-                            :kind="email.trim() ? 'invalid' : 'required'"
-                            :label="errors.email"
-                          />
-                        </Field>
-                      </div>
-
-                      <div
-                        v-else-if="step === 'password'"
-                        class="flex flex-col gap-(--spacing-lg) motion-reduce:transition-none motion-reduce:transform-none"
-                      >
-                        <div
-                          class="flex items-center gap-(--spacing-sm) motion-reduce:transition-none motion-reduce:transform-none"
+                    <form
+                      ref="cardContent"
+                      class="flex flex-col gap-(--spacing-lg)"
+                      aria-label="Sign in to your account"
+                      novalidate
+                      @submit.prevent="handlePrimary"
+                    >
+                      <header class="flex flex-col gap-(--spacing-xxs)">
+                        <h1 class="text-heading-sm text-(--text-default)">
+                          {{ heading.title }}
+                        </h1>
+                        <p
+                          v-if="heading.description"
+                          class="text-body-sm text-(--text-muted)"
                         >
-                          <Tooltip text="Change email">
-                            <IconButton
-                              icon="pi pi-chevron-left"
-                              aria-label="Change email"
-                              kind="outlined"
-                              size="small"
-                              @click="backToEmail"
-                            />
-                          </Tooltip>
-                          <span class="truncate text-label-sm text-(--text-default)">{{
-                            email
-                          }}</span>
-                        </div>
+                          {{ heading.description }}
+                        </p>
+                      </header>
 
-                        <div class="flex flex-col gap-(--spacing-xs)">
-                          <Field
-                            :required="!!errors.password && !password"
-                            :invalid="!!errors.password && !!password"
-                          >
-                            <Field.Label for="login-password">Password</Field.Label>
-                            <PasswordInput
-                              id="login-password"
-                              v-model="password"
-                              name="password"
-                              autocomplete="current-password"
-                              placeholder="Type your password"
-                              @update:model-value="errors.password = ''"
-                            />
-                            <Field.Description v-if="errors.password">{{
-                              errors.password
-                            }}</Field.Description>
-                          </Field>
-
-                          <a
-                            class="self-start text-body-xs text-(--text-muted) underline underline-offset-2 transition-colors duration-fast-02 ease-productive-entrance hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
-                            href="#"
-                            @click.prevent="forgotPassword"
-                            >Forgot your password?</a
-                          >
-                        </div>
-                      </div>
-
-                      <div
-                        v-else-if="step === 'reset'"
-                        class="flex flex-col gap-(--spacing-lg) motion-reduce:transition-none motion-reduce:transform-none"
-                      >
-                        <div
-                          class="flex items-center gap-(--spacing-sm) motion-reduce:transition-none motion-reduce:transform-none"
-                        >
-                          <Tooltip text="Back to sign in">
-                            <IconButton
-                              icon="pi pi-chevron-left"
-                              aria-label="Back to sign in"
-                              kind="outlined"
-                              size="small"
-                              @click="backToSignIn"
-                            />
-                          </Tooltip>
-                          <span class="truncate text-label-sm text-(--text-default)"
-                            >Back to sign in</span
-                          >
-                        </div>
-
-                        <Field :required="!!errors.resetEmail && !resetEmail.trim()">
-                          <Field.Label for="reset-email">Email</Field.Label>
-                          <Input
-                            id="reset-email"
-                            v-model="resetEmail"
-                            type="email"
-                            name="reset-email"
-                            size="large"
-                            autocomplete="email"
-                            class="w-full"
-                            placeholder="myemail@example.com"
-                            :required="!!errors.resetEmail && !resetEmail.trim()"
-                            :invalid="!!errors.resetEmail && !!resetEmail.trim()"
-                            :aria-describedby="errors.resetEmail ? 'reset-email-error' : undefined"
-                            @update:model-value="errors.resetEmail = ''"
-                          />
-                          <HelperText
-                            v-if="errors.resetEmail"
-                            id="reset-email-error"
-                            :kind="resetEmail.trim() ? 'invalid' : 'required'"
-                            :label="errors.resetEmail"
-                          />
-                        </Field>
-                      </div>
-
-                      <div
-                        v-else-if="step === 'new-password'"
-                        class="flex flex-col gap-(--spacing-lg) motion-reduce:transition-none motion-reduce:transform-none"
-                      >
-                        <Field
-                          :required="!!errors.newPassword && !newPassword"
-                          :invalid="!!errors.newPassword && !!newPassword"
-                        >
-                          <Field.Label for="new-password">New password</Field.Label>
-                          <PasswordInput
-                            id="new-password"
-                            v-model="newPassword"
-                            name="new-password"
-                            autocomplete="new-password"
-                            placeholder="Enter a new password"
-                            @update:model-value="errors.newPassword = ''"
-                          />
-                          <Field.Description v-if="errors.newPassword">{{
-                            errors.newPassword
-                          }}</Field.Description>
-                          <PasswordRequirements :value="newPassword" />
-                        </Field>
-
-                        <Field
-                          :required="!!errors.confirmPassword && !confirmPassword"
-                          :invalid="!!errors.confirmPassword && !!confirmPassword"
-                        >
-                          <Field.Label for="confirm-password">Confirm password</Field.Label>
-                          <PasswordInput
-                            id="confirm-password"
-                            v-model="confirmPassword"
-                            name="confirm-password"
-                            autocomplete="new-password"
-                            placeholder="Repeat the new password"
-                            @update:model-value="errors.confirmPassword = ''"
-                          />
-                          <Field.Description v-if="errors.confirmPassword">{{
-                            errors.confirmPassword
-                          }}</Field.Description>
-                        </Field>
-                      </div>
-
-                      <div
-                        v-else
-                        class="flex flex-col gap-(--spacing-xs) motion-reduce:transition-none motion-reduce:transform-none"
-                      >
-                        <div class="flex items-center gap-(--spacing-xs)">
-                          <p class="text-body-sm text-(--text-default)">
-                            Didn't receive the email?
-                          </p>
-                          <a
-                            class="text-link text-body-sm"
-                            href="#"
-                            @click.prevent
-                            >Resend email</a
-                          >
-                        </div>
-                        <div class="flex items-center gap-(--spacing-xs)">
-                          <p class="text-body-sm text-(--text-default)">Already opened it?</p>
-                          <a
-                            class="text-link text-body-sm"
-                            href="#"
-                            @click.prevent="openResetLink"
-                            >Set a new password</a
-                          >
-                        </div>
-                      </div>
-                    </div>
-
-                    <div class="relative">
-                      <Button
-                        :label="primaryAction.label"
-                        :kind="primaryAction.kind"
-                        size="large"
-                        class="w-full"
-                        type="submit"
+                      <Alert
+                        v-if="expiredNotice"
+                        key="expired"
+                        severity="info"
+                        size="small"
+                        label="Your session expired. Sign in again to pick up where you left off."
+                      />
+                      <Alert
+                        v-else-if="signedIn"
+                        key="signed-in"
+                        severity="success"
+                        size="small"
+                        label="Signed in."
                       />
 
-                      <div
-                        v-if="step === 'email'"
-                        class="absolute end-(--spacing-sm) top-0 -translate-y-1/2"
-                      >
-                        <Tag
-                          label="Last used"
-                          severity="info"
-                          size="small"
-                        />
+                      <div class="flex flex-col">
+                        <div
+                          v-if="step === 'email'"
+                          class="flex flex-col gap-(--spacing-lg) pb-(--spacing-lg)"
+                        >
+                          <div class="flex flex-col gap-(--spacing-sm)">
+                            <Button
+                              type="button"
+                              label="Continue with Google"
+                              kind="outlined"
+                              size="large"
+                              icon="ai-cor ai-google"
+                              class="w-full"
+                            />
+                            <Button
+                              type="button"
+                              label="Continue with GitHub"
+                              kind="outlined"
+                              size="large"
+                              icon="ai ai-github"
+                              class="w-full"
+                            />
+                          </div>
+
+                          <Separator label="or" />
+                        </div>
+
+                        <div
+                          v-if="step === 'email'"
+                          class="motion-reduce:transition-none motion-reduce:transform-none"
+                        >
+                          <Field :required="!!errors.email && !email.trim()">
+                            <Field.Label for="login-email">Email</Field.Label>
+                            <Input
+                              id="login-email"
+                              v-model="email"
+                              type="email"
+                              name="email"
+                              size="large"
+                              autocomplete="username"
+                              class="w-full"
+                              placeholder="myemail@example.com"
+                              :required="!!errors.email && !email.trim()"
+                              :invalid="!!errors.email && !!email.trim()"
+                              :aria-describedby="errors.email ? 'login-email-error' : undefined"
+                              @update:model-value="errors.email = ''"
+                            />
+                            <HelperText
+                              v-if="errors.email"
+                              id="login-email-error"
+                              :kind="email.trim() ? 'invalid' : 'required'"
+                              :label="errors.email"
+                            />
+                          </Field>
+                        </div>
+
+                        <div
+                          v-else-if="step === 'password'"
+                          class="flex flex-col gap-(--spacing-lg) motion-reduce:transition-none motion-reduce:transform-none"
+                        >
+                          <div
+                            class="flex items-center gap-(--spacing-sm) motion-reduce:transition-none motion-reduce:transform-none"
+                          >
+                            <Tooltip text="Change email">
+                              <IconButton
+                                icon="pi pi-chevron-left"
+                                aria-label="Change email"
+                                kind="outlined"
+                                size="small"
+                                @click="backToEmail"
+                              />
+                            </Tooltip>
+                            <span class="truncate text-label-sm text-(--text-default)">{{
+                              email
+                            }}</span>
+                          </div>
+
+                          <div class="flex flex-col gap-(--spacing-xs)">
+                            <Field
+                              :required="!!errors.password && !password"
+                              :invalid="!!errors.password && !!password"
+                            >
+                              <Field.Label for="login-password">Password</Field.Label>
+                              <PasswordInput
+                                id="login-password"
+                                v-model="password"
+                                name="password"
+                                autocomplete="current-password"
+                                placeholder="Type your password"
+                                @update:model-value="errors.password = ''"
+                              />
+                              <Field.Description v-if="errors.password">{{
+                                errors.password
+                              }}</Field.Description>
+                            </Field>
+
+                            <a
+                              class="self-start text-body-xs text-(--text-muted) underline underline-offset-2 transition-colors duration-fast-02 ease-productive-entrance hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
+                              href="#"
+                              @click.prevent="forgotPassword"
+                              >Forgot your password?</a
+                            >
+                          </div>
+                        </div>
+
+                        <div
+                          v-else-if="step === 'reset'"
+                          class="flex flex-col gap-(--spacing-lg) motion-reduce:transition-none motion-reduce:transform-none"
+                        >
+                          <div
+                            class="flex items-center gap-(--spacing-sm) motion-reduce:transition-none motion-reduce:transform-none"
+                          >
+                            <Tooltip text="Back to sign in">
+                              <IconButton
+                                icon="pi pi-chevron-left"
+                                aria-label="Back to sign in"
+                                kind="outlined"
+                                size="small"
+                                @click="backToSignIn"
+                              />
+                            </Tooltip>
+                            <span class="truncate text-label-sm text-(--text-default)"
+                              >Back to sign in</span
+                            >
+                          </div>
+
+                          <Field :required="!!errors.resetEmail && !resetEmail.trim()">
+                            <Field.Label for="reset-email">Email</Field.Label>
+                            <Input
+                              id="reset-email"
+                              v-model="resetEmail"
+                              type="email"
+                              name="reset-email"
+                              size="large"
+                              autocomplete="email"
+                              class="w-full"
+                              placeholder="myemail@example.com"
+                              :required="!!errors.resetEmail && !resetEmail.trim()"
+                              :invalid="!!errors.resetEmail && !!resetEmail.trim()"
+                              :aria-describedby="
+                                errors.resetEmail ? 'reset-email-error' : undefined
+                              "
+                              @update:model-value="errors.resetEmail = ''"
+                            />
+                            <HelperText
+                              v-if="errors.resetEmail"
+                              id="reset-email-error"
+                              :kind="resetEmail.trim() ? 'invalid' : 'required'"
+                              :label="errors.resetEmail"
+                            />
+                          </Field>
+                        </div>
+
+                        <div
+                          v-else-if="step === 'new-password'"
+                          class="flex flex-col gap-(--spacing-lg) motion-reduce:transition-none motion-reduce:transform-none"
+                        >
+                          <Field
+                            :required="!!errors.newPassword && !newPassword"
+                            :invalid="!!errors.newPassword && !!newPassword"
+                          >
+                            <Field.Label for="new-password">New password</Field.Label>
+                            <PasswordInput
+                              id="new-password"
+                              v-model="newPassword"
+                              name="new-password"
+                              autocomplete="new-password"
+                              placeholder="Enter a new password"
+                              @update:model-value="errors.newPassword = ''"
+                            />
+                            <Field.Description v-if="errors.newPassword">{{
+                              errors.newPassword
+                            }}</Field.Description>
+                            <PasswordRequirements :value="newPassword" />
+                          </Field>
+
+                          <Field
+                            :required="!!errors.confirmPassword && !confirmPassword"
+                            :invalid="!!errors.confirmPassword && !!confirmPassword"
+                          >
+                            <Field.Label for="confirm-password">Confirm password</Field.Label>
+                            <PasswordInput
+                              id="confirm-password"
+                              v-model="confirmPassword"
+                              name="confirm-password"
+                              autocomplete="new-password"
+                              placeholder="Repeat the new password"
+                              @update:model-value="errors.confirmPassword = ''"
+                            />
+                            <Field.Description v-if="errors.confirmPassword">{{
+                              errors.confirmPassword
+                            }}</Field.Description>
+                          </Field>
+                        </div>
+
+                        <div
+                          v-else
+                          class="flex flex-col gap-(--spacing-xs) motion-reduce:transition-none motion-reduce:transform-none"
+                        >
+                          <div class="flex items-center gap-(--spacing-xs)">
+                            <p class="text-body-sm text-(--text-default)">
+                              Didn't receive the email?
+                            </p>
+                            <a
+                              class="text-link text-body-sm"
+                              href="#"
+                              @click.prevent
+                              >Resend email</a
+                            >
+                          </div>
+                          <div class="flex items-center gap-(--spacing-xs)">
+                            <p class="text-body-sm text-(--text-default)">Already opened it?</p>
+                            <a
+                              class="text-link text-body-sm"
+                              href="#"
+                              @click.prevent="openResetLink"
+                              >Set a new password</a
+                            >
+                          </div>
+                        </div>
                       </div>
-                    </div>
-                  </form>
+
+                      <div class="relative">
+                        <Button
+                          :label="primaryAction.label"
+                          :kind="primaryAction.kind"
+                          size="large"
+                          class="w-full"
+                          type="submit"
+                        />
+
+                        <div
+                          v-if="step === 'email'"
+                          class="absolute end-(--spacing-sm) top-0 -translate-y-1/2"
+                        >
+                          <Tag
+                            label="Last used"
+                            severity="info"
+                            size="small"
+                          />
+                        </div>
+                      </div>
+                    </form>
+                  </div>
                 </div>
               </template>
             </Card>

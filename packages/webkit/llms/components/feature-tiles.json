@@ -67,7 +67,7 @@
    "type": "FeatureTilesTile[]",
    "default": "[]",
    "required": "false",
-   "doc": "The tiles rendered as frame cells, in order; each is `{ title, description, image?, illustration?, scale? }` where `image` is a picture URL, `illustration` a registry name drawn fluid, and `scale` its media scale."
+   "doc": "The tiles rendered as frame cells, in order; each is `{ title, description, image?, alt?, illustration?, scale? }` where `image` is a picture URL, `alt` its alternative text (empty keeps the picture decorative), `illustration` a registry name drawn fluid, and `scale` its media scale."
   }
  ],
  "events": [],

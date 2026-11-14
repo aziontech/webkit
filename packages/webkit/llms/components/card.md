@@ -12,6 +12,7 @@
 - Host a divided list edge to edge: set `:padded="false"` and put an `Item` list in the `content` slot.
 - A centered single-card screen (sign-up, onboarding, a success page) that needs header, body and footer regions.
 - A catalog tile for an integration, an extension or a plugin: set `kind="integration"` for the logo, the name, the vendor, a short description, badges, the installed state and one action.
+- A short row of highlighted integrations above the full catalog (Featured): add `featured` to the integration tile for the centred, raised layout with the badge in the corner.
 
 ## Do
 
@@ -24,6 +25,7 @@
 - Keep the description to one or two sentences; the card clamps it to three lines.
 - Show at most two badges (category, context, plan). The installed state is a prop, not a badge, so it reads the same everywhere.
 - Integration cards sit under a section heading, so their title is an `h3`.
+- featured` centres the mark, the name, the vendor and the description on a raised surface with a primary glow at the top, and moves the badges to the top end corner, where a badge without `severity` is `primary`. Use it for a row of at most three or four picks above the full catalog, never for every tile; the full catalog keeps the plain integration tile.
 
 ## Don’t
 
@@ -56,6 +58,7 @@
 | `badges` | `CardBadge[]` | `[]` | false | Integration kind: small tags such as the category or the context (`{ label, severity? }`, severity defaults to `info`). |
 | `installed` | `boolean` | `false` | false | Integration kind: shows the Installed tag. |
 | `href` | `string` | `''` | false | Integration kind: the title links here; without it the title is a button that emits `select`. |
+| `featured` | `boolean` | `false` | false | Integration kind: the featured layout, centred on a raised surface with a primary glow at the top and the badges in the top end corner. |
 
 ## Events
 
@@ -80,6 +83,7 @@
 - Responsive: the content region is the `@container/card`, so `KeyValuePairs`, `Field orientation="responsive"` and any `@sm:`/`@md:` utility inside follow the card, not the window. A card used as a shrink-to-fit flex item must get an explicit width (`flex-1`, `w-full`, a grid track): inline-size containment gives the content no intrinsic width.
 - Hover-free devices: the `header-action` slot stays visible where the pointer cannot hover (`@media (hover: none)`).
 - Integration kind: `hover` shades the surface, `focus-visible` rings the whole tile (the ring sits on the stretched title target), `installed` adds the success Installed tag.
+- Featured (`featured`, integration kind only): the surface is raised; `hover` strengthens the border and brightens the top glow instead of shading the surface; the layout is centred and the badges sit in the top end corner. `data-featured` on the root drives the styles.
 
 ## Accessibility
 
@@ -92,7 +96,7 @@
 
 ## Right-to-left
 
-- Layout: logical utilities only; the logo sits at the start, the badges and the action at the end.
+- Layout: logical utilities only; the logo sits at the start, the badges and the action at the end. Featured: the content is centred and the badges sit in the top end corner (`end-*`), so they move to the left under `dir="rtl"`.
 - Icons: the logo is not mirrored.
 - Keyboard: no arrow-key navigation of its own.
 - User data: the vendor and the title render in `<bdi>`.
@@ -109,7 +113,7 @@
 ## Responsive
 
 - Container queries: the content region is `@container/card`; the integration layout does not change with width, the description wraps and clamps to three lines.
-- Narrow (≤ 640 px or a narrow container): the badges wrap under the title row; the action stays at the end of its own row.
+- Narrow (≤ 640 px or a narrow container): the badges wrap under the title row; the action stays at the end of its own row. Featured: the corner badges keep their place and the centred block reserves the top inset for them.
 - Touch: the whole tile is the target; the action is a regular `Button`.
 - Reflow: no horizontal scroll at 320 px and 200 % zoom.
 

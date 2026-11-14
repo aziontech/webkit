@@ -1,6 +1,6 @@
 # Site Page
 
-> The page renderer of the marketing site: it takes a page as data — the page JSON `{ hero, sections }` whose entries are `{ _id, props, scenes?, gap?, submission? }` — and renders each entry with the page section published at `@aziontech/webkit/<_id>`, binding `props` onto it. Openings (`hero`) run full bleed; the column (`sections`) sits in one `SectionContainer max-width="site"` with a hatched `SectionGap` before each band and one more after the last, the hatched break a page closes on before the footer (in the design sample that break is drawn by the closing call to action of every page), as the design sample's `SitePage` lays a page out. A scene named in `scenes` is resolved by name through the scene registry and drawn in the section's slot of that name (`hero-band` `top` / `bottom`, `console-panel` `scene`). Every section and scene is loaded on demand, so a page pulls in only the sections it lists. An `_id` or scene name the renderer does not know is skipped with a development warning naming it, never silently. It reverses the earlier rule in `.claude/docs/SECTIONS.md` ("the package ships no registry and no dispatcher"): the owner decided to ship the renderer (ROADMAP M2.10 row 44), and that doc is updated with it. **Section registry.** `src/components/marketing/site-page/site-page-sections.ts`, beside the component, maps every folder in `src/components/sections/` except `site-nav` and `site-footer` (the frame, which `shells/website` owns) to a `() => import('../../sections/<name>/<name>.vue')` thunk, keyed by the folder name, which is the `_id`. The component test fails when a section folder has no entry. **Scene registry.** `src/assets/scene-registry.ts` exports `sceneAssets` (scene name to a `() => import(...)` thunk), the `SceneName` union of its keys and `resolveScene(name)`, which returns one cached async component per name or `null` for a name it does not hold. It is seeded with `BrandGlobeScene` and `SpinningGlobe` (the two scenes `media-split-band` drew from a private map) and with `Diagram`, `ProductWidget` and `Illustration`, the components a scene slot already takes. `media-split-band` moves from its private `SCENES` constant onto it in the same change, so the system has one scene map, and a scene ported later (`ConsoleApplicationScene`, `ConsoleTraceScene`, `FunctionsHeroCanvas`) becomes drawable on every page by one entry there. **Root.** A plain `div` with no role, carrying `v-bind="$attrs"` and the `data-testid` fallback `marketing-site-page`.
+> The page renderer of the marketing site: it takes a page as data — the page JSON `{ hero, sections }` whose entries are `{ _id, props, scenes?, gap?, submission? }` — and renders each entry with the page section published at `@aziontech/webkit/<_id>`, binding `props` onto it. Openings (`hero`) run full bleed; the column (`sections`) sits in one `SectionContainer max-width="site"` with a hatched `SectionGap` before each band and one more after the last, the hatched break a page closes on before the footer, as the design sample's `SitePage` lays a page out. A page that ends on a closing band (`closing-call-to-action` and its `-agents`, `-newsletter` and `-templates` siblings) closes on that band's own closing frame instead, so no trailing gap is drawn; two closing bands in a row share one frame (the upper one is bound with `hatch: false`); and a `closing-call-to-action` of `kind: 'frame'` takes no gap before it. A scene named in `scenes` is resolved by name through the scene registry and drawn in the section's slot of that name (`hero-band` `top` / `bottom`, `console-panel` `scene`). Every section and scene is loaded on demand, so a page pulls in only the sections it lists. An `_id` or scene name the renderer does not know is skipped with a development warning naming it, never silently. It reverses the earlier rule in `.claude/docs/SECTIONS.md` ("the package ships no registry and no dispatcher"): the owner decided to ship the renderer (ROADMAP M2.10 row 44), and that doc is updated with it. **Section registry.** `src/components/marketing/site-page/site-page-sections.ts`, beside the component, maps every folder in `src/components/sections/` except `site-nav` and `site-footer` (the frame, which `shells/website` owns) to a `() => import('../../sections/<name>/<name>.vue')` thunk, keyed by the folder name, which is the `_id`. The component test fails when a section folder has no entry. **Scene registry.** `src/assets/scene-registry.ts` exports `sceneAssets` (scene name to a `() => import(...)` thunk), the `SceneName` union of its keys and `resolveScene(name)`, which returns one cached async component per name or `null` for a name it does not hold. It is seeded with `BrandGlobeScene` and `SpinningGlobe` (the two scenes `media-split-band` drew from a private map) and with `Diagram`, `ProductWidget` and `Illustration`, the components a scene slot already takes. `media-split-band` moves from its private `SCENES` constant onto it in the same change, so the system has one scene map, and a scene ported later (`ConsoleApplicationScene`, `ConsoleTraceScene`, `FunctionsHeroCanvas`) becomes drawable on every page by one entry there. **Root.** A plain `div` with no role, carrying `v-bind="$attrs"` and the `data-testid` fallback `marketing-site-page`.
 
 - Import: `import SitePage from '@aziontech/webkit/site-page'`
 - Category: marketing · Surface: marketing · Structure: monolithic
@@ -17,6 +17,7 @@
 - Put openings (`hero-band`, `hero-form`, `hero-with-opening`, `hero-copy-on-top-art`, `article-body`, `pricing-plans`) in `hero` and every band after them in `sections`.
 - Keep scenes as names (`{ component: 'BrandGlobeScene' }`), never as code, so the page stays plain JSON.
 - Use `gap` only to change the default break: `none` for a band that follows its neighbour with no break, `small` for two bands that belong together.
+- End a page on a closing band, or on `{ _id: 'closing-call-to-action', props: { kind: 'frame' } }` when its last band already carries its actions; never set `hatch` yourself on stacked closings, the renderer does.
 - Keep transport details of a form (`endpoint`, `hiddenFields`) in `submission`, next to `props`; the renderer passes the entry back on `submit` and the site sends.
 - Watch the development console after changing a page: an unknown `_id` or scene is named there.
 - Keep one opening per page: every opening renders the page `h1`, so two openings put two `h1` on the page.
@@ -59,6 +60,7 @@
 
 - No state of its own; each section owns its states (`loading`, `submitted`, `error` on a form band come from its `props`).
 - An unknown `_id` or scene name renders nothing in its place and warns once per name in development.
+- Closing bands: a closing band followed directly by another is bound with `hatch: false` (an explicit `hatch` in its `props` is overridden), so stacked closings share the lower band's closing frame; a `closing-call-to-action` with `kind: 'frame'` takes no gap before it; when the last column entry is a closing band that draws its frame, the trailing gap is omitted.
 - A section or scene still loading renders nothing in its place until its chunk arrives.
 - A section or scene whose chunk fails to load (network failure, deploy skew) or takes longer than 10 s renders nothing in its place, the rest of the page keeps rendering, and a development warning names the `_id` or scene; it does not retry (`defineAsyncComponent` with `timeout` and `onError`).
 
@@ -180,5 +182,72 @@
     :hero="hero"
     :sections="sections"
   />
+</template>
+```
+
+### Closings
+
+```vue
+<script setup lang="ts">
+  import SitePage, { type SitePageSection } from '@aziontech/webkit/site-page'
+
+  const sections: SitePageSection[] = [
+    {
+      _id: 'faq-section',
+      props: {
+        anchor: 'faq',
+        title: 'Frequently asked questions',
+        items: [
+          {
+            question: 'Can I start without a credit card?',
+            answer: 'Yes. The free plan needs only an email address.'
+          }
+        ]
+      }
+    },
+    {
+      _id: 'closing-call-to-action',
+      props: {
+        kind: 'panel',
+        title: 'Ready to join us?',
+        description: 'See our open positions and find the right fit.',
+        primaryAction: { label: 'See open roles', href: '/careers/jobs', trailing: true }
+      }
+    },
+    {
+      _id: 'closing-call-to-action',
+      props: {
+        kind: 'primary',
+        anchor: 'contact',
+        title: 'Build, run, and protect applications everywhere.',
+        description: 'Get faster launches, lower latency, and less infrastructure overhead.',
+        primaryAction: { label: 'Start for free', href: '/signup' },
+        secondaryAction: { label: 'Docs', href: '/docs', trailing: true }
+      }
+    }
+  ]
+
+  const legal: SitePageSection[] = [
+    {
+      _id: 'faq-section',
+      props: {
+        title: 'Privacy questions',
+        items: [
+          {
+            question: 'Where is my data stored?',
+            answer: 'In the regions you choose for each workload.'
+          }
+        ]
+      }
+    },
+    { _id: 'closing-call-to-action', props: { kind: 'frame' } }
+  ]
+</script>
+
+<template>
+  <div class="flex flex-col gap-(--spacing-xxl)">
+    <SitePage :sections="sections" />
+    <SitePage :sections="legal" />
+  </div>
 </template>
 ```

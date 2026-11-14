@@ -14,6 +14,7 @@
  ],
  "bestPractices": [
   "Give a card either `image` or `mark`; the mark is drawn only when there is no cover.",
-  "Keep the band to three cards so the frame row stays full."
+  "Keep the band to three cards so the frame row stays full.",
+  "Set `external` on a card whose article lives on another site; it opens in a new tab and says so to assistive technology."
  ]
 }

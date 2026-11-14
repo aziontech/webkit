@@ -37,6 +37,7 @@
 | `primaryAction` | `HeroCopyOnTopArtAction` | `undefined` | false | First button under the headline; `{ label, href, trailing?, target? }`. Shown only with a label and a link. |
 | `secondaryAction` | `HeroCopyOnTopArtAction` | `undefined` | false | Second, outlined button beside the first; `{ label, href, trailing?, target? }`. Shown only with a label and a link. |
 | `levels` | `HeroCopyOnTopArtLevel[]` | `[]` | false | The columns of the topology, left to right; each is `{ nodes }`, the cards top to bottom, each `{ eyebrow, icon, title, label, severity, lit? }`. A card without `title` is skipped, and the scene renders only when a level has a card. |
+| `anchor` | `string` | `''` | false | In-page id set on the band so a `#hash` link can scroll to it. |
 
 ## Assets
 
@@ -57,6 +58,26 @@
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): owned by `hero-title`, `button` and `tag`; card text uses `--text-default` and `--text-muted`.
 - `motion-reduce:transition-none motion-reduce:animate-none` on every motion-bearing class.
 - Touch target ≥40×40 px — the large buttons meet it.
+
+## Right-to-left
+
+- Layout: logical utilities only; the topology columns run in reading order and the edge mask is symmetric.
+- Icons: card icons and the action trailing glyphs follow `button` and `tag`; no icon is mirrored by the band.
+- Keyboard: no arrow-key handling; `Tab` moves through the actions.
+- User data: none.
+
+## Internationalization
+
+No built-in strings: every visible and announced text is a prop from the page JSON.
+
+- Formatting: none.
+
+## Responsive
+
+- Container queries: the scene reads its own container: below `@4xl` the scene keeps a fixed 40rem width and the edges fade out (`@max-2xl` mask); from `@4xl` it takes `--container-3xl`.
+- Narrow (≤ 640 px): the headline and actions stack centred; the scene is clipped at the edges, never scrolled.
+- Touch: the large buttons meet 40 px; the cards are not interactive.
+- Reflow: no horizontal scroll at 320 px and 200 % zoom; the scene is decorative and clipped.
 
 ## Examples
 

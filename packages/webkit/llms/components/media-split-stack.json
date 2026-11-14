@@ -36,6 +36,13 @@
    "doc": "Layout of the run: `media-end` sets every picture at the closing end, `alternating` starts it at the opening end and swaps sides band by band."
   },
   {
+   "name": "anchor",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "In-page id set on the run so a `#hash` link can scroll to it."
+  },
+  {
    "name": "eyebrow",
    "type": "string",
    "default": "''",
@@ -47,14 +54,21 @@
    "type": "string",
    "default": "''",
    "required": "false",
-   "doc": "Headline of the run, rendered by the large centered section title as its `h2`; the run renders no header when empty."
+   "doc": "Headline of the run, rendered by the large centered section title as its `h2`; the run renders no header when empty, and with a header each band's headline drops to an `h3`."
+  },
+  {
+   "name": "description",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Supporting sentence under the section title."
   },
   {
    "name": "bands",
    "type": "MediaSplitStackBand[]",
    "default": "[]",
    "required": "false",
-   "doc": "The bands, in order; each is `{ title, description, widget?, diagram?, image?, imageAlt?, imageFramed?, illustration?, illustrationLabel?, action? }` where `widget` is a `ProductWidget` name, `diagram` a `Diagram` name, `image` a picture URL, `illustration` a registry name, and `action` `{ label, href }` the outlined button and the link the whole band follows."
+   "doc": "The bands, in order; each is `{ title, description, eyebrow?, href?, scene?, widget?, diagram?, image?, imageAlt?, imageFramed?, illustration?, illustrationLabel?, action? }` where `eyebrow` is the band's overline, `href` the link the whole band follows (falling back to the action's), `scene` a `{ component, props? }` webkit scene asset, `widget` a `ProductWidget` name, `diagram` a `Diagram` name, `image` a picture URL, `illustration` a registry name, and `action` `{ label, href }` the outlined button."
   }
  ],
  "events": [],
@@ -73,7 +87,7 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import quickStartWithTemplates from '@aziontech/webkit/assets/quick-start-with-templates.svg'\n  import MediaSplitStack from '@aziontech/webkit/media-split-stack'\n\n  const bands = [\n    {\n      image: quickStartWithTemplates,\n      title: 'Modern applications',\n      description: 'Build static sites, run serverless applications, or modernize legacy systems.',\n      action: {\n        label: 'Learn more',\n        href: '/en/solutions/web-apps/'\n      }\n    },\n    {\n      illustration: 'improve-application-performance-and-reliability',\n      title: 'Optimized workloads',\n      description:\n        'Speed up applications, deliver content through the CDN, and process images on demand.',\n      action: {\n        label: 'Learn more',\n        href: '/en/solutions/performance/'\n      }\n    },\n    {\n      illustration: 'ai-applications',\n      title: 'AI applications',\n      description:\n        'Build and deploy AI agents and AI-powered applications on a distributed platform, with inference close to users.',\n      action: {\n        label: 'Learn more',\n        href: '/en/solutions/ai/'\n      }\n    },\n    {\n      illustration: 'automate-threat-mitigation',\n      title: 'Protected applications and APIs',\n      description:\n        'Protect web applications and APIs (WAAP), manage bots, and enforce programmable security policies at scale.',\n      action: {\n        label: 'Learn more',\n        href: '/en/solutions/security/'\n      }\n    },\n    {\n      illustration: 'content-and-media-delivery',\n      title: 'Media and streaming content',\n      description:\n        'Stream video and deliver large files at low latency to audiences of any size, with media processed close to viewers.',\n      action: {\n        label: 'Learn more',\n        href: '/en/solutions/streaming/'\n      }\n    }\n  ]\n</script>\n\n<template>\n  <MediaSplitStack\n    kind=\"media-end\"\n    :bands=\"bands\"\n  />\n</template>"
+   "sfc": "<script setup>\n  import quickStartWithTemplates from '@aziontech/webkit/assets/quick-start-with-templates.svg'\n  import MediaSplitStack from '@aziontech/webkit/media-split-stack'\n\n  const bands = [\n    {\n      image: quickStartWithTemplates,\n      eyebrow: 'Web applications',\n      title: 'Modern applications',\n      description: 'Build static sites, run serverless applications, or modernize legacy systems.',\n      action: {\n        label: 'Learn more',\n        href: '/en/solutions/web-apps/'\n      }\n    },\n    {\n      illustration: 'improve-application-performance-and-reliability',\n      eyebrow: 'Performance',\n      href: '/en/solutions/performance/overview/',\n      title: 'Optimized workloads',\n      description:\n        'Speed up applications, deliver content through the CDN, and process images on demand.',\n      action: {\n        label: 'Learn more',\n        href: '/en/solutions/performance/'\n      }\n    },\n    {\n      scene: { component: 'ProductWidget', props: { name: 'ai-inference-model' } },\n      illustration: 'ai-applications',\n      eyebrow: 'AI Inference',\n      title: 'AI applications',\n      description:\n        'Build and deploy AI agents and AI-powered applications on a distributed platform, with inference close to users.',\n      action: {\n        label: 'Learn more',\n        href: '/en/solutions/ai/'\n      }\n    },\n    {\n      illustration: 'automate-threat-mitigation',\n      title: 'Protected applications and APIs',\n      description:\n        'Protect web applications and APIs (WAAP), manage bots, and enforce programmable security policies at scale.',\n      action: {\n        label: 'Learn more',\n        href: '/en/solutions/security/'\n      }\n    },\n    {\n      illustration: 'content-and-media-delivery',\n      title: 'Media and streaming content',\n      description:\n        'Stream video and deliver large files at low latency to audiences of any size, with media processed close to viewers.',\n      action: {\n        label: 'Learn more',\n        href: '/en/solutions/streaming/'\n      }\n    }\n  ]\n</script>\n\n<template>\n  <MediaSplitStack\n    kind=\"media-end\"\n    eyebrow=\"Solutions\"\n    title=\"One platform for every workload you run\"\n    description=\"Pick the outcome you need; the same distributed platform serves it.\"\n    :bands=\"bands\"\n  />\n</template>"
   },
   {
    "name": "Types",

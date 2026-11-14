@@ -41,6 +41,7 @@
 | `templates` | `ClosingCallToActionTemplatesTemplate[]` | `[]` | false | The template cards of the scrolling grid beside the copy, in order; each is `{ title, description?, icon?, invertInDark?, href? }`. Templates without a title are skipped and the grid is omitted when none is left. |
 | `deployLabel` | `string` | `''` | false | Label of the deploy button on each card; a card renders its button only when both this and its `href` are set. |
 | `templatesAriaLabel` | `string` | `''` | false | Accessible name of the scrolling grid of templates. |
+| `hatch` | `boolean` | `true` | false | Draws the hatched closing frame under the band; turn it off when another closing band stacks directly below and draws the shared frame. |
 
 ## States
 
@@ -49,6 +50,7 @@
 - Layout: from `lg` up the ask and the grid sit side by side; below it they stack, the ask first, and the grid drops to one column below `sm`
 - Overflow: the grid holds a fixed height (32rem, 38rem from `lg`) and scrolls vertically, its top and bottom fading out
 - Empty: when `title` is empty the band renders nothing but its root; without titled templates the grid is omitted and the ask stands alone in the band; a card without `href` (or without `deployLabel`) shows no deploy button
+- `hatch` off: the band renders without its closing frame, so the closing band stacked below draws the page's one close
 
 ## Accessibility
 
@@ -58,6 +60,26 @@
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): card titles `var(--text-default)`, card lines `var(--text-muted)`; marks flagged `invertInDark` invert under the dark theme.
 - `motion-reduce:transition-none motion-reduce:transform-none` — the waving texture, the button hover and the scrolling belong to `texture-material`, `button` and `scroll-area`, which carry their own reduced-motion fallback; this band adds no motion.
 - Touch target ≥40×40 px — the band's actions are large `button`s, the deploy buttons medium.
+
+## Right-to-left
+
+- Layout: logical utilities only; the ask and the grid swap sides under `dir="rtl"` and the divider follows the start edge.
+- Icons: the deploy chevron mirrors with `button`; the template marks are not mirrored.
+- Keyboard: no arrow-key handling beyond the scroll area's own.
+- User data: template titles render as given.
+
+## Internationalization
+
+No built-in strings: the deploy label, the grid name and every visible text are props from the page JSON (`deployLabel`, `templatesAriaLabel`).
+
+- Formatting: none.
+
+## Responsive
+
+- Container queries: none; the split switches at the `lg` viewport breakpoint.
+- Narrow (below `lg`): the ask stacks over the grid; below `sm` the grid drops to one column.
+- Touch: the band's actions are large and the deploy buttons medium; the card hover only lights the button, which works without it.
+- Reflow: no horizontal scroll at 320 px and 200 % zoom; the grid scrolls vertically inside its fixed height.
 
 ## Examples
 
@@ -144,5 +166,107 @@
     deploy-label="Deploy"
     templates-aria-label="Templates you can deploy"
   />
+</template>
+```
+
+### Stacked
+
+```vue
+<script setup>
+  import ClosingCallToAction from '@aziontech/webkit/closing-call-to-action'
+  import ClosingCallToActionTemplates from '@aziontech/webkit/closing-call-to-action-templates'
+  import SectionContainer from '@aziontech/webkit/section-container'
+  import SectionGap from '@aziontech/webkit/section-gap'
+
+  const primaryAction = {
+    label: 'Start for free',
+    href: '/signup'
+  }
+
+  const secondaryAction = {
+    label: 'Browse all templates',
+    href: 'https://www.azion.com/en/documentation/products/guides/#azion-templates',
+    trailing: true
+  }
+
+  const templates = [
+    {
+      title: 'AI Inference Starter Kit',
+      description: 'Run AI models close to your users.',
+      icon: 'ai ai-edge-functions',
+      href: 'https://www.azion.com/en/documentation/products/guides/#azion-templates'
+    },
+    {
+      title: 'Next.js Commerce',
+      description: 'Ecommerce template built with Next.js and Shopify.',
+      icon: 'ai-cor ai-next',
+      invertInDark: true,
+      href: 'https://www.azion.com/en/documentation/products/guides/#azion-templates'
+    },
+    {
+      title: 'Astro Odyssey',
+      description: 'A business marketing website built with Astro.',
+      icon: 'ai-cor ai-astro',
+      href: 'https://www.azion.com/en/documentation/products/guides/#azion-templates'
+    },
+    {
+      title: 'Next.js AI Chatbot',
+      description: 'A server-rendered Next.js App Router AI chatbot.',
+      icon: 'ai-cor ai-next',
+      invertInDark: true,
+      href: 'https://www.azion.com/en/documentation/products/guides/#azion-templates'
+    },
+    {
+      title: 'SvelteKit Commerce',
+      description: 'Ecommerce template built with SvelteKit and Shopify.',
+      icon: 'ai-cor ai-svelte',
+      href: 'https://www.azion.com/en/documentation/products/guides/#azion-templates'
+    },
+    {
+      title: 'Next.js Multi-tenant Starter',
+      description: 'A minimal multi-tenant Next.js starter.',
+      icon: 'ai-cor ai-next',
+      invertInDark: true,
+      href: 'https://www.azion.com/en/documentation/products/guides/#azion-templates'
+    },
+    {
+      title: 'Cosmic Agency Website',
+      description: "A template built on Cosmic's React components.",
+      icon: 'ai-cor ai-react',
+      href: 'https://www.azion.com/en/documentation/products/guides/#azion-templates'
+    },
+    {
+      title: 'Functions Starter Kit',
+      description: 'A “Hello World” originless app powered by functions.',
+      icon: 'ai ai-edge-functions',
+      href: 'https://www.azion.com/en/documentation/products/guides/#azion-templates'
+    }
+  ]
+</script>
+
+<template>
+  <SectionContainer max-width="site">
+    <SectionGap hatch />
+
+    <ClosingCallToActionTemplates
+      anchor="contact"
+      title="Start from a template. Ship it today."
+      description="Deploy a ready-made starter in seconds, then make it yours."
+      :primary-action="primaryAction"
+      :secondary-action="secondaryAction"
+      :templates="templates"
+      deploy-label="Deploy"
+      templates-aria-label="Templates you can deploy"
+      :hatch="false"
+    />
+    <SectionGap hatch />
+
+    <ClosingCallToAction
+      kind="panel"
+      title="Ready to talk?"
+      description="Tell us what you are building and a specialist will reach out."
+      :primary-action="{ label: 'Talk to a specialist', href: '/contact', trailing: true }"
+    />
+  </SectionContainer>
 </template>
 ```

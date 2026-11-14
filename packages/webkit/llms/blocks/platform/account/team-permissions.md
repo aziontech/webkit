@@ -1,18 +1,18 @@
 # TeamPermissions (`platform/account/team-permissions`)
 
-> Teams and their permissions. The primary is the Teams and permissions list: a `PageHeader` with Create Team, search and Refresh over a `Table` of teams (name as `Table.CellLink` with a square `Avatar` and the description, permissions as `Table.CellTags` with `+N`, members, `Table.CellStatus`, and `Table.CellActions` with Edit, Duplicate and Delete behind a `ConfirmDialog`), on one `useCollection`. The CreateTeam variant is the permission matrix: General (name, description), a Permissions table grouped by area with View and Edit columns, a group `Checkbox` that is indeterminate when partly checked, filter, Select all and Clear, Edit implying View, and a `SaveBar`. The EditTeam variant fills it with a saved team and adds Members (add from the account's users, remove) and Delete team. A page body for ConsoleLayout, rendered in its default slot.
+> Teams and their permissions. The primary is the Teams and permissions list: a `PageHeader` with Create Team, the table-view controls row (`PropertyFilter`, Refresh and Download CSV as `IconButton`s, `CollectionPreferences`) over a `Table` of teams (name as `Table.CellLink` with a square `Avatar` and the description, permissions as `Table.CellTags` with `+N`, members, `Table.CellStatus`, and `Table.CellActions` with Edit, Duplicate and Delete behind a `ConfirmDialog`), on one `useCollection`. The CreateTeam variant is the permission matrix: General (name, description), a Permissions table grouped by area with View and Edit columns, a group `Checkbox` that is indeterminate when partly checked, filter, Select all and Clear, Edit implying View, and a `SaveBar`. The EditTeam variant fills it with a saved team and adds Members (add from the account's users, remove) and Delete team. The list and its states are a page body for ConsoleLayout, rendered in its default slot; CreateTeam and EditTeam are full pages in the creation frame of `platform/create/single-page-create` (a `GlobalHeader` with Back to Teams and permissions, no rail).
 
 - Surface: product
 - Source: `blocks/platform/account/team-permissions/team-permissions.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/account/team-permissions")`
-- Components: [Alert](../../../components/alert.md), [Avatar](../../../components/avatar.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [Checkbox](../../../components/checkbox.md), [Combobox](../../../components/combobox.md), [ConfirmDialog](../../../components/confirm-dialog.md), [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [Field](../../../components/field.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [PageHeader](../../../components/page-header.md), [SaveBar](../../../components/save-bar.md), [SettingsSection](../../../components/settings-section.md), [Switch](../../../components/switch.md), [Table](../../../components/table.md), [Textarea](../../../components/textarea.md), [Toast](../../../components/toast.md), [Tooltip](../../../components/tooltip.md), `use-collection`
+- Components: [Alert](../../../components/alert.md), [Avatar](../../../components/avatar.md), [Brand](../../../components/brand.md), [Breadcrumb](../../../components/breadcrumb.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [Checkbox](../../../components/checkbox.md), [CollectionPreferences](../../../components/collection-preferences.md), [Combobox](../../../components/combobox.md), [ConfirmDialog](../../../components/confirm-dialog.md), [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [Field](../../../components/field.md), [GlobalHeader](../../../components/global-header.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [PageHeader](../../../components/page-header.md), [PropertyFilter](../../../components/property-filter.md), [SaveBar](../../../components/save-bar.md), [SettingsSection](../../../components/settings-section.md), [Switch](../../../components/switch.md), [Table](../../../components/table.md), [Textarea](../../../components/textarea.md), [Toast](../../../components/toast.md), [Tooltip](../../../components/tooltip.md), `use-collection`
 - Skills: `webkit-lists`, `webkit-tables`, `webkit-form`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
 
 teams; teams and permissions; roles; roles and permissions; permission matrix; access control; rbac; create team; user groups; times e permissões; papéis e permissões; matriz de permissões; controle de acesso; criar time; edit team; team members; editar time; membros do time
 
-Who can do what in the account. An admin keeps one team per role (Administrators, Developers, Security, Finance), sees what each grants and how many people it covers, and creates or edits a team by ticking View and Edit per resource in one matrix. People get permissions only through teams; nothing is granted per person, so the list of teams is the whole access model. It is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header and the `main`.
+Who can do what in the account. An admin keeps one team per role (Administrators, Developers, Security, Finance), sees what each grants and how many people it covers, and creates or edits a team by ticking View and Edit per resource in one matrix. People get permissions only through teams; nothing is granted per person, so the list of teams is the whole access model. The list is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header and the `main`. Create Team and Edit Team are full pages in the creation frame instead (building block I).
 
 ## When to use
 
@@ -31,9 +31,9 @@ Who can do what in the account. An admin keeps one team per role (Administrators
 
 Title `Teams and permissions` and the sentence that states the model. Actions: Documentation and the primary `Create Team` at `size="large"`, which opens the CreateTeam page.
 
-### B. Search and refresh — `Input`, `Tooltip`, `IconButton` (required)
+### B. Controls row — `PropertyFilter`, `Tooltip`, `IconButton`, `CollectionPreferences` (required)
 
-A search `Input` bound with `v-bind="filterProps"` (name, description, status) and Refresh. Hidden when there is no team.
+The table-view controls row (`platform/view/table-view`): a `PropertyFilter` bound with `v-bind="propertyFilterProps"` over name, description and status, then Refresh and Download CSV as outlined `IconButton`s with a `Tooltip` each (Download CSV writes every match through the table's `exportCsv`, disabled with no match), and `CollectionPreferences` bound with `v-bind="preferencesProps"` for page size and visible columns. Hidden when there is no team.
 
 ### C. Team table — `Card`, `Table`, `Avatar`, `useCollection` (required)
 
@@ -45,7 +45,7 @@ A search `Input` bound with `v-bind="filterProps"` (name, description, status) a
 
 ### E. No match and empty — `EmptyState` (required)
 
-`No matching teams` with Clear search in the table's `#empty` slot; `No teams yet` with Create Team in a flush `Card` when the account has none.
+`No matching teams` with Clear filters in the table's `#empty` slot; `No teams yet` with Create Team in a flush `Card` when the account has none.
 
 ### F. Load failure — `Alert` (conditional)
 
@@ -60,6 +60,12 @@ On the Edit Team page, a Members section above the matrix: an Add member `Combob
 ### H. Delete team and save — `ConfirmDialog`, `Button` (EditTeam)
 
 A Delete team section at the end of the form opens a `ConfirmDialog` that says how many members lose what the team grants; the confirm button spins while the request runs. The `SaveBar` says `You have unsaved changes.` and offers Discard and Save changes only once something differs from the saved team; unchanged, it offers Back to teams and a disabled Save changes.
+
+### I. Creation frame — `IconButton`, `Avatar` (CreateTeam, EditTeam)
+
+Variants CreateTeam and EditTeam only; they add `GlobalHeader`, `Brand` and `Breadcrumb`.
+
+Creating or editing a team is a full page in the creation frame of `platform/create/single-page-create`, not a page body in `ConsoleLayout`: a `GlobalHeader` with no rail, a small outlined `IconButton` named `Back to Teams and permissions` that returns to the list, the `Brand` linking home, a `Breadcrumb` (`Teams and permissions` › `Create Team` or `Edit Team`) and the account `Avatar` on the right. The form scrolls in the `main` under it, and its `SaveBar` stays at the bottom of that scroll region.
 
 ### Outcomes — through `toast`
 
@@ -96,15 +102,17 @@ Duplicate and Delete end in a success toast. Team changes are not deploys, so th
 - Each matrix checkbox is named `View <Resource>` or `Edit <Resource>`; the area checkbox is named by its label and reports mixed when partly checked.
 - After a failed save, focus moves to the name field or to the permissions filter.
 - Members are a list named `Members`; after Remove, focus moves to the next member's Remove button, or to Add member when the list is empty.
+- The filter is named Filter teams; Refresh and Download CSV carry an accessible name and a tooltip.
+- The Back button of the creation frame is named `Back to Teams and permissions`.
 - Table name links say where they go on their tooltip; the row menu is named `Actions for <team>`.
 
 ## States
 
-- Default: five teams (one with every permission, one inactive with no members) with search, refresh, sorting, row menus, duplicate and delete wired.
-- CreateTeam: the create page with three permissions preselected; the matrix filter, Select all, Clear, Edit-implies-View, required name and at-least-one-permission errors, and a success toast on Create. Cancel and Create sit in a `SaveBar kind="centered"`, a raised card centred over the bottom of the scroll region; the Edit Team page keeps the full-width `plain` bar.
-- EditTeam: a saved team with three members and six permissions; add and remove members, Discard, Save changes with a success toast, Delete team behind a `ConfirmDialog`.
+- Default: five teams (one with every permission, one inactive with no members) with the property filter, Refresh, Download CSV, preferences, sorting, row menus, duplicate and delete wired.
+- CreateTeam: the create page in the creation frame (Back to Teams and permissions, no rail) with three permissions preselected; the matrix filter, Select all, Clear, Edit-implies-View, required name and at-least-one-permission errors, and a success toast on Create. Cancel and Create sit in a `SaveBar kind="centered"`, a raised card centred over the bottom of the scroll region; the Edit Team page keeps the full-width `plain` bar.
+- EditTeam: in the same creation frame, a saved team with three members and six permissions; add and remove members, Discard, Save changes with a success toast, Delete team behind a `ConfirmDialog`.
 - Empty: no team yet; the heading and an empty state with Create Team.
-- Loading: the first load; the search row and the table's loading rows.
+- Loading: the first load; the controls row and the table's loading rows.
 - Failed: the teams did not load; a danger Alert with Retry.
 
 ## Related
@@ -118,10 +126,10 @@ Duplicate and Delete end in a success toast. Team changes are not deploys, so th
 ## Variants
 
 - `Default` — primary (the code below)
-- `CreateTeam` — The Create Team page: name and description, the View and Edit permission matrix grouped by area with group checkboxes, filter, Select all and Clear, a status Switch, and Cancel and Create in a centered SaveBar floating over the bottom of the form; errors on the name field and above the matrix.
-- `EditTeam` — The Edit Team page: the CreateTeam form filled with a saved team, a Members section (Add member `Combobox` over the account's users with Add, each member with Remove), Delete team behind a `ConfirmDialog`, and a `SaveBar` that offers Discard and Save changes only once something changed.
-- `Empty` — No team yet: the heading and a flush EmptyState with Create Team replace the search row and the table.
-- `Loading` — The first load: the search row and the table's loading rows.
+- `CreateTeam` — The Create Team page in the creation frame (a `GlobalHeader` with Back to Teams and permissions, the brand and a breadcrumb; no rail): name and description, the View and Edit permission matrix grouped by area with group checkboxes, filter, Select all and Clear, a status Switch, and Cancel and Create in a centered SaveBar floating over the bottom of the form; errors on the name field and above the matrix.
+- `EditTeam` — The Edit Team page in the same creation frame: the CreateTeam form filled with a saved team, a Members section (Add member `Combobox` over the account's users with Add, each member with Remove), Delete team behind a `ConfirmDialog`, and a `SaveBar` that offers Discard and Save changes only once something changed.
+- `Empty` — No team yet: the heading and a flush EmptyState with Create Team replace the controls row and the table.
+- `Loading` — The first load: the controls row and the table's loading rows.
 - `Failed` — The teams did not load: a danger Alert with Retry replaces the table; Retry loads them.
 
 Each variant is the same screen in another state: `get_pattern("platform/account/team-permissions", { variant })`, or the file under `blocks/platform/account/team-permissions/variants/`.
@@ -134,18 +142,18 @@ Each variant is the same screen in another state: `get_pattern("platform/account
   import Avatar from '@aziontech/webkit/avatar'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
+  import CollectionPreferences from '@aziontech/webkit/collection-preferences'
   import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
   import DropdownMenu, { type DropdownMenuOptionValue } from '@aziontech/webkit/dropdown-menu'
   import EmptyState from '@aziontech/webkit/empty-state'
   import IconButton from '@aziontech/webkit/icon-button'
-  import Input from '@aziontech/webkit/input'
   import PageHeader from '@aziontech/webkit/page-header'
-  import Table from '@aziontech/webkit/table'
-  import type { TableColumn } from '@aziontech/webkit/table-root'
+  import PropertyFilter from '@aziontech/webkit/property-filter'
+  import Table, { type TableColumn, type TableExposed } from '@aziontech/webkit/table'
   import type { TagSeverity } from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
-  import { useCollection } from '@aziontech/webkit/use-collection'
+  import { type FilteringProperty, useCollection } from '@aziontech/webkit/use-collection'
   import { computed, ref } from 'vue'
 
   type TeamStatus = 'Active' | 'Inactive'
@@ -256,12 +264,28 @@ Each variant is the same screen in another state: `get_pattern("platform/account
     { id: 'actions', kind: 'action', hideable: false }
   ]
 
-  const { filterProps, tableProps, status, clearFilters } = useCollection({
-    items: rows,
-    columns,
-    filtering: { fields: ['name', 'description', 'status'] },
-    pagination: { pageSize: 10 }
-  })
+  const statusOptions = [...new Set(rows.value.map((row) => row.status))]
+    .sort()
+    .map((value) => ({ value }))
+
+  const properties: FilteringProperty[] = [
+    { key: 'name', label: 'Name' },
+    { key: 'description', label: 'Description' },
+    { key: 'status', label: 'Status', options: statusOptions }
+  ]
+
+  const { tableProps, propertyFilterProps, preferencesProps, status, matchingItems, clearFilters } =
+    useCollection({
+      items: rows,
+      columns,
+      filtering: { fields: ['name', 'description', 'status'] },
+      propertyFiltering: { properties },
+      pagination: { pageSize: 10, pageSizeOptions: [10, 25, 50] },
+      preferences: { storageKey: 'account-teams' }
+    })
+
+  const teamsTable = ref<TableExposed<TeamRow> | null>(null)
+  const exportCsv = () => teamsTable.value?.exportCsv({ filename: 'teams.csv' })
 
   const statusSeverity = (value: TeamStatus): TagSeverity =>
     value === 'Active' ? 'success' : 'secondary'
@@ -346,36 +370,47 @@ Each variant is the same screen in another state: `get_pattern("platform/account
       <section class="layout-section-start flex min-w-0 flex-col gap-(--layout-group-gap)">
         <header
           v-if="!loadFailed && (loading || status !== 'empty')"
-          class="flex items-center gap-(--layout-group-gap)"
+          class="flex flex-wrap items-start gap-(--layout-group-gap)"
         >
-          <div class="min-w-0 grow">
-            <Input
-              v-bind="filterProps"
-              placeholder="Search teams"
-              aria-label="Search teams"
-              class="w-full"
-            >
-              <template #iconLeft>
-                <i
-                  class="pi pi-search"
-                  aria-hidden="true"
-                />
-              </template>
-            </Input>
-          </div>
-          <Tooltip
-            text="Refresh"
-            class="shrink-0"
-          >
-            <IconButton
-              icon="pi pi-refresh"
-              kind="outlined"
-              size="medium"
-              :loading="refreshing"
-              aria-label="Refresh"
-              @click="refresh"
+          <div class="flex min-w-0 grow basis-(--container-2xs)">
+            <PropertyFilter
+              v-bind="propertyFilterProps"
+              placeholder="Filter teams"
+              aria-label="Filter teams"
             />
-          </Tooltip>
+          </div>
+          <div class="flex shrink-0 flex-wrap items-center gap-(--spacing-xs)">
+            <Tooltip
+              text="Refresh"
+              class="shrink-0"
+            >
+              <IconButton
+                icon="pi pi-refresh"
+                kind="outlined"
+                size="medium"
+                :loading="refreshing"
+                aria-label="Refresh"
+                @click="refresh"
+              />
+            </Tooltip>
+            <Tooltip
+              text="Download CSV"
+              class="shrink-0"
+            >
+              <IconButton
+                icon="pi pi-download"
+                kind="outlined"
+                size="medium"
+                :disabled="!matchingItems.length"
+                aria-label="Download CSV"
+                @click="exportCsv"
+              />
+            </Tooltip>
+            <CollectionPreferences
+              v-bind="preferencesProps"
+              title="Table preferences"
+            />
+          </div>
         </header>
 
         <Alert
@@ -425,6 +460,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
         >
           <template #content>
             <Table
+              ref="teamsTable"
               v-bind="tableProps"
               :loading="loading || refreshing"
               enable-sorting
@@ -501,11 +537,11 @@ Each variant is the same screen in another state: `get_pattern("platform/account
                   size="small"
                   icon="pi pi-search"
                   title="No matching teams"
-                  description="No team matches this search."
+                  description="No team matches these filters."
                 >
                   <template #actions>
                     <Button
-                      label="Clear search"
+                      label="Clear filters"
                       kind="outlined"
                       size="small"
                       @click="clearFilters"

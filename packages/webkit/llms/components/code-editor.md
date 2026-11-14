@@ -11,6 +11,7 @@
 - Editing a function, a script, a SQL query, a JSON or YAML document inside the product.
 - Showing the change between two versions of code side by side (diff mode), for example before a deploy or a revert.
 - Code that the server validates: the diagnostics come back as `markers` and show on their lines and in a list.
+- A JSON document with a known shape (a function's argument schema, a configuration file): pass its JSON Schema as `schema` and Monaco checks the document against it as the user types.
 - A read-only view of code that still needs the editor's navigation (find, folding) once Monaco is loaded.
 
 ## Do
@@ -20,6 +21,8 @@
 - Set `padLineNumbers` on a full-page code editor (`fill`, a function's Code or Arguments document), as the console does (01, 02…); leave it off on a small editor inside a form.
 - Function calls are coloured for you (JavaScript and TypeScript, with `--code-sintax-function`); do not register your own Monarch grammar for that.
 - Send server diagnostics as `markers` with 1-based lines; keep each message one sentence.
+- Pass a JSON Schema as `schema` for a JSON document with a known shape, and listen to `validate` to show the first problem in a `Field.Error`; keep `markers` for what only the server knows.
+- Set `:bordered="false"` when the editor fills a pane that already frames it (a resizable pane, a full-page function editor, a drawer body); keep the default frame inside a form.
 - Give the editor a fixed `height`, or `fill` inside a flex column that has its own height; never let it grow with the content.
 - Use `readonly` for code the user may read and select but not change; use `disabled` only when the whole form is locked.
 - In diff mode, `original` is the left side and `v-model` the right side; keep the right side editable only when the change can still be edited.
@@ -55,9 +58,11 @@
 | `markers` | `CodeEditorMarker[]` | `[]` | false | Diagnostics shown on their lines and in the problems list. |
 | `height` | `string` | `'16rem'` | false | CSS height of the editing area. |
 | `fill` | `boolean` | `false` | false | Fills a flex column instead of using `height`. |
+| `bordered` | `boolean` | `true` | false | Draws the frame: border, corner radius and an offset focus ring. Off, the editor sits flush in its pane. |
 | `lineNumbers` | `boolean` | `true` | false | Shows the line-number gutter. |
 | `padLineNumbers` | `boolean` | `false` | false | Zero-pads line numbers to two digits (01, 02…), as the console's full-page function and arguments editors do. |
 | `path` | `string` | `''` | false | Model path for Monaco language services (`index.ts`, `args.json`). |
+| `schema` | `Record<string, unknown>` | `undefined` | false | JSON Schema the value is checked against when `language` is `json` and Monaco is loaded. |
 | `ariaLabel` | `string` | `''` | false | Accessible name when no `Field` label names it. Empty uses the locale catalog. |
 | `modelValue` | `string` | `''` | false | Two-way value (`v-model`). |
 
@@ -67,6 +72,7 @@
 | --- | --- | --- |
 | `ready` | `unknown` | Monaco mounted; the payload is the editor instance (for actions). |
 | `load-error` | `unknown` | The loader rejected; the plain editor stays. |
+| `validate` | `CodeEditorMarker[]` | The diagnostics Monaco's language services (JSON syntax and `schema`, TypeScript) put on the value, as markers sorted by line, each time they change. The `markers` prop is not echoed back; the plain editor never fires it. |
 
 ## Slots
 
@@ -88,16 +94,17 @@ _none_ — monolithic. The gutter, the fallback textarea, the Monaco host, the t
 
 - Visual states: `default`, `focus-visible` (ring on the frame), `invalid`, `readonly`, `disabled`, `loading` (Monaco on the way, the plain editor is live)
 - `data-mode`: `plain` | `loading` | `monaco` — which editor is live
-- `data-invalid`, `data-readonly`, `data-disabled`, `data-diff`, `data-fill` mirror their props
+- `data-invalid`, `data-readonly`, `data-disabled`, `data-diff`, `data-fill`, `data-bordered` mirror their props
+- Borderless (`bordered` false): no border and no radius; the focus ring is drawn inset so a pane edge never clips it
 - Each gutter line with a marker carries `data-severity` (`error` | `warning` | `info`)
 - Load failure: the plain editor stays and a muted note says the full editor could not load
 
 ## Accessibility
 
-- Visible focus: the frame shows `focus-within:ring-2 ring-(--ring-color)` for both editors.
+- Visible focus: the frame shows `focus-within:ring-2 ring-(--ring-color)` for both editors; a borderless editor draws the same ring inset.
 - Keyboard map (plain editor): typing edits; `Tab` inserts two spaces and `Shift+Tab` removes them at the line start; `Escape` releases the trap so the next `Tab` / `Shift+Tab` leaves the editor (WCAG 2.1.2); the problems list buttons move the caret to the marker's line. Monaco runs in tab-focus mode by default, so `Tab` moves focus out unless the user toggles it with `Ctrl+M`.
 - ARIA: the textarea is a native multi-line text box named by the `Field` label or `ariaLabel`; `aria-invalid`, `aria-readonly` and `aria-describedby` (the field's description plus the problems summary); the gutter is `aria-hidden`; the problems list is a named list; the problem count is a polite `status`.
-- Diagnostics are never colour only: each one is a list item with its line and severity in text.
+- Diagnostics are never colour only: each one is a list item with its line and severity in text. Schema problems reach the user through Monaco's own hover and, when the app shows them, through `validate` in a `Field.Error`.
 - Contrast ≥4.5:1: code and line numbers use the code syntax tokens tuned for both themes.
 - Forced colors: the frame keeps a system border and the gutter marker becomes a system glyph colour.
 

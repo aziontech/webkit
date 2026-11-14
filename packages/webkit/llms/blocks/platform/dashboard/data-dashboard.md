@@ -5,12 +5,12 @@
 - Surface: product
 - Source: `blocks/platform/dashboard/data-dashboard/data-dashboard.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/dashboard/data-dashboard")`
-- Components: [Alert](../../../components/alert.md), [Chart](../../../components/chart.md), [ChartCard](../../../components/chart-card.md), [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [Hint](../../../components/hint.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [PageHeader](../../../components/page-header.md), [StatTile](../../../components/stat-tile.md), `TableRoot`, [Tag](../../../components/tag.md), [ToggleGroup](../../../components/toggle-group.md), [Tooltip](../../../components/tooltip.md)
+- Components: [Alert](../../../components/alert.md), [Chart](../../../components/chart.md), [ChartCard](../../../components/chart-card.md), [Dialog](../../../components/dialog.md), `DialogClose`, `DialogContent`, `DialogDescription`, `DialogOverlay`, `DialogPortal`, `DialogTitle`, [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [Hint](../../../components/hint.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [PageHeader](../../../components/page-header.md), `PanelContent`, `PanelHeader`, [Select](../../../components/select.md), [StatTile](../../../components/stat-tile.md), `TableRoot`, [Tag](../../../components/tag.md), [Toast](../../../components/toast.md), [ToggleGroup](../../../components/toggle-group.md), [Tooltip](../../../components/tooltip.md), `utils/csv`
 - Skills: `webkit-data-viz`, `webkit-tables`, `webkit-ui-states`
 
 ## Asked as
 
-data dashboard; metrics dashboard; kpi dashboard; stat tiles; data transferred; usage dashboard; breakdown charts; métricas; painel de dados; painel de uso
+data dashboard; metrics dashboard; kpi dashboard; stat tiles; data transferred; usage dashboard; breakdown charts; métricas; painel de dados; painel de uso; real user monitoring; rum; web vitals; core web vitals; monitoramento de usuário real
 
 The usage page: how much the account's projects consumed in the period, how that compares with the
 previous period, and which projects drove it. It leads with six KPI tiles (each with a sparkline and
@@ -67,13 +67,19 @@ Only on the period comparison chart, labelled with its card.
 
 Names Expand and More options on hover and focus.
 
-### H. Expand — `IconButton` (optional)
+### H. Expand — `IconButton`, `Dialog`, `DialogPortal`, `DialogOverlay`, `DialogContent`, `PanelHeader`, `DialogTitle`, `DialogDescription`, `DialogClose`, `PanelContent` (optional)
 
-Opens a card full size; its `aria-label` names the card.
+Its `aria-label` names the card (`Expand Data transferred by project`). It opens one large `Dialog`
+with the card title, its Hint sentence as the description, and the region at full size: the chart
+at a 420px plot with the same Line or Bar choice, or the usage table at ten rows per page. Closing
+it returns focus to Expand. Disabled while loading and after a failure.
 
-### I. More options — `DropdownMenu` (optional)
+### I. More options — `DropdownMenu`, `toast` (optional)
 
-`Copy query` and `Export CSV` in every card.
+`Copy query` copies the card's GraphQL query and confirms with `Query copied.`; `Export CSV` saves
+the card's rows with `toCsv` and `downloadCsv` from `@aziontech/webkit/utils/csv` and confirms with
+`CSV exported.` and the file name. Export is disabled while loading and after a failure; the app
+mounts the toast region.
 
 ### J. Charts — `Chart` (required)
 
@@ -93,6 +99,18 @@ Searchable, paginated; requests and data transferred per project in tabular, rig
 
 `No usage yet` / `Usage appears here once a project serves requests.` when nothing was recorded, and
 `No matching rows` / `Change the search.` when the search matches nothing.
+
+### N. Real-user monitoring — `StatTile`, `Hint` (optional)
+
+Variant RealUser only; it adds `Select` to the page. Timings measured in the reader's browsers instead of consumption: title
+`Real-user monitoring`, and a medium Period `Select` (`Last hour`, `Last 24 hours`, `Last 7 days`,
+`Last 30 days`) in the `PageHeader` actions drives every figure. Four vitals `StatTile`s
+(`kind="sans"`) lead: `Page load time`, `Largest contentful paint`, `First input delay`,
+`Sessions`, each a median value beside its unit (`s`, `ms`, `K`) with no delta, and a `Hint` in the
+aside that defines the timing. Under them, a two-column grid of trend `StatTile`s, one per vital,
+each with the latest value, its unit, a sparkline of the period and the period name in the aside.
+A timing has no "previous period" the reader acts on here, so these tiles carry no delta and no
+`inverse`.
 
 ## Do
 
@@ -115,6 +133,7 @@ Searchable, paginated; requests and data transferred per project in tabular, rig
 - **Series names:** `This period`, `Previous period`.
 - **Empty state:** `No usage yet` / `Usage appears here once a project serves requests.`
 - **No-match state:** `No matching rows` / `Change the search.`
+- **RealUser:** title `Real-user monitoring`, description `Real-user timings collected in the browser, for the selected period.`; tile labels are the timing in sentence case (`First input delay`); the aside of a trend tile is the period name (`Last 24 hours`).
 
 ## Accessibility
 
@@ -129,6 +148,7 @@ Searchable, paginated; requests and data transferred per project in tabular, rig
 - Loading: `Skeleton`s hold every tile, chart and table row in place.
 - Empty: no usage recorded yet; each tile shows a dash, and every chart and the table explain that nothing was recorded.
 - Failed: the request for the period failed; tiles show a dash, and every card keeps its header with a danger `Alert` that names what did not load and offers Retry.
+- RealUser: the real-user monitoring page; the vitals and the trend tiles follow the Period select.
 
 ## Related
 
@@ -142,6 +162,7 @@ Searchable, paginated; requests and data transferred per project in tabular, rig
 - `Loading` — The first response is on its way: Skeletons hold every tile, chart and table row in place.
 - `Empty` — No usage recorded yet: each tile shows a dash, and every chart and the table explain that nothing was recorded in the period.
 - `Failed` — The request for the period failed: the tiles read as dashes, and every card keeps its header with a danger Alert that names what did not load and offers Retry.
+- `RealUser` — Real-user monitoring: a Period Select in the header drives four vitals StatTiles (page load time, largest contentful paint, first input delay, sessions) that read a median value beside its unit with no delta and a Hint on the label, over a two-column grid of trend StatTiles with the latest value, a sparkline of the period and the period name in the aside.
 
 Each variant is the same screen in another state: `get_pattern("platform/dashboard/data-dashboard", { variant })`, or the file under `blocks/platform/dashboard/data-dashboard/variants/`.
 
@@ -151,18 +172,29 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
 <script setup lang="ts">
   import Chart, { type ChartSeries } from '@aziontech/webkit/chart'
   import ChartCard from '@aziontech/webkit/chart-card'
+  import Dialog from '@aziontech/webkit/dialog'
+  import DialogClose from '@aziontech/webkit/dialog-close'
+  import DialogContent from '@aziontech/webkit/dialog-content'
+  import DialogDescription from '@aziontech/webkit/dialog-description'
+  import DialogOverlay from '@aziontech/webkit/dialog-overlay'
+  import DialogPortal from '@aziontech/webkit/dialog-portal'
+  import DialogTitle from '@aziontech/webkit/dialog-title'
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
   import EmptyState from '@aziontech/webkit/empty-state'
   import Hint from '@aziontech/webkit/hint'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
   import PageHeader from '@aziontech/webkit/page-header'
+  import PanelContent from '@aziontech/webkit/panel-content'
+  import PanelHeader from '@aziontech/webkit/panel-header'
   import StatTile from '@aziontech/webkit/stat-tile'
   import TableRoot, { type TableColumn } from '@aziontech/webkit/table-root'
   import Tag from '@aziontech/webkit/tag'
+  import { toast } from '@aziontech/webkit/toast'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
   import Tooltip from '@aziontech/webkit/tooltip'
-  import { ref } from 'vue'
+  import { type CsvColumn, downloadCsv, toCsv } from '@aziontech/webkit/utils/csv'
+  import { computed, ref } from 'vue'
 
   const compact = new Intl.NumberFormat('en-US', { notation: 'compact', maximumFractionDigits: 1 })
 
@@ -431,6 +463,133 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
     { label: 'Line', value: 'line' },
     { label: 'Bar', value: 'bar' }
   ]
+
+  interface CardQuery {
+    dataset: string
+    fields: string[]
+    orderBy: string
+  }
+
+  const periodStart = '2026-11-13T00:00:00Z'
+  const periodEnd = '2026-11-13T23:59:59Z'
+
+  const cardQuery = (report: CardQuery) =>
+    [
+      'query {',
+      `  ${report.dataset}(`,
+      '    limit: 5000',
+      '    aggregate: { sum: requests }',
+      `    filter: { tsRange: { begin: "${periodStart}", end: "${periodEnd}" } }`,
+      `    orderBy: [${report.orderBy}]`,
+      '  ) {',
+      ...report.fields.map((field) => `    ${field}`),
+      '  }',
+      '}'
+    ].join('\n')
+
+  const copyQuery = async (report: CardQuery) => {
+    try {
+      await globalThis.navigator.clipboard.writeText(cardQuery(report))
+      toast.success('Query copied.', {
+        description: 'Paste it into any GraphQL client that sends your token.'
+      })
+    } catch {
+      toast.error('The query could not be copied.')
+    }
+  }
+
+  type CardId = 'comparison' | 'projects' | 'usage'
+
+  const queries: Record<CardId, CardQuery> = {
+    comparison: {
+      dataset: 'usageMetrics',
+      fields: ['ts', 'dataTransferred', 'previousDataTransferred'],
+      orderBy: 'ts_ASC'
+    },
+    projects: {
+      dataset: 'usageMetrics',
+      fields: ['project', 'dataTransferred'],
+      orderBy: 'dataTransferred_DESC'
+    },
+    usage: {
+      dataset: 'usageMetrics',
+      fields: ['project', 'requests', 'dataTransferred'],
+      orderBy: 'requests_DESC'
+    }
+  }
+
+  interface CardReport extends CardQuery {
+    label: string
+    description: string
+    columns: CsvColumn[]
+    rows: () => object[]
+  }
+
+  const seriesRows = (series: readonly ChartSeries[], axis: readonly (string | Date)[]) =>
+    axis.map((label, index) => ({
+      ts: label instanceof Date ? label.toISOString() : label,
+      ...Object.fromEntries(series.map((entry) => [entry.id, entry.values[index] ?? '']))
+    }))
+
+  const expanded = ref(false)
+  const expandedId = ref<CardId>('comparison')
+  const expandedReport = computed(() => reports[expandedId.value])
+
+  const openExpanded = (id: CardId) => {
+    expandedId.value = id
+    expanded.value = true
+  }
+
+  const onCardOption = (id: CardId, value: string | number) => {
+    const report = reports[id]
+    if (value === 'query') {
+      copyQuery(report)
+      return
+    }
+    const filename = `${id}-last-24-hours.csv`
+    downloadCsv(filename, toCsv({ columns: report.columns, rows: report.rows() }))
+    toast.success('CSV exported.', { description: filename })
+  }
+
+  const reports: Record<CardId, CardReport> = {
+    comparison: {
+      ...queries.comparison,
+      label: 'Data transferred, this period vs previous',
+      description:
+        'Data delivered by every project in the selected period, drawn over the same span of the previous period.',
+      columns: [
+        { id: 'ts', header: 'Time' },
+        { id: 'current', header: 'This period' },
+        { id: 'previous', header: 'Previous period' }
+      ],
+      rows: () => seriesRows(comparison.series, comparison.labels)
+    },
+    projects: {
+      ...queries.projects,
+      label: 'Data transferred by project',
+      description: 'The projects that delivered the most data in the period.',
+      columns: [
+        { id: 'project', header: 'Project' },
+        { id: 'dataTransferred', header: 'Data transferred' }
+      ],
+      rows: () =>
+        ranking.labels.map((project, index) => ({
+          project,
+          dataTransferred: ranking.series[0]?.values[index] ?? ''
+        }))
+    },
+    usage: {
+      ...queries.usage,
+      label: 'Usage by project',
+      description: 'Requests and data transferred per project in the period.',
+      columns: [
+        { id: 'project', header: 'Project' },
+        { id: 'requests', header: 'Requests' },
+        { id: 'dataTransferred', header: 'Data transferred' }
+      ],
+      rows: () => rows
+    }
+  }
 </script>
 
 <template>
@@ -504,9 +663,13 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
                   kind="transparent"
                   size="small"
                   aria-label="Expand Data transferred, this period vs previous"
+                  @click="openExpanded('comparison')"
                 />
               </Tooltip>
-              <DropdownMenu placement="bottom-end">
+              <DropdownMenu
+                placement="bottom-end"
+                @select="(_event, value) => onCardOption('comparison', value)"
+              >
                 <DropdownMenu.Trigger>
                   <IconButton
                     icon="pi pi-ellipsis-h"
@@ -576,9 +739,13 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
                   kind="transparent"
                   size="small"
                   aria-label="Expand Data transferred by project"
+                  @click="openExpanded('projects')"
                 />
               </Tooltip>
-              <DropdownMenu placement="bottom-end">
+              <DropdownMenu
+                placement="bottom-end"
+                @select="(_event, value) => onCardOption('projects', value)"
+              >
                 <DropdownMenu.Trigger>
                   <IconButton
                     icon="pi pi-ellipsis-h"
@@ -643,9 +810,13 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
                   kind="transparent"
                   size="small"
                   aria-label="Expand Usage by project"
+                  @click="openExpanded('usage')"
                 />
               </Tooltip>
-              <DropdownMenu placement="bottom-end">
+              <DropdownMenu
+                placement="bottom-end"
+                @select="(_event, value) => onCardOption('usage', value)"
+              >
                 <DropdownMenu.Trigger>
                   <IconButton
                     icon="pi pi-ellipsis-h"
@@ -728,6 +899,99 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
         </ChartCard>
       </div>
     </div>
+    <Dialog
+      v-model:open="expanded"
+      size="large"
+    >
+      <DialogPortal>
+        <DialogOverlay />
+        <DialogContent>
+          <PanelHeader class="w-full">
+            <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+              <DialogTitle>{{ expandedReport.label }}</DialogTitle>
+              <DialogDescription>{{ expandedReport.description }}</DialogDescription>
+            </div>
+            <DialogClose />
+          </PanelHeader>
+          <PanelContent>
+            <div class="flex min-w-0 flex-col gap-(--spacing-md)">
+              <template v-if="expandedId === 'comparison'">
+                <div>
+                  <ToggleGroup
+                    v-model="form"
+                    :options="FORMS"
+                    size="small"
+                    :aria-label="`Chart form for ${expandedReport.label}`"
+                  />
+                </div>
+                <Chart
+                  :series="comparison.series"
+                  :labels="comparison.labels"
+                  :format-value="formatBytes"
+                  :height="420"
+                  empty-title="No usage yet"
+                  empty-description="Usage appears here once a project serves requests."
+                  :aria-label="expandedReport.label"
+                >
+                  <Chart.Grid />
+                  <Chart.Axis kind="y" />
+                  <Chart.Axis kind="x" />
+                  <Chart.Bar
+                    v-if="form === 'bar'"
+                    stacked
+                  />
+                  <Chart.Line v-else />
+                  <Chart.Crosshair />
+                  <Chart.Tooltip />
+                  <Chart.Legend totals />
+                </Chart>
+              </template>
+              <Chart
+                v-else-if="expandedId === 'projects'"
+                :series="ranking.series"
+                :labels="ranking.labels"
+                orientation="horizontal"
+                :format-value="formatBytes"
+                :height="420"
+                empty-title="No usage yet"
+                empty-description="Usage appears here once a project serves requests."
+                :aria-label="expandedReport.label"
+              >
+                <Chart.Grid />
+                <Chart.Axis kind="y" />
+                <Chart.Axis kind="x" />
+                <Chart.Bar labeled />
+                <Chart.Tooltip />
+              </Chart>
+              <TableRoot
+                v-else
+                :data="rows"
+                :columns="columns"
+                row-key="id"
+                enable-sorting
+                paginated
+                :page-size="10"
+                header-kind="compact"
+                bordered
+              >
+                <template #empty>
+                  <EmptyState
+                    size="small"
+                    icon="pi pi-chart-line"
+                    title="No usage yet"
+                    description="Usage appears here once a project serves requests."
+                  />
+                </template>
+
+                <template #cell-requests="{ row }">
+                  <span class="tabular-nums">{{ formatCount(row.requests) }}</span>
+                </template>
+              </TableRoot>
+            </div>
+          </PanelContent>
+        </DialogContent>
+      </DialogPortal>
+    </Dialog>
   </div>
 </template>
 ```

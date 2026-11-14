@@ -1,0 +1,23 @@
+{
+ "purpose": "The body of a careers posting page, under the posting's title band: the description in rows, one per section of the posting (a heading, then its paragraphs and bullet lists), beside a sticky rail that restates the posting (its area, its title and its facets such as department, location and contract) with the link to the application; then the application form, and a dialog that confirms a sent application with a way back to the open positions. From the design sample's careers job page. It is a page section — the site places it from a `{ _id: 'job-posting', props }` entry and binds `props` straight onto it — and it composes `section-module`, `frame-box`, `section-title`, `overline`, `button`, `field`, `label`, `input`, `phone-input`, `file-dropzone`, `file-token-group`, `alert`, `dialog` and `panel`. It collects data, so it follows the forms exception of the page-section contract: it validates on submit only and emits `submit`; the site sends the application and hands the outcome back through `loading`, `submitted` and `error`.",
+ "useWhen": [
+  "On the page of one open position, under a `hero-band` (`kind: 'title-band'`) that carries the posting's title and its apply link."
+ ],
+ "avoidWhen": [
+  "For the list of open positions → use `listing-browser`.",
+  "For a lead or contact form at the top of a landing page → use `hero-form`.",
+  "For a newsletter sign-up at the end of a page → use `closing-call-to-action-newsletter`."
+ ],
+ "related": [
+  "hero-band` — the title band above the posting; its action links to `#` plus `form.anchor`.",
+  "hero-form` — the sibling page section that also emits `submit` and takes `loading`, `submitted` and `error`."
+ ],
+ "bestPractices": [
+  "Write each section as a short heading and its `blocks`: a `text` block per paragraph, a `list` block per bullet list, in the posting's order.",
+  "Keep `facets` to the four the listing states (department, location, work arrangement, contract), each with a glyph.",
+  "Set `form.anchor` (for example `apply`) and point the title band's action at `#apply`; the rail's apply button links there too.",
+  "Put the format and size limits of a `file` field in its `helper`, and the accepted types in `accept`.",
+  "Mark only what the team needs as `required`; say \"Optional.\" in the `helper` of the rest.",
+  "Send the application from the `submit` handler, read the file from `new FormData(event.target)`, and set `loading`, then `submitted` or `error`."
+ ]
+}

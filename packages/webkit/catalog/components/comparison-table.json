@@ -9,11 +9,15 @@
  ],
  "related": [
   "compare-plans` — the plan-by-plan matrix of Pricing.",
-  "tooltip` — names each support glyph on hover and focus."
+  "tooltip` — names each support glyph on hover and focus.",
+  "logo` — draws the competitor's mark right on both themes."
  ],
  "bestPractices": [
   "Give every row a `definition`; the info popover is where a reader learns what the capability means.",
-  "Ship both `competitor.logo` (dark theme) and `competitor.logoLight` (light theme); with one file it shows in both, with none the name shows as text.",
+  "Pass the competitor's entry from `@aziontech/webkit/assets/competitor-registry` (`competitor('Akamai')`): its `logo` and `logoLight` render on first paint, server render included.",
+  "With only a `name`, the band looks the name up in the competitor registry once the page is interactive (the registry loads on demand, outside the band's bundle) and shows the name as text until then, or for a platform the registry does not hold.",
+  "For a platform outside the registry, ship both `competitor.logo` (dark theme) and `competitor.logoLight` (light theme), or one file with its `artwork`.",
+  "Set `anchor` when a page links to the table (`#compare`).",
   "Keep `caption` equal to the title; it is the table's accessible name."
  ]
 }

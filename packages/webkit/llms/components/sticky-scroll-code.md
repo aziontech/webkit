@@ -30,16 +30,17 @@
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
+| `anchor` | `string` | `''` | false | In-page id set on the band so a `#hash` link can scroll to it. |
 | `eyebrow` | `string` | `''` | false | Overline above the section title. |
 | `title` | `string` | `''` | false | Headline of the band, rendered by the large section title as its `h2`; the band renders no header when empty. |
 | `description` | `string` | `''` | false | Supporting sentence under the headline. |
-| `items` | `StickyScrollCodeItem[]` | `[]` | false | The capabilities, in reading order; each is `{ title, description, code, action? }` where `code` is the one-file sample `{ fileName, code, language?, fileIcon?, copyAriaLabel? }` and `action` is `{ label, href, trailing? }` rendered as a small secondary button under the open item. |
+| `items` | `StickyScrollCodeItem[]` | `[]` | false | The capabilities, in reading order; each is `{ title, description, code, action? }` where `code` is the one-file sample `{ fileName, code, language?, fileIcon?, copyAriaLabel? }` and `action` is `{ label, href, trailing?, target?, kind? }` rendered as a small button under the open item, `secondary` unless `kind` says `outlined` or `transparent`, opening in a new tab when `target` is `_blank`. |
 
 ## States
 
 - Visual states: `default`; the open item, its progress and the pinned frame are scroll-driven state owned by `sticky-stack`
 - Empty: when `items` is empty the band renders nothing — not the header, not the frame
-- The header renders only when `title` is set; an item's button renders only when it has an `action`
+- The header renders only when `title` is set; an item's button renders only when it has an `action`; it is `secondary` unless the action sets `kind` (`outlined` or `transparent`) and carries the action's `target`
 
 ## Accessibility
 
@@ -134,7 +135,8 @@
       action: {
         label: 'Docs',
         href: 'https://www.azion.com/en/documentation/devtools/',
-        trailing: true
+        trailing: true,
+        target: '_blank'
       },
       code: {
         fileName: 'requests.graphql',
@@ -149,6 +151,7 @@
 
 <template>
   <StickyScrollCode
+    anchor="ship-it"
     eyebrow="Ship It"
     title="Everything You Need to Build and Deploy"
     description="Deploy from Git or the CLI, automate with APIs and Terraform, and query every metric over GraphQL. One platform carries your web app from the first push to the traffic it serves."

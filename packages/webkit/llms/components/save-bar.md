@@ -52,6 +52,7 @@
 
 - Visual states: `default`
 - `data-kind` mirrors the `kind` prop on the root
+- Floating inset: while a `floating` bar is mounted it publishes its measured height on the document root as `--save-bar-inset` (for a scroll region of its own, such as a code editor, to pad its bottom) and `--toast-offset-bottom` (so the `toaster` stacks above the bar), and updates both when the bar resizes. When the bar would cover the end of the content, the root grows to the bar's height so the last field can scroll clear of it; when there is nothing left to cover, the root stays at zero height. Both properties are removed when the bar unmounts or changes to another `kind`. The other kinds publish nothing.
 - Responsive: the root is the `@container/save-bar`. `floating` and `docked` put the message and the actions on one row from `@xl` of the bar; below it the actions stack full width under the message, Save on top. `plain` stacks the same way below `@md`. `fade` keeps `leading` (Back) and the actions on one row at every width, the actions at the inline end. `centered` keeps the card centred and one row at every width: the optional `leading` or `default` content first, then the actions; the card never grows wider than the bar and lets clicks through around it. The bar keeps `env(safe-area-inset-bottom)` clear on phones.
 
 ## Accessibility
@@ -60,6 +61,26 @@
 - Keyboard map: `Tab` reaches Discard, then Save, in reading order (the column is reversed visually on a phone so Save sits on top).
 - ARIA: the root is a `footer`; the status glyph is `aria-hidden`.
 - Contrast ≥4.5:1 for the status sentence.
+
+## Right-to-left
+
+- Layout: logical utilities only (`ms-auto`, `me-auto`, `ps-`); the message sits at the inline start and the actions at the inline end.
+- Icons: the info glyph is not mirrored.
+- Keyboard: none of its own; `Tab` order follows the actions in the slot.
+- User data: none.
+
+## Internationalization
+
+No built-in strings: the status sentence and the action labels come from the consumer's slots.
+
+- Formatting: none.
+
+## Responsive
+
+- Container queries: the root is `@container/save-bar`; `floating` and `docked` go to one row from `@xl`, `plain` stacks below `@md`.
+- Narrow (≤ 640 px or a narrow container): the actions stack full width under the message, Save on top; the bar keeps `env(safe-area-inset-bottom)` clear.
+- Touch: the actions are `Button` at `medium`, full width when stacked; no hover-only affordance.
+- Reflow: no horizontal scroll at 320 px and 200 % zoom; the floating bar reserves scroll room so it never hides the last field.
 
 ## Examples
 

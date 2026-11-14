@@ -8,18 +8,19 @@
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],
- "purpose": "An editable list of rows with the same fields, after Cloudscape's attribute editor: key and value pairs (environment variables, headers, metadata) or any set of columns given by a `definition`. It owns the row anatomy every hand-built editor repeats: a label per cell, one control per cell, a per-cell error under the field, Add and Remove, an item limit, the empty text, focus after add and remove, and a polite announcement of each change. A grouped mode lays rows out as AND groups joined by OR, the shape of rule criteria. It edits an array and validates nothing itself: the consumer passes `errors`.",
+ "purpose": "An editable list of rows with the same fields, after Cloudscape's attribute editor: key and value pairs (environment variables, headers, metadata) or any set of columns given by a `definition`. It owns the row anatomy every hand-built editor repeats: a label per cell, one control per cell, a per-cell error under the field, Add and Remove, an item limit, the empty text, focus after add and remove, and a polite announcement of each change. A grouped mode lays rows out as AND groups joined by OR, the shape of rule criteria. With `reorderable`, rows (and groups) carry a grip and Move up / Move down buttons, so the order itself is part of the value, as in rule criteria evaluated top to bottom. It edits an array and validates nothing itself: the consumer passes `errors`.",
  "setup": null,
  "useWhen": [
   "Users add, edit and remove a variable number of pairs or tuples: environment variables, request headers, query arguments, labels, metadata.",
   "Rule criteria: conditions inside a group must all match (and), groups are alternatives (or).",
-  "A bulk form where each row has the same two to four fields and a row-level error can occur."
+  "A bulk form where each row has the same two to four fields and a row-level error can occur.",
+  "An ordered list of rows where the order matters (criteria evaluated top to bottom, header precedence): turn on `reorderable`."
  ],
  "avoidWhen": [
   "Key and value tags with limits, reserved prefixes and removal of saved tags → use `tag-editor`, which is built on this component.",
   "A fixed set of named settings on one resource → use `field` controls in a form.",
   "Many records the user browses, filters and acts on → use `table` with row actions.",
-  "An ordered list of actions with drag and drop and per-type arguments → compose it by hand as in the `platform/edit/rule-builder` block."
+  "An ordered list of actions whose argument fields change per type → compose it by hand as in the behaviors of the `platform/edit/rule-builder` block."
  ],
  "related": [
   "tag-editor` — key and value tags with limits and validation, on top of AttributeEditor.",
@@ -36,7 +37,8 @@
   "Set `limit` when the backend has one; the component says how many rows are left and disables Add at the limit.",
   "Replace a cell's control through `cell-<key>` (a `Select` for an operator, a `Switch` for secret) instead of drawing rows by hand; use `row` only when the row needs a layout of its own.",
   "Type the rows with your own interface (`ref<Header[]>`): `value` in `cell-<key>` and `item` in every slot then carry the field types, so a `Select` or `Switch` binds `value` without `as string` / `as boolean`.",
-  "Name the editor (`ariaLabel`) after what the rows are: \"Environment variables\", \"Request headers\"."
+  "Name the editor (`ariaLabel`) after what the rows are: \"Environment variables\", \"Request headers\".",
+  "Turn on `reorderable` only when the order changes behavior; an unordered list (environment variables) stays without grips."
  ],
  "props": [
   {
@@ -152,6 +154,13 @@
    "doc": "Disables Add only, for example until the last row is filled in."
   },
   {
+   "name": "reorderable",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Shows a grip and Move up / Move down on every row (and every group in grouped mode) when there is more than one; rows move by dragging the grip, with the buttons, with Arrow Up / Arrow Down on the grip or Alt+Arrow Up / Alt+Arrow Down anywhere in the row. The new order goes out through v-model."
+  },
+  {
    "name": "ariaLabel",
    "type": "string",
    "default": "''",
@@ -163,12 +172,12 @@
   {
    "name": "update:items",
    "payload": "TItem[]",
-   "notes": "A row was added, removed or edited in list mode."
+   "notes": "A row was added, removed, edited or moved in list mode."
   },
   {
    "name": "update:groups",
    "payload": "TItem[][]",
-   "notes": "A row or group was added, removed or edited in grouped mode."
+   "notes": "A row or group was added, removed, edited or moved in grouped mode."
   },
   {
    "name": "add",
@@ -184,8 +193,8 @@
  "slots": [
   {
    "name": "row",
-   "scope": "{ item, index, groupIndex, errors, update, remove, removable, removeLabel }",
-   "notes": "Replaces the whole row; the column header is not drawn. `remove` takes the activating event (`@click=\"remove\"`)."
+   "scope": "{ item, index, groupIndex, errors, update, remove, removable, removeLabel, move }",
+   "notes": "Replaces the whole row; the column header and the reorder controls are not drawn. `remove` takes the activating event (`@click=\"remove\"`); `move(event, offset)` moves the row when `reorderable` is on."
   },
   {
    "name": "row-actions",

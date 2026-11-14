@@ -83,6 +83,13 @@
    "default": "false",
    "required": "false",
    "doc": "The site could not send the address: `form.errorMessage` shows under the form."
+  },
+  {
+   "name": "hatch",
+   "type": "boolean",
+   "default": "true",
+   "required": "false",
+   "doc": "Draws the hatched closing frame under the band; turn it off when another closing band stacks directly below and draws the shared frame."
   }
  ],
  "events": [

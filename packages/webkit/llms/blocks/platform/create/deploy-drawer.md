@@ -1,11 +1,11 @@
 # DeployDrawer (`platform/create/deploy-drawer`)
 
-> The drawer a platform deploys from, opened by the outlined Deploy button on a service or a project. Every variant shares one Resources card: a row per resource with its Ready tag, the picked version and a Change version menu, and a Dependencies disclosure with the modules and integrations the service references. On a service the default flow is environment first: the Project card uses an existing project or creates one, the environments come as radio blocks, and Projects impacted lists every project the environment’s shared Deployment Settings publish to. A deploy started without a pinned version first builds one, so the drawer opens as Build and deployment with a Building row and the other sections faded. A service can also deploy project first, picking the project before the environment. On a project, the drawer carries every resource it serves and warns when its Deployment Settings also publish elsewhere. Built from `SettingsSection`, `Drawer`, `PanelHeader`, `PanelContent`, `PanelFooter`, `Card`, `Item`, `Accordion`, `Separator`, `Popover`, `DropdownMenu`, `ToggleGroup`, `Field` choice cards with `RadioButton`, `Input`, `Avatar`, `Tag`, `Spinner`, `Alert`, `Tooltip` and `Button`.
+> The drawer a platform deploys from, opened by the outlined Deploy button on a service or a project. Every variant shares one Resources card: a row per resource with its Ready tag, the picked version and a Change version menu, and a Dependencies disclosure with the modules and integrations the service references. On a service the default flow is environment first: the Project card uses an existing project or creates one, the environments come as radio blocks, and Projects impacted lists every project the environment’s shared Deployment Settings publish to. A deploy started without a pinned version first builds one, so the drawer opens as Build and deployment with a Building row and the other sections faded. A service can also deploy project first, picking the project before the environment. On a project, the drawer carries every resource it serves and warns when its Deployment Settings also publish elsewhere. The footer counts the version changes and where they go live; while the targets resolve the sections are Skeletons, a load failure is an Alert with Retry, and a project with no environment shows an EmptyState with Add environment, Deploy disabled in all three. Built from `SettingsSection`, `Drawer`, `PanelHeader`, `PanelContent`, `PanelFooter`, `Card`, `Item`, `Accordion`, `Separator`, `Popover`, `DropdownMenu`, `ToggleGroup`, `Field` choice cards with `RadioButton`, `Input`, `Avatar`, `Tag`, `Spinner`, `Skeleton`, `EmptyState`, `Alert`, `Tooltip` and `Button`.
 
 - Surface: product
 - Source: `blocks/platform/create/deploy-drawer/deploy-drawer.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/create/deploy-drawer")`
-- Components: [Accordion](../../../components/accordion.md), [Alert](../../../components/alert.md), [Avatar](../../../components/avatar.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [Drawer](../../../components/drawer.md), `DrawerClose`, `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, `DrawerTrigger`, [DropdownMenu](../../../components/dropdown-menu.md), [Field](../../../components/field.md), [Input](../../../components/input.md), [Item](../../../components/item.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [Popover](../../../components/popover.md), [RadioButton](../../../components/radio-button.md), [Separator](../../../components/separator.md), [SettingsSection](../../../components/settings-section.md), [Skeleton](../../../components/skeleton.md), [Spinner](../../../components/spinner.md), [Tag](../../../components/tag.md), [Toast](../../../components/toast.md), [ToggleGroup](../../../components/toggle-group.md), [Tooltip](../../../components/tooltip.md)
+- Components: [Accordion](../../../components/accordion.md), [Alert](../../../components/alert.md), [Avatar](../../../components/avatar.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [Drawer](../../../components/drawer.md), `DrawerClose`, `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, `DrawerTrigger`, [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [Field](../../../components/field.md), [Input](../../../components/input.md), [Item](../../../components/item.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [Popover](../../../components/popover.md), [RadioButton](../../../components/radio-button.md), [Separator](../../../components/separator.md), [SettingsSection](../../../components/settings-section.md), [Skeleton](../../../components/skeleton.md), [Spinner](../../../components/spinner.md), [Tag](../../../components/tag.md), [Toast](../../../components/toast.md), [ToggleGroup](../../../components/toggle-group.md), [Tooltip](../../../components/tooltip.md)
 - Skills: `webkit-create-surface`, `webkit-form`, `webkit-ui-states`
 
 ## Asked as
@@ -59,7 +59,7 @@ Choice cards, one horizontal `Field` with a `RadioButton` per environment of the
 
 ### H. Projects impacted and commit — `Item`, `Tag`, `Tooltip`, `Popover`, `PanelFooter`, `Button` (required on a service)
 
-Every project the chosen environment's shared Deployment Settings publish to, grouped by environment, the current one tagged Selected, with its domains shown like the Project card. `PanelFooter` holds one primary medium `Button` reading Deploy, alone on the right, of `type="submit"`.
+Every project the chosen environment's shared Deployment Settings publish to, grouped by environment, the current one tagged Selected, with its domains shown like the Project card. `PanelFooter` holds one primary medium `Button` reading Deploy on the right, of `type="submit"`. On its left, once a version differs from the live one, one muted line counts the changes and names the environment they go live in.
 
 ## Do
 
@@ -73,6 +73,9 @@ Every project the chosen environment's shared Deployment Settings publish to, gr
 - Say in an info `Alert` when the deploy replaces another service on the chosen project, naming both.
 - When a choice changes what the deploy reaches, reload that section in place: `Skeleton` rows, `aria-busy` on the region and one `role="status"` line; never clear the whole drawer.
 - Tag a dependency other services reference as Shared, name them in a `Tooltip`, and say once that a shared dependency deploys at one version.
+- Resolve the drawer in place: while the resources and environments load, keep the section titles and render `Skeleton` blocks shaped like the Resources card and the environment cards, with `aria-busy` and one status line, and Deploy disabled.
+- When the targets fail to load, replace the sections with one danger `Alert` saying what failed and an outlined Retry; Deploy stays disabled.
+- When the project has no environment, show the Environment section as a bordered small `EmptyState` with Add environment, and say in the footer why Deploy is disabled. A Resources card with nothing bound says so in one line instead of disappearing.
 - When a dependency has no ready version, disable Deploy and say why in the footer, next to the button it disables.
 - After Deploy, follow `platform/states/async-submit`: the drawer closes and one toast per run turns from Deploying… into the outcome, with Edit (reopens the drawer with the same choices) and Redeploy.
 - Raise toasts with `toast` only; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shells/console` does), so this page body never renders a `Toaster`.
@@ -94,6 +97,9 @@ Every project the chosen environment's shared Deployment Settings publish to, gr
 - **Version control:** "Change version"; search placeholder and `aria-label` "Search versions"; footer "Load 10 more".
 - **Project modes:** "Use existing" and "Create new".
 - **Environment descriptions:** one sentence on how it serves, e.g. "Live traffic. One version serves the domain, and deploying replaces it."
+- **Footer summary:** "1 change goes live in Production." or "3 changes go live in Production."
+- **Load failure:** "The deploy targets for project-01 couldn't be loaded. Check your connection and try again." with "Retry".
+- **No environment:** "No environment on this project", one sentence on why there is no target, and "Add environment"; footer "Add an environment to deploy."
 - **Tags:** one or two words, e.g. "Ready", "Active", "Last used", "Selected", "New".
 - **In progress:** the progressive verb with `…`, e.g. "Building…".
 - **Run toast:** "Deploying web-app…" with "<version> to <environments>. It keeps running if you leave."; the outcome "web-app is live in Production." or "web-app wasn't deployed." with what failed and that nothing changed; actions "Edit" and "Redeploy".
@@ -116,11 +122,14 @@ Every project the chosen environment's shared Deployment Settings publish to, gr
 
 ## States
 
-- Service: a service deploying environment first; Resources, Project with the last used project, Environment and Projects impacted.
+- Service: a service deploying environment first; Resources, Project with the last used project, Environment and Projects impacted, and the footer counting the one version change that goes live in Production.
 - Building: no pinned version; titled Build and deployment with a Building row in place of Resources, the other sections faded and inert, Deploy disabled.
 - ServiceProjectFirst: the project-first flow; Resources, the Project card with the last used project and a Change popover, then every environment.
 - Project: deploying a project; its service and storage in Resources, Production and Preview, and a warning about other projects that share its storefront settings.
 - Environment: a locked Strict environment, an Also deploys tag, the replace and multi-environment `Alert`s, Projects impacted grouped per environment and reloaded on switch; the run ends in a success toast with Edit and Redeploy.
+- Loading: the resources and environments resolving; `Skeleton` blocks under the Resources and Environment titles, an `aria-busy` region with a status line, Deploy disabled.
+- LoadFailed: the deploy targets failed to load; a danger `Alert` with Retry, which reloads them as Skeletons, and Deploy disabled.
+- NoEnvironment: nothing bound and no environment; a one-line empty Resources card, an `EmptyState` with Add environment, and Deploy disabled with the reason in the footer.
 - Dependencies: the open Dependencies disclosure with a Shared dependency, a not-versioned integration and a dependency with no ready version that blocks Deploy; changing the service version reloads the list. The first run fails and its toast offers Edit and Redeploy; Redeploy succeeds.
 
 ## Related
@@ -141,6 +150,9 @@ Every project the chosen environment's shared Deployment Settings publish to, gr
 - `Project` — Deploy on a project: the Resources card with the service it serves and its dependencies, then its storage, which is not versioned; Production and Preview below, with a warning that shared-storefront also publishes to project-05 and project-09.
 - `Environment` — The environment decision at its edges: Staging is locked by Strict Deployment Settings (a disabled choice card with a Strict tag and the reason), Preview is tagged Also deploys because Production's shared settings reach it, an info Alert says the deploy replaces legacy-web on the chosen project and a warning Alert says it goes live in two environments at once. Projects impacted are grouped per environment with a heading and a count, and switching environment reloads them with Skeleton rows, aria-busy and a status line. Deploy closes the drawer and reports through one toast that turns from Deploying… into the outcome with Edit and Redeploy.
 - `Dependencies` — The Dependencies disclosure open: each module and integration with its own version and Change version menu, auth-gateway tagged Shared with a Tooltip naming the services that also reference it and one info Alert saying a shared dependency deploys at one version, payments-api not versioned (a note instead of the menu), and geo-redirect with no ready version, which disables Deploy with the reason in the footer. Changing the service version reloads the dependencies with Skeleton rows, aria-busy and a status line; a second resource that references nothing says so. The first run fails and its toast carries Edit and Redeploy; Redeploy succeeds.
+- `Loading` — The drawer resolving what it deploys: Skeleton blocks stand in for the Resources card and the two environment choice cards under their real section titles, the region is aria-busy with one status line, and Deploy stays disabled until they land.
+- `LoadFailed` — The deploy targets could not be loaded: a danger Alert says so in place of the sections, with an outlined Retry that reloads them as Skeletons; Deploy stays disabled.
+- `NoEnvironment` — A project with nothing bound and no environment: the Resources card says nothing is bound yet, the Environment section is a bordered EmptyState with Add environment, and Deploy is disabled with the reason beside it in the footer.
 
 Each variant is the same screen in another state: `get_pattern("platform/create/deploy-drawer", { variant })`, or the file under `blocks/platform/create/deploy-drawer/variants/`.
 
@@ -660,6 +672,21 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
     row.total > row.versions.length
       ? `${row.versions.length} of ${row.total} Ready versions`
       : `${row.total} Ready versions`
+
+  const liveVersionId = (row: Dependency) =>
+    (row.versions.find((entry) => entry.active) ?? row.versions[0])?.id ?? ''
+
+  const changeCount = computed(
+    () =>
+      resources
+        .flatMap((row) => [row, ...row.dependencies])
+        .filter((row) => row.versions.length && versionOf(row).id !== liveVersionId(row)).length
+  )
+
+  const changeSummary = computed(
+    () =>
+      `${changeCount.value} ${changeCount.value === 1 ? 'change goes' : 'changes go'} live in ${environment.value}.`
+  )
 
   const pickVersion = (row: Dependency, id: string) => {
     picks[row.key] = id
@@ -1437,7 +1464,17 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
 
           <PanelFooter>
             <div class="flex w-full flex-wrap items-center justify-between gap-(--spacing-sm)">
-              <div class="flex min-w-0 items-center gap-(--spacing-sm)" />
+              <p
+                v-if="changeCount"
+                class="flex min-w-0 items-center gap-(--spacing-xxs) text-body-xs text-(--text-muted)"
+              >
+                <i
+                  class="pi pi-info-circle shrink-0"
+                  aria-hidden="true"
+                />
+                <span class="truncate">{{ changeSummary }}</span>
+              </p>
+              <span v-else />
               <Button
                 label="Deploy"
                 kind="primary"

@@ -1,6 +1,6 @@
 # Doc Layout
 
-> The documentation chrome, composed once in the app: a sticky header (the Azion Docs mark, the section links, `SearchTrigger` and the app's actions), the navigation rail (`Sidebar` + `Menu`) on the inline start, the article in the layout's `<main>`, the "On this page" rail (`DocOnThisPage`) on the inline end with its own slot below it, and the footer under the article. The **document** scrolls: the header and both rails are sticky, so a full-page capture shows the whole article, the browser's find and scroll restoration work, and the dark canvas is painted to the end. The outline follows the reading position, a jump clears the sticky header, and below `lg` the rail moves into a drawer opened from the header. The `Command` palette lists every navigation page. Doc pages are only their article, rendered through the default slot.
+> The documentation chrome, composed once in the app: a sticky header (the Azion Docs mark, the section links, `SearchTrigger` and the app's actions), the navigation rail (`Sidebar` + `Menu`) on the inline start, resizable by dragging its edge and collapsible to a thin edge that brings it back, the article in the layout's `<main>`, the "On this page" rail (`DocOnThisPage`) on the inline end with its own slot below it, and the footer under the article. The **document** scrolls: the header and both rails are sticky, so a full-page capture shows the whole article, the browser's find and scroll restoration work, and the dark canvas is painted to the end. The outline follows the reading position, a jump clears the sticky header, and below `lg` the rail moves into a drawer opened from the header. The `Command` palette lists every navigation page. Doc pages are only their article, rendered through the default slot.
 
 - Import: `import DocLayout from '@aziontech/webkit/doc-layout'`
 - Category: documentation · Surface: docs · Structure: monolithic
@@ -18,6 +18,7 @@
 - Pass the page's headings as `outline` (`{ id, text, depth }`) with the same ids the `DocHeading`s carry; the layout tracks which one is in view.
 - Put the theme switch in `navigation-footer`, the GitHub and Console links in `actions`, a call to action (`DocCta`) in `aside`, and the site footer (`Footer kind="content"`) in `footer`.
 - The page renders no `<main>` and no `ScrollArea` around the article: the document scrolls.
+- Bind `v-model:navigation-expanded` and `v-model:navigation-width` to state the app persists (local storage, a cookie) so the rail keeps the reader's size and collapsed state across pages and reloads; leave them unbound and the rail resets on each mount.
 - A drill row (`kind: 'drill'`) opens its level in place; the rail's Back then reads `Back to Docs` at the first level. Set `rootLabel` when the tree is not the whole docs (`Back to API reference`); never add a hand-made Back row to `navigation`.
 
 ## Don’t
@@ -48,6 +49,8 @@
 | `ariaLabel` | `string` | `''` | false | Accessible name of the navigation landmark. Empty uses the locale catalog (`Documentation`). |
 | `rootLabel` | `string` | `''` | false | Names the top of the docs tree in the rail's Back button on the first drill level (`Back to Docs`); deeper levels name their parent row. Empty uses the locale catalog (`Docs`). |
 | `searchOpen` | `boolean` | `false` | false | Two-way value (`v-model:searchOpen`). |
+| `navigationExpanded` | `boolean` | `true` | false | Two-way value (`v-model:navigationExpanded`). |
+| `navigationWidth` | `number \| null` | `null` | false | Two-way value (`v-model:navigationWidth`). |
 
 ## Events
 
@@ -69,49 +72,55 @@
 
 ## v-model
 
-| Model                 | Type      | Default | Emits               | Notes                                                                         |
-| --------------------- | --------- | ------- | ------------------- | ----------------------------------------------------------------------------- |
-| `v-model:search-open` | `boolean` | `false` | `update:searchOpen` | Whether the search palette is open; the header search and ⌘K / Ctrl K set it. |
+| Model                         | Type             | Default | Emits                       | Notes                                                                                                                                                                                          |
+| ----------------------------- | ---------------- | ------- | --------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `v-model:search-open`         | `boolean`        | `false` | `update:searchOpen`         | Whether the search palette is open; the header search and ⌘K / Ctrl K set it.                                                                                                                  |
+| `v-model:navigation-expanded` | `boolean`        | `true`  | `update:navigationExpanded` | Whether the navigation rail is expanded from `lg`; `false` collapses it to the edge affordance that brings it back. No effect below `lg`, where the rail is a drawer.                          |
+| `v-model:navigation-width`    | `number \| null` | `null`  | `update:navigationWidth`    | The rail's width in px after the reader drags its edge; `null` uses the natural width (`var(--container-2xs)`). Clamped by `Sidebar` between `var(--container-3xs)` and `var(--container-sm)`. |
 
 ## States
 
-- Visual states: `default`; below `lg` the rail is a drawer (`open` / `closed`) opened from the header; the end rail shows from `xl` when `outline` or `aside` has content; the palette `open` / `closed`.
+- Visual states: `default`; from `lg` the rail is `expanded` or `collapsed` (`Sidebar` `data-collapsed`, the edge affordance shown) and `resizing` while dragged; below `lg` the rail is a drawer (`open` / `closed`) opened from the header; the end rail shows from `xl` when `outline` or `aside` has content; the palette `open` / `closed`.
 - Outline: the entry of the heading nearest the top of the viewport (under the header) carries `aria-current="location"`; choosing an entry or a heading anchor scrolls the heading under the header and updates the address hash.
 - Not applicable: `loading`, `empty`, `error`, `disabled`, `readonly`, `invalid` (the article owns its states).
 
 ## Accessibility
 
 - Landmarks: the header is `GlobalHeader` (`<header>` named by the catalog `Documentation sections` on its section links); the rail is the `Sidebar` `<nav>` named by `ariaLabel`; the article is inside the single `<main>`; the end rail is an `<aside>` holding the `DocOnThisPage` navigation landmarks. A page must not render a second `<main>`.
-- Keyboard map: `Tab` runs header → rail → article → end rail → footer; `⌘K` / `Ctrl K` opens the palette (`Command`); the compact menu button opens the drawer, `Escape` closes it and returns focus. Choosing an outline entry moves focus to its heading (made focusable with `tabindex="-1"`).
+- Keyboard map: `Tab` runs header → rail → article → end rail → footer; the rail's resize handle is a focusable `separator` (`Resize navigation`) moved with `ArrowLeft` / `ArrowRight`, its collapse button (`Collapse navigation`) folds the rail and the edge affordance's button (`Expand navigation`) brings it back, all owned by `Sidebar`; `⌘K` / `Ctrl K` opens the palette (`Command`); the compact menu button opens the drawer, `Escape` closes it and returns focus. Choosing an outline entry moves focus to its heading (made focusable with `tabindex="-1"`).
 - Names: the mark link (`Azion Docs home`), the compact menu button (`Open documentation navigation`) and the search (`Search docs`) come from the locale catalog.
 - Visible focus: composed controls own their rings; the mark link uses `focus-visible:ring-2 focus-visible:ring-(--ring-color)`.
 
 ## Right-to-left
 
 - Layout: logical utilities only; the navigation rail sits at the inline start, the outline at the inline end, and the drawer opens from the inline start.
+- Resize: dragging and the arrow keys follow the inline direction (`Sidebar` mirrors them under `dir="rtl"`); the collapse and expand glyphs mirror.
 - Icons: the mark is not mirrored; `Menu` and `DocOnThisPage` mirror their own glyphs.
 - Keyboard: arrow handling is `Menu`'s and `Command`'s, both direction-aware.
 - User data: labels render with `dir="auto"` inside `Menu`, `DocOnThisPage` and `Command`.
 
 ## Internationalization
 
-| Key                        | English source                  | Override prop |
-| -------------------------- | ------------------------------- | ------------- |
-| `docLayout.navigation`     | `Documentation`                 | `ariaLabel`   |
-| `docLayout.sections`       | `Documentation sections`        | —             |
-| `docLayout.home`           | `Azion Docs home`               | —             |
-| `docLayout.badge`          | `Docs`                          | —             |
-| `docLayout.openNavigation` | `Open documentation navigation` | —             |
-| `docLayout.search`         | `Search docs`                   | —             |
-| `docLayout.searchEmpty`    | `No page matches your search.`  | —             |
-| `docLayout.pages`          | `Pages`                         | —             |
-| `docLayout.root`           | `Docs`                          | `rootLabel`   |
+| Key                            | English source                  | Override prop |
+| ------------------------------ | ------------------------------- | ------------- |
+| `docLayout.navigation`         | `Documentation`                 | `ariaLabel`   |
+| `docLayout.sections`           | `Documentation sections`        | —             |
+| `docLayout.home`               | `Azion Docs home`               | —             |
+| `docLayout.badge`              | `Docs`                          | —             |
+| `docLayout.openNavigation`     | `Open documentation navigation` | —             |
+| `docLayout.search`             | `Search docs`                   | —             |
+| `docLayout.searchEmpty`        | `No page matches your search.`  | —             |
+| `docLayout.pages`              | `Pages`                         | —             |
+| `docLayout.root`               | `Docs`                          | `rootLabel`   |
+| `docLayout.collapseNavigation` | `Collapse navigation`           | —             |
+| `docLayout.expandNavigation`   | `Expand navigation`             | —             |
+| `docLayout.resizeNavigation`   | `Resize navigation`             | —             |
 
 - Formatting: none. Navigation and outline text is consumer data.
 
 ## Responsive
 
-- Breakpoints (viewport, because the layout is the page): the navigation rail shows from `lg` and is a drawer below; the outline rail shows from `xl`; the section links show from `lg`. The header is an `@container`, so `SearchTrigger collapsible` folds to the magnifier on a narrow header.
+- Breakpoints (viewport, because the layout is the page): the navigation rail shows from `lg`, resizable and collapsible, and is a drawer below (no resize or collapse there); the outline rail shows from `xl`; the section links show from `lg`. The header is an `@container`, so `SearchTrigger collapsible` folds to the magnifier on a narrow header.
 - Narrow: the article takes the full width; the end rail content (`aside`) is not repeated under the article.
 - Touch: menu button and search are 32 px controls, 44 px on coarse pointers through their components.
 - Reflow: no horizontal scroll at 320 px; the document scrolls, never an inner region.
@@ -222,6 +231,87 @@
             >Next steps</DocHeading
           >
           <p>Add a domain and turn on the cache for your static assets.</p>
+        </DocProse>
+      </div>
+    </div>
+  </DocLayout>
+</template>
+```
+
+### Persisted rail
+
+```vue
+<script setup lang="ts">
+  import DocHeading from '@aziontech/webkit/doc-heading'
+  import DocLayout, { type DocLayoutNavGroup } from '@aziontech/webkit/doc-layout'
+  import DocPageHeader from '@aziontech/webkit/doc-page-header'
+  import DocProse from '@aziontech/webkit/doc-prose'
+  import { onMounted, ref, watch } from 'vue'
+
+  const STORAGE_KEY = 'acme-docs-rail'
+
+  const navigation: DocLayoutNavGroup[] = [
+    {
+      label: 'Fundamentals',
+      items: [
+        { id: 'overview', label: 'Overview', href: '/docs' },
+        { id: 'first-deploy', label: 'First deploy', href: '/docs/first-deploy' },
+        { id: 'domains', label: 'Domains', href: '/docs/domains' }
+      ]
+    }
+  ]
+
+  const expanded = ref(true)
+  const width = ref<number | null>(null)
+
+  onMounted(() => {
+    try {
+      const saved = JSON.parse(globalThis.localStorage.getItem(STORAGE_KEY) ?? 'null')
+      if (saved) {
+        expanded.value = saved.expanded !== false
+        width.value = typeof saved.width === 'number' ? saved.width : null
+      }
+    } catch {
+      return
+    }
+  })
+
+  watch([expanded, width], () => {
+    try {
+      globalThis.localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify({ expanded: expanded.value, width: width.value })
+      )
+    } catch {
+      return
+    }
+  })
+</script>
+
+<template>
+  <DocLayout
+    v-model:navigation-expanded="expanded"
+    v-model:navigation-width="width"
+    :navigation="navigation"
+    :outline="[{ id: 'resize-the-rail', text: 'Resize the rail', depth: 2 }]"
+    active-id="first-deploy"
+  >
+    <div class="layout-boundary">
+      <div class="layout-column-content flex flex-col gap-(--spacing-lg)">
+        <DocPageHeader
+          title="First deploy"
+          description="Drag the rail's edge or collapse it; reload and it keeps its size."
+        />
+        <DocProse>
+          <DocHeading
+            id="resize-the-rail"
+            :level="2"
+            >Resize the rail</DocHeading
+          >
+          <p>
+            Drag the edge of the navigation, or focus it and use the arrow keys. Collapse it from
+            the button at its foot and bring it back from the edge.
+          </p>
         </DocProse>
       </div>
     </div>

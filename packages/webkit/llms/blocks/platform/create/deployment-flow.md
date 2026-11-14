@@ -1,6 +1,6 @@
 # DeploymentFlow (`platform/create/deployment-flow`)
 
-> The deploy flow card a create flow streams while it deploys: a Card titled Deployment whose header carries the run status, a StatusIndicator while it runs and the Phased or Complete ToggleGroup once it has failed, opening on a cloning splash and then streaming the DeploymentLogs block with its controls moved up to that header: a Logs row with the step count, the pipeline as an Accordion of steps, each with its status glyph, its time and its own LogView, over a flush Progress. A create flow that provisions rather than deploys titles it Provisioning, with a Creating status and a Provisioning splash; the standalone logs block is the DeploymentLogs template. The live stream is shown here as one story per state, with the steps and log lines of the template deploy pipeline. Built from Card, StatusIndicator, ToggleGroup, Accordion, LogView, Spinner, Tag and Progress.
+> The deploy flow card a create flow streams while it deploys: a Card titled Deployment whose header carries the run status, a StatusIndicator while it runs and the Phased or Complete ToggleGroup once it has failed, opening on a cloning splash (a source tile, a marching dashed connector and a large destination tile that fade into the logs) and then streaming the DeploymentLogs block with its controls moved up to that header: a Logs row with the step count, the pipeline as an Accordion of steps, each with its status glyph, its time and its own LogView, over a flush Progress. A create flow that provisions rather than deploys titles it Provisioning, with a Creating status and a Provisioning splash; the standalone logs block is the DeploymentLogs template. The live stream is shown here as one story per state, with the steps and log lines of the template deploy pipeline. Built from Card, StatusIndicator, ToggleGroup, Accordion, LogView, Spinner, Tag and Progress.
 
 - Surface: product
 - Source: `blocks/platform/create/deployment-flow/deployment-flow.vue` in `@aziontech/webkit`
@@ -31,7 +31,7 @@ The card a create flow hands its column to once the user has pressed Deploy. The
 
 ### A. Deployment card — `Card` (required)
 
-`Card :padded="false"` at the full width of the flow's column. The header names the run in one word, Deployment, or Provisioning when the flow provisions rather than deploys. The content opens on the cloning splash: the source and the destination glyphs, then one line naming the repository and the scope it is cloned into. Once the first step starts, the content becomes the pipeline: a Logs row with the step count, one `Accordion` item per step with its status glyph, its time and its own `LogView`, and a flush `Progress` on the bottom edge while the run goes. Only the step in flight is open; finished steps collapse.
+`Card :padded="false"` at the full width of the flow's column. The header names the run in one word, Deployment, or Provisioning when the flow provisions rather than deploys. The content opens on the cloning splash, which fades in: a small source tile (the Git provider glyph), a dashed connector whose dashes march toward the destination (`animate-flow-dash`, still under `motion-reduce`) and a large destination tile, with one polite live line for screen readers naming the repository and the scope it is cloned into. The splash fades out as the first step starts. Once the first step starts, the content becomes the pipeline: a Logs row with the step count, one `Accordion` item per step with its status glyph, its time and its own `LogView`, and a flush `Progress` on the bottom edge while the run goes. Only the step in flight is open; finished steps collapse.
 
 ### B. Run status — `StatusIndicator` (required)
 
@@ -57,7 +57,7 @@ Sits in the card header, opposite the title. While the run goes it is a loading 
 
 - **Card title:** one noun naming the run, e.g. "Deployment" or "Provisioning".
 - **Run status:** the progressive form of the verb with `…` only while in progress, e.g. "Building…" in prose, "Building" as an indicator label.
-- **Splash line:** fragments naming source and destination, e.g. "Cloning acme/web-app to acme".
+- **Splash line:** the screen-reader line names source and destination in fragments, e.g. "Cloning acme/web-app to acme".
 - **Outcome tag:** one or two words stating the result, e.g. "Completed", "Failed".
 - **Pending steps:** say they have not started, e.g. "Waiting to start…".
 - **Errors:** the log output says what failed; the step title names the step in sentence case, e.g. "Routing rules".
@@ -67,13 +67,13 @@ Sits in the card header, opposite the title. While the run goes it is a loading 
 
 - The status label is text, not only a colour or a spinner; screen readers hear Building, then the outcome.
 - The progress bar has an accessible name, e.g. "Deployment progress", and the logs region an `aria-label`.
-- Decorative glyphs in the splash and in step rows carry `aria-hidden="true"`; the status of each step is also given in words.
+- The splash tiles and connector are one `aria-hidden` group; its meaning is the visually hidden live line. Decorative glyphs in the splash and in step rows carry `aria-hidden="true"`; the status of each step is also given in words.
 - Step headers are keyboard-operable accordion triggers; opening a step does not move focus.
 - New log lines do not steal focus or announce one by one; the step change and the outcome are what is announced.
 
 ## States
 
-- Initial: Deploy was just pressed; the cloning splash with a Building indicator, before the first step starts.
+- Initial: Deploy was just pressed; the cloning splash (source tile, marching connector, destination tile) with a Building indicator, before the first step starts.
 - Running: two steps done with their times, the current step spinning and open on its lines, the step count shown and the progress bar on the bottom edge.
 - Finished: every step checked and collapsed, a Completed tag, the progress bar retired, just before the success screen.
 - Failed: the failing step open on its error output with a Failed tag, the later steps Skipped, and the Phased or Complete switch in the header.
@@ -119,66 +119,51 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
     </template>
 
     <template #content>
-      <div
-        class="flex min-h-(--size-96) flex-col items-center justify-center gap-(--spacing-xl) p-(--spacing-lg)"
+      <Transition
+        appear
+        enter-active-class="animate-fade-in motion-reduce:animate-none"
+        leave-active-class="animate-fade-out motion-reduce:animate-none"
       >
-        <div
-          class="w-(--size-64) overflow-hidden rounded-(--shape-card) border border-(--primary) bg-(--bg-surface)"
-        >
-          <div class="flex items-center gap-(--spacing-xxs) border-b border-(--border-default)">
-            <span class="size-2 rounded-full bg-(--danger)" />
-            <span class="size-2 rounded-full bg-(--warning)" />
-            <span class="size-2 rounded-full bg-(--success)" />
-          </div>
-          <div class="flex flex-col gap-(--spacing-sm) p-(--spacing-md)">
-            <div class="h-3 w-3/4 rounded-(--shape-flat) bg-(--bg-surface-raised)" />
-            <div class="flex items-center justify-center gap-(--spacing-lg) py-(--spacing-sm)">
-              <span
-                class="flex size-12 items-center justify-center rounded-(--shape-elements) border border-(--border-default) bg-(--bg-canvas) text-(--text-default)"
-              >
-                <i
-                  class="ai ai-github text-body-lg"
-                  aria-hidden="true"
-                />
-              </span>
-              <span
-                class="flex size-12 items-center justify-center rounded-(--shape-elements) border border-(--border-selected) bg-(--bg-canvas) text-(--primary)"
-              >
-                <i
-                  class="pi pi-server text-body-lg"
-                  aria-hidden="true"
-                />
-              </span>
-            </div>
-            <div class="h-3 w-3/4 rounded-(--shape-flat) bg-(--bg-surface-raised)" />
+        <div class="flex h-60 items-center justify-center p-(--spacing-lg)">
+          <p
+            class="sr-only"
+            aria-live="polite"
+          >
+            Cloning acme/web-app to acme
+          </p>
+          <div
+            class="flex items-center"
+            aria-hidden="true"
+          >
+            <span
+              class="flex size-10 shrink-0 items-center justify-center rounded-(--shape-card) border border-(--border-default) bg-(--bg-canvas) text-(--text-default)"
+            >
+              <i class="ai ai-github text-body-lg leading-none" />
+            </span>
+            <svg
+              class="h-0.5 w-20 shrink-0 text-(--primary)"
+              viewBox="0 0 80 2"
+              preserveAspectRatio="none"
+            >
+              <line
+                x1="0"
+                y1="1"
+                x2="80"
+                y2="1"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-dasharray="2 4"
+                class="animate-flow-dash motion-reduce:animate-none"
+              />
+            </svg>
+            <span
+              class="flex size-20 shrink-0 items-center justify-center rounded-(--shape-card) border border-(--border-default) bg-(--bg-canvas) text-(--primary)"
+            >
+              <i class="ai ai-azion text-heading-lg leading-none" />
+            </span>
           </div>
         </div>
-
-        <div
-          class="flex max-w-(--container-lg) flex-wrap items-center justify-center gap-(--spacing-xs) text-label-sm text-(--text-default)"
-        >
-          <span>Cloning</span>
-          <span
-            class="inline-flex items-center gap-(--spacing-xs) rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface-raised) px-(--spacing-xs) py-(--spacing-xxs)"
-          >
-            <i
-              class="ai ai-github text-[length:inherit] leading-none"
-              aria-hidden="true"
-            />
-            acme/web-app
-          </span>
-          <span class="text-(--text-muted)">to</span>
-          <span
-            class="inline-flex items-center gap-(--spacing-xs) rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface-raised) px-(--spacing-xs) py-(--spacing-xxs)"
-          >
-            <i
-              class="ai ai-github text-[length:inherit] leading-none"
-              aria-hidden="true"
-            />
-            acme
-          </span>
-        </div>
-      </div>
+      </Transition>
     </template>
   </Card>
 </template>

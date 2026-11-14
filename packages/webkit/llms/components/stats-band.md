@@ -31,6 +31,7 @@
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
 | `items` | `StatsBandItem[]` | `[]` | false | The figures rendered as cells, in order; each item is `{ value, label, prefix?, suffix? }` where `value` is the figure, `label` its caption, and `prefix` / `suffix` the qualifier and unit set beside it. |
+| `anchor` | `string` | `''` | false | In-page id set on the band so a `#hash` link can scroll to it. |
 
 ## States
 
@@ -45,6 +46,26 @@
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): owned by `big-numbers`.
 - `motion-reduce:transition-none motion-reduce:transform-none` — the band adds no motion.
 - Touch target ≥40×40 px — not applicable, nothing is interactive.
+
+## Right-to-left
+
+- Layout: logical utilities only; the figure row follows the direction as `big-numbers` lays it out.
+- Icons: none.
+- Keyboard: nothing is interactive.
+- User data: none.
+
+## Internationalization
+
+No built-in strings: every visible and announced text is a prop from the page JSON.
+
+- Formatting: none.
+
+## Responsive
+
+- Container queries: none of its own; `big-numbers` owns how the figures wrap.
+- Narrow (below `md`): the figures stack as `big-numbers` stacks them; the frame rules stay full width.
+- Touch: nothing is interactive.
+- Reflow: no horizontal scroll at 320 px and 200 % zoom.
 
 ## Examples
 

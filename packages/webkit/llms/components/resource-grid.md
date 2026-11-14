@@ -30,6 +30,7 @@
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
+| `anchor` | `string` | `''` | false | Id set on the band so an in-page `#hash` link can target it. |
 | `eyebrow` | `string` | `''` | false | Overline above the headline. |
 | `title` | `string` | `''` | false | Headline of the band, which also names its region and the scroll area. |
 | `description` | `string` | `''` | false | Lead sentence beside the grid. |
@@ -42,6 +43,7 @@
 - `data-scrollable` is set when more than four cards render, and the grid scrolls inside a fading scroll area
 - Empty: when no item has a title the band renders nothing
 - The button renders only when `primaryAction` has a label and a link
+- `anchor` sets the root's `id`
 
 ## Accessibility
 
@@ -51,6 +53,25 @@
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): owned by `media-split` and `topic`.
 - `motion-reduce:transition-none motion-reduce:transform-none` — the band adds no motion.
 - Touch target ≥40×40 px — every card is a full-cell link.
+
+## Right-to-left
+
+- Layout: logical utilities only; the copy and grid mirror through `media-split` and `card-grid`.
+- Icons: the button's trailing chevron mirrors (owned by `button`).
+- Keyboard: unchanged.
+- User data: none.
+
+## Internationalization
+
+- Built-in strings: none. Every visible string is marketing copy and arrives through props, so the page supplies it in its own language.
+- Formatting: none.
+
+## Responsive
+
+- Container queries: none.
+- Narrow (≤ 640 px): the copy stacks above the grid, which drops to one column (from `media-split` and `card-grid`).
+- Touch: every card is a full-cell link.
+- Reflow: no horizontal scroll at 320 px; past four cards the grid scrolls vertically inside its scroll area.
 
 ## Examples
 

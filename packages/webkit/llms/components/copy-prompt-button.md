@@ -1,6 +1,6 @@
 # Copy Prompt Button
 
-> The "Copy prompt" button of a docs or product home: one dark chip that copies a ready-made prompt for a coding agent and, after its label, shows the marks of the agents it works with (Claude, ChatGPT, Gemini and Cursor by default). The chip is dark in both themes (it renders under `data-theme="dark"`) with a faint accent glow on its top and bottom edges, so it reads as the AI entry point next to a primary button. The marks are single-colour and decorative; their names reach screen readers as the button's description ("Works with Claude, ChatGPT, Gemini, Cursor").
+> The "Copy prompt" button of a docs or product home: one dark chip that copies a ready-made prompt for a coding agent and, after its label, shows the marks of the agents it works with (Claude, ChatGPT, Gemini and Cursor by default). The chip carries the design system's AI treatment, the same three layers as `ButtonHighlight`: a blurred gradient glow rotating behind it, the brand-accent gradient over the glow, and a dark scrim over both that holds the white label at contrast; on hover the gradient and the scrim fade to a quarter and the glow blooms through. It is dark in both themes (it renders under `data-theme="dark"`), so it reads as the AI entry point next to a primary button, and a tooltip says what it does. The marks are single-colour and decorative, drawn in the chip's own ink; their names reach screen readers as the button's description ("Works with Claude, ChatGPT, Gemini, Cursor"). With `closable` a dismiss button sits beside the chip, and dismissing removes both from the layout.
 
 - Import: `import CopyPromptButton from '@aziontech/webkit/copy-prompt-button'`
 - Category: actions · Surface: product · Structure: monolithic
@@ -17,6 +17,8 @@
 - Keep the default agents unless the product supports a different set; pass `:agents="[]"` to draw the label alone.
 - Pass the exact prompt in `value`; the button copies it as it stands.
 - Do not recolour the marks: they are single-colour by design and follow the chip's ink.
+- To draw a mark from the agent's asset file instead of the icon font, give the agent a `logo` (`@aziontech/webkit/assets/claude-symbol-color.svg`); `Logo` flattens it to the chip's ink.
+- Set `closable` where the chip is guidance the reader can put away (a first-use overview), not where it is part of a page's composition (a hero). Listen to `close` to remember the choice; the chip only hides itself.
 
 ## Don’t
 
@@ -31,6 +33,8 @@
 - DocAgentCard` — the docs-home card that places this button in its left column.
 - DocHero` — the docs-home masthead whose `actions` slot holds `Get started` and this button.
 - CopyButton` — the icon-only copy control; this button shares its clipboard fallback.
+- ButtonHighlight` — the AI-flow button whose glow, gradient and scrim this chip shares.
+- Logo` — draws an agent mark from its asset file in the chip's ink.
 
 ## Props
 
@@ -39,45 +43,50 @@
 | `value` | `string` | `—` | true | The prompt copied to the clipboard on activation. |
 | `label` | `string` | `''` | false | Visible text and accessible name while idle; empty uses the catalog's `Copy prompt`. |
 | `copiedLabel` | `string` | `''` | false | Visible text announced after a copy; empty uses the catalog's `Copied`. |
-| `agents` | `CopyPromptAgent[]` | `Claude, ChatGPT, Gemini, Cursor` | false | The agents whose marks follow the label, in order; an empty list draws no marks. |
+| `agents` | `CopyPromptAgent[]` | `Claude, ChatGPT, Gemini, Cursor` | false | The agents whose marks follow the label, in order; each is `{ name, icon?, logo? }`, drawn from `logo` through `Logo` when set and from the `icon` glyph otherwise; an empty list draws no marks. |
 | `disabled` | `boolean` | `false` | false | Disables the button; `copy` is not emitted. |
+| `closable` | `boolean` | `false` | false | Shows a dismiss button beside the chip; activating it removes both from the layout and emits `close`. |
 
 ## Events
 
 | Event | Payload | Notes |
 | --- | --- | --- |
 | `copy` | `string` | Fires with `value` after the clipboard write succeeds. When the write is refused, the copy fallback popover opens instead. |
+| `close` | `MouseEvent` | Fires with the click on the dismiss button (`closable`), after the chip removes itself; whether it stays away is the page's decision. |
 
 ## States
 
-- Visual states: `idle`, `hover` (a hover layer lightens the chip), `focus-visible` (outline ring), `copied` (the label swaps to a check and `Copied` for two seconds, without changing the width), `disabled`.
+- Visual states: `idle`, `hover` (the gradient and the scrim fade to 25% and the rotating glow blooms through), `focus-visible` (ring), `copied` (the label swaps to a check and `Copied` for two seconds, without changing the width), `disabled` (the AI layers hide and the chip takes the disabled fill), `dismissed` (with `closable`, the chip and its dismiss button unmount).
 - `data-state` is `idle` or `copied`; `data-disabled` mirrors `disabled`.
-- Not applicable: `loading`, `empty`, `error`, `readonly`, `invalid`, `open`/`closed`.
+- Not applicable: `loading`, `empty`, `error`, `readonly`, `invalid`, `open`/`closed` (the tooltip owns its own open state).
 
 ## Accessibility
 
-- Pattern: a WAI-ARIA APG **button** (`<button type="button">`); its accessible name is the label (`Copy prompt`, then `Copied` while the copied state shows).
+- Pattern: a WAI-ARIA APG **button** (`<button type="button">`); its accessible name is the label (`Copy prompt`, then `Copied` while the copied state shows). A `Tooltip` on hover and focus says what it does (`Copies a setup prompt for your AI coding tool`).
+- With `closable`, the dismiss control is a separate `IconButton` beside the chip (never inside it), named `Dismiss`; dismissing unmounts both, so neither stays in the tab order.
 - The agent marks are `aria-hidden`; their names form the description through `aria-describedby` ("Works with Claude, ChatGPT, Gemini, Cursor").
 - A polite `role="status"` region next to the button announces `Copied` after a successful copy.
-- Keyboard map: `Tab` focuses; `Enter` and `Space` copy.
-- Visible focus: `focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring-color)`.
-- Contrast: label and marks ≥ 4.5:1 on the dark chip in both page themes.
+- Keyboard map: `Tab` focuses the chip, then the dismiss button when `closable`; `Enter` and `Space` copy on the chip and dismiss on the dismiss button; `Esc` closes an open tooltip (owned by `Tooltip`).
+- Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`.
+- Contrast: the white label and marks sit on the 80% black scrim at rest (≥ 4.5:1 in both page themes); on hover the scrim thins over the accent gradient and the label stays above 3:1 for its large button type.
 - Touch target: 40 px tall; `pointer-coarse:min-h-11` raises it to 44 px.
-- `motion-reduce:transition-none` on every transition.
+- `motion-reduce:animate-none` on the rotating glow and `motion-reduce:transition-none` on every transition.
 
 ## Right-to-left
 
-- Layout: logical utilities only (`ps-`/`pe-`, `gap-`, `inset-x-`); the label leads at the inline start and the marks follow it.
-- Icons: brand marks are not mirrored.
+- Layout: logical utilities only (`ps-`/`pe-`, `gap-`); the label leads at the inline start, the marks follow it and the dismiss button follows the chip. The glow, gradient and scrim layers are symmetric.
+- Icons: brand marks and the dismiss `×` are not mirrored.
 - Keyboard: no arrow keys.
 
 ## Internationalization
 
-| Key                          | English source       | Override prop |
-| ---------------------------- | -------------------- | ------------- |
-| `copyPromptButton.label`     | `Copy prompt`        | `label`       |
-| `copyPromptButton.copied`    | `Copied`             | `copiedLabel` |
-| `copyPromptButton.worksWith` | `Works with {agents}` | `agents`      |
+| Key                          | English source                                  | Override prop         |
+| ---------------------------- | ----------------------------------------------- | --------------------- |
+| `copyPromptButton.label`     | `Copy prompt`                                   | `label`               |
+| `copyPromptButton.copied`    | `Copied`                                        | `copiedLabel`         |
+| `copyPromptButton.worksWith` | `Works with {agents}`                           | `agents`              |
+| `copyPromptButton.tooltip`   | `Copies a setup prompt for your AI coding tool` | — (provider messages) |
+| `copyPromptButton.dismiss`   | `Dismiss`                                       | — (provider messages) |
 
 - Agent names are brand names and are not translated.
 

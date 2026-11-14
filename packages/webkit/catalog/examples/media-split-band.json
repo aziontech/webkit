@@ -9,6 +9,11 @@
    "name": "Product media",
    "summary": "The band with a ProductWidget console screen as its picture (`widget`), then with a Diagram request flow (`diagram`). Both sit inset in the media cell, and the widget plays its beat while the pointer is over the band.",
    "sfc": "<script setup>\n  import MediaSplitBand from '@aziontech/webkit/media-split-band'\n</script>\n\n<template>\n  <MediaSplitBand\n    eyebrow=\"Real-Time Events\"\n    title=\"Filter every request as it happens\"\n    description=\"Narrow the event stream by status, path or country, and read the matching requests seconds after they arrive.\"\n    widget=\"real-time-events-filter\"\n    :primary-action=\"{\n      label: 'Learn more',\n      href: '/en/products/real-time-events/',\n      trailing: true\n    }\"\n  />\n  <MediaSplitBand\n    eyebrow=\"Cache\"\n    title=\"Serve repeat requests from the nearest location\"\n    description=\"Cached responses never travel back to your origin, so it handles a fraction of the traffic.\"\n    diagram=\"cache\"\n  />\n</template>"
+  },
+  {
+   "name": "Vertical",
+   "summary": "A wide console scene stacked under the copy with `orientation=\"vertical\"` on a dots texture. The lone action is an outlined button closed by the chevron, and `linked` is off so the band itself stays unlinked while the scene plays.",
+   "sfc": "<script setup>\n  import MediaSplitBand from '@aziontech/webkit/media-split-band'\n</script>\n\n<template>\n  <MediaSplitBand\n    anchor=\"topology\"\n    eyebrow=\"Workloads\"\n    title=\"Read the whole request path on one screen\"\n    description=\"The domains, the application and the firewall a workload serves, drawn as one chain you can follow from left to right.\"\n    orientation=\"vertical\"\n    texture=\"dots\"\n    :linked=\"false\"\n    :scene=\"{ component: 'ProductWidget', props: { name: 'workload-topology' } }\"\n    :primary-action=\"{ label: 'Docs', href: '/docs/workloads' }\"\n  />\n</template>"
   }
  ]
 }

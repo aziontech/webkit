@@ -33,12 +33,13 @@
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
+| `anchor` | `string` | `''` | false | In-page id set on the band so a `#hash` link can scroll to it. |
 | `eyebrow` | `string` | `''` | false | Overline above the headline. |
 | `title` | `string` | `''` | false | Headline of the band, rendered by the media split as its `h2` and naming its region. |
 | `description` | `string` | `''` | false | Paragraph under the headline. |
 | `primaryAction` | `TemplateGalleryAction` | `undefined` | false | First button under the copy, drawn as the large secondary button; `{ label, href, trailing?, target? }`. Omitted when absent. |
 | `secondaryAction` | `TemplateGalleryAction` | `undefined` | false | Second button under the copy, drawn as the large outlined button; `{ label, href, trailing?, target? }`. Omitted when absent. |
-| `templates` | `TemplateGalleryTemplate[]` | `[]` | false | The template cards of the scrolling wall, in order; each is `{ title, description?, icon?, invertInDark?, href? }`. Templates without a title are skipped. |
+| `templates` | `TemplateGalleryTemplate[]` | `[]` | false | The template cards of the scrolling wall, in order; each is `{ title, description?, icon?, invertInDark?, href? }` where `href` makes the whole card a link to the template. Templates without a title are skipped. |
 | `deployLabel` | `string` | `''` | false | Label of the deploy button on each card; a card renders its button only when both this and its `href` are set. |
 | `templatesAriaLabel` | `string` | `''` | false | Accessible name of the scrolling wall of templates. |
 | `tickerLabel` | `string` | `''` | false | Overline above the row of marks. |
@@ -51,14 +52,15 @@
 ## States
 
 - Visual states: `default`
-- Hovering a card lights its deploy button
+- A card with an `href` is a link target as a whole: a click anywhere on it follows the `href` (and a modified or middle click opens it in a new tab, as any link does), the pointer turns to the hand over it, and hovering it lights its deploy button. With a deploy button the card keeps one tab stop — the button — and the card-wide link is a pointer-only target hidden from assistive technology; without a deploy button the card-wide link is the card's one tab stop, named by the template title
+- A card without an `href` is not interactive: no hand pointer, no hover light
 - Empty: when no template carries a title the band renders nothing — not the split, not the ticker
 
 ## Accessibility
 
-- Visible focus: owned by the composed `button`s and the `scroll-area`.
-- Keyboard map: `Tab` reaches the copy's actions, the scrolling wall and each card's deploy link in reading order; `Enter` follows a link. Nothing else in the band is interactive.
-- ARIA: the band's root is a plain `div`, because `media-split` already renders the band's region named by its title; the wall is `scroll-area`'s region named by `templatesAriaLabel`; the template marks are decorative (`aria-hidden`).
+- Visible focus: owned by the composed `button`s and the `scroll-area`; a card-wide link that is a card's only tab stop draws `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset` over the card.
+- Keyboard map: `Tab` reaches the copy's actions, the scrolling wall and each card's one link (its deploy button, or the card itself when it has none) in reading order; `Enter` follows a link. Nothing else in the band is interactive.
+- ARIA: the band's root is a plain `div`, because `media-split` already renders the band's region named by its title; the wall is `scroll-area`'s region named by `templatesAriaLabel`; the template marks are decorative (`aria-hidden`); a card-wide link duplicated by a deploy button is `aria-hidden` with `tabindex="-1"`, so each card is announced once.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): card titles `var(--text-default)`, card lines `var(--text-muted)`; marks flagged `invertInDark` invert under the dark theme.
 - `motion-reduce:transition-none motion-reduce:transform-none` — the button hover and the ticker scroll belong to `button` and `ticker`, which carry their own reduced-motion fallback; this band adds no motion.
 - Touch target ≥40×40 px — the deploy buttons are medium `button`s, the copy's actions are large.
@@ -74,6 +76,7 @@
 
 <template>
   <TemplateGallery
+    anchor="templates"
     eyebrow="Your Stack, Your Way"
     title="Quick Start with Templates"
     description="Launch storefronts faster with pre-built templates and starter kits. Deploy complete projects in seconds with popular frameworks."

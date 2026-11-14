@@ -53,6 +53,7 @@
 | `showPrefix` | `boolean` | `true` | false | show Prefix. |
 | `showSuffix` | `boolean` | `true` | false | show Suffix. |
 | `actionLabel` | `string` | `'Label'` | false | action Label. |
+| `animated` | `boolean` | `false` | false | Fades the old price out and the new one in when the price changes, such as on a billing-period switch. |
 
 ## Slots
 
@@ -64,6 +65,7 @@
 ## States
 
 - Visual states: `default`, `hover`, `focus-visible`, `active`, `disabled`
+- Animated: with `animated`, a change of `value`, `prefix` or `suffix` fades the old price out and the new one in (`data-animated` on the root); without it the price swaps in place
 
 ## Accessibility
 
@@ -71,7 +73,7 @@
 - Keyboard map: `Tab` focuses; `Enter`/`Space` activates; `Escape` closes overlays where applicable.
 - ARIA: root uses appropriate roles (`button`, `dialog`, `status`, etc.) per sub-component.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state.
-- `motion-reduce:transition-none motion-reduce:transform-none` on animated states.
+- `motion-reduce:transition-none motion-reduce:transform-none` on animated states; the `animated` price fade pairs each class with `motion-reduce:animate-none`, so the price swaps in place under reduced motion.
 - Touch target ≥40×40 px where the control is interactive.
 
 ## Examples

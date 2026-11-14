@@ -1,6 +1,6 @@
 # PageWires (`platform/states/page-wires`)
 
-> The skeleton wires an app paints while a page is still arriving: the Home overview (HomeWire), the first-access Home (HomeFirstUseWire), and the whole shell while an expired session signs out (SessionWire), which draws one of four bodies by the family of the page it covers: list, detail, create form or Home. Each one is the real page’s grid drawn with Skeleton bands inside the same Card frames, so nothing shifts when the content lands. In the app the session wire is a fixed full-viewport layer sized to the measured header and rail; here it fills the canvas at the header’s 56px and the rail’s `--container-2xs`. Built from Skeleton, Card and Item. Overview and Onboarding are page bodies for the default slot of ConsoleLayout; the Session wires stand in for the whole app, layout included.
+> The skeleton wires an app paints while a page is still arriving: the Home overview (HomeWire), the first-access Home (HomeFirstUseWire), and the whole shell while an expired session signs out (SessionWire), which draws one of four bodies by the family of the page it covers: list, detail, create form or Home, and the version page (VersionWire), sectioned cards whose rows end in a switch band. Each one is the real page’s grid drawn with Skeleton bands inside the same Card frames, so nothing shifts when the content lands. In the app the session wire is a fixed full-viewport layer sized to the measured header and rail; here it fills the canvas at the header’s 56px and the rail’s `--container-2xs`. Built from Skeleton, Card and Item. Overview, Onboarding and VersionDetail are page bodies for the default slot of ConsoleLayout; the Session wires stand in for the whole app, layout included.
 
 - Surface: product
 - Source: `blocks/platform/states/page-wires/page-wires.vue` in `@aziontech/webkit`
@@ -81,6 +81,7 @@ Panels of rows use `Item.List` with `Item size="small"` and `Item.Content`, the 
 - SessionDetail: the same over a detail page: tab bands under the header, a heading and two cards of field rows in the data column.
 - SessionForm: the same over a create page: a heading and two cards of field rows in the create column, with the save bar held at the foot.
 - SessionHome: the same over Home: the Overview wire centred in the data column.
+- VersionDetail: the version page loading; form-column heading bands and two sectioned flush cards whose rows end in a switch band, one `role="status"` region with `aria-busy`, no tabs.
 
 ## Related
 
@@ -88,6 +89,7 @@ Panels of rows use `Item.List` with `Item size="small"` and `Item.Content`, the 
 - `platform/view/table-view` — the list page the Session wire draws.
 - `platform/detail/details-page` — the detail page the SessionDetail wire draws.
 - `platform/create/single-page-create` — the create page the SessionForm wire draws.
+- `platform/detail/version-detail` — the version page the VersionDetail wire stands in for.
 - `platform/auth` — where the session wire lands once the sign-out completes.
 - `shells/console` — the header and rail the session wires reproduce.
 
@@ -99,6 +101,7 @@ Panels of rows use `Item.List` with `Item size="small"` and `Item.Content`, the 
 - `SessionDetail` — The same wire over a detail page: a strip of tab bands under the header, then a heading and two banded cards of field rows in the data column.
 - `SessionForm` — The same wire over a create page: the heading and two banded cards of field rows in the create column, with the save bar held at the foot.
 - `SessionHome` — The same wire over Home: the Overview wire centred in the data column.
+- `VersionDetail` — The version page while it loads: heading and description bands in the form column, then two sections, each a title band over a flush Card whose rows hold a label and a description band and end in a switch-sized band; one status region, aria-busy, no tabs.
 
 Each variant is the same screen in another state: `get_pattern("platform/states/page-wires", { variant })`, or the file under `blocks/platform/states/page-wires/variants/`.
 

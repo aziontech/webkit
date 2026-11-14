@@ -18,11 +18,15 @@
   "For marks with photos and stories in a mosaic → use `client-mosaic`."
  ],
  "related": [
-  "logo-wall` — the wall the marks are laid in, with the quote in its aside."
+  "logo-wall` — the wall the marks are laid in, with the quote in its aside.",
+  "logo` — draws every mark (the wall's and the quote's) right on both themes."
  ],
  "bestPractices": [
   "Eight or nine logos fill the rectangle wall beside the aside.",
-  "Set `logoTreatment` per mark: `monochrome` for a mark drawn in one ink that must follow the theme, `invert-light` for a reversed mark that must flip on the light theme, `as-is` for a colour mark; give a `logoLight` file instead when the light theme needs a different drawing."
+  "Pass client registry entries (`@aziontech/webkit/assets/client-registry`) as they stand: each carries `name`, `logo` and either `logoLight` (a light-theme drawing) or `artwork` (which theme a single file must be inverted on), and every mark renders through `Logo`.",
+  "Without a registry entry, set `logoTreatment` per mark: `monochrome` for a mark drawn in one ink that must follow the theme, `invert-light` for a reversed mark that must flip on the light theme, `as-is` for a colour mark; give a `logoLight` file instead when the light theme needs a different drawing.",
+  "Give the quote's company mark a `logoLight` (or an `artwork`) the same way, so it stays legible on both themes.",
+  "Keep to one or two actions under the quote: the primary (`secondary` kind) and an optional outlined `secondaryAction`."
  ],
  "props": [
   {
@@ -72,14 +76,14 @@
    "type": "LogoWallQuoteLogo[]",
    "default": "[]",
    "required": "false",
-   "doc": "The client marks, in order; each is `{ name, logo, logoLight?, logoTreatment?, href? }` where `logoTreatment` is `'as-is'`, `'monochrome'` or `'invert-light'`."
+   "doc": "The client marks, in order; each is `{ name, logo, logoLight?, logoTreatment?, artwork?, href? }` where `logoTreatment` is `'as-is'`, `'monochrome'` or `'invert-light'` and `artwork` is the registry's `'color'`, `'light'` or `'dark'`."
   },
   {
    "name": "quote",
    "type": "LogoWallQuoteQuote",
    "default": "undefined",
    "required": "false",
-   "doc": "The signed quote in the wall's aside; `{ text, name, jobTitle, logo, logoAlt }`. Omitted when absent."
+   "doc": "The signed quote in the wall's aside; `{ text, name, jobTitle, logo, logoAlt, logoLight?, artwork? }`. Omitted when absent."
   },
   {
    "name": "primaryAction",
@@ -87,6 +91,13 @@
    "default": "undefined",
    "required": "false",
    "doc": "Button under the quote; `{ label, href, trailing?, target? }`. Omitted when absent."
+  },
+  {
+   "name": "secondaryAction",
+   "type": "LogoWallQuoteAction",
+   "default": "undefined",
+   "required": "false",
+   "doc": "Outlined button beside the primary one under the quote; `{ label, href, trailing?, target? }`. Omitted when absent."
   }
  ],
  "events": [],
@@ -101,6 +112,10 @@
   {
    "name": "Quote band",
    "sfc": "<script setup>\n  import agibankExtendedColor from '@aziontech/webkit/assets/agibank-extended-color.svg'\n  import netshoesExtendedColor from '@aziontech/webkit/assets/netshoes-extended-color.svg'\n  import LogoWallQuote from '@aziontech/webkit/logo-wall-quote'\n</script>\n\n<template>\n  <div class=\"flex flex-col\">\n    <LogoWallQuote\n      kind=\"quote\"\n      :quote=\"{\n        text: 'We stopped planning capacity for campaigns. Traffic peaks just work now.',\n        name: 'Jane Doe',\n        jobTitle: 'Head of Platform, Agibank',\n        logo: agibankExtendedColor,\n        logoAlt: 'Agibank'\n      }\"\n      :primary-action=\"{ label: 'Read the story', href: '/customers/agibank', trailing: true }\"\n    />\n    <LogoWallQuote\n      kind=\"quote\"\n      quote-kind=\"highlight\"\n      :quote=\"{\n        text: 'Our checkout got faster in every country on the first deploy.',\n        name: 'John Smith',\n        jobTitle: 'CTO, Netshoes',\n        logo: netshoesExtendedColor,\n        logoAlt: 'Netshoes'\n      }\"\n    />\n  </div>\n</template>"
+  },
+  {
+   "name": "Registry",
+   "sfc": "<script setup>\n  import { CLIENTS } from '@aziontech/webkit/assets/client-registry'\n  import LogoWallQuote from '@aziontech/webkit/logo-wall-quote'\n\n  const WALL = [\n    'Agibank',\n    'iFood',\n    'Itaú',\n    'GPA',\n    'Netshoes',\n    'Renner',\n    'Magalu',\n    'Dafiti',\n    'Prime Video'\n  ]\n\n  const logos = WALL.map((name) => CLIENTS.find((client) => client.name === name))\n\n  const zoop = CLIENTS.find((client) => client.name === 'Zoop')\n</script>\n\n<template>\n  <LogoWallQuote\n    eyebrow=\"Customers\"\n    title=\"Trusted by the largest retailers and banks\"\n    aria-label=\"Retailers and banks running on Azion\"\n    :logos=\"logos\"\n    :quote=\"{\n      text: 'Azion delivered the advanced protection and superior performance we needed, with fast implementation and immediate results.',\n      name: 'Ismael Aguilar',\n      jobTitle: 'Information Security Manager at Zoop',\n      logo: zoop.logo,\n      logoLight: zoop.logoLight,\n      artwork: zoop.artwork,\n      logoAlt: zoop.name\n    }\"\n    :primary-action=\"{\n      label: 'Read the case study',\n      href: 'https://example.com/stories',\n      trailing: true\n    }\"\n    :secondary-action=\"{ label: 'See all customers', href: 'https://example.com/customers' }\"\n  />\n</template>"
   }
  ],
  "docs": "components/logo-wall-quote.md"

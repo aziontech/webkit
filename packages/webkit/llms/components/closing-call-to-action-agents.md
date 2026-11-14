@@ -36,9 +36,10 @@
 | `typedLead` | `string` | `''` | false | Fixed opening of the typed line, before the typed word. |
 | `typedWords` | `string[]` | `[]` | false | Words typed, held, erased and typed again in order after `typedLead`; the typed line renders only when there are words. |
 | `description` | `string` | `''` | false | Closing sentence under the typed line, the same for every audience. |
-| `audiences` | `ClosingCallToActionAgentsAudience[]` | `[]` | false | The ways in, in switch order; each is `{ value, label, copy?, actions? }` and the first one opens. The switch renders only with two or more. |
+| `audiences` | `ClosingCallToActionAgentsAudience[]` | `[]` | false | The ways in, in switch order; each is `{ value, label, copy?, actions? }` (`copy` is `{ label, text, shell? }`, `shell` drawing the `$` prompt) and the first one opens. The switch renders only with two or more. |
 | `audiencesAriaLabel` | `string` | `''` | false | Accessible name of the audience switch. |
 | `lineAriaLabel` | `string` | `''` | false | Accessible name of the read-only field that shows an audience's copyable line. |
+| `hatch` | `boolean` | `true` | false | Draws the hatched closing frame under the band; turn it off when another closing band stacks directly below and draws the shared frame. |
 
 ## States
 
@@ -47,6 +48,8 @@
 - Typed word: after mount the words are typed (90 ms a character), held (1.8 s), erased (45 ms a character) and the next one typed (after 270 ms), in a loop; the timer is cleared on scope dispose
 - Reduced motion: the typed word shows every word at once, joined by commas, and the cursor is hidden
 - Empty: when `title` is empty the band renders nothing but its root; an audience without `copy` shows no field; without `typedWords` the typed line is omitted
+- `hatch` off: the band renders without its closing frame, so the closing band stacked below draws the page's one close
+- `copy.shell`: the copyable line draws the `$` shell prompt before the text, so a command reads apart from a prompt meant for an agent; without it the line is bare
 
 ## Accessibility
 
@@ -56,6 +59,26 @@
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): the typed line uses `var(--text-muted)` and `var(--text-default)`.
 - `motion-reduce:transition-none motion-reduce:transform-none` — see the Motion table; under reduced motion nothing types or blinks.
 - Touch target ≥40×40 px — the switch, the copy button and the actions are large.
+
+## Right-to-left
+
+- Layout: logical utilities only (`ms-px` on the cursor); the switch and the row follow the direction.
+- Icons: the trailing chevron mirrors with `button`; the `$` prompt and the copyable line are not mirrored.
+- Keyboard: the switch's arrow keys follow the direction (owned by `toggle-group`).
+- User data: the copyable line is a command or a URL and renders as written.
+
+## Internationalization
+
+No built-in strings: the switch, field and copy-button names and every visible text are props from the page JSON (`audiencesAriaLabel`, `lineAriaLabel`, `copy.label`).
+
+- Formatting: none; the reduced-motion typed line joins the words with commas.
+
+## Responsive
+
+- Container queries: none; the row switches at viewport breakpoints.
+- Narrow (below `lg`): the copyable line and the actions stack full width; from `sm` the stack centres.
+- Touch: the switch, the copy button and the actions are large; nothing depends on hover.
+- Reflow: no horizontal scroll at 320 px and 200 % zoom; a long line scrolls inside its field.
 
 ## Examples
 
@@ -114,6 +137,83 @@
     description="A person and an agent ship the same way."
     audiences-aria-label="Audience"
     line-aria-label="Prompt"
+    :audiences="audiences"
+  />
+</template>
+```
+
+### Shell
+
+```vue
+<script setup>
+  import ClosingCallToActionAgents from '@aziontech/webkit/closing-call-to-action-agents'
+
+  const typedWords = ['Console', 'CLI', 'MCP server']
+
+  const audiences = [
+    {
+      value: 'humans',
+      label: 'For humans',
+      actions: [
+        {
+          label: 'Start for free',
+          href: '/signup',
+          kind: 'secondary',
+          trailing: true
+        },
+        {
+          label: 'Talk to a specialist',
+          href: '/site/contact',
+          kind: 'outlined',
+          trailing: true
+        }
+      ]
+    },
+    {
+      value: 'cli',
+      label: 'For the CLI',
+      copy: {
+        label: 'Copy command',
+        text: 'npm install -g azion',
+        shell: true
+      },
+      actions: [
+        {
+          label: 'Read the CLI docs',
+          href: '/site/docs/cli',
+          kind: 'outlined',
+          trailing: true
+        }
+      ]
+    },
+    {
+      value: 'agents',
+      label: 'For agents',
+      copy: {
+        label: 'Copy prompt',
+        text: 'Connect Azion MCP: https://mcp.azion.com'
+      },
+      actions: [
+        {
+          label: 'Read the agent docs',
+          href: '/site/docs/agent-setup',
+          kind: 'outlined',
+          trailing: true
+        }
+      ]
+    }
+  ]
+</script>
+
+<template>
+  <ClosingCallToActionAgents
+    anchor="contact"
+    title="Built by you, or your agents."
+    typed-lead="Drive one platform from the"
+    :typed-words="typedWords"
+    description="A person and an agent ship the same way."
+    audiences-aria-label="Audience"
+    line-aria-label="Line to copy"
     :audiences="audiences"
   />
 </template>

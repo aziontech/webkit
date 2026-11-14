@@ -34,6 +34,7 @@
 | `ariaLabel` | `string` | `''` | false | Accessible name of the scrolling region. |
 | `duration` | `number` | `0` | false | Seconds one loop of the strip takes; `0` paces it at ten seconds per photo. |
 | `photos` | `PhotoMarqueePhoto[]` | `[]` | false | The photographs, in order; each is `{ src, alt, width, height }`. |
+| `anchor` | `string` | `''` | false | In-page id set on the band so a `#hash` link can scroll to it. |
 
 ## States
 
@@ -56,6 +57,19 @@
 - Motion: under `dir="rtl"` the marquee track starts offset (`rtl:translate-x-1/2`) and the animation runs reversed, so photos flow in reading order; `motion-reduce` stops it in both.
 - Keyboard: no horizontal arrow-key logic.
 - User data: none.
+
+## Internationalization
+
+No built-in strings: every visible and announced text is a prop from the page JSON.
+
+- Formatting: none.
+
+## Responsive
+
+- Container queries: none: the strip is a fixed-height row that loops horizontally.
+- Narrow (below `sm`): photos are 20rem tall instead of 28rem.
+- Touch: the strip is one focusable region; hover pauses the loop on a pointer device and focus pauses it on any device.
+- Reflow: the strip clips inside its frame, so the page never scrolls horizontally at 320 px and 200 % zoom.
 
 ## Examples
 

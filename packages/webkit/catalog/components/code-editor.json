@@ -4,6 +4,7 @@
   "Editing a function, a script, a SQL query, a JSON or YAML document inside the product.",
   "Showing the change between two versions of code side by side (diff mode), for example before a deploy or a revert.",
   "Code that the server validates: the diagnostics come back as `markers` and show on their lines and in a list.",
+  "A JSON document with a known shape (a function's argument schema, a configuration file): pass its JSON Schema as `schema` and Monaco checks the document against it as the user types.",
   "A read-only view of code that still needs the editor's navigation (find, folding) once Monaco is loaded."
  ],
  "avoidWhen": [
@@ -26,6 +27,8 @@
   "Set `padLineNumbers` on a full-page code editor (`fill`, a function's Code or Arguments document), as the console does (01, 02…); leave it off on a small editor inside a form.",
   "Function calls are coloured for you (JavaScript and TypeScript, with `--code-sintax-function`); do not register your own Monarch grammar for that.",
   "Send server diagnostics as `markers` with 1-based lines; keep each message one sentence.",
+  "Pass a JSON Schema as `schema` for a JSON document with a known shape, and listen to `validate` to show the first problem in a `Field.Error`; keep `markers` for what only the server knows.",
+  "Set `:bordered=\"false\"` when the editor fills a pane that already frames it (a resizable pane, a full-page function editor, a drawer body); keep the default frame inside a form.",
   "Give the editor a fixed `height`, or `fill` inside a flex column that has its own height; never let it grow with the content.",
   "Use `readonly` for code the user may read and select but not change; use `disabled` only when the whole form is locked.",
   "In diff mode, `original` is the left side and `v-model` the right side; keep the right side editable only when the change can still be edited."

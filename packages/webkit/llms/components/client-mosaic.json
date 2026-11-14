@@ -8,7 +8,7 @@
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],
- "purpose": "The client mosaic: a framed bento grid of customer cells where a story cell carries a photograph, the client's mark, one line of its result and a \"read the case study\" link, and a mark cell carries only the client's linked logo on a chosen fill. The layout is derived from the data: the first story spans two columns and two rows, every other story one column and two rows, every mark one cell. It is a page section — the site places it from a `{ _id: 'client-mosaic', props }` entry and binds `props` straight onto it — and it composes `section-module`, `frame-box`, `bento-grid` and `mini-button`.",
+ "purpose": "The client mosaic: a framed bento grid of customer cells where a story cell carries a photograph, the client's mark, one line of its result and a \"read the case study\" link, and a mark cell carries only the client's linked logo on a chosen fill. With `stories` and `logos` the layout is derived from the data: the first story spans two columns and two rows, every other story one column and two rows, every mark one cell. With `cells` the page places story and mark cells in one ordered list, each with its own column and row span, so stories and marks interleave as on the home page. It is a page section — the site places it from a `{ _id: 'client-mosaic', props }` entry and binds `props` straight onto it — and it composes `section-module`, `frame-box`, `bento-grid`, `logo` and `mini-button`.",
  "setup": null,
  "useWhen": [
   "On the home page, to show the best customer stories and a wall of marks in one band."
@@ -19,11 +19,15 @@
  ],
  "related": [
   "bento-grid` — the grid the cells are laid in.",
-  "client-mosaic-columns` — the three-column sibling with brand-coloured faces."
+  "client-mosaic-columns` — the three-column sibling with brand-coloured faces.",
+  "logo` — draws every client mark in the ink its fill needs."
  ],
  "bestPractices": [
   "Two stories and six marks fill the four-column grid exactly.",
-  "Pick `fill` and `logoTreatment` together: a `knockout` mark reads on `white` or `primary`, a `monochrome` one on `canvas` or `surface`."
+  "Use `cells` when the order matters (a story between marks, a tall story at the end of a row): give each cell its `span` and `rows` (`'1'` or `'2'`) and make the spans add up to full rows of four.",
+  "Pick `fill` and `logoTreatment` together: a `knockout` mark reads on `white` or `primary`, a `monochrome` one on `canvas` or `surface`. Left unset, a mark on `white` or `primary` takes `knockout` and every other mark `monochrome`.",
+  "Set `stacked` on a cell whose mark is a stacked lockup (squarer than a wordmark) so it draws one step taller.",
+  "A story without a `photo` sits on its fill; keep photos for the stories that have one."
  ],
  "props": [
   {
@@ -41,11 +45,18 @@
    "doc": "Label of the link under every story."
   },
   {
+   "name": "anchor",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "In-page id set on the band so a hash link can target it."
+  },
+  {
    "name": "stories",
    "type": "ClientMosaicStory[]",
    "default": "[]",
    "required": "false",
-   "doc": "The story cells, in order; each is `{ logo, logoAlt, photo, text, href, fill?, logoTreatment? }`. The first spans two columns and two rows, the rest one column and two rows."
+   "doc": "The story cells, in order; each is `{ logo, logoAlt, photo?, text, href, fill?, logoTreatment? }`. The first spans two columns and two rows, the rest one column and two rows."
   },
   {
    "name": "logos",
@@ -53,6 +64,13 @@
    "default": "[]",
    "required": "false",
    "doc": "The mark cells, in order; each is `{ logo, logoAlt, href, fill?, logoTreatment? }` where `fill` is `'canvas'`, `'surface'`, `'white'` or `'primary'` and `logoTreatment` is `'monochrome'`, `'knockout'` or `'as-is'`."
+  },
+  {
+   "name": "cells",
+   "type": "ClientMosaicCell[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "The cells in placement order, story and mark cells interleaved; each is `{ logo, logoAlt, href, text?, photo?, span?, rows?, fill?, logoTreatment?, stacked? }` where a cell with `text` is a story cell, `span` and `rows` are `'1'` (default) or `'2'`, and `fill` defaults to `canvas`. When set it replaces `stories` and `logos`."
   }
  ],
  "events": [],
@@ -63,6 +81,10 @@
   {
    "name": "Default",
    "sfc": "<script setup>\n  import agibankExtendedReversed from '@aziontech/webkit/assets/agibank-extended-reversed.svg'\n  import dafitiExtendedMono from '@aziontech/webkit/assets/dafiti-extended-mono.svg'\n  import exameExtendedMono from '@aziontech/webkit/assets/exame-extended-mono.svg'\n  import fourbankExtendedReversed from '@aziontech/webkit/assets/fourbank-extended-reversed.svg'\n  import gpaExtendedReversed from '@aziontech/webkit/assets/gpa-extended-reversed.svg'\n  import gpaPhoto from '@aziontech/webkit/assets/gpa-photo.jpg'\n  import netshoesExtendedColor from '@aziontech/webkit/assets/netshoes-extended-color.svg'\n  import netshoesPhoto from '@aziontech/webkit/assets/netshoes-photo.jpg'\n  import nznExtendedReversed from '@aziontech/webkit/assets/nzn-extended-reversed.svg'\n  import rennerExtendedReversed from '@aziontech/webkit/assets/renner-extended-reversed.svg'\n  import ClientMosaic from '@aziontech/webkit/client-mosaic'\n</script>\n\n<template>\n  <ClientMosaic\n    aria-label=\"Client stories\"\n    link-label=\"Read the case study\"\n    :stories=\"[\n      {\n        logo: netshoesExtendedColor,\n        logoAlt: 'Netshoes',\n        photo: netshoesPhoto,\n        text: 'Netshoes automatically blocks more than 4 million threats in six months',\n        href: 'https://www.azion.com/en/success-case/netshoes/',\n        fill: 'surface',\n        logoTreatment: 'monochrome'\n      },\n      {\n        logo: gpaExtendedReversed,\n        logoAlt: 'GPA',\n        photo: gpaPhoto,\n        text: 'Grupo Pão de Açúcar (GPA) stops a cyberattack and reduces costs by 30%',\n        href: 'https://www.azion.com/en/success-case/gpa-solved-cyberattack/',\n        fill: 'surface',\n        logoTreatment: 'monochrome'\n      }\n    ]\"\n    :logos=\"[\n      {\n        logo: dafitiExtendedMono,\n        logoAlt: 'Dafiti',\n        href: 'https://www.azion.com/en/success-case/dafiti/dafiti-accelerates-its-e-commerce-by-86-and-saves-45-on-data-transfer-costs-using-azion-edge-application/',\n        fill: 'white',\n        logoTreatment: 'knockout'\n      },\n      {\n        logo: agibankExtendedReversed,\n        logoAlt: 'Agibank',\n        href: 'https://www.azion.com/en/success-case/agibank/',\n        fill: 'canvas',\n        logoTreatment: 'monochrome'\n      },\n      {\n        logo: rennerExtendedReversed,\n        logoAlt: 'Renner',\n        href: 'https://www.azion.com/en/success-case/renner/',\n        fill: 'canvas',\n        logoTreatment: 'monochrome'\n      },\n      {\n        logo: fourbankExtendedReversed,\n        logoAlt: 'Fourbank',\n        href: 'https://www.azion.com/en/success-case/fourbank/',\n        fill: 'primary',\n        logoTreatment: 'knockout'\n      },\n      {\n        logo: exameExtendedMono,\n        logoAlt: 'Exame',\n        href: 'https://www.azion.com/en/success-case/exame/',\n        fill: 'canvas',\n        logoTreatment: 'monochrome'\n      },\n      {\n        logo: nznExtendedReversed,\n        logoAlt: 'NZN',\n        href: 'https://www.azion.com/en/success-case/nzn/nzn-creates-more-than-100-edge-applications-and-reduces-their-websites-loading-time-by-50-using-the-azion-platform/',\n        fill: 'primary',\n        logoTreatment: 'knockout'\n      }\n    ]\"\n  />\n</template>"
+  },
+  {
+   "name": "Ordered cells",
+   "sfc": "<script setup>\n  import agibankExtendedReversed from '@aziontech/webkit/assets/agibank-extended-reversed.svg'\n  import dafitiExtendedMono from '@aziontech/webkit/assets/dafiti-extended-mono.svg'\n  import exameExtendedMono from '@aziontech/webkit/assets/exame-extended-mono.svg'\n  import fourbankExtendedReversed from '@aziontech/webkit/assets/fourbank-extended-reversed.svg'\n  import gpaExtendedReversed from '@aziontech/webkit/assets/gpa-extended-reversed.svg'\n  import gpaPhoto from '@aziontech/webkit/assets/gpa-photo.jpg'\n  import netshoesExtendedColor from '@aziontech/webkit/assets/netshoes-extended-color.svg'\n  import netshoesPhoto from '@aziontech/webkit/assets/netshoes-photo.jpg'\n  import nznExtendedReversed from '@aziontech/webkit/assets/nzn-extended-reversed.svg'\n  import rennerExtendedReversed from '@aziontech/webkit/assets/renner-extended-reversed.svg'\n  import ClientMosaic from '@aziontech/webkit/client-mosaic'\n\n  const cells = [\n    {\n      logo: netshoesExtendedColor,\n      logoAlt: 'Netshoes',\n      photo: netshoesPhoto,\n      text: 'Netshoes automatically blocks more than 4 million threats in six months',\n      href: 'https://www.azion.com/en/success-case/netshoes/',\n      span: '2',\n      rows: '2',\n      fill: 'surface'\n    },\n    {\n      logo: dafitiExtendedMono,\n      logoAlt: 'Dafiti',\n      href: 'https://www.azion.com/en/success-case/dafiti/',\n      fill: 'white'\n    },\n    {\n      logo: agibankExtendedReversed,\n      logoAlt: 'Agibank',\n      href: 'https://www.azion.com/en/success-case/agibank/'\n    },\n    {\n      logo: rennerExtendedReversed,\n      logoAlt: 'Renner',\n      href: 'https://www.azion.com/en/success-case/renner/'\n    },\n    {\n      logo: gpaExtendedReversed,\n      logoAlt: 'GPA',\n      photo: gpaPhoto,\n      text: 'Grupo Pão de Açúcar (GPA) stops a cyberattack and reduces costs by 30%',\n      href: 'https://www.azion.com/en/success-case/gpa-solved-cyberattack/',\n      rows: '2',\n      fill: 'surface',\n      stacked: true\n    },\n    {\n      logo: fourbankExtendedReversed,\n      logoAlt: 'Fourbank',\n      href: 'https://www.azion.com/en/success-case/fourbank/',\n      fill: 'primary'\n    },\n    {\n      logo: exameExtendedMono,\n      logoAlt: 'Exame',\n      href: 'https://www.azion.com/en/success-case/exame/'\n    },\n    {\n      logo: nznExtendedReversed,\n      logoAlt: 'NZN',\n      href: 'https://www.azion.com/en/success-case/nzn/',\n      fill: 'primary'\n    }\n  ]\n</script>\n\n<template>\n  <ClientMosaic\n    anchor=\"clients\"\n    aria-label=\"Client stories\"\n    link-label=\"Read the case study\"\n    :cells=\"cells\"\n  />\n</template>"
   }
  ],
  "docs": "components/client-mosaic.md"

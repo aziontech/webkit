@@ -1,6 +1,6 @@
 # Pricing Plans
 
-> The plan cards at the top of Pricing: a billing-period toggle over a framed row of pricing cards, each with its plan name, its price for the picked period, what it includes and one button. The recommended plan sits on a raised surface and carries a tag. It is a page section — the site places it from a `{ _id: 'pricing-plans', props }` entry and binds `props` straight onto it — and it composes `section-module`, `frame-box`, `toggle-group`, `card-grid`, `card-pricing` and `button`; the picked period is local state.
+> The plan cards at the top of Pricing: a billing-period toggle over a framed row of pricing cards, each with its plan name, its price for the picked period, what it includes and one button. The recommended plan sits on a raised surface and carries a tag. It is a page section — the site places it from a `{ _id: 'pricing-plans', props }` entry and binds `props` straight onto it — and it composes `frame-box`, `toggle-group`, `card-grid`, `card-pricing` and `button`; the picked period is local state. The band runs full bleed (the page's inline inset only, closed by a bottom rule) and centres its frame at the site measure, with rules on its sides.
 
 - Import: `import PricingPlans from '@aziontech/webkit/pricing-plans'`
 - Category: sections · Surface: marketing · Structure: monolithic
@@ -14,6 +14,7 @@
 
 - Give every plan one price per period, matched by `period`; a price without a `period` applies to every period.
 - Highlight one plan; it is raised and is the only card that shows its tag.
+- Put terms that hold for every period in the plan's `description`; a price's own `details` replaces it for that period.
 - Keep `features` to five or so short labels led by an icon.
 
 ## Don’t
@@ -33,12 +34,15 @@
 | `anchor` | `string` | `''` | false | In-page id set on the band so a hash link can target it. |
 | `periods` | `PricingPlansPeriod[]` | `[]` | false | The billing periods of the toggle, in order; each is `{ label, value }`. The toggle shows with two or more and opens on the first. |
 | `periodsAriaLabel` | `string` | `''` | false | Accessible name of the billing-period toggle. |
-| `plans` | `PricingPlansPlan[]` | `[]` | false | The plan cards, in order; each is `{ name, highlighted?, tagLabel?, prices, featuresTitle?, features?, action? }` where a price is `{ period?, value, prefix?, suffix?, details? }`, a feature is `{ icon, label }` and `action` is `{ label, href }`; a plan without a name is dropped, and an action without a label or href is dropped. |
+| `plans` | `PricingPlansPlan[]` | `[]` | false | The plan cards, in order; each is `{ name, description?, highlighted?, tagLabel?, prices, featuresTitle?, features?, action? }` where a price is `{ period?, value, prefix?, suffix?, details? }`, a feature is `{ icon, label }` and `action` is `{ label, href }`; `description` stands in for a price without `details`, a plan without a name is dropped, and an action without a label or href is dropped. |
 
 ## States
 
 - Visual states: `default`
 - The picked period selects each plan's price; a plan with no price for it falls back to its period-less price
+- Price change: every card is `animated`, so a period switch fades the old price out and the new one in (the card's reduced-motion fallback swaps it in place)
+- Terms: the line under the price is the price's `details`, else the plan's `description`, else empty
+- Layout: a full-width band (`__band`) on `var(--bg-canvas)` with the page's inline inset `var(--layout-boundary-inline)` and a bottom rule, and inside it a `frame-box` with side rules and bottom marks capped at `var(--layout-measure-site)` and centred
 - The highlighted plan sits on `var(--bg-surface)`, shows its tag and carries the secondary button; the others sit on `var(--bg-canvas)` with an outlined button
 - Empty: when no plan has a name the band renders nothing but its root
 
@@ -48,7 +52,7 @@
 - Keyboard map: `Tab` reaches the toggle and each card's button; the toggle's arrow-key map is `toggle-group`'s.
 - ARIA: the toggle is named by `periodsAriaLabel`; each plan is a `card-pricing` article with its name as `h3`; the features are a list and their glyphs are `aria-hidden`.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): text colours are the tokens above.
-- `motion-reduce:transition-none motion-reduce:transform-none` — the toggle indicator belongs to `toggle-group`, which carries its own fallback; this band adds no motion.
+- `motion-reduce:transition-none motion-reduce:transform-none` — the toggle indicator belongs to `toggle-group` and the price fade to `card-pricing`, each with its own reduced-motion fallback; this band adds no motion of its own.
 - Touch target ≥40×40 px — the toggle and the buttons are `large`.
 
 ## Examples
@@ -159,13 +163,9 @@
     },
     {
       name: 'Enterprise',
+      description: 'Custom terms and payment schedule. Commit up front and save on usage.',
       highlighted: false,
-      prices: [
-        {
-          value: 'Custom',
-          details: 'Custom terms and payment schedule. Commit up front and save on usage.'
-        }
-      ],
+      prices: [{ value: 'Custom' }],
       featuresTitle: 'All Pro features, plus:',
       features: [
         {

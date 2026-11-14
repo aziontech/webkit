@@ -1,5 +1,5 @@
 {
- "purpose": "The feature-by-feature matrix under the plan cards on Pricing: one column per plan with its name and action button pinned in the header while the page scrolls, one band per product with an overline, a title and a lead, and one row per feature saying what each plan includes — a tick, a dash, or the allowance as text. The recommended plan carries an accent bar, and below the large breakpoint the table folds to one plan picked from a select. It is a page section — the site places it from a `{ _id: 'compare-plans', props }` entry and binds `props` straight onto it — and it composes `section-module`, `select`, `button`, `overline`, `hint`, `tag` and `link`.",
+ "purpose": "The feature-by-feature matrix under the plan cards on Pricing: one column per plan with its name and action button pinned in the header while the page scrolls, one band per product with an overline, a title and a lead, and one row per feature saying what each plan includes — an included mark, a not-included mark, or the allowance as text. The recommended plan carries an accent bar, and below the large breakpoint the table folds to one plan picked from a searchable select. It is a page section — the site places it from a `{ _id: 'compare-plans', props }` entry and binds `props` straight onto it — and it composes `section-module`, `select`, `input`, `button`, `icon-button`, `popover`, `tooltip`, `overline`, `tag` and `link`.",
  "useWhen": [
   "On Pricing, under the plan cards, to show what every plan includes product by product."
  ],
@@ -14,6 +14,8 @@
  "bestPractices": [
   "Give every plan a stable `id`; the narrow-screen picker selects by it.",
   "Mark one plan `highlighted`; it gets the accent bar, the secondary button and opens the picker.",
-  "Give every row's `values` one entry per plan, in plan order."
+  "Give every row's `values` one entry per plan, in plan order.",
+  "Use a row's `hint` to define the term its label names; it opens in a popover titled with the label, so it can run to a sentence or two.",
+  "Set `includedLabel` and `excludedLabel` to the page's words; left empty, the marks read the locale's Included and Not included."
  ]
 }

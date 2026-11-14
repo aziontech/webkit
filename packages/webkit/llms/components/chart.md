@@ -140,10 +140,10 @@ The root `chart.vue` renders a `<figure>` with a CSS grid: the plot cell (every 
   - Props: _none_.
   - Events: _none_.
   - Slots: _none_.
-- `chart-tooltip/chart-tooltip.vue` — the readout for the active index, inside the figure (never teleported): a header with the label, divided edge to edge from the rows, then every visible series with a 2px line key, its name, and its value at the end of the row in tabular figures. Raised surface `var(--chart-tooltip-bg)` with a `var(--chart-tooltip-border)` edge; flips to the other side past the middle of the plot.
-  - Props: _none_.
+- `chart-tooltip/chart-tooltip.vue` — the readout for the active index, inside the figure (never teleported): a header with the label, divided edge to edge from the rows, then every visible series with a 2px line key, its name, and its value at the end of the row in tabular figures. Raised surface `var(--chart-tooltip-bg)` with a `var(--chart-tooltip-border)` edge; flips to the other side past the middle of the plot. With `total`, a Total row under a hairline in `var(--chart-tooltip-border)` sums the visible series at the active index (empty values count as zero) in the same value format; the `footer` slot adds a hint line under the rows, also divided edge to edge, such as what a click on the plot does.
+  - Props: `total?: boolean` (default `false` — a Total row summing the visible series under the rows).
   - Events: _none_.
-  - Slots: _none_.
+  - Slots: `footer` (a hint line under the rows, in `.text-body-sm` / `var(--chart-tooltip-muted)`; the tooltip is `aria-hidden`, so the same hint must also be reachable elsewhere, such as the chart `ariaLabel`).
 - `chart-legend/chart-legend.vue` — one toggle button per series (`aria-pressed`), a square key in the series color (the same key for every mark kind), the name, and the series total. Hover and focus emphasize the series; the other keys dim with their marks. Renders nothing for a single series.
   - Props: `totals?: boolean` (default `false` — show each series total beside its name).
   - Events: _none_ (toggles flow through the root's `legend-toggle` and `v-model:hiddenSeries`).
@@ -203,6 +203,7 @@ The root `chart.vue` renders a `<figure>` with a CSS grid: the plot cell (every 
 | `chart.otherSeries`     | `Other`                                        | `otherLabel`          |
 | `chart.rangeDraft`      | `Selecting from {from} to {to}`                | —                     |
 | `chart.rangeSelected`   | `Selected from {from} to {to}`                 | —                     |
+| `chart.total`           | `Total`                                        | —                     |
 
 - Formatting: `Intl.NumberFormat` (compact values) and `Intl.DateTimeFormat` (Date labels, in `timeZone`) with the locale from `WebkitProvider`.
 

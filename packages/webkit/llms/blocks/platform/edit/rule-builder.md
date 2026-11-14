@@ -1,6 +1,6 @@
 # RuleBuilder (`platform/edit/rule-builder`)
 
-> A rule builder drawer, the richest form pattern: a large right-side drawer with General, Phase, Criteria, Behaviors and Status sections over a single Save in the footer. Name shows its required state only after Save is pressed with it empty, never on first render. Criteria are an `AttributeEditor` in grouped mode: AND groups of variable, operator and argument rows joined by OR, the variable a `Combobox` of the phase's variables, with Add condition, Add OR group, limits and announcements from the editor; behaviors are a Then list whose argument field follows the behavior picked, from a searchable list filtered by phase. Behaviors reorder by dragging the grip or with the arrow buttons. Every form resets when the drawer opens, so its content stays in place while it closes. A resource’s Rules tab opens it as Add Rule or Edit Rule; a resource that only acts on requests opens the same drawer with a single Request phase (so no Phase section) and its own behaviors. Built from `SettingsSection`, `SettingRow`, `Drawer` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter`, `Field`, `Input`, `HelperText`, `Select`, `AttributeEditor`, `Combobox`, `RadioButton` choice cards, `Card`, `Item`, `Switch`, `IconButton`, `Tooltip` and `Button`.
+> A rule builder drawer, the richest form pattern: a large right-side drawer with General, Phase, Criteria, Behaviors and Status sections over a single Save in the footer. Name shows its required state only after Save is pressed with it empty, never on first render. Criteria are an `AttributeEditor` in grouped mode: AND groups of variable, operator and argument rows joined by OR, the variable a `Combobox` of the phase's variables, with Add condition, Add OR group, limits and announcements from the editor, and conditions and groups that reorder by grip, Move up and Move down, or Alt+Arrow keys (`reorderable`); behaviors are a Then list whose argument field follows the behavior picked, from a searchable list filtered by phase. Behaviors reorder by dragging the grip or with the arrow buttons. Every form resets when the drawer opens, so its content stays in place while it closes. A resource’s Rules tab opens it as Add Rule or Edit Rule; a resource that only acts on requests opens the same drawer with a single Request phase (so no Phase section) and its own behaviors. Built from `SettingsSection`, `SettingRow`, `Drawer` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter`, `Field`, `Input`, `HelperText`, `Select`, `AttributeEditor`, `Combobox`, `RadioButton` choice cards, `Card`, `Item`, `Switch`, `IconButton`, `Tooltip` and `Button`.
 
 - Surface: product
 - Source: `blocks/platform/edit/rule-builder/rule-builder.vue` in `@aziontech/webkit`
@@ -43,7 +43,7 @@ Request and Response as choice cards: a flush `Card` of `Field`s, each a `RadioB
 
 ### D. Criteria — `SettingsSection`, `AttributeEditor` (grouped), `Combobox`, `Select`, `Input` (required)
 
-An `AttributeEditor` in grouped mode (`v-model:groups`), large, named "Criteria": each group is an AND group of condition rows, groups are joined by an "or" `Separator`, and the editor draws the labels, Add condition under each group, Add OR group at the end, Remove condition per row, the limits (10 conditions per group, 5 groups), focus after add and remove, and the polite "Item n added" and "Item n removed" announcements. Its cells are replaced through `cell-<key>` slots: the variable is a `Combobox` of the variables of the chosen phase that also takes a typed one, the operator a `Select`, and the argument an `Input` that turns into a disabled "No argument" field for exists and does not exist. `min-items="1"` keeps one condition. A missing variable shows "Enter the variable to compare." under it, only after Save, through the editor's `errors`. Conditions do not reorder: And and Or do not depend on order.
+An `AttributeEditor` in grouped mode (`v-model:groups`), large, named "Criteria": each group is an AND group of condition rows, groups are joined by an "or" `Separator`, and the editor draws the labels, Add condition under each group, Add OR group at the end, Remove condition per row, the limits (10 conditions per group, 5 groups), focus after add and remove, and the polite "Item n added" and "Item n removed" announcements. Its cells are replaced through `cell-<key>` slots: the variable is a `Combobox` of the variables of the chosen phase that also takes a typed one, the operator a `Select`, and the argument an `Input` that turns into a disabled "No argument" field for exists and does not exist. `min-items="1"` keeps one condition. A missing variable shows "Enter the variable to compare." under it, only after Save, through the editor's `errors`. `reorderable` lets conditions and whole OR groups move by their grip, with Move up and Move down, or with Alt+Arrow Up and Alt+Arrow Down inside a row; the editor announces each move. Conditions are evaluated in the order shown, so the cheapest or most selective one goes first.
 
 ### E. Behaviors — `SettingsSection`, `Card`, `Select`, `Input`, `HelperText`, `Tooltip`, `IconButton`, `Button` (required)
 
@@ -62,7 +62,7 @@ A flush `Card` with an `Item.List` holding one `SettingRow` titled Active with a
 - Show the Name error only after a failed Save, never on first render, and move focus to the first field in error.
 - Read the logic aloud in the layout: and inside a group, or between groups, then the behaviors in order.
 - Make every argument field follow what was picked before it, so the user never types a value the operator or behavior cannot take.
-- Offer both drag and buttons to reorder behaviors; the buttons are the keyboard path.
+- Offer both drag and buttons to reorder behaviors and criteria; the buttons are the keyboard path.
 - Filter variables and behaviors by phase, and lock the phase on an existing rule.
 - Follow `skills/webkit-form` for fields and `skills/webkit-errors` for error timing.
 
@@ -82,7 +82,7 @@ A flush `Card` with an `Item.List` holding one `SettingRow` titled Active with a
 - **Logic labels:** single words, e.g. "and", "or", "Then".
 - **Add buttons:** verb first, e.g. "Add condition", "Add OR group", "Add behavior".
 - **Errors:** "Name is required.", "Enter the variable to compare."
-- **Reorder controls:** name the item, e.g. "Move condition up", "Remove behavior".
+- **Reorder controls:** name the item, e.g. "Move behavior up", "Remove behavior"; the criteria take numbered names from the editor ("Move item 2 up", "Reorder group 1").
 - Follow `skills/webkit-microcopy`: sentence case, no em dash, no "please", no exclamation marks.
 
 ## Accessibility
@@ -813,6 +813,7 @@ Each variant is the same screen in another state: `get_pattern("platform/edit/ru
                   :group-limit="5"
                   :min-items="1"
                   :disabled="submitting"
+                  reorderable
                   size="large"
                   add-button-label="Add condition"
                   add-group-label="Add OR group"

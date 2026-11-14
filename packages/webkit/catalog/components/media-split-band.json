@@ -1,5 +1,5 @@
 {
- "purpose": "One claim beside its picture, on its own frame: the copy cell with its overline, headline and sentence on one side, and the media on a raised, pixel-textured surface on the other. It is a page section — the site places it from a `{ _id: 'media-split-band', props }` entry and binds `props` straight onto it — and it composes `section-module`, a framed `media-split`, `button`, `illustration`, `product-widget`, `diagram` and the webkit scene assets. The media is a scene, a product console widget, a request-flow diagram, an image (cover or framed) or an illustration; with one action the whole band links to it, with two the band stays unlinked.",
+ "purpose": "One claim beside its picture, on its own frame: the copy cell with its overline, headline and sentence on one side, and the media on a raised, pixel-textured surface on the other. It is a page section — the site places it from a `{ _id: 'media-split-band', props }` entry and binds `props` straight onto it — and it composes `section-module`, a framed `media-split`, `button`, `illustration`, `product-widget`, `diagram` and the webkit scene assets. The media is a scene, a product console widget, a request-flow diagram, an image (cover or framed) or an illustration; with one action the whole band links to it (unless `linked` is off), with two the band stays unlinked. The media sits beside the copy, or under it when `orientation` is `vertical`.",
  "useWhen": [
   "To make one point beside one picture and move on (a values statement, a single product claim)."
  ],
@@ -16,6 +16,9 @@
   "On a product page prefer `widget` or `diagram`: they show the product itself. Do not drop to `media-split` and its `media` slot to place one.",
   "Set `image.framed` for a picture that is an object rather than a scene (a badge, a logo, a screenshot): it sits whole on a rounded, bordered plate inset in the cell instead of covering it.",
   "Use `size=\"large\"` for a band that carries only its headline and description.",
+  "Use `orientation=\"vertical\"` for a wide scene that needs the full width of the frame under the copy.",
+  "Turn `linked` off when the media holds controls of its own, so a click in it is not taken as a click on the band.",
+  "Set `anchor` when another part of the page links to the band.",
   "Give an `image` its `width` and `height` so the page reserves its box before it loads."
  ]
 }

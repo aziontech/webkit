@@ -1,6 +1,6 @@
 # Listing Table
 
-> A titled preview of a longer listing: a few linked rows in columns, and one outlined button into the full list. It is a page section — the site places it from a `{ _id: 'listing-table', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `frame-box`, `table` and, below `sm`, `item`. Each row is one link named by its first column; the whole row is clickable with the pointer and the first column's link is the keyboard and screen-reader path. Below `sm` the same rows become a list of items, the first column as the title and the second as the description, with the button going full width.
+> A titled preview of a longer listing: a few linked rows in columns, and one outlined button into the full list. It is a page section — the site places it from a `{ _id: 'listing-table', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `frame-box`, `table` and, below `sm`, `item`. Each row is one link named by its first column; a pointer click anywhere on the row follows that link (with the same modifier keys), and the link stays the keyboard and screen-reader path. The other columns are metadata in the small overline, each cut to one line with its full text as a tooltip. Below `sm` the same rows become a list of items, the first column as the title and the second as the description in the small overline, with the button going full width.
 
 - Import: `import ListingTable from '@aziontech/webkit/listing-table'`
 - Category: sections · Surface: marketing · Structure: monolithic
@@ -39,7 +39,9 @@
 
 ## States
 
-- Visual states: `default`, `hover` (row fill)
+- Visual states: `default`, `hover` (row fill `var(--bg-hover)` in both the table and the list)
+- Whole-row navigation: a click on a row outside its link is forwarded to the link, keeping `ctrl`/`meta`/`shift`/`alt`; a click that ends a text selection is not forwarded
+- Metadata cells (every column after the first) render `text-overline-sm`, truncated to one line, with their full value as `title`
 - Empty: when `rows` or `columns` is empty the band renders nothing — not the header, not the frame
 - The header renders only when `title` is set; the footer button only when `primaryAction` is set
 - Below `sm` the table is hidden and the rows render as an item list
@@ -52,6 +54,25 @@
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): row titles `var(--text-default)`, values `var(--text-muted)`.
 - `motion-reduce:transition-none motion-reduce:transform-none` — the band adds no motion; the button carries its own fallback.
 - Touch target ≥40×40 px — each phone row is a whole-item link; the button is large.
+
+## Right-to-left
+
+- Layout: logical utilities only (`ps-`/`pe-`); columns mirror with the table.
+- Icons: the button's trailing chevron mirrors (owned by `button`).
+- Keyboard: unchanged.
+- User data: none.
+
+## Internationalization
+
+- Built-in strings: none. Column labels, row values and the action arrive through props.
+- Formatting: none; values arrive pre-formatted.
+
+## Responsive
+
+- Container queries: none.
+- Narrow (< `sm`): the table is hidden and the rows render as an item list, the description in the small overline, the button full width.
+- Touch: each phone row is a whole-item link; each table row is a whole-row target.
+- Reflow: no horizontal scroll at 320 px; metadata truncates instead of widening the table, its full text in the tooltip.
 
 ## Examples
 

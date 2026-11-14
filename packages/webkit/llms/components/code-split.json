@@ -24,10 +24,19 @@
  "bestPractices": [
   "Keep the sample short enough to read in the cell; the frame cuts off whatever runs past it.",
   "Give every tab a `code`; a tab without one is skipped.",
+  "Set `defaultFile` to the `value` of the file the argument hinges on when it is not the first tab.",
+  "Set `anchor` when another part of the page links to the band.",
   "Use `primaryAction` alone for one destination, and add `secondaryAction` only for a second, distinct one.",
   "Set an action's `kind` to `transparent` for a quiet text link such as \"Learn more\" (the product pages' Cache, Application Accelerator and Image Processor bands); leave it unset for the filled `secondary` first button and the `outlined` second one."
  ],
  "props": [
+  {
+   "name": "anchor",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "In-page id set on the band so a `#hash` link can scroll to it."
+  },
   {
    "name": "title",
    "type": "string",
@@ -48,6 +57,13 @@
    "default": "[]",
    "required": "false",
    "doc": "The files of the code sample, in order; each is `{ label, value, code, language?, fileName?, fileIcon?, icon? }` where `icon` is a mark drawn beside the tab label. A tab without `code` is skipped."
+  },
+  {
+   "name": "defaultFile",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "value` of the tab open first; empty, or a value no tab carries, opens the first tab."
   },
   {
    "name": "copyAriaLabel",
@@ -79,6 +95,10 @@
   {
    "name": "Default",
    "sfc": "<script setup>\n  import CodeSplit from '@aziontech/webkit/code-split'\n\n  const codeTabs = [\n    {\n      label: 'cache-settings.json',\n      value: 'cache-settings',\n      language: 'json',\n      code: '{\\n  \"cache_settings\": {\\n    \"name\": \"api-cache\",\\n    \"browser_cache_settings\": {\\n      \"ttl\": 60\\n    },\\n    \"cdn_cache_settings\": {\\n      \"ttl\": 30\\n    },\\n    \"cache_key\": {\\n      \"query_string\": \"whitelist\",\\n      \"query_string_fields\": [\"user_id\", \"category\"],\\n      \"cookie\": \"whitelist\",\\n      \"cookie_names\": [\"session_id\", \"region\"]\\n    },\\n    \"methods\": [\"GET\", \"POST\", \"OPTIONS\"],\\n    \"stale_cache\": true\\n  }\\n}',\n      fileName: 'cache-settings.json',\n      fileIcon: 'ai ai-json'\n    }\n  ]\n\n  const primaryAction = {\n    label: 'Learn more',\n    href: 'https://www.azion.com/en/documentation/products/build/applications/application-accelerator/',\n    trailing: true,\n    kind: 'transparent'\n  }\n</script>\n\n<template>\n  <CodeSplit\n    title=\"From basic caching to advanced acceleration\"\n    description=\"Application Accelerator extends Cache with protocol optimizations and advanced cache rules for dynamic content.\"\n    :code-tabs=\"codeTabs\"\n    copy-aria-label=\"Copy the cache settings sample\"\n    :primary-action=\"primaryAction\"\n  />\n</template>"
+  },
+  {
+   "name": "Default file",
+   "sfc": "<script setup>\n  import CodeSplit from '@aziontech/webkit/code-split'\n\n  const codeTabs = [\n    {\n      label: 'azion.config.js',\n      value: 'config',\n      language: 'javascript',\n      code: \"export default {\\n  build: { preset: 'javascript' },\\n  rules: {\\n    request: [{ name: 'Run the handler', match: '^/', behavior: { runFunction: 'handler' } }]\\n  }\\n}\",\n      fileName: 'azion.config.js',\n      fileIcon: 'ai-cor ai-js'\n    },\n    {\n      label: 'main.js',\n      value: 'handler',\n      language: 'javascript',\n      code: \"export default {\\n  async fetch(request) {\\n    const url = new URL(request.url)\\n\\n    if (url.pathname === '/api/status') {\\n      return Response.json({ region: 'edge', ok: true })\\n    }\\n\\n    return fetch(request)\\n  }\\n}\",\n      fileName: 'main.js',\n      fileIcon: 'ai-cor ai-js'\n    },\n    {\n      label: 'package.json',\n      value: 'package',\n      language: 'json',\n      code: '{\\n  \"name\": \"acme-store\",\\n  \"type\": \"module\",\\n  \"scripts\": {\\n    \"deploy\": \"azion deploy\"\\n  }\\n}',\n      fileName: 'package.json',\n      fileIcon: 'ai ai-json'\n    }\n  ]\n</script>\n\n<template>\n  <CodeSplit\n    anchor=\"handler\"\n    title=\"Answer the request before it reaches the origin\"\n    description=\"A function returns the response itself when a route needs logic, and passes everything else through.\"\n    :code-tabs=\"codeTabs\"\n    default-file=\"handler\"\n    copy-aria-label=\"Copy the handler sample\"\n    :primary-action=\"{ label: 'Docs', href: '/docs/functions', trailing: true }\"\n  />\n</template>"
   }
  ],
  "docs": "components/code-split.md"

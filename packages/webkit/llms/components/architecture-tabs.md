@@ -35,7 +35,8 @@
 | `title` | `string` | `''` | false | Headline of the band, rendered by the horizontal section title as its `h2`; the band renders no header when empty. |
 | `description` | `string` | `''` | false | Supporting sentence beside the headline. |
 | `position` | `ArchitectureTabsPosition` | `'top'` | false | Side of the diagram the tabs sit on: `top`, `bottom`, `left` or `right`; left and right hold up to three tabs. |
-| `tabs` | `ArchitectureTabsTab[]` | `[]` | false | The architectures, in order; each is `{ value, title, description, diagram }` where `diagram` is the name of the diagram drawn while the tab is active. |
+| `tabs` | `ArchitectureTabsTab[]` | `[]` | false | The architectures, in order; each is `{ value, title, description, diagram, diagramAriaLabel? }` where `diagram` is the name of the diagram drawn while the tab is active and `diagramAriaLabel` replaces the description that diagram ships. |
+| `interval` | `number` | `6000` | false | Milliseconds each tab holds before the next one opens. |
 | `primaryAction` | `ArchitectureTabsAction` | `undefined` | false | Large button in the section title; `{ label, href, trailing?, target? }`. Omitted when absent. |
 
 ## Assets
@@ -47,12 +48,13 @@
 - Visual states: `default`; the active tab, its progress and the timer are owned by `media-tabs`
 - Empty: when `tabs` is empty the band renders nothing — not the header, not the frame
 - The header renders only when `title` is set
+- The timer holds each tab for `interval` milliseconds (owned by `media-tabs`)
 
 ## Accessibility
 
 - Visible focus: owned by `media-tabs` (the tabs) and `button`.
 - Keyboard map: `Tab` reaches the button and the tab row; the tab row's keys are owned by `media-tabs`.
-- ARIA: the band is a `<section>` named by its title (`aria-label`) when one is set; the headline is the section title's `h2`; each diagram carries the description its spec ships.
+- ARIA: the band is a `<section>` named by its title (`aria-label`) when one is set; the headline is the section title's `h2`; each diagram carries the description its spec ships, or the tab's `diagramAriaLabel` when one is set.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): owned by `section-title`, `media-tabs` and `diagram`.
 - `motion-reduce:transition-none motion-reduce:transform-none` — the band adds no motion; the timer never runs under reduced motion (owned by `media-tabs`).
 - Touch target ≥40×40 px: the large button and the tab rows.
@@ -77,7 +79,9 @@
       value: 'failover',
       title: 'Provider failover',
       description: 'When a provider degrades, the gateway moves to the next model on the alias.',
-      diagram: 'ai-gateway-provider-failover'
+      diagram: 'ai-gateway-provider-failover',
+      diagramAriaLabel:
+        'A request falls back from a degraded model provider to the next model on the alias'
     },
     {
       value: 'costs',
@@ -113,6 +117,7 @@
     title="Every AI request through one control point"
     description="Every client calls one endpoint. Firewall stops abuse, then a function checks the key, routes the call, and logs it."
     position="bottom"
+    :interval="8000"
     :tabs="tabs"
     :primary-action="primaryAction"
   />

@@ -32,6 +32,7 @@
 | `title` | `string` | `''` | false | Headline of the band, rendered by the centered section title as its `h2`; the band renders no header when empty. |
 | `linkLabel` | `string` | `''` | false | Line revealed under a mark on hover, and the start of each link's accessible name. |
 | `items` | `InvestorMarksItem[]` | `[]` | false | The investors, in order; each is `{ name, logo, logoLight?, href }` where `logo` is the mark on the dark theme and `logoLight` the one on the light theme. |
+| `anchor` | `string` | `''` | false | In-page id set on the band so a `#hash` link can scroll to it. |
 
 ## States
 
@@ -46,6 +47,28 @@
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): link line `var(--text-default)` on `var(--bg-hover)`.
 - `motion-reduce:transition-none motion-reduce:transform-none` on every transition above.
 - Touch target ≥40×40 px — each link is a full 12rem-tall cell.
+
+## Right-to-left
+
+- Layout: logical utilities only; the two-column grid mirrors under `dir="rtl"`.
+- Icons: the arrow-up-right glyph and the investor marks are not mirrored.
+- Keyboard: no arrow-key handling; `Tab` order follows the grid.
+- User data: investor names render as given.
+
+## Internationalization
+
+| Key                    | English source       | Override prop |
+| ---------------------- | -------------------- | ------------- |
+| `investorMarks.newTab` | (opens in a new tab) | —             |
+
+- Formatting: none; the revealed link line is the `linkLabel` prop.
+
+## Responsive
+
+- Container queries: none of its own; `bento-grid` lays the cells in two columns.
+- Narrow (below `md`): the cells keep two columns and the marks scale down to their `max-w-48` box.
+- Touch: each link is a full 12rem-tall cell; the hover reveal also shows on focus, and the link works without it.
+- Reflow: no horizontal scroll at 320 px and 200 % zoom.
 
 ## Examples
 

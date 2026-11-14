@@ -29,6 +29,13 @@
  ],
  "props": [
   {
+   "name": "anchor",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "In-page id set on the band so a hash link can target it."
+  },
+  {
    "name": "ariaLabel",
    "type": "string",
    "default": "''",

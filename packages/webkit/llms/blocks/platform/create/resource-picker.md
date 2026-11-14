@@ -1,24 +1,25 @@
 # ResourcePicker (`platform/create/resource-picker`)
 
-> The card a create flow uses to bind one resource to another: a lead, a ToggleGroup choosing between an existing resource and a new one, then either a hint over a searchable list of the existing resources with a selected mark, paged five at a time with skeleton rows while the next page loads and a polite status line for screen readers, or a Name `Field` around an `Input` whose helper text carries the allowed characters and turns into the required message once Next is pressed empty. The ToggleGroup disappears and the card opens on New when nothing exists to bind. ProvisionWizard binds its project with it on the first step, and its second step reuses the same paged list to pick an existing deployment. Built from `Card`, `ToggleGroup`, `Field`, `Input`, `HelperText`, `Item`, `Skeleton` and `Button`.
+> The card a create flow uses to bind one resource to another: a lead, a ToggleGroup choosing between an existing resource and a new one, then either a hint over a searchable list of the existing resources with a selected mark, paged five at a time with skeleton rows while the next page loads and a polite status line for screen readers, or a Name `Field` around an `Input` whose helper text carries the allowed characters and turns into the required message once Next is pressed empty. The ToggleGroup disappears and the card opens on New when nothing exists to bind. ProvisionWizard binds its project with it on the first step, and its second step reuses the same paged list to pick an existing deployment. The OptionalBinding variant wraps the picker in an opt-in band: a compact `SettingRow` with a `Switch` that unfolds the Existing / New choice in place, where New shows a Name field over module switches with one locked on behind a `Tooltip`; the firewall binding of SourceWizard's last step uses it. Built from `Card`, `ToggleGroup`, `Field`, `Input`, `HelperText`, `Item`, `Skeleton` and `Button`.
 
 - Surface: product
 - Source: `blocks/platform/create/resource-picker/resource-picker.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/create/resource-picker")`
-- Components: [Button](../../../components/button.md), [Card](../../../components/card.md), [Field](../../../components/field.md), [HelperText](../../../components/helper-text.md), [Input](../../../components/input.md), [Item](../../../components/item.md), [Skeleton](../../../components/skeleton.md), [ToggleGroup](../../../components/toggle-group.md)
+- Components: [Button](../../../components/button.md), [Card](../../../components/card.md), [Field](../../../components/field.md), [HelperText](../../../components/helper-text.md), [Input](../../../components/input.md), [Item](../../../components/item.md), [SettingRow](../../../components/setting-row.md), [Skeleton](../../../components/skeleton.md), [Switch](../../../components/switch.md), [ToggleGroup](../../../components/toggle-group.md), [Tooltip](../../../components/tooltip.md)
 - Skills: `webkit-form`, `webkit-ui-states`
 
 ## Asked as
 
-resource picker; select existing or new; choose resource; bind resource; searchable picker; pick application; seletor de recurso; escolher recurso; existente ou novo
+resource picker; select existing or new; choose resource; bind resource; searchable picker; pick application; seletor de recurso; escolher recurso; existente ou novo; optional binding; opt-in binding; protect with firewall; bind firewall; vincular firewall
 
-The band a create flow uses when the resource being created needs another resource that may already exist. The user either reuses one of theirs or makes a new one on the spot, and answers it in one place: an Existing / New choice, then a searchable, paged list of what exists or the few fields that create a new one. The chosen row is marked, every search and load is announced, and a missing answer is flagged above the list where it is seen first.
+The band a create flow uses when the resource being created needs another resource that may already exist. The user either reuses one of theirs or makes a new one on the spot, and answers it in one place: an Existing / New choice, then a searchable, paged list of what exists or the few fields that create a new one. The chosen row is marked, every search and load is announced, and a missing answer is flagged above the list where it is seen first. When the binding itself is optional (a firewall in front of a project), the same band sits behind an opt-in switch row and unfolds in place when it is turned on.
 
 ## When to use
 
 - A create flow binds a whole resource that the user may reuse or create: the project a service serves, the deployment a release is cut against, the firewall that protects a workload.
 - The candidates can run past seven, so the list needs search, paging and a no-match line.
 - Creating the bound resource takes one or a few fields that fit in the same card.
+- The binding is optional and off by default: wrap the band in the opt-in switch row (OptionalBinding).
 
 ## When not to use
 
@@ -32,6 +33,8 @@ The band a create flow uses when the resource being created needs another resour
 ### A. Band card — `Card` (required)
 
 `Card :padded="false"` titled with the bound noun ("Project"), opening with one muted sentence on what the binding does. The card is flush so the list rows run edge to edge; text and controls carry their own padding. It sits in the form column (`layout-column-form`) like any other band.
+
+For an optional binding (OptionalBinding), the card has no title: its first row is a compact `SettingRow` titled with the action ("Protect with a firewall") whose `Switch` opts in, and the rest of the band unfolds under it with a grid-rows transition, `inert` while it is off. New then lists the resource's own modules as compact `SettingRow`s with a `Switch` each under the Name field; a module that cannot be turned off is a disabled, checked `Switch` in a `Tooltip` that says why.
 
 ### B. Existing / New choice — `ToggleGroup` (required when something exists)
 
@@ -60,6 +63,7 @@ A transparent small full-width `Button` under the list while more matches remain
 - Keep the required message above the rows, under the search, so it is read before the list is scanned.
 - Offer the other mode in the no-match line, so an empty search leads to creating one.
 - Keep the chosen value when the user switches to New and back.
+- Keep an optional binding off by default, and prefill the new resource's name from the resource being created.
 - Build the band once and pass the noun, icon and options; every flow that binds a resource reads the same (see `skills/webkit-create-surface`).
 
 ## Don't
@@ -69,6 +73,7 @@ A transparent small full-width `Button` under the list while more matches remain
 - Don't validate the Name while it is being typed, or show required and invalid together.
 - Don't render a loading spinner in place of the rows; show skeleton rows in the row shape and keep the visible ones.
 - Don't put the create fields in a dialog or a second page; they belong in the same card.
+- Don't hide a locked module or leave it looking editable; disable it, keep it on and say why in a tooltip.
 
 ## Copy
 
@@ -80,6 +85,7 @@ A transparent small full-width `Button` under the list while more matches remain
 - **No match:** the fact, then both ways out, e.g. "No project matches “api”. Create one instead, or clear the search."
 - **Required:** what to do, as a sentence, e.g. "Select the project this service serves, or create a new one."
 - **Name guidance:** the allowed characters, e.g. "Lowercase letters, numbers, and hyphens."
+- **Opt-in row:** the action as the title, e.g. "Protect with a firewall", and what it does and that it is off by default as the description. A locked module's tooltip: the fact, e.g. "DDoS Protection is always on."
 - Follow `skills/webkit-microcopy`: "Select", never "Pick" or "Choose"; sentence case; no em dash.
 
 ## Accessibility
@@ -90,6 +96,7 @@ A transparent small full-width `Button` under the list while more matches remain
 - A `role="status"` region announces the count after every search, load and no-match, e.g. "5 of 19 projects".
 - Skeleton rows are `aria-hidden`; the Load more `Button` carries `:loading` so its busy state is announced.
 - The required message is tied to the search group by `data-field-invalid`, and focus stays where it was when it appears.
+- The opt-in `Switch` and every module `Switch` carry an `aria-label` equal to their row title; the folded body is `inert`, so its controls leave the tab order while the switch is off; the reveal honours reduced motion.
 
 ## States
 
@@ -97,9 +104,11 @@ A transparent small full-width `Button` under the list while more matches remain
 - New: the user switched to New; the list gives way to the Name field with the allowed characters as helper text.
 - Loading: Load more was pressed; five skeleton rows follow the visible ones and the button spins.
 - Required: Next was pressed with nothing chosen; the required message sits under the search, above the list.
+- OptionalBinding: the Protect with a firewall switch is on and New firewall is selected; the Name is prefilled from the project and the Firewall modules list has DDoS Protection locked on.
 
 ## Related
 
+- `platform/create/source-wizard` — its last step binds an optional firewall with the OptionalBinding band.
 - `platform/create/provision-wizard` — binds its project with this band on the first step and reuses the list for the deployment.
 - `platform/create/multipage-create` — the step wizard whose Where it runs chooser follows the same list rules.
 - `platform/states/form-validation` — how required and invalid messages appear on submit.
@@ -112,6 +121,7 @@ A transparent small full-width `Button` under the list while more matches remain
 - `New` — New project: the list gives way to a Name field with the allowed characters as helper text. It only reads as required once Next is pressed with it empty.
 - `Loading` — Loading the next page: five skeleton rows with staggered wire widths follow the visible projects while the load button spins.
 - `Required` — Next pressed with no project selected: the required message sits under the search, above the list.
+- `OptionalBinding` — An opt-in binding: a Protect with a firewall switch row, turned on, unfolds the Existing / New choice; New firewall shows the Name prefilled from the project and the Firewall modules switches, DDoS Protection disabled and always on with a tooltip that says why.
 
 Each variant is the same screen in another state: `get_pattern("platform/create/resource-picker", { variant })`, or the file under `blocks/platform/create/resource-picker/variants/`.
 

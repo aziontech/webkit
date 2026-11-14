@@ -27,6 +27,13 @@
  ],
  "props": [
   {
+   "name": "anchor",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Id set on the band so an in-page `#hash` link can target it."
+  },
+  {
    "name": "eyebrow",
    "type": "string",
    "default": "''",

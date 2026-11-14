@@ -8,7 +8,7 @@
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],
- "purpose": "The reading page of an article. A brand banner sits over a three-column grid: the share, community and copy-page rail on the left; the breadcrumb, headline, byline and prose down the middle at a reading measure; and the \"On this page\" outline on the right. Both rails stick under the header and fold away below `lg`, leaving the column alone. The section opens the page itself, so it carries its own `section-container` instead of sitting in the page column. The prose arrives as markdown: blank-line separated blocks render as `##` / `###` headings (each with an id slugged from its text, feeding the outline), `-` lists and paragraphs. It is a page section — the site places it from a `{ _id: 'article-body', props }` entry and binds `props` straight onto it — and it composes `section-container`, `section-module`, `frame-box`, `breadcrumb`, `hero-title`, `divider`, `doc-prose`, `tooltip`, `icon-button`, `split-button` and `doc-on-this-page`; copying to the clipboard is local behaviour.",
+ "purpose": "The reading page of an article. A brand banner sits over a three-column grid: the share, community and copy-page rail on the left; the breadcrumb, headline, byline and prose down the middle at a reading measure; and the \"On this page\" outline on the right. Both rails stick under the header and fold away below `lg`, leaving the column alone. The section opens the page itself, so it carries its own `section-container` instead of sitting in the page column. The prose arrives as markdown: `##` / `###` headings (each with an id slugged from its text, feeding the outline), fenced code blocks, `-` and numbered lists and paragraphs, with inline links, `**strong**`, `*emphasis*` and `` `code` `` inside paragraphs and list items. The outline follows the reader: the heading last scrolled past is active, and choosing an entry scrolls to it (smoothly unless reduced motion is set) and writes its hash to the address. The byline can carry the writers' names and their photos as overlapping avatars. It is a page section — the site places it from a `{ _id: 'article-body', props }` entry and binds `props` straight onto it — and it composes `section-container`, `section-module`, `frame-box`, `breadcrumb`, `hero-title`, `divider`, `doc-prose`, `tooltip`, `icon-button`, `split-button`, `avatar` and `doc-on-this-page`; copying to the clipboard is local behaviour, confirmed by a toast.",
  "setup": null,
  "useWhen": [
   "To open every blog post and every success story page."
@@ -38,7 +38,7 @@
    "type": "ArticleBodyArticle",
    "default": "—",
    "required": "true",
-   "doc": "The piece being read: its `title` (the page h1), `description`, `date`, `readTime` and canonical `href`."
+   "doc": "The piece being read: its `title` (the page h1), `description`, `date`, `readTime`, canonical `href`, and optionally `author` (the writers' names) and `authors` (each a `name` and an `avatar` photo URL)."
   },
   {
    "name": "trail",
@@ -66,7 +66,7 @@
    "type": "ArticleBodyShare",
    "default": "undefined",
    "required": "false",
-   "doc": "Labels of the share group: its `title`, `copyLink`, `shareX` and `shareLinkedIn`; the group is omitted when absent."
+   "doc": "Labels of the share group: its `title`, `copyLink`, `shareX` and `shareLinkedIn`, optional `copyFeed` with the `feed` URL it copies, and optional toast messages `copiedLink`, `copiedFeed` and `copiedPage`; the group is omitted when absent."
   },
   {
    "name": "community",
@@ -81,6 +81,13 @@
    "default": "undefined",
    "required": "false",
    "doc": "The copy-page split button: its `label` and a `menu` of entries, each a `value`, a `label` and an `icon`; omitted when absent."
+  },
+  {
+   "name": "assistants",
+   "type": "Record<string, string>",
+   "default": "{}",
+   "required": "false",
+   "doc": "URL templates of the assistants the copy-page menu opens, keyed by menu `value`; `{prompt}` in a template is replaced by the encoded prompt to read the article."
   }
  ],
  "events": [],
@@ -90,7 +97,7 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import ArticleBody from '@aziontech/webkit/article-body'\n  import placeholderImage from '@aziontech/webkit/assets/placeholder-image.svg'\n</script>\n\n<template>\n  <ArticleBody\n    eyebrow=\"Blog\"\n    :banner=\"placeholderImage\"\n    body=\"## Challenge&#10;&#10;Magalu is the most innovative retail company in LATAM.&#10;&#10;## Solution&#10;&#10;Magalu counts on Azion’s platform to evolve its security posture.&#10;&#10;## Results and Impact&#10;&#10;Magalu simplified security operations by blocking millions of threats per year.\"\n    :article=\"{\n      title: 'Magalu Ensures High Availability at Scale with Azion',\n      description:\n        'Explore how Magalu enhances cybersecurity with Azion’s Firewall and WAF, improving threat intelligence and bot management in retail.',\n      date: 'FEB 4, 2022',\n      readTime: '5 min read',\n      href: 'https://www.azion.com/en/success-case/magalu/'\n    }\"\n    :trail=\"[\n      { label: 'Success cases', href: '/success-cases' },\n      { label: 'Retail', href: '/success-cases?industry=Retail' },\n      { label: 'Magalu Ensures High Availability at Scale with Azion', current: true }\n    ]\"\n    :share=\"{\n      title: 'Share this article',\n      copyLink: 'Copy link',\n      shareX: 'Share on X',\n      shareLinkedIn: 'Share on LinkedIn'\n    }\"\n    :community=\"{\n      title: 'Community',\n      links: [\n        {\n          label: 'Join us on Discord',\n          href: 'https://discord.com/invite/Yp9N7RMVZy',\n          icon: 'pi pi-discord'\n        },\n        { label: 'Read our blog posts', href: '/blog', icon: 'pi pi-comment' },\n        { label: 'Follow us on X', href: 'https://twitter.com/aziontech', icon: 'ai ai-x' }\n      ]\n    }\"\n    :copy-page=\"{\n      label: 'Copy page',\n      menu: [\n        { value: 'link', label: 'Get page link', icon: 'pi pi-link' },\n        { value: 'markdown', label: 'View page as markdown', icon: 'pi pi-eye' }\n      ]\n    }\"\n  />\n</template>"
+   "sfc": "<script setup>\n  import ArticleBody from '@aziontech/webkit/article-body'\n  import placeholderImage from '@aziontech/webkit/assets/placeholder-image.svg'\n</script>\n\n<template>\n  <ArticleBody\n    eyebrow=\"Blog\"\n    :banner=\"placeholderImage\"\n    body=\"## Challenge&#10;&#10;Magalu is the most innovative retail company in LATAM.&#10;&#10;## Solution&#10;&#10;Magalu counts on Azion’s platform to evolve its security posture.&#10;&#10;## Results and Impact&#10;&#10;Magalu simplified security operations by blocking millions of threats per year.\"\n    :article=\"{\n      title: 'Magalu Ensures High Availability at Scale with Azion',\n      description:\n        'Explore how Magalu enhances cybersecurity with Azion’s Firewall and WAF, improving threat intelligence and bot management in retail.',\n      date: 'FEB 4, 2022',\n      readTime: '5 min read',\n      href: 'https://www.azion.com/en/success-case/magalu/',\n      author: 'Jane Doe',\n      authors: [{ name: 'Jane Doe' }]\n    }\"\n    :trail=\"[\n      { label: 'Success cases', href: '/success-cases' },\n      { label: 'Retail', href: '/success-cases?industry=Retail' },\n      { label: 'Magalu Ensures High Availability at Scale with Azion', current: true }\n    ]\"\n    :share=\"{\n      title: 'Share this article',\n      copyLink: 'Copy link',\n      copyFeed: 'Copy RSS feed',\n      feed: 'https://example.com/blog/feed.xml',\n      shareX: 'Share on X',\n      shareLinkedIn: 'Share on LinkedIn'\n    }\"\n    :community=\"{\n      title: 'Community',\n      links: [\n        {\n          label: 'Join us on Discord',\n          href: 'https://discord.com/invite/Yp9N7RMVZy',\n          icon: 'pi pi-discord'\n        },\n        { label: 'Read our blog posts', href: '/blog', icon: 'pi pi-comment' },\n        { label: 'Follow us on X', href: 'https://twitter.com/aziontech', icon: 'ai ai-x' }\n      ]\n    }\"\n    :copy-page=\"{\n      label: 'Copy page',\n      menu: [\n        { value: 'link', label: 'Get page link', icon: 'pi pi-link' },\n        { value: 'markdown', label: 'View page as markdown', icon: 'pi pi-eye' }\n      ]\n    }\"\n  />\n</template>"
   }
  ],
  "docs": "components/article-body.md"

@@ -24,7 +24,8 @@
  ],
  "bestPractices": [
   "Give a card either `image` or `mark`; the mark is drawn only when there is no cover.",
-  "Keep the band to three cards so the frame row stays full."
+  "Keep the band to three cards so the frame row stays full.",
+  "Set `external` on a card whose article lives on another site; it opens in a new tab and says so to assistive technology."
  ],
  "props": [
   {
@@ -33,6 +34,13 @@
    "default": "'left'",
    "required": "false",
    "doc": "Placement of the heading: `left` sets it at the start, `centered` centres it over the cards."
+  },
+  {
+   "name": "anchor",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Id set on the band so an in-page `#hash` link can target it."
   },
   {
    "name": "eyebrow",
@@ -53,7 +61,7 @@
    "type": "ArticleCardsItem[]",
    "default": "[]",
    "required": "false",
-   "doc": "The cards, in order; each is `{ key, href, title, description, meta, image?, mark? }`."
+   "doc": "The cards, in order; each is `{ key, href, title, description, meta, image?, mark?, external? }`; an `external` card opens in a new tab."
   },
   {
    "name": "ariaLabel",

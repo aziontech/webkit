@@ -1,6 +1,6 @@
 # Marketplace (`platform/view/marketplace`)
 
-> The marketplace page: a medium page heading with the outlined Documentation action over `Tabs` for Integrations and Templates. The Integrations tab shows a Featured row of three integration cards while no filter is set, then All integrations: one `PropertyFilter` (free text over name, publisher and description; Publisher, Category, Context and Status as properties, all in the URL through `useCollection`) over a grid of `Card kind="integration"` tiles with the logo, the name, by the publisher, two lines of description, the category badge, the Installed tag and an Install or Configure action. A tile opens the integration in a medium right `Drawer`: name and publisher in the header, the description, `KeyValuePairs` (publisher, category, context, version, last update, the applications it runs on), an Overview in `DocProse`, the permissions it needs, and the install form, a required Application `Field` with a `Select` of the applications it is not on yet. Install is an async run (`platform/states/async-submit`): the button shows `loading`, a progress toast follows the user, and the outcome lands as a toast and an inline `Alert` in the drawer; success carries Configure and Open application, failure is permanent and carries Edit and Reinstall. The Templates tab shows popular templates and links to the template browser. A search that matches nothing shows No matching integrations with Clear filters; while the catalog loads the tiles are skeletons. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
+> The marketplace page: a medium page heading with the outlined Documentation action over centred `Tabs` for Templates and Integrations, Templates first and selected. The Templates tab is the full catalog: a search `Input` over a dense grid of small template tiles (two to five a row by width), each a `Card` with the framework mark that turns from grey to colour on hover, a hover glow drawn from the mark, the name as a link to the template page and two lines of description; a search that matches nothing shows a bordered `EmptyState` with Clear search. The Integrations tab shows a Featured row of three `featured` integration cards (centred, raised, the context badge in the corner) while no filter is set, then All integrations: one `PropertyFilter` (free text over name, publisher and description; Publisher, Category, Context and Status as properties, all in the URL through `useCollection`) over a grid of `Card kind="integration"` tiles with the logo, the name, by the publisher, two lines of description, the category badge, the Installed tag and an Install or Configure action. A tile opens the integration in a medium right `Drawer`: name and publisher in the header, the description, `KeyValuePairs` (publisher, category, context, version, last update, the applications it runs on), an Overview in `DocProse`, the permissions it needs, and the install form, a required Application `Field` with a `Select` of the applications it is not on yet. Install is an async run (`platform/states/async-submit`): the button shows `loading`, a progress toast follows the user, and the outcome lands as a toast and an inline `Alert` in the drawer; success carries Configure and Open application, failure is permanent and carries Edit and Reinstall. A search that matches nothing shows No matching integrations with Clear filters; while the catalog loads the tiles are skeletons. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
 
 - Surface: product
 - Source: `blocks/platform/view/marketplace/marketplace.vue` in `@aziontech/webkit`
@@ -10,7 +10,7 @@
 
 ## Asked as
 
-marketplace; integration catalog; integrations marketplace; install an integration; browse integrations; extensions catalog; plugin catalog; app store page; integration detail; installed integrations; configure integration; marketplace de integrações; catálogo de integrações; instalar integração; loja de extensões
+marketplace; integration catalog; integrations marketplace; install an integration; browse integrations; extensions catalog; plugin catalog; app store page; integration detail; installed integrations; configure integration; marketplace de integrações; catálogo de integrações; instalar integração; loja de extensões; template marketplace; search templates
 
 The page where people find something made by Azion or a partner and add it to what they run. Two kinds of item live here: integrations, installed into an existing application, and templates, which start a new project. People browse by need ("block bots", "split traffic"), compare by publisher and context, read what an integration does and what it may touch, then install it on one application and keep working while it installs. One `useCollection` call holds the search and the filters; one drawer holds the detail and the install; the install reports by toast wherever the person is.
 
@@ -20,11 +20,11 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 
 - A catalog of installable add-ons (integrations, extensions, plugins) with a publisher, a category and an installed state per account.
 - Installing means choosing a target (an application) and waiting for an asynchronous run.
-- The same page also points people at templates, the other way to start from someone else's work.
+- The same page also lists the templates, the other way to start from someone else's work, as a searchable grid on the first tab.
 
 ## When not to use
 
-- Only templates, with a preview and a README: use `platform/view/template-browser`.
+- Only templates, grouped by category with a filter, a preview and a README: use `platform/view/template-browser`.
 - Deploying a chosen template: use `platform/create/deploy-template`.
 - The resources the account already created: use `platform/view/card-view` or `platform/view/table-view`.
 - Changing the settings of an installed integration on one application: use `platform/edit/edit-resource` from Configure.
@@ -37,11 +37,11 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 
 ### B. Item kinds — `Tabs` (required)
 
-`Tabs.Root` with Integrations and Templates, starting on the tab the URL names (Integrations by default here). The tab row is centred over the catalog with `Tabs.List align="center"`, as in the design sample; the solution page keeps its tabs at the start, since they head a resource page. Each tab is a `Tabs.Panel`; the panels keep their own state when the person switches.
+`Tabs.Root` with Templates first and Integrations second, starting on the tab the URL names (Templates by default here, as in the design sample). The tab row is centred over the catalog with `Tabs.List align="center"`, as in the design sample; the solution page keeps its tabs at the start, since they head a resource page. Each tab is a `Tabs.Panel`; the panels keep their own state when the person switches.
 
 ### C. Featured — `Card` (required)
 
-While no filter is set (`filtersActive` is false), a "Featured" `h2` over three `Card kind="integration"` tiles in a row (one a row on a phone). They carry the context as their badge and no action, so the row reads as a recommendation; the tile opens the drawer. Searching hides the row, so the results start at the top.
+While no filter is set (`filtersActive` is false), a "Featured" `h2` over three `Card kind="integration" featured` tiles in a row (one a row on a phone): the mark, the name, the publisher and the description centred on a raised surface with a primary glow at the top, and the context as a primary badge in the corner. They carry no action, so the row reads as a recommendation; the tile opens the drawer. Searching hides the row, so the results start at the top.
 
 ### D. Search and filter — `PropertyFilter` (required)
 
@@ -55,9 +55,9 @@ A `ul` grid, one to three tiles a row by width, of `Card kind="integration"`: th
 
 When `status` is `no-match`, the grid gives way to a medium `EmptyState` with the filter-slash glyph, "No matching integrations", one sentence, and an outlined small Clear filters `Button` bound to `clearFilters`.
 
-### G. Popular templates — `Card`, `Button` (required)
+### G. Templates — `Input`, `Card`, `EmptyState`, `Button` (required)
 
-The Templates tab: a "Popular templates" `h2` with a transparent small Browse all templates `Button` that leads to `platform/view/template-browser`, over a grid of small `Card` tiles (the mark, the name as a stretched link to the template's preview, the framework). The full catalog, its filter and the README live in the template browser.
+The first tab is the full template catalog. A medium `Input` with a leading search glyph (placeholder and `aria-label` "Search templates") matches the name and the description as the person types. Under it a `ul` grid of small `Card` tiles, two a row on a phone, then three, four and five as the page widens: the framework mark in a bordered square, grey until the tile is hovered or focused, then in colour; the name as an `h3` holding a stretched link to the template page (`/marketplace/templates/<id>`); two lines of description. Hovering or focusing a tile lights a soft glow from its top start corner, drawn from the mark itself: an `aria-hidden` span under the content holds a scaled, blurred, faded copy of the mark, so a colour mark (`ai-cor`) glows in its own colours and a one-colour font mark (a starter) in `text-(--primary)`; `isolate` on the `Card` keeps the glow under the content, and no colour value lives in the data. When the search matches nothing, the grid gives way to a bordered medium `EmptyState`, "No matching templates", with an outlined small Clear search `Button`.
 
 ### H. Integration drawer — `Drawer`, `DrawerPortal`, `DrawerOverlay`, `DrawerContent`, `DrawerTitle`, `DrawerClose`, `PanelHeader`, `PanelContent`, `PanelFooter` (required)
 
@@ -100,6 +100,8 @@ Raised through `toast` with one id for the install, so progress turns into the o
 - Run the catalog on one `useCollection` call with `filtering`, `propertyFiltering` and `url: true`; derive the Status property from where each integration is installed.
 - Use `Card kind="integration"` for every integration tile, with the installed state as the `installed` prop and one action in the `action` slot.
 - Hide the Featured row while any filter is set.
+- Open on Templates and keep the template search to one `Input`; the grouped catalog with category and framework filters is the template browser's job.
+- Draw the template glow from the mark (a blurred copy), never from a brand colour written into the data: a hex value fails `webkit/no-hardcoded-color` in the app that copies the block.
 - Open the detail in a drawer so the catalog, the filter and the scroll stay put.
 - Show the permissions before the install form, and the target as a required field.
 - Treat install as an async run: `loading` on Install, a progress toast, then the outcome as a toast and an inline `Alert`, with actions that fit an integration (Configure, Open application; Edit, Reinstall).
@@ -112,12 +114,14 @@ Raised through `toast` with one id for the install, so progress turns into the o
 - Don't use "Retry" or "Try again" for a failed install; the action is Reinstall.
 - Don't show Install for an application that already runs the integration; filter it out of the `Select`.
 - Don't badge every tile with more than one tag beside Installed; the publisher and the category are enough to compare.
-- Don't rebuild the template browser inside the Templates tab; link to it.
+- Don't rebuild the template browser inside the Templates tab: no categories, no property filter, no preview drawer; the tile links to the template page.
+- Don't use `featured` for every integration tile; it marks the short Featured row only.
 
 ## Copy
 
 - **Title:** "Marketplace". Description: "Find integrations and templates that run on your applications."
-- **Tabs:** "Integrations", "Templates". **Sections:** "Featured", "All integrations", "Popular templates".
+- **Tabs:** "Templates", "Integrations". **Sections:** "Featured", "All integrations".
+- **Template search:** placeholder and `aria-label` "Search templates"; no match: "No matching templates", "No template matches this search. Try another name or framework.", "Clear search".
 - **Filter:** placeholder and `aria-label` "Search integrations".
 - **Tile action:** "Install" or "Configure"; its `aria-label` adds the name.
 - **Drawer:** the name, "by <publisher>", "Overview", "Permissions", "Install" or "Install on another application", the field "Application" with "Select an application".
@@ -131,7 +135,8 @@ Raised through `toast` with one id for the install, so progress turns into the o
 ## Accessibility
 
 - The layout owns the one `main` landmark; the `PageHeader` title is the only `h1`, each section heading an `h2`, each tile name an `h3`.
-- The tabs follow the tablist pattern: arrow keys move between Integrations and Templates, and each panel is labelled by its tab.
+- The tabs follow the tablist pattern: arrow keys move between Templates and Integrations, and each panel is labelled by its tab.
+- Each template tile's target is a real link named by the template; the mark and the glow are decorative (`aria-hidden`), and the glow also follows keyboard focus.
 - Each tile's target is a real button named by the integration; the action button sits above it and is named with the integration, so "Install" is never ambiguous in a list.
 - The Installed state is text in a `Tag`, never colour alone.
 - The drawer traps focus, is named by `DrawerTitle`, closes on Escape and returns focus to what opened it; its form has an accessible name.
@@ -140,14 +145,15 @@ Raised through `toast` with one id for the install, so progress turns into the o
 
 ## States
 
-- Default: the Integrations tab with Featured, All integrations, the filter and the tiles; a tile opens the drawer and Install runs and lands as a success toast and Alert.
-- Templates: the Templates tab with popular templates linking to the template browser.
+- Default: the Templates tab with the search and the full template grid; each tile links to its template page.
+- Integrations: the Integrations tab with Featured, All integrations, the filter and the tiles; a tile opens the drawer and Install runs and lands as a success toast and Alert.
 - Detail: the drawer is open on Request Signer with its details, overview, permissions and the install form.
 - Installing: Install is running on storefront; the button is `loading`, the field disabled and the progress toast says it keeps running.
 - Installed: Request Signer is installed on storefront; the success Alert, the Installed tag, Configure in the footer and the success toast with Configure and Open application.
 - InstallFailed: the install on checkout failed; the danger Alert with the reason and Reinstall, and the permanent toast with Edit and Reinstall.
-- NoMatch: the search "kubernetes" matches nothing; the Featured row hides and the empty state offers Clear filters.
-- Loading: the filter is disabled and six `Skeleton` tiles (logo, name, two lines, badge, action) hold the grid in a band that is `aria-busy`.
+- NoMatch: the integration search "kubernetes" matches nothing; the Featured row hides and the empty state offers Clear filters.
+- TemplatesNoMatch: the template search "kubernetes" matches nothing; the bordered empty state offers Clear search.
+- Loading: on Templates, the search is disabled and ten `Skeleton` tiles (mark, name, two lines) hold the grid in a band that is `aria-busy`; the Integrations tab holds six skeleton integration tiles under a disabled filter.
 
 - SolutionPage: Waiting Room as a page, storefront on 1.3.0 (Update available) and checkout on 1.4.0.
 - Configure: Waiting Room settings on storefront, with the SaveBar after a change.
@@ -155,7 +161,7 @@ Raised through `toast` with one id for the install, so progress turns into the o
 
 ## Related
 
-- `platform/view/template-browser` — the full template catalog the Templates tab leads to.
+- `platform/view/template-browser` — the template catalog grouped by category, with a filter and a README preview.
 - `platform/create/deploy-template` — where a template's Deploy leads.
 - `platform/states/async-submit` — the toast and inline outcome every install follows.
 - `platform/states/form-error` — the field, section and toast placement of a form error.
@@ -164,13 +170,14 @@ Raised through `toast` with one id for the install, so progress turns into the o
 ## Variants
 
 - `Default` — primary (the code below)
-- `Templates` — The Templates tab: popular templates as tiles that open in the template browser, with Browse all templates.
+- `Integrations` — The Integrations tab: the Featured row of three featured integration tiles over All integrations, the filter and the integration grid with Install and Configure.
 - `Detail` — The detail drawer open on Request Signer: details, overview, permissions and the install form.
 - `Installing` — Install is running on storefront: the button shows loading, the field is disabled and the progress toast says it keeps running if the panel closes.
 - `Installed` — The install succeeded: the success Alert in the drawer, the Installed tag on the tile, Configure in the footer and the success toast with Configure and Open application.
 - `InstallFailed` — The install failed on checkout: the danger Alert with the reason and Reinstall, and the permanent failure toast with Edit and Reinstall.
-- `NoMatch` — A search that matches no integration: the Featured row hides, the token stays and a medium EmptyState offers Clear filters.
-- `Loading` — The catalog is loading: the filter is disabled and skeleton tiles hold the grid.
+- `NoMatch` — The Integrations tab with a search that matches no integration: the Featured row hides, the token stays and a medium EmptyState offers Clear filters.
+- `TemplatesNoMatch` — A template search that matches nothing: the search keeps the term and a bordered medium EmptyState offers Clear search.
+- `Loading` — The catalog is loading: the template search is disabled and skeleton tiles hold the template grid; the Integrations tab holds skeleton integration tiles under a disabled filter.
 - `SolutionPage` — The integration as a full page (Waiting Room): a Back to Marketplace `Link`, the `PageHeader`, `Tabs` for Overview, Usage, Changelog (version history, Latest marked) and Applications (a `Table` of the applications running it, `Table.CellStatus` Up to date or Update available and an Update to <version> action), beside an install card whose Application `Select` tags each application Installed or Update available. Install and Update are async runs that end in a toast with Configure and Open application.
 - `Configure` — The screen behind Configure: the integration's settings on one application (Queue visitors `Switch`, Capacity and Queue page title fields, Session length `Select`) in `SettingsSection`s, errors after Save with a summary `Alert`, and a `SaveBar` with Discard and Save; saving is not a deploy, so its toast has no Redeploy.
 - `TemplatePage` — A template as a full page (Nuxt Storefront): a Back to Templates `Link`, the description, the deploy form (application name and repository, errors after Deploy) beside the template facts; Deploy is an async run that ends in the async-submit toast with Edit and Redeploy.
@@ -193,6 +200,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/ma
   import DrawerTitle from '@aziontech/webkit/drawer-title'
   import EmptyState from '@aziontech/webkit/empty-state'
   import Field from '@aziontech/webkit/field'
+  import Input from '@aziontech/webkit/input'
   import KeyValuePairs from '@aziontech/webkit/key-value-pairs'
   import PageHeader from '@aziontech/webkit/page-header'
   import PanelContent from '@aziontech/webkit/panel-content'
@@ -366,18 +374,122 @@ Each variant is the same screen in another state: `get_pattern("platform/view/ma
     )
   ])
 
-  const templates = [
-    { id: 'next-starter', title: 'Next.js Starter', icon: 'ai ai-next', framework: 'Next.js' },
-    { id: 'astro-blog', title: 'Astro Blog', icon: 'ai ai-astro', framework: 'Astro' },
-    { id: 'nuxt-store', title: 'Nuxt Storefront', icon: 'ai ai-nuxt', framework: 'Nuxt' },
-    { id: 'static-site', title: 'Static Site', icon: 'ai ai-edge-storage', framework: 'Vite' },
-    {
-      id: 'reverse-proxy',
-      title: 'Reverse Proxy',
-      icon: 'ai ai-edge-connectors',
-      framework: 'JavaScript'
-    },
-    { id: 'rest-api', title: 'REST API', icon: 'ai ai-hono', framework: 'Hono' }
+  interface Template {
+    id: string
+    title: string
+    icon: string
+    description: string
+    markClass: string
+  }
+
+  const template = (
+    id: string,
+    title: string,
+    icon: string,
+    description: string,
+    markClass = ''
+  ): Template => ({ id, title, icon, description, markClass })
+
+  const INVERT_IN_DARK = '[[data-theme=dark]_&]:invert'
+
+  const templates: Template[] = [
+    template(
+      'next-starter',
+      'Next.js Starter',
+      'ai-cor ai-next',
+      'A Next.js app with server rendering and static pages, ready to deploy.',
+      INVERT_IN_DARK
+    ),
+    template(
+      'react-starter',
+      'React Starter',
+      'ai-cor ai-react',
+      'A single-page React app built with Vite, every route served from the edge.'
+    ),
+    template(
+      'vue-starter',
+      'Vue Starter',
+      'ai-cor ai-vue',
+      'A lightweight Vue app with routing, built with Vite.'
+    ),
+    template(
+      'nuxt-store',
+      'Nuxt Storefront',
+      'ai-cor ai-nuxt',
+      'A product catalog with a cart, rendered on the server and cached close to buyers.'
+    ),
+    template(
+      'astro-blog',
+      'Astro Blog',
+      'ai-cor ai-astro',
+      'A content-first blog with Markdown posts, an RSS feed and a sitemap.'
+    ),
+    template(
+      'angular-dashboard',
+      'Angular Dashboard',
+      'ai-cor ai-angular',
+      'A single-page admin dashboard with routing and lazy-loaded modules.'
+    ),
+    template(
+      'svelte-starter',
+      'Svelte Starter',
+      'ai-cor ai-svelte',
+      'A SvelteKit app with server routes and prerendered pages.'
+    ),
+    template(
+      'solid-starter',
+      'Solid Starter',
+      'ai-cor ai-solidjs',
+      'A SolidStart app with fine-grained updates and streaming server rendering.'
+    ),
+    template(
+      'qwik-starter',
+      'Qwik Starter',
+      'ai ai-qwik',
+      'A resumable Qwik app that loads only the code a visitor touches.'
+    ),
+    template(
+      'gatsby-site',
+      'Gatsby Site',
+      'ai ai-gatsby',
+      'A marketing site built at deploy time from Markdown and images.'
+    ),
+    template(
+      'docusaurus-docs',
+      'Docusaurus Docs',
+      'ai ai-docusaurus',
+      'A documentation site with versioned sections, search and a blog.'
+    ),
+    template(
+      'vitepress-docs',
+      'VitePress Docs',
+      'ai ai-vitepress',
+      'A fast documentation site written in Markdown, with a sidebar and search.'
+    ),
+    template(
+      'hugo-docs',
+      'Hugo Docs',
+      'ai ai-hugo',
+      'A documentation site with search, versioned sections and dark mode.'
+    ),
+    template(
+      'static-site',
+      'Static Site',
+      'ai ai-edge-storage',
+      'Publish a folder of built files and serve it from the closest location.'
+    ),
+    template(
+      'reverse-proxy',
+      'Reverse Proxy',
+      'ai ai-edge-connectors',
+      'Front an origin you already run and pass every request on to it.'
+    ),
+    template(
+      'rest-api',
+      'REST API',
+      'ai ai-hono',
+      'A small Hono API with typed routes, running at the edge.'
+    )
   ]
 
   const withStatus = (item: Integration) => ({
@@ -424,7 +536,16 @@ Each variant is the same screen in another state: `get_pattern("platform/view/ma
 
   const featured = computed(() => catalog.value.filter((item) => item.featured))
 
-  const activeTab = ref('integrations')
+  const templateQuery = ref('')
+  const filteredTemplates = computed(() => {
+    const term = templateQuery.value.trim().toLowerCase()
+    if (!term) return templates
+    return templates.filter((item) =>
+      `${item.title} ${item.description}`.toLowerCase().includes(term)
+    )
+  })
+
+  const activeTab = ref('templates')
 
   const detailOpen = ref(false)
   const selectedId = ref('request-signer')
@@ -517,15 +638,102 @@ Each variant is the same screen in another state: `get_pattern("platform/view/ma
         <Tabs.Root v-model="activeTab">
           <Tabs.List align="center">
             <Tabs.Item
-              value="integrations"
-              label="Integrations"
-            />
-            <Tabs.Item
               value="templates"
               label="Templates"
             />
+            <Tabs.Item
+              value="integrations"
+              label="Integrations"
+            />
           </Tabs.List>
           <Tabs.Content>
+            <Tabs.Panel value="templates">
+              <section
+                class="flex min-w-0 flex-col gap-(--layout-group-gap) pt-(--layout-group-gap)"
+                aria-label="Templates"
+              >
+                <Input
+                  v-model="templateQuery"
+                  size="medium"
+                  placeholder="Search templates"
+                  aria-label="Search templates"
+                  class="w-full"
+                >
+                  <template #iconLeft>
+                    <i class="pi pi-search" />
+                  </template>
+                </Input>
+
+                <EmptyState
+                  v-if="!filteredTemplates.length"
+                  bordered
+                  size="medium"
+                  icon="pi pi-search"
+                  title="No matching templates"
+                  description="No template matches this search. Try another name or framework."
+                >
+                  <template #actions>
+                    <Button
+                      label="Clear search"
+                      kind="outlined"
+                      size="small"
+                      @click="templateQuery = ''"
+                    />
+                  </template>
+                </EmptyState>
+
+                <ul
+                  v-else
+                  class="m-0 grid list-none grid-cols-2 gap-(--spacing-md) p-0 sm:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5"
+                >
+                  <li
+                    v-for="item in filteredTemplates"
+                    :key="item.id"
+                    class="flex min-w-0"
+                  >
+                    <Card class="group isolate w-full">
+                      <template #content>
+                        <span
+                          aria-hidden="true"
+                          class="pointer-events-none absolute inset-0 -z-1 overflow-hidden rounded-(--shape-card) opacity-0 transition-opacity duration-moderate-01 ease-productive-entrance group-focus-within:opacity-100 group-hover:opacity-100 motion-reduce:transition-none"
+                        >
+                          <i
+                            :class="[item.icon, item.markClass]"
+                            class="absolute start-(--spacing-xl) top-(--spacing-xl) scale-600 text-body-lg leading-none text-(--primary) opacity-25 blur-sm"
+                          />
+                        </span>
+                        <div class="flex flex-col items-start gap-(--spacing-md)">
+                          <span
+                            class="flex size-10 shrink-0 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
+                          >
+                            <i
+                              :class="[item.icon, item.markClass]"
+                              class="text-body-lg leading-none text-(--text-default) grayscale transition duration-moderate-01 ease-productive-entrance group-focus-within:grayscale-0 group-hover:grayscale-0 motion-reduce:transition-none"
+                              aria-hidden="true"
+                            />
+                          </span>
+                          <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+                            <h3 class="text-label-md text-(--text-default)">
+                              <a
+                                :href="`/marketplace/templates/${item.id}`"
+                                class="text-(--text-default) no-underline outline-none after:absolute after:inset-0 after:content-[''] focus-visible:after:ring-2 focus-visible:after:ring-inset focus-visible:after:ring-(--ring-color)"
+                                >{{ item.title }}</a
+                              >
+                            </h3>
+                            <p
+                              class="m-0 line-clamp-2 text-pretty text-body-sm text-(--text-muted)"
+                            >
+                              {{ item.description }}
+                            </p>
+                          </div>
+                        </div>
+                      </template>
+                    </Card>
+                  </li>
+                </ul>
+              </section>
+            </Tabs.Panel>
+
             <Tabs.Panel value="integrations">
               <div class="flex min-w-0 flex-col gap-(--layout-section-gap) pt-(--layout-group-gap)">
                 <section
@@ -548,6 +756,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/ma
                       <Card
                         class="w-full"
                         kind="integration"
+                        featured
                         :title="item.name"
                         :vendor="item.vendor"
                         :logo="item.logo"
@@ -627,65 +836,6 @@ Each variant is the same screen in another state: `get_pattern("platform/view/ma
                   </ul>
                 </section>
               </div>
-            </Tabs.Panel>
-
-            <Tabs.Panel value="templates">
-              <section
-                class="flex min-w-0 flex-col gap-(--layout-group-gap) pt-(--layout-group-gap)"
-                aria-labelledby="marketplace-templates"
-              >
-                <div class="flex flex-wrap items-center justify-between gap-(--spacing-sm)">
-                  <h2
-                    id="marketplace-templates"
-                    class="text-heading-xxs text-(--text-default)"
-                  >
-                    Popular templates
-                  </h2>
-                  <Button
-                    label="Browse all templates"
-                    icon="pi pi-arrow-right"
-                    icon-position="trailing"
-                    kind="transparent"
-                    size="small"
-                    href="/templates"
-                  />
-                </div>
-                <ul
-                  class="m-0 grid list-none grid-cols-2 gap-(--spacing-md) p-0 sm:grid-cols-3 xl:grid-cols-6"
-                >
-                  <li
-                    v-for="template in templates"
-                    :key="template.id"
-                    class="flex min-w-0"
-                  >
-                    <Card class="w-full">
-                      <template #content>
-                        <div class="flex flex-col items-start gap-(--spacing-sm)">
-                          <span
-                            class="flex size-10 shrink-0 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
-                          >
-                            <i
-                              :class="template.icon"
-                              class="text-body-lg leading-none text-(--text-default)"
-                              aria-hidden="true"
-                            />
-                          </span>
-                          <h3 class="text-label-md text-(--text-default)">
-                            <a
-                              :href="`/templates?preview=${template.id}`"
-                              class="text-(--text-default) no-underline outline-none after:absolute after:inset-0 after:transition-colors after:content-[''] hover:after:bg-(--bg-hover) focus-visible:after:ring-2 focus-visible:after:ring-inset focus-visible:after:ring-(--ring-color) motion-reduce:after:transition-none"
-                              >{{ template.title }}</a
-                            >
-                          </h3>
-                          <span class="text-body-xs text-(--text-muted)">{{
-                            template.framework
-                          }}</span>
-                        </div>
-                      </template>
-                    </Card>
-                  </li>
-                </ul>
-              </section>
             </Tabs.Panel>
           </Tabs.Content>
         </Tabs.Root>

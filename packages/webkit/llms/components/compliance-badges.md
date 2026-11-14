@@ -34,6 +34,7 @@
 | `ariaLabel` | `string` | `''` | false | Accessible name of the badge list. |
 | `certifications` | `ComplianceBadgesCertification[]` | `[]` | false | The badges, in order; each is `{ label, badge, alt }` where `badge` is the picture URL and `label` the pill text. |
 | `primaryAction` | `ComplianceBadgesAction` | `undefined` | false | The closing "see more" cell; `{ label, href }`. Omitted when absent. |
+| `anchor` | `string` | `''` | false | In-page id set on the band so a `#hash` link can scroll to it. |
 
 ## States
 
@@ -55,6 +56,19 @@
 - Icons: the "more" chevron mirrors (`rtl:-scale-x-100`) and its hover nudge moves toward the end edge.
 - Keyboard: no horizontal arrow-key logic.
 - User data: none.
+
+## Internationalization
+
+No built-in strings: every visible and announced text is a prop from the page JSON.
+
+- Formatting: none.
+
+## Responsive
+
+- Container queries: none of its own; `media-split` stacks the copy over the grid below its breakpoint.
+- Narrow (below `md`): the badge grid drops from three columns to two.
+- Touch: the see-more cell is a full grid cell; nothing depends on hover.
+- Reflow: no horizontal scroll at 320 px and 200 % zoom.
 
 ## Examples
 
