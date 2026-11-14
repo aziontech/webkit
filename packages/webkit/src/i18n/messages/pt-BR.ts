@@ -1157,7 +1157,9 @@ export const ptBR: Messages = {
   },
   tree: {
     label: 'Árvore',
-    emptyTitle: 'Nenhum item'
+    emptyTitle: 'Nenhum item',
+    loadingChildren: 'Carregando',
+    renameLabel: 'Renomear {label}'
   },
   unsavedChanges: {
     title: 'Alterações não salvas',

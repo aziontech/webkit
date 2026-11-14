@@ -26,6 +26,21 @@
       "name": "Empty",
       "summary": "With an empty `items` array the tree shows the default `EmptyState`, titled by `emptyTitle` with `emptyDescription`. Pass the `empty` slot to replace it.",
       "file": "empty.vue"
+    },
+    {
+      "name": "LazyChildren",
+      "summary": "A node marked `lazy` is a parent before its children exist. The app listens to `update:expanded`, sets `loading` on the node while it fetches the listing, then patches `children` in; while loading, the expanded node shows a loading row (Skeleton plus a polite status) and its group is `aria-busy`.",
+      "file": "lazy-children.vue"
+    },
+    {
+      "name": "Rename",
+      "summary": "With `editable`, F2 on the focused node (or the exposed `startRename`, here wired to a per-row `IconButton` in the `actions` slot) turns the label into a field. Enter or blur submits and emits `rename` with `{ item, label }`; Escape cancels. A double-click on a row emits `item-dblclick` to open it.",
+      "file": "rename.vue"
+    },
+    {
+      "name": "MultiSelect",
+      "summary": "`selectable=\"multiple\"` writes ids to `v-model:selected-ids` and sets `aria-multiselectable`. Click selects one node, Ctrl or Cmd+click toggles, Shift+click selects the visible range, Space toggles the focused node, Shift+Arrow extends and Ctrl+A selects every visible node.",
+      "file": "multi-select.vue"
     }
   ]
 }

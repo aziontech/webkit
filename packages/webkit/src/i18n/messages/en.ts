@@ -1161,7 +1161,9 @@ export const topologyDiagram = {
 
 export const tree = {
   label: 'Tree',
-  emptyTitle: 'No items'
+  emptyTitle: 'No items',
+  loadingChildren: 'Loading',
+  renameLabel: 'Rename {label}'
 } as const
 
 export const unsavedChanges = {

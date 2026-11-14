@@ -21,6 +21,11 @@
       "update": 50,
       "update_is": "collapse one of 50 expanded folders of 99 nodes"
     },
+    "tree-5k-multi-select": {
+      "mount": 420,
+      "update": 220,
+      "update_is": "select all 5k ids with 1k visible rows"
+    },
     "select-1k": {
       "mount": 30,
       "update": 160,

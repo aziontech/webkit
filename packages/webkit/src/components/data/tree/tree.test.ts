@@ -2,9 +2,12 @@ import '../../../test/reflow.css'
 
 import userEvent from '@testing-library/user-event'
 import { render } from '@testing-library/vue'
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { defineComponent, h, nextTick, ref } from 'vue'
 
+import LazyChildren from '../../../../examples/tree/lazy-children.vue'
+import MultiSelect from '../../../../examples/tree/multi-select.vue'
+import RenameExample from '../../../../examples/tree/rename.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Tree, { type TreeItem } from './tree.vue'
 
@@ -392,5 +395,167 @@ describe('Tree', () => {
     loading.unmount()
     const empty = mount({ items: [] })
     await expectNoA11yViolations(empty.container)
+  })
+})
+
+describe('Tree lazy children, rename, double-click and multi-select', () => {
+  it('treats a lazy node as a parent and renders a loading row while it loads', async () => {
+    const lazy: TreeItem = { id: 'logs', label: 'logs', lazy: true, loading: true }
+    const view = mount({ items: [lazy, CONFIG], expanded: ['logs'] })
+    const logs = node(view.container, 'logs')
+    expect(logs.getAttribute('aria-expanded')).toBe('true')
+    const group = logs.querySelector('[role="group"]') as HTMLElement
+    expect(group.getAttribute('aria-busy')).toBe('true')
+    expect(view.getByTestId('data-tree-loading')).toBeTruthy()
+    expect(view.getByRole('status').textContent).toBe('Loading')
+    await expectNoA11yViolations(view.container)
+    await view.rerender({
+      items: [{ ...lazy, loading: false, children: [{ id: 'logs/a.log', label: 'a.log' }] }, CONFIG]
+    })
+    expect(view.queryByTestId('data-tree-loading')).toBeNull()
+    expect(node(view.container, 'logs/a.log')).toBeTruthy()
+  })
+
+  it('emits update:expanded when a collapsed lazy node is expanded with ArrowRight', async () => {
+    const lazy: TreeItem = { id: 'logs', label: 'logs', lazy: true }
+    const onExpanded = vi.fn()
+    const view = mount({ items: [lazy], 'onUpdate:expanded': onExpanded })
+    node(view.container, 'logs').focus()
+    await userEvent.keyboard('{ArrowRight}')
+    expect(onExpanded).toHaveBeenCalledWith(['logs'])
+  })
+
+  it('renames in place with F2: Enter submits a trimmed label, Escape cancels', async () => {
+    const onRename = vi.fn()
+    const view = mount({ editable: true, onRename })
+    node(view.container, 'azion.config.js').focus()
+    await userEvent.keyboard('{F2}')
+    const field = view.getByRole('textbox', { name: 'Rename azion.config.js' })
+    expect(document.activeElement).toBe(field)
+    await userEvent.clear(field)
+    await userEvent.type(field, '  app.config.js  {Enter}')
+    expect(onRename).toHaveBeenCalledTimes(1)
+    const [event, payload] = onRename.mock.calls[0]
+    expect(event).toBeInstanceOf(KeyboardEvent)
+    expect(payload).toEqual({ item: CONFIG, label: 'app.config.js' })
+    expect(view.queryByRole('textbox')).toBeNull()
+    await nextTick()
+    expect(document.activeElement).toBe(node(view.container, 'azion.config.js'))
+
+    await userEvent.keyboard('{F2}')
+    await userEvent.type(view.getByRole('textbox'), 'other{Escape}')
+    expect(onRename).toHaveBeenCalledTimes(1)
+    expect(view.queryByRole('textbox')).toBeNull()
+  })
+
+  it('submits a rename on blur, ignores an unchanged label, and needs editable', async () => {
+    const onRename = vi.fn()
+    const view = render(
+      defineComponent({
+        setup() {
+          const tree = ref<{ startRename: (id: string) => void } | null>(null)
+          return () => [
+            h(Tree, { ref: tree, items: ITEMS, editable: true, ariaLabel: 'Files', onRename }),
+            h('button', { type: 'button', onClick: () => tree.value?.startRename('src') }, 'Go')
+          ]
+        }
+      })
+    )
+    await userEvent.click(view.getByRole('button', { name: 'Go' }))
+    const field = view.getByRole('textbox', { name: 'Rename src' })
+    await userEvent.type(field, '2')
+    await userEvent.click(view.getByRole('button', { name: 'Go' }))
+    expect(onRename).toHaveBeenCalledWith(expect.any(FocusEvent), { item: SRC, label: 'src2' })
+    await userEvent.keyboard('{Enter}')
+    expect(onRename).toHaveBeenCalledTimes(1)
+
+    const plain = mount({ onRename })
+    node(plain.container, 'src').focus()
+    await userEvent.keyboard('{F2}')
+    expect(plain.queryByRole('textbox')).toBeNull()
+  })
+
+  it('emits item-dblclick on a row, but not on a disabled node or the chevron', async () => {
+    const onDblclick = vi.fn()
+    const view = mount({ 'onItem-dblclick': onDblclick })
+    await userEvent.dblClick(rowOf(view.container, 'azion.config.js'))
+    expect(onDblclick).toHaveBeenCalledWith(expect.any(MouseEvent), CONFIG)
+    await userEvent.dblClick(rowOf(view.container, 'locked.txt'))
+    await userEvent.dblClick(view.getAllByTestId('data-tree-toggle')[0])
+    expect(onDblclick).toHaveBeenCalledTimes(1)
+  })
+
+  const MultiHarness = defineComponent({
+    setup() {
+      const selectedIds = ref<string[]>([])
+      return () => [
+        h(Tree, {
+          ariaLabel: 'Bucket objects',
+          items: ITEMS,
+          selectable: 'multiple',
+          expanded: ['assets'],
+          selectedIds: selectedIds.value,
+          'onUpdate:selectedIds': (value: string[]) => (selectedIds.value = value)
+        }),
+        h('output', { 'data-testid': 'ids' }, selectedIds.value.join(','))
+      ]
+    }
+  })
+
+  it('selects with click, Ctrl/Cmd+click, Shift+click, Space, Shift+Arrow and Ctrl+A', async () => {
+    const user = userEvent.setup()
+    const view = render(MultiHarness)
+    const ids = () => view.getByTestId('ids').textContent
+    expect(view.getByRole('tree').getAttribute('aria-multiselectable')).toBe('true')
+
+    await user.click(rowOf(view.container, 'assets/img'))
+    expect(ids()).toBe('assets/img')
+    await user.keyboard('{Control>}')
+    await user.click(rowOf(view.container, 'src'))
+    await user.keyboard('{/Control}')
+    expect(ids()).toBe('assets/img,src')
+    expect(node(view.container, 'src').getAttribute('aria-selected')).toBe('true')
+
+    await user.click(rowOf(view.container, 'assets'))
+    await user.keyboard('{Shift>}')
+    await user.click(rowOf(view.container, 'src'))
+    await user.keyboard('{/Shift}')
+    expect(ids()).toBe('assets,assets/img,assets/hero.webp,src')
+
+    await user.keyboard(' ')
+    expect(ids()).toBe('assets,assets/img,assets/hero.webp')
+    await user.keyboard('{Shift>}{ArrowDown}{ArrowDown}{/Shift}')
+    expect(ids()).toBe('assets,assets/img,assets/hero.webp,azion.config.js')
+
+    await user.keyboard('{Control>}a{/Control}')
+    expect(ids()).toBe('assets,assets/img,assets/hero.webp,src,azion.config.js')
+    await expectNoA11yViolations(view.container)
+  })
+
+  it('handles multi-select over 1k visible nodes', async () => {
+    const big: TreeItem[] = Array.from({ length: 1200 }, (_, i) => ({
+      id: `n${i}`,
+      label: `file-${i}.txt`
+    }))
+    const user = userEvent.setup()
+    const onIds = vi.fn()
+    const view = mount({ items: big, selectable: 'multiple', 'onUpdate:selectedIds': onIds })
+    await user.click(rowOf(view.container, 'n0'))
+    await user.keyboard('{Shift>}')
+    await user.click(rowOf(view.container, 'n1199'))
+    await user.keyboard('{/Shift}')
+    expect(onIds.mock.calls.at(-1)?.[0]).toHaveLength(1200)
+  })
+})
+
+describe('Tree feature examples', () => {
+  it.each([
+    ['LazyChildren', LazyChildren],
+    ['Rename', RenameExample],
+    ['MultiSelect', MultiSelect]
+  ])('renders the %s example without axe violations', async (_, example) => {
+    const view = render(example)
+    expect(view.getByRole('tree')).toBeTruthy()
+    await expectNoA11yViolations(view.container)
   })
 })

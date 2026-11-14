@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { computed, inject, onMounted, onUpdated, ref, useId, watch } from 'vue'
 
+  import Skeleton from '../../../feedback/skeleton/skeleton.vue'
   import { TreeInjectionKey } from '../injection-key'
   import type { TreeItem } from '../tree.vue'
 
@@ -35,7 +36,8 @@
   const labelId = useId()
 
   const children = computed(() => props.item.children ?? [])
-  const isParent = computed(() => children.value.length > 0)
+  const isParent = computed(() => props.item.lazy === true || children.value.length > 0)
+  const renaming = computed(() => ctx.renamingId.value === props.item.id)
   const expanded = computed(() => isParent.value && ctx.isExpanded(props.item.id))
   const selected = computed(() => ctx.isSelected(props.item.id))
   const state = computed(() => {
@@ -73,6 +75,35 @@
   function onToggle() {
     ctx.toggle(props.item.id)
     ctx.focusItem(props.item.id)
+  }
+
+  let renameDone = false
+
+  function mountRenameField(el: unknown) {
+    if (!(el instanceof globalThis.HTMLInputElement) || el.dataset['ready']) return
+    el.dataset['ready'] = 'true'
+    renameDone = false
+    el.focus()
+    el.select()
+  }
+
+  function commitRename(event: KeyboardEvent | FocusEvent) {
+    if (renameDone) return
+    renameDone = true
+    const field = event.target as globalThis.HTMLInputElement
+    ctx.commitRename(event, props.item.id, field.value)
+  }
+
+  function onRenameKeydown(event: KeyboardEvent) {
+    event.stopPropagation()
+    if (event.key === 'Enter') {
+      event.preventDefault()
+      commitRename(event)
+    } else if (event.key === 'Escape') {
+      event.preventDefault()
+      renameDone = true
+      ctx.cancelRename(props.item.id)
+    }
   }
 </script>
 
@@ -121,7 +152,20 @@
         :id="labelId"
         class="flex min-w-0 flex-1 items-center gap-(--spacing-xs)"
       >
+        <input
+          v-if="renaming"
+          :ref="mountRenameField"
+          type="text"
+          data-tree-rename
+          :data-testid="`${ctx.testId.value}-rename`"
+          :value="item.label"
+          :aria-label="ctx.renameLabel(item.label)"
+          class="h-6 min-w-0 flex-1 rounded-(--shape-elements) border border-(--border-default) bg-(--bg-canvas) px-(--spacing-xxs) text-label-md text-(--text-default) outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)"
+          @keydown="onRenameKeydown"
+          @blur="commitRename"
+        />
         <slot
+          v-else
           name="item"
           :item="item"
           :level="level"
@@ -145,10 +189,29 @@
     <ul
       v-if="expanded"
       role="group"
+      :aria-busy="item.loading || undefined"
       class="m-0 ms-(--spacing-md) list-none border-s border-(--border-muted) p-0"
     >
+      <li
+        v-if="item.loading"
+        role="none"
+        :data-testid="`${ctx.testId.value}-loading`"
+        class="m-0 flex min-h-8 list-none items-center gap-(--spacing-xs) px-(--spacing-xs) ps-[calc(var(--spacing-xs)+1rem+var(--spacing-xs))]"
+      >
+        <Skeleton
+          kind="shape"
+          width="60%"
+          height="1rem"
+          aria-hidden="true"
+        />
+        <span
+          role="status"
+          class="sr-only"
+          >{{ ctx.loadingLabel.value }}</span
+        >
+      </li>
       <TreeNode
-        v-for="(child, index) in children"
+        v-for="(child, index) in item.loading ? [] : children"
         :key="child.id"
         :item="child"
         :level="level + 1"

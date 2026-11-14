@@ -1157,7 +1157,9 @@ export const es: Messages = {
   },
   tree: {
     label: 'Árbol',
-    emptyTitle: 'No hay elementos'
+    emptyTitle: 'No hay elementos',
+    loadingChildren: 'Cargando',
+    renameLabel: 'Cambiar el nombre de {label}'
   },
   unsavedChanges: {
     title: 'Cambios sin guardar',
