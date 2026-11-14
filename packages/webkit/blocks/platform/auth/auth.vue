@@ -15,7 +15,7 @@
   import Separator from '@aziontech/webkit/separator'
   import Tag from '@aziontech/webkit/tag'
   import Tooltip from '@aziontech/webkit/tooltip'
-  import { computed, nextTick, reactive, ref } from 'vue'
+  import { computed, nextTick, onMounted, onScopeDispose, reactive, ref } from 'vue'
 
   const expiredEmail = ''
 
@@ -35,6 +35,25 @@
     newPassword: '',
     confirmPassword: ''
   })
+
+  const cardContent = ref<HTMLElement | null>(null)
+  const cardHeight = ref(0)
+  const resizing = ref(false)
+  let resizeObserver: ResizeObserver | null = null
+
+  const onCardResize = ([entry]: ResizeObserverEntry[]) => {
+    const next = Math.round(entry.contentRect.height)
+    if (cardHeight.value && next !== cardHeight.value) resizing.value = true
+    cardHeight.value = next
+  }
+
+  onMounted(() => {
+    if (typeof ResizeObserver === 'undefined' || !cardContent.value) return
+    resizeObserver = new ResizeObserver(onCardResize)
+    resizeObserver.observe(cardContent.value)
+  })
+
+  onScopeDispose(() => resizeObserver?.disconnect())
 
   const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
@@ -174,287 +193,299 @@
     <main class="flex min-h-0 flex-1 flex-col overflow-y-auto lg:overflow-hidden">
       <div class="layout-column-site flex flex-1 flex-col lg:min-h-0">
         <div class="flex flex-1 flex-col py-(--spacing-xl) lg:min-h-0 lg:overflow-y-auto">
-          <div class="m-auto flex w-full flex-col items-center gap-(--spacing-md)">
+          <div
+            class="m-auto flex w-full flex-col items-center gap-(--spacing-md) transition-[translate,opacity] duration-slow-01 ease-expressive-entrance starting:-translate-x-6 starting:opacity-0 rtl:starting:translate-x-6 motion-reduce:transition-none"
+          >
             <Card
               class="w-full max-w-(--container-sm)"
               :padded="false"
             >
               <template #content>
                 <div class="p-(--spacing-lg)">
-                  <form
-                    class="flex flex-col gap-(--spacing-lg)"
-                    aria-label="Sign in to your account"
-                    novalidate
-                    @submit.prevent="handlePrimary"
+                  <div
+                    :style="cardHeight ? { height: `${cardHeight}px` } : undefined"
+                    :data-resizing="resizing || null"
+                    class="transition-[height] duration-moderate-02 ease-productive-entrance motion-safe:data-resizing:overflow-hidden motion-reduce:transition-none"
+                    @transitionend.self="resizing = false"
                   >
-                    <header class="flex flex-col gap-(--spacing-xxs)">
-                      <h1 class="text-heading-sm text-(--text-default)">
-                        {{ heading.title }}
-                      </h1>
-                      <p
-                        v-if="heading.description"
-                        class="text-body-sm text-(--text-muted)"
-                      >
-                        {{ heading.description }}
-                      </p>
-                    </header>
-
-                    <Alert
-                      v-if="expiredNotice"
-                      key="expired"
-                      severity="info"
-                      size="small"
-                      label="Your session expired. Sign in again to pick up where you left off."
-                    />
-                    <Alert
-                      v-else-if="signedIn"
-                      key="signed-in"
-                      severity="success"
-                      size="small"
-                      label="Signed in."
-                    />
-
-                    <div class="flex flex-col">
-                      <div
-                        v-if="step === 'email'"
-                        class="flex flex-col gap-(--spacing-lg) pb-(--spacing-lg)"
-                      >
-                        <div class="flex flex-col gap-(--spacing-sm)">
-                          <Button
-                            type="button"
-                            label="Continue with Google"
-                            kind="outlined"
-                            size="large"
-                            icon="ai-cor ai-google"
-                            class="w-full"
-                          />
-                          <Button
-                            type="button"
-                            label="Continue with GitHub"
-                            kind="outlined"
-                            size="large"
-                            icon="ai ai-github"
-                            class="w-full"
-                          />
-                        </div>
-
-                        <Separator label="or" />
-                      </div>
-
-                      <div
-                        v-if="step === 'email'"
-                        class="motion-reduce:transition-none motion-reduce:transform-none"
-                      >
-                        <Field :required="!!errors.email && !email.trim()">
-                          <Field.Label for="login-email">Email</Field.Label>
-                          <Input
-                            id="login-email"
-                            v-model="email"
-                            type="email"
-                            name="email"
-                            size="large"
-                            autocomplete="username"
-                            class="w-full"
-                            placeholder="myemail@example.com"
-                            :required="!!errors.email && !email.trim()"
-                            :invalid="!!errors.email && !!email.trim()"
-                            :aria-describedby="errors.email ? 'login-email-error' : undefined"
-                            @update:model-value="errors.email = ''"
-                          />
-                          <HelperText
-                            v-if="errors.email"
-                            id="login-email-error"
-                            :kind="email.trim() ? 'invalid' : 'required'"
-                            :label="errors.email"
-                          />
-                        </Field>
-                      </div>
-
-                      <div
-                        v-else-if="step === 'password'"
-                        class="flex flex-col gap-(--spacing-lg) motion-reduce:transition-none motion-reduce:transform-none"
-                      >
-                        <div
-                          class="flex items-center gap-(--spacing-sm) motion-reduce:transition-none motion-reduce:transform-none"
+                    <form
+                      ref="cardContent"
+                      class="flex flex-col gap-(--spacing-lg)"
+                      aria-label="Sign in to your account"
+                      novalidate
+                      @submit.prevent="handlePrimary"
+                    >
+                      <header class="flex flex-col gap-(--spacing-xxs)">
+                        <h1 class="text-heading-sm text-(--text-default)">
+                          {{ heading.title }}
+                        </h1>
+                        <p
+                          v-if="heading.description"
+                          class="text-body-sm text-(--text-muted)"
                         >
-                          <Tooltip text="Change email">
-                            <IconButton
-                              icon="pi pi-chevron-left"
-                              aria-label="Change email"
-                              kind="outlined"
-                              size="small"
-                              @click="backToEmail"
-                            />
-                          </Tooltip>
-                          <span class="truncate text-label-sm text-(--text-default)">{{
-                            email
-                          }}</span>
-                        </div>
+                          {{ heading.description }}
+                        </p>
+                      </header>
 
-                        <div class="flex flex-col gap-(--spacing-xs)">
-                          <Field
-                            :required="!!errors.password && !password"
-                            :invalid="!!errors.password && !!password"
-                          >
-                            <Field.Label for="login-password">Password</Field.Label>
-                            <PasswordInput
-                              id="login-password"
-                              v-model="password"
-                              name="password"
-                              autocomplete="current-password"
-                              placeholder="Type your password"
-                              @update:model-value="errors.password = ''"
-                            />
-                            <Field.Description v-if="errors.password">{{
-                              errors.password
-                            }}</Field.Description>
-                          </Field>
-
-                          <a
-                            class="self-start text-body-xs text-(--text-muted) underline underline-offset-2 transition-colors duration-fast-02 ease-productive-entrance hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
-                            href="#"
-                            @click.prevent="forgotPassword"
-                            >Forgot your password?</a
-                          >
-                        </div>
-                      </div>
-
-                      <div
-                        v-else-if="step === 'reset'"
-                        class="flex flex-col gap-(--spacing-lg) motion-reduce:transition-none motion-reduce:transform-none"
-                      >
-                        <div
-                          class="flex items-center gap-(--spacing-sm) motion-reduce:transition-none motion-reduce:transform-none"
-                        >
-                          <Tooltip text="Back to sign in">
-                            <IconButton
-                              icon="pi pi-chevron-left"
-                              aria-label="Back to sign in"
-                              kind="outlined"
-                              size="small"
-                              @click="backToSignIn"
-                            />
-                          </Tooltip>
-                          <span class="truncate text-label-sm text-(--text-default)"
-                            >Back to sign in</span
-                          >
-                        </div>
-
-                        <Field :required="!!errors.resetEmail && !resetEmail.trim()">
-                          <Field.Label for="reset-email">Email</Field.Label>
-                          <Input
-                            id="reset-email"
-                            v-model="resetEmail"
-                            type="email"
-                            name="reset-email"
-                            size="large"
-                            autocomplete="email"
-                            class="w-full"
-                            placeholder="myemail@example.com"
-                            :required="!!errors.resetEmail && !resetEmail.trim()"
-                            :invalid="!!errors.resetEmail && !!resetEmail.trim()"
-                            :aria-describedby="errors.resetEmail ? 'reset-email-error' : undefined"
-                            @update:model-value="errors.resetEmail = ''"
-                          />
-                          <HelperText
-                            v-if="errors.resetEmail"
-                            id="reset-email-error"
-                            :kind="resetEmail.trim() ? 'invalid' : 'required'"
-                            :label="errors.resetEmail"
-                          />
-                        </Field>
-                      </div>
-
-                      <div
-                        v-else-if="step === 'new-password'"
-                        class="flex flex-col gap-(--spacing-lg) motion-reduce:transition-none motion-reduce:transform-none"
-                      >
-                        <Field
-                          :required="!!errors.newPassword && !newPassword"
-                          :invalid="!!errors.newPassword && !!newPassword"
-                        >
-                          <Field.Label for="new-password">New password</Field.Label>
-                          <PasswordInput
-                            id="new-password"
-                            v-model="newPassword"
-                            name="new-password"
-                            autocomplete="new-password"
-                            placeholder="Enter a new password"
-                            @update:model-value="errors.newPassword = ''"
-                          />
-                          <Field.Description v-if="errors.newPassword">{{
-                            errors.newPassword
-                          }}</Field.Description>
-                          <PasswordRequirements :value="newPassword" />
-                        </Field>
-
-                        <Field
-                          :required="!!errors.confirmPassword && !confirmPassword"
-                          :invalid="!!errors.confirmPassword && !!confirmPassword"
-                        >
-                          <Field.Label for="confirm-password">Confirm password</Field.Label>
-                          <PasswordInput
-                            id="confirm-password"
-                            v-model="confirmPassword"
-                            name="confirm-password"
-                            autocomplete="new-password"
-                            placeholder="Repeat the new password"
-                            @update:model-value="errors.confirmPassword = ''"
-                          />
-                          <Field.Description v-if="errors.confirmPassword">{{
-                            errors.confirmPassword
-                          }}</Field.Description>
-                        </Field>
-                      </div>
-
-                      <div
-                        v-else
-                        class="flex flex-col gap-(--spacing-xs) motion-reduce:transition-none motion-reduce:transform-none"
-                      >
-                        <div class="flex items-center gap-(--spacing-xs)">
-                          <p class="text-body-sm text-(--text-default)">
-                            Didn't receive the email?
-                          </p>
-                          <a
-                            class="text-link text-body-sm"
-                            href="#"
-                            @click.prevent
-                            >Resend email</a
-                          >
-                        </div>
-                        <div class="flex items-center gap-(--spacing-xs)">
-                          <p class="text-body-sm text-(--text-default)">Already opened it?</p>
-                          <a
-                            class="text-link text-body-sm"
-                            href="#"
-                            @click.prevent="openResetLink"
-                            >Set a new password</a
-                          >
-                        </div>
-                      </div>
-                    </div>
-
-                    <div class="relative">
-                      <Button
-                        :label="primaryAction.label"
-                        :kind="primaryAction.kind"
-                        size="large"
-                        class="w-full"
-                        type="submit"
+                      <Alert
+                        v-if="expiredNotice"
+                        key="expired"
+                        severity="info"
+                        size="small"
+                        label="Your session expired. Sign in again to pick up where you left off."
+                      />
+                      <Alert
+                        v-else-if="signedIn"
+                        key="signed-in"
+                        severity="success"
+                        size="small"
+                        label="Signed in."
                       />
 
-                      <div
-                        v-if="step === 'email'"
-                        class="absolute end-(--spacing-sm) top-0 -translate-y-1/2"
-                      >
-                        <Tag
-                          label="Last used"
-                          severity="info"
-                          size="small"
-                        />
+                      <div class="flex flex-col">
+                        <div
+                          v-if="step === 'email'"
+                          class="flex flex-col gap-(--spacing-lg) pb-(--spacing-lg)"
+                        >
+                          <div class="flex flex-col gap-(--spacing-sm)">
+                            <Button
+                              type="button"
+                              label="Continue with Google"
+                              kind="outlined"
+                              size="large"
+                              icon="ai-cor ai-google"
+                              class="w-full"
+                            />
+                            <Button
+                              type="button"
+                              label="Continue with GitHub"
+                              kind="outlined"
+                              size="large"
+                              icon="ai ai-github"
+                              class="w-full"
+                            />
+                          </div>
+
+                          <Separator label="or" />
+                        </div>
+
+                        <div
+                          v-if="step === 'email'"
+                          class="motion-reduce:transition-none motion-reduce:transform-none"
+                        >
+                          <Field :required="!!errors.email && !email.trim()">
+                            <Field.Label for="login-email">Email</Field.Label>
+                            <Input
+                              id="login-email"
+                              v-model="email"
+                              type="email"
+                              name="email"
+                              size="large"
+                              autocomplete="username"
+                              class="w-full"
+                              placeholder="myemail@example.com"
+                              :required="!!errors.email && !email.trim()"
+                              :invalid="!!errors.email && !!email.trim()"
+                              :aria-describedby="errors.email ? 'login-email-error' : undefined"
+                              @update:model-value="errors.email = ''"
+                            />
+                            <HelperText
+                              v-if="errors.email"
+                              id="login-email-error"
+                              :kind="email.trim() ? 'invalid' : 'required'"
+                              :label="errors.email"
+                            />
+                          </Field>
+                        </div>
+
+                        <div
+                          v-else-if="step === 'password'"
+                          class="flex flex-col gap-(--spacing-lg) motion-reduce:transition-none motion-reduce:transform-none"
+                        >
+                          <div
+                            class="flex items-center gap-(--spacing-sm) motion-reduce:transition-none motion-reduce:transform-none"
+                          >
+                            <Tooltip text="Change email">
+                              <IconButton
+                                icon="pi pi-chevron-left"
+                                aria-label="Change email"
+                                kind="outlined"
+                                size="small"
+                                @click="backToEmail"
+                              />
+                            </Tooltip>
+                            <span class="truncate text-label-sm text-(--text-default)">{{
+                              email
+                            }}</span>
+                          </div>
+
+                          <div class="flex flex-col gap-(--spacing-xs)">
+                            <Field
+                              :required="!!errors.password && !password"
+                              :invalid="!!errors.password && !!password"
+                            >
+                              <Field.Label for="login-password">Password</Field.Label>
+                              <PasswordInput
+                                id="login-password"
+                                v-model="password"
+                                name="password"
+                                autocomplete="current-password"
+                                placeholder="Type your password"
+                                @update:model-value="errors.password = ''"
+                              />
+                              <Field.Description v-if="errors.password">{{
+                                errors.password
+                              }}</Field.Description>
+                            </Field>
+
+                            <a
+                              class="self-start text-body-xs text-(--text-muted) underline underline-offset-2 transition-colors duration-fast-02 ease-productive-entrance hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
+                              href="#"
+                              @click.prevent="forgotPassword"
+                              >Forgot your password?</a
+                            >
+                          </div>
+                        </div>
+
+                        <div
+                          v-else-if="step === 'reset'"
+                          class="flex flex-col gap-(--spacing-lg) motion-reduce:transition-none motion-reduce:transform-none"
+                        >
+                          <div
+                            class="flex items-center gap-(--spacing-sm) motion-reduce:transition-none motion-reduce:transform-none"
+                          >
+                            <Tooltip text="Back to sign in">
+                              <IconButton
+                                icon="pi pi-chevron-left"
+                                aria-label="Back to sign in"
+                                kind="outlined"
+                                size="small"
+                                @click="backToSignIn"
+                              />
+                            </Tooltip>
+                            <span class="truncate text-label-sm text-(--text-default)"
+                              >Back to sign in</span
+                            >
+                          </div>
+
+                          <Field :required="!!errors.resetEmail && !resetEmail.trim()">
+                            <Field.Label for="reset-email">Email</Field.Label>
+                            <Input
+                              id="reset-email"
+                              v-model="resetEmail"
+                              type="email"
+                              name="reset-email"
+                              size="large"
+                              autocomplete="email"
+                              class="w-full"
+                              placeholder="myemail@example.com"
+                              :required="!!errors.resetEmail && !resetEmail.trim()"
+                              :invalid="!!errors.resetEmail && !!resetEmail.trim()"
+                              :aria-describedby="
+                                errors.resetEmail ? 'reset-email-error' : undefined
+                              "
+                              @update:model-value="errors.resetEmail = ''"
+                            />
+                            <HelperText
+                              v-if="errors.resetEmail"
+                              id="reset-email-error"
+                              :kind="resetEmail.trim() ? 'invalid' : 'required'"
+                              :label="errors.resetEmail"
+                            />
+                          </Field>
+                        </div>
+
+                        <div
+                          v-else-if="step === 'new-password'"
+                          class="flex flex-col gap-(--spacing-lg) motion-reduce:transition-none motion-reduce:transform-none"
+                        >
+                          <Field
+                            :required="!!errors.newPassword && !newPassword"
+                            :invalid="!!errors.newPassword && !!newPassword"
+                          >
+                            <Field.Label for="new-password">New password</Field.Label>
+                            <PasswordInput
+                              id="new-password"
+                              v-model="newPassword"
+                              name="new-password"
+                              autocomplete="new-password"
+                              placeholder="Enter a new password"
+                              @update:model-value="errors.newPassword = ''"
+                            />
+                            <Field.Description v-if="errors.newPassword">{{
+                              errors.newPassword
+                            }}</Field.Description>
+                            <PasswordRequirements :value="newPassword" />
+                          </Field>
+
+                          <Field
+                            :required="!!errors.confirmPassword && !confirmPassword"
+                            :invalid="!!errors.confirmPassword && !!confirmPassword"
+                          >
+                            <Field.Label for="confirm-password">Confirm password</Field.Label>
+                            <PasswordInput
+                              id="confirm-password"
+                              v-model="confirmPassword"
+                              name="confirm-password"
+                              autocomplete="new-password"
+                              placeholder="Repeat the new password"
+                              @update:model-value="errors.confirmPassword = ''"
+                            />
+                            <Field.Description v-if="errors.confirmPassword">{{
+                              errors.confirmPassword
+                            }}</Field.Description>
+                          </Field>
+                        </div>
+
+                        <div
+                          v-else
+                          class="flex flex-col gap-(--spacing-xs) motion-reduce:transition-none motion-reduce:transform-none"
+                        >
+                          <div class="flex items-center gap-(--spacing-xs)">
+                            <p class="text-body-sm text-(--text-default)">
+                              Didn't receive the email?
+                            </p>
+                            <a
+                              class="text-link text-body-sm"
+                              href="#"
+                              @click.prevent
+                              >Resend email</a
+                            >
+                          </div>
+                          <div class="flex items-center gap-(--spacing-xs)">
+                            <p class="text-body-sm text-(--text-default)">Already opened it?</p>
+                            <a
+                              class="text-link text-body-sm"
+                              href="#"
+                              @click.prevent="openResetLink"
+                              >Set a new password</a
+                            >
+                          </div>
+                        </div>
                       </div>
-                    </div>
-                  </form>
+
+                      <div class="relative">
+                        <Button
+                          :label="primaryAction.label"
+                          :kind="primaryAction.kind"
+                          size="large"
+                          class="w-full"
+                          type="submit"
+                        />
+
+                        <div
+                          v-if="step === 'email'"
+                          class="absolute end-(--spacing-sm) top-0 -translate-y-1/2"
+                        >
+                          <Tag
+                            label="Last used"
+                            severity="info"
+                            size="small"
+                          />
+                        </div>
+                      </div>
+                    </form>
+                  </div>
                 </div>
               </template>
             </Card>
