@@ -81,12 +81,12 @@ The entire public surface, from `package.json#exports`:
 ```javascript
 import { primitives, brandPrimitives, surfacePrimitives } from '@aziontech/theme/colors'
 
-primitives.orange[500] // '#F3652B' — primary brand
+primitives.orange[600] // '#D94A03' — primary brand
 primitives.blue[500] // '#0072F5' — accent
 primitives.violet[500] // '#8A84EC' — brand.accent palette
 primitives.gray[900] // '#141414'
 
-brandPrimitives.primary[500] // '#F3652B'
+brandPrimitives.primary[600] // '#D94A03'
 brandPrimitives.absolute.white // '#FFFFFF'
 
 surfacePrimitives.surface[0] // '#FFFFFF'
@@ -122,7 +122,7 @@ Responsive `fontSize` keys (`_`, `sm`, `md`, …) become `@media (min-width: …
 import { compileThemeVars, compileThemeCss, injectThemeCss } from '@aziontech/theme/theme-colors'
 
 compileThemeVars()
-// → { light: { '--primary': '#F3652B', '--text-default': '#141414', … }, dark: { … } }
+// → { light: { '--primary': '#D94A03', '--text-default': '#141414', … }, dark: { … } }
 
 compileThemeCss()
 // → ':root, [data-theme=light], .azion.azion-light { … }\n\n[data-theme=dark], .dark, … { … }'
@@ -140,7 +140,7 @@ The semantic layer flips automatically between modes:
 :root,
 [data-theme='light'],
 .azion.azion-light {
-  --primary: #f3652b;
+  --primary: #d94a03;
   --text-default: #141414;
   /* … */
 }

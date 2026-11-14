@@ -43,7 +43,7 @@ own fill. Where colour fails, use `-mono` on light and `-reversed` on dark.
 - `MONOCHROME_FILTER` — `brightness(0)` then `invert()` on dark: every mark becomes the same
   silhouette in the page's ink, for a strip where brand colours would compete.
 - `KNOCKOUT_FILTER` — `brightness(0)` alone, the flat black silhouette for a mark on a coloured fill
-  such as `--primary` (black on #F3652B is 6.71:1, white 3.0:1).
+  such as `--primary` (black on #D94A03 is 4.93:1, white 4.26:1).
 
 Both need an alpha channel — a mark on an opaque white background flattens to a black box. Every file
 here, including the rasters `itau-extended-reversed.webp` and `magalu-symbol-color.png`, is transparent.

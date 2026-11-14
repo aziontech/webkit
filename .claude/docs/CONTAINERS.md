@@ -276,7 +276,7 @@ Tailwind's **1px**.
 | `--border-default`  | `#00000014` | `#FFFFFF1A` | The frame: hero rule, column rules, module dividers, grid gaps.                          |
 | `--border-muted`    | `#00000014` | `#FFFFFF0D` | One step back: rules _inside_ a module, capability strips, `FrameBox` perimeter + hatch. |
 | `--border-strong`   | `#000000`   | `#FFFFFF`   | Pressed / active edge.                                                                   |
-| `--border-selected` | `#F3652B`   | `#F3652B`   | Selection (Azion orange, both modes).                                                    |
+| `--border-selected` | `#D94A03`   | `#D94A03`   | Selection (Azion orange, both modes).                                                    |
 
 > **`default` and `muted` are identical in light mode** (`#00000014`); only dark mode separates them.
 > Pick by role and verify in dark — light mode cannot show you the mistake.
