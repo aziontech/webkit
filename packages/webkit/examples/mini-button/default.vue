@@ -6,6 +6,6 @@
   <MiniButton
     size="large"
     label="Learn more"
-    href="#"
+    href="https://example.com/docs"
   />
 </template>

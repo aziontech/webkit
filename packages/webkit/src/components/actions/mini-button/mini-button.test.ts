@@ -2,6 +2,7 @@ import { fireEvent, render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
 import Default from '../../../../examples/mini-button/default.vue'
+import Disabled from '../../../../examples/mini-button/disabled.vue'
 import Sizes from '../../../../examples/mini-button/sizes.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import MiniButton from './mini-button.vue'
@@ -64,6 +65,29 @@ describe('MiniButton', () => {
         props: { label: 'Learn More', showIcon: false }
       })
       expect(queryByTestId('actions-mini-button__icon')).toBeNull()
+    })
+
+    it('omits the icon when icon is empty', () => {
+      const { queryByTestId } = render(MiniButton, { props: { label: 'Learn More', icon: '' } })
+      expect(queryByTestId('actions-mini-button__icon')).toBeNull()
+    })
+  })
+
+  describe('attribute forwarding', () => {
+    it('lands id, aria-describedby and class on the anchor', () => {
+      const { getByRole } = render(MiniButton, {
+        props: { label: 'Docs', href: 'https://example.com/docs' },
+        attrs: { id: 'docs-link', 'aria-describedby': 'docs-hint', class: 'ms-auto' }
+      })
+      const link = getByRole('link', { name: 'Docs' })
+      expect(link.id).toBe('docs-link')
+      expect(link.getAttribute('aria-describedby')).toBe('docs-hint')
+      expect(link.classList.contains('ms-auto')).toBe(true)
+    })
+
+    it('renders the Disabled example as an inactive link', () => {
+      const { getByTestId } = render(Disabled)
+      expect(getByTestId('actions-mini-button').getAttribute('aria-disabled')).toBe('true')
     })
   })
 

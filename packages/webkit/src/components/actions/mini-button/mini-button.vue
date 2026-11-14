@@ -5,7 +5,7 @@
   import * as en from '../../../i18n/messages/en'
   import { directionalIconClass } from '../../../utils/directional-icons'
 
-  export type MiniButtonSize = 'large' | 'medium'
+  export type MiniButtonSize = 'medium' | 'large'
   export type MiniButtonTarget = '_self' | '_blank'
 
   defineOptions({
@@ -20,9 +20,9 @@
     size?: MiniButtonSize
     /** Disables interaction and applies disabled tokens. */
     disabled?: boolean
-    /** When true, renders the trailing icon. */
+    /** @deprecated since 6.0 — set `icon` to an empty string to hide the icon. Removed in 7.0. */
     showIcon?: boolean
-    /** PrimeIcons class for the trailing icon. */
+    /** PrimeIcons class for the trailing icon. Empty renders no icon. */
     icon?: string
     /** Destination URL for the anchor. */
     href?: string
@@ -51,21 +51,6 @@
     () => (attrs['data-testid'] as string | undefined) ?? 'actions-mini-button'
   )
 
-  const rootClasses = computed(() => [
-    'group relative inline-flex shrink-0 items-center whitespace-nowrap',
-    'rounded-(--shape-button) text-(--text-default)',
-    'transition-opacity duration-150 ease-out motion-reduce:transition-none',
-    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)',
-    'focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)',
-    'data-[size=large]:h-10 data-[size=large]:min-h-10 data-[size=large]:text-button-lg',
-    'data-[size=medium]:h-8 data-[size=medium]:min-h-8',
-    'data-[size=medium]:text-button-md',
-    'data-[disabled]:pointer-events-none data-[disabled]:cursor-not-allowed',
-    'data-[disabled]:text-(--text-disabled)! data-[disabled]:[&_.mini-button-ghost]:hidden',
-    'data-[disabled]:[&_.mini-button-icon]:text-(--text-disabled)!',
-    attrs['class']
-  ])
-
   const handleClick = (event: MouseEvent) => {
     if (props.disabled) {
       event.preventDefault()
@@ -81,7 +66,8 @@
     :href="href"
     :target="target"
     :rel="target === '_blank' ? 'noopener noreferrer' : undefined"
-    :class="rootClasses"
+    v-bind="$attrs"
+    class="group relative inline-flex shrink-0 items-center whitespace-nowrap rounded-(--shape-button) text-(--text-default) transition-opacity duration-150 ease-out motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) data-[size=large]:h-10 data-[size=large]:min-h-10 data-[size=large]:text-button-lg data-[size=medium]:h-8 data-[size=medium]:min-h-8 data-[size=medium]:text-button-md data-[disabled]:pointer-events-none data-[disabled]:cursor-not-allowed data-[disabled]:text-(--text-disabled)! data-[disabled]:[&_.mini-button-ghost]:hidden data-[disabled]:[&_.mini-button-icon]:text-(--text-disabled)!"
     :aria-disabled="disabled || undefined"
     :tabindex="disabled ? -1 : undefined"
     :data-disabled="disabled ? '' : undefined"
@@ -105,7 +91,7 @@
         {{ label || t('miniButton.label') }}
       </span>
       <i
-        v-if="showIcon"
+        v-if="showIcon && icon"
         :class="[icon, directionalIconClass(icon)]"
         class="mini-button-icon inline-flex size-(--spacing-sm) shrink-0 items-center justify-center text-(--primary) leading-none"
         aria-hidden="true"

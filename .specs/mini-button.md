@@ -3,13 +3,14 @@ name: mini-button
 category: actions
 structure: monolithic
 status: implemented
-spec_version: 1
+spec_version: 2
+template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3211-220
   node_id: 3211:220
-checksum: 56741ef40669a3e62518073192e670b3e286208acfb898a5195545dc318abba8
+checksum: 3348c842fcd9a2625d03eb55c0983a7413f81ceb43271f566fc117d6bd859d3b
 created: 2026-06-01
-last_updated: 2026-11-11
+last_updated: 2026-11-14
 ---
 
 # Mini Button — Component Spec
@@ -32,14 +33,15 @@ Compact text action with an optional trailing external-link icon and a ghost hov
 ## Related
 
 - `link` — same anatomy (label, trailing icon, ghost hover) in link color, with a `small` size; the default for standalone links.
-- `button` — full action control with kinds, loading and a button element.
+- `button` — full action control with kinds, loading and a button element; `kind="link"` with a trailing icon covers the same text action.
+- Overlap: MiniButton is always an anchor with a trailing icon, the anatomy of `link`. Prefer `link` for new code; MiniButton stays for the marketing surfaces that use its body-colored label.
 
 ## Best practices
 
 - Always set `href`; the default `'#'` is a placeholder and the control always renders as an anchor.
 - Replace the `'Learn more'` default `label` with text that says where the link goes.
-- Keep the default `pi pi-external-link` icon for off-site targets with `target="_blank"` (`rel="noopener noreferrer"` is added for you); set `showIcon` to false otherwise.
-- Only `large` and `medium` sizes exist.
+- Keep the default `pi pi-external-link` icon for off-site targets with `target="_blank"` (`rel="noopener noreferrer"` is added for you); set `icon` to an empty string otherwise (`showIcon` is deprecated).
+- Only `medium` and `large` sizes exist.
 
 ## Usage
 
@@ -50,8 +52,8 @@ Compact text action with an optional trailing external-link icon and a ghost hov
 
 <template>
   <MiniButton
-    label="Learn more"
-    href="#"
+    label="Read the docs"
+    href="https://example.com/docs"
     target="_blank"
   />
 </template>
@@ -62,10 +64,10 @@ Compact text action with an optional trailing external-link icon and a ghost hov
 | Prop       | Type                  | Default                 | Required | JSDoc                                                                                    |
 | ---------- | --------------------- | ----------------------- | -------- | ---------------------------------------------------------------------------------------- |
 | `label`    | `string`              | `''`                    | false    | Visible label rendered inside the control. Empty uses the locale catalog (`Learn more`). |
-| `size`     | `'large' \| 'medium'` | `'large'`               | false    | Size token; affects height, gap, and typography.                                         |
+| `size`     | `'medium' \| 'large'` | `'large'`               | false    | Size token; affects height, gap, and typography.                                         |
 | `disabled` | `boolean`             | `false`                 | false    | Disables interaction and applies disabled tokens.                                        |
-| `showIcon` | `boolean`             | `true`                  | false    | When true, renders the trailing icon.                                                    |
-| `icon`     | `string`              | `'pi pi-external-link'` | false    | PrimeIcons class for the trailing icon.                                                  |
+| `showIcon` | `boolean`             | `true`                  | false    | `@deprecated since 6.0 — set icon to an empty string. Removed in 7.0.` False hides the icon. |
+| `icon`     | `string`              | `'pi pi-external-link'` | false    | PrimeIcons class for the trailing icon. Empty renders no icon.                                                  |
 | `href`     | `string`              | `'#'`                   | false    | Destination URL for the anchor.                                                          |
 | `target`   | `'_blank' \| '_self'` | `'_self'`               | false    | Link target when navigating.                                                             |
 
@@ -84,6 +86,7 @@ Compact text action with an optional trailing external-link icon and a ghost hov
 - Visual states: `default`, `hover`, `focus-visible`, `active`, `disabled`
 - `data-disabled` mirrors the `disabled` prop
 - `data-size` mirrors the `size` prop
+- Consumer attributes (`id`, `aria-*`, `class`) land on the anchor (`inheritAttrs: false` + `v-bind="$attrs"`); the utilities are a flat class on the root, no class composition in script.
 
 ## Motion & Animations
 
@@ -133,10 +136,27 @@ Compact text action with an optional trailing external-link icon and a ghost hov
 - Keyboard: no horizontal arrow-key logic.
 - User data: none.
 
+## Internationalization
+
+| Key               | English source | Override prop |
+| ----------------- | -------------- | ------------- |
+| `miniButton.label` | `Learn more`   | `label`       |
+
+## Responsive
+
+- The control never wraps (`whitespace-nowrap`); keep labels short in narrow cards.
+- Touch: `large` is 40 px high; `medium` is for dense layouts with a pointer.
+
+## Performance
+
+- Bundle budget: see `.size-limit.json` entry `mini-button`.
+- Runtime: one anchor, no observers.
+
 ## Examples
 
 - Default
 - Sizes — composite story rendering every `size` value side-by-side.
+- Disabled
 
 ## Constraints — DO NOT
 
