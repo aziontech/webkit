@@ -35,32 +35,36 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 
 A flush `Card` (`:padded="false"`) holds the explanation and the method list as one object. Each promo below sits in its own flush `Card`, two columns from `md`.
 
-### B. Explanation — `EmptyState` (required)
+### B. Agent marks — `Logo` (optional)
+
+The coding-agent promo stacks the agent marks, each a decorative `Logo` at `size="small"` in a bordered tile. A mono mark takes `kind="current"` and the tile's text colour, a coloured one `kind="color"`.
+
+### C. Explanation — `EmptyState` (required)
 
 The resource glyph, a headline that names the first action, and one sentence on the ways to do it. Its `#actions` slot holds only the documentation link; the create actions live in the method list. The icon slot shows the resource glyph; an app may draw a richer figure there.
 
-### C. Documentation — `Link` (required)
+### D. Documentation — `Link` (required)
 
 `Documentation`, opening the docs for this resource in a new tab. One link, no button.
 
-### D. Methods — `Item` (required)
+### E. Methods — `Item` (required)
 
 An `Item.List` under the `EmptyState`, one `Item` per way to create the first resource: a bordered icon frame in `Item.Media`, `Item.Title` and `Item.Description`, and one action in `Item.Actions`. List the methods in order of how most users start (repository import, CLI, from scratch).
 
-### E. Method action — `Button` (required)
+### F. Method action — `Button` (required)
 
 One per method. The recommended method takes `kind="primary"` (`Import`); the others take `kind="outlined"` (`Create`). Only one primary on the block.
 
-### F. Command row — `InputGroupRoot` (CLI method)
+### G. Command row — `InputGroupRoot` (CLI method)
 
 Joins the read-only command and its copy button into one control, full width.
 
-### G. Command — `Input` (CLI method)
+### H. Command — `Input` (CLI method)
 
 `readonly`, `monospace`, `:spellcheck="false"` and `size="large"`, holding the command to run in the
 code face, with an `aria-label` that names it.
 
-### H. Copy — `CopyButton` (CLI method)
+### I. Copy — `CopyButton` (CLI method)
 
 Copies the command, with an `aria-label` (`Copy the Via CLI command`) and a `copied-label` (`Command copied`) that confirms it.
 
@@ -74,7 +78,7 @@ Copies the command, with an `aria-label` (`Copy the Via CLI command`) and a `cop
 
 ## Don't
 
-- Don't write an agent mark's mask as an unquoted `url(...)`: the build inlines the SVG as a `data:` URI and the unquoted value renders the mark as a solid square. Quote it (`url('…')`).
+- Don't draw an agent mark by hand (an `img` or a CSS mask): `Logo` already inks it for the theme.
 - Don't show list controls (search, filters, pagination, column settings) over a list that has never had an item.
 - Don't render this block for a filtered list with no matches; that state says how to clear the filter.
 - Don't show it while the list is still loading; the user would see "create your first" for an account that has items.
@@ -171,7 +175,7 @@ Each variant is the same screen in another state: `get_pattern("platform/states/
             <Item>
               <Item.Media>
                 <span
-                  class="flex size-8 shrink-0 items-center justify-center overflow-hidden rounded-(--shape-elements) border-(length:--border-width-default) border-(--border-muted) bg-(--bg-surface-raised)"
+                  class="flex size-8 shrink-0 items-center justify-center overflow-hidden rounded-(--shape-elements) border-(length:--border-width-default) border-(--border-muted) bg-(--bg-surface-raised) text-(--text-default)"
                 >
                   <i
                     class="ai ai-github text-body-lg leading-none text-(--text-default)"
@@ -351,7 +355,7 @@ Each variant is the same screen in another state: `get_pattern("platform/states/
                   :src="agent.src"
                   :kind="agent.mono ? 'current' : 'color'"
                   decorative
-                  class="size-(--size-4) text-(--text-default)"
+                  size="small"
                 />
               </span>
             </span>

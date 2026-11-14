@@ -30,7 +30,7 @@
  ],
  "bestPractices": [
   "Pass a registry entry as it stands: `name`, `src` from `logo`, `src-light` from `logoLight`, `artwork` from `artwork`. The registry knows which theme each file is drawn for.",
-  "Set the height with a class on the component (`class=\"h-8\"`; the default is `h-6`, 24 px); the width follows each file's own aspect ratio. Cap wide wordmarks with `max-w-*`.",
+  "Set the height with `size`: `small` (16 px) beside a label or in a table cell, `medium` (24 px, the default) in a card or a list, `large` (32 px) in a logo wall or a quote attribution. The width follows each file's own aspect ratio. Cap wide wordmarks with `max-w-*`.",
   "In a list of many clients, use `kind=\"monochrome\"`: per-brand colour reads as noise next to twenty others.",
   "On a coloured fill (white, `--primary`), use `kind=\"knockout\"`: a fill does not follow the theme, so the ink must not either.",
   "On a surface that is dark in both themes, or among drawn diagram parts, use `kind=\"current\"` so the mark takes the surface's own ink.",
@@ -80,6 +80,13 @@
    "doc": "Accessible name when it should differ from `name`."
   },
   {
+   "name": "size",
+   "type": "'small' | 'medium' | 'large'",
+   "default": "'medium'",
+   "required": "false",
+   "doc": "Height of the mark: `small` 16 px, `medium` 24 px, `large` 32 px; the width follows the file's aspect ratio."
+  },
+  {
    "name": "decorative",
    "type": "boolean",
    "default": "false",
@@ -94,7 +101,11 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import { CLIENTS } from '@aziontech/webkit/assets/client-registry'\n  import Logo from '@aziontech/webkit/logo'\n\n  const client = CLIENTS.find((entry) => entry.name === 'Agibank')\n</script>\n\n<template>\n  <Logo\n    :name=\"client.name\"\n    :src=\"client.logo\"\n    :src-light=\"client.logoLight\"\n    :artwork=\"client.artwork\"\n    class=\"h-8 max-w-40\"\n  />\n</template>"
+   "sfc": "<script setup>\n  import { CLIENTS } from '@aziontech/webkit/assets/client-registry'\n  import Logo from '@aziontech/webkit/logo'\n\n  const client = CLIENTS.find((entry) => entry.name === 'Agibank')\n</script>\n\n<template>\n  <Logo\n    :name=\"client.name\"\n    :src=\"client.logo\"\n    :src-light=\"client.logoLight\"\n    :artwork=\"client.artwork\"\n    size=\"large\"\n    class=\"max-w-40\"\n  />\n</template>"
+  },
+  {
+   "name": "Sizes",
+   "sfc": "<script setup>\n  import { CLIENTS } from '@aziontech/webkit/assets/client-registry'\n  import Logo from '@aziontech/webkit/logo'\n\n  const client = CLIENTS.find((entry) => entry.name === 'Agibank')\n  const sizes = ['small', 'medium', 'large']\n</script>\n\n<template>\n  <div class=\"flex flex-col gap-(--spacing-md)\">\n    <div\n      v-for=\"size in sizes\"\n      :key=\"size\"\n      class=\"flex flex-wrap items-center gap-(--spacing-xl)\"\n    >\n      <span class=\"w-20 text-label-md text-(--text-muted)\">{{ size }}</span>\n      <Logo\n        :name=\"client.name\"\n        :src=\"client.logo\"\n        :src-light=\"client.logoLight\"\n        :artwork=\"client.artwork\"\n        :size=\"size\"\n        class=\"max-w-40\"\n      />\n      <Logo\n        name=\"Acme Inc.\"\n        :size=\"size\"\n      />\n    </div>\n  </div>\n</template>"
   },
   {
    "name": "Types",

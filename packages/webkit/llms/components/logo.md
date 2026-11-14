@@ -15,7 +15,7 @@
 ## Do
 
 - Pass a registry entry as it stands: `name`, `src` from `logo`, `src-light` from `logoLight`, `artwork` from `artwork`. The registry knows which theme each file is drawn for.
-- Set the height with a class on the component (`class="h-8"`; the default is `h-6`, 24 px); the width follows each file's own aspect ratio. Cap wide wordmarks with `max-w-*`.
+- Set the height with `size`: `small` (16 px) beside a label or in a table cell, `medium` (24 px, the default) in a card or a list, `large` (32 px) in a logo wall or a quote attribution. The width follows each file's own aspect ratio. Cap wide wordmarks with `max-w-*`.
 - In a list of many clients, use `kind="monochrome"`: per-brand colour reads as noise next to twenty others.
 - On a coloured fill (white, `--primary`), use `kind="knockout"`: a fill does not follow the theme, so the ink must not either.
 - On a surface that is dark in both themes, or among drawn diagram parts, use `kind="current"` so the mark takes the surface's own ink.
@@ -47,6 +47,7 @@
 | `artwork` | `'color' \| 'light' \| 'dark'` | `'color'` | false | The ink a single file is drawn in: `light` art (for dark surfaces) is inverted on the light theme, `dark` art is inverted on the dark theme, `color` is kept as is. Ignored when `srcLight` is set or `kind` is not `color`. |
 | `kind` | `'color' \| 'monochrome' \| 'current' \| 'knockout'` | `'color'` | false | Ink: `color` keeps the vendor's colours, `monochrome` paints one silhouette black on light and white on dark, `current` paints it in the surrounding text colour, `knockout` pins it black for a mark on a coloured fill. |
 | `ariaLabel` | `string` | `''` | false | Accessible name when it should differ from `name`. |
+| `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | false | Height of the mark: `small` 16 px, `medium` 24 px, `large` 32 px; the width follows the file's aspect ratio. |
 | `decorative` | `boolean` | `false` | false | Hides the mark from assistive technology when the text beside it already names the company. |
 
 ## States
@@ -54,7 +55,8 @@
 - `data-kind` on the root: `color` | `monochrome` | `current` | `knockout`.
 - `data-route` on the root: `pair` (both files in the DOM, the theme reveals one), `single` (one file, filtered by `artwork` or the ink of `kind`), `wordmark` (no file: the name in type).
 - `data-artwork` on the root mirrors `artwork`.
-- `data-sized` on the root when the caller's class sets a height (`h-*` or `size-*`, with or without a breakpoint); without it the root falls back to `h-6`.
+- `data-size` on the root mirrors `size`: `small` is `h-4`, `medium` is `h-6`, `large` is `h-8`.
+- `data-sized` on the root when the caller's class sets a height (`h-*` or `size-*`, with or without a breakpoint); it then wins over `size`.
 - Not applicable: `loading`, `empty`, `error`, `disabled`, `readonly`, `invalid`, `open`/`closed` (a static mark).
 
 ## Accessibility
@@ -81,7 +83,7 @@ No built-in strings: the accessible name and the wordmark are the `name` the con
 
 ## Responsive
 
-- Container queries: none; the caller sets the height (`h-*`) and the width cap (`max-w-*`).
+- Container queries: none; `size` sets the height and the caller sets the width cap (`max-w-*`).
 - Narrow: the files keep their aspect ratio inside the cap (`object-contain`); the wordmark does not wrap.
 - Touch: not interactive.
 - Reflow: no horizontal scroll at 320 px when the caller caps the width.
@@ -104,8 +106,45 @@ No built-in strings: the accessible name and the wordmark are the `name` the con
     :src="client.logo"
     :src-light="client.logoLight"
     :artwork="client.artwork"
-    class="h-8 max-w-40"
+    size="large"
+    class="max-w-40"
   />
+</template>
+```
+
+### Sizes
+
+```vue
+<script setup>
+  import { CLIENTS } from '@aziontech/webkit/assets/client-registry'
+  import Logo from '@aziontech/webkit/logo'
+
+  const client = CLIENTS.find((entry) => entry.name === 'Agibank')
+  const sizes = ['small', 'medium', 'large']
+</script>
+
+<template>
+  <div class="flex flex-col gap-(--spacing-md)">
+    <div
+      v-for="size in sizes"
+      :key="size"
+      class="flex flex-wrap items-center gap-(--spacing-xl)"
+    >
+      <span class="w-20 text-label-md text-(--text-muted)">{{ size }}</span>
+      <Logo
+        :name="client.name"
+        :src="client.logo"
+        :src-light="client.logoLight"
+        :artwork="client.artwork"
+        :size="size"
+        class="max-w-40"
+      />
+      <Logo
+        name="Acme Inc."
+        :size="size"
+      />
+    </div>
+  </div>
 </template>
 ```
 

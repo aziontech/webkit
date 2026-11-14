@@ -20,7 +20,7 @@
  ],
  "bestPractices": [
   "Pass a registry entry as it stands: `name`, `src` from `logo`, `src-light` from `logoLight`, `artwork` from `artwork`. The registry knows which theme each file is drawn for.",
-  "Set the height with a class on the component (`class=\"h-8\"`; the default is `h-6`, 24 px); the width follows each file's own aspect ratio. Cap wide wordmarks with `max-w-*`.",
+  "Set the height with `size`: `small` (16 px) beside a label or in a table cell, `medium` (24 px, the default) in a card or a list, `large` (32 px) in a logo wall or a quote attribution. The width follows each file's own aspect ratio. Cap wide wordmarks with `max-w-*`.",
   "In a list of many clients, use `kind=\"monochrome\"`: per-brand colour reads as noise next to twenty others.",
   "On a coloured fill (white, `--primary`), use `kind=\"knockout\"`: a fill does not follow the theme, so the ink must not either.",
   "On a surface that is dark in both themes, or among drawn diagram parts, use `kind=\"current\"` so the mark takes the surface's own ink.",

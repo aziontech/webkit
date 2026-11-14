@@ -3,7 +3,12 @@
   {
    "name": "Default",
    "summary": "A client from the asset registry: its dark-theme file and its light-theme file both render, and the theme reveals one.",
-   "sfc": "<script setup>\n  import { CLIENTS } from '@aziontech/webkit/assets/client-registry'\n  import Logo from '@aziontech/webkit/logo'\n\n  const client = CLIENTS.find((entry) => entry.name === 'Agibank')\n</script>\n\n<template>\n  <Logo\n    :name=\"client.name\"\n    :src=\"client.logo\"\n    :src-light=\"client.logoLight\"\n    :artwork=\"client.artwork\"\n    class=\"h-8 max-w-40\"\n  />\n</template>"
+   "sfc": "<script setup>\n  import { CLIENTS } from '@aziontech/webkit/assets/client-registry'\n  import Logo from '@aziontech/webkit/logo'\n\n  const client = CLIENTS.find((entry) => entry.name === 'Agibank')\n</script>\n\n<template>\n  <Logo\n    :name=\"client.name\"\n    :src=\"client.logo\"\n    :src-light=\"client.logoLight\"\n    :artwork=\"client.artwork\"\n    size=\"large\"\n    class=\"max-w-40\"\n  />\n</template>"
+  },
+  {
+   "name": "Sizes",
+   "summary": "`small` (16 px), `medium` (24 px, the default) and `large` (32 px) on the same client pair and on a wordmark with no file; the width follows each file's aspect ratio.",
+   "sfc": "<script setup>\n  import { CLIENTS } from '@aziontech/webkit/assets/client-registry'\n  import Logo from '@aziontech/webkit/logo'\n\n  const client = CLIENTS.find((entry) => entry.name === 'Agibank')\n  const sizes = ['small', 'medium', 'large']\n</script>\n\n<template>\n  <div class=\"flex flex-col gap-(--spacing-md)\">\n    <div\n      v-for=\"size in sizes\"\n      :key=\"size\"\n      class=\"flex flex-wrap items-center gap-(--spacing-xl)\"\n    >\n      <span class=\"w-20 text-label-md text-(--text-muted)\">{{ size }}</span>\n      <Logo\n        :name=\"client.name\"\n        :src=\"client.logo\"\n        :src-light=\"client.logoLight\"\n        :artwork=\"client.artwork\"\n        :size=\"size\"\n        class=\"max-w-40\"\n      />\n      <Logo\n        name=\"Acme Inc.\"\n        :size=\"size\"\n      />\n    </div>\n  </div>\n</template>"
   },
   {
    "name": "Types",

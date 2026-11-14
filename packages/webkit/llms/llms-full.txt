@@ -5710,7 +5710,7 @@ What each part takes: [blocks/platform/dashboard/dashboard-switcher.md](blocks/p
 
 ## Asked as
 
-data dashboard; metrics dashboard; kpi dashboard; stat tiles; data transferred; usage dashboard; breakdown charts; métricas; painel de dados; painel de uso; real user monitoring; rum; web vitals; core web vitals; monitoramento de usuário real
+data dashboard; metrics dashboard; kpi dashboard; stat tiles; data transferred; usage dashboard; breakdown charts; métricas; painel de dados; painel de uso; real user monitoring; rum; core web vitals; monitoramento de usuário real
 
 The usage page: how much the account's projects consumed in the period, how that compares with the
 previous period, and which projects drove it. It leads with six KPI tiles (each with a sparkline and
@@ -6152,7 +6152,7 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 - B. Control labels and metric definitions — `Tooltip` (required)
 - C. Icon-only controls — `IconButton` (required)
 - D. Usage band — `StatTileGroup`, `StatTile` (required)
-- E. Agent onboarding — `Card` (optional)
+- E. Agent onboarding — `Card`, `Logo` (optional)
 - F. Resource rows — `Item` (required)
 - G. Classic summary — `StatTile`, `Card`, `IconButton`, `Tooltip` (optional)
 
@@ -8503,13 +8503,14 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 ## Building blocks
 
 - A. Frame — `Card` (required)
-- B. Explanation — `EmptyState` (required)
-- C. Documentation — `Link` (required)
-- D. Methods — `Item` (required)
-- E. Method action — `Button` (required)
-- F. Command row — `InputGroupRoot` (CLI method)
-- G. Command — `Input` (CLI method)
-- H. Copy — `CopyButton` (CLI method)
+- B. Agent marks — `Logo` (optional)
+- C. Explanation — `EmptyState` (required)
+- D. Documentation — `Link` (required)
+- E. Methods — `Item` (required)
+- F. Method action — `Button` (required)
+- G. Command row — `InputGroupRoot` (CLI method)
+- H. Command — `Input` (CLI method)
+- I. Copy — `CopyButton` (CLI method)
 
 What each part takes: [blocks/platform/states/first-use.md](blocks/platform/states/first-use.md).
 
@@ -8523,7 +8524,7 @@ What each part takes: [blocks/platform/states/first-use.md](blocks/platform/stat
 
 ## Don't
 
-- Don't write an agent mark's mask as an unquoted `url(...)`: the build inlines the SVG as a `data:` URI and the unquoted value renders the mark as a solid square. Quote it (`url('…')`).
+- Don't draw an agent mark by hand (an `img` or a CSS mask): `Logo` already inks it for the theme.
 - Don't show list controls (search, filters, pagination, column settings) over a list that has never had an item.
 - Don't render this block for a filtered list with no matches; that state says how to clear the filter.
 - Don't show it while the list is still loading; the user would see "create your first" for an account that has items.
@@ -18155,7 +18156,7 @@ Markup is valid HTML in both shapes: an Item is a `<div>` wrapping one `<dt>` an
 ## Do
 
 - Pass a registry entry as it stands: `name`, `src` from `logo`, `src-light` from `logoLight`, `artwork` from `artwork`. The registry knows which theme each file is drawn for.
-- Set the height with a class on the component (`class="h-8"`; the default is `h-6`, 24 px); the width follows each file's own aspect ratio. Cap wide wordmarks with `max-w-*`.
+- Set the height with `size`: `small` (16 px) beside a label or in a table cell, `medium` (24 px, the default) in a card or a list, `large` (32 px) in a logo wall or a quote attribution. The width follows each file's own aspect ratio. Cap wide wordmarks with `max-w-*`.
 - In a list of many clients, use `kind="monochrome"`: per-brand colour reads as noise next to twenty others.
 - On a coloured fill (white, `--primary`), use `kind="knockout"`: a fill does not follow the theme, so the ink must not either.
 - On a surface that is dark in both themes, or among drawn diagram parts, use `kind="current"` so the mark takes the surface's own ink.
@@ -18186,6 +18187,7 @@ Markup is valid HTML in both shapes: an Item is a `<div>` wrapping one `<dt>` an
 | `artwork` | `'color' \| 'light' \| 'dark'` | `'color'` | false | The ink a single file is drawn in: `light` art (for dark surfaces) is inverted on the light theme, `dark` art is inverted on the dark theme, `color` is kept as is. Ignored when `srcLight` is set or `kind` is not `color`. |
 | `kind` | `'color' \| 'monochrome' \| 'current' \| 'knockout'` | `'color'` | false | Ink: `color` keeps the vendor's colours, `monochrome` paints one silhouette black on light and white on dark, `current` paints it in the surrounding text colour, `knockout` pins it black for a mark on a coloured fill. |
 | `ariaLabel` | `string` | `''` | false | Accessible name when it should differ from `name`. |
+| `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | false | Height of the mark: `small` 16 px, `medium` 24 px, `large` 32 px; the width follows the file's aspect ratio. |
 | `decorative` | `boolean` | `false` | false | Hides the mark from assistive technology when the text beside it already names the company. |
 
 ## States
@@ -18193,7 +18195,8 @@ Markup is valid HTML in both shapes: an Item is a `<div>` wrapping one `<dt>` an
 - `data-kind` on the root: `color` | `monochrome` | `current` | `knockout`.
 - `data-route` on the root: `pair` (both files in the DOM, the theme reveals one), `single` (one file, filtered by `artwork` or the ink of `kind`), `wordmark` (no file: the name in type).
 - `data-artwork` on the root mirrors `artwork`.
-- `data-sized` on the root when the caller's class sets a height (`h-*` or `size-*`, with or without a breakpoint); without it the root falls back to `h-6`.
+- `data-size` on the root mirrors `size`: `small` is `h-4`, `medium` is `h-6`, `large` is `h-8`.
+- `data-sized` on the root when the caller's class sets a height (`h-*` or `size-*`, with or without a breakpoint); it then wins over `size`.
 - Not applicable: `loading`, `empty`, `error`, `disabled`, `readonly`, `invalid`, `open`/`closed` (a static mark).
 
 ## Accessibility
@@ -18220,7 +18223,7 @@ No built-in strings: the accessible name and the wordmark are the `name` the con
 
 ## Responsive
 
-- Container queries: none; the caller sets the height (`h-*`) and the width cap (`max-w-*`).
+- Container queries: none; `size` sets the height and the caller sets the width cap (`max-w-*`).
 - Narrow: the files keep their aspect ratio inside the cap (`object-contain`); the wordmark does not wrap.
 - Touch: not interactive.
 - Reflow: no horizontal scroll at 320 px when the caller caps the width.
@@ -18243,12 +18246,13 @@ No built-in strings: the accessible name and the wordmark are the `name` the con
     :src="client.logo"
     :src-light="client.logoLight"
     :artwork="client.artwork"
-    class="h-8 max-w-40"
+    size="large"
+    class="max-w-40"
   />
 </template>
 ```
 
-1 more example(s) in [components/logo.md](https://github.com/aziontech/webkit/blob/main/.specs/components/logo.md).
+2 more example(s) in [components/logo.md](https://github.com/aziontech/webkit/blob/main/.specs/components/logo.md).
 
 ---
 

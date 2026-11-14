@@ -10,7 +10,7 @@
 
 ## Asked as
 
-data dashboard; metrics dashboard; kpi dashboard; stat tiles; data transferred; usage dashboard; breakdown charts; métricas; painel de dados; painel de uso; real user monitoring; rum; web vitals; core web vitals; monitoramento de usuário real
+data dashboard; metrics dashboard; kpi dashboard; stat tiles; data transferred; usage dashboard; breakdown charts; métricas; painel de dados; painel de uso; real user monitoring; rum; core web vitals; monitoramento de usuário real
 
 The usage page: how much the account's projects consumed in the period, how that compares with the
 previous period, and which projects drove it. It leads with six KPI tiles (each with a sparkline and

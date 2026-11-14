@@ -6914,6 +6914,13 @@
      "doc": "Accessible name when it should differ from `name`."
     },
     {
+     "name": "size",
+     "type": "'small' | 'medium' | 'large'",
+     "default": "'medium'",
+     "required": "false",
+     "doc": "Height of the mark: `small` 16 px, `medium` 24 px, `large` 32 px; the width follows the file's aspect ratio."
+    },
+    {
      "name": "decorative",
      "type": "boolean",
      "default": "false",
@@ -27955,12 +27962,10 @@
    "guidelinesSummary": "The top bar of the focused creation shell: create, edit and deploy flows that run without the navigation rail. The user is doing one task with a start and an end, so the bar gives them a linear way out (the back button and the breadcrumb to the list the flow started from) and keeps their identity visible (the avatar), and nothing else. No search, no Create, no Agent: the flow is the only thing on screen.",
    "variants": [
     {
-     "name": "CreateHub",
-     "summary": "The Creation Center header: the back control returns Home and the crumb is the single current page."
+     "name": "CreateHub"
     },
     {
-     "name": "Terminal",
-     "summary": "A creation wizard once the last step is submitted: the provisioning and success screens keep only the brand and the avatar, with no back control and no crumb."
+     "name": "Terminal"
     }
    ],
    "file": "catalog/patterns/headers/creation-header.json"
@@ -28057,8 +28062,7 @@
    "guidelinesSummary": "The top bar of every page inside the persistent console shell. It sits in the content zone beside the navigation rail and carries what the user needs on any browse page: where they are (no breadcrumb at the first level, where the rail's active row already says it; the module and the resource from the second), search, the two ways to start something (Create and the Agent), and their account. It is the header that `shells/console` renders.",
    "variants": [
     {
-     "name": "SecondLevel",
-     "summary": "A resource inside a module. The breadcrumb names the module and the resource, and shows from `md`; the last crumb is the current page and carries no link."
+     "name": "SecondLevel"
     }
    ],
    "file": "catalog/patterns/headers/resource-header.json"
@@ -28168,16 +28172,13 @@
    "guidelinesSummary": "The account's audit log. An admin or a security reviewer answers \"who did this, from where, and when\": a token that was revoked, a role that changed, a sign-in that failed, a plan that was upgraded. They narrow the log by period, category, person and address, read the newest events first, copy an IP address into another tool, and export what they found. It is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header and the `main`.",
    "variants": [
     {
-     "name": "Empty",
-     "summary": "No event in the selected period (the last 15 minutes): the controls stay, and a flush EmptyState offers Show the last 30 days."
+     "name": "Empty"
     },
     {
-     "name": "Loading",
-     "summary": "The first load: the controls and the table's loading rows."
+     "name": "Loading"
     },
     {
-     "name": "Failed",
-     "summary": "The log did not load: a danger Alert with Retry replaces the table; Retry loads the events."
+     "name": "Failed"
     }
    ],
    "file": "catalog/patterns/platform/account/activity-history.json"
@@ -28267,24 +28268,19 @@
    "guidelinesSummary": "What the account pays, what it paid and which card it is charged to. An admin checks the current plan and the next charge, moves to another plan, finds and downloads an invoice, and keeps the cards on file current: which one is the default, which ones to remove. It is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header and the `main`.",
    "variants": [
     {
-     "name": "Loading",
-     "summary": "The first load: the plan name and every value as skeletons, Change plan and Contact sales disabled, and the invoices table's loading rows."
+     "name": "Loading"
     },
     {
-     "name": "Failed",
-     "summary": "The billing data did not load: a danger Alert with Retry replaces the tab's content; Retry loads it."
+     "name": "Failed"
     },
     {
-     "name": "NoInvoices",
-     "summary": "A new account before its first billing cycle closes: the plan cards, then a flush EmptyState that says when the first invoice appears."
+     "name": "NoInvoices"
     },
     {
-     "name": "NoMatch",
-     "summary": "A Status = Overdue filter that matches no invoice: the table's empty slot says so and offers Clear filters."
+     "name": "NoMatch"
     },
     {
-     "name": "PaymentMethods",
-     "summary": "The Payment Methods tab: Payment information with Update, then the cards with the default one tagged; Set as default and Remove (after confirmation) are wired."
+     "name": "PaymentMethods"
     }
    ],
    "file": "catalog/patterns/platform/account/billing.json"
@@ -28397,16 +28393,13 @@
    "guidelinesSummary": "How every deploy in the account routes. A Deployment Setting holds a binding policy (whether a version locks the resource IDs it shipped with) and a deployment policy (one live version, or a URL per version); every environment of every service publishes with exactly one, linked automatically to a setting that matches its own deployment policy. On this page an admin sets the defaults the next service starts with, sees which environment publishes with which setting, points two environments at the same setting so one deploy reaches both, and manages the settings themselves. It is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header and the `main`.",
    "variants": [
     {
-     "name": "UnsavedChanges",
-     "summary": "The binding policy default changed from Strict to Flexible: the SaveBar says You have unsaved changes. with Discard and Save; Save confirms with a toast and Discard puts the saved value back."
+     "name": "UnsavedChanges"
     },
     {
-     "name": "Empty",
-     "summary": "An account with no service yet: All services shows a small EmptyState and the Deployment Settings table holds only Default."
+     "name": "Empty"
     },
     {
-     "name": "Loading",
-     "summary": "The first load: Skeletons in place of the default Selects and the services, and the table's loading rows."
+     "name": "Loading"
     }
    ],
    "file": "catalog/patterns/platform/account/build-deployment.json"
@@ -28504,8 +28497,7 @@
    "guidelinesSummary": "The drawer the Billing page opens from its Subscription Plan card. The user wants to compare tiers and move the account to one without leaving Billing: a Monthly or Yearly switch over the Free, Pro and Enterprise pricing cards, each with its features and one action. Continue with Pro stacks the Upgrade to Pro drawer on top (what is included, the charge, the payment method and the billing address, then Upgrade); Contact sales closes the drawer.",
    "variants": [
     {
-     "name": "Checkout",
-     "summary": "The Upgrade to Pro drawer opened at checkout: the charge with Due today and the renewal and tax note, the payment method, the billing address, and a required terms Checkbox with Terms of Service and Privacy Policy links; Upgrade without it marks the checkbox invalid and focuses it."
+     "name": "Checkout"
     }
    ],
    "file": "catalog/patterns/platform/account/change-plan-drawer.json"
@@ -28599,20 +28591,16 @@
    "guidelinesSummary": "Where an account admin arranges the account's hierarchy. Workspaces sit under groups, groups under organizations, and a role binding set on a parent applies to everything under it, so where a workspace lives decides who can reach it. The page shows the whole hierarchy as one tree table, lets the admin select across levels and act on the selection (move, label, delete), and shows the role bindings and labels of the one resource selected. It is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header and the `main`.",
    "variants": [
     {
-     "name": "Selected",
-     "summary": "One workspace selected: the bulk actions are enabled, Clear selection shows, and the details panel lists its role bindings and labels."
+     "name": "Selected"
     },
     {
-     "name": "Empty",
-     "summary": "No resource yet: a flush EmptyState with Create workspace replaces the table; the toolbar stays with the bulk actions disabled."
+     "name": "Empty"
     },
     {
-     "name": "Loading",
-     "summary": "The first load: the table's loading rows under its headers."
+     "name": "Loading"
     },
     {
-     "name": "Failed",
-     "summary": "The hierarchy did not load: a danger Alert with Retry replaces the table; Retry loads it."
+     "name": "Failed"
     }
    ],
    "file": "catalog/patterns/platform/account/manage-resources.json"
@@ -28678,16 +28666,13 @@
    "guidelinesSummary": "Multi-factor authentication for a whole account. An admin sees who signs in with a second factor and who uses a password only, requires MFA for everyone, reminds the people who have not set it up, and resets the factor of someone who lost their device. Setting up a factor and the sign-in challenge are `platform/auth` (`MfaSetup`, `MfaChallenge`); this page manages them for other people. It is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header and the `main`.",
    "variants": [
     {
-     "name": "Required",
-     "summary": "MFA required for the account: the Switch on, no password-only warning; people without MFA still listed as Not set up until their next sign-in."
+     "name": "Required"
     },
     {
-     "name": "Loading",
-     "summary": "The first load: the Switch disabled and the table's loading rows."
+     "name": "Loading"
     },
     {
-     "name": "Failed",
-     "summary": "The MFA status did not load: a danger Alert with Retry replaces the table and the Switch is disabled."
+     "name": "Failed"
     }
    ],
    "file": "catalog/patterns/platform/account/mfa-management.json"
@@ -28787,12 +28772,10 @@
    "guidelinesSummary": "The `/signup/onboarding` screen, frame included. A new user has an account but no organization yet, and needs to create one with as few questions as possible: one step at a time in a card (organization, plan, profile), with a live wireframe beside it from `lg` showing the app the organization will open into, named and colored by what they type. It is a full page with its own focused header: the app routes it outside `ConsoleLayout`, never into the layout's default slot.",
    "variants": [
     {
-     "name": "Plan",
-     "summary": "Step 2 of 3: the three plans as full-width rows; Free selects directly, while Pro or Enterprise opens the upgrade drawer and only selects once Upgrade is pressed."
+     "name": "Plan"
     },
     {
-     "name": "Profile",
-     "summary": "Step 3 of 3: the usage and role questions, the onboarding-session switch and the Create Organization action."
+     "name": "Profile"
     }
    ],
    "file": "catalog/patterns/platform/account/onboarding-form.json"
@@ -28854,12 +28837,10 @@
    "guidelinesSummary": "The Payment method card of the Upgrade to Pro drawer. The user needs to confirm which card will be charged and, if needed, replace it without leaving the upgrade: the card on file shows as one row (brand plate, last four digits, Change), and Change swaps the row for the card form until Cancel or Update. The drawer disables it while the upgrade submits.",
    "variants": [
     {
-     "name": "Editing",
-     "summary": "After Change: cardholder, country, number, expiry and security code over the PCI notice, with Cancel and Update stacked below sm."
+     "name": "Editing"
     },
     {
-     "name": "Disabled",
-     "summary": "While the upgrade submits, the Change action is disabled."
+     "name": "Disabled"
     }
    ],
    "file": "catalog/patterns/platform/account/payment-method-card.json"
@@ -29026,24 +29007,19 @@
    "guidelinesSummary": "Who can do what in the account. An admin keeps one team per role (Administrators, Developers, Security, Finance), sees what each grants and how many people it covers, and creates or edits a team by ticking View and Edit per resource in one matrix. People get permissions only through teams; nothing is granted per person, so the list of teams is the whole access model. The list is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header and the `main`. Create Team and Edit Team are full pages in the creation frame instead (building block I).",
    "variants": [
     {
-     "name": "CreateTeam",
-     "summary": "The Create Team page in the creation frame (a `GlobalHeader` with Back to Teams and permissions, the brand and a breadcrumb; no rail): name and description, the View and Edit permission matrix grouped by area with group checkboxes, filter, Select all and Clear, a status Switch, and Cancel and Create in a centered SaveBar floating over the bottom of the form; errors on the name field and above the matrix."
+     "name": "CreateTeam"
     },
     {
-     "name": "EditTeam",
-     "summary": "The Edit Team page in the same creation frame: the CreateTeam form filled with a saved team, a Members section (Add member `Combobox` over the account's users with Add, each member with Remove), Delete team behind a `ConfirmDialog`, and a `SaveBar` that offers Discard and Save changes only once something changed."
+     "name": "EditTeam"
     },
     {
-     "name": "Empty",
-     "summary": "No team yet: the heading and a flush EmptyState with Create Team replace the controls row and the table."
+     "name": "Empty"
     },
     {
-     "name": "Loading",
-     "summary": "The first load: the controls row and the table's loading rows."
+     "name": "Loading"
     },
     {
-     "name": "Failed",
-     "summary": "The teams did not load: a danger Alert with Retry replaces the table; Retry loads them."
+     "name": "Failed"
     }
    ],
    "file": "catalog/patterns/platform/account/team-permissions.json"
@@ -29159,20 +29135,16 @@
    "guidelinesSummary": "The Personal tokens page of the account settings. A person creates a token for a script, a CI job or the CLI, copies its secret the one time it is shown, sees which tokens are still alive and when each expires or was last used, and revokes one that leaked or is no longer needed. The secret never comes back: the list shows only the name, status and dates, and a lost secret means a new token. It is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header and the `main`.",
    "variants": [
     {
-     "name": "Empty",
-     "summary": "No token yet: the heading stays and a flush card with an EmptyState and Create Personal Token replaces the controls row and the table."
+     "name": "Empty"
     },
     {
-     "name": "Loading",
-     "summary": "The first load: the controls row and the table shell with its loading rows, before the empty state can be decided."
+     "name": "Loading"
     },
     {
-     "name": "Failed",
-     "summary": "The list could not load: a danger Alert with Retry in place of the table; Retry loads the tokens."
+     "name": "Failed"
     },
     {
-     "name": "Created",
-     "summary": "Right after Create: the one-time reveal Dialog with the warning, the masked secret with show and copy, and a confirmation that the token was copied."
+     "name": "Created"
     }
    ],
    "file": "catalog/patterns/platform/account/tokens.json"
@@ -29294,24 +29266,19 @@
    "guidelinesSummary": "Who can sign in to the account, with which role and through which teams. An admin invites a teammate by email, chooses their teams, sees who has not accepted yet, resends or cancels an invitation, changes a person's role, moves a person between teams and removes people who left. The role decides what a person can do on the account itself (Admin manages people, teams and billing; Developer and Viewer do not); resource permissions come only from teams (`platform/account/team-permissions`), so this page never grants a single permission to a person. It is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header and the `main`.",
    "variants": [
     {
-     "name": "Invite",
-     "summary": "The Invite User drawer open over the list: Email and Teams (Developers preselected), Cancel and Send invitation; Send with an empty, malformed or existing email or no team shows the error on that field and focuses it."
+     "name": "Invite"
     },
     {
-     "name": "EditRole",
-     "summary": "The Edit role dialog open for Jordan Reyes: a role Select (Admin, Developer, Viewer) whose description says what the role allows, Cancel and Save role; saving changes the Role tag and raises a toast with Undo."
+     "name": "EditRole"
     },
     {
-     "name": "OnlyOwner",
-     "summary": "An account with only its owner: the owner's row, then a small EmptyState that invites the first teammate."
+     "name": "OnlyOwner"
     },
     {
-     "name": "Loading",
-     "summary": "The first load: the controls row and the table's loading rows."
+     "name": "Loading"
     },
     {
-     "name": "Failed",
-     "summary": "The users did not load: a danger Alert with Retry replaces the table; Retry loads them."
+     "name": "Failed"
     }
    ],
    "file": "catalog/patterns/platform/account/users.json"
@@ -29365,20 +29332,16 @@
    "guidelinesSummary": "The moment an assistant needs permission. The reader asked for something that changes their account — a deployment, a purge, a deletion — and the assistant stops before doing it: it says what it found, shows exactly what will run, and waits for Approve or Deny. The decision stays in the thread as text, and the assistant reports what happened next, so the conversation is also the record of what ran and who allowed it. It is a page body for `ConsoleLayout`: it fills the layout's content region (`grow basis-0 min-h-0`, never `h-dvh`), so only the log scrolls, and the layout owns the rail, the header and the `main`.",
    "variants": [
     {
-     "name": "Irreversible",
-     "summary": "The assistant proposes deleting a domain nobody uses: the card turns danger and Delete stays disabled until the reader types the domain name."
+     "name": "Irreversible"
     },
     {
-     "name": "Approved",
-     "summary": "After Deploy: the card reads Approved, the deployment call completed, and the assistant reports the new build is live with the previous one kept for rollback."
+     "name": "Approved"
     },
     {
-     "name": "Denied",
-     "summary": "After Deny: the card reads Denied, the deployment call is recorded as denied, and the assistant acknowledges that nothing was deployed."
+     "name": "Denied"
     },
     {
-     "name": "Expired",
-     "summary": "Nobody decided in time: the card reads Request expired and the assistant says nothing was deployed."
+     "name": "Expired"
     }
    ],
    "file": "catalog/patterns/platform/ai/ai-action-approval.json"
@@ -29470,20 +29433,16 @@
    "guidelinesSummary": "A full page where a person talks with the generative AI assistant about their account: they ask in their own words, watch the response arrive, check where it came from, and keep going with a follow-up or a new question. The page is the conversation; everything else (header, composer) stays still while only the log scrolls. Use it as the assistant's home; on a resource page, open the same conversation in a drawer with `platform/ai/ai-chat-drawer`. It is a page body for `ConsoleLayout`: it fills the layout's content region (`grow basis-0 min-h-0`, never `h-dvh`), so only the log scrolls, and the layout owns the rail, the header and the `main`.",
    "variants": [
     {
-     "name": "Streaming",
-     "summary": "A response arriving: the reader asked why storefront returns 502 errors and the answer streams in with its caret, a table on the way, the region busy and Stop in the composer; when it ends the sources, actions and follow-up questions appear."
+     "name": "Streaming"
     },
     {
-     "name": "Error",
-     "summary": "A response that failed mid-stream: the partial text stays, the error line says the connection was interrupted and Try again regenerates the response in place."
+     "name": "Error"
     },
     {
-     "name": "LongThread",
-     "summary": "Six earlier turns about one workload that overflow the log: it opens on the newest response, stops following when the reader scrolls up, and Scroll to the latest message brings them back; follow-up questions close the thread."
+     "name": "LongThread"
     },
     {
-     "name": "Artifact",
-     "summary": "An answer that produced a file: the message carries an `ArtifactPreview` of top-orders.sql and the `ArtifactCanvas` sits beside the conversation in a `Resizable` pane (a `Drawer` under the md breakpoint) with its versions, Copy, Download and Close; asking for a change streams a new version into the canvas, which locks its pager while it is written and then shows it."
+     "name": "Artifact"
     }
    ],
    "file": "catalog/patterns/platform/ai/ai-chat.json"
@@ -29567,16 +29526,13 @@
    "guidelinesSummary": "The generative AI assistant beside the work: the reader is on a resource page — here a workload whose error rate is up — and opens the assistant in a drawer to ask about what they see, without losing the page. The drawer carries the same conversation as the full assistant page, laid out for a narrow column: every message at the inline start, a shorter composer, and support prompts written about this resource. It is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header and the `main`.",
    "variants": [
     {
-     "name": "Streaming",
-     "summary": "The drawer open on a response streaming in about the 502 errors of the workload behind it, with the caret, Stop in the composer and the busy region."
+     "name": "Streaming"
     },
     {
-     "name": "Error",
-     "summary": "A response that failed mid-stream inside the drawer: the partial text, the error line and Try again."
+     "name": "Error"
     },
     {
-     "name": "LongThread",
-     "summary": "Six earlier turns about the workload in the narrow drawer: the log opens on the newest response and Scroll to the latest message returns after scrolling up."
+     "name": "LongThread"
     }
    ],
    "file": "catalog/patterns/platform/ai/ai-chat-drawer.json"
@@ -29704,48 +29660,37 @@
    "guidelinesSummary": "The signed-out screens of a platform app: sign in, sign up, reset password and check your inbox, frame included. The user has one job here, to get into their account, and one object on the page to do it with: a single card under the signed-out bar. Every step of the flow (`email`, `password`, `reset`, `sent`, `new-password`) swaps the contents of that card in place, and every answer the server gives, success included, lands in one `Alert` inside it. Auth never toasts. It is a full page with its own focused header: the app routes it outside `ConsoleLayout`, never into the layout's default slot.",
    "variants": [
     {
-     "name": "SignUp",
-     "summary": "The sign-up screen: create an account with a work email, Google or GitHub."
+     "name": "SignUp"
     },
     {
-     "name": "SessionExpired",
-     "summary": "The /login screen after a session expires: it opens on the password step for the same email, with an info Alert that clears on the next action."
+     "name": "SessionExpired"
     },
     {
-     "name": "ProvidersLoading",
-     "summary": "The /login screen while the identity providers load: two `Skeleton` bars in a `role=\"status\"` region named Preparing sign-in providers take the place of the Google and GitHub buttons; email sign-in works meanwhile."
+     "name": "ProvidersLoading"
     },
     {
-     "name": "CheckInbox",
-     "summary": "The /signup/verify screen: where the verification link went, the resend prompt, and a secondary Return to sign in action."
+     "name": "CheckInbox"
     },
     {
-     "name": "IncorrectCredentials",
-     "summary": "401 on Sign in: a danger message above both fields with no action, and the password cleared."
+     "name": "IncorrectCredentials"
     },
     {
-     "name": "ServiceUnavailable",
-     "summary": "503 on Sign in: a warning message that keeps the credentials and carries Retry, the only move left."
+     "name": "ServiceUnavailable"
     },
     {
-     "name": "ServerError",
-     "summary": "500 on the POST: tied to no field, so where the console would toast, the card keeps a danger message with Retry."
+     "name": "ServerError"
     },
     {
-     "name": "Timeout",
-     "summary": "No response: the same message as the 500 but warning, because the request may still have gone through, with Retry."
+     "name": "Timeout"
     },
     {
-     "name": "EmailAlreadyRegistered",
-     "summary": "409 on Sign up: a danger message carrying the two ways out as links, Sign in or reset your password, with the address left in the field."
+     "name": "EmailAlreadyRegistered"
     },
     {
-     "name": "MfaSetup",
-     "summary": "Turn on multi-factor authentication: steps, the QR code with a copyable setup key, and a 6-digit OtpInput that verifies on complete; wrong code on the field, no answer as a warning with Retry."
+     "name": "MfaSetup"
     },
     {
-     "name": "MfaCode",
-     "summary": "The sign-in MFA challenge: a 6-digit OtpInput, focused when the challenge opens, that submits when full, a recovery-code mode (8 characters, grouped), and Sign in with another account."
+     "name": "MfaCode"
     }
    ],
    "file": "catalog/patterns/platform/auth.json"
@@ -29814,12 +29759,10 @@
    "guidelinesSummary": "The Creation Center, where a new project starts. The user arrives from Home or a Create action with something to deploy and needs to pick its source in one look: a repository from their Git account, a template, or a file or folder from their machine. The page puts the two main sources side by side, Import from GitHub and Start from template, under one heading, and accepts a dropped folder anywhere.",
    "variants": [
     {
-     "name": "Connected",
-     "summary": "GitHub connected: jane-doe is the selected scope and its seven repositories are listed, most recently pushed first."
+     "name": "Connected"
     },
     {
-     "name": "LoadingRepositories",
-     "summary": "A scope just picked: six skeleton rows stand in for the repositories while they load."
+     "name": "LoadingRepositories"
     }
    ],
    "file": "catalog/patterns/platform/create/create-hub.json"
@@ -29993,40 +29936,31 @@
    "guidelinesSummary": "The right-side drawer that adds or edits something that only exists inside another resource: a domain, a DNS record, an environment, a variable, a rule. The user is working on the resource behind it and must keep it in view, so the form slides over the page instead of replacing it. They fill a few sections, press the one commit button and land back where they were, with the new item in the list. The drawer opens over a console page: ItemRows and NestedDrawer draw that page as a page body for `ConsoleLayout` (the layout owns the rail, the header and the `main`).",
    "variants": [
     {
-     "name": "AddEnvironment",
-     "summary": "The same form opened from Add Environment in the resource environment menu, titled and saved as Add Environment."
+     "name": "AddEnvironment"
     },
     {
-     "name": "EditDomain",
-     "summary": "Edit from a domain row menu: the drawer opens on www.example.com as a domain of its own, so the Certificate select shows with example.com wildcard and the footer saves the domain."
+     "name": "EditDomain"
     },
     {
-     "name": "AddRecord",
-     "summary": "Closed until Add Record opens it, here as a DNS zone renders it: Name with the zone as an addon, Record type, TTL, Value with the placeholder and helper of the selected type, and Description under Settings; Policy type under Policy, with Weight appearing only for the weighted policy. Save on an empty form flags Name and Value as required."
+     "name": "AddRecord"
     },
     {
-     "name": "ItemRows",
-     "summary": "An in-context add whose body is the settings layout: an Origins page inside the storefront resource whose heading action opens a large right-side drawer, and inside it section-titled groups of `Item` rows, each a small heading over a flush `Card`, saved together by the one Add Origin in the footer. An origin lives inside its resource, so it adds in a drawer; a first-level resource such as a service creates on a page instead. General, Connection and Options are the sections. The drawer clears its fields and errors each time it opens, so its content stays in place while it closes. Name and Protocol flag only after Add Origin is pressed. Built from `PageHeader`, `SettingRow`, `Button`, `Drawer` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter`, `Card`, `Item`, `Input`, `Select`, `Switch` and `HelperText`. The page is a page body for ConsoleLayout."
+     "name": "ItemRows"
     },
     {
-     "name": "NestedDrawer",
-     "summary": "A create drawer whose select needs another item of the same resource that may not exist yet: the Rules Engine page of the storefront resource opens a large Add Rule drawer, and the Create Origin option pinned to the foot of its Origin select opens a second, medium drawer stacked above it on raised layers. Rule and origin both live inside the resource, so both create in drawers; a first-level resource such as a service is never created this way, it creates on a page. Saving the child adds the new origin and selects it back into the rule. Each drawer is its own scoped save, and each clears its fields and errors when it opens, so its content stays in place while it closes. Built from `PageHeader`, `SettingRow`, `Button`, `Drawer` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter`, `Card`, `Item`, `Input`, `Select` and `HelperText`. The page is a page body for ConsoleLayout."
+     "name": "NestedDrawer"
     },
     {
-     "name": "DeploymentSettings",
-     "summary": "The drawer that creates a Deployment Setting, opened from the Create Deployment Settings heading action of a Build and deployment settings panel. A form drawer with the title and its description, a General section with the required Name, an optional Description and the Active switch, and a Routing and policy section with the Strict or Flexible binding policy, the Single or Versioned deployment version policy and the Share across services switch, then a submit footer. The form resets every time the drawer opens, never on close, and Name only reads as required once the form is submitted empty. Built from `SettingsSection`, `Drawer`, the `Panel` parts, `Field` with `Input`, `Textarea`, `RadioButton` and `Switch` choice cards, `Field.Legend`, `HelperText`, `Hint` and `Button`."
+     "name": "DeploymentSettings"
     },
     {
-     "name": "Certificate",
-     "summary": "Create Certificate: a Server certificate or Trusted CA `ToggleGroup`, a PEM `Textarea` with Upload file, a details panel read from the pasted certificate (issued to, issued by, valid from, and the expiry with a `StatusIndicator` that warns within 30 days and blocks an expired one) and, for a server certificate, the private key; opened with a sample certificate pasted and the key empty."
+     "name": "Certificate"
     },
     {
-     "name": "CreateEnvironment",
-     "summary": "Create Environment: Name, Description, a Deployment policy and a Robots policy Select whose helpers say what each choice does, an IP allowlist Switch that reveals a Textarea of IPv4 addresses and CIDR ranges checked on submit, and a Branch tracking Switch that reveals the match Mode and the Branch match. It opens on its own at medium size, or stacked at small size above Add Domain from the Environment select's Create Environment option, and the new environment comes back selected."
+     "name": "CreateEnvironment"
     },
     {
-     "name": "FunctionInstance",
-     "summary": "Add or edit a function instance from a resource's instance list: a Function Select and a Name, then the function's arguments as a `SchemaForm` built from the schema it declares, with a Fields or JSON `ToggleGroup`; the JSON view is a `CodeEditor` whose edits update the fields and whose parse errors show as markers. Required arguments show their messages only after submit, and changing the function clears the arguments."
+     "name": "FunctionInstance"
     }
    ],
    "file": "catalog/patterns/platform/create/create-in-drawer.json"
@@ -30121,36 +30055,28 @@
    "guidelinesSummary": "The drawer a platform deploys from, opened by Deploy on a service or a project. The user is about to put a version into traffic and needs to confirm exactly what goes out (each resource and dependency at a version), where it goes (a project and one of its environments) and what else it reaches (every project that shares the environment's Deployment Settings). One Deploy at the foot commits all of it.",
    "variants": [
     {
-     "name": "Building",
-     "summary": "Deploy without a pinned version: the drawer opens as Build and deployment, a Building row with the new version and its elapsed seconds stands in for the Resources card, and the Project, Environment and Projects impacted sections stay faded and inert, with Deploy disabled, until the build lands."
+     "name": "Building"
     },
     {
-     "name": "ServiceProjectFirst",
-     "summary": "The project-first flow: the same Resources card, a Project card with the last used project, its domain and a Change popover of the projects serving the service, then every environment as a radio block."
+     "name": "ServiceProjectFirst"
     },
     {
-     "name": "Project",
-     "summary": "Deploy on a project: the Resources card with the service it serves and its dependencies, then its storage, which is not versioned; Production and Preview below, with a warning that shared-storefront also publishes to project-05 and project-09."
+     "name": "Project"
     },
     {
-     "name": "Environment",
-     "summary": "The environment decision at its edges: Staging is locked by Strict Deployment Settings (a disabled choice card with a Strict tag and the reason), Preview is tagged Also deploys because Production's shared settings reach it, an info Alert says the deploy replaces legacy-web on the chosen project and a warning Alert says it goes live in two environments at once. Projects impacted are grouped per environment with a heading and a count, and switching environment reloads them with Skeleton rows, aria-busy and a status line. Deploy closes the drawer and reports through one toast that turns from Deploying… into the outcome with Edit and Redeploy."
+     "name": "Environment"
     },
     {
-     "name": "Dependencies",
-     "summary": "The Dependencies disclosure open: each module and integration with its own version and Change version menu, auth-gateway tagged Shared with a Tooltip naming the services that also reference it and one info Alert saying a shared dependency deploys at one version, payments-api not versioned (a note instead of the menu), and geo-redirect with no ready version, which disables Deploy with the reason in the footer. Changing the service version reloads the dependencies with Skeleton rows, aria-busy and a status line; a second resource that references nothing says so. The first run fails and its toast carries Edit and Redeploy; Redeploy succeeds."
+     "name": "Dependencies"
     },
     {
-     "name": "Loading",
-     "summary": "The drawer resolving what it deploys: Skeleton blocks stand in for the Resources card and the two environment choice cards under their real section titles, the region is aria-busy with one status line, and Deploy stays disabled until they land."
+     "name": "Loading"
     },
     {
-     "name": "LoadFailed",
-     "summary": "The deploy targets could not be loaded: a danger Alert says so in place of the sections, with an outlined Retry that reloads them as Skeletons; Deploy stays disabled."
+     "name": "LoadFailed"
     },
     {
-     "name": "NoEnvironment",
-     "summary": "A project with nothing bound and no environment: the Resources card says nothing is bound yet, the Environment section is a bordered EmptyState with Add environment, and Deploy is disabled with the reason beside it in the footer."
+     "name": "NoEnvironment"
     }
    ],
    "file": "catalog/patterns/platform/create/deploy-drawer.json"
@@ -30218,16 +30144,13 @@
    "guidelinesSummary": "The modal progress of one deploy that activates several Deployment Settings, each on its own, and the drop-to-deploy confirm that starts it. The user dropped a folder (or started a deploy whose environment publishes through several Deployment Settings) and wants to see each one activate, know which failed and why, and retry only those. The page behind the dialog is a page body for `ConsoleLayout` (the layout owns the rail, the header and the `main`); the dialog teleports over it. **The toast stays the standard.** Every deploy reports through one toast with Edit and Redeploy (`platform/states/async-submit`). This dialog is only for the drop-to-deploy path and for a deploy that fans out to several Deployment Settings; even there the outcome still reaches the user through the toast, so they can close the dialog and leave.",
    "variants": [
     {
-     "name": "Drop",
-     "summary": "The drop-to-deploy confirm: New production deployment, the service with a Production `Tag`, what the files replace, and the dropped folder with its file count, total size and a scrollable list of paths with sizes formatted by `Intl.NumberFormat`. Cancel closes; Deploy to Production opens the progress dialog and starts the run."
+     "name": "Drop"
     },
     {
-     "name": "PartialFailure",
-     "summary": "Settled with one failure: Deployed 4 of 5 Deployment Settings with a warning `OutcomeMark`, staging-settings marked Failed with the reason, Retry failed beside Close, and an error toast with Edit (reopens the dialog on the failed rows) and Redeploy."
+     "name": "PartialFailure"
     },
     {
-     "name": "Succeeded",
-     "summary": "Every Deployment Setting deployed: a large animated success `OutcomeMark` beside Deployed 5 Deployment Settings, every row Done, Close enabled, and a success toast with Edit and Redeploy."
+     "name": "Succeeded"
     }
    ],
    "file": "catalog/patterns/platform/create/deploy-progress-dialog.json"
@@ -30278,8 +30201,7 @@
    "guidelinesSummary": "The screen a create flow ends on. The user has just watched a deploy finish and needs three answers before leaving: is it live and where, what exactly was created or bound along the way, and what to do next. The page answers them in that order in the terminal column of the wizard, then offers one way out to manage the resource.",
    "variants": [
     {
-     "name": "CliCreated",
-     "summary": "A resource made from the CLI that nothing serves yet: no deployment card, the resource as the only row, next steps that deploy it here (Recommended) or on a new service, and Get started with the CLI and GitHub Actions paths."
+     "name": "CliCreated"
     }
    ],
    "file": "catalog/patterns/platform/create/deploy-success.json"
@@ -30362,24 +30284,19 @@
    "guidelinesSummary": "A focused page, outside the console shell, where the user turns a template into a running project. They chose a template in the Creation Center and now need to see what it clones, connect a Git provider if they have none, name the repository it creates, fill the settings the template requires and deploy. The same column then shows the build and the outcome, so the user never leaves the page.",
    "variants": [
     {
-     "name": "Form",
-     "summary": "GitHub connected: the riley-carter scope and the nuxt-ecommerce repository name, public by default, over the store domain setting, then two collapsible groups in bordered frames: Build and output settings (root directory and install command, filled with their defaults) and Environment variables, open because the access token is required, each variable a locked Key row over a Value row with a show or hide control and a locked Secret checkbox. Deploy checks the form and shows each missing required value under its field, opening the group that holds it."
+     "name": "Form"
     },
     {
-     "name": "BuildSettings",
-     "summary": "Deploy was pressed with the access token empty: both groups open, Build and output settings led by a Build preset `Select` on the detected Nuxt preset with its helper, and the required NUXT_STORE_ACCESS_TOKEN value showing its error."
+     "name": "BuildSettings"
     },
     {
-     "name": "LoadingSettings",
-     "summary": "The template settings are still loading: scope and repository name are ready, three `Skeleton` field bands stand in for the settings in an `aria-busy` region with a status line, and Deploy is disabled."
+     "name": "LoadingSettings"
     },
     {
-     "name": "ImportFromGit",
-     "summary": "Reached from Import from Git: the crumb and preview card name the acme-web repository it imports from GitHub, the form keeps the scope and repository name and trims the settings to one collapsed Build and output settings group with the detected Vite preset; no template settings, no variables."
+     "name": "ImportFromGit"
     },
     {
-     "name": "Upload",
-     "summary": "Reached from a dropped folder: no Git and no repository, the project name and an empty Build preset `Select` side by side, then Project files, a card with the folder summary and a scrollable list of every file with its glyph, monospace path and size, and, because the static project has no index.html, a required Root (/) `Select` of the top-level files; Deploy waits for it."
+     "name": "Upload"
     }
    ],
    "file": "catalog/patterns/platform/create/deploy-template.json"
@@ -30435,16 +30352,13 @@
    "guidelinesSummary": "The card a create flow hands its column to once the user has pressed Deploy. The user waits here for the first deploy of what they just made: they need to know that it started, what it is doing now, how far it has gone and, if it stops, which step failed and why. The card opens on a cloning splash, then streams the pipeline steps with their logs, and either hands over to the success screen or stays open on the failure.",
    "variants": [
     {
-     "name": "Running",
-     "summary": "Mid-stream: two steps checked with their times, Install dependencies spinning and open on the lines printed so far, the step count in the Logs row and the progress bar on the bottom edge."
+     "name": "Running"
     },
     {
-     "name": "Finished",
-     "summary": "The last line has printed: every step checked and collapsed, a Completed Tag in the Logs row and the progress bar retired, a beat before the flow hands over to its success screen."
+     "name": "Finished"
     },
     {
-     "name": "Failed",
-     "summary": "The routing rules were rejected: that step is open on its error output with a Failed Tag, the steps behind it read Skipped, and the header swaps the status for the Phased or Complete switch."
+     "name": "Failed"
     }
    ],
    "file": "catalog/patterns/platform/create/deployment-flow.json"
@@ -30537,16 +30451,13 @@
    "guidelinesSummary": "The page a first-level resource is created on one step at a time. The user first says where the resource runs, then answers each step's fields in order, and only reaches the create action on the last step. A rail on the left shows how far they are and lets them return to any step already reached; if the host they chose lacks a module the resource needs, a step is inserted that offers to turn it on, so nothing is created that would silently never be read.",
    "variants": [
     {
-     "name": "ModuleOff",
-     "summary": "acme-staging was chosen with IP filtering off, so an IP filtering step follows Where it runs: a warning Alert, the Switch choice card that turns the module on with the list, and a note on what leaving it off means."
+     "name": "ModuleOff"
     },
     {
-     "name": "ListSettings",
-     "summary": "The last step of a list bound to acme-production: the Type as wide RadioButton choice cards and the List Textarea whose label, placeholder and guidance follow the type, with Back and Create access list in the footer. Leaving the list empty flags it and marks the step red on the rail."
+     "name": "ListSettings"
     },
     {
-     "name": "Review",
-     "summary": "The Review step that closes the create, after List settings: three bands under small `SectionHeader`s. Where it runs is one `Alert` (success when the policy is ready, warning when it is unbound or its module stays off) with Edit back to the chooser; What gets created lists each value beside the property it is sent as, the entries as `Tag`s with a count and and N more, with Edit back to List settings; What can reference it lists the consumers and the field that carries the reference. Create Access List shows its loading state and the result arrives as a toast; a value that fails on create sends the user back to its step, marked red on the rail."
+     "name": "Review"
     }
    ],
    "file": "catalog/patterns/platform/create/multipage-create.json"
@@ -30630,12 +30541,10 @@
    "guidelinesSummary": "The two-step wizard that provisions a resource bound to another and puts it into traffic. The user first binds the project the service serves, reusing one from a paged list or creating it right there with its cache and origin, then sets the domain traffic arrives on, the environment and certificate, and the deployment the first release is cut against. The address is previewed as they type, the defaults sit under Advanced, and the last button says it both creates and deploys, so the cost of pressing it is never a surprise.",
    "variants": [
     {
-     "name": "NewProject",
-     "summary": "New project: the Name field replaces the list and the project is configured in place, with the Cache Settings switches and the Add an origin switch, each opening its own fields."
+     "name": "NewProject"
     },
     {
-     "name": "DomainAndDeployment",
-     "summary": "The second step with web-app bound: the read-back row with Change, the Domain card on a free platform domain previewing https://my-first-app.example.com, Environment and certificate, the Deployment card creating one, the collapsed Advanced section, and Back plus Create and deploy."
+     "name": "DomainAndDeployment"
     }
    ],
    "file": "catalog/patterns/platform/create/provision-wizard.json"
@@ -30705,24 +30614,19 @@
    "guidelinesSummary": "The Review and deploy page of a release that carries several resources at once: a service, the policy in front of it, its storage, its error page and every dependency they reference. The user is about to put all of it into traffic and needs to see, before deploying, which version of each resource goes out, which dependencies go with it, and every Deployment Setting, environment and project the release reaches. One Deploy release at the foot commits it, after one confirmation.",
    "variants": [
     {
-     "name": "ChooseSettings",
-     "summary": "The step before Review and deploy that picks the Deployment Settings the release deploys with: a search over every setting, the count selected with Select all and Clear, then Field checkbox choice cards grouped as Your Deployment Settings and Managed, each with its policy line, a Shared or Managed `Tag`, up to three environment `Tag`s and a +N `Tag` whose `Tooltip` names the rest, and the workloads it affects (a `Skeleton` while that count loads). An inactive setting sits in its own group as a dashed note with the link that activates it, a search with no match offers Clear search, and Continue stays disabled until one setting is selected."
+     "name": "ChooseSettings"
     },
     {
-     "name": "Loading",
-     "summary": "The impact is being computed: the Impact card shows Computing impact… with a `Spinner` and three `Skeleton` lines, is `aria-busy`, announces it through a status line, hides the view switch and the summary, and the footer says Computing impact… beside Deploy release."
+     "name": "Loading"
     },
     {
-     "name": "Unavailable",
-     "summary": "The projects behind the Deployment Settings could not be read: a warning `Alert` says the impact is unknown and that the release can still deploy, the count of settings selected and Retry. Retry computes again and lands on a truncated list, shown with its own warning above the tree."
+     "name": "Unavailable"
     },
     {
-     "name": "MissingVersion",
-     "summary": "edge-policy has no Ready version: its version `Select` is disabled and invalid with the reason under it, Build a version links to its versions, and Deploy release stays disabled with the reason in the footer. Switching edge-policy off the release clears the blocker."
+     "name": "MissingVersion"
     },
     {
-     "name": "Failed",
-     "summary": "The last run failed: the error toast and the danger `Alert` at the top say edge-policy was refused and nothing changed in traffic, each with Edit (back to the resources) and Redeploy. Redeploy runs again through the same toast and succeeds."
+     "name": "Failed"
     }
    ],
    "file": "catalog/patterns/platform/create/release-impact.json"
@@ -30783,20 +30687,16 @@
    "guidelinesSummary": "The band a create flow uses when the resource being created needs another resource that may already exist. The user either reuses one of theirs or makes a new one on the spot, and answers it in one place: an Existing / New choice, then a searchable, paged list of what exists or the few fields that create a new one. The chosen row is marked, every search and load is announced, and a missing answer is flagged above the list where it is seen first. When the binding itself is optional (a firewall in front of a project), the same band sits behind an opt-in switch row and unfolds in place when it is turned on.",
    "variants": [
     {
-     "name": "New",
-     "summary": "New project: the list gives way to a Name field with the allowed characters as helper text. It only reads as required once Next is pressed with it empty."
+     "name": "New"
     },
     {
-     "name": "Loading",
-     "summary": "Loading the next page: five skeleton rows with staggered wire widths follow the visible projects while the load button spins."
+     "name": "Loading"
     },
     {
-     "name": "Required",
-     "summary": "Next pressed with no project selected: the required message sits under the search, above the list."
+     "name": "Required"
     },
     {
-     "name": "OptionalBinding",
-     "summary": "An opt-in binding: a Protect with a firewall switch row, turned on, unfolds the Existing / New choice; New firewall shows the Name prefilled from the project and the Firewall modules switches, DDoS Protection disabled and always on with a tooltip that says why."
+     "name": "OptionalBinding"
     }
    ],
    "file": "catalog/patterns/platform/create/resource-picker.json"
@@ -30911,32 +30811,25 @@
    "guidelinesSummary": "The page a first-level resource is created on when everything it needs fits on one screen. The user arrives from the module's `Create <Object>` button, answers the required fields at the top, leaves the defaulted ones folded under Advanced, and commits from a bar that never scrolls away. The page has its own URL, its own creation header and no sidebar, so it survives a reload and the back button, and leaving it returns to the list.",
    "variants": [
     {
-     "name": "CreateZone",
-     "summary": "Create Zone after importing a zone file: Import sits in the bar's leading slot (pasting a zone file into Domain name does the same), Name and Domain name take the zone origin, and a Records section lists each imported record with its type Tag, value and TTL, a Remove per row and a Discard import action in the card footer. The SOA and the nameservers are never imported; each import, failure and discard confirms in a toast."
+     "name": "CreateZone"
     },
     {
-     "name": "CreateOrganization",
-     "summary": "Create Organization: General with Name and a Mark picked from seven RadioCards colors, each a marble Avatar seeded by the name, and an In the header preview that follows the name and the color; an Owner row with the signed-in user's Avatar and Owner and Active Tags; First workspace with its name prefilled; and a collapsed Advanced section of Selects. A name already in use is invalid on submit; Create Organization shows its loading state and confirms in a success toast, and a failed request raises an error toast with Retry."
+     "name": "CreateOrganization"
     },
     {
-     "name": "CreatePurge",
-     "summary": "Create Purge: a Target section of wide rows choosing the Layer and the Purge type with RadioButton choice cards, an Arguments section whose code-font Textarea follows the chosen type, a warning Alert, and a bar with only Cancel and Purge. Choosing Tiered Cache leaves Cache Key as the only allowed type."
+     "name": "CreatePurge"
     },
     {
-     "name": "CreateService",
-     "summary": "A long create, Create Service, in five groups of Item rows (General, Delivery settings, Origins, Cache expiration policies and Debug rules) under the centred commit card with Cancel and Save: Name and Address empty, HTTP port 80 preselected, HTTPS ports disabled until a protocol with HTTPS is chosen, and the host header prefilled with ${host}."
+     "name": "CreateService"
     },
     {
-     "name": "RequiredFields",
-     "summary": "Create Service after Save on the empty form: Name and Address carry the required state with This field is required. under them, and typing into either clears its own error."
+     "name": "RequiredFields"
     },
     {
-     "name": "ImportFromGit",
-     "summary": "Standalone field stacks in one column, as a page body for ConsoleLayout: a page heading, then the Git scope and repository side by side and sections of field stacks under plain headings, ending with an acknowledgement checkbox and a single Deploy button at the end of the column, with no sticky footer. Import from Git is the example: Template settings, Deployment, Build and Runtime, Notifications and Alerts, Delivery features. Every required field flags only after Deploy is pressed, through the field’s own required state and helper text. Built from `PageHeader`, `Select`, `Field` (with its `FieldLabel`, `FieldDescription`, `FieldContent`, `FieldTitle` and `FieldLegend` parts and choice cards), `Input`, `InputGroup`, `RadioButton`, `MultiSelect`, `PasswordInput`, `Textarea`, `PhoneInput`, `Switch`, `Checkbox`, `HelperText` and `Button`."
+     "name": "ImportFromGit"
     },
     {
-     "name": "ImportFromGitSubmitted",
-     "summary": "After Deploy on the untouched form: the access token, deployment type, build command, deploy key, on-call number and the acknowledgement each show their required state and message."
+     "name": "ImportFromGitSubmitted"
     }
    ],
    "file": "catalog/patterns/platform/create/single-page-create.json"
@@ -31044,28 +30937,22 @@
    "guidelinesSummary": "The wizard that starts a resource from code and deploys it. The user first says which service the project deploys to (an existing one, a new one created inline, or none yet), then picks how the code arrives: import from Git, sync from the CLI or start from a template. The method they pick declares the steps that follow on the rail: Import from Git asks for a repository, the CLI goes straight to configuring, and a template asks for the template, then the repository it is cloned into (or, for an integration template, its settings and a preview of what gets added). The last step names the project, its domain, its build commands, an optional firewall and the advanced modules, and the flow ends on the provisioning log and the success screen. Steps answered by a click carry no Next, so the user moves as fast as they decide.",
    "variants": [
     {
-     "name": "Method",
-     "summary": "service-01 chosen: the page heading appears over How do you want to start?, a flush card of the three methods with a chevron each, and only Back in the footer, since picking a method is the answer."
+     "name": "Method"
     },
     {
-     "name": "GitSource",
-     "summary": "Import from Git with the account connected: an account Select and a search over the repository list, each row with its framework mark and when it was updated, and only Back in the footer, since picking a repository answers the step."
+     "name": "GitSource"
     },
     {
-     "name": "TemplateSource",
-     "summary": "Start from a template: a PropertyFilter (search, Type, Use case) over the templates grouped under sticky Official, Community and Frameworks headings, the first three frameworks tagged Featured; picking one answers the step."
+     "name": "TemplateSource"
     },
     {
-     "name": "Repository",
-     "summary": "Next.js Commerce chosen: New repository or Existing repository, the Account select, the repository name prefilled with a privacy switch in a tooltip, and Back plus Next, which shows the required message when the name is empty."
+     "name": "Repository"
     },
     {
-     "name": "Configure",
-     "summary": "storefront-checkout imported: the read-back row with Change, Name prefilled, Domain with its info alert, the build and deploy commands Accordion that tags an edited command, the firewall switch off, Advanced collapsed, and Back plus Create and deploy."
+     "name": "Configure"
     },
     {
-     "name": "Install",
-     "summary": "The Origin Proxy integration chosen: the read-back row, its settings with the required Origin address, What gets added previewing the origin and the request-phase rule on service-01, and Back plus Add to service-01."
+     "name": "Install"
     }
    ],
    "file": "catalog/patterns/platform/create/source-wizard.json"
@@ -31132,16 +31019,13 @@
    "guidelinesSummary": "The page an operator opens to answer \"what did these actors ask for, and what did the rules decide?\". It counts every request by its outcome (allowed, blocked, held, approved, denied, over budget), shows how those outcomes moved over time, breaks them down by actor, category and destination, and ends in the request log, where each row names the rule that decided it. Every region reads the same filters, so narrowing the time range or the actor moves the whole page at once. This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`.",
    "variants": [
     {
-     "name": "Loading",
-     "summary": "While the time range loads, the tiles, the chart and the breakdowns render their own Skeleton and the log holds Skeleton rows, so the page does not reflow when data arrives."
+     "name": "Loading"
     },
     {
-     "name": "Empty",
-     "summary": "A time range with no request. The tiles show a dash with no delta, the chart and the breakdowns keep their box with an empty state, and the log says what fills it and to widen the time range."
+     "name": "Empty"
     },
     {
-     "name": "Failed",
-     "summary": "The request for the period failed: the tiles read as dashes, and every card keeps its header with a danger Alert that names what did not load and offers Retry."
+     "name": "Failed"
     }
    ],
    "file": "catalog/patterns/platform/dashboard/activity-outcomes-dashboard.json"
@@ -31206,16 +31090,13 @@
    "guidelinesSummary": "The page a security or operations lead opens to triage: what is open, how severe it is, what kind of alert it is and which entities are involved. It leads with the open counts, shows how many alerts were raised each day by severity, and ends in the open alerts table, ordered from critical to info, where the reader picks what to work on next. Severity reads on one scale everywhere: tiles, chart, tags and tables. This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`.",
    "variants": [
     {
-     "name": "Loading",
-     "summary": "While the period loads, the tiles, the chart, the bar list and both tables render their own Skeleton, and Open by severity holds Skeleton rows, so nothing reflows when data arrives."
+     "name": "Loading"
     },
     {
-     "name": "Empty",
-     "summary": "A period with no alerts. The tiles show a dash with no delta, and every region keeps its box with an EmptyState that says why it is empty and what to do next."
+     "name": "Empty"
     },
     {
-     "name": "Failed",
-     "summary": "The request for the period failed: the tiles read as dashes, and every card keeps its header with a danger Alert that names what did not load and offers Retry."
+     "name": "Failed"
     }
    ],
    "file": "catalog/patterns/platform/dashboard/alerts-dashboard.json"
@@ -31328,28 +31209,22 @@
    "guidelinesSummary": "The page a developer or operator opens to see how much traffic their services handled and how well they handled it: requests, data transferred, success rate and server errors for the period, then the charts and the table that explain those totals. Every tile, chart and the table read the same period, so one change of range moves every region together. It is the reference grammar for the other dashboards: KPI row first, a 12-column grid of `ChartCard`s below, one shared card header. This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`.",
    "variants": [
     {
-     "name": "Loading",
-     "summary": "While the first response loads, every tile, chart and the table hold their place with a Skeleton, so the grid does not reflow when data arrives."
+     "name": "Loading"
     },
     {
-     "name": "Empty",
-     "summary": "No traffic in the period. The tiles show a dash with no delta or trend, and each card keeps its box with an EmptyState that says nothing was recorded."
+     "name": "Empty"
     },
     {
-     "name": "Failed",
-     "summary": "The request for the period failed: the tiles read as dashes, and every card keeps its header with a danger Alert that names what did not load and offers Retry."
+     "name": "Failed"
     },
     {
-     "name": "Metrics",
-     "summary": "Real-time metrics per product: a PageTabs strip switches between Applications, Functions, Firewall, DNS and Data stream, and a Period Select in the page header (Last hour, Last 24 hours, Last 7 days, Last 30 days) drives every region. Each product shows its own four StatTiles with sparkline and change against the previous period, over four ChartCards of area, line or stacked bar Charts that share one crosshair. Products with more than one dashboard add a ToggleGroup under the tabs: Applications switches between Overview, Status codes (the status card over a status and upstream status table with search and an All, 2xx, 3xx, 4xx, 5xx status-class filter) and Request breakdown (an IP address table with search); Firewall adds Denied sources. Every card menu copies its GraphQL query and exports its rows as CSV."
+     "name": "Metrics"
     },
     {
-     "name": "Expanded",
-     "summary": "The Requests over time card opened from its Expand button: a large Dialog with the card title and its description, the Line or Bar ToggleGroup shared with the card, and the chart at a 420px plot (the table card opens with ten rows per page). Closing it returns focus to Expand. Every card's menu works: Copy query copies the card's GraphQL query and Export CSV downloads its rows, each confirmed by a toast."
+     "name": "Expanded"
     },
     {
-     "name": "MetricsOverview",
-     "summary": "The real-time metrics landing page across products: a Period Select and a Refresh button in the page header, six StatTiles (requests, data transferred, cache offload, status 5xx, requests denied, function invocations) with sparkline and change, and six highlight ChartCards from Applications, Firewall and Functions. Each card keeps the full header (Sum Tag, Line or Bar ToggleGroup, Expand into a large Dialog, Copy query and Export CSV) and ends in a footer Link to its product dashboard (Open Applications dashboard)."
+     "name": "MetricsOverview"
     }
    ],
    "file": "catalog/patterns/platform/dashboard/analytics-dashboard.json"
@@ -31417,16 +31292,13 @@
    "guidelinesSummary": "The page that answers \"what is this total made of, and how did the mix move?\". The block's example is the organization's monthly spend: the total and its three largest categories first, then the mix over 12 months, the current month's split, and the resources that drive it, ranked. The same shape fits any total that breaks down into exclusive parts (storage by type, requests by product, seats by team). This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`.",
    "variants": [
     {
-     "name": "Loading",
-     "summary": "While the first response loads, every tile, both charts and the table hold their place with a Skeleton, so the grid does not reflow when data arrives."
+     "name": "Loading"
     },
     {
-     "name": "Empty",
-     "summary": "Nothing was billed in the selected period. The tiles show a dash with no delta or trend, and the stacked chart, the donut and the table each keep their box with an EmptyState that names the reason."
+     "name": "Empty"
     },
     {
-     "name": "Failed",
-     "summary": "The request for the period failed: the tiles read as dashes, and every card keeps its header with a danger Alert that names what did not load and offers Retry."
+     "name": "Failed"
     }
    ],
    "file": "catalog/patterns/platform/dashboard/composition-dashboard.json"
@@ -31483,20 +31355,16 @@
    "guidelinesSummary": "A dashboard the reader arranges: they move cards, change how many columns a card spans and how tall it is, and keep that layout. It serves readers who come back to the same page every day and care about different cards than the default puts first. The page owns the layout (an array of id, span and height, in order) and binds it to `Board`, which moves, resizes, clamps and announces; the `ChartCard` inside each `Board.Item` provides the drag handle and the resize corner. This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`.",
    "variants": [
     {
-     "name": "Editing",
-     "summary": "Edit mode. Drag a card by its handle onto another to swap their order, or drag its corner to change the span and the height. Focus the handle and use the arrow keys to move a card, or focus the corner and use Left and Right for the span, Up and Down for the height."
+     "name": "Editing"
     },
     {
-     "name": "Loading",
-     "summary": "While the data loads, every chart renders its own Skeleton inside its card, so the layout holds its shape."
+     "name": "Loading"
     },
     {
-     "name": "Empty",
-     "summary": "Nothing recorded yet. Each card keeps its place and size and shows its empty state, so the reader can still arrange the dashboard before any data arrives."
+     "name": "Empty"
     },
     {
-     "name": "Failed",
-     "summary": "The request for the cards failed: every card keeps its place, size and header, with a danger Alert that names the card that did not load and offers Retry."
+     "name": "Failed"
     }
    ],
    "file": "catalog/patterns/platform/dashboard/configurable-dashboard.json"
@@ -31565,12 +31433,10 @@
    "guidelinesSummary": "The dashboards hub. The reader comes here to look at one of several prepared views of the account (traffic, usage, edge health, threats, business figures, or a layout of their own) without hunting for each page in the navigation. One control picks the dashboard, one shared period scopes it, and the body under them is the chosen dashboard. Switching keeps the period, so comparing traffic and threats over the same 7 days is two clicks. This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`.",
    "variants": [
     {
-     "name": "OwnPeriod",
-     "summary": "Executive summary chosen: a dashboard that owns its period, so the shared Filter and its Period chip are hidden and a quarter `ToggleGroup` takes their place in the controls row; the tiles compare against the previous quarter and the chart runs week by week."
+     "name": "OwnPeriod"
     },
     {
-     "name": "Loading",
-     "summary": "The body of the chosen dashboard while it loads: the controls stay usable, the tiles, the chart and the ranked list render their own Skeleton in their final boxes, so nothing reflows when the data arrives."
+     "name": "Loading"
     }
    ],
    "file": "catalog/patterns/platform/dashboard/dashboard-switcher.json"
@@ -31594,7 +31460,6 @@
     "painel de uso",
     "real user monitoring",
     "rum",
-    "web vitals",
     "core web vitals",
     "monitoramento de usuário real"
    ],
@@ -31663,20 +31528,16 @@
    "guidelinesSummary": "The usage page: how much the account's projects consumed in the period, how that compares with the previous period, and which projects drove it. It leads with six KPI tiles (each with a sparkline and the change against the previous 24 hours), then explains the headline number with this period against the previous one, a ranking of projects and a table of usage per project. This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`.",
    "variants": [
     {
-     "name": "Loading",
-     "summary": "The first response is on its way: Skeletons hold every tile, chart and table row in place."
+     "name": "Loading"
     },
     {
-     "name": "Empty",
-     "summary": "No usage recorded yet: each tile shows a dash, and every chart and the table explain that nothing was recorded in the period."
+     "name": "Empty"
     },
     {
-     "name": "Failed",
-     "summary": "The request for the period failed: the tiles read as dashes, and every card keeps its header with a danger Alert that names what did not load and offers Retry."
+     "name": "Failed"
     },
     {
-     "name": "RealUser",
-     "summary": "Real-user monitoring: a Period Select in the header drives four vitals StatTiles (page load time, largest contentful paint, first input delay, sessions) that read a median value beside its unit with no delta and a Hint on the label, over a two-column grid of trend StatTiles with the latest value, a sparkline of the period and the period name in the aside."
+     "name": "RealUser"
     }
    ],
    "file": "catalog/patterns/platform/dashboard/data-dashboard.json"
@@ -31741,16 +31602,13 @@
    "guidelinesSummary": "The one page a lead reads to see how the quarter went: the headline results against last quarter, the twelve-month trend behind each one, progress on the quarter's goals and the notes the leads wrote when they reviewed it. It favours a few numbers read in seconds over detail; every figure links back to its own dashboard for the breakdown. This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`.",
    "variants": [
     {
-     "name": "Loading",
-     "summary": "While the quarter loads, the tiles and charts render their own Skeleton and the goals and commentary hold Skeleton rows, so the page does not reflow when data arrives."
+     "name": "Loading"
     },
     {
-     "name": "Empty",
-     "summary": "A quarter with nothing reported. The tiles show a dash with no delta, every trend card keeps its box with an EmptyState that names the quarter and points to a later one, and the goals and commentary each say what fills them."
+     "name": "Empty"
     },
     {
-     "name": "Failed",
-     "summary": "The request for the quarter failed: the tiles read as dashes, and every trend card, the goals and the commentary keep their header with a danger Alert that names what did not load and offers Retry."
+     "name": "Failed"
     }
    ],
    "file": "catalog/patterns/platform/dashboard/executive-summary-dashboard.json"
@@ -31809,16 +31667,13 @@
    "guidelinesSummary": "The growth page: how people move through the steps from a first visit to a paid plan, where they drop off, and how well each weekly sign-up cohort keeps coming back. One global filter bar (period and segment) drives every region, so the funnel, the tiles and the cohorts always describe the same slice of users. This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`.",
    "variants": [
     {
-     "name": "Loading",
-     "summary": "While the first response loads, every tile, both charts and both tables hold their place with a Skeleton, so the grid does not reflow when data arrives. The filter bar stays usable."
+     "name": "Loading"
     },
     {
-     "name": "Empty",
-     "summary": "The filters match nothing. The tiles show a dash with no delta or trend, and each card keeps its box with an EmptyState that names the filters as the reason and offers Clear filters, which resets the period and the segment."
+     "name": "Empty"
     },
     {
-     "name": "Failed",
-     "summary": "The request for the period failed: the tiles read as dashes, and every card keeps its header with a danger Alert that names what did not load and offers Retry."
+     "name": "Failed"
     }
    ],
    "file": "catalog/patterns/platform/dashboard/funnel-cohort-dashboard.json"
@@ -31878,16 +31733,13 @@
    "guidelinesSummary": "The page that answers \"how well does this work for the people who use it, and where is it worst?\". Experience is reduced to one score out of 100 with three bands (Good at 80 or more, Fair from 50 to 79, Poor under 50). The page shows the overall score and its trend, ranks applications and locations lowest first with the top cause of poor samples, gives each application an hour-by-hour strip, and ends in the open incidents that need someone's attention. This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`.",
    "variants": [
     {
-     "name": "Loading",
-     "summary": "While the period loads, the chart, the rankings and the trackers render their own Skeleton and the incidents hold Skeleton rows, so the page does not reflow when data arrives."
+     "name": "Loading"
     },
     {
-     "name": "Empty",
-     "summary": "A period with no samples. The score shows a dash with no band, and every region keeps its box with an empty state that names the period and says what fills it."
+     "name": "Empty"
     },
     {
-     "name": "Failed",
-     "summary": "The request for the period failed: the score shows a dash, and every card keeps its header with a danger Alert that names what did not load and offers Retry."
+     "name": "Failed"
     }
    ],
    "file": "catalog/patterns/platform/dashboard/health-score-dashboard.json"
@@ -31990,12 +31842,10 @@
    "guidelinesSummary": "The Console's Home page: the first screen a signed-in user lands on. Its job is to get them back to work fast. For an account that owns resources it shows a short usage band and the resources they touch most (projects, resources, domains, recents), every row a link. For a brand-new account it becomes the first-access screen: a greeting, the command prompt and three doors to a first project, a first domain and a coding agent. It is not an analytics page; detail lives on each resource's own dashboard. This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header, the search palette and the `main`. The populated Home fits the screen at `xl` (each resource panel scrolls its own rows), so its root carries `data-layout-fill` and scrolls itself (`overflow-y-auto`): below `xl` the root scrolls as one page, its content centred while it fits (`justify-center-safe`). The first-access screen (Empty) is a centred page with nothing pinned; it does not fill, and the layout's `main` scrolls it (`h-dvh` on the populated root only sizes a standalone preview).",
    "variants": [
     {
-     "name": "Empty",
-     "summary": "Home for a brand-new account: the first-access screen. Inside ConsoleLayout, clicking the prompt (or pressing Enter on it) opens the layout's command palette; type a domain such as example.com (taken) or acme.example.com (available) into the second door to run the availability check."
+     "name": "Empty"
     },
     {
-     "name": "Summary",
-     "summary": "The classic overview: four metric StatTiles with a Hint on each label and the window they cover in a caption, a resources TableRoot card and a Recent activity TableRoot card, each with a View all footer Link, beside an aside of a Monthly usage list card and a Marketplace trends card that pages through featured templates with Previous and Next."
+     "name": "Summary"
     }
    ],
    "file": "catalog/patterns/platform/dashboard/home-dashboard.json"
@@ -32066,16 +31916,13 @@
    "guidelinesSummary": "Where one project stands against its plan, one project and sprint at a time. A lead or a team member opens it before a stand-up or a review to see completion, the sprint burndown, the next milestones, what is at risk and who carries the open work. The page heading (`Project status`) sits over a filter row that picks the project and the sprint; every region reads that pair. This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`.",
    "variants": [
     {
-     "name": "Loading",
-     "summary": "While the first response loads, the tiles, both charts and the table hold their place with a Skeleton, and the two lists show Skeleton rows, so the grid does not reflow when data arrives."
+     "name": "Loading"
     },
     {
-     "name": "Empty",
-     "summary": "A project with no tasks yet. The tiles show a dash with no delta or trend, every card keeps its box with an EmptyState that says what will appear there, and the completion card carries the one setup action, Add tasks."
+     "name": "Empty"
     },
     {
-     "name": "Failed",
-     "summary": "The request for the period failed: the tiles read as dashes, and every card keeps its header with a danger Alert that names what did not load and offers Retry."
+     "name": "Failed"
     }
    ],
    "file": "catalog/patterns/platform/dashboard/project-status-dashboard.json"
@@ -32142,16 +31989,13 @@
    "guidelinesSummary": "The page for a pipeline that sends items (files, attachments, packages) for analysis and gives each a verdict. The reader checks what was submitted, what is still waiting, what was flagged, and above all two exceptions: deliveries held until a verdict arrives, and items that were delivered before they were flagged. It ends in the submissions table, where the reader finds a specific item. This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`.",
    "variants": [
     {
-     "name": "Loading",
-     "summary": "While the results load, the tiles, the donut and the bar list render their own Skeleton, the summary holds Skeleton lines and the table shows Skeleton rows, so the page does not reflow when data arrives."
+     "name": "Loading"
     },
     {
-     "name": "Empty",
-     "summary": "Nothing has been sent for analysis yet. The tiles read zero, the verdicts and sources keep their box with an EmptyState, and the Submissions card drops the filters and the table for one EmptyState that says what fills it."
+     "name": "Empty"
     },
     {
-     "name": "Failed",
-     "summary": "The request for the period failed: the tiles read as dashes, and every card keeps its header with a danger Alert that names what did not load and offers Retry."
+     "name": "Failed"
     }
    ],
    "file": "catalog/patterns/platform/dashboard/scan-results-dashboard.json"
@@ -32246,16 +32090,13 @@
    "guidelinesSummary": "The page a reader opens to see what their security rules are doing: how many requests were blocked and inspected, how blocking moved over time, which attack categories and countries it came from, which source addresses sent the most, and the short list of settings and traffic that need a decision now. Needs attention is what makes it more than a report: every entry ends in one action. This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`.",
    "variants": [
     {
-     "name": "Loading",
-     "summary": "The first load: every tile, chart and the table hold a Skeleton, and Needs attention shows three placeholder rows."
+     "name": "Loading"
     },
     {
-     "name": "Empty",
-     "summary": "No security rules set up yet: the tiles read as dashes, and one bordered EmptyState names the reason and offers Add rule set instead of a grid of empty charts."
+     "name": "Empty"
     },
     {
-     "name": "Failed",
-     "summary": "The request for the period failed: the tiles read as dashes, and every card keeps its header with a danger Alert that names what did not load and offers Retry."
+     "name": "Failed"
     }
    ],
    "file": "catalog/patterns/platform/dashboard/security-dashboard.json"
@@ -32312,16 +32153,13 @@
    "guidelinesSummary": "The page an on-call engineer keeps open: is every service up, how fast is it answering, how many requests fail, and which alerts are open right now. One tile per service states its p95 latency and its state in words; latency percentiles and error rates sit in two charts with their own window; the open alerts live in a rail on the right that scrolls on its own, so the alerts stay in view while the reader studies a chart. This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`. Its root carries `data-layout-fill`, so the layout's `main` stops scrolling and the root fills it: from `xl` the charts column and the alerts rail scroll on their own; below `xl` the root itself scrolls, so the page still scrolls as one (`h-dvh` only sizes a standalone preview).",
    "variants": [
     {
-     "name": "Loading",
-     "summary": "The first load: every tile, both charts and the rail hold Skeletons, and the window switches stay usable."
+     "name": "Loading"
     },
     {
-     "name": "Empty",
-     "summary": "No traffic yet: the tiles show a dash, both charts explain that metrics appear once a service serves requests, and the rail reads No open alerts."
+     "name": "Empty"
     },
     {
-     "name": "Failed",
-     "summary": "The request for the window failed: each service tile reads as a dash, and both charts and the Open alerts rail show a danger Alert that names what did not load and offers Retry."
+     "name": "Failed"
     }
    ],
    "file": "catalog/patterns/platform/dashboard/service-monitoring-dashboard.json"
@@ -32406,8 +32244,7 @@
    "guidelinesSummary": "The last stop before a resource is gone for good. The user chose Delete from a row menu or a settings page and now has to see what goes with the resource, take one deliberate step to prove they mean this one, and either confirm or back out. The dialog makes the irreversible action slow on purpose: Delete stays disabled until the typed name matches. LabelledField draws the page it is opened from as a page body for `ConsoleLayout` (the layout owns the rail, the header and the `main`).",
    "variants": [
     {
-     "name": "LabelledField",
-     "summary": "A short, blocking decision in a modal: an outlined `Item` row on the page names what the delete removes and holds the danger trigger, and the medium dialog it opens stacks a warning `Alert` over a labelled `Field` + `Input` asking for the exact resource name, with Delete disabled until the typed name matches. The field clears every time the dialog opens, so its content stays in place while it closes. It is the form counterpart of the default Delete dialog on the resource lists, which renders the name as a copy chip with a bare input instead of a labelled field. Built from `PageHeader`, `Item`, `Dialog` with its trigger, portal, overlay, content, title and close parts, `PanelHeader`, `PanelContent`, `PanelFooter`, `Alert`, `Field`, `Input` and `Button`. The page is a page body for ConsoleLayout."
+     "name": "LabelledField"
     }
    ],
    "file": "catalog/patterns/platform/delete/delete-with-confirmation.json"
@@ -32501,20 +32338,16 @@
    "guidelinesSummary": "The user started a deployment and wants to know where it is, whether it went live and, when it did not, exactly which step failed and why. This block shows the pipeline as ordered steps, each with its status, its one-line outcome, its time and its own log output, so the user can follow the run as it streams, then read the full output once it settles.",
    "variants": [
     {
-     "name": "Succeeded",
-     "summary": "A run that went live: every step checked, the last one open, a Completed Tag with Deployed in 42s and the view switch in the Logs row, and copy on every step log."
+     "name": "Succeeded"
     },
     {
-     "name": "Failed",
-     "summary": "A run whose routing rules were rejected: that step is open on its error output with a Failed Tag and the reason in full, the steps behind it read Skipped, and the Logs row names the failed step beside the view switch."
+     "name": "Failed"
     },
     {
-     "name": "CompleteView",
-     "summary": "The Complete view of a finished run: every line the pipeline printed as one continuous LogView with its copy button."
+     "name": "CompleteView"
     },
     {
-     "name": "FailedCompleteView",
-     "summary": "The Complete view of the failed run: the lines up to the error, as one LogView, nothing from the steps that never ran."
+     "name": "FailedCompleteView"
     }
    ],
    "file": "catalog/patterns/platform/detail/deployment-logs.json"
@@ -32670,60 +32503,46 @@
    "guidelinesSummary": "The second-level page of one resource. The user arrives from a list row or a deploy flow to answer three questions about it: where it lives and whether it is serving, what it is made of, and what to do next. The page names the resource in the breadcrumb, splits its concerns into tabs, and opens the Overview tab on one summary card of facts, followed by whatever the resource needs next: Get started for a resource made from the CLI, the production checklist and topology for a service. It is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header with the breadcrumb, the ⌘K palette and the `main`.",
    "variants": [
     {
-     "name": "Resource",
-     "summary": "The summary card that opens a resource Overview tab: a subject band with the primary link and the actions, a band of labelled facts, and a state band on the canvas fill. It comes in three shapes — a resource, a service with its domains and environments, and a policy — each with its own facts and copy. Built from `Card`, `Button`, `IconButton`, `DropdownMenu`, `Popover`, `Tag`, `StatusIndicator`, `Avatar`, `CopyButton`, `Accordion`, `Alert` and `Tooltip`."
+     "name": "Resource"
     },
     {
-     "name": "Service",
-     "summary": "The service summary: the domain with its aliases in the overflow popover, the environment menu (shown below md only; from md up the breadcrumb carries the environment) and actions, the custom domains, status, service ID and creation, and the shared Deployment Settings band that expands into its policies."
+     "name": "Service"
     },
     {
-     "name": "Policy",
-     "summary": "The policy summary: the resource it protects, a Rules shortcut and actions, then status, environment, rule count, last edit and the enabled modules, and what the policy inspects."
+     "name": "Policy"
     },
     {
-     "name": "ResourceVersions",
-     "summary": "The Versions tab of the same resource: the small Versions heading with Add Version, the controls row (Filter, search, Refresh, Download CSV, Columns) and the paginated versions table, each row with its code-set name and Latest mark, the comment, the state Tag, who built it and when, and the Open configuration or Deploy actions."
+     "name": "ResourceVersions"
     },
     {
-     "name": "ResourceBuild",
-     "summary": "The Build tab of a resource made from the CLI: the small Build heading with an outlined Deploy, the Git repository band holding the Connect your repository card, the Build configuration band with the read-only framework preset and the build and deploy commands, and the Deployment band with the API token. Editing a command raises the save bar."
+     "name": "ResourceBuild"
     },
     {
-     "name": "ServiceOverview",
-     "summary": "A service (its environment crumb is a transparent small select the page sets with `ConsoleLayout.Breadcrumbs`): the outlined Deploy action sits on the tab row, the summary carries its Deployment Settings band (its own environment menu shows only below md, where the layout hides the breadcrumb), the production checklist expands into a drawer, and the deployment topology is a `TopologyDiagram` from domains to storage, whose Domains node adds a domain from its `actions` slot: Policy, Error Page and Origin are bindable slots whose changes are staged, counted beside Deploy and listed in the deploy drawer, ending in the toast with Edit and Redeploy."
+     "name": "ServiceOverview"
     },
     {
-     "name": "DeploymentDetail",
-     "summary": "A deployment that went live: the success banner, the Deployment details card with every fact and its Deployment Settings band for Default, and the Deployment logs card with the run duration and the Phased or Complete switch over the phased steps."
+     "name": "DeploymentDetail"
     },
     {
-     "name": "DeploymentFailed",
-     "summary": "A deployment the rules rejected: the danger banner with Redeploy, Visit disabled until the deployment is live, and the Deployment logs card with the Error status, open on the failed step with the rest skipped."
+     "name": "DeploymentFailed"
     },
     {
-     "name": "Application",
-     "summary": "An application page body with working tabs: Overview (the summary card with the live address, Visit and actions, the deployment, status, active version, framework, source and creation facts, and a band that sends settings changes to the active version), Versions and Deployments (a small `SectionHeader` over a `TableRoot` each), and Topology, where `TopologyDiagram` draws domain, workload, firewall, application and function instance. Binding or removing a firewall or function is staged: the tab row counts the changes in a warning `Tag`, Deploy opens a `Drawer` listing them, and the run reports through the async-submit toast with Edit (back to Topology) and Redeploy."
+     "name": "Application"
     },
     {
-     "name": "FirstDeploy",
-     "summary": "The summary cards before and during the first deploy: a resource never deployed (Not deployed yet in place of the address, None for Deployment and Domains, Not deployed as its status, Not yet as its creation, Connect Git Repository and Project upload under Source, and the state band naming the three ways to deploy), then two service cards whose Status reads Deploying · Build with a loading `StatusIndicator`, and Inactive."
+     "name": "FirstDeploy"
     },
     {
-     "name": "Invocation",
-     "summary": "The summary card of one function invocation: the function link, the invocation ID with a `CopyButton` and its status, Replay, the Recent switcher whose `DropdownMenu` lists the recent invocations with their status and start, the Invocation actions menu (Open in Real-Time Events, Function settings), a facts band with Started, Completed, Duration and Location, and a state band with the request that triggered it, copyable, and its outcome, in danger color when it failed."
+     "name": "Invocation"
     },
     {
-     "name": "DeploymentQueued",
-     "summary": "A deployment waiting for a runner: the info banner, Visit disabled until the deployment is live, the Deployment details card with Queued as its status and Not started as its duration, and the Deployment logs card with a Queued `StatusIndicator` in its header and a not-started `EmptyState` in place of the steps, with no Phased or Complete switch."
+     "name": "DeploymentQueued"
     },
     {
-     "name": "ResourceBuildConnected",
-     "summary": "The Build tab of a resource with a connected repository: the Git repository band holds the repository link with a danger Disconnect and the Production branch and Preview branch rows, then the Build configuration and Deployment bands. Editing a branch or a command raises the save bar."
+     "name": "ResourceBuildConnected"
     },
     {
-     "name": "ApplicationBuild",
-     "summary": "An application page body with the Overview, Versions, Build and Deployments tabs and no topology: the Overview summary says every push to the production branch deploys and that a project can be dropped on the page; dragging files over the page raises the dashed project-intake drop target, and dropping them (or Deploy on the tab row) opens a deploy `Drawer` that names the source and runs through the async-submit toast with Edit and Redeploy. The Build tab edits the connected repository branches and the build commands behind a save bar, and leaving it with unsaved changes asks first in a `ConfirmDialog` (`useUnsavedChanges`)."
+     "name": "ApplicationBuild"
     }
    ],
    "file": "catalog/patterns/platform/detail/details-page.json"
@@ -32764,8 +32583,7 @@
    "guidelinesSummary": "The first thing a user reads about a resource they created from the CLI and have not deployed yet. They need the exact commands to build and ship it, in order, for the path they work with: the CLI on their own machine or a GitHub Actions workflow. The block names the two paths, lets them pick one and walks them through three numbered steps, each with commands they can copy.",
    "variants": [
     {
-     "name": "Ci",
-     "summary": "The GitHub Actions path: store a personal token as a repository secret, add the deploy workflow, then push to the production branch."
+     "name": "Ci"
     }
    ],
    "file": "catalog/patterns/platform/detail/get-started.json"
@@ -32833,12 +32651,10 @@
    "guidelinesSummary": "The page a user opens to understand one run of a function: did it work, how long did it take, where did the time go, and what did the code print. It reads top to bottom from the answer to the evidence: the invocation summary, the path the request travelled, the trace that measured each step, and the logs on the same clock. It is a page body for `ConsoleLayout`: the layout owns the rail, the header with the breadcrumb (Functions › the function › Invocations) and the `main`.",
    "variants": [
     {
-     "name": "Failed",
-     "summary": "A run the origin timed out: the danger status, the outcome in danger color, the function and origin nodes tagged Failed and Timed out, the failing origin-response span selected in the trace with its message, and the warning lines in the logs."
+     "name": "Failed"
     },
     {
-     "name": "Running",
-     "summary": "A run still in progress: a loading Running status, Replay disabled, Completed reading Not yet, the function and origin nodes tagged Running and Waiting, the spans running in the trace and the logs loading under the lines printed so far."
+     "name": "Running"
     }
    ],
    "file": "catalog/patterns/platform/detail/invocations.json"
@@ -32900,12 +32716,10 @@
    "guidelinesSummary": "A service that is live on its generated hostname is not yet ready for real traffic. This card tells the user what stands between the service and production (a custom domain, a security policy, custom error pages), how many of those gates are done and which one to take next. It expands into a drawer where each gate explains itself and offers its action, and it shrinks to a single line once every gate is done.",
    "variants": [
     {
-     "name": "Complete",
-     "summary": "Every gate done: the Tag turns into a success Ready for production, the rows are gone and the header loses its bottom border, so the card closes down to its title and the expand button."
+     "name": "Complete"
     },
     {
-     "name": "DrawerDetail",
-     "summary": "The expand button opens a right-side drawer with the same progress Tag, the checklist description, every step with its description, and either its action or, once done, a Tag with what it now serves, over a Done footer."
+     "name": "DrawerDetail"
     }
    ],
    "file": "catalog/patterns/platform/detail/production-checklist.json"
@@ -33033,12 +32847,10 @@
    "guidelinesSummary": "The detail page of a resource that owns a long list of records, here a DNS zone. The user arrives from the zones index to do one of two jobs: adjust the zone itself (name, nameservers, DNSSEC, status) and save, or find, add, edit and delete the records the zone answers with. A tab bar splits the two jobs so the settings form and the records table never share a scroll. It is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header, the ⌘K palette and the `main`.",
    "variants": [
     {
-     "name": "Records",
-     "summary": "The Records tab with the zone’s one A record, the ID column hidden by default."
+     "name": "Records"
     },
     {
-     "name": "ImportZoneFile",
-     "summary": "The Records tab with Import zone file open: a large `Drawer` that takes one BIND zone file from a `FileDropzone` (or Browse files) or pasted into a `Textarea`, parses it as it changes ($ORIGIN, $TTL with units, inherited names, quoted TXT) and previews every line in a `TableRoot` with its line number, name, type, value and a Ready, Skipped or Error `Tag`, the reason under the value. A polite status line counts ready, skipped and errors; errors raise a danger `Alert` saying the ready records still import. The SOA, the apex NS and unsupported types are skipped with their reason; a bad address or a missing value is an error. Import N records adds the ready ones to the table and reports through a toast that counts what was left out."
+     "name": "ImportZoneFile"
     }
    ],
    "file": "catalog/patterns/platform/detail/record-table.json"
@@ -33116,12 +32928,10 @@
    "guidelinesSummary": "The page of one resource whose tab holds more sibling pages than a tab row can carry: the rules of a policy, the records of a zone, the settings of one application. The user arrives from the resource's list row or its tabs and moves between the sibling pages without leaving the resource. A console screen shows one navigation per level: the rail lists modules and first-level pages, `PageTabs` lists the resource's sections, and this block adds the third level, at most one local navigation inside the active tab. It is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header with the breadcrumb, the ⌘K palette and the `main`.",
    "variants": [
     {
-     "name": "Narrow",
-     "summary": "The same Private access tab in a narrow page, below `@3xl` of the tab body: the local navigation folds into a medium `Select` labelled Private access, its 16 options in the same 4 groups, with Server groups current; the list takes the full width under it."
+     "name": "Narrow"
     },
     {
-     "name": "FewSiblings",
-     "summary": "The Network security tab with 6 sibling pages: no local navigation. A medium `ToggleGroup` labelled Network security switches between them above the list, the alternative rule 4 prescribes for 7 or fewer siblings."
+     "name": "FewSiblings"
     }
    ],
    "file": "catalog/patterns/platform/detail/sectioned-resource.json"
@@ -33264,44 +33074,34 @@
    "guidelinesSummary": "One version of a resource, opened from its Versions tab. The user is here to change a draft and ship it, or to read what a built version holds and redeploy it or branch a new version from it. The page keeps the version they are on in the breadcrumb, where they can switch to another, puts the version's settings in tabs, pins the state and the save or deploy action to the bottom, and opens the version history beside the work when they need to see what changed. It is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header with the breadcrumb, the ⌘K palette and the `main`. The workspace pins its own bars, so its root carries `data-layout-fill`: the layout's `main` stops scrolling, the root fills it (`h-dvh` only sizes a standalone preview) and its panes scroll.",
    "variants": [
     {
-     "name": "Deployed",
-     "summary": "The deployed version, read-only: the creation date beside the Deployed Tag, the settings fieldset disabled, and the version bar reading Viewing a deployed version and Read-only with its description, Add Version and Redeploy."
+     "name": "Deployed"
     },
     {
-     "name": "VersionHistory",
-     "summary": "The draft with Version history open beside it: the current version with its description, author and the pencil that edits it in place, the empty changes entry, and the five newest earlier versions with Show older for the rest."
+     "name": "VersionHistory"
     },
     {
-     "name": "Revert",
-     "summary": "An earlier Ready version opened from Version history, read-only, the history pane open with the entry marked Viewing. The version bar reads Viewing an earlier version and offers Add Version and a primary Revert to AK7D0ZX4, which opens a `ConfirmDialog` with the diff against the deployed version: each changed setting from its old value to the new one, the rules added and removed, and that the deployed version stays in history. Confirm runs the revert as an async action: one toast turns from Reverting to AK7D0ZX4… into the outcome with Edit and Redeploy, and the version's Tag becomes Deployed."
+     "name": "Revert"
     },
     {
-     "name": "EnvironmentCrumb",
-     "summary": "The same version page reached from an environment: the trail reads Resources, the resource, then two `Select` crumbs (the page's `ConsoleLayout.Breadcrumbs` from md up, the body's own row below md). The environment crumb searches the environments, tags each with its deployment policy and offers Add Environment at its foot; picking one moves the version crumb to the version that environment serves. The version crumb marks each version with the environments it is live in, beside its state `Tag`."
+     "name": "EnvironmentCrumb"
     },
     {
-     "name": "Creating",
-     "summary": "A new version being copied from the deployed AEO25I38: the workspace is drawn as `Skeleton` wires (a heading band, then sectioned cards of rows with a trailing switch) inside a polite busy status, and the version bar shows a `Spinner`, reads Creating new version… and Copying AEO25I38 into a new draft., with Add Version loading and Redeploy disabled."
+     "name": "Creating"
     },
     {
-     "name": "NotFound",
-     "summary": "A version link that points nowhere: the trail ends on the missing version and the body is a bordered `EmptyState`, Version not found, saying the version may have been deleted, with View Versions back to the Versions tab."
+     "name": "NotFound"
     },
     {
-     "name": "Source",
-     "summary": "The draft on its Source tab: a small Source heading with Upload Files, the controls row (search in folder, Refresh, Download CSV, Columns and Open in Object Storage), a `Breadcrumb` of the folder path from the bucket, and the files table whose folders open in place and whose empty state offers Upload Files and Open Bucket."
+     "name": "Source"
     },
     {
-     "name": "DeviceGroups",
-     "summary": "The draft on its Device Groups tab: a small heading with Add Device Group, the controls row and the groups table (name, User-Agent match, last modified). A name opens the edit `Drawer`, the same one Add Device Group opens, with the Name and the User-Agent regular expression `Textarea`, validated on submit."
+     "name": "DeviceGroups"
     },
     {
-     "name": "CacheSettings",
-     "summary": "The draft on its Cache Settings tab: the cache settings table (browser cache, edge cache, a tiered cache `Tag`, last modified) and the add or edit `Drawer` that holds the cache-settings rows of Templates/Platform/Edit/EditResource: Browser cache, Edge cache with stale, large file and tiered cache, and a collapsible Advanced cache key that ends on Adaptive delivery and a Device groups `MultiSelect`."
+     "name": "CacheSettings"
     },
     {
-     "name": "FunctionsInstances",
-     "summary": "The draft on its Functions Instances tab: the instances table with the runtime glyph and a link to each function, its arguments and status, and the add or edit `Drawer` with the Name, a function `Select` whose footer is Create Function, and the arguments as a `SchemaForm` when the function declares a schema or a JSON `CodeEditor` when it does not."
+     "name": "FunctionsInstances"
     }
    ],
    "file": "catalog/patterns/platform/detail/version-detail.json"
@@ -33436,16 +33236,13 @@
    "guidelinesSummary": "A list of key and value pairs and the drawer that edits them, here environment variables. The user scans the variables already defined, then opens Create Variable to type or paste several pairs at once, mark the sensitive ones as secret, and select where they apply (the whole account, or specific environments, projects, services or policies) before saving them in one step. It is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header, the ⌘K palette and the `main`.",
    "variants": [
     {
-     "name": "Create",
-     "summary": "Closed until Create Variable opens it: one empty Key and Value pair in an `AttributeEditor`, the Form view selected and Global the only scope switched on, all reset each time the drawer opens. Add variable waits for the last pair to be filled; Save flags the empty or malformed fields only after it is pressed."
+     "name": "Create"
     },
     {
-     "name": "PasteEnv",
-     "summary": "Create Variable opens the drawer with the Paste .env panel open on a pasted file: the report counts the pairs found, names the line that will be skipped, the key repeated in the text and the key already in the list whose value will be replaced, and Add 3 variables merges them into the rows, announces the count and returns focus to Paste .env."
+     "name": "PasteEnv"
     },
     {
-     "name": "NetworkList",
-     "summary": "Create Network List opens a drawer with a Name, a type `ToggleGroup` (IP/CIDR, ASN, Countries) and the entries as an `AttributeEditor` of address and comment rows; Paste list holds a pasted list of nine lines whose report counts 7 entries, names the 2 lines that are not valid addresses and the line already in the list, and Add 7 entries appends them as rows where each invalid line shows its own error. Countries is a `MultiSelect`; Save checks every row and raises a success toast."
+     "name": "NetworkList"
     }
    ],
    "file": "catalog/patterns/platform/edit/attribute-editor.json"
@@ -33560,20 +33357,16 @@
    "guidelinesSummary": "The editing page of a service whose behavior lives in source code. The user writes and saves the code, defines the argument form each instance of the service asks for (its fields, types and defaults), and adjusts the service's settings. The editor fills the page so the code has room, and one save bar commits code, arguments and settings together. It is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header with the Services breadcrumb, the ⌘K palette and the `main`. The editor pins its own panes, so its root carries `data-layout-fill`: the layout's `main` stops scrolling and the root fills it (`h-dvh` only sizes a standalone preview).",
    "variants": [
     {
-     "name": "Arguments",
-     "summary": "The Arguments document of image-optimizer: its form schema in the left pane and its two fields on the right, defaultFormat expanded into its settings and Choices and quality collapsed. The handle resizes the editor and collapses it past its minimum."
+     "name": "Arguments"
     },
     {
-     "name": "NoArguments",
-     "summary": "The Arguments document of auth-handler, a service with no form: the empty schema on the left and the This form has no fields empty state on the right."
+     "name": "NoArguments"
     },
     {
-     "name": "Settings",
-     "summary": "The Settings tab of image-optimizer: the General, Runtime, Execution environment and Status sections in the form column, the runtime locked; editing anything raises the unsaved-changes bar."
+     "name": "Settings"
     },
     {
-     "name": "TestRun",
-     "summary": "The Code document after a test run of image-optimizer: Run test in the editor toolbar, and under the editor a resizable Test run pane with the run status and ID, the request and its outcome, the run details, the `Trace` waterfall with the origin fetch selected, and the run logs in a `LogView`. Run test again shows the running state until the run finishes."
+     "name": "TestRun"
     }
    ],
    "file": "catalog/patterns/platform/edit/code-editor.json"
@@ -33742,48 +33535,37 @@
    "guidelinesSummary": "The settings page of one existing resource. The user comes here to change how the resource is named, what it runs with and whether it is active, review the change, and commit it or throw it away. Every field sits in a labeled section of the form column, and one save band appears only once something has changed, so the page reads as the resource's current state until the user edits it. It is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header with the resource breadcrumb, the ⌘K palette and the `main`; the save band sticks to the bottom of the layout's scrolling region.",
    "variants": [
     {
-     "name": "DeployableSettings",
-     "summary": "A deployable resource’s Settings tab, under the environment switcher the page sets as its control crumb with `ConsoleLayout.Breadcrumbs` and the Deploy action in the tab bar: General, the Domains table with the environment, policy and certificate of each domain, the collapsed Advanced settings band holding Deployment Settings, Protocol settings and Mutual authentication, and the Danger zone. The bar sits under the page here, outside the tab’s own scroll region."
+     "name": "DeployableSettings"
     },
     {
-     "name": "PolicySettings",
-     "summary": "A security policy’s Settings tab, with the Documentation action in the heading: General, Modules with DDoS Protection locked on, Debug rules and Status."
+     "name": "PolicySettings"
     },
     {
-     "name": "WafSettings",
-     "summary": "A WAF rule set's Main Settings tab: General with the Name, Status with Active and a Mode Select (Blocking or Learning), and a Threats section with one row per threat family, each a Sensitivity Select beside a Switch; turning a threat off disables its Sensitivity. Any change raises the SaveBar, and Save confirms in a toast."
+     "name": "WafSettings"
     },
     {
-     "name": "ResourceSettings",
-     "summary": "The settings page of a first-level resource with no tabs, drawn from the same field list as its create page: here an access list at /access-lists/:id/settings, with its name under General and the type and entries under List settings. The entries field follows the selected type, and Save checks every field before it commits."
+     "name": "ResourceSettings"
     },
     {
-     "name": "UnsavedChanges",
-     "summary": "The policy Settings tab after Debug rules was switched on: the bar is up and the Settings tab carries the unsaved-changes dot. Discard restores the record and the bar leaves, Save holds its loading state and then leaves. Switching tabs while dirty asks first, through `useUnsavedChanges`: Keep editing, Discard changes, or Save changes and go."
+     "name": "UnsavedChanges"
     },
     {
-     "name": "Saving",
-     "summary": "While the save request is in flight: Save shows its loading state and Discard is disabled."
+     "name": "Saving"
     },
     {
-     "name": "DataStream",
-     "summary": "The settings page of a data stream at /data-stream/:id/settings: General, Source (data source and the workloads it collects from), Sampling with its rate and the warning that sampling turns off the account's other streams, Template (a preset shown read-only in a CodeBlock, or a custom data set edited as JSON in a CodeEditor and checked on Save) and Destination, whose fields follow the connector (HTTP POST, Kafka, S3-compatible storage, log analytics). Save sends one test record; when the endpoint does not answer (in this demo, any host under .invalid) a danger Alert opens above Destination with Send test record, the URL turns invalid with its reason and takes the focus, and every other change stays."
+     "name": "DataStream"
     },
     {
-     "name": "StaleRecord",
-     "summary": "The record was saved by someone else after the form opened, and the form holds edits: a warning `Alert` above the sections says it changed elsewhere, with Reload. Save asks before it overwrites (Go back / Overwrite and save); Reload replaces the edits with the saved values and the notice turns into Edits discarded with Undo."
+     "name": "StaleRecord"
     },
     {
-     "name": "DangerZone",
-     "summary": "The settings page ending with the Danger zone band: a flush card row for Delete this project with a danger button. The confirmation dialog warns that it cannot be undone, links to the docs, and enables Delete only when the typed name matches; the name sits in a code chip with a copy button, and Delete holds its loading state while the request runs."
+     "name": "DangerZone"
     },
     {
-     "name": "CacheSettings",
-     "summary": "One cache setting of an application at /applications/:id/cache-settings/:name: General (the name rules pick it by), Browser cache and Edge cache (behavior `Select`, the maximum TTL `NumberInput` only while overriding, stale cache, large file optimization with its fragment size, tiered cache with its topology) and the collapsed Advanced cache key band (HTTP methods in a `MultiSelect`, query string and cookie behavior with their allowlist or denylist). Each dependent row is indented under its switch or behavior. An edge TTL under 60 seconds or an empty list marks the field invalid with its reason; Save deploys the application and reports through the async-submit toast with Edit and Redeploy."
+     "name": "CacheSettings"
     },
     {
-     "name": "Protocols",
-     "summary": "The protocol settings of a workload: Protocols (HTTP ports, HTTPS support with its ports, HTTP/3 support with its ports, minimum TLS version and cipher suite) and Mutual authentication (off and explained until HTTPS is on; then the Enforce or Permissive mode as `Field` choice cards, the trusted CA certificate picker, a searchable `Select` with expiry beside each certificate and Upload certificate at its foot, which opens a `Drawer` that validates the name and the PEM and picks the new certificate, and the revocation lists). HTTP/3 turns HTTPS on, turning HTTPS off turns HTTP/3 and mutual authentication off. Save checks that each protocol has a port and that mutual authentication has a CA, then deploys through the async-submit toast with Edit and Redeploy."
+     "name": "Protocols"
     }
    ],
    "file": "catalog/patterns/platform/edit/edit-resource.json"
@@ -33869,8 +33651,7 @@
    "guidelinesSummary": "A drawer where the user writes one rule of a rules engine: when it runs (the phase), the conditions that decide whether it applies, and the ordered behaviors it performs when they match. The user composes groups of variable, operator and argument rows (every row in a group must match, any group is enough), picks behaviors that fit the phase, puts everything in order and saves, without leaving the resource's Rules tab.",
    "variants": [
     {
-     "name": "Composed",
-     "summary": "Editing the seeded Docs rewrite rule: the drawer titled Edit Rule, the phase locked with its note, one condition on the URI, and two behaviors that rewrite the path and set the Static Assets cache policy."
+     "name": "Composed"
     }
    ],
    "file": "catalog/patterns/platform/edit/rule-builder.json"
@@ -33974,28 +33755,22 @@
    "guidelinesSummary": "The table schema of a SQL database: the definition of one table and the drawers and dialogs that change it. A developer creates a table with its columns, adds a column, inserts a row by hand, changes a column's type or empties a table, and stays on the same surface while each change runs. It sits behind the Create Table, Add column, Insert and table menu buttons of `platform/view/query-editor`. It is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header, the ⌘K palette and the `main`.",
    "variants": [
     {
-     "name": "AddColumn",
-     "summary": "The Add column drawer over the customers definition, filled with phone as varchar; Primary key and Not null switches below, with Not null locked on while Primary key is on."
+     "name": "AddColumn"
     },
     {
-     "name": "InsertRow",
-     "summary": "The Insert row drawer for customers after Insert was pressed with email empty: one field per column in table order, id generated and disabled, created_at falling back to now(), and email invalid because it is NOT NULL."
+     "name": "InsertRow"
     },
     {
-     "name": "ChangeType",
-     "summary": "The Change type dialog for email: a warning that the table is rebuilt, the New type select, and the BEGIN … COMMIT statements that will run in a read-only CodeEditor; Change type is disabled until the type differs."
+     "name": "ChangeType"
     },
     {
-     "name": "TruncateTable",
-     "summary": "The Truncate customers dialog: a warning, the row count that goes, the TRUNCATE TABLE statement and a field that must match the table name before the danger button enables."
+     "name": "TruncateTable"
     },
     {
-     "name": "ImportCsv",
-     "summary": "Create Table started from a CSV: subscribers.csv as a `FileTokenGroup` token, the columns rebuilt from its header with guessed types, a five-row `TableRoot` preview, and a foreign key from customer_id to customers.id with On delete Cascade."
+     "name": "ImportCsv"
     },
     {
-     "name": "Failed",
-     "summary": "Create Table came back from the server: a table named customers already exists, so a danger Alert in the General section says nothing else was lost and the Name field is invalid with the same reason; the columns stay as they were."
+     "name": "Failed"
     }
    ],
    "file": "catalog/patterns/platform/edit/schema-editor.json"
@@ -34074,24 +33849,19 @@
    "guidelinesSummary": "The place the user goes to change how an account or a project behaves. They scan a few topics, change one or two values, and commit them knowing exactly what the save covers. The block is one layout with three save strategies: one save for a form that is one logical unit, one save per group, or one save per card on a long configuration page. The save model follows how the page is partitioned, not the container. It is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header, the breadcrumbs, the ⌘K palette and the `<main>`.",
    "variants": [
     {
-     "name": "Saving",
-     "summary": "While the save is in flight: the whole fieldset is disabled, Discard is disabled and Save shows its loading state."
+     "name": "Saving"
     },
     {
-     "name": "SavePerGroup",
-     "summary": "A settings page split into topic groups that each save on their own: a page heading, then one section per topic, each a small heading over a flush `Card` of `Item` rows whose footer carries a secondary Save for that group only. Saving one group disables just its own fieldset; the other stays editable. Preferences is the example, with General (Full name, Language) and Notifications (Product updates, Security alerts). Built from `PageHeader`, `SettingRow`, `Card`, `Item`, `Input`, `Select`, `Switch` and `Button`."
+     "name": "SavePerGroup"
     },
     {
-     "name": "SavingOneGroup",
-     "summary": "General is saving: its Save shows the loading state and its rows are disabled, while Notifications stays editable and can be saved on its own."
+     "name": "SavingOneGroup"
     },
     {
-     "name": "SavePerCard",
-     "summary": "A long configuration page split into titled cards that each own their save: a page heading, then one `Card` per topic with an info `Alert`, stacked label-and-control fields inside a fieldset, and a footer whose secondary Save commits that card alone, beside an optional docs `Link`. Project settings is the example, with Preview Toolbar and Deployment Protection. Built from `PageHeader`, `Card`, `Alert`, `Field`, `Select`, `Switch`, `Link` and `Button`."
+     "name": "SavePerCard"
     },
     {
-     "name": "SavingOneCard",
-     "summary": "Preview Toolbar is saving: its Save shows the loading state and its selects are disabled, while Deployment Protection stays editable."
+     "name": "SavingOneCard"
     }
    ],
    "file": "catalog/patterns/platform/settings/settings-form.json"
@@ -34154,16 +33924,13 @@
    "guidelinesSummary": "The async-action pattern, taken from the design sample (`/forms/async-deployment`), and the standard for every build and deploy screen. A long-running action the user is free to walk away from: a deploy that runs for about half a minute and asks nothing while it does. The user's job is to start it, go on working anywhere in the console, and learn how it ended without coming back to check. The page that started the run shows its status in the heading, the logs while it runs and an inline outcome when it ends; in a full app the run lives outside the page, so its progress and its outcome also travel with the user as a toast, on success and on failure. This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`. The run toast rides the app's one toast region, never the page's: the app installs `ToastPlugin` (`app.use(ToastPlugin, { position: 'bottom-right' })`) or mounts one `Toaster` near its root, beside `ConsoleLayout`, and this page body only imports `toast` from `@aziontech/webkit/toast`. A `Toaster` inside a page body is a second region for the whole app: only the first `Toaster` to mount is active, and it gives that up when it unmounts, so a page's copy is either inert or, when it mounted first, stops every toast once the user leaves the page, the opposite of a run toast that follows the user. The docs preview mounts one region around the block the way an app root does, so its frames show the toasts; a copy of the page shows them wherever the app has mounted the region. The toasts are raised through `toast` with one id per run so each state replaces the last. Every outcome toast passes `actions: [{ label: 'Edit', onClick }, { label: 'Redeploy', onClick }]` and `closable: true`, so the app's `Toaster` renders both as `Toast.Action`s beside `Toast.Close`; the progress toast carries no action. The Running frame raises the progress toast, Failed the permanent failure toast and Succeeded the success toast; leaving the page dismisses the story's toast so the next story starts clean.",
    "variants": [
     {
-     "name": "Running",
-     "summary": "Mid-run: the progress toast reads Deploying web-app…, the heading reads Deploying, the simulation controls are disabled while Deploy shows its loading state, and the logs card streams under the Building status."
+     "name": "Running"
     },
     {
-     "name": "Failed",
-     "summary": "The routing rules were refused: the heading reads Failed, the danger Alert carries the reason with Edit and Redeploy, the permanent failure toast carries the same two actions, and the logs card stays open on the failed step with the Phased or Complete switch."
+     "name": "Failed"
     },
     {
-     "name": "Succeeded",
-     "summary": "The run is live: the heading reads Deployed and the success Alert names the new address with Edit, Redeploy and Open service, the success toast carries Edit and Redeploy, and the logs card is gone."
+     "name": "Succeeded"
     }
    ],
    "file": "catalog/patterns/platform/states/async-submit.json"
@@ -34226,8 +33993,7 @@
    "guidelinesSummary": "What a first-level list shows before the account owns any resource of that kind. The user's job is to create the first one, so the block replaces the empty table with a short explanation and every way to get started on the same screen: the methods to create one (import, CLI, from scratch), then the promotions that shortcut it (a Catalog template, a coding agent). Every list that is still empty renders this block with its own nouns, methods and promos. This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`.",
    "variants": [
     {
-     "name": "Loading",
-     "summary": "While the account reloads, the page holds the block’s footprint with two Skeleton bands."
+     "name": "Loading"
     }
    ],
    "file": "catalog/patterns/platform/states/first-use.json"
@@ -34313,16 +34079,13 @@
    "guidelinesSummary": "The form-error pattern, taken from the design sample (`/forms/error-validation`): what a long create form does when the server rejects the save because of one section. The user's job is to create a service; another user deletes the origin it links to while the form is open, so the save comes back with an error the Origin section owns. The page takes the user to that section, says what happened and that nothing else was lost, offers the one action that recovers (Reload origins), and marks the field with its own reason. This is the standard for every server rejection that a section or a field owns. This block is a focused create page with its own creation header and no rail: render it outside `ConsoleLayout` (`shells/console`).",
    "variants": [
     {
-     "name": "Rejected",
-     "summary": "User 2 deleted web-origin-prod and Save was pressed: the page scrolls to the Origin section, the danger Alert opens under its heading with Reload origins, and focus lands on the Origin select, which reads This origin no longer exists."
+     "name": "Rejected"
     },
     {
-     "name": "Reloading",
-     "summary": "Reload origins in flight: its button shows the loading state, the Origin select gives way to a Skeleton, and Save is disabled until the list is back."
+     "name": "Reloading"
     },
     {
-     "name": "Reloaded",
-     "summary": "The list is reloaded without the deleted origin: the Alert closes, the select is cleared and flagged required with Select an origin to continue."
+     "name": "Reloaded"
     }
    ],
    "file": "catalog/patterns/platform/states/form-error.json"
@@ -34376,28 +34139,22 @@
    "guidelinesSummary": "Every state a submit can land in, on one create form. The user's job is to create a resource and, when something stops the save, to know exactly which control to touch and that nothing they typed was lost. The primary is a short Create Variable page (heading, four fields straight on the canvas, Cancel and Create); the variants walk it through validation, the in-flight lock, an unscoped failure, a conflict, success and loading. A server rejection scoped to one section of a long form is its own block, `platform/states/form-error`. This block is a page body for a create page: render it under the focused creation header (`headers/creation-header`), not in `ConsoleLayout`.",
    "variants": [
     {
-     "name": "ValidationErrors",
-     "summary": "Create pressed with gaps. The empty Value and Environment take the required state, the malformed key takes the invalid state, each helper text carries its own message, and focus moves to Key."
+     "name": "ValidationErrors"
     },
     {
-     "name": "Submitting",
-     "summary": "The request is in flight. Create shows its loading state, and the fields and Cancel are disabled so the entries cannot change mid-save."
+     "name": "Submitting"
     },
     {
-     "name": "ServerError",
-     "summary": "The request failed and no field owns the failure. An error Toast says what failed and carries Retry, the lock is released, and every entry stays as typed."
+     "name": "ServerError"
     },
     {
-     "name": "Conflict",
-     "summary": "The server rejected a value one field owns: the key is already in use. A danger Alert above the fields says so and that the entries are kept, Key takes the invalid state with its reason and the focus, and nothing toasts."
+     "name": "Conflict"
     },
     {
-     "name": "Saved",
-     "summary": "The save went through. A success Toast names the new variable and where it is available, and the form is cleared for the next entry."
+     "name": "Saved"
     },
     {
-     "name": "Loading",
-     "summary": "The form while its data loads, such as the environments it offers or the record an edit form opens with. Skeleton rows hold the layout, and Create stays disabled until the fields arrive."
+     "name": "Loading"
     }
    ],
    "file": "catalog/patterns/platform/states/form-validation.json"
@@ -34445,16 +34202,13 @@
    "guidelinesSummary": "The page an app renders when it cannot show the address the user asked for: the address leads nowhere (404), the user may not see it (403), or the server failed to build it (500). The user's job is to understand, in one sentence, that the problem is the address or the access and not their work, and to get somewhere useful in one click. The block keeps the error code out of the headline (it is in the figure and in a hidden `h1`) and says what happened in plain words. This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`.",
    "variants": [
     {
-     "name": "Forbidden",
-     "summary": "403: the address exists but the user's role does not include it. The 403 numeral art, You don't have access to this page, what to do (ask an admin, or switch account), and Go to home with Switch account."
+     "name": "Forbidden"
     },
     {
-     "name": "ServerError",
-     "summary": "500: the page failed on the server. A warning icon tile in place of the numeral art, Something went wrong on our side, the reassurance that nothing saved was lost, Try again (which reloads and shows its loading state), System status in a new tab, and the error reference to quote to support."
+     "name": "ServerError"
     },
     {
-     "name": "ResourceNotFound",
-     "summary": "Inside the console: the route is valid but the record is not (deleted, or a stale link). A bordered EmptyState in the content column names the resource and its ID, says why it may be missing, and offers Back to services."
+     "name": "ResourceNotFound"
     }
    ],
    "file": "catalog/patterns/platform/states/not-found.json"
@@ -34493,28 +34247,22 @@
    "guidelinesSummary": "The skeleton wires an app paints while a page is still arriving. The user's job does not change while they wait: they need to see the shape of the page they asked for, so the wire draws the real page's grid with `Skeleton` bands inside the same `Card` frames, and nothing shifts when the content lands. The set covers the Home overview, the first-access Home, and the whole shell while an expired session signs out, drawn over the family of page it covers (list, detail, create form or Home). Overview and Onboarding are page bodies for the default slot of `ConsoleLayout` (`shells/console`); the Session wires stand in for the whole app, layout included.",
    "variants": [
     {
-     "name": "Onboarding",
-     "summary": "The first-access Home wire: the headline and prompt bands over three door cards, each holding its illustration stage, three text lines and an action."
+     "name": "Onboarding"
     },
     {
-     "name": "Session",
-     "summary": "The whole app shell as a wire while a session expires over a list page: header bar, navigation rail with its grouped items, the list controls row and a table card with header, eight rows and pagination."
+     "name": "Session"
     },
     {
-     "name": "SessionDetail",
-     "summary": "The same wire over a detail page: a strip of tab bands under the header, then a heading and two banded cards of field rows in the data column."
+     "name": "SessionDetail"
     },
     {
-     "name": "SessionForm",
-     "summary": "The same wire over a create page: the heading and two banded cards of field rows in the create column, with the save bar held at the foot."
+     "name": "SessionForm"
     },
     {
-     "name": "SessionHome",
-     "summary": "The same wire over Home: the Overview wire centred in the data column."
+     "name": "SessionHome"
     },
     {
-     "name": "VersionDetail",
-     "summary": "The version page while it loads: heading and description bands in the form column, then two sections, each a title band over a flush Card whose rows hold a label and a description band and end in a switch-sized band; one status region, aria-busy, no tabs."
+     "name": "VersionDetail"
     }
    ],
    "file": "catalog/patterns/platform/states/page-wires.json"
@@ -34552,8 +34300,7 @@
    "guidelinesSummary": "The surfaces a project passes through when the user drops it on the page. The user's job is to deploy a folder they already have without filling in a form: while a folder hovers over the page, a dashed drop target fills it and says what will happen; once it is dropped, a full-screen Initializing overlay reads like the deploy logs, one row per received file, until the upload is done and the deploy takes over. DropZone is a page-body overlay inside the default slot of `ConsoleLayout` (`shells/console`); Initializing covers the whole screen.",
    "variants": [
     {
-     "name": "Initializing",
-     "summary": "The Initializing overlay mid-upload, held inside a layout-contained frame here so it does not cover the docs page: two files uploaded, the third running, two queued, each row a step with its status glyph, path and size."
+     "name": "Initializing"
     }
    ],
    "file": "catalog/patterns/platform/states/project-intake.json"
@@ -34618,8 +34365,7 @@
    "guidelinesSummary": "The first-level index of one resource type, in cards. The user lands here from the sidebar to find a resource they recognise by its name and a few fields (its status, domain, region, traffic), narrow the list by those fields, open one, or select several and act on them together. One `useCollection` call holds the filter, the sort, the page, the selection across pages and the saved preferences, so the page is one heading over one band: the controls row, the cards and the pagination. This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`.",
    "variants": [
     {
-     "name": "Empty",
-     "summary": "An account with no applications: the heading and the controls stay, and the cards give way to a medium EmptyState with a small secondary Create Application button."
+     "name": "Empty"
     }
    ],
    "file": "catalog/patterns/platform/view/card-view.json"
@@ -34729,16 +34475,13 @@
    "guidelinesSummary": "The contents of one storage resource. The user opens a bucket to find a file, walk into a folder and back out, upload something or add a folder, and download or delete what is there. The table's toolbar is the whole page header, so the storage name, search, the folder path and Add to files all sit on the one surface the files live on. This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`.",
    "variants": [
     {
-     "name": "InsideAFolder",
-     "summary": "Inside a build folder: the crumb gains the folder, a .. row leads back up, and the files carry their glyph, size, editor and age."
+     "name": "InsideAFolder"
     },
     {
-     "name": "Uploading",
-     "summary": "An upload into the storage root is running: the floating `UploadProgress` card counts finished files over one bar, gives each file its bar, Cancel and, when a file fails, Retry, and finished files join the table as they land. Add to files opens the Upload files dialog (`FileDropzone` plus a `FileTokenGroup` that keeps files over 300 MB in the list with the reason and leaves them out of the upload); dragging files anywhere over the page shows the drop overlay for the folder in view. Upload folder opens the same dialog for a folder (`FileDropzone directories` and a Browse folder picker); each file keeps its path and its folders appear in the table as files land. The outcome is reported by a toast whose actions fit the files: Open folder after a clean upload, Retry failed after a partial one."
+     "name": "Uploading"
     },
     {
-     "name": "MoveObject",
-     "summary": "Two files of a build folder are selected and the Move dialog is open: it names the files, their total size and the folder they leave, and the Destination folder `Combobox` offers every folder in the storage and accepts a new path. A path with characters outside printable ASCII, with `..`, or equal to the current folder is refused under the field. Move runs in the floating `UploadProgress` card (`operation=\"move\"`) and ends in a toast with Open folder. Selecting rows shows a selection bar with Move, and every file's row menu has Move."
+     "name": "MoveObject"
     }
    ],
    "file": "catalog/patterns/platform/view/file-browser.json"
@@ -34846,48 +34589,37 @@
    "guidelinesSummary": "The page where people find something made by Azion or a partner and add it to what they run. Two kinds of item live here: integrations, installed into an existing application, and templates, which start a new project. People browse by need (\"block bots\", \"split traffic\"), compare by publisher and context, read what an integration does and what it may touch, then install it on one application and keep working while it installs. One `useCollection` call holds the search and the filters; one drawer holds the detail and the install; the install reports by toast wherever the person is. This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`.",
    "variants": [
     {
-     "name": "Integrations",
-     "summary": "The Integrations tab: the Featured row of three featured integration tiles over All integrations, the filter and the integration grid with Install and Configure."
+     "name": "Integrations"
     },
     {
-     "name": "Detail",
-     "summary": "The detail drawer open on Request Signer: details, overview, permissions and the install form."
+     "name": "Detail"
     },
     {
-     "name": "Installing",
-     "summary": "Install is running on storefront: the button shows loading, the field is disabled and the progress toast says it keeps running if the panel closes."
+     "name": "Installing"
     },
     {
-     "name": "Installed",
-     "summary": "The install succeeded: the success Alert in the drawer, the Installed tag on the tile, Configure in the footer and the success toast with Configure and Open application."
+     "name": "Installed"
     },
     {
-     "name": "InstallFailed",
-     "summary": "The install failed on checkout: the danger Alert with the reason and Reinstall, and the permanent failure toast with Edit and Reinstall."
+     "name": "InstallFailed"
     },
     {
-     "name": "NoMatch",
-     "summary": "The Integrations tab with a search that matches no integration: the Featured row hides, the token stays and a medium EmptyState offers Clear filters."
+     "name": "NoMatch"
     },
     {
-     "name": "TemplatesNoMatch",
-     "summary": "A template search that matches nothing: the search keeps the term and a bordered medium EmptyState offers Clear search."
+     "name": "TemplatesNoMatch"
     },
     {
-     "name": "Loading",
-     "summary": "The catalog is loading: the template search is disabled and skeleton tiles hold the template grid; the Integrations tab holds skeleton integration tiles under a disabled filter."
+     "name": "Loading"
     },
     {
-     "name": "SolutionPage",
-     "summary": "The integration as a full page (Waiting Room): a Back to Marketplace `Link`, the `PageHeader`, `Tabs` for Overview, Usage, Changelog (version history, Latest marked) and Applications (a `Table` of the applications running it, `Table.CellStatus` Up to date or Update available and an Update to <version> action), beside an install card whose Application `Select` tags each application Installed or Update available. Install and Update are async runs that end in a toast with Configure and Open application."
+     "name": "SolutionPage"
     },
     {
-     "name": "Configure",
-     "summary": "The screen behind Configure: the integration's settings on one application (Queue visitors `Switch`, Capacity and Queue page title fields, Session length `Select`) in `SettingsSection`s, errors after Save with a summary `Alert`, and a `SaveBar` with Discard and Save; saving is not a deploy, so its toast has no Redeploy."
+     "name": "Configure"
     },
     {
-     "name": "TemplatePage",
-     "summary": "A template as a full page (Nuxt Storefront): a Back to Templates `Link`, the description, the deploy form (application name and repository, errors after Deploy) beside the template facts; Deploy is an async run that ends in the async-submit toast with Edit and Redeploy."
+     "name": "TemplatePage"
     }
    ],
    "file": "catalog/patterns/platform/view/marketplace.json"
@@ -35022,36 +34754,28 @@
    "guidelinesSummary": "The workspace of one SQL database. The user comes here to see which tables exist, read and edit a table's rows or its definition, and write and run queries against the data. Two tabs share one layout: a resizable side panel that lists things (tables, or past queries) beside a working pane that shows the one in use. This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`. The editor is a workspace: its root carries `data-layout-fill`, so the layout's `main` stops scrolling, the root fills it, and the side panel, the rows, the editor and the results each scroll on their own at every width (`h-dvh` only sizes a standalone preview). CreateDatabase is a focused create page with its own header and no rail, rendered outside it.",
    "variants": [
     {
-     "name": "Schema",
-     "summary": "The Definition view of customers: the Columns heading with Add column over a card holding the column name, its type as a Tag, and its constraints."
+     "name": "Schema"
     },
     {
-     "name": "EmptyDatabase",
-     "summary": "A database with no tables yet: the side panel says so and the working pane shows the Create Table empty state."
+     "name": "EmptyDatabase"
     },
     {
-     "name": "Query",
-     "summary": "The Editor tab after the Select all query ran: the query history in the side panel, the statement in the editor, and its three rows in the Results band, switchable to JSON."
+     "name": "Query"
     },
     {
-     "name": "Templates",
-     "summary": "The Editor tab before anything ran, with the Results band ready to execute; the Templates button opens the SQL quick templates drawer, and choosing a card loads its SQL into the editor."
+     "name": "Templates"
     },
     {
-     "name": "Failed",
-     "summary": "The rows of the selected table failed to load: the Tables tab keeps the side panel and the table toolbar, and the Data view shows a danger Alert that names the table and offers Retry."
+     "name": "Failed"
     },
     {
-     "name": "TableData",
-     "summary": "The events table in the Data view: 137 rows in a compact `TableRoot` paged 25 at a time, each column header naming its type with a key on the primary key, `NULL` in muted italics, sortable headers and row selection. Two rows are selected, so Delete 2 rows joins the toolbar; it ends in a toast with Undo."
+     "name": "TableData"
     },
     {
-     "name": "ImportCsv",
-     "summary": "An empty table's Import data from CSV (also a CSV dropped on its empty state): a drawer that reads the file (`FileDropzone`, `FileTokenGroup`), maps each CSV column to a table column or Skip in a `Select` (matched by name first), checks every value against its column's type and NOT NULL with the errors listed per line, previews the first rows as they will be inserted, and inserts the valid rows with a spinner, then a toast with Undo that says how many rows were skipped."
+     "name": "ImportCsv"
     },
     {
-     "name": "CreateDatabase",
-     "summary": "The Create Database page from the design sample: Name (6 to 50 letters, numbers and hyphens) and an Advanced section with Active, under a centred save bar card with Cancel and Create Database. A taken name comes back on the field, a failed request is a toast with Retry, and success is a toast with Open database and Create Table."
+     "name": "CreateDatabase"
     }
    ],
    "file": "catalog/patterns/platform/view/query-editor.json"
@@ -35172,32 +34896,25 @@
    "guidelinesSummary": "An ordered list of rules grouped by phase: the Rules tab of an application (Request and Response phases) or a firewall (Request only). Order is behavior here, so the list is built to change the order safely: drag, keys, a typed position or Move up and Move down move a rule, every move is announced, and nothing runs in the new order until the user reviews the changes and saves. This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`.",
    "variants": [
     {
-     "name": "Firewall",
-     "summary": "A firewall's rules: one Request phase, five rules and no locked rule, so every rule moves; the page says rules run until one refuses the request."
+     "name": "Firewall"
     },
     {
-     "name": "ReviewChanges",
-     "summary": "After two moves and one rule turned on: the SaveBar counts the changes and the Review changes dialog is open, listing Docs rewrite moving from 5 to 3 (and the rules it pushed down), Maintenance page turned on, and Security headers moving to the top of the Response phase."
+     "name": "ReviewChanges"
     },
     {
-     "name": "SaveFailed",
-     "summary": "The same changes after a failed save: the dialog stays open with a danger Alert saying the rules still run in the saved order, and Save reads Save again; the next attempt saves and closes the dialog with the success toast."
+     "name": "SaveFailed"
     },
     {
-     "name": "Searching",
-     "summary": "A search for cache narrows both phases to their matches, the counts read n of total, an info Alert says reordering is off while searching, and every Order control is disabled with the reason in its name and tooltip."
+     "name": "Searching"
     },
     {
-     "name": "Empty",
-     "summary": "A firewall with no rules: the Request phase panel shows a small EmptyState with Add Rule instead of the table."
+     "name": "Empty"
     },
     {
-     "name": "Loading",
-     "summary": "While the rules load: both phases read Loading, the search is disabled, and each table shows three skeleton rows shaped like the columns."
+     "name": "Loading"
     },
     {
-     "name": "EditRule",
-     "summary": "The list composed with `platform/edit/rule-builder`: a rule's name opens the large rule-builder `Drawer` as Edit Rule, seeded with that rule's criteria and behaviors and its phase locked; Add Rule in the header (or in an empty phase) opens it as Add Rule in that phase. Saving an edit updates the row in place and confirms it in a toast; a new rule lands last in its phase, the phase opens, and the toast offers Edit. Neither changes the run order, so the SaveBar only counts moves and status switches."
+     "name": "EditRule"
     }
    ],
    "file": "catalog/patterns/platform/view/rules-list.json"
@@ -35311,28 +35028,22 @@
    "guidelinesSummary": "The events explorer. The user comes here to answer what happened on their traffic: how many events, how many errors, when they spiked, and what one event looked like in full. They narrow the log by fields and time, scan the rows, and open one event beside the log without losing their place. The fields, the log and the event document are three panes of one workspace, and every filter acts on all of them at once. This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`. The explorer is a workspace: its root carries `data-layout-fill`, so the layout's `main` stops scrolling, the root fills it, and the fields panel, the log and the event document each scroll on their own at every width (`h-dvh` only sizes a standalone preview).",
    "variants": [
     {
-     "name": "Filtered",
-     "summary": "Errors from the Security and Access Control sources: the Filter button counts three applied fields and each shows as a chip that reopens the popover on that field or removes it."
+     "name": "Filtered"
     },
     {
-     "name": "Empty",
-     "summary": "A workspace with no traffic yet: the summary reads zero, the chart is flat and the log shows its No events yet state."
+     "name": "Empty"
     },
     {
-     "name": "Failed",
-     "summary": "The event log request failed: the fields panel stays, and the log pane shows a danger Alert that says the events did not load and offers Retry."
+     "name": "Failed"
     },
     {
-     "name": "Query",
-     "summary": "The Console Kit query bar on the sample design: a `DateRangePicker` (relative ranges, an absolute range typed in the chosen time zone, Previous and Next) drives the period, and `PropertyFilter` in query mode takes `level = Error AND host = api.example.com`, suggests fields, operators and values at the caret, explains an invalid query under the field and applies it on Enter. Saved queries (name, apply, delete) and Recent queries sit in two popovers beside the bar; the field values in the fields panel add or remove clauses of the query; the log, chart and times follow the chosen zone."
+     "name": "Query"
     },
     {
-     "name": "Sessions",
-     "summary": "Several investigations open as tabs above the explorer, each keeping its own filters, search and period: API errors is active, with All traffic and Security blocks beside it. New investigation adds a tab (up to five, then a message says to close one); the actions menu renames (also F2 or a double click, with an inline field: Enter keeps, Escape cancels), duplicates or closes the active one (also Delete on the focused tab)."
+     "name": "Sessions"
     },
     {
-     "name": "EventDocument",
-     "summary": "An error event selected with its document open beside the log. The document lists every field of the event with a Search in this event field that narrows and highlights the fields, a Filter by and an Exclude button per value that apply to the log (an exclusion shows as an is not chip), and Copy that copies the fields shown as JSON; the full JSON document follows."
+     "name": "EventDocument"
     }
    ],
    "file": "catalog/patterns/platform/view/split-view.json"
@@ -35500,12 +35211,10 @@
    "guidelinesSummary": "The first-level index of one resource type, in rows. The user lands here from the sidebar to find a resource among many, narrow the list by its attributes, compare records column by column, and act on one: open it, deploy it, clone it, delete it, or create a new one. One `useCollection` call holds the filter, the sort, the page and the saved preferences, so the page is one heading over one band: the controls row and the table it narrows. This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`.",
    "variants": [
     {
-     "name": "Empty",
-     "summary": "Every resource deleted on an account that is not new: `useCollection` reports `empty` (not `no-match`), so the page keeps its heading and controls, and the table, without its header or footer, gives way to a flush Card that holds only a medium EmptyState led by the resource glyph, with a small secondary Create Resource and a small outlined Documentation button."
+     "name": "Empty"
     },
     {
-     "name": "Deployments",
-     "summary": "The deployments list, the same page with its own columns: a PropertyFilter over Version, Status, Project, Environment and Author with Refresh, Download CSV and preferences; Version with a Current `Tag`, a hidden ID, Status as a `StatusIndicator` (a spinner while Building) with the run's duration, the project as a `Table.CellLink`, the environment as a rounded `Tag` and the author avatar with the relative time. Clicking a row opens the deployment; its menu holds View details, Redeploy and Promote to production (disabled unless the run is Ready and not already in Production). Refresh shows the table's loading state, a filter with no match shows No matching deployments, and an account with no deployments shows the flush empty card. The details-page Deployments tabs reuse this table without the page heading."
+     "name": "Deployments"
     }
    ],
    "file": "catalog/patterns/platform/view/table-view.json"
@@ -35586,20 +35295,16 @@
    "guidelinesSummary": "The catalog of templates a person starts a project from. They arrive from the creation hub, the marketplace or a \"Start from a template\" link, already knowing roughly what they want (a framework, a kind of site, a small function) and needing to find it, check what it contains and start the deploy. The page is one heading over one band: a single search and filter control, then the templates grouped by category. A tile opens a preview drawer with the facts and the README, and the drawer's Deploy hands off to the deploy template flow, which owns the run and its outcome. This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`.",
    "variants": [
     {
-     "name": "Preview",
-     "summary": "The preview drawer open on Next.js Starter: details, the README and the Deploy entry into the deploy template flow."
+     "name": "Preview"
     },
     {
-     "name": "NoMatch",
-     "summary": "A search that matches no template: the filter keeps the token and a medium EmptyState offers Clear filters."
+     "name": "NoMatch"
     },
     {
-     "name": "Loading",
-     "summary": "The catalog is loading: the filter is disabled and two sections of skeleton tiles hold the layout."
+     "name": "Loading"
     },
     {
-     "name": "Failed",
-     "summary": "The catalog failed to load: a danger Alert with Retry, and an EmptyState that points to Import from Git."
+     "name": "Failed"
     }
    ],
    "file": "catalog/patterns/platform/view/template-browser.json"
@@ -35687,20 +35392,16 @@
    "guidelinesSummary": "The Tuning tab of a WAF rule set. It shows the requests the rule set matched, grouped by the rule that matched them, with enough context (hits, top addresses, countries and paths) for the user to tell an attack from a false positive, and turns the legitimate ones into allowed rules with a recorded reason. This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`.",
    "variants": [
     {
-     "name": "Allow",
-     "summary": "Two rules checked and the Allow 2 rules dialog open: rule 1005 (SQL injection on 3 paths) and 1201 (Cross-site scripting on 3 paths), 6 allowed rules in all, and an empty Reason."
+     "name": "Allow"
     },
     {
-     "name": "AllowFailed",
-     "summary": "The same dialog after the allowed rules could not be created: a danger Alert says nothing changed in the rule set, and the submit button reads Try again."
+     "name": "AllowFailed"
     },
     {
-     "name": "Empty",
-     "summary": "A rule set that has not matched any request: no threshold settings, and an EmptyState saying matches appear as traffic arrives."
+     "name": "Empty"
     },
     {
-     "name": "Loading",
-     "summary": "While the matches load: the settings and actions are disabled and the table shows skeleton rows."
+     "name": "Loading"
     }
    ],
    "file": "catalog/patterns/platform/view/waf-tuning.json"
@@ -35824,20 +35525,16 @@
    "guidelinesSummary": "The application shell every signed-in page renders inside. The user browses and moves laterally between modules, so the shell keeps the whole product one step away: the navigation rail (wordmark, grouped navigation with drill-in levels, the account at its foot), one global header (breadcrumbs, search, the app's actions, the avatar) and the ⌘K palette. All of that is one component, `ConsoleLayout`: this block is the app's `App.vue` — compose it once around `RouterView` and every console page is only the body rendered through its default slot. The body here is a stand-in for `platform/view/table-view`.",
    "variants": [
     {
-     "name": "DetailPage",
-     "summary": "A resource detail page rendered through `ConsoleLayout`: the page body sets its own trail with `ConsoleLayout.Breadcrumbs` (Applications, the application) ending on its environment as a control crumb, a `Select` with `kind=\"transparent\"` and `size=\"small\"` that searches the environments, tags each with its deployment policy and offers Add Environment at its foot; the default slot opens flush on a full-bleed `PageTabs` with the Overview, Deployments and Settings tabs and the outlined Deploy action, which stays in view while the tab content scrolls under it."
+     "name": "DetailPage"
     },
     {
-     "name": "Notifications",
-     "summary": "The ListPage rendered through `ConsoleLayout` with a bell in its `actions` slot: the bell carries an unread `Badge` and toggles the layout's tools region (`v-model:tools-open`, titled Notifications, a drawer on a narrow screen), whose `tools` slot lists deploys, invitations and alerts with Mark all as read and Clear all and offers Edit and Redeploy on each deploy; a failed deploy also shows as a flash `Alert` in the `notifications` slot above the page, and an empty list reads You are all caught up through `EmptyState`."
+     "name": "Notifications"
     },
     {
-     "name": "AccountSwitch",
-     "summary": "The ListPage rendered through `ConsoleLayout` with the account switcher in its `sidebar-header` slot, full width in the rail under the wordmark (square `Avatar`, the account name, a sort glyph; tooltip on the right; Ctrl+O or ⌘O), and in its `header-start` slot while compact (avatar and chevron only): a large `Dialog` with search over the organization, group and workspace `Table` tree (expand and collapse, type, ID and client ID), the current account marked, a toast on switch, and Account settings in the footer."
+     "name": "AccountSwitch"
     },
     {
-     "name": "AccountSwitchFailed",
-     "summary": "The AccountSwitch dialog when the account list fails to load: a danger `Alert`, The account list could not be loaded., with Try again replaces the account `Table` under the search; Try again loads the tree."
+     "name": "AccountSwitchFailed"
     }
    ],
    "file": "catalog/patterns/shells/console.json"
@@ -35991,24 +35688,19 @@
    "guidelinesSummary": "The documentation shell. A reader comes to learn one task and leave, so the shell keeps the page readable and the next page close. It is `DocLayout`, composed once in the app around `RouterView`: the layout owns the docs header, the navigation rail, the \"On this page\" rail, the search palette and the footer, and the document itself scrolls with the header and both rails sticky. Every docs page is only its article.",
    "variants": [
     {
-     "name": "Article",
-     "summary": "A tutorial page inside DocLayout: masthead with breadcrumb and meta actions, a chooser of paths, callouts, steps with commands, an agent prompt, Next steps, Related resources and the pager; the outline tracks its DocHeading ids, with the GitHub and Community groups and a DocCta under it."
+     "name": "Article"
     },
     {
-     "name": "Reference",
-     "summary": "A product reference page inside DocLayout: an info callout, two actions, the request path as a Diagram in a DocFrame, a JSON CodeBlock, a term list and a two-column Next steps; the outline tracks its four sections, with a DocCta under it."
+     "name": "Reference"
     },
     {
-     "name": "Landing",
-     "summary": "The documentation home inside DocLayout, with the navigation rail and no outline rail: a DocHero with Get started and the CopyPromptButton (agent marks) and its note, then a DocAgentCard above the Console, CLI and API cards, then objectives, coloured framework templates, Stop attacks, compliance, Follow along and the pager forward."
+     "name": "Landing"
     },
     {
-     "name": "AgentSetup",
-     "summary": "The index of agent setup pages inside DocLayout: a DocTabs picker that filters the coding-agent DocCards by workflow, a comparison Table with check marks and Tags, a legend DocCallout, and Workflow, Key concepts and Common tradeoffs DocCard grids; the outline tracks its h2 and h3 sections."
+     "name": "AgentSetup"
     },
     {
-     "name": "AgentGuide",
-     "summary": "One agent's setup page inside DocLayout: a masthead with the agent mark, fact Tags and links, Quick start DocSteps with DocCodeGroup commands and DocMarkdown bodies, the MCP tools Table, CLI and CLAUDE.md code, agent-friendly DocItem rows, DocPrompts, tip callouts, FAQ and Troubleshooting DocAccordionGroups and the Other agents grid."
+     "name": "AgentGuide"
     }
    ],
    "file": "catalog/patterns/shells/documentation.json"
