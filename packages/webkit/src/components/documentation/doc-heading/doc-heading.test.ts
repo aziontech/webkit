@@ -9,7 +9,7 @@ import DocHeading from './doc-heading.vue'
 
 describe('DocHeading', () => {
   it('renders the heading tag for its level with the id', () => {
-    const { getByRole } = render(DocHeading, { props: { level: 3, id: 'keys', label: 'Keys' } })
+    const { getByRole } = render(DocHeading, { props: { level: 3, anchor: 'keys', label: 'Keys' } })
     const heading = getByRole('heading', { level: 3, name: 'Keys' })
     expect(heading).toHaveAttribute('id', 'keys')
     expect(heading).toHaveAttribute('data-doc-heading', '3')
@@ -17,10 +17,16 @@ describe('DocHeading', () => {
 
   it('links the text to its own anchor', () => {
     const { getByRole } = render(DocHeading, {
-      props: { id: 'purge' },
+      props: { anchor: 'purge' },
       slots: { default: 'Purge' }
     })
     expect(getByRole('link', { name: 'Purge' })).toHaveAttribute('href', '#purge')
+  })
+
+  it('still reads the deprecated id prop when anchor is empty', () => {
+    const { getByRole } = render(DocHeading, { props: { id: 'legacy', label: 'Legacy' } })
+    expect(getByRole('heading', { name: 'Legacy' })).toHaveAttribute('id', 'legacy')
+    expect(getByRole('link', { name: 'Legacy' })).toHaveAttribute('href', '#legacy')
   })
 
   it('draws no link without an id', () => {
@@ -34,7 +40,7 @@ describe('DocHeading', () => {
     const Page = defineComponent({
       setup() {
         provideHeadingNav(navigate)
-        return () => h(DocHeading, { id: 'rules', label: 'Rules' })
+        return () => h(DocHeading, { anchor: 'rules', label: 'Rules' })
       }
     })
     const { getByRole } = render(Page)
@@ -44,7 +50,7 @@ describe('DocHeading', () => {
 
   it('keeps the glyph out of the accessible name and at the inline end under rtl', () => {
     const { getByRole } = render({
-      render: () => h('div', { dir: 'rtl' }, [h(DocHeading, { id: 'x', label: 'Cache' })])
+      render: () => h('div', { dir: 'rtl' }, [h(DocHeading, { anchor: 'x', label: 'Cache' })])
     })
     const link = getByRole('link', { name: 'Cache' })
     expect(link.querySelector('i')).toHaveAttribute('aria-hidden', 'true')

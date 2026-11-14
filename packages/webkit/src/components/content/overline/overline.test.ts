@@ -56,23 +56,43 @@ describe('Overline', () => {
     expect(closing.getByText('</>')).toBeInTheDocument()
   })
 
-  it('does not render the cursor span by default (showCursor=false)', () => {
+  it('does not render the cursor span by default (cursor=false)', () => {
     const { container } = render(Overline, { slots: { default: 'NO CURSOR' } })
     // The cursor is the only span carrying the blink animation utility.
     expect(container.querySelector('.animate-blink')).toBeNull()
   })
 
-  it('renders the cursor span when showCursor is true', () => {
+  it('renders the cursor span when cursor is true', () => {
     const { container } = render(Overline, {
-      props: { showCursor: true },
+      props: { cursor: true },
       slots: { default: 'WITH CURSOR' }
     })
     expect(container.querySelector('.animate-blink')).not.toBeNull()
   })
 
+  it('hides the cursor from assistive tech and mirrors it and singleLine on data attributes', () => {
+    const { getByTestId, container } = render(Overline, {
+      props: { cursor: true },
+      slots: { default: 'MIRRORED' }
+    })
+    const root = getByTestId('content-overline')
+    expect(root).toHaveAttribute('data-cursor')
+    expect(root).toHaveAttribute('data-single-line')
+    expect(container.querySelector('.animate-blink')).toHaveAttribute('aria-hidden', 'true')
+  })
+
+  it('still shows the cursor for the deprecated showCursor prop', () => {
+    const { getByTestId } = render(Overline, {
+      props: { showCursor: true, singleLine: false },
+      slots: { default: 'LEGACY' }
+    })
+    expect(getByTestId('content-overline')).toHaveAttribute('data-cursor')
+    expect(getByTestId('content-overline')).not.toHaveAttribute('data-single-line')
+  })
+
   it('renders prefix and cursor together', () => {
     const { getByText, container } = render(Overline, {
-      props: { prefix: '//', showCursor: true },
+      props: { prefix: '//', cursor: true },
       slots: { default: 'TERMINAL OUTPUT' }
     })
     expect(getByText('//')).toBeInTheDocument()
@@ -100,7 +120,7 @@ describe('Overline', () => {
 
   it('has no accessibility violations with a prefix and cursor', async () => {
     const { container } = render(Overline, {
-      props: { prefix: '</>', showCursor: true },
+      props: { prefix: '</>', cursor: true },
       slots: { default: 'ACCESSIBLE TERMINAL' }
     })
     await expectNoA11yViolations(container)

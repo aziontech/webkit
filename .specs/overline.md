@@ -3,13 +3,13 @@ name: overline
 category: content
 structure: monolithic
 status: implemented
-spec_version: 1
+spec_version: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=6482-17218
   node_id: 6482:17218
-checksum: 901ebdce94755c3e65e00311b63d160d2b828f699724b709c375c4f3af510249
+checksum: d54b7dff6f6fb5386ba4e7bbf3ac6473e8d25e16d551653ac1b6e569887bbdc6
 created: 2026-11-10
-last_updated: 2026-11-11
+last_updated: 2026-11-14
 ---
 
 # Overline — Component Spec
@@ -34,7 +34,7 @@ Overline is the short uppercase label set above a headline to name the section, 
 
 ## Related
 
-- `section-title` — the framed section header; renders its `eyebrow` as an Overline with `prefix="//"` and `show-cursor`.
+- `section-title` — the framed section header; renders its `eyebrow` as an Overline with `prefix="//"` and `cursor`.
 - `hero-title` — the hero copy block; renders its `eyebrow` as an Overline closed by the cursor, with `single-line` turned off.
 - `tag` — a compact label attached to an item, not a heading companion.
 - `badge` — a compact count or status indicator.
@@ -44,7 +44,7 @@ Overline is the short uppercase label set above a headline to name the section, 
 - Keep the label to one or two words: it is set uppercase and, with the default `single-line`, stays on one line whenever it fits its container.
 - Turn `single-line` off only when the label can be longer than its container (narrow columns, translated copy); the label then wraps under `text-pretty`, which avoids a lone word on the last line.
 - Use a `prefix` from the preset set only (`//`, `<>`, `</>`); the prefix is decorative and hidden from screen readers (`aria-hidden="true"`), so never put meaning in it.
-- Use `show-cursor` for one eyebrow per view at most; the blink stops under reduced motion.
+- Use `cursor` for one eyebrow per view at most; the blink stops under reduced motion.
 - Keep the semantic heading in the element after the Overline; the Overline itself carries no heading role.
 
 ## Usage
@@ -57,7 +57,7 @@ Overline is the short uppercase label set above a headline to name the section, 
 <template>
   <Overline
     prefix="//"
-    show-cursor
+    cursor
     >Platform</Overline
   >
 </template>
@@ -68,7 +68,8 @@ Overline is the short uppercase label set above a headline to name the section, 
 | Prop         | Type                          | Default | Required | JSDoc                                                                                                           |
 | ------------ | ----------------------------- | ------- | -------- | --------------------------------------------------------------------------------------------------------------- |
 | `singleLine` | `boolean`                     | `true`  | false    | Keeps the prefix unbroken and the label on one line while it fits; a longer label wraps instead of overflowing. |
-| `showCursor` | `boolean`                     | `false` | false    | Shows a blinking terminal-style cursor after the label.                                                         |
+| `cursor`     | `boolean`                     | `false` | false    | Shows a blinking terminal-style cursor after the label.                                                         |
+| `showCursor` | `boolean`                     | `false` | false    | @deprecated since 6.0 — use `cursor` instead. Removed in 7.0. Still shows the cursor.                           |
 | `prefix`     | `'' \| '//' \| '<>' \| '</>'` | `''`    | false    | Preset prefix rendered before the label; empty renders no prefix.                                               |
 
 ## Events
@@ -85,17 +86,17 @@ Overline is the short uppercase label set above a headline to name the section, 
 
 - Static: no hover, focus, active or disabled states; the root is a non-interactive `div`.
 - Prefix: a `span` before the label is rendered only when `prefix` is not empty; it carries `aria-hidden="true"`.
-- Cursor: a `span` after the label is rendered only when `showCursor` is set; the root drops its end padding (`pr-0`) while the cursor is shown and keeps `pr-(--spacing-xxs)` otherwise.
-- Wrapping: with `singleLine` (default) the prefix carries `whitespace-nowrap` and the label sits on one line because the root is `w-fit`; it wraps (with `text-pretty`) only when the container is narrower than the label. With it off the prefix may wrap too.
+- Cursor: a decorative, `aria-hidden` `span` after the label is rendered only when `cursor` (or the deprecated `showCursor`) is set; the root carries `data-cursor` and drops its end padding (`data-[cursor]:pe-0`) while the cursor is shown.
+- Wrapping: with `singleLine` (default) the root carries `data-single-line` and the prefix turns `whitespace-nowrap` and the label sits on one line because the root is `w-fit`; it wraps (with `text-pretty`) only when the container is narrower than the label. With it off the prefix may wrap too.
 - Attributes (including `class`) are forwarded to the root `div` (`inheritAttrs: false` + `v-bind="$attrs"`).
 - Test ids: root `content-overline` (consumer `data-testid` wins).
 - Reflow: the root is capped at the width of its container, and a label that does not fit wraps instead of overflowing at any width, at 200% zoom and with translated copy (no viewport breakpoint involved).
 
 ## Motion & Animations
 
-| Trigger                     | Animation / Transition | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback                           |
-| --------------------------- | ---------------------- | ------------------------------------------------- | ------------------------------------------------- |
-| cursor shown (`showCursor`) | `animate-blink`        | theme `blink` (1s step-end, infinite)             | `motion-reduce:animate-none` (cursor stays solid) |
+| Trigger                 | Animation / Transition | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback                           |
+| ----------------------- | ---------------------- | ------------------------------------------------- | ------------------------------------------------- |
+| cursor shown (`cursor`) | `animate-blink`        | theme `blink` (1s step-end, infinite)             | `motion-reduce:animate-none` (cursor stays solid) |
 
 ## Tokens
 
@@ -103,7 +104,7 @@ Overline is the short uppercase label set above a headline to name the section, 
 | --------------------------- | ----------------------------------------------------------- |
 | typography (prefix, label)  | `.text-overline-md` with `font-medium`                      |
 | text (prefix)               | `var(--text-default)` (`text-(--text-default)`)             |
-| text (label)                | `var(--text-primary)` (`text-(--text-primary)`)                     |
+| text (label)                | `var(--text-primary)` (`text-(--text-primary)`)             |
 | cursor surface              | `var(--accent)`                                             |
 | cursor size                 | `w-1` · `h-5`                                               |
 | gap (prefix, label, cursor) | `var(--spacing-xxs)`                                        |
@@ -128,7 +129,7 @@ Overline is the short uppercase label set above a headline to name the section, 
 
 - Default
 - Prefixes — every preset `prefix` (`//`, `<>`, `</>`) side by side. Justified: `prefix` is a string union rather than a `kind`, and the three glyphs are the component's main visual axis.
-- Cursor — the blinking cursor with and without a prefix. Justified: `showCursor` adds an animated element that the Default story does not show.
+- Cursor — the blinking cursor with and without a prefix. Justified: `cursor` adds an animated element that the Default story does not show.
 
 ## Constraints — DO NOT
 

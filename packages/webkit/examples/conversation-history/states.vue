@@ -6,11 +6,11 @@
   <div class="grid w-full gap-(--spacing-xl) sm:grid-cols-2">
     <ConversationHistory
       loading
-      label="Conversation history, loading"
+      aria-label="Conversation history, loading"
     />
     <ConversationHistory
       :items="[]"
-      label="Conversation history, empty"
+      aria-label="Conversation history, empty"
     />
   </div>
 </template>

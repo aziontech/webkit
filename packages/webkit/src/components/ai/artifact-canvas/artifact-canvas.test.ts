@@ -176,3 +176,15 @@ describe('ArtifactCanvas slot presence', () => {
     expect(queryByTestId('probe')).toBeNull()
   })
 })
+
+describe('ArtifactCanvas test ids', () => {
+  it('lets a consumer data-testid win over the fallback', () => {
+    const { getByTestId, queryByTestId } = render(ArtifactCanvas, {
+      props: { title: 'Report' },
+      attrs: { 'data-testid': 'canvas' }
+    })
+    expect(getByTestId('canvas')).toBeInTheDocument()
+    expect(getByTestId('canvas__title')).toBeInTheDocument()
+    expect(queryByTestId('ai-artifact-canvas')).toBeNull()
+  })
+})

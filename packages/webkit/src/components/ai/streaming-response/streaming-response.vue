@@ -3,7 +3,7 @@
 
   import CodeBlock from '../../code/code-block/code-block.vue'
   import MarkdownInline from '../_lib/markdown-inline'
-  import { parseMarkdown } from '../_lib/parse-markdown'
+  import { type MarkdownBlock, parseMarkdown } from '../_lib/parse-markdown'
   import type { AiSource } from '../sources/types'
 
   defineOptions({
@@ -34,7 +34,17 @@
   const testId = computed<string>(
     () => (attrs['data-testid'] as string | undefined) ?? 'ai-streaming-response'
   )
-  const blocks = computed(() => parseMarkdown(props.content))
+  let settled: { block: MarkdownBlock; key: string }[] = []
+
+  const blocks = computed<MarkdownBlock[]>(() => {
+    const next = parseMarkdown(props.content).map((block, i) => {
+      const key = JSON.stringify(block)
+      const previous = settled[i]
+      return previous && previous.key === key ? previous : { block, key }
+    })
+    settled = next
+    return next.map((entry) => entry.block)
+  })
   const lastIndex = computed<number>(() => blocks.value.length - 1)
   const caretInline = computed<boolean>(() => {
     const last = blocks.value[lastIndex.value]

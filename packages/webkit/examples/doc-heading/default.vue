@@ -4,7 +4,7 @@
 
 <template>
   <DocHeading
-    id="purge-by-url"
+    anchor="purge-by-url"
     :level="2"
   >
     Purge by URL

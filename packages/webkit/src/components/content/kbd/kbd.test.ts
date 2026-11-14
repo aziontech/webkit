@@ -1,6 +1,6 @@
 import { render } from '@testing-library/vue'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { defineComponent, h } from 'vue'
+import { defineComponent, h, nextTick } from 'vue'
 
 import { expectNoA11yViolations } from '../../../test/axe'
 import { LOCALES } from '../../../test/locales'
@@ -88,10 +88,25 @@ describe('Kbd', () => {
       expect(getByTestId('content-kbd')).toHaveTextContent('StrgEntf')
     })
 
-    it('keeps the ⌘ symbol on macOS whatever the locale', () => {
+    it('keeps the ⌘ symbol on macOS whatever the locale', async () => {
       vi.stubGlobal('navigator', { platform: 'MacIntel', userAgent: 'Macintosh' })
       const { getByTestId } = render(inProvider({ meta: true }, { locale: 'pt-BR' }))
+      await nextTick()
       expect(getByTestId('content-kbd')).toHaveTextContent('⌘')
+    })
+
+    it('prints the macOS glyphs for meta, ctrl and alt once mounted', async () => {
+      vi.stubGlobal('navigator', { platform: 'MacIntel', userAgent: 'Macintosh' })
+      const { getByTestId } = render(Kbd, { props: { meta: true, ctrl: true, alt: true } })
+      await nextTick()
+      expect(getByTestId('content-kbd')).toHaveTextContent('⌘⌃⌥')
+    })
+
+    it('prints Ctrl and Alt for meta, ctrl and alt on other platforms', async () => {
+      vi.stubGlobal('navigator', { platform: 'Win32', userAgent: 'Windows' })
+      const { getByTestId } = render(Kbd, { props: { meta: true, ctrl: true, alt: true } })
+      await nextTick()
+      expect(getByTestId('content-kbd')).toHaveTextContent('CtrlCtrlAlt')
     })
   })
 })

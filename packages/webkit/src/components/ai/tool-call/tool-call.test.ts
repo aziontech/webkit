@@ -58,6 +58,19 @@ describe('ToolCall', () => {
     expect(emitted('update:open')?.[0]).toEqual([true])
   })
 
+  it('follows a bound v-model:open', async () => {
+    const { getByRole, getByTestId, emitted, rerender } = render(ToolCall, {
+      props: { name: 'get_settings', open: true, 'onUpdate:open': () => undefined },
+      slots: { input: () => '{ "id": 1 }' }
+    })
+    expect(getByTestId('ai-tool-call__details')).toBeVisible()
+    await userEvent.click(getByRole('button'))
+    expect(emitted('update:open')?.[0]).toEqual([false])
+    expect(getByTestId('ai-tool-call__details')).toBeVisible()
+    await rerender({ name: 'get_settings', open: false, 'onUpdate:open': () => undefined })
+    expect(getByTestId('ai-tool-call__details')).not.toBeVisible()
+  })
+
   it('has no axe violations', async () => {
     const { container } = render(ToolCall, {
       props: { name: 'get_settings', state: 'error', defaultOpen: true },

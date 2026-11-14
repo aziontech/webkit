@@ -3,11 +3,11 @@ name: streaming-response
 category: ai
 structure: monolithic
 status: implemented
-spec_version: 1
+spec_version: 2
 template: 2
-checksum: 467844085e6742147bcd70a76958b0c4018634fae28ff789f54316cf368cb02f
+checksum: 35f26ed47463209de216dfd71f281f85427942b3067f37e3be4d66cd7a9e9968
 created: 2026-11-11
-last_updated: 2026-11-11
+last_updated: 2026-11-14
 ---
 
 # StreamingResponse — Component Spec
@@ -69,7 +69,10 @@ Numbered citations `[1]` become `Citation` references resolved against `sources`
     anchor="answer-1"
     :streaming="false"
   />
-  <Sources :items="sources" anchor="answer-1" />
+  <Sources
+    :items="sources"
+    anchor="answer-1"
+  />
 </template>
 ```
 
@@ -82,12 +85,12 @@ components: `code-block`, `citation`._
 
 ## Props
 
-| Prop        | Type         | Default | Required | JSDoc                                                                                                                                              |
-| ----------- | ------------ | ------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Prop        | Type         | Default | Required | JSDoc                                                                                                                                                         |
+| ----------- | ------------ | ------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `content`   | `string`     | `''`    | false    | The model's Markdown so far. Parsed into elements, never injected as HTML: raw tags render as text and only http(s), mailto, relative and hash links survive. |
-| `streaming` | `boolean`    | `false` | false    | Tokens are still arriving: shows the caret, marks the region busy and keeps an unclosed code fence as plain text until it closes.                  |
-| `sources`   | `AiSource[]` | `[]`    | false    | Sources the `[n]` citations in the content resolve against (title in the tooltip and the accessible name).                                          |
-| `anchor`    | `string`     | `''`    | false    | The `anchor` of the `Sources` list under the response; citations link to its items. Empty renders unlinked numbers.                               |
+| `streaming` | `boolean`    | `false` | false    | Tokens are still arriving: shows the caret, marks the region busy and keeps an unclosed code fence as plain text until it closes.                             |
+| `sources`   | `AiSource[]` | `[]`    | false    | Sources the `[n]` citations in the content resolve against (title in the tooltip and the accessible name).                                                    |
+| `anchor`    | `string`     | `''`    | false    | The `anchor` of the `Sources` list under the response; citations link to its items. Empty renders unlinked numbers.                                           |
 
 ## Events
 
@@ -105,21 +108,21 @@ _No slots — the content is the `content` string._
 
 ## Motion & Animations
 
-| Trigger         | Animation / Transition | Token   | Reduced-motion fallback      |
-| --------------- | ---------------------- | ------- | ---------------------------- |
-| caret           | `animate-blink`        | `blink` | `motion-reduce:animate-none` (a steady block) |
+| Trigger | Animation / Transition | Token   | Reduced-motion fallback                       |
+| ------- | ---------------------- | ------- | --------------------------------------------- |
+| caret   | `animate-blink`        | `blink` | `motion-reduce:animate-none` (a steady block) |
 
 ## Tokens
 
-| Region            | Token                                                          |
-| ----------------- | -------------------------------------------------------------- |
-| body              | `.text-body-md`, `var(--text-default)`                         |
-| headings          | `.text-heading-sm` (`#`), `.text-heading-xs`, `.text-heading-xxs`, `.text-label-md` |
-| inline code       | `.text-label-code`, `var(--bg-surface-raised)`, `var(--shape-elements)` |
-| links             | `var(--text-link)`                                             |
-| quote             | `var(--border-strong)`, `var(--text-muted)`                    |
-| table             | `var(--border-default)`, `var(--border-muted)`, header `var(--bg-surface-raised)`, `.text-body-sm` |
-| block gap         | `var(--spacing-sm)`                                            |
+| Region      | Token                                                                                              |
+| ----------- | -------------------------------------------------------------------------------------------------- |
+| body        | `.text-body-md`, `var(--text-default)`                                                             |
+| headings    | `.text-heading-sm` (`#`), `.text-heading-xs`, `.text-heading-xxs`, `.text-label-md`                |
+| inline code | `.text-label-code`, `var(--bg-surface-raised)`, `var(--shape-elements)`                            |
+| links       | `var(--text-link)`                                                                                 |
+| quote       | `var(--border-strong)`, `var(--text-muted)`                                                        |
+| table       | `var(--border-default)`, `var(--border-muted)`, header `var(--bg-surface-raised)`, `.text-body-sm` |
+| block gap   | `var(--spacing-sm)`                                                                                |
 
 ## Theme gaps
 
@@ -156,7 +159,7 @@ No built-in strings (the content is the model's; `Citation` and `CodeBlock` carr
 ## Performance
 
 - Bundle budget: see `.size-limit.json` (`streaming-response`; includes `CodeBlock`).
-- Runtime budget: re-parse of a 4 000-character response < 1 ms; blocks keyed by position so earlier blocks keep their DOM.
+- Runtime budget: re-parse of a 4 000-character response < 1 ms; blocks keyed by position so earlier blocks keep their DOM, and a block whose parse is unchanged keeps its object, so its inline content does not re-render on each token. `streaming-response-2k-lines` in `perf-budgets.json` holds streaming into a 2k-line answer.
 - Heavy parts: `CodeBlock` highlighting runs only for closed fences.
 
 ## Examples

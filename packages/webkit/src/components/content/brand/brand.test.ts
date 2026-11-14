@@ -27,6 +27,14 @@ describe('Brand', () => {
     expect(root).toHaveAttribute('role', 'img')
   })
 
+  it('drops its role and name and hides from assistive tech when decorative', () => {
+    const { getByTestId } = render(Brand, { props: { decorative: true } })
+    const root = getByTestId('content-brand')
+    expect(root).not.toHaveAttribute('role')
+    expect(root).not.toHaveAttribute('aria-label')
+    expect(root).toHaveAttribute('aria-hidden', 'true')
+  })
+
   it('honors a consumer data-testid on the root', () => {
     const { getByTestId } = render(Brand, {
       attrs: { 'data-testid': 'my-brand' }

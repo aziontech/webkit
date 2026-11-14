@@ -46,30 +46,49 @@ describe('DocCardGroup', () => {
         slots: { default: '<span>Cell</span>' }
       })
       const root = getByTestId('documentation-doc-card-group')
-      expect(root.getAttribute('data-cols')).toBe('2')
-      const grid = root.querySelector('[data-mobile-cols]')
+      expect(root.getAttribute('data-columns')).toBe('2')
+      const grid = root.querySelector('[data-mobile-columns]')
       expect(grid).not.toBeNull()
-      expect(grid?.getAttribute('data-cols')).toBe('2')
-      expect(grid?.getAttribute('data-mobile-cols')).toBe('1')
+      expect(grid?.getAttribute('data-columns')).toBe('2')
+      expect(grid?.getAttribute('data-mobile-columns')).toBe('1')
     })
 
-    it('mirrors cols and mobileColumns onto the grid', () => {
+    it('mirrors columns and mobileColumns onto the grid', () => {
       const { getByTestId } = render(DocCardGroup, {
-        props: { cols: 4, mobileColumns: 2 },
+        props: { columns: 4, mobileColumns: 2 },
         slots: { default: '<span>Cell</span>' }
       })
       const root = getByTestId('documentation-doc-card-group')
-      expect(root.getAttribute('data-cols')).toBe('4')
-      const grid = root.querySelector('[data-mobile-cols]')
-      expect(grid?.getAttribute('data-cols')).toBe('4')
-      expect(grid?.getAttribute('data-mobile-cols')).toBe('2')
+      expect(root.getAttribute('data-columns')).toBe('4')
+      const grid = root.querySelector('[data-mobile-columns]')
+      expect(grid?.getAttribute('data-columns')).toBe('4')
+      expect(grid?.getAttribute('data-mobile-columns')).toBe('2')
+    })
+
+    it('still reads the deprecated cols, and columns wins over it', () => {
+      const legacy = render(DocCardGroup, {
+        props: { cols: 3 },
+        slots: { default: '<span>Cell</span>' }
+      })
+      expect(legacy.getByTestId('documentation-doc-card-group')).toHaveAttribute(
+        'data-columns',
+        '3'
+      )
+      legacy.unmount()
+      const both = render(DocCardGroup, {
+        props: { cols: 3, columns: 1 },
+        slots: { default: '<span>Cell</span>' }
+      })
+      expect(both.getByTestId('documentation-doc-card-group')).toHaveAttribute('data-columns', '1')
     })
 
     it('renders the slot children as the grid cells', () => {
       const { getByTestId } = render(DocCardGroup, {
         slots: { default: '<a href="#a">A</a><a href="#b">B</a><a href="#c">C</a>' }
       })
-      const grid = getByTestId('documentation-doc-card-group').querySelector('[data-mobile-cols]')
+      const grid = getByTestId('documentation-doc-card-group').querySelector(
+        '[data-mobile-columns]'
+      )
       expect(grid?.children).toHaveLength(3)
     })
   })

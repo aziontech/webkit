@@ -3,8 +3,8 @@ name: card-pricing
 category: content
 structure: monolithic
 status: implemented
-spec_version: 2
-checksum: b9e2a3bdbf8e0ce03671a164bb12553ef6444c7bf08a688626e08e6f42dfc772
+spec_version: 3
+checksum: c92a4fd52e396541fae0d907fc4c37f5c6e4e160939dae4be09b99dbe1832a8b
 created: 2026-05-22
 last_updated: 2026-11-14
 ---
@@ -67,7 +67,7 @@ The plan title is an **overline** (`.text-overline-md` on an `<h3>`): the token 
 
 <template>
   <CardPricing
-    plan-title="Pro"
+    title="Pro"
     value="20"
     prefix="$"
     suffix="/ mon"
@@ -96,23 +96,24 @@ The plan title is an **overline** (`.text-overline-md` on an `<h3>`): the token 
 
 ## Props
 
-| Prop                 | Type                           | Default       | Required | JSDoc                                                                                                  |
-| -------------------- | ------------------------------ | ------------- | -------- | ------------------------------------------------------------------------------------------------------ |
-| `planTitle`          | `string`                       | `'Pro'`       | false    | plan Title.                                                                                            |
-| `pricingDetails`     | `string`                       | `''`          | false    | pricing Details.                                                                                       |
-| `showPricingDetails` | `boolean`                      | `true`        | false    | show Pricing Details.                                                                                  |
-| `showTag`            | `boolean`                      | `false`       | false    | show Tag.                                                                                              |
-| `tagLabel`           | `string`                       | `'Popular'`   | false    | tag Label.                                                                                             |
-| `aligned`            | `boolean`                      | `false`       | false    | Reserves the caveat's band so a row of cards aligns row-for-row. Set it on every card in the row.      |
-| `slotPosition`       | `'bottom' \| 'middle'`         | `'bottom'`    | false    | slot Position.                                                                                         |
-| `kind`               | `'contained' \| 'transparent'` | `'contained'` | false    | card Style.                                                                                            |
-| `value`              | `string`                       | `'20'`        | false    | value.                                                                                                 |
-| `prefix`             | `string`                       | `'$'`         | false    | prefix.                                                                                                |
-| `suffix`             | `string`                       | `'/ mon'`     | false    | suffix.                                                                                                |
-| `showPrefix`         | `boolean`                      | `true`        | false    | show Prefix.                                                                                           |
-| `showSuffix`         | `boolean`                      | `true`        | false    | show Suffix.                                                                                           |
-| `actionLabel`        | `string`                       | `'Label'`     | false    | action Label.                                                                                          |
-| `animated`           | `boolean`                      | `false`       | false    | Fades the old price out and the new one in when the price changes, such as on a billing-period switch. |
+| Prop                 | Type                           | Default       | Required | JSDoc                                                                                                                                              |
+| -------------------- | ------------------------------ | ------------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `title`              | `string`                       | `''`          | false    | Plan name shown as the card heading. Empty falls back to the deprecated `planTitle`.                                                               |
+| `planTitle`          | `string`                       | `'Pro'`       | false    | @deprecated since 6.0 — use `title` instead. Removed in 7.0.                                                                                       |
+| `pricingDetails`     | `string`                       | `''`          | false    | Caveat under the price, such as the billing terms.                                                                                                 |
+| `showPricingDetails` | `boolean`                      | `true`        | false    | Shows the pricing details line.                                                                                                                    |
+| `showTag`            | `boolean`                      | `false`       | false    | Shows the tag beside the plan name.                                                                                                                |
+| `tagLabel`           | `string`                       | `'Popular'`   | false    | Text of the tag beside the plan name.                                                                                                              |
+| `aligned`            | `boolean`                      | `false`       | false    | Reserves the caveat's band so a row of cards aligns row-for-row. Set it on every card in the row.                                                  |
+| `slotPosition`       | `'bottom' \| 'middle'`         | `'bottom'`    | false    | Composition of the card: `bottom` stacks the actions under the price, `middle` puts the price and actions between the header and the default slot. |
+| `kind`               | `'contained' \| 'transparent'` | `'contained'` | false    | Whether the card draws its own surface: `contained` has a border and a surface, `transparent` sits on the page.                                    |
+| `value`              | `string`                       | `'20'`        | false    | Price amount, already formatted, without the currency symbol.                                                                                      |
+| `prefix`             | `string`                       | `'$'`         | false    | Text before the amount, usually the currency symbol.                                                                                               |
+| `suffix`             | `string`                       | `'/ mon'`     | false    | Text after the amount, usually the billing period.                                                                                                 |
+| `showPrefix`         | `boolean`                      | `true`        | false    | Shows the prefix.                                                                                                                                  |
+| `showSuffix`         | `boolean`                      | `true`        | false    | Shows the suffix.                                                                                                                                  |
+| `actionLabel`        | `string`                       | `'Label'`     | false    | Label of the default action button.                                                                                                                |
+| `animated`           | `boolean`                      | `false`       | false    | Fades the old price out and the new one in when the price changes, such as on a billing-period switch.                                             |
 
 ## Events
 

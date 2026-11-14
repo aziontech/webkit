@@ -1,10 +1,9 @@
 <script setup lang="ts">
-  import { computed, useAttrs, useId } from 'vue'
+  import { computed, useAttrs } from 'vue'
 
-  import Button from '../../actions/button/button.vue'
-  import Brand from '../../content/brand/brand.vue'
-  import FrameBox from '../../layout/frame-box/frame-box.vue'
+  import DocCallToAction from '../doc-call-to-action/doc-call-to-action.vue'
 
+  /** @deprecated since 6.0 — use `DocCallToAction` (`@aziontech/webkit/doc-call-to-action`) instead. Removed in 7.0. */
   defineOptions({ name: 'DocCta', inheritAttrs: false })
 
   interface Props {
@@ -22,7 +21,7 @@
     secondaryHref?: string
   }
 
-  withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<Props>(), {
     title: '',
     label: '',
     primaryLabel: '',
@@ -37,7 +36,6 @@
   }>()
 
   const attrs = useAttrs()
-  const titleId = useId()
 
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? 'documentation-doc-cta'
@@ -45,56 +43,19 @@
 </script>
 
 <template>
-  <FrameBox
+  <DocCallToAction
     v-bind="$attrs"
     :data-testid="testId"
-    role="complementary"
-    :aria-labelledby="title ? titleId : undefined"
-    class="w-full"
+    :title="title"
+    :label="label"
+    :primary-action="{ label: props.primaryLabel, href: props.primaryHref }"
+    :secondary-action="{ label: props.secondaryLabel, href: props.secondaryHref }"
   >
-    <div class="flex flex-col bg-(--bg-surface) px-6 py-5">
-      <Brand
-        kind="default"
-        size="small"
-        class="mb-(--spacing-md) [&>svg]:h-3.5!"
-      />
-
-      <p
-        v-if="title"
-        :id="titleId"
-        class="m-0 text-heading-xxs text-(--text-default)"
-      >
-        {{ title }}
-      </p>
-
-      <p
-        v-if="slots.default || label"
-        class="m-0 mt-(--spacing-xxs) text-body-xs text-(--text-muted)"
-      >
-        <slot>{{ label }}</slot>
-      </p>
-
-      <div
-        v-if="primaryLabel || secondaryLabel"
-        class="mt-(--spacing-md) flex flex-col gap-(--spacing-xs)"
-      >
-        <Button
-          v-if="primaryLabel"
-          :label="primaryLabel"
-          :href="primaryHref"
-          size="medium"
-          class="w-full"
-        />
-        <Button
-          v-if="secondaryLabel"
-          key="secondary"
-          :label="secondaryLabel"
-          :href="secondaryHref"
-          kind="outlined"
-          size="medium"
-          class="w-full"
-        />
-      </div>
-    </div>
-  </FrameBox>
+    <template
+      v-if="slots.default"
+      #default
+    >
+      <slot />
+    </template>
+  </DocCallToAction>
 </template>

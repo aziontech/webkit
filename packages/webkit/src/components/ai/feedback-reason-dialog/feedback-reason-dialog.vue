@@ -37,21 +37,20 @@
     inheritAttrs: false
   })
 
-  const props = withDefaults(
-    defineProps<{
-      /** Reasons offered, in order. Empty uses the catalog's five: inaccurate, not helpful, did not follow the request, unsafe or harmful, other. */
-      reasons?: FeedbackReason[]
-      /** The feedback is being sent: Send feedback shows a spinner and the form is locked. */
-      loading?: boolean
-      /** Dialog title. Empty uses the locale catalog (`What went wrong?`). */
-      title?: string
-    }>(),
-    {
-      reasons: () => [],
-      loading: false,
-      title: ''
-    }
-  )
+  interface Props {
+    /** Reasons offered, in order. Empty uses the catalog's five: inaccurate, not helpful, did not follow the request, unsafe or harmful, other. */
+    reasons?: FeedbackReason[]
+    /** The feedback is being sent: Send feedback shows a spinner and the form is locked. */
+    loading?: boolean
+    /** Dialog title. Empty uses the locale catalog (`What went wrong?`). */
+    title?: string
+  }
+
+  const props = withDefaults(defineProps<Props>(), {
+    reasons: () => [],
+    loading: false,
+    title: ''
+  })
 
   const open = defineModel<boolean>('open', { default: false })
 

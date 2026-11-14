@@ -42,7 +42,7 @@
     "sample:site/docs/ui/DocAccordionGroup": "doc-accordion-group",
     "sample:site/docs/ui/DocAccordionItem": "doc-accordion-item",
     "sample:site/docs/ui/DocCodeGroup": "doc-code-group",
-    "sample:site/docs/ui/DocCta": "doc-cta",
+    "sample:site/docs/ui/DocCta": "doc-call-to-action",
     "sample:site/docs/ui/DocHeading": "doc-heading",
     "sample:site/docs/ui/DocTab": "doc-tab",
     "sample:site/docs/ui/DocTabs": "doc-tabs",
@@ -1720,6 +1720,10 @@
     },
     {
       "id": "doc-accordion-item",
+      "surface": "docs"
+    },
+    {
+      "id": "doc-call-to-action",
       "surface": "docs"
     },
     {

@@ -4,7 +4,7 @@
 </script>
 
 <template>
-  <DocCardGroup :cols="3">
+  <DocCardGroup :columns="3">
     <DocCard
       title="Start from a template"
       icon="pi pi-th-large"

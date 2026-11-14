@@ -3,11 +3,11 @@ name: tool-call
 category: ai
 structure: monolithic
 status: implemented
-spec_version: 1
+spec_version: 2
 template: 2
-checksum: dcecb8fe8b26ee16bee815c935632ca80fcd5ff7e10c07c178ccea1102737b8d
+checksum: b74b62e71c13cb20bedec85ffb8542fc2caadf06333a7652ec30df676079e199
 created: 2026-11-11
-last_updated: 2026-11-11
+last_updated: 2026-11-14
 ---
 
 # ToolCall — Component Spec
@@ -51,9 +51,18 @@ collapsible panel. It is the record of what the agent did; authorization before 
 </script>
 
 <template>
-  <ToolCall name="list_workloads" title="Listing your workloads" state="success">
+  <ToolCall
+    name="list_workloads"
+    title="Listing your workloads"
+    state="success"
+  >
     <template #input>
-      <CodeBlock :tabs="[{ label: 'JSON', value: 'in', code: '{ &quot;limit&quot;: 10 }', language: 'json' }]" :show-line-numbers="false" />
+      <CodeBlock
+        :tabs="[
+          { label: 'JSON', value: 'in', code: '{ &quot;limit&quot;: 10 }', language: 'json' }
+        ]"
+        :show-line-numbers="false"
+      />
     </template>
   </ToolCall>
 </template>
@@ -65,26 +74,29 @@ _None. Exports: `"./tool-call"`; type `ToolCallState`. Composed DS components: `
 
 ## Props
 
-| Prop          | Type                                                        | Default     | Required | JSDoc                                                                                                       |
-| ------------- | ----------------------------------------------------------- | ----------- | -------- | ----------------------------------------------------------------------------------------------------------- |
-| `name`        | `string`                                                    | —           | true     | The tool or command identifier, shown in code font (`list_workloads`).                                     |
-| `title`       | `string`                                                    | `''`        | false    | What the call does in the reader's words (`Listing your workloads`). Empty shows only the name.            |
+| Prop          | Type                                                         | Default     | Required | JSDoc                                                                                                                   |
+| ------------- | ------------------------------------------------------------ | ----------- | -------- | ----------------------------------------------------------------------------------------------------------------------- |
+| `name`        | `string`                                                     | —           | true     | The tool or command identifier, shown in code font (`list_workloads`).                                                  |
+| `title`       | `string`                                                     | `''`        | false    | What the call does in the reader's words (`Listing your workloads`). Empty shows only the name.                         |
 | `state`       | `'pending' \| 'running' \| 'success' \| 'error' \| 'denied'` | `'running'` | false    | `pending` waits for authorization, `running` is in flight, then `success`, `error` or `denied` (the reader refused it). |
-| `open`        | `boolean`                                                   | `undefined` | false    | Controlled open state of the input and output details. Use with `v-model:open`.                            |
-| `defaultOpen` | `boolean`                                                   | `false`     | false    | Initial open state when uncontrolled; details start collapsed.                                             |
+| `defaultOpen` | `boolean`                                                    | `false`     | false    | Initial open state when uncontrolled; details start collapsed.                                                          |
+
+## v-model
+
+| Model          | Type      | Default     | Emits         | Notes                                                                                     |
+| -------------- | --------- | ----------- | ------------- | ----------------------------------------------------------------------------------------- |
+| `v-model:open` | `boolean` | `undefined` | `update:open` | Details expanded or collapsed. Unbound, the state is local and starts from `defaultOpen`. |
 
 ## Events
 
-| Event         | Payload   | When                               |
-| ------------- | --------- | ---------------------------------- |
-| `update:open` | `boolean` | Details expanded or collapsed.     |
+_No events._
 
 ## Slots
 
-| Slot     | Scope | Notes                                                              |
-| -------- | ----- | ------------------------------------------------------------------ |
+| Slot     | Scope | Notes                                                                  |
+| -------- | ----- | ---------------------------------------------------------------------- |
 | `input`  | —     | The parameters the tool is called with (`CodeBlock`, `KeyValuePairs`). |
-| `output` | —     | What the tool returned, or the error it failed with.               |
+| `output` | —     | What the tool returned, or the error it failed with.                   |
 
 ## States
 
@@ -101,13 +113,13 @@ _None. Exports: `"./tool-call"`; type `ToolCallState`. Composed DS components: `
 
 ## Tokens
 
-| Region        | Token                                                           |
-| ------------- | --------------------------------------------------------------- |
-| frame         | `var(--bg-surface)`, `var(--border-default)`, `var(--shape-card)` |
-| title         | `.text-label-sm`, `var(--text-default)`                          |
+| Region        | Token                                                               |
+| ------------- | ------------------------------------------------------------------- |
+| frame         | `var(--bg-surface)`, `var(--border-default)`, `var(--shape-card)`   |
+| title         | `.text-label-sm`, `var(--text-default)`                             |
 | name          | `.text-label-code`, `var(--bg-surface-raised)`, `var(--text-muted)` |
-| section label | `.text-label-sm`, `var(--text-muted)`                            |
-| padding       | `var(--spacing-sm)`, `var(--spacing-xs)`                         |
+| section label | `.text-label-sm`, `var(--text-muted)`                               |
+| padding       | `var(--spacing-sm)`, `var(--spacing-xs)`                            |
 
 ## Theme gaps
 

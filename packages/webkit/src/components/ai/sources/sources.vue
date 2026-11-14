@@ -1,7 +1,6 @@
 <script setup lang="ts">
-  import { computed, onBeforeUnmount, onMounted, useAttrs, useId } from 'vue'
+  import { computed, onMounted, onScopeDispose, useAttrs, useId } from 'vue'
 
-  import { useControllable } from '../../../composables/use-controllable'
   import { useTranslate } from '../../../composables/use-locale/use-translate'
   import * as en from '../../../i18n/messages/en'
   import type { AiSource } from './types'
@@ -21,8 +20,6 @@
     anchor?: string
     /** Heading of the disclosure. Empty uses the locale catalog (`3 sources`). */
     title?: string
-    /** Controlled open state. Use with `v-model:open`. */
-    open?: boolean
     /** Initial open state when uncontrolled. */
     defaultOpen?: boolean
   }
@@ -31,14 +28,11 @@
     items: () => [],
     anchor: '',
     title: '',
-    open: undefined,
     defaultOpen: false
   })
 
-  const emit = defineEmits<{
-    /** The list was expanded or collapsed. */
-    'update:open': [value: boolean]
-  }>()
+  /** Controlled open state. Use with `v-model:open`; while unbound it follows `defaultOpen` and toggles locally. */
+  const open = defineModel<boolean>('open', { default: undefined as never })
 
   const attrs = useAttrs()
   const { t } = useTranslate({ sources: en.sources })
@@ -53,16 +47,13 @@
     () => props.title || t('sources.count', { count: props.items.length })
   )
 
-  const openProp = computed(() => props.open)
-  const isOpen = useControllable<boolean>({
-    prop: openProp,
-    defaultProp: props.defaultOpen,
-    onChange: (value: boolean) => emit('update:open', value)
-  })
+  const isOpen = computed<boolean>(() => open.value ?? props.defaultOpen)
 
   function toggle(): void {
-    isOpen.set(!isOpen.value)
+    open.value = !isOpen.value
   }
+
+  let frame: number | null = null
 
   function external(href?: string): boolean {
     return Boolean(href && /^https?:\/\//i.test(href))
@@ -72,12 +63,19 @@
     if (typeof window === 'undefined') return
     const hash = decodeURIComponent(window.location.hash.slice(1))
     if (!hash.startsWith(`${prefix.value}-source-`)) return
-    isOpen.set(true)
-    requestAnimationFrame(() => document.getElementById(hash)?.scrollIntoView({ block: 'nearest' }))
+    open.value = true
+    if (frame !== null) cancelAnimationFrame(frame)
+    frame = requestAnimationFrame(() => {
+      frame = null
+      document.getElementById(hash)?.scrollIntoView({ block: 'nearest' })
+    })
   }
 
   onMounted(() => window.addEventListener('hashchange', onHashChange))
-  onBeforeUnmount(() => window.removeEventListener('hashchange', onHashChange))
+  onScopeDispose(() => {
+    if (typeof window !== 'undefined') window.removeEventListener('hashchange', onHashChange)
+    if (frame !== null) cancelAnimationFrame(frame)
+  })
 </script>
 
 <template>

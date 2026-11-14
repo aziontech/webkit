@@ -3,11 +3,11 @@ name: overflow-count
 category: content
 structure: monolithic
 status: implemented
-spec_version: 1
+spec_version: 2
 template: 2
-checksum: be8b2864f750a3c686d5526d01f0ae3ab6cc67b4f0597e8d7be239075375bca9
+checksum: 4708ca844716e798c4f81c33e6d6fabb8f2510a1339199c44dfdb4fa4d17bc19
 created: 2026-11-11
-last_updated: 2026-11-11
+last_updated: 2026-11-14
 ---
 
 # OverflowCount — Component Spec
@@ -59,10 +59,10 @@ A small `+N` chip that stands for the items a slot cannot show, and opens a popo
 
 ## Props
 
-| Prop    | Type                                                | Default     | Required | JSDoc                                                                                                  |
-| ------- | --------------------------------------------------- | ----------- | -------- | ------------------------------------------------------------------------------------------------------ |
-| `items` | `Array<string \| { label: string; href?: string }>` | `[]`        | false    | The hidden items. The chip reads `+<length>`; an item with `href` opens in a new tab.                  |
-| `noun`  | `string \| { one: string; other: string }`          | `undefined` | false    | What the items are, for the summary and the trigger's name. Empty uses the catalog (`item` / `items`). |
+| Prop    | Type                                                | Default | Required | JSDoc                                                                                                  |
+| ------- | --------------------------------------------------- | ------- | -------- | ------------------------------------------------------------------------------------------------------ |
+| `items` | `Array<string \| { label: string; href?: string }>` | `[]`    | false    | The hidden items. The chip reads a plus sign and the count; an item with `href` opens in a new tab.    |
+| `noun`  | `string \| { one: string; other: string }`          | `''`    | false    | What the items are, for the summary and the trigger's name. Empty uses the catalog (`item` / `items`). |
 
 ## Events
 
@@ -110,6 +110,7 @@ _none_
 - Keyboard: `Enter`/`Space` opens, `Esc` closes and returns focus to the chip, `Tab` moves through the search box, the links and Load more.
 - A polite `role="status"` region announces the summary after a search or Load more.
 - A link that opens a new tab carries a visually hidden `(opens in a new tab)`.
+- The trigger stops its click from bubbling, so opening the list inside a clickable table row does not fire the row's `row-click`; the wrapper itself is not interactive and lets other clicks through.
 - Contrast: the secondary `Tag` and the muted summary meet 4.5:1 in both themes.
 
 ## Internationalization

@@ -9,13 +9,18 @@
     /** Keeps the prefix unbroken and the label on one line while it fits; a longer label wraps instead of overflowing. */
     singleLine?: boolean
     /** Shows a blinking terminal-style cursor after the label. */
+    cursor?: boolean
+    /**
+     * @deprecated since 6.0 — use `cursor` instead. Removed in 7.0.
+     */
     showCursor?: boolean
     /** Preset prefix rendered before the label; empty renders no prefix. */
     prefix?: OverlinePrefix
   }
 
-  withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<Props>(), {
     singleLine: true,
+    cursor: false,
     showCursor: false,
     prefix: ''
   })
@@ -27,20 +32,22 @@
   const attrs = useAttrs()
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'content-overline')
+
+  const hasCursor = computed(() => props.cursor || props.showCursor)
 </script>
 
 <template>
   <div
     v-bind="$attrs"
     :data-testid="testId"
-    class="flex items-center gap-(--spacing-xxs) relative w-fit max-w-full ps-(--spacing-xxs)"
-    :class="!showCursor ? 'pe-(--spacing-xxs)' : 'pe-0'"
+    :data-cursor="hasCursor || null"
+    :data-single-line="singleLine || null"
+    class="group/overline flex items-center gap-(--spacing-xxs) relative w-fit max-w-full ps-(--spacing-xxs) pe-(--spacing-xxs) data-[cursor]:pe-0"
   >
     <span
       v-if="prefix"
       aria-hidden="true"
-      class="text-(--text-default) font-medium text-overline-md"
-      :class="{ 'whitespace-nowrap': singleLine }"
+      class="text-(--text-default) font-medium text-overline-md group-data-[single-line]/overline:whitespace-nowrap"
     >
       {{ prefix }}
     </span>
@@ -48,7 +55,8 @@
       <slot />
     </span>
     <span
-      v-if="showCursor"
+      v-if="hasCursor"
+      aria-hidden="true"
       class="w-1 h-5 shrink-0 relative bg-(--accent) animate-blink motion-reduce:animate-none"
     />
   </div>

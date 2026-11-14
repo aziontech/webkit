@@ -8,7 +8,11 @@
   interface Props {
     /** Heading level; drives the tag and the prose type scale. */
     level?: 1 | 2 | 3 | 4
-    /** Anchor id: what the page rail's entry and the copied URL point at. */
+    /** In-page anchor: the heading's id, what the page rail's entry and the copied URL point at. */
+    anchor?: string
+    /**
+     * @deprecated since 6.0 — use `anchor` instead. Removed in 7.0.
+     */
     id?: string
     /** Fallback text when the default slot is empty. */
     label?: string
@@ -16,6 +20,7 @@
 
   const props = withDefaults(defineProps<Props>(), {
     level: 2,
+    anchor: '',
     id: '',
     label: ''
   })
@@ -28,6 +33,8 @@
   const attrs = useAttrs()
   const nav = useHeadingNav()
 
+  const target = computed(() => props.anchor || props.id)
+
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? 'documentation-doc-heading'
   )
@@ -37,17 +44,17 @@
   <component
     :is="`h${level}`"
     v-bind="$attrs"
-    :id="id || undefined"
+    :id="target || undefined"
     :data-doc-heading="level"
     :data-testid="testId"
     class="scroll-mt-(--spacing-lg)"
   >
     <a
-      v-if="id"
-      :href="`#${id}`"
+      v-if="target"
+      :href="`#${target}`"
       data-doc-anchor
       class="group/anchor rounded-(--shape-flat) text-inherit no-underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring-color)"
-      @click="nav($event, { id: props.id })"
+      @click="nav($event, { id: target })"
     >
       <span class="decoration-(--border-strong) underline-offset-4 group-hover/anchor:underline">
         <slot>{{ label }}</slot>

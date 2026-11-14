@@ -210,7 +210,7 @@
       case 'heading':
         return h(
           DocHeading,
-          { key, level: node.depth, id: node.id },
+          { key, level: node.depth, anchor: node.id },
           { default: () => inline(node.text) }
         )
       case 'paragraph':

@@ -64,6 +64,27 @@ describe('Sources', () => {
     window.location.hash = ''
   })
 
+  it('stops listening for citation hashes once unmounted', async () => {
+    const { emitted, unmount } = render(Sources, { props: { items, anchor: 'gone-test' } })
+    const events = emitted()
+    unmount()
+    window.location.hash = 'gone-test-source-1'
+    await new Promise((resolve) => setTimeout(resolve, 50))
+    expect(events['update:open']).toBeUndefined()
+    window.location.hash = ''
+  })
+
+  it('follows a bound v-model:open and does not open itself while controlled', async () => {
+    const { getByRole, getByTestId, emitted, rerender } = render(Sources, {
+      props: { items, open: false, 'onUpdate:open': () => undefined }
+    })
+    await userEvent.click(getByRole('button'))
+    expect(emitted('update:open')?.[0]).toEqual([true])
+    expect(getByTestId('ai-sources__list')).not.toBeVisible()
+    await rerender({ items, open: true, 'onUpdate:open': () => undefined })
+    expect(getByTestId('ai-sources__list')).toBeVisible()
+  })
+
   it('has no axe violations when open', async () => {
     const { container } = render(Sources, { props: { items, defaultOpen: true } })
     await expectNoA11yViolations(container)

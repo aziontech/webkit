@@ -67,6 +67,13 @@ describe('QrCode', () => {
     expect(plate.color).not.toBe(plate.backgroundColor)
   })
 
+  it('takes an ariaLabel, which wins over the deprecated label', () => {
+    const view = render(QrCode, {
+      props: { value: URI, ariaLabel: 'Scan to sign in', label: 'Old name' }
+    })
+    expect(view.getByRole('img', { name: 'Scan to sign in' })).toBeInTheDocument()
+  })
+
   it('takes a size', () => {
     render(QrCode, { props: { value: 'a', size: 'small' } })
     expect(root()).toHaveAttribute('data-size', 'small')

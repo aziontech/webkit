@@ -19,11 +19,14 @@
     kind?: BrandKind
     /** Size token; sets the lockup height (16 / 24 / 32 px) while width scales automatically so each `kind` keeps its own aspect ratio. */
     size?: BrandSize
+    /** Hides the mark from assistive tech when visible text beside it already says Azion. */
+    decorative?: boolean
   }
 
   const props = withDefaults(defineProps<Props>(), {
     kind: 'default',
-    size: 'medium'
+    size: 'medium',
+    decorative: false
   })
 
   const attrs = useAttrs()
@@ -39,8 +42,9 @@
 
 <template>
   <span
-    role="img"
-    aria-label="Azion"
+    :role="decorative ? undefined : 'img'"
+    :aria-label="decorative ? undefined : 'Azion'"
+    :aria-hidden="decorative ? 'true' : undefined"
     v-bind="$attrs"
     :data-testid="testId"
     :data-kind="kind"

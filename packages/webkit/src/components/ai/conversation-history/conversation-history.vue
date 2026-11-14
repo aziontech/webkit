@@ -19,27 +19,31 @@
     inheritAttrs: false
   })
 
-  const props = withDefaults(
-    defineProps<{
-      /** Conversations, any order; they are sorted newest first inside their group. */
-      items?: ConversationHistoryItem[]
-      /** Reference time for the groups. Empty uses the nearest WebkitProvider now, then the current time; set either when the list is rendered on the server. */
-      now?: string | number | Date
-      /** Shows a Delete button on each row that emits `remove`. */
-      removable?: boolean
-      /** Shows placeholder rows while the history loads. */
-      loading?: boolean
-      /** Accessible name of the list. Empty uses the locale catalog (`Conversation history`). */
-      label?: string
-    }>(),
-    {
-      items: () => [],
-      now: undefined,
-      removable: false,
-      loading: false,
-      label: ''
-    }
-  )
+  interface Props {
+    /** Conversations, any order; they are sorted newest first inside their group. */
+    items?: ConversationHistoryItem[]
+    /** Reference time for the groups. Empty uses the nearest WebkitProvider now, then the current time; set either when the list is rendered on the server. */
+    now?: string | number | Date
+    /** Shows a Delete button on each row that emits `remove`. */
+    removable?: boolean
+    /** Shows placeholder rows while the history loads. */
+    loading?: boolean
+    /** Accessible name of the list. Empty uses the locale catalog (`Conversation history`). */
+    ariaLabel?: string
+    /**
+     * @deprecated since 6.0 — use `ariaLabel` instead. Removed in 7.0.
+     */
+    label?: string
+  }
+
+  const props = withDefaults(defineProps<Props>(), {
+    items: () => [],
+    now: undefined,
+    removable: false,
+    loading: false,
+    ariaLabel: '',
+    label: ''
+  })
 
   const model = defineModel<string | null>({ default: null })
 
@@ -81,7 +85,9 @@
     for (const item of props.items) {
       const time = new Date(item.updatedAt).getTime()
       const key = groupOf(Number.isNaN(time) ? 0 : time, today)
-      buckets.set(key, [...(buckets.get(key) ?? []), { item, time }])
+      const bucket = buckets.get(key)
+      if (bucket) bucket.push({ item, time })
+      else buckets.set(key, [{ item, time }])
     }
     return ORDER.filter((key) => buckets.has(key)).map((key) => ({
       key,
@@ -96,7 +102,7 @@
 <template>
   <nav
     v-bind="$attrs"
-    :aria-label="label || t('conversationHistory.label')"
+    :aria-label="ariaLabel || label || t('conversationHistory.label')"
     :aria-busy="loading || undefined"
     :data-testid="testId"
     class="flex min-w-0 flex-col gap-(--spacing-md)"

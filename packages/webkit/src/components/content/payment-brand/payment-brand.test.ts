@@ -60,6 +60,13 @@ describe('PaymentBrand', () => {
     expect(view.getByRole('img', { name: 'Visa card' })).toHaveAttribute('data-size', 'small')
   })
 
+  it('takes an ariaLabel, which wins over the deprecated label', () => {
+    const view = render(PaymentBrand, {
+      props: { brand: 'visa', ariaLabel: 'Card on file', label: 'Visa card' }
+    })
+    expect(view.getByRole('img', { name: 'Card on file' })).toBeInTheDocument()
+  })
+
   it('hides a decorative plate from assistive technology', () => {
     render(PaymentBrand, { props: { brand: 'visa', decorative: true } })
     expect(root()).toHaveAttribute('aria-hidden', 'true')

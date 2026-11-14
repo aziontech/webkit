@@ -189,9 +189,30 @@ describe('TutorialPanel', () => {
     expect(getByTestId('state').textContent).toBe('|0|start:first-site,exit:first-site')
   })
 
-  it('shows the empty line with no tutorials', () => {
-    const { getByText } = render(Page, { props: { list: [] } })
+  it('shows the EmptyState with no tutorials', () => {
+    const { getByText, getByTestId } = render(Page, { props: { list: [] } })
     expect(getByText('No tutorials yet.')).toBeTruthy()
+    expect(getByTestId('content-tutorial-panel__empty__title')).toHaveTextContent(
+      'No tutorials yet.'
+    )
+  })
+
+  it('keeps the running tutorial and step locally when v-model is unbound', async () => {
+    const Loose = defineComponent({
+      components: { TutorialPanel, TutorialPanelProvider, Hotspot },
+      setup: () => ({ tutorials }),
+      template: `
+        <TutorialPanelProvider :tutorials="tutorials">
+          <Hotspot hotspot-id="create"><button type="button">Create</button></Hotspot>
+          <Hotspot hotspot-id="name"><label>Name <input /></label></Hotspot>
+          <TutorialPanel />
+        </TutorialPanelProvider>
+      `
+    })
+    const { getAllByRole, findAllByText } = render(Loose)
+    getAllByRole('button', { name: /start/i })[0]!.click()
+    await tick()
+    expect((await findAllByText('Open the create menu')).length).toBeGreaterThan(0)
   })
 
   it('renders a hotspot outside a provider as its content only', () => {

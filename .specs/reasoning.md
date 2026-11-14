@@ -3,11 +3,11 @@ name: reasoning
 category: ai
 structure: monolithic
 status: implemented
-spec_version: 2
+spec_version: 3
 template: 2
-checksum: ab27ea861ffb59d22614e3d58dea37fd8f7041f4ddf50af1f2f60f69ac93d81f
+checksum: eff37d2ecb1031d8cd71d20ab84c0791875fde9612bbfae93a353eb1561469a3
 created: 2026-11-11
-last_updated: 2026-11-13
+last_updated: 2026-11-14
 ---
 
 # Reasoning — Component Spec
@@ -64,25 +64,29 @@ _None. Exports: `"./reasoning"`. Composed DS components: `button` (Skip thinking
 
 ## Props
 
-| Prop          | Type      | Default     | Required | JSDoc                                                                                                                   |
-| ------------- | --------- | ----------- | -------- | ----------------------------------------------------------------------------------------------------------------------- |
-| `streaming`   | `boolean` | `false`     | false    | The model is still reasoning: the label reads `Thinking` and pulses; when it turns false the label shows how long it took. |
+| Prop          | Type      | Default     | Required | JSDoc                                                                                                                                 |
+| ------------- | --------- | ----------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------- |
+| `streaming`   | `boolean` | `false`     | false    | The model is still reasoning: the label reads `Thinking` and pulses; when it turns false the label shows how long it took.            |
 | `duration`    | `number`  | `undefined` | false    | Seconds the reasoning took, when the server reports it. Without it the component measures from `streaming` turning on to turning off. |
-| `open`        | `boolean` | `undefined` | false    | Controlled open state. Use with `v-model:open`.                                                                         |
-| `defaultOpen` | `boolean` | `false`     | false    | Initial open state when uncontrolled; collapsed is the default in a chat, where the response is the main content.       |
-| `skippable`   | `boolean` | `false`     | false    | Offers `Skip thinking` while streaming, for a model that can answer before it finishes reasoning.                       |
+| `defaultOpen` | `boolean` | `false`     | false    | Initial open state when uncontrolled; collapsed is the default in a chat, where the response is the main content.                     |
+| `skippable`   | `boolean` | `false`     | false    | Offers `Skip thinking` while streaming, for a model that can answer before it finishes reasoning.                                     |
+
+## v-model
+
+| Model          | Type      | Default     | Emits         | Notes                                                                                           |
+| -------------- | --------- | ----------- | ------------- | ----------------------------------------------------------------------------------------------- |
+| `v-model:open` | `boolean` | `undefined` | `update:open` | The trace was expanded or collapsed. Unbound, the state is local and starts from `defaultOpen`. |
 
 ## Events
 
-| Event         | Payload   | When                                    |
-| ------------- | --------- | --------------------------------------- |
-| `update:open` | `boolean` | The trace was expanded or collapsed.    |
-| `skip`        | `(event: MouseEvent)` | Skip thinking pressed while streaming.  |
+| Event  | Payload               | When                                   |
+| ------ | --------------------- | -------------------------------------- |
+| `skip` | `(event: MouseEvent)` | Skip thinking pressed while streaming. |
 
 ## Slots
 
-| Slot      | Scope | Notes                                                                        |
-| --------- | ----- | ---------------------------------------------------------------------------- |
+| Slot      | Scope | Notes                                                                              |
+| --------- | ----- | ---------------------------------------------------------------------------------- |
 | `default` | —     | The trace: short narration, steps, inline code. Kept as it was once thinking ends. |
 
 ## States
@@ -92,19 +96,19 @@ _None. Exports: `"./reasoning"`. Composed DS components: `button` (Skip thinking
 
 ## Motion & Animations
 
-| Trigger            | Animation / Transition                                    | Token                         | Reduced-motion fallback          |
-| ------------------ | --------------------------------------------------------- | ----------------------------- | -------------------------------- |
-| streaming glyph    | `animate-pulse`                                           | `pulse`                       | `motion-reduce:animate-none`     |
-| chevron open/close | `transition-transform duration-fast-02 ease-productive-entrance` | `fast-02`                | `motion-reduce:transition-none`  |
-| label color hover  | `transition-colors`                                       | `fast-02`                     | `motion-reduce:transition-none`  |
+| Trigger            | Animation / Transition                                           | Token     | Reduced-motion fallback         |
+| ------------------ | ---------------------------------------------------------------- | --------- | ------------------------------- |
+| streaming glyph    | `animate-pulse`                                                  | `pulse`   | `motion-reduce:animate-none`    |
+| chevron open/close | `transition-transform duration-fast-02 ease-productive-entrance` | `fast-02` | `motion-reduce:transition-none` |
+| label color hover  | `transition-colors`                                              | `fast-02` | `motion-reduce:transition-none` |
 
 ## Tokens
 
-| Region  | Token                                                         |
-| ------- | ------------------------------------------------------------- |
-| label   | `.text-label-sm`, `var(--text-muted)` → hover `var(--text-default)` |
-| trace   | `.text-body-sm`, `var(--text-muted)`, `border-s-2 var(--border-default)`, `var(--spacing-sm)` |
-| gaps    | `var(--spacing-xs)`, `var(--spacing-sm)`                      |
+| Region | Token                                                                                         |
+| ------ | --------------------------------------------------------------------------------------------- |
+| label  | `.text-label-sm`, `var(--text-muted)` → hover `var(--text-default)`                           |
+| trace  | `.text-body-sm`, `var(--text-muted)`, `border-s-2 var(--border-default)`, `var(--spacing-sm)` |
+| gaps   | `var(--spacing-xs)`, `var(--spacing-sm)`                                                      |
 
 ## Theme gaps
 
@@ -119,12 +123,12 @@ _None._
 
 ## Internationalization
 
-| Key                        | English source                                | Override prop |
-| -------------------------- | --------------------------------------------- | ------------- |
-| `reasoning.thinking`       | `Thinking`                                    | —             |
-| `reasoning.thought`        | `Thought for {count} second(s)` (plural)       | —             |
-| `reasoning.thoughtBriefly` | `Thought for a few seconds`                   | —             |
-| `reasoning.skip`           | `Skip thinking`                               | —             |
+| Key                        | English source                           | Override prop |
+| -------------------------- | ---------------------------------------- | ------------- |
+| `reasoning.thinking`       | `Thinking`                               | —             |
+| `reasoning.thought`        | `Thought for {count} second(s)` (plural) | —             |
+| `reasoning.thoughtBriefly` | `Thought for a few seconds`              | —             |
+| `reasoning.skip`           | `Skip thinking`                          | —             |
 
 - Formatting: plural rules through `Intl.PluralRules`; the count through `Intl.NumberFormat`.
 

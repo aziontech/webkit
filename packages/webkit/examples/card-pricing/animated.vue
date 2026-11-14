@@ -26,7 +26,7 @@
     />
     <CardPricing
       animated
-      plan-title="Pro"
+      title="Pro"
       prefix="$"
       :value="price.value"
       :suffix="price.suffix"

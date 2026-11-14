@@ -3,12 +3,12 @@ name: card
 category: content
 structure: monolithic
 status: implemented
-spec_version: 3
+spec_version: 4
 template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=562-6473
   node_id: 562:6473
-checksum: 74048ff8a118f6f1b94b0709577aa0106bd3a9034ec0c119520364e6362b38d3
+checksum: 1f5e1234362b4cf29b6ccc62929929a809bcb9d589f38767fc06b23617375559
 created: 2026-05-22
 last_updated: 2026-11-14
 ---
@@ -22,7 +22,7 @@ Displays content or metadata in the UI. Lives at `packages/webkit/src/components
 ## When to use
 
 - Group related console content into one bordered surface with a title header, a body and an optional footer, such as a settings block, a summary or a form section.
-- Host a divided list edge to edge: set `:padded="false"` and put an `Item` list in the `content` slot.
+- Host a divided list edge to edge: set `:padded="false"` and put an `Item` list in the body.
 - A centered single-card screen (sign-up, onboarding, a success page) that needs header, body and footer regions.
 - A catalog tile for an integration, an extension or a plugin: set `kind="integration"` for the logo, the name, the vendor, a short description, badges, the installed state and one action.
 - A short row of highlighted integrations above the full catalog (Featured): add `featured` to the integration tile for the centred, raised layout with the badge in the corner.
@@ -46,7 +46,7 @@ Displays content or metadata in the UI. Lives at `packages/webkit/src/components
 
 ## Best practices
 
-- Put the body in the `content` slot. There is no `default` slot, so children passed without `#content` don't render.
+- Put the body in the default slot (or `#content`, its named form).
 - Use `title` for a plain heading (rendered as an `h2`). Use the `header` slot only when the header needs another layout: it replaces both the title and `header-action`.
 - `header-action` content stays hidden until the header is hovered or focused, so keep it to secondary actions and never make it the only way to reach a control.
 - Set `:padded="false"` only when the content draws its own inset or needs flush dividers.
@@ -119,18 +119,18 @@ Displays content or metadata in the UI. Lives at `packages/webkit/src/components
 
 ## Props
 
-| Prop          | Type                         | Default     | Required | JSDoc                                                                                                                                         |
-| ------------- | ---------------------------- | ----------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
-| `title`       | `string`                     | `''`        | false    | Heading rendered in the header when the `header` slot is empty; with `kind="integration"`, the item name.                                     |
-| `padded`      | `boolean`                    | `true`      | false    | Pads the content region. Set `false` for flush, edge-to-edge content such as an `ItemList` with full-width dividers.                          |
-| `kind`        | `'default' \| 'integration'` | `'default'` | false    | `integration` lays the card out as a catalog tile from `title`, `logo`, `vendor`, `description`, `badges`, `installed` and the `action` slot. |
-| `logo`        | `string`                     | `''`        | false    | Integration kind: icon class for the logo mark. The `logo` slot takes an image instead.                                                       |
-| `vendor`      | `string`                     | `''`        | false    | Integration kind: who publishes the item, shown as "by {vendor}".                                                                             |
-| `description` | `string`                     | `''`        | false    | Integration kind: one or two sentences on what the item does.                                                                                 |
-| `badges`      | `CardBadge[]`                | `[]`        | false    | Integration kind: small tags such as the category or the context (`{ label, severity? }`, severity defaults to `info`).                       |
-| `installed`   | `boolean`                    | `false`     | false    | Integration kind: shows the Installed tag.                                                                                                    |
-| `href`        | `string`                     | `''`        | false    | Integration kind: the title links here; without it the title is a button that emits `select`.                                                 |
-| `featured`    | `boolean`                    | `false`     | false    | Integration kind: the featured layout, centred on a raised surface with a primary glow at the top and the badges in the top end corner.       |
+| Prop          | Type                         | Default     | Required | JSDoc                                                                                                                                                                           |
+| ------------- | ---------------------------- | ----------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `title`       | `string`                     | `''`        | false    | Heading rendered in the header when the `header` slot is empty; with `kind="integration"`, the item name.                                                                       |
+| `padded`      | `boolean`                    | `true`      | false    | Pads the content region. Set `false` for flush, edge-to-edge content such as an `ItemList` with full-width dividers.                                                            |
+| `kind`        | `'default' \| 'integration'` | `'default'` | false    | `integration` lays the card out as a catalog tile from `title`, `logo`, `vendor`, `description`, `badges`, `installed` and the `action` slot.                                   |
+| `logo`        | `string`                     | `''`        | false    | Integration kind: icon class for the logo mark. The `logo` slot takes an image instead.                                                                                         |
+| `vendor`      | `string`                     | `''`        | false    | Integration kind: who publishes the item, shown as "by {vendor}".                                                                                                               |
+| `description` | `string`                     | `''`        | false    | Integration kind: one or two sentences on what the item does.                                                                                                                   |
+| `badges`      | `CardBadge[]`                | `[]`        | false    | Integration kind: small tags such as the category or the context (`{ label, severity? }`, severity is a `TagSeverity`, `CardBadgeSeverity` is its alias, defaulting to `info`). |
+| `installed`   | `boolean`                    | `false`     | false    | Integration kind: shows the Installed tag.                                                                                                                                      |
+| `href`        | `string`                     | `''`        | false    | Integration kind: the title links here; without it the title is a button that emits `select`.                                                                                   |
+| `featured`    | `boolean`                    | `false`     | false    | Integration kind: the featured layout, centred on a raised surface with a primary glow at the top and the badges in the top end corner.                                         |
 
 ## Events
 
@@ -140,16 +140,17 @@ Displays content or metadata in the UI. Lives at `packages/webkit/src/components
 
 ## Slots
 
-| Slot            | Scope | Notes                                                                                  |
-| --------------- | ----- | -------------------------------------------------------------------------------------- |
-| `header`        | —     | Replaces the default header layout (title + header-action).                            |
-| `header-action` | —     | Actions aligned to the end of the default header; visible on header hover.             |
-| `content`       | —     | Main card body; with `kind="integration"` it renders under the description.            |
-| `footer`        | —     | Footer actions or metadata; omitted when empty.                                        |
-| `logo`          | —     | Integration kind: replaces the logo mark, for an `img` with an empty `alt`.            |
-| `action`        | —     | Integration kind: one action at the end of the tile, above the stretched title target. |
+| Slot            | Scope | Notes                                                                                                            |
+| --------------- | ----- | ---------------------------------------------------------------------------------------------------------------- |
+| `header`        | —     | Replaces the default header layout (title + header-action).                                                      |
+| `header-action` | —     | Actions aligned to the end of the default header; visible on header hover.                                       |
+| `default`       | —     | Main card body: children passed without a slot name. With `kind="integration"` it renders under the description. |
+| `content`       | —     | The named form of `default`; when both are passed, `content` wins.                                               |
+| `footer`        | —     | Footer actions or metadata; omitted when empty.                                                                  |
+| `logo`          | —     | Integration kind: replaces the logo mark, for an `img` with an empty `alt`.                                      |
+| `action`        | —     | Integration kind: one action at the end of the tile, above the stretched title target.                           |
 
-> There is no `default` slot — content goes through `content`.
+> The body is the `default` slot (shadcn, Radix); `content` stays as its named form.
 
 ## States
 

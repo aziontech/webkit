@@ -3,13 +3,13 @@ name: brand
 category: content
 structure: monolithic
 status: implemented
-spec_version: 1
+spec_version: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=587-3946
   node_id: 587:3946
-checksum: 14fc8c14b4793dd5e3b7c26d2b021496becb4794584a1659a4b212ede1a9a0e9
+checksum: 5f2193015bd69c88a55e9cdaf265f50fbca580d4969ef45917a68bdcf4001794
 created: 2026-07-13
-last_updated: 2026-11-09
+last_updated: 2026-11-14
 ---
 
 # Brand — Component Spec
@@ -46,7 +46,7 @@ The Azion brand logo, rendered as an inline SVG lockup. A single `kind` prop sel
 
 ```vue
 <script setup>
-import Brand from '@aziontech/webkit/brand'
+  import Brand from '@aziontech/webkit/brand'
 </script>
 
 <template>
@@ -56,10 +56,11 @@ import Brand from '@aziontech/webkit/brand'
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `kind` | `'default' \| 'reduced' \| 'extended'` | `'default'` | false | Brand lockup to render: `default` (AZION wordmark), `reduced` (the "A" glyph for tight spaces), `extended` (wordmark with the "move to the edge technologies®" tagline). |
-| `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | false | Size token; sets the lockup height (16 / 24 / 32 px) while width scales automatically so each `kind` keeps its own aspect ratio. |
+| Prop         | Type                                   | Default     | Required | JSDoc                                                                                                                                                                    |
+| ------------ | -------------------------------------- | ----------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `kind`       | `'default' \| 'reduced' \| 'extended'` | `'default'` | false    | Brand lockup to render: `default` (AZION wordmark), `reduced` (the "A" glyph for tight spaces), `extended` (wordmark with the "move to the edge technologies®" tagline). |
+| `size`       | `'small' \| 'medium' \| 'large'`       | `'medium'`  | false    | Size token; sets the lockup height (16 / 24 / 32 px) while width scales automatically so each `kind` keeps its own aspect ratio.                                         |
+| `decorative` | `boolean`                              | `false`     | false    | Hides the mark from assistive tech when visible text beside it already says Azion.                                                                                       |
 
 ## Events
 
@@ -81,19 +82,19 @@ _none_
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| brand mark (SVG fill, asset-owned) | `var(--primary)` |
+| Region                             | Token (DESIGN.md) |
+| ---------------------------------- | ----------------- |
+| brand mark (SVG fill, asset-owned) | `var(--primary)`  |
 
 ## Theme gaps
 
-| Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
+| Figma variable           | Temporary primitive                           | Follow-up                                              |
+| ------------------------ | --------------------------------------------- | ------------------------------------------------------ |
 | brand orange (`#F3652B`) | hardcoded HEX inside the `svg/azion/*` assets | `TODO: tokenizar the brand assets to `var(--primary)`` |
 
 ## Accessibility (WCAG 2.1 AA)
 
-- The root carries `role="img"` and a default `aria-label` (`Azion`) so the logo has an accessible name; consumers may override the label via a passed `aria-label`.
+- The root carries `role="img"` and a default `aria-label` (`Azion`) so the logo has an accessible name; consumers may override the label via a passed `aria-label`. With `decorative` the root drops `role` and the name and is `aria-hidden`, for a mark next to visible Azion text (the same option `Logo` has; `Brand` is the Azion house mark, `Logo` any vendor mark).
 - Non-interactive: the logo is not focusable and emits no events; the inner SVG is presentational.
 - Contrast ≥3:1 for the brand mark against its background (large graphic).
 - `motion-reduce` not applicable — the component is static.

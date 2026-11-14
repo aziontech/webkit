@@ -1,7 +1,6 @@
 <script setup lang="ts">
   import { computed, inject, onBeforeUnmount, onMounted, provide, ref, useAttrs } from 'vue'
 
-  import { cn } from '../../../../utils/cn'
   import { AccordionInjectionKey, AccordionItemInjectionKey } from '../injection-key'
 
   defineOptions({
@@ -50,7 +49,13 @@
   })
 
   onMounted(() => {
-    ctx.register({ value: props.value, disabled: props.disabled, el: root })
+    ctx.register({
+      value: props.value,
+      get disabled() {
+        return props.disabled
+      },
+      el: root
+    })
   })
 
   onBeforeUnmount(() => {
@@ -65,12 +70,7 @@
     :data-testid="testId"
     :data-state="open ? 'open' : 'closed'"
     :data-disabled="disabled || null"
-    :class="
-      cn(
-        'flex flex-col border-b border-(--border-muted) data-[state=open]:border-b-0',
-        attrs.class as string | undefined
-      )
-    "
+    class="flex flex-col border-b border-(--border-muted) data-[state=open]:border-b-0"
   >
     <slot />
   </div>

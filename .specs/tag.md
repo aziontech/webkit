@@ -3,13 +3,13 @@ name: tag
 category: content
 structure: monolithic
 status: implemented
-spec_version: 1
+spec_version: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=476-940&vars=1
   node_id: 476:940
-checksum: 364699d1fc59b0d8e9c142d6d0d9411cb9854901498e2b0727f933bc9f77f988
+checksum: 2aa66ad8e1225c7588451e57b7e4b82ccea09221655bca270afe34dfe9be8275
 created: 2026-05-22
-last_updated: 2026-11-12
+last_updated: 2026-11-14
 ---
 
 # Tag — Component Spec
@@ -59,13 +59,13 @@ Compact status or category label with severity-based color coding. Supports opti
 
 ## Props
 
-| Prop       | Type                                                                                                 | Default     | Required | JSDoc                                                                                                     |
-| ---------- | ---------------------------------------------------------------------------------------------------- | ----------- | -------- | --------------------------------------------------------------------------------------------------------- |
-| `label`    | `string`                                                                                             | `''`        | false    | Fallback text when the default slot is empty.                                                             |
+| Prop       | Type                                                                                                                | Default     | Required | JSDoc                                                                                                                                                                              |
+| ---------- | ------------------------------------------------------------------------------------------------------------------- | ----------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `label`    | `string`                                                                                                            | `''`        | false    | Fallback text when the default slot is empty.                                                                                                                                      |
 | `severity` | `'primary' \| 'secondary' \| 'success' \| 'info' \| 'warning' \| 'danger' \| 'accent' \| 'contrast' \| 'highlight'` | `'primary'` | false    | Color style for the tag surface and label; `primary` is solid brand orange, `highlight` the brand orange as a tint, `contrast` uses `var(--bg-contrast)` / `var(--text-contrast)`. |
-| `size`     | `'small' \| 'medium'`                                                                                | `'medium'`  | false    | Size token; `medium` is 24px tall, `small` is 20px.                                                       |
-| `rounded`  | `boolean`                                                                                            | `false`     | false    | Pill shape when true.                                                                                     |
-| `icon`     | `string`                                                                                             | `undefined` | false    | PrimeIcons class for the leading icon.                                                                    |
+| `size`     | `'small' \| 'medium'`                                                                                               | `'medium'`  | false    | Size token; `medium` is 24px tall, `small` is 20px.                                                                                                                                |
+| `rounded`  | `boolean`                                                                                                           | `false`     | false    | Pill shape when true.                                                                                                                                                              |
+| `icon`     | `string`                                                                                                            | `''`        | false    | PrimeIcons class for the leading icon.                                                                                                                                             |
 
 ## Events
 
@@ -79,7 +79,7 @@ Compact status or category label with severity-based color coding. Supports opti
 
 ## States
 
-- Visual states: `default`, `hover`, `focus-visible`, `active`, `disabled`
+- Visual states: `default`. A tag is static text: it takes no focus and has no hover or active state.
 
 ## Motion & Animations
 
@@ -87,18 +87,18 @@ _none_
 
 ## Tokens
 
-| Region                 | Token (DESIGN.md)                                                    |
-| ---------------------- | -------------------------------------------------------------------- |
-| typography (medium)    | `.text-tag-md` + `leading-none` (Figma Typography/Tag/md, 12px)      |
-| typography (small)     | `.text-tag-sm` + `leading-none` (Figma Typography/Tag/sm, 11px)      |
-| spacing (medium)       | `var(--spacing-xs)` horizontal padding and icon gap                  |
-| spacing (small)        | `var(--spacing-xxs)` horizontal padding and icon gap                 |
-| shape (all severities) | `var(--shape-elements)`                                              |
-| surface (primary)      | `var(--primary)` / `var(--primary-contrast)`, WCAG AA in both themes |
-| surface (contrast)     | `var(--bg-contrast)` / `var(--text-contrast)`                        |
+| Region                 | Token (DESIGN.md)                                                                                                                                              |
+| ---------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| typography (medium)    | `.text-tag-md` + `leading-none` (Figma Typography/Tag/md, 12px)                                                                                                |
+| typography (small)     | `.text-tag-sm` + `leading-none` (Figma Typography/Tag/sm, 11px)                                                                                                |
+| spacing (medium)       | `var(--spacing-xs)` horizontal padding and icon gap                                                                                                            |
+| spacing (small)        | `var(--spacing-xxs)` horizontal padding and icon gap                                                                                                           |
+| shape (all severities) | `var(--shape-elements)`                                                                                                                                        |
+| surface (primary)      | `var(--primary)` / `var(--primary-contrast)`, WCAG AA in both themes                                                                                           |
+| surface (contrast)     | `var(--bg-contrast)` / `var(--text-contrast)`                                                                                                                  |
 | surface (highlight)    | `var(--primary-mask)` / `color-mix(in srgb, var(--text-primary) 80%, var(--text-default))`, WCAG AA (5.1:1 or more) on every surface and canvas in both themes |
-| shape (pill)           | `rounded-full`                                                       |
-| ring                   | `var(--ring-color)`                                                  |
+| shape (pill)           | `rounded-full`                                                                                                                                                 |
+| ring                   | `var(--ring-color)`                                                                                                                                            |
 
 ## Theme gaps
 
@@ -106,7 +106,7 @@ _none_
 
 ## Accessibility (WCAG 2.1 AA)
 
-- Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`
+- Visible focus: none; the tag is not focusable. A focusable control that holds a tag draws its own ring.
 - Keyboard map: `Tab` focuses; `Enter`/`Space` activates; `Escape` closes overlays where applicable.
 - ARIA: root uses appropriate roles (`button`, `dialog`, `status`, etc.) per sub-component.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state.

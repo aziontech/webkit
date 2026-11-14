@@ -10,20 +10,24 @@
     inheritAttrs: false
   })
 
-  const props = withDefaults(
-    defineProps<{
-      /** How many versions exist. With one or none the pager is not drawn. */
-      count: number
-      /** Accessible name of the pager group. Empty uses the locale catalog (`Response versions`). */
-      label?: string
-      /** Locks the pager, for example while a new version streams. */
-      disabled?: boolean
-    }>(),
-    {
-      label: '',
-      disabled: false
-    }
-  )
+  interface Props {
+    /** How many versions exist. With one or none the pager is not drawn. */
+    count: number
+    /** Accessible name of the pager group. Empty uses the locale catalog (`Response versions`). */
+    ariaLabel?: string
+    /**
+     * @deprecated since 6.0 — use `ariaLabel` instead. Removed in 7.0.
+     */
+    label?: string
+    /** Locks the pager, for example while a new version streams. */
+    disabled?: boolean
+  }
+
+  const props = withDefaults(defineProps<Props>(), {
+    ariaLabel: '',
+    label: '',
+    disabled: false
+  })
 
   const model = defineModel<number>({ default: 0 })
 
@@ -63,7 +67,7 @@
     <div
       v-if="count > 1"
       role="group"
-      :aria-label="label || t('responseBranches.label')"
+      :aria-label="ariaLabel || label || t('responseBranches.label')"
       :data-testid="`${testId}__pager`"
       :data-disabled="disabled || null"
       class="group inline-flex items-center gap-(--spacing-xxs) self-start"

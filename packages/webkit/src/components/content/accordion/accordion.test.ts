@@ -307,6 +307,53 @@ describe('Accordion (compound / provide-inject)', () => {
     expect(document.activeElement).toBe(last)
   })
 
+  it('follows a disabled flag that changes after mount in the arrow-key order', async () => {
+    const Toggle = defineComponent({
+      components: { Accordion, AccordionItem, AccordionTrigger, AccordionContent },
+      setup: () => ({ off: ref(false) }),
+      template: `
+        <button type="button" data-testid="flip" @click="off = !off">flip</button>
+        <Accordion>
+          <AccordionItem value="a"><AccordionTrigger>Alpha</AccordionTrigger><AccordionContent>A</AccordionContent></AccordionItem>
+          <AccordionItem value="b" :disabled="off"><AccordionTrigger>Beta</AccordionTrigger><AccordionContent>B</AccordionContent></AccordionItem>
+          <AccordionItem value="c"><AccordionTrigger>Gamma</AccordionTrigger><AccordionContent>C</AccordionContent></AccordionItem>
+        </Accordion>
+      `
+    })
+    const view = render(Toggle)
+    const alpha = trigger(view, 'Alpha')
+    alpha.focus()
+    await fireEvent.keyDown(alpha, { key: 'ArrowDown' })
+    expect(document.activeElement).toBe(trigger(view, 'Beta'))
+    await fireEvent.click(view.getByTestId('flip'))
+    alpha.focus()
+    await fireEvent.keyDown(alpha, { key: 'ArrowDown' })
+    expect(document.activeElement).toBe(trigger(view, 'Gamma'))
+  })
+
+  it('moves focus in DOM order even when an item mounts after its later siblings', async () => {
+    const Late = defineComponent({
+      components: { Accordion, AccordionItem, AccordionTrigger, AccordionContent },
+      setup: () => ({ shown: ref(false) }),
+      template: `
+        <button type="button" data-testid="show" @click="shown = true">show</button>
+        <Accordion>
+          <AccordionItem value="a"><AccordionTrigger>Alpha</AccordionTrigger><AccordionContent>A</AccordionContent></AccordionItem>
+          <AccordionItem v-if="shown" value="b"><AccordionTrigger>Beta</AccordionTrigger><AccordionContent>B</AccordionContent></AccordionItem>
+          <AccordionItem value="c"><AccordionTrigger>Gamma</AccordionTrigger><AccordionContent>C</AccordionContent></AccordionItem>
+        </Accordion>
+      `
+    })
+    const view = render(Late)
+    await fireEvent.click(view.getByTestId('show'))
+    const alpha = trigger(view, 'Alpha')
+    alpha.focus()
+    await fireEvent.keyDown(alpha, { key: 'ArrowDown' })
+    expect(document.activeElement).toBe(trigger(view, 'Beta'))
+    await fireEvent.keyDown(trigger(view, 'Beta'), { key: 'ArrowDown' })
+    expect(document.activeElement).toBe(trigger(view, 'Gamma'))
+  })
+
   it('Home and End jump focus to the first / last enabled trigger', async () => {
     const view = render(host())
     const first = trigger(view, 'What is Azion')

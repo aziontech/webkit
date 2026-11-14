@@ -1,7 +1,6 @@
 <script setup lang="ts">
   import { computed, provide, ref } from 'vue'
 
-  import { useControllable } from '../../../../composables/use-controllable'
   import type { Tutorial, TutorialFlatStep } from '../injection-key'
   import { TutorialInjectionKey } from '../injection-key'
 
@@ -13,42 +12,28 @@
   interface Props {
     /** The tutorials the panel lists and the hotspots on the page belong to. */
     tutorials?: Tutorial[]
-    /** Id of the running tutorial; null when none runs. Use with v-model:active. */
-    active?: string | null
-    /** 0-based index of the current step across the running tutorial's tasks. Use with v-model:step. */
-    step?: number
   }
 
   const props = withDefaults(defineProps<Props>(), {
-    tutorials: () => [],
-    active: undefined,
-    step: undefined
+    tutorials: () => []
   })
 
   const emit = defineEmits<{
-    'update:active': [value: string | null]
-    'update:step': [value: number]
     start: [id: string]
     exit: [id: string]
     finish: [id: string]
   }>()
 
+  /** Id of the running tutorial; null when none runs. Use with v-model:active; unbound, the provider keeps it locally. */
+  const active = defineModel<string | null>('active', { default: null })
+
+  /** 0-based index of the current step across the running tutorial's tasks. Use with v-model:step; unbound, the provider keeps it locally. */
+  const step = defineModel<number>('step', { default: 0 })
+
   defineSlots<{
     /** The page: the layout that holds the TutorialPanel and every Hotspot. */
     default(): unknown
   }>()
-
-  const activeState = useControllable<string | null>({
-    prop: computed(() => props.active),
-    defaultProp: null,
-    onChange: (value) => emit('update:active', value)
-  })
-
-  const stepState = useControllable<number>({
-    prop: computed(() => props.step),
-    defaultProp: 0,
-    onChange: (value) => emit('update:step', value)
-  })
 
   const dismissed = ref(false)
   const focusRequest = ref(0)
@@ -57,7 +42,7 @@
   const tutorials = computed<Tutorial[]>(() => props.tutorials)
 
   const activeTutorial = computed<Tutorial | null>(
-    () => tutorials.value.find((tutorial) => tutorial.id === activeState.value) ?? null
+    () => tutorials.value.find((tutorial) => tutorial.id === active.value) ?? null
   )
 
   const steps = computed<TutorialFlatStep[]>(() => {
@@ -68,9 +53,7 @@
     return out
   })
 
-  const currentStep = computed<number>(() =>
-    Math.min(Math.max(stepState.value, 0), steps.value.length)
-  )
+  const currentStep = computed<number>(() => Math.min(Math.max(step.value, 0), steps.value.length))
 
   const finished = computed<boolean>(
     () =>
@@ -81,20 +64,20 @@
 
   const move = (index: number) => {
     dismissed.value = false
-    stepState.set(index)
+    step.value = index
     focusRequest.value += 1
   }
 
   const start = (id: string) => {
-    activeState.set(id)
+    active.value = id
     move(0)
     emit('start', id)
   }
 
   const exit = () => {
     const id = activeTutorial.value?.id
-    activeState.set(null)
-    stepState.set(0)
+    active.value = null
+    step.value = 0
     dismissed.value = false
     if (id) emit('exit', id)
   }

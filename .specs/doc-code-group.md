@@ -3,11 +3,11 @@ name: doc-code-group
 category: documentation
 structure: monolithic
 status: implemented
-spec_version: 2
+spec_version: 3
 template: 2
-checksum: 6460f2269744a4a2b16e68b80cad7903e659f82c87d9bd0e0fee4b20790bf331
+checksum: 3f4ab1b451ea062215c6504588e87caa13da702379813a1c704e10a94c2dccfb
 created: 2026-11-11
-last_updated: 2026-11-12
+last_updated: 2026-11-14
 ---
 
 # DocCodeGroup — Component Spec
@@ -69,6 +69,8 @@ One or more code samples of the same thing in different languages or package man
 | `kind`            | `'code' \| 'output'` | `'code'` | false    | What the samples hold: `code` the reader runs, or `output` — what a command prints — drawn muted under an "Output" label, without a copy control.                 |
 
 `DocCodeSample` is `{ label?, language?, fileName?, code, output? }`: `label` falls back to the language's readable name; `output` is what `code` prints, drawn in its own "Output" block under the sample while that sample is the active tab.
+
+The defaults differ from `CodeBlock` on purpose: `showLineNumbers` is `false` and `showLabel` is `true` here (prose code samples are short, and the label names the sample), while `CodeBlock` shows line numbers and hides the label. `samples` is this component's name for `CodeBlock`'s `tabs`, after Mintlify's `CodeGroup`.
 
 ## Events
 

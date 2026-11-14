@@ -3,10 +3,10 @@ name: doc-callout
 category: documentation
 structure: monolithic
 status: implemented
-spec_version: 1
-checksum: a29ab810591bbae99acad8a7bcb9d7650b542d142a9bb3e285341bc4bf78778a
+spec_version: 2
+checksum: 8b0353ed79dcc7dc0f9799cda30fc80225a36e973498937d39f9b5e597f1bf1b
 created: 2026-08-22
-last_updated: 2026-09-25
+last_updated: 2026-11-14
 ---
 
 # DocCallout — Component Spec
@@ -57,6 +57,8 @@ The admonition a documentation page interrupts itself with — Note, Info, Tip, 
 | ------- | --------------------------------------------------------------- | -------- | -------- | ----------------------------------------------------------------- |
 | `kind`  | `'note' \| 'info' \| 'tip' \| 'check' \| 'warning' \| 'danger'` | `'note'` | false    | Which admonition this is; drives the severity color and the icon. |
 | `label` | `string`                                                        | `''`     | false    | Fallback copy when the default slot is empty.                     |
+
+`kind` names the admonition type (Mintlify's Note, Info, Tip, Check, Warning, Danger), not a severity: `note` and `tip` are not severities. It maps onto `Alert` severities for color and adds an icon (`note` and `info` → info, `tip` → info drawn neutral, `check` → success, `warning` → warning, `danger` → danger), which is why it is not called `severity`.
 
 ## Events
 

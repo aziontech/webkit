@@ -25,18 +25,17 @@
     inheritAttrs: false
   })
 
-  const props = withDefaults(
-    defineProps<{
-      /** The hidden items. The chip reads `+<length>`; an item with `href` opens in a new tab. */
-      items?: OverflowCountItem[]
-      /** What the items are, for the summary and the trigger's name. Empty uses the catalog (`item` / `items`). */
-      noun?: OverflowCountNoun
-    }>(),
-    {
-      items: () => [],
-      noun: undefined
-    }
-  )
+  interface Props {
+    /** The hidden items. The chip reads a plus sign and the count; an item with `href` opens in a new tab. */
+    items?: OverflowCountItem[]
+    /** What the items are, for the summary and the trigger's name. Empty uses the catalog (`item` / `items`). */
+    noun?: OverflowCountNoun
+  }
+
+  const props = withDefaults(defineProps<Props>(), {
+    items: () => [],
+    noun: ''
+  })
 
   defineSlots<{
     /** One list entry; replaces the built-in text or link. */
@@ -114,7 +113,6 @@
     v-bind="$attrs"
     :data-testid="testId"
     class="inline-flex shrink-0"
-    @click.stop
   >
     <Popover
       v-model:open="open"
@@ -126,6 +124,7 @@
         :aria-label="triggerLabel"
         :data-testid="`${testId}__trigger`"
         class="rounded-(--shape-elements)"
+        @click.stop
       >
         <Tag
           :label="`+${total}`"

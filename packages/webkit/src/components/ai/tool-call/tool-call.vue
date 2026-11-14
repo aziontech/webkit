@@ -1,7 +1,6 @@
 <script setup lang="ts">
   import { computed, useAttrs, useId } from 'vue'
 
-  import { useControllable } from '../../../composables/use-controllable'
   import { useTranslate } from '../../../composables/use-locale/use-translate'
   import * as en from '../../../i18n/messages/en'
   import type { StatusIndicatorSeverity } from '../../feedback/status-indicator/status-indicator.vue'
@@ -21,8 +20,6 @@
     title?: string
     /** `pending` waits for authorization, `running` is in flight, then `success`, `error` or `denied` (the reader refused it). */
     state?: ToolCallState
-    /** Controlled open state of the input and output details. Use with `v-model:open`. */
-    open?: boolean
     /** Initial open state when uncontrolled; details start collapsed. */
     defaultOpen?: boolean
   }
@@ -30,14 +27,11 @@
   const props = withDefaults(defineProps<Props>(), {
     title: '',
     state: 'running',
-    open: undefined,
     defaultOpen: false
   })
 
-  const emit = defineEmits<{
-    /** The details were expanded or collapsed. */
-    'update:open': [value: boolean]
-  }>()
+  /** Controlled open state. Use with `v-model:open`; while unbound it follows `defaultOpen` and toggles locally. */
+  const open = defineModel<boolean>('open', { default: undefined as never })
 
   const slots = defineSlots<{
     /** The parameters the tool is called with, usually a `CodeBlock` or `KeyValuePairs`. */
@@ -54,12 +48,7 @@
   const testId = computed<string>(
     () => (attrs['data-testid'] as string | undefined) ?? 'ai-tool-call'
   )
-  const openProp = computed(() => props.open)
-  const isOpen = useControllable<boolean>({
-    prop: openProp,
-    defaultProp: props.defaultOpen,
-    onChange: (value) => emit('update:open', value)
-  })
+  const isOpen = computed<boolean>(() => open.value ?? props.defaultOpen)
   const expandable = () => Boolean(slots.input || slots.output)
 
   const severity = computed<StatusIndicatorSeverity>(() => {
@@ -71,7 +60,7 @@
   })
 
   function toggle(): void {
-    isOpen.set(!isOpen.value)
+    open.value = !isOpen.value
   }
 </script>
 

@@ -28,6 +28,29 @@
       "mount": 240,
       "update": 80,
       "update_is": "filter 10k virtual rows by text under useCollection"
-    }
+    },
+    "conversation-history-5k": {
+      "mount": 680,
+      "update": 100,
+      "update_is": "select a conversation"
+    },
+    "conversation-500": {
+      "mount": 420,
+      "update": 50,
+      "update_is": "stream 20 tokens into the last message"
+    },
+    "streaming-response-2k-lines": {
+      "mount": 440,
+      "update": 1100,
+      "update_is": "stream 20 tokens"
+    },
+    "doc-markdown-5k-lines": {
+      "mount": 440,
+      "update": 160,
+      "update_is": "replace the page source"
+    },
+    "doc-layout-1k": { "mount": 480, "update": 800, "update_is": "open the search palette" },
+    "item-list-1k": { "mount": 380, "update": 240, "update_is": "reverse the 1k rows" },
+    "key-value-pairs-1k": { "mount": 240, "update": 120, "update_is": "change the 1k values" }
   }
 }

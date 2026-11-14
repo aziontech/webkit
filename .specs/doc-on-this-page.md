@@ -3,10 +3,10 @@ name: doc-on-this-page
 category: documentation
 structure: monolithic
 status: implemented
-spec_version: 1
-checksum: 131451f1ccc0a4b8324677bbaa78769c6ea5fcd2d14e04bc9f2700327f7d5120
+spec_version: 2
+checksum: a29d90efbfd2721da474fb9688d76c7c5bc566bf00128a1a8ebef56f062311b2
 created: 2026-08-22
-last_updated: 2026-11-11
+last_updated: 2026-11-14
 ---
 
 # DocOnThisPage — Component Spec
@@ -126,6 +126,10 @@ The "On this page" rail: the page's own headings, the active one lit, nested hea
 - The marker is never the only signal: the active entry also changes ink and carries `aria-current`, so the state does not depend on seeing the dash.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons).
 - Touch target: entries are padded rows; the rail itself is not interactive.
+
+## Performance
+
+- Runtime: the rail re-measures its headings on scroll and resize. Its size is capped by page structure (a page outline stays well under 100 headings), so it has no runtime budget case; a page that outgrows that should be split.
 
 ## Examples
 
