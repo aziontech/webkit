@@ -159,12 +159,12 @@
 ```vue
 <script setup>
   import Button from '@aziontech/webkit/button'
-  import Dialog from '@aziontech/webkit/dialog-root'
   import DialogClose from '@aziontech/webkit/dialog-close'
   import DialogContent from '@aziontech/webkit/dialog-content'
   import DialogDescription from '@aziontech/webkit/dialog-description'
   import DialogOverlay from '@aziontech/webkit/dialog-overlay'
   import DialogPortal from '@aziontech/webkit/dialog-portal'
+  import Dialog from '@aziontech/webkit/dialog-root'
   import DialogTitle from '@aziontech/webkit/dialog-title'
   import DialogTrigger from '@aziontech/webkit/dialog-trigger'
   import PanelContent from '@aziontech/webkit/panel-content'
@@ -236,12 +236,12 @@
 ```vue
 <script setup>
   import Button from '@aziontech/webkit/button'
-  import Dialog from '@aziontech/webkit/dialog-root'
   import DialogClose from '@aziontech/webkit/dialog-close'
   import DialogContent from '@aziontech/webkit/dialog-content'
   import DialogDescription from '@aziontech/webkit/dialog-description'
   import DialogOverlay from '@aziontech/webkit/dialog-overlay'
   import DialogPortal from '@aziontech/webkit/dialog-portal'
+  import Dialog from '@aziontech/webkit/dialog-root'
   import DialogTitle from '@aziontech/webkit/dialog-title'
   import DialogTrigger from '@aziontech/webkit/dialog-trigger'
   import PanelContent from '@aziontech/webkit/panel-content'

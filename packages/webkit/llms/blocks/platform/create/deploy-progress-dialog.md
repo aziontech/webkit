@@ -114,11 +114,11 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
 ```vue
 <script setup lang="ts">
   import Button from '@aziontech/webkit/button'
-  import Dialog from '@aziontech/webkit/dialog-root'
   import DialogContent from '@aziontech/webkit/dialog-content'
   import DialogDescription from '@aziontech/webkit/dialog-description'
   import DialogOverlay from '@aziontech/webkit/dialog-overlay'
   import DialogPortal from '@aziontech/webkit/dialog-portal'
+  import Dialog from '@aziontech/webkit/dialog-root'
   import DialogTitle from '@aziontech/webkit/dialog-title'
   import EmptyState from '@aziontech/webkit/empty-state'
   import Item from '@aziontech/webkit/item'
