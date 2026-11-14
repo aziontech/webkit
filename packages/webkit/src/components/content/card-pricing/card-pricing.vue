@@ -10,45 +10,50 @@
     inheritAttrs: false
   })
 
-  /** Which composition the card is — see the block comment above. */
+  /** Composition of the card: `bottom` stacks the actions under the price, `middle` puts the price and actions between the header and the default slot. */
   export type CardPricingSlotPosition = 'bottom' | 'middle'
   /** Whether the card draws its own surface. */
   export type CardPricingKind = 'contained' | 'transparent'
 
   interface CardPricingProps {
-    /** plan Title. */
+    /** Plan name shown as the card heading. Empty falls back to the deprecated `planTitle`. */
+    title?: string
+    /**
+     * @deprecated since 6.0 — use `title` instead. Removed in 7.0.
+     */
     planTitle?: string
-    /** pricing Details. */
+    /** Caveat under the price, such as the billing terms. */
     pricingDetails?: string
-    /** show Pricing Details. */
+    /** Shows the pricing details line. */
     showPricingDetails?: boolean
-    /** show Tag. */
+    /** Shows the tag beside the plan name. */
     showTag?: boolean
-    /** tag Label. */
+    /** Text of the tag beside the plan name. */
     tagLabel?: string
     /** Reserves the caveat's band so a row of cards aligns row-for-row. Set it on every card in the row. */
     aligned?: boolean
-    /** slot Position. */
+    /** Composition of the card: `bottom` stacks the actions under the price, `middle` puts the price and actions between the header and the default slot. */
     slotPosition?: CardPricingSlotPosition
-    /** card Style. */
+    /** Whether the card draws its own surface: `contained` has a border and a surface, `transparent` sits on the page. */
     kind?: CardPricingKind
-    /** value. */
+    /** Price amount, already formatted, without the currency symbol. */
     value?: string
-    /** prefix. */
+    /** Text before the amount, usually the currency symbol. */
     prefix?: string
-    /** suffix. */
+    /** Text after the amount, usually the billing period. */
     suffix?: string
-    /** show Prefix. */
+    /** Shows the prefix. */
     showPrefix?: boolean
-    /** show Suffix. */
+    /** Shows the suffix. */
     showSuffix?: boolean
-    /** action Label. */
+    /** Label of the default action button. */
     actionLabel?: string
     /** Fades the old price out and the new one in when the price changes, such as on a billing-period switch. */
     animated?: boolean
   }
 
   const props = withDefaults(defineProps<CardPricingProps>(), {
+    title: '',
     planTitle: 'Pro',
     pricingDetails: '',
     showPricingDetails: true,
@@ -107,7 +112,7 @@
             class="text-overline-md text-(--text-default) [word-break:break-word]"
             :data-testid="`${testId}__title`"
           >
-            {{ planTitle }}
+            {{ title || planTitle }}
           </h3>
           <Tag
             v-if="showTag"

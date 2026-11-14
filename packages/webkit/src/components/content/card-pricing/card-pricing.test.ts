@@ -27,6 +27,12 @@ describe('CardPricing', () => {
     expect(getByTestId(`${ROOT}__header`)).toContainElement(title)
   })
 
+  it('renders title, which wins over the deprecated planTitle', () => {
+    const { getByTestId } = render(CardPricing, { props: { title: 'Team', planTitle: 'Old' } })
+    expect(getByTestId(`${ROOT}__title`)).toHaveTextContent('Team')
+    expect(getByTestId(`${ROOT}__title`)).not.toHaveTextContent('Old')
+  })
+
   it('uses the default planTitle "Pro" when unset', () => {
     const { getByTestId } = render(CardPricing, { props: {} })
     expect(getByTestId(`${ROOT}__title`)).toHaveTextContent('Pro')

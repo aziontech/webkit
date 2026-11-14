@@ -5,7 +5,7 @@
 
 <template>
   <CardPricing
-    plan-title="Pro"
+    title="Pro"
     pricing-details="Billed annually or $25/mo billed monthly."
     slot-position="middle"
     kind="contained"

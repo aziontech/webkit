@@ -6,7 +6,7 @@
   <div class="grid grid-cols-[repeat(auto-fit,320px)] gap-6">
     <CardPricing
       aligned
-      plan-title="Hobby"
+      title="Hobby"
       pricing-details=""
       value="Free"
       prefix=""
@@ -17,7 +17,7 @@
       aligned
       show-tag
       tag-label="Popular"
-      plan-title="Pro"
+      title="Pro"
       pricing-details="Billed annually, save 20%"
       value="20"
       prefix="$"
@@ -26,7 +26,7 @@
     />
     <CardPricing
       aligned
-      plan-title="Enterprise"
+      title="Enterprise"
       pricing-details="Tailored to your usage requirements and payment terms"
       value="Custom"
       prefix=""

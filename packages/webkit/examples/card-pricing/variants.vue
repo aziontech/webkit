@@ -7,7 +7,7 @@
     <CardPricing
       slot-position="bottom"
       kind="contained"
-      plan-title="Pro"
+      title="Pro"
       pricing-details="Billed annually or $25/mo billed monthly."
       value="20"
       prefix="$"
@@ -17,7 +17,7 @@
     <CardPricing
       slot-position="bottom"
       kind="transparent"
-      plan-title="Pro"
+      title="Pro"
       pricing-details="Billed annually or $25/mo billed monthly."
       value="20"
       prefix="$"
@@ -27,7 +27,7 @@
     <CardPricing
       slot-position="middle"
       kind="contained"
-      plan-title="Pro"
+      title="Pro"
       pricing-details="Billed annually or $25/mo billed monthly."
       value="20"
       prefix="$"
@@ -37,7 +37,7 @@
     <CardPricing
       slot-position="middle"
       kind="transparent"
-      plan-title="Pro"
+      title="Pro"
       pricing-details="Billed annually or $25/mo billed monthly."
       value="20"
       prefix="$"
