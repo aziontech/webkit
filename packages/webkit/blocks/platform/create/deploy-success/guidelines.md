@@ -21,27 +21,27 @@ The screen a create flow ends on. The user has just watched a deploy finish and 
 
 A large `h1` stating the outcome and one muted lead sentence under it. For a Git source the lead ends with the scope as a secondary `Tag` with the provider glyph; without a Git source there is no scope tag. The heading enters with the content animation and respects reduced motion.
 
-### B. Deployment card — `Card`, `Tag`, `Button`, `Tooltip` (required)
+### B. Deployment card — `Card`, `Tag`, `Button`, `Link`, `Tooltip` (required)
 
-The live service: a preview tile that opens the site, the service name as an `h2` with a small success `Tag` reading Live, and its creation time. An outlined medium `Button` Visit site opens the domain in a new tab. Under it, one row for the domain with Add custom domain beside it, and one row for the repository with its branch. Each external link carries a `Tooltip` naming where it goes and an external-link glyph. Leave the card out when nothing serves the resource yet.
+The live service: a decorative preview tile (hidden from assistive technology; Visit site is the link), the service name as an `h2` with a small success `Tag` reading Live, and its creation time. An outlined medium `Button` Visit site opens the domain in a new tab. Under it, one row for the domain (a small `Link` with `target="_blank"`) with Add custom domain beside it (a small `Button kind="link"` with `href`), and one row for the repository (a small `Link`) with its branch. Each external `Link` carries a `Tooltip` naming where it goes and its external-link glyph. Never hand-roll the anchors. Leave the card out when nothing serves the resource yet.
 
 ### C. Resources list — `Card`, `Item`, `Tag` (required)
 
-A small heading over `Card :padded="false"` holding an `Item` list, one small row per resource: kind glyph, name, its ID or contents as the description, and a small `Tag` reading Created or Bound. Bound marks a resource that already existed and was attached, so the user can tell new things from reused ones.
+A small heading, "Resources", over `Card :padded="false"` holding an `Item` list, one small row per resource: kind glyph, name, its ID or contents as the description, and a small `Tag` reading Created or Bound. Bound marks a resource that already existed and was attached, so the user can tell new things from reused ones.
 
-### D. Next steps — `Card`, `Tag` (required)
+### D. Next steps — `Card` (required)
 
-Three unpadded `Card`s in a row from the small breakpoint, each a whole-card link or button with a glyph, a title, one sentence and a trailing chevron or external-link glyph. Mark at most one with a primary `Tag` reading Recommended. External steps open the docs in a new tab; internal ones carry on in the console.
+`Card kind="integration"` tiles in a row from the small breakpoint, each with a glyph (`logo`), a title and one sentence. A step with `href` is a link stretched over the tile; a step that acts in place (Deploy this resource) has no `href`, and its title is a button that emits `select`. Mark at most one with a primary Recommended badge (`badges`). Docs steps open in the same tab, so no new-tab notice is needed.
 
 ### E. Manage — `Button` (required)
 
-One full-width secondary large `Button` at the end of the column that opens the resource. It is the only exit; do not add a second.
+One full-width secondary large `Button`, "Manage service", at the end of the column that opens the resource. It is the only exit; do not add a second.
 
 ## Do
 
 - Lead with the outcome and the live address; the user came to see it work.
 - Tag every resource Created or Bound so the list doubles as a receipt of what the flow touched.
-- Open external links in a new tab, with a `Tooltip` and a visually hidden note saying so.
+- Open the domain and the repository in a new tab with `Link target="_blank"`, and a `Tooltip` saying so.
 - Drop the scope tag and the repository row when the flow had no Git source.
 - In CliCreated, replace the deployment card with next steps that deploy the resource, and add the Get started paths for the CLI and GitHub Actions.
 
@@ -60,14 +60,14 @@ One full-width secondary large `Button` at the end of the column that opens the 
 - **Status tag:** one word, e.g. "Live"; resource tags "Created" or "Bound".
 - **Links:** verb first, e.g. "Visit site", "Add custom domain"; tooltips name the target, e.g. "Open acme/web-app in a new tab".
 - **Next steps:** title verb first in two or three words, e.g. "Customize domain", "View analytics"; description one sentence with a period.
-- **Exit:** "Manage", a single verb.
+- **Exit:** "Manage service", the verb and its object.
 - Follow `skills/webkit-microcopy`: sentence case, no em dash, no ampersand, no "please".
 
 ## Accessibility
 
 - The heading is the page's only `h1`; the service name and the section titles are `h2`.
-- The preview tile and Visit site have an `aria-label` that names the address and says it opens in a new tab.
-- Links that open a new tab say so in visually hidden text, not only with the external-link glyph.
+- The preview tile is decorative (`aria-hidden`); Visit site names the address.
+- Links that open a new tab say so in their `Tooltip`, not only with the external-link glyph.
 - Glyphs in rows and cards are decorative and carry `aria-hidden="true"`; the Created or Bound tag gives the state in words.
 - A next-step card is one focusable link or button with a visible focus ring; its title and description are its name.
 - Focus order follows reading order: heading, deployment card, resources, next steps, Manage.
@@ -83,5 +83,5 @@ One full-width secondary large `Button` at the end of the column that opens the 
 - `platform/create/deploy-template` — a flow that ends here.
 - `platform/create/source-wizard` — a wizard that ends here.
 - `platform/create/provision-wizard` — a wizard that ends here with its own title.
-- `platform/detail/get-started` — the CLI and GitHub Actions steps the CliCreated state embeds.
+- `platform/detail/get-started` — the source of the CLI and GitHub Actions steps the CliCreated state embeds; CliCreated copies its section verbatim, so change the command copy there first and copy it here.
 - `platform/detail/details-page` — where Manage leads.

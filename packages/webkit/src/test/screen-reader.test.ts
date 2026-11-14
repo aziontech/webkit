@@ -306,13 +306,11 @@ describe('screen-reader smoke · form blocks', () => {
                 - /placeholder: My domain
             - listitem:
               - text: Domain name
-              - paragraph: The root hostname this domain answers for, without a subdomain. Pasting a zone file here imports its records instead.
+              - paragraph: The root hostname this domain answers for, without a subdomain.
               - textbox "Domain name":
                 - /placeholder: example.com
           - heading "Advanced" [level=2]:
             - button "Advanced"
-        - button "Import"
-        - paragraph: or paste zone file contents in Domain name
         - button "Cancel"
         - button "Save""
     `)

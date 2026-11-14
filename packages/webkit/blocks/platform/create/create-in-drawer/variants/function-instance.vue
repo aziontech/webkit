@@ -22,6 +22,7 @@
   import SchemaForm, { type SchemaFormSchema } from '@aziontech/webkit/schema-form'
   import Select from '@aziontech/webkit/select'
   import SettingsSection from '@aziontech/webkit/settings-section'
+  import { toast } from '@aziontech/webkit/toast'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
   import { computed, nextTick, reactive, ref, watch } from 'vue'
 
@@ -264,6 +265,7 @@
         : [...instances.value, record]
       submitting.value = false
       open.value = false
+      toast.success(`${record.name} ${editingId.value ? 'saved' : 'added'}.`)
     }, 600)
   }
 </script>

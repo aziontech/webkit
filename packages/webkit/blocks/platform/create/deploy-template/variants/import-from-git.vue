@@ -29,7 +29,7 @@
   const breadcrumb = [{ label: 'Import from Git' }, { label: 'acme-web', current: true }]
 
   const scopes: SelectOptionItem[] = [
-    { label: 'riley-carter', value: 'riley-carter' },
+    { label: 'jane-doe', value: 'jane-doe' },
     { label: 'acme', value: 'acme' },
     { label: 'acme-templates', value: 'acme-templates' }
   ]
@@ -143,53 +143,57 @@
       <div
         class="layout-column-focused relative flex min-h-full flex-col items-center gap-(--spacing-xl) px-(--spacing-md) py-(--spacing-xxl)"
       >
-        <div
-          class="flex w-full items-start gap-(--spacing-md) overflow-hidden rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) p-(--spacing-md)"
-        >
-          <span
-            class="flex size-10 shrink-0 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
-          >
-            <i
-              class="ai ai-github text-body-lg leading-none text-(--text-default)"
-              aria-hidden="true"
-            />
-          </span>
-
-          <div class="flex min-w-0 flex-1 flex-col gap-(--spacing-md)">
-            <div class="flex w-full min-w-0 flex-col overflow-hidden">
-              <span class="flex items-center gap-(--spacing-xs)">
-                <span class="truncate text-heading-xxs text-(--text-default)">acme-web</span>
+        <Card class="w-full">
+          <template #content>
+            <div class="flex w-full items-start gap-(--spacing-md)">
+              <span
+                class="flex size-10 shrink-0 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
+              >
+                <i
+                  class="ai ai-github text-body-lg leading-none text-(--text-default)"
+                  aria-hidden="true"
+                />
               </span>
-              <span class="text-body-xs text-(--text-muted)">
-                Import and deploy the acme-web repository from GitHub.
-              </span>
-            </div>
 
-            <div class="flex w-full flex-col gap-(--spacing-xxs)">
-              <span class="truncate text-body-xxs text-(--text-muted)">Importing from GitHub</span>
-              <div class="flex items-center gap-(--spacing-md)">
-                <span
-                  class="flex h-5 items-center gap-(--spacing-xxs) text-label-sm text-(--text-default)"
-                >
-                  <i
-                    class="ai ai-github text-[length:inherit] leading-none"
-                    aria-hidden="true"
-                  />
-                  acme
-                </span>
-                <span
-                  class="flex h-5 items-center gap-(--spacing-xxs) text-label-sm text-(--text-muted)"
-                >
-                  <i
-                    class="pi pi-folder text-[length:inherit] leading-none"
-                    aria-hidden="true"
-                  />
-                  acme-web
-                </span>
+              <div class="flex min-w-0 flex-1 flex-col gap-(--spacing-md)">
+                <div class="flex w-full min-w-0 flex-col overflow-hidden">
+                  <span class="flex items-center gap-(--spacing-xs)">
+                    <span class="truncate text-heading-xxs text-(--text-default)">acme-web</span>
+                  </span>
+                  <span class="text-body-xs text-(--text-muted)">
+                    Import and deploy the acme-web repository from GitHub.
+                  </span>
+                </div>
+
+                <div class="flex w-full flex-col gap-(--spacing-xxs)">
+                  <span class="truncate text-body-xxs text-(--text-muted)"
+                    >Importing from GitHub</span
+                  >
+                  <div class="flex items-center gap-(--spacing-md)">
+                    <span
+                      class="flex h-5 items-center gap-(--spacing-xxs) text-label-sm text-(--text-default)"
+                    >
+                      <i
+                        class="ai ai-github text-[length:inherit] leading-none"
+                        aria-hidden="true"
+                      />
+                      acme
+                    </span>
+                    <span
+                      class="flex h-5 items-center gap-(--spacing-xxs) text-label-sm text-(--text-muted)"
+                    >
+                      <i
+                        class="pi pi-folder text-[length:inherit] leading-none"
+                        aria-hidden="true"
+                      />
+                      acme-web
+                    </span>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-        </div>
+          </template>
+        </Card>
 
         <div
           data-phase="form"

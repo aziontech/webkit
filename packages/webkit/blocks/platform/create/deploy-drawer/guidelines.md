@@ -10,6 +10,8 @@ The drawer a platform deploys from, opened by Deploy on a service or a project. 
 
 ## When not to use
 
+- A release of several resources reviewed together: use `platform/create/release-impact`. This drawer is the canonical surface for deploying one service or one project.
+
 - Creating or editing an item inside a resource: use `platform/create/create-in-drawer`.
 - The first deploy at the end of a create flow: use `platform/create/deploy-template` or `platform/create/provision-wizard`, which stream `platform/create/deployment-flow` in the page.
 - Reading what a past deploy did: use `platform/detail/deployment-logs` or `platform/detail/version-detail`.
@@ -37,17 +39,17 @@ An outlined medium `Button` reading Deploy inside `DrawerTrigger`, on the servic
 
 A small `Accordion` below the resource rows, collapsed, listing the modules and integrations the service references, each with its own version and Change version menu. Dependencies go out with the deploy, so they are shown even when the user does not change them.
 
-### F. Project — `ToggleGroup`, `Item`, `Tag`, `Tooltip`, `Popover`, `DropdownMenu` (required on a service)
+### F. Project — `ToggleGroup`, `Item`, `Tag`, `Link`, `Tooltip`, `Popover`, `DropdownMenu` (required on a service)
 
-A full-width `ToggleGroup` in the card header switches between Use existing and Create new. The project is an outlined `Item`: its name, a New `Tag` when it will be created, and its domains grouped by environment, the first one linked with a `Tooltip`, the rest behind a `+N` `Tag` that opens a searchable `Popover`. Change opens a `DropdownMenu` of the projects grouped by how they relate to the service.
+A full-width `ToggleGroup` in the card header switches between Use existing and Create new. The project is an outlined `Item`: its name, a New `Tag` when it will be created, and its domains grouped by environment, the first one a small `Link` (`target="_blank"`, with its external glyph) under a `Tooltip` that says it opens in a new tab, the rest behind a `+N` `Tag` whose `Popover.Trigger` is named "N more domains" and opens a searchable `Popover` listing each domain as a `Link`. Never hand-roll the anchors. Change opens a `DropdownMenu` of the projects grouped by how they relate to the service.
 
 ### G. Environment — `Field`, `RadioButton`, `Tag` (required)
 
 Choice cards, one horizontal `Field` with a `RadioButton` per environment of the project, each with one sentence on how it serves traffic and a small `Tag` such as Last used. The group carries an `aria-label`.
 
-### H. Projects impacted and commit — `Item`, `Tag`, `Tooltip`, `Popover`, `PanelFooter`, `Button` (required on a service)
+### H. Projects impacted and commit — `Item`, `Tag`, `Link`, `Tooltip`, `Popover`, `PanelFooter`, `Button` (required on a service)
 
-Every project the chosen environment's shared Deployment Settings publish to, grouped by environment, the current one tagged Selected, with its domains shown like the Project card. `PanelFooter` holds one primary medium `Button` reading Deploy on the right, of `type="submit"`. On its left, once a version differs from the live one, one muted line counts the changes and names the environment they go live in.
+Every project the chosen environment's shared Deployment Settings deploy to, grouped by environment, the current one tagged Selected, with its domains shown like the Project card. `PanelFooter` holds one primary medium `Button` reading Deploy on the right, of `type="submit"`. On its left, once a version differs from the live one, one muted line counts the changes and names the environment they go live in.
 
 ## Do
 
@@ -55,7 +57,7 @@ Every project the chosen environment's shared Deployment Settings publish to, gr
 - Preselect the last used project and environment, and say so with a tag.
 - List every project a shared Deployment Setting reaches before the user deploys, not after.
 - When no version is pinned, open as Build and deployment with a Building row, keep the other sections faded and `inert`, and disable Deploy until the build lands.
-- On a project, warn with an `Alert` above the environments when its Deployment Settings also publish elsewhere.
+- On a project, warn with an `Alert` above the environments when its Deployment Settings also deploy elsewhere.
 - Keep an environment that Strict Deployment Settings lock visible but disabled, with a Strict tag and one sentence naming the settings and the service they keep bound.
 - Tag an environment Also deploys (warning) when the chosen environment's shared settings reach it, and say once, in a warning `Alert`, how many environments go live at once.
 - Say in an info `Alert` when the deploy replaces another service on the chosen project, naming both.
@@ -70,7 +72,7 @@ Every project the chosen environment's shared Deployment Settings publish to, gr
 
 ## Don't
 
-- Don't deploy from a dialog, or ask for confirmation after Deploy; the drawer is the review.
+- Don't deploy one service from a dialog, or ask for confirmation after Deploy; the drawer is the review. This is the one confirmation rule across the deploy surfaces: the surface that shows what goes live is the review, and nothing confirms it again. A release of several resources is reviewed on a page (`platform/create/release-impact`, whose single `ConfirmDialog` states the reach); a dropped folder is reviewed in the Drop confirm of `platform/create/deploy-progress-dialog`.
 - Don't hide dependencies or impacted projects behind a second step.
 - Don't let Change version list hundreds of versions at once; search plus Load more.
 - Don't add a second commit such as Save as draft; one Deploy.
@@ -82,7 +84,7 @@ Every project the chosen environment's shared Deployment Settings publish to, gr
 
 - **Trigger, title, commit:** "Deploy" on all three; "Build and deployment" as the title only while a build runs first.
 - **Section hints:** one sentence on what the section decides, e.g. "The project whose domains serve the service."
-- **Version control:** "Change version"; search placeholder and `aria-label` "Search versions"; footer "Load 10 more".
+- **Version control:** "Change version", named "Change version of <resource>" for assistive technology; search placeholder and `aria-label` "Search versions"; footer "Load 10 more".
 - **Project modes:** "Use existing" and "Create new".
 - **Environment descriptions:** one sentence on how it serves, e.g. "Live traffic. One version serves the domain, and deploying replaces it."
 - **Footer summary:** "1 change goes live in Production." or "3 changes go live in Production."

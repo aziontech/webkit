@@ -1,8 +1,10 @@
 <script setup lang="ts">
   import Accordion from '@aziontech/webkit/accordion'
+  import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import LogView, { type LogViewLine } from '@aziontech/webkit/log-view'
   import LogViewContent from '@aziontech/webkit/log-view-content'
+  import StatusIndicator from '@aziontech/webkit/status-indicator'
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
   import { ref } from 'vue'
@@ -21,6 +23,13 @@
     }
     lines: LogViewLine[]
   }
+  const STATUS_TEXT: Record<StepStatus, string> = {
+    done: 'Done',
+    running: 'In progress',
+    pending: 'Waiting',
+    failed: 'Failed',
+    skipped: 'Skipped'
+  }
 
   const steps: DeploymentStep[] = [
     {
@@ -34,25 +43,25 @@
           id: '0',
           time: '13:47:33',
           type: 'success',
-          message: '[TASK] - #. Deploy started successfully!'
+          message: '[TASK] - #. Deploy started successfully.'
         },
         {
           id: '1',
           time: '13:47:33',
           type: 'text',
-          message: '[TASK] - #. Creating access token!'
+          message: '[TASK] - #. Creating access token.'
         },
         {
           id: '2',
           time: '13:47:35',
           type: 'text',
-          message: '[TASK] - #. Adding token to the CLI!'
+          message: '[TASK] - #. Adding token to the CLI.'
         },
         {
           id: '3',
           time: '13:47:36',
           type: 'success',
-          message: '[TASK] - #. Token added successfully!'
+          message: '[TASK] - #. Token added successfully.'
         }
       ]
     },
@@ -69,7 +78,7 @@
           type: 'text',
           message: '[TASK] - # Current directory: vue/vue3-vite-static/'
         },
-        { id: '1', time: '13:47:38', type: 'text', message: '[TASK] - #. Cloning template!' },
+        { id: '1', time: '13:47:38', type: 'text', message: '[TASK] - #. Cloning template.' },
         {
           id: '2',
           time: '13:47:39',
@@ -80,7 +89,7 @@
           id: '3',
           time: '13:47:40',
           type: 'success',
-          message: '[TASK] - #. Template cloned successfully!'
+          message: '[TASK] - #. Template cloned successfully.'
         }
       ]
     },
@@ -114,7 +123,7 @@
           id: '4',
           time: '13:47:49',
           type: 'success',
-          message: '[TASK] - # Dependencies installed successfully!'
+          message: '[TASK] - # Dependencies installed successfully.'
         }
       ]
     },
@@ -142,7 +151,7 @@
           id: '3',
           time: '13:47:57',
           type: 'success',
-          message: '[TASK] - # Build completed successfully!'
+          message: '[TASK] - # Build completed successfully.'
         }
       ]
     },
@@ -176,7 +185,7 @@
           id: '4',
           time: '13:48:02',
           type: 'success',
-          message: '[TASK] - # Upload completed successfully!'
+          message: '[TASK] - # Upload completed successfully.'
         }
       ]
     },
@@ -198,7 +207,7 @@
           id: '2',
           time: '13:48:07',
           type: 'success',
-          message: '[TASK] - # Service created successfully!'
+          message: '[TASK] - # Service created successfully.'
         }
       ]
     },
@@ -256,6 +265,11 @@
 
   const logView = ref('phased')
   const openStep = ref('rules')
+  const redeploying = ref(false)
+
+  const redeploy = () => {
+    redeploying.value = true
+  }
 </script>
 
 <template>
@@ -265,7 +279,14 @@
   >
     <template #header>
       <p class="truncate text-heading-xs text-(--text-default)">Deployment</p>
+      <StatusIndicator
+        v-if="redeploying"
+        loading
+        severity="info"
+        label="Redeploying"
+      />
       <ToggleGroup
+        v-else
         v-model="logView"
         :options="logViews"
         class="shrink-0"
@@ -319,6 +340,12 @@
                     v-else
                     class="size-3.5 rounded-full border border-dashed border-(--border-default)"
                   />
+                </span>
+                <span
+                  v-if="!step.tag"
+                  class="sr-only"
+                >
+                  {{ STATUS_TEXT[step.status] }}
                 </span>
                 <span
                   :data-state="step.status"
@@ -384,6 +411,26 @@
             <template #empty>No log lines yet.</template>
           </LogViewContent>
         </LogView>
+      </div>
+    </template>
+
+    <template #footer>
+      <div class="flex w-full flex-wrap items-center justify-end gap-(--spacing-sm)">
+        <Button
+          label="Edit"
+          kind="outlined"
+          size="medium"
+          href="/create/templates/nuxt-ecommerce"
+          :disabled="redeploying"
+        />
+        <Button
+          label="Redeploy"
+          kind="primary"
+          size="medium"
+          icon="pi pi-refresh"
+          :loading="redeploying"
+          @click="redeploy"
+        />
       </div>
     </template>
   </Card>

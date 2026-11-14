@@ -19,6 +19,7 @@
   import Select from '@aziontech/webkit/select'
   import SettingsSection from '@aziontech/webkit/settings-section'
   import Textarea from '@aziontech/webkit/textarea'
+  import { toast } from '@aziontech/webkit/toast'
   import { computed, reactive, ref, watch } from 'vue'
 
   const recordTypes = [
@@ -109,6 +110,7 @@
     setTimeout(() => {
       submitting.value = false
       open.value = false
+      toast.success(`${selectedType.value.value} record ${form.name.trim()} added.`)
     }, 800)
   }
 </script>
@@ -162,7 +164,8 @@
                 <div class="flex min-w-0 flex-col gap-(--layout-group-gap)">
                   <Field
                     :disabled="submitting"
-                    :required="!!errors.name"
+                    required
+                    :invalid="!!errors.name"
                   >
                     <Field.Label>Name</Field.Label>
                     <InputGroup>
@@ -173,8 +176,9 @@
                       />
                       <InputGroup.Addon>.example.com</InputGroup.Addon>
                     </InputGroup>
-                    <Field.Description>
-                      {{ errors.name || 'Use @ to create a record for the root domain.' }}
+                    <Field.Error v-if="errors.name">{{ errors.name }}</Field.Error>
+                    <Field.Description v-else>
+                      Use @ to create a record for the root domain.
                     </Field.Description>
                   </Field>
 
@@ -238,7 +242,8 @@
 
                   <Field
                     :disabled="submitting"
-                    :required="!!errors.value"
+                    required
+                    :invalid="!!errors.value"
                   >
                     <Field.Label>Value</Field.Label>
                     <Textarea
@@ -246,8 +251,9 @@
                       :placeholder="selectedType.placeholder"
                       @update:model-value="errors.value = ''"
                     />
-                    <Field.Description v-if="errors.value || selectedType.valueHelper">
-                      {{ errors.value || selectedType.valueHelper }}
+                    <Field.Error v-if="errors.value">{{ errors.value }}</Field.Error>
+                    <Field.Description v-else-if="selectedType.valueHelper">
+                      {{ selectedType.valueHelper }}
                     </Field.Description>
                   </Field>
 
@@ -330,8 +336,7 @@
           </PanelContent>
 
           <PanelFooter>
-            <div class="flex w-full flex-wrap items-center justify-between gap-(--spacing-sm)">
-              <div class="flex min-w-0 items-center gap-(--spacing-sm)"></div>
+            <div class="flex w-full flex-wrap items-center justify-end gap-(--spacing-sm)">
               <Button
                 label="Add Record"
                 kind="primary"

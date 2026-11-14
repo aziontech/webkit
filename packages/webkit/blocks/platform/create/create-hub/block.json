@@ -3,7 +3,7 @@
   "name": "CreateHub",
   "title": "Templates/Platform/Create/CreateHub",
   "surface": "product",
-  "summary": "The Creation Center, where a project starts: the creation header with a single current crumb and a back control to Home, a large page heading whose lead also offers to pick a file or a folder, then two columns side by side from the large breakpoint. On the left, Import from GitHub: a dashed EmptyState with Continue with GitHub until an account is connected, then an account Select with an Add GitHub account option, a search that also takes a repository URL, and a flush list of repositories with an Import button each, shown as skeleton rows while a scope loads. On the right, Start from template: a Filter button over a faded ScrollArea holding Recommended framework cards in three columns, then the starter templates, one per kind of resource, and every other framework as two-column cards with the vendor beside the title. Dragging a folder onto the page shows the drop target plotted in ProjectIntake. Each Recommended card turns its mark from grey to colour and lights a glow drawn from its mark on hover and focus. Built from `PageHeader`, `GlobalHeader`, `Breadcrumb`, `EmptyState`, `Link`, `Select`, `Input`, `Card`, `Item`, `Skeleton`, `ScrollArea` and `Button`.",
+  "summary": "The Creation Center, where a project starts: the creation header with a single current crumb and a back control to Home, a large page heading whose lead offers to upload a file or a folder through the system picker, then two columns side by side from the large breakpoint. On the left, Import from GitHub: a bordered EmptyState with Continue with GitHub until an account is connected (a danger Alert under the button when the connection fails), then an account Select with an Add GitHub account option, a search that also takes a repository URL, and a flush list of the ten most recently pushed repositories with a named Import button each and Load more for the rest; skeleton rows with a status line while a scope loads, a danger Alert with Retry when the list fails to load, and a small EmptyState with Clear search when nothing matches. On the right, Start from template: a template search over a faded ScrollArea holding Recommended framework cards in three columns, then the starter templates, one per kind of resource, and every other framework as two-column integration Cards with the vendor beside the title; each tile links to its deploy page, and a search with no match shows an EmptyState with Clear search. Each Recommended card turns its mark from grey to colour and lights a glow drawn from its mark on hover and focus. Built from `PageHeader`, `GlobalHeader`, `Breadcrumb`, `EmptyState`, `Alert`, `Link`, `Select`, `Input`, `Card`, `Item`, `Skeleton`, `ScrollArea` and `Button`.",
   "preview": {
     "layout": "fullscreen",
     "background": "dark"
@@ -31,13 +31,23 @@
   "variants": [
     {
       "name": "Connected",
-      "summary": "GitHub connected: jane-doe is the selected scope and its seven repositories are listed, most recently pushed first.",
+      "summary": "GitHub connected: jane-doe is the selected scope and its ten most recently pushed repositories are listed, with Load more for the other two.",
       "file": "variants/connected.vue"
     },
     {
       "name": "LoadingRepositories",
-      "summary": "A scope just picked: six skeleton rows stand in for the repositories while they load.",
+      "summary": "A scope just picked: six skeleton rows, hidden from assistive technology, stand in for the repositories while one status line says they are loading.",
       "file": "variants/loading-repositories.vue"
+    },
+    {
+      "name": "ConnectFailed",
+      "summary": "The GitHub connection failed: the connect EmptyState stays, with a danger Alert under Continue with GitHub saying the authorization did not finish; pressing the button again retries.",
+      "file": "variants/connect-failed.vue"
+    },
+    {
+      "name": "LoadFailed",
+      "summary": "The repositories of the jane-doe scope failed to load: a danger Alert with Retry takes the place of the list, while the scope Select and the search stay usable.",
+      "file": "variants/load-failed.vue"
     }
   ]
 }

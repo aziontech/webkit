@@ -18,6 +18,7 @@
   import SettingsSection from '@aziontech/webkit/settings-section'
   import Switch from '@aziontech/webkit/switch'
   import Textarea from '@aziontech/webkit/textarea'
+  import { toast } from '@aziontech/webkit/toast'
   import { reactive, ref, watch } from 'vue'
 
   const bindingPolicies = [
@@ -75,6 +76,7 @@
     await new Promise((resolve) => setTimeout(resolve, 500))
     submitting.value = false
     open.value = false
+    toast.success(`${form.name.trim()} created.`)
   }
 </script>
 

@@ -1,11 +1,14 @@
 <script setup lang="ts">
   import Button from '@aziontech/webkit/button'
   import Checkbox from '@aziontech/webkit/checkbox'
+  import EmptyState from '@aziontech/webkit/empty-state'
   import Field from '@aziontech/webkit/field'
   import Input from '@aziontech/webkit/input'
+  import OverflowCount from '@aziontech/webkit/overflow-count'
+  import PageHeader from '@aziontech/webkit/page-header'
+  import SaveBar from '@aziontech/webkit/save-bar'
   import Skeleton from '@aziontech/webkit/skeleton'
   import Tag from '@aziontech/webkit/tag'
-  import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, ref } from 'vue'
 
   interface DeploymentSetting {
@@ -147,15 +150,11 @@
       <div
         class="layout-column-focused layout-boundary flex min-w-0 flex-1 flex-col gap-(--layout-section-gap)"
       >
-        <header class="flex min-w-0 flex-col gap-(--spacing-xxs)">
-          <h1 class="text-balance text-heading-lg text-(--text-default)">
-            Choose Deployment Settings
-          </h1>
-          <p class="text-body-md text-(--text-muted)">
-            A Deployment Setting binds a service, and optionally a firewall and an error page.
-            Selecting one deploys into every environment and workload that uses it.
-          </p>
-        </header>
+        <PageHeader
+          title="Select Deployment Settings"
+          description="A Deployment Setting binds a service, and optionally a firewall and an error page. Selecting one deploys into every environment and workload that uses it."
+          size="large"
+        />
 
         <section
           aria-labelledby="release-impact-settings"
@@ -207,20 +206,22 @@
             </div>
           </div>
 
-          <div
+          <EmptyState
             v-if="!visibleGroups.length"
-            class="flex min-w-0 flex-col items-start gap-(--spacing-xs) rounded-(--shape-elements) border border-dashed border-(--border-muted) p-(--spacing-md)"
+            size="small"
+            icon="pi pi-search"
+            title="No Deployment Settings match"
+            :description="`Nothing is named like “${search}”.`"
           >
-            <p class="text-body-sm text-(--text-muted)">
-              No Deployment Settings match this search.
-            </p>
-            <Button
-              label="Clear search"
-              kind="transparent"
-              size="small"
-              @click="search = ''"
-            />
-          </div>
+            <template #actions>
+              <Button
+                label="Clear search"
+                kind="outlined"
+                size="small"
+                @click="search = ''"
+              />
+            </template>
+          </EmptyState>
 
           <div
             v-else
@@ -279,22 +280,11 @@
                             severity="secondary"
                             size="small"
                           />
-                          <Tooltip
+                          <OverflowCount
                             v-if="extraEnvironments(entry).length"
-                            :text="extraEnvironments(entry).join(', ')"
-                          >
-                            <Tag
-                              :label="`+${extraEnvironments(entry).length}`"
-                              severity="secondary"
-                              size="small"
-                            />
-                          </Tooltip>
-                          <span
-                            v-if="extraEnvironments(entry).length"
-                            class="sr-only"
-                          >
-                            Also {{ extraEnvironments(entry).join(', ') }}
-                          </span>
+                            :items="extraEnvironments(entry)"
+                            :noun="{ one: 'environment', other: 'environments' }"
+                          />
                         </span>
                         <span
                           v-if="entry.workloads === null"
@@ -359,10 +349,8 @@
         </section>
       </div>
 
-      <footer class="sticky bottom-0 shrink-0 border-t border-(--border-muted) bg-(--bg-surface)">
-        <div
-          class="layout-column-focused layout-boundary-inline flex flex-col gap-(--spacing-sm) py-(--spacing-md) md:flex-row md:items-center md:justify-between"
-        >
+      <SaveBar kind="docked">
+        <template #leading>
           <p
             id="release-impact-settings-hint"
             class="text-body-sm text-(--text-muted)"
@@ -373,31 +361,25 @@
                 : 'Select at least one Deployment Setting to continue.'
             }}
           </p>
-          <div class="flex flex-col gap-(--spacing-sm) md:flex-row md:items-center">
-            <div class="w-full md:w-fit">
-              <Button
-                class="w-full"
-                label="Cancel"
-                kind="outlined"
-                size="medium"
-                href="/services/web-app"
-              />
-            </div>
-            <div class="w-full md:w-fit">
-              <Button
-                class="w-full"
-                label="Continue"
-                kind="primary"
-                size="medium"
-                icon="pi pi-arrow-right"
-                icon-position="trailing"
-                :disabled="!selected.length"
-                aria-describedby="release-impact-settings-hint"
-              />
-            </div>
-          </div>
-        </div>
-      </footer>
+        </template>
+        <template #actions>
+          <Button
+            label="Cancel"
+            kind="outlined"
+            size="medium"
+            href="/services/web-app"
+          />
+          <Button
+            label="Continue"
+            kind="primary"
+            size="medium"
+            icon="pi pi-arrow-right"
+            icon-position="trailing"
+            :disabled="!selected.length"
+            aria-describedby="release-impact-settings-hint"
+          />
+        </template>
+      </SaveBar>
     </main>
   </div>
 </template>

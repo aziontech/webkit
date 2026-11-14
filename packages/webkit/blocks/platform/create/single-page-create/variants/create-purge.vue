@@ -16,7 +16,8 @@
   import SettingRow from '@aziontech/webkit/setting-row'
   import SettingsSection from '@aziontech/webkit/settings-section'
   import Textarea from '@aziontech/webkit/textarea'
-  import { computed, reactive, watch } from 'vue'
+  import { toast } from '@aziontech/webkit/toast'
+  import { computed, reactive, ref, watch } from 'vue'
 
   interface PurgeError {
     kind: HelperTextKind
@@ -102,16 +103,52 @@
     return ''
   }
 
-  const submit = () => {
+  const validate = () => {
     if (!entries.value.length) {
       error.kind = 'required'
       error.message = 'This field is required.'
-      return
+      return false
     }
     const issue = entries.value.map(lineIssue).find(Boolean)
     if (issue) {
       error.kind = 'invalid'
       error.message = issue
+      return false
+    }
+    return true
+  }
+
+  const submitting = ref(false)
+  const SAVE_FAILURES = 0
+  let failuresLeft = SAVE_FAILURES
+
+  const sendRequest = () =>
+    new Promise<void>((resolve, reject) => {
+      setTimeout(() => {
+        if (failuresLeft > 0) {
+          failuresLeft -= 1
+          reject(new Error('The service did not answer. Check your connection and try again.'))
+          return
+        }
+        resolve()
+      }, 900)
+    })
+
+  const submit = async () => {
+    if (submitting.value || !validate()) return
+    submitting.value = true
+    try {
+      await sendRequest()
+      toast.success(
+        `Purge started for ${entries.value.length} ${entries.value.length === 1 ? 'entry' : 'entries'}.`
+      )
+    } catch (error) {
+      toast.error('Could not start the purge.', {
+        description: error instanceof Error ? error.message : 'Try again.',
+        action: { label: 'Retry', onClick: () => submit() }
+      })
+    } finally {
+      submitting.value = false
     }
   }
 </script>
@@ -174,7 +211,10 @@
               title-id="create-purge-title"
             />
 
-            <fieldset class="mx-0 mt-(--layout-section-gap) flex min-w-0 flex-col border-0 p-0">
+            <fieldset
+              :disabled="submitting"
+              class="mx-0 mt-(--layout-section-gap) flex min-w-0 flex-col border-0 p-0"
+            >
               <legend class="sr-only">Create Purge</legend>
 
               <SettingsSection
@@ -279,20 +319,20 @@
                         kind="stacked"
                       >
                         <template #title> {{ selectedType.label }} List </template>
-                        <div class="contents font-(family-name:--font-code) text-body-sm">
-                          <Textarea
-                            v-model="form.arguments"
-                            class="w-full"
-                            :rows="6"
-                            :aria-label="selectedType.label + ' list'"
-                            :placeholder="selectedType.placeholder"
-                            :required="!!error.message && error.kind === 'required'"
-                            :invalid="!!error.message && error.kind === 'invalid'"
-                            aria-describedby="create-purge-arguments-message"
-                            spellcheck="false"
-                            autocomplete="off"
-                          />
-                        </div>
+                        <Textarea
+                          monospace
+                          v-model="form.arguments"
+                          class="w-full"
+                          :rows="6"
+                          :aria-label="selectedType.label + ' list'"
+                          :placeholder="selectedType.placeholder"
+                          :required="!!error.message && error.kind === 'required'"
+                          :invalid="!!error.message && error.kind === 'invalid'"
+                          aria-describedby="create-purge-arguments-message"
+                          :spellcheck="false"
+                          autocomplete="off"
+                        />
+
                         <HelperText
                           id="create-purge-arguments-message"
                           :kind="error.message ? error.kind : 'helper'"
@@ -324,6 +364,7 @@
                 kind="primary"
                 size="medium"
                 type="submit"
+                :loading="submitting"
               />
             </template>
           </SaveBar>

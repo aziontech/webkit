@@ -99,7 +99,9 @@
     method: '' as MethodId | '',
     gitConnected: false,
     repository: '',
-    template: ''
+    template: '',
+    connectFailed: false,
+    reposFailed: false
   }
 
   const breadcrumb = [{ label: 'Projects', href: '/projects' }, { label: 'Create Project' }]
@@ -388,7 +390,7 @@
     {
       key: 'ddos',
       title: 'DDoS Protection',
-      description: 'Absorbs volumetric attacks at the network layer.',
+      description: 'Absorbs volumetric attacks at the network layer. Always on.',
       locked: true
     },
     {
@@ -581,6 +583,10 @@
   const connecting = ref(false)
   const reposLoading = ref(false)
   const accounts = ref<Option[]>([{ value: 'acme', label: 'acme' }])
+  const connectFailed = ref(initial.connectFailed)
+  const reposFailed = ref(initial.reposFailed)
+  const REPO_PAGE = 5
+  const repoLimit = ref(REPO_PAGE)
   const account = ref('acme')
   const repoQuery = ref('')
   const chosenRepo = ref(initial.repository)
@@ -589,6 +595,8 @@
 
   const loadRepos = () => {
     reposLoading.value = true
+    reposFailed.value = false
+    repoLimit.value = REPO_PAGE
     clearTimeout(reposTimer)
     reposTimer = setTimeout(() => {
       reposLoading.value = false
@@ -598,6 +606,7 @@
   const connect = () => {
     if (connecting.value) return
     connecting.value = true
+    connectFailed.value = false
     connectTimer = setTimeout(() => {
       connecting.value = false
       gitConnected.value = true
@@ -621,14 +630,30 @@
   const accountLabel = (value: string) =>
     accounts.value.find((option) => option.value === value)?.label ?? ''
 
+  const accountRepositories = computed(() => (account.value === 'acme' ? repositories : []))
+
   const repoMatches = computed(() => {
     const term = repoQuery.value.trim().toLowerCase()
-    if (!term) return repositories
-    return repositories.filter((repo) => repo.name.toLowerCase().includes(term))
+    if (!term) return accountRepositories.value
+    return accountRepositories.value.filter((repo) => repo.name.toLowerCase().includes(term))
   })
+
+  const shownRepos = computed(() => repoMatches.value.slice(0, repoLimit.value))
+  const hiddenRepoCount = computed(() => repoMatches.value.length - shownRepos.value.length)
+
+  const showMoreRepos = () => {
+    repoLimit.value += REPO_PAGE
+  }
+
+  const startFromTemplate = () => {
+    chooseMethod('template')
+  }
 
   const repoSummary = computed(() => {
     if (reposLoading.value) return 'Loading repositories'
+    if (reposFailed.value) return 'Repositories did not load'
+    if (!accountRepositories.value.length)
+      return 'No repositories in ' + accountLabel(account.value)
     if (!repoMatches.value.length) return 'No repository matches ' + repoQuery.value.trim()
     return repoMatches.value.length + ' repositories'
   })
@@ -939,8 +964,7 @@
                   >
                     <section
                       v-if="step === 'where'"
-                      data-wide
-                      class="mx-auto flex w-full max-w-(--container-2xs) flex-col items-center gap-(--spacing-lg) data-wide:max-w-(--container-md)"
+                      class="mx-auto flex w-full max-w-(--container-md) flex-col items-center gap-(--spacing-lg)"
                       aria-labelledby="create-project-host-title"
                     >
                       <header class="flex flex-col items-center gap-(--spacing-xs) text-center">
@@ -1142,6 +1166,13 @@
                               :loading="connecting"
                               @click="connect"
                             />
+                            <Alert
+                              v-if="connectFailed"
+                              severity="danger"
+                              size="small"
+                              label="GitHub didn't connect. The authorization window closed before GitHub answered."
+                              class="w-full"
+                            />
                           </template>
                         </EmptyState>
                       </template>
@@ -1209,9 +1240,20 @@
                         </div>
 
                         <div class="max-h-(--size-80) overflow-y-auto overscroll-contain">
+                          <div
+                            v-if="reposFailed"
+                            class="p-(--spacing-md)"
+                          >
+                            <Alert
+                              severity="danger"
+                              :label="`The repositories in ${accountLabel(account)} didn't load. GitHub didn't answer in time.`"
+                              action-label="Retry"
+                              @action="loadRepos"
+                            />
+                          </div>
                           <Item.List
                             key="item.list-1"
-                            v-if="reposLoading"
+                            v-else-if="reposLoading"
                             aria-busy="true"
                           >
                             <Item
@@ -1242,54 +1284,95 @@
                             </Item>
                           </Item.List>
 
-                          <Item.List
-                            key="item.list-2"
-                            v-else-if="repoMatches.length"
-                          >
-                            <Item
-                              v-for="repo in repoMatches"
-                              :key="repo.name"
-                              size="small"
-                              clickable
-                              :aria-pressed="repo.name === chosenRepo"
-                              @click="chooseRepo(repo)"
-                            >
-                              <Item.Media>
-                                <span
-                                  class="flex size-8 shrink-0 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
-                                >
+                          <div v-else-if="repoMatches.length">
+                            <Item.List key="item.list-2">
+                              <Item
+                                v-for="repo in shownRepos"
+                                :key="repo.name"
+                                size="small"
+                                clickable
+                                :aria-pressed="repo.name === chosenRepo"
+                                @click="chooseRepo(repo)"
+                              >
+                                <Item.Media>
+                                  <span
+                                    class="flex size-8 shrink-0 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
+                                  >
+                                    <i
+                                      :class="repo.icon"
+                                      class="text-body-md leading-none text-(--text-default)"
+                                      aria-hidden="true"
+                                    />
+                                  </span>
+                                </Item.Media>
+                                <Item.Content>
+                                  <Item.Title>{{ repo.name }}</Item.Title>
+                                  <Item.Description>Updated {{ repo.age }}</Item.Description>
+                                </Item.Content>
+                                <Item.Actions>
                                   <i
-                                    :class="repo.icon"
-                                    class="text-body-md leading-none text-(--text-default)"
+                                    v-if="repo.name === chosenRepo"
+                                    class="pi pi-check shrink-0 text-(--text-default)"
                                     aria-hidden="true"
                                   />
-                                </span>
-                              </Item.Media>
-                              <Item.Content>
-                                <Item.Title>{{ repo.name }}</Item.Title>
-                                <Item.Description>Updated {{ repo.age }}</Item.Description>
-                              </Item.Content>
-                              <Item.Actions>
-                                <i
-                                  v-if="repo.name === chosenRepo"
-                                  class="pi pi-check shrink-0 text-(--text-default)"
-                                  aria-hidden="true"
-                                />
-                                <i
-                                  v-else
-                                  class="pi pi-chevron-right text-(--text-muted)"
-                                  aria-hidden="true"
-                                />
-                              </Item.Actions>
-                            </Item>
-                          </Item.List>
+                                  <i
+                                    v-else
+                                    class="pi pi-chevron-right text-(--text-muted)"
+                                    aria-hidden="true"
+                                  />
+                                </Item.Actions>
+                              </Item>
+                            </Item.List>
+                            <div
+                              v-if="hiddenRepoCount > 0"
+                              class="flex justify-center border-t border-(--border-muted) p-(--spacing-sm)"
+                            >
+                              <Button
+                                type="button"
+                                :label="`Load more (${hiddenRepoCount})`"
+                                kind="transparent"
+                                size="small"
+                                @click="showMoreRepos"
+                              />
+                            </div>
+                          </div>
 
-                          <p
-                            v-else
-                            class="px-(--spacing-md) py-(--spacing-lg) text-center text-body-sm text-(--text-muted)"
+                          <EmptyState
+                            v-else-if="!accountRepositories.length"
+                            key="repos-empty"
+                            size="small"
+                            icon="ai ai-github"
+                            :title="`No repositories in ${accountLabel(account)}`"
+                            description="Push a repository to this account, select another account, or start from a template."
                           >
-                            No repository matches “{{ repoQuery.trim() }}”.
-                          </p>
+                            <template #actions>
+                              <Button
+                                type="button"
+                                label="Start from a template"
+                                kind="outlined"
+                                size="small"
+                                @click="startFromTemplate"
+                              />
+                            </template>
+                          </EmptyState>
+                          <EmptyState
+                            v-else
+                            key="repos-no-match"
+                            size="small"
+                            icon="pi pi-search"
+                            title="No repositories match"
+                            :description="`Nothing in ${accountLabel(account)} is named like “${repoQuery.trim()}”.`"
+                          >
+                            <template #actions>
+                              <Button
+                                type="button"
+                                label="Clear search"
+                                kind="outlined"
+                                size="small"
+                                @click="repoQuery = ''"
+                              />
+                            </template>
+                          </EmptyState>
                         </div>
 
                         <span
@@ -1376,21 +1459,23 @@
                             </section>
                           </template>
 
-                          <div
+                          <EmptyState
                             v-else
-                            class="flex flex-col items-center gap-(--spacing-xs) px-(--spacing-md) py-(--spacing-lg) text-center"
+                            size="small"
+                            icon="pi pi-search"
+                            title="No templates match"
+                            description="Nothing matches this search and these filters."
                           >
-                            <p class="text-body-sm text-(--text-muted)">
-                              No template matches this search.
-                            </p>
-                            <Button
-                              type="button"
-                              label="Clear filters"
-                              kind="transparent"
-                              size="small"
-                              @click="clearFilters"
-                            />
-                          </div>
+                            <template #actions>
+                              <Button
+                                type="button"
+                                label="Clear filters"
+                                kind="outlined"
+                                size="small"
+                                @click="clearFilters"
+                              />
+                            </template>
+                          </EmptyState>
                         </div>
                       </template>
                     </Card>
@@ -1421,6 +1506,13 @@
                               size="large"
                               :loading="connecting"
                               @click="connect"
+                            />
+                            <Alert
+                              v-if="connectFailed"
+                              severity="danger"
+                              size="small"
+                              label="GitHub didn't connect. The authorization window closed before GitHub answered."
+                              class="w-full"
                             />
                           </template>
                         </EmptyState>
@@ -1552,9 +1644,20 @@
                           v-if="repoMode === 'existing'"
                           class="max-h-(--size-80) overflow-y-auto overscroll-contain border-t border-(--border-default)"
                         >
+                          <div
+                            v-if="reposFailed"
+                            class="p-(--spacing-md)"
+                          >
+                            <Alert
+                              severity="danger"
+                              :label="`The repositories in ${accountLabel(account)} didn't load. GitHub didn't answer in time.`"
+                              action-label="Retry"
+                              @action="loadRepos"
+                            />
+                          </div>
                           <Item.List
                             key="item.list-1"
-                            v-if="reposLoading"
+                            v-else-if="reposLoading"
                             aria-busy="true"
                           >
                             <Item
@@ -1585,49 +1688,90 @@
                             </Item>
                           </Item.List>
 
-                          <Item.List
-                            key="item.list-2"
-                            v-else-if="repoMatches.length"
-                          >
-                            <Item
-                              v-for="repo in repoMatches"
-                              :key="repo.name"
-                              size="small"
-                              clickable
-                              :aria-pressed="repo.name === existingRepo"
-                              @click="existingRepo = repo.name"
-                            >
-                              <Item.Media>
-                                <span
-                                  class="flex size-8 shrink-0 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
-                                >
+                          <div v-else-if="repoMatches.length">
+                            <Item.List key="item.list-2">
+                              <Item
+                                v-for="repo in shownRepos"
+                                :key="repo.name"
+                                size="small"
+                                clickable
+                                :aria-pressed="repo.name === existingRepo"
+                                @click="existingRepo = repo.name"
+                              >
+                                <Item.Media>
+                                  <span
+                                    class="flex size-8 shrink-0 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
+                                  >
+                                    <i
+                                      :class="repo.icon"
+                                      class="text-body-md leading-none text-(--text-default)"
+                                      aria-hidden="true"
+                                    />
+                                  </span>
+                                </Item.Media>
+                                <Item.Content>
+                                  <Item.Title>{{ repo.name }}</Item.Title>
+                                  <Item.Description>Updated {{ repo.age }}</Item.Description>
+                                </Item.Content>
+                                <Item.Actions>
                                   <i
-                                    :class="repo.icon"
-                                    class="text-body-md leading-none text-(--text-default)"
+                                    v-if="repo.name === existingRepo"
+                                    class="pi pi-check shrink-0 text-(--text-default)"
                                     aria-hidden="true"
                                   />
-                                </span>
-                              </Item.Media>
-                              <Item.Content>
-                                <Item.Title>{{ repo.name }}</Item.Title>
-                                <Item.Description>Updated {{ repo.age }}</Item.Description>
-                              </Item.Content>
-                              <Item.Actions>
-                                <i
-                                  v-if="repo.name === existingRepo"
-                                  class="pi pi-check shrink-0 text-(--text-default)"
-                                  aria-hidden="true"
-                                />
-                              </Item.Actions>
-                            </Item>
-                          </Item.List>
+                                </Item.Actions>
+                              </Item>
+                            </Item.List>
+                            <div
+                              v-if="hiddenRepoCount > 0"
+                              class="flex justify-center border-t border-(--border-muted) p-(--spacing-sm)"
+                            >
+                              <Button
+                                type="button"
+                                :label="`Load more (${hiddenRepoCount})`"
+                                kind="transparent"
+                                size="small"
+                                @click="showMoreRepos"
+                              />
+                            </div>
+                          </div>
 
-                          <p
-                            v-else
-                            class="px-(--spacing-md) py-(--spacing-lg) text-center text-body-sm text-(--text-muted)"
+                          <EmptyState
+                            v-else-if="!accountRepositories.length"
+                            key="repos-empty"
+                            size="small"
+                            icon="ai ai-github"
+                            :title="`No repositories in ${accountLabel(account)}`"
+                            description="Push a repository to this account, select another account, or start from a template."
                           >
-                            No repository matches “{{ repoQuery.trim() }}”.
-                          </p>
+                            <template #actions>
+                              <Button
+                                type="button"
+                                label="Start from a template"
+                                kind="outlined"
+                                size="small"
+                                @click="startFromTemplate"
+                              />
+                            </template>
+                          </EmptyState>
+                          <EmptyState
+                            v-else
+                            key="repos-no-match"
+                            size="small"
+                            icon="pi pi-search"
+                            title="No repositories match"
+                            :description="`Nothing in ${accountLabel(account)} is named like “${repoQuery.trim()}”.`"
+                          >
+                            <template #actions>
+                              <Button
+                                type="button"
+                                label="Clear search"
+                                kind="outlined"
+                                size="small"
+                                @click="repoQuery = ''"
+                              />
+                            </template>
+                          </EmptyState>
                         </div>
                       </template>
                     </Card>
@@ -1947,7 +2091,7 @@
                           title="Build and deploy commands"
                         >
                           <template #content>
-                            <div class="[&>*>*:last-child]:border-b-0">
+                            <div>
                               <Accordion type="multiple">
                                 <Accordion.Item
                                   v-for="command in commands"
@@ -1960,7 +2104,7 @@
                                         {{ command.label }}
                                       </span>
                                       <span
-                                        class="min-w-0 flex-1 truncate font-(family-name:--font-code) text-body-sm text-(--text-muted)"
+                                        class="min-w-0 flex-1 truncate text-label-code-sm text-(--text-muted)"
                                       >
                                         {{ form[command.field].trim() || command.empty }}
                                       </span>
@@ -2126,18 +2270,16 @@
                                         :description="module.description"
                                         kind="compact"
                                       >
-                                        <Tooltip
+                                        <Switch
                                           v-if="module.locked"
-                                          text="DDoS Protection is always on."
-                                        >
-                                          <Switch
-                                            :model-value="true"
-                                            disabled
-                                            :aria-label="module.title"
-                                          />
-                                        </Tooltip>
+                                          key="locked"
+                                          :model-value="true"
+                                          disabled
+                                          :aria-label="module.title"
+                                        />
                                         <Switch
                                           v-else
+                                          key="editable"
                                           v-model="protection.modules[module.key]"
                                           :aria-label="module.title"
                                         />
@@ -2209,25 +2351,29 @@
             </div>
           </div>
 
-          <SaveBar
-            v-if="stepIndex > 0 || nextLabel"
-            kind="fade"
-          >
-            <template
-              v-if="stepIndex > 0"
-              #leading
-            >
+          <SaveBar kind="fade">
+            <template #leading>
               <Button
+                type="button"
+                label="Cancel"
+                kind="transparent"
+                size="medium"
+                href="/projects"
+              />
+            </template>
+            <template #actions>
+              <Button
+                v-if="stepIndex > 0"
+                key="back"
                 type="button"
                 label="Back"
                 kind="outlined"
                 size="medium"
                 @click="goBack"
               />
-            </template>
-            <template #actions>
               <Button
                 v-if="nextLabel"
+                key="next"
                 :label="nextLabel"
                 kind="primary"
                 size="medium"

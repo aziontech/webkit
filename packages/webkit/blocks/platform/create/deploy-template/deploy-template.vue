@@ -61,111 +61,110 @@
       <div
         class="layout-column-focused relative flex min-h-full flex-col items-center gap-(--spacing-xl) px-(--spacing-md) py-(--spacing-xxl)"
       >
-        <div
-          class="flex w-full items-start gap-(--spacing-md) overflow-hidden rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) p-(--spacing-md) no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas) max-w-none! motion-reduce:transition-none! motion-reduce:transform-none!"
-        >
-          <span
-            class="flex size-10 shrink-0 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
-          >
-            <i
-              class="ai-cor ai-nuxt text-body-lg leading-none text-(--text-default)"
-              aria-hidden="true"
-            />
-          </span>
-
-          <div class="flex min-w-0 flex-1 flex-col gap-(--spacing-md)">
-            <div class="flex w-full min-w-0 flex-col overflow-hidden">
-              <span class="flex items-center gap-(--spacing-xs)">
-                <span class="truncate text-heading-xxs text-(--text-default)">Nuxt E-commerce</span>
+        <Card class="w-full">
+          <template #content>
+            <div class="flex w-full items-start gap-(--spacing-md)">
+              <span
+                class="flex size-10 shrink-0 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
+              >
+                <i
+                  class="ai-cor ai-nuxt text-body-lg leading-none text-(--text-default)"
+                  aria-hidden="true"
+                />
               </span>
-              <span class="text-body-xs text-(--text-muted)">
-                Launch a Nuxt e-commerce or content app in a few steps.
-              </span>
-            </div>
 
-            <div class="flex w-full flex-col gap-(--spacing-xxs)">
-              <span class="truncate text-body-xxs text-(--text-muted)">Cloning from GitHub</span>
-              <div class="flex items-center gap-(--spacing-md)">
-                <span
-                  class="flex h-5 items-center gap-(--spacing-xxs) text-label-sm text-(--text-default)"
-                >
-                  <i
-                    class="ai ai-github text-[length:inherit] leading-none"
-                    aria-hidden="true"
-                  />
-                  acme
-                </span>
-                <span
-                  class="flex h-5 items-center gap-(--spacing-xxs) text-label-sm text-(--text-muted)"
-                >
-                  <i
-                    class="pi pi-folder text-[length:inherit] leading-none"
-                    aria-hidden="true"
-                  />
-                  templates/nuxt-ecommerce
-                </span>
+              <div class="flex min-w-0 flex-1 flex-col gap-(--spacing-md)">
+                <div class="flex w-full min-w-0 flex-col overflow-hidden">
+                  <span class="flex items-center gap-(--spacing-xs)">
+                    <span class="truncate text-heading-xxs text-(--text-default)"
+                      >Nuxt E-commerce</span
+                    >
+                  </span>
+                  <span class="text-body-xs text-(--text-muted)">
+                    Launch a Nuxt e-commerce or content app in a few steps.
+                  </span>
+                </div>
+
+                <div class="flex w-full flex-col gap-(--spacing-xxs)">
+                  <span class="truncate text-body-xxs text-(--text-muted)"
+                    >Cloning from GitHub</span
+                  >
+                  <div class="flex items-center gap-(--spacing-md)">
+                    <span
+                      class="flex h-5 items-center gap-(--spacing-xxs) text-label-sm text-(--text-default)"
+                    >
+                      <i
+                        class="ai ai-github text-[length:inherit] leading-none"
+                        aria-hidden="true"
+                      />
+                      acme
+                    </span>
+                    <span
+                      class="flex h-5 items-center gap-(--spacing-xxs) text-label-sm text-(--text-muted)"
+                    >
+                      <i
+                        class="pi pi-folder text-[length:inherit] leading-none"
+                        aria-hidden="true"
+                      />
+                      templates/nuxt-ecommerce
+                    </span>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-        </div>
+          </template>
+        </Card>
 
         <div
           data-phase="connect"
           class="flex w-full flex-col items-center gap-(--spacing-xl) data-[phase=success]:my-auto motion-reduce:transition-none! motion-reduce:transform-none!"
         >
-          <Card class="w-full">
-            <template #content>
-              <div
-                class="flex rounded-(--shape-card) border border-dashed border-(--border-default) bg-(--bg-surface-raised) lg:min-h-0 lg:flex-1"
-              >
-                <EmptyState
-                  size="medium"
-                  title="Connect a Git provider"
-                  description="Nuxt E-commerce is cloned into a repository in your account, then deployed from it on every push."
-                  class="w-full"
+          <EmptyState
+            bordered
+            size="medium"
+            title="Connect a Git provider"
+            description="Nuxt E-commerce is cloned into a repository in your account, then deployed from it on every push."
+            class="w-full"
+          >
+            <template #icon>
+              <span class="relative flex size-10 items-center justify-center">
+                <span
+                  aria-hidden="true"
+                  class="absolute left-1/2 top-1/2 size-14 -translate-x-1/2 -translate-y-1/2 rounded-(--shape-card) border border-(--border-strong) bg-(--bg-canvas) opacity-5"
+                />
+                <span
+                  aria-hidden="true"
+                  class="absolute left-1/2 top-1/2 size-12 -translate-x-1/2 -translate-y-1/2 rounded-(--shape-card) border border-(--border-strong) bg-(--bg-canvas) opacity-10"
+                />
+                <span
+                  class="relative flex size-10 items-center justify-center rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface)"
                 >
-                  <template #icon>
-                    <span class="relative flex size-10 items-center justify-center">
-                      <span
-                        aria-hidden="true"
-                        class="absolute left-1/2 top-1/2 size-14 -translate-x-1/2 -translate-y-1/2 rounded-[var(--radius-xl,12px)] border border-(--border-strong) bg-(--bg-canvas) opacity-5"
-                      />
-                      <span
-                        aria-hidden="true"
-                        class="absolute left-1/2 top-1/2 size-12 -translate-x-1/2 -translate-y-1/2 rounded-(--shape-card) border border-(--border-strong) bg-(--bg-canvas) opacity-10"
-                      />
-                      <span
-                        class="relative flex size-10 items-center justify-center rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface)"
-                      >
-                        <i
-                          class="ai ai-github text-body-md leading-none text-(--text-default)"
-                          aria-hidden="true"
-                        />
-                      </span>
-                    </span>
-                  </template>
-                  <template #actions>
-                    <Button
-                      label="Continue with GitHub"
-                      icon="ai ai-github"
-                      kind="secondary"
-                      size="large"
-                    />
-                    <Button
-                      label="Continue without Git"
-                      kind="transparent"
-                      size="large"
-                    />
-                    <Link
-                      label="Manage connected providers"
-                      href="#"
-                      size="large"
-                    />
-                  </template>
-                </EmptyState>
-              </div>
+                  <i
+                    class="ai ai-github text-body-md leading-none text-(--text-default)"
+                    aria-hidden="true"
+                  />
+                </span>
+              </span>
             </template>
-          </Card>
+            <template #actions>
+              <Button
+                label="Continue with GitHub"
+                icon="ai ai-github"
+                kind="secondary"
+                size="large"
+              />
+              <Button
+                label="Continue without Git"
+                kind="transparent"
+                size="large"
+              />
+              <Link
+                label="Manage connected providers"
+                href="#"
+                size="large"
+              />
+            </template>
+          </EmptyState>
 
           <Button
             label="Browse templates"

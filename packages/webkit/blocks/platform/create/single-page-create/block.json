@@ -48,22 +48,22 @@
   "variants": [
     {
       "name": "CreateZone",
-      "summary": "Create Zone after importing a zone file: Import sits in the bar's leading slot (pasting a zone file into Domain name does the same), Name and Domain name take the zone origin, and a Records section lists each imported record with its type Tag, value and TTL, a Remove per row and a Discard import action in the card footer. The SOA and the nameservers are never imported; each import, failure and discard confirms in a toast.",
+      "summary": "Create Zone after importing a zone file: Import sits in the bar's leading slot (pasting a zone file into Domain name does the same), Name and Domain name take the zone origin, and a Records section lists each imported record with its type Tag, value and TTL, a Remove per row and a Discard import action in the card footer. The SOA and the nameservers are never imported; each import, failure and discard confirms in a toast. The Records section previews the first 50 records with an 'and N more' line, and a re-import skips records already listed.",
       "file": "variants/create-zone.vue"
     },
     {
       "name": "CreateOrganization",
-      "summary": "Create Organization: General with Name and a Mark picked from seven RadioCards colors, each a marble Avatar seeded by the name, and an In the header preview that follows the name and the color; an Owner row with the signed-in user's Avatar and Owner and Active Tags; First workspace with its name prefilled; and a collapsed Advanced section of Selects. A name already in use is invalid on submit; Create Organization shows its loading state and confirms in a success toast, and a failed request raises an error toast with Retry.",
+      "summary": "Create Organization: General with Name and a Mark picked from six RadioCards colors built from semantic tokens, each a marble Avatar seeded by the name, and an In the header preview that follows the name and the color; an Owner row with the signed-in user's Avatar and Owner and Active Tags; First workspace with its name prefilled; and a collapsed Advanced section of Selects. A name already in use is invalid on submit; Create Organization shows its loading state and confirms in a success toast, and a failed request raises an error toast with Retry.",
       "file": "variants/create-organization.vue"
     },
     {
       "name": "CreatePurge",
-      "summary": "Create Purge: a Target section of wide rows choosing the Layer and the Purge type with RadioButton choice cards, an Arguments section whose code-font Textarea follows the chosen type, a warning Alert, and a bar with only Cancel and Purge. Choosing Tiered Cache leaves Cache Key as the only allowed type.",
+      "summary": "Create Purge: a Target section of wide rows choosing the Layer and the Purge type with RadioButton choice cards, an Arguments section whose monospace Textarea follows the chosen type, a warning Alert, and a bar with only Cancel and Purge, which shows its loading state and confirms in a toast (or an error toast with Retry). Choosing Tiered Cache leaves Cache Key as the only allowed type.",
       "file": "variants/create-purge.vue"
     },
     {
       "name": "CreateService",
-      "summary": "A long create, Create Service, in five groups of Item rows (General, Delivery settings, Origins, Cache expiration policies and Debug rules) under the centred commit card with Cancel and Save: Name and Address empty, HTTP port 80 preselected, HTTPS ports disabled until a protocol with HTTPS is chosen, and the host header prefilled with ${host}.",
+      "summary": "A long create, Create Service, under a small PageHeader, in five groups of Item rows (General, Delivery settings, Origins, Cache expiration policies and Debug rules, each under an h2) under the centred commit card with Cancel and Save: Name and Address empty, HTTP port 80 preselected, HTTPS ports disabled until a protocol with HTTPS is chosen, and the host header prefilled with ${host}.",
       "file": "variants/create-service.vue"
     },
     {

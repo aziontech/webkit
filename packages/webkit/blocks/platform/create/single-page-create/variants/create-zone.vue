@@ -16,7 +16,7 @@
   import Switch from '@aziontech/webkit/switch'
   import Tag from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
-  import { reactive, ref } from 'vue'
+  import { computed, reactive, ref } from 'vue'
 
   interface FormErrors {
     name: string
@@ -92,6 +92,11 @@
     return { origin, records: parsed }
   }
 
+  const RECORD_PREVIEW = 50
+  const recordKey = (record: ZoneRecord) => `${record.name}|${record.type}|${record.value}`
+  const shownRecords = computed(() => records.value.slice(0, RECORD_PREVIEW))
+  const hiddenRecordCount = computed(() => records.value.length - shownRecords.value.length)
+
   const applyParsed = (parsed: ParsedZone, source: string) => {
     if (parsed.origin) {
       if (!form.domain.trim()) {
@@ -103,9 +108,16 @@
         errors.name = ''
       }
     }
-    records.value = [...records.value, ...parsed.records]
+    const seen = new Set(records.value.map(recordKey))
+    const fresh = parsed.records.filter((record) => {
+      const key = recordKey(record)
+      if (seen.has(key)) return false
+      seen.add(key)
+      return true
+    })
+    records.value = [...records.value, ...fresh]
     importedFrom.value = source
-    const count = parsed.records.length
+    const count = fresh.length
     toast.success(
       count === 1
         ? `Imported 1 record from ${source}.`
@@ -179,7 +191,37 @@
     return !errors.name && !errors.domain
   }
 
-  const submit = () => validate()
+  const submitting = ref(false)
+  const SAVE_FAILURES = 0
+  let failuresLeft = SAVE_FAILURES
+
+  const sendRequest = () =>
+    new Promise<void>((resolve, reject) => {
+      setTimeout(() => {
+        if (failuresLeft > 0) {
+          failuresLeft -= 1
+          reject(new Error('The service did not answer. Check your connection and try again.'))
+          return
+        }
+        resolve()
+      }, 900)
+    })
+
+  const submit = async () => {
+    if (submitting.value || !validate()) return
+    submitting.value = true
+    try {
+      await sendRequest()
+      toast.success(`${form.domain.trim()} zone created.`)
+    } catch (error) {
+      toast.error('Could not create the zone.', {
+        description: error instanceof Error ? error.message : 'Try again.',
+        action: { label: 'Retry', onClick: () => submit() }
+      })
+    } finally {
+      submitting.value = false
+    }
+  }
   const openImport = () => fileRef.value?.click()
 </script>
 
@@ -241,7 +283,10 @@
               title-id="create-zone-title"
             />
 
-            <fieldset class="mx-0 mt-(--layout-section-gap) flex min-w-0 flex-col border-0 p-0">
+            <fieldset
+              :disabled="submitting"
+              class="mx-0 mt-(--layout-section-gap) flex min-w-0 flex-col border-0 p-0"
+            >
               <legend class="sr-only">Create Zone</legend>
 
               <SettingsSection
@@ -314,13 +359,13 @@
                   <template #content>
                     <Item.List aria-label="Imported records">
                       <Item
-                        v-for="(record, index) in records"
-                        :key="`${record.name}-${record.type}-${record.value}`"
+                        v-for="(record, index) in shownRecords"
+                        :key="`${index}-${recordKey(record)}`"
                         size="small"
                       >
                         <Item.Content>
                           <Item.Title>
-                            <span class="font-code">{{ record.name }}</span>
+                            <span class="text-label-code-sm">{{ record.name }}</span>
                             <Tag
                               :label="record.type"
                               severity="info"
@@ -328,7 +373,8 @@
                             />
                           </Item.Title>
                           <Item.Description>
-                            <span class="font-code">{{ record.value }}</span> · TTL {{ record.ttl }}
+                            <span class="text-label-code-sm">{{ record.value }}</span> · TTL
+                            {{ record.ttl }}
                           </Item.Description>
                         </Item.Content>
                         <Item.Actions>
@@ -342,6 +388,12 @@
                         </Item.Actions>
                       </Item>
                     </Item.List>
+                    <p
+                      v-if="hiddenRecordCount > 0"
+                      class="m-0 px-(--spacing-md) py-(--spacing-sm) text-body-sm text-(--text-muted)"
+                    >
+                      and {{ hiddenRecordCount }} more
+                    </p>
                   </template>
                   <template #footer>
                     <div
@@ -435,6 +487,7 @@
                 kind="primary"
                 size="medium"
                 type="submit"
+                :loading="submitting"
               />
             </template>
           </SaveBar>

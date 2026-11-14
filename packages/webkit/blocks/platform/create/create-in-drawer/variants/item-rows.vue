@@ -17,6 +17,7 @@
   import Select from '@aziontech/webkit/select'
   import SettingRow from '@aziontech/webkit/setting-row'
   import Switch from '@aziontech/webkit/switch'
+  import { toast } from '@aziontech/webkit/toast'
   import { reactive, ref, watch } from 'vue'
 
   const protocols = [
@@ -83,6 +84,7 @@
       ...origins.value
     ]
     drawerOpen.value = false
+    toast.success(`${form.name.trim()} added.`)
   }
 </script>
 

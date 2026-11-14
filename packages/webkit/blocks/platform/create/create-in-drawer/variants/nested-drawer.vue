@@ -16,6 +16,7 @@
   import PanelHeader from '@aziontech/webkit/panel-header'
   import Select from '@aziontech/webkit/select'
   import SettingRow from '@aziontech/webkit/setting-row'
+  import { toast } from '@aziontech/webkit/toast'
   import { reactive, ref, watch } from 'vue'
 
   let nextId = 0
@@ -74,6 +75,7 @@
       { id: `rule-${uid()}`, name: form.name.trim(), originId: form.originId }
     ]
     parentOpen.value = false
+    toast.success(`${form.name.trim()} added.`)
   }
 
   watch(childOpen, (open) => {

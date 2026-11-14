@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import Alert from '@aziontech/webkit/alert'
   import Avatar from '@aziontech/webkit/avatar'
   import Brand from '@aziontech/webkit/brand'
   import Breadcrumb from '@aziontech/webkit/breadcrumb-root'
@@ -14,7 +15,8 @@
   import ScrollArea from '@aziontech/webkit/scroll-area'
   import Select from '@aziontech/webkit/select'
   import Skeleton from '@aziontech/webkit/skeleton'
-  import { computed, ref } from 'vue'
+  import { toast } from '@aziontech/webkit/toast'
+  import { computed, onBeforeUnmount, ref } from 'vue'
 
   interface Account {
     label: string
@@ -48,8 +50,14 @@
     { name: 'storefront-checkout', age: '3 days ago', icon: 'ai-cor ai-react' },
     { name: 'observability-dashboard', age: '6 days ago', icon: 'ai-cor ai-svelte' },
     { name: 'marketing-landing', age: '2 weeks ago', icon: 'ai-cor ai-nuxt' },
-    { name: 'internal-admin', age: 'last month', icon: 'ai-cor ai-angular' }
+    { name: 'internal-admin', age: 'last month', icon: 'ai-cor ai-angular' },
+    { name: 'image-resizer', age: 'last month', icon: 'pi pi-image' },
+    { name: 'status-page', age: '2 months ago', icon: 'ai-cor ai-astro' },
+    { name: 'auth-gateway', age: '2 months ago', icon: 'pi pi-lock' },
+    { name: 'blog', age: '3 months ago', icon: 'ai-cor ai-nuxt' },
+    { name: 'design-tokens', age: '5 months ago', icon: 'pi pi-palette' }
   ]
+  const REPO_PAGE = 10
   const sections: HubSection[] = [
     {
       id: 'recommended',
@@ -380,20 +388,43 @@
 
   const accounts = ref<Account[]>(ACCOUNTS)
   const connecting = ref(false)
+  const connectFailed = ref(false)
   const scope = ref(ACCOUNTS[0].value)
   const reposLoading = ref(true)
+  const reposFailed = ref(false)
   const search = ref('')
+  const repoLimit = ref(REPO_PAGE)
+  const templateSearch = ref('')
+  const fileInput = ref<HTMLInputElement | null>(null)
+  const folderInput = ref<HTMLInputElement | null>(null)
+  const timers = new Set<ReturnType<typeof setTimeout>>()
+
+  const later = (run: () => void, delay: number) => {
+    const id = setTimeout(() => {
+      timers.delete(id)
+      run()
+    }, delay)
+    timers.add(id)
+  }
+
+  onBeforeUnmount(() => {
+    timers.forEach((id) => clearTimeout(id))
+    timers.clear()
+  })
 
   const loadRepos = () => {
     reposLoading.value = true
-    setTimeout(() => {
+    reposFailed.value = false
+    repoLimit.value = REPO_PAGE
+    later(() => {
       reposLoading.value = false
     }, 900)
   }
 
   const connect = () => {
     connecting.value = true
-    setTimeout(() => {
+    connectFailed.value = false
+    later(() => {
       connecting.value = false
       accounts.value = ACCOUNTS
       scope.value = ACCOUNTS[0].value
@@ -412,6 +443,50 @@
     if (!q) return repos
     return repos.filter((repo) => repo.name.toLowerCase().includes(q))
   })
+  const shownRepos = computed(() => filteredRepos.value.slice(0, repoLimit.value))
+  const hiddenRepoCount = computed(() => filteredRepos.value.length - shownRepos.value.length)
+
+  const showMoreRepos = () => {
+    repoLimit.value += REPO_PAGE
+  }
+
+  const clearSearch = () => {
+    search.value = ''
+  }
+
+  const templateMatches = (item: HubItem, query: string) =>
+    item.title.toLowerCase().includes(query) || item.description.toLowerCase().includes(query)
+
+  const filteredSections = computed(() => {
+    const q = templateSearch.value.trim().toLowerCase()
+    if (!q) return sections
+    return sections
+      .map((section) => ({
+        ...section,
+        items: section.items.filter((item) => templateMatches(item, q))
+      }))
+      .filter((section) => section.items.length > 0)
+  })
+
+  const clearTemplateSearch = () => {
+    templateSearch.value = ''
+  }
+
+  const templateHref = (item: HubItem) => `/create/templates/${item.slug}`
+
+  const openFilePicker = () => fileInput.value?.click()
+  const openFolderPicker = () => folderInput.value?.click()
+
+  const onPick = (event: Event) => {
+    const input = event.target as HTMLInputElement
+    const picked = input.files ? Array.from(input.files) : []
+    if (!picked.length) return
+    const first = picked[0]
+    const folder = first.webkitRelativePath.split('/')[0]
+    const name = folder || first.name
+    toast.info(`Opening ${name} in Upload a project.`)
+    input.value = ''
+  }
 </script>
 
 <template>
@@ -464,17 +539,37 @@
             size="large"
           >
             <template #description>
-              Start from a repository or use a framework template. You can also drag and drop your
-              project, or select a
+              Start from a repository or use a framework template. You can also upload your project:
+              select a
               <Button
                 kind="link"
                 label="file"
+                @click="openFilePicker"
               />
               or a
               <Button
                 kind="link"
                 label="folder"
+                @click="openFolderPicker"
               />.
+              <input
+                ref="fileInput"
+                type="file"
+                multiple
+                class="sr-only"
+                tabindex="-1"
+                aria-hidden="true"
+                @change="onPick"
+              />
+              <input
+                ref="folderInput"
+                type="file"
+                webkitdirectory
+                class="sr-only"
+                tabindex="-1"
+                aria-hidden="true"
+                @change="onPick"
+              />
             </template>
           </PageHeader>
 
@@ -493,59 +588,59 @@
                   v-if="!accounts.length"
                   class="flex lg:min-h-0 lg:flex-1"
                 >
-                  <Card class="w-full">
-                    <template #content>
-                      <div
-                        class="flex rounded-(--shape-card) border border-dashed border-(--border-default) bg-(--bg-surface-raised) lg:min-h-0 lg:flex-1"
-                      >
-                        <EmptyState
-                          size="medium"
-                          title="Connect your repository"
-                          description="Select a Git provider to connect your repository and start the deployment process."
-                          class="w-full"
+                  <EmptyState
+                    bordered
+                    size="medium"
+                    title="Connect your repository"
+                    description="Select a Git provider to connect your repository and start the deployment process."
+                    class="w-full"
+                  >
+                    <template #icon>
+                      <span class="relative flex size-10 items-center justify-center">
+                        <span
+                          aria-hidden="true"
+                          class="absolute left-1/2 top-1/2 size-14 -translate-x-1/2 -translate-y-1/2 rounded-(--shape-card) border border-(--border-strong) bg-(--bg-canvas) opacity-5"
+                        />
+                        <span
+                          aria-hidden="true"
+                          class="absolute left-1/2 top-1/2 size-12 -translate-x-1/2 -translate-y-1/2 rounded-(--shape-card) border border-(--border-strong) bg-(--bg-canvas) opacity-10"
+                        />
+                        <span
+                          class="relative flex size-10 items-center justify-center rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface)"
                         >
-                          <template #icon>
-                            <span class="relative flex size-10 items-center justify-center">
-                              <span
-                                aria-hidden="true"
-                                class="absolute left-1/2 top-1/2 size-14 -translate-x-1/2 -translate-y-1/2 rounded-[var(--radius-xl,12px)] border border-(--border-strong) bg-(--bg-canvas) opacity-5"
-                              />
-                              <span
-                                aria-hidden="true"
-                                class="absolute left-1/2 top-1/2 size-12 -translate-x-1/2 -translate-y-1/2 rounded-(--shape-card) border border-(--border-strong) bg-(--bg-canvas) opacity-10"
-                              />
-                              <span
-                                class="relative flex size-10 items-center justify-center rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface)"
-                              >
-                                <i
-                                  class="ai ai-github text-body-md leading-none text-(--text-default)"
-                                  aria-hidden="true"
-                                />
-                              </span>
-                            </span>
-                          </template>
-                          <template #actions>
-                            <Button
-                              label="Continue with GitHub"
-                              icon="ai ai-github"
-                              kind="secondary"
-                              size="large"
-                              class="self-center"
-                              :loading="connecting"
-                              @click="connect"
-                            />
-                            <Link
-                              label="Manage connected providers"
-                              href="#"
-                              size="large"
-                              class="self-center"
-                              @click.prevent
-                            />
-                          </template>
-                        </EmptyState>
-                      </div>
+                          <i
+                            class="ai ai-github text-body-md leading-none text-(--text-default)"
+                            aria-hidden="true"
+                          />
+                        </span>
+                      </span>
                     </template>
-                  </Card>
+                    <template #actions>
+                      <Button
+                        label="Continue with GitHub"
+                        icon="ai ai-github"
+                        kind="secondary"
+                        size="large"
+                        class="self-center"
+                        :loading="connecting"
+                        @click="connect"
+                      />
+                      <Alert
+                        v-if="connectFailed"
+                        severity="danger"
+                        size="small"
+                        label="GitHub didn't connect. The authorization window closed before GitHub answered."
+                        class="w-full"
+                      />
+                      <Link
+                        label="Manage connected providers"
+                        href="#"
+                        size="large"
+                        class="self-center"
+                        @click.prevent
+                      />
+                    </template>
+                  </EmptyState>
                 </div>
 
                 <div
@@ -595,8 +690,8 @@
                       <Input
                         v-model="search"
                         size="large"
-                        placeholder="Search projects or enter a Git repository URL"
-                        aria-label="Search projects or enter a Git repository URL"
+                        placeholder="Search repositories or paste a repository URL"
+                        aria-label="Search repositories or paste a repository URL"
                         class="w-full"
                       >
                         <template #iconLeft>
@@ -613,90 +708,136 @@
                     >
                       <template #content>
                         <div class="overflow-y-auto overscroll-contain lg:min-h-0">
-                          <Item.List
-                            v-if="reposLoading"
+                          <div
+                            v-if="reposFailed"
+                            key="repos-failed"
+                            class="p-(--spacing-md)"
+                          >
+                            <Alert
+                              severity="danger"
+                              label="The repositories in this scope didn't load. GitHub didn't answer in time."
+                              action-label="Retry"
+                              @action="loadRepos"
+                            />
+                          </div>
+                          <div
+                            v-else-if="reposLoading"
                             key="repos-loading"
                             aria-busy="true"
                           >
-                            <Item
-                              v-for="n in skeletonRows"
-                              :key="'repo-skeleton-' + n"
-                              size="small"
+                            <p
+                              role="status"
+                              class="sr-only"
                             >
-                              <Item.Media>
-                                <Skeleton
-                                  kind="shape"
-                                  width="1.75rem"
-                                  height="1.75rem"
-                                />
-                              </Item.Media>
-                              <Item.Content>
-                                <div class="flex flex-col gap-(--spacing-xs)">
+                              Loading repositories
+                            </p>
+                            <Item.List aria-hidden="true">
+                              <Item
+                                v-for="n in skeletonRows"
+                                :key="'repo-skeleton-' + n"
+                                size="small"
+                              >
+                                <Item.Media>
                                   <Skeleton
-                                    width="40%"
-                                    height="0.875rem"
+                                    kind="shape"
+                                    width="1.75rem"
+                                    height="1.75rem"
                                   />
+                                </Item.Media>
+                                <Item.Content>
+                                  <div class="flex flex-col gap-(--spacing-xs)">
+                                    <Skeleton
+                                      width="40%"
+                                      height="0.875rem"
+                                    />
+                                    <Skeleton
+                                      width="25%"
+                                      height="0.75rem"
+                                    />
+                                  </div>
+                                </Item.Content>
+                                <Item.Actions>
                                   <Skeleton
-                                    width="25%"
-                                    height="0.75rem"
+                                    width="4.5rem"
+                                    height="1.75rem"
                                   />
-                                </div>
-                              </Item.Content>
-                              <Item.Actions>
-                                <Skeleton
-                                  width="4.5rem"
-                                  height="1.75rem"
-                                />
-                              </Item.Actions>
-                            </Item>
-                          </Item.List>
-                          <Item.List
+                                </Item.Actions>
+                              </Item>
+                            </Item.List>
+                          </div>
+                          <div
                             v-else-if="filteredRepos.length"
                             key="repos-list"
                           >
-                            <Item
-                              v-for="repo in filteredRepos"
-                              :key="repo.name"
-                              size="small"
-                            >
-                              <Item.Media>
-                                <span
-                                  class="flex size-7 shrink-0 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
-                                >
-                                  <i
-                                    :class="repo.icon"
-                                    class="text-body-md leading-none text-(--text-default)"
-                                    aria-hidden="true"
-                                  />
-                                </span>
-                              </Item.Media>
-                              <Item.Content>
-                                <Item.Title>{{ repo.name }}</Item.Title>
-                                <Item.Description>
-                                  <span class="flex items-center gap-(--spacing-xxs) text-body-xs">
+                            <Item.List :aria-label="`Repositories in ${scope}`">
+                              <Item
+                                v-for="repo in shownRepos"
+                                :key="repo.name"
+                                size="small"
+                              >
+                                <Item.Media>
+                                  <span
+                                    class="flex size-7 shrink-0 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
+                                  >
                                     <i
-                                      class="pi pi-history"
+                                      :class="repo.icon"
+                                      class="text-body-md leading-none text-(--text-default)"
                                       aria-hidden="true"
                                     />
-                                    {{ repo.age }}
                                   </span>
-                                </Item.Description>
-                              </Item.Content>
-                              <Item.Actions>
-                                <Button
-                                  label="Import"
-                                  kind="secondary"
-                                  size="small"
-                                />
-                              </Item.Actions>
-                            </Item>
-                          </Item.List>
-                          <p
+                                </Item.Media>
+                                <Item.Content>
+                                  <Item.Title>{{ repo.name }}</Item.Title>
+                                  <Item.Description>
+                                    <span
+                                      class="flex items-center gap-(--spacing-xxs) text-body-xs"
+                                    >
+                                      <i
+                                        class="pi pi-history"
+                                        aria-hidden="true"
+                                      />
+                                      {{ repo.age }}
+                                    </span>
+                                  </Item.Description>
+                                </Item.Content>
+                                <Item.Actions>
+                                  <Button
+                                    label="Import"
+                                    kind="secondary"
+                                    size="small"
+                                    :aria-label="`Import ${repo.name}`"
+                                  />
+                                </Item.Actions>
+                              </Item>
+                            </Item.List>
+                            <div
+                              v-if="hiddenRepoCount > 0"
+                              class="flex justify-center border-t border-(--border-muted) p-(--spacing-sm)"
+                            >
+                              <Button
+                                :label="`Load more (${hiddenRepoCount})`"
+                                kind="transparent"
+                                size="small"
+                                @click="showMoreRepos"
+                              />
+                            </div>
+                          </div>
+                          <EmptyState
                             v-else
-                            class="px-(--spacing-md) py-(--spacing-lg) text-center text-body-sm text-(--text-muted)"
+                            size="small"
+                            icon="pi pi-search"
+                            title="No repositories match"
+                            :description="`Nothing in ${scope} is named like “${search}”.`"
                           >
-                            No repositories match “{{ search }}”.
-                          </p>
+                            <template #actions>
+                              <Button
+                                label="Clear search"
+                                kind="outlined"
+                                size="small"
+                                @click="clearSearch"
+                              />
+                            </template>
+                          </EmptyState>
                         </div>
                       </template>
                     </Card>
@@ -712,17 +853,22 @@
                 <div
                   class="flex min-h-(--size-8) flex-wrap items-center justify-between gap-(--spacing-md)"
                 >
-                  <p class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">
+                  <h2 class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">
                     Start from template
-                  </p>
+                  </h2>
 
-                  <div class="flex shrink-0 items-center">
-                    <Button
-                      label="Filter"
-                      kind="outlined"
+                  <div class="flex w-full shrink-0 items-center sm:w-(--container-3xs)">
+                    <Input
+                      v-model="templateSearch"
                       size="medium"
-                      icon="pi pi-filter"
-                    />
+                      placeholder="Search templates"
+                      aria-label="Search templates"
+                      class="w-full"
+                    >
+                      <template #iconLeft>
+                        <i class="pi pi-search" />
+                      </template>
+                    </Input>
                   </div>
                 </div>
               </div>
@@ -735,61 +881,49 @@
                     class="w-full"
                   >
                     <div class="pb-(--spacing-xxs) pe-(--spacing-xxs)">
-                      <div class="flex flex-col gap-(--layout-section-gap)">
+                      <EmptyState
+                        v-if="!filteredSections.length"
+                        size="small"
+                        icon="pi pi-search"
+                        title="No templates match"
+                        :description="`Nothing is named like “${templateSearch}”.`"
+                      >
+                        <template #actions>
+                          <Button
+                            label="Clear search"
+                            kind="outlined"
+                            size="small"
+                            @click="clearTemplateSearch"
+                          />
+                        </template>
+                      </EmptyState>
+                      <div
+                        v-else
+                        class="flex flex-col gap-(--layout-section-gap)"
+                      >
                         <section
-                          v-for="section in sections"
+                          v-for="section in filteredSections"
                           :key="section.id"
                           class="flex flex-col gap-(--layout-group-gap)"
                         >
-                          <p class="px-(--spacing-xs) text-label-sm text-(--text-muted)">
+                          <h3 class="px-(--spacing-xs) text-label-sm text-(--text-muted)">
                             {{ section.label }}
-                          </p>
+                          </h3>
 
                           <div
                             v-if="section.kind === 'list'"
                             class="grid grid-cols-1 gap-(--spacing-md) sm:grid-cols-2"
                           >
-                            <div
+                            <Card
                               v-for="item in section.items"
                               :key="item.slug"
-                              class="group relative cursor-pointer transition-colors duration-moderate-01 ease-productive-entrance motion-reduce:transition-none"
-                            >
-                              <Card
-                                role="button"
-                                tabindex="0"
-                              >
-                                <template #content>
-                                  <div class="flex items-start gap-(--spacing-md)">
-                                    <span
-                                      class="flex size-10 shrink-0 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
-                                    >
-                                      <i
-                                        :class="[item.icon, item.markClass]"
-                                        class="text-body-lg leading-none text-(--text-default)"
-                                        aria-hidden="true"
-                                      />
-                                    </span>
-                                    <div class="flex min-w-0 flex-1 flex-col gap-(--spacing-xxs)">
-                                      <div
-                                        class="flex flex-wrap items-baseline gap-x-(--spacing-xs)"
-                                      >
-                                        <h3 class="text-label-md text-(--text-default)">
-                                          {{ item.title }}
-                                        </h3>
-                                        <span
-                                          v-if="item.vendor"
-                                          class="text-body-xs text-(--text-muted)"
-                                          >by {{ item.vendor }}</span
-                                        >
-                                      </div>
-                                      <p class="text-pretty text-body-sm text-(--text-muted)">
-                                        {{ item.description }}
-                                      </p>
-                                    </div>
-                                  </div>
-                                </template>
-                              </Card>
-                            </div>
+                              kind="integration"
+                              :title="item.title"
+                              :logo="`${item.icon} ${item.markClass}`.trim()"
+                              :vendor="item.vendor ?? ''"
+                              :description="item.description"
+                              :href="templateHref(item)"
+                            />
                           </div>
 
                           <div
@@ -799,13 +933,9 @@
                             <div
                               v-for="item in section.items"
                               :key="item.slug"
-                              class="flex group relative min-h-(--size-44) cursor-pointer"
+                              class="flex group relative min-h-(--size-44)"
                             >
-                              <Card
-                                class="w-full"
-                                role="button"
-                                tabindex="0"
-                              >
+                              <Card class="w-full">
                                 <template #content>
                                   <div class="isolate flex flex-1 flex-col">
                                     <span
@@ -830,9 +960,14 @@
                                         />
                                       </span>
                                       <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
-                                        <h3 class="text-label-md text-(--text-default)">
-                                          {{ item.title }}
-                                        </h3>
+                                        <h4 class="text-label-md text-(--text-default)">
+                                          <a
+                                            :href="templateHref(item)"
+                                            class="text-(--text-default) no-underline outline-none after:absolute after:inset-0 after:z-20 after:rounded-(--shape-card) after:content-[''] focus-visible:after:ring-2 focus-visible:after:ring-inset focus-visible:after:ring-(--ring-color)"
+                                          >
+                                            {{ item.title }}
+                                          </a>
+                                        </h4>
                                         <p class="text-pretty text-body-sm text-(--text-muted)">
                                           {{ item.description }}
                                         </p>

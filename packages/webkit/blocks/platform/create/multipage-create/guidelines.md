@@ -50,9 +50,13 @@ A choice that changes what follows, such as the list type, is a `SettingRow kind
 
 A stacked row with a five-row `Textarea` whose label, placeholder and guidance follow the choice above it. Its required message is a `HelperText` tied by `aria-describedby`.
 
-### I. Footer — `SaveBar` (required)
+### I. Review — `SectionHeader`, `Alert`, `Card`, `Item`, `Tag`, `Button` (required)
 
-`SaveBar kind="plain"` fixed under the form, on the create measure (a wrapper sets `--layout-measure-form` to `--layout-measure-form-create`, since the bar takes no classes of its own): transparent Cancel in its `#leading` slot, on the left; outlined Back (hidden on the first step) and the primary submit in `#actions`, on the right, all medium `Button`s. The submit reads Next and becomes the create label on the last step. It is the form's only `type="submit"`, so Enter advances.
+The last step, read-only: three bands under small `SectionHeader`s (Where it runs, What gets created, What can reference it), each with Edit back to its step; see Review step below.
+
+### J. Footer — `SaveBar` (required)
+
+`SaveBar kind="fade"` fixed under the form (the footer every create wizard shares: `platform/create/source-wizard` and `platform/create/provision-wizard` use the same Cancel on the left and Back plus the primary on the right), on the create measure (a wrapper sets `--layout-measure-form` to `--layout-measure-form-create`, since the bar takes no classes of its own): transparent Cancel in its `#leading` slot, on the left; outlined Back (hidden on the first step) and the primary submit in `#actions`, on the right, all medium `Button`s. The submit reads Next and becomes the create label on the last step. It is the form's only `type="submit"`, so Enter advances. On the last step (Review) it shows its loading state while the request runs and the result arrives as a toast; every state of the flow reaches that path.
 
 ## Do
 
@@ -98,14 +102,14 @@ A stacked row with a five-row `Textarea` whose label, placeholder and guidance f
 
 - WhereItRuns: the first step; the centred chooser of policies with search, module tags and the two escape routes.
 - ModuleOff: acme-staging was chosen with IP filtering off, so the IP filtering step shows the warning, the switch card and the note.
-- ListSettings: the settings step; Type as radio choice cards and the List textarea. An empty list marks the step red on the rail.
+- ListSettings: the settings step; Type as radio choice cards and the List textarea, with Back and Next (Review follows). An empty list marks the step red on the rail.
 - Review: the last step, read-only, with the create action in the footer. Where it runs is one `Alert` whose severity says whether anything will read the resource; What gets created pairs each value with the property it is sent as and shows long lists as their first five `Tag`s and a count; What can reference it names the consumers. Each band that maps to a step has an outlined Edit (`aria-label` names the band) that jumps back to that step. Create re-validates every step and, on a failure, opens the first step with an error.
 
 ## Review step
 
 - Add a Review step when the create has three or more steps or binds the resource to something; skip it for a one-step create.
 - Show values as they will be sent, with the property name under each, and never show secrets in clear.
-- Put Edit on each band, not on each value; after the edit, Next walks forward through the later steps, already filled, back to Review.
+- Put Edit on each band, and on a value whose step differs from its band's (Name, on General); after the edit, Next walks forward through the later steps, already filled, back to Review.
 - Say plainly when nothing will read the resource yet (unbound, or a module off) with a warning `Alert`, not a disabled create.
 
 ## Related

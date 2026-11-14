@@ -84,9 +84,9 @@ describe('single-page-create#CreateOrganization', () => {
     await fireEvent.update(screen.getByRole('textbox', { name: 'Name' }), 'Northwind Studio')
     expect(preview.textContent).toContain('Northwind Studio')
     const fill = () => preview.querySelector<SVGRectElement>('rect')?.style.fill ?? ''
-    await waitFor(() => expect(fill()).toMatch(/--color-(orange|yellow)-/), wait)
+    await waitFor(() => expect(fill()).toMatch(/--(text-primary|primary|warning)\b/), wait)
     await fireEvent.click(screen.getByRole('radio', { name: 'Green mark' }))
-    await waitFor(() => expect(fill()).toMatch(/--color-(green|blue)-/), wait)
+    await waitFor(() => expect(fill()).toMatch(/--success/), wait)
   })
 
   it('flags an empty name and a name already in use only after submit', async () => {
@@ -145,7 +145,7 @@ describe('create-in-drawer#CreateEnvironment', () => {
       expect(dialogs()).toHaveLength(1)
       return lastDialog()
     })
-    await fireEvent.click(within(domain).getByRole('combobox', { name: 'Environment' }))
+    await fireEvent.click(within(domain).getByRole('combobox', { name: /^Environment/ }))
     await fireEvent.click(await screen.findByRole('option', { name: 'Create Environment' }))
     const stacked = await waitFor(() => {
       expect(dialogs()).toHaveLength(2)
@@ -154,7 +154,7 @@ describe('create-in-drawer#CreateEnvironment', () => {
     await fireEvent.update(within(stacked).getByRole('textbox', { name: 'Name' }), 'Canary')
     await fireEvent.click(within(stacked).getByRole('button', { name: 'Create Environment' }))
     await waitFor(() => expect(dialogs()).toHaveLength(1), wait)
-    expect(within(domain).getByRole('combobox', { name: 'Environment' }).textContent).toContain(
+    expect(within(domain).getByRole('combobox', { name: /^Environment/ }).textContent).toContain(
       'Canary'
     )
   })

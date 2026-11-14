@@ -6,6 +6,9 @@
   import Card from '@aziontech/webkit/card'
   import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
   import Field from '@aziontech/webkit/field'
+  import Input from '@aziontech/webkit/input'
+  import PageHeader from '@aziontech/webkit/page-header'
+  import SaveBar from '@aziontech/webkit/save-bar'
   import Select from '@aziontech/webkit/select'
   import Skeleton from '@aziontech/webkit/skeleton'
   import Spinner from '@aziontech/webkit/spinner'
@@ -288,30 +291,19 @@
 
   const finishRun = () => {
     deploying.value = false
-    const actions = [
-      { label: 'Edit', onClick: edit },
-      { label: 'Redeploy', onClick: startRun }
-    ]
     if (failNext.value) {
       failNext.value = false
       outcome.value = 'failed'
       toast.error("The release wasn't deployed.", {
         id: RUN_TOAST,
-        description:
-          'edge-policy was refused: a rule points at an integration that does not exist.',
-        duration: 0,
-        closable: true,
-        actions
+        description: 'edge-policy was refused: a rule points at an integration that does not exist.'
       })
       return
     }
     outcome.value = 'succeeded'
     toast.success('Release deployed.', {
       id: RUN_TOAST,
-      description: `${releaseLine.value} serve ${plural(projects.value.length, 'project', 'projects')} now.`,
-      duration: 0,
-      closable: true,
-      actions
+      description: `${releaseLine.value} serve ${plural(projects.value.length, 'project', 'projects')} now.`
     })
   }
 
@@ -348,12 +340,11 @@
       <div
         class="layout-column-focused layout-boundary flex min-w-0 flex-1 flex-col gap-(--layout-section-gap)"
       >
-        <header class="flex min-w-0 flex-col gap-(--spacing-xxs)">
-          <h1 class="text-balance text-heading-lg text-(--text-default)">Review and deploy</h1>
-          <p class="text-body-md text-(--text-muted)">
-            Check the resources this release deploys and everything it reaches, then deploy it.
-          </p>
-        </header>
+        <PageHeader
+          title="Review and deploy"
+          description="Check the resources this release deploys and everything it reaches, then deploy it."
+          size="large"
+        />
 
         <Alert
           key="alert-1"
@@ -420,286 +411,280 @@
               Resources
             </h2>
 
-            <section
+            <Card
               v-for="card in cards"
               :key="card.type"
+              :padded="false"
               :aria-label="`${resourceTypes[card.type].label} ${card.name}`"
               :data-included="card.enabled || null"
-              class="flex min-w-0 flex-col rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface)"
             >
-              <header
-                class="flex min-h-14 min-w-0 items-center justify-between gap-(--spacing-xs) border-b border-(--border-default) px-(--spacing-md) py-(--spacing-sm)"
-              >
-                <span class="flex min-w-0 items-center gap-(--spacing-xs)">
-                  <i
-                    :class="resourceTypes[card.type].icon"
-                    class="shrink-0 text-(--text-muted)"
-                    aria-hidden="true"
-                  />
-                  <span class="truncate text-label-md text-(--text-default)">
-                    {{ resourceTypes[card.type].label }}
-                  </span>
-                </span>
-                <span class="flex shrink-0 items-center gap-(--spacing-xs)">
-                  <Tag
-                    key="tag-1"
-                    v-if="card.readonly"
-                    label="Read-only"
-                    severity="secondary"
-                    icon="pi pi-lock"
-                    size="small"
-                  />
-                  <Tag
-                    key="tag-2"
-                    v-else-if="card.required"
-                    label="Required"
-                    severity="warning"
-                    size="small"
-                  />
-                  <Tooltip
-                    v-if="card.canToggle"
-                    :text="
-                      card.enabled
-                        ? `Leave ${card.name} out of this release`
-                        : `Include ${card.name} in this release`
-                    "
-                  >
-                    <Switch
-                      v-model="card.enabled"
-                      :disabled="deploying"
-                      :aria-label="`Include ${card.name} in this release`"
+              <template #header>
+                <div class="flex min-w-0 flex-1 items-center justify-between gap-(--spacing-xs)">
+                  <span class="flex min-w-0 items-center gap-(--spacing-xs)">
+                    <i
+                      :class="resourceTypes[card.type].icon"
+                      class="shrink-0 text-(--text-muted)"
+                      aria-hidden="true"
                     />
-                  </Tooltip>
-                </span>
-              </header>
-
-              <p
-                v-if="!card.enabled"
-                class="p-(--spacing-md) text-body-sm text-(--text-muted)"
-              >
-                {{ card.note }}
-              </p>
-
-              <div
-                v-else
-                class="flex min-w-0 flex-col gap-(--spacing-md) p-(--spacing-md)"
-              >
+                    <span class="truncate text-label-md text-(--text-default)">
+                      {{ resourceTypes[card.type].label }}
+                    </span>
+                  </span>
+                  <span class="flex shrink-0 items-center gap-(--spacing-xs)">
+                    <Tag
+                      key="tag-1"
+                      v-if="card.readonly"
+                      label="Read-only"
+                      severity="secondary"
+                      icon="pi pi-lock"
+                      size="small"
+                    />
+                    <Tag
+                      key="tag-2"
+                      v-else-if="card.required"
+                      label="Required"
+                      severity="warning"
+                      size="small"
+                    />
+                    <Tooltip
+                      v-if="card.canToggle"
+                      :text="
+                        card.enabled
+                          ? `Leave ${card.name} out of this release`
+                          : `Include ${card.name} in this release`
+                      "
+                    >
+                      <Switch
+                        v-model="card.enabled"
+                        :disabled="deploying"
+                        :aria-label="`Include ${card.name} in this release`"
+                      />
+                    </Tooltip>
+                  </span>
+                </div>
+              </template>
+              <template #content>
                 <p
-                  v-if="card.readonly"
-                  class="text-body-sm text-(--text-muted)"
+                  v-if="!card.enabled"
+                  class="p-(--spacing-md) text-body-sm text-(--text-muted)"
                 >
-                  Kept from the active release.
+                  {{ card.note }}
                 </p>
 
-                <div class="grid min-w-0 gap-(--spacing-sm) sm:grid-cols-2">
-                  <Field>
-                    <Field.Label>Resource</Field.Label>
-                    <div
-                      class="flex min-h-9 min-w-0 items-center justify-between gap-(--spacing-xs) rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised) px-(--spacing-sm)"
-                    >
-                      <span class="truncate text-body-sm text-(--text-default)">
-                        {{ card.name }}
-                      </span>
-                      <i
-                        v-if="card.readonly"
-                        class="pi pi-lock shrink-0 text-(--text-muted)"
-                        aria-hidden="true"
-                      />
-                    </div>
-                  </Field>
+                <div
+                  v-else
+                  class="flex min-w-0 flex-col gap-(--spacing-md) p-(--spacing-md)"
+                >
+                  <p
+                    v-if="card.readonly"
+                    class="text-body-sm text-(--text-muted)"
+                  >
+                    Kept from the active release.
+                  </p>
 
-                  <Field :invalid="!card.versions.length">
-                    <Field.Label>Version</Field.Label>
-                    <Select
-                      v-model="card.versionId"
-                      size="medium"
-                      placeholder="Select a version"
-                      :disabled="deploying || card.readonly || !card.versions.length"
-                      :invalid="!card.versions.length"
-                      :display-value="(value) => versionLabel(card, value)"
-                    >
-                      <Select.Trigger class="w-full" />
-                      <Select.Content>
-                        <Select.Option
-                          :value="LATEST"
-                          icon="pi pi-sync"
-                        >
-                          Track latest Ready
-                          <template #tag>
-                            <span class="shrink-0 text-body-xs text-(--text-muted)">
-                              resolves at deploy
-                            </span>
-                          </template>
-                        </Select.Option>
-                        <Select.Group label="Pin a ready version">
+                  <div class="grid min-w-0 gap-(--spacing-sm) sm:grid-cols-2">
+                    <Field>
+                      <Field.Label>Resource</Field.Label>
+                      <Input
+                        :model-value="card.name"
+                        size="medium"
+                        readonly
+                      />
+                    </Field>
+
+                    <Field :invalid="!card.versions.length">
+                      <Field.Label>Version</Field.Label>
+                      <Select
+                        v-model="card.versionId"
+                        size="medium"
+                        placeholder="Select a version"
+                        :disabled="deploying || card.readonly || !card.versions.length"
+                        :invalid="!card.versions.length"
+                        :display-value="(value) => versionLabel(card, value)"
+                      >
+                        <Select.Trigger class="w-full" />
+                        <Select.Content>
                           <Select.Option
-                            v-for="version in card.versions"
-                            :key="version.id"
-                            :value="version.id"
+                            :value="LATEST"
+                            icon="pi pi-sync"
                           >
-                            {{ version.id }}
+                            Track latest Ready
                             <template #tag>
-                              <span class="flex shrink-0 items-center gap-(--spacing-xs)">
-                                <Tag
-                                  v-if="version.current"
-                                  label="Current"
-                                  severity="success"
-                                  size="small"
-                                />
-                                <span class="text-body-xs text-(--text-muted)">
-                                  {{ version.age }}
-                                </span>
+                              <span class="shrink-0 text-body-xs text-(--text-muted)">
+                                resolves at deploy
                               </span>
                             </template>
                           </Select.Option>
-                        </Select.Group>
-                      </Select.Content>
-                    </Select>
-                    <Field.Error v-if="!card.versions.length">
-                      {{ card.name }} has no Ready version, so it cannot be deployed.
-                    </Field.Error>
-                    <Field.Description v-else-if="card.versionId === LATEST">
-                      Resolves to {{ resolvedVersion(card) }} when the release deploys.
-                    </Field.Description>
-                  </Field>
-                </div>
-
-                <Button
-                  v-if="!card.versions.length"
-                  class="self-start"
-                  label="Build a version"
-                  kind="transparent"
-                  size="small"
-                  icon="pi pi-external-link"
-                  href="/services/edge-policy/versions"
-                />
-
-                <div
-                  v-if="card.groups.length"
-                  class="flex min-w-0 flex-col rounded-(--shape-card) border border-(--border-default)"
-                >
-                  <div
-                    class="flex min-w-0 items-center gap-(--spacing-xs) border-b border-(--border-default) px-(--spacing-md) py-(--spacing-sm)"
-                  >
-                    <h3 class="truncate text-label-md text-(--text-default)">Dependencies</h3>
-                    <Badge
-                      :label="String(dependencyCount(card))"
-                      severity="secondary"
-                      size="small"
-                    />
-                  </div>
-                  <Accordion
-                    type="multiple"
-                    size="medium"
-                    :default-value="card.groups.map((group) => group.type)"
-                  >
-                    <Accordion.Item
-                      v-for="group in card.groups"
-                      :key="group.type"
-                      :value="group.type"
-                    >
-                      <Accordion.Trigger>
-                        <span class="flex min-w-0 flex-1 items-center gap-(--spacing-xs)">
-                          <i
-                            :class="resourceTypes[group.type].icon"
-                            class="shrink-0 text-(--text-muted)"
-                            aria-hidden="true"
-                          />
-                          <span class="truncate text-label-md text-(--text-default)">
-                            {{ resourceTypes[group.type].label }}
-                          </span>
-                          <Badge
-                            :label="String(group.rows.length)"
-                            severity="secondary"
-                            size="small"
-                          />
-                        </span>
-                      </Accordion.Trigger>
-                      <Accordion.Content>
-                        <div
-                          class="flex min-w-0 flex-col gap-(--spacing-sm) px-(--spacing-md) pt-(--spacing-sm) pb-(--spacing-md)"
-                        >
-                          <Alert
-                            v-if="group.rows.some((row) => row.sharedWith?.length)"
-                            severity="info"
-                            size="small"
-                            label="A shared dependency deploys at one version. Changing it here changes it under every resource in this release that references it."
-                          />
-                          <div
-                            v-for="row in group.rows"
-                            :key="row.name"
-                            class="flex min-w-0 flex-col gap-(--spacing-xs) rounded-(--shape-elements) border border-(--border-muted) p-(--spacing-sm)"
-                          >
-                            <div class="flex min-w-0 items-center gap-(--spacing-xs)">
-                              <span class="truncate text-label-sm text-(--text-default)">
-                                {{ row.name }}
-                              </span>
-                              <Tooltip
-                                v-if="row.sharedWith?.length"
-                                :text="`Also referenced by ${row.sharedWith.join(' and ')}.`"
-                              >
-                                <span
-                                  tabindex="0"
-                                  class="inline-flex shrink-0 rounded-(--shape-elements) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)"
-                                >
+                          <Select.Group label="Pin a ready version">
+                            <Select.Option
+                              v-for="version in card.versions"
+                              :key="version.id"
+                              :value="version.id"
+                            >
+                              {{ version.id }}
+                              <template #tag>
+                                <span class="flex shrink-0 items-center gap-(--spacing-xs)">
                                   <Tag
-                                    label="Shared"
-                                    severity="info"
-                                    icon="pi pi-link"
+                                    v-if="version.current"
+                                    label="Current"
+                                    severity="success"
                                     size="small"
                                   />
+                                  <span class="text-body-xs text-(--text-muted)">
+                                    {{ version.age }}
+                                  </span>
                                 </span>
-                              </Tooltip>
-                            </div>
-                            <Select
-                              v-model="row.versionId"
-                              size="medium"
-                              :disabled="deploying"
-                              :display-value="(value) => versionLabel(row, value)"
+                              </template>
+                            </Select.Option>
+                          </Select.Group>
+                        </Select.Content>
+                      </Select>
+                      <Field.Error v-if="!card.versions.length">
+                        {{ card.name }} has no Ready version, so it cannot be deployed.
+                      </Field.Error>
+                      <Field.Description v-else-if="card.versionId === LATEST">
+                        Resolves to {{ resolvedVersion(card) }} when the release deploys.
+                      </Field.Description>
+                    </Field>
+                  </div>
+
+                  <Button
+                    v-if="!card.versions.length"
+                    class="self-start"
+                    label="Build a version"
+                    kind="transparent"
+                    size="small"
+                    icon="pi pi-external-link"
+                    href="/services/edge-policy/versions"
+                  />
+
+                  <div
+                    v-if="card.groups.length"
+                    class="flex min-w-0 flex-col rounded-(--shape-card) border border-(--border-default)"
+                  >
+                    <div
+                      class="flex min-w-0 items-center gap-(--spacing-xs) border-b border-(--border-default) px-(--spacing-md) py-(--spacing-sm)"
+                    >
+                      <h3 class="truncate text-label-md text-(--text-default)">Dependencies</h3>
+                      <Badge
+                        :label="String(dependencyCount(card))"
+                        severity="secondary"
+                        size="small"
+                      />
+                    </div>
+                    <Accordion
+                      type="multiple"
+                      size="medium"
+                      :default-value="card.groups.map((group) => group.type)"
+                    >
+                      <Accordion.Item
+                        v-for="group in card.groups"
+                        :key="group.type"
+                        :value="group.type"
+                      >
+                        <Accordion.Trigger>
+                          <span class="flex min-w-0 flex-1 items-center gap-(--spacing-xs)">
+                            <i
+                              :class="resourceTypes[group.type].icon"
+                              class="shrink-0 text-(--text-muted)"
+                              aria-hidden="true"
+                            />
+                            <span class="truncate text-label-md text-(--text-default)">
+                              {{ resourceTypes[group.type].label }}
+                            </span>
+                            <Badge
+                              :label="String(group.rows.length)"
+                              severity="secondary"
+                              size="small"
+                            />
+                          </span>
+                        </Accordion.Trigger>
+                        <Accordion.Content>
+                          <div
+                            class="flex min-w-0 flex-col gap-(--spacing-sm) px-(--spacing-md) pt-(--spacing-sm) pb-(--spacing-md)"
+                          >
+                            <Alert
+                              v-if="group.rows.some((row) => row.sharedWith?.length)"
+                              severity="info"
+                              size="small"
+                              label="A shared dependency deploys at one version. Changing it here changes it under every resource in this release that references it."
+                            />
+                            <div
+                              v-for="row in group.rows"
+                              :key="row.name"
+                              class="flex min-w-0 flex-col gap-(--spacing-xs) rounded-(--shape-elements) border border-(--border-muted) p-(--spacing-sm)"
                             >
-                              <Select.Trigger
-                                class="w-full"
-                                :aria-label="`Version of ${row.name}`"
-                              />
-                              <Select.Content>
-                                <Select.Option
-                                  :value="LATEST"
-                                  icon="pi pi-sync"
+                              <div class="flex min-w-0 items-center gap-(--spacing-xs)">
+                                <span class="truncate text-label-sm text-(--text-default)">
+                                  {{ row.name }}
+                                </span>
+                                <Tooltip
+                                  v-if="row.sharedWith?.length"
+                                  :text="`Also referenced by ${row.sharedWith.join(' and ')}.`"
                                 >
-                                  Track latest Ready
-                                </Select.Option>
-                                <Select.Group label="Pin a ready version">
-                                  <Select.Option
-                                    v-for="version in row.versions"
-                                    :key="version.id"
-                                    :value="version.id"
+                                  <span
+                                    tabindex="0"
+                                    class="inline-flex shrink-0 rounded-(--shape-elements) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)"
                                   >
-                                    {{ version.id }}
-                                    <template #tag>
-                                      <span class="flex shrink-0 items-center gap-(--spacing-xs)">
-                                        <Tag
-                                          v-if="version.current"
-                                          label="Current"
-                                          severity="success"
-                                          size="small"
-                                        />
-                                        <span class="text-body-xs text-(--text-muted)">
-                                          {{ version.age }}
-                                        </span>
-                                      </span>
-                                    </template>
+                                    <Tag
+                                      label="Shared"
+                                      severity="info"
+                                      icon="pi pi-link"
+                                      size="small"
+                                    />
+                                  </span>
+                                </Tooltip>
+                              </div>
+                              <Select
+                                v-model="row.versionId"
+                                size="medium"
+                                :disabled="deploying"
+                                :display-value="(value) => versionLabel(row, value)"
+                              >
+                                <Select.Trigger
+                                  class="w-full"
+                                  :aria-label="`Version of ${row.name}`"
+                                />
+                                <Select.Content>
+                                  <Select.Option
+                                    :value="LATEST"
+                                    icon="pi pi-sync"
+                                  >
+                                    Track latest Ready
                                   </Select.Option>
-                                </Select.Group>
-                              </Select.Content>
-                            </Select>
+                                  <Select.Group label="Pin a ready version">
+                                    <Select.Option
+                                      v-for="version in row.versions"
+                                      :key="version.id"
+                                      :value="version.id"
+                                    >
+                                      {{ version.id }}
+                                      <template #tag>
+                                        <span class="flex shrink-0 items-center gap-(--spacing-xs)">
+                                          <Tag
+                                            v-if="version.current"
+                                            label="Current"
+                                            severity="success"
+                                            size="small"
+                                          />
+                                          <span class="text-body-xs text-(--text-muted)">
+                                            {{ version.age }}
+                                          </span>
+                                        </span>
+                                      </template>
+                                    </Select.Option>
+                                  </Select.Group>
+                                </Select.Content>
+                              </Select>
+                            </div>
                           </div>
-                        </div>
-                      </Accordion.Content>
-                    </Accordion.Item>
-                  </Accordion>
+                        </Accordion.Content>
+                      </Accordion.Item>
+                    </Accordion>
+                  </div>
                 </div>
-              </div>
-            </section>
+              </template>
+            </Card>
           </section>
 
           <div class="min-w-0 xl:sticky xl:top-(--layout-boundary-start)">
@@ -964,63 +949,59 @@
         </div>
       </div>
 
-      <footer class="sticky bottom-0 shrink-0 border-t border-(--border-muted) bg-(--bg-surface)">
-        <div
-          class="layout-column-focused layout-boundary-inline flex flex-col gap-(--spacing-sm) py-(--spacing-md) md:flex-row md:items-center md:justify-between"
-        >
+      <SaveBar kind="docked">
+        <template #leading>
           <p class="text-body-sm text-(--text-muted)">
             Deploying puts every included resource into traffic at the version shown.
           </p>
-          <div class="flex flex-col gap-(--spacing-sm) md:flex-row md:items-center md:justify-end">
-            <p
-              v-if="blocker"
-              class="flex items-center gap-(--spacing-xs) text-body-sm text-(--warning-contrast)"
-            >
-              <i
-                class="pi pi-exclamation-triangle shrink-0"
-                aria-hidden="true"
-              />
-              {{ blocker }}
-            </p>
-            <div class="flex flex-col gap-(--spacing-sm) md:flex-row md:items-center">
+        </template>
+        <template #actions>
+          <p
+            v-if="blocker"
+            class="flex items-center gap-(--spacing-xs) text-body-sm text-(--warning-contrast)"
+          >
+            <i
+              class="pi pi-exclamation-triangle shrink-0"
+              aria-hidden="true"
+            />
+            {{ blocker }}
+          </p>
+          <div class="w-full md:w-fit">
+            <Button
+              class="w-full"
+              label="Cancel"
+              kind="outlined"
+              size="medium"
+              href="/services/web-app"
+              :disabled="deploying"
+            />
+          </div>
+          <ConfirmDialog
+            v-model:open="confirmOpen"
+            title="Deploy this release?"
+            :description="confirmBody"
+            confirm-label="Deploy release"
+            kind="primary"
+            size="small"
+            :disabled="!canDeploy"
+            @confirm="confirmDeploy"
+          >
+            <template #trigger>
               <div class="w-full md:w-fit">
                 <Button
                   class="w-full"
-                  label="Cancel"
-                  kind="outlined"
+                  :label="deploying ? 'Deploying…' : 'Deploy release'"
+                  kind="primary"
                   size="medium"
-                  href="/services/web-app"
-                  :disabled="deploying"
+                  icon="pi pi-cloud-upload"
+                  :disabled="!canDeploy"
+                  :loading="deploying"
                 />
               </div>
-              <ConfirmDialog
-                v-model:open="confirmOpen"
-                title="Deploy this release?"
-                :description="confirmBody"
-                confirm-label="Deploy release"
-                kind="primary"
-                size="small"
-                :disabled="!canDeploy"
-                @confirm="confirmDeploy"
-              >
-                <template #trigger>
-                  <div class="w-full md:w-fit">
-                    <Button
-                      class="w-full"
-                      :label="deploying ? 'Deploying…' : 'Deploy release'"
-                      kind="primary"
-                      size="medium"
-                      icon="pi pi-cloud-upload"
-                      :disabled="!canDeploy"
-                      :loading="deploying"
-                    />
-                  </div>
-                </template>
-              </ConfirmDialog>
-            </div>
-          </div>
-        </div>
-      </footer>
+            </template>
+          </ConfirmDialog>
+        </template>
+      </SaveBar>
     </main>
   </div>
 </template>

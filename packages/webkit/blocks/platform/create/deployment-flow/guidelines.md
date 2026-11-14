@@ -23,7 +23,9 @@ The card a create flow hands its column to once the user has pressed Deploy. The
 
 ### B. Run status — `StatusIndicator` (required)
 
-Sits in the card header, opposite the title. While the run goes it is a loading `StatusIndicator` with `severity="info"` and a progressive label, Building or Creating. When the run settles, the outcome moves to a `Tag` in the Logs row (Completed or Failed) and, after a failure, the header swaps the indicator for the Phased or Complete `ToggleGroup` so the user can read the logs step by step or as one console.
+Sits in the card header, opposite the title. While the run goes it is a loading `StatusIndicator` with `severity="info"` and a progressive label: Cloning during the splash, then Building, or Creating when the flow provisions. When the run settles, the outcome moves to a `Tag` in the Logs row (Completed or Failed) and, after a failure, the header swaps the indicator for the Phased or Complete `ToggleGroup` so the user can read the logs step by step or as one console.
+
+**Failure actions (Failed).** After a failure the card footer holds Edit (outlined, back to the form with the values kept) and Redeploy (primary, starts the run again, with its loading state and a Redeploying indicator in the header). Every deploy surface ends a failure with the same two actions (`platform/create/deploy-drawer`, `platform/create/deploy-progress-dialog`, `platform/states/async-submit`, `platform/create/release-impact`).
 
 ## Do
 
@@ -39,12 +41,12 @@ Sits in the card header, opposite the title. While the run goes it is a loading 
 - Don't put the run status in a toast; it belongs in the card header.
 - Don't auto-advance to the success screen after a failure, or hide the logs that explain it.
 - Don't expand every finished step; a long log pushes the step in flight out of view.
-- Don't add a Cancel or a second action to the card; the flow around it owns navigation.
+- Don't add a Cancel to the card while the run goes; the flow around it owns navigation. The only actions are Edit and Redeploy after a failure.
 
 ## Copy
 
 - **Card title:** one noun naming the run, e.g. "Deployment" or "Provisioning".
-- **Run status:** the progressive form of the verb with `…` only while in progress, e.g. "Building…" in prose, "Building" as an indicator label.
+- **Run status:** the progressive form of the verb with `…` only while in progress, e.g. "Cloning…" or "Building…" in prose, "Cloning" or "Building" as an indicator label. Log lines end with a period, never an exclamation mark.
 - **Splash line:** the screen-reader line names source and destination in fragments, e.g. "Cloning acme/web-app to acme".
 - **Outcome tag:** one or two words stating the result, e.g. "Completed", "Failed".
 - **Pending steps:** say they have not started, e.g. "Waiting to start…".
@@ -53,18 +55,18 @@ Sits in the card header, opposite the title. While the run goes it is a loading 
 
 ## Accessibility
 
-- The status label is text, not only a colour or a spinner; screen readers hear Building, then the outcome.
+- The status label is text, not only a colour or a spinner; screen readers hear Cloning, then Building, then the outcome.
 - The progress bar has an accessible name, e.g. "Deployment progress", and the logs region an `aria-label`.
-- The splash tiles and connector are one `aria-hidden` group; its meaning is the visually hidden live line. Decorative glyphs in the splash and in step rows carry `aria-hidden="true"`; the status of each step is also given in words.
+- The splash tiles and connector are one `aria-hidden` group; its meaning is the visually hidden live line. Decorative glyphs in the splash and in step rows carry `aria-hidden="true"`; the status of each step is also given in words: a visually hidden Done, In progress, Waiting (or the Failed and Skipped `Tag`) inside each step trigger.
 - Step headers are keyboard-operable accordion triggers; opening a step does not move focus.
 - New log lines do not steal focus or announce one by one; the step change and the outcome are what is announced.
 
 ## States
 
-- Initial: Deploy was just pressed; the cloning splash (source tile, marching connector, destination tile) with a Building indicator, before the first step starts.
+- Initial: Deploy was just pressed; the cloning splash (source tile, marching connector, destination tile) with a Cloning indicator, before the first step starts.
 - Running: two steps done with their times, the current step spinning and open on its lines, the step count shown and the progress bar on the bottom edge.
 - Finished: every step checked and collapsed, a Completed tag, the progress bar retired, just before the success screen.
-- Failed: the failing step open on its error output with a Failed tag, the later steps Skipped, and the Phased or Complete switch in the header.
+- Failed: the failing step open on its error output with a Failed tag, the later steps Skipped, the Phased or Complete switch in the header, and Edit and Redeploy in the card footer.
 
 ## Related
 

@@ -12,10 +12,12 @@
   import Item from '@aziontech/webkit/item'
   import MultiSelect from '@aziontech/webkit/multi-select'
   import NumberInput from '@aziontech/webkit/number-input'
+  import PageHeader from '@aziontech/webkit/page-header'
   import RadioButton from '@aziontech/webkit/radio-button'
   import SaveBar from '@aziontech/webkit/save-bar'
   import SettingRow from '@aziontech/webkit/setting-row'
   import Switch from '@aziontech/webkit/switch'
+  import { toast } from '@aziontech/webkit/toast'
   import { computed, reactive, ref } from 'vue'
 
   interface PortOption {
@@ -23,7 +25,7 @@
     value: string
   }
 
-  const breadcrumb = [{ label: 'Forms', href: '/forms' }, { label: 'In-page create' }]
+  const breadcrumb = [{ label: 'Services', href: '/services' }, { label: 'Create Service' }]
 
   const protocolUsageOptions = [
     {
@@ -113,7 +115,36 @@
     return !errors.name && !errors.httpPorts && !errors.address && !errors.hostHeader
   }
 
-  const submit = () => validate()
+  const SAVE_FAILURES = 0
+  let failuresLeft = SAVE_FAILURES
+
+  const sendRequest = () =>
+    new Promise<void>((resolve, reject) => {
+      setTimeout(() => {
+        if (failuresLeft > 0) {
+          failuresLeft -= 1
+          reject(new Error('The service did not answer. Check your connection and try again.'))
+          return
+        }
+        resolve()
+      }, 900)
+    })
+
+  const submit = async () => {
+    if (submitting.value || !validate()) return
+    submitting.value = true
+    try {
+      await sendRequest()
+      toast.success(`${form.name.trim()} created.`)
+    } catch (error) {
+      toast.error('Could not create the service.', {
+        description: error instanceof Error ? error.message : 'Try again.',
+        action: { label: 'Retry', onClick: () => submit() }
+      })
+    } finally {
+      submitting.value = false
+    }
+  }
 </script>
 
 <template>
@@ -122,7 +153,7 @@
       <GlobalHeader.Left>
         <IconButton
           icon="pi pi-chevron-left"
-          aria-label="Back to Forms"
+          aria-label="Back to Services"
           kind="outlined"
           size="small"
         />
@@ -163,14 +194,19 @@
         @submit.prevent="submit"
       >
         <div class="layout-column-form layout-boundary flex flex-1 flex-col">
+          <PageHeader
+            title="Create Service"
+            size="small"
+            description="A service answers requests on its domains and forwards them to its origins."
+          />
           <fieldset
             class="mx-0 flex min-w-0 flex-col border-0 p-0"
             :disabled="submitting"
           >
             <legend class="sr-only">Create Service</legend>
 
-            <section class="flex flex-col gap-(--layout-group-gap)">
-              <p class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">General</p>
+            <section class="layout-section-start flex flex-col gap-(--layout-group-gap)">
+              <h2 class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">General</h2>
               <Card :padded="false">
                 <template #content>
                   <Item.List>
@@ -205,9 +241,9 @@
             </section>
 
             <section class="layout-section-start flex flex-col gap-(--layout-group-gap)">
-              <p class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">
+              <h2 class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">
                 Delivery settings
-              </p>
+              </h2>
               <Card :padded="false">
                 <template #content>
                   <Item.List>
@@ -309,7 +345,7 @@
             </section>
 
             <section class="layout-section-start flex flex-col gap-(--layout-group-gap)">
-              <p class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">Origins</p>
+              <h2 class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">Origins</h2>
               <Card :padded="false">
                 <template #content>
                   <Item.List>
@@ -412,9 +448,9 @@
             </section>
 
             <section class="layout-section-start flex flex-col gap-(--layout-group-gap)">
-              <p class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">
+              <h2 class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">
                 Cache expiration policies
-              </p>
+              </h2>
               <Card :padded="false">
                 <template #content>
                   <Item.List>
@@ -508,7 +544,7 @@
             </section>
 
             <section class="layout-section-start flex flex-col gap-(--layout-group-gap)">
-              <p class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">Debug rules</p>
+              <h2 class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">Debug rules</h2>
               <Card :padded="false">
                 <template #content>
                   <Item.List>

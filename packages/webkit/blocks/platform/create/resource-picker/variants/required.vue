@@ -7,7 +7,7 @@
   import Item from '@aziontech/webkit/item'
   import Skeleton from '@aziontech/webkit/skeleton'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
-  import { computed, reactive, ref } from 'vue'
+  import { computed, onBeforeUnmount, reactive, ref } from 'vue'
 
   interface PickerOption {
     value: string
@@ -40,27 +40,31 @@
     { value: 'docs-site', label: 'docs-site', description: 'Astro · acme/docs-site' },
     { value: 'docs-next', label: 'docs-next', description: 'Next.js · acme/docs-next' },
     { value: 'vue-sample', label: 'vue-sample', description: 'Vue · jane-doe/vue-sample' },
-    { value: 'hello-world', label: 'hello-world', description: 'JavaScript · ' },
+    { value: 'hello-world', label: 'hello-world', description: 'JavaScript · acme/hello-world' },
     { value: 'company-site', label: 'company-site', description: 'HTML · acme/company-site' },
-    { value: 'company-docs', label: 'company-docs', description: 'HTML · ' },
+    { value: 'company-docs', label: 'company-docs', description: 'HTML · acme/company-docs' },
     { value: 'analytics-pro', label: 'analytics-pro', description: 'Next.js · acme/analytics-pro' },
-    { value: 'analytics-api', label: 'analytics-api', description: 'Next.js · ' },
+    { value: 'analytics-api', label: 'analytics-api', description: 'Next.js · acme/analytics-api' },
     {
       value: 'react-dashboard',
       label: 'react-dashboard',
       description: 'React · acme/react-dashboard'
     },
-    { value: 'docs-portal', label: 'docs-portal', description: 'Vue · ' },
-    { value: 'ecommerce-v2', label: 'ecommerce-v2', description: 'Nuxt · shopco/ecommerce-v2' },
-    { value: 'ecommerce-storefront', label: 'ecommerce-storefront', description: 'Nuxt · ' },
+    { value: 'docs-portal', label: 'docs-portal', description: 'Vue · acme/docs-portal' },
+    { value: 'ecommerce-v2', label: 'ecommerce-v2', description: 'Nuxt · acme/ecommerce-v2' },
+    {
+      value: 'ecommerce-storefront',
+      label: 'ecommerce-storefront',
+      description: 'Nuxt · acme/ecommerce-storefront'
+    },
     {
       value: 'marketing-site',
       label: 'marketing-site',
       description: 'Astro · acme/marketing-site'
     },
-    { value: 'blog-platform', label: 'blog-platform', description: 'Astro · ' },
+    { value: 'blog-platform', label: 'blog-platform', description: 'Astro · acme/blog-platform' },
     { value: 'status-page', label: 'status-page', description: 'Svelte · acme/status-page' },
-    { value: 'mobile-app', label: 'mobile-app', description: 'Svelte · ' }
+    { value: 'mobile-app', label: 'mobile-app', description: 'Svelte · acme/mobile-app' }
   ]
   const PAGE_SIZE = 5
   const wireWidths = ['62%', '48%', '70%', '54%', '44%']
@@ -72,6 +76,8 @@
     const message = ref(initial.message ?? '')
     const shown = ref(PAGE_SIZE)
     const loading = ref(initial.loading ?? false)
+    let timer: ReturnType<typeof setTimeout> | undefined
+    onBeforeUnmount(() => clearTimeout(timer))
 
     const chosenIndex = options.findIndex((option) => option.value === chosen.value)
     if (chosenIndex >= PAGE_SIZE) shown.value = Math.ceil((chosenIndex + 1) / PAGE_SIZE) * PAGE_SIZE
@@ -106,7 +112,8 @@
     const loadMore = () => {
       if (loading.value || !remaining.value) return
       loading.value = true
-      setTimeout(() => {
+      clearTimeout(timer)
+      timer = setTimeout(() => {
         shown.value += PAGE_SIZE
         loading.value = false
       }, 420)
@@ -127,7 +134,7 @@
     })
   }
 
-  const mode = ref('existing')
+  const mode = ref(projects.length ? 'existing' : 'new')
   const name = ref('')
   const projectPicker = usePicker(projects, 'project', {
     chosen: '',
@@ -149,12 +156,19 @@
             projects on Production and Preview.
           </p>
           <ToggleGroup
+            v-if="projects.length"
             v-model="mode"
             :options="projectModes"
             size="large"
             fluid
             aria-label="Where the project comes from"
           />
+          <p
+            v-else
+            class="text-body-sm text-(--text-muted)"
+          >
+            There is no project to bind yet, so a new one is created with this service.
+          </p>
 
           <p
             v-if="mode === 'existing'"

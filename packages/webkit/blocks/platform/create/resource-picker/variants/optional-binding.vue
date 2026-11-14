@@ -9,8 +9,7 @@
   import Skeleton from '@aziontech/webkit/skeleton'
   import Switch from '@aziontech/webkit/switch'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
-  import Tooltip from '@aziontech/webkit/tooltip'
-  import { computed, reactive, ref, watch } from 'vue'
+  import { computed, onBeforeUnmount, reactive, ref, watch } from 'vue'
 
   interface PickerOption {
     value: string
@@ -49,7 +48,7 @@
     {
       key: 'ddos',
       title: 'DDoS Protection',
-      description: 'Absorbs volumetric attacks at the network layer.',
+      description: 'Absorbs volumetric attacks at the network layer. Always on.',
       locked: true
     },
     {
@@ -79,6 +78,8 @@
     const message = ref(initial.message ?? '')
     const shown = ref(PAGE_SIZE)
     const loading = ref(initial.loading ?? false)
+    let timer: ReturnType<typeof setTimeout> | undefined
+    onBeforeUnmount(() => clearTimeout(timer))
 
     const chosenIndex = options.findIndex((option) => option.value === chosen.value)
     if (chosenIndex >= PAGE_SIZE) shown.value = Math.ceil((chosenIndex + 1) / PAGE_SIZE) * PAGE_SIZE
@@ -113,7 +114,8 @@
     const loadMore = () => {
       if (loading.value || !remaining.value) return
       loading.value = true
-      setTimeout(() => {
+      clearTimeout(timer)
+      timer = setTimeout(() => {
         shown.value += PAGE_SIZE
         loading.value = false
       }, 420)
@@ -359,18 +361,16 @@
                     :description="module.description"
                     kind="compact"
                   >
-                    <Tooltip
+                    <Switch
                       v-if="module.locked"
-                      text="DDoS Protection is always on."
-                    >
-                      <Switch
-                        :model-value="true"
-                        disabled
-                        :aria-label="module.title"
-                      />
-                    </Tooltip>
+                      key="locked"
+                      :model-value="true"
+                      disabled
+                      :aria-label="module.title"
+                    />
                     <Switch
                       v-else
+                      key="editable"
                       v-model="modules[module.key]"
                       :aria-label="module.title"
                     />

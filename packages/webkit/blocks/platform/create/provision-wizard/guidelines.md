@@ -31,7 +31,7 @@ A `Stepper` labelled with the create label and two steps, Project and Domain and
 
 ### D. Project band — `Card`, `ToggleGroup`, `Field`, `Input`, `HelperText`, `Item`, `Skeleton`, `Button` (required)
 
-The `platform/create/resource-picker` band: a flush `Card` titled Project, a lead sentence, a large fluid `ToggleGroup` of Existing project and New project, then either a searchable `Item` list paged five at a time with `Skeleton` rows and a Load more `Button`, or a Name `Field` with an `Input`. The required message is a `HelperText kind="required"` under the search, above the rows.
+The `platform/create/resource-picker` band, copied from that block, which is the source of truth for the paged picker (change it there first): a flush `Card` titled Project, a lead sentence, a large fluid `ToggleGroup` of Existing project and New project, then either a searchable `Item` list paged five at a time with `Skeleton` rows and a Load more `Button`, or a Name `Field` with an `Input`. The required message is a `HelperText kind="required"` under the search, above the rows.
 
 ### E. New project configuration — `Card`, `Item`, `Switch`, `Field`, `Input`, `SettingRow`, `RadioCards`, `HelperText`, `Select` (conditional)
 
@@ -59,7 +59,7 @@ A `SettingsSection` titled Advanced, `collapsible`, `icon="pi pi-cog"`, closed b
 
 ### K. Footer — `SaveBar`, `Button` (required)
 
-`SaveBar kind="fade"`, a footer with no border or surface that fades in over the canvas on the form's own measure: outlined Back in `#leading` from step two on, and in `#actions` the primary submit, Next on step one and Create and deploy on step two. Both are medium; the submit is the form's only `type="submit"`.
+`SaveBar kind="fade"`, a footer with no border or surface that fades in over the canvas on the form's own measure: transparent Cancel in `#leading` on the left, back to Services (the footer every create wizard shares, as in `platform/create/multipage-create`), and in `#actions` on the right outlined Back from step two on, then the primary submit, Next on step one and Create and deploy on step two. Both are medium; the submit is the form's only `type="submit"`. Create and deploy shows its loading state while the request runs and locks Back; the consumer then hands the column to `platform/create/deployment-flow` (the block stops at the loading state).
 
 ## Do
 

@@ -6,6 +6,8 @@
   import DialogOverlay from '@aziontech/webkit/dialog-overlay'
   import DialogPortal from '@aziontech/webkit/dialog-portal'
   import DialogTitle from '@aziontech/webkit/dialog-title'
+  import EmptyState from '@aziontech/webkit/empty-state'
+  import Item from '@aziontech/webkit/item'
   import OutcomeMark, { type OutcomeMarkSeverity } from '@aziontech/webkit/outcome-mark'
   import PanelContent from '@aziontech/webkit/panel-content'
   import PanelFooter from '@aziontech/webkit/panel-footer'
@@ -133,7 +135,7 @@
 
   const tally = computed(
     () =>
-      `${counts.value.done} succeeded, ${counts.value.failed} failed. Each Deployment Setting activates on its own, and the ones that succeeded stay live.`
+      `${counts.value.done} succeeded, ${counts.value.failed} failed. Each Deployment Setting deploys on its own, and the ones that succeeded stay live.`
   )
 
   const outcomeSeverity = computed(() => (counts.value.failed ? 'warning' : 'success'))
@@ -245,7 +247,7 @@
     <header class="flex min-w-0 flex-col gap-(--spacing-xxs)">
       <h1 class="text-balance text-heading-lg text-(--text-default)">web-app</h1>
       <p class="text-body-md text-(--text-muted)">
-        Deploys to {{ items.length }} {{ noun(items.length) }}, each activating on its own.
+        Deploys to {{ items.length }} {{ noun(items.length) }}, each going live on its own.
       </p>
     </header>
     <div class="flex flex-wrap items-center gap-(--spacing-sm)">
@@ -261,7 +263,6 @@
     <Dialog
       v-model:open="open"
       size="medium"
-      :dismissible="!running"
     >
       <DialogPortal>
         <DialogOverlay />
@@ -296,7 +297,7 @@
                   v-if="activeName"
                   class="truncate text-body-sm text-(--text-muted)"
                 >
-                  Activating {{ activeName }}
+                  Deploying {{ activeName }}
                 </p>
               </div>
 
@@ -308,46 +309,41 @@
                 class="self-start"
               />
 
-              <ul
+              <Item.List
+                v-if="visibleItems.length"
                 aria-label="Deployment Settings"
-                class="m-0 flex min-w-0 list-none flex-col gap-(--spacing-xs) p-0"
               >
-                <li
+                <Item
                   v-for="item in visibleItems"
                   :key="item.id"
-                  class="flex min-w-0 items-start justify-between gap-(--spacing-sm) rounded-(--shape-elements) border border-(--border-muted) p-(--spacing-sm)"
+                  kind="outlined"
+                  size="small"
                 >
-                  <span class="flex min-w-0 items-start gap-(--spacing-xs)">
-                    <span class="mt-0.5 flex shrink-0">
-                      <OutcomeMark
-                        v-if="MARK[item.status]"
-                        :severity="MARK[item.status]"
-                        size="small"
-                        :animated="settledOnce || running"
-                        :aria-label="STATUS_TAG[item.status].label"
-                      />
-                      <i
-                        v-else
-                        class="pi pi-sliders-h text-(--text-muted)"
-                        aria-hidden="true"
-                      />
+                  <Item.Media>
+                    <OutcomeMark
+                      v-if="MARK[item.status]"
+                      :severity="MARK[item.status]"
+                      size="small"
+                      :animated="settledOnce || running"
+                      :aria-label="STATUS_TAG[item.status].label"
+                    />
+                    <i
+                      v-else
+                      class="pi pi-sliders-h text-(--text-muted)"
+                      aria-hidden="true"
+                    />
+                  </Item.Media>
+                  <Item.Content>
+                    <Item.Title>{{ item.name }}</Item.Title>
+                    <Item.Description>{{ item.environments }}</Item.Description>
+                    <span
+                      v-if="item.message"
+                      class="text-body-xs text-(--danger-contrast)"
+                    >
+                      {{ item.message }}
                     </span>
-                    <span class="flex min-w-0 flex-col gap-(--spacing-xxs)">
-                      <span class="truncate text-label-sm text-(--text-default)">
-                        {{ item.name }}
-                      </span>
-                      <span class="truncate text-body-xs text-(--text-muted)">
-                        {{ item.environments }}
-                      </span>
-                      <span
-                        v-if="item.message"
-                        class="text-body-xs text-(--danger-contrast)"
-                      >
-                        {{ item.message }}
-                      </span>
-                    </span>
-                  </span>
-                  <span class="flex shrink-0 items-center gap-(--spacing-xs)">
+                  </Item.Content>
+                  <Item.Actions>
                     <span
                       v-if="item.status === 'deploying'"
                       class="flex size-4 shrink-0 text-(--text-muted)"
@@ -359,15 +355,15 @@
                       :severity="STATUS_TAG[item.status].severity"
                       size="small"
                     />
-                  </span>
-                </li>
-                <li
-                  v-if="!visibleItems.length"
-                  class="p-(--spacing-sm) text-body-sm text-(--text-muted)"
-                >
-                  {{ emptyLabel }}
-                </li>
-              </ul>
+                  </Item.Actions>
+                </Item>
+              </Item.List>
+              <EmptyState
+                v-else
+                size="small"
+                icon="pi pi-filter"
+                :title="emptyLabel"
+              />
               <span
                 class="sr-only"
                 role="status"
@@ -395,10 +391,9 @@
               <div class="w-full md:w-fit">
                 <Button
                   class="w-full"
-                  label="Close"
+                  :label="running ? 'Hide' : 'Close'"
                   kind="primary"
                   size="medium"
-                  :disabled="running"
                   @click="open = false"
                 />
               </div>
