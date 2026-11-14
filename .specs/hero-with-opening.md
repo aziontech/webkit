@@ -3,11 +3,13 @@ name: hero-with-opening
 category: sections
 structure: monolithic
 status: implemented
-spec_version: 1
+spec_version: 2
 created: 2026-11-05
-last_updated: 2026-11-05
-checksum: 0cde28579140721ab18d8290d606940f99efc29631d85351bacd6b2293c2f565
+last_updated: 2026-11-14
+checksum: c0bc6a85aca4025c777ac32bd340798baed43b46bdd0401f428a7a19f8ed5e6b
+template: 2
 ---
+
 # HeroWithOpening — Component Spec
 
 ## Purpose
@@ -38,7 +40,7 @@ The opening band of a product page followed straight by its arguments: a large c
 
 ```vue
 <script setup>
-import HeroWithOpening from '@aziontech/webkit/hero-with-opening'
+  import HeroWithOpening from '@aziontech/webkit/hero-with-opening'
 </script>
 
 <template>
@@ -49,9 +51,21 @@ import HeroWithOpening from '@aziontech/webkit/hero-with-opening'
     :primary-action="{ label: 'Start for free', href: '/signup' }"
     :secondary-action="{ label: 'Docs', href: '/docs', trailing: true }"
     :items="[
-      { icon: 'pi pi-shield', title: 'Programmable rule engine', description: 'Define custom rules across OSI layers L3-L7.' },
-      { icon: 'pi pi-code', title: 'Extensible with Functions', description: 'Run custom JavaScript security code.' },
-      { icon: 'pi pi-sync', title: 'Real-time synchronization', description: 'Rules sync automatically across every data center.' }
+      {
+        icon: 'pi pi-shield',
+        title: 'Programmable rule engine',
+        description: 'Define custom rules across OSI layers L3-L7.'
+      },
+      {
+        icon: 'pi pi-code',
+        title: 'Extensible with Functions',
+        description: 'Run custom JavaScript security code.'
+      },
+      {
+        icon: 'pi pi-sync',
+        title: 'Real-time synchronization',
+        description: 'Rules sync automatically across every data center.'
+      }
     ]"
   />
 </template>
@@ -59,14 +73,16 @@ import HeroWithOpening from '@aziontech/webkit/hero-with-opening'
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `eyebrow` | `string` | `''` | false | Short overline above the headline. |
-| `title` | `string` | `''` | false | Page headline, rendered as the page `h1`; the band renders nothing when empty. A title longer than 45 characters widens the headline column. |
-| `description` | `string` | `''` | false | Sentence under the headline. |
-| `primaryAction` | `HeroWithOpeningAction` | `undefined` | false | First button under the headline; `{ label, href, trailing?, target? }`. Shown only with a label and a link. |
-| `secondaryAction` | `HeroWithOpeningAction` | `undefined` | false | Second, outlined button beside the first; `{ label, href, trailing?, target? }`. Shown only with a label and a link. |
-| `items` | `HeroWithOpeningItem[]` | `[]` | false | The arguments in reading order, three to a row; each is `{ icon, title, description }`. The grid renders only when there are items. |
+| Prop              | Type                         | Default     | Required | JSDoc                                                                                                                                                                                        |
+| ----------------- | ---------------------------- | ----------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `eyebrow`         | `string`                     | `''`        | false    | Short overline above the headline.                                                                                                                                                           |
+| `highlight`       | `string`                     | `''`        | false    | Opening words of the headline, painted in the brand accent; reads as one sentence with `title`.                                                                                              |
+| `title`           | `string`                     | `''`        | false    | Page headline, rendered as the page `h1`; the band renders nothing when empty. Without `titleLength`, a title longer than 45 characters widens the headline column.                          |
+| `titleLength`     | `HeroWithOpeningTitleLength` | `undefined` | false    | Length of the headline: `short` keeps it on the narrow `xl` column, `long` widens it to `4xl` so it breaks into two lines instead of three; unset, the column follows the 45-character rule. |
+| `description`     | `string`                     | `''`        | false    | Sentence under the headline.                                                                                                                                                                 |
+| `primaryAction`   | `HeroWithOpeningAction`      | `undefined` | false    | First button under the headline; `{ label, href, trailing?, target? }`. Shown only with a label and a link.                                                                                  |
+| `secondaryAction` | `HeroWithOpeningAction`      | `undefined` | false    | Second, outlined button beside the first; `{ label, href, trailing?, target? }`. Shown only with a label and a link.                                                                         |
+| `items`           | `HeroWithOpeningItem[]`      | `[]`        | false    | The arguments in reading order, three to a row; each is `{ icon, title, description }`. The grid renders only when there are items.                                                          |
 
 ## Events
 
@@ -79,7 +95,8 @@ import HeroWithOpening from '@aziontech/webkit/hero-with-opening'
 ## States
 
 - Visual states: `default`
-- The headline column is `xl` wide for a title of up to 45 characters and `4xl` wide for a longer one
+- The headline column is `xl` wide for `titleLength: 'short'` and `4xl` wide for `'long'`; unset, it is `xl` for a title of up to 45 characters (counting `highlight`) and `4xl` for a longer one
+- `highlight` opens the headline in the brand accent; the hero is named by the whole headline (`highlight` and `title`)
 - Empty: when `title` is empty the band renders nothing but its root; when `items` is empty the grid and its closing gap are omitted
 - Each action renders only with a label and a link
 
@@ -89,16 +106,16 @@ _none_
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| cell fill | `var(--bg-canvas)` |
+| Region                | Token (DESIGN.md)       |
+| --------------------- | ----------------------- |
+| cell fill             | `var(--bg-canvas)`      |
 | frame rules and marks | `var(--border-default)` |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 
@@ -109,9 +126,36 @@ _none_
 - `motion-reduce:transition-none motion-reduce:transform-none` — the band adds no motion.
 - Touch target ≥40×40 px — the large buttons meet it.
 
+## Internationalization
+
+No built-in strings: every visible text is a prop from the page JSON; the `//` eyebrow prefix is a glyph, not a word.
+
+- Formatting: none.
+
+## Right-to-left
+
+- Layout: logical utilities only; the centred headline and the three-column grid mirror under `dir="rtl"`.
+- Icons: the trailing chevron on an action mirrors with `button`; the argument icons are not mirrored.
+- Keyboard: no arrow-key handling.
+- User data: none.
+
+## Responsive
+
+- Container queries: none of its own; `card-grid` sets the arguments three to a row from `lg`, two from `sm` and one below it.
+- Narrow (≤ 640 px): the headline wraps on the full column and the arguments stack.
+- Touch: the large buttons meet 40 px; nothing depends on hover.
+- Reflow: no horizontal scroll at 320 px and 200 % zoom.
+
+## Performance
+
+- Bundle budget: 10.15 KB gzip, the `.size-limit.json` entry `hero-with-opening` (entry chunk only).
+- Runtime budget: none: static.
+- Heavy parts: none.
+
 ## Examples
 
 - Default
+- Highlight — justification: `highlight` and `titleLength` change the headline (an accented lead-in on a long, two-line headline), which no other example shows.
 
 ## Constraints — DO NOT
 

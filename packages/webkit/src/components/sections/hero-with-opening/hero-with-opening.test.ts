@@ -70,6 +70,28 @@ describe('HeroWithOpening', () => {
     expect(getByRole('region', { name: LONG_TITLE })).toBeInTheDocument()
   })
 
+  it('opens the headline on the highlight and names the hero by the whole headline', () => {
+    const { getByRole, getByText } = band({ highlight: 'Secure', title: 'every request' })
+
+    expect(getByText('Secure')).toBeInTheDocument()
+    expect(getByRole('heading', { level: 1, name: /Secure\s*every request/ })).toBeInTheDocument()
+    expect(getByRole('region', { name: 'Secure every request' })).toBeInTheDocument()
+  })
+
+  it('sets the headline column from titleLength, else from the title length', () => {
+    const width = (props: Record<string, unknown>) => {
+      const view = band(props)
+      const value = view.getByTestId(TITLE_TESTID).getAttribute('data-width')
+      view.unmount()
+      return value
+    }
+
+    expect(width({ title: 'Short title' })).toBe('xl')
+    expect(width({ title: 'Short title', titleLength: 'long' })).toBe('4xl')
+    expect(width({ title: LONG_TITLE, titleLength: 'short' })).toBe('xl')
+    expect(width({ title: LONG_TITLE })).toBe(LONG_TITLE.length > 45 ? '4xl' : 'xl')
+  })
+
   it('renders the eyebrow and the description', () => {
     const { getByText } = band()
 
