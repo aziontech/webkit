@@ -46,11 +46,13 @@
     }
   }
 
+  const invalid = computed(() => props.invalid || errors.value.length > 0)
+
   provide(fieldContextKey, {
     controlId: `field-${useId()}`,
     describedBy: computed(() => [...descriptions.value, ...errors.value].join(' ') || undefined),
     labelledBy: computed(() => titles.value.join(' ') || undefined),
-    invalid: computed(() => props.invalid),
+    invalid,
     disabled: computed(() => props.disabled),
     required: computed(() => props.required),
     hasError: computed(() => errors.value.length > 0),
