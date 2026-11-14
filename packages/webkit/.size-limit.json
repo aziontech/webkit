@@ -1914,7 +1914,7 @@
   {
     "name": "radio-cards",
     "path": "src/components/inputs/radio-cards/radio-cards.vue",
-    "limit": "14.15 KB"
+    "limit": "2.95 KB"
   },
   {
     "name": "checkbox",
