@@ -76,7 +76,7 @@ A collapsible `SettingsSection` titled "Advanced" with a hint, closed by default
 
 ### O. Footer — `SaveBar`, `Button` (conditional)
 
-`SaveBar kind="fade"` under the form: no border or surface, the step content fades into the canvas above it on the form's own measure. Mounted only when it has something to offer: outlined Back in `#leading` from step two on, on the left, and the primary action in `#actions` only on steps that ask for typed answers, on the right: Next on Connect a repository, "Create and deploy" (or "Create Project" for the CLI) on the last step, "Add to <service>" on Review and add. Both are medium. On a step answered by a click, the footer carries Back alone.
+`SaveBar kind="fade"` under the form: no border or surface, the step content fades into the canvas above it on the form's own measure. The footer every create wizard shares (`platform/create/multipage-create`, `platform/create/provision-wizard`): transparent Cancel in `#leading` on the left, back to Projects; in `#actions` on the right, outlined Back from step two on, then the primary action only on steps that ask for typed answers: Next on Connect a repository, "Create and deploy" (or "Create Project" for the CLI) on the last step, "Add to <service>" on Review and add. Both are medium. On a step answered by a click, the footer carries Cancel and Back.
 
 ## Do
 
@@ -142,9 +142,9 @@ A collapsible `SettingsSection` titled "Advanced" with a hint, closed by default
 
 ## States
 
-- WhereItRuns: the first step; the centred service chooser with search, the Create Service row and Continue without a service; no footer until answered.
-- Method: service-01 was chosen; the page heading over the three-method card, with only Back in the footer.
-- GitSource: Import from Git with the account connected; the account select and search over the repository list, and only Back in the footer, since picking a repository is the answer.
+- WhereItRuns: the first step; the centred service chooser with search, the Create Service row and Continue without a service; the footer carries Cancel alone until answered.
+- Method: service-01 was chosen; the page heading over the three-method card, with Cancel and Back in the footer.
+- GitSource: Import from Git with the account connected; the account select and search over the repository list, and Cancel and Back in the footer, since picking a repository is the answer.
 - TemplateSource: Start from a template; the property filter over the templates grouped under Official, Community and Frameworks, the first three frameworks tagged Featured.
 - Repository: Next.js Commerce chosen; New repository with the Account select and the name prefilled, the privacy switch on public, and Back plus Next.
 - Configure: storefront-checkout imported; the read-back row, Name, Domain, the build and deploy commands, the firewall switch off and Advanced collapsed, with Back plus Create and deploy.

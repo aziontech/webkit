@@ -2351,25 +2351,29 @@
             </div>
           </div>
 
-          <SaveBar
-            v-if="stepIndex > 0 || nextLabel"
-            kind="fade"
-          >
-            <template
-              v-if="stepIndex > 0"
-              #leading
-            >
+          <SaveBar kind="fade">
+            <template #leading>
               <Button
+                type="button"
+                label="Cancel"
+                kind="transparent"
+                size="medium"
+                href="/projects"
+              />
+            </template>
+            <template #actions>
+              <Button
+                v-if="stepIndex > 0"
+                key="back"
                 type="button"
                 label="Back"
                 kind="outlined"
                 size="medium"
                 @click="goBack"
               />
-            </template>
-            <template #actions>
               <Button
                 v-if="nextLabel"
+                key="next"
                 :label="nextLabel"
                 kind="primary"
                 size="medium"

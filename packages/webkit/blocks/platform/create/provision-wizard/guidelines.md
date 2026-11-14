@@ -59,7 +59,7 @@ A `SettingsSection` titled Advanced, `collapsible`, `icon="pi pi-cog"`, closed b
 
 ### K. Footer — `SaveBar`, `Button` (required)
 
-`SaveBar kind="fade"`, a footer with no border or surface that fades in over the canvas on the form's own measure: outlined Back in `#leading` from step two on, and in `#actions` the primary submit, Next on step one and Create and deploy on step two. Both are medium; the submit is the form's only `type="submit"`. Create and deploy shows its loading state while the request runs and locks Back; the consumer then hands the column to `platform/create/deployment-flow` (the block stops at the loading state).
+`SaveBar kind="fade"`, a footer with no border or surface that fades in over the canvas on the form's own measure: transparent Cancel in `#leading` on the left, back to Services (the footer every create wizard shares, as in `platform/create/multipage-create`), and in `#actions` on the right outlined Back from step two on, then the primary submit, Next on step one and Create and deploy on step two. Both are medium; the submit is the form's only `type="submit"`. Create and deploy shows its loading state while the request runs and locks Back; the consumer then hands the column to `platform/create/deployment-flow` (the block stops at the loading state).
 
 ## Do
 

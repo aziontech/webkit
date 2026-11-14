@@ -15,6 +15,8 @@ import DeployTemplate from '../../blocks/platform/create/deploy-template/deploy-
 import DeployTemplateUpload from '../../blocks/platform/create/deploy-template/variants/upload.vue'
 import DeploymentFlowFailed from '../../blocks/platform/create/deployment-flow/variants/failed.vue'
 import DeploymentFlowRunning from '../../blocks/platform/create/deployment-flow/variants/running.vue'
+import MultipageListSettings from '../../blocks/platform/create/multipage-create/variants/list-settings.vue'
+import MultipageReview from '../../blocks/platform/create/multipage-create/variants/review.vue'
 import ProvisionWizardBinding from '../../blocks/platform/create/provision-wizard/variants/domain-and-deployment.vue'
 import ReleaseImpact from '../../blocks/platform/create/release-impact/release-impact.vue'
 import ReleaseImpactSettings from '../../blocks/platform/create/release-impact/variants/choose-settings.vue'
@@ -302,5 +304,27 @@ describe('release-impact', () => {
     expect(screen.getByText('No Deployment Settings match')).toBeTruthy()
     await fireEvent.click(screen.getByRole('button', { name: 'Clear search' }))
     expect(screen.queryByText('No Deployment Settings match')).toBeNull()
+  })
+})
+
+describe('multipage-create', () => {
+  it('moves from List settings to Review with Next, so every flow reaches the create', async () => {
+    render(MultipageListSettings)
+    expect(screen.queryByRole('button', { name: 'Create Access List' })).toBeNull()
+    expect(screen.getByRole('button', { name: 'Cancel' })).toBeTruthy()
+    expect(screen.getByRole('button', { name: 'Next' })).toBeTruthy()
+  })
+
+  it('creates from Review with a loading submit and a toast, and edits Name on General', async () => {
+    render(MultipageReview)
+    const create = screen.getByRole('button', { name: 'Create Access List' })
+    await fireEvent.click(create)
+    await waitFor(() => expect(create.getAttribute('aria-busy')).toBe('true'), wait)
+    await waitFor(() => expect(screen.getByText('office-ranges created.')).toBeTruthy(), wait)
+    await fireEvent.click(screen.getByRole('button', { name: 'Edit name' }))
+    await waitFor(
+      () => expect(screen.getByRole('heading', { level: 1 }).textContent).toContain('General'),
+      wait
+    )
   })
 })

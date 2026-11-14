@@ -1727,11 +1727,19 @@
           </div>
 
           <SaveBar kind="fade">
-            <template
-              v-if="stepIndex > 0"
-              #leading
-            >
+            <template #leading>
               <Button
+                type="button"
+                label="Cancel"
+                kind="transparent"
+                size="medium"
+                href="/services"
+                :disabled="submitting"
+              />
+            </template>
+            <template #actions>
+              <Button
+                v-if="stepIndex > 0"
                 type="button"
                 label="Back"
                 kind="outlined"
@@ -1739,8 +1747,6 @@
                 :disabled="submitting"
                 @click="goBack"
               />
-            </template>
-            <template #actions>
               <Button
                 :label="nextLabel"
                 kind="primary"

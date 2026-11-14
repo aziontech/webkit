@@ -14,12 +14,14 @@
   import PageHeader from '@aziontech/webkit/page-header'
   import RadioButton from '@aziontech/webkit/radio-button'
   import SaveBar from '@aziontech/webkit/save-bar'
+  import SectionHeader from '@aziontech/webkit/section-header'
   import SettingRow from '@aziontech/webkit/setting-row'
   import Stepper, { type StepperStepState } from '@aziontech/webkit/stepper'
   import Switch from '@aziontech/webkit/switch'
   import Tag from '@aziontech/webkit/tag'
   import Textarea from '@aziontech/webkit/textarea'
-  import { computed, reactive, ref } from 'vue'
+  import { toast } from '@aziontech/webkit/toast'
+  import { computed, onBeforeUnmount, reactive, ref } from 'vue'
 
   type ListType = 'asn' | 'ip_cidr' | 'countries'
   type FieldName = 'name' | 'type' | 'items'
@@ -137,8 +139,8 @@
     },
     countries: {
       label: 'Countries',
-      placeholder: 'BR\nUS',
-      helper: 'One or more countries, one two-letter ISO 3166-1 code per line, such as BR.'
+      placeholder: 'US\nCA',
+      helper: 'One or more countries, one two-letter ISO 3166-1 code per line, such as US.'
     }
   }
 
@@ -192,6 +194,12 @@
       description:
         'The kind of entry the list holds, and the entries themselves. The type cannot be changed after the list is created, because every entry is validated against it.',
       fields: ['type', 'items']
+    },
+    {
+      value: 'review',
+      title: 'Review',
+      description: 'Check what is created and where it runs. Edit any part, then create the list.',
+      fields: []
     }
   ])
 
@@ -279,13 +287,62 @@
     if (matches.value.length) choose(matches.value[0])
   }
 
+  const entries = computed(() =>
+    Array.from(
+      new Set(
+        form.items
+          .split('\n')
+          .map((line) => line.trim())
+          .filter(Boolean)
+      )
+    )
+  )
+  const PREVIEW = 5
+  const typeLabel = computed(() => types.find((option) => option.value === form.type)?.label)
+  const consumers = [
+    {
+      by: 'Policy rules',
+      path: 'rules[].criteria[].argument',
+      as: 'Network list'
+    },
+    {
+      by: 'Rule sets',
+      path: 'rule_sets[].match.network_list',
+      as: 'Network list'
+    }
+  ]
+
+  const editStep = (value: string) => {
+    direction.value = 'back'
+    current.value = value
+  }
+
+  const creating = ref(false)
+  let timer: ReturnType<typeof setTimeout> | undefined
+
   const commit = () => {
     if (!isLast.value) {
       goNext()
       return
     }
-    validate(['name', 'type', 'items'])
+    if (!validate(['name', 'type', 'items'])) {
+      const failed = definitions.value.find((entry) => entry.fields.some((field) => errors[field]))
+      if (failed) editStep(failed.value)
+      return
+    }
+    creating.value = true
+    clearTimeout(timer)
+    timer = setTimeout(() => {
+      creating.value = false
+      toast.success(`${form.name} created.`, {
+        description: choice.value
+          ? `Rules of ${choice.value} can match on it now.`
+          : 'Bind it to a policy to use it in rules.'
+      })
+    }, 900)
   }
+
+  onBeforeUnmount(() => clearTimeout(timer))
 </script>
 
 <template>
@@ -383,8 +440,7 @@
                 <legend class="sr-only">{{ step.title }}</legend>
                 <section
                   v-if="current === 'where-it-runs'"
-                  data-wide
-                  class="mx-auto flex w-full max-w-(--container-2xs) flex-col items-center gap-(--spacing-lg) data-wide:max-w-(--container-md)"
+                  class="mx-auto flex w-full max-w-(--container-md) flex-col items-center gap-(--spacing-lg)"
                   aria-labelledby="create-access-list-host-title"
                 >
                   <header class="flex flex-col items-center gap-(--spacing-xs) text-center">
@@ -560,7 +616,7 @@
                 </section>
 
                 <section
-                  v-else
+                  v-else-if="current === 'settings'"
                   class="grid grid-cols-1 gap-y-(--spacing-md) [&:not(:first-of-type)]:mt-(--layout-section-gap)"
                 >
                   <div class="flex min-w-0 flex-col gap-(--spacing-lg)">
@@ -626,13 +682,176 @@
                     </Card>
                   </div>
                 </section>
+                <section
+                  v-else
+                  class="flex min-w-0 flex-col gap-(--layout-section-gap)"
+                >
+                  <section class="flex min-w-0 flex-col gap-(--layout-group-gap)">
+                    <SectionHeader
+                      title="Where it runs"
+                      size="small"
+                    >
+                      <template #actions>
+                        <Button
+                          type="button"
+                          label="Edit"
+                          kind="outlined"
+                          size="small"
+                          aria-label="Edit where it runs"
+                          @click="editStep('where-it-runs')"
+                        />
+                      </template>
+                    </SectionHeader>
+                    <Alert
+                      key="alert-1"
+                      v-if="!choice"
+                      severity="warning"
+                    >
+                      Bound to no policy. The list is created, but no rule can match on it until a
+                      policy uses it.
+                    </Alert>
+                    <Alert
+                      key="alert-2"
+                      v-else-if="moduleMissing && !enableModule"
+                      severity="warning"
+                    >
+                      IP filtering is off on {{ choice }}, so no rule reads this list until it is
+                      on.
+                    </Alert>
+                    <Alert
+                      key="alert-3"
+                      v-else
+                      severity="success"
+                    >
+                      Runs on {{ choice }}.
+                    </Alert>
+                  </section>
+
+                  <section class="flex min-w-0 flex-col gap-(--layout-group-gap)">
+                    <SectionHeader
+                      title="What gets created"
+                      description="Each value is sent as the property named under it."
+                      size="small"
+                    >
+                      <template #actions>
+                        <Button
+                          type="button"
+                          label="Edit"
+                          kind="outlined"
+                          size="small"
+                          aria-label="Edit list settings"
+                          @click="editStep('settings')"
+                        />
+                      </template>
+                    </SectionHeader>
+                    <Card :padded="false">
+                      <template #content>
+                        <Item.List>
+                          <Item>
+                            <Item.Content>
+                              <Item.Title>Name</Item.Title>
+                              <Item.Description>name</Item.Description>
+                            </Item.Content>
+                            <Item.Actions>
+                              <span class="max-w-80 truncate text-label-sm text-(--text-default)">{{
+                                form.name
+                              }}</span>
+                              <Button
+                                type="button"
+                                label="Edit"
+                                kind="transparent"
+                                size="small"
+                                aria-label="Edit name"
+                                @click="editStep('general')"
+                              />
+                            </Item.Actions>
+                          </Item>
+                          <Item>
+                            <Item.Content>
+                              <Item.Title>Type</Item.Title>
+                              <Item.Description>type</Item.Description>
+                            </Item.Content>
+                            <Item.Actions>
+                              <span class="text-label-sm text-(--text-default)">{{
+                                typeLabel
+                              }}</span>
+                            </Item.Actions>
+                          </Item>
+                          <Item>
+                            <Item.Content>
+                              <Item.Title>{{ listField.label }}</Item.Title>
+                              <Item.Description>items</Item.Description>
+                              <ul
+                                class="m-0 mt-(--spacing-xs) flex list-none flex-wrap gap-(--spacing-xxs) p-0"
+                                :aria-label="`${entries.length} entries`"
+                              >
+                                <li
+                                  v-for="entry in entries.slice(0, PREVIEW)"
+                                  :key="entry"
+                                >
+                                  <Tag
+                                    :label="entry"
+                                    severity="secondary"
+                                    size="small"
+                                  />
+                                </li>
+                                <li
+                                  v-if="entries.length > PREVIEW"
+                                  class="text-label-sm text-(--text-muted)"
+                                >
+                                  and {{ entries.length - PREVIEW }} more
+                                </li>
+                              </ul>
+                            </Item.Content>
+                            <Item.Actions>
+                              <span class="text-label-sm text-(--text-default)"
+                                >{{ entries.length }}
+                                {{ entries.length === 1 ? 'entry' : 'entries' }}</span
+                              >
+                            </Item.Actions>
+                          </Item>
+                        </Item.List>
+                      </template>
+                    </Card>
+                  </section>
+
+                  <section class="flex min-w-0 flex-col gap-(--layout-group-gap)">
+                    <SectionHeader
+                      title="What can reference it"
+                      description="Everything that can point at this list once it exists, and the field that carries the reference."
+                      size="small"
+                    />
+                    <Card :padded="false">
+                      <template #content>
+                        <Item.List>
+                          <Item
+                            v-for="row in consumers"
+                            :key="row.by"
+                          >
+                            <Item.Content>
+                              <Item.Title>{{ row.by }}</Item.Title>
+                              <Item.Description>{{ row.path }}</Item.Description>
+                            </Item.Content>
+                            <Item.Actions>
+                              <Tag
+                                :label="row.as"
+                                severity="secondary"
+                                size="small"
+                              />
+                            </Item.Actions>
+                          </Item>
+                        </Item.List>
+                      </template>
+                    </Card>
+                  </section>
+                </section>
               </fieldset>
             </div>
           </div>
         </main>
 
         <div class="shrink-0 [--layout-measure-form:var(--layout-measure-form-create)]">
-          <SaveBar kind="plain">
+          <SaveBar kind="fade">
             <template #leading>
               <Button
                 type="button"
@@ -655,6 +874,7 @@
                 kind="primary"
                 size="medium"
                 type="submit"
+                :loading="creating"
               />
             </template>
           </SaveBar>

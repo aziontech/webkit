@@ -139,8 +139,8 @@
     },
     countries: {
       label: 'Countries',
-      placeholder: 'BR\nUS',
-      helper: 'One or more countries, one two-letter ISO 3166-1 code per line, such as BR.'
+      placeholder: 'US\nCA',
+      helper: 'One or more countries, one two-letter ISO 3166-1 code per line, such as US.'
     }
   }
 
@@ -440,8 +440,7 @@
                 <legend class="sr-only">{{ step.title }}</legend>
                 <section
                   v-if="current === 'where-it-runs'"
-                  data-wide
-                  class="mx-auto flex w-full max-w-(--container-2xs) flex-col items-center gap-(--spacing-lg) data-wide:max-w-(--container-md)"
+                  class="mx-auto flex w-full max-w-(--container-md) flex-col items-center gap-(--spacing-lg)"
                   aria-labelledby="create-access-list-host-title"
                 >
                   <header class="flex flex-col items-center gap-(--spacing-xs) text-center">
@@ -757,6 +756,14 @@
                               <span class="max-w-80 truncate text-label-sm text-(--text-default)">{{
                                 form.name
                               }}</span>
+                              <Button
+                                type="button"
+                                label="Edit"
+                                kind="transparent"
+                                size="small"
+                                aria-label="Edit name"
+                                @click="editStep('general')"
+                              />
                             </Item.Actions>
                           </Item>
                           <Item>
@@ -844,7 +851,7 @@
         </main>
 
         <div class="shrink-0 [--layout-measure-form:var(--layout-measure-form-create)]">
-          <SaveBar kind="plain">
+          <SaveBar kind="fade">
             <template #leading>
               <Button
                 type="button"
