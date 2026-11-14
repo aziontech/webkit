@@ -587,3 +587,14 @@ describe('PhoneInput', () => {
     })
   })
 })
+
+describe('PhoneInput test ids', () => {
+  it('falls back to phone-input on the root and lets a passed data-testid win', () => {
+    const view = render(PhoneInput)
+    expect(view.getByTestId('phone-input')).toBeTruthy()
+    view.unmount()
+    const custom = render(PhoneInput, { attrs: { 'data-testid': 'contact-phone' } })
+    expect(custom.getByTestId('contact-phone')).toBeTruthy()
+    expect(custom.queryByTestId('phone-input')).toBeNull()
+  })
+})

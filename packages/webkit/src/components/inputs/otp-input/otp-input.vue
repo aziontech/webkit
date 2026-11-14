@@ -12,33 +12,32 @@
     inheritAttrs: false
   })
 
-  const props = withDefaults(
-    defineProps<{
-      /** How many characters the code has; one box each. */
-      length?: number
-      /** `numeric` keeps digits and opens the number keypad; `alphanumeric` keeps letters and digits, upper case. */
-      mode?: OtpInputMode
-      /** Draw a separator after every `group` boxes (`3` gives `123 – 456`). `0` draws none. */
-      group?: number
-      /** Disables the field while a code is being checked. */
-      disabled?: boolean
-      /** Danger borders on every box and `aria-invalid`; set after a rejected code. */
-      invalid?: boolean
-      /** Native `required` and `aria-required`. */
-      required?: boolean
-      /** Focus the field on mount, for a screen whose only task is the code. */
-      autofocus?: boolean
-    }>(),
-    {
-      length: 6,
-      mode: 'numeric',
-      group: 0,
-      disabled: false,
-      invalid: false,
-      required: false,
-      autofocus: false
-    }
-  )
+  interface Props {
+    /** How many characters the code has; one box each. */
+    length?: number
+    /** `numeric` keeps digits and opens the number keypad; `alphanumeric` keeps letters and digits, upper case. */
+    mode?: OtpInputMode
+    /** Draw a separator after every `group` boxes (`3` gives `123 – 456`). `0` draws none. */
+    group?: number
+    /** Disables the field while a code is being checked. */
+    disabled?: boolean
+    /** Danger borders on every box and `aria-invalid`; set after a rejected code. */
+    invalid?: boolean
+    /** Native `required` and `aria-required`. */
+    required?: boolean
+    /** Focus the field on mount, for a screen whose only task is the code. */
+    autofocus?: boolean
+  }
+
+  const props = withDefaults(defineProps<Props>(), {
+    length: 6,
+    mode: 'numeric',
+    group: 0,
+    disabled: false,
+    invalid: false,
+    required: false,
+    autofocus: false
+  })
 
   const emit = defineEmits<{
     complete: [value: string]
