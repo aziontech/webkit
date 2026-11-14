@@ -21,22 +21,12 @@
   export type AppLayoutSplitPanelPosition = 'bottom' | 'side'
 
   interface Props {
-    /** Whether the navigation region shows beside the content. Use with `v-model:navigation-open`. Not used while compact. */
-    navigationOpen?: boolean
     /** Accessible name of the navigation drawer. Empty uses the locale catalog (`Navigation`). */
     navigationLabel?: string
-    /** Whether the tools region (help) is open; while compact it drives the tools drawer. Use with `v-model:tools-open`. */
-    toolsOpen?: boolean
     /** Title of the tools region, shown in its header. Empty uses the locale catalog (`Help`). */
     toolsLabel?: string
     /** Width of the tools region in pixels while not compact. */
     toolsWidth?: number
-    /** Whether the split panel is open. Use with `v-model:split-panel-open`. */
-    splitPanelOpen?: boolean
-    /** Where the split panel sits: under the content or beside it. Use with `v-model:split-panel-position`. Bottom while compact. */
-    splitPanelPosition?: AppLayoutSplitPanelPosition
-    /** Height (bottom) or width (side) of the split panel in pixels. Use with `v-model:split-panel-size`. */
-    splitPanelSize?: number
     /** Title of the split panel, shown in its header. Empty uses the locale catalog (`Details`). */
     splitPanelTitle?: string
     /** When set, the split panel size and position and the navigation and tools open state are kept in `localStorage` under it. */
@@ -46,26 +36,30 @@
   }
 
   const props = withDefaults(defineProps<Props>(), {
-    navigationOpen: true,
     navigationLabel: '',
-    toolsOpen: false,
     toolsLabel: '',
     toolsWidth: 320,
-    splitPanelOpen: false,
-    splitPanelPosition: 'bottom',
-    splitPanelSize: 320,
     splitPanelTitle: '',
     storageKey: '',
     compactBelow: 768
   })
 
-  const emit = defineEmits<{
-    'update:navigationOpen': [value: boolean]
-    'update:toolsOpen': [value: boolean]
-    'update:splitPanelOpen': [value: boolean]
-    'update:splitPanelPosition': [value: AppLayoutSplitPanelPosition]
-    'update:splitPanelSize': [value: number]
-  }>()
+  /** Whether the navigation region shows beside the content. Use with `v-model:navigation-open`. Not used while compact. */
+  const navigationOpen = defineModel<boolean>('navigationOpen', { default: true })
+
+  /** Whether the tools region (help) is open; while compact it drives the tools drawer. Use with `v-model:tools-open`. */
+  const toolsOpen = defineModel<boolean>('toolsOpen', { default: false })
+
+  /** Whether the split panel is open. Use with `v-model:split-panel-open`. */
+  const splitOpen = defineModel<boolean>('splitPanelOpen', { default: false })
+
+  /** Where the split panel sits: under the content or beside it. Use with `v-model:split-panel-position`. Bottom while compact. */
+  const splitPosition = defineModel<AppLayoutSplitPanelPosition>('splitPanelPosition', {
+    default: 'bottom'
+  })
+
+  /** Height (bottom) or width (side) of the split panel in pixels. Use with `v-model:split-panel-size`. */
+  const splitSize = defineModel<number>('splitPanelSize', { default: 320 })
 
   const slots = defineSlots<{
     /** The page content (the consumer's main). Scrolls on its own. */
@@ -95,42 +89,6 @@
 
   const testId = computed<string>(
     () => (attrs['data-testid'] as string | undefined) ?? 'layout-app-layout'
-  )
-
-  function local<T>(read: () => T, event: (value: T) => void) {
-    const state = ref(read()) as { value: T }
-    watch(read, (value) => {
-      state.value = value
-    })
-    return computed<T>({
-      get: () => state.value,
-      set: (value) => {
-        if (value === state.value) return
-        state.value = value
-        event(value)
-      }
-    })
-  }
-
-  const navigationOpen = local(
-    () => props.navigationOpen,
-    (value) => emit('update:navigationOpen', value)
-  )
-  const toolsOpen = local(
-    () => props.toolsOpen,
-    (value) => emit('update:toolsOpen', value)
-  )
-  const splitOpen = local(
-    () => props.splitPanelOpen,
-    (value) => emit('update:splitPanelOpen', value)
-  )
-  const splitPosition = local(
-    () => props.splitPanelPosition,
-    (value) => emit('update:splitPanelPosition', value)
-  )
-  const splitSize = local(
-    () => props.splitPanelSize,
-    (value) => emit('update:splitPanelSize', value)
   )
 
   const rootRef = ref<globalThis.HTMLElement | null>(null)

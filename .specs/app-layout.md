@@ -3,11 +3,11 @@ name: app-layout
 category: layout
 structure: monolithic
 status: implemented
-spec_version: 1
+spec_version: 2
 template: 2
-checksum: adda2875853a7c05f798a7ca075f6336b45d68d69a595fdb01336b6e397453d8
+checksum: 1a2fe72bd0ccc12a0e3d6760a06aac455cecda4049c7c682f4d3565bd4f3f801
 created: 2026-11-11
-last_updated: 2026-11-12
+last_updated: 2026-11-14
 ---
 
 # AppLayout — Component Spec
@@ -121,27 +121,31 @@ keeps its own `Sidebar`, `GlobalHeader` and page content and only hands the fram
 
 | Prop                 | Type                 | Default    | Required | JSDoc                                                                                                                      |
 | -------------------- | -------------------- | ---------- | -------- | -------------------------------------------------------------------------------------------------------------------------- |
-| `navigationOpen`     | `boolean`            | `true`     | false    | Whether the navigation region shows beside the content. Use with `v-model:navigation-open`. Not used while compact.        |
 | `navigationLabel`    | `string`             | `''`       | false    | Accessible name of the navigation drawer. Empty uses the locale catalog (`Navigation`).                                    |
-| `toolsOpen`          | `boolean`            | `false`    | false    | Whether the tools region (help) is open; while compact it drives the tools drawer. Use with `v-model:tools-open`.          |
 | `toolsLabel`         | `string`             | `''`       | false    | Title of the tools region, shown in its header. Empty uses the locale catalog (`Help`).                                    |
 | `toolsWidth`         | `number`             | `320`      | false    | Width of the tools region in pixels while not compact.                                                                     |
-| `splitPanelOpen`     | `boolean`            | `false`    | false    | Whether the split panel is open. Use with `v-model:split-panel-open`.                                                      |
-| `splitPanelPosition` | `'bottom' \| 'side'` | `'bottom'` | false    | Where the split panel sits: under the content or beside it. Use with `v-model:split-panel-position`. Bottom while compact. |
-| `splitPanelSize`     | `number`             | `320`      | false    | Height (bottom) or width (side) of the split panel in pixels. Use with `v-model:split-panel-size`.                         |
 | `splitPanelTitle`    | `string`             | `''`       | false    | Title of the split panel, shown in its header. Empty uses the locale catalog (`Details`).                                  |
 | `storageKey`         | `string`             | `''`       | false    | When set, the split panel size and position and the navigation and tools open state are kept in `localStorage` under it.   |
 | `compactBelow`       | `number`             | `768`      | false    | Width of the layout itself, in pixels, under which navigation and tools become drawers and the split panel moves down.     |
 
+## v-model
+
+Each two-way value is a named `defineModel`, so its `update:*` event is generated, not hand-declared.
+Unbound, each one keeps its own local state.
+
+| Model                          | Type                 | Default    | Emits                       | Notes                                                                                                                                     |
+| ------------------------------ | -------------------- | ---------- | --------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| `v-model:navigation-open`      | `boolean`            | `true`     | `update:navigationOpen`     | Whether the navigation region shows beside the content. Not used while compact, where navigation is a drawer. Same name on `ConsoleLayout`. |
+| `v-model:tools-open`           | `boolean`            | `false`    | `update:toolsOpen`          | Whether the tools region (help) is open; while compact it drives the tools drawer.                                                        |
+| `v-model:split-panel-open`     | `boolean`            | `false`    | `update:splitPanelOpen`     | Whether the split panel is open.                                                                                                          |
+| `v-model:split-panel-position` | `'bottom' \| 'side'` | `'bottom'` | `update:splitPanelPosition` | Where the split panel sits: under the content or beside it. Bottom while compact.                                                         |
+| `v-model:split-panel-size`     | `number`             | `320`      | `update:splitPanelSize`     | Height (bottom) or width (side) of the split panel in pixels; emitted on every step.                                                     |
+
 ## Events
 
-| Event                       | Payload              | Notes                                    |
-| --------------------------- | -------------------- | ---------------------------------------- |
-| `update:navigationOpen`     | `boolean`            | v-model:navigation-open.                 |
-| `update:toolsOpen`          | `boolean`            | v-model:tools-open.                      |
-| `update:splitPanelOpen`     | `boolean`            | v-model:split-panel-open.                |
-| `update:splitPanelPosition` | `'bottom' \| 'side'` | v-model:split-panel-position.            |
-| `update:splitPanelSize`     | `number`             | v-model:split-panel-size; on every step. |
+| _none_ | — | — |
+
+The only events are the `update:*` of the models above.
 
 ## Slots
 
