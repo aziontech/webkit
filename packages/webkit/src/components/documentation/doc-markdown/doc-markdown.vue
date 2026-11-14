@@ -33,17 +33,18 @@
 
   defineOptions({ name: 'DocMarkdown', inheritAttrs: false })
 
-  interface Props {
-    /** The page source: optional frontmatter, then Markdown with MDX component tags. */
-    source?: string
-    /** Replaces the component a block tag mounts, or adds a block tag, keyed by tag name. The tag's attributes become props. */
-    components?: Record<string, Component>
-  }
-
-  const props = withDefaults(defineProps<Props>(), {
-    source: '',
-    components: () => ({})
-  })
+  const props = withDefaults(
+    defineProps<{
+      /** The page source: optional frontmatter, then Markdown with MDX component tags. */
+      source?: string
+      /** Replaces the component a block tag mounts, or adds a block tag, keyed by tag name. The tag's attributes become props. */
+      components?: Record<string, Component>
+    }>(),
+    {
+      source: '',
+      components: () => ({})
+    }
+  )
 
   const attrs = useAttrs()
   const { t } = useTranslate({ docMarkdown: en.docMarkdown })
