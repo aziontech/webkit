@@ -3,7 +3,6 @@
 
   import { cn } from '../../../utils/cn'
   import { type TabsContext, TabsInjectionKey, type TabsValue } from './injection-key'
-  import { getTabViewPanelTransitionStyle, tabViewEnterOffsetClasses } from './presets/transitions'
 
   defineOptions({
     name: 'TabsPanel',
@@ -32,9 +31,11 @@
 
   const isActive = computed(() => context.value.value === props.value)
 
-  const panelClasses = computed(() =>
-    cn('relative w-full shrink-0', !isActive.value && 'hidden', attrs.class as string | undefined)
-  )
+  const passthroughAttrs = computed(() => {
+    const { class: omittedClass, ...rest } = attrs
+    void omittedClass
+    return rest
+  })
 
   const tabId = computed(() => context.tabId(props.value))
   const panelId = computed(() => context.panelId(props.value))
@@ -46,28 +47,12 @@
 
   const motionReady = ref(true)
 
-  const enterOffsetClass = computed(() => {
+  const slide = computed(() => {
     const direction = context.slideDirection.value
-
-    if (direction === 'right') {
-      return tabViewEnterOffsetClasses.right
-    }
-
-    if (direction === 'left') {
-      return tabViewEnterOffsetClasses.left
-    }
-
-    return tabViewEnterOffsetClasses.none
+    if (direction === 'right') return 'end'
+    if (direction === 'left') return 'start'
+    return undefined
   })
-
-  const contentMotionClasses = computed(() =>
-    cn(
-      'w-full transform motion-reduce:transform-none motion-reduce:opacity-100 motion-reduce:transition-none',
-      motionReady.value ? 'translate-x-0 opacity-100' : cn(enterOffsetClass.value, 'opacity-0')
-    )
-  )
-
-  const contentTransitionStyle = computed(() => getTabViewPanelTransitionStyle())
 
   const runEnterMotion = () => {
     motionReady.value = false
@@ -91,9 +76,12 @@
 
 <template>
   <div
+    v-bind="passthroughAttrs"
     role="tabpanel"
     :id="panelId"
-    :class="panelClasses"
+    :class="
+      cn('relative w-full shrink-0 data-[state=inactive]:hidden', attrs.class as string | undefined)
+    "
     :data-testid="testId"
     :data-state="isActive ? 'active' : 'inactive'"
     :aria-labelledby="tabId"
@@ -103,8 +91,9 @@
     <div
       v-if="isActive"
       :key="contentKey"
-      :class="contentMotionClasses"
-      :style="contentTransitionStyle"
+      :data-motion="motionReady ? undefined : 'enter'"
+      :data-slide="motionReady ? undefined : slide"
+      class="w-full translate-x-0 opacity-100 transition-[translate,opacity] duration-moderate-02 ease-productive-entrance motion-reduce:transition-none motion-safe:data-[motion=enter]:opacity-0 motion-safe:data-[slide=end]:translate-x-(--spacing-md) motion-safe:data-[slide=start]:-translate-x-(--spacing-md) motion-safe:rtl:data-[slide=end]:-translate-x-(--spacing-md) motion-safe:rtl:data-[slide=start]:translate-x-(--spacing-md)"
     >
       <slot />
     </div>

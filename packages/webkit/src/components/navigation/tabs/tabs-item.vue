@@ -16,7 +16,10 @@
     value?: TabsValue
     /** Visible label when the default slot is empty. */
     label?: string
-    /** Selected state for standalone usage (Highlight). */
+    /**
+     * Selected state of a standalone item outside a root, rendered as a toggle button.
+     * @deprecated since 6.0 — use ToggleGroup. Removed in 7.0.
+     */
     selected?: boolean
     /** Disables interaction. */
     disabled?: boolean
@@ -28,7 +31,7 @@
 
   const props = withDefaults(defineProps<Props>(), {
     value: undefined,
-    label: 'Tab Item',
+    label: '',
     selected: false,
     disabled: false,
     closable: false,
@@ -79,40 +82,14 @@
       : undefined
   )
 
-  const itemSharedClasses = [
-    'relative z-1 inline-flex h-(--size-8) shrink-0 cursor-pointer items-center',
-    'gap-(--spacing-xs) rounded-(--shape-button)',
-    'px-(--spacing-xs) py-(--spacing-xs)',
-    'text-label-md transition-colors motion-reduce:transition-none',
-    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)',
-    'focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)'
-  ]
+  const passthroughAttrs = computed(() => {
+    const { class: omittedClass, ...rest } = attrs
+    void omittedClass
+    return rest
+  })
 
-  const itemClasses = computed(() =>
-    cn(
-      itemSharedClasses,
-      isDisabled.value &&
-        'pointer-events-none bg-(--bg-disabled) text-(--text-disabled) opacity-60',
-      !isDisabled.value &&
-        context &&
-        !isSelected.value &&
-        'bg-transparent text-(--text-muted) hover:bg-(--bg-hover) hover:text-(--text-default)',
-      !isDisabled.value && context && isSelected.value && 'bg-transparent text-(--text-default)',
-      !context &&
-        isSelected.value &&
-        'border-(length:--border-width-default) border-(--border-muted) bg-(--secondary-mask) text-(--text-default) shadow-(--shadow-xs)',
-      !context &&
-        !isSelected.value &&
-        'bg-transparent text-(--text-muted) hover:bg-(--bg-hover) hover:text-(--text-default)',
-      attrs.class as string | undefined
-    )
-  )
-
-  const iconClasses =
-    'flex size-3.5 shrink-0 items-center justify-center text-[inherit] [&_i]:text-body-xs'
-
-  const closeClasses =
-    'flex size-3.5 shrink-0 items-center justify-center rounded-(--shape-button) text-[inherit] hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)'
+  const ROOT_CLASS =
+    'relative z-1 inline-flex h-(--size-8) shrink-0 cursor-pointer items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-xs) py-(--spacing-xs) text-label-md transition-colors motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) bg-transparent text-(--text-muted) hover:bg-(--bg-hover) hover:text-(--text-default) not-data-[disabled]:data-[mode=tab]:data-[state=active]:text-(--text-default) not-data-[disabled]:data-[mode=tab]:data-[state=active]:hover:bg-transparent not-data-[disabled]:data-[mode=toggle]:data-[state=active]:border-(length:--border-width-default) not-data-[disabled]:data-[mode=toggle]:data-[state=active]:border-(--border-muted) not-data-[disabled]:data-[mode=toggle]:data-[state=active]:bg-(--secondary-mask) not-data-[disabled]:data-[mode=toggle]:data-[state=active]:text-(--text-default) not-data-[disabled]:data-[mode=toggle]:data-[state=active]:shadow-(--shadow-xs) data-[disabled]:pointer-events-none data-[disabled]:bg-(--bg-disabled) data-[disabled]:text-(--text-disabled) data-[disabled]:opacity-60'
 
   const activate = (event: globalThis.MouseEvent) => {
     if (isDisabled.value) {
@@ -149,7 +126,9 @@
 
     context.registerTab({
       value: props.value,
-      disabled: props.disabled,
+      get disabled() {
+        return props.disabled
+      },
       el: buttonRef
     })
   })
@@ -168,8 +147,10 @@
     ref="buttonRef"
     type="button"
     :role="context ? 'tab' : undefined"
+    v-bind="passthroughAttrs"
     :id="tabId"
-    :class="itemClasses"
+    :class="cn(ROOT_CLASS, attrs.class as string | undefined)"
+    :data-mode="context ? 'tab' : 'toggle'"
     :data-testid="testId"
     :data-state="isSelected ? 'active' : 'inactive'"
     :data-disabled="isDisabled ? '' : undefined"
@@ -185,7 +166,7 @@
   >
     <span
       v-if="$slots['leading']"
-      :class="iconClasses"
+      class="flex size-3.5 shrink-0 items-center justify-center text-[inherit] [&_i]:text-body-xs"
       aria-hidden="true"
       :data-testid="`${testId}__leading`"
     >
@@ -207,7 +188,7 @@
     >
     <span
       v-if="$slots['trailing']"
-      :class="iconClasses"
+      class="flex size-3.5 shrink-0 items-center justify-center text-[inherit] [&_i]:text-body-xs"
       aria-hidden="true"
       :data-testid="`${testId}__trailing`"
     >
@@ -215,7 +196,7 @@
     </span>
     <span
       v-if="closable"
-      :class="closeClasses"
+      class="flex size-3.5 shrink-0 items-center justify-center rounded-(--shape-button) text-[inherit] hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)"
       :data-testid="`${testId}__close`"
       :title="t('tabs.close')"
       aria-hidden="true"

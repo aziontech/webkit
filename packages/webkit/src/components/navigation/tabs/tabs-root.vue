@@ -34,8 +34,17 @@
 
   const valueProp = computed(() => valueModel.value)
 
+  function inDomOrder(tabs: TabsTabRegistration[]) {
+    return [...tabs].sort((a, b) => {
+      const aEl = a.el.value
+      const bEl = b.el.value
+      if (!aEl || !bEl || aEl === bEl) return 0
+      return aEl.compareDocumentPosition(bEl) & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1
+    })
+  }
+
   function getEnabledTabs(tabs: TabsTabRegistration[]) {
-    return tabs.filter((tab) => !tab.disabled)
+    return inDomOrder(tabs).filter((tab) => !tab.disabled)
   }
 
   function getNextTabValue(
@@ -83,8 +92,9 @@
       return null
     }
 
-    const currentIndex = tabs.value.findIndex((tab) => tab.value === current)
-    const nextIndex = tabs.value.findIndex((tab) => tab.value === next)
+    const ordered = inDomOrder(tabs.value)
+    const currentIndex = ordered.findIndex((tab) => tab.value === current)
+    const nextIndex = ordered.findIndex((tab) => tab.value === next)
 
     if (currentIndex === -1 || nextIndex === -1 || currentIndex === nextIndex) {
       return null
@@ -121,8 +131,13 @@
     tab?.el.value?.focus()
   }
 
-  const tabId = (tabValue: TabsValue) => `${baseId}-tab-${String(tabValue)}`
-  const panelId = (tabValue: TabsValue) => `${baseId}-panel-${String(tabValue)}`
+  const idToken = (tabValue: TabsValue) =>
+    String(tabValue).replace(
+      /[^A-Za-z0-9-]/g,
+      (char) => `_${char.codePointAt(0)?.toString(16) ?? ''}_`
+    )
+  const tabId = (tabValue: TabsValue) => `${baseId}-tab-${idToken(tabValue)}`
+  const panelId = (tabValue: TabsValue) => `${baseId}-panel-${idToken(tabValue)}`
 
   const panels = ref<TabsValue[]>([])
 
@@ -192,15 +207,21 @@
     tabs.value = []
   })
 
-  const rootClasses = computed(() =>
-    cn('relative isolate flex w-full flex-col items-start', attrs.class as string | undefined)
-  )
+  const passthroughAttrs = computed(() => {
+    const { class: omittedClass, ...rest } = attrs
+    void omittedClass
+    return rest
+  })
 </script>
 
 <template>
   <div
-    :class="rootClasses"
+    v-bind="passthroughAttrs"
+    :class="
+      cn('relative isolate flex w-full flex-col items-start', attrs.class as string | undefined)
+    "
     :data-testid="testId"
+    data-tabs-root=""
     data-tab-view-root=""
     data-orientation="horizontal"
   >

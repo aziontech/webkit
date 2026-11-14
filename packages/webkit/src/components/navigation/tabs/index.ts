@@ -8,6 +8,7 @@ type CompoundTabs = typeof TabsRoot & {
   Root: typeof TabsRoot
   List: typeof TabsList
   Item: typeof TabsItem
+  Trigger: typeof TabsItem
   Content: typeof TabsContent
   Panel: typeof TabsPanel
 }
@@ -16,6 +17,7 @@ const Tabs = Object.assign(TabsRoot, {
   Root: TabsRoot,
   List: TabsList,
   Item: TabsItem,
+  Trigger: TabsItem,
   Content: TabsContent,
   Panel: TabsPanel
 }) as CompoundTabs
