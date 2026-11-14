@@ -145,7 +145,7 @@ describe('create-in-drawer#CreateEnvironment', () => {
       expect(dialogs()).toHaveLength(1)
       return lastDialog()
     })
-    await fireEvent.click(within(domain).getByRole('combobox', { name: 'Environment' }))
+    await fireEvent.click(within(domain).getByRole('combobox', { name: /^Environment/ }))
     await fireEvent.click(await screen.findByRole('option', { name: 'Create Environment' }))
     const stacked = await waitFor(() => {
       expect(dialogs()).toHaveLength(2)
@@ -154,7 +154,7 @@ describe('create-in-drawer#CreateEnvironment', () => {
     await fireEvent.update(within(stacked).getByRole('textbox', { name: 'Name' }), 'Canary')
     await fireEvent.click(within(stacked).getByRole('button', { name: 'Create Environment' }))
     await waitFor(() => expect(dialogs()).toHaveLength(1), wait)
-    expect(within(domain).getByRole('combobox', { name: 'Environment' }).textContent).toContain(
+    expect(within(domain).getByRole('combobox', { name: /^Environment/ }).textContent).toContain(
       'Canary'
     )
   })

@@ -1,13 +1,20 @@
-import { fireEvent, render, screen, within } from '@testing-library/vue'
+import { fireEvent, render, screen, waitFor, within } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
 import CreateHub from '../../blocks/platform/create/create-hub/create-hub.vue'
 import CreateHubConnected from '../../blocks/platform/create/create-hub/variants/connected.vue'
 import CreateHubLoadFailed from '../../blocks/platform/create/create-hub/variants/load-failed.vue'
 import CreateHubLoading from '../../blocks/platform/create/create-hub/variants/loading-repositories.vue'
+import CreateInDrawer from '../../blocks/platform/create/create-in-drawer/create-in-drawer.vue'
+import CreateInDrawerSaveFailed from '../../blocks/platform/create/create-in-drawer/variants/save-failed.vue'
 import DeployTemplate from '../../blocks/platform/create/deploy-template/deploy-template.vue'
 import DeployTemplateUpload from '../../blocks/platform/create/deploy-template/variants/upload.vue'
 import { expectNoA11yViolations } from './axe'
+import { useToastRegion } from './toast-region'
+
+useToastRegion()
+
+const wait = { timeout: 4000 }
 
 describe('deploy-template#Upload', () => {
   it('derives the folder summary from the files and scrolls the list from the keyboard', async () => {
@@ -86,5 +93,43 @@ describe('create-hub', () => {
     expect(screen.getByText(/didn't load/)).toBeTruthy()
     await fireEvent.click(screen.getByRole('button', { name: 'Retry' }))
     expect(screen.getByRole('status').textContent).toContain('Loading repositories')
+  })
+})
+
+describe('create-in-drawer', () => {
+  it('marks the fields required up front and shows Field.Error alerts after an empty submit', async () => {
+    render(CreateInDrawer)
+    await fireEvent.click(screen.getByRole('button', { name: 'Add Domain' }))
+    const dialog = await screen.findByRole('dialog')
+    const domain = within(dialog).getByRole('textbox', { name: /Domain/ })
+    expect(domain.hasAttribute('required')).toBe(true)
+    expect(domain.getAttribute('aria-invalid')).not.toBe('true')
+    await fireEvent.click(within(dialog).getByRole('button', { name: 'Add Domain' }))
+    const alerts = await within(dialog).findAllByRole('alert')
+    expect(alerts.length).toBe(2)
+    expect(domain.getAttribute('aria-invalid')).toBe('true')
+  })
+
+  it('closes on a valid save and names the domain in a toast', async () => {
+    render(CreateInDrawer)
+    await fireEvent.click(screen.getByRole('button', { name: 'Add Domain' }))
+    const dialog = await screen.findByRole('dialog')
+    await fireEvent.update(within(dialog).getByRole('textbox', { name: /Domain/ }), 'acme-store')
+    await fireEvent.click(within(dialog).getByRole('combobox', { name: /Environment/ }))
+    await fireEvent.click(await screen.findByRole('option', { name: 'Production' }))
+    await fireEvent.click(within(dialog).getByRole('button', { name: 'Add Domain' }))
+    await waitFor(() => expect(screen.getByText('acme-store.azion.app added.')).toBeTruthy(), wait)
+  })
+
+  it('keeps the values after a failed save and retries from the alert', async () => {
+    const view = render(CreateInDrawerSaveFailed)
+    const dialog = await screen.findByRole('dialog')
+    expect(within(dialog).getByText(/wasn't added/)).toBeTruthy()
+    expect(
+      (within(dialog).getByRole('textbox', { name: /Domain/ }) as HTMLInputElement).value
+    ).toBe('acme-store')
+    await expectNoA11yViolations(view.baseElement as HTMLElement)
+    await fireEvent.click(within(dialog).getByRole('button', { name: 'Retry' }))
+    await waitFor(() => expect(screen.getByText('acme-store.azion.app added.')).toBeTruthy(), wait)
   })
 })

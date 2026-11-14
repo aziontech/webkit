@@ -19,6 +19,7 @@
   import SettingsSection from '@aziontech/webkit/settings-section'
   import Switch from '@aziontech/webkit/switch'
   import Textarea from '@aziontech/webkit/textarea'
+  import { toast } from '@aziontech/webkit/toast'
   import { computed, reactive, ref, watch } from 'vue'
 
   const open = ref(false)
@@ -303,6 +304,7 @@
     setTimeout(() => {
       submitting.value = false
       open.value = false
+      toast.success(`${fullDomain.value} added.`)
     }, 600)
   }
 </script>
@@ -363,8 +365,8 @@
                 hint="Where the domain answers."
               >
                 <Field
-                  :data-field-invalid="errors.environment ? true : null"
-                  :required="!!errors.environment"
+                  required
+                  :invalid="!!errors.environment"
                 >
                   <div class="flex min-w-0 items-center justify-between gap-(--spacing-xs)">
                     <Field.Label for="domain-environment">Environment</Field.Label>
@@ -380,10 +382,7 @@
                     :display-value="environmentLabel"
                     @update:model-value="onEnvironmentModel"
                   >
-                    <Select.Trigger
-                      id="domain-environment"
-                      aria-describedby="domain-environment-helper"
-                    />
+                    <Select.Trigger id="domain-environment" />
                     <Select.Content>
                       <Select.Option
                         v-for="option in environmentOptions"
@@ -402,13 +401,8 @@
                       </template>
                     </Select.Content>
                   </Select>
-                  <HelperText
-                    id="domain-environment-helper"
-                    :kind="errors.environment ? 'required' : 'helper'"
-                  >
-                    <template v-if="errors.environment">{{ errors.environment }}</template>
-                    <template v-else>{{ environmentHint }}</template>
-                  </HelperText>
+                  <Field.Error v-if="errors.environment">{{ errors.environment }}</Field.Error>
+                  <Field.Description v-else>{{ environmentHint }}</Field.Description>
                 </Field>
               </SettingsSection>
 
@@ -449,7 +443,8 @@
 
                   <Field
                     :disabled="submitting"
-                    :required="!!errors.domain"
+                    required
+                    :invalid="!!errors.domain"
                   >
                     <Field.Label>Domain</Field.Label>
                     <InputGroup>
@@ -460,7 +455,7 @@
                       />
                       <InputGroup.Addon v-if="form.kind === 'free'">.azion.app</InputGroup.Addon>
                     </InputGroup>
-                    <Field.Description v-if="errors.domain">{{ errors.domain }}</Field.Description>
+                    <Field.Error v-if="errors.domain">{{ errors.domain }}</Field.Error>
                   </Field>
 
                   <template v-if="form.kind === 'own'">
@@ -508,8 +503,7 @@
           </PanelContent>
 
           <PanelFooter>
-            <div class="flex w-full flex-wrap items-center justify-between gap-(--spacing-sm)">
-              <div class="flex min-w-0 items-center gap-(--spacing-sm)"></div>
+            <div class="flex w-full flex-wrap items-center justify-end gap-(--spacing-sm)">
               <Button
                 label="Add Domain"
                 kind="primary"

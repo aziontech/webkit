@@ -36,9 +36,9 @@ An outlined medium `Button` where the list lives: under the section on the resou
 
 `PanelContent` holds one `fieldset` disabled while saving, and inside it one `SettingsSection` per topic, each a title with a `hint` glyph rather than a paragraph. Order them by what the user decides first: here Environment, then Domain.
 
-### E. Environment select — `Field`, `Select`, `HelperText` (required)
+### E. Environment select — `Field`, `Select` (required)
 
-A large `Select` in a `Field` with its `Field.Label` and a `HelperText` tied to the trigger by `aria-describedby`. The options are every environment, and the panel ends with a Create Environment option. The helper text says where the item answers, and changes to say when picking an environment the resource does not publish to yet connects it.
+A large `Select` in a required `Field` with its `Field.Label` and a `Field.Description` that the `Field` ties to the trigger by `aria-describedby`; after a failed submit a `Field.Error` takes its place and the `Field` turns `invalid`. The options are every environment, and the panel ends with a Create Environment option. The helper text says where the item answers, and changes to say when picking an environment the resource does not publish to yet connects it.
 
 ### F. Domain source — `Field`, `RadioButton` (required)
 
@@ -46,7 +46,7 @@ Choice cards: one horizontal `Field` per option with a `RadioButton`, a title an
 
 ### G. Domain name — `Field`, `InputGroup` (required)
 
-A `Field` with its label and an `InputGroup` whose addon shows the free platform suffix while the free option is chosen. The required message appears in the field description only after submit.
+A `Field` with its label and an `InputGroup` whose addon shows the free platform suffix while the free option is chosen. The field is `required` from the start (the Required marker shows on the label); after an empty submit the `Field` turns `invalid` and a `Field.Error` (`role="alert"`) says so. Every variant renders field errors the same way: `Field.Error` under the control, never a `Field.Description` swapped to an error.
 
 ### H. Certificate — `Field`, `Select`, `HelperText` (optional)
 
@@ -69,7 +69,8 @@ In the Certificate state the drawer imports a TLS certificate. A `ToggleGroup` p
 - Open on a blank form every time, or on the edited item's values, and clear every error on open.
 - Lock the `fieldset` and pass `:disabled` to every control from the same flag while saving; release it on success and on failure.
 - Validate on submit only: an empty required field gets the amber required prompt after Save is pressed.
-- Close the drawer on success and show the new item in the list behind it, with a toast that names it.
+- Close the drawer on success and show the new item in the list behind it, with a toast that names it (every variant does).
+- On a failed save keep the drawer open with the values, release the fieldset and show a danger `Alert` with Retry above the footer (SaveFailed).
 - Stack a second, medium drawer for a missing item of the same resource, such as an origin for a rule, and select the new one back into the parent.
 - Raise toasts with `toast` only; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shells/console` does), so this page body never renders a `Toaster`.
 
@@ -97,7 +98,8 @@ In the Certificate state the drawer imports a TLS certificate. A `ToggleGroup` p
 
 - The drawer traps focus while open, moves it to the first field on open and returns it to the trigger on close.
 - The `form` has an `aria-label` that matches the title; `DrawerTitle` names the dialog.
-- Every select trigger points at its `HelperText` with `aria-describedby`, so the consequence is read with the value.
+- Every select trigger is described by its `Field.Description` (or its `Field.Error`) through the `Field`, so the consequence is read with the value.
+- Required fields carry the Required marker from the start; an error is a `Field.Error` with `role="alert"` and the control is `aria-invalid`.
 - The choice cards are a radio group named by the Domain source label; each card's title and description are the radio's name and description.
 - The loading button keeps its label and announces the busy state; the disabled `fieldset` keeps keyboard users out of the form while saving.
 - Escape, the close button and the overlay all dismiss; none of them submit.
@@ -113,6 +115,7 @@ In the Certificate state the drawer imports a TLS certificate. A `ToggleGroup` p
 - DeploymentSettings: the drawer that creates a Deployment Setting, with General and Routing and policy sections.
 - Certificate: Create Certificate opened with shop.example.com pasted as a server certificate: the details panel reads Issued to shop.example.com, Issued by Example Test CA and the expiry with the days left; the private key is empty, so Save flags it.
 - CreateEnvironment: Create Environment with General, Settings, Protection and Branch tracking sections; the IP allowlist and Branch tracking switches each reveal their fields, a duplicate name or an invalid address is flagged only after Create Environment. Opened from Add Domain's Environment select it stacks at small size above that drawer and selects the new environment back.
+- SaveFailed: Add Domain after a failed save: the drawer stays open with acme-store and Production kept, the fieldset released, and a danger Alert with Retry above the footer.
 - FunctionInstance: Add Function Instance (or Edit from a row) with a Function `Select`, a Name, and the arguments as a `SchemaForm` of the chosen function's schema with a Fields or JSON `ToggleGroup`; the JSON `CodeEditor` marks a parse error, and required arguments are flagged only after submit.
 
 ## Related
