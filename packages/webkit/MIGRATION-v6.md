@@ -468,6 +468,23 @@ catalog, so an empty string no longer removes the label; `HelpPanel.Links` `titl
 (`1,200`, `1.200` in Portuguese). `useLocale()` from `@aziontech/webkit/use-locale` gives your own
 components the same locale, `t()` and `Intl` helpers.
 
+### Deprecated names (still working, removed in 7.0)
+
+These old names keep working through v6 and are marked `@deprecated` in the types and the specs.
+Move to the new name when you touch the code; they are removed in 7.0.
+
+| Component        | Deprecated                           | Use instead                                    | Codemod                                                         |
+| ---------------- | ------------------------------------ | ---------------------------------------------- | --------------------------------------------------------------- |
+| `Sidebar`        | `v-model:collapsed`                  | `v-model:open` (inverted: `open = !collapsed`) | no, the bound value inverts                                     |
+| `ConsoleLayout`  | `v-model:navigation-expanded`        | `v-model:navigation-open` (same value)         | yes                                                             |
+| `Resizable.Pane` | `v-model:collapsed`                  | `v-model:expanded` (inverted)                  | no, the bound value inverts                                     |
+| `GlobalHeader`   | `.Left`, `.Middle`, `.Nav`, `.Right` | `.Start`, `.Center`, `.Center`, `.End`         | no; the new parts use `__start` / `__center` / `__end` test ids |
+
+The navigation rail now has one name across the layouts: `open` on `Sidebar` and `navigationOpen`
+on `AppLayout` and `ConsoleLayout`. `@aziontech/webkit/sidebar` is now the compound
+(`Sidebar.Header`, `Sidebar.Group`, `Sidebar.Footer`); `@aziontech/webkit/sidebar-root` is the
+standalone root.
+
 ## 5. Field report: Azion Console
 
 The codemod ran on a copy of `azion-console-kit` (November 2026). The console declares
