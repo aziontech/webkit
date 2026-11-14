@@ -62,6 +62,19 @@ describe('Spinner', () => {
     expect(path?.getAttribute('stroke')).toBe('currentColor')
   })
 
+  it('announces itself as a named status when aria-label is set', async () => {
+    const { getByRole, container } = render(Spinner, { attrs: { 'aria-label': 'Loading' } })
+    const status = getByRole('status', { name: 'Loading' })
+    expect(status.tagName.toLowerCase()).toBe('svg')
+    expect(status.hasAttribute('aria-hidden')).toBe(false)
+    await expectNoA11yViolations(container)
+  })
+
+  it('stays out of the accessibility tree without a label', () => {
+    const { queryByRole } = render(Spinner)
+    expect(queryByRole('status')).toBeNull()
+  })
+
   it('has no accessibility violations', async () => {
     const { container } = render(Spinner)
 

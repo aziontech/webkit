@@ -3,11 +3,11 @@ name: spinner
 category: utils
 structure: monolithic
 status: implemented
-spec_version: 1
-checksum: e0ad8f25cc6e636fe8d23c342559bd4637c8c046668f168cb5b5bc73e3d7d2c3
+spec_version: 2
+checksum: b5701a2a04e4e59e5c05edeca1c877e6808bbac5adcac4b0162828864b63f080
 style_seam: true
 created: 2026-05-22
-last_updated: 2026-11-12
+last_updated: 2026-11-14
 ---
 
 # Spinner — Component Spec
@@ -36,9 +36,9 @@ Shared visual utility used by other components. Lives at `packages/webkit/src/co
 
 ## Best practices
 
-- It has no props: size it with a `size-*` class (`size-3`, `size-4`) and color it through the inherited text color (it strokes `currentColor`).
+- Its one prop is `ariaLabel`: size it with a `size-*` class (`size-3`, `size-4`) and color it through the inherited text color (it strokes `currentColor`).
 - `class` on its tag is its sizing API, not a restyle: the spec is a `style_seam`, so `webkit/no-style-override` accepts `<Spinner class="size-4" />`. Keep the class to a `size-*` and, when it must differ from the surrounding text, a text color token.
-- It is `aria-hidden`; announce the busy state on the surrounding element (`aria-busy`, a live region or visible text).
+- Without `ariaLabel` it is `aria-hidden`: announce the busy state on the surrounding element (`aria-busy`, a live region or visible text). A standalone Spinner that is the only sign of the wait sets `ariaLabel` (`aria-label="Loading"`); it then renders `role="status"` with that name, so the wait is announced. Do not set it inside a control that already announces its own busy state (a `loading` button).
 - The spin stops under reduced motion, so pair it with text when the wait matters.
 
 ## Usage
@@ -50,12 +50,19 @@ Shared visual utility used by other components. Lives at `packages/webkit/src/co
 
 <template>
   <Spinner class="size-4" />
+  <!-- standalone: the only sign of the wait, so it announces itself -->
+  <Spinner
+    class="size-4"
+    aria-label="Loading"
+  />
 </template>
 ```
 
 ## Props
 
-| _none_ | — | — | — | No props or slots; size and color come through `class` on the root. |
+| Prop        | Type     | Default | Required | JSDoc                                                                                                                         |
+| ----------- | -------- | ------- | -------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| `ariaLabel` | `string` | `''`    | false    | Accessible name; when set the spinner renders role status with this name, otherwise it stays aria-hidden. Size and color come through `class`. |
 
 ## Events
 
@@ -96,7 +103,7 @@ Shared visual utility used by other components. Lives at `packages/webkit/src/co
 
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`
 - Keyboard map: `Tab` focuses; `Enter`/`Space` activates; `Escape` closes overlays where applicable.
-- ARIA: root uses appropriate roles (`button`, `dialog`, `status`, etc.) per sub-component.
+- ARIA: `aria-hidden="true"` by default (decorative, the surrounding element announces the wait); with `ariaLabel` set, `role="status"` and `aria-label` instead. Not focusable.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state.
 - `motion-reduce:transition-none motion-reduce:transform-none` on animated states.
 - Touch target ≥40×40 px where the control is interactive.
