@@ -4,7 +4,7 @@
   "examples": [
     {
       "name": "Default",
-      "summary": "The console chrome around a list page: navigation as data with a drill level and a Preview badge, the breadcrumb, Create and Agent in the actions slot (icon-only while compact), recent resources in the ⌘K palette and the account menu. The page body is only the slot content.",
+      "summary": "The console chrome around a list page: navigation as data with a drill level and a Preview badge, the breadcrumb, Create and Agent in the actions slot (icon-only while compact), recent resources in the ⌘K palette and the account menu, whose choice (pointer or keyboard) arrives through `@account-select`. The page body is only the slot content.",
       "file": "default.vue"
     },
     {

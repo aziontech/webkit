@@ -1,5 +1,6 @@
 import userEvent from '@testing-library/user-event'
 import { fireEvent, render, waitFor, within } from '@testing-library/vue'
+import axe from 'axe-core'
 import { describe, expect, it, vi } from 'vitest'
 import { createSSRApp, defineComponent, h, KeepAlive, nextTick, onMounted, ref } from 'vue'
 import { renderToString, type SSRContext } from 'vue/server-renderer'
@@ -8,6 +9,8 @@ import FillPageExample from '../../../../examples/console-layout/fill-page.vue'
 import NavigationExpandedExample from '../../../../examples/console-layout/navigation-expanded.vue'
 import PageBreadcrumbsExample from '../../../../examples/console-layout/page-breadcrumbs.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
+import DropdownMenuGroup from '../../navigation/dropdown-menu/dropdown-menu-group/dropdown-menu-group.vue'
+import DropdownMenuOption from '../../navigation/dropdown-menu/dropdown-menu-option/dropdown-menu-option.vue'
 import CommandGroup from '../../overlay/command/command-group/command-group.vue'
 import CommandItem from '../../overlay/command/command-item/command-item.vue'
 import { useConsoleLayout } from './composables/use-console-layout'
@@ -295,10 +298,84 @@ describe('ConsoleLayout', () => {
       { 'account-menu': () => h('p', 'Account settings') }
     )
     expect(getByText('Ana Souza')).toBeTruthy()
-    const trigger = within(getByRole('banner')).getByRole('button', { name: 'Account menu' })
+    const trigger = within(getByRole('banner')).getByRole('button', { name: 'AN, account menu' })
     await userEvent.click(trigger)
     await waitFor(() => expect(trigger.getAttribute('aria-expanded')).toBe('true'))
     expect(within(document.body).getAllByText('Account settings').length).toBeGreaterThan(0)
+  })
+
+  const accountMenu = () =>
+    h(DropdownMenuGroup, null, () => [
+      h(DropdownMenuOption, { value: 'settings', label: 'Account settings' }),
+      h(DropdownMenuOption, { value: 'logout', label: 'Log out' })
+    ])
+
+  it('emits account-select when an account option is chosen with the keyboard', async () => {
+    const onAccountSelect = vi.fn()
+    const { getByRole } = mount(
+      { account: { name: 'Jane Doe' }, onAccountSelect },
+      {},
+      { 'account-menu': accountMenu }
+    )
+    const trigger = within(getByRole('banner')).getByRole('button', {
+      name: 'JA, account menu'
+    })
+    await userEvent.click(trigger)
+    const option = await waitFor(() =>
+      within(document.body).getByRole('menuitem', { name: 'Log out' })
+    )
+    option.focus()
+    await userEvent.keyboard('{Enter}')
+    expect(onAccountSelect).toHaveBeenCalledTimes(1)
+    const [event, value] = onAccountSelect.mock.calls[0]
+    expect(event).toBeInstanceOf(KeyboardEvent)
+    expect(value).toBe('logout')
+  })
+
+  it('emits account-select when an option of the rail account menu is clicked', async () => {
+    const onAccountSelect = vi.fn()
+    const { getByTestId } = mount(
+      { account: { name: 'Jane Doe' }, onAccountSelect },
+      {},
+      { 'account-menu': accountMenu }
+    )
+    const footer = within(getByTestId('layout-console-layout__account'))
+    await userEvent.click(footer.getByRole('button', { name: 'Account menu' }))
+    const option = await waitFor(() =>
+      within(document.body).getByRole('menuitem', { name: 'Account settings' })
+    )
+    await userEvent.click(option)
+    expect(onAccountSelect).toHaveBeenCalledTimes(1)
+    const [event, value] = onAccountSelect.mock.calls[0]
+    expect(event).toBeInstanceOf(MouseEvent)
+    expect(value).toBe('settings')
+  })
+
+  it('starts the header avatar trigger name with the visible initials', async () => {
+    const { container, getByRole } = mount(
+      { account: { name: 'Jane Doe' } },
+      {},
+      { 'account-menu': accountMenu }
+    )
+    const trigger = within(getByRole('banner')).getByRole('button', {
+      name: 'JA, account menu'
+    })
+    expect(trigger.textContent?.trim()).toBe('JA')
+    const results = await axe.run(container, {
+      runOnly: { type: 'rule', values: ['label-content-name-mismatch'] }
+    })
+    expect(results.violations).toEqual([])
+    expect(results.passes.map((rule) => rule.id)).toContain('label-content-name-mismatch')
+    await expectNoA11yViolations(container)
+  })
+
+  it('names the header avatar trigger Account menu when the account has an image', () => {
+    const { getByRole } = mount(
+      { account: { name: 'Jane Doe', src: 'https://example.com/jane.png' } },
+      {},
+      { 'account-menu': accountMenu }
+    )
+    expect(within(getByRole('banner')).getByRole('button', { name: 'Account menu' })).toBeTruthy()
   })
 
   it('renders the actions slot with the compact flag', () => {
@@ -377,6 +454,96 @@ describe('ConsoleLayout', () => {
     const { container, getByRole } = mount({}, { dir: 'rtl' })
     expect(getByRole('main')).toBeTruthy()
     await expectNoA11yViolations(container)
+  })
+})
+
+describe('ConsoleLayout — active row in view', () => {
+  const longNavigation: ConsoleLayoutNavGroup[] = [
+    {
+      items: Array.from({ length: 40 }, (_, index) => ({
+        id: `row-${index}`,
+        label: `Resource ${index}`,
+        href: `/resources/${index}`
+      }))
+    }
+  ]
+
+  const scrollerOf = (getByTestId: (id: string) => HTMLElement) => {
+    const scroller = getByTestId('layout-console-layout__navigation__scroll')
+    scroller.style.height = '120px'
+    scroller.style.overflowY = 'auto'
+    return scroller
+  }
+
+  const withShortRail = async (run: () => Promise<void>) => {
+    const sheet = document.createElement('style')
+    sheet.textContent =
+      '[data-testid="layout-console-layout__navigation__scroll"]{height:120px;overflow-y:auto}'
+    document.head.append(sheet)
+    try {
+      await run()
+    } finally {
+      sheet.remove()
+    }
+  }
+
+  const currentRow = (scroller: HTMLElement) =>
+    scroller.querySelector<HTMLElement>('[aria-current="page"]') as HTMLElement
+
+  const inView = (scroller: HTMLElement, row: HTMLElement) => {
+    const box = scroller.getBoundingClientRect()
+    const rect = row.getBoundingClientRect()
+    return rect.top >= box.top - 1 && rect.bottom <= box.bottom + 1
+  }
+
+  it('scrolls the rail, not the page, to a current row below the fold', async () => {
+    const pageScroll = document.scrollingElement?.scrollTop ?? 0
+    const { getByTestId, rerender } = render(ConsoleLayout, {
+      props: { navigation: longNavigation, activeId: 'row-0' }
+    })
+    const scroller = scrollerOf(getByTestId)
+    expect(scroller.scrollTop).toBe(0)
+    await rerender({ navigation: longNavigation, activeId: 'row-38' })
+    await nextTick()
+    expect(scroller.scrollTop).toBeGreaterThan(0)
+    expect(currentRow(scroller).textContent).toContain('Resource 38')
+    expect(inView(scroller, currentRow(scroller))).toBe(true)
+    expect(document.scrollingElement?.scrollTop ?? 0).toBe(pageScroll)
+  })
+
+  it('scrolls back up to a current row above the visible part', async () => {
+    const { getByTestId, rerender } = render(ConsoleLayout, {
+      props: { navigation: longNavigation, activeId: 'row-0' }
+    })
+    const scroller = scrollerOf(getByTestId)
+    await rerender({ navigation: longNavigation, activeId: 'row-38' })
+    await nextTick()
+    const low = scroller.scrollTop
+    await rerender({ navigation: longNavigation, activeId: 'row-2' })
+    await nextTick()
+    expect(scroller.scrollTop).toBeLessThan(low)
+    expect(inView(scroller, currentRow(scroller))).toBe(true)
+  })
+
+  it('scrolls the rail to the current row on mount', async () => {
+    await withShortRail(async () => {
+      const { getByTestId } = render(ConsoleLayout, {
+        props: { navigation: longNavigation, activeId: 'row-36' }
+      })
+      const scroller = getByTestId('layout-console-layout__navigation__scroll')
+      await waitFor(() => expect(scroller.scrollTop).toBeGreaterThan(0))
+      expect(inView(scroller, currentRow(scroller))).toBe(true)
+    })
+  })
+
+  it('leaves the rail where it is when the current row is already visible', async () => {
+    const { getByTestId, rerender } = render(ConsoleLayout, {
+      props: { navigation: longNavigation, activeId: 'row-0' }
+    })
+    const scroller = scrollerOf(getByTestId)
+    await rerender({ navigation: longNavigation, activeId: 'row-1' })
+    await nextTick()
+    expect(scroller.scrollTop).toBe(0)
   })
 })
 

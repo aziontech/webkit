@@ -39,6 +39,7 @@
   import BreadcrumbItem from '../../navigation/breadcrumb-item/breadcrumb-item.vue'
   import DropdownMenu from '../../navigation/dropdown-menu/dropdown-menu.vue'
   import DropdownMenuTrigger from '../../navigation/dropdown-menu/dropdown-menu-trigger/dropdown-menu-trigger.vue'
+  import type { DropdownMenuOptionValue } from '../../navigation/dropdown-menu/injection-key'
   import type { MenuNode } from '../../navigation/menu/injection-key'
   import Menu from '../../navigation/menu/menu.vue'
   import MenuBack from '../../navigation/menu/menu-back/menu-back.vue'
@@ -128,6 +129,11 @@
       event: globalThis.MouseEvent | globalThis.KeyboardEvent,
       value: string | number
     ]
+    /** An option of the `account-menu` slot was chosen, by pointer or keyboard. */
+    'account-select': [
+      event: globalThis.MouseEvent | globalThis.KeyboardEvent,
+      value: DropdownMenuOptionValue
+    ]
   }>()
 
   /** Whether the search palette is open. Use with `v-model:search-open`. */
@@ -194,6 +200,7 @@
   })
   const menuPath = ref<string[]>([])
   const menuExpanded = ref<string[]>([])
+  const navEl = ref<globalThis.HTMLElement | null>(null)
 
   const NAV_VALUE = 'console-layout:nav:'
 
@@ -211,6 +218,13 @@
   const currentId = computed(
     () => props.activeId || matchActiveId(props.navigation, currentPath.value, hrefOf)
   )
+
+  const accountTriggerLabel = computed(() => {
+    const initials = props.account?.name.trim().slice(0, 2).toUpperCase() ?? ''
+    return props.account?.src || !initials
+      ? t('consoleLayout.accountMenu')
+      : t('consoleLayout.accountMenuFor', { initials })
+  })
 
   const menuGroups = computed(() => toMenuGroups(props.navigation, hrefOf))
 
@@ -261,6 +275,8 @@
     { immediate: true }
   )
 
+  watch([currentId, navEl], () => revealActive(), { flush: 'post' })
+
   watch(currentPath, (_next, previous) => {
     if (previous) pageKey.value += 1
   })
@@ -268,6 +284,44 @@
   watch(searchOpen, () => {
     query.value = ''
   })
+
+  const railScroller = (from: globalThis.HTMLElement): globalThis.HTMLElement | null => {
+    const limit = from.closest('nav')
+    let node = from.parentElement
+    while (node && limit?.contains(node)) {
+      const { overflowY } = globalThis.getComputedStyle(node)
+      if ((overflowY === 'auto' || overflowY === 'scroll') && node.scrollHeight > node.clientHeight)
+        return node
+      node = node.parentElement
+    }
+    return null
+  }
+
+  const revealActive = () => {
+    const root = navEl.value
+    const entry = root?.querySelector<globalThis.HTMLElement>('[aria-current="page"]')
+    const scroller = root && entry ? railScroller(root) : null
+    if (!entry || !scroller) return
+    const style = globalThis.getComputedStyle(scroller)
+    const padStart = Number.parseFloat(style.scrollPaddingTop) || 0
+    const padEnd = Number.parseFloat(style.scrollPaddingBottom) || 0
+    const box = scroller.getBoundingClientRect()
+    const rect = entry.getBoundingClientRect()
+    const delta =
+      rect.top < box.top + padStart
+        ? rect.top - box.top - padStart
+        : rect.bottom > box.bottom - padEnd
+          ? rect.bottom - box.bottom + padEnd
+          : 0
+    if (delta) scroller.scrollTo({ top: scroller.scrollTop + delta, behavior: 'instant' })
+  }
+
+  const onAccountSelect = (
+    event: globalThis.MouseEvent | globalThis.KeyboardEvent,
+    value: DropdownMenuOptionValue
+  ) => {
+    emit('account-select', event, value)
+  }
 
   const activate = (
     event: globalThis.MouseEvent | globalThis.KeyboardEvent,
@@ -358,7 +412,10 @@
             </div>
           </template>
 
-          <div class="-mt-(--spacing-xxs) pt-(--layout-boundary-start)">
+          <div
+            ref="navEl"
+            class="-mt-(--spacing-xxs) pt-(--layout-boundary-start)"
+          >
             <Menu
               v-model:path="menuPath"
               v-model:expanded="menuExpanded"
@@ -394,6 +451,7 @@
               <DropdownMenu
                 v-if="$slots['account-menu']"
                 placement="top-end"
+                @select="onAccountSelect"
               >
                 <DropdownMenuTrigger>
                   <Tooltip :text="t('consoleLayout.accountMenu')">
@@ -501,11 +559,12 @@
               <DropdownMenu
                 v-if="account && $slots['account-menu']"
                 placement="bottom-end"
+                @select="onAccountSelect"
               >
                 <DropdownMenuTrigger>
                   <button
                     type="button"
-                    :aria-label="t('consoleLayout.accountMenu')"
+                    :aria-label="accountTriggerLabel"
                     class="rounded-(--shape-button) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
                   >
                     <Avatar

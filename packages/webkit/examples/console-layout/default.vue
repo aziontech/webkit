@@ -8,6 +8,7 @@
   import IconButton from '@aziontech/webkit/icon-button'
   import PageHeader from '@aziontech/webkit/page-header'
   import Tooltip from '@aziontech/webkit/tooltip'
+  import { ref } from 'vue'
 
   const navigation: ConsoleLayoutNavGroup[] = [
     {
@@ -61,6 +62,13 @@
       ]
     }
   ]
+
+  const accountAction = ref('')
+
+  const onAccountSelect = (_event: MouseEvent | KeyboardEvent, value: string | number) => {
+    accountAction.value =
+      value === 'logout' ? 'Signing out of Acme Inc.' : 'Opening account settings'
+  }
 </script>
 
 <template>
@@ -69,6 +77,7 @@
     :breadcrumbs="[{ label: 'Workloads', href: '/workloads' }, { label: 'edge-shop' }]"
     :account="{ name: 'Jane Doe', email: 'jane.doe@example.com' }"
     active-id="workloads"
+    @account-select="onAccountSelect"
   >
     <template #actions="{ compact }">
       <Tooltip
@@ -127,6 +136,13 @@
           title="edge-shop"
           description="The workload that serves the storefront."
         />
+        <p
+          v-if="accountAction"
+          role="status"
+          class="text-body-sm text-(--text-muted)"
+        >
+          {{ accountAction }}
+        </p>
         <EmptyState
           title="No deployments yet"
           description="Deploy the workload to see its history here."
