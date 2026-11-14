@@ -111,6 +111,12 @@
   /** Whether the search palette is open. Use with `v-model:search-open`. */
   const searchOpen = defineModel<boolean>('searchOpen', { default: false })
 
+  /** Whether the navigation rail is expanded from lg; false collapses it. Use with `v-model:navigation-expanded`. */
+  const navigationExpanded = defineModel<boolean>('navigationExpanded', { default: true })
+
+  /** The rail width in px after a drag; null uses the natural width. Use with `v-model:navigation-width`. */
+  const navigationWidth = defineModel<number | null>('navigationWidth', { default: null })
+
   const slots = defineSlots<{
     /** The article, rendered inside the layout's main landmark. */
     default(): unknown
@@ -137,6 +143,13 @@
   const menuPath = ref<string[]>([])
   const headingId = ref('')
   const header = ref<globalThis.HTMLElement | null>(null)
+
+  const railCollapsed = computed({
+    get: () => !navigationExpanded.value,
+    set: (value: boolean) => {
+      navigationExpanded.value = !value
+    }
+  })
 
   const NAV_VALUE = 'doc-layout:nav:'
 
@@ -358,15 +371,22 @@
     <div class="flex min-w-0 flex-1">
       <div
         v-if="navigation.length || $slots['navigation-footer']"
-        class="hidden w-(--container-2xs) shrink-0 lg:block"
+        class="hidden shrink-0 lg:block"
       >
         <div
           class="sticky top-(--layout-header-height) flex h-[calc(100dvh-var(--layout-header-height))]"
         >
           <Sidebar
+            v-model:collapsed="railCollapsed"
+            v-model:width="navigationWidth"
+            resizable
+            collapsible
             :aria-label="ariaLabel || t('docLayout.navigation')"
+            :collapse-aria-label="t('docLayout.collapseNavigation')"
+            :expand-aria-label="t('docLayout.expandNavigation')"
+            :resize-aria-label="t('docLayout.resizeNavigation')"
             :data-testid="`${testId}__navigation`"
-            class="w-full"
+            class="[--sidebar-width:var(--container-2xs)]"
           >
             <Menu
               v-model:path="menuPath"

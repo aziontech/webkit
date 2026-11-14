@@ -430,7 +430,13 @@ export const ptBR: Messages = {
     search: 'Buscar na documentação',
     searchEmpty: 'Nenhuma página corresponde à busca.',
     pages: 'Páginas',
-    root: 'Docs'
+    root: 'Docs',
+    collapseNavigation: 'Recolher navegação',
+    expandNavigation: 'Expandir navegação',
+    resizeNavigation: 'Redimensionar navegação'
+  },
+  docMarkdown: {
+    newTab: '(abre em uma nova aba)'
   },
   docOnThisPage: {
     title: 'Nesta página'

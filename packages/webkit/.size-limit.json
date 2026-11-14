@@ -25,6 +25,12 @@
     "limit": "65 KB"
   },
   {
+    "name": "doc-markdown",
+    "path": "src/components/documentation/doc-markdown/doc-markdown.vue",
+    "limit": "15 KB",
+    "entryOnly": true
+  },
+  {
     "name": "browser-frame",
     "path": "src/components/content/browser-frame/browser-frame.vue",
     "limit": "12.1 KB",

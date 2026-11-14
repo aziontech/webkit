@@ -357,6 +357,10 @@ export const docFrame = {
   close: 'Close'
 } as const
 
+export const docMarkdown = {
+  newTab: '(opens in a new tab)'
+} as const
+
 export const docOnThisPage = {
   title: 'On this page'
 } as const
@@ -1203,7 +1207,10 @@ export const docLayout = {
   search: 'Search docs',
   searchEmpty: 'No page matches your search.',
   pages: 'Pages',
-  root: 'Docs'
+  root: 'Docs',
+  collapseNavigation: 'Collapse navigation',
+  expandNavigation: 'Expand navigation',
+  resizeNavigation: 'Resize navigation'
 } as const
 
 export const siteLayout = {
@@ -1256,6 +1263,7 @@ export const en = {
   dialog,
   docFrame,
   docLayout,
+  docMarkdown,
   docOnThisPage,
   docPageHeader,
   docPagination,

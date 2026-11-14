@@ -3,18 +3,18 @@ name: doc-layout
 category: documentation
 structure: monolithic
 status: implemented
-spec_version: 1
+spec_version: 2
 template: 2
-checksum: 522dda33225bfe5d7e197f7dbc40202664aa35291b1a79cc8680af1e6e315c2c
+checksum: 56ca469b6f5254c22f74e495d46efd2e03a2a569df02e9d393e24db68d3c7112
 created: 2026-11-12
-last_updated: 2026-11-12
+last_updated: 2026-11-14
 ---
 
 # DocLayout — Component Spec
 
 ## Purpose
 
-The documentation chrome, composed once in the app: a sticky header (the Azion Docs mark, the section links, `SearchTrigger` and the app's actions), the navigation rail (`Sidebar` + `Menu`) on the inline start, the article in the layout's `<main>`, the "On this page" rail (`DocOnThisPage`) on the inline end with its own slot below it, and the footer under the article. The **document** scrolls: the header and both rails are sticky, so a full-page capture shows the whole article, the browser's find and scroll restoration work, and the dark canvas is painted to the end. The outline follows the reading position, a jump clears the sticky header, and below `lg` the rail moves into a drawer opened from the header. The `Command` palette lists every navigation page. Doc pages are only their article, rendered through the default slot.
+The documentation chrome, composed once in the app: a sticky header (the Azion Docs mark, the section links, `SearchTrigger` and the app's actions), the navigation rail (`Sidebar` + `Menu`) on the inline start, resizable by dragging its edge and collapsible to a thin edge that brings it back, the article in the layout's `<main>`, the "On this page" rail (`DocOnThisPage`) on the inline end with its own slot below it, and the footer under the article. The **document** scrolls: the header and both rails are sticky, so a full-page capture shows the whole article, the browser's find and scroll restoration work, and the dark canvas is painted to the end. The outline follows the reading position, a jump clears the sticky header, and below `lg` the rail moves into a drawer opened from the header. The `Command` palette lists every navigation page. Doc pages are only their article, rendered through the default slot.
 
 ## When to use
 
@@ -42,6 +42,7 @@ The documentation chrome, composed once in the app: a sticky header (the Azion D
 - Pass the page's headings as `outline` (`{ id, text, depth }`) with the same ids the `DocHeading`s carry; the layout tracks which one is in view.
 - Put the theme switch in `navigation-footer`, the GitHub and Console links in `actions`, a call to action (`DocCta`) in `aside`, and the site footer (`Footer kind="content"`) in `footer`.
 - The page renders no `<main>` and no `ScrollArea` around the article: the document scrolls.
+- Bind `v-model:navigation-expanded` and `v-model:navigation-width` to state the app persists (local storage, a cookie) so the rail keeps the reader's size and collapsed state across pages and reloads; leave them unbound and the rail resets on each mount.
 - A drill row (`kind: 'drill'`) opens its level in place; the rail's Back then reads `Back to Docs` at the first level. Set `rootLabel` when the tree is not the whole docs (`Back to API reference`); never add a hand-made Back row to `navigation`.
 
 ## Usage
@@ -83,9 +84,11 @@ The documentation chrome, composed once in the app: a sticky header (the Azion D
 
 ## v-model
 
-| Model                 | Type      | Default | Emits               | Notes                                                                         |
-| --------------------- | --------- | ------- | ------------------- | ----------------------------------------------------------------------------- |
-| `v-model:search-open` | `boolean` | `false` | `update:searchOpen` | Whether the search palette is open; the header search and ⌘K / Ctrl K set it. |
+| Model                         | Type             | Default | Emits                       | Notes                                                                                                                                                                                          |
+| ----------------------------- | ---------------- | ------- | --------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `v-model:search-open`         | `boolean`        | `false` | `update:searchOpen`         | Whether the search palette is open; the header search and ⌘K / Ctrl K set it.                                                                                                                  |
+| `v-model:navigation-expanded` | `boolean`        | `true`  | `update:navigationExpanded` | Whether the navigation rail is expanded from `lg`; `false` collapses it to the edge affordance that brings it back. No effect below `lg`, where the rail is a drawer.                          |
+| `v-model:navigation-width`    | `number \| null` | `null`  | `update:navigationWidth`    | The rail's width in px after the reader drags its edge; `null` uses the natural width (`var(--container-2xs)`). Clamped by `Sidebar` between `var(--container-3xs)` and `var(--container-sm)`. |
 
 ## Events
 
@@ -107,30 +110,31 @@ The documentation chrome, composed once in the app: a sticky header (the Azion D
 
 ## States
 
-- Visual states: `default`; below `lg` the rail is a drawer (`open` / `closed`) opened from the header; the end rail shows from `xl` when `outline` or `aside` has content; the palette `open` / `closed`.
+- Visual states: `default`; from `lg` the rail is `expanded` or `collapsed` (`Sidebar` `data-collapsed`, the edge affordance shown) and `resizing` while dragged; below `lg` the rail is a drawer (`open` / `closed`) opened from the header; the end rail shows from `xl` when `outline` or `aside` has content; the palette `open` / `closed`.
 - Outline: the entry of the heading nearest the top of the viewport (under the header) carries `aria-current="location"`; choosing an entry or a heading anchor scrolls the heading under the header and updates the address hash.
 - Not applicable: `loading`, `empty`, `error`, `disabled`, `readonly`, `invalid` (the article owns its states).
 
 ## Motion & Animations
 
-| Trigger         | Animation / Transition                | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback                       |
-| --------------- | ------------------------------------- | ------------------------------------------------- | --------------------------------------------- |
-| outline jump    | smooth window scroll                  | browser                                           | instant scroll under `prefers-reduced-motion` |
-| brand hover     | `transition-opacity` on the mark link | `duration-fast-02` · `ease-productive-entrance`   | `motion-reduce:transition-none`               |
-| drawer, palette | `Drawer`, `Command`                   | component                                         | handled by those components                   |
+| Trigger                       | Animation / Transition                | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback                       |
+| ----------------------------- | ------------------------------------- | ------------------------------------------------- | --------------------------------------------- |
+| rail collapse, expand, resize | `Sidebar` rail width and panel slide  | component                                         | handled by `Sidebar`                          |
+| outline jump                  | smooth window scroll                  | browser                                           | instant scroll under `prefers-reduced-motion` |
+| brand hover                   | `transition-opacity` on the mark link | `duration-fast-02` · `ease-productive-entrance`   | `motion-reduce:transition-none`               |
+| drawer, palette               | `Drawer`, `Command`                   | component                                         | handled by those components                   |
 
 ## Tokens
 
-| Region             | Token (DESIGN.md)                                                     |
-| ------------------ | --------------------------------------------------------------------- |
-| canvas             | `var(--bg-canvas)`, `var(--text-default)`                             |
-| sticky rail offset | `var(--layout-header-height)`                                         |
-| rail widths        | `var(--container-2xs)` (navigation), `var(--container-3xs)` (outline) |
-| rail rules         | `var(--border-default)`                                               |
-| badge              | `.text-overline-sm`, `var(--text-muted)`, `var(--border-muted)`       |
-| end rail padding   | `var(--spacing-md)`, `var(--spacing-lg)`                              |
-| gaps               | `var(--spacing-xs)`, `var(--spacing-lg)`                              |
-| ring               | `var(--ring-color)`, offset `var(--bg-canvas)`                        |
+| Region             | Token (DESIGN.md)                                                                                              |
+| ------------------ | -------------------------------------------------------------------------------------------------------------- |
+| canvas             | `var(--bg-canvas)`, `var(--text-default)`                                                                      |
+| sticky rail offset | `var(--layout-header-height)`                                                                                  |
+| rail widths        | `var(--container-2xs)` (navigation, natural width through `--sidebar-width`), `var(--container-3xs)` (outline) |
+| rail rules         | `var(--border-default)`                                                                                        |
+| badge              | `.text-overline-sm`, `var(--text-muted)`, `var(--border-muted)`                                                |
+| end rail padding   | `var(--spacing-md)`, `var(--spacing-lg)`                                                                       |
+| gaps               | `var(--spacing-xs)`, `var(--spacing-lg)`                                                                       |
+| ring               | `var(--ring-color)`, offset `var(--bg-canvas)`                                                                 |
 
 ## Theme gaps
 
@@ -141,49 +145,54 @@ The documentation chrome, composed once in the app: a sticky header (the Azion D
 ## Accessibility (WCAG 2.1 AA)
 
 - Landmarks: the header is `GlobalHeader` (`<header>` named by the catalog `Documentation sections` on its section links); the rail is the `Sidebar` `<nav>` named by `ariaLabel`; the article is inside the single `<main>`; the end rail is an `<aside>` holding the `DocOnThisPage` navigation landmarks. A page must not render a second `<main>`.
-- Keyboard map: `Tab` runs header → rail → article → end rail → footer; `⌘K` / `Ctrl K` opens the palette (`Command`); the compact menu button opens the drawer, `Escape` closes it and returns focus. Choosing an outline entry moves focus to its heading (made focusable with `tabindex="-1"`).
+- Keyboard map: `Tab` runs header → rail → article → end rail → footer; the rail's resize handle is a focusable `separator` (`Resize navigation`) moved with `ArrowLeft` / `ArrowRight`, its collapse button (`Collapse navigation`) folds the rail and the edge affordance's button (`Expand navigation`) brings it back, all owned by `Sidebar`; `⌘K` / `Ctrl K` opens the palette (`Command`); the compact menu button opens the drawer, `Escape` closes it and returns focus. Choosing an outline entry moves focus to its heading (made focusable with `tabindex="-1"`).
 - Names: the mark link (`Azion Docs home`), the compact menu button (`Open documentation navigation`) and the search (`Search docs`) come from the locale catalog.
 - Visible focus: composed controls own their rings; the mark link uses `focus-visible:ring-2 focus-visible:ring-(--ring-color)`.
 
 ## Internationalization
 
-| Key                        | English source                  | Override prop |
-| -------------------------- | ------------------------------- | ------------- |
-| `docLayout.navigation`     | `Documentation`                 | `ariaLabel`   |
-| `docLayout.sections`       | `Documentation sections`        | —             |
-| `docLayout.home`           | `Azion Docs home`               | —             |
-| `docLayout.badge`          | `Docs`                          | —             |
-| `docLayout.openNavigation` | `Open documentation navigation` | —             |
-| `docLayout.search`         | `Search docs`                   | —             |
-| `docLayout.searchEmpty`    | `No page matches your search.`  | —             |
-| `docLayout.pages`          | `Pages`                         | —             |
-| `docLayout.root`           | `Docs`                          | `rootLabel`   |
+| Key                            | English source                  | Override prop |
+| ------------------------------ | ------------------------------- | ------------- |
+| `docLayout.navigation`         | `Documentation`                 | `ariaLabel`   |
+| `docLayout.sections`           | `Documentation sections`        | —             |
+| `docLayout.home`               | `Azion Docs home`               | —             |
+| `docLayout.badge`              | `Docs`                          | —             |
+| `docLayout.openNavigation`     | `Open documentation navigation` | —             |
+| `docLayout.search`             | `Search docs`                   | —             |
+| `docLayout.searchEmpty`        | `No page matches your search.`  | —             |
+| `docLayout.pages`              | `Pages`                         | —             |
+| `docLayout.root`               | `Docs`                          | `rootLabel`   |
+| `docLayout.collapseNavigation` | `Collapse navigation`           | —             |
+| `docLayout.expandNavigation`   | `Expand navigation`             | —             |
+| `docLayout.resizeNavigation`   | `Resize navigation`             | —             |
 
 - Formatting: none. Navigation and outline text is consumer data.
 
 ## Right-to-left
 
 - Layout: logical utilities only; the navigation rail sits at the inline start, the outline at the inline end, and the drawer opens from the inline start.
+- Resize: dragging and the arrow keys follow the inline direction (`Sidebar` mirrors them under `dir="rtl"`); the collapse and expand glyphs mirror.
 - Icons: the mark is not mirrored; `Menu` and `DocOnThisPage` mirror their own glyphs.
 - Keyboard: arrow handling is `Menu`'s and `Command`'s, both direction-aware.
 - User data: labels render with `dir="auto"` inside `Menu`, `DocOnThisPage` and `Command`.
 
 ## Responsive
 
-- Breakpoints (viewport, because the layout is the page): the navigation rail shows from `lg` and is a drawer below; the outline rail shows from `xl`; the section links show from `lg`. The header is an `@container`, so `SearchTrigger collapsible` folds to the magnifier on a narrow header.
+- Breakpoints (viewport, because the layout is the page): the navigation rail shows from `lg`, resizable and collapsible, and is a drawer below (no resize or collapse there); the outline rail shows from `xl`; the section links show from `lg`. The header is an `@container`, so `SearchTrigger collapsible` folds to the magnifier on a narrow header.
 - Narrow: the article takes the full width; the end rail content (`aside`) is not repeated under the article.
 - Touch: menu button and search are 32 px controls, 44 px on coarse pointers through their components.
 - Reflow: no horizontal scroll at 320 px; the document scrolls, never an inner region.
 
 ## Performance
 
-- Bundle budget: 65 KB gzip for `./doc-layout` in `.size-limit.json` (62.8 KB measured; it pulls `GlobalHeader`, `NavigationMenu`, `Sidebar`, `Menu`, `Drawer`, `DocOnThisPage` and `Command`).
-- Runtime budget: one passive `scroll` listener (throttled to one read per animation frame) while `outline` is not empty; one `popstate` listener without a router.
+- Bundle budget: 65 KB gzip for `./doc-layout` in `.size-limit.json` (63.6 KB measured; it pulls `GlobalHeader`, `NavigationMenu`, `Sidebar`, `Menu`, `Drawer`, `DocOnThisPage` and `Command`).
+- Runtime budget: the rail's pointer listeners exist only while dragging (owned by `Sidebar`); one passive `scroll` listener (throttled to one read per animation frame) while `outline` is not empty; one `popstate` listener without a router.
 - Heavy parts: none beyond the composed components.
 
 ## Examples
 
 - Default — the layout with a docs tree, section links, an article with headings tracked by the outline, a call to action in the end rail and the footer.
+- Persisted rail — `v-model:navigation-expanded` and `v-model:navigation-width` bound to local storage, so the rail keeps its size and collapsed state across reloads.
 
 ## Constraints — DO NOT
 
