@@ -1,6 +1,9 @@
 import { fireEvent, render, waitFor } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
+import CardView from '../../blocks/platform/view/card-view/card-view.vue'
+import CardViewFailed from '../../blocks/platform/view/card-view/variants/failed.vue'
+import CardViewLoading from '../../blocks/platform/view/card-view/variants/loading.vue'
 import FileBrowser from '../../blocks/platform/view/file-browser/file-browser.vue'
 import InsideAFolder from '../../blocks/platform/view/file-browser/variants/inside-a-folder.vue'
 import QueryEditor from '../../blocks/platform/view/query-editor/query-editor.vue'
@@ -143,5 +146,24 @@ describe('platform/view/waf-tuning block', () => {
     await waitFor(() =>
       expect(view.container.textContent).not.toContain("Couldn't load the matched requests.")
     )
+  })
+})
+
+describe('platform/view/card-view block', () => {
+  it('names each card with a Link to the application', () => {
+    const view = render(CardView)
+    expect(view.getByRole('link', { name: 'storefront' })).toHaveAttribute(
+      'href',
+      '/applications/app-01'
+    )
+  })
+
+  it('shows placeholder cards while loading and a Retry alert when loading fails', async () => {
+    const loading = render(CardViewLoading)
+    expect(loading.container.querySelector('[aria-busy="true"]')).not.toBeNull()
+    loading.unmount()
+    const failed = render(CardViewFailed)
+    await fireEvent.click(failed.getByRole('button', { name: 'Retry' }))
+    expect(failed.emitted('retry')).toHaveLength(1)
   })
 })
