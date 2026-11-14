@@ -3,11 +3,11 @@ name: error-boundary
 category: feedback
 structure: monolithic
 status: implemented
-spec_version: 1
+spec_version: 2
 template: 2
-checksum: 20ba9c3bb955282ebd19440ecba6aa46ac17b78f2f3b54e3da35588082524c3e
+checksum: 1305b222264e08a5dfb6b6054ec4670cffc40979047016c8c77ff7ae6c1b9b05
 created: 2026-11-11
-last_updated: 2026-11-11
+last_updated: 2026-11-14
 ---
 
 # ErrorBoundary — Component Spec
@@ -85,14 +85,14 @@ example).
 | Event   | Payload                   | Notes                                                                                                                    |
 | ------- | ------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
 | `error` | `ErrorBoundaryErrorEvent` | Fires once per failure with `{ error, info }`: what was thrown and Vue's description of where. Report it from here.      |
-| `retry` | `void`                    | Fires when the region is mounted again (Retry, the slot's `retry`, or a `resetKey` change). Reset the broken state here. |
+| `retry` | `(event?: Event)`         | Fires when the region is mounted again (Retry, the slot's `retry`, or a `resetKey` change). Reset the broken state here. Carries the click event when the built-in Retry button (or a slot `retry(event)` call) triggered it; no argument for a `resetKey` change. |
 
 ## Slots
 
 | Slot       | Scope                                   | Notes                                                                                     |
 | ---------- | --------------------------------------- | ----------------------------------------------------------------------------------------- |
 | `default`  | —                                       | The region the boundary guards. Mounted again, from scratch, on every retry.              |
-| `fallback` | `{ error: unknown, retry: () => void }` | Replaces the built-in `Alert` while the region is failed. Call `retry` to mount it again. |
+| `fallback` | `{ error: unknown, retry: (event?: Event) => void }` | Replaces the built-in `Alert` while the region is failed. Call `retry` to mount it again; pass the click event to forward it on the `retry` event. |
 
 ## States
 

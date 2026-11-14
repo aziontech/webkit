@@ -48,14 +48,15 @@
 
   const emit = defineEmits<{
     error: [event: ErrorBoundaryErrorEvent]
-    retry: []
+    /** The region mounts again; carries the click event when the Retry button triggered it. */
+    retry: [event?: Event]
   }>()
 
   defineSlots<{
     /** The region this boundary guards. */
     default(): unknown
     /** Replaces the built-in fallback; `retry` mounts the region again. */
-    fallback(props: { error: unknown; retry: () => void }): unknown
+    fallback(props: { error: unknown; retry: (event?: Event) => void }): unknown
   }>()
 
   const attrs = useAttrs()
@@ -89,12 +90,13 @@
     return props.propagate ? undefined : false
   })
 
-  const retry = () => {
+  const retry = (event?: Event) => {
     if (!failure.value) return
     const moveFocus = focusWasInside()
     failure.value = null
     generation.value += 1
-    emit('retry')
+    if (event) emit('retry', event)
+    else emit('retry')
     if (moveFocus) void nextTick(() => root.value?.focus({ preventScroll: true }))
   }
 
