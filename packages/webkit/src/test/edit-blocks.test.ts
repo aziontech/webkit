@@ -86,7 +86,7 @@ describe('edit-resource locked modules', () => {
     ['primary', EditResource],
     ['StaleRecord', StaleRecord],
     ['DangerZone', DangerZone]
-  ])('%s links Contact sales through the Link component in a new tab', (_name, block) => {
+  ])('%s links Contact sales as an in-sentence text-link in a new tab', (_name, block) => {
     const view = render(block)
     const links = Array.from(
       view.container.querySelectorAll<HTMLAnchorElement>(
@@ -95,7 +95,6 @@ describe('edit-resource locked modules', () => {
     )
     expect(links.length).toBeGreaterThan(0)
     for (const link of links) {
-      expect(link.dataset.testid).toBe('navigation-link')
       expect(link.target).toBe('_blank')
       expect(link.rel).toContain('noopener')
     }

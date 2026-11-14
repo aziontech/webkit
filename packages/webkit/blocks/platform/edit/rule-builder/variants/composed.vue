@@ -566,13 +566,16 @@
           </PanelHeader>
 
           <PanelContent>
-            <Alert
+            <div
               v-if="saveError"
-              severity="danger"
-              :label="saveError"
               class="mb-(--spacing-md)"
-              data-testid="rule-builder-save-error"
-            />
+            >
+              <Alert
+                severity="danger"
+                :label="saveError"
+                data-testid="rule-builder-save-error"
+              />
+            </div>
             <fieldset
               class="m-0 flex min-w-0 flex-col border-0 p-0"
               :disabled="submitting"
