@@ -630,3 +630,43 @@ describe('nested overlays', () => {
     expect(drawerOpen.value).toBe(true)
   })
 })
+
+describe('closable (explicit close, separate from light-dismiss)', () => {
+  it('dismissible false with closable true: Escape and overlay stay shut, the close button closes', async () => {
+    const { getByTestId } = render(
+      composed({ defaultOpen: true, dismissible: false, closable: true })
+    )
+    await settle()
+    await settle()
+
+    await fireEvent.keyDown(document, { key: 'Escape' })
+    await fireEvent.click(byTestId('overlay-drawer__backdrop')!)
+    await settle()
+    expect(getByTestId('overlay-drawer').getAttribute('data-state')).toBe('open')
+
+    const close = byTestId('overlay-drawer__close')!
+    expect(close.hasAttribute('disabled')).toBe(false)
+    await fireEvent.click(close)
+    await settle()
+    expect(getByTestId('overlay-drawer').getAttribute('data-state')).toBe('closed')
+  })
+
+  it('closable false keeps light-dismiss and disables the close button', async () => {
+    const { getByTestId } = render(composed({ defaultOpen: true, closable: false }))
+    await settle()
+    await settle()
+
+    expect(byTestId('overlay-drawer__close')!.hasAttribute('disabled')).toBe(true)
+    await fireEvent.keyDown(document, { key: 'Escape' })
+    await settle()
+    expect(getByTestId('overlay-drawer').getAttribute('data-state')).toBe('closed')
+  })
+
+  it('unset closable still follows dismissible (6.x compatibility)', async () => {
+    render(composed({ defaultOpen: true, dismissible: false }))
+    await settle()
+    await settle()
+
+    expect(byTestId('overlay-drawer__close')!.hasAttribute('disabled')).toBe(true)
+  })
+})

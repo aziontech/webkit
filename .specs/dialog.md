@@ -3,11 +3,11 @@ name: dialog
 category: overlay
 structure: composition
 status: implemented
-spec_version: 2
+spec_version: 3
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=482-935
   node_id: 482:935
-checksum: e900389778d3fb856cb7a96423eb45169455efcae29ac707d7788401292279a1
+checksum: 46edc7fbb0fe024ad4d2d48416f27bebf5e5b9df3af3c93d63d3d8e85d5aafc4
 created: 2026-05-22
 last_updated: 2026-11-14
 ---
@@ -115,8 +115,11 @@ Modal surface above the page, built on the shared Panel shell. The consumer comp
 | Prop          | Type         | Default    | Required | JSDoc                                                 |
 | ------------- | ------------ | ---------- | -------- | ----------------------------------------------------- |
 | `defaultOpen` | `boolean`    | `false`    | false    | Initial open state when uncontrolled.                 |
-| `dismissible` | `boolean`    | `true`     | false    | When true, overlay click and Escape close the dialog. |
+| `closable` | `boolean` | `undefined` | false | Whether the close button (DialogClose) and the context close() close the dialog; false renders the close button disabled. Escape and overlay click follow `dismissible`. Unset, it follows `dismissible` for 6.x compatibility (deprecated coupling: set it explicitly; from 7.0 unset means true). |
+| `dismissible` | `boolean` | `true` | false | Light-dismiss: when true, overlay click and Escape close the dialog. It does not govern the close button; see `closable`. |
 | `size`        | `DialogSize` | `'medium'` | false    | Panel max-width preset passed to the inner Panel.     |
+
+- Two close paths: `dismissible` gates the light-dismiss paths only (`Esc`, overlay click); `closable` gates the explicit close (`DialogClose` and the context `close()`), as Radix and the prop vocabulary separate them. `:dismissible="false" :closable="true"` is a dialog that only its close button or a footer action closes. For 6.x compatibility an unset `closable` follows `dismissible`, so an existing `:dismissible="false"` still disables the close button; that coupling is deprecated and from 7.0 an unset `closable` means `true`. Tests: `dialog.test.ts` › closable.
 
 ## v-model
 

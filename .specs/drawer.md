@@ -3,8 +3,8 @@ name: drawer
 category: overlay
 structure: composition
 status: implemented
-spec_version: 2
-checksum: 8cf1b1131be096c376f07994b15f4eb42ceed6d586a6c679a19b5bf89e37501b
+spec_version: 3
+checksum: e09a9b79a5814b41cad8883b4b3e23b94e5fe24b94675ad6193c85f0983365af
 created: 2026-05-22
 last_updated: 2026-11-14
 ---
@@ -113,9 +113,12 @@ Layered surface above the page (modal, drawer, menu). Lives at `packages/webkit/
 | Prop          | Type         | Default    | Required | JSDoc                                                                                                   |
 | ------------- | ------------ | ---------- | -------- | ------------------------------------------------------------------------------------------------------- |
 | `defaultOpen` | `boolean`    | `false`    | false    | Initial open state when uncontrolled.                                                                   |
-| `dismissible` | `boolean`    | `true`     | false    | When true, overlay click and Escape close the drawer.                                                   |
+| `closable` | `boolean` | `undefined` | false | Whether the close button (DrawerClose) and the context close() close the drawer; false renders the close button disabled. Escape and overlay click follow `dismissible`. Unset, it follows `dismissible` for 6.x compatibility (deprecated coupling: set it explicitly; from 7.0 unset means true). |
+| `dismissible` | `boolean` | `true` | false | Light-dismiss: when true, overlay click and Escape close the drawer. It does not govern the close button; see `closable`. |
 | `side`        | `DrawerSide` | `'right'`  | false    | Edge the drawer panel slides from.                                                                      |
 | `size`        | `DrawerSize` | `'medium'` | false    | Panel max-width preset (`small` `--container-sm`, `medium` `--container-xl`, `large` `--container-4xl`). Height is always 100% viewport. |
+
+- Two close paths: `dismissible` gates the light-dismiss paths only (`Esc`, overlay click); `closable` gates the explicit close (`DrawerClose` and the context `close()`), as Radix and the prop vocabulary separate them. `:dismissible="false" :closable="true"` is a drawer that only its close button or a footer action closes. For 6.x compatibility an unset `closable` follows `dismissible`, so an existing `:dismissible="false"` still disables the close button; that coupling is deprecated and from 7.0 an unset `closable` means `true`. Tests: `drawer.test.ts` › closable.
 
 ## v-model
 

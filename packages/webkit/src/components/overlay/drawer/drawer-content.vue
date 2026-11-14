@@ -48,7 +48,7 @@
     if (!isTop.value) return
     if (!ctx?.dismissible) return
     event.preventDefault()
-    ctx.close()
+    ctx.dismiss()
   })
 
   watch(isOpen, async (open, wasOpen) => {
