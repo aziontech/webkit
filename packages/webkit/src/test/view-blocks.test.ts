@@ -8,6 +8,8 @@ import FileBrowser from '../../blocks/platform/view/file-browser/file-browser.vu
 import InsideAFolder from '../../blocks/platform/view/file-browser/variants/inside-a-folder.vue'
 import QueryEditor from '../../blocks/platform/view/query-editor/query-editor.vue'
 import QueryEditorQuery from '../../blocks/platform/view/query-editor/variants/query.vue'
+import SplitView from '../../blocks/platform/view/split-view/split-view.vue'
+import SplitViewFiltered from '../../blocks/platform/view/split-view/variants/filtered.vue'
 import TableView from '../../blocks/platform/view/table-view/table-view.vue'
 import TableViewFailed from '../../blocks/platform/view/table-view/variants/failed.vue'
 import TableViewLoading from '../../blocks/platform/view/table-view/variants/loading.vue'
@@ -165,5 +167,23 @@ describe('platform/view/card-view block', () => {
     const failed = render(CardViewFailed)
     await fireEvent.click(failed.getByRole('button', { name: 'Retry' }))
     expect(failed.emitted('retry')).toHaveLength(1)
+  })
+})
+
+describe('platform/view/split-view block', () => {
+  it('opens an event from its detail button, a keyboard path to the document', async () => {
+    const view = render(SplitView)
+    const [open] = await waitFor(() => view.getAllByRole('button', { name: /^Open event / }))
+    expect(open).toHaveAttribute('aria-expanded', 'false')
+    await fireEvent.click(open)
+    await waitFor(() => expect(open).toHaveAttribute('aria-expanded', 'true'))
+  })
+
+  it('filters through FilterMenu and shows its chips for applied fields', async () => {
+    const view = render(SplitViewFiltered)
+    expect(view.getByTestId('filter-button')).toBeTruthy()
+    const chips = view.getByTestId('filter-chips')
+    expect(chips.textContent).toContain('Source')
+    expect(chips.textContent).toContain('Level')
   })
 })

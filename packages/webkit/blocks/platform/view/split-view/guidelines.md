@@ -20,29 +20,29 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 
 ## Building blocks
 
-### A. Filter popover — `Popover`, `Button`, `Badge`, `CalendarRoot`, `Input` (required)
+### A. Filter — `FilterMenu` (required)
 
-An outlined medium Filter `Button` opens one `Popover` placed `bottom-start`: the field list first, then the values of the chosen field with their counts. A small `Badge` on the trigger counts applied fields. This drill-down popover is the one place the count stays composed: `Table.Filter`, whose trigger carries the count, opens its own field, operator and value builder and has no labelled trigger, controlled open state or nested calendar, so it cannot host this panel. A filter in a table toolbar uses `Table.Filter` and its `count`, never a hand-built `Badge`. The period offers presets and a `CalendarRoot` range; the popover stays open while the calendar is open. Long value lists get their own search `Input`.
+`FilterMenu` bound with `v-model="filters"` and `:fields`: the Filter button (counting the applied fields) opens a drill-in menu, the field list first, then the values of the chosen field. Period is a `date` field whose options are the block's presets (Last 15 minutes to Last 24 hours) plus the menu's own Custom range calendar; Source, Level and every field added from the fields panel are `multi` fields. The block maps its filter fields to `FilterMenuField`s and keeps matching the log itself. Do not build a filter popover, its count badge or its value rows by hand.
 
 ### B. Search and toolbar — `Input`, `Tooltip`, `IconButton` (required)
 
 A medium search `Input` across events, hosts, paths and addresses, then outlined medium `IconButton`s for Refresh and Download CSV, each named by a `Tooltip` and an `aria-label` with the same words.
 
-### C. Applied filters — `Chip` (optional)
+### C. Applied filters — `FilterMenu.Chips` (optional)
 
-One medium `Chip` per applied field under the controls row. A chip summarizes its values, reopens the popover on its field and can be removed. The row wraps; it never scrolls sideways.
+`FilterMenu.Chips` shares the model and the fields with the menu: one chip per applied field under the controls row, which summarizes its values, reopens the menu on its field and can be removed. The row wraps; it never scrolls sideways.
 
-### D. Fields panel — `Sidebar`, `Input`, `Field`, `Checkbox`, `Popover`, `Accordion`, `Tag` (optional)
+### D. Fields panel — `Sidebar`, `Input`, `Field`, `Checkbox`, `Popover`, `Item`, `Accordion`, `Tag` (optional)
 
-A resizable, collapsible start `Sidebar` named Fields with its own Search fields `Input`. Core fields sit on top; the rest are grouped by category in an `Accordion`, each category trigger carrying a small `Tag` with its applied count. Each field has a `Checkbox` that shows or hides its column in the log, and a `Popover` of its top values that applies a value as a filter. The panel hides when the explorer is narrower than the panel plus the log.
+A resizable, collapsible start `Sidebar` named Fields with its own Search fields `Input`. Core fields sit on top; the rest are grouped by category in an `Accordion`, each category trigger carrying a small `Tag` with its applied count. Each field has a `Checkbox` that shows or hides its column in the log, and a `Popover` of its top values, each an option `Item` (`clickable`, `kind="option"`, `aria-pressed` while applied) with its count, that applies the value as a filter. The panel hides when the explorer is narrower than the panel plus the log.
 
 ### E. Log — `Chart`, `TableRoot`, `Tag`, `EmptyState` (required)
 
 Above the table, a summary `dl` of Events, Errors and Avg request time, and the stacked volume `Chart` by level (`Chart.Bar kind="histogram" stacked`: solid columns that touch, one per time bucket, with `Chart.Brush`, bound to `v-model:range`). Each level wears its step of the severity ramp (Error `severity-critical`, Warning `severity-medium`, Info `severity-low`, Debug `severity-info`), and `Chart.Tooltip total` lists every level in the bucket with a Total row under them and a footer hint: Click to filter to this bucket, or drag to select a span. Dragging across the chart selects a span and filters the period to it; from the keyboard the arrow keys step through buckets, Shift with the arrows extends a span and Enter applies it. The primary and every variant (Query, Sessions, EventDocument included) use this same `Chart`; no variant draws its own bars. Below it the event `TableRoot`, `paginated` at 25 rows, with a detail column first, Level as a small `Tag` in the level's severity, and the columns chosen in the fields panel. Its empty slot picks one small `EmptyState`: no traffic yet, no match for the search, or nothing in the window.
 
-### F. Event document — `Sidebar`, `Tooltip`, `IconButton`, `Tag`, `CodeBlock` (required)
+### F. Event document — `Resizable`, `Tooltip`, `IconButton`, `Tag`, `CodeBlock` (required)
 
-Clicking a row opens the event in a resizable end `Sidebar` beside the log when the explorer is wide enough for the fields panel, the log and the document. Its header shows the level and source as small `Tag`s and a small Close `IconButton` in a `Tooltip`; the body lists the fields and ends with the full event in a `CodeBlock` that copies it as JSON.
+Each row's detail cell is an `IconButton` named Open event <id> with `aria-expanded`, so a keyboard user opens an event with Tab and Enter; a row click does the same for a pointer. When the explorer is wide enough for the fields panel, the log and the document, the event opens in the end pane of a horizontal `Resizable` (`Resizable.Handle` named Resize the event panel, the pane 320 to 512 px, collapsed while no event is open), so the handle sits on the inner edge and dragging it inward widens the document. Its header holds the Event heading and a small Close `IconButton` in a `Tooltip`; the body shows the level and source as small `Tag`s, lists the fields and ends with the full event in a `CodeBlock` that copies it as JSON.
 
 ### G. Narrow document — `Drawer`, `DrawerPortal`, `DrawerOverlay`, `DrawerContent`, `PanelHeader`, `DrawerTitle`, `DrawerClose`, `Tag`, `CodeBlock` (required)
 
@@ -79,7 +79,7 @@ The document lists every field of the event. Search in this event narrows the li
 - Drive the summary, the chart and the table from one filtered set, so every number agrees.
 - Let a click or drag on the chart set the period, and show the period as a filter the user can clear.
 - Keep the row selected while its document is open, and switch between pane and drawer by the explorer's width, not the viewport's.
-- Count applied fields on the Filter `Badge` and show each one as a `Chip` in field order.
+- Let `FilterMenu` count the applied fields on its trigger and `FilterMenu.Chips` show each one in field order.
 - Pick the empty message that matches why the log is empty.
 - In query mode, keep the applied query text as the user typed it, and save and list that text.
 - Keep each investigation tab self-contained: its own filters, search and period.
@@ -89,12 +89,12 @@ The document lists every field of the event. Search in this event narrows the li
 ## Don't
 
 - Don't navigate away to read one event; the document opens beside the log.
-- Don't add a second filter surface (a row of `Select`s, a filter bar in the fields panel) beside the Filter popover.
+- Don't add a second filter surface (a row of `Select`s, a filter bar in the fields panel) beside the Filter menu.
 - Don't hide the controls row or the summary when the log is empty.
 - Don't encode level by colour alone; the chart has a card with level names and counts, and the table shows level as text.
 - Don't let a wide log scroll the page sideways.
 - Don't size the root with `calc(100dvh - …)`; `data-layout-fill` fits it to the layout's `main`.
-- Don't offer the query bar and the Filter popover at once; pick the one that fits the users.
+- Don't offer the query bar and the Filter menu at once; pick the one that fits the users.
 - Don't guess the meaning of a query that mixes AND and OR; say so and let the user fix it.
 - Don't let investigation tabs grow without a limit, and never close the last one.
 
@@ -117,8 +117,8 @@ The document lists every field of the event. Search in this event narrows the li
 - The explorer sits in the layout's one `main` landmark; each `Sidebar` is named (Fields, Event document) with its own collapse, expand and resize labels.
 - The chart is `Chart`'s one tab stop with an `aria-label` that carries the summary (busiest bucket) and the instruction; arrow keys move between buckets, Shift extends a span, Enter commits it, and the tooltip follows keyboard focus as it follows the pointer.
 - The Errors value carries an `aria-label` with its share of all events.
-- Every icon-only button has an `aria-label`; the filter `Badge` and decorative glyphs are `aria-hidden="true"`.
-- Value options in the popovers expose `aria-checked`, so applied values are announced.
+- Every icon-only button has an `aria-label`; decorative glyphs are `aria-hidden="true"`. The row detail button names its event and carries `aria-expanded`.
+- Value options in the fields-panel popovers are buttons with `aria-pressed`, so applied values are announced; the Filter menu's own rows come from `FilterMenu`.
 - The document drawer traps focus while open and closes on Escape; motion is turned off under `prefers-reduced-motion`.
 - Query: the bar is a `combobox` whose invalid state sets `aria-invalid` and points `aria-describedby` at the reason; the mixed AND / OR message and the saved-query confirmations are `role="status"`.
 - Sessions: the tabs follow the `Tabs` keyboard map (arrows, Home, End); F2 renames and Delete closes the focused tab, and the same actions sit in a named menu for pointer and screen-reader users; focus returns to the tab after rename or close.
@@ -126,8 +126,9 @@ The document lists every field of the event. Search in this event narrows the li
 
 ## States
 
-- Default: live traffic with the summary, the chart and the log filled, and no filters applied.
-- Filtered: errors from the Security and Access Control sources; the Filter button counts three fields and each shows as a chip.
+- Default: live traffic with the summary, the chart and the log filled, and no filters applied; while Refresh runs the summary values and the chart show `Skeleton`s and the table its loading rows.
+- Loading: the first load; `Skeleton`s hold the summary values and the chart band and the table shows its loading rows.
+- Filtered: errors from the Security and Access Control sources; the Filter button counts three fields and each shows as a `FilterMenu.Chips` chip.
 - Empty: a workspace with no traffic yet; the summary reads zero, the chart is flat and the log shows No events yet.
 - Failed: the event request failed; the fields panel stays and the log pane shows a danger `Alert` that says the events did not load, with Retry, which reruns the request like Refresh.
 - Query: `level = Error AND host = api.example.com` over the last 24 hours, with two saved and two recent queries.
