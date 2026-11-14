@@ -751,7 +751,8 @@ export const es: Messages = {
     moveSelectedToTarget: 'Mover seleccionados al destino',
     moveAllToTarget: 'Mover todos al destino',
     moveSelectedToSource: 'Mover seleccionados al origen',
-    moveAllToSource: 'Mover todos al origen'
+    moveAllToSource: 'Mover todos al origen',
+    empty: 'Sin elementos'
   },
   popover: {
     close: 'Cerrar'

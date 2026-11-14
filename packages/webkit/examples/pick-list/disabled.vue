@@ -15,7 +15,7 @@
 <template>
   <PickList
     v-model="model"
-    data-key="id"
+    track-by="id"
     disabled
   >
     <PickList.Source title="Available">

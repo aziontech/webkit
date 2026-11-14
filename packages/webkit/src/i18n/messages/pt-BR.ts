@@ -751,7 +751,8 @@ export const ptBR: Messages = {
     moveSelectedToTarget: 'Mover selecionados para o destino',
     moveAllToTarget: 'Mover todos para o destino',
     moveSelectedToSource: 'Mover selecionados para a origem',
-    moveAllToSource: 'Mover todos para a origem'
+    moveAllToSource: 'Mover todos para a origem',
+    empty: 'Nenhum item'
   },
   popover: {
     close: 'Fechar'

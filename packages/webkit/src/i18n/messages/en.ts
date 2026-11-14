@@ -715,7 +715,8 @@ export const pickList = {
   moveSelectedToTarget: 'Move selected to target',
   moveAllToTarget: 'Move all to target',
   moveSelectedToSource: 'Move selected to source',
-  moveAllToSource: 'Move all to source'
+  moveAllToSource: 'Move all to source',
+  empty: 'No items'
 } as const
 
 export const popover = {

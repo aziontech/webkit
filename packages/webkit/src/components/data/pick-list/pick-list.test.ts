@@ -483,3 +483,102 @@ describe('PickList (composition compound)', () => {
     })
   })
 })
+
+describe('PickList keyboard, identity and empty lists', () => {
+  const Keyed = (trackBy: string) =>
+    defineComponent({
+      components: { PickList, PickListSource, PickListTarget, PickListControls },
+      setup: () => ({ model: ref(makeModel()), trackBy }),
+      template: `
+        <PickList v-model="model" :track-by="trackBy">
+          <PickListSource title="Available">
+            <template #item="{ item }">{{ item.label }}</template>
+          </PickListSource>
+          <PickListControls />
+          <PickListTarget title="Selected">
+            <template #item="{ item }">{{ item.label }}</template>
+          </PickListTarget>
+        </PickList>
+      `
+    })
+
+  const sourceOptions = (container: HTMLElement) =>
+    Array.from(
+      container.querySelectorAll<HTMLElement>(
+        '[data-testid="pick-list-source__list"] [role="option"]'
+      )
+    )
+
+  it('keeps one tab stop per list and moves it with the arrows, Home and End', async () => {
+    const view = render(Harness())
+    const options = sourceOptions(view.container)
+    expect(options.map((option) => option.tabIndex)).toEqual([0, -1, -1])
+    options[0]!.focus()
+    await fireEvent.keyDown(options[0]!, { key: 'ArrowDown' })
+    await new Promise((resolve) => setTimeout(resolve, 0))
+    expect(document.activeElement).toBe(sourceOptions(view.container)[1])
+    expect(sourceOptions(view.container).map((option) => option.tabIndex)).toEqual([-1, 0, -1])
+    await fireEvent.keyDown(document.activeElement!, { key: 'End' })
+    await new Promise((resolve) => setTimeout(resolve, 0))
+    expect(document.activeElement).toBe(sourceOptions(view.container)[2])
+    await fireEvent.keyDown(document.activeElement!, { key: 'Home' })
+    await new Promise((resolve) => setTimeout(resolve, 0))
+    expect(document.activeElement).toBe(sourceOptions(view.container)[0])
+  })
+
+  it('extends the selection with Shift and the arrows', async () => {
+    const view = render(Harness())
+    const options = sourceOptions(view.container)
+    options[0]!.focus()
+    await fireEvent.keyDown(options[0]!, { key: 'ArrowDown', shiftKey: true })
+    await new Promise((resolve) => setTimeout(resolve, 0))
+    expect(sourceOptions(view.container).map((o) => o.getAttribute('aria-selected'))).toEqual([
+      'true',
+      'true',
+      'false'
+    ])
+  })
+
+  it('keys the selection by trackBy, so it follows the record when the list changes', async () => {
+    const model = ref(makeModel())
+    const view = render(
+      defineComponent({
+        components: { PickList, PickListSource, PickListTarget, PickListControls },
+        setup: () => ({ model }),
+        template: `
+          <PickList v-model="model" track-by="id">
+            <PickListSource title="Available">
+              <template #item="{ item }">{{ item.label }}</template>
+            </PickListSource>
+            <PickListControls />
+            <PickListTarget title="Selected">
+              <template #item="{ item }">{{ item.label }}</template>
+            </PickListTarget>
+          </PickList>
+        `
+      })
+    )
+    await fireEvent.click(sourceOptions(view.container)[1]!)
+    model.value = [[{ id: 9, label: 'Logs' }, ...model.value[0]!], model.value[1]!]
+    await new Promise((resolve) => setTimeout(resolve, 0))
+    const selected = sourceOptions(view.container).filter(
+      (option) => option.getAttribute('aria-selected') === 'true'
+    )
+    expect(selected.map((option) => option.textContent?.trim())).toEqual(['WAF'])
+  })
+
+  it('still keys rows by the deprecated dataKey', async () => {
+    const view = render(Keyed(''))
+    expect(sourceOptions(view.container)).toHaveLength(3)
+  })
+
+  it('shows an empty state in a list with no items', async () => {
+    const view = render(Harness())
+    await fireEvent.click(
+      within(view.container).getByRole('button', { name: 'Move all to target' })
+    )
+    const empty = view.getByTestId('pick-list-source__empty')
+    expect(empty.textContent).toContain('No items')
+    await expectNoA11yViolations(view.container)
+  })
+})

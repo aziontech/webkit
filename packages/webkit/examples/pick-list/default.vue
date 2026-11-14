@@ -15,7 +15,7 @@
 <template>
   <PickList
     v-model="model"
-    data-key="id"
+    track-by="id"
   >
     <PickList.Source title="Available">
       <template #item="{ item }">{{ item.label }}</template>

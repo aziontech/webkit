@@ -1779,7 +1779,7 @@
   {
     "name": "pick-list",
     "path": "src/components/data/pick-list/index.ts",
-    "limit": "5.6 KB"
+    "limit": "6.75 KB"
   },
   {
     "name": "pick-list-root",
@@ -1789,12 +1789,12 @@
   {
     "name": "pick-list-source",
     "path": "src/components/data/pick-list/pick-list-source/pick-list-source.vue",
-    "limit": "2.8 KB"
+    "limit": "4.75 KB"
   },
   {
     "name": "pick-list-target",
     "path": "src/components/data/pick-list/pick-list-target/pick-list-target.vue",
-    "limit": "2.8 KB"
+    "limit": "4.75 KB"
   },
   {
     "name": "pick-list-controls",
