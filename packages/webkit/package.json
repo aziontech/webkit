@@ -178,10 +178,6 @@
       "types": "./types/components/ai/ai-loading/ai-loading.vue.d.ts",
       "default": "./src/components/ai/ai-loading/ai-loading.vue"
     },
-    "./loader": {
-      "types": "./types/components/ai/loader/loader.vue.d.ts",
-      "default": "./src/components/ai/loader/loader.vue"
-    },
     "./artifact-canvas": {
       "types": "./types/components/ai/artifact-canvas/artifact-canvas.vue.d.ts",
       "default": "./src/components/ai/artifact-canvas/artifact-canvas.vue"

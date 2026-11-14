@@ -5,8 +5,8 @@
   import * as en from '../../../i18n/messages/en'
   import Button from '../../actions/button/button.vue'
   import Avatar from '../../content/avatar/avatar.vue'
+  import AiLoading from '../ai-loading/ai-loading.vue'
   import { ConversationInjectionKey } from '../conversation/injection-key'
-  import Loader from '../loader/loader.vue'
   import type { ChatMessageFrom, ChatMessageState } from './injection-key'
   import { ChatMessageInjectionKey } from './injection-key'
 
@@ -30,7 +30,7 @@
     grouped?: boolean
     /** Error text shown while `state` is `error`. Empty uses the locale catalog. */
     errorMessage?: string
-    /** Loading text shown while `state` is `pending`. Empty uses `Loader`'s own (`Generating a response`). */
+    /** Loading text shown while `state` is `pending`. Empty uses `AiLoading`'s own (`Generating a response`). */
     loadingLabel?: string
   }
 
@@ -151,7 +151,7 @@
           {{ timestamp }}
         </span>
       </p>
-      <Loader
+      <AiLoading
         v-if="state === 'pending'"
         :label="loadingLabel"
         :delay="0"
