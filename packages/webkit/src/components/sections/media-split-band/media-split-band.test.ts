@@ -119,6 +119,82 @@ describe('MediaSplitBand', () => {
     ])
   })
 
+  it('draws a lone action as an outlined button closed by the chevron', () => {
+    const { getByRole } = band({ primaryAction: { label: 'Join us', href: '/careers' } })
+
+    const button = getByRole('link', { name: 'Join us' })
+    expect(button).toHaveAttribute('data-kind', 'outlined')
+  })
+
+  it('draws a lone secondary action the same way and links the band to it', () => {
+    const { getByRole, getByTestId } = band({ secondaryAction })
+
+    expect(getByRole('link', { name: secondaryAction.label })).toHaveAttribute(
+      'data-kind',
+      'outlined'
+    )
+    expect(getByTestId(SPLIT_TESTID).hasAttribute('data-media-href')).toBe(true)
+  })
+
+  it('draws two actions as secondary then outlined', () => {
+    const { getAllByRole } = band({ primaryAction, secondaryAction })
+
+    expect(getAllByRole('link').map((link) => link.getAttribute('data-kind'))).toEqual([
+      'secondary',
+      'outlined'
+    ])
+  })
+
+  it('leaves the band unlinked with one action when linked is off', () => {
+    const { getByTestId, getByRole } = band({ primaryAction, linked: false })
+
+    expect(getByTestId(SPLIT_TESTID).hasAttribute('data-media-href')).toBe(false)
+    expect(getByRole('link', { name: primaryAction.label })).toHaveAttribute(
+      'href',
+      primaryAction.href
+    )
+  })
+
+  it('aligns the copy to the top at size medium and centres it at size large', () => {
+    expect(band().getByTestId(SPLIT_TESTID)).toHaveAttribute('data-align', 'top')
+    expect(band({ size: 'large' }).getAllByTestId(SPLIT_TESTID)[1]).toHaveAttribute(
+      'data-align',
+      'center'
+    )
+  })
+
+  it('forwards the orientation to the media split', () => {
+    const { getByTestId } = band({ orientation: 'vertical' })
+
+    expect(getByTestId(SPLIT_TESTID)).toHaveAttribute('data-orientation', 'vertical')
+  })
+
+  it('paints the chosen texture under the media', () => {
+    const { getByTestId } = band({ texture: 'dots' })
+
+    expect(
+      getByTestId(TESTID).querySelector('[data-testid="marketing-texture-material"]')
+    ).toHaveAttribute('data-kind', 'dots')
+  })
+
+  it('sets the anchor as the band id', () => {
+    const { getByTestId } = band({ anchor: 'values' })
+
+    expect(getByTestId(TESTID)).toHaveAttribute('id', 'values')
+  })
+
+  it('binds the scene props onto the scene', async () => {
+    const { findByTestId } = band({
+      image: undefined,
+      scene: { component: 'ProductWidget', props: { name: 'kv-store-key' } }
+    })
+
+    expect(await findByTestId('content-product-widget')).toHaveAttribute(
+      'data-name',
+      'kv-store-key'
+    )
+  })
+
   it('is not a link without actions', () => {
     const { getByTestId, queryAllByRole } = band()
 

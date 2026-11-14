@@ -11,6 +11,11 @@
       "name": "Product media",
       "summary": "The band with a ProductWidget console screen as its picture (`widget`), then with a Diagram request flow (`diagram`). Both sit inset in the media cell, and the widget plays its beat while the pointer is over the band.",
       "file": "product-media.vue"
+    },
+    {
+      "name": "Vertical",
+      "summary": "A wide console scene stacked under the copy with `orientation=\"vertical\"` on a dots texture. The lone action is an outlined button closed by the chevron, and `linked` is off so the band itself stays unlinked while the scene plays.",
+      "file": "vertical.vue"
     }
   ],
   "site": [

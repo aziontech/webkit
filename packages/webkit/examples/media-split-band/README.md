@@ -19,9 +19,11 @@ Example: [`site-values.vue`](./site-values.vue)
 Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` fill it:
 
 - `eyebrow`, `title` and `description` fill the copy cell.
-- `size` sets the type scale: `large` sets the headline at `heading-xl` and centres the copy beside the media; `medium` is the default.
-- The media is one of `scene` (`{ component }`, naming the webkit scene asset: `BrandGlobeScene` or `SpinningGlobe`), `image` (`src`, `alt`, `width`, `height`) or `illustration` with `illustrationAriaLabel`. When several are set, that order decides.
-- `primaryAction` and `secondaryAction` are optional, each a `label`, an `href`, an optional `target` and an optional `trailing` chevron: one makes the whole band a link to it, two leave the band unlinked.
+- `size` sets the type scale: `large` sets the headline at `heading-xl` and centres the copy beside the media; `medium`, the default, aligns it to the top of the media.
+- `orientation` is `horizontal` (the default) or `vertical`, which stacks the media under the copy; `texture` picks the texture under the media (`pixelate` by default).
+- `anchor` is the band's id for in-page links.
+- The media is one of `scene` (`{ component, props? }`, naming a webkit scene asset such as `BrandGlobeScene`, `SpinningGlobe` or `ProductWidget`, and the props bound onto it), `widget`, `diagram`, `image` (`src`, `alt`, `width`, `height`) or `illustration` with `illustrationAriaLabel`. When several are set, that order decides.
+- `primaryAction` and `secondaryAction` are optional, each a `label`, an `href`, an optional `target` and an optional `trailing` chevron: one renders outlined with the chevron and makes the whole band a link to it (set `linked` to `false` when the media holds controls), two leave the band unlinked.
 
 Example:
 
