@@ -3,11 +3,12 @@ name: architecture-tabs
 category: sections
 structure: monolithic
 status: implemented
-spec_version: 2
+spec_version: 3
 created: 2026-11-05
 last_updated: 2026-11-14
-checksum: cd2f51671c5b6d98d753a14e923cd4dad84f0b79fcedeafcaf409b623720982c
+checksum: 10c27f2b6c3e8a89728d645ae6120d4564724b2fabac75b203ff2c6c71019e54
 ---
+
 # ArchitectureTabs — Component Spec
 
 ## Purpose
@@ -37,7 +38,7 @@ The architecture band of a product page: a horizontal section title with one lar
 
 ```vue
 <script setup>
-import ArchitectureTabs from '@aziontech/webkit/architecture-tabs'
+  import ArchitectureTabs from '@aziontech/webkit/architecture-tabs'
 </script>
 
 <template>
@@ -47,8 +48,18 @@ import ArchitectureTabs from '@aziontech/webkit/architecture-tabs'
     description="Every client calls one endpoint."
     position="bottom"
     :tabs="[
-      { value: 'request-path', title: 'Request path', description: 'A call crosses Firewall before it reaches a model.', diagram: 'ai-gateway' },
-      { value: 'failover', title: 'Provider failover', description: 'The gateway moves to the next model on the alias.', diagram: 'ai-gateway-provider-failover' }
+      {
+        value: 'request-path',
+        title: 'Request path',
+        description: 'A call crosses Firewall before it reaches a model.',
+        diagram: 'ai-gateway'
+      },
+      {
+        value: 'failover',
+        title: 'Provider failover',
+        description: 'The gateway moves to the next model on the alias.',
+        diagram: 'ai-gateway-provider-failover'
+      }
     ]"
     :primary-action="{ label: 'Docs', href: '/docs', trailing: true }"
   />
@@ -57,16 +68,18 @@ import ArchitectureTabs from '@aziontech/webkit/architecture-tabs'
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `anchor` | `string` | `''` | false | In-page id set on the band so a `#hash` link can scroll to it. |
-| `eyebrow` | `string` | `''` | false | Overline above the section title. |
-| `title` | `string` | `''` | false | Headline of the band, rendered by the horizontal section title as its `h2`; the band renders no header when empty. |
-| `description` | `string` | `''` | false | Supporting sentence beside the headline. |
-| `position` | `ArchitectureTabsPosition` | `'top'` | false | Side of the diagram the tabs sit on: `top`, `bottom`, `left` or `right`; left and right hold up to three tabs. |
-| `tabs` | `ArchitectureTabsTab[]` | `[]` | false | The architectures, in order; each is `{ value, title, description, diagram, diagramAriaLabel? }` where `diagram` is the name of the diagram drawn while the tab is active and `diagramAriaLabel` replaces the description that diagram ships. |
-| `interval` | `number` | `6000` | false | Milliseconds each tab holds before the next one opens. |
-| `primaryAction` | `ArchitectureTabsAction` | `undefined` | false | Large button in the section title; `{ label, href, trailing?, target? }`. Omitted when absent. |
+| Prop               | Type                       | Default     | Required | JSDoc                                                                                                                                                                                                                                         |
+| ------------------ | -------------------------- | ----------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `anchor`           | `string`                   | `''`        | false    | In-page id set on the band so a `#hash` link can scroll to it.                                                                                                                                                                                |
+| `eyebrow`          | `string`                   | `''`        | false    | Overline above the section title.                                                                                                                                                                                                             |
+| `title`            | `string`                   | `''`        | false    | Headline of the band, rendered by the horizontal section title as its `h2`; the band renders no header when empty.                                                                                                                            |
+| `description`      | `string`                   | `''`        | false    | Supporting sentence beside the headline.                                                                                                                                                                                                      |
+| `position`         | `ArchitectureTabsPosition` | `'top'`     | false    | Side of the diagram the tabs sit on: `top`, `bottom`, `left` or `right`; left and right hold up to three tabs.                                                                                                                                |
+| `tabs`             | `ArchitectureTabsTab[]`    | `[]`        | false    | The architectures, in order; each is `{ value, title, description, diagram, diagramAriaLabel? }` where `diagram` is the name of the diagram drawn while the tab is active and `diagramAriaLabel` replaces the description that diagram ships. |
+| `autoplay`         | `boolean`                  | `true`      | false    | Opens the next tab on a timer, with the composed tabs' visible pause control.                                                                                                                                                                 |
+| `autoplayInterval` | `number`                   | `6000`      | false    | Milliseconds each tab holds before the next one opens.                                                                                                                                                                                        |
+| `interval`         | `number`                   | `0`         | false    | @deprecated since 6.0 — use `autoplayInterval`. Removed in 7.0. A non-zero value still sets the hold.                                                                                                                                         |
+| `primaryAction`    | `ArchitectureTabsAction`   | `undefined` | false    | Large button in the section title; `{ label, href, trailing?, target? }`. Omitted when absent.                                                                                                                                                |
 
 ## Events
 
@@ -81,7 +94,7 @@ import ArchitectureTabs from '@aziontech/webkit/architecture-tabs'
 - Visual states: `default`; the active tab, its progress and the timer are owned by `media-tabs`
 - Empty: when `tabs` is empty the band renders nothing — not the header, not the frame
 - The header renders only when `title` is set
-- The timer holds each tab for `interval` milliseconds (owned by `media-tabs`)
+- The timer holds each tab for `autoplayInterval` milliseconds (owned by `media-tabs`)
 
 ## Motion & Animations
 
@@ -89,16 +102,16 @@ _none_
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| diagram fill | `var(--bg-surface)` |
-| frame rule | `var(--border-default)` |
+| Region       | Token (DESIGN.md)       |
+| ------------ | ----------------------- |
+| diagram fill | `var(--bg-surface)`     |
+| frame rule   | `var(--border-default)` |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 
@@ -111,7 +124,7 @@ _none_
 
 ## Examples
 
-- Default — carries `diagramAriaLabel` on one tab and a custom `interval`.
+- Default — carries `diagramAriaLabel` on one tab and a custom `autoplayInterval`.
 
 ## Constraints — DO NOT
 

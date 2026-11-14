@@ -55,7 +55,11 @@
     position?: ArchitectureTabsPosition
     /** The architectures, in order; each is `{ value, title, description, diagram, diagramAriaLabel? }` where `diagram` is the name of the diagram drawn while the tab is active and `diagramAriaLabel` replaces the description it ships. */
     tabs?: ArchitectureTabsTab[]
+    /** Opens the next tab on a timer, with the composed tabs' visible pause control. */
+    autoplay?: boolean
     /** Milliseconds each tab holds before the next one opens. */
+    autoplayInterval?: number
+    /** @deprecated since 6.0 — use `autoplayInterval`. Removed in 7.0. */
     interval?: number
     /** Large button in the section title; `{ label, href, trailing?, target? }`. Omitted when absent. */
     primaryAction?: ArchitectureTabsAction
@@ -68,7 +72,9 @@
     description: '',
     position: 'top',
     tabs: () => [],
-    interval: 6000,
+    autoplay: true,
+    autoplayInterval: 6000,
+    interval: 0,
     primaryAction: undefined
   })
 
@@ -138,7 +144,8 @@
           :position="position"
           size="small"
           :items="items"
-          :autoplay-interval="interval"
+          :autoplay="autoplay"
+          :autoplay-interval="interval || autoplayInterval"
           class="[--media-tabs-media-bg:var(--bg-surface)] [--media-tabs-media-min-lg:28rem] [--media-tabs-media-min:24rem]"
         >
           <template #media="{ index }">

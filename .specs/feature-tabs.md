@@ -3,11 +3,12 @@ name: feature-tabs
 category: sections
 structure: monolithic
 status: implemented
-spec_version: 2
+spec_version: 3
 created: 2026-11-05
 last_updated: 2026-11-14
-checksum: 9abf4b6f5581f5a190f779953e6354925b1016be831b26c32414dd78e1ed79c1
+checksum: ddd9054924029d8ea74e6eb2d855e8fbb20c2f3aa40f6703a7f6527217f6c089
 ---
+
 # FeatureTabs — Component Spec
 
 ## Purpose
@@ -40,7 +41,7 @@ The feature walkthrough band of a product page: a horizontal section title, with
 
 ```vue
 <script setup>
-import FeatureTabs from '@aziontech/webkit/feature-tabs'
+  import FeatureTabs from '@aziontech/webkit/feature-tabs'
 </script>
 
 <template>
@@ -48,8 +49,18 @@ import FeatureTabs from '@aziontech/webkit/feature-tabs'
     eyebrow="Observability"
     title="Inspect every run end-to-end"
     :tabs="[
-      { title: 'Trace', description: 'The run as a waterfall.', illustration: 'live-debugging', illustrationLabel: 'A trace waterfall' },
-      { title: 'Logs', description: 'Structured output on the same clock.', illustration: 'traffic-and-cost-bar-chart', illustrationLabel: 'Structured logs' }
+      {
+        title: 'Trace',
+        description: 'The run as a waterfall.',
+        illustration: 'live-debugging',
+        illustrationLabel: 'A trace waterfall'
+      },
+      {
+        title: 'Logs',
+        description: 'Structured output on the same clock.',
+        illustration: 'traffic-and-cost-bar-chart',
+        illustrationLabel: 'Structured logs'
+      }
     ]"
     :primary-action="{ label: 'Open an invocation', href: '/docs', trailing: true }"
   />
@@ -58,17 +69,19 @@ import FeatureTabs from '@aziontech/webkit/feature-tabs'
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `anchor` | `string` | `''` | false | In-page id set on the band so a `#hash` link can scroll to it. |
-| `eyebrow` | `string` | `''` | false | Overline above the section title. |
-| `title` | `string` | `''` | false | Headline of the band, rendered by the horizontal section title as its `h2`; the band renders no header when empty. |
-| `description` | `string` | `''` | false | Supporting sentence under the headline. |
-| `tabs` | `FeatureTabsTab[]` | `[]` | false | The features, in order, at most three; each is `{ title, description, value?, code?, illustration?, illustrationLabel? }` where `value` is the stable key handed to the band scene as its `tab`, `code` is the `{ label, value, code, language?, fileName?, fileIcon? }` file the tab opens as its media, `illustration` is a registry name drawn when the tab has no code and the band no scene, and `illustrationLabel` its accessible name. |
-| `scene` | `FeatureTabsScene` | `undefined` | false | Live scene drawn as the media of every tab without code, `{ component, props? }` naming a webkit scene asset; it receives the tab's `value` as `tab` and whether the tab is open as `active`. Wins over the illustrations. |
-| `interval` | `number` | `5200` | false | Milliseconds each tab holds before the next one opens. |
-| `copyAriaLabel` | `string` | `''` | false | Accessible name of the copy button on each tab's code file; empty keeps the code block's own. |
-| `primaryAction` | `FeatureTabsAction` | `undefined` | false | Button in the section title, beside the headline (under the frame when the band has no title); `{ label, href, trailing?, target? }` where `trailing` adds the chevron. Omitted when absent. |
+| Prop               | Type                | Default     | Required | JSDoc                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| ------------------ | ------------------- | ----------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `anchor`           | `string`            | `''`        | false    | In-page id set on the band so a `#hash` link can scroll to it.                                                                                                                                                                                                                                                                                                                                                                                 |
+| `eyebrow`          | `string`            | `''`        | false    | Overline above the section title.                                                                                                                                                                                                                                                                                                                                                                                                              |
+| `title`            | `string`            | `''`        | false    | Headline of the band, rendered by the horizontal section title as its `h2`; the band renders no header when empty.                                                                                                                                                                                                                                                                                                                             |
+| `description`      | `string`            | `''`        | false    | Supporting sentence under the headline.                                                                                                                                                                                                                                                                                                                                                                                                        |
+| `tabs`             | `FeatureTabsTab[]`  | `[]`        | false    | The features, in order, at most three; each is `{ title, description, value?, code?, illustration?, illustrationLabel? }` where `value` is the stable key handed to the band scene as its `tab`, `code` is the `{ label, value, code, language?, fileName?, fileIcon? }` file the tab opens as its media, `illustration` is a registry name drawn when the tab has no code and the band no scene, and `illustrationLabel` its accessible name. |
+| `scene`            | `FeatureTabsScene`  | `undefined` | false    | Live scene drawn as the media of every tab without code, `{ component, props? }` naming a webkit scene asset; it receives the tab's `value` as `tab` and whether the tab is open as `active`. Wins over the illustrations.                                                                                                                                                                                                                     |
+| `autoplay`         | `boolean`           | `true`      | false    | Opens the next tab on a timer, with the composed tabs' visible pause control.                                                                                                                                                                                                                                                                                                                                                                  |
+| `autoplayInterval` | `number`            | `5200`      | false    | Milliseconds each tab holds before the next one opens.                                                                                                                                                                                                                                                                                                                                                                                         |
+| `interval`         | `number`            | `0`         | false    | @deprecated since 6.0 — use `autoplayInterval`. Removed in 7.0. A non-zero value still sets the hold.                                                                                                                                                                                                                                                                                                                                          |
+| `copyAriaLabel`    | `string`            | `''`        | false    | Accessible name of the copy button on each tab's code file; empty keeps the code block's own.                                                                                                                                                                                                                                                                                                                                                  |
+| `primaryAction`    | `FeatureTabsAction` | `undefined` | false    | Button in the section title, beside the headline (under the frame when the band has no title); `{ label, href, trailing?, target? }` where `trailing` adds the chevron. Omitted when absent.                                                                                                                                                                                                                                                   |
 
 ## Events
 
@@ -91,20 +104,20 @@ _none_
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| link inset | `var(--spacing-xl)` |
-| code inset | `var(--spacing-xl)` |
-| code shape | `var(--shape-elements)` |
-| code shadow | `var(--shadow-sm)` |
-| anchor scroll offset | `var(--spacing-xxl)` |
+| Region                | Token (DESIGN.md)       |
+| --------------------- | ----------------------- |
+| link inset            | `var(--spacing-xl)`     |
+| code inset            | `var(--spacing-xl)`     |
+| code shape            | `var(--shape-elements)` |
+| code shadow           | `var(--shadow-sm)`      |
+| anchor scroll offset  | `var(--spacing-xxl)`    |
 | frame rules and marks | `var(--border-default)` |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 

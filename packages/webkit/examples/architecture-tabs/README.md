@@ -21,7 +21,7 @@ Add this entry to the `sections` array of the page JSON. `_id` picks the block a
 - `eyebrow`, `title` and `description` make the section title.
 - `position` is the side of the diagram the tabs sit on: `top` (the default), `bottom`, `left` or `right`. Left and right hold up to three tabs.
 - `tabs` are up to five architectures, each a `value`, a `title`, a `description` and the `diagram` name it draws; `diagramAriaLabel` replaces the description that diagram ships.
-- `interval` is how long each tab holds, in milliseconds (6000 by default).
+- `autoplayInterval` is how long each tab holds, in milliseconds (6000 by default).
 - `primaryAction` is the large button in the section title, a `label`, an `href` and `trailing`. Leave it out to drop the button.
 - `anchor` is the band's id for in-page links.
 
