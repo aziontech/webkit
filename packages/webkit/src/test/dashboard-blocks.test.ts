@@ -1,14 +1,18 @@
 import { cleanup, fireEvent, render, waitFor } from '@testing-library/vue'
 import { afterEach, describe, expect, it } from 'vitest'
+import { userEvent } from 'vitest/browser'
 
+import Analytics from '../../blocks/platform/dashboard/analytics-dashboard/analytics-dashboard.vue'
 import Switcher from '../../blocks/platform/dashboard/dashboard-switcher/dashboard-switcher.vue'
 import SwitcherEmpty from '../../blocks/platform/dashboard/dashboard-switcher/variants/empty.vue'
 import SwitcherFailed from '../../blocks/platform/dashboard/dashboard-switcher/variants/failed.vue'
 import SwitcherOwnPeriod from '../../blocks/platform/dashboard/dashboard-switcher/variants/own-period.vue'
+import Data from '../../blocks/platform/dashboard/data-dashboard/data-dashboard.vue'
 import Health from '../../blocks/platform/dashboard/health-score-dashboard/health-score-dashboard.vue'
 import HealthEmpty from '../../blocks/platform/dashboard/health-score-dashboard/variants/empty.vue'
 import Home from '../../blocks/platform/dashboard/home-dashboard/home-dashboard.vue'
 import HomeFailed from '../../blocks/platform/dashboard/home-dashboard/variants/failed.vue'
+import Security from '../../blocks/platform/dashboard/security-dashboard/security-dashboard.vue'
 import { useToastRegion } from './toast-region'
 
 useToastRegion()
@@ -103,5 +107,27 @@ describe('platform/dashboard/health-score-dashboard', () => {
     const view = render(HealthEmpty)
     const tile = byTestId('chart-stat-tile', view.container)!
     expect(tile.textContent).toContain('No value')
+  })
+})
+
+describe.each([
+  ['analytics-dashboard', Analytics],
+  ['data-dashboard', Data],
+  ['security-dashboard', Security]
+])('platform/dashboard/%s period', (_name, Block) => {
+  it('drives the delta comparison from the Period Select in the header', async () => {
+    const view = render(Block)
+    expect(view.container.textContent).toContain('vs previous 24 hours')
+    await userEvent.click(view.getByRole('combobox', { name: 'Period' }))
+    const option = await waitFor(() => {
+      const found = Array.from(document.querySelectorAll('[role="option"]')).find(
+        (node) => node.textContent?.trim() === 'Last 7 days'
+      )
+      if (!found) throw new Error('no option')
+      return found as HTMLElement
+    })
+    await userEvent.click(option)
+    await waitFor(() => expect(view.container.textContent).toContain('vs previous 7 days'))
+    expect(view.container.textContent).not.toContain('vs previous 24 hours')
   })
 })
