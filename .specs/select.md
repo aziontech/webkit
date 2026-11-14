@@ -3,11 +3,11 @@ name: select
 category: inputs
 structure: composition
 status: implemented
-spec_version: 3
+spec_version: 4
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3714-10801
   node_id: 3714:10801
-checksum: 2c4bcf9b2d67c5cbe894996d1a097ec27d7043c5f604f758c3a7f4ca4baf5234
+checksum: 7fafb901f4df543daa302d2e0d2c7e7c6bb3a7fffbc1ee1622e6295b8f45888e
 created: 2026-06-15
 last_updated: 2026-11-14
 ---
@@ -88,7 +88,7 @@ Aligned with Figma frames `3714:10801` (trigger states) and `3899:29361` (option
 - `select-trigger/select-trigger.vue` — Bordered trigger field with an optional `#prefix` slot (typed with `defineSlots`; the deprecated `#iconLeft` is its fallback until 7.0), selected-value label, and chevron-down. Mirrors `Input` size/state visuals. The selected value renders inside a `<bdi>`, so its own direction is isolated from the trigger's: an English value on a right-to-left page, or an Arabic value on a left-to-right one, keeps its character order while the label still aligns to the inline start. Prop `valueDir?: 'ltr' | 'rtl' | 'auto'` (default `undefined`, i.e. the `<bdi>` follows the value's first strong character) sets the `<bdi>`'s `dir`; pass `ltr` for values with no strong character whose order matters, such as dial codes (`PhoneInput` passes it, so `+1` never reads `1+`).
 - `select-content/select-content.vue` — Popover panel teleported to `body` and anchored with `usePlacement`; exposes `default` (the options), `#search` and `#footer` slots, typed with `defineSlots`, and scrolls its option list when content exceeds `max-h-[320px]`.
 - `select-group/select-group.vue` — Section wrapper for a labelled group of options; renders a `text-label-sm` heading in `--text-muted` when `label` is set. Groups never sit flush: `--spacing-sm` above every group but the first — the same rhythm DropdownMenu puts around its group divider and Command puts between two bare groups. No hairline: unlike DropdownMenu, this panel separates groups by space alone.
-- `select-option/select-option.vue` — Selectable option row with a trailing check when selected, an optional `icon` (PrimeIcons, default `''`), an optional leading `#left` slot, the option label, and an optional trailing `#tag` slot. **One leading column for the whole list**: as soon as any option in the panel has an `icon` or a `#left` slot, _every_ option reserves the leading box (a fixed `size-4`), so a list mixing iconed and icon-less options keeps a single label edge instead of a ragged one. A panel where no option has either reserves nothing and pays no indent. The reservation is pure CSS — the list carries `group/options`, each option with a glyph carries `data-leading`, and `group-has-[[data-leading]]/options` turns the column on for all of them — so no option registry is needed for the column. Each option records its visible text with the root on mount and update, so the trigger names the selection by label; while a selected value has no recorded label and the panel is closed, the content renders the options once in a `hidden` container (`<testId>__labels`) to collect them.
+- `select-option/select-option.vue` — Selectable option row with a trailing check when selected, an optional `icon` (PrimeIcons, default `''`), an optional leading `#left` slot, the option label, and an optional trailing `#tag` slot. **One leading column for the whole list**: as soon as any option in the panel has an `icon` or a `#left` slot, _every_ option reserves the leading box (a fixed `size-4`), so a list mixing iconed and icon-less options keeps a single label edge instead of a ragged one. A panel where no option has either reserves nothing and pays no indent. The reservation is pure CSS — the list carries `group/options`, each option with a glyph carries `data-leading`, and `group-has-[[data-leading]]/options` turns the column on for all of them — so no option registry is needed for the column. Each option records its visible text with the root on mount and update, so the trigger names the selection by label; while a selected value has no recorded label and the panel is closed, the content renders only the selected options (and any group without a `value`) once in a `hidden` container (`<testId>__labels`) to collect them; a 1,000-option list with a preselection mounts within the `select-1k-preselected` budget.
 - `select-group/select-group.vue` `label` defaults to `''` (no heading, no `aria-label`).
 
 ## Props

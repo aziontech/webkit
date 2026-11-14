@@ -3,11 +3,11 @@ name: multi-select
 category: inputs
 structure: composition
 status: implemented
-spec_version: 4
+spec_version: 5
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3899-29362
   node_id: 3899:29362
-checksum: 97e73922b92ce44e3010fb2b391475db5b933a4945021f425deef159ddafdd28
+checksum: e34e5c496e1067615738c8e2a72a6d017d7ae66bda986ed2357c60ab0fa1873d
 created: 2026-06-25
 last_updated: 2026-11-14
 ---
@@ -86,7 +86,7 @@ Aligned with Figma frame `3899:29362` (options panel). The trigger reuses the `I
 
 ## Sub-components
 
-- `multi-select-trigger/multi-select-trigger.vue` — Bordered trigger field with an optional `#prefix` slot (typed with `defineSlots`; the deprecated `#iconLeft` is its fallback until 7.0), selected-value label (comma-joined option labels, or `displayValue`). Each option records its label text with the root when it mounts; on mount `MultiSelectContent` renders its options once inside a `hidden` container so the labels are known before the panel first opens, then drops it, and chevron-down. Mirrors `Input` size/state visuals.
+- `multi-select-trigger/multi-select-trigger.vue` — Bordered trigger field with an optional `#prefix` slot (typed with `defineSlots`; the deprecated `#iconLeft` is its fallback until 7.0), selected-value label (comma-joined option labels, or `displayValue`). Each option records its label text with the root when it mounts; on mount `MultiSelectContent` renders only the selected options (and any group without a `value`) once inside a `hidden` container so their labels are known before the panel first opens, then drops it, and chevron-down. Mirrors `Input` size/state visuals.
 - `multi-select-content/multi-select-content.vue` — Popover panel teleported to `body` and anchored with `usePlacement`; exposes `default` (the options), `#search` and `#footer` slots, typed with `defineSlots`, and scrolls its option list when content exceeds `max-h-[320px]`.
 - `multi-select-group/multi-select-group.vue` — Section wrapper for a labelled group of options; renders a `text-label-sm` heading in `--text-muted` when `label` is set. Groups never sit flush: `--spacing-sm` above every group but the first — the same rhythm DropdownMenu puts around its group divider and Command puts between two bare groups. No hairline: unlike DropdownMenu, this panel separates groups by space alone.
 - `multi-select-option/multi-select-option.vue` — Selectable option row with a checkbox indicator (the `Checkbox` webkit component), an optional `icon` (PrimeIcons), an optional leading `#left` slot, the option label, and an optional trailing `#tag` slot. **One leading column for the whole list**: as soon as any option in the panel has an `icon` or a `#left` slot, _every_ option reserves the leading box (a fixed `size-4`), so a list mixing iconed and icon-less options keeps a single label edge instead of a ragged one. A panel where no option has either reserves nothing and pays no indent. The reservation is pure CSS — the list carries `group/options`, each option with a glyph carries `data-leading`, and `group-has-[[data-leading]]/options` turns the column on for all of them — so no option registry is needed.
