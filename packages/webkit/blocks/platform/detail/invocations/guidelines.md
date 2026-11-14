@@ -19,11 +19,11 @@ The page a user opens to understand one run of a function: did it work, how long
 
 ### A. Page heading — `PageHeader` (required)
 
-A medium `PageHeader` titled Invocations with one sentence on what the page shows. The function is in the breadcrumb, never repeated as a heading.
+A medium `PageHeader` titled Invocation, singular because the page is one run, with one sentence on what the page shows. The list of runs is the Recent switcher on this page, and the full list lives in Real-Time Events. The function is in the breadcrumb, never repeated as a heading.
 
 ### B. Invocation summary — `Card`, `Tooltip`, `CopyButton`, `StatusIndicator`, `Button`, `DropdownMenu`, `IconButton` (required)
 
-`Card :padded="false"` with three bands. The subject band holds the function link (its `Tooltip` says where it goes), the invocation ID in code type with a `CopyButton`, and the run's `StatusIndicator` (loading while it runs); then Replay as a secondary `Button` (disabled while the run is still going), the Recent switcher, a `DropdownMenu` of the recent invocations with their status and start that swaps the page to the picked run, and the Invocation actions `IconButton` menu with Open in Real-Time Events and Function settings. The facts band lists Started, Completed, Duration and Location. The state band, on the canvas fill, shows the request that triggered the run with a `CopyButton` and its outcome, in danger color when it failed.
+`Card :padded="false"` with three bands. The subject band holds the function `Link` (its `Tooltip` says where it goes), the invocation ID in code type with a `CopyButton`, and the run's `StatusIndicator` (loading while it runs); then Replay as a secondary `Button` (disabled while the run is still going), the Recent switcher, an outlined medium `Button` with the history glyph inside `DropdownMenu.Trigger` (its `Tooltip` inside the trigger, like the actions menu) that opens a `DropdownMenu` of the recent invocations with their status and start that swaps the page to the picked run, and the Invocation actions `IconButton` menu with Open in Real-Time Events and Function settings. The facts band lists Started, Completed, Duration and Location. The state band, on the canvas fill, shows the request that triggered the run with a `CopyButton` and its outcome, in danger color when it failed.
 
 ### C. Request path — `SectionHeader`, `Flow`, `Tag` (required)
 
@@ -35,7 +35,7 @@ A small `SectionHeader` over the `Trace` waterfall of the run, its spans nested 
 
 ### E. Logs — `LogView`, `LogViewContent` (required)
 
-A small `SectionHeader` over a copyable `LogView` whose lines are timed from the run's zero (+16 ms), the same clock as the trace. Warnings and errors use the warning line type and keep the level word in the message; the last line of a completed run is a success line. While the run is going the view shows its loading state under the lines printed so far, and `LogViewContent` holds the empty text.
+A small `SectionHeader` over a copyable `LogView` whose lines are timed from the run's zero (+16 ms), the same clock as the trace. Warnings and errors use the warning line type and keep the level word in the message; the last line of a completed run is a success line. While the run is going the lines printed so far stay on screen and a loading `StatusIndicator` reading Streaming sits in the section header; the view shows its own loading state only while no line has arrived yet, and `LogViewContent` holds the empty text.
 
 ## Do
 
@@ -54,7 +54,7 @@ A small `SectionHeader` over a copyable `LogView` whose lines are timed from the
 
 ## Copy
 
-- **Heading:** "Invocations", with "Every run of this function, end to end: the path the request took and what each step cost."
+- **Heading:** "Invocation", with "One run of this function, end to end: the path the request took and what each step cost."
 - **Facts:** "Started", "Completed" ("Not yet" while running), "Duration", "Location".
 - **Durations:** milliseconds under a second ("412 ms"), seconds with two decimals above ("1.24 s"); log times relative ("+16 ms").
 - **Outcome:** the status code and one sentence, e.g. "502, the origin did not answer within the 1 s budget."
@@ -74,7 +74,7 @@ A small `SectionHeader` over a copyable `LogView` whose lines are timed from the
 
 - Completed: a run that served its response, every node tagged Active or Answered, the trace with no error and the logs ending on a success line.
 - Failed: a run the origin timed out, the danger status and outcome, the function and origin nodes failed, the origin-response span selected with its message, and warning lines in the logs.
-- Running: a run in progress, the loading status, Replay disabled, Completed reading Not yet, running spans and the logs loading under the lines printed so far.
+- Running: a run in progress, the loading status, Replay disabled, Completed reading Not yet, running spans, and the lines printed so far with a Streaming indicator in the Logs header.
 
 ## Related
 

@@ -1,6 +1,7 @@
 import { cleanup, fireEvent, render, waitFor, within } from '@testing-library/vue'
 import { afterEach, describe, expect, it } from 'vitest'
 
+import Running from '../../blocks/platform/detail/invocations/variants/running.vue'
 import Records from '../../blocks/platform/detail/record-table/variants/records.vue'
 import SectionedResource from '../../blocks/platform/detail/sectioned-resource/sectioned-resource.vue'
 import FewSiblings from '../../blocks/platform/detail/sectioned-resource/variants/few-siblings.vue'
@@ -60,5 +61,24 @@ describe('platform/detail/sectioned-resource', () => {
     expect(open.getAttribute('href')).toBe('/policies/acme-default/settings')
     await fireEvent.click(view.getByRole('tab', { name: 'Private access' }))
     await waitFor(() => expect(view.getByRole('table')).toBeTruthy())
+  })
+})
+
+describe('platform/detail/invocations', () => {
+  it('keeps the printed lines of a running invocation on screen while it streams', async () => {
+    const view = render(Running)
+    await waitFor(() =>
+      expect(view.container.textContent).toContain('Cache miss, fetching assets.example.com')
+    )
+    expect(view.container.textContent).toContain('Streaming')
+    expect(view.getByRole('heading', { name: 'Invocation' })).toBeTruthy()
+  })
+
+  it('opens Recent from a real button and links the function', () => {
+    const view = render(Running)
+    expect(view.getByRole('button', { name: /Recent/ })).toBeTruthy()
+    expect(view.getByRole('link', { name: 'image-resizer' }).getAttribute('href')).toBe(
+      '/functions/40122'
+    )
   })
 })
