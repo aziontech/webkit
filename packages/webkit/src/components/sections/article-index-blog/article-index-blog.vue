@@ -210,7 +210,7 @@
       :padded="false"
     >
       <FrameBox
-        key="rows"
+        key="toolbar"
         v-if="title || categories.length > 0 || search"
         flush
         borders="y"

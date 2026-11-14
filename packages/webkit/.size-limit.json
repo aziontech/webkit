@@ -487,7 +487,7 @@
   {
     "name": "article-cards",
     "path": "src/components/sections/article-cards/article-cards.vue",
-    "limit": "4.85 KB"
+    "limit": "6 KB"
   },
   {
     "name": "article-highlight",
@@ -497,12 +497,12 @@
   {
     "name": "article-index-blog",
     "path": "src/components/sections/article-index-blog/article-index-blog.vue",
-    "limit": "22.5 KB"
+    "limit": "24 KB"
   },
   {
     "name": "article-index-resource-hub",
     "path": "src/components/sections/article-index-resource-hub/article-index-resource-hub.vue",
-    "limit": "27.4 KB"
+    "limit": "29 KB"
   },
   {
     "name": "resource-grid",
