@@ -4,14 +4,18 @@
   import Card from '@aziontech/webkit/card'
   import CollectionPreferences from '@aziontech/webkit/collection-preferences'
   import CopyButton from '@aziontech/webkit/copy-button'
-  import type { DateRangeUnit, DateRangeValue } from '@aziontech/webkit/date-range-picker'
+  import type {
+    DateRangeUnit,
+    DateRangeValue,
+    RelativeOption
+  } from '@aziontech/webkit/date-range-picker'
   import DateRangePicker from '@aziontech/webkit/date-range-picker'
   import EmptyState from '@aziontech/webkit/empty-state'
   import IconButton from '@aziontech/webkit/icon-button'
   import PageHeader from '@aziontech/webkit/page-header'
   import PropertyFilter from '@aziontech/webkit/property-filter'
   import Table, { type TableColumn, type TableExposed } from '@aziontech/webkit/table'
-  import type { TagSeverity } from '@aziontech/webkit/tag'
+  import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { type FilteringProperty, useCollection } from '@aziontech/webkit/use-collection'
   import { computed, ref } from 'vue'
@@ -135,6 +139,14 @@
     unit: 'minute',
     key: 'last-15-minutes'
   })
+  const relativeOptions: RelativeOption[] = [
+    { key: 'last-15-minutes', amount: 15, unit: 'minute' },
+    { key: 'last-1-hour', amount: 1, unit: 'hour' },
+    { key: 'last-24-hours', amount: 24, unit: 'hour' },
+    { key: 'last-7-days', amount: 7, unit: 'day' },
+    { key: 'last-30-days', amount: 30, unit: 'day' },
+    { key: 'last-90-days', amount: 90, unit: 'day' }
+  ]
   const UNIT_MS: Partial<Record<DateRangeUnit, number>> = {
     minute: MINUTE,
     hour: HOUR,
@@ -198,8 +210,28 @@
   const activityTable = ref<TableExposed<ActivityEvent> | null>(null)
   const exportCsv = () => activityTable.value?.exportCsv({ filename: 'activity-history.csv' })
 
+  const RETENTION_DAYS = 90
+  const widerRange = computed<RelativeOption | null>(() => {
+    const span =
+      period.value.end === Number.POSITIVE_INFINITY
+        ? referenceTime - period.value.start
+        : period.value.end - period.value.start
+    if (span >= RETENTION_DAYS * DAY) return null
+    return (
+      relativeOptions.find((option) => option.amount * (UNIT_MS[option.unit] ?? DAY) > span) ?? null
+    )
+  })
+  const widenLabel = computed(() => {
+    const next = widerRange.value
+    if (!next) return ''
+    return next.amount === 1
+      ? `Show the last ${next.unit}`
+      : `Show the last ${next.amount} ${next.unit}s`
+  })
   const widenRange = () => {
-    range.value = { type: 'relative', amount: 30, unit: 'day', key: 'last-30-days' }
+    const next = widerRange.value
+    if (next)
+      range.value = { type: 'relative', amount: next.amount, unit: next.unit, key: next.key }
   }
 </script>
 
@@ -234,6 +266,7 @@
           <div class="flex shrink-0 flex-wrap items-center gap-(--spacing-xs)">
             <DateRangePicker
               v-model="range"
+              :relative-options="relativeOptions"
               aria-label="Activity period"
               :show-time-zone="false"
             />
@@ -295,11 +328,18 @@
               size="medium"
               icon="pi pi-history"
               title="No activity in this period"
-              description="Nothing happened in the account in the selected period. Pick a longer period to see older events."
+              :description="
+                widerRange
+                  ? 'Nothing happened in the account in the selected period. Select a longer period to see older events.'
+                  : 'Nothing happened in the account in the last 90 days, the longest period events are kept.'
+              "
             >
-              <template #actions>
+              <template
+                v-if="widerRange"
+                #actions
+              >
                 <Button
-                  label="Show the last 30 days"
+                  :label="widenLabel"
                   kind="secondary"
                   size="small"
                   @click="widenRange"
@@ -324,9 +364,10 @@
               aria-label="Activity history"
             >
               <template #cell-category="{ value }">
-                <Table.CellStatus
+                <Tag
                   :label="value"
                   :severity="categorySeverity(value)"
+                  size="small"
                 />
               </template>
               <template #cell-user="{ value }">
