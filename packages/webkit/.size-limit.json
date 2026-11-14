@@ -86,7 +86,7 @@
   {
     "name": "table-root",
     "path": "src/components/data/table/table.vue",
-    "limit": "53.8 KB"
+    "limit": "54.1 KB"
   },
   {
     "name": "property-filter",
@@ -1386,6 +1386,23 @@
     "limit": "7.15 KB"
   },
   {
+    "name": "filter-menu",
+    "path": "src/components/data/filter-menu/index.ts",
+    "limit": "24.9 KB",
+    "entryOnly": true
+  },
+  {
+    "name": "filter-menu-root",
+    "path": "src/components/data/filter-menu/filter-menu.vue",
+    "limit": "22.1 KB",
+    "entryOnly": true
+  },
+  {
+    "name": "filter-menu-chips",
+    "path": "src/components/data/filter-menu/filter-menu-chips/filter-menu-chips.vue",
+    "limit": "20 KB"
+  },
+  {
     "name": "upload-progress",
     "path": "src/components/feedback/upload-progress/upload-progress.vue",
     "limit": "8.25 KB"
@@ -1650,17 +1667,17 @@
   {
     "name": "table-filter",
     "path": "src/components/data/table/table-filter/table-filter.vue",
-    "limit": "11.5 KB"
+    "limit": "48.6 KB"
   },
   {
     "name": "table-applied-filters",
     "path": "src/components/data/table/table-applied-filters/table-applied-filters.vue",
-    "limit": "8.55 KB"
+    "limit": "22.4 KB"
   },
   {
     "name": "table-column-selector",
     "path": "src/components/data/table/table-column-selector/table-column-selector.vue",
-    "limit": "8.6 KB"
+    "limit": "20.8 KB"
   },
   {
     "name": "table-export",

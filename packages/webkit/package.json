@@ -1090,6 +1090,18 @@
       "types": "./types/components/inputs/file-token-group/file-token-group.vue.d.ts",
       "default": "./src/components/inputs/file-token-group/file-token-group.vue"
     },
+    "./filter-menu": {
+      "types": "./types/components/data/filter-menu/index.d.ts",
+      "default": "./src/components/data/filter-menu/index.ts"
+    },
+    "./filter-menu-root": {
+      "types": "./types/components/data/filter-menu/filter-menu.vue.d.ts",
+      "default": "./src/components/data/filter-menu/filter-menu.vue"
+    },
+    "./filter-menu-chips": {
+      "types": "./types/components/data/filter-menu/filter-menu-chips/filter-menu-chips.vue.d.ts",
+      "default": "./src/components/data/filter-menu/filter-menu-chips/filter-menu-chips.vue"
+    },
     "./password-requirements": {
       "types": "./types/components/inputs/password-requirements/index.d.ts",
       "default": "./src/components/inputs/password-requirements/index.ts"

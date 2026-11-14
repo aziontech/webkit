@@ -434,6 +434,33 @@ export const fileTokenGroup = {
   showFewer: 'Show fewer files'
 } as const
 
+export const filterMenu = {
+  label: 'Filter',
+  triggerCount: {
+    one: '{label}, {count} applied',
+    other: '{label}, {count} applied'
+  },
+  searchFields: 'Filter by…',
+  searchFieldsLabel: 'Search filter fields',
+  searchValues: 'Filter {field}…',
+  searchValuesLabel: 'Search {field} values',
+  back: 'Back to all filters',
+  backToPeriods: 'Back to date periods',
+  noMatch: 'No match for “{query}”.',
+  clear: 'Clear {field}',
+  last24Hours: 'Last 24 hours',
+  last7Days: 'Last 7 days',
+  last30Days: 'Last 30 days',
+  last3Months: 'Last 3 months',
+  customRange: 'Custom range…',
+  pickRange: 'Pick a range',
+  rangeBetween: '{start} – {end}',
+  rangeSince: 'Since {date}',
+  rangeUntil: 'Until {date}',
+  more: '+{count}',
+  applied: 'Applied filters'
+} as const
+
 export const uploadProgress = {
   label: 'File transfers',
   uploading: {
@@ -811,12 +838,16 @@ export const tableAppliedFilters = {
   in: 'in',
   notIn: 'not in',
   isEmpty: 'is empty',
-  isNotEmpty: 'is not empty'
+  isNotEmpty: 'is not empty',
+  within: 'within the last',
+  between: 'between'
 } as const
 
 export const tableColumnSelector = {
   title: 'Columns',
-  empty: 'No hideable columns.'
+  empty: 'No hideable columns.',
+  alwaysShown: 'Always shown',
+  showAll: 'Show all columns'
 } as const
 
 export const tableExport = {
@@ -846,7 +877,9 @@ export const tableFilter = {
   in: 'in',
   notIn: 'not in',
   isEmpty: 'is empty',
-  isNotEmpty: 'is not empty'
+  isNotEmpty: 'is not empty',
+  within: 'within the last',
+  between: 'between'
 } as const
 
 export const tableHeadCell = {
@@ -1255,6 +1288,7 @@ export const en = {
   field,
   fileDropzone,
   fileTokenGroup,
+  filterMenu,
   uploadProgress,
   footer,
   gaugeChart,
