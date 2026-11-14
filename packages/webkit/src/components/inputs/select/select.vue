@@ -2,6 +2,7 @@
   import { computed, provide, type Ref, ref, shallowReactive, useAttrs, useId, watch } from 'vue'
 
   import { useFieldControl } from '../../../composables/use-field-control'
+  import type { ListboxFocusIntent } from '../../../composables/use-listbox'
   import { fieldContextKey } from '../field/injection-key'
   import {
     selectContextKey,
@@ -67,6 +68,7 @@
   const {
     controlId,
     describedBy,
+    labelledBy,
     invalid: isInvalid,
     disabled: isDisabled,
     required: isRequired
@@ -168,6 +170,8 @@
     required: isRequired,
     controlId,
     describedBy,
+    labelledBy,
+    pendingFocus: ref<ListboxFocusIntent>(''),
     ariaLabel: computed(() => attrs['aria-label'] as string | undefined),
     ariaLabelledby: computed(() => attrs['aria-labelledby'] as string | undefined),
     placeholder: computed(() => props.placeholder),
