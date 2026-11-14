@@ -4,7 +4,7 @@
   "examples": [
     {
       "name": "Default",
-      "summary": "The band as the Web Apps page places it: five capabilities, from deploying with the CLI to querying metrics over GraphQL, each with a one-file sample and a docs button shown while it is open. Edit the props in the Controls panel — a band with no items renders nothing at all.",
+      "summary": "The band as the Web Apps page places it: five capabilities, from deploying with the CLI to querying metrics over GraphQL, each with a one-file sample and a docs button shown while it is open. Edit the props in the Controls panel — a band with no items renders nothing at all. The band carries an `anchor`, and the GraphQL action opens the docs in a new tab (`target: '_blank'`).",
       "file": "default.vue"
     }
   ],

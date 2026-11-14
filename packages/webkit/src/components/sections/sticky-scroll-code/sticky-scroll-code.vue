@@ -14,6 +14,9 @@
     inheritAttrs: false
   })
 
+  /** Button kind of an item's action. */
+  export type StickyScrollCodeActionKind = 'secondary' | 'outlined' | 'transparent'
+
   /** The small action under an open item's copy. */
   export type StickyScrollCodeAction = {
     /** Visible label of the action. */
@@ -22,6 +25,10 @@
     href: string
     /** Closes the label on a trailing chevron that reads as "go". */
     trailing?: boolean
+    /** Link target of the action; `_blank` opens it in a new tab. */
+    target?: '_blank' | '_self'
+    /** Button kind; defaults to secondary, and transparent draws a quiet text button. */
+    kind?: StickyScrollCodeActionKind
   }
 
   /** The one-file code sample an item shows while it is open. */
@@ -46,22 +53,25 @@
     description: string
     /** The one-file sample pinned while the item is open. */
     code: StickyScrollCodeSample
-    /** Small secondary button under the open item; `{ label, href, trailing? }`. Omitted when absent. */
+    /** Small button under the open item; `{ label, href, trailing?, target?, kind? }`. Omitted when absent. */
     action?: StickyScrollCodeAction
   }
 
   interface Props {
+    /** In-page id set on the band so a `#hash` link can scroll to it. */
+    anchor?: string
     /** Overline above the section title. */
     eyebrow?: string
     /** Headline of the band, rendered by the large section title as its `h2`; the band renders no header when empty. */
     title?: string
     /** Supporting sentence under the headline. */
     description?: string
-    /** The capabilities, in reading order; each is `{ title, description, code, action? }` where `code` is the one-file sample `{ fileName, code, language?, fileIcon?, copyAriaLabel? }` and `action` is `{ label, href, trailing? }` rendered as a small secondary button under the open item. */
+    /** The capabilities, in reading order; each is `{ title, description, code, action? }` where `code` is the one-file sample `{ fileName, code, language?, fileIcon?, copyAriaLabel? }` and `action` is `{ label, href, trailing?, target?, kind? }` rendered as a small button under the open item, secondary unless `kind` says otherwise. */
     items?: StickyScrollCodeItem[]
   }
 
   const props = withDefaults(defineProps<Props>(), {
+    anchor: '',
     eyebrow: '',
     title: '',
     description: '',
@@ -93,8 +103,10 @@
 <template>
   <section
     v-bind="$attrs"
+    :id="anchor || undefined"
     :data-testid="testId"
     :aria-label="title || undefined"
+    class="scroll-mt-(--spacing-xxl)"
   >
     <SectionModule
       v-if="hasItems"
@@ -146,7 +158,8 @@
               v-if="items[index].action"
               :label="items[index].action.label"
               :href="items[index].action.href"
-              kind="secondary"
+              :target="items[index].action.target"
+              :kind="items[index].action.kind ?? 'secondary'"
               size="small"
               :icon="items[index].action.trailing ? 'pi pi-chevron-right' : ''"
               icon-position="trailing"
