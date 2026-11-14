@@ -1,7 +1,8 @@
-import { cleanup, fireEvent, render, waitFor } from '@testing-library/vue'
+import { cleanup, fireEvent, render, waitFor, within } from '@testing-library/vue'
 import { afterEach, describe, expect, it } from 'vitest'
 import { userEvent } from 'vitest/browser'
 
+import ChangePlanDrawer from '../../blocks/platform/account/change-plan-drawer/change-plan-drawer.vue'
 import Checkout from '../../blocks/platform/account/change-plan-drawer/variants/checkout.vue'
 import TeamPermissions from '../../blocks/platform/account/team-permissions/team-permissions.vue'
 import CreateTeam from '../../blocks/platform/account/team-permissions/variants/create-team.vue'
@@ -88,17 +89,18 @@ describe('account/tokens', () => {
       expect(dialog()).not.toBeNull()
       return dialog() as HTMLElement
     })
-    await fireEvent.click(buttonByText('Create', drawer))
+    expect(within(drawer).getByRole('heading', { name: 'Create Personal Token' })).toBeTruthy()
+    await fireEvent.click(buttonByText('Create Personal Token', drawer))
     await waitFor(() => expect(drawer.textContent).toContain('This field is required.'))
     await userEvent.type(view.getByLabelText(/^Name/), 'Local CLI')
-    await fireEvent.click(buttonByText('Create', drawer))
+    await fireEvent.click(buttonByText('Create Personal Token', drawer))
     await waitFor(() =>
       expect(drawer.textContent).toContain('A token with this name already exists.')
     )
     const name = view.getByLabelText(/^Name/) as HTMLInputElement
     await userEvent.clear(name)
     await userEvent.type(name, 'Release bot')
-    await fireEvent.click(buttonByText('Create', drawer))
+    await fireEvent.click(buttonByText('Create Personal Token', drawer))
     const reveal = await waitFor(
       () => {
         const node = Array.from(document.querySelectorAll('[role="dialog"]')).find((item) =>
@@ -113,6 +115,7 @@ describe('account/tokens', () => {
     expect(secret.value).toMatch(/^pat_[0-9a-f]{48}$/)
     expect(secret).toHaveAttribute('type', 'password')
     expect(secret).toHaveAttribute('readonly')
+    expect(reveal.querySelectorAll('[role="status"]').length).toBe(0)
     await expectNoA11yViolations(reveal)
     await fireEvent.click(buttonByText('I copied the token', reveal))
     await waitFor(() => expect(document.body.textContent).not.toContain('Copy your new token'))
@@ -168,6 +171,20 @@ describe('team-permissions#CreateTeam', () => {
     expect(view.getByRole('table', { name: 'Permissions granted by this team' })).toBeTruthy()
   })
 
+  it('builds the matrix with the Table and shows an EmptyState when the filter matches nothing', async () => {
+    const view = render(CreateTeam)
+    const table = await view.findByRole('table', { name: 'Permissions granted by this team' })
+    expect(table.getAttribute('data-testid')).toBe('data-table__table')
+    expect(view.queryByRole('button', { name: 'Account settings' })).toBeNull()
+    await fireEvent.update(view.getByLabelText('Filter permissions'), 'nothing-like-this')
+    await waitFor(() => expect(view.getByText('No matching permissions')).toBeTruthy())
+    expect(view.queryByRole('table')).toBeNull()
+    await fireEvent.click(buttonByText('Clear filter'))
+    await waitFor(() =>
+      expect(view.getByRole('table', { name: 'Permissions granted by this team' })).toBeTruthy()
+    )
+  })
+
   it('requires a name and at least one permission', async () => {
     const view = render(CreateTeam)
     await fireEvent.click(buttonByText('Clear'))
@@ -215,6 +232,18 @@ describe('shells/console#AccountSwitch', () => {
       'aria-expanded',
       'false'
     )
+  })
+})
+
+describe('change-plan-drawer', () => {
+  it('lists each tier with FeatureList', async () => {
+    const view = render(ChangePlanDrawer)
+    await fireEvent.click(view.getByRole('button', { name: 'Change plan' }))
+    const panel = await waitFor(() => {
+      expect(dialog()).not.toBeNull()
+      return dialog() as HTMLElement
+    })
+    expect(panel.querySelectorAll('[data-testid="content-feature-list"]').length).toBe(3)
   })
 })
 

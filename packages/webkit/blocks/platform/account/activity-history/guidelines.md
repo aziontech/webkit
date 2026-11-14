@@ -25,19 +25,19 @@ Bound with `v-bind="propertyFilterProps"`. Properties: Event (free text), Catego
 
 ### C. Period — `DateRangePicker` (required)
 
-The period comes first in the reader's mind and is filtered before the collection: relative ranges (last 30 days by default) or absolute dates. It is a separate control because time is not a property token.
+The period comes first in the reader's mind and is filtered before the collection: relative ranges from the last 15 minutes to the last 90 days, the retention limit (last 30 days by default), or absolute dates. It is a separate control because time is not a property token.
 
 ### D. Listing actions — `Tooltip`, `IconButton`, `CollectionPreferences` (required)
 
 Refresh and Download CSV as outlined icon buttons in tooltips, then `CollectionPreferences` (page size 25, 50 or 100; columns), saved under `storageKey`.
 
-### E. Event table — `Card`, `Table`, `CopyButton`, `useCollection` (required)
+### E. Event table — `Card`, `Table`, `Tag`, `CopyButton`, `useCollection` (required)
 
-One `useCollection` over the events in the period, sorted by Date descending, `Table` bound with `v-bind="tableProps"` in a flush `Card`. Columns: Event (sentence in past tense naming the object), Category through `Table.CellStatus` with one severity per category, User, IP address (left to right, with a `CopyButton` named `Copy IP address`), and Date through `Table.CellTime` (relative, exact time on the tooltip).
+One `useCollection` over the events in the period, sorted by Date descending, `Table` bound with `v-bind="tableProps"` in a flush `Card`. Columns: Event (sentence in past tense naming the object), Category as a small `Tag` with one severity per category (a category is not a status), User, IP address (left to right, with a `CopyButton` named `Copy IP address`), and Date through `Table.CellTime` (relative, exact time on the tooltip).
 
 ### F. No match and empty period — `EmptyState` (required)
 
-Filters that hide every event fill the table's `#empty` slot with `No matching events` and Clear filters. A period with no events at all replaces the table with `No activity in this period` and a button that widens it to the last 30 days.
+Filters that hide every event fill the table's `#empty` slot with `No matching events` and Clear filters. A period with no events at all replaces the table with `No activity in this period` and a button that widens it to the next longer preset (`Show the last hour`, … `Show the last 90 days`). At 90 days, the retention limit, the button goes and the description says events are kept for 90 days.
 
 ### G. Load failure — `Alert` (conditional)
 
@@ -60,7 +60,7 @@ A danger `Alert` with Retry takes the table's place; the controls stay so the re
 
 - **Title:** `Activity history`. **Filter:** `Filter activity`. **Period:** `Activity period`.
 - **Categories:** `Sign-in`, `Security`, `Users`, `Billing`, `Deploy`.
-- **Empty period:** `No activity in this period`, then `Nothing happened in the account in the selected period. Pick a longer period to see older events.` and `Show the last 30 days`.
+- **Empty period:** `No activity in this period`, then `Nothing happened in the account in the selected period. Select a longer period to see older events.` and `Show the last <next preset>`; at 90 days, `Nothing happened in the account in the last 90 days, the longest period events are kept.` with no action.
 - **No match:** `No matching events`, `No event in this period matches these filters.`, `Clear filters`.
 - Follow `skills/webkit-microcopy`: sentence case, no "please", no exclamation marks.
 
@@ -74,7 +74,7 @@ A danger `Alert` with Retry takes the table's place; the controls stay so the re
 ## States
 
 - Default: ten events over three weeks, the last 30 days selected, with filter, period, refresh, export, preferences, sorting and paging wired.
-- Empty: the last 15 minutes hold no event; a flush empty state offers the last 30 days.
+- Empty: the last 15 minutes hold no event; a flush empty state offers the next longer period, the last hour.
 - Loading: the first load; the controls and the table's loading rows.
 - Failed: the log did not load; a danger Alert with Retry.
 

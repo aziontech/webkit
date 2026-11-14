@@ -18,20 +18,9 @@
     "método de pagamento",
     "cartão de crédito",
     "dados do cartão",
-    "billing",
-    "billing page",
-    "invoices",
-    "bills",
-    "subscription plan",
-    "payment methods",
-    "credit cards",
-    "current plan",
-    "plan and billing",
-    "cobrança",
-    "faturas",
-    "faturamento",
-    "métodos de pagamento",
-    "plano de assinatura"
+    "payment method card",
+    "update card",
+    "alterar cartão"
   ],
   "skills": ["webkit-form", "webkit-errors"],
   "primary": {

@@ -18,11 +18,11 @@ const buttonByText = (text: string, root: Document | HTMLElement = document) =>
   ) as HTMLButtonElement
 
 describe('platform/account/billing', () => {
-  it('switches between the Bills and Payment Methods tabs', async () => {
+  it('switches between the Bills and Payment methods tabs', async () => {
     const view = render(Billing)
     expect(view.getByRole('table', { name: 'Invoices' })).toBeTruthy()
     expect(view.container.textContent).toContain('INV-A12401')
-    await fireEvent.click(view.getByRole('tab', { name: 'Payment Methods' }))
+    await fireEvent.click(view.getByRole('tab', { name: 'Payment methods' }))
     await waitFor(() => expect(view.getByRole('table', { name: 'Payment methods' })).toBeTruthy())
     expect(view.queryByRole('table', { name: 'Invoices' })).toBeNull()
     expect(view.container.textContent).toContain('billing@example.com')

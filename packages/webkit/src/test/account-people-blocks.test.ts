@@ -1,4 +1,4 @@
-import { fireEvent, render, waitFor } from '@testing-library/vue'
+import { fireEvent, render, waitFor, within } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 import { userEvent } from 'vitest/browser'
 
@@ -74,5 +74,30 @@ describe('platform/account/mfa-management', () => {
     await fireEvent.click(button(dialog()!, 'Require MFA'))
     await waitFor(() => expect(dialog()).toBeNull())
     expect(view.container.textContent).not.toMatch(/sign in with a password only/)
+  })
+
+  it('filters people by MFA status under the table-view controls row', async () => {
+    const view = render(MfaManagement)
+    expect(view.getByRole('button', { name: 'Refresh' })).toBeTruthy()
+    expect(view.getByRole('button', { name: 'Download CSV' })).not.toBeDisabled()
+    const input = view.getByRole('combobox', { name: 'Filter people' })
+    await fireEvent.update(input, 'MFA = Not set up')
+    await fireEvent.keyDown(input, { key: 'Enter' })
+    await waitFor(() => expect(view.container.textContent).not.toContain('Avery Stone'))
+    expect(view.container.textContent).toContain('Priya Nair')
+  })
+
+  it('shows an EmptyState with Clear filters when no person matches', async () => {
+    const view = render(MfaManagement)
+    const input = view.getByRole('combobox', { name: 'Filter people' })
+    await fireEvent.update(input, 'nobody-here')
+    await fireEvent.keyDown(input, { key: 'Enter' })
+    const empty = await waitFor(() => {
+      const node = view.getByText('No matching people').closest('[data-testid$="empty-state"]')
+      expect(node).not.toBeNull()
+      return node as HTMLElement
+    })
+    await fireEvent.click(within(empty).getByRole('button', { name: 'Clear filters' }))
+    await waitFor(() => expect(view.container.textContent).toContain('Avery Stone'))
   })
 })

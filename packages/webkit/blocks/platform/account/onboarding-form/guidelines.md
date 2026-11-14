@@ -88,7 +88,7 @@ Under the picker: `Generated from the organization's name. Select its color.`
 ## States
 
 - Organization: step 1 of 3, name fields and the organization mark.
-- Plan: step 2 of 3, the plans as rows; Free selects directly, Pro or Enterprise opens the upgrade drawer and selects only once Upgrade is pressed.
+- Plan: step 2 of 3, the plans as rows; Free selects directly, Pro or Enterprise opens the upgrade drawer and selects only once Upgrade is pressed. The drawer is the Checkout of `platform/account/change-plan-drawer` (What's included as a `FeatureList`, the charge, the payment method and the billing address); keep its fields and copy identical to that block rather than diverging.
 - Profile: step 3 of 3, the usage and role questions, the onboarding-session switch and Create Organization, which locks the step while the request runs and answers in one `Alert` in the card: `Organization created.`, or, when the request fails (offline), `The organization wasn't created. Check your connection, then retry. Your answers are kept.` with Retry.
 
 ## Related

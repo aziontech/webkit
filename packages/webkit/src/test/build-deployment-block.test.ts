@@ -55,10 +55,25 @@ describe('platform/account/build-deployment', () => {
     expect(view.getAllByText('Shared · 3 services').length).toBeGreaterThan(0)
   })
 
+  it('shows an EmptyState with Clear search when no service matches', async () => {
+    const view = render(BuildDeployment)
+    await fireEvent.click(view.getByRole('button', { name: /on a shared setting/ }))
+    const search = await waitFor(() =>
+      view.getByRole('textbox', { name: 'Search services or Deployment Settings' })
+    )
+    await fireEvent.update(search, 'no-such-service')
+    await waitFor(() => expect(view.getByText('No matching services')).toBeTruthy())
+    expect(view.queryByRole('list', { name: 'Services' })).toBeNull()
+    await fireEvent.click(buttonByText('Clear search', view.container)!)
+    await waitFor(() => expect(view.getByRole('list', { name: 'Services' })).toBeTruthy())
+    expect(view.queryByRole('navigation', { name: 'Services pages' })).toBeNull()
+  })
+
   it('creates a Deployment Setting from the drawer after the name is filled', async () => {
     const view = render(BuildDeployment)
-    await fireEvent.click(buttonByText('Create Deployment Settings', view.container)!)
+    await fireEvent.click(buttonByText('Create Deployment Setting', view.container)!)
     await waitFor(() => expect(dialog()).not.toBeNull())
+    expect(dialog()!.textContent).toContain('Create Deployment Setting')
     const submit = Array.from(dialog()!.querySelectorAll('button[type="submit"]'))[0] as HTMLElement
     await fireEvent.click(submit)
     await waitFor(() => expect(dialog()!.textContent).toContain('This field is required.'))

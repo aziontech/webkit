@@ -117,9 +117,9 @@
 
     <main class="flex min-h-0 flex-1 flex-col overflow-y-auto lg:overflow-hidden">
       <div
-        class="mx-auto grid w-full max-w-(--container-7xl) flex-1 grid-cols-1 items-center gap-(--spacing-xxl) px-(--layout-boundary-inline) py-(--spacing-xl) lg:min-h-0 lg:grid-cols-2 lg:items-start lg:overflow-y-auto lg:px-(--spacing-xl)"
+        class="layout-column layout-boundary grid flex-1 grid-cols-1 items-center gap-(--spacing-xxl) lg:min-h-0 lg:grid-cols-2 lg:items-start lg:overflow-y-auto"
       >
-        <div class="mx-auto flex w-full max-w-(--container-xl) flex-col lg:my-auto">
+        <div class="flex w-full max-w-(--container-xl) flex-col justify-self-center lg:my-auto">
           <Card
             :padded="false"
             class="w-full"
@@ -271,7 +271,7 @@
                     kind="square"
                     class="shrink-0"
                   />
-                  <span class="min-w-0 truncate text-label-md font-medium text-(--text-default)">
+                  <span class="min-w-0 truncate text-label-md text-(--text-default)">
                     {{ previewName }}
                   </span>
                 </span>
@@ -285,7 +285,7 @@
                     kind="square"
                     class="shrink-0"
                   />
-                  <span class="min-w-0 truncate text-label-md font-medium text-(--text-default)">
+                  <span class="min-w-0 truncate text-label-md text-(--text-default)">
                     My Workspace
                   </span>
                 </span>

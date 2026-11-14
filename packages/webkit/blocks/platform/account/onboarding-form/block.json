@@ -32,7 +32,7 @@
   "variants": [
     {
       "name": "Plan",
-      "summary": "Step 2 of 3: the three plans as full-width rows; Free selects directly, while Pro or Enterprise opens the upgrade drawer and only selects once Upgrade is pressed.",
+      "summary": "Step 2 of 3: the three plans as full-width rows; Free selects directly, while Pro or Enterprise opens the upgrade drawer (the `platform/account/change-plan-drawer#Checkout` form, What's included as a `FeatureList`) and only selects once Upgrade is pressed.",
       "file": "variants/plan.vue"
     },
     {

@@ -125,7 +125,7 @@
   const activeTab = ref<string>(INITIAL_TAB)
   const tabs: { value: BillingTab; label: string }[] = [
     { value: 'bills', label: 'Bills' },
-    { value: 'payment-methods', label: 'Payment Methods' }
+    { value: 'payment-methods', label: 'Payment methods' }
   ]
 
   const loading = ref(START_LOADING)

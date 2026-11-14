@@ -14,6 +14,8 @@
   import EmptyState from '@aziontech/webkit/empty-state'
   import Field from '@aziontech/webkit/field'
   import IconButton from '@aziontech/webkit/icon-button'
+  import Input from '@aziontech/webkit/input'
+  import KeyValuePairs from '@aziontech/webkit/key-value-pairs'
   import Link from '@aziontech/webkit/link'
   import MultiSelect from '@aziontech/webkit/multi-select'
   import PageHeader from '@aziontech/webkit/page-header'
@@ -144,6 +146,26 @@
     return build(null)
   })
 
+  const query = ref('')
+  const needle = computed(() => query.value.trim().toLowerCase())
+  const matchesQuery = (item: Resource) =>
+    [item.name, item.id, types[item.type].label, ...(item.labels ?? [])].some((value) =>
+      value.toLowerCase().includes(needle.value)
+    )
+  const visibleTree = computed<ResourceNode[]>(() => {
+    if (!needle.value) return tree.value
+    const prune = (nodes: ResourceNode[]): ResourceNode[] =>
+      nodes.flatMap((node) => {
+        if (matchesQuery(node)) return [node]
+        const children = prune(node.children ?? [])
+        return children.length ? [{ ...node, children }] : []
+      })
+    return prune(tree.value)
+  })
+  const clearQuery = () => {
+    query.value = ''
+  }
+
   const columns: TableColumn[] = [
     { accessorKey: 'name', header: 'Name', principal: true, grow: 3 },
     { accessorKey: 'id', header: 'ID', minWidth: 128 },
@@ -155,7 +177,13 @@
     { id: 'actions', kind: 'action', hideable: false }
   ]
 
-  const expanded = ref({ 'org-1001': true, 'grp-2101': true })
+  const expanded = ref<Record<string, boolean>>({ 'org-1001': true, 'grp-2101': true })
+  const tableExpanded = computed<true | Record<string, boolean>>({
+    get: () => (needle.value ? true : expanded.value),
+    set: (value) => {
+      if (value !== true) expanded.value = value
+    }
+  })
   const selection = ref<Record<string, boolean>>({})
 
   const selected = computed(() => resources.value.filter((item) => selection.value[item.id]))
@@ -344,7 +372,17 @@
       <PageHeader
         title="Manage resources"
         description="Organize workspaces into a hierarchy of organizations and groups. Role bindings set on a parent apply to everything under it."
-      />
+      >
+        <template #actions>
+          <Button
+            label="Create Workspace"
+            icon="pi pi-plus"
+            kind="primary"
+            size="large"
+            href="/account/resources/new"
+          />
+        </template>
+      </PageHeader>
 
       <div
         role="group"
@@ -352,14 +390,7 @@
         class="layout-section-start flex flex-wrap items-center gap-(--spacing-xs)"
       >
         <Button
-          label="Create workspace"
-          icon="pi pi-plus"
-          kind="primary"
-          size="medium"
-          href="/account/resources/new"
-        />
-        <Button
-          label="Create group"
+          label="Create Group"
           icon="pi pi-folder"
           kind="outlined"
           size="medium"
@@ -466,7 +497,7 @@
               >
                 <template #actions>
                   <Button
-                    label="Create workspace"
+                    label="Create Workspace"
                     icon="pi pi-plus"
                     kind="secondary"
                     size="small"
@@ -477,140 +508,184 @@
             </template>
           </Card>
 
-          <Card
-            key="card-2"
-            v-else
-            :padded="false"
-          >
-            <template #content>
-              <Table
-                v-model:expanded="expanded"
-                v-model:row-selection="selection"
-                :data="tree"
-                :columns="columns"
-                :get-sub-rows="(row) => row.children"
-                :loading="loading || refreshing"
-                row-key="id"
-                enable-row-selection
-                :bordered="false"
-                :aria-labelledby="`${uid}-resources`"
-              >
-                <template #cell-name="{ row }">
-                  <span class="flex min-w-0 items-center gap-(--spacing-xs)">
-                    <Avatar
-                      v-if="row.type !== 'workspace'"
-                      :label="initials(row.name)"
+          <template v-else>
+            <Input
+              v-model="query"
+              placeholder="Search by name, ID, type or label"
+              aria-label="Search resources"
+              class="w-full"
+            >
+              <template #iconLeft>
+                <i
+                  class="pi pi-search"
+                  aria-hidden="true"
+                />
+              </template>
+            </Input>
+
+            <Card
+              key="card-3"
+              v-if="needle && !visibleTree.length"
+              :padded="false"
+            >
+              <template #content>
+                <EmptyState
+                  size="small"
+                  icon="pi pi-search"
+                  title="No matching resources"
+                  :description="`No resource matches “${query.trim()}”.`"
+                >
+                  <template #actions>
+                    <Button
+                      label="Clear search"
+                      kind="outlined"
                       size="small"
-                      kind="square"
+                      @click="clearQuery"
                     />
-                    <i
+                  </template>
+                </EmptyState>
+              </template>
+            </Card>
+
+            <Card
+              key="card-2"
+              v-else
+              :padded="false"
+            >
+              <template #content>
+                <Table
+                  v-model:expanded="tableExpanded"
+                  v-model:row-selection="selection"
+                  :data="visibleTree"
+                  paginated
+                  :page-size="25"
+                  :columns="columns"
+                  :get-sub-rows="(row) => row.children"
+                  :loading="loading || refreshing"
+                  row-key="id"
+                  enable-row-selection
+                  :bordered="false"
+                  :aria-labelledby="`${uid}-resources`"
+                >
+                  <template #cell-name="{ row }">
+                    <span class="flex min-w-0 items-center gap-(--spacing-xs)">
+                      <Avatar
+                        v-if="row.type !== 'workspace'"
+                        :label="initials(row.name)"
+                        size="small"
+                        kind="square"
+                      />
+                      <i
+                        v-else
+                        :class="types[row.type].icon"
+                        class="shrink-0 text-body-sm text-(--text-muted)"
+                        aria-hidden="true"
+                      />
+                      <span class="truncate text-label-sm text-(--text-default)">{{
+                        row.name
+                      }}</span>
+                      <Tooltip
+                        v-if="row.id === currentId"
+                        text="Current workspace"
+                      >
+                        <i
+                          class="pi pi-check shrink-0 text-body-xs text-(--text-muted)"
+                          aria-label="Current workspace"
+                          role="img"
+                        />
+                      </Tooltip>
+                    </span>
+                  </template>
+                  <template #cell-id="{ row, value }">
+                    <Table.CellId
+                      v-if="row.type === 'workspace'"
+                      :value="value"
+                      resource="workspace"
+                    />
+                    <span
                       v-else
-                      :class="types[row.type].icon"
-                      class="shrink-0 text-body-sm text-(--text-muted)"
-                      aria-hidden="true"
-                    />
-                    <span class="truncate text-label-sm text-(--text-default)">{{ row.name }}</span>
-                    <Tooltip
-                      v-if="row.id === currentId"
-                      text="Current workspace"
+                      class="text-body-sm text-(--text-muted)"
+                      >{{ value }}</span
                     >
-                      <i
-                        class="pi pi-check shrink-0 text-body-xs text-(--text-muted)"
-                        aria-label="Current workspace"
-                        role="img"
-                      />
-                    </Tooltip>
-                  </span>
-                </template>
-                <template #cell-id="{ row, value }">
-                  <Table.CellId
-                    v-if="row.type === 'workspace'"
-                    :value="value"
-                    resource="workspace"
-                  />
-                  <span
-                    v-else
-                    class="text-body-sm text-(--text-muted)"
-                    >{{ value }}</span
-                  >
-                </template>
-                <template #cell-type="{ value }">
-                  <Tag
-                    :label="types[value].label"
-                    :icon="types[value].icon"
-                    :severity="types[value].severity"
-                    size="small"
-                  />
-                </template>
-                <template #cell-lastAccessed="{ value }">
-                  <span class="text-body-sm text-(--text-muted)">{{ value || '—' }}</span>
-                </template>
-                <template #cell-status="{ value }">
-                  <Table.CellStatus
-                    :label="value"
-                    :severity="statusSeverity(value)"
-                  />
-                </template>
-                <template #cell-charges="{ value }">
-                  <span
-                    class="tabular-nums"
-                    :class="value ? 'text-(--text-default)' : 'text-(--text-muted)'"
-                    >{{ value ? money.format(value) : '—' }}</span
-                  >
-                </template>
-                <template #header-charges>
-                  <span class="inline-flex items-center gap-(--spacing-xxs)">
-                    Charges
-                    <Tooltip text="Estimated month-to-date charges.">
-                      <i
-                        class="pi pi-question-circle text-body-xs text-(--text-muted)"
-                        role="img"
-                        aria-label="About charges"
-                        tabindex="0"
-                      />
-                    </Tooltip>
-                  </span>
-                </template>
-                <template #cell-labels="{ value }">
-                  <Table.CellTags
-                    :items="value ?? []"
-                    icon="pi pi-tag"
-                    :noun="{ one: 'label', other: 'labels' }"
-                  />
-                </template>
-                <template #header-actions>
-                  <span class="sr-only">Actions</span>
-                </template>
-                <template #cell-actions="{ row }">
-                  <Table.CellActions
-                    :name="row.name"
-                    @select="(_event, value) => onRowAction(value, row)"
-                  >
-                    <DropdownMenu.Group>
-                      <DropdownMenu.Option
-                        value="details"
-                        label="View details"
-                      />
-                      <DropdownMenu.Option
-                        value="move"
-                        label="Move"
-                      />
-                      <DropdownMenu.Option
-                        value="labels"
-                        label="Edit labels"
-                      />
-                    </DropdownMenu.Group>
-                    <DropdownMenu.Group>
-                      <DropdownMenu.Option
-                        value="delete"
-                        label="Delete"
-                      />
-                    </DropdownMenu.Group>
-                  </Table.CellActions>
-                </template>
-              </Table>
-            </template>
-          </Card>
+                  </template>
+                  <template #cell-type="{ value }">
+                    <Tag
+                      :label="types[value].label"
+                      :icon="types[value].icon"
+                      :severity="types[value].severity"
+                      size="small"
+                    />
+                  </template>
+                  <template #cell-lastAccessed="{ value }">
+                    <span class="text-body-sm text-(--text-muted)">{{ value || '—' }}</span>
+                  </template>
+                  <template #cell-status="{ value }">
+                    <Table.CellStatus
+                      :label="value"
+                      :severity="statusSeverity(value)"
+                    />
+                  </template>
+                  <template #cell-charges="{ value }">
+                    <span
+                      class="tabular-nums text-(--text-default) data-[empty]:text-(--text-muted)"
+                      :data-empty="!value || null"
+                      >{{ value ? money.format(value) : '—' }}</span
+                    >
+                  </template>
+                  <template #header-charges>
+                    <span class="inline-flex items-center gap-(--spacing-xxs)">
+                      Charges
+                      <Tooltip text="Estimated month-to-date charges.">
+                        <i
+                          class="pi pi-question-circle text-body-xs text-(--text-muted)"
+                          role="img"
+                          aria-label="About charges"
+                          tabindex="0"
+                        />
+                      </Tooltip>
+                    </span>
+                  </template>
+                  <template #cell-labels="{ value }">
+                    <Table.CellTags
+                      :items="value ?? []"
+                      icon="pi pi-tag"
+                      :noun="{ one: 'label', other: 'labels' }"
+                    />
+                  </template>
+                  <template #header-actions>
+                    <span class="sr-only">Actions</span>
+                  </template>
+                  <template #cell-actions="{ row }">
+                    <Table.CellActions
+                      :name="row.name"
+                      @select="(_event, value) => onRowAction(value, row)"
+                    >
+                      <DropdownMenu.Group>
+                        <DropdownMenu.Option
+                          value="details"
+                          label="View details"
+                        />
+                        <DropdownMenu.Option
+                          value="move"
+                          label="Move"
+                        />
+                        <DropdownMenu.Option
+                          value="labels"
+                          label="Edit labels"
+                        />
+                      </DropdownMenu.Group>
+                      <DropdownMenu.Group>
+                        <DropdownMenu.Option
+                          value="delete"
+                          label="Delete"
+                        />
+                      </DropdownMenu.Group>
+                    </Table.CellActions>
+                  </template>
+                </Table>
+              </template>
+            </Card>
+          </template>
 
           <Link
             label="Resources pending deletion"
@@ -651,16 +726,19 @@
                     </Tabs.List>
                     <Tabs.Content>
                       <Tabs.Panel value="permissions">
-                        <Alert
+                        <EmptyState
                           v-if="!focused"
-                          severity="info"
-                        >
-                          {{
+                          size="small"
+                          icon="pi pi-sitemap"
+                          :title="
+                            selectedCount ? 'Several resources selected' : 'Select a resource'
+                          "
+                          :description="
                             selectedCount
                               ? 'Select a single resource to see its role bindings.'
                               : 'Select a resource to see its role bindings and labels.'
-                          }}
-                        </Alert>
+                          "
+                        />
                         <div
                           v-else
                           class="flex flex-col gap-(--spacing-sm)"
@@ -676,36 +754,35 @@
                               focused.name
                             }}</span>
                           </div>
-                          <ul
+                          <KeyValuePairs
+                            kind="split"
                             aria-label="Role bindings"
-                            class="m-0 flex list-none flex-col gap-(--spacing-xs) p-0"
                           >
-                            <li
+                            <KeyValuePairs.Item
                               v-for="binding in roleBindings"
                               :key="binding.role"
-                              class="flex items-center justify-between rounded-(--shape-elements) bg-(--bg-surface-raised) px-(--spacing-sm) py-(--spacing-xs)"
-                            >
-                              <span class="text-label-sm text-(--text-default)">{{
-                                binding.role
-                              }}</span>
-                              <span class="text-body-xs text-(--text-muted)">{{
+                              :label="binding.role"
+                              >{{
                                 plural(binding.members, 'member', 'members')
-                              }}</span>
-                            </li>
-                          </ul>
+                              }}</KeyValuePairs.Item
+                            >
+                          </KeyValuePairs>
                         </div>
                       </Tabs.Panel>
                       <Tabs.Panel value="labels">
-                        <Alert
+                        <EmptyState
                           v-if="!focused"
-                          severity="info"
-                        >
-                          {{
+                          size="small"
+                          icon="pi pi-tag"
+                          :title="
+                            selectedCount ? 'Several resources selected' : 'Select a resource'
+                          "
+                          :description="
                             selectedCount
                               ? 'Select a single resource to see its labels.'
                               : 'Select a resource to see its role bindings and labels.'
-                          }}
-                        </Alert>
+                          "
+                        />
                         <div
                           v-else
                           class="flex flex-col gap-(--spacing-sm)"
@@ -726,12 +803,13 @@
                               />
                             </li>
                           </ul>
-                          <p
+                          <EmptyState
                             v-else
-                            class="text-body-sm text-(--text-muted)"
-                          >
-                            This resource has no labels.
-                          </p>
+                            size="small"
+                            icon="pi pi-tag"
+                            title="No labels"
+                            description="This resource has no labels."
+                          />
                           <Button
                             label="Edit labels"
                             icon="pi pi-tag"

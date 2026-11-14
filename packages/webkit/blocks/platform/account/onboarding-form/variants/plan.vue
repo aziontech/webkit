@@ -11,6 +11,7 @@
   import DrawerOverlay from '@aziontech/webkit/drawer-overlay'
   import DrawerPortal from '@aziontech/webkit/drawer-portal'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
+  import FeatureList, { type FeatureListItem } from '@aziontech/webkit/feature-list'
   import Field from '@aziontech/webkit/field'
   import GlobalHeader from '@aziontech/webkit/global-header'
   import HelperText from '@aziontech/webkit/helper-text'
@@ -238,6 +239,12 @@
   const address = reactive({ useAccountInformation: true, ...accountAddress })
 
   const upgrade = computed(() => upgrades[pendingPlanId.value])
+  const upgradeFeatures = computed<FeatureListItem[]>(() =>
+    (upgrade.value?.features ?? []).map((feature) => ({
+      label: feature.title,
+      description: feature.detail
+    }))
+  )
   const charge = computed(() => upgrade.value?.charge[period.value] ?? null)
 
   watch(
@@ -312,9 +319,9 @@
 
     <main class="flex min-h-0 flex-1 flex-col overflow-y-auto lg:overflow-hidden">
       <div
-        class="mx-auto grid w-full max-w-(--container-7xl) flex-1 grid-cols-1 items-center gap-(--spacing-xxl) px-(--layout-boundary-inline) py-(--spacing-xl) lg:min-h-0 lg:grid-cols-2 lg:items-start lg:overflow-y-auto lg:px-(--spacing-xl)"
+        class="layout-column layout-boundary grid flex-1 grid-cols-1 items-center gap-(--spacing-xxl) lg:min-h-0 lg:grid-cols-2 lg:items-start lg:overflow-y-auto"
       >
-        <div class="mx-auto flex w-full max-w-(--container-xl) flex-col lg:my-auto">
+        <div class="flex w-full max-w-(--container-xl) flex-col justify-self-center lg:my-auto">
           <Card
             :padded="false"
             class="w-full"
@@ -429,33 +436,14 @@
                                     >
                                       <div class="flex flex-col gap-(--spacing-xs)">
                                         <h3
-                                          class="flex shrink-0 items-center px-(--spacing-xs) text-label-lg text-(--text-default) lg:min-h-[calc(var(--spacing-sm)*2+var(--spacing-10)+1px)] lg:border-t lg:border-t-transparent lg:py-(--spacing-sm)"
+                                          class="flex shrink-0 items-center px-(--spacing-xs) text-label-lg text-(--text-default) lg:py-(--spacing-sm)"
                                         >
                                           What's included
                                         </h3>
 
-                                        <ul class="m-0 flex list-none flex-col p-0">
-                                          <li
-                                            v-for="feature in upgrade.features"
-                                            :key="feature.title"
-                                            class="flex items-start gap-(--spacing-xs) rounded-(--shape-elements) px-(--spacing-xs) py-(--spacing-xs) odd:bg-(--bg-mask)"
-                                          >
-                                            <i
-                                              class="pi pi-check mt-0.5 shrink-0 text-body-xs leading-none text-(--success-contrast)"
-                                              aria-hidden="true"
-                                            />
-                                            <span class="flex min-w-0 flex-col gap-(--spacing-xxs)">
-                                              <span class="text-label-md text-(--text-default)">{{
-                                                feature.title
-                                              }}</span>
-                                              <span
-                                                v-if="feature.detail"
-                                                class="text-body-xs text-(--text-muted)"
-                                                >{{ feature.detail }}</span
-                                              >
-                                            </span>
-                                          </li>
-                                        </ul>
+                                        <div class="px-(--spacing-xs)">
+                                          <FeatureList :items="upgradeFeatures" />
+                                        </div>
                                       </div>
 
                                       <div class="flex flex-col gap-(--spacing-xs)">
@@ -900,7 +888,7 @@
                     kind="square"
                     class="shrink-0"
                   />
-                  <span class="min-w-0 truncate text-label-md font-medium text-(--text-default)">
+                  <span class="min-w-0 truncate text-label-md text-(--text-default)">
                     Your organization
                   </span>
                 </span>
@@ -914,7 +902,7 @@
                     kind="square"
                     class="shrink-0"
                   />
-                  <span class="min-w-0 truncate text-label-md font-medium text-(--text-default)">
+                  <span class="min-w-0 truncate text-label-md text-(--text-default)">
                     My Workspace
                   </span>
                 </span>

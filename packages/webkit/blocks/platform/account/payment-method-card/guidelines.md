@@ -5,7 +5,7 @@ The Payment method card of the Upgrade to Pro drawer. The user needs to confirm 
 ## When to use
 
 - Inside a checkout or upgrade drawer where a card on file may need replacing.
-- On Billing, as the payment method section.
+- Wherever a card on file is replaced in place. On Billing, Add payment method in the Payment methods tab leads to this form (the Editing state).
 
 ## When not to use
 
@@ -32,7 +32,7 @@ Cardholder (`cc-name`), number (`cc-number`), expiry (`cc-exp`) and security cod
 
 ### E. Country — `Select` (required)
 
-Country or region, defaulting to the account's country.
+Country or region. It starts empty on a blank card (selects start empty); the person selects it.
 
 ### F. Notices — `Alert` (required)
 

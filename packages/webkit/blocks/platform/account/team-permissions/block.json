@@ -42,12 +42,12 @@
   "variants": [
     {
       "name": "CreateTeam",
-      "summary": "The Create Team page in the creation frame (a `GlobalHeader` with Back to Teams and permissions, the brand and a breadcrumb; no rail): name and description, the View and Edit permission matrix grouped by area with group checkboxes, filter, Select all and Clear, a status Switch, and Cancel and Create in a centered SaveBar floating over the bottom of the form; errors on the name field and above the matrix.",
+      "summary": "The Create Team page in the creation frame (a `GlobalHeader` with Back to Teams and permissions, the brand and a breadcrumb; no rail): name and description, the View and Edit permission matrix as a `Table` grouped by area with group checkboxes (a small `EmptyState` with Clear filter when the filter matches nothing), filter, Select all and Clear, a status Switch, and Cancel and Create in a centered SaveBar floating over the bottom of the form; errors on the name field and above the matrix.",
       "file": "variants/create-team.vue"
     },
     {
       "name": "EditTeam",
-      "summary": "The Edit Team page in the same creation frame: the CreateTeam form filled with a saved team, a Members section (Add member `Combobox` over the account's users with Add, each member with Remove), Delete team behind a `ConfirmDialog`, and a `SaveBar` that offers Discard and Save changes only once something changed.",
+      "summary": "The Edit Team page in the same creation frame: the CreateTeam form filled with a saved team, a Members section (Add member `Combobox` over the account's users with Add, each member with Remove), Delete team behind a `ConfirmDialog`, and the same centered `SaveBar`, which offers Discard and Save changes only once something changed.",
       "file": "variants/edit-team.vue"
     },
     {
