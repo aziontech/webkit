@@ -32,40 +32,40 @@
     typeof globalThis.matchMedia === 'function' &&
     globalThis.matchMedia('(prefers-reduced-motion: reduce)').matches
 
-  const onEnter = (el: globalThis.Element, done: () => void) => {
-    const node = el as globalThis.HTMLElement
-    if (prefersReducedMotion()) {
+  const animates = (node: globalThis.HTMLElement) =>
+    !prefersReducedMotion() &&
+    globalThis
+      .getComputedStyle(node)
+      .transitionDuration.split(',')
+      .some((d) => parseFloat(d) > 0)
+
+  const settle = (node: globalThis.HTMLElement, from: string, to: string, done: () => void) => {
+    node.style.height = from
+    void node.offsetHeight
+    if (!animates(node)) {
+      node.style.height = ''
       done()
       return
     }
-    const target = node.scrollHeight
-    node.style.height = '0'
-    node.style.transition = 'height 150ms ease-out'
-    void node.offsetHeight
-    node.style.height = `${target}px`
-    const finish = () => {
-      node.style.height = ''
-      node.style.transition = ''
-      done()
-    }
-    node.addEventListener('transitionend', finish, { once: true })
+    node.addEventListener(
+      'transitionend',
+      () => {
+        node.style.height = ''
+        done()
+      },
+      { once: true }
+    )
+    node.style.height = to
+  }
+
+  const onEnter = (el: globalThis.Element, done: () => void) => {
+    const node = el as globalThis.HTMLElement
+    settle(node, '0', `${node.scrollHeight}px`, done)
   }
 
   const onLeave = (el: globalThis.Element, done: () => void) => {
     const node = el as globalThis.HTMLElement
-    if (prefersReducedMotion()) {
-      done()
-      return
-    }
-    node.style.height = `${node.scrollHeight}px`
-    node.style.transition = 'height 150ms ease-out'
-    void node.offsetHeight
-    node.style.height = '0'
-    const finish = () => {
-      node.style.transition = ''
-      done()
-    }
-    node.addEventListener('transitionend', finish, { once: true })
+    settle(node, `${node.scrollHeight}px`, '0', done)
   }
 </script>
 
@@ -85,7 +85,7 @@
       :data-state="itemCtx.open.value ? 'open' : 'closed'"
       :data-size="ctx.size.value"
       :class="attrs.class"
-      class="overflow-hidden text-(--text-muted) data-[size=medium]:text-body-xs data-[size=large]:text-body-sm"
+      class="overflow-hidden transition-[height] duration-150 ease-out motion-reduce:transition-none text-(--text-muted) data-[size=medium]:text-body-xs data-[size=large]:text-body-sm"
     >
       <slot />
     </div>

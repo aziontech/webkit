@@ -759,6 +759,27 @@ describe('MenuGroup slot presence', () => {
 })
 
 describe('Menu audit fixes', () => {
+  it('puts the selected, disabled and icon state on the interactive element as data attributes', () => {
+    const view = render(
+      defineComponent({
+        components: { MenuItem },
+        template: `
+          <ul>
+            <MenuItem label="Home" href="https://example.com" icon="pi pi-home" selected />
+            <MenuItem label="Billing" disabled />
+          </ul>`
+      })
+    )
+    const [home, billing] = view.getAllByTestId('navigation-menu-item')
+    const link = home!.querySelector('a') as HTMLElement
+    expect(link.hasAttribute('data-selected')).toBe(true)
+    expect(link.hasAttribute('data-icon')).toBe(true)
+    expect(link.hasAttribute('data-disabled')).toBe(false)
+    const button = billing!.querySelector('button') as HTMLElement
+    expect(button.hasAttribute('data-disabled')).toBe(true)
+    expect(button.hasAttribute('data-selected')).toBe(false)
+  })
+
   it('emits click on a sub-trigger with the event and its label and href', async () => {
     const calls: unknown[][] = []
     const { getByTestId } = render(

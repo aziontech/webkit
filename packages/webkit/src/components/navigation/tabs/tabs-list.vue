@@ -63,20 +63,8 @@
     canScrollEnd.value = Math.ceil(scrolled + el.clientWidth) < el.scrollWidth - 1
   }
 
-  const listClasses = computed(() =>
-    cn(
-      'relative flex w-full shrink-0 items-end gap-(--spacing-xs) overflow-x-auto bg-transparent [scrollbar-width:none] [&::-webkit-scrollbar]:hidden data-[align=center]:justify-center-safe',
-      attrs.class as string | undefined
-    )
-  )
-
-  const indicatorClasses = [
-    'pointer-events-none absolute top-0 z-0',
-    'rounded-(--shape-button) bg-(--secondary-mask)',
-    'border-(length:--border-width-default) border-(--border-muted)',
-    'shadow-(--shadow-xs)',
-    'motion-reduce:transition-none'
-  ]
+  const LIST_CLASS =
+    'relative flex w-full shrink-0 items-end gap-(--spacing-xs) overflow-x-auto bg-transparent [scrollbar-width:none] [&::-webkit-scrollbar]:hidden data-[align=center]:justify-center-safe'
 
   const syncIndicator = () => {
     const listEl = listRef.value
@@ -142,7 +130,7 @@
     <div
       ref="listRef"
       role="tablist"
-      :class="listClasses"
+      :class="cn(LIST_CLASS, attrs.class as string | undefined)"
       :data-align="align"
       :data-testid="testId"
       :data-fade-start="canScrollStart || null"
@@ -151,7 +139,7 @@
     >
       <span
         v-show="indicatorVisible"
-        :class="indicatorClasses"
+        class="pointer-events-none absolute top-0 z-0 rounded-(--shape-button) bg-(--secondary-mask) border-(length:--border-width-default) border-(--border-muted) shadow-(--shadow-xs) motion-reduce:transition-none"
         :style="[indicatorTransitionStyle, indicatorTransformStyle]"
         :data-testid="`${testId}__indicator`"
         aria-hidden="true"

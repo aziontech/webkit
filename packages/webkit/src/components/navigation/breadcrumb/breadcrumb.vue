@@ -118,7 +118,6 @@
                 :current="item.current"
                 :show-icon="item.showIcon"
                 :icon="item.icon"
-                :class="item.current ? 'text-(--text-default)' : undefined"
                 :data-testid="`${testId}__item-${index}`"
                 @click="(event) => !item.current && handleItemClick(event, item.href ?? '#')"
               />
@@ -141,7 +140,6 @@
               :current="firstItem.current && !showDistinctEnds"
               :show-icon="firstItem.showIcon"
               :icon="firstItem.icon"
-              :class="firstItem.current && !showDistinctEnds ? 'text-(--text-default)' : undefined"
               :data-testid="`${testId}__item-0`"
               @click="
                 (event) => !firstItem.current && handleItemClick(event, firstItem.href ?? '#')

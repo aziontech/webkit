@@ -3,11 +3,11 @@ name: menu
 category: navigation
 structure: composition
 status: implemented
-spec_version: 2
+spec_version: 3
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=5993-33335
   node_id: '5993:33335'
-checksum: 4162210553f20f95be8cd0f694a991b1182d1c36bcb4fe4cff6b1095120c65dd
+checksum: 164496fce986255c63f279cdd822e70867def12bd2f47abbc7c46a311f2b45bf
 created: 2026-08-03
 last_updated: 2026-11-14
 ---
@@ -356,7 +356,7 @@ say) can persist the list and hand it back, which per-sub local state cannot sur
 - Visual states: `default`, `hover`, `focus-visible`, `active`, `selected`, `disabled`
 - `data-state` values: `open` | `closed` — on `Sub`, `SubTrigger` and `SubContent`. A `Group` has none: it never closes.
 - `data-kind` values: `inline` | `drill` — on `SubTrigger` and `SubContent`. On a trigger they sit on its root, which is always the row **box** holding its label control and its arrow.
-- `data-selected` mirrors the `selected` prop on `Menu.Item`
+- `data-selected` mirrors the `selected` prop on `Menu.Item` (on the `li` and on its link or button, which also carries `data-disabled` and, with an `icon`, `data-icon`; the row styles switch on these, not on class bindings)
 - `data-disabled` mirrors the `disabled` prop on `Menu.Item` and `SubTrigger` (on the row box and on its label alike, so a test can read it from either)
 - `data-level` on `SubContent` — nesting depth, drives the indent step
 - `data-motion` values: `push` | `pop` | `none` — on a drill level, so the direction of the slide is a Tailwind `data-[motion=…]` variant instead of a `:class` ternary (see Motion)

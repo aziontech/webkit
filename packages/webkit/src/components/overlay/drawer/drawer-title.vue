@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed, inject, useAttrs } from 'vue'
+  import { inject, useAttrs } from 'vue'
 
   import { cn } from '../../../utils/cn'
   import { DrawerInjectionKey } from './injection-key'
@@ -15,16 +15,12 @@
 
   const attrs = useAttrs()
   const ctx = inject(DrawerInjectionKey)
-
-  const rootClasses = computed(() =>
-    cn('text-heading-sm text-(--text-default)', attrs.class as string | undefined)
-  )
 </script>
 
 <template>
   <h2
     :id="ctx?.titleId"
-    :class="rootClasses"
+    :class="cn('text-heading-sm text-(--text-default)', attrs.class as string | undefined)"
     :data-testid="`${ctx?.testId}__title`"
   >
     <slot />

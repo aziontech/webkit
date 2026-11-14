@@ -1,5 +1,6 @@
 import { fireEvent, render, waitFor, within } from '@testing-library/vue'
 import { describe, expect, it, vi } from 'vitest'
+import { commands } from 'vitest/browser'
 import { defineComponent, ref } from 'vue'
 
 import Default from '../../../../examples/accordion/default.vue'
@@ -123,6 +124,20 @@ describe('Accordion (compound / provide-inject)', () => {
     // aria contract: trigger controls the region; the region is labelled by the trigger.
     expect(pricingTrigger.getAttribute('aria-controls')).toBe(region.id)
     expect(region.getAttribute('aria-labelledby')).toBe(pricingTrigger.id)
+  })
+
+  it('animates the reveal without an inline transition, so a consumer class can override it', async () => {
+    await commands.emulateMedia({ reducedMotion: 'no-preference' })
+    const view = render(host())
+    await fireEvent.click(trigger(view, 'What is Azion'))
+    await new Promise((resolve) => requestAnimationFrame(resolve))
+    const region = regions()[0] as HTMLElement
+    expect(globalThis.matchMedia('(prefers-reduced-motion: reduce)').matches).toBe(false)
+    expect(region.style.transition).toBe('')
+    await waitFor(() => expect(region.style.height).toBe(''))
+    await fireEvent.click(trigger(view, 'What is Azion'))
+    await waitFor(() => expect(regions()).toHaveLength(0))
+    await commands.emulateMedia({ reducedMotion: null })
   })
 
   // ---- Toggle behavior: single mode --------------------------------------------

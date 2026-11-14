@@ -115,41 +115,8 @@
     transform: `translate3d(${indicatorOffsetX.value}px, ${indicatorOffsetY.value}px, 0)`
   }))
 
-  const rootClasses = computed(() =>
-    cn(
-      'group relative inline-flex w-fit max-w-full min-w-0 items-stretch gap-(--spacing-xxs)',
-      'rounded-(--shape-button) border border-(--border-muted) bg-(--bg-surface) p-(--spacing-xxs)',
-      'data-[size=small]:h-7 data-[size=medium]:h-8 data-[size=large]:h-10',
-      'data-[fluid]:flex data-[fluid]:w-full',
-      attrs.class as string | undefined
-    )
-  )
-
-  const indicatorClasses = [
-    'pointer-events-none absolute top-0 z-0',
-    'rounded-(--shape-button) bg-(--bg-selected)',
-    'transition-[transform,width,height] duration-moderate-02 ease-productive-entrance motion-reduce:transition-none'
-  ]
-
-  const sharedOptionClasses = [
-    'relative z-1 inline-flex min-w-0 items-center justify-center gap-(--spacing-xs) whitespace-nowrap',
-    'group-data-[fluid]:min-w-0 group-data-[fluid]:flex-1',
-    'rounded-(--shape-button) border border-transparent',
-    'group-data-[size=small]:px-(--spacing-xs) group-data-[size=medium]:px-(--spacing-sm) group-data-[size=large]:px-(--spacing-md)',
-    'group-data-[size=small]:text-label-sm group-data-[size=medium]:text-label-sm group-data-[size=large]:text-label-md',
-    'transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none',
-    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)',
-    'disabled:pointer-events-none disabled:cursor-not-allowed disabled:bg-(--bg-disabled) disabled:text-(--text-disabled)'
-  ]
-
-  const optionClasses = (value: string, locked: boolean) =>
-    cn(
-      sharedOptionClasses,
-      value === selectedValue.value
-        ? 'bg-transparent text-(--text-default)'
-        : 'bg-transparent text-(--text-muted)',
-      locked && 'pe-(--spacing-xs)'
-    )
+  const ROOT_CLASS =
+    'group relative inline-flex w-fit max-w-full min-w-0 items-stretch gap-(--spacing-xxs) rounded-(--shape-button) border border-(--border-muted) bg-(--bg-surface) p-(--spacing-xxs) data-[size=small]:h-7 data-[size=medium]:h-8 data-[size=large]:h-10 data-[fluid]:flex data-[fluid]:w-full'
 
   const resolveOptionElement = (
     element: globalThis.Element | ComponentPublicInstance | null
@@ -326,7 +293,7 @@
     v-bind="forwardedAttrs"
     ref="rootRef"
     role="radiogroup"
-    :class="rootClasses"
+    :class="cn(ROOT_CLASS, attrs.class as string | undefined)"
     :data-size="size"
     :data-fluid="fluid || null"
     :data-disabled="disabled || null"
@@ -335,7 +302,7 @@
   >
     <span
       v-show="indicatorVisible"
-      :class="indicatorClasses"
+      class="pointer-events-none absolute top-0 z-0 rounded-(--shape-button) bg-(--bg-selected) transition-[transform,width,height] duration-moderate-02 ease-productive-entrance motion-reduce:transition-none"
       :style="indicatorTransformStyle"
       :data-testid="`${testId}__indicator`"
       aria-hidden="true"
@@ -349,10 +316,11 @@
       :aria-checked="option.value === selectedValue"
       :tabindex="option.value === tabStopValue ? 0 : -1"
       :disabled="option.disabled"
-      :class="optionClasses(option.value, option.locked)"
       :data-testid="`${testId}__option`"
       :data-state="option.value === selectedValue ? 'active' : 'inactive'"
       :data-disabled="option.disabled ? '' : undefined"
+      :data-locked="option.locked || null"
+      class="relative z-1 inline-flex min-w-0 items-center justify-center gap-(--spacing-xs) whitespace-nowrap group-data-[fluid]:min-w-0 group-data-[fluid]:flex-1 rounded-(--shape-button) border border-transparent bg-transparent group-data-[size=small]:px-(--spacing-xs) group-data-[size=medium]:px-(--spacing-sm) group-data-[size=large]:px-(--spacing-md) group-data-[size=small]:text-label-sm group-data-[size=medium]:text-label-sm group-data-[size=large]:text-label-md data-[state=active]:text-(--text-default) data-[state=inactive]:text-(--text-muted) data-[locked]:pe-(--spacing-xs) transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) disabled:pointer-events-none disabled:cursor-not-allowed disabled:bg-(--bg-disabled) disabled:text-(--text-disabled)"
       @click="selectOption(option.value, option.disabled)"
       @keydown="onOptionKeydown($event, option.value, option.disabled)"
     >
