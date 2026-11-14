@@ -92,7 +92,9 @@
     hint?(): unknown
   }>()
 
-  const PromptInputReferences = defineAsyncComponent(() => import('./prompt-input-references.vue'))
+  const PromptInputReferences = defineAsyncComponent(
+    () => import('./parts/prompt-input-references.vue')
+  )
 
   const attrs = useAttrs()
   const { t } = useTranslate({ promptInput: en.promptInput, promptInputMenu: en.promptInputMenu })

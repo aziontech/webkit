@@ -1,15 +1,21 @@
 <script setup lang="ts">
-  import Chip from '../../inputs/chip/chip.vue'
-  import type { PromptInputReference } from './prompt-input.vue'
+  import Chip from '../../../inputs/chip/chip.vue'
+  import type { PromptInputReference } from '../prompt-input.vue'
 
-  defineOptions({ name: 'PromptInputReferences' })
+  defineOptions({ name: 'PromptInputReferences', inheritAttrs: false })
 
-  defineProps<{
+  interface Props {
+    /** The references in the draft, in order. */
     references: PromptInputReference[]
+    /** Accessible name of the list. */
     label: string
+    /** Locks the remove buttons. */
     disabled: boolean
+    /** Test id of the owning PromptInput; the list appends its own part. */
     testId: string
-  }>()
+  }
+
+  defineProps<Props>()
 
   const emit = defineEmits<{
     remove: [event: MouseEvent, reference: PromptInputReference]
@@ -18,6 +24,7 @@
 
 <template>
   <ul
+    v-bind="$attrs"
     :aria-label="label"
     :data-testid="`${testId}__references`"
     class="m-0 flex list-none flex-wrap gap-(--spacing-xs) p-0"
