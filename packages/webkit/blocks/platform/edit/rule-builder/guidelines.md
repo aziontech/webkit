@@ -27,23 +27,23 @@ A `SettingsSection` with a hint, holding two `Field`s with large `Input`s: Name,
 
 ### C. Phase — `SettingsSection`, `Card`, `Field`, `RadioButton`, `HelperText` (optional)
 
-Request and Response as choice cards: a flush `Card` of `Field`s, each a `RadioButton` with a title and a one-line description. When editing, the phase is locked and a `HelperText` explains why. A resource that only acts on requests has a single phase and omits this section.
+Request and Response as choice cards: a flush `Card` of `Field`s, each a `RadioButton` with a title and a one-line description. When editing, the phase is locked and a `HelperText` explains why.
 
 ### D. Criteria — `SettingsSection`, `AttributeEditor` (grouped), `Combobox`, `Select`, `Input` (required)
 
 An `AttributeEditor` in grouped mode (`v-model:groups`), large, named "Criteria": each group is an AND group of condition rows, groups are joined by an "or" `Separator`, and the editor draws the labels, Add condition under each group, Add OR group at the end, Remove condition per row, the limits (10 conditions per group, 5 groups), focus after add and remove, and the polite "Item n added" and "Item n removed" announcements. Its cells are replaced through `cell-<key>` slots: the variable is a `Combobox` of the variables of the chosen phase that also takes a typed one, the operator a `Select`, and the argument an `Input` that turns into a disabled "No argument" field for exists and does not exist. `min-items="1"` keeps one condition. A missing variable shows "Enter the variable to compare." under it, only after Save, through the editor's `errors`. `reorderable` lets conditions and whole OR groups move by their grip, with Move up and Move down, or with Alt+Arrow Up and Alt+Arrow Down inside a row; the editor announces each move. Conditions are evaluated in the order shown, so the cheapest or most selective one goes first.
 
-### E. Behaviors — `SettingsSection`, `Card`, `Select`, `Input`, `HelperText`, `Tooltip`, `IconButton`, `Button` (required)
+### E. Behaviors — `SettingsSection`, `Card`, `AttributeEditor`, `Select`, `Input`, `HelperText` (required)
 
-A Then list run top to bottom. Each row is a behavior `Select` with its own search `Input`, listing only behaviors valid in the chosen phase, then an argument `Input` or `Select` that follows the behavior, with a `HelperText` where the argument needs one. Rows reorder by grip or Move up and Move down, and can be removed. An outlined Add behavior `Button` ends the list.
+A Then list run top to bottom, drawn by a second `AttributeEditor` in list mode (`v-model:items`, large, `reorderable`, `limit` 10, `min-items` 1) named "Behaviors" with Behavior and Argument columns. The `cell-type` slot is a behavior `Select` with its own search `Input`, listing only behaviors valid in the chosen phase; the `cell-argument` slot is the `Input`, `Select` or group of `Input`s that the behavior takes (a disabled "No argument" field when it takes none), with a `HelperText` where the argument needs one. The editor owns the grip, Move up and Move down, Alt+Arrow keys, Remove behavior, the limit text, focus and announcements; Add behavior is disabled while the last behavior ends the rule, and the `info` slot says so ("Deliver ends the rule. Nothing after it runs.").
 
 ### F. Status — `SettingsSection`, `Card`, `Item`, `SettingRow`, `Switch` (required)
 
 A flush `Card` with an `Item.List` holding one `SettingRow` titled Active with a `Switch`. The hint says an inactive rule keeps its place in the order and is skipped at runtime.
 
-### G. Footer — `PanelFooter`, `Button` (required)
+### G. Footer — `PanelFooter`, `Button`, `Alert` (required)
 
-`PanelFooter` with one primary medium Save `Button` at the end, which submits the form and shows its loading state.
+`PanelFooter` with one primary medium Save `Button` at the end, which submits the form and shows its loading state. A save that fails keeps the drawer open with every field and a danger `Alert` at the top of `PanelContent` ("Rule not saved. You are offline; check your connection and save again."); Save retries.
 
 ## Do
 
@@ -70,15 +70,15 @@ A flush `Card` with an `Item.List` holding one `SettingRow` titled Active with a
 - **Logic labels:** single words, e.g. "and", "or", "Then".
 - **Add buttons:** verb first, e.g. "Add condition", "Add OR group", "Add behavior".
 - **Errors:** "Name is required.", "Enter the variable to compare."
-- **Reorder controls:** name the item, e.g. "Move behavior up", "Remove behavior"; the criteria take numbered names from the editor ("Move item 2 up", "Reorder group 1").
+- **Reorder controls:** the editor names them with the row number ("Move item 2 up", "Remove behavior 2", "Reorder group 1").
 - Follow `skills/webkit-microcopy`: sentence case, no em dash, no "please", no exclamation marks.
 
 ## Accessibility
 
 - Every `Input` and `Select` trigger has a label: a `Field.Label` tied by `for`, or an `aria-label` such as "Behavior"; the criteria cells are `Field`s of the `AttributeEditor`, labelled Variable, Operator and Argument, and groups are `group`s named "Group n".
 - The variable `Combobox` is a `combobox` with a `listbox` of `option`s; picking one keeps focus in the field.
-- Behavior drag grips are labeled, e.g. "Drag to reorder behavior, or use arrow keys", and the Move up and Move down buttons give the same result without a pointer.
-- Icon-only controls carry an `aria-label` that matches their `Tooltip`; decorative icons carry `aria-hidden="true"`.
+- Behaviors and criteria reorder through `AttributeEditor`: a native grip button, Move up and Move down, and Alt+Arrow keys, each move announced.
+- Decorative icons carry `aria-hidden="true"`.
 - The drawer traps focus while open and returns it to the trigger on close; motion respects reduced motion.
 
 ## States

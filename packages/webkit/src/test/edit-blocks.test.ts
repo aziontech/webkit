@@ -1,4 +1,4 @@
-import { fireEvent, render, waitFor } from '@testing-library/vue'
+import { fireEvent, render, waitFor, within } from '@testing-library/vue'
 import { afterEach, describe, expect, it } from 'vitest'
 import { userEvent } from 'vitest/browser'
 
@@ -8,6 +8,8 @@ import CodeEditorSaving from '../../blocks/platform/edit/code-editor/variants/sa
 import EditResource from '../../blocks/platform/edit/edit-resource/edit-resource.vue'
 import DangerZone from '../../blocks/platform/edit/edit-resource/variants/danger-zone.vue'
 import StaleRecord from '../../blocks/platform/edit/edit-resource/variants/stale-record.vue'
+import RuleBuilder from '../../blocks/platform/edit/rule-builder/rule-builder.vue'
+import RuleBuilderComposed from '../../blocks/platform/edit/rule-builder/variants/composed.vue'
 import { useToastRegion } from './toast-region'
 
 useToastRegion()
@@ -148,5 +150,55 @@ describe('code-editor#Saving', () => {
     render(CodeEditorSaving)
     await waitFor(() => expect(buttonIn(document, 'Discard').disabled).toBe(true))
     expect(buttonIn(document, 'Save').getAttribute('aria-busy')).toBe('true')
+  })
+})
+
+const openRuleDrawer = async (label: string) => {
+  await userEvent.click(buttonIn(document, label))
+  await waitFor(() => expect(dialog()).not.toBeNull())
+  return dialog() as HTMLElement
+}
+
+describe('rule-builder behaviors', () => {
+  it('waits on Add behavior while the last behavior ends the rule', async () => {
+    render(RuleBuilder)
+    const panel = await openRuleDrawer('Add Rule')
+    const behaviors = panel.querySelector('[aria-label="Behaviors"]') as HTMLElement
+    expect(behaviors).not.toBeNull()
+    expect(buttonIn(panel, 'Add behavior').disabled).toBe(true)
+    expect(panel.textContent).toContain('Deliver ends the rule. Nothing after it runs.')
+    expect(panel.querySelector('span[role="button"]')).toBeNull()
+  })
+
+  it('reorders behaviors through the AttributeEditor controls', async () => {
+    render(RuleBuilderComposed)
+    const panel = await openRuleDrawer('Edit Rule')
+    const behaviors = panel
+      .querySelector('[aria-label="Behaviors"]')
+      ?.closest('[data-mode]') as HTMLElement
+    const placeholders = () =>
+      Array.from(behaviors.querySelectorAll<HTMLInputElement>('input[aria-label="Path"]')).map(
+        (input) => input.value
+      )
+    expect(placeholders()).toEqual(['/documentation${uri}'])
+    const rows = () => Array.from(behaviors.querySelectorAll('[data-row]'))
+    expect(rows()[0].textContent).toContain('Rewrite Request')
+    await fireEvent.click(within(behaviors).getByRole('button', { name: 'Move item 2 up' }))
+    await waitFor(() => expect(rows()[0].textContent).toContain('Set Cache Policy'))
+  })
+
+  it('keeps the drawer open with a danger alert when the save fails', async () => {
+    Object.defineProperty(globalThis.navigator, 'onLine', { configurable: true, value: false })
+    render(RuleBuilderComposed)
+    const panel = await openRuleDrawer('Edit Rule')
+    await fireEvent.click(buttonIn(panel, 'Save'))
+    await waitFor(
+      () =>
+        expect(
+          panel.querySelector('[data-testid="rule-builder-save-error"]')?.textContent
+        ).toContain('Rule not saved.'),
+      wait
+    )
+    expect(dialog()).not.toBeNull()
   })
 })
