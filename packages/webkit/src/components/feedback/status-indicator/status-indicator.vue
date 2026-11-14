@@ -14,7 +14,7 @@
   })
 
   interface Props {
-    /** severity. */
+    /** Severity token driving the status dot color. */
     severity?: StatusIndicatorSeverity
     /** Transitional state: a spinner replaces the dot and the label gains a trailing ellipsis, so pass the bare verb (Deploying); a trailing ellipsis or three periods already in the label are not doubled. */
     loading?: boolean
@@ -41,7 +41,6 @@
 <template>
   <div
     v-bind="attrs"
-    role="status"
     :aria-busy="loading || undefined"
     :data-testid="testId"
     :data-severity="severity"
