@@ -1,10 +1,10 @@
 ---
 name: webkit-ui-verify
-description: Drive a finished @aziontech/webkit screen in a real browser (Playwright, headless Chromium) and OBSERVE before declaring it done — screenshot both themes at multiple widths, assert zero console errors, run axe-core against the live tree, and exercise the loading/empty/error states and the primary interaction. The runtime a11y gate the accessibility rule defers to: axe on the rendered tree, focus trap/restore observed, live-region announcements. Use as the runtime gate that verifies what the other skills prescribe, before you call any route finished.
+description: Drive a finished @aziontech/webkit screen in a real browser (Playwright, headless Chromium) and OBSERVE before declaring it done — screenshot both themes at multiple widths, assert zero console errors, run axe-core against the live tree, check the navigation levels (no route offered twice, one agreeing current row per level), and exercise the loading/empty/error states and the primary interaction. The runtime a11y gate the accessibility rule defers to: axe on the rendered tree, focus trap/restore observed, live-region announcements. Use as the runtime gate that verifies what the other skills prescribe, before you call any route finished.
 status: active
-last_updated: 2026-07-20
+last_updated: 2026-11-14
 scope: general
-enforced_by: [ui-verify, webkit-accessibility, webkit-component-states]
+enforced_by: [ui-verify, webkit-accessibility, webkit-component-states, webkit-navigation-levels]
 ---
 
 # Skill: webkit-ui-verify
@@ -42,7 +42,7 @@ back. Either way the loop is the same; only who drives it changes.
 
 ## The loop — capture, then assert
 
-Run every route through all four, in both themes and at 2–3 widths. A pass that skipped a theme, a
+Run every route through all of them, in both themes and at 2–3 widths. A pass that skipped a theme, a
 width, or a state did not verify the screen.
 
 - **Visual, both themes × widths.** Screenshot in **light** and in `data-theme="dark"`, at **375**,
@@ -67,6 +67,26 @@ width, or a state did not verify the screen.
 ```js
 await page.route('**/api/workloads', (r) => r.fulfill({ status: 500 })) // error
 await page.route('**/api/workloads', (r) => r.fulfill({ json: [] })) // empty
+```
+
+- **Navigation levels.** Every visited route passes `npx @aziontech/webkit check --url <url,...>`
+  (rule `webkit-navigation-levels`). It opens each route in Chromium through the project's own
+  Playwright, collects the links of every visible navigation control (each `nav` /
+  `role="navigation"`: the rail and its current drill level, an in-page menu; each
+  `role="tablist"`; the breadcrumb, pagination, hidden or inert levels and `#anchor` links are left
+  out) and fails on:
+  - **a route offered twice**: the same path (query and hash ignored) in two controls, such as a rail
+    row and an in-page `Menu` row (rule 2);
+  - **more than one current row** (`aria-current="page"`) in one control (rule 5);
+  - **current rows that disagree**: two controls whose current rows point at different routes, where
+    neither is a parent of the other (rule 5).
+
+  The message names both controls (by their accessible name) and the route. The fix is the rule's:
+  keep the destination in one level, reach the resource's pages through the resource (block
+  `platform/detail/sectioned-resource`), never through rail rows.
+
+```bash
+npx @aziontech/webkit check --no-lint --url http://localhost:5173/policies/acme/access-rules,http://localhost:5173/workloads
 ```
 
 - **Interaction + focus.** Drive the primary flow — submit the form, open the overlay, paginate — and
@@ -151,6 +171,8 @@ Extend it per route: add `page.route()` calls to force empty/error, and a `userE
 - Overlays trap focus while open and restore it to the trigger on close; the action's feedback appears.
 - Async status (loading, saved, error) is announced via an `aria-live` region / webkit status surface —
   not colour or a silent spinner alone.
+- Every visited route passes `webkit check --url`: no route offered by two navigation controls, one
+  current row per control, and the current rows of all levels agree.
 - Assert **behavior, console, a11y, and visual snapshots** — never class strings, pixel positions, or
   animation timing.
 
@@ -165,9 +187,11 @@ Route: /workloads
 [✗] Console    dark @ 1280: "[Vue warn] Missing required prop: title"
 [✗] a11y       axe color-contrast (serious): .status-pill text on --bg-surface-raised in dark
 [✗] States     empty fetch → blank panel, no EmptyState rendered
+[✗] Navigation /policies/acme/access-rules offered by "Console navigation" (nav) and "Private access" (role=navigation)
 [✓] Interaction dialog traps + restores focus; success toast appears
 
-fix: pass :label to <Alert>; darken the pill text token; add EmptyState to the no-data branch.
+fix: pass :label to <Alert>; darken the pill text token; add EmptyState to the no-data branch;
+     drop the Access rules rows from the rail (the policy's local navigation owns them).
 ```
 
 End with: `verified — ship` or `N findings — fix before ship`.
@@ -178,6 +202,8 @@ End with: `verified — ship` or `N findings — fix before ship`.
 - [ ] Both themes and 2–3 widths captured; no dark-only or narrow-width regression.
 - [ ] Zero console errors / failed requests on load and on the primary interaction.
 - [ ] axe-core run against the live tree with no violations; async status announced via a live region.
+- [ ] `webkit check --url` passes on every visited route: one owner per navigation level, no
+      duplicate destination, current rows that agree.
 - [ ] Loading, empty, and error each forced and each renders its webkit state component.
 - [ ] Primary flow driven; focus traps + restores; the action's feedback appears.
 - [ ] Wired into CI as a smoke/visual job — this runtime gate runs on every PR, not just locally.
