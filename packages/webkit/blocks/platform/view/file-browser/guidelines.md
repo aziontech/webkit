@@ -22,19 +22,19 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 
 ### A. Surface — `Card`, `TableRoot` (required)
 
-One `Card :padded="false"` around a `TableRoot :bordered="false"` with `row-key`, `enable-sorting`, `:loading`, `v-model:columnVisibility` and an `export-filename`. Name is the `principal` column; actions are `kind: 'action'` and not hideable. Everything above the rows lives in the table's `#toolbar` slot, so there is no separate page heading.
+One `Card :padded="false"` around a `TableRoot :bordered="false"` with `row-key`, `enable-sorting` with `manual-sorting` and `v-model:sorting` (the block orders the rows so `..` and the folders stay first: Size sorts on a numeric `bytes` field and Last modified on the `modifiedAt` timestamp, within folders and within files), `v-model:global-filter`, `paginated` at 50 rows (25, 50, 100), `:loading` and an `export-filename`. Name is the `principal` column; actions are `kind: 'action'` and not hideable. Everything above the rows lives in the table's `#toolbar` slot, so there is no separate page heading.
 
 ### B. Storage title and search — `TableSearch` (required)
 
-The toolbar opens with the storage glyph and the storage name, truncated on one line. Below it a large `TableSearch` fills the row, searching inside the table with the placeholder "Search in folder"; it searches the current folder, not the whole bucket.
+The toolbar opens with the storage glyph and the storage name, the page's `h1`, truncated on one line. Below it a large `TableSearch` fills the row, searching inside the table with the placeholder "Search in folder"; it searches the current folder, not the whole bucket.
 
 ### C. Toolbar actions — `Tooltip`, `IconButton` (optional)
 
 Large outlined `IconButton`s for Refresh (`:loading` while the listing reloads) and Download CSV (`exportCsv` on the table ref), each named by a `Tooltip` and an `aria-label` with the same words. They sit on the search row and act on the listing.
 
-### D. Columns panel — `PopoverRoot`, `PopoverTrigger`, `PopoverContent`, `Field`, `Switch`, `Button` (optional)
+### D. Columns — `Table.ColumnSelector` (optional)
 
-A Columns `IconButton` opens a popover placed `bottom-end` with one `Switch` per column, labelled by a horizontal `Field`; locked columns show disabled with "Always shown". A transparent Show all columns `Button` appears only while a column is hidden. The column's `Tooltip` is suppressed while the popover is open.
+The last toolbar control is `Table.ColumnSelector`, which reads the table's columns from context: one switch per column, Name locked as Always shown, and Show all columns once one is hidden. Do not build a popover of `Switch`es by hand.
 
 ### E. Path and create — `Breadcrumb`, `SplitButton` (required)
 
@@ -42,7 +42,7 @@ A `Breadcrumb` of the folder path starts at the storage name; each crumb jumps b
 
 ### F. Cell recipes — `Table.CellTime` (optional)
 
-Folders sort first with a link-coloured folder glyph and open on row click; a `..` row leads back up once inside a folder; files take a glyph by extension. Size is muted. Last modified is `Table.CellTime`: the editor's avatar and a relative time that updates every minute, with the absolute time in its tooltip.
+Folders sort first with a link-coloured folder glyph; the folder name is a `Button kind="link"` that opens it (a row click does the same for a pointer), and the `..` name is a link button named Go up to the parent folder; a `..` row leads back up once inside a folder; files take a glyph by extension. Size is muted. Last modified is `Table.CellTime`: the editor's avatar and a relative time that updates every minute, with the absolute time in its tooltip.
 
 ### G. Row actions — `Table.CellActions`, `DropdownMenuGroup`, `DropdownMenuOption` (required)
 
@@ -54,7 +54,7 @@ The root's `select` event hands the option and the row to the page: Open enters 
 
 ### I. Empty folder — `EmptyState`, `SplitButton` (required)
 
-The table's `#empty` slot holds a medium `EmptyState` with one sentence and a secondary Add to files `SplitButton` with the same options as the toolbar's. Inside a folder the `..` row always remains, so the user can still go back up.
+When the search is set, the table's `#empty` slot holds a medium `EmptyState`, No matching files, with an outlined Clear search; otherwise it holds a medium `EmptyState` with one sentence and a secondary Add to files `SplitButton` with the same options as the toolbar's. Inside a folder the `..` row always remains, so the user can still go back up.
 
 ### J. Upload — `SplitButton` (optional)
 
@@ -81,7 +81,7 @@ Variant MoveObject only; it adds `Dialog` and its parts, `Field` and `Combobox`.
 ## Do
 
 - Keep the storage name, search, path and Add to files inside the table toolbar, on the same surface as the rows.
-- Sort folders before files and open a folder on row click.
+- Sort folders before files, keep `..` first under any sort, and sort Size and Last modified on numbers, never on display strings.
 - Show the path as a `Breadcrumb` and keep the `..` row while inside a folder.
 - Use one Add to files `SplitButton` for every way of adding content.
 - Put Delete last in the row menu, in its own group, and confirm it with `platform/delete/delete-with-confirmation`.
@@ -119,10 +119,10 @@ Variant MoveObject only; it adds `Dialog` and its parts, `Field` and `Combobox`.
 
 ## Accessibility
 
-- The card sits in the layout's one `main` landmark; the storage name is the visible title of the surface.
+- The card sits in the layout's one `main` landmark; the storage name is the page's `h1`.
 - Every icon-only button has an `aria-label`; file and folder glyphs carry `aria-hidden="true"`, so the name cell reads as the name alone.
 - The `Breadcrumb` crumbs are links the keyboard reaches in order; the last crumb is the current folder.
-- Folder rows open on click and the Open option in the row menu gives the same action to keyboard users.
+- Folder and `..` names are buttons, so a keyboard user opens a folder or goes up with Tab and Enter; the row click is the pointer shortcut and the Open option in the row menu repeats it.
 - Focus order follows reading order: search, Refresh, Download CSV, Columns, path, Add to files, the rows.
 - `Table.CellTime` names the author and reads the absolute time to screen readers.
 - The drop overlay is `aria-hidden`: dragging is a pointer path, and Add to files with Browse files is the keyboard path to the same upload.
@@ -135,6 +135,8 @@ Variant MoveObject only; it adds `Dialog` and its parts, `Field` and `Combobox`.
 - Default: the storage root with folders first, then files, and the full toolbar.
 - InsideAFolder: inside a build folder the crumb gains the folder, a `..` row leads back up and files show glyph, size, editor and age.
 - Uploading: a transfer is running in the floating card; one file fails once and can be retried; the upload dialog and the page drop overlay add more.
+- Empty: an empty folder (`assets/` of a build); the `..` row stays and the empty state offers Add to files.
+- Failed: the folder could not load; the storage name, the path and Refresh stay, Add to files is disabled and a danger `Alert` with Retry takes the table's place.
 - MoveObject: two files selected inside a build folder with the Move dialog open; moving runs in the card and ends in a toast.
 
 ## Related
