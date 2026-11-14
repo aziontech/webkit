@@ -5,6 +5,8 @@ import Switcher from '../../blocks/platform/dashboard/dashboard-switcher/dashboa
 import SwitcherEmpty from '../../blocks/platform/dashboard/dashboard-switcher/variants/empty.vue'
 import SwitcherFailed from '../../blocks/platform/dashboard/dashboard-switcher/variants/failed.vue'
 import SwitcherOwnPeriod from '../../blocks/platform/dashboard/dashboard-switcher/variants/own-period.vue'
+import Health from '../../blocks/platform/dashboard/health-score-dashboard/health-score-dashboard.vue'
+import HealthEmpty from '../../blocks/platform/dashboard/health-score-dashboard/variants/empty.vue'
 import Home from '../../blocks/platform/dashboard/home-dashboard/home-dashboard.vue'
 import HomeFailed from '../../blocks/platform/dashboard/home-dashboard/variants/failed.vue'
 import { useToastRegion } from './toast-region'
@@ -85,5 +87,21 @@ describe('platform/dashboard/home-dashboard', () => {
     )
     expect(retries.length).toBe(5)
     expect(view.queryByRole('link', { name: /marketing-site/ })).toBeNull()
+  })
+})
+
+describe('platform/dashboard/health-score-dashboard', () => {
+  it('renders the overall score as a StatTile out of 100', () => {
+    const view = render(Health)
+    const tile = byTestId('chart-stat-tile', view.container)!
+    expect(tile.textContent).toContain('Overall score')
+    expect(tile.textContent).toContain('79')
+    expect(tile.textContent).toContain('/ 100')
+  })
+
+  it('prints a dash for the overall score when the period is empty', () => {
+    const view = render(HealthEmpty)
+    const tile = byTestId('chart-stat-tile', view.container)!
+    expect(tile.textContent).toContain('No value')
   })
 })

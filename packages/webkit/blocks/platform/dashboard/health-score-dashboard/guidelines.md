@@ -43,39 +43,45 @@ the reader.
 The overall score's `Hint` states the bands:
 `Average of every sample in the period, out of 100. Good is 80 or more, fair 50 to 79, poor under 50.`
 
-### E. Band — `Tag` (required)
+### E. Overall figure — `StatTile` (required)
+
+The overall score as a `StatTile` with `kind="sans"`, labelled `Overall score`, the unit `/ 100` and
+no delta, with the top cause of poor samples under it. The tile owns its loading Skeleton and prints
+a dash when the period has no score; never hand-build the figure.
+
+### F. Band — `Tag` (required)
 
 The band word (`Good`, `Fair`, `Poor`) with its status severity, beside the overall score, at the end
 of every hourly row and on each incident. The band is always written; color reinforces it.
 
-### F. Loading placeholders — `Skeleton` (required)
+### G. Loading placeholders — `Skeleton` (required)
 
-Holds the score figure, hourly row labels, band tags and incident rows while the period loads.
+Holds the hourly row labels, band tags and incident rows while the period loads.
 
-### G. Score per hour — `Chart` (required)
+### H. Score per hour — `Chart` (required)
 
 A line of the overall score per hour beside the figure and the top cause of poor samples.
 
-### H. Rankings — `BarList` (required)
+### I. Rankings — `BarList` (required)
 
 Score per application and per location, sorted lowest first, because the reader looks for the worst.
 Each row names its top cause (`Video calls · packet loss`).
 
-### I. Hourly strips — `Tracker` (required)
+### J. Hourly strips — `Tracker` (required)
 
 One strip per application, one block per hour colored by band, with an `aria-label`
 (`Video calls, score per hour`) and a label on each block (`08:00 · 35 · Poor`).
 
-### J. Empty regions — `EmptyState` (required)
+### K. Empty regions — `EmptyState` (required)
 
 Every region names the period and what fills it: `No samples in the last 24 hours` /
 `Scores appear once devices report their first samples. Select a longer period.`
 
-### K. Open incidents — `Card` (required)
+### L. Open incidents — `Card` (required)
 
 A card titled `Open incidents` under the grid.
 
-### L. Incident rows — `Item` (required)
+### M. Incident rows — `Item` (required)
 
 One `Item` per incident: what is affected, the cause, how many devices and what share of samples,
 when it opened, and its band.
