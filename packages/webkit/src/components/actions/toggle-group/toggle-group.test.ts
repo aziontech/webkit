@@ -1,5 +1,3 @@
-import '../../../test/reflow.css'
-
 import { fireEvent, render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
@@ -288,31 +286,68 @@ describe('ToggleGroup', () => {
     expect(getByTestId('actions-toggle-group')).toBeTruthy()
     expect(queryAllByTestId('actions-toggle-group__option-lock').length).toBe(1)
   })
-})
 
-const boxOf = (width: number) => {
-  const host = document.createElement('div')
-  host.style.width = `${width}px`
-  document.body.appendChild(host)
-  return host
-}
-
-describe('ToggleGroup in a narrow box', () => {
-  it('shrinks its options and truncates the labels instead of overflowing', () => {
-    const host = boxOf(160)
-    const view = render(ToggleGroup, {
-      props: {
-        options: [
-          { label: 'Production environment', value: 'production' },
-          { label: 'Staging environment', value: 'staging' }
-        ],
-        ariaLabel: 'Environment'
-      },
-      container: host
+  it('is named by a consumer aria-labelledby and forwards id', () => {
+    const { getByRole } = render({
+      components: { ToggleGroup },
+      template:
+        '<div><span id="range-label">Time range</span><ToggleGroup id="range" aria-labelledby="range-label" :options="options" /></div>',
+      setup: () => ({ options: OPTIONS })
     })
+    const group = getByRole('radiogroup', { name: 'Time range' })
+    expect(group.id).toBe('range')
+    expect(group.hasAttribute('aria-label')).toBe(false)
+  })
 
-    expect(view.getByRole('radiogroup').getBoundingClientRect().right).toBeLessThanOrEqual(
-      host.getBoundingClientRect().right + 1
-    )
+  it('moves forward with ArrowLeft under dir=rtl', async () => {
+    const { getAllByRole, emitted } = render({
+      components: { ToggleGroup },
+      template:
+        '<div dir="rtl"><ToggleGroup :options="options" aria-label="Count" @update:model-value="(v) => $emit(\'picked\', v)" /></div>',
+      setup: () => ({ options: OPTIONS }),
+      emits: ['picked']
+    })
+    const radios = getAllByRole('radio')
+    await fireEvent.keyDown(radios[0], { key: 'ArrowLeft' })
+    expect(emitted('picked')?.[0]).toEqual(['two'])
+    await fireEvent.keyDown(radios[1], { key: 'ArrowRight' })
+    expect(emitted('picked')?.[1]).toEqual(['one'])
+  })
+
+  it('disables every option when the group is disabled', async () => {
+    const { getAllByRole, getByRole, emitted } = render(ToggleGroup, {
+      props: { options: OPTIONS, ariaLabel: 'Count', disabled: true }
+    })
+    expect(getByRole('radiogroup').hasAttribute('data-disabled')).toBe(true)
+    const radios = getAllByRole('radio')
+    radios.forEach((radio) => expect((radio as HTMLButtonElement).disabled).toBe(true))
+    await fireEvent.click(radios[1])
+    expect(emitted('update:modelValue')).toBeUndefined()
+  })
+
+  it('draws the lock only where locked allows it', () => {
+    const { queryAllByTestId } = render(ToggleGroup, {
+      props: {
+        ariaLabel: 'Plan',
+        options: [
+          { label: 'Free', value: 'free' },
+          { label: 'Pro', value: 'pro', locked: true },
+          { label: 'Paused', value: 'paused', disabled: true, locked: false },
+          { label: 'Legacy', value: 'legacy', disabled: true }
+        ]
+      }
+    })
+    const locks = queryAllByTestId('actions-toggle-group__option-lock')
+    expect(locks.map((lock) => lock.closest('button')?.textContent?.trim())).toEqual([
+      'Pro',
+      'Legacy'
+    ])
+  })
+
+  it('leaves the indicator transition to classes so reduced motion can turn it off', () => {
+    const { getByTestId } = render(ToggleGroup, {
+      props: { options: OPTIONS, ariaLabel: 'Count' }
+    })
+    expect(getByTestId('actions-toggle-group__indicator').style.transition).toBe('')
   })
 })

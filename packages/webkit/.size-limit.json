@@ -1464,7 +1464,7 @@
   {
     "name": "toggle-group",
     "path": "src/components/actions/toggle-group/toggle-group.vue",
-    "limit": "15.75 KB"
+    "limit": "13.85 KB"
   },
   {
     "name": "icon-button",
