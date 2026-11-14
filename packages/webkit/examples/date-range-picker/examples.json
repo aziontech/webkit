@@ -26,6 +26,11 @@
       "name": "TimeZone",
       "summary": "`v-model:time-zone` with a short list of zones: the absolute range is typed and shown in the chosen zone, and the stored value stays the same ISO instants, printed under the picker.",
       "file": "time-zone.vue"
+    },
+    {
+      "name": "Disabled",
+      "summary": "A disabled picker keeps its range visible; the trigger and the step buttons do not respond.",
+      "file": "disabled.vue"
     }
   ]
 }
