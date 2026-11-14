@@ -1167,6 +1167,18 @@
       "types": "./types/components/inputs/textarea/textarea.vue.d.ts",
       "default": "./src/components/inputs/textarea/textarea.vue"
     },
+    "./context-menu": {
+      "types": "./types/components/navigation/context-menu/index.d.ts",
+      "default": "./src/components/navigation/context-menu/index.ts"
+    },
+    "./context-menu-root": {
+      "types": "./types/components/navigation/context-menu/context-menu.vue.d.ts",
+      "default": "./src/components/navigation/context-menu/context-menu.vue"
+    },
+    "./context-menu-trigger": {
+      "types": "./types/components/navigation/context-menu/context-menu-trigger/context-menu-trigger.vue.d.ts",
+      "default": "./src/components/navigation/context-menu/context-menu-trigger/context-menu-trigger.vue"
+    },
     "./dropdown-menu": {
       "types": "./types/components/navigation/dropdown-menu/index.d.ts",
       "default": "./src/components/navigation/dropdown-menu/index.ts"

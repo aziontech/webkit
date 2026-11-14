@@ -1962,9 +1962,24 @@
     "limit": "1.85 KB"
   },
   {
+    "name": "context-menu",
+    "path": "src/components/navigation/context-menu/index.ts",
+    "limit": "9.3 KB"
+  },
+  {
+    "name": "context-menu-root",
+    "path": "src/components/navigation/context-menu/context-menu.vue",
+    "limit": "6.1 KB"
+  },
+  {
+    "name": "context-menu-trigger",
+    "path": "src/components/navigation/context-menu/context-menu-trigger/context-menu-trigger.vue",
+    "limit": "1.2 KB"
+  },
+  {
     "name": "dropdown-menu",
     "path": "src/components/navigation/dropdown-menu/index.ts",
-    "limit": "9.25 KB"
+    "limit": "10.15 KB"
   },
   {
     "name": "dropdown-menu-root",
@@ -1984,22 +1999,22 @@
   {
     "name": "dropdown-menu-option",
     "path": "src/components/navigation/dropdown-menu/dropdown-menu-option/dropdown-menu-option.vue",
-    "limit": "1.75 KB"
+    "limit": "1.65 KB"
   },
   {
     "name": "dropdown-menu-sub",
     "path": "src/components/navigation/dropdown-menu/dropdown-menu-sub/dropdown-menu-sub.vue",
-    "limit": "0.6 KB"
+    "limit": "0.8 KB"
   },
   {
     "name": "dropdown-menu-sub-content",
     "path": "src/components/navigation/dropdown-menu/dropdown-menu-sub-content/dropdown-menu-sub-content.vue",
-    "limit": "2.5 KB"
+    "limit": "4.8 KB"
   },
   {
     "name": "dropdown-menu-sub-trigger",
     "path": "src/components/navigation/dropdown-menu/dropdown-menu-sub-trigger/dropdown-menu-sub-trigger.vue",
-    "limit": "1.3 KB"
+    "limit": "1.65 KB"
   },
   {
     "name": "multi-select-root",
