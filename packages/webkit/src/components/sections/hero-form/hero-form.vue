@@ -67,6 +67,26 @@
     error: string
   }
 
+  /** A link continuing the description inline. */
+  export type HeroFormLink = {
+    /** Visible text of the link. */
+    label: string
+    /** Destination the link points to. */
+    href: string
+  }
+
+  /** A call to action under the copy. */
+  export type HeroFormAction = {
+    /** Visible label of the action. */
+    label: string
+    /** Destination the action links to. */
+    href: string
+    /** Closes the label on a trailing chevron that reads as "go". */
+    trailing?: boolean
+    /** Link target of the action. */
+    target?: '_blank' | '_self'
+  }
+
   interface Props {
     /** Copy of the form outcomes: `{ missing, invalidEmail, success, error }`. */
     messages: HeroFormMessages
@@ -78,6 +98,16 @@
     title?: string
     /** Sentence under the headline. */
     description?: string
+    /** A link continuing the description inline, such as a phone line; `{ label, href }`. Omitted when absent. */
+    descriptionLink?: HeroFormLink
+    /** Copy after the inline link, closing the description's sentence. */
+    descriptionAfter?: string
+    /** First button under the copy; `{ label, href, trailing?, target? }`. Shown only with a label and a link. */
+    primaryAction?: HeroFormAction
+    /** Second, outlined button beside the first; `{ label, href, trailing?, target? }`. Shown only with a label and a link. */
+    secondaryAction?: HeroFormAction
+    /** In-page id set on the band so a `#hash` link can scroll to it. */
+    anchor?: string
     /** The highlights under the description, in order; each is `{ icon, title, description }`. The list renders only when there are items. */
     items?: HeroFormItem[]
     /** Accessible name of the field group, read as its legend. */
@@ -103,6 +133,11 @@
     highlight: '',
     title: '',
     description: '',
+    descriptionLink: undefined,
+    descriptionAfter: '',
+    primaryAction: undefined,
+    secondaryAction: undefined,
+    anchor: '',
     items: () => [],
     formAriaLabel: '',
     fields: () => [],
@@ -128,6 +163,16 @@
   const values = ref<Record<string, string>>({})
   const countries = ref<Record<string, string>>({})
   const errors = ref<Record<string, string>>({})
+
+  const usable = (action?: HeroFormAction) => Boolean(action?.label && action.href)
+
+  const primary = computed(() => usable(props.primaryAction))
+
+  const actions = computed(() =>
+    [props.primaryAction, props.secondaryAction].filter((action): action is HeroFormAction =>
+      usable(action)
+    )
+  )
 
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? 'sections-hero-form'
@@ -200,10 +245,12 @@
 <template>
   <div
     v-bind="$attrs"
+    :id="anchor || undefined"
     :data-testid="testId"
     :data-loading="loading || null"
     :data-submitted="submitted || null"
     :data-error="error || null"
+    class="scroll-mt-(--spacing-xxl)"
   >
     <Hero
       v-if="title"
@@ -225,10 +272,37 @@
           :eyebrow-prefix="EYEBROW_PREFIX"
           :highlight="highlight"
           :title="title"
-          :description="description"
           max-width="lg"
+          :sticky="items.length === 0"
           class="min-w-0 [&_h1]:max-w-(--container-md)"
-        />
+        >
+          <template v-if="description || descriptionLink || descriptionAfter">
+            {{ description }}
+            <a
+              v-if="descriptionLink"
+              :href="descriptionLink.href"
+              class="underline underline-offset-2 transition-colors duration-fast-02 ease-productive-entrance hover:text-(--text-default) focus-visible:rounded-(--shape-flat) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring-color) motion-reduce:transition-none"
+              >{{ descriptionLink.label }}</a
+            >{{ descriptionAfter }}
+          </template>
+          <template
+            v-if="actions.length > 0"
+            #actions
+          >
+            <Button
+              v-for="(action, index) in actions"
+              :key="action.label"
+              :label="action.label"
+              :href="action.href"
+              :target="action.target"
+              :kind="index === 0 && primary ? 'secondary' : 'outlined'"
+              size="large"
+              :icon="action.trailing ? 'pi pi-chevron-right' : ''"
+              :icon-position="action.trailing ? 'trailing' : 'leading'"
+              :animated="Boolean(action.trailing)"
+            />
+          </template>
+        </HeroTitle>
 
         <ul
           v-if="items.length > 0"
@@ -266,6 +340,7 @@
             @submit.prevent="send"
           >
             <fieldset
+              :disabled="loading"
               class="m-0 grid min-w-0 grid-cols-1 gap-(--spacing-md) border-0 p-0 sm:grid-cols-2"
             >
               <legend

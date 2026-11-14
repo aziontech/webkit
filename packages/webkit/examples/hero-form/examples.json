@@ -26,6 +26,11 @@
       "name": "Failed",
       "summary": "The site could not send the values: `messages.error` shows under the button and the form stays editable.",
       "file": "failed.vue"
+    },
+    {
+      "name": "Contact line",
+      "summary": "The copy carries a phone line inline (`descriptionLink` + `descriptionAfter`) and two actions under it; with no highlights the copy stays in view while the form scrolls past.",
+      "file": "contact-line.vue"
     }
   ],
   "site": [

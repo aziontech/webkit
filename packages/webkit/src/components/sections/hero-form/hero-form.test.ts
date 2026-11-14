@@ -77,6 +77,59 @@ describe('HeroForm', () => {
     expect(queryByRole('heading', { level: 1 })).toBeNull()
   })
 
+  it('sets the anchor as the band id, and no id without one', () => {
+    const { getByTestId, unmount } = band({ anchor: 'contact' })
+
+    expect(getByTestId(TESTID)).toHaveAttribute('id', 'contact')
+    unmount()
+    expect(band().getByTestId(TESTID)).not.toHaveAttribute('id')
+  })
+
+  it('continues the description with an inline link and the copy after it', () => {
+    const { getByRole, getByTestId } = band({
+      description: 'Call us at',
+      descriptionLink: { label: '+1 555-0100', href: 'tel:+15550100' },
+      descriptionAfter: ' or fill in the form.'
+    })
+
+    const link = getByRole('link', { name: '+1 555-0100' })
+    expect(link).toHaveAttribute('href', 'tel:+15550100')
+    expect(link.parentElement?.textContent?.replace(/\s+/g, ' ').trim()).toBe(
+      'Call us at +1 555-0100 or fill in the form.'
+    )
+    expect(getByTestId('marketing-hero-title')).toContainElement(link)
+  })
+
+  it('renders the actions under the copy only with a label and a link', () => {
+    const { getByRole, queryByRole } = band({
+      primaryAction: { label: 'Talk to sales', href: '/contact' },
+      secondaryAction: { label: 'Docs', href: '' }
+    })
+
+    expect(getByRole('link', { name: 'Talk to sales' })).toHaveAttribute('href', '/contact')
+    expect(queryByRole('link', { name: 'Docs' })).toBeNull()
+  })
+
+  it('keeps the copy sticky only when there are no highlights', () => {
+    const withItems = band()
+    expect(withItems.getByTestId('marketing-hero-title')).not.toHaveAttribute('data-sticky')
+    withItems.unmount()
+
+    expect(band({ items: [] }).getByTestId('marketing-hero-title')).toHaveAttribute('data-sticky')
+  })
+
+  it('has no a11y violations with the inline link and the actions', async () => {
+    const { container } = band({
+      items: [],
+      descriptionLink: { label: '+1 555-0100', href: 'tel:+15550100' },
+      descriptionAfter: '.',
+      primaryAction: { label: 'Talk to sales', href: '/contact' },
+      secondaryAction: { label: 'Docs', href: '/docs', trailing: true }
+    })
+
+    await expectNoA11yViolations(container)
+  })
+
   it('renders one highlight per item, in order', () => {
     const { getAllByRole } = band()
 
@@ -219,10 +272,11 @@ describe('HeroForm', () => {
   })
 
   it('locks the fields and suppresses submit while loading', async () => {
-    const { getByLabelText, getByRole, emitted } = band({ loading: true })
+    const { container, getByLabelText, getByRole, emitted } = band({ loading: true })
 
     expect(getByLabelText(/First name/, { selector: 'input' })).toBeDisabled()
     expect(getByLabelText(/How can we help/, { selector: 'textarea' })).toBeDisabled()
+    expect(container.querySelector('fieldset')).toHaveAttribute('disabled')
     getByRole('button', { name: SUBMIT }).closest('form')?.requestSubmit()
     await userEvent.click(getByRole('button', { name: SUBMIT }))
 

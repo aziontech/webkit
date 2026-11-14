@@ -1,0 +1,142 @@
+<script setup>
+  import HeroForm from '@aziontech/webkit/hero-form'
+
+  const fields = [
+    {
+      name: 'firstname',
+      kind: 'text',
+      label: 'First name',
+      half: true,
+      required: true
+    },
+    {
+      name: 'lastname',
+      kind: 'text',
+      label: 'Last name',
+      half: true,
+      required: true
+    },
+    {
+      name: 'email',
+      kind: 'email',
+      label: 'Work email',
+      placeholder: 'm@example.com',
+      required: true
+    },
+    {
+      name: 'role',
+      kind: 'select',
+      label: 'Role',
+      placeholder: 'Select your role',
+      half: true,
+      required: true,
+      options: [
+        'Administrator',
+        'Advisor',
+        'Analyst',
+        'Architect',
+        'Assistant',
+        'Auditor',
+        'Buyer',
+        'CDO - Chief Data Officer',
+        'CDO - Chief Digital Officer',
+        'CEO – Chief Executive Officer',
+        'CFO – Chief Financial Officer',
+        'CHRO – Chief Human Resources Officer',
+        'CIO - Chief Information Officer',
+        'CISO - Chief Information Security Officer',
+        'CMO – Chief Marketing Officer',
+        'Consultant',
+        'Controller',
+        'COO – Chief Operating Officer',
+        'Coordinator',
+        'CPO - Chief Product Owner',
+        'CRO - Chief Revenue Officer',
+        'CTO - Chief Technology Officer',
+        'CXO - Chief Experience officer',
+        'Dean',
+        'Designer',
+        'Developer',
+        'Director',
+        'Engineer',
+        'Expert',
+        'Founder',
+        'Head',
+        'Manager',
+        'Owner',
+        'Partner',
+        'President',
+        'Secretary',
+        'Specialist',
+        'Superintendent',
+        'Supervisor',
+        'Vice President'
+      ]
+    },
+    {
+      name: 'company',
+      kind: 'text',
+      label: 'Company',
+      half: true,
+      required: true
+    },
+    {
+      name: 'mobilephone',
+      kind: 'phone',
+      label: 'Phone',
+      country: 'US',
+      required: true
+    },
+    {
+      name: 'message',
+      kind: 'textarea',
+      label: 'How can we help?',
+      placeholder:
+        'Tell us about your current stack, your use case, and what you want to run on Azion.',
+      required: true
+    }
+  ]
+
+  const messages = {
+    missing: 'This field is required.',
+    invalidEmail: 'Enter a valid email address.',
+    success: 'We will be in touch.',
+    error: 'We could not send your message. Try again.'
+  }
+
+  const carouselMarks = [
+    'global-fashion-group',
+    'herospark',
+    'itau',
+    'nzn',
+    'netshoes',
+    'caixa',
+    'agibank',
+    'prime-video',
+    'america-movil',
+    'gpa',
+    'fourbank'
+  ]
+
+  const onSubmit = (_event, _values) => {}
+</script>
+
+<template>
+  <HeroForm
+    anchor="contact"
+    eyebrow="Sales"
+    title="Talk to our sales team"
+    description="Get a custom demo and explore plans built for your company. Prefer to talk now? Call"
+    :description-link="{ label: '+1 555-0100', href: 'tel:+15550100' }"
+    description-after="."
+    :primary-action="{ label: 'See pricing', href: '/pricing', trailing: true }"
+    :secondary-action="{ label: 'Docs', href: '/docs' }"
+    form-aria-label="Contact sales"
+    :fields="fields"
+    submit-label="Contact sales"
+    :messages="messages"
+    carousel-label="Trusted by teams running critical workloads"
+    :carousel-marks="carouselMarks"
+    @submit="onSubmit"
+  />
+</template>
