@@ -336,7 +336,7 @@
   {
     "name": "site-page",
     "path": "src/components/marketing/site-page/site-page.vue",
-    "limit": "2.5 KB",
+    "limit": "2.6 KB",
     "entryOnly": true
   },
   {

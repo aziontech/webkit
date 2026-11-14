@@ -46,6 +46,7 @@
   type ResolvedSection = {
     key: string
     entry: SitePageSection
+    props: Record<string, unknown>
     component: Component
     scenes: ResolvedScene[]
     gapSize: 'small' | 'medium' | null
@@ -76,7 +77,16 @@
 
   const heroEntries = computed(() => resolveEntries(props.hero))
 
-  const columnEntries = computed(() => resolveEntries(props.sections))
+  const columnEntries = computed(() => resolveEntries(props.sections, true))
+
+  const closesPage = computed(() => {
+    const last = columnEntries.value.at(-1)
+    return isClosing(last?.entry) && last?.props.hatch !== false
+  })
+
+  function isClosing(entry?: SitePageSection): boolean {
+    return !!entry?._id.startsWith('closing-call-to-action')
+  }
 
   function resolveScenes(entry: SitePageSection): ResolvedScene[] {
     const scenes: ResolvedScene[] = []
@@ -91,17 +101,25 @@
     return scenes
   }
 
-  function resolveEntries(entries: SitePageSection[]): ResolvedSection[] {
+  function resolveEntries(entries: SitePageSection[], column = false): ResolvedSection[] {
     const resolved: ResolvedSection[] = []
     entries.forEach((entry, index) => {
       const component = resolveSection(entry._id)
       if (!component) return
+      const bound = entry.props ?? {}
+      const closing = column && isClosing(entry)
       resolved.push({
         key: `${entry._id}-${index}`,
         entry,
+        props: closing && isClosing(entries[index + 1]) ? { ...bound, hatch: false } : bound,
         component,
         scenes: resolveScenes(entry),
-        gapSize: entry.gap === 'none' ? null : entry.gap === 'small' ? 'small' : 'medium'
+        gapSize:
+          entry.gap === 'none' || (closing && bound.kind === 'frame')
+            ? null
+            : entry.gap === 'small'
+              ? 'small'
+              : 'medium'
       })
     })
     return resolved
@@ -125,7 +143,7 @@
       :is="item.component"
       v-for="item in heroEntries"
       :key="item.key"
-      v-bind="item.entry.props ?? {}"
+      v-bind="item.props"
       @submit="(event: Event, values?: unknown) => onSubmit(item.entry, event, values)"
     >
       <template
@@ -153,7 +171,7 @@
         />
         <component
           :is="item.component"
-          v-bind="item.entry.props ?? {}"
+          v-bind="item.props"
           @submit="(event: Event, values?: unknown) => onSubmit(item.entry, event, values)"
         >
           <template
@@ -168,6 +186,7 @@
         </component>
       </template>
       <SectionGap
+        v-if="!closesPage"
         hatch
         size="medium"
       />

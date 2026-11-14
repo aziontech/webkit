@@ -3,18 +3,18 @@ name: site-page
 category: marketing
 structure: monolithic
 status: implemented
-spec_version: 1
+spec_version: 2
 template: 2
-checksum: 89cd623be6b7e960d1a9108db9e2b9d3eac9fc9ee4782383782c30b54c3daf1d
+checksum: 8175b0a818a594cbba79cedd1c36f9799be9d3ad37b7f858f0b72a0ad10ec959
 created: 2026-11-12
-last_updated: 2026-11-13
+last_updated: 2026-11-14
 ---
 
 # SitePage — Component Spec
 
 ## Purpose
 
-The page renderer of the marketing site: it takes a page as data — the page JSON `{ hero, sections }` whose entries are `{ _id, props, scenes?, gap?, submission? }` — and renders each entry with the page section published at `@aziontech/webkit/<_id>`, binding `props` onto it. Openings (`hero`) run full bleed; the column (`sections`) sits in one `SectionContainer max-width="site"` with a hatched `SectionGap` before each band and one more after the last, the hatched break a page closes on before the footer (in the design sample that break is drawn by the closing call to action of every page), as the design sample's `SitePage` lays a page out. A scene named in `scenes` is resolved by name through the scene registry and drawn in the section's slot of that name (`hero-band` `top` / `bottom`, `console-panel` `scene`). Every section and scene is loaded on demand, so a page pulls in only the sections it lists. An `_id` or scene name the renderer does not know is skipped with a development warning naming it, never silently.
+The page renderer of the marketing site: it takes a page as data — the page JSON `{ hero, sections }` whose entries are `{ _id, props, scenes?, gap?, submission? }` — and renders each entry with the page section published at `@aziontech/webkit/<_id>`, binding `props` onto it. Openings (`hero`) run full bleed; the column (`sections`) sits in one `SectionContainer max-width="site"` with a hatched `SectionGap` before each band and one more after the last, the hatched break a page closes on before the footer, as the design sample's `SitePage` lays a page out. A page that ends on a closing band (`closing-call-to-action` and its `-agents`, `-newsletter` and `-templates` siblings) closes on that band's own closing frame instead, so no trailing gap is drawn; two closing bands in a row share one frame (the upper one is bound with `hatch: false`); and a `closing-call-to-action` of `kind: 'frame'` takes no gap before it. A scene named in `scenes` is resolved by name through the scene registry and drawn in the section's slot of that name (`hero-band` `top` / `bottom`, `console-panel` `scene`). Every section and scene is loaded on demand, so a page pulls in only the sections it lists. An `_id` or scene name the renderer does not know is skipped with a development warning naming it, never silently.
 
 It reverses the earlier rule in `.claude/docs/SECTIONS.md` ("the package ships no registry and no dispatcher"): the owner decided to ship the renderer (ROADMAP M2.10 row 44), and that doc is updated with it.
 
@@ -48,6 +48,7 @@ It reverses the earlier rule in `.claude/docs/SECTIONS.md` ("the package ships n
 - Put openings (`hero-band`, `hero-form`, `hero-with-opening`, `hero-copy-on-top-art`, `article-body`, `pricing-plans`) in `hero` and every band after them in `sections`.
 - Keep scenes as names (`{ component: 'BrandGlobeScene' }`), never as code, so the page stays plain JSON.
 - Use `gap` only to change the default break: `none` for a band that follows its neighbour with no break, `small` for two bands that belong together.
+- End a page on a closing band, or on `{ _id: 'closing-call-to-action', props: { kind: 'frame' } }` when its last band already carries its actions; never set `hatch` yourself on stacked closings, the renderer does.
 - Keep transport details of a form (`endpoint`, `hiddenFields`) in `submission`, next to `props`; the renderer passes the entry back on `submit` and the site sends.
 - Watch the development console after changing a page: an unknown `_id` or scene is named there.
 - Keep one opening per page: every opening renders the page `h1`, so two openings put two `h1` on the page.
@@ -111,6 +112,7 @@ Exported types, beside the component:
 
 - No state of its own; each section owns its states (`loading`, `submitted`, `error` on a form band come from its `props`).
 - An unknown `_id` or scene name renders nothing in its place and warns once per name in development.
+- Closing bands: a closing band followed directly by another is bound with `hatch: false` (an explicit `hatch` in its `props` is overridden), so stacked closings share the lower band's closing frame; a `closing-call-to-action` with `kind: 'frame'` takes no gap before it; when the last column entry is a closing band that draws its frame, the trailing gap is omitted.
 - A section or scene still loading renders nothing in its place until its chunk arrives.
 - A section or scene whose chunk fails to load (network failure, deploy skew) or takes longer than 10 s renders nothing in its place, the rest of the page keeps rendering, and a development warning names the `_id` or scene; it does not retry (`defineAsyncComponent` with `timeout` and `onError`).
 
@@ -160,13 +162,14 @@ _none_
 
 ## Performance
 
-- Bundle budget: 2.5 KB gzip for `./site-page` in `.size-limit.json`, `entryOnly: true` (every section and scene is its own async chunk).
+- Bundle budget: 2.6 KB gzip for `./site-page` in `.size-limit.json`, `entryOnly: true` (every section and scene is its own async chunk); raised from 2.5 KB for the closing-band rules (2.58 KB measured).
 - Runtime budget: none of its own; a page loads only the sections and scenes it lists.
 - Heavy parts: every section and every scene is lazy-loaded through `defineAsyncComponent`.
 
 ## Examples
 
-- Default — a short product page from data: an opening `hero-band`, then `use-cases`, `faq-section` and a `closing-call-to-action`, the column gaps included.
+- Default — a short product page from data: an opening `hero-band`, then `use-cases`, `faq-section` and a `closing-call-to-action`, the column gaps included; the closing band draws the page's closing frame.
+- Closings — justification: the closing-band rules (stacked closings sharing one frame, the bare `frame` close with no gap) are renderer behaviour no other example shows.
 
 ## Constraints — DO NOT
 
