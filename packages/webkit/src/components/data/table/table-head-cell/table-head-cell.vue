@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed, inject, useAttrs } from 'vue'
+  import { computed, inject, useAttrs, useId } from 'vue'
 
   import { useTranslate } from '../../../../composables/use-locale/use-translate'
   import * as en from '../../../../i18n/messages/en'
@@ -73,6 +73,9 @@
       (ctx ? `${ctx.testId}__head-cell` : 'data-table__head-cell')
   )
 
+  const labelId = useId()
+  const sortById = useId()
+
   const growAttr = computed<number | null>(() =>
     props.kind === 'checkbox' || props.kind === 'action'
       ? null
@@ -106,23 +109,33 @@
     :data-frozen="frozen ?? null"
     :data-compact="compact || null"
     :aria-sort="ariaSort"
-    :tabindex="sortable ? 0 : undefined"
     @click="toggleSort"
     @keydown.enter.prevent="toggleSort"
     @keydown.space.prevent="toggleSort"
-    class="group/head relative flex h-11 min-w-0 items-center gap-(--spacing-xs) px-(--spacing-sm) data-[sortable]:cursor-pointer data-[sortable]:select-none data-[sortable]:focus-visible:outline-none data-[sortable]:focus-visible:ring-2 data-[sortable]:focus-visible:ring-inset data-[sortable]:focus-visible:ring-(--ring-color) data-[compact]:h-9 data-[compact]:px-(--spacing-xs) text-label-sm text-(--text-muted) data-[align=start]:text-start data-[align=center]:text-center data-[align=end]:text-end data-[align=start]:justify-start data-[align=center]:justify-center data-[align=end]:justify-end data-[grow=1]:flex-[1_0_5rem] data-[grow=2]:flex-[2_0_5rem] data-[grow=3]:flex-[3_0_5rem] data-[kind=checkbox]:w-10 data-[kind=checkbox]:flex-none data-[kind=checkbox]:justify-center data-[kind=checkbox]:px-0 data-[kind=action]:ms-auto data-[kind=action]:w-10 data-[kind=action]:flex-none data-[kind=action]:justify-center data-[kind=action]:px-0 data-[frozen=start]:sticky data-[frozen=start]:start-0 data-[frozen=end]:sticky data-[frozen=end]:end-0 data-[frozen]:z-10 data-[frozen]:bg-[var(--table-row-bg,var(--bg-surface))] data-[frozen=start]:after:pointer-events-none data-[frozen=start]:after:absolute data-[frozen=start]:after:inset-y-0 data-[frozen=start]:after:-end-6 data-[frozen=start]:after:w-6 data-[frozen=start]:after:content-[''] group-data-[overflow-start]/table:data-[frozen=start]:after:bg-gradient-to-l rtl:group-data-[overflow-start]/table:data-[frozen=start]:after:bg-gradient-to-r data-[frozen=start]:after:from-transparent data-[frozen=start]:after:to-[var(--table-row-bg,var(--bg-surface))] data-[frozen=end]:before:pointer-events-none data-[frozen=end]:before:absolute data-[frozen=end]:before:inset-y-0 data-[frozen=end]:before:-start-6 data-[frozen=end]:before:w-6 data-[frozen=end]:before:content-[''] group-data-[overflow-end]/table:data-[frozen=end]:before:bg-gradient-to-r rtl:group-data-[overflow-end]/table:data-[frozen=end]:before:bg-gradient-to-l data-[frozen=end]:before:from-transparent data-[frozen=end]:before:to-[var(--table-row-bg,var(--bg-surface))]"
+    class="group/head relative flex h-11 min-w-0 items-center gap-(--spacing-xs) px-(--spacing-sm) data-[sortable]:cursor-pointer data-[sortable]:select-none data-[compact]:h-9 data-[compact]:px-(--spacing-xs) text-label-sm text-(--text-muted) data-[align=start]:text-start data-[align=center]:text-center data-[align=end]:text-end data-[align=start]:justify-start data-[align=center]:justify-center data-[align=end]:justify-end data-[grow=1]:flex-[1_0_5rem] data-[grow=2]:flex-[2_0_5rem] data-[grow=3]:flex-[3_0_5rem] data-[kind=checkbox]:w-10 data-[kind=checkbox]:flex-none data-[kind=checkbox]:justify-center data-[kind=checkbox]:px-0 data-[kind=action]:ms-auto data-[kind=action]:w-10 data-[kind=action]:flex-none data-[kind=action]:justify-center data-[kind=action]:px-0 data-[frozen=start]:sticky data-[frozen=start]:start-0 data-[frozen=end]:sticky data-[frozen=end]:end-0 data-[frozen]:z-10 data-[frozen]:bg-[var(--table-row-bg,var(--bg-surface))] data-[frozen=start]:after:pointer-events-none data-[frozen=start]:after:absolute data-[frozen=start]:after:inset-y-0 data-[frozen=start]:after:-end-6 data-[frozen=start]:after:w-6 data-[frozen=start]:after:content-[''] group-data-[overflow-start]/table:data-[frozen=start]:after:bg-gradient-to-l rtl:group-data-[overflow-start]/table:data-[frozen=start]:after:bg-gradient-to-r data-[frozen=start]:after:from-transparent data-[frozen=start]:after:to-[var(--table-row-bg,var(--bg-surface))] data-[frozen=end]:before:pointer-events-none data-[frozen=end]:before:absolute data-[frozen=end]:before:inset-y-0 data-[frozen=end]:before:-start-6 data-[frozen=end]:before:w-6 data-[frozen=end]:before:content-[''] group-data-[overflow-end]/table:data-[frozen=end]:before:bg-gradient-to-r rtl:group-data-[overflow-end]/table:data-[frozen=end]:before:bg-gradient-to-l data-[frozen=end]:before:from-transparent data-[frozen=end]:before:to-[var(--table-row-bg,var(--bg-surface))]"
   >
     <slot v-if="kind === 'checkbox' || kind === 'action'" />
     <template v-else>
-      <span class="min-w-0 flex-1 truncate text-[length:inherit]"><slot /></span>
+      <span
+        :id="labelId"
+        class="min-w-0 flex-1 truncate text-[length:inherit]"
+        ><slot
+      /></span>
       <span
         v-if="sortable"
-        class="flex h-full shrink-0 items-center justify-center opacity-0 transition-opacity duration-150 ease-out motion-reduce:transition-none group-hover/head:opacity-100 group-focus-visible/head:opacity-100 focus-within:opacity-100 group-data-[sort=ascending]/head:opacity-100 group-data-[sort=descending]/head:opacity-100 [@media(hover:none)]:opacity-100"
+        :id="sortById"
+        hidden
+        >{{ t('tableHeadCell.sortBy') }}</span
+      >
+      <span
+        v-if="sortable"
+        class="flex h-full shrink-0 items-center justify-center opacity-0 transition-opacity duration-150 ease-out motion-reduce:transition-none group-hover/head:opacity-100 focus-within:opacity-100 group-data-[sort=ascending]/head:opacity-100 group-data-[sort=descending]/head:opacity-100 [@media(hover:none)]:opacity-100"
         @click.stop
         @keydown.stop
       >
         <TableSortButton
           :direction="sortDirection"
+          :aria-labelledby="`${sortById} ${labelId}`"
           @toggle="handleSort"
         />
       </span>

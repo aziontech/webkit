@@ -58,8 +58,8 @@
 
 <template>
   <IconButton
+    v-bind="{ ...$attrs, ariaLabel }"
     :icon="icon"
-    v-bind="{ ariaLabel }"
     kind="transparent"
     size="small"
     :data-testid="testId"

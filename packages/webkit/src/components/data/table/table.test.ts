@@ -307,11 +307,29 @@ describe('Table (composition + data-driven)', () => {
       // The SortButton (IconButton) is rendered inside the sortable head; from
       // 'none' the first toggle yields 'ascending'.
       expect(getByRole('table')).toBeTruthy()
-      const button = within(sortableHead).getByRole('button', { name: 'Sort column' })
+      const button = within(sortableHead).getByRole('button', { name: 'Sort by Name' })
       await fireEvent.click(button)
 
       // The parent's @sort handler received 'ascending' and aria-sort updated.
       expect(sortableHead.getAttribute('aria-sort')).toBe('ascending')
+    })
+  })
+
+  describe('TableHeadCell — one tab stop per sortable column (APG sortable table)', () => {
+    it('keeps the header cell out of the tab order and names the sort button with the column', () => {
+      const { getAllByRole } = render(Table, {
+        props: { data: rows, columns, enableSorting: true }
+      })
+      const nameHead = getAllByRole('columnheader').find(
+        (h) => within(h).queryByText('Name') !== null
+      ) as HTMLElement
+      expect(nameHead.hasAttribute('tabindex')).toBe(false)
+      expect(nameHead.getAttribute('aria-sort')).toBe('none')
+      const focusable = nameHead.querySelectorAll(
+        'button, [tabindex]:not([tabindex="-1"]), a[href], input'
+      )
+      expect(focusable).toHaveLength(1)
+      expect(within(nameHead).getByRole('button', { name: 'Sort by Name' })).toBe(focusable[0])
     })
   })
 
@@ -401,7 +419,7 @@ describe('Table (composition + data-driven)', () => {
 
       // The Name column is sortable (enableSorting global true, Status opted out).
       const nameHead = getAllByRole('columnheader').find(
-        (h) => h.textContent?.trim() === 'Name'
+        (h) => within(h).queryByText('Name') !== null
       ) as HTMLElement
       expect(nameHead.getAttribute('data-sortable')).toBe('true')
 
@@ -421,7 +439,7 @@ describe('Table (composition + data-driven)', () => {
       })
 
       const statusHead = getAllByRole('columnheader').find(
-        (h) => h.textContent?.trim() === 'Status'
+        (h) => within(h).queryByText('Status') !== null
       ) as HTMLElement
       // Status column set enableSorting: false.
       expect(statusHead.getAttribute('data-sortable')).toBeNull()
