@@ -149,6 +149,41 @@ function chartCase(): Case {
   }
 }
 
+function chartHoverCase(): Case {
+  const n = 10_000
+  const labels = Array.from({ length: n }, (_, i) => i)
+  const data = [
+    { id: 'allowed', name: 'Allowed', color: 'success', values: series(n, 0) },
+    { id: 'blocked', name: 'Blocked', color: 'danger', values: series(n, 1) },
+    { id: 'cached', name: 'Cached', color: 'info', values: series(n, 2) }
+  ]
+  const active = ref<number | null>(null)
+  return {
+    mount: () => ({
+      render: () =>
+        h('div', { style: 'width:800px' }, [
+          h(
+            Chart,
+            {
+              series: data,
+              labels,
+              ariaLabel: 'Requests',
+              activeIndex: active.value,
+              'onUpdate:activeIndex': (v: number | null) => (active.value = v)
+            },
+            { default: () => [h(Chart.Line), h(Chart.Scatter, { ids: ['cached'] })] }
+          )
+        ])
+    }),
+    update: async () => {
+      for (let i = 0; i < 40; i++) {
+        active.value = 100 + i * 211
+        await nextTick()
+      }
+    }
+  }
+}
+
 function treeCase(expandAll = false): Case {
   const items = Array.from({ length: 50 }, (_, f) => ({
     id: `f${f}`,
@@ -1026,6 +1061,9 @@ describe('runtime budgets (perf-budgets.json)', () => {
 
   it('Chart with 10k points per series', async () => {
     check('chart-10k', await measure(chartCase))
+  })
+  it('Chart with 3 series of 10k points: walk the active index 40 times', async () => {
+    check('chart-10k-hover', await measure(chartHoverCase))
   })
   it('Tree with 5k nodes', async () => {
     check('tree-5k', await measure(() => treeCase()))

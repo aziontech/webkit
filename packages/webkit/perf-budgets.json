@@ -6,6 +6,11 @@
       "update": 320,
       "update_is": "replace both 10k-point series"
     },
+    "chart-10k-hover": {
+      "mount": 700,
+      "update": 50,
+      "update_is": "move the active index 40 times over three 10k-point series (lines and dots)"
+    },
     "tree-5k": {
       "mount": 60,
       "update": 170,

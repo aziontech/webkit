@@ -2,7 +2,14 @@
   import { duration } from '@aziontech/theme/animations'
   import { computed, onScopeDispose, useAttrs } from 'vue'
 
-  import { areaPath, type ChartCurve, isFiniteNumber, linePath, stackValues } from '../../_lib'
+  import {
+    areaPath,
+    type ChartCurve,
+    isFiniteNumber,
+    keepIds,
+    linePath,
+    stackValues
+  } from '../../_lib'
   import { useChartContext } from '../composables/use-chart-context'
 
   defineOptions({ name: 'ChartArea', inheritAttrs: false })
@@ -24,13 +31,14 @@
 
   const attrs = useAttrs()
   const ctx = useChartContext()
+  const ids = computed<readonly string[]>((previous) => keepIds(previous, props.ids))
 
   onScopeDispose(
     ctx.registerMark(() => ({
       kind: 'area',
       stacked: props.stacked,
       labeled: false,
-      ids: props.ids
+      ids: ids.value
     }))
   )
 
@@ -42,7 +50,7 @@
     const layout = ctx.category.value
     const scale = ctx.valueScale.value
     const base = ctx.baseline.value
-    const list = ctx.resolveSeries(props.ids)
+    const list = ctx.resolveSeries(ids.value)
     const count = ctx.labels.value.length
     const layers = props.stacked
       ? stackValues(

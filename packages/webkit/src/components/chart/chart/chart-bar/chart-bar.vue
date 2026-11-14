@@ -2,7 +2,7 @@
   import { duration } from '@aziontech/theme/animations'
   import { computed, onScopeDispose, useAttrs } from 'vue'
 
-  import { barPath, isFiniteNumber, stackValues } from '../../_lib'
+  import { barPath, isFiniteNumber, keepIds, stackValues } from '../../_lib'
   import { useChartContext } from '../composables/use-chart-context'
 
   defineOptions({ name: 'ChartBar', inheritAttrs: false })
@@ -30,13 +30,14 @@
 
   const attrs = useAttrs()
   const ctx = useChartContext()
+  const ids = computed<readonly string[]>((previous) => keepIds(previous, props.ids))
 
   onScopeDispose(
     ctx.registerMark(() => ({
       kind: 'bar',
       stacked: props.stacked,
       labeled: props.labeled,
-      ids: props.ids,
+      ids: ids.value,
       fit: props.kind === 'histogram'
     }))
   )
@@ -72,7 +73,7 @@
     const category = ctx.category.value
     const scale = ctx.valueScale.value
     const base = ctx.baseline.value
-    const list = ctx.resolveSeries(props.ids)
+    const list = ctx.resolveSeries(ids.value)
     const count = ctx.labels.value.length
     const band = category.bandwidth
     const bars: BarMark[] = []

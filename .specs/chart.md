@@ -3,8 +3,8 @@ name: chart
 category: chart
 structure: composition
 status: implemented
-checksum: 72c4fd4a3646ec85a8f7435474196e8221459409b9eea2265859951c5dfe62c4
-spec_version: 6
+checksum: e89c5d8f982217d0016e16ec028ce24bc69783d81541e12ffa90d9b7c8404ee8
+spec_version: 7
 template: 2
 created: 2026-10-20
 last_updated: 2026-11-14
@@ -320,7 +320,7 @@ The entrance is a composition assembling on first paint with a per-series stagge
 ## Performance
 
 - Bundle budget: `chart` 22.5 KB, `chart-root` 15.5 KB, `chart-scatter` 2 KB, `chart-brush` 1.5 KB gzip (`.size-limit.json`).
-- Runtime budget: a 10k-point line mounts within the chart perf budget; the hidden twin samples to 1,000 rows. `Chart.Scatter` with 10k points mounts and moves the active index within `chart-scatter-10k` (the active point is one overlay dot per series, so the dot list never re-renders on a move), and `Chart.Bar` with 1k categories × 3 series within `chart-bar-1k-x3`; both in `perf-budgets.json`.
+- Runtime budget: a 10k-point line mounts within the chart perf budget; the hidden twin samples to 1,000 rows. `Chart.Scatter` with 10k points mounts and moves the active index within `chart-scatter-10k` (the active point is one overlay dot per series, so the dot list never re-renders on a move), and `Chart.Bar` with 1k categories × 3 series within `chart-bar-1k-x3`; both in `perf-budgets.json`. Moving the active index re-renders only the active marks: each mark keeps its `ids` until their content changes (an inline `:ids` array no longer rebuilds the scales on every render of the chart), the hidden twin is memoized, a line without `markers` looks its active point up by index, and a numeric axis whose positions ascend finds the point under the pointer by binary search. `chart-10k-hover` (three 10k-point series, 40 moves) holds this to its budget.
 - Heavy parts: none; in-house SVG, no chart dependency.
 
 ## Examples

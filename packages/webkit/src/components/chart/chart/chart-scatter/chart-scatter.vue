@@ -2,7 +2,7 @@
   import { duration } from '@aziontech/theme/animations'
   import { computed, onScopeDispose, useAttrs } from 'vue'
 
-  import { isFiniteNumber } from '../../_lib'
+  import { isFiniteNumber, keepIds } from '../../_lib'
   import { useChartContext } from '../composables/use-chart-context'
 
   defineOptions({ name: 'ChartScatter', inheritAttrs: false })
@@ -18,9 +18,10 @@
 
   const attrs = useAttrs()
   const ctx = useChartContext()
+  const ids = computed<readonly string[]>((previous) => keepIds(previous, props.ids))
 
   onScopeDispose(
-    ctx.registerMark(() => ({ kind: 'scatter', stacked: false, labeled: false, ids: props.ids }))
+    ctx.registerMark(() => ({ kind: 'scatter', stacked: false, labeled: false, ids: ids.value }))
   )
 
   const testId = computed(
@@ -31,7 +32,7 @@
     const layout = ctx.category.value
     const scale = ctx.valueScale.value
     const vertical = ctx.orientation.value === 'vertical'
-    return ctx.resolveSeries(props.ids).map((entry, order) => ({
+    return ctx.resolveSeries(ids.value).map((entry, order) => ({
       id: entry.id,
       color: entry.color,
       delay: `calc(${duration['fast-01']} * ${order})`,
@@ -44,12 +45,25 @@
     }))
   })
 
+  const dotAt = <T extends { index: number }>(dots: readonly T[], index: number): T | undefined => {
+    let low = 0
+    let high = dots.length - 1
+    while (low <= high) {
+      const middle = (low + high) >> 1
+      const found = dots[middle]
+      if (found.index === index) return found
+      if (found.index < index) low = middle + 1
+      else high = middle - 1
+    }
+    return undefined
+  }
+
   const activeDots = computed(() => {
     const index = ctx.activeIndex.value
     if (index === null) return new Map<string, { x: number; y: number }>()
     return new Map(
       groups.value.flatMap((group) => {
-        const dot = group.dots.find((entry) => entry.index === index)
+        const dot = dotAt(group.dots, index)
         return dot ? [[group.id, { x: dot.x, y: dot.y }] as const] : []
       })
     )
@@ -76,17 +90,19 @@
       :style="{ transitionDelay: group.delay }"
       class="opacity-0 transition-opacity duration-slow-01 ease-productive-entrance motion-reduce:transition-none data-[entered]:opacity-100 data-[entered]:data-[dimmed]:opacity-30"
     >
-      <circle
-        v-for="dot in group.dots"
-        :key="dot.index"
-        v-memo="[dot.x, dot.y, group.color]"
-        :cx="dot.x"
-        :cy="dot.y"
-        r="4"
-        :fill="group.color"
-        stroke="var(--bg-surface)"
-        stroke-width="1.5"
-      />
+      <g v-memo="[group.dots, group.color]">
+        <circle
+          v-for="dot in group.dots"
+          :key="dot.index"
+          v-memo="[dot.x, dot.y, group.color]"
+          :cx="dot.x"
+          :cy="dot.y"
+          r="4"
+          :fill="group.color"
+          stroke="var(--bg-surface)"
+          stroke-width="1.5"
+        />
+      </g>
       <circle
         v-if="activeDots.get(group.id)"
         :cx="activeDots.get(group.id)?.x"
