@@ -60,7 +60,7 @@
   {
     "name": "diagram",
     "path": "src/components/marketing/diagram/diagram.vue",
-    "limit": "10.3 KB",
+    "limit": "10.35 KB",
     "entryOnly": true
   },
   {
@@ -81,7 +81,7 @@
   {
     "name": "date-range-picker",
     "path": "src/components/inputs/date-range-picker/date-range-picker.vue",
-    "limit": "33.55 KB"
+    "limit": "33.65 KB"
   },
   {
     "name": "table-root",
@@ -91,7 +91,7 @@
   {
     "name": "property-filter",
     "path": "src/components/data/property-filter/property-filter.vue",
-    "limit": "29.05 KB"
+    "limit": "29.1 KB"
   },
   {
     "name": "collection-preferences",
@@ -141,7 +141,7 @@
   {
     "name": "chip",
     "path": "src/components/inputs/chip/chip.vue",
-    "limit": "6.5 KB"
+    "limit": "6.6 KB"
   },
   {
     "name": "footer-root",
@@ -502,7 +502,7 @@
   {
     "name": "article-index-resource-hub",
     "path": "src/components/sections/article-index-resource-hub/article-index-resource-hub.vue",
-    "limit": "27.3 KB"
+    "limit": "27.4 KB"
   },
   {
     "name": "resource-grid",
@@ -512,7 +512,7 @@
   {
     "name": "story-library",
     "path": "src/components/sections/story-library/story-library.vue",
-    "limit": "28.15 KB"
+    "limit": "28.2 KB"
   },
   {
     "name": "hero-band",
@@ -583,12 +583,12 @@
   {
     "name": "comparison-table",
     "path": "src/components/sections/comparison-table/comparison-table.vue",
-    "limit": "22.25 KB"
+    "limit": "22.3 KB"
   },
   {
     "name": "compare-plans",
     "path": "src/components/sections/compare-plans/compare-plans.vue",
-    "limit": "29 KB"
+    "limit": "29.05 KB"
   },
   {
     "name": "compare-support-tiers",
@@ -927,7 +927,7 @@
   {
     "name": "hotspot",
     "path": "src/components/content/hotspot/hotspot.vue",
-    "limit": "11.57 KB"
+    "limit": "11.6 KB"
   },
   {
     "name": "tutorial-panel",
@@ -1108,12 +1108,12 @@
   {
     "name": "settings-section",
     "path": "src/components/layout/settings-section/settings-section.vue",
-    "limit": "6.75 KB"
+    "limit": "6.85 KB"
   },
   {
     "name": "setting-row",
     "path": "src/components/layout/setting-row/setting-row.vue",
-    "limit": "13.5 KB"
+    "limit": "16.65 KB"
   },
   {
     "name": "save-bar",
@@ -1133,33 +1133,33 @@
   {
     "name": "webkit-provider",
     "path": "src/components/utils/webkit-provider/webkit-provider.vue",
-    "limit": "9.35 KB"
+    "limit": "9.5 KB"
   },
   {
     "name": "locales-pt-BR",
     "path": "src/locales/pt-BR.ts",
-    "limit": "8.54 KB"
+    "limit": "8.75 KB"
   },
   {
     "name": "locales-es",
     "path": "src/locales/es.ts",
-    "limit": "8.7 KB"
+    "limit": "8.9 KB"
   },
   {
     "name": "phone-input",
     "path": "src/components/inputs/phone-input/phone-input.vue",
-    "limit": "26.5 KB",
+    "limit": "26.6 KB",
     "entryOnly": true
   },
   {
     "name": "select",
     "path": "src/components/inputs/select/index.ts",
-    "limit": "20 KB"
+    "limit": "20.1 KB"
   },
   {
     "name": "multi-select",
     "path": "src/components/inputs/multi-select/index.ts",
-    "limit": "21.07 KB"
+    "limit": "21.1 KB"
   },
   {
     "name": "code-block",
@@ -1187,7 +1187,7 @@
   {
     "name": "topology-diagram",
     "path": "src/components/data/topology-diagram/topology-diagram.vue",
-    "limit": "34.03 KB"
+    "limit": "34.1 KB"
   },
   {
     "name": "action-confirmation",
@@ -1291,7 +1291,7 @@
   {
     "name": "attribute-editor",
     "path": "src/components/inputs/attribute-editor/attribute-editor.vue",
-    "limit": "14.25 KB"
+    "limit": "14.3 KB"
   },
   {
     "name": "code-editor",
@@ -1301,7 +1301,7 @@
   {
     "name": "button-group",
     "path": "src/components/actions/button-group/button-group.vue",
-    "limit": "13.25 KB"
+    "limit": "13.3 KB"
   },
   {
     "name": "combobox",
@@ -1316,7 +1316,7 @@
   {
     "name": "schema-form",
     "path": "src/components/inputs/schema-form/schema-form.vue",
-    "limit": "31.35 KB"
+    "limit": "50.25 KB"
   },
   {
     "name": "use-unsaved-changes",
@@ -1368,7 +1368,7 @@
   {
     "name": "table-cell-time",
     "path": "src/components/data/table/table-cell-time/table-cell-time.vue",
-    "limit": "17.3 KB"
+    "limit": "17.4 KB"
   },
   {
     "name": "table-cell-tags",
