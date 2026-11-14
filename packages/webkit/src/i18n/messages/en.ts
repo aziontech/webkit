@@ -542,7 +542,9 @@ export const logView = {
   gzip: 'gzip:',
   empty: 'No log lines match the current filters.',
   copy: 'Copy logs',
-  copied: 'Copied logs'
+  copied: 'Copied logs',
+  levels: 'Log levels',
+  levelCount: { one: '{level}, {count} line', other: '{level}, {count} lines' }
 } as const
 
 export const logoWall = {

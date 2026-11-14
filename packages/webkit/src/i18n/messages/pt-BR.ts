@@ -597,7 +597,9 @@ export const ptBR: Messages = {
     gzip: 'gzip:',
     empty: 'Nenhuma linha de log corresponde aos filtros atuais.',
     copy: 'Copiar logs',
-    copied: 'Logs copiados'
+    copied: 'Logs copiados',
+    levels: 'Níveis de log',
+    levelCount: { one: '{level}, {count} linha', other: '{level}, {count} linhas' }
   },
   logoWall: {
     link: 'Ler história'

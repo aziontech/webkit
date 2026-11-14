@@ -4,6 +4,7 @@ import { defineComponent, h, ref } from 'vue'
 
 import Default from '../../../../examples/log-view/default.vue'
 import Flush from '../../../../examples/log-view/flush.vue'
+import Levels from '../../../../examples/log-view/levels.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import type { LogViewLine } from './injection-key'
 import LogView from './log-view.vue'
@@ -408,6 +409,117 @@ describe('LogView (composition: provide/inject over Header/Content/Footer)', () 
       const log = container.querySelector('[data-testid$="__body"]') as globalThis.HTMLElement
       await vi.waitFor(() => expect(log.hasAttribute('data-fade')).toBe(true))
       expect(queryByTestId('code-log-view__content__fade-bottom')).toBeNull()
+    })
+  })
+
+  describe('log levels', () => {
+    const RUN: LogViewLine[] = [
+      { id: 'r1', time: '0 ms', level: 'info', type: 'text', message: 'Request received' },
+      { id: 'r2', time: '4 ms', level: 'debug', type: 'text', message: 'Arguments parsed' },
+      { id: 'r3', time: '180 ms', level: 'warn', type: 'text', message: 'Slow origin' },
+      { id: 'r4', time: '', level: 'error', type: 'text', message: 'Webhook failed' },
+      { id: 'r5', time: '1.2 s', level: 'info', type: 'text', message: 'Response sent' }
+    ]
+
+    const renderLevels = (props: { disabled?: boolean } = {}) => {
+      const level = ref('')
+      const onCopy = vi.fn()
+      const view = render(
+        defineComponent({
+          setup: () => () =>
+            h(
+              LogView,
+              {
+                lines: RUN,
+                levels: ['debug', 'info', 'warn', 'error'],
+                disabled: props.disabled ?? false,
+                level: level.value,
+                'onUpdate:level': (next: string) => (level.value = next),
+                onCopy
+              },
+              () => [h(LogViewHeader), h(LogViewContent)]
+            )
+        })
+      )
+      return { view, level, onCopy }
+    }
+
+    it('offers one toggle per level, named with its count, in a labelled group', () => {
+      const { view } = renderLevels()
+      const group = view.getByRole('group', { name: 'Log levels' })
+      const toggles = within(group).getAllByRole('button')
+      expect(toggles.map((toggle) => toggle.getAttribute('aria-label'))).toEqual([
+        'debug, 1 line',
+        'info, 2 lines',
+        'warn, 1 line',
+        'error, 1 line'
+      ])
+      expect(toggles.every((toggle) => toggle.getAttribute('aria-pressed') === 'false')).toBe(true)
+    })
+
+    it('hides the level filter when levels is empty', () => {
+      const { Host } = makeHost({ lines: RUN })
+      const view = render(Host)
+      expect(view.queryByRole('group', { name: 'Log levels' })).toBeNull()
+    })
+
+    it('filters to a level on click, round-trips v-model:level and clears on a second click', async () => {
+      const { view, level } = renderLevels()
+      const info = view.getByRole('button', { name: 'info, 2 lines' })
+      await fireEvent.click(info)
+      expect(level.value).toBe('info')
+      expect(info.getAttribute('aria-pressed')).toBe('true')
+      expect(view.getByTestId('code-log-view').getAttribute('data-level')).toBe('info')
+      expect(view.getAllByTestId('code-log-view__line').map((row) => row.textContent)).toEqual([
+        expect.stringContaining('Request received'),
+        expect.stringContaining('Response sent')
+      ])
+      await fireEvent.click(view.getByRole('button', { name: 'error, 1 line' }))
+      expect(level.value).toBe('error')
+      await fireEvent.click(view.getByRole('button', { name: 'error, 1 line' }))
+      expect(level.value).toBe('')
+      expect(view.getAllByTestId('code-log-view__line')).toHaveLength(5)
+    })
+
+    it('does not change the level while disabled', async () => {
+      const { view, level } = renderLevels({ disabled: true })
+      const debug = view.getByRole('button', { name: 'debug, 1 line' })
+      expect(debug).toBeDisabled()
+      await fireEvent.click(debug)
+      expect(level.value).toBe('')
+    })
+
+    it('renders the level column and data-level on rows, and drops an empty time', () => {
+      const { view } = renderLevels()
+      const rows = view.getAllByTestId('code-log-view__line')
+      expect(rows.map((row) => row.getAttribute('data-level'))).toEqual([
+        'info',
+        'debug',
+        'warn',
+        'error',
+        'info'
+      ])
+      expect(within(rows[2]!).getByTestId('code-log-view__line-level').textContent?.trim()).toBe(
+        'warn'
+      )
+      expect(within(rows[3]!).queryByTestId('code-log-view__line-time')).toBeNull()
+      expect(within(rows[0]!).getByTestId('code-log-view__line-time').textContent?.trim()).toBe(
+        '0 ms'
+      )
+    })
+
+    it('copies the level with each line', async () => {
+      stubClipboardResolved()
+      const { view, onCopy } = renderLevels()
+      await fireEvent.click(view.getByRole('button', { name: 'warn, 1 line' }))
+      await fireEvent.click(within(view.getByTestId('code-log-view__copy')).getByRole('button'))
+      await vi.waitFor(() => expect(onCopy).toHaveBeenCalledWith('180 ms WARN Slow origin'))
+    })
+
+    it('the Levels example has no a11y violations', async () => {
+      const { container, getAllByTestId } = render(Levels)
+      expect(getAllByTestId('code-log-view__header__level')).toHaveLength(4)
+      await expectNoA11yViolations(container)
     })
   })
 

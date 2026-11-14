@@ -2,6 +2,8 @@ import type { ComputedRef, InjectionKey } from 'vue'
 
 export type LogViewLineType = 'text' | 'folder' | 'framework-version' | 'success' | 'warning'
 
+export type LogViewLineLevel = 'debug' | 'info' | 'warn' | 'error'
+
 export interface LogViewLine {
   id: string
   time: string
@@ -11,6 +13,7 @@ export interface LogViewLine {
   size?: string
   gzipSize?: string
   suffix?: string
+  level?: LogViewLineLevel
 }
 
 export interface LogViewContext {
@@ -19,6 +22,9 @@ export interface LogViewContext {
   filteredLines: ComputedRef<LogViewLine[]>
   search: ComputedRef<string>
   warningsOnly: ComputedRef<boolean>
+  levels: ComputedRef<LogViewLineLevel[]>
+  level: ComputedRef<LogViewLineLevel | ''>
+  levelCounts: ComputedRef<Record<LogViewLineLevel, number>>
   disabled: ComputedRef<boolean>
   copyable: ComputedRef<boolean>
   loading: ComputedRef<boolean>
@@ -31,6 +37,7 @@ export interface LogViewContext {
   copyText: ComputedRef<string>
   setSearch: (value: string) => void
   toggleWarningsOnly: () => void
+  toggleLevel: (level: LogViewLineLevel) => void
   emitCopy: (value: string) => void
 }
 

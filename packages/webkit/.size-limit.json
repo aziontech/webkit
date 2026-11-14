@@ -1589,7 +1589,7 @@
   {
     "name": "log-view-header",
     "path": "src/components/code/log-view/log-view-header.vue",
-    "limit": "4.7 KB"
+    "limit": "4.8 KB"
   },
   {
     "name": "table",

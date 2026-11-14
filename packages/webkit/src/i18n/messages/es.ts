@@ -597,7 +597,9 @@ export const es: Messages = {
     gzip: 'gzip:',
     empty: 'Ninguna línea de registro coincide con los filtros actuales.',
     copy: 'Copiar registros',
-    copied: 'Registros copiados'
+    copied: 'Registros copiados',
+    levels: 'Niveles de registro',
+    levelCount: { one: '{level}, {count} línea', other: '{level}, {count} líneas' }
   },
   logoWall: {
     link: 'Leer historia'

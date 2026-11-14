@@ -147,22 +147,36 @@
                 :key="line.id"
                 :data-testid="`${ctx.testId}__line`"
                 :data-type="line.type"
-                class="text-label-code-sm relative flex gap-(--spacing-md) border-s-2 border-s-transparent px-(--spacing-md) py-(--spacing-xxs) transition-colors duration-150 ease-out before:pointer-events-none before:absolute before:inset-0 before:bg-(--bg-hover) before:opacity-0 before:transition-opacity before:duration-150 before:ease-out before:content-[''] hover:border-s-(--ring-color) hover:bg-(--bg-surface-raised) hover:before:opacity-100 data-[type=warning]:bg-(--warning) data-[type=warning]:hover:bg-(--warning) motion-reduce:transition-none motion-reduce:before:transition-none"
+                :data-level="line.level"
+                class="text-label-code-sm relative flex gap-(--spacing-md) border-s-2 border-s-transparent px-(--spacing-md) py-(--spacing-xxs) transition-colors duration-150 ease-out before:pointer-events-none before:absolute before:inset-0 before:bg-(--bg-hover) before:opacity-0 before:transition-opacity before:duration-150 before:ease-out before:content-[''] hover:border-s-(--ring-color) hover:bg-(--bg-surface-raised) hover:before:opacity-100 data-[type=warning]:bg-(--warning) data-[type=warning]:hover:bg-(--warning) data-[level=warn]:bg-(--warning) data-[level=warn]:hover:bg-(--warning) data-[level=error]:bg-(--danger) data-[level=error]:hover:bg-(--danger) motion-reduce:transition-none motion-reduce:before:transition-none"
               >
                 <span
+                  v-if="line.time"
                   :data-testid="`${ctx.testId}__line-time`"
+                  :data-level="line.level"
                   dir="ltr"
-                  class="relative z-1 shrink-0 text-(--text-muted)"
+                  class="relative z-1 shrink-0 text-(--text-muted) data-[level=error]:text-(--text-default)"
                 >
                   {{ line.time }}
+                </span>
+
+                <span
+                  v-if="line.level"
+                  :data-testid="`${ctx.testId}__line-level`"
+                  :data-level="line.level"
+                  dir="ltr"
+                  class="relative z-1 w-12 shrink-0 uppercase text-(--text-muted) data-[level=error]:text-(--danger-contrast) data-[level=info]:text-(--info-contrast) data-[level=warn]:text-(--warning-contrast)"
+                >
+                  {{ line.level }}
                 </span>
 
                 <span
                   v-if="line.type !== 'folder'"
                   :data-testid="`${ctx.testId}__line-message`"
                   dir="auto"
-                  class="relative z-1 flex min-w-0 flex-1 items-center gap-(--spacing-xs) text-(--text-default) data-[type=success]:gap-(--spacing-xs) data-[type=warning]:text-(--warning-contrast) max-sm:whitespace-nowrap"
+                  class="relative z-1 flex min-w-0 flex-1 items-center gap-(--spacing-xs) text-(--text-default) data-[level=error]:text-(--danger-contrast) data-[type=success]:gap-(--spacing-xs) data-[type=warning]:text-(--warning-contrast) max-sm:whitespace-nowrap"
                   :data-type="line.type"
+                  :data-level="line.level"
                 >
                   <template v-if="line.type === 'framework-version'">
                     <span class="shrink-0 whitespace-nowrap">
