@@ -3,10 +3,10 @@ name: tracker
 category: chart
 structure: monolithic
 status: implemented
-spec_version: 3
+spec_version: 4
 created: 2026-11-10
 last_updated: 2026-11-14
-checksum: d3365e93629e2175af1711df7b4bea24b65949b2c69ceeb408ed4b796e8c2c40
+checksum: cdb3a291ab1d573ac0b9fb8d887cb1788b5901657a2919e93147be6791408afb
 ---
 
 # Tracker — Component Spec
@@ -36,7 +36,7 @@ A status strip: one block per period — a day, an hour, a deployment — colore
 ## Best practices
 
 - Write each `label` as period plus state ("Nov 3 · Partial outage"), so the readout stands alone.
-- Leave periods with no data without a status; they render neutral rather than pretending to be healthy.
+- Leave periods with no data without a severity; they render neutral rather than pretending to be healthy.
 - Keep the period count fixed for a given view (90 days, 24 hours) so strips stacked in a list line up.
 - Put the summary figure (99.98% uptime) beside the strip; the strip shows where, the figure shows how much.
 
@@ -51,12 +51,12 @@ A status strip: one block per period — a day, an hour, a deployment — colore
   <Tracker
     aria-label="Edge Application uptime, last 7 days"
     :items="[
-      { status: 'success', label: 'Nov 4 · Operational' },
-      { status: 'success', label: 'Nov 5 · Operational' },
-      { status: 'warning', label: 'Nov 6 · Degraded performance' },
-      { status: 'success', label: 'Nov 7 · Operational' },
-      { status: 'danger', label: 'Nov 8 · Partial outage' },
-      { status: 'success', label: 'Nov 9 · Operational' },
+      { severity: 'success', label: 'Nov 4 · Operational' },
+      { severity: 'success', label: 'Nov 5 · Operational' },
+      { severity: 'warning', label: 'Nov 6 · Degraded performance' },
+      { severity: 'success', label: 'Nov 7 · Operational' },
+      { severity: 'danger', label: 'Nov 8 · Partial outage' },
+      { severity: 'success', label: 'Nov 9 · Operational' },
       { label: 'Nov 10 · No data' }
     ]"
   />
@@ -65,12 +65,12 @@ A status strip: one block per period — a day, an hour, a deployment — colore
 
 ## Props
 
-| Prop        | Type            | Default | Required | JSDoc                                                                                                                                                                                                                                                                                                                             |
-| ----------- | --------------- | ------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `items`     | `TrackerItem[]` | `[]`    | false    | One block per period, oldest first; each item is `{ id?: string; status?: ChartStatus; label: string }`. No status renders a neutral no-data block. The item field `severity` is the same under its old name, **@deprecated since 6.0 — use `status`. Removed in 7.0.** (it is typed `ChartStatus`), read when `status` is unset. |
-| `loading`   | `boolean`       | `false` | false    | Renders a Skeleton strip in place of the blocks.                                                                                                                                                                                                                                                                                  |
-| `error`     | `string`        | `''`    | false    | Error message; when set, the strip renders it inline (`role="alert"`, danger tokens kept under forced colors) in place of the blocks.                                                                                                                                                                                             |
-| `ariaLabel` | `string`        | `''`    | false    | Accessible name of the strip.                                                                                                                                                                                                                                                                                                     |
+| Prop        | Type            | Default | Required | JSDoc                                                                                                                                                                                                                                                                                                                                                       |
+| ----------- | --------------- | ------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `items`     | `TrackerItem[]` | `[]`    | false    | One block per period, oldest first; each item is `{ id?: string; severity?: ChartStatus; label: string }`. No severity renders a neutral no-data block. The item field `status` is the same under a banned alias (prop-vocabulary), **@deprecated since 6.0 — use `severity`. Removed in 7.0.** (it is typed `ChartStatus`), read when `severity` is unset. |
+| `loading`   | `boolean`       | `false` | false    | Renders a Skeleton strip in place of the blocks.                                                                                                                                                                                                                                                                                                            |
+| `error`     | `string`        | `''`    | false    | Error message; when set, the strip renders it inline (`role="alert"`, danger tokens kept under forced colors) in place of the blocks.                                                                                                                                                                                                                       |
+| `ariaLabel` | `string`        | `''`    | false    | Accessible name of the strip.                                                                                                                                                                                                                                                                                                                               |
 
 ## v-model
 

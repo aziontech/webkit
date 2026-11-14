@@ -128,11 +128,11 @@ rewrites the prop renames, the rest are listed here so you can move at your own 
 | `table-cell-link`    | `moreNoun`                    | `noun` (the name `table-cell-tags` uses)       |
 | `table-header`       | `kind`                        | `density`                                      |
 | `topology-diagram`   | node field `kind`             | node field `type`                              |
-| `tracker`            | item field `severity`         | item field `status`                            |
+| `tracker`            | item field `status`           | item field `severity` (prop-vocabulary)        |
 
 `headerKind` and `density` are not one-to-one: `density="compact"` also compacts the rows, so the
 codemod leaves `headerKind` for you. `flush`, `warningsOnly`, `type: 'warning'` and the data fields
-(`kind` on topology nodes, `severity` on tracker items) are data or inverted booleans; move them by
+(`kind` on topology nodes, `status` on tracker items) are data or inverted booleans; move them by
 hand.
 
 ## 4. Manual changes
