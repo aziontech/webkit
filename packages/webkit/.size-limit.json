@@ -398,6 +398,11 @@
     "entryOnly": true
   },
   {
+    "name": "logo",
+    "path": "src/components/content/logo/logo.vue",
+    "limit": "11.5 KB"
+  },
+  {
     "name": "product-widget",
     "path": "src/components/content/product-widget/product-widget.vue",
     "limit": "2.5 KB",

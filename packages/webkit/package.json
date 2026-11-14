@@ -566,6 +566,10 @@
       "types": "./types/components/content/line-figure/line-figure.vue.d.ts",
       "default": "./src/components/content/line-figure/line-figure.vue"
     },
+    "./logo": {
+      "types": "./types/components/content/logo/logo.vue.d.ts",
+      "default": "./src/components/content/logo/logo.vue"
+    },
     "./product-widget": {
       "types": "./types/components/content/product-widget/product-widget.vue.d.ts",
       "default": "./src/components/content/product-widget/product-widget.vue"
