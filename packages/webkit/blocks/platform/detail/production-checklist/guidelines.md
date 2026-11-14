@@ -24,9 +24,9 @@ A service that is live on its generated hostname is not yet ready for real traff
 
 A small `Tag` beside the title: secondary with the count, "1 of 3", while gates remain; success with "Ready for production" when all are done. It is the only progress signal on the card.
 
-### C. Expand button — `IconButton` (required)
+### C. Expand button — `IconButton`, `Tooltip` (required)
 
-A small outlined `IconButton` with the maximize icon at the header's end, `aria-label="Expand the production checklist"`. It opens the drawer with the same steps, their descriptions and their actions.
+A small outlined `IconButton` with the maximize icon at the header's end, `aria-label="Expand the production checklist"`, named on hover by a `Tooltip` reading Expand. It opens the drawer with the same steps, their descriptions and their actions.
 
 ### D. Gate rows — `Item` (required)
 
@@ -67,7 +67,7 @@ One small `Item` per gate, rendered as a full-width button: the gate's icon, its
 
 ## States
 
-- Card: some gates done; the card lists every gate with the count in its tag.
+- Card: some gates done; the card lists every gate with the count in its tag, and the expand button and every row open the drawer.
 - Complete: every gate done; the tag reads Ready for production and the rows are gone.
 - DrawerDetail: the expand button opened the right-side drawer with every step, its description and its action or its Done tag and note, over a Done footer; a card row opens the same drawer.
 

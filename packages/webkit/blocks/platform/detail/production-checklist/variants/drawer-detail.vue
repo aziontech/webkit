@@ -13,9 +13,10 @@
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import Tag from '@aziontech/webkit/tag'
+  import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, ref } from 'vue'
 
-  const open = ref(false)
+  const open = ref(true)
 
   const steps = [
     {
@@ -70,14 +71,18 @@
         />
       </div>
 
-      <IconButton
-        icon="pi pi-window-maximize"
-        aria-label="Expand the production checklist"
-        kind="outlined"
-        size="small"
+      <Tooltip
+        text="Expand"
         class="shrink-0"
-        @click="open = true"
-      />
+      >
+        <IconButton
+          icon="pi pi-window-maximize"
+          aria-label="Expand the production checklist"
+          kind="outlined"
+          size="small"
+          @click="open = true"
+        />
+      </Tooltip>
     </template>
 
     <template #content>

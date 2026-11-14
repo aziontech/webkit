@@ -1,7 +1,9 @@
 import { cleanup, fireEvent, render, waitFor, within } from '@testing-library/vue'
 import { afterEach, describe, expect, it } from 'vitest'
 
+import DeploymentLogs from '../../blocks/platform/detail/deployment-logs/deployment-logs.vue'
 import Running from '../../blocks/platform/detail/invocations/variants/running.vue'
+import ProductionChecklist from '../../blocks/platform/detail/production-checklist/production-checklist.vue'
 import Records from '../../blocks/platform/detail/record-table/variants/records.vue'
 import SectionedResource from '../../blocks/platform/detail/sectioned-resource/sectioned-resource.vue'
 import FewSiblings from '../../blocks/platform/detail/sectioned-resource/variants/few-siblings.vue'
@@ -80,5 +82,32 @@ describe('platform/detail/invocations', () => {
     expect(view.getByRole('link', { name: 'image-resizer' }).getAttribute('href')).toBe(
       '/functions/40122'
     )
+  })
+})
+
+describe('platform/detail/production-checklist', () => {
+  it('opens the drawer from a step row and from the expand button', async () => {
+    const view = render(ProductionChecklist)
+    await fireEvent.click(view.getByRole('button', { name: /Enable a security policy/ }))
+    const drawer = await waitFor(() => view.getByRole('dialog', { name: /Ship to production/ }))
+    expect(drawer.textContent).toContain('Attach Policy')
+    await fireEvent.click(buttonByText('Done', drawer))
+    await waitFor(() => expect(view.queryByRole('dialog')).toBeNull())
+    await fireEvent.click(view.getByRole('button', { name: 'Expand the production checklist' }))
+    await waitFor(() =>
+      expect(view.getByRole('dialog', { name: /Ship to production/ })).toBeTruthy()
+    )
+  })
+})
+
+describe('platform/detail/deployment-logs', () => {
+  it('derives the progress from the steps and shows no time for steps that never ran', () => {
+    const view = render(DeploymentLogs)
+    const root = view.container as HTMLElement
+    expect(view.getByRole('heading', { name: 'Deployment logs', level: 2 })).toBeTruthy()
+    expect(view.getByRole('status').textContent).toMatch(/3\/8 steps\s*Build/)
+    expect(view.getByRole('progressbar').getAttribute('aria-valuenow')).toBe('38')
+    const publish = within(root).getByText('Publish').closest('button') as HTMLElement
+    expect(publish.textContent).not.toMatch(/\d+s/)
   })
 })

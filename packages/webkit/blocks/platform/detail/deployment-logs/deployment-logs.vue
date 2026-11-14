@@ -4,7 +4,7 @@
   import LogViewContent from '@aziontech/webkit/log-view-content'
   import Progress from '@aziontech/webkit/progress'
   import Spinner from '@aziontech/webkit/spinner'
-  import { ref } from 'vue'
+  import { computed, ref } from 'vue'
 
   type StepStatus = 'done' | 'failed' | 'skipped' | 'running' | 'pending'
   type DeployStep = {
@@ -145,7 +145,7 @@
       title: 'Upload',
       description: 'Static assets uploaded to storage',
       status: 'pending',
-      duration: '5s',
+      duration: '',
       lines: []
     },
     {
@@ -153,7 +153,7 @@
       title: 'Service',
       description: 'Service and cache settings created',
       status: 'pending',
-      duration: '5s',
+      duration: '',
       lines: []
     },
     {
@@ -161,7 +161,7 @@
       title: 'Routing Rules',
       description: 'Request rules and cache policies applied',
       status: 'pending',
-      duration: '4s',
+      duration: '',
       lines: []
     },
     {
@@ -169,12 +169,18 @@
       title: 'Publish',
       description: 'Repository wired and the deploy published',
       status: 'pending',
-      duration: '4s',
+      duration: '',
       lines: []
     }
   ]
 
   const openStep = ref('build')
+
+  const doneCount = computed(() => steps.filter((step) => step.status === 'done').length)
+  const progress = computed(() => Math.round((doneCount.value / steps.length) * 100))
+  const currentStep = computed(
+    () => steps.find((step) => step.status === 'running' || step.status === 'failed')?.title ?? ''
+  )
 
   const stepStatusLabels: Record<StepStatus, string> = {
     done: 'Done',
@@ -190,13 +196,15 @@
     <div
       class="flex min-h-12 items-center justify-between gap-(--spacing-sm) border-b border-(--border-default) px-(--spacing-md) py-(--spacing-sm)"
     >
-      <p class="shrink-0 text-heading-xxs text-(--text-default)">Deployment logs</p>
+      <h2 class="m-0 shrink-0 text-heading-xxs text-(--text-default)">Deployment logs</h2>
       <div
         role="status"
         class="ms-auto flex min-w-0 items-center gap-(--spacing-sm)"
       >
-        <span class="shrink-0 text-label-sm text-(--text-default)">3/8 steps</span>
-        <span class="truncate text-label-sm text-(--text-muted)">Build</span>
+        <span class="shrink-0 text-label-sm text-(--text-default)"
+          >{{ doneCount }}/{{ steps.length }} steps</span
+        >
+        <span class="truncate text-label-sm text-(--text-muted)">{{ currentStep }}</span>
       </div>
     </div>
     <Accordion
@@ -282,7 +290,7 @@
       </Accordion.Item>
     </Accordion>
     <Progress
-      :value="55"
+      :value="progress"
       :max="100"
       size="small"
       shape="flat"
