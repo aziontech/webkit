@@ -1,4 +1,4 @@
-import { fireEvent, render, within } from '@testing-library/vue'
+import { fireEvent, render, waitFor, within } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
 import { expectNoA11yViolations } from '../../../test/axe'
@@ -124,9 +124,49 @@ describe('PricingPlans', () => {
     await fireEvent.click(getByRole('radio', { name: 'Annual' }))
 
     expect(within(pro()).getByText('Billed annually.')).toBeInTheDocument()
+    await waitFor(() =>
+      expect(within(pro()).getByTestId('content-card-pricing__currency__value')).toHaveTextContent(
+        '20'
+      )
+    )
     expect(
       within(getAllByTestId('content-card-pricing')[0]).getByText('Free forever.')
     ).toBeInTheDocument()
+  })
+
+  it('animates every card price', () => {
+    const { getAllByTestId } = band()
+
+    expect(
+      getAllByTestId('content-card-pricing').every((card) => card.hasAttribute('data-animated'))
+    ).toBe(true)
+  })
+
+  it('falls back to the plan description when the price states no terms', () => {
+    const { getAllByTestId } = band({
+      plans: [
+        { name: 'Hobby', description: 'For personal projects.', prices: [{ value: 'Free' }] },
+        {
+          name: 'Pro',
+          description: 'For teams.',
+          prices: [{ value: '20', details: 'Billed annually.' }]
+        }
+      ]
+    })
+
+    const cards = getAllByTestId('content-card-pricing')
+    expect(within(cards[0]).getByText('For personal projects.')).toBeInTheDocument()
+    expect(within(cards[1]).getByText('Billed annually.')).toBeInTheDocument()
+    expect(within(cards[1]).queryByText('For teams.')).toBeNull()
+  })
+
+  it('lays the cards in a full-bleed band', () => {
+    const { getByTestId } = band()
+
+    expect(within(getByTestId(TESTID)).getByTestId('marketing-hero')).toHaveAttribute(
+      'data-width',
+      'full'
+    )
   })
 
   it('names the toggle', () => {

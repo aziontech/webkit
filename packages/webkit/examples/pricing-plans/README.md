@@ -18,6 +18,7 @@ Add this entry to the `sections` array of the page JSON. `_id` picks the block a
 
 - `periods` sets the toggle options and `periodsAriaLabel` names it. The toggle shows only with two or more periods, and opens on the first.
 - `plans[].prices` holds one price per period, matched by `period`. A price without a period applies to every period.
+- `plans[].description` is the line under the price when the picked price has no `details`.
 - `highlighted` raises the recommended plan, and `tagLabel` sets its tag.
 - `featuresTitle` and `features` (an `icon` and a `label` each) list what the plan includes.
 - `action` is the card button (`label`, `href`); the highlighted plan gets the secondary button, the others an outlined one. It is dropped when its label or link is missing, and a plan without a name is dropped.
