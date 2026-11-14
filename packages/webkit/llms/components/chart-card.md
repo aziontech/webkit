@@ -77,7 +77,7 @@
 
 ## Sub-components
 
-The root `chart-card.vue` renders a `div` with `role="group"` and the card surface (a group, not a `section`, so a dashboard of many cards does not bury the page landmarks). It provides a context (`injection-key.ts` + `composables/use-chart-card-context.ts`) holding the test id, the title and description ids (picked up by a nested `chart` for `aria-labelledby` / `aria-describedby`), `draggable`, `resizable`, the span and height bounds, the current span and height, and the functions `armDrag`, `move`, `startResize`, `resizeTo` and `endResize`. Every part throws a clear error when used outside `<ChartCard>`.
+The root `chart-card.vue` renders a `div` with `role="group"` and the card surface (a group, not a `section`, so a dashboard of many cards does not bury the page landmarks; the header and footer rows are plain `div`s for the same reason, since a `header` or `footer` outside a sectioning element is a page banner or contentinfo). It provides a context (`injection-key.ts` + `composables/use-chart-card-context.ts`) holding the test id, the title and description ids (picked up by a nested `chart` for `aria-labelledby` / `aria-describedby`), `draggable`, `resizable`, the span and height bounds, the current span and height, and the functions `armDrag`, `move`, `startResize`, `resizeTo` and `endResize`. Every part throws a clear error when used outside `<ChartCard>`.
 
 - `chart-card.vue` — the root: surface, span and height models, native drag arming, resize bookkeeping.
 - `chart-card-header/chart-card-header.vue` — the header row, at least 56px tall, hairline under it.

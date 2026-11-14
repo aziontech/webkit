@@ -66,7 +66,7 @@ _None. Exports: `"./tool-call"`; type `ToolCallState`. Composed DS components: `
 
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color)` on the trigger.
 - Keyboard map: `Tab` to the trigger, `Enter` / `Space` toggles the details.
-- ARIA: the trigger is a `button` with `aria-expanded` / `aria-controls`; the status is `StatusIndicator` (`role="status"`), so a change from Running to Completed is announced; Input and Output are `section`s labelled by their `h4`.
+- ARIA: the trigger is a `button` with `aria-expanded` / `aria-controls`; the status is a `StatusIndicator` inside a `role="status"` region the ToolCall owns (StatusIndicator itself is not live), so a change from Running to Completed is announced; Input and Output are `section`s labelled by their `h4`.
 - Status is conveyed in text, never by color alone.
 
 ## Right-to-left
