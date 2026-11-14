@@ -381,7 +381,7 @@
               />
             </span>
             <div class="min-w-0 flex-1">
-              <span class="block text-overline-sm text-(--primary)">Anthropic</span>
+              <span class="block text-overline-sm text-(--text-muted)">Anthropic</span>
               <h1 class="m-0 text-heading-xl text-(--text-default)">Claude Code + Azion</h1>
             </div>
           </div>
