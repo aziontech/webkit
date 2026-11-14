@@ -107,7 +107,7 @@ Unset ⇒ `0`, so a banner that owns the whole viewport needs nothing.
 **`#background` is z-0, copy is z-10.** A backdrop is named on the container
 with the `texture` prop (a `TextureMaterial` kind) or filled through the `#background` slot
 ([`hero.vue:143`](../../packages/webkit/src/components/marketing/hero/hero.vue#L143)); the slot is where an artwork backdrop goes —
-[`BannerArt`](../../packages/webkit/src/components/marketing/banner/banner-art/banner-art.vue) `art="globe" | "map" | "network"`,
+[`BannerArt`](../../packages/webkit/src/components/marketing/banner-art/banner-art.vue) `kind="globe" | "map" | "network"`,
 the design sample's banner registry — and it wins over the prop when both are given.
 
 **Every Site hero carries `banner="dot-grid"`.** It is azion.com's own hero texture — a crisp 2px
@@ -130,7 +130,7 @@ headline to compete with, and the ink is a 22% mix of `--text-default` so the fi
 same step from the ground on either theme instead of being tuned for the dark one.
 
 ([`hero-band.vue`](../../packages/webkit/src/components/sections/hero-band/hero-band.vue) — `kind="centered"` paints the dots
-texture with its top fade; [`banner-art.vue`](../../packages/webkit/src/components/marketing/banner/banner-art/banner-art.vue)
+texture with its top fade; [`banner-art.vue`](../../packages/webkit/src/components/marketing/banner-art/banner-art.vue)
 carries the mask and scrim recipe for the heavier backdrops.)
 
 **Hero copy anatomy** — left-aligned, always in this order
