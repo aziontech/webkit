@@ -10,6 +10,18 @@
     inheritAttrs: false
   })
 
+  /** The page column the tab row lines up with. */
+  export type PageTabsColumn = 'full' | 'data' | 'form' | 'focused'
+
+  interface Props {
+    /** The page column the tab row lines up with: the full width, or the data, form or focused column below it. */
+    column?: PageTabsColumn
+  }
+
+  withDefaults(defineProps<Props>(), {
+    column: 'full'
+  })
+
   const value = defineModel<TabsValue | null>({ default: null })
 
   defineSlots<{
@@ -30,9 +42,13 @@
   <div
     v-bind="$attrs"
     :data-testid="testId"
-    class="border-b border-(--border-default)"
+    :data-column="column"
+    class="group/page-tabs border-b border-(--border-default)"
   >
-    <div class="layout-boundary-inline flex items-center gap-(--spacing-sm) py-(--spacing-sm)">
+    <div
+      :data-testid="`${testId}__row`"
+      class="layout-boundary-inline flex items-center gap-(--spacing-sm) py-(--spacing-sm) group-data-[column=data]/page-tabs:layout-column group-data-[column=focused]/page-tabs:layout-column-focused group-data-[column=form]/page-tabs:layout-column-form"
+    >
       <div class="flex -ms-(--spacing-xs) min-w-0 flex-1">
         <TabsRoot
           v-model="value"
