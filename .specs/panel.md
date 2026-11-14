@@ -3,8 +3,8 @@ name: panel
 category: overlay
 structure: composition
 status: implemented
-spec_version: 3
-checksum: 46fd9af6abf049b374662b58dcfa4ec04fc191a9ca72c8493d43fc5943a90d7c
+spec_version: 4
+checksum: 930db3f4d4ea4f3466cee6c9f53a4375b6c90831456610990d8c16dbdfb401df
 created: 2026-05-22
 last_updated: 2026-11-14
 ---
@@ -46,22 +46,19 @@ Layered surface above the page (modal, drawer, menu). Lives at `packages/webkit/
 <script setup>
   import Button from '@aziontech/webkit/button'
   import Panel from '@aziontech/webkit/panel'
-  import PanelHeader from '@aziontech/webkit/panel-header'
-  import PanelContent from '@aziontech/webkit/panel-content'
-  import PanelFooter from '@aziontech/webkit/panel-footer'
 </script>
 
 <template>
   <Panel size="medium">
-    <PanelHeader>
+    <Panel.Header>
       <h2 class="text-heading-sm text-(--text-default)">Cache settings</h2>
-    </PanelHeader>
-    <PanelContent>
+    </Panel.Header>
+    <Panel.Content>
       <p class="text-body-sm text-(--text-muted)">
         Objects are cached at the edge for the TTL set on each rule.
       </p>
-    </PanelContent>
-    <PanelFooter>
+    </Panel.Content>
+    <Panel.Footer>
       <Button
         label="Cancel"
         kind="outlined"
@@ -70,13 +67,16 @@ Layered surface above the page (modal, drawer, menu). Lives at `packages/webkit/
         label="Save"
         kind="primary"
       />
-    </PanelFooter>
+    </Panel.Footer>
   </Panel>
 </template>
 ```
 
+Tree-shaking: `@aziontech/webkit/panel-root` is the root alone, and `panel-header`, `panel-content` and `panel-footer` keep their own paths.
+
 ## Sub-components
 
+- `index.ts` — the compound: `Panel` with `Panel.Header`, `Panel.Content` and `Panel.Footer` attached by `Object.assign`, exported at `@aziontech/webkit/panel`; the root alone is `@aziontech/webkit/panel-root`.
 - `panel-content.vue` — Public sub-component `panel-content`.
 - `panel-footer.vue` — Public sub-component `panel-footer`.
 - `panel-header.vue` — Public sub-component `panel-header`.

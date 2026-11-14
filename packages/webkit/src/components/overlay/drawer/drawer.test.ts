@@ -670,3 +670,33 @@ describe('closable (explicit close, separate from light-dismiss)', () => {
     expect(byTestId('overlay-drawer__close')!.hasAttribute('disabled')).toBe(true)
   })
 })
+
+describe('compound API (index.ts)', () => {
+  it('attaches every part and the Panel regions for dot-notation', async () => {
+    const { default: Compound } = await import('./index')
+    const PanelHeader = (await import('../panel/panel-header.vue')).default
+    const PanelContent = (await import('../panel/panel-content.vue')).default
+    const PanelFooter = (await import('../panel/panel-footer.vue')).default
+    expect(Compound).toBe(Drawer)
+    expect(Compound.Trigger).toBe(DrawerTrigger)
+    expect(Compound.Portal).toBe(DrawerPortal)
+    expect(Compound.Overlay).toBe(DrawerOverlay)
+    expect(Compound.Content).toBe(DrawerContent)
+    expect(Compound.Title).toBe(DrawerTitle)
+    expect(Compound.Description).toBe(DrawerDescription)
+    expect(Compound.Close).toBe(DrawerClose)
+    expect(Compound.Header).toBe(PanelHeader)
+    expect(Compound.Body).toBe(PanelContent)
+    expect(Compound.Footer).toBe(PanelFooter)
+  })
+
+  it('renders the compound Default example and opens it', async () => {
+    const { default: Example } = await import('../../../../examples/drawer/default.vue')
+    const view = render(Example)
+    await settle()
+    await fireEvent.click(view.getByRole('button', { name: 'Open drawer' }))
+    await settle()
+    expect(byTestId('overlay-drawer__panel')).not.toBeNull()
+    expect(byTestId('overlay-drawer__close')).not.toBeNull()
+  })
+})

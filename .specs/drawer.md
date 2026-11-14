@@ -3,8 +3,8 @@ name: drawer
 category: overlay
 structure: composition
 status: implemented
-spec_version: 3
-checksum: e09a9b79a5814b41cad8883b4b3e23b94e5fe24b94675ad6193c85f0983365af
+spec_version: 4
+checksum: 15cad5a63eb7a036728a1695aab6cba17adad8352cd5b0ac3e098929a44674e0
 created: 2026-05-22
 last_updated: 2026-11-14
 ---
@@ -38,21 +38,13 @@ Layered surface above the page (modal, drawer, menu). Lives at `packages/webkit/
 
 ## Usage
 
+The compound import leads: every part hangs off the root (`Drawer.Trigger`, `Drawer.Content`, …), and `Drawer.Header`, `Drawer.Body` and `Drawer.Footer` are the shared Panel regions, so one import builds the whole drawer.
+
 ```vue
 <script setup>
   import { ref } from 'vue'
   import Button from '@aziontech/webkit/button'
   import Drawer from '@aziontech/webkit/drawer'
-  import DrawerTrigger from '@aziontech/webkit/drawer-trigger'
-  import DrawerPortal from '@aziontech/webkit/drawer-portal'
-  import DrawerOverlay from '@aziontech/webkit/drawer-overlay'
-  import DrawerContent from '@aziontech/webkit/drawer-content'
-  import DrawerTitle from '@aziontech/webkit/drawer-title'
-  import DrawerDescription from '@aziontech/webkit/drawer-description'
-  import DrawerClose from '@aziontech/webkit/drawer-close'
-  import PanelHeader from '@aziontech/webkit/panel-header'
-  import PanelContent from '@aziontech/webkit/panel-content'
-  import PanelFooter from '@aziontech/webkit/panel-footer'
 
   const open = ref(false)
 </script>
@@ -63,25 +55,25 @@ Layered surface above the page (modal, drawer, menu). Lives at `packages/webkit/
     side="right"
     size="medium"
   >
-    <DrawerTrigger>
+    <Drawer.Trigger>
       <Button
         label="Add origin"
         kind="primary"
       />
-    </DrawerTrigger>
-    <DrawerPortal>
-      <DrawerOverlay />
-      <DrawerContent>
-        <PanelHeader>
-          <DrawerTitle>Add origin</DrawerTitle>
-          <DrawerClose />
-        </PanelHeader>
-        <PanelContent>
-          <DrawerDescription>
+    </Drawer.Trigger>
+    <Drawer.Portal>
+      <Drawer.Overlay />
+      <Drawer.Content>
+        <Drawer.Header>
+          <Drawer.Title>Add origin</Drawer.Title>
+          <Drawer.Close />
+        </Drawer.Header>
+        <Drawer.Body>
+          <Drawer.Description>
             Point the application at the server that holds the original content.
-          </DrawerDescription>
-        </PanelContent>
-        <PanelFooter>
+          </Drawer.Description>
+        </Drawer.Body>
+        <Drawer.Footer>
           <Button
             label="Cancel"
             kind="outlined"
@@ -91,15 +83,18 @@ Layered surface above the page (modal, drawer, menu). Lives at `packages/webkit/
             label="Save"
             kind="primary"
           />
-        </PanelFooter>
-      </DrawerContent>
-    </DrawerPortal>
+        </Drawer.Footer>
+      </Drawer.Content>
+    </Drawer.Portal>
   </Drawer>
 </template>
 ```
 
+Tree-shaking: `@aziontech/webkit/drawer-root` is the root alone (nothing attached), and every part keeps its own path (`@aziontech/webkit/drawer-trigger`, `-portal`, `-overlay`, `-content`, `-title`, `-description`, `-close`, and `@aziontech/webkit/panel-header`, `panel-content`, `panel-footer` for the regions), so code written against the per-part imports keeps working unchanged.
+
 ## Sub-components
 
+- `index.ts` — the compound: the root with every part attached by `Object.assign` (`Drawer.Trigger`, `.Portal`, `.Overlay`, `.Content`, `.Title`, `.Description`, `.Close`), plus the shared Panel regions as `Drawer.Header` (`panel-header`), `Drawer.Body` (`panel-content`) and `Drawer.Footer` (`panel-footer`). It adds no component of its own. Exported at `@aziontech/webkit/drawer`; the root alone is `@aziontech/webkit/drawer-root`. The parts stay in the root folder (flat) for 6.x path stability; per-part export paths are unchanged.
 - `drawer-close.vue` — Public sub-component `drawer-close`.
 - `drawer-content.vue` — Public sub-component `drawer-content`.
 - `drawer-description.vue` — Public sub-component `drawer-description`.

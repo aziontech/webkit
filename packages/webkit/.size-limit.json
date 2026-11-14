@@ -1038,7 +1038,7 @@
   {
     "name": "tree",
     "path": "src/components/data/tree/tree.vue",
-    "limit": "5.9 KB"
+    "limit": "6.35 KB"
   },
   {
     "name": "file-dropzone",
@@ -1185,12 +1185,12 @@
   {
     "name": "select",
     "path": "src/components/inputs/select/index.ts",
-    "limit": "20.75 KB"
+    "limit": "21.5 KB"
   },
   {
     "name": "multi-select",
     "path": "src/components/inputs/multi-select/index.ts",
-    "limit": "21.65 KB"
+    "limit": "22.45 KB"
   },
   {
     "name": "code-block",
@@ -1337,7 +1337,7 @@
   {
     "name": "combobox",
     "path": "src/components/inputs/combobox/combobox.vue",
-    "limit": "11.85 KB"
+    "limit": "12.25 KB"
   },
   {
     "name": "tag-editor",
@@ -1954,7 +1954,7 @@
   {
     "name": "dropdown-menu",
     "path": "src/components/navigation/dropdown-menu/index.ts",
-    "limit": "8.65 KB"
+    "limit": "8.95 KB"
   },
   {
     "name": "dropdown-menu-root",
@@ -2249,7 +2249,7 @@
   {
     "name": "tooltip",
     "path": "src/components/overlay/tooltip/tooltip.vue",
-    "limit": "5 KB"
+    "limit": "5.3 KB"
   },
   {
     "name": "command",
@@ -2293,6 +2293,11 @@
   },
   {
     "name": "dialog",
+    "path": "src/components/overlay/dialog/index.ts",
+    "limit": "22.35 KB"
+  },
+  {
+    "name": "dialog-root",
     "path": "src/components/overlay/dialog/dialog.vue",
     "limit": "1 KB"
   },
@@ -2333,8 +2338,13 @@
   },
   {
     "name": "drawer",
+    "path": "src/components/overlay/drawer/index.ts",
+    "limit": "22.45 KB"
+  },
+  {
+    "name": "drawer-root",
     "path": "src/components/overlay/drawer/drawer.vue",
-    "limit": "1 KB"
+    "limit": "1.05 KB"
   },
   {
     "name": "drawer-close",
@@ -2373,6 +2383,11 @@
   },
   {
     "name": "panel",
+    "path": "src/components/overlay/panel/index.ts",
+    "limit": "14.4 KB"
+  },
+  {
+    "name": "panel-root",
     "path": "src/components/overlay/panel/panel.vue",
     "limit": "11.75 KB"
   },
@@ -2399,7 +2414,7 @@
   {
     "name": "popover-root",
     "path": "src/components/overlay/popover/popover.vue",
-    "limit": "4.4 KB"
+    "limit": "4.8 KB"
   },
   {
     "name": "popover-trigger",

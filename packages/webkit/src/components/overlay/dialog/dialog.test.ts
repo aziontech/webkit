@@ -703,3 +703,33 @@ describe('closable (explicit close, separate from light-dismiss)', () => {
     expect(byTestId('overlay-dialog__close')!.hasAttribute('disabled')).toBe(true)
   })
 })
+
+describe('compound API (index.ts)', () => {
+  it('attaches every part and the Panel regions for dot-notation', async () => {
+    const { default: Compound } = await import('./index')
+    const PanelHeader = (await import('../panel/panel-header.vue')).default
+    const PanelContent = (await import('../panel/panel-content.vue')).default
+    const PanelFooter = (await import('../panel/panel-footer.vue')).default
+    expect(Compound).toBe(Dialog)
+    expect(Compound.Trigger).toBe(DialogTrigger)
+    expect(Compound.Portal).toBe(DialogPortal)
+    expect(Compound.Overlay).toBe(DialogOverlay)
+    expect(Compound.Content).toBe(DialogContent)
+    expect(Compound.Title).toBe(DialogTitle)
+    expect(Compound.Description).toBe(DialogDescription)
+    expect(Compound.Close).toBe(DialogClose)
+    expect(Compound.Header).toBe(PanelHeader)
+    expect(Compound.Body).toBe(PanelContent)
+    expect(Compound.Footer).toBe(PanelFooter)
+  })
+
+  it('renders the compound Default example and opens it', async () => {
+    const { default: Example } = await import('../../../../examples/dialog/default.vue')
+    const view = render(Example)
+    await settle()
+    await fireEvent.click(view.getByRole('button', { name: 'Open dialog' }))
+    await settle()
+    expect(byTestId('overlay-dialog__panel')).not.toBeNull()
+    expect(byTestId('overlay-dialog__close')).not.toBeNull()
+  })
+})

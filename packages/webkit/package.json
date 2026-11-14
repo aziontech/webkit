@@ -1603,6 +1603,10 @@
       "default": "./src/components/overlay/command/command-separator/command-separator.vue"
     },
     "./dialog": {
+      "types": "./types/components/overlay/dialog/index.d.ts",
+      "default": "./src/components/overlay/dialog/index.ts"
+    },
+    "./dialog-root": {
       "types": "./types/components/overlay/dialog/dialog.vue.d.ts",
       "default": "./src/components/overlay/dialog/dialog.vue"
     },
@@ -1639,6 +1643,10 @@
       "default": "./src/components/overlay/confirm-dialog/confirm-dialog.vue"
     },
     "./drawer": {
+      "types": "./types/components/overlay/drawer/index.d.ts",
+      "default": "./src/components/overlay/drawer/index.ts"
+    },
+    "./drawer-root": {
       "types": "./types/components/overlay/drawer/drawer.vue.d.ts",
       "default": "./src/components/overlay/drawer/drawer.vue"
     },
@@ -1671,6 +1679,10 @@
       "default": "./src/components/overlay/drawer/drawer-trigger.vue"
     },
     "./panel": {
+      "types": "./types/components/overlay/panel/index.d.ts",
+      "default": "./src/components/overlay/panel/index.ts"
+    },
+    "./panel-root": {
       "types": "./types/components/overlay/panel/panel.vue.d.ts",
       "default": "./src/components/overlay/panel/panel.vue"
     },
