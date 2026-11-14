@@ -19,7 +19,8 @@ Example: [`site-default.vue`](./site-default.vue)
 Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` are bound straight onto the component:
 
 - `title` and `description` are the copy beside the code.
-- `codeTabs` are the files, each with `label`, `value`, `language`, `code`, `fileName` and `fileIcon`. A tab without `code` is skipped.
+- `codeTabs` are the files, each with `label`, `value`, `language`, `code`, `fileName` and `fileIcon`. A tab without `code` is skipped. `defaultFile` names the `value` of the tab open first.
+- `anchor` is the band's id for in-page links.
 - `copyAriaLabel` names the copy button for screen readers.
 - `primaryAction` and `secondaryAction` are the two buttons, each a `label` and an `href`; `trailing` closes the label on a chevron, `icon` draws a leading glyph and `target` opens the link elsewhere, and `kind` picks the button (`secondary` by default for the first, `outlined` for the second, `transparent` for a quiet text button like "Learn more"). Leave either out to drop it.
 

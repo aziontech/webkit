@@ -6,6 +6,11 @@
       "name": "Default",
       "summary": "The band as the Application Accelerator page places it: the claim and a large \"Learn more\" text button (`kind: 'transparent'`) beside a one-file sample, drawn with a filename bar. Edit the props in the Controls panel — add a second file to get a tab strip, or a `secondaryAction` for a second button.",
       "file": "default.vue"
+    },
+    {
+      "name": "Default file",
+      "summary": "Three files with `defaultFile` opening the handler, the second tab, first; an unknown value falls back to the first tab. The band carries an `anchor` for in-page links.",
+      "file": "default-file.vue"
     }
   ],
   "site": [

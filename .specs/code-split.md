@@ -3,10 +3,10 @@ name: code-split
 category: sections
 structure: monolithic
 status: implemented
-spec_version: 1
+spec_version: 2
 created: 2026-11-05
-last_updated: 2026-11-12
-checksum: 94b5a09f7dc49c5d762a1861821c3f622ea099c06c402756f649cca57d75244e
+last_updated: 2026-11-14
+checksum: 7a8b3f059efd2039bccf3e7fae096c468a300cb6a581d028c887840f63ae5860
 ---
 # CodeSplit — Component Spec
 
@@ -32,6 +32,8 @@ The claim-beside-its-code band of a product page: a framed media split whose cop
 
 - Keep the sample short enough to read in the cell; the frame cuts off whatever runs past it.
 - Give every tab a `code`; a tab without one is skipped.
+- Set `defaultFile` to the `value` of the file the argument hinges on when it is not the first tab.
+- Set `anchor` when another part of the page links to the band.
 - Use `primaryAction` alone for one destination, and add `secondaryAction` only for a second, distinct one.
 - Set an action's `kind` to `transparent` for a quiet text link such as "Learn more" (the product pages' Cache, Application Accelerator and Image Processor bands); leave it unset for the filled `secondary` first button and the `outlined` second one.
 
@@ -59,9 +61,11 @@ import CodeSplit from '@aziontech/webkit/code-split'
 
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
+| `anchor` | `string` | `''` | false | In-page id set on the band so a `#hash` link can scroll to it. |
 | `title` | `string` | `''` | false | Headline of the band, rendered by the media split as its `h2` and naming its region; the band renders nothing when empty. |
 | `description` | `string` | `''` | false | Supporting sentence under the headline. |
 | `codeTabs` | `CodeSplitTab[]` | `[]` | false | The files of the code sample, in order; each is `{ label, value, code, language?, fileName?, fileIcon?, icon? }` where `icon` is a mark drawn beside the tab label. A tab without `code` is skipped. |
+| `defaultFile` | `string` | `''` | false | `value` of the tab open first; empty, or a value no tab carries, opens the first tab. |
 | `copyAriaLabel` | `string` | `''` | false | Accessible name of the sample's copy button; empty keeps the code block's own. |
 | `primaryAction` | `CodeSplitAction` | `undefined` | false | First button under the copy; `{ label, href, trailing?, icon?, target?, kind? }` where `kind` defaults to `secondary`. Omitted when absent. |
 | `secondaryAction` | `CodeSplitAction` | `undefined` | false | Second button beside the first; `{ label, href, trailing?, icon?, target?, kind? }` where `kind` defaults to `outlined`. Omitted when absent. |
@@ -78,6 +82,7 @@ import CodeSplit from '@aziontech/webkit/code-split'
 
 - Visual states: `default`; the tab strip, copy button and buttons own their hover and focus states
 - Empty: when `title` is empty the band renders nothing; when no tab carries `code` the media cell is left out
+- With several tabs the one whose `value` is `defaultFile` opens first, otherwise the first tab
 - One tab draws a filename bar, several draw a tab strip; a tab mark renders only when some tab carries an `icon`
 - An action's `kind` (`secondary`, `outlined` or `transparent`) picks its button; without it the first action is `secondary` and the second `outlined`
 
@@ -94,6 +99,7 @@ _none_
 | sample shape | `var(--shape-elements)` |
 | sample shadow | `var(--shadow-sm)` |
 | sample bleed | `var(--spacing-xl)` |
+| anchor scroll offset | `var(--spacing-xxl)` |
 
 ## Theme gaps
 
@@ -114,6 +120,7 @@ _none_
 
 - Default
 - Text action — `primaryAction.kind: 'transparent'` draws "Learn more" as a text button.
+- Default file — three files with `defaultFile` opening the second, and an `anchor`.
 
 ## Constraints — DO NOT
 
