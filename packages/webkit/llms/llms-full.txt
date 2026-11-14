@@ -6903,6 +6903,101 @@ What each part takes: [blocks/platform/detail/record-table.md](blocks/platform/d
 
 ---
 
+<!-- blocks/platform/detail/sectioned-resource.md -->
+
+# SectionedResource (`platform/detail/sectioned-resource`)
+
+> A resource page whose tab holds more sibling pages than a tab row can carry: the third navigation level, and the only sanctioned home for a `MenuRoot` inside a page body.
+
+- Surface: product
+- Source: `blocks/platform/detail/sectioned-resource/sectioned-resource.vue` in `@aziontech/webkit`
+- MCP: `get_pattern("platform/detail/sectioned-resource")`
+- Components: Button, Card, EmptyState, Field, IconButton, `MenuRoot`, PageHeader, PageTabs, PropertyFilter, Select, Table, `TableRoot`, Tabs, ToggleGroup, Tooltip, `use-collection`
+- Skills: `webkit-navigation`, `webkit-layout`, `webkit-tables`
+
+## Asked as
+
+local navigation; in-page navigation; section navigation; sub navigation; third level navigation; level 3 navigation; sectioned resource; resource sections; tab with many pages; many sibling pages; grouped sub pages; policy sections; side menu in page; navigation levels; navegação local; navegação de terceiro nível; submenu da página; seções do recurso; navegación local; secciones del recurso
+
+The page of one resource whose tab holds more sibling pages than a tab row can carry: the rules of a policy, the records of a zone, the settings of one application. The user arrives from the resource's list row or its tabs and moves between the sibling pages without leaving the resource. A console screen shows one navigation per level: the rail lists modules and first-level pages, `PageTabs` lists the resource's sections, and this block adds the third level, at most one local navigation inside the active tab. It is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header with the breadcrumb, the ⌘K palette and the `main`.
+
+## When to use
+
+- One tab of a resource holds more than 7 sibling pages that only exist inside that resource, such as the Private access families of a policy.
+- The siblings fall into a few named groups the reader scans before picking one.
+- Each sibling page is a list or a form of its own, with its own route, so a link to it can be shared.
+
+## When not to use
+
+- The rail already lists these pages: a destination appears once per screen, so drop either the rail rows or the local navigation. Pages that need a resource are reached through the resource, never as rail rows.
+- The tab has 7 or fewer siblings: use a `ToggleGroup` (the FewSiblings variant), tabs, or sections of one page.
+- The pages do not belong to one resource: they are first-level pages and go in the rail.
+- A resource whose tabs each hold one page: use `platform/detail/details-page` or `platform/detail/record-table`.
+
+## Building blocks
+
+- A. Tab bar — `PageTabs`, `Tabs` (required)
+- B. Local navigation — `MenuRoot` (required)
+- C. Folded navigation — `Field`, `Select` (required)
+- D. Page heading — `PageHeader`, `Button` (required)
+- E. Controls row — `PropertyFilter`, `Tooltip`, `IconButton` (required)
+- F. List — `Card`, `TableRoot`, `Table.CellLink`, `Table.CellId`, `Table.CellStatus`, `Table.CellTime`, `EmptyState` (required)
+
+What each part takes: [blocks/platform/detail/sectioned-resource.md](blocks/platform/detail/sectioned-resource.md).
+
+## Do
+
+- Keep one control per navigation level: the rail, the tabs, and at most this one local navigation.
+- Derive the current row from the route on every level, and make the current rows of all levels describe the same place.
+- Keep the menu column at `--container-3xs`, so the list keeps the page column minus that column.
+- Label the folded `Select` with the tab name, so the reader knows which set of pages it switches.
+- Give every sibling page its own route, and let the menu rows be real links that open in a new tab on a modified click.
+
+## Don't
+
+- Don't render a `Menu` in a page body outside this block; local navigation is this block.
+- Don't repeat in the local navigation a page the rail already offers, and don't add rail rows that route into a resource, not even as a shortcut into a default one.
+- Don't use it for 7 or fewer siblings; a `ToggleGroup`, tabs or one page of sections carries them.
+- Don't add glyphs to the menu rows or nest a second level inside the local navigation.
+- Don't put the container query on the element that declares the container.
+
+## Copy
+
+- **Tabs:** short nouns, e.g. "Private access", "Settings".
+- **Group labels:** one noun for the family, e.g. "Applications", "Access", "Monitoring".
+- **Rows and options:** the page name in sentence case, plural, e.g. "Access rules", "Server groups".
+- **Heading:** the page name as the title and one sentence that ends with a period, e.g. "Access rules of the acme-default policy."
+- **Actions:** "Documentation" and "Add Rule", the noun of one entry.
+- Follow `skills/webkit-microcopy`: sentence case, no em dash, no "please", no exclamation marks.
+
+## Accessibility
+
+- The local navigation is a `nav` named after the tab; exactly one row carries `aria-current="page"`, the one that matches the route.
+- The folded `Select` is labelled by its `Field.Label`, and only one of the two forms is rendered at a time, so the reader never meets the same pages twice.
+- Focus order follows reading order: tabs, local navigation, page actions, filter, Refresh, table, pagination.
+- The filter has an `aria-label` that matches its placeholder; Refresh is named by its `aria-label` and a `Tooltip` with the same words.
+- Every utility is logical (`ms-`, `ps-`, `start`), so the menu column sits on the inline start in right-to-left.
+- The tab entrance respects reduced motion.
+
+## States
+
+- Default: the Private access tab of the acme-default policy, 16 sibling pages in 4 groups in the menu column, Access rules current and listed beside it.
+- Narrow: the same tab below `@3xl` of the tab body: the menu folds into a Select labelled Private access, Server groups current, the list under it at full width.
+- FewSiblings: the Network security tab with 6 siblings and no local navigation; a ToggleGroup labelled Network security switches between them above the list.
+
+## Related
+
+- `platform/view/table-view` — the list each sibling page renders, and the source of the controls row recipe.
+- `platform/detail/details-page` — a resource whose tabs each hold one page.
+- `platform/detail/record-table` — a resource with a settings tab and one dominant record list.
+- `ConsoleLayout` — the rail (level 1) this block must not repeat; see `skills/webkit-navigation`.
+
+## Variants
+
+`Default` (primary) · `Narrow` · `FewSiblings`. Code: [blocks/platform/detail/sectioned-resource.md](blocks/platform/detail/sectioned-resource.md), `get_pattern("platform/detail/sectioned-resource", { variant })`.
+
+---
+
 <!-- blocks/platform/detail/version-detail.md -->
 
 # VersionDetail (`platform/detail/version-detail`)
@@ -10573,6 +10668,7 @@ _none_ — items are data (`items`), because every item has the same anatomy (ic
 - With `collapsible`, put the bar inside an `@container` (the header blocks do); the trigger folds while that container is narrower than 47rem (752 px, the `--container-2xl` token) and without a container it stays folded. Do not add your own breakpoint around it: 47rem is the one threshold every header uses.
 - With `collapsible`, the button sits inside the `Tooltip` wrapper, so put layout classes (`ms-auto`, `order-*`) on a parent, not on the trigger.
 - Name the target in the label when the scope is narrow (`Search docs`); the label is also the accessible name.
+- Leave the accessible name to the label: to name a narrower scope, change `label` (`Search docs`), not `aria-label`. An `aria-label` attribute replaces the name and must start with the visible text, or a voice-control user who says what they see cannot activate the button (WCAG 2.5.3 Label in Name).
 
 ## Don’t
 
@@ -10612,8 +10708,8 @@ _none_ — items are data (`items`), because every item has the same anatomy (ic
 
 ## Accessibility
 
-- Pattern: a WAI-ARIA APG **button** (`<button type="button">`); its accessible name is the label (`aria-label` keeps it when the label is visually hidden in the folded form).
-- Shortcut: `aria-keyshortcuts="Meta+K Control+K"` (both chords `Command` listens for, so the server and the client render the same attribute) when `shortcut` is set; the keycap is `aria-hidden` so the name is not read twice.
+- Pattern: a WAI-ARIA APG **button** (`<button type="button">`) named from its content: a visually hidden span (`sr-only`, test id `<testid>__name`) carries the label, and the drawn label, the magnifier and the keycap are `aria-hidden`. The name is exactly the visible label (`Search`), in the wide and in the folded form, and the button carries no `aria-label`, so the visible text (`Search ⌘K`) never disagrees with an author-supplied name (WCAG 2.5.3 Label in Name; axe `label-content-name-mismatch` only applies to `aria-label` / `aria-labelledby`). A consumer `aria-label` attribute still wins and must start with the visible text.
+- Shortcut: `aria-keyshortcuts="Meta+K Control+K"` (both chords `Command` listens for, in ARIA key syntax, so the server and the client render the same attribute) when `shortcut` is set; the keycap is `aria-hidden`, so the shortcut is announced once, through `aria-keyshortcuts`, and stays out of the name.
 - Keyboard map: `Tab` focuses; `Enter` and `Space` activate; `⌘K` / `Ctrl K` anywhere on the page opens search (handled by `Command` when one is mounted, otherwise by the trigger, which emits `open`).
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`.
 - Disabled: native `disabled` (out of the tab order, not announced as actionable); text and border keep ≥ 3:1 against the surface.
@@ -26030,6 +26126,7 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
 
 - Set `min` / `max` / `step` to constrain input rather than validating after the fact.
 - Use `inputmode="numeric"` semantics for mobile keyboards.
+- Set `nullable` on an optional field (a port, a limit) so a cleared field stays unset (`null`) instead of falling back to `min ?? 0`.
 
 ## Don’t
 
@@ -26054,13 +26151,14 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
 | `max` | `number \| undefined` | `undefined` | false | Maximum allowed value; spinner stops at this bound. |
 | `step` | `number` | `1` | false | Increment used by the spinner buttons and arrow keys. |
 | `showButtons` | `boolean` | `true` | false | Renders the chevron-up/chevron-down spinner controls. |
-| `modelValue` | `number` | `0` | false | Two-way value (`v-model`). |
+| `nullable` | `boolean` | `false` | false | Lets a cleared field emit null instead of falling back to min or 0. |
+| `modelValue` | `NumberInputValue<TNullable>` | `0 as NumberInputValue<TNullable>` | false | Two-way value (`v-model`). |
 
 ## Events
 
 | Event | Payload | Notes |
 | --- | --- | --- |
-| `change` | `number` | Emitted when the user commits the value (blur or Enter). |
+| `change` | `number` | Emitted when the user commits the value (blur or Enter). With `nullable` the payload is `null` when the field is committed empty. |
 
 ## Slots
 
@@ -26071,13 +26169,13 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
 
 ## v-model
 
-| Model     | Type     | Default | Emits               | Notes                                                                                                                                                   |
-| --------- | -------- | ------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `v-model` | `number` | `0`     | `update:modelValue` | The value via `defineModel`, always numeric and clamped to `min`/`max`; updates on typing and on the spinner. A cleared field falls back to `min ?? 0`. |
+| Model     | Type                                        | Default | Emits               | Notes                                                                                                                                                                                                                                                                                                                                                                              |
+| --------- | ------------------------------------------- | ------- | ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `v-model` | `number` (`number \| null` with `nullable`) | `0`     | `update:modelValue` | The value via `defineModel`, clamped to `min`/`max`; updates on typing and on the spinner. A cleared field falls back to `min ?? 0`; with `nullable` it emits `null` and shows the placeholder, and the spinner on a `null` value starts at `min ?? 0` (clamped). The component is generic over `nullable`, so the model and `change` are typed `number` unless `nullable` is set. |
 
 ## States
 
-- Visual states: `default`, `hover`, `focus-visible`, `disabled`, `invalid`, `filled`
+- Visual states: `default`, `hover`, `focus-visible`, `disabled`, `invalid`, `filled`, `empty` (a `nullable` field whose value is `null` shows the placeholder)
 - `data-disabled` mirrors the `disabled` prop
 - `data-invalid` mirrors the `invalid` prop
 - `data-size` mirrors the `size` prop
@@ -26799,7 +26897,7 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
 
 # Schema Form
 
-> A form rendered from a JSON schema: each property of an object schema becomes a `Field` with its label, description, Required marker and control, and a nested object becomes a fieldset with its own legend. It edits one value object through `v-model`, seeds the schema's defaults, validates the supported draft-07 keywords with built-in messages (on leaving a field, or only after `validate()`), and shows server messages passed by field path. It is for forms whose fields are data (a function's arguments, an integration's settings), not for forms a designer lays out by hand.
+> A form rendered from a JSON schema: each property of an object schema becomes a `Field` with its label, description, Required marker and control, and a nested object becomes a fieldset with its own legend. It edits one value object through `v-model`, seeds the schema's defaults, validates the supported draft-07 keywords with built-in messages (on leaving a field, or only after `validate()`), and shows server messages passed by field path. It also reads the OpenAPI request-body keywords a console generates its create and edit forms from: `oneOf` with a `discriminator`, `format`, `writeOnly` and string maps (`additionalProperties`). Through the `ui` map the app adds what a schema cannot say: fields shown only while a predicate holds (`when`), choices loaded from the app (`options`), arrays of objects edited as repeatable fieldsets (`widget: 'repeat'`) and sections, one of them folded under Advanced settings. It is for forms whose fields are data (a function's arguments, an integration's settings, a resource's request body), not for forms a designer lays out by hand.
 
 - Import: `import SchemaForm from '@aziontech/webkit/schema-form'`
 - Category: inputs · Surface: product · Structure: monolithic
@@ -26809,6 +26907,7 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
 - A function, template or integration declares its own arguments as a JSON schema and the console must ask for them.
 - The same settings form must follow a schema the server sends (fields added or removed without a release).
 - A form of typed values (text, choices, numbers, switches, lists) with constraints that already live in a schema.
+- A resource's create or edit drawer generated from its OpenAPI request schema, with choices read from other endpoints through a loader the app supplies.
 
 ## Do
 
@@ -26818,7 +26917,12 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
 - Call `validate()` on submit and stop when it returns `valid: false`; it shows every message and focuses the first invalid field.
 - Pass server rejections in `errors` keyed by path (`origin.host`): the field turns invalid with that message until the user edits it (the form-error rule). Put a section-level failure in an `Alert` above the form, not in `errors`.
 - Use a `field:<path>` slot for a control the schema cannot express (`RadioCards`, a resource picker); the slot keeps the label, description and messages.
-- Do not rely on unsupported keywords (`$ref`, `oneOf`, `anyOf`, `allOf`, `if`/`then`, `const`, `format`, `uniqueItems`, `multipleOf`, `additionalProperties`): they are ignored, so validate them on the server.
+- Do not rely on unsupported keywords (`$ref`, `anyOf`, `allOf`, `if`/`then`/`else`, `uniqueItems`, `multipleOf`, `patternProperties`, a `oneOf` without a `discriminator`): they are ignored, so validate them on the server. Express an `if`/`then` as `ui[path].when`.
+- Define `ui` once in the script, not inline in the template: a new `ui` object rebuilds the fields and seeds defaults again.
+- Keep a `when` predicate pure and cheap (it runs on every change); read the second argument (the object holding the field) inside a repeat item.
+- An `options` loader receives the typed text (empty on first load) and resolves to `{ value, label?, description? }`; filter on the server, return a short list, and let it reject on failure (the field then says so). SchemaForm calls it; it never fetches on its own.
+- Mark secrets `writeOnly`: the field starts empty, an empty field leaves the key out of the value, so a PATCH keeps the stored secret.
+- Put rarely changed keys in a collapsed section (`ui[''].sections`), not in a second form.
 
 ## Don’t
 
@@ -26830,8 +26934,10 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
 ## Related
 
 - `field` — the wrapper every generated field uses; SchemaForm adds no field chrome of its own.
-- `input`, `select`, `switch`, `textarea` — the controls it renders per type.
-- `attribute-editor` — user-defined key/value rows, where SchemaForm renders a fixed set of keys.
+- `input`, `select`, `switch`, `textarea`, `password-input` — the controls it renders per type and format.
+- `combobox`, `multi-select` — the controls of a field whose choices come from `ui[path].options`.
+- `accordion` — folds a collapsed section.
+- `attribute-editor` — user-defined key/value rows; SchemaForm uses it for string maps and for the Add and Remove of a repeat.
 - `code-editor` — the JSON view of the same value, when the user prefers to type it.
 
 ## Props
@@ -26840,7 +26946,7 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
 | --- | --- | --- | --- | --- |
 | `schema` | `SchemaFormSchema` | `—` | true | JSON schema of an object (draft-07 subset); each property becomes a Field. |
 | `errors` | `Record<string, string>` | `{}` | false | Server or external messages by field path; a field shows its message until it is edited. |
-| `ui` | `Record<string, SchemaFormUi>` | `{}` | false | Presentation overrides by field path: widget, placeholder, hidden, and key order (`''` is the root). |
+| `ui` | `Record<string, SchemaFormUi>` | `{}` | false | Presentation overrides by field path (`''` is the root, `*` a repeat item): widget, placeholder, hidden, order, when, options and sections. |
 | `validateOn` | `'blur' \| 'submit'` | `'blur'` | false | When fields first show their validation message: on leaving the field, or only after `validate()`. |
 | `disabled` | `boolean` | `false` | false | Disables every field. |
 | `readonly` | `boolean` | `false` | false | Shows every value without letting it change. |
@@ -26859,6 +26965,11 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
 - Validation timing: a field shows its own message after the user leaves it (`validate-on="blur"`), after `validate()` in both modes, and from then on updates as the user types. Opening a `Select` does not count as leaving its field.
 - Server messages (`errors`) show at once, win over the field's own message and leave once that field is edited; a new `errors` object shows them again.
 - Draft text: a number, list or JSON field keeps what the user typed while it does not parse; the value then holds no key for it, and the field reports "Enter a number." or "Enter valid JSON."
+- Hidden (`when`): the field is not rendered, not validated and its key is removed from the value; a variant not chosen is hidden the same way.
+- Loading options: the `Combobox` shows its spinner and loading row; a rejected loader shows "Couldn't load the options." in the list.
+- Repeat: an empty array shows the editor's empty text; the item fieldsets carry `data-testid` `__item`; Add is disabled at `maxItems` and Remove is hidden at `minItems`.
+- Map: a duplicate key marks its row invalid at once and fails `validate()` on the map's path.
+- Sections: `data-widget="section"`; a collapsed section opens when `validate()` focuses a field inside it.
 
 ## Accessibility
 
@@ -26866,7 +26977,10 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
 - A nested object is a real `<fieldset>` with a `<legend>`, so its fields are announced with the group name.
 - Messages are text under the control, never colour alone; the message replaces the description while it shows, as the design sample does.
 - `validate()` moves focus to the first invalid control, in reading order, so keyboard and screen-reader users land on the problem.
-- Keyboard map: no keys of its own; Tab moves through the controls in schema order (or `ui` order); each control keeps its own keys.
+- Keyboard map: no keys of its own; Tab moves through the controls in schema order (or `ui` order, then sections); each control keeps its own keys (the `Combobox` arrows and Enter, the `Accordion` trigger's Enter and Space).
+- A repeat and a map are `<fieldset>`s named by the property title; each repeat item is a `role="group"` named "Item 2" (or the item schema's `title` and number), its Remove button is named "Remove item 2", and Add and Remove are announced by `AttributeEditor`'s live region, which also moves focus to the new row.
+- A collapsed section is an `Accordion` trigger with `aria-expanded`; a closed section's fields are still validated, and `validate()` opens it before moving focus.
+- A field that appears or disappears through `when` is not announced; keep the controlling field just before it so the change happens where the user is.
 - A `field:<path>` slot control must name itself (the scope gives `invalid`, `required`, `disabled`); WebKit inputs read the Field context and need nothing.
 - Visible focus, contrast and touch targets come from the composed controls.
 
@@ -26879,26 +26993,38 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
 
 ## Internationalization
 
-| Key                            | English source                                | Override prop          |
-| ------------------------------ | --------------------------------------------- | ---------------------- |
-| `schemaForm.required`          | This field is required.                       | —                      |
-| `schemaForm.minLength`         | Use at least {min} characters.                | —                      |
-| `schemaForm.maxLength`         | Use at most {max} characters.                 | —                      |
-| `schemaForm.pattern`           | This value doesn't match the expected format. | —                      |
-| `schemaForm.minimum`           | Enter {min} or more.                          | —                      |
-| `schemaForm.maximum`           | Enter {max} or less.                          | —                      |
-| `schemaForm.number`            | Enter a number.                               | —                      |
-| `schemaForm.integer`           | Enter a whole number.                         | —                      |
-| `schemaForm.enum`              | Choose one of the options.                    | —                      |
-| `schemaForm.minItems`          | Add at least {min} values.                    | —                      |
-| `schemaForm.maxItems`          | Add at most {max} values.                     | —                      |
-| `schemaForm.listItem`          | Line {line}: {message}                        | —                      |
-| `schemaForm.json`              | Enter valid JSON.                             | —                      |
-| `schemaForm.selectPlaceholder` | Select an option                              | `ui[path].placeholder` |
-| `schemaForm.numberPlaceholder` | A number                                      | `ui[path].placeholder` |
-| `schemaForm.numberFrom`        | From {min}                                    | `ui[path].placeholder` |
-| `schemaForm.listPlaceholder`   | One value per line                            | `ui[path].placeholder` |
-| `schemaForm.jsonPlaceholder`   | A JSON value                                  | `ui[path].placeholder` |
+| Key                               | English source                                 | Override prop          |
+| --------------------------------- | ---------------------------------------------- | ---------------------- |
+| `schemaForm.required`             | This field is required.                        | —                      |
+| `schemaForm.minLength`            | Use at least {min} characters.                 | —                      |
+| `schemaForm.maxLength`            | Use at most {max} characters.                  | —                      |
+| `schemaForm.pattern`              | This value doesn't match the expected format.  | —                      |
+| `schemaForm.minimum`              | Enter {min} or more.                           | —                      |
+| `schemaForm.maximum`              | Enter {max} or less.                           | —                      |
+| `schemaForm.number`               | Enter a number.                                | —                      |
+| `schemaForm.integer`              | Enter a whole number.                          | —                      |
+| `schemaForm.enum`                 | Choose one of the options.                     | —                      |
+| `schemaForm.minItems`             | Add at least {min} values.                     | —                      |
+| `schemaForm.maxItems`             | Add at most {max} values.                      | —                      |
+| `schemaForm.listItem`             | Line {line}: {message}                         | —                      |
+| `schemaForm.json`                 | Enter valid JSON.                              | —                      |
+| `schemaForm.selectPlaceholder`    | Select an option                               | `ui[path].placeholder` |
+| `schemaForm.numberPlaceholder`    | A number                                       | `ui[path].placeholder` |
+| `schemaForm.numberFrom`           | From {min}                                     | `ui[path].placeholder` |
+| `schemaForm.listPlaceholder`      | One value per line                             | `ui[path].placeholder` |
+| `schemaForm.jsonPlaceholder`      | A JSON value                                   | `ui[path].placeholder` |
+| `schemaForm.email`                | Enter a valid email address.                   | —                      |
+| `schemaForm.uri`                  | Enter a full URL, such as https://example.com. | —                      |
+| `schemaForm.date`                 | Enter a date as YYYY-MM-DD.                    | —                      |
+| `schemaForm.datePlaceholder`      | YYYY-MM-DD                                     | `ui[path].placeholder` |
+| `schemaForm.searchPlaceholder`    | Search                                         | `ui[path].placeholder` |
+| `schemaForm.optionsError`         | Couldn't load the options.                     | —                      |
+| `schemaForm.writeOnlyPlaceholder` | Leave empty to keep the current value          | `ui[path].placeholder` |
+| `schemaForm.item`                 | Item {index}                                   | item schema `title`    |
+| `schemaForm.advanced`             | Advanced settings                              | section `title`        |
+| `schemaForm.mapKey`               | Key                                            | —                      |
+| `schemaForm.mapValue`             | Value                                          | —                      |
+| `schemaForm.duplicateKey`         | Each key must be unique.                       | —                      |
 
 - Formatting: `{min}` and `{max}` go through the locale's number format (`useTranslate`). Labels and descriptions come from the schema, so a translated form needs a translated schema.
 
@@ -28266,6 +28392,7 @@ Exported types: `BoardLayoutItem = { id: string; span: number; height?: number }
 - A page body that also renders on its own (a block preview, a docs example, a test) calls `useConsoleLayout({ optional: true })`, which returns `null` outside a layout, and guards the call (`layout?.openSearch()`). Never wrap `useConsoleLayout()` in `try` / `catch`.
 - The page entrance (`animate-page-enter`) plays on every route path change: the `<main>` is keyed on the path, so the page body remounts when the path changes and is kept when only the query or the hash changes. Keep state that must survive a path change (a list filter, a draft) in the route query or in the app's store, not in the page body; a `KeepAlive` belongs inside a page body (tabbed views), not around `RouterView`.
 - The page body renders no `<main>` of its own and no `AppLayout`: the layout owns the landmark. Frame the body with `layout-boundary` + `layout-column` for list and form pages, or flush (`PageTabs` first) for detail pages.
+- A destination appears once per screen (rule `webkit-navigation-levels`, rule 2): never render a `Menu` in the page body whose rows repeat the layout's navigation; local navigation inside a resource is the `platform/detail/sectioned-resource` block. In development builds the layout scans the `Menu`s in its `<main>` after mount, on each route change and on page mutations, and when a row `href` has the same path (query and hash ignored) as a `navigation` row on screen (the top level, its inline children and the open drill level; a closed drill level is not on screen), it calls `console.warn` once per route with both labels and the route. Production builds drop the check (`import.meta.env.DEV`).
 
 ## Don’t
 
@@ -28303,6 +28430,7 @@ Exported types: `BoardLayoutItem = { id: string; span: number; height?: number }
 | --- | --- | --- |
 | `navigate` | `(event: MouseEvent \| KeyboardEvent, item: ConsoleLayoutNavItem)` | Fired when a navigation row or a palette page is chosen; the layout then follows its `href` (an in-app path with the app's router). A row without `href` is left to this handler. Event first. |
 | `search-select` | `(event: MouseEvent \| KeyboardEvent, value: string \| number)` | Fired when a palette item from the `search` slot is chosen; `value` is that item's value. Event first. |
+| `account-select` | `(event: MouseEvent \| KeyboardEvent, value: string \| number)` | Fired when an option of the `account-menu` slot is chosen, by click or by keyboard (`Enter` / `Space`), from the rail footer or the header avatar; `value` is the option's `value`. Event first. |
 
 ## Slots
 
@@ -28315,7 +28443,7 @@ Exported types: `BoardLayoutItem = { id: string; span: number; height?: number }
 | `notifications` | — | Flash messages (`Alert`) above the page, kept in view while the page scrolls. |
 | `tools` | — | The tools region's body (a `HelpPanel` or the notifications list), opened with `v-model:tools-open`. |
 | `search` | { query: string } | Extra `Command.Group`s (recent resources, commands) listed before the navigation pages in the palette. |
-| `account-menu` | — | DropdownMenu.Group`s of the account menu, opened from the account row in the rail and from the header avatar. |
+| `account-menu` | — | DropdownMenu.Group`s of the account menu, opened from the account row in the rail and from the header avatar; a chosen option is reported by `account-select`. |
 
 ## Sub-component imports
 
@@ -28355,14 +28483,15 @@ packages/webkit/src/components/layout/console-layout/
 - Fill: a direct child of the `<main>` with `data-layout-fill` makes the main `h-full overflow-hidden` and the child `flex-1 min-h-0`; pure CSS, right in the server render.
 - Page entrance: the `<main>` is keyed on the current route path (the router's `currentRoute.path`, or `location.pathname` on `popstate` without a router); a path change replaces the main and remounts the page body, so `animate-page-enter` replays. The first path read after mount (no router) and a change of only the query or the hash keep the main.
 - Page trail: registered on mount, so the server render shows the layout's trail and the page trail replaces it after hydration (no mismatch); use `breadcrumbs` when the first server paint must show it.
-- Active navigation row: `Menu`'s `activeId`; a row inside a drill level opens that level, a row inside an inline row expands it.
+- Active navigation row: `Menu`'s `activeId`; a row inside a drill level opens that level, a row inside an inline row expands it. On mount, when the rail (or the compact drawer) is rendered and whenever the active row changes, the rail's own scroller scrolls the minimum needed to bring the row into view, honouring the scroller's `scroll-padding` (the `ScrollArea` fade), with an instant jump (no smooth scroll); the page never scrolls.
 - Not applicable: `loading`, `empty`, `error`, `disabled`, `readonly`, `invalid` (the page body owns its states).
 
 ## Accessibility
 
 - Landmarks: the rail is the `Sidebar` `<nav>` named by `ariaLabel`; the header is `GlobalHeader` (`<header>`); the page body is inside the layout's single `<main>`. A page body must not render a second `<main>`.
 - Keyboard map: `Tab` runs rail → header → page; `⌘K` / `Ctrl K` opens the palette (owned by `Command`); in the palette `ArrowUp` / `ArrowDown` move, `Enter` chooses, `Escape` closes and returns focus. The rail keyboard map is `Menu`'s; the compact drawer closes on `Escape` and returns focus to the hamburger (`AppLayout`).
-- Names: the compact hamburger (`Open navigation`), the brand link (`Azion home`), the account trigger (`Account menu`) come from the locale catalog; the avatar carries the account name.
+- Names: the compact hamburger (`Open navigation`), the brand link (`Azion home`), the rail account trigger (`Account menu`, an icon button) come from the locale catalog; the avatar carries the account name. The header avatar trigger shows the initials, so its name starts with them (`JD, account menu`, `consoleLayout.accountMenuFor`) to meet WCAG 2.5.3 Label in Name (a speech user says what they see); with an account image it has no visible text and is named `Account menu`.
+- Account menu: choosing an option by pointer or keyboard emits `account-select`; the keyboard map inside the menu is `DropdownMenu`'s.
 - Visible focus: every interactive part is a WebKit control with its own ring; the brand link and the avatar button use `focus-visible:ring-2 focus-visible:ring-(--ring-color)`.
 - Choosing a row in the compact drawer closes it.
 - A page's control crumb is the last item of the header's `Breadcrumb` list; it carries its own accessible name (`aria-label` on `Select.Trigger`, e.g. `Switch environment`).
@@ -28382,6 +28511,7 @@ packages/webkit/src/components/layout/console-layout/
 | `consoleLayout.home`              | `Azion home`                              | —                   |
 | `consoleLayout.openNavigation`    | `Open navigation`                         | —                   |
 | `consoleLayout.accountMenu`       | `Account menu`                            | —                   |
+| `consoleLayout.accountMenuFor`    | `{initials}, account menu`                | —                   |
 | `consoleLayout.searchPlaceholder` | `Search pages and commands`               | `searchPlaceholder` |
 | `consoleLayout.searchEmpty`       | `No page or command matches your search.` | —                   |
 | `consoleLayout.pages`             | `Pages`                                   | —                   |
@@ -28410,6 +28540,7 @@ packages/webkit/src/components/layout/console-layout/
   import IconButton from '@aziontech/webkit/icon-button'
   import PageHeader from '@aziontech/webkit/page-header'
   import Tooltip from '@aziontech/webkit/tooltip'
+  import { ref } from 'vue'
 
   const navigation: ConsoleLayoutNavGroup[] = [
     {
@@ -28463,6 +28594,13 @@ packages/webkit/src/components/layout/console-layout/
       ]
     }
   ]
+
+  const accountAction = ref('')
+
+  const onAccountSelect = (_event: MouseEvent | KeyboardEvent, value: string | number) => {
+    accountAction.value =
+      value === 'logout' ? 'Signing out of Acme Inc.' : 'Opening account settings'
+  }
 </script>
 
 <template>
@@ -28471,6 +28609,7 @@ packages/webkit/src/components/layout/console-layout/
     :breadcrumbs="[{ label: 'Workloads', href: '/workloads' }, { label: 'edge-shop' }]"
     :account="{ name: 'Jane Doe', email: 'jane.doe@example.com' }"
     active-id="workloads"
+    @account-select="onAccountSelect"
   >
     <template #actions="{ compact }">
       <Tooltip
@@ -28529,6 +28668,13 @@ packages/webkit/src/components/layout/console-layout/
           title="edge-shop"
           description="The workload that serves the storefront."
         />
+        <p
+          v-if="accountAction"
+          role="status"
+          class="text-body-sm text-(--text-muted)"
+        >
+          {{ accountAction }}
+        </p>
         <EmptyState
           title="No deployments yet"
           description="Deploy the workload to see its history here."
@@ -29624,6 +29770,7 @@ context, so a consumer never wires one part to the other.
 - Let a tall control (an input group of three nameservers, a textarea) sit beside the copy: the title stays at the top of the row.
 - Do not wrap the row or its copy in your own flex box to change the alignment or to stack it; use `kind` and `stackable`.
 - Do not set `stackable` on a `compact` row: a switch or a button always stays at the end side.
+- Keep the description to the one sentence that says what the setting does, and put the rest of a longer explanation in `hint`: the description clamps to two lines, and the Hint glyph beside the title reveals the full text on hover or focus.
 
 ## Don’t
 
@@ -29646,18 +29793,19 @@ context, so a consumer never wires one part to the other.
 | `kind` | `'field' \| 'compact' \| 'stacked'` | `'field'` | false | Where the control sits relative to the copy. |
 | `level` | `0 \| 1 \| 2` | `0` | false | Indent depth under a rule, for a setting that only applies when its parent is on. |
 | `stackable` | `boolean` | `false` | false | Below the md container of the row, move a field control under the copy at full width. |
+| `hint` | `string` | `''` | false | Extra guidance in a Hint glyph beside the title; empty renders no glyph. |
 
 ## Slots
 
 | Slot | Scope | Notes |
 | --- | --- | --- |
 | `default` | — | The control, plus the HelperText message under it when there is one. |
-| `title` | — | Rich title content (a Tag, a Hint); replaces the `title` prop. |
+| `title` | — | Rich title content (a Tag); replaces the `title` prop. The `hint` glyph still renders after it. |
 | `description` | — | Rich description content (links, inline code); replaces the `description` prop. |
 
 ## States
 
-- Visual states: `default`
+- Visual states: `default`, `hinted` (a `Hint` glyph after the title when `hint` is set)
 - `data-row-kind` mirrors `kind` and `data-level` mirrors `level` on the root; `data-stackable` is set when `stackable` is on
 - Alignment: the copy and the control align to the top of the row, so a title stays level with the first line of a tall control.
 - Responsive: the row is the `@container/setting-row`. By default the row keeps its two columns at every width: the copy shrinks (the description clamps to two lines with an ellipsis) and a `field` control keeps the end cell, capped at the 3xs container. With `stackable`, below `@md` of the row a `field` control moves under the copy at full width.
@@ -29667,6 +29815,7 @@ context, so a consumer never wires one part to the other.
 - Visible focus: owned by the control in the default slot.
 - Keyboard map: `Tab` reaches the control; the row is not interactive.
 - ARIA: the row is an `Item` (a `listitem` inside `Item.List`); the control carries `aria-label` equal to the title, and a message is linked with `aria-describedby`.
+- Truncation: the two-line clamp of the description is visual only; the full text stays in the DOM, so assistive technology reads all of it. For sighted users, `hint` is the way to the full explanation: its glyph is a focusable button whose accessible name and tooltip are the hint text, reachable with `Tab` and revealed on hover or focus.
 - Contrast ≥4.5:1 for the title and the muted description.
 
 ## Examples
@@ -29798,6 +29947,7 @@ context, so a consumer never wires one part to the other.
 - Visual states: `default`, `hover` / `focus-within` (reveals the copy-link button)
 - `data-state` on the root: `open` | `closed` when `collapsible`
 - `data-open` on the body mirrors whether it is unfolded
+- Only a collapsible band folds along the `0fr`/`1fr` grid track (`data-collapsible` on the body); a band that is not collapsible lays its body out in normal flow, so it has no track that can resolve to zero height.
 - Responsive: the body is the `@container/settings-section`, so rows and fields inside lay out for the section, not the window.
 - Hover-free devices: the copy-link button is shown inline after the title where the pointer cannot hover (`@media (hover: none)`), instead of floating outside the start edge on hover.
 
@@ -34628,7 +34778,7 @@ The root `Hero` owns the band — the full-bleed section, the capped column, the
 
 # Menu
 
-> A vertical, hierarchical navigation menu. It owns no shell and no layout of its own: it is **injected into** a host — usually `Sidebar`, but any scroll container works — and renders three structures through one compound: **groups** that separate rows under a title, **condensed rows** that own children and expand in place behind an indent rail, and **drill rows** that replace the menu with a second-level menu. Unlike `navigation-menu` — the horizontal megamenu — this menu is vertical, recursive, and owns a view stack. Its box model follows Cloudflare Kumo's `Sidebar` (<https://kumo-ui.com/components/sidebar/>): full-width rows, padding inside the row rather than on the list, and indentation carried by the nested list's `padding-left`. Per [`migration.md`](https://github.com/aziontech/webkit/blob/main/.claude/rules/migration.md) only that _structure_ is adopted — every _value_ is expressed in our own tokens (see [`styling.md`](https://github.com/aziontech/webkit/blob/main/.claude/rules/styling.md)). Kumo's raw utilities (`min-h-8.5`, `rounded-lg`, `gap-2.5`, `pl-7`, `my-3`, a `cubic-bezier` literal) are all things the token rules forbid outright; the mapping is in Tokens, and the single value with no token behind it is in Theme gaps.
+> A vertical, hierarchical navigation menu. It owns no shell and no layout of its own: it is **injected into** a host built for it — `Sidebar`, the rail of `ConsoleLayout` and `DocLayout`, or the local navigation of the `platform/detail/sectioned-resource` block — and renders three structures through one compound: **groups** that separate rows under a title, **condensed rows** that own children and expand in place behind an indent rail, and **drill rows** that replace the menu with a second-level menu. Unlike `navigation-menu` — the horizontal megamenu — this menu is vertical, recursive, and owns a view stack. Its box model follows Cloudflare Kumo's `Sidebar` (<https://kumo-ui.com/components/sidebar/>): full-width rows, padding inside the row rather than on the list, and indentation carried by the nested list's `padding-left`. Per [`migration.md`](https://github.com/aziontech/webkit/blob/main/.claude/rules/migration.md) only that _structure_ is adopted — every _value_ is expressed in our own tokens (see [`styling.md`](https://github.com/aziontech/webkit/blob/main/.claude/rules/styling.md)). Kumo's raw utilities (`min-h-8.5`, `rounded-lg`, `gap-2.5`, `pl-7`, `my-3`, a `cubic-bezier` literal) are all things the token rules forbid outright; the mapping is in Tokens, and the single value with no token behind it is in Theme gaps.
 
 - Import: `import MenuRoot from '@aziontech/webkit/menu-root'`
 - Compound import (dot notation, not tree-shakeable): `import Menu from '@aziontech/webkit/menu'`
@@ -34636,7 +34786,7 @@ The root `Hero` owns the band — the full-bleed section, the capped column, the
 
 ## When to use
 
-- Any navigation region grouped by product or concern — placed inside `Sidebar`, a drawer, or a plain container.
+- Any navigation region grouped by product or concern — placed inside `Sidebar` (a drawer included), the rail of `ConsoleLayout` or `DocLayout`, or the `platform/detail/sectioned-resource` block.
 - A documentation tree that nests two or three levels and must show its indentation structurally.
 - A settings-style area where activating a row should replace the menu with that row's own menu, then return.
 - Navigation whose tree comes from a manifest or route config rather than hand-authored markup (use `groups`).
@@ -34645,7 +34795,8 @@ The root `Hero` owns the band — the full-bleed section, the capped column, the
 
 - Put every `Menu.Item` and `Menu.Sub` inside a `Menu.Group` or an **inline** `Menu.SubContent`. Those own the `<ul>`; a row outside one is a `<li>` with no list, which is invalid HTML. A group with no `label` is the correct way to express an unlabeled block — including inside a **drill** `Menu.SubContent`, which is a level container rather than a list precisely so it can hold groups.
 - Treat a drilled level as a whole menu, because it is one: give it groups and labels the way the root has them. A second-level nav that is only flat rows is a missed opportunity, not a constraint of the component.
-- Let the host own width, padding and scrolling. The menu fills the width it is given and adds no outer margin, so it drops into `Sidebar`, a drawer, or a bare `<div>` unchanged.
+- Let the host own width, padding and scrolling. The menu fills the width it is given and adds no outer margin, so it drops into `Sidebar`, a drawer, the `ConsoleLayout` / `DocLayout` rail or the `platform/detail/sectioned-resource` block unchanged.
+- Do not render a `Menu` inside a page body whose rows repeat the layout's navigation. The rail, the page's tabs and one local navigation each own a level, and a route appears once per screen; in-page local navigation is the `platform/detail/sectioned-resource` block. The lint `webkit/no-page-navigation-menu` warns on a `Menu` in a page body, and `ConsoleLayout` warns in development when one repeats a rail row.
 - Keep padding **inside the row**, never on the list. Every list (`Group`'s `<ul>`, `SubContent`'s `<ul>`) is a bare `m-0 list-none p-0 flex flex-col`; the row owns `px-(--spacing-sm)` and `min-h-8`. That is what lets a row's hover surface span the full menu width instead of stopping short of a list inset.
 - **The rail means parentage, not membership.** It is drawn only by an inline `Menu.SubContent`, where it ties children to the row above them. A `Menu.Group` draws none and indents nothing: its label already marks the section, so a rail there would spend the same ink saying something the label has said and dilute what the rail means everywhere else. A grouped row therefore sits flush with an ungrouped one.
 - Indentation is the nested list's `padding-left`, not a margin on each row — so the rail, which is drawn relative to that padding box, stays aligned no matter what a row contains.
@@ -34671,6 +34822,7 @@ The root `Hero` owns the band — the full-bleed section, the capped column, the
 - A single collapsible content region that is not navigation → use `accordion` instead.
 - Mutually exclusive in-page view switching → use `tabs` (or `toggle-group` for a compact control) instead.
 - The surrounding shell itself (brand header, scroll region, user footer) → that is `Sidebar`; this menu goes inside it.
+- Local navigation inside a page body → never a free `Menu`, and never one whose rows repeat the layout's navigation (one owner per level, a destination once per screen: rule `webkit-navigation-levels`). More than 7 sibling pages of a resource tab → the `platform/detail/sectioned-resource` block; 7 or fewer → `tabs`, `toggle-group` or sections of one page.
 
 ## Related
 

@@ -28,6 +28,7 @@
 - A page body that also renders on its own (a block preview, a docs example, a test) calls `useConsoleLayout({ optional: true })`, which returns `null` outside a layout, and guards the call (`layout?.openSearch()`). Never wrap `useConsoleLayout()` in `try` / `catch`.
 - The page entrance (`animate-page-enter`) plays on every route path change: the `<main>` is keyed on the path, so the page body remounts when the path changes and is kept when only the query or the hash changes. Keep state that must survive a path change (a list filter, a draft) in the route query or in the app's store, not in the page body; a `KeepAlive` belongs inside a page body (tabbed views), not around `RouterView`.
 - The page body renders no `<main>` of its own and no `AppLayout`: the layout owns the landmark. Frame the body with `layout-boundary` + `layout-column` for list and form pages, or flush (`PageTabs` first) for detail pages.
+- A destination appears once per screen (rule `webkit-navigation-levels`, rule 2): never render a `Menu` in the page body whose rows repeat the layout's navigation; local navigation inside a resource is the `platform/detail/sectioned-resource` block. In development builds the layout scans the `Menu`s in its `<main>` after mount, on each route change and on page mutations, and when a row `href` has the same path (query and hash ignored) as a `navigation` row on screen (the top level, its inline children and the open drill level; a closed drill level is not on screen), it calls `console.warn` once per route with both labels and the route. Production builds drop the check (`import.meta.env.DEV`).
 
 ## Don’t
 
@@ -66,6 +67,7 @@
 | --- | --- | --- |
 | `navigate` | `(event: MouseEvent \| KeyboardEvent, item: ConsoleLayoutNavItem)` | Fired when a navigation row or a palette page is chosen; the layout then follows its `href` (an in-app path with the app's router). A row without `href` is left to this handler. Event first. |
 | `search-select` | `(event: MouseEvent \| KeyboardEvent, value: string \| number)` | Fired when a palette item from the `search` slot is chosen; `value` is that item's value. Event first. |
+| `account-select` | `(event: MouseEvent \| KeyboardEvent, value: string \| number)` | Fired when an option of the `account-menu` slot is chosen, by click or by keyboard (`Enter` / `Space`), from the rail footer or the header avatar; `value` is the option's `value`. Event first. |
 
 ## Slots
 
@@ -78,7 +80,7 @@
 | `notifications` | — | Flash messages (`Alert`) above the page, kept in view while the page scrolls. |
 | `tools` | — | The tools region's body (a `HelpPanel` or the notifications list), opened with `v-model:tools-open`. |
 | `search` | { query: string } | Extra `Command.Group`s (recent resources, commands) listed before the navigation pages in the palette. |
-| `account-menu` | — | DropdownMenu.Group`s of the account menu, opened from the account row in the rail and from the header avatar. |
+| `account-menu` | — | DropdownMenu.Group`s of the account menu, opened from the account row in the rail and from the header avatar; a chosen option is reported by `account-select`. |
 
 ## Sub-component imports
 
@@ -118,14 +120,15 @@ packages/webkit/src/components/layout/console-layout/
 - Fill: a direct child of the `<main>` with `data-layout-fill` makes the main `h-full overflow-hidden` and the child `flex-1 min-h-0`; pure CSS, right in the server render.
 - Page entrance: the `<main>` is keyed on the current route path (the router's `currentRoute.path`, or `location.pathname` on `popstate` without a router); a path change replaces the main and remounts the page body, so `animate-page-enter` replays. The first path read after mount (no router) and a change of only the query or the hash keep the main.
 - Page trail: registered on mount, so the server render shows the layout's trail and the page trail replaces it after hydration (no mismatch); use `breadcrumbs` when the first server paint must show it.
-- Active navigation row: `Menu`'s `activeId`; a row inside a drill level opens that level, a row inside an inline row expands it.
+- Active navigation row: `Menu`'s `activeId`; a row inside a drill level opens that level, a row inside an inline row expands it. On mount, when the rail (or the compact drawer) is rendered and whenever the active row changes, the rail's own scroller scrolls the minimum needed to bring the row into view, honouring the scroller's `scroll-padding` (the `ScrollArea` fade), with an instant jump (no smooth scroll); the page never scrolls.
 - Not applicable: `loading`, `empty`, `error`, `disabled`, `readonly`, `invalid` (the page body owns its states).
 
 ## Accessibility
 
 - Landmarks: the rail is the `Sidebar` `<nav>` named by `ariaLabel`; the header is `GlobalHeader` (`<header>`); the page body is inside the layout's single `<main>`. A page body must not render a second `<main>`.
 - Keyboard map: `Tab` runs rail → header → page; `⌘K` / `Ctrl K` opens the palette (owned by `Command`); in the palette `ArrowUp` / `ArrowDown` move, `Enter` chooses, `Escape` closes and returns focus. The rail keyboard map is `Menu`'s; the compact drawer closes on `Escape` and returns focus to the hamburger (`AppLayout`).
-- Names: the compact hamburger (`Open navigation`), the brand link (`Azion home`), the account trigger (`Account menu`) come from the locale catalog; the avatar carries the account name.
+- Names: the compact hamburger (`Open navigation`), the brand link (`Azion home`), the rail account trigger (`Account menu`, an icon button) come from the locale catalog; the avatar carries the account name. The header avatar trigger shows the initials, so its name starts with them (`JD, account menu`, `consoleLayout.accountMenuFor`) to meet WCAG 2.5.3 Label in Name (a speech user says what they see); with an account image it has no visible text and is named `Account menu`.
+- Account menu: choosing an option by pointer or keyboard emits `account-select`; the keyboard map inside the menu is `DropdownMenu`'s.
 - Visible focus: every interactive part is a WebKit control with its own ring; the brand link and the avatar button use `focus-visible:ring-2 focus-visible:ring-(--ring-color)`.
 - Choosing a row in the compact drawer closes it.
 - A page's control crumb is the last item of the header's `Breadcrumb` list; it carries its own accessible name (`aria-label` on `Select.Trigger`, e.g. `Switch environment`).
@@ -145,6 +148,7 @@ packages/webkit/src/components/layout/console-layout/
 | `consoleLayout.home`              | `Azion home`                              | —                   |
 | `consoleLayout.openNavigation`    | `Open navigation`                         | —                   |
 | `consoleLayout.accountMenu`       | `Account menu`                            | —                   |
+| `consoleLayout.accountMenuFor`    | `{initials}, account menu`                | —                   |
 | `consoleLayout.searchPlaceholder` | `Search pages and commands`               | `searchPlaceholder` |
 | `consoleLayout.searchEmpty`       | `No page or command matches your search.` | —                   |
 | `consoleLayout.pages`             | `Pages`                                   | —                   |
@@ -173,6 +177,7 @@ packages/webkit/src/components/layout/console-layout/
   import IconButton from '@aziontech/webkit/icon-button'
   import PageHeader from '@aziontech/webkit/page-header'
   import Tooltip from '@aziontech/webkit/tooltip'
+  import { ref } from 'vue'
 
   const navigation: ConsoleLayoutNavGroup[] = [
     {
@@ -226,6 +231,13 @@ packages/webkit/src/components/layout/console-layout/
       ]
     }
   ]
+
+  const accountAction = ref('')
+
+  const onAccountSelect = (_event: MouseEvent | KeyboardEvent, value: string | number) => {
+    accountAction.value =
+      value === 'logout' ? 'Signing out of Acme Inc.' : 'Opening account settings'
+  }
 </script>
 
 <template>
@@ -234,6 +246,7 @@ packages/webkit/src/components/layout/console-layout/
     :breadcrumbs="[{ label: 'Workloads', href: '/workloads' }, { label: 'edge-shop' }]"
     :account="{ name: 'Jane Doe', email: 'jane.doe@example.com' }"
     active-id="workloads"
+    @account-select="onAccountSelect"
   >
     <template #actions="{ compact }">
       <Tooltip
@@ -292,6 +305,13 @@ packages/webkit/src/components/layout/console-layout/
           title="edge-shop"
           description="The workload that serves the storefront."
         />
+        <p
+          v-if="accountAction"
+          role="status"
+          class="text-body-sm text-(--text-muted)"
+        >
+          {{ accountAction }}
+        </p>
         <EmptyState
           title="No deployments yet"
           description="Deploy the workload to see its history here."

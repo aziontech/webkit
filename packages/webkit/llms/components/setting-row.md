@@ -22,6 +22,7 @@
 - Let a tall control (an input group of three nameservers, a textarea) sit beside the copy: the title stays at the top of the row.
 - Do not wrap the row or its copy in your own flex box to change the alignment or to stack it; use `kind` and `stackable`.
 - Do not set `stackable` on a `compact` row: a switch or a button always stays at the end side.
+- Keep the description to the one sentence that says what the setting does, and put the rest of a longer explanation in `hint`: the description clamps to two lines, and the Hint glyph beside the title reveals the full text on hover or focus.
 
 ## Don’t
 
@@ -45,18 +46,19 @@
 | `kind` | `'field' \| 'compact' \| 'stacked'` | `'field'` | false | Where the control sits relative to the copy. |
 | `level` | `0 \| 1 \| 2` | `0` | false | Indent depth under a rule, for a setting that only applies when its parent is on. |
 | `stackable` | `boolean` | `false` | false | Below the md container of the row, move a field control under the copy at full width. |
+| `hint` | `string` | `''` | false | Extra guidance in a Hint glyph beside the title; empty renders no glyph. |
 
 ## Slots
 
 | Slot | Scope | Notes |
 | --- | --- | --- |
 | `default` | — | The control, plus the HelperText message under it when there is one. |
-| `title` | — | Rich title content (a Tag, a Hint); replaces the `title` prop. |
+| `title` | — | Rich title content (a Tag); replaces the `title` prop. The `hint` glyph still renders after it. |
 | `description` | — | Rich description content (links, inline code); replaces the `description` prop. |
 
 ## States
 
-- Visual states: `default`
+- Visual states: `default`, `hinted` (a `Hint` glyph after the title when `hint` is set)
 - `data-row-kind` mirrors `kind` and `data-level` mirrors `level` on the root; `data-stackable` is set when `stackable` is on
 - Alignment: the copy and the control align to the top of the row, so a title stays level with the first line of a tall control.
 - Responsive: the row is the `@container/setting-row`. By default the row keeps its two columns at every width: the copy shrinks (the description clamps to two lines with an ellipsis) and a `field` control keeps the end cell, capped at the 3xs container. With `stackable`, below `@md` of the row a `field` control moves under the copy at full width.
@@ -66,6 +68,7 @@
 - Visible focus: owned by the control in the default slot.
 - Keyboard map: `Tab` reaches the control; the row is not interactive.
 - ARIA: the row is an `Item` (a `listitem` inside `Item.List`); the control carries `aria-label` equal to the title, and a message is linked with `aria-describedby`.
+- Truncation: the two-line clamp of the description is visual only; the full text stays in the DOM, so assistive technology reads all of it. For sighted users, `hint` is the way to the full explanation: its glyph is a focusable button whose accessible name and tooltip are the hint text, reachable with `Tab` and revealed on hover or focus.
 - Contrast ≥4.5:1 for the title and the muted description.
 
 ## Examples

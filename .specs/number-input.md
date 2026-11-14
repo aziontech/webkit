@@ -3,11 +3,11 @@ name: number-input
 category: inputs
 structure: monolithic
 status: implemented
-spec_version: 2
+spec_version: 3
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3714-10789&m=dev
   node_id: 3714:10789
-checksum: 6a3d84aec10a532d94cd6ede7ae0ae4943865322f219202f1e384e7a5d03c40a
+checksum: 8e822db3546b40ea913b69e4591456c4d94740890dfb269027d084bcff4aca8e
 created: 2026-06-22
 last_updated: 2026-11-14
 ---
@@ -105,7 +105,7 @@ An optional field binds a `number | null` model and sets `nullable`:
 
 | Event    | Payload                                     | Notes                                                                                                       |
 | -------- | ------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
-| `change` | `number` (`number \| null` with `nullable`) | Emitted when the user commits the value (blur or Enter); `null` when a `nullable` field is committed empty. |
+| `change` | `number` | Emitted when the user commits the value (blur or Enter). With `nullable` the payload is `null` when the field is committed empty. |
 
 ## Slots
 

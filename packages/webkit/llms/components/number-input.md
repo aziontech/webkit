@@ -14,6 +14,7 @@
 
 - Set `min` / `max` / `step` to constrain input rather than validating after the fact.
 - Use `inputmode="numeric"` semantics for mobile keyboards.
+- Set `nullable` on an optional field (a port, a limit) so a cleared field stays unset (`null`) instead of falling back to `min ?? 0`.
 
 ## Don’t
 
@@ -39,13 +40,14 @@
 | `max` | `number \| undefined` | `undefined` | false | Maximum allowed value; spinner stops at this bound. |
 | `step` | `number` | `1` | false | Increment used by the spinner buttons and arrow keys. |
 | `showButtons` | `boolean` | `true` | false | Renders the chevron-up/chevron-down spinner controls. |
-| `modelValue` | `number` | `0` | false | Two-way value (`v-model`). |
+| `nullable` | `boolean` | `false` | false | Lets a cleared field emit null instead of falling back to min or 0. |
+| `modelValue` | `NumberInputValue<TNullable>` | `0 as NumberInputValue<TNullable>` | false | Two-way value (`v-model`). |
 
 ## Events
 
 | Event | Payload | Notes |
 | --- | --- | --- |
-| `change` | `number` | Emitted when the user commits the value (blur or Enter). |
+| `change` | `number` | Emitted when the user commits the value (blur or Enter). With `nullable` the payload is `null` when the field is committed empty. |
 
 ## Slots
 
@@ -56,13 +58,13 @@
 
 ## v-model
 
-| Model     | Type     | Default | Emits               | Notes                                                                                                                                                   |
-| --------- | -------- | ------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `v-model` | `number` | `0`     | `update:modelValue` | The value via `defineModel`, always numeric and clamped to `min`/`max`; updates on typing and on the spinner. A cleared field falls back to `min ?? 0`. |
+| Model     | Type                                        | Default | Emits               | Notes                                                                                                                                                                                                                                                                                                                                                                              |
+| --------- | ------------------------------------------- | ------- | ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `v-model` | `number` (`number \| null` with `nullable`) | `0`     | `update:modelValue` | The value via `defineModel`, clamped to `min`/`max`; updates on typing and on the spinner. A cleared field falls back to `min ?? 0`; with `nullable` it emits `null` and shows the placeholder, and the spinner on a `null` value starts at `min ?? 0` (clamped). The component is generic over `nullable`, so the model and `change` are typed `number` unless `nullable` is set. |
 
 ## States
 
-- Visual states: `default`, `hover`, `focus-visible`, `disabled`, `invalid`, `filled`
+- Visual states: `default`, `hover`, `focus-visible`, `disabled`, `invalid`, `filled`, `empty` (a `nullable` field whose value is `null` shows the placeholder)
 - `data-disabled` mirrors the `disabled` prop
 - `data-invalid` mirrors the `invalid` prop
 - `data-size` mirrors the `size` prop

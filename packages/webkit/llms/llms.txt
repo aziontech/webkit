@@ -82,6 +82,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [GetStarted (platform/detail/get-started)](blocks/platform/detail/get-started.md): The first thing a user reads about a resource they created from the CLI and have not deployed yet.
 - [ProductionChecklist (platform/detail/production-checklist)](blocks/platform/detail/production-checklist.md): A service that is live on its generated hostname is not yet ready for real traffic.
 - [RecordTable (platform/detail/record-table)](blocks/platform/detail/record-table.md): The detail page of a resource that owns a long list of records, here a DNS zone.
+- [SectionedResource (platform/detail/sectioned-resource)](blocks/platform/detail/sectioned-resource.md): The page of one resource whose tab holds more sibling pages than a tab row can carry: the rules of a policy, the records of a zone, the settings of one application.
 - [VersionDetail (platform/detail/version-detail)](blocks/platform/detail/version-detail.md): One version of a resource, opened from its Versions tab.
 - [AttributeEditor (platform/edit/attribute-editor)](blocks/platform/edit/attribute-editor.md): A list of key and value pairs and the drawer that edits them, here environment variables.
 - [CodeEditor (platform/edit/code-editor)](blocks/platform/edit/code-editor.md): The editing page of a service whose behavior lives in source code.

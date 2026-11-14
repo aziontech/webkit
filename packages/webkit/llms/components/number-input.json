@@ -22,7 +22,8 @@
  ],
  "bestPractices": [
   "Set `min` / `max` / `step` to constrain input rather than validating after the fact.",
-  "Use `inputmode=\"numeric\"` semantics for mobile keyboards."
+  "Use `inputmode=\"numeric\"` semantics for mobile keyboards.",
+  "Set `nullable` on an optional field (a port, a limit) so a cleared field stays unset (`null`) instead of falling back to `min ?? 0`."
  ],
  "props": [
   {
@@ -96,9 +97,16 @@
    "doc": "Renders the chevron-up/chevron-down spinner controls."
   },
   {
+   "name": "nullable",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Lets a cleared field emit null instead of falling back to min or 0."
+  },
+  {
    "name": "modelValue",
-   "type": "number",
-   "default": "0",
+   "type": "NumberInputValue<TNullable>",
+   "default": "0 as NumberInputValue<TNullable>",
    "required": "false",
    "doc": "Two-way value (`v-model`)."
   }
@@ -107,7 +115,7 @@
   {
    "name": "change",
    "payload": "number",
-   "notes": "Emitted when the user commits the value (blur or Enter)."
+   "notes": "Emitted when the user commits the value (blur or Enter). With `nullable` the payload is `null` when the field is committed empty."
   }
  ],
  "slots": [

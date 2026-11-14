@@ -12370,9 +12370,16 @@
      "doc": "Renders the chevron-up/chevron-down spinner controls."
     },
     {
+     "name": "nullable",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Lets a cleared field emit null instead of falling back to min or 0."
+    },
+    {
      "name": "modelValue",
-     "type": "number",
-     "default": "0",
+     "type": "NumberInputValue<TNullable>",
+     "default": "0 as NumberInputValue<TNullable>",
      "required": "false",
      "doc": "Two-way value (`v-model`)."
     }
@@ -12381,7 +12388,7 @@
     {
      "name": "change",
      "payload": "number",
-     "notes": "Emitted when the user commits the value (blur or Enter)."
+     "notes": "Emitted when the user commits the value (blur or Enter). With `nullable` the payload is `null` when the field is committed empty."
     }
    ],
    "slots": [
@@ -14885,6 +14892,11 @@
      "name": "search-select",
      "payload": "(event: MouseEvent | KeyboardEvent, value: string | number)",
      "notes": "Fired when a palette item from the `search` slot is chosen; `value` is that item's value. Event first."
+    },
+    {
+     "name": "account-select",
+     "payload": "(event: MouseEvent | KeyboardEvent, value: string | number)",
+     "notes": "Fired when an option of the `account-menu` slot is chosen, by click or by keyboard (`Enter` / `Space`), from the rail footer or the header avatar; `value` is the option's `value`. Event first."
     }
    ],
    "slots": [
@@ -14926,7 +14938,7 @@
     {
      "name": "account-menu",
      "scope": "—",
-     "notes": "DropdownMenu.Group`s of the account menu, opened from the account row in the rail and from the header avatar."
+     "notes": "DropdownMenu.Group`s of the account menu, opened from the account row in the rail and from the header avatar; a chosen option is reported by `account-select`."
     }
    ],
    "surface": "product",
@@ -15035,6 +15047,11 @@
      "name": "search-select",
      "payload": "(event: MouseEvent | KeyboardEvent, value: string | number)",
      "notes": "Fired when a palette item from the `search` slot is chosen; `value` is that item's value. Event first."
+    },
+    {
+     "name": "account-select",
+     "payload": "(event: MouseEvent | KeyboardEvent, value: string | number)",
+     "notes": "Fired when an option of the `account-menu` slot is chosen, by click or by keyboard (`Enter` / `Space`), from the rail footer or the header avatar; `value` is the option's `value`. Event first."
     }
    ],
    "slots": [
@@ -15076,7 +15093,7 @@
     {
      "name": "account-menu",
      "scope": "—",
-     "notes": "DropdownMenu.Group`s of the account menu, opened from the account row in the rail and from the header avatar."
+     "notes": "DropdownMenu.Group`s of the account menu, opened from the account row in the rail and from the header avatar; a chosen option is reported by `account-select`."
     }
    ],
    "surface": "product",
@@ -15711,6 +15728,13 @@
      "default": "false",
      "required": "false",
      "doc": "Below the md container of the row, move a field control under the copy at full width."
+    },
+    {
+     "name": "hint",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Extra guidance in a Hint glyph beside the title; empty renders no glyph."
     }
    ],
    "slots": [
@@ -15722,7 +15746,7 @@
     {
      "name": "title",
      "scope": "—",
-     "notes": "Rich title content (a Tag, a Hint); replaces the `title` prop."
+     "notes": "Rich title content (a Tag); replaces the `title` prop. The `hint` glyph still renders after it."
     },
     {
      "name": "description",
@@ -26695,7 +26719,7 @@
      "type": "Record<string, SchemaFormUi>",
      "default": "{}",
      "required": "false",
-     "doc": "Presentation overrides by field path: widget, placeholder, hidden, and key order (`''` is the root)."
+     "doc": "Presentation overrides by field path (`''` is the root, `*` a repeat item): widget, placeholder, hidden, order, when, options and sections."
     },
     {
      "name": "validateOn",
@@ -31336,6 +31360,89 @@
     }
    ],
    "file": "catalog/patterns/platform/detail/record-table.json"
+  },
+  "platform/detail/sectioned-resource": {
+   "name": "SectionedResource",
+   "title": "Templates/Platform/Detail/SectionedResource",
+   "source": "blocks/platform/detail/sectioned-resource/sectioned-resource.vue",
+   "surface": "product",
+   "summary": "A resource page whose tab holds more sibling pages than a tab row can carry: the third navigation level, and the only sanctioned home for a `MenuRoot` inside a page body. A full-bleed `PageTabs` row names the resource's sections (here a policy: Web security, Network security, Private access, Data protection, Objects, Settings, Versions); the Private access tab carries 16 sibling pages in 4 groups. From `@3xl` of the tab body the local navigation is a `MenuRoot` of groups in a fixed `--container-3xs` column, its rows `href` links with no glyphs, like rail sub-rows, and exactly one row marked current, derived from the route; below `@3xl` it folds into a medium `Select` labelled with the tab name through `Field`, its options grouped the same way. Beside it the current page is the TableView body: a small `PageHeader` with an outlined Documentation and an outlined Add action, the `PropertyFilter` controls row with Refresh, and a flush `Card` around `TableRoot` driven by `useCollection`, with a No matching `EmptyState` inside the table. The container query sits on the tab body wrapper and the queries on its children, so the content column never drops below the page column minus the navigation column. Use it only when the rail does not already list these pages and the tab has more than 7 siblings; with 7 or fewer, use a `ToggleGroup` (the FewSiblings variant), tabs or sections of one page. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.",
+   "intents": [
+    "local navigation",
+    "in-page navigation",
+    "section navigation",
+    "sub navigation",
+    "third level navigation",
+    "level 3 navigation",
+    "sectioned resource",
+    "resource sections",
+    "tab with many pages",
+    "many sibling pages",
+    "grouped sub pages",
+    "policy sections",
+    "side menu in page",
+    "navigation levels",
+    "navegação local",
+    "navegação de terceiro nível",
+    "submenu da página",
+    "seções do recurso",
+    "navegación local",
+    "secciones del recurso"
+   ],
+   "skills": [
+    "webkit-navigation",
+    "webkit-layout",
+    "webkit-tables"
+   ],
+   "components": [
+    "Button",
+    "Card",
+    "EmptyState",
+    "Field",
+    "IconButton",
+    "MenuRoot",
+    "PageHeader",
+    "PageTabs",
+    "PropertyFilter",
+    "Select",
+    "Table",
+    "TableRoot",
+    "Tabs",
+    "ToggleGroup",
+    "Tooltip",
+    "use-collection"
+   ],
+   "imports": [
+    "@aziontech/webkit/button",
+    "@aziontech/webkit/card",
+    "@aziontech/webkit/empty-state",
+    "@aziontech/webkit/field",
+    "@aziontech/webkit/icon-button",
+    "@aziontech/webkit/menu-root",
+    "@aziontech/webkit/page-header",
+    "@aziontech/webkit/page-tabs",
+    "@aziontech/webkit/property-filter",
+    "@aziontech/webkit/select",
+    "@aziontech/webkit/table",
+    "@aziontech/webkit/table-root",
+    "@aziontech/webkit/tabs",
+    "@aziontech/webkit/toggle-group",
+    "@aziontech/webkit/tooltip",
+    "@aziontech/webkit/use-collection"
+   ],
+   "primary": "Default",
+   "guidelinesSummary": "The page of one resource whose tab holds more sibling pages than a tab row can carry: the rules of a policy, the records of a zone, the settings of one application. The user arrives from the resource's list row or its tabs and moves between the sibling pages without leaving the resource. A console screen shows one navigation per level: the rail lists modules and first-level pages, `PageTabs` lists the resource's sections, and this block adds the third level, at most one local navigation inside the active tab. It is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header with the breadcrumb, the ⌘K palette and the `main`.",
+   "variants": [
+    {
+     "name": "Narrow",
+     "summary": "The same Private access tab in a narrow page, below `@3xl` of the tab body: the local navigation folds into a medium `Select` labelled Private access, its 16 options in the same 4 groups, with Server groups current; the list takes the full width under it."
+    },
+    {
+     "name": "FewSiblings",
+     "summary": "The Network security tab with 6 sibling pages: no local navigation. A medium `ToggleGroup` labelled Network security switches between them above the list, the alternative rule 4 prescribes for 7 or fewer siblings."
+    }
+   ],
+   "file": "catalog/patterns/platform/detail/sectioned-resource.json"
   },
   "platform/detail/version-detail": {
    "name": "VersionDetail",

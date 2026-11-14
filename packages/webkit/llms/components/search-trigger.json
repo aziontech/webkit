@@ -32,7 +32,8 @@
   "Do not hand-roll the field (`<button>` + magnifier + `Kbd`) or put a bare magnifier `IconButton` in a header: the `webkit/header-search-trigger` lint rule flags both.",
   "With `collapsible`, put the bar inside an `@container` (the header blocks do); the trigger folds while that container is narrower than 47rem (752 px, the `--container-2xl` token) and without a container it stays folded. Do not add your own breakpoint around it: 47rem is the one threshold every header uses.",
   "With `collapsible`, the button sits inside the `Tooltip` wrapper, so put layout classes (`ms-auto`, `order-*`) on a parent, not on the trigger.",
-  "Name the target in the label when the scope is narrow (`Search docs`); the label is also the accessible name."
+  "Name the target in the label when the scope is narrow (`Search docs`); the label is also the accessible name.",
+  "Leave the accessible name to the label: to name a narrower scope, change `label` (`Search docs`), not `aria-label`. An `aria-label` attribute replaces the name and must start with the visible text, or a voice-control user who says what they see cannot activate the button (WCAG 2.5.3 Label in Name)."
  ],
  "props": [
   {

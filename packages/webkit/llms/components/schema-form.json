@@ -8,12 +8,13 @@
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],
- "purpose": "A form rendered from a JSON schema: each property of an object schema becomes a `Field` with its label, description, Required marker and control, and a nested object becomes a fieldset with its own legend. It edits one value object through `v-model`, seeds the schema's defaults, validates the supported draft-07 keywords with built-in messages (on leaving a field, or only after `validate()`), and shows server messages passed by field path. It is for forms whose fields are data (a function's arguments, an integration's settings), not for forms a designer lays out by hand.",
+ "purpose": "A form rendered from a JSON schema: each property of an object schema becomes a `Field` with its label, description, Required marker and control, and a nested object becomes a fieldset with its own legend. It edits one value object through `v-model`, seeds the schema's defaults, validates the supported draft-07 keywords with built-in messages (on leaving a field, or only after `validate()`), and shows server messages passed by field path. It also reads the OpenAPI request-body keywords a console generates its create and edit forms from: `oneOf` with a `discriminator`, `format`, `writeOnly` and string maps (`additionalProperties`). Through the `ui` map the app adds what a schema cannot say: fields shown only while a predicate holds (`when`), choices loaded from the app (`options`), arrays of objects edited as repeatable fieldsets (`widget: 'repeat'`) and sections, one of them folded under Advanced settings. It is for forms whose fields are data (a function's arguments, an integration's settings, a resource's request body), not for forms a designer lays out by hand.",
  "setup": null,
  "useWhen": [
   "A function, template or integration declares its own arguments as a JSON schema and the console must ask for them.",
   "The same settings form must follow a schema the server sends (fields added or removed without a release).",
-  "A form of typed values (text, choices, numbers, switches, lists) with constraints that already live in a schema."
+  "A form of typed values (text, choices, numbers, switches, lists) with constraints that already live in a schema.",
+  "A resource's create or edit drawer generated from its OpenAPI request schema, with choices read from other endpoints through a loader the app supplies."
  ],
  "avoidWhen": [
   "A form with a fixed, designed layout (settings sections, create pages) → compose `field`, `input`, `select` and `switch` by hand (`platform/edit/edit-resource`, `platform/create/single-page-create`).",
@@ -23,8 +24,10 @@
  ],
  "related": [
   "field` — the wrapper every generated field uses; SchemaForm adds no field chrome of its own.",
-  "input`, `select`, `switch`, `textarea` — the controls it renders per type.",
-  "attribute-editor` — user-defined key/value rows, where SchemaForm renders a fixed set of keys.",
+  "input`, `select`, `switch`, `textarea`, `password-input` — the controls it renders per type and format.",
+  "combobox`, `multi-select` — the controls of a field whose choices come from `ui[path].options`.",
+  "accordion` — folds a collapsed section.",
+  "attribute-editor` — user-defined key/value rows; SchemaForm uses it for string maps and for the Add and Remove of a repeat.",
   "code-editor` — the JSON view of the same value, when the user prefers to type it."
  ],
  "bestPractices": [
@@ -34,7 +37,12 @@
   "Call `validate()` on submit and stop when it returns `valid: false`; it shows every message and focuses the first invalid field.",
   "Pass server rejections in `errors` keyed by path (`origin.host`): the field turns invalid with that message until the user edits it (the form-error rule). Put a section-level failure in an `Alert` above the form, not in `errors`.",
   "Use a `field:<path>` slot for a control the schema cannot express (`RadioCards`, a resource picker); the slot keeps the label, description and messages.",
-  "Do not rely on unsupported keywords (`$ref`, `oneOf`, `anyOf`, `allOf`, `if`/`then`, `const`, `format`, `uniqueItems`, `multipleOf`, `additionalProperties`): they are ignored, so validate them on the server."
+  "Do not rely on unsupported keywords (`$ref`, `anyOf`, `allOf`, `if`/`then`/`else`, `uniqueItems`, `multipleOf`, `patternProperties`, a `oneOf` without a `discriminator`): they are ignored, so validate them on the server. Express an `if`/`then` as `ui[path].when`.",
+  "Define `ui` once in the script, not inline in the template: a new `ui` object rebuilds the fields and seeds defaults again.",
+  "Keep a `when` predicate pure and cheap (it runs on every change); read the second argument (the object holding the field) inside a repeat item.",
+  "An `options` loader receives the typed text (empty on first load) and resolves to `{ value, label?, description? }`; filter on the server, return a short list, and let it reject on failure (the field then says so). SchemaForm calls it; it never fetches on its own.",
+  "Mark secrets `writeOnly`: the field starts empty, an empty field leaves the key out of the value, so a PATCH keeps the stored secret.",
+  "Put rarely changed keys in a collapsed section (`ui[''].sections`), not in a second form."
  ],
  "props": [
   {
@@ -56,7 +64,7 @@
    "type": "Record<string, SchemaFormUi>",
    "default": "{}",
    "required": "false",
-   "doc": "Presentation overrides by field path: widget, placeholder, hidden, and key order (`''` is the root)."
+   "doc": "Presentation overrides by field path (`''` is the root, `*` a repeat item): widget, placeholder, hidden, order, when, options and sections."
   },
   {
    "name": "validateOn",

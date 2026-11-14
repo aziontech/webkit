@@ -1,6 +1,6 @@
 # Menu
 
-> A vertical, hierarchical navigation menu. It owns no shell and no layout of its own: it is **injected into** a host — usually `Sidebar`, but any scroll container works — and renders three structures through one compound: **groups** that separate rows under a title, **condensed rows** that own children and expand in place behind an indent rail, and **drill rows** that replace the menu with a second-level menu. Unlike `navigation-menu` — the horizontal megamenu — this menu is vertical, recursive, and owns a view stack. Its box model follows Cloudflare Kumo's `Sidebar` (<https://kumo-ui.com/components/sidebar/>): full-width rows, padding inside the row rather than on the list, and indentation carried by the nested list's `padding-left`. Per [`migration.md`](https://github.com/aziontech/webkit/blob/main/.claude/rules/migration.md) only that _structure_ is adopted — every _value_ is expressed in our own tokens (see [`styling.md`](https://github.com/aziontech/webkit/blob/main/.claude/rules/styling.md)). Kumo's raw utilities (`min-h-8.5`, `rounded-lg`, `gap-2.5`, `pl-7`, `my-3`, a `cubic-bezier` literal) are all things the token rules forbid outright; the mapping is in Tokens, and the single value with no token behind it is in Theme gaps.
+> A vertical, hierarchical navigation menu. It owns no shell and no layout of its own: it is **injected into** a host built for it — `Sidebar`, the rail of `ConsoleLayout` and `DocLayout`, or the local navigation of the `platform/detail/sectioned-resource` block — and renders three structures through one compound: **groups** that separate rows under a title, **condensed rows** that own children and expand in place behind an indent rail, and **drill rows** that replace the menu with a second-level menu. Unlike `navigation-menu` — the horizontal megamenu — this menu is vertical, recursive, and owns a view stack. Its box model follows Cloudflare Kumo's `Sidebar` (<https://kumo-ui.com/components/sidebar/>): full-width rows, padding inside the row rather than on the list, and indentation carried by the nested list's `padding-left`. Per [`migration.md`](https://github.com/aziontech/webkit/blob/main/.claude/rules/migration.md) only that _structure_ is adopted — every _value_ is expressed in our own tokens (see [`styling.md`](https://github.com/aziontech/webkit/blob/main/.claude/rules/styling.md)). Kumo's raw utilities (`min-h-8.5`, `rounded-lg`, `gap-2.5`, `pl-7`, `my-3`, a `cubic-bezier` literal) are all things the token rules forbid outright; the mapping is in Tokens, and the single value with no token behind it is in Theme gaps.
 
 - Import: `import MenuRoot from '@aziontech/webkit/menu-root'`
 - Compound import (dot notation, not tree-shakeable): `import Menu from '@aziontech/webkit/menu'`
@@ -9,7 +9,7 @@
 
 ## When to use
 
-- Any navigation region grouped by product or concern — placed inside `Sidebar`, a drawer, or a plain container.
+- Any navigation region grouped by product or concern — placed inside `Sidebar` (a drawer included), the rail of `ConsoleLayout` or `DocLayout`, or the `platform/detail/sectioned-resource` block.
 - A documentation tree that nests two or three levels and must show its indentation structurally.
 - A settings-style area where activating a row should replace the menu with that row's own menu, then return.
 - Navigation whose tree comes from a manifest or route config rather than hand-authored markup (use `groups`).
@@ -18,7 +18,8 @@
 
 - Put every `Menu.Item` and `Menu.Sub` inside a `Menu.Group` or an **inline** `Menu.SubContent`. Those own the `<ul>`; a row outside one is a `<li>` with no list, which is invalid HTML. A group with no `label` is the correct way to express an unlabeled block — including inside a **drill** `Menu.SubContent`, which is a level container rather than a list precisely so it can hold groups.
 - Treat a drilled level as a whole menu, because it is one: give it groups and labels the way the root has them. A second-level nav that is only flat rows is a missed opportunity, not a constraint of the component.
-- Let the host own width, padding and scrolling. The menu fills the width it is given and adds no outer margin, so it drops into `Sidebar`, a drawer, or a bare `<div>` unchanged.
+- Let the host own width, padding and scrolling. The menu fills the width it is given and adds no outer margin, so it drops into `Sidebar`, a drawer, the `ConsoleLayout` / `DocLayout` rail or the `platform/detail/sectioned-resource` block unchanged.
+- Do not render a `Menu` inside a page body whose rows repeat the layout's navigation. The rail, the page's tabs and one local navigation each own a level, and a route appears once per screen; in-page local navigation is the `platform/detail/sectioned-resource` block. The lint `webkit/no-page-navigation-menu` warns on a `Menu` in a page body, and `ConsoleLayout` warns in development when one repeats a rail row.
 - Keep padding **inside the row**, never on the list. Every list (`Group`'s `<ul>`, `SubContent`'s `<ul>`) is a bare `m-0 list-none p-0 flex flex-col`; the row owns `px-(--spacing-sm)` and `min-h-8`. That is what lets a row's hover surface span the full menu width instead of stopping short of a list inset.
 - **The rail means parentage, not membership.** It is drawn only by an inline `Menu.SubContent`, where it ties children to the row above them. A `Menu.Group` draws none and indents nothing: its label already marks the section, so a rail there would spend the same ink saying something the label has said and dilute what the rail means everywhere else. A grouped row therefore sits flush with an ungrouped one.
 - Indentation is the nested list's `padding-left`, not a margin on each row — so the rail, which is drawn relative to that padding box, stays aligned no matter what a row contains.
@@ -44,6 +45,7 @@
 - A single collapsible content region that is not navigation → use `accordion` instead.
 - Mutually exclusive in-page view switching → use `tabs` (or `toggle-group` for a compact control) instead.
 - The surrounding shell itself (brand header, scroll region, user footer) → that is `Sidebar`; this menu goes inside it.
+- Local navigation inside a page body → never a free `Menu`, and never one whose rows repeat the layout's navigation (one owner per level, a destination once per screen: rule `webkit-navigation-levels`). More than 7 sibling pages of a resource tab → the `platform/detail/sectioned-resource` block; 7 or fewer → `tabs`, `toggle-group` or sections of one page.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
 ## Related

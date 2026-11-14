@@ -63,6 +63,7 @@
 - Visual states: `default`, `hover` / `focus-within` (reveals the copy-link button)
 - `data-state` on the root: `open` | `closed` when `collapsible`
 - `data-open` on the body mirrors whether it is unfolded
+- Only a collapsible band folds along the `0fr`/`1fr` grid track (`data-collapsible` on the body); a band that is not collapsible lays its body out in normal flow, so it has no track that can resolve to zero height.
 - Responsive: the body is the `@container/settings-section`, so rows and fields inside lay out for the section, not the window.
 - Hover-free devices: the copy-link button is shown inline after the title where the pointer cannot hover (`@media (hover: none)`), instead of floating outside the start edge on hover.
 

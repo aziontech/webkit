@@ -23,6 +23,7 @@
   "Set `stackable` only when the field needs the full measure to be usable in a narrow box (a long URL or a code value in a side drawer); never to fix a centred or cramped look.",
   "Let a tall control (an input group of three nameservers, a textarea) sit beside the copy: the title stays at the top of the row.",
   "Do not wrap the row or its copy in your own flex box to change the alignment or to stack it; use `kind` and `stackable`.",
-  "Do not set `stackable` on a `compact` row: a switch or a button always stays at the end side."
+  "Do not set `stackable` on a `compact` row: a switch or a button always stays at the end side.",
+  "Keep the description to the one sentence that says what the setting does, and put the rest of a longer explanation in `hint`: the description clamps to two lines, and the Hint glyph beside the title reveals the full text on hover or focus."
  ]
 }

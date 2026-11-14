@@ -3,7 +3,7 @@ name: schema-form
 category: inputs
 structure: monolithic
 status: implemented
-spec_version: 1
+spec_version: 2
 template: 2
 checksum: 28922f79d913c1afb789aa461260fc4f1c54927b48cb0c43159a21c160702eec
 created: 2026-11-11

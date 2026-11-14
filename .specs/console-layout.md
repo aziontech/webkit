@@ -3,7 +3,7 @@ name: console-layout
 category: layout
 structure: composition
 status: implemented
-spec_version: 2
+spec_version: 3
 template: 2
 checksum: 308060948382c7f25b2b16c7a184141c3ca5fed97266935b7176b600eb88d160
 created: 2026-11-12

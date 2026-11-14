@@ -12,6 +12,7 @@
  ],
  "bestPractices": [
   "Set `min` / `max` / `step` to constrain input rather than validating after the fact.",
-  "Use `inputmode=\"numeric\"` semantics for mobile keyboards."
+  "Use `inputmode=\"numeric\"` semantics for mobile keyboards.",
+  "Set `nullable` on an optional field (a port, a limit) so a cleared field stays unset (`null`) instead of falling back to `min ?? 0`."
  ]
 }

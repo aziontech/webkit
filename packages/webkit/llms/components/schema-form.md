@@ -1,6 +1,6 @@
 # Schema Form
 
-> A form rendered from a JSON schema: each property of an object schema becomes a `Field` with its label, description, Required marker and control, and a nested object becomes a fieldset with its own legend. It edits one value object through `v-model`, seeds the schema's defaults, validates the supported draft-07 keywords with built-in messages (on leaving a field, or only after `validate()`), and shows server messages passed by field path. It is for forms whose fields are data (a function's arguments, an integration's settings), not for forms a designer lays out by hand.
+> A form rendered from a JSON schema: each property of an object schema becomes a `Field` with its label, description, Required marker and control, and a nested object becomes a fieldset with its own legend. It edits one value object through `v-model`, seeds the schema's defaults, validates the supported draft-07 keywords with built-in messages (on leaving a field, or only after `validate()`), and shows server messages passed by field path. It also reads the OpenAPI request-body keywords a console generates its create and edit forms from: `oneOf` with a `discriminator`, `format`, `writeOnly` and string maps (`additionalProperties`). Through the `ui` map the app adds what a schema cannot say: fields shown only while a predicate holds (`when`), choices loaded from the app (`options`), arrays of objects edited as repeatable fieldsets (`widget: 'repeat'`) and sections, one of them folded under Advanced settings. It is for forms whose fields are data (a function's arguments, an integration's settings, a resource's request body), not for forms a designer lays out by hand.
 
 - Import: `import SchemaForm from '@aziontech/webkit/schema-form'`
 - Category: inputs · Surface: product · Structure: monolithic
@@ -11,6 +11,7 @@
 - A function, template or integration declares its own arguments as a JSON schema and the console must ask for them.
 - The same settings form must follow a schema the server sends (fields added or removed without a release).
 - A form of typed values (text, choices, numbers, switches, lists) with constraints that already live in a schema.
+- A resource's create or edit drawer generated from its OpenAPI request schema, with choices read from other endpoints through a loader the app supplies.
 
 ## Do
 
@@ -20,7 +21,12 @@
 - Call `validate()` on submit and stop when it returns `valid: false`; it shows every message and focuses the first invalid field.
 - Pass server rejections in `errors` keyed by path (`origin.host`): the field turns invalid with that message until the user edits it (the form-error rule). Put a section-level failure in an `Alert` above the form, not in `errors`.
 - Use a `field:<path>` slot for a control the schema cannot express (`RadioCards`, a resource picker); the slot keeps the label, description and messages.
-- Do not rely on unsupported keywords (`$ref`, `oneOf`, `anyOf`, `allOf`, `if`/`then`, `const`, `format`, `uniqueItems`, `multipleOf`, `additionalProperties`): they are ignored, so validate them on the server.
+- Do not rely on unsupported keywords (`$ref`, `anyOf`, `allOf`, `if`/`then`/`else`, `uniqueItems`, `multipleOf`, `patternProperties`, a `oneOf` without a `discriminator`): they are ignored, so validate them on the server. Express an `if`/`then` as `ui[path].when`.
+- Define `ui` once in the script, not inline in the template: a new `ui` object rebuilds the fields and seeds defaults again.
+- Keep a `when` predicate pure and cheap (it runs on every change); read the second argument (the object holding the field) inside a repeat item.
+- An `options` loader receives the typed text (empty on first load) and resolves to `{ value, label?, description? }`; filter on the server, return a short list, and let it reject on failure (the field then says so). SchemaForm calls it; it never fetches on its own.
+- Mark secrets `writeOnly`: the field starts empty, an empty field leaves the key out of the value, so a PATCH keeps the stored secret.
+- Put rarely changed keys in a collapsed section (`ui[''].sections`), not in a second form.
 
 ## Don’t
 
@@ -33,8 +39,10 @@
 ## Related
 
 - [field](field.md) — the wrapper every generated field uses; SchemaForm adds no field chrome of its own.
-- [input](input.md), `select`, `switch`, `textarea` — the controls it renders per type.
-- [attribute-editor](attribute-editor.md) — user-defined key/value rows, where SchemaForm renders a fixed set of keys.
+- [input](input.md), `select`, `switch`, `textarea`, `password-input` — the controls it renders per type and format.
+- [combobox](combobox.md), `multi-select` — the controls of a field whose choices come from `ui[path].options`.
+- [accordion](accordion.md) — folds a collapsed section.
+- [attribute-editor](attribute-editor.md) — user-defined key/value rows; SchemaForm uses it for string maps and for the Add and Remove of a repeat.
 - [code-editor](code-editor.md) — the JSON view of the same value, when the user prefers to type it.
 
 ## Props
@@ -43,7 +51,7 @@
 | --- | --- | --- | --- | --- |
 | `schema` | `SchemaFormSchema` | `—` | true | JSON schema of an object (draft-07 subset); each property becomes a Field. |
 | `errors` | `Record<string, string>` | `{}` | false | Server or external messages by field path; a field shows its message until it is edited. |
-| `ui` | `Record<string, SchemaFormUi>` | `{}` | false | Presentation overrides by field path: widget, placeholder, hidden, and key order (`''` is the root). |
+| `ui` | `Record<string, SchemaFormUi>` | `{}` | false | Presentation overrides by field path (`''` is the root, `*` a repeat item): widget, placeholder, hidden, order, when, options and sections. |
 | `validateOn` | `'blur' \| 'submit'` | `'blur'` | false | When fields first show their validation message: on leaving the field, or only after `validate()`. |
 | `disabled` | `boolean` | `false` | false | Disables every field. |
 | `readonly` | `boolean` | `false` | false | Shows every value without letting it change. |
@@ -62,6 +70,11 @@
 - Validation timing: a field shows its own message after the user leaves it (`validate-on="blur"`), after `validate()` in both modes, and from then on updates as the user types. Opening a `Select` does not count as leaving its field.
 - Server messages (`errors`) show at once, win over the field's own message and leave once that field is edited; a new `errors` object shows them again.
 - Draft text: a number, list or JSON field keeps what the user typed while it does not parse; the value then holds no key for it, and the field reports "Enter a number." or "Enter valid JSON."
+- Hidden (`when`): the field is not rendered, not validated and its key is removed from the value; a variant not chosen is hidden the same way.
+- Loading options: the `Combobox` shows its spinner and loading row; a rejected loader shows "Couldn't load the options." in the list.
+- Repeat: an empty array shows the editor's empty text; the item fieldsets carry `data-testid` `__item`; Add is disabled at `maxItems` and Remove is hidden at `minItems`.
+- Map: a duplicate key marks its row invalid at once and fails `validate()` on the map's path.
+- Sections: `data-widget="section"`; a collapsed section opens when `validate()` focuses a field inside it.
 
 ## Accessibility
 
@@ -69,7 +82,10 @@
 - A nested object is a real `<fieldset>` with a `<legend>`, so its fields are announced with the group name.
 - Messages are text under the control, never colour alone; the message replaces the description while it shows, as the design sample does.
 - `validate()` moves focus to the first invalid control, in reading order, so keyboard and screen-reader users land on the problem.
-- Keyboard map: no keys of its own; Tab moves through the controls in schema order (or `ui` order); each control keeps its own keys.
+- Keyboard map: no keys of its own; Tab moves through the controls in schema order (or `ui` order, then sections); each control keeps its own keys (the `Combobox` arrows and Enter, the `Accordion` trigger's Enter and Space).
+- A repeat and a map are `<fieldset>`s named by the property title; each repeat item is a `role="group"` named "Item 2" (or the item schema's `title` and number), its Remove button is named "Remove item 2", and Add and Remove are announced by `AttributeEditor`'s live region, which also moves focus to the new row.
+- A collapsed section is an `Accordion` trigger with `aria-expanded`; a closed section's fields are still validated, and `validate()` opens it before moving focus.
+- A field that appears or disappears through `when` is not announced; keep the controlling field just before it so the change happens where the user is.
 - A `field:<path>` slot control must name itself (the scope gives `invalid`, `required`, `disabled`); WebKit inputs read the Field context and need nothing.
 - Visible focus, contrast and touch targets come from the composed controls.
 
@@ -82,26 +98,38 @@
 
 ## Internationalization
 
-| Key                            | English source                                | Override prop          |
-| ------------------------------ | --------------------------------------------- | ---------------------- |
-| `schemaForm.required`          | This field is required.                       | —                      |
-| `schemaForm.minLength`         | Use at least {min} characters.                | —                      |
-| `schemaForm.maxLength`         | Use at most {max} characters.                 | —                      |
-| `schemaForm.pattern`           | This value doesn't match the expected format. | —                      |
-| `schemaForm.minimum`           | Enter {min} or more.                          | —                      |
-| `schemaForm.maximum`           | Enter {max} or less.                          | —                      |
-| `schemaForm.number`            | Enter a number.                               | —                      |
-| `schemaForm.integer`           | Enter a whole number.                         | —                      |
-| `schemaForm.enum`              | Choose one of the options.                    | —                      |
-| `schemaForm.minItems`          | Add at least {min} values.                    | —                      |
-| `schemaForm.maxItems`          | Add at most {max} values.                     | —                      |
-| `schemaForm.listItem`          | Line {line}: {message}                        | —                      |
-| `schemaForm.json`              | Enter valid JSON.                             | —                      |
-| `schemaForm.selectPlaceholder` | Select an option                              | `ui[path].placeholder` |
-| `schemaForm.numberPlaceholder` | A number                                      | `ui[path].placeholder` |
-| `schemaForm.numberFrom`        | From {min}                                    | `ui[path].placeholder` |
-| `schemaForm.listPlaceholder`   | One value per line                            | `ui[path].placeholder` |
-| `schemaForm.jsonPlaceholder`   | A JSON value                                  | `ui[path].placeholder` |
+| Key                               | English source                                 | Override prop          |
+| --------------------------------- | ---------------------------------------------- | ---------------------- |
+| `schemaForm.required`             | This field is required.                        | —                      |
+| `schemaForm.minLength`            | Use at least {min} characters.                 | —                      |
+| `schemaForm.maxLength`            | Use at most {max} characters.                  | —                      |
+| `schemaForm.pattern`              | This value doesn't match the expected format.  | —                      |
+| `schemaForm.minimum`              | Enter {min} or more.                           | —                      |
+| `schemaForm.maximum`              | Enter {max} or less.                           | —                      |
+| `schemaForm.number`               | Enter a number.                                | —                      |
+| `schemaForm.integer`              | Enter a whole number.                          | —                      |
+| `schemaForm.enum`                 | Choose one of the options.                     | —                      |
+| `schemaForm.minItems`             | Add at least {min} values.                     | —                      |
+| `schemaForm.maxItems`             | Add at most {max} values.                      | —                      |
+| `schemaForm.listItem`             | Line {line}: {message}                         | —                      |
+| `schemaForm.json`                 | Enter valid JSON.                              | —                      |
+| `schemaForm.selectPlaceholder`    | Select an option                               | `ui[path].placeholder` |
+| `schemaForm.numberPlaceholder`    | A number                                       | `ui[path].placeholder` |
+| `schemaForm.numberFrom`           | From {min}                                     | `ui[path].placeholder` |
+| `schemaForm.listPlaceholder`      | One value per line                             | `ui[path].placeholder` |
+| `schemaForm.jsonPlaceholder`      | A JSON value                                   | `ui[path].placeholder` |
+| `schemaForm.email`                | Enter a valid email address.                   | —                      |
+| `schemaForm.uri`                  | Enter a full URL, such as https://example.com. | —                      |
+| `schemaForm.date`                 | Enter a date as YYYY-MM-DD.                    | —                      |
+| `schemaForm.datePlaceholder`      | YYYY-MM-DD                                     | `ui[path].placeholder` |
+| `schemaForm.searchPlaceholder`    | Search                                         | `ui[path].placeholder` |
+| `schemaForm.optionsError`         | Couldn't load the options.                     | —                      |
+| `schemaForm.writeOnlyPlaceholder` | Leave empty to keep the current value          | `ui[path].placeholder` |
+| `schemaForm.item`                 | Item {index}                                   | item schema `title`    |
+| `schemaForm.advanced`             | Advanced settings                              | section `title`        |
+| `schemaForm.mapKey`               | Key                                            | —                      |
+| `schemaForm.mapValue`             | Value                                          | —                      |
+| `schemaForm.duplicateKey`         | Each key must be unique.                       | —                      |
 
 - Formatting: `{min}` and `{max}` go through the locale's number format (`useTranslate`). Labels and descriptions come from the schema, so a translated form needs a translated schema.
 
