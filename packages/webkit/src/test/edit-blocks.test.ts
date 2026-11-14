@@ -3,6 +3,9 @@ import { afterEach, describe, expect, it } from 'vitest'
 import { userEvent } from 'vitest/browser'
 
 import AttributeEditorList from '../../blocks/platform/edit/attribute-editor/attribute-editor.vue'
+import EditResource from '../../blocks/platform/edit/edit-resource/edit-resource.vue'
+import DangerZone from '../../blocks/platform/edit/edit-resource/variants/danger-zone.vue'
+import StaleRecord from '../../blocks/platform/edit/edit-resource/variants/stale-record.vue'
 import { useToastRegion } from './toast-region'
 
 useToastRegion()
@@ -71,5 +74,26 @@ describe('attribute-editor#List', () => {
     )
     expect(dialog()).not.toBeNull()
     expect(key.value).toBe('NEW_KEY')
+  })
+})
+
+describe('edit-resource locked modules', () => {
+  it.each([
+    ['primary', EditResource],
+    ['StaleRecord', StaleRecord],
+    ['DangerZone', DangerZone]
+  ])('%s links Contact sales through the Link component in a new tab', (_name, block) => {
+    const view = render(block)
+    const links = Array.from(
+      view.container.querySelectorAll<HTMLAnchorElement>(
+        'a[href="https://example.com/contact-sales"]'
+      )
+    )
+    expect(links.length).toBeGreaterThan(0)
+    for (const link of links) {
+      expect(link.dataset.testid).toBe('navigation-link')
+      expect(link.target).toBe('_blank')
+      expect(link.rel).toContain('noopener')
+    }
   })
 })

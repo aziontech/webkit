@@ -6,6 +6,7 @@
   import HelperText from '@aziontech/webkit/helper-text'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
+  import Link from '@aziontech/webkit/link'
   import PageHeader from '@aziontech/webkit/page-header'
   import PageTabs from '@aziontech/webkit/page-tabs'
   import SaveBar from '@aziontech/webkit/save-bar'
@@ -341,18 +342,12 @@
                         >
                           <template #description>
                             {{ mod.description }}
-                            <a
+                            <Link
+                              label="Contact sales"
                               href="https://example.com/contact-sales"
                               target="_blank"
-                              rel="noopener noreferrer"
-                              class="inline-flex items-center gap-(--spacing-xxs) rounded-(--shape-button) text-(--text-link) underline-offset-2 transition-colors duration-fast-02 ease-productive-entrance hover:text-(--text-link-hover) hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) motion-reduce:transition-none"
-                            >
-                              Contact sales
-                              <i
-                                class="pi pi-external-link shrink-0 text-body-sm leading-none"
-                                aria-hidden="true"
-                              />
-                            </a>
+                              size="small"
+                            />
                           </template>
                           <Tooltip text="Contact sales to activate this module.">
                             <Switch
