@@ -43,6 +43,8 @@
       installed?: boolean
       /** Integration kind: the title links here; without it the title is a button that emits `select`. */
       href?: string
+      /** Integration kind: the featured layout, centred on a raised surface with a primary glow at the top and the badges in the top end corner. */
+      featured?: boolean
     }>(),
     {
       title: '',
@@ -53,7 +55,8 @@
       description: '',
       badges: () => [],
       installed: false,
-      href: ''
+      href: '',
+      featured: false
     }
   )
 
@@ -84,6 +87,7 @@
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'content-card')
 
   const isIntegration = computed(() => props.kind === 'integration')
+  const isFeatured = computed(() => isIntegration.value && props.featured)
   const hasHeaderSlot = () => Boolean(slots['header'])
   const hasHeaderActionSlot = () => Boolean(slots['header-action'])
   const hasFooterSlot = () => Boolean(slots['footer'])
@@ -99,11 +103,12 @@
 
   const rootClasses = computed(() =>
     cn(
-      'flex flex-col overflow-clip',
+      'group/card flex flex-col overflow-clip',
       'bg-(--bg-surface)',
       'border border-(length:--border-width-default) border-(--border-default)',
       'rounded-(--shape-card)',
-      'data-[kind=integration]:transition-colors data-[kind=integration]:hover:bg-(--bg-hover) motion-reduce:transition-none',
+      'data-[kind=integration]:transition-colors data-[kind=integration]:not-data-[featured]:hover:bg-(--bg-hover) motion-reduce:transition-none',
+      'data-[featured]:isolate data-[featured]:bg-(--bg-surface-raised) data-[featured]:hover:border-(--border-strong)',
       attrs.class as string | undefined
     )
   )
@@ -127,6 +132,7 @@
     v-bind="$attrs"
     :class="rootClasses"
     :data-kind="kind"
+    :data-featured="isFeatured || null"
     :data-testid="testId"
   >
     <header
@@ -163,9 +169,30 @@
     >
       <div
         v-if="isIntegration"
-        class="flex min-w-0 flex-1 flex-col gap-(--spacing-md)"
+        class="flex min-w-0 flex-1 flex-col gap-(--spacing-md) group-data-[featured]/card:items-center group-data-[featured]/card:px-(--spacing-sm) group-data-[featured]/card:py-(--spacing-lg) group-data-[featured]/card:text-center"
       >
-        <div class="flex min-w-0 items-start gap-(--spacing-md)">
+        <span
+          v-if="isFeatured"
+          aria-hidden="true"
+          class="pointer-events-none absolute inset-x-0 top-0 -z-1 h-24 bg-[radial-gradient(120%_90%_at_50%_0%,var(--primary),transparent_62%)] opacity-10 transition-opacity group-hover/card:opacity-20 motion-reduce:transition-none"
+          :data-testid="`${testId}__glow`"
+        />
+        <div
+          v-if="isFeatured && badges.length"
+          class="pointer-events-none absolute end-(--spacing-md) top-(--spacing-md) flex flex-wrap justify-end gap-(--spacing-xs)"
+          :data-testid="`${testId}__badges`"
+        >
+          <Tag
+            v-for="badge in badges"
+            :key="badge.label"
+            :label="badge.label"
+            :severity="badge.severity ?? 'primary'"
+            size="small"
+          />
+        </div>
+        <div
+          class="flex min-w-0 items-start gap-(--spacing-md) group-data-[featured]/card:flex-col group-data-[featured]/card:items-center"
+        >
           <span
             class="flex size-10 shrink-0 items-center justify-center overflow-hidden rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
             :data-testid="`${testId}__logo`"
@@ -178,10 +205,14 @@
               />
             </slot>
           </span>
-          <div class="flex min-w-0 flex-1 flex-col gap-(--spacing-xxs)">
-            <div class="flex flex-wrap items-baseline gap-x-(--spacing-xs)">
+          <div
+            class="flex min-w-0 flex-1 flex-col gap-(--spacing-xxs) group-data-[featured]/card:items-center"
+          >
+            <div
+              class="flex flex-wrap items-baseline gap-x-(--spacing-xs) group-data-[featured]/card:flex-col group-data-[featured]/card:items-center group-data-[featured]/card:gap-y-(--spacing-xxs)"
+            >
               <h3
-                class="min-w-0 text-label-md text-(--text-default)"
+                class="min-w-0 text-label-md text-(--text-default) group-data-[featured]/card:text-heading-xs"
                 :data-testid="`${testId}__title`"
               >
                 <a
@@ -193,7 +224,7 @@
                 <button
                   v-else
                   type="button"
-                  class="cursor-pointer border-0 bg-transparent p-0 text-start text-(--text-default) outline-none after:absolute after:inset-0 after:content-[''] focus-visible:after:ring-2 focus-visible:after:ring-inset focus-visible:after:ring-(--ring-color)"
+                  class="cursor-pointer border-0 bg-transparent p-0 text-start text-(--text-default) group-data-[featured]/card:text-center outline-none after:absolute after:inset-0 after:content-[''] focus-visible:after:ring-2 focus-visible:after:ring-inset focus-visible:after:ring-(--ring-color)"
                   @click="onSelect"
                 >
                   <bdi>{{ title }}</bdi>
@@ -204,7 +235,6 @@
                 class="text-body-xs text-(--text-muted)"
                 :data-testid="`${testId}__vendor`"
                 >{{ t('card.byVendor', { vendor }) }}</bdi
-              >
               >
             </div>
             <p
@@ -220,8 +250,8 @@
           name="content"
         />
         <div
-          v-if="installed || badges.length || hasActionSlot()"
-          class="mt-auto flex min-w-0 flex-wrap items-center gap-(--spacing-xs)"
+          v-if="installed || (badges.length && !isFeatured) || hasActionSlot()"
+          class="mt-auto flex min-w-0 flex-wrap items-center gap-(--spacing-xs) group-data-[featured]/card:justify-center"
         >
           <Tag
             v-if="installed"
@@ -231,16 +261,18 @@
             icon="pi pi-check"
             :data-testid="`${testId}__installed`"
           />
-          <Tag
-            v-for="badge in badges"
-            :key="badge.label"
-            :label="badge.label"
-            :severity="badge.severity ?? 'info'"
-            size="small"
-          />
+          <template v-if="!isFeatured">
+            <Tag
+              v-for="badge in badges"
+              :key="badge.label"
+              :label="badge.label"
+              :severity="badge.severity ?? 'info'"
+              size="small"
+            />
+          </template>
           <div
             v-if="hasActionSlot()"
-            class="relative z-[1] ms-auto"
+            class="relative z-[1] ms-auto group-data-[featured]/card:ms-0"
             :data-testid="`${testId}__action`"
           >
             <slot name="action" />

@@ -27,6 +27,7 @@
     vendor?: string
     icon: string
     markClass: string
+    color?: string
   }
   interface HubSection {
     id: string
@@ -61,63 +62,72 @@
           title: 'Next.js Boilerplate',
           description: 'Deploy a full-stack Next.js application in a few steps.',
           icon: 'ai-cor ai-next',
-          markClass: '[[data-theme=dark]_&]:invert'
+          markClass: '[[data-theme=dark]_&]:invert',
+          color: '#0070f3'
         },
         {
           slug: 'react-boilerplate',
           title: 'React Boilerplate',
           description: 'Automate your React.js deployment process.',
           icon: 'ai-cor ai-react',
-          markClass: ''
+          markClass: '',
+          color: '#61dafb'
         },
         {
           slug: 'vue-boilerplate',
           title: 'Vue.js starter',
           description: 'A lightweight template to rapidly build Vue.js applications.',
           icon: 'ai-cor ai-vue',
-          markClass: ''
+          markClass: '',
+          color: '#42b883'
         },
         {
           slug: 'angular-boilerplate',
           title: 'Angular Boilerplate',
           description: 'Automate your Angular deployment process with this template.',
           icon: 'ai-cor ai-angular',
-          markClass: ''
+          markClass: '',
+          color: '#dd0031'
         },
         {
           slug: 'nuxt-ecommerce',
           title: 'Nuxt E-commerce',
           description: 'Launch a Nuxt e-commerce or content app.',
           icon: 'ai-cor ai-nuxt',
-          markClass: ''
+          markClass: '',
+          color: '#00dc82'
         },
         {
           slug: 'astro-starter',
           title: 'Astro Starter',
           description: 'Ship a content-driven Astro site that renders.',
           icon: 'ai-cor ai-astro',
-          markClass: ''
+          markClass: '',
+          color: '#ff5d01'
         },
         {
           slug: 'svelte-boilerplate',
           title: 'Svelte Boilerplate',
           description: 'Accelerate the deployment of Svelte applications.',
           icon: 'ai-cor ai-svelte',
-          markClass: ''
+          markClass: '',
+          color: '#ff3e00'
         },
         {
           slug: 'preact-starter',
           title: 'Preact Starter',
           description: 'Deploy a Preact app: the React API in a fraction of the bundle.',
           icon: 'ai ai-preact',
-          markClass: ''
+          markClass: '',
+          color: '#673ab8'
         },
         {
           slug: 'qwik-starter',
           title: 'Qwik Starter',
           description: 'Ship a resumable Qwik app that hydrates only what the reader touches.',
           icon: 'ai ai-qwik',
-          markClass: ''
+          markClass: '',
+          color: '#ac7ef4'
         }
       ]
     },
@@ -377,6 +387,8 @@
     }
   ]
   const skeletonRows = 6
+
+  const glow = (item: HubItem) => (item.color ? { '--template-glow': item.color } : undefined)
 
   const accounts = ref<Account[]>(ACCOUNTS)
   const connecting = ref(false)
@@ -802,11 +814,16 @@
                               class="flex group relative min-h-(--size-44) cursor-pointer"
                             >
                               <Card
-                                class="w-full"
+                                class="isolate w-full"
                                 role="button"
                                 tabindex="0"
+                                :style="glow(item)"
                               >
                                 <template #content>
+                                  <span
+                                    aria-hidden="true"
+                                    class="pointer-events-none absolute inset-0 -z-1 bg-[radial-gradient(120%_90%_at_18%_0%,color-mix(in_oklab,var(--template-glow,var(--primary))_20%,transparent),transparent_62%)] opacity-0 transition-opacity duration-moderate-01 ease-productive-entrance group-focus-within:opacity-100 group-hover:opacity-100 motion-reduce:transition-none rtl:bg-[radial-gradient(120%_90%_at_82%_0%,color-mix(in_oklab,var(--template-glow,var(--primary))_20%,transparent),transparent_62%)]"
+                                  />
                                   <div
                                     class="relative z-10 flex flex-col items-start gap-(--spacing-md) text-start"
                                   >
@@ -815,7 +832,7 @@
                                     >
                                       <i
                                         :class="[item.icon, item.markClass]"
-                                        class="text-body-lg leading-none text-(--text-default) grayscale transition duration-moderate-01 ease-productive-entrance group-hover:grayscale-0 motion-reduce:transition-none"
+                                        class="text-body-lg leading-none text-(--text-default) grayscale transition duration-moderate-01 ease-productive-entrance group-focus-within:grayscale-0 group-hover:grayscale-0 motion-reduce:transition-none"
                                         aria-hidden="true"
                                       />
                                     </span>

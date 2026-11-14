@@ -38,6 +38,20 @@
 
   type Framework = keyof typeof FRAMEWORKS
 
+  const BRAND_COLORS: Partial<Record<Framework, string>> = {
+    next: '#0070f3',
+    astro: '#ff5d01',
+    nuxt: '#00dc82',
+    angular: '#dd0031',
+    hugo: '#ff4088',
+    vite: '#646cff',
+    hono: '#e36002'
+  }
+
+  const MARKS: Partial<Record<Framework, string>> = {
+    next: '[[data-theme=dark]_&]:invert'
+  }
+
   interface Template {
     id: string
     title: string
@@ -74,7 +88,7 @@
       'Next.js Starter',
       'frameworks',
       'next',
-      'ai ai-next',
+      'ai-cor ai-next',
       'A Next.js app with server rendering and static pages, ready to deploy.',
       'Oct 28, 2026'
     ),
@@ -83,7 +97,7 @@
       'Astro Blog',
       'frameworks',
       'astro',
-      'ai ai-astro',
+      'ai-cor ai-astro',
       'A content-first blog with Markdown posts, an RSS feed and a sitemap.',
       'Oct 21, 2026'
     ),
@@ -92,7 +106,7 @@
       'Nuxt Storefront',
       'frameworks',
       'nuxt',
-      'ai ai-nuxt',
+      'ai-cor ai-nuxt',
       'A product catalog with a cart, rendered on the server and cached close to buyers.',
       'Oct 14, 2026'
     ),
@@ -101,7 +115,7 @@
       'Angular Dashboard',
       'frameworks',
       'angular',
-      'ai ai-angular',
+      'ai-cor ai-angular',
       'A single-page admin dashboard with routing and lazy-loaded modules.',
       'Sep 30, 2026'
     ),
@@ -169,6 +183,11 @@
       'Sep 27, 2026'
     )
   ]
+
+  const glow = (item: Template) => {
+    const color = BRAND_COLORS[item.framework]
+    return color ? { '--template-glow': color } : undefined
+  }
 
   const properties = [
     { key: 'title', label: 'Name' },
@@ -272,15 +291,22 @@
                 :key="item.id"
                 class="group flex min-w-0"
               >
-                <Card class="w-full">
+                <Card
+                  class="isolate w-full"
+                  :style="glow(item)"
+                >
                   <template #content>
+                    <span
+                      aria-hidden="true"
+                      class="pointer-events-none absolute inset-0 -z-1 bg-[radial-gradient(120%_90%_at_18%_0%,color-mix(in_oklab,var(--template-glow,var(--primary))_20%,transparent),transparent_62%)] opacity-0 transition-opacity duration-moderate-01 ease-productive-entrance group-focus-within:opacity-100 group-hover:opacity-100 motion-reduce:transition-none rtl:bg-[radial-gradient(120%_90%_at_82%_0%,color-mix(in_oklab,var(--template-glow,var(--primary))_20%,transparent),transparent_62%)]"
+                    />
                     <div class="flex flex-col items-start gap-(--spacing-md)">
                       <span
                         class="flex size-10 shrink-0 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
                       >
                         <i
-                          :class="item.icon"
-                          class="text-body-lg leading-none text-(--text-default) grayscale transition group-hover:grayscale-0 motion-reduce:transition-none"
+                          :class="[item.icon, MARKS[item.framework]]"
+                          class="text-body-lg leading-none text-(--text-default) grayscale transition duration-moderate-01 ease-productive-entrance group-focus-within:grayscale-0 group-hover:grayscale-0 motion-reduce:transition-none"
                           aria-hidden="true"
                         />
                       </span>
@@ -328,7 +354,7 @@
                 class="flex size-10 shrink-0 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
               >
                 <i
-                  :class="selected.icon"
+                  :class="[selected.icon, MARKS[selected.framework]]"
                   class="text-body-lg leading-none text-(--text-default)"
                   aria-hidden="true"
                 />

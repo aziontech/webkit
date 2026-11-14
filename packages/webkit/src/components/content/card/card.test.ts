@@ -4,6 +4,7 @@ import { userEvent } from 'vitest/browser'
 import { defineComponent, h, nextTick, ref } from 'vue'
 
 import Default from '../../../../examples/card/default.vue'
+import Featured from '../../../../examples/card/featured.vue'
 import Installed from '../../../../examples/card/installed.vue'
 import Integration from '../../../../examples/card/integration.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
@@ -267,6 +268,47 @@ describe('Card integration kind', () => {
 
     expect(view.getByTestId('content-card__action').className).toContain('ms-auto')
     await expectNoA11yViolations(view.container)
+  })
+
+  it('lays out the featured tile: corner badges default to primary, a glow, and the title still selects', async () => {
+    const view = render(Card, { props: { ...integration, featured: true } })
+    const root = view.getByTestId('content-card')
+
+    expect(root).toHaveAttribute('data-featured')
+    expect(view.getByTestId('content-card__glow')).toHaveAttribute('aria-hidden', 'true')
+    const badges = view.getByTestId('content-card__badges')
+    expect(badges.textContent).toContain('Firewall')
+    expect(badges.textContent).toContain('Paid')
+    expect(view.getAllByText('Firewall')).toHaveLength(1)
+    expect(view.getByRole('heading', { level: 3 })).toHaveTextContent('Request Signer')
+    expect(view.getByTestId('content-card__vendor')).toHaveTextContent('by Northwind Labs')
+
+    await fireEvent.click(view.getByRole('button', { name: 'Request Signer' }))
+    expect(view.emitted('select')).toHaveLength(1)
+  })
+
+  it('ignores featured outside the integration kind', () => {
+    const view = render(Card, { props: { title: 'Plan', featured: true } })
+
+    expect(view.getByTestId('content-card')).not.toHaveAttribute('data-featured')
+    expect(view.queryByTestId('content-card__glow')).toBeNull()
+  })
+
+  it('keeps the installed tag and the action in the featured layout', () => {
+    const view = render(Card, {
+      props: { ...integration, featured: true, installed: true },
+      slots: { action: '<button type="button">Configure</button>' }
+    })
+
+    expect(view.getByTestId('content-card__installed')).toHaveTextContent('Installed')
+    expect(view.getByRole('button', { name: 'Configure' })).toBeTruthy()
+  })
+
+  it('has no axe violations in the Featured example', async () => {
+    const view = render(Featured)
+    await expectNoA11yViolations(view.container)
+    await fireEvent.click(view.getByRole('button', { name: 'Bot Shield' }))
+    expect(view.getByRole('status')).toHaveTextContent('Opened Bot Shield')
   })
 
   it('has no axe violations in the Integration and Installed examples', async () => {

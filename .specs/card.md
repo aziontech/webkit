@@ -3,14 +3,14 @@ name: card
 category: content
 structure: monolithic
 status: implemented
-spec_version: 2
+spec_version: 3
 template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=562-6473
   node_id: 562:6473
-checksum: c3ba957e93e1171881d38cc160a0925dc7e67a4fc8afe8ca8bd27fe6ffe4b6a7
+checksum: 74048ff8a118f6f1b94b0709577aa0106bd3a9034ec0c119520364e6362b38d3
 created: 2026-05-22
-last_updated: 2026-11-11
+last_updated: 2026-11-14
 ---
 
 # Card Box — Component Spec
@@ -25,6 +25,7 @@ Displays content or metadata in the UI. Lives at `packages/webkit/src/components
 - Host a divided list edge to edge: set `:padded="false"` and put an `Item` list in the `content` slot.
 - A centered single-card screen (sign-up, onboarding, a success page) that needs header, body and footer regions.
 - A catalog tile for an integration, an extension or a plugin: set `kind="integration"` for the logo, the name, the vendor, a short description, badges, the installed state and one action.
+- A short row of highlighted integrations above the full catalog (Featured): add `featured` to the integration tile for the centred, raised layout with the badge in the corner.
 
 ## When NOT to use
 
@@ -54,6 +55,7 @@ Displays content or metadata in the UI. Lives at `packages/webkit/src/components
 - Keep the description to one or two sentences; the card clamps it to three lines.
 - Show at most two badges (category, context, plan). The installed state is a prop, not a badge, so it reads the same everywhere.
 - Integration cards sit under a section heading, so their title is an `h3`.
+- `featured` centres the mark, the name, the vendor and the description on a raised surface with a primary glow at the top, and moves the badges to the top end corner, where a badge without `severity` is `primary`. Use it for a row of at most three or four picks above the full catalog, never for every tile; the full catalog keeps the plain integration tile.
 
 ## Usage
 
@@ -128,6 +130,7 @@ Displays content or metadata in the UI. Lives at `packages/webkit/src/components
 | `badges`      | `CardBadge[]`                | `[]`        | false    | Integration kind: small tags such as the category or the context (`{ label, severity? }`, severity defaults to `info`).                       |
 | `installed`   | `boolean`                    | `false`     | false    | Integration kind: shows the Installed tag.                                                                                                    |
 | `href`        | `string`                     | `''`        | false    | Integration kind: the title links here; without it the title is a button that emits `select`.                                                 |
+| `featured`    | `boolean`                    | `false`     | false    | Integration kind: the featured layout, centred on a raised surface with a primary glow at the top and the badges in the top end corner.       |
 
 ## Events
 
@@ -154,6 +157,7 @@ Displays content or metadata in the UI. Lives at `packages/webkit/src/components
 - Responsive: the content region is the `@container/card`, so `KeyValuePairs`, `Field orientation="responsive"` and any `@sm:`/`@md:` utility inside follow the card, not the window. A card used as a shrink-to-fit flex item must get an explicit width (`flex-1`, `w-full`, a grid track): inline-size containment gives the content no intrinsic width.
 - Hover-free devices: the `header-action` slot stays visible where the pointer cannot hover (`@media (hover: none)`).
 - Integration kind: `hover` shades the surface, `focus-visible` rings the whole tile (the ring sits on the stretched title target), `installed` adds the success Installed tag.
+- Featured (`featured`, integration kind only): the surface is raised; `hover` strengthens the border and brightens the top glow instead of shading the surface; the layout is centred and the badges sit in the top end corner. `data-featured` on the root drives the styles.
 
 ## Motion & Animations
 
@@ -161,17 +165,19 @@ Displays content or metadata in the UI. Lives at `packages/webkit/src/components
 | -------------------- | ---------------------- | ------ | ------------------------------- |
 | header action reveal | `transition-opacity`   | inline | `motion-reduce:transition-none` |
 | integration hover    | `transition-colors`    | inline | `motion-reduce:transition-none` |
+| featured glow        | `transition-opacity`   | inline | `motion-reduce:transition-none` |
 
 ## Tokens
 
-| Region     | Token (DESIGN.md)       |
-| ---------- | ----------------------- |
-| typography | .text-body-sm           |
-| surface    | `var(--bg-surface)`     |
-| text       | `var(--text-default)`   |
-| spacing    | `var(--spacing-3)`      |
-| shape      | `var(--shape-elements)` |
-| ring       | `var(--ring-color)`     |
+| Region     | Token (DESIGN.md)                                                    |
+| ---------- | -------------------------------------------------------------------- |
+| typography | .text-body-sm                                                        |
+| surface    | `var(--bg-surface)`                                                  |
+| featured   | `var(--bg-surface-raised)`, `var(--border-strong)`, `var(--primary)` |
+| text       | `var(--text-default)`                                                |
+| spacing    | `var(--spacing-3)`                                                   |
+| shape      | `var(--shape-elements)`                                              |
+| ring       | `var(--ring-color)`                                                  |
 
 ## Theme gaps
 
@@ -199,7 +205,7 @@ Displays content or metadata in the UI. Lives at `packages/webkit/src/components
 
 ## Right-to-left
 
-- Layout: logical utilities only; the logo sits at the start, the badges and the action at the end.
+- Layout: logical utilities only; the logo sits at the start, the badges and the action at the end. Featured: the content is centred and the badges sit in the top end corner (`end-*`), so they move to the left under `dir="rtl"`.
 - Icons: the logo is not mirrored.
 - Keyboard: no arrow-key navigation of its own.
 - User data: the vendor and the title render in `<bdi>`.
@@ -207,13 +213,13 @@ Displays content or metadata in the UI. Lives at `packages/webkit/src/components
 ## Responsive
 
 - Container queries: the content region is `@container/card`; the integration layout does not change with width, the description wraps and clamps to three lines.
-- Narrow (≤ 640 px or a narrow container): the badges wrap under the title row; the action stays at the end of its own row.
+- Narrow (≤ 640 px or a narrow container): the badges wrap under the title row; the action stays at the end of its own row. Featured: the corner badges keep their place and the centred block reserves the top inset for them.
 - Touch: the whole tile is the target; the action is a regular `Button`.
 - Reflow: no horizontal scroll at 320 px and 200 % zoom.
 
 ## Performance
 
-- Bundle budget: 13.5 KB gzip for `./card` in `.size-limit.json`: 11.1 KB before the integration kind (`cn` carries `tailwind-merge`), plus `tag` and the translate helper.
+- Bundle budget: 13.5 KB gzip for `./card` in `.size-limit.json`: 11.1 KB before the integration kind (`cn` carries `tailwind-merge`), plus `tag` and the translate helper. The featured layout is template and classes only.
 - Runtime budget: none: static.
 - Heavy parts: none.
 
@@ -225,6 +231,7 @@ Displays content or metadata in the UI. Lives at `packages/webkit/src/components
 - Flush — `padded=false` edge-to-edge content (mutually-exclusive boolean state of the `padded` prop)
 - Integration — `kind="integration"` with a vendor, a badge and an Install action (per `kind`)
 - Installed — `kind="integration"` with `installed` and a Configure action (justified: the installed state is the tile's second state)
+- Featured — a row of three `featured` integration tiles (justified: `featured` is a boolean layout of the integration kind)
 
 ## Constraints — DO NOT
 
