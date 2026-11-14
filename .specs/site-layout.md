@@ -3,11 +3,11 @@ name: site-layout
 category: layout
 structure: monolithic
 status: implemented
-spec_version: 1
+spec_version: 2
 template: 2
-checksum: 1144c940caf1fb61c969f41d419ef6ebd1c35245694151998771ce9f226e2031
+checksum: d68a4b2894ac8964f62200822fb1f1edd552a765a9179f0ffe25585eebfdc038
 created: 2026-11-12
-last_updated: 2026-11-12
+last_updated: 2026-11-14
 ---
 
 # SiteLayout — Component Spec
@@ -68,6 +68,7 @@ The marketing site's chrome, composed once in the app: `SiteNav` on top, the pag
 | `navigation`        | `SiteLayoutNavigation` | `—`         | true     | The bar, bound onto `SiteNav`: `{ menus, home?, links?, contact?, primaryAction?, secondaryAction?, secondaryActionOnPhones? }`.                         |
 | `footer`            | `SiteLayoutFooter`     | `undefined` | false    | The footer, bound onto `SiteFooter`: `{ kind?, home?, columns?, socials?, statusLabel?, languages? }`; `kind` defaults to `site`. No footer when absent. |
 | `searchPlaceholder` | `string`               | `''`        | false    | Placeholder of the palette's input. Empty uses the locale catalog (`Search the site`).                                                                   |
+| `navOverlay`        | `boolean`              | `false`     | false    | Floats the bar over the page's first band instead of stacking it above; the bar stays sticky over the whole page.                                        |
 
 ## v-model
 
@@ -92,6 +93,7 @@ The marketing site's chrome, composed once in the app: `SiteNav` on top, the pag
 ## States
 
 - Visual states: `default`; the palette `open` / `closed`; the bar's sheet and mega-menus own their states (`SiteNav`).
+- `navOverlay` (mirrored on `data-nav-overlay`): the root becomes a one-column grid where the bar and the main landmark share the first row, so the first band runs under the bar (a home page whose hero art fills the top); the bar stays sticky to the end of the page and the footer takes the second row.
 - Not applicable: `loading`, `empty`, `error`, `disabled`, `readonly`, `invalid` (the sections own their states).
 
 ## Motion & Animations
@@ -151,6 +153,7 @@ The marketing site's chrome, composed once in the app: `SiteNav` on top, the pag
 ## Examples
 
 - Default — the layout with the azion.com navigation and footer and a framed page of sections.
+- Nav overlay — justification: `navOverlay` changes the layout (the bar floats over the first band), which no other example shows.
 
 ## Constraints — DO NOT
 

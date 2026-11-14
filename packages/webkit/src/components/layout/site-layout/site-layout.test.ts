@@ -85,6 +85,19 @@ describe('SiteLayout', () => {
     expect(queryByRole('contentinfo')).toBeNull()
   })
 
+  it('floats the bar over the first band only with navOverlay, keeping one bar, main and footer', async () => {
+    const stacked = mount()
+    expect(stacked.getByTestId('layout-site-layout')).not.toHaveAttribute('data-nav-overlay')
+    stacked.unmount()
+
+    const { getByTestId, getAllByRole, getByRole, container } = mount({ navOverlay: true })
+    expect(getByTestId('layout-site-layout')).toHaveAttribute('data-nav-overlay')
+    expect(getByRole('banner', { name: 'Azion' })).toBeTruthy()
+    expect(getAllByRole('main')).toHaveLength(1)
+    expect(getByRole('contentinfo')).toBeTruthy()
+    await expectNoA11yViolations(container)
+  })
+
   it('opens the palette from the bar search with every navigation destination', async () => {
     const onOpen = vi.fn()
     const { getByRole } = mount({ 'onUpdate:searchOpen': onOpen })
