@@ -77,6 +77,9 @@ test('catalog aliases map market and retired names to the current export', () =>
   assert.equal(aliases.paginator, 'pagination')
   assert.equal(aliases.tiles, 'radio-cards')
   assert.equal(aliases['segmented-control'], 'toggle-group')
+  assert.equal(aliases['config-provider'], 'webkit-provider')
+  assert.equal(aliases['locale-provider'], 'webkit-provider')
+  assert.equal(aliases['bordered-box'], 'frame-box')
   for (const [name, to] of Object.entries(aliases)) {
     assert.ok(!subpaths.includes(name), `${name} must not be an export`)
     assert.ok(subpaths.includes(to), `${to} must be an export`)

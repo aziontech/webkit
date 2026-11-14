@@ -6,6 +6,15 @@
     inheritAttrs: false
   })
 
+  interface Props {
+    /** Accessible name; when set the spinner renders role status with this name, otherwise it stays aria-hidden. */
+    ariaLabel?: string
+  }
+
+  withDefaults(defineProps<Props>(), {
+    ariaLabel: ''
+  })
+
   const attrs = useAttrs()
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'utils-spinner')
@@ -17,7 +26,9 @@
     viewBox="0 0 16 16"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
-    aria-hidden="true"
+    :aria-hidden="ariaLabel ? undefined : 'true'"
+    :role="ariaLabel ? 'status' : undefined"
+    :aria-label="ariaLabel || undefined"
     v-bind="$attrs"
     :data-testid="testId"
   >

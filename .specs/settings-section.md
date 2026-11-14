@@ -3,8 +3,8 @@ name: settings-section
 category: layout
 structure: monolithic
 status: implemented
-checksum: ebbc0145e394f757f02329ff9f71e5932b383f545f346fad9e71733c55c22497
-spec_version: 1
+checksum: b08fa886994f8d5069a30d05e61f6cecdb96c1e0a3627c193e3241039347d58e
+spec_version: 2
 created: 2026-11-10
 last_updated: 2026-11-14
 ---
@@ -31,7 +31,7 @@ A band of a settings page: an h2 with a `Hint` glyph that carries the one-senten
 - `setting-row` — the rows inside the band's card.
 - `card` — the flush (`:padded="false"`) surface the rows sit on.
 - `hint` — the guidance glyph beside the title.
-- `section-header` — the band heading with a description and actions.
+- `section-header` — the band heading with a description and actions. Pick by content: a settings band of `SettingRow`s (a Hint, a gutter copy-link, an optional disclosure) is `SettingsSection`; a console band heading with a description and its own actions is `SectionHeader`; a marketing section heading is `section-title`. The three share the h2 and the copy-link anchor; folding SettingsSection's heading onto SectionHeader is a planned refactor, not a behaviour change.
 
 ## Best practices
 

@@ -24,19 +24,19 @@ export default {
   }${
     showLeft
       ? figma.code`
-  <GlobalHeader.Left>
+  <GlobalHeader.Start>
     ${left}
-  </GlobalHeader.Left>`
+  </GlobalHeader.Start>`
       : ''
   }
-  <GlobalHeader.Middle>
+  <GlobalHeader.Center>
     ${nav}
-  </GlobalHeader.Middle>${
+  </GlobalHeader.Center>${
     showRight
       ? figma.code`
-  <GlobalHeader.Right>
+  <GlobalHeader.End>
     ${right}
-  </GlobalHeader.Right>`
+  </GlobalHeader.End>`
       : ''
   }
 </GlobalHeader>`,

@@ -94,7 +94,7 @@ describe('ConsoleLayout', () => {
     const header = getByTestId('layout-console-layout__header')
     const regions = [
       ...header.querySelectorAll(
-        '[data-testid$="__left"], [data-testid$="__middle"], [data-testid$="__right"]'
+        '[data-testid$="__start"], [data-testid$="__center"], [data-testid$="__end"]'
       )
     ]
       .filter(
@@ -102,7 +102,7 @@ describe('ConsoleLayout', () => {
           el.parentElement?.closest('[data-testid="layout-console-layout__header"]') === header
       )
       .map((el) => el.getAttribute('data-testid')?.split('__').pop())
-    expect(regions).toEqual(['left', 'middle', 'right'])
+    expect(regions).toEqual(['start', 'center', 'end'])
   })
 
   it('lets a consumer override data-testid', () => {
@@ -663,6 +663,23 @@ describe('ConsoleLayout — navigation rail state', () => {
   it('renders the rail expanded by default', () => {
     const view = mount()
     expect(rail(view).hasAttribute('data-collapsed')).toBe(false)
+  })
+
+  it('collapses the rail when navigationOpen is false', () => {
+    const view = mount({ navigationOpen: false })
+    expect(rail(view).hasAttribute('data-collapsed')).toBe(true)
+  })
+
+  it('emits update:navigationOpen and the deprecated update:navigationExpanded together', async () => {
+    const onOpen = vi.fn()
+    const onExpanded = vi.fn()
+    const view = mount({
+      'onUpdate:navigationOpen': onOpen,
+      'onUpdate:navigationExpanded': onExpanded
+    })
+    await userEvent.click(view.getByRole('button', { name: 'Collapse sidebar' }))
+    expect(onOpen).toHaveBeenCalledWith(false)
+    expect(onExpanded).toHaveBeenCalledWith(false)
   })
 
   it('collapses the rail when navigationExpanded is false', () => {

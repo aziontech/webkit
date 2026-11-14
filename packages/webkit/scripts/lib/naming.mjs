@@ -3,13 +3,16 @@ import { join, relative } from 'node:path'
 
 export const MARKET_ALIASES = {
   'alert-dialog': 'dialog',
+  'bordered-box': 'frame-box',
   breadcrumbs: 'breadcrumb',
   callout: 'alert',
   'command-palette': 'command',
+  'config-provider': 'webkit-provider',
   'data-table': 'table',
   datatable: 'table',
   keyboard: 'kbd',
   loader: 'spinner',
+  'locale-provider': 'webkit-provider',
   modal: 'dialog',
   notification: 'toast',
   'segmented-control': 'toggle-group',

@@ -4,6 +4,7 @@
     computed,
     Fragment,
     type FunctionalComponent,
+    getCurrentInstance,
     h,
     isVNode,
     nextTick,
@@ -54,9 +55,9 @@
   import Tooltip from '../../overlay/tooltip/tooltip.vue'
   import AppLayout from '../app-layout/app-layout.vue'
   import GlobalHeader from '../global-header/global-header.vue'
-  import GlobalHeaderLeft from '../global-header/global-header-left.vue'
-  import GlobalHeaderMiddle from '../global-header/global-header-middle.vue'
-  import GlobalHeaderRight from '../global-header/global-header-right.vue'
+  import GlobalHeaderCenter from '../global-header/global-header-center.vue'
+  import GlobalHeaderEnd from '../global-header/global-header-end.vue'
+  import GlobalHeaderStart from '../global-header/global-header-start.vue'
   import Sidebar from '../sidebar/sidebar.vue'
   import {
     ConsoleLayoutInjectionKey,
@@ -144,7 +145,10 @@
   /** Whether the tools region is open. Use with `v-model:tools-open`. */
   const toolsOpen = defineModel<boolean>('toolsOpen', { default: false })
 
-  /** Whether the navigation rail is expanded on wide layouts; false collapses it. Use with `v-model:navigation-expanded`. */
+  /** Whether the navigation rail is shown on wide layouts; false collapses it. Use with `v-model:navigation-open`. */
+  const navigationOpen = defineModel<boolean>('navigationOpen', { default: true })
+
+  /** @deprecated since 6.0 — use `v-model:navigation-open`. Removed in 7.0. */
   const navigationExpanded = defineModel<boolean>('navigationExpanded', { default: true })
 
   defineSlots<{
@@ -192,14 +196,24 @@
   })
 
   const attrs = useAttrs()
+  const instance = getCurrentInstance()
   const { t } = useTranslate({ consoleLayout: en.consoleLayout })
 
   const query = ref('')
   const railWidth = ref<number | null>(null)
-  const railCollapsed = computed({
-    get: () => !navigationExpanded.value,
+  const passed = (...names: string[]) => {
+    const raw = instance?.vnode.props
+    return Boolean(raw && names.some((name) => name in raw))
+  }
+  const railOpen = computed({
+    get: () =>
+      passed('navigationExpanded', 'navigation-expanded') &&
+      !passed('navigationOpen', 'navigation-open')
+        ? navigationExpanded.value
+        : navigationOpen.value,
     set: (value: boolean) => {
-      navigationExpanded.value = !value
+      navigationOpen.value = value
+      navigationExpanded.value = value
     }
   })
   const menuPath = ref<string[]>([])
@@ -472,7 +486,7 @@
       <template #navigation="{ drawer, closeNavigation }">
         <Sidebar
           v-model:width="railWidth"
-          v-model:collapsed="railCollapsed"
+          v-model:open="railOpen"
           :resizable="!drawer"
           :collapsible="!drawer"
           :aria-label="ariaLabel || t('consoleLayout.navigation')"
@@ -568,7 +582,7 @@
       <template #header="{ compact, openNavigation, toggleTools }">
         <div class="@container">
           <GlobalHeader :data-testid="`${testId}__header`">
-            <GlobalHeaderLeft>
+            <GlobalHeaderStart>
               <div class="flex min-w-0 items-center justify-start gap-(--spacing-xs)">
                 <template v-if="compact">
                   <Tooltip
@@ -638,9 +652,9 @@
                   />
                 </div>
               </div>
-            </GlobalHeaderLeft>
-            <GlobalHeaderMiddle />
-            <GlobalHeaderRight>
+            </GlobalHeaderStart>
+            <GlobalHeaderCenter />
+            <GlobalHeaderEnd>
               <SearchTrigger
                 collapsible
                 :data-testid="`${testId}__search`"
@@ -680,7 +694,7 @@
                 size="medium"
                 kind="square"
               />
-            </GlobalHeaderRight>
+            </GlobalHeaderEnd>
           </GlobalHeader>
         </div>
       </template>

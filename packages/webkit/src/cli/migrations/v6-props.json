@@ -4,6 +4,7 @@
   "alert": { "severity": { "to": "severity", "values": { "error": "danger" } } },
   "button": { "kind": { "to": "kind", "values": { "text": "transparent" } } },
   "code-block": { "border": "bordered", "value": "modelValue" },
+  "console-layout": { "navigationExpanded": "navigationOpen" },
   "doc-card": { "overline": "eyebrow", "link": "linkLabel" },
   "doc-card-group": { "mobileCols": "mobileColumns" },
   "doc-tooltip": { "headline": "title", "cta": "linkLabel" },

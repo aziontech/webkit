@@ -14,16 +14,16 @@
     }
   ]
 
-  const navigationExpanded = ref(true)
+  const navigationOpen = ref(true)
 
   const onSearchSelect = (_event: MouseEvent | KeyboardEvent, value: string | number) => {
-    if (value === 'action:sidebar') navigationExpanded.value = !navigationExpanded.value
+    if (value === 'action:sidebar') navigationOpen.value = !navigationOpen.value
   }
 </script>
 
 <template>
   <ConsoleLayout
-    v-model:navigation-expanded="navigationExpanded"
+    v-model:navigation-open="navigationOpen"
     :navigation="navigation"
     active-id="workloads"
     @search-select="onSearchSelect"
@@ -33,11 +33,11 @@
         <Command.Item value="action:sidebar">
           <template #prefix>
             <i
-              :class="navigationExpanded ? 'pi pi-angle-double-left' : 'pi pi-angle-double-right'"
+              :class="navigationOpen ? 'pi pi-angle-double-left' : 'pi pi-angle-double-right'"
               aria-hidden="true"
             />
           </template>
-          {{ navigationExpanded ? 'Collapse sidebar' : 'Expand sidebar' }}
+          {{ navigationOpen ? 'Collapse sidebar' : 'Expand sidebar' }}
         </Command.Item>
       </Command.Group>
     </template>

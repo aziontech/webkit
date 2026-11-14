@@ -1,6 +1,6 @@
 import { fireEvent, render, waitFor, within } from '@testing-library/vue'
 import { afterEach, describe, expect, it } from 'vitest'
-import { h } from 'vue'
+import { h, nextTick, ref } from 'vue'
 
 import { expectNoA11yViolations } from '../../../test/axe'
 import AppLayout from './app-layout.vue'
@@ -107,6 +107,28 @@ describe('AppLayout', () => {
     expect(getByTestId('layout-app-layout').dataset.navigation).toBe('closed')
     expect(queryByText('nav links')).toBeNull()
     expect(updates).toEqual([false])
+  })
+
+  it('round-trips the models with a controlling parent (defineModel)', async () => {
+    const navigationOpen = ref(true)
+    const toolsOpen = ref(false)
+    const { getByText, getByTestId } = render({
+      setup: () => () =>
+        layout({
+          navigationOpen: navigationOpen.value,
+          'onUpdate:navigationOpen': (value: boolean) => (navigationOpen.value = value),
+          toolsOpen: toolsOpen.value,
+          'onUpdate:toolsOpen': (value: boolean) => (toolsOpen.value = value)
+        }).render()
+    })
+    await fireEvent.click(getByText('Toggle navigation'))
+    expect(navigationOpen.value).toBe(false)
+    expect(getByTestId('layout-app-layout').dataset.navigation).toBe('closed')
+    await fireEvent.click(getByText('Help'))
+    expect(toolsOpen.value).toBe(true)
+    navigationOpen.value = true
+    await nextTick()
+    expect(getByTestId('layout-app-layout').dataset.navigation).not.toBe('closed')
   })
 
   it('opens the tools region from the header and closes it from its own button', async () => {

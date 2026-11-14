@@ -3,6 +3,7 @@
 
   import { GlobalHeaderInjectionKey } from './injection-key'
 
+  /** @deprecated since 6.0 — use `GlobalHeader.Start`. Removed in 7.0. */
   defineOptions({
     name: 'GlobalHeaderLeft',
     inheritAttrs: false

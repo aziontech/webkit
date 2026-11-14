@@ -25,7 +25,7 @@
   import SidebarHeader from '@aziontech/webkit/sidebar-header'
   import { ref } from 'vue'
 
-  const collapsed = ref(false)
+  const open = ref(true)
   const width = ref(null)
 
   const accountMenuOpen = ref(false)
@@ -36,7 +36,7 @@
   <div class="relative flex h-screen min-h-0">
     <div class="flex min-h-0 shrink-0 max-md:hidden">
       <Sidebar
-        v-model:collapsed="collapsed"
+        v-model:open="open"
         v-model:width="width"
         resizable
         collapsible

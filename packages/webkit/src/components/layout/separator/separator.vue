@@ -13,11 +13,14 @@
     orientation?: SeparatorOrientation
     /** Fallback centered text shown when the default slot is empty. */
     label?: string
+    /** Purely visual line: renders role none instead of separator when there is no label. */
+    decorative?: boolean
   }
 
   const props = withDefaults(defineProps<Props>(), {
     orientation: 'horizontal',
-    label: ''
+    label: '',
+    decorative: false
   })
 
   defineSlots<{
@@ -37,8 +40,8 @@
 <template>
   <div
     v-bind="$attrs"
-    role="separator"
-    :aria-orientation="orientation"
+    :role="decorative && !hasContent() ? 'none' : 'separator'"
+    :aria-orientation="decorative && !hasContent() ? undefined : orientation"
     :aria-labelledby="hasContent() ? labelId : undefined"
     :data-testid="testId"
     :data-orientation="orientation"

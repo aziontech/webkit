@@ -1,5 +1,14 @@
 <script setup lang="ts">
-  import { computed, inject, onBeforeUnmount, onMounted, ref, useAttrs, watch } from 'vue'
+  import {
+    computed,
+    getCurrentInstance,
+    inject,
+    onBeforeUnmount,
+    onMounted,
+    ref,
+    useAttrs,
+    watch
+  } from 'vue'
 
   import { ResizableInjectionKey } from '../injection-key'
 
@@ -25,7 +34,9 @@
 
   /** Pane length in px along the group axis; a pane that never receives one is flexible and absorbs the remainder. */
   const basis = defineModel<number | undefined>('basis', { default: undefined })
-  /** Whether the pane renders at zero length. It stays mounted, so its content keeps its state. */
+  /** Whether the pane is shown at its length; false renders it at zero length. It stays mounted, so its content keeps its state. */
+  const expanded = defineModel<boolean>('expanded', { default: true })
+  /** @deprecated since 6.0 — use `v-model:expanded` (inverted). Removed in 7.0. */
   const collapsed = defineModel<boolean | undefined>('collapsed', { default: undefined })
 
   defineSlots<{
@@ -33,6 +44,7 @@
   }>()
 
   const attrs = useAttrs()
+  const instance = getCurrentInstance()
   const ctx = inject(ResizableInjectionKey, null)
 
   const testId = computed<string>(
@@ -42,7 +54,17 @@
   )
 
   const flexible = computed(() => basis.value === undefined)
-  const isCollapsed = computed(() => collapsed.value === true)
+  const passed = (name: string) => {
+    const raw = instance?.vnode.props
+    return Boolean(raw && name in raw)
+  }
+  const isCollapsed = computed(() =>
+    passed('collapsed') && !passed('expanded') ? collapsed.value === true : !expanded.value
+  )
+  const setCollapsed = (value: boolean) => {
+    expanded.value = !value
+    collapsed.value = value
+  }
   const orientation = computed(() => ctx?.orientation.value ?? 'horizontal')
 
   const paneRef = ref<globalThis.HTMLElement | null>(null)
@@ -51,11 +73,11 @@
 
   const setBasis = (next: number) => {
     if (props.collapsible && next < props.min / 2) {
-      if (!isCollapsed.value) collapsed.value = true
+      if (!isCollapsed.value) setCollapsed(true)
       basis.value = props.min
       return
     }
-    if (isCollapsed.value) collapsed.value = false
+    if (isCollapsed.value) setCollapsed(false)
     basis.value = clamp(next)
   }
 
