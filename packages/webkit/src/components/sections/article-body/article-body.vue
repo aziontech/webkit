@@ -546,13 +546,13 @@
                     </Tooltip>
                     <Tooltip
                       v-if="hasFeed"
-                      :text="share.copyFeed"
+                      :text="share.copyFeed ?? ''"
                     >
                       <IconButton
                         kind="outlined"
                         size="medium"
                         icon="ai ai-rss"
-                        :ariaLabel="share.copyFeed"
+                        :ariaLabel="share.copyFeed ?? ''"
                         @click="copyFeed"
                       />
                     </Tooltip>
