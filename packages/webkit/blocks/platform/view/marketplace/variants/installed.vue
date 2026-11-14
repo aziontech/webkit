@@ -527,48 +527,17 @@
                   <li
                     v-for="item in templateItems"
                     :key="item.id"
-                    class="group flex min-w-0"
+                    class="flex min-w-0"
                   >
-                    <Card class="w-full">
-                      <template #content>
-                        <div class="isolate flex flex-1 flex-col">
-                          <span
-                            aria-hidden="true"
-                            class="pointer-events-none absolute inset-0 -z-1 overflow-hidden rounded-(--shape-card) opacity-0 transition-opacity duration-moderate-01 ease-productive-entrance group-focus-within:opacity-100 group-hover:opacity-100 motion-reduce:transition-none"
-                          >
-                            <i
-                              :class="[item.icon, item.markClass]"
-                              class="absolute start-(--spacing-xl) top-(--spacing-xl) scale-600 text-body-lg leading-none text-(--primary) opacity-25 blur-sm"
-                            />
-                          </span>
-                          <div class="flex flex-col items-start gap-(--spacing-md)">
-                            <span
-                              class="flex size-10 shrink-0 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
-                            >
-                              <i
-                                :class="[item.icon, item.markClass]"
-                                class="text-body-lg leading-none text-(--text-default) grayscale transition duration-moderate-01 ease-productive-entrance group-focus-within:grayscale-0 group-hover:grayscale-0 motion-reduce:transition-none"
-                                aria-hidden="true"
-                              />
-                            </span>
-                            <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
-                              <h3 class="text-label-md text-(--text-default)">
-                                <a
-                                  :href="`/marketplace/templates/${item.id}`"
-                                  class="text-(--text-default) no-underline outline-none after:absolute after:inset-0 after:content-[''] focus-visible:after:ring-2 focus-visible:after:ring-inset focus-visible:after:ring-(--ring-color)"
-                                  >{{ item.title }}</a
-                                >
-                              </h3>
-                              <p
-                                class="m-0 line-clamp-2 text-pretty text-body-sm text-(--text-muted)"
-                              >
-                                {{ item.description }}
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-                      </template>
-                    </Card>
+                    <Card
+                      kind="integration"
+                      class="w-full"
+                      :title="item.title"
+                      :logo="[item.icon, item.markClass].filter(Boolean).join(' ')"
+                      :description="item.description"
+                      :badges="[{ label: item.framework, severity: 'secondary' }]"
+                      :href="`/marketplace/templates/${item.id}`"
+                    />
                   </li>
                 </ul>
               </section>

@@ -29,9 +29,9 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 
 One `PropertyFilter` bound with `v-bind="propertyFilterProps"` from `useCollection`, at full width above the sections. Free text searches the name and the description; Category and Framework are properties with `options`, in catalog order. Every token lives in the URL (`url: true`), so a filtered catalog survives a reload and can be shared. There is no second search field and no filter popover.
 
-### C. Category sections — `Card`, `Tag` (required)
+### C. Category sections — `Card` (required)
 
-One `section` per category that still has matches, labelled by its `h2` in the muted small label style (Frameworks, Starters, Functions), each with a `ul` grid of one to four tiles a row by width. A tile is a `Card` with the framework mark in a 40 px raised box (grey until the tile is hovered or focused, the `grayscale` to colour shift of the design; colour marks use `ai-cor`, and the black Next.js mark inverts in dark), the name as an `h3` that holds a button with `aria-haspopup="dialog"`, two lines of description and a small secondary `Tag` with the framework. The button's stretched `after` box makes the whole tile one target, draws the translucent hover wash and the focus ring inside the tile, and leaves the `Card` surface untouched. Hovering or focusing a tile also lights a soft glow from its top start corner: an `aria-hidden` span under the content (the `Card` carries `isolate`, the span clips to the card's shape) holds a second copy of the tile's mark, scaled up, blurred and faded. A colour mark (`ai-cor`) glows in its own colours; a one-colour font mark takes `text-(--primary)`, so the glow needs no colour value in the data. Tiles in a row share a height.
+One `section` per category that still has matches, labelled by its `h2` in the muted small label style (Frameworks, Starters, Functions), each with a `ul` grid of one to four tiles a row by the width of the content (container queries on the `@container/templates` section, so an open rail does not overstate the room). A tile is a `Card kind="integration"`: the framework mark as its `logo` (colour marks use `ai-cor`, and the black Next.js mark inverts in dark), the name as an `h3` holding a button that emits `select` and opens the preview, two lines of description and the framework as a secondary badge. The title's stretched target makes the whole tile one target with the hover wash and the focus ring inside the tile; the markup lives in `Card`, not in the block. Tiles in a row share a height.
 
 ### D. No matching templates — `EmptyState`, `Button` (required)
 
@@ -54,7 +54,7 @@ A `section` labelled by its "README" heading, with the template's README in a `C
 - Run the catalog on one `useCollection` call with `filtering`, `propertyFiltering` and `url: true`, and bind `propertyFilterProps`.
 - Group the matches by category in a fixed order and drop a category with no match.
 - Make the tile's name the only interactive element, and stretch it over the tile.
-- Show the framework on the tile as text in a `Tag`, not only as the mark.
+- Show the framework on the tile as text in a badge, not only as the mark.
 - Open the preview in a drawer, so the catalog and the filter stay where they were.
 - End the preview on Deploy, a link into `platform/create/deploy-template`, and let that flow run the deploy and raise the async-submit toast.
 - Keep README headings below the drawer title (`h4` and down).
@@ -64,7 +64,7 @@ A `section` labelled by its "README" heading, with the template's README in a `C
 - Don't deploy from the tile or the drawer without the deploy flow; the template needs a scope, a repository name and its settings.
 - Don't put a Deploy button on every tile; the preview is where a person confirms the choice.
 - Don't page the catalog or add preferences; a grouped list of tens of items reads better whole.
-- Don't colour the tile per framework at rest; the surface stays neutral and the brand shows only in the mark and the glow drawn from it.
+- Don't colour the tile per framework; the surface stays neutral and the brand shows only in the mark.
 - Don't hide the filter while loading or after a failure; disable it, so the page keeps its shape.
 - Don't show the README as raw markdown or in a code block.
 
@@ -83,9 +83,8 @@ A `section` labelled by its "README" heading, with the template's README in a `C
 
 - The layout owns the one `main` landmark; the `PageHeader` title is the only `h1`, each category is an `h2`, each tile name an `h3`.
 - Each category is a `section` labelled by its heading and holds a `ul`, so the count of templates is announced.
-- The tile's target is a real `button` with `aria-haspopup="dialog"`, named by the template name; the description and the framework follow it in reading order.
+- The tile's target is a real `button` named by the template name; the description and the framework follow it in reading order.
 - The focus ring is drawn inside the tile on the stretched target, so it is never clipped by the grid.
-- The glow and the colour mark follow keyboard focus as well as hover, and both are decorative.
 - The drawer traps focus, is named by `DrawerTitle`, closes on Escape and returns focus to the tile that opened it.
 - The `PropertyFilter` is named by its `aria-label` and announces the match count after each change.
 - The loading band is `aria-busy`; the failure `Alert` is announced and its Retry is a button.

@@ -38,7 +38,7 @@
       </PageHeader>
 
       <section
-        class="layout-section-start flex min-w-0 flex-col gap-(--layout-section-gap)"
+        class="@container/templates layout-section-start flex min-w-0 flex-col gap-(--layout-section-gap)"
         aria-busy="true"
         aria-label="Loading templates"
       >
@@ -58,7 +58,7 @@
             height="1rem"
           />
           <ul
-            class="m-0 grid list-none grid-cols-1 gap-(--spacing-md) p-0 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4"
+            class="m-0 grid list-none grid-cols-1 gap-(--spacing-md) p-0 @xl/templates:grid-cols-2 @4xl/templates:grid-cols-3 @7xl/templates:grid-cols-4"
           >
             <li
               v-for="tile in section.tiles"

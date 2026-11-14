@@ -15,7 +15,6 @@
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import PropertyFilter from '@aziontech/webkit/property-filter'
-  import Tag from '@aziontech/webkit/tag'
   import { useCollection } from '@aziontech/webkit/use-collection'
   import { computed, ref } from 'vue'
 
@@ -231,7 +230,9 @@
         </template>
       </PageHeader>
 
-      <section class="layout-section-start flex min-w-0 flex-col gap-(--layout-section-gap)">
+      <section
+        class="@container/templates layout-section-start flex min-w-0 flex-col gap-(--layout-section-gap)"
+      >
         <PropertyFilter
           v-bind="propertyFilterProps"
           placeholder="Search templates"
@@ -269,59 +270,22 @@
               {{ section.label }}
             </h2>
             <ul
-              class="m-0 grid list-none grid-cols-1 gap-(--spacing-md) p-0 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4"
+              class="m-0 grid list-none grid-cols-1 gap-(--spacing-md) p-0 @xl/templates:grid-cols-2 @4xl/templates:grid-cols-3 @7xl/templates:grid-cols-4"
             >
               <li
                 v-for="item in section.items"
                 :key="item.id"
-                class="group flex min-w-0"
+                class="flex min-w-0"
               >
-                <Card class="w-full">
-                  <template #content>
-                    <div class="isolate flex flex-1 flex-col">
-                      <span
-                        aria-hidden="true"
-                        class="pointer-events-none absolute inset-0 -z-1 overflow-hidden rounded-(--shape-card) opacity-0 transition-opacity duration-moderate-01 ease-productive-entrance group-focus-within:opacity-100 group-hover:opacity-100 motion-reduce:transition-none"
-                      >
-                        <i
-                          :class="[item.icon, MARKS[item.framework]]"
-                          class="absolute start-(--spacing-xl) top-(--spacing-xl) scale-600 text-body-lg leading-none text-(--primary) opacity-25 blur-sm"
-                        />
-                      </span>
-                      <div class="flex flex-col items-start gap-(--spacing-md)">
-                        <span
-                          class="flex size-10 shrink-0 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
-                        >
-                          <i
-                            :class="[item.icon, MARKS[item.framework]]"
-                            class="text-body-lg leading-none text-(--text-default) grayscale transition duration-moderate-01 ease-productive-entrance group-focus-within:grayscale-0 group-hover:grayscale-0 motion-reduce:transition-none"
-                            aria-hidden="true"
-                          />
-                        </span>
-                        <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
-                          <h3 class="text-label-md text-(--text-default)">
-                            <button
-                              type="button"
-                              class="cursor-pointer border-0 bg-transparent p-0 text-start text-(--text-default) outline-none after:absolute after:inset-0 after:transition-colors after:content-[''] hover:after:bg-(--bg-hover) focus-visible:after:ring-2 motion-reduce:after:transition-none focus-visible:after:ring-inset focus-visible:after:ring-(--ring-color)"
-                              aria-haspopup="dialog"
-                              @click="openPreview(item)"
-                            >
-                              {{ item.title }}
-                            </button>
-                          </h3>
-                          <p class="m-0 line-clamp-2 text-pretty text-body-sm text-(--text-muted)">
-                            {{ item.description }}
-                          </p>
-                        </div>
-                        <Tag
-                          :label="FRAMEWORKS[item.framework]"
-                          severity="secondary"
-                          size="small"
-                        />
-                      </div>
-                    </div>
-                  </template>
-                </Card>
+                <Card
+                  kind="integration"
+                  class="w-full"
+                  :title="item.title"
+                  :logo="[item.icon, MARKS[item.framework]].filter(Boolean).join(' ')"
+                  :description="item.description"
+                  :badges="[{ label: FRAMEWORKS[item.framework], severity: 'secondary' }]"
+                  @select="openPreview(item)"
+                />
               </li>
             </ul>
           </section>

@@ -45,7 +45,7 @@ When `status` is `no-match`, the grid gives way to a medium `EmptyState` with th
 
 ### G. Templates — `PropertyFilter`, `Card`, `EmptyState`, `Button` (required)
 
-The first tab is the full template catalog. A second `useCollection` runs the templates: its `PropertyFilter` (placeholder and `aria-label` "Search templates") turns free text over the name, the framework and the description, and a Framework property, into tokens that live in the URL under the `templates` prefix, so they never collide with the integration filter. Under it a `ul` grid of small `Card` tiles, two a row on a phone, then three, four and five as the page widens: the framework mark in a bordered square, grey until the tile is hovered or focused, then in colour; the name as an `h3` holding a stretched link to the template page (`/marketplace/templates/<id>`); two lines of description. Hovering or focusing a tile lights a soft glow from its top start corner, drawn from the mark itself: an `aria-hidden` span under the content holds a scaled, blurred, faded copy of the mark, so a colour mark (`ai-cor`) glows in its own colours and a one-colour font mark (a starter) in `text-(--primary)`; `isolate` on the `Card` keeps the glow under the content, and no colour value lives in the data. When its `status` is `no-match`, the grid gives way to a bordered medium `EmptyState`, "No matching templates", with an outlined small Clear filters `Button` bound to the templates' `clearFilters`.
+The first tab is the full template catalog. A second `useCollection` runs the templates: its `PropertyFilter` (placeholder and `aria-label` "Search templates") turns free text over the name, the framework and the description, and a Framework property, into tokens that live in the URL under the `templates` prefix, so they never collide with the integration filter. Under it a `ul` grid of `Card kind="integration"` tiles, two a row on a phone, then three, four and five as the page widens: the framework mark as the `logo` (`ai-cor` colour marks; the black Next.js mark inverts in dark), the name as an `h3` holding a stretched link to the template page (`/marketplace/templates/<id>`), two lines of description and the framework as a secondary badge. The tile markup is the `Card`'s, shared with `platform/view/template-browser`. When its `status` is `no-match`, the grid gives way to a bordered medium `EmptyState`, "No matching templates", with an outlined small Clear filters `Button` bound to the templates' `clearFilters`.
 
 ### H. Integration drawer — `Drawer`, `DrawerPortal`, `DrawerOverlay`, `DrawerContent`, `DrawerTitle`, `DrawerClose`, `PanelHeader`, `PanelContent`, `PanelFooter` (required)
 
@@ -89,7 +89,6 @@ Raised through `toast` with one id for the install, so progress turns into the o
 - Use `Card kind="integration"` for every integration tile, with the installed state as the `installed` prop and one action in the `action` slot.
 - Hide the Featured row while any filter is set.
 - Open on Templates and narrow the templates with one `PropertyFilter` on their own `useCollection`, as every list does; the grouped catalog with a preview drawer is the template browser's job.
-- Draw the template glow from the mark (a blurred copy), never from a brand colour written into the data: a hex value fails `webkit/no-hardcoded-color` in the app that copies the block.
 - Open the detail in a drawer so the catalog, the filter and the scroll stay put.
 - Show the permissions before the install form, and the target as a required field.
 - Treat install as an async run: `loading` on Install, a progress toast, then the outcome as a toast and an inline `Alert`, with actions that fit an integration (Configure, Open application; Edit, Reinstall).
@@ -124,7 +123,7 @@ Raised through `toast` with one id for the install, so progress turns into the o
 
 - The layout owns the one `main` landmark; the `PageHeader` title is the only `h1`, each section heading an `h2`, each tile name an `h3`.
 - The tabs follow the tablist pattern: arrow keys move between Templates and Integrations, and each panel is labelled by its tab.
-- Each template tile's target is a real link named by the template; the mark and the glow are decorative (`aria-hidden`), and the glow also follows keyboard focus.
+- Each template tile's target is a real link named by the template; the mark is decorative.
 - Each tile's target is a real button named by the integration; the action button sits above it and is named with the integration, so "Install" is never ambiguous in a list.
 - The Installed state is text in a `Tag`, never colour alone.
 - The drawer traps focus, is named by `DrawerTitle`, closes on Escape and returns focus to what opened it; its form has an accessible name.
