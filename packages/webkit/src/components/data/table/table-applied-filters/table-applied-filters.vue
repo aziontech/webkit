@@ -1,15 +1,32 @@
 <script setup lang="ts">
-  import { computed, inject, useAttrs } from 'vue'
+  import { computed, defineAsyncComponent, inject, useAttrs } from 'vue'
 
   import { useLocale } from '../../../../composables/use-locale'
   import * as en from '../../../../i18n/messages/en'
   import Chip from '../../../inputs/chip/chip.vue'
-  import { type AppliedFilter, type FilterOperator, TableInjectionKey } from '../injection-key'
+  import type { FilterMenuField } from '../../filter-menu/types'
+  import { toMenuFields, toMenuModel } from '../filter-menu-bridge'
+  import {
+    type AppliedFilter,
+    type FilterOperator,
+    type TableFilterKind,
+    TableInjectionKey
+  } from '../injection-key'
 
   defineOptions({
     name: 'TableAppliedFilters',
     inheritAttrs: false
   })
+
+  withDefaults(
+    defineProps<{
+      /** Builder renders one chip per condition; menu renders FilterMenu chips (field, values, +N) over the table's filter fields. */
+      kind?: TableFilterKind
+    }>(),
+    {
+      kind: 'builder'
+    }
+  )
 
   const emit = defineEmits<{
     remove: [event: MouseEvent, filter: AppliedFilter]
@@ -47,7 +64,9 @@
     in: t('tableAppliedFilters.in'),
     'not-in': t('tableAppliedFilters.notIn'),
     'is-empty': t('tableAppliedFilters.isEmpty'),
-    'is-not-empty': t('tableAppliedFilters.isNotEmpty')
+    'is-not-empty': t('tableAppliedFilters.isNotEmpty'),
+    within: t('tableAppliedFilters.within'),
+    between: t('tableAppliedFilters.between')
   }))
 
   const labelOf = (filter: AppliedFilter): string => {
@@ -57,6 +76,22 @@
       ? formatList(filter.value.map(String), { type: 'unit', style: 'short' })
       : String(filter.value)
     return `${filter.field} ${operator} ${value}`.trim()
+  }
+
+  const FilterMenuChips = defineAsyncComponent(
+    () => import('../../filter-menu/filter-menu-chips/filter-menu-chips.vue')
+  )
+  const menuFields = computed(() => toMenuFields(ctx?.filterFields.value ?? []))
+  const menuModel = computed(() => toMenuModel(filters.value, menuFields.value))
+  const filterOf = (field: FilterMenuField): AppliedFilter | undefined =>
+    filters.value.find((filter) => filter.field === field.id)
+  const onMenuRemove = (event: MouseEvent, field: FilterMenuField): void => {
+    const filter = filterOf(field)
+    if (filter) onRemove(event, filter)
+  }
+  const onMenuEdit = (event: MouseEvent | KeyboardEvent, field: FilterMenuField): void => {
+    const filter = filterOf(field)
+    if (filter) onEdit(event, filter)
   }
 
   const onRemove = (event: MouseEvent, filter: AppliedFilter): void => {
@@ -70,7 +105,17 @@
 </script>
 
 <template>
+  <FilterMenuChips
+    v-if="kind === 'menu'"
+    v-bind="$attrs"
+    :data-testid="testId"
+    :fields="menuFields"
+    :model-value="menuModel"
+    @edit="onMenuEdit"
+    @remove="onMenuRemove"
+  />
   <TransitionGroup
+    v-else
     v-bind="$attrs"
     tag="div"
     :data-testid="testId"

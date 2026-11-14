@@ -70,7 +70,12 @@ const TableRoot = Object.assign(Table, {
 }) as CompoundTable
 
 export default TableRoot
-export type { AppliedFilter, FilterField, TableStateSnapshot } from './injection-key'
+export type {
+  AppliedFilter,
+  FilterField,
+  TableFilterKind,
+  TableStateSnapshot
+} from './injection-key'
 export type {
   DropdownMenuOptionValue,
   TableCellSlotProps,

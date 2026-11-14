@@ -527,6 +527,29 @@ export const es: Messages = {
     },
     showFewer: 'Mostrar menos archivos'
   },
+  filterMenu: {
+    label: 'Filtrar',
+    triggerCount: { one: '{label}, {count} aplicado', other: '{label}, {count} aplicados' },
+    searchFields: 'Filtrar por…',
+    searchFieldsLabel: 'Buscar campos de filtro',
+    searchValues: 'Filtrar {field}…',
+    searchValuesLabel: 'Buscar valores de {field}',
+    back: 'Volver a todos los filtros',
+    backToPeriods: 'Volver a los períodos',
+    noMatch: 'Sin resultados para “{query}”.',
+    clear: 'Borrar {field}',
+    last24Hours: 'Últimas 24 horas',
+    last7Days: 'Últimos 7 días',
+    last30Days: 'Últimos 30 días',
+    last3Months: 'Últimos 3 meses',
+    customRange: 'Rango personalizado…',
+    pickRange: 'Elige un rango',
+    rangeBetween: '{start} – {end}',
+    rangeSince: 'Desde {date}',
+    rangeUntil: 'Hasta {date}',
+    more: '+{count}',
+    applied: 'Filtros aplicados'
+  },
   uploadProgress: {
     label: 'Transferencias de archivos',
     uploading: {
@@ -883,11 +906,15 @@ export const es: Messages = {
     in: 'en',
     notIn: 'no está en',
     isEmpty: 'está vacío',
-    isNotEmpty: 'no está vacío'
+    isNotEmpty: 'no está vacío',
+    within: 'en los últimos',
+    between: 'entre'
   },
   tableColumnSelector: {
     title: 'Columnas',
-    empty: 'No hay columnas que se puedan ocultar.'
+    empty: 'No hay columnas que se puedan ocultar.',
+    alwaysShown: 'Siempre visible',
+    showAll: 'Mostrar todas las columnas'
   },
   tableExport: {
     label: 'Exportar CSV'
@@ -912,7 +939,9 @@ export const es: Messages = {
     in: 'en',
     notIn: 'no está en',
     isEmpty: 'está vacío',
-    isNotEmpty: 'no está vacío'
+    isNotEmpty: 'no está vacío',
+    within: 'en los últimos',
+    between: 'entre'
   },
   tableHeadCell: {
     resize: 'Redimensionar columna'

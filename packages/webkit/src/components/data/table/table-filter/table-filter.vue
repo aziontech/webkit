@@ -1,5 +1,14 @@
 <script setup lang="ts">
-  import { computed, inject, onBeforeUnmount, onMounted, ref, useAttrs, watch } from 'vue'
+  import {
+    computed,
+    defineAsyncComponent,
+    inject,
+    onBeforeUnmount,
+    onMounted,
+    ref,
+    useAttrs,
+    watch
+  } from 'vue'
 
   import type { MessageKey } from '../../../../composables/use-locale'
   import { usePortalLocale, useTranslate } from '../../../../composables/use-locale/use-translate'
@@ -9,10 +18,15 @@
   import IconButton from '../../../actions/icon-button/icon-button.vue'
   import Badge from '../../../content/badge/badge.vue'
   import Input from '../../../inputs/input/input.vue'
+  import { useFilterMenuLabels } from '../../filter-menu/composables/use-filter-menu-labels'
+  import type FilterMenuComponent from '../../filter-menu/filter-menu.vue'
+  import type { FilterMenuModel } from '../../filter-menu/types'
+  import { toAppliedFilters, toMenuFields, toMenuModel } from '../filter-menu-bridge'
   import {
     type AppliedFilter,
     type FilterField,
     type FilterOperator,
+    type TableFilterKind,
     TableInjectionKey
   } from '../injection-key'
 
@@ -29,11 +43,14 @@
       title?: string
       /** Applied filters shown on the trigger; 0 counts the table's applied filters. */
       count?: number
+      /** Builder renders the field, operator and value form; menu renders the drill-in FilterMenu over the same filters. */
+      kind?: TableFilterKind
     }>(),
     {
       fields: () => [],
       title: '',
-      count: 0
+      count: 0,
+      kind: 'builder'
     }
   )
 
@@ -135,7 +152,9 @@
     in: 'tableFilter.in',
     'not-in': 'tableFilter.notIn',
     'is-empty': 'tableFilter.isEmpty',
-    'is-not-empty': 'tableFilter.isNotEmpty'
+    'is-not-empty': 'tableFilter.isNotEmpty',
+    within: 'tableFilter.within',
+    between: 'tableFilter.between'
   }
   const NO_VALUE_OPERATORS: FilterOperator[] = ['is-empty', 'is-not-empty']
 
@@ -198,10 +217,31 @@
   }
   const removeOne = (event: Event, filter: AppliedFilter): void => ctx?.removeFilter(event, filter)
 
+  const FilterMenu = defineAsyncComponent(() => import('../../filter-menu/filter-menu.vue'))
+  const menuRef = ref<InstanceType<typeof FilterMenuComponent> | null>(null)
+  const menuLabels = useFilterMenuLabels()
+  const menuFields = computed(() => toMenuFields(fields.value))
+  const menuModel = computed<FilterMenuModel>(() => toMenuModel(applied.value, menuFields.value))
+  const onMenuChange = (next: FilterMenuModel): void => {
+    const ids = new Set(menuFields.value.map((field) => field.id))
+    const list = [
+      ...applied.value.filter((filter) => !ids.has(filter.field)),
+      ...toAppliedFilters(next, menuFields.value, (field) => menuLabels.summaryText(next, field))
+    ]
+    const event = new Event('change')
+    ctx?.applyFilters(event, list)
+    emit('apply', event, list)
+  }
+
   watch(
     () => ctx?.editingFilter.value ?? null,
     (filter) => {
       if (!filter) return
+      if (props.kind === 'menu') {
+        menuRef.value?.open(filter.field)
+        if (ctx) ctx.editingFilter.value = null
+        return
+      }
       draftField.value = filter.field
       draftOperator.value = filter.operator
       draftValue.value = Array.isArray(filter.value)
@@ -217,7 +257,19 @@
 </script>
 
 <template>
-  <div class="relative inline-flex">
+  <FilterMenu
+    v-if="kind === 'menu'"
+    ref="menuRef"
+    :data-testid="testId"
+    :fields="menuFields"
+    :label="title"
+    :model-value="menuModel"
+    @update:model-value="onMenuChange"
+  />
+  <div
+    v-else
+    class="relative inline-flex"
+  >
     <span
       ref="triggerRef"
       class="relative inline-flex"
