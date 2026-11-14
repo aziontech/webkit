@@ -8,6 +8,10 @@ import { server } from 'vitest/browser'
 import { type Component, defineComponent, h, nextTick, ref } from 'vue'
 
 import budgets from '../../perf-budgets.json'
+import ChatMessageRoot from '../components/ai/chat-message/chat-message.vue'
+import Conversation from '../components/ai/conversation/conversation.vue'
+import ConversationHistory from '../components/ai/conversation-history/conversation-history.vue'
+import StreamingResponse from '../components/ai/streaming-response/streaming-response.vue'
 import BarList from '../components/chart/bar-list/bar-list.vue'
 import Chart from '../components/chart/chart'
 import DonutChart from '../components/chart/donut-chart/donut-chart.vue'
@@ -15,8 +19,16 @@ import CodeBlock from '../components/code/code-block/code-block.vue'
 import LogView from '../components/code/log-view/log-view.vue'
 import LogViewContent from '../components/code/log-view/log-view-content.vue'
 import LogViewHeader from '../components/code/log-view/log-view-header.vue'
+import Item from '../components/content/item/item.vue'
+import ItemContent from '../components/content/item/item-content.vue'
+import ItemList from '../components/content/item/item-list.vue'
+import ItemTitle from '../components/content/item/item-title.vue'
+import KeyValuePairs from '../components/content/key-value-pairs/key-value-pairs.vue'
+import KeyValuePairsItem from '../components/content/key-value-pairs/key-value-pairs-item/key-value-pairs-item.vue'
 import Table from '../components/data/table/table.vue'
 import Tree from '../components/data/tree/tree.vue'
+import DocLayout from '../components/documentation/doc-layout/doc-layout.vue'
+import DocMarkdown from '../components/documentation/doc-markdown/doc-markdown.vue'
 import MultiSelect from '../components/inputs/multi-select'
 import Select from '../components/inputs/select'
 import { useCollection, type UseCollectionReturn } from '../composables/use-collection'
@@ -307,6 +319,179 @@ function tableCase(n: number, virtual: boolean, change: 'sort' | 'filter'): Case
   }
 }
 
+function conversationHistoryCase(): Case {
+  const base = Date.parse('2026-11-11T14:00:00')
+  const items = Array.from({ length: 5000 }, (_, i) => ({
+    id: `c${i}`,
+    title: `Conversation ${i}`,
+    updatedAt: base - i * 3_600_000
+  }))
+  const selected = ref<string | null>(null)
+  return {
+    mount: () =>
+      defineComponent({
+        setup: () => () =>
+          h(ConversationHistory, {
+            items,
+            now: '2026-11-11T15:00:00',
+            modelValue: selected.value,
+            'onUpdate:modelValue': (value: string | null) => (selected.value = value)
+          })
+      }),
+    update: () => {
+      selected.value = 'c2500'
+    }
+  }
+}
+
+function conversationCase(): Case {
+  const n = 500
+  const last = ref('Streaming')
+  const messages = Array.from({ length: n - 1 }, (_, i) => ({
+    from: i % 2 ? 'assistant' : 'user',
+    text: `Message ${i}: purge the cache of ${i} URLs and check the edge logs for errors.`
+  }))
+  const Host = defineComponent({
+    setup: () => () =>
+      h('div', { style: 'height:640px;display:flex;flex-direction:column' }, [
+        h(Conversation, null, () => [
+          ...messages.map((m, i) =>
+            h(ChatMessageRoot, { key: i, from: m.from as 'user' | 'assistant' }, () =>
+              m.from === 'user' ? m.text : h(StreamingResponse, { content: m.text })
+            )
+          ),
+          h(ChatMessageRoot, { key: 'last' }, () =>
+            h(StreamingResponse, { content: last.value, streaming: true })
+          )
+        ])
+      ])
+  })
+  return {
+    mount: () => Host,
+    update: async () => {
+      for (let i = 0; i < 20; i++) {
+        last.value += ' token'
+        await nextTick()
+      }
+    }
+  }
+}
+
+function streamingResponseCase(): Case {
+  const lines = Array.from({ length: 2000 }, (_, i) =>
+    i % 50 === 0
+      ? `\n### Section ${i / 50}\n`
+      : i % 50 === 25
+        ? '```js\nconst value = ' + i + '\n```'
+        : `Line ${i} explains **cache keys** and \`ttl\` for the edge.`
+  )
+  const content = ref(lines.join('\n'))
+  return {
+    mount: () =>
+      defineComponent({
+        setup: () => () => h(StreamingResponse, { content: content.value, streaming: true })
+      }),
+    update: async () => {
+      for (let i = 0; i < 20; i++) {
+        content.value += ' more'
+        await nextTick()
+      }
+    }
+  }
+}
+
+function docMarkdownCase(): Case {
+  const page = (suffix: string) =>
+    [
+      '---',
+      'title: Reference',
+      '---',
+      ...Array.from({ length: 5000 }, (_, i) =>
+        i % 40 === 0
+          ? `\n## Heading ${i / 40}${suffix}\n`
+          : `Line ${i} of the reference with \`code\` and a [link](/docs/${i}).`
+      )
+    ].join('\n')
+  const source = ref(page(''))
+  return {
+    mount: () => defineComponent({ setup: () => () => h(DocMarkdown, { source: source.value }) }),
+    update: () => {
+      source.value = page(' updated')
+    }
+  }
+}
+
+function docLayoutCase(): Case {
+  const navigation = Array.from({ length: 20 }, (_, g) => ({
+    label: `Group ${g}`,
+    items: Array.from({ length: 50 }, (_, i) => ({
+      id: `g${g}-i${i}`,
+      label: `Page ${g}.${i}`,
+      href: `/docs/${g}/${i}`
+    }))
+  }))
+  const searchOpen = ref(false)
+  return {
+    mount: () =>
+      defineComponent({
+        setup: () => () =>
+          h(
+            DocLayout,
+            {
+              navigation,
+              activeId: 'g0-i0',
+              searchOpen: searchOpen.value,
+              'onUpdate:searchOpen': (value: boolean) => (searchOpen.value = value)
+            },
+            () => h('p', 'Article')
+          )
+      }),
+    update: () => {
+      searchOpen.value = true
+    }
+  }
+}
+
+function itemListCase(): Case {
+  const rows = ref(Array.from({ length: 1000 }, (_, i) => `Resource ${i}`))
+  return {
+    mount: () =>
+      defineComponent({
+        setup: () => () =>
+          h(ItemList, null, () =>
+            rows.value.map((label) =>
+              h(Item, { key: label }, () =>
+                h(ItemContent, null, () => h(ItemTitle, null, () => label))
+              )
+            )
+          )
+      }),
+    update: () => {
+      rows.value = [...rows.value].reverse()
+    }
+  }
+}
+
+function keyValuePairsCase(): Case {
+  const rows = ref(
+    Array.from({ length: 1000 }, (_, i) => ({ label: `Key ${i}`, value: `Value ${i}` }))
+  )
+  return {
+    mount: () =>
+      defineComponent({
+        setup: () => () =>
+          h(KeyValuePairs, { 'aria-label': 'Details' }, () =>
+            rows.value.map((row) =>
+              h(KeyValuePairsItem, { key: row.label, label: row.label }, () => row.value)
+            )
+          )
+      }),
+    update: () => {
+      rows.value = rows.value.map((row) => ({ ...row, value: `${row.value}!` }))
+    }
+  }
+}
+
 describe('runtime budgets (perf-budgets.json)', () => {
   afterEach(() => cleanup())
 
@@ -342,5 +527,26 @@ describe('runtime budgets (perf-budgets.json)', () => {
   })
   it('Table with 10k virtual rows under useCollection: filter', async () => {
     check('table-10k-virtual-filter', await measure(() => tableCase(10_000, true, 'filter')))
+  })
+  it('ConversationHistory with 5k items: mount and select', async () => {
+    check('conversation-history-5k', await measure(conversationHistoryCase))
+  })
+  it('Conversation with 500 messages: mount and stream into the last one', async () => {
+    check('conversation-500', await measure(conversationCase))
+  })
+  it('StreamingResponse streaming a 2k-line answer', async () => {
+    check('streaming-response-2k-lines', await measure(streamingResponseCase))
+  })
+  it('DocMarkdown with a 5k-line page: mount and replace', async () => {
+    check('doc-markdown-5k-lines', await measure(docMarkdownCase))
+  })
+  it('DocLayout with 1k navigation rows: mount and open search', async () => {
+    check('doc-layout-1k', await measure(docLayoutCase))
+  })
+  it('Item.List with 1k items: mount and reorder', async () => {
+    check('item-list-1k', await measure(itemListCase))
+  })
+  it('KeyValuePairs with 1k pairs: mount and update values', async () => {
+    check('key-value-pairs-1k', await measure(keyValuePairsCase))
   })
 })
