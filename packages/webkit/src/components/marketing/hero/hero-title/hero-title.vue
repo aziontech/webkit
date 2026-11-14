@@ -53,7 +53,9 @@
   })
 
   const slots = defineSlots<{
+    /** Replaces the description with richer content; falls back to the description prop. */
     default?(): unknown
+    /** The band's calls to action, under the copy. */
     actions?(): unknown
   }>()
 

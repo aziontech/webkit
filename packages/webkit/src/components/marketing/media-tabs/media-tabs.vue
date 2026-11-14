@@ -82,7 +82,7 @@
 
   defineSlots<{
     /** The tab's medium; replaces the image built from the item's own source. */
-    media(props: { item: MediaTabsItem; index: number; active: boolean }): unknown
+    media?(props: { item: MediaTabsItem; index: number; active: boolean }): unknown
   }>()
 
   const attrs = useAttrs()

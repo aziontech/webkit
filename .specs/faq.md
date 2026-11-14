@@ -3,10 +3,10 @@ name: faq
 category: marketing
 structure: monolithic
 status: implemented
-spec_version: 2
-checksum: 2ded38b17d467aca8eb1345c053fa0d9cb394ae302f08f5f5a0d980606e15f97
+spec_version: 3
+checksum: 9e30a8734dce728b076bcb9e4e7e30c0395148d9503dd4f9e7887b1db1097feb
 created: 2026-09-22
-last_updated: 2026-09-24
+last_updated: 2026-11-14
 ---
 
 # Faq — Component Spec
@@ -137,6 +137,8 @@ _none_
 ## Examples
 
 - Default
+- Framed — the band draws its own registration frame
+- Rich answer — the `answer` slot ends every answer on a link
 
 ## Constraints — DO NOT
 

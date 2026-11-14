@@ -49,11 +49,11 @@
 
   defineSlots<{
     /** The claim's medium; replaces the image built from the item's own source. */
-    media(props: { item: StickyStackItem; index: number; active: boolean }): unknown
+    media?(props: { item: StickyStackItem; index: number; active: boolean }): unknown
     /** The claim's own controls, under its description; shown while the claim is open. */
-    actions(props: { item: StickyStackItem; index: number; active: boolean }): unknown
+    actions?(props: { item: StickyStackItem; index: number; active: boolean }): unknown
     /** Fills the media frame behind every claim's medium; mounted once, so it holds still as the claims change. */
-    backdrop(): unknown
+    backdrop?(): unknown
   }>()
 
   const attrs = useAttrs()
