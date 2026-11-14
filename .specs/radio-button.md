@@ -3,11 +3,11 @@ name: radio-button
 category: inputs
 structure: monolithic
 status: implemented
-spec_version: 5
+spec_version: 6
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2027-7554
   node_id: 2027:7554
-checksum: 0c24c759f58e0f7d58c6905ff2124309690bc706114a169a8292c2880172a31c
+checksum: c6f4e63fe55b0d8e45e42952741ed6d34ddc0da11f95908499095dc9ea93a889
 created: 2026-05-22
 last_updated: 2026-11-14
 ---
@@ -42,7 +42,7 @@ Atomic exclusive-choice control only — the circular radio input from Figma (no
 
 - Bind every radio in a group to the same `v-model` and give them the same `name`; each one emits its own `value` when selected.
 - `value` and `modelValue` are strings; map numeric or object ids to strings before binding.
-- Give each radio an accessible name: point a `label` element's `for` at `inputId`, or pass `aria-label`.
+- Give each radio an accessible name: point a `label` element's `for` at its `id`, wrap it in a `Field`, or pass `aria-label`.
 - Wrap the group in a `fieldset` with a `legend` so the question itself is announced.
 
 ## Usage
@@ -62,14 +62,14 @@ Atomic exclusive-choice control only — the circular radio input from Figma (no
       v-model="billing"
       name="billing"
       value="monthly"
-      input-id="billing-monthly"
+      id="billing-monthly"
       aria-label="Monthly"
     />
     <RadioButton
       v-model="billing"
       name="billing"
       value="yearly"
-      input-id="billing-yearly"
+      id="billing-yearly"
       aria-label="Yearly"
     />
   </fieldset>
@@ -78,12 +78,13 @@ Atomic exclusive-choice control only — the circular radio input from Figma (no
 
 ## Props
 
-| Prop       | Type      | Default     | Required | JSDoc                                               |
-| ---------- | --------- | ----------- | -------- | --------------------------------------------------- |
-| `value`    | `string`  | `''`        | false    | Option value for this radio instance.               |
-| `name`     | `string`  | `''`        | false    | HTML name shared across a mutually exclusive group; empty renders no `name`. |
-| `disabled` | `boolean` | `false`     | false    | Disables interaction and applies disabled tokens.   |
-| `inputId`  | `string`  | `''`        | false    | id for the native input; links label to control. Empty uses `id`, then the enclosing Field's id. |
+| Prop       | Type      | Default | Required | JSDoc                                                                                                                           |
+| ---------- | --------- | ------- | -------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| `value`    | `string`  | `''`    | false    | Option value for this radio instance.                                                                                           |
+| `name`     | `string`  | `''`    | false    | HTML name shared across a mutually exclusive group; empty renders no `name`.                                                    |
+| `disabled` | `boolean` | `false` | false    | Disables interaction and applies disabled tokens.                                                                               |
+| `invalid`  | `boolean` | `false` | false    | Marks the control invalid: sets `aria-invalid` and the danger border (unchecked). An enclosing `Field`'s `invalid` sets it too. |
+| `inputId`  | `string`  | `''`    | false    | `@deprecated since 6.0 — pass id (or let the enclosing Field set it). Removed in 7.0.` Wins over `id` while it is set.          |
 
 ## v-model
 
@@ -103,6 +104,7 @@ _none_
 
 - Visual states: `default`, `hover`, `focus-visible`, `active`, `disabled`
 - `data-disabled` mirrors the `disabled` prop
+- `data-invalid` mirrors `invalid` (own prop or the enclosing `Field`); with `aria-invalid` on the control, it paints the danger border while unchecked
 - `data-checked` mirrors selected state
 - Consumer `class` lands on the drawn circle as a plain class (no tailwind-merge): the utilities are one flat class on the root, so the entry stays near the checkbox budget.
 - Touch: the native input that receives the click extends past the 20 px circle to 24 × 24 px, and to 44 × 44 px on a coarse pointer; the drawn circle does not change.

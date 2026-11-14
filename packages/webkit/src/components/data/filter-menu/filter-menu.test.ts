@@ -323,6 +323,21 @@ describe('FilterMenu examples', () => {
 })
 
 describe('FilterMenu open state, disabled and long value lists', () => {
+  it('opens from defaultOpen and reports and follows v-model:open', async () => {
+    const seeded = render(FilterMenu, { props: { fields, defaultOpen: true } })
+    await waitFor(() => expect(panel()).not.toBeNull(), WAIT)
+    seeded.unmount()
+    document.body.innerHTML = ''
+
+    const view = render(FilterMenu, { props: { fields, open: false, 'onUpdate:open': () => {} } })
+    await settle()
+    await fireEvent.click(trigger())
+    expect(view.emitted()['update:open']).toEqual([[true]])
+    expect(trigger().getAttribute('aria-expanded')).toBe('false')
+    await view.rerender({ open: true })
+    await waitFor(() => expect(panel()).not.toBeNull(), WAIT)
+  })
+
   it('opens and closes through v-model:open', async () => {
     const open = ref(false)
     const opens: boolean[] = []

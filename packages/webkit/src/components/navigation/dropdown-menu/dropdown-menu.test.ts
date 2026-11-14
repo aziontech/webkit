@@ -539,6 +539,22 @@ describe('keyboard map (spec)', () => {
 })
 
 describe('DropdownMenu audit fixes', () => {
+  it('opens from defaultOpen while v-model:open is unbound', async () => {
+    render(
+      defineComponent({
+        setup: () => () =>
+          h(DropdownMenu, { defaultOpen: true }, () => [
+            h(DropdownMenuTrigger, null, () => h('button', { type: 'button' }, 'Menu')),
+            h(DropdownMenuGroup, null, () => [
+              h(DropdownMenuOption, { value: 'profile', label: 'Profile' })
+            ])
+          ])
+      })
+    )
+    await waitForOpen(1)
+    expect(control().getAttribute('aria-expanded')).toBe('true')
+  })
+
   const menu = (children: () => unknown[], props: Record<string, unknown> = { open: true }) =>
     defineComponent({
       setup() {

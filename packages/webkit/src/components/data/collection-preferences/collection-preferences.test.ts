@@ -22,6 +22,22 @@ const columns = [
 ]
 
 describe('CollectionPreferences', () => {
+  it('opens from defaultOpen and reports v-model:open', async () => {
+    const view = render(CollectionPreferences, { props: { columns, defaultOpen: true } })
+    await settle()
+    expect(dialog()).toBeTruthy()
+    expect(view.getByTestId('data-collection-preferences').getAttribute('data-state')).toBe('open')
+    view.unmount()
+
+    const closed = render(CollectionPreferences, { props: { columns } })
+    await settle()
+    expect(closed.getByTestId('data-collection-preferences').getAttribute('data-state')).toBe(
+      'closed'
+    )
+    await fireEvent.click(closed.getByRole('button', { name: 'Preferences' }))
+    expect(closed.emitted()['update:open']).toEqual([[true]])
+  })
+
   it('opens from the cog button with every section', async () => {
     const view = render(Default)
     await fireEvent.click(view.getByRole('button', { name: 'Preferences' }))

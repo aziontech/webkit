@@ -58,6 +58,8 @@
     /** Shows a spinner and the loading row while options are fetched. */
     loading?: boolean
     /** Text of the list when nothing matches. Empty uses the locale catalog. */
+    emptyTitle?: string
+    /** @deprecated since 6.0 — use `emptyTitle`. Removed in 7.0. */
     emptyText?: string
     /** Disables the field. */
     disabled?: boolean
@@ -67,6 +69,8 @@
     required?: boolean
     /** Marks the field invalid (`aria-invalid`, danger border). */
     invalid?: boolean
+    /** Initial open state of the list when uncontrolled (v-model:open unbound). */
+    defaultOpen?: boolean
   }
 
   const props = withDefaults(defineProps<Props>(), {
@@ -78,14 +82,18 @@
     filter: true,
     clearable: false,
     loading: false,
+    emptyTitle: '',
     emptyText: '',
     disabled: false,
     readonly: false,
     required: false,
-    invalid: false
+    invalid: false,
+    defaultOpen: false
   })
 
   const model = defineModel<string>({ default: '' })
+  /** Whether the list is open (v-model:open); omit for uncontrolled, seeded by defaultOpen. The list shows while open and it has rows, is loading, or has a no-match row. */
+  const openModel = defineModel<boolean>('open', { default: undefined as never })
 
   const emit = defineEmits<{
     search: [text: string]
@@ -119,7 +127,12 @@
 
   const anchorRef = ref<HTMLElement | null>(null)
   const panelRef = ref<HTMLElement | null>(null)
-  const open = ref(false)
+  const open = computed<boolean>({
+    get: () => openModel.value ?? props.defaultOpen,
+    set: (next) => {
+      if (next !== open.value) openModel.value = next
+    }
+  })
   const typing = ref(false)
   const active = ref(-1)
   const anchorWidth = ref(0)
@@ -205,6 +218,8 @@
       (rows.value.length > 0 || props.loading || (typing.value && Boolean(query.value)))
   )
 
+  const emptyLabel = computed(() => props.emptyTitle || props.emptyText || t('combobox.empty'))
+
   const activeId = computed(() =>
     expanded.value && active.value >= 0 ? rows.value[active.value]?.id : undefined
   )
@@ -212,7 +227,7 @@
   const status = computed(() => {
     if (!expanded.value) return ''
     if (props.loading) return t('combobox.loading')
-    if (!rows.value.length) return props.emptyText || t('combobox.empty')
+    if (!rows.value.length) return emptyLabel.value
     return t('combobox.count', { count: rows.value.length })
   })
 
@@ -590,7 +605,7 @@
             class="flex min-h-8 items-center px-(--spacing-sm) text-body-sm text-(--text-muted)"
             :data-testid="`${testId}__empty`"
           >
-            {{ emptyText || t('combobox.empty') }}
+            {{ emptyLabel }}
           </li>
         </ul>
       </Transition>

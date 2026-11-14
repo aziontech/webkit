@@ -44,6 +44,22 @@ describe('RadioButton', () => {
     expect(input.getAttribute('id')).toBe('radio-a')
   })
 
+  it('marks the input aria-invalid and the root data-invalid from its own prop', async () => {
+    const view = render(RadioButton, {
+      props: { value: 'a', invalid: true },
+      attrs: { 'aria-label': 'Monthly' }
+    })
+    expect(view.getByTestId('input-radio-button__input').getAttribute('aria-invalid')).toBe('true')
+    expect(view.getByTestId('input-radio-button').hasAttribute('data-invalid')).toBe(true)
+    await view.rerender({ invalid: false })
+    expect(view.getByTestId('input-radio-button__input').hasAttribute('aria-invalid')).toBe(false)
+  })
+
+  it('takes the native id from the id attribute', () => {
+    const view = render(RadioButton, { props: { value: 'a' }, attrs: { id: 'plan-monthly' } })
+    expect(view.getByTestId('input-radio-button__input').id).toBe('plan-monthly')
+  })
+
   it('is unchecked and shows no indicator when modelValue does not match value', () => {
     const { getByTestId, queryByTestId } = render(RadioButton, {
       props: { modelValue: 'b', value: 'a' }

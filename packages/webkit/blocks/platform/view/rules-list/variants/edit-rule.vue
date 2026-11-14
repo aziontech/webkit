@@ -1543,7 +1543,7 @@
                                 v-model="form.phase"
                                 :value="phase.value"
                                 name="rule-phase"
-                                :input-id="`rule-phase-${phase.value}`"
+                                :id="`rule-phase-${phase.value}`"
                               />
                               <Field.Content>
                                 <Field.Title>{{ phase.label }}</Field.Title>
@@ -1588,7 +1588,7 @@
                           :options="variablesForPhase"
                           size="large"
                           placeholder="${uri}"
-                          empty-text="No variable matches. Type the one you need."
+                          empty-title="No variable matches. Type the one you need."
                           required
                           :invalid="invalid"
                           :disabled="submitting"

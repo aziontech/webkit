@@ -316,7 +316,7 @@
                     v-model="form.deploymentType"
                     :value="option.value"
                     name="deploymentType"
-                    :input-id="`tpl-deploymentType-${option.value}`"
+                    :id="`tpl-deploymentType-${option.value}`"
                   />
                   <Field.Content>
                     <Field.Title>{{ option.label }}</Field.Title>
@@ -347,7 +347,7 @@
                     v-model="form.runtime"
                     :value="option.value"
                     name="runtime"
-                    :input-id="`tpl-runtime-${option.value}`"
+                    :id="`tpl-runtime-${option.value}`"
                   />
                   <Field.Label :for="`tpl-runtime-${option.value}`">{{ option.label }}</Field.Label>
                 </Field>

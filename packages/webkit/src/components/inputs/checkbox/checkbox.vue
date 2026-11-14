@@ -8,36 +8,38 @@
     inheritAttrs: false
   })
 
-  const props = withDefaults(
-    defineProps<{
-      /** Identifier for this checkbox in a group. Compared against a scalar model, or added to and removed from an array model. Unset, the model is a boolean. */
-      value?: unknown
-      /** @deprecated since 6.0 — leave `value` unset for a boolean model. Removed in 7.0. */
-      binary?: boolean
-      /** Renders the indeterminate visual (horizontal bar). Does not affect modelValue; the parent owns the tri-state logic. */
-      indeterminate?: boolean
-      /** Disables interaction and applies disabled tokens. */
-      disabled?: boolean
-      /** Marks the field read-only; value is visible but cannot change via interaction. */
-      readonly?: boolean
-      /** @deprecated since 6.0 — pass `id` (or let the enclosing Field set it). Removed in 7.0. */
-      inputId?: string
-      /** HTML name for form submission. */
-      name?: string
-      /** @deprecated since 6.0 — pass the `tabindex` attribute; it falls through to the input. Removed in 7.0. */
-      tabindex?: number
-    }>(),
-    {
-      value: undefined,
-      binary: false,
-      indeterminate: false,
-      disabled: false,
-      readonly: false,
-      inputId: '',
-      name: '',
-      tabindex: 0
-    }
-  )
+  interface Props {
+    /** Identifier for this checkbox in a group. Compared against a scalar model, or added to and removed from an array model. Unset, the model is a boolean. */
+    value?: unknown
+    /** @deprecated since 6.0 — leave `value` unset for a boolean model. Removed in 7.0. */
+    binary?: boolean
+    /** Renders the indeterminate visual (horizontal bar). Does not affect modelValue; the parent owns the tri-state logic. */
+    indeterminate?: boolean
+    /** Disables interaction and applies disabled tokens. */
+    disabled?: boolean
+    /** Marks the field read-only; value is visible but cannot change via interaction. */
+    readonly?: boolean
+    /** Marks the control invalid: sets aria-invalid and the danger border. An enclosing Field's invalid sets it too. */
+    invalid?: boolean
+    /** @deprecated since 6.0 — pass `id` (or let the enclosing Field set it). Removed in 7.0. */
+    inputId?: string
+    /** HTML name for form submission. */
+    name?: string
+    /** @deprecated since 6.0 — pass the `tabindex` attribute; it falls through to the input. Removed in 7.0. */
+    tabindex?: number
+  }
+
+  const props = withDefaults(defineProps<Props>(), {
+    value: undefined,
+    binary: false,
+    indeterminate: false,
+    disabled: false,
+    readonly: false,
+    invalid: false,
+    inputId: '',
+    name: '',
+    tabindex: 0
+  })
 
   /** Two-way bound value: a boolean when `value` is unset; with `value`, an array to add it to and remove it from, or a scalar set to `value` when checked and to null when unchecked. An unset (undefined) model with `value` is treated as an empty array. */
   const model = defineModel<TModel>({ default: undefined as never })
@@ -55,6 +57,7 @@
     id: () => props.inputId || (attrs['id'] as string | undefined),
     describedBy: () => attrs['aria-describedby'] as string | undefined,
     labelledBy: () => attrs['aria-labelledby'] as string | undefined,
+    invalid: () => props.invalid,
     disabled: () => props.disabled
   })
 
@@ -139,8 +142,9 @@
     :data-checked="isChecked || null"
     :data-indeterminate="indeterminate || null"
     :data-disabled="isDisabled || null"
+    :data-invalid="isInvalid || null"
     :data-readonly="readonly || null"
-    class="group relative inline-flex size-[1.125rem] shrink-0 items-center justify-center align-middle rounded-(--shape-button) border border-(--border-default) bg-(--bg-surface) text-transparent before:pointer-events-none before:absolute before:inset-0 before:rounded-[inherit] before:bg-(--bg-hover) before:opacity-0 before:content-[''] before:transition-opacity before:duration-fast-02 before:ease-productive-entrance after:pointer-events-none after:absolute after:inset-0 after:rounded-[inherit] after:bg-(--bg-active) after:opacity-0 after:content-[''] after:transition-opacity after:duration-fast-02 after:ease-productive-entrance hover:before:opacity-100 active:after:opacity-100 motion-reduce:before:transition-none motion-reduce:after:transition-none has-[:focus-visible]:outline-none has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-(--ring-color) has-[:focus-visible]:ring-offset-1 has-[:focus-visible]:ring-offset-(--bg-canvas) focus-within:before:opacity-0 has-[:focus-visible]:before:opacity-0 data-[checked]:border-(--primary) data-[checked]:bg-(--primary) data-[checked]:text-(--primary-contrast) data-[checked]:before:hidden data-[checked]:after:hidden data-[indeterminate]:border-(--primary) data-[indeterminate]:bg-(--primary) data-[indeterminate]:text-(--primary-contrast) data-[indeterminate]:before:hidden data-[indeterminate]:after:hidden data-[disabled]:pointer-events-none data-[disabled]:cursor-not-allowed data-[disabled]:border-(--border-default) data-[disabled]:bg-(--bg-disabled) data-[disabled]:opacity-50 data-[disabled]:before:hidden data-[disabled]:after:hidden data-[readonly]:pointer-events-none data-[readonly]:cursor-not-allowed data-[readonly]:before:hidden data-[readonly]:after:hidden"
+    class="group relative inline-flex size-[1.125rem] shrink-0 items-center justify-center align-middle rounded-(--shape-button) border border-(--border-default) bg-(--bg-surface) text-transparent before:pointer-events-none before:absolute before:inset-0 before:rounded-[inherit] before:bg-(--bg-hover) before:opacity-0 before:content-[''] before:transition-opacity before:duration-fast-02 before:ease-productive-entrance after:pointer-events-none after:absolute after:inset-0 after:rounded-[inherit] after:bg-(--bg-active) after:opacity-0 after:content-[''] after:transition-opacity after:duration-fast-02 after:ease-productive-entrance hover:before:opacity-100 active:after:opacity-100 motion-reduce:before:transition-none motion-reduce:after:transition-none has-[:focus-visible]:outline-none has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-(--ring-color) has-[:focus-visible]:ring-offset-1 has-[:focus-visible]:ring-offset-(--bg-canvas) focus-within:before:opacity-0 has-[:focus-visible]:before:opacity-0 data-[invalid]:not-data-[checked]:not-data-[indeterminate]:border-(--danger-border) data-[checked]:border-(--primary) data-[checked]:bg-(--primary) data-[checked]:text-(--primary-contrast) data-[checked]:before:hidden data-[checked]:after:hidden data-[indeterminate]:border-(--primary) data-[indeterminate]:bg-(--primary) data-[indeterminate]:text-(--primary-contrast) data-[indeterminate]:before:hidden data-[indeterminate]:after:hidden data-[disabled]:pointer-events-none data-[disabled]:cursor-not-allowed data-[disabled]:border-(--border-default) data-[disabled]:bg-(--bg-disabled) data-[disabled]:opacity-50 data-[disabled]:before:hidden data-[disabled]:after:hidden data-[readonly]:pointer-events-none data-[readonly]:cursor-not-allowed data-[readonly]:before:hidden data-[readonly]:after:hidden"
   >
     <input
       :id="controlId || ''"

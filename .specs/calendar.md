@@ -3,12 +3,12 @@ name: calendar
 category: inputs
 structure: composition
 status: implemented
-spec_version: 5
+spec_version: 6
 template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=5087-17336
   node_id: 5087:17336
-checksum: b4098e70275b269264c84678dd0006f0e7cc377b4f544dc9b9303a0ec5db06e3
+checksum: f61ccc01ae65d41ffdec6491cf24c2e289feec0e91733b4f4ba0bf1cf3e4e384
 created: 2026-06-25
 last_updated: 2026-11-14
 ---
@@ -116,46 +116,48 @@ Tree-shaking alternative — the standalone root + each sub-component from its o
 
 ## Props
 
-| Prop           | Type                             | Default     | Required | JSDoc                                                                                                                                                                                                |
-| -------------- | -------------------------------- | ----------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `mode`         | `'single' \| 'range'`            | `'range'`   | false    | Selection mode. Single picks one date; range picks a start and end date.                                                                                                                             |
-| `size`         | `'small' \| 'medium' \| 'large'` | `'medium'`  | false    | Size token; affects the trigger, day-cell hit-area, and typography.                                                                                                                                  |
-| `min`          | `Date \| undefined`              | `undefined` | false    | Earliest selectable date; earlier days render disabled.                                                                                                                                              |
-| `max`          | `Date \| undefined`              | `undefined` | false    | Latest selectable date; later days render disabled.                                                                                                                                                  |
-| `disabled`     | `boolean`                        | `false`     | false    | Disables the trigger, grid, and all controls, applying disabled tokens.                                                                                                                              |
-| `placeholder`  | `string`                         | `''`        | false    | Trigger text shown when there is no selection. Empty uses the locale catalog (`Select a date range`).                                                                                                |
-| `presets`      | `CalendarPresetItem[]`           | `[]`        | false    | Consumer-provided shortcuts; each is `{ label, value }` where value is a `Date` or range. When present, the trigger becomes a two-part control whose left segment opens a dropdown of these presets. |
-| `showFields`   | `boolean`                        | `true`      | false    | Shows the Start/End date fields in the panel. Set false when the shortcuts and the grid are the whole interaction and typing a boundary by hand is not offered.                                      |
-| `showTime`     | `boolean`                        | `false`     | false    | Shows Start/End time fields alongside the date fields.                                                                                                                                               |
-| `showTimeZone` | `boolean`                        | `false`     | false    | Shows the time zone selector below the fields.                                                                                                                                                       |
-| `showTimezone` | `boolean`                        | `false`     | false    | `@deprecated since 6.0 — use showTimeZone. Removed in 7.0.` Same effect as `showTimeZone`.                                                                                                          |
-| `timeZones`    | `string[]`                       | `[]`        | false    | Time zone options for the selector (IANA names); empty falls back to a curated list derived from `Intl`.                                                                                            |
-| `timezones`    | `string[]`                       | `[]`        | false    | `@deprecated since 6.0 — use timeZones. Removed in 7.0.` Read when `timeZones` is empty.                                                                                                            |
-| `orientation`  | `'vertical' \| 'horizontal'`     | `'vertical'` | false   | Places the fields and Apply column below the calendar (vertical) or beside it (horizontal).                                                                                                          |
-| `horizontal`   | `boolean`                        | `false`     | false    | `@deprecated since 6.0 — use orientation="horizontal". Removed in 7.0.` True has the effect of `orientation="horizontal"`.                                                                          |
-| `ariaLabel`    | `string`                         | `''`        | false    | Accessible name of the trigger; the current value is appended (`Billing period: Jan 1 – Jan 31`). Empty leaves the name to the Field label or the trigger text.                                      |
-| `clearable`    | `boolean`                        | `false`     | false    | Shows a clear control on the trigger that empties the committed selection.                                                                                                                           |
-| `showApply`    | `boolean`                        | `true`      | false    | Stages edits in a draft and requires Apply to commit; when false, every edit commits immediately.                                                                                                    |
-| `period`       | `boolean`                        | `false`     | false    | Enables the "Select period" relative-time mode: a relative-preset list plus a text input that parses spans like `45m` or `last month`.                                                               |
-| `split`        | `boolean`                        | `false`     | false    | Renders the trigger as a split control with a separate chevron affordance.                                                                                                                           |
+| Prop           | Type                             | Default      | Required | JSDoc                                                                                                                                                                                                |
+| -------------- | -------------------------------- | ------------ | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `mode`         | `'single' \| 'range'`            | `'range'`    | false    | Selection mode. Single picks one date; range picks a start and end date.                                                                                                                             |
+| `size`         | `'small' \| 'medium' \| 'large'` | `'medium'`   | false    | Size token; affects the trigger, day-cell hit-area, and typography.                                                                                                                                  |
+| `min`          | `Date \| undefined`              | `undefined`  | false    | Earliest selectable date; earlier days render disabled.                                                                                                                                              |
+| `max`          | `Date \| undefined`              | `undefined`  | false    | Latest selectable date; later days render disabled.                                                                                                                                                  |
+| `disabled`     | `boolean`                        | `false`      | false    | Disables the trigger, grid, and all controls, applying disabled tokens.                                                                                                                              |
+| `invalid`      | `boolean`                        | `false`      | false    | Marks the trigger invalid: sets `aria-invalid` and the danger border. An enclosing `Field`'s `invalid` sets it too.                                                                                  |
+| `defaultOpen`  | `boolean`                        | `false`      | false    | Initial open state when uncontrolled (`v-model:open` unbound).                                                                                                                                       |
+| `placeholder`  | `string`                         | `''`         | false    | Trigger text shown when there is no selection. Empty uses the locale catalog (`Select a date range`).                                                                                                |
+| `presets`      | `CalendarPresetItem[]`           | `[]`         | false    | Consumer-provided shortcuts; each is `{ label, value }` where value is a `Date` or range. When present, the trigger becomes a two-part control whose left segment opens a dropdown of these presets. |
+| `showFields`   | `boolean`                        | `true`       | false    | Shows the Start/End date fields in the panel. Set false when the shortcuts and the grid are the whole interaction and typing a boundary by hand is not offered.                                      |
+| `showTime`     | `boolean`                        | `false`      | false    | Shows Start/End time fields alongside the date fields.                                                                                                                                               |
+| `showTimeZone` | `boolean`                        | `false`      | false    | Shows the time zone selector below the fields.                                                                                                                                                       |
+| `showTimezone` | `boolean`                        | `false`      | false    | `@deprecated since 6.0 — use showTimeZone. Removed in 7.0.` Same effect as `showTimeZone`.                                                                                                           |
+| `timeZones`    | `string[]`                       | `[]`         | false    | Time zone options for the selector (IANA names); empty falls back to a curated list derived from `Intl`.                                                                                             |
+| `timezones`    | `string[]`                       | `[]`         | false    | `@deprecated since 6.0 — use timeZones. Removed in 7.0.` Read when `timeZones` is empty.                                                                                                             |
+| `orientation`  | `'vertical' \| 'horizontal'`     | `'vertical'` | false    | Places the fields and Apply column below the calendar (vertical) or beside it (horizontal).                                                                                                          |
+| `horizontal`   | `boolean`                        | `false`      | false    | `@deprecated since 6.0 — use orientation="horizontal". Removed in 7.0.` True has the effect of `orientation="horizontal"`.                                                                           |
+| `ariaLabel`    | `string`                         | `''`         | false    | Accessible name of the trigger; the current value is appended (`Billing period: Jan 1 – Jan 31`). Empty leaves the name to the Field label or the trigger text.                                      |
+| `clearable`    | `boolean`                        | `false`      | false    | Shows a clear control on the trigger that empties the committed selection.                                                                                                                           |
+| `showApply`    | `boolean`                        | `true`       | false    | Stages edits in a draft and requires Apply to commit; when false, every edit commits immediately.                                                                                                    |
+| `period`       | `boolean`                        | `false`      | false    | Enables the "Select period" relative-time mode: a relative-preset list plus a text input that parses spans like `45m` or `last month`.                                                               |
+| `split`        | `boolean`                        | `false`      | false    | Renders the trigger as a split control with a separate chevron affordance.                                                                                                                           |
 
 ## v-model
 
-| Model          | Type                            | Default     | Emits               | Notes                                                                                                                                                                                         |
-| -------------- | ------------------------------- | ----------- | ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `v-model`      | `Date \| null \| CalendarRange` | `null`      | `update:modelValue` | The committed `Date` (single) or `{ start, end }` range via `defineModel`; empty value on clear. Only updated on Apply (or immediately when `showApply` is false). Uncontrolled when unbound. |
-| `v-model:open` | `boolean`                       | `undefined` | `update:open`       | Open state of the popover via `defineModel`. Fires when the popover opens or closes. Unbound, the popover keeps its own state and starts closed.                                              |
-| `v-model:time-zone` | `string`                   | `''`        | `update:timeZone`   | Selected IANA time zone for display formatting via `defineModel('timeZone')`. Empty resolves to the local zone. Unbound, the selector keeps its own choice. Same name as on `date-range-picker`. |
-| `v-model:timezone` | `string`                    | `''`        | `update:timezone`   | `@deprecated since 6.0 — use v-model:time-zone. Removed in 7.0.` Read when `timeZone` is empty; a selection updates both models.                                                             |
+| Model               | Type                            | Default     | Emits               | Notes                                                                                                                                                                                            |
+| ------------------- | ------------------------------- | ----------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `v-model`           | `Date \| null \| CalendarRange` | `null`      | `update:modelValue` | The committed `Date` (single) or `{ start, end }` range via `defineModel`; empty value on clear. Only updated on Apply (or immediately when `showApply` is false). Uncontrolled when unbound.    |
+| `v-model:open`      | `boolean`                       | `undefined` | `update:open`       | Open state of the popover via `defineModel`. Fires when the popover opens or closes. Unbound, the popover keeps its own state and starts at `defaultOpen`.                                       |
+| `v-model:time-zone` | `string`                        | `''`        | `update:timeZone`   | Selected IANA time zone for display formatting via `defineModel('timeZone')`. Empty resolves to the local zone. Unbound, the selector keeps its own choice. Same name as on `date-range-picker`. |
+| `v-model:timezone`  | `string`                        | `''`        | `update:timezone`   | `@deprecated since 6.0 — use v-model:time-zone. Removed in 7.0.` Read when `timeZone` is empty; a selection updates both models.                                                                 |
 
 **Booleans that default to true.** `showFields` and `showApply` default to `true`: they switch off parts of the default panel. Inverting them (`hideFields`, `instant`) would break every consumer, so they are recorded here as the exceptions to props.md's default-false rule.
 
 ## Events
 
-| Event             | Payload                                                | Notes                                                                                                                                                         |
-| ----------------- | ------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `month-change`    | `CalendarMonth`                                        | Emitted when the first visible month changes via navigation or keyboard paging. Payload is `{ year, month }` (month is 0-indexed).                            |
-| `apply`           | `(event: Event, value: Date \| null \| CalendarRange)` | Emitted when the draft selection is committed via Apply, a preset or a period; `event` is the activating click or key event, `value` the committed selection. |
+| Event          | Payload                                                | Notes                                                                                                                                                         |
+| -------------- | ------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `month-change` | `CalendarMonth`                                        | Emitted when the first visible month changes via navigation or keyboard paging. Payload is `{ year, month }` (month is 0-indexed).                            |
+| `apply`        | `(event: Event, value: Date \| null \| CalendarRange)` | Emitted when the draft selection is committed via Apply, a preset or a period; `event` is the activating click or key event, `value` the committed selection. |
 
 ## Slots
 
@@ -176,6 +178,7 @@ Tree-shaking alternative — the standalone root + each sub-component from its o
 - `data-band` on each day cell drives the connected range highlight: `none` | `single` | `start` | `middle` | `end`
 - `data-today` marks the current date; `data-outside` marks an adjacent-month day cell
 - `data-disabled` mirrors the `disabled` prop on the root, unselectable day cells, and the clear control when there is no selection
+- `data-invalid` mirrors `invalid` (own prop or the enclosing `Field`'s) on the root and the trigger shell, with `aria-invalid` on the trigger and the danger border
 - When `presets` are supplied, the trigger is a two-part control: a left preset button (`aria-haspopup="menu"`, clock glyph, `data-testid` `…__presets-trigger`) opening the preset dropdown, and a right calendar button (`aria-haspopup="dialog"`, calendar glyph) opening the popover; the two dropdowns are mutually exclusive, and each preset menu item sets `data-selected` when it is the active preset
 - In period mode, a committed selection renders the trigger as two side-by-side segments: the relative token (e.g. `45m`, with a clock glyph) beside the resolved concrete window (e.g. `14:44 – 23:59`, with a calendar glyph), separated by a divider
 - Reflow: the root is capped at the width of its container (`max-w-full`), so the trigger, presets included, never overflows a 320 px box.

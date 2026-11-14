@@ -198,6 +198,12 @@
   "checkbox": {
     "inputId": "id"
   },
+  "combobox": {
+    "emptyText": "emptyTitle"
+  },
+  "radio-button": {
+    "inputId": "id"
+  },
   "file-token-group": {
     "alignment": "orientation"
   },

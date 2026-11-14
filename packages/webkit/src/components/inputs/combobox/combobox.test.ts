@@ -26,6 +26,36 @@ const lastValue = (emitted: Record<string, unknown[][]>) =>
   emitted['update:modelValue']?.at(-1)?.[0] as string | undefined
 
 describe('Combobox', () => {
+  it('opens from defaultOpen and reports and follows v-model:open', async () => {
+    const seeded = render(Combobox, {
+      props: { options, ariaLabel: 'Variable', defaultOpen: true }
+    })
+    expect(seeded.getByTestId('input-combobox').getAttribute('data-state')).toBe('open')
+    seeded.unmount()
+
+    const view = render(Combobox, {
+      props: { options, ariaLabel: 'Variable', open: false, 'onUpdate:open': () => {} }
+    })
+    await fireEvent.focus(view.getByRole('combobox'))
+    expect(view.emitted()['update:open']).toEqual([[true]])
+    expect(view.getByTestId('input-combobox').getAttribute('data-state')).toBe('closed')
+    await view.rerender({ open: true })
+    expect(view.getByTestId('input-combobox').getAttribute('data-state')).toBe('open')
+    view.unmount()
+  })
+
+  it('reads emptyTitle, and still the deprecated emptyText', async () => {
+    const view = render(Combobox, {
+      props: { options, ariaLabel: 'Variable', allowCustom: false, emptyTitle: 'Nothing here' }
+    })
+    const input = view.getByRole('combobox')
+    await fireEvent.update(input, 'zzz')
+    await waitFor(() => expect(document.body.textContent).toContain('Nothing here'))
+    await view.rerender({ emptyTitle: '', emptyText: 'Old text' })
+    await waitFor(() => expect(document.body.textContent).toContain('Old text'))
+    view.unmount()
+  })
+
   it('wires the ARIA 1.2 combobox pattern and opens on focus', async () => {
     const view = render(Combobox, { props: { options, ariaLabel: 'Variable' } })
     const input = view.getByRole('combobox')

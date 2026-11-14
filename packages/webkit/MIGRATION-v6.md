@@ -74,6 +74,7 @@ component.
 | `checkbox`             | `inputId`          | `id`                 |
 | `code-block`           | `border`           | `bordered`           |
 | `code-block`           | `value`            | `modelValue`         |
+| `combobox`             | `emptyText`        | `emptyTitle`         |
 | `conversation-history` | `label`            | `ariaLabel`          |
 | `doc-card-group`       | `cols`             | `columns`            |
 | `doc-card-group`       | `mobileCols`       | `mobileColumns`      |
@@ -96,6 +97,7 @@ component.
 | `qr-code`              | `label`            | `ariaLabel`          |
 | `quote-tabs`           | `autoPlayInterval` | `autoplayInterval`   |
 | `quote-tabs`           | `autoPlay`         | `autoplay`           |
+| `radio-button`         | `inputId`          | `id`                 |
 | `response-branches`    | `label`            | `ariaLabel`          |
 | `severity-tag`         | `level`            | `severity`           |
 | `shell-mockup`         | `still="false"`    | `animated="true"`    |

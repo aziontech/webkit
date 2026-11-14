@@ -849,7 +849,7 @@
                                     v-model="form.mtls.mode"
                                     :value="option.value"
                                     name="mtls-mode"
-                                    :input-id="`mtls-mode-${option.value}`"
+                                    :id="`mtls-mode-${option.value}`"
                                   />
                                   <Field.Content>
                                     <Field.Title>{{ option.label }}</Field.Title>

@@ -33,6 +33,17 @@ describe('Checkbox', () => {
     })
   })
 
+  describe('invalid', () => {
+    it('marks the input aria-invalid and the root data-invalid from its own prop', async () => {
+      const view = render(Checkbox, { props: { invalid: true }, attrs: { 'aria-label': 'Accept' } })
+      expect(view.getByTestId('input-checkbox__input').getAttribute('aria-invalid')).toBe('true')
+      expect(view.getByTestId('input-checkbox').hasAttribute('data-invalid')).toBe(true)
+      await view.rerender({ invalid: false })
+      expect(view.getByTestId('input-checkbox__input').hasAttribute('aria-invalid')).toBe(false)
+      expect(view.getByTestId('input-checkbox').hasAttribute('data-invalid')).toBe(false)
+    })
+  })
+
   describe('binary mode — update:modelValue', () => {
     it('emits the negated boolean when toggling from false', async () => {
       const { getByTestId, emitted } = render(Checkbox, {

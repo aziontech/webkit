@@ -46,12 +46,15 @@
     offset?: number
     /** Prevents the trigger from opening the panel and applies disabled tokens. */
     disabled?: boolean
+    /** Initial open state when uncontrolled (v-model:open unbound). */
+    defaultOpen?: boolean
   }
 
   const props = withDefaults(defineProps<Props>(), {
     placement: 'bottom-start',
     offset: 4,
-    disabled: false
+    disabled: false,
+    defaultOpen: false
   })
 
   const emit = defineEmits<{
@@ -61,7 +64,7 @@
     ]
   }>()
 
-  /** Controlled open state. Use with v-model:open; while unbound the menu is uncontrolled and starts closed. */
+  /** Controlled open state. Use with v-model:open; while unbound the menu is uncontrolled and starts at defaultOpen. */
   const openModel = defineModel<boolean>('open', { default: undefined as never })
 
   const attrs = useAttrs()
@@ -91,7 +94,7 @@
 
   const isOpenState = useControllable<boolean>({
     prop: openProp,
-    defaultProp: false,
+    defaultProp: props.defaultOpen,
     onChange: (value) => {
       openModel.value = value
     }

@@ -3,9 +3,9 @@ name: collection-preferences
 category: data
 structure: monolithic
 status: implemented
-spec_version: 3
+spec_version: 4
 template: 2
-checksum: 4f23dcccf57b36c7bf55e6d2ab615b1f6433307183e99bb438fb9efa5b727c78
+checksum: 8f4f72457a5278f6cc85535c3b9c8da241ff17dc770dc85f238b3cf24c85edd8
 created: 2026-11-11
 last_updated: 2026-11-14
 ---
@@ -72,12 +72,13 @@ The preferences panel of a collection, after Cloudscape's collection preferences
 | `container`       | `'dialog' \| 'drawer'`           | `'dialog'`                                                     | false    | Opens in a centered dialog or a side drawer.                      |
 | `title`           | `string`                         | `''`                                                           | false    | Panel title and trigger label. Empty uses the locale catalog.     |
 | `disabled`        | `boolean`                        | `false`                                                        | false    | Disables the trigger.                                             |
+| `defaultOpen`     | `boolean`                        | `false`                                                        | false    | Initial open state when uncontrolled (`v-model:open` unbound).    |
 
 Types: `CollectionPreferencesValue = { pageSize?: number; columns?: { id: string; visible: boolean }[]; wrapLines?: boolean; striped?: boolean; density?: 'comfortable' | 'compact' }`; `CollectionPreferencesColumn = { id: string; label: string; locked?: boolean }`; `CollectionPreferencesSection = 'page-size' | 'columns' | 'wrap-lines' | 'striped' | 'density'`.
 
 ## v-model
 
-- **`v-model:open`** — `boolean`, default `false`. Whether the panel is open; the trigger, Confirm, Cancel, the close button and `Esc` update it.
+- **`v-model:open`** — `boolean`, default `undefined`, via `defineModel('open')`. Whether the panel is open; the trigger, Confirm, Cancel, the close button and `Esc` update it. Unbound, the panel keeps it itself and starts at `defaultOpen`.
 - **`v-model:preferences`** — `CollectionPreferencesValue`, default `{}`, via `defineModel('preferences')`. Set on Confirm with the sections shown (`update:preferences`). Unbound, the panel keeps the confirmed values itself, so it reopens on them.
 
 ## Events
