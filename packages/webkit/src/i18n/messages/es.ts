@@ -420,7 +420,10 @@ export const es: Messages = {
     search: 'Buscar en la documentación',
     searchEmpty: 'Ninguna página coincide con la búsqueda.',
     pages: 'Páginas',
-    root: 'Docs'
+    root: 'Docs',
+    collapseNavigation: 'Contraer navegación',
+    expandNavigation: 'Expandir navegación',
+    resizeNavigation: 'Cambiar el tamaño de la navegación'
   },
   docOnThisPage: {
     title: 'En esta página'

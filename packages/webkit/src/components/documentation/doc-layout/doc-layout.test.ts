@@ -203,6 +203,48 @@ describe('DocLayout', () => {
   })
 })
 
+describe('DocLayout — resizable, collapsible rail', () => {
+  const rail = (view: ReturnType<typeof mount>) =>
+    within(view.getByTestId('documentation-doc-layout__navigation'))
+
+  it('names the resize handle and the collapse button from the locale catalog', () => {
+    const view = mount()
+    expect(rail(view).getByRole('separator', { name: 'Resize navigation' })).toBeTruthy()
+    expect(rail(view).getByRole('button', { name: 'Collapse navigation' })).toBeTruthy()
+  })
+
+  it('collapses the rail and emits update:navigationExpanded', async () => {
+    const onExpanded = vi.fn()
+    const view = mount({ 'onUpdate:navigationExpanded': onExpanded })
+    await userEvent.click(rail(view).getByRole('button', { name: 'Collapse navigation' }))
+    expect(onExpanded).toHaveBeenLastCalledWith(false)
+  })
+
+  it('brings a collapsed rail back from the edge affordance', async () => {
+    const onExpanded = vi.fn()
+    const view = mount({ navigationExpanded: false, 'onUpdate:navigationExpanded': onExpanded })
+    expect(view.getByTestId('documentation-doc-layout__navigation').hasAttribute('inert')).toBe(
+      true
+    )
+    await userEvent.click(view.getByRole('button', { name: 'Expand navigation' }))
+    expect(onExpanded).toHaveBeenLastCalledWith(true)
+  })
+
+  it('emits update:navigationWidth when the handle is moved with the keyboard', async () => {
+    const onWidth = vi.fn()
+    const view = mount({ navigationWidth: 300, 'onUpdate:navigationWidth': onWidth })
+    rail(view).getByRole('separator', { name: 'Resize navigation' }).focus()
+    await userEvent.keyboard('{ArrowRight}')
+    expect(onWidth).toHaveBeenCalled()
+    expect(onWidth.mock.calls.at(-1)![0]).toBeGreaterThan(300)
+  })
+
+  it('has no axe violations with the rail collapsed', async () => {
+    const { container } = mount({ navigationExpanded: false })
+    await expectNoA11yViolations(container)
+  })
+})
+
 describe('DocLayout — Back in the rail', () => {
   const drill: DocLayoutNavGroup[] = [
     {

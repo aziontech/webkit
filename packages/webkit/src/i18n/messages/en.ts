@@ -1191,7 +1191,10 @@ export const docLayout = {
   search: 'Search docs',
   searchEmpty: 'No page matches your search.',
   pages: 'Pages',
-  root: 'Docs'
+  root: 'Docs',
+  collapseNavigation: 'Collapse navigation',
+  expandNavigation: 'Expand navigation',
+  resizeNavigation: 'Resize navigation'
 } as const
 
 export const siteLayout = {
