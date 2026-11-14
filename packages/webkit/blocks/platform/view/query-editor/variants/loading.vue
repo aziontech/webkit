@@ -797,12 +797,12 @@ LIMIT 3;`
                   >
                 </template>
                 <template #cell-__actions="{ row }">
-                  <Tooltip :text="`Delete row ${row.id ?? row.__k}`">
+                  <Tooltip :text="`Delete row ${row['id'] ?? row.__k}`">
                     <IconButton
                       icon="pi pi-trash"
                       kind="transparent"
                       size="small"
-                      :aria-label="`Delete row ${row.id ?? row.__k}`"
+                      :aria-label="`Delete row ${row['id'] ?? row.__k}`"
                       @click="deleteRow(row)"
                     />
                   </Tooltip>
