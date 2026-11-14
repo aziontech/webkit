@@ -644,6 +644,7 @@ props in section 3; move the rest by hand:
   (the same names `DateRangePicker` uses).
 - `Checkbox`: a boolean `v-model` needs no `binary` (leave `value` unset); `tabindex` is an
   attribute, not a prop.
+- `DocCardGroup`: the `DocCardGroupCols` type → `DocCardGroupColumns`.
 - `Input`, `PasswordInput`, `Select.Trigger`, `MultiSelect.Trigger`: the `#iconLeft` slot →
   `#prefix`, `#iconRight` → `#suffix`.
 - `MiniButton`: `:show-icon="false"` → `icon=""`.

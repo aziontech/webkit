@@ -26,3 +26,4 @@ export default Tabs
 export type { TabsValue } from './injection-key'
 export type { TabsListAlign } from './tabs-list.vue'
 export type { TabsActivationMode } from './tabs-root.vue'
+export type { TabsRootProps } from './tabs-root.vue'

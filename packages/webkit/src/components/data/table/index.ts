@@ -101,4 +101,6 @@ export type {
   TableHeadCellGrow,
   TableHeadCellKind
 } from './table-head-cell/table-head-cell.vue'
+export type { TableHeadCellProps } from './table-head-cell/table-head-cell.vue'
 export type { TableHeaderKind } from './table-header/table-header.vue'
+export type { TableSortButtonProps } from './table-sort-button/table-sort-button.vue'

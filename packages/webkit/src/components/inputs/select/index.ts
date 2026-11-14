@@ -20,3 +20,6 @@ Select.Option = SelectOption
 export default Select
 export { SelectContent, SelectGroup, SelectOption, SelectTrigger }
 export type { SelectKind, SelectOptionItem, SelectSize, SelectValue } from './select.vue'
+export type { SelectGroupProps } from './select-group/select-group.vue'
+export type { SelectOptionProps } from './select-option/select-option.vue'
+export type { SelectTriggerProps } from './select-trigger/select-trigger.vue'
