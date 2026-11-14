@@ -24,7 +24,7 @@
         y2="101"
         gradientUnits="userSpaceOnUse"
       >
-        <stop stop-color="#D94A03" />
+        <stop stop-color="#F3652B" />
         <stop
           offset="1"
           stop-color="#D95C2A"
