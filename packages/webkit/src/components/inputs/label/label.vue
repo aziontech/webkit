@@ -55,7 +55,7 @@
     >
       <span
         aria-hidden="true"
-        class="text-(--primary)"
+        class="text-(--text-primary)"
         >*</span
       >
       {{ t('label.required') }}
