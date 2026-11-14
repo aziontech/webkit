@@ -1,38 +1,49 @@
 <script setup lang="ts">
+  import Alert from '@aziontech/webkit/alert'
   import Button from '@aziontech/webkit/button'
   import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
+  import CopyButton from '@aziontech/webkit/copy-button'
   import Input from '@aziontech/webkit/input'
-  import Alert from '@aziontech/webkit/alert'
-  import Tooltip from '@aziontech/webkit/tooltip'
-  import { computed, ref, useId, watch } from 'vue'
+  import { toast } from '@aziontech/webkit/toast'
+  import { computed, onScopeDispose, ref, useId, watch } from 'vue'
+
+  const name = 'resource-01'
+  const inUseError = `${name} is still used by 2 workloads. Remove it from them and try again.`
+  const failing = false
 
   const open = ref(false)
-  const name = 'resource-01'
   const confirmation = ref('')
-  const copied = ref(false)
+  const deleting = ref(false)
+  const deleteError = ref('')
   const confirmLabelId = useId()
+  let deleteTimer: ReturnType<typeof setTimeout> | undefined
+
+  onScopeDispose(() => clearTimeout(deleteTimer))
 
   const canDelete = computed(
-    () => confirmation.value.trim().length > 0 && confirmation.value.trim() === name.trim()
+    () => confirmation.value.trim().length > 0 && confirmation.value.trim() === name
   )
 
   watch(open, (isOpen) => {
     if (!isOpen) return
     confirmation.value = ''
-    copied.value = false
+    deleteError.value = ''
   })
 
-  const copyName = async () => {
-    await navigator.clipboard.writeText(name)
-    copied.value = true
-    setTimeout(() => {
-      copied.value = false
-    }, 2000)
-  }
-
   const confirm = () => {
-    if (!canDelete.value) return
-    open.value = false
+    if (!canDelete.value || deleting.value) return
+    deleting.value = true
+    deleteError.value = ''
+    clearTimeout(deleteTimer)
+    deleteTimer = setTimeout(() => {
+      deleting.value = false
+      if (failing) {
+        deleteError.value = inUseError
+        return
+      }
+      open.value = false
+      toast.success(`${name} was deleted.`, { id: 'delete-resource-result' })
+    }, 600)
   }
 </script>
 
@@ -41,6 +52,11 @@
     v-model:open="open"
     title="Delete resource"
     size="medium"
+    confirm-label="Delete resource"
+    cancel-label="Cancel"
+    :loading="deleting"
+    :disabled="!canDelete"
+    @confirm="confirm"
   >
     <template #trigger>
       <Button
@@ -51,6 +67,14 @@
     </template>
     <div class="flex flex-col gap-(--spacing-md)">
       <Alert
+        v-if="deleteError"
+        key="delete-error"
+        severity="danger"
+        :label="deleteError"
+      />
+      <Alert
+        v-else
+        key="delete-warning"
         severity="warning"
         label="Once confirmed, this action can't be reversed."
       />
@@ -59,7 +83,7 @@
         Check the
         <a
           href="https://example.com/docs"
-          class="rounded-(--shape-button) text-(--text-link) underline-offset-2 transition-colors duration-fast-02 ease-productive-entrance hover:text-(--text-link-hover) underline hover:decoration-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) motion-reduce:transition-none"
+          class="text-link"
           >Help Center</a
         >
         for more details.
@@ -69,35 +93,12 @@
         class="m-0 flex flex-wrap items-center gap-(--spacing-xxs) text-body-sm text-(--text-default)"
       >
         <span>Type</span>
-        <Tooltip
-          text="Copy to clipboard"
-          class="max-w-full"
-        >
-          <button
-            type="button"
-            class="inline-flex max-w-full cursor-pointer items-center rounded-(--shape-elements) border border-(length:--border-width-default) border-(--border-muted) bg-(--bg-surface-overlay) px-(--spacing-xxs) text-body-sm text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance hover:border-(--border-default) hover:bg-(--bg-hover) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring-color) motion-reduce:transition-none"
-            :aria-label="copied ? 'Copied ' + name : 'Copy ' + name + ' to the clipboard'"
-            @click="copyName"
-          >
-            <span class="truncate">{{ name }}</span>
-            <i
-              :class="copied ? 'pi pi-check' : 'pi pi-copy'"
-              class="ms-(--spacing-xxs) shrink-0 text-body-xs text-(--text-default)"
-              aria-hidden="true"
-            />
-            <span
-              :data-shown="copied || null"
-              class="grid min-w-0 grid-cols-[0fr] transition-[grid-template-columns] duration-moderate-01 ease-productive-entrance data-shown:grid-cols-[1fr] motion-reduce:transition-none"
-            >
-              <span class="min-w-0 overflow-hidden">
-                <span
-                  class="block whitespace-nowrap ps-(--spacing-xxs) text-body-xs text-(--text-default)"
-                  >Copied</span
-                >
-              </span>
-            </span>
-          </button>
-        </Tooltip>
+        <span class="text-label-code-sm text-(--text-default)">{{ name }}</span>
+        <CopyButton
+          :value="name"
+          :aria-label="`Copy ${name}`"
+          copied-label="Copied"
+        />
         <span>to confirm.</span>
       </p>
       <Input
@@ -105,23 +106,9 @@
         :aria-labelledby="confirmLabelId"
         autocomplete="off"
         class="w-full"
+        :disabled="deleting"
         @keydown.enter="confirm"
       />
     </div>
-    <template #actions="{ close }">
-      <Button
-        label="Cancel"
-        kind="outlined"
-        size="medium"
-        @click="close"
-      />
-      <Button
-        label="Delete resource"
-        kind="danger"
-        size="medium"
-        :disabled="!canDelete"
-        @click="confirm"
-      />
-    </template>
   </ConfirmDialog>
 </template>

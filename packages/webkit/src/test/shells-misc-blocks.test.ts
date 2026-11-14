@@ -11,6 +11,8 @@ import EmailAlreadyRegistered from '../../blocks/platform/auth/variants/email-al
 import IncorrectCredentials from '../../blocks/platform/auth/variants/incorrect-credentials.vue'
 import ServerError from '../../blocks/platform/auth/variants/server-error.vue'
 import Submitting from '../../blocks/platform/auth/variants/submitting.vue'
+import DeleteWithConfirmation from '../../blocks/platform/delete/delete-with-confirmation/delete-with-confirmation.vue'
+import DeleteFailed from '../../blocks/platform/delete/delete-with-confirmation/variants/failed.vue'
 import ConsoleShell from '../../blocks/shells/console/console.vue'
 import AccountSwitch from '../../blocks/shells/console/variants/account-switch.vue'
 import Notifications from '../../blocks/shells/console/variants/notifications.vue'
@@ -163,5 +165,32 @@ describe('platform/auth', () => {
     await waitFor(() =>
       expect(view.getByText('We sent another link to jane.doe@example.com.')).toBeTruthy()
     )
+  })
+})
+
+describe('platform/delete/delete-with-confirmation', () => {
+  const dialog = () => document.querySelector('[role="dialog"]') as HTMLElement | null
+
+  it('locks the dialog while Delete runs, then closes it', async () => {
+    const view = render(DeleteWithConfirmation)
+    await fireEvent.click(view.getByRole('button', { name: 'Delete resource' }))
+    const panel = await waitFor(() => dialog() as HTMLElement)
+    expect(panel.querySelector('button[aria-label="Copy resource-01"]')).not.toBeNull()
+    const input = panel.querySelector('input') as HTMLInputElement
+    await fireEvent.update(input, 'resource-01')
+    const confirm = Array.from(panel.querySelectorAll('button')).find(
+      (b) => b.textContent?.trim() === 'Delete resource'
+    ) as HTMLButtonElement
+    await fireEvent.click(confirm)
+    await waitFor(() => expect(input.disabled).toBe(true))
+    await waitFor(() => expect(input.disabled).toBe(false), { timeout: 2000 })
+    await waitFor(() => expect(panel.isConnected).toBe(false), { timeout: 3000 })
+  })
+
+  it('Failed: keeps the dialog and the typed name, with the reason in a danger alert', () => {
+    render(DeleteFailed)
+    const panel = dialog() as HTMLElement
+    expect(panel.textContent).toContain('resource-01 is still used by 2 workloads')
+    expect((panel.querySelector('input') as HTMLInputElement).value).toBe('resource-01')
   })
 })

@@ -6,36 +6,36 @@ The last stop before a resource is gone for good. The user chose Delete from a r
 
 - Any permanent delete of a resource, a folder of files or a record, opened from the row Delete action of `platform/view/table-view`, `platform/view/file-browser` or `platform/detail/record-table`.
 - The resource takes other things with it (settings, instances, files) and the user must read that before confirming.
-- A delete that lives in a settings page as its own row: use the LabelledField variant, a labelled field inside a medium `Dialog` opened from an outlined `Item`.
+- A delete that lives in a settings page as its own row (the danger zone): use the LabelledField variant, a labelled field inside the same medium `ConfirmDialog` opened from an outlined `Item`.
 
 ## When not to use
 
 - Detaching a reference while the object survives: that is Remove, a plain action with an undo toast, not this dialog.
 - A reversible change such as disabling or archiving: save it through `platform/settings/settings-form` or `platform/edit/edit-resource`.
 - A plain yes-or-no decision with nothing to type: use `ConfirmDialog` with its actions only, without the typed name.
-- A failed or slow delete request: the submit lifecycle is `platform/states/async-submit`.
+- A long-running delete that reports back later (a purge, a teardown): the submit lifecycle is `platform/states/async-submit`.
 
 ## Building blocks
 
 ### A. Dialog and trigger — `ConfirmDialog`, `Button` (required)
 
-`ConfirmDialog` at `size="medium"`, bound with `v-model:open`, closed by default. Its `#trigger` slot holds the visible `Button kind="danger"` that opens it; in a list the trigger is the row menu's Delete option instead. The title reads Delete plus the resource kind, the same string as the trigger. The body goes in the default slot and the buttons in the `#actions` slot.
+`ConfirmDialog` at `size="medium"`, bound with `v-model:open`, closed by default. Its `#trigger` slot holds the visible `Button kind="danger"` that opens it; in a list the trigger is the row menu's Delete option instead. The title reads Delete plus the resource kind, the same string as the trigger. The body goes in the default slot; the dialog's own Cancel and Delete buttons take `confirm-label`, `cancel-label`, `:disabled` and `:loading`.
 
 ### B. Consequence — `Alert` (required)
 
-A `severity="warning"` `Alert` first in the body states that the action cannot be reversed. Below it, one muted sentence names what goes with the resource and links the Help Center. A container that holds other items (a folder, a database) passes its own consequence sentence instead of the generic one.
+A `severity="warning"` `Alert` first in the body states that the action cannot be reversed. Below it, one muted sentence names what goes with the resource and links the Help Center with the `text-link` utility. When the server refuses the delete, the same slot shows a `severity="danger"` `Alert` that says what blocks it and how to fix it. A container that holds other items (a folder, a database) passes its own consequence sentence instead of the generic one.
 
-### C. Name chip — `Tooltip` (required)
+### C. Name and copy — `CopyButton` (required)
 
-The prompt "Type … to confirm." shows the resource name as a click-to-copy chip inside a `Tooltip` reading Copy to clipboard. Clicking copies the name and reveals Copied with a check icon for two seconds. The chip truncates a long name instead of wrapping the dialog wider.
+The prompt "Type … to confirm." shows the resource name in `text-label-code-sm` with a `CopyButton` beside it (`aria-label` "Copy resource-01", `copied-label` "Copied"), so the user can paste the exact name.
 
 ### D. Typed confirmation — `Input` (required)
 
-A full-width `Input` with `autocomplete="off"`, labelled by the prompt paragraph through `aria-labelledby`. The value is compared trimmed and must match the name exactly. Enter confirms only when it matches. The input and the Copied reveal reset each time the dialog opens, never as it closes, so the content stays put during the exit motion.
+A full-width `Input` with `autocomplete="off"`, labelled by the prompt paragraph through `aria-labelledby`. The value is compared trimmed and must match the name exactly. Enter confirms only when it matches. The input and the error reset each time the dialog opens, never as it closes, so the content stays put during the exit motion.
 
-### E. Actions — `Button` (required)
+### E. Trigger — `Button` (required)
 
-In the `#actions` slot: an outlined Cancel that calls the slot's `close`, then `kind="danger"` Delete resource, the title repeated, `:disabled` until the typed name matches. Both are medium. In the LabelledField variant the same pair sits in `PanelFooter`, stacked full width on a phone, and Delete takes `:loading` while the request runs.
+The visible `kind="danger"` trigger in `#trigger`. The dialog's own footer carries Cancel and `kind="danger"` Delete resource (the title repeated), `:disabled` until the typed name matches and `:loading` while the request runs; while it loads Cancel and the input are disabled and the dialog cannot be dismissed. On success the dialog closes and a toast says `resource-01 was deleted.`
 
 ## Do
 
@@ -51,7 +51,8 @@ In the `#actions` slot: an outlined Cancel that calls the slot's `close`, then `
 - Don't delete on the first click, from a row menu or anywhere else.
 - Don't enable Delete on a partial or case-insensitive match.
 - Don't put the warning in the input's label or placeholder.
-- Don't make Delete the only button, or use primary for it; it is `kind="danger"` beside an outlined Cancel.
+- Don't make Delete the only button, or use primary for it; it is `kind="danger"` beside Cancel.
+- Don't close the dialog on a refused delete or clear the typed name; show why in the danger `Alert` and let Delete run again.
 - Don't clear the input as the dialog closes; the field would flash empty during the exit.
 
 ## Copy
@@ -69,15 +70,16 @@ In the `#actions` slot: an outlined Cancel that calls the slot's `close`, then `
 
 - `ConfirmDialog` traps focus, closes on Escape and returns focus to the trigger.
 - The input is named by the prompt paragraph through `aria-labelledby`, so a screen reader hears the name to type.
-- The name chip is a real `button` whose `aria-label` switches from "Copy resource-01 to the clipboard" to "Copied resource-01"; its icons carry `aria-hidden="true"`.
+- The `CopyButton` is named "Copy resource-01" and announces "Copied" once it copies.
 - Enter in the input confirms only when the name matches; otherwise focus moves on to Cancel and Delete in reading order.
 - In the LabelledField variant the `Field` label carries the prompt, so the name to type is part of the input's accessible name.
-- Motion on the Copied reveal is turned off under `prefers-reduced-motion`.
+- While the delete runs, the confirm button announces its busy state and the dialog stays open.
 
 ## States
 
 - Default: the danger trigger is visible; opening it shows the warning, the name chip and the empty input with Delete resource disabled.
-- LabelledField: an outlined `Item` row on a settings page opens a medium `Dialog` asking for the name through a labelled `Field`, with Delete resource disabled until it matches.
+- LabelledField: the settings-page danger zone; an outlined `Item` row opens the medium `ConfirmDialog` asking for the name through a labelled `Field`, with Delete resource disabled until it matches and loading while it runs.
+- Failed: the server refuses the delete (the resource is still used by two workloads); the dialog stays open with the typed name, a danger `Alert` says why, and Delete can run again.
 
 ## Related
 
@@ -85,5 +87,5 @@ In the `#actions` slot: an outlined Cancel that calls the slot's `close`, then `
 - `platform/view/file-browser` — Delete on a file or folder row.
 - `platform/detail/record-table` — Delete on a record of a resource.
 - `platform/settings/settings-form` — where the LabelledField variant sits.
-- `platform/states/async-submit` — the delete request in flight and its failure.
+- `platform/states/async-submit` — a long-running request that reports back later.
 - `ConfirmDialog` — the dialog this block fills; see `skills/webkit-form` for the Dialog form type.
