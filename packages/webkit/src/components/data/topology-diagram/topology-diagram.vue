@@ -4,6 +4,7 @@
 
   import { useTranslate } from '../../../composables/use-locale/use-translate'
   import * as en from '../../../i18n/messages/en'
+  import EmptyState from '../../feedback/empty-state/empty-state.vue'
   import Skeleton from '../../feedback/skeleton/skeleton.vue'
   import { useFlowConnectors } from '../flow/connectors'
   import TopologyDiagramNode from './topology-node/topology-node.vue'
@@ -115,10 +116,14 @@
     <div
       v-if="!loading && !levels.length"
       :data-testid="`${testId}__empty`"
-      class="p-(--spacing-md) text-body-sm text-(--text-muted)"
+      class="p-(--spacing-md)"
     >
       <slot name="empty">
-        <p>{{ t('topologyDiagram.empty') }}</p>
+        <EmptyState
+          size="small"
+          icon="pi pi-sitemap"
+          :title="t('topologyDiagram.empty')"
+        />
       </slot>
     </div>
     <div

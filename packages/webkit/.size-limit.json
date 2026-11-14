@@ -1213,7 +1213,7 @@
   {
     "name": "topology-diagram",
     "path": "src/components/data/topology-diagram/topology-diagram.vue",
-    "limit": "34.1 KB"
+    "limit": "34.75 KB"
   },
   {
     "name": "action-confirmation",

@@ -17,7 +17,7 @@
       nodes: [
         {
           key: 'domains',
-          kind: 'Domains',
+          type: 'Domains',
           icon: 'pi pi-globe',
           name: 'shop.example.com',
           status: '2 domains',
@@ -45,7 +45,7 @@
       nodes: [
         {
           key: 'project',
-          kind: 'Project',
+          type: 'Project',
           icon: 'pi pi-folder',
           name: 'web-app',
           status: 'Live',
@@ -64,7 +64,7 @@
       nodes: [
         {
           key: 'policy',
-          kind: 'Policy',
+          type: 'Policy',
           icon: 'pi pi-shield',
           name: 'edge-guard',
           status: 'Active',
@@ -84,7 +84,7 @@
       nodes: [
         {
           key: 'service',
-          kind: 'Service',
+          type: 'Service',
           icon: 'pi pi-server',
           name: 'web-app',
           status: 'Active',
@@ -94,7 +94,7 @@
         },
         {
           key: 'error-page',
-          kind: 'Error page',
+          type: 'Error page',
           icon: 'pi pi-file',
           terminal: true,
           bindable: true,
@@ -109,7 +109,7 @@
       nodes: [
         {
           key: 'cache-static',
-          kind: 'Cache rule',
+          type: 'Cache rule',
           icon: 'pi pi-bolt',
           name: 'static-assets',
           status: 'Active',
@@ -118,7 +118,7 @@
         },
         {
           key: 'cache-api',
-          kind: 'Cache rule',
+          type: 'Cache rule',
           icon: 'pi pi-bolt',
           name: 'api-bypass',
           status: 'Active',
@@ -133,7 +133,7 @@
       nodes: [
         {
           key: 'integration',
-          kind: 'Integration',
+          type: 'Integration',
           icon: 'pi pi-link',
           name: 'web-app-origin',
           status: 'Active',
@@ -150,7 +150,7 @@
       nodes: [
         {
           key: 'storage',
-          kind: 'Storage',
+          type: 'Storage',
           icon: 'pi pi-inbox',
           name: 'web-app-assets',
           status: 'Private',

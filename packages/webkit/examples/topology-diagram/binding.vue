@@ -4,7 +4,7 @@
 
   const targets = {
     policy: {
-      kind: 'Policy',
+      type: 'Policy',
       icon: 'pi pi-shield',
       options: [
         { value: 'edge-guard', label: 'edge-guard' },
@@ -13,7 +13,7 @@
       unbound: 'Requests reach the service without inspection.'
     },
     'error-page': {
-      kind: 'Error page',
+      type: 'Error page',
       icon: 'pi pi-file',
       options: [{ value: 'maintenance', label: 'maintenance' }],
       unbound: 'Errors answer with the default page.'
@@ -32,7 +32,7 @@
     const value = pick === undefined ? deployed[key] : pick
     const base = {
       key,
-      kind: target.kind,
+      type: target.type,
       icon: target.icon,
       bindable: true,
       bindOptions: target.options,
@@ -44,7 +44,7 @@
         status: removing ? 'Staged' : '',
         severity: removing ? 'warning' : 'neutral',
         dashed: true,
-        message: removing ? `Deploy to remove this ${target.kind.toLowerCase()}.` : target.unbound
+        message: removing ? `Deploy to remove this ${target.type.toLowerCase()}.` : target.unbound
       }
     }
     return {
@@ -54,7 +54,7 @@
       status: pick === undefined ? 'Active' : 'Staged',
       severity: pick === undefined ? 'success' : 'warning',
       dashed: pick !== undefined,
-      message: pick === undefined ? '' : `Deploy to apply this ${target.kind.toLowerCase()}.`
+      message: pick === undefined ? '' : `Deploy to apply this ${target.type.toLowerCase()}.`
     }
   }
 
@@ -64,7 +64,7 @@
       nodes: [
         {
           key: 'project',
-          kind: 'Project',
+          type: 'Project',
           icon: 'pi pi-folder',
           name: 'web-app',
           status: 'Live',
@@ -78,7 +78,7 @@
       nodes: [
         {
           key: 'service',
-          kind: 'Service',
+          type: 'Service',
           icon: 'pi pi-server',
           name: 'web-app',
           status: 'Active',
@@ -94,15 +94,15 @@
   const bind = (event, { key, value }) => {
     if (value === deployed[key]) delete staged[key]
     else staged[key] = value
-    note.value = `${value} staged on ${targets[key].kind.toLowerCase()}.`
+    note.value = `${value} staged on ${targets[key].type.toLowerCase()}.`
   }
   const remove = (event, key) => {
     if (deployed[key]) staged[key] = ''
     else delete staged[key]
-    note.value = `${targets[key].kind} staged for removal.`
+    note.value = `${targets[key].type} staged for removal.`
   }
   const create = (event, key) => {
-    note.value = `Opens the create flow for a new ${targets[key].kind.toLowerCase()}.`
+    note.value = `Opens the create flow for a new ${targets[key].type.toLowerCase()}.`
   }
 </script>
 
