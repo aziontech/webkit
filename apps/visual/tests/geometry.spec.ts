@@ -237,7 +237,7 @@ for (const theme of THEMES) {
   }
 }
 
-const COMMAND_ORANGE = { light: 'rgb(176, 60, 2)', dark: 'rgb(243, 101, 43)' }
+const COMMAND_ORANGE = { light: 'rgb(176, 60, 2)', dark: 'rgb(255, 177, 128)' }
 
 for (const theme of THEMES) {
   for (const width of [390, 1280]) {
