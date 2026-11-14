@@ -512,6 +512,21 @@
       ? `${row.versions.length} of ${row.total} Ready versions`
       : `${row.total} Ready versions`
 
+  const liveVersionId = (row: Dependency) =>
+    (row.versions.find((entry) => entry.active) ?? row.versions[0])?.id ?? ''
+
+  const changeCount = computed(
+    () =>
+      resources
+        .flatMap((row) => [row, ...row.dependencies])
+        .filter((row) => row.versions.length && versionOf(row).id !== liveVersionId(row)).length
+  )
+
+  const changeSummary = computed(
+    () =>
+      `${changeCount.value} ${changeCount.value === 1 ? 'change goes' : 'changes go'} live in ${environment.value}.`
+  )
+
   const pickVersion = (row: Dependency, id: string) => {
     picks[row.key] = id
     versionOpen[row.key] = false
@@ -1288,7 +1303,17 @@
 
           <PanelFooter>
             <div class="flex w-full flex-wrap items-center justify-between gap-(--spacing-sm)">
-              <div class="flex min-w-0 items-center gap-(--spacing-sm)" />
+              <p
+                v-if="changeCount"
+                class="flex min-w-0 items-center gap-(--spacing-xxs) text-body-xs text-(--text-muted)"
+              >
+                <i
+                  class="pi pi-info-circle shrink-0"
+                  aria-hidden="true"
+                />
+                <span class="truncate">{{ changeSummary }}</span>
+              </p>
+              <span v-else />
               <Button
                 label="Deploy"
                 kind="primary"

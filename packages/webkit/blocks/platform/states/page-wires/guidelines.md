@@ -69,6 +69,7 @@ Panels of rows use `Item.List` with `Item size="small"` and `Item.Content`, the 
 - SessionDetail: the same over a detail page: tab bands under the header, a heading and two cards of field rows in the data column.
 - SessionForm: the same over a create page: a heading and two cards of field rows in the create column, with the save bar held at the foot.
 - SessionHome: the same over Home: the Overview wire centred in the data column.
+- VersionDetail: the version page loading; form-column heading bands and two sectioned flush cards whose rows end in a switch band, one `role="status"` region with `aria-busy`, no tabs.
 
 ## Related
 
@@ -76,5 +77,6 @@ Panels of rows use `Item.List` with `Item size="small"` and `Item.Content`, the 
 - `platform/view/table-view` — the list page the Session wire draws.
 - `platform/detail/details-page` — the detail page the SessionDetail wire draws.
 - `platform/create/single-page-create` — the create page the SessionForm wire draws.
+- `platform/detail/version-detail` — the version page the VersionDetail wire stands in for.
 - `platform/auth` — where the session wire lands once the sign-out completes.
 - `shells/console` — the header and rail the session wires reproduce.

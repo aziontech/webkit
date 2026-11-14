@@ -3,8 +3,8 @@
   import Card from '@aziontech/webkit/card'
   import LogView, { type LogViewLine } from '@aziontech/webkit/log-view'
   import LogViewContent from '@aziontech/webkit/log-view-content'
-  import ToggleGroup from '@aziontech/webkit/toggle-group'
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
+  import ToggleGroup from '@aziontech/webkit/toggle-group'
   import { ref } from 'vue'
 
   type StepStatus = 'done' | 'running' | 'pending' | 'failed' | 'skipped'

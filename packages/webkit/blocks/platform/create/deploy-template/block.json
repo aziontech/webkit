@@ -3,7 +3,7 @@
   "name": "DeployTemplate",
   "title": "Templates/Platform/Create/DeployTemplate",
   "surface": "product",
-  "summary": "The deploy template page, a focused flow outside the console shell: the creation header with Back to Creation Center and the Start from a template crumb, the template preview card naming the repository it clones from, then the step the flow is on with Browse templates under it. Without a Git provider the step is the Connect a Git provider card; once one is connected it is the Deploy your project form, with the scope and the repository name with its privacy switch side by side over the template settings, and the Deploy button that stays disabled until every required setting is filled. Deploying hands the same column to the build logs (the DeploymentFlow template) and then to the success screen (the DeploySuccess template). Import from Git and Upload a Project reach the same page with the form trimmed to the repository or the uploaded files. Built from `GlobalHeader`, `Breadcrumb`, `Card`, `EmptyState`, `Field`, `Select`, `InputGroupRoot`, `InputGroupAddon`, `InputGroupInput`, `Switch`, `Input` and `Button`.",
+  "summary": "The deploy template page, a focused flow outside the console shell: the creation header with Back to Creation Center and the Start from a template crumb, the template preview card naming the repository it clones from, then the step the flow is on with Browse templates under it. Without a Git provider the step is the Connect a Git provider card; once one is connected it is the Deploy your project form, with the scope and the repository name with its privacy switch side by side over the template settings and two collapsible groups, Build and output settings and Environment variables (a locked key, a value with a show control and a locked Secret checkbox), and a Deploy that checks the form and shows each missing value under its field. While the settings load they are Skeleton bands. Deploying hands the same column to the build logs (the DeploymentFlow template) and then to the success screen (the DeploySuccess template). Import from Git reaches the same page with the form trimmed to the repository and its build settings, and Upload a Project with the project name, a build preset and the uploaded files with a Root (/) pick for a static project without an index. Built from `GlobalHeader`, `Breadcrumb`, `Card`, `EmptyState`, `Field`, `Select`, `InputGroupRoot`, `InputGroupAddon`, `InputGroupInput`, `Switch`, `Input`, `Accordion`, `Checkbox`, `Tooltip`, `Skeleton` and `Button`.",
   "preview": {
     "layout": "fullscreen",
     "background": "dark"
@@ -18,7 +18,10 @@
     "start from a template",
     "implantar template",
     "clonar template",
-    "conectar git"
+    "conectar git",
+    "deploy uploaded project",
+    "deploy imported repository",
+    "implantar projeto enviado"
   ],
   "skills": ["webkit-create-surface", "webkit-form", "webkit-errors"],
   "steps": ["connect-git", "form"],
@@ -29,8 +32,28 @@
   "variants": [
     {
       "name": "Form",
-      "summary": "GitHub connected: the riley-carter scope and the nuxt-ecommerce repository name, public by default, over the three store settings of the Nuxt E-commerce template; Deploy waits for the access token.",
+      "summary": "GitHub connected: the riley-carter scope and the nuxt-ecommerce repository name, public by default, over the store domain setting, then two collapsible groups in bordered frames: Build and output settings (root directory and install command, filled with their defaults) and Environment variables, open because the access token is required, each variable a locked Key row over a Value row with a show or hide control and a locked Secret checkbox. Deploy checks the form and shows each missing required value under its field, opening the group that holds it.",
       "file": "variants/form.vue"
+    },
+    {
+      "name": "BuildSettings",
+      "summary": "Deploy was pressed with the access token empty: both groups open, Build and output settings led by a Build preset `Select` on the detected Nuxt preset with its helper, and the required NUXT_STORE_ACCESS_TOKEN value showing its error.",
+      "file": "variants/build-settings.vue"
+    },
+    {
+      "name": "LoadingSettings",
+      "summary": "The template settings are still loading: scope and repository name are ready, three `Skeleton` field bands stand in for the settings in an `aria-busy` region with a status line, and Deploy is disabled.",
+      "file": "variants/loading-settings.vue"
+    },
+    {
+      "name": "ImportFromGit",
+      "summary": "Reached from Import from Git: the crumb and preview card name the acme-web repository it imports from GitHub, the form keeps the scope and repository name and trims the settings to one collapsed Build and output settings group with the detected Vite preset; no template settings, no variables.",
+      "file": "variants/import-from-git.vue"
+    },
+    {
+      "name": "Upload",
+      "summary": "Reached from a dropped folder: no Git and no repository, the project name and an empty Build preset `Select` side by side, then Project files, a card with the folder summary and a scrollable list of every file with its glyph, monospace path and size, and, because the static project has no index.html, a required Root (/) `Select` of the top-level files; Deploy waits for it.",
+      "file": "variants/upload.vue"
     }
   ]
 }

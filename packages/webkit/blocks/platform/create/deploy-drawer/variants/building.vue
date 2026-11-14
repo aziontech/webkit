@@ -18,9 +18,9 @@
   import Popover from '@aziontech/webkit/popover'
   import RadioButton from '@aziontech/webkit/radio-button'
   import SettingsSection from '@aziontech/webkit/settings-section'
-  import ToggleGroup from '@aziontech/webkit/toggle-group'
   import Spinner from '@aziontech/webkit/spinner'
   import Tag from '@aziontech/webkit/tag'
+  import ToggleGroup from '@aziontech/webkit/toggle-group'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, ref, watch } from 'vue'
 

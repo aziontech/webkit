@@ -111,13 +111,14 @@ When `status` is `empty`, the table and its header and footer give way to a flus
 
 - Default: resources exist; the table shows them with the property filter, refresh, export, preferences, sorting and pagination wired, and filtering to nothing shows No matching resources with Clear filters.
 - Empty: every resource was deleted on an account that is not new; `useCollection` reports `empty`, the heading and controls stay, and a flush card with Create Resource and Documentation replaces the table.
+- Deployments: the deployments list with Version (Current tag), Status with a spinner while Building and the run's duration, the project link, the environment tag and the author with the time; a row click opens the deployment, the row menu holds View details, Redeploy and Promote to production, and Refresh, no match and empty behave as in Default and Empty.
 
 ## Related
 
 - `platform/view/card-view` — the same collection, rendered as selectable cards.
 - `platform/create/single-page-create` — where the Create action leads for a short form.
 - `platform/create/create-in-drawer` — create without leaving the list when the form is three fields or fewer.
-- `platform/detail/details-page` — where a row name leads.
+- `platform/detail/details-page` — where a row name leads; its Deployments tab renders the Deployments table without the page heading.
 - `platform/delete/delete-with-confirmation` — the dialog behind the row menu's Delete.
 - `platform/states/first-use` — the module before its first resource.
 - `TableRoot` and `useCollection` — the table this page wraps and the state behind it; see `skills/webkit-tables` and `skills/webkit-lists`.
