@@ -1,4 +1,4 @@
-import { fireEvent, render, waitFor } from '@testing-library/vue'
+import { fireEvent, render, waitFor, within } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
 import SchemaEditor from '../../blocks/platform/edit/schema-editor/schema-editor.vue'
@@ -9,9 +9,7 @@ useToastRegion()
 
 const drawer = () => document.querySelector('[role="dialog"]') as HTMLElement
 const columnNames = () =>
-  Array.from(drawer().querySelectorAll<HTMLInputElement>('[data-column-key] input')).filter(
-    (input) => input.getAttribute('aria-label')?.startsWith('Name of column')
-  )
+  Array.from(drawer().querySelectorAll<HTMLInputElement>('input[placeholder="column_name"]'))
 
 describe('platform/edit/schema-editor Create Table', () => {
   it('reads a CSV into columns with guessed types and previews the rows', async () => {
@@ -34,25 +32,19 @@ describe('platform/edit/schema-editor Create Table', () => {
     )
   })
 
-  it('drags a column row onto another and announces it', async () => {
+  it('draws the columns and foreign keys with AttributeEditor and moves a column', async () => {
     render(SchemaEditor)
     await waitFor(() => expect(drawer()).not.toBeNull())
-    const grips = Array.from(drawer().querySelectorAll<HTMLElement>('[data-grip]'))
-    const target = drawer().querySelectorAll<HTMLElement>('[data-column-key]')[1]
-    target.scrollIntoView({ block: 'center' })
-    await fireEvent.pointerDown(grips[0], { button: 0, pointerId: 1 })
-    const box = target.getBoundingClientRect()
-    await fireEvent.pointerMove(grips[0], {
-      pointerId: 1,
-      clientX: box.left + 4,
-      clientY: box.top + box.height / 2
-    })
-    expect(target.getAttribute('data-drop')).toBe('after')
-    await fireEvent.pointerUp(grips[0], { pointerId: 1 })
+    expect(drawer().querySelector('[data-grip]')).toBeNull()
+    const columns = drawer().querySelector('[aria-label="Columns"]')?.closest('[data-mode]')
+    expect(columns).not.toBeNull()
+    expect(drawer().textContent).toContain('No foreign keys.')
+    await fireEvent.click(
+      within(columns as HTMLElement).getByRole('button', { name: 'Move item 1 down' })
+    )
     await waitFor(() =>
       expect(columnNames().map((input) => input.value)).toEqual(['created_at', 'id'])
     )
-    expect(drawer().textContent).toContain('Dropped id to position 2 of 2.')
   })
 
   it('asks to complete a foreign key after Create', async () => {
