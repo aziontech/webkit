@@ -14,7 +14,9 @@
         'Explore how Magalu enhances cybersecurity with Azion’s Firewall and WAF, improving threat intelligence and bot management in retail.',
       date: 'FEB 4, 2022',
       readTime: '5 min read',
-      href: 'https://www.azion.com/en/success-case/magalu/'
+      href: 'https://www.azion.com/en/success-case/magalu/',
+      author: 'Jane Doe',
+      authors: [{ name: 'Jane Doe' }]
     }"
     :trail="[
       { label: 'Success cases', href: '/success-cases' },
@@ -24,6 +26,8 @@
     :share="{
       title: 'Share this article',
       copyLink: 'Copy link',
+      copyFeed: 'Copy RSS feed',
+      feed: 'https://example.com/blog/feed.xml',
       shareX: 'Share on X',
       shareLinkedIn: 'Share on LinkedIn'
     }"

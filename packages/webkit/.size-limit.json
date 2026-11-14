@@ -482,7 +482,7 @@
   {
     "name": "article-body",
     "path": "src/components/sections/article-body/article-body.vue",
-    "limit": "37 KB"
+    "limit": "40.5 KB"
   },
   {
     "name": "article-cards",

@@ -98,6 +98,14 @@ export const ptBR: Messages = {
     showAtSide: 'Mostrar ao lado do conteúdo',
     showAtBottom: 'Mostrar abaixo do conteúdo'
   },
+  articleBody: {
+    copiedLink: 'Link copiado',
+    copiedFeed: 'Link do feed copiado',
+    copiedPage: 'Página copiada como markdown',
+    copyFailed: 'Não foi possível copiar',
+    copyFailedHint: 'Seu navegador bloqueou o acesso à área de transferência.',
+    assistantPrompt: 'Leia {url} para que eu possa fazer perguntas sobre ele.'
+  },
   articleCards: {
     newTab: '(abre em uma nova aba)'
   },

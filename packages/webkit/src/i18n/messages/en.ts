@@ -13,6 +13,15 @@ export const appLayout = {
   showAtBottom: 'Show under the content'
 } as const
 
+export const articleBody = {
+  copiedLink: 'Link copied',
+  copiedFeed: 'Feed link copied',
+  copiedPage: 'Page copied as markdown',
+  copyFailed: 'Could not copy',
+  copyFailedHint: 'Your browser blocked clipboard access.',
+  assistantPrompt: 'Read {url} so I can ask questions about it.'
+} as const
+
 export const articleCards = {
   newTab: '(opens in a new tab)'
 } as const
@@ -1221,6 +1230,7 @@ export const en = {
   aiLoading,
   alert,
   appLayout,
+  articleBody,
   articleCards,
   articleIndex,
   artifactCanvas,

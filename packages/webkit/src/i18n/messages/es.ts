@@ -98,6 +98,14 @@ export const es: Messages = {
     showAtSide: 'Mostrar junto al contenido',
     showAtBottom: 'Mostrar debajo del contenido'
   },
+  articleBody: {
+    copiedLink: 'Enlace copiado',
+    copiedFeed: 'Enlace del feed copiado',
+    copiedPage: 'Página copiada como markdown',
+    copyFailed: 'No se pudo copiar',
+    copyFailedHint: 'Tu navegador bloqueó el acceso al portapapeles.',
+    assistantPrompt: 'Lee {url} para que pueda hacerte preguntas sobre él.'
+  },
   articleCards: {
     newTab: '(se abre en una pestaña nueva)'
   },

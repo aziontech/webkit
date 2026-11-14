@@ -3,16 +3,17 @@ name: article-body
 category: sections
 structure: monolithic
 status: implemented
-spec_version: 1
+spec_version: 2
+template: 2
 created: 2026-11-05
-last_updated: 2026-11-05
-checksum: c166af351c393793fd4e4a8aa77a4eb5d0615244081df5fea2e6eb7184c1127a
+last_updated: 2026-11-14
+checksum: 5795dc559e97a1eaa8d30bc7e7e124ff99232aac4a88f003da5834b1eb52785d
 ---
 # ArticleBody — Component Spec
 
 ## Purpose
 
-The reading page of an article. A brand banner sits over a three-column grid: the share, community and copy-page rail on the left; the breadcrumb, headline, byline and prose down the middle at a reading measure; and the "On this page" outline on the right. Both rails stick under the header and fold away below `lg`, leaving the column alone. The section opens the page itself, so it carries its own `section-container` instead of sitting in the page column. The prose arrives as markdown: blank-line separated blocks render as `##` / `###` headings (each with an id slugged from its text, feeding the outline), `-` lists and paragraphs. It is a page section — the site places it from a `{ _id: 'article-body', props }` entry and binds `props` straight onto it — and it composes `section-container`, `section-module`, `frame-box`, `breadcrumb`, `hero-title`, `divider`, `doc-prose`, `tooltip`, `icon-button`, `split-button` and `doc-on-this-page`; copying to the clipboard is local behaviour.
+The reading page of an article. A brand banner sits over a three-column grid: the share, community and copy-page rail on the left; the breadcrumb, headline, byline and prose down the middle at a reading measure; and the "On this page" outline on the right. Both rails stick under the header and fold away below `lg`, leaving the column alone. The section opens the page itself, so it carries its own `section-container` instead of sitting in the page column. The prose arrives as markdown: `##` / `###` headings (each with an id slugged from its text, feeding the outline), fenced code blocks, `-` and numbered lists and paragraphs, with inline links, `**strong**`, `*emphasis*` and `` `code` `` inside paragraphs and list items. The outline follows the reader: the heading last scrolled past is active, and choosing an entry scrolls to it (smoothly unless reduced motion is set) and writes its hash to the address. The byline can carry the writers' names and their photos as overlapping avatars. It is a page section — the site places it from a `{ _id: 'article-body', props }` entry and binds `props` straight onto it — and it composes `section-container`, `section-module`, `frame-box`, `breadcrumb`, `hero-title`, `divider`, `doc-prose`, `tooltip`, `icon-button`, `split-button`, `avatar` and `doc-on-this-page`; copying to the clipboard is local behaviour, confirmed by a toast.
 
 ## When to use
 
@@ -66,13 +67,14 @@ import ArticleBody from '@aziontech/webkit/article-body'
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
 | `eyebrow` | `string` | `''` | false | Overline above the headline. |
-| `article` | `ArticleBodyArticle` | `—` | true | The piece being read: its `title` (the page h1), `description`, `date`, `readTime` and canonical `href`. |
+| `article` | `ArticleBodyArticle` | `—` | true | The piece being read: its `title` (the page h1), `description`, `date`, `readTime`, canonical `href`, and optionally `author` (the writers' names) and `authors` (each a `name` and an `avatar` photo URL). |
 | `trail` | `ArticleBodyCrumb[]` | `[]` | false | The breadcrumb over the headline, each a `label` and an `href`, the last one marked `current`. |
 | `body` | `string` | `''` | false | The article as markdown; its `##` and `###` headings feed the outline. |
 | `banner` | `string` | `''` | false | URL of the image over the masthead; the banner frame is omitted when empty. |
-| `share` | `ArticleBodyShare` | `undefined` | false | Labels of the share group: its `title`, `copyLink`, `shareX` and `shareLinkedIn`; the group is omitted when absent. |
+| `share` | `ArticleBodyShare` | `undefined` | false | Labels of the share group: its `title`, `copyLink`, `shareX` and `shareLinkedIn`, optional `copyFeed` with the `feed` URL it copies, and optional toast messages `copiedLink`, `copiedFeed` and `copiedPage`; the group is omitted when absent. |
 | `community` | `ArticleBodyCommunity` | `undefined` | false | The community group: a `title` and `links`, each a `label`, an `href` and an `icon`; omitted when absent. |
 | `copyPage` | `ArticleBodyCopyPage` | `undefined` | false | The copy-page split button: its `label` and a `menu` of entries, each a `value`, a `label` and an `icon`; omitted when absent. |
+| `assistants` | `Record<string, string>` | `{}` | false | URL templates of the assistants the copy-page menu opens, keyed by menu `value`; `{prompt}` in a template is replaced by the encoded prompt to read the article. |
 
 ## Events
 
@@ -85,9 +87,13 @@ import ArticleBody from '@aziontech/webkit/article-body'
 ## States
 
 - Visual states: `default`, `hover` and `focus-visible` on every link and button
-- The outline lists the body's headings, the first one active; it is omitted when the body has none
+- The outline lists the body's headings; it is omitted when the body has none
+- Scroll-spy: the first heading is active on the server and on load; after mount the active heading is the last one whose top has scrolled above the header line (120 px), updated on scroll; choosing an outline entry scrolls its heading into view (`smooth`, or instant under reduced motion), makes it active and replaces the address hash
 - The left rail renders only the groups that are set, and is omitted when none is
-- Copying: the copy-link button and the `link` menu entry copy `article.href`; the split button's main action copies the body; a failed clipboard write is ignored
+- Copying: the copy-link button and the `link` menu entry copy the current page URL (`article.href` when there is none); the copy-feed button (when `share.copyFeed` and `share.feed` are set) copies `share.feed`; the split button's main action copies the page as markdown (headline, deck, body); each success raises a success toast (`share.copiedLink` / `copiedFeed` / `copiedPage`, or the locale default), and a failed clipboard write raises an error toast. Toasts render where the page mounts a `Toaster`
+- Copy-page menu: the `link` entry copies the URL; the `markdown` entry opens the page as plain-text markdown in a new tab; an entry whose `value` is a key of `assistants` opens that template in a new tab with `{prompt}` replaced by the encoded prompt `Read <article.href> so I can ask questions about it.`
+- Byline: with `authors`, overlapping large avatars (photo, or initials without one) lead the byline; with `author`, the names sit above the date and read time
+- Prose: fenced code blocks render as `pre`/`code`; numbered lists as `ol`; a full `http` link opens in a new tab
 
 ## Motion & Animations
 
@@ -102,6 +108,8 @@ import ArticleBody from '@aziontech/webkit/article-body'
 | banner fill | `var(--bg-canvas)` |
 | rail headings | `text-heading-xs`, `var(--text-default)` |
 | byline and community links | `text-body-sm`, `var(--text-muted)`, hover `var(--text-default)` |
+| author names | `text-body-sm`, `var(--text-default)` |
+| avatar ring | `var(--bg-canvas)` |
 | focus ring | `var(--ring-color)` |
 
 ## Theme gaps
@@ -113,15 +121,50 @@ import ArticleBody from '@aziontech/webkit/article-body'
 ## Accessibility (WCAG 2.1 AA)
 
 - Visible focus: every link and button shows a `focus-visible` ring.
+- Feedback: copy results are announced by the `Toaster`'s live region; the outline's active entry carries `aria-current` (owned by `doc-on-this-page`).
 - Keyboard map: `Tab` moves through the breadcrumb, the rails and the prose links; the split button owns its menu keyboard map.
 - ARIA: the root is a plain `div` so the page keeps its own landmarks; the headline is the page `h1` (from `hero-title`); the prose is an `article`; the two rails are `aside` landmarks, the left one named by the share title, the right one by the outline's own navigation; the share and community groups are named `section`s; icon-only share buttons are named by their labels and carry a tooltip; the banner is decorative (`aria-hidden`, `alt=""`); heading ids are slugged from their text.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): text uses `--text-default` / `--text-muted`.
 - `motion-reduce:transition-none` on every transition.
 - Touch target ≥40×40 px — owned by `icon-button` and `split-button`.
 
+## Internationalization
+
+| Key | English source | Override prop |
+|---|---|---|
+| `articleBody.copiedLink` | `Link copied` | `share.copiedLink` |
+| `articleBody.copiedFeed` | `Feed link copied` | `share.copiedFeed` |
+| `articleBody.copiedPage` | `Page copied as markdown` | `share.copiedPage` |
+| `articleBody.copyFailed` | `Could not copy` | — |
+| `articleBody.copyFailedHint` | `Your browser blocked clipboard access.` | — |
+| `articleBody.assistantPrompt` | `Read {url} so I can ask questions about it.` | — |
+
+- Every other string (labels, trail, the article) arrives through props.
+- Formatting: none; the date and read time arrive pre-formatted.
+
+## Right-to-left
+
+- Layout: logical utilities only; the rails swap sides with the grid under `rtl`.
+- Icons: share and copy glyphs and brand marks do not mirror.
+- Keyboard: unchanged; the split button owns its menu map.
+- User data: code blocks keep `dir="ltr"`.
+
+## Responsive
+
+- Container queries: none; from `lg` the grid has three columns with sticky rails.
+- Narrow (< `lg`): both rails fold away and the column stands alone; code blocks scroll sideways inside themselves.
+- Touch: owned by `icon-button` and `split-button`.
+- Reflow: no horizontal page scroll at 320 px; only a code block scrolls.
+
+## Performance
+
+- Bundle budget: the `./article-body` entry in `.size-limit.json`.
+- Runtime budget: the scroll handler reads one rect per heading per scroll event (passive listener), cleaned up on unmount.
+- Heavy parts: none; the markdown parser is a small built-in one, to be replaced by the shared doc renderer when it ships.
+
 ## Examples
 
-- Default
+- Default — with writers in the byline and the copy-feed button.
 
 ## Constraints — DO NOT
 
