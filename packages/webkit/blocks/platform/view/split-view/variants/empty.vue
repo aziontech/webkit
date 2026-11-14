@@ -25,7 +25,6 @@
   import PanelHeader from '@aziontech/webkit/panel-header'
   import Popover from '@aziontech/webkit/popover'
   import Sidebar from '@aziontech/webkit/sidebar'
-  import Table from '@aziontech/webkit/table'
   import TableRoot, { type TableColumn, type TableExposed } from '@aziontech/webkit/table-root'
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
   import Tooltip from '@aziontech/webkit/tooltip'
@@ -756,10 +755,10 @@
   })
 
   const levelColors: Record<EventLevel, ChartColor> = {
-    Error: 'danger',
-    Warning: 'warning',
-    Info: 'info',
-    Debug: 'other'
+    Error: 'severity-critical',
+    Warning: 'severity-medium',
+    Info: 'severity-low',
+    Debug: 'severity-info'
   }
 
   const volumeLabels = computed(() => buckets.value.map((bucket) => bucket.at))
@@ -1647,7 +1646,9 @@
               stacked
             />
             <Chart.Crosshair />
-            <Chart.Tooltip />
+            <Chart.Tooltip total>
+              <template #footer>Click to filter to this bucket, or drag to select a span.</template>
+            </Chart.Tooltip>
           </Chart>
         </section>
 
@@ -1688,9 +1689,10 @@
               </template>
 
               <template #cell-level="{ value }">
-                <Table.CellStatus
+                <Tag
                   :label="value"
                   :severity="eventLevelSeverity(value)"
+                  size="small"
                 />
               </template>
 
@@ -1792,12 +1794,12 @@
                   <Tag
                     :label="documentEvent.level"
                     :severity="eventLevelSeverity(documentEvent.level)"
-                    size="medium"
+                    size="small"
                   />
                   <Tag
                     :label="documentEvent.sourceLabel"
                     severity="secondary"
-                    size="medium"
+                    size="small"
                   />
                 </div>
                 <p class="text-body-md text-(--text-default)">{{ documentEvent.message }}</p>
@@ -1863,12 +1865,12 @@
                     <Tag
                       :label="documentEvent.level"
                       :severity="eventLevelSeverity(documentEvent.level)"
-                      size="medium"
+                      size="small"
                     />
                     <Tag
                       :label="documentEvent.sourceLabel"
                       severity="secondary"
-                      size="medium"
+                      size="small"
                     />
                   </div>
                   <p class="text-body-md text-(--text-default)">

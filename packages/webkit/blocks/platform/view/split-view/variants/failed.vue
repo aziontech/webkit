@@ -1557,12 +1557,12 @@
                   <Tag
                     :label="documentEvent.level"
                     :severity="eventLevelSeverity(documentEvent.level)"
-                    size="medium"
+                    size="small"
                   />
                   <Tag
                     :label="documentEvent.sourceLabel"
                     severity="secondary"
-                    size="medium"
+                    size="small"
                   />
                 </div>
                 <p class="text-body-md text-(--text-default)">{{ documentEvent.message }}</p>
@@ -1628,12 +1628,12 @@
                     <Tag
                       :label="documentEvent.level"
                       :severity="eventLevelSeverity(documentEvent.level)"
-                      size="medium"
+                      size="small"
                     />
                     <Tag
                       :label="documentEvent.sourceLabel"
                       severity="secondary"
-                      size="medium"
+                      size="small"
                     />
                   </div>
                   <p class="text-body-md text-(--text-default)">
