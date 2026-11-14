@@ -8,38 +8,39 @@
     inheritAttrs: false
   })
 
-  interface Props {
-    /** Identifier for this checkbox in a group. Compared against a scalar model, or added to and removed from an array model. Unset, the model is a boolean. */
-    value?: unknown
-    /** @deprecated since 6.0 — leave `value` unset for a boolean model. Removed in 7.0. */
-    binary?: boolean
-    /** Renders the indeterminate visual (horizontal bar). Does not affect modelValue; the parent owns the tri-state logic. */
-    indeterminate?: boolean
-    /** Disables interaction and applies disabled tokens. */
-    disabled?: boolean
-    /** Marks the field read-only; value is visible but cannot change via interaction. */
-    readonly?: boolean
-    /** Marks the control invalid: sets aria-invalid and the danger border. An enclosing Field's invalid sets it too. */
-    invalid?: boolean
-    /** @deprecated since 6.0 — pass `id` (or let the enclosing Field set it). Removed in 7.0. */
-    inputId?: string
-    /** HTML name for form submission. */
-    name?: string
-    /** @deprecated since 6.0 — pass the `tabindex` attribute; it falls through to the input. Removed in 7.0. */
-    tabindex?: number
-  }
-
-  const props = withDefaults(defineProps<Props>(), {
-    value: undefined,
-    binary: false,
-    indeterminate: false,
-    disabled: false,
-    readonly: false,
-    invalid: false,
-    inputId: '',
-    name: '',
-    tabindex: 0
-  })
+  const props = withDefaults(
+    defineProps<{
+      /** Identifier for this checkbox in a group. Compared against a scalar model, or added to and removed from an array model. Unset, the model is a boolean. */
+      value?: unknown
+      /** @deprecated since 6.0 — leave `value` unset for a boolean model. Removed in 7.0. */
+      binary?: boolean
+      /** Renders the indeterminate visual (horizontal bar). Does not affect modelValue; the parent owns the tri-state logic. */
+      indeterminate?: boolean
+      /** Disables interaction and applies disabled tokens. */
+      disabled?: boolean
+      /** Marks the field read-only; value is visible but cannot change via interaction. */
+      readonly?: boolean
+      /** Marks the control invalid: sets aria-invalid and the danger border. An enclosing Field's invalid sets it too. */
+      invalid?: boolean
+      /** @deprecated since 6.0 — pass `id` (or let the enclosing Field set it). Removed in 7.0. */
+      inputId?: string
+      /** HTML name for form submission. */
+      name?: string
+      /** @deprecated since 6.0 — pass the `tabindex` attribute; it falls through to the input. Removed in 7.0. */
+      tabindex?: number
+    }>(),
+    {
+      value: undefined,
+      binary: false,
+      indeterminate: false,
+      disabled: false,
+      readonly: false,
+      invalid: false,
+      inputId: '',
+      name: '',
+      tabindex: 0
+    }
+  )
 
   /** Two-way bound value: a boolean when `value` is unset; with `value`, an array to add it to and remove it from, or a scalar set to `value` when checked and to null when unchecked. An unset (undefined) model with `value` is treated as an empty array. */
   const model = defineModel<TModel>({ default: undefined as never })
