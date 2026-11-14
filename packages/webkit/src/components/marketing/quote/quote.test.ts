@@ -1,4 +1,4 @@
-import { render, waitFor } from '@testing-library/vue'
+import { render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 import { nextTick, ref } from 'vue'
 
@@ -30,23 +30,6 @@ describe('Quote', () => {
 
     expect(getByTestId('testimonial')).toBeInTheDocument()
     expect(queryByTestId(TESTID)).toBeNull()
-  })
-
-  it('draws a registry mark named by mark when there is no logo', async () => {
-    const { container, getByRole } = render(Quote, { props: { ...props, mark: 'magalu' } })
-    await waitFor(() => expect(container.querySelector('svg[data-mark="magalu"]')).not.toBeNull())
-    expect(getByRole('img', { name: 'Magalu' })).toBeInTheDocument()
-  })
-
-  it('prefers the logo over the mark', () => {
-    const { container, getByRole } = render(Quote, { props: { ...props, logo, mark: 'magalu' } })
-    expect(getByRole('img')).toHaveAttribute('src', logo)
-    expect(container.querySelector('[data-mark]')).toBeNull()
-  })
-
-  it('writes an unregistered mark as its own wordmark', () => {
-    const { getByText } = render(Quote, { props: { ...props, mark: 'Northwind' } })
-    expect(getByText('Northwind')).toBeInTheDocument()
   })
 
   it('renders the quotation inside a blockquote', () => {

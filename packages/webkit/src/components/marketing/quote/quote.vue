@@ -1,7 +1,6 @@
 <script setup lang="ts">
-  import { computed, defineAsyncComponent, useAttrs } from 'vue'
+  import { computed, useAttrs } from 'vue'
 
-  import { brandMarkLabel, resolveBrandMark } from '../../../svg/brands/registry'
   import Avatar from '../../content/avatar/avatar.vue'
 
   defineOptions({
@@ -21,11 +20,9 @@
     jobTitle?: string
     /** URL of the person's likeness, drawn beside the attribution by `highlight`; without one the attribution stands alone. */
     photo?: string
-    /** URL of the company logo, drawn as-is; wins over mark, and is ignored when the mark slot is filled. */
+    /** URL of the company mark; ignored when the mark slot is filled. */
     logo?: string
-    /** Registry name of the company's one-ink mark, drawn when there is no logo; an unregistered name is written as its own wordmark. */
-    mark?: string
-    /** Alternative text for the logo; falls back to `jobTitle` when empty. */
+    /** Alternative text for the mark; falls back to `jobTitle` when empty. */
     logoAlt?: string
     /** Phrases of `text` kept in the default ink while the rest of the quotation recedes to the muted one; each is matched verbatim, and an empty list leaves the whole quotation in the default ink. Ignored when the default slot is filled. */
     highlights?: string[]
@@ -38,7 +35,6 @@
     jobTitle: '',
     photo: '',
     logo: '',
-    mark: '',
     logoAlt: '',
     highlights: () => [],
     kind: 'inline'
@@ -57,15 +53,7 @@
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'marketing-quote')
 
-  const markArt = computed(() => {
-    if (props.logo || !props.mark) return null
-    const loader = resolveBrandMark(props.mark)
-    return loader ? defineAsyncComponent(loader) : null
-  })
-
-  const markLabel = computed(() => (props.mark ? brandMarkLabel(props.mark) : ''))
-
-  const hasMark = () => Boolean(slots.mark) || props.logo.length > 0 || props.mark.length > 0
+  const hasMark = () => Boolean(slots.mark) || props.logo.length > 0
 
   const hasAttribution = computed<boolean>(() => props.name.length > 0 || props.jobTitle.length > 0)
 
@@ -105,30 +93,12 @@
     >
       <slot name="mark">
         <img
-          v-if="logo"
           :src="logo"
           :alt="logoAlt || jobTitle"
           loading="lazy"
           decoding="async"
           class="h-8 w-fit max-w-(--size-40) object-contain group-data-[kind=inline]:h-full group-data-[kind=highlight]:md:h-auto group-data-[kind=highlight]:md:max-h-24 group-data-[kind=highlight]:md:w-full group-data-[kind=highlight]:md:max-w-none"
         />
-        <span
-          v-else-if="markArt"
-          role="img"
-          :aria-label="logoAlt || markLabel"
-          class="flex h-8 items-center text-(--text-default) group-data-[kind=inline]:h-full"
-        >
-          <component
-            :is="markArt"
-            :data-mark="mark"
-            class="h-full w-auto max-w-(--size-40)"
-          />
-        </span>
-        <span
-          v-else
-          class="text-heading-xxs text-(--text-default)"
-          >{{ markLabel }}</span
-        >
       </slot>
     </div>
 
