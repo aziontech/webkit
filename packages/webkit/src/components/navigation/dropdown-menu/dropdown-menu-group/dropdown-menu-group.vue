@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed, provide, useAttrs, useId } from 'vue'
+  import { computed, inject, provide, useAttrs, useId } from 'vue'
 
   import { DropdownMenuGroupInjectionKey, useDropdownContext } from '../injection-key'
 
@@ -29,6 +29,8 @@
   const uid = useId()
   const labelId = `${uid}-label`
 
+  const inPanel = inject(DropdownMenuGroupInjectionKey, false)
+
   provide(DropdownMenuGroupInjectionKey, true)
 
   const testId = computed(
@@ -40,8 +42,9 @@
 
 <template>
   <Teleport
-    v-if="ctx.panelBodyRef.value"
-    :to="ctx.panelBodyRef.value"
+    v-if="inPanel || ctx.panelBodyRef.value"
+    :to="ctx.panelBodyRef.value ?? 'body'"
+    :disabled="inPanel"
   >
     <div
       v-bind="attrs"

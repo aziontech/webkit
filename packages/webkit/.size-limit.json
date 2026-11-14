@@ -1987,6 +1987,21 @@
     "limit": "1.75 KB"
   },
   {
+    "name": "dropdown-menu-sub",
+    "path": "src/components/navigation/dropdown-menu/dropdown-menu-sub/dropdown-menu-sub.vue",
+    "limit": "0.6 KB"
+  },
+  {
+    "name": "dropdown-menu-sub-content",
+    "path": "src/components/navigation/dropdown-menu/dropdown-menu-sub-content/dropdown-menu-sub-content.vue",
+    "limit": "2.5 KB"
+  },
+  {
+    "name": "dropdown-menu-sub-trigger",
+    "path": "src/components/navigation/dropdown-menu/dropdown-menu-sub-trigger/dropdown-menu-sub-trigger.vue",
+    "limit": "1.3 KB"
+  },
+  {
     "name": "multi-select-root",
     "path": "src/components/inputs/multi-select/multi-select.vue",
     "limit": "2.05 KB"

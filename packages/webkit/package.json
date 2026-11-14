@@ -1187,6 +1187,18 @@
       "types": "./types/components/navigation/dropdown-menu/dropdown-menu-option/dropdown-menu-option.vue.d.ts",
       "default": "./src/components/navigation/dropdown-menu/dropdown-menu-option/dropdown-menu-option.vue"
     },
+    "./dropdown-menu-sub": {
+      "types": "./types/components/navigation/dropdown-menu/dropdown-menu-sub/dropdown-menu-sub.vue.d.ts",
+      "default": "./src/components/navigation/dropdown-menu/dropdown-menu-sub/dropdown-menu-sub.vue"
+    },
+    "./dropdown-menu-sub-content": {
+      "types": "./types/components/navigation/dropdown-menu/dropdown-menu-sub-content/dropdown-menu-sub-content.vue.d.ts",
+      "default": "./src/components/navigation/dropdown-menu/dropdown-menu-sub-content/dropdown-menu-sub-content.vue"
+    },
+    "./dropdown-menu-sub-trigger": {
+      "types": "./types/components/navigation/dropdown-menu/dropdown-menu-sub-trigger/dropdown-menu-sub-trigger.vue.d.ts",
+      "default": "./src/components/navigation/dropdown-menu/dropdown-menu-sub-trigger/dropdown-menu-sub-trigger.vue"
+    },
     "./multi-select": {
       "types": "./types/components/inputs/multi-select/index.d.ts",
       "default": "./src/components/inputs/multi-select/index.ts"

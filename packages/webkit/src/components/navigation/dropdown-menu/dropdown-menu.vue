@@ -1,21 +1,10 @@
 <script setup lang="ts">
-  import {
-    computed,
-    nextTick,
-    onBeforeUnmount,
-    onMounted,
-    provide,
-    ref,
-    useAttrs,
-    useId,
-    watch
-  } from 'vue'
+  import { computed, provide, ref, useAttrs, useId, watch } from 'vue'
 
   import { useControllable } from '../../../composables/use-controllable'
   import { usePortalLocale } from '../../../composables/use-locale/use-translate'
-  import { useOverlayLayer } from '../../../composables/use-overlay-layer'
+  import { useMenuRoot } from '../../../composables/use-menu-root'
   import { usePlacement } from '../../../composables/use-placement'
-  import { registerShortcut } from './composables/shortcut-registry'
   import type {
     DropdownMenuOptionValue,
     DropdownMenuPlacement,
@@ -24,6 +13,7 @@
   import { DropdownMenuInjectionKey } from './injection-key'
 
   export type {
+    DropdownMenuOptionKind,
     DropdownMenuOptionValue,
     DropdownMenuPlacement,
     DropdownMenuPlacementInput
@@ -123,169 +113,11 @@
     isOpenState.set(value)
   }
 
-  function getEnabledOptions(): globalThis.HTMLElement[] {
-    const panel = panelRef.value
-    if (!panel) return []
-    const nodes = panel.querySelectorAll<globalThis.HTMLElement>(
-      '[role^="menuitem"]:not([aria-disabled="true"])'
-    )
-    return Array.from(nodes)
-  }
-
-  function focusFirstOption() {
-    const options = getEnabledOptions()
-    if (options.length > 0) options[0].focus({ preventScroll: true })
-  }
-
-  function focusLastOption() {
-    const options = getEnabledOptions()
-    if (options.length > 0) options[options.length - 1].focus({ preventScroll: true })
-  }
-
-  function focusNextOption() {
-    const options = getEnabledOptions()
-    if (options.length === 0) return
-    const active = globalThis.document?.activeElement as globalThis.HTMLElement | null
-    const index = active ? options.indexOf(active) : -1
-    const next = options[(index + 1) % options.length]
-    next.focus({ preventScroll: true })
-  }
-
-  function focusPrevOption() {
-    const options = getEnabledOptions()
-    if (options.length === 0) return
-    const active = globalThis.document?.activeElement as globalThis.HTMLElement | null
-    const index = active ? options.indexOf(active) : -1
-    const prev = options[(index <= 0 ? options.length : index) - 1]
-    prev.focus({ preventScroll: true })
-  }
-
   function focusTrigger() {
     triggerRef.value?.focus({ preventScroll: true })
   }
 
-  function selectOption(
-    value: DropdownMenuOptionValue,
-    event: globalThis.MouseEvent | globalThis.KeyboardEvent
-  ) {
-    const wasOpen = isOpenState.value
-    emit('select', event, value)
-    if (wasOpen) {
-      setOpen(false)
-      focusTrigger()
-    }
-  }
-
-  function onPanelKeydown(event: globalThis.KeyboardEvent) {
-    const typing = (event.target as globalThis.HTMLElement | null)?.matches?.('input, textarea')
-    if (typing && (event.key === 'Home' || event.key === 'End')) return
-    if (event.key === 'ArrowDown') {
-      event.preventDefault()
-      focusNextOption()
-    } else if (event.key === 'ArrowUp') {
-      event.preventDefault()
-      focusPrevOption()
-    } else if (event.key === 'Home') {
-      event.preventDefault()
-      focusFirstOption()
-    } else if (event.key === 'End') {
-      event.preventDefault()
-      focusLastOption()
-    } else if (event.key === 'Escape') {
-      event.preventDefault()
-      setOpen(false)
-      focusTrigger()
-    } else if (event.key === 'Tab') {
-      if (event.shiftKey) event.preventDefault()
-      setOpen(false)
-      focusTrigger()
-    } else if (
-      !typing &&
-      event.key.length === 1 &&
-      event.key !== ' ' &&
-      !event.ctrlKey &&
-      !event.metaKey &&
-      !event.altKey
-    ) {
-      typeahead(event)
-    }
-  }
-
-  let typeaheadBuffer = ''
-  let typeaheadAt = 0
-
-  function typeahead(event: globalThis.KeyboardEvent) {
-    const options = getEnabledOptions()
-    if (options.length === 0) return
-    typeaheadBuffer =
-      event.timeStamp - typeaheadAt > 500 ? event.key : `${typeaheadBuffer}${event.key}`
-    typeaheadAt = event.timeStamp
-    const typed = typeaheadBuffer.toLocaleLowerCase()
-    const query = Array.from(typed).every((char) => char === typed[0]) ? typed[0] : typed
-    const active = globalThis.document?.activeElement as globalThis.HTMLElement | null
-    const start = active ? options.indexOf(active) : -1
-    const ordered =
-      query.length === 1
-        ? [...options.slice(start + 1), ...options.slice(0, start + 1)]
-        : [...options.slice(Math.max(start, 0)), ...options.slice(0, Math.max(start, 0))]
-    const match = ordered.find((option) =>
-      (option.textContent ?? '').trim().toLocaleLowerCase().startsWith(query)
-    )
-    if (match) {
-      event.preventDefault()
-      match.focus({ preventScroll: true })
-    }
-  }
-
-  function shortcutPriority(): number {
-    if (isOpenState.value) return 2
-    const focused = globalThis.document?.activeElement ?? null
-    return focused && triggerRef.value?.contains(focused) ? 1 : 0
-  }
-
-  function registerCommand(
-    command: string,
-    activate: (event: globalThis.KeyboardEvent) => void
-  ): () => void {
-    return registerShortcut(command, () => !props.disabled, activate, shortcutPriority)
-  }
-
-  const { isInsideHigherLayer } = useOverlayLayer(isOpenRef, { element: panelRef })
-
-  function onDocumentMousedown(event: globalThis.MouseEvent) {
-    if (!isOpenState.value) return
-    const target = event.target as globalThis.Node | null
-    if (!target) return
-    if (triggerRef.value?.contains(target)) return
-    if (panelRef.value?.contains(target)) return
-    if (isInsideHigherLayer(target)) return
-    setOpen(false)
-  }
-
-  function listenOutside(active: boolean) {
-    if (active) globalThis.document?.addEventListener('mousedown', onDocumentMousedown)
-    else globalThis.document?.removeEventListener('mousedown', onDocumentMousedown)
-  }
-
-  watch(
-    () => isOpenState.value,
-    async (open) => {
-      listenOutside(open)
-      if (!open) return
-      await nextTick()
-      focusFirstOption()
-    }
-  )
-
-  onMounted(() => {
-    if (isOpenState.value) listenOutside(true)
-  })
-
-  onBeforeUnmount(() => {
-    listenOutside(false)
-  })
-
-  provide(DropdownMenuInjectionKey, {
+  const { context, onPanelKeydown } = useMenuRoot({
     testId: testId.value,
     isOpen: isOpenRef,
     disabled: disabledRef,
@@ -296,14 +128,11 @@
     panelRef,
     panelBodyRef: bodyTarget,
     setOpen,
-    selectOption,
-    registerCommand,
-    focusFirstOption,
-    focusLastOption,
-    focusNextOption,
-    focusPrevOption,
+    onSelect: (event, value) => emit('select', event, value),
     focusTrigger
   })
+
+  provide(DropdownMenuInjectionKey, context)
 
   const portalLocale = usePortalLocale()
 </script>
