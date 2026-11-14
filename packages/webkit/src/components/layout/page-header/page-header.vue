@@ -31,6 +31,14 @@
     description(): unknown
     /** The actions the page owns, Documentation first and the create action on the outer edge. */
     actions(): unknown
+    /** The trail back to the parent pages, above the title row. */
+    breadcrumb(): unknown
+    /** A decorative leading glyph or square avatar before the title. */
+    icon(): unknown
+    /** Short facts beside the title, such as a status tag. */
+    meta(): unknown
+    /** The tabs of the page's sections, across the full width under the header. */
+    tabs(): unknown
   }>()
 
   const attrs = useAttrs()
@@ -47,8 +55,23 @@
     :data-size="size"
     class="@container/page-header flex flex-wrap items-start justify-between gap-(--spacing-md)"
   >
+    <div
+      v-if="$slots['breadcrumb']"
+      :data-testid="`${testId}__breadcrumb`"
+      class="flex min-w-0 basis-full"
+    >
+      <slot name="breadcrumb" />
+    </div>
     <div class="flex min-w-0 grow flex-col gap-(--spacing-xxs)">
-      <div class="flex min-w-0 items-center gap-(--spacing-xs)">
+      <div class="flex min-w-0 flex-wrap items-center gap-(--spacing-xs)">
+        <span
+          v-if="$slots['icon']"
+          :data-testid="`${testId}__icon`"
+          aria-hidden="true"
+          class="inline-flex shrink-0 items-center text-heading-sm text-(--text-muted)"
+        >
+          <slot name="icon" />
+        </span>
         <h1
           :id="titleId || undefined"
           :data-testid="`${testId}__title`"
@@ -57,6 +80,13 @@
         >
           {{ title }}
         </h1>
+        <div
+          v-if="$slots['meta']"
+          :data-testid="`${testId}__meta`"
+          class="flex min-w-0 flex-wrap items-center gap-(--spacing-xs)"
+        >
+          <slot name="meta" />
+        </div>
       </div>
       <p
         v-if="$slots['description'] || description"
@@ -72,6 +102,13 @@
       class="flex w-full shrink-0 flex-wrap items-center gap-(--spacing-sm) @md/page-header:w-auto @md/page-header:max-w-full @max-md/page-header:*:w-full"
     >
       <slot name="actions" />
+    </div>
+    <div
+      v-if="$slots['tabs']"
+      :data-testid="`${testId}__tabs`"
+      class="min-w-0 basis-full"
+    >
+      <slot name="tabs" />
     </div>
   </header>
 </template>

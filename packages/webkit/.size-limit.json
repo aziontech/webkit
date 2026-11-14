@@ -1133,7 +1133,7 @@
   {
     "name": "page-header",
     "path": "src/components/layout/page-header/page-header.vue",
-    "limit": "1 KB"
+    "limit": "1.1 KB"
   },
   {
     "name": "section-header",

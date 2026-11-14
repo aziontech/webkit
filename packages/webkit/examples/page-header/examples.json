@@ -18,6 +18,11 @@
       "file": "sizes.vue"
     },
     {
+      "name": "DetailPage",
+      "summary": "A resource detail header: the `breadcrumb` trail above, a decorative `icon` before the title, status tags in `meta` beside it, the actions on the right and the section `tabs` across the bottom.",
+      "file": "detail-page.vue"
+    },
+    {
       "name": "RichDescription",
       "summary": "The `description` slot carries inline buttons or links when one plain sentence is not enough.",
       "file": "rich-description.vue"

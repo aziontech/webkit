@@ -3,22 +3,24 @@ name: page-header
 category: layout
 structure: monolithic
 status: implemented
-checksum: f06dd0957b8bd694ee0c81b1a131761e205de64ab7d0c4b12e736a2b753ce6b1
-spec_version: 1
+checksum: a80ef113a3b417de3aa447c69920a7013dfac72a47babca04670c84e1a4342d5
+spec_version: 2
+template: 2
 created: 2026-11-10
-last_updated: 2026-11-11
+last_updated: 2026-11-14
 ---
 
 # PageHeader — Component Spec
 
 ## Purpose
 
-The heading that opens a console page: an h1 whose `size` picks the heading token by page level, a one-line description, and the actions the page owns on the right. When the row runs out of room the actions move below the copy together; on a phone they stack, each at full width. It replaces the header markup every list, detail, settings and create page used to copy by hand.
+The heading that opens a console page: an h1 whose `size` picks the heading token by page level, a one-line description, and the actions the page owns on the right. When the row runs out of room the actions move below the copy together; on a phone they stack, each at full width. Four optional regions complete a detail page's header without local markup: a `breadcrumb` trail above the title, an `icon` before it, `meta` (a status tag, a version) beside it, and `tabs` across the bottom. It replaces the header markup every list, detail, settings and create page used to copy by hand.
 
 ## When to use
 
 - The top of any console page: a first-level list (`medium`), a detail tab or settings sub-page (`small`), a creation hub headline (`large`).
 - A page that owns actions (Documentation, a create action) that belong next to its title.
+- A resource detail page whose header carries the trail back to the list, the resource's icon, its status and the tabs of its sections (`breadcrumb`, `icon`, `meta`, `tabs`).
 
 ## When NOT to use
 
@@ -29,7 +31,9 @@ The heading that opens a console page: an h1 whose `size` picks the heading toke
 ## Related
 
 - `section-header` — the h2 band heading inside a page.
-- `page-tabs` — the second-level navigation strip that sits above a detail page's header.
+- `page-tabs` — the second-level navigation strip that sits above a detail page's header; a header-local tab row goes in the `tabs` slot.
+- `breadcrumb` — the usual content of the `breadcrumb` slot.
+- `tag` — the usual content of the `meta` slot (a status, an environment, a version).
 - `button` — the usual content of the `actions` slot (outlined, `size="medium"`).
 
 ## Best practices
@@ -38,13 +42,23 @@ The heading that opens a console page: an h1 whose `size` picks the heading toke
 - Put the Documentation link first and the create action on the outer edge, both outlined at the medium size.
 - Do not set `class="w-full"` on the action buttons; the header makes them full width on a phone.
 - Set `titleId` when a form or landmark names itself with `aria-labelledby`.
+- `breadcrumb`: pass a `Breadcrumb` with `items`; its last entry is the current page and should match the title.
+- `icon`: one decorative glyph or a square `Avatar`, at most 32 px; it is `aria-hidden` by default, since the title already names the page.
+- `meta`: one or two small `Tag`s (status, environment). Longer facts (owner, created date) belong in the page body, not the header.
+- `tabs`: a `Tabs` row of the page's sections. A page that already shows `PageTabs` above the header leaves this slot empty; never both.
 
 ## Usage
 
 ```vue
 <script setup>
+  import Breadcrumb from '@aziontech/webkit/breadcrumb'
   import Button from '@aziontech/webkit/button'
   import PageHeader from '@aziontech/webkit/page-header'
+  import Tabs from '@aziontech/webkit/tabs'
+  import Tag from '@aziontech/webkit/tag'
+  import { ref } from 'vue'
+
+  const tab = ref('overview')
 </script>
 
 <template>
@@ -69,6 +83,40 @@ The heading that opens a console page: an h1 whose `size` picks the heading toke
       />
     </template>
   </PageHeader>
+
+  <!-- A resource detail header: trail, icon, status and section tabs -->
+  <PageHeader
+    title="acme-store"
+    description="Storefront served from three regions."
+  >
+    <template #breadcrumb>
+      <Breadcrumb :items="[{ label: 'Resources', href: '/resources' }, { label: 'acme-store' }]" />
+    </template>
+    <template #icon>
+      <i class="pi pi-box" />
+    </template>
+    <template #meta>
+      <Tag
+        label="Active"
+        severity="success"
+        size="small"
+      />
+    </template>
+    <template #tabs>
+      <Tabs.Root v-model="tab">
+        <Tabs.List>
+          <Tabs.Item
+            value="overview"
+            label="Overview"
+          />
+          <Tabs.Item
+            value="settings"
+            label="Settings"
+          />
+        </Tabs.List>
+      </Tabs.Root>
+    </template>
+  </PageHeader>
 </template>
 ```
 
@@ -87,15 +135,20 @@ The heading that opens a console page: an h1 whose `size` picks the heading toke
 
 ## Slots
 
-| Slot          | Scope | Notes                                                                                   |
-| ------------- | ----- | --------------------------------------------------------------------------------------- |
-| `description` | —     | Rich description content (links, inline buttons); replaces the `description` prop.      |
-| `actions`     | —     | The actions the page owns, Documentation first and the create action on the outer edge. |
+| Slot          | Scope | Notes                                                                                               |
+| ------------- | ----- | --------------------------------------------------------------------------------------------------- |
+| `description` | —     | Rich description content (links, inline buttons); replaces the `description` prop.                  |
+| `actions`     | —     | The actions the page owns, Documentation first and the create action on the outer edge.             |
+| `breadcrumb`  | —     | The trail back to the parent pages, above the title row; usually a `Breadcrumb` with `items`.       |
+| `icon`        | —     | A leading glyph or square avatar before the title, decorative (`aria-hidden`).                      |
+| `meta`        | —     | Short facts beside the title, such as a status `Tag`; wraps under the title when the row is narrow. |
+| `tabs`        | —     | The tabs of the page's sections, across the full width under the title and actions.                 |
 
 ## States
 
 - Visual states: `default`
 - `data-size` mirrors the `size` prop on the root and the h1
+- Each region renders only when its slot is filled: `__breadcrumb` (a full-width row above the title row), `__icon` (before the h1, `aria-hidden`), `__meta` (after the h1 on the same line, wrapping under it), `__tabs` (a full-width row after the copy and the actions). With no region slot the header renders exactly as before.
 - Responsive: the root is the `@container/page-header`. Below `@md` of its own box the actions drop under the copy and each one stretches to the full width; from `@md` they sit beside the title at their own width. A header inside a drawer or a split view lays out for that box, not the window.
 
 ## Motion & Animations
@@ -112,6 +165,9 @@ _none_
 | row gap          | `var(--spacing-md)`                                                                   |
 | copy gap         | `var(--spacing-xxs)`                                                                  |
 | actions gap      | `var(--spacing-sm)`                                                                   |
+| icon             | `var(--text-muted)` · `.text-heading-sm` glyph size                                   |
+| title-row gap    | `var(--spacing-xs)` (icon, title, meta)                                               |
+| breadcrumb, tabs | full-width rows separated by the row gap, `var(--spacing-md)`                         |
 
 ## Theme gaps
 
@@ -121,15 +177,43 @@ _none_
 
 - Visible focus: owned by the controls in the `actions` slot.
 - Keyboard map: `Tab` moves through the actions in DOM order; the header itself is not interactive.
-- ARIA: the root is a `header` element and the title is the page's only `h1`; `titleId` lets a form or landmark reference it with `aria-labelledby`.
+- ARIA: the root is a `header` element and the title is the page's only `h1`; `titleId` lets a form or landmark reference it with `aria-labelledby`. The breadcrumb comes first in reading order (its own `nav` landmark), then the h1, the meta, the description, the actions and the tabs. The icon wrapper is `aria-hidden`.
+- Keyboard map with regions: `Tab` reaches the breadcrumb links, then the actions, then the tabs (which own their arrow-key model).
 - Contrast ≥4.5:1 for the title and the muted description.
 - Touch target: the actions keep the Button sizes; on a phone they stretch to full width.
+
+## Internationalization
+
+No built-in strings: the title, description and every region come from the consumer.
+
+- Formatting: none
+
+## Right-to-left
+
+- Layout: flex order and logical utilities only, so the icon leads the title and the actions trail under `dir="rtl"`.
+- Icons: the `icon` region is consumer content; the header mirrors nothing itself.
+- Keyboard: no arrow-key logic in the header; the tabs in the `tabs` slot own theirs.
+- User data: the title is consumer text; a resource name in another script can be wrapped in `bdi` by the consumer.
+
+## Responsive
+
+- Container queries: the root is `@container/page-header`; below `@md` the actions drop under the copy at full width.
+- Narrow (≤ 640 px or a narrow container): the meta wraps under the title; the breadcrumb collapses on its own (`Breadcrumb` `items` mode); the tabs row scrolls inside `Tabs`.
+- Touch: the actions keep the Button sizes; no hover-only affordance.
+- Reflow: no horizontal scroll at 320 px and 200 % zoom.
+
+## Performance
+
+- Bundle budget: 1.1 KB gzip for `page-header` in `.size-limit.json`; the regions are slots, so the header imports no other component.
+- Runtime budget: none: static.
+- Heavy parts: none.
 
 ## Examples
 
 - ListPage — medium title with the Documentation and create actions.
 - SettingsPage — small title, no actions.
 - Sizes — every `size` value stacked.
+- DetailPage — justified: the `breadcrumb`, `icon`, `meta` and `tabs` regions only appear together on a resource detail header, which none of the other examples shows.
 - RichDescription — the `description` slot with inline buttons; justified because a hub description carries inline controls.
 
 ## Constraints — DO NOT
@@ -146,9 +230,10 @@ _none_
 - Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=value]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `.claude/rules/styling.md`.
 - Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `.claude/rules/migration.md`.
 - Do not add Figma references to examples. No Figma URLs or node IDs in `examples/<name>/` files or `examples.json`. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
-- Do not add examples beyond Default + per `kind` + per `size` + Disabled, unless the spec's "Examples" section explicitly justifies the addition.
+- Do not add examples beyond Default + Types + Sizes + state examples (`Loading`, `Disabled`) for the props the component actually declares, unless the spec's "Examples" section explicitly justifies the addition. Do not split Types/Sizes into one-example-per-variant — the composite examples are the canonical pattern.
 - Do not edit `.claude/docs/DESIGN.md`, `.claude/docs/COMPONENT_REQUIREMENTS.md`, or `.claude/docs/PRIMEVUE_ABSTRACTION.md`.
 - Do not edit the root `package.json` or `.github/workflows/*`.
+- Do not export composition sub-components without attaching them to the root compound (`index.ts` via `Object.assign`; vue-tsc generates `index.d.ts` — never hand-write it); the root export points at `index.ts`, and a standalone `./<name>-root` export points at the root `.vue` (tree-shaking). Do not invent overlay part names (`Trigger` / `Content`) on a component with no `data-state=open|closed`, and do not collapse a slot-shaped concern into a config-array prop. See `.claude/rules/compound-api.md`.
 - Do not change `structure` after `status: approved`. To change structure, bump `spec_version` and re-author the spec.
 - Do not create files outside the paths declared by your task (the orchestrator tells you exactly which files to write).
 - Do not run `git` commands, `pnpm install`, or any command that changes the lockfile.

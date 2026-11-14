@@ -4,6 +4,7 @@ import { render, within } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
 import Default from '../../../../examples/page-header/default.vue'
+import DetailPage from '../../../../examples/page-header/detail-page.vue'
 import RichDescription from '../../../../examples/page-header/rich-description.vue'
 import Sizes from '../../../../examples/page-header/sizes.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
@@ -123,5 +124,64 @@ describe('PageHeader in a narrow box', () => {
     const action = view.getByRole('button', { name: 'Create' })
 
     expect(action.getBoundingClientRect().width).toBeLessThan(200)
+  })
+})
+
+describe('PageHeader regions', () => {
+  it('renders no region wrapper when no region slot is filled', () => {
+    const { queryByTestId } = within(
+      render(PageHeader, { props: { title: 'Resources' } }).container
+    )
+
+    for (const part of ['breadcrumb', 'icon', 'meta', 'tabs']) {
+      expect(queryByTestId(`layout-page-header__${part}`)).toBeNull()
+    }
+  })
+
+  it('renders each filled region in reading order around the title', () => {
+    const { getByTestId } = within(
+      render(PageHeader, {
+        props: { title: 'acme-store' },
+        slots: {
+          breadcrumb: '<nav aria-label="Breadcrumb"><a href="/resources">Resources</a></nav>',
+          icon: '<i class="pi pi-box"></i>',
+          meta: '<span>Active</span>',
+          actions: '<button type="button">Deploy</button>',
+          tabs: '<div role="tablist"><button role="tab" aria-selected="true">Overview</button></div>'
+        }
+      }).container
+    )
+
+    const order = ['breadcrumb', 'icon', 'title', 'meta', 'actions', 'tabs'].map((part) =>
+      getByTestId(`layout-page-header__${part}`)
+    )
+    for (let index = 1; index < order.length; index += 1) {
+      expect(
+        order[index - 1].compareDocumentPosition(order[index]) & Node.DOCUMENT_POSITION_FOLLOWING
+      ).toBeTruthy()
+    }
+    expect(getByTestId('layout-page-header__meta').textContent).toBe('Active')
+  })
+
+  it('hides the decorative icon from assistive technology', () => {
+    const { getByTestId } = within(
+      render(PageHeader, {
+        props: { title: 'acme-store' },
+        slots: { icon: '<i class="pi pi-box"></i>' }
+      }).container
+    )
+
+    expect(getByTestId('layout-page-header__icon')).toHaveAttribute('aria-hidden', 'true')
+  })
+
+  it('renders the DetailPage example with its trail, tags and tabs and no a11y violations', async () => {
+    const { container } = render(DetailPage)
+    const view = within(container)
+
+    expect(view.getByRole('heading', { level: 1 }).textContent?.trim()).toBe('acme-store')
+    expect(view.getByRole('link', { name: 'Resources' })).toHaveAttribute('href', '/resources')
+    expect(view.getByTestId('layout-page-header__meta').textContent).toContain('Active')
+    expect(view.getAllByRole('tab')).toHaveLength(3)
+    await expectNoA11yViolations(container)
   })
 })
