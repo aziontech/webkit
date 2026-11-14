@@ -797,3 +797,35 @@ describe('nested in a Dialog (overlay layer stack)', () => {
     expect(byTestId('host-dialog')!.getAttribute('data-state')).toBe('open')
   })
 })
+
+describe('Popover global listeners', () => {
+  it('adds its document mousedown and keydown listeners only while open', async () => {
+    const add = vi.spyOn(document, 'addEventListener')
+    const remove = vi.spyOn(document, 'removeEventListener')
+    const count = (spy: typeof add, type: string) =>
+      spy.mock.calls.filter(
+        ([name, listener]) =>
+          name === type &&
+          ['onDocumentMousedown', 'onDocumentKeydown'].includes(
+            (listener as { name?: string }).name ?? ''
+          )
+      ).length
+    try {
+      render(host())
+      await nextTick()
+      expect(count(add, 'mousedown')).toBe(0)
+      expect(count(add, 'keydown')).toBe(0)
+      await fireEvent.click(control())
+      await nextTick()
+      expect(panel()).not.toBeNull()
+      expect(count(add, 'mousedown')).toBe(1)
+      expect(count(add, 'keydown')).toBe(1)
+      const removedBefore = count(remove, 'mousedown') + count(remove, 'keydown')
+      await fireEvent.click(control())
+      await nextTick()
+      expect(count(remove, 'mousedown') + count(remove, 'keydown')).toBe(removedBefore + 2)
+    } finally {
+      vi.restoreAllMocks()
+    }
+  })
+})

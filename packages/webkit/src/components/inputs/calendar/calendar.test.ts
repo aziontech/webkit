@@ -1,6 +1,6 @@
 import userEvent from '@testing-library/user-event'
 import { fireEvent, render, waitFor, within } from '@testing-library/vue'
-import { beforeEach, describe, expect, it } from 'vitest'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { defineComponent, h, nextTick, ref } from 'vue'
 
 import Default from '../../../../examples/calendar/default.vue'
@@ -148,6 +148,24 @@ describe('Calendar', () => {
 
     await waitFor(() => expect(getPopover()).toBeNull())
     expect(getByTestId('input-calendar').getAttribute('data-state')).toBe('closed')
+  })
+
+  it('listens for outside mousedowns on the document only while open', async () => {
+    const add = vi.spyOn(document, 'addEventListener')
+    const outside = () =>
+      add.mock.calls.filter(
+        ([type, listener]) =>
+          type === 'mousedown' && (listener as { name?: string }).name === 'onDocumentMousedown'
+      ).length
+    try {
+      const { getByTestId } = render(Calendar, { props: { mode: 'single', modelValue: OCT_8 } })
+      await nextTick()
+      expect(outside()).toBe(0)
+      await openCalendar(getByTestId)
+      expect(outside()).toBe(1)
+    } finally {
+      vi.restoreAllMocks()
+    }
   })
 
   // ---- Grid structure & a11y roles ------------------------------------------

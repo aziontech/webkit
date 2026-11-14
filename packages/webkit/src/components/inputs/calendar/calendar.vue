@@ -1,14 +1,5 @@
 <script setup lang="ts">
-  import {
-    computed,
-    onBeforeUnmount,
-    onMounted,
-    provide,
-    ref,
-    useAttrs,
-    useSlots,
-    watch
-  } from 'vue'
+  import { computed, onBeforeUnmount, provide, ref, useAttrs, useSlots, watch } from 'vue'
 
   import { useFieldControl } from '../../../composables/use-field-control'
   import { useFocusTrap } from '../../../composables/use-focus-trap'
@@ -438,9 +429,14 @@
     }
   }
 
-  onMounted(() => {
-    globalThis.document?.addEventListener('mousedown', onDocumentMousedown)
-  })
+  watch(
+    () => isOpen.value || isPresetsOpen.value,
+    (open) => {
+      if (open) globalThis.document?.addEventListener('mousedown', onDocumentMousedown)
+      else globalThis.document?.removeEventListener('mousedown', onDocumentMousedown)
+    },
+    { immediate: true }
+  )
 
   onBeforeUnmount(() => {
     globalThis.document?.removeEventListener('mousedown', onDocumentMousedown)

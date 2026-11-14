@@ -10,40 +10,44 @@ export function useFocusTrap(
   active: MaybeRefOrGetter<boolean>,
   isTop: MaybeRefOrGetter<boolean> = true
 ): void {
-  useEventListener(defaultDocument, 'keydown', (event: KeyboardEvent) => {
-    if (!toValue(active) || event.key !== 'Tab' || event.defaultPrevented || !toValue(isTop)) {
-      return
-    }
-
-    const root = toValue(containerRef)
-    if (!root) return
-
-    const focusable = Array.from(root.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR)).filter(
-      (el) => !el.hasAttribute('disabled') && el.offsetParent !== null
-    )
-
-    const first = focusable[0]
-    const last = focusable[focusable.length - 1]
-    if (!first || !last) {
-      event.preventDefault()
-      return
-    }
-
-    const activeEl = document.activeElement
-
-    if (event.shiftKey) {
-      if (activeEl === first || !root.contains(activeEl)) {
-        event.preventDefault()
-        last.focus()
+  useEventListener(
+    () => (toValue(active) ? defaultDocument : undefined),
+    'keydown',
+    (event: KeyboardEvent) => {
+      if (!toValue(active) || event.key !== 'Tab' || event.defaultPrevented || !toValue(isTop)) {
+        return
       }
-      return
-    }
 
-    if (activeEl === last) {
-      event.preventDefault()
-      first.focus()
+      const root = toValue(containerRef)
+      if (!root) return
+
+      const focusable = Array.from(root.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR)).filter(
+        (el) => !el.hasAttribute('disabled') && el.offsetParent !== null
+      )
+
+      const first = focusable[0]
+      const last = focusable[focusable.length - 1]
+      if (!first || !last) {
+        event.preventDefault()
+        return
+      }
+
+      const activeEl = document.activeElement
+
+      if (event.shiftKey) {
+        if (activeEl === first || !root.contains(activeEl)) {
+          event.preventDefault()
+          last.focus()
+        }
+        return
+      }
+
+      if (activeEl === last) {
+        event.preventDefault()
+        first.focus()
+      }
     }
-  })
+  )
 
   watch(
     () => toValue(active),
