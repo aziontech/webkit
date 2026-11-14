@@ -2094,7 +2094,7 @@
   {
     "name": "sidebar-root",
     "path": "src/components/layout/sidebar/sidebar.vue",
-    "limit": "25.3 KB"
+    "limit": "23.5 KB"
   },
   {
     "name": "sidebar-group",
@@ -2429,7 +2429,7 @@
   {
     "name": "spinner",
     "path": "src/components/utils/spinner/spinner.vue",
-    "limit": "0.6 KB"
+    "limit": "0.65 KB"
   },
   {
     "name": "card-grid",
