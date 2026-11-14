@@ -93,6 +93,7 @@
     /** Shows every value without letting it change. */
     readonly?: boolean
   }
+  export type SchemaFormProps = Props
 
   /** Scope of a `field:<path>` slot, which replaces that field's control. */
   export interface SchemaFormFieldSlotProps {

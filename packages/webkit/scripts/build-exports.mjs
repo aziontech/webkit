@@ -4,7 +4,7 @@ import { existsSync, readFileSync, writeFileSync } from 'node:fs'
 import { dirname, join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
-import { exportTarget, typedExports } from './lib/exports.mjs'
+import { exportTarget, typedExports, typesVersionsFor } from './lib/exports.mjs'
 
 const PKG = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 const PKG_JSON = join(PKG, 'package.json')
@@ -20,6 +20,9 @@ export function exportsProblems(pkg, pkgDir = PKG) {
     if (!target) problems.push(`${key}: no default target`)
     else if (!existsSync(join(pkgDir, target))) problems.push(`${key}: ${target} does not exist`)
   }
+  if (JSON.stringify(pkg.typesVersions) !== JSON.stringify(typesVersionsFor(expected))) {
+    problems.push('typesVersions: out of date with exports')
+  }
   return problems
 }
 
@@ -31,7 +34,9 @@ if (invoked) {
   if (check) {
     const problems = exportsProblems(pkg)
     if (problems.length) {
-      console.error(`package.json#exports is not in the typed shape (${problems.length}):`)
+      console.error(
+        `package.json#exports or typesVersions is not in the typed shape (${problems.length}):`
+      )
       for (const p of problems.slice(0, 50)) console.error(`  - ${p}`)
       console.error('Run: pnpm --filter @aziontech/webkit exports:build')
       process.exit(1)
@@ -39,6 +44,7 @@ if (invoked) {
     console.log(`Exports OK: ${Object.keys(pkg.exports).length} entries, every source entry typed.`)
   } else {
     pkg.exports = typedExports(pkg.exports ?? {})
+    pkg.typesVersions = typesVersionsFor(pkg.exports)
     const next = `${JSON.stringify(pkg, null, 2)}\n`
     if (next !== raw) writeFileSync(PKG_JSON, next)
     const missing = exportsProblems(pkg)

@@ -16,6 +16,7 @@
     /** Anchor side of the tooltip relative to the glyph. */
     placement?: HintPlacement
   }
+  export type HintProps = Props
 
   withDefaults(defineProps<Props>(), {
     placement: 'top'

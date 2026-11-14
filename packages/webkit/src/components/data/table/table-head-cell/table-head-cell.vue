@@ -39,6 +39,7 @@
     /** Pointer handler (mousedown/touchstart) that starts the resize drag. */
     resizeHandler?: (event: MouseEvent | globalThis.TouchEvent) => void
   }
+  export type TableHeadCellProps = Props
 
   const props = withDefaults(defineProps<Props>(), {
     kind: 'default',

@@ -28,6 +28,7 @@
     /** Focus the field on mount, for a screen whose only task is the code. */
     autofocus?: boolean
   }
+  export type OtpInputProps = Props
 
   const props = withDefaults(defineProps<Props>(), {
     length: 6,

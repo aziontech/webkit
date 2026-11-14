@@ -18,6 +18,7 @@
     /** id for the native input; associate an external label via htmlFor. */
     inputId?: string
   }
+  export type RadioButtonProps = Props
 
   const props = withDefaults(defineProps<Props>(), {
     value: '',

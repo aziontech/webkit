@@ -42,6 +42,7 @@
     /** Sets the value and placeholder in the monospace code face, for CLI commands, IDs, tokens and hashes. */
     monospace?: boolean
   }
+  export type InputProps = Props
 
   const props = withDefaults(defineProps<Props>(), {
     placeholder: '',

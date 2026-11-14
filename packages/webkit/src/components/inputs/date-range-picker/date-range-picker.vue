@@ -89,6 +89,7 @@
     /** Size token of the trigger and the panel controls. */
     size?: RangeSize
   }
+  export type DateRangePickerProps = Props
 
   const props = withDefaults(defineProps<Props>(), {
     relativeOptions: () => DEFAULT_RELATIVE_OPTIONS,

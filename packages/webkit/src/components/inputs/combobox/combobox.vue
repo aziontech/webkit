@@ -68,6 +68,7 @@
     /** Marks the field invalid (`aria-invalid`, danger border). */
     invalid?: boolean
   }
+  export type ComboboxProps = Props
 
   const props = withDefaults(defineProps<Props>(), {
     options: () => [],

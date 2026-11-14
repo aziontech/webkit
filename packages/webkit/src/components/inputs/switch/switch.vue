@@ -23,6 +23,7 @@
     /** Disables interaction and applies the disabled tokens. */
     disabled?: boolean
   }
+  export type SwitchProps = Props
 
   const props = withDefaults(defineProps<Props>(), {
     kind: 'default',

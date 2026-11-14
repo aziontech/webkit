@@ -20,6 +20,7 @@
     /** Accessible name for the icon-only segmented group. Empty uses the locale catalog (`Theme`). */
     ariaLabel?: string
   }
+  export type ThemeSwitcherProps = Props
 
   const props = withDefaults(defineProps<Props>(), {
     disabled: false,

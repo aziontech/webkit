@@ -19,6 +19,7 @@
     /** Hides the button while keeping its layout slot. */
     visible?: boolean
   }
+  export type TableSortButtonProps = Props
 
   const props = withDefaults(defineProps<Props>(), {
     direction: 'none',

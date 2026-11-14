@@ -18,6 +18,7 @@
     /** Shows the Required marker on FieldLabel and sets required on the wrapped control. */
     required?: boolean
   }
+  export type FieldProps = Props
 
   const props = withDefaults(defineProps<Props>(), {
     orientation: 'vertical',

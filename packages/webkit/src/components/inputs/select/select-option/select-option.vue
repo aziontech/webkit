@@ -16,6 +16,7 @@
     /** Disables this single option; does not affect the parent select. */
     disabled?: boolean
   }
+  export type SelectOptionProps = Props
 
   const props = withDefaults(defineProps<Props>(), {
     icon: '',

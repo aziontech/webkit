@@ -69,6 +69,7 @@
     /** Shown in the dial-code list when no country matches the search. Empty uses the locale catalog (`No country found.`). */
     searchEmptyLabel?: string
   }
+  export type PhoneInputProps = Props
 
   const props = withDefaults(defineProps<Props>(), {
     countries: () => defaultCountries,

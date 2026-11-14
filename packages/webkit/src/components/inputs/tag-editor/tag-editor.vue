@@ -46,6 +46,7 @@
     /** Accessible name of the list of tags. Empty uses the locale catalog. */
     ariaLabel?: string
   }
+  export type TagEditorProps = Props
 
   const props = withDefaults(defineProps<Props>(), {
     keySuggestions: () => [],
