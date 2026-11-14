@@ -27,7 +27,7 @@ export const background = {
     'bg-hover': tokenRef('primitives.alpha.white.100'),
     'bg-active': tokenRef('primitives.alpha.white.50'),
     'bg-backdrop': tokenRef('primitives.alpha.black.800'),
-    'bg-selected': tokenRef('theme.surfaces.surface-800'),
+    'bg-selected': tokenRef('theme.surfaces.surface-750'),
     'bg-contrast': tokenRef('theme.surfaces.surface-50'),
     'bg-disabled': tokenRef('theme.surfaces.surface-800')
   }

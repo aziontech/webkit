@@ -1141,7 +1141,7 @@
   --bg-hover: #FFFFFF1A;
   --bg-active: #FFFFFF0D;
   --bg-backdrop: #000000CC;
-  --bg-selected: #1A1A1A;
+  --bg-selected: #2B2B2B;
   --bg-contrast: #FAFAFA;
   --bg-disabled: #1A1A1A;
   --border-default: #2B2B2B;
@@ -1179,7 +1179,7 @@
   --illustration-ground: #000000;
   --illustration-surface: #0A0A0A;
   --illustration-surface-raised: #141414;
-  --illustration-block: #1A1A1A;
+  --illustration-block: #2B2B2B;
   --illustration-line: #2B2B2B;
   --illustration-line-muted: #242424;
   --illustration-line-strong: #4D4D4D;
