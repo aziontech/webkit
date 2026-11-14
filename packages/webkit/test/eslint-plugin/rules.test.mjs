@@ -452,6 +452,12 @@ import FaqSection from '@aziontech/webkit/faq-section'
       {
         code: '<template><ClosingCallToAction /><SectionGap hatch /></template>',
         filename: 'd.vue'
+      },
+      {
+        code: sfc(
+          '<ClosingCallToAction kind="panel" :hatch="false" /><SectionGap hatch /><ClosingCallToAction kind="primary" />'
+        ),
+        filename: 'h.vue'
       }
     ],
     invalid: [
@@ -470,6 +476,16 @@ import FaqSection from '@aziontech/webkit/faq-section'
           '<ClosingCallToAction title="Go" /><FrameBox borders="none" marks="all"><TextureMaterial kind="lines" /></FrameBox>'
         ),
         filename: 'g.vue',
+        errors: [{ messageId: 'doubled' }]
+      },
+      {
+        code: sfc('<ClosingCallToAction :hatch="true" title="Go" /><SectionGap hatch />'),
+        filename: 'i.vue',
+        errors: [{ messageId: 'doubled' }]
+      },
+      {
+        code: sfc('<ClosingCallToAction :hatch="stacked" title="Go" /><SectionGap hatch />'),
+        filename: 'j.vue',
         errors: [{ messageId: 'doubled' }]
       }
     ]

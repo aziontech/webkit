@@ -31,7 +31,7 @@ export default {
     type: 'problem',
     docs: {
       description:
-        'Disallow a SectionGap or a closing FrameBox right after a closing section (ClosingCallToAction and its variants): the section draws the hatched closing frame itself, so a trailing one doubles it.'
+        'Disallow a SectionGap or a closing FrameBox right after a closing section (ClosingCallToAction and its variants): the section draws the hatched closing frame itself, so a trailing one doubles it. A section bound with :hatch="false" draws no frame and is skipped.'
     },
     schema: [],
     messages: {
@@ -88,11 +88,22 @@ export default {
       )
     }
 
+    function hatchOff(element) {
+      return (element.startTag?.attributes ?? []).some(
+        (attr) =>
+          attr.directive &&
+          attr.key?.name?.name === 'bind' &&
+          attr.key.argument?.name === 'hatch' &&
+          attr.value?.expression?.type === 'Literal' &&
+          attr.value.expression.value === false
+      )
+    }
+
     const templateVisitor = {
       VElement(node) {
         if (!closing.size || !parts.size) return
         const section = lookup(closing, node)
-        if (!section) return
+        if (!section || hatchOff(node)) return
         const next = nextElement(node)
         if (!next || !closesThePage(next)) return
         context.report({
