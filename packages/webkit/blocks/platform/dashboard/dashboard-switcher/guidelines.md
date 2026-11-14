@@ -1,0 +1,88 @@
+# Dashboard switcher
+
+The dashboards hub. The reader comes here to look at one of several prepared views of the account (traffic, usage, edge health, threats, business figures, or a layout of their own) without hunting for each page in the navigation. One control picks the dashboard, one shared period scopes it, and the body under them is the chosen dashboard. Switching keeps the period, so comparing traffic and threats over the same 7 days is two clicks.
+
+This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`.
+
+## When to use
+
+- An account has several dashboards that share one time scope, and the reader moves between them often.
+- The set mixes platform, security and business views, so a grouped list beats a long navigation menu.
+- Some dashboards report on their own calendar (a quarter, a billing cycle) and must say so instead of following the shared period.
+
+## When not to use
+
+- A single dashboard with its own page: use the dashboard block directly (`platform/dashboard/analytics-dashboard`, `platform/dashboard/security-dashboard`, `platform/dashboard/data-dashboard`, and the rest of `platform/dashboard`).
+- A dashboard the reader arranges by hand: use `platform/dashboard/configurable-dashboard` (it is the body of the Custom entry).
+- An overview of the whole account with resources and recent activity: use `platform/dashboard/home-dashboard`.
+
+## Building blocks
+
+### A. Page heading — `PageHeader` (required)
+
+Title `Dashboards` and one sentence that says what the views cover. The heading holds no action; the controls row below does.
+
+### B. Dashboard picker — `Select` (required)
+
+A medium `Select`, a fixed `--container-3xs` wide from `sm` (full width below), with a muted chart icon in the trigger's `iconLeft` slot and `aria-label="Dashboard"` on the trigger. Options are grouped with `Select.Group`: Platform, Security, Business, then Yours for the reader's own layout. `displayValue` prints the dashboard name, never its id.
+
+### C. Shared period — `Popover`, `Button`, `Badge`, `RadioButton` (required)
+
+An outlined medium Filter `Button` opens a `Popover` placed `bottom-start` with the Period presets as a `RadioButton` group in a `fieldset` (Last hour, Last 24 hours, Last 7 days, Last 30 days) and Cancel / Apply. A small `Badge` on the trigger counts the applied filter. Hidden for a dashboard that owns its period.
+
+### D. Own period — `ToggleGroup` (optional)
+
+When the chosen dashboard owns its period (Executive summary, Spend, Project status), a medium quarter `ToggleGroup` labelled `Quarter` takes the filter's place, so the reader always sees what the figures cover.
+
+### E. Refresh — `IconButton`, `Tooltip` (required)
+
+An outlined medium `IconButton` at the end of the row, named Refresh by its `Tooltip` and `aria-label`; it shows `loading` while the body refetches.
+
+### F. Applied period — `Chip` (required)
+
+The applied period as one filled medium `Chip` under the controls (`Period Last 24 hours`). Clicking it reopens the filter; removing it returns the dashboard to the default period (Last 24 hours) and the chip leaves. Hidden with the filter.
+
+### G. Dashboard body — `StatTile`, `Hint`, `ChartCard`, `Chart`, `BarList` (required)
+
+The chosen dashboard, keyed by its id so switching remounts it: four `StatTile`s with a `Hint` each, the delta read against the comparison period (`vs previous 24 hours`, or `vs previous quarter`), then a `ChartCard` spanning 8 of 12 columns with the dashboard's `Chart` (stacked bars, areas or lines, a `Chart.Tooltip total` when it has more than one series, and a legend with totals) and a `ChartCard` spanning 4 with a ranked `BarList`. In an app, render the matching dashboard block here instead (the bodies of `analytics-dashboard`, `security-dashboard`, `scan-results-dashboard`, `composition-dashboard` and the rest).
+
+## Do
+
+- Keep the period when the reader switches dashboards; reset only the hover state.
+- Load the body on a switch (Skeletons in the final boxes) and refetch it on a period change or Refresh (previous render held), so the controls never jump.
+- Hide the shared period for a dashboard that owns its own, and show that dashboard's control in the same place.
+
+## Don't
+
+- Don't list the dashboards as tabs; twelve views in four groups need the grouped picker.
+- Don't keep a Period chip that the body ignores.
+- Don't put a second period control inside a card.
+
+## Copy
+
+- **Title:** `Dashboards`.
+- **Description:** one sentence on what the views cover. `Traffic, security and business views across every workload, plus a layout of your own.`
+- **Groups:** one word. `Platform`, `Security`, `Business`, `Yours`.
+- **Dashboard names:** a noun phrase in sentence case. `Edge health`, `Funnel and cohorts`.
+- **Chip:** the field, then its value. `Period` `Last 7 days`.
+- **Comparison:** `vs previous 24 hours`, `vs previous quarter`.
+
+## Accessibility
+
+- The picker trigger is named `Dashboard`; the controls sit in a section labelled `Dashboard controls`, the body in a section named after the dashboard, with `aria-busy` while it loads or refetches.
+- The period presets are native radios in a `fieldset` with the legend `Period`; each label is tied to its radio.
+- The Filter button names the applied count (`Filter, 1 applied`); the visual `Badge` is `aria-hidden`.
+- Refresh is an icon-only button with `aria-label="Refresh"`.
+
+## States
+
+- Default: Traffic over the last 24 hours.
+- OwnPeriod: Executive summary chosen; the shared filter and chip are hidden and the quarter `ToggleGroup` shows.
+- Loading: the body loads after a switch; tiles, chart and list render their Skeletons.
+- Refetching: after a period change or Refresh, the chart holds the previous render at reduced opacity and Refresh shows its spinner.
+
+## Related
+
+- `platform/dashboard/configurable-dashboard` — the Custom entry, laid out by the reader.
+- `platform/dashboard/analytics-dashboard`, `platform/dashboard/data-dashboard`, `platform/dashboard/security-dashboard` — the Traffic, Usage and Threats bodies on their own pages.
+- `platform/dashboard/home-dashboard` — the account overview.
