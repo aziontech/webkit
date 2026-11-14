@@ -4285,7 +4285,7 @@ What each part takes: [blocks/platform/create/deploy-template.md](blocks/platfor
 - Surface: product
 - Source: `blocks/platform/create/deployment-flow/deployment-flow.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/create/deployment-flow")`
-- Components: Accordion, Button, Card, LogView, `LogViewContent`, Progress, Spinner, StatusIndicator, Tag, ToggleGroup
+- Components: Accordion, Button, Card, `LogViewContent`, LogView, Progress, Spinner, StatusIndicator, Tag, ToggleGroup
 - Skills: `webkit-ui-states`, `webkit-errors`
 
 ## Asked as
@@ -6873,7 +6873,7 @@ What each part takes: [blocks/platform/detail/attached-resources.md](blocks/plat
 - Surface: product
 - Source: `blocks/platform/detail/deployment-logs/deployment-logs.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/detail/deployment-logs")`
-- Components: Accordion, LogView, `LogViewContent`, Progress, Spinner, Tag, ToggleGroup
+- Components: Accordion, `LogViewContent`, LogView, Progress, Spinner, Tag, ToggleGroup
 - Skills: `webkit-ui-states`, `webkit-errors`
 
 ## Asked as
@@ -6972,7 +6972,7 @@ What each part takes: [blocks/platform/detail/deployment-logs.md](blocks/platfor
 - Surface: product
 - Source: `blocks/platform/detail/details-page/details-page.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/detail/details-page")`
-- Components: Accordion, Alert, Avatar, Button, Card, CodeBlock, ConfirmDialog, ConsoleLayout, CopyButton, Drawer, `DrawerClose`, `DrawerContent`, `DrawerDescription`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, DropdownMenu, EmptyState, IconButton, Input, `InputGroupRoot`, Item, Link, LogView, `LogViewContent`, PageHeader, PageTabs, `PanelContent`, `PanelFooter`, `PanelHeader`, Popover, SaveBar, SectionHeader, Select, SettingRow, SettingsSection, StatusIndicator, `TableRoot`, Tabs, Tag, Toast, ToggleGroup, Tooltip, TopologyDiagram, `use-unsaved-changes`
+- Components: Accordion, Alert, Avatar, Button, Card, CodeBlock, ConfirmDialog, ConsoleLayout, CopyButton, Drawer, `DrawerClose`, `DrawerContent`, `DrawerDescription`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, DropdownMenu, EmptyState, IconButton, Input, `InputGroupRoot`, Item, Link, `LogViewContent`, LogView, PageHeader, PageTabs, `PanelContent`, `PanelFooter`, `PanelHeader`, Popover, SaveBar, SectionHeader, Select, SettingRow, SettingsSection, StatusIndicator, `TableRoot`, Tabs, Tag, Toast, ToggleGroup, Tooltip, TopologyDiagram, `use-unsaved-changes`
 - Skills: `webkit-layout`, `webkit-navigation`, `webkit-ui-states`
 
 ## Asked as
@@ -7194,7 +7194,7 @@ What each part takes: [blocks/platform/detail/get-started.md](blocks/platform/de
 - Surface: product
 - Source: `blocks/platform/detail/invocations/invocations.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/detail/invocations")`
-- Components: Button, Card, CopyButton, DropdownMenu, Flow, IconButton, Link, LogView, `LogViewContent`, PageHeader, SectionHeader, StatusIndicator, Tag, Toast, Tooltip, Trace
+- Components: Button, Card, CopyButton, DropdownMenu, Flow, IconButton, Link, `LogViewContent`, LogView, PageHeader, SectionHeader, StatusIndicator, Tag, Toast, Tooltip, Trace
 - Skills: `webkit-layout`, `webkit-ui-states`, `webkit-data-viz`
 
 ## Asked as
@@ -7842,7 +7842,7 @@ What each part takes: [blocks/platform/edit/attribute-editor.md](blocks/platform
 - Surface: product
 - Source: `blocks/platform/edit/code-editor/code-editor.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/edit/code-editor")`
-- Components: Alert, Button, Card, CodeEditor, CopyButton, EmptyState, Field, HelperText, IconButton, Input, Item, KeyValuePairs, Link, LogView, `LogViewContent`, PageTabs, RadioButton, `ResizableHandle`, `ResizablePane`, `ResizableRoot`, SaveBar, Select, SettingRow, SettingsSection, StatusIndicator, Switch, Tabs, Tag, Textarea, Toast, ToggleGroup, Tooltip, Trace
+- Components: Alert, Button, Card, CodeEditor, CopyButton, EmptyState, Field, HelperText, IconButton, Input, Item, KeyValuePairs, Link, `LogViewContent`, LogView, PageTabs, RadioButton, `ResizableHandle`, `ResizablePane`, `ResizableRoot`, SaveBar, Select, SettingRow, SettingsSection, StatusIndicator, Switch, Tabs, Tag, Textarea, Toast, ToggleGroup, Tooltip, Trace
 - Skills: `webkit-layout`, `webkit-navigation`, `webkit-form`
 
 ## Asked as
@@ -8419,7 +8419,7 @@ What each part takes: [blocks/platform/settings/settings-form.md](blocks/platfor
 - Surface: product
 - Source: `blocks/platform/states/async-submit/async-submit.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/states/async-submit")`
-- Components: Accordion, Alert, Button, Card, EmptyState, LogView, `LogViewContent`, PageHeader, Progress, Spinner, StatusIndicator, Tag, Toast, ToggleGroup
+- Components: Accordion, Alert, Button, Card, EmptyState, `LogViewContent`, LogView, PageHeader, Progress, Spinner, StatusIndicator, Tag, Toast, ToggleGroup
 - Skills: `webkit-errors`, `webkit-ui-states`, `webkit-form`
 
 ## Asked as
@@ -27388,7 +27388,7 @@ Public members of the compound:
 | -------------------- | ----------------------- | ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | Root                 | — (the compound itself) | `@aziontech/webkit/input-group-root`  | The container. Orchestrates borders, seams, focus ring, and states.                                                                                                                                                                                                                                                      |
 | `<InputGroup.Addon>` | `Addon`                 | `@aziontech/webkit/input-group-addon` | Static-content island (icon, text like `https://`, `.com`, `$`) rendered with the darker `--bg-canvas` fill and muted text.                                                                                                                                                                                             |
-| `<InputGroup.Input>` | `Input`                 | `@aziontech/webkit/input-group-input` | Borderless middle `<input>`, with the same inline padding as `Input` (`--spacing-sm`). Props: `modelValue` (`''`), `type` (`'text' | 'email' | 'number'`, default `'text'`, the same restricted set as `Input`), `placeholder` (`''`), `autocomplete`, `disabled`, `readonly`, `required`, `invalid` (all `false`); emits `update:modelValue`. Reads `id`, `aria-describedby`, `invalid`, `disabled` and `required` from an enclosing `Field` (an explicit prop/attribute wins). |
+| `<InputGroup.Input>` | `Input`                 | `@aziontech/webkit/input-group-input` | Borderless middle `<input>`, with the same inline padding as `Input` (`--spacing-sm`). Props: `modelValue` (`''`), `type` (`'text' | 'email' | 'number' | 'password'`, default `'text'`: the restricted set of `Input`, plus `password` to mask a secret value that a reveal control in an addon toggles back to `text`), `placeholder` (`''`), `autocomplete`, `disabled`, `readonly`, `required`, `invalid` (all `false`); emits `update:modelValue`. Reads `id`, `aria-describedby`, `invalid`, `disabled` and `required` from an enclosing `Field` (an explicit prop/attribute wins). |
 
 The root reads `invalid`, `disabled` and `required` from an enclosing `Field` too, OR-ed with its own props, so a `Field`'s state styles the whole group. The root then provides the Field context to its children with `invalid` and `disabled` OR-ed with the group's own (the parent Field's id, description, title and `required` pass through), so the group's state reaches the controls inside.
 
@@ -28393,7 +28393,7 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
 | --- | --- | --- | --- | --- |
 | `items` | `TItem[]` | `undefined` | true | Options rendered as selectable cards; each entry must include `value` and `label`. |
 | `disabled` | `boolean` | `false` | false | Disables all options and applies disabled tokens. |
-| `modelValue` | `TItem['value']` | `undefined` | false | Two-way value (`v-model`). |
+| `modelValue` | `TItem['value']` | `undefined as never` | false | Two-way value (`v-model`). |
 
 ## Slots
 
@@ -29545,7 +29545,7 @@ Unbound, each one keeps its own local state.
   import MenuRoot from '@aziontech/webkit/menu-root'
   import PageHeader from '@aziontech/webkit/page-header'
   import SearchTrigger from '@aziontech/webkit/search-trigger'
-  import Sidebar from '@aziontech/webkit/sidebar'
+  import Sidebar from '@aziontech/webkit/sidebar-root'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
   import { ref } from 'vue'
 
@@ -31013,13 +31013,6 @@ context, so a consumer never wires one part to the other.
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
 | `kind` | `'floating' \| 'docked' \| 'plain' \| 'fade' \| 'centered'` | `'floating'` | false | How the bar sits at the bottom of its scroll region. See the kind table below. |
-| `kind` | `Placement` | `Surface` | Use for |  |
-| `----------` | `----------------------------------------------------------------` | `-----------------------------------------------` | ------------------------------------------------ |  |
-| `floating` | `overlays the bottom of the scroll region; the content does not move` | `canvas band with a top border` | the dirty state of a settings page |  |
-| `docked` | `its own row at the bottom of the region; the content ends above it` | `canvas band with a top border` | the dirty state when nothing may be covered |  |
-| `plain` | `the last row of a form column, always shown` | `surface band with a muted top border` | a form saved as one unit |  |
-| `fade` | `the last row of a wizard step, always shown` | `a gradient from transparent to the canvas, no border` | a full-page wizard step (Back, Next) |  |
-| `centered` | `a card centred at the bottom of the region, over the content` | `raised card with a border and a large shadow` | a create page (Cancel, Create) |  |
 
 ## Slots
 
@@ -31888,9 +31881,9 @@ with `defineModel`, so their `update:*` events are not hand-declared.
   import MenuSubContent from '@aziontech/webkit/menu-sub-content'
   import MenuSubTrigger from '@aziontech/webkit/menu-sub-trigger'
   import SearchTrigger from '@aziontech/webkit/search-trigger'
-  import Sidebar from '@aziontech/webkit/sidebar'
   import SidebarFooter from '@aziontech/webkit/sidebar-footer'
   import SidebarHeader from '@aziontech/webkit/sidebar-header'
+  import Sidebar from '@aziontech/webkit/sidebar-root'
   import { ref } from 'vue'
 
   const accountMenuOpen = ref(false)

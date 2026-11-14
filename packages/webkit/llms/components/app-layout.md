@@ -150,7 +150,7 @@ Unbound, each one keeps its own local state.
   import MenuRoot from '@aziontech/webkit/menu-root'
   import PageHeader from '@aziontech/webkit/page-header'
   import SearchTrigger from '@aziontech/webkit/search-trigger'
-  import Sidebar from '@aziontech/webkit/sidebar'
+  import Sidebar from '@aziontech/webkit/sidebar-root'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
   import { ref } from 'vue'
 

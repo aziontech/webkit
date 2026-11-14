@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import Accordion from '@aziontech/webkit/accordion'
-  import LogView, { type LogViewLine } from '@aziontech/webkit/log-view'
   import LogViewContent from '@aziontech/webkit/log-view-content'
+  import LogView, { type LogViewLine } from '@aziontech/webkit/log-view-root'
   import Progress from '@aziontech/webkit/progress'
   import Spinner from '@aziontech/webkit/spinner'
   import { computed, ref } from 'vue'

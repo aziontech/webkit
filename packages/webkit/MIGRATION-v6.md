@@ -625,6 +625,22 @@ standalone root.
 - `TagEditor` reserves no key prefix by default (`reservedPrefix` was `'azion:'`). Pass
   `reserved-prefix="azion:"` where the platform reserves it.
 
+Optional text props that defaulted to `undefined` now default to `''`, and an empty string means
+"not set", so the rendered output does not change. Code that reads the prop, or compares it with
+`undefined`, sees `''` instead:
+
+- `Avatar`: `src`, `alt` and `label` default to `''`; an empty `src` draws the initials or the icon.
+- `Kbd`: `keyName` defaults to `''`; an empty `keyName` draws no named key, only the modifiers and the slot.
+- `OverflowCount`: `noun` defaults to `''`; an empty `noun` uses the catalog (`item` / `items`).
+- `Tag`: `icon` defaults to `''`; an empty `icon` draws no glyph.
+- `RadioButton`: `value`, `name` and `inputId` default to `''`. A radio with no `value` now writes
+  `''` to its `v-model` when picked (was `undefined`), and an unset `v-model` no longer matches it.
+  Give every radio a `value`.
+- `FileDropzone`: `icon` defaults to `''` and still draws `pi pi-cloud-upload`; pass a PrimeIcons
+  class to change it, as before.
+- `StatTile`: `trend` accepts `null` entries (`(number | null)[]`) for gaps in the sparkline. Arrays
+  of numbers keep working; a typed `number[]` variable still assigns to it.
+
 These old names keep working in v6, marked `@deprecated`, and go in 7.0. The codemod rewrites the
 props in section 3; move the rest by hand:
 

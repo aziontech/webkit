@@ -313,7 +313,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
     {
       key: 'gitlab',
       name: 'GitLab',
-      href: 'https://gitlab.com/-/profile/applications',
+      href: '/account/integrations/gitlab',
       icon: 'ai-cor ai-gitlab',
       connected: false,
       tag: '',
@@ -323,7 +323,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
     {
       key: 'bitbucket',
       name: 'Bitbucket',
-      href: 'https://bitbucket.org/account/settings/app-authorizations/',
+      href: '/account/integrations/bitbucket',
       icon: 'ai-cor ai-bitbucket',
       connected: false,
       tag: '',
@@ -679,9 +679,13 @@ Each variant is the same screen in another state: `get_pattern("platform/account
                             :aria-label="`${provider.action} ${provider.name}`"
                             kind="outlined"
                             size="medium"
-                            :icon="provider.connected ? undefined : 'pi pi-external-link'"
+                            :icon="
+                              provider.connected || !provider.href.startsWith('http')
+                                ? undefined
+                                : 'pi pi-external-link'
+                            "
                             :href="provider.href"
-                            target="_blank"
+                            :target="provider.href.startsWith('http') ? '_blank' : undefined"
                           />
                         </Item.Actions>
                       </Item>

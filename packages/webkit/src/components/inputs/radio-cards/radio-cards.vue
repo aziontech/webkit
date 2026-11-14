@@ -21,7 +21,7 @@
     }
   )
 
-  const model = defineModel<TItem['value']>()
+  const model = defineModel<TItem['value']>({ default: undefined as never })
 
   defineSlots<{
     default(props: { item: TItem; selected: boolean }): unknown

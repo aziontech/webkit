@@ -205,6 +205,16 @@ describe('InputGroup', () => {
       await fireEvent.update(input, 'acme.example.com')
       expect(value.value).toBe('acme.example.com')
     })
+
+    it('masks a secret value with the password type', () => {
+      const { getByLabelText } = render(InputGroupInput, {
+        props: { type: 'password', modelValue: 'secret' },
+        attrs: { 'aria-label': 'Token' }
+      })
+      const input = getByLabelText('Token') as HTMLInputElement
+      expect(input.type).toBe('password')
+      expect(input.value).toBe('secret')
+    })
   })
 
   describe('InputGroup.Addon', () => {

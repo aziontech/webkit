@@ -5,7 +5,7 @@
 - Surface: product
 - Source: `blocks/platform/detail/invocations/invocations.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/detail/invocations")`
-- Components: [Button](../../../components/button.md), [Card](../../../components/card.md), [CopyButton](../../../components/copy-button.md), [DropdownMenu](../../../components/dropdown-menu.md), [Flow](../../../components/flow.md), [IconButton](../../../components/icon-button.md), [Link](../../../components/link.md), [LogView](../../../components/log-view.md), `LogViewContent`, [PageHeader](../../../components/page-header.md), [SectionHeader](../../../components/section-header.md), [StatusIndicator](../../../components/status-indicator.md), [Tag](../../../components/tag.md), [Toast](../../../components/toast.md), [Tooltip](../../../components/tooltip.md), [Trace](../../../components/trace.md)
+- Components: [Button](../../../components/button.md), [Card](../../../components/card.md), [CopyButton](../../../components/copy-button.md), [DropdownMenu](../../../components/dropdown-menu.md), [Flow](../../../components/flow.md), [IconButton](../../../components/icon-button.md), [Link](../../../components/link.md), `LogViewContent`, [LogView](../../../components/log-view.md), [PageHeader](../../../components/page-header.md), [SectionHeader](../../../components/section-header.md), [StatusIndicator](../../../components/status-indicator.md), [Tag](../../../components/tag.md), [Toast](../../../components/toast.md), [Tooltip](../../../components/tooltip.md), [Trace](../../../components/trace.md)
 - Skills: `webkit-layout`, `webkit-ui-states`, `webkit-data-viz`
 
 ## Asked as
@@ -114,8 +114,8 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
   import Flow from '@aziontech/webkit/flow'
   import IconButton from '@aziontech/webkit/icon-button'
   import Link from '@aziontech/webkit/link'
-  import LogView, { type LogViewLine } from '@aziontech/webkit/log-view'
   import LogViewContent from '@aziontech/webkit/log-view-content'
+  import LogView, { type LogViewLine } from '@aziontech/webkit/log-view-root'
   import PageHeader from '@aziontech/webkit/page-header'
   import SectionHeader from '@aziontech/webkit/section-header'
   import StatusIndicator, { type StatusIndicatorSeverity } from '@aziontech/webkit/status-indicator'

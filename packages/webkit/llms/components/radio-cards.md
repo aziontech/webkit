@@ -41,7 +41,7 @@
 | --- | --- | --- | --- | --- |
 | `items` | `TItem[]` | `undefined` | true | Options rendered as selectable cards; each entry must include `value` and `label`. |
 | `disabled` | `boolean` | `false` | false | Disables all options and applies disabled tokens. |
-| `modelValue` | `TItem['value']` | `undefined` | false | Two-way value (`v-model`). |
+| `modelValue` | `TItem['value']` | `undefined as never` | false | Two-way value (`v-model`). |
 
 ## Slots
 
