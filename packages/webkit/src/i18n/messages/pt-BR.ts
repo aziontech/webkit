@@ -1076,7 +1076,9 @@ export const ptBR: Messages = {
   copyPromptButton: {
     label: 'Copiar prompt',
     copied: 'Copiado',
-    worksWith: 'Funciona com {agents}'
+    worksWith: 'Funciona com {agents}',
+    tooltip: 'Copia um prompt de configuração para sua ferramenta de IA',
+    dismiss: 'Dispensar'
   },
   docAgentCard: {
     title: 'Seu agente de IA, fluente em Azion',

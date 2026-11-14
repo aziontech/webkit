@@ -1176,7 +1176,9 @@ export const searchTrigger = {
 export const copyPromptButton = {
   label: 'Copy prompt',
   copied: 'Copied',
-  worksWith: 'Works with {agents}'
+  worksWith: 'Works with {agents}',
+  tooltip: 'Copies a setup prompt for your AI coding tool',
+  dismiss: 'Dismiss'
 } as const
 
 export const docAgentCard = {

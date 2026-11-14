@@ -2,6 +2,7 @@
   import { computed, useAttrs } from 'vue'
 
   import Button from '../../actions/button/button.vue'
+  import Logo, { type LogoArtwork, type LogoKind } from '../../content/logo/logo.vue'
   import FrameBox from '../../layout/frame-box/frame-box.vue'
   import LogoWall from '../../marketing/logo-wall/logo-wall.vue'
   import Quote from '../../marketing/quote/quote.vue'
@@ -26,6 +27,8 @@
     logoLight?: string
     /** How the mark follows the theme; defaults to `as-is`. */
     logoTreatment?: LogoWallQuoteLogoTreatment
+    /** The ink a single file is drawn in, as the client registry records it: `light` art is inverted on the light theme, `dark` art on the dark theme. */
+    artwork?: LogoArtwork
     /** Destination the mark links to, such as that client's success case. */
     href?: string
   }
@@ -44,10 +47,14 @@
     name: string
     /** Role of that person and where they work. */
     jobTitle: string
-    /** URL of the company mark shown above the quotation. */
+    /** URL of the company mark shown above the quotation; the dark-theme file when `logoLight` is set. */
     logo: string
     /** Alternative text naming the company of the mark. */
     logoAlt: string
+    /** URL of the company mark on the light theme, when it needs a different drawing. */
+    logoLight?: string
+    /** The ink a single mark file is drawn in, as the client registry records it. */
+    artwork?: LogoArtwork
   }
 
   /** The call to action set under the quote. */
@@ -81,6 +88,8 @@
     quote?: LogoWallQuoteQuote
     /** Button under the quote; `{ label, href, trailing?, target? }`. Omitted when absent. */
     primaryAction?: LogoWallQuoteAction
+    /** Outlined button beside the primary one under the quote; `{ label, href, trailing?, target? }`. Omitted when absent. */
+    secondaryAction?: LogoWallQuoteAction
   }
 
   const props = withDefaults(defineProps<Props>(), {
@@ -92,7 +101,8 @@
     ariaLabel: '',
     logos: () => [],
     quote: undefined,
-    primaryAction: undefined
+    primaryAction: undefined,
+    secondaryAction: undefined
   })
 
   const attrs = useAttrs()
@@ -106,6 +116,14 @@
   const isQuoteBand = computed(() => props.kind === 'quote' && Boolean(props.quote?.text))
 
   const renders = computed(() => props.kind !== 'quote' || isQuoteBand.value)
+
+  const hasActions = computed(() => Boolean(props.primaryAction || props.secondaryAction))
+
+  const markKind = (logo: LogoWallQuoteLogo): LogoKind =>
+    logo.logoTreatment === 'monochrome' ? 'monochrome' : 'color'
+
+  const markArtwork = (logo: LogoWallQuoteLogo): LogoArtwork =>
+    logo.artwork ?? (logo.logoTreatment === 'invert-light' ? 'light' : 'color')
 
   const wallItems = computed(() =>
     props.logos.map((logo) => ({
@@ -145,14 +163,25 @@
             :text="quote.text"
             :name="quote.name"
             :job-title="quote.jobTitle"
-            :logo="quote.logo"
-            :logo-alt="quote.logoAlt"
           >
             <template
-              v-if="primaryAction"
+              v-if="quote.logo"
+              #mark
+            >
+              <Logo
+                :name="quote.logoAlt"
+                :src="quote.logo"
+                :src-light="quote.logoLight"
+                :artwork="quote.artwork"
+                class="h-8 max-w-(--size-40) group-data-[kind=highlight]:md:h-24 group-data-[kind=highlight]:md:max-w-none"
+              />
+            </template>
+            <template
+              v-if="hasActions"
               #actions
             >
               <Button
+                v-if="primaryAction"
                 :label="primaryAction.label"
                 :href="primaryAction.href"
                 kind="secondary"
@@ -161,6 +190,18 @@
                 :icon="primaryAction.trailing ? 'pi pi-chevron-right' : ''"
                 icon-position="trailing"
                 :animated="Boolean(primaryAction.trailing)"
+              />
+              <Button
+                key="button-2"
+                v-if="secondaryAction"
+                :label="secondaryAction.label"
+                :href="secondaryAction.href"
+                kind="outlined"
+                size="large"
+                :target="secondaryAction.target"
+                :icon="secondaryAction.trailing ? 'pi pi-chevron-right' : ''"
+                icon-position="trailing"
+                :animated="Boolean(secondaryAction.trailing)"
               />
             </template>
           </Quote>
@@ -195,27 +236,15 @@
           :items="wallItems"
         >
           <template #mark="{ index }">
-            <template v-if="logos[index]?.logoLight">
-              <img
-                :src="logos[index]?.logo"
-                :alt="logos[index]?.name"
-                decoding="async"
-                class="h-5 w-auto max-w-full object-contain sm:max-w-24 hidden [[data-theme=dark]_&]:block"
-              />
-              <img
-                :src="logos[index]?.logoLight"
-                :alt="logos[index]?.name"
-                decoding="async"
-                class="h-5 w-auto max-w-full object-contain sm:max-w-24 block [[data-theme=dark]_&]:hidden"
-              />
-            </template>
-            <img
-              v-else
-              :src="logos[index]?.logo"
-              :alt="logos[index]?.name"
-              :data-treatment="logos[index]?.logoTreatment ?? 'as-is'"
-              decoding="async"
-              class="h-5 w-auto max-w-full object-contain sm:max-w-24 data-[treatment=monochrome]:brightness-0 [[data-theme=dark]_&[data-treatment=monochrome]]:invert data-[treatment=invert-light]:invert [[data-theme=dark]_&[data-treatment=invert-light]]:invert-0"
+            <Logo
+              v-if="logos[index]"
+              :name="logos[index].name"
+              :src="logos[index].logo"
+              :src-light="logos[index].logoLight"
+              :artwork="markArtwork(logos[index])"
+              :kind="markKind(logos[index])"
+              :data-treatment="logos[index].logoTreatment ?? 'as-is'"
+              class="h-5 sm:max-w-24"
             />
           </template>
           <template
@@ -229,14 +258,18 @@
               :job-title="quote.jobTitle"
             >
               <template #mark>
-                <img
+                <Logo
+                  :name="quote.logoAlt"
                   :src="quote.logo"
-                  :alt="quote.logoAlt"
-                  decoding="async"
-                  class="h-8 w-auto max-w-40 object-contain"
+                  :src-light="quote.logoLight"
+                  :artwork="quote.artwork"
+                  class="h-8 max-w-40"
                 />
               </template>
-              <template #actions>
+              <template
+                v-if="hasActions"
+                #actions
+              >
                 <Button
                   v-if="primaryAction"
                   :label="primaryAction.label"
@@ -247,6 +280,18 @@
                   :icon="primaryAction.trailing ? 'pi pi-chevron-right' : ''"
                   icon-position="trailing"
                   :animated="Boolean(primaryAction.trailing)"
+                />
+                <Button
+                  key="button-2"
+                  v-if="secondaryAction"
+                  :label="secondaryAction.label"
+                  :href="secondaryAction.href"
+                  kind="outlined"
+                  size="large"
+                  :target="secondaryAction.target"
+                  :icon="secondaryAction.trailing ? 'pi pi-chevron-right' : ''"
+                  icon-position="trailing"
+                  :animated="Boolean(secondaryAction.trailing)"
                 />
               </template>
             </Quote>

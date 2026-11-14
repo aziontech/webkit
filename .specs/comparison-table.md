@@ -3,10 +3,11 @@ name: comparison-table
 category: sections
 structure: monolithic
 status: implemented
-spec_version: 1
+spec_version: 2
+template: 2
 created: 2026-11-05
-last_updated: 2026-11-11
-checksum: 7c8dff3953e3d98eb00c892f8a3d62facdf67232dd039157c73068c6bdad22df
+last_updated: 2026-11-14
+checksum: 649322eb99c4f144ee96f6875298ad67f944120a433165dcc6a969e04e085c11
 ---
 
 # ComparisonTable — Component Spec
@@ -28,18 +29,22 @@ The capability-by-capability comparison of Azion with one competitor on a migrat
 
 - `compare-plans` — the plan-by-plan matrix of Pricing.
 - `tooltip` — names each support glyph on hover and focus.
+- `logo` — draws the competitor's mark right on both themes.
 
 ## Best practices
 
 - Give every row a `definition`; the info popover is where a reader learns what the capability means.
-- Ship both `competitor.logo` (dark theme) and `competitor.logoLight` (light theme); with one file it shows in both, with none the name shows as text.
+- Pass the competitor's entry from `@aziontech/webkit/assets/competitor-registry` (`competitor('Akamai')`): its `logo` and `logoLight` render on first paint, server render included.
+- With only a `name`, the band looks the name up in the competitor registry once the page is interactive (the registry loads on demand, outside the band's bundle) and shows the name as text until then, or for a platform the registry does not hold.
+- For a platform outside the registry, ship both `competitor.logo` (dark theme) and `competitor.logoLight` (light theme), or one file with its `artwork`.
+- Set `anchor` when a page links to the table (`#compare`).
 - Keep `caption` equal to the title; it is the table's accessible name.
 
 ## Usage
 
 ```vue
 <script setup>
-import ComparisonTable from '@aziontech/webkit/comparison-table'
+  import ComparisonTable from '@aziontech/webkit/comparison-table'
 </script>
 
 <template>
@@ -56,7 +61,12 @@ import ComparisonTable from '@aziontech/webkit/comparison-table'
       {
         title: 'Security',
         rows: [
-          { capability: 'Bot management', definition: 'Detecting and blocking automated traffic.', azion: 'full', competitor: 'partial' }
+          {
+            capability: 'Bot management',
+            definition: 'Detecting and blocking automated traffic.',
+            azion: 'full',
+            competitor: 'partial'
+          }
         ]
       }
     ]"
@@ -66,17 +76,18 @@ import ComparisonTable from '@aziontech/webkit/comparison-table'
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `eyebrow` | `string` | `''` | false | Overline above the section title. |
-| `title` | `string` | `''` | false | Headline of the band, rendered by the section title as its `h2` and naming the band; no header renders when empty. |
-| `caption` | `string` | `''` | false | Screen-reader caption naming the table. |
-| `columnLabel` | `string` | `''` | false | Heading of the capability column. |
-| `fullLabel` | `string` | `''` | false | Tooltip and screen-reader text of a full-support cell. |
-| `partialLabel` | `string` | `''` | false | Tooltip and screen-reader text of a partial-support cell. |
-| `noneLabel` | `string` | `''` | false | Tooltip and screen-reader text of an unsupported cell. |
-| `competitor` | `ComparisonTableCompetitor` | `—` | true | The platform compared with Azion; `{ name, logo?, logoLight? }` where `logo` is the dark-theme file and `logoLight` the light-theme one. |
-| `groups` | `ComparisonTableGroup[]` | `[]` | false | The categories, in order; each is `{ title, rows }` and a row is `{ capability, definition?, azion?, competitor? }` with each level `full`, `partial` or `none` (missing reads as `none`). |
+| Prop           | Type                        | Default | Required | JSDoc                                                                                                                                                                                                                                                                                                                             |
+| -------------- | --------------------------- | ------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `anchor`       | `string`                    | `''`    | false    | In-page id set on the band so a hash link can target it.                                                                                                                                                                                                                                                                          |
+| `eyebrow`      | `string`                    | `''`    | false    | Overline above the section title.                                                                                                                                                                                                                                                                                                 |
+| `title`        | `string`                    | `''`    | false    | Headline of the band, rendered by the section title as its `h2` and naming the band; no header renders when empty.                                                                                                                                                                                                                |
+| `caption`      | `string`                    | `''`    | false    | Screen-reader caption naming the table.                                                                                                                                                                                                                                                                                           |
+| `columnLabel`  | `string`                    | `''`    | false    | Heading of the capability column.                                                                                                                                                                                                                                                                                                 |
+| `fullLabel`    | `string`                    | `''`    | false    | Tooltip and screen-reader text of a full-support cell.                                                                                                                                                                                                                                                                            |
+| `partialLabel` | `string`                    | `''`    | false    | Tooltip and screen-reader text of a partial-support cell.                                                                                                                                                                                                                                                                         |
+| `noneLabel`    | `string`                    | `''`    | false    | Tooltip and screen-reader text of an unsupported cell.                                                                                                                                                                                                                                                                            |
+| `competitor`   | `ComparisonTableCompetitor` | `—`     | true     | The platform compared with Azion; `{ name, logo?, logoLight?, artwork? }` where `logo` is the dark-theme file and `logoLight` the light-theme one. With only a `name`, the logo is taken from the competitor registry once the page is interactive, and the name is the column head until then or when the registry has no entry. |
+| `groups`       | `ComparisonTableGroup[]`    | `[]`    | false    | The categories, in order; each is `{ title, rows }` and a row is `{ capability, definition?, azion?, competitor? }` with each level `full`, `partial` or `none` (missing reads as `none`).                                                                                                                                        |
 
 ## Events
 
@@ -90,7 +101,8 @@ import ComparisonTable from '@aziontech/webkit/comparison-table'
 
 - Visual states: `default`
 - A support cell is one of `full`, `partial` or `none`, mirrored on the glyph's `data-support`
-- Without a competitor logo the header shows the competitor name as text
+- The competitor head is a `Logo` (`data-testid="sections-comparison-table__competitor-logo"`) whose `data-route` is `pair` (light/dark files), `single` (one file) or `wordmark` (the name as text: no logo and no registry entry, or before the registry loads)
+- Not applicable: `loading`, `error`, `disabled`, `readonly`, `invalid`, `open`/`closed` (the popovers own their open state)
 - Empty: when `groups` is empty the band renders nothing but its root — no header, no table
 
 ## Motion & Animations
@@ -99,37 +111,67 @@ _none_
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| typography (column heads, category heads) | `.text-overline-md` |
-| typography (row heads) | `.text-label-md` |
-| category head text | `var(--text-primary)` |
-| column head text | `var(--text-muted)` |
-| row head text | `var(--text-default)` |
-| full / partial / none glyph | `var(--success-contrast)` / `var(--warning-contrast)` / `var(--text-muted)` |
-| header fill | `var(--bg-canvas)` |
-| category fill | `var(--bg-surface)` |
-| rules | `var(--border-default)` |
-| cell padding | `var(--spacing-xs)` / `var(--spacing-md)` / `var(--spacing-xl)` |
+| Region                                    | Token (DESIGN.md)                                                           |
+| ----------------------------------------- | --------------------------------------------------------------------------- |
+| typography (column heads, category heads) | `.text-overline-md`                                                         |
+| typography (row heads)                    | `.text-label-md`                                                            |
+| category head text                        | `var(--text-primary)`                                                       |
+| column head text                          | `var(--text-muted)`                                                         |
+| row head text                             | `var(--text-default)`                                                       |
+| full / partial / none glyph               | `var(--success-contrast)` / `var(--warning-contrast)` / `var(--text-muted)` |
+| header fill                               | `var(--bg-canvas)`                                                          |
+| category fill                             | `var(--bg-surface)`                                                         |
+| rules                                     | `var(--border-default)`                                                     |
+| cell padding                              | `var(--spacing-xs)` / `var(--spacing-md)` / `var(--spacing-xl)`             |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 
 - Visible focus: owned by the composed `icon-button` and `tooltip` triggers.
 - Keyboard map: `Tab` reaches each definition's info button; `Enter` / `Space` opens its popover and `Esc` closes it (owned by `popover`).
-- ARIA: the band is a `<section>` named by its title (`aria-label`) when one is set; the table carries a `caption`, `scope="col"` heads, a `scope="colgroup"` head per category and a `scope="row"` head per capability, so each value is announced with its row and column. The glyphs are `aria-hidden` and every cell carries its level as `sr-only` text; each logo has the platform name as `alt`.
+- ARIA: the band is a `<section>` named by its title (`aria-label`) when one is set; the table carries a `caption`, `scope="col"` heads, a `scope="colgroup"` head per category and a `scope="row"` head per capability, so each value is announced with its row and column. The glyphs are `aria-hidden` and every cell carries its level as `sr-only` text; the competitor logo is a `Logo` named by the platform, inside a head cell that carries the same name.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): text and glyph colours are the tokens above.
 - `motion-reduce:transition-none motion-reduce:transform-none` — the popover and tooltip carry their own reduced-motion fallback; this band adds no motion.
 - Touch target ≥40×40 px — the info button is a small `icon-button`, a secondary affordance next to the capability name.
 
+## Internationalization
+
+| Key                     | English source       | Override prop |
+| ----------------------- | -------------------- | ------------- |
+| `comparisonTable.about` | `About {capability}` | —             |
+
+- The column and level labels (`columnLabel`, `fullLabel`, `partialLabel`, `noneLabel`), the caption and every capability are content the page passes.
+- Formatting: none.
+
+## Right-to-left
+
+- Layout: logical utilities only (`border-s`, `ps-`/`pe-`); the Azion and competitor columns follow the reading direction.
+- Icons: the support glyphs and the info glyph are not mirrored; logos are never mirrored.
+- Keyboard: `Tab` order follows the DOM.
+- User data: the competitor name drawn as a wordmark is wrapped in `dir="auto"` by `Logo`.
+
+## Responsive
+
+- Container queries: none; the head row's logos step up from 12 px to 16 px (`sm`) and 24 px (`md`).
+- Narrow: the capability column keeps its text, the two platform columns narrow to their glyphs.
+- Touch: the info button is a small `icon-button`, a secondary affordance next to the capability name.
+- Reflow: no horizontal scroll at 320 px; the head row stays pinned under the site header.
+
+## Performance
+
+- Bundle budget: 23.1 KB gzip for the initial chunk of `./comparison-table` in `.size-limit.json` (`entryOnly`); the competitor registry and its logo files are a separate chunk, fetched only when a competitor comes with a name and no logo.
+- Runtime budget: one table; a few dozen rows.
+- Heavy parts: the competitor registry, loaded on demand after mount.
+
 ## Examples
 
 - Default
+- Registry — the competitor given by name only, its logo taken from the competitor registry, and the band reachable at `#compare`.
 
 ## Constraints — DO NOT
 

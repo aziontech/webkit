@@ -3,11 +3,12 @@ name: client-mosaic-columns
 category: sections
 structure: monolithic
 status: implemented
-spec_version: 1
+spec_version: 2
 created: 2026-11-04
-last_updated: 2026-11-12
-checksum: 02d6f1a9a56645203287df11fb34a2f66c5922a61f014aecbfc356cd683e2dce
+last_updated: 2026-11-14
+checksum: 12ca80f9dac1cc4d101d2854c8b28923762e34c43bef0f37c02152977b17e512
 ---
+
 # ClientMosaicColumns — Component Spec
 
 ## Purpose
@@ -37,9 +38,9 @@ Three featured success stories side by side: each column is a client's mark on a
 
 ```vue
 <script setup>
-import dafitiLogo from '@aziontech/webkit/assets/dafiti-extended-reversed.svg'
-import magaluLogo from '@aziontech/webkit/assets/magalu-extended-color.svg'
-import ClientMosaicColumns from '@aziontech/webkit/client-mosaic-columns'
+  import dafitiLogo from '@aziontech/webkit/assets/dafiti-extended-reversed.svg'
+  import magaluLogo from '@aziontech/webkit/assets/magalu-extended-color.svg'
+  import ClientMosaicColumns from '@aziontech/webkit/client-mosaic-columns'
 </script>
 
 <template>
@@ -47,8 +48,20 @@ import ClientMosaicColumns from '@aziontech/webkit/client-mosaic-columns'
     aria-label="Featured success stories"
     link-label="Read story"
     :cells="[
-      { name: 'Magalu', logo: magaluLogo, href: '/success-case/magalu', story: 'How Magalu enhances cybersecurity with Azion.', logoTreatment: 'monochrome' },
-      { name: 'Dafiti', logo: dafitiLogo, href: '/success-case/dafiti', story: 'Dafiti modernized its digital architecture.', logoTreatment: 'knockout' }
+      {
+        name: 'Magalu',
+        logo: magaluLogo,
+        href: '/success-case/magalu',
+        story: 'How Magalu enhances cybersecurity with Azion.',
+        logoTreatment: 'monochrome'
+      },
+      {
+        name: 'Dafiti',
+        logo: dafitiLogo,
+        href: '/success-case/dafiti',
+        story: 'Dafiti modernized its digital architecture.',
+        logoTreatment: 'knockout'
+      }
     ]"
   />
 </template>
@@ -56,11 +69,12 @@ import ClientMosaicColumns from '@aziontech/webkit/client-mosaic-columns'
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `ariaLabel` | `string` | `''` | false | Accessible name of the list of stories. |
-| `linkLabel` | `string` | `''` | false | Label the mark face reveals on hover and the link's accessible name. |
-| `cells` | `ClientMosaicColumnsCell[]` | `[]` | false | The stories, in order; each is `{ name, logo, href, story, brand?, logoTreatment? }` where `brand` is `{ base, glow, ink? }` (CSS colours painting the face, `ink` `'dark'` or `'light'`) and defaults to the client registry's colours for `name` and `logoTreatment` is `'monochrome'`, `'knockout'` or `'as-is'`. |
+| Prop        | Type                        | Default | Required | JSDoc                                                                                                                                                                                                                                                                                                                |
+| ----------- | --------------------------- | ------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `anchor`    | `string`                    | `''`    | false    | In-page id set on the band so a hash link can target it.                                                                                                                                                                                                                                                             |
+| `ariaLabel` | `string`                    | `''`    | false    | Accessible name of the list of stories.                                                                                                                                                                                                                                                                              |
+| `linkLabel` | `string`                    | `''`    | false    | Label the mark face reveals on hover and the link's accessible name.                                                                                                                                                                                                                                                 |
+| `cells`     | `ClientMosaicColumnsCell[]` | `[]`    | false    | The stories, in order; each is `{ name, logo, href, story, brand?, logoTreatment? }` where `brand` is `{ base, glow, ink? }` (CSS colours painting the face, `ink` `'dark'` or `'light'`) and defaults to the client registry's colours for `name` and `logoTreatment` is `'monochrome'`, `'knockout'` or `'as-is'`. |
 
 ## Events
 
@@ -78,26 +92,26 @@ import ClientMosaicColumns from '@aziontech/webkit/client-mosaic-columns'
 
 ## Motion & Animations
 
-| Trigger | Animation / Transition | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback |
-|---|---|---|---|
-| hover fill on the story | `before:transition-opacity before:duration-moderate-01 before:ease-productive-entrance` | inline (matches catalog) | `motion-reduce:before:transition-none` |
+| Trigger                 | Animation / Transition                                                                  | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback                |
+| ----------------------- | --------------------------------------------------------------------------------------- | ------------------------------------------------- | -------------------------------------- |
+| hover fill on the story | `before:transition-opacity before:duration-moderate-01 before:ease-productive-entrance` | inline (matches catalog)                          | `motion-reduce:before:transition-none` |
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| typography (story) | `.text-heading-sm` |
-| story text | `var(--text-default)` |
-| story fill | `var(--bg-canvas)` |
-| story hover fill | `var(--bg-hover)` |
-| story inset | `var(--spacing-lg)` |
-| mark lift | `var(--spacing-sm)` |
+| Region                    | Token (DESIGN.md)       |
+| ------------------------- | ----------------------- |
+| typography (story)        | `.text-heading-sm`      |
+| story text                | `var(--text-default)`   |
+| story fill                | `var(--bg-canvas)`      |
+| story hover fill          | `var(--bg-hover)`       |
+| story inset               | `var(--spacing-lg)`     |
+| mark lift                 | `var(--spacing-sm)`     |
 | grid gaps and frame marks | `var(--border-default)` |
 
 ## Theme gaps
 
-| Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
+| Figma variable           | Temporary primitive                                   | Follow-up                                      |
+| ------------------------ | ----------------------------------------------------- | ---------------------------------------------- |
 | link ink on a brand face | `var(--color-base-white)` / `var(--color-base-black)` | `TODO: tokenizar` semantic on-brand ink tokens |
 
 ## Accessibility (WCAG 2.1 AA)

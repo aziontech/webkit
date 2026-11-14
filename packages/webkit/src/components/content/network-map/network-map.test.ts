@@ -101,24 +101,27 @@ describe('NetworkMap', () => {
         0
       )
 
-    expect(count('world')).toBe(309)
-    expect(count('europe')).toBe(48)
+    expect(count('world')).toBe(203)
+    expect(count('europe')).toBe(40)
   })
 
-  it('lights the main Brazilian capitals at the lowest density', () => {
+  it('lights the design PoP field at the default density, in three pulse phases', () => {
+    const { getByTestId } = render(NetworkMap)
+    const paths = Array.from(popPaths(getByTestId(TESTID)))
+    const cells = paths.flatMap((path) => (path.getAttribute('d') ?? '').match(/M\d+ \d+/g) ?? [])
+    expect(cells).toHaveLength(172)
+    expect(new Set(cells).size).toBe(172)
+    expect(new Set(paths.map((path) => path.getAttribute('data-phase')))).toEqual(
+      new Set(['0', '1', '2'])
+    )
+  })
+
+  it('lights a capital of each cluster at the lowest density', () => {
     const { getByTestId } = render(NetworkMap, { props: { density: 'low' } })
     const lit = Array.from(popPaths(getByTestId(TESTID)))
       .map((path) => path.getAttribute('d') ?? '')
       .join('')
-    const CAPITALS = {
-      'São Paulo': 'M490 740',
-      'Rio de Janeiro': 'M500 740',
-      Brasília: 'M510 700',
-      Salvador: 'M540 680',
-      Fortaleza: 'M550 620',
-      Manaus: 'M450 620',
-      'Porto Alegre': 'M480 780'
-    }
+    const CAPITALS = { Brasília: 'M510 700', Fortaleza: 'M550 620' }
 
     Object.values(CAPITALS).forEach((cell) => expect(lit).toContain(`${cell}h5v5h-5z`))
   })

@@ -1,0 +1,16 @@
+{
+  "component": "logo",
+  "title": "Components/Primitives/Content/Logo",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "A client from the asset registry: its dark-theme file and its light-theme file both render, and the theme reveals one.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Types",
+      "summary": "The four inks on the same marks: `color` keeps each file's colours (a light/dark pair, a light file inverted on the light theme, an agent symbol), `monochrome` paints one silhouette per theme, `current` takes the surface's text colour, `knockout` pins black for a white fill. A name with no file draws its wordmark.",
+      "file": "types.vue"
+    }
+  ]
+}

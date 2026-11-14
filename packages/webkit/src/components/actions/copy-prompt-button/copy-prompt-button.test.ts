@@ -4,6 +4,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 import { defineComponent, h } from 'vue'
 
 import AgentsExample from '../../../../examples/copy-prompt-button/agents.vue'
+import ClosableExample from '../../../../examples/copy-prompt-button/closable.vue'
 import DefaultExample from '../../../../examples/copy-prompt-button/default.vue'
 import DisabledExample from '../../../../examples/copy-prompt-button/disabled.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
@@ -55,6 +56,53 @@ describe('CopyPromptButton', () => {
     const none = render(CopyPromptButton, { props: { value: PROMPT, agents: [] } })
     expect(none.queryByTestId('actions-copy-prompt-button__agents')).toBeNull()
     expect(none.getByRole('button')).not.toHaveAttribute('aria-describedby')
+  })
+
+  it('draws an agent mark from its logo file in the chip ink', () => {
+    const { getByTestId } = render(CopyPromptButton, {
+      props: {
+        value: PROMPT,
+        agents: [
+          { name: 'Claude', logo: 'https://example.com/claude.svg' },
+          { name: 'Cursor', icon: 'ai ai-cursor' }
+        ]
+      }
+    })
+    const marks = getByTestId('actions-copy-prompt-button__agents')
+    const logo = marks.querySelector<HTMLElement>('[data-agent="Claude"]')!
+    expect(logo).toHaveAttribute('data-testid', 'content-logo')
+    expect(logo).toHaveAttribute('data-kind', 'current')
+    expect(logo).toHaveAttribute('aria-hidden', 'true')
+    expect(marks.querySelector('i[data-agent="Cursor"]')).toHaveClass('ai-cursor')
+  })
+
+  it('wraps the chip in a tooltip that says what it does', async () => {
+    const user = userEvent.setup()
+    const { getByRole, getByTestId } = render(CopyPromptButton, { props: { value: PROMPT } })
+    expect(getByTestId('actions-copy-prompt-button__tooltip')).toContainElement(getByRole('button'))
+    await user.hover(getByRole('button'))
+    await waitFor(() =>
+      expect(document.body.querySelector('[role="tooltip"]')).toHaveTextContent(
+        'Copies a setup prompt for your AI coding tool'
+      )
+    )
+  })
+
+  it('has no dismiss button unless closable', () => {
+    const { queryByRole } = render(CopyPromptButton, { props: { value: PROMPT } })
+    expect(queryByRole('button', { name: 'Dismiss' })).toBeNull()
+  })
+
+  it('removes itself and emits close with the click when dismissed', async () => {
+    const user = userEvent.setup()
+    const { getByRole, queryByTestId, emitted } = render(CopyPromptButton, {
+      props: { value: PROMPT, closable: true }
+    })
+    await user.click(getByRole('button', { name: 'Dismiss' }))
+    expect(emitted('close')).toHaveLength(1)
+    expect(emitted('close')![0][0]).toBeInstanceOf(MouseEvent)
+    expect(queryByTestId('actions-copy-prompt-button')).toBeNull()
+    expect(queryByTestId('actions-copy-prompt-button__frame')).toBeNull()
   })
 
   it('copies the value, emits copy, shows and announces Copied, then resets', async () => {
@@ -140,6 +188,10 @@ describe('CopyPromptButton', () => {
     b.unmount()
     const c = render(DisabledExample)
     expect(c.getByRole('button', { name: 'Copy prompt' })).toBeDisabled()
+    c.unmount()
+    const d = render(ClosableExample)
+    expect(d.getByRole('button', { name: 'Onboard your agent' })).toBeTruthy()
+    expect(d.getByRole('button', { name: 'Dismiss' })).toBeTruthy()
   })
 
   it('has no axe violations idle, without marks and disabled', async () => {
@@ -151,5 +203,8 @@ describe('CopyPromptButton', () => {
     b.unmount()
     const c = render(CopyPromptButton, { props: { value: PROMPT, disabled: true } })
     await expectNoA11yViolations(c.container)
+    c.unmount()
+    const d = render(ClosableExample)
+    await expectNoA11yViolations(d.container)
   })
 })

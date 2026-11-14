@@ -81,8 +81,14 @@ describe('LogoWallQuote', () => {
   it('renders one mark image per logo, named by its client', () => {
     const { getByRole } = band()
 
-    expect(getByRole('img', { name: 'Magalu' })).toHaveAttribute('src', '/logos/magalu.svg')
-    expect(getByRole('img', { name: 'Banco' })).toHaveAttribute('src', '/logos/banco.svg')
+    expect(getByRole('img', { name: 'Magalu' }).querySelector('img')).toHaveAttribute(
+      'src',
+      '/logos/magalu.svg'
+    )
+    expect(getByRole('img', { name: 'Banco' }).querySelector('img')).toHaveAttribute(
+      'src',
+      '/logos/banco.svg'
+    )
   })
 
   it('reflects logoTreatment on the mark, defaulting to as-is', () => {
@@ -92,15 +98,55 @@ describe('LogoWallQuote', () => {
     expect(getByRole('img', { name: 'Banco' })).toHaveAttribute('data-treatment', 'monochrome')
   })
 
-  it('renders two theme images for a logo with logoLight', () => {
+  it('renders two theme images for a logo with logoLight, announced once', () => {
     const { getAllByRole } = band()
 
     const marks = getAllByRole('img', { name: 'Agibank' })
-    expect(marks).toHaveLength(2)
-    expect(marks.map((mark) => mark.getAttribute('src'))).toEqual([
-      '/logos/agibank-reversed.svg',
-      '/logos/agibank-color.svg'
-    ])
+    expect(marks).toHaveLength(1)
+    expect(marks[0]).toHaveAttribute('data-route', 'pair')
+    expect(
+      Array.from(marks[0].querySelectorAll('img')).map((file) => file.getAttribute('src'))
+    ).toEqual(['/logos/agibank-reversed.svg', '/logos/agibank-color.svg'])
+  })
+
+  it('draws a monochrome treatment in the theme ink and maps invert-light to light artwork', () => {
+    const { getByRole } = band({
+      logos: [
+        ...logos,
+        { name: 'Itau', logo: '/logos/itau.svg', logoTreatment: 'invert-light', href: '/itau' }
+      ]
+    })
+
+    expect(getByRole('img', { name: 'Banco' })).toHaveAttribute('data-kind', 'monochrome')
+    expect(getByRole('img', { name: 'Itau' })).toHaveAttribute('data-artwork', 'light')
+  })
+
+  it('takes the registry artwork of a single-file mark', () => {
+    const { getByRole } = band({
+      logos: [{ name: 'Gpa', logo: '/logos/gpa.svg', artwork: 'dark', href: '/gpa' }]
+    })
+
+    const mark = getByRole('img', { name: 'Gpa' })
+    expect(mark).toHaveAttribute('data-route', 'single')
+    expect(mark).toHaveAttribute('data-artwork', 'dark')
+  })
+
+  it('draws the quote mark as a light/dark pair when logoLight is set', () => {
+    const { getByRole } = band({
+      quote: { ...quote, logo: '/logos/zoop-dark.svg', logoLight: '/logos/zoop-light.svg' }
+    })
+
+    const mark = getByRole('img', { name: 'Zoop' })
+    expect(mark).toHaveAttribute('data-route', 'pair')
+  })
+
+  it('renders the secondary action beside the primary one', () => {
+    const { getByRole } = band({
+      secondaryAction: { label: 'See all customers', href: '/customers' }
+    })
+
+    expect(getByRole('link', { name: primaryAction.label })).toBeInTheDocument()
+    expect(getByRole('link', { name: 'See all customers' })).toHaveAttribute('href', '/customers')
   })
 
   it('renders the quote text and its action link', () => {
@@ -154,6 +200,20 @@ describe('LogoWallQuote — quote band', () => {
     expect(root).toHaveAttribute('data-kind', 'quote')
     expect(root).toHaveAttribute('id', 'quote')
     expect(getByText(quote.text)).toBeInTheDocument()
+  })
+
+  it('signs the quote band with the theme-aware company mark and both actions', () => {
+    const { getByRole } = render(LogoWallQuote, {
+      props: {
+        kind: 'quote',
+        quote: { ...quote, artwork: 'light' },
+        primaryAction,
+        secondaryAction: { label: 'Talk to sales', href: '/contact' }
+      }
+    })
+
+    expect(getByRole('img', { name: 'Zoop' })).toHaveAttribute('data-artwork', 'light')
+    expect(getByRole('link', { name: 'Talk to sales' })).toHaveAttribute('href', '/contact')
   })
 
   it('renders nothing in the quote layout without a quote', () => {

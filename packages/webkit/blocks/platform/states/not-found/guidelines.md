@@ -21,9 +21,9 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 
 ## Building blocks
 
-### A. Figure — `Error404` (`@aziontech/webkit/svg/error-404`)
+### A. Figure — `LineFigure` (`@aziontech/webkit/line-figure`)
 
-The large numeral art in the `EmptyState` icon slot, 192 px wide on phones and 256 px from `sm`. It is decorative: the `EmptyState` icon wrapper is `aria-hidden`, and the hidden `h1` names the code. Forbidden uses `Error403`. ServerError and ResourceNotFound use the `EmptyState` icon tile (`pi pi-exclamation-triangle`, `pi pi-search`) because no numeral art exists for them.
+The 404 is the `azion-404` line figure in the `EmptyState` icon slot, 256 px wide on phones and 320 px from `sm`, with `play` so it walks through its answer on its own until a pointer or focus arrives (a still frame under reduced motion). It is decorative: the `EmptyState` icon wrapper is `aria-hidden`, and the hidden `h1` names the code. Forbidden uses the `Error403` numeral art (`@aziontech/webkit/svg/error-403`). ServerError and ResourceNotFound use the `EmptyState` icon tile (`pi pi-exclamation-triangle`, `pi pi-search`) because no numeral art exists for them.
 
 ### B. Message — `EmptyState` (required)
 
@@ -68,7 +68,7 @@ Two at most, side by side, wrapping on narrow screens. The way out is primary (`
 
 ## States
 
-- Default: 404, the 404 numeral art, Page not found, Go to home and Docs.
+- Default: 404, the animated azion-404 line figure, Page not found, Go to home and Docs.
 - Forbidden: 403, the 403 numeral art, You don't have access to this page, Go to home and Switch account.
 - ServerError: 500, the warning icon tile, Something went wrong on our side, Try again, System status and the error reference.
 - ResourceNotFound: a bordered EmptyState in the console's content column naming the missing service and its ID, with Back to services.

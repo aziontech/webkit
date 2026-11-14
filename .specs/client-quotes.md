@@ -3,11 +3,12 @@ name: client-quotes
 category: sections
 structure: monolithic
 status: implemented
-spec_version: 1
+spec_version: 2
 created: 2026-11-04
-last_updated: 2026-11-12
-checksum: af9039737036c16b34019fc336e259949b37eed7c17bce92aa9aeec44c13cd48
+last_updated: 2026-11-14
+checksum: 6626de74e1a9cbc6677269b4c0b28f9a166515eb1cace4cd0fd7def0020b6edb
 ---
+
 # ClientQuotes — Component Spec
 
 ## Purpose
@@ -39,17 +40,29 @@ The client-stories band: a framed `quote-tabs` carousel of customer quotes, each
 
 ```vue
 <script setup>
-import ClientQuotes from '@aziontech/webkit/client-quotes'
-import axur from '@aziontech/webkit/assets/axur-extended-reversed.svg'
-import magalu from '@aziontech/webkit/assets/magalu-extended-color.svg'
+  import ClientQuotes from '@aziontech/webkit/client-quotes'
+  import axur from '@aziontech/webkit/assets/axur-extended-reversed.svg'
+  import magalu from '@aziontech/webkit/assets/magalu-extended-color.svg'
 </script>
 
 <template>
   <ClientQuotes
     aria-label="Client stories"
     :items="[
-      { logo: axur, clientName: 'Axur', text: 'With Azion, we scale proprietary AI models without managing infrastructure.', name: 'Fabio Ramos', jobTitle: 'CEO at Axur' },
-      { logo: magalu, clientName: 'Magalu', text: 'Azion shielded us from sophisticated cyberattacks.', name: 'Allan Monteiro', jobTitle: 'CISO at Magalu' }
+      {
+        logo: axur,
+        clientName: 'Axur',
+        text: 'With Azion, we scale proprietary AI models without managing infrastructure.',
+        name: 'Fabio Ramos',
+        jobTitle: 'CEO at Axur'
+      },
+      {
+        logo: magalu,
+        clientName: 'Magalu',
+        text: 'Azion shielded us from sophisticated cyberattacks.',
+        name: 'Allan Monteiro',
+        jobTitle: 'CISO at Magalu'
+      }
     ]"
     :primary-action="{ label: 'See customer stories', href: '/success-cases', trailing: true }"
   />
@@ -58,19 +71,20 @@ import magalu from '@aziontech/webkit/assets/magalu-extended-color.svg'
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `ariaLabel` | `string` | `''` | false | Accessible name of the quote carousel. |
-| `items` | `ClientQuotesItem[]` | `[]` | false | The quotes, in order; each is `{ text, name?, jobTitle?, mark?, logo?, clientName?, photo? }` where `mark` is a registry mark name and `logo` a mark URL named by `clientName`. |
-| `primaryAction` | `ClientQuotesAction` | `undefined` | false | Button under the quotes; `{ label, href, trailing? }`. Omitted when absent. |
-| `autoplay` | `boolean` | `true` | false | Advances to the next quote on a timer, as `quote-tabs` does; pauses under the pointer or keyboard focus and never runs under reduced motion. |
-| `autoplayInterval` | `number` | `5000` | false | Milliseconds each quote is held before the band advances. |
+| Prop               | Type                 | Default     | Required | JSDoc                                                                                                                                                                           |
+| ------------------ | -------------------- | ----------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `anchor`           | `string`             | `''`        | false    | In-page id set on the band so a hash link can target it.                                                                                                                        |
+| `ariaLabel`        | `string`             | `''`        | false    | Accessible name of the quote carousel.                                                                                                                                          |
+| `items`            | `ClientQuotesItem[]` | `[]`        | false    | The quotes, in order; each is `{ text, name?, jobTitle?, mark?, logo?, clientName?, photo? }` where `mark` is a registry mark name and `logo` a mark URL named by `clientName`. |
+| `primaryAction`    | `ClientQuotesAction` | `undefined` | false    | Button under the quotes; `{ label, href, trailing? }`. Omitted when absent.                                                                                                     |
+| `autoplay`         | `boolean`            | `true`      | false    | Advances to the next quote on a timer, as `quote-tabs` does; pauses under the pointer or keyboard focus and never runs under reduced motion.                                    |
+| `autoplayInterval` | `number`             | `5000`      | false    | Milliseconds each quote is held before the band advances.                                                                                                                       |
 
 ## v-model
 
-| Model | Type | Default | Emits | Notes |
-|---|---|---|---|---|
-| `v-model` | `number` | `0` | `update:modelValue` | Index of the selected quote, passed through to `quote-tabs`; left unbound the band starts on the first quote. A click, an arrow key or the timer writes the new index back. |
+| Model     | Type     | Default | Emits               | Notes                                                                                                                                                                       |
+| --------- | -------- | ------- | ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `v-model` | `number` | `0`     | `update:modelValue` | Index of the selected quote, passed through to `quote-tabs`; left unbound the band starts on the first quote. A click, an arrow key or the timer writes the new index back. |
 
 ## Events
 
@@ -92,15 +106,15 @@ _none_
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
+| Region                | Token (DESIGN.md)       |
+| --------------------- | ----------------------- |
 | frame rules and marks | `var(--border-default)` |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 

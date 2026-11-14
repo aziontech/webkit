@@ -44,7 +44,7 @@
   {
     "name": "copy-prompt-button",
     "path": "src/components/actions/copy-prompt-button/copy-prompt-button.vue",
-    "limit": "2.5 KB",
+    "limit": "6.5 KB",
     "entryOnly": true
   },
   {
@@ -404,6 +404,11 @@
     "entryOnly": true
   },
   {
+    "name": "logo",
+    "path": "src/components/content/logo/logo.vue",
+    "limit": "1.5 KB"
+  },
+  {
     "name": "product-widget",
     "path": "src/components/content/product-widget/product-widget.vue",
     "limit": "2.5 KB",
@@ -589,7 +594,8 @@
   {
     "name": "comparison-table",
     "path": "src/components/sections/comparison-table/comparison-table.vue",
-    "limit": "22.3 KB"
+    "limit": "23.1 KB",
+    "entryOnly": true
   },
   {
     "name": "compare-plans",
@@ -648,7 +654,7 @@
   {
     "name": "client-mosaic",
     "path": "src/components/sections/client-mosaic/client-mosaic.vue",
-    "limit": "7 KB"
+    "limit": "7.1 KB"
   },
   {
     "name": "client-mosaic-columns",

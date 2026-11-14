@@ -3,6 +3,9 @@
 
   import { useTranslate } from '../../../composables/use-locale/use-translate'
   import * as en from '../../../i18n/messages/en'
+  import Logo from '../../content/logo/logo.vue'
+  import Tooltip from '../../overlay/tooltip/tooltip.vue'
+  import IconButton from '../icon-button/icon-button.vue'
 
   defineOptions({ name: 'CopyPromptButton', inheritAttrs: false })
 
@@ -10,8 +13,10 @@
   export type CopyPromptAgent = {
     /** Brand name, read by screen readers in the "Works with" description. */
     name: string
-    /** Icon-font class of the single-colour mark, such as `ai ai-claude`. */
-    icon: string
+    /** Icon-font class of the single-colour mark, such as `ai ai-claude`; used when `logo` is not set. */
+    icon?: string
+    /** URL of the agent's mark file, such as the `@aziontech/webkit/assets/claude-symbol-color.svg` asset, drawn through `Logo` in the chip's own ink. */
+    logo?: string
   }
 
   interface Props {
@@ -25,6 +30,8 @@
     agents?: CopyPromptAgent[]
     /** Disables the button; `copy` is not emitted. */
     disabled?: boolean
+    /** Shows a dismiss button beside the chip; activating it removes both from the layout and emits `close`. */
+    closable?: boolean
   }
 
   const props = withDefaults(defineProps<Props>(), {
@@ -36,11 +43,13 @@
       { name: 'Gemini', icon: 'ai ai-gemini' },
       { name: 'Cursor', icon: 'ai ai-cursor' }
     ],
-    disabled: false
+    disabled: false,
+    closable: false
   })
 
   const emit = defineEmits<{
     copy: [value: string]
+    close: [event: MouseEvent]
   }>()
 
   const attrs = useAttrs()
@@ -69,6 +78,7 @@
   const copied = ref(false)
   const fallbackRequested = ref(false)
   const fallbackOpen = ref(false)
+  const dismissed = ref(false)
   let resetTimer: ReturnType<typeof setTimeout> | null = null
 
   async function onClick() {
@@ -89,6 +99,11 @@
     }, 2000)
   }
 
+  function onClose(event: MouseEvent) {
+    dismissed.value = true
+    emit('close', event)
+  }
+
   onBeforeUnmount(() => {
     if (resetTimer) clearTimeout(resetTimer)
   })
@@ -96,62 +111,105 @@
 
 <template>
   <span
+    v-if="!dismissed"
     :data-testid="`${testId}__frame`"
-    class="inline-flex max-w-full rounded-(--shape-button) border border-(--border-default) p-px"
+    class="inline-flex max-w-full items-center gap-(--spacing-xxs)"
   >
-    <button
-      ref="root"
-      type="button"
-      v-bind="$attrs"
-      data-theme="dark"
-      :data-testid="testId"
-      :data-state="copied ? 'copied' : 'idle'"
-      :data-disabled="disabled ? '' : undefined"
-      :disabled="disabled"
-      :aria-label="copied ? doneLabel : idleLabel"
-      :aria-describedby="worksWith ? describedBy : undefined"
-      class="group/copy-prompt relative isolate inline-flex h-10 min-w-0 max-w-full cursor-pointer items-center gap-(--spacing-sm) overflow-hidden rounded-(--shape-button) border border-(--border-default) bg-(--bg-canvas) bg-linear-to-r rtl:bg-linear-to-l from-(--bg-canvas) via-(--bg-surface-raised) to-(--bg-canvas) ps-(--spacing-md) pe-(--spacing-sm) text-button-lg whitespace-nowrap text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance before:pointer-events-none before:absolute before:inset-0 before:-z-10 before:bg-(--bg-hover) before:opacity-0 before:transition-opacity before:duration-fast-02 before:ease-productive-entrance before:content-[''] enabled:hover:before:opacity-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring-color) disabled:cursor-not-allowed disabled:bg-none disabled:bg-(--bg-disabled) disabled:text-(--text-disabled) motion-reduce:transition-none motion-reduce:before:transition-none pointer-coarse:min-h-11 forced-colors:border-[ButtonBorder]"
-      @click="onClick"
+    <Tooltip
+      :text="t('copyPromptButton.tooltip')"
+      placement="top"
+      :data-testid="`${testId}__tooltip`"
+      class="min-w-0 max-w-full"
     >
-      <span
-        aria-hidden="true"
-        class="pointer-events-none absolute inset-x-(--spacing-xl) top-0 h-px bg-linear-to-r rtl:bg-linear-to-l from-transparent via-(--accent) to-transparent opacity-70 group-disabled/copy-prompt:hidden"
-      />
-      <span
-        aria-hidden="true"
-        class="pointer-events-none absolute inset-x-(--spacing-xl) bottom-0 h-px bg-linear-to-r rtl:bg-linear-to-l from-transparent via-(--accent) to-transparent group-disabled/copy-prompt:hidden"
-      />
-      <span class="grid min-w-0">
-        <span
-          :data-testid="`${testId}__label`"
-          class="truncate [grid-area:1/1] group-data-[state=copied]/copy-prompt:invisible"
-          >{{ idleLabel }}</span
-        >
+      <button
+        ref="root"
+        type="button"
+        v-bind="$attrs"
+        data-theme="dark"
+        :data-testid="testId"
+        :data-state="copied ? 'copied' : 'idle'"
+        :data-disabled="disabled ? '' : undefined"
+        :disabled="disabled"
+        :aria-label="copied ? doneLabel : idleLabel"
+        :aria-describedby="worksWith ? describedBy : undefined"
+        class="group/copy-prompt relative isolate inline-flex h-10 min-w-0 max-w-full cursor-pointer items-center overflow-hidden rounded-(--shape-button) border border-(length:--border-width-default) border-(--secondary-mask) p-px text-button-lg whitespace-nowrap transition-colors duration-fast-02 ease-productive-entrance focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) disabled:cursor-not-allowed disabled:border-transparent disabled:bg-(--bg-disabled) motion-reduce:transition-none pointer-coarse:min-h-11 forced-colors:border-[ButtonBorder]"
+        @click="onClick"
+      >
         <span
           aria-hidden="true"
-          class="invisible inline-flex items-center gap-(--spacing-xxs) [grid-area:1/1] group-data-[state=copied]/copy-prompt:visible"
-        >
-          <i
-            class="pi pi-check text-body-sm"
-            aria-hidden="true"
-          />{{ doneLabel }}</span
-        >
-      </span>
-      <span
-        v-if="agents.length"
-        aria-hidden="true"
-        :data-testid="`${testId}__agents`"
-        class="inline-flex shrink-0 items-center gap-(--spacing-xs) text-(--text-default) group-disabled/copy-prompt:text-(--text-disabled)"
-      >
-        <i
-          v-for="agent in agents"
-          :key="agent.name"
-          :class="agent.icon"
-          class="text-label-lg leading-none"
-          :data-agent="agent.name"
+          class="pointer-events-none absolute inset-0 animate-spin [animation-duration:8s] [animation-timing-function:linear] [background:linear-gradient(90deg,var(--color-base-white),var(--color-blue-500),var(--color-brand-primary-500))] [filter:blur(12px)] motion-reduce:animate-none group-disabled/copy-prompt:hidden"
         />
-      </span>
-    </button>
+        <span
+          aria-hidden="true"
+          class="pointer-events-none absolute inset-px rounded-[inherit] [background-image:linear-gradient(120deg,var(--color-brand-accent-900)_17%,var(--color-brand-accent-100)_53%,var(--color-brand-accent-600)_96%)] transition-opacity duration-300 ease-out motion-reduce:transition-none group-enabled/copy-prompt:group-hover/copy-prompt:opacity-25 group-disabled/copy-prompt:hidden"
+        />
+        <span
+          aria-hidden="true"
+          class="pointer-events-none absolute inset-px rounded-[inherit] bg-(--bg-backdrop) transition-opacity duration-300 ease-out motion-reduce:transition-none group-enabled/copy-prompt:group-hover/copy-prompt:opacity-25 group-disabled/copy-prompt:hidden"
+        />
+        <span
+          class="relative z-1 inline-flex h-full w-full min-w-0 items-center gap-(--spacing-xs) ps-(--spacing-md) pe-(--spacing-sm) text-(--color-base-white) sm:gap-(--spacing-sm) group-disabled/copy-prompt:text-(--text-disabled)"
+        >
+          <span class="grid min-w-0">
+            <span
+              :data-testid="`${testId}__label`"
+              class="truncate [grid-area:1/1] group-data-[state=copied]/copy-prompt:invisible"
+              >{{ idleLabel }}</span
+            >
+            <span
+              aria-hidden="true"
+              class="invisible inline-flex items-center gap-(--spacing-xxs) [grid-area:1/1] group-data-[state=copied]/copy-prompt:visible"
+            >
+              <i
+                class="pi pi-check text-body-sm"
+                aria-hidden="true"
+              />{{ doneLabel }}</span
+            >
+          </span>
+          <span
+            v-if="agents.length"
+            aria-hidden="true"
+            :data-testid="`${testId}__agents`"
+            class="inline-flex shrink-0 items-center gap-(--spacing-xxs) sm:gap-(--spacing-xs)"
+          >
+            <template
+              v-for="agent in agents"
+              :key="agent.name"
+            >
+              <Logo
+                v-if="agent.logo"
+                :name="agent.name"
+                :src="agent.logo"
+                kind="current"
+                decorative
+                :data-agent="agent.name"
+                class="size-5"
+              />
+              <i
+                v-else
+                :class="agent.icon"
+                class="text-label-lg leading-none"
+                :data-agent="agent.name"
+              />
+            </template>
+          </span>
+        </span>
+      </button>
+    </Tooltip>
+    <Tooltip
+      v-if="closable"
+      :text="t('copyPromptButton.dismiss')"
+      placement="top"
+    >
+      <IconButton
+        icon="pi pi-times"
+        kind="transparent"
+        size="small"
+        :aria-label="t('copyPromptButton.dismiss')"
+        :data-testid="`${testId}__close`"
+        @click="onClose"
+      />
+    </Tooltip>
     <span
       v-if="worksWith"
       :id="describedBy"

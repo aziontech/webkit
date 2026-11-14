@@ -40,6 +40,8 @@
   }
 
   interface Props {
+    /** In-page id set on the band so a hash link can target it. */
+    anchor?: string
     /** Accessible name of the quote carousel. */
     ariaLabel?: string
     /** The quotes, in order. */
@@ -53,6 +55,7 @@
   }
 
   const props = withDefaults(defineProps<Props>(), {
+    anchor: '',
     ariaLabel: '',
     items: () => [],
     primaryAction: undefined,
@@ -77,6 +80,7 @@
 <template>
   <div
     v-bind="$attrs"
+    :id="anchor || undefined"
     :data-testid="testId"
   >
     <SectionModule

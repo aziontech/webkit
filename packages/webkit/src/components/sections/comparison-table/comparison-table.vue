@@ -1,10 +1,11 @@
 <script setup lang="ts">
-  import { computed, useAttrs } from 'vue'
+  import { computed, onMounted, ref, shallowRef, useAttrs, watch } from 'vue'
 
   import { useTranslate } from '../../../composables/use-locale/use-translate'
   import * as en from '../../../i18n/messages/en'
   import IconButton from '../../actions/icon-button/icon-button.vue'
   import Brand from '../../content/brand/brand.vue'
+  import Logo, { type LogoArtwork } from '../../content/logo/logo.vue'
   import FrameBox from '../../layout/frame-box/frame-box.vue'
   import SectionModule from '../../marketing/section-module/section-module.vue'
   import SectionTitle from '../../marketing/section-title/section-title.vue'
@@ -25,12 +26,14 @@
 
   /** The platform compared with Azion, heading the last column. */
   export type ComparisonTableCompetitor = {
-    /** Name of the platform; the logo's alt text, and the column head when no logo is set. */
+    /** Name of the platform; the logo's alt text, and the key the competitor registry is searched by when no logo is set. */
     name: string
     /** Logo file for the dark theme, or for both themes when `logoLight` is absent. */
     logo?: string
     /** Logo file for the light theme. */
     logoLight?: string
+    /** The ink a single logo file is drawn in, as the registries record it: `light` art is inverted on the light theme, `dark` art on the dark theme. */
+    artwork?: LogoArtwork
   }
 
   /** One capability, rendered as a table row. */
@@ -54,6 +57,8 @@
   }
 
   interface Props {
+    /** In-page id set on the band so a hash link can target it. */
+    anchor?: string
     /** Overline above the section title. */
     eyebrow?: string
     /** Headline of the band, rendered by the section title as its `h2` and naming the band; no header renders when empty. */
@@ -68,13 +73,14 @@
     partialLabel?: string
     /** Tooltip and screen-reader text of an unsupported cell. */
     noneLabel?: string
-    /** The platform compared with Azion; `{ name, logo?, logoLight? }` where `logo` is the dark-theme file and `logoLight` the light-theme one. */
+    /** The platform compared with Azion; `{ name, logo?, logoLight?, artwork? }` where `logo` is the dark-theme file and `logoLight` the light-theme one. With only a `name`, the logo is taken from the competitor registry once the page is interactive, and the name is the column head until then or when the registry has no entry. */
     competitor: ComparisonTableCompetitor
     /** The categories, in order; each is `{ title, rows }` and a row is `{ capability, definition?, azion?, competitor? }` with each level `full`, `partial` or `none` (missing reads as `none`). */
     groups?: ComparisonTableGroup[]
   }
 
   const props = withDefaults(defineProps<Props>(), {
+    anchor: '',
     eyebrow: '',
     title: '',
     caption: '',
@@ -93,6 +99,30 @@
   )
 
   const hasGroups = computed(() => props.groups.length > 0)
+
+  const mounted = ref(false)
+
+  const registryEntry = shallowRef<ComparisonTableCompetitor | null>(null)
+
+  const hasOwnLogo = computed(() => Boolean(props.competitor.logo || props.competitor.logoLight))
+
+  const competitorMark = computed<ComparisonTableCompetitor>(() =>
+    hasOwnLogo.value ? props.competitor : (registryEntry.value ?? props.competitor)
+  )
+
+  async function loadRegistryEntry() {
+    registryEntry.value = null
+    if (!mounted.value || hasOwnLogo.value) return
+    const name = props.competitor.name
+    const { competitor } = await import('../../../assets/logos/competitors/registry')
+    if (name === props.competitor.name && !hasOwnLogo.value) registryEntry.value = competitor(name)
+  }
+
+  watch(() => [mounted.value, props.competitor.name, hasOwnLogo.value], loadRegistryEntry)
+
+  onMounted(() => {
+    mounted.value = true
+  })
 
   const platforms = ['azion', 'competitor'] as const
 
@@ -114,6 +144,7 @@
 <template>
   <section
     v-bind="$attrs"
+    :id="anchor || undefined"
     :data-testid="testId"
     :aria-label="title || undefined"
   >
@@ -177,35 +208,16 @@
               <th
                 scope="col"
                 :aria-label="competitor.name"
-                class="sticky top-14 z-20 border-b border-s border-(--border-default) bg-(--bg-canvas) px-(--spacing-xs) py-0 align-middle font-normal h-(--compare-head) sm:px-(--spacing-lg)"
+                class="sticky top-14 z-20 border-b border-s border-(--border-default) bg-(--bg-canvas) px-(--spacing-xs) py-0 text-center align-middle font-normal h-(--compare-head) sm:px-(--spacing-lg)"
               >
-                <template v-if="competitor.logo && competitor.logoLight">
-                  <img
-                    :src="competitor.logo"
-                    :alt="competitor.name"
-                    decoding="async"
-                    class="mx-auto h-3 w-auto max-w-full object-contain sm:h-4 md:h-6 hidden [[data-theme=dark]_&]:block"
-                  />
-                  <img
-                    :src="competitor.logoLight"
-                    :alt="competitor.name"
-                    decoding="async"
-                    class="mx-auto h-3 w-auto max-w-full object-contain sm:h-4 md:h-6 block [[data-theme=dark]_&]:hidden"
-                  />
-                </template>
-                <img
-                  v-else-if="competitor.logo"
-                  :src="competitor.logo"
-                  :alt="competitor.name"
-                  decoding="async"
-                  class="mx-auto h-3 w-auto max-w-full object-contain sm:h-4 md:h-6"
+                <Logo
+                  :name="competitorMark.name"
+                  :src="competitorMark.logo"
+                  :src-light="competitorMark.logoLight"
+                  :artwork="competitorMark.artwork"
+                  :data-testid="`${testId}__competitor-logo`"
+                  class="h-3 sm:h-4 md:h-6"
                 />
-                <span
-                  v-else
-                  class="block text-center text-heading-xxs whitespace-nowrap"
-                >
-                  {{ competitor.name }}
-                </span>
               </th>
             </tr>
           </thead>
