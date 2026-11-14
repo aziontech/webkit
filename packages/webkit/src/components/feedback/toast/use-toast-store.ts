@@ -1,6 +1,12 @@
 import { reactive, readonly, ref } from 'vue'
 
-/** Severity / lifecycle variants reflected on each toast via `data-type`. */
+/** Severity / lifecycle variants reflected on each toast via `data-severity`. */
+export type ToastSeverity = 'default' | 'success' | 'info' | 'warning' | 'danger' | 'loading'
+
+/**
+ * Legacy name of the severity union, with `error` for `danger`.
+ * @deprecated since 6.0 — use `ToastSeverity`. Removed in 7.0.
+ */
 export type ToastType = 'default' | 'success' | 'info' | 'warning' | 'error' | 'loading'
 
 /** Corner (or edge-center) a toast (or the whole Toaster) is anchored to. */
@@ -23,7 +29,7 @@ export interface ToastOptions {
   action?: ToastAction
   /** Up to two inline actions (the first two are rendered); takes precedence over `action`. */
   actions?: ToastAction[]
-  /** Auto-dismiss time in ms for this toast; `0` keeps it until dismissed. Falls back to the Toaster default. */
+  /** Auto-dismiss time in ms for this toast; `0` keeps it until dismissed. Falls back to the Toaster default, raised to at least 10 s when the toast has an action. */
   duration?: number
   /** Anchor this single toast to a specific corner, overriding the Toaster's `position`. */
   position?: ToastPosition
@@ -50,6 +56,11 @@ export interface ToastEntry {
   /** Stable identity used for keying and dismissal. */
   id: string
   /** Severity / lifecycle variant. */
+  severity: ToastSeverity
+  /**
+   * Legacy severity, with `error` for `danger`; kept in sync with `severity`.
+   * @deprecated since 6.0 — use `severity`. Removed in 7.0.
+   */
   type: ToastType
   /** Primary line. */
   message: string
@@ -77,7 +88,13 @@ export interface ToastStore {
   /** The live, read-only stack the Toaster renders. */
   toasts: readonly ToastEntry[]
   /** Push a new entry (or replace one with the same id) and return its id. */
-  add: (entry: Omit<ToastEntry, 'duration'> & { duration?: number }) => string
+  add: (
+    entry: Omit<ToastEntry, 'duration' | 'severity' | 'type'> & {
+      duration?: number
+      severity?: ToastSeverity
+      type?: ToastType
+    }
+  ) => string
   /** Patch an existing entry in place; no-op when the id is unknown. */
   update: (id: string, patch: ToastEntryPatch) => void
   /** Remove one entry by id, or clear the whole stack when no id is given. */
@@ -91,6 +108,19 @@ export interface ToastStore {
 }
 
 const DEFAULT_DURATION = 4000
+const ACTION_MIN_DURATION = 10000
+
+const severityOfType = (type: ToastType): ToastSeverity => (type === 'error' ? 'danger' : type)
+const typeOfSeverity = (severity: ToastSeverity): ToastType =>
+  severity === 'danger' ? 'error' : severity
+
+const resolveSeverity = (
+  severity: ToastSeverity | undefined,
+  type: ToastType | undefined
+): ToastSeverity => severity ?? (type ? severityOfType(type) : 'default')
+
+const hasActions = (entry: { action?: ToastAction; actions?: ToastAction[] }): boolean =>
+  Boolean(entry.action || entry.actions?.length)
 
 const defaultDuration = ref(DEFAULT_DURATION)
 
@@ -164,8 +194,14 @@ const resumeAll = () => {
 }
 
 const add: ToastStore['add'] = (entry) => {
-  const duration = entry.duration ?? defaultDuration.value
-  const next: ToastEntry = { ...entry, duration }
+  const fallback = hasActions(entry)
+    ? defaultDuration.value === 0
+      ? 0
+      : Math.max(defaultDuration.value, ACTION_MIN_DURATION)
+    : defaultDuration.value
+  const duration = entry.duration ?? fallback
+  const severity = resolveSeverity(entry.severity, entry.type)
+  const next: ToastEntry = { ...entry, severity, type: typeOfSeverity(severity), duration }
   const existing = entries.findIndex((item) => item.id === next.id)
   if (existing !== -1) {
     entries.splice(existing, 1, next)
@@ -182,6 +218,8 @@ const update: ToastStore['update'] = (id, patch) => {
     return
   }
   const merged: ToastEntry = { ...entries[index], ...patch }
+  if (patch.severity) merged.type = typeOfSeverity(patch.severity)
+  else if (patch.type) merged.severity = severityOfType(patch.type)
   entries.splice(index, 1, merged)
   scheduleDismiss(id, merged.duration)
 }
@@ -202,10 +240,10 @@ export const toastStore: ToastStore = {
 
 export const useToastStore = (): ToastStore => toastStore
 
-const raise = (type: ToastType, message: string, options: ToastOptions = {}): string =>
+const raise = (severity: ToastSeverity, message: string, options: ToastOptions = {}): string =>
   toastStore.add({
     id: options.id ?? nextId(),
-    type,
+    severity,
     message,
     description: options.description,
     action: options.action,
@@ -236,7 +274,7 @@ const base = (message: string, options?: ToastOptions): string => raise('default
 const toastFn = base as ToastFn
 
 toastFn.success = (message, options) => raise('success', message, options)
-toastFn.error = (message, options) => raise('error', message, options)
+toastFn.error = (message, options) => raise('danger', message, options)
 toastFn.info = (message, options) => raise('info', message, options)
 toastFn.warning = (message, options) => raise('warning', message, options)
 toastFn.loading = (message, options) => raise('loading', message, { duration: 0, ...options })
@@ -247,11 +285,11 @@ toastFn.promise = (promise, messages, options) => {
     (value) => {
       const text =
         typeof messages.success === 'function' ? messages.success(value) : messages.success
-      toastStore.update(id, { type: 'success', message: text, duration: defaultDuration.value })
+      toastStore.update(id, { severity: 'success', message: text, duration: defaultDuration.value })
     },
     (reason) => {
       const text = typeof messages.error === 'function' ? messages.error(reason) : messages.error
-      toastStore.update(id, { type: 'error', message: text, duration: defaultDuration.value })
+      toastStore.update(id, { severity: 'danger', message: text, duration: defaultDuration.value })
     }
   )
   return id

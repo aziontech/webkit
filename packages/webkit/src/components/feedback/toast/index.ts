@@ -37,6 +37,7 @@ export type {
   ToastEntryPatch,
   ToastOptions,
   ToastPromiseMessages,
+  ToastSeverity,
   ToastStore,
   ToastType
 } from './use-toast-store'
