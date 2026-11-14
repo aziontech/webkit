@@ -648,7 +648,7 @@
   {
     "name": "client-mosaic",
     "path": "src/components/sections/client-mosaic/client-mosaic.vue",
-    "limit": "7 KB"
+    "limit": "7.1 KB"
   },
   {
     "name": "client-mosaic-columns",

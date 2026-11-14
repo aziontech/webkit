@@ -46,6 +46,12 @@ describe('ClientQuotes', () => {
     expect(getByTestId(TESTID)).toBeInTheDocument()
   })
 
+  it('sets the anchor as the band id', () => {
+    const { getByTestId } = render(ClientQuotes, { props: { items, anchor: 'clients' } })
+
+    expect(getByTestId(TESTID)).toHaveAttribute('id', 'clients')
+  })
+
   it('lets a consumer data-testid win over the fallback', () => {
     const { getByTestId, queryByTestId } = render(ClientQuotes, {
       props: { items },

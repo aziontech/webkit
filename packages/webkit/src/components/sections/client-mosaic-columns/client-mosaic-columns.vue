@@ -44,6 +44,8 @@
   }
 
   interface Props {
+    /** In-page id set on the band so a hash link can target it. */
+    anchor?: string
     /** Accessible name of the list of stories. */
     ariaLabel?: string
     /** Label the mark face reveals on hover and the link's accessible name. */
@@ -53,6 +55,7 @@
   }
 
   withDefaults(defineProps<Props>(), {
+    anchor: '',
     ariaLabel: '',
     linkLabel: '',
     cells: () => []
@@ -81,6 +84,7 @@
 <template>
   <section
     v-bind="$attrs"
+    :id="anchor || undefined"
     :data-testid="testId"
   >
     <SectionModule
