@@ -44,7 +44,7 @@ describe('shells/console#AccountSwitch placement', () => {
 })
 
 describe('shells/console#AccountSwitchFailed', () => {
-  it('replaces the account table with a danger alert and loads the list on Try again', async () => {
+  it('replaces the account table with a danger alert and loads the list on Retry', async () => {
     at(AccountSwitchFailed, 1280)
     const panel = await waitFor(() => {
       expect(dialog()?.textContent).toContain('Switch account')
@@ -56,7 +56,7 @@ describe('shells/console#AccountSwitchFailed', () => {
     expect(within(panel).getByLabelText('Search accounts')).toBeTruthy()
     await expectNoA11yViolations(panel)
 
-    await fireEvent.click(within(panel).getByRole('button', { name: 'Try again' }))
+    await fireEvent.click(within(panel).getByRole('button', { name: 'Retry' }))
 
     await waitFor(() => expect(within(panel).getByRole('table')).toBeTruthy())
     expect(panel.textContent).not.toContain('The account list could not be loaded.')

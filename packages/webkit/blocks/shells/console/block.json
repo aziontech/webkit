@@ -66,7 +66,7 @@
     },
     {
       "name": "AccountSwitchFailed",
-      "summary": "The AccountSwitch dialog when the account list fails to load: a danger `Alert`, The account list could not be loaded., with Try again replaces the account `Table` under the search; Try again loads the tree.",
+      "summary": "The AccountSwitch dialog when the account list fails to load: a danger `Alert`, The account list could not be loaded., with Retry replaces the account `Table` under the search; Retry loads the tree.",
       "file": "variants/account-switch-failed.vue"
     }
   ]

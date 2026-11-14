@@ -656,7 +656,7 @@
                 severity="danger"
                 size="medium"
                 label="The account list could not be loaded."
-                action-label="Try again"
+                action-label="Retry"
                 @action="retryLoad"
               />
               <Card

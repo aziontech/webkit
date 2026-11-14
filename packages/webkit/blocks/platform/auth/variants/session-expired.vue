@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
+  import Alert, { type AlertSeverity } from '@aziontech/webkit/alert'
   import Brand from '@aziontech/webkit/brand'
   import Button, { type ButtonKind } from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
@@ -8,6 +8,7 @@
   import HelperText from '@aziontech/webkit/helper-text'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
+  import PageHeader from '@aziontech/webkit/page-header'
   import PasswordInput from '@aziontech/webkit/password-input'
   import PasswordRequirements, {
     DEFAULT_PASSWORD_REQUIREMENTS
@@ -17,17 +18,47 @@
   import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, nextTick, onMounted, onScopeDispose, reactive, ref } from 'vue'
 
-  const expiredEmail = 'myemail@example.com'
+  interface CardNotice {
+    severity: AlertSeverity
+    label: string
+    retry?: boolean
+  }
 
-  const step = ref(expiredEmail ? 'password' : 'email')
+  const failure: string = ''
+  const failureNotices: Record<string, CardNotice> = {
+    'bad-credentials': {
+      severity: 'danger',
+      label: 'Incorrect email or password. Check both and try again.'
+    },
+    'service-unavailable': {
+      severity: 'warning',
+      label: 'Sign-in is unavailable right now. Your credentials are fine.',
+      retry: true
+    },
+    'server-error': {
+      severity: 'danger',
+      label: 'Sign-in failed on our side. You are still signed out. Error 500.',
+      retry: true
+    },
+    timeout: {
+      severity: 'warning',
+      label: 'The server did not answer in time. Your session may already be open.',
+      retry: true
+    }
+  }
+
+  const step = ref('password')
   const returnStep = ref('email')
-  const expiredNotice = ref(Boolean(expiredEmail))
-  const email = ref(expiredEmail)
+  const email = ref('jane.doe@example.com')
   const password = ref('')
   const resetEmail = ref('')
   const newPassword = ref('')
   const confirmPassword = ref('')
-  const signedIn = ref(false)
+  const cardNotice = ref<CardNotice | null>({
+    severity: 'info',
+    label: 'Your session expired. Sign in again to pick up where you left off.'
+  })
+  const verifying = ref(false)
   const errors = reactive({
     email: '',
     password: '',
@@ -40,6 +71,7 @@
   const cardHeight = ref(0)
   const resizing = ref(false)
   let resizeObserver: ResizeObserver | null = null
+  let requestTimer: ReturnType<typeof setTimeout> | undefined
 
   const onCardResize = ([entry]: ResizeObserverEntry[]) => {
     const next = Math.round(entry.contentRect.height)
@@ -53,7 +85,10 @@
     resizeObserver.observe(cardContent.value)
   })
 
-  onScopeDispose(() => resizeObserver?.disconnect())
+  onScopeDispose(() => {
+    resizeObserver?.disconnect()
+    clearTimeout(requestTimer)
+  })
 
   const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
@@ -96,16 +131,26 @@
     return { label: 'Continue with email', kind: 'primary' }
   })
 
+  const focusField = (id: string) => nextTick(() => document.getElementById(id)?.focus())
+
+  const request = (done: () => void) => {
+    verifying.value = true
+    clearTimeout(requestTimer)
+    requestTimer = setTimeout(() => {
+      verifying.value = false
+      done()
+    }, 600)
+  }
+
   const backToEmail = () => {
-    signedIn.value = false
+    cardNotice.value = null
     step.value = 'email'
     password.value = ''
     errors.password = ''
   }
 
   const forgotPassword = () => {
-    signedIn.value = false
-    expiredNotice.value = false
+    cardNotice.value = null
     returnStep.value = step.value === 'password' ? 'password' : 'email'
     resetEmail.value = email.value
     errors.resetEmail = ''
@@ -113,10 +158,21 @@
   }
 
   const backToSignIn = () => {
+    cardNotice.value = null
     step.value = returnStep.value
   }
 
+  const resendEmail = () => {
+    request(() => {
+      cardNotice.value = {
+        severity: 'success',
+        label: `We sent another link to ${resetEmail.value}.`
+      }
+    })
+  }
+
   const openResetLink = () => {
+    cardNotice.value = null
     newPassword.value = ''
     confirmPassword.value = ''
     errors.newPassword = ''
@@ -124,23 +180,29 @@
     step.value = 'new-password'
   }
 
-  const focusField = (id: string) => nextTick(() => document.getElementById(id)?.focus())
+  const signIn = () => {
+    errors.password = password.value ? '' : 'This field is required.'
+    if (errors.password) {
+      focusField('login-password')
+      return
+    }
+    request(() => {
+      cardNotice.value = failureNotices[failure] ?? { severity: 'success', label: 'Signed in.' }
+    })
+  }
 
   const handlePrimary = () => {
-    expiredNotice.value = false
-    signedIn.value = false
+    if (verifying.value) return
+    cardNotice.value = null
     if (step.value === 'email') {
       errors.email = emailError(email.value)
       if (errors.email) focusField('login-email')
-      else step.value = 'password'
-    } else if (step.value === 'password') {
-      errors.password = password.value ? '' : 'This field is required.'
-      if (errors.password) focusField('login-password')
-      else signedIn.value = true
-    } else if (step.value === 'reset') {
+      else request(() => (step.value = 'password'))
+    } else if (step.value === 'password') signIn()
+    else if (step.value === 'reset') {
       errors.resetEmail = emailError(resetEmail.value)
       if (errors.resetEmail) focusField('reset-email')
-      else step.value = 'sent'
+      else request(() => (step.value = 'sent'))
     } else if (step.value === 'new-password') {
       errors.newPassword = newPasswordError(newPassword.value)
       errors.confirmPassword = !confirmPassword.value
@@ -150,12 +212,17 @@
           : "Passwords don't match."
       if (errors.newPassword || errors.confirmPassword)
         focusField(errors.newPassword ? 'new-password' : 'confirm-password')
-      else {
-        email.value = resetEmail.value
-        password.value = ''
-        returnStep.value = 'password'
-        step.value = 'password'
-      }
+      else
+        request(() => {
+          email.value = resetEmail.value
+          password.value = ''
+          returnStep.value = 'password'
+          step.value = 'password'
+          cardNotice.value = {
+            severity: 'success',
+            label: 'Password updated. Sign in with the new one.'
+          }
+        })
     } else backToSignIn()
   }
 </script>
@@ -212,37 +279,42 @@
                       ref="cardContent"
                       class="flex flex-col gap-(--spacing-lg)"
                       aria-label="Sign in to your account"
+                      :aria-busy="verifying || undefined"
                       novalidate
                       @submit.prevent="handlePrimary"
                     >
-                      <header class="flex flex-col gap-(--spacing-xxs)">
-                        <h1 class="text-heading-sm text-(--text-default)">
-                          {{ heading.title }}
-                        </h1>
-                        <p
-                          v-if="heading.description"
-                          class="text-body-sm text-(--text-muted)"
+                      <PageHeader
+                        :title="heading.title"
+                        :description="heading.description"
+                        size="small"
+                      />
+
+                      <Alert
+                        v-if="cardNotice"
+                        :key="cardNotice.label"
+                        :severity="cardNotice.severity"
+                        size="small"
+                        :label="cardNotice.label"
+                      >
+                        <template
+                          v-if="cardNotice.retry"
+                          #action
                         >
-                          {{ heading.description }}
-                        </p>
-                      </header>
+                          <Button
+                            label="Retry"
+                            kind="secondary"
+                            size="small"
+                            :loading="verifying"
+                            @click="signIn"
+                          />
+                        </template>
+                      </Alert>
 
-                      <Alert
-                        v-if="expiredNotice"
-                        key="expired"
-                        severity="info"
-                        size="small"
-                        label="Your session expired. Sign in again to pick up where you left off."
-                      />
-                      <Alert
-                        v-else-if="signedIn"
-                        key="signed-in"
-                        severity="success"
-                        size="small"
-                        label="Signed in."
-                      />
-
-                      <div class="flex flex-col">
+                      <fieldset
+                        class="m-0 flex min-w-0 flex-col border-0 p-0"
+                        :disabled="verifying"
+                      >
+                        <legend class="sr-only">{{ heading.title }}</legend>
                         <div
                           v-if="step === 'email'"
                           class="flex flex-col gap-(--spacing-lg) pb-(--spacing-lg)"
@@ -269,10 +341,7 @@
                           <Separator label="or" />
                         </div>
 
-                        <div
-                          v-if="step === 'email'"
-                          class="motion-reduce:transition-none motion-reduce:transform-none"
-                        >
+                        <div v-if="step === 'email'">
                           <Field :required="!!errors.email && !email.trim()">
                             <Field.Label for="login-email">Email</Field.Label>
                             <Input
@@ -283,7 +352,7 @@
                               size="large"
                               autocomplete="username"
                               class="w-full"
-                              placeholder="myemail@example.com"
+                              placeholder="m@example.com"
                               :required="!!errors.email && !email.trim()"
                               :invalid="!!errors.email && !!email.trim()"
                               :aria-describedby="errors.email ? 'login-email-error' : undefined"
@@ -300,11 +369,9 @@
 
                         <div
                           v-else-if="step === 'password'"
-                          class="flex flex-col gap-(--spacing-lg) motion-reduce:transition-none motion-reduce:transform-none"
+                          class="flex flex-col gap-(--spacing-lg)"
                         >
-                          <div
-                            class="flex items-center gap-(--spacing-sm) motion-reduce:transition-none motion-reduce:transform-none"
-                          >
+                          <div class="flex items-center gap-(--spacing-sm)">
                             <Tooltip text="Change email">
                               <IconButton
                                 icon="pi pi-chevron-left"
@@ -319,8 +386,9 @@
                             }}</span>
                           </div>
 
-                          <div class="flex flex-col gap-(--spacing-xs)">
+                          <div class="flex flex-col items-start gap-(--spacing-xs)">
                             <Field
+                              class="w-full"
                               :required="!!errors.password && !password"
                               :invalid="!!errors.password && !!password"
                             >
@@ -333,27 +401,25 @@
                                 placeholder="Type your password"
                                 @update:model-value="errors.password = ''"
                               />
-                              <Field.Description v-if="errors.password">{{
+                              <Field.Error v-if="errors.password">{{
                                 errors.password
-                              }}</Field.Description>
+                              }}</Field.Error>
                             </Field>
 
-                            <a
-                              class="self-start text-body-xs text-(--text-muted) underline underline-offset-2 transition-colors duration-fast-02 ease-productive-entrance hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
-                              href="#"
-                              @click.prevent="forgotPassword"
-                              >Forgot your password?</a
-                            >
+                            <Button
+                              type="button"
+                              label="Forgot your password?"
+                              kind="link"
+                              @click="forgotPassword"
+                            />
                           </div>
                         </div>
 
                         <div
                           v-else-if="step === 'reset'"
-                          class="flex flex-col gap-(--spacing-lg) motion-reduce:transition-none motion-reduce:transform-none"
+                          class="flex flex-col gap-(--spacing-lg)"
                         >
-                          <div
-                            class="flex items-center gap-(--spacing-sm) motion-reduce:transition-none motion-reduce:transform-none"
-                          >
+                          <div class="flex items-center gap-(--spacing-sm)">
                             <Tooltip text="Back to sign in">
                               <IconButton
                                 icon="pi pi-chevron-left"
@@ -378,7 +444,7 @@
                               size="large"
                               autocomplete="email"
                               class="w-full"
-                              placeholder="myemail@example.com"
+                              placeholder="m@example.com"
                               :required="!!errors.resetEmail && !resetEmail.trim()"
                               :invalid="!!errors.resetEmail && !!resetEmail.trim()"
                               :aria-describedby="
@@ -397,7 +463,7 @@
 
                         <div
                           v-else-if="step === 'new-password'"
-                          class="flex flex-col gap-(--spacing-lg) motion-reduce:transition-none motion-reduce:transform-none"
+                          class="flex flex-col gap-(--spacing-lg)"
                         >
                           <Field
                             :required="!!errors.newPassword && !newPassword"
@@ -412,9 +478,9 @@
                               placeholder="Enter a new password"
                               @update:model-value="errors.newPassword = ''"
                             />
-                            <Field.Description v-if="errors.newPassword">{{
+                            <Field.Error v-if="errors.newPassword">{{
                               errors.newPassword
-                            }}</Field.Description>
+                            }}</Field.Error>
                             <PasswordRequirements :value="newPassword" />
                           </Field>
 
@@ -431,38 +497,38 @@
                               placeholder="Repeat the new password"
                               @update:model-value="errors.confirmPassword = ''"
                             />
-                            <Field.Description v-if="errors.confirmPassword">{{
+                            <Field.Error v-if="errors.confirmPassword">{{
                               errors.confirmPassword
-                            }}</Field.Description>
+                            }}</Field.Error>
                           </Field>
                         </div>
 
                         <div
                           v-else
-                          class="flex flex-col gap-(--spacing-xs) motion-reduce:transition-none motion-reduce:transform-none"
+                          class="flex flex-col gap-(--spacing-xs)"
                         >
                           <div class="flex items-center gap-(--spacing-xs)">
                             <p class="text-body-sm text-(--text-default)">
                               Didn't receive the email?
                             </p>
-                            <a
-                              class="text-link text-body-sm"
-                              href="#"
-                              @click.prevent
-                              >Resend email</a
-                            >
+                            <Button
+                              type="button"
+                              label="Resend email"
+                              kind="link"
+                              @click="resendEmail"
+                            />
                           </div>
                           <div class="flex items-center gap-(--spacing-xs)">
                             <p class="text-body-sm text-(--text-default)">Already opened it?</p>
-                            <a
-                              class="text-link text-body-sm"
-                              href="#"
-                              @click.prevent="openResetLink"
-                              >Set a new password</a
-                            >
+                            <Button
+                              type="button"
+                              label="Set a new password"
+                              kind="link"
+                              @click="openResetLink"
+                            />
                           </div>
                         </div>
-                      </div>
+                      </fieldset>
 
                       <div class="relative">
                         <Button
@@ -471,6 +537,7 @@
                           size="large"
                           class="w-full"
                           type="submit"
+                          :loading="verifying"
                         />
 
                         <div
@@ -502,27 +569,26 @@
                 >
               </div>
 
-              <p
-                v-if="step === 'email' || step === 'password'"
-                class="text-center text-body-xs text-(--text-muted)"
-              >
-                By continuing, I agree to the
-                <a
-                  class="text-link"
-                  href="https://example.com/terms"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  >terms of service</a
-                >
-                and
-                <a
-                  class="text-link"
-                  href="https://example.com/privacy"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  >privacy policy</a
-                >.
-              </p>
+              <template v-if="step === 'email' || step === 'password'">
+                <p class="text-center text-body-xs text-(--text-muted)">
+                  By continuing, I agree to the
+                  <a
+                    class="text-link"
+                    href="https://example.com/terms"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    >terms of service</a
+                  >
+                  and
+                  <a
+                    class="text-link"
+                    href="https://example.com/privacy"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    >privacy policy</a
+                  >.
+                </p>
+              </template>
             </div>
           </div>
         </div>
