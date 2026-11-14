@@ -19,6 +19,7 @@ import {
   limitToBytes,
   raisedBudgets
 } from '../../scripts/check-size-ratchet.mjs'
+import { initialOutputs } from '../../scripts/check-size.mjs'
 
 const FIXTURES = join(dirname(fileURLToPath(import.meta.url)), 'fixtures/complete-examples')
 const fixture = (name) => readFileSync(join(FIXTURES, name), 'utf-8')
@@ -184,6 +185,36 @@ test('raisedBudgets keys entries by measured path, so a renamed entry is compare
     { name: 'shell', path: 'src/index.ts', limit: '72 KB' }
   ]
   assert.deepEqual(raisedBudgets(base, head), [{ name: 'shell', from: '10 KB', to: '72 KB' }])
+})
+
+test('raisedBudgets treats a switch to entryOnly as a raise, even at the same limit', () => {
+  const base = [
+    { name: 'tabs', path: 'src/tabs.vue', limit: '12 KB' },
+    { name: 'table', path: 'src/table.vue', limit: '40 KB', entryOnly: true }
+  ]
+  const head = [
+    { name: 'tabs', path: 'src/tabs.vue', limit: '12 KB', entryOnly: true },
+    { name: 'table', path: 'src/table.vue', limit: '40 KB', entryOnly: true }
+  ]
+  assert.deepEqual(raisedBudgets(base, head), [
+    { name: 'tabs', from: '12 KB', to: '12 KB (entryOnly: lazy chunks no longer counted)' }
+  ])
+  assert.deepEqual(raisedBudgets(head, base), [])
+})
+
+test('initialOutputs counts the entry and every chunk it imports statically, not lazy chunks', () => {
+  const chunk = (fileName, extra) => ({ type: 'chunk', fileName, imports: [], ...extra })
+  const outputs = [
+    chunk('entry.js', { isEntry: true, imports: ['shared.js'], dynamicImports: ['lazy.js'] }),
+    chunk('shared.js', { imports: ['deep.js'] }),
+    chunk('deep.js'),
+    chunk('lazy.js', { imports: ['shared.js', 'lazy-only.js'] }),
+    chunk('lazy-only.js')
+  ]
+  assert.deepEqual(
+    initialOutputs(outputs).map((o) => o.fileName),
+    ['entry.js', 'shared.js', 'deep.js']
+  )
 })
 
 test('hasBudgetRaise needs a line starting Budget-raise: with a reason', () => {
