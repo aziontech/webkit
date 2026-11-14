@@ -3,11 +3,11 @@ name: breadcrumb-item
 category: navigation
 structure: monolithic
 status: implemented
-spec_version: 1
+spec_version: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3374-6288
   node_id: 3374:6288
-checksum: 2212f727289927667770dd0de7155976bf76faef1f3812d0a25d8fbdff48a4c4
+checksum: 9f317c4664f7936cf4e13ef4036127d7333c07d7acd9bb0d6418fc85368972ab
 created: 2026-05-25
 last_updated: 2026-11-11
 ---
@@ -37,8 +37,8 @@ Single segment in a breadcrumb trail. Ancestor segments use muted label text and
 ## Best practices
 
 - Set `current` on the last segment only; it renders a `span` with `aria-current="page"`, drops out of the tab order and ignores `href`.
-- Always pass a real `href` on ancestors — it defaults to `'#'`, and the segment renders an `a`.
-- Use `show-icon` together with `icon` (a PrimeIcons class, default `pi pi-box`); `icon` alone renders nothing.
+- Always pass a real `href` on ancestors — an empty `href` (the default) renders `#`, and the segment renders an `a`.
+- Use `show-icon` together with `icon` (a PrimeIcons class; empty shows `pi pi-box`); `icon` alone renders nothing.
 - `disabled` suppresses the `click` emit and removes the segment from the tab order; prefer omitting an unreachable ancestor over disabling it.
 
 ## Usage
@@ -60,14 +60,14 @@ Single segment in a breadcrumb trail. Ancestor segments use muted label text and
 
 ## Props
 
-| Prop       | Type      | Default       | Required | JSDoc                                                                              |
-| ---------- | --------- | ------------- | -------- | ---------------------------------------------------------------------------------- |
-| `label`    | `string`  | `'Page Name'` | false    | Visible segment label.                                                             |
-| `href`     | `string`  | `'#'`         | false    | Destination when the segment is a link (ignored when `current` is true).           |
-| `current`  | `boolean` | `false`       | false    | Marks the current page (last segment); renders as span with `aria-current="page"`. |
-| `showIcon` | `boolean` | `false`       | false    | When true, renders a leading PrimeIcons icon before the label.                     |
-| `icon`     | `string`  | `'pi pi-box'` | false    | PrimeIcons class for the leading icon when `showIcon` is true.                     |
-| `disabled` | `boolean` | `false`       | false    | Disables interaction and applies disabled tokens.                                  |
+| Prop       | Type      | Default | Required | JSDoc                                                                                       |
+| ---------- | --------- | ------- | -------- | ------------------------------------------------------------------------------------------- |
+| `label`    | `string`  | `''`    | false    | Visible segment label.                                                                      |
+| `href`     | `string`  | `''`    | false    | Destination when the segment is a link (ignored when `current` is true); empty renders `#`. |
+| `current`  | `boolean` | `false` | false    | Marks the current page (last segment); renders as span with `aria-current="page"`.          |
+| `showIcon` | `boolean` | `false` | false    | When true, renders a leading PrimeIcons icon before the label.                              |
+| `icon`     | `string`  | `''`    | false    | PrimeIcons class for the leading icon when `showIcon` is true; empty shows `pi pi-box`.     |
+| `disabled` | `boolean` | `false` | false    | Disables interaction and applies disabled tokens.                                           |
 
 ## Events
 
