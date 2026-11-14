@@ -216,13 +216,16 @@ describe('ArticleHighlight', () => {
     })
 
     const root = highlightOf(getByTestId)
-    await leave(getByTestId)
     const control = await findByRole('button', { name: 'Pause rotation' })
     await fireEvent.click(control)
+    await leave(getByTestId)
     expect(root).toHaveAttribute('data-paused')
     expect(root.hasAttribute('data-autoplay')).toBe(false)
+    const selected = () =>
+      getAllByRole('tab').findIndex((tab) => tab.getAttribute('aria-selected') === 'true')
+    const held = selected()
     await new Promise((resolve) => setTimeout(resolve, 500))
-    expect(getAllByRole('tab')[0]?.getAttribute('aria-selected')).toBe('true')
+    expect(selected()).toBe(held)
 
     await fireEvent.click(getByRole('button', { name: 'Resume rotation' }))
     await waitFor(() => expect(root.hasAttribute('data-autoplay')).toBe(true))
