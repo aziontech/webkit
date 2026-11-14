@@ -1,5 +1,5 @@
-import { render } from '@testing-library/vue'
-import { describe, expect, it } from 'vitest'
+import { fireEvent, render } from '@testing-library/vue'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import { h } from 'vue'
 
 import Default from '../../../../examples/section-command/default.vue'
@@ -7,8 +7,29 @@ import Prompt from '../../../../examples/section-command/prompt.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import { LOCALES } from '../../../test/locales'
 import WebkitProvider from '../../utils/webkit-provider/webkit-provider.vue'
+import SectionCommand from './section-command.vue'
 
 describe('SectionCommand', () => {
+  afterEach(() => vi.restoreAllMocks())
+
+  it('carries the fallback testid and lets a consumer testid win', () => {
+    const { getByTestId, unmount } = render(SectionCommand, { props: { value: 'npm i' } })
+    expect(getByTestId('sections-section-command')).toBeInTheDocument()
+    unmount()
+    const custom = render(SectionCommand, {
+      props: { value: 'npm i' },
+      attrs: { 'data-testid': 'install' }
+    })
+    expect(custom.getByTestId('install')).toBeInTheDocument()
+  })
+
+  it('copies the command value as written', async () => {
+    const writeText = vi.spyOn(navigator.clipboard, 'writeText').mockResolvedValue()
+    const { getByRole } = render(Default)
+    await fireEvent.click(getByRole('button', { name: 'Copy command' }))
+    await vi.waitFor(() => expect(writeText).toHaveBeenCalledWith('npm create azion@latest'))
+  })
+
   it('shows the command read-only with a decorative prompt', () => {
     const { getByRole, getByText } = render(Default)
     const field = getByRole('textbox', { name: 'Command' })

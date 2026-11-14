@@ -37,6 +37,14 @@ const band = (props: Record<string, unknown> = {}) =>
   render(SubjectLibrary, { props: { anchor: 'subjects', subjects, closing, ...props } })
 
 describe('SubjectLibrary', () => {
+  it('names the band region by ariaLabel and leaves it unnamed without one', () => {
+    const named = render(SubjectLibrary, { props: { subjects, ariaLabel: 'Learning subjects' } })
+    expect(named.getByRole('region', { name: 'Learning subjects' })).toBe(named.getByTestId(TESTID))
+    named.unmount()
+    const bare = render(SubjectLibrary, { props: { subjects } })
+    expect(bare.getByTestId(TESTID)).not.toHaveAttribute('aria-label')
+  })
+
   it('renders the band under the default testid', () => {
     const { getByTestId } = band()
 
