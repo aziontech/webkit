@@ -73,8 +73,13 @@
     },
     "streaming-response-2k-lines": {
       "mount": 440,
-      "update": 1100,
+      "update": 40,
       "update_is": "stream 20 tokens"
+    },
+    "streaming-response-code-fences": {
+      "mount": 200,
+      "update": 25,
+      "update_is": "stream 20 tokens after three closed code fences of 400, 300 and 500 lines"
     },
     "doc-markdown-5k-lines": {
       "mount": 440,

@@ -462,6 +462,47 @@ function streamingResponseCase(): Case {
   }
 }
 
+function streamingFencesCase(): Case {
+  const fence = (lang: string, n: number, name: string) =>
+    [
+      '```' + lang,
+      ...Array.from(
+        { length: n },
+        (_, i) => `export const ${name}${i} = await fetch('https://api.example.com/${name}/${i}')`
+      ),
+      '```'
+    ].join('\n')
+  const prose = (n: number) =>
+    Array.from(
+      { length: n },
+      (_, i) => `Step ${i} sets the **cache key** and the \`ttl\` of the edge route.`
+    ).join('\n')
+  const content = ref(
+    [
+      '### Configure the origin',
+      prose(20),
+      fence('ts', 400, 'origin'),
+      prose(20),
+      fence('js', 300, 'route'),
+      prose(20),
+      fence('ts', 500, 'rule'),
+      'The rule above'
+    ].join('\n\n')
+  )
+  return {
+    mount: () =>
+      defineComponent({
+        setup: () => () => h(StreamingResponse, { content: content.value, streaming: true })
+      }),
+    update: async () => {
+      for (let i = 0; i < 20; i++) {
+        content.value += ' token'
+        await nextTick()
+      }
+    }
+  }
+}
+
 function docMarkdownCase(): Case {
   const page = (suffix: string) =>
     [
@@ -1033,6 +1074,9 @@ describe('runtime budgets (perf-budgets.json)', () => {
   })
   it('StreamingResponse streaming a 2k-line answer', async () => {
     check('streaming-response-2k-lines', await measure(streamingResponseCase))
+  })
+  it('StreamingResponse streaming 20 tokens after 1.2k lines of closed code fences', async () => {
+    check('streaming-response-code-fences', await measure(streamingFencesCase))
   })
   it('DocMarkdown with a 5k-line page: mount and replace', async () => {
     check('doc-markdown-5k-lines', await measure(docMarkdownCase))

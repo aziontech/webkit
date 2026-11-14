@@ -1,8 +1,15 @@
 import { render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
+import { nextTick } from 'vue'
 
 import { expectNoA11yViolations } from '../../../test/axe'
-import { parseInline, parseMarkdown, safeHref } from '../_lib/parse-markdown'
+import {
+  type MarkdownParse,
+  parseInline,
+  parseMarkdown,
+  parseMarkdownIncremental,
+  safeHref
+} from '../_lib/parse-markdown'
 import StreamingResponse from './streaming-response.vue'
 
 const rich = [
@@ -56,6 +63,38 @@ describe('parseMarkdown', () => {
     expect(parseInline('5 * 3 and snake_case')).toEqual([
       { type: 'text', value: '5 * 3 and snake_case' }
     ])
+  })
+
+  it('parses an appended stream to the same blocks as a full parse at every step', () => {
+    const source = [
+      rich,
+      '',
+      'Then | not a table',
+      '| A | B |',
+      '|---|---|',
+      '| 1 | 2 |',
+      'para',
+      '- item',
+      '  continued',
+      '```js x',
+      '~~~ts',
+      'const a = 1',
+      '',
+      '~~~',
+      '# Done\r\nlast'
+    ].join('\n')
+    let state: MarkdownParse | undefined
+    for (let end = 1; end <= source.length; end += 1) {
+      state = parseMarkdownIncremental(source.slice(0, end), state)
+      expect(state.blocks, `after ${end} chars`).toEqual(parseMarkdown(source.slice(0, end)))
+    }
+  })
+
+  it('keeps settled blocks as the same objects while text is appended', () => {
+    const first = parseMarkdownIncremental('```js\nconst a = 1\n```\n\nSome')
+    const next = parseMarkdownIncremental('```js\nconst a = 1\n```\n\nSome more', first)
+    expect(next.blocks[0]).toBe(first.blocks[0])
+    expect(next.blocks[1]).not.toBe(first.blocks[1])
   })
 
   it('allows only safe link protocols', () => {
@@ -133,6 +172,30 @@ describe('StreamingResponse', () => {
     expect(getByTestId('ai-streaming-response__pending-code')).toHaveAttribute('dir', 'ltr')
     await rerender({ content: '```bash\nazion purge\n```', streaming: false })
     expect(queryByTestId('ai-streaming-response__pending-code')).toBeNull()
+  })
+
+  it('does not re-render a closed code block while later tokens stream in', async () => {
+    let codeBlockUpdates = 0
+    const { rerender } = render(StreamingResponse, {
+      props: { content: '```js\nconst a = 1\n```\n\nThe rule', streaming: true },
+      global: {
+        mixins: [
+          {
+            updated(this: { $options: { name?: string } }) {
+              if (this.$options.name === 'CodeBlock') codeBlockUpdates += 1
+            }
+          }
+        ]
+      }
+    })
+    for (const token of [' above', ' sets', ' the', ' cache']) {
+      await rerender({
+        content: `\`\`\`js\nconst a = 1\n\`\`\`\n\nThe rule${token}`,
+        streaming: true
+      })
+      await nextTick()
+    }
+    expect(codeBlockUpdates).toBe(0)
   })
 
   it('links citations to the sources anchor', () => {
