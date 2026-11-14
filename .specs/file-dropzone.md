@@ -3,10 +3,10 @@ name: file-dropzone
 category: inputs
 structure: monolithic
 status: implemented
-checksum: 0b242a0d988a12da3904f3d3ada460287c1212c459d9e2d2e007b4edc7856b76
-spec_version: 2
+checksum: 16b5e4af42603eaff92dd4ad041920f6a8b1b3a524507aa5f3d9c610a7cc910c
+spec_version: 3
 created: 2026-11-10
-last_updated: 2026-11-11
+last_updated: 2026-11-14
 ---
 
 # FileDropzone — Component Spec
@@ -126,11 +126,11 @@ The drop target itself is pointer-only. It is never a keyboard control. The keyb
 | `title`       | `string`                | `''`                   | false    | Instruction shown under the icon. Empty uses the locale catalog (`Drop files to upload`).                                                                                   |
 | `description` | `string`                | `''`                   | false    | Secondary line under the title, typically the accepted types and limits. Not rendered when empty.                                                                           |
 | `accept`      | `string`                | `''`                   | false    | Comma-separated file filter using the native input accept syntax (extensions, MIME types, type wildcards). Files that do not match are rejected. Empty accepts every file.  |
-| `multiple`    | `boolean`               | `true`                 | false    | When false, only the first accepted file of a drop is accepted and the rest are rejected.                                                                                   |
+| `multiple`    | `boolean`               | `true`                 | false    | When false, only the first accepted file of a drop is accepted and the rest are rejected. `true` by default (recorded exception to the default-false rule; inverting it would break consumers).                                                                                   |
 | `directories` | `boolean`               | `false`                | false    | Accepts dropped folders: walks every dropped folder and emits the files inside, each with its `webkitRelativePath` (`assets/img/logo.svg`). The events fire after the walk. |
 | `disabled`    | `boolean`               | `false`                | false    | Ignores drags and drops: no active state, no events.                                                                                                                        |
 | `invalid`     | `boolean`               | `false`                | false    | Paints the inline region with the danger border so a wrapping field can show a validation error. Drops still work.                                                          |
-| `icon`        | `string`                | `'pi pi-cloud-upload'` | false    | PrimeIcons class for the glyph above the title.                                                                                                                             |
+| `icon`        | `string`                | `''`                   | false    | PrimeIcons class for the glyph above the title. Empty draws the cloud-upload glyph (`pi pi-cloud-upload`).                                                                  |
 
 `multiple` defaults to `true` on purpose, against the "booleans default to `false`" habit. Most drops carry several files (a folder's contents, a batch of assets), and the positive name `multiple` matches the native `<input multiple>` attribute the consumer pairs it with. The inverse (`single`) would be a new term with no native counterpart.
 
