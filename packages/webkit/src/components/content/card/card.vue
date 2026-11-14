@@ -4,7 +4,7 @@
   import { useTranslate } from '../../../composables/use-locale/use-translate'
   import * as en from '../../../i18n/messages/en'
   import { cn } from '../../../utils/cn'
-  import Tag from '../tag/tag.vue'
+  import Tag, { type TagSeverity } from '../tag/tag.vue'
 
   defineOptions({
     name: 'Card',
@@ -14,51 +14,49 @@
   /** Layout of the card. */
   export type CardKind = 'default' | 'integration'
 
-  /** Color of an integration badge. */
-  export type CardBadgeSeverity =
-    'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'danger' | 'accent'
+  /** Color of an integration badge; the `Tag` severity it renders. */
+  export type CardBadgeSeverity = TagSeverity
 
   export interface CardBadge {
     label: string
     severity?: CardBadgeSeverity
   }
 
-  const props = withDefaults(
-    defineProps<{
-      /** Heading rendered in the header when the `header` slot is empty; with `kind="integration"`, the item name. */
-      title?: string
-      /** Pads the content region. Set false for flush, edge-to-edge content such as an ItemList with full-width dividers. */
-      padded?: boolean
-      /** `integration` lays the card out as a catalog tile from `title`, `logo`, `vendor`, `description`, `badges`, `installed` and the `action` slot. */
-      kind?: CardKind
-      /** Integration kind: icon class for the logo mark. The `logo` slot takes an image instead. */
-      logo?: string
-      /** Integration kind: who publishes the item, shown as "by {vendor}". */
-      vendor?: string
-      /** Integration kind: one or two sentences on what the item does. */
-      description?: string
-      /** Integration kind: small tags such as the category or the context. */
-      badges?: CardBadge[]
-      /** Integration kind: shows the Installed tag. */
-      installed?: boolean
-      /** Integration kind: the title links here; without it the title is a button that emits `select`. */
-      href?: string
-      /** Integration kind: the featured layout, centred on a raised surface with a primary glow at the top and the badges in the top end corner. */
-      featured?: boolean
-    }>(),
-    {
-      title: '',
-      padded: true,
-      kind: 'default',
-      logo: '',
-      vendor: '',
-      description: '',
-      badges: () => [],
-      installed: false,
-      href: '',
-      featured: false
-    }
-  )
+  interface Props {
+    /** Heading rendered in the header when the `header` slot is empty; with `kind="integration"`, the item name. */
+    title?: string
+    /** Pads the content region. Set false for flush, edge-to-edge content such as an ItemList with full-width dividers. */
+    padded?: boolean
+    /** `integration` lays the card out as a catalog tile from `title`, `logo`, `vendor`, `description`, `badges`, `installed` and the `action` slot. */
+    kind?: CardKind
+    /** Integration kind: icon class for the logo mark. The `logo` slot takes an image instead. */
+    logo?: string
+    /** Integration kind: who publishes the item, shown as "by {vendor}". */
+    vendor?: string
+    /** Integration kind: one or two sentences on what the item does. */
+    description?: string
+    /** Integration kind: small tags such as the category or the context. */
+    badges?: CardBadge[]
+    /** Integration kind: shows the Installed tag. */
+    installed?: boolean
+    /** Integration kind: the title links here; without it the title is a button that emits `select`. */
+    href?: string
+    /** Integration kind: the featured layout, centred on a raised surface with a primary glow at the top and the badges in the top end corner. */
+    featured?: boolean
+  }
+
+  const props = withDefaults(defineProps<Props>(), {
+    title: '',
+    padded: true,
+    kind: 'default',
+    logo: '',
+    vendor: '',
+    description: '',
+    badges: () => [],
+    installed: false,
+    href: '',
+    featured: false
+  })
 
   const emit = defineEmits<{
     /** Integration kind without `href`: the title (the whole tile) was activated. */
@@ -70,7 +68,9 @@
     header(): unknown
     /** Actions aligned to the end of the default header; visible on header hover. */
     'header-action'(): unknown
-    /** Main card body; with `kind="integration"` it renders under the description. */
+    /** Main card body; with `kind="integration"` it renders under the description. Children passed without a slot name render here too. */
+    default(): unknown
+    /** Main card body, the named form of the default slot; with `kind="integration"` it renders under the description. */
     content(): unknown
     /** Footer actions or metadata; omitted when empty. */
     footer(): unknown
@@ -91,7 +91,7 @@
   const hasHeaderSlot = () => Boolean(slots['header'])
   const hasHeaderActionSlot = () => Boolean(slots['header-action'])
   const hasFooterSlot = () => Boolean(slots['footer'])
-  const hasContentSlot = () => Boolean(slots['content'])
+  const hasContentSlot = () => Boolean(slots['content'] || slots['default'])
   const hasActionSlot = () => Boolean(slots['action'])
 
   const showHeaderRegion = () =>
@@ -101,43 +101,25 @@
 
   const showDefaultHeader = () => showHeaderRegion() && !hasHeaderSlot()
 
-  const rootClasses = computed(() =>
-    cn(
-      'group/card flex flex-col overflow-clip',
-      'bg-(--bg-surface)',
-      'border border-(length:--border-width-default) border-(--border-default)',
-      'rounded-(--shape-card)',
-      'data-[kind=integration]:transition-colors data-[kind=integration]:not-data-[featured]:hover:bg-(--bg-hover) motion-reduce:transition-none',
-      'data-[featured]:isolate data-[featured]:bg-(--bg-surface-raised) data-[featured]:hover:border-(--border-strong)',
-      attrs.class as string | undefined
-    )
-  )
-
-  const headerClasses =
-    'group flex min-h-14 shrink-0 items-center justify-between gap-(--spacing-xs) border-b border-(--border-default) px-(--spacing-md) py-(--spacing-sm)'
-
-  const titleClasses = 'text-label-md text-(--text-default)'
-
-  const contentClasses =
-    '@container/card relative flex min-h-0 flex-1 flex-col data-[padded]:p-(--spacing-md)'
-
-  const footerClasses =
-    'flex min-h-14 shrink-0 items-center justify-center gap-(--spacing-sm) border-t border-(--border-default) px-(--spacing-md) py-(--spacing-sm)'
-
   const onSelect = (event: MouseEvent) => emit('select', event)
 </script>
 
 <template>
   <section
     v-bind="$attrs"
-    :class="rootClasses"
+    :class="
+      cn(
+        'group/card flex flex-col overflow-clip bg-(--bg-surface) border border-(length:--border-width-default) border-(--border-default) rounded-(--shape-card) data-[kind=integration]:transition-colors data-[kind=integration]:not-data-[featured]:hover:bg-(--bg-hover) motion-reduce:transition-none data-[featured]:isolate data-[featured]:bg-(--bg-surface-raised) data-[featured]:hover:border-(--border-strong)',
+        attrs.class as string | undefined
+      )
+    "
     :data-kind="kind"
     :data-featured="isFeatured || null"
     :data-testid="testId"
   >
     <header
       v-if="showHeaderRegion()"
-      :class="headerClasses"
+      class="group flex min-h-14 shrink-0 items-center justify-between gap-(--spacing-xs) border-b border-(--border-default) px-(--spacing-md) py-(--spacing-sm)"
       :data-testid="`${testId}__header`"
     >
       <slot
@@ -147,7 +129,7 @@
       <template v-else-if="showDefaultHeader()">
         <h2
           v-if="title && !isIntegration"
-          :class="titleClasses"
+          class="text-label-md text-(--text-default)"
           :data-testid="`${testId}__title`"
         >
           {{ title }}
@@ -163,7 +145,7 @@
     </header>
 
     <div
-      :class="contentClasses"
+      class="@container/card relative flex min-h-0 flex-1 flex-col data-[padded]:p-(--spacing-md)"
       :data-padded="props.padded || null"
       :data-testid="`${testId}__content`"
     >
@@ -248,7 +230,8 @@
         <slot
           v-if="hasContentSlot()"
           name="content"
-        />
+          ><slot
+        /></slot>
         <div
           v-if="installed || (badges.length && !isFeatured) || hasActionSlot()"
           class="mt-auto flex min-w-0 flex-wrap items-center gap-(--spacing-xs) group-data-[featured]/card:justify-center"
@@ -282,12 +265,13 @@
       <slot
         v-else-if="hasContentSlot()"
         name="content"
-      />
+        ><slot
+      /></slot>
     </div>
 
     <footer
       v-if="hasFooterSlot()"
-      :class="footerClasses"
+      class="flex min-h-14 shrink-0 items-center justify-center gap-(--spacing-sm) border-t border-(--border-default) px-(--spacing-md) py-(--spacing-sm)"
       :data-testid="`${testId}__footer`"
     >
       <slot name="footer" />

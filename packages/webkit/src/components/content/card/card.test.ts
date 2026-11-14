@@ -38,6 +38,18 @@ describe('Card', () => {
     expect(getByTestId(`${TESTID}__content`)).toBeTruthy()
   })
 
+  it('renders default slot children as the body, and content wins when both are passed', () => {
+    const plain = render(Card, { slots: { default: '<p>Default body</p>' } })
+    expect(plain.getByTestId(`${TESTID}__content`).textContent).toContain('Default body')
+    plain.unmount()
+    const both = render(Card, {
+      slots: { default: '<p>Default body</p>', content: '<p>Named body</p>' }
+    })
+    const region = both.getByTestId(`${TESTID}__content`)
+    expect(region.textContent).toContain('Named body')
+    expect(region.textContent).not.toContain('Default body')
+  })
+
   it('renders content slot markup inside the content region', () => {
     const { getByTestId, getByText } = render(Card, {
       slots: { content: '<p>Body copy</p>' }
