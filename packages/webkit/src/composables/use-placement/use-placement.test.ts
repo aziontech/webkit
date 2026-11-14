@@ -336,4 +336,82 @@ describe('usePlacement (composable, real layout)', () => {
     expect(Math.abs(pr.top - tr.bottom)).toBeLessThanOrEqual(1 + 4)
     window.scrollTo(0, 0)
   })
+
+  const ScrollHost = defineComponent({
+    setup() {
+      const triggerRef = ref<HTMLElement | null>(null)
+      const panelRef = ref<HTMLElement | null>(null)
+      const isOpen = ref(true)
+      const dismissed = ref(0)
+      const placement = usePlacement({
+        triggerRef,
+        panelRef,
+        isOpen,
+        placement: 'bottom-start',
+        onDismiss: () => {
+          dismissed.value += 1
+        }
+      })
+      return () =>
+        h('div', [
+          h('div', { 'data-testid': 'up-ancestor', style: 'height:120px;overflow:auto' }, [
+            h('div', { style: 'height:600px' }, [
+              h(
+                'button',
+                { ref: triggerRef, type: 'button', style: 'width:120px;height:32px' },
+                'trigger'
+              )
+            ])
+          ]),
+          h('div', { 'data-testid': 'up-unrelated', style: 'height:120px;overflow:auto' }, [
+            h('div', { style: 'height:600px' }, 'list')
+          ]),
+          h('output', { 'data-testid': 'up-dismissed' }, String(dismissed.value)),
+          h(Teleport, { to: 'body' }, [
+            h(
+              'div',
+              {
+                ref: panelRef,
+                'data-testid': 'up-panel',
+                style: { ...placement.panelStyle.value, height: '80px', width: '120px' }
+              },
+              'panel'
+            )
+          ])
+        ])
+    }
+  })
+
+  const scrollBy = async (el: HTMLElement, top: number) => {
+    el.scrollTop = top
+    el.dispatchEvent(new Event('scroll'))
+    await nextTick()
+  }
+
+  it('ignores the scroll of a scroller that does not hold the trigger', async () => {
+    const { getByTestId } = render(ScrollHost)
+    await nextTick()
+    await nextTick()
+    await scrollBy(getByTestId('up-unrelated'), 200)
+    expect(getByTestId('up-unrelated').scrollTop).toBeGreaterThan(0)
+    expect(getByTestId('up-dismissed').textContent).toBe('0')
+  })
+
+  it('ignores a scroll event on an ancestor that leaves the trigger in place', async () => {
+    const { getByTestId } = render(ScrollHost)
+    await nextTick()
+    await nextTick()
+    await scrollBy(getByTestId('up-ancestor'), 0)
+    document.dispatchEvent(new Event('scroll'))
+    await nextTick()
+    expect(getByTestId('up-dismissed').textContent).toBe('0')
+  })
+
+  it('dismisses when an ancestor scroll moves the trigger', async () => {
+    const { getByTestId } = render(ScrollHost)
+    await nextTick()
+    await nextTick()
+    await scrollBy(getByTestId('up-ancestor'), 40)
+    expect(getByTestId('up-dismissed').textContent).toBe('1')
+  })
 })

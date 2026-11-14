@@ -79,9 +79,12 @@ export interface UsePlacementOptions {
   autoPlacements?: Placement[]
   zIndex?: number
   /**
-   * When provided, a scroll outside the panel dismisses it through this callback (the
-   * panel is anchored once and does not follow the page); scrolls inside the panel are
-   * ignored. When omitted, a scroll repositions the panel. Resize always repositions.
+   * When provided, a scroll that moves the trigger dismisses the panel through this callback
+   * (the panel is anchored once and does not follow the page): the scrolled node must be the
+   * document or an ancestor of the trigger, and the trigger must have moved more than 1px from
+   * where the panel was last anchored. Scrolls inside the panel, of unrelated scrollers, and
+   * scroll events that leave the trigger in place are ignored. When omitted, a scroll
+   * repositions the panel. Resize always repositions.
    */
   onDismiss?: () => void
   /** Lock the panel width to the trigger width (list boxes anchored under a field). */
@@ -289,6 +292,7 @@ export function usePlacement({
   const anchored = ref(false)
   let anchorFrame = 0
   let disposed = false
+  let anchorRect: Rect | null = null
 
   function updatePosition() {
     const trigger = toValue(triggerRef)
@@ -307,6 +311,7 @@ export function usePlacement({
       height: panel.offsetHeight ? panel.offsetHeight * frame.scaleY : rawPanelRect.height
     }
     const triggerRect = trigger.getBoundingClientRect()
+    anchorRect = triggerRect
     const viewport = { width: globalThis.innerWidth ?? 0, height: globalThis.innerHeight ?? 0 }
 
     const result = computePlacement({
@@ -349,11 +354,22 @@ export function usePlacement({
     updatePosition()
   }
 
+  function triggerMoved(target: globalThis.Node | null): boolean {
+    const trigger = toValue(triggerRef)
+    if (!trigger || !anchorRect) return false
+    const doc = globalThis.document
+    const scrollsPage = !target || target === doc || target === doc?.scrollingElement
+    if (!scrollsPage && !target.contains(trigger)) return false
+    const now = trigger.getBoundingClientRect()
+    return Math.abs(now.top - anchorRect.top) > 1 || Math.abs(now.left - anchorRect.left) > 1
+  }
+
   function onScroll(event?: globalThis.Event) {
     if (!toValue(isOpen)) return
     const target = (event?.target ?? null) as globalThis.Node | null
     if (target && toValue(panelRef)?.contains(target)) return
     if (onDismiss) {
+      if (!triggerMoved(target)) return
       onDismiss()
       nextTick(() => {
         if (toValue(isOpen)) updatePosition()
@@ -368,6 +384,7 @@ export function usePlacement({
     async (open) => {
       if (!open) {
         anchored.value = false
+        anchorRect = null
         return
       }
       await nextTick()
