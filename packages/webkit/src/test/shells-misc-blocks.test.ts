@@ -178,12 +178,19 @@ describe('platform/auth', () => {
 })
 
 describe('platform/delete/delete-with-confirmation', () => {
-  const dialog = () => document.querySelector('[role="dialog"]') as HTMLElement | null
+  const confirmPanel = () =>
+    waitFor(() => {
+      const found = Array.from(document.querySelectorAll('[role="dialog"]')).find((el) =>
+        el.textContent?.includes('to confirm.')
+      )
+      expect(found).toBeTruthy()
+      return found as HTMLElement
+    })
 
   it('locks the dialog while Delete runs, then closes it', async () => {
     const view = render(DeleteWithConfirmation)
     await fireEvent.click(view.getByRole('button', { name: 'Delete resource' }))
-    const panel = await waitFor(() => dialog() as HTMLElement)
+    const panel = await confirmPanel()
     expect(panel.querySelector('button[aria-label="Copy resource-01"]')).not.toBeNull()
     const input = panel.querySelector('input') as HTMLInputElement
     await fireEvent.update(input, 'resource-01')
@@ -196,9 +203,9 @@ describe('platform/delete/delete-with-confirmation', () => {
     await waitFor(() => expect(panel.isConnected).toBe(false), { timeout: 3000 })
   })
 
-  it('Failed: keeps the dialog and the typed name, with the reason in a danger alert', () => {
+  it('Failed: keeps the dialog and the typed name, with the reason in a danger alert', async () => {
     render(DeleteFailed)
-    const panel = dialog() as HTMLElement
+    const panel = await confirmPanel()
     expect(panel.textContent).toContain('resource-01 is still used by 2 workloads')
     expect((panel.querySelector('input') as HTMLInputElement).value).toBe('resource-01')
   })
