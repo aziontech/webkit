@@ -109,6 +109,71 @@ describe('PropertyFilter', () => {
     expect(lastQuery(view.emitted())?.tokens).toEqual([])
   })
 
+  it('keeps its own tokens and text when no v-model is bound', async () => {
+    const view = render(PropertyFilter, { props: { properties } })
+    const input = view.getByRole('combobox')
+    await fireEvent.update(input, 'edge')
+    await fireEvent.keyDown(input, { key: 'Enter' })
+    await fireEvent.update(input, 'cdn')
+    await fireEvent.keyDown(input, { key: 'Enter' })
+    expect(view.getAllByTestId('data-property-filter__token')).toHaveLength(2)
+    expect(lastQuery(view.emitted())?.tokens).toEqual([
+      { operator: ':', value: 'edge' },
+      { operator: ':', value: 'cdn' }
+    ])
+
+    const query = render(PropertyFilter, { props: { properties, mode: 'query' } })
+    const field = query.getAllByRole('combobox').at(-1) as HTMLInputElement
+    await fireEvent.update(field, 'status = Active')
+    expect(field.value).toBe('status = Active')
+    expect(query.emitted()['update:text']?.at(-1)).toEqual(['status = Active'])
+  })
+
+  it('adds, removes and submits nothing while disabled', async () => {
+    const view = render(PropertyFilter, {
+      props: {
+        properties,
+        disabled: true,
+        query: { tokens: [{ operator: ':', value: 'x' }], operation: 'and' }
+      }
+    })
+    const input = view.getByRole('combobox') as HTMLInputElement
+    expect(input.disabled).toBe(true)
+    await fireEvent.focus(input)
+    expect(input.getAttribute('aria-expanded')).toBe('false')
+    await fireEvent.keyDown(input, { key: 'Enter' })
+    await fireEvent.keyDown(input, { key: 'Backspace' })
+    const remove = view.queryByRole('button', { name: /^Remove/ }) as HTMLButtonElement | null
+    if (remove) await fireEvent.click(remove)
+    expect(view.emitted()['update:query']).toBeUndefined()
+  })
+
+  it('takes the consumer data-testid over the fallback', () => {
+    const fallback = render(PropertyFilter, { props: { properties } })
+    expect(fallback.getByTestId('data-property-filter')).toBeTruthy()
+    fallback.unmount()
+    const view = render(PropertyFilter, { props: { properties }, attrs: { 'data-testid': 'logs' } })
+    expect(view.getByTestId('logs')).toBeTruthy()
+    expect(view.queryByTestId('data-property-filter')).toBeNull()
+  })
+
+  it('renders at most 100 suggestions and keeps the typed-text row last', async () => {
+    const many = [
+      {
+        key: 'host',
+        label: 'Host',
+        options: Array.from({ length: 1000 }, (_, i) => ({ value: `host-${i}.example.com` }))
+      }
+    ]
+    const view = render(PropertyFilter, { props: { properties: many } })
+    const input = view.getByRole('combobox')
+    await fireEvent.focus(input)
+    await fireEvent.update(input, 'example')
+    const rows = options()
+    expect(rows).toHaveLength(100)
+    expect(rows.at(-1)?.getAttribute('data-group')).toBe('text')
+  })
+
   it('reads its strings from the active locale', async () => {
     const view = render({
       components: { PropertyFilter },

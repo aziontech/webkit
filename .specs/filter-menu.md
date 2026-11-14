@@ -3,9 +3,9 @@ name: filter-menu
 category: data
 structure: composition
 status: implemented
-spec_version: 1
+spec_version: 2
 template: 2
-checksum: e27b74113ef7853c921da889388a10c5cca37ea8722afa13e76b19aa3c384e66
+checksum: 82bde5a096ff0f1feaf82080c7a4a773b0b55289fec787524366817bcfca14fc
 created: 2026-11-14
 last_updated: 2026-11-14
 ---
@@ -38,7 +38,7 @@ this menu offers only the values a field has, one click each, which is what most
 
 ## When NOT to use
 
-- Filters typed as text, with operators or and/or logic, or a query people keep as text → use `property-filter`.
+- Filters typed as text, with operators or and/or logic, or a query people keep as text → use `property-filter`. FilterMenu is for faceted picks from known values; PropertyFilter is for expression search.
 - A table that needs comparisons on numbers or free-text conditions → use `table-filter` with its builder.
 - Two to four fixed choices always on screen → use `toggle-group` or selectable `chip`s.
 - A single search over names → use `input`, or `table-search` inside a table.
