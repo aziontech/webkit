@@ -166,6 +166,20 @@ describe('ListingBrowser', () => {
     expect(table.getAllByText('Hybrid · Full-time')).toHaveLength(2)
   })
 
+  it('mounts the groups of a long listing as they near the viewport', () => {
+    const groups = Array.from({ length: 10 }, (_, i) => `Group ${i}`)
+    const many = Array.from({ length: 1000 }, (_, i) => ({
+      href: `/careers/role-${i}`,
+      group: groups[i % groups.length],
+      values: { role: `Role ${i}`, team: 'Engineering', type: 'Remote' },
+      facets: {}
+    }))
+    const { getByTestId } = band({ rows: many, groups, facets: [] })
+    const mounted = tableRoles(getByTestId).length
+    expect(mounted).toBeGreaterThan(0)
+    expect(mounted).toBeLessThan(many.length)
+  })
+
   it('renders the phone list with one item per row and its second column as description', () => {
     const { getByTestId } = band()
 

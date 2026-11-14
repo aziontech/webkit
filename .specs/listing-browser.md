@@ -3,11 +3,11 @@ name: listing-browser
 category: sections
 structure: monolithic
 status: implemented
-spec_version: 4
+spec_version: 5
 template: 2
 created: 2026-11-05
 last_updated: 2026-11-14
-checksum: aaca5a288594d091a820d531c4d19c40810a7c44d663c1747b152294dfc3fd21
+checksum: 8f8715bf620230f78aed0b14ee371b8d120dd54077d0c33a289701b16a1da7bd
 ---
 
 # ListingBrowser — Component Spec
@@ -204,7 +204,7 @@ _none_
 
 - Bundle budget: the `./listing-browser` entry in `.size-limit.json`, initial chunk only.
 - Runtime budget: `listing-browser-1k` in `perf-budgets.json` (mount 1k grouped rows, then search them), measured by `src/test/performance.test.ts`.
-- The phone list and the table are both rendered and switched by CSS at the small breakpoint, so every matching row is in the DOM twice; the budget covers that.
+- The phone list and the table are both rendered and switched by CSS at the small breakpoint, so the server-rendered and hydrated markup stays one for every screen. When more than 300 rows match, each of the two mounts the first group and then each later group as it nears the viewport (`useLazyChunks`, one group per chunk; an `aria-hidden` placeholder sized from the group's row count holds its place), so a long listing mounts what is on screen and only its first group is in the server-rendered HTML.
 - Heavy parts: none; marks load lazily, and the applied-filter `Chip`s load in their own chunk the first time a filter is applied.
 
 ## Examples
