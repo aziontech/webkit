@@ -421,6 +421,32 @@ describe('QuoteTabs', () => {
     expect(bare.querySelector('a')).toBeNull()
   })
 
+  it('offers a pause control while autoplay runs that stops and resumes the rotation', async () => {
+    vi.useFakeTimers()
+    const { container, getByRole, getByTestId } = render(QuoteTabs, {
+      props: { items: ITEMS, autoplayInterval: INTERVAL }
+    })
+
+    const control = getByRole('button', { name: 'Pause rotation' })
+    await fireEvent.click(control)
+    expect(getByRole('button', { name: 'Resume rotation' })).toBe(control)
+    expect(getByTestId(TESTID)).toHaveAttribute('data-paused')
+
+    vi.advanceTimersByTime(INTERVAL * 2)
+    await nextTick()
+    expect(selectedIndex(container)).toBe(0)
+
+    await fireEvent.click(control)
+    vi.advanceTimersByTime(INTERVAL)
+    await nextTick()
+    expect(selectedIndex(container)).toBe(1)
+  })
+
+  it('renders no pause control when autoplay is off', () => {
+    const { queryByRole } = render(QuoteTabs, { props: { items: ITEMS, autoplay: false } })
+    expect(queryByRole('button', { name: 'Pause rotation' })).toBeNull()
+  })
+
   it('marks a running band with data-autoplay and draws a decorative hairline in the panel', () => {
     const { container, getByTestId } = render(QuoteTabs, { props: { items: ITEMS } })
 

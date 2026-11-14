@@ -15,7 +15,10 @@
   } from 'vue'
 
   import { eventDirection, logicalArrowKey } from '../../../composables/use-direction'
+  import { useTranslate } from '../../../composables/use-locale/use-translate'
+  import * as en from '../../../i18n/messages/en'
   import { brandMarkLabel, resolveBrandMark } from '../../../svg/brands/registry'
+  import IconButton from '../../actions/icon-button/icon-button.vue'
   import FrameBox from '../../layout/frame-box/frame-box.vue'
   import CardGrid from '../card-grid/card-grid.vue'
   import CardGridCell from '../card-grid/card-grid-cell/card-grid-cell.vue'
@@ -81,6 +84,7 @@
   const attrs = useAttrs()
   const baseId = useId()
   const reducedMotion = usePreferredReducedMotion()
+  const { t } = useTranslate({ autoplayControl: en.autoplayControl })
 
   const PROGRESS_TICK_MS = 100
 
@@ -93,6 +97,7 @@
   const elapsed = ref(0)
   const pointerInside = ref(false)
   const focusInside = ref(false)
+  const paused = ref(false)
 
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? 'marketing-quote-tabs'
@@ -128,7 +133,11 @@
   )
 
   const autoplayRunning = computed(
-    () => autoplayEnabled.value && !pointerInside.value && !focusInside.value
+    () => autoplayEnabled.value && !paused.value && !pointerInside.value && !focusInside.value
+  )
+
+  const pauseLabel = computed(() =>
+    paused.value ? t('autoplayControl.resumeRotation') : t('autoplayControl.pauseRotation')
   )
 
   const progress = computed(() =>
@@ -183,6 +192,10 @@
     if (elapsed.value < props.autoplayInterval) return
     pendingDirection = 'forward'
     select(selected.value >= props.items.length - 1 ? 0 : selected.value + 1)
+  }
+
+  function togglePause(): void {
+    paused.value = !paused.value
   }
 
   function enterPointer(): void {
@@ -241,12 +254,22 @@
     v-bind="$attrs"
     :data-testid="testId"
     :data-autoplay="autoplayRunning || null"
-    class="flex flex-col"
+    :data-paused="(autoplayEnabled && paused) || null"
+    class="relative flex flex-col"
     @pointerenter="enterPointer"
     @pointerleave="leavePointer"
     @focusin="enterFocus"
     @focusout="leaveFocus"
   >
+    <IconButton
+      v-if="autoplayEnabled"
+      :icon="paused ? 'pi pi-play' : 'pi pi-pause'"
+      :aria-label="pauseLabel"
+      kind="outlined"
+      size="small"
+      class="absolute end-(--spacing-xs) top-(--spacing-xs) z-20"
+      @click="togglePause"
+    />
     <FrameBox
       :id="panelId"
       borders="bottom"
