@@ -5,13 +5,13 @@ export const border = {
     'border-default': tokenRef('theme.surfaces.surface-275'),
     'border-muted': tokenRef('theme.surfaces.surface-250'),
     'border-strong': tokenRef('primitives.base.black'),
-    'border-selected': tokenRef('brand.primary.primary-500')
+    'border-selected': tokenRef('brand.primary.primary-600')
   },
   dark: {
     'border-default': tokenRef('theme.surfaces.surface-650'),
     'border-muted': tokenRef('theme.surfaces.surface-650'),
     'border-strong': tokenRef('primitives.base.white'),
-    'border-selected': tokenRef('brand.primary.primary-500')
+    'border-selected': tokenRef('brand.primary.primary-600')
   }
 }
 
