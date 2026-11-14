@@ -104,7 +104,8 @@ export const ptBR: Messages = {
   articleIndex: {
     search: 'Buscar',
     searchFacet: 'Buscar {facet}',
-    empty: 'Nenhum resultado encontrado.'
+    empty: 'Nenhum resultado encontrado.',
+    newTab: '(abre em uma nova aba)'
   },
   attributeEditor: {
     add: 'Adicionar item',

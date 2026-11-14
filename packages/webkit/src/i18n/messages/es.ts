@@ -104,7 +104,8 @@ export const es: Messages = {
   articleIndex: {
     search: 'Buscar',
     searchFacet: 'Buscar {facet}',
-    empty: 'No se encontraron resultados.'
+    empty: 'No se encontraron resultados.',
+    newTab: '(se abre en una pestaña nueva)'
   },
   attributeEditor: {
     add: 'Agregar elemento',

@@ -1,8 +1,8 @@
 <script setup>
-  import SectionContainer from '@aziontech/webkit/section-container'
-  import SectionGap from '@aziontech/webkit/section-gap'
   import ArticleIndexBlog from '@aziontech/webkit/article-index-blog'
   import placeholderImage from '@aziontech/webkit/assets/placeholder-image.svg'
+  import SectionContainer from '@aziontech/webkit/section-container'
+  import SectionGap from '@aziontech/webkit/section-gap'
 
   const items = [
     {
@@ -101,6 +101,7 @@
       :search="search"
       row-label="Read article"
       more-label="Load more"
+      :empty="{ title: 'No articles match these filters', action: 'View all articles' }"
       aria-label="Articles"
     />
 

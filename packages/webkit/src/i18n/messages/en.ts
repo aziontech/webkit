@@ -20,7 +20,8 @@ export const articleCards = {
 export const articleIndex = {
   search: 'Search',
   searchFacet: 'Search {facet}',
-  empty: 'No results found.'
+  empty: 'No results found.',
+  newTab: '(opens in a new tab)'
 } as const
 
 export const attributeEditor = {
