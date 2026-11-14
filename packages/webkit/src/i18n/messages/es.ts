@@ -146,7 +146,8 @@ export const es: Messages = {
     imageAlt: 'Avatar'
   },
   barList: {
-    emptyTitle: 'No hay datos disponibles'
+    emptyTitle: 'No hay datos disponibles',
+    errorTitle: 'No se pudieron cargar los datos'
   },
   board: {
     label: 'Panel',

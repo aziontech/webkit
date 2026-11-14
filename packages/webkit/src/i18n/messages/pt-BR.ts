@@ -146,7 +146,8 @@ export const ptBR: Messages = {
     imageAlt: 'Avatar'
   },
   barList: {
-    emptyTitle: 'Nenhum dado disponível'
+    emptyTitle: 'Nenhum dado disponível',
+    errorTitle: 'Não foi possível carregar os dados'
   },
   board: {
     label: 'Painel',

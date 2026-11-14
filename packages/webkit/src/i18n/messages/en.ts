@@ -66,7 +66,8 @@ export const avatar = {
 } as const
 
 export const barList = {
-  emptyTitle: 'No data available'
+  emptyTitle: 'No data available',
+  errorTitle: 'Could not load the data'
 } as const
 
 export const board = {
