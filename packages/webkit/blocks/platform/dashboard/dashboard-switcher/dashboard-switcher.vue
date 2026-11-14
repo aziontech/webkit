@@ -1,15 +1,15 @@
 <script setup lang="ts">
-  import Badge from '@aziontech/webkit/badge'
+  import Alert from '@aziontech/webkit/alert'
   import BarList, { type BarListItem } from '@aziontech/webkit/bar-list'
-  import Button from '@aziontech/webkit/button'
   import Chart, { type ChartColor, type ChartSeries } from '@aziontech/webkit/chart'
   import ChartCard from '@aziontech/webkit/chart-card'
-  import Chip from '@aziontech/webkit/chip'
+  import FilterMenu, {
+    type FilterMenuField,
+    type FilterMenuModel
+  } from '@aziontech/webkit/filter-menu'
   import Hint from '@aziontech/webkit/hint'
   import IconButton from '@aziontech/webkit/icon-button'
   import PageHeader from '@aziontech/webkit/page-header'
-  import Popover from '@aziontech/webkit/popover'
-  import RadioButton from '@aziontech/webkit/radio-button'
   import Select from '@aziontech/webkit/select'
   import StatTile from '@aziontech/webkit/stat-tile'
   import ToggleGroup, { type ToggleGroupOption } from '@aziontech/webkit/toggle-group'
@@ -837,29 +837,27 @@
   const viewLabel = (value: string) =>
     dashboards.find((entry) => entry.value === value)?.label ?? ''
 
-  const appliedPeriod = ref<Period | null>(defaultPeriod)
-  const draftPeriod = ref<string>(defaultPeriod)
-  const filterOpen = ref(false)
-  const period = computed<Period>(() => appliedPeriod.value ?? defaultPeriod)
+  const filterFields: FilterMenuField[] = [
+    {
+      id: 'period',
+      label: 'Period',
+      kind: 'single',
+      options: periods.map((entry) => ({ value: entry.value, label: entry.label }))
+    }
+  ]
+  const filters = ref<FilterMenuModel>({ period: [defaultPeriod] })
+  const period = computed<Period>(() => {
+    const picked = filters.value.period?.[0]
+    return periods.some((entry) => entry.value === picked) ? (picked as Period) : defaultPeriod
+  })
   const periodInfo = computed(
     () => periods.find((entry) => entry.value === period.value) ?? periods[1]
   )
   const quarter = ref('q4')
 
-  watch(filterOpen, (open) => {
-    if (open) draftPeriod.value = period.value
-  })
-
-  const applyPeriod = () => {
-    appliedPeriod.value = draftPeriod.value as Period
-    filterOpen.value = false
-  }
-
-  const clearPeriod = () => {
-    appliedPeriod.value = null
-  }
-
   const loading = ref(false)
+  const failed = false
+  const empty = false
   const refetching = ref(false)
   let timer: ReturnType<typeof setTimeout> | undefined
 
@@ -954,7 +952,7 @@
         name: entry.name,
         ...(entry.color ? { color: entry.color } : {}),
         values: Array.from(
-          { length: points },
+          { length: empty ? 0 : points },
           (_, index) => Math.round(entry.base * factor * wave(seed, index) * 100) / 100
         )
       }
@@ -962,7 +960,7 @@
   })
 
   const breakdown = computed(() =>
-    active.value.breakdown.items.map((item) => ({
+    (empty ? [] : active.value.breakdown.items).map((item) => ({
       ...item,
       value: scalesWithPeriod.has(active.value.breakdown.format)
         ? Math.round(item.value * scale.value)
@@ -1021,78 +1019,13 @@
             </Select>
           </div>
 
-          <Popover
+          <FilterMenu
             v-if="!active.ownPeriod"
-            v-model:open="filterOpen"
-            placement="bottom-start"
+            v-model="filters"
+            :fields="filterFields"
+            size="medium"
             class="shrink-0"
-          >
-            <div class="relative">
-              <Popover.Trigger>
-                <Button
-                  label="Filter"
-                  kind="outlined"
-                  size="medium"
-                  icon="pi pi-filter"
-                  :aria-label="appliedPeriod ? 'Filter, 1 applied' : 'Filter'"
-                />
-              </Popover.Trigger>
-              <div
-                v-if="appliedPeriod"
-                class="pointer-events-none absolute -top-2 -end-2 min-w-5"
-              >
-                <Badge
-                  label="1"
-                  severity="primary"
-                  size="small"
-                  aria-hidden="true"
-                  class="w-full"
-                />
-              </div>
-            </div>
-            <Popover.Content>
-              <form
-                class="flex w-(--container-3xs) max-w-full flex-col"
-                @submit.prevent="applyPeriod"
-              >
-                <fieldset class="flex flex-col gap-(--spacing-xs) p-(--spacing-sm)">
-                  <legend class="pb-(--spacing-xs) text-label-sm text-(--text-muted)">
-                    Period
-                  </legend>
-                  <label
-                    v-for="option in periods"
-                    :key="option.value"
-                    :for="`dashboard-period-${option.value}`"
-                    class="flex min-h-8 cursor-pointer items-center gap-(--spacing-xs) text-body-sm text-(--text-default)"
-                  >
-                    <RadioButton
-                      v-model="draftPeriod"
-                      name="dashboard-period"
-                      :value="option.value"
-                      :input-id="`dashboard-period-${option.value}`"
-                    />
-                    {{ option.label }}
-                  </label>
-                </fieldset>
-                <div
-                  class="flex justify-end gap-(--spacing-xs) border-t border-(--border-default) p-(--spacing-sm)"
-                >
-                  <Button
-                    label="Cancel"
-                    kind="transparent"
-                    size="small"
-                    type="button"
-                    @click="filterOpen = false"
-                  />
-                  <Button
-                    label="Apply"
-                    size="small"
-                    type="submit"
-                  />
-                </div>
-              </form>
-            </Popover.Content>
-          </Popover>
+          />
 
           <ToggleGroup
             v-else
@@ -1116,25 +1049,11 @@
           </div>
         </div>
 
-        <div
-          v-if="!active.ownPeriod && appliedPeriod"
-          class="flex min-w-0 flex-wrap items-center gap-(--spacing-xs)"
-        >
-          <Chip
-            kind="filled"
-            size="medium"
-            clickable
-            removable
-            :label="`Period ${periodInfo.label}`"
-            @click="filterOpen = true"
-            @remove="clearPeriod"
-          >
-            <span class="flex min-w-0 items-center gap-(--spacing-xxs)">
-              <span class="truncate text-(--text-muted)">Period</span>
-              <span class="truncate">{{ periodInfo.label }}</span>
-            </span>
-          </Chip>
-        </div>
+        <FilterMenu.Chips
+          v-if="!active.ownPeriod"
+          v-model="filters"
+          :fields="filterFields"
+        />
       </section>
 
       <section
@@ -1154,12 +1073,12 @@
           >
             <StatTile
               :label="figure.label"
-              :value="figure.value"
+              :value="failed || empty ? null : figure.value"
               :format-value="formatters[figure.format]"
-              :delta="figure.delta"
+              :delta="failed || empty ? null : figure.delta"
               :delta-label="active.ownPeriod ? 'vs previous quarter' : periodInfo.comparison"
               :inverse="figure.inverse"
-              :trend="figure.trend"
+              :trend="failed || empty ? [] : figure.trend"
               :loading="loading"
             >
               <template #aside>
@@ -1180,7 +1099,15 @@
               </span>
             </ChartCard.Header>
             <ChartCard.Content>
+              <Alert
+                v-if="failed"
+                severity="danger"
+                :label="`Couldn't load ${active.chart.title.toLowerCase()}. Check your connection and retry.`"
+                action-label="Retry"
+                @action="refresh"
+              />
               <Chart
+                v-else
                 v-model:active-index="activeIndex"
                 :series="series"
                 :labels="labels"
@@ -1215,7 +1142,15 @@
               </span>
             </ChartCard.Header>
             <ChartCard.Content>
+              <Alert
+                v-if="failed"
+                severity="danger"
+                :label="`Couldn't load ${active.breakdown.title.toLowerCase()}. Check your connection and retry.`"
+                action-label="Retry"
+                @action="refresh"
+              />
               <BarList
+                v-else
                 :items="breakdown"
                 :format-value="formatters[active.breakdown.format]"
                 :loading="loading"
