@@ -20,9 +20,9 @@
   import MenuSubContent from '@aziontech/webkit/menu-sub-content'
   import MenuSubTrigger from '@aziontech/webkit/menu-sub-trigger'
   import SearchTrigger from '@aziontech/webkit/search-trigger'
-  import Sidebar from '@aziontech/webkit/sidebar'
   import SidebarFooter from '@aziontech/webkit/sidebar-footer'
   import SidebarHeader from '@aziontech/webkit/sidebar-header'
+  import Sidebar from '@aziontech/webkit/sidebar-root'
   import { ref } from 'vue'
 
   const accountMenuOpen = ref(false)

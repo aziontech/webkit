@@ -9,7 +9,7 @@
   import MenuRoot from '@aziontech/webkit/menu-root'
   import PageHeader from '@aziontech/webkit/page-header'
   import SearchTrigger from '@aziontech/webkit/search-trigger'
-  import Sidebar from '@aziontech/webkit/sidebar'
+  import Sidebar from '@aziontech/webkit/sidebar-root'
   import { ref } from 'vue'
 
   const searchOpen = ref(false)

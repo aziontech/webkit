@@ -1,8 +1,8 @@
 <script setup lang="ts">
   import Accordion from '@aziontech/webkit/accordion'
   import Card from '@aziontech/webkit/card'
-  import LogView, { type LogViewLine } from '@aziontech/webkit/log-view'
   import LogViewContent from '@aziontech/webkit/log-view-content'
+  import LogView, { type LogViewLine } from '@aziontech/webkit/log-view-root'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
   import Tag from '@aziontech/webkit/tag'
   import { ref } from 'vue'

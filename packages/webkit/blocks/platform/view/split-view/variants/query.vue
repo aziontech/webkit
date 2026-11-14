@@ -33,7 +33,7 @@
     type PropertyFilterToken
   } from '@aziontech/webkit/property-filter'
   import Resizable from '@aziontech/webkit/resizable'
-  import Sidebar from '@aziontech/webkit/sidebar'
+  import Sidebar from '@aziontech/webkit/sidebar-root'
   import TableRoot, { type TableColumn, type TableExposed } from '@aziontech/webkit/table-root'
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
   import Tooltip from '@aziontech/webkit/tooltip'
