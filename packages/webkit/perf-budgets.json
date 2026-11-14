@@ -5,6 +5,21 @@
     "tree-5k": { "mount": 60, "update": 170, "update_is": "expand two folders of 99 nodes" },
     "select-1k": { "mount": 50, "update": 260, "update_is": "open the list, then filter it" },
     "multi-select-1k": { "mount": 50, "update": 480, "update_is": "open the list, then filter it" },
+    "select-1k-preselected": {
+      "mount": 50,
+      "update": 200,
+      "update_is": "open the list, then filter it (mount collects the selected option's label)"
+    },
+    "multi-select-1k-preselected": {
+      "mount": 50,
+      "update": 360,
+      "update_is": "open the list, then filter it (mount collects the 10 selected labels)"
+    },
+    "combobox-1k": {
+      "mount": 50,
+      "update": 160,
+      "update_is": "focus the field to open the list, then type a filter"
+    },
     "donut-chart-500": { "mount": 50, "update": 50, "update_is": "replace the 500 slices" },
     "bar-list-1k": { "mount": 240, "update": 160, "update_is": "replace the 1k rows" },
     "log-view-10k": { "mount": 60, "update": 60, "update_is": "search the 10k lines" },

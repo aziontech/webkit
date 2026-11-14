@@ -3,18 +3,18 @@ name: combobox
 category: inputs
 structure: monolithic
 status: implemented
-spec_version: 2
+spec_version: 3
 template: 2
-checksum: 935b713c8ce524b633a78e60d586d1303196b36ff57edc6154b827f6068560ff
+checksum: 76cb404e66e61298091f95393e777235afc835c903959db2e88a4540a2844e1c
 created: 2026-11-11
-last_updated: 2026-11-13
+last_updated: 2026-11-14
 ---
 
 # Combobox — Component Spec
 
 ## Purpose
 
-A text field with a list of suggestions under it: typing filters the options, picking one fills the field, and a value that is not in the list is accepted as typed. It holds one string value, after the design sample's `ComboboxInput` and the ARIA 1.2 combobox pattern. It differs from `Select`, whose value must be one of its options and whose trigger is a button, and from `Command`, which runs commands from a palette instead of filling a form field.
+A text field with a list of suggestions under it: typing filters the options, picking one fills the field, and a value that is not in the list is accepted as typed. It holds one string value, after the design sample's `ComboboxInput` and the ARIA 1.2 combobox pattern. It differs from `Select`, whose value must be one of its options and whose trigger is a button, and from `Command`, which runs commands from a palette instead of filling a form field. Naming: this is the ARIA 1.2 combobox (an editable field with suggestions, free text by default). In shadcn, `Combobox` is a searchable select whose value must come from the list; get that here with `allow-custom="false"` (or `Select` with a search field). `allowCustom` and `filter` default to `true` and are recorded as exceptions to the default-false rule: inverting them would break every consumer. `emptyText` is the empty-list text prop; AttributeEditor's `empty` names the same idea and the next vocabulary pass should align them on `emptyText`.
 
 ## When to use
 
@@ -199,7 +199,7 @@ _none_ — one `.vue` file. The list is rendered by the component itself (telepo
 ## Performance
 
 - Bundle budget: see `.size-limit.json` entry `combobox` (Input, Spinner and usePlacement included).
-- Runtime budget: 1,000 options filter and render in < 50 ms per keystroke; the list renders only the matches.
+- Runtime budget: `combobox-1k` in `perf-budgets.json` (focus to open a 1,000-option list, then type). The list renders only the matches, and above 300 rows a section mounts in chunks of 100 as they scroll near view (`LazyNodes`, 34 px per row); moving the active option by keyboard mounts every chunk first, so `aria-activedescendant` always points at a rendered option.
 - Heavy parts: none; long server lists should be paged by the server (`search`).
 
 ## Examples
@@ -207,6 +207,7 @@ _none_ — one `.vue` file. The list is rendered by the component itself (telepo
 - Default — a Field-wrapped Combobox of variable names with descriptions and free entry.
 - Grouped — options with `group` (Recent / Suggested).
 - Server — `filter: false`, `search` and `loading` driving a fake request.
+- States — `disabled`, `invalid` and `loading` side by side (the state examples for those props).
 
 Justification: Combobox has no `kind`; `size` is shown in Default's controls. Grouped and Server show the two data shapes a consumer must wire differently.
 

@@ -1,5 +1,19 @@
 <script setup lang="ts">
-  import { computed, inject, nextTick, onBeforeUnmount, onMounted, ref, useAttrs, watch } from 'vue'
+  import {
+    Comment,
+    computed,
+    Fragment,
+    inject,
+    isVNode,
+    nextTick,
+    onBeforeUnmount,
+    onMounted,
+    ref,
+    useAttrs,
+    type VNode,
+    type VNodeArrayChildren,
+    watch
+  } from 'vue'
 
   import LazyNodes from '../../../../composables/use-lazy-chunks/lazy-nodes'
   import { usePortalLocale } from '../../../../composables/use-locale/use-translate'
@@ -17,7 +31,7 @@
     throw new Error('MultiSelectContent must be used inside MultiSelect.')
   }
 
-  defineSlots<{
+  const slots = defineSlots<{
     /** The options (MultiSelectOption). */
     default(): unknown
     /** Pinned above the list, for a search field. */
@@ -27,6 +41,20 @@
   }>()
 
   const attrs = useAttrs()
+
+  const pickPending = (nodes: VNodeArrayChildren): VNode[] =>
+    nodes.flatMap((node): VNode[] => {
+      if (Array.isArray(node)) return pickPending(node)
+      if (!isVNode(node) || node.type === Comment) return []
+      if (node.type === Fragment && Array.isArray(node.children)) {
+        return pickPending(node.children as VNodeArrayChildren)
+      }
+      const props = node.props as Record<string, unknown> | null
+      if (props && 'value' in props) return ctx.isSelected(props['value']) ? [node] : []
+      return [node]
+    })
+
+  const PendingLabels = () => pickPending(slots.default?.() ?? [])
 
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? 'multi-select-content'
@@ -237,6 +265,6 @@
     hidden
     :data-testid="`${testId}__labels`"
   >
-    <slot />
+    <PendingLabels />
   </div>
 </template>

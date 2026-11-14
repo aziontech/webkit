@@ -2,7 +2,7 @@
 // Budgets live in ../../perf-budgets.json, in milliseconds, set at 3–5× the median measured on a
 // developer machine so CI stays stable. A component over budget fails here; fix the component
 // (window long lists, render collapsed children lazily), do not raise the number.
-import { cleanup, render } from '@testing-library/vue'
+import { cleanup, fireEvent, render } from '@testing-library/vue'
 import { afterEach, describe, expect, it } from 'vitest'
 import { server } from 'vitest/browser'
 import { type Component, defineComponent, h, nextTick, ref } from 'vue'
@@ -17,6 +17,7 @@ import LogViewContent from '../components/code/log-view/log-view-content.vue'
 import LogViewHeader from '../components/code/log-view/log-view-header.vue'
 import Table from '../components/data/table/table.vue'
 import Tree from '../components/data/tree/tree.vue'
+import Combobox from '../components/inputs/combobox/combobox.vue'
 import MultiSelect from '../components/inputs/multi-select'
 import Select from '../components/inputs/select'
 import { useCollection, type UseCollectionReturn } from '../composables/use-collection'
@@ -135,7 +136,7 @@ function treeCase(): Case {
   }
 }
 
-function selectCase(multiple: boolean): Case {
+function selectCase(multiple: boolean, preselected = false): Case {
   const options = Array.from({ length: 1000 }, (_, i) => ({ value: `v${i}`, label: `Option ${i}` }))
   const open = ref(false)
   const search = ref('')
@@ -153,7 +154,13 @@ function selectCase(multiple: boolean): Case {
         h(
           Root,
           {
-            modelValue: multiple ? [] : '',
+            modelValue: preselected
+              ? multiple
+                ? options.slice(990).map((o) => o.value)
+                : 'v999'
+              : multiple
+                ? []
+                : '',
             open: open.value,
             'onUpdate:open': (v: boolean) => (open.value = v)
           },
@@ -172,6 +179,21 @@ function selectCase(multiple: boolean): Case {
       open.value = true
       await settle()
       search.value = '1'
+    }
+  }
+}
+
+function comboboxCase(): Case {
+  const options = Array.from({ length: 1000 }, (_, i) => ({ value: `v${i}`, label: `Option ${i}` }))
+  return {
+    mount: () => ({
+      render: () => h(Combobox, { options, ariaLabel: 'Origin', allowCustom: false })
+    }),
+    update: async () => {
+      const input = document.querySelector<HTMLInputElement>('[role="combobox"]')!
+      await fireEvent.focus(input)
+      await settle()
+      await fireEvent.update(input, '1')
     }
   }
 }
@@ -321,6 +343,15 @@ describe('runtime budgets (perf-budgets.json)', () => {
   })
   it('MultiSelect with 1k options: open and filter', async () => {
     check('multi-select-1k', await measure(() => selectCase(true)))
+  })
+  it('Select with 1k options and a preselected value: mount names it by label', async () => {
+    check('select-1k-preselected', await measure(() => selectCase(false, true)))
+  })
+  it('MultiSelect with 1k options and 10 preselected values: mount names them by label', async () => {
+    check('multi-select-1k-preselected', await measure(() => selectCase(true, true)))
+  })
+  it('Combobox with 1k options: open and type', async () => {
+    check('combobox-1k', await measure(comboboxCase))
   })
   it('DonutChart with 500 slices', async () => {
     check('donut-chart-500', await measure(donutCase))
