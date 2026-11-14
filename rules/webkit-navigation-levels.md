@@ -94,7 +94,7 @@ const navigation = [
   `/* webkit-local-navigation */`. It is static and approximate, so it warns.
 - `ConsoleLayout` warns in development when a `Menu` in its default slot has a row whose `href`
   matches a rail row, naming both labels and the route.
-- `npx @aziontech/webkit check` and `/webkit-ui-verify` fail a visited route with a duplicate
+- `npx @aziontech/webkit check --url <url,...>` and `/webkit-ui-verify` fail a visited route with a duplicate
   destination, more than one `aria-current="page"` in one control, or two controls whose current rows
   point at different routes.
 - `/webkit-navigation` reviews the levels by hand.
