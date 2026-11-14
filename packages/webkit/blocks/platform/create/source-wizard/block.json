@@ -64,6 +64,16 @@
       "name": "Install",
       "summary": "The Origin Proxy integration chosen: the read-back row, its settings with the required Origin address, What gets added previewing the origin and the request-phase rule on service-01, and Back plus Add to service-01.",
       "file": "variants/install.vue"
+    },
+    {
+      "name": "ConnectFailed",
+      "summary": "Import from Git on service-01 after the GitHub authorization failed: the Connect a Git account state stays, with a small danger `Alert` under Connect GitHub; pressing it again retries.",
+      "file": "variants/connect-failed.vue"
+    },
+    {
+      "name": "LoadFailed",
+      "summary": "Import from Git with the acme account connected, but its repositories failed to load: a danger `Alert` with Retry takes the place of the list, while the account Select and the search stay usable.",
+      "file": "variants/load-failed.vue"
     }
   ]
 }

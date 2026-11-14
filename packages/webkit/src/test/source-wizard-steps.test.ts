@@ -2,8 +2,10 @@ import { fireEvent, render, screen, waitFor, within } from '@testing-library/vue
 import { describe, expect, it } from 'vitest'
 
 import Configure from '../../blocks/platform/create/source-wizard/variants/configure.vue'
+import ConnectFailed from '../../blocks/platform/create/source-wizard/variants/connect-failed.vue'
 import GitSource from '../../blocks/platform/create/source-wizard/variants/git-source.vue'
 import Install from '../../blocks/platform/create/source-wizard/variants/install.vue'
+import LoadFailed from '../../blocks/platform/create/source-wizard/variants/load-failed.vue'
 import Method from '../../blocks/platform/create/source-wizard/variants/method.vue'
 import Repository from '../../blocks/platform/create/source-wizard/variants/repository.vue'
 import TemplateSource from '../../blocks/platform/create/source-wizard/variants/template-source.vue'
@@ -31,8 +33,12 @@ describe('source-wizard steps', () => {
   it('git source: a search with no match says so', async () => {
     render(GitSource)
     await fireEvent.update(screen.getByRole('textbox', { name: 'Search repositories' }), 'zzz')
-    expect(screen.getByText('No repository matches “zzz”.')).toBeTruthy()
-    expect(screen.getByRole('status').textContent).toBe('No repository matches zzz')
+    expect(screen.getByText('No repositories match')).toBeTruthy()
+    expect(
+      screen.getAllByRole('status').some((node) => node.textContent === 'No repository matches zzz')
+    ).toBe(true)
+    await fireEvent.click(screen.getByRole('button', { name: 'Clear search' }))
+    expect(screen.getByRole('button', { name: /docs-site/ })).toBeTruthy()
   })
 
   it('template source: groups the templates, tags the featured ones and moves on', async () => {
@@ -61,6 +67,8 @@ describe('source-wizard steps', () => {
     await fireEvent.click(screen.getByRole('radio', { name: 'Existing repository' }))
     await fireEvent.click(screen.getByRole('button', { name: 'Next' }))
     expect(await screen.findByText('Select a repository, or create a new one.')).toBeTruthy()
+    expect(screen.queryByRole('button', { name: /internal-admin/ })).toBeNull()
+    await fireEvent.click(screen.getByRole('button', { name: 'Load more (2)' }))
     await fireEvent.click(screen.getByRole('button', { name: /internal-admin/ }))
     await fireEvent.click(screen.getByRole('button', { name: 'Next' }))
     expect(await screen.findByText('acme/internal-admin')).toBeTruthy()
@@ -106,5 +114,18 @@ describe('source-wizard steps', () => {
     )
     const added = screen.getByText('Records').parentElement as HTMLElement
     expect(within(added).getByText(/origin\.example\.com/)).toBeTruthy()
+  })
+
+  it('git source: a failed load offers Retry, and an empty account offers a template', async () => {
+    render(LoadFailed)
+    expect(screen.getByText(/didn't load/)).toBeTruthy()
+    await fireEvent.click(screen.getByRole('button', { name: 'Retry' }))
+    expect(screen.getByRole('status').textContent).toBe('Loading repositories')
+  })
+
+  it('git source: a failed connection says so under Connect GitHub', () => {
+    render(ConnectFailed)
+    expect(screen.getByText(/GitHub didn't connect/)).toBeTruthy()
+    expect(screen.getByRole('button', { name: 'Connect GitHub' })).toBeTruthy()
   })
 })
