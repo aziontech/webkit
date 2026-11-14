@@ -190,7 +190,6 @@
     title: string
     icon: string
     description: string
-    color: string
     markClass: string
   }
 
@@ -199,9 +198,8 @@
     title: string,
     icon: string,
     description: string,
-    color = '',
     markClass = ''
-  ): Template => ({ id, title, icon, description, color, markClass })
+  ): Template => ({ id, title, icon, description, markClass })
 
   const INVERT_IN_DARK = '[[data-theme=dark]_&]:invert'
 
@@ -211,92 +209,79 @@
       'Next.js Starter',
       'ai-cor ai-next',
       'A Next.js app with server rendering and static pages, ready to deploy.',
-      '#0070f3',
       INVERT_IN_DARK
     ),
     template(
       'react-starter',
       'React Starter',
       'ai-cor ai-react',
-      'A single-page React app built with Vite, every route served from the edge.',
-      '#61dafb'
+      'A single-page React app built with Vite, every route served from the edge.'
     ),
     template(
       'vue-starter',
       'Vue Starter',
       'ai-cor ai-vue',
-      'A lightweight Vue app with routing, built with Vite.',
-      '#42b883'
+      'A lightweight Vue app with routing, built with Vite.'
     ),
     template(
       'nuxt-store',
       'Nuxt Storefront',
       'ai-cor ai-nuxt',
-      'A product catalog with a cart, rendered on the server and cached close to buyers.',
-      '#00dc82'
+      'A product catalog with a cart, rendered on the server and cached close to buyers.'
     ),
     template(
       'astro-blog',
       'Astro Blog',
       'ai-cor ai-astro',
-      'A content-first blog with Markdown posts, an RSS feed and a sitemap.',
-      '#ff5d01'
+      'A content-first blog with Markdown posts, an RSS feed and a sitemap.'
     ),
     template(
       'angular-dashboard',
       'Angular Dashboard',
       'ai-cor ai-angular',
-      'A single-page admin dashboard with routing and lazy-loaded modules.',
-      '#dd0031'
+      'A single-page admin dashboard with routing and lazy-loaded modules.'
     ),
     template(
       'svelte-starter',
       'Svelte Starter',
       'ai-cor ai-svelte',
-      'A SvelteKit app with server routes and prerendered pages.',
-      '#ff3e00'
+      'A SvelteKit app with server routes and prerendered pages.'
     ),
     template(
       'solid-starter',
       'Solid Starter',
       'ai-cor ai-solidjs',
-      'A SolidStart app with fine-grained updates and streaming server rendering.',
-      '#446b9e'
+      'A SolidStart app with fine-grained updates and streaming server rendering.'
     ),
     template(
       'qwik-starter',
       'Qwik Starter',
       'ai ai-qwik',
-      'A resumable Qwik app that loads only the code a visitor touches.',
-      '#ac7ef4'
+      'A resumable Qwik app that loads only the code a visitor touches.'
     ),
     template(
       'gatsby-site',
       'Gatsby Site',
       'ai ai-gatsby',
-      'A marketing site built at deploy time from Markdown and images.',
-      '#663399'
+      'A marketing site built at deploy time from Markdown and images.'
     ),
     template(
       'docusaurus-docs',
       'Docusaurus Docs',
       'ai ai-docusaurus',
-      'A documentation site with versioned sections, search and a blog.',
-      '#3ecc5f'
+      'A documentation site with versioned sections, search and a blog.'
     ),
     template(
       'vitepress-docs',
       'VitePress Docs',
       'ai ai-vitepress',
-      'A fast documentation site written in Markdown, with a sidebar and search.',
-      '#646cff'
+      'A fast documentation site written in Markdown, with a sidebar and search.'
     ),
     template(
       'hugo-docs',
       'Hugo Docs',
       'ai ai-hugo',
-      'A documentation site with search, versioned sections and dark mode.',
-      '#ff4088'
+      'A documentation site with search, versioned sections and dark mode.'
     ),
     template(
       'static-site',
@@ -314,12 +299,9 @@
       'rest-api',
       'REST API',
       'ai ai-hono',
-      'A small Hono API with typed routes, running at the edge.',
-      '#e36002'
+      'A small Hono API with typed routes, running at the edge.'
     )
   ]
-
-  const glow = (item: Template) => (item.color ? { '--template-glow': item.color } : undefined)
 
   const withStatus = (item: Integration) => ({
     ...item,
@@ -520,15 +502,17 @@
                     :key="item.id"
                     class="flex min-w-0"
                   >
-                    <Card
-                      class="group isolate w-full"
-                      :style="glow(item)"
-                    >
+                    <Card class="group isolate w-full">
                       <template #content>
                         <span
                           aria-hidden="true"
-                          class="pointer-events-none absolute inset-0 -z-1 bg-[radial-gradient(120%_90%_at_18%_0%,color-mix(in_oklab,var(--template-glow,var(--primary))_20%,transparent),transparent_62%)] opacity-0 transition-opacity duration-moderate-01 ease-productive-entrance group-focus-within:opacity-100 group-hover:opacity-100 motion-reduce:transition-none rtl:bg-[radial-gradient(120%_90%_at_82%_0%,color-mix(in_oklab,var(--template-glow,var(--primary))_20%,transparent),transparent_62%)]"
-                        />
+                          class="pointer-events-none absolute inset-0 -z-1 overflow-hidden rounded-(--shape-card) opacity-0 transition-opacity duration-moderate-01 ease-productive-entrance group-focus-within:opacity-100 group-hover:opacity-100 motion-reduce:transition-none"
+                        >
+                          <i
+                            :class="[item.icon, item.markClass]"
+                            class="absolute start-(--spacing-xl) top-(--spacing-xl) scale-600 text-body-lg leading-none text-(--primary) opacity-25 blur-sm"
+                          />
+                        </span>
                         <div class="flex flex-col items-start gap-(--spacing-md)">
                           <span
                             class="flex size-10 shrink-0 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"

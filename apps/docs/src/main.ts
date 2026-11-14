@@ -3,7 +3,6 @@ import './styles/main.css'
 import '@aziontech/icons'
 import '@aziontech/webkit/styles/country-flags'
 
-import { ToastPlugin } from '@aziontech/webkit/toast'
 import { ViteSSG } from 'vite-ssg'
 
 import App from './App.vue'
@@ -20,8 +19,7 @@ export const createApp = ViteSSG(
       return { top: 0 }
     }
   },
-  ({ app, router, isClient }) => {
-    if (isClient) app.use(ToastPlugin, { position: 'bottom-center' })
+  ({ router }) => {
     router.beforeResolve(async (to) => {
       await preloadRoute(to)
     })

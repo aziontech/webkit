@@ -1,4 +1,10 @@
 <script setup lang="ts">
+  import claudeMark from '@aziontech/webkit/assets/claude-symbol-color.svg'
+  import codexMark from '@aziontech/webkit/assets/codex-symbol-mono.svg'
+  import copilotMark from '@aziontech/webkit/assets/copilot-symbol-color.svg'
+  import cursorMark from '@aziontech/webkit/assets/cursor-symbol-mono.svg'
+  import geminiMark from '@aziontech/webkit/assets/gemini-symbol-color.svg'
+  import opencodeMark from '@aziontech/webkit/assets/opencode-symbol-mono.svg'
   import Button from '@aziontech/webkit/button'
   import DocCallout from '@aziontech/webkit/doc-callout'
   import DocCard from '@aziontech/webkit/doc-card'
@@ -13,6 +19,7 @@
   import DocTabs from '@aziontech/webkit/doc-tabs'
   import Footer from '@aziontech/webkit/footer'
   import IconButton from '@aziontech/webkit/icon-button'
+  import Logo from '@aziontech/webkit/logo'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
   import Table from '@aziontech/webkit/table-root'
   import Tag from '@aziontech/webkit/tag'
@@ -26,6 +33,8 @@
     name: string
     vendor: string
     icon: string
+    logo: string
+    mono: boolean
     workflows: Workflow[]
     pricing: string
     model: string
@@ -46,6 +55,8 @@
       name: 'Claude Code',
       vendor: 'Anthropic',
       icon: 'ai ai-claude',
+      logo: claudeMark,
+      mono: false,
       workflows: ['Terminal'],
       pricing: 'Subscription',
       model: 'Locked',
@@ -59,6 +70,8 @@
       name: 'Cursor',
       vendor: 'Cursor',
       icon: 'ai ai-cursor',
+      logo: cursorMark,
+      mono: true,
       workflows: ['IDE'],
       pricing: 'Subscription',
       model: 'Multi-provider',
@@ -72,6 +85,8 @@
       name: 'GitHub Copilot',
       vendor: 'GitHub',
       icon: 'ai ai-github',
+      logo: copilotMark,
+      mono: false,
       workflows: ['Extension', 'IDE'],
       pricing: 'Subscription',
       model: 'Multi-provider',
@@ -85,6 +100,8 @@
       name: 'Windsurf',
       vendor: 'Cognition',
       icon: 'ai ai-windsurf',
+      logo: '',
+      mono: true,
       workflows: ['IDE'],
       pricing: 'Subscription',
       model: 'Multi-provider',
@@ -98,6 +115,8 @@
       name: 'Codex',
       vendor: 'OpenAI',
       icon: 'pi pi-code',
+      logo: codexMark,
+      mono: true,
       workflows: ['Terminal'],
       pricing: 'Hybrid',
       model: 'Locked',
@@ -111,6 +130,8 @@
       name: 'Gemini CLI',
       vendor: 'Google',
       icon: 'ai ai-gemini',
+      logo: geminiMark,
+      mono: false,
       workflows: ['Terminal'],
       pricing: 'Hybrid',
       model: 'Locked',
@@ -124,6 +145,8 @@
       name: 'OpenCode',
       vendor: 'SST',
       icon: 'pi pi-desktop',
+      logo: opencodeMark,
+      mono: true,
       workflows: ['Terminal'],
       pricing: 'BYOK',
       model: 'Multi-provider',
@@ -237,6 +260,8 @@
     id: agent.slug,
     agent: agent.name,
     icon: agent.icon,
+    logo: agent.logo,
+    mono: agent.mono,
     href: agentHref(agent),
     terminal: agent.workflows.includes('Terminal'),
     ide: agent.workflows.includes('IDE'),
@@ -372,8 +397,21 @@
                 :eyebrow="agent.vendor"
                 :icon="agent.icon"
                 :href="agentHref(agent)"
-                >{{ agent.description }}</DocCard
               >
+                <template
+                  v-if="agent.logo"
+                  #icon
+                >
+                  <Logo
+                    :name="agent.name"
+                    :src="agent.logo"
+                    :kind="agent.mono ? 'current' : 'color'"
+                    decorative
+                    class="size-6 text-(--text-default)"
+                  />
+                </template>
+                {{ agent.description }}
+              </DocCard>
             </DocCardGroup>
           </DocTab>
         </DocTabs>
@@ -402,7 +440,16 @@
                 :href="row.href"
                 class="flex min-w-0 items-center gap-(--spacing-sm) rounded-(--shape-flat) text-label-md text-(--text-default) no-underline hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring-color)"
               >
+                <Logo
+                  v-if="row.logo"
+                  :name="row.agent"
+                  :src="row.logo"
+                  :kind="row.mono ? 'current' : 'color'"
+                  decorative
+                  class="size-4"
+                />
                 <i
+                  v-else
                   :class="row.icon"
                   class="shrink-0 text-label-md"
                   aria-hidden="true"

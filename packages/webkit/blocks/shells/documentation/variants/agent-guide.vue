@@ -1,4 +1,9 @@
 <script setup lang="ts">
+  import codexMark from '@aziontech/webkit/assets/codex-symbol-mono.svg'
+  import copilotMark from '@aziontech/webkit/assets/copilot-symbol-color.svg'
+  import cursorMark from '@aziontech/webkit/assets/cursor-symbol-mono.svg'
+  import geminiMark from '@aziontech/webkit/assets/gemini-symbol-color.svg'
+  import opencodeMark from '@aziontech/webkit/assets/opencode-symbol-mono.svg'
   import Button from '@aziontech/webkit/button'
   import DocAccordionGroup from '@aziontech/webkit/doc-accordion-group'
   import DocAccordionItem from '@aziontech/webkit/doc-accordion-item'
@@ -21,6 +26,7 @@
   import FrameBox from '@aziontech/webkit/frame-box'
   import IconButton from '@aziontech/webkit/icon-button'
   import ItemList from '@aziontech/webkit/item-list'
+  import Logo from '@aziontech/webkit/logo'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
   import Table from '@aziontech/webkit/table-root'
   import Tag from '@aziontech/webkit/tag'
@@ -49,6 +55,8 @@
       name: 'Cursor',
       vendor: 'Cursor',
       icon: 'ai ai-cursor',
+      logo: cursorMark,
+      mono: true,
       description:
         'AI-first IDE with multi-file edits and background agents. Azion plugs into its MCP settings.'
     },
@@ -57,6 +65,8 @@
       name: 'GitHub Copilot',
       vendor: 'GitHub',
       icon: 'ai ai-github',
+      logo: copilotMark,
+      mono: false,
       description:
         'Agent mode inside your editor, with workspace context and pull-request integration.'
     },
@@ -65,6 +75,8 @@
       name: 'Windsurf',
       vendor: 'Cognition',
       icon: 'ai ai-windsurf',
+      logo: '',
+      mono: true,
       description: 'Agentic IDE built around multi-step tasks. Connects through mcp-remote.'
     },
     {
@@ -72,6 +84,8 @@
       name: 'Codex',
       vendor: 'OpenAI',
       icon: 'pi pi-code',
+      logo: codexMark,
+      mono: true,
       description: 'Terminal agent that runs commands in a sandbox and reads AGENTS.md natively.'
     },
     {
@@ -79,6 +93,8 @@
       name: 'Gemini CLI',
       vendor: 'Google',
       icon: 'ai ai-gemini',
+      logo: geminiMark,
+      mono: false,
       description: 'Open source terminal agent with a free tier. Verify the server with /mcp.'
     },
     {
@@ -86,6 +102,8 @@
       name: 'OpenCode',
       vendor: 'SST',
       icon: 'pi pi-desktop',
+      logo: opencodeMark,
+      mono: true,
       description: 'Open source, provider-agnostic terminal agent, whichever model you choose.'
     }
   ]
@@ -603,8 +621,21 @@
             :eyebrow="other.vendor"
             :icon="other.icon"
             :href="`/docs/agent-setup/${other.slug}`"
-            >{{ other.description }}</DocCard
           >
+            <template
+              v-if="other.logo"
+              #icon
+            >
+              <Logo
+                :name="other.name"
+                :src="other.logo"
+                :kind="other.mono ? 'current' : 'color'"
+                decorative
+                class="size-6 text-(--text-default)"
+              />
+            </template>
+            {{ other.description }}
+          </DocCard>
         </DocCardGroup>
       </DocProse>
       <DocPagination

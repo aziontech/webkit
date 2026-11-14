@@ -34,7 +34,7 @@ A `Card` whose header holds the `Subscription plan` heading and the outlined `Ch
 
 ### E. Upgrade card — `Card` (required)
 
-`Upgrade to Enterprise` beside the plan card: one sentence on what the tier adds, four perks with icons, a link to pricing and a secondary `Contact sales` (the tier is sold by the sales team, so the page keeps no primary action). Show the next tier only; hide the card on the top tier.
+`Upgrade to Enterprise` beside the plan card: one sentence on what the tier adds, four perks with icons, a link to pricing and a primary `Contact sales`, the one primary action on the page (the tier is sold by the sales team). Show the next tier only; hide the card on the top tier.
 
 ### F. Invoices controls — `SectionHeader`, `PropertyFilter`, `CollectionPreferences` (required)
 

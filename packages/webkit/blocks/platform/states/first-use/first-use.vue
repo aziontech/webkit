@@ -11,12 +11,13 @@
   import InputGroupRoot from '@aziontech/webkit/input-group-root'
   import Item from '@aziontech/webkit/item'
   import Link from '@aziontech/webkit/link'
+  import Logo from '@aziontech/webkit/logo'
 
   const agentMarks = [
-    { name: 'claude', src: claudeMark, mono: false },
-    { name: 'codex', src: codexMark, mono: true },
-    { name: 'gemini', src: geminiMark, mono: false },
-    { name: 'cursor', src: cursorMark, mono: true }
+    { name: 'Claude', src: claudeMark, mono: false },
+    { name: 'Codex', src: codexMark, mono: true },
+    { name: 'Gemini', src: geminiMark, mono: false },
+    { name: 'Cursor', src: cursorMark, mono: true }
   ]
 </script>
 
@@ -221,16 +222,12 @@
                 :key="agent.name"
                 class="flex size-8 shrink-0 items-center justify-center overflow-hidden rounded-(--shape-elements) border-(length:--border-width-default) border-(--border-muted) bg-(--bg-surface-raised)"
               >
-                <span
-                  v-if="agent.mono"
-                  class="size-(--size-4) shrink-0 bg-current text-(--text-default) mask-(--agent-mark) mask-contain mask-center mask-no-repeat"
-                  :style="{ '--agent-mark': `url('${agent.src}')` }"
-                />
-                <img
-                  v-else
+                <Logo
+                  :name="agent.name"
                   :src="agent.src"
-                  alt=""
-                  class="size-(--size-4) shrink-0"
+                  :kind="agent.mono ? 'current' : 'color'"
+                  decorative
+                  class="size-(--size-4) text-(--text-default)"
                 />
               </span>
             </span>
