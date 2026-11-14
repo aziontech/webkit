@@ -13,13 +13,13 @@
 <path d="M111.614 37.19H81.633C77.2147 37.19 73.633 40.7717 73.633 45.19V75.12C73.633 79.5383 77.2147 83.12 81.633 83.12H111.614C116.032 83.12 119.614 79.5383 119.614 75.12V45.19C119.614 40.7717 116.032 37.19 111.614 37.19Z" fill="white"/>
 </mask>
 <radialGradient id="paint0_radial_2904_5907" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(152.434 60) scale(20 60.1337)">
-<stop stop-color="#F3652B" stop-opacity="0.1"/>
-<stop offset="1" stop-color="#F3652B" stop-opacity="0"/>
+<stop stop-color="#D94A03" stop-opacity="0.1"/>
+<stop offset="1" stop-color="#D94A03" stop-opacity="0"/>
 </radialGradient>
 <radialGradient id="paint1_radial_2904_5907" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(96.622 60.155) rotate(90) scale(55.7478 55.8098)">
-<stop stop-color="#F3652B" stop-opacity="0.5"/>
-<stop offset="0.28" stop-color="#F3652B" stop-opacity="0.25"/>
-<stop offset="1" stop-color="#F3652B" stop-opacity="0"/>
+<stop stop-color="#D94A03" stop-opacity="0.5"/>
+<stop offset="0.28" stop-color="#D94A03" stop-opacity="0.25"/>
+<stop offset="1" stop-color="#D94A03" stop-opacity="0"/>
 </radialGradient>
 <linearGradient id="paint2_linear_2904_5907" x1="73.633" y1="37.19" x2="119.563" y2="83.171" gradientUnits="userSpaceOnUse">
 <stop stop-color="#F7A380"/>
@@ -29,8 +29,8 @@
 <stop offset="1" stop-color="#F7A380"/>
 </linearGradient>
 <radialGradient id="paint3_radial_2904_5907" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(40.813 60) rotate(180) scale(20 60.1337)">
-<stop stop-color="#F3652B" stop-opacity="0.1"/>
-<stop offset="1" stop-color="#F3652B" stop-opacity="0"/>
+<stop stop-color="#D94A03" stop-opacity="0.1"/>
+<stop offset="1" stop-color="#D94A03" stop-opacity="0"/>
 </radialGradient>
 <linearGradient id="paint4_linear_2904_5907" x1="73.633" y1="37.19" x2="119.563" y2="83.171" gradientUnits="userSpaceOnUse">
 <stop stop-color="#F7A380"/>

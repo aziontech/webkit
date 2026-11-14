@@ -15,7 +15,7 @@
         fill-rule="evenodd"
         clip-rule="evenodd"
         d="M18.2868 0L0.490892 14.9821L0 17.561H2.5639L16.349 5.96141L14.1271 17.561H17.4898L20.8537 0H18.2868Z"
-        fill="#F3652B"
+        fill="#D94A03"
       />
     </g>
     <defs>

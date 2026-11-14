@@ -79,12 +79,12 @@ viewBox="0 0 193 120"
     gradientUnits="userSpaceOnUse"
     >
     <stop
-        stop-color="#F3652B"
+        stop-color="#D94A03"
         stop-opacity=".1"
     />
     <stop
         offset="1"
-        stop-color="#F3652B"
+        stop-color="#D94A03"
         stop-opacity="0"
     />
     </radialGradient>
@@ -97,17 +97,17 @@ viewBox="0 0 193 120"
     gradientUnits="userSpaceOnUse"
     >
     <stop
-        stop-color="#F3652B"
+        stop-color="#D94A03"
         stop-opacity=".5"
     />
     <stop
         offset=".28"
-        stop-color="#F3652B"
+        stop-color="#D94A03"
         stop-opacity=".25"
     />
     <stop
         offset="1"
-        stop-color="#F3652B"
+        stop-color="#D94A03"
         stop-opacity="0"
     />
     </radialGradient>
@@ -120,12 +120,12 @@ viewBox="0 0 193 120"
     gradientUnits="userSpaceOnUse"
     >
     <stop
-        stop-color="#F3652B"
+        stop-color="#D94A03"
         stop-opacity=".1"
     />
     <stop
         offset="1"
-        stop-color="#F3652B"
+        stop-color="#D94A03"
         stop-opacity="0"
     />
     </radialGradient>
