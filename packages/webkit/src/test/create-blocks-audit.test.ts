@@ -8,6 +8,7 @@ import CreateHubLoading from '../../blocks/platform/create/create-hub/variants/l
 import CreateInDrawer from '../../blocks/platform/create/create-in-drawer/create-in-drawer.vue'
 import CreateInDrawerSaveFailed from '../../blocks/platform/create/create-in-drawer/variants/save-failed.vue'
 import DeployDrawer from '../../blocks/platform/create/deploy-drawer/deploy-drawer.vue'
+import DeployProgressDialog from '../../blocks/platform/create/deploy-progress-dialog/deploy-progress-dialog.vue'
 import DeployTemplate from '../../blocks/platform/create/deploy-template/deploy-template.vue'
 import DeployTemplateUpload from '../../blocks/platform/create/deploy-template/variants/upload.vue'
 import { expectNoA11yViolations } from './axe'
@@ -152,5 +153,19 @@ describe('deploy-drawer', () => {
       0
     )
     expect(dialog.textContent).not.toMatch(/publish/i)
+  })
+})
+
+describe('deploy-progress-dialog', () => {
+  it('lets the user hide the dialog while the run goes on and reopen it', async () => {
+    render(DeployProgressDialog)
+    const dialog = await screen.findByRole('dialog')
+    expect(within(dialog).getByRole('list', { name: 'Deployment Settings' })).toBeTruthy()
+    const hide = within(dialog).getByRole('button', { name: 'Hide' })
+    expect(hide.hasAttribute('disabled')).toBe(false)
+    await fireEvent.click(hide)
+    await waitFor(() => expect(screen.queryByRole('dialog')).toBeNull(), wait)
+    await fireEvent.click(screen.getByRole('button', { name: 'Show progress' }))
+    expect(await screen.findByRole('dialog')).toBeTruthy()
   })
 })
