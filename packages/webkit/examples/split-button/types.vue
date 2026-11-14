@@ -13,17 +13,17 @@
     <SplitButton
       kind="primary"
       label="Primary"
-      :model="items"
+      :items="items"
     />
     <SplitButton
       kind="secondary"
       label="Secondary"
-      :model="items"
+      :items="items"
     />
     <SplitButton
       kind="outlined"
       label="Outlined"
-      :model="items"
+      :items="items"
     />
   </div>
 </template>

@@ -12,7 +12,7 @@
   <SplitButton
     label="Save"
     icon="pi pi-check"
-    :model="items"
+    :items="items"
     update-label-on-select
   />
 </template>

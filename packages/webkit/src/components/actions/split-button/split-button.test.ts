@@ -29,7 +29,7 @@ const host = (props: Record<string, unknown> = {}) =>
     setup() {
       return { props, model: (props.model as SplitButtonItem[] | undefined) ?? model }
     },
-    template: `<SplitButton label="Deploy" v-bind="props" :model="model" />`
+    template: `<SplitButton label="Deploy" v-bind="props" :items="model" />`
   })
 
 const openMenu = async (view: ReturnType<typeof render>) => {
@@ -222,6 +222,28 @@ describe('SplitButton (joined command + menu overlay)', () => {
     await openMenu(view)
     const selected = options().find((row) => row.textContent?.includes('Deploy to staging'))
     expect(selected?.hasAttribute('data-selected')).toBe(true)
+  })
+
+  it('keeps the deprecated model prop working', async () => {
+    const view = render(SplitButton, { props: { label: 'Deploy', model } })
+    await openMenu(view)
+    expect(options().map((row) => row.textContent?.trim())).toEqual([
+      'Deploy to staging',
+      'Deploy preview',
+      'Rollback release'
+    ])
+  })
+
+  it('emits update:selected and restores the mirrored action from v-model:selected', async () => {
+    const view = render(SplitButton, {
+      props: { label: 'Deploy', items: model, updateLabelOnSelect: true, selected: 'staging' }
+    })
+    expect(view.getByTestId('actions-split-button__primary').textContent).toContain(
+      'Deploy to staging'
+    )
+    await openMenu(view)
+    await fireEvent.click(options()[1])
+    expect(view.emitted('update:selected')?.[0]).toEqual(['Deploy preview'])
   })
 
   // ---- Suppression: disabled / loading ---------------------------------------------

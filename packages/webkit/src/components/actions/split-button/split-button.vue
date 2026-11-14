@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed, ref, useAttrs } from 'vue'
+  import { computed, useAttrs } from 'vue'
 
   import { useTranslate } from '../../../composables/use-locale/use-translate'
   import * as en from '../../../i18n/messages/en'
@@ -33,6 +33,8 @@
     /** PrimeIcons class for the primary button's leading icon. */
     icon?: string
     /** Actions rendered as rows in the attached overlay menu. */
+    items?: SplitButtonItem[]
+    /** @deprecated since 6.0 — use `items`. Removed in 7.0. */
     model?: SplitButtonItem[]
     /** Visual variant applied to both joined segments. */
     kind?: SplitButtonKind
@@ -49,6 +51,7 @@
   const props = withDefaults(defineProps<Props>(), {
     label: '',
     icon: '',
+    items: () => [],
     model: () => [],
     kind: 'primary',
     size: 'large',
@@ -62,6 +65,9 @@
     'item-click': [event: MouseEvent | KeyboardEvent, item: SplitButtonItem]
   }>()
 
+  /** Value of the menu action the primary button mirrors when `updateLabelOnSelect` is set (v-model:selected); null shows the default label. */
+  const selectedValue = defineModel<string | null>('selected', { default: null })
+
   const attrs = useAttrs()
   const { t } = useTranslate({ splitButton: en.splitButton })
 
@@ -73,11 +79,11 @@
     return item.value ?? item.label
   }
 
-  const selectedValue = ref<string | null>(null)
+  const actions = computed(() => (props.items.length ? props.items : props.model))
 
   const selectedItem = computed(() => {
     if (!props.updateLabelOnSelect || selectedValue.value === null) return null
-    return props.model.find((entry) => optionValue(entry) === selectedValue.value) ?? null
+    return actions.value.find((entry) => optionValue(entry) === selectedValue.value) ?? null
   })
 
   const displayLabel = computed(() => selectedItem.value?.label ?? props.label)
@@ -101,7 +107,7 @@
   }
 
   function onSelect(event: MouseEvent | KeyboardEvent, value: string | number) {
-    const item = props.model.find((entry) => optionValue(entry) === String(value))
+    const item = actions.value.find((entry) => optionValue(entry) === String(value))
 
     if (item) {
       if (props.updateLabelOnSelect) {
@@ -156,7 +162,7 @@
 
       <DropdownMenu.Group>
         <DropdownMenu.Option
-          v-for="(item, index) in model"
+          v-for="(item, index) in actions"
           :key="`${optionValue(item)}-${index}`"
           :value="optionValue(item)"
           :label="item.label"

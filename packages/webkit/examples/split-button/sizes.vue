@@ -13,17 +13,17 @@
     <SplitButton
       size="small"
       label="Small"
-      :model="items"
+      :items="items"
     />
     <SplitButton
       size="medium"
       label="Medium"
-      :model="items"
+      :items="items"
     />
     <SplitButton
       size="large"
       label="Large"
-      :model="items"
+      :items="items"
     />
   </div>
 </template>

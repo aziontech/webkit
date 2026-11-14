@@ -13,6 +13,6 @@
     label="Saving"
     icon="pi pi-check"
     loading
-    :model="items"
+    :items="items"
   />
 </template>

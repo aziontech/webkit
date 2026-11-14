@@ -14,6 +14,6 @@
     size="large"
     label="Save"
     icon="pi pi-check"
-    :model="items"
+    :items="items"
   />
 </template>
