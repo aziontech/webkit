@@ -30,7 +30,7 @@
 - [setting-row](setting-row.md) — the rows inside the band's card.
 - [card](card.md) — the flush (`:padded="false"`) surface the rows sit on.
 - [hint](hint.md) — the guidance glyph beside the title.
-- [section-header](section-header.md) — the band heading with a description and actions.
+- [section-header](section-header.md) — the band heading with a description and actions. Pick by content: a settings band of `SettingRow`s (a Hint, a gutter copy-link, an optional disclosure) is `SettingsSection`; a console band heading with a description and its own actions is `SectionHeader`; a marketing section heading is `section-title`. The three share the h2 and the copy-link anchor; folding SettingsSection's heading onto SectionHeader is a planned refactor, not a behaviour change.
 
 ## Props
 

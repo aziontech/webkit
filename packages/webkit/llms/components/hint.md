@@ -52,7 +52,7 @@
 - Keyboard map: `Tab` moves focus to the glyph and opens the tooltip; `Escape` closes it (owned by `Tooltip`); the button has no activation behaviour.
 - The button's default action is prevented on click, so a `Hint` rendered inside a `<label>` never toggles the labelled control.
 - Contrast ≥4.5:1 between `var(--text-muted)` and `var(--bg-canvas)`; the focus ring uses `var(--ring-color)` at 2px with an offset.
-- Touch target: the glyph is a 20×20 px affordance placed inline with 12 px label text; it is an enhancement, never the only path to the information.
+- Touch target: the glyph is drawn at 20×20 px inline with 12 px label text; a `[data-slot=touch-target]` span extends the hit area to 24×24 px (WCAG 2.5.8), and to 44×44 px on a coarse pointer. It is an enhancement, never the only path to the information.
 
 ## Examples
 

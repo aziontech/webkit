@@ -45,8 +45,6 @@
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `items` | `TItem[]` | `[]` | false | Rows in list mode. Supports v-model:items. |
-| `groups` | `TItem[][]` | `undefined` | false | Rows in grouped mode: every inner array is an AND group, groups are joined by OR. Supports v-model:groups. |
 | `definition` | `AttributeEditorColumn[]` | `[]` | false | Columns of every row: key of the item field, label, placeholder, required. |
 | `errors` | `AttributeEditorErrors` | `[]` | false | Error per cell, aligned with the rows (nested per group in grouped mode). Empty shows none. |
 | `addButtonLabel` | `string` | `''` | false | Label of the Add button. Empty uses the locale catalog. |
@@ -63,13 +61,13 @@
 | `addDisabled` | `boolean` | `false` | false | Disables Add only, for example until the last row is filled in. |
 | `reorderable` | `boolean` | `false` | false | Shows a grip and Move up / Move down on every row (and every group in grouped mode) when there is more than one; rows move by dragging the grip, with the buttons, with Arrow Up / Arrow Down on the grip or Alt+Arrow Up / Alt+Arrow Down anywhere in the row. The new order goes out through v-model. |
 | `ariaLabel` | `string` | `''` | false | Accessible name of the list of rows. |
+| `items` | `TItem[]` | `() => []` | false | Two-way value (`v-model:items`). |
+| `groups` | `TItem[][] \| undefined` | `undefined` | false | Two-way value (`v-model:groups`). |
 
 ## Events
 
 | Event | Payload | Notes |
 | --- | --- | --- |
-| `update:items` | `TItem[]` | A row was added, removed, edited or moved in list mode. |
-| `update:groups` | `TItem[][]` | A row or group was added, removed, edited or moved in grouped mode. |
 | `add` | `(event: MouseEvent, detail: { index: number; groupIndex?: number })` | After a row is added; `groupIndex` only in grouped mode. |
 | `remove` | `(event: MouseEvent \| KeyboardEvent, detail: { index: number; item: TItem; groupIndex?: number })` | After a row is removed. |
 
@@ -83,6 +81,13 @@
 | `actions` | — | Extra buttons after Add (for example Upload or Paste .env). |
 | `info` | — | Extra help text under the buttons, after the limit text. |
 | `limit` | { count, limit, left } | Replaces the limit text in list mode (for example "You can add 3 more tags."). |
+
+## v-model
+
+| Model            | Type                     | Default     | Emits           | Notes                                                                                                                                                                         |
+| ---------------- | ------------------------ | ----------- | --------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `v-model:items`  | `TItem[]`                | `[]`        | `update:items`  | Rows in list mode, via `defineModel('items')`. A row added, removed, edited or moved goes out as the new array; unbound, the editor keeps its own rows.                         |
+| `v-model:groups` | `TItem[][] \| undefined` | `undefined` | `update:groups` | Rows in grouped mode, via `defineModel('groups')`: every inner array is an AND group, groups are joined by OR. Setting it (even to `[]`) switches the editor to grouped mode. |
 
 ## States
 

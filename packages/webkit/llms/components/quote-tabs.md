@@ -44,7 +44,7 @@
 | --- | --- | --- | --- | --- |
 | `items` | `QuoteTabsItem[]` | `[]` | false | The clients, in wall order; each item is `{ logo?, mark?, clientName?, shape?, text, name?, jobTitle?, photo? }` — the URL of the client's colour logo, the registry name of its one-ink mark, its name in prose, how tall its mark sits on the card, the quotation, who said it, their role and their likeness. |
 | `ariaLabel` | `string` | `''` | false | Accessible name for the wall of client cards. |
-| `autoplay` | `boolean` | `true` | false | Advances to the next client on a timer; pauses under the pointer or keyboard focus, restarts its count on a selection, and never runs under reduced motion. |
+| `autoplay` | `boolean` | `true` | false | Advances to the next client on a timer, with a visible pause control; pauses under the pointer or keyboard focus, restarts its count on a selection, and never runs under reduced motion. |
 | `autoplayInterval` | `number` | `5000` | false | Milliseconds each client is held before the band advances. |
 | `showProgress` | `boolean` | `true` | false | Advances a hairline along the quotation panel's bottom edge while the timer runs. |
 | `modelValue` | `number` | `0` | false | Two-way value (`v-model`). |
@@ -76,6 +76,7 @@
 - The visible quotation fills that held height, and `quote` gives the slack to the quotation itself, so the attribution and the `actions` control sit on the same line for every client and a change of client never moves them
 - `data-direction` on the panel is `forward` when the new card sits after the previous one in the wall and `back` when it sits before it; an arrow key that wraps keeps its own direction (`ArrowRight` from the last card to the first is `forward`, `ArrowLeft` from the first to the last is `back`). It decides which side the quotations travel to and from
 - `data-autoplay` marks the root while the timer runs. It runs when `autoplay` is on, the band has more than one client and the reader has not asked for reduced motion; it pauses while the pointer rests on the band or keyboard focus (`:focus-visible`) is inside it, and resumes on leave
+- `data-paused` marks the root while the reader has paused the rotation with the pause control
 - Every change of client restarts the count, whether the timer, a click, an arrow key or a bound `modelValue` made it; clicking the selected card restarts it too, and a click keeps the timer running with the pointer still on the band. The timer moves to the next card and wraps from the last to the first, travelling `forward`
 - While the timer runs and `showProgress` is on, a `--primary` hairline grows along the panel's bottom edge, across the panel's full width rather than the quotation's padded column, and reaches the right edge as the band advances; it is decorative and `aria-hidden`
 - During a change the leaving quotation travels out first and the entering one travels in once it has gone, both within that same cell, so two quotations never overlap and the wall below never moves
@@ -92,7 +93,7 @@
 - ARIA: only the selected quotation is exposed; the others in the panel's cell are `inert` (so never focusable or reachable) and `aria-hidden` (so never announced). The wall is a `role="tablist"` named by `ariaLabel`; each card is a native `<button role="tab">` named by the client's name through `aria-label`, with `aria-selected` and `aria-controls` pointing at the panel; the card's artwork is decorative (`alt=""` or `aria-hidden`), since the name is its label. The panel is `role="tabpanel"` with `tabindex="0"` and `aria-labelledby` pointing at the selected card; its colour logo carries the client name as its alternative text, and a one-ink mark is `aria-hidden` with the quotation's attribution naming the company. Ids come from `useId()`. The leaving quotation stays `aria-hidden` while it travels out, so a screen reader reads one quotation.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): colour logos are logotypes, exempt under WCAG 1.4.11, and are drawn as the consumer supplies them; the name fallback is `var(--text-default)` on both card surfaces.
 - `motion-reduce:transition-none motion-reduce:duration-0 motion-reduce:translate-x-0` on the travelling quotation (the zero duration is what lets the out-in swap finish at once instead of waiting out the leave), `motion-reduce:transition-none` on the card surface and `motion-reduce:before:transition-none` on its ghost layer; under reduced motion the band never advances on its own.
-- Pause (WCAG 2.2.2): the timer stops while the pointer rests on the band or keyboard focus is inside it, so a reader holds a quotation by pointing at it or reaching the band with `Tab`; `autoplay` off removes the movement entirely. The panel is not a live region, so a change the timer makes is never announced over the reader.
+- Pause (WCAG 2.2.2): while the timer can run, a visible outlined `IconButton` at the band's top end pauses it ("Pause rotation") and resumes it ("Resume rotation"), for touch and screen-reader users alike. The timer also stops while the pointer rests on the band or keyboard focus is inside it, so a reader holds a quotation by pointing at it or reaching the band with `Tab`; `autoplay` off removes the movement entirely. The panel is not a live region, so a change the timer makes is never announced over the reader.
 - Touch target ≥40×40 px: each card is a full 3:2 cell of the wall, well above 40px on every breakpoint.
 
 ## Right-to-left
@@ -102,6 +103,15 @@
 - Keyboard: `ArrowRight`/`ArrowLeft` move to the next/previous quote, swapped under `dir="rtl"` (`logicalArrowKey`).
 - Motion: the panel slides in from the end edge when moving forward and from the start edge when moving back (`rtl:` flips the `translate-x`).
 - User data: quotes and names in another script keep their own direction.
+
+## Internationalization
+
+| Key                              | English source    | Override prop |
+| -------------------------------- | ----------------- | ------------- |
+| `autoplayControl.pauseRotation`  | `Pause rotation`  | —             |
+| `autoplayControl.resumeRotation` | `Resume rotation` | —             |
+
+- Every other string is copy passed through `items`.
 
 ## Examples
 

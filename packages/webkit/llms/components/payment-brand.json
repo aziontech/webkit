@@ -44,11 +44,18 @@
    "doc": "Plate size: `small` 20 × 32 px for dense tables, `medium` 28 × 40 px for rows and forms."
   },
   {
-   "name": "label",
+   "name": "ariaLabel",
    "type": "string",
-   "default": "undefined",
+   "default": "''",
    "required": "false",
    "doc": "Accessible name. Empty uses the brand's name (`Visa`), or the catalog's `Card` for an unknown brand."
+  },
+  {
+   "name": "label",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "@deprecated since 6.0 — use `ariaLabel` instead. Removed in 7.0."
   },
   {
    "name": "decorative",

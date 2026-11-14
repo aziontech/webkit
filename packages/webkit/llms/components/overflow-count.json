@@ -36,12 +36,12 @@
    "type": "Array<string | { label: string; href?: string }>",
    "default": "[]",
    "required": "false",
-   "doc": "The hidden items. The chip reads `+<length>`; an item with `href` opens in a new tab."
+   "doc": "The hidden items. The chip reads a plus sign and the count; an item with `href` opens in a new tab."
   },
   {
    "name": "noun",
    "type": "string | { one: string; other: string }",
-   "default": "undefined",
+   "default": "''",
    "required": "false",
    "doc": "What the items are, for the summary and the trigger's name. Empty uses the catalog (`item` / `items`)."
   }

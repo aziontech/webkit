@@ -23,7 +23,7 @@
 
 ## Don’t
 
-- Filters typed as text, with operators or and/or logic, or a query people keep as text → use `property-filter`.
+- Filters typed as text, with operators or and/or logic, or a query people keep as text → use `property-filter`. FilterMenu is for faceted picks from known values; PropertyFilter is for expression search.
 - A table that needs comparisons on numbers or free-text conditions → use `table-filter` with its builder.
 - Two to four fixed choices always on screen → use `toggle-group` or selectable `chip`s.
 - A single search over names → use `input`, or `table-search` inside a table.
@@ -44,7 +44,9 @@
 | `fields` | `FilterMenuField[]` | `[]` | false | Fields the menu lists, in order, each with its kind and values. |
 | `label` | `string` | `''` | false | Text of the trigger button. Empty uses the locale catalog (`Filter`). |
 | `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | false | Size token of the trigger button. |
+| `disabled` | `boolean` | `false` | false | Disables the trigger: the menu does not open. |
 | `modelValue` | `FilterMenuModel` | `—` | false | Two-way value (`v-model`). |
+| `open` | `boolean` | `false` | false | Two-way value (`v-model:open`). |
 
 ## Sub-component imports
 
@@ -56,9 +58,12 @@ The root ships a compound API: `index.ts` attaches `Chips` to the root and re-ex
 menu and its chips are siblings in the page (the controls row and the row below it), so they share
 no provider: chips and a menu that receive the **same `fields` array** are linked through a
 per-array channel (`composables/use-filter-menu-channel.ts`, module scope, keyed by the raw array),
-so activating a chip opens that menu at the chip's field with no wiring. When the arrays differ (as
-in `Table.AppliedFilters`, which links through the table context), the consumer calls the root's
-exposed `open(fieldId)`.
+so activating a chip opens that menu at the chip's field with no wiring. The link is the array's
+identity: an inline `:fields="[...]"` literal or a computed that rebuilds the array gives the menu
+and the chips two arrays, so a chip that finds no listening menu warns once per activation in the
+console (`FilterMenu.Chips: no FilterMenu has these fields.`). When the arrays differ
+on purpose (as in `Table.AppliedFilters`, which links through the table context), the consumer calls
+the root's exposed `open(fieldId)`.
 
 - `filter-menu-chips/filter-menu-chips.vue` — One filled, clickable, removable `Chip` per applied field, in `fields` order, inside a `role="group"` named `Applied filters`. Each chip reads `<field label>` (muted) + up to three option avatars (when the picked options carry `avatar`) + the first value's label + `+N` (muted) when more values are picked. Chips enter, leave and reflow with a `TransitionGroup`. Renders nothing when no field is applied.
   - Props: `fields?: FilterMenuField[]` (default `[]` — the same array the menu receives).
@@ -104,9 +109,10 @@ Imperative API (root, `defineExpose`): `open(fieldId?: string, returnFocus?: HTM
 
 ## v-model
 
-| Model     | Type              | Default | Emits               | Notes                                                                                                                     |
-| --------- | ----------------- | ------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------- |
-| `v-model` | `FilterMenuModel` | `{}`    | `update:modelValue` | Applied values per field id. Every pick emits a new object; clearing a field (Clear, or a chip's remove) deletes its key. |
+| Model          | Type              | Default | Emits               | Notes                                                                                                                                                                 |
+| -------------- | ----------------- | ------- | ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `v-model`      | `FilterMenuModel` | `{}`    | `update:modelValue` | Applied values per field id. Every pick emits a new object; clearing a field (Clear, or a chip's remove) deletes its key.                                             |
+| `v-model:open` | `boolean`         | `false` | `update:open`       | Whether the menu is open, via `defineModel('open')`: the trigger, outside click, `Esc`, a chip and the exposed `open()` update it. Unbound, the menu keeps it itself. |
 
 ## States
 
@@ -116,7 +122,9 @@ Imperative API (root, `defineExpose`): `open(fieldId?: string, returnFocus?: HTM
 - `data-applied` on a field row when the field has values.
 - Count: the trigger shows a small primary `Badge` with the number of applied fields and drops it at 0.
 - Empty: a level with no rows matching the search shows `No match for “<query>”.`; a menu with no `fields` shows the same line for the empty query.
-- `loading`, `error`, `disabled`, `readonly`, `invalid`: not states of this component — the page owns the data, and the trigger is always available.
+- `disabled`: the trigger is disabled (`data-disabled` from `Popover`) and the menu does not open.
+- Long value lists: a level renders at most 100 matching values and then a muted line, `<n> more values. Type to narrow the list.` (`__more-values`); the search narrows the rest.
+- `loading`, `error`, `readonly`, `invalid`: not states of this component — the page owns the data.
 
 ## Accessibility
 
@@ -137,29 +145,30 @@ Imperative API (root, `defineExpose`): `open(fieldId?: string, returnFocus?: HTM
 
 ## Internationalization
 
-| Key                            | English source                    | Override prop      |
-| ------------------------------ | --------------------------------- | ------------------ |
-| `filterMenu.label`             | Filter                            | `label`            |
-| `filterMenu.triggerCount`      | {label}, {count} applied (plural) | —                  |
-| `filterMenu.searchFields`      | Filter by…                        | —                  |
-| `filterMenu.searchFieldsLabel` | Search filter fields              | —                  |
-| `filterMenu.searchValues`      | Filter {field}…                   | —                  |
-| `filterMenu.searchValuesLabel` | Search {field} values             | —                  |
-| `filterMenu.back`              | Back to all filters               | —                  |
-| `filterMenu.backToPeriods`     | Back to date periods              | —                  |
-| `filterMenu.noMatch`           | No match for “{query}”.           | —                  |
-| `filterMenu.clear`             | Clear {field}                     | —                  |
-| `filterMenu.last24Hours`       | Last 24 hours                     | `fields[].options` |
-| `filterMenu.last7Days`         | Last 7 days                       | `fields[].options` |
-| `filterMenu.last30Days`        | Last 30 days                      | `fields[].options` |
-| `filterMenu.last3Months`       | Last 3 months                     | `fields[].options` |
-| `filterMenu.customRange`       | Custom range…                     | —                  |
-| `filterMenu.pickRange`         | Pick a range                      | —                  |
-| `filterMenu.rangeBetween`      | {start} – {end}                   | —                  |
-| `filterMenu.rangeSince`        | Since {date}                      | —                  |
-| `filterMenu.rangeUntil`        | Until {date}                      | —                  |
-| `filterMenu.more`              | +{count}                          | —                  |
-| `filterMenu.applied`           | Applied filters                   | —                  |
+| Key                            | English source                                           | Override prop      |
+| ------------------------------ | -------------------------------------------------------- | ------------------ |
+| `filterMenu.label`             | Filter                                                   | `label`            |
+| `filterMenu.triggerCount`      | {label}, {count} applied (plural)                        | —                  |
+| `filterMenu.searchFields`      | Filter by…                                               | —                  |
+| `filterMenu.searchFieldsLabel` | Search filter fields                                     | —                  |
+| `filterMenu.searchValues`      | Filter {field}…                                          | —                  |
+| `filterMenu.searchValuesLabel` | Search {field} values                                    | —                  |
+| `filterMenu.back`              | Back to all filters                                      | —                  |
+| `filterMenu.backToPeriods`     | Back to date periods                                     | —                  |
+| `filterMenu.noMatch`           | No match for “{query}”.                                  | —                  |
+| `filterMenu.clear`             | Clear {field}                                            | —                  |
+| `filterMenu.last24Hours`       | Last 24 hours                                            | `fields[].options` |
+| `filterMenu.last7Days`         | Last 7 days                                              | `fields[].options` |
+| `filterMenu.last30Days`        | Last 30 days                                             | `fields[].options` |
+| `filterMenu.last3Months`       | Last 3 months                                            | `fields[].options` |
+| `filterMenu.customRange`       | Custom range…                                            | —                  |
+| `filterMenu.pickRange`         | Pick a range                                             | —                  |
+| `filterMenu.rangeBetween`      | {start} – {end}                                          | —                  |
+| `filterMenu.rangeSince`        | Since {date}                                             | —                  |
+| `filterMenu.rangeUntil`        | Until {date}                                             | —                  |
+| `filterMenu.more`              | +{count}                                                 | —                  |
+| `filterMenu.moreValues`        | {count} more value(s). Type to narrow the list. (plural) | —                  |
+| `filterMenu.applied`           | Applied filters                                          | —                  |
 
 - Formatting: custom range dates through `formatDate` from `useLocale` (`Intl.DateTimeFormat`, `{ month: 'short', day: 'numeric' }`) with the provider locale; `+N` and the trigger count through the catalog's plural forms. The field label inside the search placeholder is lower-cased with the provider locale (`toLocaleLowerCase`).
 

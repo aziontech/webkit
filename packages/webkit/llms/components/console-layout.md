@@ -23,7 +23,7 @@
 - Put an account switcher in `sidebar-header` (full width under the wordmark, the design sample's rail) and, below the compact breakpoint, in `header-start` while `compact`; page-level flash messages go in `notifications`, and help or the notifications list in `tools` (toggled from a bell in `actions` with `toggleTools`).
 - A page's control crumb is its `ConsoleLayout.Breadcrumbs`, never `App.vue`'s `breadcrumbs` slot.
 - A workspace page (editor, pinned panes) puts `data-layout-fill` on its root: the `<main>` becomes a fixed-height, non-scrolling region the root fills. Never size a body with `100dvh` or `calc(100dvh - var(--layout-header-height))` (lint `webkit/no-viewport-height-calc`, also run by the authoring ratchet over blocks and examples).
-- Bind `v-model:navigation-expanded` when the rail's state must survive a reload or be driven from elsewhere (a `Collapse sidebar` / `Expand sidebar` command in the `search` slot); persist it in the app. The rail's own collapse control and the edge affordance keep working either way.
+- Bind `v-model:navigation-open` when the rail's state must survive a reload or be driven from elsewhere (a `Collapse sidebar` / `Expand sidebar` command in the `search` slot); persist it in the app. The rail's own collapse control and the edge affordance keep working either way.
 - Open the palette from inside a page with `useConsoleLayout().openSearch()` (imported from `@aziontech/webkit/use-console-layout`); never mount a second `Command`. `useConsoleLayout()` throws outside a `ConsoleLayout`, so a misplaced call fails loudly.
 - A page body that also renders on its own (a block preview, a docs example, a test) calls `useConsoleLayout({ optional: true })`, which returns `null` outside a layout, and guards the call (`layout?.openSearch()`). Never wrap `useConsoleLayout()` in `try` / `catch`.
 - The page entrance (`animate-page-enter`) plays on every route path change: the `<main>` is keyed on the path, so the page body remounts when the path changes and is kept when only the query or the hash changes. Keep state that must survive a path change (a list filter, a draft) in the route query or in the app's store, not in the page body; a `KeepAlive` belongs inside a page body (tabbed views), not around `RouterView`.
@@ -59,6 +59,7 @@
 | `toolsLabel` | `string` | `''` | false | Title of the tools region (help, notifications). Empty uses `AppLayout`'s catalog (`Help`). |
 | `searchOpen` | `boolean` | `false` | false | Two-way value (`v-model:searchOpen`). |
 | `toolsOpen` | `boolean` | `false` | false | Two-way value (`v-model:toolsOpen`). |
+| `navigationOpen` | `boolean` | `true` | false | Two-way value (`v-model:navigationOpen`). |
 | `navigationExpanded` | `boolean` | `true` | false | Two-way value (`v-model:navigationExpanded`). |
 
 ## Events
@@ -112,7 +113,8 @@ packages/webkit/src/components/layout/console-layout/
 | ----------------------------- | --------- | ------- | --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `v-model:search-open`         | `boolean` | `false` | `update:searchOpen`         | Whether the search palette is open; the trigger, ⌘K / Ctrl K and `openSearch()` set it.                                                                                   |
 | `v-model:tools-open`          | `boolean` | `false` | `update:toolsOpen`          | Whether the tools region (help or notifications) is open beside the content; a drawer while compact.                                                                      |
-| `v-model:navigation-expanded` | `boolean` | `true`  | `update:navigationExpanded` | Whether the navigation rail is expanded on wide layouts; `false` collapses it (the Sidebar's collapsed rail). It has no effect while compact, where the rail is a drawer. |
+| `v-model:navigation-open`     | `boolean` | `true`  | `update:navigationOpen`     | Whether the navigation rail is shown on wide layouts; `false` collapses it (the Sidebar's `open`). It has no effect while compact, where the rail is a drawer. Same name as `AppLayout`'s `navigationOpen`. |
+| `v-model:navigation-expanded` | `boolean` | `true`  | `update:navigationExpanded` | **@deprecated since 6.0 — use `v-model:navigation-open`. Removed in 7.0.** Same state and polarity; both are emitted on every change, and a host that binds only this one still drives the rail. |
 
 ## States
 
@@ -383,7 +385,7 @@ packages/webkit/src/components/layout/console-layout/
 </template>
 ```
 
-### NavigationExpanded
+### NavigationOpen
 
 ```vue
 <script setup lang="ts">
@@ -402,16 +404,16 @@ packages/webkit/src/components/layout/console-layout/
     }
   ]
 
-  const navigationExpanded = ref(true)
+  const navigationOpen = ref(true)
 
   const onSearchSelect = (_event: MouseEvent | KeyboardEvent, value: string | number) => {
-    if (value === 'action:sidebar') navigationExpanded.value = !navigationExpanded.value
+    if (value === 'action:sidebar') navigationOpen.value = !navigationOpen.value
   }
 </script>
 
 <template>
   <ConsoleLayout
-    v-model:navigation-expanded="navigationExpanded"
+    v-model:navigation-open="navigationOpen"
     :navigation="navigation"
     active-id="workloads"
     @search-select="onSearchSelect"
@@ -421,11 +423,11 @@ packages/webkit/src/components/layout/console-layout/
         <Command.Item value="action:sidebar">
           <template #prefix>
             <i
-              :class="navigationExpanded ? 'pi pi-angle-double-left' : 'pi pi-angle-double-right'"
+              :class="navigationOpen ? 'pi pi-angle-double-left' : 'pi pi-angle-double-right'"
               aria-hidden="true"
             />
           </template>
-          {{ navigationExpanded ? 'Collapse sidebar' : 'Expand sidebar' }}
+          {{ navigationOpen ? 'Collapse sidebar' : 'Expand sidebar' }}
         </Command.Item>
       </Command.Group>
     </template>

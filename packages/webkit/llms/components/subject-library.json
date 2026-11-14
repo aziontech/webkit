@@ -49,6 +49,13 @@
    "default": "undefined",
    "required": "false",
    "doc": "Call to action across the grid's last two cells; `{ eyebrow, title, titleMuted, description, primaryAction, secondaryAction }` where each action is `{ label, href, trailing?, target? }`. Omitted when absent."
+  },
+  {
+   "name": "ariaLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Accessible name of the band; empty leaves the section unnamed. Set it so the band is a named region landmark."
   }
  ],
  "events": [],

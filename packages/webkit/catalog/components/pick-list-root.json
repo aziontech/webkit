@@ -16,7 +16,7 @@
   "checkbox` — independent boolean or small-set multi-pick."
  ],
  "bestPractices": [
-  "Set `data-key` to a unique item field so rows keep stable keys across moves; without it rows are keyed by their index.",
+  "Set `track-by` to a unique item field so rows keep stable keys across moves and the selection follows the record when the lists change; without it rows and the selection are keyed by their index.",
   "Set `title` on both `PickList.Source` and `PickList.Target`; it is the listbox's accessible name.",
   "Listen to `move` for side effects such as saving the assignment instead of diffing `v-model`.",
   "Set `:move-on-double-click=\"false\"` when double-click should do something else; `item-double-click` still fires."

@@ -12,6 +12,8 @@
  ],
  "related": [
   "select` — a fixed list of named periods without a grid.",
+  "date-range-picker` — time ranges: relative windows (`last 15 minutes`) kept relative, and absolute ranges down to the minute. Calendar is for whole days (a date or a date range); its `period` mode overlaps DateRangePicker's Relative tab, so prefer DateRangePicker for a time window. In shadcn and Radix-based kits `Calendar` names the inline month grid and the popover picker is a `DatePicker`; this component is the popover picker.",
+  "field` — inside a `Field`, the trigger takes the field's label (`for` points at it), description, `invalid` and `disabled`.",
   "input` — the trigger and the Start/End fields share its heights, hover, and disabled treatment, so they align side by side.",
   "number-input` — numeric durations instead of dates."
  ],

@@ -1,6 +1,6 @@
 # Switch
 
-> Control-only pill toggle `Switch` (36×20 px). Two visual types: `default` (plain handle) and `privacy` (handle carries a `pi-lock` / `pi-lock-open` icon mirroring the toggled state). No label or description — wrap it in a horizontal `Field` or a `Field.Label` choice card for labeled layouts, or place it bare where the label already exists outside the control (an ItemGroup row names the field with `Item.Title`). Because the bare form has no wrapper to defer to, the control owns its own `disabled` state.
+> Control-only pill toggle `Switch` (36×20 px). Two visual types: `default` (plain handle) and `privacy` (handle carries a `pi-lock` / `pi-lock-open` icon mirroring the toggled state; both glyphs render and `group-data-[checked]:` shows the right one, so no class is chosen in script). No label or description — wrap it in a horizontal `Field` or a `Field.Label` choice card for labeled layouts, or place it bare where the label already exists outside the control (an ItemGroup row names the field with `Item.Title`). Because the bare form has no wrapper to defer to, the control owns its own `disabled` state.
 
 - Import: `import Switch from '@aziontech/webkit/switch'`
 - Category: inputs · Surface: product · Structure: monolithic
@@ -16,7 +16,7 @@
 
 - The switch renders no text: give it an accessible name with `aria-label`, or `aria-labelledby` pointing at the visible label.
 - Set `disabled` on the switch itself; it renders a native disabled button, so it leaves the tab order and ignores clicks and keys.
-- focused` moves real focus and forces the ring; use it only to mirror an external focus state, never as decoration.
+- Use `autofocus` to focus the switch when it mounts (a dialog whose first control it is). `focused` is deprecated: it moves real focus on every change and forces the ring even when focus is elsewhere.
 - Keep `kind="default"` unless the setting is about visibility or access.
 
 ## Don’t
@@ -38,8 +38,9 @@
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `kind` | `'default' \| 'privacy'` | `'default'` | false | Visual variant. `privacy` renders a lock icon inside the handle (closed when off, open when on). |
-| `focused` | `boolean` | `false` | false | Forces the focused visual state regardless of keyboard focus. Mirrors the Figma `focused` variant. |
+| `kind` | `'default' \| 'privacy'` | `'default'` | false | Visual variant (`SwitchKind`; `SwitchType` stays exported as a deprecated alias until 7.0). `privacy` renders a lock icon inside the handle (closed when off, open when on). |
+| `autofocus` | `boolean` | `false` | false | Moves focus to the switch once, when it mounts. |
+| `focused` | `boolean` | `false` | false | @deprecated since 6.0 — use autofocus. Removed in 7.0.` Forces the focused visual state and moves focus. Mirrors the Figma `focused` variant. |
 | `disabled` | `boolean` | `false` | false | Disables interaction and applies the disabled tokens. |
 | `modelValue` | `boolean` | `false` | false | Two-way value (`v-model`). |
 
@@ -53,7 +54,7 @@
 
 - Visual states: `default`, `hover`, `focus-visible`, `active`, `checked`, `disabled`
 - `data-checked` mirrors the `modelValue` prop (toggled-on state)
-- `data-focused` mirrors the `focused` prop and applies the same ring tokens as `:focus-visible`
+- `data-focused` mirrors the deprecated `focused` prop and applies the same ring tokens as `:focus-visible`
 - `data-kind` mirrors the `kind` prop (`default` | `privacy`)
 - `data-disabled` mirrors the `disabled` prop; the root is also natively `<button disabled>`, so it leaves the tab order and neither click nor `Space`/`Enter` emits `update:modelValue`. The disabled treatment is the `--bg-disabled` track + `--text-disabled` handle + `cursor-not-allowed` — token surfaces, never an opacity wash. It wins over the checked tokens, so a disabled switch reads locked in both the off and on positions.
 - Hover applies an inset `var(--bg-hover)` overlay on both off and on tracks; disabled suppresses that overlay (`data-[disabled]:hover:shadow-none`) while keeping the element hit-testable so `cursor-not-allowed` is what the pointer shows

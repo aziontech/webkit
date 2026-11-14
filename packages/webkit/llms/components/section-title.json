@@ -28,6 +28,7 @@
  ],
  "bestPractices": [
   "Leave `framed` on when the header is a brick of its own in a page column; turn it off when a band composes the header inside a frame it already draws, so the rule and the padding are not drawn twice.",
+  "framed` defaults to `true` here, unlike `call-to-action`, `faq` and `media-split`, where it defaults to `false`: a section title most often opens a page section as its own brick, while those components are most often composed inside a band's frame. The default stays as it is because flipping it would change every existing page; pass `framed` explicitly when composing.",
   "Keep one `section-title` per section, and let it own the section's `h2` so the page keeps one document outline. `size` changes the headline's step on the type scale, never its heading level — a page with a `large` and a `small` header still reads as two `h2`s.",
   "Leave `size` at `medium` for an ordinary section opener. Reach for `large` only where the headline is the band's whole statement, and for `small` where the header opens a subsection inside a band that already has one.",
   "Write the eyebrow as one or two words: it is set uppercase and prefixed with `//`, so a sentence in it reads as noise.",

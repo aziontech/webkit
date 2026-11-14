@@ -1,6 +1,6 @@
 # CreateInDrawer (`platform/create/create-in-drawer`)
 
-> The right-side form drawer every item created or edited inside a resource opens, such as a domain, a record, an environment, a variable or a rule: a panel header with the title, a muted one-line description and the close button; a disabled-while-saving fieldset of `SettingsSection` bands, each a heading with a hint glyph over its stacked `Field` components; and one submit button in the footer that flags empty required fields only after it is pressed and shows its loading state while the save is in flight. Its state resets each time it opens, so the content stays in place while it closes. Add Domain opens from under Domains on the resource’s Settings tab, from a domain row menu to edit it, and from Add Environment in the resource environment menu. The Environment select lists every environment, says when choosing one connects it to the resource, and ends in a Create Environment option. Choosing Bring my own domain drops the free-domain addon and reveals the Certificate select, preselecting a certificate that already covers the address. Built from `SettingsSection`, `Drawer` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter`, `Field` (with `InputGroup` and `RadioButton` choice cards), `Field` and `HelperText` around `Select`, `NumberInput`, `Input`, `Textarea`, `Link`, `Alert` and `Button`. The same drawer comes in three more shapes, each a variant: ItemRows, an Origins page inside a resource whose Add Origin drawer groups `Item` rows under section-titled flush `Card`s; NestedDrawer, an Add Rule drawer on a resource's Rules Engine whose Origin select creates the missing origin of that same resource in a second, medium drawer stacked above it and selects it back; and DeploymentSettings, the drawer that creates a Deployment Setting from a Build and deployment settings panel. CreateEnvironment is the Create Environment drawer, on its own or stacked above Add Domain; FunctionInstance adds or edits a function instance whose arguments are a `SchemaForm` with a Fields or JSON (`CodeEditor`) `ToggleGroup`. The variants add `PageHeader`, `SettingRow`, `Card`, `Item`, `Switch`, `Textarea`, `SchemaForm`, `CodeEditor` and `ToggleGroup`.
+> The right-side form drawer every item created or edited inside a resource opens, such as a domain, a record, an environment, a variable or a rule: a panel header with the title, a muted one-line description and the close button; a disabled-while-saving fieldset of `SettingsSection` bands, each a heading with a hint glyph over its stacked `Field` components; and one submit button in the footer; required fields carry the Required marker from the start, an empty submit marks them invalid with a `Field.Error` under each, the button shows its loading state while the save is in flight, a successful save closes the drawer with a toast naming the item, and a failed save keeps the values with a danger Alert and Retry above the footer. Its state resets each time it opens, so the content stays in place while it closes. Add Domain opens from under Domains on the resource’s Settings tab, from a domain row menu to edit it, and from Add Environment in the resource environment menu. The Environment select lists every environment, says when choosing one connects it to the resource, and ends in a Create Environment option. Choosing Bring my own domain drops the free-domain addon and reveals the Certificate select, preselecting a certificate that already covers the address. Built from `SettingsSection`, `Drawer` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter`, `Field` (with `InputGroup` and `RadioButton` choice cards), `Field` with `Field.Description` and `Field.Error` around `Select`, `NumberInput`, `Input`, `Textarea`, `Link`, `Alert` and `Button`. The same drawer comes in three more shapes, each a variant: ItemRows, an Origins page inside a resource whose Add Origin drawer groups `Item` rows under section-titled flush `Card`s; NestedDrawer, an Add Rule drawer on a resource's Rules Engine whose Origin select creates the missing origin of that same resource in a second, medium drawer stacked above it and selects it back; and DeploymentSettings, the drawer that creates a Deployment Setting from a Build and deployment settings panel. CreateEnvironment is the Create Environment drawer, on its own or stacked above Add Domain; FunctionInstance adds or edits a function instance whose arguments are a `SchemaForm` with a Fields or JSON (`CodeEditor`) `ToggleGroup`. The variants add `PageHeader`, `SettingRow`, `Card`, `Item`, `Switch`, `Textarea`, `SchemaForm`, `CodeEditor` and `ToggleGroup`.
 
 - Surface: product
 - Source: `blocks/platform/create/create-in-drawer/create-in-drawer.vue` in `@aziontech/webkit`
@@ -48,9 +48,9 @@ An outlined medium `Button` where the list lives: under the section on the resou
 
 `PanelContent` holds one `fieldset` disabled while saving, and inside it one `SettingsSection` per topic, each a title with a `hint` glyph rather than a paragraph. Order them by what the user decides first: here Environment, then Domain.
 
-### E. Environment select — `Field`, `Select`, `HelperText` (required)
+### E. Environment select — `Field`, `Select` (required)
 
-A large `Select` in a `Field` with its `Field.Label` and a `HelperText` tied to the trigger by `aria-describedby`. The options are every environment, and the panel ends with a Create Environment option. The helper text says where the item answers, and changes to say when picking an environment the resource does not publish to yet connects it.
+A large `Select` in a required `Field` with its `Field.Label` and a `Field.Description` that the `Field` ties to the trigger by `aria-describedby`; after a failed submit a `Field.Error` takes its place and the `Field` turns `invalid`. The options are every environment, and the panel ends with a Create Environment option. The helper text says where the item answers, and changes to say when picking an environment the resource does not publish to yet connects it.
 
 ### F. Domain source — `Field`, `RadioButton` (required)
 
@@ -58,7 +58,7 @@ Choice cards: one horizontal `Field` per option with a `RadioButton`, a title an
 
 ### G. Domain name — `Field`, `InputGroup` (required)
 
-A `Field` with its label and an `InputGroup` whose addon shows the free platform suffix while the free option is chosen. The required message appears in the field description only after submit.
+A `Field` with its label and an `InputGroup` whose addon shows the free platform suffix while the free option is chosen. The field is `required` from the start (the Required marker shows on the label); after an empty submit the `Field` turns `invalid` and a `Field.Error` (`role="alert"`) says so. Every variant renders field errors the same way: `Field.Error` under the control, never a `Field.Description` swapped to an error.
 
 ### H. Certificate — `Field`, `Select`, `HelperText` (optional)
 
@@ -81,7 +81,8 @@ In the Certificate state the drawer imports a TLS certificate. A `ToggleGroup` p
 - Open on a blank form every time, or on the edited item's values, and clear every error on open.
 - Lock the `fieldset` and pass `:disabled` to every control from the same flag while saving; release it on success and on failure.
 - Validate on submit only: an empty required field gets the amber required prompt after Save is pressed.
-- Close the drawer on success and show the new item in the list behind it, with a toast that names it.
+- Close the drawer on success and show the new item in the list behind it, with a toast that names it (every variant does).
+- On a failed save keep the drawer open with the values, release the fieldset and show a danger `Alert` with Retry above the footer (SaveFailed).
 - Stack a second, medium drawer for a missing item of the same resource, such as an origin for a rule, and select the new one back into the parent.
 - Raise toasts with `toast` only; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shells/console` does), so this page body never renders a `Toaster`.
 
@@ -109,7 +110,8 @@ In the Certificate state the drawer imports a TLS certificate. A `ToggleGroup` p
 
 - The drawer traps focus while open, moves it to the first field on open and returns it to the trigger on close.
 - The `form` has an `aria-label` that matches the title; `DrawerTitle` names the dialog.
-- Every select trigger points at its `HelperText` with `aria-describedby`, so the consequence is read with the value.
+- Every select trigger is described by its `Field.Description` (or its `Field.Error`) through the `Field`, so the consequence is read with the value.
+- Required fields carry the Required marker from the start; an error is a `Field.Error` with `role="alert"` and the control is `aria-invalid`.
 - The choice cards are a radio group named by the Domain source label; each card's title and description are the radio's name and description.
 - The loading button keeps its label and announces the busy state; the disabled `fieldset` keeps keyboard users out of the form while saving.
 - Escape, the close button and the overlay all dismiss; none of them submit.
@@ -125,6 +127,7 @@ In the Certificate state the drawer imports a TLS certificate. A `ToggleGroup` p
 - DeploymentSettings: the drawer that creates a Deployment Setting, with General and Routing and policy sections.
 - Certificate: Create Certificate opened with shop.example.com pasted as a server certificate: the details panel reads Issued to shop.example.com, Issued by Example Test CA and the expiry with the days left; the private key is empty, so Save flags it.
 - CreateEnvironment: Create Environment with General, Settings, Protection and Branch tracking sections; the IP allowlist and Branch tracking switches each reveal their fields, a duplicate name or an invalid address is flagged only after Create Environment. Opened from Add Domain's Environment select it stacks at small size above that drawer and selects the new environment back.
+- SaveFailed: Add Domain after a failed save: the drawer stays open with acme-store and Production kept, the fieldset released, and a danger Alert with Retry above the footer.
 - FunctionInstance: Add Function Instance (or Edit from a row) with a Function `Select`, a Name, and the arguments as a `SchemaForm` of the chosen function's schema with a Fields or JSON `ToggleGroup`; the JSON `CodeEditor` marks a parse error, and required arguments are flagged only after submit.
 
 ## Related
@@ -148,6 +151,7 @@ In the Certificate state the drawer imports a TLS certificate. A `ToggleGroup` p
 - `Certificate` — Create Certificate: a Server certificate or Trusted CA `ToggleGroup`, a PEM `Textarea` with Upload file, a details panel read from the pasted certificate (issued to, issued by, valid from, and the expiry with a `StatusIndicator` that warns within 30 days and blocks an expired one) and, for a server certificate, the private key; opened with a sample certificate pasted and the key empty.
 - `CreateEnvironment` — Create Environment: Name, Description, a Deployment policy and a Robots policy Select whose helpers say what each choice does, an IP allowlist Switch that reveals a Textarea of IPv4 addresses and CIDR ranges checked on submit, and a Branch tracking Switch that reveals the match Mode and the Branch match. It opens on its own at medium size, or stacked at small size above Add Domain from the Environment select's Create Environment option, and the new environment comes back selected.
 - `FunctionInstance` — Add or edit a function instance from a resource's instance list: a Function Select and a Name, then the function's arguments as a `SchemaForm` built from the schema it declares, with a Fields or JSON `ToggleGroup`; the JSON view is a `CodeEditor` whose edits update the fields and whose parse errors show as markers. Required arguments show their messages only after submit, and changing the function clears the arguments.
+- `SaveFailed` — Add Domain after a failed save: the drawer stays open with acme-store and Production kept, the fieldset released, and a danger `Alert` above the footer says the domain was not added, with Retry.
 
 Each variant is the same screen in another state: `get_pattern("platform/create/create-in-drawer", { variant })`, or the file under `blocks/platform/create/create-in-drawer/variants/`.
 
@@ -172,10 +176,13 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
   import RadioButton from '@aziontech/webkit/radio-button'
   import Select, { type SelectOptionItem } from '@aziontech/webkit/select'
   import SettingsSection from '@aziontech/webkit/settings-section'
+  import { toast } from '@aziontech/webkit/toast'
   import { computed, reactive, ref, watch } from 'vue'
 
   const open = ref(false)
   const submitting = ref(false)
+  const saveFailed = ref(false)
+  const failNextSave = ref(false)
   const environmentSelectOpen = ref(false)
   const certificateTouched = ref(false)
 
@@ -248,6 +255,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
     if (!isOpen) return
     Object.assign(errors, { domain: '', environment: '' })
     submitting.value = false
+    saveFailed.value = false
     Object.assign(form, blankForm())
     certificateTouched.value = false
   })
@@ -321,9 +329,16 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
     if (submitting.value) return
     if (!validate()) return
     submitting.value = true
+    saveFailed.value = false
     setTimeout(() => {
       submitting.value = false
+      if (failNextSave.value) {
+        failNextSave.value = false
+        saveFailed.value = true
+        return
+      }
       open.value = false
+      toast.success(`${fullDomain.value} added.`)
     }, 600)
   }
 </script>
@@ -374,8 +389,8 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
                 hint="Where the domain answers."
               >
                 <Field
-                  :data-field-invalid="errors.environment ? true : null"
-                  :required="!!errors.environment"
+                  required
+                  :invalid="!!errors.environment"
                 >
                   <div class="flex min-w-0 items-center justify-between gap-(--spacing-xs)">
                     <Field.Label for="domain-environment">Environment</Field.Label>
@@ -391,10 +406,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
                     :display-value="environmentLabel"
                     @update:model-value="onEnvironmentModel"
                   >
-                    <Select.Trigger
-                      id="domain-environment"
-                      aria-describedby="domain-environment-helper"
-                    />
+                    <Select.Trigger id="domain-environment" />
                     <Select.Content>
                       <Select.Option
                         v-for="option in environmentOptions"
@@ -413,13 +425,8 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
                       </template>
                     </Select.Content>
                   </Select>
-                  <HelperText
-                    id="domain-environment-helper"
-                    :kind="errors.environment ? 'required' : 'helper'"
-                  >
-                    <template v-if="errors.environment">{{ errors.environment }}</template>
-                    <template v-else>{{ environmentHint }}</template>
-                  </HelperText>
+                  <Field.Error v-if="errors.environment">{{ errors.environment }}</Field.Error>
+                  <Field.Description v-else>{{ environmentHint }}</Field.Description>
                 </Field>
               </SettingsSection>
 
@@ -460,7 +467,8 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
 
                   <Field
                     :disabled="submitting"
-                    :required="!!errors.domain"
+                    required
+                    :invalid="!!errors.domain"
                   >
                     <Field.Label>Domain</Field.Label>
                     <InputGroup>
@@ -471,7 +479,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
                       />
                       <InputGroup.Addon v-if="form.kind === 'free'">.azion.app</InputGroup.Addon>
                     </InputGroup>
-                    <Field.Description v-if="errors.domain">{{ errors.domain }}</Field.Description>
+                    <Field.Error v-if="errors.domain">{{ errors.domain }}</Field.Error>
                   </Field>
 
                   <template v-if="form.kind === 'own'">
@@ -518,9 +526,20 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
             </fieldset>
           </PanelContent>
 
+          <div
+            v-if="saveFailed"
+            class="px-(--spacing-md) pb-(--spacing-sm)"
+          >
+            <Alert
+              severity="danger"
+              :label="`${fullDomain || 'The domain'} wasn't added. The request timed out; your values are kept.`"
+              action-label="Retry"
+              @action="submit"
+            />
+          </div>
+
           <PanelFooter>
-            <div class="flex w-full flex-wrap items-center justify-between gap-(--spacing-sm)">
-              <div class="flex min-w-0 items-center gap-(--spacing-sm)"></div>
+            <div class="flex w-full flex-wrap items-center justify-end gap-(--spacing-sm)">
               <Button
                 label="Add Domain"
                 kind="primary"

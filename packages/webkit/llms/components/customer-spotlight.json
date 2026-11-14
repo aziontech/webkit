@@ -29,7 +29,7 @@
  ],
  "props": [
   {
-   "name": "cards",
+   "name": "items",
    "type": "CustomerSpotlightCard[]",
    "default": "[]",
    "required": "false",
@@ -43,11 +43,25 @@
    "doc": "Accessible name of the list; empty uses the built-in \"Customer stories\"."
   },
   {
-   "name": "storyLabel",
+   "name": "linkLabel",
    "type": "string",
    "default": "''",
    "required": "false",
    "doc": "Label revealed under the description while the card is open; empty uses the built-in \"Read story\"."
+  },
+  {
+   "name": "cards",
+   "type": "CustomerSpotlightCard[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "@deprecated since 6.0 — use `items`. Removed in 7.0. Read only when `items` is empty."
+  },
+  {
+   "name": "storyLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "@deprecated since 6.0 — use `linkLabel`. Removed in 7.0. Read only when `linkLabel` is empty."
   },
   {
    "name": "anchor",
@@ -64,7 +78,7 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import agibankExtendedReversed from '@aziontech/webkit/assets/agibank-extended-reversed.svg'\n  import americanasExtendedReversed from '@aziontech/webkit/assets/americanas-extended-reversed.svg'\n  import arezzoExtendedReversed from '@aziontech/webkit/assets/arezzo-extended-reversed.svg'\n  import CustomerSpotlight from '@aziontech/webkit/customer-spotlight'\n\n  const cards = [\n    {\n      name: 'Agibank',\n      logo: agibankExtendedReversed,\n      href: '/customers/agibank',\n      description: 'Agibank moved its digital bank to a platform that scales with every campaign.'\n    },\n    {\n      name: 'Americanas',\n      logo: americanasExtendedReversed,\n      href: '/customers/americanas',\n      description: 'Americanas serves Black Friday traffic with no capacity planning.'\n    },\n    {\n      name: 'Arezzo',\n      logo: arezzoExtendedReversed,\n      href: '/customers/arezzo',\n      description: 'Arezzo cut image weight by half across its storefronts.'\n    }\n  ]\n</script>\n\n<template>\n  <CustomerSpotlight :cards=\"cards\" />\n</template>"
+   "sfc": "<script setup>\n  import agibankExtendedReversed from '@aziontech/webkit/assets/agibank-extended-reversed.svg'\n  import americanasExtendedReversed from '@aziontech/webkit/assets/americanas-extended-reversed.svg'\n  import arezzoExtendedReversed from '@aziontech/webkit/assets/arezzo-extended-reversed.svg'\n  import CustomerSpotlight from '@aziontech/webkit/customer-spotlight'\n\n  const items = [\n    {\n      name: 'Agibank',\n      logo: agibankExtendedReversed,\n      href: '/customers/agibank',\n      description: 'Agibank moved its digital bank to a platform that scales with every campaign.'\n    },\n    {\n      name: 'Americanas',\n      logo: americanasExtendedReversed,\n      href: '/customers/americanas',\n      description: 'Americanas serves Black Friday traffic with no capacity planning.'\n    },\n    {\n      name: 'Arezzo',\n      logo: arezzoExtendedReversed,\n      href: '/customers/arezzo',\n      description: 'Arezzo cut image weight by half across its storefronts.'\n    }\n  ]\n</script>\n\n<template>\n  <CustomerSpotlight :items=\"items\" />\n</template>"
   }
  ],
  "docs": "components/customer-spotlight.md"

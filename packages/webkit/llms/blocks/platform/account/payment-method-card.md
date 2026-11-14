@@ -10,14 +10,14 @@
 
 ## Asked as
 
-payment method; credit card form; card on file; change card; update payment method; card details; método de pagamento; cartão de crédito; dados do cartão; billing; billing page; invoices; bills; subscription plan; payment methods; credit cards; current plan; plan and billing; cobrança; faturas; faturamento; métodos de pagamento; plano de assinatura
+payment method; credit card form; card on file; change card; update payment method; card details; método de pagamento; cartão de crédito; dados do cartão; payment method card; update card; alterar cartão
 
 The Payment method card of the Upgrade to Pro drawer. The user needs to confirm which card will be charged and, if needed, replace it without leaving the upgrade: the card on file shows as one row (brand plate, last four digits, Change), and Change swaps the row for the card form until Cancel or Update. The drawer disables it while the upgrade submits.
 
 ## When to use
 
 - Inside a checkout or upgrade drawer where a card on file may need replacing.
-- On Billing, as the payment method section.
+- Wherever a card on file is replaced in place. On Billing, Add payment method in the Payment methods tab leads to this form (the Editing state).
 
 ## When not to use
 
@@ -44,7 +44,7 @@ Cardholder (`cc-name`), number (`cc-number`), expiry (`cc-exp`) and security cod
 
 ### E. Country — `Select` (required)
 
-Country or region, defaulting to the account's country.
+Country or region. It starts empty on a blank card (selects start empty); the person selects it.
 
 ### F. Notices — `Alert` (required)
 

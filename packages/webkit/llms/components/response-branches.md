@@ -34,7 +34,8 @@
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
 | `count` | `number` | `—` | true | How many versions exist. With one or none the pager is not drawn. |
-| `label` | `string` | `''` | false | Accessible name of the pager group. Empty uses the locale catalog (`Response versions`). |
+| `ariaLabel` | `string` | `''` | false | Accessible name of the pager group. Empty uses the locale catalog (`Response versions`). |
+| `label` | `string` | `''` | false | @deprecated since 6.0 — use `ariaLabel` instead. Removed in 7.0. Read when `ariaLabel` is empty. |
 | `disabled` | `boolean` | `false` | false | Locks the pager, for example while a new version streams. |
 | `modelValue` | `number` | `0` | false | Two-way value (`v-model`). |
 
@@ -59,7 +60,7 @@
 
 ## Accessibility
 
-- The pager is `role="group"` named by `label` (`Response versions`); Previous and Next are `IconButton`s named `Previous version` / `Next version`.
+- The pager is `role="group"` named by `ariaLabel` (`Response versions`); Previous and Next are `IconButton`s named `Previous version` / `Next version`.
 - The counter (`2 of 3`) is a polite live region, so moving announces the new position once; the slot is not live.
 - Keyboard: `Tab` reaches Previous and Next; `Enter`/`Space` move; a disabled end button leaves the tab order.
 
@@ -74,7 +75,7 @@
 
 | Key                         | English source         | Override prop |
 | --------------------------- | ---------------------- | ------------- |
-| `responseBranches.label`    | `Response versions`    | `label`       |
+| `responseBranches.label`    | `Response versions`    | `ariaLabel`   |
 | `responseBranches.previous` | `Previous version`     | —             |
 | `responseBranches.next`     | `Next version`         | —             |
 | `responseBranches.position` | `{current} of {total}` | —             |

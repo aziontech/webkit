@@ -1,11 +1,11 @@
 # NotFound (`platform/states/not-found`)
 
-> The page an app renders when it cannot show the address the user asked for. The primary is the 404: the content region centring an EmptyState whose figure is the animated azion-404 line figure (a still frame under reduced motion), the title Page not found, one sentence that says the address leads nowhere, and two actions, Go to home (primary) and Docs (outlined, new tab). A visually hidden h1 names the error code the figure shows. Variants cover 403 (no access, with Switch account), 500 (a failure on the server, with Try again, System status and an error reference for support) and a resource that does not exist inside the console (bordered EmptyState in the content column with Back to the list). Built from `EmptyState`, `Button`, `LineFigure` (azion-404) and the `svg/error-403` figure. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
+> The page an app renders when it cannot show the address the user asked for. The primary is the 404: the content region centring an EmptyState whose figure is the animated azion-404 line figure (a still frame under reduced motion), the title Page not found, one sentence that says the address leads nowhere, and two actions, Go to home (primary) and Docs (outlined, new tab). A visually hidden h1 names the error code the figure shows. Variants cover 403 (no access, with Switch account), 500 (a failure on the server, with Retry, System status and an error reference for support) and a resource that does not exist inside the console (bordered EmptyState in the content column with Back to the list). Built from `EmptyState`, `Button`, `LineFigure` (azion-404) and the `svg/error-403` figure. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
 
 - Surface: product
 - Source: `blocks/platform/states/not-found/not-found.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/states/not-found")`
-- Components: [Button](../../../components/button.md), [EmptyState](../../../components/empty-state.md), [LineFigure](../../../components/line-figure.md), `Error403`
+- Components: [Button](../../../components/button.md), [CopyButton](../../../components/copy-button.md), [EmptyState](../../../components/empty-state.md), [LineFigure](../../../components/line-figure.md), `Error403`
 - Skills: `webkit-ui-states`, `webkit-errors`, `webkit-microcopy`
 
 ## Asked as
@@ -43,7 +43,7 @@ The title says what happened in the user's words (`Page not found`, `You don't h
 
 ### C. Actions — `Button` (required)
 
-Two at most, side by side, wrapping on narrow screens. The way out is primary (`Go to home`, `Try again`, `Back to services`); the help is outlined (`Docs`, `Switch account`, `System status`). Links that leave the app open in a new tab (`target="_blank"`).
+Two at most, side by side, wrapping on narrow screens. The way out is primary (`Go to home`, `Retry`, `Back to services`); the help is outlined (`Docs`, `Switch account`, `System status`). Links that leave the app open in a new tab (`target="_blank"`).
 
 ## Do
 
@@ -65,9 +65,9 @@ Two at most, side by side, wrapping on narrow screens. The way out is primary (`
 
 - **Title:** what happened, sentence case, no code: `Page not found`, `You don't have access to this page`, `Something went wrong on our side`, `Service 4821 not found`.
 - **Description:** why, and what to do: `There is nothing deployed at this address. Check the URL or head back to the start.` On a 500, reassure: `Nothing you saved was lost.`
-- **Primary action:** where it goes: `Go to home`, `Back to services`; or what it does: `Try again`.
+- **Primary action:** where it goes: `Go to home`, `Back to services`; or what it does: `Retry`.
 - **Secondary action:** `Docs`, `Switch account`, `System status`.
-- **Reference:** `Error reference: req_7f3c91ab`, in monospace, wrapped in `<bdi>` so it keeps its order in right-to-left pages.
+- **Reference:** `Error reference: req_7f3c91ab`, in `text-label-code-sm`, wrapped in `<bdi>` so it keeps its order in right-to-left pages, with a `CopyButton` (`Copy the error reference`) so the user can paste it to support.
 
 ## Accessibility
 
@@ -75,14 +75,14 @@ Two at most, side by side, wrapping on narrow screens. The way out is primary (`
 - Every variant is a body inside the layout's `main`, with no `main` of its own.
 - The figure is `aria-hidden` (inside the `EmptyState` icon wrapper); never put the only statement of the error in the art.
 - The `EmptyState` is `role="status"`, so a client-side route change to this page is announced.
-- Try again shows the `Button` loading state while the page reloads; the button keeps its label.
+- Retry shows the `Button` loading state while the page reloads; the button keeps its label.
 - Buttons that open a new tab carry an icon; do not rely on colour.
 
 ## States
 
 - Default: 404, the animated azion-404 line figure, Page not found, Go to home and Docs.
 - Forbidden: 403, the 403 numeral art, You don't have access to this page, Go to home and Switch account.
-- ServerError: 500, the warning icon tile, Something went wrong on our side, Try again, System status and the error reference.
+- ServerError: 500, the warning icon tile, Something went wrong on our side, Retry, System status and the error reference with its copy button.
 - ResourceNotFound: a bordered EmptyState in the console's content column naming the missing service and its ID, with Back to services.
 
 ## Related
@@ -97,7 +97,7 @@ Two at most, side by side, wrapping on narrow screens. The way out is primary (`
 
 - `Default` — primary (the code below)
 - `Forbidden` — 403: the address exists but the user's role does not include it. The 403 numeral art, You don't have access to this page, what to do (ask an admin, or switch account), and Go to home with Switch account.
-- `ServerError` — 500: the page failed on the server. A warning icon tile in place of the numeral art, Something went wrong on our side, the reassurance that nothing saved was lost, Try again (which reloads and shows its loading state), System status in a new tab, and the error reference to quote to support.
+- `ServerError` — 500: the page failed on the server. A warning icon tile in place of the numeral art, Something went wrong on our side, the reassurance that nothing saved was lost, Retry (which reloads and shows its loading state), System status in a new tab, and the copyable error reference to quote to support.
 - `ResourceNotFound` — Inside the console: the route is valid but the record is not (deleted, or a stale link). A bordered EmptyState in the content column names the resource and its ID, says why it may be missing, and offers Back to services.
 
 Each variant is the same screen in another state: `get_pattern("platform/states/not-found", { variant })`, or the file under `blocks/platform/states/not-found/variants/`.
@@ -122,7 +122,7 @@ Each variant is the same screen in another state: `get_pattern("platform/states/
         description="There is nothing deployed at this address. Check the URL or head back to the start."
       >
         <template #icon>
-          <div class="w-64 sm:w-80">
+          <div class="w-(--container-3xs) sm:w-(--container-2xs)">
             <LineFigure
               name="azion-404"
               play

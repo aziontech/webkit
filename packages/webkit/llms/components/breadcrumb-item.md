@@ -14,8 +14,8 @@
 ## Do
 
 - Set `current` on the last segment only; it renders a `span` with `aria-current="page"`, drops out of the tab order and ignores `href`.
-- Always pass a real `href` on ancestors — it defaults to `'#'`, and the segment renders an `a`.
-- Use `show-icon` together with `icon` (a PrimeIcons class, default `pi pi-box`); `icon` alone renders nothing.
+- Always pass a real `href` on ancestors — an empty `href` (the default) renders `#`, and the segment renders an `a`.
+- Use `show-icon` together with `icon` (a PrimeIcons class; empty shows `pi pi-box`); `icon` alone renders nothing.
 - disabled` suppresses the `click` emit and removes the segment from the tab order; prefer omitting an unreachable ancestor over disabling it.
 
 ## Don’t
@@ -34,11 +34,11 @@
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `label` | `string` | `'Page Name'` | false | Visible segment label. |
-| `href` | `string` | `'#'` | false | Destination when the segment is a link (ignored when `current` is true). |
+| `label` | `string` | `''` | false | Visible segment label. |
+| `href` | `string` | `''` | false | Destination when the segment is a link (ignored when `current` is true); empty renders `#`. |
 | `current` | `boolean` | `false` | false | Marks the current page (last segment); renders as span with `aria-current="page"`. |
 | `showIcon` | `boolean` | `false` | false | When true, renders a leading PrimeIcons icon before the label. |
-| `icon` | `string` | `'pi pi-box'` | false | PrimeIcons class for the leading icon when `showIcon` is true. |
+| `icon` | `string` | `''` | false | PrimeIcons class for the leading icon when `showIcon` is true; empty shows `pi pi-box`. |
 | `disabled` | `boolean` | `false` | false | Disables interaction and applies disabled tokens. |
 
 ## Events

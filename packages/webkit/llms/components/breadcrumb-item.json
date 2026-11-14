@@ -25,24 +25,24 @@
  ],
  "bestPractices": [
   "Set `current` on the last segment only; it renders a `span` with `aria-current=\"page\"`, drops out of the tab order and ignores `href`.",
-  "Always pass a real `href` on ancestors — it defaults to `'#'`, and the segment renders an `a`.",
-  "Use `show-icon` together with `icon` (a PrimeIcons class, default `pi pi-box`); `icon` alone renders nothing.",
+  "Always pass a real `href` on ancestors — an empty `href` (the default) renders `#`, and the segment renders an `a`.",
+  "Use `show-icon` together with `icon` (a PrimeIcons class; empty shows `pi pi-box`); `icon` alone renders nothing.",
   "disabled` suppresses the `click` emit and removes the segment from the tab order; prefer omitting an unreachable ancestor over disabling it."
  ],
  "props": [
   {
    "name": "label",
    "type": "string",
-   "default": "'Page Name'",
+   "default": "''",
    "required": "false",
    "doc": "Visible segment label."
   },
   {
    "name": "href",
    "type": "string",
-   "default": "'#'",
+   "default": "''",
    "required": "false",
-   "doc": "Destination when the segment is a link (ignored when `current` is true)."
+   "doc": "Destination when the segment is a link (ignored when `current` is true); empty renders `#`."
   },
   {
    "name": "current",
@@ -61,9 +61,9 @@
   {
    "name": "icon",
    "type": "string",
-   "default": "'pi pi-box'",
+   "default": "''",
    "required": "false",
-   "doc": "PrimeIcons class for the leading icon when `showIcon` is true."
+   "doc": "PrimeIcons class for the leading icon when `showIcon` is true; empty shows `pi pi-box`."
   },
   {
    "name": "disabled",

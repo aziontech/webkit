@@ -1,5 +1,5 @@
 {
- "purpose": "Communicates status, alerts, or progress to the user. Lives at `packages/webkit/src/components/feedback/status-indicator/`.",
+ "purpose": "Shows the settled or transitional state of one resource as a colored dot (or a spinner while `loading`) beside a short label: Active, Failed, Paused, Deploying. It is the status column of tables and lists and the status line of a detail header, so it is static text, not a live region.",
  "useWhen": [
   "The state of a resource in a table cell, a list row or a detail header: Active, Failed, Paused.",
   "A transitional state such as Deploying or Propagating, with `loading`."
@@ -20,6 +20,6 @@
   "Always pass `label`. The default is the literal `'Status'`, and the color alone does not carry the meaning.",
   "Map `severity` to meaning and keep it consistent across the app: `success`, `info`, `warning` and `danger` follow their tokens, `neutral` is muted, and `alt` uses the primary color.",
   "With `loading`, pass the bare verb (`\"Deploying\"`). The component appends the ellipsis character (`…`, not three periods) and swaps the dot for a spinner. A label that already ends in `…` or `...` (copy pasted from a design: `\"Building...\"`) is trimmed first, so it renders `Building…`, never `Building......`.",
-  "It is a non-interactive `role=\"status\"` element with no click or keyboard behavior. Don't attach handlers to it."
+  "It is a non-interactive element with no role, no click and no keyboard behavior. Don't attach handlers to it. When a status change must be announced (a single deploy you are watching), announce it through a toast or a live region the page owns, not by making every indicator live."
  ]
 }

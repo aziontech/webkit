@@ -1,6 +1,6 @@
 # Doc Cta
 
-> The closing offer of a documentation page, parked at the foot of the "On this page" rail after the outline. It is a docs card built like every other card on the page: a `FrameBox` with corner marks, a flat `--bg-surface` face, the wordmark at the headline size, a headline, a subtitle and full-width stacked actions. Set on the rail scale (14 px headline, 12 px copy) so it never out-shouts the page outline. Every string is content passed by the page.
+> > **@deprecated since 6.0 — use `DocCallToAction` (`@aziontech/webkit/doc-call-to-action`) instead. Removed in 7.0.** `DocCta` keeps working: it renders `DocCallToAction`, mapping `primaryLabel` / `primaryHref` to `primaryAction` and `secondaryLabel` / `secondaryHref` to `secondaryAction`, and keeps its own `documentation-doc-cta` test id. The closing offer of a documentation page, parked at the foot of the "On this page" rail after the outline. It is a docs card built like every other card on the page: a `FrameBox` with corner marks, a flat `--bg-surface` face, the wordmark at the headline size, a headline, a subtitle and full-width stacked actions. Set on the rail scale (14 px headline, 12 px copy) so it never out-shouts the page outline. Every string is content passed by the page.
 
 - Import: `import DocCta from '@aziontech/webkit/doc-cta'`
 - Category: documentation · Surface: docs · Structure: monolithic
@@ -8,7 +8,7 @@
 
 ## When to use
 
-- Once per documentation page, last in the right rail.
+- Existing pages only, until they move to `DocCallToAction`.
 
 ## Do
 
@@ -23,6 +23,7 @@
 
 ## Related
 
+- DocCallToAction` — the replacement, which this component renders.
 - DocOnThisPage` — the rail it closes.
 - FrameBox` — the frame.
 - CallToAction` — the marketing closing band.

@@ -1,6 +1,6 @@
 # Status Indicator
 
-> Communicates status, alerts, or progress to the user. Lives at `packages/webkit/src/components/feedback/status-indicator/`.
+> Shows the settled or transitional state of one resource as a colored dot (or a spinner while `loading`) beside a short label: Active, Failed, Paused, Deploying. It is the status column of tables and lists and the status line of a detail header, so it is static text, not a live region.
 
 - Import: `import StatusIndicator from '@aziontech/webkit/status-indicator'`
 - Category: feedback · Surface: product · Structure: monolithic
@@ -16,7 +16,7 @@
 - Always pass `label`. The default is the literal `'Status'`, and the color alone does not carry the meaning.
 - Map `severity` to meaning and keep it consistent across the app: `success`, `info`, `warning` and `danger` follow their tokens, `neutral` is muted, and `alt` uses the primary color.
 - With `loading`, pass the bare verb (`"Deploying"`). The component appends the ellipsis character (`…`, not three periods) and swaps the dot for a spinner. A label that already ends in `…` or `...` (copy pasted from a design: `"Building..."`) is trimmed first, so it renders `Building…`, never `Building......`.
-- It is a non-interactive `role="status"` element with no click or keyboard behavior. Don't attach handlers to it.
+- It is a non-interactive element with no role, no click and no keyboard behavior. Don't attach handlers to it. When a status change must be announced (a single deploy you are watching), announce it through a toast or a live region the page owns, not by making every indicator live.
 
 ## Don’t
 
@@ -49,7 +49,7 @@
 
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`
 - Keyboard map: `Tab` focuses; `Enter`/`Space` activates; `Escape` closes overlays where applicable.
-- ARIA: root uses appropriate roles (`button`, `dialog`, `status`, etc.) per sub-component.
+- ARIA: no role on the root. It is plain text (the dot is `aria-hidden`; the label carries the meaning), because a table of 1k rows would otherwise hold 1k live regions and announce every change. `aria-busy="true"` while `loading`. Tests: `src/test/live-regions.test.ts`.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state.
 - `motion-reduce:transition-none motion-reduce:transform-none` on animated states.
 - Touch target ≥40×40 px where the control is interactive.

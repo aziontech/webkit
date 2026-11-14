@@ -1,6 +1,6 @@
 # Tag Editor
 
-> Key and value tags of one resource, after Cloudscape's tag editor, built on `AttributeEditor`. It adds what tags need on top of the rows: key and value suggestions while typing, a tag limit (50 by default) that ignores tags marked for removal, the built-in key checks (required when the row has a value, unique, length, allowed characters, no reserved `azion:` prefix), and a removal that only marks a saved tag, with Undo, until the form is saved.
+> Key and value tags of one resource, after Cloudscape's tag editor, built on `AttributeEditor`. It adds what tags need on top of the rows: key and value suggestions while typing, a tag limit (50 by default) that ignores tags marked for removal, the built-in key checks (required when the row has a value, unique, length, allowed characters, no key starting with a `reservedPrefix` the product reserves), and a removal that only marks a saved tag, with Undo, until the form is saved.
 
 - Import: `import TagEditor from '@aziontech/webkit/tag-editor'`
 - Category: inputs · Surface: product · Structure: monolithic
@@ -37,22 +37,22 @@
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `tags` | `TagEditorTag[]` | `[]` | false | Tags being edited. Saved tags carry `existing`; Remove marks them `markedForRemoval` until Undo. Supports v-model:tags. |
 | `keySuggestions` | `string[]` | `[]` | false | Keys offered while typing a key, for example the keys already used in the account. |
 | `valueSuggestions` | `Record<string, string[]>` | `{}` | false | Values offered per key while typing a value. |
 | `limit` | `number` | `50` | false | Most tags allowed; tags marked for removal do not count. |
 | `keyMaxLength` | `number` | `128` | false | Longest key allowed, in characters. |
 | `valueMaxLength` | `number` | `256` | false | Longest value allowed, in characters. |
-| `reservedPrefix` | `string` | `'azion:'` | false | Prefix reserved for the platform; keys may not start with it. Empty allows every prefix. |
+| `reservedPrefix` | `string` | `''` | false | Prefix reserved for the platform (for example `acme:`); keys may not start with it. Empty allows every prefix. |
 | `errors` | `TagEditorErrors` | `[]` | false | Server errors per row, aligned with `tags`; shown in place of the built-in checks. |
 | `disabled` | `boolean` | `false` | false | Disables every control. |
 | `ariaLabel` | `string` | `''` | false | Accessible name of the list of tags. Empty uses the locale catalog. |
+| `tags` | `TagEditorTag[]` | `() => []` | false | Two-way value (`v-model:tags`). |
 
-## Events
+## v-model
 
-| Event | Payload | Notes |
-| --- | --- | --- |
-| `update:tags` | `TagEditorTag[]` | A tag was added, edited, removed, marked for removal or restored. |
+| Model          | Type             | Default | Emits         | Notes                                                                                                                                                                              |
+| -------------- | ---------------- | ------- | ------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `v-model:tags` | `TagEditorTag[]` | `[]`    | `update:tags` | Tags being edited, via `defineModel('tags')`. Saved tags carry `existing`; Remove marks them `markedForRemoval` until Undo. Unbound, the editor keeps its own tags. |
 
 ## States
 
@@ -144,7 +144,7 @@
 
   const tags = ref([
     { key: 'owner', value: 'platform-team', existing: true, markedForRemoval: true },
-    { key: 'azion:managed', value: 'true' },
+    { key: 'acme:managed', value: 'true' },
     { key: 'region', value: 'sa-east' },
     { key: 'region', value: 'us-east' }
   ])
@@ -166,6 +166,7 @@
       ref="editor"
       v-model:tags="tags"
       :limit="5"
+      reserved-prefix="acme:"
       aria-label="Resource tags"
     />
     <div>

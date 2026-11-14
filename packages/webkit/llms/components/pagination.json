@@ -37,25 +37,11 @@
  ],
  "props": [
   {
-   "name": "page",
-   "type": "number",
-   "default": "1",
-   "required": "false",
-   "doc": "Current page, 1-based (data-driven mode). Supports `v-model:page`."
-  },
-  {
    "name": "total",
    "type": "number",
    "default": "undefined",
    "required": "false",
    "doc": "Total item count. When set, the Pagination runs in data-driven mode and renders its own controls."
-  },
-  {
-   "name": "pageSize",
-   "type": "number",
-   "default": "10",
-   "required": "false",
-   "doc": "Rows per page (data-driven mode). Supports `v-model:page-size`."
   },
   {
    "name": "pageSizeOptions",
@@ -77,20 +63,23 @@
    "default": "''",
    "required": "false",
    "doc": "Accessible name for the navigation landmark. Empty uses the locale catalog (`Pagination`)."
-  }
- ],
- "events": [
-  {
-   "name": "update:page",
-   "payload": "[page: number]",
-   "notes": "Current page changed in data-driven mode (Previous / Next / page number). Supports `v-model:page`."
   },
   {
-   "name": "update:pageSize",
-   "payload": "[pageSize: number]",
-   "notes": "Rows-per-page changed via the internal selector. Supports `v-model:page-size`."
+   "name": "page",
+   "type": "number",
+   "default": "1",
+   "required": "false",
+   "doc": "Two-way value (`v-model:page`)."
+  },
+  {
+   "name": "pageSize",
+   "type": "number",
+   "default": "10",
+   "required": "false",
+   "doc": "Two-way value (`v-model:pageSize`)."
   }
  ],
+ "events": [],
  "slots": [
   {
    "name": "info",

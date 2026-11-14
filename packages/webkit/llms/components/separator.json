@@ -42,6 +42,13 @@
    "default": "''",
    "required": "false",
    "doc": "Fallback centered text shown when the default slot is empty."
+  },
+  {
+   "name": "decorative",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Purely visual line: renders role none instead of separator when there is no label."
   }
  ],
  "events": [],

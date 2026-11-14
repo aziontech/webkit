@@ -45,13 +45,6 @@
    "doc": "Seconds the reasoning took, when the server reports it. Without it the component measures from `streaming` turning on to turning off."
   },
   {
-   "name": "open",
-   "type": "boolean",
-   "default": "undefined",
-   "required": "false",
-   "doc": "Controlled open state. Use with `v-model:open`."
-  },
-  {
    "name": "defaultOpen",
    "type": "boolean",
    "default": "false",
@@ -64,14 +57,16 @@
    "default": "false",
    "required": "false",
    "doc": "Offers `Skip thinking` while streaming, for a model that can answer before it finishes reasoning."
+  },
+  {
+   "name": "open",
+   "type": "boolean",
+   "default": "undefined as never",
+   "required": "false",
+   "doc": "Two-way value (`v-model:open`)."
   }
  ],
  "events": [
-  {
-   "name": "update:open",
-   "payload": "boolean",
-   "notes": ""
-  },
   {
    "name": "skip",
    "payload": "(event: MouseEvent)",

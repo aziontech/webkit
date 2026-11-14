@@ -1,11 +1,11 @@
 # ManageResources (`platform/account/manage-resources`)
 
-> The account hierarchy: organizations, groups and workspaces in one `Table` with tree rows (`get-sub-rows`, `v-model:expanded`, a treegrid with the row-focus keyboard map) and row selection. A `PageHeader`, an action row with Create workspace, Create group, the bulk Move, Labels and Delete that act on the selection, Refresh and Hide details, and a details panel with Permissions (role bindings of the one selected resource) and Labels tabs. Move picks a new parent in a `Dialog` (never the resource itself or anything inside it); Labels adds and removes labels on every selected resource; Delete counts what is inside in a `ConfirmDialog` and keeps it in Resources pending deletion for 30 days; each ends in a toast, Move and Delete with Undo. A page body for ConsoleLayout, rendered in its default slot.
+> The account hierarchy: organizations, groups and workspaces in one `Table` with tree rows (`get-sub-rows`, `v-model:expanded`, a treegrid with the row-focus keyboard map) and row selection. A `PageHeader` with Create Workspace, a search `Input` over name, ID, type and labels that keeps the ancestors of each match (a small `EmptyState` with Clear search when nothing matches), the paginated tree, an action row with Create Group, the bulk Move, Labels and Delete that act on the selection, Refresh and Hide details, and a details panel with Permissions (role bindings of the one selected resource as `KeyValuePairs`) and Labels tabs. Move picks a new parent in a `Dialog` (never the resource itself or anything inside it); Labels adds and removes labels on every selected resource; Delete counts what is inside in a `ConfirmDialog` and keeps it in Resources pending deletion for 30 days; each ends in a toast, Move and Delete with Undo. A page body for ConsoleLayout, rendered in its default slot.
 
 - Surface: product
 - Source: `blocks/platform/account/manage-resources/manage-resources.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/account/manage-resources")`
-- Components: [Alert](../../../components/alert.md), [Avatar](../../../components/avatar.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [ConfirmDialog](../../../components/confirm-dialog.md), [Dialog](../../../components/dialog.md), `DialogContent`, `DialogDescription`, `DialogOverlay`, `DialogPortal`, `DialogTitle`, [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [Field](../../../components/field.md), [IconButton](../../../components/icon-button.md), [Link](../../../components/link.md), [MultiSelect](../../../components/multi-select.md), [PageHeader](../../../components/page-header.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [Select](../../../components/select.md), [Table](../../../components/table.md), [Tabs](../../../components/tabs.md), [Tag](../../../components/tag.md), [Toast](../../../components/toast.md), [Tooltip](../../../components/tooltip.md)
+- Components: [Alert](../../../components/alert.md), [Avatar](../../../components/avatar.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [ConfirmDialog](../../../components/confirm-dialog.md), [Dialog](../../../components/dialog.md), `DialogContent`, `DialogDescription`, `DialogOverlay`, `DialogPortal`, `DialogTitle`, [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [Field](../../../components/field.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [KeyValuePairs](../../../components/key-value-pairs.md), [Link](../../../components/link.md), [MultiSelect](../../../components/multi-select.md), [PageHeader](../../../components/page-header.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [Select](../../../components/select.md), [Table](../../../components/table.md), [Tabs](../../../components/tabs.md), [Tag](../../../components/tag.md), [Toast](../../../components/toast.md), [Tooltip](../../../components/tooltip.md)
 - Skills: `webkit-lists`, `webkit-tables`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -28,23 +28,23 @@ Where an account admin arranges the account's hierarchy. Workspaces sit under gr
 
 ## Building blocks
 
-### A. Page heading — `PageHeader` (required)
+### A. Page heading — `PageHeader`, `Button` (required)
 
-Title `Manage resources` and one sentence on what the hierarchy decides. No heading actions: `PageHeader` stretches its actions to full width on phones, so Refresh and the details toggle live at the end of the toolbar instead (the design sample put them in the heading).
+Title `Manage resources` and one sentence on what the hierarchy decides. The page's primary, `Create Workspace` at `size="large"`, sits in the heading's actions as on every sibling list page. Refresh and the details toggle stay at the end of the toolbar, so the heading holds one action that stretches cleanly on phones.
 
 ### B. Toolbar — `Button`, `Tooltip`, `IconButton` (required)
 
-A `role="group"` row named `Resource actions`: Create workspace (primary) and Create group, a divider, then Move, Labels and Delete. The three bulk actions are disabled until something is selected and act on every selected row, at any depth. At the end, Refresh (spins while the table reloads) and a transparent `Hide details` / `Show details` that toggles the details panel (`aria-expanded`, `aria-controls`). The row wraps on narrow screens.
+A `role="group"` row named `Resource actions`: Create Group (outlined), a divider, then Move, Labels and Delete. The three bulk actions are disabled until something is selected and act on every selected row, at any depth. At the end, Refresh (spins while the table reloads) and a transparent `Hide details` / `Show details` that toggles the details panel (`aria-expanded`, `aria-controls`). The row wraps on narrow screens.
 
-### C. Resource tree — `Card`, `Table`, `Avatar`, `Tag`, `DropdownMenu`, `Link` (required)
+### C. Resource tree — `Input`, `Card`, `Table`, `Avatar`, `Tag`, `DropdownMenu`, `Link` (required)
 
-A flush `Card` holding `Table` (tree rows) with `:get-sub-rows="(row) => row.children"`, `v-model:expanded` (the first organization and its first group open) and `v-model:row-selection`. The table turns into a treegrid: chevrons in the Name column, one indent step per level, and `aria-level` and `aria-expanded` on rows. Name: a square `Avatar` for organizations and groups, the type glyph for workspaces, and a check for the current workspace. ID as `Table.CellId` with copy for workspaces. Type as a `Tag` with icon and severity (Organization accent, Group info, Workspace secondary). Last accessed, Status (`Table.CellStatus`: Active, Pending, Suspended), Charges right-aligned in tabular figures with a help tooltip on the header, Labels as `Table.CellTags` with `+N`, and `Table.CellActions` (View details, Move, Edit labels, then Delete on its own). A dash stands in for any empty value. Below the card, a `Link` to Resources pending deletion.
+A search `Input` named `Search resources` over name, ID, type and labels sits above the tree. A match keeps its ancestors (so a workspace shows under its group and organization) and opens every branch while the search is on; clearing it restores the branches the person had open. No match shows a small `EmptyState` (`No matching resources`) with Clear search in the card. Then a flush `Card` holding `Table` (tree rows), `paginated` at 25 rows a page, with `:get-sub-rows="(row) => row.children"`, `v-model:expanded` (the first organization and its first group open) and `v-model:row-selection`. The table turns into a treegrid: chevrons in the Name column, one indent step per level, and `aria-level` and `aria-expanded` on rows. Name: a square `Avatar` for organizations and groups, the type glyph for workspaces, and a check for the current workspace. ID as `Table.CellId` with copy for workspaces. Type as a `Tag` with icon and severity (Organization accent, Group info, Workspace secondary). Last accessed, Status (`Table.CellStatus`: Active, Pending, Suspended), Charges right-aligned in tabular figures with a help tooltip on the header (an empty charge is a muted dash through `data-empty`, never a class ternary), Labels as `Table.CellTags` with `+N`, and `Table.CellActions` (View details, Move, Edit labels, then Delete on its own). A dash stands in for any empty value. Below the card, a `Link` to Resources pending deletion.
 
 The data stays flat (`parentId`) and the page builds the tree for the table, so a move only changes one field.
 
-### D. Details panel — `Card`, `Tabs`, `Alert`, `Tag` (required)
+### D. Details panel — `Card`, `Tabs`, `KeyValuePairs`, `EmptyState`, `Tag` (required)
 
-An `aside` beside the table from `2xl` and under it below that: next to the panel, the nine columns of the tree do not fit under 1536 px. Its heading says what is selected (`No resource selected`, `1 resource selected`, `3 resources selected`) and is polite live. Tabs: Permissions lists the role bindings of the one selected resource (role and member count); Labels shows its labels and an Edit labels button. With none or several selected, an info `Alert` says what to do.
+An `aside` beside the table from `2xl` and under it below that: next to the panel, the nine columns of the tree do not fit under 1536 px. Its heading says what is selected (`No resource selected`, `1 resource selected`, `3 resources selected`) and is polite live. Tabs: Permissions lists the role bindings of the one selected resource as split `KeyValuePairs` (role, member count); Labels shows its labels and an Edit labels button, or a small `No labels` `EmptyState`. With none or several selected, a small `EmptyState` (`Select a resource`, `Several resources selected`) says what to do.
 
 ### E. Move — `Dialog`, `DialogPortal`, `DialogOverlay`, `DialogContent`, `DialogTitle`, `DialogDescription`, `PanelHeader`, `PanelContent`, `PanelFooter`, `Field`, `Select` (required)
 
@@ -62,7 +62,7 @@ Title `Delete <name>` or `Delete 3 resources`. The description counts what is in
 
 ### H. Empty and failure — `EmptyState`, `Alert` (conditional)
 
-No resource: a flush `EmptyState` with Create workspace replaces the table. Load failure: a danger `Alert` with Retry takes the table's place; the heading and toolbar stay.
+No resource: a flush `EmptyState` with Create Workspace replaces the table. Load failure: a danger `Alert` with Retry takes the table's place; the heading and toolbar stay.
 
 ### Outcomes — through `toast`
 
@@ -84,9 +84,10 @@ Every action ends in a success toast. Move and Delete carry Undo. Hierarchy chan
 
 ## Copy
 
-- **Title:** `Manage resources`. **Create:** `Create workspace`, `Create group`.
+- **Title:** `Manage resources`. **Create:** `Create Workspace`, `Create Group` (the entity keeps its capital, as in `Create Team`).
+- **Search:** `Search resources`; no match `No matching resources`, `No resource matches “…”.`, `Clear search`.
 - **Bulk:** `Move`, `Labels`, `Delete`; row menu `View details`, `Move`, `Edit labels`, `Delete`.
-- **Panel:** `No resource selected`, `1 resource selected`; `Select a resource to see its role bindings and labels.`; `Select a single resource to see its role bindings.`; `This resource has no labels.`
+- **Panel:** `No resource selected`, `1 resource selected`; empty states `Select a resource`, `Several resources selected`, `No labels`; `Select a resource to see its role bindings and labels.`; `Select a single resource to see its role bindings.`; `This resource has no labels.`
 - **Toasts:** `2 resources moved to Digital services.`; `3 resources scheduled for deletion.` with `They stay in Resources pending deletion for 30 days.`; `Labels updated on 1 resource.`
 - Follow `skills/webkit-microcopy`: sentence case, no "please", no exclamation marks.
 
@@ -103,7 +104,7 @@ Every action ends in a success toast. Move and Delete carry Undo. Hierarchy chan
 
 - Default: two organizations, three groups and six workspaces; the first organization and its first group open, nothing selected, and every action wired.
 - Selected: one workspace selected; bulk actions enabled and the details panel filled.
-- Empty: no resource; an empty state with Create workspace.
+- Empty: no resource; an empty state with Create Workspace.
 - Loading: the first load; the table's loading rows.
 - Failed: the hierarchy did not load; a danger Alert with Retry.
 
@@ -143,6 +144,8 @@ Each variant is the same screen in another state: `get_pattern("platform/account
   import EmptyState from '@aziontech/webkit/empty-state'
   import Field from '@aziontech/webkit/field'
   import IconButton from '@aziontech/webkit/icon-button'
+  import Input from '@aziontech/webkit/input'
+  import KeyValuePairs from '@aziontech/webkit/key-value-pairs'
   import Link from '@aziontech/webkit/link'
   import MultiSelect from '@aziontech/webkit/multi-select'
   import PageHeader from '@aziontech/webkit/page-header'
@@ -273,6 +276,26 @@ Each variant is the same screen in another state: `get_pattern("platform/account
     return build(null)
   })
 
+  const query = ref('')
+  const needle = computed(() => query.value.trim().toLowerCase())
+  const matchesQuery = (item: Resource) =>
+    [item.name, item.id, types[item.type].label, ...(item.labels ?? [])].some((value) =>
+      value.toLowerCase().includes(needle.value)
+    )
+  const visibleTree = computed<ResourceNode[]>(() => {
+    if (!needle.value) return tree.value
+    const prune = (nodes: ResourceNode[]): ResourceNode[] =>
+      nodes.flatMap((node) => {
+        if (matchesQuery(node)) return [node]
+        const children = prune(node.children ?? [])
+        return children.length ? [{ ...node, children }] : []
+      })
+    return prune(tree.value)
+  })
+  const clearQuery = () => {
+    query.value = ''
+  }
+
   const columns: TableColumn[] = [
     { accessorKey: 'name', header: 'Name', principal: true, grow: 3 },
     { accessorKey: 'id', header: 'ID', minWidth: 128 },
@@ -284,7 +307,13 @@ Each variant is the same screen in another state: `get_pattern("platform/account
     { id: 'actions', kind: 'action', hideable: false }
   ]
 
-  const expanded = ref({ 'org-1001': true, 'grp-2101': true })
+  const expanded = ref<Record<string, boolean>>({ 'org-1001': true, 'grp-2101': true })
+  const tableExpanded = computed<true | Record<string, boolean>>({
+    get: () => (needle.value ? true : expanded.value),
+    set: (value) => {
+      if (value !== true) expanded.value = value
+    }
+  })
   const selection = ref<Record<string, boolean>>({})
 
   const selected = computed(() => resources.value.filter((item) => selection.value[item.id]))
@@ -473,7 +502,17 @@ Each variant is the same screen in another state: `get_pattern("platform/account
       <PageHeader
         title="Manage resources"
         description="Organize workspaces into a hierarchy of organizations and groups. Role bindings set on a parent apply to everything under it."
-      />
+      >
+        <template #actions>
+          <Button
+            label="Create Workspace"
+            icon="pi pi-plus"
+            kind="primary"
+            size="large"
+            href="/account/resources/new"
+          />
+        </template>
+      </PageHeader>
 
       <div
         role="group"
@@ -481,14 +520,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
         class="layout-section-start flex flex-wrap items-center gap-(--spacing-xs)"
       >
         <Button
-          label="Create workspace"
-          icon="pi pi-plus"
-          kind="primary"
-          size="medium"
-          href="/account/resources/new"
-        />
-        <Button
-          label="Create group"
+          label="Create Group"
           icon="pi pi-folder"
           kind="outlined"
           size="medium"
@@ -595,7 +627,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
               >
                 <template #actions>
                   <Button
-                    label="Create workspace"
+                    label="Create Workspace"
                     icon="pi pi-plus"
                     kind="secondary"
                     size="small"
@@ -606,140 +638,184 @@ Each variant is the same screen in another state: `get_pattern("platform/account
             </template>
           </Card>
 
-          <Card
-            key="card-2"
-            v-else
-            :padded="false"
-          >
-            <template #content>
-              <Table
-                v-model:expanded="expanded"
-                v-model:row-selection="selection"
-                :data="tree"
-                :columns="columns"
-                :get-sub-rows="(row) => row.children"
-                :loading="loading || refreshing"
-                row-key="id"
-                enable-row-selection
-                :bordered="false"
-                :aria-labelledby="`${uid}-resources`"
-              >
-                <template #cell-name="{ row }">
-                  <span class="flex min-w-0 items-center gap-(--spacing-xs)">
-                    <Avatar
-                      v-if="row.type !== 'workspace'"
-                      :label="initials(row.name)"
+          <template v-else>
+            <Input
+              v-model="query"
+              placeholder="Search by name, ID, type or label"
+              aria-label="Search resources"
+              class="w-full"
+            >
+              <template #iconLeft>
+                <i
+                  class="pi pi-search"
+                  aria-hidden="true"
+                />
+              </template>
+            </Input>
+
+            <Card
+              key="card-3"
+              v-if="needle && !visibleTree.length"
+              :padded="false"
+            >
+              <template #content>
+                <EmptyState
+                  size="small"
+                  icon="pi pi-search"
+                  title="No matching resources"
+                  :description="`No resource matches “${query.trim()}”.`"
+                >
+                  <template #actions>
+                    <Button
+                      label="Clear search"
+                      kind="outlined"
                       size="small"
-                      kind="square"
+                      @click="clearQuery"
                     />
-                    <i
+                  </template>
+                </EmptyState>
+              </template>
+            </Card>
+
+            <Card
+              key="card-2"
+              v-else
+              :padded="false"
+            >
+              <template #content>
+                <Table
+                  v-model:expanded="tableExpanded"
+                  v-model:row-selection="selection"
+                  :data="visibleTree"
+                  paginated
+                  :page-size="25"
+                  :columns="columns"
+                  :get-sub-rows="(row) => row.children"
+                  :loading="loading || refreshing"
+                  row-key="id"
+                  enable-row-selection
+                  :bordered="false"
+                  :aria-labelledby="`${uid}-resources`"
+                >
+                  <template #cell-name="{ row }">
+                    <span class="flex min-w-0 items-center gap-(--spacing-xs)">
+                      <Avatar
+                        v-if="row.type !== 'workspace'"
+                        :label="initials(row.name)"
+                        size="small"
+                        kind="square"
+                      />
+                      <i
+                        v-else
+                        :class="types[row.type].icon"
+                        class="shrink-0 text-body-sm text-(--text-muted)"
+                        aria-hidden="true"
+                      />
+                      <span class="truncate text-label-sm text-(--text-default)">{{
+                        row.name
+                      }}</span>
+                      <Tooltip
+                        v-if="row.id === currentId"
+                        text="Current workspace"
+                      >
+                        <i
+                          class="pi pi-check shrink-0 text-body-xs text-(--text-muted)"
+                          aria-label="Current workspace"
+                          role="img"
+                        />
+                      </Tooltip>
+                    </span>
+                  </template>
+                  <template #cell-id="{ row, value }">
+                    <Table.CellId
+                      v-if="row.type === 'workspace'"
+                      :value="value"
+                      resource="workspace"
+                    />
+                    <span
                       v-else
-                      :class="types[row.type].icon"
-                      class="shrink-0 text-body-sm text-(--text-muted)"
-                      aria-hidden="true"
-                    />
-                    <span class="truncate text-label-sm text-(--text-default)">{{ row.name }}</span>
-                    <Tooltip
-                      v-if="row.id === currentId"
-                      text="Current workspace"
+                      class="text-body-sm text-(--text-muted)"
+                      >{{ value }}</span
                     >
-                      <i
-                        class="pi pi-check shrink-0 text-body-xs text-(--text-muted)"
-                        aria-label="Current workspace"
-                        role="img"
-                      />
-                    </Tooltip>
-                  </span>
-                </template>
-                <template #cell-id="{ row, value }">
-                  <Table.CellId
-                    v-if="row.type === 'workspace'"
-                    :value="value"
-                    resource="workspace"
-                  />
-                  <span
-                    v-else
-                    class="text-body-sm text-(--text-muted)"
-                    >{{ value }}</span
-                  >
-                </template>
-                <template #cell-type="{ value }">
-                  <Tag
-                    :label="types[value].label"
-                    :icon="types[value].icon"
-                    :severity="types[value].severity"
-                    size="small"
-                  />
-                </template>
-                <template #cell-lastAccessed="{ value }">
-                  <span class="text-body-sm text-(--text-muted)">{{ value || '—' }}</span>
-                </template>
-                <template #cell-status="{ value }">
-                  <Table.CellStatus
-                    :label="value"
-                    :severity="statusSeverity(value)"
-                  />
-                </template>
-                <template #cell-charges="{ value }">
-                  <span
-                    class="tabular-nums"
-                    :class="value ? 'text-(--text-default)' : 'text-(--text-muted)'"
-                    >{{ value ? money.format(value) : '—' }}</span
-                  >
-                </template>
-                <template #header-charges>
-                  <span class="inline-flex items-center gap-(--spacing-xxs)">
-                    Charges
-                    <Tooltip text="Estimated month-to-date charges.">
-                      <i
-                        class="pi pi-question-circle text-body-xs text-(--text-muted)"
-                        role="img"
-                        aria-label="About charges"
-                        tabindex="0"
-                      />
-                    </Tooltip>
-                  </span>
-                </template>
-                <template #cell-labels="{ value }">
-                  <Table.CellTags
-                    :items="value ?? []"
-                    icon="pi pi-tag"
-                    :noun="{ one: 'label', other: 'labels' }"
-                  />
-                </template>
-                <template #header-actions>
-                  <span class="sr-only">Actions</span>
-                </template>
-                <template #cell-actions="{ row }">
-                  <Table.CellActions
-                    :name="row.name"
-                    @select="(_event, value) => onRowAction(value, row)"
-                  >
-                    <DropdownMenu.Group>
-                      <DropdownMenu.Option
-                        value="details"
-                        label="View details"
-                      />
-                      <DropdownMenu.Option
-                        value="move"
-                        label="Move"
-                      />
-                      <DropdownMenu.Option
-                        value="labels"
-                        label="Edit labels"
-                      />
-                    </DropdownMenu.Group>
-                    <DropdownMenu.Group>
-                      <DropdownMenu.Option
-                        value="delete"
-                        label="Delete"
-                      />
-                    </DropdownMenu.Group>
-                  </Table.CellActions>
-                </template>
-              </Table>
-            </template>
-          </Card>
+                  </template>
+                  <template #cell-type="{ value }">
+                    <Tag
+                      :label="types[value].label"
+                      :icon="types[value].icon"
+                      :severity="types[value].severity"
+                      size="small"
+                    />
+                  </template>
+                  <template #cell-lastAccessed="{ value }">
+                    <span class="text-body-sm text-(--text-muted)">{{ value || '—' }}</span>
+                  </template>
+                  <template #cell-status="{ value }">
+                    <Table.CellStatus
+                      :label="value"
+                      :severity="statusSeverity(value)"
+                    />
+                  </template>
+                  <template #cell-charges="{ value }">
+                    <span
+                      class="tabular-nums text-(--text-default) data-[empty]:text-(--text-muted)"
+                      :data-empty="!value || null"
+                      >{{ value ? money.format(value) : '—' }}</span
+                    >
+                  </template>
+                  <template #header-charges>
+                    <span class="inline-flex items-center gap-(--spacing-xxs)">
+                      Charges
+                      <Tooltip text="Estimated month-to-date charges.">
+                        <i
+                          class="pi pi-question-circle text-body-xs text-(--text-muted)"
+                          role="img"
+                          aria-label="About charges"
+                          tabindex="0"
+                        />
+                      </Tooltip>
+                    </span>
+                  </template>
+                  <template #cell-labels="{ value }">
+                    <Table.CellTags
+                      :items="value ?? []"
+                      icon="pi pi-tag"
+                      :noun="{ one: 'label', other: 'labels' }"
+                    />
+                  </template>
+                  <template #header-actions>
+                    <span class="sr-only">Actions</span>
+                  </template>
+                  <template #cell-actions="{ row }">
+                    <Table.CellActions
+                      :name="row.name"
+                      @select="(_event, value) => onRowAction(value, row)"
+                    >
+                      <DropdownMenu.Group>
+                        <DropdownMenu.Option
+                          value="details"
+                          label="View details"
+                        />
+                        <DropdownMenu.Option
+                          value="move"
+                          label="Move"
+                        />
+                        <DropdownMenu.Option
+                          value="labels"
+                          label="Edit labels"
+                        />
+                      </DropdownMenu.Group>
+                      <DropdownMenu.Group>
+                        <DropdownMenu.Option
+                          value="delete"
+                          label="Delete"
+                        />
+                      </DropdownMenu.Group>
+                    </Table.CellActions>
+                  </template>
+                </Table>
+              </template>
+            </Card>
+          </template>
 
           <Link
             label="Resources pending deletion"
@@ -780,16 +856,19 @@ Each variant is the same screen in another state: `get_pattern("platform/account
                     </Tabs.List>
                     <Tabs.Content>
                       <Tabs.Panel value="permissions">
-                        <Alert
+                        <EmptyState
                           v-if="!focused"
-                          severity="info"
-                        >
-                          {{
+                          size="small"
+                          icon="pi pi-sitemap"
+                          :title="
+                            selectedCount ? 'Several resources selected' : 'Select a resource'
+                          "
+                          :description="
                             selectedCount
                               ? 'Select a single resource to see its role bindings.'
                               : 'Select a resource to see its role bindings and labels.'
-                          }}
-                        </Alert>
+                          "
+                        />
                         <div
                           v-else
                           class="flex flex-col gap-(--spacing-sm)"
@@ -805,36 +884,35 @@ Each variant is the same screen in another state: `get_pattern("platform/account
                               focused.name
                             }}</span>
                           </div>
-                          <ul
+                          <KeyValuePairs
+                            kind="split"
                             aria-label="Role bindings"
-                            class="m-0 flex list-none flex-col gap-(--spacing-xs) p-0"
                           >
-                            <li
+                            <KeyValuePairs.Item
                               v-for="binding in roleBindings"
                               :key="binding.role"
-                              class="flex items-center justify-between rounded-(--shape-elements) bg-(--bg-surface-raised) px-(--spacing-sm) py-(--spacing-xs)"
-                            >
-                              <span class="text-label-sm text-(--text-default)">{{
-                                binding.role
-                              }}</span>
-                              <span class="text-body-xs text-(--text-muted)">{{
+                              :label="binding.role"
+                              >{{
                                 plural(binding.members, 'member', 'members')
-                              }}</span>
-                            </li>
-                          </ul>
+                              }}</KeyValuePairs.Item
+                            >
+                          </KeyValuePairs>
                         </div>
                       </Tabs.Panel>
                       <Tabs.Panel value="labels">
-                        <Alert
+                        <EmptyState
                           v-if="!focused"
-                          severity="info"
-                        >
-                          {{
+                          size="small"
+                          icon="pi pi-tag"
+                          :title="
+                            selectedCount ? 'Several resources selected' : 'Select a resource'
+                          "
+                          :description="
                             selectedCount
                               ? 'Select a single resource to see its labels.'
                               : 'Select a resource to see its role bindings and labels.'
-                          }}
-                        </Alert>
+                          "
+                        />
                         <div
                           v-else
                           class="flex flex-col gap-(--spacing-sm)"
@@ -855,12 +933,13 @@ Each variant is the same screen in another state: `get_pattern("platform/account
                               />
                             </li>
                           </ul>
-                          <p
+                          <EmptyState
                             v-else
-                            class="text-body-sm text-(--text-muted)"
-                          >
-                            This resource has no labels.
-                          </p>
+                            size="small"
+                            icon="pi pi-tag"
+                            title="No labels"
+                            description="This resource has no labels."
+                          />
                           <Button
                             label="Edit labels"
                             icon="pi pi-tag"

@@ -1,11 +1,11 @@
 # DeployDrawer (`platform/create/deploy-drawer`)
 
-> The drawer a platform deploys from, opened by the outlined Deploy button on a service or a project. Every variant shares one Resources card: a row per resource with its Ready tag, the picked version and a Change version menu, and a Dependencies disclosure with the modules and integrations the service references. On a service the default flow is environment first: the Project card uses an existing project or creates one, the environments come as radio blocks, and Projects impacted lists every project the environment’s shared Deployment Settings publish to. A deploy started without a pinned version first builds one, so the drawer opens as Build and deployment with a Building row and the other sections faded. A service can also deploy project first, picking the project before the environment. On a project, the drawer carries every resource it serves and warns when its Deployment Settings also publish elsewhere. The footer counts the version changes and where they go live; while the targets resolve the sections are Skeletons, a load failure is an Alert with Retry, and a project with no environment shows an EmptyState with Add environment, Deploy disabled in all three. Built from `SettingsSection`, `Drawer`, `PanelHeader`, `PanelContent`, `PanelFooter`, `Card`, `Item`, `Accordion`, `Separator`, `Popover`, `DropdownMenu`, `ToggleGroup`, `Field` choice cards with `RadioButton`, `Input`, `Avatar`, `Tag`, `Spinner`, `Skeleton`, `EmptyState`, `Alert`, `Tooltip` and `Button`.
+> The drawer a platform deploys from, opened by the outlined Deploy button on a service or a project. Every variant shares one Resources card: a row per resource with its Ready tag, the picked version and a Change version menu, and a Dependencies disclosure with the modules and integrations the service references. On a service the default flow is environment first: the Project card uses an existing project or creates one, the environments come as radio blocks, and Projects impacted lists every project the environment’s shared Deployment Settings deploy to. A deploy started without a pinned version first builds one, so the drawer opens as Build and deployment with a Building row and the other sections faded. A service can also deploy project first, picking the project before the environment. On a project, the drawer carries every resource it serves and warns when its Deployment Settings also deploy elsewhere. The footer counts the version changes and where they go live; while the targets resolve the sections are Skeletons, a load failure is an Alert with Retry, and a project with no environment shows an EmptyState with Add environment, Deploy disabled in all three. Built from `SettingsSection`, `Drawer`, `PanelHeader`, `PanelContent`, `PanelFooter`, `Card`, `Item`, `Accordion`, `Separator`, `Popover`, `DropdownMenu`, `ToggleGroup`, `Field` choice cards with `RadioButton`, `Input`, `Avatar`, `Tag`, `Spinner`, `Skeleton`, `EmptyState`, `Alert`, `Tooltip` and `Button`.
 
 - Surface: product
 - Source: `blocks/platform/create/deploy-drawer/deploy-drawer.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/create/deploy-drawer")`
-- Components: [Accordion](../../../components/accordion.md), [Alert](../../../components/alert.md), [Avatar](../../../components/avatar.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [Drawer](../../../components/drawer.md), `DrawerClose`, `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, `DrawerTrigger`, [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [Field](../../../components/field.md), [Input](../../../components/input.md), [Item](../../../components/item.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [Popover](../../../components/popover.md), [RadioButton](../../../components/radio-button.md), [Separator](../../../components/separator.md), [SettingsSection](../../../components/settings-section.md), [Skeleton](../../../components/skeleton.md), [Spinner](../../../components/spinner.md), [Tag](../../../components/tag.md), [Toast](../../../components/toast.md), [ToggleGroup](../../../components/toggle-group.md), [Tooltip](../../../components/tooltip.md)
+- Components: [Accordion](../../../components/accordion.md), [Alert](../../../components/alert.md), [Avatar](../../../components/avatar.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [Drawer](../../../components/drawer.md), `DrawerClose`, `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, `DrawerTrigger`, [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [Field](../../../components/field.md), [Input](../../../components/input.md), [Item](../../../components/item.md), [Link](../../../components/link.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [Popover](../../../components/popover.md), [RadioButton](../../../components/radio-button.md), [Separator](../../../components/separator.md), [SettingsSection](../../../components/settings-section.md), [Skeleton](../../../components/skeleton.md), [Spinner](../../../components/spinner.md), [Tag](../../../components/tag.md), [Toast](../../../components/toast.md), [ToggleGroup](../../../components/toggle-group.md), [Tooltip](../../../components/tooltip.md)
 - Skills: `webkit-create-surface`, `webkit-form`, `webkit-ui-states`
 
 ## Asked as
@@ -21,6 +21,8 @@ The drawer a platform deploys from, opened by Deploy on a service or a project. 
 - A service deploys to a project that may not exist yet; the Project section creates it in place.
 
 ## When not to use
+
+- A release of several resources reviewed together: use `platform/create/release-impact`. This drawer is the canonical surface for deploying one service or one project.
 
 - Creating or editing an item inside a resource: use `platform/create/create-in-drawer`.
 - The first deploy at the end of a create flow: use `platform/create/deploy-template` or `platform/create/provision-wizard`, which stream `platform/create/deployment-flow` in the page.
@@ -49,17 +51,17 @@ An outlined medium `Button` reading Deploy inside `DrawerTrigger`, on the servic
 
 A small `Accordion` below the resource rows, collapsed, listing the modules and integrations the service references, each with its own version and Change version menu. Dependencies go out with the deploy, so they are shown even when the user does not change them.
 
-### F. Project — `ToggleGroup`, `Item`, `Tag`, `Tooltip`, `Popover`, `DropdownMenu` (required on a service)
+### F. Project — `ToggleGroup`, `Item`, `Tag`, `Link`, `Tooltip`, `Popover`, `DropdownMenu` (required on a service)
 
-A full-width `ToggleGroup` in the card header switches between Use existing and Create new. The project is an outlined `Item`: its name, a New `Tag` when it will be created, and its domains grouped by environment, the first one linked with a `Tooltip`, the rest behind a `+N` `Tag` that opens a searchable `Popover`. Change opens a `DropdownMenu` of the projects grouped by how they relate to the service.
+A full-width `ToggleGroup` in the card header switches between Use existing and Create new. The project is an outlined `Item`: its name, a New `Tag` when it will be created, and its domains grouped by environment, the first one a small `Link` (`target="_blank"`, with its external glyph) under a `Tooltip` that says it opens in a new tab, the rest behind a `+N` `Tag` whose `Popover.Trigger` is named "N more domains" and opens a searchable `Popover` listing each domain as a `Link`. Never hand-roll the anchors. Change opens a `DropdownMenu` of the projects grouped by how they relate to the service.
 
 ### G. Environment — `Field`, `RadioButton`, `Tag` (required)
 
 Choice cards, one horizontal `Field` with a `RadioButton` per environment of the project, each with one sentence on how it serves traffic and a small `Tag` such as Last used. The group carries an `aria-label`.
 
-### H. Projects impacted and commit — `Item`, `Tag`, `Tooltip`, `Popover`, `PanelFooter`, `Button` (required on a service)
+### H. Projects impacted and commit — `Item`, `Tag`, `Link`, `Tooltip`, `Popover`, `PanelFooter`, `Button` (required on a service)
 
-Every project the chosen environment's shared Deployment Settings publish to, grouped by environment, the current one tagged Selected, with its domains shown like the Project card. `PanelFooter` holds one primary medium `Button` reading Deploy on the right, of `type="submit"`. On its left, once a version differs from the live one, one muted line counts the changes and names the environment they go live in.
+Every project the chosen environment's shared Deployment Settings deploy to, grouped by environment, the current one tagged Selected, with its domains shown like the Project card. `PanelFooter` holds one primary medium `Button` reading Deploy on the right, of `type="submit"`. On its left, once a version differs from the live one, one muted line counts the changes and names the environment they go live in.
 
 ## Do
 
@@ -67,7 +69,7 @@ Every project the chosen environment's shared Deployment Settings publish to, gr
 - Preselect the last used project and environment, and say so with a tag.
 - List every project a shared Deployment Setting reaches before the user deploys, not after.
 - When no version is pinned, open as Build and deployment with a Building row, keep the other sections faded and `inert`, and disable Deploy until the build lands.
-- On a project, warn with an `Alert` above the environments when its Deployment Settings also publish elsewhere.
+- On a project, warn with an `Alert` above the environments when its Deployment Settings also deploy elsewhere.
 - Keep an environment that Strict Deployment Settings lock visible but disabled, with a Strict tag and one sentence naming the settings and the service they keep bound.
 - Tag an environment Also deploys (warning) when the chosen environment's shared settings reach it, and say once, in a warning `Alert`, how many environments go live at once.
 - Say in an info `Alert` when the deploy replaces another service on the chosen project, naming both.
@@ -82,7 +84,7 @@ Every project the chosen environment's shared Deployment Settings publish to, gr
 
 ## Don't
 
-- Don't deploy from a dialog, or ask for confirmation after Deploy; the drawer is the review.
+- Don't deploy one service from a dialog, or ask for confirmation after Deploy; the drawer is the review. This is the one confirmation rule across the deploy surfaces: the surface that shows what goes live is the review, and nothing confirms it again. A release of several resources is reviewed on a page (`platform/create/release-impact`, whose single `ConfirmDialog` states the reach); a dropped folder is reviewed in the Drop confirm of `platform/create/deploy-progress-dialog`.
 - Don't hide dependencies or impacted projects behind a second step.
 - Don't let Change version list hundreds of versions at once; search plus Load more.
 - Don't add a second commit such as Save as draft; one Deploy.
@@ -94,7 +96,7 @@ Every project the chosen environment's shared Deployment Settings publish to, gr
 
 - **Trigger, title, commit:** "Deploy" on all three; "Build and deployment" as the title only while a build runs first.
 - **Section hints:** one sentence on what the section decides, e.g. "The project whose domains serve the service."
-- **Version control:** "Change version"; search placeholder and `aria-label` "Search versions"; footer "Load 10 more".
+- **Version control:** "Change version", named "Change version of <resource>" for assistive technology; search placeholder and `aria-label` "Search versions"; footer "Load 10 more".
 - **Project modes:** "Use existing" and "Create new".
 - **Environment descriptions:** one sentence on how it serves, e.g. "Live traffic. One version serves the domain, and deploying replaces it."
 - **Footer summary:** "1 change goes live in Production." or "3 changes go live in Production."
@@ -175,6 +177,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
   import Field from '@aziontech/webkit/field'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
+  import Link from '@aziontech/webkit/link'
   import PanelContent from '@aziontech/webkit/panel-content'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
@@ -740,7 +743,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
               <legend class="sr-only">Deploy</legend>
               <SettingsSection
                 title="Resources"
-                hint="The service version this deployment publishes, and the version of every module and integration it references."
+                hint="The service version this deployment sends live, and the version of every module and integration it references."
               >
                 <Card :padded="false">
                   <template #content>
@@ -791,6 +794,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
                             <DropdownMenu.Trigger>
                               <Button
                                 label="Change version"
+                                :aria-label="`Change version of ${row.name}`"
                                 kind="outlined"
                                 size="small"
                                 icon="pi pi-chevron-down"
@@ -942,6 +946,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
                                         <DropdownMenu.Trigger>
                                           <Button
                                             label="Change version"
+                                            :aria-label="`Change version of ${dependency.name}`"
                                             kind="outlined"
                                             size="small"
                                             icon="pi pi-chevron-down"
@@ -1042,7 +1047,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
 
               <SettingsSection
                 title="Project"
-                hint="The project whose domains serve the service. Create one to publish it on a new domain."
+                hint="The project whose domains serve the service. Create one to deploy it on a new domain."
               >
                 <Card :padded="false">
                   <template #header>
@@ -1105,24 +1110,12 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
                                   :text="`Open ${domainGroup.domains[0]} in a new tab`"
                                   class="w-full"
                                 >
-                                  <a
+                                  <Link
+                                    :label="domainGroup.domains[0]"
                                     :href="`https://${domainGroup.domains[0]}`"
                                     target="_blank"
-                                    rel="noopener noreferrer"
-                                    data-link="true"
-                                    class="group/link data-link:cursor-pointer inline-flex min-w-0 items-center gap-(--spacing-xxs) rounded-(--shape-button) text-body-sm text-(--text-default) no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)"
-                                  >
-                                    <span
-                                      class="truncate underline-offset-2 group-hover/link:underline"
-                                    >
-                                      {{ domainGroup.domains[0] }}
-                                    </span>
-                                    <span class="sr-only">{{ ' (opens in a new tab)' }}</span>
-                                    <i
-                                      class="pi pi-external-link shrink-0 text-body-xs leading-none"
-                                      aria-hidden="true"
-                                    />
-                                  </a>
+                                    size="small"
+                                  />
                                 </Tooltip>
                               </div>
                               <Popover
@@ -1130,7 +1123,9 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
                                 placement="bottom-start"
                                 width="small"
                               >
-                                <Popover.Trigger>
+                                <Popover.Trigger
+                                  :aria-label="`${domainGroup.total - 1} more domains`"
+                                >
                                   <div class="shrink-0 cursor-pointer">
                                     <Tag
                                       :label="`+${domainGroup.total - 1}`"
@@ -1164,20 +1159,18 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
                                   <div
                                     class="max-h-(--container-xs) overflow-auto overscroll-contain p-(--spacing-xxs)"
                                   >
-                                    <a
+                                    <div
                                       v-for="domain in domainGroup.domains"
                                       :key="domain"
-                                      :href="`https://${domain}`"
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                      class="flex items-center gap-(--spacing-xxs) rounded-(--shape-elements) px-(--spacing-xs) py-(--spacing-xxs) text-body-sm text-(--text-default) hover:bg-(--bg-hover) hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)"
+                                      class="flex min-w-0 px-(--spacing-xs) py-(--spacing-xxs)"
                                     >
-                                      <span class="truncate">{{ domain }}</span>
-                                      <i
-                                        class="pi pi-external-link ms-auto shrink-0 text-body-xs leading-none"
-                                        aria-hidden="true"
+                                      <Link
+                                        :label="domain"
+                                        :href="`https://${domain}`"
+                                        target="_blank"
+                                        size="small"
                                       />
-                                    </a>
+                                    </div>
                                   </div>
 
                                   <div
@@ -1246,7 +1239,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
 
               <SettingsSection
                 title="Environment"
-                hint="Where the deployment goes live, from the environments this project serves. Each one publishes with the Deployment Settings set on the project."
+                hint="Where the deployment goes live, from the environments this project serves. Each one goes live with the Deployment Settings set on the project."
               >
                 <div
                   role="radiogroup"
@@ -1291,7 +1284,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
 
               <SettingsSection
                 title="Projects impacted"
-                hint="This environment publishes with shared Deployment Settings, so the deployment reaches every project below, in every environment they are linked to, and the domains they serve."
+                hint="This environment deploys with shared Deployment Settings, so the deployment reaches every project below, in every environment they are linked to, and the domains they serve."
               >
                 <div class="flex min-w-0 flex-col gap-(--spacing-md)">
                   <div
@@ -1350,24 +1343,12 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
                                     :text="`Open ${domainGroup.domains[0]} in a new tab`"
                                     class="w-full"
                                   >
-                                    <a
+                                    <Link
+                                      :label="domainGroup.domains[0]"
                                       :href="`https://${domainGroup.domains[0]}`"
                                       target="_blank"
-                                      rel="noopener noreferrer"
-                                      data-link="true"
-                                      class="group/link data-link:cursor-pointer inline-flex min-w-0 items-center gap-(--spacing-xxs) rounded-(--shape-button) text-body-sm text-(--text-default) no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)"
-                                    >
-                                      <span
-                                        class="truncate underline-offset-2 group-hover/link:underline"
-                                      >
-                                        {{ domainGroup.domains[0] }}
-                                      </span>
-                                      <span class="sr-only">{{ ' (opens in a new tab)' }}</span>
-                                      <i
-                                        class="pi pi-external-link shrink-0 text-body-xs leading-none"
-                                        aria-hidden="true"
-                                      />
-                                    </a>
+                                      size="small"
+                                    />
                                   </Tooltip>
                                 </div>
                                 <Popover
@@ -1375,7 +1356,9 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
                                   placement="bottom-start"
                                   width="small"
                                 >
-                                  <Popover.Trigger>
+                                  <Popover.Trigger
+                                    :aria-label="`${domainGroup.total - 1} more domains`"
+                                  >
                                     <div class="shrink-0 cursor-pointer">
                                       <Tag
                                         :label="`+${domainGroup.total - 1}`"
@@ -1409,20 +1392,18 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
                                     <div
                                       class="max-h-(--container-xs) overflow-auto overscroll-contain p-(--spacing-xxs)"
                                     >
-                                      <a
+                                      <div
                                         v-for="domain in domainGroup.domains"
                                         :key="domain"
-                                        :href="`https://${domain}`"
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        class="flex items-center gap-(--spacing-xxs) rounded-(--shape-elements) px-(--spacing-xs) py-(--spacing-xxs) text-body-sm text-(--text-default) hover:bg-(--bg-hover) hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)"
+                                        class="flex min-w-0 px-(--spacing-xs) py-(--spacing-xxs)"
                                       >
-                                        <span class="truncate">{{ domain }}</span>
-                                        <i
-                                          class="pi pi-external-link ms-auto shrink-0 text-body-xs leading-none"
-                                          aria-hidden="true"
+                                        <Link
+                                          :label="domain"
+                                          :href="`https://${domain}`"
+                                          target="_blank"
+                                          size="small"
                                         />
-                                      </a>
+                                      </div>
                                     </div>
 
                                     <div

@@ -75,11 +75,32 @@
    "doc": "Renders Skeleton rows in place of the list."
   },
   {
+   "name": "refetching",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Holds the previous rows at reduced opacity while new data loads (the same as `chart`)."
+  },
+  {
+   "name": "error",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Error message; when set, the list renders an error state in an `alert` region instead of rows: a bordered small `EmptyState` with the error mark, `barList.errorTitle` and the message (the `error` slot replaces it)."
+  },
+  {
    "name": "emptyTitle",
    "type": "string",
    "default": "''",
    "required": "false",
    "doc": "Title of the empty state shown when `items` is empty. Empty uses the locale catalog (`No data available`)."
+  },
+  {
+   "name": "emptyDescription",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Supporting line under the empty title: why the list is empty, or what to do next."
   },
   {
    "name": "ariaLabel",
@@ -96,7 +117,23 @@
    "notes": "A row activated — a clickable row, or a link row (the link still navigates). `item` is the consumer's own item object."
   }
  ],
- "slots": [],
+ "slots": [
+  {
+   "name": "empty",
+   "scope": "—",
+   "notes": "Replaces the default `EmptyState` shown when `items` is empty."
+  },
+  {
+   "name": "empty-actions",
+   "scope": "—",
+   "notes": "Actions under the default empty state (a Clear filters or Retry)."
+  },
+  {
+   "name": "error",
+   "scope": "—",
+   "notes": "Replaces the default error state shown while `error` is set."
+  }
+ ],
  "styleSeam": false,
  "assets": [],
  "examples": [

@@ -1,11 +1,11 @@
 # AiChatDrawer (`platform/ai/ai-chat-drawer`)
 
-> The generative AI assistant in a right-side drawer over a resource page, so the reader asks about what they are looking at without leaving it: a workload page (`PageHeader` with an Ask AI `Button`, a `Card` of `KeyValuePairs` with a `StatusIndicator`) behind a medium `Drawer` whose `PanelHeader` holds `DrawerTitle`, a Preview `Tag`, New chat and `DrawerClose`. Inside, an `EmptyState` with support prompts about this workload (`SuggestionGroup`), then a `Conversation` with every message at the inline start, responses that think (`Reasoning`), stream (`StreamingResponse`), cite (`Sources`) and carry Copy, Regenerate and feedback, and a `PromptInput` pinned at the foot with the disclaimer. Built from `Drawer`, `DrawerPortal`, `DrawerOverlay`, `DrawerContent`, `DrawerTitle`, `DrawerClose`, `PanelHeader`, `ChatMessage`, `Conversation`, `PromptInput`, `IconButton` and `CopyButton`. A page body for ConsoleLayout, rendered in its default slot.
+> The generative AI assistant in a right-side drawer over a resource page, so the reader asks about what they are looking at without leaving it: a workload page (`PageHeader` with an Agent `Button`, the name the console header gives the assistant, a `Card` of `KeyValuePairs` with a `StatusIndicator`) beside a medium `Drawer` with no overlay, so the page stays undimmed and readable whose `PanelHeader` holds `DrawerTitle`, a Preview `Tag`, New chat and `DrawerClose`. Inside, an `EmptyState` with support prompts about this workload (`SuggestionGroup`), then a `Conversation` with every message at the inline start, responses that think (`Reasoning`), stream (`StreamingResponse`), cite (`Sources`) and carry Copy, Regenerate and feedback, and a `PromptInput` pinned at the foot with the disclaimer. Built from `Drawer`, `DrawerPortal`, `DrawerContent`, `DrawerTitle`, `DrawerClose`, `PanelHeader`, `ChatMessage`, `Conversation`, `PromptInput`, `IconButton` and `CopyButton`. A page body for ConsoleLayout, rendered in its default slot; inside ConsoleLayout on a wide screen the same conversation can go in the layout's tools region (`v-model:tools-open`) instead.
 
 - Surface: product
 - Source: `blocks/platform/ai/ai-chat-drawer/ai-chat-drawer.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/ai/ai-chat-drawer")`
-- Components: [Button](../../../components/button.md), [Card](../../../components/card.md), [ChatMessage](../../../components/chat-message.md), [Conversation](../../../components/conversation.md), [CopyButton](../../../components/copy-button.md), [Drawer](../../../components/drawer.md), `DrawerClose`, `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, [EmptyState](../../../components/empty-state.md), [IconButton](../../../components/icon-button.md), [KeyValuePairs](../../../components/key-value-pairs.md), [PageHeader](../../../components/page-header.md), `PanelHeader`, [PromptInput](../../../components/prompt-input.md), [Reasoning](../../../components/reasoning.md), [Sources](../../../components/sources.md), [StatusIndicator](../../../components/status-indicator.md), [StreamingResponse](../../../components/streaming-response.md), [SuggestionGroup](../../../components/suggestion-group.md), [Tag](../../../components/tag.md)
+- Components: [Button](../../../components/button.md), [Card](../../../components/card.md), [ChatMessage](../../../components/chat-message.md), [Conversation](../../../components/conversation.md), [CopyButton](../../../components/copy-button.md), [Drawer](../../../components/drawer.md), `DrawerClose`, `DrawerContent`, `DrawerPortal`, `DrawerTitle`, [EmptyState](../../../components/empty-state.md), [IconButton](../../../components/icon-button.md), [KeyValuePairs](../../../components/key-value-pairs.md), [PageHeader](../../../components/page-header.md), `PanelHeader`, [PromptInput](../../../components/prompt-input.md), [Reasoning](../../../components/reasoning.md), [Sources](../../../components/sources.md), [StatusIndicator](../../../components/status-indicator.md), [StreamingResponse](../../../components/streaming-response.md), [SuggestionGroup](../../../components/suggestion-group.md), [Tag](../../../components/tag.md)
 - Skills: `webkit-genai`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -17,7 +17,7 @@ The generative AI assistant beside the work: the reader is on a resource page �
 ## When to use
 
 - A resource or list page where questions are about what is on screen: why a metric moved, what a setting does, how to fix a status.
-- A global Ask AI entry point in the console header, when the reader should keep their place.
+- A global Agent entry point in the console header, when the reader should keep their place.
 - A short exchange that ends back on the page (the reader acts on the answer there).
 
 ## When not to use
@@ -31,15 +31,15 @@ The generative AI assistant beside the work: the reader is on a resource page �
 
 ### A. Page behind — `PageHeader`, `Card`, `KeyValuePairs`, `StatusIndicator`
 
-The resource page the reader is on. The assistant's support prompts and answers refer to it, so keep it visible behind the overlay.
+The resource page the reader is on. The assistant's support prompts and answers refer to it, so keep it visible and undimmed: the drawer has no overlay.
 
 ### B. Entry point — `Button`
 
-An outlined Ask AI `Button` with the assistant mark in the page header actions, `aria-expanded` while the drawer is open. A console-wide entry point lives in the global header instead.
+An outlined Agent `Button` with the assistant mark in the page header actions, `aria-expanded` while the drawer is open. A console-wide entry point lives in the global header instead.
 
-### C. Drawer frame — `Drawer`, `DrawerPortal`, `DrawerOverlay`, `DrawerContent`
+### C. Drawer frame — `Drawer`, `DrawerPortal`, `DrawerContent`
 
-A medium right-side `Drawer`. Escape, the overlay and the close button dismiss it; the conversation survives closing and reopening during the visit.
+A medium right-side `Drawer` with no `DrawerOverlay`, so the resource page beside it stays undimmed and readable while the reader asks about it. Escape and the close button dismiss it. Inside `ConsoleLayout` on a wide screen, put the same conversation in the layout's tools region (`v-model:tools-open`, as the console Notifications do) and keep the drawer for narrow screens; the conversation survives closing and reopening during the visit.
 
 ### D. Header — `PanelHeader`, `DrawerTitle`, `Tag`, `IconButton`, `DrawerClose`
 
@@ -81,7 +81,7 @@ At the foot of the drawer above a divider: four rows at most, a placeholder that
 
 ## Copy
 
-- **Entry point:** `Ask AI`.
+- **Entry point:** `Agent`, the name the console header's `ButtonHighlight` gives the same assistant; the panel title says what it is, `AI assistant`.
 - **Drawer title:** `AI assistant`, with the Preview tag while in preview.
 - **Empty state:** "Ask about <resource>" and one sentence saying the assistant reads this resource's settings and metrics.
 - **Placeholder:** "Ask about <resource>".
@@ -90,8 +90,8 @@ At the foot of the drawer above a divider: four rows at most, a placeholder that
 
 ## Accessibility
 
-- The drawer traps focus while open and returns it to Ask AI when it closes; `DrawerTitle` names the dialog.
-- Ask AI exposes `aria-expanded`.
+- The drawer traps focus while open and returns it to Agent when it closes; `DrawerTitle` names the dialog.
+- Agent exposes `aria-expanded`.
 - The log is a named `role="log"` with live behavior off; finished responses are announced once through the conversation's polite region.
 - New chat is an icon button with an accessible name; it is disabled while the thread is empty.
 - Keyboard order inside the drawer: header controls, log, message actions, follow-ups, composer.
@@ -134,7 +134,6 @@ Each variant is the same screen in another state: `get_pattern("platform/ai/ai-c
   import Drawer from '@aziontech/webkit/drawer'
   import DrawerClose from '@aziontech/webkit/drawer-close'
   import DrawerContent from '@aziontech/webkit/drawer-content'
-  import DrawerOverlay from '@aziontech/webkit/drawer-overlay'
   import DrawerPortal from '@aziontech/webkit/drawer-portal'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
   import EmptyState from '@aziontech/webkit/empty-state'
@@ -368,7 +367,7 @@ Each variant is the same screen in another state: `get_pattern("platform/ai/ai-c
         >
           <template #actions>
             <Button
-              label="Ask AI"
+              label="Agent"
               kind="outlined"
               size="medium"
               icon="ai ai-ask-azion"
@@ -410,7 +409,6 @@ Each variant is the same screen in another state: `get_pattern("platform/ai/ai-c
       size="medium"
     >
       <DrawerPortal>
-        <DrawerOverlay />
         <DrawerContent>
           <div class="flex min-h-0 flex-1 flex-col">
             <PanelHeader class="w-full">

@@ -1,8 +1,9 @@
 # Log View
 
-> Composition-based terminal log viewer for CI/deploy output. **LogView** is the root shell and context provider; **LogViewHeader**, **LogViewContent**, and **LogViewFooter** are composed as children so teams can reorder, omit, or replace the toolbar and footer without forking the log renderer.
+> Composition-based terminal log viewer for CI/deploy output. **LogView** is the root shell and context provider; **`LogView.Header`**, **`LogView.Content`**, and **`LogView.Footer`** are composed as children so teams can reorder, omit, or replace the toolbar and footer without forking the log renderer.
 
-- Import: `import LogView from '@aziontech/webkit/log-view'`
+- Import: `import LogViewRoot from '@aziontech/webkit/log-view-root'`
+- Compound import (dot notation, not tree-shakeable): `import LogView from '@aziontech/webkit/log-view'`
 - Category: code · Surface: product · Structure: composition
 - API as JSON: [log-view.json](https://github.com/aziontech/webkit/blob/main/.specs/log-view.json)
 
@@ -47,6 +48,7 @@
 | `loading` | `boolean` | `false` | false | Replaces the LogViewContent log body with a centered spinner and label. |
 | `loadingLabel` | `string` | `''` | false | Label shown beneath the spinner while `loading`. Empty uses the locale catalog (`Loading…`). |
 | `levels` | `LogViewLineLevel[]` | `[]` | false | Levels the header offers as filter toggles, each with its line count; a level with no line is still offered. Empty hides the level filter. |
+| `error` | `string` | `''` | false | Message shown in place of the log body when the log failed to load. Empty shows the log. |
 | `search` | `string` | `''` | false | Two-way value (`v-model:search`). |
 | `warningsOnly` | `boolean` | `false` | false | Two-way value (`v-model:warningsOnly`). |
 | `level` | `LogViewLineLevel \| ''` | `''` | false | Two-way value (`v-model:level`). |
@@ -71,24 +73,27 @@
 
 ## Sub-components
 
-LogView ships flat, individually importable sub-components (each from its own `@aziontech/webkit/log-view-*` entry); every sub-component reads the root's shared state through the injected context, so the consumer wires nothing.
+LogView ships its sub-components attached to the root (`LogView.Header`, `LogView.Content`, `LogView.Footer`, via `index.ts`) and individually importable (each from its own `@aziontech/webkit/log-view-*` entry); every sub-component reads the root's shared state through the injected context, so the consumer wires nothing.
 
-- `log-view-header.vue` — Default 48px toolbar: line count, warning filter, the level filter (one toggle per entry of `levels`, with its line count) and a search field. Slots: `left`, `right`, `search`.
-- `log-view-content.vue` — Scrollable log body with per-`type` line rendering, search highlighting, `ScrollArea`'s `fade` on the log body (the edges that still have lines beyond them fade out), and the copy-to-clipboard control (a `CopyButton` pinned top-right over the log content, shown when `copyable` is set). When `loading` is set, it replaces the log body with a centered `Spinner` (`@aziontech/webkit/spinner`) and the `loadingLabel` text (`role="status"`). Slot: `empty`.
-- `log-view-footer.vue` — Optional footer region for actions (download, follow live, pagination). Slot: `default`.
+- `log-view-header.vue` (`LogView.Header`) — Default 48px toolbar: line count, warning filter (a native button, 32 px, 44 px on coarse pointers), the level filter (one toggle per entry of `levels`, with its line count) and a search field. Slots: `left`, `right`, `search`.
+- `log-view-content.vue` (`LogView.Content`) — Scrollable log body with per-`type` line rendering, search highlighting, `ScrollArea`'s `fade` on the log body (the edges that still have lines beyond them fade out), and the copy-to-clipboard control (a `CopyButton` pinned top-right over the log content, shown when `copyable` is set). When `loading` is set, it replaces the log body with a centered `Spinner` (`@aziontech/webkit/spinner`) and the `loadingLabel` text (`role="status"`). When `error` is set, it replaces the body with a danger `Alert` holding the message. With no line to show, it renders the package `EmptyState` (small): "No log lines yet." for an empty log, "No line matches “query”" with a Clear search action for a search with no result, and "No log lines match the current filters." for a level or warnings filter with no result. Slot: `empty` (replaces the EmptyState).
+- `log-view-footer.vue` (`LogView.Footer`) — Optional footer region for actions (download, follow live, pagination). Slot: `default`.
 
 ## v-model
 
-| Model                   | Type                     | Default | Emits                 | Notes                                                                                                                    |
-| ----------------------- | ------------------------ | ------- | --------------------- | ------------------------------------------------------------------------------------------------------------------------ |
-| `v-model:search`        | `string`                 | `''`    | `update:search`       | Two-way search query; filters LogViewContent and highlights matches.                                                     |
-| `v-model:warnings-only` | `boolean`                | `false` | `update:warningsOnly` | When true, shows only lines whose `type` is `warning`.                                                                   |
-| `v-model:level`         | `LogViewLineLevel \| ''` | `''`    | `update:level`        | The level the log is filtered to; empty shows every level. A level toggle sets it and pressing the active one clears it. |
+| Model                   | Type                     | Default | Emits                 | Notes                                                                                                                                                                      |
+| ----------------------- | ------------------------ | ------- | --------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `v-model:search`        | `string`                 | `''`    | `update:search`       | Two-way search query; filters LogViewContent and highlights matches.                                                                                                       |
+| `v-model:warnings-only` | `boolean`                | `false` | `update:warningsOnly` | **@deprecated since 6.0 — use `v-model:level` with `'warn'`. Removed in 7.0.** When true, shows only warning lines (`level: 'warn'`, or the deprecated `type: 'warning'`). |
+| `v-model:level`         | `LogViewLineLevel \| ''` | `''`    | `update:level`        | The level the log is filtered to; empty shows every level. A level toggle sets it and pressing the active one clears it.                                                   |
 
 ## States
 
-- Visual states: `default`, `hover` (per log line), `focus-visible`, `disabled`, `loading`
-- `data-disabled` / `data-warnings-only` / `data-level` / `data-loading` / `data-border` on the LogView root
+- Visual states: `default`, `hover` (per log line), `focus-visible`, `disabled`, `loading`, `error`, `empty`
+- `data-disabled` / `data-warnings-only` / `data-level` / `data-loading` / `data-error` / `data-border` on the LogView root
+- `level` is the one severity axis: the warnings filter, the warning count and the level toggles all read `level`, falling back to `warn` for a deprecated `type: 'warning'` line
+- `error` state: LogViewContent renders a danger `Alert` with the message in place of the log body; copy is hidden
+- `empty` state: the package `EmptyState` (see LogViewContent above)
 - `loading` state: LogViewContent renders a centered spinner + `loadingLabel` in place of the log body
 - Log line `data-type` reflects `line.type` and `data-level` reflects `line.level`; `warn` rows take the warning tint, `error` rows the danger tint and danger text
 - Level toggles carry `data-level` and `data-active` (the chosen level); every toggle shows the count of lines at its level in the whole log
@@ -123,6 +128,9 @@ LogView ships flat, individually importable sub-components (each from its own `@
 | `logView.warningCount`      | {count} warning / {count} warnings (plural)             | —                   |
 | `logView.gzip`              | gzip:                                                   | —                   |
 | `logView.empty`             | No log lines match the current filters.                 | `empty` slot        |
+| `logView.noLines`           | No log lines yet.                                       | `empty` slot        |
+| `logView.noMatch`           | No line matches “{query}”.                              | `empty` slot        |
+| `logView.clearSearch`       | Clear search                                            | `empty` slot        |
 | `logView.copy`              | Copy logs                                               | —                   |
 | `logView.copied`            | Copied logs                                             | —                   |
 | `logView.levels`            | Log levels                                              | —                   |
@@ -144,8 +152,6 @@ LogView ships flat, individually importable sub-components (each from its own `@
 ```vue
 <script setup>
   import LogView from '@aziontech/webkit/log-view'
-  import LogViewContent from '@aziontech/webkit/log-view-content'
-  import LogViewHeader from '@aziontech/webkit/log-view-header'
   import { ref } from 'vue'
 
   const lines = [
@@ -174,20 +180,18 @@ LogView ships flat, individually importable sub-components (each from its own `@
       v-model:warnings-only="warningsOnly"
       class="h-full"
     >
-      <LogViewHeader />
-      <LogViewContent />
+      <LogView.Header />
+      <LogView.Content />
     </LogView>
   </div>
 </template>
 ```
 
-### Flush
+### Borderless
 
 ```vue
 <script setup>
   import LogView from '@aziontech/webkit/log-view'
-  import LogViewContent from '@aziontech/webkit/log-view-content'
-  import LogViewHeader from '@aziontech/webkit/log-view-header'
   import { ref } from 'vue'
 
   const lines = [
@@ -221,8 +225,8 @@ LogView ships flat, individually importable sub-components (each from its own `@
         v-model:warnings-only="warningsOnly"
         class="h-full"
       >
-        <LogViewHeader />
-        <LogViewContent />
+        <LogView.Header />
+        <LogView.Content />
       </LogView>
     </div>
   </div>
@@ -234,8 +238,6 @@ LogView ships flat, individually importable sub-components (each from its own `@
 ```vue
 <script setup>
   import LogView from '@aziontech/webkit/log-view'
-  import LogViewContent from '@aziontech/webkit/log-view-content'
-  import LogViewHeader from '@aziontech/webkit/log-view-header'
   import { ref } from 'vue'
 
   const lines = [
@@ -265,8 +267,8 @@ LogView ships flat, individually importable sub-components (each from its own `@
       v-model:warnings-only="warningsOnly"
       class="h-full"
     >
-      <LogViewHeader />
-      <LogViewContent />
+      <LogView.Header />
+      <LogView.Content />
     </LogView>
   </div>
 </template>

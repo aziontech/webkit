@@ -19,7 +19,8 @@
  "avoidWhen": [
   "A single text search over a short list → use `input` bound to `filterProps`.",
   "A few fixed choices always on screen → use `toggle-group` or `chip` filters.",
-  "A structured filter builder with its own panel inside a table toolbar → use `table-filter`."
+  "A structured filter builder with its own panel inside a table toolbar → use `table-filter`.",
+  "Faceted picks from a known set of values per field (status, region, owner), shown as chips → use `filter-menu`. PropertyFilter is for expression search: typed tokens, operators, free text and a query people keep as text."
  ],
  "related": [
   "use-collection` — applies the query; `propertyFilterProps` is the binding.",
@@ -36,13 +37,6 @@
   "A product grammar (`like`, `between`, parentheses) passes `validate` and `suggest`; `submit` then carries `query: null` for text the built-in grammar cannot flatten, and the product parses `text` itself."
  ],
  "props": [
-  {
-   "name": "query",
-   "type": "PropertyFilterQuery",
-   "default": "undefined",
-   "required": "false",
-   "doc": "The tokens and how they combine. Supports v-model:query."
-  },
   {
    "name": "properties",
    "type": "FilteringProperty[]",
@@ -93,13 +87,6 @@
    "doc": "tokens` turns each choice into a token; `query` edits one query string."
   },
   {
-   "name": "text",
-   "type": "string",
-   "default": "undefined",
-   "required": "false",
-   "doc": "The query string in query mode. Supports v-model:text."
-  },
-  {
    "name": "validate",
    "type": "(text: string) => string",
    "default": "undefined",
@@ -112,19 +99,23 @@
    "default": "undefined",
    "required": "false",
    "doc": "Suggestions for the word at the caret in query mode. Replaces the built-in field, operator, value and AND / OR suggestions."
+  },
+  {
+   "name": "query",
+   "type": "PropertyFilterQuery",
+   "default": "—",
+   "required": "false",
+   "doc": "Two-way value (`v-model:query`)."
+  },
+  {
+   "name": "text",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Two-way value (`v-model:text`)."
   }
  ],
  "events": [
-  {
-   "name": "update:query",
-   "payload": "PropertyFilterQuery",
-   "notes": "A token was added or removed, the operation changed, or all cleared. Tokens mode only."
-  },
-  {
-   "name": "update:text",
-   "payload": "string",
-   "notes": "The query string changed (typing, a suggestion, Escape clearing). Query mode only."
-  },
   {
    "name": "submit",
    "payload": "(event: KeyboardEvent, payload: PropertyFilterSubmit)",

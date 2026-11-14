@@ -55,6 +55,21 @@
 - `motion-reduce:transition-none motion-reduce:transform-none` — the toggle indicator belongs to `toggle-group` and the price fade to `card-pricing`, each with its own reduced-motion fallback; this band adds no motion of its own.
 - Touch target ≥40×40 px — the toggle and the buttons are `large`.
 
+## Right-to-left
+
+- Layout: logical utilities and the composed components' own mirroring, so the plan cards fill from the inline start.
+- Icons: action chevrons mirror (owned by `button`).
+- Keyboard: unchanged.
+
+## Internationalization
+
+- No built-in strings: every visible string arrives through props.
+
+## Responsive
+
+- The plan cards follow `card-grid`: stacked on phones, side by side as the grid widens; the billing `toggle-group` stays above them.
+- No horizontal scroll at 320 px.
+
 ## Examples
 
 ### Default

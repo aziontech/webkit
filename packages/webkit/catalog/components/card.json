@@ -2,7 +2,7 @@
  "purpose": "Displays content or metadata in the UI. Lives at `packages/webkit/src/components/content/card/`.",
  "useWhen": [
   "Group related console content into one bordered surface with a title header, a body and an optional footer, such as a settings block, a summary or a form section.",
-  "Host a divided list edge to edge: set `:padded=\"false\"` and put an `Item` list in the `content` slot.",
+  "Host a divided list edge to edge: set `:padded=\"false\"` and put an `Item` list in the body.",
   "A centered single-card screen (sign-up, onboarding, a success page) that needs header, body and footer regions.",
   "A catalog tile for an integration, an extension or a plugin: set `kind=\"integration\"` for the logo, the name, the vendor, a short description, badges, the installed state and one action.",
   "A short row of highlighted integrations above the full catalog (Featured): add `featured` to the integration tile for the centred, raised layout with the badge in the corner."
@@ -23,7 +23,7 @@
   "empty-state` — goes in the `content` slot when the card has no data yet."
  ],
  "bestPractices": [
-  "Put the body in the `content` slot. There is no `default` slot, so children passed without `#content` don't render.",
+  "Put the body in the default slot (or `#content`, its named form).",
   "Use `title` for a plain heading (rendered as an `h2`). Use the `header` slot only when the header needs another layout: it replaces both the title and `header-action`.",
   "header-action` content stays hidden until the header is hovered or focused, so keep it to secondary actions and never make it the only way to reach a control.",
   "Set `:padded=\"false\"` only when the content draws its own inset or needs flush dividers.",

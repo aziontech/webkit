@@ -9,13 +9,17 @@
   "A short titled preview of a longer listing on a marketing page → use `listing-table`.",
   "A feature-by-feature comparison of Azion with a competitor → use `comparison-table`.",
   "Rows of mixed content (media, title, description, actions) that do not share columns → use `item`.",
-  "A grid of selectable cards or options → use `radio-cards`."
+  "A grid of selectable cards or options → use `radio-cards`.",
+  "The same records as a grid of cards → use `cards` (same collection, card layout)."
  ],
  "related": [
   "pagination` — the page strip; a data-driven table with `paginated` renders and wires it in the footer.",
   "listing-table` — marketing section that composes `table` for a linked preview of a list.",
   "empty-state` — the pattern behind the table's default `empty` slot; override the slot for resource-specific copy and actions.",
-  "item` — list rows without a column structure."
+  "item` — list rows without a column structure.",
+  "property-filter` — expression search over a collection (typed tokens, operators, free text); use it above a table when people type queries. `Table.Filter` (builder) is for a few structured conditions on known fields; `Table.Filter kind=\"menu\"` / `filter-menu` is for faceted picks from known values. All three write filters the collection applies; pick one per screen.",
+  "collection-preferences` — the full preferences panel (page size, density, wrap, stripes, visible columns and their order) committed on Confirm. `Table.ColumnSelector` is the quick toolbar toggle that changes visibility immediately; a screen offers one or the other for columns, not both.",
+  "filter-menu` — the drill-in menu behind `Table.Filter kind=\"menu\"`."
  ],
  "bestPractices": [
   "For repeated data, use data-driven mode: pass `data` + `columns` (any non-empty `columns` switches it on) and customize cells with the `cell-<columnId>` / `header-<columnId>` slots instead of composing N rows by hand. Compose `Table.Header` / `Table.Body` / `Table.Row` / `Table.Cell` only for small, static tables.",

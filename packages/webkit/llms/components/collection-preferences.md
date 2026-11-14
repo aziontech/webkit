@@ -19,7 +19,7 @@
 
 ## Don’t
 
-- A single column-visibility toggle inside a table toolbar → use `table-column-selector`.
+- A single column-visibility toggle inside a table toolbar → use `table-column-selector` (it applies each switch at once; this panel drafts every preference and commits on Confirm). Offer one of the two for columns on a screen, not both; both edit the same `{ id, visible }` column shape that `useCollection` saves.
 - Settings of the resource itself (not of how the list shows it) → use a form page or `dialog`.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
@@ -34,7 +34,6 @@
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `preferences` | `CollectionPreferencesValue` | `{}` | false | The saved preferences. Supports v-model:preferences; changes apply on Confirm. |
 | `columns` | `CollectionPreferencesColumn[]` | `[]` | false | Columns to show, hide and order. Empty hides the columns section. |
 | `pageSizeOptions` | `number[]` | `[]` | false | Page sizes offered. Empty hides the page size section. |
 | `sections` | `CollectionPreferencesSection[]` | `['page-size', 'columns', 'wrap-lines', 'striped', 'density']` | false | Sections the panel shows, in this order. |
@@ -42,12 +41,12 @@
 | `title` | `string` | `''` | false | Panel title and trigger label. Empty uses the locale catalog. |
 | `disabled` | `boolean` | `false` | false | Disables the trigger. |
 | `open` | `boolean` | `false` | false | Two-way value (`v-model:open`). |
+| `preferences` | `CollectionPreferencesValue` | `—` | false | Two-way value (`v-model:preferences`). |
 
 ## Events
 
 | Event | Payload | Notes |
 | --- | --- | --- |
-| `update:preferences` | `CollectionPreferencesValue` | Confirm was activated. |
 | `confirm` | `(event: MouseEvent, value: CollectionPreferencesValue)` | Same value, for a handler that is not a model. |
 | `cancel` | `(event: MouseEvent)` | Cancel was activated; the draft is discarded. |
 
@@ -60,13 +59,13 @@
 ## v-model
 
 - **`v-model:open`** — `boolean`, default `false`. Whether the panel is open; the trigger, Confirm, Cancel, the close button and `Esc` update it.
-- **`v-model:preferences`** — `CollectionPreferencesValue`. Emitted on Confirm with the sections shown.
+- **`v-model:preferences`** — `CollectionPreferencesValue`, default `{}`, via `defineModel('preferences')`. Set on Confirm with the sections shown (`update:preferences`). Unbound, the panel keeps the confirmed values itself, so it reopens on them.
 
 ## States
 
 - Visual states: `closed`, `open`; the trigger reflects `disabled`
 - `data-state` on the root: `open` | `closed`
-- Move up is disabled on the first column, move down on the last; a locked column's switch is disabled and on
+- Move up is disabled on the first column, move down on the last; a locked column's switch is disabled and on, and its label carries `data-locked` (muted, default cursor)
 
 ## Accessibility
 
@@ -85,19 +84,19 @@
 
 ## Internationalization
 
-| Key                                          | English source                               | Override prop |
-| -------------------------------------------- | -------------------------------------------- | ------------- |
-| `collectionPreferences.title`                | Preferences                                  | `title`       |
-| `collectionPreferences.confirm` / `cancel`   | Confirm / Cancel                             | —             |
-| `collectionPreferences.pageSize`             | Page size                                    | —             |
-| `collectionPreferences.pageSizeOption`       | {count} item / {count} items (plural)        | —             |
-| `collectionPreferences.columns`              | Columns                                      | —             |
-| `collectionPreferences.columnsDescription`   | Choose which columns show, and their order.  | —             |
-| `collectionPreferences.alwaysShown`          | Always shown                                 | —             |
-| `collectionPreferences.moveUp` / `moveDown`  | Move {column} up / Move {column} down        | —             |
-| `collectionPreferences.wrapLines` (+ `Description`) | Wrap lines / Show the whole text of every cell. | —     |
-| `collectionPreferences.striped` (+ `Description`)   | Striped rows / Shade every other row.    | —             |
-| `collectionPreferences.density`, `comfortable`, `compact` | Density, Comfortable, Compact       | —             |
+| Key                                                       | English source                                  | Override prop |
+| --------------------------------------------------------- | ----------------------------------------------- | ------------- |
+| `collectionPreferences.title`                             | Preferences                                     | `title`       |
+| `collectionPreferences.confirm` / `cancel`                | Confirm / Cancel                                | —             |
+| `collectionPreferences.pageSize`                          | Page size                                       | —             |
+| `collectionPreferences.pageSizeOption`                    | {count} item / {count} items (plural)           | —             |
+| `collectionPreferences.columns`                           | Columns                                         | —             |
+| `collectionPreferences.columnsDescription`                | Choose which columns show, and their order.     | —             |
+| `collectionPreferences.alwaysShown`                       | Always shown                                    | —             |
+| `collectionPreferences.moveUp` / `moveDown`               | Move {column} up / Move {column} down           | —             |
+| `collectionPreferences.wrapLines` (+ `Description`)       | Wrap lines / Show the whole text of every cell. | —             |
+| `collectionPreferences.striped` (+ `Description`)         | Striped rows / Shade every other row.           | —             |
+| `collectionPreferences.density`, `comfortable`, `compact` | Density, Comfortable, Compact                   | —             |
 
 - Formatting: page sizes go through the plural rules and number format of the active locale.
 
@@ -181,5 +180,26 @@
       />
     </template>
   </CollectionPreferences>
+</template>
+```
+
+### Disabled
+
+```vue
+<script setup>
+  import CollectionPreferences from '@aziontech/webkit/collection-preferences'
+
+  const columns = [
+    { id: 'name', label: 'Name', locked: true },
+    { id: 'status', label: 'Status' }
+  ]
+</script>
+
+<template>
+  <CollectionPreferences
+    :columns="columns"
+    :page-size-options="[10, 25, 50]"
+    disabled
+  />
 </template>
 ```

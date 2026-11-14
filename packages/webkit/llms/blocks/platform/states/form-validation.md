@@ -58,7 +58,7 @@ Description. Optionality is said in the description (`Optional. Up to 200 charac
 
 ### G. Actions — `Button` (required)
 
-`Cancel` (`kind="outlined"`, resets the form) then `Create` (`kind="primary"`, `type="submit"`) at the end of the column. Create shows `loading` while submitting and is `disabled` while loading; Cancel is disabled while busy. Below `md` both stack at full width.
+`Cancel` (`kind="outlined"`, a link back to the Variables list; it never clears the form in place) then `Create` (`kind="primary"`, `type="submit"`) at the end of the column. Create shows `loading` while submitting and is `disabled` while loading; Cancel is disabled while busy. Below `md` both stack at full width.
 
 ### H. Section notice — `Alert` (conflict and rejection only)
 
@@ -90,7 +90,7 @@ A toast shows the result of a save that no field owns: `toast.error` with **Retr
 - **Page heading:** `Create` plus the entity, matching the page it lists: `Create Variable`. Lead: one sentence on what it is for: `Add a key-value pair your services read at runtime.`
 - **Field labels:** one to three words, no colon, no parentheses: `Key`, `Value`, `Environment`, `Description`.
 - **Field descriptions:** a constraint or purpose, one sentence with a period: `Uppercase letters, digits and underscores, for example API_TOKEN.`, `Optional. Up to 200 characters.`
-- **Required message:** names the field: `Key is required.`; for a select, the action: `Select an environment.`
+- **Required message:** the one sentence every block uses: `This field is required.`; for a select, the action: `Select an environment.`
 - **Invalid message:** what is wrong and the rule: `Use uppercase letters, digits and underscores, starting with a letter.`
 - **Conflict message:** the fact, on the field: `A variable named API_TOKEN already exists.` The section `Alert` adds what happened and what to do: `A variable named API_TOKEN already exists in this account, so it wasn't created. Your entries are kept: change the key and press Create again.`
 - **Error toast:** what did not happen, then what was kept: title `The variable wasn't created.`, description `The request didn't reach the server. Your entries are kept.`, action `Retry`.
@@ -182,13 +182,13 @@ Each variant is the same screen in another state: `get_pattern("platform/states/
 
   const errors = computed<Record<FieldName, string>>(() => ({
     key: !form.key
-      ? 'Key is required.'
+      ? 'This field is required.'
       : !KEY_PATTERN.test(form.key)
         ? 'Use uppercase letters, digits and underscores, starting with a letter.'
         : form.key === takenKey.value
           ? `A variable named ${form.key} already exists.`
           : '',
-    value: form.value ? '' : 'Value is required.',
+    value: form.value ? '' : 'This field is required.',
     environment: form.environment ? '' : 'Select an environment.',
     description:
       form.description.length > DESCRIPTION_LIMIT
@@ -376,7 +376,7 @@ Each variant is the same screen in another state: `get_pattern("platform/states/
             kind="outlined"
             size="medium"
             :disabled="busy"
-            @click="reset"
+            href="/variables"
           />
         </div>
         <div class="w-full md:w-fit">

@@ -28,7 +28,8 @@
 
 ## Related
 
-- [field](field.md) — a horizontal `Field` puts the radio beside its label and description (the default inside forms); a `Field.Label` wrapping it is a card-style option with a selected border and background. Group the options in `Field.Set` + `Field.Legend`.
+- radio-group` (not shipped yet): one RadioButton per option still binds the same `v-model` and `name` by hand; RadioCards is the shipped group.
+- [field](field.md) — inside a `Field`, the input takes the field's id, description, `invalid` (`aria-invalid`), `required` and `disabled`. A horizontal `Field` puts the radio beside its label and description (the default inside forms); a `Field.Label` wrapping it is a card-style option with a selected border and background. Group the options in `Field.Set` + `Field.Legend`.
 - [radio-cards](radio-cards.md) — horizontal grid of selectable cards with its own model.
 - [checkbox](checkbox.md) — the multi-pick counterpart.
 - [select](select.md) — single choice from a dropdown when the options do not fit inline.
@@ -37,10 +38,10 @@
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `value` | `string` | `undefined` | false | Option value for this radio instance. |
-| `name` | `string` | `undefined` | false | HTML name shared across a mutually exclusive group. |
+| `value` | `string` | `''` | false | Option value for this radio instance. |
+| `name` | `string` | `''` | false | HTML name shared across a mutually exclusive group; empty renders no `name`. |
 | `disabled` | `boolean` | `false` | false | Disables interaction and applies disabled tokens. |
-| `inputId` | `string` | `undefined` | false | id for the native input; links label to control. |
+| `inputId` | `string` | `''` | false | id for the native input; links label to control. Empty uses `id`, then the enclosing Field's id. |
 | `modelValue` | `string \| undefined` | `undefined` | false | Two-way value (`v-model`). |
 
 ## v-model
@@ -54,6 +55,7 @@
 - Visual states: `default`, `hover`, `focus-visible`, `active`, `disabled`
 - `data-disabled` mirrors the `disabled` prop
 - `data-checked` mirrors selected state
+- Consumer `class` lands on the drawn circle as a plain class (no tailwind-merge): the utilities are one flat class on the root, so the entry stays near the checkbox budget.
 - Touch: the native input that receives the click extends past the 20 px circle to 24 × 24 px, and to 44 × 44 px on a coarse pointer; the drawn circle does not change.
 
 ## Accessibility

@@ -25,7 +25,7 @@
  ],
  "avoidWhen": [
   "Horizontal top-of-page navigation with hover-opened panels → use `navigation-menu` instead.",
-  "A menu that floats over the page from a trigger → use `dropdown` (rows + selection) or `popover` (arbitrary content) instead.",
+  "A menu that floats over the page from a trigger → use `dropdown-menu` (rows + selection) or `popover` (arbitrary content) instead. `Menu` is a sidebar navigation tree (a `navigation` landmark of list rows, what shadcn calls `SidebarMenu`), not a `role=\"menu\"` widget such as Radix `Menu` / `DropdownMenu`.",
   "A searchable flat command palette → use `command` instead.",
   "A single collapsible content region that is not navigation → use `accordion` instead.",
   "Mutually exclusive in-page view switching → use `tabs` (or `toggle-group` for a compact control) instead.",
@@ -111,16 +111,6 @@
    "name": "navigate",
    "payload": "(event: MouseEvent, node: MenuNode)",
    "notes": "A leaf row — or the **label** of a row that owns children, of either kind, since such a row is a destination as well as a container — was activated in data-driven mode; `node` is the activated tree node. A row's **arrow** does not emit it: revealing children is a move inside the menu, not a navigation. A node with nothing to point at gives the consumer nothing to route to, which is the consumer's own check."
-  },
-  {
-   "name": "update:path",
-   "payload": "string[]",
-   "notes": "v-model:path` — the drill stack as ancestor node ids, outermost first. Empty at the root level. **Persist it when the host remounts** (and always when a drill row navigates, which remounts the shell in most routers) or the level closes on the very navigation that opened it. A stack supplied this way is restored **with its label, its trigger, and its entrance**: every drill sub announces the first two to the root when its trigger mounts (not only when pushed), so the restored level still names itself in the a11y tree, `Menu.Back` can still name it as a destination from a deeper level, and popping still returns focus to the row that owns it; and the level _arrives_ rather than simply being there — see the restored-level row in Motion."
-  },
-  {
-   "name": "update:expanded",
-   "payload": "string[]",
-   "notes": "v-model:expanded` — ids of the inline subs currently open. Persist it when the host remounts, or expansion resets and one sub appearing to close another."
   }
  ],
  "slots": [

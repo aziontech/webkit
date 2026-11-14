@@ -1,6 +1,6 @@
 # SiteHeader (`headers/site-header`)
 
-> The marketing bar: a sticky `GlobalHeader` in its `site` placement. The surface runs to the window edges while the regions are capped at the bar’s own measure and centred, so the bar answers to the framed page under it. Start: the navigation trigger below `xl` and the brand. Middle: the navigation, from `xl`. End: Contact from `xl`, then Login and Start for free, with search last. The mega-menus and the navigation sheet are documented on Templates › Marketing › Shell › SiteNav. Built from `GlobalHeader`, `NavigationMenu`, `IconButton`, `Button` and `Brand`.
+> The marketing bar: a sticky `GlobalHeader` in its `site` placement. The surface runs to the window edges while the regions are capped at the bar’s own measure and centred, so the bar answers to the framed page under it. Start: the navigation trigger below `xl` and the brand. Middle: the navigation, from `xl`. End: search first, then Contact from `xl`, Sign in and Start for free. The mega-menus and the navigation sheet are documented on Templates › Marketing › Shell › SiteNav. Built from `GlobalHeader`, `NavigationMenu`, `IconButton`, `Button` and `Brand`.
 
 - Surface: marketing
 - Source: `blocks/headers/site-header/site-header.vue` in `@aziontech/webkit`
@@ -12,11 +12,11 @@
 
 site header; marketing header; website header; landing page header; marketing navbar; site navigation bar; mega menu header; cabeçalho do site; menu do site; cabeçalho de marketing
 
-The sticky top bar of the marketing site. A visitor is deciding whether to try Azion, so the bar keeps the decision one click away (Start for free, Login) while letting them explore (the product navigation and its mega-menus, Contact, search). Its surface runs to the window edges while its regions are capped at the site measure, so it lines up with the framed page under it.
+The sticky top bar of the marketing site. A visitor is deciding whether to try Azion, so the bar keeps the decision one click away (Start for free, Sign in) while letting them explore (the product navigation and its mega-menus, Contact, search). Its surface runs to the window edges while its regions are capped at the site measure, so it lines up with the framed page under it.
 
 ## When to use
 
-- On every marketing page, inside `shells/website`.
+- An app that does not use `SiteLayout` and needs the marketing bar on its own. Inside `shells/website`, `SiteLayout` already renders this bar; never add it to a page there.
 
 ## When not to use
 
@@ -42,11 +42,11 @@ Five top-level links (`Solutions`, `Products`, `Developer`, `Resources`, `Pricin
 
 ### E. Actions — `Button` (required)
 
-Contact (`transparent`, from `xl` only), Login (`secondary`) and Start for free (`primary`). One primary in the bar.
+Contact (`transparent`, from `xl` only), Sign in (`secondary`) and Start for free (`primary`). One primary in the bar.
 
 ### F. Search — `SearchTrigger` (required)
 
-The header search, last in the end cluster as on azion.com: `collapsible` with no `@container` around the bar, so it stays the magnifier at every width. It still announces and binds ⌘K / Ctrl K and emits `open`, which opens the `Command` palette. Never a bare magnifier `IconButton` (rule `webkit-header-search`).
+The header search, first in the end cluster as in every channel (docs, site, console): `collapsible` with no `@container` around the bar, so it stays the magnifier at every width. It still announces and binds ⌘K / Ctrl K and emits `open`, which opens the `Command` palette. Never a bare magnifier `IconButton` (rule `webkit-header-search`).
 
 ### G. Search palette — `Command` (required)
 
@@ -55,7 +55,7 @@ The ⌘K palette the header search opens: `Command.Input`, one group of pages, a
 ## Do
 
 - Keep Start for free as the only primary action, and visible at every width.
-- Let Contact leave first when space runs out; Login and Start for free stay.
+- Let Contact leave first when space runs out; Sign in and Start for free stay.
 
 ## Don't
 
@@ -65,13 +65,13 @@ The ⌘K palette the header search opens: `Command.Input`, one group of pages, a
 ## Copy
 
 - **Navigation:** nouns, sentence case: `Solutions`, `Pricing`.
-- **Actions:** short verbs: `Contact`, `Login`, `Start for free`. Keep the same capitalization on every page and in the hero.
+- **Actions:** short verbs: `Contact`, `Sign in`, `Start for free` (`Sign in` is the word the console and `platform/auth` use). Keep the same capitalization on every page and in the hero.
 
 ## Accessibility
 
 - Sticky bar: make sure in-page anchors scroll with an offset so the target is not hidden under it.
 - `NavigationMenu` triggers are keyboard operable and the popup closes on Escape; the mobile trigger has `aria-label="Open navigation"`.
-- At 320 px only the trigger, brand, Login, Start for free and search remain, without horizontal scroll.
+- At 320 px only the trigger, brand, search, Sign in and Start for free remain, without horizontal scroll.
 
 ## States
 
@@ -171,6 +171,10 @@ Each variant is the same screen in another state: `get_pattern("headers/site-hea
         </GlobalHeader.Middle>
 
         <GlobalHeader.Right>
+          <SearchTrigger
+            collapsible
+            @open="searchOpen = true"
+          />
           <div class="hidden xl:flex">
             <Button
               label="Contact"
@@ -180,7 +184,7 @@ Each variant is the same screen in another state: `get_pattern("headers/site-hea
             />
           </div>
           <Button
-            label="Login"
+            label="Sign in"
             kind="secondary"
             size="medium"
             href="#"
@@ -191,10 +195,6 @@ Each variant is the same screen in another state: `get_pattern("headers/site-hea
             size="medium"
             class="shrink-0"
             href="#"
-          />
-          <SearchTrigger
-            collapsible
-            @open="searchOpen = true"
           />
         </GlobalHeader.Right>
       </GlobalHeader>

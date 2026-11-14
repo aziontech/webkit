@@ -50,7 +50,7 @@
   },
   {
    "name": "items",
-   "type": "LogoItem[]",
+   "type": "LogoWallItem[]",
    "default": "[]",
    "required": "false",
    "doc": "The marks rendered in the grid, in order; each item is `{ src, alt, href?, shape? }` where `src` is the mark's URL, `alt` names the company, `href` links the cell to that customer's story, and `shape` sets a near-square mark taller than a wordmark."
@@ -73,7 +73,7 @@
  "events": [
   {
    "name": "item-click",
-   "payload": "(event: MouseEvent, item: LogoItem)",
+   "payload": "(event: MouseEvent, item: LogoWallItem)",
    "notes": "Fired when a linked cell is activated; `item` is the matched `items` entry. The anchor still navigates unless the handler calls `event.preventDefault()`, which is how a client-side router takes over."
   }
  ],
@@ -85,7 +85,7 @@
   },
   {
    "name": "mark",
-   "scope": "{ item: LogoItem; index: number }",
+   "scope": "{ item: LogoWallItem; index: number }",
    "notes": "One cell's mark, replacing the image built from the item — for a mark that owns its own theming (a per-theme asset swap, a silhouette filter). The slotted content carries its own alternative text and sits in a 28px-tall box; on a linked cell it lifts with the built image's motion."
   }
  ],

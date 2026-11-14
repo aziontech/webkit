@@ -15,8 +15,8 @@
 
 - Always set `href`; the default `'#'` is a placeholder and the control always renders as an anchor.
 - Replace the `'Learn more'` default `label` with text that says where the link goes.
-- Keep the default `pi pi-external-link` icon for off-site targets with `target="_blank"` (`rel="noopener noreferrer"` is added for you); set `showIcon` to false otherwise.
-- Only `large` and `medium` sizes exist.
+- Keep the default `pi pi-external-link` icon for off-site targets with `target="_blank"` (`rel="noopener noreferrer"` is added for you); set `icon` to an empty string otherwise (`showIcon` is deprecated).
+- Only `medium` and `large` sizes exist.
 
 ## Don’t
 
@@ -28,17 +28,18 @@
 ## Related
 
 - [link](link.md) — same anatomy (label, trailing icon, ghost hover) in link color, with a `small` size; the default for standalone links.
-- [button](button.md) — full action control with kinds, loading and a button element.
+- [button](button.md) — full action control with kinds, loading and a button element; `kind="link"` with a trailing icon covers the same text action.
+- Overlap: MiniButton is always an anchor with a trailing icon, the anatomy of `link`. Prefer `link` for new code; MiniButton stays for the marketing surfaces that use its body-colored label.
 
 ## Props
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
 | `label` | `string` | `''` | false | Visible label rendered inside the control. Empty uses the locale catalog (`Learn more`). |
-| `size` | `'large' \| 'medium'` | `'large'` | false | Size token; affects height, gap, and typography. |
+| `size` | `'medium' \| 'large'` | `'large'` | false | Size token; affects height, gap, and typography. |
 | `disabled` | `boolean` | `false` | false | Disables interaction and applies disabled tokens. |
-| `showIcon` | `boolean` | `true` | false | When true, renders the trailing icon. |
-| `icon` | `string` | `'pi pi-external-link'` | false | PrimeIcons class for the trailing icon. |
+| `showIcon` | `boolean` | `true` | false | @deprecated since 6.0 — set icon to an empty string. Removed in 7.0.` False hides the icon. |
+| `icon` | `string` | `'pi pi-external-link'` | false | PrimeIcons class for the trailing icon. Empty renders no icon. |
 | `href` | `string` | `'#'` | false | Destination URL for the anchor. |
 | `target` | `'_blank' \| '_self'` | `'_self'` | false | Link target when navigating. |
 
@@ -57,6 +58,7 @@
 - Visual states: `default`, `hover`, `focus-visible`, `active`, `disabled`
 - `data-disabled` mirrors the `disabled` prop
 - `data-size` mirrors the `size` prop
+- Consumer attributes (`id`, `aria-*`, `class`) land on the anchor (`inheritAttrs: false` + `v-bind="$attrs"`); the utilities are a flat class on the root, no class composition in script.
 
 ## Accessibility
 
@@ -74,6 +76,17 @@
 - Keyboard: no horizontal arrow-key logic.
 - User data: none.
 
+## Internationalization
+
+| Key               | English source | Override prop |
+| ----------------- | -------------- | ------------- |
+| `miniButton.label` | `Learn more`   | `label`       |
+
+## Responsive
+
+- The control never wraps (`whitespace-nowrap`); keep labels short in narrow cards.
+- Touch: `large` is 40 px high; `medium` is for dense layouts with a pointer.
+
 ## Examples
 
 ### Default
@@ -87,7 +100,7 @@
   <MiniButton
     size="large"
     label="Learn more"
-    href="#"
+    href="https://example.com/docs"
   />
 </template>
 ```
@@ -104,13 +117,29 @@
     <MiniButton
       size="medium"
       label="Learn more"
-      href="#"
+      href="https://example.com/docs"
     />
     <MiniButton
       size="large"
       label="Learn more"
-      href="#"
+      href="https://example.com/docs"
     />
   </div>
+</template>
+```
+
+### Disabled
+
+```vue
+<script setup>
+  import MiniButton from '@aziontech/webkit/mini-button'
+</script>
+
+<template>
+  <MiniButton
+    label="Read the docs"
+    href="https://example.com/docs"
+    disabled
+  />
 </template>
 ```

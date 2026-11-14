@@ -38,7 +38,14 @@
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `kind` | `'floating' \| 'docked' \| 'plain' \| 'fade' \| 'centered'` | `'floating'` | false | How the bar sits at the bottom of its scroll region. |
+| `kind` | `'floating' \| 'docked' \| 'plain' \| 'fade' \| 'centered'` | `'floating'` | false | How the bar sits at the bottom of its scroll region. See the kind table below. |
+| `kind` | `Placement` | `Surface` | Use for |  |
+| `----------` | `----------------------------------------------------------------` | `-----------------------------------------------` | ------------------------------------------------ |  |
+| `floating` | `overlays the bottom of the scroll region; the content does not move` | `canvas band with a top border` | the dirty state of a settings page |  |
+| `docked` | `its own row at the bottom of the region; the content ends above it` | `canvas band with a top border` | the dirty state when nothing may be covered |  |
+| `plain` | `the last row of a form column, always shown` | `surface band with a muted top border` | a form saved as one unit |  |
+| `fade` | `the last row of a wizard step, always shown` | `a gradient from transparent to the canvas, no border` | a full-page wizard step (Back, Next) |  |
+| `centered` | `a card centred at the bottom of the region, over the content` | `raised card with a border and a large shadow` | a create page (Cancel, Create) |  |
 
 ## Slots
 
@@ -59,7 +66,7 @@
 
 - Visible focus: owned by the action buttons.
 - Keyboard map: `Tab` reaches Discard, then Save, in reading order (the column is reversed visually on a phone so Save sits on top).
-- ARIA: the root is a `footer`; the status glyph is `aria-hidden`.
+- ARIA: the root is a `footer`; the status glyph is `aria-hidden`. The message region (`__message`, the `leading` / default slot) is a polite live region (`role="status"`), so a bar that appears when the form turns dirty announces its status sentence (WCAG 4.1.3 Status Messages) without moving focus.
 - Contrast ≥4.5:1 for the status sentence.
 
 ## Right-to-left

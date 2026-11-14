@@ -1,11 +1,11 @@
 # ExecutiveSummaryDashboard (`platform/dashboard/executive-summary-dashboard`)
 
-> An executive summary dashboard: one page a lead reads to see how the quarter went. A page heading with the quarter Select and Export sits over a scorecard row of six StatTiles (revenue, monthly active users, net revenue retention, NPS, uptime and cost per request), each with its delta against last quarter and a Hint that defines it. Below, a trend grid of small multiples, one ChartCard per metric with a compact Chart (Area or Line) over the last 12 months and a Tag with the twelve-month change, shares one active index so hovering a month moves the crosshair on every card. A side column holds the goals, a Card of goal bars where each goal shows its label, a status Tag (On track, At risk, Off track), a Progress of current against target and both figures, and the commentary, a Card of Item rows with the author Avatar, role, date and the note itself. Its page-level parts are `PageHeader`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
+> An executive summary dashboard: one page a lead reads to see how the quarter went. A page heading with the quarter Select and Export sits over a scorecard row of six StatTiles (revenue, monthly active users, net revenue retention, NPS, uptime and cost per request), each with its delta against last quarter and a Hint that defines it. Below, a trend grid of small multiples, one ChartCard per metric with a compact Chart (Area or Line) over the last 12 months and a Tag with the twelve-month change, shares one active index so hovering a month moves the crosshair on every card. A side column holds the goals, a Card of goal bars where each goal shows its label, a status Tag (On track, At risk, Off track), a Progress of current against target and both figures, and the commentary, a Card of Item rows with the author Avatar, role, date and the note itself. Built from `Avatar`, `Button`, `Card`, `Chart`, `ChartCard`, `EmptyState`, `Hint`, `Item`, `PageHeader`, `Progress`, `Select`, `Skeleton`, `StatTile`, `Tag` and `Alert`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
 
 - Surface: product
 - Source: `blocks/platform/dashboard/executive-summary-dashboard/executive-summary-dashboard.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/dashboard/executive-summary-dashboard")`
-- Components: [Alert](../../../components/alert.md), [Avatar](../../../components/avatar.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [Chart](../../../components/chart.md), [ChartCard](../../../components/chart-card.md), [EmptyState](../../../components/empty-state.md), [Hint](../../../components/hint.md), [Item](../../../components/item.md), [PageHeader](../../../components/page-header.md), [Progress](../../../components/progress.md), [Select](../../../components/select.md), [Skeleton](../../../components/skeleton.md), [StatTile](../../../components/stat-tile.md), [Tag](../../../components/tag.md)
+- Components: [Alert](../../../components/alert.md), [Avatar](../../../components/avatar.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [Chart](../../../components/chart.md), [ChartCard](../../../components/chart-card.md), [EmptyState](../../../components/empty-state.md), [Hint](../../../components/hint.md), [Item](../../../components/item.md), [PageHeader](../../../components/page-header.md), [Progress](../../../components/progress.md), [Select](../../../components/select.md), [Skeleton](../../../components/skeleton.md), [StatTile](../../../components/stat-tile.md), [Tag](../../../components/tag.md), [Toast](../../../components/toast.md), `utils/csv`
 - Skills: `webkit-data-viz`, `webkit-tables`, `webkit-ui-states`
 
 ## Asked as
@@ -44,7 +44,7 @@ The reporting period, labelled `Quarter`. It scopes every region, including goal
 
 ### C. Export — `Button` (optional)
 
-`Export` the summary for sharing outside the product.
+`Export` downloads the scorecard and the goals of the chosen quarter as CSV (`executive-summary-q3-2026.csv`) for sharing outside the product, and confirms with a success toast naming the file (an error toast when it fails). Disabled while loading, and when the quarter failed or has no data.
 
 ### D. Scorecard — `StatTile` (required)
 
@@ -168,6 +168,8 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
   import Skeleton from '@aziontech/webkit/skeleton'
   import StatTile from '@aziontech/webkit/stat-tile'
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
+  import { toast } from '@aziontech/webkit/toast'
+  import { type CsvColumn, downloadCsv, toCsv } from '@aziontech/webkit/utils/csv'
   import { ref } from 'vue'
 
   type MetricFormat = 'currency' | 'count' | 'percentage' | 'uptime' | 'score' | 'cost'
@@ -548,6 +550,48 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
     score: (value) => value.toFixed(0),
     cost: (value) => `${value.toFixed(4)}`
   }
+  type CardId = 'executive-summary'
+
+  interface CsvReport {
+    columns: CsvColumn[]
+    rows: () => object[]
+  }
+
+  const reports: Record<CardId, CsvReport> = {
+    'executive-summary': {
+      columns: [
+        { id: 'section', header: 'Section' },
+        { id: 'metric', header: 'Metric' },
+        { id: 'value', header: 'Value' },
+        { id: 'detail', header: 'Change or target' }
+      ],
+      rows: () => [
+        ...figures.map((figure) => ({
+          section: 'Scorecard',
+          metric: figure.label,
+          value: figure.value === null ? '' : formatters[figure.format](figure.value),
+          detail: figure.delta === null ? '' : `${figure.delta}% ${comparison}`
+        })),
+        ...goals.map((goal) => ({
+          section: 'Goals',
+          metric: goal.label,
+          value: formatters[goal.format](goal.current),
+          detail: `Target ${formatters[goal.format](goal.target)}, ${goal.status.label}`
+        }))
+      ]
+    }
+  }
+
+  const exportCsv = (id: CardId) => {
+    const filename = `${id}-${quarter.value.toLowerCase().replaceAll(' ', '-')}.csv`
+    try {
+      const report = reports[id]
+      downloadCsv(filename, toCsv({ columns: report.columns, rows: report.rows() }))
+      toast.success('CSV exported.', { description: filename })
+    } catch {
+      toast.error('The CSV could not be exported.', { description: 'Try again in a moment.' })
+    }
+  }
 </script>
 
 <template>
@@ -580,6 +624,8 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
             kind="outlined"
             size="medium"
             icon="pi pi-download"
+            :disabled="loading"
+            @click="exportCsv('executive-summary')"
           />
         </template>
       </PageHeader>

@@ -41,8 +41,10 @@
 | `description` | `string` | `''` | false | Sentence under the headline. |
 | `primaryAction` | `HeroBandAction` | `undefined` | false | First button under the headline; `{ label, href, trailing?, target? }`. Shown only with a label and a link. |
 | `secondaryAction` | `HeroBandAction` | `undefined` | false | Second, outlined button beside the first; `{ label, href, trailing?, target? }`. Shown only with a label and a link. |
-| `carouselLabel` | `string` | `''` | false | Overline above the client strip; empty uses the locale catalog (`Proven on mission-critical workloads`). |
-| `carouselMarks` | `string[]` | `[]` | false | Registry names of the client marks on the band floor, in order; the strip renders only when it has marks. |
+| `tickerLabel` | `string` | `''` | false | Overline above the client ticker; empty uses the locale catalog (`Proven on mission-critical workloads`). |
+| `carouselLabel` | `string` | `''` | false | @deprecated since 6.0 — use `tickerLabel`. Removed in 7.0. Read only when `tickerLabel` is empty. |
+| `tickerMarks` | `string[]` | `[]` | false | Registry names of the client marks on the band floor, in order; the ticker renders only when it has marks. |
+| `carouselMarks` | `string[]` | `[]` | false | @deprecated since 6.0 — use `tickerMarks`. Removed in 7.0. Read only when `tickerMarks` is empty. |
 | `illustration` | `string` | `''` | false | Registry name of the illustration set beside the copy in the `copy-beside-art` layout. |
 | `illustrationAriaLabel` | `string` | `''` | false | Accessible description of the illustration. |
 | `image` | `HeroBandImage` | `undefined` | false | Image set beside the copy in the `copy-beside-art` layout when no `illustration` is given; `{ src, alt, width, height }`. A portrait image (taller than wide) is drawn at half width, centered, below `md`. |
@@ -70,7 +72,7 @@
 - `data-kind` mirrors the `kind` prop and drives the hero's height, width, backdrop and the copy alignment
 - `data-title-measure="narrow"` on the root when the headline is set on the narrow measure (`titleLength: 'short'` in the `centered`, `title-band` and `centered-band` layouts); the headline then caps at `--container-lg` while the description keeps the column
 - Empty: when `title` is empty the band renders nothing but its root
-- The client strip renders only when `carouselMarks` has marks; each action renders only with a label and a link; the art renders only in the `copy-beside-art` layout with `illustration` or `image` set (`illustration` wins when both are given)
+- The client strip renders only when `tickerMarks` has marks; each action renders only with a label and a link; the art renders only in the `copy-beside-art` layout with `illustration` or `image` set (`illustration` wins when both are given)
 - `copy-beside-art` art bounds: a registered illustration whose drawn area is known (the `azion-to-*` comparisons and the solution illustrations) takes a width, a bleed past the column's end edge and a top and bottom trim computed from where it is drawn on its canvas, set as `--hero-art-width`, `--hero-art-bleed`, `--hero-art-trim-top` and `--hero-art-trim-bottom` on the art box from `md` up; any other illustration keeps the default bounds (161.45 % wide, 35.73 % bleed, no trim); an `image` fills the media column. Below `md` the art takes the column width
 - `data-orientation="portrait"` on an `image` taller than it is wide
 
@@ -92,9 +94,9 @@
 
 ## Internationalization
 
-| Key                      | English source                       | Override prop   |
-| ------------------------ | ------------------------------------ | --------------- |
-| `heroBand.carouselLabel` | Proven on mission-critical workloads | `carouselLabel` |
+| Key                      | English source                       | Override prop |
+| ------------------------ | ------------------------------------ | ------------- |
+| `heroBand.carouselLabel` | Proven on mission-critical workloads | `tickerLabel` |
 
 - Formatting: none; every other text is a prop from the page JSON.
 
@@ -148,8 +150,8 @@
       description="Run code, AI, data, and security on 100+ data centers worldwide."
       :primary-action="{ label: 'Start for free', href: '/signup' }"
       :secondary-action="{ label: 'Talk to a specialist', href: '/contact', trailing: true }"
-      carousel-label="Trusted by teams running critical workloads"
-      :carousel-marks="['global-fashion-group', 'herospark', 'itau', 'nzn', 'netshoes']"
+      ticker-label="Trusted by teams running critical workloads"
+      :ticker-marks="['global-fashion-group', 'herospark', 'itau', 'nzn', 'netshoes']"
     />
     <HeroBand
       kind="title-band"
@@ -167,8 +169,8 @@
       description="Run AI inference close to users on Azion’s distributed infrastructure."
       :primary-action="{ label: 'Start for free', href: '/signup' }"
       :secondary-action="{ label: 'Talk to a specialist', href: '/contact' }"
-      carousel-label="Trusted by teams running critical workloads"
-      :carousel-marks="['global-fashion-group', 'herospark', 'itau', 'nzn', 'netshoes']"
+      ticker-label="Trusted by teams running critical workloads"
+      :ticker-marks="['global-fashion-group', 'herospark', 'itau', 'nzn', 'netshoes']"
     />
     <HeroBand
       kind="copy-beside-art"
@@ -178,8 +180,8 @@
       :primary-action="{ label: 'Talk to a specialist', href: '/contact', trailing: true }"
       illustration="global-network"
       illustration-aria-label="A global network of Azion data centers"
-      carousel-label="Trusted by teams running critical workloads"
-      :carousel-marks="['agibank', 'radware', 'america-movil', 'gpa', 'fourbank']"
+      ticker-label="Trusted by teams running critical workloads"
+      :ticker-marks="['agibank', 'radware', 'america-movil', 'gpa', 'fourbank']"
     />
     <HeroBand
       kind="copy-on-top-art"

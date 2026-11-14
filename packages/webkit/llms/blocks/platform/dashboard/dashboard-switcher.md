@@ -1,11 +1,11 @@
 # DashboardSwitcher (`platform/dashboard/dashboard-switcher`)
 
-> The dashboards hub: one page that switches between every dashboard of the account. A `PageHeader` named Dashboards sits over the controls row: a grouped `Select` of the dashboards (Platform, Security, Business and Yours) with a chart icon, a Filter `Popover` that sets the shared Period with a `Badge` that counts it, and a Refresh `IconButton` in a `Tooltip` at the end. The applied period shows as a removable `Chip` that reopens the filter. Under the controls, the chosen dashboard: four `StatTile`s with a `Hint` each and the comparison period, a `ChartCard` with the dashboard's `Chart` and its tooltip total, and a `ChartCard` with a ranked `BarList`. Switching the dashboard loads its body (Skeletons in place); changing the period or pressing Refresh refetches it, holding the previous render. A dashboard that owns its period (Executive summary, Spend, Project status) hides the shared filter and its chip and shows its own quarter `ToggleGroup` instead. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
+> The dashboards hub: one page that switches between every dashboard of the account. A `PageHeader` named Dashboards sits over the controls row: a grouped `Select` of the dashboards (Platform, Security, Business and Yours) with a chart icon, a `FilterMenu` that sets the shared Period and counts it on its Filter button, and a Refresh `IconButton` in a `Tooltip` at the end. The applied period shows as a removable chip in `FilterMenu.Chips`. Under the controls, a placeholder body for the chosen dashboard (in an app, render the real dashboard block there, and `configurable-dashboard` for Custom): four `StatTile`s with a `Hint` each and the comparison period, a `ChartCard` with the dashboard's `Chart` and its tooltip total, and a `ChartCard` with a ranked `BarList`. Switching the dashboard loads its body (Skeletons in place); changing the period or pressing Refresh refetches it, holding the previous render. A dashboard that owns its period (Executive summary, Spend, Project status) hides the shared filter and its chip and shows its own quarter `ToggleGroup` instead. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
 
 - Surface: product
 - Source: `blocks/platform/dashboard/dashboard-switcher/dashboard-switcher.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/dashboard/dashboard-switcher")`
-- Components: [Badge](../../../components/badge.md), [BarList](../../../components/bar-list.md), [Button](../../../components/button.md), [Chart](../../../components/chart.md), [ChartCard](../../../components/chart-card.md), [Chip](../../../components/chip.md), [Hint](../../../components/hint.md), [IconButton](../../../components/icon-button.md), [PageHeader](../../../components/page-header.md), [Popover](../../../components/popover.md), [RadioButton](../../../components/radio-button.md), [Select](../../../components/select.md), [StatTile](../../../components/stat-tile.md), [ToggleGroup](../../../components/toggle-group.md), [Tooltip](../../../components/tooltip.md)
+- Components: [Alert](../../../components/alert.md), [BarList](../../../components/bar-list.md), [Chart](../../../components/chart.md), [ChartCard](../../../components/chart-card.md), [FilterMenu](../../../components/filter-menu.md), [Hint](../../../components/hint.md), [IconButton](../../../components/icon-button.md), [PageHeader](../../../components/page-header.md), [Select](../../../components/select.md), [StatTile](../../../components/stat-tile.md), [ToggleGroup](../../../components/toggle-group.md), [Tooltip](../../../components/tooltip.md)
 - Skills: `webkit-data-viz`, `webkit-ui-states`, `webkit-navigation`
 
 ## Asked as
@@ -38,9 +38,9 @@ Title `Dashboards` and one sentence that says what the views cover. The heading 
 
 A medium `Select`, a fixed `--container-3xs` wide from `sm` (full width below), with a muted chart icon in the trigger's `iconLeft` slot and `aria-label="Dashboard"` on the trigger. Options are grouped with `Select.Group`: Platform, Security, Business, then Yours for the reader's own layout. `displayValue` prints the dashboard name, never its id.
 
-### C. Shared period — `Popover`, `Button`, `Badge`, `RadioButton` (required)
+### C. Shared period — `FilterMenu` (required)
 
-An outlined medium Filter `Button` opens a `Popover` placed `bottom-start` with the Period presets as a `RadioButton` group in a `fieldset` (Last hour, Last 24 hours, Last 7 days, Last 30 days) and Cancel / Apply. A small `Badge` on the trigger counts the applied filter. Hidden for a dashboard that owns its period.
+A medium `FilterMenu` with one single-choice field, Period (Last hour, Last 24 hours, Last 7 days, Last 30 days). Its Filter button carries the count of applied filters; picking a period applies it at once. Hidden for a dashboard that owns its period. Never hand-build this filter from a `Popover`, a `Badge` and radios.
 
 ### D. Own period — `ToggleGroup` (optional)
 
@@ -50,13 +50,13 @@ When the chosen dashboard owns its period (Executive summary, Spend, Project sta
 
 An outlined medium `IconButton` at the end of the row, named Refresh by its `Tooltip` and `aria-label`; it shows `loading` while the body refetches.
 
-### F. Applied period — `Chip` (required)
+### F. Applied period — `FilterMenu.Chips` (required)
 
-The applied period as one filled medium `Chip` under the controls (`Period Last 24 hours`). Clicking it reopens the filter; removing it returns the dashboard to the default period (Last 24 hours) and the chip leaves. Hidden with the filter.
+The applied period as a chip under the controls (`Period: Last 24 hours`), bound to the same model as the menu. Removing it returns the dashboard to the default period (Last 24 hours) and the chip leaves. Hidden with the filter.
 
-### G. Dashboard body — `StatTile`, `Hint`, `ChartCard`, `Chart`, `BarList` (required)
+### G. Dashboard body — `StatTile`, `Hint`, `ChartCard`, `Chart`, `BarList`, `Alert` (required)
 
-The chosen dashboard, keyed by its id so switching remounts it: four `StatTile`s with a `Hint` each, the delta read against the comparison period (`vs previous 24 hours`, or `vs previous quarter`), then a `ChartCard` spanning 8 of 12 columns with the dashboard's `Chart` (stacked bars, areas or lines, a `Chart.Tooltip total` when it has more than one series, and a legend with totals) and a `ChartCard` spanning 4 with a ranked `BarList`. In an app, render the matching dashboard block here instead (the bodies of `analytics-dashboard`, `security-dashboard`, `scan-results-dashboard`, `composition-dashboard` and the rest).
+The chosen dashboard, keyed by its id so switching remounts it: four `StatTile`s with a `Hint` each, the delta read against the comparison period (`vs previous 24 hours`, or `vs previous quarter`), then a `ChartCard` spanning 8 of 12 columns with the dashboard's `Chart` (stacked bars, areas or lines, a `Chart.Tooltip total` when it has more than one series, and a legend with totals) and a `ChartCard` spanning 4 with a ranked `BarList`. When the body fails to load, each card keeps its header and shows a danger `Alert` with Retry. Each body here is a placeholder with sample figures: in an app, render the matching dashboard block in its place (the bodies of `analytics-dashboard`, `security-dashboard`, `scan-results-dashboard`, `composition-dashboard` and the rest), and render `configurable-dashboard` for the Custom entry under Yours. Don't ship the placeholder bodies as the real dashboards.
 
 ## Do
 
@@ -76,14 +76,13 @@ The chosen dashboard, keyed by its id so switching remounts it: four `StatTile`s
 - **Description:** one sentence on what the views cover. `Traffic, security and business views across every workload, plus a layout of your own.`
 - **Groups:** one word. `Platform`, `Security`, `Business`, `Yours`.
 - **Dashboard names:** a noun phrase in sentence case. `Edge health`, `Funnel and cohorts`.
-- **Chip:** the field, then its value. `Period` `Last 7 days`.
+- **Chip:** the field, then its value. `Period: Last 7 days`.
 - **Comparison:** `vs previous 24 hours`, `vs previous quarter`.
 
 ## Accessibility
 
 - The picker trigger is named `Dashboard`; the controls sit in a section labelled `Dashboard controls`, the body in a section named after the dashboard, with `aria-busy` while it loads or refetches.
-- The period presets are native radios in a `fieldset` with the legend `Period`; each label is tied to its radio.
-- The Filter button names the applied count (`Filter, 1 applied`); the visual `Badge` is `aria-hidden`.
+- The period lives in `FilterMenu`, which names its applied count on the Filter button and gives every row and chip its own name.
 - Refresh is an icon-only button with `aria-label="Refresh"`.
 
 ## States
@@ -91,6 +90,8 @@ The chosen dashboard, keyed by its id so switching remounts it: four `StatTile`s
 - Default: Traffic over the last 24 hours.
 - OwnPeriod: Executive summary chosen; the shared filter and chip are hidden and the quarter `ToggleGroup` shows.
 - Loading: the body loads after a switch; tiles, chart and list render their Skeletons.
+- Failed: the body could not load; the tiles show dashes and each card keeps its header with a danger `Alert` and Retry, which refetches.
+- Empty: the period has no data; the tiles show dashes, the chart and the ranked list show their empty state (`No data in this period`).
 - Refetching: after a period change or Refresh, the chart holds the previous render at reduced opacity and Refresh shows its spinner.
 
 ## Related
@@ -104,6 +105,8 @@ The chosen dashboard, keyed by its id so switching remounts it: four `StatTile`s
 - `Default` — primary (the code below)
 - `OwnPeriod` — Executive summary chosen: a dashboard that owns its period, so the shared Filter and its Period chip are hidden and a quarter `ToggleGroup` takes their place in the controls row; the tiles compare against the previous quarter and the chart runs week by week.
 - `Loading` — The body of the chosen dashboard while it loads: the controls stay usable, the tiles, the chart and the ranked list render their own Skeleton in their final boxes, so nothing reflows when the data arrives.
+- `Failed` — The chosen dashboard could not load: the tiles show dashes and the chart and ranked-list cards keep their headers with a danger `Alert` and Retry, which refetches the body.
+- `Empty` — The period has no data: the tiles show dashes, the chart and the ranked list show their empty state (`No data in this period`), and the controls stay usable to widen the period.
 
 Each variant is the same screen in another state: `get_pattern("platform/dashboard/dashboard-switcher", { variant })`, or the file under `blocks/platform/dashboard/dashboard-switcher/variants/`.
 
@@ -111,17 +114,17 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
 
 ```vue
 <script setup lang="ts">
-  import Badge from '@aziontech/webkit/badge'
+  import Alert from '@aziontech/webkit/alert'
   import BarList, { type BarListItem } from '@aziontech/webkit/bar-list'
-  import Button from '@aziontech/webkit/button'
   import Chart, { type ChartColor, type ChartSeries } from '@aziontech/webkit/chart'
   import ChartCard from '@aziontech/webkit/chart-card'
-  import Chip from '@aziontech/webkit/chip'
+  import FilterMenu, {
+    type FilterMenuField,
+    type FilterMenuModel
+  } from '@aziontech/webkit/filter-menu'
   import Hint from '@aziontech/webkit/hint'
   import IconButton from '@aziontech/webkit/icon-button'
   import PageHeader from '@aziontech/webkit/page-header'
-  import Popover from '@aziontech/webkit/popover'
-  import RadioButton from '@aziontech/webkit/radio-button'
   import Select from '@aziontech/webkit/select'
   import StatTile from '@aziontech/webkit/stat-tile'
   import ToggleGroup, { type ToggleGroupOption } from '@aziontech/webkit/toggle-group'
@@ -949,29 +952,27 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
   const viewLabel = (value: string) =>
     dashboards.find((entry) => entry.value === value)?.label ?? ''
 
-  const appliedPeriod = ref<Period | null>(defaultPeriod)
-  const draftPeriod = ref<string>(defaultPeriod)
-  const filterOpen = ref(false)
-  const period = computed<Period>(() => appliedPeriod.value ?? defaultPeriod)
+  const filterFields: FilterMenuField[] = [
+    {
+      id: 'period',
+      label: 'Period',
+      kind: 'single',
+      options: periods.map((entry) => ({ value: entry.value, label: entry.label }))
+    }
+  ]
+  const filters = ref<FilterMenuModel>({ period: [defaultPeriod] })
+  const period = computed<Period>(() => {
+    const picked = filters.value.period?.[0]
+    return periods.some((entry) => entry.value === picked) ? (picked as Period) : defaultPeriod
+  })
   const periodInfo = computed(
     () => periods.find((entry) => entry.value === period.value) ?? periods[1]
   )
   const quarter = ref('q4')
 
-  watch(filterOpen, (open) => {
-    if (open) draftPeriod.value = period.value
-  })
-
-  const applyPeriod = () => {
-    appliedPeriod.value = draftPeriod.value as Period
-    filterOpen.value = false
-  }
-
-  const clearPeriod = () => {
-    appliedPeriod.value = null
-  }
-
   const loading = ref(false)
+  const failed = false
+  const empty = false
   const refetching = ref(false)
   let timer: ReturnType<typeof setTimeout> | undefined
 
@@ -1066,7 +1067,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
         name: entry.name,
         ...(entry.color ? { color: entry.color } : {}),
         values: Array.from(
-          { length: points },
+          { length: empty ? 0 : points },
           (_, index) => Math.round(entry.base * factor * wave(seed, index) * 100) / 100
         )
       }
@@ -1074,7 +1075,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
   })
 
   const breakdown = computed(() =>
-    active.value.breakdown.items.map((item) => ({
+    (empty ? [] : active.value.breakdown.items).map((item) => ({
       ...item,
       value: scalesWithPeriod.has(active.value.breakdown.format)
         ? Math.round(item.value * scale.value)
@@ -1133,78 +1134,13 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
             </Select>
           </div>
 
-          <Popover
+          <FilterMenu
             v-if="!active.ownPeriod"
-            v-model:open="filterOpen"
-            placement="bottom-start"
+            v-model="filters"
+            :fields="filterFields"
+            size="medium"
             class="shrink-0"
-          >
-            <div class="relative">
-              <Popover.Trigger>
-                <Button
-                  label="Filter"
-                  kind="outlined"
-                  size="medium"
-                  icon="pi pi-filter"
-                  :aria-label="appliedPeriod ? 'Filter, 1 applied' : 'Filter'"
-                />
-              </Popover.Trigger>
-              <div
-                v-if="appliedPeriod"
-                class="pointer-events-none absolute -top-2 -end-2 min-w-5"
-              >
-                <Badge
-                  label="1"
-                  severity="primary"
-                  size="small"
-                  aria-hidden="true"
-                  class="w-full"
-                />
-              </div>
-            </div>
-            <Popover.Content>
-              <form
-                class="flex w-(--container-3xs) max-w-full flex-col"
-                @submit.prevent="applyPeriod"
-              >
-                <fieldset class="flex flex-col gap-(--spacing-xs) p-(--spacing-sm)">
-                  <legend class="pb-(--spacing-xs) text-label-sm text-(--text-muted)">
-                    Period
-                  </legend>
-                  <label
-                    v-for="option in periods"
-                    :key="option.value"
-                    :for="`dashboard-period-${option.value}`"
-                    class="flex min-h-8 cursor-pointer items-center gap-(--spacing-xs) text-body-sm text-(--text-default)"
-                  >
-                    <RadioButton
-                      v-model="draftPeriod"
-                      name="dashboard-period"
-                      :value="option.value"
-                      :input-id="`dashboard-period-${option.value}`"
-                    />
-                    {{ option.label }}
-                  </label>
-                </fieldset>
-                <div
-                  class="flex justify-end gap-(--spacing-xs) border-t border-(--border-default) p-(--spacing-sm)"
-                >
-                  <Button
-                    label="Cancel"
-                    kind="transparent"
-                    size="small"
-                    type="button"
-                    @click="filterOpen = false"
-                  />
-                  <Button
-                    label="Apply"
-                    size="small"
-                    type="submit"
-                  />
-                </div>
-              </form>
-            </Popover.Content>
-          </Popover>
+          />
 
           <ToggleGroup
             v-else
@@ -1228,25 +1164,11 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
           </div>
         </div>
 
-        <div
-          v-if="!active.ownPeriod && appliedPeriod"
-          class="flex min-w-0 flex-wrap items-center gap-(--spacing-xs)"
-        >
-          <Chip
-            kind="filled"
-            size="medium"
-            clickable
-            removable
-            :label="`Period ${periodInfo.label}`"
-            @click="filterOpen = true"
-            @remove="clearPeriod"
-          >
-            <span class="flex min-w-0 items-center gap-(--spacing-xxs)">
-              <span class="truncate text-(--text-muted)">Period</span>
-              <span class="truncate">{{ periodInfo.label }}</span>
-            </span>
-          </Chip>
-        </div>
+        <FilterMenu.Chips
+          v-if="!active.ownPeriod"
+          v-model="filters"
+          :fields="filterFields"
+        />
       </section>
 
       <section
@@ -1266,12 +1188,12 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
           >
             <StatTile
               :label="figure.label"
-              :value="figure.value"
+              :value="failed || empty ? null : figure.value"
               :format-value="formatters[figure.format]"
-              :delta="figure.delta"
+              :delta="failed || empty ? null : figure.delta"
               :delta-label="active.ownPeriod ? 'vs previous quarter' : periodInfo.comparison"
               :inverse="figure.inverse"
-              :trend="figure.trend"
+              :trend="failed || empty ? [] : figure.trend"
               :loading="loading"
             >
               <template #aside>
@@ -1292,7 +1214,15 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
               </span>
             </ChartCard.Header>
             <ChartCard.Content>
+              <Alert
+                v-if="failed"
+                severity="danger"
+                :label="`Couldn't load ${active.chart.title.toLowerCase()}. Check your connection and retry.`"
+                action-label="Retry"
+                @action="refresh"
+              />
               <Chart
+                v-else
                 v-model:active-index="activeIndex"
                 :series="series"
                 :labels="labels"
@@ -1327,7 +1257,15 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
               </span>
             </ChartCard.Header>
             <ChartCard.Content>
+              <Alert
+                v-if="failed"
+                severity="danger"
+                :label="`Couldn't load ${active.breakdown.title.toLowerCase()}. Check your connection and retry.`"
+                action-label="Retry"
+                @action="refresh"
+              />
               <BarList
+                v-else
                 :items="breakdown"
                 :format-value="formatters[active.breakdown.format]"
                 :loading="loading"

@@ -44,7 +44,10 @@
 | --- | --- | --- | --- | --- |
 | `tabs` | `CodeBlockTab[]` | `[]` | false | Tab definitions with label, value, code, and optional language, filename, diff, or highlight metadata. |
 | `defaultValue` | `string` | `undefined` | false | Initial active tab when uncontrolled. |
-| `showLineNumbers` | `boolean` | `true` | false | Shows a fixed-width gutter with zero-padded line numbers before each code line. |
+| `code` | `string` | `''` | false | Code of a single snippet, used when `tabs` is empty. |
+| `language` | `string` | `''` | false | Language of the single `code` snippet (highlighting and the label header). |
+| `lineNumbers` | `boolean` | `true` | false | Shows a fixed-width gutter with zero-padded line numbers before each code line (the same name as `code-editor`). |
+| `showLineNumbers` | `boolean` | `undefined` | false | **@deprecated since 6.0 — use `lineNumbers`. Removed in 7.0.** Shows the line-number gutter; when set it wins over `lineNumbers`. |
 | `copyAriaLabel` | `string` | `''` | false | Accessible name for the copy control (forwarded to CopyButton's aria-label). Empty uses the locale catalog (`Copy code`). |
 | `copyable` | `boolean` | `undefined` | false | Shows the copy control. Unset, a `code` block shows it and an `output` block does not; turn it off for a decorative block nobody copies from. |
 | `kind` | `'code' \| 'output'` | `'code'` | false | What the block holds: `code` the reader runs or reads, or `output` — what a command prints — drawn flat and muted under an "Output" label, without a copy control. |
@@ -75,7 +78,7 @@
 ## States
 
 - Visual states: `default`, `hover`, `focus-visible` on tabs and copy control
-- `data-state` on tabs: `active` | `inactive`
+- `data-state` on tabs: `active` | `inactive`; the active tab's text colour switches on `data-[state=active]:` in the tab's flat class, never a `:class` ternary
 - `data-state` on code lines: `default` | `added` | `removed` | `highlighted`
 - `data-disabled` not used (tabs are not disabled in v2)
 - `data-kind` on the root: `code` | `output`; `output` paints the shell `--bg-canvas` and every line flat in `--text-muted`
@@ -96,13 +99,11 @@ Code content scrolls inside `@aziontech/webkit/scroll-area` (`orientation="both"
 
 **The shell is fluid: it takes the width its container gives it and never grows past it.** Long lines are a scroll, never a wider block — so the root is a size container (`@container`, i.e. inline-size containment) and its code width is invisible to the layout above it. Without that, the block's intrinsic width leaks upward: an `auto`-sized grid track or flex row (a one-column `grid` on mobile, a `md:grid-cols-2` panel below its breakpoint) sizes itself to the widest code line and the block overflows the viewport instead of scrolling — a consumer's `min-w-0` on the wrapper cannot fix it, because `min-width` is a floor on the intrinsic contribution, not a cap. The copy control (a `CopyButton`, `kind="outlined"` `size="small"`) is absolutely positioned on the non-scrolling content shell (`__content`) so it stays pinned top-right while lines scroll. **On a single-line block it centres on that row instead** (`data-single-line` on the anchor): the shell is 44 px, the control 28 px, so the `--spacing-sm` top inset would leave it 4 px below the line's own centre. Every line reserves the control's full footprint on its right (`pr-11` = 28 px control + its 12 px inset), so a long line always scrolls clear of it rather than under it. With `copyable` off (`data-copyable` absent on the root) the control is not rendered and lines reserve only `--spacing-sm` on their right.
 
-- Long files: above 300 lines the panel mounts lines in chunks of 100 as they scroll near view (unmounted chunks keep an estimated 24 px per line), so a 5,000-line file mounts and switches tabs within its runtime budget. Copy always copies the whole file.
-
 ## Accessibility
 
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`
 - Keyboard map: `Tab` focuses tabs and copy; `ArrowLeft`/`ArrowRight`/`Home`/`End` move between tabs; `Enter`/`Space` activates tab; copy uses `Enter`/`Space` on the CopyButton (native `<button>`); when focus is in the code scroll region, `ArrowUp`/`ArrowDown`/`PageUp`/`PageDown`/`Home`/`End` scroll vertically and `ArrowLeft`/`ArrowRight` scroll horizontally via ScrollArea.
-- ARIA: tab list uses `role="tablist"` when visible; tabs use `role="tab"` with `aria-selected`; panel uses `role="tabpanel"` with `aria-labelledby`; copy uses CopyButton `ariaLabel` (forwarded to its inner IconButton); diff `+`/`-` markers are `aria-hidden="true"` (change semantics conveyed by row `data-state` and visible background).
+- ARIA: tab list uses `role="tablist"` when visible; tabs use `role="tab"` with `aria-selected`; panel uses `role="tabpanel"` with `aria-labelledby`. Tab and panel ids come from `useId()` (`<uid>-tab-<index>`, one `<uid>-panel`), so two tabbed blocks on one page never share an id and a tab value with spaces is still a valid id; only the selected tab carries `aria-controls`, pointing at the one rendered panel; copy uses CopyButton `ariaLabel` (forwarded to its inner IconButton); diff `+`/`-` markers are `aria-hidden="true"` (change semantics conveyed by row `data-state` and visible background).
 - Contrast ≥4.5:1 for code text on surface, including syntax token colors and diff/highlight row backgrounds in light and dark. Row backgrounds for `added`, `removed` and `highlighted` are the feedback fills at 40% (`bg-(--success)/40`, `bg-(--danger)/40`, `bg-(--info)/40`): at full strength the light fills (`--danger` `#F3A5A5`, `--info` `#99C9FF`) put the line numbers and the `function` and `type` syntax colours under 4.5:1 (3.93:1 for a line number on a removed row); at 40% every syntax colour clears 4.5:1 in light and dark (the lowest, the light `function` orange `#B03C02` on a removed row, is 4.6:1).
 - `motion-reduce:transition-none motion-reduce:transform-none` on indicator and panel motion.
 - When `animateLines` is enabled, line motion is disabled under `prefers-reduced-motion` (lines render fully visible immediately).
@@ -115,6 +116,22 @@ Code content scrolls inside `@aziontech/webkit/scroll-area` (`orientation="both"
 - Keyboard: `ArrowRight`/`ArrowLeft` move between the file tabs, swapped under `dir="rtl"` (`logicalArrowKey`); the tab indicator is anchored with a physical `left: 0` and moved by `offsetLeft`.
 - Motion: the panel slide between tabs mirrors (`rtl:` flips the `translate-x` presets).
 - User data: code lines render `dir="ltr"`: code always reads left to right. The scroll area keeps the copy button's width free on its side (`pe-10` when `copyable`), so under `dir="rtl"` the button never covers the start of a line.
+
+## Internationalization
+
+| Key                | English source | Override prop   |
+| ------------------ | -------------- | --------------- |
+| `codeBlock.copy`   | Copy code      | `copyAriaLabel` |
+| `codeBlock.output` | Output         | `title`         |
+
+- Formatting: none. Line numbers are zero-padded digits; code is never translated.
+
+## Responsive
+
+- Container queries: the root is a size container (`@container`), so long lines scroll inside the block instead of widening the layout above it.
+- Narrow (≤ 640 px or a narrow container): the shell takes the container width; lines never wrap and scroll horizontally inside `scroll-area`; the tab strip keeps one row.
+- Touch: tabs are 32 px tall inside the 40 px strip; the copy control is a 28 px CopyButton with its own touch target.
+- Reflow: no page-level horizontal scroll at 320 px; the code region scrolls on its own (code is an allowed two-dimensional exception, WCAG 1.4.10).
 
 ## Examples
 
@@ -147,7 +164,7 @@ Code content scrolls inside `@aziontech/webkit/scroll-area` (`orientation="both"
     <CodeBlock
       :tabs="tabs"
       default-value="js"
-      show-line-numbers
+      line-numbers
     />
   </div>
 </template>
@@ -182,7 +199,7 @@ Code content scrolls inside `@aziontech/webkit/scroll-area` (`orientation="both"
     <CodeBlock
       :tabs="tabs"
       default-value="js"
-      :show-line-numbers="false"
+      :line-numbers="false"
     />
   </div>
 </template>
@@ -217,7 +234,7 @@ Code content scrolls inside `@aziontech/webkit/scroll-area` (`orientation="both"
     <CodeBlock
       :tabs="tabs"
       default-value="js"
-      show-line-numbers
+      line-numbers
       :copyable="false"
     />
   </div>

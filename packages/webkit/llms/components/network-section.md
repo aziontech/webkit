@@ -67,6 +67,22 @@
 - `motion-reduce:transition-none motion-reduce:transform-none` — the map animation belongs to `network-map`, which carries its own reduced-motion fallback; this band adds no motion.
 - Touch target ≥40×40 px — not applicable, nothing is interactive.
 
+## Right-to-left
+
+- Layout: logical utilities and the composed components' own mirroring, so the network map, title, chips and floor fill from the inline start.
+- Icons: action chevrons mirror (owned by `button`).
+- Keyboard: unchanged.
+
+## Internationalization
+
+- No built-in strings: every visible string arrives through props.
+
+## Responsive
+
+- Below medium the map is drawn as a strip under the copy (the full-height map column is hidden); from medium the map sits behind the copy, its fade widened between medium and large.
+- The floor follows `card-grid`: outcomes take one column per entry, benefits up to three, stats the `big-numbers` row.
+- No horizontal scroll at 320 px.
+
 ## Examples
 
 ### Default

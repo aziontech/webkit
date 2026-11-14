@@ -110,3 +110,77 @@
   />
 </template>
 ```
+
+### Framed
+
+```vue
+<script setup>
+  import Faq from '@aziontech/webkit/faq'
+</script>
+
+<template>
+  <Faq
+    title="Billing questions"
+    framed
+    :items="[
+      {
+        value: 'invoice',
+        question: 'When is the invoice issued?',
+        answer: 'On the first day of each month, for the usage of the month before.'
+      },
+      {
+        value: 'currency',
+        question: 'Which currency is it billed in?',
+        answer: 'Every account is billed in USD.'
+      },
+      {
+        value: 'cancel',
+        question: 'Can I cancel at any time?',
+        answer: 'Yes. Usage stops being metered the moment the last workload is deleted.'
+      }
+    ]"
+  />
+</template>
+```
+
+### Rich answer
+
+```vue
+<script setup>
+  import Faq from '@aziontech/webkit/faq'
+  import Link from '@aziontech/webkit/link'
+
+  const items = [
+    {
+      value: 'limits',
+      question: 'What are the request limits?',
+      answer: 'Each plan has its own limits.'
+    },
+    {
+      value: 'status',
+      question: 'Where can I see the platform status?',
+      answer: 'On the status page.'
+    }
+  ]
+
+  const links = {
+    limits: { label: 'Read the limits for every plan', href: 'https://example.com/docs/limits' },
+    status: { label: 'Open the status page', href: 'https://status.example.com' }
+  }
+</script>
+
+<template>
+  <Faq
+    title="Frequently asked questions"
+    :items="items"
+  >
+    <template #answer="{ item }">
+      {{ item.answer }}
+      <Link
+        :label="links[item.value].label"
+        :href="links[item.value].href"
+      />
+    </template>
+  </Faq>
+</template>
+```

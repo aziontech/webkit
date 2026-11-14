@@ -47,8 +47,10 @@
 | `formAriaLabel` | `string` | `''` | false | Accessible name of the field group, read as its legend. |
 | `fields` | `HeroFormField[]` | `[]` | false | The form fields in order; each is `{ name, kind, label, placeholder?, required?, half?, options?, country?, visuallyHiddenLabel? }`; `visuallyHiddenLabel` keeps the label as the accessible name but does not draw it. |
 | `submitLabel` | `string` | `''` | false | Label of the submit button. |
-| `carouselLabel` | `string` | `''` | false | Overline above the client strip. |
-| `carouselMarks` | `string[]` | `[]` | false | Registry names of the client marks, in order; the strip renders only when there are marks. |
+| `tickerLabel` | `string` | `''` | false | Overline above the client ticker. |
+| `carouselLabel` | `string` | `''` | false | @deprecated since 6.0 — use `tickerLabel`. Removed in 7.0. Read only when `tickerLabel` is empty. |
+| `tickerMarks` | `string[]` | `[]` | false | Registry names of the client marks, in order; the ticker renders only when there are marks. |
+| `carouselMarks` | `string[]` | `[]` | false | @deprecated since 6.0 — use `tickerMarks`. Removed in 7.0. Read only when `tickerMarks` is empty. |
 | `loading` | `boolean` | `false` | false | The site is sending the values: the button shows its loading state and a submit is ignored. |
 | `submitted` | `boolean` | `false` | false | The site sent the values: the form gives way to `messages.success`. |
 | `error` | `boolean` | `false` | false | The site could not send the values: `messages.error` shows under the form. |
@@ -75,7 +77,7 @@
 - `descriptionLink` renders inline after `description`, underlined, followed by `descriptionAfter`, so the copy reads as one sentence
 - Without `items`, the copy block is sticky from `lg` (it stays in view while the taller form scrolls past); with `items` it scrolls with the highlights
 - `loading` also sets `disabled` on the `fieldset`, so the browser locks every control in it
-- Empty: when `title` is empty the band renders nothing but its root; when `items` is empty the list is omitted; when `carouselMarks` is empty the strip is omitted
+- Empty: when `title` is empty the band renders nothing but its root; when `items` is empty the list is omitted; when `tickerMarks` is empty the strip is omitted
 
 ## Accessibility
 
@@ -240,7 +242,7 @@ No built-in strings: every label, placeholder, message and action is a prop from
     error: 'We could not send your message. Try again.'
   }
 
-  const carouselMarks = [
+  const tickerMarks = [
     'global-fashion-group',
     'herospark',
     'itau',
@@ -268,8 +270,8 @@ No built-in strings: every label, placeholder, message and action is a prop from
     :fields="fields"
     submit-label="Contact sales"
     :messages="messages"
-    carousel-label="Trusted by teams running critical workloads"
-    :carousel-marks="carouselMarks"
+    ticker-label="Trusted by teams running critical workloads"
+    :ticker-marks="tickerMarks"
     @submit="onSubmit"
   />
 </template>
@@ -354,7 +356,7 @@ No built-in strings: every label, placeholder, message and action is a prop from
     error: 'We could not send your message. Try again.'
   }
 
-  const carouselMarks = [
+  const tickerMarks = [
     'global-fashion-group',
     'herospark',
     'itau',
@@ -369,7 +371,7 @@ No built-in strings: every label, placeholder, message and action is a prop from
   ]
 
   const onSubmit = (event, values) => {
-    console.log(event.type, values)
+    console.warn(event.type, values)
   }
 </script>
 
@@ -384,8 +386,8 @@ No built-in strings: every label, placeholder, message and action is a prop from
     :fields="fields"
     submit-label="Request immediate contact"
     :messages="messages"
-    carousel-label="Trusted by teams running critical workloads"
-    :carousel-marks="carouselMarks"
+    ticker-label="Trusted by teams running critical workloads"
+    :ticker-marks="tickerMarks"
     @submit="onSubmit"
   />
 </template>
@@ -523,7 +525,7 @@ No built-in strings: every label, placeholder, message and action is a prop from
     error: 'We could not send your message. Try again.'
   }
 
-  const carouselMarks = [
+  const tickerMarks = [
     'global-fashion-group',
     'herospark',
     'itau',
@@ -551,8 +553,8 @@ No built-in strings: every label, placeholder, message and action is a prop from
     :fields="fields"
     submit-label="Contact sales"
     :messages="messages"
-    carousel-label="Trusted by teams running critical workloads"
-    :carousel-marks="carouselMarks"
+    ticker-label="Trusted by teams running critical workloads"
+    :ticker-marks="tickerMarks"
     :loading="true"
     @submit="onSubmit"
   />

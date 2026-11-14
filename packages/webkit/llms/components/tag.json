@@ -61,7 +61,7 @@
   {
    "name": "icon",
    "type": "string",
-   "default": "undefined",
+   "default": "''",
    "required": "false",
    "doc": "PrimeIcons class for the leading icon."
   }

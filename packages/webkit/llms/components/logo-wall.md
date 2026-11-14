@@ -46,7 +46,7 @@
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
 | `kind` | `LogoWallKind` | `'square'` | false | The cell's proportion; `rectangle` sets every cell at 3:2, keeps three columns below `sm`, and holds three columns beside `aside` from `lg`. |
-| `items` | `LogoItem[]` | `[]` | false | The marks rendered in the grid, in order; each item is `{ src, alt, href?, shape? }` where `src` is the mark's URL, `alt` names the company, `href` links the cell to that customer's story, and `shape` sets a near-square mark taller than a wordmark. |
+| `items` | `LogoWallItem[]` | `[]` | false | The marks rendered in the grid, in order; each item is `{ src, alt, href?, shape? }` where `src` is the mark's URL, `alt` names the company, `href` links the cell to that customer's story, and `shape` sets a near-square mark taller than a wordmark. |
 | `ariaLabel` | `string` | `''` | false | Accessible name for the group of marks, announced instead of an unnamed region. |
 | `linkLabel` | `string` | `''` | false | Words revealed under a linked mark on hover and focus, and the lead of that link's accessible name. Empty uses the locale catalog (`Read story`). |
 
@@ -54,14 +54,14 @@
 
 | Event | Payload | Notes |
 | --- | --- | --- |
-| `item-click` | `(event: MouseEvent, item: LogoItem)` | Fired when a linked cell is activated; `item` is the matched `items` entry. The anchor still navigates unless the handler calls `event.preventDefault()`, which is how a client-side router takes over. |
+| `item-click` | `(event: MouseEvent, item: LogoWallItem)` | Fired when a linked cell is activated; `item` is the matched `items` entry. The anchor still navigates unless the handler calls `event.preventDefault()`, which is how a client-side router takes over. |
 
 ## Slots
 
 | Slot | Scope | Notes |
 | --- | --- | --- |
 | `aside` | — | Content set beside the wall from `lg` up, centred in a panel that never sets the band's height (keep it short enough to fit two rows of squares from `xl`), such as one customer's `quote`, on a `--bg-canvas` panel padded by `--spacing-xl` and framed with a registration mark in each corner; its child fills the panel's width. When it is empty the wall spans the full width. |
-| `mark` | { item: LogoItem; index: number } | One cell's mark, replacing the image built from the item — for a mark that owns its own theming (a per-theme asset swap, a silhouette filter). The slotted content carries its own alternative text and sits in a 28px-tall box; on a linked cell it lifts with the built image's motion. |
+| `mark` | { item: LogoWallItem; index: number } | One cell's mark, replacing the image built from the item — for a mark that owns its own theming (a per-theme asset swap, a silhouette filter). The slotted content carries its own alternative text and sits in a 28px-tall box; on a linked cell it lifts with the built image's motion. |
 
 ## States
 

@@ -5,7 +5,7 @@
 - Surface: product
 - Source: `blocks/platform/dashboard/composition-dashboard/composition-dashboard.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/dashboard/composition-dashboard")`
-- Components: [Alert](../../../components/alert.md), [Button](../../../components/button.md), [Chart](../../../components/chart.md), [ChartCard](../../../components/chart-card.md), [DonutChart](../../../components/donut-chart.md), [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [Hint](../../../components/hint.md), [IconButton](../../../components/icon-button.md), [PageHeader](../../../components/page-header.md), [Progress](../../../components/progress.md), [Select](../../../components/select.md), [StatTile](../../../components/stat-tile.md), `TableRoot`, [Tag](../../../components/tag.md), [ToggleGroup](../../../components/toggle-group.md)
+- Components: [Alert](../../../components/alert.md), [Button](../../../components/button.md), [Chart](../../../components/chart.md), [ChartCard](../../../components/chart-card.md), [DonutChart](../../../components/donut-chart.md), [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [Hint](../../../components/hint.md), [IconButton](../../../components/icon-button.md), [PageHeader](../../../components/page-header.md), [Progress](../../../components/progress.md), [Select](../../../components/select.md), [StatTile](../../../components/stat-tile.md), `TableRoot`, [Tag](../../../components/tag.md), [Toast](../../../components/toast.md), [ToggleGroup](../../../components/toggle-group.md), `utils/csv`
 - Skills: `webkit-data-viz`, `webkit-tables`, `webkit-ui-states`
 
 ## Asked as
@@ -45,7 +45,7 @@ Title `Cost breakdown` with one sentence on what it shows. Its actions hold the 
 
 ### C. Export — `Button` (optional)
 
-`Export CSV` in the page heading exports the whole breakdown. Per-card exports live in each card's menu.
+`Export CSV` in the page heading downloads the whole breakdown (spend per category per month, `spend-by-category-last-12-months.csv`). Per-card exports live in each card's menu. Each export confirms with a success toast naming the file, or an error toast when it fails, and is disabled while loading and when the period failed or has no data.
 
 ### D. Total and top categories — `StatTile` (required)
 
@@ -66,7 +66,7 @@ Switches the stacked trend between Area and Bar. Labelled `Chart form for Spend 
 
 ### H. More options — `DropdownMenu` (optional)
 
-Per-card secondary actions such as `Export CSV`, behind the more-options button.
+Per-card secondary actions such as `Export CSV`, behind the more-options button; it downloads that card's rows.
 
 ### I. More options trigger — `IconButton` (optional)
 
@@ -175,8 +175,10 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
   import StatTile from '@aziontech/webkit/stat-tile'
   import TableRoot, { type TableColumn } from '@aziontech/webkit/table-root'
   import Tag from '@aziontech/webkit/tag'
+  import { toast } from '@aziontech/webkit/toast'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
-  import { ref } from 'vue'
+  import { type CsvColumn, downloadCsv, toCsv } from '@aziontech/webkit/utils/csv'
+  import { computed, ref } from 'vue'
 
   interface Contributor {
     id: string
@@ -501,6 +503,66 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
 
   const period = ref('12m')
   const trendForm = ref('area')
+
+  type CardId = 'spend-by-category' | 'current-split' | 'top-contributors'
+
+  interface CsvReport {
+    columns: CsvColumn[]
+    rows: () => object[]
+  }
+
+  const reports: Record<CardId, CsvReport> = {
+    'spend-by-category': {
+      columns: [
+        { id: 'month', header: 'Month' },
+        ...series.map((entry) => ({ id: entry.id, header: entry.name }))
+      ],
+      rows: () =>
+        labels.map((month, index) => ({
+          month,
+          ...Object.fromEntries(series.map((entry) => [entry.id, entry.values[index] ?? '']))
+        }))
+    },
+    'current-split': {
+      columns: [
+        { id: 'category', header: 'Category' },
+        { id: 'amount', header: 'Spend (USD)' }
+      ],
+      rows: () => split.map((entry) => ({ category: entry.name, amount: entry.values[0] ?? '' }))
+    },
+    'top-contributors': {
+      columns: [
+        { id: 'rank', header: 'Rank' },
+        { id: 'name', header: 'Resource' },
+        { id: 'category', header: 'Category' },
+        { id: 'amount', header: 'Spend (USD)' },
+        { id: 'share', header: 'Share (%)' },
+        { id: 'change', header: 'Change (%)' }
+      ],
+      rows: () => contributors
+    }
+  }
+
+  const periodSlug = computed(() =>
+    (periods.find((option) => option.value === period.value)?.label ?? 'period')
+      .toLowerCase()
+      .replaceAll(' ', '-')
+  )
+
+  const exportCsv = (id: CardId) => {
+    const filename = `${id}-${periodSlug.value}.csv`
+    try {
+      const report = reports[id]
+      downloadCsv(filename, toCsv({ columns: report.columns, rows: report.rows() }))
+      toast.success('CSV exported.', { description: filename })
+    } catch {
+      toast.error('The CSV could not be exported.', { description: 'Try again in a moment.' })
+    }
+  }
+
+  const onCardOption = (id: CardId, value: string | number) => {
+    if (value === 'export') exportCsv(id)
+  }
 </script>
 
 <template>
@@ -536,6 +598,8 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
             icon="pi pi-download"
             kind="outlined"
             size="medium"
+            :disabled="loading"
+            @click="exportCsv('spend-by-category')"
           />
         </template>
       </PageHeader>
@@ -581,7 +645,10 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
                 size="small"
                 aria-label="Chart form for Spend by category"
               />
-              <DropdownMenu placement="bottom-end">
+              <DropdownMenu
+                placement="bottom-end"
+                @select="(_event, value) => onCardOption('spend-by-category', value)"
+              >
                 <DropdownMenu.Trigger>
                   <IconButton
                     icon="pi pi-ellipsis-h"
@@ -594,6 +661,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
                   <DropdownMenu.Option
                     value="export"
                     label="Export CSV"
+                    :disabled="loading"
                   />
                 </DropdownMenu.Group>
               </DropdownMenu>
@@ -633,7 +701,10 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
               <Hint text="This month’s spend by category, with the total in the center." />
             </span>
             <ChartCard.Controls>
-              <DropdownMenu placement="bottom-end">
+              <DropdownMenu
+                placement="bottom-end"
+                @select="(_event, value) => onCardOption('current-split', value)"
+              >
                 <DropdownMenu.Trigger>
                   <IconButton
                     icon="pi pi-ellipsis-h"
@@ -646,6 +717,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
                   <DropdownMenu.Option
                     value="export"
                     label="Export CSV"
+                    :disabled="loading"
                   />
                 </DropdownMenu.Group>
               </DropdownMenu>
@@ -673,7 +745,10 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
               />
             </span>
             <ChartCard.Controls>
-              <DropdownMenu placement="bottom-end">
+              <DropdownMenu
+                placement="bottom-end"
+                @select="(_event, value) => onCardOption('top-contributors', value)"
+              >
                 <DropdownMenu.Trigger>
                   <IconButton
                     icon="pi pi-ellipsis-h"
@@ -686,6 +761,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
                   <DropdownMenu.Option
                     value="export"
                     label="Export CSV"
+                    :disabled="loading"
                   />
                 </DropdownMenu.Group>
               </DropdownMenu>

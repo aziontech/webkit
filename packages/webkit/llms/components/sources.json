@@ -50,27 +50,21 @@
    "doc": "Heading of the disclosure. Empty uses the locale catalog (`3 sources`)."
   },
   {
-   "name": "open",
-   "type": "boolean",
-   "default": "undefined",
-   "required": "false",
-   "doc": "Controlled open state. Use with `v-model:open`."
-  },
-  {
    "name": "defaultOpen",
    "type": "boolean",
    "default": "false",
    "required": "false",
    "doc": "Initial open state when uncontrolled."
-  }
- ],
- "events": [
+  },
   {
-   "name": "update:open",
-   "payload": "boolean",
-   "notes": ""
+   "name": "open",
+   "type": "boolean",
+   "default": "undefined as never",
+   "required": "false",
+   "doc": "Two-way value (`v-model:open`)."
   }
  ],
+ "events": [],
  "slots": [],
  "styleSeam": false,
  "assets": [],

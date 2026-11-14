@@ -61,7 +61,7 @@
    "type": "boolean",
    "default": "true",
    "required": "false",
-   "doc": "Advances to the next quote on a timer, as `quote-tabs` does; pauses under the pointer or keyboard focus and never runs under reduced motion."
+   "doc": "Advances to the next quote on a timer, as `quote-tabs` does, with its visible pause control; pauses under the pointer or keyboard focus and never runs under reduced motion."
   },
   {
    "name": "autoplayInterval",

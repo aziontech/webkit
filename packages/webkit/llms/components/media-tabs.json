@@ -68,7 +68,7 @@
    "type": "boolean",
    "default": "true",
    "required": "false",
-   "doc": "Advances to the next tab on a timer; pauses under the pointer or keyboard focus, restarts its count on a click, and never runs under reduced motion."
+   "doc": "Advances to the next tab on a timer, with a visible pause control; pauses under the pointer or keyboard focus, restarts its count on a click, and never runs under reduced motion."
   },
   {
    "name": "autoplayInterval",
@@ -104,13 +104,20 @@
    "default": "'vignette'",
    "required": "false",
    "doc": "How the ground fades out before the column's edges."
+  },
+  {
+   "name": "modelValue",
+   "type": "number",
+   "default": "0",
+   "required": "false",
+   "doc": "Two-way value (`v-model`)."
   }
  ],
  "events": [
   {
    "name": "tab-change",
    "payload": "(event: Event, index: number)",
-   "notes": "The selection moved; `index` is the tab now shown. Fires on a reader's hover or click, not on an autoplay tick."
+   "notes": "@deprecated since 6.0 — use `v-model` (`update:modelValue`). Removed in 7.0. The reader moved the selection; `index` is the tab now shown. Fires on a reader's hover or click, not on an autoplay tick."
   }
  ],
  "slots": [

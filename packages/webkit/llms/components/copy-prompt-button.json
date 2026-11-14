@@ -33,7 +33,7 @@
   "Pass the exact prompt in `value`; the button copies it as it stands.",
   "Do not recolour the marks: they are single-colour by design and follow the chip's ink.",
   "To draw a mark from the agent's asset file instead of the icon font, give the agent a `logo` (`@aziontech/webkit/assets/claude-symbol-color.svg`); `Logo` flattens it to the chip's ink.",
-  "Set `closable` where the chip is guidance the reader can put away (a first-use overview), not where it is part of a page's composition (a hero). Listen to `close` to remember the choice; the chip only hides itself."
+  "Set `closable` where the chip is guidance the reader can put away (a first-use overview), not where it is part of a page's composition (a hero). Bind `v-model:open` to remember or restore the choice (`close` still fires with the click)."
  ],
  "props": [
   {
@@ -77,6 +77,13 @@
    "default": "false",
    "required": "false",
    "doc": "Shows a dismiss button beside the chip; activating it removes both from the layout and emits `close`."
+  },
+  {
+   "name": "open",
+   "type": "boolean",
+   "default": "true",
+   "required": "false",
+   "doc": "Two-way value (`v-model:open`)."
   }
  ],
  "events": [

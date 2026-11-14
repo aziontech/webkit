@@ -1,5 +1,5 @@
 {
- "purpose": "A loading placeholder that reserves the space of content while it loads, gently pulsing to signal activity. Use it in place of text lines, media, or avatars during fetches; unlike `status-indicator` (which communicates a settled state) the skeleton is a transient, decorative stand-in. Two geometries cover the common cases: a rounded rectangular block (`shape`) and a `circle` (for avatars / icons).",
+ "purpose": "A loading placeholder that reserves the space of content while it loads, gently pulsing to signal activity. Use it in place of text lines, media, or avatars during fetches; unlike `status-indicator` (which communicates a settled state) the skeleton is a transient, decorative stand-in. Two geometries cover the common cases: a rounded rectangular block (`rectangle`) and a `circle` (for avatars / icons).",
  "useWhen": [
   "Content is loading and its final layout is known: text lines, cards, media blocks.",
   "Avatar and icon placeholders, with `kind=\"circle\"`."

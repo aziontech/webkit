@@ -16,7 +16,8 @@
 
 - Give every item a unique `value`; it is both the `v-model` payload and the render key.
 - Name the group by passing `aria-labelledby` or `aria-label` on the component: it renders a `role="radiogroup"` with no visible label of its own. Set an item's `ariaLabel` when its `label` alone is ambiguous.
-- disabled` applies to the whole group; there is no per-item disabled state, so leave unavailable options out of `items`.
+- disabled` applies to the whole group; set `disabled: true` on an item to show one option as unavailable (arrow keys skip it).
+- Inside a `Field`, the group takes the field's label (`aria-labelledby`), description, `invalid`, `required` and `disabled` with no wiring.
 - Use the `tag` slot for trailing content. The `default` slot replaces the whole card body (icon, label, description and `tag`), so use it only when the card needs a different layout.
 - Arrow keys move and select in one step, as in any radio group, so `update:modelValue` fires while a keyboard user browses. Don't trigger navigation or requests on every change.
 
@@ -38,15 +39,9 @@
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `modelValue` | `string \| number` | `undefined` | false | Currently selected item value (v-model). |
 | `items` | `TItem[]` | `undefined` | true | Options rendered as selectable cards; each entry must include `value` and `label`. |
 | `disabled` | `boolean` | `false` | false | Disables all options and applies disabled tokens. |
-
-## Events
-
-| Event | Payload | Notes |
-| --- | --- | --- |
-| `update:modelValue` | `TItem['value']` | v-model when the user selects an option. |
+| `modelValue` | `TItem['value']` | `undefined` | false | Two-way value (`v-model`). |
 
 ## Slots
 
@@ -55,18 +50,25 @@
 | `default` | { item: TItem; selected: boolean } | Overrides the entire card body for an option. |
 | `tag` | { item: TItem; selected: boolean } | Trailing content below label/description (e.g. plan badge). |
 
+## v-model
+
+| Model     | Type                          | Default     | Emits               | Notes                                                                                                                           |
+| --------- | ----------------------------- | ----------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| `v-model` | `TItem['value'] \| undefined` | `undefined` | `update:modelValue` | Selected item value via `defineModel`. Unbound, the group keeps its own selection, so it works uncontrolled. |
+
 ## States
 
 - Visual states: `default`, `hover`, `focus-visible`, `active`, `disabled`, `selected`
-- `data-disabled` mirrors the `disabled` prop on root and each option
-- `data-selected` mirrors whether `modelValue === item.value`
+- `data-disabled` mirrors the `disabled` prop (or the enclosing `Field`'s) on the root and every option, and an item's own `disabled` on that option, which also carries `aria-disabled`
+- `data-invalid` and `aria-invalid` / `aria-required` on the root when the enclosing `Field` is invalid / required; consumer attributes (`id`, `aria-labelledby`, `aria-describedby`) land on the root and win over the Field's
+- `data-selected` mirrors whether the model equals `item.value`
 - Reflow: each option is capped at the width of the group (`max-w-full`) so long descriptions and tags wrap inside a narrow box.
 
 ## Accessibility
 
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)` on each option.
-- Keyboard map: `Tab` / arrow keys move focus between options; `Enter` / `Space` selects the focused option.
-- ARIA: root `role="radiogroup"`; each option `role="radio"` with `aria-checked` and `aria-label` from `item.ariaLabel` or `item.label`. The `aria-label` replaces the option's text, so an item with a `description` also points `aria-describedby` at the rendered description, which would otherwise never be announced.
+- Keyboard map: `Tab` / arrow keys move focus between options, skipping disabled items; `Enter` / `Space` selects the focused option.
+- ARIA: root `role="radiogroup"`; each option `role="radio"` with `aria-checked`. The option is named by `item.ariaLabel` when it is set; otherwise by its rendered label (`aria-labelledby` on the label row) in the default body, or by the slotted content when the `default` slot replaces the body, so custom text is announced. An item with a `description` points `aria-describedby` at the rendered description.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state.
 - `motion-reduce:transition-none` on color transitions.
 - Touch target ≥40×40 px via card padding.

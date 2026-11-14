@@ -1,11 +1,11 @@
 # Profile (`platform/account/profile`)
 
-> The profile page of a signed-in account, and the layout every account settings page follows: a small page heading over seven stacked sections, each a flush `Card` of field rows, in the form column, with the unsaved-changes bar that rises once a saved field changes. Account name and Billing emails come filled from the account and are checked on Save; the Appearance font picker defaults to Rubik. A save that fails with no field to blame raises an error toast with Retry and keeps the changes. Other account pages (billing, credentials, users, teams) keep the same column and swap the sections for their own cards or tables. Built from `PageHeader`, `SettingsSection`, `SettingRow`, `SaveBar`, `Card`, `Item`, `Input`, `Textarea`, `Select`, `Switch`, `Tag`, `HelperText` and `Button`; its toasts go through `toast` into the app's one toast region (ToastPlugin, or one Toaster at the app root), never a Toaster in the page body. A page body for ConsoleLayout, rendered in its default slot.
+> The profile page of a signed-in account, and the layout every account settings page follows: a small page heading over seven stacked sections, each a flush `Card` of field rows, in the form column, with the unsaved-changes bar that rises once a saved field changes. Account name comes filled from the account; Billing emails starts empty and is required; both are checked on Save. Requiring MFA lives in `platform/account/mfa-management`, linked from the Login settings row; source-control actions open the provider; Delete account asks in a `ConfirmDialog` that takes the account name typed; the Appearance font picker defaults to Rubik. A save that fails with no field to blame raises an error toast with Retry and keeps the changes. Other account pages (billing, credentials, users, teams) keep the same column and swap the sections for their own cards or tables. Built from `PageHeader`, `SettingsSection`, `SettingRow`, `SaveBar`, `Card`, `Item`, `Input`, `Textarea`, `Select`, `Switch`, `Tag`, `HelperText`, `ConfirmDialog`, `Skeleton`, `Alert` and `Button`; its toasts go through `toast` into the app's one toast region (ToastPlugin, or one Toaster at the app root), never a Toaster in the page body. A page body for ConsoleLayout, rendered in its default slot.
 
 - Surface: product
 - Source: `blocks/platform/account/profile/profile.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/account/profile")`
-- Components: [Button](../../../components/button.md), [Card](../../../components/card.md), [HelperText](../../../components/helper-text.md), [Input](../../../components/input.md), [Item](../../../components/item.md), [PageHeader](../../../components/page-header.md), [SaveBar](../../../components/save-bar.md), [Select](../../../components/select.md), [SettingRow](../../../components/setting-row.md), [SettingsSection](../../../components/settings-section.md), [Switch](../../../components/switch.md), [Tag](../../../components/tag.md), [Textarea](../../../components/textarea.md), [Toast](../../../components/toast.md)
+- Components: [Alert](../../../components/alert.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [ConfirmDialog](../../../components/confirm-dialog.md), [HelperText](../../../components/helper-text.md), [Input](../../../components/input.md), [Item](../../../components/item.md), [PageHeader](../../../components/page-header.md), [SaveBar](../../../components/save-bar.md), [Select](../../../components/select.md), [SettingRow](../../../components/setting-row.md), [SettingsSection](../../../components/settings-section.md), [Skeleton](../../../components/skeleton.md), [Switch](../../../components/switch.md), [Tag](../../../components/tag.md), [Textarea](../../../components/textarea.md), [Toast](../../../components/toast.md)
 - Skills: `webkit-form`, `webkit-errors`, `webkit-layout`
 
 ## Asked as
@@ -61,11 +61,11 @@ Country, state and city; font family and system appearance. The trigger carries 
 
 ### I. Toggle — `Switch` (required)
 
-Allow social login, Enforce multi-factor authentication.
+Allow social login. Requiring MFA is not a switch here: `platform/account/mfa-management` owns it, behind its own confirmation, and the Multi-factor authentication row links there with `Manage MFA`.
 
 ### J. Actions — `Button` (required)
 
-Row actions (`Manage`, `Connect` with an external-link icon), the `danger` Delete account, and the save bar's Discard and Save (`:loading` while saving).
+Row actions that each go somewhere: `Manage MFA` links to the MFA management page, and the source-control `Manage` and `Connect` (external-link icon) open the provider in a new tab, named `Connect GitLab` and so on. The `danger` Delete account opens the confirmation (N), and the save bar has Discard and Save (`:loading` while saving).
 
 ### K. Connection state — `Tag` (optional)
 
@@ -77,7 +77,15 @@ Rises with a motion-reduced transition once the form differs from the saved copy
 
 ### M. Field message — `HelperText` (conditional)
 
-Under Account name and Billing emails after Save: `required` when empty, `invalid` when an address is malformed, linked with `aria-describedby`. Save stops and focus moves to the first field in error.
+Under Account name and Billing emails after Save. Billing emails starts empty (an editable contact field never carries sample data) and is required, so Save on an untouched profile asks for it first: `required` when empty, `invalid` when an address is malformed, linked with `aria-describedby`. Save stops and focus moves to the first field in error.
+
+### N. Delete account — `ConfirmDialog` (required)
+
+`kind="danger"`: a warning `Alert` that it cannot be reversed, one sentence on what goes with the account, then `Type <account name> to confirm.` over an `Input`. The danger `Delete account` button stays disabled until the typed name matches the saved one, spins while the request runs and ends in a toast.
+
+### O. Load state — `Skeleton`, `Alert` (conditional)
+
+While the account loads, three `Card`s of `Skeleton` rows stand in for the sections (`aria-busy`). When it fails, a danger `Alert` with Retry takes their place; the heading stays.
 
 ### Toasts — through `toast`
 
@@ -87,7 +95,7 @@ A save no field owns that fails is `toast.error` with Retry and keeps the change
 
 - Disable the whole fieldset while saving and release it when the request ends, on success and on failure.
 - Keep preferences that apply immediately (Appearance) and external connections (Source control) out of Save, and say so in their section hints.
-- Put destructive actions in the last section, behind a confirmation (`platform/delete/delete-with-confirmation`).
+- Put destructive actions in the last section, behind a type-to-confirm `ConfirmDialog`, as in `platform/delete/delete-with-confirmation`.
 
 ## Don't
 
@@ -105,6 +113,8 @@ A save no field owns that fails is `toast.error` with Retry and keeps the change
 - **Field errors:** `This field is required.`, `Enter valid email addresses, separated by semicolons.`
 - **Save failure:** unscoped failures go to `toast.error` with Retry: `The profile wasn't saved.`, described by `The request didn't reach the server. Your changes are kept.`
 - **Save success:** `Profile saved.`
+- **Delete:** title `Delete account`, `Type Acme to confirm.`, toast `Account scheduled for deletion.`
+- **Load failure:** `The profile could not be loaded. Nothing was changed; try again.` with `Retry`.
 
 ## Accessibility
 
@@ -114,7 +124,9 @@ A save no field owns that fails is `toast.error` with Retry and keeps the change
 
 ## States
 
-- Default: the profile filled from the account, save bar hidden until a saved field changes. Saving with Account name set to `Offline` walks the failure toast; an empty Account name or a malformed billing address walks the field errors.
+- Default: the profile filled from the account (Billing emails empty and required), save bar hidden until a saved field changes. Saving with Account name set to `Offline` walks the failure toast; an empty Account name or a malformed billing address walks the field errors. Delete account opens the type-to-confirm dialog.
+- Loading: the first load; `Skeleton` cards in place of the sections.
+- Failed: the account did not load; a danger Alert with Retry.
 
 ## Related
 
@@ -125,6 +137,8 @@ A save no field owns that fails is `toast.error` with Retry and keeps the change
 ## Variants
 
 - `Default` — primary (the code below)
+- `Loading` — The first load: three cards of Skeleton rows in place of the sections, the heading kept.
+- `Failed` — The account did not load: a danger Alert with Retry replaces the sections; Retry loads them.
 
 Each variant is the same screen in another state: `get_pattern("platform/account/profile", { variant })`, or the file under `blocks/platform/account/profile/variants/`.
 
@@ -132,8 +146,10 @@ Each variant is the same screen in another state: `get_pattern("platform/account
 
 ```vue
 <script setup lang="ts">
+  import Alert from '@aziontech/webkit/alert'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
+  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
   import HelperText from '@aziontech/webkit/helper-text'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
@@ -142,11 +158,12 @@ Each variant is the same screen in another state: `get_pattern("platform/account
   import Select from '@aziontech/webkit/select'
   import SettingRow from '@aziontech/webkit/setting-row'
   import SettingsSection from '@aziontech/webkit/settings-section'
+  import Skeleton from '@aziontech/webkit/skeleton'
   import Switch from '@aziontech/webkit/switch'
   import Tag from '@aziontech/webkit/tag'
   import Textarea from '@aziontech/webkit/textarea'
   import { toast } from '@aziontech/webkit/toast'
-  import { computed, nextTick, reactive, ref } from 'vue'
+  import { computed, nextTick, reactive, ref, useId } from 'vue'
 
   const form = reactive({
     accountName: 'Acme',
@@ -160,8 +177,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
     city: 'sf',
     address: '100 Market Street',
     apartment: 'Suite 400',
-    allowSocialLogin: true,
-    enforceMfa: false
+    allowSocialLogin: true
   })
   const saving = ref(false)
   const baseline = ref(JSON.stringify(form))
@@ -204,6 +220,40 @@ Each variant is the same screen in another state: `get_pattern("platform/account
       toast.success('Profile saved.', { id: SAVE_TOAST })
     }, 900)
   }
+  const loading = ref(false)
+  const loadFailed = ref(false)
+  const retryLoad = () => {
+    loadFailed.value = false
+    loading.value = true
+    setTimeout(() => {
+      loading.value = false
+    }, 700)
+  }
+
+  const deleteOpen = ref(false)
+  const deleteConfirmation = ref('')
+  const deleting = ref(false)
+  const deleteLabelId = useId()
+  const savedName = computed<string>(() => JSON.parse(baseline.value).accountName)
+  const canDelete = computed(
+    () => deleteConfirmation.value.trim() === savedName.value && !deleting.value
+  )
+  const openDelete = () => {
+    deleteConfirmation.value = ''
+    deleteOpen.value = true
+  }
+  const confirmDelete = () => {
+    if (!canDelete.value) return
+    deleting.value = true
+    setTimeout(() => {
+      deleting.value = false
+      deleteOpen.value = false
+      toast.success('Account scheduled for deletion.', {
+        description: 'You get an email to confirm it; nothing is deleted before then.'
+      })
+    }, 800)
+  }
+
   const discard = () => {
     Object.assign(form, JSON.parse(baseline.value))
     Object.assign(errors, { accountName: '', billingEmails: '' })
@@ -252,6 +302,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
     {
       key: 'github',
       name: 'GitHub',
+      href: 'https://github.com/settings/installations',
       icon: 'ai ai-github',
       connected: true,
       tag: 'Active',
@@ -262,6 +313,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
     {
       key: 'gitlab',
       name: 'GitLab',
+      href: 'https://gitlab.com/-/profile/applications',
       icon: 'ai-cor ai-gitlab',
       connected: false,
       tag: '',
@@ -271,6 +323,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
     {
       key: 'bitbucket',
       name: 'Bitbucket',
+      href: 'https://bitbucket.org/account/settings/app-authorizations/',
       icon: 'ai-cor ai-bitbucket',
       connected: false,
       tag: '',
@@ -315,7 +368,47 @@ Each variant is the same screen in another state: `get_pattern("platform/account
               description="Manage your identity, company details, address, and sign-in preferences."
               size="small"
             />
+            <div
+              v-if="loading"
+              class="mt-(--layout-section-gap) flex min-w-0 flex-col gap-(--layout-section-gap)"
+              role="status"
+              aria-busy="true"
+              aria-label="Loading the profile"
+            >
+              <Card
+                v-for="section in 3"
+                :key="section"
+              >
+                <template #content>
+                  <div class="flex flex-col gap-(--spacing-md)">
+                    <Skeleton
+                      v-for="row in 3"
+                      :key="row"
+                      height="2.5rem"
+                    />
+                  </div>
+                </template>
+              </Card>
+            </div>
+            <div
+              v-else-if="loadFailed"
+              class="mt-(--layout-section-gap)"
+            >
+              <Alert severity="danger">
+                The profile could not be loaded. Nothing was changed; try again.
+                <template #action>
+                  <Button
+                    type="button"
+                    label="Retry"
+                    kind="secondary"
+                    size="small"
+                    @click="retryLoad"
+                  />
+                </template>
+              </Alert>
+            </div>
             <fieldset
+              v-else
               class="mx-0 mt-(--layout-section-gap) flex min-w-0 flex-col border-0 p-0"
               :disabled="saving"
             >
@@ -530,26 +623,15 @@ Each variant is the same screen in another state: `get_pattern("platform/account
                         />
                       </SettingRow>
                       <SettingRow
-                        title="Enforce multi-factor authentication"
-                        description="MFA is required on login for every user linked to this account."
-                        kind="compact"
-                      >
-                        <Switch
-                          v-model="form.enforceMfa"
-                          aria-label="Enforce multi-factor authentication"
-                          :disabled="saving"
-                        />
-                      </SettingRow>
-                      <SettingRow
-                        title="Authenticator devices"
-                        description="Manage the devices and recovery codes registered for this account."
+                        title="Multi-factor authentication"
+                        description="Require MFA for everyone in the account, see who has set it up and reset a lost device on the MFA management page."
                         kind="compact"
                       >
                         <Button
-                          type="button"
-                          label="Manage"
+                          label="Manage MFA"
                           kind="outlined"
                           size="medium"
+                          href="/account/security/mfa"
                         />
                       </SettingRow>
                     </Item.List>
@@ -574,10 +656,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
                             class="flex size-8 shrink-0 items-center justify-center overflow-hidden rounded-(--shape-elements) border-(length:--border-width-default) border-(--border-muted) bg-(--bg-surface-raised)"
                           >
                             <i
-                              :class="[
-                                provider.icon,
-                                'text-body-lg leading-none text-(--text-default)'
-                              ]"
+                              :class="[provider.icon, 'text-body-lg text-(--text-default)']"
                               aria-hidden="true"
                             />
                           </span>
@@ -596,11 +675,13 @@ Each variant is the same screen in another state: `get_pattern("platform/account
                         </Item.Content>
                         <Item.Actions>
                           <Button
-                            type="button"
                             :label="provider.action"
+                            :aria-label="`${provider.action} ${provider.name}`"
                             kind="outlined"
                             size="medium"
                             :icon="provider.connected ? undefined : 'pi pi-external-link'"
+                            :href="provider.href"
+                            target="_blank"
                           />
                         </Item.Actions>
                       </Item>
@@ -692,6 +773,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
                           kind="danger"
                           size="medium"
                           icon="pi pi-trash"
+                          @click="openDelete"
                         />
                       </SettingRow>
                     </Item.List>
@@ -731,6 +813,56 @@ Each variant is the same screen in another state: `get_pattern("platform/account
         </Transition>
       </form>
     </div>
+
+    <ConfirmDialog
+      v-model:open="deleteOpen"
+      kind="danger"
+      title="Delete account"
+      size="medium"
+    >
+      <div class="flex flex-col gap-(--spacing-md)">
+        <Alert
+          severity="warning"
+          label="Once confirmed, this action can't be reversed."
+        />
+        <p class="m-0 text-body-sm text-(--text-muted)">
+          The account, its applications, domains, users and invoices are deleted with all their
+          data.
+        </p>
+        <p
+          :id="deleteLabelId"
+          class="m-0 text-body-sm text-(--text-default)"
+        >
+          Type <code class="text-label-code-sm">{{ savedName }}</code> to confirm.
+        </p>
+        <Input
+          v-model="deleteConfirmation"
+          :aria-labelledby="deleteLabelId"
+          autocomplete="off"
+          class="w-full"
+          @keydown.enter.prevent="confirmDelete"
+        />
+      </div>
+      <template #actions="{ close }">
+        <Button
+          type="button"
+          label="Cancel"
+          kind="outlined"
+          size="medium"
+          :disabled="deleting"
+          @click="close"
+        />
+        <Button
+          type="button"
+          label="Delete account"
+          kind="danger"
+          size="medium"
+          :disabled="!canDelete"
+          :loading="deleting"
+          @click="confirmDelete"
+        />
+      </template>
+    </ConfirmDialog>
   </div>
 </template>
 ```

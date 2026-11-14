@@ -36,14 +36,8 @@
 | `name` | `string` | `—` | true | The tool or command identifier, shown in code font (`list_workloads`). |
 | `title` | `string` | `''` | false | What the call does in the reader's words (`Listing your workloads`). Empty shows only the name. |
 | `state` | `'pending' \| 'running' \| 'success' \| 'error' \| 'denied'` | `'running'` | false | pending` waits for authorization, `running` is in flight, then `success`, `error` or `denied` (the reader refused it). |
-| `open` | `boolean` | `undefined` | false | Controlled open state of the input and output details. Use with `v-model:open`. |
 | `defaultOpen` | `boolean` | `false` | false | Initial open state when uncontrolled; details start collapsed. |
-
-## Events
-
-| Event | Payload | Notes |
-| --- | --- | --- |
-| `update:open` | `boolean` |  |
+| `open` | `boolean` | `undefined as never` | false | Two-way value (`v-model:open`). |
 
 ## Slots
 
@@ -55,6 +49,12 @@
 ## Sub-components
 
 _None. Exports: `"./tool-call"`; type `ToolCallState`. Composed DS components: `status-indicator`._
+
+## v-model
+
+| Model          | Type      | Default     | Emits         | Notes                                                                                     |
+| -------------- | --------- | ----------- | ------------- | ----------------------------------------------------------------------------------------- |
+| `v-model:open` | `boolean` | `undefined` | `update:open` | Details expanded or collapsed. Unbound, the state is local and starts from `defaultOpen`. |
 
 ## States
 

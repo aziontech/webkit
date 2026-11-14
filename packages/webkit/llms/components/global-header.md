@@ -16,11 +16,11 @@
 ## Do
 
 - Keep the default `kind="content"` for app shells; use `kind="site"` only on framed marketing pages.
-- Group the menu trigger and the brand in `GlobalHeader.Container` so they stay together and never shrink; `GlobalHeader.Nav` is the same component as `GlobalHeader.Middle`.
+- Group the menu trigger and the brand in `GlobalHeader.Container` so they stay together and never shrink.
 - Wrap the logo in `GlobalHeader.Brand` inside a link with its own accessible name (for example `aria-label="Azion home"`).
 - Set `aria-label` on the root (default `'Global header'`) when the page has more than one banner-style bar.
 - Keep the regions free of layout overrides — the bar owns height, padding and the bottom hairline; put only controls in each region.
-- Every header that navigates (console, demo, docs, site) carries `SearchTrigger` first in `GlobalHeader.Right`, wired to a `Command` palette; wrap the header in an `@container` so it unfolds into the `Search … ⌘K` field. Never hand-roll the field or use a bare magnifier `IconButton` (lint `webkit/header-search-trigger`).
+- Every header that navigates (console, demo, docs, site) carries `SearchTrigger` first in `GlobalHeader.End`, wired to a `Command` palette; wrap the header in an `@container` so it unfolds into the `Search … ⌘K` field. Never hand-roll the field or use a bare magnifier `IconButton` (lint `webkit/header-search-trigger`).
 
 ## Don’t
 
@@ -32,7 +32,7 @@
 ## Related
 
 - [site-nav](site-nav.md) — the marketing navigation band built on `global-header`, `brand` and `navigation-menu`.
-- [navigation-menu](navigation-menu.md) — the dropdown navigation that usually goes in `GlobalHeader.Middle`.
+- [navigation-menu](navigation-menu.md) — the dropdown navigation that usually goes in `GlobalHeader.Center`.
 - [brand](brand.md) — the Azion lockup to place inside `GlobalHeader.Brand`.
 - platform-shell` — the console layout template that composes the header with the sidebar and the page.
 
@@ -47,16 +47,24 @@
 
 | Slot | Scope | Notes |
 | --- | --- | --- |
-| `default` | — | Root: compose `Container` (or `Left` + `Brand`), `Middle`/`Nav`, and `Right` sub-components. |
+| `default` | — | Root: compose `Container` (or `Start` + `Brand`), `Center`, and `End` sub-components. |
 | `default` | — | Each sub-component (incl. `Container`) exposes `default` for region content. |
 | `default` | — | global-header-brand` exposes `default` for logo markup. |
 
 ## Sub-components
 
-- `global-header-container.vue` — Start cluster wrapper; groups the menu trigger (`Left`) and `Brand` into one `shrink-0` flex unit, mirroring the Figma `Container` region. Optional — consumers may still place `Left`/`Brand` directly in the root.
-- `global-header-left.vue` — Start region; flex row for menu and leading actions.
-- `global-header-middle.vue` — Center region; grows to fill space between start and end. Also exposed as `GlobalHeader.Nav` (Figma `Nav` name); both names reference the same component.
-- `global-header-right.vue` — End region; trailing actions aligned to the end.
+- `global-header-container.vue` — Start cluster wrapper; groups the menu trigger (`Start`) and `Brand` into one `shrink-0` flex unit, mirroring the Figma `Container` region. Optional — consumers may still place `Start`/`Brand` directly in the root.
+- `global-header-start.vue` — `GlobalHeader.Start`. Start region; flex row for the menu trigger and leading actions. Logical name: it sits on the right under `dir="rtl"`.
+- `global-header-center.vue` — `GlobalHeader.Center`. Center region; grows to fill the space between start and end.
+- `global-header-end.vue` — `GlobalHeader.End`. End region; trailing actions aligned to the end.
+- `global-header-left.vue` — `GlobalHeader.Left`. **@deprecated since 6.0 — use `GlobalHeader.Start`. Removed in 7.0.** Same region and markup; keeps its `__left` testid.
+- `global-header-middle.vue` — `GlobalHeader.Middle`, also `GlobalHeader.Nav` (the Figma `Nav` name). **@deprecated since 6.0 — use `GlobalHeader.Center`. Removed in 7.0.** Same region and markup; keeps its `__middle` testid.
+- `global-header-right.vue` — `GlobalHeader.Right`. **@deprecated since 6.0 — use `GlobalHeader.End`. Removed in 7.0.** Same region and markup; keeps its `__right` testid.
+
+The regions are named start / center / end, not left / right, because the bar mirrors under
+right-to-left: the start region is on the right there. The deprecated physical names render the
+same markup and keep working until 7.0. The new parts derive `__start`, `__center` and `__end`
+testids from the root.
 - `global-header-brand.vue` — Brand slot wrapper sized for Azion logo SVGs (default / min).
 
 ## States
@@ -86,7 +94,7 @@
 
 <template>
   <GlobalHeader aria-label="Global header">
-    <GlobalHeader.Left>
+    <GlobalHeader.Start>
       <GlobalHeader.Brand>
         <a
           href="/"
@@ -95,9 +103,9 @@
           <Default />
         </a>
       </GlobalHeader.Brand>
-    </GlobalHeader.Left>
-    <GlobalHeader.Middle />
-    <GlobalHeader.Right />
+    </GlobalHeader.Start>
+    <GlobalHeader.Center />
+    <GlobalHeader.End />
   </GlobalHeader>
 </template>
 ```
@@ -114,20 +122,20 @@
 <template>
   <div class="flex w-full flex-col bg-(--bg-canvas)">
     <GlobalHeader aria-label="Console header">
-      <GlobalHeader.Left>
+      <GlobalHeader.Start>
         <div class="flex w-full min-w-0 items-center gap-(--spacing-xs)">
           <Breadcrumb :items="[{ label: 'Build', href: '/build' }, { label: 'Custom Pages' }]" />
         </div>
-      </GlobalHeader.Left>
-      <GlobalHeader.Middle />
-      <GlobalHeader.Right>
+      </GlobalHeader.Start>
+      <GlobalHeader.Center />
+      <GlobalHeader.End>
         <Button
           label="Create"
           kind="secondary"
           size="medium"
           icon="pi pi-plus-circle"
         />
-      </GlobalHeader.Right>
+      </GlobalHeader.End>
     </GlobalHeader>
     <div class="layout-boundary">
       <h1 class="text-heading-xl text-(--text-default)">Custom Pages</h1>
@@ -163,7 +171,7 @@
             size="small"
         /></a>
       </GlobalHeader.Brand>
-      <GlobalHeader.Middle>
+      <GlobalHeader.Center>
         <div class="flex w-full min-w-0 items-center">
           <a
             class="text-label-md text-(--text-default) no-underline"
@@ -171,14 +179,14 @@
             >Pricing</a
           >
         </div>
-      </GlobalHeader.Middle>
-      <GlobalHeader.Right>
+      </GlobalHeader.Center>
+      <GlobalHeader.End>
         <Button
           label="Start for Free"
           kind="primary"
           size="medium"
         />
-      </GlobalHeader.Right>
+      </GlobalHeader.End>
     </GlobalHeader>
     <section
       class="mx-auto w-full max-w-(--layout-measure-site) px-(--layout-boundary-inline) py-(--spacing-xl)"

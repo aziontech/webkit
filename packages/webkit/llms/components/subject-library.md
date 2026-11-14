@@ -36,6 +36,7 @@
 | `anchor` | `string` | `''` | false | In-page `id` of the band, the target of a `#hash` link. |
 | `subjects` | `SubjectLibrarySubject[]` | `[]` | false | The subject cards, in order; each is `{ slug, title, description, articles }` where every article is `{ label, href }`. Subjects without a title or a linked article are skipped. |
 | `closing` | `SubjectLibraryClosing` | `undefined` | false | Call to action across the grid's last two cells; `{ eyebrow, title, titleMuted, description, primaryAction, secondaryAction }` where each action is `{ label, href, trailing?, target? }`. Omitted when absent. |
+| `ariaLabel` | `string` | `''` | false | Accessible name of the band; empty leaves the section unnamed. Set it so the band is a named region landmark. |
 
 ## States
 
@@ -47,10 +48,25 @@
 
 - Visible focus: each article link draws `focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring-color)`; the closing buttons own theirs.
 - Keyboard map: `Tab` moves through the article links in reading order, then the closing actions; `Enter` follows one. Nothing else in the band is interactive.
-- ARIA: the band is a `<section>` carrying `anchor` as its `id`; each subject is an `h3` over a `role="list"` of links; the closing cell is `call-to-action`'s own section, named by its title.
+- ARIA: the band is a `<section>` carrying `anchor` as its `id` and named by `ariaLabel` when set, so it becomes a region landmark; each subject is an `h3` over a `role="list"` of links; the closing cell is `call-to-action`'s own section, named by its title.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): titles `var(--text-default)`, descriptions and links `var(--text-muted)`.
 - `motion-reduce:transition-none motion-reduce:transform-none` — the article link colour transition carries `motion-reduce:transition-none`.
 - Touch target ≥40×40 px — the closing actions are large `button`s; article links are inline text links inside a list.
+
+## Right-to-left
+
+- Layout: the composed `card-grid` and `call-to-action` use logical utilities, so the grid fills from the inline start.
+- Icons: the closing buttons' chevrons mirror (owned by `button`).
+- Keyboard: unchanged.
+
+## Internationalization
+
+- No built-in strings: subject titles, descriptions, article labels, the closing copy and `ariaLabel` arrive through props.
+
+## Responsive
+
+- One subject per row on phones (`mobileColumns: 1`), three columns from the grid's breakpoint up; the closing cell spans two cells from the small breakpoint.
+- No horizontal scroll at 320 px.
 
 ## Examples
 

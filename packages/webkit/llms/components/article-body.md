@@ -39,6 +39,7 @@
 | `community` | `ArticleBodyCommunity` | `undefined` | false | The community group: a `title` and `links`, each a `label`, an `href` and an `icon`; omitted when absent. |
 | `copyPage` | `ArticleBodyCopyPage` | `undefined` | false | The copy-page split button: its `label` and a `menu` of entries, each a `value`, a `label` and an `icon`; omitted when absent. |
 | `assistants` | `Record<string, string>` | `{}` | false | URL templates of the assistants the copy-page menu opens, keyed by menu `value`; `{prompt}` in a template is replaced by the encoded prompt to read the article. |
+| `anchor` | `string` | `''` | false | In-page id set on the band so a hash link can target it. |
 
 ## States
 
@@ -70,14 +71,14 @@
 
 ## Internationalization
 
-| Key | English source | Override prop |
-|---|---|---|
-| `articleBody.copiedLink` | `Link copied` | `share.copiedLink` |
-| `articleBody.copiedFeed` | `Feed link copied` | `share.copiedFeed` |
-| `articleBody.copiedPage` | `Page copied as markdown` | `share.copiedPage` |
-| `articleBody.copyFailed` | `Could not copy` | — |
-| `articleBody.copyFailedHint` | `Your browser blocked clipboard access.` | — |
-| `articleBody.assistantPrompt` | `Read {url} so I can ask questions about it.` | — |
+| Key                           | English source                                | Override prop      |
+| ----------------------------- | --------------------------------------------- | ------------------ |
+| `articleBody.copiedLink`      | `Link copied`                                 | `share.copiedLink` |
+| `articleBody.copiedFeed`      | `Feed link copied`                            | `share.copiedFeed` |
+| `articleBody.copiedPage`      | `Page copied as markdown`                     | `share.copiedPage` |
+| `articleBody.copyFailed`      | `Could not copy`                              | —                  |
+| `articleBody.copyFailedHint`  | `Your browser blocked clipboard access.`      | —                  |
+| `articleBody.assistantPrompt` | `Read {url} so I can ask questions about it.` | —                  |
 
 - Every other string (labels, trail, the article) arrives through props.
 - Formatting: none; the date and read time arrive pre-formatted.

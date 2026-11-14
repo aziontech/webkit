@@ -66,7 +66,8 @@ Neither part is an overlay, so neither is named `Trigger` or `Content` and neith
 - `basis` — `number`, default unset. The pane length in pixels along the group axis, two-way through `v-model:basis`. Leave unset for the pane that absorbs the remaining space.
 - `min` — `number`, default `96`. Smallest length in pixels a drag may set.
 - `max` — `number`, default `720`. Largest length in pixels a drag may set.
-- `collapsed` — `boolean`, default unset. Whether the pane renders at zero length, two-way through `v-model:collapsed`. The pane stays mounted, so its content keeps its state.
+- `expanded` — `boolean`, default `true`. Whether the pane is shown at its length; `false` renders it at zero length. Two-way through `v-model:expanded`. The pane stays mounted, so its content keeps its state.
+- `collapsed` — `boolean`, default unset. **@deprecated since 6.0 — use `v-model:expanded` (inverted). Removed in 7.0.** The inverse of `expanded`; a host that binds only `collapsed` still drives the pane.
 - `collapsible` — `boolean`, default `false`. Whether dragging past the minimum collapses the pane instead of stopping at it.
 - `ariaLabel` — `string`, default `''`. Accessible name for the region.
 
@@ -76,8 +77,9 @@ Neither part is an overlay, so neither is named `Trigger` or `Content` and neith
 - `disabled` — `boolean`, default `false`. Disables the drag and the keyboard nudge, and removes the separator from the tab order.
 
 `resizable-pane` events: `update:basis` (`number`) on every step of a drag and on a
-keyboard nudge, and `update:collapsed` (`boolean`) when a drag past the minimum collapses
-the pane or a drag back out restores it. Both are the `v-model` half of the props above.
+keyboard nudge, and `update:expanded` (`boolean`) when a drag past the minimum or `Enter` on the
+handle collapses the pane, or a drag back out restores it; the deprecated `update:collapsed` is
+emitted with the inverse value on the same change. Each is the `v-model` half of the props above.
 
 `resizable-handle` emits nothing: it drives the pane beside it through the group's
 context, so a consumer never wires one part to the other.
@@ -86,7 +88,7 @@ context, so a consumer never wires one part to the other.
 
 - Visual states: `default`, `hover`, `focus-visible`, `active`, `disabled`
 - `data-orientation`: `horizontal` | `vertical` — on the root, and mirrored onto every pane and handle so each part styles itself off one fact.
-- `data-collapsed` mirrors the pane's `collapsed` state
+- `data-collapsed` is set while the pane is collapsed (`expanded` false)
 - `data-resizing` on the handle while a drag is in flight
 - `data-disabled` mirrors the handle's `disabled` prop
 - Reflow: the group clips on its main axis (`overflow-x-clip` / `overflow-y-clip`), so the hit area of a handle at the edge (a collapsed end pane) never adds overflow.
@@ -197,16 +199,16 @@ context, so a consumer never wires one part to the other.
   import Resizable from '@aziontech/webkit/resizable'
   import { ref } from 'vue'
 
-  const collapsed = ref(true)
+  const expanded = ref(false)
 </script>
 
 <template>
   <div class="flex flex-col gap-(--spacing-sm)">
     <button
       type="button"
-      @click="collapsed = !collapsed"
+      @click="expanded = !expanded"
     >
-      {{ collapsed ? 'Show' : 'Hide' }} the preview
+      {{ expanded ? 'Hide' : 'Show' }} the preview
     </button>
     <div class="h-64">
       <Resizable
@@ -216,7 +218,7 @@ context, so a consumer never wires one part to the other.
         <Resizable.Pane aria-label="Editor">Editor</Resizable.Pane>
         <Resizable.Handle aria-label="Resize the preview" />
         <Resizable.Pane
-          v-model:collapsed="collapsed"
+          v-model:expanded="expanded"
           :basis="240"
           :min="160"
           collapsible

@@ -1,16 +1,16 @@
 # DeploymentFlow (`platform/create/deployment-flow`)
 
-> The deploy flow card a create flow streams while it deploys: a Card titled Deployment whose header carries the run status, a StatusIndicator while it runs and the Phased or Complete ToggleGroup once it has failed, opening on a cloning splash (a source tile, a marching dashed connector and a large destination tile that fade into the logs) and then streaming the DeploymentLogs block with its controls moved up to that header: a Logs row with the step count, the pipeline as an Accordion of steps, each with its status glyph, its time and its own LogView, over a flush Progress. A create flow that provisions rather than deploys titles it Provisioning, with a Creating status and a Provisioning splash; the standalone logs block is the DeploymentLogs template. The live stream is shown here as one story per state, with the steps and log lines of the template deploy pipeline. Built from Card, StatusIndicator, ToggleGroup, Accordion, LogView, Spinner, Tag and Progress.
+> The deploy flow card a create flow streams while it deploys: a Card titled Deployment whose header carries the run status, a StatusIndicator while it runs and the Phased or Complete ToggleGroup once it has failed, opening on a cloning splash (a source tile, a marching dashed connector and a large destination tile that fade into the logs) and then streaming the DeploymentLogs block with its controls moved up to that header: a Logs row with the step count, the pipeline as an Accordion of steps, each with its status glyph and the status in words for assistive technology, its time and its own LogView, over a flush Progress. A create flow that provisions rather than deploys titles it Provisioning, with a Creating status and a Provisioning splash; the standalone logs block is the DeploymentLogs template. The live stream is shown here as one story per state, with the steps and log lines of the template deploy pipeline. Built from Card, StatusIndicator, ToggleGroup, Accordion, LogView, Spinner, Tag and Progress.
 
 - Surface: product
 - Source: `blocks/platform/create/deployment-flow/deployment-flow.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/create/deployment-flow")`
-- Components: [Accordion](../../../components/accordion.md), [Card](../../../components/card.md), [LogView](../../../components/log-view.md), `LogViewContent`, [Progress](../../../components/progress.md), [Spinner](../../../components/spinner.md), [StatusIndicator](../../../components/status-indicator.md), [Tag](../../../components/tag.md), [ToggleGroup](../../../components/toggle-group.md)
+- Components: [Accordion](../../../components/accordion.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [LogView](../../../components/log-view.md), `LogViewContent`, [Progress](../../../components/progress.md), [Spinner](../../../components/spinner.md), [StatusIndicator](../../../components/status-indicator.md), [Tag](../../../components/tag.md), [ToggleGroup](../../../components/toggle-group.md)
 - Skills: `webkit-ui-states`, `webkit-errors`
 
 ## Asked as
 
-deployment progress; build logs; deploy logs; creation progress; deployment status; build pipeline; deploy failed; progresso do deploy; logs de build; status da implantação; deploy flow; streaming deploy logs; fluxo de deploy
+deployment progress; creation progress; deployment status; build pipeline; deploy failed; status da implantação; deploy flow; fluxo de deploy; first deploy; primeiro deploy
 
 The card a create flow hands its column to once the user has pressed Deploy. The user waits here for the first deploy of what they just made: they need to know that it started, what it is doing now, how far it has gone and, if it stops, which step failed and why. The card opens on a cloning splash, then streams the pipeline steps with their logs, and either hands over to the success screen or stays open on the failure.
 
@@ -35,7 +35,9 @@ The card a create flow hands its column to once the user has pressed Deploy. The
 
 ### B. Run status — `StatusIndicator` (required)
 
-Sits in the card header, opposite the title. While the run goes it is a loading `StatusIndicator` with `severity="info"` and a progressive label, Building or Creating. When the run settles, the outcome moves to a `Tag` in the Logs row (Completed or Failed) and, after a failure, the header swaps the indicator for the Phased or Complete `ToggleGroup` so the user can read the logs step by step or as one console.
+Sits in the card header, opposite the title. While the run goes it is a loading `StatusIndicator` with `severity="info"` and a progressive label: Cloning during the splash, then Building, or Creating when the flow provisions. When the run settles, the outcome moves to a `Tag` in the Logs row (Completed or Failed) and, after a failure, the header swaps the indicator for the Phased or Complete `ToggleGroup` so the user can read the logs step by step or as one console.
+
+**Failure actions (Failed).** After a failure the card footer holds Edit (outlined, back to the form with the values kept) and Redeploy (primary, starts the run again, with its loading state and a Redeploying indicator in the header). Every deploy surface ends a failure with the same two actions (`platform/create/deploy-drawer`, `platform/create/deploy-progress-dialog`, `platform/states/async-submit`, `platform/create/release-impact`).
 
 ## Do
 
@@ -51,12 +53,12 @@ Sits in the card header, opposite the title. While the run goes it is a loading 
 - Don't put the run status in a toast; it belongs in the card header.
 - Don't auto-advance to the success screen after a failure, or hide the logs that explain it.
 - Don't expand every finished step; a long log pushes the step in flight out of view.
-- Don't add a Cancel or a second action to the card; the flow around it owns navigation.
+- Don't add a Cancel to the card while the run goes; the flow around it owns navigation. The only actions are Edit and Redeploy after a failure.
 
 ## Copy
 
 - **Card title:** one noun naming the run, e.g. "Deployment" or "Provisioning".
-- **Run status:** the progressive form of the verb with `…` only while in progress, e.g. "Building…" in prose, "Building" as an indicator label.
+- **Run status:** the progressive form of the verb with `…` only while in progress, e.g. "Cloning…" or "Building…" in prose, "Cloning" or "Building" as an indicator label. Log lines end with a period, never an exclamation mark.
 - **Splash line:** the screen-reader line names source and destination in fragments, e.g. "Cloning acme/web-app to acme".
 - **Outcome tag:** one or two words stating the result, e.g. "Completed", "Failed".
 - **Pending steps:** say they have not started, e.g. "Waiting to start…".
@@ -65,18 +67,18 @@ Sits in the card header, opposite the title. While the run goes it is a loading 
 
 ## Accessibility
 
-- The status label is text, not only a colour or a spinner; screen readers hear Building, then the outcome.
+- The status label is text, not only a colour or a spinner; screen readers hear Cloning, then Building, then the outcome.
 - The progress bar has an accessible name, e.g. "Deployment progress", and the logs region an `aria-label`.
-- The splash tiles and connector are one `aria-hidden` group; its meaning is the visually hidden live line. Decorative glyphs in the splash and in step rows carry `aria-hidden="true"`; the status of each step is also given in words.
+- The splash tiles and connector are one `aria-hidden` group; its meaning is the visually hidden live line. Decorative glyphs in the splash and in step rows carry `aria-hidden="true"`; the status of each step is also given in words: a visually hidden Done, In progress, Waiting (or the Failed and Skipped `Tag`) inside each step trigger.
 - Step headers are keyboard-operable accordion triggers; opening a step does not move focus.
 - New log lines do not steal focus or announce one by one; the step change and the outcome are what is announced.
 
 ## States
 
-- Initial: Deploy was just pressed; the cloning splash (source tile, marching connector, destination tile) with a Building indicator, before the first step starts.
+- Initial: Deploy was just pressed; the cloning splash (source tile, marching connector, destination tile) with a Cloning indicator, before the first step starts.
 - Running: two steps done with their times, the current step spinning and open on its lines, the step count shown and the progress bar on the bottom edge.
 - Finished: every step checked and collapsed, a Completed tag, the progress bar retired, just before the success screen.
-- Failed: the failing step open on its error output with a Failed tag, the later steps Skipped, and the Phased or Complete switch in the header.
+- Failed: the failing step open on its error output with a Failed tag, the later steps Skipped, the Phased or Complete switch in the header, and Edit and Redeploy in the card footer.
 
 ## Related
 
@@ -92,7 +94,7 @@ Sits in the card header, opposite the title. While the run goes it is a loading 
 - `Initial` — primary (the code below)
 - `Running` — Mid-stream: two steps checked with their times, Install dependencies spinning and open on the lines printed so far, the step count in the Logs row and the progress bar on the bottom edge.
 - `Finished` — The last line has printed: every step checked and collapsed, a Completed Tag in the Logs row and the progress bar retired, a beat before the flow hands over to its success screen.
-- `Failed` — The routing rules were rejected: that step is open on its error output with a Failed Tag, the steps behind it read Skipped, and the header swaps the status for the Phased or Complete switch.
+- `Failed` — The routing rules were rejected: that step is open on its error output with a Failed Tag, the steps behind it read Skipped, the header swaps the status for the Phased or Complete switch, and the card footer offers Edit (back to the form, values kept) and Redeploy.
 
 Each variant is the same screen in another state: `get_pattern("platform/create/deployment-flow", { variant })`, or the file under `blocks/platform/create/deployment-flow/variants/`.
 
@@ -114,7 +116,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
       <StatusIndicator
         loading
         severity="info"
-        label="Building"
+        label="Cloning"
       />
     </template>
 

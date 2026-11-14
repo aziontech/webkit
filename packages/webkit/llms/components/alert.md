@@ -45,13 +45,14 @@
 | `actionLabel` | `string` | `''` | false | Label for the built-in secondary action button; hidden when empty. |
 | `closable` | `boolean` | `false` | false | When true, shows a close control that dismisses the message. |
 | `life` | `number` | `0` | false | Duration in milliseconds before auto-dismiss; `0` disables auto-dismiss. |
+| `title` | `string` | `''` | false | Optional bold first line above the copy (the AlertTitle of the shadcn anatomy); hidden when empty. |
 
 ## Events
 
 | Event | Payload | Notes |
 | --- | --- | --- |
 | `action` | `MouseEvent` | Emitted when the built-in action button is clicked. |
-| `close` | `void` | Emitted when the message is dismissed manually or after `life` expires. |
+| `close` | `(event?: Event)` | Emitted when the message is dismissed, after the fade. Carries the originating event: the close button's `MouseEvent` or the `Escape` `KeyboardEvent`; no argument after `life` expires. |
 
 ## Slots
 
@@ -76,7 +77,7 @@
 - ARIA: root uses `role="alert"` for danger/warning severities and `role="status"` for info/success.
 - Inline links are underlined, not colour-only, so they stay distinguishable against every severity surface (WCAG 1.4.1); the `.text-link` token supplies the focus outline.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state.
-- `motion-reduce:transition-none motion-reduce:transform-none` on animated states.
+- `motion-reduce:transition-none` on the dismiss fade; nothing sets the transition inline.
 - Touch target ≥40×40 px where the control is interactive.
 
 ## Examples

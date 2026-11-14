@@ -76,7 +76,7 @@
    "type": "string",
    "default": "''",
    "required": "false",
-   "doc": "Accessible name of the tree."
+   "doc": "Accessible name of the tree. Empty uses the locale catalog (`tree.label`, `Tree`), so the `tree` role always has a name."
   },
   {
    "name": "expanded",

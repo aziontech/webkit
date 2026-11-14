@@ -36,7 +36,7 @@
 | `ariaLabel` | `string` | `''` | false | Accessible name of the quote carousel. |
 | `items` | `ClientQuotesItem[]` | `[]` | false | The quotes, in order; each is `{ text, name?, jobTitle?, mark?, logo?, clientName?, photo? }` where `mark` is a registry mark name and `logo` a mark URL named by `clientName`. |
 | `primaryAction` | `ClientQuotesAction` | `undefined` | false | Button under the quotes; `{ label, href, trailing? }`. Omitted when absent. |
-| `autoplay` | `boolean` | `true` | false | Advances to the next quote on a timer, as `quote-tabs` does; pauses under the pointer or keyboard focus and never runs under reduced motion. |
+| `autoplay` | `boolean` | `true` | false | Advances to the next quote on a timer, as `quote-tabs` does, with its visible pause control; pauses under the pointer or keyboard focus and never runs under reduced motion. |
 | `autoplayInterval` | `number` | `5000` | false | Milliseconds each quote is held before the band advances. |
 | `modelValue` | `number` | `0` | false | Two-way value (`v-model`). |
 

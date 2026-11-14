@@ -43,27 +43,35 @@
    "doc": "Spans of the trace, each `{ id, parentId?, name, service?, icon?, start, duration, status?, message?, attributes? }` in milliseconds."
   },
   {
-   "name": "selected",
-   "type": "string",
-   "default": "''",
-   "required": "false",
-   "doc": "Id of the span whose details show under the waterfall. Supports v-model:selected."
-  },
-  {
    "name": "ariaLabel",
    "type": "string",
    "default": "''",
    "required": "false",
    "doc": "Accessible name of the waterfall. Empty uses the locale catalog."
-  }
- ],
- "events": [
+  },
   {
-   "name": "update:selected",
-   "payload": "string",
-   "notes": "A row was selected, selected again (empty: deselected), or Close used."
+   "name": "bordered",
+   "type": "boolean",
+   "default": "true",
+   "required": "false",
+   "doc": "Draws the outer border and radius. Off for a trace inside a card or panel that has its own."
+  },
+  {
+   "name": "loading",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Shows placeholder rows while the spans load; search and selection wait."
+  },
+  {
+   "name": "selected",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Two-way value (`v-model:selected`)."
   }
  ],
+ "events": [],
  "slots": [],
  "styleSeam": false,
  "assets": [],

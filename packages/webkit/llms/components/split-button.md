@@ -1,6 +1,6 @@
 # Split Button
 
-> A primary command button visually joined to a chevron toggle that opens an overlay menu of related actions defined by a `model` array. The primary button runs the default action; the joined toggle composes `navigation/dropdown-menu` to present the remaining actions. Opt into `updateLabelOnSelect` to have the primary segment mirror the last-chosen menu action (label + icon), turning the control into a "default is the last selection" pattern; the primary `click` then reports that mirrored action as its second argument, so a single handler can run whichever action is active. Use it when one action is the default and related actions belong in an attached menu; for a single action use `Button`, and for a standalone menu use `DropdownMenu`.
+> A primary command button visually joined to a chevron toggle that opens an overlay menu of related actions defined by an `items` array (`model` is its deprecated name until 7.0). The primary button runs the default action; the joined toggle composes `navigation/dropdown-menu` to present the remaining actions. Opt into `updateLabelOnSelect` to have the primary segment mirror the last-chosen menu action (label + icon), turning the control into a "default is the last selection" pattern; the primary `click` then reports that mirrored action as its second argument, so a single handler can run whichever action is active. Use it when one action is the default and related actions belong in an attached menu; for a single action use `Button`, and for a standalone menu use `DropdownMenu`.
 
 - Import: `import SplitButton from '@aziontech/webkit/split-button'`
 - Category: actions · Surface: product · Structure: monolithic
@@ -38,12 +38,14 @@
 | --- | --- | --- | --- | --- |
 | `label` | `string` | `''` | false | Visible label text on the primary command button. |
 | `icon` | `string` | `''` | false | PrimeIcons class for the primary button's leading icon. |
-| `model` | `SplitButtonItem[]` | `[]` | false | Actions rendered as rows in the attached overlay menu. |
+| `items` | `SplitButtonItem[]` | `[]` | false | Actions rendered as rows in the attached overlay menu. Same name as ButtonGroup's actions. |
+| `model` | `SplitButtonItem[]` | `[]` | false | @deprecated since 6.0 — use items. Removed in 7.0.` Read when `items` is empty. |
 | `kind` | `'primary' \| 'secondary' \| 'outlined'` | `'primary'` | false | Visual variant applied to both joined segments. |
 | `size` | `'small' \| 'medium' \| 'large'` | `'large'` | false | Size token; affects height, padding, and typography. |
 | `disabled` | `boolean` | `false` | false | Disables both segments and prevents the menu from opening. |
 | `loading` | `boolean` | `false` | false | Shows a spinner on the primary button and takes the disabled status: both segments are disabled and the menu cannot open while it resolves. |
 | `updateLabelOnSelect` | `boolean` | `false` | false | When true, selecting a menu action updates the primary button's label and icon to mirror that action and marks it as selected in the menu. Opt-in; the mirrored action is also reported as the primary `click`'s second argument, so the consumer decides what each segment does. |
+| `selected` | `string \| null` | `null` | false | Two-way value (`v-model:selected`). |
 
 ## Events
 
@@ -55,6 +57,12 @@
 ## Assets
 
 - Icons: every valid name is in [icons.md](../foundations/icons.md) (MCP `list_assets({ kind: "icons" })`). An unknown class renders nothing.
+
+## v-model
+
+| Model              | Type             | Default | Emits             | Notes                                                                                                                                                                         |
+| ------------------ | ---------------- | ------- | ----------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `v-model:selected` | `string \| null` | `null`  | `update:selected` | Value (`value`, else `label`) of the action the primary button mirrors when `updateLabelOnSelect` is on, via `defineModel('selected')`. Bind it to read or restore the mirrored action; unbound, the control keeps its own. `null` shows the default `label` and `icon`. |
 
 ## States
 
@@ -82,6 +90,20 @@
 - Keyboard: no horizontal arrow-key logic.
 - User data: none.
 
+## Internationalization
+
+| Key                          | English source             | Override prop |
+| ---------------------------- | -------------------------- | ------------- |
+| `splitButton.moreActions`    | `More actions`             | —             |
+| `splitButton.moreActionsFor` | `More actions for {label}` | —             |
+
+- The primary label and the action labels are consumer copy.
+
+## Responsive
+
+- The control never wraps; on narrow screens keep the label short or move the actions into a `DropdownMenu` behind an `IconButton`.
+- Touch: both segments use the Button and IconButton touch-target spans (44 px on a coarse pointer).
+
 ## Examples
 
 ### Default
@@ -103,7 +125,7 @@
     size="large"
     label="Save"
     icon="pi pi-check"
-    :model="items"
+    :items="items"
   />
 </template>
 ```
@@ -126,17 +148,17 @@
     <SplitButton
       kind="primary"
       label="Primary"
-      :model="items"
+      :items="items"
     />
     <SplitButton
       kind="secondary"
       label="Secondary"
-      :model="items"
+      :items="items"
     />
     <SplitButton
       kind="outlined"
       label="Outlined"
-      :model="items"
+      :items="items"
     />
   </div>
 </template>
@@ -160,17 +182,17 @@
     <SplitButton
       size="small"
       label="Small"
-      :model="items"
+      :items="items"
     />
     <SplitButton
       size="medium"
       label="Medium"
-      :model="items"
+      :items="items"
     />
     <SplitButton
       size="large"
       label="Large"
-      :model="items"
+      :items="items"
     />
   </div>
 </template>

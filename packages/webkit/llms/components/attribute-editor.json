@@ -42,20 +42,6 @@
  ],
  "props": [
   {
-   "name": "items",
-   "type": "TItem[]",
-   "default": "[]",
-   "required": "false",
-   "doc": "Rows in list mode. Supports v-model:items."
-  },
-  {
-   "name": "groups",
-   "type": "TItem[][]",
-   "default": "undefined",
-   "required": "false",
-   "doc": "Rows in grouped mode: every inner array is an AND group, groups are joined by OR. Supports v-model:groups."
-  },
-  {
    "name": "definition",
    "type": "AttributeEditorColumn[]",
    "default": "[]",
@@ -166,19 +152,23 @@
    "default": "''",
    "required": "false",
    "doc": "Accessible name of the list of rows."
+  },
+  {
+   "name": "items",
+   "type": "TItem[]",
+   "default": "() => []",
+   "required": "false",
+   "doc": "Two-way value (`v-model:items`)."
+  },
+  {
+   "name": "groups",
+   "type": "TItem[][] | undefined",
+   "default": "undefined",
+   "required": "false",
+   "doc": "Two-way value (`v-model:groups`)."
   }
  ],
  "events": [
-  {
-   "name": "update:items",
-   "payload": "TItem[]",
-   "notes": "A row was added, removed, edited or moved in list mode."
-  },
-  {
-   "name": "update:groups",
-   "payload": "TItem[][]",
-   "notes": "A row or group was added, removed, edited or moved in grouped mode."
-  },
   {
    "name": "add",
    "payload": "(event: MouseEvent, detail: { index: number; groupIndex?: number })",

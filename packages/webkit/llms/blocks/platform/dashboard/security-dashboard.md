@@ -1,11 +1,11 @@
 # SecurityDashboard (`platform/dashboard/security-dashboard`)
 
-> The security dashboard pattern: blocked and allowed requests over time, breakdowns by attack category and origin, the top sources and an attention list. A row of three StatTiles (Requests blocked, Requests inspected, Block rate, each with its delta against the previous period and a sparkline) sits over a 12-column grid of ChartCards. Matched requests over time plots blocked and logged requests; Needs attention lists the settings and traffic that ask for a decision, each with a severity Tag and one action Link; attack categories and countries read as ranked BarLists, and the top source IPs as a searchable, paginated TableRoot. With no rule set in place the tiles stay as dashes and one setup EmptyState that offers Add rule set replaces the grid. Built from `PageHeader`, `StatTile`, `ChartCard`, `Chart`, `BarList`, `Item`, `Tag`, `Link`, `TableRoot`, `Hint`, `ToggleGroup`, `DropdownMenu`, `Skeleton`, `EmptyState` and `Button`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
+> The security dashboard pattern: blocked and allowed requests over time, breakdowns by attack category and origin, the top sources and an attention list, under a PageHeader whose Period Select sets the comparison of every delta and the period in each exported CSV name. A row of three StatTiles (Requests blocked, Requests inspected, Block rate, each with its delta against the previous period and a sparkline) sits over a 12-column grid of ChartCards. Matched requests over time plots blocked and logged requests; Needs attention lists the settings and traffic that ask for a decision, each with a severity Tag and one action Link; attack categories and countries read as ranked BarLists, and the top source IPs as a searchable, paginated TableRoot. With no rule set in place the tiles stay as dashes and one setup EmptyState that offers Add rule set replaces the grid. Built from `PageHeader`, `StatTile`, `ChartCard`, `Chart`, `BarList`, `Item`, `Tag`, `Link`, `TableRoot`, `Hint`, `ToggleGroup`, `DropdownMenu`, `Skeleton`, `EmptyState` and `Button`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
 
 - Surface: product
 - Source: `blocks/platform/dashboard/security-dashboard/security-dashboard.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/dashboard/security-dashboard")`
-- Components: [Alert](../../../components/alert.md), [BarList](../../../components/bar-list.md), [Button](../../../components/button.md), [Chart](../../../components/chart.md), [ChartCard](../../../components/chart-card.md), [Dialog](../../../components/dialog.md), `DialogClose`, `DialogContent`, `DialogDescription`, `DialogOverlay`, `DialogPortal`, `DialogTitle`, [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [Hint](../../../components/hint.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [Item](../../../components/item.md), [Link](../../../components/link.md), [PageHeader](../../../components/page-header.md), `PanelContent`, `PanelHeader`, [Skeleton](../../../components/skeleton.md), [StatTile](../../../components/stat-tile.md), `TableRoot`, [Tag](../../../components/tag.md), [Toast](../../../components/toast.md), [ToggleGroup](../../../components/toggle-group.md), [Tooltip](../../../components/tooltip.md), `utils/csv`
+- Components: [Alert](../../../components/alert.md), [BarList](../../../components/bar-list.md), [Button](../../../components/button.md), [Chart](../../../components/chart.md), [ChartCard](../../../components/chart-card.md), [Dialog](../../../components/dialog.md), `DialogClose`, `DialogContent`, `DialogDescription`, `DialogOverlay`, `DialogPortal`, `DialogTitle`, [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [Hint](../../../components/hint.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [Item](../../../components/item.md), [Link](../../../components/link.md), [PageHeader](../../../components/page-header.md), `PanelContent`, `PanelHeader`, [Select](../../../components/select.md), [Skeleton](../../../components/skeleton.md), [StatTile](../../../components/stat-tile.md), `TableRoot`, [Tag](../../../components/tag.md), [Toast](../../../components/toast.md), [ToggleGroup](../../../components/toggle-group.md), [Tooltip](../../../components/tooltip.md), `utils/csv`
 - Skills: `webkit-data-viz`, `webkit-tables`, `webkit-ui-states`
 
 ## Asked as
@@ -34,10 +34,13 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 
 ## Building blocks
 
-### A. Page heading — `PageHeader` (required)
+### A. Page heading and period — `PageHeader`, `Select` (required)
 
 Title `Security` and one sentence on what the page shows, over the rest of the page in the standard
-`layout-column`.
+`layout-column`. The header actions hold one medium `Select` named `Period` by its `aria-label`
+(`Last hour`, `Last 24 hours`, `Last 7 days`, `Last 30 days`); it sets the comparison label of every
+delta (`vs previous 7 days`) and the period in the exported CSV file name
+(`requests-last-7-days.csv`). No card has a period control of its own.
 
 ### B. KPI row — `StatTile` (required)
 
@@ -190,6 +193,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
   import PageHeader from '@aziontech/webkit/page-header'
   import PanelContent from '@aziontech/webkit/panel-content'
   import PanelHeader from '@aziontech/webkit/panel-header'
+  import Select from '@aziontech/webkit/select'
   import StatTile from '@aziontech/webkit/stat-tile'
   import TableRoot, { type TableColumn } from '@aziontech/webkit/table-root'
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
@@ -198,6 +202,25 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
   import Tooltip from '@aziontech/webkit/tooltip'
   import { type CsvColumn, downloadCsv, toCsv } from '@aziontech/webkit/utils/csv'
   import { computed, ref } from 'vue'
+
+  const fallbackPeriod = {
+    value: '24h',
+    label: 'Last 24 hours',
+    comparison: 'vs previous 24 hours'
+  }
+  const periods = [
+    { value: '1h', label: 'Last hour', comparison: 'vs previous hour' },
+    fallbackPeriod,
+    { value: '7d', label: 'Last 7 days', comparison: 'vs previous 7 days' },
+    { value: '30d', label: 'Last 30 days', comparison: 'vs previous 30 days' }
+  ]
+  const period = ref(fallbackPeriod.value)
+  const periodLabel = (value: string) => periods.find((entry) => entry.value === value)?.label ?? ''
+  const currentPeriod = computed(
+    () => periods.find((entry) => entry.value === period.value) ?? fallbackPeriod
+  )
+  const periodComparison = computed(() => currentPeriod.value.comparison)
+  const periodSlug = computed(() => currentPeriod.value.label.toLowerCase().replaceAll(' ', '-'))
 
   interface AttentionEntry {
     id: string
@@ -503,7 +526,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
       copyQuery(report)
       return
     }
-    const filename = `${id}-last-24-hours.csv`
+    const filename = `${id}-${periodSlug.value}.csv`
     downloadCsv(filename, toCsv({ columns: report.columns, rows: report.rows() }))
     toast.success('CSV exported.', { description: filename })
   }
@@ -562,7 +585,26 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
       <PageHeader
         title="Security"
         description="Requests your rules blocked and inspected, and the settings that need a decision."
-      />
+      >
+        <template #actions>
+          <Select
+            v-model="period"
+            size="medium"
+            :display-value="periodLabel"
+          >
+            <Select.Trigger aria-label="Period" />
+            <Select.Content>
+              <Select.Option
+                v-for="option in periods"
+                :key="option.value"
+                :value="option.value"
+              >
+                {{ option.label }}
+              </Select.Option>
+            </Select.Content>
+          </Select>
+        </template>
+      </PageHeader>
       <ul class="grid grid-cols-1 gap-(--spacing-md) sm:grid-cols-3">
         <li class="flex min-w-0 flex-col">
           <StatTile
@@ -570,7 +612,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
             :value="requestsBlocked"
             :format-value="formatCount"
             :delta="requestsBlockedDelta"
-            delta-label="vs previous 24 hours"
+            :delta-label="periodComparison"
             inverse
             :trend="requestsBlockedTrend"
           >
@@ -587,7 +629,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
             :value="requestsInspected"
             :format-value="formatCount"
             :delta="requestsInspectedDelta"
-            delta-label="vs previous 24 hours"
+            :delta-label="periodComparison"
             :trend="requestsInspectedTrend"
           >
             <template #aside>
@@ -601,7 +643,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
             :value="blockRate"
             :format-value="formatPercent"
             :delta="blockRateDelta"
-            delta-label="vs previous 24 hours"
+            :delta-label="periodComparison"
             inverse
             :trend="blockRateTrend"
           >

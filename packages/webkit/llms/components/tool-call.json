@@ -51,27 +51,21 @@
    "doc": "pending` waits for authorization, `running` is in flight, then `success`, `error` or `denied` (the reader refused it)."
   },
   {
-   "name": "open",
-   "type": "boolean",
-   "default": "undefined",
-   "required": "false",
-   "doc": "Controlled open state of the input and output details. Use with `v-model:open`."
-  },
-  {
    "name": "defaultOpen",
    "type": "boolean",
    "default": "false",
    "required": "false",
    "doc": "Initial open state when uncontrolled; details start collapsed."
-  }
- ],
- "events": [
+  },
   {
-   "name": "update:open",
-   "payload": "boolean",
-   "notes": ""
+   "name": "open",
+   "type": "boolean",
+   "default": "undefined as never",
+   "required": "false",
+   "doc": "Two-way value (`v-model:open`)."
   }
  ],
+ "events": [],
  "slots": [
   {
    "name": "input",

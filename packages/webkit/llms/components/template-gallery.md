@@ -65,6 +65,21 @@
 - `motion-reduce:transition-none motion-reduce:transform-none` — the button hover and the ticker scroll belong to `button` and `ticker`, which carry their own reduced-motion fallback; this band adds no motion.
 - Touch target ≥40×40 px — the deploy buttons are medium `button`s, the copy's actions are large.
 
+## Right-to-left
+
+- Layout: logical utilities and the composed components' own mirroring, so the ask and the template grid follow the reading direction.
+- Icons: action chevrons mirror (owned by `button`).
+- Keyboard: unchanged.
+
+## Internationalization
+
+- No built-in strings: every visible string arrives through props.
+
+## Responsive
+
+- The composed `media-split` sets the ask beside the template grid and stacks them on narrow screens; the grid scrolls inside its `scroll-area`, at least 36rem tall and 44rem from large.
+- No horizontal scroll at 320 px.
+
 ## Examples
 
 ### Default

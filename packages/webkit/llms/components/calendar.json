@@ -25,6 +25,8 @@
  ],
  "related": [
   "select` — a fixed list of named periods without a grid.",
+  "date-range-picker` — time ranges: relative windows (`last 15 minutes`) kept relative, and absolute ranges down to the minute. Calendar is for whole days (a date or a date range); its `period` mode overlaps DateRangePicker's Relative tab, so prefer DateRangePicker for a time window. In shadcn and Radix-based kits `Calendar` names the inline month grid and the popover picker is a `DatePicker`; this component is the popover picker.",
+  "field` — inside a `Field`, the trigger takes the field's label (`for` points at it), description, `invalid` and `disabled`.",
   "input` — the trigger and the Start/End fields share its heights, hover, and disabled treatment, so they align side by side.",
   "number-input` — numeric durations instead of dates."
  ],
@@ -100,32 +102,53 @@
    "doc": "Shows Start/End time fields alongside the date fields."
   },
   {
+   "name": "showTimeZone",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Shows the time zone selector below the fields."
+  },
+  {
    "name": "showTimezone",
    "type": "boolean",
    "default": "false",
    "required": "false",
-   "doc": "Shows the timezone selector below the fields."
+   "doc": "@deprecated since 6.0 — use showTimeZone. Removed in 7.0.` Same effect as `showTimeZone`."
   },
   {
-   "name": "timezone",
-   "type": "string",
-   "default": "''",
+   "name": "timeZones",
+   "type": "string[]",
+   "default": "[]",
    "required": "false",
-   "doc": "Selected IANA timezone for display formatting (v-model:timezone). Empty resolves to the local zone."
+   "doc": "Time zone options for the selector (IANA names); empty falls back to a curated list derived from `Intl`."
   },
   {
    "name": "timezones",
    "type": "string[]",
    "default": "[]",
    "required": "false",
-   "doc": "Timezone options for the selector; empty falls back to a curated list derived from `Intl`."
+   "doc": "@deprecated since 6.0 — use timeZones. Removed in 7.0.` Read when `timeZones` is empty."
+  },
+  {
+   "name": "orientation",
+   "type": "'vertical' | 'horizontal'",
+   "default": "'vertical'",
+   "required": "false",
+   "doc": "Places the fields and Apply column below the calendar (vertical) or beside it (horizontal)."
   },
   {
    "name": "horizontal",
    "type": "boolean",
    "default": "false",
    "required": "false",
-   "doc": "Lays the fields/apply column beside the calendar instead of below it."
+   "doc": "@deprecated since 6.0 — use orientation=\"horizontal\". Removed in 7.0.` True has the effect of `orientation=\"horizontal\"`."
+  },
+  {
+   "name": "ariaLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Accessible name of the trigger; the current value is appended (`Billing period: Jan 1 – Jan 31`). Empty leaves the name to the Field label or the trigger text."
   },
   {
    "name": "clearable",
@@ -168,14 +191,23 @@
    "default": "undefined as never",
    "required": "false",
    "doc": "Two-way value (`v-model:open`)."
+  },
+  {
+   "name": "timeZone",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Two-way value (`v-model:timeZone`)."
+  },
+  {
+   "name": "timezone",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Two-way value (`v-model:timezone`)."
   }
  ],
  "events": [
-  {
-   "name": "update:timezone",
-   "payload": "string",
-   "notes": "v-model:timezone. Emitted when the timezone selection changes."
-  },
   {
    "name": "month-change",
    "payload": "CalendarMonth",
@@ -209,7 +241,7 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import CalendarRoot from '@aziontech/webkit/calendar-root'\n  import { ref } from 'vue'\n\n  const range = ref(null)\n</script>\n\n<template>\n  <CalendarRoot\n    v-model=\"range\"\n    mode=\"range\"\n    clearable\n    show-time\n    show-timezone\n  />\n</template>"
+   "sfc": "<script setup>\n  import CalendarRoot from '@aziontech/webkit/calendar-root'\n  import { ref } from 'vue'\n\n  const range = ref(null)\n</script>\n\n<template>\n  <CalendarRoot\n    v-model=\"range\"\n    mode=\"range\"\n    clearable\n    show-time\n    show-time-zone\n  />\n</template>"
   },
   {
    "name": "Sizes",

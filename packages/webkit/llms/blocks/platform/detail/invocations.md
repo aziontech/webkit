@@ -1,11 +1,11 @@
 # Invocations (`platform/detail/invocations`)
 
-> The Invocations page of one function, as a page body for ConsoleLayout: one run end to end. A `PageHeader` opens on the invocation summary `Card` (the function link, the copyable invocation ID with its `StatusIndicator`, Replay, the Recent switcher whose `DropdownMenu` picks another invocation, the Invocation actions menu with Open in Real-Time Events and Function settings, the Started, Completed, Duration and Location facts, and the triggering request with its outcome). Below it the Request path is a `Flow` with one node per hop (service, resource, function, origin), each with its `Tag`, its facts and the time spent there; a node's `IconButton` selects its span in the `Trace` waterfall and scrolls it into view. The `LogView` lists what the function printed, timed on the same clock as the trace. The Failed variant opens on a run the origin timed out, with the failing span selected; Running shows a run still in progress, its spans running and the logs still loading. Built from `PageHeader`, `Card`, `Tooltip`, `CopyButton`, `StatusIndicator`, `Button`, `DropdownMenu`, `IconButton`, `SectionHeader`, `Flow`, `Tag`, `Trace`, `LogView` and `LogViewContent`; Replay reports through `toast`.
+> The Invocation page of one function run, as a page body for ConsoleLayout: one run end to end. A `PageHeader` titled Invocation opens on the invocation summary `Card` (the function `Link`, the copyable invocation ID with its `StatusIndicator`, Replay, the Recent switcher, an outlined `Button` whose `DropdownMenu` picks another invocation, the Invocation actions menu with Open in Real-Time Events and Function settings, the Started, Completed, Duration and Location facts, and the triggering request with its outcome). Below it the Request path is a `Flow` with one node per hop (service, resource, function, origin), each with its `Tag`, its facts and the time spent there; a node's `IconButton` selects its span in the `Trace` waterfall and scrolls it into view. The `LogView` lists what the function printed, timed on the same clock as the trace. The Failed variant opens on a run the origin timed out, with the failing span selected; Running shows a run still in progress, its spans running and the lines printed so far under a Streaming indicator. Built from `PageHeader`, `Card`, `Tooltip`, `CopyButton`, `StatusIndicator`, `Button`, `DropdownMenu`, `IconButton`, `Link`, `SectionHeader`, `Flow`, `Tag`, `Trace`, `LogView` and `LogViewContent`; Replay reports through `toast`.
 
 - Surface: product
 - Source: `blocks/platform/detail/invocations/invocations.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/detail/invocations")`
-- Components: [Button](../../../components/button.md), [Card](../../../components/card.md), [CopyButton](../../../components/copy-button.md), [DropdownMenu](../../../components/dropdown-menu.md), [Flow](../../../components/flow.md), [IconButton](../../../components/icon-button.md), [LogView](../../../components/log-view.md), `LogViewContent`, [PageHeader](../../../components/page-header.md), [SectionHeader](../../../components/section-header.md), [StatusIndicator](../../../components/status-indicator.md), [Tag](../../../components/tag.md), [Toast](../../../components/toast.md), [Tooltip](../../../components/tooltip.md), [Trace](../../../components/trace.md)
+- Components: [Button](../../../components/button.md), [Card](../../../components/card.md), [CopyButton](../../../components/copy-button.md), [DropdownMenu](../../../components/dropdown-menu.md), [Flow](../../../components/flow.md), [IconButton](../../../components/icon-button.md), [Link](../../../components/link.md), [LogView](../../../components/log-view.md), `LogViewContent`, [PageHeader](../../../components/page-header.md), [SectionHeader](../../../components/section-header.md), [StatusIndicator](../../../components/status-indicator.md), [Tag](../../../components/tag.md), [Toast](../../../components/toast.md), [Tooltip](../../../components/tooltip.md), [Trace](../../../components/trace.md)
 - Skills: `webkit-layout`, `webkit-ui-states`, `webkit-data-viz`
 
 ## Asked as
@@ -31,11 +31,11 @@ The page a user opens to understand one run of a function: did it work, how long
 
 ### A. Page heading — `PageHeader` (required)
 
-A medium `PageHeader` titled Invocations with one sentence on what the page shows. The function is in the breadcrumb, never repeated as a heading.
+A medium `PageHeader` titled Invocation, singular because the page is one run, with one sentence on what the page shows. The list of runs is the Recent switcher on this page, and the full list lives in Real-Time Events. The function is in the breadcrumb, never repeated as a heading.
 
-### B. Invocation summary — `Card`, `Tooltip`, `CopyButton`, `StatusIndicator`, `Button`, `DropdownMenu`, `IconButton` (required)
+### B. Invocation summary — `Card`, `Link`, `Tooltip`, `CopyButton`, `StatusIndicator`, `Button`, `DropdownMenu`, `IconButton` (required)
 
-`Card :padded="false"` with three bands. The subject band holds the function link (its `Tooltip` says where it goes), the invocation ID in code type with a `CopyButton`, and the run's `StatusIndicator` (loading while it runs); then Replay as a secondary `Button` (disabled while the run is still going), the Recent switcher, a `DropdownMenu` of the recent invocations with their status and start that swaps the page to the picked run, and the Invocation actions `IconButton` menu with Open in Real-Time Events and Function settings. The facts band lists Started, Completed, Duration and Location. The state band, on the canvas fill, shows the request that triggered the run with a `CopyButton` and its outcome, in danger color when it failed.
+`Card :padded="false"` with three bands. The subject band holds the function `Link` (its `Tooltip` says where it goes), the invocation ID in code type with a `CopyButton`, and the run's `StatusIndicator` (loading while it runs); then Replay as a secondary `Button` (disabled while the run is still going), the Recent switcher, an outlined medium `Button` with the history glyph inside `DropdownMenu.Trigger` (its `Tooltip` inside the trigger, like the actions menu) that opens a `DropdownMenu` of the recent invocations with their status and start that swaps the page to the picked run, and the Invocation actions `IconButton` menu with Open in Real-Time Events and Function settings. The facts band lists Started, Completed, Duration and Location. The state band, on the canvas fill, shows the request that triggered the run with a `CopyButton` and its outcome, in danger color when it failed.
 
 ### C. Request path — `SectionHeader`, `Flow`, `Tag` (required)
 
@@ -45,9 +45,9 @@ A small `SectionHeader`, then a horizontally scrolling surface holding a `Flow` 
 
 A small `SectionHeader` over the `Trace` waterfall of the run, its spans nested by `parentId` with a service word and glyph, bound with `v-model:selected` so a node of the request path and a row of the waterfall are one selection. A failed span carries `status: 'error'` and its `message`; a span still going carries `status: 'running'`.
 
-### E. Logs — `LogView`, `LogViewContent` (required)
+### E. Logs — `SectionHeader`, `StatusIndicator`, `LogView`, `LogViewContent` (required)
 
-A small `SectionHeader` over a copyable `LogView` whose lines are timed from the run's zero (+16 ms), the same clock as the trace. Warnings and errors use the warning line type and keep the level word in the message; the last line of a completed run is a success line. While the run is going the view shows its loading state under the lines printed so far, and `LogViewContent` holds the empty text.
+A small `SectionHeader` over a copyable `LogView` whose lines are timed from the run's zero (+16 ms), the same clock as the trace. Warnings and errors use the warning line type and keep the level word in the message; the last line of a completed run is a success line. While the run is going the lines printed so far stay on screen and a loading `StatusIndicator` reading Streaming sits in the section header; the view shows its own loading state only while no line has arrived yet, and `LogViewContent` holds the empty text.
 
 ## Do
 
@@ -66,7 +66,7 @@ A small `SectionHeader` over a copyable `LogView` whose lines are timed from the
 
 ## Copy
 
-- **Heading:** "Invocations", with "Every run of this function, end to end: the path the request took and what each step cost."
+- **Heading:** "Invocation", with "One run of this function, end to end: the path the request took and what each step cost."
 - **Facts:** "Started", "Completed" ("Not yet" while running), "Duration", "Location".
 - **Durations:** milliseconds under a second ("412 ms"), seconds with two decimals above ("1.24 s"); log times relative ("+16 ms").
 - **Outcome:** the status code and one sentence, e.g. "502, the origin did not answer within the 1 s budget."
@@ -86,7 +86,7 @@ A small `SectionHeader` over a copyable `LogView` whose lines are timed from the
 
 - Completed: a run that served its response, every node tagged Active or Answered, the trace with no error and the logs ending on a success line.
 - Failed: a run the origin timed out, the danger status and outcome, the function and origin nodes failed, the origin-response span selected with its message, and warning lines in the logs.
-- Running: a run in progress, the loading status, Replay disabled, Completed reading Not yet, running spans and the logs loading under the lines printed so far.
+- Running: a run in progress, the loading status, Replay disabled, Completed reading Not yet, running spans, and the lines printed so far with a Streaming indicator in the Logs header.
 
 ## Related
 
@@ -99,7 +99,7 @@ A small `SectionHeader` over a copyable `LogView` whose lines are timed from the
 
 - `Completed` — primary (the code below)
 - `Failed` — A run the origin timed out: the danger status, the outcome in danger color, the function and origin nodes tagged Failed and Timed out, the failing origin-response span selected in the trace with its message, and the warning lines in the logs.
-- `Running` — A run still in progress: a loading Running status, Replay disabled, Completed reading Not yet, the function and origin nodes tagged Running and Waiting, the spans running in the trace and the logs loading under the lines printed so far.
+- `Running` — A run still in progress: a loading Running status, Replay disabled, Completed reading Not yet, the function and origin nodes tagged Running and Waiting, the spans running in the trace and the lines printed so far kept on screen, with a loading Streaming `StatusIndicator` in the Logs header.
 
 Each variant is the same screen in another state: `get_pattern("platform/detail/invocations", { variant })`, or the file under `blocks/platform/detail/invocations/variants/`.
 
@@ -113,6 +113,7 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
   import Flow from '@aziontech/webkit/flow'
   import IconButton from '@aziontech/webkit/icon-button'
+  import Link from '@aziontech/webkit/link'
   import LogView, { type LogViewLine } from '@aziontech/webkit/log-view'
   import LogViewContent from '@aziontech/webkit/log-view-content'
   import PageHeader from '@aziontech/webkit/page-header'
@@ -500,8 +501,8 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
   <div class="layout-boundary flex min-h-0 w-full flex-1 flex-col">
     <div class="layout-column flex min-w-0 flex-col pb-(--layout-section-gap)">
       <PageHeader
-        title="Invocations"
-        description="Every run of this function, end to end: the path the request took and what each step cost."
+        title="Invocation"
+        description="One run of this function, end to end: the path the request took and what each step cost."
         size="medium"
       />
 
@@ -523,14 +524,12 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
                     :text="`Open ${FUNCTION.name} in Functions`"
                     class="w-full"
                   >
-                    <a
+                    <Link
+                      :label="FUNCTION.name"
                       :href="`/functions/${FUNCTION.id}`"
-                      class="group/link inline-flex min-w-0 items-center gap-(--spacing-xxs) rounded-(--shape-button) text-body-sm text-(--text-default) no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)"
-                    >
-                      <span class="truncate underline-offset-2 group-hover/link:underline">{{
-                        FUNCTION.name
-                      }}</span>
-                    </a>
+                      size="small"
+                      :show-icon="false"
+                    />
                   </Tooltip>
                 </div>
                 <span
@@ -563,44 +562,37 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
                   @click="replay"
                 />
 
-                <Tooltip text="Pick another invocation of this function">
-                  <DropdownMenu
-                    placement="bottom-end"
-                    @select="(_event, value) => pickRun(String(value))"
-                  >
-                    <DropdownMenu.Trigger>
-                      <span
-                        class="flex h-8 min-w-0 items-center gap-(--spacing-xs) rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) text-label-sm text-(--text-default) transition-colors duration-150 ease-out motion-reduce:transition-none hover:border-(--border-strong)"
-                      >
-                        <i
-                          class="pi pi-history shrink-0 text-(--text-muted)"
-                          aria-hidden="true"
-                        />
-                        <span class="truncate">Recent</span>
-                        <i
-                          class="pi pi-chevron-down shrink-0 text-(--text-muted)"
-                          aria-hidden="true"
-                        />
-                      </span>
-                    </DropdownMenu.Trigger>
+                <DropdownMenu
+                  placement="bottom-end"
+                  @select="(_event, value) => pickRun(String(value))"
+                >
+                  <DropdownMenu.Trigger>
+                    <Tooltip text="Pick another invocation of this function">
+                      <Button
+                        label="Recent"
+                        kind="outlined"
+                        size="medium"
+                        icon="pi pi-history"
+                      />
+                    </Tooltip>
+                  </DropdownMenu.Trigger>
 
-                    <DropdownMenu.Group label="Recent invocations">
-                      <DropdownMenu.Option
-                        v-for="option in runs"
-                        :key="option.id"
-                        :value="option.id"
-                        :label="option.id"
-                        :selected="option.id === run.id"
-                      >
-                        <template #right>
-                          <span class="text-label-sm text-(--text-muted)">
-                            {{ option.status }} · {{ option.started }}
-                          </span>
-                        </template>
-                      </DropdownMenu.Option>
-                    </DropdownMenu.Group>
-                  </DropdownMenu>
-                </Tooltip>
+                  <DropdownMenu.Group label="Recent invocations">
+                    <DropdownMenu.Option
+                      v-for="option in runs"
+                      :key="option.id"
+                      :value="option.id"
+                      :label="option.id"
+                      :selected="option.id === run.id"
+                    >
+                      <template #right>
+                        <span class="text-label-sm text-(--text-muted)">
+                          {{ option.status }} · {{ option.started }}
+                        </span>
+                      </template>
+                    </DropdownMenu.Option>
+                  </DropdownMenu.Group>
+                </DropdownMenu>
 
                 <DropdownMenu placement="bottom-end">
                   <DropdownMenu.Trigger>
@@ -804,10 +796,21 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
             title="Logs"
             description="What the function printed while it ran, on the same clock as the trace."
             size="small"
-          />
+          >
+            <template
+              v-if="running"
+              #actions
+            >
+              <StatusIndicator
+                severity="warning"
+                loading
+                label="Streaming"
+              />
+            </template>
+          </SectionHeader>
           <LogView
             :lines="lines"
-            :loading="running"
+            :loading="running && !lines.length"
             loading-label="Waiting for the function to finish…"
             copyable
           >

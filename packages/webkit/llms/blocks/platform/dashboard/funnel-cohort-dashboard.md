@@ -5,12 +5,12 @@
 - Surface: product
 - Source: `blocks/platform/dashboard/funnel-cohort-dashboard/funnel-cohort-dashboard.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/dashboard/funnel-cohort-dashboard")`
-- Components: [Alert](../../../components/alert.md), [Button](../../../components/button.md), [Chart](../../../components/chart.md), [ChartCard](../../../components/chart-card.md), [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [Hint](../../../components/hint.md), [IconButton](../../../components/icon-button.md), [PageHeader](../../../components/page-header.md), [Select](../../../components/select.md), [StatTile](../../../components/stat-tile.md), `TableRoot`
+- Components: [Alert](../../../components/alert.md), [Button](../../../components/button.md), [Chart](../../../components/chart.md), [ChartCard](../../../components/chart-card.md), [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [Hint](../../../components/hint.md), [IconButton](../../../components/icon-button.md), [PageHeader](../../../components/page-header.md), [Select](../../../components/select.md), [StatTile](../../../components/stat-tile.md), `TableRoot`, [Toast](../../../components/toast.md), `utils/csv`
 - Skills: `webkit-data-viz`, `webkit-tables`, `webkit-ui-states`
 
 ## Asked as
 
-funnel dashboard; conversion funnel; cohort retention; retention heatmap; signup to paid; growth dashboard; funil de conversão; retenção por coorte; painel de funil
+funnel dashboard; conversion funnel; cohort retention; signup to paid; growth dashboard; funil de conversão; retenção por coorte; painel de funil
 
 The growth page: how people move through the steps from a first visit to a paid plan, where they drop
 off, and how well each weekly sign-up cohort keeps coming back. One global filter bar (period and
@@ -59,7 +59,7 @@ On every tile and card title. The funnel `Hint` states the counting rule:
 
 ### F. More options — `DropdownMenu` (optional)
 
-`Export CSV` in each card header.
+`Export CSV` in each card header downloads that card's rows (`weekly-cohorts-last-6-weeks.csv`) and confirms with a success toast naming the file, or an error toast when it fails. Disabled while loading and when the filters match nothing.
 
 ### G. More options trigger — `IconButton` (optional)
 
@@ -155,6 +155,8 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
   import Select, { type SelectOptionItem } from '@aziontech/webkit/select'
   import StatTile from '@aziontech/webkit/stat-tile'
   import TableRoot, { type TableColumn } from '@aziontech/webkit/table-root'
+  import { toast } from '@aziontech/webkit/toast'
+  import { type CsvColumn, downloadCsv, toCsv } from '@aziontech/webkit/utils/csv'
   import { computed, ref } from 'vue'
 
   type FigureFormat = 'number' | 'share'
@@ -594,6 +596,61 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
 
   const activeIndex = ref<number | null>(null)
 
+  type CardId = 'conversion-funnel' | 'retention-by-cohort' | 'weekly-cohorts'
+
+  interface CsvReport {
+    columns: CsvColumn[]
+    rows: () => object[]
+  }
+
+  const reports: Record<CardId, CsvReport> = {
+    'conversion-funnel': {
+      columns: [
+        { id: 'step', header: 'Step' },
+        { id: 'users', header: 'Users' },
+        { id: 'share', header: 'Share of visitors (%)' },
+        { id: 'dropoff', header: 'Drop-off (%)' }
+      ],
+      rows: () => view.value.steps
+    },
+    'retention-by-cohort': {
+      columns: [
+        { id: 'week', header: 'Week' },
+        ...view.value.retention.map((entry) => ({ id: entry.id, header: entry.name }))
+      ],
+      rows: () =>
+        weekLabels.map((week, index) => ({
+          week,
+          ...Object.fromEntries(
+            view.value.retention.map((entry) => [entry.id, entry.values[index] ?? ''])
+          )
+        }))
+    },
+    'weekly-cohorts': {
+      columns: [
+        { id: 'cohort', header: 'Cohort' },
+        { id: 'size', header: 'Users' },
+        ...weeks.map((week) => ({ id: week.key, header: week.label }))
+      ],
+      rows: () => view.value.cohorts
+    }
+  }
+
+  const exportCsv = (id: CardId) => {
+    const filename = `${id}-${periodLabel(period.value).toLowerCase().replaceAll(' ', '-')}.csv`
+    try {
+      const report = reports[id]
+      downloadCsv(filename, toCsv({ columns: report.columns, rows: report.rows() }))
+      toast.success('CSV exported.', { description: filename })
+    } catch {
+      toast.error('The CSV could not be exported.', { description: 'Try again in a moment.' })
+    }
+  }
+
+  const onCardOption = (id: CardId, value: string | number) => {
+    if (value === 'export') exportCsv(id)
+  }
+
   const clearFilters = () => {
     period.value = '6w'
     segment.value = 'all'
@@ -686,7 +743,10 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
             />
           </span>
           <ChartCard.Controls>
-            <DropdownMenu placement="bottom-end">
+            <DropdownMenu
+              placement="bottom-end"
+              @select="(_event, value) => onCardOption('conversion-funnel', value)"
+            >
               <DropdownMenu.Trigger>
                 <IconButton
                   icon="pi pi-ellipsis-h"
@@ -699,6 +759,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
                 <DropdownMenu.Option
                   value="export"
                   label="Export CSV"
+                  :disabled="loading || !view.steps.length"
                 />
               </DropdownMenu.Group>
             </DropdownMenu>
@@ -775,7 +836,10 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
             />
           </span>
           <ChartCard.Controls>
-            <DropdownMenu placement="bottom-end">
+            <DropdownMenu
+              placement="bottom-end"
+              @select="(_event, value) => onCardOption('retention-by-cohort', value)"
+            >
               <DropdownMenu.Trigger>
                 <IconButton
                   icon="pi pi-ellipsis-h"
@@ -788,6 +852,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
                 <DropdownMenu.Option
                   value="export"
                   label="Export CSV"
+                  :disabled="loading || !view.retention.length"
                 />
               </DropdownMenu.Group>
             </DropdownMenu>
@@ -832,7 +897,10 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
             />
           </span>
           <ChartCard.Controls>
-            <DropdownMenu placement="bottom-end">
+            <DropdownMenu
+              placement="bottom-end"
+              @select="(_event, value) => onCardOption('weekly-cohorts', value)"
+            >
               <DropdownMenu.Trigger>
                 <IconButton
                   icon="pi pi-ellipsis-h"
@@ -845,6 +913,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
                 <DropdownMenu.Option
                   value="export"
                   label="Export CSV"
+                  :disabled="loading || !view.cohorts.length"
                 />
               </DropdownMenu.Group>
             </DropdownMenu>

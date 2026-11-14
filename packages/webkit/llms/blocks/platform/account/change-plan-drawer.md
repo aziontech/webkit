@@ -72,7 +72,7 @@ Says why the user is here before the cards: `Compare what each tier includes bef
 
 ### L. Plan — `CardPricing` (required)
 
-One per tier, `kind="contained"`, aligned, actions at the bottom: price with prefix and suffix, details line, the `Current plan` tag on the current tier, a feature list headed by what it builds on (`All Free features, plus:`).
+One per tier, `kind="contained"`, aligned, actions at the bottom: price with prefix and suffix, details line, the `Current plan` tag on the current tier, a `FeatureList` headed by what it builds on (`All Free features, plus:`).
 
 ### M. Divider — `Separator` (required)
 
@@ -116,7 +116,7 @@ The plate before the card on file in the Payment method section, named after the
 
 ### W. Included features — `FeatureList` (required)
 
-What's included in the upgrade drawer, under its visible heading: one check per feature, with the usage allowance as the label and the overage price as its description. Do not hand-write the list with your own check icons. The pricing cards keep their own icon list, since each icon names the feature.
+What's included in the upgrade drawer, under its visible heading: one check per feature, with the usage allowance as the label and the overage price as its description. Do not hand-write the list with your own check icons. The pricing cards use the same `FeatureList` in their slot, so every feature list in the flow reads the same.
 
 ### Toasts — through `toast`
 
@@ -222,11 +222,11 @@ Each variant is the same screen in another state: `get_pattern("platform/account
       actionLabel: 'Current plan',
       featuresTitle: 'All features included',
       features: [
-        { icon: 'pi pi-globe', label: 'Global infrastructure' },
-        { icon: 'pi pi-code', label: 'Serverless compute' },
-        { icon: 'pi pi-database', label: 'Storage and database' },
-        { icon: 'pi pi-image', label: 'Image optimization' },
-        { icon: 'pi pi-shield', label: 'DDoS mitigation and firewall' }
+        { label: 'Global infrastructure' },
+        { label: 'Serverless compute' },
+        { label: 'Storage and database' },
+        { label: 'Image optimization' },
+        { label: 'DDoS mitigation and firewall' }
       ],
       card: {
         monthly: {
@@ -255,11 +255,11 @@ Each variant is the same screen in another state: `get_pattern("platform/account
       actionLabel: 'Continue with Pro',
       featuresTitle: 'All Free features, plus:',
       features: [
-        { icon: 'pi pi-box', label: 'Additional resources' },
-        { icon: 'pi pi-server', label: 'Higher request limits' },
-        { icon: 'pi pi-database', label: 'More storage capacity' },
-        { icon: 'pi pi-shield', label: 'Broader security coverage' },
-        { icon: 'pi pi-wallet', label: 'Configurable spend limit' }
+        { label: 'Additional resources' },
+        { label: 'Higher request limits' },
+        { label: 'More storage capacity' },
+        { label: 'Broader security coverage' },
+        { label: 'Configurable spend limit' }
       ],
       card: {
         monthly: {
@@ -288,11 +288,11 @@ Each variant is the same screen in another state: `get_pattern("platform/account
       actionLabel: 'Contact sales',
       featuresTitle: 'All Pro features, plus:',
       features: [
-        { icon: 'pi pi-chart-line', label: 'On-demand pricing' },
-        { icon: 'pi pi-arrow-down', label: 'Cut costs with commitments' },
-        { icon: 'ai ai-layers', label: 'Capacity Reservation available' },
-        { icon: 'pi pi-calendar', label: 'Savings Plan available' },
-        { icon: 'ai ai-business-support', label: 'Advanced support available' }
+        { label: 'On-demand pricing' },
+        { label: 'Cut costs with commitments' },
+        { label: 'Capacity Reservation available' },
+        { label: 'Savings Plan available' },
+        { label: 'Advanced support available' }
       ],
       card: {
         monthly: {
@@ -604,19 +604,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
                     >
                       {{ plan.featuresTitle }}
                     </p>
-                    <ul class="m-0 flex w-full list-none flex-col gap-(--spacing-sm) p-0">
-                      <li
-                        v-for="feature in plan.features"
-                        :key="feature.label"
-                        class="flex items-start gap-(--spacing-sm)"
-                      >
-                        <i
-                          :class="[feature.icon, 'mt-0.5 shrink-0 text-body-sm text-(--primary)']"
-                          aria-hidden="true"
-                        />
-                        <span class="text-body-sm text-(--text-default)">{{ feature.label }}</span>
-                      </li>
-                    </ul>
+                    <FeatureList :items="plan.features" />
                   </div>
                   <template #actions>
                     <Button
@@ -662,7 +650,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
               <aside class="flex flex-col gap-(--spacing-md)">
                 <div class="flex flex-col gap-(--spacing-xs)">
                   <h3
-                    class="flex shrink-0 items-center px-(--spacing-xs) text-label-lg text-(--text-default) lg:min-h-[calc(var(--spacing-sm)*2+var(--spacing-10)+1px)] lg:border-t lg:border-t-transparent lg:py-(--spacing-sm)"
+                    class="flex shrink-0 items-center px-(--spacing-xs) text-label-lg text-(--text-default) lg:py-(--spacing-sm)"
                   >
                     What's included
                   </h3>

@@ -6,7 +6,7 @@
   "Filters people pick rather than type, where each field has a short list of values."
  ],
  "avoidWhen": [
-  "Filters typed as text, with operators or and/or logic, or a query people keep as text → use `property-filter`.",
+  "Filters typed as text, with operators or and/or logic, or a query people keep as text → use `property-filter`. FilterMenu is for faceted picks from known values; PropertyFilter is for expression search.",
   "A table that needs comparisons on numbers or free-text conditions → use `table-filter` with its builder.",
   "Two to four fixed choices always on screen → use `toggle-group` or selectable `chip`s.",
   "A single search over names → use `input`, or `table-search` inside a table."

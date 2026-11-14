@@ -53,7 +53,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [CreateHub (platform/create/create-hub)](blocks/platform/create/create-hub.md): The Creation Center, where a new project starts.
 - [CreateInDrawer (platform/create/create-in-drawer)](blocks/platform/create/create-in-drawer.md): The right-side drawer that adds or edits something that only exists inside another resource: a domain, a DNS record, an environment, a variable, a rule.
 - [DeployDrawer (platform/create/deploy-drawer)](blocks/platform/create/deploy-drawer.md): The drawer a platform deploys from, opened by Deploy on a service or a project.
-- [DeployProgressDialog (platform/create/deploy-progress-dialog)](blocks/platform/create/deploy-progress-dialog.md): The modal progress of one deploy that activates several Deployment Settings, each on its own, and the drop-to-deploy confirm that starts it.
+- [DeployProgressDialog (platform/create/deploy-progress-dialog)](blocks/platform/create/deploy-progress-dialog.md): The modal progress of one deploy that sends several Deployment Settings live, each on its own, and the drop-to-deploy confirm that starts it.
 - [DeploySuccess (platform/create/deploy-success)](blocks/platform/create/deploy-success.md): The screen a create flow ends on.
 - [DeployTemplate (platform/create/deploy-template)](blocks/platform/create/deploy-template.md): A focused page, outside the console shell, where the user turns a template into a running project.
 - [DeploymentFlow (platform/create/deployment-flow)](blocks/platform/create/deployment-flow.md): The card a create flow hands its column to once the user has pressed Deploy.
@@ -94,9 +94,9 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [RuleBuilder (platform/edit/rule-builder)](blocks/platform/edit/rule-builder.md): A drawer where the user writes one rule of a rules engine: when it runs (the phase), the conditions that decide whether it applies, and the ordered behaviors it performs when they match.
 - [SchemaEditor (platform/edit/schema-editor)](blocks/platform/edit/schema-editor.md): The table schema of a SQL database: the definition of one table and the drawers and dialogs that change it.
 - [SettingsForm (platform/settings/settings-form)](blocks/platform/settings/settings-form.md): The place the user goes to change how an account or a project behaves.
-- [AsyncSubmit (platform/states/async-submit)](blocks/platform/states/async-submit.md): The async-action pattern, taken from the design sample (`/forms/async-deployment`), and the standard for every build and deploy screen.
+- [AsyncSubmit (platform/states/async-submit)](blocks/platform/states/async-submit.md): The async-action pattern, and the standard for every build and deploy screen.
 - [FirstUse (platform/states/first-use)](blocks/platform/states/first-use.md): What a first-level list shows before the account owns any resource of that kind.
-- [FormError (platform/states/form-error)](blocks/platform/states/form-error.md): The form-error pattern, taken from the design sample (`/forms/error-validation`): what a long create form does when the server rejects the save because of one section.
+- [FormError (platform/states/form-error)](blocks/platform/states/form-error.md): The form-error pattern, what a long create form does when the server rejects the save because of one section.
 - [FormValidation (platform/states/form-validation)](blocks/platform/states/form-validation.md): Every state a submit can land in, on one create form.
 - [NotFound (platform/states/not-found)](blocks/platform/states/not-found.md): The page an app renders when it cannot show the address the user asked for: the address leads nowhere (404), the user may not see it (403), or the server failed to build it (500).
 - [PageWires (platform/states/page-wires)](blocks/platform/states/page-wires.md): The skeleton wires an app paints while a page is still arriving.
@@ -127,7 +127,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [IconButton](components/icon-button.md): Interactive control for user actions.
 - [MiniButton](components/mini-button.md): Compact text action with an optional trailing external-link icon and a ghost hover surface.
 - [SearchTrigger](components/search-trigger.md): The field-shaped button in a top bar that opens search: a magnifier, a muted label (`Search` by default) and the keycap of the shortcut that opens the same palette (`⌘K` on macOS, `Ctrl K` elsewhere, drawn by `Kbd`).
-- [SplitButton](components/split-button.md): A primary command button visually joined to a chevron toggle that opens an overlay menu of related actions defined by a `model` array.
+- [SplitButton](components/split-button.md): A primary command button visually joined to a chevron toggle that opens an overlay menu of related actions defined by an `items` array (`model` is its deprecated name until 7.0).
 - [ToggleGroup](components/toggle-group.md): ToggleGroup is a connected group of buttons that picks exactly one value out of a small set of related options, with a selection indicator that slides to the active segment.
 
 ## Components: Ai
@@ -218,11 +218,12 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [DocAccordionGroup](components/doc-accordion-group.md): The FAQ and "expand for detail" block of a documentation page.
 - [DocAccordionItem](components/doc-accordion-item.md): One collapsible entry inside a `DocAccordionGroup`.
 - [DocAgentCard](components/doc-agent-card.md): The "Your AI agent, fluent in Azion" card that opens the first section of a documentation home.
+- [DocCallToAction](components/doc-call-to-action.md): The closing offer of a documentation page, parked at the foot of the "On this page" rail after the outline.
 - [DocCallout](components/doc-callout.md): The admonition a documentation page interrupts itself with — Note, Info, Tip, Check, Warning, Danger — rendered on the webkit `Alert` surface, so the severity colour, the border, the icon and the radius come from the…
 - [DocCard](components/doc-card.md): One cell of the grid a documentation page scans across: a leading glyph, an optional eyebrow, the title, the copy, and an optional call-to-action row at the foot.
 - [DocCardGroup](components/doc-card-group.md): The framed, responsive grid a `DocCard` set sits in.
 - [DocCodeGroup](components/doc-code-group.md): One or more code samples of the same thing in different languages or package managers, rendered on `CodeBlock` so the docs inherit its header, copy control and syntax surface.
-- [DocCta](components/doc-cta.md): The closing offer of a documentation page, parked at the foot of the "On this page" rail after the outline.
+- [DocCta](components/doc-cta.md): > **@deprecated since 6.0 — use `DocCallToAction` (`@aziontech/webkit/doc-call-to-action`) instead.
 - [DocFrame](components/doc-frame.md): The bordered surface every screenshot, diagram and clip in a documentation page sits on, so no media floats loose on the canvas and all of it shares one border, radius and inset.
 - [DocHeading](components/doc-heading.md): A documentation section heading that is also the link to itself.
 - [DocHero](components/doc-hero.md): The masthead of a documentation home: a display-size `h1`, a deck capped at a readable measure, an action row (the primary `Get started`, then `CopyPromptButton`) and one muted note under it that says what the prompt…
@@ -249,7 +250,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [OutcomeMark](components/outcome-mark.md): A small round mark that states how something ended: a check for success, a cross for danger, an exclamation for warning and a dash for neutral (not set, not run).
 - [Progress](components/progress.md): Communicates the progress of an ongoing task as a horizontal bar.
 - [Skeleton](components/skeleton.md): A loading placeholder that reserves the space of content while it loads, gently pulsing to signal activity.
-- [StatusIndicator](components/status-indicator.md): Communicates status, alerts, or progress to the user.
+- [StatusIndicator](components/status-indicator.md): Shows the settled or transitional state of one resource as a colored dot (or a spinner while `loading`) beside a short label: Active, Failed, Paused, Deploying.
 - [Toast](components/toast.md): A transient, non-blocking notification system: mount the `<Toaster>` region **once** near the application root, then raise notifications imperatively from anywhere via the exported `toast()` function (`toast('Saved')`…
 - [UploadProgress](components/upload-progress.md): A card that follows a file transfer to its end while the person keeps working: uploading files into a bucket, moving objects between folders or deleting them.
 
@@ -261,7 +262,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [Chip](components/chip.md): A Chip is a compact, pill-shaped token that labels a discrete value the user has applied — most often a filter on a data view.
 - [Combobox](components/combobox.md): A text field with a list of suggestions under it: typing filters the options, picking one fills the field, and a value that is not in the list is accepted as typed.
 - [DateRangePicker](components/date-range-picker.md): A time range for queries over time: logs, events, traces and metrics.
-- [Field](components/field.md): One composable form field that wraps **any** control — `Input`, `Textarea`, `Select`, `MultiSelect`, `NumberInput`, `PasswordInput`, `PhoneInput`, `InputGroup`, `Checkbox`, `RadioButton`, `Switch`, `Slider` — with its…
+- [Field](components/field.md): One composable form field that wraps **any** control — `Input`, `Textarea`, `Select`, `MultiSelect`, `NumberInput`, `PasswordInput`, `PhoneInput`, `InputGroup`, `Combobox`, `Calendar`, `DateRangePicker`, `Checkbox`, `…
 - [FileDropzone](components/file-dropzone.md): A FileDropzone is the target a user drags files from the operating system onto.
 - [FileTokenGroup](components/file-token-group.md): The files a person picked for upload, shown as removable tokens before or while they upload: each token names the file with a glyph for its type, its size and, when asked, its last-modified date, carries a progress ba…
 - [HelperText](components/helper-text.md): Auxiliary text rendered below a form input to communicate guidance (`helper`), validation errors (`invalid`), required-field reminders (`required`), or a locked/disabled state (`disabled`).

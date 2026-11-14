@@ -2,7 +2,8 @@
 
 > Helps users move between views or sections. Composable application sidebar with optional header and footer regions; navigation content scrolls inside a built-in `ScrollArea`. It also owns **the rail gesture** — sizing the sidebar by dragging its trailing edge, and collapsing it out of the layout entirely. That belongs here rather than in each shell: the interaction is not a small one (a pointer drag that crosses the collapse boundary continuously, a keyboard equivalent, token-derived bounds, a phase-aware transition, and an affordance that brings a collapsed rail back), and every app that has a sidebar wants the same one. Two shells re-implementing it is how the two drift apart. Both halves are **opt-in and independent**: `resizable` adds the drag, `collapsible` adds the collapse trigger and the edge affordance. With neither set the component renders exactly as it always has, with the host owning the width — every existing consumer is unaffected.
 
-- Import: `import Sidebar from '@aziontech/webkit/sidebar'`
+- Import: `import SidebarRoot from '@aziontech/webkit/sidebar-root'`
+- Compound import (dot notation, not tree-shakeable): `import Sidebar from '@aziontech/webkit/sidebar'`
 - Category: layout · Surface: product · Structure: composition
 - API as JSON: [sidebar.json](https://github.com/aziontech/webkit/blob/main/.specs/sidebar.json)
 
@@ -10,7 +11,7 @@
 
 - The persistent navigation column of an app shell, with an optional header (brand, workspace switcher) and footer (profile, settings) around a scrolling `Menu`.
 - The user should be able to resize the rail by dragging its trailing edge (`resizable`) or take it out of the layout and bring it back (`collapsible`).
-- The rail's size or collapsed state must survive navigation or reloads — bind `v-model:width` and `v-model:collapsed` and persist them in the app.
+- The rail's size or collapsed state must survive navigation or reloads — bind `v-model:width` and `v-model:open` and persist them in the app.
 
 ## Do
 
@@ -46,15 +47,9 @@
 | `collapseAriaLabel` | `string` | `''` | false | Accessible name for the collapse trigger. Empty uses the locale catalog (`Collapse sidebar`). |
 | `expandAriaLabel` | `string` | `''` | false | Accessible name for the control and the grab bar that bring a collapsed rail back. Empty uses the locale catalog (`Expand sidebar`). |
 | `resizeAriaLabel` | `string` | `''` | false | Accessible name for the drag handle separator. Empty uses the locale catalog (`Resize sidebar`). |
+| `open` | `boolean` | `true` | false | Two-way value (`v-model:open`). |
 | `collapsed` | `boolean` | `false` | false | Two-way value (`v-model:collapsed`). |
 | `width` | `number \| null` | `null` | false | Two-way value (`v-model:width`). |
-
-## Events
-
-| Event | Payload | Notes |
-| --- | --- | --- |
-| `update:collapsed` | `boolean` | v-model:collapsed` — the rail entered or left the layout, by the trigger, the drag crossing the snap boundary, the keyboard nudge, or a double-click on the handle. |
-| `update:width` | `number` | v-model:width` — the sized width in px, already clamped to the token bounds. Emitted continuously during a drag. |
 
 ## Slots
 
@@ -72,6 +67,11 @@
 
 ## Sub-components
 
+The compound `@aziontech/webkit/sidebar` (its `index.ts`) attaches every part for dot-notation —
+`Sidebar.Header`, `Sidebar.Group`, `Sidebar.Footer` — and `@aziontech/webkit/sidebar-root` is the
+standalone, tree-shakeable root with nothing attached. The flat sub-component paths below keep
+working.
+
 - `sidebar-footer.vue` — Public sub-component `sidebar-footer`.
 - `sidebar-group.vue` — Public sub-component `sidebar-group`. One flat block of rows under an
   optional title, **superseded by `Menu.Group`**: the docs, the stories and every example here
@@ -83,6 +83,18 @@
 
 `Sidebar` does not import `Menu` and `Menu` does not import `Sidebar`; the only thing that passes
 between them is the ring-offset surface below.
+
+## v-model
+
+| Model               | Type             | Default | Emits              | Notes                                                                                                                                                                                                                                                                                           |
+| ------------------- | ---------------- | ------- | ------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `v-model:open`      | `boolean`        | `true`  | `update:open`      | Whether the rail is in the layout. `false` collapses it — by the trigger, the drag crossing the snap boundary, the keyboard nudge, or a double-click on the handle. Same name as shadcn's Sidebar `open`; the layouts that compose it call the same state `navigationOpen`.                          |
+| `v-model:width`     | `number \| null` | `null`  | `update:width`     | The sized width in px, already clamped to the token bounds and emitted continuously during a drag. `null` means _not sized yet_: the sidebar seeds it from its own natural width on mount, after which the gesture owns it. px is the model's native unit because it is the outcome of a pointer gesture; the **bounds** come from tokens (`minWidthToken` / `maxWidthToken`). |
+| `v-model:collapsed` | `boolean`        | `false` | `update:collapsed` | **@deprecated since 6.0 — use `v-model:open` (inverted). Removed in 7.0.** Still works: it is the inverse of `open`, both are emitted on every change, and when a host binds only `collapsed` it drives the rail.                                                                                 |
+
+Every model is inert unless `resizable` or `collapsible` is set. With neither, no inline width is
+applied and the host's own `class="w-[280px]"` governs exactly as before. The models are declared
+with `defineModel`, so their `update:*` events are not hand-declared.
 
 ## States
 
@@ -101,7 +113,7 @@ between them is the ring-offset surface below.
   rail's motion off until then, so a state restored at mount lands in place; see Motion &
   Animations); not a documented consumer styling hook.
 - Region testids derived from the root: `__panel` (the fixed-width inner panel),
-  `__collapse-input` (the hidden checkbox that carries `collapsed` for CSS — not an interactive
+  `__collapse-input` (the hidden checkbox that carries the collapsed state, `!open`, for CSS — not an interactive
   control; see Accessibility), `__header`, `__nav`, `__scroll`, `__footer`, `__collapse` (the
   trigger), `__handle` (the drag separator), `__expand` / `__expand-button` (the collapsed
   affordance)
@@ -137,7 +149,7 @@ between them is the ring-offset surface below.
 - A **collapsed rail carries `inert` and `aria-hidden`** — the content is still mounted so its width
   can animate, and it must not be reachable while it is out of the layout. That is why the control
   that brings it back is a sibling of the rail rather than inside it.
-- The **hidden checkbox that mirrors `collapsed`** (`__collapse-input`) carries `aria-hidden="true"`
+- The **hidden checkbox that mirrors the collapsed state (`!open`)** (`__collapse-input`) carries `aria-hidden="true"`
   and `tabindex="-1"`: it is a CSS state carrier, not a second control, so it is never reachable by
   keyboard or announced by a screen reader. The trigger's accessible name and role are unaffected —
   the consumer-facing control is still the `IconButton`.

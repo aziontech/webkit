@@ -13,7 +13,7 @@
 
 ## Do
 
-- Bind `v-model` to the route (or a ref) and render the section below from it.
+- Bind `v-model` to the route (or a ref) and render the section below from it. PageTabs renders only the tab list, so it takes no `Tabs.Content` / `Tabs.Panel`: the page renders the active section itself from the `v-model` value.
 - Keep the labels to one word where possible.
 - Put only actions that apply to the whole resource in `actions`; page-level actions go in the `page-header`.
 - Set `column` to the column the page body uses (`form` over a settings form, `data` over a list) so the tabs start where the content starts.

@@ -3,7 +3,7 @@
  "useWhen": [
   "The persistent navigation column of an app shell, with an optional header (brand, workspace switcher) and footer (profile, settings) around a scrolling `Menu`.",
   "The user should be able to resize the rail by dragging its trailing edge (`resizable`) or take it out of the layout and bring it back (`collapsible`).",
-  "The rail's size or collapsed state must survive navigation or reloads — bind `v-model:width` and `v-model:collapsed` and persist them in the app."
+  "The rail's size or collapsed state must survive navigation or reloads — bind `v-model:width` and `v-model:open` and persist them in the app."
  ],
  "avoidWhen": [
   "Adjacent work areas the reader resizes (editor beside a preview, a terminal under it) → use `resizable`.",

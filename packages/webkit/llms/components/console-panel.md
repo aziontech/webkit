@@ -45,7 +45,9 @@
 | `tabs` | `ConsolePanelTab[]` | `[]` | false | Tabs over the frame, each `{ value, title }`; each plays its own beat of the scene. |
 | `tabsAriaLabel` | `string` | `''` | false | Accessible name of the tab control; empty uses the built-in "Console views". |
 | `crop` | `number` | `0` | false | Share of the scene height clipped off its bottom, from 0 to 0.5, from the medium breakpoint up. |
-| `actions` | `ConsolePanelAction[]` | `[]` | false | Buttons under the headline; each is `{ label, href, trailing?, target?, kind? }`; without `kind` the first is secondary and the rest outlined. |
+| `primaryAction` | `ConsolePanelAction` | `undefined` | false | First button under the headline, `secondary`; `{ label, href, trailing?, target? }`. Shown only with a label and a link. |
+| `secondaryAction` | `ConsolePanelAction` | `undefined` | false | Second button under the headline, `outlined`; same shape. Shown only with a label and a link. |
+| `actions` | `ConsolePanelAction[]` | `[]` | false | @deprecated since 6.0 — use `primaryAction` / `secondaryAction`. Removed in 7.0. Read only when neither is set; each is `{ label, href, trailing?, target?, kind? }`, without `kind` the first is secondary and the rest outlined. |
 
 ## Slots
 
@@ -156,7 +158,7 @@
   <ConsolePanel
     kind="diagram"
     title="Requests take the shortest path"
-    :actions="[{ label: 'See the network', href: '/network', trailing: true }]"
+    :primary-action="{ label: 'See the network', href: '/network', trailing: true }"
   >
     <template #scene>
       <Illustration

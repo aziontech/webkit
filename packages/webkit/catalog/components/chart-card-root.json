@@ -7,7 +7,8 @@
  "avoidWhen": [
   "A KPI figure → use `stat-tile`, which is its own surface.",
   "A general content card with no chart → use `card`.",
-  "A chart inline in a page section with its own heading → render `chart` alone."
+  "A chart inline in a page section with its own heading → render `chart` alone.",
+  "A table, a log or a form panel on a dashboard that is not a chart → use `card` (composed in a `board` item for span and height); a grid of draggable, resizable cards → let `board` / `board-item` own the span, the height and their bounds."
  ],
  "related": [
   "chart`, `donut-chart` — what goes inside the content area; a chart inside a card takes its accessible name from the card title.",
@@ -15,9 +16,9 @@
   "dropdown` — the \"More options\" menu (Copy query, Export CSV) composed into the controls zone."
  ],
  "bestPractices": [
-  "Put the aggregation tag (Sum, Average) and the variation tag in `ChartCard.Controls`, before the menu.",
+  "Put the aggregation tag (Sum, Average) and the variation tag in `ChartCard.Action`, before the menu.",
   "Keep filters and the time range above the grid, never inside a card.",
-  "Use `flush` content for a plot that should run edge to edge, padded for everything else.",
+  "Use `:padded=\"false\"` content for a plot that should run edge to edge, padded (the default) for everything else.",
   "Give the page's grid `--chart-grid-columns` per breakpoint so a 6-column card never overflows a 1-column phone layout.",
   "Persist `span` and `height` with the dashboard layout; they are plain numbers."
  ]

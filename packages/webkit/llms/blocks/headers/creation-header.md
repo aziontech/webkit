@@ -1,11 +1,11 @@
 # CreationHeader (`headers/creation-header`)
 
-> The console bar for the focused creation shell: create, edit and deploy flows that run without the navigation rail. A `GlobalHeader` in its default `content` placement, spanning the whole window. Start: a small back button, the brand and the breadcrumb of where the flow lives. End: the account avatar alone, so the signed-in user stays visible. The bar carries no search, Create or Agent: the flow is the one thing on screen. Every one-screen create page (SinglePageCreate), every stepped one (MultipageCreate), the creation wizards (SourceWizard, ProvisionWizard), the deploy flows and the CreateHub render it. The back button returns to the list the flow started from; the wizards drop it and the crumb once they reach the provisioning and success screens. Built from `GlobalHeader`, `Breadcrumb`, `IconButton`, `Avatar` and `Brand`.
+> The console bar for the focused creation shell: create, edit and deploy flows that run without the navigation rail. A `GlobalHeader` in its default `content` placement, spanning the whole window. Start: a small back link with a `Tooltip`, the brand and the breadcrumb of where the flow lives. End: the account avatar alone, opening the account `DropdownMenu`, so the signed-in user stays visible. The bar carries no search, Create or Agent: the flow is the one thing on screen. Every one-screen create page (SinglePageCreate), every stepped one (MultipageCreate), the creation wizards (SourceWizard, ProvisionWizard), the deploy flows and the CreateHub render it. The back button returns to the list the flow started from; the wizards drop it and the crumb once they reach the provisioning and success screens. Built from `GlobalHeader`, `Breadcrumb`, `IconButton`, `Tooltip`, `Avatar`, `DropdownMenu` and `Brand`.
 
 - Surface: product
 - Source: `blocks/headers/creation-header/creation-header.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("headers/creation-header")`
-- Components: [Avatar](../../components/avatar.md), [Brand](../../components/brand.md), [Breadcrumb](../../components/breadcrumb.md), [GlobalHeader](../../components/global-header.md), [IconButton](../../components/icon-button.md)
+- Components: [Avatar](../../components/avatar.md), [Brand](../../components/brand.md), [Breadcrumb](../../components/breadcrumb.md), [DropdownMenu](../../components/dropdown-menu.md), [GlobalHeader](../../components/global-header.md), [IconButton](../../components/icon-button.md), [Tooltip](../../components/tooltip.md)
 - Skills: `webkit-navigation`, `webkit-layout`
 
 ## Asked as
@@ -33,7 +33,7 @@ Default `content` placement spanning the whole window, `aria-label="Console"`. T
 
 ### B. Back — `IconButton` (required until the flow is terminal)
 
-Small, outlined, chevron icon, with an `aria-label` that names the destination (`Back to Resources`). It returns to the list the flow started from. Drop it only on terminal screens (provisioning, success), where there is nothing left to go back to.
+Small, outlined, chevron icon, a link (`href`) to the list the flow started from, with an `aria-label` that names the destination (`Back to Resources`) and a `Tooltip` with the same text. Drop it only on terminal screens (provisioning, success), where there is nothing left to go back to.
 
 ### C. Brand — `Brand` (required)
 
@@ -43,9 +43,13 @@ Inside `GlobalHeader.Brand`, linked to the home route with `aria-label="Azion ho
 
 Where the flow lives: the module with an `href`, then the current page with none (`Resources › Create Resource`). The crumb links are a way out alongside the back button. A step of a wizard is not a crumb.
 
-### E. Account — `Avatar` (required)
+### E. Account — `DropdownMenu` + `Avatar` (required)
 
-The signed-in user, inside a button labelled `Account settings`. It stays on every screen of the flow, including terminal ones, so the user never looks signed out.
+The signed-in user, inside a button labelled `Account menu` that opens the account `DropdownMenu`: name and email on top, Account settings, then Docs and Log out. It stays on every screen of the flow, including terminal ones, so the user never looks signed out.
+
+### F. Hint — `Tooltip` (required)
+
+Names the icon-only back link with the same text as its `aria-label` (`Back to Resources`).
 
 ## Do
 
@@ -63,7 +67,7 @@ The signed-in user, inside a button labelled `Account settings`. It stays on eve
 
 - **Back label:** `Back to` plus the list name, matching the first crumb: `Back to Resources`.
 - **Breadcrumb:** the module as the sidebar names it, then the create action with the entity capitalized: `Create Resource`, `Create Network List`.
-- **Avatar label:** `Account settings`.
+- **Avatar label:** `Account menu`.
 
 ## Accessibility
 
@@ -98,22 +102,32 @@ Each variant is the same screen in another state: `get_pattern("headers/creation
   import Avatar from '@aziontech/webkit/avatar'
   import Brand from '@aziontech/webkit/brand'
   import Breadcrumb from '@aziontech/webkit/breadcrumb-root'
+  import DropdownMenu from '@aziontech/webkit/dropdown-menu'
   import GlobalHeader from '@aziontech/webkit/global-header'
   import IconButton from '@aziontech/webkit/icon-button'
+  import Tooltip from '@aziontech/webkit/tooltip'
 
   const breadcrumb = [{ label: 'Resources', href: '/resources' }, { label: 'Create Resource' }]
+
+  const account = { name: 'Amy Chen', email: 'amy.chen@example.com' }
 </script>
 
 <template>
   <div class="w-full bg-(--bg-canvas)">
     <GlobalHeader aria-label="Console">
       <GlobalHeader.Left>
-        <IconButton
-          icon="pi pi-chevron-left"
-          aria-label="Back to Resources"
-          kind="outlined"
-          size="small"
-        />
+        <Tooltip
+          text="Back to Resources"
+          placement="bottom"
+        >
+          <IconButton
+            icon="pi pi-chevron-left"
+            aria-label="Back to Resources"
+            kind="outlined"
+            size="small"
+            href="/resources"
+          />
+        </Tooltip>
         <GlobalHeader.Brand>
           <a
             href="/home"
@@ -130,17 +144,64 @@ Each variant is the same screen in another state: `get_pattern("headers/creation
       </GlobalHeader.Left>
       <GlobalHeader.Middle />
       <GlobalHeader.Right>
-        <button
-          type="button"
-          aria-label="Account settings"
-          class="rounded-full transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
-        >
-          <Avatar
-            label="name@example.com"
-            size="medium"
-            kind="square"
-          />
-        </button>
+        <DropdownMenu placement="bottom-end">
+          <DropdownMenu.Trigger>
+            <button
+              type="button"
+              aria-label="Account menu"
+              class="rounded-(--shape-button) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
+            >
+              <Avatar
+                :label="account.name"
+                size="medium"
+                kind="square"
+              />
+            </button>
+          </DropdownMenu.Trigger>
+          <DropdownMenu.Group>
+            <template #top>
+              <div class="flex min-w-0 flex-col">
+                <span class="truncate text-label-md text-(--text-default)">{{ account.name }}</span>
+                <span class="truncate text-body-xs text-(--text-muted)">{{ account.email }}</span>
+              </div>
+            </template>
+            <DropdownMenu.Option
+              value="settings"
+              label="Account settings"
+            >
+              <template #right>
+                <i
+                  class="pi pi-cog"
+                  aria-hidden="true"
+                />
+              </template>
+            </DropdownMenu.Option>
+          </DropdownMenu.Group>
+          <DropdownMenu.Group>
+            <DropdownMenu.Option
+              value="docs"
+              label="Docs"
+            >
+              <template #right>
+                <i
+                  class="pi pi-book"
+                  aria-hidden="true"
+                />
+              </template>
+            </DropdownMenu.Option>
+            <DropdownMenu.Option
+              value="logout"
+              label="Log out"
+            >
+              <template #right>
+                <i
+                  class="pi pi-sign-out"
+                  aria-hidden="true"
+                />
+              </template>
+            </DropdownMenu.Option>
+          </DropdownMenu.Group>
+        </DropdownMenu>
       </GlobalHeader.Right>
     </GlobalHeader>
   </div>

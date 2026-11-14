@@ -1,11 +1,11 @@
 # TemplateBrowser (`platform/view/template-browser`)
 
-> The template catalog people start a project from: a medium page heading with the outlined Documentation action, one `PropertyFilter` that searches the name and the description and filters by Category and Framework, then one section per category (Frameworks, Starters, Functions) with a grid of template tiles. Each tile is a `Card` with the framework mark, the name as a button that opens the preview, two lines of description and the framework `Tag`; the whole tile is the target. The preview is a medium right `Drawer`: the mark and the name in the header, the description, a `KeyValuePairs` of framework, category, repository and last update, and the template's README in a `Card` through `DocProse`; its footer holds View repository and the primary Deploy, which leads to the deploy template flow (`platform/create/deploy-template`), where the deploy runs and reports by toast. The filter lives in the URL through `useCollection`. A search that matches nothing shows No matching templates with Clear filters; while the catalog loads the tiles are skeletons; a catalog that fails to load shows a danger `Alert` with Retry and an Import from Git way out. Hovering or focusing a tile turns the mark from grey to colour and lights a glow drawn from the mark. Built from `PageHeader`, `Button`, `PropertyFilter`, `Card`, `Tag`, `EmptyState`, `Drawer`, `DrawerPortal`, `DrawerOverlay`, `DrawerContent`, `DrawerTitle`, `DrawerClose`, `PanelHeader`, `PanelContent`, `PanelFooter`, `KeyValuePairs` and `DocProse`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
+> The template catalog people start a project from: a medium page heading with the outlined Documentation action, one `PropertyFilter` that searches the name and the description and filters by Category and Framework, then one section per category (Frameworks, Starters, Functions) with a grid of template tiles. Each tile is a `Card kind="integration"` with the framework mark, the name as a button that opens the preview, two lines of description and the framework as a badge; the whole tile is the target, and the grid follows the content width through container queries. The preview is a medium right `Drawer`: the mark and the name in the header, the description, a `KeyValuePairs` of framework, category, repository and last update, and the template's README in a `Card` through `DocProse`; its footer holds View repository and the primary Deploy, which leads to the deploy template flow (`platform/create/deploy-template`), where the deploy runs and reports by toast. The filter lives in the URL through `useCollection`. A search that matches nothing shows No matching templates with Clear filters; while the catalog loads the tiles are skeletons; a catalog that fails to load shows a danger `Alert` with Retry and an Import from Git way out. Built from `PageHeader`, `Button`, `PropertyFilter`, `Card`, `EmptyState`, `Drawer`, `DrawerPortal`, `DrawerOverlay`, `DrawerContent`, `DrawerTitle`, `DrawerClose`, `PanelHeader`, `PanelContent`, `PanelFooter`, `KeyValuePairs` and `DocProse`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
 
 - Surface: product
 - Source: `blocks/platform/view/template-browser/template-browser.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/view/template-browser")`
-- Components: [Alert](../../../components/alert.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [DocProse](../../../components/doc-prose.md), [Drawer](../../../components/drawer.md), `DrawerClose`, `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, [EmptyState](../../../components/empty-state.md), [KeyValuePairs](../../../components/key-value-pairs.md), [PageHeader](../../../components/page-header.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [PropertyFilter](../../../components/property-filter.md), [Skeleton](../../../components/skeleton.md), [Tag](../../../components/tag.md), `use-collection`
+- Components: [Alert](../../../components/alert.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [DocProse](../../../components/doc-prose.md), [Drawer](../../../components/drawer.md), `DrawerClose`, `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, [EmptyState](../../../components/empty-state.md), [KeyValuePairs](../../../components/key-value-pairs.md), [PageHeader](../../../components/page-header.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [PropertyFilter](../../../components/property-filter.md), [Skeleton](../../../components/skeleton.md), `use-collection`
 - Skills: `webkit-lists`, `webkit-create-surface`, `webkit-ui-states`
 
 ## Asked as
@@ -41,9 +41,9 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 
 One `PropertyFilter` bound with `v-bind="propertyFilterProps"` from `useCollection`, at full width above the sections. Free text searches the name and the description; Category and Framework are properties with `options`, in catalog order. Every token lives in the URL (`url: true`), so a filtered catalog survives a reload and can be shared. There is no second search field and no filter popover.
 
-### C. Category sections — `Card`, `Tag` (required)
+### C. Category sections — `Card` (required)
 
-One `section` per category that still has matches, labelled by its `h2` in the muted small label style (Frameworks, Starters, Functions), each with a `ul` grid of one to four tiles a row by width. A tile is a `Card` with the framework mark in a 40 px raised box (grey until the tile is hovered or focused, the `grayscale` to colour shift of the design; colour marks use `ai-cor`, and the black Next.js mark inverts in dark), the name as an `h3` that holds a button with `aria-haspopup="dialog"`, two lines of description and a small secondary `Tag` with the framework. The button's stretched `after` box makes the whole tile one target, draws the translucent hover wash and the focus ring inside the tile, and leaves the `Card` surface untouched. Hovering or focusing a tile also lights a soft glow from its top start corner: an `aria-hidden` span under the content (the `Card` carries `isolate`, the span clips to the card's shape) holds a second copy of the tile's mark, scaled up, blurred and faded. A colour mark (`ai-cor`) glows in its own colours; a one-colour font mark takes `text-(--primary)`, so the glow needs no colour value in the data. Tiles in a row share a height.
+One `section` per category that still has matches, labelled by its `h2` in the muted small label style (Frameworks, Starters, Functions), each with a `ul` grid of one to four tiles a row by the width of the content (container queries on the `@container/templates` section, so an open rail does not overstate the room). A tile is a `Card kind="integration"`: the framework mark as its `logo` (colour marks use `ai-cor`, and the black Next.js mark inverts in dark), the name as an `h3` holding a button that emits `select` and opens the preview, two lines of description and the framework as a secondary badge. The title's stretched target makes the whole tile one target with the hover wash and the focus ring inside the tile; the markup lives in `Card`, not in the block. Tiles in a row share a height.
 
 ### D. No matching templates — `EmptyState`, `Button` (required)
 
@@ -66,7 +66,7 @@ A `section` labelled by its "README" heading, with the template's README in a `C
 - Run the catalog on one `useCollection` call with `filtering`, `propertyFiltering` and `url: true`, and bind `propertyFilterProps`.
 - Group the matches by category in a fixed order and drop a category with no match.
 - Make the tile's name the only interactive element, and stretch it over the tile.
-- Show the framework on the tile as text in a `Tag`, not only as the mark.
+- Show the framework on the tile as text in a badge, not only as the mark.
 - Open the preview in a drawer, so the catalog and the filter stay where they were.
 - End the preview on Deploy, a link into `platform/create/deploy-template`, and let that flow run the deploy and raise the async-submit toast.
 - Keep README headings below the drawer title (`h4` and down).
@@ -76,7 +76,7 @@ A `section` labelled by its "README" heading, with the template's README in a `C
 - Don't deploy from the tile or the drawer without the deploy flow; the template needs a scope, a repository name and its settings.
 - Don't put a Deploy button on every tile; the preview is where a person confirms the choice.
 - Don't page the catalog or add preferences; a grouped list of tens of items reads better whole.
-- Don't colour the tile per framework at rest; the surface stays neutral and the brand shows only in the mark and the glow drawn from it.
+- Don't colour the tile per framework; the surface stays neutral and the brand shows only in the mark.
 - Don't hide the filter while loading or after a failure; disable it, so the page keeps its shape.
 - Don't show the README as raw markdown or in a code block.
 
@@ -95,9 +95,8 @@ A `section` labelled by its "README" heading, with the template's README in a `C
 
 - The layout owns the one `main` landmark; the `PageHeader` title is the only `h1`, each category is an `h2`, each tile name an `h3`.
 - Each category is a `section` labelled by its heading and holds a `ul`, so the count of templates is announced.
-- The tile's target is a real `button` with `aria-haspopup="dialog"`, named by the template name; the description and the framework follow it in reading order.
+- The tile's target is a real `button` named by the template name; the description and the framework follow it in reading order.
 - The focus ring is drawn inside the tile on the stretched target, so it is never clipped by the grid.
-- The glow and the colour mark follow keyboard focus as well as hover, and both are decorative.
 - The drawer traps focus, is named by `DrawerTitle`, closes on Escape and returns focus to the tile that opened it.
 - The `PropertyFilter` is named by its `aria-label` and announces the match count after each change.
 - The loading band is `aria-busy`; the failure `Alert` is announced and its Retry is a button.
@@ -148,7 +147,6 @@ Each variant is the same screen in another state: `get_pattern("platform/view/te
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import PropertyFilter from '@aziontech/webkit/property-filter'
-  import Tag from '@aziontech/webkit/tag'
   import { useCollection } from '@aziontech/webkit/use-collection'
   import { computed, ref } from 'vue'
 
@@ -364,7 +362,9 @@ Each variant is the same screen in another state: `get_pattern("platform/view/te
         </template>
       </PageHeader>
 
-      <section class="layout-section-start flex min-w-0 flex-col gap-(--layout-section-gap)">
+      <section
+        class="@container/templates layout-section-start flex min-w-0 flex-col gap-(--layout-section-gap)"
+      >
         <PropertyFilter
           v-bind="propertyFilterProps"
           placeholder="Search templates"
@@ -402,59 +402,22 @@ Each variant is the same screen in another state: `get_pattern("platform/view/te
               {{ section.label }}
             </h2>
             <ul
-              class="m-0 grid list-none grid-cols-1 gap-(--spacing-md) p-0 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4"
+              class="m-0 grid list-none grid-cols-1 gap-(--spacing-md) p-0 @xl/templates:grid-cols-2 @4xl/templates:grid-cols-3 @7xl/templates:grid-cols-4"
             >
               <li
                 v-for="item in section.items"
                 :key="item.id"
-                class="group flex min-w-0"
+                class="flex min-w-0"
               >
-                <Card class="w-full">
-                  <template #content>
-                    <div class="isolate flex flex-1 flex-col">
-                      <span
-                        aria-hidden="true"
-                        class="pointer-events-none absolute inset-0 -z-1 overflow-hidden rounded-(--shape-card) opacity-0 transition-opacity duration-moderate-01 ease-productive-entrance group-focus-within:opacity-100 group-hover:opacity-100 motion-reduce:transition-none"
-                      >
-                        <i
-                          :class="[item.icon, MARKS[item.framework]]"
-                          class="absolute start-(--spacing-xl) top-(--spacing-xl) scale-600 text-body-lg leading-none text-(--primary) opacity-25 blur-sm"
-                        />
-                      </span>
-                      <div class="flex flex-col items-start gap-(--spacing-md)">
-                        <span
-                          class="flex size-10 shrink-0 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
-                        >
-                          <i
-                            :class="[item.icon, MARKS[item.framework]]"
-                            class="text-body-lg leading-none text-(--text-default) grayscale transition duration-moderate-01 ease-productive-entrance group-focus-within:grayscale-0 group-hover:grayscale-0 motion-reduce:transition-none"
-                            aria-hidden="true"
-                          />
-                        </span>
-                        <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
-                          <h3 class="text-label-md text-(--text-default)">
-                            <button
-                              type="button"
-                              class="cursor-pointer border-0 bg-transparent p-0 text-start text-(--text-default) outline-none after:absolute after:inset-0 after:transition-colors after:content-[''] hover:after:bg-(--bg-hover) focus-visible:after:ring-2 motion-reduce:after:transition-none focus-visible:after:ring-inset focus-visible:after:ring-(--ring-color)"
-                              aria-haspopup="dialog"
-                              @click="openPreview(item)"
-                            >
-                              {{ item.title }}
-                            </button>
-                          </h3>
-                          <p class="m-0 line-clamp-2 text-pretty text-body-sm text-(--text-muted)">
-                            {{ item.description }}
-                          </p>
-                        </div>
-                        <Tag
-                          :label="FRAMEWORKS[item.framework]"
-                          severity="secondary"
-                          size="small"
-                        />
-                      </div>
-                    </div>
-                  </template>
-                </Card>
+                <Card
+                  kind="integration"
+                  class="w-full"
+                  :title="item.title"
+                  :logo="[item.icon, MARKS[item.framework]].filter(Boolean).join(' ')"
+                  :description="item.description"
+                  :badges="[{ label: FRAMEWORKS[item.framework], severity: 'secondary' }]"
+                  @select="openPreview(item)"
+                />
               </li>
             </ul>
           </section>

@@ -37,7 +37,9 @@
 | `description` | `string` | `''` | false | One or two sentences under the title. |
 | `items` | `CapabilityGridItem[]` | `[]` | false | The capabilities, in order; each is `{ title, description, icon?, points? }`. The band renders nothing when empty. |
 | `columns` | `CapabilityGridColumns` | `3` | false | Capabilities per row from the large breakpoint up. |
-| `actions` | `CapabilityGridAction[]` | `[]` | false | Buttons under the section title; each is `{ label, href, trailing?, target?, kind? }`; without `kind` the first is secondary and the rest outlined. |
+| `primaryAction` | `CapabilityGridAction` | `undefined` | false | First button under the section title, `secondary`; `{ label, href, trailing?, target? }`. Shown only with a label and a link. |
+| `secondaryAction` | `CapabilityGridAction` | `undefined` | false | Second button under the section title, `outlined`; same shape. Shown only with a label and a link. |
+| `actions` | `CapabilityGridAction[]` | `[]` | false | @deprecated since 6.0 — use `primaryAction` / `secondaryAction`. Removed in 7.0. Read only when neither is set; each is `{ label, href, trailing?, target?, kind? }`, without `kind` the first is secondary and the rest outlined. |
 | `anchor` | `string` | `''` | false | In-page id set on the band so a hash link can target it. |
 | `titleKind` | `SectionTitleKind` | `'centered'` | false | Layout of the section title: `centered` stacks and centers it, `left` stacks it at the start edge, `horizontal` sets the headline and its description in two columns. |
 
@@ -101,7 +103,7 @@
     title="Everything an application needs, in one place"
     description="Compute, storage and security that deploy together."
     :items="items"
-    :actions="[{ label: 'Explore the platform', href: '/platform', trailing: true }]"
+    :primary-action="{ label: 'Explore the platform', href: '/platform', trailing: true }"
   />
 </template>
 ```

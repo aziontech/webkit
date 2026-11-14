@@ -16,7 +16,7 @@
 
 - Put static text and icons in `InputGroup.Addon`; place real controls (`button`, `select`) as direct children with no wrapper `div`.
 - Set the same `size` on the group and on its child controls so heights line up.
-- disabled`, `invalid`, and `required` style the group only; also set them on every child control they should affect. Inside a `Field`, put them on the `Field` instead: the root and `InputGroup.Input` both read them.
+- disabled` and `invalid` on the group reach every field control inside (`InputGroup.Input`, `Input`, `Select` and the other controls that read the Field context); a `Button` or `IconButton` in the group needs its own `disabled`. `required` styles the group only; set it on the input or on the enclosing `Field`. Inside a `Field`, the Field's state reaches the root and the controls the same way.
 - Use `InputGroup.Input` for the middle input: it is borderless, picks up the enclosing `Field`'s wiring, and spares the long raw-`<input>` class string.
 - The root is `role="group"`; label the inner input itself, or give the group an `aria-label`.
 
@@ -37,9 +37,9 @@
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
 | `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | false | Size token; affects the root's height and inner addon padding. Heights: small=28px, medium=32px, large=40px. Matches the sibling input primitives (`Input`, `Select`) — set the same `size` on child controls to keep them visually aligned. |
-| `invalid` | `boolean` | `false` | false | Renders the error border and sets `aria-invalid="true"` on the root. |
+| `invalid` | `boolean` | `false` | false | Renders the error border and marks the field controls inside invalid (`aria-invalid` on the input, never on the `role="group"` root, where ARIA does not allow it). |
 | `required` | `boolean` | `false` | false | Renders the required (warning) border. `aria-required` is not allowed on `role="group"`, so the required state belongs on the input (`InputGroup.Input` reads it from the Field). |
-| `disabled` | `boolean` | `false` | false | Renders the disabled visual (muted fill, not-allowed cursor, no focus-within ring) and sets `aria-disabled="true"` on the root. Does not propagate to the child controls — each child is responsible for its own `disabled` attribute (inside a `Field`, the Field's `disabled` reaches both the root and `InputGroup.Input`). |
+| `disabled` | `boolean` | `false` | false | Renders the disabled visual, sets `aria-disabled="true"` on the root and disables the field controls inside (`InputGroup.Input`, `Input`, `Select`, …) through the Field context. A `Button` or `IconButton` inside needs its own `disabled`. |
 
 ## Slots
 
@@ -72,16 +72,16 @@ Public members of the compound:
 | -------------------- | ----------------------- | ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | Root                 | — (the compound itself) | `@aziontech/webkit/input-group-root`  | The container. Orchestrates borders, seams, focus ring, and states.                                                                                                                                                                                                                                                      |
 | `<InputGroup.Addon>` | `Addon`                 | `@aziontech/webkit/input-group-addon` | Static-content island (icon, text like `https://`, `.com`, `$`) rendered with the darker `--bg-canvas` fill and muted text.                                                                                                                                                                                             |
-| `<InputGroup.Input>` | `Input`                 | `@aziontech/webkit/input-group-input` | Borderless middle `<input>`. Props: `modelValue` (`''`), `placeholder` (`''`), `autocomplete`, `disabled`, `readonly`, `required`, `invalid` (all `false`); emits `update:modelValue`. Reads `id`, `aria-describedby`, `invalid`, `disabled` and `required` from an enclosing `Field` (an explicit prop/attribute wins). |
+| `<InputGroup.Input>` | `Input`                 | `@aziontech/webkit/input-group-input` | Borderless middle `<input>`, with the same inline padding as `Input` (`--spacing-sm`). Props: `modelValue` (`''`), `type` (`'text' | 'email' | 'number'`, default `'text'`, the same restricted set as `Input`), `placeholder` (`''`), `autocomplete`, `disabled`, `readonly`, `required`, `invalid` (all `false`); emits `update:modelValue`. Reads `id`, `aria-describedby`, `invalid`, `disabled` and `required` from an enclosing `Field` (an explicit prop/attribute wins). |
 
-The root reads `invalid`, `disabled` and `required` from an enclosing `Field` too, OR-ed with its own props, so a `Field`'s state styles the whole group.
+The root reads `invalid`, `disabled` and `required` from an enclosing `Field` too, OR-ed with its own props, so a `Field`'s state styles the whole group. The root then provides the Field context to its children with `invalid` and `disabled` OR-ed with the group's own (the parent Field's id, description, title and `required` pass through), so the group's state reaches the controls inside.
 
 ## States
 
 - Visual states on root: `default`, `hover`, `focus-within`, `invalid`, `required`, `disabled`
 - `data-size` mirrors the `size` prop and drives the root height (`small`=`h-7`, `medium`=`h-8`, `large`=`h-10`)
 - Only one focus indicator is visible when a descendant is focused: the group draws the single `focus-within` ring on its root, and the inner input primitives' own focus rings are suppressed via `[&_*]:focus-visible:!ring-0 [&_*]:focus-within:!ring-0` so `Button`, `Select.Trigger`, `Input` wrappers, and raw `<input>` share the group's ring instead of stacking their own on top
-- `data-invalid` mirrors the `invalid` prop; sets `aria-invalid="true"`
+- `data-invalid` mirrors the `invalid` prop; `aria-invalid` lands on the controls inside, not on the root
 - `data-required` mirrors the `required` prop (no `aria-required` on the group root)
 - `data-disabled` mirrors the `disabled` prop; sets `aria-disabled="true"`
 - Border semantics mirror `input` (independent, not compound):
@@ -100,7 +100,7 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
 
 - Visible focus: the root shows a `focus-within` ring (`ring-2 ring-(--ring-color) ring-offset-2 ring-offset-(--bg-canvas)`) whenever any descendant (any child control or the middle input) has focus. The middle input renders `focus:ring-0 outline-none` so the group's ring is the only visible focus indicator. Suppressed when `data-disabled` is present. Child components (`Button`, `Select`) retain their own focus behavior internally but the group's ring is visually authoritative.
 - Keyboard map: `Tab` moves through the children in DOM order. No custom keybindings on the group.
-- ARIA: root uses `role="group"`; `aria-invalid` reflects the prop; `required` is styling only on the root. Each child keeps its own `aria-*` — the group does not duplicate.
+- ARIA: root uses `role="group"` with `aria-disabled`; `aria-invalid` is set on the controls inside (ARIA 1.2 does not allow it on `group`); `required` is styling only on the root. Each child keeps its own `aria-*` — the group does not duplicate.
 - `<InputGroup.Addon>` is decorative-by-default; when its content is not conveyed elsewhere the consumer should annotate it (`aria-hidden="true"` for pure decoration, or a visible-only label the middle input references via `aria-describedby`).
 - Contrast ≥4.5:1 for addon text against `var(--bg-canvas)`; ≥3:1 for the border in every state.
 - Motion: color transitions on state changes are `duration-150 ease-out` and pair with `motion-reduce:transition-none`.

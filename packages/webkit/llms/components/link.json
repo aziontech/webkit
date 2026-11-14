@@ -12,7 +12,7 @@
  "setup": null,
  "useWhen": [
   "A standalone navigation link: a domain, a repository, a docs page, \"View all\".",
-  "An in-console navigation action (\"Add custom domain\") with `showIcon` set to false."
+  "An in-console navigation action (\"Add custom domain\"): no trailing icon unless `icon` is set."
  ],
  "avoidWhen": [
   "A link inside a sentence → use a plain anchor with the text-link class.",
@@ -25,8 +25,10 @@
   "breadcrumb` — a trail of links for hierarchical location."
  ],
  "bestPractices": [
-  "Always set `href` and a `label` that names the destination; the defaults (`'#'`, `'Learn more'`) are placeholders.",
-  "Keep the default `pi pi-external-link` icon for off-site targets with `target=\"_blank\"` (`rel=\"noopener noreferrer\"` is added for you); turn `showIcon` off for in-app destinations.",
+  "Always set `href` and a label that names the destination; an empty `href` renders `#` so the anchor stays focusable, and an empty label falls back to the locale catalog (`Learn more`).",
+  "Pass the label as the default slot or the `label` prop; the slot wins when both are set.",
+  "target=\"_blank\"` adds `rel=\"noopener noreferrer\"` and, when `icon` is empty, the `pi pi-external-link` glyph so an off-site link reads as one; same-tab links show no icon unless `icon` is set.",
+  "An icon is shown when `icon` is set; `showIcon` is deprecated.",
   "Match `size` to the controls around it; heights follow `button` (40 / 32 / 28 px).",
   "disabled` drops it from the tab order and suppresses `click`; hide a link that can never be followed instead."
  ],
@@ -36,7 +38,7 @@
    "type": "string",
    "default": "''",
    "required": "false",
-   "doc": "Visible label rendered inside the link. Empty uses the locale catalog (`Learn more`)."
+   "doc": "Visible label, the default slot's fallback. Empty uses the locale catalog (`Learn more`)."
   },
   {
    "name": "size",
@@ -55,23 +57,23 @@
   {
    "name": "showIcon",
    "type": "boolean",
-   "default": "true",
+   "default": "undefined",
    "required": "false",
-   "doc": "When true, renders the trailing icon."
+   "doc": "@deprecated since 6.0 — use `icon` (set shows it, empty hides it). Removed in 7.0. `false` hides the icon; `true` shows `icon`, or `pi pi-external-link` when `icon` is empty."
   },
   {
    "name": "icon",
    "type": "string",
-   "default": "'pi pi-external-link'",
+   "default": "''",
    "required": "false",
-   "doc": "PrimeIcons class for the trailing icon."
+   "doc": "PrimeIcons class for the trailing icon; set shows it. Empty shows `pi pi-external-link` only when `target` is `_blank`."
   },
   {
    "name": "href",
    "type": "string",
-   "default": "'#'",
+   "default": "''",
    "required": "false",
-   "doc": "Destination URL for the anchor."
+   "doc": "Destination URL for the anchor. Empty renders `#`."
   },
   {
    "name": "target",
@@ -88,7 +90,13 @@
    "notes": "—"
   }
  ],
- "slots": [],
+ "slots": [
+  {
+   "name": "default",
+   "scope": "",
+   "notes": "The link text. Fallback: `label`, then the locale catalog."
+  }
+ ],
  "styleSeam": false,
  "assets": [
   {
@@ -99,15 +107,15 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import Link from '@aziontech/webkit/link'\n</script>\n\n<template>\n  <Link\n    label=\"Learn more\"\n    size=\"large\"\n    href=\"#\"\n  />\n</template>"
+   "sfc": "<script setup>\n  import Link from '@aziontech/webkit/link'\n</script>\n\n<template>\n  <Link\n    label=\"Learn more\"\n    size=\"large\"\n    href=\"https://example.com/docs\"\n    target=\"_blank\"\n  />\n</template>"
   },
   {
    "name": "Sizes",
-   "sfc": "<script setup>\n  import Link from '@aziontech/webkit/link'\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-center gap-4\">\n    <Link\n      size=\"large\"\n      label=\"Learn more\"\n    />\n    <Link\n      size=\"medium\"\n      label=\"Learn more\"\n    />\n    <Link\n      size=\"small\"\n      label=\"Learn more\"\n    />\n  </div>\n</template>"
+   "sfc": "<script setup>\n  import Link from '@aziontech/webkit/link'\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-center gap-4\">\n    <Link\n      size=\"large\"\n      label=\"Learn more\"\n      icon=\"pi pi-external-link\"\n    />\n    <Link\n      size=\"medium\"\n      label=\"Learn more\"\n      icon=\"pi pi-external-link\"\n    />\n    <Link\n      size=\"small\"\n      label=\"Learn more\"\n      icon=\"pi pi-external-link\"\n    />\n  </div>\n</template>"
   },
   {
    "name": "Disabled",
-   "sfc": "<script setup>\n  import Link from '@aziontech/webkit/link'\n</script>\n\n<template>\n  <Link\n    label=\"Learn more\"\n    disabled\n  />\n</template>"
+   "sfc": "<script setup>\n  import Link from '@aziontech/webkit/link'\n</script>\n\n<template>\n  <Link\n    label=\"Learn more\"\n    icon=\"pi pi-external-link\"\n    disabled\n  />\n</template>"
   }
  ],
  "docs": "components/link.md"

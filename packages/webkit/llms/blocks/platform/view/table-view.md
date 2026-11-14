@@ -10,7 +10,7 @@
 
 ## Asked as
 
-list; list page; resource list; module list; index page; resources index; list with filters; workloads list; listagem; lista de recursos; página de listagem; resource table; data table; table; sortable table; paginated table; table with copy id; listing table; tabela de listagem; tabela; tabela de recursos; tabela paginada; list controls; filter bar; search and filter; table toolbar; filter chips; column visibility; filtros; barra de filtros; busca e filtro; users; users management; users list; team members; members list; invite user; invite teammate; manage users; remove user; usuários; gestão de usuários; lista de usuários; convidar usuário; membros; teams and permissions; teams; permissions; roles and permissions; access control; team list; create team; user groups; times e permissões; permissões; controle de acesso; equipes; credentials; api tokens; personal tokens; api keys; access tokens; token list; revoke token; credenciais; tokens de api; chaves de api; environments; environments list; production stage preview; deployment environments; deployment policies; create environment; ambientes; lista de ambientes; ambientes de deploy; activity history; audit log; activity log; audit trail; account activity; event history; user actions log; histórico de atividades; log de auditoria; registro de atividades; table view; index table; visualização em tabela; property filter; filter tokens; collection preferences; table preferences; saved preferences; filters in the url; shareable filters; use collection; filtro por propriedade; preferências da tabela; filtros na url; deployments list; deployment history; lista de deploys; histórico de deploys
+list; list page; resource list; module list; index page; resources index; list with filters; workloads list; listagem; lista de recursos; página de listagem; resource table; data table; table; sortable table; paginated table; table with copy id; listing table; tabela de listagem; tabela; tabela de recursos; tabela paginada; list controls; filter bar; search and filter; table toolbar; filter chips; column visibility; filtros; barra de filtros; busca e filtro; table view; index table; visualização em tabela; property filter; filter tokens; collection preferences; table preferences; saved preferences; filters in the url; shareable filters; use collection; filtro por propriedade; preferências da tabela; filtros na url; deployments list; deployment history; lista de deploys; histórico de deploys
 
 The first-level index of one resource type, in rows. The user lands here from the sidebar to find a resource among many, narrow the list by its attributes, compare records column by column, and act on one: open it, deploy it, clone it, delete it, or create a new one. One `useCollection` call holds the filter, the sort, the page and the saved preferences, so the page is one heading over one band: the controls row and the table it narrows.
 
@@ -18,7 +18,7 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 
 ## When to use
 
-- The module the sidebar routes to lists resources of one type (applications, workloads, users, tokens, environments, activity history).
+- The module the sidebar routes to lists resources of one type that has no dedicated block (applications, workloads, domains).
 - Users compare many records by the same few attributes (status, domain, owner, last change) and need to sort, filter and page through them.
 - The filtered list must survive a reload or a shared link, and each person's page size and columns must survive the next visit.
 - The list must survive its last row being deleted: the page keeps its heading and controls and the table gives way to an empty state.
@@ -27,6 +27,7 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 
 - Resources people recognise by a few fields or a picture rather than compare column by column: use `platform/view/card-view`.
 - A list nested inside one resource (a tab of a details page): use the table inside `platform/detail/details-page` or `platform/detail/record-table`, with `Add <Module>` instead of `Create`.
+- People on the account: use `platform/account/users`. Teams and their permissions: use `platform/account/team-permissions`. API tokens: use `platform/account/tokens`. The audit log: use `platform/account/activity-history`.
 - Files and folders of a storage resource: use `platform/view/file-browser`.
 - Events or logs explored over time with a chart and a document pane: use `platform/view/split-view`.
 - An account that has never created the resource: use `platform/states/first-use`, which teaches the module before any list exists.
@@ -52,11 +53,11 @@ The last control of the row. `CollectionPreferences` bound with `v-bind="prefere
 
 ### E. Resource table — `Card`, `TableRoot` (required)
 
-`Card :padded="false"` around `TableRoot :bordered="false"` bound with `v-bind="tableProps"`, which hands it one page of rows, the ordered and visible columns, the sort, the pagination footer, density, wrap and stripes; the table renders and never filters or slices on its own. `enable-sorting` makes Name, Status and Last Modified sortable; `:loading` joins Refresh with the collection's own fetch. The Name column is `principal`; the actions column is `kind: 'action'`. On a phone the table keeps its grid and scrolls sideways inside the card, as the console does; do not set `stackable` on a resource index, whose rows are compared across columns.
+`Card :padded="false"` around `TableRoot :bordered="false"` bound with `v-bind="tableProps"`, which hands it one page of rows, the ordered and visible columns, the sort, the pagination footer, density, wrap and stripes; the table renders and never filters or slices on its own. `enable-sorting` makes Name, Status and Last modified sortable; `:loading` joins Refresh with the collection's own fetch. The Name column is `principal`; the actions column is `kind: 'action'`. On a phone the table keeps its grid and scrolls sideways inside the card, as the console does; do not set `stackable` on a resource index, whose rows are compared across columns.
 
 ### F. Cell presets — `Table.CellLink`, `Table.CellId`, `Table.CellStatus`, `Table.CellTime` (optional)
 
-Every cell is a preset from `@aziontech/webkit/table`, so the list reads like every other WebKit list. Name is `Table.CellLink` with `to` and `destination="Resources"` (the tooltip says where it leads). ID is `Table.CellId` (copy button named after the resource). The domain is `Table.CellLink` with `href` (opens in a new tab, external mark, copy button) and the other domains as `more`: a `+N` `OverflowCount` whose popover counts them and searches once the list is long. Status is `Table.CellStatus`. Last Modified is `Table.CellTime`: the author's avatar and a relative time that updates every minute, the absolute time in its tooltip.
+Every cell is a preset from `@aziontech/webkit/table`, so the list reads like every other WebKit list. Name is `Table.CellLink` with `to` and `destination="Resources"` (the tooltip says where it leads). ID is `Table.CellId` (copy button named after the resource). The domain is `Table.CellLink` with `href` (opens in a new tab, external mark, copy button) and the other domains as `more`: a `+N` `OverflowCount` whose popover counts them and searches once the list is long. Status is `Table.CellStatus`. Last modified is `Table.CellTime` on the `modifiedAt` timestamp: the author's avatar and a relative time that updates every minute, the absolute time in its tooltip.
 
 ### G. Row actions — `Table.CellActions`, `DropdownMenuGroup`, `DropdownMenuOption` (required)
 
@@ -70,7 +71,9 @@ The `platform/delete/delete-with-confirmation` dialog, opened from the row menu 
 
 When `status` is `no-match`, the table's `#empty` slot holds a medium `EmptyState` with the filter-slash glyph, "No matching resources", one sentence, and an outlined small Clear filters `Button` bound to `clearFilters`. The heading, the filter tokens and the table header stay, so the user can see and undo what hid the rows.
 
-### J. Empty listing — `Card`, `EmptyState`, `Button` (required)
+### J. Failed and empty listing — `Alert`, `Card`, `EmptyState`, `Button` (required)
+
+When `status` is `error`, a danger `Alert` ("Couldn't load the resources. Check your connection and retry.") with a Retry action bound to the collection's `refresh` takes the table's place; the heading and the controls row stay.
 
 When `status` is `empty`, the table and its header and footer give way to a flush `Card :padded="false"` holding only a medium `EmptyState`: the resource glyph, one sentence, then a small secondary `Create <Object>` with the heading's label and a small outlined Documentation on one row.
 
@@ -81,7 +84,7 @@ When `status` is `empty`, the table and its header and footer give way to a flus
 - Set `url: true` so the tokens, the sort and the page live in the query string and a filtered list can be shared or reloaded.
 - Give the list a `storageKey` of its own and lock the column that names the row.
 - Keep `CollectionPreferences` the last control of the row and every control on it medium.
-- Branch on `status`: `empty` swaps the table for the empty listing, `no-match` fills the table's `#empty` slot with Clear filters.
+- Branch on `status`: `loading` shows the table's skeleton rows, `error` swaps the table for a danger `Alert` with Retry, `empty` swaps it for the empty listing, `no-match` fills the table's `#empty` slot with Clear filters.
 - Give every icon-only control a `Tooltip` and an `aria-label` with the same words.
 - Put Delete last in the row menu, in its own group, and always behind the confirmation dialog.
 
@@ -102,7 +105,7 @@ When `status` is `empty`, the table and its header and footer give way to a flus
 - **Filter:** placeholder and `aria-label` name what is filtered, e.g. "Filter resources".
 - **Properties:** the column header's words, e.g. "Name", "Author", "Status", "Domain".
 - **Icon buttons:** a verb or noun in sentence case, e.g. "Refresh", "Download CSV", "Row actions". Preferences title: "Table preferences".
-- **Column headers:** one or two words without punctuation, e.g. "Name", "ID", "Domains", "Status", "Last Modified".
+- **Column headers:** one or two words without punctuation, e.g. "Name", "ID", "Domains", "Status", "Last modified".
 - **No match:** "No matching resources", then "No resource matches these filters.", and the action "Clear filters".
 - **Empty:** title states the fact, e.g. "No resources yet"; description is one sentence with what to do, e.g. "Create a resource to start serving traffic on your domains."
 - **Copy buttons:** name what they copy, e.g. "Copy resource ID", "Copy domain name".
@@ -123,6 +126,8 @@ When `status` is `empty`, the table and its header and footer give way to a flus
 
 - Default: resources exist; the table shows them with the property filter, refresh, export, preferences, sorting and pagination wired, and filtering to nothing shows No matching resources with Clear filters.
 - Empty: every resource was deleted on an account that is not new; `useCollection` reports `empty`, the heading and controls stay, and a flush card with Create Resource and Documentation replaces the table.
+- Loading: the first load; the heading stays, the filter, Download CSV and preferences are disabled, Refresh spins and the table shows its skeleton rows.
+- Failed: the resources could not load; the heading and the disabled controls stay, and a danger `Alert` with Retry takes the table's place (`status` is `error` when a server-mode `fetch` rejects).
 - Deployments: the deployments list with Version (Current tag), Status with a spinner while Building and the run's duration, the project link, the environment tag and the author with the time; a row click opens the deployment, the row menu holds View details, Redeploy and Promote to production, and Refresh, no match and empty behave as in Default and Empty.
 
 ## Related
@@ -139,6 +144,8 @@ When `status` is `empty`, the table and its header and footer give way to a flus
 
 - `Default` — primary (the code below)
 - `Empty` — Every resource deleted on an account that is not new: `useCollection` reports `empty` (not `no-match`), so the page keeps its heading and controls, and the table, without its header or footer, gives way to a flush Card that holds only a medium EmptyState led by the resource glyph, with a small secondary Create Resource and a small outlined Documentation button.
+- `Loading` — The first load: the heading stays, the PropertyFilter, Download CSV and preferences are disabled, Refresh spins and the table shows its skeleton rows under the column header.
+- `Failed` — The resources could not load: the heading and the disabled controls row stay, and a danger Alert with Retry takes the table's place, as the primary does when `useCollection` reports `error`.
 - `Deployments` — The deployments list, the same page with its own columns: a PropertyFilter over Version, Status, Project, Environment and Author with Refresh, Download CSV and preferences; Version with a Current `Tag`, a hidden ID, Status as a `StatusIndicator` (a spinner while Building) with the run's duration, the project as a `Table.CellLink`, the environment as a rounded `Tag` and the author avatar with the relative time. Clicking a row opens the deployment; its menu holds View details, Redeploy and Promote to production (disabled unless the run is Ready and not already in Production). Refresh shows the table's loading state, a filter with no match shows No matching deployments, and an account with no deployments shows the flush empty card. The details-page Deployments tabs reuse this table without the page heading.
 
 Each variant is the same screen in another state: `get_pattern("platform/view/table-view", { variant })`, or the file under `blocks/platform/view/table-view/variants/`.
@@ -176,11 +183,9 @@ Each variant is the same screen in another state: `get_pattern("platform/view/ta
     name: string
     domain: string
     domains: string[]
-    domainCount: number
     status: ResourceStatus
     owner: string
     modifiedAt: Date
-    lastModified: string
   }
 
   const owners = [
@@ -210,7 +215,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/ta
     { accessorKey: 'id', header: 'ID', minWidth: 80 },
     { accessorKey: 'domain', header: 'Domains', grow: 2 },
     { accessorKey: 'status', header: 'Status', enableSorting: true, minWidth: 104 },
-    { accessorKey: 'lastModified', header: 'Last Modified', enableSorting: true, minWidth: 80 },
+    { accessorKey: 'modifiedAt', header: 'Last modified', enableSorting: true, minWidth: 80 },
     { id: 'actions', kind: 'action', hideable: false }
   ]
 
@@ -221,7 +226,6 @@ Each variant is the same screen in another state: `get_pattern("platform/view/ta
     n: number,
     owner: string,
     days: number,
-    lastModified: string,
     status: ResourceStatus = 'Live'
   ): Resource => {
     const name = `resource-${String(n).padStart(2, '0')}`
@@ -234,25 +238,23 @@ Each variant is the same screen in another state: `get_pattern("platform/view/ta
         domain,
         ...Array.from({ length: n * 7 }, (_, j) => `${name}-alias-${j + 1}.example.com`)
       ],
-      domainCount: n * 7,
       status,
       owner,
-      modifiedAt: daysAgo(days),
-      lastModified
+      modifiedAt: daysAgo(days)
     }
   }
 
   const rows: Resource[] = [
-    resource(1, 'Ethan Brooks', 0, 'just now'),
-    resource(2, 'Jordan Kim', 18, '3 weeks ago'),
-    resource(3, 'Taylor Reed', 36, '1 month ago'),
-    resource(4, 'John Smith', 54, '2 months ago'),
-    resource(5, 'Sam Lee', 72, '2 months ago'),
-    resource(6, 'Priya Patel', 90, '3 months ago'),
-    resource(7, 'Chris Taylor', 108, '4 months ago'),
-    resource(8, 'Riley Carter', 126, '4 months ago'),
-    resource(9, 'Ethan Brooks', 144, '5 months ago', 'Inactive'),
-    resource(10, 'Jordan Kim', 162, '5 months ago')
+    resource(1, 'Ethan Brooks', 0),
+    resource(2, 'Jordan Kim', 18),
+    resource(3, 'Taylor Reed', 36),
+    resource(4, 'John Smith', 54),
+    resource(5, 'Sam Lee', 72),
+    resource(6, 'Priya Patel', 90),
+    resource(7, 'Chris Taylor', 108),
+    resource(8, 'Riley Carter', 126),
+    resource(9, 'Ethan Brooks', 144, 'Inactive'),
+    resource(10, 'Jordan Kim', 162)
   ]
 
   const items = ref<Resource[]>(rows)
@@ -264,6 +266,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/ta
     status,
     matchingItems,
     clearFilters,
+    refresh: retry,
     loading: fetching
   } = useCollection({
     items,
@@ -415,6 +418,13 @@ Each variant is the same screen in another state: `get_pattern("platform/view/ta
                 </EmptyState>
               </template>
             </Card>
+            <Alert
+              v-else-if="status === 'error'"
+              severity="danger"
+              label="Couldn't load the resources. Check your connection and retry."
+              action-label="Retry"
+              @action="retry"
+            />
             <Card
               key="card-2"
               v-else
@@ -458,7 +468,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/ta
                       :severity="value === 'Live' ? 'success' : 'secondary'"
                     />
                   </template>
-                  <template #cell-lastModified="{ row }">
+                  <template #cell-modifiedAt="{ row }">
                     <Table.CellTime
                       :value="row.modifiedAt"
                       :author="row.owner"

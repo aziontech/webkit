@@ -82,6 +82,13 @@
    "default": "0",
    "required": "false",
    "doc": "Duration in milliseconds before auto-dismiss; `0` disables auto-dismiss."
+  },
+  {
+   "name": "title",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Optional bold first line above the copy (the AlertTitle of the shadcn anatomy); hidden when empty."
   }
  ],
  "events": [
@@ -92,8 +99,8 @@
   },
   {
    "name": "close",
-   "payload": "void",
-   "notes": "Emitted when the message is dismissed manually or after `life` expires."
+   "payload": "(event?: Event)",
+   "notes": "Emitted when the message is dismissed, after the fade. Carries the originating event: the close button's `MouseEvent` or the `Escape` `KeyboardEvent`; no argument after `life` expires."
   }
  ],
  "slots": [

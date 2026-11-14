@@ -2,7 +2,7 @@
  "purpose": "Helps users move between views or sections. Migrated from the existing implementation at `packages/webkit/src/components/navigation/link/`. Design source: [Webkit — Link](https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3548-578) (`Size` × `State` variants; hover handled in CSS).",
  "useWhen": [
   "A standalone navigation link: a domain, a repository, a docs page, \"View all\".",
-  "An in-console navigation action (\"Add custom domain\") with `showIcon` set to false."
+  "An in-console navigation action (\"Add custom domain\"): no trailing icon unless `icon` is set."
  ],
  "avoidWhen": [
   "A link inside a sentence → use a plain anchor with the text-link class.",
@@ -15,8 +15,10 @@
   "breadcrumb` — a trail of links for hierarchical location."
  ],
  "bestPractices": [
-  "Always set `href` and a `label` that names the destination; the defaults (`'#'`, `'Learn more'`) are placeholders.",
-  "Keep the default `pi pi-external-link` icon for off-site targets with `target=\"_blank\"` (`rel=\"noopener noreferrer\"` is added for you); turn `showIcon` off for in-app destinations.",
+  "Always set `href` and a label that names the destination; an empty `href` renders `#` so the anchor stays focusable, and an empty label falls back to the locale catalog (`Learn more`).",
+  "Pass the label as the default slot or the `label` prop; the slot wins when both are set.",
+  "target=\"_blank\"` adds `rel=\"noopener noreferrer\"` and, when `icon` is empty, the `pi pi-external-link` glyph so an off-site link reads as one; same-tab links show no icon unless `icon` is set.",
+  "An icon is shown when `icon` is set; `showIcon` is deprecated.",
   "Match `size` to the controls around it; heights follow `button` (40 / 32 / 28 px).",
   "disabled` drops it from the tab order and suppresses `click`; hide a link that can never be followed instead."
  ]

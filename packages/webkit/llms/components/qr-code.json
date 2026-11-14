@@ -37,11 +37,18 @@
    "doc": "The text the code carries (a URI, a key), encoded as UTF-8 bytes."
   },
   {
-   "name": "label",
+   "name": "ariaLabel",
    "type": "string",
-   "default": "undefined",
+   "default": "''",
    "required": "false",
    "doc": "Accessible name of the image. Empty uses the catalog's `QR code`; name it after what the scan does."
+  },
+  {
+   "name": "label",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "@deprecated since 6.0 — use `ariaLabel` instead. Removed in 7.0."
   },
   {
    "name": "errorCorrection",
@@ -65,11 +72,11 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import CopyButton from '@aziontech/webkit/copy-button'\n  import QrCode from '@aziontech/webkit/qr-code'\n\n  const account = 'jane.doe@example.com'\n  const secret = 'JBSWY3DPEHPK3PXP'\n  const uri = `otpauth://totp/Azion:${encodeURIComponent(account)}?secret=${secret}&issuer=Azion`\n</script>\n\n<template>\n  <div class=\"flex flex-col items-start gap-(--spacing-md)\">\n    <QrCode\n      :value=\"uri\"\n      :label=\"`QR code to add ${account} to an authenticator app`\"\n    />\n    <div class=\"flex flex-col gap-(--spacing-xxs)\">\n      <p class=\"text-label-sm text-(--text-default)\">Can't scan the code?</p>\n      <div class=\"flex items-center gap-(--spacing-xs)\">\n        <code\n          class=\"text-label-code text-(--text-default)\"\n          dir=\"ltr\"\n          >{{ secret.match(/.{1,4}/g).join(' ') }}</code\n        >\n        <CopyButton\n          :value=\"secret\"\n          aria-label=\"Copy setup key\"\n          copied-label=\"Setup key copied\"\n        />\n      </div>\n    </div>\n  </div>\n</template>"
+   "sfc": "<script setup>\n  import CopyButton from '@aziontech/webkit/copy-button'\n  import QrCode from '@aziontech/webkit/qr-code'\n\n  const account = 'jane.doe@example.com'\n  const secret = 'JBSWY3DPEHPK3PXP'\n  const uri = `otpauth://totp/Azion:${encodeURIComponent(account)}?secret=${secret}&issuer=Azion`\n</script>\n\n<template>\n  <div class=\"flex flex-col items-start gap-(--spacing-md)\">\n    <QrCode\n      :value=\"uri\"\n      :aria-label=\"`QR code to add ${account} to an authenticator app`\"\n    />\n    <div class=\"flex flex-col gap-(--spacing-xxs)\">\n      <p class=\"text-label-sm text-(--text-default)\">Can't scan the code?</p>\n      <div class=\"flex items-center gap-(--spacing-xs)\">\n        <code\n          class=\"text-label-code text-(--text-default)\"\n          dir=\"ltr\"\n          >{{ secret.match(/.{1,4}/g).join(' ') }}</code\n        >\n        <CopyButton\n          :value=\"secret\"\n          aria-label=\"Copy setup key\"\n          copied-label=\"Setup key copied\"\n        />\n      </div>\n    </div>\n  </div>\n</template>"
   },
   {
    "name": "Sizes",
-   "sfc": "<script setup>\n  import QrCode from '@aziontech/webkit/qr-code'\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-end gap-(--spacing-lg)\">\n    <QrCode\n      v-for=\"size in ['small', 'medium', 'large']\"\n      :key=\"size\"\n      value=\"https://www.azion.com/en/documentation/\"\n      :size=\"size\"\n      :label=\"`QR code, ${size}, to the Azion documentation`\"\n    />\n  </div>\n</template>"
+   "sfc": "<script setup>\n  import QrCode from '@aziontech/webkit/qr-code'\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-end gap-(--spacing-lg)\">\n    <QrCode\n      v-for=\"size in ['small', 'medium', 'large']\"\n      :key=\"size\"\n      value=\"https://www.azion.com/en/documentation/\"\n      :size=\"size\"\n      :aria-label=\"`QR code, ${size}, to the Azion documentation`\"\n    />\n  </div>\n</template>"
   }
  ],
  "docs": "components/qr-code.md"

@@ -2,7 +2,7 @@
  "name": "sidebar",
  "binding": "Sidebar",
  "import": "@aziontech/webkit/sidebar",
- "treeShakeableImport": "@aziontech/webkit/sidebar",
+ "treeShakeableImport": "@aziontech/webkit/sidebar-root",
  "category": "layout",
  "surface": "product",
  "structure": "composition",
@@ -17,7 +17,7 @@
  "useWhen": [
   "The persistent navigation column of an app shell, with an optional header (brand, workspace switcher) and footer (profile, settings) around a scrolling `Menu`.",
   "The user should be able to resize the rail by dragging its trailing edge (`resizable`) or take it out of the layout and bring it back (`collapsible`).",
-  "The rail's size or collapsed state must survive navigation or reloads — bind `v-model:width` and `v-model:collapsed` and persist them in the app."
+  "The rail's size or collapsed state must survive navigation or reloads — bind `v-model:width` and `v-model:open` and persist them in the app."
  ],
  "avoidWhen": [
   "Adjacent work areas the reader resizes (editor beside a preview, a terminal under it) → use `resizable`.",
@@ -95,6 +95,13 @@
    "doc": "Accessible name for the drag handle separator. Empty uses the locale catalog (`Resize sidebar`)."
   },
   {
+   "name": "open",
+   "type": "boolean",
+   "default": "true",
+   "required": "false",
+   "doc": "Two-way value (`v-model:open`)."
+  },
+  {
    "name": "collapsed",
    "type": "boolean",
    "default": "false",
@@ -109,18 +116,7 @@
    "doc": "Two-way value (`v-model:width`)."
   }
  ],
- "events": [
-  {
-   "name": "update:collapsed",
-   "payload": "boolean",
-   "notes": "v-model:collapsed` — the rail entered or left the layout, by the trigger, the drag crossing the snap boundary, the keyboard nudge, or a double-click on the handle."
-  },
-  {
-   "name": "update:width",
-   "payload": "number",
-   "notes": "v-model:width` — the sized width in px, already clamped to the token bounds. Emitted continuously during a drag."
-  }
- ],
+ "events": [],
  "slots": [
   {
    "name": "default",

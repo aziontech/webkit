@@ -27,6 +27,7 @@
 - A single text search over a short list → use `input` bound to `filterProps`.
 - A few fixed choices always on screen → use `toggle-group` or `chip` filters.
 - A structured filter builder with its own panel inside a table toolbar → use `table-filter`.
+- Faceted picks from a known set of values per field (status, region, owner), shown as chips → use `filter-menu`. PropertyFilter is for expression search: typed tokens, operators, free text and a query people keep as text.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
 ## Related
@@ -40,7 +41,6 @@
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `query` | `PropertyFilterQuery` | `undefined` | false | The tokens and how they combine. Supports v-model:query. |
 | `properties` | `FilteringProperty[]` | `[]` | false | Properties the suggestions offer, with their operators and values. |
 | `totalCount` | `number` | `undefined` | false | Items that match the query, announced next to the tokens. Hidden when unset. |
 | `placeholder` | `string` | `''` | false | Placeholder of the field. Empty uses the locale catalog. |
@@ -48,24 +48,30 @@
 | `freeText` | `boolean` | `true` | false | Accepts typed text with no property as a free-text token. |
 | `disabled` | `boolean` | `false` | false | Disables the field and the tokens. |
 | `mode` | `'tokens' \| 'query'` | `'tokens'` | false | tokens` turns each choice into a token; `query` edits one query string. |
-| `text` | `string` | `undefined` | false | The query string in query mode. Supports v-model:text. |
 | `validate` | `(text: string) => string` | `undefined` | false | Checks the query string in query mode: '' when valid, else the message shown under the field. Replaces the built-in check. |
 | `suggest` | `(text: string, caret: number) => PropertyFilterQuerySuggestion[]` | `undefined` | false | Suggestions for the word at the caret in query mode. Replaces the built-in field, operator, value and AND / OR suggestions. |
+| `query` | `PropertyFilterQuery` | `—` | false | Two-way value (`v-model:query`). |
+| `text` | `string` | `''` | false | Two-way value (`v-model:text`). |
 
 ## Events
 
 | Event | Payload | Notes |
 | --- | --- | --- |
-| `update:query` | `PropertyFilterQuery` | A token was added or removed, the operation changed, or all cleared. Tokens mode only. |
-| `update:text` | `string` | The query string changed (typing, a suggestion, Escape clearing). Query mode only. |
 | `submit` | `(event: KeyboardEvent, payload: PropertyFilterSubmit)` | Enter with no active suggestion and a valid query; `event` is the Enter keydown. Query mode only. |
+
+## v-model
+
+| Model           | Type                  | Default                            | Emits          | Notes                                                                                                                                                       |
+| --------------- | --------------------- | ---------------------------------- | -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `v-model:query` | `PropertyFilterQuery` | `{ tokens: [], operation: 'and' }` | `update:query` | Via `defineModel('query')`. A token was added or removed, the operation changed, or all cleared. Tokens mode only. Unbound, the field keeps its own tokens. |
+| `v-model:text`  | `string`              | `''`                               | `update:text`  | Via `defineModel('text')`. The query string changed (typing, a suggestion, Escape clearing). Query mode only. Unbound, the field keeps its own text.        |
 
 ## States
 
 - Visual states: `default`, `focus-visible`, `open` (suggestions shown), `disabled`, `invalid` (query mode: after Enter or blur on a query that fails the check, then live until it passes or is cleared)
 - `data-mode` on the field wrapper mirrors `mode`; query mode sets the typed text in the code type (`text-label-code-sm`)
 - `aria-expanded` on the field mirrors the open suggestions; `data-active` marks the active option
-- `data-disabled` mirrors the `disabled` prop
+- `data-disabled` mirrors the `disabled` prop; while disabled nothing is added, removed or submitted (no `update:query`, no `submit`)
 
 ## Accessibility
 
@@ -88,26 +94,26 @@
 
 ## Internationalization
 
-| Key                                 | English source                 | Override prop |
-| ----------------------------------- | ------------------------------ | ------------- |
-| `propertyFilter.label`              | Filter                         | `ariaLabel`   |
-| `propertyFilter.placeholder`        | Filter by property or text     | `placeholder` |
-| `propertyFilter.suggestions`        | Suggestions                    | —             |
-| `propertyFilter.useText`            | Use: “{text}”                  | —             |
-| `propertyFilter.properties`         | Properties                     | —             |
-| `propertyFilter.values`             | Values                         | —             |
-| `propertyFilter.tokens`             | Applied filters                | —             |
-| `propertyFilter.operation`          | Combine filters                | —             |
-| `propertyFilter.matchAll` / `matchAny` | Match all / Match any       | —             |
-| `propertyFilter.and` / `or`         | and / or                       | —             |
-| `propertyFilter.clear`              | Clear filters                  | —             |
-| `propertyFilter.matches`            | {count} match / {count} matches (plural) | —   |
-| `propertyFilter.equals` … `lessOrEqual` | operator names (Equals, Contains, …) | —   |
-| `propertyFilterQuery.label`         | Query                          | `ariaLabel`   |
-| `propertyFilterQuery.placeholder`   | Type a query, for example status = Active AND requests > 10 | `placeholder` |
-| `propertyFilterQuery.fields`        | Fields                         | —             |
-| `propertyFilterQuery.all` / `any`   | Every condition matches / Any condition matches (AND / OR) | — |
-| `propertyFilterQuery.unknownField` … `unclosedQuote` | the built-in check messages (`{field}`, `{operator}`, `{word}`, `{connective}`, `{position}`) | `validate` |
+| Key                                                  | English source                                                                                | Override prop |
+| ---------------------------------------------------- | --------------------------------------------------------------------------------------------- | ------------- |
+| `propertyFilter.label`                               | Filter                                                                                        | `ariaLabel`   |
+| `propertyFilter.placeholder`                         | Filter by property or text                                                                    | `placeholder` |
+| `propertyFilter.suggestions`                         | Suggestions                                                                                   | —             |
+| `propertyFilter.useText`                             | Use: “{text}”                                                                                 | —             |
+| `propertyFilter.properties`                          | Properties                                                                                    | —             |
+| `propertyFilter.values`                              | Values                                                                                        | —             |
+| `propertyFilter.tokens`                              | Applied filters                                                                               | —             |
+| `propertyFilter.operation`                           | Combine filters                                                                               | —             |
+| `propertyFilter.matchAll` / `matchAny`               | Match all / Match any                                                                         | —             |
+| `propertyFilter.and` / `or`                          | and / or                                                                                      | —             |
+| `propertyFilter.clear`                               | Clear filters                                                                                 | —             |
+| `propertyFilter.matches`                             | {count} match / {count} matches (plural)                                                      | —             |
+| `propertyFilter.equals` … `lessOrEqual`              | operator names (Equals, Contains, …)                                                          | —             |
+| `propertyFilterQuery.label`                          | Query                                                                                         | `ariaLabel`   |
+| `propertyFilterQuery.placeholder`                    | Type a query, for example status = Active AND requests > 10                                   | `placeholder` |
+| `propertyFilterQuery.fields`                         | Fields                                                                                        | —             |
+| `propertyFilterQuery.all` / `any`                    | Every condition matches / Any condition matches (AND / OR)                                    | —             |
+| `propertyFilterQuery.unknownField` … `unclosedQuote` | the built-in check messages (`{field}`, `{operator}`, `{word}`, `{connective}`, `{position}`) | `validate`    |
 
 - Formatting: the match count goes through the plural rules and number format of the active locale (`Intl.PluralRules`, `Intl.NumberFormat`).
 

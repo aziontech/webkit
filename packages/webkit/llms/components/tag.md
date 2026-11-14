@@ -38,7 +38,7 @@
 | `severity` | `'primary' \| 'secondary' \| 'success' \| 'info' \| 'warning' \| 'danger' \| 'accent' \| 'contrast' \| 'highlight'` | `'primary'` | false | Color style for the tag surface and label; `primary` is solid brand orange, `highlight` the brand orange as a tint, `contrast` uses `var(--bg-contrast)` / `var(--text-contrast)`. |
 | `size` | `'small' \| 'medium'` | `'medium'` | false | Size token; `medium` is 24px tall, `small` is 20px. |
 | `rounded` | `boolean` | `false` | false | Pill shape when true. |
-| `icon` | `string` | `undefined` | false | PrimeIcons class for the leading icon. |
+| `icon` | `string` | `''` | false | PrimeIcons class for the leading icon. |
 
 ## Slots
 
@@ -52,11 +52,11 @@
 
 ## States
 
-- Visual states: `default`, `hover`, `focus-visible`, `active`, `disabled`
+- Visual states: `default`. A tag is static text: it takes no focus and has no hover or active state.
 
 ## Accessibility
 
-- Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`
+- Visible focus: none; the tag is not focusable. A focusable control that holds a tag draws its own ring.
 - Keyboard map: `Tab` focuses; `Enter`/`Space` activates; `Escape` closes overlays where applicable.
 - ARIA: root uses appropriate roles (`button`, `dialog`, `status`, etc.) per sub-component.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state.

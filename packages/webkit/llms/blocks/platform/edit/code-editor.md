@@ -1,11 +1,11 @@
 # CodeEditor (`platform/edit/code-editor`)
 
-> The code editor page, a page body for ConsoleLayout (the layout's breadcrumb names the service): the Code and Settings tabs, an editor toolbar whose ToggleGroup switches between the Code document and the Arguments document, and under it either one editor filling the pane or the Arguments split, a Resizable with the collapsible schema editor on the left and the form fields on the right. Both editors are a `CodeEditor` filling its pane with zero-padded line numbers and the Monaco loader from the code-editor spec. On Settings the tab holds the General, Runtime, Execution environment and Status sections, with the unsaved-changes bar. Its page-level parts are `PageTabs`, `SettingsSection`, `SettingRow` and `SaveBar`.
+> The code editor page, a page body for ConsoleLayout (the layout's breadcrumb names the service): the Code and Settings tabs, an editor toolbar whose ToggleGroup switches between the Code document and the Arguments document, and under it either one editor filling the pane or the Arguments split, a Resizable with the collapsible schema editor on the left and the form fields on the right. Both editors are a `CodeEditor` filling its pane with zero-padded line numbers and the Monaco loader from the code-editor spec. On Settings the tab holds the General, Runtime, Execution environment and Status sections, with the unsaved-changes bar: Save shows its loading state while Discard and the fields wait, a saved change raises a success toast, and a failed save keeps the bar with a danger `Alert`. Fields reorder with Move up and Move down buttons. Its page-level parts are `PageTabs`, `SettingsSection`, `SettingRow` and `SaveBar`.
 
 - Surface: product
 - Source: `blocks/platform/edit/code-editor/code-editor.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/edit/code-editor")`
-- Components: [Button](../../../components/button.md), [Card](../../../components/card.md), [CodeEditor](../../../components/code-editor.md), [CopyButton](../../../components/copy-button.md), [EmptyState](../../../components/empty-state.md), [Field](../../../components/field.md), [HelperText](../../../components/helper-text.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [Item](../../../components/item.md), [KeyValuePairs](../../../components/key-value-pairs.md), [Link](../../../components/link.md), [LogView](../../../components/log-view.md), `LogViewContent`, [PageTabs](../../../components/page-tabs.md), [RadioButton](../../../components/radio-button.md), `ResizableHandle`, `ResizablePane`, `ResizableRoot`, [SaveBar](../../../components/save-bar.md), [Select](../../../components/select.md), [SettingRow](../../../components/setting-row.md), [SettingsSection](../../../components/settings-section.md), [StatusIndicator](../../../components/status-indicator.md), [Switch](../../../components/switch.md), [Tabs](../../../components/tabs.md), [Tag](../../../components/tag.md), [Textarea](../../../components/textarea.md), [ToggleGroup](../../../components/toggle-group.md), [Tooltip](../../../components/tooltip.md), [Trace](../../../components/trace.md)
+- Components: [Alert](../../../components/alert.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [CodeEditor](../../../components/code-editor.md), [CopyButton](../../../components/copy-button.md), [EmptyState](../../../components/empty-state.md), [Field](../../../components/field.md), [HelperText](../../../components/helper-text.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [Item](../../../components/item.md), [KeyValuePairs](../../../components/key-value-pairs.md), [Link](../../../components/link.md), [LogView](../../../components/log-view.md), `LogViewContent`, [PageTabs](../../../components/page-tabs.md), [RadioButton](../../../components/radio-button.md), `ResizableHandle`, `ResizablePane`, `ResizableRoot`, [SaveBar](../../../components/save-bar.md), [Select](../../../components/select.md), [SettingRow](../../../components/setting-row.md), [SettingsSection](../../../components/settings-section.md), [StatusIndicator](../../../components/status-indicator.md), [Switch](../../../components/switch.md), [Tabs](../../../components/tabs.md), [Tag](../../../components/tag.md), [Textarea](../../../components/textarea.md), [Toast](../../../components/toast.md), [ToggleGroup](../../../components/toggle-group.md), [Tooltip](../../../components/tooltip.md), [Trace](../../../components/trace.md)
 - Skills: `webkit-layout`, `webkit-navigation`, `webkit-form`
 
 ## Asked as
@@ -64,7 +64,7 @@ When the form has no fields, the right pane shows an `EmptyState` with one sente
 
 ### G. Field list — `Card`, `Item`, `Tag`, `Tooltip`, `IconButton` (required)
 
-A flush `Card` with one small `Item` per field: a reorder grip, the field name and type, small `Tag`s for Required and Needs a name, and `IconButton`s to duplicate, remove and expand the field, each named by a `Tooltip`. Only the expanded field shows its settings.
+A flush `Card` with one small `Item` per field: a Move up and a Move down `IconButton` (transparent, small, disabled at the ends of the list), the field name and type, small `Tag`s for Required and Needs a name, and `IconButton`s to duplicate, remove and expand the field, each named by a `Tooltip`. Only the expanded field shows its settings. A move keeps focus on the button that moved the field (or its sibling once the field reaches an end) and is announced in a polite live region ("quality moved to position 1 of 2.").
 
 ### H. Field settings — `SettingRow`, `Input`, `Select`, `Switch`, `Textarea`, `HelperText` (required)
 
@@ -74,9 +74,9 @@ Inside an expanded field, `SettingRow`s for Name, Type, Label, Description, Requ
 
 The form column with four `SettingsSection`s: General (Name, required on Save), Runtime (a read-only `Input` with a lock glyph, because it cannot change after creation), Execution environment (On request or At the gateway as `Field` choice cards around `RadioButton`s) and Status (Active as a `Switch`). See `skills/webkit-form`.
 
-### J. Save bar — `SaveBar`, `Button` (required)
+### J. Save bar — `SaveBar`, `Button`, `Alert` (required)
 
-A `SaveBar` slides up on the first change to code, arguments or settings, with an outlined Discard and a primary Save, both medium. If Save finds Name empty, it switches to the Settings tab and moves focus to Name; an empty Code document takes focus on the Code tab.
+A `SaveBar` slides up on the first change to code, arguments or settings, with an outlined Discard and a primary Save, both medium. If Save finds Name empty, it switches to the Settings tab and moves focus to Name; an empty Code document takes focus on the Code tab. While the save runs, Save shows its loading state, Discard, the field list and the Settings fields are disabled, and both editors turn read-only; a saved change raises a success toast ("image-optimizer saved.") and the bar leaves. A failed save keeps the bar and every change, and puts a small danger `Alert` in its leading region ("Not saved. You are offline; check your connection and save again."); Save retries and Discard clears it.
 
 ## Do
 
@@ -116,7 +116,7 @@ A `SaveBar` slides up on the first change to code, arguments or settings, with a
 
 - Both editors have an `aria-label` that names the document, e.g. "Source code", "Argument form schema, as JSON".
 - The split is labeled "Argument form", its panes "Schema" and "Fields", and the handle "Resize the schema".
-- Field grips are focusable buttons named "Reorder" plus the field name, and move the field with the arrow keys.
+- Each field has native Move up and Move down buttons named with the field ("Move quality up"); moves are announced in a polite live region.
 - The expand button sets `aria-expanded` and `aria-controls` and names the field it opens.
 - Every icon-only control has an `aria-label` that matches its `Tooltip`; decorative icons carry `aria-hidden="true"`.
 - The save bar's motion respects reduced motion.
@@ -130,6 +130,7 @@ A `SaveBar` slides up on the first change to code, arguments or settings, with a
 - NoArguments: the Arguments document of a service with no form, the empty schema and the no fields empty state.
 - TestRun: the Code document with a finished test run of image-optimizer under it, the origin fetch selected in the trace; Run test shows the running state.
 - Settings: the Settings tab with General, Runtime, Execution environment and Status; editing raises the save bar.
+- Saving: a change to the Code document is being saved; Save shows its loading state, Discard and the fields are disabled and the editors are read-only.
 
 ## Related
 
@@ -148,6 +149,7 @@ A `SaveBar` slides up on the first change to code, arguments or settings, with a
 - `NoArguments` — The Arguments document of auth-handler, a service with no form: the empty schema on the left and the This form has no fields empty state on the right.
 - `Settings` — The Settings tab of image-optimizer: the General, Runtime, Execution environment and Status sections in the form column, the runtime locked; editing anything raises the unsaved-changes bar.
 - `TestRun` — The Code document after a test run of image-optimizer: Run test in the editor toolbar, and under the editor a resizable Test run pane with the run status and ID, the request and its outcome, the run details, the `Trace` waterfall with the origin fetch selected, and the run logs in a `LogView`. Run test again shows the running state until the run finishes.
+- `Saving` — The Code document of image-optimizer while a change is being saved: the save bar stays up, Save shows its loading state, Discard and the fields are disabled and the editors are read-only until the request ends.
 
 Each variant is the same screen in another state: `get_pattern("platform/edit/code-editor", { variant })`, or the file under `blocks/platform/edit/code-editor/variants/`.
 
@@ -155,6 +157,7 @@ Each variant is the same screen in another state: `get_pattern("platform/edit/co
 
 ```vue
 <script setup lang="ts">
+  import Alert from '@aziontech/webkit/alert'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import CodeEditor, { type CodeEditorMonacoModule } from '@aziontech/webkit/code-editor'
@@ -178,6 +181,7 @@ Each variant is the same screen in another state: `get_pattern("platform/edit/co
   import Tabs from '@aziontech/webkit/tabs'
   import Tag from '@aziontech/webkit/tag'
   import Textarea from '@aziontech/webkit/textarea'
+  import { toast } from '@aziontech/webkit/toast'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, nextTick, reactive, ref, useId } from 'vue'
@@ -401,11 +405,22 @@ export async function handleRequest(request, args = {}) {
     fields.value.splice(index + 1, 0, copy)
     open(copy.id)
   }
+  const moveStatus = ref('')
+  const fieldName = (field: SchemaField) => field.key || 'this field'
   const move = (index: number, direction: number) => {
     const to = index + direction
     if (to < 0 || to >= fields.value.length) return
     const [moved] = fields.value.splice(index, 1)
     fields.value.splice(to, 0, moved)
+    moveStatus.value = `${fieldName(moved)} moved to position ${to + 1} of ${fields.value.length}.`
+    nextTick(() => {
+      const same = document.getElementById(`${formId}-${direction < 0 ? 'up' : 'down'}-${moved.id}`)
+      const other = document.getElementById(
+        `${formId}-${direction < 0 ? 'down' : 'up'}-${moved.id}`
+      )
+      const target = same instanceof HTMLButtonElement && !same.disabled ? same : other
+      target?.focus()
+    })
   }
   const removeForm = () => {
     form.schema = cleanSchema
@@ -435,8 +450,17 @@ export async function handleRequest(request, args = {}) {
     const saved: { form: typeof form; fields: SchemaField[] } = JSON.parse(baseline.value)
     Object.assign(form, saved.form)
     fields.value = saved.fields
+    saveError.value = ''
   }
-  const save = () => {
+  const saving = ref(false)
+  const saveError = ref('')
+  const saveRequest = () =>
+    new Promise<boolean>((resolve) => {
+      setTimeout(() => resolve(globalThis.navigator?.onLine !== false), 900)
+    })
+  const save = async () => {
+    if (saving.value) return
+    saveError.value = ''
     nameError.value = form.name.trim() ? '' : 'This field is required.'
     codeError.value = form.code.trim() ? '' : 'This field is required.'
     if (codeError.value) {
@@ -449,7 +473,15 @@ export async function handleRequest(request, args = {}) {
       nextTick(() => document.getElementById(target)?.focus())
       return
     }
+    saving.value = true
+    const saved = await saveRequest()
+    saving.value = false
+    if (!saved) {
+      saveError.value = 'Not saved. You are offline; check your connection and save again.'
+      return
+    }
     baseline.value = snapshot()
+    toast.success(`${form.name} saved.`)
   }
 </script>
 
@@ -468,12 +500,18 @@ export async function handleRequest(request, args = {}) {
       />
     </PageTabs>
     <section
-      class="flex min-h-0 flex-1 flex-col"
-      :class="activeTab === 'code' ? 'overflow-hidden' : 'overflow-auto'"
+      :data-tab="activeTab"
+      class="flex min-h-0 flex-1 flex-col overflow-auto data-[tab=code]:overflow-hidden"
     >
       <div class="flex min-h-0 flex-1 flex-col">
         <fieldset class="m-0 flex min-h-0 min-w-0 flex-1 flex-col border-0 p-0">
           <legend class="sr-only">{{ form.name }} settings</legend>
+          <p
+            class="sr-only"
+            aria-live="polite"
+          >
+            {{ moveStatus }}
+          </p>
           <div
             v-show="activeTab === 'code'"
             class="flex min-h-0 flex-1 flex-col"
@@ -504,6 +542,7 @@ export async function handleRequest(request, args = {}) {
                     <div class="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
                       <div class="flex min-h-0 flex-1 flex-col">
                         <CodeEditor
+                          :readonly="saving"
                           id="service-source-code"
                           v-model="form.code"
                           language="javascript"
@@ -545,6 +584,7 @@ export async function handleRequest(request, args = {}) {
                           kind="outlined"
                           size="medium"
                           icon="pi pi-plus"
+                          :disabled="saving"
                           @click="addField"
                         />
                         <Button
@@ -552,6 +592,7 @@ export async function handleRequest(request, args = {}) {
                           kind="outlined"
                           size="medium"
                           icon="pi pi-times"
+                          :disabled="saving"
                           @click="removeForm"
                         />
                       </div>
@@ -573,6 +614,7 @@ export async function handleRequest(request, args = {}) {
                             <div class="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
                               <div class="flex min-h-0 flex-1 flex-col">
                                 <CodeEditor
+                                  :readonly="saving"
                                   v-model="form.schema"
                                   language="json"
                                   path="args.json"
@@ -621,8 +663,9 @@ export async function handleRequest(request, args = {}) {
                             v-else
                             class="min-h-0 flex-1 overflow-auto p-(--spacing-sm) pb-[calc(var(--spacing-sm)+var(--save-bar-inset,0rem))]"
                           >
-                            <div
-                              class="layout-column-form mx-auto flex min-w-0 flex-col gap-(--spacing-sm)"
+                            <fieldset
+                              class="layout-column-form m-0 flex min-w-0 flex-col gap-(--spacing-sm) border-0 p-0"
+                              :disabled="saving"
                             >
                               <Card :padded="false">
                                 <template #content>
@@ -640,17 +683,27 @@ export async function handleRequest(request, args = {}) {
                                             class="flex w-full min-w-0 items-center gap-(--spacing-xs) px-(--spacing-md)"
                                           >
                                             <div
-                                              class="inline-flex size-6 shrink-0 items-center justify-center rounded-(--shape-button) text-(--text-muted) outline-none transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) hover:text-(--text-default) focus-visible:ring-2 focus-visible:ring-(--ring-color) aria-disabled:pointer-events-none aria-disabled:opacity-40 aria-disabled:cursor-default cursor-grab active:cursor-grabbing motion-reduce:transition-none"
-                                              role="button"
-                                              tabindex="0"
-                                              :aria-disabled="fields.length < 2 || undefined"
-                                              :aria-label="'Reorder ' + (field.key || 'this field')"
-                                              @keydown.up.prevent="move(index, -1)"
-                                              @keydown.down.prevent="move(index, 1)"
+                                              class="flex shrink-0 items-center"
+                                              role="group"
+                                              :aria-label="'Order of ' + fieldName(field)"
                                             >
-                                              <i
-                                                class="pi pi-bars text-label-sm"
-                                                aria-hidden="true"
+                                              <IconButton
+                                                :id="`${formId}-up-${field.id}`"
+                                                icon="pi pi-arrow-up"
+                                                kind="transparent"
+                                                size="small"
+                                                :disabled="index === 0"
+                                                :aria-label="'Move ' + fieldName(field) + ' up'"
+                                                @click="move(index, -1)"
+                                              />
+                                              <IconButton
+                                                :id="`${formId}-down-${field.id}`"
+                                                icon="pi pi-arrow-down"
+                                                kind="transparent"
+                                                size="small"
+                                                :disabled="index === fields.length - 1"
+                                                :aria-label="'Move ' + fieldName(field) + ' down'"
+                                                @click="move(index, 1)"
                                               />
                                             </div>
                                             <Item.Content>
@@ -659,8 +712,8 @@ export async function handleRequest(request, args = {}) {
                                               >
                                                 <Item.Title>
                                                   <span
-                                                    class="truncate font-code text-label-code-sm"
-                                                    :class="field.key ? '' : 'text-(--text-muted)'"
+                                                    :data-empty="!field.key || null"
+                                                    class="truncate font-code text-label-code-sm data-empty:text-(--text-muted)"
                                                   >
                                                     {{ field.key || 'Unnamed field' }}
                                                   </span>
@@ -673,13 +726,14 @@ export async function handleRequest(request, args = {}) {
                                             <Item.Actions class="shrink-0">
                                               <Tag
                                                 v-if="field.required"
+                                                key="required"
                                                 label="Required"
                                                 severity="info"
                                                 size="small"
                                               />
                                               <Tag
-                                                key="tag-2"
                                                 v-if="keyError(field)"
+                                                key="needs-name"
                                                 label="Needs a name"
                                                 severity="warning"
                                                 size="small"
@@ -727,12 +781,8 @@ export async function handleRequest(request, args = {}) {
                                           </div>
                                           <div
                                             :id="formId + '-body-' + field.id"
-                                            class="grid transition-[grid-template-rows] duration-moderate-01 ease-productive-entrance motion-reduce:transition-none"
-                                            :class="
-                                              isExpanded(field.id)
-                                                ? 'grid-rows-[1fr]'
-                                                : 'grid-rows-[0fr]'
-                                            "
+                                            :data-expanded="isExpanded(field.id) || null"
+                                            class="grid grid-rows-[0fr] transition-[grid-template-rows] duration-moderate-01 ease-productive-entrance data-expanded:grid-rows-[1fr] motion-reduce:transition-none"
                                           >
                                             <div class="overflow-hidden">
                                               <div
@@ -1063,7 +1113,7 @@ export async function handleRequest(request, args = {}) {
                                   </Item.List>
                                 </template>
                               </Card>
-                            </div>
+                            </fieldset>
                           </div>
                         </ResizablePane>
                       </ResizableRoot>
@@ -1077,7 +1127,10 @@ export async function handleRequest(request, args = {}) {
             v-show="activeTab === 'settings'"
             class="layout-column-form layout-boundary flex min-w-0 flex-col"
           >
-            <section class="layout-section-start flex min-w-0 flex-col">
+            <fieldset
+              class="layout-section-start m-0 flex min-w-0 flex-col border-0 p-0"
+              :disabled="saving"
+            >
               <SettingsSection title="General">
                 <Card :padded="false">
                   <template #content>
@@ -1207,7 +1260,7 @@ export async function handleRequest(request, args = {}) {
                   </template>
                 </Card>
               </SettingsSection>
-            </section>
+            </fieldset>
           </div>
         </fieldset>
       </div>
@@ -1218,7 +1271,18 @@ export async function handleRequest(request, args = {}) {
       leave-active-class="transition-[translate,opacity] duration-fast-02 ease-productive-exit motion-reduce:transition-none"
       leave-to-class="translate-y-2 opacity-0"
     >
-      <SaveBar v-if="dirty">
+      <SaveBar v-if="dirty || saving">
+        <template
+          v-if="saveError"
+          #leading
+        >
+          <Alert
+            severity="danger"
+            size="small"
+            :label="saveError"
+            data-testid="code-editor-save-error"
+          />
+        </template>
         You have unsaved changes.
 
         <template #actions>
@@ -1227,12 +1291,14 @@ export async function handleRequest(request, args = {}) {
             label="Discard"
             kind="outlined"
             size="medium"
+            :disabled="saving"
             @click="discard"
           />
           <Button
             label="Save"
             kind="primary"
             size="medium"
+            :loading="saving"
             @click="save"
           />
         </template>

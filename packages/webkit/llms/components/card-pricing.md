@@ -39,20 +39,21 @@
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `planTitle` | `string` | `'Pro'` | false | plan Title. |
-| `pricingDetails` | `string` | `''` | false | pricing Details. |
-| `showPricingDetails` | `boolean` | `true` | false | show Pricing Details. |
-| `showTag` | `boolean` | `false` | false | show Tag. |
-| `tagLabel` | `string` | `'Popular'` | false | tag Label. |
+| `title` | `string` | `''` | false | Plan name shown as the card heading. Empty falls back to the deprecated `planTitle`. |
+| `planTitle` | `string` | `'Pro'` | false | @deprecated since 6.0 — use `title` instead. Removed in 7.0. |
+| `pricingDetails` | `string` | `''` | false | Caveat under the price, such as the billing terms. |
+| `showPricingDetails` | `boolean` | `true` | false | Shows the pricing details line. |
+| `showTag` | `boolean` | `false` | false | Shows the tag beside the plan name. |
+| `tagLabel` | `string` | `'Popular'` | false | Text of the tag beside the plan name. |
 | `aligned` | `boolean` | `false` | false | Reserves the caveat's band so a row of cards aligns row-for-row. Set it on every card in the row. |
-| `slotPosition` | `'bottom' \| 'middle'` | `'bottom'` | false | slot Position. |
-| `kind` | `'contained' \| 'transparent'` | `'contained'` | false | card Style. |
-| `value` | `string` | `'20'` | false | value. |
-| `prefix` | `string` | `'$'` | false | prefix. |
-| `suffix` | `string` | `'/ mon'` | false | suffix. |
-| `showPrefix` | `boolean` | `true` | false | show Prefix. |
-| `showSuffix` | `boolean` | `true` | false | show Suffix. |
-| `actionLabel` | `string` | `'Label'` | false | action Label. |
+| `slotPosition` | `'bottom' \| 'middle'` | `'bottom'` | false | Composition of the card: `bottom` stacks the actions under the price, `middle` puts the price and actions between the header and the default slot. |
+| `kind` | `'contained' \| 'transparent'` | `'contained'` | false | Whether the card draws its own surface: `contained` has a border and a surface, `transparent` sits on the page. |
+| `value` | `string` | `'20'` | false | Price amount, already formatted, without the currency symbol. |
+| `prefix` | `string` | `'$'` | false | Text before the amount, usually the currency symbol. |
+| `suffix` | `string` | `'/ mon'` | false | Text after the amount, usually the billing period. |
+| `showPrefix` | `boolean` | `true` | false | Shows the prefix. |
+| `showSuffix` | `boolean` | `true` | false | Shows the suffix. |
+| `actionLabel` | `string` | `'Label'` | false | Label of the default action button. |
 | `animated` | `boolean` | `false` | false | Fades the old price out and the new one in when the price changes, such as on a billing-period switch. |
 
 ## Slots
@@ -87,7 +88,7 @@
 
 <template>
   <CardPricing
-    plan-title="Pro"
+    title="Pro"
     pricing-details="Billed annually or $25/mo billed monthly."
     slot-position="bottom"
     kind="contained"
@@ -110,7 +111,7 @@
   <div class="grid grid-cols-[repeat(auto-fit,320px)] gap-6">
     <CardPricing
       aligned
-      plan-title="Hobby"
+      title="Hobby"
       pricing-details=""
       value="Free"
       prefix=""
@@ -121,7 +122,7 @@
       aligned
       show-tag
       tag-label="Popular"
-      plan-title="Pro"
+      title="Pro"
       pricing-details="Billed annually, save 20%"
       value="20"
       prefix="$"
@@ -130,7 +131,7 @@
     />
     <CardPricing
       aligned
-      plan-title="Enterprise"
+      title="Enterprise"
       pricing-details="Tailored to your usage requirements and payment terms"
       value="Custom"
       prefix=""
@@ -153,7 +154,7 @@
     <CardPricing
       slot-position="bottom"
       kind="contained"
-      plan-title="Pro"
+      title="Pro"
       pricing-details="Billed annually or $25/mo billed monthly."
       value="20"
       prefix="$"
@@ -163,7 +164,7 @@
     <CardPricing
       slot-position="bottom"
       kind="transparent"
-      plan-title="Pro"
+      title="Pro"
       pricing-details="Billed annually or $25/mo billed monthly."
       value="20"
       prefix="$"
@@ -173,7 +174,7 @@
     <CardPricing
       slot-position="middle"
       kind="contained"
-      plan-title="Pro"
+      title="Pro"
       pricing-details="Billed annually or $25/mo billed monthly."
       value="20"
       prefix="$"
@@ -183,7 +184,7 @@
     <CardPricing
       slot-position="middle"
       kind="transparent"
-      plan-title="Pro"
+      title="Pro"
       pricing-details="Billed annually or $25/mo billed monthly."
       value="20"
       prefix="$"

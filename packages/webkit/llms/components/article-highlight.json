@@ -60,7 +60,7 @@
    "type": "boolean",
    "default": "false",
    "required": "false",
-   "doc": "Advances to the next article every `autoplayInterval`, pausing under hover and keyboard focus; off under reduced motion and with one article."
+   "doc": "Advances to the next article every `autoplayInterval`, with a visible pause control, pausing under hover and keyboard focus; off under reduced motion and with one article."
   },
   {
    "name": "autoplayInterval",

@@ -13,7 +13,7 @@
   "The text is a field label → use `label`."
  ],
  "related": [
-  "section-title` — the framed section header; renders its `eyebrow` as an Overline with `prefix=\"//\"` and `show-cursor`.",
+  "section-title` — the framed section header; renders its `eyebrow` as an Overline with `prefix=\"//\"` and `cursor`.",
   "hero-title` — the hero copy block; renders its `eyebrow` as an Overline closed by the cursor, with `single-line` turned off.",
   "tag` — a compact label attached to an item, not a heading companion.",
   "badge` — a compact count or status indicator."
@@ -22,7 +22,7 @@
   "Keep the label to one or two words: it is set uppercase and, with the default `single-line`, stays on one line whenever it fits its container.",
   "Turn `single-line` off only when the label can be longer than its container (narrow columns, translated copy); the label then wraps under `text-pretty`, which avoids a lone word on the last line.",
   "Use a `prefix` from the preset set only (`//`, `<>`, `</>`); the prefix is decorative and hidden from screen readers (`aria-hidden=\"true\"`), so never put meaning in it.",
-  "Use `show-cursor` for one eyebrow per view at most; the blink stops under reduced motion.",
+  "Use `cursor` for one eyebrow per view at most; the blink stops under reduced motion.",
   "Keep the semantic heading in the element after the Overline; the Overline itself carries no heading role."
  ]
 }

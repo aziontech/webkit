@@ -43,7 +43,7 @@ A `Stepper` labelled with the create label and two steps, Project and Domain and
 
 ### D. Project band — `Card`, `ToggleGroup`, `Field`, `Input`, `HelperText`, `Item`, `Skeleton`, `Button` (required)
 
-The `platform/create/resource-picker` band: a flush `Card` titled Project, a lead sentence, a large fluid `ToggleGroup` of Existing project and New project, then either a searchable `Item` list paged five at a time with `Skeleton` rows and a Load more `Button`, or a Name `Field` with an `Input`. The required message is a `HelperText kind="required"` under the search, above the rows.
+The `platform/create/resource-picker` band, copied from that block, which is the source of truth for the paged picker (change it there first): a flush `Card` titled Project, a lead sentence, a large fluid `ToggleGroup` of Existing project and New project, then either a searchable `Item` list paged five at a time with `Skeleton` rows and a Load more `Button`, or a Name `Field` with an `Input`. The required message is a `HelperText kind="required"` under the search, above the rows.
 
 ### E. New project configuration — `Card`, `Item`, `Switch`, `Field`, `Input`, `SettingRow`, `RadioCards`, `HelperText`, `Select` (conditional)
 
@@ -71,7 +71,7 @@ A `SettingsSection` titled Advanced, `collapsible`, `icon="pi pi-cog"`, closed b
 
 ### K. Footer — `SaveBar`, `Button` (required)
 
-`SaveBar kind="fade"`, a footer with no border or surface that fades in over the canvas on the form's own measure: outlined Back in `#leading` from step two on, and in `#actions` the primary submit, Next on step one and Create and deploy on step two. Both are medium; the submit is the form's only `type="submit"`.
+`SaveBar kind="fade"`, a footer with no border or surface that fades in over the canvas on the form's own measure: transparent Cancel in `#leading` on the left, back to Services (the footer every create wizard shares, as in `platform/create/multipage-create`), and in `#actions` on the right outlined Back from step two on, then the primary submit, Next on step one and Create and deploy on step two. Both are medium; the submit is the form's only `type="submit"`. Create and deploy shows its loading state while the request runs and locks Back; the consumer then hands the column to `platform/create/deployment-flow` (the block stops at the loading state).
 
 ## Do
 
@@ -129,7 +129,7 @@ A `SettingsSection` titled Advanced, `collapsible`, `icon="pi pi-cog"`, closed b
 ## Steps
 
 - project
-- domain-and-deployment
+- binding
 
 ## Variants
 
@@ -165,7 +165,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
   import Stepper, { type StepperStepState } from '@aziontech/webkit/stepper'
   import Switch from '@aziontech/webkit/switch'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
-  import { computed, reactive, ref } from 'vue'
+  import { computed, onBeforeUnmount, reactive, ref } from 'vue'
 
   interface WizardStep {
     id: string
@@ -248,27 +248,31 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
     { value: 'docs-site', label: 'docs-site', description: 'Astro · acme/docs-site' },
     { value: 'docs-next', label: 'docs-next', description: 'Next.js · acme/docs-next' },
     { value: 'vue-sample', label: 'vue-sample', description: 'Vue · jane-doe/vue-sample' },
-    { value: 'hello-world', label: 'hello-world', description: 'JavaScript · ' },
+    { value: 'hello-world', label: 'hello-world', description: 'JavaScript · acme/hello-world' },
     { value: 'company-site', label: 'company-site', description: 'HTML · acme/company-site' },
-    { value: 'company-docs', label: 'company-docs', description: 'HTML · ' },
+    { value: 'company-docs', label: 'company-docs', description: 'HTML · acme/company-docs' },
     { value: 'analytics-pro', label: 'analytics-pro', description: 'Next.js · acme/analytics-pro' },
-    { value: 'analytics-api', label: 'analytics-api', description: 'Next.js · ' },
+    { value: 'analytics-api', label: 'analytics-api', description: 'Next.js · acme/analytics-api' },
     {
       value: 'react-dashboard',
       label: 'react-dashboard',
       description: 'React · acme/react-dashboard'
     },
-    { value: 'docs-portal', label: 'docs-portal', description: 'Vue · ' },
-    { value: 'ecommerce-v2', label: 'ecommerce-v2', description: 'Nuxt · shopco/ecommerce-v2' },
-    { value: 'ecommerce-storefront', label: 'ecommerce-storefront', description: 'Nuxt · ' },
+    { value: 'docs-portal', label: 'docs-portal', description: 'Vue · acme/docs-portal' },
+    { value: 'ecommerce-v2', label: 'ecommerce-v2', description: 'Nuxt · acme/ecommerce-v2' },
+    {
+      value: 'ecommerce-storefront',
+      label: 'ecommerce-storefront',
+      description: 'Nuxt · acme/ecommerce-storefront'
+    },
     {
       value: 'marketing-site',
       label: 'marketing-site',
       description: 'Astro · acme/marketing-site'
     },
-    { value: 'blog-platform', label: 'blog-platform', description: 'Astro · ' },
+    { value: 'blog-platform', label: 'blog-platform', description: 'Astro · acme/blog-platform' },
     { value: 'status-page', label: 'status-page', description: 'Svelte · acme/status-page' },
-    { value: 'mobile-app', label: 'mobile-app', description: 'Svelte · ' }
+    { value: 'mobile-app', label: 'mobile-app', description: 'Svelte · acme/mobile-app' }
   ]
   const cachePolicies: CachePolicy[] = [
     {
@@ -414,7 +418,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
       description:
         'The platform’s own deployment. Versions keep the resource IDs they shipped with.'
     },
-    { value: 's1', label: 'shop-storefront', description: 'Storefront traffic for production.' },
+    { value: 's1', label: 'storefront-prod', description: 'Storefront traffic for production.' },
     { value: 's2', label: 'acme-storefront', description: 'Acme storefront, production traffic.' },
     {
       value: 's5',
@@ -664,6 +668,8 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
     const message = ref(initial.message ?? '')
     const shown = ref(PAGE_SIZE)
     const loading = ref(initial.loading ?? false)
+    let timer: ReturnType<typeof setTimeout> | undefined
+    onBeforeUnmount(() => clearTimeout(timer))
 
     const chosenIndex = options.findIndex((option) => option.value === chosen.value)
     if (chosenIndex >= PAGE_SIZE) shown.value = Math.ceil((chosenIndex + 1) / PAGE_SIZE) * PAGE_SIZE
@@ -698,7 +704,8 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
     const loadMore = () => {
       if (loading.value || !remaining.value) return
       loading.value = true
-      setTimeout(() => {
+      clearTimeout(timer)
+      timer = setTimeout(() => {
         shown.value += PAGE_SIZE
         loading.value = false
       }, 420)
@@ -849,9 +856,20 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
     return Object.keys(errors).length === 0 && !deploymentPicker.message
   }
 
+  const submitting = ref(false)
+  let submitTimer: ReturnType<typeof setTimeout> | undefined
+  onBeforeUnmount(() => clearTimeout(submitTimer))
+
   const advance = () => {
-    if (!validate()) return
-    if (stepIndex.value < wizardSteps.length - 1) stepIndex.value += 1
+    if (submitting.value || !validate()) return
+    if (stepIndex.value < wizardSteps.length - 1) {
+      stepIndex.value += 1
+      return
+    }
+    submitting.value = true
+    submitTimer = setTimeout(() => {
+      submitting.value = false
+    }, 1200)
   }
 
   const nextLabel = computed(() =>
@@ -1852,29 +1870,33 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
             </div>
           </div>
 
-          <SaveBar
-            v-if="stepIndex > 0 || nextLabel"
-            kind="fade"
-          >
-            <template
-              v-if="stepIndex > 0"
-              #leading
-            >
+          <SaveBar kind="fade">
+            <template #leading>
               <Button
                 type="button"
-                label="Back"
-                kind="outlined"
+                label="Cancel"
+                kind="transparent"
                 size="medium"
-                @click="goBack"
+                href="/services"
+                :disabled="submitting"
               />
             </template>
             <template #actions>
               <Button
-                v-if="nextLabel"
+                v-if="stepIndex > 0"
+                type="button"
+                label="Back"
+                kind="outlined"
+                size="medium"
+                :disabled="submitting"
+                @click="goBack"
+              />
+              <Button
                 :label="nextLabel"
                 kind="primary"
                 size="medium"
                 type="submit"
+                :loading="submitting"
               />
             </template>
           </SaveBar>

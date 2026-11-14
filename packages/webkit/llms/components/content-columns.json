@@ -37,7 +37,7 @@
  "props": [
   {
    "name": "items",
-   "type": "ContentColumnItem[]",
+   "type": "ContentColumnsItem[]",
    "default": "[]",
    "required": "false",
    "doc": "The columns, in reading order; each item is `{ title, description }`."

@@ -21,13 +21,14 @@
  ],
  "related": [
   "link` — same anatomy (label, trailing icon, ghost hover) in link color, with a `small` size; the default for standalone links.",
-  "button` — full action control with kinds, loading and a button element."
+  "button` — full action control with kinds, loading and a button element; `kind=\"link\"` with a trailing icon covers the same text action.",
+  "Overlap: MiniButton is always an anchor with a trailing icon, the anatomy of `link`. Prefer `link` for new code; MiniButton stays for the marketing surfaces that use its body-colored label."
  ],
  "bestPractices": [
   "Always set `href`; the default `'#'` is a placeholder and the control always renders as an anchor.",
   "Replace the `'Learn more'` default `label` with text that says where the link goes.",
-  "Keep the default `pi pi-external-link` icon for off-site targets with `target=\"_blank\"` (`rel=\"noopener noreferrer\"` is added for you); set `showIcon` to false otherwise.",
-  "Only `large` and `medium` sizes exist."
+  "Keep the default `pi pi-external-link` icon for off-site targets with `target=\"_blank\"` (`rel=\"noopener noreferrer\"` is added for you); set `icon` to an empty string otherwise (`showIcon` is deprecated).",
+  "Only `medium` and `large` sizes exist."
  ],
  "props": [
   {
@@ -39,7 +40,7 @@
   },
   {
    "name": "size",
-   "type": "'large' | 'medium'",
+   "type": "'medium' | 'large'",
    "default": "'large'",
    "required": "false",
    "doc": "Size token; affects height, gap, and typography."
@@ -56,14 +57,14 @@
    "type": "boolean",
    "default": "true",
    "required": "false",
-   "doc": "When true, renders the trailing icon."
+   "doc": "@deprecated since 6.0 — set icon to an empty string. Removed in 7.0.` False hides the icon."
   },
   {
    "name": "icon",
    "type": "string",
    "default": "'pi pi-external-link'",
    "required": "false",
-   "doc": "PrimeIcons class for the trailing icon."
+   "doc": "PrimeIcons class for the trailing icon. Empty renders no icon."
   },
   {
    "name": "href",
@@ -98,11 +99,15 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import MiniButton from '@aziontech/webkit/mini-button'\n</script>\n\n<template>\n  <MiniButton\n    size=\"large\"\n    label=\"Learn more\"\n    href=\"#\"\n  />\n</template>"
+   "sfc": "<script setup>\n  import MiniButton from '@aziontech/webkit/mini-button'\n</script>\n\n<template>\n  <MiniButton\n    size=\"large\"\n    label=\"Learn more\"\n    href=\"https://example.com/docs\"\n  />\n</template>"
   },
   {
    "name": "Sizes",
-   "sfc": "<script setup>\n  import MiniButton from '@aziontech/webkit/mini-button'\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-center gap-4\">\n    <MiniButton\n      size=\"medium\"\n      label=\"Learn more\"\n      href=\"#\"\n    />\n    <MiniButton\n      size=\"large\"\n      label=\"Learn more\"\n      href=\"#\"\n    />\n  </div>\n</template>"
+   "sfc": "<script setup>\n  import MiniButton from '@aziontech/webkit/mini-button'\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-center gap-4\">\n    <MiniButton\n      size=\"medium\"\n      label=\"Learn more\"\n      href=\"https://example.com/docs\"\n    />\n    <MiniButton\n      size=\"large\"\n      label=\"Learn more\"\n      href=\"https://example.com/docs\"\n    />\n  </div>\n</template>"
+  },
+  {
+   "name": "Disabled",
+   "sfc": "<script setup>\n  import MiniButton from '@aziontech/webkit/mini-button'\n</script>\n\n<template>\n  <MiniButton\n    label=\"Read the docs\"\n    href=\"https://example.com/docs\"\n    disabled\n  />\n</template>"
   }
  ],
  "docs": "components/mini-button.md"

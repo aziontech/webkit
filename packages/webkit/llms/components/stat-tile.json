@@ -98,10 +98,10 @@
   },
   {
    "name": "trend",
-   "type": "number[]",
+   "type": "(number | null)[]",
    "default": "[]",
    "required": "false",
-   "doc": "Sparkline values, oldest first. Empty hides the sparkline."
+   "doc": "Sparkline values, oldest first; `null` leaves a gap, as in `spark-chart`. Empty hides the sparkline."
   },
   {
    "name": "loading",

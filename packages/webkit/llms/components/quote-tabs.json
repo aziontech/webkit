@@ -57,7 +57,7 @@
    "type": "boolean",
    "default": "true",
    "required": "false",
-   "doc": "Advances to the next client on a timer; pauses under the pointer or keyboard focus, restarts its count on a selection, and never runs under reduced motion."
+   "doc": "Advances to the next client on a timer, with a visible pause control; pauses under the pointer or keyboard focus, restarts its count on a selection, and never runs under reduced motion."
   },
   {
    "name": "autoplayInterval",

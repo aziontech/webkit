@@ -5,7 +5,7 @@
 - Surface: product
 - Source: `blocks/platform/dashboard/project-status-dashboard/project-status-dashboard.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/dashboard/project-status-dashboard")`
-- Components: [Alert](../../../components/alert.md), [Avatar](../../../components/avatar.md), [Button](../../../components/button.md), [Chart](../../../components/chart.md), [ChartCard](../../../components/chart-card.md), [DonutChart](../../../components/donut-chart.md), [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [Hint](../../../components/hint.md), [IconButton](../../../components/icon-button.md), [Item](../../../components/item.md), [PageHeader](../../../components/page-header.md), [Select](../../../components/select.md), [Skeleton](../../../components/skeleton.md), [StatTile](../../../components/stat-tile.md), [StatusIndicator](../../../components/status-indicator.md), `TableRoot`, [Tag](../../../components/tag.md)
+- Components: [Alert](../../../components/alert.md), [Avatar](../../../components/avatar.md), [Button](../../../components/button.md), [Chart](../../../components/chart.md), [ChartCard](../../../components/chart-card.md), [DonutChart](../../../components/donut-chart.md), [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [Hint](../../../components/hint.md), [IconButton](../../../components/icon-button.md), [Item](../../../components/item.md), [PageHeader](../../../components/page-header.md), [Select](../../../components/select.md), [Skeleton](../../../components/skeleton.md), [StatTile](../../../components/stat-tile.md), [StatusIndicator](../../../components/status-indicator.md), `TableRoot`, [Tag](../../../components/tag.md), [Toast](../../../components/toast.md), `utils/csv`
 - Skills: `webkit-data-viz`, `webkit-tables`, `webkit-ui-states`
 
 ## Asked as
@@ -58,7 +58,7 @@ closes the grid. Every card has the same header: title with `Hint`, its tags, an
 
 ### F. Card menu — `DropdownMenu` (optional)
 
-`Copy link` and `Export CSV`.
+`Copy link` copies a link to the card for the chosen project and sprint, and `Export CSV` downloads the card's rows (`owners-product-launch-sprint-6.csv`); each confirms with a success toast, or an error toast when it fails. Both are disabled while loading.
 
 ### G. Card menu trigger — `IconButton` (optional)
 
@@ -180,7 +180,9 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
   import StatusIndicator, { type StatusIndicatorSeverity } from '@aziontech/webkit/status-indicator'
   import TableRoot, { type TableColumn } from '@aziontech/webkit/table-root'
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
-  import { ref } from 'vue'
+  import { toast } from '@aziontech/webkit/toast'
+  import { type CsvColumn, downloadCsv, toCsv } from '@aziontech/webkit/utils/csv'
+  import { computed, ref } from 'vue'
 
   type FigureFormat = 'count' | 'percentage'
 
@@ -542,6 +544,86 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
 
   const project = ref('product-launch')
   const sprint = ref('sprint-6')
+  const sprintSlug = computed(() => `${project.value}-${sprint.value}`)
+
+  type CardId = 'completion' | 'sprint-burndown' | 'milestones' | 'at-risk' | 'owners'
+
+  interface CsvReport {
+    columns: CsvColumn[]
+    rows: () => object[]
+  }
+
+  const reports: Record<CardId, CsvReport> = {
+    completion: {
+      columns: [
+        { id: 'status', header: 'Status' },
+        { id: 'tasks', header: 'Tasks' }
+      ],
+      rows: () => completion.map((entry) => ({ status: entry.name, tasks: entry.values[0] ?? '' }))
+    },
+    'sprint-burndown': {
+      columns: [
+        { id: 'day', header: 'Day' },
+        ...burndown.map((entry) => ({ id: entry.id, header: `${entry.name} (pts)` }))
+      ],
+      rows: () =>
+        sprintDays.map((day, index) => ({
+          day,
+          ...Object.fromEntries(burndown.map((entry) => [entry.id, entry.values[index] ?? '']))
+        }))
+    },
+    milestones: {
+      columns: [
+        { id: 'date', header: 'Date' },
+        { id: 'title', header: 'Milestone' },
+        { id: 'status', header: 'Status' }
+      ],
+      rows: () => milestones
+    },
+    'at-risk': {
+      columns: [
+        { id: 'title', header: 'Item' },
+        { id: 'reason', header: 'Reason' },
+        { id: 'tag', header: 'Risk' }
+      ],
+      rows: () => atRisk
+    },
+    owners: {
+      columns: [
+        { id: 'owner', header: 'Owner' },
+        { id: 'open', header: 'Open' },
+        { id: 'done', header: 'Done' },
+        { id: 'overdue', header: 'Overdue' }
+      ],
+      rows: () => owners
+    }
+  }
+
+  const exportCsv = (id: CardId) => {
+    const filename = `${id}-${sprintSlug.value}.csv`
+    try {
+      const report = reports[id]
+      downloadCsv(filename, toCsv({ columns: report.columns, rows: report.rows() }))
+      toast.success('CSV exported.', { description: filename })
+    } catch {
+      toast.error('The CSV could not be exported.', { description: 'Try again in a moment.' })
+    }
+  }
+
+  const copyLink = async (id: CardId) => {
+    const url = `https://app.example.com/projects/${project.value}/status?sprint=${sprint.value}#${id}`
+    try {
+      await globalThis.navigator.clipboard.writeText(url)
+      toast.success('Link copied.', { description: url })
+    } catch {
+      toast.error('The link could not be copied.')
+    }
+  }
+
+  const onCardOption = (id: CardId, value: string | number) => {
+    if (value === 'link') copyLink(id)
+    else if (value === 'export') exportCsv(id)
+  }
 </script>
 
 <template>
@@ -628,7 +710,10 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
               <Hint text="Every task in the project, by its current status." />
             </span>
             <ChartCard.Controls>
-              <DropdownMenu placement="bottom-end">
+              <DropdownMenu
+                placement="bottom-end"
+                @select="(_event, value) => onCardOption('completion', value)"
+              >
                 <DropdownMenu.Trigger>
                   <IconButton
                     icon="pi pi-ellipsis-h"
@@ -641,10 +726,12 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
                   <DropdownMenu.Option
                     value="link"
                     label="Copy link"
+                    :disabled="loading"
                   />
                   <DropdownMenu.Option
                     value="export"
                     label="Export CSV"
+                    :disabled="loading"
                   />
                 </DropdownMenu.Group>
               </DropdownMenu>
@@ -694,7 +781,10 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
                 :icon="behind.icon"
                 size="small"
               />
-              <DropdownMenu placement="bottom-end">
+              <DropdownMenu
+                placement="bottom-end"
+                @select="(_event, value) => onCardOption('sprint-burndown', value)"
+              >
                 <DropdownMenu.Trigger>
                   <IconButton
                     icon="pi pi-ellipsis-h"
@@ -707,10 +797,12 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
                   <DropdownMenu.Option
                     value="link"
                     label="Copy link"
+                    :disabled="loading"
                   />
                   <DropdownMenu.Option
                     value="export"
                     label="Export CSV"
+                    :disabled="loading"
                   />
                 </DropdownMenu.Group>
               </DropdownMenu>
@@ -751,7 +843,10 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
               <Hint text="Dated checkpoints to launch, oldest first." />
             </span>
             <ChartCard.Controls>
-              <DropdownMenu placement="bottom-end">
+              <DropdownMenu
+                placement="bottom-end"
+                @select="(_event, value) => onCardOption('milestones', value)"
+              >
                 <DropdownMenu.Trigger>
                   <IconButton
                     icon="pi pi-ellipsis-h"
@@ -764,10 +859,12 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
                   <DropdownMenu.Option
                     value="link"
                     label="Copy link"
+                    :disabled="loading"
                   />
                   <DropdownMenu.Option
                     value="export"
                     label="Export CSV"
+                    :disabled="loading"
                   />
                 </DropdownMenu.Group>
               </DropdownMenu>
@@ -843,7 +940,10 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
                 severity="secondary"
                 size="small"
               />
-              <DropdownMenu placement="bottom-end">
+              <DropdownMenu
+                placement="bottom-end"
+                @select="(_event, value) => onCardOption('at-risk', value)"
+              >
                 <DropdownMenu.Trigger>
                   <IconButton
                     icon="pi pi-ellipsis-h"
@@ -856,10 +956,12 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
                   <DropdownMenu.Option
                     value="link"
                     label="Copy link"
+                    :disabled="loading"
                   />
                   <DropdownMenu.Option
                     value="export"
                     label="Export CSV"
+                    :disabled="loading"
                   />
                 </DropdownMenu.Group>
               </DropdownMenu>
@@ -922,7 +1024,10 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
               <Hint text="Tasks per owner. Overdue counts open tasks past their due date." />
             </span>
             <ChartCard.Controls>
-              <DropdownMenu placement="bottom-end">
+              <DropdownMenu
+                placement="bottom-end"
+                @select="(_event, value) => onCardOption('owners', value)"
+              >
                 <DropdownMenu.Trigger>
                   <IconButton
                     icon="pi pi-ellipsis-h"
@@ -935,10 +1040,12 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
                   <DropdownMenu.Option
                     value="link"
                     label="Copy link"
+                    :disabled="loading"
                   />
                   <DropdownMenu.Option
                     value="export"
                     label="Export CSV"
+                    :disabled="loading"
                   />
                 </DropdownMenu.Group>
               </DropdownMenu>

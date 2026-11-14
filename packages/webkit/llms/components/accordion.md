@@ -113,7 +113,7 @@ Exports to add to `packages/webkit/package.json#exports` (flat public names; cat
 ## Accessibility
 
 - Visible focus (Figma has no focus variant; we own it): `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)` on each `Accordion.Trigger`.
-- Keyboard map: `Tab` / `Shift+Tab` move between triggers and into open content; `Enter` / `Space` toggle the focused item; `Arrow Down` / `Arrow Up` move focus to the next / previous trigger; `Home` / `End` move focus to the first / last trigger.
+- Keyboard map: `Tab` / `Shift+Tab` move between triggers and into open content; `Enter` / `Space` toggle the focused item; `Arrow Down` / `Arrow Up` move focus to the next / previous trigger; `Home` / `End` move focus to the first / last trigger. The order is the document order of the items, and an item disabled after mount drops out of it at once.
 - ARIA: each trigger is a `<button>` with `aria-expanded` reflecting open state and `aria-controls` referencing its content; the trigger button is wrapped in a heading element (`<h{level}>`, default `h3`); the content panel has `role="region"` and `aria-labelledby` referencing its trigger. A `disabled` item sets `disabled` + `aria-disabled` on its trigger.
 - Contrast ≥4.5:1 for text (title `--text-default`, body `--text-muted` on the surface) / ≥3:1 for the chevron glyph, including the disabled state (`--text-disabled`).
 - `motion-reduce:transition-none motion-reduce:animate-none` on the chevron rotation and content reveal.

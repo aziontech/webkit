@@ -53,7 +53,7 @@ When the list does not load, a danger `Alert` with Retry takes the table's place
 
 ### G. Create drawer — `Drawer`, `DrawerPortal`, `DrawerOverlay`, `DrawerContent`, `PanelHeader`, `DrawerTitle`, `DrawerClose`, `PanelContent`, `SettingsSection`, `PanelFooter` (required)
 
-A medium right `Drawer` with one `form`: General (Name, Description) and Expiration. Footer: Cancel and Create. The fields lock while it submits.
+A medium right `Drawer` with one `form`: General (Name, Description) and Expiration. Titled `Create Personal Token`. Footer: Cancel and `Create Personal Token`, so the label does not change on the way in. The fields lock while it submits.
 
 ### H. Fields — `Field`, `Input`, `Textarea`, `Select`, `HelperText` (required)
 
@@ -61,7 +61,7 @@ Name is required and unique; the error sits under the field (`This field is requ
 
 ### I. One-time reveal — `Dialog`, `DialogPortal`, `DialogOverlay`, `DialogContent`, `DialogTitle`, `DialogDescription`, `PasswordInput`, `CopyButton` (required)
 
-After Create the drawer closes and a `Dialog` opens: the token's name, a warning `Alert` that this is the only time the secret is shown, the secret in a read-only `PasswordInput` (masked, with show) and a `CopyButton` beside it. A polite status line confirms the copy and the footer button changes from `I copied the token` to `Done`. Closing clears the secret from memory.
+After Create the drawer closes and a `Dialog` opens: the token's name, a warning `Alert` that this is the only time the secret is shown, the secret in a read-only `PasswordInput` (masked, with show) and a `CopyButton` beside it. The `CopyButton` announces `Token copied` (its `copied-label`), the only announcement; a muted line repeats `Copied to the clipboard.` for sighted users, hidden from assistive technology, and the footer button changes from `I copied the token` to `Done`. Closing clears the secret from memory.
 
 ### J. Confirmations and outcomes — `ConfirmDialog` (required)
 
@@ -83,7 +83,7 @@ Revoke asks in a danger `ConfirmDialog` that says what stops working and that it
 
 ## Copy
 
-- **Title:** `Personal tokens`. **Create:** `Create Personal Token` on the page, `Create personal token` as the drawer title, `Create` in the footer.
+- **Title:** `Personal tokens`. **Create:** `Create Personal Token` on the page, as the drawer title and on the footer submit.
 - **Status:** `Active`, `Expires in 3 days`, `Expired`, `Revoked`. **Last used:** relative time, or `Never used`.
 - **Reveal:** title `Copy your new token`; warning `Copy the token and store it somewhere safe, such as a secret manager. After you close this dialog, it cannot be shown again; create a new one if it is lost.`
 - **Revoke:** title `Revoke token`; description `Scripts and tools that use “<name>” stop working right away. You cannot undo this.`; button `Revoke token`; toast `Token “<name>” revoked. Requests that use it are now refused.`
@@ -94,7 +94,7 @@ Revoke asks in a danger `ConfirmDialog` that says what stops working and that it
 - No `main` of its own (the layout's is the only one); the `PageHeader` title is the only `h1`.
 - The `PropertyFilter` (Filter tokens) and every icon-only button carry an `aria-label`; the row menu is named `Actions for <token>`.
 - The drawer and the dialogs trap focus, are named by their titles and return focus to their trigger; the first invalid field takes focus after Create.
-- The reveal labels the secret field `Token`; the copy result is announced in a polite status region.
+- The reveal labels the secret field `Token`; the copy result is announced once, by the `CopyButton`.
 
 ## States
 
@@ -645,13 +645,13 @@ Each variant is the same screen in another state: `get_pattern("platform/account
         <DrawerContent>
           <form
             class="flex min-h-0 flex-1 flex-col"
-            aria-label="Create personal token"
+            aria-label="Create Personal Token"
             novalidate
             @submit.prevent="submit"
           >
             <PanelHeader class="w-full">
               <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
-                <DrawerTitle>Create personal token</DrawerTitle>
+                <DrawerTitle>Create Personal Token</DrawerTitle>
                 <p class="text-body-sm text-(--text-muted)">
                   The token acts as you, with your permissions, until it expires or you revoke it.
                 </p>
@@ -664,7 +664,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
                 class="m-0 flex min-w-0 flex-col border-0 p-0"
                 :disabled="submitting"
               >
-                <legend class="sr-only">Create personal token</legend>
+                <legend class="sr-only">Create Personal Token</legend>
                 <SettingsSection
                   title="General"
                   hint="How you will recognise the token in this list."
@@ -744,7 +744,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
                   @click="createOpen = false"
                 />
                 <Button
-                  label="Create"
+                  label="Create Personal Token"
                   kind="primary"
                   size="medium"
                   type="submit"
@@ -800,10 +800,11 @@ Each variant is the same screen in another state: `get_pattern("platform/account
                   />
                 </div>
                 <p
+                  v-if="copied"
                   class="text-body-xs text-(--text-muted)"
-                  role="status"
+                  aria-hidden="true"
                 >
-                  {{ copied ? 'Copied to the clipboard.' : '' }}
+                  Copied to the clipboard.
                 </p>
               </Field>
             </div>

@@ -64,11 +64,25 @@
    "doc": "Capabilities per row from the large breakpoint up."
   },
   {
+   "name": "primaryAction",
+   "type": "CapabilityGridAction",
+   "default": "undefined",
+   "required": "false",
+   "doc": "First button under the section title, `secondary`; `{ label, href, trailing?, target? }`. Shown only with a label and a link."
+  },
+  {
+   "name": "secondaryAction",
+   "type": "CapabilityGridAction",
+   "default": "undefined",
+   "required": "false",
+   "doc": "Second button under the section title, `outlined`; same shape. Shown only with a label and a link."
+  },
+  {
    "name": "actions",
    "type": "CapabilityGridAction[]",
    "default": "[]",
    "required": "false",
-   "doc": "Buttons under the section title; each is `{ label, href, trailing?, target?, kind? }`; without `kind` the first is secondary and the rest outlined."
+   "doc": "@deprecated since 6.0 — use `primaryAction` / `secondaryAction`. Removed in 7.0. Read only when neither is set; each is `{ label, href, trailing?, target?, kind? }`, without `kind` the first is secondary and the rest outlined."
   },
   {
    "name": "anchor",
@@ -92,7 +106,7 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import CapabilityGrid from '@aziontech/webkit/capability-grid'\n\n  const items = [\n    {\n      icon: 'pi pi-bolt',\n      title: 'Functions',\n      description: 'Run JavaScript and WebAssembly close to every user.'\n    },\n    {\n      icon: 'pi pi-database',\n      title: 'Object Storage',\n      description: 'Keep files where they are read, with no egress to plan for.'\n    },\n    {\n      icon: 'pi pi-shield',\n      title: 'Firewall',\n      description: 'Stop bots and attacks before they reach your origin.'\n    }\n  ]\n</script>\n\n<template>\n  <CapabilityGrid\n    eyebrow=\"Platform\"\n    title=\"Everything an application needs, in one place\"\n    description=\"Compute, storage and security that deploy together.\"\n    :items=\"items\"\n    :actions=\"[{ label: 'Explore the platform', href: '/platform', trailing: true }]\"\n  />\n</template>"
+   "sfc": "<script setup>\n  import CapabilityGrid from '@aziontech/webkit/capability-grid'\n\n  const items = [\n    {\n      icon: 'pi pi-bolt',\n      title: 'Functions',\n      description: 'Run JavaScript and WebAssembly close to every user.'\n    },\n    {\n      icon: 'pi pi-database',\n      title: 'Object Storage',\n      description: 'Keep files where they are read, with no egress to plan for.'\n    },\n    {\n      icon: 'pi pi-shield',\n      title: 'Firewall',\n      description: 'Stop bots and attacks before they reach your origin.'\n    }\n  ]\n</script>\n\n<template>\n  <CapabilityGrid\n    eyebrow=\"Platform\"\n    title=\"Everything an application needs, in one place\"\n    description=\"Compute, storage and security that deploy together.\"\n    :items=\"items\"\n    :primary-action=\"{ label: 'Explore the platform', href: '/platform', trailing: true }\"\n  />\n</template>"
   },
   {
    "name": "Points",

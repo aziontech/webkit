@@ -9,7 +9,8 @@
  "avoidWhen": [
   "A single text search over a short list → use `input` bound to `filterProps`.",
   "A few fixed choices always on screen → use `toggle-group` or `chip` filters.",
-  "A structured filter builder with its own panel inside a table toolbar → use `table-filter`."
+  "A structured filter builder with its own panel inside a table toolbar → use `table-filter`.",
+  "Faceted picks from a known set of values per field (status, region, owner), shown as chips → use `filter-menu`. PropertyFilter is for expression search: typed tokens, operators, free text and a query people keep as text."
  ],
  "related": [
   "use-collection` — applies the query; `propertyFilterProps` is the binding.",

@@ -66,12 +66,12 @@
 
 ## Accessibility
 
-- Visible focus: none of its own — no mark is a focusable target, so the strip adds no tab stop and needs no ring. The loop still pauses on `:focus-within`, so anything a consumer places over it stays still while it is reached.
-- Keyboard map: no arrow-key model and no tab stop — this is a list, not a composite widget.
+- Visible focus: no mark is a focusable target; the one tab stop is the pause control (an `IconButton`, which owns its ring). The loop still pauses on `:focus-within`, so anything a consumer places over it stays still while it is reached.
+- Keyboard map: no arrow-key model — this is a list, not a composite widget; `Tab` reaches the pause control and `Enter` / `Space` toggles it.
 - ARIA: the row is a `<ul>` of `<li>` named by `ariaLabel` when set; every copy after the first carries `aria-hidden="true"` so a screen reader hears each mark once, and each mark is titled with its own name. In `items` mode the labels are the row's text and each icon is `aria-hidden`.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): marks are drawn in `var(--text-default)` at 70%, which WCAG 1.4.11 exempts as a logotype; the typographic fallback is real text and clears the minimum in both themes at that strength. Item labels are real text drawn at full `var(--text-default)`, so their contrast is the ground's to meet, and a strip placed on anything but the canvas or a surface must keep the labels at body size or larger.
-- `motion-reduce:animate-none` on the track and `motion-reduce:transition-none` on the mark hover. WCAG 2.2.2 applies — the loop is longer than five seconds, so it pauses on hover and on focus-within, and stops outright under `prefers-reduced-motion`.
-- Touch target ≥40×40 px: marks are not interactive targets; the whole strip is one decorative band.
+- `motion-reduce:animate-none` on the track and `motion-reduce:transition-none` on the mark hover. WCAG 2.2.2 applies — the loop is longer than five seconds, so a visible outlined `IconButton` at the strip's end pauses it ("Pause scrolling") and resumes it ("Resume scrolling") for touch and screen-reader users (`data-paused` on the track holds `animation-play-state`); it also pauses on hover and on focus-within, and stops outright under `prefers-reduced-motion`, where the control is hidden.
+- Touch target ≥40×40 px: marks are not interactive targets; the pause control is the composed `IconButton`.
 
 ## Right-to-left
 
@@ -79,6 +79,15 @@
 - Motion: the marquee runs toward the start edge in both directions: under `dir="rtl"` the track starts offset (`rtl:translate-x-1/2`) and the animation runs reversed; `motion-reduce` stops it in both.
 - Keyboard: no horizontal arrow-key logic.
 - User data: none.
+
+## Internationalization
+
+| Key                               | English source     | Override prop |
+| --------------------------------- | ------------------ | ------------- |
+| `autoplayControl.pauseScrolling`  | `Pause scrolling`  | —             |
+| `autoplayControl.resumeScrolling` | `Resume scrolling` | —             |
+
+- Marks and item labels are content passed through props.
 
 ## Examples
 

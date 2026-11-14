@@ -21,6 +21,10 @@
 - Portal` teleports to `container` when set and to `body` otherwise, passing the selector through so the server renders the same chain the client hydrates.
 - Pin a wide panel to the page column with the positioner's `collision-padding`, not with override classes on the popup.
 - Set `aria-label` on the root (default `'Main'`) when the page has more than one navigation landmark.
+- Test ids: root fallback `navigation-navigation-menu` (`<category>-<name>`); every part derives from it (`navigation-navigation-menu__list`, `__item`, `__trigger`, `__content`, `__portal`, `__positioner`, `__popup`, `__viewport`, `__arrow`, `__backdrop`, `__icon`), and a consumer `data-testid` wins on every part.
+- Attributes on the root (`id`, `aria-labelledby`, `data-*`, listeners) land on the `nav` landmark.
+- Portal`, `Backdrop`, `Positioner`, `Popup`, `Viewport` and `Arrow` are the overlay chain that hosts every panel. They stay public so a page can place, pad and decorate the one shared popup; most pages copy the chain from the Usage block unchanged.
+- NavigationMenu.Trigger` always renders a `button` (or an anchor with `href`). Its `native-button` prop is deprecated since 6.0 and removed in 7.0: with `:native-button="false"` the trigger is still keyboard reachable (`role="button"`, `tabindex="0"`, `Enter`/`Space` toggle).
 
 ## Don’t
 
@@ -67,7 +71,7 @@
 - `navigation-menu-content.vue` — Public sub-component `navigation-menu-content`.
 - `navigation-menu-icon.vue` — Public sub-component `navigation-menu-icon`.
 - `navigation-menu-item.vue` — Public sub-component `navigation-menu-item`.
-- `navigation-menu-link.vue` — internal; not reachable through the compound, where `NavigationMenu.Link` is an alias of `NavigationMenuTrigger`.
+- `navigation-menu-link.vue` — Public sub-component `navigation-menu-link`, reached as `NavigationMenu.Link`: a top-level link of the bar (`href`, `active`, `close-on-click`) that renders the same anchor as a trigger with an `href`. Attributes it does not declare still flow to the trigger it renders, so a `NavigationMenu.Link` written as a panel trigger keeps working.
 - `navigation-menu-list.vue` — Public sub-component `navigation-menu-list`.
 - `navigation-menu-popup.vue` — Public sub-component `navigation-menu-popup`.
 - `navigation-menu-portal.vue` — Public sub-component `navigation-menu-portal`.
@@ -90,7 +94,7 @@
 
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`
 - Keyboard map: `Tab` moves between triggers and links of the bar. On a trigger, `Enter`/`Space` toggle its panel; `ArrowRight`/`ArrowLeft` move to the next/previous trigger and wrap (swapped under RTL); `ArrowDown` opens the panel and focuses its first entry; `Escape` closes an open panel. Inside a panel, `ArrowDown`/`ArrowUp` move between entries and wrap, `Tab` on the trigger of an open panel moves into it, `Shift+Tab` on the first entry returns to the trigger, `Tab` on the last entry closes the panel and moves on to the next trigger, and `Escape` closes the panel and returns focus to its trigger. Tests: `navigation-menu.test.ts` › keyboard map (spec).
-- ARIA: root uses appropriate roles (`button`, `dialog`, `status`, etc.) per sub-component.
+- ARIA: the root is a `nav` landmark. A panel trigger is a disclosure button: `aria-expanded` reflects its panel and, while open, `aria-controls` names the panel (`role="region"`); it carries no `aria-haspopup`, since the panel is navigation, not a menu. A link trigger carries `aria-current="page"` when `active`. Tests: `navigation-menu.test.ts` › axe on the closed bar, the open panel and the vertical menu.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state.
 - `motion-reduce:transition-none motion-reduce:transform-none` on animated states.
 - Touch target ≥40×40 px where the control is interactive.

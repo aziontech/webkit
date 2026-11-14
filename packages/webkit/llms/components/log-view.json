@@ -2,7 +2,7 @@
  "name": "log-view",
  "binding": "LogView",
  "import": "@aziontech/webkit/log-view",
- "treeShakeableImport": "@aziontech/webkit/log-view",
+ "treeShakeableImport": "@aziontech/webkit/log-view-root",
  "category": "code",
  "surface": "product",
  "structure": "composition",
@@ -12,7 +12,7 @@
   "@aziontech/webkit/log-view-footer",
   "@aziontech/webkit/log-view-header"
  ],
- "purpose": "Composition-based terminal log viewer for CI/deploy output. **LogView** is the root shell and context provider; **LogViewHeader**, **LogViewContent**, and **LogViewFooter** are composed as children so teams can reorder, omit, or replace the toolbar and footer without forking the log renderer.",
+ "purpose": "Composition-based terminal log viewer for CI/deploy output. **LogView** is the root shell and context provider; **`LogView.Header`**, **`LogView.Content`**, and **`LogView.Footer`** are composed as children so teams can reorder, omit, or replace the toolbar and footer without forking the log renderer.",
  "setup": null,
  "useWhen": [
   "Showing build, deploy or CI output as timestamped lines the reader can search, filter to warnings, and copy.",
@@ -96,6 +96,13 @@
    "doc": "Levels the header offers as filter toggles, each with its line count; a level with no line is still offered. Empty hides the level filter."
   },
   {
+   "name": "error",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Message shown in place of the log body when the log failed to load. Empty shows the log."
+  },
+  {
    "name": "search",
    "type": "string",
    "default": "''",
@@ -136,15 +143,15 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import LogView from '@aziontech/webkit/log-view'\n  import LogViewContent from '@aziontech/webkit/log-view-content'\n  import LogViewHeader from '@aziontech/webkit/log-view-header'\n  import { ref } from 'vue'\n\n  const lines = [\n    { id: '1', time: '13:47:33', type: 'text', message: 'Deploy started successfully!' },\n    { id: '2', time: '13:47:41', type: 'success', message: 'Build finished' },\n    {\n      id: '3',\n      time: '13:47:42',\n      type: 'folder',\n      message: 'dist/index.js',\n      folderType: 'asset',\n      size: '12.4 kB',\n      gzipSize: '4.1 kB'\n    },\n    { id: '4', time: '13:47:43', type: 'warning', message: 'Bundle larger than recommended' }\n  ]\n  const search = ref('')\n  const warningsOnly = ref(false)\n</script>\n\n<template>\n  <div class=\"h-[640px]\">\n    <LogView\n      :lines=\"lines\"\n      v-model:search=\"search\"\n      v-model:warnings-only=\"warningsOnly\"\n      class=\"h-full\"\n    >\n      <LogViewHeader />\n      <LogViewContent />\n    </LogView>\n  </div>\n</template>"
+   "sfc": "<script setup>\n  import LogView from '@aziontech/webkit/log-view'\n  import { ref } from 'vue'\n\n  const lines = [\n    { id: '1', time: '13:47:33', type: 'text', message: 'Deploy started successfully!' },\n    { id: '2', time: '13:47:41', type: 'success', message: 'Build finished' },\n    {\n      id: '3',\n      time: '13:47:42',\n      type: 'folder',\n      message: 'dist/index.js',\n      folderType: 'asset',\n      size: '12.4 kB',\n      gzipSize: '4.1 kB'\n    },\n    { id: '4', time: '13:47:43', type: 'warning', message: 'Bundle larger than recommended' }\n  ]\n  const search = ref('')\n  const warningsOnly = ref(false)\n</script>\n\n<template>\n  <div class=\"h-[640px]\">\n    <LogView\n      :lines=\"lines\"\n      v-model:search=\"search\"\n      v-model:warnings-only=\"warningsOnly\"\n      class=\"h-full\"\n    >\n      <LogView.Header />\n      <LogView.Content />\n    </LogView>\n  </div>\n</template>"
   },
   {
-   "name": "Flush",
-   "sfc": "<script setup>\n  import LogView from '@aziontech/webkit/log-view'\n  import LogViewContent from '@aziontech/webkit/log-view-content'\n  import LogViewHeader from '@aziontech/webkit/log-view-header'\n  import { ref } from 'vue'\n\n  const lines = [\n    { id: '1', time: '13:47:33', type: 'text', message: 'Deploy started successfully!' },\n    { id: '2', time: '13:47:41', type: 'success', message: 'Build finished' },\n    {\n      id: '3',\n      time: '13:47:42',\n      type: 'folder',\n      message: 'dist/index.js',\n      folderType: 'asset',\n      size: '12.4 kB',\n      gzipSize: '4.1 kB'\n    },\n    { id: '4', time: '13:47:43', type: 'warning', message: 'Bundle larger than recommended' }\n  ]\n  const search = ref('')\n  const warningsOnly = ref(false)\n</script>\n\n<template>\n  <div\n    class=\"rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) p-(--spacing-md)\"\n  >\n    <span class=\"text-label-sm text-(--text-muted)\">Deploy output</span>\n    <div class=\"mt-(--spacing-sm) h-[420px]\">\n      <LogView\n        :lines=\"lines\"\n        :bordered=\"false\"\n        v-model:search=\"search\"\n        v-model:warnings-only=\"warningsOnly\"\n        class=\"h-full\"\n      >\n        <LogViewHeader />\n        <LogViewContent />\n      </LogView>\n    </div>\n  </div>\n</template>"
+   "name": "Borderless",
+   "sfc": "<script setup>\n  import LogView from '@aziontech/webkit/log-view'\n  import { ref } from 'vue'\n\n  const lines = [\n    { id: '1', time: '13:47:33', type: 'text', message: 'Deploy started successfully!' },\n    { id: '2', time: '13:47:41', type: 'success', message: 'Build finished' },\n    {\n      id: '3',\n      time: '13:47:42',\n      type: 'folder',\n      message: 'dist/index.js',\n      folderType: 'asset',\n      size: '12.4 kB',\n      gzipSize: '4.1 kB'\n    },\n    { id: '4', time: '13:47:43', type: 'warning', message: 'Bundle larger than recommended' }\n  ]\n  const search = ref('')\n  const warningsOnly = ref(false)\n</script>\n\n<template>\n  <div\n    class=\"rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) p-(--spacing-md)\"\n  >\n    <span class=\"text-label-sm text-(--text-muted)\">Deploy output</span>\n    <div class=\"mt-(--spacing-sm) h-[420px]\">\n      <LogView\n        :lines=\"lines\"\n        :bordered=\"false\"\n        v-model:search=\"search\"\n        v-model:warnings-only=\"warningsOnly\"\n        class=\"h-full\"\n      >\n        <LogView.Header />\n        <LogView.Content />\n      </LogView>\n    </div>\n  </div>\n</template>"
   },
   {
    "name": "Loading",
-   "sfc": "<script setup>\n  import LogView from '@aziontech/webkit/log-view'\n  import LogViewContent from '@aziontech/webkit/log-view-content'\n  import LogViewHeader from '@aziontech/webkit/log-view-header'\n  import { ref } from 'vue'\n\n  const lines = [\n    { id: '1', time: '13:47:33', type: 'text', message: 'Deploy started successfully!' },\n    { id: '2', time: '13:47:41', type: 'success', message: 'Build finished' },\n    {\n      id: '3',\n      time: '13:47:42',\n      type: 'folder',\n      message: 'dist/index.js',\n      folderType: 'asset',\n      size: '12.4 kB',\n      gzipSize: '4.1 kB'\n    },\n    { id: '4', time: '13:47:43', type: 'warning', message: 'Bundle larger than recommended' }\n  ]\n  const search = ref('')\n  const warningsOnly = ref(false)\n</script>\n\n<template>\n  <div class=\"h-[640px]\">\n    <LogView\n      :lines=\"lines\"\n      loading\n      v-model:search=\"search\"\n      v-model:warnings-only=\"warningsOnly\"\n      class=\"h-full\"\n    >\n      <LogViewHeader />\n      <LogViewContent />\n    </LogView>\n  </div>\n</template>"
+   "sfc": "<script setup>\n  import LogView from '@aziontech/webkit/log-view'\n  import { ref } from 'vue'\n\n  const lines = [\n    { id: '1', time: '13:47:33', type: 'text', message: 'Deploy started successfully!' },\n    { id: '2', time: '13:47:41', type: 'success', message: 'Build finished' },\n    {\n      id: '3',\n      time: '13:47:42',\n      type: 'folder',\n      message: 'dist/index.js',\n      folderType: 'asset',\n      size: '12.4 kB',\n      gzipSize: '4.1 kB'\n    },\n    { id: '4', time: '13:47:43', type: 'warning', message: 'Bundle larger than recommended' }\n  ]\n  const search = ref('')\n  const warningsOnly = ref(false)\n</script>\n\n<template>\n  <div class=\"h-[640px]\">\n    <LogView\n      :lines=\"lines\"\n      loading\n      v-model:search=\"search\"\n      v-model:warnings-only=\"warningsOnly\"\n      class=\"h-full\"\n    >\n      <LogView.Header />\n      <LogView.Content />\n    </LogView>\n  </div>\n</template>"
   }
  ],
  "docs": "components/log-view.md"

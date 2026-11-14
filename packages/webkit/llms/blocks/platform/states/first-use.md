@@ -1,6 +1,6 @@
 # FirstUse (`platform/states/first-use`)
 
-> The block a first-level list renders before the account owns any resource of that kind: a flush Card holding an EmptyState (the resource glyph, headline, lead and a Documentation link) over an Item.List of the ways to create the first one, each led by a bordered icon frame, with the promo cards below it: Catalog templates (only for resource kinds that have a template catalog) and agent onboarding, whose frames carry the Claude, Codex, Gemini and Cursor marks from the webkit assets. The EmptyState’s icon slot shows the resource glyph; an app may draw a richer figure there. Every list that is still empty renders it with its own nouns, methods and promos. Built from Card, EmptyState, Item, Button, InputGroup, Input, CopyButton and Link. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
+> The block a first-level list renders before the account owns any resource of that kind: a flush Card holding an EmptyState (the resource glyph, headline, lead and a Documentation link) over an Item.List of the ways to create the first one, each led by `Item.Media kind="icon"` (the CLI method copies `azion deploy`), with the promo cards below it, each a link covering its card: Catalog templates (only for resource kinds that have a template catalog) and agent onboarding, whose frames carry the Claude, Codex, Gemini and Cursor marks from the webkit assets. The EmptyState’s icon slot shows the resource glyph; an app may draw a richer figure there. Every list that is still empty renders it with its own nouns, methods and promos. Built from Card, EmptyState, Item, Button, InputGroup, Input, CopyButton and Link. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
 
 - Surface: product
 - Source: `blocks/platform/states/first-use/first-use.vue` in `@aziontech/webkit`
@@ -49,7 +49,7 @@ The resource glyph, a headline that names the first action, and one sentence on 
 
 ### E. Methods — `Item` (required)
 
-An `Item.List` under the `EmptyState`, one `Item` per way to create the first resource: a bordered icon frame in `Item.Media`, `Item.Title` and `Item.Description`, and one action in `Item.Actions`. List the methods in order of how most users start (repository import, CLI, from scratch).
+An `Item.List` under the `EmptyState`, one `Item` per way to create the first resource: the method glyph in `Item.Media kind="icon"` (the component draws the frame), `Item.Title` and `Item.Description`, and one action in `Item.Actions`. List the methods in order of how most users start (repository import, CLI, from scratch).
 
 ### F. Method action — `Button` (required)
 
@@ -74,7 +74,7 @@ Copies the command, with an `aria-label` (`Copy the Via CLI command`) and a `cop
 - Show the Catalog template promo only for resource kinds that have a template catalog.
 - Keep one primary action across the whole block, on the method most users take.
 - Keep the documentation link as the only action in the `EmptyState`.
-- Hold the block's footprint with `Skeleton` bands while the account reloads, so it does not jump in.
+- Hold the block's own footprint while the account reloads (the empty-state band, one row per method and the promo cards, in `Skeleton`s), so it does not jump in.
 
 ## Don't
 
@@ -98,7 +98,7 @@ Copies the command, with an `aria-label` (`Copy the Via CLI command`) and a `cop
 ## Accessibility
 
 - The method icons and promo marks are decorative (`aria-hidden="true"`, `alt=""`); the titles carry the meaning.
-- Each promo is a real `<button type="button">` covering the card, so it is reachable and announced by its title.
+- Each promo is a real link (`<a href>`) covering the card, because both navigate; the Catalog one opens a new tab, shows the external-link glyph and says so to screen readers.
 - The command `Input` has an `aria-label`; the copy button has its own label and announces the copied state.
 - The documentation link opens in a new tab; say so in the destination or let `Link` mark it.
 - The headline is the page's first heading under the list title, not a second `h1`.
@@ -106,7 +106,7 @@ Copies the command, with an `aria-label` (`Copy the Via CLI command`) and a `cop
 ## States
 
 - Default: the explanation, three create methods and the two promos.
-- Loading: while the account reloads, two `Skeleton` bands hold the block's footprint.
+- Loading: while the account reloads, `Skeleton`s draw the block's footprint (empty-state band, three method rows, two promo cards) in a busy status region.
 
 ## Related
 
@@ -119,7 +119,7 @@ Copies the command, with an `aria-label` (`Copy the Via CLI command`) and a `cop
 ## Variants
 
 - `Default` — primary (the code below)
-- `Loading` — While the account reloads, the page holds the block’s footprint with two Skeleton bands.
+- `Loading` — While the account reloads, the page holds the block's own footprint in `Skeleton`s: the empty-state band, the three method rows and the two promo cards, in a busy status region.
 
 Each variant is the same screen in another state: `get_pattern("platform/states/first-use", { variant })`, or the file under `blocks/platform/states/first-use/variants/`.
 
@@ -173,15 +173,11 @@ Each variant is the same screen in another state: `get_pattern("platform/states/
         <div class="border-t border-(--border-muted)">
           <Item.List>
             <Item>
-              <Item.Media>
-                <span
-                  class="flex size-8 shrink-0 items-center justify-center overflow-hidden rounded-(--shape-elements) border-(length:--border-width-default) border-(--border-muted) bg-(--bg-surface-raised) text-(--text-default)"
-                >
-                  <i
-                    class="ai ai-github text-body-lg leading-none text-(--text-default)"
-                    aria-hidden="true"
-                  />
-                </span>
+              <Item.Media kind="icon">
+                <i
+                  class="ai ai-github text-body-lg leading-none text-(--text-default)"
+                  aria-hidden="true"
+                />
               </Item.Media>
               <Item.Content>
                 <Item.Title>From GitHub</Item.Title>
@@ -198,20 +194,16 @@ Each variant is the same screen in another state: `get_pattern("platform/states/
               </Item.Actions>
             </Item>
             <Item>
-              <Item.Media>
-                <span
-                  class="flex size-8 shrink-0 items-center justify-center overflow-hidden rounded-(--shape-elements) border-(length:--border-width-default) border-(--border-muted) bg-(--bg-surface-raised)"
-                >
-                  <i
-                    class="pi pi-code text-body-lg leading-none text-(--text-default)"
-                    aria-hidden="true"
-                  />
-                </span>
+              <Item.Media kind="icon">
+                <i
+                  class="pi pi-code text-body-lg leading-none text-(--text-default)"
+                  aria-hidden="true"
+                />
               </Item.Media>
               <Item.Content>
                 <Item.Title>Via CLI</Item.Title>
                 <Item.Description
-                  >Run platform deploy and ship the branch you are on.</Item.Description
+                  >Run azion deploy and ship the branch you are on.</Item.Description
                 >
               </Item.Content>
               <div
@@ -221,7 +213,7 @@ Each variant is the same screen in another state: `get_pattern("platform/states/
                   <InputGroupRoot class="w-full">
                     <div class="flex min-w-0 flex-1">
                       <Input
-                        model-value="platform deploy"
+                        model-value="azion deploy"
                         size="large"
                         class="w-full"
                         aria-label="Via CLI command"
@@ -231,7 +223,7 @@ Each variant is the same screen in another state: `get_pattern("platform/states/
                       />
                     </div>
                     <CopyButton
-                      value="platform deploy"
+                      value="azion deploy"
                       aria-label="Copy the Via CLI command"
                       copied-label="Command copied"
                     />
@@ -240,15 +232,11 @@ Each variant is the same screen in another state: `get_pattern("platform/states/
               </div>
             </Item>
             <Item>
-              <Item.Media>
-                <span
-                  class="flex size-8 shrink-0 items-center justify-center overflow-hidden rounded-(--shape-elements) border-(length:--border-width-default) border-(--border-muted) bg-(--bg-surface-raised)"
-                >
-                  <i
-                    class="pi pi-globe text-body-lg leading-none text-(--text-default)"
-                    aria-hidden="true"
-                  />
-                </span>
+              <Item.Media kind="icon">
+                <i
+                  class="pi pi-globe text-body-lg leading-none text-(--text-default)"
+                  aria-hidden="true"
+                />
               </Item.Media>
               <Item.Content>
                 <Item.Title>From scratch</Item.Title>
@@ -273,9 +261,11 @@ Each variant is the same screen in another state: `get_pattern("platform/states/
         class="w-full"
       >
         <template #content>
-          <button
-            type="button"
-            class="group relative flex h-full w-full flex-col items-start gap-(--spacing-md) rounded-(--shape-card) p-(--spacing-md) text-start transition-colors duration-moderate-01 ease-productive-entrance motion-reduce:transition-none hover:bg-(--bg-surface-raised) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset"
+          <a
+            href="https://www.azion.com/en/templates/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="group relative flex h-full w-full flex-col items-start gap-(--spacing-md) rounded-(--shape-card) p-(--spacing-md) text-start no-underline transition-colors duration-moderate-01 ease-productive-entrance motion-reduce:transition-none hover:bg-(--bg-surface-raised) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset"
           >
             <span
               class="flex items-center [&>*+*]:-ms-2 [&>*+*]:transition-[margin-left] [&>*+*]:duration-moderate-01 [&>*+*]:ease-productive-entrance group-hover:[&>*+*]:-ms-1.5 group-focus-visible:[&>*+*]:-ms-1.5 motion-reduce:[&>*+*]:transition-none"
@@ -328,7 +318,8 @@ Each variant is the same screen in another state: `get_pattern("platform/states/
               class="pi pi-external-link absolute end-(--spacing-md) top-(--spacing-md) text-body-sm leading-none text-(--text-muted) transition-colors duration-moderate-01 ease-productive-entrance motion-reduce:transition-none group-hover:text-(--text-default)"
               aria-hidden="true"
             />
-          </button>
+            <span class="sr-only">(opens in a new tab)</span>
+          </a>
         </template>
       </Card>
 
@@ -337,9 +328,9 @@ Each variant is the same screen in another state: `get_pattern("platform/states/
         class="w-full"
       >
         <template #content>
-          <button
-            type="button"
-            class="group relative flex h-full w-full flex-col items-start gap-(--spacing-md) rounded-(--shape-card) p-(--spacing-md) text-start transition-colors duration-moderate-01 ease-productive-entrance motion-reduce:transition-none hover:bg-(--bg-surface-raised) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset"
+          <a
+            href="/agent-setup"
+            class="group relative flex h-full w-full flex-col items-start gap-(--spacing-md) rounded-(--shape-card) p-(--spacing-md) text-start no-underline transition-colors duration-moderate-01 ease-productive-entrance motion-reduce:transition-none hover:bg-(--bg-surface-raised) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset"
           >
             <span
               class="flex items-center [&>*+*]:-ms-2 [&>*+*]:transition-[margin-left] [&>*+*]:duration-moderate-01 [&>*+*]:ease-productive-entrance group-hover:[&>*+*]:-ms-1.5 group-focus-visible:[&>*+*]:-ms-1.5 motion-reduce:[&>*+*]:transition-none"
@@ -366,7 +357,7 @@ Each variant is the same screen in another state: `get_pattern("platform/states/
                 >Give your editor a prompt that teaches it to build and deploy here.</span
               >
             </span>
-          </button>
+          </a>
         </template>
       </Card>
     </div>

@@ -3,12 +3,17 @@
   {
    "name": "Default",
    "summary": "Default large mini button with trailing icon.",
-   "sfc": "<script setup>\n  import MiniButton from '@aziontech/webkit/mini-button'\n</script>\n\n<template>\n  <MiniButton\n    size=\"large\"\n    label=\"Learn more\"\n    href=\"#\"\n  />\n</template>"
+   "sfc": "<script setup>\n  import MiniButton from '@aziontech/webkit/mini-button'\n</script>\n\n<template>\n  <MiniButton\n    size=\"large\"\n    label=\"Learn more\"\n    href=\"https://example.com/docs\"\n  />\n</template>"
   },
   {
    "name": "Sizes",
    "summary": "All size variants side by side.",
-   "sfc": "<script setup>\n  import MiniButton from '@aziontech/webkit/mini-button'\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-center gap-4\">\n    <MiniButton\n      size=\"medium\"\n      label=\"Learn more\"\n      href=\"#\"\n    />\n    <MiniButton\n      size=\"large\"\n      label=\"Learn more\"\n      href=\"#\"\n    />\n  </div>\n</template>"
+   "sfc": "<script setup>\n  import MiniButton from '@aziontech/webkit/mini-button'\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-center gap-4\">\n    <MiniButton\n      size=\"medium\"\n      label=\"Learn more\"\n      href=\"https://example.com/docs\"\n    />\n    <MiniButton\n      size=\"large\"\n      label=\"Learn more\"\n      href=\"https://example.com/docs\"\n    />\n  </div>\n</template>"
+  },
+  {
+   "name": "Disabled",
+   "summary": "A disabled mini button: not focusable, no hover surface, and clicks do nothing.",
+   "sfc": "<script setup>\n  import MiniButton from '@aziontech/webkit/mini-button'\n</script>\n\n<template>\n  <MiniButton\n    label=\"Read the docs\"\n    href=\"https://example.com/docs\"\n    disabled\n  />\n</template>"
   }
  ]
 }

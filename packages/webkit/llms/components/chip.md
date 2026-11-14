@@ -91,7 +91,7 @@
 - ARIA: when neither `clickable` nor `selectable`, the root is a non-interactive `<span>` container; when either is set, it is `role="button"` with `tabindex="0"`. A `selectable` chip is a toggle button: `aria-pressed="true|false"` mirrors the `selected` model and flips on every activation, so the state is announced, not only painted. When `disabled`, an interactive root drops `tabindex` and carries `aria-disabled="true"`; the remove control is a native disabled `<button>`. The remove control is a real `<button type="button">`; the `pi pi-times` glyph is `aria-hidden="true"`. Its `aria-label` and its tooltip text are **the same derived string** — `Remove <label>` when `label` is set, `Remove` otherwise — so what is shown and what is announced cannot drift.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including the remove icon.
 - `motion-reduce:transition-none` on every transition the chip declares (kind/border colour, remove-button colour). The chip declares no dismiss animation at all, so there is nothing to suppress there.
-- Touch target: the remove control is **24×24 px at `medium`** — the WCAG 2.5.8 (AA) minimum — and 16×16 px at `small`, a justified deviation for the compact 24px token where the surrounding chip remains the visible affordance. The earlier build drew the control at 14×14 px at every size, which met neither.
+- Touch target: the remove control is drawn at 24×24 px at `medium` and 16×16 px at `small`; a `[data-slot=touch-target]` span extends its hit area to at least 24×24 px at both sizes (WCAG 2.5.8), and to 44×44 px on a coarse pointer.
 
 ## Examples
 

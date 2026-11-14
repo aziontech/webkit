@@ -51,6 +51,21 @@
 - `motion-reduce:transition-none motion-reduce:transform-none` — the band adds no motion; the sample's line entrance is owned by `code-block`.
 - Touch target ≥40×40 px — not applicable to the small item button, which is supplementary to the item's copy.
 
+## Right-to-left
+
+- Layout: logical utilities and the composed components' own mirroring, so the stack of claims with code fill from the inline start.
+- Icons: action chevrons mirror (owned by `button`).
+- Keyboard: unchanged.
+
+## Internationalization
+
+- No built-in strings: every visible string arrives through props.
+
+## Responsive
+
+- Below large the claims stack, each with its code under it (the composed `sticky-stack` does not pin); from large the stack pins under the site header and the code frame keeps a fixed height.
+- No horizontal scroll at 320 px; long code lines scroll inside the `code-block`.
+
 ## Examples
 
 ### Default

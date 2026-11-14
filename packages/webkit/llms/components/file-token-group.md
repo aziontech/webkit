@@ -17,7 +17,7 @@
 - Keep the refused files in the list with their error, so the person sees why and can remove them; do not drop them silently.
 - Write each error as the reason and the limit (`Larger than 300 MB`), not as a code.
 - Use `limit` when more than five files are common, so the form below stays in view.
-- Remove the file from your list on `dismiss`; the group moves focus to the next token for you.
+- Remove the file from your list on `remove`; the group moves focus to the next token for you.
 
 ## Don’t
 
@@ -29,7 +29,7 @@
 ## Related
 
 - [file-dropzone](file-dropzone.md) — receives dropped files; the group lists them.
-- [upload-progress](upload-progress.md) — the floating card for transfers that keep running after the dialog closes.
+- [upload-progress](upload-progress.md) — the floating card for transfers that keep running after the dialog closes. Split: FileTokenGroup lists the files picked in a form, before and while they are sent, and dies with the form; UploadProgress tracks transfers that outlive the dialog, with Cancel and Retry. Both draw a file row with a progress bar; when a transfer must survive navigation, hand it to UploadProgress instead of keeping the token.
 - [chip](chip.md) — a removable label without file details.
 
 ## Props
@@ -37,7 +37,8 @@
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
 | `items` | `FileTokenGroupItem[]` | `[]` | false | The files, in order; each with its optional upload state, error and warning. |
-| `alignment` | `'vertical' \| 'horizontal'` | `'vertical'` | false | Vertical stacks full-width tokens; horizontal wraps compact tokens in rows. |
+| `orientation` | `'vertical' \| 'horizontal'` | `'vertical'` | false | Vertical stacks full-width tokens; horizontal wraps compact tokens in rows. Same name as `field`'s axis. |
+| `alignment` | `'vertical' \| 'horizontal'` | `'vertical'` | false | @deprecated since 6.0 — use orientation. Removed in 7.0.` Read when `orientation` is left vertical. |
 | `limit` | `number` | `0` | false | Shows this many tokens and a Show more toggle for the rest. 0 shows them all. |
 | `showFileSize` | `boolean` | `true` | false | Shows the size beside the name, formatted for the locale. |
 | `showFileLastModified` | `boolean` | `false` | false | Shows the last-modified date, formatted for the locale. |
@@ -48,11 +49,12 @@
 
 | Event | Payload | Notes |
 | --- | --- | --- |
-| `dismiss` | `(event: MouseEvent, payload: { index: number; item: FileTokenGroupItem })` | The remove button of the token at `index` was pressed. The parent removes it from `items`. |
+| `remove` | `(event: MouseEvent, payload: { index: number; item: FileTokenGroupItem })` | The remove button of the token at `index` was pressed. The parent removes it from `items`. Same name as Chip and AttributeEditor. |
+| `dismiss` | `(event: MouseEvent, payload: { index: number; item: FileTokenGroupItem })` | @deprecated since 6.0 — listen to remove. Removed in 7.0.` Fires right after `remove` with the same payload. |
 
 ## States
 
-- Root `data-alignment`: `vertical` | `horizontal`; `data-readonly` when read-only.
+- Root `data-orientation` (and the deprecated mirror `data-alignment`): `vertical` | `horizontal`; `data-readonly` when read-only.
 - Token `data-status`: `idle` | `loading` | `warning` | `error` (error wins over warning, both over loading).
 - Show more toggle: `aria-expanded` `true` | `false`.
 - A file with a `webkitRelativePath` (picked with a folder picker or dropped as a folder on `FileDropzone directories`) is named by that path (`site/css/main.css`) in the token, its title, the remove button and the progress bar; otherwise by `name`.
@@ -157,7 +159,7 @@
     />
     <FileTokenGroup
       :items="items"
-      @dismiss="(_event, { index }) => remove(index)"
+      @remove="(_event, { index }) => remove(index)"
     />
   </div>
 </template>
@@ -220,9 +222,9 @@
   <div class="w-full max-w-(--container-lg)">
     <FileTokenGroup
       :items="items"
-      alignment="horizontal"
+      orientation="horizontal"
       :limit="3"
-      @dismiss="(_event, { index }) => remove(index)"
+      @remove="(_event, { index }) => remove(index)"
     />
   </div>
 </template>

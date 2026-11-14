@@ -88,6 +88,13 @@
    "default": "{}",
    "required": "false",
    "doc": "URL templates of the assistants the copy-page menu opens, keyed by menu `value`; `{prompt}` in a template is replaced by the encoded prompt to read the article."
+  },
+  {
+   "name": "anchor",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "In-page id set on the band so a hash link can target it."
   }
  ],
  "events": [],

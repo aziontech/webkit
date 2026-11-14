@@ -1,11 +1,11 @@
 # ActivityOutcomesDashboard (`platform/dashboard/activity-outcomes-dashboard`)
 
-> An activity outcomes dashboard: what a set of actors requested through the rules and what the rules decided. A page heading with a Refresh IconButton sits over a filter row of `Field`s (time range, actor, outcome and category Selects, and a destination Input that matches an exact host). A grid of seven StatTiles, four per row until the widest screens, counts the outcomes (requests, allowed, blocked, held, approved, denied and over budget), each with its delta against the previous period and a Hint that defines it. Below, a ChartCard plots outcomes over time as a Chart with stacked bars, one series per exclusive outcome in its status color (allowed success, blocked danger, held warning), with a legend that toggles a series and shows its total. Three ChartCards break the same requests down by actor, category and destination with a BarList each, and a last ChartCard holds the request log, a TableRoot with time, actor, an outcome Tag, category, a SeverityTag, destination, method and the rule that decided it. Its page-level parts are `PageHeader`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
+> An activity outcomes dashboard: what a set of actors requested through the rules and what the rules decided. A page heading with the time range Select and a Refresh IconButton sits over a filter row: a `FilterMenu` with actor, outcome and category fields, its `FilterMenu.Chips`, and a destination Input. Every region reads the filters, and a filter that matches nothing shows a no-match state with Clear filters. A grid of seven StatTiles, four per row until the widest screens, counts the outcomes (requests, allowed, blocked, held, approved, denied and over budget), each with its delta against the previous period and a Hint that defines it. Below, a ChartCard plots outcomes over time as a Chart with stacked bars, one series per exclusive outcome in its status color (allowed success, blocked danger, held warning), with a legend that toggles a series and shows its total. Three ChartCards break the same requests down by actor, category and destination with a BarList each, and a last ChartCard holds the request log, a TableRoot with time, actor, an outcome Tag, category, a SeverityTag, destination, method and the rule that decided it. Built from `PageHeader`, `Select`, `IconButton`, `FilterMenu`, `Input`, `Button`, `StatTile`, `Hint`, `ChartCard`, `Chart`, `BarList`, `TableRoot`, `Table`, `Tag`, `SeverityTag`, `EmptyState` and, in Failed, `Alert`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
 
 - Surface: product
 - Source: `blocks/platform/dashboard/activity-outcomes-dashboard/activity-outcomes-dashboard.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/dashboard/activity-outcomes-dashboard")`
-- Components: [Alert](../../../components/alert.md), [BarList](../../../components/bar-list.md), [Chart](../../../components/chart.md), [ChartCard](../../../components/chart-card.md), [EmptyState](../../../components/empty-state.md), [Field](../../../components/field.md), [Hint](../../../components/hint.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [PageHeader](../../../components/page-header.md), [Select](../../../components/select.md), [SeverityTag](../../../components/severity-tag.md), [StatTile](../../../components/stat-tile.md), [Table](../../../components/table.md), `TableRoot`, [Tag](../../../components/tag.md)
+- Components: [Alert](../../../components/alert.md), [BarList](../../../components/bar-list.md), [Button](../../../components/button.md), [Chart](../../../components/chart.md), [ChartCard](../../../components/chart-card.md), [EmptyState](../../../components/empty-state.md), [FilterMenu](../../../components/filter-menu.md), [Hint](../../../components/hint.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [PageHeader](../../../components/page-header.md), [Select](../../../components/select.md), [SeverityTag](../../../components/severity-tag.md), [StatTile](../../../components/stat-tile.md), [Table](../../../components/table.md), `TableRoot`, [Tag](../../../components/tag.md)
 - Skills: `webkit-data-viz`, `webkit-tables`, `webkit-ui-states`
 
 ## Asked as
@@ -36,34 +36,37 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 - The reader only needs the log with filters and no summary: use `platform/view/table-view`.
 - Traffic volume per host or country with no decision behind it: use
   `platform/dashboard/analytics-dashboard`.
+- WAF traffic blocked by rule sets, with attack categories and source IPs: use
+  `platform/dashboard/security-dashboard`. This block is per-actor policy decisions with a request log.
 
 ## Building blocks
 
-### A. Page heading — `PageHeader` (required)
+### A. Page heading and time range — `PageHeader`, `Select` (required)
 
 Title `Request activity` with a one-sentence description of what the page reports. The heading's
-actions slot holds only the refresh control; the filters live in their own row below.
+actions slot holds the time range `Select` (named `Time range` by its `aria-label`) and the refresh
+control. The time range scopes everything else, so it sits with the title, not in the filter row.
 
 ### B. Refresh — `IconButton` (optional)
 
-Re-reads the current filters without changing them. Icon-only, so it carries `aria-label="Refresh"`.
-Omit it when the data streams in on its own.
+Re-reads the current filters without changing them (the block emits `refresh`). Icon-only, so it
+carries `aria-label="Refresh"`. Omit it when the data streams in on its own.
 
-### C. Filter row — `Field` (required)
+### C. Filters — `FilterMenu` (required)
 
-One `Field` per filter, each with a visible `Field.Label`, in a container labelled `Filters`. The
-filters are global: every tile, chart, breakdown and the log read them. Keep them in one row that
-wraps on narrow screens; never repeat a filter inside a card.
+One `FilterMenu` with three multi-choice fields: Actor, Outcome and Category, in a container labelled
+`Filters`, with its `FilterMenu.Chips` on the row below. The filters are global: every tile, chart,
+breakdown and the log read them. Never repeat a filter inside a card.
 
-### D. Time range, actor, outcome and category — `Select` (required)
+### D. Destination — `Input` (optional)
 
-Each `Select` sits in its `Field`. The time range is the first filter because it scopes everything
-else. Offer an "All" option for actor, outcome and category so the default view is the whole set.
+A text filter beside the menu, named `Destination host` by its `aria-label`, that keeps the requests
+whose destination contains the typed host (`api.example.com` as the placeholder).
 
-### E. Destination — `Input` (optional)
+### E. Clear filters — `Button` (required)
 
-Matches one exact host (`api.example.com` as the placeholder). It is a filter, not a search: say in
-its description that it matches the whole host, so a partial value returning nothing is not a surprise.
+When the filters match no request, the log and the chart show the no-match state with an outlined
+`Clear filters` button that empties the menu and the destination.
 
 ### F. Outcome tiles — `StatTile` (required)
 
@@ -111,7 +114,9 @@ outcome; outcome and severity are two different facts.
 ### N. Empty regions — `EmptyState` (required)
 
 Each chart, breakdown and the log render their own `EmptyState` when the range holds no request
-(`No requests in this time range`), keeping the card's box.
+(`No requests in this time range`), keeping the card's box. A filter that matches nothing is a
+different state: `No requests match these filters` / `Clear the filters or pick other values.` with
+`Clear filters`, and the tiles show a dash.
 
 ## Do
 
@@ -132,7 +137,8 @@ Each chart, breakdown and the log render their own `EmptyState` when the range h
 
 - **Title:** a noun phrase for what is reported. `Request activity`.
 - **Description:** one sentence, what the page shows. `What each actor requested through the rules and what the rules decided.`
-- **Filter labels:** one or two words, no colon. `Time range`, `Actor`, `Outcome`, `Category`, `Destination`.
+- **Filter labels:** one or two words, no colon. `Time range`, `Actor`, `Outcome`, `Category`, `Destination host`.
+- **No match:** `No requests match these filters` / `Clear the filters or pick other values.`
 - **Tile labels:** the outcome name in sentence case. `Over budget`, not `Over Budget (requests)`.
 - **Hint:** one sentence defining the metric. `Requests the rules held for a person to approve.`
 - **Empty state:** what is missing, then what fills it and what to do. `No requests in this time range` / `Requests the rules evaluate appear here. Widen the time range to see older ones.`
@@ -142,13 +148,14 @@ Each chart, breakdown and the log render their own `EmptyState` when the range h
 
 - The refresh control is an `IconButton` with `aria-label="Refresh"`.
 - The filter container is labelled `Filters`, the tile grid `Outcomes`, each `BarList` names what it ranks.
-- Every filter has a visible label through `Field.Label`; the destination placeholder is an example, not the label.
+- `FilterMenu` names its applied count on the Filter button; the time range `Select` and the destination `Input` carry an `aria-label`; the destination placeholder is an example, not the label.
 - Outcome is never color alone: the chart legend, the tooltip and the log `Tag` all carry the word.
 - Times, counts and deltas use `tabular-nums` so columns do not jitter on refresh.
 
 ## States
 
 - Default: the populated page for the selected time range.
+- NoMatch (a state of Default): the filters match no request; tiles show a dash, the chart and the log show `No requests match these filters` with `Clear filters`, and the breakdowns empty out.
 - Loading: while the range loads, tiles, chart and breakdowns render their own `Skeleton` and the log holds Skeleton rows; nothing reflows.
 - Empty: no request in the range; tiles show a dash with no delta, every card keeps its box with an empty state, and the log says to widen the time range.
 - Failed: the request for the period failed; tiles show a dash, and every card keeps its header with a danger `Alert` that names what did not load and offers Retry.
@@ -174,10 +181,14 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
 ```vue
 <script setup lang="ts">
   import BarList, { type BarListItem } from '@aziontech/webkit/bar-list'
+  import Button from '@aziontech/webkit/button'
   import Chart, { type ChartSeries } from '@aziontech/webkit/chart'
   import ChartCard from '@aziontech/webkit/chart-card'
   import EmptyState from '@aziontech/webkit/empty-state'
-  import Field from '@aziontech/webkit/field'
+  import FilterMenu, {
+    type FilterMenuField,
+    type FilterMenuModel
+  } from '@aziontech/webkit/filter-menu'
   import Hint from '@aziontech/webkit/hint'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
@@ -188,7 +199,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
   import Table from '@aziontech/webkit/table'
   import TableRoot, { type TableColumn } from '@aziontech/webkit/table-root'
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
-  import { ref } from 'vue'
+  import { computed, ref } from 'vue'
 
   type Outcome = 'allowed' | 'blocked' | 'held' | 'approved' | 'denied'
 
@@ -207,9 +218,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
   const loading = false
   const comparison = 'vs prior day'
   const timeRange = ref('Last 24 hours')
-  const actor = ref('Any actor')
-  const outcome = ref('Any outcome')
-  const category = ref('Any category')
+  const filters = ref<FilterMenuModel>({})
   const destination = ref('')
   const activeIndex = ref<number | null>(null)
 
@@ -237,96 +246,38 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
     }
   ]
 
-  const actorOptions: SelectOptionItem[] = [
+  const filterFields: FilterMenuField[] = [
     {
-      value: 'Any actor',
-      label: 'Any actor'
+      id: 'actor',
+      label: 'Actor',
+      options: [
+        'report-builder',
+        'ticket-triage',
+        'inventory-sync',
+        'invoice-reader',
+        'release-helper',
+        'data-export',
+        'calendar-sync'
+      ].map((name) => ({ value: name, label: name }))
     },
     {
-      value: 'report-builder',
-      label: 'report-builder'
+      id: 'outcome',
+      label: 'Outcome',
+      options: [
+        { value: 'allowed', label: 'Allowed' },
+        { value: 'blocked', label: 'Blocked' },
+        { value: 'held', label: 'Held' },
+        { value: 'approved', label: 'Approved' },
+        { value: 'denied', label: 'Denied' }
+      ]
     },
     {
-      value: 'ticket-triage',
-      label: 'ticket-triage'
-    },
-    {
-      value: 'inventory-sync',
-      label: 'inventory-sync'
-    },
-    {
-      value: 'invoice-reader',
-      label: 'invoice-reader'
-    },
-    {
-      value: 'release-helper',
-      label: 'release-helper'
-    },
-    {
-      value: 'data-export',
-      label: 'data-export'
-    },
-    {
-      value: 'calendar-sync',
-      label: 'calendar-sync'
-    }
-  ]
-
-  const outcomeOptions: SelectOptionItem[] = [
-    {
-      value: 'Any outcome',
-      label: 'Any outcome'
-    },
-    {
-      value: 'Allowed',
-      label: 'Allowed'
-    },
-    {
-      value: 'Blocked',
-      label: 'Blocked'
-    },
-    {
-      value: 'Held',
-      label: 'Held'
-    },
-    {
-      value: 'Approved',
-      label: 'Approved'
-    },
-    {
-      value: 'Denied',
-      label: 'Denied'
-    }
-  ]
-
-  const categoryOptions: SelectOptionItem[] = [
-    {
-      value: 'Any category',
-      label: 'Any category'
-    },
-    {
-      value: 'Read',
-      label: 'Read'
-    },
-    {
-      value: 'Write',
-      label: 'Write'
-    },
-    {
-      value: 'Search',
-      label: 'Search'
-    },
-    {
-      value: 'Export',
-      label: 'Export'
-    },
-    {
-      value: 'Delete',
-      label: 'Delete'
-    },
-    {
-      value: 'Admin',
-      label: 'Admin'
+      id: 'category',
+      label: 'Category',
+      options: ['Read', 'Write', 'Search', 'Export', 'Delete', 'Admin'].map((name) => ({
+        value: name,
+        label: name
+      }))
     }
   ]
 
@@ -750,6 +701,94 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
   }
 
   const outcomeTag = (outcome: Outcome) => outcomeTags[outcome]
+
+  const picked = (id: string) => (filters.value[id] ?? []).map(String)
+  const keeps = (id: string, value: string) => {
+    const values = picked(id)
+    return !values.length || values.includes(value)
+  }
+  const host = computed(() => destination.value.trim().toLowerCase())
+
+  const filtering = computed(
+    () => Object.values(filters.value).some((values) => values.length > 0) || host.value !== ''
+  )
+
+  const filteredRows = computed(() =>
+    rows.filter(
+      (row) =>
+        keeps('actor', row.actor) &&
+        keeps('outcome', row.outcome) &&
+        keeps('category', row.category) &&
+        (!host.value || row.destination.toLowerCase().includes(host.value))
+    )
+  )
+
+  const share = computed(() => (rows.length ? filteredRows.value.length / rows.length : 0))
+  const outcomeIds: ReadonlySet<string> = new Set([
+    'allowed',
+    'blocked',
+    'held',
+    'approved',
+    'denied'
+  ])
+
+  const visibleFigures = computed(() =>
+    filtering.value
+      ? figures.map((figure) => {
+          if (!filteredRows.value.length) return { ...figure, value: null, delta: null }
+          const excluded = outcomeIds.has(figure.id) && !keeps('outcome', figure.id)
+          return {
+            ...figure,
+            value: excluded ? 0 : Math.round(figure.value * share.value),
+            delta: null
+          }
+        })
+      : figures
+  )
+
+  const visibleOutcomes = computed<ChartSeries[]>(() =>
+    filtering.value
+      ? filteredRows.value.length
+        ? outcomes
+            .filter((entry) => keeps('outcome', entry.id))
+            .map((entry) => ({
+              ...entry,
+              values: entry.values.map((value) =>
+                value === null ? null : Math.round(value * share.value)
+              )
+            }))
+        : []
+      : outcomes
+  )
+
+  const narrow = (items: BarListItem[], keep: (item: BarListItem) => boolean) =>
+    filtering.value ? (filteredRows.value.length ? items.filter(keep) : []) : items
+
+  const visibleActors = computed(() =>
+    narrow(actors, (item) => keeps('actor', String(item.id ?? item.name)))
+  )
+  const visibleCategories = computed(() =>
+    narrow(categories, (item) => keeps('category', String(item.id ?? item.name)))
+  )
+  const visibleDestinations = computed(() =>
+    narrow(destinations, (item) => !host.value || item.name.toLowerCase().includes(host.value))
+  )
+
+  const emptyTitle = computed(() =>
+    filtering.value ? 'No requests match these filters' : 'No requests in this time range'
+  )
+  const emptyDescription = computed(() =>
+    filtering.value
+      ? 'Clear the filters or pick other values.'
+      : 'Requests the rules evaluate appear here. Widen the time range to see older ones.'
+  )
+
+  const clearFilters = () => {
+    filters.value = {}
+    destination.value = ''
+  }
+
+  const emit = defineEmits<{ refresh: [event: MouseEvent] }>()
 </script>
 
 <template>
@@ -760,110 +799,62 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
         description="What each actor requested through the rules: what was allowed, blocked or held for approval, and what went over budget, per actor, category and destination."
       >
         <template #actions>
+          <div class="w-full sm:w-44">
+            <Select
+              v-model="timeRange"
+              size="medium"
+            >
+              <Select.Trigger aria-label="Time range" />
+              <Select.Content>
+                <Select.Option
+                  v-for="option in timeRanges"
+                  :key="String(option.value)"
+                  :value="option.value"
+                >
+                  {{ option.label }}
+                </Select.Option>
+              </Select.Content>
+            </Select>
+          </div>
           <IconButton
             icon="pi pi-refresh"
             kind="outlined"
             size="medium"
             aria-label="Refresh"
+            @click="(event: MouseEvent) => emit('refresh', event)"
           />
         </template>
       </PageHeader>
 
       <section
         aria-label="Filters"
-        class="grid grid-cols-1 items-start gap-(--spacing-md) sm:grid-cols-2 lg:grid-cols-5"
+        class="flex min-w-0 flex-col gap-(--spacing-xs)"
       >
-        <Field>
-          <Field.Label>Time range</Field.Label>
-          <Select
-            v-model="timeRange"
-            size="medium"
-          >
-            <Select.Trigger />
-            <Select.Content>
-              <Select.Option
-                v-for="option in timeRanges"
-                :key="String(option.value)"
-                :value="option.value"
-                :disabled="option.disabled"
-              >
-                {{ option.label }}
-              </Select.Option>
-            </Select.Content>
-          </Select>
-        </Field>
-        <Field>
-          <Field.Label>Actor</Field.Label>
-          <Select
-            v-model="actor"
-            size="medium"
-          >
-            <Select.Trigger />
-            <Select.Content>
-              <Select.Option
-                v-for="option in actorOptions"
-                :key="String(option.value)"
-                :value="option.value"
-                :disabled="option.disabled"
-              >
-                {{ option.label }}
-              </Select.Option>
-            </Select.Content>
-          </Select>
-        </Field>
-        <Field>
-          <Field.Label>Outcome</Field.Label>
-          <Select
-            v-model="outcome"
-            size="medium"
-          >
-            <Select.Trigger />
-            <Select.Content>
-              <Select.Option
-                v-for="option in outcomeOptions"
-                :key="String(option.value)"
-                :value="option.value"
-                :disabled="option.disabled"
-              >
-                {{ option.label }}
-              </Select.Option>
-            </Select.Content>
-          </Select>
-        </Field>
-        <Field>
-          <Field.Label>Category</Field.Label>
-          <Select
-            v-model="category"
-            size="medium"
-          >
-            <Select.Trigger />
-            <Select.Content>
-              <Select.Option
-                v-for="option in categoryOptions"
-                :key="String(option.value)"
-                :value="option.value"
-                :disabled="option.disabled"
-              >
-                {{ option.label }}
-              </Select.Option>
-            </Select.Content>
-          </Select>
-        </Field>
-        <Field>
-          <Field.Label>Destination</Field.Label>
-          <Input
-            v-model="destination"
-            placeholder="api.example.com"
+        <div class="flex min-w-0 flex-wrap items-center gap-(--spacing-xs)">
+          <FilterMenu
+            v-model="filters"
+            :fields="filterFields"
             size="medium"
           />
-          <Field.Description>Exact host.</Field.Description>
-        </Field>
+          <div class="w-full min-w-0 sm:w-(--container-3xs)">
+            <Input
+              v-model="destination"
+              placeholder="api.example.com"
+              size="medium"
+              aria-label="Destination host"
+            />
+          </div>
+        </div>
+        <FilterMenu.Chips
+          v-model="filters"
+          :fields="filterFields"
+        />
       </section>
 
       <section aria-label="Outcomes">
         <ul class="grid grid-cols-2 gap-(--spacing-md) sm:grid-cols-4 2xl:grid-cols-7">
           <li
-            v-for="figure in figures"
+            v-for="figure in visibleFigures"
             :key="figure.id"
             class="flex min-w-0 flex-col"
           >
@@ -897,13 +888,24 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
           <ChartCard.Content>
             <Chart
               v-model:active-index="activeIndex"
-              :series="outcomes"
+              :series="visibleOutcomes"
               :labels="labels"
               :format-value="formatCount"
-              empty-title="No requests in this time range"
-              empty-description="Requests the rules evaluate appear here. Widen the time range to see older ones."
+              :empty-title="emptyTitle"
+              :empty-description="emptyDescription"
               :loading="loading"
             >
+              <template
+                v-if="filtering"
+                #empty-actions
+              >
+                <Button
+                  label="Clear filters"
+                  kind="outlined"
+                  size="small"
+                  @click="clearFilters"
+                />
+              </template>
               <Chart.Grid />
               <Chart.Axis kind="y" />
               <Chart.Axis kind="x" />
@@ -924,9 +926,9 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
           </ChartCard.Header>
           <ChartCard.Content>
             <BarList
-              :items="actors"
+              :items="visibleActors"
               :format-value="formatCount"
-              empty-title="No requests in this time range"
+              :empty-title="emptyTitle"
               :loading="loading"
               aria-label="Requests by actor"
             />
@@ -942,10 +944,10 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
           </ChartCard.Header>
           <ChartCard.Content>
             <BarList
-              :items="categories"
+              :items="visibleCategories"
               :format-value="formatCount"
               :color="2"
-              empty-title="No requests in this time range"
+              :empty-title="emptyTitle"
               :loading="loading"
               aria-label="Requests by category"
             />
@@ -961,10 +963,10 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
           </ChartCard.Header>
           <ChartCard.Content>
             <BarList
-              :items="destinations"
+              :items="visibleDestinations"
               :format-value="formatCount"
               :color="3"
-              empty-title="No requests in this time range"
+              :empty-title="emptyTitle"
               :loading="loading"
               aria-label="Requests by destination"
             />
@@ -981,8 +983,8 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
             </span>
             <ChartCard.Controls>
               <Tag
-                v-if="!loading && rows.length"
-                :label="rows.length + ' requests'"
+                v-if="!loading && filteredRows.length"
+                :label="filteredRows.length + ' requests'"
                 severity="secondary"
                 size="small"
               />
@@ -990,8 +992,8 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
           </ChartCard.Header>
           <ChartCard.Content>
             <TableRoot
-              v-if="loading || rows.length"
-              :data="rows"
+              v-if="loading || filteredRows.length"
+              :data="filteredRows"
               :columns="columns"
               row-key="id"
               enable-sorting
@@ -1019,6 +1021,24 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
               </template>
             </TableRoot>
             <EmptyState
+              key="empty-state-1"
+              v-else-if="filtering"
+              size="small"
+              icon="pi pi-filter-slash"
+              title="No requests match these filters"
+              description="Clear the filters or pick other values."
+            >
+              <template #actions>
+                <Button
+                  label="Clear filters"
+                  kind="outlined"
+                  size="small"
+                  @click="clearFilters"
+                />
+              </template>
+            </EmptyState>
+            <EmptyState
+              key="empty-state-2"
               v-else
               size="small"
               icon="pi pi-list"

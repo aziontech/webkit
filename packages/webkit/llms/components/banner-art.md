@@ -1,6 +1,6 @@
 # Banner Art
 
-> The decorative backdrop a site, hub or docs band stands on, for a `Hero` `background` slot or any band with `relative overflow-hidden`: `globe` hangs half a globe past the page's inline-end rule over the dot lattice, `map` insets the world map beside the copy, `network` lays the map full bleed with its PoPs lit, the sample's `MapMesh` traffic crossing between them (`NetworkMap` `traffic`: links and packets, the links alone as the still frame under reduced motion) and a scrim over the copy column. From the design sample's `shared/ui/banners` (GlobeBanner, MapBanner, NetworkBanner), drawn with WebKit's own `SpinningGlobe` and `NetworkMap` so there is one map and one globe in the system. The inventory's "`Banner` `art` variants" became this sibling component under `marketing/banner`: `Banner` is an announcement band with its own surfaces, and a backdrop layer is a different thing.
+> The decorative backdrop a site, hub or docs band stands on, for a `Hero` `background` slot or any band with `relative overflow-hidden`: `globe` hangs half a globe past the page's inline-end rule over the dot lattice, `map` insets the world map beside the copy, `network` lays the map full bleed with its PoPs lit, the sample's `MapMesh` traffic crossing between them (`NetworkMap` `traffic`: links and packets, the links alone as the still frame under reduced motion) and a scrim over the copy column. From the design sample's `shared/ui/banners` (GlobeBanner, MapBanner, NetworkBanner), drawn with WebKit's own `SpinningGlobe` and `NetworkMap` so there is one map and one globe in the system. The inventory's "`Banner` `art` variants" became this sibling component, `marketing/banner-art`: `Banner` is an announcement band with its own surfaces, and a backdrop layer is a different thing.
 
 - Import: `import BannerArt from '@aziontech/webkit/banner-art'`
 - Category: marketing · Surface: marketing · Structure: monolithic
@@ -33,12 +33,13 @@
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `art` | `'globe' \ \| 'map' \ \| 'network'` | `'map'` | false | Which backdrop to draw. |
+| `kind` | `BannerArtKind` | `'map'` | false | Which backdrop to draw: `globe`, `map` or `network`. |
+| `art` | `BannerArtKind \| ''` | `''` | false | @deprecated since 6.0 — use `kind`. Removed in 7.0. When set, it still picks the backdrop. |
 | `animated` | `boolean` | `true` | false | Spins the globe or pulses the PoPs; a still frame when false or under reduced motion. |
 
 ## States
 
-- `data-art` mirrors `art`.
+- `data-kind` mirrors the backdrop drawn; `data-art` carries the same value for one major, deprecated with `art`.
 
 ## Accessibility
 
@@ -77,7 +78,7 @@
     max-width="site"
   >
     <template #background>
-      <BannerArt art="map" />
+      <BannerArt kind="map" />
     </template>
     <HeroTitle
       eyebrow="Network"
@@ -96,9 +97,9 @@
   import BannerArt from '@aziontech/webkit/banner-art'
 
   const arts = [
-    { art: 'globe', label: 'Globe' },
-    { art: 'map', label: 'Map' },
-    { art: 'network', label: 'Network' }
+    { kind: 'globe', label: 'Globe' },
+    { kind: 'map', label: 'Map' },
+    { kind: 'network', label: 'Network' }
   ]
 </script>
 
@@ -106,10 +107,10 @@
   <div class="flex flex-col gap-(--spacing-md)">
     <div
       v-for="item in arts"
-      :key="item.art"
+      :key="item.kind"
       class="relative h-80 overflow-hidden border border-(--border-default) bg-(--bg-canvas)"
     >
-      <BannerArt :art="item.art" />
+      <BannerArt :kind="item.kind" />
       <p class="relative z-10 m-0 p-(--spacing-lg) text-heading-md text-(--text-default)">
         {{ item.label }}
       </p>

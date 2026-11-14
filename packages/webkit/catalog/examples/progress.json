@@ -8,7 +8,7 @@
   {
    "name": "Shapes",
    "summary": "Both corner-radius variants stacked: `rounded` and `flat`.",
-   "sfc": "<script setup>\n  import Progress from '@aziontech/webkit/progress'\n</script>\n\n<template>\n  <div class=\"flex w-[320px] flex-col gap-4\">\n    <Progress\n      :value=\"60\"\n      shape=\"rounded\"\n    />\n    <Progress\n      :value=\"60\"\n      shape=\"flat\"\n    />\n  </div>\n</template>"
+   "sfc": "<script setup>\n  import Progress from '@aziontech/webkit/progress'\n</script>\n\n<template>\n  <div class=\"flex w-[320px] flex-col gap-4\">\n    <Progress\n      :value=\"60\"\n      kind=\"rounded\"\n    />\n    <Progress\n      :value=\"60\"\n      kind=\"flat\"\n    />\n  </div>\n</template>"
   },
   {
    "name": "Sizes",

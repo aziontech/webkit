@@ -64,6 +64,13 @@
    "default": "[]",
    "required": "false",
    "doc": "The use cases rendered as frame cells, in order; each item is `{ icon, title, description }`."
+  },
+  {
+   "name": "anchor",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "In-page id set on the band so a hash link can target it."
   }
  ],
  "events": [],

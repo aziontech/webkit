@@ -5,7 +5,7 @@
 - Surface: product
 - Source: `blocks/platform/ai/ai-action-approval/ai-action-approval.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/ai/ai-action-approval")`
-- Components: [ActionConfirmation](../../../components/action-confirmation.md), [ChatMessage](../../../components/chat-message.md), [CodeBlock](../../../components/code-block.md), [Conversation](../../../components/conversation.md), [CopyButton](../../../components/copy-button.md), [PromptInput](../../../components/prompt-input.md), [StreamingResponse](../../../components/streaming-response.md), [ToolCall](../../../components/tool-call.md)
+- Components: [ActionConfirmation](../../../components/action-confirmation.md), [Button](../../../components/button.md), [ChatMessage](../../../components/chat-message.md), [CodeBlock](../../../components/code-block.md), [Conversation](../../../components/conversation.md), [CopyButton](../../../components/copy-button.md), [PromptInput](../../../components/prompt-input.md), [StreamingResponse](../../../components/streaming-response.md), [ToolCall](../../../components/tool-call.md)
 - Skills: `webkit-genai`, `webkit-ui-states`, `webkit-errors`
 
 ## Asked as
@@ -49,9 +49,9 @@ The question names the action and its target, with the command or tool in code. 
 
 After approval, the call appears as a running `ToolCall` under the card and completes or fails in place; a denial records it as denied.
 
-### F. Outcome — `ChatMessage`, `CopyButton`
+### F. Outcome — `ChatMessage`, `CopyButton`, `Button`
 
-A new response that says what changed (or that nothing ran), with Copy in its actions.
+A new response that says what changed (or that nothing ran), with Copy in its actions. When the approved action fails or is stopped, the response says what failed and that the previous version still serves, and an outlined Retry `Button` beside Copy runs the action again; an action never ends in silence.
 
 ## Do
 
@@ -95,6 +95,7 @@ A new response that says what changed (or that nothing ran), with Copy in its ac
 - Approved: the card approved, the deployment completed and the assistant's report.
 - Denied: the card denied, the call recorded as denied and the assistant's acknowledgement.
 - Expired: the request expired and the assistant says nothing ran.
+- Failed: the approved deployment failed; the call reads failed and the assistant says what failed and that `b-4790` still serves, with Retry.
 
 ## Related
 
@@ -110,6 +111,7 @@ A new response that says what changed (or that nothing ran), with Copy in its ac
 - `Approved` — After Deploy: the card reads Approved, the deployment call completed, and the assistant reports the new build is live with the previous one kept for rollback.
 - `Denied` — After Deny: the card reads Denied, the deployment call is recorded as denied, and the assistant acknowledges that nothing was deployed.
 - `Expired` — Nobody decided in time: the card reads Request expired and the assistant says nothing was deployed.
+- `Failed` — The approved deployment fails: the deployment call reads failed, and the assistant says what failed and that production still serves the previous version, with Retry beside Copy.
 
 Each variant is the same screen in another state: `get_pattern("platform/ai/ai-action-approval", { variant })`, or the file under `blocks/platform/ai/ai-action-approval/variants/`.
 
@@ -120,6 +122,7 @@ Each variant is the same screen in another state: `get_pattern("platform/ai/ai-a
   import ActionConfirmation, {
     type ActionConfirmationState
   } from '@aziontech/webkit/action-confirmation'
+  import Button from '@aziontech/webkit/button'
   import ChatMessage from '@aziontech/webkit/chat-message'
   import CodeBlock from '@aziontech/webkit/code-block'
   import Conversation from '@aziontech/webkit/conversation'
@@ -132,6 +135,7 @@ Each variant is the same screen in another state: `get_pattern("platform/ai/ai-a
   const command = 'azion deploy --workload storefront --build b-4821 --env production'
   const decision = ref<ActionConfirmationState>('pending')
   const run = ref<ToolCallState | ''>('')
+  const stopped = ref(false)
   const prompt = ref('')
   let timer: ReturnType<typeof setTimeout> | undefined
 
@@ -139,6 +143,10 @@ Each variant is the same screen in another state: `get_pattern("platform/ai/ai-a
     if (decision.value === 'denied')
       return 'Got it, nothing was deployed. Build `b-4821` stays ready if you change your mind.'
     if (decision.value === 'expired') return 'This request expired. Nothing was deployed.'
+    if (run.value === 'error' && stopped.value)
+      return 'You stopped the deployment before it finished. Production still serves the previous version `b-4790`.'
+    if (run.value === 'error')
+      return 'The deployment of build `b-4821` failed while uploading the build to the edge. Nothing changed: production still serves the previous version `b-4790`.'
     if (run.value === 'success')
       return 'storefront is live on production with build `b-4821`. The previous version `b-4790` stays available for rollback.'
     return ''
@@ -149,6 +157,7 @@ Each variant is the same screen in another state: `get_pattern("platform/ai/ai-a
 
   function approve() {
     decision.value = 'approved'
+    stopped.value = false
     run.value = 'running'
     timer = setTimeout(() => (run.value = 'success'), 2500)
   }
@@ -160,6 +169,7 @@ Each variant is the same screen in another state: `get_pattern("platform/ai/ai-a
 
   function stop() {
     clearTimeout(timer)
+    stopped.value = true
     run.value = 'error'
   }
 
@@ -223,6 +233,14 @@ Each variant is the same screen in another state: `get_pattern("platform/ai/ai-a
         <template #actions>
           <ChatMessage.Actions>
             <CopyButton :value="followUp" />
+            <Button
+              v-if="run === 'error'"
+              label="Retry"
+              kind="outlined"
+              size="small"
+              icon="pi pi-refresh"
+              @click="approve"
+            />
           </ChatMessage.Actions>
         </template>
       </ChatMessage>

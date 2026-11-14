@@ -8,7 +8,7 @@
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],
- "purpose": "Control-only pill toggle `Switch` (36×20 px). Two visual types: `default` (plain handle) and `privacy` (handle carries a `pi-lock` / `pi-lock-open` icon mirroring the toggled state). No label or description — wrap it in a horizontal `Field` or a `Field.Label` choice card for labeled layouts, or place it bare where the label already exists outside the control (an ItemGroup row names the field with `Item.Title`). Because the bare form has no wrapper to defer to, the control owns its own `disabled` state.",
+ "purpose": "Control-only pill toggle `Switch` (36×20 px). Two visual types: `default` (plain handle) and `privacy` (handle carries a `pi-lock` / `pi-lock-open` icon mirroring the toggled state; both glyphs render and `group-data-[checked]:` shows the right one, so no class is chosen in script). No label or description — wrap it in a horizontal `Field` or a `Field.Label` choice card for labeled layouts, or place it bare where the label already exists outside the control (an ItemGroup row names the field with `Item.Title`). Because the bare form has no wrapper to defer to, the control owns its own `disabled` state.",
  "setup": null,
  "useWhen": [
   "An on/off setting that takes effect as soon as it flips (enable a feature, turn a rule on).",
@@ -30,7 +30,7 @@
  "bestPractices": [
   "The switch renders no text: give it an accessible name with `aria-label`, or `aria-labelledby` pointing at the visible label.",
   "Set `disabled` on the switch itself; it renders a native disabled button, so it leaves the tab order and ignores clicks and keys.",
-  "focused` moves real focus and forces the ring; use it only to mirror an external focus state, never as decoration.",
+  "Use `autofocus` to focus the switch when it mounts (a dialog whose first control it is). `focused` is deprecated: it moves real focus on every change and forces the ring even when focus is elsewhere.",
   "Keep `kind=\"default\"` unless the setting is about visibility or access."
  ],
  "props": [
@@ -39,14 +39,21 @@
    "type": "'default' | 'privacy'",
    "default": "'default'",
    "required": "false",
-   "doc": "Visual variant. `privacy` renders a lock icon inside the handle (closed when off, open when on)."
+   "doc": "Visual variant (`SwitchKind`; `SwitchType` stays exported as a deprecated alias until 7.0). `privacy` renders a lock icon inside the handle (closed when off, open when on)."
+  },
+  {
+   "name": "autofocus",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Moves focus to the switch once, when it mounts."
   },
   {
    "name": "focused",
    "type": "boolean",
    "default": "false",
    "required": "false",
-   "doc": "Forces the focused visual state regardless of keyboard focus. Mirrors the Figma `focused` variant."
+   "doc": "@deprecated since 6.0 — use autofocus. Removed in 7.0.` Forces the focused visual state and moves focus. Mirrors the Figma `focused` variant."
   },
   {
    "name": "disabled",

@@ -1,6 +1,6 @@
 # MultipageCreate (`platform/create/multipage-create`)
 
-> The page a first-level resource is created on one step at a time: the creation header, a Stepper rail on the left that unlocks each step once it is reached and shows the description of the current one, a form column that opens with the step heading, and a footer bar with Cancel on the left and Back plus Next on the right, Next turning into the create action on the last step. Every create asks first where the resource runs: a centred chooser lists the hosts it can bind to, six at a time with a search, and tags the ones missing a module the resource needs; choosing one with that module off inserts a step that offers to turn it on. Each resource brings its own field steps, plus an Advanced step when the endpoint has optional settings, and a code resource can make one step the editor plotted in CodeWorkspace. Built from `PageHeader`, `SettingRow`, `GlobalHeader`, `Stepper`, `Input`, `Tag`, `Card`, `Alert`, `Field` choice cards with `Switch` and `RadioButton`, `Item`, `Textarea`, `HelperText` and `Button`.
+> The page a first-level resource is created on one step at a time: the creation header, a Stepper rail on the left that unlocks each step once it is reached and shows the description of the current one, a form column that opens with the step heading, and a footer bar with Cancel on the left and Back plus Next on the right, Next turning into the create action on the last step, a Review step that shows its loading state and confirms the create in a toast. Every create asks first where the resource runs: a centred chooser lists the hosts it can bind to, six at a time with a search, and tags the ones missing a module the resource needs; choosing one with that module off inserts a step that offers to turn it on. Each resource brings its own field steps, plus an Advanced step when the endpoint has optional settings, and a code resource can make one step the editor plotted in CodeWorkspace. Built from `PageHeader`, `SettingRow`, `GlobalHeader`, `Stepper`, `Input`, `Tag`, `Card`, `Alert`, `Field` choice cards with `Switch` and `RadioButton`, `Item`, `Textarea`, `HelperText` and `Button`.
 
 - Surface: product
 - Source: `blocks/platform/create/multipage-create/multipage-create.vue` in `@aziontech/webkit`
@@ -62,9 +62,13 @@ A choice that changes what follows, such as the list type, is a `SettingRow kind
 
 A stacked row with a five-row `Textarea` whose label, placeholder and guidance follow the choice above it. Its required message is a `HelperText` tied by `aria-describedby`.
 
-### I. Footer — `SaveBar` (required)
+### I. Review — `SectionHeader`, `Alert`, `Card`, `Item`, `Tag`, `Button` (required)
 
-`SaveBar kind="plain"` fixed under the form, on the create measure (a wrapper sets `--layout-measure-form` to `--layout-measure-form-create`, since the bar takes no classes of its own): transparent Cancel in its `#leading` slot, on the left; outlined Back (hidden on the first step) and the primary submit in `#actions`, on the right, all medium `Button`s. The submit reads Next and becomes the create label on the last step. It is the form's only `type="submit"`, so Enter advances.
+The last step, read-only: three bands under small `SectionHeader`s (Where it runs, What gets created, What can reference it), each with Edit back to its step; see Review step below.
+
+### J. Footer — `SaveBar` (required)
+
+`SaveBar kind="fade"` fixed under the form (the footer every create wizard shares: `platform/create/source-wizard` and `platform/create/provision-wizard` use the same Cancel on the left and Back plus the primary on the right), on the create measure (a wrapper sets `--layout-measure-form` to `--layout-measure-form-create`, since the bar takes no classes of its own): transparent Cancel in its `#leading` slot, on the left; outlined Back (hidden on the first step) and the primary submit in `#actions`, on the right, all medium `Button`s. The submit reads Next and becomes the create label on the last step. It is the form's only `type="submit"`, so Enter advances. On the last step (Review) it shows its loading state while the request runs and the result arrives as a toast; every state of the flow reaches that path.
 
 ## Do
 
@@ -110,14 +114,14 @@ A stacked row with a five-row `Textarea` whose label, placeholder and guidance f
 
 - WhereItRuns: the first step; the centred chooser of policies with search, module tags and the two escape routes.
 - ModuleOff: acme-staging was chosen with IP filtering off, so the IP filtering step shows the warning, the switch card and the note.
-- ListSettings: the settings step; Type as radio choice cards and the List textarea. An empty list marks the step red on the rail.
+- ListSettings: the settings step; Type as radio choice cards and the List textarea, with Back and Next (Review follows). An empty list marks the step red on the rail.
 - Review: the last step, read-only, with the create action in the footer. Where it runs is one `Alert` whose severity says whether anything will read the resource; What gets created pairs each value with the property it is sent as and shows long lists as their first five `Tag`s and a count; What can reference it names the consumers. Each band that maps to a step has an outlined Edit (`aria-label` names the band) that jumps back to that step. Create re-validates every step and, on a failure, opens the first step with an error.
 
 ## Review step
 
 - Add a Review step when the create has three or more steps or binds the resource to something; skip it for a one-step create.
 - Show values as they will be sent, with the property name under each, and never show secrets in clear.
-- Put Edit on each band, not on each value; after the edit, Next walks forward through the later steps, already filled, back to Review.
+- Put Edit on each band, and on a value whose step differs from its band's (Name, on General); after the edit, Next walks forward through the later steps, already filled, back to Review.
 - Say plainly when nothing will read the resource yet (unbound, or a module off) with a warning `Alert`, not a disabled create.
 
 ## Related
@@ -133,14 +137,16 @@ A stacked row with a five-row `Textarea` whose label, placeholder and guidance f
 
 - where-it-runs
 - module
+- general
 - settings
+- review
 
 ## Variants
 
 - `WhereItRuns` — primary (the code below)
 - `ModuleOff` — acme-staging was chosen with IP filtering off, so an IP filtering step follows Where it runs: a warning Alert, the Switch choice card that turns the module on with the list, and a note on what leaving it off means.
-- `ListSettings` — The last step of a list bound to acme-production: the Type as wide RadioButton choice cards and the List Textarea whose label, placeholder and guidance follow the type, with Back and Create access list in the footer. Leaving the list empty flags it and marks the step red on the rail.
-- `Review` — The Review step that closes the create, after List settings: three bands under small `SectionHeader`s. Where it runs is one `Alert` (success when the policy is ready, warning when it is unbound or its module stays off) with Edit back to the chooser; What gets created lists each value beside the property it is sent as, the entries as `Tag`s with a count and and N more, with Edit back to List settings; What can reference it lists the consumers and the field that carries the reference. Create Access List shows its loading state and the result arrives as a toast; a value that fails on create sends the user back to its step, marked red on the rail.
+- `ListSettings` — The settings step of a list bound to acme-production, before Review: the Type as wide RadioButton choice cards and the List Textarea whose label, placeholder and guidance follow the type, with Back and Next in the footer. Leaving the list empty flags it and marks the step red on the rail.
+- `Review` — The Review step that closes the create, after List settings: three bands under small `SectionHeader`s. Where it runs is one `Alert` (success when the policy is ready, warning when it is unbound or its module stays off) with Edit back to the chooser; What gets created lists each value beside the property it is sent as (Name with its own Edit back to General), the entries as `Tag`s with a count and and N more, with Edit back to List settings; What can reference it lists the consumers and the field that carries the reference. Create Access List shows its loading state and the result arrives as a toast; a value that fails on create sends the user back to its step, marked red on the rail.
 
 Each variant is the same screen in another state: `get_pattern("platform/create/multipage-create", { variant })`, or the file under `blocks/platform/create/multipage-create/variants/`.
 
@@ -163,12 +169,14 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
   import PageHeader from '@aziontech/webkit/page-header'
   import RadioButton from '@aziontech/webkit/radio-button'
   import SaveBar from '@aziontech/webkit/save-bar'
+  import SectionHeader from '@aziontech/webkit/section-header'
   import SettingRow from '@aziontech/webkit/setting-row'
   import Stepper, { type StepperStepState } from '@aziontech/webkit/stepper'
   import Switch from '@aziontech/webkit/switch'
   import Tag from '@aziontech/webkit/tag'
   import Textarea from '@aziontech/webkit/textarea'
-  import { computed, reactive, ref } from 'vue'
+  import { toast } from '@aziontech/webkit/toast'
+  import { computed, onBeforeUnmount, reactive, ref } from 'vue'
 
   type ListType = 'asn' | 'ip_cidr' | 'countries'
   type FieldName = 'name' | 'type' | 'items'
@@ -286,8 +294,8 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
     },
     countries: {
       label: 'Countries',
-      placeholder: 'BR\nUS',
-      helper: 'One or more countries, one two-letter ISO 3166-1 code per line, such as BR.'
+      placeholder: 'US\nCA',
+      helper: 'One or more countries, one two-letter ISO 3166-1 code per line, such as US.'
     }
   }
 
@@ -341,6 +349,12 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
       description:
         'The kind of entry the list holds, and the entries themselves. The type cannot be changed after the list is created, because every entry is validated against it.',
       fields: ['type', 'items']
+    },
+    {
+      value: 'review',
+      title: 'Review',
+      description: 'Check what is created and where it runs. Edit any part, then create the list.',
+      fields: []
     }
   ])
 
@@ -428,13 +442,62 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
     if (matches.value.length) choose(matches.value[0])
   }
 
+  const entries = computed(() =>
+    Array.from(
+      new Set(
+        form.items
+          .split('\n')
+          .map((line) => line.trim())
+          .filter(Boolean)
+      )
+    )
+  )
+  const PREVIEW = 5
+  const typeLabel = computed(() => types.find((option) => option.value === form.type)?.label)
+  const consumers = [
+    {
+      by: 'Policy rules',
+      path: 'rules[].criteria[].argument',
+      as: 'Network list'
+    },
+    {
+      by: 'Rule sets',
+      path: 'rule_sets[].match.network_list',
+      as: 'Network list'
+    }
+  ]
+
+  const editStep = (value: string) => {
+    direction.value = 'back'
+    current.value = value
+  }
+
+  const creating = ref(false)
+  let timer: ReturnType<typeof setTimeout> | undefined
+
   const commit = () => {
     if (!isLast.value) {
       goNext()
       return
     }
-    validate(['name', 'type', 'items'])
+    if (!validate(['name', 'type', 'items'])) {
+      const failed = definitions.value.find((entry) => entry.fields.some((field) => errors[field]))
+      if (failed) editStep(failed.value)
+      return
+    }
+    creating.value = true
+    clearTimeout(timer)
+    timer = setTimeout(() => {
+      creating.value = false
+      toast.success(`${form.name} created.`, {
+        description: choice.value
+          ? `Rules of ${choice.value} can match on it now.`
+          : 'Bind it to a policy to use it in rules.'
+      })
+    }, 900)
   }
+
+  onBeforeUnmount(() => clearTimeout(timer))
 </script>
 
 <template>
@@ -532,8 +595,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
                 <legend class="sr-only">{{ step.title }}</legend>
                 <section
                   v-if="current === 'where-it-runs'"
-                  data-wide
-                  class="mx-auto flex w-full max-w-(--container-2xs) flex-col items-center gap-(--spacing-lg) data-wide:max-w-(--container-md)"
+                  class="mx-auto flex w-full max-w-(--container-md) flex-col items-center gap-(--spacing-lg)"
                   aria-labelledby="create-access-list-host-title"
                 >
                   <header class="flex flex-col items-center gap-(--spacing-xs) text-center">
@@ -709,7 +771,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
                 </section>
 
                 <section
-                  v-else
+                  v-else-if="current === 'settings'"
                   class="grid grid-cols-1 gap-y-(--spacing-md) [&:not(:first-of-type)]:mt-(--layout-section-gap)"
                 >
                   <div class="flex min-w-0 flex-col gap-(--spacing-lg)">
@@ -775,13 +837,176 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
                     </Card>
                   </div>
                 </section>
+                <section
+                  v-else
+                  class="flex min-w-0 flex-col gap-(--layout-section-gap)"
+                >
+                  <section class="flex min-w-0 flex-col gap-(--layout-group-gap)">
+                    <SectionHeader
+                      title="Where it runs"
+                      size="small"
+                    >
+                      <template #actions>
+                        <Button
+                          type="button"
+                          label="Edit"
+                          kind="outlined"
+                          size="small"
+                          aria-label="Edit where it runs"
+                          @click="editStep('where-it-runs')"
+                        />
+                      </template>
+                    </SectionHeader>
+                    <Alert
+                      key="alert-1"
+                      v-if="!choice"
+                      severity="warning"
+                    >
+                      Bound to no policy. The list is created, but no rule can match on it until a
+                      policy uses it.
+                    </Alert>
+                    <Alert
+                      key="alert-2"
+                      v-else-if="moduleMissing && !enableModule"
+                      severity="warning"
+                    >
+                      IP filtering is off on {{ choice }}, so no rule reads this list until it is
+                      on.
+                    </Alert>
+                    <Alert
+                      key="alert-3"
+                      v-else
+                      severity="success"
+                    >
+                      Runs on {{ choice }}.
+                    </Alert>
+                  </section>
+
+                  <section class="flex min-w-0 flex-col gap-(--layout-group-gap)">
+                    <SectionHeader
+                      title="What gets created"
+                      description="Each value is sent as the property named under it."
+                      size="small"
+                    >
+                      <template #actions>
+                        <Button
+                          type="button"
+                          label="Edit"
+                          kind="outlined"
+                          size="small"
+                          aria-label="Edit list settings"
+                          @click="editStep('settings')"
+                        />
+                      </template>
+                    </SectionHeader>
+                    <Card :padded="false">
+                      <template #content>
+                        <Item.List>
+                          <Item>
+                            <Item.Content>
+                              <Item.Title>Name</Item.Title>
+                              <Item.Description>name</Item.Description>
+                            </Item.Content>
+                            <Item.Actions>
+                              <span class="max-w-80 truncate text-label-sm text-(--text-default)">{{
+                                form.name
+                              }}</span>
+                              <Button
+                                type="button"
+                                label="Edit"
+                                kind="transparent"
+                                size="small"
+                                aria-label="Edit name"
+                                @click="editStep('general')"
+                              />
+                            </Item.Actions>
+                          </Item>
+                          <Item>
+                            <Item.Content>
+                              <Item.Title>Type</Item.Title>
+                              <Item.Description>type</Item.Description>
+                            </Item.Content>
+                            <Item.Actions>
+                              <span class="text-label-sm text-(--text-default)">{{
+                                typeLabel
+                              }}</span>
+                            </Item.Actions>
+                          </Item>
+                          <Item>
+                            <Item.Content>
+                              <Item.Title>{{ listField.label }}</Item.Title>
+                              <Item.Description>items</Item.Description>
+                              <ul
+                                class="m-0 mt-(--spacing-xs) flex list-none flex-wrap gap-(--spacing-xxs) p-0"
+                                :aria-label="`${entries.length} entries`"
+                              >
+                                <li
+                                  v-for="entry in entries.slice(0, PREVIEW)"
+                                  :key="entry"
+                                >
+                                  <Tag
+                                    :label="entry"
+                                    severity="secondary"
+                                    size="small"
+                                  />
+                                </li>
+                                <li
+                                  v-if="entries.length > PREVIEW"
+                                  class="text-label-sm text-(--text-muted)"
+                                >
+                                  and {{ entries.length - PREVIEW }} more
+                                </li>
+                              </ul>
+                            </Item.Content>
+                            <Item.Actions>
+                              <span class="text-label-sm text-(--text-default)"
+                                >{{ entries.length }}
+                                {{ entries.length === 1 ? 'entry' : 'entries' }}</span
+                              >
+                            </Item.Actions>
+                          </Item>
+                        </Item.List>
+                      </template>
+                    </Card>
+                  </section>
+
+                  <section class="flex min-w-0 flex-col gap-(--layout-group-gap)">
+                    <SectionHeader
+                      title="What can reference it"
+                      description="Everything that can point at this list once it exists, and the field that carries the reference."
+                      size="small"
+                    />
+                    <Card :padded="false">
+                      <template #content>
+                        <Item.List>
+                          <Item
+                            v-for="row in consumers"
+                            :key="row.by"
+                          >
+                            <Item.Content>
+                              <Item.Title>{{ row.by }}</Item.Title>
+                              <Item.Description>{{ row.path }}</Item.Description>
+                            </Item.Content>
+                            <Item.Actions>
+                              <Tag
+                                :label="row.as"
+                                severity="secondary"
+                                size="small"
+                              />
+                            </Item.Actions>
+                          </Item>
+                        </Item.List>
+                      </template>
+                    </Card>
+                  </section>
+                </section>
               </fieldset>
             </div>
           </div>
         </main>
 
         <div class="shrink-0 [--layout-measure-form:var(--layout-measure-form-create)]">
-          <SaveBar kind="plain">
+          <SaveBar kind="fade">
             <template #leading>
               <Button
                 type="button"
@@ -804,6 +1029,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
                 kind="primary"
                 size="medium"
                 type="submit"
+                :loading="creating"
               />
             </template>
           </SaveBar>

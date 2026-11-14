@@ -39,9 +39,9 @@ The layout hides its breadcrumbs while compact, so the body opens on a row (`md:
 
 A horizontal `Resizable` named "Version workspace": the version settings pane, a handle named "Resize the version history", and the collapsible Version history pane. History is closed by default.
 
-### C. Version tab bar — `PageTabs`, `Tabs`, `Tag`, `DropdownMenu`, `IconButton` (required)
+### C. Version tab bar — `PageTabs`, `Tabs`, `Tag`, `DropdownMenu`, `IconButton`, `EmptyState` (required)
 
-`PageTabs` with one `Tabs.Item` per area: Settings, Source, Device Groups, Cache Settings, Functions Instances, Rules Engine. The tab row ends on the version's state `Tag` and an outlined Version actions `IconButton` whose `DropdownMenu` holds Edit version info and the toggle for Version history.
+`PageTabs` with one `Tabs.Item` per area: Settings, Source, Device Groups, Cache Settings, Functions Instances, Rules Engine. The tab row ends on the version's state `Tag` and an outlined Version actions `IconButton` whose `DropdownMenu` holds Edit version info and the toggle for Version history. Each tab is its own route: a variant renders the open tab's panel, and a tab whose panel lives on another route shows an `EmptyState` with an Open link to it.
 
 ### D. Settings panel — `ScrollArea`, `PageHeader`, `SettingsSection`, `Card`, `Item`, `SettingRow`, `Input`, `Switch`, `Tooltip` (required)
 
@@ -53,15 +53,15 @@ A bar pinned to the bottom of the settings pane, aligned with the column above i
 
 ### F. Version history — `IconButton`, `Tag`, `Field`, `Textarea`, `Button`, `Avatar` (optional)
 
-The side pane titled "Version history", closed with an `IconButton`. It starts on the current version with its `Tag`, its description, its author `Avatar` and a pencil that edits the description in place through a `Field` with a `Textarea` and Cancel and Save `Button`s. Then the changes entry, empty until something is saved, then the five newest earlier versions and Show older for the rest.
+The side pane titled "Version history", closed with an `IconButton`. It starts on the current version with its `Tag`, its description, its author `Avatar` and a pencil that edits the description in place through a `Field` with a `Textarea` and Cancel and Save `Button`s. Then the changes entry, empty until something is saved, then the five newest earlier versions and Show older for the rest. Each earlier version is a link to that version's page, never a button; the one being viewed carries `aria-current="page"`.
 
 ### G. Revert — `Button`, `Tag` (optional, on an earlier Ready version)
 
-An earlier version opened from Version history keeps the page read-only and says Viewing an earlier version, with the entry in history marked by a Viewing `Tag` and `aria-current`. The version bar's primary action is Revert to <id>, the trigger of a `ConfirmDialog` with `kind="primary"` and `size="medium"`. Its body is the diff against the deployed version: a bordered list of the settings that change, each with its old and new value in words, a line with the rules added and removed, and a description saying that reverting deploys <id> to Production and that the deployed version stays in history. Confirm closes the dialog and starts the async-submit run: one toast id that turns from a loading toast ("Reverting to <id>…", "It keeps running if you leave.") into the outcome, which stays until closed and carries **Edit** and **Redeploy**, never View deployments. On success the version's `Tag` reads Deployed in the breadcrumb, the tab row and the history, and the bar offers Redeploy.
+An earlier version opened from Version history keeps the page read-only and says Viewing an earlier version, with the entry in history marked by a Viewing `Tag` and `aria-current="page"`. The version bar's primary action is Revert to <id>, the trigger of a `ConfirmDialog` with `kind="primary"` and `size="medium"`. Its body is the diff against the deployed version: a bordered list of the settings that change, each with its old and new value in words, a line with the rules added and removed, and a description saying that reverting deploys <id> to Production and that the deployed version stays in history. Confirm closes the dialog and starts the async-submit run: one toast id that turns from a loading toast ("Reverting to <id>…", "It keeps running if you leave.") into the outcome, which stays until closed and carries **Edit** and **Redeploy**, never View deployments. On success the version's `Tag` reads Deployed in the breadcrumb, the tab row and the history, and the bar offers Redeploy.
 
 ## List tabs
 
-Source, Device Groups, Cache Settings and Functions Instances are lists inside the version: a small `PageHeader` with an outlined add action, the controls row of `platform/view/table-view` (search, Refresh, Download CSV, Columns) and a flush `TableRoot` in a `Card`. The name cell is a button that opens the edit `Drawer`, the same drawer the add action opens, built as in `platform/create/create-in-drawer`: `SettingsSection`s of `Field`s (Device Groups, Functions Instances) or of `SettingRow`s in a `Card` (Cache Settings, reusing the rows of `platform/edit/edit-resource#CacheSettings` plus Adaptive delivery and a Device groups `MultiSelect`). Functions Instances renders the arguments as a `SchemaForm` when the function declares a schema and as a JSON `CodeEditor` when it does not, and its function `Select` ends on Create Function. Source embeds the file browser: Upload Files in the heading, Open in Object Storage in the controls row, the folder path as a `Breadcrumb` and an `EmptyState` with Upload Files and Open Bucket. Saving a drawer changes the draft only; the version bar still deploys it.
+Source, Device Groups, Cache Settings and Functions Instances are lists inside the version: a small `PageHeader` with an outlined add action, the controls row of `platform/view/table-view` (search, Refresh, Download CSV, Columns) and a flush `TableRoot` in a `Card`, paginated at 10. Its `#empty` slot tells a search that matches nothing (No matching, with Clear search) apart from a list with nothing yet (the add action). The name cell is a button that opens the edit `Drawer`, the same drawer the add action opens, built as in `platform/create/create-in-drawer`: `SettingsSection`s of `Field`s (Device Groups, Functions Instances) or of `SettingRow`s in a `Card` (Cache Settings, reusing the rows of `platform/edit/edit-resource#CacheSettings` plus Adaptive delivery and a Device groups `MultiSelect`). Functions Instances renders the arguments as a `SchemaForm` when the function declares a schema and as a JSON `CodeEditor` when it does not, and its function `Select` ends on Create Function. Source embeds the file browser: Upload Files in the heading, Open in Object Storage in the controls row, the folder path as a `Breadcrumb` and an `EmptyState` with Upload Files and Open Bucket. Saving a drawer changes the draft only; the version bar still deploys it.
 
 ## Creating and not found
 
@@ -168,6 +168,7 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
   import Card from '@aziontech/webkit/card'
   import ConsoleLayout from '@aziontech/webkit/console-layout'
   import DropdownMenu, { type DropdownMenuOptionValue } from '@aziontech/webkit/dropdown-menu'
+  import EmptyState from '@aziontech/webkit/empty-state'
   import Field from '@aziontech/webkit/field'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
@@ -373,6 +374,7 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
   const versionId = ref('ADA8FMMR')
   const query = ref('')
   const activeTab = ref('main-settings')
+  const tabLabel = computed(() => tabs.find((tab) => tab.value === activeTab.value)?.label ?? '')
   const settings = reactive<{ name: string; active: boolean; modules: Record<string, boolean> }>({
     name: 'web-app',
     active: true,
@@ -636,6 +638,7 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
             </PageTabs>
 
             <section
+              v-if="activeTab === 'main-settings'"
               class="grid min-h-0 flex-1 grid-rows-[minmax(0,1fr)] transition-opacity duration-moderate-01 ease-productive-entrance data-processing:opacity-32 motion-reduce:transition-none"
             >
               <ScrollArea
@@ -770,6 +773,30 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
                   </fieldset>
                 </div>
               </ScrollArea>
+            </section>
+            <section
+              v-else
+              class="grid min-h-0 flex-1 grid-rows-[minmax(0,1fr)] transition-opacity duration-moderate-01 ease-productive-entrance data-processing:opacity-32 motion-reduce:transition-none"
+            >
+              <div class="layout-column layout-boundary flex min-w-0 flex-col">
+                <div class="layout-section-start">
+                  <EmptyState
+                    size="medium"
+                    icon="pi pi-external-link"
+                    :title="tabLabel"
+                    :description="`${tabLabel} opens on its own page.`"
+                  >
+                    <template #actions>
+                      <Button
+                        :label="`Open ${tabLabel}`"
+                        kind="outlined"
+                        size="small"
+                        :href="`/resources/web-app/${activeTab}`"
+                      />
+                    </template>
+                  </EmptyState>
+                </div>
+              </div>
             </section>
 
             <Transition
@@ -998,9 +1025,9 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
                     class="absolute bottom-0 start-3.5 top-7 w-px -translate-x-1/2 bg-(--border-default)"
                     aria-hidden="true"
                   />
-                  <button
-                    type="button"
-                    class="group flex w-full min-w-0 gap-(--spacing-sm) rounded-(--shape-button) text-start focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)"
+                  <a
+                    :href="`/resources/web-app/versions/${entry.name}`"
+                    class="group flex w-full min-w-0 gap-(--spacing-sm) rounded-(--shape-button) text-start no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)"
                   >
                     <span
                       class="relative flex size-7 shrink-0 items-center justify-center rounded-full border border-(--border-default) bg-(--bg-surface) text-(--text-default)"
@@ -1040,7 +1067,7 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
                         <span class="truncate">{{ entry.author }} · {{ entry.createdAgo }}</span>
                       </span>
                     </span>
-                  </button>
+                  </a>
                 </li>
               </ol>
 

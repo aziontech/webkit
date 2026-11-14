@@ -53,8 +53,10 @@
 
 | Slot | Scope | Notes |
 | --- | --- | --- |
-| `iconLeft` |  | Hidden from assistive tech (`aria-hidden="true"`). |
-| `iconRight` |  | Hidden from assistive tech (`aria-hidden="true"`). |
+| `prefix` |  | Hidden from assistive tech (`aria-hidden="true"`). Logical: it sits on the right under `dir="rtl"`. |
+| `suffix` |  | Hidden from assistive tech (`aria-hidden="true"`). |
+| `iconLeft` |  | Rendered as the fallback of `prefix`. |
+| `iconRight` |  | Rendered as the fallback of `suffix`. |
 
 ## v-model
 
@@ -72,7 +74,7 @@
 - `data-disabled` mirrors the `disabled` prop
 - `data-invalid` mirrors the `invalid` prop
 - `data-required` mirrors the `required` prop; drives the warning-border treatment
-- `data-has-icon-left` / `data-has-icon-right` mirror slot presence (driven by `$slots.iconLeft` / `$slots.iconRight`), read at render time: an icon slot passed behind a `v-if` adds or removes its icon box when the condition changes, never leaving an empty box behind
+- `data-has-icon-left` / `data-has-icon-right` mirror slot presence (driven by `$slots.prefix` or `$slots.iconLeft` / `$slots.suffix` or `$slots.iconRight`), read at render time: an icon slot passed behind a `v-if` adds or removes its icon box when the condition changes, never leaving an empty box behind
 - `filled` is detected via the native `:not(:placeholder-shown)` selector — no JS state
 
 ## Accessibility
@@ -163,7 +165,7 @@
       v-model="leading"
       placeholder="Leading icon"
     >
-      <template #iconLeft>
+      <template #prefix>
         <i class="pi pi-globe" />
       </template>
     </Input>
@@ -171,7 +173,7 @@
       v-model="trailing"
       placeholder="Trailing icon"
     >
-      <template #iconRight>
+      <template #suffix>
         <i class="pi pi-search" />
       </template>
     </Input>
@@ -179,10 +181,10 @@
       v-model="both"
       placeholder="Both icons"
     >
-      <template #iconLeft>
+      <template #prefix>
         <i class="pi pi-globe" />
       </template>
-      <template #iconRight>
+      <template #suffix>
         <i class="pi pi-search" />
       </template>
     </Input>

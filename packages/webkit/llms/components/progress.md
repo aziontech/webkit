@@ -16,7 +16,7 @@
 - Pass `value` on the scale of `max`, for example `:value="3" :max="5"` for steps. Don't convert it to a percentage yourself.
 - Switch to `indeterminate` when progress is unknown. `value` is then ignored and `aria-valuenow` is dropped.
 - There is no label prop. Give the bar an accessible name with an `aria-label` or `aria-labelledby` attribute, and show the percentage in text next to it if users need the number.
-- The default is the thin `small` bar with `flat` corners. Use `shape="rounded"` and a larger `size` only when the bar stands alone.
+- The default is the thin `small` bar with `flat` corners. Use `kind="rounded"` and a larger `size` only when the bar stands alone. The `small` default is a deliberate exception to the house `medium` default: the bar is mostly a thin inline strip (table rows, upload rows, the top of a region).
 
 ## Don’t
 
@@ -37,14 +37,15 @@
 | --- | --- | --- | --- | --- |
 | `value` | `number` | `0` | false | Current progress, relative to `max`. |
 | `max` | `number` | `100` | false | Upper bound; percentage = `value / max * 100`. |
-| `shape` | `'rounded' \| 'flat'` | `'flat'` | false | Track and fill corner-radius variant. |
+| `kind` | `ProgressKind` (`'rounded' \| 'flat'`)` | `undefined` (resolves to `'flat'`)` | false | Track and fill corner-radius variant. |
+| `shape` | `ProgressShape` (`'rounded' \| 'flat'`)` | `undefined` | false | **@deprecated since 6.0 — use `kind`. Removed in 7.0.** Read only when `kind` is unset. |
 | `size` | `'small' \| 'medium' \| 'large'` | `'small'` | false | Bar height token. |
 | `indeterminate` | `boolean` | `false` | false | Loading state; animates a sliding segment and ignores `value`. |
 
 ## States
 
 - Visual states: `default`, `indeterminate`
-- `data-shape` mirrors the `shape` prop: `rounded` | `flat`
+- `data-kind` mirrors the resolved `kind` (`kind`, else the deprecated `shape`, else `flat`): `rounded` | `flat`. The legacy `data-shape` carries the same value until 7.0.
 - `data-size` mirrors the `size` prop: `small` | `medium` | `large`
 - `data-indeterminate` is present while `indeterminate` is `true`
 
@@ -81,11 +82,11 @@
   <div class="flex w-[320px] flex-col gap-4">
     <Progress
       :value="60"
-      shape="rounded"
+      kind="rounded"
     />
     <Progress
       :value="60"
-      shape="flat"
+      kind="flat"
     />
   </div>
 </template>

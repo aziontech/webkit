@@ -1,11 +1,11 @@
 # ProductionChecklist (`platform/detail/production-checklist`)
 
-> A production checklist on a resource overview: a card that names the gates between the generated hostname and production, counts how many are done and lists each as a row, with an expand button that opens the same list as a drawer where every step carries its description and its action. Once every gate is done the card collapses to its title with a Ready for production Tag. Rendered on a resource’s Overview tab. Built from `Card`, `Item`, `Tag`, `IconButton`, `Drawer`, `PanelHeader`, `PanelContent`, `PanelFooter` and `Button`.
+> A production checklist on a resource overview: a card that names the gates between the generated hostname and production, counts how many are done and lists each as a row, with an expand button (named by a `Tooltip`) and clickable rows that open the same list as a drawer where every step carries its description and its action. Once every gate is done the card collapses to its title with a Ready for production Tag. Rendered on a resource’s Overview tab. Built from `Card`, `Item`, `Tag`, `IconButton`, `Tooltip`, `Drawer`, `PanelHeader`, `PanelContent`, `PanelFooter` and `Button`.
 
 - Surface: product
 - Source: `blocks/platform/detail/production-checklist/production-checklist.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/detail/production-checklist")`
-- Components: [Button](../../../components/button.md), [Card](../../../components/card.md), [Drawer](../../../components/drawer.md), `DrawerClose`, `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, [IconButton](../../../components/icon-button.md), [Item](../../../components/item.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [Tag](../../../components/tag.md)
+- Components: [Button](../../../components/button.md), [Card](../../../components/card.md), [Drawer](../../../components/drawer.md), `DrawerClose`, `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, [IconButton](../../../components/icon-button.md), [Item](../../../components/item.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [Tag](../../../components/tag.md), [Tooltip](../../../components/tooltip.md)
 - Skills: `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -36,13 +36,17 @@ A service that is live on its generated hostname is not yet ready for real traff
 
 A small `Tag` beside the title: secondary with the count, "1 of 3", while gates remain; success with "Ready for production" when all are done. It is the only progress signal on the card.
 
-### C. Expand button — `IconButton` (required)
+### C. Expand button — `IconButton`, `Tooltip` (required)
 
-A small outlined `IconButton` with the maximize icon at the header's end, `aria-label="Expand the production checklist"`. It opens the drawer with the same steps, their descriptions and their actions.
+A small outlined `IconButton` with the maximize icon at the header's end, `aria-label="Expand the production checklist"`, named on hover by a `Tooltip` reading Expand. It opens the drawer with the same steps, their descriptions and their actions.
 
 ### D. Gate rows — `Item` (required)
 
 One small `Item` per gate, rendered as a full-width button: the gate's icon, its title and, at the end, a check when done. A done row takes the primary mask fill and a primary icon. Each row carries a screen-reader status, "Done" or "Not started", and opens the drawer like the expand button.
+
+### E. Checklist drawer — `Drawer`, `DrawerPortal`, `DrawerOverlay`, `DrawerContent`, `DrawerTitle`, `DrawerClose`, `PanelHeader`, `PanelContent`, `PanelFooter`, `Button` (required)
+
+A large right-side `Drawer` that the expand button and every row open. `PanelHeader` repeats the title with the progress `Tag` and one sentence on where the service stands, beside `DrawerClose`; `PanelContent` lists every gate as a medium `Item` with its description and either its outlined action `Button` or, once done, a Done `Tag` with what it now serves; `PanelFooter` ends with a primary Done `Button` that closes it.
 
 ## Do
 
@@ -79,7 +83,7 @@ One small `Item` per gate, rendered as a full-width button: the gate's icon, its
 
 ## States
 
-- Card: some gates done; the card lists every gate with the count in its tag.
+- Card: some gates done; the card lists every gate with the count in its tag, and the expand button and every row open the drawer.
 - Complete: every gate done; the tag reads Ready for production and the rows are gone.
 - DrawerDetail: the expand button opened the right-side drawer with every step, its description and its action or its Done tag and note, over a Done footer; a card row opens the same drawer.
 
@@ -94,7 +98,7 @@ One small `Item` per gate, rendered as a full-width button: the gate's icon, its
 
 - `Card` — primary (the code below)
 - `Complete` — Every gate done: the Tag turns into a success Ready for production, the rows are gone and the header loses its bottom border, so the card closes down to its title and the expand button.
-- `DrawerDetail` — The expand button opens a right-side drawer with the same progress Tag, the checklist description, every step with its description, and either its action or, once done, a Tag with what it now serves, over a Done footer.
+- `DrawerDetail` — The drawer open, as the expand button or a row opens it: a right-side drawer with the same progress Tag, the checklist description, every step with its description, and either its action or, once done, a Tag with what it now serves, over a Done footer.
 
 Each variant is the same screen in another state: `get_pattern("platform/detail/production-checklist", { variant })`, or the file under `blocks/platform/detail/production-checklist/variants/`.
 
@@ -102,11 +106,24 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
 
 ```vue
 <script setup lang="ts">
+  import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
+  import Drawer from '@aziontech/webkit/drawer'
+  import DrawerClose from '@aziontech/webkit/drawer-close'
+  import DrawerContent from '@aziontech/webkit/drawer-content'
+  import DrawerOverlay from '@aziontech/webkit/drawer-overlay'
+  import DrawerPortal from '@aziontech/webkit/drawer-portal'
+  import DrawerTitle from '@aziontech/webkit/drawer-title'
   import IconButton from '@aziontech/webkit/icon-button'
   import Item from '@aziontech/webkit/item'
+  import PanelContent from '@aziontech/webkit/panel-content'
+  import PanelFooter from '@aziontech/webkit/panel-footer'
+  import PanelHeader from '@aziontech/webkit/panel-header'
   import Tag from '@aziontech/webkit/tag'
-  import { computed } from 'vue'
+  import Tooltip from '@aziontech/webkit/tooltip'
+  import { computed, ref } from 'vue'
+
+  const open = ref(false)
 
   const steps = [
     {
@@ -161,13 +178,18 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
         />
       </div>
 
-      <IconButton
-        icon="pi pi-window-maximize"
-        aria-label="Expand the production checklist"
-        kind="outlined"
-        size="small"
+      <Tooltip
+        text="Expand"
         class="shrink-0"
-      />
+      >
+        <IconButton
+          icon="pi pi-window-maximize"
+          aria-label="Expand the production checklist"
+          kind="outlined"
+          size="small"
+          @click="open = true"
+        />
+      </Tooltip>
     </template>
 
     <template #content>
@@ -184,6 +206,7 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
           <Item
             size="small"
             clickable
+            @click="open = true"
           >
             <Item.Media>
               <i
@@ -212,5 +235,103 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
       </div>
     </template>
   </Card>
+
+  <Drawer
+    v-model:open="open"
+    size="large"
+    side="right"
+  >
+    <DrawerPortal>
+      <DrawerOverlay />
+      <DrawerContent>
+        <PanelHeader class="w-full">
+          <div class="flex min-w-0 flex-1 flex-col gap-(--spacing-xxs)">
+            <div class="flex min-w-0 items-center gap-(--spacing-sm)">
+              <DrawerTitle>Ship to production</DrawerTitle>
+              <Tag
+                :label="complete ? 'Ready for production' : `${doneCount} of ${steps.length}`"
+                :severity="complete ? 'success' : 'secondary'"
+                size="small"
+                class="shrink-0"
+              />
+            </div>
+            <p class="text-body-sm text-(--text-muted)">
+              This service is live on a generated hostname. These steps take it to production.
+            </p>
+          </div>
+          <DrawerClose />
+        </PanelHeader>
+
+        <PanelContent>
+          <div class="flex flex-col gap-(--spacing-sm)">
+            <Item
+              v-for="step in steps"
+              :key="`${step.id}:${step.done ? 'done' : 'todo'}`"
+              size="medium"
+              :data-done="step.done || null"
+            >
+              <Item.Media>
+                <span
+                  class="flex size-8 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface) text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance group-data-done/item:border-(--primary) group-data-done/item:bg-transparent group-data-done/item:text-(--primary) motion-reduce:transition-none"
+                  aria-hidden="true"
+                >
+                  <i
+                    :class="step.done ? 'pi pi-check' : step.icon"
+                    class="text-body-sm leading-none"
+                  />
+                </span>
+              </Item.Media>
+
+              <Item.Content>
+                <Item.Title>
+                  {{ step.title }}
+                </Item.Title>
+                <Item.Description>
+                  {{ step.description }}
+                </Item.Description>
+              </Item.Content>
+
+              <Item.Footer>
+                <div
+                  v-if="step.done"
+                  class="flex min-w-0 flex-wrap items-center gap-(--spacing-xs)"
+                >
+                  <Tag
+                    icon="pi pi-check"
+                    label="Done"
+                    severity="secondary"
+                    size="medium"
+                  />
+                  <span
+                    v-if="step.doneNote"
+                    class="min-w-0 text-body-sm text-(--text-muted)"
+                    >{{ step.doneNote }}</span
+                  >
+                </div>
+                <Button
+                  v-else
+                  :label="step.actionLabel || step.title"
+                  kind="outlined"
+                  size="small"
+                  @click="open = false"
+                />
+              </Item.Footer>
+            </Item>
+          </div>
+        </PanelContent>
+
+        <PanelFooter>
+          <div class="flex w-full items-center justify-end gap-(--spacing-sm)">
+            <Button
+              label="Done"
+              kind="primary"
+              size="medium"
+              @click="open = false"
+            />
+          </div>
+        </PanelFooter>
+      </DrawerContent>
+    </DrawerPortal>
+  </Drawer>
 </template>
 ```

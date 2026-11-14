@@ -8,7 +8,7 @@
  ],
  "avoidWhen": [
   "Horizontal top-of-page navigation with hover-opened panels → use `navigation-menu` instead.",
-  "A menu that floats over the page from a trigger → use `dropdown` (rows + selection) or `popover` (arbitrary content) instead.",
+  "A menu that floats over the page from a trigger → use `dropdown-menu` (rows + selection) or `popover` (arbitrary content) instead. `Menu` is a sidebar navigation tree (a `navigation` landmark of list rows, what shadcn calls `SidebarMenu`), not a `role=\"menu\"` widget such as Radix `Menu` / `DropdownMenu`.",
   "A searchable flat command palette → use `command` instead.",
   "A single collapsible content region that is not navigation → use `accordion` instead.",
   "Mutually exclusive in-page view switching → use `tabs` (or `toggle-group` for a compact control) instead.",

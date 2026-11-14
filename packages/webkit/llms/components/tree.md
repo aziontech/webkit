@@ -45,7 +45,7 @@
 | `loading` | `boolean` | `false` | false | Renders Skeleton rows in place of the tree and sets `aria-busy`. |
 | `emptyTitle` | `string` | `''` | false | Title of the default empty state shown when `items` is empty. Empty uses the locale catalog (`No items`). |
 | `emptyDescription` | `string` | `''` | false | Supporting line under the empty title. |
-| `ariaLabel` | `string` | `''` | false | Accessible name of the tree. |
+| `ariaLabel` | `string` | `''` | false | Accessible name of the tree. Empty uses the locale catalog (`tree.label`, `Tree`), so the `tree` role always has a name. |
 | `expanded` | `string[]` | `() => []` | false | Two-way value (`v-model:expanded`). |
 | `selected` | `string` | `''` | false | Two-way value (`v-model:selected`). |
 
@@ -85,7 +85,7 @@
 
 ## Accessibility
 
-- Structure (WAI-ARIA tree pattern): the tree is a `<ul role="tree">` named by `ariaLabel`, inside the root wrapper that carries `data-testid` and `$attrs`. Each node is an `<li role="treeitem">` with `aria-level` (1-based), `aria-setsize` and `aria-posinset` (among its siblings), and `aria-labelledby` pointing at its label region (ids from `useId()`), so the name excludes the children and the actions. A parent carries `aria-expanded="true|false"` and, when expanded, renders its children in a nested `<ul role="group">` inside its `<li>`. Leaves carry no `aria-expanded`.
+- Structure (WAI-ARIA tree pattern): the tree is a `<ul role="tree">` named by `ariaLabel` (or `tree.label` when it is empty), inside the root wrapper that carries `data-testid` and `$attrs`. Each node is an `<li role="treeitem">` with `aria-level` (1-based), `aria-setsize` and `aria-posinset` (among its siblings), and `aria-labelledby` pointing at its label region (ids from `useId()`), so the name excludes the children and the actions. A parent carries `aria-expanded="true|false"` and, when expanded, renders its children in a nested `<ul role="group">` inside its `<li>`. Leaves carry no `aria-expanded`.
 - Selection: while `selectable`, every treeitem carries `aria-selected="true|false"`; otherwise none does. `aria-multiselectable` is not set (single selection).
 - Disabled: a disabled node carries `aria-disabled="true"`.
 - Roving tabindex: exactly one treeitem has `tabindex="0"`, every other `-1`. The tab stop is the selected node when it is visible, else the last focused node when visible, else the first node. When the tab-stop node is hidden by a collapse (from the keyboard or from a `v-model:expanded` change), the tab stop moves to its nearest visible ancestor. Clicking a row moves the tab stop and focus to it.

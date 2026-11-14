@@ -54,9 +54,13 @@ The grip comes from `Table` `reorderable`: drag it, or focus it and press Arrow 
 
 Any move or status change raises a `SaveBar` counting the changes, with Discard (outlined, restores the saved order and announces it) and Review changes (primary). Review changes opens a medium `Dialog` titled "Review changes": a description of what saving does, then one section per phase with an `h3` and a list of lines such as "Docs rewrite moves from position 5 to 3." and "Maintenance page is turned on." The footer has Cancel and Save; Save shows its loading state and the dialog cannot be dismissed while saving. On success the dialog closes, focus moves to the rules region (the Review changes button is gone) and a success toast says "Rule order saved." On failure the dialog stays open with a danger `Alert` at the top saying the rules still run in the saved order, and Save becomes Save again. This page body only calls `toast` from `@aziontech/webkit/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shells/console` does), so the page never renders a `Toaster`.
 
-### G. States — `EmptyState` (required)
+### G. States — `EmptyState`, `Alert` (required)
 
-Loading: triggers read Loading, the search is disabled and each `TableRoot` shows its skeleton rows (`loading`). Empty phase: a small `EmptyState` ("No request rules yet") with an outlined Add Rule. No match in a phase: one muted line in the table's `empty` slot, "No request rule matches “cache”."
+Loading: triggers read Loading, the search and Add Rule are disabled and each `TableRoot` shows its skeleton rows (`loading`). Load failure: the heading and the disabled search stay and a danger `Alert`, "Couldn't load the rules. Check your connection and retry.", with Retry takes the phases' place. Empty phase: a small `EmptyState` ("No request rules yet") with an outlined Add Rule. No match in a phase: a small `EmptyState` in the table's `empty` slot, "No request rule matches “cache”", with an outlined Clear search.
+
+A rule's name is a `Button kind="link"` named "Edit <rule>" that emits `edit` with the event and the rule; the page opens `platform/edit/rule-builder` from it, as EditRule shows.
+
+Each phase renders every rule, unpaged: paging an ordered list would hide the neighbours a move lands between. A phase is sized for the tens of rules people manage by hand; past about 200 rules, split them across phases or rule sets rather than paging one phase.
 
 ## Do
 
@@ -105,7 +109,8 @@ Loading: triggers read Loading, the search is disabled and each `TableRoot` show
 - SaveFailed: the review dialog open with the failure `Alert` and Save again.
 - Searching: "cache" typed, reordering off with its `Alert`, phases reading "n of total".
 - Empty: a firewall with no rules, the Request phase showing its `EmptyState`.
-- Loading: skeleton rows in each phase.
+- Loading: skeleton rows in each phase, the search and Add Rule disabled.
+- LoadFailed: the rules did not load; a danger `Alert` with Retry replaces the phases.
 - EditRule: the list composed with `platform/edit/rule-builder`. A rule's name is a button ("Edit Docs rewrite") that opens the builder `Drawer` as Edit Rule, seeded with the rule and its phase locked; Add Rule in the header or in an empty phase opens it as Add Rule in that phase. Saving an edit updates the row and says so in a toast; a new rule lands last in its phase with a toast that offers Edit. Neither is an order change, so the `SaveBar` still counts only moves and switches. Product pages (an application's or a firewall's Rules tab) compose the two the same way.
 
 ## Related
@@ -124,6 +129,7 @@ Loading: triggers read Loading, the search is disabled and each `TableRoot` show
 - `Searching` — A search for cache narrows both phases to their matches, the counts read n of total, an info Alert says reordering is off while searching, and every Order control is disabled with the reason in its name and tooltip.
 - `Empty` — A firewall with no rules: the Request phase panel shows a small EmptyState with Add Rule instead of the table.
 - `Loading` — While the rules load: both phases read Loading, the search is disabled, and each table shows three skeleton rows shaped like the columns.
+- `LoadFailed` — The rules could not load: the heading and the disabled search stay, Add Rule is disabled, and a danger Alert with Retry takes the phases' place.
 - `EditRule` — The list composed with `platform/edit/rule-builder`: a rule's name opens the large rule-builder `Drawer` as Edit Rule, seeded with that rule's criteria and behaviors and its phase locked; Add Rule in the header (or in an empty phase) opens it as Add Rule in that phase. Saving an edit updates the row in place and confirms it in a toast; a new rule lands last in its phase, the phase opens, and the toast offers Edit. Neither changes the run order, so the SaveBar only counts moves and status switches.
 
 Each variant is the same screen in another state: `get_pattern("platform/view/rules-list", { variant })`, or the file under `blocks/platform/view/rules-list/variants/`.
@@ -203,6 +209,8 @@ Each variant is the same screen in another state: `get_pattern("platform/view/ru
     name: string
     text: string
   }
+
+  const emit = defineEmits<{ edit: [event: MouseEvent, rule: Rule] }>()
 
   const rule = (
     id: string,
@@ -539,6 +547,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/ru
             icon="pi pi-plus"
             kind="outlined"
             size="medium"
+            :disabled="loading"
           />
         </template>
       </PageHeader>
@@ -688,12 +697,14 @@ Each variant is the same screen in another state: `get_pattern("platform/view/ru
                       </template>
                       <template #cell-name="{ row }">
                         <div class="flex min-w-0 items-center gap-(--spacing-xxs)">
-                          <a
-                            :href="`#rule-${row.id}`"
+                          <Button
+                            kind="link"
+                            :label="row.name"
                             data-rule-name
-                            class="min-w-0 truncate rounded-(--shape-button) text-(--text-default) underline-offset-2 outline-none hover:underline focus-visible:ring-2 focus-visible:ring-(--ring-color)"
-                            >{{ row.name }}</a
-                          >
+                            :aria-label="`Edit ${row.name}`"
+                            class="min-w-0"
+                            @click="(event: MouseEvent) => emit('edit', event, row)"
+                          />
                           <Tag
                             v-if="row.locked"
                             label="Default"
@@ -732,11 +743,20 @@ Each variant is the same screen in another state: `get_pattern("platform/view/ru
                         >
                       </template>
                       <template #empty>
-                        <p
-                          class="m-0 px-(--spacing-md) py-(--spacing-lg) text-center text-body-sm text-(--text-muted)"
+                        <EmptyState
+                          size="small"
+                          icon="pi pi-search"
+                          :title="`No ${group.label.toLowerCase()} rule matches “${search.trim()}”`"
                         >
-                          No {{ group.label.toLowerCase() }} rule matches “{{ search.trim() }}”.
-                        </p>
+                          <template #actions>
+                            <Button
+                              label="Clear search"
+                              kind="outlined"
+                              size="small"
+                              @click="search = ''"
+                            />
+                          </template>
+                        </EmptyState>
                       </template>
                     </TableRoot>
                     <EmptyState

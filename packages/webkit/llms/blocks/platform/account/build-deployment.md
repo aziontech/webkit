@@ -1,11 +1,11 @@
 # Build and deployment (`platform/account/build-deployment`)
 
-> The account's Build and deployment settings. A `PageHeader` with Documentation and the primary Create Deployment Settings, a closable info `Alert` that explains what a Deployment Setting is, then three `SettingsSection`s. New service defaults: a flush `Card` of `SettingRow`s in an `Item.List` with a binding policy `Select`, a deployment policy `Select` and an Apply to existing `Switch`, saved through a `SaveBar` that appears only with unsaved changes (Discard, Save). All services: a collapsible `Accordion` whose trigger counts the services and tags how many share a setting; inside, a search `Input` and one row per environment with environment and policy `Tag`s, a `Select` that rebinds it to a matching Deployment Setting (inactive ones disabled), and Linked automatically and Shared `Tag`s; a rebind ends in a toast that warns when the setting now reaches several services. Deployment Settings: the table-view controls row (`PropertyFilter`, Refresh and Download CSV as `IconButton`s with a `Tooltip`, `CollectionPreferences`) over a `Table` on one `useCollection` (Name with a System `Tag` for Default, Services with a Shared `Tag` and the service names on a `Tooltip`, Type hidden by default, Binding policy, Deployment policy, `Table.CellStatus`, `Table.CellTime` for Last modified, `Table.CellActions` with Edit, Clone and Delete behind a `ConfirmDialog`). Create and Edit open a medium `Drawer` form (Name, Description, Active `Switch`, binding and deployment policy `RadioButton`s). Loading draws `Skeleton`s; no services draws an `EmptyState`. Its toasts go through `toast` into the app's one toast region. A page body for ConsoleLayout, rendered in its default slot.
+> The account's Build and deployment settings. A `PageHeader` with Documentation and the primary Create Deployment Setting, a closable info `Alert` that explains what a Deployment Setting is, then three `SettingsSection`s. New service defaults: a flush `Card` of `SettingRow`s in an `Item.List` with a binding policy `Select`, a deployment policy `Select` and an Apply to existing `Switch`, saved through a `SaveBar` that appears only with unsaved changes (Discard, Save). All services: a collapsible `Accordion` whose trigger counts the services and tags how many share a setting; inside, a search `Input` (a small `EmptyState` with Clear search when nothing matches) and, ten services per page with `Pagination`, one row per environment with environment and policy `Tag`s, a `Select` that rebinds it to a matching Deployment Setting (inactive ones disabled), and Linked automatically and Shared `Tag`s; a rebind ends in a toast that warns when the setting now reaches several services. Deployment Settings: the table-view controls row (`PropertyFilter`, Refresh and Download CSV as `IconButton`s with a `Tooltip`, `CollectionPreferences`) over a `Table` on one `useCollection` (Name with a System `Tag` for Default, Services with a Shared `Tag` and the service names on a `Tooltip`, Type hidden by default, Binding policy, Deployment policy, `Table.CellStatus`, `Table.CellTime` for Last modified, `Table.CellActions` with Edit, Clone and Delete behind a `ConfirmDialog`). Create and Edit open a medium `Drawer` form (Name, Description, Active `Switch`, binding and deployment policy `RadioButton`s). Loading draws `Skeleton`s; no services draws an `EmptyState`. Its toasts go through `toast` into the app's one toast region. A page body for ConsoleLayout, rendered in its default slot.
 
 - Surface: product
 - Source: `blocks/platform/account/build-deployment/build-deployment.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/account/build-deployment")`
-- Components: [Accordion](../../../components/accordion.md), [Alert](../../../components/alert.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [CollectionPreferences](../../../components/collection-preferences.md), [ConfirmDialog](../../../components/confirm-dialog.md), [Drawer](../../../components/drawer.md), `DrawerClose`, `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [Field](../../../components/field.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [Item](../../../components/item.md), [PageHeader](../../../components/page-header.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [PropertyFilter](../../../components/property-filter.md), [RadioButton](../../../components/radio-button.md), [SaveBar](../../../components/save-bar.md), [Select](../../../components/select.md), [SettingRow](../../../components/setting-row.md), [SettingsSection](../../../components/settings-section.md), [Skeleton](../../../components/skeleton.md), [Switch](../../../components/switch.md), [Table](../../../components/table.md), [Tag](../../../components/tag.md), [Textarea](../../../components/textarea.md), [Toast](../../../components/toast.md), [Tooltip](../../../components/tooltip.md), `use-collection`
+- Components: [Accordion](../../../components/accordion.md), [Alert](../../../components/alert.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [CollectionPreferences](../../../components/collection-preferences.md), [ConfirmDialog](../../../components/confirm-dialog.md), [Drawer](../../../components/drawer.md), `DrawerClose`, `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [Field](../../../components/field.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [Item](../../../components/item.md), [PageHeader](../../../components/page-header.md), [Pagination](../../../components/pagination.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [PropertyFilter](../../../components/property-filter.md), [RadioButton](../../../components/radio-button.md), [SaveBar](../../../components/save-bar.md), [Select](../../../components/select.md), [SettingRow](../../../components/setting-row.md), [SettingsSection](../../../components/settings-section.md), [Skeleton](../../../components/skeleton.md), [Switch](../../../components/switch.md), [Table](../../../components/table.md), [Tag](../../../components/tag.md), [Textarea](../../../components/textarea.md), [Toast](../../../components/toast.md), [Tooltip](../../../components/tooltip.md), `use-collection`
 - Skills: `webkit-form`, `webkit-tables`, `webkit-lists`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -30,7 +30,7 @@ How every deploy in the account routes. A Deployment Setting holds a binding pol
 
 ### A. Page heading — `PageHeader`, `Button` (required)
 
-Title `Build and deployment` and one sentence that says every environment is linked automatically. Actions: Documentation and the primary `Create Deployment Settings` at `size="large"`, which opens the drawer (G).
+Title `Build and deployment` and one sentence that says every environment is linked automatically. Actions: Documentation and the primary `Create Deployment Setting` at `size="large"`, which opens the drawer (G).
 
 ### B. What a Deployment Setting is — `Alert` (required)
 
@@ -40,9 +40,9 @@ A small info `Alert`, closable, that explains the binding policy, the deployment
 
 A `SettingsSection` with an anchor around a flush `Card` and an `Item.List` of `SettingRow`s: Binding policy and Deployment policy as large `Select`s whose value reads the policy label, then `Apply to existing Deployment Settings` as a compact `Switch`. Changing any of them raises a `SaveBar` (entering and leaving with a short translate and fade, none under reduced motion) that says `You have unsaved changes.` with Discard and Save. Save spins, keeps the values, turns Apply off again and toasts what changed: with Apply on, how many settings now use the binding policy (Default is never changed).
 
-### D. All services — `Accordion`, `Input`, `Tag`, `Select` (required)
+### D. All services — `Accordion`, `Input`, `Tag`, `Select`, `Pagination` (required)
 
-A `SettingsSection` around a flush `Card` with one collapsible `Accordion` item, closed at first, its trigger a level 3 heading: `All services`, the count and a warning `Tag` with how many services use a shared setting. Inside: a search `Input` over service and setting names, then a list named Services with one entry per service (its name links to the service) and one row per environment: the environment and its deployment policy as small `Tag`s, a `Select` named `Deployment Setting for <service> <environment>` that offers only the settings with the same deployment policy (inactive ones disabled), `Linked automatically` while the link was never changed, and `Shared · N services` when the setting reaches more than one. A rebind applies at once and toasts; when the new setting is shared, the toast is a warning that says how many services a deploy now reaches.
+A `SettingsSection` around a flush `Card` with one collapsible `Accordion` item, closed at first, its trigger a level 3 heading: `All services`, the count and a warning `Tag` with how many services use a shared setting. Inside: a search `Input` over service and setting names (`v-bind="filterProps"` from a `useCollection` over the services), then a list named Services, ten services per page with a `Pagination` under it when more match, so an account with hundreds of services never mounts hundreds of `Select`s, with one entry per service (its name links to the service) and one row per environment: the environment and its deployment policy as small `Tag`s, a `Select` named `Deployment Setting for <service> <environment>` that offers only the settings with the same deployment policy (inactive ones disabled), `Linked automatically` while the link was never changed, and `Shared · N services` when the setting reaches more than one. A rebind applies at once and toasts; when the new setting is shared, the toast is a warning that says how many services a deploy now reaches. A search with no match shows a small `EmptyState` (`No matching services`) with Clear search, inside a polite status region.
 
 ### E. Deployment Settings controls — `PropertyFilter`, `Tooltip`, `IconButton`, `CollectionPreferences` (required)
 
@@ -54,7 +54,7 @@ The table-view controls row (`platform/view/table-view`): a `PropertyFilter` ove
 
 ### G. Create and edit drawer — `Drawer`, `DrawerPortal`, `DrawerOverlay`, `DrawerContent`, `DrawerTitle`, `DrawerClose`, `PanelHeader`, `PanelContent`, `PanelFooter`, `Field`, `Textarea`, `RadioButton` (required)
 
-The form of `platform/create/create-in-drawer#DeploymentSettings` in a medium right `Drawer`: General (Name, required and unique; Description; Active `Switch`) and Routing and policy (binding policy and deployment policy as `RadioButton` groups with a description each, starting from the saved defaults). Edit opens the same form filled, titled `Edit Deployment Settings`, with the deployment policy locked because it cannot change after creation. Cancel and the primary `Create Deployment Settings` or `Save changes`, which spins; the drawer cannot be dismissed while it saves. A missing or taken name shows on the field after submit and focus moves to it.
+This page owns the Deployment Setting form, in a medium right `Drawer` (`platform/create/create-in-drawer#DeploymentSettings` should match it field for field): General (Name, required and unique; Description; Active `Switch`) and Routing and policy (binding policy and deployment policy as `RadioButton` groups with a description each, starting from the saved defaults). Edit opens the same form filled, titled `Edit Deployment Setting`, with the deployment policy locked because it cannot change after creation. Cancel and the primary `Create Deployment Setting` or `Save changes`, which spins; the drawer cannot be dismissed while it saves. A missing or taken name shows on the field after submit and focus moves to it.
 
 ### H. Loading and no services — `Skeleton` (conditional)
 
@@ -79,7 +79,8 @@ Saving defaults, rebinding, creating, editing, cloning and deleting end in a toa
 
 ## Copy
 
-- **Title:** `Build and deployment`. **Action:** `Create Deployment Settings`; the drawer titles `Create Deployment Settings` and `Edit Deployment Settings`, the submits `Create Deployment Settings` and `Save changes`.
+- **Title:** `Build and deployment`. **Action:** `Create Deployment Setting`; the drawer titles `Create Deployment Setting` and `Edit Deployment Setting`, the submits `Create Deployment Setting` and `Save changes`. The label does not change on the way in.
+- **No match:** `No matching services`, `No service or setting matches “…”.`, `Clear search`.
 - **Sections:** `New service defaults`, `All services`, `Deployment Settings`.
 - **Policies:** `Strict`, `Flexible`; `Single`, `Versioned`.
 - **Tags:** `System`, `Shared`, `Linked automatically`, `Shared · 2 services`, `1 on a shared setting`.
@@ -142,6 +143,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
   import PageHeader from '@aziontech/webkit/page-header'
+  import Pagination from '@aziontech/webkit/pagination-root'
   import PanelContent from '@aziontech/webkit/panel-content'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
@@ -358,6 +360,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
     applyToExisting: false
   }
 
+  const SERVICES_PAGE_SIZE = 10
   const settings = ref<DeploymentSetting[]>(seedSettings)
   const services = ref<Service[]>(seedServices)
   const loading = ref(false)
@@ -410,17 +413,25 @@ Each variant is the same screen in another state: `get_pattern("platform/account
   const reachLabel = (count: number) =>
     count === 0 ? 'No services' : count === 1 ? '1 service' : `${count} services`
 
-  const query = ref('')
-  const visibleServices = computed(() => {
-    const needle = query.value.trim().toLowerCase()
-    if (!needle) return services.value
-    return services.value.filter(
-      (service) =>
-        service.name.toLowerCase().includes(needle) ||
-        service.environments.some((environment) =>
-          settingName(environment.settingId).toLowerCase().includes(needle)
-        )
-    )
+  const serviceRows = computed(() =>
+    services.value.map((service) => ({
+      ...service,
+      settings: service.environments
+        .map((environment) => settingName(environment.settingId))
+        .join(' ')
+    }))
+  )
+  const {
+    items: pagedServices,
+    totalCount: matchingServiceCount,
+    filterProps: serviceFilterProps,
+    paginationProps: servicePaginationProps,
+    clearFilters: clearServiceSearch
+  } = useCollection({
+    items: serviceRows,
+    columns: [{ accessorKey: 'name' }, { accessorKey: 'settings' }],
+    filtering: { fields: ['name', 'settings'] },
+    pagination: { pageSize: SERVICES_PAGE_SIZE, pageSizeOptions: [SERVICES_PAGE_SIZE] }
   })
   const sharedCount = computed(
     () =>
@@ -542,7 +553,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
   const submitting = ref(false)
   const formEl = ref<HTMLFormElement | null>(null)
   const drawerTitle = computed(() =>
-    editingId.value ? 'Edit Deployment Settings' : 'Create Deployment Settings'
+    editingId.value ? 'Edit Deployment Setting' : 'Create Deployment Setting'
   )
 
   const openCreate = () => {
@@ -680,7 +691,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
             target="_blank"
           />
           <Button
-            label="Create Deployment Settings"
+            label="Create Deployment Setting"
             icon="pi pi-plus"
             kind="primary"
             size="large"
@@ -828,7 +839,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
                     <Accordion.Content>
                       <div class="flex min-w-0 flex-col gap-(--spacing-md)">
                         <Input
-                          v-model="query"
+                          v-bind="serviceFilterProps"
                           size="medium"
                           placeholder="Search services or settings"
                           aria-label="Search services or Deployment Settings"
@@ -841,20 +852,33 @@ Each variant is the same screen in another state: `get_pattern("platform/account
                             />
                           </template>
                         </Input>
-                        <p
-                          v-if="!visibleServices.length"
-                          class="py-(--spacing-md) text-body-sm text-(--text-muted)"
+                        <div
+                          v-if="!matchingServiceCount"
                           role="status"
                         >
-                          No service or setting matches “{{ query }}”.
-                        </p>
+                          <EmptyState
+                            size="small"
+                            icon="pi pi-search"
+                            title="No matching services"
+                            :description="`No service or setting matches “${serviceFilterProps.modelValue}”.`"
+                          >
+                            <template #actions>
+                              <Button
+                                label="Clear search"
+                                kind="outlined"
+                                size="small"
+                                @click="clearServiceSearch"
+                              />
+                            </template>
+                          </EmptyState>
+                        </div>
                         <ul
                           v-else
                           class="m-0 flex list-none flex-col p-0"
                           aria-label="Services"
                         >
                           <li
-                            v-for="service in visibleServices"
+                            v-for="service in pagedServices"
                             :key="service.id"
                             class="flex min-w-0 flex-col gap-(--spacing-xs) border-b border-(--border-muted) py-(--spacing-sm) last:border-b-0"
                           >
@@ -916,6 +940,11 @@ Each variant is the same screen in another state: `get_pattern("platform/account
                             </div>
                           </li>
                         </ul>
+                        <Pagination
+                          v-if="matchingServiceCount > SERVICES_PAGE_SIZE"
+                          v-bind="servicePaginationProps"
+                          aria-label="Services pages"
+                        />
                       </div>
                     </Accordion.Content>
                   </Accordion.Item>
@@ -1282,7 +1311,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
                 />
                 <Button
                   type="submit"
-                  :label="editingId ? 'Save changes' : 'Create Deployment Settings'"
+                  :label="editingId ? 'Save changes' : 'Create Deployment Setting'"
                   kind="primary"
                   size="medium"
                   :loading="submitting"

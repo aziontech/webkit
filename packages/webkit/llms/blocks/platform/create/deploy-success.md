@@ -1,11 +1,11 @@
 # DeploySuccess (`platform/create/deploy-success`)
 
-> The outcome screen a create flow ends on, in the terminal column of the wizard page: a heading with its lead and, for a Git source, the scope as a Tag; the deployment card with a preview tile, the service name with a Live Tag and its creation time, Visit site, the domain with Add custom domain, and the repository with its branch; the Resources list that tags each row Created or Bound; three Next steps cards that open the docs or carry on in the console; Get started with the CLI or GitHub Actions for a resource made from the CLI; and the Manage button. Any create flow can end on it, with its own title and, when there is no Git source, no scope. Built from `SectionHeader`, `Card`, `Tag`, `Button`, `Tooltip`, `Item`, `ToggleGroup` and `CodeBlock`.
+> The outcome screen a create flow ends on, in the terminal column of the wizard page: a heading with its lead and, for a Git source, the scope as a Tag; the deployment card with a preview tile, the service name with a Live Tag and its creation time, Visit site, the domain with Add custom domain, and the repository with its branch; the Resources list that tags each row Created or Bound; Next steps as integration Cards that open the docs or carry on in the console; Get started with the CLI or GitHub Actions for a resource made from the CLI; and the Manage service button. Any create flow can end on it, with its own title and, when there is no Git source, no scope. Built from `SectionHeader`, `Card`, `Tag`, `Button`, `Link`, `Tooltip`, `Item`, `ToggleGroup` and `CodeBlock`.
 
 - Surface: product
 - Source: `blocks/platform/create/deploy-success/deploy-success.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/create/deploy-success")`
-- Components: [Button](../../../components/button.md), [Card](../../../components/card.md), [CodeBlock](../../../components/code-block.md), [Item](../../../components/item.md), [SectionHeader](../../../components/section-header.md), [Tag](../../../components/tag.md), [ToggleGroup](../../../components/toggle-group.md), [Tooltip](../../../components/tooltip.md)
+- Components: [Button](../../../components/button.md), [Card](../../../components/card.md), [CodeBlock](../../../components/code-block.md), [Item](../../../components/item.md), [Link](../../../components/link.md), [SectionHeader](../../../components/section-header.md), [Tag](../../../components/tag.md), [ToggleGroup](../../../components/toggle-group.md), [Tooltip](../../../components/tooltip.md)
 - Skills: `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -33,27 +33,27 @@ The screen a create flow ends on. The user has just watched a deploy finish and 
 
 A large `h1` stating the outcome and one muted lead sentence under it. For a Git source the lead ends with the scope as a secondary `Tag` with the provider glyph; without a Git source there is no scope tag. The heading enters with the content animation and respects reduced motion.
 
-### B. Deployment card — `Card`, `Tag`, `Button`, `Tooltip` (required)
+### B. Deployment card — `Card`, `Tag`, `Button`, `Link`, `Tooltip` (required)
 
-The live service: a preview tile that opens the site, the service name as an `h2` with a small success `Tag` reading Live, and its creation time. An outlined medium `Button` Visit site opens the domain in a new tab. Under it, one row for the domain with Add custom domain beside it, and one row for the repository with its branch. Each external link carries a `Tooltip` naming where it goes and an external-link glyph. Leave the card out when nothing serves the resource yet.
+The live service: a decorative preview tile (hidden from assistive technology; Visit site is the link), the service name as an `h2` with a small success `Tag` reading Live, and its creation time. An outlined medium `Button` Visit site opens the domain in a new tab. Under it, one row for the domain (a small `Link` with `target="_blank"`) with Add custom domain beside it (a small `Button kind="link"` with `href`), and one row for the repository (a small `Link`) with its branch. Each external `Link` carries a `Tooltip` naming where it goes and its external-link glyph. Never hand-roll the anchors. Leave the card out when nothing serves the resource yet.
 
 ### C. Resources list — `Card`, `Item`, `Tag` (required)
 
-A small heading over `Card :padded="false"` holding an `Item` list, one small row per resource: kind glyph, name, its ID or contents as the description, and a small `Tag` reading Created or Bound. Bound marks a resource that already existed and was attached, so the user can tell new things from reused ones.
+A small heading, "Resources", over `Card :padded="false"` holding an `Item` list, one small row per resource: kind glyph, name, its ID or contents as the description, and a small `Tag` reading Created or Bound. Bound marks a resource that already existed and was attached, so the user can tell new things from reused ones.
 
-### D. Next steps — `Card`, `Tag` (required)
+### D. Next steps — `Card` (required)
 
-Three unpadded `Card`s in a row from the small breakpoint, each a whole-card link or button with a glyph, a title, one sentence and a trailing chevron or external-link glyph. Mark at most one with a primary `Tag` reading Recommended. External steps open the docs in a new tab; internal ones carry on in the console.
+`Card kind="integration"` tiles in a row from the small breakpoint, each with a glyph (`logo`), a title and one sentence. A step with `href` is a link stretched over the tile; a step that acts in place (Deploy this resource) has no `href`, and its title is a button that emits `select`. Mark at most one with a primary Recommended badge (`badges`). Docs steps open in the same tab, so no new-tab notice is needed.
 
 ### E. Manage — `Button` (required)
 
-One full-width secondary large `Button` at the end of the column that opens the resource. It is the only exit; do not add a second.
+One full-width secondary large `Button`, "Manage service", at the end of the column that opens the resource. It is the only exit; do not add a second.
 
 ## Do
 
 - Lead with the outcome and the live address; the user came to see it work.
 - Tag every resource Created or Bound so the list doubles as a receipt of what the flow touched.
-- Open external links in a new tab, with a `Tooltip` and a visually hidden note saying so.
+- Open the domain and the repository in a new tab with `Link target="_blank"`, and a `Tooltip` saying so.
 - Drop the scope tag and the repository row when the flow had no Git source.
 - In CliCreated, replace the deployment card with next steps that deploy the resource, and add the Get started paths for the CLI and GitHub Actions.
 
@@ -72,14 +72,14 @@ One full-width secondary large `Button` at the end of the column that opens the 
 - **Status tag:** one word, e.g. "Live"; resource tags "Created" or "Bound".
 - **Links:** verb first, e.g. "Visit site", "Add custom domain"; tooltips name the target, e.g. "Open acme/web-app in a new tab".
 - **Next steps:** title verb first in two or three words, e.g. "Customize domain", "View analytics"; description one sentence with a period.
-- **Exit:** "Manage", a single verb.
+- **Exit:** "Manage service", the verb and its object.
 - Follow `skills/webkit-microcopy`: sentence case, no em dash, no ampersand, no "please".
 
 ## Accessibility
 
 - The heading is the page's only `h1`; the service name and the section titles are `h2`.
-- The preview tile and Visit site have an `aria-label` that names the address and says it opens in a new tab.
-- Links that open a new tab say so in visually hidden text, not only with the external-link glyph.
+- The preview tile is decorative (`aria-hidden`); Visit site names the address.
+- Links that open a new tab say so in their `Tooltip`, not only with the external-link glyph.
 - Glyphs in rows and cards are decorative and carry `aria-hidden="true"`; the Created or Bound tag gives the state in words.
 - A next-step card is one focusable link or button with a visible focus ring; its title and description are its name.
 - Focus order follows reading order: heading, deployment card, resources, next steps, Manage.
@@ -95,7 +95,7 @@ One full-width secondary large `Button` at the end of the column that opens the 
 - `platform/create/deploy-template` — a flow that ends here.
 - `platform/create/source-wizard` — a wizard that ends here.
 - `platform/create/provision-wizard` — a wizard that ends here with its own title.
-- `platform/detail/get-started` — the CLI and GitHub Actions steps the CliCreated state embeds.
+- `platform/detail/get-started` — the source of the CLI and GitHub Actions steps the CliCreated state embeds; CliCreated copies its section verbatim, so change the command copy there first and copy it here.
 - `platform/detail/details-page` — where Manage leads.
 
 ## Variants
@@ -110,8 +110,9 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
 ```vue
 <script setup lang="ts">
   import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
+  import Card, { type CardBadge } from '@aziontech/webkit/card'
   import Item from '@aziontech/webkit/item'
+  import Link from '@aziontech/webkit/link'
   import Tag from '@aziontech/webkit/tag'
   import Tooltip from '@aziontech/webkit/tooltip'
 
@@ -120,10 +121,11 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
     title: string
     description: string
     href?: string
-    external?: boolean
     action?: boolean
     recommended?: boolean
   }
+
+  const recommendedBadge: CardBadge[] = [{ label: 'Recommended', severity: 'primary' }]
 
   const resources = [
     {
@@ -163,23 +165,20 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
       title: 'Customize domain',
       description:
         'Associate a custom domain and subdomains with this service to handle user access.',
-      href: 'https://example.com/docs',
-      external: true
+      href: 'https://example.com/docs'
     },
     {
       icon: 'pi pi-sitemap',
       title: 'Point traffic',
       description:
         'Redirect the traffic of a domain to the platform and take advantage of the distributed network.',
-      href: 'https://example.com/docs',
-      external: true
+      href: 'https://example.com/docs'
     },
     {
       icon: 'pi pi-chart-line',
       title: 'View analytics',
       description: 'Gain powerful insights into your performance, availability, and security.',
-      href: 'https://example.com/docs',
-      external: true
+      href: 'https://example.com/docs'
     }
   ]
 </script>
@@ -213,12 +212,9 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
             <Card>
               <template #content>
                 <div class="flex flex-col gap-(--spacing-md) sm:flex-row">
-                  <a
-                    href="https://web-app-k3x9q2.example.com"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label="Visit web-app-k3x9q2.example.com in a new tab"
-                    class="relative flex aspect-16/10 w-full shrink-0 items-center justify-center overflow-hidden rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-canvas) sm:w-56 before:pointer-events-none before:absolute before:inset-0 before:bg-(--bg-hover) before:opacity-0 before:content-[''] before:transition-opacity before:duration-fast-02 before:ease-productive-entrance hover:before:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas) motion-reduce:before:transition-none"
+                  <div
+                    aria-hidden="true"
+                    class="relative flex aspect-16/10 w-full shrink-0 items-center justify-center overflow-hidden rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-canvas) sm:w-56"
                   >
                     <span
                       class="relative flex size-10 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface)"
@@ -228,7 +224,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
                         aria-hidden="true"
                       />
                     </span>
-                  </a>
+                  </div>
 
                   <div class="flex min-w-0 flex-1 flex-col gap-(--spacing-md)">
                     <div class="flex flex-wrap items-start justify-between gap-(--spacing-sm)">
@@ -269,39 +265,22 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
                               text="Open web-app-k3x9q2.example.com in a new tab"
                               class="w-full"
                             >
-                              <a
+                              <Link
+                                label="web-app-k3x9q2.example.com"
                                 href="https://web-app-k3x9q2.example.com"
                                 target="_blank"
-                                rel="noopener noreferrer"
-                                data-link
-                                class="group/link data-link:cursor-pointer inline-flex min-w-0 items-center gap-(--spacing-xxs) rounded-(--shape-button) text-body-sm text-(--text-default) no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)"
-                              >
-                                <span
-                                  class="truncate underline-offset-2 group-hover/link:underline"
-                                >
-                                  web-app-k3x9q2.example.com
-                                </span>
-                                <span class="sr-only">{{ ' (opens in a new tab)' }}</span>
-                                <i
-                                  class="pi pi-external-link shrink-0 text-body-xs leading-none"
-                                  aria-hidden="true"
-                                />
-                              </a>
+                                size="small"
+                              />
                             </Tooltip>
                           </div>
                         </span>
-                        <a
+                        <Button
+                          label="Add custom domain"
+                          kind="link"
+                          size="small"
+                          icon="pi pi-plus-circle"
                           href="/services/1482736015?name=web-app&tab=settings"
-                          class="group/link inline-flex min-w-0 items-center gap-(--spacing-xs) rounded-(--shape-button) text-body-sm text-(--text-default) no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)"
-                        >
-                          <i
-                            class="pi pi-plus-circle shrink-0 text-(--text-muted)"
-                            aria-hidden="true"
-                          />
-                          <span class="truncate underline-offset-2 group-hover/link:underline"
-                            >Add custom domain</span
-                          >
-                        </a>
+                        />
                       </li>
                       <li class="flex min-h-7 min-w-0 flex-wrap items-center gap-x-(--spacing-md)">
                         <span class="flex min-w-0 items-center gap-(--spacing-xs)">
@@ -314,24 +293,12 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
                               text="Open acme/web-app in a new tab"
                               class="w-full"
                             >
-                              <a
+                              <Link
+                                label="acme/web-app"
                                 href="https://github.com/acme/web-app"
                                 target="_blank"
-                                rel="noopener noreferrer"
-                                data-link
-                                class="group/link data-link:cursor-pointer inline-flex min-w-0 items-center gap-(--spacing-xxs) rounded-(--shape-button) text-body-sm text-(--text-default) no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)"
-                              >
-                                <span
-                                  class="truncate underline-offset-2 group-hover/link:underline"
-                                >
-                                  acme/web-app
-                                </span>
-                                <span class="sr-only">{{ ' (opens in a new tab)' }}</span>
-                                <i
-                                  class="pi pi-external-link shrink-0 text-body-xs leading-none"
-                                  aria-hidden="true"
-                                />
-                              </a>
+                                size="small"
+                              />
                             </Tooltip>
                           </div>
                         </span>
@@ -350,7 +317,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
             </Card>
 
             <section class="flex flex-col gap-(--spacing-sm)">
-              <h2 class="text-label-md text-(--text-default)">Resources created</h2>
+              <h2 class="text-label-md text-(--text-default)">Resources</h2>
               <Card :padded="false">
                 <template #content>
                   <Item.List>
@@ -395,56 +362,19 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
                 <Card
                   v-for="step in nextSteps"
                   :key="step.title"
-                  :padded="false"
-                >
-                  <template #content>
-                    <component
-                      :is="step.action ? 'button' : 'a'"
-                      :type="step.action ? 'button' : undefined"
-                      :href="step.href || undefined"
-                      :target="step.external ? '_blank' : undefined"
-                      :rel="step.external ? 'noopener noreferrer' : undefined"
-                      class="group/step relative flex h-full w-full cursor-pointer flex-col gap-(--spacing-sm) rounded-(--shape-card) border-0 bg-transparent p-(--spacing-md) text-start text-inherit no-underline before:pointer-events-none before:absolute before:inset-0 before:rounded-[inherit] before:bg-(--bg-hover) before:opacity-0 before:content-[''] before:transition-opacity before:duration-fast-02 before:ease-productive-entrance hover:before:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas) motion-reduce:before:transition-none"
-                    >
-                      <span class="relative flex items-center justify-between gap-(--spacing-xs)">
-                        <span
-                          class="flex size-8 shrink-0 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface)"
-                        >
-                          <i
-                            :class="step.icon"
-                            class="text-body-sm leading-none text-(--text-default)"
-                            aria-hidden="true"
-                          />
-                        </span>
-                        <i
-                          :class="step.external ? 'pi pi-external-link' : 'pi pi-chevron-right'"
-                          class="text-body-xs leading-none text-(--text-muted)"
-                          aria-hidden="true"
-                        />
-                      </span>
-                      <span class="relative flex flex-col gap-(--spacing-xxs)">
-                        <span class="flex flex-wrap items-center gap-(--spacing-xs)">
-                          <span class="text-label-md text-(--text-default)">{{ step.title }}</span>
-                          <Tag
-                            v-if="step.recommended"
-                            label="Recommended"
-                            severity="primary"
-                            size="small"
-                          />
-                        </span>
-                        <span class="text-pretty text-body-sm text-(--text-muted)">{{
-                          step.description
-                        }}</span>
-                      </span>
-                    </component>
-                  </template>
-                </Card>
+                  kind="integration"
+                  :title="step.title"
+                  :logo="step.icon"
+                  :description="step.description"
+                  :href="step.href ?? ''"
+                  :badges="step.recommended ? recommendedBadge : []"
+                />
               </div>
             </section>
 
             <Button
               class="w-full"
-              label="Manage"
+              label="Manage service"
               kind="secondary"
               size="large"
             />

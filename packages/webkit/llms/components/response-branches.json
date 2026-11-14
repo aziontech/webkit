@@ -37,11 +37,18 @@
    "doc": "How many versions exist. With one or none the pager is not drawn."
   },
   {
-   "name": "label",
+   "name": "ariaLabel",
    "type": "string",
    "default": "''",
    "required": "false",
    "doc": "Accessible name of the pager group. Empty uses the locale catalog (`Response versions`)."
+  },
+  {
+   "name": "label",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "@deprecated since 6.0 — use `ariaLabel` instead. Removed in 7.0. Read when `ariaLabel` is empty."
   },
   {
    "name": "disabled",

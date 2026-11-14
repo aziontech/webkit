@@ -159,10 +159,25 @@ No built-in strings: the accessible name and the wordmark are the `name` the con
   import Logo from '@aziontech/webkit/logo'
 
   const kinds = [
-    { kind: 'color', label: 'Color', fill: 'bg-(--bg-canvas)' },
-    { kind: 'monochrome', label: 'Monochrome', fill: 'bg-(--bg-canvas)' },
-    { kind: 'current', label: 'Current', fill: 'bg-(--bg-canvas) text-(--text-muted)' },
-    { kind: 'knockout', label: 'Knockout', fill: 'bg-(--color-base-white)' }
+    { kind: 'color', label: 'Color', fill: 'bg-(--bg-canvas)', ink: 'text-(--text-muted)' },
+    {
+      kind: 'monochrome',
+      label: 'Monochrome',
+      fill: 'bg-(--bg-canvas)',
+      ink: 'text-(--text-muted)'
+    },
+    {
+      kind: 'current',
+      label: 'Current',
+      fill: 'bg-(--bg-canvas) text-(--text-muted)',
+      ink: 'text-(--text-muted)'
+    },
+    {
+      kind: 'knockout',
+      label: 'Knockout',
+      fill: 'bg-(--color-base-white)',
+      ink: 'text-(--color-base-black)'
+    }
   ]
 </script>
 
@@ -174,7 +189,11 @@ No built-in strings: the accessible name and the wordmark are the `name` the con
       class="flex flex-wrap items-center gap-(--spacing-xl) rounded-(--shape-card) border border-(--border-default) p-(--spacing-md)"
       :class="row.fill"
     >
-      <span class="w-28 text-label-md text-(--text-muted)">{{ row.label }}</span>
+      <span
+        class="w-28 text-label-md"
+        :class="row.ink"
+        >{{ row.label }}</span
+      >
       <Logo
         name="Netshoes"
         :src="netshoesExtendedReversed"

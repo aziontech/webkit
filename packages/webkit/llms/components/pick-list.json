@@ -30,18 +30,25 @@
   "checkbox` — independent boolean or small-set multi-pick."
  ],
  "bestPractices": [
-  "Set `data-key` to a unique item field so rows keep stable keys across moves; without it rows are keyed by their index.",
+  "Set `track-by` to a unique item field so rows keep stable keys across moves and the selection follows the record when the lists change; without it rows and the selection are keyed by their index.",
   "Set `title` on both `PickList.Source` and `PickList.Target`; it is the listbox's accessible name.",
   "Listen to `move` for side effects such as saving the assignment instead of diffing `v-model`.",
   "Set `:move-on-double-click=\"false\"` when double-click should do something else; `item-double-click` still fires."
  ],
  "props": [
   {
+   "name": "trackBy",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Item field that identifies a record, the same name as `cards`: each row's render key and the key of the selection, so an external change to the v-model pair keeps the selection on its records. Empty falls back to the index."
+  },
+  {
    "name": "dataKey",
    "type": "string",
    "default": "''",
    "required": "false",
-   "doc": "Item field used as each row's render key (falls back to the index). Selection is always tracked by index."
+   "doc": "**@deprecated since 6.0 — use `trackBy`. Removed in 7.0.** Same as `trackBy`; read when `trackBy` is empty."
   },
   {
    "name": "disabled",
@@ -89,15 +96,15 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import PickList from '@aziontech/webkit/pick-list'\n  import { ref } from 'vue'\n\n  const model = ref([\n    [\n      { id: 1, label: 'Edge Functions' },\n      { id: 2, label: 'WAF' },\n      { id: 3, label: 'Image Processor' }\n    ],\n    [{ id: 4, label: 'Cache' }]\n  ])\n</script>\n\n<template>\n  <PickList\n    v-model=\"model\"\n    data-key=\"id\"\n  >\n    <PickList.Source title=\"Available\">\n      <template #item=\"{ item }\">{{ item.label }}</template>\n    </PickList.Source>\n\n    <PickList.Controls />\n\n    <PickList.Target title=\"Selected\">\n      <template #item=\"{ item }\">{{ item.label }}</template>\n    </PickList.Target>\n  </PickList>\n</template>"
+   "sfc": "<script setup>\n  import PickList from '@aziontech/webkit/pick-list'\n  import { ref } from 'vue'\n\n  const model = ref([\n    [\n      { id: 1, label: 'Edge Functions' },\n      { id: 2, label: 'WAF' },\n      { id: 3, label: 'Image Processor' }\n    ],\n    [{ id: 4, label: 'Cache' }]\n  ])\n</script>\n\n<template>\n  <PickList\n    v-model=\"model\"\n    track-by=\"id\"\n  >\n    <PickList.Source title=\"Available\">\n      <template #item=\"{ item }\">{{ item.label }}</template>\n    </PickList.Source>\n\n    <PickList.Controls />\n\n    <PickList.Target title=\"Selected\">\n      <template #item=\"{ item }\">{{ item.label }}</template>\n    </PickList.Target>\n  </PickList>\n</template>"
   },
   {
    "name": "Disabled",
-   "sfc": "<script setup>\n  import PickList from '@aziontech/webkit/pick-list'\n  import { ref } from 'vue'\n\n  const model = ref([\n    [\n      { id: 1, label: 'Edge Functions' },\n      { id: 2, label: 'WAF' },\n      { id: 3, label: 'Image Processor' }\n    ],\n    [{ id: 4, label: 'Cache' }]\n  ])\n</script>\n\n<template>\n  <PickList\n    v-model=\"model\"\n    data-key=\"id\"\n    disabled\n  >\n    <PickList.Source title=\"Available\">\n      <template #item=\"{ item }\">{{ item.label }}</template>\n    </PickList.Source>\n\n    <PickList.Controls />\n\n    <PickList.Target title=\"Selected\">\n      <template #item=\"{ item }\">{{ item.label }}</template>\n    </PickList.Target>\n  </PickList>\n</template>"
+   "sfc": "<script setup>\n  import PickList from '@aziontech/webkit/pick-list'\n  import { ref } from 'vue'\n\n  const model = ref([\n    [\n      { id: 1, label: 'Edge Functions' },\n      { id: 2, label: 'WAF' },\n      { id: 3, label: 'Image Processor' }\n    ],\n    [{ id: 4, label: 'Cache' }]\n  ])\n</script>\n\n<template>\n  <PickList\n    v-model=\"model\"\n    track-by=\"id\"\n    disabled\n  >\n    <PickList.Source title=\"Available\">\n      <template #item=\"{ item }\">{{ item.label }}</template>\n    </PickList.Source>\n\n    <PickList.Controls />\n\n    <PickList.Target title=\"Selected\">\n      <template #item=\"{ item }\">{{ item.label }}</template>\n    </PickList.Target>\n  </PickList>\n</template>"
   },
   {
    "name": "Loading",
-   "sfc": "<script setup>\n  import PickList from '@aziontech/webkit/pick-list'\n  import { ref } from 'vue'\n\n  const model = ref([\n    [\n      { id: 1, label: 'Edge Functions' },\n      { id: 2, label: 'WAF' },\n      { id: 3, label: 'Image Processor' }\n    ],\n    [{ id: 4, label: 'Cache' }]\n  ])\n</script>\n\n<template>\n  <PickList\n    v-model=\"model\"\n    data-key=\"id\"\n  >\n    <PickList.Source\n      title=\"Available\"\n      loading\n    >\n      <template #item=\"{ item }\">{{ item.label }}</template>\n    </PickList.Source>\n\n    <PickList.Controls />\n\n    <PickList.Target title=\"Selected\">\n      <template #item=\"{ item }\">{{ item.label }}</template>\n    </PickList.Target>\n  </PickList>\n</template>"
+   "sfc": "<script setup>\n  import PickList from '@aziontech/webkit/pick-list'\n  import { ref } from 'vue'\n\n  const model = ref([\n    [\n      { id: 1, label: 'Edge Functions' },\n      { id: 2, label: 'WAF' },\n      { id: 3, label: 'Image Processor' }\n    ],\n    [{ id: 4, label: 'Cache' }]\n  ])\n</script>\n\n<template>\n  <PickList\n    v-model=\"model\"\n    track-by=\"id\"\n  >\n    <PickList.Source\n      title=\"Available\"\n      loading\n    >\n      <template #item=\"{ item }\">{{ item.label }}</template>\n    </PickList.Source>\n\n    <PickList.Controls />\n\n    <PickList.Target title=\"Selected\">\n      <template #item=\"{ item }\">{{ item.label }}</template>\n    </PickList.Target>\n  </PickList>\n</template>"
   }
  ],
  "docs": "components/pick-list.md"

@@ -5,7 +5,7 @@
   "Any collection driven by `useCollection`, which saves the result per collection."
  ],
  "avoidWhen": [
-  "A single column-visibility toggle inside a table toolbar → use `table-column-selector`.",
+  "A single column-visibility toggle inside a table toolbar → use `table-column-selector` (it applies each switch at once; this panel drafts every preference and commits on Confirm). Offer one of the two for columns on a screen, not both; both edit the same `{ id, visible }` column shape that `useCollection` saves.",
   "Settings of the resource itself (not of how the list shows it) → use a form page or `dialog`."
  ],
  "related": [

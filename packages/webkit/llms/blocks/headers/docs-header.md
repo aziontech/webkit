@@ -1,6 +1,6 @@
 # DocsHeader (`headers/docs-header`)
 
-> The documentation bar: a `GlobalHeader` in its default `content` placement, so it runs full bleed across the window and opens on the page boundary. Start: the navigation trigger below `lg`, the brand with the Docs tag, and the section links from `lg`. End: search, GitHub, then Console. Search leads the end cluster in every channel, so it sits at the start of the buttons wherever the reader is. The sample widens the search into a field carrying the ⌘K shortcut once the bar is wide enough; the control is an icon button below that, and an icon button here. Built from `GlobalHeader`, `NavigationMenu`, `IconButton`, `Button` and `Brand`.
+> The documentation bar: a `GlobalHeader` in its default `content` placement, so it runs full bleed across the window and opens on the page boundary. Start: the navigation trigger below `lg`, the brand with the Docs tag, and the section links (`NavigationMenu.Link`) from `lg`. The docs layout renders this bar in `shells/documentation`; the block is the bar on its own. End: search, GitHub, then Console. Search leads the end cluster in every channel, so it sits at the start of the buttons wherever the reader is. The sample widens the search into a field carrying the ⌘K shortcut once the bar is wide enough; the control is an icon button below that, and an icon button here. Built from `GlobalHeader`, `NavigationMenu`, `IconButton`, `Button` and `Brand`.
 
 - Surface: docs
 - Source: `blocks/headers/docs-header/docs-header.vue` in `@aziontech/webkit`
@@ -16,7 +16,7 @@ The top bar of the documentation site. A reader arrives from search or from the 
 
 ## When to use
 
-- On every documentation page, inside `shells/documentation`.
+- An app that does not use `DocLayout` and needs the documentation bar on its own. Inside `shells/documentation`, `DocLayout` already renders this bar; never add it to a page there.
 - On a docs-like reference site (API reference, changelog) that shares the documentation navigation.
 
 ## When not to use
@@ -28,7 +28,7 @@ The top bar of the documentation site. A reader arrives from search or from the 
 
 ### A. Bar — `GlobalHeader` (required)
 
-Default `content` placement, `aria-label="Azion documentation"`. Start cluster in `GlobalHeader.Left`, an empty `GlobalHeader.Nav`, the actions in `GlobalHeader.Right`.
+Default `content` placement, `aria-label="Azion documentation"`. Start cluster in `GlobalHeader.Left`, an empty `GlobalHeader.Middle`, the actions in `GlobalHeader.Right`.
 
 ### B. Navigation trigger and GitHub — `IconButton` (required)
 
@@ -40,7 +40,7 @@ Inside `GlobalHeader.Brand`, followed by a small `Docs` overline tag, both in on
 
 ### D. Section links — `NavigationMenu` (required from lg)
 
-The top-level sections (`Reference`, `Guides`, `Dev tools`) as `NavigationMenu.Trigger` links, with the popup (`Portal`, `Positioner` bottom-start, `Popup`, `Arrow`, `Viewport`) for sections that open a panel. Hidden below `lg`, where the trigger in B opens the same sections.
+The top-level sections (`Reference`, `Guides`, `Dev tools`) as `NavigationMenu.Link` items, each with its route. Use `NavigationMenu.Trigger` with `Content` and the popup (`Portal`, `Positioner` bottom-start, `Popup`, `Arrow`, `Viewport`) only for a section that opens a panel; a trigger that opens nothing is a bug. Hidden below `lg`, where the trigger in B opens the same sections.
 
 ### E. Console — `Button` (required)
 
@@ -105,7 +105,11 @@ Each variant is the same screen in another state: `get_pattern("headers/docs-hea
   import SearchTrigger from '@aziontech/webkit/search-trigger'
   import { ref } from 'vue'
 
-  const sections = ['Reference', 'Guides', 'Dev tools']
+  const sections = [
+    { label: 'Reference', href: '/docs/reference' },
+    { label: 'Guides', href: '/docs/guides' },
+    { label: 'Dev tools', href: '/docs/dev-tools' }
+  ]
   const searchPages = ['Get started', 'Applications', 'Functions', 'Firewall', 'Azion CLI']
   const searchOpen = ref(false)
 </script>
@@ -125,7 +129,7 @@ Each variant is the same screen in another state: `get_pattern("headers/docs-hea
           </div>
           <GlobalHeader.Brand>
             <a
-              href="#"
+              href="/docs"
               aria-label="Azion Docs home"
               class="inline-flex w-fit items-center rounded-(--shape-elements) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) gap-(--spacing-xs)"
             >
@@ -145,28 +149,18 @@ Each variant is the same screen in another state: `get_pattern("headers/docs-hea
               <NavigationMenu.List>
                 <NavigationMenu.Item
                   v-for="section in sections"
-                  :key="section"
+                  :key="section.href"
                 >
-                  <NavigationMenu.Trigger href="#">{{ section }}</NavigationMenu.Trigger>
+                  <NavigationMenu.Link :href="section.href">{{
+                    section.label
+                  }}</NavigationMenu.Link>
                 </NavigationMenu.Item>
               </NavigationMenu.List>
-              <NavigationMenu.Portal>
-                <NavigationMenu.Positioner
-                  side="bottom"
-                  align="start"
-                  :side-offset="12"
-                >
-                  <NavigationMenu.Popup>
-                    <NavigationMenu.Arrow />
-                    <NavigationMenu.Viewport />
-                  </NavigationMenu.Popup>
-                </NavigationMenu.Positioner>
-              </NavigationMenu.Portal>
             </NavigationMenu>
           </div>
         </div>
       </GlobalHeader.Left>
-      <GlobalHeader.Nav />
+      <GlobalHeader.Middle />
       <GlobalHeader.Right>
         <SearchTrigger
           collapsible
@@ -187,7 +181,7 @@ Each variant is the same screen in another state: `get_pattern("headers/docs-hea
           kind="secondary"
           size="medium"
           class="shrink-0"
-          href="#"
+          href="/home"
         />
       </GlobalHeader.Right>
     </GlobalHeader>

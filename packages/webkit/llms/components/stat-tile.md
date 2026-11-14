@@ -52,7 +52,7 @@
 | `delta` | `number \| null` | `null` | false | Signed change against the named period, in percent, printed with at most two decimals and no trailing zeros. Null hides the delta. |
 | `deltaLabel` | `string` | `''` | false | The comparison period, read after the delta. |
 | `inverse` | `boolean` | `false` | false | A rise is bad for this metric; flips the delta between success and danger. |
-| `trend` | `number[]` | `[]` | false | Sparkline values, oldest first. Empty hides the sparkline. |
+| `trend` | `(number \| null)[]` | `[]` | false | Sparkline values, oldest first; `null` leaves a gap, as in `spark-chart`. Empty hides the sparkline. |
 | `loading` | `boolean` | `false` | false | Renders Skeleton lines in place of the figure, delta and sparkline. |
 
 ## Slots
@@ -74,7 +74,7 @@
 
 ## Accessibility
 
-- The tile is a `<section>` named by its label (`aria-labelledby`).
+- The tile is a `role="group"` named by its label (`aria-labelledby`), not a region landmark, so a strip of KPI tiles adds no landmarks.
 - The animated figure and its unit are `aria-hidden`; a visually hidden copy holds the final formatted value with its unit, so assistive tech never reads a ticking number.
 - The delta pairs an arrow icon and a signed value with its period, and a visually hidden word (better / worse), so its meaning never rests on color.
 - The sparkline is a decorative `spark-chart` (`aria-hidden`); the figure and delta carry the information.

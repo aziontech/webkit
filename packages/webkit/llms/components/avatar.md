@@ -37,9 +37,9 @@
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `src` | `string` | `undefined` | false | Image URL. When set, renders a photo and takes precedence over label and icon. |
-| `alt` | `string` | `undefined` | false | Accessible name: the image's `alt` with `src`, and the name of the initials or icon fallback without it. |
-| `label` | `string` | `undefined` | false | Initials shown when no image (normalized to two uppercase characters). |
+| `src` | `string` | `''` | false | Image URL. When set, renders a photo and takes precedence over label and icon. |
+| `alt` | `string` | `''` | false | Accessible name: the image's `alt` with `src`, and the name of the initials or icon fallback without it. |
+| `label` | `string` | `''` | false | Initials shown when no image (normalized to two uppercase characters). |
 | `icon` | `string` | `'pi pi-user'` | false | Icon class for the fallback when no image or label (PrimeIcons class). |
 | `kind` | `AvatarKind` | `'circle'` | false | Visual shape of the avatar container. |
 | `size` | `AvatarSize` | `'medium'` | false | Size preset matching Figma sm / md / lg (24 / 32 / 48 px). |
@@ -54,6 +54,9 @@
 
 - Visual states: `default`, `hover`, `focus-visible`, `active`, `disabled`
 - Content: `image` (`src`), `pattern` (`pattern` set, no `src`), `label` (initials), `icon`. `data-pattern` mirrors `pattern` on the root while the pattern renders.
+- Root attributes: `data-kind` and `data-size` mirror the props; `data-content` names the content that renders (`image`, `pattern`, `label`, `icon`). Variants are styled from these attributes.
+- Image error: when `src` fails to load, the avatar falls back to the next content in the precedence (`pattern`, `label`, `icon`) instead of a broken image; a new `src` tries the image again. An image that already failed before hydration is detected on mount.
+- Attributes: every consumer attribute (`id`, `title`, `aria-*`, `style`, listeners) lands on the root.
 - Marble: three layers seeded by a 32-bit string hash of `label` (falling back to `alt`): a filled square, then two blurred shapes translated, rotated and scaled by the seed, the last blended with `overlay`. Each layer takes the color at `(seed + layer) % colors.length`. The same seed and colors always draw the same mark, on the server and in the browser.
 
 ## Accessibility

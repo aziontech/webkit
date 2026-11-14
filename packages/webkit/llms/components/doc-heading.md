@@ -1,6 +1,6 @@
 # Doc Heading
 
-> A documentation section heading that is also the link to itself. The whole text links to its own `id`, so a reader can copy the URL to the section; a rule under the text and a chain glyph after it appear on hover and keyboard focus without taking layout. The click goes through `useHeadingNav`, so the page decides how to scroll; with no page it falls back to the native hash jump. MDX renderers and hand-composed pages both render headings through it, so the two authoring paths cannot drift.
+> A documentation section heading that is also the link to itself. The whole text links to its own `anchor` (the heading's `id`), so a reader can copy the URL to the section; a rule under the text and a chain glyph after it appear on hover and keyboard focus without taking layout. The click goes through `useHeadingNav`, so the page decides how to scroll; with no page it falls back to the native hash jump. MDX renderers and hand-composed pages both render headings through it, so the two authoring paths cannot drift.
 
 - Import: `import DocHeading from '@aziontech/webkit/doc-heading'`
 - Category: documentation · Surface: docs · Structure: monolithic
@@ -13,8 +13,8 @@
 
 ## Do
 
-- Give every heading a stable, slug-like `id`.
-- Without an `id` the heading renders plain text with no anchor — a link to nowhere is never drawn.
+- Give every heading a stable, slug-like `anchor`.
+- Without an `anchor` the heading renders plain text with no anchor — a link to nowhere is never drawn.
 
 ## Don’t
 
@@ -32,8 +32,9 @@
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `level` | `1 \ \| 2 \ \| 3 \ \| 4` | `2` | false | Heading level; drives the tag and the prose type scale. |
-| `id` | `string` | `''` | false | Anchor id: what the page rail entry and the copied URL point at. Empty renders the heading without a link. |
+| `level` | `1 \| 2 \| 3 \| 4` | `2` | false | Heading level; drives the tag and the prose type scale. |
+| `anchor` | `string` | `''` | false | In-page anchor: the heading's id, what the page rail entry and the copied URL point at. Empty renders the heading without a link. |
+| `id` | `string` | `''` | false | @deprecated since 6.0 — use `anchor` instead. Removed in 7.0. Still read when `anchor` is empty. |
 | `label` | `string` | `''` | false | Fallback text when the default slot is empty. |
 
 ## Slots
@@ -78,7 +79,7 @@
 
 <template>
   <DocHeading
-    id="purge-by-url"
+    anchor="purge-by-url"
     :level="2"
   >
     Purge by URL
@@ -96,22 +97,22 @@
 <template>
   <div class="flex flex-col gap-(--spacing-sm)">
     <DocHeading
-      id="cache"
+      anchor="cache"
       :level="1"
       label="Cache"
     />
     <DocHeading
-      id="cache-rules"
+      anchor="cache-rules"
       :level="2"
       label="Cache rules"
     />
     <DocHeading
-      id="cache-keys"
+      anchor="cache-keys"
       :level="3"
       label="Cache keys"
     />
     <DocHeading
-      id="query-strings"
+      anchor="query-strings"
       :level="4"
       label="Query strings"
     />

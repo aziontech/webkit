@@ -37,6 +37,7 @@
 | --- | --- | --- | --- | --- |
 | `kind` | `'default' \| 'reduced' \| 'extended'` | `'default'` | false | Brand lockup to render: `default` (AZION wordmark), `reduced` (the "A" glyph for tight spaces), `extended` (wordmark with the "move to the edge technologies®" tagline). |
 | `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | false | Size token; sets the lockup height (16 / 24 / 32 px) while width scales automatically so each `kind` keeps its own aspect ratio. |
+| `decorative` | `boolean` | `false` | false | Hides the mark from assistive tech when visible text beside it already says Azion. |
 
 ## States
 
@@ -46,7 +47,7 @@
 
 ## Accessibility
 
-- The root carries `role="img"` and a default `aria-label` (`Azion`) so the logo has an accessible name; consumers may override the label via a passed `aria-label`.
+- The root carries `role="img"` and a default `aria-label` (`Azion`) so the logo has an accessible name; consumers may override the label via a passed `aria-label`. With `decorative` the root drops `role` and the name and is `aria-hidden`, for a mark next to visible Azion text (the same option `Logo` has; `Brand` is the Azion house mark, `Logo` any vendor mark).
 - Non-interactive: the logo is not focusable and emits no events; the inner SVG is presentational.
 - Contrast ≥3:1 for the brand mark against its background (large graphic).
 - `motion-reduce` not applicable — the component is static.

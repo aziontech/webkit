@@ -15,7 +15,7 @@
 
 ## Do
 
-- Set `data-key` to a unique item field so rows keep stable keys across moves; without it rows are keyed by their index.
+- Set `track-by` to a unique item field so rows keep stable keys across moves and the selection follows the record when the lists change; without it rows and the selection are keyed by their index.
 - Set `title` on both `PickList.Source` and `PickList.Target`; it is the listbox's accessible name.
 - Listen to `move` for side effects such as saving the assignment instead of diffing `v-model`.
 - Set `:move-on-double-click="false"` when double-click should do something else; `item-double-click` still fires.
@@ -37,7 +37,8 @@
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `dataKey` | `string` | `''` | false | Item field used as each row's render key (falls back to the index). Selection is always tracked by index. |
+| `trackBy` | `string` | `''` | false | Item field that identifies a record, the same name as `cards`: each row's render key and the key of the selection, so an external change to the v-model pair keeps the selection on its records. Empty falls back to the index. |
+| `dataKey` | `string` | `''` | false | **@deprecated since 6.0 — use `trackBy`. Removed in 7.0.** Same as `trackBy`; read when `trackBy` is empty. |
 | `disabled` | `boolean` | `false` | false | Disables all selection and move controls and applies disabled tokens. |
 | `moveOnDoubleClick` | `boolean` | `true` | false | When true, double-clicking an item moves it to the opposite list. Set false to keep `item-double-click` firing without the move. |
 | `modelValue` | `PickListValue` | `—` | false | Two-way value (`v-model`). |
@@ -80,12 +81,13 @@
 - `data-loading` on a list (`pick-list-source` / `pick-list-target`) mirrors that list's `loading` prop
 - A loading list renders a centered spinner instead of its options and sets `aria-busy="true"`; while any list is loading, both the move controls and double-click-to-move are disabled until loading clears
 - Each option carries `data-selected` mirroring its selection and `aria-selected`
+- Empty list (not loading, no items): the package `EmptyState` (small, `pickList.empty`, `No items`) is laid over the list box, outside the listbox element (a `status` region is not an allowed listbox child); test id `<list testid>__empty`
 - Server render and hydration: the options are the direct `v-for` children of the `TransitionGroup` list (an empty list while loading) and the spinner a sibling `v-if`, so the server renders no fragment markers inside the list and the HTML hydrates as is.
 
 ## Accessibility
 
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)` on each option and on every move control.
-- Keyboard map: `Tab` moves between the two listboxes and the control column; within a listbox `Space`/`Enter` toggle the focused option's selection; the move controls are activated with `Enter`/`Space`. Double-click on an option is a pointer affordance for moving it to the opposite list; the same move is reachable via select + the move controls (no keyboard-only feature is double-click-only).
+- Keyboard map: `Tab` moves between the two listboxes and the control column, one tab stop per listbox (roving `tabindex`: the last focused option, the first by default); within a listbox `ArrowDown`/`ArrowUp` move focus, `Home`/`End` go to the first and last option, `Space`/`Enter` toggle the focused option's selection, and `Shift`+`ArrowDown`/`ArrowUp` extend the selection to the next option; the move controls are activated with `Enter`/`Space`. Double-click on an option is a pointer affordance for moving it to the opposite list; the same move is reachable via select + the move controls (no keyboard-only feature is double-click-only).
 - ARIA: each list is `role="listbox"` with `aria-label` from its title text; options are `role="option"` with `aria-selected`; the source/target listboxes set `aria-multiselectable="true"`; every move control is an icon-only button with an explicit `aria-label`; `aria-disabled` mirrors `disabled` on both listboxes, and a disabled root becomes `role="group"` with `aria-disabled="true"`, so the titles dimmed by the root's `opacity-60` belong to a disabled control (WCAG 1.4.3 inactive-component exemption) instead of reading as low-contrast live text.
 - Contrast ≥4.5:1 (text) / ≥3:1 (borders + icons), including the disabled state.
 - A loading list sets `aria-busy="true"`; its `Spinner` is decorative (`aria-hidden`) and carries its own reduced-motion fallback. Control hover transitions pair with `motion-reduce:transition-none`.
@@ -113,7 +115,7 @@
 <template>
   <PickList
     v-model="model"
-    data-key="id"
+    track-by="id"
   >
     <PickList.Source title="Available">
       <template #item="{ item }">{{ item.label }}</template>
@@ -148,7 +150,7 @@
 <template>
   <PickList
     v-model="model"
-    data-key="id"
+    track-by="id"
     disabled
   >
     <PickList.Source title="Available">
@@ -184,7 +186,7 @@
 <template>
   <PickList
     v-model="model"
-    data-key="id"
+    track-by="id"
   >
     <PickList.Source
       title="Available"

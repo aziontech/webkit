@@ -12,16 +12,16 @@
  ],
  "related": [
   "site-nav` — the marketing navigation band built on `global-header`, `brand` and `navigation-menu`.",
-  "navigation-menu` — the dropdown navigation that usually goes in `GlobalHeader.Middle`.",
+  "navigation-menu` — the dropdown navigation that usually goes in `GlobalHeader.Center`.",
   "brand` — the Azion lockup to place inside `GlobalHeader.Brand`.",
   "platform-shell` — the console layout template that composes the header with the sidebar and the page."
  ],
  "bestPractices": [
   "Keep the default `kind=\"content\"` for app shells; use `kind=\"site\"` only on framed marketing pages.",
-  "Group the menu trigger and the brand in `GlobalHeader.Container` so they stay together and never shrink; `GlobalHeader.Nav` is the same component as `GlobalHeader.Middle`.",
+  "Group the menu trigger and the brand in `GlobalHeader.Container` so they stay together and never shrink.",
   "Wrap the logo in `GlobalHeader.Brand` inside a link with its own accessible name (for example `aria-label=\"Azion home\"`).",
   "Set `aria-label` on the root (default `'Global header'`) when the page has more than one banner-style bar.",
   "Keep the regions free of layout overrides — the bar owns height, padding and the bottom hairline; put only controls in each region.",
-  "Every header that navigates (console, demo, docs, site) carries `SearchTrigger` first in `GlobalHeader.Right`, wired to a `Command` palette; wrap the header in an `@container` so it unfolds into the `Search … ⌘K` field. Never hand-roll the field or use a bare magnifier `IconButton` (lint `webkit/header-search-trigger`)."
+  "Every header that navigates (console, demo, docs, site) carries `SearchTrigger` first in `GlobalHeader.End`, wired to a `Command` palette; wrap the header in an `@container` so it unfolds into the `Search … ⌘K` field. Never hand-roll the field or use a bare magnifier `IconButton` (lint `webkit/header-search-trigger`)."
  ]
 }

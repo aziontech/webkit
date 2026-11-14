@@ -40,7 +40,7 @@
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `items` | `BigNumberItem[]` | `[]` | false | The figures rendered as cells, in order; each item is `{ value, label, prefix?, suffix? }` where `value` is the figure, `label` its caption, and `prefix` / `suffix` the qualifier and unit set beside it. |
+| `items` | `BigNumbersItem[]` | `[]` | false | The figures rendered as cells, in order; each item is `{ value, label, prefix?, suffix? }` where `value` is the figure, `label` its caption, and `prefix` / `suffix` the qualifier and unit set beside it. |
 | `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | false | Size token; picks the big-number scale the figures are set at. |
 
 ## States

@@ -1,11 +1,11 @@
 # SplitView (`platform/view/split-view`)
 
-> The events explorer (the app marks its Events navigation entry active): the controls row (Filter popover, event search, Refresh and Download CSV) over the applied filter chips, and the explorer. The explorer pairs a resizable, collapsible fields `Sidebar` (each field a column checkbox and a popover of its top values, grouped in an `Accordion` by category) with the log: the Events, Errors and Avg request time summary, the stacked volume chart whose buckets filter the period on click or drag, and the event `TableRoot`. Clicking a row opens the event document beside the log in a resizable end `Sidebar` when the explorer is wide enough, and in a `Drawer` when it is not. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main. Its root carries data-layout-fill, so the main stops scrolling and the fields panel, the log and the document scroll on their own.
+> The events explorer (the app marks its Events navigation entry active): the controls row (`FilterMenu`, event search, Refresh and Download CSV) over the applied `FilterMenu.Chips`, and the explorer. The explorer pairs a resizable, collapsible fields `Sidebar` (each field a column checkbox and a popover of its top values, grouped in an `Accordion` by category) with the log: the Events, Errors and Avg request time summary, the stacked volume chart whose buckets filter the period on click or drag, and the event `TableRoot`. Each row's detail `IconButton` (or a row click) opens the event document beside the log in the end pane of a `Resizable` when the explorer is wide enough, and in a `Drawer` when it is not. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main. Its root carries data-layout-fill, so the main stops scrolling and the fields panel, the log and the document scroll on their own.
 
 - Surface: product
 - Source: `blocks/platform/view/split-view/split-view.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/view/split-view")`
-- Components: [Accordion](../../../components/accordion.md), [Alert](../../../components/alert.md), [Badge](../../../components/badge.md), [Button](../../../components/button.md), `CalendarRoot`, [Chart](../../../components/chart.md), [Checkbox](../../../components/checkbox.md), [Chip](../../../components/chip.md), [CodeBlock](../../../components/code-block.md), [CopyButton](../../../components/copy-button.md), [DateRangePicker](../../../components/date-range-picker.md), [Drawer](../../../components/drawer.md), `DrawerClose`, `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [Field](../../../components/field.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), `PanelHeader`, [Popover](../../../components/popover.md), [PropertyFilter](../../../components/property-filter.md), [Sidebar](../../../components/sidebar.md), `TableRoot`, [Tabs](../../../components/tabs.md), [Tag](../../../components/tag.md), [Tooltip](../../../components/tooltip.md), `use-collection`
+- Components: [Accordion](../../../components/accordion.md), [Alert](../../../components/alert.md), [Button](../../../components/button.md), [Chart](../../../components/chart.md), [Checkbox](../../../components/checkbox.md), [Chip](../../../components/chip.md), [CodeBlock](../../../components/code-block.md), [CopyButton](../../../components/copy-button.md), [DateRangePicker](../../../components/date-range-picker.md), [Drawer](../../../components/drawer.md), `DrawerClose`, `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [Field](../../../components/field.md), [FilterMenu](../../../components/filter-menu.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [Item](../../../components/item.md), `PanelHeader`, [Popover](../../../components/popover.md), [PropertyFilter](../../../components/property-filter.md), [Resizable](../../../components/resizable.md), [Sidebar](../../../components/sidebar.md), [Skeleton](../../../components/skeleton.md), `TableRoot`, [Tabs](../../../components/tabs.md), [Tag](../../../components/tag.md), [Tooltip](../../../components/tooltip.md), `use-collection`
 - Skills: `webkit-data-viz`, `webkit-tables`, `webkit-ui-states`
 
 ## Asked as
@@ -32,29 +32,29 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 
 ## Building blocks
 
-### A. Filter popover — `Popover`, `Button`, `Badge`, `CalendarRoot`, `Input` (required)
+### A. Filter — `FilterMenu` (required)
 
-An outlined medium Filter `Button` opens one `Popover` placed `bottom-start`: the field list first, then the values of the chosen field with their counts. A small `Badge` on the trigger counts applied fields. This drill-down popover is the one place the count stays composed: `Table.Filter`, whose trigger carries the count, opens its own field, operator and value builder and has no labelled trigger, controlled open state or nested calendar, so it cannot host this panel. A filter in a table toolbar uses `Table.Filter` and its `count`, never a hand-built `Badge`. The period offers presets and a `CalendarRoot` range; the popover stays open while the calendar is open. Long value lists get their own search `Input`.
+`FilterMenu` bound with `v-model="filters"` and `:fields`: the Filter button (counting the applied fields) opens a drill-in menu, the field list first, then the values of the chosen field. Period is a `date` field whose options are the block's presets (Last 15 minutes to Last 24 hours) plus the menu's own Custom range calendar; Source, Level and every field added from the fields panel are `multi` fields. The block maps its filter fields to `FilterMenuField`s and keeps matching the log itself. Do not build a filter popover, its count badge or its value rows by hand.
 
 ### B. Search and toolbar — `Input`, `Tooltip`, `IconButton` (required)
 
 A medium search `Input` across events, hosts, paths and addresses, then outlined medium `IconButton`s for Refresh and Download CSV, each named by a `Tooltip` and an `aria-label` with the same words.
 
-### C. Applied filters — `Chip` (optional)
+### C. Applied filters — `FilterMenu.Chips` (optional)
 
-One medium `Chip` per applied field under the controls row. A chip summarizes its values, reopens the popover on its field and can be removed. The row wraps; it never scrolls sideways.
+`FilterMenu.Chips` shares the model and the fields with the menu: one chip per applied field under the controls row, which summarizes its values, reopens the menu on its field and can be removed. The row wraps; it never scrolls sideways.
 
-### D. Fields panel — `Sidebar`, `Input`, `Field`, `Checkbox`, `Popover`, `Accordion`, `Tag` (optional)
+### D. Fields panel — `Sidebar`, `Input`, `Field`, `Checkbox`, `Popover`, `Item`, `Accordion`, `Tag` (optional)
 
-A resizable, collapsible start `Sidebar` named Fields with its own Search fields `Input`. Core fields sit on top; the rest are grouped by category in an `Accordion`, each category trigger carrying a small `Tag` with its applied count. Each field has a `Checkbox` that shows or hides its column in the log, and a `Popover` of its top values that applies a value as a filter. The panel hides when the explorer is narrower than the panel plus the log.
+A resizable, collapsible start `Sidebar` named Fields with its own Search fields `Input`. Core fields sit on top; the rest are grouped by category in an `Accordion`, each category trigger carrying a small `Tag` with its applied count. Each field has a `Checkbox` that shows or hides its column in the log, and a `Popover` of its top values, each an option `Item` (`clickable`, `kind="option"`, `aria-pressed` while applied) with its count, that applies the value as a filter. The panel hides when the explorer is narrower than the panel plus the log.
 
-### E. Log — `Chart`, `TableRoot`, `Tag`, `EmptyState` (required)
+### E. Log — `Chart`, `Skeleton`, `TableRoot`, `Tag`, `EmptyState` (required)
 
 Above the table, a summary `dl` of Events, Errors and Avg request time, and the stacked volume `Chart` by level (`Chart.Bar kind="histogram" stacked`: solid columns that touch, one per time bucket, with `Chart.Brush`, bound to `v-model:range`). Each level wears its step of the severity ramp (Error `severity-critical`, Warning `severity-medium`, Info `severity-low`, Debug `severity-info`), and `Chart.Tooltip total` lists every level in the bucket with a Total row under them and a footer hint: Click to filter to this bucket, or drag to select a span. Dragging across the chart selects a span and filters the period to it; from the keyboard the arrow keys step through buckets, Shift with the arrows extends a span and Enter applies it. The primary and every variant (Query, Sessions, EventDocument included) use this same `Chart`; no variant draws its own bars. Below it the event `TableRoot`, `paginated` at 25 rows, with a detail column first, Level as a small `Tag` in the level's severity, and the columns chosen in the fields panel. Its empty slot picks one small `EmptyState`: no traffic yet, no match for the search, or nothing in the window.
 
-### F. Event document — `Sidebar`, `Tooltip`, `IconButton`, `Tag`, `CodeBlock` (required)
+### F. Event document — `Resizable`, `Tooltip`, `IconButton`, `Tag`, `CodeBlock` (required)
 
-Clicking a row opens the event in a resizable end `Sidebar` beside the log when the explorer is wide enough for the fields panel, the log and the document. Its header shows the level and source as small `Tag`s and a small Close `IconButton` in a `Tooltip`; the body lists the fields and ends with the full event in a `CodeBlock` that copies it as JSON.
+Each row's detail cell is an `IconButton` named Open event <id> with `aria-expanded`, so a keyboard user opens an event with Tab and Enter; a row click does the same for a pointer. When the explorer is wide enough for the fields panel, the log and the document, the event opens in the end pane of a horizontal `Resizable` (`Resizable.Handle` named Resize the event panel, the pane 320 to 512 px, collapsed while no event is open), so the handle sits on the inner edge and dragging it inward widens the document. Its header holds the Event heading and a small Close `IconButton` in a `Tooltip`; the body shows the level and source as small `Tag`s, lists the fields and ends with the full event in a `CodeBlock` that copies it as JSON.
 
 ### G. Narrow document — `Drawer`, `DrawerPortal`, `DrawerOverlay`, `DrawerContent`, `PanelHeader`, `DrawerTitle`, `DrawerClose`, `Tag`, `CodeBlock` (required)
 
@@ -68,7 +68,7 @@ Variant Query only; it adds `PropertyFilter` (`mode="query"`) and `DateRangePick
 
 For people who type their questions. `DateRangePicker` replaces the Period field of the Filter popover: relative ranges (Last 15 minutes to Last 24 hours), an absolute range typed in the chosen time zone and bounded to the retained days, and Previous and Next, which move the window by its own length. The times in the log, the chart axis and the document follow that zone. `PropertyFilter` in query mode replaces both the Filter popover and the search field: one query string (`level = Error AND host = api.example.com`), suggestions for the word at the caret, the reason under the field when the query is invalid, and the match count. Enter applies it; a query that mixes AND and OR shows a message instead of guessing. A value picked in the fields panel adds or removes its `field = value` clause, so the panel and the query never disagree.
 
-### I. Saved and recent queries — `Popover`, `IconButton`, `Input`, `Button`, `Tooltip` (optional)
+### I. Saved and recent queries — `Popover`, `IconButton`, `Input`, `Item`, `Tooltip` (optional)
 
 Variant Query only.
 
@@ -80,7 +80,7 @@ Variant Sessions only; it adds `Tabs` and `DropdownMenu` to the page.
 
 Above the controls row, one tab per open investigation; each keeps its own filters, search and period, and switching tabs closes the open document. New investigation (a transparent `IconButton`) adds a tab, up to five; past the limit a status line says to close one. The actions `DropdownMenu` renames, duplicates or closes the active tab. Rename opens an inline `Input` over the tab (also F2 or a double click on it): Enter keeps the name, Escape restores it. Each tab is `closable` while more than one is open: the × on the tab closes it with the pointer, and Delete on the focused tab closes it from the keyboard (the tab announces the shortcut through `aria-keyshortcuts`); focus moves to the tab before it. The last tab cannot be closed. The × is not a separate focusable button: inside a `tablist` anything focusable that is not a tab fails `aria-required-children`, so the keyboard path is Delete, as in the WAI-ARIA tabs pattern, and the actions menu keeps Close investigation for discovery.
 
-### K. Document tools — `Input`, `IconButton`, `Tooltip`, `Chip` (optional)
+### K. Document tools — `Input`, `IconButton`, `Tooltip` (optional)
 
 Variant EventDocument only; it adds `CopyButton` to the page.
 
@@ -91,7 +91,7 @@ The document lists every field of the event. Search in this event narrows the li
 - Drive the summary, the chart and the table from one filtered set, so every number agrees.
 - Let a click or drag on the chart set the period, and show the period as a filter the user can clear.
 - Keep the row selected while its document is open, and switch between pane and drawer by the explorer's width, not the viewport's.
-- Count applied fields on the Filter `Badge` and show each one as a `Chip` in field order.
+- Let `FilterMenu` count the applied fields on its trigger and `FilterMenu.Chips` show each one in field order.
 - Pick the empty message that matches why the log is empty.
 - In query mode, keep the applied query text as the user typed it, and save and list that text.
 - Keep each investigation tab self-contained: its own filters, search and period.
@@ -101,12 +101,12 @@ The document lists every field of the event. Search in this event narrows the li
 ## Don't
 
 - Don't navigate away to read one event; the document opens beside the log.
-- Don't add a second filter surface (a row of `Select`s, a filter bar in the fields panel) beside the Filter popover.
+- Don't add a second filter surface (a row of `Select`s, a filter bar in the fields panel) beside the Filter menu.
 - Don't hide the controls row or the summary when the log is empty.
 - Don't encode level by colour alone; the chart has a card with level names and counts, and the table shows level as text.
 - Don't let a wide log scroll the page sideways.
 - Don't size the root with `calc(100dvh - …)`; `data-layout-fill` fits it to the layout's `main`.
-- Don't offer the query bar and the Filter popover at once; pick the one that fits the users.
+- Don't offer the query bar and the Filter menu at once; pick the one that fits the users.
 - Don't guess the meaning of a query that mixes AND and OR; say so and let the user fix it.
 - Don't let investigation tabs grow without a limit, and never close the last one.
 
@@ -129,8 +129,8 @@ The document lists every field of the event. Search in this event narrows the li
 - The explorer sits in the layout's one `main` landmark; each `Sidebar` is named (Fields, Event document) with its own collapse, expand and resize labels.
 - The chart is `Chart`'s one tab stop with an `aria-label` that carries the summary (busiest bucket) and the instruction; arrow keys move between buckets, Shift extends a span, Enter commits it, and the tooltip follows keyboard focus as it follows the pointer.
 - The Errors value carries an `aria-label` with its share of all events.
-- Every icon-only button has an `aria-label`; the filter `Badge` and decorative glyphs are `aria-hidden="true"`.
-- Value options in the popovers expose `aria-checked`, so applied values are announced.
+- Every icon-only button has an `aria-label`; decorative glyphs are `aria-hidden="true"`. The row detail button names its event and carries `aria-expanded`.
+- Value options in the fields-panel popovers are buttons with `aria-pressed`, so applied values are announced; the Filter menu's own rows come from `FilterMenu`.
 - The document drawer traps focus while open and closes on Escape; motion is turned off under `prefers-reduced-motion`.
 - Query: the bar is a `combobox` whose invalid state sets `aria-invalid` and points `aria-describedby` at the reason; the mixed AND / OR message and the saved-query confirmations are `role="status"`.
 - Sessions: the tabs follow the `Tabs` keyboard map (arrows, Home, End); F2 renames and Delete closes the focused tab, and the same actions sit in a named menu for pointer and screen-reader users; focus returns to the tab after rename or close.
@@ -138,8 +138,9 @@ The document lists every field of the event. Search in this event narrows the li
 
 ## States
 
-- Default: live traffic with the summary, the chart and the log filled, and no filters applied.
-- Filtered: errors from the Security and Access Control sources; the Filter button counts three fields and each shows as a chip.
+- Default: live traffic with the summary, the chart and the log filled, and no filters applied; while Refresh runs the summary values and the chart show `Skeleton`s and the table its loading rows.
+- Loading: the first load; `Skeleton`s hold the summary values and the chart band and the table shows its loading rows.
+- Filtered: errors from the Security and Access Control sources; the Filter button counts three fields and each shows as a `FilterMenu.Chips` chip.
 - Empty: a workspace with no traffic yet; the summary reads zero, the chart is flat and the log shows No events yet.
 - Failed: the event request failed; the fields panel stays and the log pane shows a danger `Alert` that says the events did not load, with Retry, which reruns the request like Refresh.
 - Query: `level = Error AND host = api.example.com` over the last 24 hours, with two saved and two recent queries.
@@ -157,10 +158,11 @@ The document lists every field of the event. Search in this event narrows the li
 ## Variants
 
 - `Default` — primary (the code below)
-- `Filtered` — Errors from the Security and Access Control sources: the Filter button counts three applied fields and each shows as a chip that reopens the popover on that field or removes it.
+- `Filtered` — Errors from the Security and Access Control sources: the Filter button counts three applied fields and each shows as a chip that reopens the menu on that field or removes it.
 - `Empty` — A workspace with no traffic yet: the summary reads zero, the chart is flat and the log shows its No events yet state.
+- `Loading` — The first load: Skeletons hold the Events, Errors and Avg request time values and the chart band, and the event table shows its loading rows.
 - `Failed` — The event log request failed: the fields panel stays, and the log pane shows a danger Alert that says the events did not load and offers Retry.
-- `Query` — The Console Kit query bar on the sample design: a `DateRangePicker` (relative ranges, an absolute range typed in the chosen time zone, Previous and Next) drives the period, and `PropertyFilter` in query mode takes `level = Error AND host = api.example.com`, suggests fields, operators and values at the caret, explains an invalid query under the field and applies it on Enter. Saved queries (name, apply, delete) and Recent queries sit in two popovers beside the bar; the field values in the fields panel add or remove clauses of the query; the log, chart and times follow the chosen zone.
+- `Query` — A typed query bar: a `DateRangePicker` (relative ranges, an absolute range typed in the chosen time zone, Previous and Next) drives the period, and `PropertyFilter` in query mode takes `level = Error AND host = api.example.com`, suggests fields, operators and values at the caret, explains an invalid query under the field and applies it on Enter. Saved queries (name, apply, delete) and Recent queries sit in two popovers beside the bar; the field values in the fields panel add or remove clauses of the query; the log, chart and times follow the chosen zone.
 - `Sessions` — Several investigations open as tabs above the explorer, each keeping its own filters, search and period: API errors is active, with All traffic and Security blocks beside it. New investigation adds a tab (up to five, then a message says to close one); the actions menu renames (also F2 or a double click, with an inline field: Enter keeps, Escape cancels), duplicates or closes the active one (also Delete on the focused tab).
 - `EventDocument` — An error event selected with its document open beside the log. The document lists every field of the event with a Search in this event field that narrows and highlights the fields, a Filter by and an Exclude button per value that apply to the log (an exclusion shows as an is not chip), and Copy that copies the fields shown as JSON; the full JSON document follows.
 
@@ -171,17 +173,13 @@ Each variant is the same screen in another state: `get_pattern("platform/view/sp
 ```vue
 <script setup lang="ts">
   import Accordion from '@aziontech/webkit/accordion'
-  import Badge from '@aziontech/webkit/badge'
-  import Button from '@aziontech/webkit/button'
-  import type { CalendarRange, CalendarValue } from '@aziontech/webkit/calendar'
-  import CalendarRoot from '@aziontech/webkit/calendar-root'
+  import type { CalendarRange } from '@aziontech/webkit/calendar'
   import Chart, {
     type ChartColor,
     type ChartRange,
     type ChartSeries
   } from '@aziontech/webkit/chart'
   import Checkbox from '@aziontech/webkit/checkbox'
-  import Chip from '@aziontech/webkit/chip'
   import CodeBlock from '@aziontech/webkit/code-block'
   import Drawer from '@aziontech/webkit/drawer'
   import DrawerClose from '@aziontech/webkit/drawer-close'
@@ -191,15 +189,19 @@ Each variant is the same screen in another state: `get_pattern("platform/view/sp
   import DrawerTitle from '@aziontech/webkit/drawer-title'
   import EmptyState from '@aziontech/webkit/empty-state'
   import Field from '@aziontech/webkit/field'
+  import FilterMenu, { type FilterMenuField } from '@aziontech/webkit/filter-menu'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
+  import Item from '@aziontech/webkit/item-root'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import Popover from '@aziontech/webkit/popover'
+  import Resizable from '@aziontech/webkit/resizable'
   import Sidebar from '@aziontech/webkit/sidebar'
+  import Skeleton from '@aziontech/webkit/skeleton'
   import TableRoot, { type TableColumn, type TableExposed } from '@aziontech/webkit/table-root'
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
   import Tooltip from '@aziontech/webkit/tooltip'
-  import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+  import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 
   type EventSource = 'http' | 'security' | 'services' | 'access'
   type EventLevel = 'Error' | 'Warning' | 'Info' | 'Debug'
@@ -689,45 +691,6 @@ Each variant is the same screen in another state: `get_pattern("platform/view/sp
     }
   }
 
-  const isApplied = (state: FilterState, field: FilterField) => Boolean(state[field.id]?.length)
-
-  const summarize = (field: FilterField, values: AppliedValue[] = []) => {
-    if (!values.length) return null
-    const first = field.options?.find((option) => option.value === values[0])
-    if (first) return { label: first.label, extra: values.length - 1 }
-    const label = field.formatValue ? field.formatValue(values[0]) : String(values[0])
-    return { label, extra: values.length - 1 }
-  }
-
-  const summarizeText = (field: FilterField, values: AppliedValue[] = []) => {
-    const parts = summarize(field, values)
-    if (!parts) return ''
-    return parts.extra ? `${parts.label} +${parts.extra}` : parts.label
-  }
-
-  const toggleValue = (
-    state: FilterState,
-    field: FilterField,
-    value: AppliedValue
-  ): FilterState => {
-    const current = state[field.id] ?? []
-    if (field.kind === 'range') {
-      return { ...state, [field.id]: current[0] === value ? [] : [value] }
-    }
-    return {
-      ...state,
-      [field.id]: current.includes(value)
-        ? current.filter((item) => item !== value)
-        : [...current, value]
-    }
-  }
-
-  const clearField = (state: FilterState, field: FilterField) => {
-    const next = { ...state }
-    delete next[field.id]
-    return next
-  }
-
   const events = ref(seedEvents())
 
   const baseFilterFields: FilterField[] = [
@@ -783,6 +746,17 @@ Each variant is the same screen in another state: `get_pattern("platform/view/sp
       }
     })
   ])
+
+  const menuFields = computed<FilterMenuField[]>(() =>
+    filterFields.value.map((field) => ({
+      id: field.id,
+      label: field.label,
+      kind: field.kind === 'range' ? 'date' : 'multi',
+      options: (field.options ?? [])
+        .filter((option) => !option.custom)
+        .map((option) => ({ value: option.value as string | number, label: option.label }))
+    }))
+  )
 
   const filteredEvents = computed(() =>
     events.value.filter((event) =>
@@ -1017,6 +991,13 @@ Each variant is the same screen in another state: `get_pattern("platform/view/sp
     }
   })
 
+  const documentPaneCollapsed = computed({
+    get: () => !isWide.value || documentCollapsed.value,
+    set: (collapsed) => {
+      if (collapsed) closeDocument()
+    }
+  })
+
   watch(documentDrawerOpen, (open) => {
     if (!open && !isWide.value) selectedId.value = ''
   })
@@ -1135,199 +1116,6 @@ Each variant is the same screen in another state: `get_pattern("platform/view/sp
       `Event volume, ${windowLabel.value.toLowerCase()}. ${chartSummary.value} Drag across the chart, or hold Shift with the arrow keys and press Enter, to filter the log to a span.`
   )
 
-  const filterCount = computed(
-    () => Object.values(filters.value).filter((values) => values?.length).length
-  )
-
-  const filterOpen = ref(false)
-  const filterFieldId = ref<string | null>(null)
-  const filterQuery = ref('')
-  const filterPanel = ref<HTMLElement | null>(null)
-  const filterRoot = ref<HTMLElement | null>(null)
-  const filterOriginId = ref<string | null>(null)
-  const filterDirection = ref<'forward' | 'back'>('forward')
-  const customFieldId = ref<string | null>(null)
-  const calendarOpen = ref(false)
-  const customRange = ref<CalendarValue>(null)
-
-  const customFilterField = computed(() =>
-    filterFields.value.find((field) => field.id === customFieldId.value)
-  )
-
-  const filterField = computed(
-    () =>
-      filterFields.value.find((field) => field.id === filterFieldId.value) ??
-      customFilterField.value
-  )
-
-  const filterLevel = computed(() => {
-    if (customFieldId.value) return `custom:${customFieldId.value}`
-    return filterFieldId.value ? `values:${filterFieldId.value}` : 'fields'
-  })
-
-  const filterRegion = ref<HTMLElement | null>(null)
-  const filterRegionHeight = ref('')
-  let releaseFilterHeight: (() => void) | null = null
-
-  const animateFilterHeight = async (mutate: () => void) => {
-    const node = filterRegion.value
-    if (!node || window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) {
-      mutate()
-      return
-    }
-    releaseFilterHeight?.()
-    const from = node.offsetHeight
-    mutate()
-    await nextTick()
-    const to = node.offsetHeight
-    if (to === from) return
-    filterRegionHeight.value = `${from}px`
-    let timer: ReturnType<typeof setTimeout> | undefined = undefined
-    const finish = () => {
-      node.removeEventListener('transitionend', onEnd)
-      clearTimeout(timer)
-      filterRegionHeight.value = ''
-      releaseFilterHeight = null
-    }
-    const onEnd = (event: TransitionEvent) => {
-      if (event.propertyName === 'height' && event.target === node) finish()
-    }
-    node.addEventListener('transitionend', onEnd)
-    timer = setTimeout(finish, 600)
-    releaseFilterHeight = finish
-    requestAnimationFrame(() =>
-      requestAnimationFrame(() => {
-        if (releaseFilterHeight === finish) filterRegionHeight.value = `${to}px`
-      })
-    )
-  }
-
-  const toFilterLevel = (direction: 'forward' | 'back', mutate: () => void) => {
-    filterDirection.value = direction
-    animateFilterHeight(mutate)
-  }
-
-  const filterRows = computed<Array<FilterField | FilterOption>>(() => {
-    const term = filterQuery.value.trim().toLowerCase()
-    const source: Array<FilterField | FilterOption> = filterField.value
-      ? (filterField.value.options ?? [])
-      : filterFields.value
-    if (!term) return source
-    return source.filter((row) => row.label.toLowerCase().includes(term))
-  })
-
-  const isPicked = (value: AppliedValue) =>
-    (filters.value[filterFieldId.value ?? ''] ?? []).includes(value)
-
-  const enterFilterField = (fieldId: string) => {
-    filterOriginId.value = fieldId
-    if (filterOpen.value) {
-      toFilterLevel('forward', () => {
-        filterFieldId.value = fieldId
-        filterQuery.value = ''
-      })
-      return
-    }
-    filterFieldId.value = fieldId
-    filterQuery.value = ''
-    filterOpen.value = true
-  }
-
-  const backToFields = () => {
-    toFilterLevel('back', () => {
-      filterFieldId.value = null
-      filterQuery.value = ''
-    })
-  }
-
-  const focusFilterOrigin = async (id: string | null) => {
-    await nextTick()
-    const field = id ? filterFields.value.find((item) => item.id === id) : null
-    const chip =
-      field && isApplied(filters.value, field)
-        ? document.querySelector<HTMLElement>(`[data-filter-chip="${id}"]`)
-        : null
-    ;(
-      chip ?? filterRoot.value?.querySelector<HTMLElement>('[data-testid="filter-button__trigger"]')
-    )?.focus()
-  }
-
-  watch(filterOpen, (isOpen) => {
-    if (isOpen) return
-    filterFieldId.value = null
-    customFieldId.value = null
-    calendarOpen.value = false
-    customRange.value = null
-    filterQuery.value = ''
-    filterDirection.value = 'forward'
-    const id = filterOriginId.value
-    filterOriginId.value = null
-    focusFilterOrigin(id)
-  })
-
-  const pickFilterOption = (field: FilterField, option: FilterOption) => {
-    if (option.custom) {
-      toFilterLevel('forward', () => {
-        customFieldId.value = field.id
-      })
-      calendarOpen.value = true
-      return
-    }
-    filters.value = toggleValue(filters.value, field, option.value)
-    if (field.kind === 'range') backToFields()
-  }
-
-  const leaveCustomRange = () => {
-    calendarOpen.value = false
-    customRange.value = null
-    toFilterLevel('back', () => {
-      customFieldId.value = null
-    })
-  }
-
-  const commitCustomRange = (range: CalendarValue) => {
-    const field = customFilterField.value
-    if (!field) return
-    const next = { ...filters.value }
-    if (range && !(range instanceof Date) && (range.start || range.end)) next[field.id] = [range]
-    else delete next[field.id]
-    filters.value = next
-    const id = field.id
-    leaveCustomRange()
-    backToFields()
-    filterOpen.value = false
-    focusFilterOrigin(id)
-  }
-
-  const clearFilterField = (field: FilterField) => {
-    filters.value = clearField(filters.value, field)
-  }
-
-  const filterLevelRows = () => [
-    ...(filterPanel.value?.querySelectorAll<HTMLElement>(
-      `[data-level="${filterLevel.value}"] [data-filter-row]`
-    ) ?? [])
-  ]
-
-  const moveFilterFocus = (event: KeyboardEvent, step: number) => {
-    const items = filterLevelRows()
-    if (!items.length) return
-    event.preventDefault()
-    const index = items.indexOf(event.target as HTMLElement)
-    items[(index + step + items.length) % items.length]?.focus()
-  }
-
-  watch(filterLevel, async () => {
-    await nextTick()
-    filterLevelRows()[0]?.focus()
-  })
-
-  const filterChips = computed(() =>
-    filterFields.value.filter((field) => isApplied(filters.value, field))
-  )
-
-  const summarizeFilter = (field: FilterField) => summarize(field, filters.value[field.id])
-
   onBeforeUnmount(() => {
     clearTimeout(refreshTimer)
     explorerObserver?.disconnect()
@@ -1344,231 +1132,12 @@ Each variant is the same screen in another state: `get_pattern("platform/view/sp
     >
       <header class="flex items-center gap-(--layout-group-gap)">
         <div class="flex min-w-0 grow items-center gap-(--spacing-xs)">
-          <div
-            ref="filterRoot"
-            class="flex shrink-0 items-center"
+          <FilterMenu
+            v-model="filters"
+            :fields="menuFields"
+            class="shrink-0"
             data-testid="filter-button"
-          >
-            <Popover
-              v-model:open="filterOpen"
-              placement="bottom-start"
-              :dismissible="!calendarOpen"
-              class="shrink-0"
-            >
-              <div class="relative">
-                <Popover.Trigger>
-                  <Button
-                    label="Filter"
-                    kind="outlined"
-                    size="medium"
-                    icon="pi pi-filter"
-                    data-testid="filter-button__trigger"
-                  />
-                  <Transition
-                    enter-from-class="scale-75 opacity-0"
-                    enter-active-class="transition-[transform,scale,opacity] duration-fast-02 ease-productive-entrance motion-reduce:transition-none"
-                    leave-to-class="scale-75 opacity-0"
-                    leave-active-class="transition-[transform,scale,opacity] duration-fast-02 ease-productive-exit motion-reduce:transition-none"
-                  >
-                    <div
-                      v-if="filterCount"
-                      class="pointer-events-none absolute -top-2 -end-2 min-w-5"
-                    >
-                      <Badge
-                        :label="String(filterCount)"
-                        severity="primary"
-                        size="small"
-                        aria-hidden="true"
-                        data-testid="filter-button__count"
-                        class="w-full"
-                      />
-                    </div>
-                  </Transition>
-                </Popover.Trigger>
-              </div>
-
-              <Popover.Content>
-                <div
-                  ref="filterPanel"
-                  class="flex flex-col"
-                  @keydown.down="moveFilterFocus($event, 1)"
-                  @keydown.up="moveFilterFocus($event, -1)"
-                >
-                  <div
-                    ref="filterRegion"
-                    :style="{ height: filterRegionHeight }"
-                    class="relative overflow-hidden transition-[height] duration-moderate-01 ease-productive-entrance motion-reduce:transition-none"
-                  >
-                    <Transition
-                      :enter-from-class="
-                        filterDirection === 'forward'
-                          ? 'translate-x-[12%] opacity-0'
-                          : 'translate-x-[-12%] opacity-0'
-                      "
-                      enter-active-class="transition-[translate,opacity] duration-moderate-01 ease-productive-entrance motion-reduce:transition-none"
-                      :leave-to-class="
-                        filterDirection === 'forward'
-                          ? 'translate-x-[-12%] opacity-0'
-                          : 'translate-x-[12%] opacity-0'
-                      "
-                      leave-active-class="absolute inset-x-0 top-0 transition-[translate,opacity] duration-fast-02 ease-productive-exit motion-reduce:transition-none"
-                    >
-                      <div
-                        :key="filterLevel"
-                        :data-level="filterLevel"
-                        class="flex flex-col"
-                      >
-                        <div
-                          v-if="filterField"
-                          class="flex items-center gap-(--spacing-xs) border-b border-(--border-default) px-(--spacing-xs) py-(--spacing-xs)"
-                        >
-                          <IconButton
-                            icon="pi pi-angle-left"
-                            kind="outlined"
-                            size="small"
-                            :aria-label="
-                              customFilterField ? 'Back to date periods' : 'Back to all filters'
-                            "
-                            @click="customFilterField ? leaveCustomRange() : backToFields()"
-                          />
-                          <span class="truncate text-label-sm text-(--text-default)">
-                            {{ filterField.label }}
-                          </span>
-                        </div>
-
-                        <div
-                          v-if="customFilterField"
-                          class="px-(--spacing-md) py-(--spacing-sm)"
-                        >
-                          <CalendarRoot
-                            v-model="customRange"
-                            v-model:open="calendarOpen"
-                            mode="range"
-                            size="medium"
-                            :show-fields="false"
-                            placeholder="Select a range"
-                            class="w-full"
-                            @update:model-value="commitCustomRange"
-                          />
-                        </div>
-
-                        <template v-else>
-                          <div class="border-b border-(--border-default) p-(--spacing-xs)">
-                            <Input
-                              v-model="filterQuery"
-                              size="medium"
-                              class="w-full"
-                              :placeholder="
-                                filterField
-                                  ? `Filter ${filterField.label.toLowerCase()}`
-                                  : 'Filter by'
-                              "
-                              :aria-label="
-                                filterField
-                                  ? `Search ${filterField.label} values`
-                                  : 'Search filter fields'
-                              "
-                            >
-                              <template #iconLeft>
-                                <i
-                                  class="pi pi-search"
-                                  aria-hidden="true"
-                                />
-                              </template>
-                            </Input>
-                          </div>
-
-                          <div
-                            class="flex max-h-(--container-3xs) flex-col gap-(--spacing-xxs) overflow-y-auto p-(--spacing-xxs)"
-                          >
-                            <template v-if="!filterField">
-                              <button
-                                v-for="field in filterRows as FilterField[]"
-                                :key="field.id"
-                                type="button"
-                                data-filter-row
-                                class="flex w-full items-center gap-(--spacing-sm) rounded-(--shape-elements) px-(--spacing-sm) py-(--spacing-xs) text-start text-label-sm text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
-                                :aria-expanded="false"
-                                @click="enterFilterField(field.id)"
-                              >
-                                <span class="grow truncate">{{ field.label }}</span>
-                                <span
-                                  v-if="isApplied(filters, field)"
-                                  class="truncate text-(--text-muted)"
-                                >
-                                  {{ summarizeText(field, filters[field.id]) }}
-                                </span>
-                                <i
-                                  class="pi pi-angle-right shrink-0 text-(--text-muted)"
-                                  aria-hidden="true"
-                                />
-                              </button>
-                            </template>
-
-                            <template v-else>
-                              <button
-                                v-for="option in filterRows as FilterOption[]"
-                                :key="String(option.value)"
-                                type="button"
-                                data-filter-row
-                                :role="
-                                  option.custom
-                                    ? undefined
-                                    : filterField.kind === 'range'
-                                      ? 'menuitemradio'
-                                      : 'menuitemcheckbox'
-                                "
-                                :aria-checked="option.custom ? undefined : isPicked(option.value)"
-                                class="flex w-full items-center gap-(--spacing-sm) rounded-(--shape-elements) px-(--spacing-sm) py-(--spacing-xs) text-start text-label-sm text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
-                                @click="pickFilterOption(filterField, option)"
-                              >
-                                <span class="grow truncate">{{ option.label }}</span>
-                                <i
-                                  v-if="option.custom"
-                                  class="pi pi-angle-right shrink-0 text-(--text-muted)"
-                                  aria-hidden="true"
-                                />
-                                <i
-                                  v-else
-                                  class="pi pi-check shrink-0 text-(--text-default)"
-                                  :class="isPicked(option.value) ? '' : 'invisible'"
-                                  aria-hidden="true"
-                                />
-                              </button>
-                            </template>
-
-                            <p
-                              v-if="!filterRows.length"
-                              class="px-(--spacing-sm) py-(--spacing-xs) text-label-sm text-(--text-muted)"
-                            >
-                              No match for “{{ filterQuery }}”.
-                            </p>
-                          </div>
-
-                          <div
-                            v-if="filterField && isApplied(filters, filterField)"
-                            class="border-t border-(--border-default) p-(--spacing-xxs)"
-                          >
-                            <button
-                              type="button"
-                              class="flex w-full items-center gap-(--spacing-sm) rounded-(--shape-elements) px-(--spacing-sm) py-(--spacing-xs) text-start text-label-sm text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
-                              @click="clearFilterField(filterField)"
-                            >
-                              <i
-                                class="pi pi-filter-slash text-(--text-muted)"
-                                aria-hidden="true"
-                              />
-                              Clear {{ filterField.label }}
-                            </button>
-                          </div>
-                        </template>
-                      </div>
-                    </Transition>
-                  </div>
-                </div>
-              </Popover.Content>
-            </Popover>
-          </div>
+          />
           <div class="flex min-w-36 grow basis-(--container-2xs)">
             <Input
               v-model="search"
@@ -1618,269 +1187,121 @@ Each variant is the same screen in another state: `get_pattern("platform/view/sp
         </div>
       </header>
 
-      <div
-        v-if="filterChips.length"
-        class="relative flex min-w-0 flex-wrap items-center gap-(--spacing-xs)"
+      <FilterMenu.Chips
+        v-model="filters"
+        :fields="menuFields"
         data-testid="filter-chips"
-      >
-        <TransitionGroup
-          move-class="transition-[transform,translate,scale,opacity] duration-moderate-01 ease-productive-entrance motion-reduce:transition-none"
-          enter-from-class="scale-90 opacity-0"
-          leave-from-class="scale-100 opacity-100"
-          leave-to-class="scale-90 opacity-0"
-          leave-active-class="pointer-events-none absolute duration-fast-02 ease-productive-exit motion-reduce:transition-none"
-        >
-          <span
-            v-for="field in filterChips"
-            :key="field.id"
-            class="inline-flex w-fit max-w-full transition-[transform,translate,scale,opacity] duration-moderate-01 ease-productive-entrance motion-reduce:transition-none"
-          >
-            <Chip
-              :data-filter-chip="field.id"
-              :label="field.label"
-              kind="filled"
-              size="medium"
-              clickable
-              removable
-              @click="enterFilterField(field.id)"
-              @remove="clearFilterField(field)"
-            >
-              <span class="flex min-w-0 items-center gap-(--spacing-xxs)">
-                <span class="truncate text-(--text-muted)">{{ field.label }}</span>
-                <span class="truncate">{{ summarizeFilter(field)?.label }}</span>
-                <span
-                  v-if="summarizeFilter(field)?.extra"
-                  class="shrink-0 text-(--text-muted)"
-                >
-                  +{{ summarizeFilter(field)?.extra }}
-                </span>
-              </span>
-            </Chip>
-          </span>
-        </TransitionGroup>
-      </div>
+      />
     </header>
 
     <section
       ref="explorerEl"
       class="animate-content-enter motion-reduce:animate-none relative flex min-h-0 min-w-0 flex-1 overflow-hidden"
     >
-      <div
-        v-if="showFieldsPanel"
-        key="fields-panel"
-        class="contents [--sidebar-width:var(--container-2xs)]"
+      <Resizable
+        orientation="horizontal"
+        aria-label="Events explorer"
+        class="min-h-0 min-w-0 flex-1"
       >
-        <Sidebar
-          v-model:collapsed="fieldsCollapsed"
-          v-model:width="fieldsWidth"
-          resizable
-          collapsible
-          aria-label="Fields"
-          collapse-aria-label="Hide the fields panel"
-          expand-aria-label="Show the fields panel"
-          resize-aria-label="Resize the fields panel"
-        >
-          <template #header>
-            <div class="px-(--spacing-xs)">
-              <Input
-                v-model="fieldSearch"
-                size="medium"
-                class="w-full"
-                placeholder="Search fields"
-                aria-label="Search fields"
-              >
-                <template #iconLeft>
-                  <i
-                    class="pi pi-search"
-                    aria-hidden="true"
-                  />
-                </template>
-              </Input>
-            </div>
-          </template>
-
-          <div>
+        <Resizable.Pane aria-label="Events">
+          <div class="flex h-full min-h-0 min-w-0 flex-1">
             <div
-              class="flex items-baseline justify-between gap-(--spacing-xs) px-(--spacing-xs) pb-(--spacing-xxs) pt-(--spacing-xxs)"
+              v-if="showFieldsPanel"
+              key="fields-panel"
+              class="contents [--sidebar-width:var(--container-2xs)]"
             >
-              <span class="text-label-sm text-(--text-muted)">Shown</span>
-              <span class="text-label-sm text-(--text-muted)">Values</span>
-            </div>
-
-            <div
-              v-for="field in shownFields"
-              :key="field.id"
-              class="group flex items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-xs) py-(--spacing-xxs) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) motion-reduce:transition-none"
-            >
-              <div class="min-w-0 flex-1">
-                <Field
-                  orientation="horizontal"
-                  :disabled="field.locked"
-                >
-                  <Checkbox
-                    binary
-                    :model-value="true"
-                    :input-id="`event-field-${field.id}`"
-                    @update:model-value="toggleColumn(field.id)"
-                  />
-                  <Field.Label>
-                    <span class="truncate">{{ field.label }}</span>
-                  </Field.Label>
-                </Field>
-              </div>
-
-              <Popover
-                v-if="canFilterField(field) && fieldCounts[field.id]"
-                placement="right-start"
+              <Sidebar
+                v-model:collapsed="fieldsCollapsed"
+                v-model:width="fieldsWidth"
+                resizable
+                collapsible
+                aria-label="Fields"
+                collapse-aria-label="Hide the fields panel"
+                expand-aria-label="Show the fields panel"
+                resize-aria-label="Resize the fields panel"
               >
-                <div
-                  class="shrink-0 cursor-pointer text-label-code-sm tabular-nums text-(--text-muted) transition-colors duration-fast-02 ease-productive-entrance hover:text-(--text-default) group-hover:text-(--text-default) motion-reduce:transition-none"
-                >
-                  <Popover.Trigger
-                    role="button"
-                    tabindex="0"
-                    :aria-label="`Filter by ${field.label}, ${fieldCounts[field.id]} values`"
-                  >
-                    {{ fieldCounts[field.id] }}
-                  </Popover.Trigger>
-                </div>
-
-                <Popover.Content>
-                  <div class="flex min-w-0 flex-col p-(--spacing-xxs)">
-                    <p
-                      class="px-(--spacing-xs) py-(--spacing-xxs) text-label-sm text-(--text-muted)"
+                <template #header>
+                  <div class="px-(--spacing-xs)">
+                    <Input
+                      v-model="fieldSearch"
+                      size="medium"
+                      class="w-full"
+                      placeholder="Search fields"
+                      aria-label="Search fields"
                     >
-                      {{ field.label }} · top values
-                    </p>
-
-                    <button
-                      v-for="entry in topFieldValues(field.id)"
-                      :key="String(entry.value)"
-                      type="button"
-                      role="menuitemcheckbox"
-                      :aria-checked="isValueApplied(field.id, entry.value)"
-                      :data-applied="isValueApplied(field.id, entry.value) || null"
-                      class="flex min-w-0 items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-xs) py-(--spacing-xxs) text-start transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) data-applied:bg-(--bg-selected) motion-reduce:transition-none"
-                      @click="toggleFieldValue(field.id, entry.value)"
-                    >
-                      <span
-                        class="min-w-0 flex-1 truncate text-label-code-sm text-(--text-default)"
-                      >
-                        {{ formatEventValue(field, entry.value) }}
-                      </span>
-                      <span class="shrink-0 text-label-code-sm tabular-nums text-(--text-muted)">
-                        {{ entry.count }}
-                      </span>
-                      <i
-                        v-if="isValueApplied(field.id, entry.value)"
-                        class="pi pi-check shrink-0 text-(--primary)"
-                        aria-hidden="true"
-                      />
-                    </button>
-
-                    <p
-                      v-if="fieldValueOverflow(field.id)"
-                      class="px-(--spacing-xs) py-(--spacing-xxs) text-body-sm text-(--text-muted)"
-                    >
-                      {{ fieldValueOverflow(field.id) }} more values in this window.
-                    </p>
+                      <template #iconLeft>
+                        <i
+                          class="pi pi-search"
+                          aria-hidden="true"
+                        />
+                      </template>
+                    </Input>
                   </div>
-                </Popover.Content>
-              </Popover>
+                </template>
 
-              <span
-                v-else
-                class="shrink-0 px-(--spacing-xxs) text-label-code-sm tabular-nums text-(--text-muted) data-empty:text-(--text-disabled)"
-                :data-empty="fieldCounts[field.id] ? null : true"
-                :aria-label="`${fieldCounts[field.id]} distinct values`"
-              >
-                {{ fieldCounts[field.id] }}
-              </span>
-            </div>
+                <div>
+                  <div
+                    class="flex items-baseline justify-between gap-(--spacing-xs) px-(--spacing-xs) pb-(--spacing-xxs) pt-(--spacing-xxs)"
+                  >
+                    <span class="text-label-sm text-(--text-muted)">Shown</span>
+                    <span class="text-label-sm text-(--text-muted)">Values</span>
+                  </div>
 
-            <div
-              v-if="fieldCategories.length"
-              class="mt-(--spacing-xs)"
-            >
-              <Accordion
-                v-model="openCategories"
-                type="multiple"
-                size="medium"
-                arrow-position="left"
-              >
-                <Accordion.Item
-                  v-for="category in fieldCategories"
-                  :key="category.id"
-                  :value="category.id"
-                >
-                  <Accordion.Trigger>
-                    <span class="flex min-w-0 items-center gap-(--spacing-xs)">
-                      <span class="truncate text-label-sm text-(--text-default)">
-                        {{ category.label }}
-                      </span>
-                      <Tag
-                        v-if="categoryFilterCount(category)"
-                        :label="String(categoryFilterCount(category))"
-                        severity="info"
-                        size="small"
-                      />
-                    </span>
-                  </Accordion.Trigger>
+                  <div
+                    v-for="field in shownFields"
+                    :key="field.id"
+                    class="group flex items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-xs) py-(--spacing-xxs) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) motion-reduce:transition-none"
+                  >
+                    <div class="min-w-0 flex-1">
+                      <Field
+                        orientation="horizontal"
+                        :disabled="field.locked"
+                      >
+                        <Checkbox
+                          binary
+                          :model-value="true"
+                          :input-id="`event-field-${field.id}`"
+                          @update:model-value="toggleColumn(field.id)"
+                        />
+                        <Field.Label>
+                          <span class="truncate">{{ field.label }}</span>
+                        </Field.Label>
+                      </Field>
+                    </div>
 
-                  <Accordion.Content>
-                    <div
-                      v-for="field in category.fields"
-                      :key="field.id"
-                      class="group flex items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-xs) py-(--spacing-xxs) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) motion-reduce:transition-none"
+                    <Popover
+                      v-if="canFilterField(field) && fieldCounts[field.id]"
+                      placement="right-start"
                     >
-                      <div class="min-w-0 flex-1">
-                        <Field orientation="horizontal">
-                          <Checkbox
-                            binary
-                            :model-value="false"
-                            :input-id="`event-field-${field.id}`"
-                            @update:model-value="toggleColumn(field.id)"
-                          />
-                          <Field.Label>
-                            <span class="truncate">{{ field.label }}</span>
-                          </Field.Label>
-                        </Field>
+                      <div
+                        class="shrink-0 cursor-pointer text-label-code-sm tabular-nums text-(--text-muted) transition-colors duration-fast-02 ease-productive-entrance hover:text-(--text-default) group-hover:text-(--text-default) motion-reduce:transition-none"
+                      >
+                        <Popover.Trigger
+                          role="button"
+                          tabindex="0"
+                          :aria-label="`Filter by ${field.label}, ${fieldCounts[field.id]} values`"
+                        >
+                          {{ fieldCounts[field.id] }}
+                        </Popover.Trigger>
                       </div>
 
-                      <Popover
-                        v-if="canFilterField(field) && fieldCounts[field.id]"
-                        placement="right-start"
-                      >
-                        <div
-                          class="shrink-0 cursor-pointer text-label-code-sm tabular-nums text-(--text-muted) transition-colors duration-fast-02 ease-productive-entrance hover:text-(--text-default) group-hover:text-(--text-default) motion-reduce:transition-none"
-                        >
-                          <Popover.Trigger
-                            role="button"
-                            tabindex="0"
-                            :aria-label="`Filter by ${field.label}, ${fieldCounts[field.id]} values`"
+                      <Popover.Content>
+                        <div class="flex min-w-0 flex-col p-(--spacing-xxs)">
+                          <p
+                            class="px-(--spacing-xs) py-(--spacing-xxs) text-label-sm text-(--text-muted)"
                           >
-                            {{ fieldCounts[field.id] }}
-                          </Popover.Trigger>
-                        </div>
+                            {{ field.label }} · top values
+                          </p>
 
-                        <Popover.Content>
-                          <div class="flex min-w-0 flex-col p-(--spacing-xxs)">
-                            <p
-                              class="px-(--spacing-xs) py-(--spacing-xxs) text-label-sm text-(--text-muted)"
-                            >
-                              {{ field.label }} · top values
-                            </p>
-
-                            <button
-                              v-for="entry in topFieldValues(field.id)"
-                              :key="String(entry.value)"
-                              type="button"
-                              role="menuitemcheckbox"
-                              :aria-checked="isValueApplied(field.id, entry.value)"
-                              :data-applied="isValueApplied(field.id, entry.value) || null"
-                              class="flex min-w-0 items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-xs) py-(--spacing-xxs) text-start transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) data-applied:bg-(--bg-selected) motion-reduce:transition-none"
-                              @click="toggleFieldValue(field.id, entry.value)"
-                            >
+                          <Item
+                            v-for="entry in topFieldValues(field.id)"
+                            :key="String(entry.value)"
+                            clickable
+                            kind="option"
+                            :aria-pressed="isValueApplied(field.id, entry.value)"
+                            @click="toggleFieldValue(field.id, entry.value)"
+                          >
+                            <span class="flex min-w-0 flex-1 items-center gap-(--spacing-xs)">
                               <span
                                 class="min-w-0 flex-1 truncate text-label-code-sm text-(--text-default)"
                               >
@@ -1896,284 +1317,454 @@ Each variant is the same screen in another state: `get_pattern("platform/view/sp
                                 class="pi pi-check shrink-0 text-(--primary)"
                                 aria-hidden="true"
                               />
-                            </button>
+                            </span>
+                          </Item>
 
-                            <p
-                              v-if="fieldValueOverflow(field.id)"
-                              class="px-(--spacing-xs) py-(--spacing-xxs) text-body-sm text-(--text-muted)"
-                            >
-                              {{ fieldValueOverflow(field.id) }} more values in this window.
-                            </p>
-                          </div>
-                        </Popover.Content>
-                      </Popover>
+                          <p
+                            v-if="fieldValueOverflow(field.id)"
+                            class="px-(--spacing-xs) py-(--spacing-xxs) text-body-sm text-(--text-muted)"
+                          >
+                            {{ fieldValueOverflow(field.id) }} more values in this window.
+                          </p>
+                        </div>
+                      </Popover.Content>
+                    </Popover>
 
-                      <span
-                        v-else
-                        class="shrink-0 px-(--spacing-xxs) text-label-code-sm tabular-nums text-(--text-muted) data-empty:text-(--text-disabled)"
-                        :data-empty="fieldCounts[field.id] ? null : true"
-                        :aria-label="`${fieldCounts[field.id]} distinct values`"
+                    <span
+                      v-else
+                      class="shrink-0 px-(--spacing-xxs) text-label-code-sm tabular-nums text-(--text-muted) data-empty:text-(--text-disabled)"
+                      :data-empty="fieldCounts[field.id] ? null : true"
+                      :aria-label="`${fieldCounts[field.id]} distinct values`"
+                    >
+                      {{ fieldCounts[field.id] }}
+                    </span>
+                  </div>
+
+                  <div
+                    v-if="fieldCategories.length"
+                    class="mt-(--spacing-xs)"
+                  >
+                    <Accordion
+                      v-model="openCategories"
+                      type="multiple"
+                      size="medium"
+                      arrow-position="left"
+                    >
+                      <Accordion.Item
+                        v-for="category in fieldCategories"
+                        :key="category.id"
+                        :value="category.id"
                       >
-                        {{ fieldCounts[field.id] }}
-                      </span>
-                    </div>
-                  </Accordion.Content>
-                </Accordion.Item>
-              </Accordion>
-            </div>
+                        <Accordion.Trigger>
+                          <span class="flex min-w-0 items-center gap-(--spacing-xs)">
+                            <span class="truncate text-label-sm text-(--text-default)">
+                              {{ category.label }}
+                            </span>
+                            <Tag
+                              v-if="categoryFilterCount(category)"
+                              :label="String(categoryFilterCount(category))"
+                              severity="info"
+                              size="small"
+                            />
+                          </span>
+                        </Accordion.Trigger>
 
-            <p
-              v-if="!hasFieldMatches"
-              class="px-(--spacing-xs) py-(--spacing-sm) text-body-sm text-(--text-muted)"
-            >
-              No fields match "{{ fieldSearch }}".
-            </p>
-          </div>
-        </Sidebar>
-      </div>
+                        <Accordion.Content>
+                          <div
+                            v-for="field in category.fields"
+                            :key="field.id"
+                            class="group flex items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-xs) py-(--spacing-xxs) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) motion-reduce:transition-none"
+                          >
+                            <div class="min-w-0 flex-1">
+                              <Field orientation="horizontal">
+                                <Checkbox
+                                  binary
+                                  :model-value="false"
+                                  :input-id="`event-field-${field.id}`"
+                                  @update:model-value="toggleColumn(field.id)"
+                                />
+                                <Field.Label>
+                                  <span class="truncate">{{ field.label }}</span>
+                                </Field.Label>
+                              </Field>
+                            </div>
 
-      <div class="flex min-w-0 flex-1 flex-col overflow-hidden">
-        <section
-          class="flex shrink-0 flex-col gap-(--spacing-xs) border-b border-(--border-default) px-(--spacing-md) py-(--spacing-sm)"
-        >
-          <div class="flex flex-wrap items-end gap-(--spacing-md)">
-            <dl class="flex flex-wrap items-end gap-(--spacing-xl)">
-              <div class="flex flex-col">
-                <dt class="text-label-sm text-(--text-muted)">Events</dt>
-                <dd class="m-0 text-heading-xs tabular-nums text-(--text-default)">
-                  {{ summary.total.toLocaleString('en-US') }}
-                </dd>
-              </div>
-              <div class="flex flex-col">
-                <dt class="text-label-sm text-(--text-muted)">Errors</dt>
-                <dd
-                  class="m-0 text-heading-xs tabular-nums text-(--text-default) data-raised:text-(--danger-contrast)"
-                  :data-raised="summary.errors ? true : null"
-                  :aria-label="`${summary.errors} errors, ${errorShareLabel}`"
-                >
-                  {{ summary.errors.toLocaleString('en-US') }}
-                </dd>
-              </div>
-              <div class="flex flex-col">
-                <dt class="text-label-sm text-(--text-muted)">Avg request time</dt>
-                <dd class="m-0 text-heading-xs tabular-nums text-(--text-default)">
-                  {{ summary.avgRequestTimeMs === null ? '—' : `${summary.avgRequestTimeMs} ms` }}
-                </dd>
-              </div>
-            </dl>
-          </div>
+                            <Popover
+                              v-if="canFilterField(field) && fieldCounts[field.id]"
+                              placement="right-start"
+                            >
+                              <div
+                                class="shrink-0 cursor-pointer text-label-code-sm tabular-nums text-(--text-muted) transition-colors duration-fast-02 ease-productive-entrance hover:text-(--text-default) group-hover:text-(--text-default) motion-reduce:transition-none"
+                              >
+                                <Popover.Trigger
+                                  role="button"
+                                  tabindex="0"
+                                  :aria-label="`Filter by ${field.label}, ${fieldCounts[field.id]} values`"
+                                >
+                                  {{ fieldCounts[field.id] }}
+                                </Popover.Trigger>
+                              </div>
 
-          <Chart
-            :range="null"
-            :series="volumeSeries"
-            :labels="volumeLabels"
-            :format-label="formatEventClock"
-            :height="80"
-            :aria-label="chartLabel"
-            @update:range="selectVolume"
-          >
-            <Chart.Axis
-              kind="x"
-              :ticks="3"
-            />
-            <Chart.Brush />
-            <Chart.Bar
-              kind="histogram"
-              stacked
-            />
-            <Chart.Crosshair />
-            <Chart.Tooltip total>
-              <template #footer>Click to filter to this bucket, or drag to select a span.</template>
-            </Chart.Tooltip>
-          </Chart>
-        </section>
+                              <Popover.Content>
+                                <div class="flex min-w-0 flex-col p-(--spacing-xxs)">
+                                  <p
+                                    class="px-(--spacing-xs) py-(--spacing-xxs) text-label-sm text-(--text-muted)"
+                                  >
+                                    {{ field.label }} · top values
+                                  </p>
 
-        <section class="flex min-h-0 min-w-0 flex-1 flex-col">
-          <div class="flex min-h-0 flex-1">
-            <TableRoot
-              ref="tableRef"
-              v-model:pagination="pagination"
-              :data="matchedEvents"
-              :columns="columns"
-              row-key="id"
-              enable-sorting
-              paginated
-              :page-size="25"
-              :bordered="false"
-              header-kind="compact"
-              max-height="100%"
-              class="w-full"
-              :loading="loading"
-              @row-click="openDocument"
-            >
-              <template #header-detail>
-                <span class="sr-only">Open the event document</span>
-              </template>
+                                  <Item
+                                    v-for="entry in topFieldValues(field.id)"
+                                    :key="String(entry.value)"
+                                    clickable
+                                    kind="option"
+                                    :aria-pressed="isValueApplied(field.id, entry.value)"
+                                    @click="toggleFieldValue(field.id, entry.value)"
+                                  >
+                                    <span
+                                      class="flex min-w-0 flex-1 items-center gap-(--spacing-xs)"
+                                    >
+                                      <span
+                                        class="min-w-0 flex-1 truncate text-label-code-sm text-(--text-default)"
+                                      >
+                                        {{ formatEventValue(field, entry.value) }}
+                                      </span>
+                                      <span
+                                        class="shrink-0 text-label-code-sm tabular-nums text-(--text-muted)"
+                                      >
+                                        {{ entry.count }}
+                                      </span>
+                                      <i
+                                        v-if="isValueApplied(field.id, entry.value)"
+                                        class="pi pi-check shrink-0 text-(--primary)"
+                                        aria-hidden="true"
+                                      />
+                                    </span>
+                                  </Item>
 
-              <template #cell-detail="{ row }">
-                <i
-                  class="pi pi-angle-right text-(--text-muted) transition-transform duration-fast-02 ease-productive-entrance data-open:rotate-90 data-open:text-(--primary) motion-reduce:transition-none"
-                  :data-open="row.id === selectedId || null"
-                  aria-hidden="true"
-                />
-              </template>
+                                  <p
+                                    v-if="fieldValueOverflow(field.id)"
+                                    class="px-(--spacing-xs) py-(--spacing-xxs) text-body-sm text-(--text-muted)"
+                                  >
+                                    {{ fieldValueOverflow(field.id) }} more values in this window.
+                                  </p>
+                                </div>
+                              </Popover.Content>
+                            </Popover>
 
-              <template #cell-time="{ value }">
-                <span class="min-w-0 truncate text-label-code-sm tabular-nums text-(--text-muted)">
-                  {{ value }}
-                </span>
-              </template>
+                            <span
+                              v-else
+                              class="shrink-0 px-(--spacing-xxs) text-label-code-sm tabular-nums text-(--text-muted) data-empty:text-(--text-disabled)"
+                              :data-empty="fieldCounts[field.id] ? null : true"
+                              :aria-label="`${fieldCounts[field.id]} distinct values`"
+                            >
+                              {{ fieldCounts[field.id] }}
+                            </span>
+                          </div>
+                        </Accordion.Content>
+                      </Accordion.Item>
+                    </Accordion>
+                  </div>
 
-              <template #cell-level="{ value }">
-                <Tag
-                  :label="value"
-                  :severity="eventLevelSeverity(value)"
-                  size="small"
-                />
-              </template>
-
-              <template #cell-message="{ value }">
-                <span class="min-w-0 truncate text-(--text-default)">{{ value }}</span>
-              </template>
-
-              <template #cell-status="{ value }">
-                <span
-                  class="min-w-0 truncate text-label-code-sm tabular-nums text-(--text-default) data-[tone=error]:text-(--danger-contrast) data-[tone=warn]:text-(--warning-contrast)"
-                  :data-tone="statusTone(value)"
-                >
-                  {{ formatEventValue(statusField, value) }}
-                </span>
-              </template>
-
-              <template
-                v-for="field in genericColumns"
-                :key="field.id"
-                #[`cell-${field.id}`]="{ value }"
-              >
-                <span
-                  class="min-w-0 truncate text-(--text-default) data-mono:text-label-code-sm data-numeric:tabular-nums"
-                  :data-mono="field.mono || null"
-                  :data-numeric="field.align === 'end' || null"
-                >
-                  {{ formatEventValue(field, value) }}
-                </span>
-              </template>
-
-              <template #empty>
-                <EmptyState
-                  v-if="!events.length"
-                  key="no-traffic"
-                  size="small"
-                  icon="pi pi-inbox"
-                  title="No events yet"
-                  description="Events appear here as soon as traffic reaches this workspace's resources."
-                />
-                <EmptyState
-                  v-else-if="search.trim()"
-                  key="no-match"
-                  size="small"
-                  icon="pi pi-search"
-                  title="No events match this search"
-                  description="Clear the search, or widen the period to cover more of the log."
-                />
-                <EmptyState
-                  v-else
-                  key="no-events"
-                  size="small"
-                  icon="pi pi-filter-slash"
-                  title="No events in this window"
-                  description="Widen the period or clear a filter to see more of the log."
-                />
-              </template>
-            </TableRoot>
-          </div>
-        </section>
-      </div>
-
-      <Sidebar
-        v-if="isWide"
-        key="event-document-panel"
-        v-model:width="documentWidth"
-        v-model:collapsed="documentCollapsed"
-        side="end"
-        resizable
-        aria-label="Event document"
-        resize-aria-label="Resize the event panel"
-        min-width-token="--container-xs"
-        max-width-token="--container-lg"
-      >
-        <template #header>
-          <div class="flex items-center justify-between gap-(--spacing-xs)">
-            <span class="min-w-0 truncate text-heading-xxs text-(--text-default)"> Event </span>
-            <Tooltip text="Close">
-              <IconButton
-                icon="pi pi-times"
-                kind="transparent"
-                size="small"
-                aria-label="Close the event document"
-                @click="closeDocument"
-              />
-            </Tooltip>
-          </div>
-        </template>
-
-        <div
-          v-if="documentEvent"
-          class="-m-(--spacing-md)"
-        >
-          <div class="flex min-w-0 flex-col">
-            <div
-              class="flex min-w-0 flex-col gap-(--spacing-md) p-(--spacing-md) pb-(--spacing-lg)"
-            >
-              <div class="flex min-w-0 flex-col gap-(--spacing-xs)">
-                <div class="flex flex-wrap items-center gap-(--spacing-xs)">
-                  <Tag
-                    :label="documentEvent.level"
-                    :severity="eventLevelSeverity(documentEvent.level)"
-                    size="small"
-                  />
-                  <Tag
-                    :label="documentEvent.sourceLabel"
-                    severity="secondary"
-                    size="small"
-                  />
+                  <p
+                    v-if="!hasFieldMatches"
+                    class="px-(--spacing-xs) py-(--spacing-sm) text-body-sm text-(--text-muted)"
+                  >
+                    No fields match "{{ fieldSearch }}".
+                  </p>
                 </div>
-                <p class="text-body-md text-(--text-default)">{{ documentEvent.message }}</p>
-                <p class="text-label-code-sm tabular-nums text-(--text-muted)">
-                  {{ documentEvent.time }}
-                </p>
-              </div>
-
-              <dl
-                class="grid min-w-0 grid-cols-[minmax(0,8rem)_minmax(0,1fr)] items-baseline gap-x-(--spacing-md) gap-y-(--spacing-sm)"
-              >
-                <template
-                  v-for="row in documentRows"
-                  :key="row.id"
-                >
-                  <dt class="min-w-0 text-label-sm text-(--text-muted)">{{ row.label }}</dt>
-                  <dd class="m-0 min-w-0 break-words text-label-code-sm text-(--text-default)">
-                    {{ row.value }}
-                  </dd>
-                </template>
-              </dl>
+              </Sidebar>
             </div>
 
-            <div class="flex min-w-0 flex-col gap-(--spacing-xs)">
-              <h3 class="px-(--spacing-md) text-label-sm text-(--text-default)">Event document</h3>
-              <div class="min-w-0">
-                <CodeBlock
-                  :tabs="documentTabs"
-                  :bordered="false"
-                  show-line-numbers
-                  copy-aria-label="Copy the event document as JSON"
-                  class="w-full"
+            <div class="flex min-w-0 flex-1 flex-col overflow-hidden">
+              <section
+                class="flex shrink-0 flex-col gap-(--spacing-xs) border-b border-(--border-default) px-(--spacing-md) py-(--spacing-sm)"
+              >
+                <div class="flex flex-wrap items-end gap-(--spacing-md)">
+                  <dl class="flex flex-wrap items-end gap-(--spacing-xl)">
+                    <div class="flex flex-col">
+                      <dt class="text-label-sm text-(--text-muted)">Events</dt>
+                      <dd class="m-0 text-heading-xs tabular-nums text-(--text-default)">
+                        <Skeleton
+                          v-if="loading"
+                          width="4rem"
+                          height="1.5rem"
+                        />
+                        <template v-else>{{ summary.total.toLocaleString('en-US') }}</template>
+                      </dd>
+                    </div>
+                    <div class="flex flex-col">
+                      <dt class="text-label-sm text-(--text-muted)">Errors</dt>
+                      <dd
+                        class="m-0 text-heading-xs tabular-nums text-(--text-default) data-raised:text-(--danger-contrast)"
+                        :data-raised="summary.errors ? true : null"
+                        :aria-label="`${summary.errors} errors, ${errorShareLabel}`"
+                      >
+                        <Skeleton
+                          v-if="loading"
+                          width="3rem"
+                          height="1.5rem"
+                        />
+                        <template v-else>{{ summary.errors.toLocaleString('en-US') }}</template>
+                      </dd>
+                    </div>
+                    <div class="flex flex-col">
+                      <dt class="text-label-sm text-(--text-muted)">Avg request time</dt>
+                      <dd class="m-0 text-heading-xs tabular-nums text-(--text-default)">
+                        <Skeleton
+                          v-if="loading"
+                          width="4rem"
+                          height="1.5rem"
+                        />
+                        <template v-else>{{
+                          summary.avgRequestTimeMs === null ? '—' : `${summary.avgRequestTimeMs} ms`
+                        }}</template>
+                      </dd>
+                    </div>
+                  </dl>
+                </div>
+
+                <Skeleton
+                  v-if="loading"
+                  height="5rem"
                 />
-              </div>
+                <Chart
+                  v-else
+                  :range="null"
+                  :series="volumeSeries"
+                  :labels="volumeLabels"
+                  :format-label="formatEventClock"
+                  :height="80"
+                  :aria-label="chartLabel"
+                  @update:range="selectVolume"
+                >
+                  <Chart.Axis
+                    kind="x"
+                    :ticks="3"
+                  />
+                  <Chart.Brush />
+                  <Chart.Bar
+                    kind="histogram"
+                    stacked
+                  />
+                  <Chart.Crosshair />
+                  <Chart.Tooltip total>
+                    <template #footer
+                      >Click to filter to this bucket, or drag to select a span.</template
+                    >
+                  </Chart.Tooltip>
+                </Chart>
+              </section>
+
+              <section class="flex min-h-0 min-w-0 flex-1 flex-col">
+                <div class="flex min-h-0 flex-1">
+                  <TableRoot
+                    ref="tableRef"
+                    v-model:pagination="pagination"
+                    :data="matchedEvents"
+                    :columns="columns"
+                    row-key="id"
+                    enable-sorting
+                    paginated
+                    :page-size="25"
+                    :bordered="false"
+                    header-kind="compact"
+                    max-height="100%"
+                    class="w-full"
+                    :loading="loading"
+                    @row-click="openDocument"
+                  >
+                    <template #header-detail>
+                      <span class="sr-only">Open the event document</span>
+                    </template>
+
+                    <template #cell-detail="{ row }">
+                      <IconButton
+                        :icon="row.id === selectedId ? 'pi pi-angle-down' : 'pi pi-angle-right'"
+                        kind="transparent"
+                        size="small"
+                        :aria-label="`Open event ${row.id}`"
+                        :aria-expanded="row.id === selectedId"
+                        @click.stop="openDocument($event, row)"
+                      />
+                    </template>
+
+                    <template #cell-time="{ value }">
+                      <span
+                        class="min-w-0 truncate text-label-code-sm tabular-nums text-(--text-muted)"
+                      >
+                        {{ value }}
+                      </span>
+                    </template>
+
+                    <template #cell-level="{ value }">
+                      <Tag
+                        :label="value"
+                        :severity="eventLevelSeverity(value)"
+                        size="small"
+                      />
+                    </template>
+
+                    <template #cell-message="{ value }">
+                      <span class="min-w-0 truncate text-(--text-default)">{{ value }}</span>
+                    </template>
+
+                    <template #cell-status="{ value }">
+                      <span
+                        class="min-w-0 truncate text-label-code-sm tabular-nums text-(--text-default) data-[tone=error]:text-(--danger-contrast) data-[tone=warn]:text-(--warning-contrast)"
+                        :data-tone="statusTone(value)"
+                      >
+                        {{ formatEventValue(statusField, value) }}
+                      </span>
+                    </template>
+
+                    <template
+                      v-for="field in genericColumns"
+                      :key="field.id"
+                      #[`cell-${field.id}`]="{ value }"
+                    >
+                      <span
+                        class="min-w-0 truncate text-(--text-default) data-mono:text-label-code-sm data-numeric:tabular-nums"
+                        :data-mono="field.mono || null"
+                        :data-numeric="field.align === 'end' || null"
+                      >
+                        {{ formatEventValue(field, value) }}
+                      </span>
+                    </template>
+
+                    <template #empty>
+                      <EmptyState
+                        v-if="!events.length"
+                        key="no-traffic"
+                        size="small"
+                        icon="pi pi-inbox"
+                        title="No events yet"
+                        description="Events appear here as soon as traffic reaches this workspace's resources."
+                      />
+                      <EmptyState
+                        v-else-if="search.trim()"
+                        key="no-match"
+                        size="small"
+                        icon="pi pi-search"
+                        title="No events match this search"
+                        description="Clear the search, or widen the period to cover more of the log."
+                      />
+                      <EmptyState
+                        v-else
+                        key="no-events"
+                        size="small"
+                        icon="pi pi-filter-slash"
+                        title="No events in this window"
+                        description="Widen the period or clear a filter to see more of the log."
+                      />
+                    </template>
+                  </TableRoot>
+                </div>
+              </section>
             </div>
           </div>
-        </div>
-      </Sidebar>
+        </Resizable.Pane>
+        <Resizable.Handle
+          v-if="!documentPaneCollapsed"
+          aria-label="Resize the event panel"
+        />
+        <Resizable.Pane
+          v-model:basis="documentWidth"
+          v-model:collapsed="documentPaneCollapsed"
+          collapsible
+          :min="320"
+          :max="512"
+          aria-label="Event document"
+        >
+          <aside
+            :inert="documentPaneCollapsed"
+            aria-labelledby="event-document-title"
+            class="flex h-full min-h-0 min-w-0 flex-col border-s border-(--border-default) bg-(--bg-surface)"
+          >
+            <div
+              class="flex items-center justify-between gap-(--spacing-xs) border-b border-(--border-default) px-(--spacing-md) py-(--spacing-sm)"
+            >
+              <h2
+                id="event-document-title"
+                class="min-w-0 truncate text-heading-xxs text-(--text-default)"
+              >
+                Event
+              </h2>
+              <Tooltip text="Close">
+                <IconButton
+                  icon="pi pi-times"
+                  kind="transparent"
+                  size="small"
+                  aria-label="Close the event document"
+                  @click="closeDocument"
+                />
+              </Tooltip>
+            </div>
+            <div class="min-h-0 flex-1 overflow-y-auto">
+              <div
+                v-if="documentEvent"
+                class="min-w-0"
+              >
+                <div class="flex min-w-0 flex-col">
+                  <div
+                    class="flex min-w-0 flex-col gap-(--spacing-md) p-(--spacing-md) pb-(--spacing-lg)"
+                  >
+                    <div class="flex min-w-0 flex-col gap-(--spacing-xs)">
+                      <div class="flex flex-wrap items-center gap-(--spacing-xs)">
+                        <Tag
+                          :label="documentEvent.level"
+                          :severity="eventLevelSeverity(documentEvent.level)"
+                          size="small"
+                        />
+                        <Tag
+                          :label="documentEvent.sourceLabel"
+                          severity="secondary"
+                          size="small"
+                        />
+                      </div>
+                      <p class="text-body-md text-(--text-default)">{{ documentEvent.message }}</p>
+                      <p class="text-label-code-sm tabular-nums text-(--text-muted)">
+                        {{ documentEvent.time }}
+                      </p>
+                    </div>
+
+                    <dl
+                      class="grid min-w-0 grid-cols-[minmax(0,8rem)_minmax(0,1fr)] items-baseline gap-x-(--spacing-md) gap-y-(--spacing-sm)"
+                    >
+                      <template
+                        v-for="row in documentRows"
+                        :key="row.id"
+                      >
+                        <dt class="min-w-0 text-label-sm text-(--text-muted)">{{ row.label }}</dt>
+                        <dd
+                          class="m-0 min-w-0 break-words text-label-code-sm text-(--text-default)"
+                        >
+                          {{ row.value }}
+                        </dd>
+                      </template>
+                    </dl>
+                  </div>
+
+                  <div class="flex min-w-0 flex-col gap-(--spacing-xs)">
+                    <h3 class="px-(--spacing-md) text-label-sm text-(--text-default)">
+                      Event document
+                    </h3>
+                    <div class="min-w-0">
+                      <CodeBlock
+                        :tabs="documentTabs"
+                        :bordered="false"
+                        show-line-numbers
+                        copy-aria-label="Copy the event document as JSON"
+                        class="w-full"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </aside>
+        </Resizable.Pane>
+      </Resizable>
     </section>
 
     <Drawer

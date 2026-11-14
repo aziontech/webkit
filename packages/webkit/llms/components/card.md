@@ -9,14 +9,14 @@
 ## When to use
 
 - Group related console content into one bordered surface with a title header, a body and an optional footer, such as a settings block, a summary or a form section.
-- Host a divided list edge to edge: set `:padded="false"` and put an `Item` list in the `content` slot.
+- Host a divided list edge to edge: set `:padded="false"` and put an `Item` list in the body.
 - A centered single-card screen (sign-up, onboarding, a success page) that needs header, body and footer regions.
 - A catalog tile for an integration, an extension or a plugin: set `kind="integration"` for the logo, the name, the vendor, a short description, badges, the installed state and one action.
 - A short row of highlighted integrations above the full catalog (Featured): add `featured` to the integration tile for the centred, raised layout with the badge in the corner.
 
 ## Do
 
-- Put the body in the `content` slot. There is no `default` slot, so children passed without `#content` don't render.
+- Put the body in the default slot (or `#content`, its named form).
 - Use `title` for a plain heading (rendered as an `h2`). Use the `header` slot only when the header needs another layout: it replaces both the title and `header-action`.
 - header-action` content stays hidden until the header is hovered or focused, so keep it to secondary actions and never make it the only way to reach a control.
 - Set `:padded="false"` only when the content draws its own inset or needs flush dividers.
@@ -55,7 +55,7 @@
 | `logo` | `string` | `''` | false | Integration kind: icon class for the logo mark. The `logo` slot takes an image instead. |
 | `vendor` | `string` | `''` | false | Integration kind: who publishes the item, shown as "by {vendor}". |
 | `description` | `string` | `''` | false | Integration kind: one or two sentences on what the item does. |
-| `badges` | `CardBadge[]` | `[]` | false | Integration kind: small tags such as the category or the context (`{ label, severity? }`, severity defaults to `info`). |
+| `badges` | `CardBadge[]` | `[]` | false | Integration kind: small tags such as the category or the context (`{ label, severity? }`, severity is a `TagSeverity`, `CardBadgeSeverity` is its alias, defaulting to `info`). |
 | `installed` | `boolean` | `false` | false | Integration kind: shows the Installed tag. |
 | `href` | `string` | `''` | false | Integration kind: the title links here; without it the title is a button that emits `select`. |
 | `featured` | `boolean` | `false` | false | Integration kind: the featured layout, centred on a raised surface with a primary glow at the top and the badges in the top end corner. |
@@ -72,7 +72,8 @@
 | --- | --- | --- |
 | `header` | — | Replaces the default header layout (title + header-action). |
 | `header-action` | — | Actions aligned to the end of the default header; visible on header hover. |
-| `content` | — | Main card body; with `kind="integration"` it renders under the description. |
+| `default` | — | Main card body: children passed without a slot name. With `kind="integration"` it renders under the description. |
+| `content` | — | The named form of `default`; when both are passed, `content` wins. |
 | `footer` | — | Footer actions or metadata; omitted when empty. |
 | `logo` | — | Integration kind: replaces the logo mark, for an `img` with an empty `alt`. |
 | `action` | — | Integration kind: one action at the end of the tile, above the stretched title target. |

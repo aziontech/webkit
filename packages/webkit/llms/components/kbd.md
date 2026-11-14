@@ -1,6 +1,6 @@
 # Kbd
 
-> Kbd renders keyboard input — a single key or a shortcut combination — as a compact, non-interactive keycap. It reads like a real key: a bordered surface with a thicker bottom edge for depth. Modifier keys are passed as boolean props (`meta`, `shift`, `alt`, `ctrl`) and rendered with the correct OS-aware glyph (⌘ on macOS, the catalog's `Ctrl` elsewhere), and named keys (`keyName`) print their localized name, so consumers never hardcode platform symbols or English key names. Use it for shortcut hints in prose, menus, and control suffixes (e.g. the ⌘K hint in `command`).
+> Kbd renders keyboard input — a single key or a shortcut combination — as a compact, non-interactive keycap. It reads like a real key: a bordered surface with a thicker bottom edge for depth. Modifier keys are passed as boolean props (`meta`, `shift`, `alt`, `ctrl`) and rendered with the correct OS-aware glyph (⌘ on macOS, the catalog's `Ctrl` elsewhere), and named keys (`keyName`) print their localized name, so consumers never hardcode platform symbols or English key names. The platform is read once mounted: the server and the first client render print the non-Mac names, then a Mac swaps in its glyphs, so hydration never mismatches. Use it for shortcut hints in prose, menus, and control suffixes (e.g. the ⌘K hint in `command`).
 
 - Import: `import Kbd from '@aziontech/webkit/kbd'`
 - Category: content · Surface: product · Structure: monolithic
@@ -38,7 +38,7 @@
 | `shift` | `boolean` | `false` | false | Prepend the Shift modifier glyph (⇧). |
 | `alt` | `boolean` | `false` | false | Prepend the Alt/Option modifier glyph (⌥ on macOS, Alt elsewhere). |
 | `size` | `'small' \| 'medium'` | `'medium'` | false | Size token; `small` is a denser keycap for menus, command bars, and table cells. |
-| `keyName` | `'ctrl' \| 'alt' \| 'shift' \| 'escape' \| 'enter' \| 'space' \| 'tab' \| 'backspace' \| 'delete'` | `undefined` | false | Named key printed from the locale catalog (`escape` → `Esc`, `enter` → `Enter`); the slot still renders after it. |
+| `keyName` | `'' \| 'ctrl' \| 'alt' \| 'shift' \| 'escape' \| 'enter' \| 'space' \| 'tab' \| 'backspace' \| 'delete'` | `''` | false | Named key printed from the locale catalog (`escape` → `Esc`, `enter` → `Enter`); the slot still renders after it. |
 
 ## Slots
 

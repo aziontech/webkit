@@ -54,7 +54,7 @@
    "type": "string",
    "default": "''",
    "required": "false",
-   "doc": "The ask, rendered as the label of the email field; it also names the band."
+   "doc": "The ask, rendered as the label of the email field; it also names the band. Empty, the field keeps a visually hidden built-in label."
   },
   {
    "name": "description",

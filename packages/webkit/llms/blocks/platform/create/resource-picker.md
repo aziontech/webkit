@@ -1,11 +1,11 @@
 # ResourcePicker (`platform/create/resource-picker`)
 
-> The card a create flow uses to bind one resource to another: a lead, a ToggleGroup choosing between an existing resource and a new one, then either a hint over a searchable list of the existing resources with a selected mark, paged five at a time with skeleton rows while the next page loads and a polite status line for screen readers, or a Name `Field` around an `Input` whose helper text carries the allowed characters and turns into the required message once Next is pressed empty. The ToggleGroup disappears and the card opens on New when nothing exists to bind. ProvisionWizard binds its project with it on the first step, and its second step reuses the same paged list to pick an existing deployment. The OptionalBinding variant wraps the picker in an opt-in band: a compact `SettingRow` with a `Switch` that unfolds the Existing / New choice in place, where New shows a Name field over module switches with one locked on behind a `Tooltip`; the firewall binding of SourceWizard's last step uses it. Built from `Card`, `ToggleGroup`, `Field`, `Input`, `HelperText`, `Item`, `Skeleton` and `Button`.
+> The card a create flow uses to bind one resource to another: a lead, a ToggleGroup choosing between an existing resource and a new one, then either a hint over a searchable list of the existing resources with a selected mark, paged five at a time with skeleton rows while the next page loads and a polite status line for screen readers, or a Name `Field` around an `Input` whose helper text carries the allowed characters and turns into the required message once Next is pressed empty. The ToggleGroup disappears and the card opens on New when nothing exists to bind. ProvisionWizard binds its project with it on the first step, and its second step reuses the same paged list to pick an existing deployment. The OptionalBinding variant wraps the picker in an opt-in band: a compact `SettingRow` with a `Switch` that unfolds the Existing / New choice in place, where New shows a Name field over module switches with one locked on, its row description saying it is always on; the firewall binding of SourceWizard's last step uses it. Built from `Card`, `ToggleGroup`, `Field`, `Input`, `HelperText`, `Item`, `Skeleton` and `Button`.
 
 - Surface: product
 - Source: `blocks/platform/create/resource-picker/resource-picker.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/create/resource-picker")`
-- Components: [Button](../../../components/button.md), [Card](../../../components/card.md), [Field](../../../components/field.md), [HelperText](../../../components/helper-text.md), [Input](../../../components/input.md), [Item](../../../components/item.md), [SettingRow](../../../components/setting-row.md), [Skeleton](../../../components/skeleton.md), [Switch](../../../components/switch.md), [ToggleGroup](../../../components/toggle-group.md), [Tooltip](../../../components/tooltip.md)
+- Components: [Button](../../../components/button.md), [Card](../../../components/card.md), [Field](../../../components/field.md), [HelperText](../../../components/helper-text.md), [Input](../../../components/input.md), [Item](../../../components/item.md), [SettingRow](../../../components/setting-row.md), [Skeleton](../../../components/skeleton.md), [Switch](../../../components/switch.md), [ToggleGroup](../../../components/toggle-group.md)
 - Skills: `webkit-form`, `webkit-ui-states`
 
 ## Asked as
@@ -34,11 +34,11 @@ The band a create flow uses when the resource being created needs another resour
 
 `Card :padded="false"` titled with the bound noun ("Project"), opening with one muted sentence on what the binding does. The card is flush so the list rows run edge to edge; text and controls carry their own padding. It sits in the form column (`layout-column-form`) like any other band.
 
-For an optional binding (OptionalBinding), the card has no title: its first row is a compact `SettingRow` titled with the action ("Protect with a firewall") whose `Switch` opts in, and the rest of the band unfolds under it with a grid-rows transition, `inert` while it is off. New then lists the resource's own modules as compact `SettingRow`s with a `Switch` each under the Name field; a module that cannot be turned off is a disabled, checked `Switch` in a `Tooltip` that says why.
+For an optional binding (OptionalBinding), the card has no title: its first row is a compact `SettingRow` titled with the action ("Protect with a firewall") whose `Switch` opts in, and the rest of the band unfolds under it with a grid-rows transition, `inert` while it is off. New then lists the resource's own modules as compact `SettingRow`s with a `Switch` each under the Name field; a module that cannot be turned off is a disabled, checked `Switch`, and its row description ends with why ("Always on."); a disabled control takes no focus, so a tooltip on it would never reach keyboard or screen-reader users.
 
 ### B. Existing / New choice — `ToggleGroup` (required when something exists)
 
-A `ToggleGroup` at `size="large"`, `fluid`, with two options, `Existing <noun>` and `New <noun>`, and an `aria-label` that names the question. Existing is the default when at least one resource exists. When none exist the toggle is not rendered and the card opens on New. Switching modes keeps both answers: going to New and back finds the same row still chosen.
+A `ToggleGroup` at `size="large"`, `fluid`, with two options, `Existing <noun>` and `New <noun>`, and an `aria-label` that names the question. Existing is the default when at least one resource exists. When none exist the toggle is not rendered, one line says a new resource is created, and the card opens on New (the Empty state). Switching modes keeps both answers: going to New and back finds the same row still chosen.
 
 ### C. New resource fields — `Field`, `Input` (required in New)
 
@@ -73,7 +73,7 @@ A transparent small full-width `Button` under the list while more matches remain
 - Don't validate the Name while it is being typed, or show required and invalid together.
 - Don't render a loading spinner in place of the rows; show skeleton rows in the row shape and keep the visible ones.
 - Don't put the create fields in a dialog or a second page; they belong in the same card.
-- Don't hide a locked module or leave it looking editable; disable it, keep it on and say why in a tooltip.
+- Don't hide a locked module or leave it looking editable; disable it, keep it on and say why in its row description, never only in a tooltip.
 
 ## Copy
 
@@ -85,7 +85,7 @@ A transparent small full-width `Button` under the list while more matches remain
 - **No match:** the fact, then both ways out, e.g. "No project matches “api”. Create one instead, or clear the search."
 - **Required:** what to do, as a sentence, e.g. "Select the project this service serves, or create a new one."
 - **Name guidance:** the allowed characters, e.g. "Lowercase letters, numbers, and hyphens."
-- **Opt-in row:** the action as the title, e.g. "Protect with a firewall", and what it does and that it is off by default as the description. A locked module's tooltip: the fact, e.g. "DDoS Protection is always on."
+- **Opt-in row:** the action as the title, e.g. "Protect with a firewall", and what it does and that it is off by default as the description. A locked module's description ends with the fact, e.g. "Always on."
 - Follow `skills/webkit-microcopy`: "Select", never "Pick" or "Choose"; sentence case; no em dash.
 
 ## Accessibility
@@ -104,6 +104,7 @@ A transparent small full-width `Button` under the list while more matches remain
 - New: the user switched to New; the list gives way to the Name field with the allowed characters as helper text.
 - Loading: Load more was pressed; five skeleton rows follow the visible ones and the button spins.
 - Required: Next was pressed with nothing chosen; the required message sits under the search, above the list.
+- Empty: nothing exists to bind; no toggle, one line saying a new project is created, and the Name field.
 - OptionalBinding: the Protect with a firewall switch is on and New firewall is selected; the Name is prefilled from the project and the Firewall modules list has DDoS Protection locked on.
 
 ## Related
@@ -121,6 +122,7 @@ A transparent small full-width `Button` under the list while more matches remain
 - `New` — New project: the list gives way to a Name field with the allowed characters as helper text. It only reads as required once Next is pressed with it empty.
 - `Loading` — Loading the next page: five skeleton rows with staggered wire widths follow the visible projects while the load button spins.
 - `Required` — Next pressed with no project selected: the required message sits under the search, above the list.
+- `Empty` — Nothing exists to bind: the ToggleGroup is not rendered, one line says a new project is created with the service, and the card opens on the Name field.
 - `OptionalBinding` — An opt-in binding: a Protect with a firewall switch row, turned on, unfolds the Existing / New choice; New firewall shows the Name prefilled from the project and the Firewall modules switches, DDoS Protection disabled and always on with a tooltip that says why.
 
 Each variant is the same screen in another state: `get_pattern("platform/create/resource-picker", { variant })`, or the file under `blocks/platform/create/resource-picker/variants/`.
@@ -137,7 +139,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
   import Item from '@aziontech/webkit/item'
   import Skeleton from '@aziontech/webkit/skeleton'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
-  import { computed, reactive, ref } from 'vue'
+  import { computed, onBeforeUnmount, reactive, ref } from 'vue'
 
   interface PickerOption {
     value: string
@@ -170,27 +172,31 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
     { value: 'docs-site', label: 'docs-site', description: 'Astro · acme/docs-site' },
     { value: 'docs-next', label: 'docs-next', description: 'Next.js · acme/docs-next' },
     { value: 'vue-sample', label: 'vue-sample', description: 'Vue · jane-doe/vue-sample' },
-    { value: 'hello-world', label: 'hello-world', description: 'JavaScript · ' },
+    { value: 'hello-world', label: 'hello-world', description: 'JavaScript · acme/hello-world' },
     { value: 'company-site', label: 'company-site', description: 'HTML · acme/company-site' },
-    { value: 'company-docs', label: 'company-docs', description: 'HTML · ' },
+    { value: 'company-docs', label: 'company-docs', description: 'HTML · acme/company-docs' },
     { value: 'analytics-pro', label: 'analytics-pro', description: 'Next.js · acme/analytics-pro' },
-    { value: 'analytics-api', label: 'analytics-api', description: 'Next.js · ' },
+    { value: 'analytics-api', label: 'analytics-api', description: 'Next.js · acme/analytics-api' },
     {
       value: 'react-dashboard',
       label: 'react-dashboard',
       description: 'React · acme/react-dashboard'
     },
-    { value: 'docs-portal', label: 'docs-portal', description: 'Vue · ' },
-    { value: 'ecommerce-v2', label: 'ecommerce-v2', description: 'Nuxt · shopco/ecommerce-v2' },
-    { value: 'ecommerce-storefront', label: 'ecommerce-storefront', description: 'Nuxt · ' },
+    { value: 'docs-portal', label: 'docs-portal', description: 'Vue · acme/docs-portal' },
+    { value: 'ecommerce-v2', label: 'ecommerce-v2', description: 'Nuxt · acme/ecommerce-v2' },
+    {
+      value: 'ecommerce-storefront',
+      label: 'ecommerce-storefront',
+      description: 'Nuxt · acme/ecommerce-storefront'
+    },
     {
       value: 'marketing-site',
       label: 'marketing-site',
       description: 'Astro · acme/marketing-site'
     },
-    { value: 'blog-platform', label: 'blog-platform', description: 'Astro · ' },
+    { value: 'blog-platform', label: 'blog-platform', description: 'Astro · acme/blog-platform' },
     { value: 'status-page', label: 'status-page', description: 'Svelte · acme/status-page' },
-    { value: 'mobile-app', label: 'mobile-app', description: 'Svelte · ' }
+    { value: 'mobile-app', label: 'mobile-app', description: 'Svelte · acme/mobile-app' }
   ]
   const PAGE_SIZE = 5
   const wireWidths = ['62%', '48%', '70%', '54%', '44%']
@@ -202,6 +208,8 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
     const message = ref(initial.message ?? '')
     const shown = ref(PAGE_SIZE)
     const loading = ref(initial.loading ?? false)
+    let timer: ReturnType<typeof setTimeout> | undefined
+    onBeforeUnmount(() => clearTimeout(timer))
 
     const chosenIndex = options.findIndex((option) => option.value === chosen.value)
     if (chosenIndex >= PAGE_SIZE) shown.value = Math.ceil((chosenIndex + 1) / PAGE_SIZE) * PAGE_SIZE
@@ -236,7 +244,8 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
     const loadMore = () => {
       if (loading.value || !remaining.value) return
       loading.value = true
-      setTimeout(() => {
+      clearTimeout(timer)
+      timer = setTimeout(() => {
         shown.value += PAGE_SIZE
         loading.value = false
       }, 420)
@@ -257,7 +266,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
     })
   }
 
-  const mode = ref('existing')
+  const mode = ref(projects.length ? 'existing' : 'new')
   const name = ref('')
   const projectPicker = usePicker(projects, 'project', {
     chosen: 'web-app',
@@ -279,12 +288,19 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
             projects on Production and Preview.
           </p>
           <ToggleGroup
+            v-if="projects.length"
             v-model="mode"
             :options="projectModes"
             size="large"
             fluid
             aria-label="Where the project comes from"
           />
+          <p
+            v-else
+            class="text-body-sm text-(--text-muted)"
+          >
+            There is no project to bind yet, so a new one is created with this service.
+          </p>
 
           <p
             v-if="mode === 'existing'"

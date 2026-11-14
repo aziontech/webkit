@@ -49,6 +49,7 @@
 | `submitLabel` | `string` | `''` | false | Label of the primary action on the last step, where Next becomes the submit action. Empty uses the locale catalog (`Create`). |
 | `loading` | `boolean` | `false` | false | Submit in progress: the primary action shows its loading state, and Cancel, Previous and every rail step are disabled. |
 | `ariaLabel` | `string` | `''` | false | Accessible name for the wizard region. Name the task, for example Create edge application. |
+| `modelValue` | `number \| undefined` | `undefined` | false | Two-way value (`v-model`). |
 | `activeStep` | `number` | `0` | false | Two-way value (`v-model:activeStep`). |
 
 ## Events
@@ -147,9 +148,10 @@ folder only):
 
 ## v-model
 
-| Model                | Type     | Default | Emits               | Notes                                                                                                                                                                                                                                                                                       |
-| -------------------- | -------- | ------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `v-model:activeStep` | `number` | `0`     | `update:activeStep` | Zero-based index of the step on screen, two-way through `defineModel('activeStep', { default: 0 })`. Written by Next (after an un-prevented `next`), by Previous (index − 1) and by a rail jump to an earlier step. Rendering clamps an out-of-range value to `0 … N − 1` without emitting. |
+| Model                | Type                  | Default     | Emits               | Notes                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+| -------------------- | --------------------- | ----------- | ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `v-model`            | `number \| undefined` | `undefined` | `update:modelValue` | Zero-based index of the step on screen, through `defineModel<number \| undefined>()`, the primary value as on `Stepper` and every sibling. Written by Next (after an un-prevented `next`), by Previous (index − 1) and by a rail jump to an earlier step. Rendering clamps an out-of-range value to `0 … N − 1` without emitting. Kept in sync with `activeStep`. The rail `Stepper` identifies steps by string `value`; the wizard by numeric index, because its steps are positional. |
+| `v-model:activeStep` | `number`              | `0`         | `update:activeStep` | `@deprecated since 6.0 — use v-model. Removed in 7.0.` Same index as `v-model`, kept in sync with it; two-way through `defineModel('activeStep', { default: 0 })`. Written by Next (after an un-prevented `next`), by Previous (index − 1) and by a rail jump to an earlier step. Rendering clamps an out-of-range value to `0 … N − 1` without emitting.                                                                                                                               |
 
 ## States
 
@@ -263,7 +265,7 @@ focus-visible:ring-offset-(--bg-canvas)`. The step heading is a programmatic foc
 
 <template>
   <Wizard
-    v-model:active-step="step"
+    v-model="step"
     aria-label="Create resource"
     submit-label="Create"
   >
@@ -406,7 +408,7 @@ focus-visible:ring-offset-(--bg-canvas)`. The step heading is a programmatic foc
 
 <template>
   <Wizard
-    v-model:active-step="step"
+    v-model="step"
     aria-label="Create resource"
     submit-label="Create"
   >
@@ -509,7 +511,7 @@ focus-visible:ring-offset-(--bg-canvas)`. The step heading is a programmatic foc
 
 <template>
   <Wizard
-    v-model:active-step="step"
+    v-model="step"
     aria-label="Create resource"
     submit-label="Create"
     loading

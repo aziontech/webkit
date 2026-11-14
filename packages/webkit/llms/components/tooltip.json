@@ -83,12 +83,12 @@
   {
    "name": "show",
    "payload": "void",
-   "notes": "Emitted right after the open transition starts."
+   "notes": "Emitted right after the open transition starts. **@deprecated since 6.0 — use `update:open` (`v-model:open`). Removed in 7.0.** It echoes `update:open`."
   },
   {
    "name": "hide",
    "payload": "void",
-   "notes": "Emitted right after the close transition starts."
+   "notes": "Emitted right after the close transition starts. **@deprecated since 6.0 — use `update:open` (`v-model:open`). Removed in 7.0.** It echoes `update:open`."
   }
  ],
  "slots": [

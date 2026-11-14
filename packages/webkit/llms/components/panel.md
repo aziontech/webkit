@@ -61,6 +61,7 @@
 
 - Visual states: `default`, `hover`, `focus-visible`, `active`, `disabled`
 - `data-state` values: `open` | `closed` (where applicable)
+- `data-width` on the root carries the resolved width: `small` | `medium` | `large`, the same with `-md` when `sizeAtMd` is set, or `fluid` when the internal `data-fluid` attribute is passed (Drawer). Tailwind `data-[width=…]:` variants map it to the container tokens; there is no JS class map.
 - Responsive: `PanelContent` is the `@container/panel`, so the content of a dialog or a drawer lays out for the panel width. Below `sm` the `PanelFooter` wraps, stretches its direct children to equal widths (`max-sm:*:flex-1`) and pads the bottom by `env(safe-area-inset-bottom)`.
 
 ## Accessibility

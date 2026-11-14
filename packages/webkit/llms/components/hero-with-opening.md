@@ -39,6 +39,7 @@
 | `primaryAction` | `HeroWithOpeningAction` | `undefined` | false | First button under the headline; `{ label, href, trailing?, target? }`. Shown only with a label and a link. |
 | `secondaryAction` | `HeroWithOpeningAction` | `undefined` | false | Second, outlined button beside the first; `{ label, href, trailing?, target? }`. Shown only with a label and a link. |
 | `items` | `HeroWithOpeningItem[]` | `[]` | false | The arguments in reading order, three to a row; each is `{ icon, title, description }`. The grid renders only when there are items. |
+| `anchor` | `string` | `''` | false | In-page id set on the band so a hash link can target it. |
 
 ## Assets
 

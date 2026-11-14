@@ -44,7 +44,7 @@
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `items` | `QuoteCarouselItem[]` | `[]` | false | The testimonials rendered as cards, in order; each item is `{ text, name?, jobTitle?, photo?, mark? }` — the quotation, who said it, the rest of the attribution, their likeness and the registry name of the company's mark. |
+| `items` | `QuoteCarouselItem[]` | `[]` | false | The testimonials rendered as cards, in order; each item is `{ text, name?, jobTitle?, photo?, logo?, logoAlt?, mark? }` — the quotation, who said it, the rest of the attribution, their likeness, the URL of the company's logo (wins over `mark`) with its alternative text, and the registry name of the company's mark. The same `logo` / `mark` pair as `quote-tabs` items. |
 | `ariaLabel` | `string` | `''` | false | Accessible name for the scrollable row of testimonials, announced before its contents. |
 
 ## Assets

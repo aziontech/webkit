@@ -12,8 +12,8 @@
   },
   {
    "name": "Move",
-   "summary": "A move between folders with `operation=\"move\"`, collapsed with `v-model:collapsed` so only the header and overall bar show.",
-   "sfc": "<script setup>\n  import UploadProgress from '@aziontech/webkit/upload-progress'\n  import { ref } from 'vue'\n\n  const collapsed = ref(true)\n\n  const items = [\n    { id: 'a', name: 'reports/2026-10.csv', size: 18_200, status: 'done' },\n    { id: 'b', name: 'reports/2026-11.csv', size: 19_400, status: 'running', progress: 40 },\n    { id: 'c', name: 'reports/summary.pdf', size: 402_000, status: 'queued' }\n  ]\n</script>\n\n<template>\n  <div class=\"w-full max-w-(--container-xs)\">\n    <UploadProgress\n      v-model:collapsed=\"collapsed\"\n      :items=\"items\"\n      operation=\"move\"\n      :floating=\"false\"\n    />\n  </div>\n</template>"
+   "summary": "A move between folders with `operation=\"move\"`, collapsed with `v-model:expanded` set to `false` so only the header and overall bar show.",
+   "sfc": "<script setup>\n  import UploadProgress from '@aziontech/webkit/upload-progress'\n  import { ref } from 'vue'\n\n  const expanded = ref(false)\n\n  const items = [\n    { id: 'a', name: 'reports/2026-10.csv', size: 18_200, status: 'done' },\n    { id: 'b', name: 'reports/2026-11.csv', size: 19_400, status: 'running', progress: 40 },\n    { id: 'c', name: 'reports/summary.pdf', size: 402_000, status: 'queued' }\n  ]\n</script>\n\n<template>\n  <div class=\"w-full max-w-(--container-xs)\">\n    <UploadProgress\n      v-model:expanded=\"expanded\"\n      :items=\"items\"\n      operation=\"move\"\n      :floating=\"false\"\n    />\n  </div>\n</template>"
   }
  ]
 }

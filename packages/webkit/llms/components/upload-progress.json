@@ -68,9 +68,16 @@
    "doc": "Shows Cancel on running and waiting files and Cancel all in the header."
   },
   {
+   "name": "expanded",
+   "type": "boolean",
+   "default": "undefined as never",
+   "required": "false",
+   "doc": "Two-way value (`v-model:expanded`)."
+  },
+  {
    "name": "collapsed",
    "type": "boolean",
-   "default": "false",
+   "default": "undefined as never",
    "required": "false",
    "doc": "Two-way value (`v-model:collapsed`)."
   }
@@ -112,7 +119,7 @@
   },
   {
    "name": "Move",
-   "sfc": "<script setup>\n  import UploadProgress from '@aziontech/webkit/upload-progress'\n  import { ref } from 'vue'\n\n  const collapsed = ref(true)\n\n  const items = [\n    { id: 'a', name: 'reports/2026-10.csv', size: 18_200, status: 'done' },\n    { id: 'b', name: 'reports/2026-11.csv', size: 19_400, status: 'running', progress: 40 },\n    { id: 'c', name: 'reports/summary.pdf', size: 402_000, status: 'queued' }\n  ]\n</script>\n\n<template>\n  <div class=\"w-full max-w-(--container-xs)\">\n    <UploadProgress\n      v-model:collapsed=\"collapsed\"\n      :items=\"items\"\n      operation=\"move\"\n      :floating=\"false\"\n    />\n  </div>\n</template>"
+   "sfc": "<script setup>\n  import UploadProgress from '@aziontech/webkit/upload-progress'\n  import { ref } from 'vue'\n\n  const expanded = ref(false)\n\n  const items = [\n    { id: 'a', name: 'reports/2026-10.csv', size: 18_200, status: 'done' },\n    { id: 'b', name: 'reports/2026-11.csv', size: 19_400, status: 'running', progress: 40 },\n    { id: 'c', name: 'reports/summary.pdf', size: 402_000, status: 'queued' }\n  ]\n</script>\n\n<template>\n  <div class=\"w-full max-w-(--container-xs)\">\n    <UploadProgress\n      v-model:expanded=\"expanded\"\n      :items=\"items\"\n      operation=\"move\"\n      :floating=\"false\"\n    />\n  </div>\n</template>"
   }
  ],
  "docs": "components/upload-progress.md"

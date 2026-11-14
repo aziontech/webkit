@@ -51,14 +51,14 @@
 | Event | Payload | Notes |
 | --- | --- | --- |
 | `error` | `ErrorBoundaryErrorEvent` | Fires once per failure with `{ error, info }`: what was thrown and Vue's description of where. Report it from here. |
-| `retry` | `void` | Fires when the region is mounted again (Retry, the slot's `retry`, or a `resetKey` change). Reset the broken state here. |
+| `retry` | `(event?: Event)` | Fires when the region is mounted again (Retry, the slot's `retry`, or a `resetKey` change). Reset the broken state here. Carries the click event when the built-in Retry button (or a slot `retry(event)` call) triggered it; no argument for a `resetKey` change. |
 
 ## Slots
 
 | Slot | Scope | Notes |
 | --- | --- | --- |
 | `default` | — | The region the boundary guards. Mounted again, from scratch, on every retry. |
-| `fallback` | { error: unknown, retry: () => void } | Replaces the built-in `Alert` while the region is failed. Call `retry` to mount it again. |
+| `fallback` | { error: unknown, retry: (event?: Event) => void } | Replaces the built-in `Alert` while the region is failed. Call `retry` to mount it again; pass the click event to forward it on the `retry` event. |
 
 ## States
 

@@ -15,7 +15,7 @@
   "Any collection driven by `useCollection`, which saves the result per collection."
  ],
  "avoidWhen": [
-  "A single column-visibility toggle inside a table toolbar → use `table-column-selector`.",
+  "A single column-visibility toggle inside a table toolbar → use `table-column-selector` (it applies each switch at once; this panel drafts every preference and commits on Confirm). Offer one of the two for columns on a screen, not both; both edit the same `{ id, visible }` column shape that `useCollection` saves.",
   "Settings of the resource itself (not of how the list shows it) → use a form page or `dialog`."
  ],
  "related": [
@@ -30,13 +30,6 @@
   "Keep the trigger at the end of the controls row, after Refresh and Download."
  ],
  "props": [
-  {
-   "name": "preferences",
-   "type": "CollectionPreferencesValue",
-   "default": "{}",
-   "required": "false",
-   "doc": "The saved preferences. Supports v-model:preferences; changes apply on Confirm."
-  },
   {
    "name": "columns",
    "type": "CollectionPreferencesColumn[]",
@@ -85,14 +78,16 @@
    "default": "false",
    "required": "false",
    "doc": "Two-way value (`v-model:open`)."
+  },
+  {
+   "name": "preferences",
+   "type": "CollectionPreferencesValue",
+   "default": "—",
+   "required": "false",
+   "doc": "Two-way value (`v-model:preferences`)."
   }
  ],
  "events": [
-  {
-   "name": "update:preferences",
-   "payload": "CollectionPreferencesValue",
-   "notes": "Confirm was activated."
-  },
   {
    "name": "confirm",
    "payload": "(event: MouseEvent, value: CollectionPreferencesValue)",
@@ -121,6 +116,10 @@
   {
    "name": "InADrawer",
    "sfc": "<script setup>\n  import Button from '@aziontech/webkit/button'\n  import CollectionPreferences from '@aziontech/webkit/collection-preferences'\n  import { ref } from 'vue'\n\n  const columns = [\n    { id: 'name', label: 'Name', locked: true },\n    { id: 'domain', label: 'Domain' },\n    { id: 'status', label: 'Status' }\n  ]\n\n  const preferences = ref({ density: 'compact' })\n</script>\n\n<template>\n  <CollectionPreferences\n    v-model:preferences=\"preferences\"\n    :columns=\"columns\"\n    :sections=\"['columns', 'density']\"\n    container=\"drawer\"\n  >\n    <template #trigger=\"{ open }\">\n      <Button\n        label=\"Table settings\"\n        icon=\"pi pi-cog\"\n        kind=\"outlined\"\n        size=\"medium\"\n        @click=\"open\"\n      />\n    </template>\n  </CollectionPreferences>\n</template>"
+  },
+  {
+   "name": "Disabled",
+   "sfc": "<script setup>\n  import CollectionPreferences from '@aziontech/webkit/collection-preferences'\n\n  const columns = [\n    { id: 'name', label: 'Name', locked: true },\n    { id: 'status', label: 'Status' }\n  ]\n</script>\n\n<template>\n  <CollectionPreferences\n    :columns=\"columns\"\n    :page-size-options=\"[10, 25, 50]\"\n    disabled\n  />\n</template>"
   }
  ],
  "docs": "components/collection-preferences.md"

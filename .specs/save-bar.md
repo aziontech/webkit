@@ -3,7 +3,7 @@ name: save-bar
 category: layout
 structure: monolithic
 status: implemented
-checksum: 0b429f50c0e5152ad043c50a90599614186ed2a56368455426e194d07074bf46
+checksum: 715d3a32ecdddd032682e7d090ff813dc205782ac11fe394ea91f01969de28df
 spec_version: 3
 template: 2
 created: 2026-11-10
@@ -79,13 +79,12 @@ The bar at the bottom of a settings or create page that holds the status of unsa
 
 Each `kind` is one placement plus one surface, named for what a reader sees:
 
-| `kind`     | Placement                                                        | Surface                                         | Use for                                          |
-| ---------- | ---------------------------------------------------------------- | ----------------------------------------------- | ------------------------------------------------ |
-| `floating` | overlays the bottom of the scroll region; the content does not move | canvas band with a top border                 | the dirty state of a settings page               |
-| `docked`   | its own row at the bottom of the region; the content ends above it | canvas band with a top border                  | the dirty state when nothing may be covered      |
-| `plain`    | the last row of a form column, always shown                      | surface band with a muted top border            | a form saved as one unit                         |
-| `fade`     | the last row of a wizard step, always shown                      | a gradient from transparent to the canvas, no border | a full-page wizard step (Back, Next)        |
-| `centered` | a card centred at the bottom of the region, over the content     | raised card with a border and a large shadow    | a create page (Cancel, Create)                   |
+- `kind`: Placement; Surface; use for Use for.
+- `floating`: overlays the bottom of the scroll region; the content does not move; canvas band with a top border; use for the dirty state of a settings page.
+- `docked`: its own row at the bottom of the region; the content ends above it; canvas band with a top border; use for the dirty state when nothing may be covered.
+- `plain`: the last row of a form column, always shown; surface band with a muted top border; use for a form saved as one unit.
+- `fade`: the last row of a wizard step, always shown; a gradient from transparent to the canvas, no border; use for a full-page wizard step (Back, Next).
+- `centered`: a card centred at the bottom of the region, over the content; raised card with a border and a large shadow; use for a create page (Cancel, Create).
 
 ## Events
 

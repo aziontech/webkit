@@ -1,6 +1,6 @@
 # PageWires (`platform/states/page-wires`)
 
-> The skeleton wires an app paints while a page is still arriving: the Home overview (HomeWire), the first-access Home (HomeFirstUseWire), and the whole shell while an expired session signs out (SessionWire), which draws one of four bodies by the family of the page it covers: list, detail, create form or Home, and the version page (VersionWire), sectioned cards whose rows end in a switch band. Each one is the real page’s grid drawn with Skeleton bands inside the same Card frames, so nothing shifts when the content lands. In the app the session wire is a fixed full-viewport layer sized to the measured header and rail; here it fills the canvas at the header’s 56px and the rail’s `--container-2xs`. Built from Skeleton, Card and Item. Overview, Onboarding and VersionDetail are page bodies for the default slot of ConsoleLayout; the Session wires stand in for the whole app, layout included.
+> The skeleton wires an app paints while a page is still arriving: the Home overview (Overview), the first-access Home (Onboarding), the whole shell while an expired session signs out (Session, with one body per family of page it covers: Session for a list, SessionDetail, SessionForm and SessionHome), and the version page (VersionDetail), sectioned cards whose rows end in a switch band. Each one is the real page’s grid drawn with Skeleton bands inside the same Card frames, so nothing shifts when the content lands. In the app the session wire is a fixed full-viewport layer sized to the measured header and rail; here it fills the canvas at the header’s 56px and the rail’s `--container-2xs`. Built from Skeleton, Card and Item; layout differences between rows switch on `data-*` attributes, never on a class ternary. Overview, Onboarding and VersionDetail are page bodies for the default slot of ConsoleLayout; the Session wires stand in for the whole app, layout included.
 
 - Surface: product
 - Source: `blocks/platform/states/page-wires/page-wires.vue` in `@aziontech/webkit`
@@ -10,7 +10,7 @@
 
 ## Asked as
 
-page skeleton; loading skeleton; skeleton screen; page loading state; wireframe loading; session expired; carregando; esqueleto de carregamento; tela de carregamento
+page skeleton; loading skeleton; skeleton screen; page loading state; wireframe loading; carregando; esqueleto de carregamento; tela de carregamento
 
 The skeleton wires an app paints while a page is still arriving. The user's job does not change while they wait: they need to see the shape of the page they asked for, so the wire draws the real page's grid with `Skeleton` bands inside the same `Card` frames, and nothing shifts when the content lands. The set covers the Home overview, the first-access Home, and the whole shell while an expired session signs out, drawn over the family of page it covers (list, detail, create form or Home).
 
@@ -206,8 +206,8 @@ Each variant is the same screen in another state: `get_pattern("platform/states/
         <div
           v-for="panel in panels"
           :key="panel"
-          class="flex min-w-0 flex-col gap-(--spacing-xs) xl:min-h-0"
-          :class="panel === 4 ? 'sm:col-span-2 lg:col-span-3 xl:col-span-2' : ''"
+          :data-wide="panel === 4 || null"
+          class="flex min-w-0 flex-col gap-(--spacing-xs) xl:min-h-0 data-wide:sm:col-span-2 data-wide:lg:col-span-3 data-wide:xl:col-span-2"
         >
           <div
             class="flex min-h-(--size-6) items-center gap-(--spacing-xs) px-[calc(var(--spacing-md)+1px)]"
@@ -232,10 +232,8 @@ Each variant is the same screen in another state: `get_pattern("platform/states/
               >
                 <Item.Content>
                   <div
-                    class="flex h-(--size-5) flex-col justify-center"
-                    :class="
-                      panel === 1 || panel === 4 ? 'ps-[calc(var(--size-4)+var(--spacing-xs))]' : ''
-                    "
+                    :data-indented="panel === 1 || panel === 4 || null"
+                    class="flex h-(--size-5) flex-col justify-center data-indented:ps-[calc(var(--size-4)+var(--spacing-xs))]"
                   >
                     <Skeleton
                       :width="row % 2 ? '55%' : '42%'"

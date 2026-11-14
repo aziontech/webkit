@@ -104,6 +104,13 @@
    "default": "''",
    "required": "false",
    "doc": "Extra classes applied to the icon glyph."
+  },
+  {
+   "name": "type",
+   "type": "'button' | 'submit' | 'reset'",
+   "default": "'button'",
+   "required": "false",
+   "doc": "Native button type. `submit` lets an icon-only control submit its form (a search submit, a chat send); `disabled` and `loading` still block it. Ignored when `href` is set."
   }
  ],
  "events": [

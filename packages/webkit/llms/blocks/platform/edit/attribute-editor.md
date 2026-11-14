@@ -1,16 +1,16 @@
 # AttributeEditor (`platform/edit/attribute-editor`)
 
-> A key/value editor, drawn as a variables list page and the Create Variable drawer its heading action opens. The list follows the table-view recipe: one client-mode `useCollection` drives a `PropertyFilter`, `CollectionPreferences` and a data-driven `TableRoot`, with a first-use and a no-match `EmptyState`; each row's Edit opens the drawer on that variable, Clone inserts a copy below it, and Delete opens the typed `ConfirmDialog` of delete-with-confirmation. In the drawer the variables are an `AttributeEditor` (add, remove, focus, announcements, minimum one row) whose `row` slot draws each variable as a pair of `InputGroupRoot` rows, a Key row with a Remove button and a Value row with a show-value button and a Secret checkbox, beside a Form or JSON view and an Upload of a .env file; every scope is an `InputGroupRoot` joining its label, a `MultiSelect` of resources and an enable `Switch`, with Global giving way to any specific scope. Required and invalid states appear only after Save is pressed. Built from `AttributeEditor`, `PageHeader`, `PropertyFilter`, `CollectionPreferences`, `SettingsSection`, `TableRoot`, `Card`, `EmptyState`, `Table.CellId`, `Table.CellLink`, `Table.CellActions`, `Avatar`, `DropdownMenu`, `ConfirmDialog`, `Alert`, `Input`, `IconButton`, `Tooltip`, `Drawer` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter`, `InputGroupRoot`, `InputGroupAddon`, `Checkbox`, `ToggleGroup`, `MultiSelect`, `Switch`, `HelperText` and `Button`; the JSON view is a webkit `Textarea`. A page body for ConsoleLayout.
+> A key/value editor, drawn as a variables list page and the Create Variable drawer its heading action opens. The list follows the table-view recipe: one client-mode `useCollection` drives a `PropertyFilter`, `CollectionPreferences` and a data-driven `TableRoot`, with a first-use and a no-match `EmptyState`; each row's Edit opens the drawer on that variable, Clone inserts a copy below it, and Delete opens the typed `ConfirmDialog` of delete-with-confirmation. In the drawer the variables are an `AttributeEditor` (add, remove, focus, announcements, minimum one row) whose `row` slot draws each variable as a pair of `InputGroupRoot` rows with `InputGroupInput` fields, a Key row with a Remove button and a Value row with a show-value button and a Secret checkbox, beside a Form or JSON view and an Upload of a .env file; every scope is an `InputGroupRoot` joining its label, a `MultiSelect` of resources and an enable `Switch`, with Global giving way to any specific scope. Required and invalid states appear only after Save is pressed; every create, edit, clone and delete raises a success toast, and a save that fails keeps the drawer open with a danger `Alert`. Built from `AttributeEditor`, `PageHeader`, `PropertyFilter`, `CollectionPreferences`, `SettingsSection`, `TableRoot`, `Card`, `EmptyState`, `Table.CellId`, `Table.CellLink`, `Table.CellActions`, `Avatar`, `DropdownMenu`, `ConfirmDialog`, `Alert`, `Input`, `IconButton`, `Tooltip`, `Drawer` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter`, `InputGroupRoot`, `InputGroupAddon`, `InputGroupInput`, `Checkbox`, `ToggleGroup`, `MultiSelect`, `Switch`, `HelperText` and `Button`; the JSON view is a webkit `Textarea`. A page body for ConsoleLayout.
 
 - Surface: product
 - Source: `blocks/platform/edit/attribute-editor/attribute-editor.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/edit/attribute-editor")`
-- Components: [Alert](../../../components/alert.md), [AttributeEditor](../../../components/attribute-editor.md), [Avatar](../../../components/avatar.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [Checkbox](../../../components/checkbox.md), [CollectionPreferences](../../../components/collection-preferences.md), [ConfirmDialog](../../../components/confirm-dialog.md), [Drawer](../../../components/drawer.md), `DrawerClose`, `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, `DrawerTrigger`, [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [Field](../../../components/field.md), [HelperText](../../../components/helper-text.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), `InputGroupAddon`, `InputGroupRoot`, [MultiSelect](../../../components/multi-select.md), [PageHeader](../../../components/page-header.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [PropertyFilter](../../../components/property-filter.md), [SettingsSection](../../../components/settings-section.md), [Switch](../../../components/switch.md), [Table](../../../components/table.md), `TableRoot`, [Textarea](../../../components/textarea.md), [Toast](../../../components/toast.md), [ToggleGroup](../../../components/toggle-group.md), [Tooltip](../../../components/tooltip.md), `use-collection`
+- Components: [Alert](../../../components/alert.md), [AttributeEditor](../../../components/attribute-editor.md), [Avatar](../../../components/avatar.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [Checkbox](../../../components/checkbox.md), [CollectionPreferences](../../../components/collection-preferences.md), [ConfirmDialog](../../../components/confirm-dialog.md), [Drawer](../../../components/drawer.md), `DrawerClose`, `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, `DrawerTrigger`, [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [Field](../../../components/field.md), [HelperText](../../../components/helper-text.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), `InputGroupAddon`, `InputGroupInput`, `InputGroupRoot`, [MultiSelect](../../../components/multi-select.md), [PageHeader](../../../components/page-header.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [PropertyFilter](../../../components/property-filter.md), [SettingsSection](../../../components/settings-section.md), [Switch](../../../components/switch.md), [Table](../../../components/table.md), `TableRoot`, [Textarea](../../../components/textarea.md), [Toast](../../../components/toast.md), [ToggleGroup](../../../components/toggle-group.md), [Tooltip](../../../components/tooltip.md), `use-collection`
 - Skills: `webkit-lists`, `webkit-tables`, `webkit-form`, `webkit-create-surface`
 
 ## Asked as
 
-variables; environment variables; env vars; secrets; create variable; edit variable; variables list; version history; variáveis; variáveis de ambiente; segredos; criar variável; key value editor; attribute editor; .env upload; editor de chave e valor; delete variable; clone variable; paste .env; paste env file; import .env; colar .env; importar variáveis; dotenv; network list; ip list; asn list; country list; bulk paste; lista de rede; lista de ips; lista de red
+variables; environment variables; env vars; secrets; create variable; edit variable; variables list; variáveis; variáveis de ambiente; segredos; criar variável; key value editor; attribute editor; .env upload; editor de chave e valor; delete variable; clone variable; paste .env; paste env file; import .env; colar .env; importar variáveis; dotenv; network list; ip list; asn list; country list; bulk paste; lista de rede; lista de ips; lista de red
 
 A list of key and value pairs and the drawer that edits them, here environment variables. The user scans the variables already defined, then opens Create Variable to type or paste several pairs at once, mark the sensitive ones as secret, and select where they apply (the whole account, or specific environments, projects, services or policies) before saving them in one step. It is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header, the ⌘K palette and the `main`.
 
@@ -53,9 +53,9 @@ A right-side `Drawer` whose content is one `form` labeled Create Variable or Edi
 
 A `SettingsSection` titled Variables with a hint that says what variables are for. Its toolbar holds an outlined Upload `Button` that reads a `.env` or text file into rows, and a medium `ToggleGroup` that switches between the Form and JSON views of the same data.
 
-### G. Key and value rows — `AttributeEditor`, `Field`, `InputGroupRoot`, `InputGroupAddon`, `Input`, `Tooltip`, `IconButton`, `Checkbox`, `HelperText` (required)
+### G. Key and value rows — `AttributeEditor`, `Field`, `InputGroupRoot`, `InputGroupAddon`, `InputGroupInput`, `Input`, `Tooltip`, `IconButton`, `Checkbox`, `HelperText` (required)
 
-The rows are one `AttributeEditor` (`v-model:items`, `min-items` 1, `add-disabled` until the last pair is filled), which owns the list semantics, Add variable, Remove, the focus after each, the polite "Item n added / removed" announcement and, while editing one variable, the limit of 1 with the note "Edit one variable at a time.". Its `row` slot draws each variable as two large `InputGroupRoot` rows. The Key row joins a Key label addon, a code-font field that turns spaces into underscores, and a Remove variable `IconButton` (hidden while only one pair is left). The Value row joins a Value label addon, the field, a Show value `IconButton` and a Secret `Checkbox` named by a `Tooltip`. Errors render as `HelperText` under the pair. The editor's outlined Add variable button is enabled only when the last pair is filled, and its `info` slot carries the hint that pasting `.env` or JSON contents into an empty key creates one row per variable. Remove is named with the row number ("Remove variable 2").
+The rows are one `AttributeEditor` (`v-model:items`, `min-items` 1, `add-disabled` until the last pair is filled), which owns the list semantics, Add variable, Remove, the focus after each, the polite "Item n added / removed" announcement and, while editing one variable, the limit of 1 with the note "Edit one variable at a time.". Its `row` slot draws each variable as two large `InputGroupRoot` rows. The Key row joins a Key label addon, an `InputGroupInput` that turns spaces into underscores, and a Remove variable `IconButton` (hidden while only one pair is left). The Value row joins a Value label addon, an `InputGroupInput` (a password field while the value is a secret), a Show value `IconButton` and a Secret `Checkbox` named by a `Tooltip`. Errors render as `HelperText` under the pair. The editor's outlined Add variable button is enabled only when the last pair is filled, and its `info` slot carries the hint that pasting `.env` or JSON contents into an empty key creates one row per variable. Remove is named with the row number ("Remove variable 2").
 
 ### H. Paste .env panel — `Button`, `Textarea`, `HelperText` (optional)
 
@@ -71,7 +71,7 @@ A `SettingsSection` titled Scope with one large `InputGroupRoot` per scope type:
 
 ### K. Drawer footer — `PanelFooter`, `Button` (required)
 
-`PanelFooter` holds one primary medium Save `Button` at the end, which submits the form and shows its loading state while saving.
+`PanelFooter` holds one primary medium Save `Button` at the end, which submits the form and shows its loading state while saving. When the save fails, the drawer stays open with every row kept and a danger `Alert` at the top of `PanelContent` says why ("Variables not saved. You are offline; check your connection and save again."); pressing Save again retries.
 
 ### L. List states — `EmptyState`, `Button` (required)
 
@@ -81,9 +81,11 @@ With no variables at all, the card holds a first-use `EmptyState` (`No variables
 
 The dialog of `platform/delete/delete-with-confirmation`, titled Delete variable: a warning `Alert`, one sentence on the consequence, and an `Input` where the user types the key. The danger Delete variable `Button` stays disabled until the trimmed value equals the key; Cancel closes the dialog.
 
+Every change confirms itself with a success toast: "API_KEY created." or "3 variables created.", "API_KEY updated.", "API_KEY cloned as API_KEY_COPY.", "API_KEY deleted.".
+
 ### N. Network list drawer — `Drawer`, `SettingsSection`, `ToggleGroup`, `Button`, `Textarea`, `HelperText`, `AttributeEditor`, `MultiSelect` (optional)
 
-In the NetworkList state the same drawer recipe creates a network list for firewall rules: a General section with a required Name, then an Entries section whose `ToggleGroup` picks the type (IP/CIDR, ASN, Countries). IP/CIDR and ASN entries are an `AttributeEditor` in list mode, large, with an Address (or ASN) column in the code font through `cell-value` and an optional Comment, at most 200 rows. Paste list opens the panel of H for a whole list, one entry per line with `#` comments: its report counts the entries found, names the lines that are not valid ("Line 4 is not an IPv4 or IPv6 address, or a CIDR range") and the lines already in the list that will be skipped. Add N entries appends every new line as a row, valid or not, and each invalid row shows its own error under the field right away, so the user fixes the list line by line instead of retyping it; typed rows are checked only after Save, and empty rows are ignored once one row is filled. Countries is a required `MultiSelect`. Save validates, moves focus to the first field in error, then closes the drawer and raises a success toast with the entry count.
+In the NetworkList state the same drawer recipe creates a network list for firewall rules: a General section with a required Name, then an Entries section whose `ToggleGroup` picks the type (IP/CIDR, ASN, Countries). IP/CIDR and ASN entries are an `AttributeEditor` in list mode, large, with an Address (or ASN) column in the code font through `cell-value` and an optional Comment, at most 200 rows; a paste that would pass 200 says how many lines will be skipped and adds only what fits. Paste list opens the panel of H for a whole list, one entry per line with `#` comments: its report counts the entries found, names the lines that are not valid ("Line 4 is not an IPv4 or IPv6 address, or a CIDR range") and the lines already in the list that will be skipped. Add N entries appends every new line as a row, valid or not, and each invalid row shows its own error under the field right away, so the user fixes the list line by line instead of retyping it; typed rows are checked only after Save, and empty rows are ignored once one row is filled. Countries is a required `MultiSelect`. Save validates, moves focus to the first field in error, then closes the drawer and raises a success toast with the entry count.
 
 ## Do
 
@@ -112,6 +114,7 @@ In the NetworkList state the same drawer recipe creates a network list for firew
 - **Empty states:** "No variables yet" / "Create a variable to store a value your services read at runtime."; "No matching variables" / "No variable matches these filters."
 - **Delete dialog:** title and danger button "Delete variable"; the prompt reads "Type API_BASE_URL to confirm."
 - **Field placeholders:** show the format, e.g. "MY_VARIABLE" for the key, "my-variable-value" for the value.
+- **Toasts:** "API_KEY created.", "3 variables created.", "API_KEY updated.", "API_KEY cloned as API_KEY_COPY.", "API_KEY deleted."; save failure "Variables not saved. You are offline; check your connection and save again."
 - **Errors:** short and specific, e.g. "Key is required.", "Use only uppercase letters, numbers, and underscores.", "Select at least one resource for this scope."
 - **Secret control:** "Mark as secret" and "Unmark as secret"; the hint states the rule, e.g. "Secret values are hidden and write-only after saving."
 - **Network list:** title "Create Network List"; types "IP/CIDR", "ASN", "Countries"; panel label "Paste one address per line"; report "7 entries found. Text after # is kept as the comment.", "Lines 4 and 8 are not an IPv4 or IPv6 address, or a CIDR range; they are added with an error to fix.", "Line 7 is already in the list and will be skipped."; row error "198.51.100.300 is not an IPv4 or IPv6 address, or a CIDR range."; toast "Office and partners created."
@@ -134,8 +137,9 @@ In the NetworkList state the same drawer recipe creates a network list for firew
 - List: the variables list page with the controls row and table; the drawer is closed.
 - First use: no variables yet; the card holds the first-use `EmptyState` with Create Variable.
 - No match: the filter matches nothing; the table shows the no-match `EmptyState` with Clear filters.
-- Edit: a row's Edit opens the drawer on that variable; Save replaces it in the list.
-- Delete: a row's Delete opens the typed confirmation; confirming removes the row.
+- Edit: a row's Edit opens the drawer on that variable; Save replaces it in the list and raises "<KEY> updated.".
+- Save failed: the save request fails; the drawer stays open with its rows and a danger `Alert` above the sections.
+- Delete: a row's Delete opens the typed confirmation; confirming removes the row and raises "<KEY> deleted.".
 - Create: the drawer open with one empty pair, the Form view and Global on; errors appear only after Save.
 - PasteEnv: Create Variable opens the drawer with one pair and the Paste .env panel holding a pasted file with a comment, an `export`, a skipped lowercase line and a repeated key that is already in the list; Add 3 variables merges them.
 - NetworkList: Create Network List opens the drawer named Office and partners, type IP/CIDR, with the Paste list panel holding nine lines: a comment line, two lines that are not valid addresses and one already pasted above; Add 7 entries appends them as rows, the two invalid ones showing their errors.
@@ -183,6 +187,7 @@ Each variant is the same screen in another state: `get_pattern("platform/edit/at
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
   import InputGroupAddon from '@aziontech/webkit/input-group-addon'
+  import InputGroupInput from '@aziontech/webkit/input-group-input'
   import InputGroupRoot from '@aziontech/webkit/input-group-root'
   import MultiSelect from '@aziontech/webkit/multi-select'
   import PageHeader from '@aziontech/webkit/page-header'
@@ -196,6 +201,7 @@ Each variant is the same screen in another state: `get_pattern("platform/edit/at
   import type { TableColumn, TableExposed } from '@aziontech/webkit/table-root'
   import TableRoot from '@aziontech/webkit/table-root'
   import Textarea from '@aziontech/webkit/textarea'
+  import { toast } from '@aziontech/webkit/toast'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { useCollection } from '@aziontech/webkit/use-collection'
@@ -251,7 +257,7 @@ Each variant is the same screen in another state: `get_pattern("platform/edit/at
     {
       id: 'v-002',
       key: 'PAYMENT_SECRET_KEY',
-      value: 'sk_live_51H8sX2eZv...',
+      value: 'sk_example_4f8a2c9e',
       secret: true,
       scope: [{ type: 'environment', id: 'env-production', name: 'Production' }],
       lastEditor: 'Jordan Kim',
@@ -290,7 +296,7 @@ Each variant is the same screen in another state: `get_pattern("platform/edit/at
     }
   ]
 
-  const authors = ['Ethan Brooks', 'Jordan Kim', 'Taylor Reed', 'John Smith', 'Sam Lee', 'myemail']
+  const authors = ['Ethan Brooks', 'Jordan Kim', 'Taylor Reed', 'John Smith', 'Sam Lee', 'Jane Doe']
   const properties = [
     { key: 'key', label: 'Key' },
     { key: 'lastEditor', label: 'Author', options: authors.map((value) => ({ value })) },
@@ -366,7 +372,12 @@ Each variant is the same screen in another state: `get_pattern("platform/edit/at
   const touched = (
     variable: Omit<VariableSeed, 'lastEditor' | 'lastEditorAvatar' | 'lastModified'>
   ) =>
-    withType({ ...variable, lastEditor: 'myemail', lastEditorAvatar: '', lastModified: 'just now' })
+    withType({
+      ...variable,
+      lastEditor: 'Jane Doe',
+      lastEditorAvatar: '',
+      lastModified: 'just now'
+    })
 
   const onCreated = (created: VariableDraft[]) => {
     variables.value = [
@@ -409,8 +420,10 @@ Each variant is the same screen in another state: `get_pattern("platform/edit/at
   )
   const confirmDelete = () => {
     if (!canDelete.value) return
+    const key = pending.value?.key
     variables.value = variables.value.filter((variable) => variable.id !== pending.value?.id)
     deleteOpen.value = false
+    toast.success(`${key} deleted.`)
   }
 
   const onRowAction = (value: DropdownMenuOptionValue, row: Variable) => {
@@ -427,6 +440,7 @@ Each variant is the same screen in another state: `get_pattern("platform/edit/at
         copy,
         ...variables.value.slice(index + 1)
       ]
+      toast.success(`${row.key} cloned as ${copy.key}.`)
       return
     }
     if (value === 'delete') {
@@ -443,8 +457,6 @@ Each variant is the same screen in another state: `get_pattern("platform/edit/at
     { label: 'Form', value: 'Form' },
     { label: 'JSON', value: 'JSON' }
   ]
-  const fieldClass =
-    'h-full min-w-0 flex-1 border-0 bg-transparent px-(--spacing-md) text-(--text-default) outline-none placeholder:text-(--text-muted) disabled:cursor-not-allowed disabled:text-(--text-disabled)'
 
   const formId = useId()
   const fieldId = (entry: Entry, part: string) => `${formId}-${part}-${entry.id}`
@@ -463,6 +475,7 @@ Each variant is the same screen in another state: `get_pattern("platform/edit/at
 
   const drawerOpen = ref(false)
   const submitting = ref(false)
+  const saveError = ref('')
   const submitted = ref(false)
   const entries = ref([createEntry()])
   const view = ref('Form')
@@ -729,9 +742,14 @@ Each variant is the same screen in another state: `get_pattern("platform/edit/at
     submitted.value = false
     Object.assign(scopes, current ? scopesFor(current.scope) : createScopes())
     submitting.value = false
+    saveError.value = ''
   })
 
   const formEl = ref<HTMLFormElement | null>(null)
+  const saveRequest = () =>
+    new Promise<boolean>((resolve) => {
+      setTimeout(() => resolve(globalThis.navigator?.onLine !== false), 900)
+    })
   const submit = async () => {
     if (submitting.value) return
     if (view.value === 'JSON') {
@@ -750,7 +768,14 @@ Each variant is the same screen in another state: `get_pattern("platform/edit/at
       return
     }
     submitting.value = true
-    await new Promise((resolve) => setTimeout(resolve, 900))
+    saveError.value = ''
+    const saved = await saveRequest()
+    if (!saved) {
+      submitting.value = false
+      saveError.value =
+        'Variables not saved. You are offline; check your connection and save again.'
+      return
+    }
     const scope = scopePayload()
     const created = filledEntries.value.map((entry) => ({
       key: entry.key.trim(),
@@ -758,8 +783,15 @@ Each variant is the same screen in another state: `get_pattern("platform/edit/at
       secret: entry.secret,
       scope
     }))
-    if (editing.value) onUpdated(editing.value.id, created)
-    else onCreated(created)
+    if (editing.value) {
+      onUpdated(editing.value.id, created)
+      toast.success(`${created[0].key} updated.`)
+    } else {
+      onCreated(created)
+      toast.success(
+        created.length === 1 ? `${created[0].key} created.` : `${created.length} variables created.`
+      )
+    }
     editing.value = null
     submitting.value = false
     drawerOpen.value = false
@@ -1042,6 +1074,16 @@ Each variant is the same screen in another state: `get_pattern("platform/edit/at
             </PanelHeader>
 
             <PanelContent>
+              <div
+                v-if="saveError"
+                class="mb-(--spacing-md)"
+              >
+                <Alert
+                  severity="danger"
+                  :label="saveError"
+                  data-testid="variables-save-error"
+                />
+              </div>
               <fieldset
                 class="m-0 flex min-w-0 flex-col border-0 p-0"
                 :disabled="submitting"
@@ -1106,26 +1148,19 @@ Each variant is the same screen in another state: `get_pattern("platform/edit/at
                                     >
                                   </span>
                                 </InputGroupAddon>
-                                <input
+                                <InputGroupInput
                                   :id="fieldId(entries[index], 'key')"
-                                  :value="entries[index].key"
+                                  :model-value="entries[index].key"
                                   placeholder="MY_VARIABLE"
                                   autocomplete="off"
                                   spellcheck="false"
-                                  :aria-invalid="!!keyError(entries[index]) || undefined"
+                                  :invalid="!!keyError(entries[index])"
                                   :aria-describedby="
                                     keyError(entries[index])
                                       ? messageId(entries[index], 'key')
                                       : undefined
                                   "
-                                  :class="fieldClass"
-                                  class="text-label-code-sm"
-                                  @input="
-                                    setKey(
-                                      entries[index],
-                                      ($event.target as HTMLInputElement).value
-                                    )
-                                  "
+                                  @update:model-value="(value) => setKey(entries[index], value)"
                                   @paste="pasteIntoKey($event, index)"
                                 />
                                 <Tooltip
@@ -1155,7 +1190,7 @@ Each variant is the same screen in another state: `get_pattern("platform/edit/at
                                     >
                                   </span>
                                 </InputGroupAddon>
-                                <input
+                                <InputGroupInput
                                   :id="fieldId(entries[index], 'value')"
                                   v-model="entries[index].value"
                                   :type="
@@ -1168,14 +1203,12 @@ Each variant is the same screen in another state: `get_pattern("platform/edit/at
                                   "
                                   autocomplete="off"
                                   spellcheck="false"
-                                  :aria-invalid="!!valueError(entries[index]) || undefined"
+                                  :invalid="!!valueError(entries[index])"
                                   :aria-describedby="
                                     valueError(entries[index])
                                       ? messageId(entries[index], 'value')
                                       : undefined
                                   "
-                                  :class="fieldClass"
-                                  class="text-label-sm"
                                 />
                                 <Tooltip
                                   v-if="entries[index].secret"
@@ -1216,13 +1249,14 @@ Each variant is the same screen in another state: `get_pattern("platform/edit/at
 
                           <HelperText
                             v-if="keyError(entries[index])"
+                            key="key-error"
                             :id="messageId(entries[index], 'key')"
                             :kind="keyError(entries[index])?.kind"
                             :label="keyError(entries[index])?.message"
                           />
                           <HelperText
-                            key="helper-text-2"
                             v-if="valueError(entries[index])"
+                            key="value-error"
                             :id="messageId(entries[index], 'value')"
                             :kind="valueError(entries[index])?.kind"
                             :label="valueError(entries[index])?.message"

@@ -2,8 +2,8 @@
  "examples": [
   {
    "name": "Default",
-   "summary": "Baseline range picker with Start/End time fields and a timezone selector (defaults to the user local zone; set `timezone` to pin a specific IANA zone).",
-   "sfc": "<script setup>\n  import CalendarRoot from '@aziontech/webkit/calendar-root'\n  import { ref } from 'vue'\n\n  const range = ref(null)\n</script>\n\n<template>\n  <CalendarRoot\n    v-model=\"range\"\n    mode=\"range\"\n    clearable\n    show-time\n    show-timezone\n  />\n</template>"
+   "summary": "Baseline range picker with Start/End time fields and a timezone selector (defaults to the user local zone; bind `v-model:time-zone` to pin a specific IANA zone).",
+   "sfc": "<script setup>\n  import CalendarRoot from '@aziontech/webkit/calendar-root'\n  import { ref } from 'vue'\n\n  const range = ref(null)\n</script>\n\n<template>\n  <CalendarRoot\n    v-model=\"range\"\n    mode=\"range\"\n    clearable\n    show-time\n    show-time-zone\n  />\n</template>"
   },
   {
    "name": "Sizes",

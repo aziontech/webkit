@@ -1,26 +1,28 @@
 # ResourceHeader (`headers/resource-header`)
 
-> The console bar for every page inside the persistent shell, at its first and second level of resource. A `GlobalHeader` in its default `content` placement, sitting in the content zone beside the navigation rail. Start: the navigation trigger below `md`, the brand, and from the second level the breadcrumb from `md`. End: search first, then Create, the Agent button and the account avatar. The first level has no breadcrumb (the rail's active row names the module); the second level names the module and the resource. Below `md` the sample collapses Create and Agent into icon buttons, and from a bar width of `--container-2xl` the `SearchTrigger` widens into the field with its ⌘K / Ctrl K keycap. Both thresholds are read from the theme tokens. Built from `GlobalHeader`, `Breadcrumb` (second level), `IconButton`, `Tooltip`, `SearchTrigger`, `Button`, `ButtonHighlight`, `Avatar` and `Brand`.
+> The console bar on its own, at its first and second level of resource, for apps that do not run on the console layout (inside `shells/console` the layout renders this bar). A `GlobalHeader` in its default `content` placement, sitting in the content zone beside the navigation rail. Start: the navigation trigger below `md`, the brand, and from the second level the breadcrumb from `md`. End: search first (it opens a `Command` palette), then Create, the Agent button and the account avatar (it opens the account `DropdownMenu`). The first level has no breadcrumb (the rail's active row names the module); the second level names the module and the resource. Below `md` the sample collapses Create and Agent into icon buttons, and from a bar width of `--container-2xl` the `SearchTrigger` widens into the field with its ⌘K / Ctrl K keycap. Both thresholds are read from the theme tokens. Built from `GlobalHeader`, `Breadcrumb` (second level), `IconButton`, `Tooltip`, `SearchTrigger`, `Button`, `ButtonHighlight`, `Avatar`, `DropdownMenu`, `Command` and `Brand`.
 
 - Surface: product
 - Source: `blocks/headers/resource-header/resource-header.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("headers/resource-header")`
-- Components: [Avatar](../../components/avatar.md), [Brand](../../components/brand.md), [Breadcrumb](../../components/breadcrumb.md), [Button](../../components/button.md), [ButtonHighlight](../../components/button-highlight.md), [GlobalHeader](../../components/global-header.md), [IconButton](../../components/icon-button.md), [SearchTrigger](../../components/search-trigger.md), [Tooltip](../../components/tooltip.md)
+- Components: [Avatar](../../components/avatar.md), [Brand](../../components/brand.md), [Breadcrumb](../../components/breadcrumb.md), [Button](../../components/button.md), [ButtonHighlight](../../components/button-highlight.md), [Command](../../components/command.md), [DropdownMenu](../../components/dropdown-menu.md), [GlobalHeader](../../components/global-header.md), [IconButton](../../components/icon-button.md), [SearchTrigger](../../components/search-trigger.md), [Tooltip](../../components/tooltip.md)
 - Skills: `webkit-navigation`, `webkit-layout`
 
 ## Asked as
 
 console header; app header; resource header; header with breadcrumb; header with search and avatar; platform top bar; signed-in header; cabeçalho do console; cabeçalho da plataforma; barra superior do app
 
-The top bar of every page inside the persistent console shell. It sits in the content zone beside the navigation rail and carries what the user needs on any browse page: where they are (no breadcrumb at the first level, where the rail's active row already says it; the module and the resource from the second), search, the two ways to start something (Create and the Agent), and their account. It is the header that `shells/console` renders.
+The top bar of every page inside the persistent console shell. It sits in the content zone beside the navigation rail and carries what the user needs on any browse page: where they are (no breadcrumb at the first level, where the rail's active row already says it; the module and the resource from the second), search, the two ways to start something (Create and the Agent), and their account. It is the `ConsoleLayout` header on its own: `shells/console` renders the same bar through `ConsoleLayout`, so inside that shell use the layout and never this block. Copy this block only for an app that does not run on `ConsoleLayout`, or as a reference for the bar.
 
 ## When to use
 
+- An app that does not use `ConsoleLayout` and needs the console bar on its own.
 - First-level pages the rail routes to (lists, Home, dashboards, settings hubs).
 - Second-level pages of a resource (details, versions, a resource's settings).
 
 ## When not to use
 
+- Inside `shells/console`: `ConsoleLayout` already renders this bar, its search palette and its account menu; a second bar in the page is a bug.
 - Create, edit and deploy flows: use `headers/creation-header`, which drops the rail and these actions.
 - Signed-out screens: use `headers/auth-header`. Docs and marketing: `headers/docs-header`, `headers/site-header`.
 
@@ -28,7 +30,7 @@ The top bar of every page inside the persistent console shell. It sits in the co
 
 ### A. Bar — `GlobalHeader` (required)
 
-Default `content` placement, `aria-label="Azion Console"`, in the content zone, never above the rail. Start cluster in `GlobalHeader.Left`, empty `GlobalHeader.Middle`, actions in `GlobalHeader.Right`.
+Default `content` placement, `aria-label="Console"` (the label every console bar uses), in the content zone, never above the rail. Start cluster in `GlobalHeader.Left`, empty `GlobalHeader.Middle`, actions in `GlobalHeader.Right`.
 
 ### B. Navigation trigger — `IconButton` (required)
 
@@ -36,7 +38,7 @@ Below `md` an outlined `pi-bars` icon button opens the rail as a drawer. In the 
 
 ### C. Brand — `Brand` (required)
 
-Linked to the home route with `aria-label="Azion home"`. At the first level nothing follows it: the rail's active row names the module and the page opens on its own `PageHeader`, so the bar carries no breadcrumb, never a single crumb. From the second level (`SecondLevel`) a `Breadcrumb` follows it from `md`: the module with an `href`, then the resource's own name with no link. A tab is never a crumb.
+Inside `GlobalHeader.Brand`, linked to the home route with `aria-label="Azion home"`. At the first level nothing follows it: the rail's active row names the module and the page opens on its own `PageHeader`, so the bar carries no breadcrumb, never a single crumb. From the second level (`SecondLevel`) a `Breadcrumb` follows it from `md`: the module with an `href`, then the resource's own name with no link. A tab is never a crumb.
 
 ### D. Create — `Button` (required)
 
@@ -46,17 +48,21 @@ Linked to the home route with `aria-label="Azion home"`. At the first level noth
 
 The AI assistant entry, medium, `ai-ask-azion` icon. It is the only highlight button on the page.
 
-### F. Account — `Avatar` (required)
+### F. Account — `DropdownMenu` + `Avatar` (required)
 
-Inside a button labelled `Account settings`, always last.
+The avatar sits in a button labelled `Account menu` inside `DropdownMenu.Trigger`, always last. The menu opens the same groups as the `ConsoleLayout` account menu: the person's name and email on top, Account settings and Personal tokens, then Docs and Log out.
 
 ### G. Search — `SearchTrigger` (required)
 
-The header search, first in the end cluster: the field (`Search` with the ⌘K / Ctrl K keycap) while the bar is at least `--container-2xl` wide, the magnifier alone below that (`collapsible`, inside the header's `@container`). It emits `open` on click and on the shortcut and opens the `Command` palette. Never hand-rolled (rule `webkit-header-search`).
+The header search, first in the end cluster: the field (`Search` with the ⌘K / Ctrl K keycap) while the bar is at least `--container-2xl` wide, the magnifier alone below that (`collapsible`, inside the header's `@container`). It emits `open` on click and on the shortcut; the block binds `@open` to a `Command` palette (`v-model:open`) listing the pages. Never hand-rolled (rule `webkit-header-search`).
 
 ### H. Hints — `Tooltip` (required)
 
 Names every icon-only control: the navigation trigger, and Create and Agent below `md`.
+
+### I. Search palette — `Command` (required)
+
+Opened by the search trigger with `v-model:open`: an input, a `Pages` group and an empty message (`No page matches your search.`).
 
 ## Do
 
@@ -74,7 +80,7 @@ Names every icon-only control: the navigation trigger, and Create and Agent belo
 
 - **Create:** the verb alone: `Create`. **Agent:** `Agent`.
 - **Breadcrumb:** the module as the rail names it (`Applications`), then the resource name as the user typed it.
-- **Icon labels:** `Search`, `Open navigation`, `Account settings`.
+- **Icon labels:** `Search`, `Open navigation`, `Account menu`.
 
 ## Accessibility
 
@@ -89,7 +95,7 @@ Names every icon-only control: the navigation trigger, and Create and Agent belo
 
 ## Related
 
-- `shells/console` — the shell that renders this bar with the rail.
+- `shells/console` — the shell whose `ConsoleLayout` renders this bar with the rail; use it instead of this block when you can.
 - `headers/creation-header` — the bar for focused flows.
 - `platform/detail/details-page`, `platform/view/table-view` — the second- and first-level pages under it.
 
@@ -108,15 +114,22 @@ Each variant is the same screen in another state: `get_pattern("headers/resource
   import Brand from '@aziontech/webkit/brand'
   import Button from '@aziontech/webkit/button'
   import ButtonHighlight from '@aziontech/webkit/button-highlight'
+  import Command from '@aziontech/webkit/command'
+  import DropdownMenu from '@aziontech/webkit/dropdown-menu'
   import GlobalHeader from '@aziontech/webkit/global-header'
   import IconButton from '@aziontech/webkit/icon-button'
   import SearchTrigger from '@aziontech/webkit/search-trigger'
   import Tooltip from '@aziontech/webkit/tooltip'
+  import { ref } from 'vue'
+
+  const account = { name: 'Amy Chen', email: 'amy.chen@example.com' }
+  const searchPages = ['Home', 'Applications', 'Functions', 'Firewall', 'Settings']
+  const searchOpen = ref(false)
 </script>
 
 <template>
   <div class="@container w-full bg-(--bg-canvas)">
-    <GlobalHeader aria-label="Azion Console">
+    <GlobalHeader aria-label="Console">
       <GlobalHeader.Left>
         <div class="flex min-w-0 items-center justify-start gap-(--spacing-xs)">
           <span class="contents md:hidden">
@@ -132,21 +145,26 @@ Each variant is the same screen in another state: `get_pattern("headers/resource
               />
             </Tooltip>
           </span>
-          <a
-            href="/home"
-            aria-label="Azion home"
-            class="inline-flex w-fit items-center rounded-(--shape-elements) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) h-6 shrink-0 px-(--spacing-xxs)"
-          >
-            <Brand
-              kind="default"
-              size="small"
-            />
-          </a>
+          <GlobalHeader.Brand>
+            <a
+              href="/home"
+              aria-label="Azion home"
+              class="inline-flex shrink-0 items-center self-center rounded-(--shape-elements) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
+            >
+              <Brand
+                kind="default"
+                size="small"
+              />
+            </a>
+          </GlobalHeader.Brand>
         </div>
       </GlobalHeader.Left>
       <GlobalHeader.Middle />
       <GlobalHeader.Right>
-        <SearchTrigger collapsible />
+        <SearchTrigger
+          collapsible
+          @open="searchOpen = true"
+        />
         <span class="contents md:hidden">
           <Tooltip
             text="Create"
@@ -184,19 +202,91 @@ Each variant is the same screen in another state: `get_pattern("headers/resource
             icon="ai ai-ask-azion"
           />
         </span>
-        <button
-          type="button"
-          aria-label="Account settings"
-          class="rounded-full transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
-        >
-          <Avatar
-            label="name@example.com"
-            size="medium"
-            kind="square"
-          />
-        </button>
+        <DropdownMenu placement="bottom-end">
+          <DropdownMenu.Trigger>
+            <button
+              type="button"
+              aria-label="Account menu"
+              class="rounded-(--shape-button) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
+            >
+              <Avatar
+                :label="account.name"
+                size="medium"
+                kind="square"
+              />
+            </button>
+          </DropdownMenu.Trigger>
+          <DropdownMenu.Group>
+            <template #top>
+              <div class="flex min-w-0 flex-col">
+                <span class="truncate text-label-md text-(--text-default)">{{ account.name }}</span>
+                <span class="truncate text-body-xs text-(--text-muted)">{{ account.email }}</span>
+              </div>
+            </template>
+            <DropdownMenu.Option
+              value="settings"
+              label="Account settings"
+            >
+              <template #right>
+                <i
+                  class="pi pi-cog"
+                  aria-hidden="true"
+                />
+              </template>
+            </DropdownMenu.Option>
+            <DropdownMenu.Option
+              value="personal-tokens"
+              label="Personal tokens"
+            >
+              <template #right>
+                <i
+                  class="pi pi-key"
+                  aria-hidden="true"
+                />
+              </template>
+            </DropdownMenu.Option>
+          </DropdownMenu.Group>
+          <DropdownMenu.Group>
+            <DropdownMenu.Option
+              value="docs"
+              label="Docs"
+            >
+              <template #right>
+                <i
+                  class="pi pi-book"
+                  aria-hidden="true"
+                />
+              </template>
+            </DropdownMenu.Option>
+            <DropdownMenu.Option
+              value="logout"
+              label="Log out"
+            >
+              <template #right>
+                <i
+                  class="pi pi-sign-out"
+                  aria-hidden="true"
+                />
+              </template>
+            </DropdownMenu.Option>
+          </DropdownMenu.Group>
+        </DropdownMenu>
       </GlobalHeader.Right>
     </GlobalHeader>
+    <Command v-model:open="searchOpen">
+      <Command.Input placeholder="Search" />
+      <Command.List>
+        <Command.Empty>No page matches your search.</Command.Empty>
+        <Command.Group heading="Pages">
+          <Command.Item
+            v-for="page in searchPages"
+            :key="page"
+            :value="page"
+            >{{ page }}</Command.Item
+          >
+        </Command.Group>
+      </Command.List>
+    </Command>
   </div>
 </template>
 ```

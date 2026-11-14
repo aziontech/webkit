@@ -1,6 +1,6 @@
 # Billing (`platform/account/billing`)
 
-> The Billing page of the account settings: a `PageHeader` with the last update, Refresh and Documentation over `PageTabs` (Bills, Payment Methods). Bills puts a Subscription plan `Card` (plan with a Current plan `Tag`, Change plan, and `KeyValuePairs` for plan start, next charge date and value as `Currency`, and the default card with its `PaymentBrand`) beside an Upgrade to Enterprise `Card`, then Invoices on one `useCollection`: a controls row (`PropertyFilter`, Refresh, Download CSV, `CollectionPreferences`) over a `Table` with No., Invoice ID, Plan, Cycle, Seats, Billing date, Amount, Payment method, Status as `Table.CellStatus` and a download `IconButton` per invoice. Payment Methods shows Payment information as `KeyValuePairs` (billing email, auto-renewal as `StatusIndicator`, address, tax ID) with Update, and a `Table` of cards (holder with a Default `Tag`, brand and last four, expiry, `Table.CellActions` with Set as default and Remove behind a `ConfirmDialog`). Outcomes go through `toast`. A page body for ConsoleLayout, rendered in its default slot.
+> The Billing page of the account settings: a `PageHeader` with the last update, Refresh and Documentation over `PageTabs` (Bills, Payment methods). Bills puts a Subscription plan `Card` (plan with a Current plan `Tag`, Change plan, and `KeyValuePairs` for plan start, next charge date and value as `Currency`, and the default card with its `PaymentBrand`) beside an Upgrade to Enterprise `Card`, then Invoices on one `useCollection`: a controls row (`PropertyFilter`, Refresh, Download CSV, `CollectionPreferences`) over a `Table` with No., Invoice ID, Plan, Cycle, Seats, Billing date, Amount, Payment method, Status as `Table.CellStatus` and a download `IconButton` per invoice. Payment methods shows Payment information as `KeyValuePairs` (billing email, auto-renewal as `StatusIndicator`, address, tax ID) with Update, and a `Table` of cards (holder with a Default `Tag`, brand and last four, expiry, `Table.CellActions` with Set as default and Remove behind a `ConfirmDialog`). Outcomes go through `toast`. A page body for ConsoleLayout, rendered in its default slot.
 
 - Surface: product
 - Source: `blocks/platform/account/billing/billing.vue` in `@aziontech/webkit`
@@ -34,7 +34,7 @@ Title `Billing` and one sentence on what the page holds. Actions: the time of th
 
 ### B. Tabs — `PageTabs`, `Tabs` (required)
 
-`PageTabs` with one `Tabs.Item` per tab: `Bills` and `Payment Methods`. Only the active tab's content renders; the heading and the load state are shared.
+`PageTabs` with one `Tabs.Item` per tab: `Bills` and `Payment methods`. Only the active tab's content renders; the heading and the load state are shared.
 
 ### C. Load failure — `Alert` (conditional)
 
@@ -60,11 +60,11 @@ One `useCollection` over the invoices, newest first, `Table` bound with `v-bind=
 
 An account with no invoice yet replaces the table with `No invoices yet` and a link to how billing works. Filters that hide every invoice fill the table's `#empty` slot with `No matching invoices` and Clear filters.
 
-### I. Payment information — `StatusIndicator` (required on Payment Methods)
+### I. Payment information — `StatusIndicator` (required on the Payment methods tab)
 
 A `SectionHeader` with Update over a `Card` of four-column `KeyValuePairs`: Billing email, Auto-renewal as a `StatusIndicator` (On or Off, never colour alone), Billing address and Tax ID (empty shows the empty-value marker).
 
-### J. Payment methods — `DropdownMenu`, `ConfirmDialog` (required on Payment Methods)
+### J. Payment methods — `DropdownMenu`, `ConfirmDialog` (required on the Payment methods tab)
 
 A `SectionHeader` with Add payment method over a flush `Card` and a `Table` of cards: Card holder with a small success `Default` tag, Card as the brand plate and the last four, Expiration date, and `Table.CellActions` named after the card with `Set as default` and `Remove` as `DropdownMenu` options, both disabled on the default card. Set as default applies at once with a toast; Remove asks in a `ConfirmDialog` first.
 
@@ -87,7 +87,7 @@ Set as default and Remove end in a success toast that names the card. This page 
 
 ## Copy
 
-- **Title:** `Billing`. **Tabs:** `Bills`, `Payment Methods`.
+- **Title:** `Billing`. **Tabs:** `Bills`, `Payment methods`.
 - **Plan card:** `Subscription plan`, `Current plan`, `Change plan`; facts `Plan start date`, `Next charge date`, `Next charge value`, `Payment method`.
 - **Invoices:** `Filter invoices`; statuses `Paid`, `Refunded`, `Overdue`; empty `No invoices yet`, `Your first invoice appears here when the first billing cycle closes.`; no match `No matching invoices`, `Clear filters`.
 - **Payment methods:** `Set as default`, `Remove`; confirm `Remove payment method`; toasts `Mastercard •••• 1702 is now the default.`, `Visa •••• 4431 removed.`
@@ -108,7 +108,7 @@ Set as default and Remove end in a success toast that names the card. This page 
 - Failed: the billing data did not load; a danger Alert with Retry.
 - NoInvoices: no invoice yet; a flush empty state says when the first one appears.
 - NoMatch: a filter that matches no invoice; No matching invoices with Clear filters.
-- PaymentMethods: the Payment Methods tab with payment information and three cards.
+- PaymentMethods: the Payment methods tab with payment information and three cards.
 
 ## Related
 
@@ -124,7 +124,7 @@ Set as default and Remove end in a success toast that names the card. This page 
 - `Failed` — The billing data did not load: a danger Alert with Retry replaces the tab's content; Retry loads it.
 - `NoInvoices` — A new account before its first billing cycle closes: the plan cards, then a flush EmptyState that says when the first invoice appears.
 - `NoMatch` — A Status = Overdue filter that matches no invoice: the table's empty slot says so and offers Clear filters.
-- `PaymentMethods` — The Payment Methods tab: Payment information with Update, then the cards with the default one tagged; Set as default and Remove (after confirmation) are wired.
+- `PaymentMethods` — The Payment methods tab: Payment information with Update, then the cards with the default one tagged; Set as default and Remove (after confirmation) are wired.
 
 Each variant is the same screen in another state: `get_pattern("platform/account/billing", { variant })`, or the file under `blocks/platform/account/billing/variants/`.
 
@@ -258,7 +258,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
   const activeTab = ref<string>(INITIAL_TAB)
   const tabs: { value: BillingTab; label: string }[] = [
     { value: 'bills', label: 'Bills' },
-    { value: 'payment-methods', label: 'Payment Methods' }
+    { value: 'payment-methods', label: 'Payment methods' }
   ]
 
   const loading = ref(START_LOADING)

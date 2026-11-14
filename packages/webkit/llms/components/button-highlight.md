@@ -76,6 +76,15 @@
 - Keyboard: no horizontal arrow-key logic.
 - User data: none.
 
+## Internationalization
+
+- No built-in strings: the label is consumer copy.
+
+## Responsive
+
+- The control never wraps its label; drawn heights are 28 / 32 / 40 px. The glow needs `overflow-hidden` on the root, which also clips a touch-target extension, so prefer `size="large"` (40 px) on touch-first surfaces.
+- Consumer attributes (`id`, `aria-*`, `name`, `form`, `class`) land on the anchor or button (`v-bind="$attrs"`); the class is not merged with tailwind-merge, which keeps the entry near the Button budget.
+
 ## Examples
 
 ### Default

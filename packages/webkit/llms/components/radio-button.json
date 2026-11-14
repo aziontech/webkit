@@ -21,7 +21,8 @@
   "The options are many or loaded from data → use `select`."
  ],
  "related": [
-  "field` — a horizontal `Field` puts the radio beside its label and description (the default inside forms); a `Field.Label` wrapping it is a card-style option with a selected border and background. Group the options in `Field.Set` + `Field.Legend`.",
+  "radio-group` (not shipped yet): one RadioButton per option still binds the same `v-model` and `name` by hand; RadioCards is the shipped group.",
+  "field` — inside a `Field`, the input takes the field's id, description, `invalid` (`aria-invalid`), `required` and `disabled`. A horizontal `Field` puts the radio beside its label and description (the default inside forms); a `Field.Label` wrapping it is a card-style option with a selected border and background. Group the options in `Field.Set` + `Field.Legend`.",
   "radio-cards` — horizontal grid of selectable cards with its own model.",
   "checkbox` — the multi-pick counterpart.",
   "select` — single choice from a dropdown when the options do not fit inline."
@@ -36,16 +37,16 @@
   {
    "name": "value",
    "type": "string",
-   "default": "undefined",
+   "default": "''",
    "required": "false",
    "doc": "Option value for this radio instance."
   },
   {
    "name": "name",
    "type": "string",
-   "default": "undefined",
+   "default": "''",
    "required": "false",
-   "doc": "HTML name shared across a mutually exclusive group."
+   "doc": "HTML name shared across a mutually exclusive group; empty renders no `name`."
   },
   {
    "name": "disabled",
@@ -57,9 +58,9 @@
   {
    "name": "inputId",
    "type": "string",
-   "default": "undefined",
+   "default": "''",
    "required": "false",
-   "doc": "id for the native input; links label to control."
+   "doc": "id for the native input; links label to control. Empty uses `id`, then the enclosing Field's id."
   },
   {
    "name": "modelValue",

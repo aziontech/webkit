@@ -8,7 +8,7 @@
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],
- "purpose": "Binary selection control. Supports a single boolean (`binary: true`) and array-based multi-select (adds or removes its `value` in the `modelValue` array) (used by `MultiSelect` and `DataTable` to drive bulk selection). The new `indeterminate` prop renders a third visual state (horizontal bar) and sets the native `indeterminate` property, which exposes the mixed state — used by parents that own a partial-selection summary (e.g. \"select all\" rows where some children are selected). Aligned with Figma frame `2027:7311`.",
+ "purpose": "Binary selection control. Supports a single boolean (no `value`), a scalar paired with `value`, and array-based multi-select (adds or removes its `value` in the `modelValue` array) (used by `MultiSelect` and `DataTable` to drive bulk selection). The new `indeterminate` prop renders a third visual state (horizontal bar) and sets the native `indeterminate` property, which exposes the mixed state — used by parents that own a partial-selection summary (e.g. \"select all\" rows where some children are selected). Aligned with Figma frame `2027:7311`.",
  "setup": null,
  "useWhen": [
   "A bare boolean control whose label lives outside it: a table row-selection cell, an option row in a list, a settings matrix.",
@@ -28,8 +28,8 @@
   "table` — uses this checkbox for row selection and the select-all header."
  ],
  "bestPractices": [
-  "Set `binary` for a plain true/false value; without it the checkbox adds or removes its `value` in an array `modelValue`.",
-  "Give every checkbox an accessible name: point a `label` element's `for` at `inputId`, or pass `aria-label` (attributes land on the inner input).",
+  "Leave `value` unset for a plain true/false model. With `value`, the checkbox adds or removes it in an array model, or sets a scalar model to `value` (checked) and `null` (unchecked).",
+  "Give every checkbox an accessible name: point a `label` element's `for` at the `id` you pass (or wrap it in a `Field`), or pass `aria-label` (attributes land on the inner input).",
   "indeterminate` only changes the visual and sets the native `indeterminate` property (exposed as mixed); the parent computes it and decides what a click does.",
   "Use `readonly` for a value that cannot change in this context and `disabled` for an option that is unavailable."
  ],
@@ -39,14 +39,14 @@
    "type": "unknown",
    "default": "undefined",
    "required": "false",
-   "doc": "Identifier for this checkbox in non-binary mode. Compared against `modelValue` (or included in the array)."
+   "doc": "Identifier for this checkbox in a group: compared against a scalar model, or added to and removed from an array model. Unset, the model is a boolean."
   },
   {
    "name": "binary",
    "type": "boolean",
    "default": "false",
    "required": "false",
-   "doc": "When true, the checkbox toggles `modelValue` as a boolean (no `value` pairing)."
+   "doc": "@deprecated since 6.0 — leave value unset for a boolean model. Removed in 7.0.` Forces the boolean model even with a `value`."
   },
   {
    "name": "indeterminate",
@@ -74,7 +74,7 @@
    "type": "string",
    "default": "''",
    "required": "false",
-   "doc": "Forwarded to the inner `<input id>` for label association."
+   "doc": "@deprecated since 6.0 — pass id (or let the enclosing Field set it). Removed in 7.0.` Wins over `id` while it is set."
   },
   {
    "name": "name",
@@ -88,7 +88,7 @@
    "type": "number",
    "default": "0",
    "required": "false",
-   "doc": "Forwarded to the inner `<input tabindex>`."
+   "doc": "@deprecated since 6.0 — pass the tabindex attribute; it falls through to the input. Removed in 7.0."
   },
   {
    "name": "modelValue",
@@ -105,15 +105,15 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import Checkbox from '@aziontech/webkit/checkbox'\n  import { ref } from 'vue'\n\n  const checked = ref(false)\n</script>\n\n<template>\n  <Checkbox\n    v-model=\"checked\"\n    binary\n    input-id=\"webkit-checkbox\"\n    aria-label=\"Toggle option\"\n  />\n</template>"
+   "sfc": "<script setup>\n  import Checkbox from '@aziontech/webkit/checkbox'\n  import { ref } from 'vue'\n\n  const checked = ref(false)\n</script>\n\n<template>\n  <Checkbox\n    v-model=\"checked\"\n    input-id=\"webkit-checkbox\"\n    aria-label=\"Toggle option\"\n  />\n</template>"
   },
   {
    "name": "Indeterminate",
-   "sfc": "<script setup>\n  import Checkbox from '@aziontech/webkit/checkbox'\n  import { ref } from 'vue'\n\n  const checked = ref(false)\n</script>\n\n<template>\n  <Checkbox\n    v-model=\"checked\"\n    binary\n    indeterminate\n    input-id=\"webkit-checkbox-indeterminate\"\n    aria-label=\"Toggle option\"\n  />\n</template>"
+   "sfc": "<script setup>\n  import Checkbox from '@aziontech/webkit/checkbox'\n  import { ref } from 'vue'\n\n  const checked = ref(false)\n</script>\n\n<template>\n  <Checkbox\n    v-model=\"checked\"\n    indeterminate\n    input-id=\"webkit-checkbox-indeterminate\"\n    aria-label=\"Toggle option\"\n  />\n</template>"
   },
   {
    "name": "Disabled",
-   "sfc": "<script setup>\n  import Checkbox from '@aziontech/webkit/checkbox'\n  import { ref } from 'vue'\n\n  const checked = ref(true)\n  const unchecked = ref(false)\n</script>\n\n<template>\n  <div class=\"flex items-center gap-(--spacing-4)\">\n    <Checkbox\n      v-model=\"checked\"\n      binary\n      disabled\n      input-id=\"webkit-checkbox-disabled-on\"\n      aria-label=\"Disabled checked\"\n    />\n    <Checkbox\n      v-model=\"unchecked\"\n      binary\n      disabled\n      input-id=\"webkit-checkbox-disabled-off\"\n      aria-label=\"Disabled unchecked\"\n    />\n  </div>\n</template>"
+   "sfc": "<script setup>\n  import Checkbox from '@aziontech/webkit/checkbox'\n  import { ref } from 'vue'\n\n  const checked = ref(true)\n  const unchecked = ref(false)\n</script>\n\n<template>\n  <div class=\"flex items-center gap-(--spacing-4)\">\n    <Checkbox\n      v-model=\"checked\"\n      disabled\n      input-id=\"webkit-checkbox-disabled-on\"\n      aria-label=\"Disabled checked\"\n    />\n    <Checkbox\n      v-model=\"unchecked\"\n      disabled\n      input-id=\"webkit-checkbox-disabled-off\"\n      aria-label=\"Disabled unchecked\"\n    />\n  </div>\n</template>"
   }
  ],
  "docs": "components/checkbox.md"

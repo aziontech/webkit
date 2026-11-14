@@ -82,6 +82,13 @@
    "default": "[]",
    "required": "false",
    "doc": "The arguments in reading order, three to a row; each is `{ icon, title, description }`. The grid renders only when there are items."
+  },
+  {
+   "name": "anchor",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "In-page id set on the band so a hash link can target it."
   }
  ],
  "events": [],

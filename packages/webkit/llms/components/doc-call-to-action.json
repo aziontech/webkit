@@ -1,0 +1,81 @@
+{
+ "name": "doc-call-to-action",
+ "binding": "DocCallToAction",
+ "import": "@aziontech/webkit/doc-call-to-action",
+ "treeShakeableImport": "@aziontech/webkit/doc-call-to-action",
+ "category": "documentation",
+ "surface": "docs",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "The closing offer of a documentation page, parked at the foot of the \"On this page\" rail after the outline. It is a docs card built like every other card on the page: a `FrameBox` with corner marks, a flat `--bg-surface` face, the wordmark at its small size, a headline, a subtitle and full-width stacked actions. Set on the rail scale (14 px headline, 12 px copy) so it never out-shouts the page outline. Every string is content passed by the page. It replaces `DocCta`, whose abbreviated name and flat `primaryLabel` / `primaryHref` props are deprecated; the actions here are `{ label, href }` objects, the same shape as the marketing bands' `primaryAction` / `secondaryAction`.",
+ "setup": null,
+ "useWhen": [
+  "Once per documentation page, last in the right rail."
+ ],
+ "avoidWhen": [
+  "In the prose column — use `CallToAction` on marketing pages or a `DocCard` link in docs.",
+  "More than once per page."
+ ],
+ "related": [
+  "DocOnThisPage` — the rail it closes.",
+  "FrameBox` — the frame.",
+  "CallToAction` — the marketing closing band.",
+  "DocCta` — the deprecated name of this component (removed in 7.0)."
+ ],
+ "bestPractices": [
+  "One primary action; a secondary only when it is a real alternative (talk to sales).",
+  "A one-line headline and a one-line subtitle."
+ ],
+ "props": [
+  {
+   "name": "title",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "The offer's headline; names the complementary landmark."
+  },
+  {
+   "name": "label",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Fallback copy when the default slot is empty."
+  },
+  {
+   "name": "primaryAction",
+   "type": "DocCallToActionAction",
+   "default": "undefined",
+   "required": "false",
+   "doc": "The primary action, `{ label, href }`; unset or an empty label renders none."
+  },
+  {
+   "name": "secondaryAction",
+   "type": "DocCallToActionAction",
+   "default": "undefined",
+   "required": "false",
+   "doc": "The outlined secondary action, `{ label, href }`; unset renders none."
+  }
+ ],
+ "events": [],
+ "slots": [
+  {
+   "name": "default",
+   "scope": "—",
+   "notes": "The offer's copy, set as the headline's subtitle."
+  }
+ ],
+ "styleSeam": false,
+ "assets": [],
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import DocCallToAction from '@aziontech/webkit/doc-call-to-action'\n</script>\n\n<template>\n  <div class=\"max-w-56\">\n    <DocCallToAction\n      title=\"Ready to build?\"\n      :primary-action=\"{ label: 'Start for free', href: '/signup' }\"\n    >\n      Deploy your first application in minutes.\n    </DocCallToAction>\n  </div>\n</template>"
+  },
+  {
+   "name": "Two actions",
+   "sfc": "<script setup>\n  import DocCallToAction from '@aziontech/webkit/doc-call-to-action'\n</script>\n\n<template>\n  <div class=\"max-w-56\">\n    <DocCallToAction\n      title=\"Running at scale?\"\n      :primary-action=\"{ label: 'Start for free', href: '/signup' }\"\n      :secondary-action=\"{ label: 'Talk to sales', href: '/contact' }\"\n    >\n      Plans with support and volume pricing.\n    </DocCallToAction>\n  </div>\n</template>"
+  }
+ ],
+ "docs": "components/doc-call-to-action.md"
+}

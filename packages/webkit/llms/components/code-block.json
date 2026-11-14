@@ -53,11 +53,32 @@
    "doc": "Initial active tab when uncontrolled."
   },
   {
-   "name": "showLineNumbers",
+   "name": "code",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Code of a single snippet, used when `tabs` is empty."
+  },
+  {
+   "name": "language",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Language of the single `code` snippet (highlighting and the label header)."
+  },
+  {
+   "name": "lineNumbers",
    "type": "boolean",
    "default": "true",
    "required": "false",
-   "doc": "Shows a fixed-width gutter with zero-padded line numbers before each code line."
+   "doc": "Shows a fixed-width gutter with zero-padded line numbers before each code line (the same name as `code-editor`)."
+  },
+  {
+   "name": "showLineNumbers",
+   "type": "boolean",
+   "default": "undefined",
+   "required": "false",
+   "doc": "**@deprecated since 6.0 — use `lineNumbers`. Removed in 7.0.** Shows the line-number gutter; when set it wins over `lineNumbers`."
   },
   {
    "name": "copyAriaLabel",
@@ -135,15 +156,15 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import CodeBlock from '@aziontech/webkit/code-block'\n\n  const tabs = [\n    {\n      label: 'Javascript',\n      value: 'js',\n      language: 'javascript',\n      fileName: 'file name.js',\n      code: \"export default {\\n  async fetch(request) {\\n    const { prompt } = await request.json()\\n\\n    const modelResponse = await Azion.AI.run(\\n      'Qwen/Qwen3-30B-A3B-Instruct-2507-FP8',\\n      {\\n        messages: [\\n          { role: 'system', content: 'You are a helpful assistant.' },\\n          { role: 'user', content: prompt }\\n        ]\\n      }\\n    )\\n\\n    return new Response(JSON.stringify(modelResponse))\\n  }\\n}\"\n    },\n    {\n      label: 'Typescript',\n      value: 'ts',\n      language: 'typescript',\n      fileName: 'file name.ts',\n      code: \"export default {\\n  async fetch(request: Request) {\\n    const { prompt } = await request.json()\\n\\n    const modelResponse = await Azion.AI.run(\\n      'Qwen/Qwen3-30B-A3B-Instruct-2507-FP8',\\n      {\\n        messages: [\\n          { role: 'system', content: 'You are a helpful assistant.' },\\n          { role: 'user', content: prompt }\\n        ]\\n      }\\n    )\\n\\n    return new Response(JSON.stringify(modelResponse))\\n  }\\n}\"\n    }\n  ]\n</script>\n\n<template>\n  <div class=\"max-w-[692px]\">\n    <CodeBlock\n      :tabs=\"tabs\"\n      default-value=\"js\"\n      show-line-numbers\n    />\n  </div>\n</template>"
+   "sfc": "<script setup>\n  import CodeBlock from '@aziontech/webkit/code-block'\n\n  const tabs = [\n    {\n      label: 'Javascript',\n      value: 'js',\n      language: 'javascript',\n      fileName: 'file name.js',\n      code: \"export default {\\n  async fetch(request) {\\n    const { prompt } = await request.json()\\n\\n    const modelResponse = await Azion.AI.run(\\n      'Qwen/Qwen3-30B-A3B-Instruct-2507-FP8',\\n      {\\n        messages: [\\n          { role: 'system', content: 'You are a helpful assistant.' },\\n          { role: 'user', content: prompt }\\n        ]\\n      }\\n    )\\n\\n    return new Response(JSON.stringify(modelResponse))\\n  }\\n}\"\n    },\n    {\n      label: 'Typescript',\n      value: 'ts',\n      language: 'typescript',\n      fileName: 'file name.ts',\n      code: \"export default {\\n  async fetch(request: Request) {\\n    const { prompt } = await request.json()\\n\\n    const modelResponse = await Azion.AI.run(\\n      'Qwen/Qwen3-30B-A3B-Instruct-2507-FP8',\\n      {\\n        messages: [\\n          { role: 'system', content: 'You are a helpful assistant.' },\\n          { role: 'user', content: prompt }\\n        ]\\n      }\\n    )\\n\\n    return new Response(JSON.stringify(modelResponse))\\n  }\\n}\"\n    }\n  ]\n</script>\n\n<template>\n  <div class=\"max-w-[692px]\">\n    <CodeBlock\n      :tabs=\"tabs\"\n      default-value=\"js\"\n      line-numbers\n    />\n  </div>\n</template>"
   },
   {
    "name": "WithoutLineNumbers",
-   "sfc": "<script setup>\n  import CodeBlock from '@aziontech/webkit/code-block'\n\n  const tabs = [\n    {\n      label: 'Javascript',\n      value: 'js',\n      language: 'javascript',\n      fileName: 'file name.js',\n      code: \"export default {\\n  async fetch(request) {\\n    const { prompt } = await request.json()\\n\\n    const modelResponse = await Azion.AI.run(\\n      'Qwen/Qwen3-30B-A3B-Instruct-2507-FP8',\\n      {\\n        messages: [\\n          { role: 'system', content: 'You are a helpful assistant.' },\\n          { role: 'user', content: prompt }\\n        ]\\n      }\\n    )\\n\\n    return new Response(JSON.stringify(modelResponse))\\n  }\\n}\"\n    },\n    {\n      label: 'Typescript',\n      value: 'ts',\n      language: 'typescript',\n      fileName: 'file name.ts',\n      code: \"export default {\\n  async fetch(request: Request) {\\n    const { prompt } = await request.json()\\n\\n    const modelResponse = await Azion.AI.run(\\n      'Qwen/Qwen3-30B-A3B-Instruct-2507-FP8',\\n      {\\n        messages: [\\n          { role: 'system', content: 'You are a helpful assistant.' },\\n          { role: 'user', content: prompt }\\n        ]\\n      }\\n    )\\n\\n    return new Response(JSON.stringify(modelResponse))\\n  }\\n}\"\n    }\n  ]\n</script>\n\n<template>\n  <div class=\"max-w-[692px]\">\n    <CodeBlock\n      :tabs=\"tabs\"\n      default-value=\"js\"\n      :show-line-numbers=\"false\"\n    />\n  </div>\n</template>"
+   "sfc": "<script setup>\n  import CodeBlock from '@aziontech/webkit/code-block'\n\n  const tabs = [\n    {\n      label: 'Javascript',\n      value: 'js',\n      language: 'javascript',\n      fileName: 'file name.js',\n      code: \"export default {\\n  async fetch(request) {\\n    const { prompt } = await request.json()\\n\\n    const modelResponse = await Azion.AI.run(\\n      'Qwen/Qwen3-30B-A3B-Instruct-2507-FP8',\\n      {\\n        messages: [\\n          { role: 'system', content: 'You are a helpful assistant.' },\\n          { role: 'user', content: prompt }\\n        ]\\n      }\\n    )\\n\\n    return new Response(JSON.stringify(modelResponse))\\n  }\\n}\"\n    },\n    {\n      label: 'Typescript',\n      value: 'ts',\n      language: 'typescript',\n      fileName: 'file name.ts',\n      code: \"export default {\\n  async fetch(request: Request) {\\n    const { prompt } = await request.json()\\n\\n    const modelResponse = await Azion.AI.run(\\n      'Qwen/Qwen3-30B-A3B-Instruct-2507-FP8',\\n      {\\n        messages: [\\n          { role: 'system', content: 'You are a helpful assistant.' },\\n          { role: 'user', content: prompt }\\n        ]\\n      }\\n    )\\n\\n    return new Response(JSON.stringify(modelResponse))\\n  }\\n}\"\n    }\n  ]\n</script>\n\n<template>\n  <div class=\"max-w-[692px]\">\n    <CodeBlock\n      :tabs=\"tabs\"\n      default-value=\"js\"\n      :line-numbers=\"false\"\n    />\n  </div>\n</template>"
   },
   {
    "name": "WithoutCopy",
-   "sfc": "<script setup>\n  import CodeBlock from '@aziontech/webkit/code-block'\n\n  const tabs = [\n    {\n      label: 'Javascript',\n      value: 'js',\n      language: 'javascript',\n      fileName: 'file name.js',\n      code: \"export default {\\n  async fetch(request) {\\n    const { prompt } = await request.json()\\n\\n    const modelResponse = await Azion.AI.run(\\n      'Qwen/Qwen3-30B-A3B-Instruct-2507-FP8',\\n      {\\n        messages: [\\n          { role: 'system', content: 'You are a helpful assistant.' },\\n          { role: 'user', content: prompt }\\n        ]\\n      }\\n    )\\n\\n    return new Response(JSON.stringify(modelResponse))\\n  }\\n}\"\n    },\n    {\n      label: 'Typescript',\n      value: 'ts',\n      language: 'typescript',\n      fileName: 'file name.ts',\n      code: \"export default {\\n  async fetch(request: Request) {\\n    const { prompt } = await request.json()\\n\\n    const modelResponse = await Azion.AI.run(\\n      'Qwen/Qwen3-30B-A3B-Instruct-2507-FP8',\\n      {\\n        messages: [\\n          { role: 'system', content: 'You are a helpful assistant.' },\\n          { role: 'user', content: prompt }\\n        ]\\n      }\\n    )\\n\\n    return new Response(JSON.stringify(modelResponse))\\n  }\\n}\"\n    }\n  ]\n</script>\n\n<template>\n  <div class=\"max-w-[692px]\">\n    <CodeBlock\n      :tabs=\"tabs\"\n      default-value=\"js\"\n      show-line-numbers\n      :copyable=\"false\"\n    />\n  </div>\n</template>"
+   "sfc": "<script setup>\n  import CodeBlock from '@aziontech/webkit/code-block'\n\n  const tabs = [\n    {\n      label: 'Javascript',\n      value: 'js',\n      language: 'javascript',\n      fileName: 'file name.js',\n      code: \"export default {\\n  async fetch(request) {\\n    const { prompt } = await request.json()\\n\\n    const modelResponse = await Azion.AI.run(\\n      'Qwen/Qwen3-30B-A3B-Instruct-2507-FP8',\\n      {\\n        messages: [\\n          { role: 'system', content: 'You are a helpful assistant.' },\\n          { role: 'user', content: prompt }\\n        ]\\n      }\\n    )\\n\\n    return new Response(JSON.stringify(modelResponse))\\n  }\\n}\"\n    },\n    {\n      label: 'Typescript',\n      value: 'ts',\n      language: 'typescript',\n      fileName: 'file name.ts',\n      code: \"export default {\\n  async fetch(request: Request) {\\n    const { prompt } = await request.json()\\n\\n    const modelResponse = await Azion.AI.run(\\n      'Qwen/Qwen3-30B-A3B-Instruct-2507-FP8',\\n      {\\n        messages: [\\n          { role: 'system', content: 'You are a helpful assistant.' },\\n          { role: 'user', content: prompt }\\n        ]\\n      }\\n    )\\n\\n    return new Response(JSON.stringify(modelResponse))\\n  }\\n}\"\n    }\n  ]\n</script>\n\n<template>\n  <div class=\"max-w-[692px]\">\n    <CodeBlock\n      :tabs=\"tabs\"\n      default-value=\"js\"\n      line-numbers\n      :copyable=\"false\"\n    />\n  </div>\n</template>"
   }
  ],
  "docs": "components/code-block.md"

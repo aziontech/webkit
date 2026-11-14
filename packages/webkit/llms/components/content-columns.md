@@ -39,7 +39,7 @@
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `items` | `ContentColumnItem[]` | `[]` | false | The columns, in reading order; each item is `{ title, description }`. |
+| `items` | `ContentColumnsItem[]` | `[]` | false | The columns, in reading order; each item is `{ title, description }`. |
 | `title` | `string` | `''` | false | Headline of the band, rendered as its `h2` above the columns. |
 | `description` | `string` | `''` | false | Supporting sentence under the headline. |
 | `eyebrow` | `string` | `''` | false | Short uppercase overline rendered above the headline. |

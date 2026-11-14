@@ -34,7 +34,8 @@
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
 | `value` | `string` | `—` | true | The text the code carries (a URI, a key), encoded as UTF-8 bytes. |
-| `label` | `string` | `undefined` | false | Accessible name of the image. Empty uses the catalog's `QR code`; name it after what the scan does. |
+| `ariaLabel` | `string` | `''` | false | Accessible name of the image. Empty uses the catalog's `QR code`; name it after what the scan does. |
+| `label` | `string` | `''` | false | @deprecated since 6.0 — use `ariaLabel` instead. Removed in 7.0. |
 | `errorCorrection` | `'L' \| 'M' \| 'Q' \| 'H'` | `'M'` | false | Error-correction level: `L` 7 %, `M` 15 %, `Q` 25 %, `H` 30 % of the code can be lost and still read. Higher levels make denser codes. |
 | `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | false | Rendered width: `small` 128 px, `medium` 160 px, `large` 224 px, quiet zone included. |
 
@@ -46,7 +47,7 @@
 
 ## Accessibility
 
-- The root is `role="img"` named by `label` (catalog `QR code` when empty); the SVG inside is `aria-hidden` and not focusable; the code takes no focus.
+- The root is `role="img"` named by `ariaLabel` (the consumer writes `aria-label`; the deprecated `label` still works; catalog `QR code` when empty); the SVG inside is `aria-hidden` and not focusable; the code takes no focus.
 - The code is never the only way: the page puts the value or its secret beside it as text.
 - Contrast: dark modules on a light plate in both themes (the plate sets `data-theme="light"`); `forced-color-adjust: none` keeps the code dark on light in forced colors, so a scanner still reads it.
 
@@ -61,7 +62,7 @@
 
 | Key            | English source | Override prop |
 | -------------- | -------------- | ------------- |
-| `qrCode.label` | `QR code`      | `label`       |
+| `qrCode.label` | `QR code`      | `ariaLabel`   |
 
 - The value is encoded as UTF-8 bytes, so non-Latin text works; most authenticator URIs are ASCII.
 
@@ -90,7 +91,7 @@
   <div class="flex flex-col items-start gap-(--spacing-md)">
     <QrCode
       :value="uri"
-      :label="`QR code to add ${account} to an authenticator app`"
+      :aria-label="`QR code to add ${account} to an authenticator app`"
     />
     <div class="flex flex-col gap-(--spacing-xxs)">
       <p class="text-label-sm text-(--text-default)">Can't scan the code?</p>
@@ -125,7 +126,7 @@
       :key="size"
       value="https://www.azion.com/en/documentation/"
       :size="size"
-      :label="`QR code, ${size}, to the Azion documentation`"
+      :aria-label="`QR code, ${size}, to the Azion documentation`"
     />
   </div>
 </template>

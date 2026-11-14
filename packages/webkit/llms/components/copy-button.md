@@ -61,11 +61,30 @@
 
 - Visible focus: inherited from `IconButton` (`focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`)
 - Keyboard map: `Tab` focuses; `Enter`/`Space` activates copy.
-- ARIA: `aria-label` toggles between `ariaLabel` and `copiedLabel` when copied.
+- ARIA: `aria-label` toggles between `ariaLabel` and `copiedLabel` when copied, and a visually hidden `role="status"` region (`<testId>__status`) announces the copied label for 2 s, since a name change on the focused button is not announced by most screen readers.
+- Attributes: consumer `class`, `id`, `aria-describedby` and listeners land on the root `span` (`inheritAttrs: false` + `v-bind="$attrs"`).
 - Fallback popover: `role="dialog"` named by its title and described by the key hint; focus moves into the selected read-only field and returns to the button on close.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state.
-- `motion-reduce:transition-none motion-reduce:transform-none` on animated states.
+- `motion-reduce:transition-none` on animated states (the icon swap comes from IconButton).
 - Touch target ≥40×40 px where the control is interactive.
+
+## Right-to-left
+
+- Layout: a single icon button; nothing to mirror. The copy and check glyphs do not mirror.
+- Keyboard: no arrow-key logic.
+- User data: the copied value is not rendered.
+
+## Internationalization
+
+| Key                 | English source | Override prop |
+| ------------------- | -------------- | ------------- |
+| `copyButton.copy`   | `Copy`         | `ariaLabel`   |
+| `copyButton.copied` | `Copied`       | `copiedLabel` |
+
+## Responsive
+
+- Size follows `size` (IconButton 28 / 32 / 40 px) with IconButton's 44 px coarse-pointer target.
+- The tooltip opens on focus as well as hover.
 
 ## Examples
 

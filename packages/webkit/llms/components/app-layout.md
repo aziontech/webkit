@@ -45,27 +45,17 @@
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `navigationOpen` | `boolean` | `true` | false | Whether the navigation region shows beside the content. Use with `v-model:navigation-open`. Not used while compact. |
 | `navigationLabel` | `string` | `''` | false | Accessible name of the navigation drawer. Empty uses the locale catalog (`Navigation`). |
-| `toolsOpen` | `boolean` | `false` | false | Whether the tools region (help) is open; while compact it drives the tools drawer. Use with `v-model:tools-open`. |
 | `toolsLabel` | `string` | `''` | false | Title of the tools region, shown in its header. Empty uses the locale catalog (`Help`). |
 | `toolsWidth` | `number` | `320` | false | Width of the tools region in pixels while not compact. |
-| `splitPanelOpen` | `boolean` | `false` | false | Whether the split panel is open. Use with `v-model:split-panel-open`. |
-| `splitPanelPosition` | `'bottom' \| 'side'` | `'bottom'` | false | Where the split panel sits: under the content or beside it. Use with `v-model:split-panel-position`. Bottom while compact. |
-| `splitPanelSize` | `number` | `320` | false | Height (bottom) or width (side) of the split panel in pixels. Use with `v-model:split-panel-size`. |
 | `splitPanelTitle` | `string` | `''` | false | Title of the split panel, shown in its header. Empty uses the locale catalog (`Details`). |
 | `storageKey` | `string` | `''` | false | When set, the split panel size and position and the navigation and tools open state are kept in `localStorage` under it. |
 | `compactBelow` | `number` | `768` | false | Width of the layout itself, in pixels, under which navigation and tools become drawers and the split panel moves down. |
-
-## Events
-
-| Event | Payload | Notes |
-| --- | --- | --- |
-| `update:navigationOpen` | `boolean` | v-model:navigation-open. |
-| `update:toolsOpen` | `boolean` | v-model:tools-open. |
-| `update:splitPanelOpen` | `boolean` | v-model:split-panel-open. |
-| `update:splitPanelPosition` | `'bottom' \| 'side'` | v-model:split-panel-position. |
-| `update:splitPanelSize` | `number` | v-model:split-panel-size; on every step. |
+| `navigationOpen` | `boolean` | `true` | false | Two-way value (`v-model:navigationOpen`). |
+| `toolsOpen` | `boolean` | `false` | false | Two-way value (`v-model:toolsOpen`). |
+| `splitPanelOpen` | `boolean` | `false` | false | Two-way value (`v-model:splitPanelOpen`). |
+| `splitPanelPosition` | `AppLayoutSplitPanelPosition` | `'bottom'` | false | Two-way value (`v-model:splitPanelPosition`). |
+| `splitPanelSize` | `number` | `320` | false | Two-way value (`v-model:splitPanelSize`). |
 
 ## Slots
 
@@ -78,6 +68,19 @@
 | `breadcrumbs` | — | Breadcrumbs above the content, inside the scroll area; the page body fills the height left under them. |
 | `tools` | — | The tools region's body, usually a `HelpPanel`. |
 | `split-panel` | — | The split panel's body. |
+
+## v-model
+
+Each two-way value is a named `defineModel`, so its `update:*` event is generated, not hand-declared.
+Unbound, each one keeps its own local state.
+
+| Model                          | Type                 | Default    | Emits                       | Notes                                                                                                                                     |
+| ------------------------------ | -------------------- | ---------- | --------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| `v-model:navigation-open`      | `boolean`            | `true`     | `update:navigationOpen`     | Whether the navigation region shows beside the content. Not used while compact, where navigation is a drawer. Same name on `ConsoleLayout`. |
+| `v-model:tools-open`           | `boolean`            | `false`    | `update:toolsOpen`          | Whether the tools region (help) is open; while compact it drives the tools drawer.                                                        |
+| `v-model:split-panel-open`     | `boolean`            | `false`    | `update:splitPanelOpen`     | Whether the split panel is open.                                                                                                          |
+| `v-model:split-panel-position` | `'bottom' \| 'side'` | `'bottom'` | `update:splitPanelPosition` | Where the split panel sits: under the content or beside it. Bottom while compact.                                                         |
+| `v-model:split-panel-size`     | `number`             | `320`      | `update:splitPanelSize`     | Height (bottom) or width (side) of the split panel in pixels; emitted on every step.                                                     |
 
 ## States
 

@@ -60,6 +60,21 @@
 - `motion-reduce:transition-none motion-reduce:transform-none` — the row hover belongs to `column-navigation`, which carries its own reduced-motion fallback; this band adds no motion.
 - Touch target ≥40×40 px — each row is a full-width link taller than 40 px.
 
+## Right-to-left
+
+- Layout: logical utilities and the composed components' own mirroring, so the directory cells fill from the inline start.
+- Icons: action chevrons mirror (owned by `button`).
+- Keyboard: unchanged.
+
+## Internationalization
+
+- No built-in strings: every visible string arrives through props.
+
+## Responsive
+
+- One cell per row on phones (`mobileColumns: 1`); from the grid's breakpoints the cells fill the computed track count, wide cells spanning two tracks from small and large.
+- No horizontal scroll at 320 px.
+
 ## Examples
 
 ### Default

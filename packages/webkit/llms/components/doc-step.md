@@ -54,7 +54,9 @@
 - Contrast ≥4.5:1 (text): the heading and the index use `var(--text-default)` on the page and `var(--bg-surface)` respectively, the same pairing the rest of the layer measures AA on.
 - Touch target: not applicable; the component is not interactive.
 
-## Usage
+## Examples
+
+### Default
 
 ```vue
 <script setup>
@@ -64,8 +66,13 @@
 
 <template>
   <DocSteps>
-    <DocStep title="Install the Azion CLI"> Homebrew is the shortest path on macOS. </DocStep>
-    <DocStep title="Deploy" />
+    <DocStep title="Install the CLI.">
+      <p>Download the binary for your system and add it to your path.</p>
+    </DocStep>
+    <DocStep title="Log in.">
+      <p>Run the login command and paste the token from your account settings.</p>
+    </DocStep>
+    <DocStep title="Deploy the project." />
   </DocSteps>
 </template>
 ```

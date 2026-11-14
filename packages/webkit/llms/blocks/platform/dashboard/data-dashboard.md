@@ -1,6 +1,6 @@
 # DataDashboard (`platform/dashboard/data-dashboard`)
 
-> The data dashboard pattern: KPI tiles with sparklines and period-over-period deltas, followed by the breakdowns that explain them. Six StatTiles carry each metric’s period total, a sparkline and the change against the previous 24 hours, each with a Hint that defines the metric. Under them, a ChartCard draws data transferred this period over the previous one as two series, a labeled horizontal bar Chart ranks the projects by data transferred, and a searchable, paginated TableRoot lists requests and data transferred per project. Every card keeps its Sum and change Tags, an Expand IconButton and a DropdownMenu with Copy query and Export CSV. Built from `PageHeader`, `StatTile`, `ChartCard`, `Chart`, `TableRoot`, `Tag`, `Hint`, `ToggleGroup`, `IconButton`, `Tooltip`, `DropdownMenu`, `Input` and `EmptyState`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
+> The data dashboard pattern: KPI tiles with sparklines and period-over-period deltas, followed by the breakdowns that explain them, under a PageHeader whose Period Select sets the comparison of every delta and the period in each exported CSV name. Six StatTiles carry each metric’s period total, a sparkline and the change against the previous 24 hours, each with a Hint that defines the metric. Under them, a ChartCard draws data transferred this period over the previous one as two series, a labeled horizontal bar Chart ranks the projects by data transferred, and a searchable, paginated TableRoot lists requests and data transferred per project. Every card keeps its Sum and change Tags, an Expand IconButton and a DropdownMenu with Copy query and Export CSV. Built from `PageHeader`, `StatTile`, `ChartCard`, `Chart`, `TableRoot`, `Tag`, `Hint`, `ToggleGroup`, `IconButton`, `Tooltip`, `DropdownMenu`, `Input` and `EmptyState`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
 
 - Surface: product
 - Source: `blocks/platform/dashboard/data-dashboard/data-dashboard.vue` in `@aziontech/webkit`
@@ -34,10 +34,13 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 
 ## Building blocks
 
-### A. Page heading — `PageHeader` (required)
+### A. Page heading and period — `PageHeader`, `Select` (required)
 
 Title `Data usage` and one sentence on what the page shows, over the rest of the page in the standard
-`layout-column`.
+`layout-column`. The header actions hold one medium `Select` named `Period` by its `aria-label`
+(`Last hour`, `Last 24 hours`, `Last 7 days`, `Last 30 days`); it sets the comparison label of every
+delta (`vs previous 7 days`) and the period in the exported CSV file name
+(`requests-last-7-days.csv`). No card has a period control of its own.
 
 ### B. KPI row — `StatTile` (required)
 
@@ -187,6 +190,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
   import PageHeader from '@aziontech/webkit/page-header'
   import PanelContent from '@aziontech/webkit/panel-content'
   import PanelHeader from '@aziontech/webkit/panel-header'
+  import Select from '@aziontech/webkit/select'
   import StatTile from '@aziontech/webkit/stat-tile'
   import TableRoot, { type TableColumn } from '@aziontech/webkit/table-root'
   import Tag from '@aziontech/webkit/tag'
@@ -195,6 +199,25 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
   import Tooltip from '@aziontech/webkit/tooltip'
   import { type CsvColumn, downloadCsv, toCsv } from '@aziontech/webkit/utils/csv'
   import { computed, ref } from 'vue'
+
+  const fallbackPeriod = {
+    value: '24h',
+    label: 'Last 24 hours',
+    comparison: 'vs previous 24 hours'
+  }
+  const periods = [
+    { value: '1h', label: 'Last hour', comparison: 'vs previous hour' },
+    fallbackPeriod,
+    { value: '7d', label: 'Last 7 days', comparison: 'vs previous 7 days' },
+    { value: '30d', label: 'Last 30 days', comparison: 'vs previous 30 days' }
+  ]
+  const period = ref(fallbackPeriod.value)
+  const periodLabel = (value: string) => periods.find((entry) => entry.value === value)?.label ?? ''
+  const currentPeriod = computed(
+    () => periods.find((entry) => entry.value === period.value) ?? fallbackPeriod
+  )
+  const periodComparison = computed(() => currentPeriod.value.comparison)
+  const periodSlug = computed(() => currentPeriod.value.label.toLowerCase().replaceAll(' ', '-'))
 
   const compact = new Intl.NumberFormat('en-US', { notation: 'compact', maximumFractionDigits: 1 })
 
@@ -546,7 +569,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
       copyQuery(report)
       return
     }
-    const filename = `${id}-last-24-hours.csv`
+    const filename = `${id}-${periodSlug.value}.csv`
     downloadCsv(filename, toCsv({ columns: report.columns, rows: report.rows() }))
     toast.success('CSV exported.', { description: filename })
   }
@@ -598,7 +621,26 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
       <PageHeader
         title="Data usage"
         description="What your projects consumed in the period, against the previous period."
-      />
+      >
+        <template #actions>
+          <Select
+            v-model="period"
+            size="medium"
+            :display-value="periodLabel"
+          >
+            <Select.Trigger aria-label="Period" />
+            <Select.Content>
+              <Select.Option
+                v-for="option in periods"
+                :key="option.value"
+                :value="option.value"
+              >
+                {{ option.label }}
+              </Select.Option>
+            </Select.Content>
+          </Select>
+        </template>
+      </PageHeader>
       <ul class="grid grid-cols-1 gap-(--spacing-md) sm:grid-cols-2 xl:grid-cols-3">
         <li
           v-for="figure in figures"
@@ -610,7 +652,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
             :value="figure.value"
             :format-value="figure.unit === 'bytes' ? formatBytes : formatCount"
             :delta="figure.delta"
-            delta-label="vs previous 24 hours"
+            :delta-label="periodComparison"
             :trend="figure.trend"
             :loading="loading"
           >
@@ -663,6 +705,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
                   kind="transparent"
                   size="small"
                   aria-label="Expand Data transferred, this period vs previous"
+                  :disabled="loading"
                   @click="openExpanded('comparison')"
                 />
               </Tooltip>
@@ -686,6 +729,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
                   <DropdownMenu.Option
                     value="export"
                     label="Export CSV"
+                    :disabled="loading"
                   />
                 </DropdownMenu.Group>
               </DropdownMenu>
@@ -739,6 +783,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
                   kind="transparent"
                   size="small"
                   aria-label="Expand Data transferred by project"
+                  :disabled="loading"
                   @click="openExpanded('projects')"
                 />
               </Tooltip>
@@ -762,6 +807,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
                   <DropdownMenu.Option
                     value="export"
                     label="Export CSV"
+                    :disabled="loading"
                   />
                 </DropdownMenu.Group>
               </DropdownMenu>
@@ -810,6 +856,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
                   kind="transparent"
                   size="small"
                   aria-label="Expand Usage by project"
+                  :disabled="loading"
                   @click="openExpanded('usage')"
                 />
               </Tooltip>
@@ -833,6 +880,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
                   <DropdownMenu.Option
                     value="export"
                     label="Export CSV"
+                    :disabled="loading"
                   />
                 </DropdownMenu.Group>
               </DropdownMenu>

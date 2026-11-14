@@ -40,20 +40,22 @@
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
 | `spans` | `TraceSpan[]` | `[]` | false | Spans of the trace, each `{ id, parentId?, name, service?, icon?, start, duration, status?, message?, attributes? }` in milliseconds. |
-| `selected` | `string` | `''` | false | Id of the span whose details show under the waterfall. Supports v-model:selected. |
 | `ariaLabel` | `string` | `''` | false | Accessible name of the waterfall. Empty uses the locale catalog. |
+| `bordered` | `boolean` | `true` | false | Draws the outer border and radius. Off for a trace inside a card or panel that has its own. |
+| `loading` | `boolean` | `false` | false | Shows placeholder rows while the spans load; search and selection wait. |
+| `selected` | `string` | `''` | false | Two-way value (`v-model:selected`). |
 
-## Events
+## v-model
 
-| Event | Payload | Notes |
-| --- | --- | --- |
-| `update:selected` | `string` | A row was selected, selected again (empty: deselected), or Close used. |
+| Model              | Type     | Default | Emits             | Notes                                                                                                                                                                                                       |
+| ------------------ | -------- | ------- | ----------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `v-model:selected` | `string` | `''`    | `update:selected` | Id of the span whose details show under the waterfall, via `defineModel('selected')`. A row was selected, selected again (empty: deselected), or Close used. Unbound, the trace keeps the selection itself. |
 
 ## States
 
-- Visual states: `default`, `hover` (row), `focus-visible` (row), `selected` (row and details band), `collapsed` / `expanded` (parent rows), `searching` (rows narrowed, every match's ancestors shown), `empty` (no spans, or no match with Clear search).
+- Visual states: `default`, `hover` (row), `focus-visible` (row), `selected` (row and details band), `collapsed` / `expanded` (parent rows), `searching` (rows narrowed, every match's ancestors shown), `loading` (placeholder rows in a `role="status"` region, `aria-busy` on the root, search disabled, no details), `empty` (the package `EmptyState`, small: no spans, or no match with a Clear search action).
 - Bar tones on `data-tone`: `root` (info), `ok` (success), `error` (danger), `running` (warning).
-- `data-selected` on the selected row; `aria-expanded` on parent rows.
+- `data-selected` on the selected row; `aria-expanded` on parent rows; `data-bordered` and `data-loading` on the root mirror their props.
 
 ## Accessibility
 
@@ -80,6 +82,7 @@
 | `trace.noMatch`                                      | No span matches “{query}”.                       | —             |
 | `trace.clearSearch`                                  | Clear search                                     | —             |
 | `trace.empty`                                        | No spans in this trace.                          | —             |
+| `trace.loading`                                      | Loading spans                                    | —             |
 | `trace.details`                                      | Details of {name}                                | —             |
 | `trace.close`                                        | Close                                            | —             |
 | `trace.copyName`                                     | Copy span name                                   | —             |

@@ -42,25 +42,11 @@
  ],
  "props": [
   {
-   "name": "navigationOpen",
-   "type": "boolean",
-   "default": "true",
-   "required": "false",
-   "doc": "Whether the navigation region shows beside the content. Use with `v-model:navigation-open`. Not used while compact."
-  },
-  {
    "name": "navigationLabel",
    "type": "string",
    "default": "''",
    "required": "false",
    "doc": "Accessible name of the navigation drawer. Empty uses the locale catalog (`Navigation`)."
-  },
-  {
-   "name": "toolsOpen",
-   "type": "boolean",
-   "default": "false",
-   "required": "false",
-   "doc": "Whether the tools region (help) is open; while compact it drives the tools drawer. Use with `v-model:tools-open`."
   },
   {
    "name": "toolsLabel",
@@ -75,27 +61,6 @@
    "default": "320",
    "required": "false",
    "doc": "Width of the tools region in pixels while not compact."
-  },
-  {
-   "name": "splitPanelOpen",
-   "type": "boolean",
-   "default": "false",
-   "required": "false",
-   "doc": "Whether the split panel is open. Use with `v-model:split-panel-open`."
-  },
-  {
-   "name": "splitPanelPosition",
-   "type": "'bottom' | 'side'",
-   "default": "'bottom'",
-   "required": "false",
-   "doc": "Where the split panel sits: under the content or beside it. Use with `v-model:split-panel-position`. Bottom while compact."
-  },
-  {
-   "name": "splitPanelSize",
-   "type": "number",
-   "default": "320",
-   "required": "false",
-   "doc": "Height (bottom) or width (side) of the split panel in pixels. Use with `v-model:split-panel-size`."
   },
   {
    "name": "splitPanelTitle",
@@ -117,35 +82,44 @@
    "default": "768",
    "required": "false",
    "doc": "Width of the layout itself, in pixels, under which navigation and tools become drawers and the split panel moves down."
+  },
+  {
+   "name": "navigationOpen",
+   "type": "boolean",
+   "default": "true",
+   "required": "false",
+   "doc": "Two-way value (`v-model:navigationOpen`)."
+  },
+  {
+   "name": "toolsOpen",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Two-way value (`v-model:toolsOpen`)."
+  },
+  {
+   "name": "splitPanelOpen",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Two-way value (`v-model:splitPanelOpen`)."
+  },
+  {
+   "name": "splitPanelPosition",
+   "type": "AppLayoutSplitPanelPosition",
+   "default": "'bottom'",
+   "required": "false",
+   "doc": "Two-way value (`v-model:splitPanelPosition`)."
+  },
+  {
+   "name": "splitPanelSize",
+   "type": "number",
+   "default": "320",
+   "required": "false",
+   "doc": "Two-way value (`v-model:splitPanelSize`)."
   }
  ],
- "events": [
-  {
-   "name": "update:navigationOpen",
-   "payload": "boolean",
-   "notes": "v-model:navigation-open."
-  },
-  {
-   "name": "update:toolsOpen",
-   "payload": "boolean",
-   "notes": "v-model:tools-open."
-  },
-  {
-   "name": "update:splitPanelOpen",
-   "payload": "boolean",
-   "notes": "v-model:split-panel-open."
-  },
-  {
-   "name": "update:splitPanelPosition",
-   "payload": "'bottom' | 'side'",
-   "notes": "v-model:split-panel-position."
-  },
-  {
-   "name": "update:splitPanelSize",
-   "payload": "number",
-   "notes": "v-model:split-panel-size; on every step."
-  }
- ],
+ "events": [],
  "slots": [
   {
    "name": "default",

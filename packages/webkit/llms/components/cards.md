@@ -1,6 +1,6 @@
 # Cards
 
-> A collection shown as cards, after Cloudscape's cards: one card per item, named by its `header` slot, with the item's fields in the default slot. It shares Table's item and selection model — `items`, `trackBy`, `selectedKeys` — so `useCollection` binds it through `cardsProps`, and selection (single or multi, with a visible select-all) survives paging. Four cards a row in a wide container, then three, two and one as the container narrows.
+> A collection shown as cards, after Cloudscape's cards: one card per item, named by its `header` slot, with the item's fields in the default slot. It follows Cloudscape's collection model — `items`, `trackBy`, `selectedKeys` (a key array) — which is not yet the same as Table's (`data`, `rowKey`, `rowSelection` record); `useCollection` binds it through `cardsProps`, and selection (single or multi, with a visible select-all) survives paging. Four cards a row in a wide container, then three, two and one as the container narrows.
 
 - Import: `import Cards from '@aziontech/webkit/cards'`
 - Category: data · Surface: product · Structure: monolithic
@@ -185,5 +185,35 @@
     </Cards>
     <Pagination v-bind="paginationProps" />
   </div>
+</template>
+```
+
+### SingleSelection
+
+```vue
+<script setup>
+  import Cards from '@aziontech/webkit/cards'
+  import { ref } from 'vue'
+
+  const plans = [
+    { id: 'starter', name: 'Starter', price: '$0 a month', requests: '1M requests' },
+    { id: 'pro', name: 'Pro', price: '$49 a month', requests: '50M requests' },
+    { id: 'business', name: 'Business', price: '$249 a month', requests: '500M requests' }
+  ]
+  const selected = ref(['pro'])
+</script>
+
+<template>
+  <Cards
+    v-model:selected-keys="selected"
+    :items="plans"
+    selection-mode="single"
+  >
+    <template #header="{ item }">{{ item.name }}</template>
+    <template #default="{ item }">
+      <p class="text-body-sm text-(--text-default)">{{ item.price }}</p>
+      <p class="text-body-sm text-(--text-muted)">{{ item.requests }}</p>
+    </template>
+  </Cards>
 </template>
 ```

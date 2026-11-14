@@ -32,18 +32,21 @@
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `cards` | `CustomerSpotlightCard[]` | `[]` | false | The cards, in reading order; each is `{ name, logo, logoWidth?, href, description, brand? }`; `brand` (`{ base, glow }`) defaults to the client registry's colours for `name`. A card opens while hovered or focused. |
+| `items` | `CustomerSpotlightCard[]` | `[]` | false | The cards, in reading order; each is `{ name, logo, logoWidth?, href, description, brand? }`; `brand` (`{ base, glow }`) defaults to the client registry's colours for `name`. A card opens while hovered or focused. |
 | `ariaLabel` | `string` | `''` | false | Accessible name of the list; empty uses the built-in "Customer stories". |
-| `storyLabel` | `string` | `''` | false | Label revealed under the description while the card is open; empty uses the built-in "Read story". |
+| `linkLabel` | `string` | `''` | false | Label revealed under the description while the card is open; empty uses the built-in "Read story". |
+| `cards` | `CustomerSpotlightCard[]` | `[]` | false | @deprecated since 6.0 — use `items`. Removed in 7.0. Read only when `items` is empty. |
+| `storyLabel` | `string` | `''` | false | @deprecated since 6.0 — use `linkLabel`. Removed in 7.0. Read only when `linkLabel` is empty. |
 | `anchor` | `string` | `''` | false | In-page id set on the band so a hash link can target it. |
 
 ## States
 
-- Renders nothing without cards.
+- Renders nothing without items.
 - Each item carries `data-state=open|closed`; one is open at a time on large screens.
 
 ## Accessibility
 
+- The root is a plain block, not a landmark: the list carries the one accessible name, so assistive technology never hears it twice.
 - A list of links; each link name is "<story label>, <client>: <story line>", so the logo image is decorative (`alt=""`).
 - Focus opens the card the same way hover does; the focus ring is drawn inside the card.
 - Contrast of the story line: `--text-default` on `--bg-canvas`.
@@ -59,9 +62,9 @@
 | Key                       | English source     | Override prop |
 | ------------------------- | ------------------ | ------------- |
 | `customerSpotlight.list`  | `Customer stories` | `ariaLabel`   |
-| `customerSpotlight.story` | `Read story`       | `storyLabel`  |
+| `customerSpotlight.story` | `Read story`       | `linkLabel`   |
 
-- Client names, logos and story lines are content passed through `cards`.
+- Client names, logos and story lines are content passed through `items`.
 
 ## Responsive
 
@@ -79,7 +82,7 @@
   import arezzoExtendedReversed from '@aziontech/webkit/assets/arezzo-extended-reversed.svg'
   import CustomerSpotlight from '@aziontech/webkit/customer-spotlight'
 
-  const cards = [
+  const items = [
     {
       name: 'Agibank',
       logo: agibankExtendedReversed,
@@ -102,6 +105,6 @@
 </script>
 
 <template>
-  <CustomerSpotlight :cards="cards" />
+  <CustomerSpotlight :items="items" />
 </template>
 ```

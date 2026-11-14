@@ -1,6 +1,6 @@
 # AlertsDashboard (`platform/dashboard/alerts-dashboard`)
 
-> An alerts dashboard: what is open, how severe it is, what kind it is and who is involved. A page heading with the period Select sits over four StatTiles (open, critical or high open, alerts in the period and the false positive rate), each with its delta and a Hint. Below, a ChartCard stacks the alerts raised each day by severity level, with every series colored from the severity ramp so the bars, the legend and the tooltip read the same scale as the tables. Beside it, Open by severity lists one SeverityTag per level with its open count and its share of the open alerts. A BarList ranks the alerts by type, the Highest risk table pairs each entity with its risk score and the SeverityTag of its worst open alert, and the Open alerts table leads every row with its SeverityTag, sortable from critical to info. Its page-level parts are `PageHeader`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
+> An alerts dashboard: what is open, how severe it is, what kind it is and who is involved. A page heading with the period Select sits over four StatTiles (open, critical or high open, alerts in the period and the false positive rate), each with its delta and a Hint. Below, a ChartCard stacks the alerts raised each day by severity level, with every series colored from the severity ramp so the bars, the legend and the tooltip read the same scale as the tables. Beside it, Open by severity lists one SeverityTag per level with its open count and its share of the open alerts. A BarList ranks the alerts by type, the Highest risk table pairs each entity with its risk score and the SeverityTag of its worst open alert, and the Open alerts table leads every row with its SeverityTag, sortable from critical to info. Built from `BarList`, `Card`, `Chart`, `ChartCard`, `EmptyState`, `Hint`, `PageHeader`, `Select`, `SeverityTag`, `Skeleton`, `StatTile`, `Table`, `TableRoot`, `Tag` and `Alert`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
 
 - Surface: product
 - Source: `blocks/platform/dashboard/alerts-dashboard/alerts-dashboard.vue` in `@aziontech/webkit`
@@ -123,7 +123,7 @@ so it is a `Table.CellStatus` (one semantic `Tag`), separate from severity. The 
 - **Description:** one sentence on the page's job. `What is open, how severe it is, what kind it is and who is involved.`
 - **Tile labels:** sentence case, no parentheses. `Critical or high open`, `False positives`.
 - **Hint:** one sentence definition ending with a period. `Alerts nobody has closed yet, at any severity.`
-- **Empty states:** state the fact, then the next step. `No alerts in this period` / `Nothing was raised in the last 30 days. Select a longer period.`
+- **Empty states:** state the fact, then the next step. `No alerts in this period` / `Nothing was raised in the last 30 days. Select a longer period.`, with the chosen period named in the sentence
 - **Severity labels:** the level only. `Critical`, `High`, `Medium`, `Low`, `Info`.
 
 ## Accessibility
@@ -174,7 +174,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
   import Table from '@aziontech/webkit/table'
   import TableRoot, { type TableColumn } from '@aziontech/webkit/table-root'
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
-  import { ref } from 'vue'
+  import { computed, ref } from 'vue'
 
   type FigureFormat = 'count' | 'percentage'
   type AlertStatus = 'Open' | 'Investigating'
@@ -233,6 +233,11 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
       label: 'Last 90 days'
     }
   ]
+
+  const periodPhrase = computed(
+    () =>
+      periods.find((option) => option.value === period.value)?.label.toLowerCase() ?? 'this period'
+  )
 
   const figures: Figure[] = [
     {
@@ -740,7 +745,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
               :format-value="formatters.count"
               :height="240"
               empty-title="No alerts in this period"
-              empty-description="Nothing was raised in the last 30 days. Select a longer period."
+              :empty-description="`Nothing was raised in the ${periodPhrase}. Select a longer period.`"
               :loading="loading"
             >
               <Chart.Grid />

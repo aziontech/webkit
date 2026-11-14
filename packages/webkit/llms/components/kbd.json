@@ -8,7 +8,7 @@
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],
- "purpose": "Kbd renders keyboard input — a single key or a shortcut combination — as a compact, non-interactive keycap. It reads like a real key: a bordered surface with a thicker bottom edge for depth. Modifier keys are passed as boolean props (`meta`, `shift`, `alt`, `ctrl`) and rendered with the correct OS-aware glyph (⌘ on macOS, the catalog's `Ctrl` elsewhere), and named keys (`keyName`) print their localized name, so consumers never hardcode platform symbols or English key names. Use it for shortcut hints in prose, menus, and control suffixes (e.g. the ⌘K hint in `command`).",
+ "purpose": "Kbd renders keyboard input — a single key or a shortcut combination — as a compact, non-interactive keycap. It reads like a real key: a bordered surface with a thicker bottom edge for depth. Modifier keys are passed as boolean props (`meta`, `shift`, `alt`, `ctrl`) and rendered with the correct OS-aware glyph (⌘ on macOS, the catalog's `Ctrl` elsewhere), and named keys (`keyName`) print their localized name, so consumers never hardcode platform symbols or English key names. The platform is read once mounted: the server and the first client render print the non-Mac names, then a Mac swaps in its glyphs, so hydration never mismatches. Use it for shortcut hints in prose, menus, and control suffixes (e.g. the ⌘K hint in `command`).",
  "setup": null,
  "useWhen": [
   "Show a keyboard shortcut or a single key inline (a ⌘K hint on a search button, an `Esc` hint in a dialog, `/` to focus search).",
@@ -66,8 +66,8 @@
   },
   {
    "name": "keyName",
-   "type": "'ctrl' | 'alt' | 'shift' | 'escape' | 'enter' | 'space' | 'tab' | 'backspace' | 'delete'",
-   "default": "undefined",
+   "type": "'' | 'ctrl' | 'alt' | 'shift' | 'escape' | 'enter' | 'space' | 'tab' | 'backspace' | 'delete'",
+   "default": "''",
    "required": "false",
    "doc": "Named key printed from the locale catalog (`escape` → `Esc`, `enter` → `Enter`); the slot still renders after it."
   }

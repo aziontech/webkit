@@ -5,7 +5,7 @@
 - Surface: product
 - Source: `blocks/platform/account/onboarding-form/onboarding-form.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/account/onboarding-form")`
-- Components: [Alert](../../../components/alert.md), [Avatar](../../../components/avatar.md), [Brand](../../../components/brand.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [Checkbox](../../../components/checkbox.md), [Drawer](../../../components/drawer.md), `DrawerClose`, `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, [Field](../../../components/field.md), [GlobalHeader](../../../components/global-header.md), [HelperText](../../../components/helper-text.md), [Input](../../../components/input.md), [Link](../../../components/link.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [PaymentBrand](../../../components/payment-brand.md), [Progress](../../../components/progress.md), [RadioCards](../../../components/radio-cards.md), [Select](../../../components/select.md), [Separator](../../../components/separator.md), [Switch](../../../components/switch.md), [Tag](../../../components/tag.md), [ToggleGroup](../../../components/toggle-group.md)
+- Components: [Alert](../../../components/alert.md), [Avatar](../../../components/avatar.md), [Brand](../../../components/brand.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [Checkbox](../../../components/checkbox.md), [Drawer](../../../components/drawer.md), `DrawerClose`, `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, [FeatureList](../../../components/feature-list.md), [Field](../../../components/field.md), [GlobalHeader](../../../components/global-header.md), [HelperText](../../../components/helper-text.md), [Input](../../../components/input.md), [Link](../../../components/link.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [PaymentBrand](../../../components/payment-brand.md), [Progress](../../../components/progress.md), [RadioCards](../../../components/radio-cards.md), [Select](../../../components/select.md), [Separator](../../../components/separator.md), [Switch](../../../components/switch.md), [Tag](../../../components/tag.md), [ToggleGroup](../../../components/toggle-group.md)
 - Skills: `webkit-form`, `webkit-errors`, `webkit-microcopy`
 
 ## Asked as
@@ -100,7 +100,7 @@ Under the picker: `Generated from the organization's name. Select its color.`
 ## States
 
 - Organization: step 1 of 3, name fields and the organization mark.
-- Plan: step 2 of 3, the plans as rows; Free selects directly, Pro or Enterprise opens the upgrade drawer and selects only once Upgrade is pressed.
+- Plan: step 2 of 3, the plans as rows; Free selects directly, Pro or Enterprise opens the upgrade drawer and selects only once Upgrade is pressed. The drawer is the Checkout of `platform/account/change-plan-drawer` (What's included as a `FeatureList`, the charge, the payment method and the billing address); keep its fields and copy identical to that block rather than diverging.
 - Profile: step 3 of 3, the usage and role questions, the onboarding-session switch and Create Organization, which locks the step while the request runs and answers in one `Alert` in the card: `Organization created.`, or, when the request fails (offline), `The organization wasn't created. Check your connection, then retry. Your answers are kept.` with Retry.
 
 ## Related
@@ -119,7 +119,7 @@ Under the picker: `Generated from the organization's name. Select its color.`
 ## Variants
 
 - `Organization` — primary (the code below)
-- `Plan` — Step 2 of 3: the three plans as full-width rows; Free selects directly, while Pro or Enterprise opens the upgrade drawer and only selects once Upgrade is pressed.
+- `Plan` — Step 2 of 3: the three plans as full-width rows; Free selects directly, while Pro or Enterprise opens the upgrade drawer (the `platform/account/change-plan-drawer#Checkout` form, What's included as a `FeatureList`) and only selects once Upgrade is pressed.
 - `Profile` — Step 3 of 3: the usage and role questions, the onboarding-session switch and the Create Organization action.
 
 Each variant is the same screen in another state: `get_pattern("platform/account/onboarding-form", { variant })`, or the file under `blocks/platform/account/onboarding-form/variants/`.
@@ -246,9 +246,9 @@ Each variant is the same screen in another state: `get_pattern("platform/account
 
     <main class="flex min-h-0 flex-1 flex-col overflow-y-auto lg:overflow-hidden">
       <div
-        class="mx-auto grid w-full max-w-(--container-7xl) flex-1 grid-cols-1 items-center gap-(--spacing-xxl) px-(--layout-boundary-inline) py-(--spacing-xl) lg:min-h-0 lg:grid-cols-2 lg:items-start lg:overflow-y-auto lg:px-(--spacing-xl)"
+        class="layout-column layout-boundary grid flex-1 grid-cols-1 items-center gap-(--spacing-xxl) lg:min-h-0 lg:grid-cols-2 lg:items-start lg:overflow-y-auto"
       >
-        <div class="mx-auto flex w-full max-w-(--container-xl) flex-col lg:my-auto">
+        <div class="flex w-full max-w-(--container-xl) flex-col justify-self-center lg:my-auto">
           <Card
             :padded="false"
             class="w-full"
@@ -400,7 +400,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
                     kind="square"
                     class="shrink-0"
                   />
-                  <span class="min-w-0 truncate text-label-md font-medium text-(--text-default)">
+                  <span class="min-w-0 truncate text-label-md text-(--text-default)">
                     {{ previewName }}
                   </span>
                 </span>
@@ -414,7 +414,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
                     kind="square"
                     class="shrink-0"
                   />
-                  <span class="min-w-0 truncate text-label-md font-medium text-(--text-default)">
+                  <span class="min-w-0 truncate text-label-md text-(--text-default)">
                     My Workspace
                   </span>
                 </span>

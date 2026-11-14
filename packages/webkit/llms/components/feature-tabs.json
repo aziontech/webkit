@@ -72,11 +72,25 @@
    "doc": "Live scene drawn as the media of every tab without code, `{ component, props? }` naming a webkit scene asset; it receives the tab's `value` as `tab` and whether the tab is open as `active`. Wins over the illustrations."
   },
   {
-   "name": "interval",
+   "name": "autoplay",
+   "type": "boolean",
+   "default": "true",
+   "required": "false",
+   "doc": "Opens the next tab on a timer, with the composed tabs' visible pause control."
+  },
+  {
+   "name": "autoplayInterval",
    "type": "number",
    "default": "5200",
    "required": "false",
    "doc": "Milliseconds each tab holds before the next one opens."
+  },
+  {
+   "name": "interval",
+   "type": "number",
+   "default": "0",
+   "required": "false",
+   "doc": "@deprecated since 6.0 — use `autoplayInterval`. Removed in 7.0. A non-zero value still sets the hold."
   },
   {
    "name": "copyAriaLabel",
@@ -117,7 +131,7 @@
   },
   {
    "name": "Live scene",
-   "sfc": "<script setup>\n  import FeatureTabs from '@aziontech/webkit/feature-tabs'\n\n  const tabs = [\n    {\n      value: 'agents',\n      title: 'Ask your coding agent',\n      description:\n        'Describe the function and let the agent write it, run it locally and deploy it from the editor you already use.'\n    },\n    {\n      value: 'console',\n      title: 'Start from the console',\n      description:\n        'Pick a template, edit the code in the browser and publish it without installing anything.'\n    },\n    {\n      value: 'cli',\n      title: 'Ship from the terminal',\n      description:\n        'Link a project, build it on your machine and deploy it with one command that hands back the domain.'\n    }\n  ]\n</script>\n\n<template>\n  <FeatureTabs\n    eyebrow=\"Functions\"\n    title=\"Three ways to ship your first function\"\n    description=\"The same function, written and deployed from wherever you already work.\"\n    :tabs=\"tabs\"\n    :scene=\"{ component: 'ProductWidget', props: { name: 'functions-start' } }\"\n    :interval=\"6000\"\n  />\n</template>"
+   "sfc": "<script setup>\n  import FeatureTabs from '@aziontech/webkit/feature-tabs'\n\n  const tabs = [\n    {\n      value: 'agents',\n      title: 'Ask your coding agent',\n      description:\n        'Describe the function and let the agent write it, run it locally and deploy it from the editor you already use.'\n    },\n    {\n      value: 'console',\n      title: 'Start from the console',\n      description:\n        'Pick a template, edit the code in the browser and publish it without installing anything.'\n    },\n    {\n      value: 'cli',\n      title: 'Ship from the terminal',\n      description:\n        'Link a project, build it on your machine and deploy it with one command that hands back the domain.'\n    }\n  ]\n</script>\n\n<template>\n  <FeatureTabs\n    eyebrow=\"Functions\"\n    title=\"Three ways to ship your first function\"\n    description=\"The same function, written and deployed from wherever you already work.\"\n    :tabs=\"tabs\"\n    :scene=\"{ component: 'ProductWidget', props: { name: 'functions-start' } }\"\n    :autoplay-interval=\"6000\"\n  />\n</template>"
   }
  ],
  "docs": "components/feature-tabs.md"

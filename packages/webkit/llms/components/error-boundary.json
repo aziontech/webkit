@@ -80,8 +80,8 @@
   },
   {
    "name": "retry",
-   "payload": "void",
-   "notes": "Fires when the region is mounted again (Retry, the slot's `retry`, or a `resetKey` change). Reset the broken state here."
+   "payload": "(event?: Event)",
+   "notes": "Fires when the region is mounted again (Retry, the slot's `retry`, or a `resetKey` change). Reset the broken state here. Carries the click event when the built-in Retry button (or a slot `retry(event)` call) triggered it; no argument for a `resetKey` change."
   }
  ],
  "slots": [
@@ -92,8 +92,8 @@
   },
   {
    "name": "fallback",
-   "scope": "{ error: unknown, retry: () => void }",
-   "notes": "Replaces the built-in `Alert` while the region is failed. Call `retry` to mount it again."
+   "scope": "{ error: unknown, retry: (event?: Event) => void }",
+   "notes": "Replaces the built-in `Alert` while the region is failed. Call `retry` to mount it again; pass the click event to forward it on the `retry` event."
   }
  ],
  "styleSeam": false,

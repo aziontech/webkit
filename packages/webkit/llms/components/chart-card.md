@@ -14,9 +14,9 @@
 
 ## Do
 
-- Put the aggregation tag (Sum, Average) and the variation tag in `ChartCard.Controls`, before the menu.
+- Put the aggregation tag (Sum, Average) and the variation tag in `ChartCard.Action`, before the menu.
 - Keep filters and the time range above the grid, never inside a card.
-- Use `flush` content for a plot that should run edge to edge, padded for everything else.
+- Use `:padded="false"` content for a plot that should run edge to edge, padded (the default) for everything else.
 - Give the page's grid `--chart-grid-columns` per breakpoint so a 6-column card never overflows a 1-column phone layout.
 - Persist `span` and `height` with the dashboard layout; they are plain numbers.
 
@@ -25,6 +25,7 @@
 - A KPI figure → use `stat-tile`, which is its own surface.
 - A general content card with no chart → use `card`.
 - A chart inline in a page section with its own heading → render `chart` alone.
+- A table, a log or a form panel on a dashboard that is not a chart → use `card` (composed in a `board` item for span and height); a grid of draggable, resizable cards → let `board` / `board-item` own the span, the height and their bounds.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
 ## Related
@@ -55,7 +56,7 @@
 | `drag-start` | `(event: DragEvent)` | Native drag began from the handle; the page records the source. |
 | `drag-end` | `(event: DragEvent)` | Native drag ended, dropped or cancelled. |
 | `resize-start` | `(event: PointerEvent)` | A pointer resize began on the handle. |
-| `resize-end` | `(event: PointerEvent \| KeyboardEvent)` | A resize finished: pointer released, or a keyboard nudge committed. |
+| `resize-end` | `(event: PointerEvent \| KeyboardEvent)` | A resize finished: pointer released, or a keyboard nudge committed. A keyboard step emits only `resize-end` (no `resize-start`): pair the two only for pointer resizes, or treat each lone `resize-end` as one committed step. |
 
 ## Slots
 
@@ -76,14 +77,14 @@
 
 ## Sub-components
 
-The root `chart-card.vue` renders a `<section>` with the card surface. It provides a context (`injection-key.ts` + `composables/use-chart-card-context.ts`) holding the test id, the title and description ids (picked up by a nested `chart` for `aria-labelledby` / `aria-describedby`), `draggable`, `resizable`, the span and height bounds, the current span and height, and the functions `armDrag`, `move`, `startResize`, `resizeTo` and `endResize`. Every part throws a clear error when used outside `<ChartCard>`.
+The root `chart-card.vue` renders a `div` with `role="group"` and the card surface (a group, not a `section`, so a dashboard of many cards does not bury the page landmarks). It provides a context (`injection-key.ts` + `composables/use-chart-card-context.ts`) holding the test id, the title and description ids (picked up by a nested `chart` for `aria-labelledby` / `aria-describedby`), `draggable`, `resizable`, the span and height bounds, the current span and height, and the functions `armDrag`, `move`, `startResize`, `resizeTo` and `endResize`. Every part throws a clear error when used outside `<ChartCard>`.
 
 - `chart-card.vue` — the root: surface, span and height models, native drag arming, resize bookkeeping.
 - `chart-card-header/chart-card-header.vue` — the header row, at least 56px tall, hairline under it.
   - Props: _none_.
   - Events: _none_.
   - Slots: `default` — handle, title and controls in reading order.
-- `chart-card-title/chart-card-title.vue` — the title (`.text-label-md`), an `<h3>` whose id names the card and the chart inside.
+- `chart-card-title/chart-card-title.vue` — the title (`.text-label-md`), a `div` (not a heading, as shadcn's CardTitle: the card sits under any heading level) whose id names the card and the chart inside.
   - Props: _none_.
   - Events: _none_.
   - Slots: `default` — plain-text title.
@@ -91,7 +92,7 @@ The root `chart-card.vue` renders a `<section>` with the card surface. It provid
   - Props: _none_.
   - Events: _none_.
   - Slots: `default` — plain-text description.
-- `chart-card-controls/chart-card-controls.vue` — the trailing zone of the header for tags and the options menu.
+- `chart-card-controls/chart-card-controls.vue` — the trailing zone of the header for tags and the options menu. Attached to the root as `ChartCard.Action` (shadcn's CardAction) and, **@deprecated since 6.0 — use `ChartCard.Action`. Removed in 7.0.**, as `ChartCard.Controls`; both are the same component, imported alone from `@aziontech/webkit/chart-card-controls`.
   - Props: _none_.
   - Events: _none_.
   - Slots: `default` — the consumer's tags, buttons and dropdown.
@@ -100,7 +101,7 @@ The root `chart-card.vue` renders a `<section>` with the card surface. It provid
   - Events: _none_ (flows through the root's `move`, `drag-start`, `drag-end`).
   - Slots: _none_.
 - `chart-card-content/chart-card-content.vue` — the body; fills the remaining height.
-  - Props: `flush?: boolean` (default `false` — no inner padding, for an edge-to-edge plot).
+  - Props: `padded?: boolean` (default `true` — the inner padding; `false` for an edge-to-edge plot, the same name and polarity as `card`), `flush?: boolean` (default `false`; **@deprecated since 6.0 — use `:padded="false"`. Removed in 7.0.** — no inner padding).
   - Events: _none_.
   - Slots: `default` — the chart.
 - `chart-card-footer/chart-card-footer.vue` — an optional row under the content, hairline above it.
@@ -124,12 +125,13 @@ The root `chart-card.vue` renders a `<section>` with the card surface. It provid
 - Visual states: `default`, `dragging` (the card dims while it travels), `resizing`, `focus-visible` on each handle
 - `data-draggable`, `data-resizable` mirror the props
 - `data-dragging` while a native drag runs; `data-resizing` while a pointer resize runs
-- `data-flush` on the content mirrors `flush`
+- `data-flush` on the content is set when the padding is off (`padded` false, or the deprecated `flush`)
 - Responsive: the root is the `@container/chart-card`. The header and footer wrap; below `@xs` of the card the controls take their own line at full width.
 
 ## Accessibility
 
-- The card is a `<section>` named by its title (`aria-labelledby`) or by `ariaLabel`.
+- The card is a `role="group"` named by its title (`aria-labelledby`) or by `ariaLabel`; it is not a region landmark, so ten cards on a dashboard add no landmarks.
+- The drag and resize handles draw 24 px but take pointer input over 40 px (a transparent `before:` hit area 8 px around them).
 - Drag handle: a real `<button>` named "Move card". Keyboard map: arrow keys emit `move` with the direction; the page reorders and keeps focus on the handle. Dragging never requires a pointer.
 - Resize handle: `role="separator"`, one tab stop, `aria-valuenow` / `aria-valuemin` / `aria-valuemax` on the span and `aria-valuetext` such as "6 of 12 columns, 552 pixels tall". Keyboard map: Left / Right change the span by one column, Up / Down change the height by 24 pixels, Home / End jump to the smallest and largest span, Escape cancels a pointer resize in progress.
 - Both handles are at least 24px with a visible focus ring `focus-visible:ring-2 focus-visible:ring-(--ring-color)`.
@@ -208,7 +210,7 @@ The root `chart-card.vue` renders a `<section>` with the card surface. It provid
         <Chart.Line />
         <Chart.Crosshair />
         <Chart.Tooltip />
-        <Chart.Legend totals />
+        <Chart.Legend total />
       </Chart>
     </ChartCard.Content>
     <ChartCard.Footer>Last hour, 5 minute buckets</ChartCard.Footer>
@@ -276,7 +278,7 @@ The root `chart-card.vue` renders a `<section>` with the card surface. It provid
           <Chart.Line />
           <Chart.Crosshair />
           <Chart.Tooltip />
-          <Chart.Legend totals />
+          <Chart.Legend total />
         </Chart>
       </ChartCard.Content>
     </ChartCard>
@@ -284,7 +286,7 @@ The root `chart-card.vue` renders a `<section>` with the card surface. It provid
       <ChartCard.Header>
         <ChartCard.Title>Flush</ChartCard.Title>
       </ChartCard.Header>
-      <ChartCard.Content flush>
+      <ChartCard.Content :padded="false">
         <Chart
           :series="series"
           :labels="labels"
@@ -295,7 +297,7 @@ The root `chart-card.vue` renders a `<section>` with the card surface. It provid
           <Chart.Line />
           <Chart.Crosshair />
           <Chart.Tooltip />
-          <Chart.Legend totals />
+          <Chart.Legend total />
         </Chart>
       </ChartCard.Content>
     </ChartCard>
@@ -347,7 +349,7 @@ The root `chart-card.vue` renders a `<section>` with the card surface. It provid
         <ChartCard.Title>Cross-site scripting threats</ChartCard.Title>
         <Hint text="Requests carrying cross-site scripting attacks against your domains." />
       </span>
-      <ChartCard.Controls>
+      <ChartCard.Action>
         <Tag
           label="Sum"
           severity="secondary"
@@ -381,7 +383,7 @@ The root `chart-card.vue` renders a `<section>` with the card surface. It provid
             />
           </DropdownMenuGroup>
         </DropdownMenuRoot>
-      </ChartCard.Controls>
+      </ChartCard.Action>
     </ChartCard.Header>
     <ChartCard.Content>
       <Chart

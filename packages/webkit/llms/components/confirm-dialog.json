@@ -89,9 +89,16 @@
    "doc": "Disables the confirm button, for a confirmation that needs input first."
   },
   {
-   "name": "open",
+   "name": "defaultOpen",
    "type": "boolean",
    "default": "false",
+   "required": "false",
+   "doc": "Initial open state when uncontrolled (`v-model:open` unbound)."
+  },
+  {
+   "name": "open",
+   "type": "boolean",
+   "default": "undefined as never",
    "required": "false",
    "doc": "Two-way value (`v-model:open`)."
   }

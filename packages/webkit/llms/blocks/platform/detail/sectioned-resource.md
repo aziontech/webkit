@@ -1,6 +1,6 @@
 # SectionedResource (`platform/detail/sectioned-resource`)
 
-> A resource page whose tab holds more sibling pages than a tab row can carry: the third navigation level, and the only sanctioned home for a `MenuRoot` inside a page body. A full-bleed `PageTabs` row names the resource's sections (here a policy: Web security, Network security, Private access, Data protection, Objects, Settings, Versions); the Private access tab carries 16 sibling pages in 4 groups. From `@3xl` of the tab body the local navigation is a `MenuRoot` of groups in a fixed `--container-3xs` column, its rows `href` links with no glyphs, like rail sub-rows, and exactly one row marked current, derived from the route; below `@3xl` it folds into a medium `Select` labelled with the tab name through `Field`, its options grouped the same way. Beside it the current page is the TableView body: a small `PageHeader` with an outlined Documentation and an outlined Add action, the `PropertyFilter` controls row with Refresh, and a flush `Card` around `TableRoot` driven by `useCollection`, with a No matching `EmptyState` inside the table. The container query sits on the tab body wrapper and the queries on its children, so the content column never drops below the page column minus the navigation column. Use it only when the rail does not already list these pages and the tab has more than 7 siblings; with 7 or fewer, use a `ToggleGroup` (the FewSiblings variant), tabs or sections of one page. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
+> A resource page whose tab holds more sibling pages than a tab row can carry: the third navigation level, and the only sanctioned home for a `MenuRoot` inside a page body. A full-bleed `PageTabs` row names the resource's sections (here a policy: Web security, Network security, Private access, Data protection, Objects, Settings, Versions); the Private access tab carries 16 sibling pages in 4 groups. From `@3xl` of the tab body the local navigation is a `MenuRoot` of groups in a fixed `--container-3xs` column, its rows `href` links with no glyphs, like rail sub-rows, and exactly one row marked current, derived from the route; below `@3xl` it folds into a medium `Select` labelled with the tab name through `Field`, its options grouped the same way. Beside it the current page is the TableView body: a small `PageHeader` with an outlined Documentation and an outlined Add action, the `PropertyFilter` controls row with Refresh, and a flush `Card` around `TableRoot` driven by `useCollection`, with an `EmptyState` inside the table that tells a page with no entries (Add) apart from a filter that matches nothing (Clear filters); another tab shows an `EmptyState` linking to that tab's route. The container query sits on the tab body wrapper and the queries on its children, so the content column never drops below the page column minus the navigation column. Use it only when the rail does not already list these pages and the tab has more than 7 siblings; with 7 or fewer, use a `ToggleGroup` (the FewSiblings variant), tabs or sections of one page. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
 
 - Surface: product
 - Source: `blocks/platform/detail/sectioned-resource/sectioned-resource.vue` in `@aziontech/webkit`
@@ -31,7 +31,7 @@ The page of one resource whose tab holds more sibling pages than a tab row can c
 
 ### A. Tab bar — `PageTabs`, `Tabs` (required)
 
-A full-bleed `PageTabs` with one `Tabs.Item` per section of the resource, in a `sticky top-0` wrapper on the canvas fill, so it stays in view while the layout's content region scrolls the tab under it. It is level 2; the breadcrumb names the resource and is not a level.
+A full-bleed `PageTabs` with one `Tabs.Item` per section of the resource, in a `sticky top-0` wrapper on the canvas fill, so it stays in view while the layout's content region scrolls the tab under it. It is level 2; the breadcrumb names the resource and is not a level. Each tab is its own route: this block renders the open tab's page, and another tab shows an `EmptyState` with an Open link to that tab's route, so no tab is ever dead.
 
 ### B. Local navigation — `MenuRoot` (required)
 
@@ -51,7 +51,7 @@ The TableView controls row: a `PropertyFilter` that grows to fill the row, bound
 
 ### F. List — `Card`, `TableRoot`, `Table.CellLink`, `Table.CellId`, `Table.CellStatus`, `Table.CellTime`, `EmptyState` (required)
 
-`Card :padded="false"` around `TableRoot :bordered="false"` with the `useCollection` table props and sorting. Name is a `Table.CellLink` to the entry, ID a `Table.CellId`, Status a `Table.CellStatus` and Last Modified a `Table.CellTime` with its author. A filter that matches nothing shows a No matching `EmptyState` with Clear filters inside the table.
+`Card :padded="false"` around `TableRoot :bordered="false"` with the `useCollection` table props and sorting. Name is a `Table.CellLink` to the entry, ID a `Table.CellId`, Status a `Table.CellStatus` and Last Modified a `Table.CellTime` with its author. The table's `#empty` slot branches on `useCollection`'s `status`: a filter that matches nothing shows a No matching `EmptyState` with Clear filters; a sibling page with no entries yet (Posture checks, Webhooks, Exceptions here) shows `No <page> yet` with `Add <Noun>`.
 
 ## Do
 
@@ -59,6 +59,7 @@ The TableView controls row: a `PropertyFilter` that grows to fill the row, bound
 - Derive the current row from the route on every level, and make the current rows of all levels describe the same place.
 - Keep the menu column at `--container-3xs`, so the list keeps the page column minus that column.
 - Label the folded `Select` with the tab name, so the reader knows which set of pages it switches.
+- Tell an empty page (Add) apart from a filter that matches nothing (Clear filters).
 - Give every sibling page its own route, and let the menu rows be real links that open in a new tab on a modified click.
 
 ## Don't
@@ -90,7 +91,7 @@ The TableView controls row: a `PropertyFilter` that grows to fill the row, bound
 ## States
 
 - Default: the Private access tab of the acme-default policy, 16 sibling pages in 4 groups in the menu column, Access rules current and listed beside it.
-- Narrow: the same tab below `@3xl` of the tab body: the menu folds into a Select labelled Private access, Server groups current, the list under it at full width.
+- Narrow: the same tab below `@3xl` of the tab body: the menu folds into a Select labelled Private access, Server groups current, the list under it at full width. The page keeps the primary's root, so `layout-column` alone sets the measure.
 - FewSiblings: the Network security tab with 6 siblings and no local navigation; a ToggleGroup labelled Network security switches between them above the list.
 
 ## Related
@@ -222,8 +223,10 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
 
   const referenceTime = Date.UTC(2026, 10, 10, 12)
 
+  const emptySections = ['posture-checks', 'webhooks', 'exceptions']
+
   const entries = computed<Entry[]>(() =>
-    Array.from({ length: 6 }, (_, index) => {
+    Array.from({ length: emptySections.includes(current.value.id) ? 0 : 6 }, (_, index) => {
       const n = index + 1
       const slug = current.value.noun.toLowerCase().replace(/\s+/g, '-')
       return {
@@ -252,6 +255,7 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
   const {
     tableProps,
     propertyFilterProps,
+    status,
     clearFilters,
     loading: fetching
   } = useCollection({
@@ -281,6 +285,8 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
   const labelOf = (value: string | undefined) =>
     siblings.find((sibling) => hrefOf(sibling) === value)?.label ?? ''
 
+  const policyBase = '/policies/acme-default'
+
   const loading = ref(false)
   let refreshTimer: ReturnType<typeof setTimeout> | undefined
   const refresh = () => {
@@ -306,7 +312,10 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
       </PageTabs>
     </div>
 
-    <section class="animate-page-enter motion-reduce:animate-none min-h-0 flex-1">
+    <section
+      v-if="activeTab === 'private-access'"
+      class="animate-page-enter motion-reduce:animate-none min-h-0 flex-1"
+    >
       <div class="layout-column layout-boundary @container/tab flex min-w-0 flex-col">
         <div
           class="flex min-w-0 flex-col gap-(--layout-group-gap) @3xl/tab:flex-row @3xl/tab:items-start @3xl/tab:gap-(--layout-section-gap)"
@@ -430,6 +439,25 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
                     </template>
                     <template #empty>
                       <EmptyState
+                        key="empty-state-1"
+                        v-if="status !== 'no-match'"
+                        size="medium"
+                        icon="pi pi-inbox"
+                        :title="`No ${current.label.toLowerCase()} yet`"
+                        :description="`Add the first ${current.noun.toLowerCase()} to this policy.`"
+                      >
+                        <template #actions>
+                          <Button
+                            :label="`Add ${current.noun}`"
+                            icon="pi pi-plus"
+                            kind="secondary"
+                            size="small"
+                          />
+                        </template>
+                      </EmptyState>
+                      <EmptyState
+                        key="empty-state-2"
+                        v-else
                         size="medium"
                         icon="pi pi-filter-slash"
                         :title="`No matching ${current.label.toLowerCase()}`"
@@ -450,6 +478,30 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
               </Card>
             </section>
           </div>
+        </div>
+      </div>
+    </section>
+    <section
+      v-else
+      class="animate-page-enter motion-reduce:animate-none min-h-0 flex-1"
+    >
+      <div class="layout-column layout-boundary flex min-w-0 flex-col">
+        <div class="layout-section-start">
+          <EmptyState
+            size="medium"
+            icon="pi pi-external-link"
+            :title="tabLabel"
+            :description="`${tabLabel} opens on its own page of the acme-default policy.`"
+          >
+            <template #actions>
+              <Button
+                :label="`Open ${tabLabel}`"
+                kind="outlined"
+                size="small"
+                :href="`${policyBase}/${activeTab}`"
+              />
+            </template>
+          </EmptyState>
         </div>
       </div>
     </section>

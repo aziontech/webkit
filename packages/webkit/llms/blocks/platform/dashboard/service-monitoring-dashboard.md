@@ -1,11 +1,11 @@
 # ServiceMonitoringDashboard (`platform/dashboard/service-monitoring-dashboard`)
 
-> The service monitoring dashboard pattern: status tiles with sparklines, multi-series charts and an alert rail. One StatTile per service carries its p95 latency, the change against the previous period and a sparkline, with a StatusIndicator naming its state in words. Below, Latency (p50, p95, p99) and Error rate (Status 4xx, Status 5xx) sit in ChartCards as multi-series line Charts, each with its own window ToggleGroup, while an Open alerts rail holds the right edge: a fixed-width column that scrolls on its own, independent of the tiles and charts, listing each alert as an Item in an Item.Group with a severity Tag. Under the xl breakpoint the rail folds below the charts and the page scrolls as one. Built from `StatTile`, `StatusIndicator`, `ChartCard`, `Chart`, `ToggleGroup`, `Hint`, `Item`, `Tag`, `Skeleton` and `EmptyState`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main. Its root carries data-layout-fill and scrolls itself: from xl the charts and the alerts rail scroll on their own; below xl the page scrolls as one.
+> The service monitoring dashboard pattern: a PageHeader with the one window ToggleGroup, status tiles with sparklines, multi-series charts and an alert rail. One StatTile per service carries its p95 latency, the change against the previous period and a sparkline, with a StatusIndicator naming its state in words. Below, Latency (p50, p95, p99) and Error rate (Status 4xx, Status 5xx) sit in ChartCards as multi-series line Charts read over that window, while an Open alerts rail holds the right edge: a fixed-width column that scrolls on its own, independent of the tiles and charts, listing each alert as a whole-row Item link to the alert in an Item.Group with a severity Tag. Under the xl breakpoint the rail folds below the charts and the page scrolls as one. Built from `PageHeader`, `StatTile`, `StatusIndicator`, `ChartCard`, `Chart`, `ToggleGroup`, `Hint`, `Item`, `Tag`, `Skeleton` and `EmptyState`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main. Its root carries data-layout-fill and scrolls itself: from xl the charts and the alerts rail scroll on their own; below xl the page scrolls as one.
 
 - Surface: product
 - Source: `blocks/platform/dashboard/service-monitoring-dashboard/service-monitoring-dashboard.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/dashboard/service-monitoring-dashboard")`
-- Components: [Alert](../../../components/alert.md), [Chart](../../../components/chart.md), [ChartCard](../../../components/chart-card.md), [EmptyState](../../../components/empty-state.md), [Hint](../../../components/hint.md), [Item](../../../components/item.md), [Skeleton](../../../components/skeleton.md), [StatTile](../../../components/stat-tile.md), [StatusIndicator](../../../components/status-indicator.md), [Tag](../../../components/tag.md), [ToggleGroup](../../../components/toggle-group.md)
+- Components: [Alert](../../../components/alert.md), [Chart](../../../components/chart.md), [ChartCard](../../../components/chart-card.md), [EmptyState](../../../components/empty-state.md), [Hint](../../../components/hint.md), [Item](../../../components/item.md), [PageHeader](../../../components/page-header.md), [Skeleton](../../../components/skeleton.md), [StatTile](../../../components/stat-tile.md), [StatusIndicator](../../../components/status-indicator.md), [Tag](../../../components/tag.md), [ToggleGroup](../../../components/toggle-group.md)
 - Skills: `webkit-data-viz`, `webkit-ui-states`
 
 ## Asked as
@@ -14,7 +14,7 @@ service monitoring; monitoring dashboard; latency p95; error rate; uptime; servi
 
 The page an on-call engineer keeps open: is every service up, how fast is it answering, how many
 requests fail, and which alerts are open right now. One tile per service states its p95 latency and
-its state in words; latency percentiles and error rates sit in two charts with their own window; the
+its state in words; latency percentiles and error rates sit in two charts read over one window; the
 open alerts live in a rail on the right that scrolls on its own, so the alerts stay in view while the
 reader studies a chart.
 
@@ -34,51 +34,57 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 
 ## Building blocks
 
-### A. Service tiles — `StatTile` (required)
+### A. Page heading and window — `PageHeader` (required)
+
+Title `Service monitoring` with one sentence on what the page shows, in the standard `layout-column`
+of the charts pane. Its actions hold the one window control (section F) that every tile and chart reads.
+
+### B. Service tiles — `StatTile` (required)
 
 One tile per service: its name, p95 latency, the change `p95 latency vs previous 24 hours` and a
 sparkline. Latency rising is bad, so every tile passes `inverse`.
 
-### B. Service state — `StatusIndicator` (required)
+### C. Service state — `StatusIndicator` (required)
 
 In each tile's aside: `Operational`, `Degraded` or `Down`, with its status color. The state is a word,
 so a tile is never read by color alone.
 
-### C. Charts — `ChartCard` (required)
+### D. Charts — `ChartCard` (required)
 
-`Latency` and `Error rate`, side by side beside the rail at wide screens.
+`Latency` and `Error rate`, stacked one over the other beside the rail at wide screens.
 
-### D. Definitions — `Hint` (required)
+### E. Definitions — `Hint` (required)
 
 On each chart title, defining the percentiles or the error rate.
 
-### E. Window — `ToggleGroup` (required)
+### F. Window — `ToggleGroup` (required)
 
-`1h`, `6h`, `24h`, one per chart (`Window for Latency`, `Window for Error rate`). Each chart has its
-own window because an engineer zooms into one signal while keeping the other wide. The switches stay
-usable while the data loads.
+`1h`, `6h`, `24h`, one control in the page heading named `Window`. It drives the tiles' comparison
+label (`p95 latency vs previous 6 hours`) and both charts, so every region reads the same window. It
+stays usable while the data loads.
 
-### F. Latency and error rate — `Chart` (required)
+### G. Latency and error rate — `Chart` (required)
 
 Multi-series lines: `p50`, `p95`, `p99` for latency; `Status 4xx`, `Status 5xx` for errors. Percentiles
 are an ordered set; keep them in that order in the legend and tooltip.
 
-### G. Alert level — `Tag` (required)
+### H. Alert level — `Tag` (required)
 
 The count beside `Open alerts`, and each alert's level (`Critical`, `Warning`, `Info`) with its
 severity.
 
-### H. Loading placeholders — `Skeleton` (required)
+### I. Loading placeholders — `Skeleton` (required)
 
 Holds the rail's rows during the first load.
 
-### I. Alert rail — `Item` (required)
+### J. Alert rail — `Item` (required)
 
-Each open alert is an `Item` in an `Item.Group` labelled `Open alerts`: the threshold that tripped
-(`Status 5xx above 5%`), the service and when it opened. The rail is a fixed-width column that scrolls
+Each open alert is an `Item` with `href` to the alert's page (`/alerts/stage-5xx`) in an `Item.Group`
+labelled `Open alerts`: the threshold that tripped (`Status 5xx above 5%`), the service and when it
+opened. The whole row is the link. The rail is a fixed-width column that scrolls
 independently; under the `xl` breakpoint it folds below the charts and the page scrolls as one.
 
-### J. Empty regions — `EmptyState` (required)
+### K. Empty regions — `EmptyState` (required)
 
 `No traffic yet` / `Latency appears here once a service serves requests.` in the charts, and
 `No open alerts` / `Alerts appear here when a service crosses a threshold.` in the rail.
@@ -88,7 +94,7 @@ independently; under the `xl` breakpoint it folds below the charts and the page 
 - Write the service state in words in every tile.
 - Keep alerts in a rail that stays in view; fold it below the charts on narrow screens.
 - Title an alert with the threshold that tripped, not with a generic name.
-- Give each chart its own window.
+- Drive every tile and chart from the one window in the page heading.
 - Mark the page root with `data-layout-fill` and let it scroll (`overflow-y-auto`), so the panes scroll on their own at `xl` and the page scrolls as one below it.
 
 ## Don't
@@ -96,6 +102,7 @@ independently; under the `xl` breakpoint it folds below the charts and the page 
 - Don't average latency into one line; show the percentiles.
 - Don't use the status colors for percentile series.
 - Don't make the rail scroll the page with it at wide screens.
+- Don't give a chart a window of its own.
 - Don't hide the rail when there are no alerts; say `No open alerts`.
 
 ## Copy
@@ -108,7 +115,7 @@ independently; under the `xl` breakpoint it folds below the charts and the page 
 
 ## Accessibility
 
-- Each `ToggleGroup` names its chart.
+- The window `ToggleGroup` is named `Window`; the page has one `h1` from `PageHeader`, and `Open alerts` is an `h2` under it.
 - The rail's `Item.Group` has `aria-label="Open alerts"`. An independently scrolling region must be reachable by keyboard.
 - The rail's scroll container is a `region` labelled by the `Open alerts` heading with `tabindex="0"`, so a keyboard user can scroll it in every browser.
 - State and level are words (`StatusIndicator`, `Tag`), never color alone.
@@ -117,7 +124,7 @@ independently; under the `xl` breakpoint it folds below the charts and the page 
 ## States
 
 - Default: services reporting, both charts populated, open alerts in the rail.
-- Loading: every tile, both charts and the rail hold Skeletons; the window switches stay usable.
+- Loading: every tile, both charts and the rail hold Skeletons; the window switch stays usable.
 - Empty: no traffic yet; tiles show a dash, both charts say metrics appear once a service serves requests, and the rail reads `No open alerts`.
 - Failed: the request failed; tiles show a dash, and both charts and the alert rail show a danger `Alert` that names what did not load and offers Retry.
 
@@ -145,12 +152,13 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
   import EmptyState from '@aziontech/webkit/empty-state'
   import Hint from '@aziontech/webkit/hint'
   import Item from '@aziontech/webkit/item'
+  import PageHeader from '@aziontech/webkit/page-header'
   import Skeleton from '@aziontech/webkit/skeleton'
   import StatTile from '@aziontech/webkit/stat-tile'
   import StatusIndicator, { type StatusIndicatorSeverity } from '@aziontech/webkit/status-indicator'
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
-  import { ref } from 'vue'
+  import { computed, ref } from 'vue'
 
   interface Service {
     id: string
@@ -178,8 +186,11 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
   const loading = false
   const empty = false
 
-  const latencyWindow = ref('24h')
-  const errorWindow = ref('24h')
+  const timeWindow = ref('24h')
+  const windowNames: Record<string, string> = { '1h': 'hour', '6h': '6 hours', '24h': '24 hours' }
+  const deltaLabel = computed(
+    () => `p95 latency vs previous ${windowNames[timeWindow.value] ?? '24 hours'}`
+  )
 
   const formatLatency = (value: number) => `${Math.round(value)} ms`
   const formatRate = (value: number) => {
@@ -596,108 +607,105 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
     data-layout-fill
     class="flex h-dvh min-w-0 flex-col overflow-y-auto xl:flex-row"
   >
-    <div
-      class="flex min-w-0 flex-1 flex-col gap-(--spacing-md) p-(--spacing-md) xl:overflow-y-auto"
-    >
-      <ul
-        class="m-0 grid list-none grid-cols-1 gap-(--spacing-md) p-0 lg:grid-cols-2 2xl:grid-cols-3"
-      >
-        <li
-          v-for="service in services"
-          :key="service.id"
-          class="flex min-w-0 flex-col"
+    <div class="layout-boundary flex min-w-0 flex-1 flex-col xl:overflow-y-auto">
+      <div class="layout-column flex min-w-0 flex-col gap-(--layout-group-gap)">
+        <PageHeader
+          title="Service monitoring"
+          description="Latency and error rate of every service, with the alerts still open."
         >
-          <StatTile
-            :label="service.name"
-            :value="service.latency"
-            :format-value="formatLatency"
-            :delta="service.delta"
-            delta-label="p95 latency vs previous 24 hours"
-            inverse
-            :trend="service.trend"
-            :loading="loading"
+          <template #actions>
+            <ToggleGroup
+              v-model="timeWindow"
+              :options="windows"
+              size="medium"
+              aria-label="Window"
+            />
+          </template>
+        </PageHeader>
+        <ul
+          class="m-0 grid list-none grid-cols-1 gap-(--spacing-md) p-0 lg:grid-cols-2 2xl:grid-cols-3"
+        >
+          <li
+            v-for="service in services"
+            :key="service.id"
+            class="flex min-w-0 flex-col"
           >
-            <template #aside>
-              <StatusIndicator
-                v-if="!loading && !empty"
-                :severity="service.status.severity"
-                :label="service.status.label"
-              />
-            </template>
-          </StatTile>
-        </li>
-      </ul>
-
-      <div class="grid min-w-0 grid-cols-1 gap-(--spacing-md) [--chart-grid-columns:1]">
-        <ChartCard :span="12">
-          <ChartCard.Header>
-            <span class="inline-flex min-w-0 items-center gap-(--spacing-xxs)">
-              <ChartCard.Title>Latency</ChartCard.Title>
-              <Hint text="Time to the first byte, by percentile, across every service." />
-            </span>
-            <ChartCard.Controls>
-              <ToggleGroup
-                v-model="latencyWindow"
-                :options="windows"
-                size="small"
-                aria-label="Window for Latency"
-              />
-            </ChartCard.Controls>
-          </ChartCard.Header>
-          <ChartCard.Content>
-            <Chart
-              :series="latency[latencyWindow].series"
-              :labels="latency[latencyWindow].labels"
+            <StatTile
+              :label="service.name"
+              :value="service.latency"
               :format-value="formatLatency"
-              empty-title="No traffic yet"
-              empty-description="Latency appears here once a service serves requests."
+              :delta="service.delta"
+              :delta-label="deltaLabel"
+              inverse
+              :trend="service.trend"
               :loading="loading"
             >
-              <Chart.Grid />
-              <Chart.Axis kind="y" />
-              <Chart.Axis kind="x" />
-              <Chart.Line />
-              <Chart.Crosshair />
-              <Chart.Tooltip />
-              <Chart.Legend />
-            </Chart>
-          </ChartCard.Content>
-        </ChartCard>
+              <template #aside>
+                <StatusIndicator
+                  v-if="!loading && !empty"
+                  :severity="service.status.severity"
+                  :label="service.status.label"
+                />
+              </template>
+            </StatTile>
+          </li>
+        </ul>
 
-        <ChartCard :span="12">
-          <ChartCard.Header>
-            <span class="inline-flex min-w-0 items-center gap-(--spacing-xxs)">
-              <ChartCard.Title>Error rate</ChartCard.Title>
-              <Hint text="Share of responses with a 4xx or 5xx status, across every service." />
-            </span>
-            <ChartCard.Controls>
-              <ToggleGroup
-                v-model="errorWindow"
-                :options="windows"
-                size="small"
-                aria-label="Window for Error rate"
-              />
-            </ChartCard.Controls>
-          </ChartCard.Header>
-          <ChartCard.Content>
-            <Chart
-              :series="errorRate[errorWindow].series"
-              :labels="errorRate[errorWindow].labels"
-              :format-value="formatRate"
-              empty-title="No traffic yet"
-              empty-description="Error rates appear here once a service serves requests."
-              :loading="loading"
-            >
-              <Chart.Grid />
-              <Chart.Axis kind="y" />
-              <Chart.Axis kind="x" />
-              <Chart.Line />
-              <Chart.Crosshair />
-              <Chart.Tooltip />
-              <Chart.Legend />
-            </Chart>
-          </ChartCard.Content>
-        </ChartCard>
+        <div class="grid min-w-0 grid-cols-1 gap-(--spacing-md) [--chart-grid-columns:1]">
+          <ChartCard :span="12">
+            <ChartCard.Header>
+              <span class="inline-flex min-w-0 items-center gap-(--spacing-xxs)">
+                <ChartCard.Title>Latency</ChartCard.Title>
+                <Hint text="Time to the first byte, by percentile, across every service." />
+              </span>
+            </ChartCard.Header>
+            <ChartCard.Content>
+              <Chart
+                :series="latency[timeWindow].series"
+                :labels="latency[timeWindow].labels"
+                :format-value="formatLatency"
+                empty-title="No traffic yet"
+                empty-description="Latency appears here once a service serves requests."
+                :loading="loading"
+              >
+                <Chart.Grid />
+                <Chart.Axis kind="y" />
+                <Chart.Axis kind="x" />
+                <Chart.Line />
+                <Chart.Crosshair />
+                <Chart.Tooltip />
+                <Chart.Legend />
+              </Chart>
+            </ChartCard.Content>
+          </ChartCard>
+
+          <ChartCard :span="12">
+            <ChartCard.Header>
+              <span class="inline-flex min-w-0 items-center gap-(--spacing-xxs)">
+                <ChartCard.Title>Error rate</ChartCard.Title>
+                <Hint text="Share of responses with a 4xx or 5xx status, across every service." />
+              </span>
+            </ChartCard.Header>
+            <ChartCard.Content>
+              <Chart
+                :series="errorRate[timeWindow].series"
+                :labels="errorRate[timeWindow].labels"
+                :format-value="formatRate"
+                empty-title="No traffic yet"
+                empty-description="Error rates appear here once a service serves requests."
+                :loading="loading"
+              >
+                <Chart.Grid />
+                <Chart.Axis kind="y" />
+                <Chart.Axis kind="x" />
+                <Chart.Line />
+                <Chart.Crosshair />
+                <Chart.Tooltip />
+                <Chart.Legend />
+              </Chart>
+            </ChartCard.Content>
+          </ChartCard>
+        </div>
       </div>
     </div>
 
@@ -745,7 +753,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
           <Item
             v-for="alert in alerts"
             :key="alert.id"
-            role="listitem"
+            :href="`/alerts/${alert.id}`"
             size="small"
           >
             <Item.Content>

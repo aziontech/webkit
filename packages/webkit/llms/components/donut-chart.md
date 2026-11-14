@@ -87,7 +87,8 @@
 ## Accessibility
 
 - Root is a `<figure>`; the ring is one tab stop, `role="group"` with `aria-roledescription="chart"`, named by `ariaLabel`.
-- Keyboard map: Left / Right (or Up / Down) move between slices, Home / End jump, Enter / Space fire `slice-click`, Escape clears.
+- Keyboard map: Left / Right (or Up / Down) move between slices, with Left and Right swapped under `dir="rtl"` (`logicalArrowKey`, as `chart`, `tracker` and `map-chart`), Home / End jump, Enter / Space fire `slice-click`, Escape clears.
+- Legend entries draw 24 px but take pointer input over 40 px (a transparent `before:` hit area).
 - A polite live region announces the active slice name, value and share.
 - A data table twin is always rendered, visually hidden unless `tableView`.
 - The ring SVG is `aria-hidden`; the legend names every slice with its value and share, so identity never rests on color.

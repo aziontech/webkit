@@ -1,5 +1,5 @@
 {
- "purpose": "Composition-based terminal log viewer for CI/deploy output. **LogView** is the root shell and context provider; **LogViewHeader**, **LogViewContent**, and **LogViewFooter** are composed as children so teams can reorder, omit, or replace the toolbar and footer without forking the log renderer.",
+ "purpose": "Composition-based terminal log viewer for CI/deploy output. **LogView** is the root shell and context provider; **`LogView.Header`**, **`LogView.Content`**, and **`LogView.Footer`** are composed as children so teams can reorder, omit, or replace the toolbar and footer without forking the log renderer.",
  "useWhen": [
   "Showing build, deploy or CI output as timestamped lines the reader can search, filter to warnings, and copy.",
   "A log shell whose toolbar and footer vary by screen — compose `LogViewHeader`, `LogViewContent` and `LogViewFooter` in the order you need, or drop the ones you don't.",

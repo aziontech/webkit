@@ -36,21 +36,21 @@
   {
    "name": "src",
    "type": "string",
-   "default": "undefined",
+   "default": "''",
    "required": "false",
    "doc": "Image URL. When set, renders a photo and takes precedence over label and icon."
   },
   {
    "name": "alt",
    "type": "string",
-   "default": "undefined",
+   "default": "''",
    "required": "false",
    "doc": "Accessible name: the image's `alt` with `src`, and the name of the initials or icon fallback without it."
   },
   {
    "name": "label",
    "type": "string",
-   "default": "undefined",
+   "default": "''",
    "required": "false",
    "doc": "Initials shown when no image (normalized to two uppercase characters)."
   },

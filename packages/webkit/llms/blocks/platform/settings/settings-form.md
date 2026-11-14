@@ -1,11 +1,11 @@
 # SettingsForm (`platform/settings/settings-form`)
 
-> A settings form and its save strategy, one variant per strategy. SaveAll, the default (a form that is one logical unit has one save): account-level settings as `Item` rows saved as one unit, a page body for ConsoleLayout (the layout owns the shell and the main landmark): the form column opening with a small page heading, topic sections each a small heading over a flush `Card` of rows, and one full-bleed sticky footer with Discard and Save; Profile is the example, with General (Full name, Email), Preferences (Timezone, Language) and Notifications (Product updates), and Full name and Email flag only after Save is pressed. SavePerGroup splits the page into topic groups whose `Card` footers each carry a secondary Save for that group only. SavePerCard splits a long configuration page into titled cards, each with an info `Alert`, its stacked fields and its own Save beside an optional docs `Link`. Saving one group or card disables just its own fieldset; the others stay editable. Built from `PageHeader`, `SettingRow`, `SaveBar`, `Card`, `Item`, `Alert`, `Field`, `Input`, `Select`, `Switch`, `Link`, `HelperText` and `Button`.
+> A settings form and its save strategy, one variant per strategy. SaveAll, the default (a form that is one logical unit has one save): account-level settings as `Item` rows saved as one unit, a page body for ConsoleLayout (the layout owns the shell and the main landmark): the form column opening with a small page heading, topic sections each a `SectionHeader` (an h2) over a flush `Card` of rows, and one full-bleed sticky footer with Discard and Save, both disabled until the form differs from what was saved (dirty tracking through `useUnsavedChanges`); a successful save confirms with a `Profile saved.` toast and a rejected one shows an error toast with Retry, the entries kept (SaveFailed); Profile is the example, with General (Full name, Email), Preferences (Timezone, Language) and Notifications (Product updates), and Full name and Email flag only after Save is pressed. SavePerGroup splits the page into topic groups whose `Card` footers each carry a secondary Save for that group only. SavePerCard splits a long configuration page into titled cards, each with an info `Alert`, its stacked fields and its own Save beside an optional docs `Link`. Saving one group or card disables just its own fieldset; the others stay editable, and each save confirms with a toast. Built from `PageHeader`, `SectionHeader`, `SettingRow`, `SaveBar`, `Card`, `Item`, `Alert`, `Field`, `Input`, `Select`, `Switch`, `Link`, `HelperText` and `Button`.
 
 - Surface: product
 - Source: `blocks/platform/settings/settings-form/settings-form.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/settings/settings-form")`
-- Components: [Alert](../../../components/alert.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [Field](../../../components/field.md), [HelperText](../../../components/helper-text.md), [Input](../../../components/input.md), [Item](../../../components/item.md), [Link](../../../components/link.md), [PageHeader](../../../components/page-header.md), [SaveBar](../../../components/save-bar.md), [Select](../../../components/select.md), [SettingRow](../../../components/setting-row.md), [Switch](../../../components/switch.md)
+- Components: [Alert](../../../components/alert.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [Field](../../../components/field.md), [HelperText](../../../components/helper-text.md), [Input](../../../components/input.md), [Item](../../../components/item.md), [Link](../../../components/link.md), [PageHeader](../../../components/page-header.md), [SaveBar](../../../components/save-bar.md), [SectionHeader](../../../components/section-header.md), [Select](../../../components/select.md), [SettingRow](../../../components/setting-row.md), [Switch](../../../components/switch.md), [Toast](../../../components/toast.md), `use-unsaved-changes`
 - Skills: `webkit-form`, `webkit-errors`, `webkit-ux-heuristics`
 
 ## Asked as
@@ -34,9 +34,9 @@ The place the user goes to change how an account or a project behaves. They scan
 
 A `PageHeader` at `size="small"` opens the form column (`layout-column-form`) with the page name and one sentence of purpose. Its `title-id` names the `form` through `aria-labelledby`. No actions in the heading: saving lives at the bottom.
 
-### B. Topic sections — `Card`, `Item` (required)
+### B. Topic sections — `SectionHeader`, `Card`, `Item` (required)
 
-Each topic is a section with a small heading (`text-heading-xxs`) over a flush `Card :padded="false"` whose content is an `Item.List`. Sections stack at the section step; the heading and its card sit at the group gap. In SaveAll the sections share one `fieldset` with a visually hidden `legend`; in SavePerGroup and SavePerCard each card holds its own `fieldset`.
+Each topic is a section with a `SectionHeader` at `size="small"` (so every topic is an `h2` under the page `h1`) over a flush `Card :padded="false"` whose content is an `Item.List`. Sections stack at the section step; the heading and its card sit at the group gap. In SaveAll the sections share one `fieldset` with a visually hidden `legend`; in SavePerGroup and SavePerCard each card holds its own `fieldset`.
 
 ### C. Setting rows — `SettingRow`, `Input`, `HelperText`, `Select`, `Switch` (required)
 
@@ -44,7 +44,7 @@ One `SettingRow` per setting, with a `title` and a one-sentence `description`. T
 
 ### D. Save — `SaveBar`, `Button` (required)
 
-SaveAll ends with one full-bleed sticky `SaveBar kind="plain"` holding an outlined Discard and the primary Save, both medium. While saving, the `fieldset` and Discard are disabled and Save takes `:loading`. Discard puts back the last saved values and clears the errors. In SavePerGroup and SavePerCard there is no `SaveBar`: each `Card` footer carries a secondary Save for that card only, and SavePerCard puts an optional docs `Link` on the footer's start.
+SaveAll ends with one full-bleed sticky `SaveBar kind="plain"` holding an outlined Discard and the primary Save, both medium. While saving, the `fieldset` and Discard are disabled and Save takes `:loading`. Discard and Save stay disabled until the form differs from what was saved (`useUnsavedChanges` tracks the baseline and `commit()` moves it on a successful save). Discard puts back the last saved values and clears the errors. A successful save shows a `Profile saved.` success toast; a rejected one shows an error toast (`The profile wasn't saved.`, the changes kept) with Retry, and leaves the form dirty. In SavePerGroup and SavePerCard there is no `SaveBar`: each `Card` footer carries a secondary Save for that card only, confirmed by a toast naming the card, and SavePerCard puts an optional docs `Link` on the footer's start.
 
 ## Do
 
@@ -88,6 +88,7 @@ SaveAll ends with one full-bleed sticky `SaveBar kind="plain"` holding an outlin
 
 - SaveAll: Profile with General, Preferences and Notifications in one fieldset and one sticky Discard and Save footer.
 - Saving: the whole fieldset and Discard are disabled and Save shows its loading state.
+- SaveFailed: the server rejects the save; an error toast with Retry says the changes are kept, and the form stays dirty with every entry.
 - SavePerGroup: Preferences split into General and Notifications cards, each with its own secondary Save.
 - SavingOneGroup: General is saving with its rows disabled while Notifications stays editable.
 - SavePerCard: Project settings with Preview Toolbar and Deployment Protection cards, each with an info `Alert`, its fields and its own Save.
@@ -98,7 +99,7 @@ SaveAll ends with one full-bleed sticky `SaveBar kind="plain"` holding an outlin
 - `platform/edit/edit-resource` — settings of one resource, with anchored sections.
 - `platform/account/profile` — the full account profile built on the same layout.
 - `platform/states/form-validation` — every outcome of a submit.
-- `platform/states/async-submit` — a save that runs long or fails on the server.
+- `platform/states/async-submit` — a save that runs long and reports back later.
 - `platform/delete/delete-with-confirmation` — the delete row a settings page can end with.
 - `SettingRow` — the row this form is made of; see `skills/webkit-form` for the ItemGroup settings and Card with independent saves types.
 
@@ -106,7 +107,8 @@ SaveAll ends with one full-bleed sticky `SaveBar kind="plain"` holding an outlin
 
 - `SaveAll` — primary (the code below)
 - `Saving` — While the save is in flight: the whole fieldset is disabled, Discard is disabled and Save shows its loading state.
-- `SavePerGroup` — A settings page split into topic groups that each save on their own: a page heading, then one section per topic, each a small heading over a flush `Card` of `Item` rows whose footer carries a secondary Save for that group only. Saving one group disables just its own fieldset; the other stays editable. Preferences is the example, with General (Full name, Language) and Notifications (Product updates, Security alerts). Built from `PageHeader`, `SettingRow`, `Card`, `Item`, `Input`, `Select`, `Switch` and `Button`.
+- `SaveFailed` — The server rejects the save: Save stops loading, an error toast says the profile was not saved and that the changes are kept, with Retry; the form stays dirty with every entry in place.
+- `SavePerGroup` — A settings page split into topic groups that each save on their own: a page heading, then one section per topic, each a `SectionHeader` over a flush `Card` of `Item` rows whose footer carries a secondary Save for that group only. Saving one group disables just its own fieldset; the other stays editable. Preferences is the example, with General (Full name, Language) and Notifications (Product updates, Security alerts). Built from `PageHeader`, `SectionHeader`, `SettingRow`, `Card`, `Item`, `Input`, `Select`, `Switch` and `Button`.
 - `SavingOneGroup` — General is saving: its Save shows the loading state and its rows are disabled, while Notifications stays editable and can be saved on its own.
 - `SavePerCard` — A long configuration page split into titled cards that each own their save: a page heading, then one `Card` per topic with an info `Alert`, stacked label-and-control fields inside a fieldset, and a footer whose secondary Save commits that card alone, beside an optional docs `Link`. Project settings is the example, with Preview Toolbar and Deployment Protection. Built from `PageHeader`, `Card`, `Alert`, `Field`, `Select`, `Switch`, `Link` and `Button`.
 - `SavingOneCard` — Preview Toolbar is saving: its Save shows the loading state and its selects are disabled, while Deployment Protection stays editable.
@@ -124,10 +126,13 @@ Each variant is the same screen in another state: `get_pattern("platform/setting
   import Item from '@aziontech/webkit/item'
   import PageHeader from '@aziontech/webkit/page-header'
   import SaveBar from '@aziontech/webkit/save-bar'
+  import SectionHeader from '@aziontech/webkit/section-header'
   import Select, { type SelectOptionItem } from '@aziontech/webkit/select'
   import SettingRow from '@aziontech/webkit/setting-row'
   import Switch from '@aziontech/webkit/switch'
-  import { computed, nextTick, reactive, ref } from 'vue'
+  import { toast } from '@aziontech/webkit/toast'
+  import { useUnsavedChanges } from '@aziontech/webkit/use-unsaved-changes'
+  import { computed, nextTick, onScopeDispose, reactive, ref } from 'vue'
 
   const timezones = [
     { label: '(UTC+00:00) UTC', value: 'utc' },
@@ -144,16 +149,28 @@ Each variant is the same screen in another state: `get_pattern("platform/setting
   const labelOf = (list: SelectOptionItem[]) => (value: string) =>
     list.find((option) => option.value === value)?.label ?? ''
 
-  const saved = ref({
+  const form = reactive({
     fullName: 'Alex Morgan',
     email: '',
     timezone: 'utc',
     language: 'en',
     productUpdates: true
   })
-  const form = reactive({ ...saved.value })
+  const failing = false
+  const SAVE_TOAST = 'profile-save'
   const submitted = ref(false)
   const submitting = ref(false)
+  let saveTimer: ReturnType<typeof setTimeout> | undefined
+
+  const {
+    isDirty: dirty,
+    commit,
+    discard: restore
+  } = useUnsavedChanges(() => form, {
+    onDiscard: (baseline) => Object.assign(form, baseline)
+  })
+
+  onScopeDispose(() => clearTimeout(saveTimer))
 
   const nameEmpty = computed(() => !form.fullName.trim())
   const emailEmpty = computed(() => !form.email.trim())
@@ -168,15 +185,26 @@ Each variant is the same screen in another state: `get_pattern("platform/setting
       return
     }
     submitting.value = true
-    setTimeout(() => {
-      saved.value = { ...form }
-      submitted.value = false
+    toast.dismiss(SAVE_TOAST)
+    clearTimeout(saveTimer)
+    saveTimer = setTimeout(() => {
       submitting.value = false
+      if (failing) {
+        toast.error("The profile wasn't saved.", {
+          id: SAVE_TOAST,
+          description: "The request didn't reach the server. Your changes are kept.",
+          action: { label: 'Retry', onClick: () => submit() }
+        })
+        return
+      }
+      commit()
+      submitted.value = false
+      toast.success('Profile saved.', { id: SAVE_TOAST })
     }, 900)
   }
 
   const discard = () => {
-    Object.assign(form, saved.value)
+    restore()
     submitted.value = false
   }
 </script>
@@ -203,7 +231,10 @@ Each variant is the same screen in another state: `get_pattern("platform/setting
         <legend class="sr-only">Profile settings</legend>
 
         <section class="flex flex-col gap-(--layout-group-gap)">
-          <p class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">General</p>
+          <SectionHeader
+            title="General"
+            size="small"
+          />
           <Card :padded="false">
             <template #content>
               <Item.List>
@@ -267,7 +298,10 @@ Each variant is the same screen in another state: `get_pattern("platform/setting
         </section>
 
         <section class="layout-section-start flex flex-col gap-(--layout-group-gap)">
-          <p class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">Preferences</p>
+          <SectionHeader
+            title="Preferences"
+            size="small"
+          />
           <Card :padded="false">
             <template #content>
               <Item.List>
@@ -333,7 +367,10 @@ Each variant is the same screen in another state: `get_pattern("platform/setting
         </section>
 
         <section class="layout-section-start flex flex-col gap-(--layout-group-gap)">
-          <p class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">Notifications</p>
+          <SectionHeader
+            title="Notifications"
+            size="small"
+          />
           <Card :padded="false">
             <template #content>
               <Item.List>
@@ -362,7 +399,7 @@ Each variant is the same screen in another state: `get_pattern("platform/setting
           label="Discard"
           kind="outlined"
           size="medium"
-          :disabled="submitting"
+          :disabled="submitting || !dirty"
           @click="discard"
         />
         <Button
@@ -370,6 +407,7 @@ Each variant is the same screen in another state: `get_pattern("platform/setting
           kind="primary"
           size="medium"
           :loading="submitting"
+          :disabled="!dirty"
           @click="submit"
         />
       </template>

@@ -11,7 +11,8 @@
   "A fixed list of named intervals and nothing custom → use `select` or `toggle-group`."
  ],
  "related": [
-  "calendar` — the month grid, the date and time fields and the time zone selector come from it, so both pickers look and behave the same.",
+  "calendar` — the month grid, the date and time fields and the time zone selector come from it, so both pickers look and behave the same. Split: Calendar picks whole days (a date or a date range); DateRangePicker picks time ranges and keeps a relative window relative. Both name the zone `timeZone` / `timeZones` / `showTimeZone` / `v-model:time-zone`.",
+  "field` — inside a `Field`, the trigger takes the field's label (`for` points at it), description, `invalid` and `disabled`.",
   "property-filter` — the query bar it sits next to in an events toolbar.",
   "chart` — the histogram whose brush usually writes an absolute range back into this picker."
  ],

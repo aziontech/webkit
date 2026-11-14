@@ -36,39 +36,46 @@
  ],
  "props": [
   {
+   "name": "title",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Plan name shown as the card heading. Empty falls back to the deprecated `planTitle`."
+  },
+  {
    "name": "planTitle",
    "type": "string",
    "default": "'Pro'",
    "required": "false",
-   "doc": "plan Title."
+   "doc": "@deprecated since 6.0 — use `title` instead. Removed in 7.0."
   },
   {
    "name": "pricingDetails",
    "type": "string",
    "default": "''",
    "required": "false",
-   "doc": "pricing Details."
+   "doc": "Caveat under the price, such as the billing terms."
   },
   {
    "name": "showPricingDetails",
    "type": "boolean",
    "default": "true",
    "required": "false",
-   "doc": "show Pricing Details."
+   "doc": "Shows the pricing details line."
   },
   {
    "name": "showTag",
    "type": "boolean",
    "default": "false",
    "required": "false",
-   "doc": "show Tag."
+   "doc": "Shows the tag beside the plan name."
   },
   {
    "name": "tagLabel",
    "type": "string",
    "default": "'Popular'",
    "required": "false",
-   "doc": "tag Label."
+   "doc": "Text of the tag beside the plan name."
   },
   {
    "name": "aligned",
@@ -82,56 +89,56 @@
    "type": "'bottom' | 'middle'",
    "default": "'bottom'",
    "required": "false",
-   "doc": "slot Position."
+   "doc": "Composition of the card: `bottom` stacks the actions under the price, `middle` puts the price and actions between the header and the default slot."
   },
   {
    "name": "kind",
    "type": "'contained' | 'transparent'",
    "default": "'contained'",
    "required": "false",
-   "doc": "card Style."
+   "doc": "Whether the card draws its own surface: `contained` has a border and a surface, `transparent` sits on the page."
   },
   {
    "name": "value",
    "type": "string",
    "default": "'20'",
    "required": "false",
-   "doc": "value."
+   "doc": "Price amount, already formatted, without the currency symbol."
   },
   {
    "name": "prefix",
    "type": "string",
    "default": "'$'",
    "required": "false",
-   "doc": "prefix."
+   "doc": "Text before the amount, usually the currency symbol."
   },
   {
    "name": "suffix",
    "type": "string",
    "default": "'/ mon'",
    "required": "false",
-   "doc": "suffix."
+   "doc": "Text after the amount, usually the billing period."
   },
   {
    "name": "showPrefix",
    "type": "boolean",
    "default": "true",
    "required": "false",
-   "doc": "show Prefix."
+   "doc": "Shows the prefix."
   },
   {
    "name": "showSuffix",
    "type": "boolean",
    "default": "true",
    "required": "false",
-   "doc": "show Suffix."
+   "doc": "Shows the suffix."
   },
   {
    "name": "actionLabel",
    "type": "string",
    "default": "'Label'",
    "required": "false",
-   "doc": "action Label."
+   "doc": "Label of the default action button."
   },
   {
    "name": "animated",
@@ -159,15 +166,15 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import CardPricing from '@aziontech/webkit/card-pricing'\n</script>\n\n<template>\n  <CardPricing\n    plan-title=\"Pro\"\n    pricing-details=\"Billed annually or $25/mo billed monthly.\"\n    slot-position=\"bottom\"\n    kind=\"contained\"\n    value=\"20\"\n    prefix=\"$\"\n    suffix=\"/ mon\"\n    action-label=\"Label\"\n  />\n</template>"
+   "sfc": "<script setup>\n  import CardPricing from '@aziontech/webkit/card-pricing'\n</script>\n\n<template>\n  <CardPricing\n    title=\"Pro\"\n    pricing-details=\"Billed annually or $25/mo billed monthly.\"\n    slot-position=\"bottom\"\n    kind=\"contained\"\n    value=\"20\"\n    prefix=\"$\"\n    suffix=\"/ mon\"\n    action-label=\"Label\"\n  />\n</template>"
   },
   {
    "name": "Aligned",
-   "sfc": "<script setup>\n  import CardPricing from '@aziontech/webkit/card-pricing'\n</script>\n\n<template>\n  <div class=\"grid grid-cols-[repeat(auto-fit,320px)] gap-6\">\n    <CardPricing\n      aligned\n      plan-title=\"Hobby\"\n      pricing-details=\"\"\n      value=\"Free\"\n      prefix=\"\"\n      suffix=\"\"\n      action-label=\"Start for free\"\n    />\n    <CardPricing\n      aligned\n      show-tag\n      tag-label=\"Popular\"\n      plan-title=\"Pro\"\n      pricing-details=\"Billed annually, save 20%\"\n      value=\"20\"\n      prefix=\"$\"\n      suffix=\"/ mon\"\n      action-label=\"Continue with Pro\"\n    />\n    <CardPricing\n      aligned\n      plan-title=\"Enterprise\"\n      pricing-details=\"Tailored to your usage requirements and payment terms\"\n      value=\"Custom\"\n      prefix=\"\"\n      suffix=\"\"\n      action-label=\"Talk to a specialist\"\n    />\n  </div>\n</template>"
+   "sfc": "<script setup>\n  import CardPricing from '@aziontech/webkit/card-pricing'\n</script>\n\n<template>\n  <div class=\"grid grid-cols-[repeat(auto-fit,320px)] gap-6\">\n    <CardPricing\n      aligned\n      title=\"Hobby\"\n      pricing-details=\"\"\n      value=\"Free\"\n      prefix=\"\"\n      suffix=\"\"\n      action-label=\"Start for free\"\n    />\n    <CardPricing\n      aligned\n      show-tag\n      tag-label=\"Popular\"\n      title=\"Pro\"\n      pricing-details=\"Billed annually, save 20%\"\n      value=\"20\"\n      prefix=\"$\"\n      suffix=\"/ mon\"\n      action-label=\"Continue with Pro\"\n    />\n    <CardPricing\n      aligned\n      title=\"Enterprise\"\n      pricing-details=\"Tailored to your usage requirements and payment terms\"\n      value=\"Custom\"\n      prefix=\"\"\n      suffix=\"\"\n      action-label=\"Talk to a specialist\"\n    />\n  </div>\n</template>"
   },
   {
    "name": "Variants",
-   "sfc": "<script setup>\n  import CardPricing from '@aziontech/webkit/card-pricing'\n</script>\n\n<template>\n  <div class=\"grid grid-cols-[repeat(auto-fit,320px)] gap-6\">\n    <CardPricing\n      slot-position=\"bottom\"\n      kind=\"contained\"\n      plan-title=\"Pro\"\n      pricing-details=\"Billed annually or $25/mo billed monthly.\"\n      value=\"20\"\n      prefix=\"$\"\n      suffix=\"/ mon\"\n      action-label=\"Label\"\n    />\n    <CardPricing\n      slot-position=\"bottom\"\n      kind=\"transparent\"\n      plan-title=\"Pro\"\n      pricing-details=\"Billed annually or $25/mo billed monthly.\"\n      value=\"20\"\n      prefix=\"$\"\n      suffix=\"/ mon\"\n      action-label=\"Label\"\n    />\n    <CardPricing\n      slot-position=\"middle\"\n      kind=\"contained\"\n      plan-title=\"Pro\"\n      pricing-details=\"Billed annually or $25/mo billed monthly.\"\n      value=\"20\"\n      prefix=\"$\"\n      suffix=\"/ mon\"\n      action-label=\"Label\"\n    />\n    <CardPricing\n      slot-position=\"middle\"\n      kind=\"transparent\"\n      plan-title=\"Pro\"\n      pricing-details=\"Billed annually or $25/mo billed monthly.\"\n      value=\"20\"\n      prefix=\"$\"\n      suffix=\"/ mon\"\n      action-label=\"Label\"\n    />\n  </div>\n</template>"
+   "sfc": "<script setup>\n  import CardPricing from '@aziontech/webkit/card-pricing'\n</script>\n\n<template>\n  <div class=\"grid grid-cols-[repeat(auto-fit,320px)] gap-6\">\n    <CardPricing\n      slot-position=\"bottom\"\n      kind=\"contained\"\n      title=\"Pro\"\n      pricing-details=\"Billed annually or $25/mo billed monthly.\"\n      value=\"20\"\n      prefix=\"$\"\n      suffix=\"/ mon\"\n      action-label=\"Label\"\n    />\n    <CardPricing\n      slot-position=\"bottom\"\n      kind=\"transparent\"\n      title=\"Pro\"\n      pricing-details=\"Billed annually or $25/mo billed monthly.\"\n      value=\"20\"\n      prefix=\"$\"\n      suffix=\"/ mon\"\n      action-label=\"Label\"\n    />\n    <CardPricing\n      slot-position=\"middle\"\n      kind=\"contained\"\n      title=\"Pro\"\n      pricing-details=\"Billed annually or $25/mo billed monthly.\"\n      value=\"20\"\n      prefix=\"$\"\n      suffix=\"/ mon\"\n      action-label=\"Label\"\n    />\n    <CardPricing\n      slot-position=\"middle\"\n      kind=\"transparent\"\n      title=\"Pro\"\n      pricing-details=\"Billed annually or $25/mo billed monthly.\"\n      value=\"20\"\n      prefix=\"$\"\n      suffix=\"/ mon\"\n      action-label=\"Label\"\n    />\n  </div>\n</template>"
   }
  ],
  "docs": "components/card-pricing.md"

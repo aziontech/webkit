@@ -144,25 +144,46 @@
    "doc": "Height of the window under the content, where the brand strip and the floor texture stand; any CSS length."
   },
   {
+   "name": "ticker",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Stand the brand ticker on the band's floor, under the `bottom` window."
+  },
+  {
    "name": "carousel",
    "type": "boolean",
    "default": "false",
    "required": "false",
-   "doc": "Stand the brand strip on the band's floor, under the `bottom` window."
+   "doc": "@deprecated since 6.0 — use `ticker`. Removed in 7.0. Read only when `ticker` is empty."
+  },
+  {
+   "name": "tickerMarks",
+   "type": "string[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "Registry names of the marks the ticker shows, in order."
   },
   {
    "name": "carouselMarks",
    "type": "string[]",
    "default": "[]",
    "required": "false",
-   "doc": "Registry names of the marks the strip shows, in order."
+   "doc": "@deprecated since 6.0 — use `tickerMarks`. Removed in 7.0. Read only when `tickerMarks` is empty."
+  },
+  {
+   "name": "tickerLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Overline above the brand ticker, stating the claim the marks make."
   },
   {
    "name": "carouselLabel",
    "type": "string",
    "default": "''",
    "required": "false",
-   "doc": "Overline above the brand strip, stating the claim the marks make."
+   "doc": "@deprecated since 6.0 — use `tickerLabel`. Removed in 7.0. Read only when `tickerLabel` is empty."
   }
  ],
  "events": [],
@@ -190,7 +211,7 @@
   {
    "name": "bottom",
    "scope": "—",
-   "notes": "Asset window standing on the band's floor; clips its child, which may be larger than the window and offset inside it. It is real content, so it **reserves its height** and `align` centres the copy in what is left. It shares the floor with the `carousel` strip, which stands under it. `floorTexture` fills this same window when the asset is one of the system's textures."
+   "notes": "Asset window standing on the band's floor; clips its child, which may be larger than the window and offset inside it. It is real content, so it **reserves its height** and `align` centres the copy in what is left. It shares the floor with the `ticker` strip, which stands under it. `floorTexture` fills this same window when the asset is one of the system's textures."
   }
  ],
  "styleSeam": false,

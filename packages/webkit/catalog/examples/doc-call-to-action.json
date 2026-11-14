@@ -1,0 +1,14 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "The closing offer at the foot of the page rail: wordmark, headline, one line of copy and one action, at the rail's width.",
+   "sfc": "<script setup>\n  import DocCallToAction from '@aziontech/webkit/doc-call-to-action'\n</script>\n\n<template>\n  <div class=\"max-w-56\">\n    <DocCallToAction\n      title=\"Ready to build?\"\n      :primary-action=\"{ label: 'Start for free', href: '/signup' }\"\n    >\n      Deploy your first application in minutes.\n    </DocCallToAction>\n  </div>\n</template>"
+  },
+  {
+   "name": "Two actions",
+   "summary": "A secondary outlined action stacks under the primary when there is a real alternative.",
+   "sfc": "<script setup>\n  import DocCallToAction from '@aziontech/webkit/doc-call-to-action'\n</script>\n\n<template>\n  <div class=\"max-w-56\">\n    <DocCallToAction\n      title=\"Running at scale?\"\n      :primary-action=\"{ label: 'Start for free', href: '/signup' }\"\n      :secondary-action=\"{ label: 'Talk to sales', href: '/contact' }\"\n    >\n      Plans with support and volume pricing.\n    </DocCallToAction>\n  </div>\n</template>"
+  }
+ ]
+}

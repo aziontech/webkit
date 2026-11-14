@@ -35,6 +35,7 @@
 | --- | --- | --- | --- | --- |
 | `orientation` | `'horizontal' \| 'vertical'` | `'horizontal'` | false | Layout axis of the separator line. |
 | `label` | `string` | `''` | false | Fallback centered text shown when the default slot is empty. |
+| `decorative` | `boolean` | `false` | false | Purely visual line: renders role none instead of separator when there is no label. |
 
 ## Slots
 
@@ -51,7 +52,7 @@
 
 - Visible focus: not applicable — the separator is non-interactive and not in the tab order.
 - Keyboard map: not applicable — no interactive controls.
-- ARIA: root carries `role="separator"` and `aria-orientation="{orientation}"`. A labelled divider keeps the `separator` role and is named by its label through `aria-labelledby` (a separator's children are presentational, so the text alone would not reach assistive technology).
+- ARIA: root carries `role="separator"` and `aria-orientation="{orientation}"`. A labelled divider keeps the `separator` role and is named by its label through `aria-labelledby` (a separator's children are presentational, so the text alone would not reach assistive technology). `decorative` marks a line that only draws (between items that are already grouped): without a label it renders `role="none"` and no `aria-orientation`, so assistive technology skips it. A labelled divider ignores `decorative` and stays a named separator. It defaults to `false` so existing dividers keep the `separator` role.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including the disabled state — the muted label text meets the body-text ratio against canvas/surface.
 - `motion-reduce:transition-none motion-reduce:transform-none` on animated states — not applicable; the component declares no motion.
 - Touch target ≥40×40 px — not applicable; the component is non-interactive.

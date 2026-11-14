@@ -13,7 +13,7 @@
  "useWhen": [
   "Switch in place between two to five related modes, views or ranges (a time range, a list/grid view, a filter scope) where exactly one is always active.",
   "Offer a compact single choice in a toolbar or a card header where a radio list would take too much room.",
-  "Show a choice that is currently unavailable as a locked segment (`disabled` option) instead of hiding it."
+  "Show a choice that is currently unavailable as a disabled segment instead of hiding it; mark it `locked` when it is unavailable because of a plan or a permission."
  ],
  "avoidWhen": [
   "The choice switches between content panels that belong to the control → use `tabs`.",
@@ -26,7 +26,8 @@
   "tabs` — tabs that own their panels; reach for it when each option reveals its own content region.",
   "field` — a horizontal `Field` with a `radio-button` is the form-field single choice with label and description; a `Field.Label` choice card when each option carries a title and description.",
   "switch` — a single boolean toggle.",
-  "button` — a lone action; the segments here hold a value instead of firing one."
+  "button` — a lone action; the segments here hold a value instead of firing one.",
+  "Naming: Radix and shadcn `ToggleGroup` is a group of `aria-pressed` toggles with `type=\"single\" | \"multiple\"`. This component is the single-select segmented control (Cloudscape and Geist call it a segmented control): one value is always selected and the segments are radios. There is no multiple mode; for several independent toggles use `checkbox`es or `ButtonGroup` toggles."
  ],
  "bestPractices": [
   "Keep labels to one or two words: segments never wrap (`whitespace-nowrap`) and long labels truncate.",
@@ -38,7 +39,7 @@
  "props": [
   {
    "name": "options",
-   "type": "ToggleGroupOption[]` (`{ label?: string | number; value?: string | number; disabled?: boolean }`)",
+   "type": "ToggleGroupOption[]` (`{ label?: string | number; value?: string | number; disabled?: boolean; locked?: boolean }`)",
    "default": "[]",
    "required": "false",
    "doc": "Segmented choices shown as a mutually exclusive group."
@@ -46,7 +47,7 @@
   {
    "name": "ariaLabel",
    "type": "string",
-   "default": "undefined",
+   "default": "''",
    "required": "false",
    "doc": "Accessible name when no visible group label is associated."
   },
@@ -70,6 +71,13 @@
    "default": "false",
    "required": "false",
    "doc": "Stretches the group to its container and lets the options share that width."
+  },
+  {
+   "name": "disabled",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Disables every option of the group."
   },
   {
    "name": "modelValue",

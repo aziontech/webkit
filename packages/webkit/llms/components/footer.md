@@ -34,6 +34,7 @@
 
 - [global-header](global-header.md) — the top-of-page chrome counterpart; same shell philosophy (regions composed by the consumer).
 - [brand](brand.md), `icon-button`, `status-indicator`, `select` — the components consumers compose inside the bands; the footer reimplements none of them.
+- [site-footer](site-footer.md) — the marketing site's data-driven footer section, the one `SiteLayout` renders. Use `site-footer` for a site page fed from section JSON and `Footer` when composing the bands by hand; the two do not share code yet.
 - [frame-box](frame-box.md) — the footer's own frame: the hatched gutters, the framed column and the signature box are `FrameBox` instances (`borders` / `marks` / `hatch`).
 
 ## Props

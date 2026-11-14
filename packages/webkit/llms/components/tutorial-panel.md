@@ -67,8 +67,9 @@ that hosts it owns that), so there is no `Trigger` / `Content`. State flows thro
 the optional variant, which returns null so a hotspot outside a provider renders only its content.
 
 - `tutorial-panel-provider/tutorial-panel-provider.vue` — Holds the tutorials, the running tutorial (`v-model:active`), the current step (`v-model:step`, flat across tasks), whether the reader dismissed the current step, and the hotspots on the page. Renders only its slot (no element).
-  - Props: `tutorials?: Tutorial[]` (default `[]`), `active?: string \| null` (default `undefined` — controlled when bound; uncontrolled starts at `null`), `step?: number` (default `undefined` — controlled when bound; uncontrolled starts at `0`; equals the step count once the tutorial is finished).
-  - Events: `update:active` (`string \| null`), `update:step` (`number`), `start` (`string` — the tutorial id, on Start and Restart), `exit` (`string` — on Exit or Back to tutorials), `finish` (`string` — on Finish of the last step).
+  - Props: `tutorials?: Tutorial[]` (default `[]`).
+  - Models (`defineModel`): `v-model:active` (`string \| null`, default `null` — the parent owns it when bound, the provider keeps it locally when not), `v-model:step` (`number`, default `0`, same rule; equals the step count once the tutorial is finished).
+  - Events: `update:active` (`string \| null`) and `update:step` (`number`) from the models; `start` (`string` — the tutorial id, on Start and Restart), `exit` (`string` — on Exit or Back to tutorials), `finish` (`string` — on Finish of the last step). `start`, `exit` and `finish` are tutorial state events, not activation events: they report what the tutorial did, reached through the context from the panel's buttons, and carry no DOM event by design.
   - Slot: `default` — the page, with the panel and every hotspot inside.
 
 Exported types: `Tutorial` (`id`, `title`, `description?`, `completed?`, `tasks`), `TutorialTask` (`title`, `steps`), `TutorialStep` (`title`, `content`, `hotspotId`).
@@ -93,11 +94,11 @@ Exports:
 "./tutorial-panel-provider": "./src/components/content/tutorial-panel/tutorial-panel-provider/tutorial-panel-provider.vue"
 ```
 
-Composed DS components (relative imports): `help-panel` (root, `Header`, `Tutorial`, `Task`), `button`, `tag`.
+Composed DS components (relative imports): `help-panel` (root, `Header`, `Tutorial`, `Task`), `button`, `empty-state`, `tag`.
 
 ## States
 
-- Visual states: `list`, `running`, `complete`, `empty` (no tutorials), `loading`
+- Visual states: `list`, `running`, `complete`, `empty` (no tutorials, rendered by a small `EmptyState` titled with `tutorialPanel.empty`), `loading`
 - `data-view` on the root: `list` | `running` | `complete`
 - `data-completed` on each list item mirrors the tutorial's `completed`
 - In `running`, each task's `HelpPanel.Task` status is derived from the current step: `complete` when every step of the task is behind it, `current` when it holds the current step, `upcoming` otherwise. The current step's row carries `aria-current="step"`.

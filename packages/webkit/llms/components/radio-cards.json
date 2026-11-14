@@ -29,18 +29,12 @@
  "bestPractices": [
   "Give every item a unique `value`; it is both the `v-model` payload and the render key.",
   "Name the group by passing `aria-labelledby` or `aria-label` on the component: it renders a `role=\"radiogroup\"` with no visible label of its own. Set an item's `ariaLabel` when its `label` alone is ambiguous.",
-  "disabled` applies to the whole group; there is no per-item disabled state, so leave unavailable options out of `items`.",
+  "disabled` applies to the whole group; set `disabled: true` on an item to show one option as unavailable (arrow keys skip it).",
+  "Inside a `Field`, the group takes the field's label (`aria-labelledby`), description, `invalid`, `required` and `disabled` with no wiring.",
   "Use the `tag` slot for trailing content. The `default` slot replaces the whole card body (icon, label, description and `tag`), so use it only when the card needs a different layout.",
   "Arrow keys move and select in one step, as in any radio group, so `update:modelValue` fires while a keyboard user browses. Don't trigger navigation or requests on every change."
  ],
  "props": [
-  {
-   "name": "modelValue",
-   "type": "string | number",
-   "default": "undefined",
-   "required": "false",
-   "doc": "Currently selected item value (v-model)."
-  },
   {
    "name": "items",
    "type": "TItem[]",
@@ -54,15 +48,16 @@
    "default": "false",
    "required": "false",
    "doc": "Disables all options and applies disabled tokens."
-  }
- ],
- "events": [
+  },
   {
-   "name": "update:modelValue",
-   "payload": "TItem['value']",
-   "notes": "v-model when the user selects an option."
+   "name": "modelValue",
+   "type": "TItem['value']",
+   "default": "undefined",
+   "required": "false",
+   "doc": "Two-way value (`v-model`)."
   }
  ],
+ "events": [],
  "slots": [
   {
    "name": "default",

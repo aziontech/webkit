@@ -40,7 +40,7 @@
 | `includedLabel` | `string` | `''` | false | Tooltip and screen-reader text of an included cell; empty uses the locale catalog (`Included`). |
 | `excludedLabel` | `string` | `''` | false | Tooltip and screen-reader text of a not-included cell; empty uses the locale catalog (`Not included`). |
 | `plans` | `ComparePlansPlan[]` | `[]` | false | The plan columns, in order; each is `{ id, name, description?, highlighted?, action }` with `action` as `{ label, href }`; a plan without a name is dropped. |
-| `sections` | `ComparePlansSection[]` | `[]` | false | The product bands, in order; each is `{ eyebrow, title, description, rows, link? }` (`link` closes the band, `{ label, href }`) and a row is `{ label, values, group?, hint?, tag? }` with one value per plan: `true` or `✓` is included, `—` is not included, other text shows as written, empty is blank; `hint` defines the label in a popover. |
+| `sections` | `ComparePlansSection[]` | `[]` | false | The product bands, in order; each is `{ eyebrow, title, description, rows, action? }` (`action` closes the band, `{ label, href }`; `link` still works, @deprecated since 6.0 — use `action`, removed in 7.0) and a row is `{ label, values, group?, hint?, tag? }` with one value per plan: `true` or `✓` is included, `—` is not included, other text shows as written, empty is blank; `hint` defines the label in a popover. |
 | `primaryAction` | `ComparePlansAction` | `undefined` | false | Closing link under the table, opened in a new tab; `{ label, href }`. Omitted when absent. |
 
 ## States
@@ -100,7 +100,7 @@
         { label: 'Custom domains', values: [true, true] },
         { label: 'Usage alerts', values: ['—', true] }
       ],
-      link: { label: 'See compute rates', href: '/pricing/compute' }
+      action: { label: 'See compute rates', href: '/pricing/compute' }
     },
     {
       eyebrow: 'Storage',
@@ -109,7 +109,7 @@
         { label: 'Storage included', values: ['5 GB', '100 GB'] },
         { label: 'Versioning', values: ['—', true] }
       ],
-      link: { label: 'See storage rates', href: '/pricing/storage' }
+      action: { label: 'See storage rates', href: '/pricing/storage' }
     }
   ]
 </script>

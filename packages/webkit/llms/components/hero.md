@@ -62,9 +62,12 @@
 | `mediaAlign` | `HeroMediaAlign` | `'center'` | false | Where the `media` slot sits in its column: `center` balances it in the column, `end` sets its end edge on the container boundary, past the inline inset, from `md` up. |
 | `offset` | `string` | `''` | false | Height of the fixed chrome above the band, subtracted from the viewport when `kind` is `screen`; any CSS length. |
 | `bottomHeight` | `string` | `''` | false | Height of the window under the content, where the brand strip and the floor texture stand; any CSS length. |
-| `carousel` | `boolean` | `false` | false | Stand the brand strip on the band's floor, under the `bottom` window. |
-| `carouselMarks` | `string[]` | `[]` | false | Registry names of the marks the strip shows, in order. |
-| `carouselLabel` | `string` | `''` | false | Overline above the brand strip, stating the claim the marks make. |
+| `ticker` | `boolean` | `false` | false | Stand the brand ticker on the band's floor, under the `bottom` window. |
+| `carousel` | `boolean` | `false` | false | @deprecated since 6.0 — use `ticker`. Removed in 7.0. Read only when `ticker` is empty. |
+| `tickerMarks` | `string[]` | `[]` | false | Registry names of the marks the ticker shows, in order. |
+| `carouselMarks` | `string[]` | `[]` | false | @deprecated since 6.0 — use `tickerMarks`. Removed in 7.0. Read only when `tickerMarks` is empty. |
+| `tickerLabel` | `string` | `''` | false | Overline above the brand ticker, stating the claim the marks make. |
+| `carouselLabel` | `string` | `''` | false | @deprecated since 6.0 — use `tickerLabel`. Removed in 7.0. Read only when `tickerLabel` is empty. |
 
 ## Slots
 
@@ -74,7 +77,7 @@
 | `media` | — | Screenshot, diagram or form set beside the copy from `md` up. When filled, the content column becomes two equal halves from `md` up and the copy keeps the leading one; the `Hero.Title` `maxWidth` caps the copy inside its half. |
 | `background` | — | Decorative backdrop rendered full-bleed beneath the content; marked `aria-hidden`. |
 | `top` | — | Decorative asset window overlaying the band's top edge; clips its child, which may be larger than the window and offset inside it. It claims no space, so content still centres on the band. |
-| `bottom` | — | Asset window standing on the band's floor; clips its child, which may be larger than the window and offset inside it. It is real content, so it **reserves its height** and `align` centres the copy in what is left. It shares the floor with the `carousel` strip, which stands under it. `floorTexture` fills this same window when the asset is one of the system's textures. |
+| `bottom` | — | Asset window standing on the band's floor; clips its child, which may be larger than the window and offset inside it. It is real content, so it **reserves its height** and `align` centres the copy in what is left. It shares the floor with the `ticker` strip, which stands under it. `floorTexture` fills this same window when the asset is one of the system's textures. |
 
 ## Assets
 
@@ -108,10 +111,10 @@ The root `Hero` owns the band — the full-bleed section, the capped column, the
 - Each asset window clips its slotted child, so an asset larger than the band shows only the part the window frames. Custom properties place it: `--banner-top-height` / `--banner-bottom-height` size the window, and `--banner-top-x` / `-y`, `--banner-bottom-x` / `-y`, `--banner-background-x` / `-y` move the asset inside it
 - The backdrop sets `--texture-fade-lead: transparent`, so a `top` / `bottom` fade on the `texture` layer — or on a `texture-material` in the `background` slot — ramps in from zero at its leading edge as well as fading out: the opening band sits under the site header, and the texture must clear it. Outside a hero the same fades stay single
 - `data-floor` present when `floorTexture` paints the floor window. The window then takes a fluid default height (`clamp(9rem, 30dvh, 34rem)`) so a `screen` band still measures one screen on a laptop and caps at the design's field where there is room; with no floor texture it stays `auto` and is sized by its slotted child. `--banner-bottom-height` overrides either, and `--banner-floor-ink` (0.6) sets how strongly the texture reads
-- The floor holds the `bottom` window and the `carousel` strip in one block, so a single ground covers both: `--banner-floor-bg` (transparent by default) paints it, which is how a design plinths the floor a shade off the band's own canvas
-- The `carousel` strip stands on `--bg-canvas` edge to edge, so a `texture` backdrop or `background` slot never shows through the marks; a `--banner-floor-bg` plinth replaces that ground so the floor still reads as one block
-- `carousel` loads the strip on demand, so a band without one pulls in neither the strip nor its mark registry
-- `carouselLabel` names what the strip is evidence of; left empty the marks stand alone, which is the right register when the band's copy has already said it
+- The floor holds the `bottom` window and the `ticker` strip in one block, so a single ground covers both: `--banner-floor-bg` (transparent by default) paints it, which is how a design plinths the floor a shade off the band's own canvas
+- The `ticker` strip stands on `--bg-canvas` edge to edge, so a `texture` backdrop or `background` slot never shows through the marks; a `--banner-floor-bg` plinth replaces that ground so the floor still reads as one block
+- `ticker` loads the strip on demand, so a band without one pulls in neither the strip nor its mark registry
+- `tickerLabel` names what the strip is evidence of; left empty the marks stand alone, which is the right register when the band's copy has already said it
 
 ## Accessibility
 

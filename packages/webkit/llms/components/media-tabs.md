@@ -43,18 +43,19 @@
 | `position` | `'left' \| 'right' \| 'top' \| 'bottom'` | `'left'` | false | Which side of the media the tabs sit on. Below the `lg` breakpoint every position stacks, with the active tab's media inside its row. |
 | `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | false | Height each row is held to beside the media, as a multiple of the band's own padding step; in a row of tabs, `small` sets the title one step down. |
 | `selectOn` | `'hover' \| 'click'` | `'hover'` | false | What moves the selection as the reader points at a row. A click always selects, on either setting. |
-| `autoplay` | `boolean` | `true` | false | Advances to the next tab on a timer; pauses under the pointer or keyboard focus, restarts its count on a click, and never runs under reduced motion. |
+| `autoplay` | `boolean` | `true` | false | Advances to the next tab on a timer, with a visible pause control; pauses under the pointer or keyboard focus, restarts its count on a click, and never runs under reduced motion. |
 | `autoplayInterval` | `number` | `5000` | false | Milliseconds each tab is held before the band advances. |
 | `showProgress` | `boolean` | `true` | false | Advances a hairline along the active row's bottom edge while the timer runs. |
 | `texture` | `TextureMaterialKind` | `'none'` | false | Texture the media column is grounded with; `none` leaves it bare. |
 | `textureSize` | `TextureMaterialSize` | `'medium'` | false | Pitch of the ground's tiling — how far apart its cells sit. |
 | `textureFade` | `TextureMaterialFade` | `'vignette'` | false | How the ground fades out before the column's edges. |
+| `modelValue` | `number` | `0` | false | Two-way value (`v-model`). |
 
 ## Events
 
 | Event | Payload | Notes |
 | --- | --- | --- |
-| `tab-change` | `(event: Event, index: number)` | The selection moved; `index` is the tab now shown. Fires on a reader's hover or click, not on an autoplay tick. |
+| `tab-change` | `(event: Event, index: number)` | @deprecated since 6.0 — use `v-model` (`update:modelValue`). Removed in 7.0. The reader moved the selection; `index` is the tab now shown. Fires on a reader's hover or click, not on an autoplay tick. |
 
 ## Slots
 
@@ -62,12 +63,19 @@
 | --- | --- | --- |
 | `media` | { item: MediaTabsItem, index: number, active: boolean } | The tab's media; replaces the image built from `item.src`. |
 
+## v-model
+
+| Model     | Type     | Default | Emits               | Notes                                                                                                                                                                                                                         |
+| --------- | -------- | ------- | ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `v-model` | `number` | `0`     | `update:modelValue` | Index of the tab shown, two-way through `defineModel`; left unbound the band keeps its own selection, starting on the first tab. A click, a hover (with `selectOn: 'hover'`) or the autoplay timer writes the new index back. |
+
 ## States
 
 - Visual states: `default`, `hover`, `focus-visible` on each row
 - Hover paints `--bg-hover` as a `::before` ghost layer over a resting row (the design system's interactive-state pattern); the selected row already sits on the raised surface and shows no ghost
 - `data-active` marks the selected row; it steps up to the raised surface while the others rest on the plain one
 - `data-autoplay` is present on the root while the timer is running, so a page can tell a moving band from a resting one
+- `data-paused` is present on the root while the reader has paused the rotation with the pause control
 - `data-size` carries the size token, which sets the row height every column measures from beside the media and the title scale of a row of tabs
 - `data-select-on` carries the interaction mode
 - The media frame shows exactly one medium at full opacity; the rest are present and transparent, which is what lets them cross-fade
@@ -86,9 +94,18 @@
 - Keyboard map: `Tab` moves between rows and `Enter` / `Space` selects one — the rows are buttons, not clickable containers, so no key handler is bolted onto a `div`.
 - ARIA: the rows are a `<ul>` of `<li>`, each holding the button; the active button carries `aria-current="true"`. Each medium carries its tab's `alt` text, and the inactive media are `aria-hidden` so the frame announces one picture rather than all of them.
 - **Not `role="tablist"`.** A tab's label here is a heading and a paragraph — the copy is the content, and the media only illustrates it. Real tabs promise a roving `tabindex` and arrow-key navigation over short labels; this band is a list of claims a reader tabs through one at a time, so it is announced as the list it is rather than as a tab set whose keyboard contract it does not honour.
-- **WCAG 2.2.2 (pause, stop, hide):** autoplay is moving content, so it must be stoppable. It pauses while the band has hover or keyboard focus, resumes when they leave, and does not start at all under `prefers-reduced-motion`. A click selects a tab and restarts the count from that tab; it does not end the rotation.
+- **WCAG 2.2.2 (pause, stop, hide):** autoplay is moving content, so it must be stoppable. While the timer can run, a visible outlined `IconButton` at the band's top end pauses it ("Pause rotation") and resumes it ("Resume rotation"), for touch and screen-reader users alike; the rotation also pauses while the band has hover or keyboard focus, resumes when they leave, and does not start at all under `prefers-reduced-motion`. A click selects a tab and restarts the count from that tab; it does not end the rotation.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): the description is `var(--text-muted)`, a known theme-level shortfall on the light canvas (see `big-numbers`); every other text region is `var(--text-default)`.
 - Touch target ≥40×40 px — each row's button spans the whole row, well past the minimum.
+
+## Internationalization
+
+| Key                              | English source    | Override prop |
+| -------------------------------- | ----------------- | ------------- |
+| `autoplayControl.pauseRotation`  | `Pause rotation`  | —             |
+| `autoplayControl.resumeRotation` | `Resume rotation` | —             |
+
+- Every other string is copy passed through `items`.
 
 ## Examples
 

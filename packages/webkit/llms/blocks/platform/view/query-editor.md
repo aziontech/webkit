@@ -1,11 +1,11 @@
 # QueryEditor (`platform/view/query-editor`)
 
-> The query editor page (the app passes the Databases breadcrumb to the layout): the Tables and Editor tabs, each pairing a resizable, collapsible `Sidebar` (288px at rest) with a working pane. On Editor the panel holds the query history and the pane stacks the Run query, Prettify and Templates toolbar, the SQL `CodeEditor`, and the Results band over its pagination; on Tables the panel lists the tables and the pane holds the selected table with its Data and Definition switch, its rows in a paged, selectable `TableRoot`. A database with no tables shows the Create Table empty state, and the Templates button opens the SQL quick templates drawer. Its page-level parts are `PageTabs`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main; CreateDatabase is a focused create page with its own header and no rail, rendered outside it. Its root carries data-layout-fill (every variant but CreateDatabase), so the main stops scrolling and the panel, the rows, the editor and the results scroll on their own.
+> The query editor page (the app passes the Databases breadcrumb to the layout): the Tables and Editor tabs, each pairing a resizable, collapsible `Sidebar` (288px at rest) with a working pane. On Editor the panel holds the query history and the pane stacks the Run query, Prettify and Templates toolbar, the SQL `CodeEditor`, and the Results band (rows paged in a `TableRoot`, or JSON in a copyable `CodeBlock`); on Tables the panel lists the tables as option `Item` rows and the pane holds the selected table with its Data and Definition switch, its rows in a paged, selectable `TableRoot`. A database with no tables shows the Create Table empty state, and the Templates button opens the SQL quick templates drawer. Its page-level parts are `PageTabs`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main; CreateDatabase is a focused create page with its own header and no rail, rendered outside it. Its root carries data-layout-fill (every variant but CreateDatabase), so the main stops scrolling and the panel, the rows, the editor and the results scroll on their own.
 
 - Surface: product
 - Source: `blocks/platform/view/query-editor/query-editor.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/view/query-editor")`
-- Components: [Alert](../../../components/alert.md), [Avatar](../../../components/avatar.md), [Brand](../../../components/brand.md), [Breadcrumb](../../../components/breadcrumb.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [CodeEditor](../../../components/code-editor.md), [Drawer](../../../components/drawer.md), `DrawerClose`, `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [FileDropzone](../../../components/file-dropzone.md), [FileTokenGroup](../../../components/file-token-group.md), [GlobalHeader](../../../components/global-header.md), [HelperText](../../../components/helper-text.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [Item](../../../components/item.md), [PageHeader](../../../components/page-header.md), [PageTabs](../../../components/page-tabs.md), `PaginationRoot`, `PanelContent`, `PanelFooter`, `PanelHeader`, [SaveBar](../../../components/save-bar.md), [Select](../../../components/select.md), [SettingRow](../../../components/setting-row.md), [SettingsSection](../../../components/settings-section.md), [Sidebar](../../../components/sidebar.md), [Switch](../../../components/switch.md), `TableRoot`, [Tabs](../../../components/tabs.md), [Tag](../../../components/tag.md), [Toast](../../../components/toast.md), [ToggleGroup](../../../components/toggle-group.md), [Tooltip](../../../components/tooltip.md)
+- Components: [Alert](../../../components/alert.md), [Avatar](../../../components/avatar.md), [Brand](../../../components/brand.md), [Breadcrumb](../../../components/breadcrumb.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [CodeBlock](../../../components/code-block.md), [CodeEditor](../../../components/code-editor.md), [Drawer](../../../components/drawer.md), `DrawerClose`, `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [FileDropzone](../../../components/file-dropzone.md), [FileTokenGroup](../../../components/file-token-group.md), [GlobalHeader](../../../components/global-header.md), [HelperText](../../../components/helper-text.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [Item](../../../components/item.md), [PageHeader](../../../components/page-header.md), [PageTabs](../../../components/page-tabs.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [SaveBar](../../../components/save-bar.md), [Select](../../../components/select.md), [SettingRow](../../../components/setting-row.md), [SettingsSection](../../../components/settings-section.md), [Sidebar](../../../components/sidebar.md), [Skeleton](../../../components/skeleton.md), [Switch](../../../components/switch.md), `TableRoot`, [Tabs](../../../components/tabs.md), [Tag](../../../components/tag.md), [Toast](../../../components/toast.md), [ToggleGroup](../../../components/toggle-group.md), [Tooltip](../../../components/tooltip.md)
 - Skills: `webkit-layout`, `webkit-tables`, `webkit-ui-states`
 
 ## Asked as
@@ -38,15 +38,15 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 
 ### B. Tables panel — `Sidebar`, `Tooltip`, `IconButton`, `Input`, `DropdownMenu` (required)
 
-A resizable, collapsible start `Sidebar` named Tables, 288px at rest. Below `md` it starts collapsed (set on mount, so the server render matches), so the pane keeps the width of the phone; the same holds for the Editor tab's query history. Its header carries Refresh tables and Create Table `IconButton`s, each named by a `Tooltip`, over a Search tables `Input`. Each table row opens it in the pane and has a Table actions `DropdownMenu` with Delete table.
+A resizable, collapsible start `Sidebar` named Tables, 288px at rest. Below `md` it starts collapsed (set on mount, so the server render matches), so the pane keeps the width of the phone; the same holds for the Editor tab's query history. Its header carries Refresh tables and Create Table `IconButton`s, each named by a `Tooltip`, over a Search tables `Input`. Each table row is an `Item` (`clickable`, `kind="option"`, `aria-pressed` on the open table) that opens it in the pane, beside an `Actions for <table>` `DropdownMenu` with Delete table. While the tables load, `Skeleton` lines hold the list; a search that matches nothing shows a small `EmptyState` with Clear search.
 
-### C. Empty database — `Card`, `EmptyState`, `Button` (required)
+### C. Empty database — `EmptyState`, `Button` (required)
 
 A database with no tables replaces the pane with a `Card` holding an `EmptyState` (No tables yet) and a secondary Create Table `Button`. The side panel says the same thing in its own words; the tabs stay.
 
 ### D. Table data — `ToggleGroup`, `Input`, `Button`, `Tooltip`, `IconButton`, `TableRoot` (required)
 
-The pane opens with the table name and a `ToggleGroup` switching Data and Definition. Data has a Filter rows `Input`, an outlined Sort `Button`, a Refresh `IconButton` and the primary Insert `Button`, over the rows. The rows are a compact `TableRoot` (`row-key="__k"`, `enable-row-selection`, `enable-sorting`, `paginated` at 25 rows with 25, 50 and 100 per page) named `Rows of <table>`: one column per table column with a `header-<name>` slot that shows the name, its type muted and a key on the primary key, a `cell-<name>` slot that renders values in the code font and `NULL` in muted italics, and a trailing action column with a Delete row `IconButton`. Sorting by a header sorts the loaded rows; selection resets when another table is picked. An empty table fills the `#empty` slot with Insert row and Import data from CSV; a filter that matches nothing says so with the filter text.
+The pane opens with the table name and a `ToggleGroup` switching Data and Definition. Data has a Filter rows `Input`, an outlined Sort `Button`, a Refresh `IconButton` and the primary Insert `Button`, over the rows. The rows are a compact `TableRoot` (`row-key="__k"`, `enable-row-selection`, `enable-sorting`, `paginated` at 25 rows with 25, 50 and 100 per page) named `Rows of <table>`: one column per table column with a `header-<name>` slot that shows the name, its type muted and a key on the primary key, a `cell-<name>` slot that renders values in the code font and `NULL` in muted italics, and a trailing action column with a Delete row `IconButton`. Sorting by a header sorts the loaded rows; selection resets when another table is picked. An empty table fills the `#empty` slot with a small `EmptyState` holding Insert row and Import data from CSV; a filter that matches nothing shows a small `EmptyState` named with the filter text and a Clear filter button. Each Delete row button names its row (`Delete row 3`).
 
 ### E. Table definition — `Button`, `Card`, `TableRoot`, `Tag` (optional)
 
@@ -60,13 +60,13 @@ On Editor the start `Sidebar` is named Query history, with a Search queries `Inp
 
 A toolbar with the primary Run query `Button` (`:loading` while it runs) and outlined Prettify and Templates `Button`s, over a `CodeEditor` (`language="sql"`, `path="query.sql"`, 14rem) named SQL editor. The plain editor ships by default; pass `loader` with `() => import('monaco-editor')` to get Monaco with SQL highlighting, themed from the tokens. While a query runs the editor is read-only and Prettify and Templates are disabled. A statement the database rejects puts an error marker on its line (`markers`) as well as the danger `Alert` in Results.
 
-### H. Results — `Input`, `ToggleGroup`, `Tooltip`, `IconButton`, `TableRoot`, `Alert`, `EmptyState`, `PaginationRoot` (required)
+### H. Results — `Input`, `ToggleGroup`, `Tooltip`, `IconButton`, `TableRoot`, `CodeBlock`, `Skeleton`, `Alert`, `EmptyState` (required)
 
-A Results band with its own search `Input`, a `ToggleGroup` switching Table and JSON, and Refresh, Download and Columns `IconButton`s named by `Tooltip`s. A successful run shows a success `Alert` with what ran and the rows in a `TableRoot`; a statement the database rejects shows a danger `Alert` with the reason and what to do (`The statement wasn't executed: near "SELEC", a syntax error. Check the statement and run it again.`), and the statement stays in the editor; before anything runs an `EmptyState` reads Ready to execute. A `PaginationRoot` at 50 rows sits under the band.
+A Results band with its own search `Input`, a `ToggleGroup` switching Table and JSON, and Refresh, Download and Columns `IconButton`s named by `Tooltip`s. A SELECT shows its rows in a `TableRoot` paged at 50 (10, 25, 50 and 100 per page), and JSON shows them in a copyable `CodeBlock`; any other statement shows a success `Alert` with what ran; a statement the database rejects shows a danger `Alert` with the reason and what to do (`The statement wasn't executed: near "SELEC", a syntax error. Check the statement and run it again.`), and the statement stays in the editor; before anything runs an `EmptyState` reads Ready to execute, and while a query runs `Skeleton` lines hold the band. A visually hidden `role="status"` announces the outcome (`3 rows returned.` or the error).
 
-### I. Templates drawer — `Drawer`, `DrawerPortal`, `DrawerOverlay`, `DrawerContent`, `PanelHeader`, `DrawerTitle`, `DrawerClose`, `PanelContent`, `Input` (optional)
+### I. Templates drawer — `Drawer`, `DrawerPortal`, `DrawerOverlay`, `DrawerContent`, `PanelHeader`, `DrawerTitle`, `DrawerClose`, `PanelContent`, `Input`, `Item` (optional)
 
-Templates opens a large right `Drawer` titled SQL quick templates with a one-line description, a Search templates `Input` and one card per snippet. Choosing a card loads its SQL into the editor and closes the drawer.
+Templates opens a large right `Drawer` titled SQL quick templates with a one-line description, a Search templates `Input` and one outlined clickable `Item` per snippet (a small `EmptyState` with Clear search when none matches). Choosing a card loads its SQL into the editor and closes the drawer.
 
 ### J. Bulk row delete — `Button` (optional)
 
@@ -127,7 +127,7 @@ Validation runs on Insert, as the form-error rule says: a table column mapped tw
 - The `CodeEditor` has the `aria-label` "SQL editor"; its markers are listed in its problems list as text, not by colour.
 - Every icon-only button has an `aria-label` that matches its `Tooltip`; the rows table is named `Rows of <table>` and its selection checkboxes come from `TableRoot`, named per row.
 - On Create Database, the Name error is the input's `aria-describedby` and focus returns to the input after a failed submit.
-- `ToggleGroup`s are named ("Table view", "Result view") and the pagination is named "Results pagination".
+- `ToggleGroup`s are named ("Table view", "Result view") and each paged table names its own pagination.
 - The templates drawer traps focus while open and closes on Escape.
 - In the import drawer each mapping `Select` is named `Table column for <CSV column>`, the mapping and the per-line errors are named lists, and the ready count is a polite live region, so changing a mapping announces the new count.
 
@@ -137,7 +137,8 @@ Validation runs on Insert, as the form-error rule says: a table column mapped tw
 - Schema: the Definition view of customers, with the Columns heading, Add column and a card of column name, type and constraints.
 - EmptyDatabase: a database with no tables; the side panel says so and the pane shows the Create Table empty state.
 - Query: the Editor tab after a query ran, with the history in the side panel, the statement in the editor and its rows in Results.
-- Templates: the Editor tab before anything ran, with Results ready to execute and the SQL quick templates drawer behind the Templates button.
+- Templates: the Editor tab before anything ran, with Results ready to execute and the SQL quick templates drawer open over it.
+- Loading: the tables list and the selected table's rows are loading; `Skeleton` lines hold the side panel and the rows table shows its loading state.
 - TableData: the events table, 137 rows paged 25 at a time, with two rows selected and Delete 2 rows in the toolbar.
 - ImportCsv: the empty subscribers table with the import drawer open on a seven-row file: `plan_name` still on Skip (Insert asks to map `plan`), `referrer` skipped, three lines with errors (a non-boolean, an empty required email, a date that does not parse).
 - CreateDatabase: the create database page with its Name and Active fields; try `acme-store` for the name conflict and a name starting with `offline` for the failed request.
@@ -159,7 +160,8 @@ Validation runs on Insert, as the form-error rule says: a table column mapped tw
 - `Schema` — The Definition view of customers: the Columns heading with Add column over a card holding the column name, its type as a Tag, and its constraints.
 - `EmptyDatabase` — A database with no tables yet: the side panel says so and the working pane shows the Create Table empty state.
 - `Query` — The Editor tab after the Select all query ran: the query history in the side panel, the statement in the editor, and its three rows in the Results band, switchable to JSON.
-- `Templates` — The Editor tab before anything ran, with the Results band ready to execute; the Templates button opens the SQL quick templates drawer, and choosing a card loads its SQL into the editor.
+- `Templates` — The Editor tab before anything ran, with the SQL quick templates drawer open over it: a search and one outlined clickable Item per snippet; choosing one loads its SQL into the editor and closes the drawer.
+- `Loading` — The tables and the selected table's rows are loading: Skeleton lines hold the side panel and the rows TableRoot shows its loading state.
 - `Failed` — The rows of the selected table failed to load: the Tables tab keeps the side panel and the table toolbar, and the Data view shows a danger Alert that names the table and offers Retry.
 - `TableData` — The events table in the Data view: 137 rows in a compact `TableRoot` paged 25 at a time, each column header naming its type with a key on the primary key, `NULL` in muted italics, sortable headers and row selection. Two rows are selected, so Delete 2 rows joins the toolbar; it ends in a toast with Undo.
 - `ImportCsv` — An empty table's Import data from CSV (also a CSV dropped on its empty state): a drawer that reads the file (`FileDropzone`, `FileTokenGroup`), maps each CSV column to a table column or Skip in a `Select` (matched by name first), checks every value against its column's type and NOT NULL with the errors listed per line, previews the first rows as they will be inserted, and inserts the valid rows with a spinner, then a toast with Undo that says how many rows were skipped.
@@ -174,6 +176,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/qu
   import Alert from '@aziontech/webkit/alert'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
+  import CodeBlock from '@aziontech/webkit/code-block'
   import CodeEditor, { type CodeEditorMarker } from '@aziontech/webkit/code-editor'
   import Drawer from '@aziontech/webkit/drawer'
   import DrawerClose from '@aziontech/webkit/drawer-close'
@@ -185,11 +188,12 @@ Each variant is the same screen in another state: `get_pattern("platform/view/qu
   import EmptyState from '@aziontech/webkit/empty-state'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
+  import Item from '@aziontech/webkit/item'
   import PageTabs from '@aziontech/webkit/page-tabs'
-  import PaginationRoot from '@aziontech/webkit/pagination-root'
   import PanelContent from '@aziontech/webkit/panel-content'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import Sidebar from '@aziontech/webkit/sidebar'
+  import Skeleton from '@aziontech/webkit/skeleton'
   import TableRoot, { type TableColumn } from '@aziontech/webkit/table-root'
   import Tabs from '@aziontech/webkit/tabs'
   import Tag from '@aziontech/webkit/tag'
@@ -266,22 +270,22 @@ Each variant is the same screen in another state: `get_pattern("platform/view/qu
         {
           __k: 'row-1',
           id: 1,
-          name: 'Ada Lovelace',
-          email: 'ada@example.com',
+          name: 'Jane Doe',
+          email: 'jane.doe@example.com',
           created_at: '2026-07-21 08:15:00'
         },
         {
           __k: 'row-2',
           id: 2,
-          name: 'Alan Turing',
-          email: 'alan@example.com',
+          name: 'John Smith',
+          email: 'john.smith@example.com',
           created_at: '2026-07-21 08:15:01'
         },
         {
           __k: 'row-3',
           id: 3,
-          name: 'Grace Hopper',
-          email: 'grace@example.com',
+          name: 'Alex Morgan',
+          email: 'alex.morgan@example.com',
           created_at: null
         }
       ]
@@ -362,9 +366,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/qu
   const rowFilter = ref('')
   const filterPlaceholder = computed(() => {
     const names = (selectedTable.value?.columns ?? []).map((column) => column.name)
-    return names.length
-      ? `Filter by ${names.slice(0, 3).join(', ')} or ask AI`
-      : 'Filter rows or ask AI'
+    return names.length ? `Filter by ${names.slice(0, 3).join(', ')}` : 'Filter rows'
   })
   const tableRows = computed(() => selectedTable.value?.rows ?? [])
   const filteredRows = computed(() => {
@@ -449,22 +451,22 @@ Each variant is the same screen in another state: `get_pattern("platform/view/qu
       {
         __k: 1,
         id: 1,
-        name: 'Ada Lovelace',
-        email: 'ada@example.com',
+        name: 'Jane Doe',
+        email: 'jane.doe@example.com',
         created_at: '2026-07-21 08:15:00'
       },
       {
         __k: 2,
         id: 2,
-        name: 'Alan Turing',
-        email: 'alan@example.com',
+        name: 'John Smith',
+        email: 'john.smith@example.com',
         created_at: '2026-07-21 08:15:01'
       },
       {
         __k: 3,
         id: 3,
-        name: 'Grace Hopper',
-        email: 'grace@example.com',
+        name: 'Alex Morgan',
+        email: 'alex.morgan@example.com',
         created_at: '2026-07-21 08:15:02'
       }
     ]
@@ -526,6 +528,14 @@ Each variant is the same screen in another state: `get_pattern("platform/view/qu
     'PRAGMA'
   ]
 
+  const resultStatus = computed(() => {
+    if (running.value) return 'Running the query.'
+    if (!results.value) return ''
+    if (results.value.type !== 'rows') return results.value.text
+    const count = results.value.rows.length
+    return `${count} ${count === 1 ? 'row' : 'rows'} returned.`
+  })
+
   const runQuery = () => {
     const sql = editorSql.value.trim()
     if (!sql || running.value) return
@@ -574,9 +584,9 @@ Each variant is the same screen in another state: `get_pattern("platform/view/qu
       description: 'Insert sample customer records into the customers table',
       icon: 'pi pi-plus-circle',
       sql: `INSERT INTO customers (name, email) VALUES
-  ('Ada Lovelace', 'ada@example.com'),
-  ('Alan Turing', 'alan@example.com'),
-  ('Grace Hopper', 'grace@example.com');`
+  ('Jane Doe', 'jane.doe@example.com'),
+  ('John Smith', 'john.smith@example.com'),
+  ('Alex Morgan', 'alex.morgan@example.com');`
     },
     {
       id: 'select-all',
@@ -740,12 +750,21 @@ LIMIT 3;`
             >
               No tables created yet
             </p>
-            <p
+            <EmptyState
               v-else-if="!filteredTables.length"
-              class="px-(--spacing-xs) py-(--spacing-sm) text-body-sm text-(--text-muted)"
+              size="small"
+              icon="pi pi-search"
+              :title="`No tables match “${tableSearch}”`"
             >
-              No tables match "{{ tableSearch }}".
-            </p>
+              <template #actions>
+                <Button
+                  label="Clear search"
+                  kind="outlined"
+                  size="small"
+                  @click="tableSearch = ''"
+                />
+              </template>
+            </EmptyState>
             <div
               v-else
               class="flex flex-col gap-(--spacing-xxs)"
@@ -755,26 +774,29 @@ LIMIT 3;`
                 :key="table.id"
                 class="group flex items-center gap-(--spacing-xxs)"
               >
-                <button
-                  type="button"
-                  :data-selected="selectedTable && selectedTable.id === table.id ? true : null"
-                  class="flex min-w-0 flex-1 items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-xs) py-(--spacing-xs) text-start text-label-sm text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) data-selected:bg-(--bg-hover) motion-reduce:transition-none"
+                <Item
+                  clickable
+                  kind="option"
+                  :aria-pressed="selectedTable?.id === table.id"
+                  class="min-w-0 flex-1"
                   @click="selectTable(table.id)"
                 >
-                  <i
-                    class="pi pi-table shrink-0 text-(--text-muted)"
-                    aria-hidden="true"
-                  />
-                  <span class="min-w-0 truncate">{{ table.name }}</span>
-                </button>
+                  <span class="flex min-w-0 flex-1 items-center gap-(--spacing-xs)">
+                    <i
+                      class="pi pi-table shrink-0 text-(--text-muted)"
+                      aria-hidden="true"
+                    />
+                    <span class="min-w-0 truncate text-label-sm">{{ table.name }}</span>
+                  </span>
+                </Item>
                 <DropdownMenu placement="bottom-end">
                   <DropdownMenu.Trigger>
-                    <Tooltip text="Table actions">
+                    <Tooltip :text="`Actions for ${table.name}`">
                       <IconButton
                         icon="pi pi-ellipsis-h"
                         kind="transparent"
                         size="small"
-                        aria-label="Table actions"
+                        :aria-label="`Actions for ${table.name}`"
                       />
                     </Tooltip>
                   </DropdownMenu.Trigger>
@@ -802,52 +824,26 @@ LIMIT 3;`
           v-if="!selectedTable"
           class="flex flex-1 items-center justify-center p-(--spacing-md)"
         >
-          <Card class="w-full max-w-(--container-2xl)">
-            <template #content>
-              <div
-                class="flex flex-1 rounded-(--shape-card) border border-dashed border-(--border-default) bg-(--bg-surface-raised)"
-              >
-                <EmptyState
+          <EmptyState
+            bordered
+            size="medium"
+            icon="pi pi-table"
+            title="No tables yet"
+            description="Create your first table to store your data."
+            class="w-full max-w-(--container-2xl)"
+          >
+            <template #actions>
+              <div class="w-full md:w-fit">
+                <Button
+                  label="Create Table"
+                  icon="pi pi-plus"
+                  kind="secondary"
                   size="medium"
-                  title="No tables yet"
-                  description="Create your first table to store your data."
                   class="w-full"
-                >
-                  <template #icon>
-                    <span class="relative flex size-10 items-center justify-center">
-                      <span
-                        aria-hidden="true"
-                        class="absolute left-1/2 top-1/2 size-14 -translate-x-1/2 -translate-y-1/2 rounded-(--radius-xl) border border-(--border-strong) bg-(--bg-canvas) opacity-5"
-                      />
-                      <span
-                        aria-hidden="true"
-                        class="absolute left-1/2 top-1/2 size-12 -translate-x-1/2 -translate-y-1/2 rounded-(--shape-card) border border-(--border-strong) bg-(--bg-canvas) opacity-10"
-                      />
-                      <span
-                        class="relative flex size-10 items-center justify-center rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface)"
-                      >
-                        <i
-                          class="pi pi-table text-body-md leading-none text-(--text-default)"
-                          aria-hidden="true"
-                        />
-                      </span>
-                    </span>
-                  </template>
-                  <template #actions>
-                    <div class="w-full md:w-fit">
-                      <Button
-                        label="Create Table"
-                        icon="pi pi-plus"
-                        kind="secondary"
-                        size="medium"
-                        class="w-full"
-                      />
-                    </div>
-                  </template>
-                </EmptyState>
+                />
               </div>
             </template>
-          </Card>
+          </EmptyState>
         </div>
 
         <div
@@ -957,50 +953,65 @@ LIMIT 3;`
                   #[`cell-${column.name}`]="{ value }"
                 >
                   <span
-                    class="truncate font-code text-label-code-sm"
-                    :class="isNull(value) ? 'italic text-(--text-muted)' : 'text-(--text-default)'"
+                    :data-null="isNull(value) || null"
+                    class="truncate font-code text-label-code-sm text-(--text-default) data-null:italic data-null:text-(--text-muted)"
                     >{{ displayCell(value) }}</span
                   >
                 </template>
                 <template #cell-__actions="{ row }">
-                  <Tooltip text="Delete row">
+                  <Tooltip :text="`Delete row ${row['id'] ?? row.__k}`">
                     <IconButton
                       icon="pi pi-trash"
                       kind="transparent"
                       size="small"
-                      aria-label="Delete row"
+                      :aria-label="`Delete row ${row['id'] ?? row.__k}`"
                       @click="deleteRow(row)"
                     />
                   </Tooltip>
                 </template>
                 <template #empty>
-                  <div
+                  <EmptyState
+                    key="empty-state-1"
                     v-if="!tableRows.length"
-                    class="flex flex-col items-center justify-center gap-(--spacing-sm) p-(--spacing-xxl) text-center"
+                    size="small"
+                    icon="pi pi-table"
+                    title="This table is empty"
+                    description="Insert a row, import a CSV file or drop one here."
                   >
-                    <p class="text-body-sm text-(--text-default)">This table is empty</p>
-                    <div class="flex flex-wrap items-center justify-center gap-(--spacing-xs)">
-                      <Button
-                        label="Insert row"
-                        kind="secondary"
-                        size="medium"
-                        icon="pi pi-plus"
-                      />
-                      <Button
-                        label="Import data from CSV"
-                        kind="outlined"
-                        size="medium"
-                        icon="pi pi-upload"
-                      />
-                    </div>
-                    <p class="text-body-xs text-(--text-muted)">or drag and drop a CSV file here</p>
-                  </div>
-                  <p
+                    <template #actions>
+                      <div class="flex flex-wrap items-center justify-center gap-(--spacing-xs)">
+                        <Button
+                          label="Insert row"
+                          kind="secondary"
+                          size="medium"
+                          icon="pi pi-plus"
+                        />
+                        <Button
+                          label="Import data from CSV"
+                          kind="outlined"
+                          size="medium"
+                          icon="pi pi-upload"
+                        />
+                      </div>
+                    </template>
+                  </EmptyState>
+                  <EmptyState
+                    key="empty-state-2"
                     v-else
-                    class="p-(--spacing-xxl) text-center text-body-sm text-(--text-muted)"
+                    size="small"
+                    icon="pi pi-search"
+                    :title="`No rows match “${rowFilter}”`"
+                    description="Change the filter to see the rows."
                   >
-                    No rows match "{{ rowFilter }}".
-                  </p>
+                    <template #actions>
+                      <Button
+                        label="Clear filter"
+                        kind="outlined"
+                        size="small"
+                        @click="rowFilter = ''"
+                      />
+                    </template>
+                  </EmptyState>
                 </template>
               </TableRoot>
             </div>
@@ -1098,14 +1109,19 @@ LIMIT 3;`
                 :key="item.id"
                 class="flex items-center gap-(--spacing-xxs)"
               >
-                <button
-                  type="button"
-                  class="min-w-0 flex-1 truncate rounded-(--shape-button) px-(--spacing-xs) py-(--spacing-xs) text-start font-code text-label-code-sm text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
+                <Item
+                  clickable
+                  kind="option"
+                  class="min-w-0 flex-1"
                   :title="oneLine(item.sql)"
                   @click="loadFromHistory(item)"
                 >
-                  {{ oneLine(item.sql) }}
-                </button>
+                  <span class="flex min-w-0 flex-1 items-center gap-(--spacing-xs)">
+                    <span class="min-w-0 truncate font-code text-label-code-sm">{{
+                      oneLine(item.sql)
+                    }}</span>
+                  </span>
+                </Item>
                 <DropdownMenu
                   placement="bottom-end"
                   @select="
@@ -1116,12 +1132,12 @@ LIMIT 3;`
                   "
                 >
                   <DropdownMenu.Trigger>
-                    <Tooltip text="Query actions">
+                    <Tooltip :text="`Actions for ${oneLine(item.sql)}`">
                       <IconButton
                         icon="pi pi-ellipsis-h"
                         kind="transparent"
                         size="small"
-                        aria-label="Query actions"
+                        :aria-label="`Actions for ${oneLine(item.sql)}`"
                       />
                     </Tooltip>
                   </DropdownMenu.Trigger>
@@ -1225,7 +1241,7 @@ LIMIT 3;`
                 :options="resultViewOptions"
                 aria-label="Result view"
               />
-              <Tooltip text="Refresh">
+              <Tooltip text="Refresh results">
                 <IconButton
                   icon="pi pi-refresh"
                   kind="outlined"
@@ -1235,7 +1251,7 @@ LIMIT 3;`
                   @click="runQuery"
                 />
               </Tooltip>
-              <Tooltip text="Download">
+              <Tooltip text="Download results">
                 <IconButton
                   icon="pi pi-download"
                   kind="outlined"
@@ -1244,7 +1260,7 @@ LIMIT 3;`
                   :disabled="!resultRows.length"
                 />
               </Tooltip>
-              <Tooltip text="Columns">
+              <Tooltip text="Toggle columns">
                 <IconButton
                   icon="pi pi-table"
                   kind="outlined"
@@ -1253,28 +1269,44 @@ LIMIT 3;`
                   :disabled="!resultRows.length"
                 />
               </Tooltip>
-              <Button
-                label="Insert"
-                kind="primary"
-                size="medium"
-                icon="pi pi-plus"
-                :disabled="true"
-              />
             </div>
           </div>
 
           <div class="min-h-(--container-3xs)">
+            <p
+              role="status"
+              class="sr-only"
+            >
+              {{ resultStatus }}
+            </p>
+            <div
+              v-if="running"
+              class="flex flex-col gap-(--spacing-sm) p-(--spacing-md)"
+              aria-busy="true"
+            >
+              <Skeleton
+                v-for="line in 4"
+                :key="line"
+                height="2rem"
+              />
+            </div>
             <TableRoot
-              v-if="resultRows.length && resultView === 'table'"
+              v-else-if="resultRows.length && resultView === 'table'"
               :data="filteredResultRows"
               :columns="resultColumns"
               row-key="__k"
+              paginated
+              :page-size="50"
+              :rows-per-page-options="[10, 25, 50, 100]"
               :bordered="false"
             />
-            <pre
+            <CodeBlock
               v-else-if="resultRows.length && resultView === 'json'"
-              class="overflow-auto p-(--spacing-md) font-code text-label-code-sm text-(--text-default)"
-              >{{ resultJson }}</pre>
+              :code="resultJson"
+              language="json"
+              copy-aria-label="Copy the results as JSON"
+              :bordered="false"
+            />
             <div
               v-else-if="results && (results.type === 'message' || results.type === 'error')"
               class="p-(--spacing-md)"
@@ -1293,15 +1325,6 @@ LIMIT 3;`
                 description="Execute a query to see the results here."
               />
             </div>
-          </div>
-
-          <div class="border-t border-(--border-default) px-(--spacing-sm) py-(--spacing-xs)">
-            <PaginationRoot
-              :total="filteredResultRows.length"
-              :page-size="50"
-              :page-size-options="[10, 25, 50, 100]"
-              aria-label="Results pagination"
-            />
           </div>
         </div>
       </div>
@@ -1346,31 +1369,43 @@ LIMIT 3;`
                 v-if="filteredTemplates.length"
                 class="grid grid-cols-1 gap-(--spacing-sm) md:grid-cols-2"
               >
-                <button
+                <Item
                   v-for="template in filteredTemplates"
                   :key="template.id"
-                  type="button"
-                  class="flex flex-col gap-(--spacing-xxs) rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) p-(--spacing-md) text-start transition-colors duration-fast-02 ease-productive-entrance hover:border-(--border-primary) hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
+                  kind="outlined"
+                  clickable
                   @click="chooseTemplate(template)"
                 >
-                  <span class="flex items-center gap-(--spacing-xs)">
+                  <Item.Media>
                     <i
                       :class="template.icon"
                       class="text-(--text-muted)"
                       aria-hidden="true"
                     />
-                    <span class="text-label-md text-(--text-default)">{{ template.title }}</span>
-                  </span>
-                  <span class="text-body-xs text-(--text-muted)">{{ template.description }}</span>
-                </button>
+                  </Item.Media>
+                  <Item.Content>
+                    <Item.Title>{{ template.title }}</Item.Title>
+                    <Item.Description>{{ template.description }}</Item.Description>
+                  </Item.Content>
+                </Item>
               </div>
 
-              <p
+              <EmptyState
                 v-else
-                class="py-(--spacing-lg) text-center text-body-sm text-(--text-muted)"
+                size="small"
+                icon="pi pi-search"
+                :title="`No templates match “${templateQuery}”`"
+                description="Try another name or statement."
               >
-                No templates match "{{ templateQuery }}".
-              </p>
+                <template #actions>
+                  <Button
+                    label="Clear search"
+                    kind="outlined"
+                    size="small"
+                    @click="templateQuery = ''"
+                  />
+                </template>
+              </EmptyState>
             </div>
           </PanelContent>
         </DrawerContent>

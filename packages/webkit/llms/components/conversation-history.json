@@ -58,11 +58,18 @@
    "doc": "Shows placeholder rows while the history loads."
   },
   {
-   "name": "label",
+   "name": "ariaLabel",
    "type": "string",
    "default": "''",
    "required": "false",
    "doc": "Accessible name of the list. Empty uses the locale catalog (`Conversation history`)."
+  },
+  {
+   "name": "label",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "@deprecated since 6.0 — use `ariaLabel` instead. Removed in 7.0. Read when `ariaLabel` is empty."
   },
   {
    "name": "modelValue",
@@ -89,7 +96,7 @@
   },
   {
    "name": "States",
-   "sfc": "<script setup>\n  import ConversationHistory from '@aziontech/webkit/conversation-history'\n</script>\n\n<template>\n  <div class=\"grid w-full gap-(--spacing-xl) sm:grid-cols-2\">\n    <ConversationHistory\n      loading\n      label=\"Conversation history, loading\"\n    />\n    <ConversationHistory\n      :items=\"[]\"\n      label=\"Conversation history, empty\"\n    />\n  </div>\n</template>"
+   "sfc": "<script setup>\n  import ConversationHistory from '@aziontech/webkit/conversation-history'\n</script>\n\n<template>\n  <div class=\"grid w-full gap-(--spacing-xl) sm:grid-cols-2\">\n    <ConversationHistory\n      loading\n      aria-label=\"Conversation history, loading\"\n    />\n    <ConversationHistory\n      :items=\"[]\"\n      aria-label=\"Conversation history, empty\"\n    />\n  </div>\n</template>"
   }
  ],
  "docs": "components/conversation-history.md"

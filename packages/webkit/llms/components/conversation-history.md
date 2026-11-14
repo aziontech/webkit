@@ -37,7 +37,8 @@
 | `now` | `string \| number \| Date` | `undefined` | false | Reference time for the groups. Empty uses the nearest `WebkitProvider`'s `now`, then the current time; set either when the list is rendered on the server. |
 | `removable` | `boolean` | `false` | false | Shows a Delete button on each row that emits `remove`. |
 | `loading` | `boolean` | `false` | false | Shows placeholder rows while the history loads. |
-| `label` | `string` | `''` | false | Accessible name of the list. Empty uses the locale catalog (`Conversation history`). |
+| `ariaLabel` | `string` | `''` | false | Accessible name of the list. Empty uses the locale catalog (`Conversation history`). |
+| `label` | `string` | `''` | false | @deprecated since 6.0 — use `ariaLabel` instead. Removed in 7.0. Read when `ariaLabel` is empty. |
 | `modelValue` | `string \| null` | `null` | false | Two-way value (`v-model`). |
 
 ## Events
@@ -61,7 +62,7 @@
 
 ## Accessibility
 
-- The root is a `nav` named by `label`; each group is a `ul` labelled by its visible heading (`aria-labelledby`).
+- The root is a `nav` named by `ariaLabel`; each group is a `ul` labelled by its visible heading (`aria-labelledby`).
 - Each conversation is a `button` with its title as the name; the open one carries `aria-current="page"`.
 - Delete is an `IconButton` named `Delete <title>`, shown on every row (not hover-only), so it is reachable by keyboard and touch.
 - Keyboard: `Tab` moves through rows and their Delete; `Enter`/`Space` open a conversation.
@@ -78,7 +79,7 @@
 
 | Key                              | English source          | Override prop |
 | -------------------------------- | ----------------------- | ------------- |
-| `conversationHistory.label`      | `Conversation history`  | `label`       |
+| `conversationHistory.label`      | `Conversation history`  | `ariaLabel`   |
 | `conversationHistory.today`      | `Today`                 | —             |
 | `conversationHistory.yesterday`  | `Yesterday`             | —             |
 | `conversationHistory.previous7`  | `Previous 7 days`       | —             |
@@ -150,11 +151,11 @@
   <div class="grid w-full gap-(--spacing-xl) sm:grid-cols-2">
     <ConversationHistory
       loading
-      label="Conversation history, loading"
+      aria-label="Conversation history, loading"
     />
     <ConversationHistory
       :items="[]"
-      label="Conversation history, empty"
+      aria-label="Conversation history, empty"
     />
   </div>
 </template>

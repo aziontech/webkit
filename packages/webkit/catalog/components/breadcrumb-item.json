@@ -15,8 +15,8 @@
  ],
  "bestPractices": [
   "Set `current` on the last segment only; it renders a `span` with `aria-current=\"page\"`, drops out of the tab order and ignores `href`.",
-  "Always pass a real `href` on ancestors — it defaults to `'#'`, and the segment renders an `a`.",
-  "Use `show-icon` together with `icon` (a PrimeIcons class, default `pi pi-box`); `icon` alone renders nothing.",
+  "Always pass a real `href` on ancestors — an empty `href` (the default) renders `#`, and the segment renders an `a`.",
+  "Use `show-icon` together with `icon` (a PrimeIcons class; empty shows `pi pi-box`); `icon` alone renders nothing.",
   "disabled` suppresses the `click` emit and removes the segment from the tab order; prefer omitting an unreachable ancestor over disabling it."
  ]
 }

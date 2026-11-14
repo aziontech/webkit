@@ -44,7 +44,8 @@
 | `size` | `'small' \| 'medium'` | `'small'` | false | Width of the dialog. |
 | `loading` | `boolean` | `false` | false | Shows a spinner on the confirm button while the action runs; Cancel, the close button, `Esc` and the overlay stop closing the dialog until it clears. |
 | `disabled` | `boolean` | `false` | false | Disables the confirm button, for a confirmation that needs input first. |
-| `open` | `boolean` | `false` | false | Two-way value (`v-model:open`). |
+| `defaultOpen` | `boolean` | `false` | false | Initial open state when uncontrolled (`v-model:open` unbound). |
+| `open` | `boolean` | `undefined as never` | false | Two-way value (`v-model:open`). |
 
 ## Events
 
@@ -63,7 +64,7 @@
 
 ## v-model
 
-- **`v-model:open`** — `boolean`, default `false`. Whether the dialog is open; the trigger, the close button, `Esc` and Cancel update it. While `loading`, only the consumer closes it (set `open` to `false` from `@confirm` once the action settles).
+- **`v-model:open`** — `boolean`, default `undefined` (uncontrolled, starts at `defaultOpen`), the same open contract as `Dialog`. Whether the dialog is open; the trigger, the close button, `Esc`, the overlay and Cancel update it. `update:open` with `false` is the one signal that fires on every close; `cancel` fires only for the Cancel button. While `loading`, only the consumer closes it (set `open` to `false` from `@confirm` once the action settles).
 
 ## States
 
@@ -74,7 +75,8 @@
 
 - Visible focus: owned by the buttons and `dialog`.
 - Keyboard map: `Esc` closes; `Tab` is trapped in the dialog and focus returns to the trigger on close (from `dialog`).
-- ARIA: the dialog is named by its title and described by its description (`DialogTitle`, `DialogDescription`).
+- ARIA: the panel is `role="alertdialog"` (it interrupts with a decision), named by its title and described by its description (`DialogTitle`, `DialogDescription`; `aria-describedby` only when a description renders).
+- Nested: opened from a `Drawer` or a `Dialog`, it is the top overlay layer, so `Esc` closes the confirm only, and while `loading` it closes nothing.
 - Contrast ≥4.5:1, owned by the composed parts.
 
 ## Examples

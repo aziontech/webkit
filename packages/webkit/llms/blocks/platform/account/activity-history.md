@@ -1,11 +1,11 @@
 # ActivityHistory (`platform/account/activity-history`)
 
-> The account's audit log: a `PageHeader` with Documentation over one controls row (`PropertyFilter` on event, category, user and IP address; a `DateRangePicker` for the period, last 30 days by default; Refresh, Download CSV and `CollectionPreferences`) and a `Table` of events, newest first: Event, Category as `Table.CellStatus`, User, IP address with a `CopyButton`, and Date as `Table.CellTime`. One `useCollection` holds filter, sort, page and saved preferences; the period narrows the items before it. An empty period offers a longer one, filters that match nothing offer Clear filters, and a failed load is a danger `Alert` with Retry. A page body for ConsoleLayout, rendered in its default slot.
+> The account's audit log: a `PageHeader` with Documentation over one controls row (`PropertyFilter` on event, category, user and IP address; a `DateRangePicker` for the period, last 30 days by default; Refresh, Download CSV and `CollectionPreferences`) and a `Table` of events, newest first: Event, Category as a `Tag`, User, IP address with a `CopyButton`, and Date as `Table.CellTime`. One `useCollection` holds filter, sort, page and saved preferences; the period narrows the items before it. An empty period offers a longer one, filters that match nothing offer Clear filters, and a failed load is a danger `Alert` with Retry. A page body for ConsoleLayout, rendered in its default slot.
 
 - Surface: product
 - Source: `blocks/platform/account/activity-history/activity-history.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/account/activity-history")`
-- Components: [Alert](../../../components/alert.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [CollectionPreferences](../../../components/collection-preferences.md), [CopyButton](../../../components/copy-button.md), [DateRangePicker](../../../components/date-range-picker.md), [EmptyState](../../../components/empty-state.md), [IconButton](../../../components/icon-button.md), [PageHeader](../../../components/page-header.md), [PropertyFilter](../../../components/property-filter.md), [Table](../../../components/table.md), [Tooltip](../../../components/tooltip.md), `use-collection`
+- Components: [Alert](../../../components/alert.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [CollectionPreferences](../../../components/collection-preferences.md), [CopyButton](../../../components/copy-button.md), [DateRangePicker](../../../components/date-range-picker.md), [EmptyState](../../../components/empty-state.md), [IconButton](../../../components/icon-button.md), [PageHeader](../../../components/page-header.md), [PropertyFilter](../../../components/property-filter.md), [Table](../../../components/table.md), [Tag](../../../components/tag.md), [Tooltip](../../../components/tooltip.md), `use-collection`
 - Skills: `webkit-lists`, `webkit-tables`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -37,19 +37,19 @@ Bound with `v-bind="propertyFilterProps"`. Properties: Event (free text), Catego
 
 ### C. Period — `DateRangePicker` (required)
 
-The period comes first in the reader's mind and is filtered before the collection: relative ranges (last 30 days by default) or absolute dates. It is a separate control because time is not a property token.
+The period comes first in the reader's mind and is filtered before the collection: relative ranges from the last 15 minutes to the last 90 days, the retention limit (last 30 days by default), or absolute dates. It is a separate control because time is not a property token.
 
 ### D. Listing actions — `Tooltip`, `IconButton`, `CollectionPreferences` (required)
 
 Refresh and Download CSV as outlined icon buttons in tooltips, then `CollectionPreferences` (page size 25, 50 or 100; columns), saved under `storageKey`.
 
-### E. Event table — `Card`, `Table`, `CopyButton`, `useCollection` (required)
+### E. Event table — `Card`, `Table`, `Tag`, `CopyButton`, `useCollection` (required)
 
-One `useCollection` over the events in the period, sorted by Date descending, `Table` bound with `v-bind="tableProps"` in a flush `Card`. Columns: Event (sentence in past tense naming the object), Category through `Table.CellStatus` with one severity per category, User, IP address (left to right, with a `CopyButton` named `Copy IP address`), and Date through `Table.CellTime` (relative, exact time on the tooltip).
+One `useCollection` over the events in the period, sorted by Date descending, `Table` bound with `v-bind="tableProps"` in a flush `Card`. Columns: Event (sentence in past tense naming the object), Category as a small `Tag` with one severity per category (a category is not a status), User, IP address (left to right, with a `CopyButton` named `Copy IP address`), and Date through `Table.CellTime` (relative, exact time on the tooltip).
 
 ### F. No match and empty period — `EmptyState` (required)
 
-Filters that hide every event fill the table's `#empty` slot with `No matching events` and Clear filters. A period with no events at all replaces the table with `No activity in this period` and a button that widens it to the last 30 days.
+Filters that hide every event fill the table's `#empty` slot with `No matching events` and Clear filters. A period with no events at all replaces the table with `No activity in this period` and a button that widens it to the next longer preset (`Show the last hour`, … `Show the last 90 days`). At 90 days, the retention limit, the button goes and the description says events are kept for 90 days.
 
 ### G. Load failure — `Alert` (conditional)
 
@@ -72,7 +72,7 @@ A danger `Alert` with Retry takes the table's place; the controls stay so the re
 
 - **Title:** `Activity history`. **Filter:** `Filter activity`. **Period:** `Activity period`.
 - **Categories:** `Sign-in`, `Security`, `Users`, `Billing`, `Deploy`.
-- **Empty period:** `No activity in this period`, then `Nothing happened in the account in the selected period. Pick a longer period to see older events.` and `Show the last 30 days`.
+- **Empty period:** `No activity in this period`, then `Nothing happened in the account in the selected period. Select a longer period to see older events.` and `Show the last <next preset>`; at 90 days, `Nothing happened in the account in the last 90 days, the longest period events are kept.` with no action.
 - **No match:** `No matching events`, `No event in this period matches these filters.`, `Clear filters`.
 - Follow `skills/webkit-microcopy`: sentence case, no "please", no exclamation marks.
 
@@ -86,7 +86,7 @@ A danger `Alert` with Retry takes the table's place; the controls stay so the re
 ## States
 
 - Default: ten events over three weeks, the last 30 days selected, with filter, period, refresh, export, preferences, sorting and paging wired.
-- Empty: the last 15 minutes hold no event; a flush empty state offers the last 30 days.
+- Empty: the last 15 minutes hold no event; a flush empty state offers the next longer period, the last hour.
 - Loading: the first load; the controls and the table's loading rows.
 - Failed: the log did not load; a danger Alert with Retry.
 
@@ -99,7 +99,7 @@ A danger `Alert` with Retry takes the table's place; the controls stay so the re
 ## Variants
 
 - `Default` — primary (the code below)
-- `Empty` — No event in the selected period (the last 15 minutes): the controls stay, and a flush EmptyState offers Show the last 30 days.
+- `Empty` — No event in the selected period (the last 15 minutes): the controls stay, and a flush EmptyState offers the next longer period, Show the last hour.
 - `Loading` — The first load: the controls and the table's loading rows.
 - `Failed` — The log did not load: a danger Alert with Retry replaces the table; Retry loads the events.
 
@@ -114,14 +114,18 @@ Each variant is the same screen in another state: `get_pattern("platform/account
   import Card from '@aziontech/webkit/card'
   import CollectionPreferences from '@aziontech/webkit/collection-preferences'
   import CopyButton from '@aziontech/webkit/copy-button'
-  import type { DateRangeUnit, DateRangeValue } from '@aziontech/webkit/date-range-picker'
+  import type {
+    DateRangeUnit,
+    DateRangeValue,
+    RelativeOption
+  } from '@aziontech/webkit/date-range-picker'
   import DateRangePicker from '@aziontech/webkit/date-range-picker'
   import EmptyState from '@aziontech/webkit/empty-state'
   import IconButton from '@aziontech/webkit/icon-button'
   import PageHeader from '@aziontech/webkit/page-header'
   import PropertyFilter from '@aziontech/webkit/property-filter'
   import Table, { type TableColumn, type TableExposed } from '@aziontech/webkit/table'
-  import type { TagSeverity } from '@aziontech/webkit/tag'
+  import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { type FilteringProperty, useCollection } from '@aziontech/webkit/use-collection'
   import { computed, ref } from 'vue'
@@ -245,6 +249,14 @@ Each variant is the same screen in another state: `get_pattern("platform/account
     unit: 'day',
     key: 'last-30-days'
   })
+  const relativeOptions: RelativeOption[] = [
+    { key: 'last-15-minutes', amount: 15, unit: 'minute' },
+    { key: 'last-1-hour', amount: 1, unit: 'hour' },
+    { key: 'last-24-hours', amount: 24, unit: 'hour' },
+    { key: 'last-7-days', amount: 7, unit: 'day' },
+    { key: 'last-30-days', amount: 30, unit: 'day' },
+    { key: 'last-90-days', amount: 90, unit: 'day' }
+  ]
   const UNIT_MS: Partial<Record<DateRangeUnit, number>> = {
     minute: MINUTE,
     hour: HOUR,
@@ -308,8 +320,28 @@ Each variant is the same screen in another state: `get_pattern("platform/account
   const activityTable = ref<TableExposed<ActivityEvent> | null>(null)
   const exportCsv = () => activityTable.value?.exportCsv({ filename: 'activity-history.csv' })
 
+  const RETENTION_DAYS = 90
+  const widerRange = computed<RelativeOption | null>(() => {
+    const span =
+      period.value.end === Number.POSITIVE_INFINITY
+        ? referenceTime - period.value.start
+        : period.value.end - period.value.start
+    if (span >= RETENTION_DAYS * DAY) return null
+    return (
+      relativeOptions.find((option) => option.amount * (UNIT_MS[option.unit] ?? DAY) > span) ?? null
+    )
+  })
+  const widenLabel = computed(() => {
+    const next = widerRange.value
+    if (!next) return ''
+    return next.amount === 1
+      ? `Show the last ${next.unit}`
+      : `Show the last ${next.amount} ${next.unit}s`
+  })
   const widenRange = () => {
-    range.value = { type: 'relative', amount: 30, unit: 'day', key: 'last-30-days' }
+    const next = widerRange.value
+    if (next)
+      range.value = { type: 'relative', amount: next.amount, unit: next.unit, key: next.key }
   }
 </script>
 
@@ -344,6 +376,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
           <div class="flex shrink-0 flex-wrap items-center gap-(--spacing-xs)">
             <DateRangePicker
               v-model="range"
+              :relative-options="relativeOptions"
               aria-label="Activity period"
               :show-time-zone="false"
             />
@@ -405,11 +438,18 @@ Each variant is the same screen in another state: `get_pattern("platform/account
               size="medium"
               icon="pi pi-history"
               title="No activity in this period"
-              description="Nothing happened in the account in the selected period. Pick a longer period to see older events."
+              :description="
+                widerRange
+                  ? 'Nothing happened in the account in the selected period. Select a longer period to see older events.'
+                  : 'Nothing happened in the account in the last 90 days, the longest period events are kept.'
+              "
             >
-              <template #actions>
+              <template
+                v-if="widerRange"
+                #actions
+              >
                 <Button
-                  label="Show the last 30 days"
+                  :label="widenLabel"
                   kind="secondary"
                   size="small"
                   @click="widenRange"
@@ -434,9 +474,10 @@ Each variant is the same screen in another state: `get_pattern("platform/account
               aria-label="Activity history"
             >
               <template #cell-category="{ value }">
-                <Table.CellStatus
+                <Tag
                   :label="value"
                   :severity="categorySeverity(value)"
+                  size="small"
                 />
               </template>
               <template #cell-user="{ value }">

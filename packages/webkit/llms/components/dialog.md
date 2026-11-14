@@ -73,6 +73,8 @@
 
 - Visual states: `default`, `hover`, `focus-visible`, `active`, `disabled`
 - `data-state` values: `open` | `closed` (where applicable)
+- `data-size` on the motion wrapper mirrors `size`, reactively (a later `size` change resizes an open dialog).
+- Attributes: the `Dialog` root forwards every consumer attribute (`id`, `class`, `aria-*`, `data-*`) to its root element; `DialogContent` forwards its attributes to the `role="dialog"` element.
 
 #### Mobile sheet, height and scroll
 
@@ -80,15 +82,16 @@
 - Exactly one element caps the sheet (the panel) and exactly one element scrolls (`panel-content`), so the title and footer actions stay reachable while the body scrolls. The motion wrapper only positions and animates; it declares no cap and no scroll of its own.
 - The page behind the overlay is scroll-locked while the dialog is open, and the lock is released on close.
 - Phones: below `md` the panel is a bottom sheet (full width, 80 dvh); below `sm` it becomes a full-height, full-width sheet (`h-dvh`, no radius, no border). The `PanelFooter` stays pinned under the scrolling content, its direct children stretch to equal widths and it keeps `env(safe-area-inset-bottom)` clear.
-- Server render and hydration: the phone layout reads the viewport only after mount (`use-overlay-mobile` gates the media query on `useMounted`), so a dialog rendered open on the server hydrates with the desktop layout and switches to the bottom sheet in the same tick as mount, before paint.
+- Server render and hydration: the phone layout and its motion timing are CSS breakpoints (`max-md:` / `md:` utilities), so the server HTML and the hydrated DOM are identical at every width.
 
 ## Accessibility
 
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`
 - Keyboard map: `Enter`/`Space` on the trigger opens the dialog and moves focus to its first focusable control. Focus is trapped: `Tab` on the last control wraps to the first and `Shift+Tab` on the first wraps to the last. `Escape` closes it (unless the consumer blocks dismissal) and focus returns to the trigger; when the dialog was opened without a `Dialog.Trigger` (controlled `v-model:open`), focus returns to whatever element held it when the dialog opened. Tests: `dialog.test.ts` › keyboard map (spec).
-- ARIA: root uses appropriate roles (`button`, `dialog`, `status`, etc.) per sub-component.
+- ARIA: the panel is `role="dialog"` with `aria-modal="true"`, `aria-labelledby` on the `DialogTitle` id, and `aria-describedby` on the `DialogDescription` id **only while a `DialogDescription` is mounted** (it registers itself, as in `Popover`), so the dialog never references a missing id. A consumer `role` passed to `DialogContent` (for example `role="alertdialog"` from `ConfirmDialog`) replaces `dialog`.
+- Nested overlays: every open `DialogContent` joins the shared overlay layer stack (`composables/use-overlay-layer`). Only the top layer handles `Escape` and `Tab` trapping, so `Escape` in a dialog opened from a `Drawer` closes the dialog only, and a `Popover` teleported out of a dialog keeps its own `Tab` containment. Tests: `dialog.test.ts` › nested overlays.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state.
-- `motion-reduce:transition-none motion-reduce:transform-none` on animated states.
+- `motion-reduce:transition-none` on every animated element; nothing sets the transition inline. Tests: `dialog-motion.test.ts`.
 - Touch target ≥40×40 px where the control is interactive.
 - Teleported content: the portal wraps its content (overlay and panel) in a `display: contents` element that binds `dir` and `lang` from the nearest `WebkitProvider` (`usePortalLocale`), so it keeps the provider's direction and language although it renders under `body`. With no provider nothing is set and the document's own `dir` and `lang` apply.
 

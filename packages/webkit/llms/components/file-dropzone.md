@@ -47,11 +47,11 @@
 | `title` | `string` | `''` | false | Instruction shown under the icon. Empty uses the locale catalog (`Drop files to upload`). |
 | `description` | `string` | `''` | false | Secondary line under the title, typically the accepted types and limits. Not rendered when empty. |
 | `accept` | `string` | `''` | false | Comma-separated file filter using the native input accept syntax (extensions, MIME types, type wildcards). Files that do not match are rejected. Empty accepts every file. |
-| `multiple` | `boolean` | `true` | false | When false, only the first accepted file of a drop is accepted and the rest are rejected. |
+| `multiple` | `boolean` | `true` | false | When false, only the first accepted file of a drop is accepted and the rest are rejected. `true` by default (recorded exception to the default-false rule; inverting it would break consumers). |
 | `directories` | `boolean` | `false` | false | Accepts dropped folders: walks every dropped folder and emits the files inside, each with its `webkitRelativePath` (`assets/img/logo.svg`). The events fire after the walk. |
 | `disabled` | `boolean` | `false` | false | Ignores drags and drops: no active state, no events. |
 | `invalid` | `boolean` | `false` | false | Paints the inline region with the danger border so a wrapping field can show a validation error. Drops still work. |
-| `icon` | `string` | `'pi pi-cloud-upload'` | false | PrimeIcons class for the glyph above the title. |
+| `icon` | `string` | `''` | false | PrimeIcons class for the glyph above the title. Empty draws the cloud-upload glyph (`pi pi-cloud-upload`). |
 
 ## Events
 

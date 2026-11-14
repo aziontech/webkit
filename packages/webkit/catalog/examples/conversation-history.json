@@ -8,7 +8,7 @@
   {
    "name": "States",
    "summary": "Loading (five placeholder rows, `aria-busy`) and empty (`No conversations yet.`).",
-   "sfc": "<script setup>\n  import ConversationHistory from '@aziontech/webkit/conversation-history'\n</script>\n\n<template>\n  <div class=\"grid w-full gap-(--spacing-xl) sm:grid-cols-2\">\n    <ConversationHistory\n      loading\n      label=\"Conversation history, loading\"\n    />\n    <ConversationHistory\n      :items=\"[]\"\n      label=\"Conversation history, empty\"\n    />\n  </div>\n</template>"
+   "sfc": "<script setup>\n  import ConversationHistory from '@aziontech/webkit/conversation-history'\n</script>\n\n<template>\n  <div class=\"grid w-full gap-(--spacing-xl) sm:grid-cols-2\">\n    <ConversationHistory\n      loading\n      aria-label=\"Conversation history, loading\"\n    />\n    <ConversationHistory\n      :items=\"[]\"\n      aria-label=\"Conversation history, empty\"\n    />\n  </div>\n</template>"
   }
  ]
 }

@@ -42,7 +42,10 @@
 | `clickable` | `boolean` | `false` | false | Renders rows without an `href` as buttons that emit `item-click`. |
 | `formatValue` | `(value: number) => string` | `formatCompact` | false | Formats the value column. |
 | `loading` | `boolean` | `false` | false | Renders Skeleton rows in place of the list. |
+| `refetching` | `boolean` | `false` | false | Holds the previous rows at reduced opacity while new data loads (the same as `chart`). |
+| `error` | `string` | `''` | false | Error message; when set, the list renders an error state in an `alert` region instead of rows: a bordered small `EmptyState` with the error mark, `barList.errorTitle` and the message (the `error` slot replaces it). |
 | `emptyTitle` | `string` | `''` | false | Title of the empty state shown when `items` is empty. Empty uses the locale catalog (`No data available`). |
+| `emptyDescription` | `string` | `''` | false | Supporting line under the empty title: why the list is empty, or what to do next. |
 | `ariaLabel` | `string` | `''` | false | Accessible name of the list. |
 
 ## Events
@@ -51,10 +54,18 @@
 | --- | --- | --- |
 | `item-click` | `(event: MouseEvent, item: BarListItem)` | A row activated — a clickable row, or a link row (the link still navigates). `item` is the consumer's own item object. |
 
+## Slots
+
+| Slot | Scope | Notes |
+| --- | --- | --- |
+| `empty` | — | Replaces the default `EmptyState` shown when `items` is empty. |
+| `empty-actions` | — | Actions under the default empty state (a Clear filters or Retry). |
+| `error` | — | Replaces the default error state shown while `error` is set. |
+
 ## States
 
-- Visual states: `default`, `hover` and `focus-visible` (interactive rows only), `loading` (Skeleton rows), `empty` (`EmptyState`)
-- `data-loading` mirrors `loading`
+- Visual states: `default`, `hover` and `focus-visible` (interactive rows only), `loading` (Skeleton rows), `refetching` (previous rows at 60% opacity), `error` (error state in an `alert` region), `empty` (`EmptyState`). Precedence: loading, then error, then empty.
+- `data-loading` mirrors `loading`; `data-refetching` mirrors `refetching`; `data-error` is set while an error shows
 - `data-interactive` on a row that is a link or a button
 - Bar width: `value / max`, at least 2% when the value is above zero, 0 when it is zero
 
@@ -64,9 +75,9 @@
 - A link row is a native `<a>`; a clickable row is a native `<button>`; a static row is neither, and is not focusable.
 - Keyboard map: Tab moves between interactive rows; Enter activates (Space too on buttons).
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-surface)` on interactive rows (the offset takes the surface color, so it never shows as a white gap in the dark theme).
-- `aria-busy` on the root while `loading`.
+- `aria-busy` on the root while `loading` or `refetching`.
 - Name and value text clear 4.5:1 on the tinted fill and on the bare surface in both themes.
-- Interactive rows are 32px tall and full width.
+- Interactive rows are 32px tall and full width; a transparent hit area (`before:` pseudo-element, 4px above and below) makes the pointer target 40px without changing the look.
 - Forced colors: the bar fill keeps its colour (`forced-color-adjust: none`); forced to `Canvas` it vanished and left only the labels (`src/test/forced-colors-charts.test.ts`).
 
 ## Examples

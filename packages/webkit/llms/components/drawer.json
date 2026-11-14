@@ -62,7 +62,7 @@
    "type": "DrawerSize",
    "default": "'medium'",
    "required": "false",
-   "doc": "Panel max-width preset (`small` 384px, `medium` 672px, `large` 1024px). Height is always 100% viewport."
+   "doc": "Panel max-width preset (`small` `--container-sm`, `medium` `--container-xl`, `large` `--container-4xl`). Height is always 100% viewport."
   },
   {
    "name": "open",

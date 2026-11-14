@@ -37,6 +37,7 @@
 | `title` | `string` | `''` | false | Headline of the band, rendered by the left-aligned section title as its `h2`; the band renders no header when empty. |
 | `description` | `string` | `''` | false | Supporting sentence under the headline. |
 | `items` | `UseCaseLinksItem[]` | `[]` | false | The use cases rendered as linked topics in a three-column divider grid, in order; each item is `{ icon, title, description, href? }`; an item without `href` renders as a plain, unlinked topic. |
+| `anchor` | `string` | `''` | false | In-page id set on the band so a hash link can target it. |
 
 ## States
 
@@ -54,6 +55,21 @@
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): typography and colours belong to `section-title` and `topic`.
 - `motion-reduce:transition-none motion-reduce:transform-none` — `topic`'s hover carries its own fallback; this band adds no motion.
 - Touch target ≥40×40 px — each topic link spans its whole cell.
+
+## Right-to-left
+
+- Layout: the left-aligned section title and the composed `card-grid` use logical utilities, so "left" reads as the inline start.
+- Icons: none mirrored.
+- Keyboard: unchanged.
+
+## Internationalization
+
+- No built-in strings: the eyebrow, title, description and items are marketing copy passed through props.
+
+## Responsive
+
+- The link cells stack on phones; the balanced `card-grid` widens at the small breakpoint and reaches three columns from large.
+- No horizontal scroll at 320 px.
 
 ## Examples
 

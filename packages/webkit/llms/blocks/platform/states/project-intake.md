@@ -1,18 +1,18 @@
 # ProjectIntake (`platform/states/project-intake`)
 
-> The surfaces a project passes through when it is dropped on the page: the dashed drop target that fills the page while a folder hovers over it, then the full-screen Initializing overlay that reads like the deploy logs: one row per received file as a step, its status glyph (a check once uploaded, a Spinner while it runs, a dashed ring while queued), the path and its size, advancing row by row, over the upload summary. A home page, its empty state, a creation hub and a project detail page render the drop target (the project page swaps the copy for “We build a new version of web-app, then you choose where it goes live.”); the home page, its empty state and the creation hub render Initializing over themselves. Built from `Card`, `Spinner`, Vue’s Transition and plain elements on theme tokens, with the step-row anatomy of the DeploymentLogs template. DropZone is a page-body overlay inside the default slot of ConsoleLayout; Initializing covers the whole screen.
+> The surfaces a project passes through when it is dropped on the page: the drop target (`FileDropzone` with `directories`, its title saying what dropping does and a Choose a folder `Button` as the keyboard way in), then the full-screen Initializing overlay: an `UploadProgress` card in the flow listing the received files with their status in words (Done, the percentage while uploading, Waiting), Cancel and Retry, over the upload summary. A large drop lists only the files still moving (at most 50 rows) while the heading keeps the counts. UploadFailed shows a file that failed: its row carries the reason and Retry, and a danger `Alert` above sums it up with Retry. A home page, its empty state, a creation hub and a project detail page render the drop target (the project page swaps the copy for “We build a new version of web-app, then you choose where it goes live.”); the home page, its empty state and the creation hub render Initializing over themselves. DropZone is a page body inside the default slot of ConsoleLayout; Initializing covers the whole screen.
 
 - Surface: product
 - Source: `blocks/platform/states/project-intake/project-intake.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/states/project-intake")`
-- Components: [Card](../../../components/card.md), [Spinner](../../../components/spinner.md)
+- Components: [Alert](../../../components/alert.md), [Button](../../../components/button.md), [FileDropzone](../../../components/file-dropzone.md), [UploadProgress](../../../components/upload-progress.md)
 - Skills: `webkit-ui-states`, `webkit-motion-polish`
 
 ## Asked as
 
 drop zone; drag and drop upload; upload project; folder upload; initializing project; file drop; arrastar e soltar; enviar projeto; upload de arquivos
 
-The surfaces a project passes through when the user drops it on the page. The user's job is to deploy a folder they already have without filling in a form: while a folder hovers over the page, a dashed drop target fills it and says what will happen; once it is dropped, a full-screen Initializing overlay reads like the deploy logs, one row per received file, until the upload is done and the deploy takes over.
+The surfaces a project passes through when the user drops it on the page. The user's job is to deploy a folder they already have without filling in a form: a drop target fills the page body and says what will happen, with a Choose a folder button for anyone not dragging; once it is dropped, a full-screen Initializing overlay lists the received files with their status until the upload is done and the deploy takes over.
 
 DropZone is a page-body overlay inside the default slot of `ConsoleLayout` (`shells/console`); Initializing covers the whole screen.
 
@@ -30,32 +30,28 @@ DropZone is a page-body overlay inside the default slot of `ConsoleLayout` (`she
 
 ## Building blocks
 
-The primary SFC (the drop target) imports no WebKit component; it is plain elements on theme tokens inside Vue's `Transition`. The Initializing variant adds `Card` and `Spinner`.
+The primary SFC is the drop target. The variants are the overlay that follows. **Upload list (Initializing, UploadFailed):** `UploadProgress` with `:floating="false"`, centred under the heading: one row per received file with its name, size and status in words (Done, the percentage and a progress bar while uploading, Waiting), Cancel on moving files and Retry on a failed one. It announces the summary through its own status region; the page adds no second live region. A drop of more than 50 files lists only the files still moving, so a repository with `node_modules` never renders thousands of rows; the heading keeps the full count. **Failure summary (UploadFailed):** A danger `Alert` above the list says how many files failed and what to do, with Retry, which retries every failed file.
 
-### A. Drop target — plain elements (required while dragging)
+### A. Drop target — `FileDropzone` (required)
 
-A layer that covers the page inset by the layout boundary, with a 2px dashed `--border-selected` border on `--bg-canvas`, `pointer-events-none` so the drop still reaches the page, and `z-40` over the content. It fades in and out with `animate-fade-in` / `animate-fade-out`, both `motion-reduce:animate-none`.
+The inline `FileDropzone` with `directories`, filling the page body: its title says what dropping does and its description what is accepted. Its `drop` event carries the accepted files with their relative paths.
 
-### B. Drop message — plain elements (required while dragging)
+### B. Keyboard way in — `Button` (required)
 
-Centred and sticky to the viewport, so it stays in view on a long page: an upload glyph in a bordered frame, a heading-sized line that says what dropping does, and one muted line on what is accepted. A project page swaps the line for the version it builds.
-
-### C. Initializing overlay — plain elements (Initializing)
-
-A full-screen `role="status"`, `aria-live="polite"` layer with a heading (`Initializing`), the progress in words (`Setting up your deployment. 2 of 5 files.`), a `Card` of step rows and the upload summary under it. Each row is a step: a status glyph (a check once uploaded, a `Spinner` while it runs, a dashed ring while queued), the path and its size, advancing row by row, with the step-row anatomy of `platform/detail/deployment-logs`.
+An outlined Choose a folder `Button` in the dropzone's default slot opens a hidden folder picker (`webkitdirectory`). Drag and drop is a shortcut, never the only way; keyboard and screen reader users take this button.
 
 ## Do
 
-- Show the drop target only while a folder is dragged over the page, and remove it on drop or drag leave.
+- Keep the drop target where a drop does something, with Choose a folder beside the message.
 - Say what dropping does, not how to drop: the user is already dragging.
 - Render Initializing over the page the drop came from (Home, its empty state, the creation hub), so the user keeps their place.
-- Advance the rows in order and keep finished rows visible; the list is the progress.
-- Offer an upload or import action elsewhere on the page; drag and drop is a shortcut, never the only way.
+- Advance the rows in order and keep finished rows visible while the list is short; past 50 files list only what is still moving.
+- Keep Choose a folder in the drop target; drag and drop is a shortcut, never the only way.
 
 ## Don't
 
-- Don't intercept the drop with the overlay; it is `pointer-events-none`.
 - Don't use a percentage bar alone for a handful of files; the per-file rows say more.
+- Don't hide a failed file in the list; say it in the `Alert` and keep Retry on its row.
 - Don't show the drop target on pages where a drop does nothing.
 - Don't keep the overlay up after the upload ends; hand over to the deploy's own progress.
 
@@ -65,32 +61,34 @@ A full-screen `role="status"`, `aria-live="polite"` layer with a heading (`Initi
 - **Drop lead:** what is accepted, full sentences: `A project folder, or the files inside one. We detect what it is built with.`
 - **Overlay heading:** one word for the phase: `Initializing`.
 - **Overlay progress:** what is happening and how far, with a period: `Setting up your deployment. 2 of 5 files.`
-- **Summary:** count and total size: `5 files, 8.17 KB`.
+- **Summary:** count and total size: `5 files, 8.36 KB`.
+- **Failure:** what failed and what to do: `1 file could not be uploaded. Retry it, or remove it from the folder and drop the project again.`
 
 ## Accessibility
 
-- The drop target is `aria-hidden="true"`: it is a pointer affordance. Keyboard and screen reader users need the page's own upload or import action.
-- The Initializing overlay is `role="status"` with `aria-live="polite"`, so progress is announced without stealing focus; announce the count, not every row.
-- Status glyphs are decorative; the row text and the progress line carry the state.
+- The drop target names itself through its title and description; Choose a folder is the keyboard and screen reader path, and the number of received files is announced once.
+- `UploadProgress` announces the transfer summary in its own status region, without stealing focus; the overlay itself is not a live region, so rows changing are not re-announced.
+- Each row says its status in words; glyphs are decorative.
 - Every fade and the row advance honour `prefers-reduced-motion`.
 
 ## States
 
-- DropZone: a folder hovers over the page; the dashed drop target fills it with the drop message.
-- Initializing: the overlay mid-upload, two files uploaded, the third running, two queued, each row with its status glyph, path and size.
+- DropZone: the drop target fills the page body with the drop message and Choose a folder.
+- Initializing: the overlay mid-upload, two files uploaded, the third uploading, two queued, each row with its status in words, path and size.
+- UploadFailed: one file failed; its row shows the reason and Retry, and a danger `Alert` above the list sums it up with Retry.
 
 ## Related
 
 - `platform/states/first-use` — an empty list page that can also render the drop target.
 - `platform/create/create-hub` — a creation hub that renders the drop target and Initializing.
 - `platform/dashboard/home-dashboard` — Home and its empty state, which render both surfaces.
-- `platform/detail/deployment-logs` — the step-row anatomy the Initializing rows reuse.
 - `platform/states/async-submit` — how the deploy that follows reports back.
 
 ## Variants
 
 - `DropZone` — primary (the code below)
-- `Initializing` — The Initializing overlay mid-upload, held inside a layout-contained frame here so it does not cover the docs page: two files uploaded, the third running, two queued, each row a step with its status glyph, path and size.
+- `Initializing` — The Initializing overlay mid-upload, held inside a layout-contained frame here so it does not cover the docs page: two files uploaded, the third uploading, two queued, in an `UploadProgress` card with each file's status in words, Cancel and the summary.
+- `UploadFailed` — A file fails mid-upload: its `UploadProgress` row shows the reason and Retry, a danger `Alert` above the card says one file could not be uploaded with Retry, and the rest keep going.
 
 Each variant is the same screen in another state: `get_pattern("platform/states/project-intake", { variant })`, or the file under `blocks/platform/states/project-intake/variants/`.
 
@@ -98,42 +96,56 @@ Each variant is the same screen in another state: `get_pattern("platform/states/
 
 ```vue
 <script setup lang="ts">
+  import Button from '@aziontech/webkit/button'
+  import FileDropzone from '@aziontech/webkit/file-dropzone'
   import { ref } from 'vue'
 
-  const active = ref(true)
+  const folderInput = ref<HTMLInputElement | null>(null)
+  const received = ref(0)
+
+  const chooseFolder = () => folderInput.value?.click()
+
+  const onFolderChosen = (event: Event) => {
+    received.value = (event.target as HTMLInputElement).files?.length ?? 0
+  }
+
+  const onDrop = (_event: DragEvent, files: File[]) => {
+    received.value = files.length
+  }
 </script>
 
 <template>
-  <div class="relative flex min-h-full flex-1 flex-col">
-    <Transition
-      enter-active-class="animate-fade-in motion-reduce:animate-none"
-      leave-active-class="animate-fade-out motion-reduce:animate-none"
+  <div class="layout-boundary flex min-h-full flex-1 flex-col">
+    <FileDropzone
+      directories
+      title="Drop your project to deploy it"
+      description="A project folder, or the files inside one. We detect what it is built with."
+      class="flex-1"
+      @drop="onDrop"
     >
-      <div
-        v-if="active"
-        aria-hidden="true"
-        class="pointer-events-none absolute inset-[var(--drop-zone-inset,0)] z-40 overflow-hidden rounded-(--shape-card) border-2 border-dashed border-(--border-selected) bg-(--bg-canvas) [--drop-zone-inset:var(--layout-boundary-inline)]"
-      >
-        <div
-          class="sticky top-0 flex h-dvh max-h-full flex-col items-center justify-center gap-(--spacing-md) p-(--spacing-lg) text-center"
-        >
-          <span
-            class="flex size-12 items-center justify-center rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface-raised)"
-          >
-            <i
-              class="pi pi-cloud-upload text-body-lg leading-none text-(--text-default)"
-              aria-hidden="true"
-            />
-          </span>
-          <div class="flex max-w-(--container-md) flex-col gap-(--spacing-xxs)">
-            <p class="text-heading-xs text-(--text-default)">Drop your project to deploy it</p>
-            <p class="text-pretty text-body-sm text-(--text-muted)">
-              A project folder, or the files inside one. We detect what it is built with.
-            </p>
-          </div>
-        </div>
-      </div>
-    </Transition>
+      <Button
+        label="Choose a folder"
+        kind="outlined"
+        size="medium"
+        icon="pi pi-folder-open"
+        @click="chooseFolder"
+      />
+      <input
+        ref="folderInput"
+        type="file"
+        webkitdirectory
+        multiple
+        hidden
+        aria-label="Project folder"
+        @change="onFolderChosen"
+      />
+    </FileDropzone>
+    <p
+      class="sr-only"
+      role="status"
+    >
+      {{ received ? `${received} files received.` : '' }}
+    </p>
   </div>
 </template>
 ```

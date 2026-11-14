@@ -59,7 +59,7 @@ The root ships a **compound API**: an `index.ts` (beside `stepper.vue`) attaches
 
 - `stepper-step/stepper-step.vue` — One dot, its title and description, and the connector down to the step below it. Registers itself with the root on mount and reads back both its ordinal and whether it is the last step (the last renders no connector). Renders an `<li>` holding a `<button type="button">` that sets the root's `v-model` to its own `value`.
   - Props: `value?: string` (default `''` — identity of this step; matches the root's `v-model` when it is the current one), `title?: string` (default `''` — what this step asks, in the reader's words), `description?: string` (default `''` — one line under the title saying what the step decides), `state?: 'upcoming' | 'complete' | 'error' | 'loading'` (default `'upcoming'` — what the owner knows about this step; `current` is derived from the root and is never set here), `disabled?: boolean` (default `false` — the step cannot be reached yet; not focusable and not clickable).
-  - Slot: `default` — optional body under the description, inside the rail.
+  - Slot: `default` — optional body under the description, inside the rail. It renders after the step's `button`, in the same `li` and aligned with the title column, so interactive content (a link, a Retry button) is never nested inside the button.
 
 Resulting layout (no per-component `package.json`; the root `packages/webkit/package.json#exports` resolves every path, and `.d.ts` is generated at publish time):
 

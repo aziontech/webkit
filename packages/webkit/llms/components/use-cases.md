@@ -39,6 +39,7 @@
 | `description` | `string` | `''` | false | One-line lead under the headline. |
 | `primaryAction` | `UseCasesAction` | `undefined` | false | Button pinned to the foot of the title cell; `{ label, href, trailing? }` where `trailing` adds the chevron. Omitted when absent. |
 | `items` | `UseCasesItem[]` | `[]` | false | The use cases rendered as frame cells, in order; each item is `{ icon, title, description }`. |
+| `anchor` | `string` | `''` | false | In-page id set on the band so a hash link can target it. |
 
 ## States
 
@@ -54,6 +55,21 @@
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): headline `var(--text-default)`, lead `var(--text-muted)`; icon colours are `topic`'s.
 - `motion-reduce:transition-none motion-reduce:transform-none` — the overline cursor and the button's hover belong to `overline` and `button`, which carry their own reduced-motion fallback; this band adds no motion.
 - Touch target ≥40×40 px — the action is a large `button`.
+
+## Right-to-left
+
+- Layout: the composed `card-grid`, `frame-box` and `topic` use logical utilities, so the intro cell sits at the inline start.
+- Icons: the trailing chevron of the action is the `button`'s own and follows its mirroring.
+- Keyboard: unchanged.
+
+## Internationalization
+
+- No built-in strings: the eyebrow, title, description, items and action label are marketing copy passed through props.
+
+## Responsive
+
+- Below large the intro cell and the use cases stack in one column; from large the intro cell spans two rows beside the use cases.
+- No horizontal scroll at 320 px.
 
 ## Examples
 

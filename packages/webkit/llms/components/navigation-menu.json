@@ -33,7 +33,11 @@
   "Render the popup chain exactly once per root: `Portal` → `Positioner` → `Popup` → `Viewport`. Each `Content` is moved into the shared `Viewport`, so a missing chain renders no panel.",
   "Portal` teleports to `container` when set and to `body` otherwise, passing the selector through so the server renders the same chain the client hydrates.",
   "Pin a wide panel to the page column with the positioner's `collision-padding`, not with override classes on the popup.",
-  "Set `aria-label` on the root (default `'Main'`) when the page has more than one navigation landmark."
+  "Set `aria-label` on the root (default `'Main'`) when the page has more than one navigation landmark.",
+  "Test ids: root fallback `navigation-navigation-menu` (`<category>-<name>`); every part derives from it (`navigation-navigation-menu__list`, `__item`, `__trigger`, `__content`, `__portal`, `__positioner`, `__popup`, `__viewport`, `__arrow`, `__backdrop`, `__icon`), and a consumer `data-testid` wins on every part.",
+  "Attributes on the root (`id`, `aria-labelledby`, `data-*`, listeners) land on the `nav` landmark.",
+  "Portal`, `Backdrop`, `Positioner`, `Popup`, `Viewport` and `Arrow` are the overlay chain that hosts every panel. They stay public so a page can place, pad and decorate the one shared popup; most pages copy the chain from the Usage block unchanged.",
+  "NavigationMenu.Trigger` always renders a `button` (or an anchor with `href`). Its `native-button` prop is deprecated since 6.0 and removed in 7.0: with `:native-button=\"false\"` the trigger is still keyboard reachable (`role=\"button\"`, `tabindex=\"0\"`, `Enter`/`Space` toggle)."
  ],
  "props": [
   {

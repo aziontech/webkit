@@ -31,6 +31,8 @@
 ## Related
 
 - [select](select.md) — a fixed list of named periods without a grid.
+- [date-range-picker](date-range-picker.md) — time ranges: relative windows (`last 15 minutes`) kept relative, and absolute ranges down to the minute. Calendar is for whole days (a date or a date range); its `period` mode overlaps DateRangePicker's Relative tab, so prefer DateRangePicker for a time window. In shadcn and Radix-based kits `Calendar` names the inline month grid and the popover picker is a `DatePicker`; this component is the popover picker.
+- [field](field.md) — inside a `Field`, the trigger takes the field's label (`for` points at it), description, `invalid` and `disabled`.
 - [input](input.md) — the trigger and the Start/End fields share its heights, hover, and disabled treatment, so they align side by side.
 - [number-input](number-input.md) — numeric durations instead of dates.
 
@@ -47,22 +49,26 @@
 | `presets` | `CalendarPresetItem[]` | `[]` | false | Consumer-provided shortcuts; each is `{ label, value }` where value is a `Date` or range. When present, the trigger becomes a two-part control whose left segment opens a dropdown of these presets. |
 | `showFields` | `boolean` | `true` | false | Shows the Start/End date fields in the panel. Set false when the shortcuts and the grid are the whole interaction and typing a boundary by hand is not offered. |
 | `showTime` | `boolean` | `false` | false | Shows Start/End time fields alongside the date fields. |
-| `showTimezone` | `boolean` | `false` | false | Shows the timezone selector below the fields. |
-| `timezone` | `string` | `''` | false | Selected IANA timezone for display formatting (v-model:timezone). Empty resolves to the local zone. |
-| `timezones` | `string[]` | `[]` | false | Timezone options for the selector; empty falls back to a curated list derived from `Intl`. |
-| `horizontal` | `boolean` | `false` | false | Lays the fields/apply column beside the calendar instead of below it. |
+| `showTimeZone` | `boolean` | `false` | false | Shows the time zone selector below the fields. |
+| `showTimezone` | `boolean` | `false` | false | @deprecated since 6.0 — use showTimeZone. Removed in 7.0.` Same effect as `showTimeZone`. |
+| `timeZones` | `string[]` | `[]` | false | Time zone options for the selector (IANA names); empty falls back to a curated list derived from `Intl`. |
+| `timezones` | `string[]` | `[]` | false | @deprecated since 6.0 — use timeZones. Removed in 7.0.` Read when `timeZones` is empty. |
+| `orientation` | `'vertical' \| 'horizontal'` | `'vertical'` | false | Places the fields and Apply column below the calendar (vertical) or beside it (horizontal). |
+| `horizontal` | `boolean` | `false` | false | @deprecated since 6.0 — use orientation="horizontal". Removed in 7.0.` True has the effect of `orientation="horizontal"`. |
+| `ariaLabel` | `string` | `''` | false | Accessible name of the trigger; the current value is appended (`Billing period: Jan 1 – Jan 31`). Empty leaves the name to the Field label or the trigger text. |
 | `clearable` | `boolean` | `false` | false | Shows a clear control on the trigger that empties the committed selection. |
 | `showApply` | `boolean` | `true` | false | Stages edits in a draft and requires Apply to commit; when false, every edit commits immediately. |
 | `period` | `boolean` | `false` | false | Enables the "Select period" relative-time mode: a relative-preset list plus a text input that parses spans like `45m` or `last month`. |
 | `split` | `boolean` | `false` | false | Renders the trigger as a split control with a separate chevron affordance. |
 | `modelValue` | `CalendarValue` | `null` | false | Two-way value (`v-model`). |
 | `open` | `boolean` | `undefined as never` | false | Two-way value (`v-model:open`). |
+| `timeZone` | `string` | `''` | false | Two-way value (`v-model:timeZone`). |
+| `timezone` | `string` | `''` | false | Two-way value (`v-model:timezone`). |
 
 ## Events
 
 | Event | Payload | Notes |
 | --- | --- | --- |
-| `update:timezone` | `string` | v-model:timezone. Emitted when the timezone selection changes. |
 | `month-change` | `CalendarMonth` | Emitted when the first visible month changes via navigation or keyboard paging. Payload is `{ year, month }` (month is 0-indexed). |
 | `apply` | `(event: Event, value: Date \| null \| CalendarRange)` | Emitted when the draft selection is committed via Apply, a preset or a period; `event` is the activating click or key event, `value` the committed selection. |
 
@@ -90,6 +96,10 @@
 | -------------- | ------------------------------- | ----------- | ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `v-model`      | `Date \| null \| CalendarRange` | `null`      | `update:modelValue` | The committed `Date` (single) or `{ start, end }` range via `defineModel`; empty value on clear. Only updated on Apply (or immediately when `showApply` is false). Uncontrolled when unbound. |
 | `v-model:open` | `boolean`                       | `undefined` | `update:open`       | Open state of the popover via `defineModel`. Fires when the popover opens or closes. Unbound, the popover keeps its own state and starts closed.                                              |
+| `v-model:time-zone` | `string`                   | `''`        | `update:timeZone`   | Selected IANA time zone for display formatting via `defineModel('timeZone')`. Empty resolves to the local zone. Unbound, the selector keeps its own choice. Same name as on `date-range-picker`. |
+| `v-model:timezone` | `string`                    | `''`        | `update:timezone`   | `@deprecated since 6.0 — use v-model:time-zone. Removed in 7.0.` Read when `timeZone` is empty; a selection updates both models.                                                             |
+
+**Booleans that default to true.** `showFields` and `showApply` default to `true`: they switch off parts of the default panel. Inverting them (`hideFields`, `instant`) would break every consumer, so they are recorded here as the exceptions to props.md's default-false rule.
 
 ## States
 
@@ -133,6 +143,12 @@
 - Period hint chips are printed by `Intl` (`Intl.NumberFormat` units and `Intl.RelativeTimeFormat`): `12 hours` / `12 horas`, `yesterday` / `ontem`, `last month` / `mês passado`, and the fixed hints (`Jan 1` / `1 de jan.`, `1/1 - 1/2` / `01/01 - 02/01`). A chip applies exactly the text it shows.
 - Typing is parsed in the active locale with English always accepted as well: unit words and their abbreviations, `today`/`yesterday`/`last week`/`last month`/`last year`/`this month` and their translations, month names (long and short, accents optional), numeric dates in the locale's day/month order (`1/2/2026` is 2 January in `en`, 1 February in `pt-BR`), ISO `2026-01-05`, and ranges split by `-`, `–` or a separator word. Times accept `14:30`, `14h30` and `2:30 pm`.
 
+## Responsive
+
+- The root is capped at its container (`max-w-full`), so the trigger, presets included, never overflows a 320 px box; the popover is capped at `min(90vw, 44rem)` and scrolls inside.
+- `orientation="horizontal"` needs room for the grid and the fields side by side; on narrow screens keep the default vertical layout.
+- Touch: day cells are 32 / 36 / 40 px by `size`; use `size="large"` on touch-first surfaces.
+
 ## Examples
 
 ### Default
@@ -151,7 +167,7 @@
     mode="range"
     clearable
     show-time
-    show-timezone
+    show-time-zone
   />
 </template>
 ```

@@ -36,15 +36,14 @@
 | --- | --- | --- | --- | --- |
 | `streaming` | `boolean` | `false` | false | The model is still reasoning: the label reads `Thinking` and pulses; when it turns false the label shows how long it took. |
 | `duration` | `number` | `undefined` | false | Seconds the reasoning took, when the server reports it. Without it the component measures from `streaming` turning on to turning off. |
-| `open` | `boolean` | `undefined` | false | Controlled open state. Use with `v-model:open`. |
 | `defaultOpen` | `boolean` | `false` | false | Initial open state when uncontrolled; collapsed is the default in a chat, where the response is the main content. |
 | `skippable` | `boolean` | `false` | false | Offers `Skip thinking` while streaming, for a model that can answer before it finishes reasoning. |
+| `open` | `boolean` | `undefined as never` | false | Two-way value (`v-model:open`). |
 
 ## Events
 
 | Event | Payload | Notes |
 | --- | --- | --- |
-| `update:open` | `boolean` |  |
 | `skip` | `(event: MouseEvent)` |  |
 
 ## Slots
@@ -56,6 +55,12 @@
 ## Sub-components
 
 _None. Exports: `"./reasoning"`. Composed DS components: `button` (Skip thinking)._
+
+## v-model
+
+| Model          | Type      | Default     | Emits         | Notes                                                                                           |
+| -------------- | --------- | ----------- | ------------- | ----------------------------------------------------------------------------------------------- |
+| `v-model:open` | `boolean` | `undefined` | `update:open` | The trace was expanded or collapsed. Unbound, the state is local and starts from `defaultOpen`. |
 
 ## States
 
@@ -78,12 +83,12 @@ _None. Exports: `"./reasoning"`. Composed DS components: `button` (Skip thinking
 
 ## Internationalization
 
-| Key                        | English source                                | Override prop |
-| -------------------------- | --------------------------------------------- | ------------- |
-| `reasoning.thinking`       | `Thinking`                                    | —             |
-| `reasoning.thought`        | `Thought for {count} second(s)` (plural)       | —             |
-| `reasoning.thoughtBriefly` | `Thought for a few seconds`                   | —             |
-| `reasoning.skip`           | `Skip thinking`                               | —             |
+| Key                        | English source                           | Override prop |
+| -------------------------- | ---------------------------------------- | ------------- |
+| `reasoning.thinking`       | `Thinking`                               | —             |
+| `reasoning.thought`        | `Thought for {count} second(s)` (plural) | —             |
+| `reasoning.thoughtBriefly` | `Thought for a few seconds`              | —             |
+| `reasoning.skip`           | `Skip thinking`                          | —             |
 
 - Formatting: plural rules through `Intl.PluralRules`; the count through `Intl.NumberFormat`.
 

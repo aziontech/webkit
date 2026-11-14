@@ -1,18 +1,18 @@
 # MfaManagement (`platform/account/mfa-management`)
 
-> Multi-factor authentication across an account. A `PageHeader` with Documentation over a flush `Card` holding a Require MFA `SettingRow` with a `Switch` (turning it on asks in a `ConfirmDialog` that names who has no second factor yet), a warning `Alert` counting the people who sign in with a password only while MFA is optional, a search `Input` and a `Table` of people on one `useCollection`: Name (square `Avatar`, name and email), MFA as `Table.CellStatus` (Enabled, Not set up), Method, Set up as `Table.CellTime`, and `Table.CellActions` with Reset MFA (behind a `ConfirmDialog`, for a lost device) or Send setup reminder. Built from `PageHeader`, `Button`, `Card`, `Item`, `SettingRow`, `Switch`, `Alert`, `Input`, `Table`, `Avatar`, `DropdownMenu`, `ConfirmDialog`; its toasts go through `toast` into the app's one toast region (ToastPlugin, or one Toaster at the app root), never a Toaster in the page body. A page body for ConsoleLayout, rendered in its default slot.
+> Multi-factor authentication across an account. A `PageHeader` with Documentation over a flush `Card` holding a Require MFA `SettingRow` with a `Switch` (turning it on asks in a `ConfirmDialog` that names who has no second factor yet), a warning `Alert` counting the people who sign in with a password only while MFA is optional, the `platform/view/table-view` controls row (`PropertyFilter` over name, email, MFA status and method, Refresh and Download CSV as `IconButton`s in a `Tooltip`, `CollectionPreferences`) and a paginated `Table` of people on one `useCollection`: Name (square `Avatar`, name and email), MFA as `Table.CellStatus` (Enabled, Not set up), Method, Set up as `Table.CellTime`, and `Table.CellActions` with Reset MFA (behind a `ConfirmDialog`, for a lost device) or Send setup reminder; a filter with no match shows a small `EmptyState` with Clear filters. Built from `PageHeader`, `Button`, `Card`, `Item`, `SettingRow`, `Switch`, `Alert`, `PropertyFilter`, `IconButton`, `Tooltip`, `CollectionPreferences`, `Table`, `EmptyState`, `Avatar`, `DropdownMenu`, `ConfirmDialog`; its toasts go through `toast` into the app's one toast region (ToastPlugin, or one Toaster at the app root), never a Toaster in the page body. A page body for ConsoleLayout, rendered in its default slot.
 
 - Surface: product
 - Source: `blocks/platform/account/mfa-management/mfa-management.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/account/mfa-management")`
-- Components: [Alert](../../../components/alert.md), [Avatar](../../../components/avatar.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [ConfirmDialog](../../../components/confirm-dialog.md), [DropdownMenu](../../../components/dropdown-menu.md), [Input](../../../components/input.md), [Item](../../../components/item.md), [PageHeader](../../../components/page-header.md), [SettingRow](../../../components/setting-row.md), [Switch](../../../components/switch.md), [Table](../../../components/table.md), [Toast](../../../components/toast.md), `use-collection`
+- Components: [Alert](../../../components/alert.md), [Avatar](../../../components/avatar.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [CollectionPreferences](../../../components/collection-preferences.md), [ConfirmDialog](../../../components/confirm-dialog.md), [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [IconButton](../../../components/icon-button.md), [Item](../../../components/item.md), [PageHeader](../../../components/page-header.md), [PropertyFilter](../../../components/property-filter.md), [SettingRow](../../../components/setting-row.md), [Switch](../../../components/switch.md), [Table](../../../components/table.md), [Toast](../../../components/toast.md), [Tooltip](../../../components/tooltip.md), `use-collection`
 - Skills: `webkit-lists`, `webkit-tables`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
 
 mfa management; multi-factor authentication; two-factor authentication; 2fa; require mfa; reset mfa; security settings; gerenciar mfa; autenticação multifator; exigir mfa; redefinir mfa
 
-Multi-factor authentication for a whole account. An admin sees who signs in with a second factor and who uses a password only, requires MFA for everyone, reminds the people who have not set it up, and resets the factor of someone who lost their device. Setting up a factor and the sign-in challenge are `platform/auth` (`MfaSetup`, `MfaChallenge`); this page manages them for other people. It is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header and the `main`.
+Multi-factor authentication for a whole account. An admin sees who signs in with a second factor and who uses a password only, requires MFA for everyone, reminds the people who have not set it up, and resets the factor of someone who lost their device. Setting up a factor and the sign-in challenge are `platform/auth` (`MfaSetup`, `MfaCode`); this page manages them for other people. It is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header and the `main`.
 
 ## When to use
 
@@ -22,7 +22,7 @@ Multi-factor authentication for a whole account. An admin sees who signs in with
 ## When not to use
 
 - A person setting up their own factor: use `platform/auth#MfaSetup`.
-- The code prompt at sign-in: use `platform/auth#MfaChallenge`.
+- The code prompt at sign-in: use `platform/auth#MfaCode`.
 - Inviting or removing people: use `platform/account/users`.
 
 ## Building blocks
@@ -39,15 +39,19 @@ One compact `SettingRow` in an `Item.List` in a flush `Card`. Turning the `Switc
 
 While MFA is optional and someone has no factor, a warning `Alert` counts them (`2 of 5 people sign in with a password only.`) and points at the two remedies.
 
-### D. People table — `Input`, `Table`, `Avatar`, `useCollection` (required)
+### D. Controls row — `PropertyFilter`, `IconButton`, `Tooltip`, `CollectionPreferences` (required)
 
-A search `Input` with `v-bind="filterProps"`, then a `Table` with `v-bind="tableProps"` in a flush `Card`: Name (square `Avatar`, name, email under it), MFA as `Table.CellStatus` (Enabled success, Not set up warning), Method, and Set up as `Table.CellTime` or a dash.
+The `platform/view/table-view` controls row, as on every account list: a `PropertyFilter` over Name, Email, MFA status and Method (`v-bind="propertyFilterProps"`), then Refresh and Download CSV as outlined `IconButton`s in a `Tooltip`, and `CollectionPreferences` for page size and columns. Download CSV is disabled when no row matches.
 
-### E. Row actions — `DropdownMenu`, `ConfirmDialog` (required)
+### E. People table — `Table`, `Avatar`, `EmptyState`, `useCollection` (required)
+
+A `Table` with `v-bind="tableProps"` in a flush `Card`, paginated by `useCollection`: Name (square `Avatar`, name, email under it), MFA as `Table.CellStatus` (Enabled success, Not set up warning), Method, and Set up as `Table.CellTime` or a dash. When no person matches the filters, the table's `#empty` slot renders a small `EmptyState` (`No matching people`) with Clear filters.
+
+### F. Row actions — `DropdownMenu`, `ConfirmDialog` (required)
 
 `Table.CellActions` named after the person: Reset MFA for an enabled factor, behind a `ConfirmDialog` that says what the person loses and when to use it; Send setup reminder for a person without one.
 
-### F. Load failure and outcomes — `Alert` (required)
+### G. Load failure and outcomes — `Alert` (required)
 
 When the list fails to load, a danger `Alert` with Retry takes the table's place. Require, optional, reset and reminder end in a success toast; they are not deploys, so no toast carries Edit or Redeploy. This page body only calls `toast` from `@aziontech/webkit/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shells/console` does), so the page never renders a `Toaster`.
 
@@ -67,6 +71,7 @@ When the list fails to load, a danger `Alert` with Retry takes the table's place
 
 - **Title:** `Multi-factor authentication`. **Setting:** `Require MFA`.
 - **Statuses:** `Enabled`, `Not set up`. **Actions:** `Reset MFA`, `Send setup reminder`.
+- **No match:** `No matching people`, `No person matches these filters.`, `Clear filters`.
 - **Toasts:** `MFA is now required.`, `MFA is optional again.`, `MFA reset for Jordan Reyes.`, `Reminder sent to priya.nair@example.com.`
 - Follow `skills/webkit-microcopy`: sentence case, no "please", no exclamation marks.
 
@@ -85,7 +90,7 @@ When the list fails to load, a danger `Alert` with Retry takes the table's place
 
 ## Related
 
-- `platform/auth` — `MfaSetup` and `MfaChallenge`, the person's own side.
+- `platform/auth` — `MfaSetup` and `MfaCode`, the person's own side.
 - `platform/account/users` — the people in the account.
 - `platform/account/activity-history` — where MFA changes are audited.
 
@@ -106,16 +111,20 @@ Each variant is the same screen in another state: `get_pattern("platform/account
   import Avatar from '@aziontech/webkit/avatar'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
+  import CollectionPreferences from '@aziontech/webkit/collection-preferences'
   import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
   import DropdownMenu, { type DropdownMenuOptionValue } from '@aziontech/webkit/dropdown-menu'
-  import Input from '@aziontech/webkit/input'
+  import EmptyState from '@aziontech/webkit/empty-state'
+  import IconButton from '@aziontech/webkit/icon-button'
   import Item from '@aziontech/webkit/item'
   import PageHeader from '@aziontech/webkit/page-header'
+  import PropertyFilter from '@aziontech/webkit/property-filter'
   import SettingRow from '@aziontech/webkit/setting-row'
   import Switch from '@aziontech/webkit/switch'
-  import Table, { type TableColumn } from '@aziontech/webkit/table'
+  import Table, { type TableColumn, type TableExposed } from '@aziontech/webkit/table'
   import { toast } from '@aziontech/webkit/toast'
-  import { useCollection } from '@aziontech/webkit/use-collection'
+  import Tooltip from '@aziontech/webkit/tooltip'
+  import { type FilteringProperty, useCollection } from '@aziontech/webkit/use-collection'
   import { computed, ref } from 'vue'
 
   const DAY = 86_400_000
@@ -196,12 +205,37 @@ Each variant is the same screen in another state: `get_pattern("platform/account
       status: member.enabled ? 'Enabled' : 'Not set up'
     }))
   )
-  const { filterProps, tableProps, clearFilters } = useCollection({
-    items: rows,
-    columns,
-    filtering: { fields: ['name', 'email', 'status'] },
-    pagination: { pageSize: 10 }
-  })
+  const properties: FilteringProperty[] = [
+    { key: 'name', label: 'Name' },
+    { key: 'email', label: 'Email' },
+    {
+      key: 'status',
+      label: 'MFA',
+      options: [{ value: 'Enabled' }, { value: 'Not set up' }]
+    },
+    { key: 'method', label: 'Method', options: [{ value: 'Authenticator app' }] }
+  ]
+
+  const { tableProps, propertyFilterProps, preferencesProps, matchingItems, clearFilters } =
+    useCollection({
+      items: rows,
+      columns,
+      filtering: { fields: ['name', 'email', 'status', 'method'] },
+      propertyFiltering: { properties },
+      pagination: { pageSize: 10, pageSizeOptions: [10, 25, 50] },
+      preferences: { storageKey: 'account-mfa' }
+    })
+
+  const membersTable = ref<TableExposed<MemberRow> | null>(null)
+  const exportCsv = () => membersTable.value?.exportCsv({ filename: 'mfa-status.csv' })
+
+  const refreshing = ref(false)
+  const refresh = () => {
+    refreshing.value = true
+    setTimeout(() => {
+      refreshing.value = false
+    }, 700)
+  }
 
   const retryLoad = () => {
     loadFailed.value = false
@@ -314,20 +348,50 @@ Each variant is the same screen in another state: `get_pattern("platform/account
         </Alert>
 
         <div class="flex min-w-0 flex-col gap-(--layout-group-gap)">
-          <Input
+          <header
             v-if="!loadFailed"
-            v-bind="filterProps"
-            placeholder="Search people"
-            aria-label="Search people"
-            class="w-full"
+            class="flex flex-wrap items-start gap-(--layout-group-gap)"
           >
-            <template #iconLeft>
-              <i
-                class="pi pi-search"
-                aria-hidden="true"
+            <div class="flex min-w-0 grow basis-(--container-2xs)">
+              <PropertyFilter
+                v-bind="propertyFilterProps"
+                placeholder="Filter people"
+                aria-label="Filter people"
               />
-            </template>
-          </Input>
+            </div>
+            <div class="flex shrink-0 flex-wrap items-center gap-(--spacing-xs)">
+              <Tooltip
+                text="Refresh"
+                class="shrink-0"
+              >
+                <IconButton
+                  icon="pi pi-refresh"
+                  kind="outlined"
+                  size="medium"
+                  :loading="refreshing"
+                  aria-label="Refresh"
+                  @click="refresh"
+                />
+              </Tooltip>
+              <Tooltip
+                text="Download CSV"
+                class="shrink-0"
+              >
+                <IconButton
+                  icon="pi pi-download"
+                  kind="outlined"
+                  size="medium"
+                  :disabled="!matchingItems.length"
+                  aria-label="Download CSV"
+                  @click="exportCsv"
+                />
+              </Tooltip>
+              <CollectionPreferences
+                v-bind="preferencesProps"
+                title="Table preferences"
+              />
+            </div>
+          </header>
 
           <Alert
             v-if="loadFailed"
@@ -350,6 +414,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
           >
             <template #content>
               <Table
+                ref="membersTable"
                 v-bind="tableProps"
                 :loading="loading"
                 enable-sorting
@@ -416,19 +481,21 @@ Each variant is the same screen in another state: `get_pattern("platform/account
                   </Table.CellActions>
                 </template>
                 <template #empty>
-                  <div
-                    class="flex flex-col items-center gap-(--spacing-sm) px-(--spacing-md) py-(--spacing-lg)"
+                  <EmptyState
+                    size="small"
+                    icon="pi pi-search"
+                    title="No matching people"
+                    description="No person matches these filters."
                   >
-                    <p class="m-0 text-body-sm text-(--text-muted)">
-                      No person matches this search.
-                    </p>
-                    <Button
-                      label="Clear search"
-                      kind="outlined"
-                      size="small"
-                      @click="clearFilters"
-                    />
-                  </div>
+                    <template #actions>
+                      <Button
+                        label="Clear filters"
+                        kind="outlined"
+                        size="small"
+                        @click="clearFilters"
+                      />
+                    </template>
+                  </EmptyState>
                 </template>
               </Table>
             </template>

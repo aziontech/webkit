@@ -132,7 +132,7 @@
 ```vue
 <script setup lang="ts">
   import Button from '@aziontech/webkit/button'
-  import DocCta from '@aziontech/webkit/doc-cta'
+  import DocCallToAction from '@aziontech/webkit/doc-call-to-action'
   import DocHeading from '@aziontech/webkit/doc-heading'
   import DocLayout, { type DocLayoutNavGroup } from '@aziontech/webkit/doc-layout'
   import DocPageHeader from '@aziontech/webkit/doc-page-header'
@@ -194,11 +194,10 @@
     </template>
 
     <template #aside>
-      <DocCta
+      <DocCallToAction
         title="Ready to build?"
         label="Deploy your first application for free."
-        primary-label="Start for free"
-        primary-href="https://console.azion.com/signup"
+        :primary-action="{ label: 'Start for free', href: 'https://console.azion.com/signup' }"
       />
     </template>
 
@@ -214,19 +213,19 @@
         />
         <DocProse>
           <DocHeading
-            id="before-you-start"
+            anchor="before-you-start"
             :level="2"
             >Before you start</DocHeading
           >
           <p>You need an Azion account and a GitHub account.</p>
           <DocHeading
-            id="deploy-with-cli"
+            anchor="deploy-with-cli"
             :level="2"
             >Deploy with Azion CLI</DocHeading
           >
           <p>Install the CLI, log in and run the deploy command from your project folder.</p>
           <DocHeading
-            id="next-steps"
+            anchor="next-steps"
             :level="2"
             >Next steps</DocHeading
           >
@@ -304,7 +303,7 @@
         />
         <DocProse>
           <DocHeading
-            id="resize-the-rail"
+            anchor="resize-the-rail"
             :level="2"
             >Resize the rail</DocHeading
           >

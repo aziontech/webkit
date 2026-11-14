@@ -1,6 +1,6 @@
 # Skeleton
 
-> A loading placeholder that reserves the space of content while it loads, gently pulsing to signal activity. Use it in place of text lines, media, or avatars during fetches; unlike `status-indicator` (which communicates a settled state) the skeleton is a transient, decorative stand-in. Two geometries cover the common cases: a rounded rectangular block (`shape`) and a `circle` (for avatars / icons).
+> A loading placeholder that reserves the space of content while it loads, gently pulsing to signal activity. Use it in place of text lines, media, or avatars during fetches; unlike `status-indicator` (which communicates a settled state) the skeleton is a transient, decorative stand-in. Two geometries cover the common cases: a rounded rectangular block (`rectangle`) and a `circle` (for avatars / icons).
 
 - Import: `import Skeleton from '@aziontech/webkit/skeleton'`
 - Category: feedback · Surface: product · Structure: monolithic
@@ -37,7 +37,7 @@
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `kind` | `'shape' \| 'circle'` | `'shape'` | false | Geometry: a rounded rectangular block (`shape`) or a circle. |
+| `kind` | `'rectangle' \| 'circle' \| 'shape'` | `'rectangle'` | false | Geometry: a rounded rectangular block (`rectangle`) or a circle. The value `shape` is **@deprecated since 6.0 — use `rectangle`. Removed in 7.0.** and renders as `rectangle`. |
 | `width` | `string` | `'100%'` | false | CSS width (any length). |
 | `height` | `string` | `'1rem'` | false | CSS height (any length); for a circle, set equal to `width`. |
 | `animated` | `boolean` | `true` | false | Shimmer while loading; suppressed under reduced motion. |
@@ -45,7 +45,7 @@
 ## States
 
 - Visual states: `default` (a single decorative placeholder; no hover/focus/active — it is not interactive)
-- `data-kind` mirrors the `kind` prop (`shape` | `circle`)
+- `data-kind` mirrors the resolved geometry (`rectangle` | `circle`; the deprecated `shape` resolves to `rectangle`)
 - `data-animated` is present when `animated` is true (drives the shimmer)
 
 ## Accessibility
@@ -65,7 +65,7 @@
 
 <template>
   <Skeleton
-    kind="shape"
+    kind="rectangle"
     width="240px"
     height="100px"
     animated
@@ -83,7 +83,7 @@
 <template>
   <div class="flex flex-wrap items-center gap-4">
     <Skeleton
-      kind="shape"
+      kind="rectangle"
       width="240px"
       height="100px"
     />
@@ -110,12 +110,12 @@
     >
       <span class="text-label-sm text-(--text-muted)">--bg-canvas</span>
       <Skeleton
-        kind="shape"
+        kind="rectangle"
         width="100%"
         height="16px"
       />
       <Skeleton
-        kind="shape"
+        kind="rectangle"
         width="60%"
         height="16px"
       />
@@ -125,12 +125,12 @@
     >
       <span class="text-label-sm text-(--text-muted)">--bg-surface</span>
       <Skeleton
-        kind="shape"
+        kind="rectangle"
         width="100%"
         height="16px"
       />
       <Skeleton
-        kind="shape"
+        kind="rectangle"
         width="60%"
         height="16px"
       />
@@ -140,12 +140,12 @@
     >
       <span class="text-label-sm text-(--text-muted)">--bg-surface-raised</span>
       <Skeleton
-        kind="shape"
+        kind="rectangle"
         width="100%"
         height="16px"
       />
       <Skeleton
-        kind="shape"
+        kind="rectangle"
         width="60%"
         height="16px"
       />
@@ -155,12 +155,12 @@
     >
       <span class="text-label-sm text-(--text-default)">--bg-surface-overlay</span>
       <Skeleton
-        kind="shape"
+        kind="rectangle"
         width="100%"
         height="16px"
       />
       <Skeleton
-        kind="shape"
+        kind="rectangle"
         width="60%"
         height="16px"
       />

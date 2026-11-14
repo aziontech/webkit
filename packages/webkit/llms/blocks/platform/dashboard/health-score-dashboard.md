@@ -1,11 +1,11 @@
 # HealthScoreDashboard (`platform/dashboard/health-score-dashboard`)
 
-> A health score dashboard: how well something performs for the people who use it, read as one score out of 100 and its bands. A page heading with the period Select sits over the overall score, a ChartCard with the figure, its band Tag (Good at 80 or more, Fair from 50 to 79, Poor under 50), the top cause of poor samples and a Line Chart of the score per hour. Two ChartCards rank the score per application and per location in a BarList, lowest first, each row naming its top cause. An hourly score card gives every application a Tracker strip, one block per hour colored by band, with its current band Tag at the end of the row. Under the grid, a Card lists the open incidents as Item rows: what is affected, the cause, how many devices and what share of samples, when it opened, and its band. Its page-level parts are `PageHeader`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
+> A health score dashboard: how well something performs for the people who use it, read as one score out of 100 and its bands. A page heading with the period Select sits over the overall score, a ChartCard with the figure, its band Tag (Good at 80 or more, Fair from 50 to 79, Poor under 50), the top cause of poor samples and a Line Chart of the score per hour. Two ChartCards rank the score per application and per location in a BarList, lowest first, each row naming its top cause. An hourly score card gives every application a Tracker strip, one block per hour colored by band, with its current band Tag at the end of the row. Under the grid, a Card lists the open incidents as Item rows: what is affected, the cause, how many devices and what share of samples, when it opened, and its band. Built from `BarList`, `Card`, `Chart`, `ChartCard`, `EmptyState`, `Hint`, `Item`, `PageHeader`, `Select`, `Skeleton`, `StatTile`, `Tag`, `Tracker` and `Alert`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
 
 - Surface: product
 - Source: `blocks/platform/dashboard/health-score-dashboard/health-score-dashboard.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/dashboard/health-score-dashboard")`
-- Components: [Alert](../../../components/alert.md), [BarList](../../../components/bar-list.md), [Card](../../../components/card.md), [Chart](../../../components/chart.md), [ChartCard](../../../components/chart-card.md), [EmptyState](../../../components/empty-state.md), [Hint](../../../components/hint.md), [Item](../../../components/item.md), [PageHeader](../../../components/page-header.md), [Select](../../../components/select.md), [Skeleton](../../../components/skeleton.md), [Tag](../../../components/tag.md), [Tracker](../../../components/tracker.md)
+- Components: [Alert](../../../components/alert.md), [BarList](../../../components/bar-list.md), [Card](../../../components/card.md), [Chart](../../../components/chart.md), [ChartCard](../../../components/chart-card.md), [EmptyState](../../../components/empty-state.md), [Hint](../../../components/hint.md), [Item](../../../components/item.md), [PageHeader](../../../components/page-header.md), [Select](../../../components/select.md), [Skeleton](../../../components/skeleton.md), [StatTile](../../../components/stat-tile.md), [Tag](../../../components/tag.md), [Tracker](../../../components/tracker.md)
 - Skills: `webkit-data-viz`, `webkit-ui-states`
 
 ## Asked as
@@ -55,42 +55,49 @@ the reader.
 The overall score's `Hint` states the bands:
 `Average of every sample in the period, out of 100. Good is 80 or more, fair 50 to 79, poor under 50.`
 
-### E. Band — `Tag` (required)
+### E. Overall figure — `StatTile` (required)
+
+The overall score as a `StatTile` with `kind="sans"`, labelled `Overall score`, the unit `/ 100` and
+no delta, with the top cause of poor samples under it. The tile owns its loading Skeleton and prints
+a dash when the period has no score; never hand-build the figure.
+
+### F. Band — `Tag` (required)
 
 The band word (`Good`, `Fair`, `Poor`) with its status severity, beside the overall score, at the end
 of every hourly row and on each incident. The band is always written; color reinforces it.
 
-### F. Loading placeholders — `Skeleton` (required)
+### G. Loading placeholders — `Skeleton` (required)
 
-Holds the score figure, hourly row labels, band tags and incident rows while the period loads.
+Holds the hourly row labels, band tags and incident rows while the period loads.
 
-### G. Score per hour — `Chart` (required)
+### H. Score per hour — `Chart` (required)
 
 A line of the overall score per hour beside the figure and the top cause of poor samples.
 
-### H. Rankings — `BarList` (required)
+### I. Rankings — `BarList` (required)
 
 Score per application and per location, sorted lowest first, because the reader looks for the worst.
 Each row names its top cause (`Video calls · packet loss`).
 
-### I. Hourly strips — `Tracker` (required)
+### J. Hourly strips — `Tracker` (required)
 
 One strip per application, one block per hour colored by band, with an `aria-label`
 (`Video calls, score per hour`) and a label on each block (`08:00 · 35 · Poor`).
 
-### J. Empty regions — `EmptyState` (required)
+### K. Empty regions — `EmptyState` (required)
 
 Every region names the period and what fills it: `No samples in the last 24 hours` /
 `Scores appear once devices report their first samples. Select a longer period.`
 
-### K. Open incidents — `Card` (required)
+### L. Open incidents — `Card` (required)
 
 A card titled `Open incidents` under the grid.
 
-### L. Incident rows — `Item` (required)
+### M. Incident rows — `Item` (required)
 
-One `Item` per incident: what is affected, the cause, how many devices and what share of samples,
-when it opened, and its band.
+One `Item` per incident, with `href` to the incident's page (`/incidents/incident-03`) so the whole row
+is a link: what is affected, the cause, how many devices and what share of samples, when it opened,
+and its band.
 
 ## Do
 
@@ -157,6 +164,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
   import PageHeader from '@aziontech/webkit/page-header'
   import Select from '@aziontech/webkit/select'
   import Skeleton from '@aziontech/webkit/skeleton'
+  import StatTile from '@aziontech/webkit/stat-tile'
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
   import Tracker, { type TrackerItem } from '@aziontech/webkit/tracker'
   import { computed, ref } from 'vue'
@@ -1209,32 +1217,17 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
             <div
               class="grid grid-cols-1 items-center gap-(--spacing-lg) md:grid-cols-[minmax(0,12rem)_1fr]"
             >
-              <div
-                v-if="loading"
-                aria-busy="true"
-                class="flex flex-col gap-(--spacing-xs)"
-              >
-                <Skeleton
-                  width="6rem"
-                  height="2.5rem"
+              <div class="flex min-w-0 flex-col gap-(--spacing-xs)">
+                <StatTile
+                  label="Overall score"
+                  kind="sans"
+                  unit="/ 100"
+                  :value="overall.score"
+                  :format-value="formatScore"
+                  :loading="loading"
                 />
-                <Skeleton
-                  width="80%"
-                  height="1rem"
-                />
-              </div>
-              <div
-                v-else
-                class="flex flex-col gap-(--spacing-xxs)"
-              >
-                <p class="flex items-baseline gap-(--spacing-xxs)">
-                  <span class="text-heading-lg tabular-nums text-(--text-default)">
-                    {{ overall.score === null ? '—' : formatScore(overall.score) }}
-                  </span>
-                  <span class="text-body-sm text-(--text-muted)">/ 100</span>
-                </p>
                 <p
-                  v-if="overall.cause"
+                  v-if="overall.cause && !loading"
                   class="text-pretty text-body-sm text-(--text-muted)"
                 >
                   Top cause: {{ overall.cause }}
@@ -1417,8 +1410,8 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
             <Item
               v-for="incident in incidents"
               :key="incident.id"
+              :href="`/incidents/${incident.id}`"
               size="small"
-              role="listitem"
             >
               <Item.Media kind="icon">
                 <i

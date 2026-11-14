@@ -145,7 +145,7 @@ The root `chart.vue` renders a `<figure>` with a CSS grid: the plot cell (every 
   - Events: _none_.
   - Slots: `footer` (a hint line under the rows, in `.text-body-sm` / `var(--chart-tooltip-muted)`; the tooltip is `aria-hidden`, so the same hint must also be reachable elsewhere, such as the chart `ariaLabel`).
 - `chart-legend/chart-legend.vue` — one toggle button per series (`aria-pressed`), a square key in the series color (the same key for every mark kind), the name, and the series total. Hover and focus emphasize the series; the other keys dim with their marks. Renders nothing for a single series.
-  - Props: `totals?: boolean` (default `false` — show each series total beside its name).
+  - Props: `total?: boolean` (default `false` — show each series total beside its name, the same name as `Chart.Tooltip`'s `total`), `totals?: boolean` (default `false`; **@deprecated since 6.0 — use `total`. Removed in 7.0.**). The legend buttons draw 24 px but take pointer input over 40 px (a transparent `before:` hit area).
   - Events: _none_ (toggles flow through the root's `legend-toggle` and `v-model:hiddenSeries`).
   - Slots: _none_.
 
@@ -271,7 +271,7 @@ The root `chart.vue` renders a `<figure>` with a CSS grid: the plot cell (every 
     <Chart.Line :ids="['blocked', 'threat']" />
     <Chart.Crosshair />
     <Chart.Tooltip />
-    <Chart.Legend totals />
+    <Chart.Legend total />
   </Chart>
 </template>
 ```

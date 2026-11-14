@@ -1,11 +1,11 @@
 # HomeDashboard (`platform/dashboard/home-dashboard`)
 
-> The whole Home page body, in both of its states. **Populated** (once the account owns a resource): a greeting heading, a usage band with four chartless StatTiles joined in one StatTileGroup card (each label explained in a Tooltip in the tile’s aside slot, each figure beside its unit and delta Tag) next to the dismissible agent onboarding card, and a five-column resources grid with the Projects, Resources, Domains and Recents panels, every row a full-width link with a hover-revealed actions DropdownMenu. **Empty** (a brand-new account): the first-access screen, a greeting under a centred headline, the command prompt that opens the layout’s palette (useConsoleLayout({ optional: true }), then layout?.openSearch()) on click or Enter, and the three doors (ship something new, add a domain with its availability check, onboard your agent). The first-access content on its own is the Onboarding template; while either screen arrives, the PageWires Overview and Onboarding wires hold the page. Built from `StatTileGroup`, `StatTile`, `Card`, `Tooltip`, `IconButton`, `Item`, `DropdownMenu`, `SearchTrigger`, `Popover`, `Spinner`, `Illustration`, `Button` and the agent marks from the webkit assets. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main. The populated root carries data-layout-fill and scrolls itself: from xl each resource panel scrolls its rows; below xl the page scrolls as one. The first-access screen does not fill.
+> The whole Home page body, in both of its states. **Populated** (once the account owns a resource): a greeting heading, a usage band with four chartless StatTiles joined in one StatTileGroup card (each label explained by a `Hint` in the tile’s aside slot, each figure beside its unit and delta Tag) next to the dismissible agent onboarding card (one whole-card `Item` link), and a five-column resources grid with the Projects, Resources, Domains and Recents panels, every row a whole-row `Item` link to the resource, each panel heading a `Link` to its list, and an empty panel an `EmptyState`. **Empty** (a brand-new account): the first-access screen, a greeting under a centred headline, the command prompt that opens the layout’s palette (useConsoleLayout({ optional: true }), then layout?.openSearch()) on click or Enter, and the three doors (ship something new, add a domain with its availability check, onboard your agent). While either screen arrives, the PageWires Overview and Onboarding wires (`platform/states/page-wires`) hold the page. Built from `StatTileGroup`, `StatTile`, `Hint`, `Card`, `Link`, `EmptyState`, `Alert`, `Tooltip`, `IconButton`, `Item`, `SearchTrigger`, `Popover`, `Spinner`, `Illustration`, `Button` and the agent marks from the webkit assets. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main. The populated root carries data-layout-fill and scrolls itself: from xl each resource panel scrolls its rows; below xl the page scrolls as one. The first-access screen does not fill.
 
 - Surface: product
 - Source: `blocks/platform/dashboard/home-dashboard/home-dashboard.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/dashboard/home-dashboard")`
-- Components: `claudeMark`, `codexMark`, `cursorMark`, `geminiMark`, [Button](../../../components/button.md), [Card](../../../components/card.md), [DropdownMenu](../../../components/dropdown-menu.md), `DropdownMenuGroup`, `DropdownMenuOption`, [Hint](../../../components/hint.md), [IconButton](../../../components/icon-button.md), [Illustration](../../../components/illustration.md), [Input](../../../components/input.md), [Item](../../../components/item.md), [Link](../../../components/link.md), [Logo](../../../components/logo.md), [Popover](../../../components/popover.md), [SearchTrigger](../../../components/search-trigger.md), [Spinner](../../../components/spinner.md), [StatTile](../../../components/stat-tile.md), [StatTileGroup](../../../components/stat-tile-group.md), [Table](../../../components/table.md), `TableRoot`, [Tag](../../../components/tag.md), [Toast](../../../components/toast.md), [Tooltip](../../../components/tooltip.md), `use-console-layout`
+- Components: [Alert](../../../components/alert.md), `claudeMark`, `codexMark`, `cursorMark`, `geminiMark`, [Button](../../../components/button.md), [Card](../../../components/card.md), `DropdownMenuGroup`, `DropdownMenuOption`, [EmptyState](../../../components/empty-state.md), [Hint](../../../components/hint.md), [IconButton](../../../components/icon-button.md), [Illustration](../../../components/illustration.md), [Input](../../../components/input.md), [Item](../../../components/item.md), [Link](../../../components/link.md), [Logo](../../../components/logo.md), [Popover](../../../components/popover.md), [SearchTrigger](../../../components/search-trigger.md), [Spinner](../../../components/spinner.md), [StatTile](../../../components/stat-tile.md), [StatTileGroup](../../../components/stat-tile-group.md), [Table](../../../components/table.md), `TableRoot`, [Tag](../../../components/tag.md), [Toast](../../../components/toast.md), [Tooltip](../../../components/tooltip.md), `use-console-layout`
 - Skills: `webkit-layout`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -37,39 +37,42 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 
 ## Building blocks
 
-### A. Row actions — `DropdownMenu` (required)
+### A. Control labels — `Tooltip` (required)
 
-On each resource row, the hover-revealed actions (`View details`, `Edit`, `Delete`).
+Names the icon-only `Dismiss` control on the agent card.
 
-### B. Control labels and metric definitions — `Tooltip` (required)
+### B. Icon-only controls — `IconButton` (required)
 
-Names every icon-only control, and in each usage tile's aside slot explains the metric
-(`Share of traffic served from cache instead of your origin.`). Also labels `Dismiss` on the agent card.
+Dismiss on the agent card, with an `aria-label` that names its target (`Dismiss agent setup`).
 
-### C. Icon-only controls — `IconButton` (required)
-
-Row actions and dismiss. Each has an `aria-label` that names its target (`Actions for my-app`,
-`Dismiss agent setup`).
-
-### D. Usage band — `StatTileGroup`, `StatTile` (required)
+### C. Usage band — `StatTileGroup`, `StatTile`, `Hint` (required)
 
 Four chartless tiles joined in one `StatTileGroup` card (the group draws the surface and the dividers),
-in an aside labelled `Usage`, each with a numeric `value`, a unit and a numeric `delta`. Beside them,
+in an aside labelled `Usage`, each with a numeric `value`, a unit and a numeric `delta`, and a `Hint`
+in the aside slot that explains the metric (`Share of traffic served from cache instead of your origin.`);
+`Hint` is focusable, so keyboard and touch readers reach the definition. Beside them,
 the dismissible `Set up your coding agent` card. Home shows at most these four figures; the rest
 belongs on a dashboard.
 
-### E. Agent onboarding — `Card`, `Logo` (optional)
+### D. Agent onboarding — `Card`, `Item`, `Logo` (optional)
 
-A whole-card button: the agent marks, `Set up your coding agent` and one sentence. Each mark is a
+A whole-card link (`Item` with `href` to the agent setup page): the agent marks, `Set up your coding agent` and one sentence. Each mark is a
 decorative `Logo` at `size="small"` in a bordered tile; a mono mark takes `kind="current"` and the
 tile's text colour, a coloured one `kind="color"`. Its dismiss `IconButton` sits outside the button
-so the two actions never nest.
+so the two controls never nest.
 
-### F. Resource rows — `Item` (required)
+### E. Resource rows — `Item`, `Link`, `EmptyState` (required)
 
-The `Projects`, `Resources`, `Domains` and `Recents` panels in a region labelled `Resources`. Every row
-is one full-width link to the resource, with its actions menu revealed on hover and focus. An empty
-panel says `Nothing here yet.` (`Nothing opened here yet.` for Recents).
+The `Projects`, `Resources`, `Domains` and `Recents` panels in a region labelled `Resources`. A panel
+heading with a list page is a `Link` to it. Every row is an `Item` with `href` to the resource
+(`/projects/4410203040`), so the whole row is one link with its own hover and focus ring; edit and
+delete live on the resource's page, never as buttons inside the row. An empty panel is a small `EmptyState` (`No domains yet`, `Nothing opened yet`
+for Recents).
+
+### F. Failure — `Alert` (required)
+
+When Home's data cannot load, the usage band and each panel show a danger `Alert` with Retry in place
+of their content; the greeting and the agent card stay.
 
 ### G. Classic summary — `StatTile`, `Card`, `IconButton`, `Tooltip` (optional)
 
@@ -94,7 +97,7 @@ resource panels. A main column and, from `xl`, an aside rail of `--container-xs`
 ## Do
 
 - Greet by first name in a muted heading; it is the only personal line on the page.
-- Make every resource row a single link with the actions menu as a separate control.
+- Make every resource row a single link (`Item` with `href`) and keep row actions on the resource's page.
 - Let the user dismiss the agent card for good.
 - Show the first-access screen, not a grid of empty panels, when the account owns nothing.
 - Open the layout's palette from the first-access prompt with `useConsoleLayout({ optional: true })` and `layout?.openSearch()` (the body also renders alone, in its preview and test, where the call returns `null`); never wrap `useConsoleLayout()` in `try` / `catch`, and never mount a second `Command`.
@@ -107,7 +110,7 @@ resource panels. A main column and, from `xl`, an aside rail of `--container-xs`
 - Don't hand-build the band's card, grid or dividers around the tiles; `StatTileGroup` draws them.
 - Don't pass figures as strings or flags as `'true'` / `'false'`: a tile's `value` and `delta` are
   numbers, and the string `'false'` is truthy.
-- Don't nest the dismiss button inside the card's button.
+- Don't nest the dismiss button inside the card's link.
 - Don't show a second highlighted button next to `Agent`.
 
 ## Copy
@@ -116,7 +119,8 @@ resource panels. A main column and, from `xl`, an aside rail of `--container-xs`
 - **Tile labels:** the metric in sentence case. `Data transferred`, `Requests per second`.
 - **Tile tooltips:** one sentence with a period. `Total bytes delivered across all your resources.`
 - **Agent card:** imperative title plus one sentence. `Set up your coding agent` / `Give your editor a prompt that teaches it to build and deploy here.`
-- **Empty panel:** `Nothing here yet.`
+- **Empty panel:** `No <things> yet` with one sentence (`Domains you create show up here.`); Recents: `Nothing opened yet`.
+- **Failure:** `Couldn't load <thing>. Check your connection and retry.` with Retry.
 - **Prompt label:** `Search resources, pages and commands`.
 - **Summary:** section headings `Metrics`, `Resources`, `Recent activity`; card titles `Monthly usage`, `Marketplace trends`; footer links `View all <thing>` in sentence case (`View all DNS zones`).
 
@@ -124,13 +128,14 @@ resource panels. A main column and, from `xl`, an aside rail of `--container-xs`
 
 - The usage band is labelled `Usage` and the panels `Resources`; the layout owns the header, the rail and the one `main`.
 - Every icon-only control has an `aria-label` and a `Tooltip`.
-- Row actions are reachable by keyboard: the menu trigger appears on focus as well as hover.
+- Every resource row is one link in the tab order; its focus ring is the row's.
 - On a new account the prompt opens the layout's command palette, which also opens with ⌘K / Ctrl K.
 - Entrance animations and the card's dismiss transition honour `prefers-reduced-motion`.
 
 ## States
 
 - Default: populated Home for an account that owns resources (usage band, agent card, resource panels).
+- Failed: Home's data could not load; the usage band and every panel show a danger `Alert` with Retry.
 - Empty: a brand-new account; the first-access screen with the greeting, the command prompt that opens the palette, and the three doors (create a project, add a domain with an availability check, set up an agent).
 - Summary: the classic overview; metric tiles with the window caption, the resources and recent activity tables, and the aside with monthly usage and a featured marketplace template.
 
@@ -145,6 +150,7 @@ resource panels. A main column and, from `xl`, an aside rail of `--container-xs`
 
 - `Default` — primary (the code below)
 - `Empty` — Home for a brand-new account: the first-access screen. Inside ConsoleLayout, clicking the prompt (or pressing Enter on it) opens the layout's command palette; type a domain such as example.com (taken) or acme.example.com (available) into the second door to run the availability check.
+- `Failed` — Populated Home whose data could not load: the usage band and every resource panel show a danger `Alert` with Retry in place of their content; the greeting and the agent card stay.
 - `Summary` — The classic overview: four metric StatTiles with a Hint on each label and the window they cover in a caption, a resources TableRoot card and a Recent activity TableRoot card, each with a View all footer Link, beside an aside of a Monthly usage list card and a Marketplace trends card that pages through featured templates with Previous and Next.
 
 Each variant is the same screen in another state: `get_pattern("platform/dashboard/home-dashboard", { variant })`, or the file under `blocks/platform/dashboard/home-dashboard/variants/`.
@@ -153,14 +159,17 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
 
 ```vue
 <script setup lang="ts">
+  import Alert from '@aziontech/webkit/alert'
   import claudeMark from '@aziontech/webkit/assets/claude-symbol-color.svg'
   import codexMark from '@aziontech/webkit/assets/codex-symbol-mono.svg'
   import cursorMark from '@aziontech/webkit/assets/cursor-symbol-mono.svg'
   import geminiMark from '@aziontech/webkit/assets/gemini-symbol-color.svg'
   import Card from '@aziontech/webkit/card'
-  import DropdownMenu from '@aziontech/webkit/dropdown-menu'
+  import EmptyState from '@aziontech/webkit/empty-state'
+  import Hint from '@aziontech/webkit/hint'
   import IconButton from '@aziontech/webkit/icon-button'
   import Item from '@aziontech/webkit/item'
+  import Link from '@aziontech/webkit/link'
   import Logo from '@aziontech/webkit/logo'
   import StatTile from '@aziontech/webkit/stat-tile'
   import StatTileGroup from '@aziontech/webkit/stat-tile-group'
@@ -322,7 +331,13 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
     { name: 'Cursor', src: cursorMark, mono: true }
   ]
 
+  const resourcePath = (resource: { type: string; id: string }) =>
+    `/${resource.type}/${resource.id}`
+
   const agentOnboardingVisible = ref(true)
+  const failed = false
+
+  const emit = defineEmits<{ retry: [event: MouseEvent] }>()
 </script>
 
 <template>
@@ -345,7 +360,14 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
         aria-label="Usage"
       >
         <div class="min-w-0 xl:flex-1">
-          <StatTileGroup>
+          <Alert
+            v-if="failed"
+            severity="danger"
+            label="Couldn't load usage. Check your connection and retry."
+            action-label="Retry"
+            @action="(event) => emit('retry', event)"
+          />
+          <StatTileGroup v-else>
             <StatTile
               v-for="metric in metrics"
               :key="metric.label"
@@ -355,12 +377,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
               :delta="metric.delta"
             >
               <template #aside>
-                <Tooltip :text="metric.hint">
-                  <i
-                    class="pi pi-info-circle text-body-sm text-(--text-muted)"
-                    aria-hidden="true"
-                  />
-                </Tooltip>
+                <Hint :text="metric.hint" />
               </template>
             </StatTile>
           </StatTileGroup>
@@ -379,38 +396,40 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
               class="w-full"
             >
               <template #content>
-                <button
-                  type="button"
-                  class="group relative flex h-full w-full flex-col items-start gap-(--spacing-md) rounded-(--shape-card) p-(--spacing-md) text-start transition-colors duration-150 ease-out motion-reduce:transition-none hover:bg-(--bg-surface-raised) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset"
+                <Item
+                  href="/agents/setup"
+                  class="h-full"
                 >
-                  <span
-                    class="flex items-center [&>*+*]:-ms-2 [&>*+*]:transition-[margin-left] [&>*+*]:duration-moderate-01 [&>*+*]:ease-productive-entrance group-hover:[&>*+*]:-ms-1.5 group-focus-visible:[&>*+*]:-ms-1.5 motion-reduce:[&>*+*]:transition-none"
-                    aria-hidden="true"
-                  >
+                  <span class="flex min-w-0 flex-col items-start gap-(--spacing-md)">
                     <span
-                      v-for="agent in agentMarks"
-                      :key="agent.name"
-                      class="flex size-8 shrink-0 items-center justify-center overflow-hidden rounded-(--shape-elements) border-(length:--border-width-default) border-(--border-muted) bg-(--bg-surface-raised) text-(--text-default)"
+                      class="flex items-center [&>*+*]:-ms-2 [&>*+*]:transition-[margin-left] [&>*+*]:duration-moderate-01 [&>*+*]:ease-productive-entrance group-hover/item:[&>*+*]:-ms-1.5 group-focus-visible/item:[&>*+*]:-ms-1.5 motion-reduce:[&>*+*]:transition-none"
+                      aria-hidden="true"
                     >
-                      <Logo
-                        :name="agent.name"
-                        :src="agent.src"
-                        :kind="agent.mono ? 'current' : 'color'"
-                        decorative
-                        size="small"
-                      />
+                      <span
+                        v-for="agent in agentMarks"
+                        :key="agent.name"
+                        class="flex size-8 shrink-0 items-center justify-center overflow-hidden rounded-(--shape-elements) border-(length:--border-width-default) border-(--border-muted) bg-(--bg-surface-raised) text-(--text-default)"
+                      >
+                        <Logo
+                          :name="agent.name"
+                          :src="agent.src"
+                          :kind="agent.mono ? 'current' : 'color'"
+                          decorative
+                          size="small"
+                        />
+                      </span>
+                    </span>
+
+                    <span class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+                      <span class="text-heading-xxs text-(--text-default)"
+                        >Set up your coding agent</span
+                      >
+                      <span class="text-pretty text-body-sm text-(--text-muted)"
+                        >Give your editor a prompt that teaches it to build and deploy here.</span
+                      >
                     </span>
                   </span>
-
-                  <span class="flex min-w-0 flex-col gap-(--spacing-xxs)">
-                    <span class="text-heading-xxs text-(--text-default)"
-                      >Set up your coding agent</span
-                    >
-                    <span class="text-pretty text-body-sm text-(--text-muted)"
-                      >Give your editor a prompt that teaches it to build and deploy here.</span
-                    >
-                  </span>
-                </button>
+                </Item>
               </template>
             </Card>
             <div class="absolute end-(--spacing-xs) top-(--spacing-xs)">
@@ -449,29 +468,32 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
               class="shrink-0"
               aria-hidden="true"
             />
-            <a
+            <Link
               v-if="panel.path"
               :href="panel.path"
-              class="inline-flex items-center gap-(--spacing-xxs) rounded-(--shape-button) outline-none hover:underline focus-visible:ring-2 focus-visible:ring-(--ring-color)"
-            >
-              {{ panel.label }}
-              <i
-                class="pi pi-chevron-right text-body-xs leading-none text-(--text-muted)"
-                aria-hidden="true"
-              />
-            </a>
+              :label="panel.label"
+              size="small"
+              icon="pi pi-chevron-right"
+            />
             <span v-else>{{ panel.label }}</span>
           </h2>
 
           <div class="min-w-0 xl:min-h-0 xl:flex-1 xl:overflow-y-auto xl:overscroll-contain">
+            <Alert
+              v-if="failed"
+              severity="danger"
+              :label="`Couldn't load ${panel.label.toLowerCase()}. Check your connection and retry.`"
+              action-label="Retry"
+              @action="(event) => emit('retry', event)"
+            />
             <Item.List
-              v-if="panel.resources.length"
+              v-else-if="panel.resources.length"
               key="panel-rows"
             >
               <Item
                 v-for="resource in panel.resources"
                 :key="resource.type + '-' + resource.id"
-                role="listitem"
+                :href="resourcePath(resource)"
                 size="small"
               >
                 <Item.Content>
@@ -500,75 +522,31 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
                         :title="resource.presetLabel"
                       />
                     </span>
-                    <button
-                      type="button"
-                      data-row-link
-                      class="min-w-0 cursor-pointer truncate text-start text-label-md text-(--text-default) outline-none group-hover/item:underline focus-visible:underline after:absolute after:inset-0 after:content-['']"
-                    >
+                    <span class="min-w-0 truncate text-label-md text-(--text-default)">
                       {{ resource.name }}
-                    </button>
+                    </span>
                   </Item.Title>
                 </Item.Content>
 
-                <div class="relative z-10 grid size-(--size-7) place-items-center">
-                  <Item.Actions class="w-full">
-                    <div
-                      class="col-start-1 row-start-1 opacity-0 transition-opacity duration-150 ease-out motion-reduce:transition-none group-hover/item:opacity-100 group-focus-within/item:opacity-100"
-                    >
-                      <DropdownMenu placement="bottom-end">
-                        <DropdownMenu.Trigger>
-                          <Tooltip text="Resource actions">
-                            <IconButton
-                              icon="pi pi-ellipsis-h"
-                              kind="transparent"
-                              size="small"
-                              :aria-label="'Actions for ' + resource.name"
-                            />
-                          </Tooltip>
-                        </DropdownMenu.Trigger>
-
-                        <DropdownMenu.Group>
-                          <DropdownMenu.Option
-                            value="view"
-                            label="View details"
-                          />
-                          <DropdownMenu.Option
-                            value="edit"
-                            label="Edit"
-                          />
-                        </DropdownMenu.Group>
-
-                        <DropdownMenu.Group>
-                          <DropdownMenu.Option
-                            value="delete"
-                            label="Delete"
-                          >
-                            <template #left>
-                              <i
-                                class="pi pi-trash"
-                                aria-hidden="true"
-                              />
-                            </template>
-                          </DropdownMenu.Option>
-                        </DropdownMenu.Group>
-                      </DropdownMenu>
-                    </div>
-
-                    <i
-                      class="pi pi-chevron-right col-start-1 row-start-1 shrink-0 text-body-xs text-(--text-muted) transition-opacity duration-150 ease-out motion-reduce:transition-none group-hover/item:opacity-0 group-focus-within/item:opacity-0"
-                      aria-hidden="true"
-                    />
-                  </Item.Actions>
-                </div>
+                <Item.Actions>
+                  <i
+                    class="pi pi-chevron-right shrink-0 text-body-xs text-(--text-muted)"
+                    aria-hidden="true"
+                  />
+                </Item.Actions>
               </Item>
             </Item.List>
 
-            <p
+            <EmptyState
               v-else
-              class="px-(--spacing-md) py-(--spacing-sm) text-body-sm text-(--text-muted)"
-            >
-              {{ panel.recent ? 'Nothing opened here yet.' : 'Nothing here yet.' }}
-            </p>
+              size="small"
+              :title="panel.recent ? 'Nothing opened yet' : `No ${panel.label.toLowerCase()} yet`"
+              :description="
+                panel.recent
+                  ? 'Resources you open show up here.'
+                  : `${panel.label} you create show up here.`
+              "
+            />
           </div>
         </div>
       </section>

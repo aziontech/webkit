@@ -1,5 +1,5 @@
 {
- "purpose": "A collection shown as cards, after Cloudscape's cards: one card per item, named by its `header` slot, with the item's fields in the default slot. It shares Table's item and selection model — `items`, `trackBy`, `selectedKeys` — so `useCollection` binds it through `cardsProps`, and selection (single or multi, with a visible select-all) survives paging. Four cards a row in a wide container, then three, two and one as the container narrows.",
+ "purpose": "A collection shown as cards, after Cloudscape's cards: one card per item, named by its `header` slot, with the item's fields in the default slot. It follows Cloudscape's collection model — `items`, `trackBy`, `selectedKeys` (a key array) — which is not yet the same as Table's (`data`, `rowKey`, `rowSelection` record); `useCollection` binds it through `cardsProps`, and selection (single or multi, with a visible select-all) survives paging. Four cards a row in a wide container, then three, two and one as the container narrows.",
  "useWhen": [
   "Items people recognise by a few fields or a picture rather than compare column by column (applications, templates, environments).",
   "The card form of a list page (`platform/view/card-view`), filtered and paged by `useCollection`."

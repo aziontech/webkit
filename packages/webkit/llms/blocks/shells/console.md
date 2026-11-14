@@ -1,11 +1,11 @@
 # Console (`shells/console`)
 
-> The console shell as one component: `ConsoleLayout`, composed once in the app around RouterView, so a console page is only its body. Its `navigation` is the Azion console tree as data (Overview, Workloads, Deployments; Build, Secure, Store, Observe; Marketplace and the Settings drill-in), each row with an `href` the layout follows with the app's router, and the active row follows the route; it renders the resizable, collapsible rail with the wordmark and the account at its foot, the header with breadcrumbs, the search trigger, the app's actions and the avatar, the ⌘K palette listing every navigation page, and the single main. Below 768 px of its own width the rail becomes a drawer opened from the header's menu button. This block fills the slots: Create (`Button`) and Agent (`ButtonHighlight`), icon-only (`IconButton` with a `Tooltip`) while compact; Recents and Actions as `Command` groups; the account menu (`DropdownMenu` with `ThemeSwitcher`, Upgrade to Pro and `StatusIndicator`). The body is a stand-in list page (`PageHeader`, Filter, a search `Input`, the toolbar and a `Card`) for platform/view/table-view; a page opens the same palette with useConsoleLayout().openSearch().
+> The console shell as one component: `ConsoleLayout`, composed once in the app around RouterView, so a console page is only its body. Its `navigation` is the Azion console tree as data (Overview, Workloads, Deployments; Build, Secure, Store, Observe; Marketplace and the Settings drill-in), each row with an `href` the layout follows with the app's router, and the active row follows the route; it renders the resizable, collapsible rail with the wordmark and the account at its foot, the header with breadcrumbs, the search trigger, the app's actions and the avatar, the ⌘K palette listing every navigation page, and the single main. Below 768 px of its own width the rail becomes a drawer opened from the header's menu button. This block fills the slots: Create (`Button`) and Agent (`ButtonHighlight`), icon-only (`IconButton` with a `Tooltip`) while compact; Recents and Actions as `Command` groups; the account menu (`DropdownMenu` with `ThemeSwitcher`, Upgrade to Pro and `StatusIndicator`). The body is a stand-in list page (`PageHeader` and a `Card`) for platform/view/table-view, which owns the controls row and the table; a page opens the same palette with useConsoleLayout().openSearch().
 
 - Surface: product
 - Source: `blocks/shells/console/console.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("shells/console")`
-- Components: [Alert](../../components/alert.md), [Avatar](../../components/avatar.md), [Badge](../../components/badge.md), [Button](../../components/button.md), [ButtonHighlight](../../components/button-highlight.md), [Card](../../components/card.md), [Command](../../components/command.md), [ConsoleLayout](../../components/console-layout.md), [ConsoleLayout](../../components/console-layout.md), [Dialog](../../components/dialog.md), `DialogClose`, `DialogContent`, `DialogDescription`, `DialogOverlay`, `DialogPortal`, `DialogTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [PageHeader](../../components/page-header.md), [PageTabs](../../components/page-tabs.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [Select](../../components/select.md), [StatusIndicator](../../components/status-indicator.md), [Table](../../components/table.md), [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [ThemeSwitcher](../../components/theme-switcher.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md)
+- Components: [Alert](../../components/alert.md), [Avatar](../../components/avatar.md), [Badge](../../components/badge.md), [Button](../../components/button.md), [ButtonHighlight](../../components/button-highlight.md), [Card](../../components/card.md), [Command](../../components/command.md), [ConsoleLayout](../../components/console-layout.md), [ConsoleLayout](../../components/console-layout.md), [Dialog](../../components/dialog.md), `DialogClose`, `DialogContent`, `DialogDescription`, `DialogOverlay`, `DialogPortal`, `DialogTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Item](../../components/item.md), [PageHeader](../../components/page-header.md), [PageTabs](../../components/page-tabs.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [Select](../../components/select.md), [StatusIndicator](../../components/status-indicator.md), [Table](../../components/table.md), [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [ThemeSwitcher](../../components/theme-switcher.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md)
 - Skills: `webkit-navigation`, `webkit-layout`
 
 ## Asked as
@@ -29,7 +29,7 @@ The application shell every signed-in page renders inside. The user browses and 
 
 ### A. Shell — `ConsoleLayout` (required)
 
-Composed once in `App.vue` around `RouterView` (imported from `console-layout-root`). `navigation` is the console tree as data: groups of rows `{ id, label, icon, href }` (an in-app `href` is followed with the app's router, an external one loads normally; `kind: 'drill'` with `groups` for Settings; `tagValue` for a `Preview` badge). The active row follows the current route; leave `active-id` empty in the app (this block sets it only because its preview has no router). `breadcrumbs` takes a static trail from the route meta (`{ label, href? }`, the last crumb, the current page, without `href`; empty on a first-level page); a page that owns its trail renders `ConsoleLayout.Breadcrumbs` instead, and a workspace page puts `data-layout-fill` on its root. `account` is the signed-in user. The layout renders the rail (resizable and collapsible, a drawer below 768 px of its own width), the header, the `SearchTrigger` wired to the ⌘K `Command` palette (every navigation page is listed), the avatar, and the single `<main>`; a page opens the same palette with `useConsoleLayout().openSearch()`.
+Composed once in `App.vue` around `RouterView` (imported from `console-layout-root`; a page that renders `ConsoleLayout.Breadcrumbs`, as DetailPage does, imports the compound `console-layout` instead). `navigation` is the console tree as data: groups of rows `{ id, label, icon, href }` (an in-app `href` is followed with the app's router, an external one loads normally; `kind: 'drill'` with `groups` for Settings; `tagValue` for a `Preview` badge). The active row follows the current route; leave `active-id` empty in the app (this block sets it only because its preview has no router). `breadcrumbs` takes a static trail from the route meta (`{ label, href? }`, the last crumb, the current page, without `href`; empty on a first-level page); a page that owns its trail renders `ConsoleLayout.Breadcrumbs` instead, and a workspace page puts `data-layout-fill` on its root. `account` is the signed-in user. The layout renders the rail (resizable and collapsible, a drawer below 768 px of its own width), the header, the `SearchTrigger` wired to the ⌘K `Command` palette (every navigation page is listed), the avatar, and the single `<main>`; a page opens the same palette with `useConsoleLayout().openSearch()`.
 
 ### B. Actions — `Button` (required)
 
@@ -41,11 +41,11 @@ The AI assistant entry in the `actions` slot, after Create, while not compact.
 
 ### D. Hints — `Tooltip` (required)
 
-Names every icon-only control: the compact Create and Agent, the page toolbar icons.
+Names every icon-only control: the compact Create and Agent, and the bell.
 
 ### E. Icon actions — `IconButton` (required)
 
-Create and Agent while the `actions` slot's `compact` is true; the page toolbar (Refresh, Download CSV, Columns).
+Create and Agent while the `actions` slot's `compact` is true; the bell in Notifications.
 
 ### F. Palette groups — `Command` (required)
 
@@ -61,19 +61,15 @@ Inside the account menu, labelled `Theme`.
 
 ### I. System status — `StatusIndicator` (required)
 
-At the foot of the account menu: `All systems normal` with `success` severity; switch severity and label when the status page reports an incident.
+At the foot of the account menu: `All systems operational` with `success` severity; switch severity and label when the status page reports an incident.
 
 ### J. Page title — `PageHeader` (stand-in body)
 
 The list page's title and description, with Documentation and the create action in its `actions` slot.
 
-### K. Search field — `Input` (stand-in body)
+### K. Table frame — `Card` (stand-in body)
 
-The list's search, with a leading icon and an `aria-label`, growing between Filter and the toolbar icons.
-
-### L. Table frame — `Card` (stand-in body)
-
-Flush (`:padded="false"`), holding the table; the card is the only border.
+Flush (`:padded="false"`), standing in for the page body; the list page's controls row and table come from `platform/view/table-view` (Table toolbar parts), never a hand-built row of buttons in the shell.
 
 ## Do
 
@@ -91,15 +87,15 @@ Flush (`:padded="false"`), holding the table; the card is the only border.
 - Don't add page actions to the global header; they belong to the page's header, controls row or tab row.
 - Don't hide the avatar when the rail is collapsed or in the drawer.
 - Don't render the account switcher in both `sidebar-header` and `header-start` at once; pick by the slots' `compact`.
-- Don't leave an empty account table when the list fails to load; show the danger `Alert` with Try again in its place.
+- Don't leave an empty account table when the list fails to load; show the danger `Alert` with Retry in its place.
 - Don't open the notifications region as a popover over the page; it is the layout's tools region beside the content.
 
 ## Copy
 
 - **Palette groups:** `Recents`, `Actions`; the layout's placeholder `Search pages and commands` and its empty line come from the locale catalog.
 - **Navigation and menu items:** nouns as the module pages are titled (`Personal tokens`, `Activity history`, `Build and deployment`, `Account settings`); Azion product names keep theirs (`Edge DNS`, `Real-Time Metrics`). No ampersand.
-- **Status:** a short state, not a sentence: `All systems normal`.
-- **Load failure:** what failed, as a sentence: `The account list could not be loaded.`; the action is `Try again`.
+- **Status:** a short state, not a sentence: `All systems operational`.
+- **Load failure:** what failed, as a sentence: `The account list could not be loaded.`; the action is `Retry`, the word every block uses (auth included).
 - **Header actions:** `Create`, `Agent`.
 - **Module create:** `Create` plus the entity: `Create Application`.
 
@@ -113,11 +109,11 @@ Flush (`:padded="false"`), holding the table; the card is the only border.
 
 ## States
 
-- ListPage: a first-level list page in the `ConsoleLayout` default slot: no breadcrumb on a first level, the page opens on its `PageHeader` (title, description, Documentation and the create action) and its controls row (Filter, search, Refresh, Download CSV, Columns) over the table.
+- ListPage: a first-level list page in the `ConsoleLayout` default slot: no breadcrumb on a first level, the page opens on its `PageHeader` (title, description, Documentation and the create action) over the page body. The controls row and the table belong to `platform/view/table-view`, which builds them from the Table toolbar parts; the shell does not draw them.
 - DetailPage: a resource detail page rendered through `ConsoleLayout`. The page body sets its own trail with `ConsoleLayout.Breadcrumbs`: Applications and the application as `items`, then the environment in its slot, a `Select` with `kind="transparent"` and `size="small"` labelled `Switch environment` (a search `Input`, each environment tagged with its deployment policy, a muted line when nothing matches, Add Environment at its foot). The default slot is flush and opens on a full-bleed `PageTabs` (Overview, Deployments, Settings, the outlined Deploy in `#actions`), sticky at the top of the layout's scrolling region so it stays in view while the tab content scrolls under it; no `main` of its own, the layout owns it.
-- Notifications: the ListPage through `ConsoleLayout` with the bell after Create and Agent in the `actions` slot; it toggles the layout's tools region (`v-model:tools-open`, `tools-label="Notifications"`), a region beside the content and a drawer when narrow. The `tools` slot holds the list: unread items raised, Edit and Redeploy on each deploy, Mark all as read, Clear all, and the EmptyState `You are all caught up` once cleared. The failed deploy also shows as a flash Alert (Edit, Redeploy) in the `notifications` slot above the page. The bell's `aria-label` carries the unread count, `aria-pressed` follows the region, and the `Badge` on it is hidden from assistive technology.
-- AccountSwitch: the ListPage through `ConsoleLayout` with the current account in the `sidebar-header` slot, full width in the rail under the wordmark (square `Avatar` with its initials, the name, a sort glyph), `Switch account (Ctrl+O)` on its tooltip (to the right) and `aria-keyshortcuts`; the rail slot renders nothing while `compact` is true, and the same switcher moves to the `header-start` slot, before the breadcrumbs, with the avatar and the chevron only (the name stays in its `aria-label`). It and the shortcut open a large `Dialog`, rendered beside the layout, with a search `Input` (name, ID or client ID) over a `Table` of the account tree: organizations, groups and workspaces indented by depth, expand and collapse buttons with `aria-expanded`, each name a button that switches, `Current` on the active one, type as `Table.CellStatus`, ID and client ID as `Table.CellId`. Switching closes the dialog and toasts `Switched to <name>.` with the IDs; the footer shows the current account and Account settings. A search with no match shows Clear search.
-- AccountSwitchFailed: the AccountSwitch dialog when the account list fails to load. A danger `Alert` (`The account list could not be loaded.`, action `Try again`) takes the place of the account `Table` under the search; the search, the title and the footer stay. Try again loads the list again and shows the table.
+- Notifications: the ListPage through `ConsoleLayout` with the bell after Create and Agent in the `actions` slot; it toggles the layout's tools region (`v-model:tools-open`, `tools-label="Notifications"`), a region beside the content and a drawer when narrow. The `tools` slot holds the list as `Item.List` of `Item` rows (`Item.Media kind="icon"` toned through `data-kind`, title, description, time, `Item.Actions`), five at a time with `Show older` for the rest: unread items marked with a `New` tag (and a visually hidden `Unread:` prefix), Edit and Redeploy on each deploy, Mark all as read, Clear all (it empties the list and toasts `Notifications cleared.` with Undo, which brings them back), and the EmptyState `You are all caught up` once cleared. The failed deploy also shows as a flash Alert (Edit, Redeploy) in the `notifications` slot above the page. The bell's `aria-label` carries the unread count, `aria-pressed` follows the region, and the `Badge` on it is hidden from assistive technology.
+- AccountSwitch: the ListPage through `ConsoleLayout` with the current account in the `sidebar-header` slot, full width in the rail under the wordmark (square `Avatar` with its initials, the name, a sort glyph), `Switch account (Ctrl+O)` on its tooltip (to the right) and `aria-keyshortcuts`; the rail slot renders nothing while `compact` is true, and the same switcher moves to the `header-start` slot, before the breadcrumbs, with the avatar and the chevron only (the name stays in its `aria-label`). It and the shortcut open a large `Dialog`, rendered beside the layout, with a search `Input` (name, ID or client ID) over a `Table` of the account tree: organizations, groups and workspaces indented by depth, expand and collapse buttons with `aria-expanded`, each name a button that switches, `Current` on the active one, type as `Table.CellStatus`, ID and client ID as `Table.CellId`. Each name is a `Button` with `kind="link"`. The table pages ten rows at a time (`paginated`), and while the list loads on open it shows the `Table` loading rows. Switching closes the dialog and toasts `Switched to <name>.` with the IDs; the footer shows the current account and Account settings. A search with no match shows Clear search. The search `Input` takes its `id` from `useId()` so the dialog can focus it on open.
+- AccountSwitchFailed: the AccountSwitch dialog when the account list fails to load. A danger `Alert` (`The account list could not be loaded.`, action `Retry`) takes the place of the account `Table` under the search; the search, the title and the footer stay. Retry loads the list again and shows the table.
 
 ## Related
 
@@ -131,7 +127,7 @@ Flush (`:padded="false"`), holding the table; the card is the only border.
 - `DetailPage` — A resource detail page rendered through `ConsoleLayout`: the page body sets its own trail with `ConsoleLayout.Breadcrumbs` (Applications, the application) ending on its environment as a control crumb, a `Select` with `kind="transparent"` and `size="small"` that searches the environments, tags each with its deployment policy and offers Add Environment at its foot; the default slot opens flush on a full-bleed `PageTabs` with the Overview, Deployments and Settings tabs and the outlined Deploy action, which stays in view while the tab content scrolls under it.
 - `Notifications` — The ListPage rendered through `ConsoleLayout` with a bell in its `actions` slot: the bell carries an unread `Badge` and toggles the layout's tools region (`v-model:tools-open`, titled Notifications, a drawer on a narrow screen), whose `tools` slot lists deploys, invitations and alerts with Mark all as read and Clear all and offers Edit and Redeploy on each deploy; a failed deploy also shows as a flash `Alert` in the `notifications` slot above the page, and an empty list reads You are all caught up through `EmptyState`.
 - `AccountSwitch` — The ListPage rendered through `ConsoleLayout` with the account switcher in its `sidebar-header` slot, full width in the rail under the wordmark (square `Avatar`, the account name, a sort glyph; tooltip on the right; Ctrl+O or ⌘O), and in its `header-start` slot while compact (avatar and chevron only): a large `Dialog` with search over the organization, group and workspace `Table` tree (expand and collapse, type, ID and client ID), the current account marked, a toast on switch, and Account settings in the footer.
-- `AccountSwitchFailed` — The AccountSwitch dialog when the account list fails to load: a danger `Alert`, The account list could not be loaded., with Try again replaces the account `Table` under the search; Try again loads the tree.
+- `AccountSwitchFailed` — The AccountSwitch dialog when the account list fails to load: a danger `Alert`, The account list could not be loaded., with Retry replaces the account `Table` under the search; Retry loads the tree.
 
 Each variant is the same screen in another state: `get_pattern("shells/console", { variant })`, or the file under `blocks/shells/console/variants/`.
 
@@ -146,7 +142,6 @@ Each variant is the same screen in another state: `get_pattern("shells/console",
   import ConsoleLayout, { type ConsoleLayoutNavGroup } from '@aziontech/webkit/console-layout-root'
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
   import IconButton from '@aziontech/webkit/icon-button'
-  import Input from '@aziontech/webkit/input'
   import PageHeader from '@aziontech/webkit/page-header'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
   import ThemeSwitcher, { type ThemeSwitcherValue } from '@aziontech/webkit/theme-switcher'
@@ -324,7 +319,6 @@ Each variant is the same screen in another state: `get_pattern("shells/console",
   ]
 
   const theme = ref<ThemeSwitcherValue>('system')
-  const search = ref('')
 
   const onSearchSelect = (_event: MouseEvent | KeyboardEvent, value: string | number) => {
     if (value === 'action:theme') theme.value = theme.value === 'dark' ? 'light' : 'dark'
@@ -499,7 +493,7 @@ Each variant is the same screen in another state: `get_pattern("shells/console",
           <div class="flex justify-center px-(--spacing-xs)">
             <StatusIndicator
               severity="success"
-              label="All systems normal"
+              label="All systems operational"
             />
           </div>
         </div>
@@ -529,55 +523,6 @@ Each variant is the same screen in another state: `get_pattern("shells/console",
             />
           </template>
         </PageHeader>
-
-        <div class="flex items-center gap-(--spacing-xs)">
-          <Button
-            label="Filter"
-            kind="outlined"
-            size="medium"
-            icon="pi pi-filter"
-          />
-          <div class="flex min-w-0 flex-1">
-            <Input
-              v-model="search"
-              size="medium"
-              placeholder="Search"
-              aria-label="Search applications"
-              class="w-full"
-            >
-              <template #iconLeft>
-                <i
-                  class="pi pi-search"
-                  aria-hidden="true"
-                />
-              </template>
-            </Input>
-          </div>
-          <Tooltip text="Refresh">
-            <IconButton
-              icon="pi pi-refresh"
-              kind="outlined"
-              size="medium"
-              aria-label="Refresh"
-            />
-          </Tooltip>
-          <Tooltip text="Download CSV">
-            <IconButton
-              icon="pi pi-download"
-              kind="outlined"
-              size="medium"
-              aria-label="Download CSV"
-            />
-          </Tooltip>
-          <Tooltip text="Columns">
-            <IconButton
-              icon="ai ai-column"
-              kind="outlined"
-              size="medium"
-              aria-label="Columns"
-            />
-          </Tooltip>
-        </div>
 
         <Card :padded="false">
           <template #content>

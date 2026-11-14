@@ -9,12 +9,14 @@
 ## When to use
 
 - A standalone navigation link: a domain, a repository, a docs page, "View all".
-- An in-console navigation action ("Add custom domain") with `showIcon` set to false.
+- An in-console navigation action ("Add custom domain"): no trailing icon unless `icon` is set.
 
 ## Do
 
-- Always set `href` and a `label` that names the destination; the defaults (`'#'`, `'Learn more'`) are placeholders.
-- Keep the default `pi pi-external-link` icon for off-site targets with `target="_blank"` (`rel="noopener noreferrer"` is added for you); turn `showIcon` off for in-app destinations.
+- Always set `href` and a label that names the destination; an empty `href` renders `#` so the anchor stays focusable, and an empty label falls back to the locale catalog (`Learn more`).
+- Pass the label as the default slot or the `label` prop; the slot wins when both are set.
+- target="_blank"` adds `rel="noopener noreferrer"` and, when `icon` is empty, the `pi pi-external-link` glyph so an off-site link reads as one; same-tab links show no icon unless `icon` is set.
+- An icon is shown when `icon` is set; `showIcon` is deprecated.
 - Match `size` to the controls around it; heights follow `button` (40 / 32 / 28 px).
 - disabled` drops it from the tab order and suppresses `click`; hide a link that can never be followed instead.
 
@@ -35,12 +37,12 @@
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `label` | `string` | `''` | false | Visible label rendered inside the link. Empty uses the locale catalog (`Learn more`). |
+| `label` | `string` | `''` | false | Visible label, the default slot's fallback. Empty uses the locale catalog (`Learn more`). |
 | `size` | `'small' \| 'medium' \| 'large'` | `'large'` | false | Size token; affects height and typography (large 40px, medium 32px, small 28px), matching Button. |
 | `disabled` | `boolean` | `false` | false | Disables interaction and applies disabled tokens. |
-| `showIcon` | `boolean` | `true` | false | When true, renders the trailing icon. |
-| `icon` | `string` | `'pi pi-external-link'` | false | PrimeIcons class for the trailing icon. |
-| `href` | `string` | `'#'` | false | Destination URL for the anchor. |
+| `showIcon` | `boolean` | `undefined` | false | @deprecated since 6.0 — use `icon` (set shows it, empty hides it). Removed in 7.0. `false` hides the icon; `true` shows `icon`, or `pi pi-external-link` when `icon` is empty. |
+| `icon` | `string` | `''` | false | PrimeIcons class for the trailing icon; set shows it. Empty shows `pi pi-external-link` only when `target` is `_blank`. |
+| `href` | `string` | `''` | false | Destination URL for the anchor. Empty renders `#`. |
 | `target` | `'_blank' \| '_self'` | `'_self'` | false | Link target when navigating. |
 
 ## Events
@@ -48,6 +50,12 @@
 | Event | Payload | Notes |
 | --- | --- | --- |
 | `click` | `MouseEvent` | — |
+
+## Slots
+
+| Slot | Scope | Notes |
+| --- | --- | --- |
+| `default` |  | The link text. Fallback: `label`, then the locale catalog. |
 
 ## Assets
 
@@ -58,6 +66,7 @@
 - Visual states: `default`, `hover`, `focus-visible`, `disabled`
 - `hover` and `focus-visible` underline the label (`underline-offset-4`); there is no surface behind the link
 - `data-disabled` mirrors the `disabled` prop
+- Consumer attributes (`id`, `aria-*`, `download`, `rel`, `data-*`, listeners) land on the anchor through `v-bind="$attrs"`; a consumer `rel` overrides the computed one
 
 ## Accessibility
 
@@ -88,7 +97,8 @@
   <Link
     label="Learn more"
     size="large"
-    href="#"
+    href="https://example.com/docs"
+    target="_blank"
   />
 </template>
 ```
@@ -105,14 +115,17 @@
     <Link
       size="large"
       label="Learn more"
+      icon="pi pi-external-link"
     />
     <Link
       size="medium"
       label="Learn more"
+      icon="pi pi-external-link"
     />
     <Link
       size="small"
       label="Learn more"
+      icon="pi pi-external-link"
     />
   </div>
 </template>
@@ -128,6 +141,7 @@
 <template>
   <Link
     label="Learn more"
+    icon="pi pi-external-link"
     disabled
   />
 </template>

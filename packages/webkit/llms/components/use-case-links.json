@@ -56,6 +56,13 @@
    "default": "[]",
    "required": "false",
    "doc": "The use cases rendered as linked topics in a three-column divider grid, in order; each item is `{ icon, title, description, href? }`; an item without `href` renders as a plain, unlinked topic."
+  },
+  {
+   "name": "anchor",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "In-page id set on the band so a hash link can target it."
   }
  ],
  "events": [],

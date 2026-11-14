@@ -9,6 +9,11 @@
    "name": "InADrawer",
    "summary": "`container=\"drawer\"` opens the panel from the side, `sections` keeps only the columns and the density, and the `trigger` slot replaces the cog with a labelled button.",
    "sfc": "<script setup>\n  import Button from '@aziontech/webkit/button'\n  import CollectionPreferences from '@aziontech/webkit/collection-preferences'\n  import { ref } from 'vue'\n\n  const columns = [\n    { id: 'name', label: 'Name', locked: true },\n    { id: 'domain', label: 'Domain' },\n    { id: 'status', label: 'Status' }\n  ]\n\n  const preferences = ref({ density: 'compact' })\n</script>\n\n<template>\n  <CollectionPreferences\n    v-model:preferences=\"preferences\"\n    :columns=\"columns\"\n    :sections=\"['columns', 'density']\"\n    container=\"drawer\"\n  >\n    <template #trigger=\"{ open }\">\n      <Button\n        label=\"Table settings\"\n        icon=\"pi pi-cog\"\n        kind=\"outlined\"\n        size=\"medium\"\n        @click=\"open\"\n      />\n    </template>\n  </CollectionPreferences>\n</template>"
+  },
+  {
+   "name": "Disabled",
+   "summary": "`disabled` turns the cog trigger off: the panel does not open.",
+   "sfc": "<script setup>\n  import CollectionPreferences from '@aziontech/webkit/collection-preferences'\n\n  const columns = [\n    { id: 'name', label: 'Name', locked: true },\n    { id: 'status', label: 'Status' }\n  ]\n</script>\n\n<template>\n  <CollectionPreferences\n    :columns=\"columns\"\n    :page-size-options=\"[10, 25, 50]\"\n    disabled\n  />\n</template>"
   }
  ]
 }

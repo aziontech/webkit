@@ -35,20 +35,20 @@
 | `items` | `AiSource[]` | `[]` | false | The sources behind the response, in citation order; item `n` is what `[n]` points at. |
 | `anchor` | `string` | `''` | false | Id prefix of the list items (`<anchor>-source-<n>`); pass the same value to `StreamingResponse` so its citations link here. |
 | `title` | `string` | `''` | false | Heading of the disclosure. Empty uses the locale catalog (`3 sources`). |
-| `open` | `boolean` | `undefined` | false | Controlled open state. Use with `v-model:open`. |
 | `defaultOpen` | `boolean` | `false` | false | Initial open state when uncontrolled. |
-
-## Events
-
-| Event | Payload | Notes |
-| --- | --- | --- |
-| `update:open` | `boolean` |  |
+| `open` | `boolean` | `undefined as never` | false | Two-way value (`v-model:open`). |
 
 ## Sub-components
 
 _None. Data-driven: a source list is a record set the response already holds, like table rows.
 Exports: `"./sources"`; exported type `AiSource` (`title`, `href?`, `description?`) from `sources/types.ts`,
 shared with `StreamingResponse`._
+
+## v-model
+
+| Model          | Type      | Default     | Emits         | Notes                                                                                                                        |
+| -------------- | --------- | ----------- | ------------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| `v-model:open` | `boolean` | `undefined` | `update:open` | Expanded or collapsed, by the trigger or by following a citation. Unbound, the state is local and starts from `defaultOpen`. |
 
 ## States
 
@@ -71,10 +71,10 @@ shared with `StreamingResponse`._
 
 ## Internationalization
 
-| Key             | English source                  | Override prop |
-| --------------- | ------------------------------- | ------------- |
-| `sources.count` | `{count} source(s)` (plural)    | `title`       |
-| `sources.label` | `Sources`                       | —             |
+| Key             | English source               | Override prop |
+| --------------- | ---------------------------- | ------------- |
+| `sources.count` | `{count} source(s)` (plural) | `title`       |
+| `sources.label` | `Sources`                    | —             |
 
 - Formatting: `Intl.PluralRules` and `Intl.NumberFormat` through `t()`.
 

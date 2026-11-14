@@ -56,7 +56,7 @@
 | Slot | Scope | Notes |
 | --- | --- | --- |
 | `actions` | { node: TopologyNode } | Extra controls in a node's identity row, before the bind control. |
-| `empty` | — | Replaces the line shown when there are no levels. |
+| `empty` | — | Replaces the default empty state (the package `EmptyState`, small, `topologyDiagram.empty`) shown when there are no levels. |
 
 ## v-model
 
@@ -64,7 +64,7 @@
 
 ## States
 
-- Root: `data-loading` and `aria-busy` while `loading`; empty when `levels` is empty.
+- Root: `data-loading` and `aria-busy` while `loading`; empty when `levels` is empty, rendered as the package `EmptyState` (small) unless the `empty` slot replaces it.
 - Node card: `data-state` `open` | `closed`; `data-dashed` for a staged or unbound node.
 - Connectors: dashed, flowing; faded never (no disabled nodes).
 
@@ -85,16 +85,16 @@
 
 ## Internationalization
 
-| Key                          | English source              | Override prop |
-| ---------------------------- | --------------------------- | ------------- |
-| `topologyDiagram.label`     | Deployment topology         | `ariaLabel`   |
-| `topologyDiagram.notBound`  | Not bound                   | node `status` |
-| `topologyDiagram.bind` / `change` / `remove` / `create` | Bind {kind} / Change {kind} / Remove {kind} / Create {kind} | — |
-| `topologyDiagram.existing`  | Existing                    | —             |
-| `topologyDiagram.noOptions` | No options yet.             | —             |
-| `topologyDiagram.copy`      | Copy {field}                | —             |
-| `topologyDiagram.empty`     | Nothing is connected yet.   | `empty` slot  |
-| `topologyDiagram.loading`   | Loading the topology        | —             |
+| Key                                                     | English source                                              | Override prop |
+| ------------------------------------------------------- | ----------------------------------------------------------- | ------------- |
+| `topologyDiagram.label`                                 | Deployment topology                                         | `ariaLabel`   |
+| `topologyDiagram.notBound`                              | Not bound                                                   | node `status` |
+| `topologyDiagram.bind` / `change` / `remove` / `create` | Bind {kind} / Change {kind} / Remove {kind} / Create {kind} | —             |
+| `topologyDiagram.existing`                              | Existing                                                    | —             |
+| `topologyDiagram.noOptions`                             | No options yet.                                             | —             |
+| `topologyDiagram.copy`                                  | Copy {field}                                                | —             |
+| `topologyDiagram.empty`                                 | Nothing is connected yet.                                   | `empty` slot  |
+| `topologyDiagram.loading`                               | Loading the topology                                        | —             |
 
 - Formatting: none; kinds, names, statuses and fields are data.
 
@@ -129,7 +129,7 @@
       nodes: [
         {
           key: 'domains',
-          kind: 'Domains',
+          type: 'Domains',
           icon: 'pi pi-globe',
           name: 'shop.example.com',
           status: '2 domains',
@@ -157,7 +157,7 @@
       nodes: [
         {
           key: 'project',
-          kind: 'Project',
+          type: 'Project',
           icon: 'pi pi-folder',
           name: 'web-app',
           status: 'Live',
@@ -176,7 +176,7 @@
       nodes: [
         {
           key: 'policy',
-          kind: 'Policy',
+          type: 'Policy',
           icon: 'pi pi-shield',
           name: 'edge-guard',
           status: 'Active',
@@ -196,7 +196,7 @@
       nodes: [
         {
           key: 'service',
-          kind: 'Service',
+          type: 'Service',
           icon: 'pi pi-server',
           name: 'web-app',
           status: 'Active',
@@ -206,7 +206,7 @@
         },
         {
           key: 'error-page',
-          kind: 'Error page',
+          type: 'Error page',
           icon: 'pi pi-file',
           terminal: true,
           bindable: true,
@@ -221,7 +221,7 @@
       nodes: [
         {
           key: 'cache-static',
-          kind: 'Cache rule',
+          type: 'Cache rule',
           icon: 'pi pi-bolt',
           name: 'static-assets',
           status: 'Active',
@@ -230,7 +230,7 @@
         },
         {
           key: 'cache-api',
-          kind: 'Cache rule',
+          type: 'Cache rule',
           icon: 'pi pi-bolt',
           name: 'api-bypass',
           status: 'Active',
@@ -245,7 +245,7 @@
       nodes: [
         {
           key: 'integration',
-          kind: 'Integration',
+          type: 'Integration',
           icon: 'pi pi-link',
           name: 'web-app-origin',
           status: 'Active',
@@ -262,7 +262,7 @@
       nodes: [
         {
           key: 'storage',
-          kind: 'Storage',
+          type: 'Storage',
           icon: 'pi pi-inbox',
           name: 'web-app-assets',
           status: 'Private',
@@ -323,7 +323,7 @@
 
   const targets = {
     policy: {
-      kind: 'Policy',
+      type: 'Policy',
       icon: 'pi pi-shield',
       options: [
         { value: 'edge-guard', label: 'edge-guard' },
@@ -332,7 +332,7 @@
       unbound: 'Requests reach the service without inspection.'
     },
     'error-page': {
-      kind: 'Error page',
+      type: 'Error page',
       icon: 'pi pi-file',
       options: [{ value: 'maintenance', label: 'maintenance' }],
       unbound: 'Errors answer with the default page.'
@@ -351,7 +351,7 @@
     const value = pick === undefined ? deployed[key] : pick
     const base = {
       key,
-      kind: target.kind,
+      type: target.type,
       icon: target.icon,
       bindable: true,
       bindOptions: target.options,
@@ -363,7 +363,7 @@
         status: removing ? 'Staged' : '',
         severity: removing ? 'warning' : 'neutral',
         dashed: true,
-        message: removing ? `Deploy to remove this ${target.kind.toLowerCase()}.` : target.unbound
+        message: removing ? `Deploy to remove this ${target.type.toLowerCase()}.` : target.unbound
       }
     }
     return {
@@ -373,7 +373,7 @@
       status: pick === undefined ? 'Active' : 'Staged',
       severity: pick === undefined ? 'success' : 'warning',
       dashed: pick !== undefined,
-      message: pick === undefined ? '' : `Deploy to apply this ${target.kind.toLowerCase()}.`
+      message: pick === undefined ? '' : `Deploy to apply this ${target.type.toLowerCase()}.`
     }
   }
 
@@ -383,7 +383,7 @@
       nodes: [
         {
           key: 'project',
-          kind: 'Project',
+          type: 'Project',
           icon: 'pi pi-folder',
           name: 'web-app',
           status: 'Live',
@@ -397,7 +397,7 @@
       nodes: [
         {
           key: 'service',
-          kind: 'Service',
+          type: 'Service',
           icon: 'pi pi-server',
           name: 'web-app',
           status: 'Active',
@@ -413,15 +413,15 @@
   const bind = (event, { key, value }) => {
     if (value === deployed[key]) delete staged[key]
     else staged[key] = value
-    note.value = `${value} staged on ${targets[key].kind.toLowerCase()}.`
+    note.value = `${value} staged on ${targets[key].type.toLowerCase()}.`
   }
   const remove = (event, key) => {
     if (deployed[key]) staged[key] = ''
     else delete staged[key]
-    note.value = `${targets[key].kind} staged for removal.`
+    note.value = `${targets[key].type} staged for removal.`
   }
   const create = (event, key) => {
-    note.value = `Opens the create flow for a new ${targets[key].kind.toLowerCase()}.`
+    note.value = `Opens the create flow for a new ${targets[key].type.toLowerCase()}.`
   }
 </script>
 

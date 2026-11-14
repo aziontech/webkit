@@ -1,6 +1,6 @@
 # Auth (`platform/auth`)
 
-> The signed-out screens of a platform app, frame included: a full-height page with the signed-out `GlobalHeader` (the product mark and a Documentation button) over a centred column that holds one `Card` and the prompt and terms under it. It serves /login, /signup and /signup/verify. The Google and GitHub buttons lead the card, over an “or” `Separator`. Each field is a `Field` whose `Field.Label` sits over an `Input`, or over a `PasswordInput` with `PasswordRequirements`; a `HelperText` appears only after the primary action, saying whether the field is empty or malformed. The rest is `Button`, `IconButton` in a `Tooltip`, a `Tag` and a `Alert`. Errors follow one rule: auth never toasts. Each error story is one endpoint response, and every outcome lands in the same small `Alert` at the top of the card, above the fields. What changes is the severity and what it carries: nothing after a 401, because the fields under it are the recovery; Retry when nobody can fix it (503, 500, timeout); the Sign in and reset-your-password links when the address is already registered (409). Built from `PageHeader`, `GlobalHeader`, `Tag`, `Card`, `Alert`, `Input`, `Field`, `PasswordInput`, `PasswordRequirements`, `HelperText` and `Button`. The card column slides in from the inline start with a fade on mount (`starting:` styles, `duration-slow-01`, `ease-expressive-entrance`, none under reduced motion), and the card height eases between steps. A full page routed outside ConsoleLayout.
+> The signed-out screens of a platform app, frame included: a full-height page with the signed-out `GlobalHeader` (the product mark and a Documentation button) over a centred column that holds one `Card` and the prompt and terms under it. It serves /login, /signup and /signup/verify. The Google and GitHub buttons lead the card, over an “or” `Separator`. The card opens on a `PageHeader` and signs in in two steps: email, then password. Each field is a `Field` whose `Field.Label` sits over an `Input`, or over a `PasswordInput` with `PasswordRequirements`; a `HelperText` (email) or `Field.Error` (password) appears only after the primary action. While a request is in flight the primary `Button` shows its loading state and the step's fieldset is disabled. The rest is `Button`, `IconButton` in a `Tooltip`, a `Tag` and an `Alert`. Errors follow one rule: auth never toasts. Each error story is the primary flow with one endpoint response: the same two-step card on its password step, and the outcome in the same small `Alert` under the heading. What changes is the severity and what it carries: nothing after a 401, because the fields under it are the recovery; Retry when nobody can fix it (503, 500, timeout); the Sign in and reset-your-password links when the address is already registered (409). In-page actions (Forgot your password?, Resend email, Set a new password) are `Button` with `kind="link"`, never an anchor to `#`. Built from `PageHeader`, `GlobalHeader`, `Tag`, `Card`, `Alert`, `Input`, `Field`, `PasswordInput`, `PasswordRequirements`, `HelperText` and `Button`. The card column slides in from the inline start with a fade on mount (`starting:` styles, `duration-slow-01`, `ease-expressive-entrance`, none under reduced motion), and the card height eases between steps. A full page routed outside ConsoleLayout.
 
 - Surface: product
 - Source: `blocks/platform/auth/auth.vue` in `@aziontech/webkit`
@@ -10,7 +10,7 @@
 
 ## Asked as
 
-login; log in; sign in; signin; login page; authentication; auth; forgot password; reset password; new password; entrar; tela de login; acessar conta; esqueci a senha; redefinir senha; signup; sign up; register; registration; create account; new account; free account; cadastro; cadastrar; criar conta; tela de cadastro; registrar; check inbox; check your email; verify email; email verification; confirm email; verification sent; resend email; verificar e-mail; confirmar e-mail; confira seu e-mail; session expired; auth errors; sessão expirada; erro de login; mfa; multi-factor authentication; two-factor authentication; 2fa; authenticator app; one-time code; verification code; totp; recovery code; autenticação em dois fatores; autenticação multifator; código de verificação; código de autenticação; loading sign-in providers; providers loading; carregando provedores de login
+login; log in; sign in; signin; login page; authentication; auth; forgot password; reset password; new password; entrar; tela de login; acessar conta; esqueci a senha; redefinir senha; signup; sign up; register; registration; create account; new account; free account; cadastro; cadastrar; criar conta; tela de cadastro; registrar; check inbox; check your email; verify email; email verification; confirm email; verification sent; resend email; verificar e-mail; confirmar e-mail; confira seu e-mail; session expired; auth errors; sessão expirada; erro de login; mfa; authenticator app; one-time code; verification code; totp; recovery code; autenticação em dois fatores; código de verificação; código de autenticação; loading sign-in providers; providers loading; carregando provedores de login
 
 The signed-out screens of a platform app: sign in, sign up, reset password and check your inbox, frame included. The user has one job here, to get into their account, and one object on the page to do it with: a single card under the signed-out bar. Every step of the flow (`email`, `password`, `reset`, `sent`, `new-password`) swaps the contents of that card in place, and every answer the server gives, success included, lands in one `Alert` inside it. Auth never toasts. It is a full page with its own focused header: the app routes it outside `ConsoleLayout`, never into the layout's default slot.
 
@@ -24,7 +24,7 @@ The signed-out screens of a platform app: sign in, sign up, reset password and c
 
 - First-run steps after the account exists (profile, plan, organization): use `platform/account/onboarding-form`.
 - Changing the password or email of a signed-in user: use `platform/account/profile`.
-- Signing out an expired session over a console page: the shell wire is `platform/states/page-wires` (SessionWire); this block is where it lands.
+- Signing out an expired session over a console page: the shell wire is `platform/states/page-wires` (Session); this block is where it lands.
 - Any signed-in form: use `platform/states/form-validation` for the submit states and `platform/settings/settings-form` for settings.
 
 ## Building blocks
@@ -47,7 +47,7 @@ Three roles, never more on one step:
 
 ### D. The card — `Card` (required)
 
-One `Card` with `:padded="false"`, capped at `max-w-(--container-sm)` and centred in the column. It holds the `<form novalidate>`, its heading (`h1` plus a muted lead), the notice slot, the step body and the primary action. Prompts that are not part of the form (Don't have an account? Sign up, the terms line) sit under the card, outside it.
+One `Card` with `:padded="false"`, capped at `max-w-(--container-sm)` and centred in the column. It holds the `<form novalidate>`, its heading (`PageHeader`, `size="small"`: the `h1` plus a muted lead), the notice slot, the step body inside one `fieldset` and the primary action. Prompts that are not part of the form (Don't have an account? Sign up, the terms line) sit under the card, outside it.
 
 ### E. Card notice — `Alert` (conditional)
 
@@ -58,7 +58,7 @@ The one place every outcome lands. It sits under the card heading and above **bo
 - **503** (`ServiceUnavailable`) and **no response** (`Timeout`): `warning`, with **Retry** in the `#action` slot. Severity follows certainty: a timeout is an unknown.
 - **500** (`ServerError`): `danger`, with **Retry**. Tied to no field, so where the console would toast, the card keeps it.
 - **409** (`EmailAlreadyRegistered`): `danger`, carrying the two exits as links in the default slot: Sign in or reset your password. The address stays in the field.
-- **Success** (signed in, account created): `success`, no action. Sign up reads `Account created. We sent a verification link to name@example.com.`
+- **Success** (signed in, account created, password updated, link resent): `success`, no action. Sign up reads `Account created. We sent a verification link to jane.doe@example.com.`
 
 Put the copy in the default slot when it carries links; animate the entrance on a wrapper, not on the `Alert` itself.
 
@@ -88,11 +88,11 @@ Names the icon-only back control: `Change email` on the password step, `Back to 
 
 ### L. Password field — `Field` (password and new-password steps)
 
-Wraps each `PasswordInput` with its `required` / `invalid` state and a `Field.Description` that holds the error. On the new-password step it also wraps the requirements list.
+Wraps each `PasswordInput` with its `required` / `invalid` state and a `Field.Error` that holds the error. On the new-password step it also wraps the requirements list.
 
 ### M. Password — `PasswordInput` (password and new-password steps)
 
-`autocomplete="current-password"` on sign in, `autocomplete="new-password"` on reset and sign up. Placeholders describe the expected value (`Type your password`, `Enter a new password`, `Repeat the new password`). `Forgot your password?` is a plain link under the sign-in password; it carries the email into the reset step.
+`autocomplete="current-password"` on sign in, `autocomplete="new-password"` on reset and sign up. Placeholders describe the expected value (`Type your password`, `Enter a new password`, `Repeat the new password`). `Forgot your password?` is a `Button` with `kind="link"` under the sign-in password (an in-page action, so never an anchor to `#`); it carries the email into the reset step. `Resend email` and `Set a new password` on the sent step are link buttons too.
 
 ### N. Password rules — `PasswordRequirements` (new-password step, sign up)
 
@@ -102,6 +102,10 @@ Live checklist bound to the new password (`:value`), driven by `DEFAULT_PASSWORD
 
 `severity="info"`, `size="small"`, `Last used`, pinned to the top-end corner of the primary action to point at the method the user signed in with last time. Decorative help, never a status.
 
+### P. Card heading — `PageHeader` (required)
+
+`size="small"`, the step's title and its lead (`Welcome back` / `Sign in to your account.`). The same part on every screen of the block, primary and variants, so the card always opens on one `h1`.
+
 ## Do
 
 - Keep one card and one notice slot for the whole flow; swap the step body, not the page.
@@ -109,7 +113,7 @@ Live checklist bound to the new password (`:value`), driven by `DEFAULT_PASSWORD
 - After a 401, put the message above both fields, clear the password and move focus back to it.
 - Keep the credentials after a 503, a 500 or a timeout; Retry re-sends the same request.
 - Carry the email between steps (sign in to reset, reset back to sign in) so the user never types it twice.
-- Release the in-flight lock on every outcome so Retry can run again.
+- While a request is in flight, show the primary `Button` `loading`, disable the step's `fieldset` and mark the form `aria-busy`; release the lock on every outcome so Retry can run again.
 - Enter the card column once, on mount: it slides in from the inline start with a fade (`starting:-translate-x-6 starting:opacity-0`, `rtl:starting:translate-x-6`, `transition-[translate,opacity] duration-slow-01 ease-expressive-entrance`). Steps inside the card do not replay it.
 - Let the card height follow the step: a `ResizeObserver` on the form sets the wrapper height, which eases with `transition-[height] duration-moderate-02 ease-productive-entrance` and clips only while it moves.
 - While the identity providers load, hold their place with two `Skeleton` bars of the buttons' height in a `role="status"` region named `Preparing sign-in providers`; keep email sign-in usable.
@@ -144,12 +148,12 @@ Live checklist bound to the new password (`:value`), driven by `DEFAULT_PASSWORD
 - **409 notice:** the fact plus the two exits as links: `This email is already registered. Sign in or reset your password.`
 - **Session expired:** `Your session expired. Sign in again to pick up where you left off.`
 - **Providers loading:** the status name says what is happening, no ellipsis: `Preparing sign-in providers`.
-- **Action in a notice:** `Retry`, never "Try again".
+- **Action in a notice:** `Retry`, never "Try again" (the console and assistant blocks use the same word).
 
 ## Accessibility
 
 - The form has an accessible name (`aria-label="Sign in to your account"`) and `novalidate`, so the browser does not show its own bubbles over the field messages.
-- Each input has a visible `Field.Label` tied to it by its `Field`; each error is linked with `aria-describedby` (or through `Field.Description` inside `Field`).
+- Each input has a visible `Field.Label` tied to it by its `Field`; each error is linked with `aria-describedby` (or through `Field.Error` inside `Field`).
 - Use the right `autocomplete` on every field (`username`, `current-password`, `new-password`, `email`) so password managers and autofill work.
 - Icon-only back buttons have an `aria-label` equal to their tooltip.
 - After a submit with errors, focus the first field that needs attention; after a 401, the password.
@@ -166,9 +170,10 @@ Live checklist bound to the new password (`:value`), driven by `DEFAULT_PASSWORD
 - Login: the sign-in flow on the email step, with Google and GitHub over the `or` divider; the same file walks through password, reset, sent and new-password.
 - SignUp: create an account with a work email (and a password checked by `PasswordRequirements`), Google or GitHub.
 - SessionExpired: opens on the password step for the same email, with an info notice that clears on the next action.
+- Submitting: Sign in in flight on the password step: the primary `Button` loading, the fieldset disabled, the form `aria-busy`.
 - ProvidersLoading: the Login card while the identity providers load; two `Skeleton` bars in a `role="status"` region (`Preparing sign-in providers`) replace Google and GitHub over the `or` divider, and the email step works meanwhile.
 - CheckInbox: the `/signup/verify` card: where the link went, the resend prompt and a secondary Return to sign in.
-- IncorrectCredentials: 401 on Sign in; a danger notice above both fields, no action, the password cleared and focused.
+- IncorrectCredentials: 401 on Sign in, on the password step of the same two-step card; a danger notice under the heading, no action, the password cleared.
 - ServiceUnavailable: 503 on Sign in; a warning notice with Retry, credentials kept.
 - ServerError: 500 on the request; a danger notice with Retry in the card instead of a toast.
 - Timeout: no response; the same notice as the 500 in warning, with Retry, because the request may have gone through.
@@ -198,11 +203,12 @@ Live checklist bound to the new password (`:value`), driven by `DEFAULT_PASSWORD
 - `SignUp` — The sign-up screen: create an account with a work email, Google or GitHub.
 - `SessionExpired` — The /login screen after a session expires: it opens on the password step for the same email, with an info Alert that clears on the next action.
 - `ProvidersLoading` — The /login screen while the identity providers load: two `Skeleton` bars in a `role="status"` region named Preparing sign-in providers take the place of the Google and GitHub buttons; email sign-in works meanwhile.
+- `Submitting` — Sign in in flight: the password step with the primary Button loading, the fieldset disabled and the form marked busy until the request answers.
 - `CheckInbox` — The /signup/verify screen: where the verification link went, the resend prompt, and a secondary Return to sign in action.
-- `IncorrectCredentials` — 401 on Sign in: a danger message above both fields with no action, and the password cleared.
-- `ServiceUnavailable` — 503 on Sign in: a warning message that keeps the credentials and carries Retry, the only move left.
-- `ServerError` — 500 on the POST: tied to no field, so where the console would toast, the card keeps a danger message with Retry.
-- `Timeout` — No response: the same message as the 500 but warning, because the request may still have gone through, with Retry.
+- `IncorrectCredentials` — 401 on Sign in, on the password step of the same two-step card: a danger message under the heading with no action, and the password cleared.
+- `ServiceUnavailable` — 503 on Sign in, on the password step: a warning message that keeps the credentials and carries Retry, the only move left.
+- `ServerError` — 500 on Sign in, on the password step: tied to no field, so where the console would toast, the card keeps a danger message with Retry.
+- `Timeout` — No response to Sign in, on the password step: the same message as the 500 but warning, because the request may still have gone through, with Retry.
 - `EmailAlreadyRegistered` — 409 on Sign up: a danger message carrying the two ways out as links, Sign in or reset your password, with the address left in the field.
 - `MfaSetup` — Turn on multi-factor authentication: steps, the QR code with a copyable setup key, and a 6-digit OtpInput that verifies on complete; wrong code on the field, no answer as a warning with Retry.
 - `MfaCode` — The sign-in MFA challenge: a 6-digit OtpInput, focused when the challenge opens, that submits when full, a recovery-code mode (8 characters, grouped), and Sign in with another account.
@@ -213,7 +219,7 @@ Each variant is the same screen in another state: `get_pattern("platform/auth", 
 
 ```vue
 <script setup lang="ts">
-  import Alert from '@aziontech/webkit/alert'
+  import Alert, { type AlertSeverity } from '@aziontech/webkit/alert'
   import Brand from '@aziontech/webkit/brand'
   import Button, { type ButtonKind } from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
@@ -222,6 +228,7 @@ Each variant is the same screen in another state: `get_pattern("platform/auth", 
   import HelperText from '@aziontech/webkit/helper-text'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
+  import PageHeader from '@aziontech/webkit/page-header'
   import PasswordInput from '@aziontech/webkit/password-input'
   import PasswordRequirements, {
     DEFAULT_PASSWORD_REQUIREMENTS
@@ -231,17 +238,44 @@ Each variant is the same screen in another state: `get_pattern("platform/auth", 
   import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, nextTick, onMounted, onScopeDispose, reactive, ref } from 'vue'
 
-  const expiredEmail = ''
+  interface CardNotice {
+    severity: AlertSeverity
+    label: string
+    retry?: boolean
+  }
 
-  const step = ref(expiredEmail ? 'password' : 'email')
+  const failure: string = ''
+  const failureNotices: Record<string, CardNotice> = {
+    'bad-credentials': {
+      severity: 'danger',
+      label: 'Incorrect email or password. Check both and try again.'
+    },
+    'service-unavailable': {
+      severity: 'warning',
+      label: 'Sign-in is unavailable right now. Your credentials are fine.',
+      retry: true
+    },
+    'server-error': {
+      severity: 'danger',
+      label: 'Sign-in failed on our side. You are still signed out. Error 500.',
+      retry: true
+    },
+    timeout: {
+      severity: 'warning',
+      label: 'The server did not answer in time. Your session may already be open.',
+      retry: true
+    }
+  }
+
+  const step = ref('email')
   const returnStep = ref('email')
-  const expiredNotice = ref(Boolean(expiredEmail))
-  const email = ref(expiredEmail)
+  const email = ref('')
   const password = ref('')
   const resetEmail = ref('')
   const newPassword = ref('')
   const confirmPassword = ref('')
-  const signedIn = ref(false)
+  const cardNotice = ref<CardNotice | null>(null)
+  const verifying = ref(false)
   const errors = reactive({
     email: '',
     password: '',
@@ -254,6 +288,7 @@ Each variant is the same screen in another state: `get_pattern("platform/auth", 
   const cardHeight = ref(0)
   const resizing = ref(false)
   let resizeObserver: ResizeObserver | null = null
+  let requestTimer: ReturnType<typeof setTimeout> | undefined
 
   const onCardResize = ([entry]: ResizeObserverEntry[]) => {
     const next = Math.round(entry.contentRect.height)
@@ -267,7 +302,10 @@ Each variant is the same screen in another state: `get_pattern("platform/auth", 
     resizeObserver.observe(cardContent.value)
   })
 
-  onScopeDispose(() => resizeObserver?.disconnect())
+  onScopeDispose(() => {
+    resizeObserver?.disconnect()
+    clearTimeout(requestTimer)
+  })
 
   const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
@@ -310,16 +348,26 @@ Each variant is the same screen in another state: `get_pattern("platform/auth", 
     return { label: 'Continue with email', kind: 'primary' }
   })
 
+  const focusField = (id: string) => nextTick(() => document.getElementById(id)?.focus())
+
+  const request = (done: () => void) => {
+    verifying.value = true
+    clearTimeout(requestTimer)
+    requestTimer = setTimeout(() => {
+      verifying.value = false
+      done()
+    }, 600)
+  }
+
   const backToEmail = () => {
-    signedIn.value = false
+    cardNotice.value = null
     step.value = 'email'
     password.value = ''
     errors.password = ''
   }
 
   const forgotPassword = () => {
-    signedIn.value = false
-    expiredNotice.value = false
+    cardNotice.value = null
     returnStep.value = step.value === 'password' ? 'password' : 'email'
     resetEmail.value = email.value
     errors.resetEmail = ''
@@ -327,10 +375,21 @@ Each variant is the same screen in another state: `get_pattern("platform/auth", 
   }
 
   const backToSignIn = () => {
+    cardNotice.value = null
     step.value = returnStep.value
   }
 
+  const resendEmail = () => {
+    request(() => {
+      cardNotice.value = {
+        severity: 'success',
+        label: `We sent another link to ${resetEmail.value}.`
+      }
+    })
+  }
+
   const openResetLink = () => {
+    cardNotice.value = null
     newPassword.value = ''
     confirmPassword.value = ''
     errors.newPassword = ''
@@ -338,23 +397,29 @@ Each variant is the same screen in another state: `get_pattern("platform/auth", 
     step.value = 'new-password'
   }
 
-  const focusField = (id: string) => nextTick(() => document.getElementById(id)?.focus())
+  const signIn = () => {
+    errors.password = password.value ? '' : 'This field is required.'
+    if (errors.password) {
+      focusField('login-password')
+      return
+    }
+    request(() => {
+      cardNotice.value = failureNotices[failure] ?? { severity: 'success', label: 'Signed in.' }
+    })
+  }
 
   const handlePrimary = () => {
-    expiredNotice.value = false
-    signedIn.value = false
+    if (verifying.value) return
+    cardNotice.value = null
     if (step.value === 'email') {
       errors.email = emailError(email.value)
       if (errors.email) focusField('login-email')
-      else step.value = 'password'
-    } else if (step.value === 'password') {
-      errors.password = password.value ? '' : 'This field is required.'
-      if (errors.password) focusField('login-password')
-      else signedIn.value = true
-    } else if (step.value === 'reset') {
+      else request(() => (step.value = 'password'))
+    } else if (step.value === 'password') signIn()
+    else if (step.value === 'reset') {
       errors.resetEmail = emailError(resetEmail.value)
       if (errors.resetEmail) focusField('reset-email')
-      else step.value = 'sent'
+      else request(() => (step.value = 'sent'))
     } else if (step.value === 'new-password') {
       errors.newPassword = newPasswordError(newPassword.value)
       errors.confirmPassword = !confirmPassword.value
@@ -364,12 +429,17 @@ Each variant is the same screen in another state: `get_pattern("platform/auth", 
           : "Passwords don't match."
       if (errors.newPassword || errors.confirmPassword)
         focusField(errors.newPassword ? 'new-password' : 'confirm-password')
-      else {
-        email.value = resetEmail.value
-        password.value = ''
-        returnStep.value = 'password'
-        step.value = 'password'
-      }
+      else
+        request(() => {
+          email.value = resetEmail.value
+          password.value = ''
+          returnStep.value = 'password'
+          step.value = 'password'
+          cardNotice.value = {
+            severity: 'success',
+            label: 'Password updated. Sign in with the new one.'
+          }
+        })
     } else backToSignIn()
   }
 </script>
@@ -426,37 +496,42 @@ Each variant is the same screen in another state: `get_pattern("platform/auth", 
                       ref="cardContent"
                       class="flex flex-col gap-(--spacing-lg)"
                       aria-label="Sign in to your account"
+                      :aria-busy="verifying || undefined"
                       novalidate
                       @submit.prevent="handlePrimary"
                     >
-                      <header class="flex flex-col gap-(--spacing-xxs)">
-                        <h1 class="text-heading-sm text-(--text-default)">
-                          {{ heading.title }}
-                        </h1>
-                        <p
-                          v-if="heading.description"
-                          class="text-body-sm text-(--text-muted)"
+                      <PageHeader
+                        :title="heading.title"
+                        :description="heading.description"
+                        size="small"
+                      />
+
+                      <Alert
+                        v-if="cardNotice"
+                        :key="cardNotice.label"
+                        :severity="cardNotice.severity"
+                        size="small"
+                        :label="cardNotice.label"
+                      >
+                        <template
+                          v-if="cardNotice.retry"
+                          #action
                         >
-                          {{ heading.description }}
-                        </p>
-                      </header>
+                          <Button
+                            label="Retry"
+                            kind="secondary"
+                            size="small"
+                            :loading="verifying"
+                            @click="signIn"
+                          />
+                        </template>
+                      </Alert>
 
-                      <Alert
-                        v-if="expiredNotice"
-                        key="expired"
-                        severity="info"
-                        size="small"
-                        label="Your session expired. Sign in again to pick up where you left off."
-                      />
-                      <Alert
-                        v-else-if="signedIn"
-                        key="signed-in"
-                        severity="success"
-                        size="small"
-                        label="Signed in."
-                      />
-
-                      <div class="flex flex-col">
+                      <fieldset
+                        class="m-0 flex min-w-0 flex-col border-0 p-0"
+                        :disabled="verifying"
+                      >
+                        <legend class="sr-only">{{ heading.title }}</legend>
                         <div
                           v-if="step === 'email'"
                           class="flex flex-col gap-(--spacing-lg) pb-(--spacing-lg)"
@@ -483,10 +558,7 @@ Each variant is the same screen in another state: `get_pattern("platform/auth", 
                           <Separator label="or" />
                         </div>
 
-                        <div
-                          v-if="step === 'email'"
-                          class="motion-reduce:transition-none motion-reduce:transform-none"
-                        >
+                        <div v-if="step === 'email'">
                           <Field :required="!!errors.email && !email.trim()">
                             <Field.Label for="login-email">Email</Field.Label>
                             <Input
@@ -497,7 +569,7 @@ Each variant is the same screen in another state: `get_pattern("platform/auth", 
                               size="large"
                               autocomplete="username"
                               class="w-full"
-                              placeholder="myemail@example.com"
+                              placeholder="m@example.com"
                               :required="!!errors.email && !email.trim()"
                               :invalid="!!errors.email && !!email.trim()"
                               :aria-describedby="errors.email ? 'login-email-error' : undefined"
@@ -514,11 +586,9 @@ Each variant is the same screen in another state: `get_pattern("platform/auth", 
 
                         <div
                           v-else-if="step === 'password'"
-                          class="flex flex-col gap-(--spacing-lg) motion-reduce:transition-none motion-reduce:transform-none"
+                          class="flex flex-col gap-(--spacing-lg)"
                         >
-                          <div
-                            class="flex items-center gap-(--spacing-sm) motion-reduce:transition-none motion-reduce:transform-none"
-                          >
+                          <div class="flex items-center gap-(--spacing-sm)">
                             <Tooltip text="Change email">
                               <IconButton
                                 icon="pi pi-chevron-left"
@@ -533,8 +603,9 @@ Each variant is the same screen in another state: `get_pattern("platform/auth", 
                             }}</span>
                           </div>
 
-                          <div class="flex flex-col gap-(--spacing-xs)">
+                          <div class="flex flex-col items-start gap-(--spacing-xs)">
                             <Field
+                              class="w-full"
                               :required="!!errors.password && !password"
                               :invalid="!!errors.password && !!password"
                             >
@@ -547,27 +618,25 @@ Each variant is the same screen in another state: `get_pattern("platform/auth", 
                                 placeholder="Type your password"
                                 @update:model-value="errors.password = ''"
                               />
-                              <Field.Description v-if="errors.password">{{
+                              <Field.Error v-if="errors.password">{{
                                 errors.password
-                              }}</Field.Description>
+                              }}</Field.Error>
                             </Field>
 
-                            <a
-                              class="self-start text-body-xs text-(--text-muted) underline underline-offset-2 transition-colors duration-fast-02 ease-productive-entrance hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
-                              href="#"
-                              @click.prevent="forgotPassword"
-                              >Forgot your password?</a
-                            >
+                            <Button
+                              type="button"
+                              label="Forgot your password?"
+                              kind="link"
+                              @click="forgotPassword"
+                            />
                           </div>
                         </div>
 
                         <div
                           v-else-if="step === 'reset'"
-                          class="flex flex-col gap-(--spacing-lg) motion-reduce:transition-none motion-reduce:transform-none"
+                          class="flex flex-col gap-(--spacing-lg)"
                         >
-                          <div
-                            class="flex items-center gap-(--spacing-sm) motion-reduce:transition-none motion-reduce:transform-none"
-                          >
+                          <div class="flex items-center gap-(--spacing-sm)">
                             <Tooltip text="Back to sign in">
                               <IconButton
                                 icon="pi pi-chevron-left"
@@ -592,7 +661,7 @@ Each variant is the same screen in another state: `get_pattern("platform/auth", 
                               size="large"
                               autocomplete="email"
                               class="w-full"
-                              placeholder="myemail@example.com"
+                              placeholder="m@example.com"
                               :required="!!errors.resetEmail && !resetEmail.trim()"
                               :invalid="!!errors.resetEmail && !!resetEmail.trim()"
                               :aria-describedby="
@@ -611,7 +680,7 @@ Each variant is the same screen in another state: `get_pattern("platform/auth", 
 
                         <div
                           v-else-if="step === 'new-password'"
-                          class="flex flex-col gap-(--spacing-lg) motion-reduce:transition-none motion-reduce:transform-none"
+                          class="flex flex-col gap-(--spacing-lg)"
                         >
                           <Field
                             :required="!!errors.newPassword && !newPassword"
@@ -626,9 +695,9 @@ Each variant is the same screen in another state: `get_pattern("platform/auth", 
                               placeholder="Enter a new password"
                               @update:model-value="errors.newPassword = ''"
                             />
-                            <Field.Description v-if="errors.newPassword">{{
+                            <Field.Error v-if="errors.newPassword">{{
                               errors.newPassword
-                            }}</Field.Description>
+                            }}</Field.Error>
                             <PasswordRequirements :value="newPassword" />
                           </Field>
 
@@ -645,38 +714,38 @@ Each variant is the same screen in another state: `get_pattern("platform/auth", 
                               placeholder="Repeat the new password"
                               @update:model-value="errors.confirmPassword = ''"
                             />
-                            <Field.Description v-if="errors.confirmPassword">{{
+                            <Field.Error v-if="errors.confirmPassword">{{
                               errors.confirmPassword
-                            }}</Field.Description>
+                            }}</Field.Error>
                           </Field>
                         </div>
 
                         <div
                           v-else
-                          class="flex flex-col gap-(--spacing-xs) motion-reduce:transition-none motion-reduce:transform-none"
+                          class="flex flex-col gap-(--spacing-xs)"
                         >
                           <div class="flex items-center gap-(--spacing-xs)">
                             <p class="text-body-sm text-(--text-default)">
                               Didn't receive the email?
                             </p>
-                            <a
-                              class="text-link text-body-sm"
-                              href="#"
-                              @click.prevent
-                              >Resend email</a
-                            >
+                            <Button
+                              type="button"
+                              label="Resend email"
+                              kind="link"
+                              @click="resendEmail"
+                            />
                           </div>
                           <div class="flex items-center gap-(--spacing-xs)">
                             <p class="text-body-sm text-(--text-default)">Already opened it?</p>
-                            <a
-                              class="text-link text-body-sm"
-                              href="#"
-                              @click.prevent="openResetLink"
-                              >Set a new password</a
-                            >
+                            <Button
+                              type="button"
+                              label="Set a new password"
+                              kind="link"
+                              @click="openResetLink"
+                            />
                           </div>
                         </div>
-                      </div>
+                      </fieldset>
 
                       <div class="relative">
                         <Button
@@ -685,6 +754,7 @@ Each variant is the same screen in another state: `get_pattern("platform/auth", 
                           size="large"
                           class="w-full"
                           type="submit"
+                          :loading="verifying"
                         />
 
                         <div
@@ -716,27 +786,26 @@ Each variant is the same screen in another state: `get_pattern("platform/auth", 
                 >
               </div>
 
-              <p
-                v-if="step === 'email' || step === 'password'"
-                class="text-center text-body-xs text-(--text-muted)"
-              >
-                By continuing, I agree to the
-                <a
-                  class="text-link"
-                  href="https://example.com/terms"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  >terms of service</a
-                >
-                and
-                <a
-                  class="text-link"
-                  href="https://example.com/privacy"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  >privacy policy</a
-                >.
-              </p>
+              <template v-if="step === 'email' || step === 'password'">
+                <p class="text-center text-body-xs text-(--text-muted)">
+                  By continuing, I agree to the
+                  <a
+                    class="text-link"
+                    href="https://example.com/terms"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    >terms of service</a
+                  >
+                  and
+                  <a
+                    class="text-link"
+                    href="https://example.com/privacy"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    >privacy policy</a
+                  >.
+                </p>
+              </template>
             </div>
           </div>
         </div>
