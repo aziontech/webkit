@@ -1,6 +1,6 @@
 # MFA management
 
-Multi-factor authentication for a whole account. An admin sees who signs in with a second factor and who uses a password only, requires MFA for everyone, reminds the people who have not set it up, and resets the factor of someone who lost their device. Setting up a factor and the sign-in challenge are `platform/auth` (`MfaSetup`, `MfaChallenge`); this page manages them for other people. It is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header and the `main`.
+Multi-factor authentication for a whole account. An admin sees who signs in with a second factor and who uses a password only, requires MFA for everyone, reminds the people who have not set it up, and resets the factor of someone who lost their device. Setting up a factor and the sign-in challenge are `platform/auth` (`MfaSetup`, `MfaCode`); this page manages them for other people. It is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header and the `main`.
 
 ## When to use
 
@@ -10,7 +10,7 @@ Multi-factor authentication for a whole account. An admin sees who signs in with
 ## When not to use
 
 - A person setting up their own factor: use `platform/auth#MfaSetup`.
-- The code prompt at sign-in: use `platform/auth#MfaChallenge`.
+- The code prompt at sign-in: use `platform/auth#MfaCode`.
 - Inviting or removing people: use `platform/account/users`.
 
 ## Building blocks
@@ -27,15 +27,19 @@ One compact `SettingRow` in an `Item.List` in a flush `Card`. Turning the `Switc
 
 While MFA is optional and someone has no factor, a warning `Alert` counts them (`2 of 5 people sign in with a password only.`) and points at the two remedies.
 
-### D. People table — `Input`, `Table`, `Avatar`, `useCollection` (required)
+### D. Controls row — `PropertyFilter`, `IconButton`, `Tooltip`, `CollectionPreferences` (required)
 
-A search `Input` with `v-bind="filterProps"`, then a `Table` with `v-bind="tableProps"` in a flush `Card`: Name (square `Avatar`, name, email under it), MFA as `Table.CellStatus` (Enabled success, Not set up warning), Method, and Set up as `Table.CellTime` or a dash.
+The `platform/view/table-view` controls row, as on every account list: a `PropertyFilter` over Name, Email, MFA status and Method (`v-bind="propertyFilterProps"`), then Refresh and Download CSV as outlined `IconButton`s in a `Tooltip`, and `CollectionPreferences` for page size and columns. Download CSV is disabled when no row matches.
 
-### E. Row actions — `DropdownMenu`, `ConfirmDialog` (required)
+### E. People table — `Table`, `Avatar`, `EmptyState`, `useCollection` (required)
+
+A `Table` with `v-bind="tableProps"` in a flush `Card`, paginated by `useCollection`: Name (square `Avatar`, name, email under it), MFA as `Table.CellStatus` (Enabled success, Not set up warning), Method, and Set up as `Table.CellTime` or a dash. When no person matches the filters, the table's `#empty` slot renders a small `EmptyState` (`No matching people`) with Clear filters.
+
+### F. Row actions — `DropdownMenu`, `ConfirmDialog` (required)
 
 `Table.CellActions` named after the person: Reset MFA for an enabled factor, behind a `ConfirmDialog` that says what the person loses and when to use it; Send setup reminder for a person without one.
 
-### F. Load failure and outcomes — `Alert` (required)
+### G. Load failure and outcomes — `Alert` (required)
 
 When the list fails to load, a danger `Alert` with Retry takes the table's place. Require, optional, reset and reminder end in a success toast; they are not deploys, so no toast carries Edit or Redeploy. This page body only calls `toast` from `@aziontech/webkit/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shells/console` does), so the page never renders a `Toaster`.
 
@@ -55,6 +59,7 @@ When the list fails to load, a danger `Alert` with Retry takes the table's place
 
 - **Title:** `Multi-factor authentication`. **Setting:** `Require MFA`.
 - **Statuses:** `Enabled`, `Not set up`. **Actions:** `Reset MFA`, `Send setup reminder`.
+- **No match:** `No matching people`, `No person matches these filters.`, `Clear filters`.
 - **Toasts:** `MFA is now required.`, `MFA is optional again.`, `MFA reset for Jordan Reyes.`, `Reminder sent to priya.nair@example.com.`
 - Follow `skills/webkit-microcopy`: sentence case, no "please", no exclamation marks.
 
@@ -73,6 +78,6 @@ When the list fails to load, a danger `Alert` with Retry takes the table's place
 
 ## Related
 
-- `platform/auth` — `MfaSetup` and `MfaChallenge`, the person's own side.
+- `platform/auth` — `MfaSetup` and `MfaCode`, the person's own side.
 - `platform/account/users` — the people in the account.
 - `platform/account/activity-history` — where MFA changes are audited.

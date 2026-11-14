@@ -3,16 +3,20 @@
   import Avatar from '@aziontech/webkit/avatar'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
+  import CollectionPreferences from '@aziontech/webkit/collection-preferences'
   import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
   import DropdownMenu, { type DropdownMenuOptionValue } from '@aziontech/webkit/dropdown-menu'
-  import Input from '@aziontech/webkit/input'
+  import EmptyState from '@aziontech/webkit/empty-state'
+  import IconButton from '@aziontech/webkit/icon-button'
   import Item from '@aziontech/webkit/item'
   import PageHeader from '@aziontech/webkit/page-header'
+  import PropertyFilter from '@aziontech/webkit/property-filter'
   import SettingRow from '@aziontech/webkit/setting-row'
   import Switch from '@aziontech/webkit/switch'
-  import Table, { type TableColumn } from '@aziontech/webkit/table'
+  import Table, { type TableColumn, type TableExposed } from '@aziontech/webkit/table'
   import { toast } from '@aziontech/webkit/toast'
-  import { useCollection } from '@aziontech/webkit/use-collection'
+  import Tooltip from '@aziontech/webkit/tooltip'
+  import { type FilteringProperty, useCollection } from '@aziontech/webkit/use-collection'
   import { computed, ref } from 'vue'
 
   const DAY = 86_400_000
@@ -93,12 +97,37 @@
       status: member.enabled ? 'Enabled' : 'Not set up'
     }))
   )
-  const { filterProps, tableProps, clearFilters } = useCollection({
-    items: rows,
-    columns,
-    filtering: { fields: ['name', 'email', 'status'] },
-    pagination: { pageSize: 10 }
-  })
+  const properties: FilteringProperty[] = [
+    { key: 'name', label: 'Name' },
+    { key: 'email', label: 'Email' },
+    {
+      key: 'status',
+      label: 'MFA',
+      options: [{ value: 'Enabled' }, { value: 'Not set up' }]
+    },
+    { key: 'method', label: 'Method', options: [{ value: 'Authenticator app' }] }
+  ]
+
+  const { tableProps, propertyFilterProps, preferencesProps, matchingItems, clearFilters } =
+    useCollection({
+      items: rows,
+      columns,
+      filtering: { fields: ['name', 'email', 'status', 'method'] },
+      propertyFiltering: { properties },
+      pagination: { pageSize: 10, pageSizeOptions: [10, 25, 50] },
+      preferences: { storageKey: 'account-mfa' }
+    })
+
+  const membersTable = ref<TableExposed<MemberRow> | null>(null)
+  const exportCsv = () => membersTable.value?.exportCsv({ filename: 'mfa-status.csv' })
+
+  const refreshing = ref(false)
+  const refresh = () => {
+    refreshing.value = true
+    setTimeout(() => {
+      refreshing.value = false
+    }, 700)
+  }
 
   const retryLoad = () => {
     loadFailed.value = false
@@ -211,20 +240,50 @@
         </Alert>
 
         <div class="flex min-w-0 flex-col gap-(--layout-group-gap)">
-          <Input
+          <header
             v-if="!loadFailed"
-            v-bind="filterProps"
-            placeholder="Search people"
-            aria-label="Search people"
-            class="w-full"
+            class="flex flex-wrap items-start gap-(--layout-group-gap)"
           >
-            <template #iconLeft>
-              <i
-                class="pi pi-search"
-                aria-hidden="true"
+            <div class="flex min-w-0 grow basis-(--container-2xs)">
+              <PropertyFilter
+                v-bind="propertyFilterProps"
+                placeholder="Filter people"
+                aria-label="Filter people"
               />
-            </template>
-          </Input>
+            </div>
+            <div class="flex shrink-0 flex-wrap items-center gap-(--spacing-xs)">
+              <Tooltip
+                text="Refresh"
+                class="shrink-0"
+              >
+                <IconButton
+                  icon="pi pi-refresh"
+                  kind="outlined"
+                  size="medium"
+                  :loading="refreshing"
+                  aria-label="Refresh"
+                  @click="refresh"
+                />
+              </Tooltip>
+              <Tooltip
+                text="Download CSV"
+                class="shrink-0"
+              >
+                <IconButton
+                  icon="pi pi-download"
+                  kind="outlined"
+                  size="medium"
+                  :disabled="!matchingItems.length"
+                  aria-label="Download CSV"
+                  @click="exportCsv"
+                />
+              </Tooltip>
+              <CollectionPreferences
+                v-bind="preferencesProps"
+                title="Table preferences"
+              />
+            </div>
+          </header>
 
           <Alert
             v-if="loadFailed"
@@ -247,6 +306,7 @@
           >
             <template #content>
               <Table
+                ref="membersTable"
                 v-bind="tableProps"
                 :loading="loading"
                 enable-sorting
@@ -313,19 +373,21 @@
                   </Table.CellActions>
                 </template>
                 <template #empty>
-                  <div
-                    class="flex flex-col items-center gap-(--spacing-sm) px-(--spacing-md) py-(--spacing-lg)"
+                  <EmptyState
+                    size="small"
+                    icon="pi pi-search"
+                    title="No matching people"
+                    description="No person matches these filters."
                   >
-                    <p class="m-0 text-body-sm text-(--text-muted)">
-                      No person matches this search.
-                    </p>
-                    <Button
-                      label="Clear search"
-                      kind="outlined"
-                      size="small"
-                      @click="clearFilters"
-                    />
-                  </div>
+                    <template #actions>
+                      <Button
+                        label="Clear filters"
+                        kind="outlined"
+                        size="small"
+                        @click="clearFilters"
+                      />
+                    </template>
+                  </EmptyState>
                 </template>
               </Table>
             </template>
