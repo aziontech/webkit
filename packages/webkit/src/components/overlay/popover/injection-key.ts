@@ -19,7 +19,13 @@ export type PopoverPlacement =
 export type PopoverPlacementInput = PopoverPlacement | 'auto'
 
 /** Panel width preset. */
-export type PopoverWidth = 'small' | 'medium' | 'large'
+export type PopoverSize = 'small' | 'medium' | 'large'
+
+/**
+ * Legacy name of the panel width preset.
+ * @deprecated since 6.0 — use `PopoverSize`. Removed in 7.0.
+ */
+export type PopoverWidth = PopoverSize
 
 export interface PopoverContext {
   /** Stable test-id prefix derived from the root component. */
@@ -30,8 +36,8 @@ export interface PopoverContext {
   disabled: Ref<boolean>
   /** Resolved placement passed to the floating panel as data-placement. */
   placement: Ref<PopoverPlacement>
-  /** Panel width preset (data-width); undefined = fluid default. */
-  width: Ref<PopoverWidth | undefined>
+  /** Panel width preset (data-size); undefined = fluid default. */
+  size: Ref<PopoverSize | undefined>
   /** Fixed-position style (top/left/z-index/--popup-origin) for the floating panel. */
   panelStyle: Readonly<Ref<Record<string, string>>>
   /** Stable element ids used to wire aria-controls / aria-labelledby / aria-describedby. */

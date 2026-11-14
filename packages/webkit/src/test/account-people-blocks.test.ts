@@ -10,7 +10,8 @@ import { useToastRegion } from './toast-region'
 
 useToastRegion()
 
-const dialog = () => document.querySelector('[role="dialog"]') as HTMLElement | null
+const dialog = () =>
+  document.querySelector('[role="dialog"], [role="alertdialog"]') as HTMLElement | null
 const button = (root: HTMLElement, label: string) =>
   Array.from(root.querySelectorAll('button')).find(
     (item) => item.textContent?.trim() === label

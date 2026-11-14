@@ -428,6 +428,28 @@ describe('Popover (compound / overlay)', () => {
     }
   )
 
+  it.each(['small', 'medium', 'large'] as const)(
+    'mirrors size=%s onto the open panel data-size',
+    async (size) => {
+      render(host({ size }))
+      await fireEvent.click(byTestId('overlay-popover__trigger') as HTMLElement)
+      await waitFor(() => expect(panel()).not.toBeNull())
+      expect((panel() as HTMLElement).getAttribute('data-size')).toBe(size)
+    }
+  )
+
+  it('size wins over the deprecated width', async () => {
+    render(host({ size: 'large', width: 'small' }))
+    await fireEvent.click(byTestId('overlay-popover__trigger') as HTMLElement)
+    await waitFor(() => expect(panel()).not.toBeNull())
+    expect((panel() as HTMLElement).getAttribute('data-size')).toBe('large')
+  })
+
+  it('opens at defaultOpen when uncontrolled', async () => {
+    render(host({ defaultOpen: true }))
+    await waitFor(() => expect(panel()).not.toBeNull())
+  })
+
   /**
    * Placement is a collision-aware preference (usePlacement flip): the side is
    * honored verbatim when it fits the viewport and flips to the opposite side
@@ -722,5 +744,56 @@ describe('text input as the trigger control', () => {
     expect(input.hasAttribute('aria-haspopup')).toBe(false)
     expect(input.hasAttribute('aria-controls')).toBe(false)
     await expectNoA11yViolations(container)
+  })
+})
+
+describe('nested in a Dialog (overlay layer stack)', () => {
+  it('Escape closes the popover only, and Tab does not leave it for the dialog', async () => {
+    const { default: Dialog } = await import('../dialog/dialog.vue')
+    const { default: DialogPortal } = await import('../dialog/dialog-portal.vue')
+    const { default: DialogContent } = await import('../dialog/dialog-content.vue')
+    const { default: DialogTitle } = await import('../dialog/dialog-title.vue')
+    render(
+      defineComponent({
+        components: {
+          Dialog,
+          DialogPortal,
+          DialogContent,
+          DialogTitle,
+          Popover,
+          PopoverTrigger,
+          PopoverContent
+        },
+        template: `
+          <Dialog :default-open="true" data-testid="host-dialog">
+            <DialogPortal>
+              <DialogContent>
+                <DialogTitle>Settings</DialogTitle>
+                <button type="button" data-testid="dialog-first">First</button>
+                <Popover>
+                  <PopoverTrigger><button type="button">Filters</button></PopoverTrigger>
+                  <PopoverContent>
+                    <button type="button" data-testid="pop-a">A</button>
+                    <button type="button" data-testid="pop-b">B</button>
+                  </PopoverContent>
+                </Popover>
+              </DialogContent>
+            </DialogPortal>
+          </Dialog>
+        `
+      })
+    )
+    await nextTick()
+    await nextTick()
+    await fireEvent.click(control())
+    await waitFor(() => expect(panel()).not.toBeNull())
+
+    byTestId('pop-b')!.focus()
+    await userEvent.keyboard('{Tab}')
+    expect(document.activeElement).toBe(control())
+
+    await fireEvent.keyDown(document, { key: 'Escape' })
+    await waitFor(() => expect(panel()).toBeNull())
+    expect(byTestId('host-dialog')!.getAttribute('data-state')).toBe('open')
   })
 })

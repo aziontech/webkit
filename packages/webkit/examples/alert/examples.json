@@ -31,6 +31,11 @@
       "name": "AutoDismiss",
       "summary": "Auto-dismisses after 5 seconds when `life` is greater than zero.",
       "file": "auto-dismiss.vue"
+    },
+    {
+      "name": "WithTitle",
+      "summary": "A bold `title` line above the copy, for a failure that needs a heading and a sentence of detail.",
+      "file": "with-title.vue"
     }
   ]
 }

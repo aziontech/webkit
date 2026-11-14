@@ -464,3 +464,87 @@ describe('keyboard map (spec)', () => {
     expect(onClick).toHaveBeenCalledTimes(1)
   })
 })
+
+describe('severity (audit: type renamed to severity, error to danger)', () => {
+  it('toast.error raises a danger toast and keeps the legacy data-type', async () => {
+    await mountToaster({ position: 'bottom-right', duration: 0 })
+    toast.error('Deploy failed')
+    const region = await regionFor('bottom-right')
+    const item = within(region!).getByTestId('feedback-toast__item')
+    expect(item.getAttribute('data-severity')).toBe('danger')
+    expect(item.getAttribute('data-type')).toBe('error')
+    expect(useToastStore().toasts[0]!.severity).toBe('danger')
+    expect(useToastStore().toasts[0]!.type).toBe('error')
+  })
+
+  it('ToastItem severity="danger" is an alert; the deprecated type="error" still maps to danger', () => {
+    const { getAllByTestId } = render({
+      components: { ToastItem },
+      template: `<div><ToastItem severity="danger">A</ToastItem><ToastItem type="error">B</ToastItem></div>`
+    })
+    const [modern, legacy] = getAllByTestId('feedback-toast__item')
+    expect(modern!.getAttribute('role')).toBe('alert')
+    expect(modern!.getAttribute('data-severity')).toBe('danger')
+    expect(legacy!.getAttribute('data-severity')).toBe('danger')
+  })
+
+  it('a store entry added with the legacy type gets the matching severity', () => {
+    useToastStore().add({ id: 'legacy', type: 'error', message: 'Old API', duration: 0 })
+    expect(useToastStore().toasts.find((t) => t.id === 'legacy')!.severity).toBe('danger')
+  })
+})
+
+describe('timing adjustable (audit: WCAG 2.2.1)', () => {
+  const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
+
+  it('a toast with an action outlives the default duration', async () => {
+    await mountToaster({ position: 'bottom-right', duration: 4000 })
+    toast('Saved', { action: { label: 'Undo', onClick: () => {} } })
+    toast('Plain')
+    const [withAction, plain] = useToastStore().toasts
+    expect(withAction!.duration).toBeGreaterThanOrEqual(10000)
+    expect(plain!.duration).toBe(4000)
+  })
+
+  it('auto-dismiss pauses while focus is inside the region and resumes when it leaves', async () => {
+    const view = render({
+      components: { Toaster },
+      template: `<div><button type="button" data-testid="work">Work</button><Toaster :duration="300" /></div>`
+    })
+    await nextTick()
+    await nextTick()
+    toast('Saved', { duration: 300, action: { label: 'Undo', onClick: () => {} } })
+    const region = await regionFor('bottom-right')
+    within(region!).getByText('Undo').closest('button')!.focus()
+    await wait(600)
+    expect(useToastStore().toasts).toHaveLength(1)
+    view.getByTestId('work').focus()
+    await wait(600)
+    expect(useToastStore().toasts).toHaveLength(0)
+  })
+
+  it('Alt+T moves focus to the front toast action', async () => {
+    const view = render({
+      components: { Toaster },
+      template: `<div><button type="button" data-testid="work">Work</button><Toaster :duration="0" /></div>`
+    })
+    await nextTick()
+    await nextTick()
+    toast('Saved', { action: { label: 'Undo', onClick: () => {} } })
+    const region = await regionFor('bottom-right')
+    view.getByTestId('work').focus()
+    await keyboardUser.keyboard('{Alt>}t{/Alt}')
+    expect(document.activeElement).toBe(within(region!).getByText('Undo').closest('button'))
+  })
+})
+
+describe('reduced motion (audit: no inline transition)', () => {
+  it('neither the region nor a toast sets an inline transition', async () => {
+    await mountToaster({ position: 'bottom-right', duration: 0 })
+    toast('Saved')
+    const region = await regionFor('bottom-right')
+    expect(region!.style.transition).toBe('')
+    const card = region!.querySelector<HTMLElement>('[data-front]')!
+    expect(card.style.transition).toBe('')
+  })
+})

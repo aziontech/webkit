@@ -5,11 +5,7 @@
   import * as en from '../../../i18n/messages/en'
   import Button from '../../actions/button/button.vue'
   import IconButton from '../../actions/icon-button/icon-button.vue'
-  import {
-    getMessageDismissTransitionStyle,
-    MESSAGE_DISMISS_MS,
-    messageDismissTransitionClasses
-  } from './presets/transitions'
+  import { MESSAGE_DISMISS_MS } from './presets/transitions'
 
   export type AlertSeverity = 'info' | 'success' | 'warning' | 'danger'
   export type AlertSize = 'small' | 'medium'
@@ -34,6 +30,8 @@
     closable?: boolean
     /** Duration in milliseconds before auto-dismiss; `0` disables auto-dismiss. */
     life?: number
+    /** Optional bold first line above the copy; hidden when empty. */
+    title?: string
   }
 
   const props = withDefaults(defineProps<Props>(), {
@@ -43,12 +41,14 @@
     icon: '',
     actionLabel: '',
     closable: false,
-    life: 0
+    life: 0,
+    title: ''
   })
 
   const emit = defineEmits<{
     action: [event: MouseEvent]
-    close: []
+    /** Dismissed, after the fade; carries the close click or the Escape key, none after life expires. */
+    close: [event?: Event]
   }>()
 
   const slots = defineSlots<{
@@ -97,11 +97,10 @@
       : 'status'
   )
 
-  const dismissTransitionStyle = getMessageDismissTransitionStyle()
-
   const visible = ref(true)
 
   let dismissTimer: ReturnType<typeof setTimeout> | undefined
+  let dismissEvent: Event | undefined
 
   const clearDismissTimer = () => {
     if (dismissTimer !== undefined) {
@@ -110,17 +109,19 @@
     }
   }
 
-  const dismiss = () => {
+  const dismiss = (event?: Event) => {
     if (!visible.value) {
       return
     }
 
+    dismissEvent = event
     clearDismissTimer()
     visible.value = false
   }
 
   const handleAfterLeave = () => {
-    emit('close')
+    if (dismissEvent) emit('close', dismissEvent)
+    else emit('close')
   }
 
   const handleAction = (event: MouseEvent) => {
@@ -129,18 +130,18 @@
 
   const handleClose = (event: MouseEvent) => {
     event.stopPropagation()
-    dismiss()
+    dismiss(event)
   }
 
-  const handleEscape = (event: { key?: string }) => {
+  const handleEscape = (event: KeyboardEvent) => {
     if (props.closable && event.key === 'Escape') {
-      dismiss()
+      dismiss(event)
     }
   }
 
   onMounted(() => {
     if (props.life > 0) {
-      dismissTimer = setTimeout(dismiss, props.life)
+      dismissTimer = setTimeout(() => dismiss(), props.life)
     }
   })
 
@@ -154,7 +155,7 @@
     :duration="{ enter: 0, leave: MESSAGE_DISMISS_MS }"
     leave-from-class="opacity-100"
     leave-to-class="opacity-0"
-    :leave-active-class="messageDismissTransitionClasses.join(' ')"
+    leave-active-class="transition-opacity duration-fast-02 ease-productive-exit motion-reduce:transition-none"
     @after-leave="handleAfterLeave"
   >
     <div
@@ -165,7 +166,6 @@
       :data-severity="normalizedSeverity"
       :data-size="size"
       :data-trailing="hasTrailingControl() || null"
-      :style="dismissTransitionStyle"
       tabindex="-1"
       class="@container/alert relative box-border flex w-full flex-wrap items-center gap-(--spacing-sm) break-words rounded-(--shape-button) border border-[length:var(--border-width-default,1px)] py-1.5 shadow-(--shadow-xs) data-[size=small]:min-h-8 data-[size=small]:px-(--spacing-xs) data-[size=medium]:min-h-9 data-[size=medium]:px-(--spacing-sm) data-[trailing]:pe-(--spacing-xs) data-[severity=info]:border-(--info-border) data-[severity=info]:bg-(--info) data-[severity=success]:border-(--success-border) data-[severity=success]:bg-(--success) data-[severity=warning]:border-(--warning-border) data-[severity=warning]:bg-(--warning) data-[severity=danger]:border-(--danger-border) data-[severity=danger]:bg-(--danger)"
       @keydown="handleEscape"
@@ -187,6 +187,12 @@
           class="m-0 min-w-0 flex-1 text-(--text-default) data-[size=small]:text-label-sm data-[size=medium]:text-label-md [&_a]:text-link [&_a]:[--text-link-color:currentColor] [&_a]:[--text-link-hover:currentColor] [&_a]:underline [&_a]:underline-offset-2 [&_a]:motion-reduce:transition-none"
           :data-testid="`${testId}__content`"
         >
+          <strong
+            v-if="title"
+            :data-testid="`${testId}__title`"
+            class="block font-medium"
+            >{{ title }}</strong
+          >
           <slot v-if="$slots['default']" />
           <template v-else>{{ label }}</template>
         </div>

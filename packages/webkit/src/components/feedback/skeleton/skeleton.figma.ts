@@ -6,7 +6,7 @@ import figma from 'figma'
 const instance = figma.selectedInstance
 
 const kind = instance.getEnum('kind', {
-  shape: 'shape',
+  shape: 'rectangle',
   circle: 'circle'
 })
 

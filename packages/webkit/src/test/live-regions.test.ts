@@ -30,20 +30,20 @@ const nested = (): HTMLElement[] =>
 afterEach(() => cleanup())
 
 describe('live regions', () => {
-  it('StatusIndicator is one polite status that updates in place', async () => {
+  it('StatusIndicator is not a live region, so a table of them announces nothing', async () => {
     const label = ref('Deploying')
     render(
       defineComponent({
-        setup: () => () => h(StatusIndicator, { label: label.value, loading: true })
+        setup: () => () =>
+          Array.from({ length: 20 }, (_, i) =>
+            h(StatusIndicator, { key: i, label: label.value, loading: true })
+          )
       })
     )
-    const [region] = regionsSaying('Deploying')
-    expect(region).toHaveAttribute('role', 'status')
-    expect(politeness(region!)).toBe('polite')
+    expect(regionsSaying('Deploying')).toEqual([])
     label.value = 'Deployed'
     await nextTick()
-    expect(regionsSaying('Deployed')).toEqual([region])
-    expect(nested()).toEqual([])
+    expect(regionsSaying('Deployed')).toEqual([])
   })
 
   it('async-submit announces the result once, through the app Toaster region', async () => {

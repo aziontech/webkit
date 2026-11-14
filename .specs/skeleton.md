@@ -3,20 +3,20 @@ name: skeleton
 category: feedback
 structure: monolithic
 status: implemented
-spec_version: 1
+spec_version: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=479-881
   node_id: 479:881
-checksum: bc512bfc435c5e4a8e01fe5ed012335fa6cba3c423df57a34f694dc0d42ce438
+checksum: 0af81b9fc3d9e0815a565735ae649ac9e5d552804a1401d6a6e4633499710c51
 created: 2026-06-23
-last_updated: 2026-11-09
+last_updated: 2026-11-14
 ---
 
 # Skeleton — Component Spec
 
 ## Purpose
 
-A loading placeholder that reserves the space of content while it loads, gently pulsing to signal activity. Use it in place of text lines, media, or avatars during fetches; unlike `status-indicator` (which communicates a settled state) the skeleton is a transient, decorative stand-in. Two geometries cover the common cases: a rounded rectangular block (`shape`) and a `circle` (for avatars / icons).
+A loading placeholder that reserves the space of content while it loads, gently pulsing to signal activity. Use it in place of text lines, media, or avatars during fetches; unlike `status-indicator` (which communicates a settled state) the skeleton is a transient, decorative stand-in. Two geometries cover the common cases: a rounded rectangular block (`rectangle`) and a `circle` (for avatars / icons).
 
 ## When to use
 
@@ -68,7 +68,7 @@ A loading placeholder that reserves the space of content while it loads, gently 
 
 | Prop       | Type                  | Default   | Required | JSDoc                                                        |
 | ---------- | --------------------- | --------- | -------- | ------------------------------------------------------------ |
-| `kind`     | `'shape' \| 'circle'` | `'shape'` | false    | Geometry: a rounded rectangular block (`shape`) or a circle. |
+| `kind`     | `'rectangle' \| 'circle' \| 'shape'` | `'rectangle'` | false    | Geometry: a rounded rectangular block (`rectangle`) or a circle. The value `shape` is **@deprecated since 6.0 — use `rectangle`. Removed in 7.0.** and renders as `rectangle`. |
 | `width`    | `string`              | `'100%'`  | false    | CSS width (any length).                                      |
 | `height`   | `string`              | `'1rem'`  | false    | CSS height (any length); for a circle, set equal to `width`. |
 | `animated` | `boolean`             | `true`    | false    | Shimmer while loading; suppressed under reduced motion.      |
@@ -84,7 +84,7 @@ A loading placeholder that reserves the space of content while it loads, gently 
 ## States
 
 - Visual states: `default` (a single decorative placeholder; no hover/focus/active — it is not interactive)
-- `data-kind` mirrors the `kind` prop (`shape` | `circle`)
+- `data-kind` mirrors the resolved geometry (`rectangle` | `circle`; the deprecated `shape` resolves to `rectangle`)
 - `data-animated` is present when `animated` is true (drives the shimmer)
 
 ## Motion & Animations
@@ -99,7 +99,7 @@ A loading placeholder that reserves the space of content while it loads, gently 
 | ---------------------- | --------------------------------- |
 | fill                   | `var(--bg-placeholder)`           |
 | shimmer sweep          | `var(--bg-placeholder-highlight)` |
-| shape radius (`shape`) | `var(--shape-elements)`           |
+| shape radius (`rectangle`) | `var(--shape-elements)`           |
 
 `--bg-placeholder` and `--bg-placeholder-highlight` are **translucent** (alpha) by design: the fill composites over whatever surface the placeholder sits on (`--bg-canvas`, `--bg-surface`, `--bg-surface-raised`, `--bg-surface-overlay`), so a single value per mode keeps the contrast correct everywhere. The sweep is a white alpha in both modes — it lightens the fill rather than replacing it, so the animated and static states share the same base tone.
 
@@ -118,7 +118,7 @@ A loading placeholder that reserves the space of content while it loads, gently 
 This component has no `size` axis, so the canonical Sizes story does not apply.
 
 - Default
-- Types — composite story rendering both `kind` values (`shape`, `circle`) side-by-side.
+- Types — composite story rendering both `kind` values (`rectangle`, `circle`) side-by-side.
 - Static — `animated: false`; demonstrates the non-shimmering placeholder. Justified because `animated` is a distinct state of the component and the shimmer cannot be seen in a static screenshot.
 
 ## Constraints — DO NOT

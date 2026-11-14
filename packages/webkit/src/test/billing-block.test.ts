@@ -10,7 +10,8 @@ useToastRegion()
 
 afterEach(() => cleanup())
 
-const dialog = () => document.querySelector('[role="dialog"]') as HTMLElement | null
+const dialog = () =>
+  document.querySelector('[role="dialog"], [role="alertdialog"]') as HTMLElement | null
 
 const buttonByText = (text: string, root: Document | HTMLElement = document) =>
   Array.from(root.querySelectorAll('button')).find(

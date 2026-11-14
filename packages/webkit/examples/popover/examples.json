@@ -24,7 +24,7 @@
     },
     {
       "name": "Widths",
-      "summary": "The `width` prop presets — click a trigger to open each: `small` (`var(--container-xs)`, 348px), `medium` (`var(--container-sm)`, 408px), and `large` (`var(--container-md)`, 472px). When `width` is omitted the panel sizes fluidly between `var(--container-3xs)` and `var(--container-xs)`.",
+      "summary": "The `size` prop presets — click a trigger to open each: `small` (`var(--container-xs)`, 348px), `medium` (`var(--container-sm)`, 408px), and `large` (`var(--container-md)`, 472px). When `size` is omitted the panel sizes fluidly between `var(--container-3xs)` and `var(--container-xs)`.",
       "file": "widths.vue"
     },
     {

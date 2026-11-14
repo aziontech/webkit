@@ -9,7 +9,7 @@
     },
     {
       "name": "Types",
-      "summary": "Both geometries side by side: a rectangular `shape` and a `circle`.",
+      "summary": "Both geometries side by side: a `rectangle` and a `circle`.",
       "file": "types.vue"
     },
     {

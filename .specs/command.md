@@ -3,10 +3,10 @@ name: command
 category: overlay
 structure: composition
 status: implemented
-spec_version: 2
-checksum: 232915bfaf6c77896f7cef17b41a14fc1c19f6485d14ba6aa018bdb08d10216f
+spec_version: 3
+checksum: 2375b54d4de5d16505cd8ccb51ca41809cd72cb7212dd148f06b6ff9d1892c58
 created: 2026-07-23
-last_updated: 2026-11-12
+last_updated: 2026-11-14
 ---
 
 # Command Menu — Component Spec
@@ -222,7 +222,7 @@ _none_
 - Keyboard map:
   - Global: the `shortcut` combo (⌘K / Ctrl+K) toggles the palette open from anywhere.
   - Inside the palette: `ArrowDown` / `ArrowUp` move the active item (skipping disabled, wrap-around); `Home` / `End` jump to first/last enabled item; `Enter` activates the active item; `Esc` closes (via `Dialog`); `Tab` is trapped within the panel (via `Dialog`).
-- ARIA: the panel is `role="dialog"` (from `Dialog`) with an accessible name via a visually-hidden title; the input is `role="combobox"` with `aria-expanded` and `aria-controls` pointing at the list, and carries its own accessible name via `aria-label` (`ariaLabel`, falling back to `placeholder`) so the name survives the first keystroke; the list is `role="listbox"` (no role while nothing matches); each group is `role="group"` with `aria-labelledby` referencing its heading id; each item is `role="option"` with `aria-selected` mirroring the active state and `aria-disabled` mirroring `disabled`.
+- ARIA: the panel is `role="dialog"` (from `Dialog`) with an accessible name via a visually-hidden title; the input is `role="combobox"` with `aria-expanded` and `aria-controls` pointing at the list, and carries its own accessible name via `aria-label` (`ariaLabel`, falling back to `placeholder`) so the name survives the first keystroke; the list is `role="listbox"` (no role while nothing matches); each group is `role="group"` with `aria-labelledby` referencing its heading id; each item is `role="option"` with a stable `id` (`useId`), `aria-selected` mirroring the active state and `aria-disabled` mirroring `disabled`. With DOM focus on the input, the input's `aria-activedescendant` points at the active item's `id` (absent while no item is active), so a screen reader announces each row as `ArrowUp` / `ArrowDown` / `Home` / `End` move; and the active row is scrolled into view (`scrollIntoView({ block: 'nearest' })`) whenever it changes, so it never drops below the fold of the scrolling list (WCAG 4.1.2, 2.4.11). Tests: `command.test.ts` › active option is announced and kept in view.
 - Contrast ≥4.5:1 (text) / ≥3:1 (icons), including the disabled state (validated via `--text-disabled`).
 - `motion-reduce:animate-none` on the inherited `animate-popup-scale-*`; `motion-reduce:transition-none` on item `transition-colors`.
 - Focus management: opening moves focus to the input; closing returns focus to the element focused before the palette opened. Focus trap and scroll-lock are inherited from `Dialog`.

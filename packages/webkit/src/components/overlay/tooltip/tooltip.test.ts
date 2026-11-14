@@ -88,8 +88,9 @@ describe('Tooltip (overlay: Teleport, data-state, hover/focus/Escape)', () => {
       await settle()
       expect(panel()).not.toBeNull()
 
-      // @mouseleave="closeTooltip"
-      await fireEvent.mouseLeave(trigger)
+      await userEvent.hover(trigger)
+      await userEvent.unhover(trigger)
+      await new Promise((resolve) => setTimeout(resolve, 150))
       await settle()
 
       expect(trigger.getAttribute('data-state')).toBe('closed')
@@ -128,6 +129,61 @@ describe('Tooltip (overlay: Teleport, data-state, hover/focus/Escape)', () => {
 
       expect(trigger.getAttribute('data-state')).toBe('closed')
       expect(panel()).toBeNull()
+    })
+  })
+
+  describe('hoverable content (WCAG 1.4.13) and long-press', () => {
+    it('stays open while the pointer moves from the trigger onto the tooltip', async () => {
+      const { getByTestId } = render(composed())
+      await settle()
+      const trigger = getByTestId('overlay-tooltip')
+      await fireEvent.focusIn(trigger)
+      await settle()
+      await fireEvent.mouseLeave(trigger)
+      await fireEvent.mouseEnter(panel()!)
+      await new Promise((resolve) => setTimeout(resolve, 200))
+      await settle()
+      expect(panel()).not.toBeNull()
+
+      await fireEvent.mouseLeave(panel()!)
+      await new Promise((resolve) => setTimeout(resolve, 200))
+      await settle()
+      expect(panel()).toBeNull()
+    })
+
+    it('opens on a touch long-press and hides after release', async () => {
+      vi.useFakeTimers()
+      try {
+        const { getByTestId } = render(composed())
+        await nextTick()
+        const trigger = getByTestId('overlay-tooltip')
+        await fireEvent.pointerDown(trigger, { pointerType: 'touch' })
+        vi.advanceTimersByTime(500)
+        await nextTick()
+        await nextTick()
+        expect(trigger.getAttribute('data-state')).toBe('open')
+        await fireEvent.pointerUp(trigger, { pointerType: 'touch' })
+        vi.advanceTimersByTime(1500)
+        await nextTick()
+        expect(trigger.getAttribute('data-state')).toBe('closed')
+      } finally {
+        vi.useRealTimers()
+      }
+    })
+
+    it('a mouse press does not open it', async () => {
+      vi.useFakeTimers()
+      try {
+        const { getByTestId } = render(composed())
+        await nextTick()
+        const trigger = getByTestId('overlay-tooltip')
+        await fireEvent.pointerDown(trigger, { pointerType: 'mouse' })
+        vi.advanceTimersByTime(600)
+        await nextTick()
+        expect(trigger.getAttribute('data-state')).toBe('closed')
+      } finally {
+        vi.useRealTimers()
+      }
     })
   })
 

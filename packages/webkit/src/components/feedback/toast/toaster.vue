@@ -13,11 +13,7 @@
 
   import { usePortalLocale } from '../../../composables/use-locale/use-translate'
   import { ToastInjectionKey } from './injection-key'
-  import {
-    getRegionTransitionStyle,
-    getToastTransitionStyle,
-    TOAST_UNMOUNT_MS
-  } from './presets/transitions'
+  import { TOAST_UNMOUNT_MS } from './presets/transitions'
   import ToastAction from './toast-action/toast-action.vue'
   import ToastClose from './toast-close/toast-close.vue'
   import ToastDescription from './toast-description/toast-description.vue'
@@ -118,6 +114,7 @@
     () =>
       store.toasts.map((t) => ({
         id: t.id,
+        severity: t.severity,
         type: t.type,
         message: t.message,
         description: t.description,
@@ -204,10 +201,50 @@
     hoveredPosition.value = position
     store.pause()
   }
+  const focusedPosition = ref<ToastPosition | null>(null)
+
   const onLeave = () => {
     hoveredPosition.value = null
-    store.resume()
+    if (focusedPosition.value === null) store.resume()
   }
+
+  const onFocusIn = (position: ToastPosition) => {
+    focusedPosition.value = position
+    store.pause()
+  }
+
+  const onFocusOut = (event: FocusEvent) => {
+    const region = event.currentTarget as HTMLElement
+    if (event.relatedTarget instanceof Node && region.contains(event.relatedTarget)) return
+    focusedPosition.value = null
+    if (hoveredPosition.value === null) store.resume()
+  }
+
+  const regionEls = new Map<ToastPosition, HTMLElement>()
+  const setRegionEl = (position: ToastPosition, el: unknown) => {
+    if (el instanceof HTMLElement) regionEls.set(position, el)
+    else regionEls.delete(position)
+  }
+
+  const focusFrontToast = () => {
+    const region = regions.value.find((r) => r.live.length > 0)
+    if (!region) return false
+    const front = regionEls.get(region.position)?.querySelector<HTMLElement>('[data-front]')
+    if (!front) return false
+    const control = front.querySelector<HTMLElement>(
+      'button:not([disabled]), a[href], [tabindex]:not([tabindex="-1"])'
+    )
+    ;(control ?? front).focus()
+    return true
+  }
+
+  const onHotkey = (event: KeyboardEvent) => {
+    if (!event.altKey || event.code !== 'KeyT' || !isActive.value) return
+    if (focusFrontToast()) event.preventDefault()
+  }
+
+  onMounted(() => document.addEventListener('keydown', onHotkey))
+  onBeforeUnmount(() => document.removeEventListener('keydown', onHotkey))
 
   const dismiss = (id: string) => store.dismiss(id)
 
@@ -239,8 +276,7 @@
       left: center ? '50%' : pos.endsWith('left') ? 'var(--spacing-md)' : 'auto',
       right: pos.endsWith('right') ? 'var(--spacing-md)' : 'auto',
       transform: center ? 'translateX(-50%)' : 'none',
-      height,
-      ...getRegionTransitionStyle()
+      height
     }
   }
 
@@ -265,8 +301,7 @@
         ...base,
         transform: `${offEdge} scale(1)`,
         opacity: '0',
-        pointerEvents: 'none',
-        ...getToastTransitionStyle(item.removing)
+        pointerEvents: 'none'
       }
     }
 
@@ -305,8 +340,7 @@
       height,
       overflow,
       opacity: hidden ? '0' : '1',
-      pointerEvents: hidden ? 'none' : 'auto',
-      ...getToastTransitionStyle(false)
+      pointerEvents: hidden ? 'none' : 'auto'
     }
   }
 
@@ -327,25 +361,31 @@
         aria-live="polite"
         aria-relevant="additions text"
         aria-atomic="false"
+        :ref="(el) => setRegionEl(region.position, el)"
         :style="regionStyle(region)"
-        class="motion-reduce:transition-none"
+        class="transition-[height] duration-moderate-02 ease-productive-entrance motion-reduce:transition-none"
         @mouseenter="onEnter(region.position)"
         @mouseleave="onLeave"
+        @focusin="onFocusIn(region.position)"
+        @focusout="onFocusOut"
       >
         <div
           v-for="(item, indexInAll) in region.all"
           :key="item.entry.id"
           :data-front="region.live.indexOf(item) === 0 || null"
+          :data-severity="item.entry.severity"
           :data-type="item.entry.type"
+          :data-removing="item.removing || null"
+          :tabindex="region.live.indexOf(item) === 0 ? -1 : undefined"
           :style="toastStyle(region, item, indexInAll)"
-          class="will-change-transform motion-reduce:transition-none"
+          class="will-change-transform rounded-(--shape-elements) outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) transition-[transform,opacity,height] duration-moderate-02 ease-productive-entrance data-[removing]:duration-slow-01 data-[removing]:ease-productive-exit motion-reduce:transition-none"
         >
           <div :ref="(el) => setCardEl(item.entry.id, el)">
             <slot
               :toast="item.entry"
               :dismiss="() => dismiss(item.entry.id)"
             >
-              <ToastItem :type="item.entry.type">
+              <ToastItem :severity="item.entry.severity">
                 <ToastTitle>{{ item.entry.message }}</ToastTitle>
                 <ToastDescription v-if="item.entry.description">{{
                   item.entry.description

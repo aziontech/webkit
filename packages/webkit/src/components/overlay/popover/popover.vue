@@ -2,8 +2,14 @@
   import { computed, onBeforeUnmount, onMounted, provide, ref, useAttrs, useId } from 'vue'
 
   import { useControllable } from '../../../composables/use-controllable'
+  import { useOverlayLayer } from '../../../composables/use-overlay-layer'
   import { usePlacement } from '../../../composables/use-placement'
-  import type { PopoverPlacement, PopoverPlacementInput, PopoverWidth } from './injection-key'
+  import type {
+    PopoverPlacement,
+    PopoverPlacementInput,
+    PopoverSize,
+    PopoverWidth
+  } from './injection-key'
   import { PopoverInjectionKey } from './injection-key'
 
   defineOptions({
@@ -27,7 +33,14 @@
       /** Prevents the trigger from opening the panel and applies disabled tokens. */
       disabled?: boolean
       /** Panel width preset mapped to container tokens: `'small'` (`--container-xs`), `'medium'` (`--container-sm`), `'large'` (`--container-md`). When omitted, the panel sizes fluidly between `--container-3xs` and `--container-xs`. */
+      size?: PopoverSize
+      /**
+       * Same values as `size`; read only when `size` is unset.
+       * @deprecated since 6.0 — use `size`. Removed in 7.0.
+       */
       width?: PopoverWidth
+      /** Initial open state when uncontrolled. */
+      defaultOpen?: boolean
       /** Light-dismiss: when true, the panel closes on outside-click and `Esc`. Set false to keep it open until the trigger or `PopoverClose` closes it. */
       dismissible?: boolean
     }>(),
@@ -35,12 +48,14 @@
       placement: 'bottom-start',
       offset: 4,
       disabled: false,
+      size: undefined,
       width: undefined,
+      defaultOpen: false,
       dismissible: true
     }
   )
 
-  /** Controlled open state. Use with v-model:open; while unbound the popover is uncontrolled and starts closed. */
+  /** Controlled open state. Use with v-model:open; while unbound the popover is uncontrolled and starts at defaultOpen. */
   const openModel = defineModel<boolean>('open', { default: undefined as never })
 
   const attrs = useAttrs()
@@ -60,7 +75,7 @@
 
   const isOpenState = useControllable<boolean>({
     prop: openProp,
-    defaultProp: false,
+    defaultProp: props.defaultOpen,
     onChange: (value) => {
       openModel.value = value
     }
@@ -70,7 +85,7 @@
   const disabledRef = computed(() => props.disabled)
   const placementRef = computed(() => props.placement)
   const offsetRef = computed(() => props.offset)
-  const widthRef = computed(() => props.width)
+  const sizeRef = computed(() => props.size ?? props.width)
 
   const hasTitle = ref(false)
   const hasDescription = ref(false)
@@ -83,6 +98,8 @@
     offset: offsetRef,
     autoPlacements: ['bottom-start', 'bottom-end', 'top-start', 'top-end']
   })
+
+  const { isTop } = useOverlayLayer(isOpenRef)
 
   const resolvedPlacementRef = computed(() => resolvedPlacement.value as PopoverPlacement)
 
@@ -108,7 +125,7 @@
 
   function onDocumentMousedown(event: globalThis.MouseEvent) {
     if (!isOpenState.value) return
-    if (!props.dismissible) return
+    if (!props.dismissible || !isTop.value) return
     const target = event.target as globalThis.Node | null
     if (!target) return
     if (triggerRef.value?.contains(target)) return
@@ -117,7 +134,7 @@
   }
 
   function onDocumentKeydown(event: globalThis.KeyboardEvent) {
-    if (!isOpenState.value) return
+    if (!isOpenState.value || !isTop.value || event.defaultPrevented) return
 
     if (event.key === 'Escape') {
       if (!props.dismissible) return
@@ -172,7 +189,7 @@
     isOpen: isOpenRef,
     disabled: disabledRef,
     placement: resolvedPlacementRef,
-    width: widthRef,
+    size: sizeRef,
     panelStyle,
     triggerId,
     contentId,

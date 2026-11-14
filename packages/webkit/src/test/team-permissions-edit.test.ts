@@ -51,7 +51,7 @@ describe('platform/account/team-permissions EditTeam', () => {
   it('asks before deleting the team and says how many members lose access', async () => {
     const view = render(EditTeam)
     await userEvent.click(view.getByRole('button', { name: 'Delete team' }))
-    const dialog = await view.findByRole('dialog', { name: 'Delete team' })
+    const dialog = await view.findByRole('alertdialog', { name: 'Delete team' })
     expect(dialog.textContent).toContain('Its 3 members lose the permissions it grants.')
   })
 })

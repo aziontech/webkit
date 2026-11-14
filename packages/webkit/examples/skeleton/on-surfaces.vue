@@ -9,12 +9,12 @@
     >
       <span class="text-label-sm text-(--text-muted)">--bg-canvas</span>
       <Skeleton
-        kind="shape"
+        kind="rectangle"
         width="100%"
         height="16px"
       />
       <Skeleton
-        kind="shape"
+        kind="rectangle"
         width="60%"
         height="16px"
       />
@@ -24,12 +24,12 @@
     >
       <span class="text-label-sm text-(--text-muted)">--bg-surface</span>
       <Skeleton
-        kind="shape"
+        kind="rectangle"
         width="100%"
         height="16px"
       />
       <Skeleton
-        kind="shape"
+        kind="rectangle"
         width="60%"
         height="16px"
       />
@@ -39,12 +39,12 @@
     >
       <span class="text-label-sm text-(--text-muted)">--bg-surface-raised</span>
       <Skeleton
-        kind="shape"
+        kind="rectangle"
         width="100%"
         height="16px"
       />
       <Skeleton
-        kind="shape"
+        kind="rectangle"
         width="60%"
         height="16px"
       />
@@ -54,12 +54,12 @@
     >
       <span class="text-label-sm text-(--text-default)">--bg-surface-overlay</span>
       <Skeleton
-        kind="shape"
+        kind="rectangle"
         width="100%"
         height="16px"
       />
       <Skeleton
-        kind="shape"
+        kind="rectangle"
         width="60%"
         height="16px"
       />

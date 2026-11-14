@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed, inject, onBeforeUnmount, onMounted, ref, toRef, useAttrs } from 'vue'
+  import { computed, inject, onBeforeUnmount, onMounted, ref, toRef, useAttrs, useId } from 'vue'
 
   import Kbd, { type KbdKeyName } from '../../../content/kbd/kbd.vue'
   import { CommandGroupIdKey, type CommandItemValue, useCommandMenuContext } from '../injection-key'
@@ -34,6 +34,7 @@
   const ctx = useCommandMenuContext()
   const groupId = inject(CommandGroupIdKey, null)
 
+  const itemId = useId()
   const rootRef = ref<HTMLElement | null>(null)
   const labelRef = ref<HTMLElement | null>(null)
   const itemText = ref(String(props.value))
@@ -87,6 +88,7 @@
     itemText.value = labelRef.value?.textContent?.trim() || String(props.value)
     unregister = ctx.registerItem({
       value: props.value,
+      id: itemId,
       groupId,
       disabled: disabledRef,
       isVisible,
@@ -104,6 +106,7 @@
   <div
     ref="rootRef"
     v-show="isVisible"
+    :id="itemId"
     v-bind="attrs"
     role="option"
     tabindex="-1"

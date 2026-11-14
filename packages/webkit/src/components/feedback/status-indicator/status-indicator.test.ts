@@ -10,14 +10,13 @@ import StatusIndicator from './status-indicator.vue'
 const STATUSES = ['success', 'info', 'neutral', 'warning', 'alt', 'danger'] as const
 
 describe('StatusIndicator', () => {
-  it('renders with the default testid, default status and default label', () => {
+  it('renders with the default testid, default severity and default label', () => {
     const { getByTestId } = render(StatusIndicator)
 
     const root = getByTestId('feedback-status-indicator')
     expect(root).toBeTruthy()
-    // Defaults from withDefaults: status positive, label "Status", loading false.
     expect(root.getAttribute('data-severity')).toBe('success')
-    expect(root.getAttribute('role')).toBe('status')
+    expect(root.hasAttribute('role')).toBe(false)
     // loading defaults to false → aria-busy is undefined (omitted) and data-loading null.
     expect(root.hasAttribute('aria-busy')).toBe(false)
     expect(root.getAttribute('data-loading')).toBeNull()
@@ -35,7 +34,7 @@ describe('StatusIndicator', () => {
     expect(getByTestId('my-status__label')).toBeTruthy()
   })
 
-  it('reflects the status prop on data-severity for every option', () => {
+  it('reflects the severity prop on data-severity for every option', () => {
     for (const status of STATUSES) {
       const { getByTestId, unmount } = render(StatusIndicator, { props: { severity: status } })
       expect(getByTestId('feedback-status-indicator').getAttribute('data-severity')).toBe(status)
@@ -47,7 +46,7 @@ describe('StatusIndicator', () => {
     }
   })
 
-  it('falls back to positive when status is undefined', () => {
+  it('falls back to success when severity is undefined', () => {
     const { getByTestId } = render(StatusIndicator, { props: { severity: undefined } })
 
     expect(getByTestId('feedback-status-indicator').getAttribute('data-severity')).toBe('success')

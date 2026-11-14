@@ -39,6 +39,8 @@
   "overline": { "showCursor": "cursor" },
   "payment-brand": { "label": "ariaLabel" },
   "qr-code": { "label": "ariaLabel" },
+  "popover": { "width": "size" },
+  "progress": { "shape": "kind" },
   "quote-tabs": { "autoPlay": "autoplay", "autoPlayInterval": "autoplayInterval" },
   "response-branches": { "label": "ariaLabel" },
   "severity-tag": { "level": "severity" },
@@ -46,6 +48,7 @@
   "shell-mockup-root": {
     "still": { "to": "animated", "values": { "true": "false", "false": "true" } }
   },
+  "skeleton": { "kind": { "to": "kind", "values": { "shape": "rectangle" } } },
   "table": { "border": "bordered" },
   "table-root": { "border": "bordered" },
   "tabs": { "value": "modelValue" },

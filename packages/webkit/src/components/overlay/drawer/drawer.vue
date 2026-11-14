@@ -21,7 +21,7 @@
       dismissible?: boolean
       /** Edge the drawer panel slides from. */
       side?: DrawerSide
-      /** Panel max-width preset (`small` 384px, `medium` 672px, `large` 1024px). Height is always 100% viewport. */
+      /** Panel max-width preset (`small` `--container-sm`, `medium` `--container-xl`, `large` `--container-4xl`). Height is always 100% viewport. */
       size?: DrawerSize
     }>(),
     {
@@ -39,6 +39,7 @@
   const uid = useId()
   const triggerRef = ref<HTMLElement | null>(null)
   const returnFocusRef = ref<HTMLElement | null>(null)
+  const hasDescription = ref(false)
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'overlay-drawer')
 
@@ -74,20 +75,32 @@
   provide(DrawerInjectionKey, {
     testId: testId.value,
     isOpen: computed(() => isOpen.value),
-    dismissible: props.dismissible,
+    get dismissible() {
+      return props.dismissible
+    },
     size: toRef(props, 'size'),
     open: openDrawer,
     close: closeDrawer,
     titleId: `${uid}-title`,
     descriptionId: `${uid}-description`,
+    hasDescription,
+    registerDescription: () => {
+      hasDescription.value = true
+    },
+    unregisterDescription: () => {
+      hasDescription.value = false
+    },
     triggerRef,
     returnFocusRef,
-    side: props.side
+    get side() {
+      return props.side
+    }
   })
 </script>
 
 <template>
   <div
+    v-bind="$attrs"
     :data-state="isOpen ? 'open' : 'closed'"
     :data-testid="testId"
   >

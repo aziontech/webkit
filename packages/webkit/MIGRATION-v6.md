@@ -71,28 +71,31 @@ component.
 | `code-block`           | `border`           | `bordered`           |
 | `code-block`           | `value`            | `modelValue`         |
 | `conversation-history` | `label`            | `ariaLabel`          |
-| `doc-card`             | `overline`         | `eyebrow`            |
-| `doc-card`             | `link`             | `linkLabel`          |
-| `doc-card-group`       | `mobileCols`       | `mobileColumns`      |
 | `doc-card-group`       | `cols`             | `columns`            |
+| `doc-card-group`       | `mobileCols`       | `mobileColumns`      |
+| `doc-card`             | `link`             | `linkLabel`          |
+| `doc-card`             | `overline`         | `eyebrow`            |
 | `doc-heading`          | `id`               | `anchor`             |
-| `doc-tooltip`          | `headline`         | `title`              |
 | `doc-tooltip`          | `cta`              | `linkLabel`          |
+| `doc-tooltip`          | `headline`         | `title`              |
 | `item`                 | `kind="outline"`   | `kind="outlined"`    |
 | `log-view`             | `border`           | `bordered`           |
 | `log-view`             | `showCopy`         | `copyable`           |
-| `media-tabs`           | `autoPlay`         | `autoplay`           |
 | `media-tabs`           | `autoPlayInterval` | `autoplayInterval`   |
+| `media-tabs`           | `autoPlay`         | `autoplay`           |
 | `navigation-menu`      | `value`            | `modelValue`         |
 | `overline`             | `showCursor`       | `cursor`             |
 | `payment-brand`        | `label`            | `ariaLabel`          |
+| `popover`              | `width`            | `size`               |
+| `progress`             | `shape`            | `kind`               |
 | `qr-code`              | `label`            | `ariaLabel`          |
-| `quote-tabs`           | `autoPlay`         | `autoplay`           |
 | `quote-tabs`           | `autoPlayInterval` | `autoplayInterval`   |
+| `quote-tabs`           | `autoPlay`         | `autoplay`           |
 | `response-branches`    | `label`            | `ariaLabel`          |
 | `severity-tag`         | `level`            | `severity`           |
-| `shell-mockup`         | `still="true"`     | `animated="false"`   |
 | `shell-mockup`         | `still="false"`    | `animated="true"`    |
+| `shell-mockup`         | `still="true"`     | `animated="false"`   |
+| `skeleton`             | `kind="shape"`     | `kind="rectangle"`   |
 | `table`                | `border`           | `bordered`           |
 | `tabs`                 | `value`            | `modelValue`         |
 | `theme-switcher`       | `value`            | `modelValue`         |
@@ -300,6 +303,27 @@ rewrite this, because the replacement depends on whether the child was a link or
   <Item.Content><Item.Title>workload_01</Item.Title></Item.Content>
 </Item>
 ```
+
+### Deprecated overlay and feedback names (removed in 7.0)
+
+The old names still work in v6 and are marked `@deprecated`; move to the new ones when you touch the
+code. The codemod rewrites `popover` `width`, `progress` `shape` and `skeleton` `kind="shape"`
+(section 3); the rest need a hand edit, because a mechanical rename would invert or retype a value.
+
+| Component         | Deprecated                     | Use instead                                                            |
+| ----------------- | ------------------------------ | ---------------------------------------------------------------------- |
+| `toast-item`      | `type` (and the value `error`) | `severity` (`danger`); store entries carry `severity` too              |
+| `toast`           | `ToastType`                    | `ToastSeverity`; `toast.error()` keeps its name                        |
+| `upload-progress` | `v-model:collapsed`            | `v-model:expanded`, inverted (`collapsed = true` → `expanded = false`) |
+| `tooltip`         | `@show`, `@hide`               | `@update:open`                                                         |
+| `popover`         | `PopoverWidth`                 | `PopoverSize`                                                          |
+| `progress`        | `ProgressShape`                | `ProgressKind`                                                         |
+
+Behaviour that changed with them: `ConfirmDialog` renders `role="alertdialog"`; `StatusIndicator` is
+no longer a `role="status"` live region (announce a change you need heard through a toast);
+`Drawer` widths come from container tokens (`small` 408px, `medium` 644px, `large` 1024px instead of
+384 / 672 / 1024 px); `Alert` `close` and `ErrorBoundary` `retry` now pass the triggering event
+(handlers that take no argument keep working).
 
 ### Test ids
 

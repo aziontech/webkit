@@ -112,7 +112,7 @@ describe('platform/account/manage-resources', () => {
     const view = render(ManageResources)
     await userEvent.click(checkboxOf('grp-2101'))
     await userEvent.click(view.getByRole('button', { name: 'Delete' }))
-    const dialog = await view.findByRole('dialog', { name: 'Delete Retail and marketplace' })
+    const dialog = await view.findByRole('alertdialog', { name: 'Delete Retail and marketplace' })
     expect(dialog.textContent).toContain('This also deletes the 3 resources inside.')
   })
 

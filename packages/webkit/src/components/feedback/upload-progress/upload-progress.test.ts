@@ -104,6 +104,52 @@ describe('UploadProgress', () => {
     expect(list?.style.display).toBe('')
   })
 
+  it('v-model:expanded drives the list and emits update:expanded', async () => {
+    const { emitted, getByRole } = render(UploadProgress, {
+      props: { items: running(), floating: false, expanded: true }
+    })
+    await fireEvent.click(getByRole('button', { name: 'Hide files' }))
+    expect(emitted()['update:expanded']).toEqual([[false]])
+    expect(emitted()['update:collapsed']).toEqual([[true]])
+  })
+
+  it('starts expanded when neither model is bound', () => {
+    const { getByRole } = render(UploadProgress, { props: { items: running(), floating: false } })
+    expect(getByRole('button', { name: 'Hide files' }).getAttribute('aria-expanded')).toBe('true')
+  })
+
+  it('keeps the deprecated v-model:collapsed working', async () => {
+    const collapsed = ref(true)
+    const view = render(
+      defineComponent({
+        setup: () => () =>
+          h(UploadProgress, {
+            items: running(),
+            floating: false,
+            collapsed: collapsed.value,
+            'onUpdate:collapsed': (value: boolean) => (collapsed.value = value)
+          })
+      })
+    )
+    await fireEvent.click(view.getByRole('button', { name: 'Show files' }))
+    await nextTick()
+    expect(collapsed.value).toBe(false)
+    expect(view.getByRole('button', { name: 'Hide files' })).toBeTruthy()
+  })
+
+  it('mounts a long transfer in chunks, not every row at once', () => {
+    const items: UploadProgressItem[] = Array.from({ length: 1000 }, (_, i) => ({
+      id: `f${i}`,
+      name: `asset-${i}.png`,
+      status: 'running',
+      progress: 10
+    }))
+    const view = render(UploadProgress, { props: { items, floating: false } })
+    const rows = view.getAllByTestId('feedback-upload-progress__row')
+    expect(rows.length).toBeLessThan(1000)
+    expect(view.container.querySelector('[data-chunk]')).not.toBeNull()
+  })
+
   it('floats by default and renders in the flow when asked', () => {
     const floating = render(UploadProgress, { props: { items: running() } })
     expect(floating.getByRole('region').hasAttribute('data-floating')).toBe(true)

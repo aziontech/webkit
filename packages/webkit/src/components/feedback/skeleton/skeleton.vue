@@ -1,7 +1,8 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
-  export type SkeletonKind = 'shape' | 'circle'
+  /** Geometry of the placeholder. `shape` is deprecated since 6.0 — use `rectangle`. Removed in 7.0. */
+  export type SkeletonKind = 'rectangle' | 'circle' | 'shape'
 
   defineOptions({
     name: 'Skeleton',
@@ -9,7 +10,7 @@
   })
 
   interface Props {
-    /** Geometry: a rounded rectangular block (`shape`) or a circle. */
+    /** Geometry: a rounded rectangular block (`rectangle`) or a circle. */
     kind?: SkeletonKind
     /** CSS width (any length). */
     width?: string
@@ -19,14 +20,16 @@
     animated?: boolean
   }
 
-  withDefaults(defineProps<Props>(), {
-    kind: 'shape',
+  const props = withDefaults(defineProps<Props>(), {
+    kind: 'rectangle',
     width: '100%',
     height: '1rem',
     animated: true
   })
 
   const attrs = useAttrs()
+
+  const geometry = computed(() => (props.kind === 'shape' ? 'rectangle' : props.kind))
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'feedback-skeleton')
 </script>
@@ -37,9 +40,9 @@
     role="presentation"
     aria-hidden="true"
     :data-testid="testId"
-    :data-kind="kind"
+    :data-kind="geometry"
     :data-animated="animated || null"
     :style="{ width, height }"
-    class="block bg-(--bg-placeholder) data-[kind=shape]:rounded-(--shape-elements) data-[kind=circle]:rounded-full data-[animated]:motion-safe:bg-[linear-gradient(90deg,transparent_0%,transparent_35%,var(--bg-placeholder-highlight)_50%,transparent_65%,transparent_100%)] data-[animated]:motion-safe:bg-[length:200%_100%] data-[animated]:motion-safe:animate-(--animate-shimmer) motion-reduce:animate-none"
+    class="block bg-(--bg-placeholder) data-[kind=rectangle]:rounded-(--shape-elements) data-[kind=circle]:rounded-full data-[animated]:motion-safe:bg-[linear-gradient(90deg,transparent_0%,transparent_35%,var(--bg-placeholder-highlight)_50%,transparent_65%,transparent_100%)] data-[animated]:motion-safe:bg-[length:200%_100%] data-[animated]:motion-safe:animate-(--animate-shimmer) motion-reduce:animate-none"
   />
 </template>

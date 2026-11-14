@@ -350,7 +350,6 @@ describe('Command (overlay: wraps Dialog, composition + provide/inject)', () => 
 
       const iconed = items[0].querySelector('[data-testid="overlay-command__item__prefix"]')
       expect(iconed).not.toBeNull()
-      expect(iconed?.className).toContain('size-4')
       expect(items[0].querySelector('i.pi-cloud-upload')).not.toBeNull()
 
       // The icon-less row puts no empty box in the DOM, so it carries no indent.
@@ -372,37 +371,53 @@ describe('Command (overlay: wraps Dialog, composition + provide/inject)', () => 
     })
   })
 
-  describe('group rhythm', () => {
-    it('spaces a group that follows another group, but not one that follows a separator', async () => {
+  describe('active option is announced and kept in view', () => {
+    it('points aria-activedescendant at the active item id as ArrowDown moves', async () => {
       render(composed({ defaultOpen: true }))
       await settle()
-
-      const groups = Array.from(
-        document.body.querySelectorAll<HTMLElement>('[data-testid="overlay-command__group"]')
+      const input = byTestId('overlay-command__input')!.querySelector('input')!
+      const items = Array.from(
+        document.body.querySelectorAll<HTMLElement>('[data-testid="overlay-command__item"]')
       )
-      expect(groups).toHaveLength(2)
+      expect(items[0]!.id).not.toBe('')
 
-      // The variant is sibling-scoped, so both groups carry the same class and the
-      // selector decides: it matches after a group, never after a separator.
-      for (const group of groups) {
-        expect(group.className).toContain('[:not([role=separator])+&]:mt-(--spacing-sm)')
-      }
+      await fireEvent.keyDown(input, { key: 'Home' })
+      await settle()
+      expect(input.getAttribute('aria-activedescendant')).toBe(items[0]!.id)
 
-      // Group 2 here follows the separator, so the rule must not match it.
-      expect(groups[1].previousElementSibling?.getAttribute('role')).toBe('separator')
+      await fireEvent.keyDown(input, { key: 'ArrowDown' })
+      await settle()
+      expect(input.getAttribute('aria-activedescendant')).toBe(items[1]!.id)
+      expect(document.getElementById(input.getAttribute('aria-activedescendant')!)).toBe(items[1])
     })
 
-    it('gives the separator the same rhythm as the DropdownMenu group divider', async () => {
-      render(composed({ defaultOpen: true }))
-      await settle()
-
-      const separator = document.body.querySelector<HTMLElement>(
-        '[data-testid="overlay-command__separator"]'
+    it('scrolls the active row into view in a scrolling list', async () => {
+      render(
+        defineComponent({
+          components: { Command, CommandInput, CommandList, CommandItem },
+          setup: () => ({
+            open: ref(true),
+            rows: Array.from({ length: 40 }, (_, i) => `row-${i}`)
+          }),
+          template: `
+            <Command v-model:open="open">
+              <CommandInput placeholder="Search" />
+              <CommandList style="max-height: 120px; overflow-y: auto">
+                <CommandItem v-for="row in rows" :key="row" :value="row">{{ row }}</CommandItem>
+              </CommandList>
+            </Command>
+          `
+        })
       )
-      expect(separator).not.toBeNull()
-      expect(separator?.className).toContain('mt-(--spacing-sm)')
-      expect(separator?.className).toContain('mb-(--spacing-xs)')
-      expect(separator?.className).toContain('border-t')
+      await settle()
+      const input = byTestId('overlay-command__input')!.querySelector('input')!
+      await fireEvent.keyDown(input, { key: 'End' })
+      await settle()
+      await new Promise((resolve) => requestAnimationFrame(() => resolve(null)))
+      const last = document.getElementById(input.getAttribute('aria-activedescendant')!)!
+      const list = byTestId('overlay-command__list')!
+      expect(last.textContent).toContain('row-39')
+      expect(list.scrollTop).toBeGreaterThan(0)
     })
   })
 

@@ -25,10 +25,16 @@ describe('Skeleton', () => {
     expect(getByTestId('my-placeholder')).toBeTruthy()
   })
 
-  it('defaults to the shape geometry', () => {
+  it('defaults to the rectangle geometry', () => {
     const { getByTestId } = render(Skeleton)
 
-    expect(getByTestId('feedback-skeleton').getAttribute('data-kind')).toBe('shape')
+    expect(getByTestId('feedback-skeleton').getAttribute('data-kind')).toBe('rectangle')
+  })
+
+  it('renders the deprecated kind="shape" as a rectangle', () => {
+    const { getByTestId } = render(Skeleton, { props: { kind: 'shape' } })
+
+    expect(getByTestId('feedback-skeleton').getAttribute('data-kind')).toBe('rectangle')
   })
 
   it('reflects kind="circle" on data-kind', () => {
@@ -68,13 +74,13 @@ describe('Skeleton', () => {
     expect(el.style.height).toBe('1rem')
   })
 
-  it.each(['shape', 'circle'] as const)('renders the %s geometry', (kind) => {
+  it.each(['rectangle', 'circle'] as const)('renders the %s geometry', (kind) => {
     const { getByTestId } = render(Skeleton, { props: { kind } })
 
     expect(getByTestId('feedback-skeleton').getAttribute('data-kind')).toBe(kind)
   })
 
-  it('has no a11y violations for the default shape', async () => {
+  it('has no a11y violations for the default rectangle', async () => {
     const { container } = render(Skeleton, {
       props: { width: '240px', height: '100px' }
     })
@@ -94,7 +100,7 @@ describe('Skeleton', () => {
     const { getByTestId } = render(Default)
     const el = getByTestId('feedback-skeleton')
 
-    expect(el.getAttribute('data-kind')).toBe('shape')
+    expect(el.getAttribute('data-kind')).toBe('rectangle')
     expect(el.hasAttribute('data-animated')).toBe(true)
   })
 
@@ -102,7 +108,7 @@ describe('Skeleton', () => {
     const { getAllByTestId } = render(Types)
     const kinds = getAllByTestId('feedback-skeleton').map((el) => el.getAttribute('data-kind'))
 
-    expect(kinds).toContain('shape')
+    expect(kinds).toContain('rectangle')
     expect(kinds).toContain('circle')
   })
 

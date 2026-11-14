@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { computed, useAttrs, useId, useSlots } from 'vue'
 
+  import { useLazyChunks } from '../../../composables/use-lazy-chunks'
   import { useLocale } from '../../../composables/use-locale/use-locale'
   import * as en from '../../../i18n/messages/en'
   import Button from '../../actions/button/button.vue'
@@ -44,7 +45,14 @@
     cancelable: true
   })
 
-  const collapsed = defineModel<boolean>('collapsed', { default: false })
+  /** Shows the file list; false hides it. While unbound the card starts expanded. */
+  const expanded = defineModel<boolean>('expanded', { default: undefined as never })
+
+  /**
+   * Hides the file list.
+   * @deprecated since 6.0 — use `v-model:expanded` (inverted). Removed in 7.0.
+   */
+  const collapsed = defineModel<boolean>('collapsed', { default: undefined as never })
 
   const emit = defineEmits<{
     /** Cancel on one file (its `id`) or Cancel all (no `id`). The parent stops the transfer. */
@@ -135,6 +143,19 @@
     return ''
   }
 
+  const { split, observe } = useLazyChunks({ rowHeight: 56 })
+  const chunks = computed(() => split(props.items))
+
+  const isCollapsed = computed<boolean>(() =>
+    expanded.value !== undefined ? !expanded.value : (collapsed.value ?? false)
+  )
+
+  const toggleList = () => {
+    const next = !isCollapsed.value
+    expanded.value = !next
+    collapsed.value = next
+  }
+
   const showActions = () => state.value !== 'running' && Boolean(slots['actions'])
 </script>
 
@@ -145,7 +166,7 @@
     :data-testid="testId"
     :data-state="state"
     :data-floating="floating || null"
-    :data-collapsed="collapsed || null"
+    :data-collapsed="isCollapsed || null"
     class="group/up z-40 flex w-full flex-col gap-(--spacing-sm) rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface-raised) p-(--spacing-md) shadow-(--shadow-sm) animate-popup-scale-in motion-reduce:animate-none data-[floating]:fixed data-[floating]:inset-x-(--spacing-md) data-[floating]:bottom-(--spacing-md) sm:data-[floating]:inset-x-auto sm:data-[floating]:end-(--spacing-md) sm:data-[floating]:w-(--container-xs)"
   >
     <span
@@ -179,14 +200,14 @@
         >{{ percentText }}</span
       >
       <IconButton
-        :icon="collapsed ? 'pi pi-chevron-up' : 'pi pi-chevron-down'"
+        :icon="isCollapsed ? 'pi pi-chevron-up' : 'pi pi-chevron-down'"
         kind="transparent"
         size="small"
-        :ariaLabel="collapsed ? t('uploadProgress.expand') : t('uploadProgress.collapse')"
-        :aria-expanded="collapsed ? 'false' : 'true'"
+        :ariaLabel="isCollapsed ? t('uploadProgress.expand') : t('uploadProgress.collapse')"
+        :aria-expanded="isCollapsed ? 'false' : 'true'"
         :aria-controls="listId"
         :data-testid="`${testId}__toggle`"
-        @click="collapsed = !collapsed"
+        @click="toggleList"
       />
       <IconButton
         v-if="state !== 'running'"
@@ -203,89 +224,104 @@
       v-if="state === 'running'"
       :value="percent"
       size="small"
-      shape="rounded"
+      kind="rounded"
       :aria-labelledby="titleId"
     />
 
     <ul
-      v-show="!collapsed"
+      v-show="!isCollapsed"
       :id="listId"
       role="list"
       :data-testid="`${testId}__list`"
       class="m-0 flex max-h-(--container-3xs) list-none flex-col gap-(--spacing-sm) overflow-y-auto p-0"
     >
-      <li
-        v-for="item in items"
-        :key="item.id"
-        :data-status="item.status"
-        :data-testid="`${testId}__row`"
-        class="flex min-w-0 flex-col gap-(--spacing-xxs)"
+      <template
+        v-for="chunk in chunks"
+        :key="chunk.index"
       >
-        <div class="flex min-w-0 items-center gap-(--spacing-xs)">
-          <div class="flex min-w-0 flex-1 flex-col">
-            <span
-              class="truncate text-label-sm text-(--text-default)"
-              :title="item.name"
-              ><bdi>{{ item.name }}</bdi></span
-            >
-            <span
-              v-if="item.error"
-              class="flex items-center gap-(--spacing-xxs) text-label-sm text-(--danger-contrast)"
-            >
+        <li
+          v-if="!chunk.mounted"
+          :ref="(el) => observe(el, chunk.index)"
+          :data-chunk="chunk.index"
+          aria-hidden="true"
+          class="shrink-0"
+          :style="{ height: `${chunk.estimatedHeight}px` }"
+        />
+        <template v-else>
+          <li
+            v-for="item in chunk.items"
+            :key="item.id"
+            :data-status="item.status"
+            :data-testid="`${testId}__row`"
+            class="flex min-w-0 flex-col gap-(--spacing-xxs)"
+          >
+            <div class="flex min-w-0 items-center gap-(--spacing-xs)">
+              <div class="flex min-w-0 flex-1 flex-col">
+                <span
+                  class="truncate text-label-sm text-(--text-default)"
+                  :title="item.name"
+                  ><bdi>{{ item.name }}</bdi></span
+                >
+                <span
+                  v-if="item.error"
+                  class="flex items-center gap-(--spacing-xxs) text-label-sm text-(--danger-contrast)"
+                >
+                  <i
+                    class="pi pi-times-circle shrink-0"
+                    aria-hidden="true"
+                  />
+                  <span class="min-w-0">{{ item.error }}</span>
+                </span>
+                <span
+                  v-else
+                  class="truncate text-body-xs text-(--text-muted)"
+                  >{{
+                    [
+                      typeof item.size === 'number' ? formatFileSize(item.size) : '',
+                      rowStatusText(item)
+                    ]
+                      .filter(Boolean)
+                      .join(' · ')
+                  }}</span
+                >
+              </div>
+              <IconButton
+                key="icon-button-2"
+                v-if="cancelable && (item.status === 'queued' || item.status === 'running')"
+                icon="pi pi-times"
+                kind="transparent"
+                size="small"
+                :ariaLabel="t('uploadProgress.cancelItem', { name: item.name })"
+                :data-testid="`${testId}__cancel`"
+                @click="emit('cancel', $event, item.id)"
+              />
+              <IconButton
+                key="icon-button-3"
+                v-else-if="item.status === 'error'"
+                icon="pi pi-refresh"
+                kind="transparent"
+                size="small"
+                :ariaLabel="t('uploadProgress.retryItem', { name: item.name })"
+                :data-testid="`${testId}__retry`"
+                @click="emit('retry', $event, item.id)"
+              />
               <i
-                class="pi pi-times-circle shrink-0"
+                v-else-if="item.status === 'done'"
+                class="pi pi-check shrink-0 px-(--spacing-xs) text-(--text-muted)"
                 aria-hidden="true"
               />
-              <span class="min-w-0">{{ item.error }}</span>
-            </span>
-            <span
-              v-else
-              class="truncate text-body-xs text-(--text-muted)"
-              >{{
-                [
-                  typeof item.size === 'number' ? formatFileSize(item.size) : '',
-                  rowStatusText(item)
-                ]
-                  .filter(Boolean)
-                  .join(' · ')
-              }}</span
-            >
-          </div>
-          <IconButton
-            key="icon-button-2"
-            v-if="cancelable && (item.status === 'queued' || item.status === 'running')"
-            icon="pi pi-times"
-            kind="transparent"
-            size="small"
-            :ariaLabel="t('uploadProgress.cancelItem', { name: item.name })"
-            :data-testid="`${testId}__cancel`"
-            @click="emit('cancel', $event, item.id)"
-          />
-          <IconButton
-            key="icon-button-3"
-            v-else-if="item.status === 'error'"
-            icon="pi pi-refresh"
-            kind="transparent"
-            size="small"
-            :ariaLabel="t('uploadProgress.retryItem', { name: item.name })"
-            :data-testid="`${testId}__retry`"
-            @click="emit('retry', $event, item.id)"
-          />
-          <i
-            v-else-if="item.status === 'done'"
-            class="pi pi-check shrink-0 px-(--spacing-xs) text-(--text-muted)"
-            aria-hidden="true"
-          />
-        </div>
-        <Progress
-          v-if="item.status === 'running'"
-          :value="item.progress ?? 0"
-          :indeterminate="typeof item.progress !== 'number'"
-          size="small"
-          shape="rounded"
-          :aria-label="t('uploadProgress.itemProgress', { name: item.name })"
-        />
-      </li>
+            </div>
+            <Progress
+              v-if="item.status === 'running'"
+              :value="item.progress ?? 0"
+              :indeterminate="typeof item.progress !== 'number'"
+              size="small"
+              kind="rounded"
+              :aria-label="t('uploadProgress.itemProgress', { name: item.name })"
+            />
+          </li>
+        </template>
+      </template>
     </ul>
 
     <div

@@ -39,9 +39,21 @@
   })
 
   const emit = defineEmits<{
+    /**
+     * Emitted right after the open transition starts.
+     * @deprecated since 6.0 — use `update:open` (v-model:open). Removed in 7.0.
+     */
     show: []
+    /**
+     * Emitted right after the close transition starts.
+     * @deprecated since 6.0 — use `update:open` (v-model:open). Removed in 7.0.
+     */
     hide: []
   }>()
+
+  const CLOSE_GRACE_MS = 100
+  const LONG_PRESS_MS = 500
+  const TOUCH_HIDE_MS = 1500
 
   /** Controlled open state. Use with v-model:open; while unbound the tooltip starts at defaultOpen. */
   const openModel = defineModel<boolean>('open', { default: undefined as never })
@@ -51,6 +63,8 @@
   const triggerRef = ref<HTMLElement | null>(null)
   const panelRef = ref<HTMLElement | null>(null)
   const hoverTimer = ref<ReturnType<typeof setTimeout> | null>(null)
+  const closeTimer = ref<ReturnType<typeof setTimeout> | null>(null)
+  const pressTimer = ref<ReturnType<typeof setTimeout> | null>(null)
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'overlay-tooltip')
 
@@ -88,6 +102,20 @@
     }
   }
 
+  function clearCloseTimer() {
+    if (closeTimer.value) {
+      clearTimeout(closeTimer.value)
+      closeTimer.value = null
+    }
+  }
+
+  function clearPressTimer() {
+    if (pressTimer.value) {
+      clearTimeout(pressTimer.value)
+      pressTimer.value = null
+    }
+  }
+
   function setOpen(next: boolean) {
     if (props.disabled) return
     if (!props.text && next) return
@@ -95,14 +123,37 @@
   }
 
   function scheduleOpen() {
+    clearCloseTimer()
     if (props.disabled || !props.text) return
+    if (isOpen.value) return
     clearHoverTimer()
     hoverTimer.value = setTimeout(() => setOpen(true), props.delay)
   }
 
   function closeTooltip() {
     clearHoverTimer()
+    clearCloseTimer()
+    clearPressTimer()
     setOpen(false)
+  }
+
+  function scheduleClose(wait: number = CLOSE_GRACE_MS) {
+    clearHoverTimer()
+    clearCloseTimer()
+    closeTimer.value = setTimeout(closeTooltip, wait)
+  }
+
+  function onPointerDown(event: globalThis.PointerEvent) {
+    if (event.pointerType !== 'touch' || props.disabled || !props.text) return
+    clearPressTimer()
+    clearCloseTimer()
+    pressTimer.value = setTimeout(() => setOpen(true), LONG_PRESS_MS)
+  }
+
+  function onPointerUp(event: globalThis.PointerEvent) {
+    if (event.pointerType !== 'touch') return
+    clearPressTimer()
+    if (isOpen.value) scheduleClose(TOUCH_HIDE_MS)
   }
 
   function onDocumentKeydown(event: globalThis.KeyboardEvent) {
@@ -149,6 +200,8 @@
 
   onBeforeUnmount(() => {
     clearHoverTimer()
+    clearCloseTimer()
+    clearPressTimer()
     globalThis.document?.removeEventListener('keydown', onDocumentKeydown)
   })
 
@@ -165,7 +218,10 @@
     :data-disabled="disabled || null"
     :data-placement="resolvedPlacementRef"
     @mouseenter="scheduleOpen"
-    @mouseleave="closeTooltip"
+    @mouseleave="scheduleClose()"
+    @pointerdown="onPointerDown"
+    @pointerup="onPointerUp"
+    @pointercancel="onPointerUp"
     @focusin="setOpen(true)"
     @focusout="onFocusOut"
   >
@@ -191,8 +247,10 @@
         :data-placement="resolvedPlacementRef"
         :data-anchored="anchored || null"
         :aria-hidden="!isOpen"
+        @mouseenter="clearCloseTimer"
+        @mouseleave="scheduleClose()"
         :style="panelStyle"
-        class="pointer-events-none flex min-h-8 max-w-(--container-3xs) items-center justify-center overflow-clip break-words rounded-(--shape-elements) bg-(--bg-contrast) p-(--spacing-xs) text-center text-body-xs text-(--text-contrast) [transform-origin:var(--popup-origin,center)] data-[anchored]:transition-[translate] data-[anchored]:duration-fast-02 data-[anchored]:ease-productive-entrance motion-reduce:transition-none"
+        class="flex min-h-8 max-w-(--container-3xs) items-center justify-center overflow-clip break-words rounded-(--shape-elements) bg-(--bg-contrast) p-(--spacing-xs) text-center text-body-xs text-(--text-contrast) [transform-origin:var(--popup-origin,center)] data-[anchored]:transition-[translate] data-[anchored]:duration-fast-02 data-[anchored]:ease-productive-entrance motion-reduce:transition-none"
       >
         {{ text }}
       </div>

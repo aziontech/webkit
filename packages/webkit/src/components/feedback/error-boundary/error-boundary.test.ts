@@ -66,6 +66,7 @@ describe('ErrorBoundary', () => {
     await waitFor(() => expect(getByTestId('region')).toBeTruthy())
     expect(mounts).toBe(2)
     expect(emitted().retry).toHaveLength(1)
+    expect((emitted().retry![0] as unknown[])[0]).toBeInstanceOf(MouseEvent)
   })
 
   it('stops the error from reaching the parent unless propagate is set', async () => {
@@ -101,6 +102,7 @@ describe('ErrorBoundary', () => {
     await rerender({ resetKey: '/services/2' })
     await waitFor(() => expect(getByTestId('region')).toBeTruthy())
     expect(emitted().retry).toHaveLength(1)
+    expect(emitted().retry![0]).toEqual([])
   })
 
   it('renders the fallback slot with the error and a working retry', async () => {

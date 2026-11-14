@@ -36,6 +36,7 @@
   const uid = useId()
   const triggerRef = ref<HTMLElement | null>(null)
   const returnFocusRef = ref<HTMLElement | null>(null)
+  const hasDescription = ref(false)
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'overlay-dialog')
 
@@ -74,11 +75,20 @@
     get dismissible() {
       return props.dismissible
     },
-    size: props.size,
+    get size() {
+      return props.size
+    },
     open: openDialog,
     close: closeDialog,
     titleId: `${uid}-title`,
     descriptionId: `${uid}-description`,
+    hasDescription,
+    registerDescription: () => {
+      hasDescription.value = true
+    },
+    unregisterDescription: () => {
+      hasDescription.value = false
+    },
     triggerRef,
     returnFocusRef
   })
@@ -86,6 +96,7 @@
 
 <template>
   <div
+    v-bind="$attrs"
     :data-state="isOpen ? 'open' : 'closed'"
     :data-testid="testId"
   >

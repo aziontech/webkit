@@ -372,17 +372,6 @@ describe('Dialog (overlay: composition sub-components + provide/inject)', () => 
   })
 })
 
-describe('Dialog on phones', () => {
-  it('opens as a full-height, full-width sheet below sm', async () => {
-    render(composed({ defaultOpen: true }))
-    await settle()
-
-    const shell = byTestId('overlay-dialog__panel-shell')
-    expect(shell?.className).toContain('max-sm:h-dvh')
-    expect(shell?.className).toContain('max-sm:rounded-none')
-  })
-})
-
 describe('keyboard map (spec)', () => {
   const twoActions = defineComponent({
     components: {
@@ -560,5 +549,117 @@ describe('Dialog unmounted while open', () => {
       warn.mockRestore()
       error.mockRestore()
     }
+  })
+})
+
+describe('audit fixes', () => {
+  const bare = (props: Record<string, unknown> = {}) =>
+    defineComponent({
+      components: { Dialog, DialogPortal, DialogContent, DialogTitle },
+      setup: () => ({ props }),
+      template: `
+        <Dialog v-bind="props" :default-open="true">
+          <DialogPortal>
+            <DialogContent><DialogTitle>Title only</DialogTitle><button type="button">Act</button></DialogContent>
+          </DialogPortal>
+        </Dialog>
+      `
+    })
+
+  it('references no description id when no DialogDescription is mounted', async () => {
+    render(bare())
+    await settle()
+    expect(panel()!.hasAttribute('aria-describedby')).toBe(false)
+  })
+
+  it('forwards consumer attributes on the root', async () => {
+    const { getByTestId } = render(bare({ id: 'billing-dialog', 'aria-label': 'Billing' }))
+    await settle()
+    const root = getByTestId('overlay-dialog')
+    expect(root.id).toBe('billing-dialog')
+    expect(root.getAttribute('aria-label')).toBe('Billing')
+  })
+
+  it('reads size reactively', async () => {
+    const size = ref('small')
+    render(
+      defineComponent({
+        components: { Dialog, DialogPortal, DialogContent, DialogTitle },
+        setup: () => ({ size }),
+        template: `<Dialog :size="size" :default-open="true"><DialogPortal><DialogContent><DialogTitle>T</DialogTitle></DialogContent></DialogPortal></Dialog>`
+      })
+    )
+    await settle()
+    const wrapper = () => panel()!.querySelector<HTMLElement>('[data-size]')!
+    expect(wrapper().getAttribute('data-size')).toBe('small')
+    size.value = 'large'
+    await settle()
+    expect(wrapper().getAttribute('data-size')).toBe('large')
+  })
+
+  it('sets no inline transition on the panel or the backdrop', async () => {
+    render(composed({ defaultOpen: true }))
+    await settle()
+    const wrapper = panel()!.querySelector<HTMLElement>('[data-state]')!
+    expect(wrapper.style.transition).toBe('')
+    expect(backdrop()!.style.transition).toBe('')
+  })
+})
+
+describe('nested overlays', () => {
+  const nested = defineComponent({
+    components: { Dialog, DialogPortal, DialogContent, DialogTitle },
+    setup() {
+      const outer = ref(true)
+      const inner = ref(false)
+      return { outer, inner }
+    },
+    template: `
+      <Dialog v-model:open="outer" data-testid="outer">
+        <DialogPortal>
+          <DialogContent>
+            <DialogTitle>Outer</DialogTitle>
+            <button type="button" data-testid="outer-first">Outer first</button>
+            <button type="button" data-testid="open-inner" @click="inner = true">Open inner</button>
+          </DialogContent>
+        </DialogPortal>
+      </Dialog>
+      <Dialog v-model:open="inner" data-testid="inner">
+        <DialogPortal>
+          <DialogContent>
+            <DialogTitle>Inner</DialogTitle>
+            <button type="button" data-testid="inner-a">A</button>
+            <button type="button" data-testid="inner-b">B</button>
+          </DialogContent>
+        </DialogPortal>
+      </Dialog>
+    `
+  })
+
+  it('Escape closes only the top dialog', async () => {
+    render(nested)
+    await settle()
+    await fireEvent.click(byTestId('open-inner')!)
+    await settle()
+    expect(byTestId('inner')!.getAttribute('data-state')).toBe('open')
+
+    await fireEvent.keyDown(document, { key: 'Escape' })
+    await settle()
+    expect(byTestId('inner')!.getAttribute('data-state')).toBe('closed')
+    expect(byTestId('outer')!.getAttribute('data-state')).toBe('open')
+
+    await fireEvent.keyDown(document, { key: 'Escape' })
+    await settle()
+    expect(byTestId('outer')!.getAttribute('data-state')).toBe('closed')
+  })
+
+  it('Tab stays in the top dialog', async () => {
+    render(nested)
+    await settle()
+    await fireEvent.click(byTestId('open-inner')!)
+    await settle()
+    byTestId('inner-b')!.focus()
+    await userEvent.keyboard('{Tab}')
+    expect(document.activeElement).toBe(byTestId('inner-a'))
   })
 })

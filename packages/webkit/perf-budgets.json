@@ -51,6 +51,11 @@
     },
     "doc-layout-1k": { "mount": 480, "update": 800, "update_is": "open the search palette" },
     "item-list-1k": { "mount": 380, "update": 240, "update_is": "reverse the 1k rows" },
-    "key-value-pairs-1k": { "mount": 240, "update": 120, "update_is": "change the 1k values" }
+    "key-value-pairs-1k": { "mount": 240, "update": 120, "update_is": "change the 1k values" },
+    "upload-progress-1k": {
+      "mount": 150,
+      "update": 100,
+      "update_is": "one progress tick on all 1k running files"
+    }
   }
 }

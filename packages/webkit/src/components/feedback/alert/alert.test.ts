@@ -238,6 +238,7 @@ describe('Alert', () => {
       await waitFor(() => {
         expect(emitted('close')).toHaveLength(1)
       })
+      expect((emitted('close')[0] as unknown[])[0]).toBeInstanceOf(MouseEvent)
       // Once dismissed and unmounted, the root is gone.
       await waitFor(() => {
         expect(queryByTestId('feedback-alert')).toBeNull()
@@ -264,6 +265,7 @@ describe('Alert', () => {
       await waitFor(() => {
         expect(emitted('close')).toHaveLength(1)
       })
+      expect((emitted('close')[0] as unknown[])[0]).toBeInstanceOf(KeyboardEvent)
     })
 
     it('does not dismiss on Escape when not closable', async () => {
@@ -289,6 +291,29 @@ describe('Alert', () => {
       await waitFor(() => {
         expect(emitted('close')).toHaveLength(1)
       })
+      expect(emitted('close')[0]).toEqual([])
+    })
+
+    it('sets no inline transition on the root', () => {
+      const { getByTestId } = render(Alert, { props: { label: 'Fade', closable: true } })
+      expect(getByTestId('feedback-alert').style.transition).toBe('')
+    })
+  })
+
+  describe('title', () => {
+    it('renders the title as the first line above the copy', () => {
+      const { getByTestId } = render(Alert, {
+        props: { title: 'Deploy failed', label: 'The build step exited with code 1.' }
+      })
+      const content = getByTestId('feedback-alert__content')
+      expect(getByTestId('feedback-alert__title').textContent).toBe('Deploy failed')
+      expect(content.firstElementChild).toBe(getByTestId('feedback-alert__title'))
+      expect(content.textContent).toContain('The build step exited with code 1.')
+    })
+
+    it('renders no title node when the title is empty', () => {
+      const { queryByTestId } = render(Alert, { props: { label: 'Plain' } })
+      expect(queryByTestId('feedback-alert__title')).toBeNull()
     })
   })
 

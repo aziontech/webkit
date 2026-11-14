@@ -3,13 +3,13 @@ name: progress
 category: feedback
 structure: monolithic
 status: implemented
-spec_version: 1
-checksum: 8a217ee24285434b4c26e3809dbe04e1b31b67462f39e8406a48a8388e1b30a3
+spec_version: 2
+checksum: 555415f23139891669bcc3173120a30bd5958089ab3b488582a987d2e606a599
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=479-870
   node_id: 479:870
 created: 2026-06-26
-last_updated: 2026-11-11
+last_updated: 2026-11-14
 ---
 
 # Progress Bar — Component Spec
@@ -44,7 +44,7 @@ quantity.
 - Pass `value` on the scale of `max`, for example `:value="3" :max="5"` for steps. Don't convert it to a percentage yourself.
 - Switch to `indeterminate` when progress is unknown. `value` is then ignored and `aria-valuenow` is dropped.
 - There is no label prop. Give the bar an accessible name with an `aria-label` or `aria-labelledby` attribute, and show the percentage in text next to it if users need the number.
-- The default is the thin `small` bar with `flat` corners. Use `shape="rounded"` and a larger `size` only when the bar stands alone.
+- The default is the thin `small` bar with `flat` corners. Use `kind="rounded"` and a larger `size` only when the bar stands alone. The `small` default is a deliberate exception to the house `medium` default: the bar is mostly a thin inline strip (table rows, upload rows, the top of a region).
 
 ## Usage
 
@@ -64,7 +64,8 @@ quantity.
 | --------------- | -------------------------------- | --------- | -------- | -------------------------------------------------------------- |
 | `value`         | `number`                         | `0`       | false    | Current progress, relative to `max`.                           |
 | `max`           | `number`                         | `100`     | false    | Upper bound; percentage = `value / max * 100`.                 |
-| `shape`         | `'rounded' \| 'flat'`            | `'flat'`  | false    | Track and fill corner-radius variant.                          |
+| `kind`          | `ProgressKind` (`'rounded' \| 'flat'`) | `undefined` (resolves to `'flat'`) | false | Track and fill corner-radius variant. |
+| `shape`         | `ProgressShape` (`'rounded' \| 'flat'`) | `undefined` | false | **@deprecated since 6.0 — use `kind`. Removed in 7.0.** Read only when `kind` is unset. |
 | `size`          | `'small' \| 'medium' \| 'large'` | `'small'` | false    | Bar height token.                                              |
 | `indeterminate` | `boolean`                        | `false`   | false    | Loading state; animates a sliding segment and ignores `value`. |
 
@@ -79,7 +80,7 @@ quantity.
 ## States
 
 - Visual states: `default`, `indeterminate`
-- `data-shape` mirrors the `shape` prop: `rounded` | `flat`
+- `data-kind` mirrors the resolved `kind` (`kind`, else the deprecated `shape`, else `flat`): `rounded` | `flat`. The legacy `data-shape` carries the same value until 7.0.
 - `data-size` mirrors the `size` prop: `small` | `medium` | `large`
 - `data-indeterminate` is present while `indeterminate` is `true`
 

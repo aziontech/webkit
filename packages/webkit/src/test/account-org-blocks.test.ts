@@ -17,7 +17,8 @@ useToastRegion()
 
 afterEach(() => cleanup())
 
-const dialog = () => document.querySelector('[role="dialog"]') as HTMLElement | null
+const dialog = () =>
+  document.querySelector('[role="dialog"], [role="alertdialog"]') as HTMLElement | null
 
 const buttonByText = (text: string, root: Document | HTMLElement = document) =>
   Array.from(root.querySelectorAll('button')).find(
@@ -103,9 +104,9 @@ describe('account/tokens', () => {
     await fireEvent.click(buttonByText('Create Personal Token', drawer))
     const reveal = await waitFor(
       () => {
-        const node = Array.from(document.querySelectorAll('[role="dialog"]')).find((item) =>
-          item.textContent?.includes('Copy your new token')
-        ) as HTMLElement
+        const node = Array.from(
+          document.querySelectorAll('[role="dialog"], [role="alertdialog"]')
+        ).find((item) => item.textContent?.includes('Copy your new token')) as HTMLElement
         expect(node).toBeTruthy()
         return node
       },

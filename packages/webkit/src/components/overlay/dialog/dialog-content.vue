@@ -3,15 +3,10 @@
   import { computed, inject, nextTick, ref, useAttrs, watch } from 'vue'
 
   import { useFocusTrap } from '../../../composables/use-focus-trap'
+  import { useOverlayLayer } from '../../../composables/use-overlay-layer'
   import { cn } from '../../../utils/cn'
-  import { useOverlayMobile } from '../composables/use-overlay-mobile'
   import Panel from '../panel/panel.vue'
-  import { dialogPanelSizeClasses } from '../panel/presets/sizes'
   import { DialogInjectionKey, DialogMotionInjectionKey } from './injection-key'
-  import {
-    dialogPanelTransitionClasses,
-    getDialogResponsiveTransitionStyle
-  } from './presets/transitions'
 
   defineOptions({
     name: 'DialogContent',
@@ -28,8 +23,12 @@
   const isOpen = computed(() => ctx?.isOpen.value ?? false)
   const motionCtx = inject(DialogMotionInjectionKey)
   const motionState = computed(() => motionCtx?.motionState.value ?? 'closed')
-  const isMobileOverlay = useOverlayMobile()
   const isScrollLocked = useScrollLock(defaultDocument?.body)
+  const { isTop } = useOverlayLayer(isOpen)
+
+  const forwardedAttrs = computed(() =>
+    Object.fromEntries(Object.entries(attrs).filter(([key]) => key !== 'class'))
+  )
 
   watch(
     isOpen,
@@ -38,10 +37,11 @@
     },
     { immediate: true }
   )
-  useFocusTrap(contentRef, isOpen)
+  useFocusTrap(contentRef, isOpen, isTop)
 
   useEventListener(defaultDocument, 'keydown', (event: globalThis.KeyboardEvent) => {
     if (!isOpen.value || event.key !== 'Escape' || event.defaultPrevented) return
+    if (!isTop.value) return
     if (!ctx?.dismissible) return
     event.preventDefault()
     ctx.close()
@@ -53,46 +53,29 @@
     const target = ctx.triggerRef.value ?? ctx.returnFocusRef.value
     if (target?.isConnected) target.focus()
   })
-
-  const shellClasses = computed(() =>
-    cn(
-      'fixed inset-0 z-1001 flex',
-      'max-md:items-end max-md:justify-center max-md:p-0',
-      'md:items-center md:justify-center md:p-(--spacing-md)',
-      'pointer-events-none',
-      attrs.class as string | undefined
-    )
-  )
-
-  const panelMotionStyle = computed(() =>
-    getDialogResponsiveTransitionStyle(motionState.value, 'panel', isMobileOverlay.value)
-  )
-
-  const panelMotionClasses = computed(() =>
-    cn(
-      'pointer-events-auto mx-auto w-full',
-      dialogPanelSizeClasses[ctx?.size ?? 'medium'],
-      'max-md:w-full',
-      dialogPanelTransitionClasses
-    )
-  )
 </script>
 
 <template>
   <div
     ref="contentRef"
-    :class="shellClasses"
     role="dialog"
+    v-bind="forwardedAttrs"
+    :class="
+      cn(
+        'pointer-events-none fixed inset-0 z-1001 flex max-md:items-end max-md:justify-center max-md:p-0 md:items-center md:justify-center md:p-(--spacing-md)',
+        attrs.class as string | undefined
+      )
+    "
     :aria-modal="true"
     :aria-labelledby="ctx?.titleId"
-    :aria-describedby="ctx?.descriptionId"
+    :aria-describedby="ctx?.hasDescription.value ? ctx.descriptionId : undefined"
     :data-testid="`${ctx?.testId}__panel`"
     tabindex="-1"
   >
     <div
-      :class="panelMotionClasses"
-      :style="panelMotionStyle"
       :data-state="motionState"
+      :data-size="ctx?.size ?? 'medium'"
+      class="pointer-events-auto mx-auto w-full max-md:w-full data-[size=small]:md:max-w-(--container-sm) data-[size=medium]:md:max-w-(--container-xl) data-[size=large]:md:max-w-(--container-2xl) transition-[translate,scale,opacity] motion-reduce:transition-none max-md:translate-x-0 max-md:duration-slow-02 max-md:ease-expressive-entrance max-md:data-[state=closed]:translate-y-full max-md:data-[state=closed]:duration-slow-01 max-md:data-[state=closed]:ease-expressive-exit max-md:data-[state=open]:translate-y-0 md:origin-center md:translate-y-0 md:scale-90 md:opacity-0 md:duration-moderate-01 md:ease-productive-entrance md:data-[state=closed]:ease-productive-exit md:data-[state=open]:scale-100 md:data-[state=open]:opacity-100"
     >
       <Panel
         :size="ctx?.size ?? 'medium'"
