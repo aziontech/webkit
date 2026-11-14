@@ -109,8 +109,10 @@
 
   const referenceTime = Date.UTC(2026, 10, 10, 12)
 
+  const emptySections = ['posture-checks', 'webhooks', 'exceptions']
+
   const entries = computed<Entry[]>(() =>
-    Array.from({ length: 6 }, (_, index) => {
+    Array.from({ length: emptySections.includes(current.value.id) ? 0 : 6 }, (_, index) => {
       const n = index + 1
       const slug = current.value.noun.toLowerCase().replace(/\s+/g, '-')
       return {
@@ -139,6 +141,7 @@
   const {
     tableProps,
     propertyFilterProps,
+    status,
     clearFilters,
     loading: fetching
   } = useCollection({
@@ -168,6 +171,8 @@
   const labelOf = (value: string | undefined) =>
     siblings.find((sibling) => hrefOf(sibling) === value)?.label ?? ''
 
+  const policyBase = '/policies/acme-default'
+
   const loading = ref(false)
   let refreshTimer: ReturnType<typeof setTimeout> | undefined
   const refresh = () => {
@@ -181,7 +186,7 @@
 </script>
 
 <template>
-  <div class="mx-auto flex min-h-0 w-full max-w-(--container-xl) flex-1 flex-col">
+  <div class="flex min-h-0 flex-1 flex-col">
     <div class="sticky top-0 z-1 bg-(--bg-canvas)">
       <PageTabs v-model="activeTab">
         <Tabs.Item
@@ -193,7 +198,10 @@
       </PageTabs>
     </div>
 
-    <section class="animate-page-enter motion-reduce:animate-none min-h-0 flex-1">
+    <section
+      v-if="activeTab === 'private-access'"
+      class="animate-page-enter motion-reduce:animate-none min-h-0 flex-1"
+    >
       <div class="layout-column layout-boundary @container/tab flex min-w-0 flex-col">
         <div
           class="flex min-w-0 flex-col gap-(--layout-group-gap) @3xl/tab:flex-row @3xl/tab:items-start @3xl/tab:gap-(--layout-section-gap)"
@@ -317,6 +325,25 @@
                     </template>
                     <template #empty>
                       <EmptyState
+                        key="empty-state-1"
+                        v-if="status !== 'no-match'"
+                        size="medium"
+                        icon="pi pi-inbox"
+                        :title="`No ${current.label.toLowerCase()} yet`"
+                        :description="`Add the first ${current.noun.toLowerCase()} to this policy.`"
+                      >
+                        <template #actions>
+                          <Button
+                            :label="`Add ${current.noun}`"
+                            icon="pi pi-plus"
+                            kind="secondary"
+                            size="small"
+                          />
+                        </template>
+                      </EmptyState>
+                      <EmptyState
+                        key="empty-state-2"
+                        v-else
                         size="medium"
                         icon="pi pi-filter-slash"
                         :title="`No matching ${current.label.toLowerCase()}`"
@@ -337,6 +364,30 @@
               </Card>
             </section>
           </div>
+        </div>
+      </div>
+    </section>
+    <section
+      v-else
+      class="animate-page-enter motion-reduce:animate-none min-h-0 flex-1"
+    >
+      <div class="layout-column layout-boundary flex min-w-0 flex-col">
+        <div class="layout-section-start">
+          <EmptyState
+            size="medium"
+            icon="pi pi-external-link"
+            :title="tabLabel"
+            :description="`${tabLabel} opens on its own page of the acme-default policy.`"
+          >
+            <template #actions>
+              <Button
+                :label="`Open ${tabLabel}`"
+                kind="outlined"
+                size="small"
+                :href="`${policyBase}/${activeTab}`"
+              />
+            </template>
+          </EmptyState>
         </div>
       </div>
     </section>

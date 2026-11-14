@@ -147,7 +147,12 @@ describe('record-table#ImportZoneFile', () => {
     const drawer = await screen.findByRole('dialog', { name: 'Import zone file' })
     const text = within(drawer).getByRole('textbox', { name: 'Or paste it' })
     await fireEvent.update(text, 'www 300 IN A 192.0.2.7\nbad IN A nowhere')
-    expect(within(drawer).getByRole('status').textContent).toMatch(/1 ready, 0 skipped,\s*1 error/)
+    expect(within(drawer).getByRole('status').textContent).toMatch(/5 ready, 3 skipped,\s*1 error/)
+    await waitFor(() =>
+      expect(within(drawer).getByRole('status').textContent).toMatch(
+        /1 ready, 0 skipped,\s*1 error/
+      )
+    )
     await fireEvent.click(within(drawer).getByRole('button', { name: 'Import 1 record' }))
     await waitFor(
       () => expect(screen.getByText('Imported 1 record from the pasted zone file.')).toBeTruthy(),

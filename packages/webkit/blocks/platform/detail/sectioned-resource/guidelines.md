@@ -19,7 +19,7 @@ The page of one resource whose tab holds more sibling pages than a tab row can c
 
 ### A. Tab bar — `PageTabs`, `Tabs` (required)
 
-A full-bleed `PageTabs` with one `Tabs.Item` per section of the resource, in a `sticky top-0` wrapper on the canvas fill, so it stays in view while the layout's content region scrolls the tab under it. It is level 2; the breadcrumb names the resource and is not a level.
+A full-bleed `PageTabs` with one `Tabs.Item` per section of the resource, in a `sticky top-0` wrapper on the canvas fill, so it stays in view while the layout's content region scrolls the tab under it. It is level 2; the breadcrumb names the resource and is not a level. Each tab is its own route: this block renders the open tab's page, and another tab shows an `EmptyState` with an Open link to that tab's route, so no tab is ever dead.
 
 ### B. Local navigation — `MenuRoot` (required)
 
@@ -39,7 +39,7 @@ The TableView controls row: a `PropertyFilter` that grows to fill the row, bound
 
 ### F. List — `Card`, `TableRoot`, `Table.CellLink`, `Table.CellId`, `Table.CellStatus`, `Table.CellTime`, `EmptyState` (required)
 
-`Card :padded="false"` around `TableRoot :bordered="false"` with the `useCollection` table props and sorting. Name is a `Table.CellLink` to the entry, ID a `Table.CellId`, Status a `Table.CellStatus` and Last Modified a `Table.CellTime` with its author. A filter that matches nothing shows a No matching `EmptyState` with Clear filters inside the table.
+`Card :padded="false"` around `TableRoot :bordered="false"` with the `useCollection` table props and sorting. Name is a `Table.CellLink` to the entry, ID a `Table.CellId`, Status a `Table.CellStatus` and Last Modified a `Table.CellTime` with its author. The table's `#empty` slot branches on `useCollection`'s `status`: a filter that matches nothing shows a No matching `EmptyState` with Clear filters; a sibling page with no entries yet (Posture checks, Webhooks, Exceptions here) shows `No <page> yet` with `Add <Noun>`.
 
 ## Do
 
@@ -47,6 +47,7 @@ The TableView controls row: a `PropertyFilter` that grows to fill the row, bound
 - Derive the current row from the route on every level, and make the current rows of all levels describe the same place.
 - Keep the menu column at `--container-3xs`, so the list keeps the page column minus that column.
 - Label the folded `Select` with the tab name, so the reader knows which set of pages it switches.
+- Tell an empty page (Add) apart from a filter that matches nothing (Clear filters).
 - Give every sibling page its own route, and let the menu rows be real links that open in a new tab on a modified click.
 
 ## Don't
@@ -78,7 +79,7 @@ The TableView controls row: a `PropertyFilter` that grows to fill the row, bound
 ## States
 
 - Default: the Private access tab of the acme-default policy, 16 sibling pages in 4 groups in the menu column, Access rules current and listed beside it.
-- Narrow: the same tab below `@3xl` of the tab body: the menu folds into a Select labelled Private access, Server groups current, the list under it at full width.
+- Narrow: the same tab below `@3xl` of the tab body: the menu folds into a Select labelled Private access, Server groups current, the list under it at full width. The page keeps the primary's root, so `layout-column` alone sets the measure.
 - FewSiblings: the Network security tab with 6 siblings and no local navigation; a ToggleGroup labelled Network security switches between them above the list.
 
 ## Related

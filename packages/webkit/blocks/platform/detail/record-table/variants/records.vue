@@ -1,15 +1,11 @@
 <script setup lang="ts">
-  import Avatar from '@aziontech/webkit/avatar'
-  import Badge from '@aziontech/webkit/badge'
   import Button from '@aziontech/webkit/button'
-  import type { CalendarRange, CalendarValue } from '@aziontech/webkit/calendar'
-  import CalendarRoot from '@aziontech/webkit/calendar-root'
   import Card from '@aziontech/webkit/card'
-  import Chip from '@aziontech/webkit/chip'
+  import CollectionPreferences from '@aziontech/webkit/collection-preferences'
   import CopyButton from '@aziontech/webkit/copy-button'
   import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'
   import DropdownMenuOption from '@aziontech/webkit/dropdown-menu-option'
-  import Field from '@aziontech/webkit/field'
+  import EmptyState from '@aziontech/webkit/empty-state'
   import HelperText from '@aziontech/webkit/helper-text'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
@@ -17,9 +13,7 @@
   import ItemList from '@aziontech/webkit/item-list'
   import PageHeader from '@aziontech/webkit/page-header'
   import PageTabs from '@aziontech/webkit/page-tabs'
-  import PopoverContent from '@aziontech/webkit/popover-content'
-  import PopoverRoot from '@aziontech/webkit/popover-root'
-  import PopoverTrigger from '@aziontech/webkit/popover-trigger'
+  import PropertyFilter from '@aziontech/webkit/property-filter'
   import SaveBar from '@aziontech/webkit/save-bar'
   import SettingRow from '@aziontech/webkit/setting-row'
   import SettingsSection from '@aziontech/webkit/settings-section'
@@ -30,7 +24,8 @@
   import Tabs from '@aziontech/webkit/tabs'
   import Tag from '@aziontech/webkit/tag'
   import Tooltip from '@aziontech/webkit/tooltip'
-  import { computed, nextTick, reactive, ref, useId, watch } from 'vue'
+  import { type FilteringProperty, useCollection } from '@aziontech/webkit/use-collection'
+  import { computed, reactive, ref, useId } from 'vue'
 
   type DnsRecord = {
     id: string
@@ -41,16 +36,6 @@
     policy: string
     weight: number
     description: string
-  }
-  type FilterOption = { value: string; label: string; custom?: boolean; avatar?: string }
-  type FilterValue = string | CalendarRange
-  type FilterField = {
-    id: string
-    label: string
-    kind: 'options' | 'range'
-    options: FilterOption[]
-    match: (record: DnsRecord, values: FilterValue[]) => boolean
-    formatValue?: (value: FilterValue) => string
   }
 
   const activeTab = ref('records')
@@ -127,23 +112,6 @@
   const policyLabel = (value: string) =>
     POLICY_TYPES.find((policy) => policy.value === value)?.label ?? ''
 
-  const filterFields: FilterField[] = [
-    {
-      id: 'type',
-      label: 'Type',
-      kind: 'options',
-      options: ['A', 'AAAA', 'CNAME', 'MX', 'TXT', 'NS'].map((value) => ({ value, label: value })),
-      match: (record: DnsRecord, values: FilterValue[]) => values.includes(record.type)
-    },
-    {
-      id: 'policy',
-      label: 'Policy',
-      kind: 'options',
-      options: POLICY_TYPES,
-      match: (record: DnsRecord, values: FilterValue[]) => values.includes(record.policy)
-    }
-  ]
-
   const columns: TableColumn[] = [
     { accessorKey: 'name', header: 'Name', enableSorting: true, principal: true, hideable: false },
     { accessorKey: 'id', header: 'ID', enableSorting: true, minWidth: 80 },
@@ -169,149 +137,35 @@
     }
   ]
 
-  const search = ref('')
-
-  const filters = ref<Record<string, FilterValue[]>>({})
-  const filterOpen = ref(false)
-  const activeId = ref<string | null>(null)
-  const customId = ref<string | null>(null)
-  const calendarOpen = ref(false)
-  const customRange = ref<CalendarValue>(null)
-  const query = ref('')
-  const direction = ref('forward')
-  const filterPanel = ref<HTMLElement | null>(null)
-  let requestedId: string | null = null
-
-  const isApplied = (field: FilterField) => Boolean(filters.value[field.id]?.length)
-  const appliedFilters = computed(() => filterFields.filter(isApplied))
-  const appliedCount = computed(() => appliedFilters.value.length)
-  const summarize = (field: FilterField) => {
-    const values = filters.value[field.id] ?? []
-    if (!values.length) return null
-    const first = field.options.find((option) => option.value === values[0])
-    return {
-      label: first ? first.label : (field.formatValue?.(values[0]) ?? ''),
-      extra: values.length - 1
-    }
-  }
-  const summarizeText = (field: FilterField) => {
-    const parts = summarize(field)
-    if (!parts) return ''
-    return parts.extra ? `${parts.label} +${parts.extra}` : parts.label
-  }
-  const avatarsOf = (field: FilterField) =>
-    field.options
-      .filter(
-        (option) => 'avatar' in option && (filters.value[field.id] ?? []).includes(option.value)
-      )
-      .slice(0, 3)
-
-  const customField = computed(() => filterFields.find((field) => field.id === customId.value))
-  const activeField = computed(
-    () => filterFields.find((field) => field.id === activeId.value) ?? customField.value
-  )
-  const levelKey = computed(() => {
-    if (customId.value) return `custom:${customId.value}`
-    return activeId.value ? `values:${activeId.value}` : 'fields'
-  })
-  const matchesQuery = <T extends { label: string }>(source: T[]) => {
-    const term = query.value.trim().toLowerCase()
-    return term ? source.filter((row) => row.label.toLowerCase().includes(term)) : source
-  }
-  const fieldRows = computed(() => matchesQuery(filterFields))
-  const optionRows = computed(() => matchesQuery(activeField.value?.options ?? []))
-  const filterRows = computed(() => (activeField.value ? optionRows.value : fieldRows.value))
-  const isPicked = (value: string) => (filters.value[activeId.value ?? ''] ?? []).includes(value)
-
-  watch(filterOpen, (open) => {
-    if (!open) return
-    activeId.value = requestedId
-    requestedId = null
-    customId.value = null
-    calendarOpen.value = false
-    customRange.value = null
-    query.value = ''
-    direction.value = 'forward'
-  })
-
-  const toLevel = (dir: string, mutate: () => void) => {
-    direction.value = dir
-    mutate()
-  }
-  const enter = (fieldId: string) => {
-    if (!filterOpen.value) {
-      requestedId = fieldId
-      filterOpen.value = true
-      return
-    }
-    toLevel('forward', () => {
-      activeId.value = fieldId
-      query.value = ''
-    })
-  }
-  const back = () =>
-    toLevel('back', () => {
-      activeId.value = null
-      query.value = ''
-    })
-  const pick = (field: FilterField, option: FilterOption) => {
-    if (option.custom) {
-      toLevel('forward', () => {
-        customId.value = field.id
-      })
-      calendarOpen.value = true
-      return
-    }
-    const current = filters.value[field.id] ?? []
-    const next: FilterValue[] =
-      field.kind === 'range'
-        ? current[0] === option.value
-          ? []
-          : [option.value]
-        : current.includes(option.value)
-          ? current.filter((item) => item !== option.value)
-          : [...current, option.value]
-    filters.value = { ...filters.value, [field.id]: next }
-    if (field.kind === 'range') back()
-  }
-  const leaveCustom = () => {
-    calendarOpen.value = false
-    customRange.value = null
-    toLevel('back', () => {
-      customId.value = null
-    })
-  }
-  const commitCustom = (range: CalendarValue) => {
-    const field = customField.value
-    if (!field) return
-    const next = { ...filters.value }
-    if (range && !(range instanceof Date) && (range.start || range.end)) next[field.id] = [range]
-    else delete next[field.id]
-    filters.value = next
-    leaveCustom()
-    back()
-    filterOpen.value = false
-  }
-  const clearFilter = (field: FilterField) => {
-    const next = { ...filters.value }
-    delete next[field.id]
-    filters.value = next
-  }
-  const levelRows = () => [
-    ...(filterPanel.value?.querySelectorAll<HTMLElement>(
-      `[data-level="${levelKey.value}"] [data-filter-row]`
-    ) ?? [])
+  const properties: FilteringProperty[] = [
+    { key: 'name', label: 'Name' },
+    {
+      key: 'type',
+      label: 'Type',
+      options: ['A', 'AAAA', 'CNAME', 'MX', 'TXT', 'NS'].map((value) => ({ value }))
+    },
+    { key: 'policy', label: 'Policy', options: POLICY_TYPES },
+    { key: 'value', label: 'Value' }
   ]
-  const move = (event: KeyboardEvent, step: number) => {
-    const items = levelRows()
-    if (!items.length) return
-    event.preventDefault()
-    const index = items.indexOf(event.target as HTMLElement)
-    items[(index + step + items.length) % items.length]?.focus()
-  }
-  watch(levelKey, async () => {
-    await nextTick()
-    levelRows()[0]?.focus()
+
+  const {
+    tableProps,
+    propertyFilterProps,
+    preferencesProps,
+    status,
+    matchingItems,
+    clearFilters,
+    loading: fetching
+  } = useCollection({
+    items: rows,
+    columns,
+    filtering: { fields: ['name', 'id', 'type', 'value', 'description'] },
+    propertyFiltering: { properties },
+    pagination: { pageSize: 10, pageSizeOptions: [10, 25, 50] },
+    preferences: {
+      storageKey: 'dns-records-table',
+      defaults: { columns: [{ id: 'id', visible: false }] }
+    }
   })
 
   const loading = ref(false)
@@ -325,44 +179,7 @@
     }, 700)
   }
 
-  const listedColumns = columns
-    .filter((column) => column.kind !== 'action')
-    .map((column) => ({
-      id: column.id ?? column.accessorKey ?? '',
-      label: column.label ?? column.header,
-      locked: column.hideable === false
-    }))
-  const columnsOpen = ref(false)
-  const columnsTipOpen = ref(false)
-  watch(columnsOpen, (open) => {
-    if (open) columnsTipOpen.value = false
-  })
-  const columnVisibility = ref<Record<string, boolean>>({ id: false })
-  const isVisible = (id: string) => columnVisibility.value[id] !== false
-  const setVisible = (id: string, visible: boolean) => {
-    const next = { ...columnVisibility.value }
-    if (visible) delete next[id]
-    else next[id] = false
-    columnVisibility.value = next
-  }
-  const hiddenCount = computed(() => listedColumns.filter((column) => !isVisible(column.id)).length)
-  const showAll = () => {
-    columnVisibility.value = {}
-  }
-
   const tableRef = ref<TableExposed<DnsRecord> | null>(null)
-  const pagination = ref({ pageIndex: 0, pageSize: 8 })
-  const visibleRows = computed(() =>
-    rows.filter((row) =>
-      filterFields.every((field) => {
-        const values = filters.value[field.id]
-        return !values?.length || field.match(row, values)
-      })
-    )
-  )
-  watch(filters, () => {
-    pagination.value = { ...pagination.value, pageIndex: 0 }
-  })
 </script>
 
 <template>
@@ -640,248 +457,13 @@
         </PageHeader>
         <section class="layout-section-start flex min-w-0 flex-col gap-(--layout-section-gap)">
           <section class="flex min-w-0 flex-col gap-(--layout-group-gap)">
-            <header class="flex items-center gap-(--layout-group-gap)">
-              <div class="flex min-w-0 grow items-center gap-(--spacing-xs)">
-                <div class="flex shrink-0 items-center">
-                  <PopoverRoot
-                    v-model:open="filterOpen"
-                    placement="bottom-start"
-                    :dismissible="!calendarOpen"
-                    class="shrink-0"
-                  >
-                    <div class="relative">
-                      <PopoverTrigger>
-                        <Button
-                          label="Filter"
-                          kind="outlined"
-                          size="medium"
-                          icon="pi pi-filter"
-                        />
-                        <Transition
-                          enter-from-class="scale-75 opacity-0"
-                          enter-active-class="transition-[transform,scale,opacity] duration-fast-02 ease-productive-entrance motion-reduce:transition-none"
-                          leave-to-class="scale-75 opacity-0"
-                          leave-active-class="transition-[transform,scale,opacity] duration-fast-02 ease-productive-exit motion-reduce:transition-none"
-                        >
-                          <div
-                            v-if="appliedCount"
-                            class="pointer-events-none absolute -top-2 -end-2 min-w-5"
-                          >
-                            <Badge
-                              :label="String(appliedCount)"
-                              severity="primary"
-                              size="small"
-                              aria-hidden="true"
-                              class="w-full"
-                            />
-                          </div>
-                        </Transition>
-                      </PopoverTrigger>
-                    </div>
-                    <PopoverContent>
-                      <div
-                        ref="filterPanel"
-                        class="flex flex-col"
-                        @keydown.down="move($event, 1)"
-                        @keydown.up="move($event, -1)"
-                      >
-                        <div class="relative overflow-hidden">
-                          <Transition
-                            :enter-from-class="
-                              direction === 'forward'
-                                ? 'translate-x-[12%] opacity-0'
-                                : 'translate-x-[-12%] opacity-0'
-                            "
-                            enter-active-class="transition-[translate,opacity] duration-moderate-01 ease-productive-entrance motion-reduce:transition-none"
-                            :leave-to-class="
-                              direction === 'forward'
-                                ? 'translate-x-[-12%] opacity-0'
-                                : 'translate-x-[12%] opacity-0'
-                            "
-                            leave-active-class="absolute inset-x-0 top-0 transition-[translate,opacity] duration-fast-02 ease-productive-exit motion-reduce:transition-none"
-                          >
-                            <div
-                              :key="levelKey"
-                              :data-level="levelKey"
-                              class="flex flex-col"
-                            >
-                              <div
-                                v-if="activeField"
-                                class="flex items-center gap-(--spacing-xs) border-b border-(--border-default) px-(--spacing-xs) py-(--spacing-xs)"
-                              >
-                                <IconButton
-                                  icon="pi pi-angle-left"
-                                  kind="outlined"
-                                  size="small"
-                                  :aria-label="
-                                    customField ? 'Back to date periods' : 'Back to all filters'
-                                  "
-                                  @click="customField ? leaveCustom() : back()"
-                                />
-                                <span class="truncate text-label-sm text-(--text-default)">{{
-                                  activeField.label
-                                }}</span>
-                              </div>
-
-                              <div
-                                v-if="customField"
-                                class="px-(--spacing-md) py-(--spacing-sm)"
-                              >
-                                <CalendarRoot
-                                  v-model="customRange"
-                                  v-model:open="calendarOpen"
-                                  mode="range"
-                                  size="medium"
-                                  :show-fields="false"
-                                  placeholder="Select a range"
-                                  class="w-full"
-                                  @update:model-value="commitCustom"
-                                />
-                              </div>
-
-                              <template v-else>
-                                <div class="border-b border-(--border-default) p-(--spacing-xs)">
-                                  <Input
-                                    v-model="query"
-                                    size="medium"
-                                    class="w-full"
-                                    :placeholder="
-                                      activeField
-                                        ? 'Search ' + activeField.label.toLowerCase()
-                                        : 'Search fields'
-                                    "
-                                    :aria-label="
-                                      activeField
-                                        ? 'Search ' + activeField.label + ' values'
-                                        : 'Search filter fields'
-                                    "
-                                  >
-                                    <template #iconLeft>
-                                      <i
-                                        class="pi pi-search"
-                                        aria-hidden="true"
-                                      />
-                                    </template>
-                                  </Input>
-                                </div>
-
-                                <div
-                                  class="flex max-h-(--container-3xs) flex-col gap-(--spacing-xxs) overflow-y-auto p-(--spacing-xxs)"
-                                >
-                                  <template v-if="!activeField">
-                                    <button
-                                      v-for="field in fieldRows"
-                                      :key="field.id"
-                                      type="button"
-                                      data-filter-row
-                                      class="flex w-full items-center gap-(--spacing-sm) rounded-(--shape-elements) px-(--spacing-sm) py-(--spacing-xs) text-start text-label-sm text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
-                                      :aria-expanded="false"
-                                      @click="enter(field.id)"
-                                    >
-                                      <span class="grow truncate">{{ field.label }}</span>
-                                      <span
-                                        v-if="isApplied(field)"
-                                        class="truncate text-(--text-muted)"
-                                        >{{ summarizeText(field) }}</span
-                                      >
-                                      <i
-                                        class="pi pi-angle-right shrink-0 text-(--text-muted)"
-                                        aria-hidden="true"
-                                      />
-                                    </button>
-                                  </template>
-
-                                  <template v-else>
-                                    <button
-                                      v-for="option in optionRows"
-                                      :key="String(option.value)"
-                                      type="button"
-                                      data-filter-row
-                                      :role="
-                                        option.custom
-                                          ? undefined
-                                          : activeField.kind === 'range'
-                                            ? 'menuitemradio'
-                                            : 'menuitemcheckbox'
-                                      "
-                                      :aria-checked="
-                                        option.custom ? undefined : isPicked(option.value)
-                                      "
-                                      class="flex w-full items-center gap-(--spacing-sm) rounded-(--shape-elements) px-(--spacing-sm) py-(--spacing-xs) text-start text-label-sm text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
-                                      @click="pick(activeField, option)"
-                                    >
-                                      <Avatar
-                                        v-if="'avatar' in option"
-                                        :src="option.avatar || undefined"
-                                        :alt="option.label"
-                                        :label="option.label"
-                                        size="small"
-                                        kind="square"
-                                        class="shrink-0"
-                                      />
-                                      <span class="grow truncate">{{ option.label }}</span>
-                                      <i
-                                        v-if="option.custom"
-                                        class="pi pi-angle-right shrink-0 text-(--text-muted)"
-                                        aria-hidden="true"
-                                      />
-                                      <i
-                                        v-else
-                                        class="pi pi-check shrink-0 text-(--text-default)"
-                                        :class="isPicked(option.value) ? '' : 'invisible'"
-                                        aria-hidden="true"
-                                      />
-                                    </button>
-                                  </template>
-
-                                  <p
-                                    v-if="!filterRows.length"
-                                    class="px-(--spacing-sm) py-(--spacing-xs) text-label-sm text-(--text-muted)"
-                                  >
-                                    No match for “{{ query }}”.
-                                  </p>
-                                </div>
-
-                                <div
-                                  v-if="activeField && isApplied(activeField)"
-                                  class="border-t border-(--border-default) p-(--spacing-xxs)"
-                                >
-                                  <button
-                                    type="button"
-                                    class="flex w-full items-center gap-(--spacing-sm) rounded-(--shape-elements) px-(--spacing-sm) py-(--spacing-xs) text-start text-label-sm text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
-                                    @click="clearFilter(activeField)"
-                                  >
-                                    <i
-                                      class="pi pi-filter-slash text-(--text-muted)"
-                                      aria-hidden="true"
-                                    />
-                                    Clear {{ activeField.label }}
-                                  </button>
-                                </div>
-                              </template>
-                            </div>
-                          </Transition>
-                        </div>
-                      </div>
-                    </PopoverContent>
-                  </PopoverRoot>
-                </div>
-                <div class="flex min-w-36 grow basis-(--container-2xs)">
-                  <Input
-                    v-model="search"
-                    size="medium"
-                    placeholder="Search records"
-                    aria-label="Search records"
-                    class="w-full"
-                  >
-                    <template #iconLeft>
-                      <i
-                        class="pi pi-search"
-                        aria-hidden="true"
-                      />
-                    </template>
-                  </Input>
-                </div>
+            <header class="flex items-start gap-(--layout-group-gap)">
+              <div class="flex min-w-0 grow">
+                <PropertyFilter
+                  v-bind="propertyFilterProps"
+                  placeholder="Filter records"
+                  aria-label="Filter records"
+                />
               </div>
               <div class="flex shrink-0 items-center gap-(--spacing-xs)">
                 <Tooltip
@@ -905,154 +487,25 @@
                     icon="pi pi-download"
                     kind="outlined"
                     size="medium"
-                    :disabled="!tableRef"
+                    :disabled="!matchingItems.length"
                     aria-label="Download CSV"
                     @click="tableRef?.exportCsv({ filename: 'records.csv' })"
                   />
                 </Tooltip>
-                <PopoverRoot
-                  v-model:open="columnsOpen"
-                  placement="bottom-end"
-                  class="shrink-0"
-                >
-                  <PopoverTrigger>
-                    <Tooltip
-                      v-model:open="columnsTipOpen"
-                      text="Columns"
-                      :disabled="columnsOpen"
-                    >
-                      <IconButton
-                        icon="ai ai-column"
-                        kind="outlined"
-                        size="medium"
-                        aria-label="Columns"
-                      />
-                    </Tooltip>
-                  </PopoverTrigger>
-                  <PopoverContent>
-                    <div class="flex flex-col">
-                      <div
-                        class="border-b border-(--border-default) px-(--spacing-md) py-(--spacing-xs)"
-                      >
-                        <p class="text-label-md text-(--text-default)">Columns</p>
-                      </div>
-                      <div
-                        class="flex max-h-(--container-xs) flex-col gap-(--spacing-xxs) overflow-y-auto overscroll-contain p-(--spacing-xxs)"
-                      >
-                        <div
-                          v-for="column in listedColumns"
-                          :key="column.id"
-                          class="rounded-(--shape-elements) px-(--spacing-sm) py-(--spacing-xs) transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none"
-                          :class="
-                            column.locked
-                              ? 'cursor-default'
-                              : 'cursor-pointer hover:bg-(--bg-hover)'
-                          "
-                        >
-                          <Field
-                            orientation="horizontal"
-                            :disabled="column.locked"
-                          >
-                            <Switch
-                              :model-value="isVisible(column.id)"
-                              @update:model-value="(value) => setVisible(column.id, !!value)"
-                            />
-                            <Field.Label>
-                              <span class="min-w-0 truncate">{{ column.label }}</span>
-                            </Field.Label>
-                            <span
-                              v-if="column.locked"
-                              class="shrink-0 text-label-xs text-(--text-muted)"
-                              >Always shown</span
-                            >
-                          </Field>
-                        </div>
-                      </div>
-                      <div
-                        v-if="hiddenCount"
-                        class="border-t border-(--border-default) p-(--spacing-xxs)"
-                      >
-                        <Button
-                          label="Show all columns"
-                          kind="transparent"
-                          size="small"
-                          class="w-full"
-                          @click="showAll"
-                        />
-                      </div>
-                    </div>
-                  </PopoverContent>
-                </PopoverRoot>
+                <CollectionPreferences
+                  v-bind="preferencesProps"
+                  title="Table preferences"
+                />
               </div>
             </header>
-            <div
-              v-if="appliedFilters.length"
-              class="relative flex min-w-0 flex-wrap items-center gap-(--spacing-xs)"
-            >
-              <TransitionGroup
-                move-class="transition-[transform,translate,scale,opacity] duration-moderate-01 ease-productive-entrance motion-reduce:transition-none"
-                enter-from-class="scale-90 opacity-0"
-                leave-from-class="scale-100 opacity-100"
-                leave-to-class="scale-90 opacity-0"
-                leave-active-class="pointer-events-none absolute duration-fast-02 ease-productive-exit motion-reduce:transition-none"
-              >
-                <span
-                  v-for="field in appliedFilters"
-                  :key="field.id"
-                  class="inline-flex w-fit max-w-full transition-[transform,translate,scale,opacity] duration-moderate-01 ease-productive-entrance motion-reduce:transition-none"
-                >
-                  <Chip
-                    :data-filter-chip="field.id"
-                    :label="field.label"
-                    kind="filled"
-                    size="medium"
-                    clickable
-                    removable
-                    @click="enter(field.id)"
-                    @remove="clearFilter(field)"
-                  >
-                    <span class="flex min-w-0 items-center gap-(--spacing-xxs)">
-                      <span class="truncate text-(--text-muted)">{{ field.label }}</span>
-                      <span
-                        v-if="avatarsOf(field).length"
-                        class="flex shrink-0 items-center -space-x-1"
-                      >
-                        <Avatar
-                          v-for="option in avatarsOf(field)"
-                          :key="String(option.value)"
-                          :src="option.avatar || undefined"
-                          :alt="option.label"
-                          :label="option.label"
-                          size="small"
-                          kind="circle"
-                        />
-                      </span>
-                      <span class="truncate">{{ summarize(field)?.label }}</span>
-                      <span
-                        v-if="summarize(field)?.extra"
-                        class="shrink-0 text-(--text-muted)"
-                        >+{{ summarize(field)?.extra }}</span
-                      >
-                    </span>
-                  </Chip>
-                </span>
-              </TransitionGroup>
-            </div>
             <Card :padded="false">
               <template #content>
                 <TableRoot
                   ref="tableRef"
-                  v-model:pagination="pagination"
-                  v-model:globalFilter="search"
-                  v-model:columnVisibility="columnVisibility"
-                  :data="visibleRows"
-                  :columns="columns"
-                  row-key="id"
+                  v-bind="tableProps"
+                  :loading="loading || fetching"
                   enable-sorting
-                  paginated
-                  :page-size="8"
                   :bordered="false"
-                  :loading="loading"
                 >
                   <template #cell-name="{ value }">
                     <span class="min-w-0 truncate">{{ value }}</span>
@@ -1081,10 +534,10 @@
                     <span class="min-w-0 truncate">{{ policyLabel(value) }}</span>
                   </template>
                   <template #cell-weight="{ value }">
-                    <span class="min-w-0 truncate">{{ value ?? '—' }}</span>
+                    <span class="min-w-0 truncate">{{ value ?? '' }}</span>
                   </template>
                   <template #cell-description="{ value }">
-                    <span class="min-w-0 truncate">{{ value || '—' }}</span>
+                    <span class="min-w-0 truncate">{{ value }}</span>
                   </template>
                   <template #cell-actions="{ row }">
                     <Table.CellActions :name="row.name">
@@ -1113,6 +566,50 @@
                         </DropdownMenuOption>
                       </DropdownMenuGroup>
                     </Table.CellActions>
+                  </template>
+                  <template #empty>
+                    <EmptyState
+                      key="empty-state-1"
+                      v-if="status === 'no-match'"
+                      size="medium"
+                      icon="pi pi-filter-slash"
+                      title="No matching records"
+                      description="No record matches these filters."
+                    >
+                      <template #actions>
+                        <Button
+                          label="Clear filters"
+                          kind="outlined"
+                          size="small"
+                          @click="clearFilters"
+                        />
+                      </template>
+                    </EmptyState>
+                    <EmptyState
+                      key="empty-state-2"
+                      v-else
+                      size="medium"
+                      icon="pi pi-list"
+                      title="No records yet"
+                      description="Add a record, or import a zone file, so this zone starts answering for example.com."
+                    >
+                      <template #actions>
+                        <div class="flex flex-wrap items-center justify-center gap-(--spacing-xs)">
+                          <Button
+                            label="Add Record"
+                            icon="pi pi-plus"
+                            kind="secondary"
+                            size="small"
+                          />
+                          <Button
+                            label="Import zone file"
+                            icon="pi pi-upload"
+                            kind="outlined"
+                            size="small"
+                          />
+                        </div>
+                      </template>
+                    </EmptyState>
                   </template>
                 </TableRoot>
               </template>
