@@ -112,6 +112,8 @@ In the Certificate state the drawer imports a TLS certificate. A `ToggleGroup` p
 - NestedDrawer: Add Rule on the storefront resource's Rules Engine, with an Origin select whose Create Origin option opens a second, medium drawer and selects the new origin back.
 - DeploymentSettings: the drawer that creates a Deployment Setting, with General and Routing and policy sections.
 - Certificate: Create Certificate opened with shop.example.com pasted as a server certificate: the details panel reads Issued to shop.example.com, Issued by Example Test CA and the expiry with the days left; the private key is empty, so Save flags it.
+- CreateEnvironment: Create Environment with General, Settings, Protection and Branch tracking sections; the IP allowlist and Branch tracking switches each reveal their fields, a duplicate name or an invalid address is flagged only after Create Environment. Opened from Add Domain's Environment select it stacks at small size above that drawer and selects the new environment back.
+- FunctionInstance: Add Function Instance (or Edit from a row) with a Function `Select`, a Name, and the arguments as a `SchemaForm` of the chosen function's schema with a Fields or JSON `ToggleGroup`; the JSON `CodeEditor` marks a parse error, and required arguments are flagged only after submit.
 
 ## Related
 

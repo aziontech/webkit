@@ -2,6 +2,8 @@ import { fireEvent, render, screen, waitFor, within } from '@testing-library/vue
 import { afterEach, describe, expect, it } from 'vitest'
 import { nextTick } from 'vue'
 
+import CreateEnvironment from '../../blocks/platform/create/create-in-drawer/variants/create-environment.vue'
+import FunctionInstance from '../../blocks/platform/create/create-in-drawer/variants/function-instance.vue'
 import CreateOrganization from '../../blocks/platform/create/single-page-create/variants/create-organization.vue'
 import CreateZone from '../../blocks/platform/create/single-page-create/variants/create-zone.vue'
 import { expectNoA11yViolations } from './axe'
@@ -103,5 +105,90 @@ describe('single-page-create#CreateOrganization', () => {
     await fireEvent.update(screen.getByRole('textbox', { name: 'Name' }), 'Northwind Studio')
     await fireEvent.click(screen.getByRole('button', { name: 'Create Organization' }))
     await waitFor(() => expect(screen.getByText('Northwind Studio created.')).toBeTruthy(), wait)
+  })
+})
+
+const dialogs = () => Array.from(document.querySelectorAll<HTMLElement>('[role="dialog"]'))
+const lastDialog = () => dialogs()[dialogs().length - 1] as HTMLElement
+
+describe('create-in-drawer#CreateEnvironment', () => {
+  it('reveals the allowlist and branch fields and checks them only on submit', async () => {
+    render(CreateEnvironment)
+    await fireEvent.click(screen.getByRole('button', { name: 'Create Environment' }))
+    const drawer = await waitFor(() => {
+      expect(dialogs()).toHaveLength(1)
+      return lastDialog()
+    })
+    const panel = within(drawer)
+    expect(panel.queryByRole('textbox', { name: 'IP addresses and CIDR ranges' })).toBeNull()
+    await fireEvent.click(panel.getByRole('switch', { name: /IP allowlist/ }))
+    const cidrs = panel.getByRole('textbox', { name: 'IP addresses and CIDR ranges' })
+    await fireEvent.update(cidrs, '203.0.113.0/24\n198.51.100.300')
+    await fireEvent.click(panel.getByRole('switch', { name: /Branch tracking/ }))
+    expect((panel.getByRole('textbox', { name: 'Branch match' }) as HTMLInputElement).value).toBe(
+      'main'
+    )
+    await fireEvent.update(panel.getByRole('textbox', { name: 'Name' }), 'Preview')
+    expect(panel.queryByText(/Invalid IPv4 address/)).toBeNull()
+    await fireEvent.click(panel.getByRole('button', { name: 'Create Environment' }))
+    expect(panel.getByText('An environment with this name already exists.')).toBeTruthy()
+    expect(panel.getByText('Invalid IPv4 address or CIDR range: 198.51.100.300.')).toBeTruthy()
+    await expectNoA11yViolations(drawer)
+  })
+
+  it('stacks above Add Domain and selects the new environment back', async () => {
+    render(CreateEnvironment)
+    await fireEvent.click(screen.getByRole('button', { name: 'Add Domain' }))
+    const domain = await waitFor(() => {
+      expect(dialogs()).toHaveLength(1)
+      return lastDialog()
+    })
+    await fireEvent.click(within(domain).getByRole('combobox', { name: 'Environment' }))
+    await fireEvent.click(await screen.findByRole('option', { name: 'Create Environment' }))
+    const stacked = await waitFor(() => {
+      expect(dialogs()).toHaveLength(2)
+      return lastDialog()
+    })
+    await fireEvent.update(within(stacked).getByRole('textbox', { name: 'Name' }), 'Canary')
+    await fireEvent.click(within(stacked).getByRole('button', { name: 'Create Environment' }))
+    await waitFor(() => expect(dialogs()).toHaveLength(1), wait)
+    expect(within(domain).getByRole('combobox', { name: 'Environment' }).textContent).toContain(
+      'Canary'
+    )
+  })
+})
+
+describe('create-in-drawer#FunctionInstance', () => {
+  it('builds the argument fields from the chosen function and flags required ones after submit', async () => {
+    render(FunctionInstance)
+    await fireEvent.click(screen.getByRole('button', { name: 'Add Function Instance' }))
+    const drawer = await waitFor(() => {
+      expect(dialogs()).toHaveLength(1)
+      return lastDialog()
+    })
+    const panel = within(drawer)
+    expect(panel.queryByRole('heading', { name: /Arguments/ })).toBeNull()
+    await fireEvent.click(panel.getByRole('combobox', { name: 'Function' }))
+    await fireEvent.click(await screen.findByRole('option', { name: 'image-resizer' }))
+    expect(panel.getByRole('heading', { name: /Arguments/ })).toBeTruthy()
+    expect(panel.getByLabelText(/Width/)).toBeTruthy()
+    await fireEvent.update(panel.getByRole('textbox', { name: 'Name' }), 'thumbnails')
+    expect(panel.queryByText('This field is required.')).toBeNull()
+    await fireEvent.click(panel.getByRole('button', { name: 'Add Function Instance' }))
+    await waitFor(() => expect(panel.getByText('This field is required.')).toBeTruthy())
+    await expectNoA11yViolations(drawer)
+  })
+
+  it('opens an instance to edit with its saved arguments', async () => {
+    render(FunctionInstance)
+    await fireEvent.click(screen.getByRole('button', { name: 'Edit resize-product-images' }))
+    const drawer = await waitFor(() => {
+      expect(dialogs()).toHaveLength(1)
+      return lastDialog()
+    })
+    const panel = within(drawer)
+    expect(panel.getByRole('heading', { name: 'Edit Function Instance' })).toBeTruthy()
+    expect((panel.getByLabelText(/Width/) as HTMLInputElement).value).toBe('800')
+    expect(panel.getByRole('radiogroup', { name: 'Arguments view' })).toBeTruthy()
   })
 })
