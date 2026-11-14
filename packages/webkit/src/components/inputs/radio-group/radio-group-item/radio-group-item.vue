@@ -9,7 +9,7 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface Props {
     /** Value written to the group when this option is selected. */
     value: string
     /** Disables this option only. */

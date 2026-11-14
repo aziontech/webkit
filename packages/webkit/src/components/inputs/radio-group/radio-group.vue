@@ -12,7 +12,7 @@
 
   export type { RadioGroupOrientation }
 
-  interface Props {
+  export interface Props {
     /** Form field name shared by every radio; the selected value submits under it. Empty uses a generated name so the radios still group. */
     name?: string
     /** Layout axis: options stacked, or in a wrapping row. Arrow keys move the selection on both axes either way. */
