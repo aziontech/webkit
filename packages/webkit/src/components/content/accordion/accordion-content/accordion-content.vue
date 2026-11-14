@@ -28,44 +28,54 @@
     () => (attrs['data-testid'] as string | undefined) ?? 'content-accordion-content'
   )
 
+  const DURATION = 150
+  const cancels = new WeakMap<globalThis.HTMLElement, () => void>()
+
   const prefersReducedMotion = () =>
     typeof globalThis.matchMedia === 'function' &&
     globalThis.matchMedia('(prefers-reduced-motion: reduce)').matches
 
-  const onEnter = (el: globalThis.Element, done: () => void) => {
-    const node = el as globalThis.HTMLElement
-    if (prefersReducedMotion()) {
+  const animateHeight = (
+    node: globalThis.HTMLElement,
+    from: number,
+    to: number,
+    done: () => void
+  ) => {
+    cancels.get(node)?.()
+    if (prefersReducedMotion() || from === to) {
+      node.style.height = ''
       done()
       return
     }
-    const target = node.scrollHeight
-    node.style.height = '0'
-    node.style.transition = 'height 150ms ease-out'
+    node.style.height = `${from}px`
     void node.offsetHeight
-    node.style.height = `${target}px`
+    node.style.height = `${to}px`
+    const onEnd = (event: globalThis.TransitionEvent) => {
+      if (event.target === node && event.propertyName === 'height') finish()
+    }
+    const timer = setTimeout(() => finish(), DURATION + 50)
+    const stop = () => {
+      clearTimeout(timer)
+      node.removeEventListener('transitionend', onEnd)
+      cancels.delete(node)
+    }
     const finish = () => {
+      stop()
       node.style.height = ''
-      node.style.transition = ''
       done()
     }
-    node.addEventListener('transitionend', finish, { once: true })
+    cancels.set(node, stop)
+    node.addEventListener('transitionend', onEnd)
+  }
+
+  const onEnter = (el: globalThis.Element, done: () => void) => {
+    const node = el as globalThis.HTMLElement
+    animateHeight(node, 0, node.scrollHeight, done)
   }
 
   const onLeave = (el: globalThis.Element, done: () => void) => {
     const node = el as globalThis.HTMLElement
-    if (prefersReducedMotion()) {
-      done()
-      return
-    }
-    node.style.height = `${node.scrollHeight}px`
-    node.style.transition = 'height 150ms ease-out'
-    void node.offsetHeight
-    node.style.height = '0'
-    const finish = () => {
-      node.style.transition = ''
-      done()
-    }
-    node.addEventListener('transitionend', finish, { once: true })
+    animateHeight(node, node.scrollHeight, 0, done)
   }
 </script>
 
@@ -85,7 +95,7 @@
       :data-state="itemCtx.open.value ? 'open' : 'closed'"
       :data-size="ctx.size.value"
       :class="attrs.class"
-      class="overflow-hidden text-(--text-muted) data-[size=medium]:text-body-xs data-[size=large]:text-body-sm"
+      class="overflow-hidden transition-[height] duration-150 ease-out motion-reduce:transition-none text-(--text-muted) data-[size=medium]:text-body-xs data-[size=large]:text-body-sm"
     >
       <slot />
     </div>

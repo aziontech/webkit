@@ -1,5 +1,6 @@
 import { fireEvent, render, waitFor, within } from '@testing-library/vue'
-import { describe, expect, it, vi } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
+import { commands } from 'vitest/browser'
 import { defineComponent, ref } from 'vue'
 
 import Default from '../../../../examples/accordion/default.vue'
@@ -154,6 +155,43 @@ describe('Accordion (compound / provide-inject)', () => {
       expect(trigger(view, 'What is Azion').getAttribute('aria-expanded')).toBe('false')
     })
     expect(updates).toEqual(['support'])
+  })
+
+  describe('height reveal with motion allowed', () => {
+    afterEach(async () => {
+      await commands.emulateMedia({ reducedMotion: null })
+    })
+
+    it('unmounts a closing panel whose content has no height', async () => {
+      await commands.emulateMedia({ reducedMotion: 'no-preference' })
+      const view = render(
+        defineComponent({
+          components: { Accordion, AccordionItem, AccordionTrigger, AccordionContent },
+          template: `
+          <Accordion default-value="empty">
+            <AccordionItem value="empty">
+              <AccordionTrigger>Empty section</AccordionTrigger>
+              <AccordionContent />
+            </AccordionItem>
+          </Accordion>
+        `
+        }),
+        { global: { stubs: { transition: false } } }
+      )
+      expect(regions()).toHaveLength(1)
+      await fireEvent.click(trigger(view, 'Empty section'))
+      await waitFor(() => expect(regions()).toHaveLength(0), { timeout: 600 })
+    })
+
+    it('animates the panel without an inline transition a consumer class could not override', async () => {
+      await commands.emulateMedia({ reducedMotion: 'no-preference' })
+      const view = render(host(), { global: { stubs: { transition: false } } })
+      await fireEvent.click(trigger(view, 'What is Azion'))
+      const region = regions()[0]
+      expect(region).toBeTruthy()
+      expect(region.style.transition).toBe('')
+      await waitFor(() => expect(region.style.height).toBe(''))
+    })
   })
 
   it('collapsible (default): clicking the open item collapses to none, emitting null', async () => {
