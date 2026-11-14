@@ -146,6 +146,32 @@ describe('ArticleCards', () => {
     expect(queryAllByRole('link')).toHaveLength(0)
   })
 
+  it('sets the anchor as the band id', () => {
+    const { getByTestId } = band({ anchor: 'related' })
+
+    expect(getByTestId(TESTID).id).toBe('related')
+  })
+
+  it('sets no id without an anchor', () => {
+    const { getByTestId } = band()
+
+    expect(getByTestId(TESTID).hasAttribute('id')).toBe(false)
+  })
+
+  it('opens an external card in a new tab and says so in its name', () => {
+    const { getByRole } = band({ items: [{ ...posts[0], external: true }, posts[1]] })
+
+    const external = getByRole('link', {
+      name: /How Do You Reduce AI Agent Latency\? \(opens in a new tab\)/
+    })
+    expect(external.getAttribute('target')).toBe('_blank')
+    expect(external.getAttribute('rel')).toBe('noopener')
+
+    const internal = getByRole('link', { name: /Best Cloudflare Alternatives/ })
+    expect(internal.hasAttribute('target')).toBe(false)
+    expect(internal.textContent).not.toContain('opens in a new tab')
+  })
+
   it('has no a11y violations with the left kind', async () => {
     const { container } = band()
 

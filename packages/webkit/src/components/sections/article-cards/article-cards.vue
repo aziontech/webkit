@@ -1,6 +1,8 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
+  import { useTranslate } from '../../../composables/use-locale/use-translate'
+  import * as en from '../../../i18n/messages/en'
   import FrameBox from '../../layout/frame-box/frame-box.vue'
   import CardGrid from '../../marketing/card-grid/card-grid.vue'
   import CardGridCell from '../../marketing/card-grid/card-grid-cell/card-grid-cell.vue'
@@ -39,16 +41,20 @@
     image?: string
     /** Client mark drawn in the media cell when there is no cover. */
     mark?: ArticleCardsMark
+    /** Opens the destination in a new tab. */
+    external?: boolean
   }
 
   interface Props {
     /** Placement of the heading: `left` sets it at the start, `centered` centres it over the cards. */
     kind?: ArticleCardsKind
+    /** Id set on the band so an in-page hash link can target it. */
+    anchor?: string
     /** Overline above the heading. */
     eyebrow?: string
     /** Headline of the band; the band renders no header when empty. */
     title?: string
-    /** The cards, in order; each is `{ key, href, title, description, meta, image?, mark? }`. */
+    /** The cards, in order; each is `{ key, href, title, description, meta, image?, mark?, external? }`; an `external` card opens in a new tab. */
     items?: ArticleCardsItem[]
     /** Accessible name of the card grid. */
     ariaLabel?: string
@@ -56,6 +62,7 @@
 
   const props = withDefaults(defineProps<Props>(), {
     kind: 'left',
+    anchor: '',
     eyebrow: '',
     title: '',
     items: () => [],
@@ -63,6 +70,8 @@
   })
 
   const attrs = useAttrs()
+
+  const { t } = useTranslate({ articleCards: en.articleCards })
 
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? 'sections-article-cards'
@@ -75,6 +84,7 @@
   <section
     v-bind="$attrs"
     :data-testid="testId"
+    :id="anchor || undefined"
     :data-kind="kind"
     :aria-label="title || undefined"
   >
@@ -115,6 +125,8 @@
           >
             <a
               :href="item.href"
+              :target="item.external ? '_blank' : undefined"
+              :rel="item.external ? 'noopener' : undefined"
               class="group/post flex h-full flex-col transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-surface-raised) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-(--ring-color) motion-reduce:transition-none"
             >
               <span
@@ -139,6 +151,11 @@
               <span class="flex flex-1 flex-col gap-(--spacing-sm) p-(--spacing-xl)">
                 <h3 class="m-0 text-balance text-heading-sm text-(--text-default)">
                   {{ item.title }}
+                  <span
+                    v-if="item.external"
+                    class="sr-only"
+                    >{{ t('articleCards.newTab') }}</span
+                  >
                 </h3>
                 <p class="m-0 text-pretty text-body-sm text-(--text-muted)">
                   {{ item.description }}

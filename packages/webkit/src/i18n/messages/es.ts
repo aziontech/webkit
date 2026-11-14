@@ -98,6 +98,9 @@ export const es: Messages = {
     showAtSide: 'Mostrar junto al contenido',
     showAtBottom: 'Mostrar debajo del contenido'
   },
+  articleCards: {
+    newTab: '(se abre en una pestaña nueva)'
+  },
   articleIndex: {
     search: 'Buscar',
     searchFacet: 'Buscar {facet}',

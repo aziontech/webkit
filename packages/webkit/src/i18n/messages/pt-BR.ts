@@ -98,6 +98,9 @@ export const ptBR: Messages = {
     showAtSide: 'Mostrar ao lado do conteúdo',
     showAtBottom: 'Mostrar abaixo do conteúdo'
   },
+  articleCards: {
+    newTab: '(abre em uma nova aba)'
+  },
   articleIndex: {
     search: 'Buscar',
     searchFacet: 'Buscar {facet}',

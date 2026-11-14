@@ -13,6 +13,10 @@ export const appLayout = {
   showAtBottom: 'Show under the content'
 } as const
 
+export const articleCards = {
+  newTab: '(opens in a new tab)'
+} as const
+
 export const articleIndex = {
   search: 'Search',
   searchFacet: 'Search {facet}',
@@ -1205,6 +1209,7 @@ export const en = {
   aiLoading,
   alert,
   appLayout,
+  articleCards,
   articleIndex,
   artifactCanvas,
   artifactPreview,
