@@ -1,10 +1,10 @@
 ---
 name: webkit-navigation
-description: Two navigation shells for UI on @aziontech/webkit — the persistent console shell is `ConsoleLayout` (@aziontech/webkit/console-layout), composed ONCE in App.vue around RouterView (navigation rail from `navigation` data with an href per row, header breadcrumbs, the ⌘K search palette, the account and its menu, the `actions` slot, `useConsoleLayout().openSearch()` from a page), and every browse page is only a body in its default slot with no `<main>` or chrome of its own; the focused creation shell (no rail, one GlobalHeader with back + brand + breadcrumb + avatar — the `headers/creation-header` block every platform/create block carries) heads create flows (`platform/create/*`: a new resource, an import, deploying a template) routed outside the layout; editing a resource and a resource's deploy progress are page bodies inside it. A page picks exactly ONE shell, renders exactly ONE GlobalHeader, and the signed-in user stays visible in both. Also fixes the page body inside the console: `layout-boundary` + a column class, a first-level list opening on its PageHeader (the create action, large) over one band of controls and a flush borderless Card table, tabbed detail pages opening flush on PageTabs with the primary button on the TAB ROW (medium), and the breadcrumb levels — no trail at first level, `module › resource name` at second level, never a tab.
+description: Two navigation shells for UI on @aziontech/webkit — the persistent console shell is `ConsoleLayout` (@aziontech/webkit/console-layout), composed ONCE in App.vue around RouterView (navigation rail from `navigation` data with an href per row, header breadcrumbs, the ⌘K search palette, the account and its menu, the `actions` slot, `useConsoleLayout().openSearch()` from a page), and every browse page is only a body in its default slot with no `<main>` or chrome of its own; the focused creation shell (no rail, one GlobalHeader with back + brand + breadcrumb + avatar — the `headers/creation-header` block every platform/create block carries) heads create flows (`platform/create/*`: a new resource, an import, deploying a template) routed outside the layout; editing a resource and a resource's deploy progress are page bodies inside it. A page picks exactly ONE shell, renders exactly ONE GlobalHeader, and the signed-in user stays visible in both. Also fixes the page body inside the console: `layout-boundary` + a column class, a first-level list opening on its PageHeader (the create action, large) over one band of controls and a flush borderless Card table, tabbed detail pages opening flush on PageTabs with the primary button on the TAB ROW (medium), and the breadcrumb levels — no trail at first level, `module › resource name` at second level, never a tab. Fixes the navigation levels too: one owner per level (rail, PageTabs, at most one local navigation — the `platform/detail/sectioned-resource` block, only past 7 sibling pages), a destination offered once per screen (no in-page `Menu` repeating rail rows), no rail row that routes into a resource, and active rows that agree with the route.
 status: active
-last_updated: 2026-11-13
+last_updated: 2026-11-14
 scope: general
-enforced_by: [webkit-accessibility, webkit-prefer-over-custom, ui-verify]
+enforced_by: [webkit-navigation-levels, webkit-accessibility, webkit-prefer-over-custom, ui-verify]
 ---
 
 # Skill: webkit-navigation
@@ -636,6 +636,52 @@ Each tab renders one of two bodies:
   `Item.List` of `SettingRow` rows, committed as **one block** by a single `SaveBar` pinned below the
   scroll region (see `webkit-form` and `webkit-ui-states`).
 
+## Navigation levels: one owner per level
+
+A console screen has at most three navigation levels, and each level has one control. The breadcrumb
+is not a level; it names where the reader is (below).
+
+| Level | Owner                                                           | Lists                                            |
+| ----- | --------------------------------------------------------------- | ------------------------------------------------ |
+| 1     | the rail: `ConsoleLayout` `navigation`, its drill levels too    | modules and first-level pages                    |
+| 2     | `PageTabs` of a resource or of a split module                   | the pages of that resource or module             |
+| 3     | the `platform/detail/sectioned-resource` block, in one tab body | more than 7 sibling pages of that tab, in groups |
+
+1. **One owner per level.** At most one control per level on a screen: the rail, one `PageTabs`, and
+   at most one local navigation inside the active tab.
+2. **A destination appears once per screen.** Compare the `href`s (path without query and hash) of
+   the rail rows (the current drill level included), the tabs and the local navigation: no route
+   appears twice.
+3. **The rail never routes into a resource.** A rail row leads to a page that needs no resource.
+   Pages that exist only inside a resource (the rule families of a policy, the records of a zone, the
+   settings of one application) are reached through that resource: its list row, its tabs, its local
+   navigation. Never as rail rows, not even as shortcuts into a default resource; a module that needs
+   a shortcut opens the resource list or the resource itself.
+4. **Local navigation is a block, not a free `Menu`.** Only when a tab holds more than 7 sibling
+   pages does its body carry one local navigation, and that is the
+   `platform/detail/sectioned-resource` block, allowed only when rules 2 and 3 hold. Seven or fewer
+   siblings are tabs, a `ToggleGroup` or sections of one page.
+5. **Active states agree with the route.** Each level marks exactly one row `aria-current="page"`,
+   derived from the route, and the marked rows of all levels describe the same place. A level whose
+   rows do not hold the current page marks none.
+6. **The content keeps its measure.** The local navigation takes a `--container-3xs` column and folds
+   into a `Select` labelled with the tab name below `@3xl` of the tab body, so the content column
+   never drops below `layout-column` minus that column.
+
+**The counter-example.** A policy's Private access tab rendered four navigations at once: the rail
+drilled into "Private access" with 12 rows (App segments, Segment groups, Server groups, Access
+rules…), the breadcrumb `Policies › Teste`, the policy's `PageTabs`, and a vertical `Menu` in a left
+column of the tab with 16 rows, the same pages again. The rail rows pointed at the default policy, so
+the rail marked "Server groups" while the page showed "Access rules" of another policy; three columns
+of navigation left the table about 45% of the width, cut at the right edge at 1440 px. The fix: drop
+the rail rows (the rail opens Policies), keep the pages inside the policy, and render them through the
+`platform/detail/sectioned-resource` block in the tab.
+
+Rule `webkit-navigation-levels` states the invariant. The lint `webkit/no-page-navigation-menu` warns
+on a `Menu` in a page body, `ConsoleLayout` warns in development when an in-page `Menu` repeats a rail
+row, and `npx @aziontech/webkit check` with `/webkit-ui-verify` fail a duplicate route or disagreeing
+active rows at runtime.
+
 ## Breadcrumb — first level and second-level resource nav
 
 In the console the trail is `ConsoleLayout`'s `breadcrumbs` prop, derived from the route meta. A
@@ -777,6 +823,9 @@ With Vue Router, keep the rows real links and let the router do the navigation:
   already carries.
 - **A tabbed page renders no `PageHeader`.** The tab bar is navigation; each tab's heading lives
   inside that tab's view. The active tab travels in `?tab=`.
+- **One navigation per level.** Rail, `PageTabs`, at most one local navigation (the
+  `platform/detail/sectioned-resource` block); a destination appears once per screen, and the rail
+  never routes into a resource (rule `webkit-navigation-levels`).
 
 ## Review output
 
@@ -810,6 +859,14 @@ For `/webkit-navigation <file>`, list gaps. Each:
 ✗ ApplicationDetail.vue:15  breadcrumb includes the active tab ("… › Build")
   rule: A tab is never a crumb — it is navigation within one page and travels in ?tab=.
   fix: end the trail at the resource name: [{ label: 'Applications', href }, { label: app.name }].
+
+✗ PolicyPage.vue:22  in-page Menu repeats 12 rail destinations
+  rule: A destination appears once per screen; local navigation is the sectioned-resource block.
+  fix: move the pages into the resource (block platform/detail/sectioned-resource) and drop the rail rows.
+
+✗ navigation.ts:31  rail row /policy-pages/... routes into a resource
+  rule: The rail never routes into a resource — those pages are reached through the resource.
+  fix: point the row at the resource list (/policies); the pages live in the policy's tabs.
 ```
 
 End with: `navigation sound` or `N gaps — fix before polish`.
@@ -858,3 +915,8 @@ End with: `navigation sound` or `N gaps — fix before polish`.
       reserved, and carries the active tab in `?tab=`.
 - [ ] The breadcrumb matches the level (no trail at first level; `module › resource name` at second
       level), every non-last crumb links, and no tab appears in the trail.
+- [ ] One control per navigation level (rail, `PageTabs`, at most one local navigation from the
+      `platform/detail/sectioned-resource` block, only past 7 siblings); no route appears twice on the
+      screen, and each level's `aria-current="page"` row agrees with the route.
+- [ ] No rail row routes into a resource (a default policy, zone or application); those pages are
+      reached through the resource's list row, tabs or local navigation.

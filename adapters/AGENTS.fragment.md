@@ -59,6 +59,8 @@ foundation, a JSON API per component, and `llms-full.txt` with everything in one
 
 - **One layout, composed once.** `ConsoleLayout`, `SiteLayout` or `DocLayout` in `App.vue`; pages
   are bodies in its slot, never a second shell, `<main>` or ⌘K palette (above).
+- **One navigation per level.** Rail, page tabs, at most one local navigation; a destination
+  appears once per screen; the rail never routes into a resource (rule `webkit-navigation-levels`).
 - **Patterns, then components.** Screens start from a pattern (above). Pieces reach for an
   `@aziontech/webkit` component before writing custom UI — find one via the `webkit` MCP
   (`suggest_component`), `node_modules/@aziontech/webkit/llms/llms.txt` or
