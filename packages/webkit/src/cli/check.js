@@ -6,6 +6,7 @@ import { blockDrift } from './blocks.js'
 import { cssScanFindings, stylelintFindings } from './css-check.js'
 import { planDoctor } from './doctor.js'
 import { loadMigration, migrateSource } from './migrate.js'
+import { runNavigationCheck } from './navigation-check.js'
 import { ESLINT_CONFIG_CANDIDATES, firstExisting } from './plan.js'
 import { resolveEslintBin, runESLint } from './report.js'
 import { PACKAGE_NAME } from './source.js'
@@ -216,6 +217,19 @@ export function runCheck(projectDir, webkit, { lint = true } = {}) {
   }
 }
 
+export async function withNavigation(result, projectDir, urls, options) {
+  if (!urls?.length) return result
+  const findings = [...result.findings, ...(await runNavigationCheck(projectDir, urls, options))]
+  const errors = findings.filter((f) => f.severity === 'error').length
+  return {
+    ...result,
+    routes: urls,
+    errors,
+    warnings: findings.length - errors,
+    findings
+  }
+}
+
 export function exitCodeFor(result, maxWarnings) {
   if (result.errors > 0) return 1
   if (maxWarnings != null && maxWarnings >= 0 && result.warnings > maxWarnings) return 1
@@ -224,7 +238,17 @@ export function exitCodeFor(result, maxWarnings) {
 
 export function formatCheck(result, maxWarnings) {
   const out = [`@aziontech/webkit check — ${PACKAGE_NAME}@${result.version}`, '']
-  const order = ['doctor', 'migration', 'imports', 'lint', 'style', 'stylelint', 'css', 'blocks']
+  const order = [
+    'doctor',
+    'migration',
+    'imports',
+    'lint',
+    'style',
+    'stylelint',
+    'css',
+    'blocks',
+    'navigation'
+  ]
   for (const source of order) {
     const group = result.findings.filter((f) => f.source === source)
     if (!group.length) continue
@@ -239,7 +263,7 @@ export function formatCheck(result, maxWarnings) {
   }
   const limit = maxWarnings != null && maxWarnings >= 0 ? ` (max ${maxWarnings})` : ''
   out.push(
-    `${result.errors} error(s), ${result.warnings} warning(s)${limit} in ${result.scanned} source file(s).`,
+    `${result.errors} error(s), ${result.warnings} warning(s)${limit} in ${result.scanned} source file(s)${result.routes?.length ? ` and ${result.routes.length} route(s)` : ''}.`,
     ''
   )
   return out.join('\n')

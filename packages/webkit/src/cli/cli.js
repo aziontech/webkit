@@ -3,9 +3,10 @@
 import { applyPlan } from './apply.js'
 import { applyAdd, MANIFEST, planAdd, planDiff } from './blocks.js'
 import { runCanary } from './canary.js'
-import { exitCodeFor, formatCheck, runCheck } from './check.js'
+import { exitCodeFor, formatCheck, runCheck, withNavigation } from './check.js'
 import { planDoctor } from './doctor.js'
 import { planMigrate, SUPPORTED_VERSIONS } from './migrate.js'
+import { parseUrls } from './navigation-check.js'
 import { planInit } from './plan.js'
 import { formatSearch, formatView, runSearch, runView } from './query.js'
 import { FAIL_MODES, FORMATS, runReport } from './report.js'
@@ -21,7 +22,7 @@ Usage:
   npx @aziontech/webkit diff <block-id|path> [--json]
   npx @aziontech/webkit search <query> [--json]
   npx @aziontech/webkit view <id> [--variant <name>] [--example <name>] [--json]
-  npx @aziontech/webkit check [--json] [--max-warnings <n>] [--no-lint]
+  npx @aziontech/webkit check [--json] [--max-warnings <n>] [--no-lint] [--url <url,...>]
   npx @aziontech/webkit doctor
   npx @aziontech/webkit report [options] [patterns...]
   npx @aziontech/webkit canary
@@ -72,6 +73,9 @@ Options (diff, search, view, check):
   --max-warnings <n> check: also fail when there are more than n warnings.
   --no-lint         check: skip the project's ESLint and Stylelint runs (built-in
                     scans only).
+  --url <url,...>   check: also open these running routes in Chromium (the project's
+                    Playwright) and fail on navigation levels that repeat a route or
+                    disagree on the current page (rule webkit-navigation-levels).
   diff exits 0 when the copy matches the canonical block, 1 when it differs.
 
 Options (report):
@@ -125,7 +129,8 @@ const VALUE_FLAGS = new Set([
   '--dest',
   '--variant',
   '--example',
-  '--max-warnings'
+  '--max-warnings',
+  '--url'
 ])
 
 function parseArgs(argv) {
@@ -170,7 +175,8 @@ function parseArgs(argv) {
     dest: values['--dest'],
     variant: values['--variant'],
     example: values['--example'],
-    maxWarnings: values['--max-warnings']
+    maxWarnings: values['--max-warnings'],
+    urls: parseUrls(values['--url'])
   }
 }
 
@@ -527,7 +533,7 @@ function runQuery(projectDir, command, parsed) {
   return 0
 }
 
-function runCheckCommand(projectDir, parsed) {
+async function runCheckCommand(projectDir, parsed) {
   let maxWarnings = null
   if (parsed.maxWarnings != null) {
     maxWarnings = Number(parsed.maxWarnings)
@@ -536,7 +542,11 @@ function runCheckCommand(projectDir, parsed) {
       return 2
     }
   }
-  const result = runCheck(projectDir, resolveWebkit(projectDir), { lint: !parsed.noLint })
+  const result = await withNavigation(
+    runCheck(projectDir, resolveWebkit(projectDir), { lint: !parsed.noLint }),
+    projectDir,
+    parsed.urls
+  )
   const code = exitCodeFor(result, maxWarnings)
   if (parsed.json) json({ ...result, maxWarnings, exitCode: code })
   else process.stdout.write(formatCheck(result, maxWarnings))

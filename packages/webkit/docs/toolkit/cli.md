@@ -83,7 +83,7 @@ fetched and say so.
 ## `check` — one CI gate
 
 ```bash
-npx @aziontech/webkit check [--json] [--max-warnings <n>] [--no-lint]
+npx @aziontech/webkit check [--json] [--max-warnings <n>] [--no-lint] [--url <url,...>]
 ```
 
 `check` runs, in one pass:
@@ -108,14 +108,23 @@ npx @aziontech/webkit check [--json] [--max-warnings <n>] [--no-lint]
   `cubic-bezier()`, `transition: all`, a zero with a unit — and a warning says Stylelint did not
   run;
 - **blocks** — every copy in `webkit.blocks.json` whose canonical block changed since it was
-  copied, whose file is gone, or whose source the installed version no longer ships (warnings).
+  copied, whose file is gone, or whose source the installed version no longer ships (warnings);
+- **navigation** — only with `--url`: each listed route of the running app (comma-separated) is
+  opened in headless Chromium through the project's own `playwright` (`npm i -D playwright && npx
+playwright install chromium`; without it the check is an error saying so). On each route it
+  collects the links of every visible navigation control (`nav` / `role="navigation"`, such as the
+  rail with its current drill level and an in-page `Menu`, and `role="tablist"`; the breadcrumb,
+  pagination, hidden or inert levels and `#anchor` links are left out) and reports an error, named
+  after both controls and the route, for rule `webkit-navigation-levels`: a route (path without
+  query or hash) offered by two controls, a control with more than one `aria-current="page"`, or
+  two controls whose current rows point at different routes, neither a parent of the other.
 
 It exits 1 on any error, or when there are more warnings than `--max-warnings` (every warning
 counts: doctor `WARN`s, Stylelint warnings, a linter that did not run, block drift). `--json`
 prints `{ eslint, stylelint, errors, warnings, maxWarnings, exitCode, findings: [{ source,
 severity, file, line, rule, message }] }`; `eslint` / `stylelint` say whether the project's own
 linter ran, and `source` is one of `doctor`, `migration`, `imports`, `lint`, `style`,
-`stylelint`, `css`, `blocks`.
+`stylelint`, `css`, `blocks`, `navigation`; with `--url` it also lists the checked `routes`.
 
 ## `report` and `canary` — measure and verify webkit adoption
 
