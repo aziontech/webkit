@@ -111,6 +111,12 @@ describe('Tag', () => {
     expect(iconEl.classList.contains('pi-box')).toBe(true)
   })
 
+  it('treats an empty icon string as no icon and keeps the tag out of the tab order', () => {
+    const { queryByTestId, getByTestId } = render(Tag, { props: { label: 'Label', icon: '' } })
+    expect(queryByTestId('content-tag__icon')).toBeNull()
+    expect(getByTestId('content-tag')).not.toHaveAttribute('tabindex')
+  })
+
   it('does not render an icon element when no icon prop is given', () => {
     const { queryByTestId } = render(Tag, { props: { label: 'Label' } })
 
