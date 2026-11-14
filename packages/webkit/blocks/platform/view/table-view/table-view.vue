@@ -28,11 +28,9 @@
     name: string
     domain: string
     domains: string[]
-    domainCount: number
     status: ResourceStatus
     owner: string
     modifiedAt: Date
-    lastModified: string
   }
 
   const owners = [
@@ -62,7 +60,7 @@
     { accessorKey: 'id', header: 'ID', minWidth: 80 },
     { accessorKey: 'domain', header: 'Domains', grow: 2 },
     { accessorKey: 'status', header: 'Status', enableSorting: true, minWidth: 104 },
-    { accessorKey: 'lastModified', header: 'Last Modified', enableSorting: true, minWidth: 80 },
+    { accessorKey: 'modifiedAt', header: 'Last modified', enableSorting: true, minWidth: 80 },
     { id: 'actions', kind: 'action', hideable: false }
   ]
 
@@ -73,7 +71,6 @@
     n: number,
     owner: string,
     days: number,
-    lastModified: string,
     status: ResourceStatus = 'Live'
   ): Resource => {
     const name = `resource-${String(n).padStart(2, '0')}`
@@ -86,25 +83,23 @@
         domain,
         ...Array.from({ length: n * 7 }, (_, j) => `${name}-alias-${j + 1}.example.com`)
       ],
-      domainCount: n * 7,
       status,
       owner,
-      modifiedAt: daysAgo(days),
-      lastModified
+      modifiedAt: daysAgo(days)
     }
   }
 
   const rows: Resource[] = [
-    resource(1, 'Ethan Brooks', 0, 'just now'),
-    resource(2, 'Jordan Kim', 18, '3 weeks ago'),
-    resource(3, 'Taylor Reed', 36, '1 month ago'),
-    resource(4, 'John Smith', 54, '2 months ago'),
-    resource(5, 'Sam Lee', 72, '2 months ago'),
-    resource(6, 'Priya Patel', 90, '3 months ago'),
-    resource(7, 'Chris Taylor', 108, '4 months ago'),
-    resource(8, 'Riley Carter', 126, '4 months ago'),
-    resource(9, 'Ethan Brooks', 144, '5 months ago', 'Inactive'),
-    resource(10, 'Jordan Kim', 162, '5 months ago')
+    resource(1, 'Ethan Brooks', 0),
+    resource(2, 'Jordan Kim', 18),
+    resource(3, 'Taylor Reed', 36),
+    resource(4, 'John Smith', 54),
+    resource(5, 'Sam Lee', 72),
+    resource(6, 'Priya Patel', 90),
+    resource(7, 'Chris Taylor', 108),
+    resource(8, 'Riley Carter', 126),
+    resource(9, 'Ethan Brooks', 144, 'Inactive'),
+    resource(10, 'Jordan Kim', 162)
   ]
 
   const items = ref<Resource[]>(rows)
@@ -116,6 +111,7 @@
     status,
     matchingItems,
     clearFilters,
+    refresh: retry,
     loading: fetching
   } = useCollection({
     items,
@@ -267,6 +263,13 @@
                 </EmptyState>
               </template>
             </Card>
+            <Alert
+              v-else-if="status === 'error'"
+              severity="danger"
+              label="Couldn't load the resources. Check your connection and retry."
+              action-label="Retry"
+              @action="retry"
+            />
             <Card
               key="card-2"
               v-else
@@ -310,7 +313,7 @@
                       :severity="value === 'Live' ? 'success' : 'secondary'"
                     />
                   </template>
-                  <template #cell-lastModified="{ row }">
+                  <template #cell-modifiedAt="{ row }">
                     <Table.CellTime
                       :value="row.modifiedAt"
                       :author="row.owner"

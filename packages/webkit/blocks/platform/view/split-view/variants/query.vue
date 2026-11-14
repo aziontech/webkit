@@ -23,6 +23,7 @@
   import Field from '@aziontech/webkit/field'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
+  import Item from '@aziontech/webkit/item-root'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import Popover from '@aziontech/webkit/popover'
   import PropertyFilter, {
@@ -31,6 +32,7 @@
     type PropertyFilterSubmit,
     type PropertyFilterToken
   } from '@aziontech/webkit/property-filter'
+  import Resizable from '@aziontech/webkit/resizable'
   import Sidebar from '@aziontech/webkit/sidebar'
   import TableRoot, { type TableColumn, type TableExposed } from '@aziontech/webkit/table-root'
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
@@ -913,6 +915,13 @@
     }
   })
 
+  const documentPaneCollapsed = computed({
+    get: () => !isWide.value || documentCollapsed.value,
+    set: (collapsed) => {
+      if (collapsed) closeDocument()
+    }
+  })
+
   watch(documentDrawerOpen, (open) => {
     if (!open && !isWide.value) selectedId.value = ''
   })
@@ -1109,19 +1118,22 @@
                     :key="entry.id"
                     class="flex min-w-0 items-center gap-(--spacing-xxs)"
                   >
-                    <button
-                      type="button"
-                      class="flex min-w-0 flex-1 flex-col items-start rounded-(--shape-elements) px-(--spacing-xs) py-(--spacing-xxs) text-start transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
+                    <Item
+                      clickable
+                      kind="option"
+                      class="min-w-0 flex-1"
                       data-testid="saved-queries__apply"
                       @click="useSavedQuery(entry)"
                     >
-                      <span class="max-w-full truncate text-label-sm text-(--text-default)">
-                        {{ entry.name }}
+                      <span class="flex min-w-0 flex-1 flex-col items-start">
+                        <span class="max-w-full truncate text-label-sm text-(--text-default)">
+                          {{ entry.name }}
+                        </span>
+                        <span class="max-w-full truncate text-label-code-sm text-(--text-muted)">
+                          {{ entry.text }}
+                        </span>
                       </span>
-                      <span class="max-w-full truncate text-label-code-sm text-(--text-muted)">
-                        {{ entry.text }}
-                      </span>
-                    </button>
+                    </Item>
                     <Tooltip text="Delete">
                       <IconButton
                         icon="pi pi-trash"
@@ -1205,22 +1217,24 @@
                     v-for="entry in recentQueries"
                     :key="entry.text"
                   >
-                    <button
-                      type="button"
-                      class="flex w-full min-w-0 items-center gap-(--spacing-xs) rounded-(--shape-elements) px-(--spacing-xs) py-(--spacing-xxs) text-start transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
+                    <Item
+                      clickable
+                      kind="option"
                       data-testid="recent-queries__apply"
                       @click="useRecentQuery(entry)"
                     >
-                      <i
-                        class="pi pi-history shrink-0 text-(--text-muted)"
-                        aria-hidden="true"
-                      />
-                      <span
-                        class="min-w-0 flex-1 truncate text-label-code-sm text-(--text-default)"
-                      >
-                        {{ entry.text }}
+                      <span class="flex min-w-0 flex-1 items-center gap-(--spacing-xs)">
+                        <i
+                          class="pi pi-history shrink-0 text-(--text-muted)"
+                          aria-hidden="true"
+                        />
+                        <span
+                          class="min-w-0 flex-1 truncate text-label-code-sm text-(--text-default)"
+                        >
+                          {{ entry.text }}
+                        </span>
                       </span>
-                    </button>
+                    </Item>
                   </li>
                 </ul>
                 <p
@@ -1288,222 +1302,110 @@
       ref="explorerEl"
       class="animate-content-enter motion-reduce:animate-none relative flex min-h-0 min-w-0 flex-1 overflow-hidden"
     >
-      <div
-        v-if="showFieldsPanel"
-        key="fields-panel"
-        class="contents [--sidebar-width:var(--container-2xs)]"
+      <Resizable
+        orientation="horizontal"
+        aria-label="Events explorer"
+        class="min-h-0 min-w-0 flex-1"
       >
-        <Sidebar
-          v-model:collapsed="fieldsCollapsed"
-          v-model:width="fieldsWidth"
-          resizable
-          collapsible
-          aria-label="Fields"
-          collapse-aria-label="Hide the fields panel"
-          expand-aria-label="Show the fields panel"
-          resize-aria-label="Resize the fields panel"
-        >
-          <template #header>
-            <div class="px-(--spacing-xs)">
-              <Input
-                v-model="fieldSearch"
-                size="medium"
-                class="w-full"
-                placeholder="Search fields"
-                aria-label="Search fields"
-              >
-                <template #iconLeft>
-                  <i
-                    class="pi pi-search"
-                    aria-hidden="true"
-                  />
-                </template>
-              </Input>
-            </div>
-          </template>
-
-          <div>
+        <Resizable.Pane aria-label="Events">
+          <div class="flex h-full min-h-0 min-w-0 flex-1">
             <div
-              class="flex items-baseline justify-between gap-(--spacing-xs) px-(--spacing-xs) pb-(--spacing-xxs) pt-(--spacing-xxs)"
+              v-if="showFieldsPanel"
+              key="fields-panel"
+              class="contents [--sidebar-width:var(--container-2xs)]"
             >
-              <span class="text-label-sm text-(--text-muted)">Shown</span>
-              <span class="text-label-sm text-(--text-muted)">Values</span>
-            </div>
-
-            <div
-              v-for="field in shownFields"
-              :key="field.id"
-              class="group flex items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-xs) py-(--spacing-xxs) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) motion-reduce:transition-none"
-            >
-              <div class="min-w-0 flex-1">
-                <Field
-                  orientation="horizontal"
-                  :disabled="field.locked"
-                >
-                  <Checkbox
-                    binary
-                    :model-value="true"
-                    :input-id="`event-field-${field.id}`"
-                    @update:model-value="toggleColumn(field.id)"
-                  />
-                  <Field.Label>
-                    <span class="truncate">{{ field.label }}</span>
-                  </Field.Label>
-                </Field>
-              </div>
-
-              <Popover
-                v-if="canFilterField(field) && fieldCounts[field.id]"
-                placement="right-start"
+              <Sidebar
+                v-model:collapsed="fieldsCollapsed"
+                v-model:width="fieldsWidth"
+                resizable
+                collapsible
+                aria-label="Fields"
+                collapse-aria-label="Hide the fields panel"
+                expand-aria-label="Show the fields panel"
+                resize-aria-label="Resize the fields panel"
               >
-                <div
-                  class="shrink-0 cursor-pointer text-label-code-sm tabular-nums text-(--text-muted) transition-colors duration-fast-02 ease-productive-entrance hover:text-(--text-default) group-hover:text-(--text-default) motion-reduce:transition-none"
-                >
-                  <Popover.Trigger
-                    role="button"
-                    tabindex="0"
-                    :aria-label="`Filter by ${field.label}, ${fieldCounts[field.id]} values`"
-                  >
-                    {{ fieldCounts[field.id] }}
-                  </Popover.Trigger>
-                </div>
-
-                <Popover.Content>
-                  <div class="flex min-w-0 flex-col p-(--spacing-xxs)">
-                    <p
-                      class="px-(--spacing-xs) py-(--spacing-xxs) text-label-sm text-(--text-muted)"
+                <template #header>
+                  <div class="px-(--spacing-xs)">
+                    <Input
+                      v-model="fieldSearch"
+                      size="medium"
+                      class="w-full"
+                      placeholder="Search fields"
+                      aria-label="Search fields"
                     >
-                      {{ field.label }} · top values
-                    </p>
-
-                    <button
-                      v-for="entry in topFieldValues(field.id)"
-                      :key="String(entry.value)"
-                      type="button"
-                      role="menuitemcheckbox"
-                      :aria-checked="isValueApplied(field.id, entry.value)"
-                      :data-applied="isValueApplied(field.id, entry.value) || null"
-                      class="flex min-w-0 items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-xs) py-(--spacing-xxs) text-start transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) data-applied:bg-(--bg-selected) motion-reduce:transition-none"
-                      @click="toggleFieldValue(field.id, entry.value)"
-                    >
-                      <span
-                        class="min-w-0 flex-1 truncate text-label-code-sm text-(--text-default)"
-                      >
-                        {{ formatEventValue(field, entry.value) }}
-                      </span>
-                      <span class="shrink-0 text-label-code-sm tabular-nums text-(--text-muted)">
-                        {{ entry.count }}
-                      </span>
-                      <i
-                        v-if="isValueApplied(field.id, entry.value)"
-                        class="pi pi-check shrink-0 text-(--primary)"
-                        aria-hidden="true"
-                      />
-                    </button>
-
-                    <p
-                      v-if="fieldValueOverflow(field.id)"
-                      class="px-(--spacing-xs) py-(--spacing-xxs) text-body-sm text-(--text-muted)"
-                    >
-                      {{ fieldValueOverflow(field.id) }} more values in this window.
-                    </p>
+                      <template #iconLeft>
+                        <i
+                          class="pi pi-search"
+                          aria-hidden="true"
+                        />
+                      </template>
+                    </Input>
                   </div>
-                </Popover.Content>
-              </Popover>
+                </template>
 
-              <span
-                v-else
-                class="shrink-0 px-(--spacing-xxs) text-label-code-sm tabular-nums text-(--text-muted) data-empty:text-(--text-disabled)"
-                :data-empty="fieldCounts[field.id] ? null : true"
-                :aria-label="`${fieldCounts[field.id]} distinct values`"
-              >
-                {{ fieldCounts[field.id] }}
-              </span>
-            </div>
+                <div>
+                  <div
+                    class="flex items-baseline justify-between gap-(--spacing-xs) px-(--spacing-xs) pb-(--spacing-xxs) pt-(--spacing-xxs)"
+                  >
+                    <span class="text-label-sm text-(--text-muted)">Shown</span>
+                    <span class="text-label-sm text-(--text-muted)">Values</span>
+                  </div>
 
-            <div
-              v-if="fieldCategories.length"
-              class="mt-(--spacing-xs)"
-            >
-              <Accordion
-                v-model="openCategories"
-                type="multiple"
-                size="medium"
-                arrow-position="left"
-              >
-                <Accordion.Item
-                  v-for="category in fieldCategories"
-                  :key="category.id"
-                  :value="category.id"
-                >
-                  <Accordion.Trigger>
-                    <span class="flex min-w-0 items-center gap-(--spacing-xs)">
-                      <span class="truncate text-label-sm text-(--text-default)">
-                        {{ category.label }}
-                      </span>
-                      <Tag
-                        v-if="categoryFilterCount(category)"
-                        :label="String(categoryFilterCount(category))"
-                        severity="info"
-                        size="small"
-                      />
-                    </span>
-                  </Accordion.Trigger>
+                  <div
+                    v-for="field in shownFields"
+                    :key="field.id"
+                    class="group flex items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-xs) py-(--spacing-xxs) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) motion-reduce:transition-none"
+                  >
+                    <div class="min-w-0 flex-1">
+                      <Field
+                        orientation="horizontal"
+                        :disabled="field.locked"
+                      >
+                        <Checkbox
+                          binary
+                          :model-value="true"
+                          :input-id="`event-field-${field.id}`"
+                          @update:model-value="toggleColumn(field.id)"
+                        />
+                        <Field.Label>
+                          <span class="truncate">{{ field.label }}</span>
+                        </Field.Label>
+                      </Field>
+                    </div>
 
-                  <Accordion.Content>
-                    <div
-                      v-for="field in category.fields"
-                      :key="field.id"
-                      class="group flex items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-xs) py-(--spacing-xxs) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) motion-reduce:transition-none"
+                    <Popover
+                      v-if="canFilterField(field) && fieldCounts[field.id]"
+                      placement="right-start"
                     >
-                      <div class="min-w-0 flex-1">
-                        <Field orientation="horizontal">
-                          <Checkbox
-                            binary
-                            :model-value="false"
-                            :input-id="`event-field-${field.id}`"
-                            @update:model-value="toggleColumn(field.id)"
-                          />
-                          <Field.Label>
-                            <span class="truncate">{{ field.label }}</span>
-                          </Field.Label>
-                        </Field>
+                      <div
+                        class="shrink-0 cursor-pointer text-label-code-sm tabular-nums text-(--text-muted) transition-colors duration-fast-02 ease-productive-entrance hover:text-(--text-default) group-hover:text-(--text-default) motion-reduce:transition-none"
+                      >
+                        <Popover.Trigger
+                          role="button"
+                          tabindex="0"
+                          :aria-label="`Filter by ${field.label}, ${fieldCounts[field.id]} values`"
+                        >
+                          {{ fieldCounts[field.id] }}
+                        </Popover.Trigger>
                       </div>
 
-                      <Popover
-                        v-if="canFilterField(field) && fieldCounts[field.id]"
-                        placement="right-start"
-                      >
-                        <div
-                          class="shrink-0 cursor-pointer text-label-code-sm tabular-nums text-(--text-muted) transition-colors duration-fast-02 ease-productive-entrance hover:text-(--text-default) group-hover:text-(--text-default) motion-reduce:transition-none"
-                        >
-                          <Popover.Trigger
-                            role="button"
-                            tabindex="0"
-                            :aria-label="`Filter by ${field.label}, ${fieldCounts[field.id]} values`"
+                      <Popover.Content>
+                        <div class="flex min-w-0 flex-col p-(--spacing-xxs)">
+                          <p
+                            class="px-(--spacing-xs) py-(--spacing-xxs) text-label-sm text-(--text-muted)"
                           >
-                            {{ fieldCounts[field.id] }}
-                          </Popover.Trigger>
-                        </div>
+                            {{ field.label }} · top values
+                          </p>
 
-                        <Popover.Content>
-                          <div class="flex min-w-0 flex-col p-(--spacing-xxs)">
-                            <p
-                              class="px-(--spacing-xs) py-(--spacing-xxs) text-label-sm text-(--text-muted)"
-                            >
-                              {{ field.label }} · top values
-                            </p>
-
-                            <button
-                              v-for="entry in topFieldValues(field.id)"
-                              :key="String(entry.value)"
-                              type="button"
-                              role="menuitemcheckbox"
-                              :aria-checked="isValueApplied(field.id, entry.value)"
-                              :data-applied="isValueApplied(field.id, entry.value) || null"
-                              class="flex min-w-0 items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-xs) py-(--spacing-xxs) text-start transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) data-applied:bg-(--bg-selected) motion-reduce:transition-none"
-                              @click="toggleFieldValue(field.id, entry.value)"
-                            >
+                          <Item
+                            v-for="entry in topFieldValues(field.id)"
+                            :key="String(entry.value)"
+                            clickable
+                            kind="option"
+                            :aria-pressed="isValueApplied(field.id, entry.value)"
+                            @click="toggleFieldValue(field.id, entry.value)"
+                          >
+                            <span class="flex min-w-0 flex-1 items-center gap-(--spacing-xs)">
                               <span
                                 class="min-w-0 flex-1 truncate text-label-code-sm text-(--text-default)"
                               >
@@ -1519,284 +1421,434 @@
                                 class="pi pi-check shrink-0 text-(--primary)"
                                 aria-hidden="true"
                               />
-                            </button>
+                            </span>
+                          </Item>
 
-                            <p
-                              v-if="fieldValueOverflow(field.id)"
-                              class="px-(--spacing-xs) py-(--spacing-xxs) text-body-sm text-(--text-muted)"
-                            >
-                              {{ fieldValueOverflow(field.id) }} more values in this window.
-                            </p>
-                          </div>
-                        </Popover.Content>
-                      </Popover>
+                          <p
+                            v-if="fieldValueOverflow(field.id)"
+                            class="px-(--spacing-xs) py-(--spacing-xxs) text-body-sm text-(--text-muted)"
+                          >
+                            {{ fieldValueOverflow(field.id) }} more values in this window.
+                          </p>
+                        </div>
+                      </Popover.Content>
+                    </Popover>
 
-                      <span
-                        v-else
-                        class="shrink-0 px-(--spacing-xxs) text-label-code-sm tabular-nums text-(--text-muted) data-empty:text-(--text-disabled)"
-                        :data-empty="fieldCounts[field.id] ? null : true"
-                        :aria-label="`${fieldCounts[field.id]} distinct values`"
+                    <span
+                      v-else
+                      class="shrink-0 px-(--spacing-xxs) text-label-code-sm tabular-nums text-(--text-muted) data-empty:text-(--text-disabled)"
+                      :data-empty="fieldCounts[field.id] ? null : true"
+                      :aria-label="`${fieldCounts[field.id]} distinct values`"
+                    >
+                      {{ fieldCounts[field.id] }}
+                    </span>
+                  </div>
+
+                  <div
+                    v-if="fieldCategories.length"
+                    class="mt-(--spacing-xs)"
+                  >
+                    <Accordion
+                      v-model="openCategories"
+                      type="multiple"
+                      size="medium"
+                      arrow-position="left"
+                    >
+                      <Accordion.Item
+                        v-for="category in fieldCategories"
+                        :key="category.id"
+                        :value="category.id"
                       >
-                        {{ fieldCounts[field.id] }}
-                      </span>
-                    </div>
-                  </Accordion.Content>
-                </Accordion.Item>
-              </Accordion>
-            </div>
+                        <Accordion.Trigger>
+                          <span class="flex min-w-0 items-center gap-(--spacing-xs)">
+                            <span class="truncate text-label-sm text-(--text-default)">
+                              {{ category.label }}
+                            </span>
+                            <Tag
+                              v-if="categoryFilterCount(category)"
+                              :label="String(categoryFilterCount(category))"
+                              severity="info"
+                              size="small"
+                            />
+                          </span>
+                        </Accordion.Trigger>
 
-            <p
-              v-if="!hasFieldMatches"
-              class="px-(--spacing-xs) py-(--spacing-sm) text-body-sm text-(--text-muted)"
-            >
-              No fields match "{{ fieldSearch }}".
-            </p>
-          </div>
-        </Sidebar>
-      </div>
+                        <Accordion.Content>
+                          <div
+                            v-for="field in category.fields"
+                            :key="field.id"
+                            class="group flex items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-xs) py-(--spacing-xxs) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) motion-reduce:transition-none"
+                          >
+                            <div class="min-w-0 flex-1">
+                              <Field orientation="horizontal">
+                                <Checkbox
+                                  binary
+                                  :model-value="false"
+                                  :input-id="`event-field-${field.id}`"
+                                  @update:model-value="toggleColumn(field.id)"
+                                />
+                                <Field.Label>
+                                  <span class="truncate">{{ field.label }}</span>
+                                </Field.Label>
+                              </Field>
+                            </div>
 
-      <div class="flex min-w-0 flex-1 flex-col overflow-hidden">
-        <section
-          class="flex shrink-0 flex-col gap-(--spacing-xs) border-b border-(--border-default) px-(--spacing-md) py-(--spacing-sm)"
-        >
-          <div class="flex flex-wrap items-end gap-(--spacing-md)">
-            <dl class="flex flex-wrap items-end gap-(--spacing-xl)">
-              <div class="flex flex-col">
-                <dt class="text-label-sm text-(--text-muted)">Events</dt>
-                <dd class="m-0 text-heading-xs tabular-nums text-(--text-default)">
-                  {{ summary.total.toLocaleString('en-US') }}
-                </dd>
-              </div>
-              <div class="flex flex-col">
-                <dt class="text-label-sm text-(--text-muted)">Errors</dt>
-                <dd
-                  class="m-0 text-heading-xs tabular-nums text-(--text-default) data-raised:text-(--danger-contrast)"
-                  :data-raised="summary.errors ? true : null"
-                  :aria-label="`${summary.errors} errors, ${errorShareLabel}`"
-                >
-                  {{ summary.errors.toLocaleString('en-US') }}
-                </dd>
-              </div>
-              <div class="flex flex-col">
-                <dt class="text-label-sm text-(--text-muted)">Avg request time</dt>
-                <dd class="m-0 text-heading-xs tabular-nums text-(--text-default)">
-                  {{ summary.avgRequestTimeMs === null ? '—' : `${summary.avgRequestTimeMs} ms` }}
-                </dd>
-              </div>
-            </dl>
-          </div>
+                            <Popover
+                              v-if="canFilterField(field) && fieldCounts[field.id]"
+                              placement="right-start"
+                            >
+                              <div
+                                class="shrink-0 cursor-pointer text-label-code-sm tabular-nums text-(--text-muted) transition-colors duration-fast-02 ease-productive-entrance hover:text-(--text-default) group-hover:text-(--text-default) motion-reduce:transition-none"
+                              >
+                                <Popover.Trigger
+                                  role="button"
+                                  tabindex="0"
+                                  :aria-label="`Filter by ${field.label}, ${fieldCounts[field.id]} values`"
+                                >
+                                  {{ fieldCounts[field.id] }}
+                                </Popover.Trigger>
+                              </div>
 
-          <Chart
-            :range="null"
-            :series="volumeSeries"
-            :labels="volumeLabels"
-            :format-label="formatEventClock"
-            :height="80"
-            :aria-label="chartLabel"
-            @update:range="selectVolume"
-          >
-            <Chart.Axis
-              kind="x"
-              :ticks="3"
-            />
-            <Chart.Brush />
-            <Chart.Bar
-              kind="histogram"
-              stacked
-            />
-            <Chart.Crosshair />
-            <Chart.Tooltip total>
-              <template #footer>Click to filter to this bucket, or drag to select a span.</template>
-            </Chart.Tooltip>
-          </Chart>
-        </section>
+                              <Popover.Content>
+                                <div class="flex min-w-0 flex-col p-(--spacing-xxs)">
+                                  <p
+                                    class="px-(--spacing-xs) py-(--spacing-xxs) text-label-sm text-(--text-muted)"
+                                  >
+                                    {{ field.label }} · top values
+                                  </p>
 
-        <section class="flex min-h-0 min-w-0 flex-1 flex-col">
-          <div class="flex min-h-0 flex-1">
-            <TableRoot
-              ref="tableRef"
-              v-model:pagination="pagination"
-              :data="matchedEvents"
-              :columns="columns"
-              row-key="id"
-              enable-sorting
-              paginated
-              :page-size="25"
-              :bordered="false"
-              header-kind="compact"
-              max-height="100%"
-              class="w-full"
-              :loading="loading"
-              @row-click="openDocument"
-            >
-              <template #header-detail>
-                <span class="sr-only">Open the event document</span>
-              </template>
+                                  <Item
+                                    v-for="entry in topFieldValues(field.id)"
+                                    :key="String(entry.value)"
+                                    clickable
+                                    kind="option"
+                                    :aria-pressed="isValueApplied(field.id, entry.value)"
+                                    @click="toggleFieldValue(field.id, entry.value)"
+                                  >
+                                    <span
+                                      class="flex min-w-0 flex-1 items-center gap-(--spacing-xs)"
+                                    >
+                                      <span
+                                        class="min-w-0 flex-1 truncate text-label-code-sm text-(--text-default)"
+                                      >
+                                        {{ formatEventValue(field, entry.value) }}
+                                      </span>
+                                      <span
+                                        class="shrink-0 text-label-code-sm tabular-nums text-(--text-muted)"
+                                      >
+                                        {{ entry.count }}
+                                      </span>
+                                      <i
+                                        v-if="isValueApplied(field.id, entry.value)"
+                                        class="pi pi-check shrink-0 text-(--primary)"
+                                        aria-hidden="true"
+                                      />
+                                    </span>
+                                  </Item>
 
-              <template #cell-detail="{ row }">
-                <i
-                  class="pi pi-angle-right text-(--text-muted) transition-transform duration-fast-02 ease-productive-entrance data-open:rotate-90 data-open:text-(--primary) motion-reduce:transition-none"
-                  :data-open="row.id === selectedId || null"
-                  aria-hidden="true"
-                />
-              </template>
+                                  <p
+                                    v-if="fieldValueOverflow(field.id)"
+                                    class="px-(--spacing-xs) py-(--spacing-xxs) text-body-sm text-(--text-muted)"
+                                  >
+                                    {{ fieldValueOverflow(field.id) }} more values in this window.
+                                  </p>
+                                </div>
+                              </Popover.Content>
+                            </Popover>
 
-              <template #cell-time="{ value }">
-                <span class="min-w-0 truncate text-label-code-sm tabular-nums text-(--text-muted)">
-                  {{ value }}
-                </span>
-              </template>
+                            <span
+                              v-else
+                              class="shrink-0 px-(--spacing-xxs) text-label-code-sm tabular-nums text-(--text-muted) data-empty:text-(--text-disabled)"
+                              :data-empty="fieldCounts[field.id] ? null : true"
+                              :aria-label="`${fieldCounts[field.id]} distinct values`"
+                            >
+                              {{ fieldCounts[field.id] }}
+                            </span>
+                          </div>
+                        </Accordion.Content>
+                      </Accordion.Item>
+                    </Accordion>
+                  </div>
 
-              <template #cell-level="{ value }">
-                <Tag
-                  :label="value"
-                  :severity="eventLevelSeverity(value)"
-                  size="small"
-                />
-              </template>
-
-              <template #cell-message="{ value }">
-                <span class="min-w-0 truncate text-(--text-default)">{{ value }}</span>
-              </template>
-
-              <template #cell-status="{ value }">
-                <span
-                  class="min-w-0 truncate text-label-code-sm tabular-nums text-(--text-default) data-[tone=error]:text-(--danger-contrast) data-[tone=warn]:text-(--warning-contrast)"
-                  :data-tone="statusTone(value)"
-                >
-                  {{ formatEventValue(statusField, value) }}
-                </span>
-              </template>
-
-              <template
-                v-for="field in genericColumns"
-                :key="field.id"
-                #[`cell-${field.id}`]="{ value }"
-              >
-                <span
-                  class="min-w-0 truncate text-(--text-default) data-mono:text-label-code-sm data-numeric:tabular-nums"
-                  :data-mono="field.mono || null"
-                  :data-numeric="field.align === 'end' || null"
-                >
-                  {{ formatEventValue(field, value) }}
-                </span>
-              </template>
-
-              <template #empty>
-                <EmptyState
-                  v-if="!events.length"
-                  key="no-traffic"
-                  size="small"
-                  icon="pi pi-inbox"
-                  title="No events yet"
-                  description="Events appear here as soon as traffic reaches this workspace's resources."
-                />
-                <EmptyState
-                  v-else-if="appliedQuery.tokens.length"
-                  key="no-match"
-                  size="small"
-                  icon="pi pi-search"
-                  title="No events match this query"
-                  description="Change the query, or widen the time range to cover more of the log."
-                />
-                <EmptyState
-                  v-else
-                  key="no-events"
-                  size="small"
-                  icon="pi pi-filter-slash"
-                  title="No events in this window"
-                  description="Widen the time range to see more of the log."
-                />
-              </template>
-            </TableRoot>
-          </div>
-        </section>
-      </div>
-
-      <Sidebar
-        v-if="isWide"
-        key="event-document-panel"
-        v-model:width="documentWidth"
-        v-model:collapsed="documentCollapsed"
-        side="end"
-        resizable
-        aria-label="Event document"
-        resize-aria-label="Resize the event panel"
-        min-width-token="--container-xs"
-        max-width-token="--container-lg"
-      >
-        <template #header>
-          <div class="flex items-center justify-between gap-(--spacing-xs)">
-            <span class="min-w-0 truncate text-heading-xxs text-(--text-default)"> Event </span>
-            <Tooltip text="Close">
-              <IconButton
-                icon="pi pi-times"
-                kind="transparent"
-                size="small"
-                aria-label="Close the event document"
-                @click="closeDocument"
-              />
-            </Tooltip>
-          </div>
-        </template>
-
-        <div
-          v-if="documentEvent"
-          class="-m-(--spacing-md)"
-        >
-          <div class="flex min-w-0 flex-col">
-            <div
-              class="flex min-w-0 flex-col gap-(--spacing-md) p-(--spacing-md) pb-(--spacing-lg)"
-            >
-              <div class="flex min-w-0 flex-col gap-(--spacing-xs)">
-                <div class="flex flex-wrap items-center gap-(--spacing-xs)">
-                  <Tag
-                    :label="documentEvent.level"
-                    :severity="eventLevelSeverity(documentEvent.level)"
-                    size="small"
-                  />
-                  <Tag
-                    :label="documentEvent.sourceLabel"
-                    severity="secondary"
-                    size="small"
-                  />
+                  <p
+                    v-if="!hasFieldMatches"
+                    class="px-(--spacing-xs) py-(--spacing-sm) text-body-sm text-(--text-muted)"
+                  >
+                    No fields match "{{ fieldSearch }}".
+                  </p>
                 </div>
-                <p class="text-body-md text-(--text-default)">{{ documentEvent.message }}</p>
-                <p class="text-label-code-sm tabular-nums text-(--text-muted)">
-                  {{ documentEvent.time }}
-                </p>
-              </div>
-
-              <dl
-                class="grid min-w-0 grid-cols-[minmax(0,8rem)_minmax(0,1fr)] items-baseline gap-x-(--spacing-md) gap-y-(--spacing-sm)"
-              >
-                <template
-                  v-for="row in documentRows"
-                  :key="row.id"
-                >
-                  <dt class="min-w-0 text-label-sm text-(--text-muted)">{{ row.label }}</dt>
-                  <dd class="m-0 min-w-0 break-words text-label-code-sm text-(--text-default)">
-                    {{ row.value }}
-                  </dd>
-                </template>
-              </dl>
+              </Sidebar>
             </div>
 
-            <div class="flex min-w-0 flex-col gap-(--spacing-xs)">
-              <h3 class="px-(--spacing-md) text-label-sm text-(--text-default)">Event document</h3>
-              <div class="min-w-0">
-                <CodeBlock
-                  :tabs="documentTabs"
-                  :bordered="false"
-                  show-line-numbers
-                  copy-aria-label="Copy the event document as JSON"
-                  class="w-full"
-                />
-              </div>
+            <div class="flex min-w-0 flex-1 flex-col overflow-hidden">
+              <section
+                class="flex shrink-0 flex-col gap-(--spacing-xs) border-b border-(--border-default) px-(--spacing-md) py-(--spacing-sm)"
+              >
+                <div class="flex flex-wrap items-end gap-(--spacing-md)">
+                  <dl class="flex flex-wrap items-end gap-(--spacing-xl)">
+                    <div class="flex flex-col">
+                      <dt class="text-label-sm text-(--text-muted)">Events</dt>
+                      <dd class="m-0 text-heading-xs tabular-nums text-(--text-default)">
+                        {{ summary.total.toLocaleString('en-US') }}
+                      </dd>
+                    </div>
+                    <div class="flex flex-col">
+                      <dt class="text-label-sm text-(--text-muted)">Errors</dt>
+                      <dd
+                        class="m-0 text-heading-xs tabular-nums text-(--text-default) data-raised:text-(--danger-contrast)"
+                        :data-raised="summary.errors ? true : null"
+                        :aria-label="`${summary.errors} errors, ${errorShareLabel}`"
+                      >
+                        {{ summary.errors.toLocaleString('en-US') }}
+                      </dd>
+                    </div>
+                    <div class="flex flex-col">
+                      <dt class="text-label-sm text-(--text-muted)">Avg request time</dt>
+                      <dd class="m-0 text-heading-xs tabular-nums text-(--text-default)">
+                        {{
+                          summary.avgRequestTimeMs === null ? '—' : `${summary.avgRequestTimeMs} ms`
+                        }}
+                      </dd>
+                    </div>
+                  </dl>
+                </div>
+
+                <Chart
+                  :range="null"
+                  :series="volumeSeries"
+                  :labels="volumeLabels"
+                  :format-label="formatEventClock"
+                  :height="80"
+                  :aria-label="chartLabel"
+                  @update:range="selectVolume"
+                >
+                  <Chart.Axis
+                    kind="x"
+                    :ticks="3"
+                  />
+                  <Chart.Brush />
+                  <Chart.Bar
+                    kind="histogram"
+                    stacked
+                  />
+                  <Chart.Crosshair />
+                  <Chart.Tooltip total>
+                    <template #footer
+                      >Click to filter to this bucket, or drag to select a span.</template
+                    >
+                  </Chart.Tooltip>
+                </Chart>
+              </section>
+
+              <section class="flex min-h-0 min-w-0 flex-1 flex-col">
+                <div class="flex min-h-0 flex-1">
+                  <TableRoot
+                    ref="tableRef"
+                    v-model:pagination="pagination"
+                    :data="matchedEvents"
+                    :columns="columns"
+                    row-key="id"
+                    enable-sorting
+                    paginated
+                    :page-size="25"
+                    :bordered="false"
+                    header-kind="compact"
+                    max-height="100%"
+                    class="w-full"
+                    :loading="loading"
+                    @row-click="openDocument"
+                  >
+                    <template #header-detail>
+                      <span class="sr-only">Open the event document</span>
+                    </template>
+
+                    <template #cell-detail="{ row }">
+                      <IconButton
+                        :icon="row.id === selectedId ? 'pi pi-angle-down' : 'pi pi-angle-right'"
+                        kind="transparent"
+                        size="small"
+                        :aria-label="`Open event ${row.id}`"
+                        :aria-expanded="row.id === selectedId"
+                        @click.stop="openDocument($event, row)"
+                      />
+                    </template>
+
+                    <template #cell-time="{ value }">
+                      <span
+                        class="min-w-0 truncate text-label-code-sm tabular-nums text-(--text-muted)"
+                      >
+                        {{ value }}
+                      </span>
+                    </template>
+
+                    <template #cell-level="{ value }">
+                      <Tag
+                        :label="value"
+                        :severity="eventLevelSeverity(value)"
+                        size="small"
+                      />
+                    </template>
+
+                    <template #cell-message="{ value }">
+                      <span class="min-w-0 truncate text-(--text-default)">{{ value }}</span>
+                    </template>
+
+                    <template #cell-status="{ value }">
+                      <span
+                        class="min-w-0 truncate text-label-code-sm tabular-nums text-(--text-default) data-[tone=error]:text-(--danger-contrast) data-[tone=warn]:text-(--warning-contrast)"
+                        :data-tone="statusTone(value)"
+                      >
+                        {{ formatEventValue(statusField, value) }}
+                      </span>
+                    </template>
+
+                    <template
+                      v-for="field in genericColumns"
+                      :key="field.id"
+                      #[`cell-${field.id}`]="{ value }"
+                    >
+                      <span
+                        class="min-w-0 truncate text-(--text-default) data-mono:text-label-code-sm data-numeric:tabular-nums"
+                        :data-mono="field.mono || null"
+                        :data-numeric="field.align === 'end' || null"
+                      >
+                        {{ formatEventValue(field, value) }}
+                      </span>
+                    </template>
+
+                    <template #empty>
+                      <EmptyState
+                        v-if="!events.length"
+                        key="no-traffic"
+                        size="small"
+                        icon="pi pi-inbox"
+                        title="No events yet"
+                        description="Events appear here as soon as traffic reaches this workspace's resources."
+                      />
+                      <EmptyState
+                        v-else-if="appliedQuery.tokens.length"
+                        key="no-match"
+                        size="small"
+                        icon="pi pi-search"
+                        title="No events match this query"
+                        description="Change the query, or widen the time range to cover more of the log."
+                      />
+                      <EmptyState
+                        v-else
+                        key="no-events"
+                        size="small"
+                        icon="pi pi-filter-slash"
+                        title="No events in this window"
+                        description="Widen the time range to see more of the log."
+                      />
+                    </template>
+                  </TableRoot>
+                </div>
+              </section>
             </div>
           </div>
-        </div>
-      </Sidebar>
+        </Resizable.Pane>
+        <Resizable.Handle
+          v-if="!documentPaneCollapsed"
+          aria-label="Resize the event panel"
+        />
+        <Resizable.Pane
+          v-model:basis="documentWidth"
+          v-model:collapsed="documentPaneCollapsed"
+          collapsible
+          :min="320"
+          :max="512"
+          aria-label="Event document"
+        >
+          <aside
+            :inert="documentPaneCollapsed"
+            aria-labelledby="event-document-title"
+            class="flex h-full min-h-0 min-w-0 flex-col border-s border-(--border-default) bg-(--bg-surface)"
+          >
+            <div
+              class="flex items-center justify-between gap-(--spacing-xs) border-b border-(--border-default) px-(--spacing-md) py-(--spacing-sm)"
+            >
+              <h2
+                id="event-document-title"
+                class="min-w-0 truncate text-heading-xxs text-(--text-default)"
+              >
+                Event
+              </h2>
+              <Tooltip text="Close">
+                <IconButton
+                  icon="pi pi-times"
+                  kind="transparent"
+                  size="small"
+                  aria-label="Close the event document"
+                  @click="closeDocument"
+                />
+              </Tooltip>
+            </div>
+            <div class="min-h-0 flex-1 overflow-y-auto">
+              <div
+                v-if="documentEvent"
+                class="min-w-0"
+              >
+                <div class="flex min-w-0 flex-col">
+                  <div
+                    class="flex min-w-0 flex-col gap-(--spacing-md) p-(--spacing-md) pb-(--spacing-lg)"
+                  >
+                    <div class="flex min-w-0 flex-col gap-(--spacing-xs)">
+                      <div class="flex flex-wrap items-center gap-(--spacing-xs)">
+                        <Tag
+                          :label="documentEvent.level"
+                          :severity="eventLevelSeverity(documentEvent.level)"
+                          size="small"
+                        />
+                        <Tag
+                          :label="documentEvent.sourceLabel"
+                          severity="secondary"
+                          size="small"
+                        />
+                      </div>
+                      <p class="text-body-md text-(--text-default)">{{ documentEvent.message }}</p>
+                      <p class="text-label-code-sm tabular-nums text-(--text-muted)">
+                        {{ documentEvent.time }}
+                      </p>
+                    </div>
+
+                    <dl
+                      class="grid min-w-0 grid-cols-[minmax(0,8rem)_minmax(0,1fr)] items-baseline gap-x-(--spacing-md) gap-y-(--spacing-sm)"
+                    >
+                      <template
+                        v-for="row in documentRows"
+                        :key="row.id"
+                      >
+                        <dt class="min-w-0 text-label-sm text-(--text-muted)">{{ row.label }}</dt>
+                        <dd
+                          class="m-0 min-w-0 break-words text-label-code-sm text-(--text-default)"
+                        >
+                          {{ row.value }}
+                        </dd>
+                      </template>
+                    </dl>
+                  </div>
+
+                  <div class="flex min-w-0 flex-col gap-(--spacing-xs)">
+                    <h3 class="px-(--spacing-md) text-label-sm text-(--text-default)">
+                      Event document
+                    </h3>
+                    <div class="min-w-0">
+                      <CodeBlock
+                        :tabs="documentTabs"
+                        :bordered="false"
+                        show-line-numbers
+                        copy-aria-label="Copy the event document as JSON"
+                        class="w-full"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </aside>
+        </Resizable.Pane>
+      </Resizable>
     </section>
 
     <Drawer

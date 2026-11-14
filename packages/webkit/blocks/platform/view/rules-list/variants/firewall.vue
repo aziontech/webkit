@@ -68,6 +68,8 @@
     text: string
   }
 
+  const emit = defineEmits<{ edit: [event: MouseEvent, rule: Rule] }>()
+
   const rule = (
     id: string,
     name: string,
@@ -375,6 +377,7 @@
             icon="pi pi-plus"
             kind="outlined"
             size="medium"
+            :disabled="loading"
           />
         </template>
       </PageHeader>
@@ -524,12 +527,14 @@
                       </template>
                       <template #cell-name="{ row }">
                         <div class="flex min-w-0 items-center gap-(--spacing-xxs)">
-                          <a
-                            :href="`#rule-${row.id}`"
+                          <Button
+                            kind="link"
+                            :label="row.name"
                             data-rule-name
-                            class="min-w-0 truncate rounded-(--shape-button) text-(--text-default) underline-offset-2 outline-none hover:underline focus-visible:ring-2 focus-visible:ring-(--ring-color)"
-                            >{{ row.name }}</a
-                          >
+                            :aria-label="`Edit ${row.name}`"
+                            class="min-w-0"
+                            @click="(event: MouseEvent) => emit('edit', event, row)"
+                          />
                           <Tag
                             v-if="row.locked"
                             label="Default"
@@ -568,11 +573,20 @@
                         >
                       </template>
                       <template #empty>
-                        <p
-                          class="m-0 px-(--spacing-md) py-(--spacing-lg) text-center text-body-sm text-(--text-muted)"
+                        <EmptyState
+                          size="small"
+                          icon="pi pi-search"
+                          :title="`No ${group.label.toLowerCase()} rule matches “${search.trim()}”`"
                         >
-                          No {{ group.label.toLowerCase() }} rule matches “{{ search.trim() }}”.
-                        </p>
+                          <template #actions>
+                            <Button
+                              label="Clear search"
+                              kind="outlined"
+                              size="small"
+                              @click="search = ''"
+                            />
+                          </template>
+                        </EmptyState>
                       </template>
                     </TableRoot>
                     <EmptyState

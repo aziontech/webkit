@@ -13,7 +13,6 @@
   import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'
   import DropdownMenuOption from '@aziontech/webkit/dropdown-menu-option'
   import EmptyState from '@aziontech/webkit/empty-state'
-  import Field from '@aziontech/webkit/field'
   import FileDropzone from '@aziontech/webkit/file-dropzone'
   import FileTokenGroup, { type FileTokenGroupItem } from '@aziontech/webkit/file-token-group'
   import IconButton from '@aziontech/webkit/icon-button'
@@ -21,11 +20,7 @@
   import PanelContent from '@aziontech/webkit/panel-content'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
-  import PopoverContent from '@aziontech/webkit/popover-content'
-  import PopoverRoot from '@aziontech/webkit/popover-root'
-  import PopoverTrigger from '@aziontech/webkit/popover-trigger'
   import SplitButton, { type SplitButtonItem } from '@aziontech/webkit/split-button'
-  import Switch from '@aziontech/webkit/switch'
   import Table from '@aziontech/webkit/table'
   import TableRoot, {
     type DropdownMenuOptionValue,
@@ -36,7 +31,7 @@
   import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
   import UploadProgress, { type UploadProgressItem } from '@aziontech/webkit/upload-progress'
-  import { computed, nextTick, onBeforeUnmount, onMounted, ref, useId, watch } from 'vue'
+  import { computed, nextTick, onBeforeUnmount, onMounted, ref, useId } from 'vue'
 
   type FileEntry = { size: string; ext: string; lastModified: string }
   type FolderEntry = { children: FolderTree }
@@ -54,7 +49,7 @@
     kind: RowKind
     icon?: string
     size: string
-    lastModified: string
+    bytes: number
     modifiedAt?: string
     author?: string
   }
@@ -139,8 +134,8 @@
       hideable: false,
       grow: 3
     },
-    { accessorKey: 'size', header: 'Size', enableSorting: true, minWidth: 80 },
-    { accessorKey: 'lastModified', header: 'Last modified', enableSorting: true, minWidth: 80 },
+    { accessorKey: 'bytes', header: 'Size', enableSorting: true, minWidth: 80 },
+    { accessorKey: 'modifiedAt', header: 'Last modified', enableSorting: true, minWidth: 80 },
     { id: 'actions', kind: 'action', hideable: false }
   ]
 
@@ -152,18 +147,11 @@
 
   const referenceTime = Date.UTC(2026, 10, 10, 12)
 
-  const relativeTime = (input: string) => {
-    const days = Math.round((referenceTime - Date.parse(input)) / 86_400_000)
-    if (days < 1) return 'today'
-    if (days < 7) return `${days} ${days === 1 ? 'day' : 'days'} ago`
-    if (days < 30) {
-      const weeks = Math.round(days / 7)
-      return `${weeks} ${weeks === 1 ? 'week' : 'weeks'} ago`
-    }
-    const months = Math.round(days / 30)
-    if (months < 12) return `${months} ${months === 1 ? 'month' : 'months'} ago`
-    const years = Math.round(days / 365)
-    return `${years} ${years === 1 ? 'year' : 'years'} ago`
+  const sizeBytes = (size: string) => {
+    const match = /^([\d.]+)\s*(B|KB|MB)$/.exec(size)
+    if (!match) return 0
+    const unit: Record<string, number> = { B: 1, KB: 1024, MB: 1024 * 1024 }
+    return Number(match[1]) * unit[match[2]]
   }
 
   const removed = ref<string[]>([])
@@ -217,7 +205,7 @@
     const folders = entries
       .filter(([, entry]) => isFolder(entry))
       .sort(([a], [b]) => a.localeCompare(b))
-      .map(([name]): FileRow => ({ id: name, name, kind: 'folder', size: '-', lastModified: '' }))
+      .map(([name]): FileRow => ({ id: name, name, kind: 'folder', size: '-', bytes: 0 }))
     const files = entries
       .filter(isFileEntry)
       .sort(([a], [b]) => a.localeCompare(b))
@@ -227,16 +215,39 @@
         kind: 'file',
         icon: GLYPHS[entry.ext] ?? 'pi pi-file',
         size: entry.size,
-        lastModified: relativeTime(entry.lastModified),
+        bytes: sizeBytes(entry.size),
         modifiedAt: entry.lastModified,
         author: people[index % people.length]
       }))
     const list: FileRow[] = [...folders, ...files]
     if (folderPath.value.length) {
-      list.unshift({ id: '..', name: '..', kind: 'parent', size: '-', lastModified: '' })
+      list.unshift({ id: '..', name: '..', kind: 'parent', size: '-', bytes: 0 })
     }
     return list
   })
+
+  const sorting = ref<{ id: string; desc: boolean }[]>([])
+  const compareFiles = (id: string) => (a: FileRow, b: FileRow) => {
+    if (id === 'bytes') return a.bytes - b.bytes
+    if (id === 'modifiedAt') return Date.parse(a.modifiedAt ?? '') - Date.parse(b.modifiedAt ?? '')
+    return a.name.localeCompare(b.name)
+  }
+  const sortedRows = computed<FileRow[]>(() => {
+    const [sort] = sorting.value
+    if (!sort) return rows.value
+    const direction = sort.desc ? -1 : 1
+    const ordered = (kind: RowKind, id: string) =>
+      rows.value
+        .filter((row) => row.kind === kind)
+        .sort((a, b) => direction * compareFiles(id)(a, b))
+    return [
+      ...rows.value.filter((row) => row.kind === 'parent'),
+      ...ordered('folder', sort.id === 'name' ? 'name' : ''),
+      ...ordered('file', sort.id)
+    ]
+  })
+
+  const search = ref('')
 
   const enterFolder = (name: string) => {
     folderPath.value = [...folderPath.value, name]
@@ -268,31 +279,6 @@
     refreshTimer = setTimeout(() => {
       loading.value = false
     }, 700)
-  }
-
-  const listedColumns = columns
-    .filter((column) => column.kind !== 'action')
-    .map((column) => ({
-      id: column.id ?? column.accessorKey ?? '',
-      label: column.label ?? column.header,
-      locked: column.hideable === false
-    }))
-  const columnsOpen = ref(false)
-  const columnsTipOpen = ref(false)
-  watch(columnsOpen, (open) => {
-    if (open) columnsTipOpen.value = false
-  })
-  const columnVisibility = ref<Record<string, boolean>>({})
-  const isVisible = (id: string) => columnVisibility.value[id] !== false
-  const setVisible = (id: string, visible: boolean) => {
-    const next = { ...columnVisibility.value }
-    if (visible) delete next[id]
-    else next[id] = false
-    columnVisibility.value = next
-  }
-  const hiddenCount = computed(() => listedColumns.filter((column) => !isVisible(column.id)).length)
-  const showAll = () => {
-    columnVisibility.value = {}
   }
 
   const LIMIT = 300 * 1024 * 1024
@@ -508,11 +494,16 @@
           <template #content>
             <TableRoot
               ref="tableRef"
-              v-model:columnVisibility="columnVisibility"
-              :data="rows"
+              v-model:sorting="sorting"
+              v-model:global-filter="search"
+              :data="sortedRows"
               :columns="columns"
               row-key="id"
               enable-sorting
+              manual-sorting
+              paginated
+              :page-size="50"
+              :rows-per-page-options="[25, 50, 100]"
               :bordered="false"
               :loading="loading"
               export-filename="files.csv"
@@ -525,9 +516,9 @@
                       class="pi pi-database shrink-0 text-body-lg text-(--text-muted)"
                       aria-hidden="true"
                     />
-                    <span class="min-w-0 truncate text-heading-xxs text-(--text-default)">{{
-                      rootName
-                    }}</span>
+                    <h1 class="min-w-0 truncate text-heading-xxs text-(--text-default)">
+                      {{ rootName }}
+                    </h1>
                   </div>
 
                   <div class="flex w-full items-center gap-(--spacing-xs)">
@@ -564,79 +555,7 @@
                         @click="tableRef?.exportCsv({ filename: 'files.csv' })"
                       />
                     </Tooltip>
-                    <PopoverRoot
-                      v-model:open="columnsOpen"
-                      placement="bottom-end"
-                      class="shrink-0"
-                    >
-                      <PopoverTrigger>
-                        <Tooltip
-                          v-model:open="columnsTipOpen"
-                          text="Columns"
-                          :disabled="columnsOpen"
-                        >
-                          <IconButton
-                            icon="ai ai-column"
-                            kind="outlined"
-                            size="large"
-                            aria-label="Columns"
-                          />
-                        </Tooltip>
-                      </PopoverTrigger>
-                      <PopoverContent>
-                        <div class="flex flex-col">
-                          <div
-                            class="border-b border-(--border-default) px-(--spacing-md) py-(--spacing-xs)"
-                          >
-                            <p class="text-label-md text-(--text-default)">Columns</p>
-                          </div>
-                          <div
-                            class="flex max-h-(--container-xs) flex-col gap-(--spacing-xxs) overflow-y-auto overscroll-contain p-(--spacing-xxs)"
-                          >
-                            <div
-                              v-for="column in listedColumns"
-                              :key="column.id"
-                              class="rounded-(--shape-elements) px-(--spacing-sm) py-(--spacing-xs) transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none"
-                              :class="
-                                column.locked
-                                  ? 'cursor-default'
-                                  : 'cursor-pointer hover:bg-(--bg-hover)'
-                              "
-                            >
-                              <Field
-                                orientation="horizontal"
-                                :disabled="column.locked"
-                              >
-                                <Switch
-                                  :model-value="isVisible(column.id)"
-                                  @update:model-value="(value) => setVisible(column.id, !!value)"
-                                />
-                                <Field.Label>
-                                  <span class="min-w-0 truncate">{{ column.label }}</span>
-                                </Field.Label>
-                                <span
-                                  v-if="column.locked"
-                                  class="shrink-0 text-label-xs text-(--text-muted)"
-                                  >Always shown</span
-                                >
-                              </Field>
-                            </div>
-                          </div>
-                          <div
-                            v-if="hiddenCount"
-                            class="border-t border-(--border-default) p-(--spacing-xxs)"
-                          >
-                            <Button
-                              label="Show all columns"
-                              kind="transparent"
-                              size="small"
-                              class="w-full"
-                              @click="showAll"
-                            />
-                          </div>
-                        </div>
-                      </PopoverContent>
-                    </PopoverRoot>
+                    <Table.ColumnSelector class="shrink-0" />
                   </div>
 
                   <div class="flex w-full items-center justify-between gap-(--spacing-xs)">
@@ -683,19 +602,35 @@
                     class="shrink-0 text-body-lg text-(--text-muted)"
                     aria-hidden="true"
                   />
+                  <Button
+                    key="button-1"
+                    v-if="row.kind === 'parent'"
+                    kind="link"
+                    label=".."
+                    aria-label="Go up to the parent folder"
+                    @click.stop="goUp"
+                  />
+                  <Button
+                    key="button-2"
+                    v-else-if="row.kind === 'folder'"
+                    kind="link"
+                    :label="value"
+                    class="min-w-0"
+                    @click.stop="enterFolder(row.name)"
+                  />
                   <span
+                    v-else
                     class="truncate"
-                    :class="row.kind !== 'file' ? 'cursor-pointer hover:underline' : ''"
                     >{{ value }}</span
                   >
                 </div>
               </template>
 
-              <template #cell-size="{ value }">
-                <span class="text-(--text-muted)">{{ value }}</span>
+              <template #cell-bytes="{ row }">
+                <span class="text-(--text-muted)">{{ row.size }}</span>
               </template>
 
-              <template #cell-lastModified="{ row }">
+              <template #cell-modifiedAt="{ row }">
                 <Table.CellTime
                   v-if="row.modifiedAt"
                   :value="row.modifiedAt"
@@ -752,6 +687,25 @@
 
               <template #empty>
                 <EmptyState
+                  key="empty-state-1"
+                  v-if="search"
+                  size="medium"
+                  icon="pi pi-search"
+                  title="No matching files"
+                  :description="`Nothing in this folder matches “${search}”.`"
+                >
+                  <template #actions>
+                    <Button
+                      label="Clear search"
+                      kind="outlined"
+                      size="small"
+                      @click="search = ''"
+                    />
+                  </template>
+                </EmptyState>
+                <EmptyState
+                  key="empty-state-2"
+                  v-else
                   size="medium"
                   title="This folder is empty"
                   description="Upload files or create a folder to get started."

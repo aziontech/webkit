@@ -6,7 +6,7 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 
 ## When to use
 
-- The module the sidebar routes to lists resources people tell apart by a handful of fields or a picture rather than by comparing one column across many rows (applications, sites, templates, images).
+- The module the sidebar routes to lists resources people tell apart by a handful of fields or a picture rather than by comparing one column across many rows (applications, sites, images).
 - Each item has a short, stable set of fields (four to six) that reads well as label and value pairs.
 - Users act on several items at once (delete, move, tag) and need the selection to survive paging and filtering.
 - The filtered list must survive a reload or a shared link, and each person's page size and visible fields must survive the next visit.
@@ -15,7 +15,8 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 
 - Records compared and sorted column by column, or more than six fields per item: use `platform/view/table-view`.
 - A list nested inside one resource (a tab of a details page): use `platform/detail/details-page` or `platform/detail/record-table`, with `Add <Module>` instead of `Create`.
-- Choosing a starting point to create from (templates, products): use `platform/create/create-hub` or `platform/create/deploy-template`.
+- Templates to start from: use `platform/view/template-browser`.
+- Choosing a starting point to create from (products): use `platform/create/create-hub` or `platform/create/deploy-template`.
 - Files and folders of a storage resource: use `platform/view/file-browser`.
 - An account that has never created the resource: use `platform/states/first-use`.
 
@@ -41,9 +42,9 @@ The `platform/delete/delete-with-confirmation` pattern adapted to a selection: a
 
 The last control of the row. `CollectionPreferences` bound with `v-bind="preferencesProps"` and `:sections="['page-size', 'columns']"` opens a dialog that edits a draft and applies it on Confirm: the page size (12, 24, 48, multiples of the four-card row) and which fields every card shows, in what order. `preferences.storageKey` saves the choice per list; `defaults.columns` hides Owner until someone shows it. The card's name is never a field, so it cannot be hidden.
 
-### F. Cards — `Cards`, `Tag` (required)
+### F. Cards — `Cards`, `Link`, `Tag` (required)
 
-`Cards` bound with `v-bind="cardsProps"` (one page of items, the selection mode and the selected keys) and an `aria-label` naming the collection. The `header` slot names each card with a link to the resource; the default slot lists the visible fields as a `dl` of label and value pairs, in the order the preferences set. Status is a small `Tag` with the same severity on every card (success, warning, secondary); the domain is isolated in `bdi`; the request count uses compact notation with tabular numerals. Each card has a checkbox labelled by its name, and a visible Select all items sits above the grid; the selection is a set of keys, so it survives paging and sorting. Four cards a row in a wide container, down to one in a narrow one, through container queries.
+`Cards` bound with `v-bind="cardsProps"` (one page of items, the selection mode and the selected keys) and an `aria-label` naming the collection. The `header` slot names each card with a `Link` to the resource, so its focus ring, hover and routing match every other link; the default slot lists the visible fields as a `dl` of label and value pairs, in the order the preferences set. Status is a small `Tag` with the same severity on every card (success, warning, secondary); the domain is isolated in `bdi`; the request count uses compact notation with tabular numerals. Each card has a checkbox labelled by its name, and a visible Select all items sits above the grid; the selection is a set of keys, so it survives paging and sorting. Four cards a row in a wide container, down to one in a narrow one, through container queries.
 
 ### G. Pagination — `Pagination` (required)
 
@@ -53,9 +54,9 @@ The last control of the row. `CollectionPreferences` bound with `v-bind="prefere
 
 When `status` is `no-match`, the `Cards` `#empty` slot holds a medium `EmptyState` with the filter-slash glyph, "No matching applications", one sentence, and an outlined small Clear filters `Button` bound to `clearFilters`. The heading and the filter tokens stay, so the user can see and undo what hid the cards.
 
-### I. Empty listing — `EmptyState`, `Button` (required)
+### I. Empty listing and load failure — `Card`, `EmptyState`, `Alert`, `Button` (required)
 
-When `status` is `empty`, the cards and the pagination give way to a medium `EmptyState` with the module glyph, one sentence, and a small secondary `Create <Object>` with the heading's label. The heading and the controls row stay.
+When `status` is `error`, a danger `Alert` with Retry (bound to the collection's `refresh`) takes the cards' place. When `status` is `empty`, the cards and the pagination give way to a flush `Card :padded="false"` holding a medium `EmptyState`, as table-view does, with the module glyph, one sentence, and a small secondary `Create <Object>` with the heading's label. The heading and the controls row stay.
 
 ## Do
 
@@ -65,7 +66,7 @@ When `status` is `empty`, the cards and the pagination give way to a medium `Emp
 - Render the fields from `preferences.columns`, so the order and visibility set in the dialog reach every card.
 - Count the selection in the bulk action's label and disable it at zero.
 - Put every Delete behind the confirmation dialog, with the count in its title and the names in its body.
-- Set `url: true` so the tokens, the sort and the page live in the query string, and give the list a `storageKey` of its own.
+- Set `url: true` so the tokens and the page live in the query string, and give the list a `storageKey` of its own.
 - Choose page sizes that fill whole rows of four.
 - Branch on `status`: `empty` replaces the cards with the create state, `no-match` fills the `#empty` slot with Clear filters.
 
@@ -105,7 +106,9 @@ When `status` is `empty`, the cards and the pagination give way to a medium `Emp
 ## States
 
 - Default: applications exist; the cards show them with the property filter, multi-select with Delete (n) behind its confirmation dialog, preferences and pagination wired, and filtering to nothing shows No matching applications with Clear filters.
-- Empty: the account has no applications; `useCollection` reports `empty`, the heading and controls stay, and a medium empty state with Create Application replaces the cards.
+- Loading: the first load; the heading stays, the filter, Delete and preferences are disabled, and `Cards` shows its placeholder cards (`loading`, `aria-busy`).
+- Failed: the applications could not load; the heading and the disabled controls stay and a danger `Alert` with Retry takes the cards' place.
+- Empty: the account has no applications; `useCollection` reports `empty`, the heading and controls stay, and a flush card holding a medium empty state with Create Application replaces the cards.
 
 ## Related
 

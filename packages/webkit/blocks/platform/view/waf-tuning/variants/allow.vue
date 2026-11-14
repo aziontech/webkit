@@ -18,8 +18,8 @@
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import Select from '@aziontech/webkit/select'
+  import Table from '@aziontech/webkit/table'
   import TableRoot, { type TableColumn, type TableExposed } from '@aziontech/webkit/table-root'
-  import Tag from '@aziontech/webkit/tag'
   import Textarea from '@aziontech/webkit/textarea'
   import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
@@ -89,6 +89,7 @@
   const ALLOW_ON_START = true
   const FAILED_ON_START = false
   const ALLOW_FAILURES = 0
+  const LOAD_FAILED_ON_START = false
 
   const columns: TableColumn[] = [
     {
@@ -109,6 +110,7 @@
   const threshold = ref('100')
   const search = ref('')
   const loading = ref(INITIAL_LOADING)
+  const loadFailed = ref(LOAD_FAILED_ON_START)
   const selection = ref({ ...INITIAL_SELECTION })
   const sorting = ref([{ id: 'hits', desc: true }])
 
@@ -141,6 +143,11 @@
     setTimeout(() => {
       loading.value = false
     }, 700)
+  }
+
+  const retry = () => {
+    loadFailed.value = false
+    refresh()
   }
 
   const allowOpen = ref(ALLOW_ON_START)
@@ -200,11 +207,11 @@
             icon="pi pi-download"
             kind="outlined"
             size="medium"
-            :disabled="!rows.length || loading"
+            :disabled="!rows.length || loading || loadFailed"
             @click="exportCsv"
           />
           <Button
-            :label="selected.length ? `Allow ${selected.length} selected` : 'Add Allowed Rule'"
+            :label="selected.length ? `Allow ${selected.length} selected` : 'Allow selected'"
             icon="pi pi-check"
             kind="outlined"
             size="medium"
@@ -288,7 +295,17 @@
           </Tooltip>
         </div>
 
-        <Card :padded="false">
+        <Alert
+          v-if="loadFailed"
+          severity="danger"
+          label="Couldn't load the matched requests. Check your connection and retry."
+          action-label="Retry"
+          @action="retry"
+        />
+        <Card
+          v-else
+          :padded="false"
+        >
           <template #content>
             <EmptyState
               v-if="!INITIAL_ROWS.length"
@@ -318,41 +335,44 @@
                 <span class="tabular-nums">{{ formatHits(value) }}</span>
               </template>
               <template #cell-ips="{ value }">
-                <span class="flex min-w-0 items-center gap-(--spacing-xxs)">
-                  <span class="truncate font-code text-body-sm">{{
-                    value.slice(0, 2).join(', ')
-                  }}</span>
-                  <Tag
-                    v-if="value.length > 2"
-                    :label="`+${value.length - 2}`"
-                    size="small"
-                  />
-                </span>
+                <Table.CellTags
+                  :items="value"
+                  :noun="{ one: 'IP address', other: 'IP addresses' }"
+                />
               </template>
               <template #cell-countries="{ value }">
-                <span class="flex min-w-0 items-center gap-(--spacing-xxs)">
-                  <span class="truncate">{{ value.slice(0, 2).join(', ') }}</span>
-                  <Tag
-                    v-if="value.length > 2"
-                    :label="`+${value.length - 2}`"
-                    size="small"
-                  />
-                </span>
+                <Table.CellTags
+                  :items="value"
+                  :noun="{ one: 'country', other: 'countries' }"
+                />
               </template>
               <template #cell-paths="{ value }">
-                <span class="flex min-w-0 items-center gap-(--spacing-xxs)">
-                  <span class="truncate font-code text-body-sm">{{
-                    value.slice(0, 2).join(', ')
-                  }}</span>
-                  <Tag
-                    v-if="value.length > 2"
-                    :label="`+${value.length - 2}`"
-                    size="small"
-                  />
-                </span>
+                <Table.CellTags
+                  :items="value"
+                  :noun="{ one: 'path', other: 'paths' }"
+                />
               </template>
               <template #empty>
                 <EmptyState
+                  key="empty-state-1"
+                  v-if="search.trim()"
+                  size="small"
+                  icon="pi pi-search"
+                  title="No matching rules"
+                  :description="`No rule, IP address, country or path matches “${search.trim()}”.`"
+                >
+                  <template #actions>
+                    <Button
+                      label="Clear search"
+                      kind="outlined"
+                      size="small"
+                      @click="search = ''"
+                    />
+                  </template>
+                </EmptyState>
+                <EmptyState
+                  key="empty-state-2"
+                  v-else
                   size="small"
                   title="No rule reaches the minimum"
                   :description="`No rule matched ${formatHits(minimumHits)} times or more in the ${rangeLabel(range).toLowerCase()}. Lower the minimum hits or widen the time range.`"

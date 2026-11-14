@@ -31,7 +31,9 @@ describe('platform/view/marketplace block', () => {
       '/marketplace/templates/astro-blog'
     )
 
-    await fireEvent.update(view.getByRole('textbox', { name: 'Search templates' }), 'docs')
+    const search = view.getByRole('combobox', { name: 'Search templates' })
+    await fireEvent.update(search, 'docs')
+    await fireEvent.keyDown(search, { key: 'Enter' })
 
     await waitFor(() => expect(view.queryByRole('link', { name: 'Astro Blog' })).toBeNull())
     expect(view.getByRole('link', { name: 'Hugo Docs' })).toBeTruthy()
@@ -41,7 +43,7 @@ describe('platform/view/marketplace block', () => {
     const view = render(TemplatesNoMatch)
     expect(view.getByText('No matching templates')).toBeTruthy()
 
-    await fireEvent.click(view.getByRole('button', { name: 'Clear search' }))
+    await fireEvent.click(view.getByRole('button', { name: 'Clear filters' }))
 
     await waitFor(() => expect(view.getByRole('link', { name: 'Next.js Starter' })).toBeTruthy())
   })

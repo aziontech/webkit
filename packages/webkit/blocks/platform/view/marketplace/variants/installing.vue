@@ -11,7 +11,6 @@
   import DrawerTitle from '@aziontech/webkit/drawer-title'
   import EmptyState from '@aziontech/webkit/empty-state'
   import Field from '@aziontech/webkit/field'
-  import Input from '@aziontech/webkit/input'
   import KeyValuePairs from '@aziontech/webkit/key-value-pairs'
   import PageHeader from '@aziontech/webkit/page-header'
   import PanelContent from '@aziontech/webkit/panel-content'
@@ -94,7 +93,7 @@
     integration(
       'bot-score',
       'Bot Score',
-      'Example Security',
+      'Acme',
       'pi pi-shield',
       'Bot management',
       'firewall',
@@ -104,7 +103,7 @@
     integration(
       'split-traffic',
       'Split Traffic',
-      'Example',
+      'Azion',
       'pi pi-sitemap',
       'Testing',
       'application',
@@ -113,7 +112,7 @@
     integration(
       'geo-content',
       'Geo Content',
-      'Example',
+      'Azion',
       'pi pi-globe',
       'Personalization',
       'application',
@@ -122,7 +121,7 @@
     integration(
       'signed-urls',
       'Signed URLs',
-      'Example',
+      'Azion',
       'pi pi-link',
       'Access control',
       'firewall',
@@ -141,7 +140,7 @@
     integration(
       'payload-limit',
       'Payload Limit',
-      'Example',
+      'Azion',
       'pi pi-box',
       'Traffic management',
       'firewall',
@@ -150,7 +149,7 @@
     integration(
       'request-id',
       'Request ID',
-      'Example',
+      'Azion',
       'pi pi-hashtag',
       'Observability',
       'application',
@@ -168,7 +167,7 @@
     integration(
       'queue-writer',
       'Queue Writer',
-      'Example',
+      'Azion',
       'pi pi-inbox',
       'Messaging',
       'application',
@@ -177,7 +176,7 @@
     integration(
       'schedule-block',
       'Scheduled Block',
-      'Example',
+      'Azion',
       'pi pi-calendar-times',
       'Access control',
       'firewall',
@@ -188,6 +187,7 @@
   interface Template {
     id: string
     title: string
+    framework: string
     icon: string
     description: string
     markClass: string
@@ -196,10 +196,11 @@
   const template = (
     id: string,
     title: string,
+    framework: string,
     icon: string,
     description: string,
     markClass = ''
-  ): Template => ({ id, title, icon, description, markClass })
+  ): Template => ({ id, title, framework, icon, description, markClass })
 
   const INVERT_IN_DARK = '[[data-theme=dark]_&]:invert'
 
@@ -207,6 +208,7 @@
     template(
       'next-starter',
       'Next.js Starter',
+      'Next.js',
       'ai-cor ai-next',
       'A Next.js app with server rendering and static pages, ready to deploy.',
       INVERT_IN_DARK
@@ -214,90 +216,105 @@
     template(
       'react-starter',
       'React Starter',
+      'React',
       'ai-cor ai-react',
       'A single-page React app built with Vite, every route served from the edge.'
     ),
     template(
       'vue-starter',
       'Vue Starter',
+      'Vue',
       'ai-cor ai-vue',
       'A lightweight Vue app with routing, built with Vite.'
     ),
     template(
       'nuxt-store',
       'Nuxt Storefront',
+      'Nuxt',
       'ai-cor ai-nuxt',
       'A product catalog with a cart, rendered on the server and cached close to buyers.'
     ),
     template(
       'astro-blog',
       'Astro Blog',
+      'Astro',
       'ai-cor ai-astro',
       'A content-first blog with Markdown posts, an RSS feed and a sitemap.'
     ),
     template(
       'angular-dashboard',
       'Angular Dashboard',
+      'Angular',
       'ai-cor ai-angular',
       'A single-page admin dashboard with routing and lazy-loaded modules.'
     ),
     template(
       'svelte-starter',
       'Svelte Starter',
+      'SvelteKit',
       'ai-cor ai-svelte',
       'A SvelteKit app with server routes and prerendered pages.'
     ),
     template(
       'solid-starter',
       'Solid Starter',
+      'SolidStart',
       'ai-cor ai-solidjs',
       'A SolidStart app with fine-grained updates and streaming server rendering.'
     ),
     template(
       'qwik-starter',
       'Qwik Starter',
+      'Qwik',
       'ai ai-qwik',
       'A resumable Qwik app that loads only the code a visitor touches.'
     ),
     template(
       'gatsby-site',
       'Gatsby Site',
+      'Gatsby',
       'ai ai-gatsby',
       'A marketing site built at deploy time from Markdown and images.'
     ),
     template(
       'docusaurus-docs',
       'Docusaurus Docs',
+      'Docusaurus',
       'ai ai-docusaurus',
       'A documentation site with versioned sections, search and a blog.'
     ),
     template(
       'vitepress-docs',
       'VitePress Docs',
+      'VitePress',
       'ai ai-vitepress',
       'A fast documentation site written in Markdown, with a sidebar and search.'
     ),
     template(
       'hugo-docs',
       'Hugo Docs',
+      'Hugo',
       'ai ai-hugo',
       'A documentation site with search, versioned sections and dark mode.'
     ),
     template(
       'static-site',
       'Static Site',
+      'Static files',
       'ai ai-edge-storage',
       'Publish a folder of built files and serve it from the closest location.'
     ),
     template(
       'reverse-proxy',
       'Reverse Proxy',
+      'JavaScript',
       'ai ai-edge-connectors',
       'Front an origin you already run and pass every request on to it.'
     ),
     template(
       'rest-api',
       'REST API',
+      'Hono',
       'ai ai-hono',
       'A small Hono API with typed routes, running at the edge.'
     )
@@ -347,13 +364,27 @@
 
   const featured = computed(() => catalog.value.filter((item) => item.featured))
 
-  const templateQuery = ref('')
-  const filteredTemplates = computed(() => {
-    const term = templateQuery.value.trim().toLowerCase()
-    if (!term) return templates
-    return templates.filter((item) =>
-      `${item.title} ${item.description}`.toLowerCase().includes(term)
-    )
+  const {
+    items: templateItems,
+    propertyFilterProps: templateFilterProps,
+    status: templateStatus,
+    clearFilters: clearTemplateFilters
+  } = useCollection({
+    items: templates,
+    filtering: { fields: ['title', 'framework', 'description'] },
+    propertyFiltering: {
+      properties: [
+        { key: 'title', label: 'Name' },
+        {
+          key: 'framework',
+          label: 'Framework',
+          options: [...new Set(templates.map((item) => item.framework))]
+            .sort()
+            .map((value) => ({ value }))
+        }
+      ]
+    },
+    url: { prefix: 'templates' }
   })
 
   const activeTab = ref('integrations')
@@ -438,32 +469,26 @@
                 class="flex min-w-0 flex-col gap-(--layout-group-gap) pt-(--layout-group-gap)"
                 aria-label="Templates"
               >
-                <Input
-                  v-model="templateQuery"
-                  size="medium"
+                <PropertyFilter
+                  v-bind="templateFilterProps"
                   placeholder="Search templates"
                   aria-label="Search templates"
-                  class="w-full"
-                >
-                  <template #iconLeft>
-                    <i class="pi pi-search" />
-                  </template>
-                </Input>
+                />
 
                 <EmptyState
-                  v-if="!filteredTemplates.length"
+                  v-if="templateStatus === 'no-match'"
                   bordered
                   size="medium"
                   icon="pi pi-search"
                   title="No matching templates"
-                  description="No template matches this search. Try another name or framework."
+                  description="No template matches these filters. Try another name or framework."
                 >
                   <template #actions>
                     <Button
-                      label="Clear search"
+                      label="Clear filters"
                       kind="outlined"
                       size="small"
-                      @click="templateQuery = ''"
+                      @click="clearTemplateFilters"
                     />
                   </template>
                 </EmptyState>
@@ -473,50 +498,19 @@
                   class="m-0 grid list-none grid-cols-2 gap-(--spacing-md) p-0 sm:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5"
                 >
                   <li
-                    v-for="item in filteredTemplates"
+                    v-for="item in templateItems"
                     :key="item.id"
-                    class="group flex min-w-0"
+                    class="flex min-w-0"
                   >
-                    <Card class="w-full">
-                      <template #content>
-                        <div class="isolate flex flex-1 flex-col">
-                          <span
-                            aria-hidden="true"
-                            class="pointer-events-none absolute inset-0 -z-1 overflow-hidden rounded-(--shape-card) opacity-0 transition-opacity duration-moderate-01 ease-productive-entrance group-focus-within:opacity-100 group-hover:opacity-100 motion-reduce:transition-none"
-                          >
-                            <i
-                              :class="[item.icon, item.markClass]"
-                              class="absolute start-(--spacing-xl) top-(--spacing-xl) scale-600 text-body-lg leading-none text-(--primary) opacity-25 blur-sm"
-                            />
-                          </span>
-                          <div class="flex flex-col items-start gap-(--spacing-md)">
-                            <span
-                              class="flex size-10 shrink-0 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
-                            >
-                              <i
-                                :class="[item.icon, item.markClass]"
-                                class="text-body-lg leading-none text-(--text-default) grayscale transition duration-moderate-01 ease-productive-entrance group-focus-within:grayscale-0 group-hover:grayscale-0 motion-reduce:transition-none"
-                                aria-hidden="true"
-                              />
-                            </span>
-                            <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
-                              <h3 class="text-label-md text-(--text-default)">
-                                <a
-                                  :href="`/marketplace/templates/${item.id}`"
-                                  class="text-(--text-default) no-underline outline-none after:absolute after:inset-0 after:content-[''] focus-visible:after:ring-2 focus-visible:after:ring-inset focus-visible:after:ring-(--ring-color)"
-                                  >{{ item.title }}</a
-                                >
-                              </h3>
-                              <p
-                                class="m-0 line-clamp-2 text-pretty text-body-sm text-(--text-muted)"
-                              >
-                                {{ item.description }}
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-                      </template>
-                    </Card>
+                    <Card
+                      kind="integration"
+                      class="w-full"
+                      :title="item.title"
+                      :logo="[item.icon, item.markClass].filter(Boolean).join(' ')"
+                      :description="item.description"
+                      :badges="[{ label: item.framework, severity: 'secondary' }]"
+                      :href="`/marketplace/templates/${item.id}`"
+                    />
                   </li>
                 </ul>
               </section>

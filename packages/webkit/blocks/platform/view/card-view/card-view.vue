@@ -1,11 +1,13 @@
 <script setup lang="ts">
   import Alert from '@aziontech/webkit/alert'
   import Button from '@aziontech/webkit/button'
+  import Card from '@aziontech/webkit/card'
   import Cards from '@aziontech/webkit/cards'
   import CollectionPreferences from '@aziontech/webkit/collection-preferences'
   import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
   import EmptyState from '@aziontech/webkit/empty-state'
   import Input from '@aziontech/webkit/input'
+  import Link from '@aziontech/webkit/link'
   import PageHeader from '@aziontech/webkit/page-header'
   import Pagination from '@aziontech/webkit/pagination-root'
   import PropertyFilter from '@aziontech/webkit/property-filter'
@@ -85,7 +87,7 @@
       label: 'Region',
       options: [{ value: 'sa-east' }, { value: 'us-east' }, { value: 'eu-west' }]
     },
-    { key: 'requests', label: 'Requests', type: 'number' }
+    { key: 'requests', label: 'Requests in 24h', type: 'number' }
   ]
 
   const items = ref<Application[]>([...applications])
@@ -97,6 +99,7 @@
     preferencesProps,
     preferences,
     status,
+    refresh: retry,
     totalCount,
     selectedCount,
     selectedItems,
@@ -159,7 +162,7 @@
     <div class="layout-column flex min-h-full flex-col">
       <PageHeader
         title="Applications"
-        description="Every application on this account, as cards."
+        description="View and manage your applications."
       >
         <template #actions>
           <Button
@@ -253,22 +256,35 @@
             </div>
           </header>
 
-          <EmptyState
+          <Card
             v-if="status === 'empty'"
-            size="medium"
-            icon="pi pi-th-large"
-            title="No applications yet"
-            description="Create an application to start serving traffic."
+            :padded="false"
           >
-            <template #actions>
-              <Button
-                label="Create Application"
-                icon="pi pi-plus"
-                kind="secondary"
-                size="small"
-              />
+            <template #content>
+              <EmptyState
+                size="medium"
+                icon="pi pi-th-large"
+                title="No applications yet"
+                description="Create an application to start serving traffic."
+              >
+                <template #actions>
+                  <Button
+                    label="Create Application"
+                    icon="pi pi-plus"
+                    kind="secondary"
+                    size="small"
+                  />
+                </template>
+              </EmptyState>
             </template>
-          </EmptyState>
+          </Card>
+          <Alert
+            v-else-if="status === 'error'"
+            severity="danger"
+            label="Couldn't load the applications. Check your connection and retry."
+            action-label="Retry"
+            @action="retry"
+          />
 
           <template v-else>
             <Cards
@@ -276,11 +292,11 @@
               aria-label="Applications"
             >
               <template #header="{ item }">
-                <a
-                  :href="'/applications/' + item.id"
-                  class="truncate text-(--text-default) no-underline hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)"
-                  >{{ item.name }}</a
-                >
+                <Link
+                  :label="item.name"
+                  :href="`/applications/${item.id}`"
+                  class="min-w-0"
+                />
               </template>
               <template #default="{ item }">
                 <dl

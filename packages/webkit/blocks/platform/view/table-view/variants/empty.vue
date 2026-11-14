@@ -28,11 +28,9 @@
     name: string
     domain: string
     domains: string[]
-    domainCount: number
     status: ResourceStatus
     owner: string
     modifiedAt: Date
-    lastModified: string
   }
 
   const owners = [
@@ -62,7 +60,7 @@
     { accessorKey: 'id', header: 'ID', minWidth: 80 },
     { accessorKey: 'domain', header: 'Domains', grow: 2 },
     { accessorKey: 'status', header: 'Status', enableSorting: true, minWidth: 104 },
-    { accessorKey: 'lastModified', header: 'Last Modified', enableSorting: true, minWidth: 80 },
+    { accessorKey: 'modifiedAt', header: 'Last modified', enableSorting: true, minWidth: 80 },
     { id: 'actions', kind: 'action', hideable: false }
   ]
 
@@ -278,7 +276,7 @@
                       :severity="value === 'Live' ? 'success' : 'secondary'"
                     />
                   </template>
-                  <template #cell-lastModified="{ row }">
+                  <template #cell-modifiedAt="{ row }">
                     <Table.CellTime
                       :value="row.modifiedAt"
                       :author="row.owner"
