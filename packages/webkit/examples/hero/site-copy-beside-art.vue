@@ -7,7 +7,7 @@
     trailing: true
   }
 
-  const carouselMarks = [
+  const tickerMarks = [
     'agibank',
     'radware',
     'america-movil',
@@ -29,7 +29,7 @@
     :primary-action="primaryAction"
     illustration="global-network"
     illustration-aria-label="AWS sells services. Your team becomes the integrator."
-    carousel-label="Trusted by teams running critical workloads"
-    :carousel-marks="carouselMarks"
+    ticker-label="Trusted by teams running critical workloads"
+    :ticker-marks="tickerMarks"
   />
 </template>

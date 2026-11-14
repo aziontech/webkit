@@ -22,7 +22,7 @@ Add this entry to the `hero` array of the page JSON. `_id` picks the block and `
 - `title` is the page h1, and `highlight` paints its opening words in the brand accent. The block renders nothing without a title.
 - `description` is the sentence under the headline.
 - `primaryAction` and `secondaryAction` take a `label`, an `href`, an optional `target` and an optional `trailing`, which closes the label on a chevron. A button shows only when it has both a label and a link.
-- `carouselLabel` is the overline above the client strip, and `carouselMarks` lists the client marks in order. The strip shows only when it has marks.
+- `tickerLabel` is the overline above the client strip, and `tickerMarks` lists the client marks in order. The strip shows only when it has marks.
 - `headerOffset` takes the site header out of the hero height, so header and hero fill exactly the first screen; it defaults to the `SiteNav` bar's `--layout-header-height`, and an empty value is for a page with no header above the hero.
 
 Example:
@@ -51,7 +51,7 @@ Add this entry to the `hero` array of the page JSON. `_id` picks the block and `
 - `title` is the page h1, and `highlight` paints its opening words in the brand accent. The block renders nothing without a title.
 - `description` is the sentence under the headline.
 - `primaryAction` and `secondaryAction` take a `label`, an `href`, an optional `target` and an optional `trailing`, which closes the label on a chevron. A button shows only when it has both a label and a link.
-- `carouselLabel` and `carouselMarks` stay out: with no marks the band has no client strip. Title band carousel below adds them.
+- `tickerLabel` and `tickerMarks` stay out: with no marks the band has no client strip. Title band carousel below adds them.
 
 Example:
 
@@ -79,7 +79,7 @@ Add this entry to the `hero` array of the page JSON. `_id` picks the block and `
 - `title` is the page h1, and `highlight` paints its opening words in the brand accent. The block renders nothing without a title.
 - `description` is the sentence under the headline.
 - `primaryAction` and `secondaryAction` take a `label`, an `href`, an optional `target` and an optional `trailing`, which closes the label on a chevron. A button shows only when it has both a label and a link.
-- `carouselLabel` is the overline above the client strip, and `carouselMarks` lists the client marks in order. The strip shows only when it has marks.
+- `tickerLabel` is the overline above the client strip, and `tickerMarks` lists the client marks in order. The strip shows only when it has marks.
 
 Example:
 
@@ -107,7 +107,7 @@ Add this entry to the `hero` array of the page JSON. `_id` picks the block and `
 - `title` is the page h1, and `highlight` paints its opening words in the brand accent. The block renders nothing without a title.
 - `description` is the sentence under the headline.
 - `primaryAction` and `secondaryAction` take a `label`, an `href`, an optional `target` and an optional `trailing`, which closes the label on a chevron. A button shows only when it has both a label and a link.
-- `carouselLabel` is the overline above the client strip, and `carouselMarks` lists the client marks in order. The strip shows only when it has marks.
+- `tickerLabel` is the overline above the client strip, and `tickerMarks` lists the client marks in order. The strip shows only when it has marks.
 
 Example:
 
@@ -137,7 +137,7 @@ Add this entry to the `hero` array of the page JSON. `_id` picks the block and `
 - `description` is the sentence under the headline.
 - `primaryAction` and `secondaryAction` take a `label`, an `href`, an optional `target` and an optional `trailing`, which closes the label on a chevron. A button shows only when it has both a label and a link.
 - `illustration` names the illustration beside the copy, and `illustrationAriaLabel` describes it for screen readers.
-- `carouselLabel` is the overline above the client strip, and `carouselMarks` lists the client marks in order. The strip shows only when it has marks.
+- `tickerLabel` is the overline above the client strip, and `tickerMarks` lists the client marks in order. The strip shows only when it has marks.
 
 Example:
 

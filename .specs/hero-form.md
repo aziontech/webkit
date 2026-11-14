@@ -3,10 +3,10 @@ name: hero-form
 category: sections
 structure: monolithic
 status: implemented
-spec_version: 2
+spec_version: 3
 created: 2026-11-05
 last_updated: 2026-11-14
-checksum: aa184052b6fdc48b7f8070f81fd2ffbb9612b27a984fa596d92bdbcf8e486862
+checksum: 81e70e393d2c6ef8122b2ff38e06f819cdd4a2ae0c0d0a149682d8fe24eb5159
 template: 2
 ---
 
@@ -112,8 +112,10 @@ The opening band of a lead-capture page, where the form is the reason for the pa
 | `formAriaLabel`    | `string`           | `''`        | false    | Accessible name of the field group, read as its legend.                                                                                                                                                                 |
 | `fields`           | `HeroFormField[]`  | `[]`        | false    | The form fields in order; each is `{ name, kind, label, placeholder?, required?, half?, options?, country?, visuallyHiddenLabel? }`; `visuallyHiddenLabel` keeps the label as the accessible name but does not draw it. |
 | `submitLabel`      | `string`           | `''`        | false    | Label of the submit button.                                                                                                                                                                                             |
-| `carouselLabel`    | `string`           | `''`        | false    | Overline above the client strip.                                                                                                                                                                                        |
-| `carouselMarks`    | `string[]`         | `[]`        | false    | Registry names of the client marks, in order; the strip renders only when there are marks.                                                                                                                              |
+| `tickerLabel`      | `string`           | `''`        | false    | Overline above the client ticker.                                                                                                                                                                                       |
+| `carouselLabel`    | `string`           | `''`        | false    | @deprecated since 6.0 — use `tickerLabel`. Removed in 7.0. Read only when `tickerLabel` is empty.                                                                                                                       |
+| `tickerMarks`      | `string[]`         | `[]`        | false    | Registry names of the client marks, in order; the ticker renders only when there are marks.                                                                                                                             |
+| `carouselMarks`    | `string[]`         | `[]`        | false    | @deprecated since 6.0 — use `tickerMarks`. Removed in 7.0. Read only when `tickerMarks` is empty.                                                                                                                       |
 | `loading`          | `boolean`          | `false`     | false    | The site is sending the values: the button shows its loading state and a submit is ignored.                                                                                                                             |
 | `submitted`        | `boolean`          | `false`     | false    | The site sent the values: the form gives way to `messages.success`.                                                                                                                                                     |
 | `error`            | `boolean`          | `false`     | false    | The site could not send the values: `messages.error` shows under the form.                                                                                                                                              |
@@ -140,7 +142,7 @@ The opening band of a lead-capture page, where the form is the reason for the pa
 - `descriptionLink` renders inline after `description`, underlined, followed by `descriptionAfter`, so the copy reads as one sentence
 - Without `items`, the copy block is sticky from `lg` (it stays in view while the taller form scrolls past); with `items` it scrolls with the highlights
 - `loading` also sets `disabled` on the `fieldset`, so the browser locks every control in it
-- Empty: when `title` is empty the band renders nothing but its root; when `items` is empty the list is omitted; when `carouselMarks` is empty the strip is omitted
+- Empty: when `title` is empty the band renders nothing but its root; when `items` is empty the list is omitted; when `tickerMarks` is empty the strip is omitted
 
 ## Motion & Animations
 

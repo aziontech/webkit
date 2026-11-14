@@ -40,8 +40,8 @@ const band = (props: Record<string, unknown> = {}) =>
       fields,
       submitLabel: SUBMIT,
       messages,
-      carouselLabel: 'Trusted by teams',
-      carouselMarks: ['itau', 'netshoes'],
+      tickerLabel: 'Trusted by teams',
+      tickerMarks: ['itau', 'netshoes'],
       ...props
     }
   })
@@ -61,6 +61,24 @@ describe('HeroForm', () => {
 
     expect(getByTestId('contact')).toBeInTheDocument()
     expect(queryByTestId(TESTID)).toBeNull()
+  })
+
+  it('stands the client ticker on the floor, from tickerMarks or the deprecated carouselMarks', async () => {
+    const current = band()
+    expect(await current.findByTestId('marketing-ticker', {}, { timeout: 5000 })).toHaveTextContent(
+      'Trusted by teams'
+    )
+    current.unmount()
+
+    const old = band({
+      tickerLabel: '',
+      tickerMarks: [],
+      carouselLabel: 'Old label',
+      carouselMarks: ['itau']
+    })
+    expect(await old.findByTestId('marketing-ticker', {}, { timeout: 5000 })).toHaveTextContent(
+      'Old label'
+    )
   })
 
   it('names the hero region by the title and renders the h1', () => {

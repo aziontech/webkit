@@ -3,10 +3,10 @@ name: hero-band
 category: sections
 structure: monolithic
 status: implemented
-spec_version: 3
+spec_version: 4
 created: 2026-11-05
 last_updated: 2026-11-14
-checksum: bce30d8a673a3b1602d2418ea835a38e7bb122158958623d7e7438dece5945f6
+checksum: 16c8a6e3cfb11f21d72cc61dc8abd796ae4f26d3014ca9bb7fe239c857152a63
 template: 2
 ---
 
@@ -70,8 +70,10 @@ The opening band of a marketing page: the page `h1` with its overline, accent ph
 | `description`           | `string`                 | `''`                            | false    | Sentence under the headline.                                                                                                                                                                                                                                                                                                                                                                                                                                            |
 | `primaryAction`         | `HeroBandAction`         | `undefined`                     | false    | First button under the headline; `{ label, href, trailing?, target? }`. Shown only with a label and a link.                                                                                                                                                                                                                                                                                                                                                             |
 | `secondaryAction`       | `HeroBandAction`         | `undefined`                     | false    | Second, outlined button beside the first; `{ label, href, trailing?, target? }`. Shown only with a label and a link.                                                                                                                                                                                                                                                                                                                                                    |
-| `carouselLabel`         | `string`                 | `''`                            | false    | Overline above the client strip; empty uses the locale catalog (`Proven on mission-critical workloads`).                                                                                                                                                                                                                                                                                                                                                                |
-| `carouselMarks`         | `string[]`               | `[]`                            | false    | Registry names of the client marks on the band floor, in order; the strip renders only when it has marks.                                                                                                                                                                                                                                                                                                                                                               |
+| `tickerLabel`           | `string`                 | `''`                            | false    | Overline above the client ticker; empty uses the locale catalog (`Proven on mission-critical workloads`).                                                                                                                                                                                                                                                                                                                                                               |
+| `carouselLabel`         | `string`                 | `''`                            | false    | @deprecated since 6.0 — use `tickerLabel`. Removed in 7.0. Read only when `tickerLabel` is empty.                                                                                                                                                                                                                                                                                                                                                                       |
+| `tickerMarks`           | `string[]`               | `[]`                            | false    | Registry names of the client marks on the band floor, in order; the ticker renders only when it has marks.                                                                                                                                                                                                                                                                                                                                                              |
+| `carouselMarks`         | `string[]`               | `[]`                            | false    | @deprecated since 6.0 — use `tickerMarks`. Removed in 7.0. Read only when `tickerMarks` is empty.                                                                                                                                                                                                                                                                                                                                                                       |
 | `illustration`          | `string`                 | `''`                            | false    | Registry name of the illustration set beside the copy in the `copy-beside-art` layout.                                                                                                                                                                                                                                                                                                                                                                                  |
 | `illustrationAriaLabel` | `string`                 | `''`                            | false    | Accessible description of the illustration.                                                                                                                                                                                                                                                                                                                                                                                                                             |
 | `image`                 | `HeroBandImage`          | `undefined`                     | false    | Image set beside the copy in the `copy-beside-art` layout when no `illustration` is given; `{ src, alt, width, height }`. A portrait image (taller than wide) is drawn at half width, centered, below `md`.                                                                                                                                                                                                                                                             |
@@ -98,7 +100,7 @@ The opening band of a marketing page: the page `h1` with its overline, accent ph
 - `data-kind` mirrors the `kind` prop and drives the hero's height, width, backdrop and the copy alignment
 - `data-title-measure="narrow"` on the root when the headline is set on the narrow measure (`titleLength: 'short'` in the `centered`, `title-band` and `centered-band` layouts); the headline then caps at `--container-lg` while the description keeps the column
 - Empty: when `title` is empty the band renders nothing but its root
-- The client strip renders only when `carouselMarks` has marks; each action renders only with a label and a link; the art renders only in the `copy-beside-art` layout with `illustration` or `image` set (`illustration` wins when both are given)
+- The client strip renders only when `tickerMarks` has marks; each action renders only with a label and a link; the art renders only in the `copy-beside-art` layout with `illustration` or `image` set (`illustration` wins when both are given)
 - `copy-beside-art` art bounds: a registered illustration whose drawn area is known (the `azion-to-*` comparisons and the solution illustrations) takes a width, a bleed past the column's end edge and a top and bottom trim computed from where it is drawn on its canvas, set as `--hero-art-width`, `--hero-art-bleed`, `--hero-art-trim-top` and `--hero-art-trim-bottom` on the art box from `md` up; any other illustration keeps the default bounds (161.45 % wide, 35.73 % bleed, no trim); an `image` fills the media column. Below `md` the art takes the column width
 - `data-orientation="portrait"` on an `image` taller than it is wide
 
@@ -130,9 +132,9 @@ The opening band of a marketing page: the page `h1` with its overline, accent ph
 
 ## Internationalization
 
-| Key                      | English source                       | Override prop   |
-| ------------------------ | ------------------------------------ | --------------- |
-| `heroBand.carouselLabel` | Proven on mission-critical workloads | `carouselLabel` |
+| Key                      | English source                       | Override prop |
+| ------------------------ | ------------------------------------ | ------------- |
+| `heroBand.carouselLabel` | Proven on mission-critical workloads | `tickerLabel` |
 
 - Formatting: none; every other text is a prop from the page JSON.
 

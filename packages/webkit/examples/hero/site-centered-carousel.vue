@@ -12,7 +12,7 @@
     trailing: true
   }
 
-  const carouselMarks = [
+  const tickerMarks = [
     'global-fashion-group',
     'herospark',
     'itau',
@@ -35,7 +35,7 @@
     description="Run code, AI, data, and security on 100+ data centers worldwide, with no cold starts and instant scale. One platform, from first commit to production traffic."
     :primary-action="primaryAction"
     :secondary-action="secondaryAction"
-    carousel-label="Trusted by teams running critical workloads"
-    :carousel-marks="carouselMarks"
+    ticker-label="Trusted by teams running critical workloads"
+    :ticker-marks="tickerMarks"
   />
 </template>

@@ -77,8 +77,8 @@
       "success": "We will be in touch.",
       "error": "We could not send your message. Try again."
     },
-    "carouselLabel": "Trusted by teams running critical workloads",
-    "carouselMarks": [
+    "tickerLabel": "Trusted by teams running critical workloads",
+    "tickerMarks": [
       "global-fashion-group",
       "herospark",
       "itau",

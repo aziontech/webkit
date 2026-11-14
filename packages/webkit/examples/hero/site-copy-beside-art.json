@@ -12,8 +12,8 @@
     },
     "illustration": "global-network",
     "illustrationAriaLabel": "AWS sells services. Your team becomes the integrator.",
-    "carouselLabel": "Trusted by teams running critical workloads",
-    "carouselMarks": [
+    "tickerLabel": "Trusted by teams running critical workloads",
+    "tickerMarks": [
       "agibank",
       "radware",
       "america-movil",

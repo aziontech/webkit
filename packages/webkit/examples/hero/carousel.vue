@@ -11,9 +11,9 @@
       align="center"
       max-width="site"
       floor-texture="pixelate"
-      carousel
-      carousel-label="Trusted by teams running in production"
-      :carousel-marks="['herospark', 'itau', 'nzn', 'netshoes', 'caixa', 'agibank', 'gpa']"
+      ticker
+      ticker-label="Trusted by teams running in production"
+      :ticker-marks="['herospark', 'itau', 'nzn', 'netshoes', 'caixa', 'agibank', 'gpa']"
     >
       <Hero.Title
         eyebrow="AI Inference"

@@ -260,9 +260,9 @@ describe('Hero', () => {
     expect(queryByTestId('marketing-ticker')).toBeNull()
   })
 
-  it('stands the brand strip on the floor when carousel is set', async () => {
+  it('stands the brand strip on the floor when ticker is set', async () => {
     const { getByTestId, findByTestId } = render(Hero, {
-      props: { carousel: true, carouselMarks: ['Itau', 'NZN'] },
+      props: { ticker: true, tickerMarks: ['Itau', 'NZN'] },
       slots: { default: '<h1>Headline</h1>' }
     })
     const strip = await findByTestId('marketing-ticker')
@@ -272,14 +272,38 @@ describe('Hero', () => {
     expect(strip).toHaveTextContent('NZN')
   })
 
-  it('names the strip with an overline when carouselLabel is set', async () => {
+  it('names the strip with an overline when tickerLabel is set', async () => {
     const { findByTestId } = render(Hero, {
-      props: { carousel: true, carouselMarks: ['NZN'], carouselLabel: 'Trusted in production' },
+      props: { ticker: true, tickerMarks: ['NZN'], tickerLabel: 'Trusted in production' },
       slots: { default: '<h1>Headline</h1>' }
     })
     const strip = await findByTestId('marketing-ticker')
 
     expect(strip).toHaveTextContent('Trusted in production')
+  })
+
+  it('still reads the deprecated carousel props, and the ticker names win', async () => {
+    const old = render(Hero, {
+      props: { carousel: true, carouselMarks: ['NZN'], carouselLabel: 'Old label' },
+      slots: { default: '<h1>Headline</h1>' }
+    })
+    expect(await old.findByTestId('marketing-ticker')).toHaveTextContent('Old label')
+    old.unmount()
+
+    const both = render(Hero, {
+      props: {
+        carousel: true,
+        carouselMarks: ['Itau'],
+        carouselLabel: 'Old label',
+        tickerMarks: ['NZN'],
+        tickerLabel: 'New label'
+      },
+      slots: { default: '<h1>Headline</h1>' }
+    })
+    const strip = await both.findByTestId('marketing-ticker')
+    expect(strip).toHaveTextContent('New label')
+    expect(strip).toHaveTextContent('NZN')
+    expect(strip).not.toHaveTextContent('Itau')
   })
 
   it('shares one floor between the bottom window and the strip', async () => {

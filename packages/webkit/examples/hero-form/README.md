@@ -22,7 +22,7 @@ Add this entry to the `hero` array of the page JSON. `_id` picks the block and `
 - `fields` are the form fields in order. Each takes a `name`, the key its value is sent under, a `kind` (`text`, `email`, `select`, `phone` or `textarea`) and a `label`, plus an optional `placeholder`, `required`, and `half` to share the row with the next half field. A `select` lists its choices in `options`; a `phone` starts on the `country` code, `US` by default, and its value is sent with the dial code.
 - `formAriaLabel` names the field group for assistive tech, and `submitLabel` is the send button.
 - `messages` holds the texts the block shows: `missing` under an empty required field, `invalidEmail` under a malformed email, `success` in place of the form once it is sent, and `error` under the form when it is not.
-- `carouselLabel` is the overline above the client strip, and `carouselMarks` lists the client marks in order. The strip shows only when it has marks.
+- `tickerLabel` is the overline above the client strip, and `tickerMarks` lists the client marks in order. The strip shows only when it has marks.
 - `submission` sits beside `props`, not inside it, and is never bound to the block: it is where the site sends the form. `endpoint` is the form service URL, and `pageName` and `hiddenFields` go with each submission.
 - The block emits `submit` with the event and the values by field `name`, and never posts them. The site posts them to `submission.endpoint` with the hidden fields and the page name, sets `loading` while it waits, then `submitted` on success or `error` on failure. `loading`, `submitted` and `error` are not in the JSON; the site owns them.
 

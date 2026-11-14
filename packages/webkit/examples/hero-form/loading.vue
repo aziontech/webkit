@@ -127,7 +127,7 @@
     error: 'We could not send your message. Try again.'
   }
 
-  const carouselMarks = [
+  const tickerMarks = [
     'global-fashion-group',
     'herospark',
     'itau',
@@ -155,8 +155,8 @@
     :fields="fields"
     submit-label="Contact sales"
     :messages="messages"
-    carousel-label="Trusted by teams running critical workloads"
-    :carousel-marks="carouselMarks"
+    ticker-label="Trusted by teams running critical workloads"
+    :ticker-marks="tickerMarks"
     :loading="true"
     @submit="onSubmit"
   />
