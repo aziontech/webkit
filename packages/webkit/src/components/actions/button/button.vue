@@ -16,8 +16,8 @@
   })
 
   interface Props {
-    /** Visible label text. Use IconButton for icon-only controls. */
-    label: string
+    /** Visible label text, the fallback of the default slot. Use IconButton for icon-only controls. */
+    label?: string
     /** Visual variant. `link` draws an inline text action in the link colour, with no box; `size` does not apply to it. */
     kind?: ButtonKind
     /** Size token; affects height, padding, and typography. */
@@ -41,6 +41,7 @@
   }
 
   const props = withDefaults(defineProps<Props>(), {
+    label: '',
     kind: 'primary',
     size: 'large',
     disabled: false,
@@ -58,6 +59,8 @@
   }>()
 
   defineSlots<{
+    /** The visible label; falls back to `label`. */
+    default?(): unknown
     /** A mark drawn before the label, ahead of a leading icon; it stays first when the icon trails. */
     prefix?(): unknown
   }>()
@@ -120,7 +123,7 @@
         class="shrink-0 text-[length:inherit] leading-none transition-[translate] duration-moderate-02 ease-expressive-entrance group-hover/button:data-animated:translate-x-0.5 rtl:group-hover/button:data-animated:-translate-x-0.5 group-data-[icon-position=trailing]/button:order-last motion-reduce:transition-none"
         aria-hidden="true"
       />
-      {{ label }}
+      <slot>{{ label }}</slot>
     </span>
     <span
       aria-hidden="true"
@@ -161,7 +164,7 @@
         class="shrink-0 text-[length:inherit] leading-none transition-[translate] duration-moderate-02 ease-expressive-entrance group-hover/button:data-animated:translate-x-0.5 rtl:group-hover/button:data-animated:-translate-x-0.5 group-data-[icon-position=trailing]/button:order-last motion-reduce:transition-none"
         aria-hidden="true"
       />
-      {{ label }}
+      <slot>{{ label }}</slot>
     </span>
     <span
       aria-hidden="true"

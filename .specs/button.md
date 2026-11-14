@@ -3,9 +3,9 @@ name: button
 category: actions
 structure: monolithic
 status: implemented
-spec_version: 3
+spec_version: 4
 template: 2
-checksum: 65100cf52d4292e55f4061967430728919805da6411f96b4f30da73229aa86d4
+checksum: 477819a0f4867c92343b55e148de5fb3ff73a887d8074828751f13fe69c3d8bd
 created: 2026-05-22
 last_updated: 2026-11-14
 ---
@@ -59,6 +59,7 @@ Interactive control for user actions. Lives at `packages/webkit/src/components/a
 
 <template>
   <Button label="Save" />
+  <Button kind="transparent">Cancel</Button>
   <Button
     label="Deploy"
     kind="secondary"
@@ -77,19 +78,19 @@ Interactive control for user actions. Lives at `packages/webkit/src/components/a
 
 ## Props
 
-| Prop           | Type                                                                  | Default     | Required | JSDoc                                                                                                                                     |
-| -------------- | --------------------------------------------------------------------- | ----------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| `label`        | `string`                                                              | `—`         | true     | Visible label text. Use `IconButton` for icon-only controls.                                                                              |
-| `kind`         | `'primary' \| 'secondary' \| 'outlined' \| 'transparent' \| 'danger' \| 'link'` | `'primary'` | false    | Visual variant. `link` draws an inline text action in the link colour, with no box. |
-| `size`         | `'small' \| 'medium' \| 'large'`                                      | `'large'`   | false    | Size token; affects height, padding, and typography.                                                                                      |
-| `disabled`     | `boolean`                                                             | `false`     | false    | Disables interaction and applies disabled tokens.                                                                                         |
-| `loading`      | `boolean`                                                             | `false`     | false    | Shows loading state and disables activation.                                                                                              |
-| `icon`         | `string`                                                              | `''`        | false    | PrimeIcons class for the icon drawn beside the label.                                                                                     |
-| `iconPosition` | `'leading' \| 'trailing'`                                             | `'leading'` | false    | Which side of the label the icon sits on. `leading` is a glyph that names the action; `trailing` is a glyph that points at where it goes. |
-| `animated`     | `boolean`                                                             | `false`     | false    | Nudges a trailing icon along its axis on hover. Off by default; marketing CTAs opt in.                                                    |
-| `href`         | `string`                                                              | `''`        | false    | When set, renders as a link (`<a>`).                                                                                                      |
-| `target`       | `'_blank' \| '_self'`                                                 | `'_self'`   | false    | Link target when `href` is set.                                                                                                           |
-| `type`         | `'button' \| 'submit' \| 'reset'`                                     | `'button'`  | false    | Native button type. `submit` lets the control submit its form; `disabled` and `loading` still block it. Ignored when `href` is set.       |
+| Prop           | Type                                                                            | Default     | Required | JSDoc                                                                                                                                     |
+| -------------- | ------------------------------------------------------------------------------- | ----------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| `label`        | `string`                                                                        | `''`        | false    | Visible label text, the fallback of the default slot (pass one or the other). Use `IconButton` for icon-only controls.                    |
+| `kind`         | `'primary' \| 'secondary' \| 'outlined' \| 'transparent' \| 'danger' \| 'link'` | `'primary'` | false    | Visual variant. `link` draws an inline text action in the link colour, with no box.                                                       |
+| `size`         | `'small' \| 'medium' \| 'large'`                                                | `'large'`   | false    | Size token; affects height, padding, and typography.                                                                                      |
+| `disabled`     | `boolean`                                                                       | `false`     | false    | Disables interaction and applies disabled tokens.                                                                                         |
+| `loading`      | `boolean`                                                                       | `false`     | false    | Shows loading state and disables activation.                                                                                              |
+| `icon`         | `string`                                                                        | `''`        | false    | PrimeIcons class for the icon drawn beside the label.                                                                                     |
+| `iconPosition` | `'leading' \| 'trailing'`                                                       | `'leading'` | false    | Which side of the label the icon sits on. `leading` is a glyph that names the action; `trailing` is a glyph that points at where it goes. |
+| `animated`     | `boolean`                                                                       | `false`     | false    | Nudges a trailing icon along its axis on hover. Off by default; marketing CTAs opt in.                                                    |
+| `href`         | `string`                                                                        | `''`        | false    | When set, renders as a link (`<a>`).                                                                                                      |
+| `target`       | `'_blank' \| '_self'`                                                           | `'_self'`   | false    | Link target when `href` is set.                                                                                                           |
+| `type`         | `'button' \| 'submit' \| 'reset'`                                               | `'button'`  | false    | Native button type. `submit` lets the control submit its form; `disabled` and `loading` still block it. Ignored when `href` is set.       |
 
 ## Events
 
@@ -99,9 +100,10 @@ Interactive control for user actions. Lives at `packages/webkit/src/components/a
 
 ## Slots
 
-| Slot     | Scope | Notes                                                                                                                                                                  |
-| -------- | ----- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `prefix` | —     | A mark drawn before the label, ahead of a leading `icon`. It stays first when `iconPosition="trailing"`, so a brand mark and a trailing chevron can share one control. |
+| Slot      | Scope | Notes                                                                                                                                                                  |
+| --------- | ----- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `default` | —     | The visible label, as shadcn and Radix take children; falls back to `label`. Plain text keeps the button's typography.                                                 |
+| `prefix`  | —     | A mark drawn before the label, ahead of a leading `icon`. It stays first when `iconPosition="trailing"`, so a brand mark and a trailing chevron can share one control. |
 
 ## States
 
@@ -118,19 +120,19 @@ Interactive control for user actions. Lives at `packages/webkit/src/components/a
 | -------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------ | -------------------------------------- |
 | hover / active (state layer fade)                  | `before:transition-opacity before:duration-fast-02 before:ease-productive-entrance`                                              | `@aziontech/theme` semantic duration + curve           | `motion-reduce:before:transition-none` |
 | hover, with `iconPosition="trailing"` + `animated` | the glyph nudges along its own axis — `transition-[translate] duration-moderate-02 ease-expressive-entrance` + `translate-x-0.5` | `--duration-moderate-02`, `--ease-expressive-entrance` | `motion-reduce:transition-none`        |
-| hover, `kind="link"` (colour change) | `transition-colors duration-fast-02 ease-productive-entrance` | `--duration-fast-02`, `--ease-productive-entrance` | `motion-reduce:transition-none` |
+| hover, `kind="link"` (colour change)               | `transition-colors duration-fast-02 ease-productive-entrance`                                                                    | `--duration-fast-02`, `--ease-productive-entrance`     | `motion-reduce:transition-none`        |
 
 ## Tokens
 
-| Region     | Token (DESIGN.md)       |
-| ---------- | ----------------------- |
-| typography | .text-button-lg         |
+| Region     | Token (DESIGN.md)                                             |
+| ---------- | ------------------------------------------------------------- |
+| typography | .text-button-lg                                               |
 | link kind  | `.text-body-sm`, `var(--text-link)`, `var(--text-link-hover)` |
-| surface    | `var(--bg-surface)`     |
-| text       | `var(--text-default)`   |
-| spacing    | `var(--spacing-3)`      |
-| shape      | `var(--shape-elements)` |
-| ring       | `var(--ring-color)`     |
+| surface    | `var(--bg-surface)`                                           |
+| text       | `var(--text-default)`                                         |
+| spacing    | `var(--spacing-3)`                                            |
+| shape      | `var(--shape-elements)`                                       |
+| ring       | `var(--ring-color)`                                           |
 
 ## Theme gaps
 

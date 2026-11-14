@@ -11,6 +11,22 @@ import Button from './button.vue'
 
 describe('Button', () => {
   describe('rendering & polymorphism', () => {
+    it('renders default slot content as the label, and label when the slot is empty', () => {
+      const slotted = render(Button, { slots: { default: 'Deploy now' } })
+      expect(slotted.getByRole('button', { name: 'Deploy now' })).toBeTruthy()
+      const withBoth = render(Button, {
+        props: { label: 'Fallback' },
+        slots: { default: 'Slotted' }
+      })
+      expect(withBoth.getByRole('button', { name: 'Slotted' })).toBeTruthy()
+      expect(withBoth.queryByText('Fallback')).toBeNull()
+      const anchor = render(Button, {
+        props: { href: 'https://example.com' },
+        slots: { default: 'Docs' }
+      })
+      expect(anchor.getByRole('link', { name: 'Docs' })).toBeTruthy()
+    })
+
     it('renders a <button> with the label and the default testid', () => {
       const { getByRole } = render(Button, { props: { label: 'Save' } })
       const node = getByRole('button', { name: 'Save' })
