@@ -11,6 +11,11 @@
       "update": 170,
       "update_is": "expand two folders of 99 nodes"
     },
+    "tree-5k-expanded": {
+      "mount": 1200,
+      "update": 50,
+      "update_is": "collapse one of 50 expanded folders of 99 nodes"
+    },
     "select-1k": {
       "mount": 50,
       "update": 260,

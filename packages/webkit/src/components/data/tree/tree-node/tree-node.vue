@@ -15,9 +15,11 @@
     posinset: number
     /** Number of siblings, the node included. */
     setsize: number
+    /** Renders the trailing actions region. */
+    actionable?: boolean
   }
 
-  const props = defineProps<Props>()
+  const props = withDefaults(defineProps<Props>(), { actionable: false })
 
   defineSlots<{
     /** Label region of the row. */
@@ -101,7 +103,7 @@
         />
       </span>
       <span
-        v-if="$slots['actions']"
+        v-if="actionable"
         data-tree-actions
         class="ms-auto flex shrink-0 items-center gap-(--spacing-xxs)"
         @mousedown.self.prevent
@@ -125,6 +127,7 @@
         :level="level + 1"
         :posinset="index + 1"
         :setsize="children.length"
+        :actionable="actionable"
       >
         <template #item="scope">
           <slot
@@ -132,10 +135,7 @@
             v-bind="scope"
           />
         </template>
-        <template
-          v-if="$slots['actions']"
-          #actions="scope"
-        >
+        <template #actions="scope">
           <slot
             name="actions"
             v-bind="scope"

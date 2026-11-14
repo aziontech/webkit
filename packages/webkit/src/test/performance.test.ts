@@ -149,7 +149,7 @@ function chartCase(): Case {
   }
 }
 
-function treeCase(): Case {
+function treeCase(expandAll = false): Case {
   const items = Array.from({ length: 50 }, (_, f) => ({
     id: `f${f}`,
     label: `folder-${f}`,
@@ -161,7 +161,7 @@ function treeCase(): Case {
       description: `${c} KB`
     }))
   }))
-  const expanded = ref<string[]>([])
+  const expanded = ref<string[]>(expandAll ? items.map((item) => item.id) : [])
   return {
     mount: () => ({
       render: () =>
@@ -173,7 +173,7 @@ function treeCase(): Case {
         })
     }),
     update: () => {
-      expanded.value = ['f0', 'f1']
+      expanded.value = expandAll ? expanded.value.slice(1) : ['f0', 'f1']
     }
   }
 }
@@ -1023,7 +1023,10 @@ describe('runtime budgets (perf-budgets.json)', () => {
     check('chart-10k', await measure(chartCase))
   })
   it('Tree with 5k nodes', async () => {
-    check('tree-5k', await measure(treeCase))
+    check('tree-5k', await measure(() => treeCase()))
+  })
+  it('Tree with 5k nodes all expanded: collapse one folder', async () => {
+    check('tree-5k-expanded', await measure(() => treeCase(true)))
   })
   it('Select with 1k options: open and filter', async () => {
     check('select-1k', await measure(() => selectCase(false)))
