@@ -31,7 +31,7 @@ One `PropertyFilter` bound with `v-bind="propertyFilterProps"` from `useCollecti
 
 ### C. Category sections — `Card`, `Tag` (required)
 
-One `section` per category that still has matches, labelled by its `h2` in the muted small label style (Frameworks, Starters, Functions), each with a `ul` grid of one to four tiles a row by width. A tile is a `Card` with the framework mark in a 40 px raised box (grey until the tile is hovered or focused, the `grayscale` to colour shift of the design; colour marks use `ai-cor`, and the black Next.js mark inverts in dark), the name as an `h3` that holds a button with `aria-haspopup="dialog"`, two lines of description and a small secondary `Tag` with the framework. The button's stretched `after` box makes the whole tile one target, draws the translucent hover wash and the focus ring inside the tile, and leaves the `Card` surface untouched. Hovering or focusing a tile also lights a soft radial glow from its top start corner in the framework's brand colour: the `Card` sets `--template-glow` from a framework-to-colour map through `:style` and carries `isolate`, and an `aria-hidden` span under the content reads it in one bracketed `bg-[radial-gradient(...)]`, falling back to `var(--primary)` for a framework without a brand colour. Tiles in a row share a height.
+One `section` per category that still has matches, labelled by its `h2` in the muted small label style (Frameworks, Starters, Functions), each with a `ul` grid of one to four tiles a row by width. A tile is a `Card` with the framework mark in a 40 px raised box (grey until the tile is hovered or focused, the `grayscale` to colour shift of the design; colour marks use `ai-cor`, and the black Next.js mark inverts in dark), the name as an `h3` that holds a button with `aria-haspopup="dialog"`, two lines of description and a small secondary `Tag` with the framework. The button's stretched `after` box makes the whole tile one target, draws the translucent hover wash and the focus ring inside the tile, and leaves the `Card` surface untouched. Hovering or focusing a tile also lights a soft glow from its top start corner: an `aria-hidden` span under the content (the `Card` carries `isolate`, the span clips to the card's shape) holds a second copy of the tile's mark, scaled up, blurred and faded. A colour mark (`ai-cor`) glows in its own colours; a one-colour font mark takes `text-(--primary)`, so the glow needs no colour value in the data. Tiles in a row share a height.
 
 ### D. No matching templates — `EmptyState`, `Button` (required)
 
@@ -64,7 +64,7 @@ A `section` labelled by its "README" heading, with the template's README in a `C
 - Don't deploy from the tile or the drawer without the deploy flow; the template needs a scope, a repository name and its settings.
 - Don't put a Deploy button on every tile; the preview is where a person confirms the choice.
 - Don't page the catalog or add preferences; a grouped list of tens of items reads better whole.
-- Don't colour the tile per framework at rest; the surface stays neutral and the brand shows only in the mark and the hover glow.
+- Don't colour the tile per framework at rest; the surface stays neutral and the brand shows only in the mark and the glow drawn from it.
 - Don't hide the filter while loading or after a failure; disable it, so the page keeps its shape.
 - Don't show the README as raw markdown or in a code block.
 

@@ -38,16 +38,6 @@
 
   type Framework = keyof typeof FRAMEWORKS
 
-  const BRAND_COLORS: Partial<Record<Framework, string>> = {
-    next: '#0070f3',
-    astro: '#ff5d01',
-    nuxt: '#00dc82',
-    angular: '#dd0031',
-    hugo: '#ff4088',
-    vite: '#646cff',
-    hono: '#e36002'
-  }
-
   const MARKS: Partial<Record<Framework, string>> = {
     next: '[[data-theme=dark]_&]:invert'
   }
@@ -184,11 +174,6 @@
     )
   ]
 
-  const glow = (item: Template) => {
-    const color = BRAND_COLORS[item.framework]
-    return color ? { '--template-glow': color } : undefined
-  }
-
   const properties = [
     { key: 'title', label: 'Name' },
     {
@@ -291,15 +276,17 @@
                 :key="item.id"
                 class="group flex min-w-0"
               >
-                <Card
-                  class="isolate w-full"
-                  :style="glow(item)"
-                >
+                <Card class="isolate w-full">
                   <template #content>
                     <span
                       aria-hidden="true"
-                      class="pointer-events-none absolute inset-0 -z-1 bg-[radial-gradient(120%_90%_at_18%_0%,color-mix(in_oklab,var(--template-glow,var(--primary))_20%,transparent),transparent_62%)] opacity-0 transition-opacity duration-moderate-01 ease-productive-entrance group-focus-within:opacity-100 group-hover:opacity-100 motion-reduce:transition-none rtl:bg-[radial-gradient(120%_90%_at_82%_0%,color-mix(in_oklab,var(--template-glow,var(--primary))_20%,transparent),transparent_62%)]"
-                    />
+                      class="pointer-events-none absolute inset-0 -z-1 overflow-hidden rounded-(--shape-card) opacity-0 transition-opacity duration-moderate-01 ease-productive-entrance group-focus-within:opacity-100 group-hover:opacity-100 motion-reduce:transition-none"
+                    >
+                      <i
+                        :class="[item.icon, MARKS[item.framework]]"
+                        class="absolute start-(--spacing-xl) top-(--spacing-xl) scale-600 text-body-lg leading-none text-(--primary) opacity-25 blur-sm"
+                      />
+                    </span>
                     <div class="flex flex-col items-start gap-(--spacing-md)">
                       <span
                         class="flex size-10 shrink-0 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"

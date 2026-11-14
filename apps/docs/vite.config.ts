@@ -66,6 +66,7 @@ export default defineConfig({
     noExternal: ['@aziontech/webkit', '@aziontech/icons', '@aziontech/theme']
   },
   build: {
+    assetsDir: '_app',
     chunkSizeWarningLimit: 2000
   },
   ssgOptions
