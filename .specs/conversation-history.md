@@ -3,9 +3,9 @@ name: conversation-history
 category: ai
 structure: monolithic
 status: implemented
-spec_version: 4
+spec_version: 5
 template: 2
-checksum: e0067d4e9b5f1a76f90e045f043d018ae49dad7fb3b1b91c6f8643930379bb1d
+checksum: c08bfa12cb0ca2a42e14eefe5b3ee2ed6e68b86f2dcf5b5a83cef59fff95fce1
 created: 2026-11-11
 last_updated: 2026-11-14
 ---
@@ -24,7 +24,7 @@ The list of past conversations with an assistant, in a side panel or drawer: tit
 ## When NOT to use
 
 - Messages of the open conversation → `Conversation`.
-- Navigation between product areas → `SidebarNav` or `NavigationMenu`.
+- Navigation between product areas → `Sidebar` or `NavigationMenu`.
 - A searchable table of records → `TableRoot`.
 
 ## Related
@@ -70,9 +70,9 @@ The list of past conversations with an assistant, in a side panel or drawer: tit
 
 ## v-model
 
-| Model     | Type       | Default | Emits  | Notes               |
-| --------- | ---------- | ------- | ------ | ------------------- |
-| `v-model` | `string \\ | null`   | `null` | `update:modelValue` | Id of the open conversation; its row is `aria-current="page"`. |
+| Model     | Type             | Default | Emits               | Notes                                                          |
+| --------- | ---------------- | ------- | ------------------- | -------------------------------------------------------------- |
+| `v-model` | `string \| null` | `null`  | `update:modelValue` | Id of the open conversation; its row is `aria-current="page"`. |
 
 ## Events
 

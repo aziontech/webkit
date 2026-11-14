@@ -3,11 +3,11 @@ name: popover
 category: overlay
 structure: composition
 status: implemented
-spec_version: 4
+spec_version: 5
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=482-954
   node_id: 482:954
-checksum: 54093a1a09af7fe1aeacf5ee2788664b2a90ed8d4674cd121d10db120a6aa883
+checksum: 568406260393a888bf34077884a22dabd2f858066e4f1dca903c37abc15992e3
 created: 2026-06-30
 last_updated: 2026-11-14
 ---
@@ -26,7 +26,7 @@ Anchored, **non-modal** overlay that opens from a consumer-supplied trigger and 
 ## When NOT to use
 
 - A short, non-interactive hint on hover or focus → use `tooltip`.
-- A list of actions or options to pick from → use `dropdown`.
+- A list of actions or options to pick from → use `dropdown-menu`.
 - Choosing a form value from a list → use `select`.
 - A blocking task that must be completed or cancelled first → use `dialog`.
 - A long form or a secondary workflow → use `drawer`.

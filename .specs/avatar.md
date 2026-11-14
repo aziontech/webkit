@@ -3,12 +3,12 @@ name: avatar
 category: content
 structure: monolithic
 status: implemented
-spec_version: 4
+spec_version: 5
 template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=477-882
   node_id: 477:882
-checksum: 2fe5909ba9613f62f36f67a8a935b8f955d6ab3db9259d687656f13c4ffa8fa4
+checksum: 9e3268371da29bd3e34b16e20ca1f5d656856d408233e5675630125bea76cc5d
 created: 2026-05-22
 last_updated: 2026-11-14
 ---
@@ -17,7 +17,7 @@ last_updated: 2026-11-14
 
 ## Purpose
 
-Displays content or metadata in the UI. Lives at `packages/webkit/src/components/content/avatar/`.
+Identifies a person, an account or an organization with a small visual mark: their picture when there is one, otherwise their initials, a fallback icon or a generated pattern seeded by the name. It comes in a circle or a square at three sizes, so the same person reads the same way in a header, a list row or a comment thread.
 
 ## When to use
 

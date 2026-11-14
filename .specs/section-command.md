@@ -3,11 +3,11 @@ name: section-command
 category: sections
 structure: monolithic
 status: implemented
-spec_version: 1
+spec_version: 2
 template: 2
-checksum: f9b0f139557bc7c024537948484c3c4609462af1c16810c5b8cd3673355c4c02
+checksum: 3c202d2d377876f986769e87bf525b3bf1ad34c91547a4cf45394a1467794e43
 created: 2026-11-11
-last_updated: 2026-11-11
+last_updated: 2026-11-14
 ---
 
 # SectionCommand — Component Spec
@@ -24,7 +24,7 @@ A one-line command or agent prompt with a copy button, set in a large `InputGrou
 ## When NOT to use
 
 - For several lines or output — use `CodeBlock` or `CliTerminal`.
-- For an editable field — use `InputText`.
+- For an editable field — use `Input`.
 
 ## Related
 

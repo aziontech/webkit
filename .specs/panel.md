@@ -3,8 +3,8 @@ name: panel
 category: overlay
 structure: composition
 status: implemented
-spec_version: 3
-checksum: 46fd9af6abf049b374662b58dcfa4ec04fc191a9ca72c8493d43fc5943a90d7c
+spec_version: 4
+checksum: bafea2053bc2e9119d7e97a8726159b8b62105d0917d16eb628b87d7e3e01ab1
 created: 2026-05-22
 last_updated: 2026-11-14
 ---
@@ -13,7 +13,7 @@ last_updated: 2026-11-14
 
 ## Purpose
 
-Layered surface above the page (modal, drawer, menu). Lives at `packages/webkit/src/components/overlay/panel/`.
+The shell inside an overlay: a sized surface with a header for the title and the close control, a body that scrolls and a footer for the actions. `DialogContent` and `DrawerContent` lay their regions out with it, and a page can render it on its own as a static preview of an overlay.
 
 ## When to use
 

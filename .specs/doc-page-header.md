@@ -3,10 +3,10 @@ name: doc-page-header
 category: documentation
 structure: monolithic
 status: implemented
-spec_version: 1
-checksum: fd928028f50dd669148a3cc4fbacb4cdf3fd9b73b0d72a791d93e49355f29222
+spec_version: 2
+checksum: 381b7e6e0adfcf828420e114896b70153b9bc476fc454ef9da64a2bfd4b25649
 created: 2026-08-22
-last_updated: 2026-11-10
+last_updated: 2026-11-14
 ---
 
 # DocPageHeader — Component Spec
@@ -21,7 +21,7 @@ The masthead of a documentation page: where the reader is (the breadcrumb), what
 
 ## When NOT to use
 
-- For an application screen's title — that is `PageHeading`, which carries console actions rather than a Copy Page control.
+- For an application screen's title — that is `PageHeader`, which carries console actions rather than a Copy Page control.
 - For a section heading inside a page — the content's own `h2` does that, and the masthead's `h1` is chrome.
 - The documentation home → use `DocHero` (display title, `Get started` and `CopyPromptButton`), then `DocAgentCard`.
 

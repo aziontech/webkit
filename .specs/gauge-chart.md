@@ -3,11 +3,11 @@ name: gauge-chart
 category: chart
 structure: monolithic
 status: implemented
-spec_version: 1
+spec_version: 2
 template: 2
-checksum: b134323d2e3526cc84eb965b974191f9344f419420b942987d72c44df4f89252
+checksum: c1df6698a1ba7098523f1e02026dc54b2146de89a8ab34a3cd2053942af8a648
 created: 2026-11-11
-last_updated: 2026-11-11
+last_updated: 2026-11-14
 ---
 
 # GaugeChart — Component Spec
@@ -26,7 +26,7 @@ One reading against a known range, drawn as a half-circle dial with the value un
 
 - A number with a change against a period and a trend → use `stat-tile`.
 - A value over time → use `chart` (line or area).
-- Progress of a task toward done → use `progress-bar`.
+- Progress of a task toward done → use `progress`.
 - Several readings to compare with each other → use `bar-list` or `chart` with horizontal bars; dials side by side compare badly.
 
 ## Related

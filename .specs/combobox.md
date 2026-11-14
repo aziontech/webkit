@@ -3,9 +3,9 @@ name: combobox
 category: inputs
 structure: monolithic
 status: implemented
-spec_version: 3
+spec_version: 4
 template: 2
-checksum: 76cb404e66e61298091f95393e777235afc835c903959db2e88a4540a2844e1c
+checksum: 865701ede23596a3fc5ece39ae3b5d8654233bd8119201b5c98691e9c2e9986e
 created: 2026-11-11
 last_updated: 2026-11-14
 ---
@@ -25,7 +25,7 @@ A text field with a list of suggestions under it: typing filters the options, pi
 
 ## When NOT to use
 
-- The value must be one of a short fixed list → use `select` (or `radio-group` for 2–5 visible choices).
+- The value must be one of a short fixed list → use `select` (or `radio-cards` / `radio-button` for 2–5 visible choices).
 - Several values at once → use `multi-select`.
 - Searching and running commands or jumping to a page → use `command`.
 - Filtering a collection by properties → use `property-filter`.

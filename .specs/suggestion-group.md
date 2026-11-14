@@ -3,11 +3,11 @@ name: suggestion-group
 category: ai
 structure: monolithic
 status: implemented
-spec_version: 2
+spec_version: 3
 template: 2
-checksum: 3df121db241e73bc3109ce6e6700b881bcda8d5296c0c724d6d8bd4e985ac246
+checksum: 1fea7c0c8e593da249f55e53c4b5e3f0acedb1eb8763143068db7a8c81cbf87b
 created: 2026-11-11
-last_updated: 2026-11-13
+last_updated: 2026-11-14
 ---
 
 # SuggestionGroup — Component Spec
@@ -28,7 +28,7 @@ and the owner either sends it or places it in the prompt input to edit.
 ## When NOT to use
 
 - Navigation or filters → `tabs`, `toggle-group`, `property-filter`.
-- Choices that are a form value → `radio-group` / `radio-cards`.
+- Choices that are a form value → `radio-button` / `radio-cards`.
 - More than five options → let the reader type; the prompt input stays available.
 
 ## Related
