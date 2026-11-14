@@ -18,6 +18,14 @@ export const sceneAssets = {
 /** Name of a scene a section draws, as the page data spells it. */
 export type SceneName = keyof typeof sceneAssets
 
+/** A live scene a section draws in a media cell, named by the page data. */
+export type SceneRef = {
+  /** Registry name of the scene. */
+  component: SceneName
+  /** Props bound onto the scene, such as the `name` of a `ProductWidget`; the section's own state props win on a clash. */
+  props?: Record<string, unknown>
+}
+
 const resolved = new Map<string, Component>()
 
 const Nothing: Component = { name: 'SceneUnavailable', render: () => null }
