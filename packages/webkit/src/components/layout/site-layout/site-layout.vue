@@ -192,7 +192,7 @@
     v-bind="$attrs"
     :data-testid="testId"
     :data-nav-overlay="navOverlay || null"
-    class="flex min-h-dvh w-full min-w-0 flex-col bg-(--bg-canvas) text-(--text-default) data-[nav-overlay]:grid data-[nav-overlay]:grid-cols-1 data-[nav-overlay]:grid-rows-[1fr_auto] data-[nav-overlay]:[&>div>header]:col-start-1 data-[nav-overlay]:[&>div>header]:row-span-2 data-[nav-overlay]:[&>div>header]:row-start-1 data-[nav-overlay]:[&>div>header]:self-start data-[nav-overlay]:[&>main]:col-start-1 data-[nav-overlay]:[&>main]:row-start-1"
+    class="flex min-h-dvh w-full min-w-0 flex-col bg-(--bg-canvas) text-(--text-default) data-[nav-overlay]:grid data-[nav-overlay]:grid-rows-[1fr_auto] data-[nav-overlay]:[&>div>header]:[grid-area:1/1/3/2] data-[nav-overlay]:[&>div>header]:self-start data-[nav-overlay]:[&>main]:[grid-area:1/1] data-[nav-overlay]:[&>main+div]:[grid-area:2/1]"
   >
     <SiteNav
       v-bind="navigation"
@@ -210,7 +210,6 @@
       kind="site"
       v-bind="footer"
       :data-testid="`${testId}__footer`"
-      class="in-data-[nav-overlay]:col-start-1 in-data-[nav-overlay]:row-start-2"
     />
 
     <Command
