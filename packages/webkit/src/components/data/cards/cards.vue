@@ -1,6 +1,7 @@
 <script setup lang="ts" generic="TItem extends object = Record<string, unknown>">
   import { computed, useAttrs, useId } from 'vue'
 
+  import { useLazyChunks } from '../../../composables/use-lazy-chunks'
   import { useTranslate } from '../../../composables/use-locale/use-translate'
   import * as en from '../../../i18n/messages/en'
   import EmptyState from '../../feedback/empty-state/empty-state.vue'
@@ -66,7 +67,7 @@
     selectedKeys.value = next
   }
 
-  const isSelected = (item: TItem): boolean => selected.value.includes(keyOf(item))
+  const selectedSet = computed<Set<string>>(() => new Set(selected.value))
 
   const toggle = (item: TItem, value: boolean): void => {
     const key = keyOf(item)
@@ -80,15 +81,21 @@
 
   const pageKeys = computed<string[]>(() => props.items.map(keyOf))
   const allSelected = computed<boolean>(
-    () => pageKeys.value.length > 0 && pageKeys.value.every((k) => selected.value.includes(k))
+    () => pageKeys.value.length > 0 && pageKeys.value.every((k) => selectedSet.value.has(k))
   )
   const someSelected = computed<boolean>(
-    () => !allSelected.value && pageKeys.value.some((k) => selected.value.includes(k))
+    () => !allSelected.value && pageKeys.value.some((k) => selectedSet.value.has(k))
   )
   const toggleAll = (value: boolean): void => {
-    const others = selected.value.filter((k) => !pageKeys.value.includes(k))
+    const onPage = new Set(pageKeys.value)
+    const others = selected.value.filter((k) => !onPage.has(k))
     setSelected(value ? [...others, ...pageKeys.value] : others)
   }
+
+  const { split, observe } = useLazyChunks({ rowHeight: 48, chunkSize: 60, threshold: 120 })
+  const chunks = computed(() =>
+    split(props.items.map((item, index) => ({ item, index, key: keyOf(item) })))
+  )
 
   const headerId = (index: number): string => `${uid}-card-${index}`
   const SKELETONS = 6
@@ -155,52 +162,72 @@
       :data-testid="`${testId}__list`"
       class="grid grid-cols-1 gap-(--spacing-sm) @xl/cards:grid-cols-2 @4xl/cards:grid-cols-3 @6xl/cards:grid-cols-4"
     >
-      <li
-        v-for="(item, index) in items"
-        :key="keyOf(item)"
-        :data-testid="`${testId}__card`"
-        :data-selected="isSelected(item) || null"
-        :data-state="isSelected(item) ? 'selected' : 'unselected'"
-        class="flex min-w-0 flex-col gap-(--spacing-sm) rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) p-(--spacing-md) transition-colors duration-150 ease-out motion-reduce:transition-none data-[selected]:border-(--border-selected) data-[selected]:bg-(--bg-selected)"
+      <template
+        v-for="chunk in chunks"
+        :key="chunk.index"
       >
-        <div class="flex min-w-0 items-start gap-(--spacing-sm)">
-          <div
-            :id="headerId(index)"
-            class="min-w-0 flex-1 text-label-md text-(--text-default)"
+        <li
+          v-if="!chunk.mounted"
+          :ref="(el) => observe(el, chunk.index)"
+          :data-chunk="chunk.index"
+          aria-hidden="true"
+          class="col-span-full"
+          :style="{ height: `${chunk.estimatedHeight}px` }"
+        />
+        <template v-else>
+          <li
+            v-for="{ item, index, key, on } in chunk.items.map((entry) => ({
+              ...entry,
+              on: selectedSet.has(entry.key)
+            }))"
+            :key="key"
+            :data-testid="`${testId}__card`"
+            :data-selected="on || null"
+            :data-state="on ? 'selected' : 'unselected'"
+            class="flex min-w-0 flex-col gap-(--spacing-sm) rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) p-(--spacing-md) transition-colors duration-150 ease-out motion-reduce:transition-none data-[selected]:border-(--border-selected) data-[selected]:bg-(--bg-selected)"
           >
-            <slot
-              name="header"
-              :item="item"
-              :index="index"
-              :selected="isSelected(item)"
-            />
-          </div>
-          <Checkbox
-            v-if="selectionMode === 'multi'"
-            binary
-            :model-value="isSelected(item)"
-            :aria-labelledby="headerId(index)"
-            :data-testid="`${testId}__select`"
-            @update:model-value="(value: unknown) => toggle(item, !!value)"
-          />
-          <RadioButton
-            v-else-if="selectionMode === 'single'"
-            :model-value="selected[0] ?? ''"
-            :value="keyOf(item)"
-            :name="`${uid}-selection`"
-            :aria-labelledby="headerId(index)"
-            :data-testid="`${testId}__select`"
-            @update:model-value="toggle(item, true)"
-          />
-        </div>
-        <div class="flex min-w-0 flex-col gap-(--spacing-xs) text-body-sm text-(--text-default)">
-          <slot
-            :item="item"
-            :index="index"
-            :selected="isSelected(item)"
-          />
-        </div>
-      </li>
+            <div class="flex min-w-0 items-start gap-(--spacing-sm)">
+              <div
+                :id="headerId(index)"
+                class="min-w-0 flex-1 text-label-md text-(--text-default)"
+              >
+                <slot
+                  name="header"
+                  :item="item"
+                  :index="index"
+                  :selected="on"
+                />
+              </div>
+              <Checkbox
+                v-if="selectionMode === 'multi'"
+                binary
+                :model-value="on"
+                :aria-labelledby="headerId(index)"
+                :data-testid="`${testId}__select`"
+                @update:model-value="(value: unknown) => toggle(item, !!value)"
+              />
+              <RadioButton
+                v-else-if="selectionMode === 'single'"
+                :model-value="selected[0] ?? ''"
+                :value="key"
+                :name="`${uid}-selection`"
+                :aria-labelledby="headerId(index)"
+                :data-testid="`${testId}__select`"
+                @update:model-value="toggle(item, true)"
+              />
+            </div>
+            <div
+              class="flex min-w-0 flex-col gap-(--spacing-xs) text-body-sm text-(--text-default)"
+            >
+              <slot
+                :item="item"
+                :index="index"
+                :selected="on"
+              />
+            </div>
+          </li>
+        </template>
+      </template>
     </ul>
 
     <div

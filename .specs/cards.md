@@ -3,9 +3,9 @@ name: cards
 category: data
 structure: monolithic
 status: implemented
-spec_version: 2
+spec_version: 3
 template: 2
-checksum: ca40daa6c2362043d9796b552d3487ff62d377dcb8fb6aa2e96409a348d345e1
+checksum: d3468896a0d8135620786254ce6162721b20875a36a3686490146a6ce163d43d
 created: 2026-11-11
 last_updated: 2026-11-14
 ---
@@ -155,7 +155,7 @@ _none_ — `update:selectedKeys` (payload `string[]`) comes from `v-model:select
 ## Performance
 
 - Bundle budget: 19 KB gzip for `./cards` (it carries `checkbox`, `radio-button`, `skeleton` and `empty-state`) in `.size-limit.json`.
-- Runtime budget: a page of cards (≤ 100) renders in one frame; paging is the answer to more. The `Cards with 1k items: mount and select all` scenario of `performance.test.ts` holds an unpaged list to its budget in `perf-budgets.json`.
+- Runtime budget: a page of cards (≤ 100) renders in one frame; paging is the answer to more. Above 120 items the cards mount in chunks of 60 as the list scrolls near them (`useLazyChunks`; a full-row placeholder holds the place of each chunk not yet mounted). Selection is looked up in a `Set` built once per change, so select-all and each card's selected state cost O(1) per card. The `Cards with 1k items: mount and select all` scenario of `performance.test.ts` holds an unpaged list to its budget in `perf-budgets.json`.
 - Heavy parts: none.
 
 ## Examples

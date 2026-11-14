@@ -35,6 +35,16 @@ describe('Cards', () => {
     ).toBe(true)
   })
 
+  it('mounts a long list in chunks and still selects every item at once', async () => {
+    const many = Array.from({ length: 1000 }, (_, i) => ({ id: `k${i}`, name: `Item ${i}` }))
+    const view = render(Cards, { props: { items: many, selectionMode: 'multi' }, slots })
+    const cards = view.getAllByTestId('data-cards__card')
+    expect(cards.length).toBeGreaterThan(0)
+    expect(cards.length).toBeLessThan(many.length)
+    await fireEvent.click(view.getByLabelText('Select all items'))
+    expect(view.emitted()['update:selectedKeys']?.at(-1)).toEqual([many.map((item) => item.id)])
+  })
+
   it('keeps one card in single selection, without a select-all', async () => {
     const view = render(Cards, {
       props: { items, selectionMode: 'single', selectedKeys: ['a'] },

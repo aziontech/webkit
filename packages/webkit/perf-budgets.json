@@ -182,8 +182,8 @@
       "update_is": "move every source item to the target"
     },
     "cards-1k": {
-      "mount": 430,
-      "update": 300,
+      "mount": 80,
+      "update": 50,
       "update_is": "select all 1k cards"
     },
     "table-1k-presets": {
