@@ -6,6 +6,7 @@ import { commands } from 'vitest/browser'
 import { nextTick } from 'vue'
 
 import DialogDefault from '../../../../examples/dialog/default.vue'
+import DrawerDefault from '../../../../examples/drawer/default.vue'
 import PopoverDefault from '../../../../examples/popover/default.vue'
 
 const frame = () => new Promise((resolve) => requestAnimationFrame(() => resolve(null)))
@@ -48,6 +49,17 @@ describe('overlay entrance motion under prefers-reduced-motion', () => {
     const panel = byTestId('overlay-dialog__panel')
     expect(panel).not.toBeNull()
     expect(longMotion(panel!.closest('[role="dialog"]') ?? panel!)).toEqual([])
+  })
+
+  it('Drawer opens with no animation or transition longer than 1ms', async () => {
+    await commands.emulateMedia({ reducedMotion: 'reduce' })
+    render(DrawerDefault)
+    await settle()
+    await fireEvent.click(byTestId('overlay-drawer__trigger')!)
+    await settle()
+    const panel = byTestId('overlay-drawer__panel')
+    expect(panel).not.toBeNull()
+    expect(longMotion(panel!)).toEqual([])
   })
 
   it('Popover opens with no animation or transition longer than 1ms', async () => {

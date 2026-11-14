@@ -45,7 +45,7 @@
   <PopoverRoot
     v-model:open="open"
     :dismissible="false"
-    width="large"
+    size="large"
   >
     <PopoverTrigger>
       <Button

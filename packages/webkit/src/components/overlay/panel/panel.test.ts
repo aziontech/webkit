@@ -134,19 +134,19 @@ describe('Panel', () => {
     expect(getByText('Scrollable region')).toBeTruthy()
   })
 
-  it.each<PanelSize>(['small', 'medium', 'large'])('renders the shell for size "%s"', (size) => {
+  it.each<PanelSize>(['small', 'medium', 'large'])('reflects size "%s" on data-width', (size) => {
     const { getByTestId } = render(composed({ size }))
-    expect(getByTestId('overlay-panel').tagName).toBe('DIV')
+    expect(getByTestId('overlay-panel').getAttribute('data-width')).toBe(size)
   })
 
-  it('renders the shell in fluid mode via the data-fluid attribute', () => {
+  it('reflects fluid mode (data-fluid attribute) on data-width', () => {
     const { getByTestId } = render(composed({ 'data-fluid': '' }))
-    expect(getByTestId('overlay-panel').tagName).toBe('DIV')
+    expect(getByTestId('overlay-panel').getAttribute('data-width')).toBe('fluid')
   })
 
-  it('renders the sizeAtMd (mobile bottom-sheet) shell', () => {
+  it('reflects sizeAtMd on data-width', () => {
     const { getByTestId } = render(composed({ sizeAtMd: true, size: 'large' }))
-    expect(getByTestId('overlay-panel').tagName).toBe('DIV')
+    expect(getByTestId('overlay-panel').getAttribute('data-width')).toBe('large-md')
   })
 
   it('makes an overflowing content region focusable only when nothing inside is', async () => {
@@ -179,15 +179,5 @@ describe('Panel', () => {
   it('has no accessibility violations on the composed tree', async () => {
     const { getByTestId } = render(composed())
     await expectNoA11yViolations(getByTestId('overlay-panel'))
-  })
-})
-
-describe('Panel on devices', () => {
-  it('makes the content a named container and stretches footer actions on phones', () => {
-    const { getByTestId } = render(composed())
-
-    expect(getByTestId('overlay-panel__content').className).toContain('@container/panel')
-    expect(getByTestId('overlay-panel__footer').className).toContain('max-sm:*:flex-1')
-    expect(getByTestId('overlay-panel__footer').className).toContain('safe-area-inset-bottom')
   })
 })

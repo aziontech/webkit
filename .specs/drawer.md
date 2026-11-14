@@ -3,10 +3,10 @@ name: drawer
 category: overlay
 structure: composition
 status: implemented
-spec_version: 1
-checksum: 71d69d8ea9dbd72db080b5d25aa04f63176dedec06f54beb99d71302303c215b
+spec_version: 2
+checksum: 8cf1b1131be096c376f07994b15f4eb42ceed6d586a6c679a19b5bf89e37501b
 created: 2026-05-22
-last_updated: 2026-11-12
+last_updated: 2026-11-14
 ---
 
 # Drawer — Component Spec
@@ -115,7 +115,7 @@ Layered surface above the page (modal, drawer, menu). Lives at `packages/webkit/
 | `defaultOpen` | `boolean`    | `false`    | false    | Initial open state when uncontrolled.                                                                   |
 | `dismissible` | `boolean`    | `true`     | false    | When true, overlay click and Escape close the drawer.                                                   |
 | `side`        | `DrawerSide` | `'right'`  | false    | Edge the drawer panel slides from.                                                                      |
-| `size`        | `DrawerSize` | `'medium'` | false    | Panel max-width preset (`small` 384px, `medium` 672px, `large` 1024px). Height is always 100% viewport. |
+| `size`        | `DrawerSize` | `'medium'` | false    | Panel max-width preset (`small` `--container-sm`, `medium` `--container-xl`, `large` `--container-4xl`). Height is always 100% viewport. |
 
 ## v-model
 
@@ -138,9 +138,18 @@ Layered surface above the page (modal, drawer, menu). Lives at `packages/webkit/
 - Visual states: `default`, `hover`, `focus-visible`, `active`, `disabled`
 - `data-state` values: `open` | `closed` (where applicable)
 - Phones: below `md` the drawer is a bottom sheet (full width, 80 dvh); below `sm` it becomes a full-height, full-width sheet (`top-0`, `h-dvh`, no radius, no border). The `PanelFooter` stays pinned under the scrolling content with full-width actions.
-- Server render and hydration: the phone layout reads the viewport only after mount (`use-overlay-mobile` gates the media query on `useMounted`), so a drawer rendered open on the server hydrates with the desktop panel and switches to the phone sheet in the same tick as mount, before paint.
+- Server render and hydration: the phone layout is CSS breakpoints only (`max-md:` / `md:`), so the server HTML and the hydrated DOM are identical at every width.
+- `data-side` and `data-size` on the `role="dialog"` element mirror `side` and `size`, reactively; `side`, `size` and `dismissible` are read live from the root, so `:dismissible="!saving"` locks an open drawer while it saves. The width comes from container tokens (`data-[size=small]:md:max-w-(--container-sm)`, `medium` `--container-xl`, `large` `--container-4xl`), not a JS map or an inline `max-width`.
+- Attributes: the `Drawer` root forwards every consumer attribute to its root element; `DrawerContent` forwards its attributes to the `role="dialog"` element.
 
 ## Motion & Animations
+
+| Trigger              | Animation / Transition                                                                                                   | Token                                                                                     | Reduced-motion fallback         |
+| -------------------- | ------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------- | ------------------------------- |
+| panel open / close   | `transition-[translate] duration-slow-02 ease-expressive-entrance`, closing `data-[state=closed]:duration-slow-01 data-[state=closed]:ease-expressive-exit` | `duration['slow-02']` / `duration['slow-01']` + `curve['expressive-entrance']` / `curve['expressive-exit']` | `motion-reduce:transition-none` |
+| overlay open / close | `transition-opacity duration-slow-01 ease-productive-entrance`, closing `data-[state=closed]:duration-slow-02 data-[state=closed]:ease-productive-exit` | `duration['slow-01']` / `duration['slow-02']` + `curve['productive-entrance']` / `curve['productive-exit']` | `motion-reduce:transition-none` |
+
+No element sets an inline `transition`, so `motion-reduce:transition-none` wins and the panel appears in place under `prefers-reduced-motion` (pinned by `dialog-motion.test.ts`).
 
 - From `md` up the panel slides in from its `side` edge (`translate-x`) and out to it. `side` names the physical edge of a left-to-right page and the panel anchors on the logical one (`start-0` / `end-0`), so under `dir="rtl"` the slide mirrors with it (`rtl:` variants): a `left` drawer sits on the right and leaves to the right.
 
@@ -165,9 +174,10 @@ Layered surface above the page (modal, drawer, menu). Lives at `packages/webkit/
 
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`
 - Keyboard map: `Enter`/`Space` on the trigger opens the drawer and moves focus to its first focusable control. Focus is trapped: `Tab` on the last control wraps to the first and `Shift+Tab` on the first wraps to the last. `Escape` closes it and focus returns to the trigger, or, when opened without a `Drawer.Trigger`, to the element that held focus when it opened. Tests: `drawer.test.ts` › keyboard map (spec).
-- ARIA: root uses appropriate roles (`button`, `dialog`, `status`, etc.) per sub-component.
+- ARIA: the panel is `role="dialog"` with `aria-modal="true"`, `aria-labelledby` on the `DrawerTitle` id, and `aria-describedby` on the `DrawerDescription` id only while a `DrawerDescription` is mounted.
+- Nested overlays: every open `DrawerContent` joins the shared overlay layer stack, so only the top layer handles `Escape` and `Tab` trapping: `Escape` in a `ConfirmDialog` opened from the drawer closes the confirm and leaves the drawer open. Tests: `drawer.test.ts` › nested overlays.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state.
-- `motion-reduce:transition-none motion-reduce:transform-none` on animated states.
+- `motion-reduce:transition-none` on every animated element.
 - Touch target ≥40×40 px where the control is interactive.
 - Teleported content: the portal wraps its content (overlay and panel) in a `display: contents` element that binds `dir` and `lang` from the nearest `WebkitProvider` (`usePortalLocale`), so it keeps the provider's direction and language although it renders under `body`. With no provider nothing is set and the document's own `dir` and `lang` apply.
 

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed, inject, useAttrs } from 'vue'
+  import { computed, inject, onBeforeUnmount, onMounted, useAttrs } from 'vue'
 
   import { cn } from '../../../utils/cn'
   import { DrawerInjectionKey } from './injection-key'
@@ -15,6 +15,9 @@
 
   const attrs = useAttrs()
   const ctx = inject(DrawerInjectionKey)
+
+  onMounted(() => ctx?.registerDescription())
+  onBeforeUnmount(() => ctx?.unregisterDescription())
 
   const rootClasses = computed(() =>
     cn('text-body-sm text-(--text-muted)', attrs.class as string | undefined)

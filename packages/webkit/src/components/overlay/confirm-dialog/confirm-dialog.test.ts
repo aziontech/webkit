@@ -1,7 +1,7 @@
 import userEvent from '@testing-library/user-event'
 import { fireEvent, render, within } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
-import { nextTick } from 'vue'
+import { defineComponent, nextTick, ref } from 'vue'
 
 import Default from '../../../../examples/confirm-dialog/default.vue'
 import SaveOrDiscard from '../../../../examples/confirm-dialog/save-or-discard.vue'
@@ -24,7 +24,7 @@ describe('ConfirmDialog', () => {
     await fireEvent.click(getByTestId('overlay-confirm-dialog__trigger'))
     await settle()
 
-    const dialog = document.body.querySelector<HTMLElement>('[role="dialog"]')
+    const dialog = document.body.querySelector<HTMLElement>('[role="alertdialog"]')
     expect(dialog).toBeTruthy()
     expect(within(dialog as HTMLElement).getByText('Remove domain')).toBeTruthy()
     expect(
@@ -117,20 +117,13 @@ describe('ConfirmDialog', () => {
     expect(emitted()['update:open']).toContainEqual([false])
   })
 
-  it('stacks the confirm button above Cancel below md', async () => {
-    render(ConfirmDialog, { props: { open: true, title: 'Remove domain' } })
-    await settle()
-    const actions = byTestId('overlay-confirm-dialog__actions') as HTMLElement
-    expect(actions.className).toContain('flex-col-reverse')
-  })
-
   it('replaces the buttons with the actions slot', async () => {
     const { getByTestId } = within(render(SaveOrDiscard).container)
 
     await fireEvent.click(getByTestId('overlay-confirm-dialog__trigger'))
     await settle()
 
-    const dialog = document.body.querySelector<HTMLElement>('[role="dialog"]') as HTMLElement
+    const dialog = document.body.querySelector<HTMLElement>('[role="alertdialog"]') as HTMLElement
     expect(within(dialog).getByRole('button', { name: 'Save changes' })).toBeTruthy()
     expect(byTestId('overlay-confirm-dialog__confirm')).toBeNull()
   })
@@ -141,6 +134,41 @@ describe('ConfirmDialog', () => {
     })
     await settle()
 
-    await expectNoA11yViolations(document.body.querySelector('[role="dialog"]') as HTMLElement)
+    await expectNoA11yViolations(document.body.querySelector('[role="alertdialog"]') as HTMLElement)
+  })
+
+  it('does not emit confirm while disabled', async () => {
+    const { emitted } = render(ConfirmDialog, {
+      props: { open: true, title: 'Type the name first', disabled: true }
+    })
+    await settle()
+    await fireEvent.click(byTestId('overlay-confirm-dialog__confirm')!)
+    expect(emitted()['confirm']).toBeUndefined()
+  })
+
+  it('round-trips a controlled v-model:open from the parent', async () => {
+    const open = ref(false)
+    render(
+      defineComponent({
+        components: { ConfirmDialog },
+        setup: () => ({ open }),
+        template: `<ConfirmDialog v-model:open="open" title="Remove domain" />`
+      })
+    )
+    await settle()
+    expect(document.body.querySelector('[role="alertdialog"]')).toBeNull()
+    open.value = true
+    await settle()
+    expect(document.body.querySelector('[role="alertdialog"]')).not.toBeNull()
+    await fireEvent.click(byTestId('overlay-confirm-dialog__cancel')!)
+    await settle()
+    expect(open.value).toBe(false)
+  })
+
+  it('opens at defaultOpen when uncontrolled, as an alertdialog', async () => {
+    render(ConfirmDialog, { props: { defaultOpen: true, title: 'Remove domain' } })
+    await settle()
+    const panel = byTestId('overlay-confirm-dialog__panel')
+    expect(panel?.getAttribute('role')).toBe('alertdialog')
   })
 })

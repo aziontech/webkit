@@ -7,10 +7,13 @@ const FOCUSABLE_SELECTOR =
 
 export function useFocusTrap(
   containerRef: MaybeRefOrGetter<HTMLElement | null | undefined>,
-  active: MaybeRefOrGetter<boolean>
+  active: MaybeRefOrGetter<boolean>,
+  isTop: MaybeRefOrGetter<boolean> = true
 ): void {
   useEventListener(defaultDocument, 'keydown', (event: KeyboardEvent) => {
-    if (!toValue(active) || event.key !== 'Tab') return
+    if (!toValue(active) || event.key !== 'Tab' || event.defaultPrevented || !toValue(isTop)) {
+      return
+    }
 
     const root = toValue(containerRef)
     if (!root) return

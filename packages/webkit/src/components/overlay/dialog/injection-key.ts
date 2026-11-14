@@ -20,6 +20,10 @@ export interface DialogContext {
   close: () => void
   titleId: string
   descriptionId: string
+  /** Whether a DialogDescription is mounted; gates aria-describedby on the panel. */
+  hasDescription: Readonly<Ref<boolean>>
+  registerDescription: () => void
+  unregisterDescription: () => void
   triggerRef: Ref<HTMLElement | null>
   /** Element focused when the overlay opened; focus returns to it when there is no trigger. */
   returnFocusRef: Ref<HTMLElement | null>

@@ -12,7 +12,7 @@
   <div class="flex flex-wrap items-center gap-(--spacing-xxl) p-(--spacing-xxl)">
     <PopoverRoot
       placement="bottom-start"
-      width="small"
+      size="small"
     >
       <PopoverTrigger>
         <Button
@@ -33,7 +33,7 @@
 
     <PopoverRoot
       placement="bottom-start"
-      width="medium"
+      size="medium"
     >
       <PopoverTrigger>
         <Button
@@ -54,7 +54,7 @@
 
     <PopoverRoot
       placement="bottom-start"
-      width="large"
+      size="large"
     >
       <PopoverTrigger>
         <Button

@@ -3,16 +3,14 @@
   import { computed, inject, nextTick, provide, ref, unref, useAttrs, watch } from 'vue'
 
   import { useFocusTrap } from '../../../composables/use-focus-trap'
+  import { useOverlayLayer } from '../../../composables/use-overlay-layer'
   import { cn } from '../../../utils/cn'
-  import { useOverlayMobile } from '../composables/use-overlay-mobile'
   import Panel from '../panel/panel.vue'
   import {
     DrawerInjectionKey,
     DrawerMotionInjectionKey,
     DrawerPanelScrollInjectionKey
   } from './injection-key'
-  import { getDrawerShellSizeStyle } from './presets/sizes'
-  import { drawerPanelStateClasses, getDrawerTransitionStyle } from './presets/transitions'
 
   defineOptions({
     name: 'DrawerContent',
@@ -29,10 +27,12 @@
   const isOpen = computed(() => ctx?.isOpen.value ?? false)
   const motionCtx = inject(DrawerMotionInjectionKey)
   const motionState = computed(() => motionCtx?.motionState.value ?? 'closed')
-  const isMobileOverlay = useOverlayMobile()
-  const isDesktopDrawer = computed(() => !isMobileOverlay.value)
-
   const isScrollLocked = useScrollLock(defaultDocument?.body)
+  const { isTop } = useOverlayLayer(isOpen)
+
+  const forwardedAttrs = computed(() =>
+    Object.fromEntries(Object.entries(attrs).filter(([key]) => key !== 'class'))
+  )
 
   watch(
     isOpen,
@@ -41,10 +41,11 @@
     },
     { immediate: true }
   )
-  useFocusTrap(contentRef, isOpen)
+  useFocusTrap(contentRef, isOpen, isTop)
 
   useEventListener(defaultDocument, 'keydown', (event: globalThis.KeyboardEvent) => {
     if (!isOpen.value || event.key !== 'Escape' || event.defaultPrevented) return
+    if (!isTop.value) return
     if (!ctx?.dismissible) return
     event.preventDefault()
     ctx.close()
@@ -57,73 +58,36 @@
     if (target?.isConnected) target.focus()
   })
 
-  const isLeft = computed(() => ctx?.side === 'left')
-  const sideKey = computed(() => (isLeft.value ? 'left' : 'right'))
+  const side = computed(() => (ctx?.side === 'left' ? 'left' : 'right'))
   const drawerSize = computed(() => unref(ctx?.size) ?? 'medium')
 
   provide(DrawerPanelScrollInjectionKey, true)
-
-  const shellClasses = computed(() =>
-    cn(
-      'fixed z-1001 flex p-0',
-      'max-md:inset-x-0 max-md:bottom-0 max-md:top-auto',
-      'max-md:justify-center',
-      'max-md:w-full',
-      'max-md:h-fit',
-      'max-md:max-h-[80dvh]',
-      'max-sm:h-dvh',
-      'max-sm:max-h-dvh',
-      'max-sm:top-0',
-      'md:inset-y-0 md:h-full md:min-h-full md:w-full',
-      isLeft.value ? 'md:start-0 md:justify-start' : 'md:end-0 md:justify-end',
-      'pointer-events-none',
-      'motion-reduce:transition-none',
-      'motion-reduce:transform-none',
-      drawerPanelStateClasses[sideKey.value],
-      attrs.class as string | undefined
-    )
-  )
-
-  const shellStyle = computed(() => ({
-    ...getDrawerTransitionStyle(motionState.value, 'panel'),
-    ...getDrawerShellSizeStyle(drawerSize.value, isDesktopDrawer.value)
-  }))
-
-  const panelClasses = computed(() =>
-    cn(
-      'pointer-events-auto flex min-h-0 h-full flex-col',
-      'max-md:w-full',
-      'max-md:h-fit',
-      'max-md:max-h-[80dvh]',
-      'max-sm:h-dvh',
-      'max-sm:max-h-dvh',
-      'max-md:max-w-none',
-      'max-md:rounded-b-(--shape-flat) max-md:rounded-t-(--shape-card)',
-      'max-sm:rounded-none max-sm:border-0',
-      'md:h-full md:min-h-0 md:max-h-full',
-      isLeft.value
-        ? 'md:rounded-e-(--shape-card) md:rounded-s-(--shape-flat)'
-        : 'md:rounded-s-(--shape-card) md:rounded-e-(--shape-flat)'
-    )
-  )
 </script>
 
 <template>
   <div
     ref="contentRef"
-    :class="shellClasses"
-    :style="shellStyle"
     role="dialog"
+    v-bind="forwardedAttrs"
+    :class="
+      cn(
+        'pointer-events-none fixed z-1001 flex p-0 transition-[translate] duration-slow-02 ease-expressive-entrance data-[state=closed]:duration-slow-01 data-[state=closed]:ease-expressive-exit motion-reduce:transition-none max-md:inset-x-0 max-md:top-auto max-md:bottom-0 max-md:h-fit max-md:max-h-[80dvh] max-md:w-full max-md:justify-center max-md:translate-x-0 max-md:data-[state=closed]:translate-y-full max-md:data-[state=open]:translate-y-0 max-sm:top-0 max-sm:h-dvh max-sm:max-h-dvh md:inset-y-0 md:h-full md:min-h-full md:w-full md:translate-y-0 md:data-[state=open]:translate-x-0 data-[side=left]:md:start-0 data-[side=left]:md:justify-start data-[side=left]:md:data-[state=closed]:-translate-x-full data-[side=left]:rtl:md:data-[state=closed]:translate-x-full data-[side=right]:md:end-0 data-[side=right]:md:justify-end data-[side=right]:md:data-[state=closed]:translate-x-full data-[side=right]:rtl:md:data-[state=closed]:-translate-x-full data-[size=small]:md:max-w-(--container-sm) data-[size=medium]:md:max-w-(--container-xl) data-[size=large]:md:max-w-(--container-4xl)',
+        attrs.class as string | undefined
+      )
+    "
     :aria-modal="true"
     :aria-labelledby="ctx?.titleId"
-    :aria-describedby="ctx?.descriptionId"
+    :aria-describedby="ctx?.hasDescription.value ? ctx.descriptionId : undefined"
     :data-state="motionState"
+    :data-side="side"
+    :data-size="drawerSize"
     :data-testid="`${ctx?.testId}__panel`"
     tabindex="-1"
   >
     <Panel
       data-fluid
-      :class="panelClasses"
+      :data-side="side"
+      class="pointer-events-auto flex h-full min-h-0 flex-col max-md:h-fit max-md:max-h-[80dvh] max-md:w-full max-md:max-w-none max-md:rounded-t-(--shape-card) max-md:rounded-b-(--shape-flat) max-sm:h-dvh max-sm:max-h-dvh max-sm:rounded-none max-sm:border-0 md:h-full md:max-h-full md:min-h-0 data-[side=left]:md:rounded-s-(--shape-flat) data-[side=left]:md:rounded-e-(--shape-card) data-[side=right]:md:rounded-s-(--shape-card) data-[side=right]:md:rounded-e-(--shape-flat)"
       :data-testid="`${ctx?.testId}__panel-shell`"
     >
       <slot />

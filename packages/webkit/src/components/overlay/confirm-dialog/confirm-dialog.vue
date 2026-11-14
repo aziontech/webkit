@@ -43,6 +43,8 @@
     loading?: boolean
     /** Disables the confirm button, for a confirmation that needs input first. */
     disabled?: boolean
+    /** Initial open state when uncontrolled. */
+    defaultOpen?: boolean
   }
 
   const props = withDefaults(defineProps<Props>(), {
@@ -52,10 +54,12 @@
     kind: 'danger',
     size: 'small',
     loading: false,
-    disabled: false
+    disabled: false,
+    defaultOpen: false
   })
 
-  const open = defineModel<boolean>('open', { default: false })
+  /** Controlled open state. Use with v-model:open; while unbound the dialog starts at defaultOpen. */
+  const open = defineModel<boolean>('open', { default: undefined as never })
 
   const emit = defineEmits<{
     confirm: [event: MouseEvent]
@@ -101,6 +105,7 @@
 <template>
   <Dialog
     v-model:open="open"
+    :default-open="defaultOpen"
     :data-testid="testId"
     :size="size"
     :dismissible="!loading"
@@ -110,7 +115,10 @@
     </DialogTrigger>
     <DialogPortal>
       <DialogOverlay />
-      <DialogContent v-bind="contentAttrs">
+      <DialogContent
+        v-bind="contentAttrs"
+        role="alertdialog"
+      >
         <PanelHeader class="w-full">
           <DialogTitle>{{ title }}</DialogTitle>
           <DialogClose />

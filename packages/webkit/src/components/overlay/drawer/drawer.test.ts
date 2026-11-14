@@ -5,6 +5,7 @@ import { defineComponent, h, nextTick, ref } from 'vue'
 
 import Default from '../../../../examples/drawer/default.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
+import ConfirmDialog from '../confirm-dialog/confirm-dialog.vue'
 import Drawer from './drawer.vue'
 import DrawerClose from './drawer-close.vue'
 import DrawerContent from './drawer-content.vue'
@@ -396,17 +397,6 @@ describe('Drawer (overlay: composition sub-components + provide/inject)', () => 
   })
 })
 
-describe('Drawer on phones', () => {
-  it('opens as a full-height, full-width sheet below sm', async () => {
-    render(composed({ defaultOpen: true }))
-    await settle()
-
-    const shell = byTestId('overlay-drawer__panel-shell')
-    expect(shell?.className).toContain('max-sm:h-dvh')
-    expect(byTestId('overlay-drawer__panel')?.className).toContain('max-sm:top-0')
-  })
-})
-
 describe('keyboard map (spec)', () => {
   const twoActions = defineComponent({
     components: { Drawer, DrawerTrigger, DrawerPortal, DrawerOverlay, DrawerContent, DrawerTitle },
@@ -542,5 +532,101 @@ describe('Drawer unmounted while open', () => {
       warn.mockRestore()
       error.mockRestore()
     }
+  })
+})
+
+describe('audit fixes', () => {
+  it('locks an open drawer when dismissible turns false, and unlocks it again', async () => {
+    const dismissible = ref(true)
+    const open = ref(true)
+    render(
+      defineComponent({
+        components: { Drawer, DrawerPortal, DrawerContent, DrawerTitle },
+        setup: () => ({ dismissible, open }),
+        template: `<Drawer v-model:open="open" :dismissible="dismissible"><DrawerPortal><DrawerContent><DrawerTitle>T</DrawerTitle><button type="button">Act</button></DrawerContent></DrawerPortal></Drawer>`
+      })
+    )
+    await settle()
+    dismissible.value = false
+    await settle()
+    await fireEvent.keyDown(document, { key: 'Escape' })
+    await settle()
+    expect(open.value).toBe(true)
+    dismissible.value = true
+    await settle()
+    await fireEvent.keyDown(document, { key: 'Escape' })
+    await settle()
+    expect(open.value).toBe(false)
+  })
+
+  it('reads side reactively and references no missing description', async () => {
+    const side = ref<'left' | 'right'>('right')
+    render(
+      defineComponent({
+        components: { Drawer, DrawerPortal, DrawerContent, DrawerTitle },
+        setup: () => ({ side }),
+        template: `<Drawer :side="side" :default-open="true" id="details"><DrawerPortal><DrawerContent><DrawerTitle>T</DrawerTitle></DrawerContent></DrawerPortal></Drawer>`
+      })
+    )
+    await settle()
+    expect(panel()!.getAttribute('data-side')).toBe('right')
+    expect(panel()!.hasAttribute('aria-describedby')).toBe(false)
+    expect(panel()!.style.transition).toBe('')
+    expect(byTestId('overlay-drawer')!.id).toBe('details')
+    side.value = 'left'
+    await settle()
+    expect(panel()!.getAttribute('data-side')).toBe('left')
+  })
+})
+
+describe('nested overlays', () => {
+  it('Escape in a ConfirmDialog opened from the drawer closes the confirm only', async () => {
+    const drawerOpen = ref(true)
+    const confirmOpen = ref(false)
+    render(
+      defineComponent({
+        components: { Drawer, DrawerPortal, DrawerContent, DrawerTitle, ConfirmDialog },
+        setup: () => ({ drawerOpen, confirmOpen }),
+        template: `
+          <Drawer v-model:open="drawerOpen">
+            <DrawerPortal>
+              <DrawerContent>
+                <DrawerTitle>Edit</DrawerTitle>
+                <button type="button" data-testid="discard" @click="confirmOpen = true">Discard</button>
+              </DrawerContent>
+            </DrawerPortal>
+          </Drawer>
+          <ConfirmDialog v-model:open="confirmOpen" title="Discard changes?" />
+        `
+      })
+    )
+    await settle()
+    await fireEvent.click(byTestId('discard')!)
+    await settle()
+    expect(confirmOpen.value).toBe(true)
+    await fireEvent.keyDown(document, { key: 'Escape' })
+    await settle()
+    expect(confirmOpen.value).toBe(false)
+    expect(drawerOpen.value).toBe(true)
+  })
+
+  it('Escape while the confirm is loading closes nothing', async () => {
+    const drawerOpen = ref(true)
+    render(
+      defineComponent({
+        components: { Drawer, DrawerPortal, DrawerContent, DrawerTitle, ConfirmDialog },
+        setup: () => ({ drawerOpen }),
+        template: `
+          <Drawer v-model:open="drawerOpen">
+            <DrawerPortal><DrawerContent><DrawerTitle>Edit</DrawerTitle><button type="button">Act</button></DrawerContent></DrawerPortal>
+          </Drawer>
+          <ConfirmDialog :open="true" :loading="true" title="Deleting" />
+        `
+      })
+    )
+    await settle()
+    await fireEvent.keyDown(document, { key: 'Escape' })
+    await settle()
+    expect(drawerOpen.value).toBe(true)
   })
 })

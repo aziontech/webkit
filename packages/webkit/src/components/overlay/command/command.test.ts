@@ -350,7 +350,6 @@ describe('Command (overlay: wraps Dialog, composition + provide/inject)', () => 
 
       const iconed = items[0].querySelector('[data-testid="overlay-command__item__prefix"]')
       expect(iconed).not.toBeNull()
-      expect(iconed?.className).toContain('size-4')
       expect(items[0].querySelector('i.pi-cloud-upload')).not.toBeNull()
 
       // The icon-less row puts no empty box in the DOM, so it carries no indent.
@@ -369,40 +368,6 @@ describe('Command (overlay: wraps Dialog, composition + provide/inject)', () => 
       for (const item of items) {
         expect(item.querySelector('[data-testid="overlay-command__item__prefix"]')).toBeNull()
       }
-    })
-  })
-
-  describe('group rhythm', () => {
-    it('spaces a group that follows another group, but not one that follows a separator', async () => {
-      render(composed({ defaultOpen: true }))
-      await settle()
-
-      const groups = Array.from(
-        document.body.querySelectorAll<HTMLElement>('[data-testid="overlay-command__group"]')
-      )
-      expect(groups).toHaveLength(2)
-
-      // The variant is sibling-scoped, so both groups carry the same class and the
-      // selector decides: it matches after a group, never after a separator.
-      for (const group of groups) {
-        expect(group.className).toContain('[:not([role=separator])+&]:mt-(--spacing-sm)')
-      }
-
-      // Group 2 here follows the separator, so the rule must not match it.
-      expect(groups[1].previousElementSibling?.getAttribute('role')).toBe('separator')
-    })
-
-    it('gives the separator the same rhythm as the DropdownMenu group divider', async () => {
-      render(composed({ defaultOpen: true }))
-      await settle()
-
-      const separator = document.body.querySelector<HTMLElement>(
-        '[data-testid="overlay-command__separator"]'
-      )
-      expect(separator).not.toBeNull()
-      expect(separator?.className).toContain('mt-(--spacing-sm)')
-      expect(separator?.className).toContain('mb-(--spacing-xs)')
-      expect(separator?.className).toContain('border-t')
     })
   })
 

@@ -3,7 +3,6 @@
 
   import { cn } from '../../../utils/cn'
   import { DrawerInjectionKey, DrawerMotionInjectionKey } from './injection-key'
-  import { drawerOverlayTransitionClasses, getDrawerTransitionStyle } from './presets/transitions'
 
   defineOptions({
     name: 'DrawerOverlay',
@@ -19,24 +18,16 @@
     if (!ctx?.dismissible) return
     ctx.close()
   }
-
-  const overlayTransitionStyle = computed(() =>
-    getDrawerTransitionStyle(motionState.value, 'overlay')
-  )
-
-  const rootClasses = computed(() =>
-    cn(
-      'fixed inset-0 z-1000 bg-(--bg-backdrop)',
-      drawerOverlayTransitionClasses,
-      attrs.class as string | undefined
-    )
-  )
 </script>
 
 <template>
   <div
-    :class="rootClasses"
-    :style="overlayTransitionStyle"
+    :class="
+      cn(
+        'fixed inset-0 z-1000 bg-(--bg-backdrop) opacity-0 data-[state=open]:opacity-100 transition-opacity duration-slow-01 ease-productive-entrance data-[state=closed]:duration-slow-02 data-[state=closed]:ease-productive-exit motion-reduce:transition-none',
+        attrs.class as string | undefined
+      )
+    "
     :data-state="motionState"
     :data-testid="`${ctx?.testId}__backdrop`"
     aria-hidden="true"
