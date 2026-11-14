@@ -11,6 +11,11 @@
       "name": "Quote band",
       "summary": "`kind=\"quote\"` sets the quote alone as a full-width band, with no logos: the design sample's QuoteBand. `quote-kind=\"highlight\"` gives it the featured register with the mark beside the text.",
       "file": "quote-band.vue"
+    },
+    {
+      "name": "Registry",
+      "summary": "The wall built straight from the client registry: each entry's light/dark pair, or its single file with the `artwork` that says which theme inverts it, is drawn right on both themes by `Logo`; the quote's company mark comes from the registry too, and an outlined `secondary-action` sits beside the primary one.",
+      "file": "registry.vue"
     }
   ],
   "site": [
