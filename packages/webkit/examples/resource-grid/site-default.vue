@@ -41,6 +41,7 @@
     <SectionGap hatch />
 
     <ResourceGrid
+      anchor="resources"
       eyebrow="Go Deeper"
       title="Guides and Resources"
       description="Documentation, articles, and customer stories on building secure, compliant financial applications on a distributed architecture."

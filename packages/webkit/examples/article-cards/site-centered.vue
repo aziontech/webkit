@@ -52,6 +52,7 @@
 
     <ArticleCards
       kind="centered"
+      anchor="success-cases"
       eyebrow="Success cases"
       title="When our customers succeed, we succeed"
       :items="items"

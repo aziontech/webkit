@@ -1,7 +1,9 @@
 <script setup lang="ts">
   import { useMediaQuery, useMounted } from '@vueuse/core'
-  import { computed, onMounted, ref, useAttrs } from 'vue'
+  import { computed, onMounted, ref, useAttrs, useId } from 'vue'
 
+  import { useTranslate } from '../../../composables/use-locale/use-translate'
+  import * as en from '../../../i18n/messages/en'
   import Button from '../../actions/button/button.vue'
   import Item from '../../content/item/item.vue'
   import ItemContent from '../../content/item/item-content.vue'
@@ -15,6 +17,7 @@
   import TableHeader from '../../data/table/table-header/table-header.vue'
   import TableRow from '../../data/table/table-row/table-row.vue'
   import EmptyState from '../../feedback/empty-state/empty-state.vue'
+  import Chip from '../../inputs/chip/chip.vue'
   import Input from '../../inputs/input/input.vue'
   import Select from '../../inputs/select/select.vue'
   import SelectContent from '../../inputs/select/select-content/select-content.vue'
@@ -44,6 +47,14 @@
     align?: ListingBrowserColumnAlign
   }
 
+  /** The client mark drawn beside a row's name. */
+  export type ListingBrowserMark = {
+    /** The client's name, the mark's alternative text. */
+    name: string
+    /** URL of the client's logo, drawn in one ink that follows the theme. */
+    logo: string
+  }
+
   /** One row of the listing, linked by its first column. */
   export type ListingBrowserRow = {
     /** Destination of the row. */
@@ -54,6 +65,8 @@
     values: Record<string, string>
     /** The facet values the row carries, keyed by facet. */
     facets?: Record<string, string[]>
+    /** Client mark drawn before the name on the table and above it on phones. */
+    mark?: ListingBrowserMark
   }
 
   /** One option of a facet select. */
@@ -113,7 +126,7 @@
     title?: string
     /** The columns, left to right; each is `{ key, label, grow?, align? }`. The first names the row and links it, the second describes it on phones. */
     columns?: ListingBrowserColumn[]
-    /** Every row, in source order; each is `{ href, group, values, facets }` where `values` and `facets` are keyed by column and facet. */
+    /** Every row, in source order; each is `{ href, group, values, facets, mark? }` where `values` and `facets` are keyed by column and facet and `mark` is the client's `{ name, logo }`. */
     rows?: ListingBrowserRow[]
     /** The groups the rows are listed under, in order; a group with no matching row is not shown. */
     groups?: string[]
@@ -127,6 +140,8 @@
     search?: ListingBrowserSearch
     /** The state shown when nothing matches; `{ title, description, clearLabel }` where `clearLabel` is the button that clears the search and every facet. Omitted when absent. */
     empty?: ListingBrowserEmpty
+    /** Label of the filter button below the large breakpoint; empty uses the locale catalog (`Filters`). */
+    filterLabel?: string
   }
 
   const props = withDefaults(defineProps<Props>(), {
@@ -139,10 +154,17 @@
     sorts: () => [],
     sortAriaLabel: '',
     search: undefined,
-    empty: undefined
+    empty: undefined,
+    filterLabel: ''
   })
 
   const attrs = useAttrs()
+
+  const { t } = useTranslate({ listingBrowser: en.listingBrowser })
+
+  const panelId = useId()
+
+  const SEARCH_THRESHOLD = 7
 
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? 'sections-listing-browser'
@@ -153,6 +175,10 @@
   const selected = ref<Record<string, string>>(
     Object.fromEntries(props.facets.map((facet) => [facet.key, '']))
   )
+
+  const expanded = ref(false)
+
+  const optionQuery = ref<Record<string, string>>({})
 
   const wideQuery = useMediaQuery('(min-width: 64rem)')
   const mounted = useMounted()
@@ -202,6 +228,51 @@
       .map((group) => ({ group, rows: matches.value.filter((row) => row.group === group) }))
       .filter((entry) => entry.rows.length > 0)
   )
+
+  const SORT_KEY = '__sort'
+
+  const narrowed = <T extends { label: string }>(key: string, options: T[]): T[] => {
+    const term = (optionQuery.value[key] ?? '').trim().toLowerCase()
+    return term ? options.filter((option) => option.label.toLowerCase().includes(term)) : options
+  }
+
+  const setOptionQuery = (key: string, value: string) => {
+    optionQuery.value = { ...optionQuery.value, [key]: value }
+  }
+
+  const applied = computed(() =>
+    props.facets.flatMap((facet) => {
+      const value = selected.value[facet.key]
+      const option = value
+        ? facet.options.find((candidate) => candidate.value === value)
+        : undefined
+      return option ? [{ key: facet.key, label: `${facet.label}: ${option.label}` }] : []
+    })
+  )
+
+  const filterButtonLabel = computed(() => {
+    const label = props.filterLabel || t('listingBrowser.filters')
+    return applied.value.length > 0
+      ? t('listingBrowser.filtersApplied', { label, count: applied.value.length })
+      : label
+  })
+
+  const followRow = (event: MouseEvent): void => {
+    const target = event.target as Element | null
+    if (!target || target.closest('a, button')) return
+    if (window.getSelection()?.toString()) return
+    const link = (event.currentTarget as Element | null)?.querySelector('a[href]')
+    link?.dispatchEvent(
+      new MouseEvent('click', {
+        bubbles: true,
+        cancelable: true,
+        ctrlKey: event.ctrlKey,
+        metaKey: event.metaKey,
+        shiftKey: event.shiftKey,
+        altKey: event.altKey
+      })
+    )
+  }
 
   const facetDisplay = (facet: ListingBrowserFacet) => (value: unknown) =>
     facet.options.find((option) => option.value === value)?.label ?? ''
@@ -260,57 +331,152 @@
           :data-testid="`${testId}__toolbar`"
           class="grid gap-(--spacing-md) border-b border-(--border-default) px-(--spacing-xl) py-(--spacing-lg) lg:grid-cols-[minmax(0,4fr)_repeat(3,minmax(0,1fr))] lg:items-center"
         >
-          <Input
-            v-if="search"
-            v-model="query"
-            size="large"
-            type="text"
-            :placeholder="placeholder"
-            :aria-label="search.label"
+          <div class="flex items-center gap-(--spacing-sm) lg:contents">
+            <Button
+              v-if="facets.length > 0 || sorts.length > 0"
+              :data-testid="`${testId}__filter-button`"
+              :label="filterButtonLabel"
+              kind="outlined"
+              size="large"
+              icon="pi pi-filter"
+              :aria-expanded="expanded ? 'true' : 'false'"
+              :aria-controls="panelId"
+              class="shrink-0 lg:hidden"
+              @click="expanded = !expanded"
+            />
+            <Input
+              v-if="search"
+              v-model="query"
+              size="large"
+              type="text"
+              :placeholder="placeholder"
+              :aria-label="search.label"
+              class="min-w-0 flex-1"
+            >
+              <template #iconLeft>
+                <i class="pi pi-search text-(--text-muted)" />
+              </template>
+            </Input>
+          </div>
+          <div
+            v-if="facets.length > 0 || sorts.length > 0"
+            :id="panelId"
+            :data-testid="`${testId}__filters`"
+            :data-expanded="expanded || null"
+            class="flex flex-col gap-(--spacing-sm) max-lg:hidden max-lg:data-[expanded]:flex lg:contents"
           >
-            <template #iconLeft>
-              <i class="pi pi-search text-(--text-muted)" />
-            </template>
-          </Input>
-          <Select
-            v-for="facet in facets"
-            :key="facet.key"
-            :model-value="selected[facet.key]"
-            size="large"
-            :placeholder="facet.allLabel"
-            :display-value="facetDisplay(facet)"
-            @update:model-value="(value) => updateFacet(facet.key, value)"
+            <Select
+              v-for="facet in facets"
+              :key="facet.key"
+              :model-value="selected[facet.key]"
+              size="large"
+              :placeholder="facet.allLabel"
+              :display-value="facetDisplay(facet)"
+              @update:model-value="(value) => updateFacet(facet.key, value)"
+              @update:open="setOptionQuery(facet.key, '')"
+            >
+              <SelectTrigger :aria-label="facet.label" />
+              <SelectContent>
+                <template
+                  v-if="facet.options.length > SEARCH_THRESHOLD"
+                  #search
+                >
+                  <Input
+                    :model-value="optionQuery[facet.key] ?? ''"
+                    size="small"
+                    :placeholder="t('listingBrowser.search')"
+                    :aria-label="
+                      t('listingBrowser.searchFacet', { facet: facet.label.toLowerCase() })
+                    "
+                    @update:model-value="setOptionQuery(facet.key, $event)"
+                  >
+                    <template #iconLeft>
+                      <i
+                        class="pi pi-search"
+                        aria-hidden="true"
+                      />
+                    </template>
+                  </Input>
+                </template>
+                <SelectOption value="">{{ facet.allLabel }}</SelectOption>
+                <SelectOption
+                  v-for="option in narrowed(facet.key, facet.options)"
+                  :key="option.value"
+                  :value="option.value"
+                >
+                  {{ option.label }}
+                </SelectOption>
+                <p
+                  v-if="narrowed(facet.key, facet.options).length === 0"
+                  role="status"
+                  class="px-(--spacing-xs) py-(--spacing-xxs) text-label-sm text-(--text-muted)"
+                >
+                  {{ t('listingBrowser.noMatch') }}
+                </p>
+              </SelectContent>
+            </Select>
+            <Select
+              v-if="sorts.length > 0"
+              :model-value="sort"
+              size="large"
+              :display-value="sortDisplay"
+              @update:model-value="updateSort"
+              @update:open="setOptionQuery(SORT_KEY, '')"
+            >
+              <SelectTrigger :aria-label="sortAriaLabel || undefined" />
+              <SelectContent>
+                <template
+                  v-if="sorts.length > SEARCH_THRESHOLD"
+                  #search
+                >
+                  <Input
+                    :model-value="optionQuery[SORT_KEY] ?? ''"
+                    size="small"
+                    :placeholder="t('listingBrowser.search')"
+                    :aria-label="
+                      t('listingBrowser.searchFacet', { facet: sortAriaLabel.toLowerCase() })
+                    "
+                    @update:model-value="setOptionQuery(SORT_KEY, $event)"
+                  >
+                    <template #iconLeft>
+                      <i
+                        class="pi pi-search"
+                        aria-hidden="true"
+                      />
+                    </template>
+                  </Input>
+                </template>
+                <SelectOption
+                  v-for="option in narrowed(SORT_KEY, sorts)"
+                  :key="option.value"
+                  :value="option.value"
+                >
+                  {{ option.label }}
+                </SelectOption>
+                <p
+                  v-if="narrowed(SORT_KEY, sorts).length === 0"
+                  role="status"
+                  class="px-(--spacing-xs) py-(--spacing-xxs) text-label-sm text-(--text-muted)"
+                >
+                  {{ t('listingBrowser.noMatch') }}
+                </p>
+              </SelectContent>
+            </Select>
+          </div>
+          <div
+            v-if="applied.length > 0"
+            :data-testid="`${testId}__applied`"
+            class="flex flex-wrap gap-(--spacing-xs) lg:hidden"
           >
-            <SelectTrigger :aria-label="facet.label" />
-            <SelectContent>
-              <SelectOption value="">{{ facet.allLabel }}</SelectOption>
-              <SelectOption
-                v-for="option in facet.options"
-                :key="option.value"
-                :value="option.value"
-              >
-                {{ option.label }}
-              </SelectOption>
-            </SelectContent>
-          </Select>
-          <Select
-            v-if="sorts.length > 0"
-            :model-value="sort"
-            size="large"
-            :display-value="sortDisplay"
-            @update:model-value="updateSort"
-          >
-            <SelectTrigger :aria-label="sortAriaLabel || undefined" />
-            <SelectContent>
-              <SelectOption
-                v-for="option in sorts"
-                :key="option.value"
-                :value="option.value"
-              >
-                {{ option.label }}
-              </SelectOption>
-            </SelectContent>
-          </Select>
+            <Chip
+              v-for="chip in applied"
+              :key="chip.key"
+              :label="chip.label"
+              removable
+              size="medium"
+              @remove="updateFacet(chip.key, '')"
+            />
+          </div>
         </div>
 
         <template v-if="listed.length > 0">
@@ -325,7 +491,7 @@
               class="data-[ruled]:border-t data-[ruled]:border-(--border-default)"
             >
               <h3
-                class="m-0 border-b border-(--border-default) px-(--spacing-xl) py-(--spacing-md) text-overline-md text-(--text-muted)"
+                class="sticky top-(--layout-header-height) z-20 m-0 border-b border-(--border-default) bg-(--bg-canvas) px-(--spacing-xl) py-(--spacing-md) text-overline-md text-(--text-muted)"
               >
                 {{ entry.group }}
               </h3>
@@ -337,6 +503,17 @@
                   class="relative px-(--spacing-xl)! py-(--spacing-lg)! hover:bg-(--bg-hover)"
                 >
                   <ItemContent class="gap-(--spacing-xs)">
+                    <span
+                      v-if="row.mark"
+                      class="flex h-5 items-center"
+                    >
+                      <img
+                        :src="row.mark.logo"
+                        :alt="row.mark.name"
+                        loading="lazy"
+                        class="h-full w-auto max-w-28 object-contain brightness-0 [[data-theme=dark]_&]:invert"
+                      />
+                    </span>
                     <ItemTitle>
                       <a
                         :href="row.href"
@@ -347,7 +524,7 @@
                     </ItemTitle>
                     <ItemDescription
                       v-if="detailKey && row.values[detailKey]"
-                      class="line-clamp-none! text-pretty"
+                      class="line-clamp-none! text-overline-sm! text-pretty"
                     >
                       {{ row.values[detailKey] }}
                     </ItemDescription>
@@ -382,7 +559,7 @@
             >
               <TableRow
                 :data-ruled="index > 0 || null"
-                class="bg-(--bg-surface) data-[ruled]:border-t data-[ruled]:border-(--border-default)"
+                class="sticky top-(--layout-header-height) z-20 bg-(--bg-surface) data-[ruled]:border-t data-[ruled]:border-(--border-default)"
               >
                 <TableCell
                   :grow="3"
@@ -394,7 +571,8 @@
               <TableRow
                 v-for="row in entry.rows"
                 :key="row.href"
-                class="relative cursor-pointer hover:[--table-row-bg:var(--bg-canvas)]"
+                class="cursor-pointer hover:[--table-row-bg:var(--bg-hover)]!"
+                @click="followRow"
               >
                 <TableCell
                   v-for="(column, cellIndex) in columns"
@@ -403,18 +581,37 @@
                   :align="column.align ?? 'start'"
                   :principal="cellIndex === 0"
                   :data-edge="edge(cellIndex)"
-                  class="py-(--spacing-lg)! text-(--text-muted) data-[edge=end]:pe-(--spacing-xl)! data-[edge=start]:ps-(--spacing-xl)!"
+                  :data-meta="cellIndex > 0 || null"
+                  class="py-(--spacing-lg)! text-(--text-muted) data-[meta]:text-overline-sm! data-[edge=end]:pe-(--spacing-xl)! data-[edge=start]:ps-(--spacing-xl)!"
                 >
-                  <a
+                  <div
                     v-if="cellIndex === 0"
-                    :href="row.href"
-                    class="text-label-lg text-(--text-default) after:absolute after:inset-0 after:content-[''] focus-visible:outline-none focus-visible:after:ring-2 focus-visible:after:ring-(--ring-color) focus-visible:after:ring-inset"
+                    class="flex min-w-0 items-center gap-(--spacing-lg)"
                   >
-                    {{ row.values[column.key] }}
-                  </a>
-                  <template v-else>
-                    {{ row.values[column.key] }}
-                  </template>
+                    <span
+                      v-if="row.mark"
+                      class="flex h-5 w-28 shrink-0 items-center"
+                    >
+                      <img
+                        :src="row.mark.logo"
+                        :alt="row.mark.name"
+                        loading="lazy"
+                        class="h-full w-auto max-w-full object-contain brightness-0 [[data-theme=dark]_&]:invert"
+                      />
+                    </span>
+                    <a
+                      :href="row.href"
+                      class="min-w-0 whitespace-normal text-pretty text-label-lg text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)"
+                    >
+                      {{ row.values[column.key] }}
+                    </a>
+                  </div>
+                  <span
+                    v-else
+                    class="min-w-0 truncate"
+                    :title="row.values[column.key]"
+                    >{{ row.values[column.key] }}</span
+                  >
                 </TableCell>
               </TableRow>
             </TableBody>

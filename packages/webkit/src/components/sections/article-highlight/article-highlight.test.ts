@@ -1,6 +1,7 @@
 import userEvent from '@testing-library/user-event'
-import { render } from '@testing-library/vue'
+import { fireEvent, render, waitFor } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
+import { userEvent as browserUser } from 'vitest/browser'
 
 import { expectNoA11yViolations } from '../../../test/axe'
 import ArticleHighlight from './article-highlight.vue'
@@ -46,6 +47,14 @@ const band = (props: Record<string, unknown> = {}) =>
 
 const panelHeadline = (getByRole: ReturnType<typeof band>['getByRole']) =>
   getByRole('heading', { level: 2 }).textContent?.trim()
+
+const highlightOf = (getByTestId: ReturnType<typeof band>['getByTestId']) =>
+  getByTestId(TESTID).querySelector('[role="tabpanel"]')!.parentElement as HTMLElement
+
+const leave = async (getByTestId: ReturnType<typeof band>['getByTestId']) => {
+  await browserUser.unhover(highlightOf(getByTestId))
+  await fireEvent.pointerLeave(highlightOf(getByTestId))
+}
 
 describe('ArticleHighlight', () => {
   it('renders the band under the default testid', () => {
@@ -172,6 +181,74 @@ describe('ArticleHighlight', () => {
 
     const { getByRole } = band({ items: [...items, ...more(4)] })
     expect(getByRole('tablist').getAttribute('data-columns')).toBe('5')
+  })
+
+  it('advances on its own with autoplay and draws the progress line', async () => {
+    const { getByRole, getByTestId, getAllByRole } = band({ autoplay: true, autoplayInterval: 300 })
+
+    await waitFor(() => expect(getByTestId(`${TESTID}__progress`)).toBeInTheDocument())
+    await leave(getByTestId)
+    await waitFor(
+      () => expect(getAllByRole('tab')[1]?.getAttribute('aria-selected')).toBe('true'),
+      {
+        timeout: 2000
+      }
+    )
+    await waitFor(() => expect(panelHeadline(getByRole)).toBe(items[1]?.title))
+  })
+
+  it('writes each autoplay step back through v-model', async () => {
+    const steps: number[] = []
+    const { getByTestId } = band({
+      autoplay: true,
+      autoplayInterval: 200,
+      'onUpdate:modelValue': (value: number) => steps.push(value)
+    })
+    await leave(getByTestId)
+
+    await waitFor(() => expect(steps).toContain(1), { timeout: 2000 })
+  })
+
+  it('pauses while the pointer is over the band', async () => {
+    const { getByTestId, getAllByRole } = band({ autoplay: true, autoplayInterval: 200 })
+
+    const root = highlightOf(getByTestId)
+    await leave(getByTestId)
+    await waitFor(() => expect(root.hasAttribute('data-autoplay')).toBe(true))
+    await fireEvent.pointerEnter(root)
+    await waitFor(() => expect(root.hasAttribute('data-autoplay')).toBe(false))
+
+    await new Promise((resolve) => setTimeout(resolve, 500))
+    expect(getAllByRole('tab')[0]?.getAttribute('aria-selected')).toBe('true')
+
+    await fireEvent.pointerLeave(root)
+    await waitFor(() => expect(root.hasAttribute('data-autoplay')).toBe(true))
+  })
+
+  it('does not autoplay by default or with one article', async () => {
+    const off = band()
+    expect(off.queryByTestId(`${TESTID}__progress`)).toBeNull()
+    off.unmount()
+
+    const { queryByTestId } = band({ autoplay: true, items: [items[0]] })
+    await new Promise((resolve) => setTimeout(resolve, 50))
+    expect(queryByTestId(`${TESTID}__progress`)).toBeNull()
+  })
+
+  it('marks the slide direction on the panel', async () => {
+    const { getAllByRole, getByRole } = band()
+
+    await userEvent.click(getAllByRole('tab')[2]!)
+    expect(getByRole('tabpanel').getAttribute('data-direction')).toBe('forward')
+
+    await userEvent.click(getAllByRole('tab')[0]!)
+    expect(getByRole('tabpanel').getAttribute('data-direction')).toBe('back')
+  })
+
+  it('sets data-fill when fill is on', () => {
+    const { getByTestId } = band({ fill: true })
+
+    expect(getByTestId(TESTID).querySelector('[data-fill]')).not.toBeNull()
   })
 
   it('omits the button when actionLabel is empty', () => {

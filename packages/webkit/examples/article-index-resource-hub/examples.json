@@ -6,6 +6,11 @@
       "name": "Default",
       "summary": "The Resource Hub list at rest. Pick a value in a dropdown to narrow it; the dropdowns combine, and when nothing matches the list and its button are left out.",
       "file": "default.vue"
+    },
+    {
+      "name": "Empty",
+      "summary": "Pick `Tech` in Industry: no resource carries it, so the `empty` state renders a search icon, its title and description, and an action that resets every facet. The second row has no cover, so it draws its client's mark and opens its external link in a new tab.",
+      "file": "empty.vue"
     }
   ],
   "site": [

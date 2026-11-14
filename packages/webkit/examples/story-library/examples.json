@@ -11,6 +11,11 @@
       "name": "NoResults",
       "summary": "No story matches: the grid gives way to the empty state and its clear-filters action.",
       "file": "no-results.vue"
+    },
+    {
+      "name": "Paged",
+      "summary": "A `page-size` of two: the grid shows the first two stories and the load-more button reveals the next page; changing the search or a facet returns to the first page. Below the large breakpoint the toolbar folds to a filter button, the shorter search placeholder and a chip per applied facet.",
+      "file": "paged.vue"
     }
   ],
   "site": [

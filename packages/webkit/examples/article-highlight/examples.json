@@ -11,6 +11,11 @@
       "name": "Selected",
       "summary": "`v-model` (the selected index) opens the band on its second article; a click or an arrow key writes the new index back.",
       "file": "selected.vue"
+    },
+    {
+      "name": "Autoplay",
+      "summary": "`autoplay` advances the featured article every `autoplay-interval` milliseconds, with a progress line along the panel's foot; it pauses while the pointer is over the band or keyboard focus is inside it, and stays still under reduced motion. `fill` makes the band fill the first viewport under the sticky site header from the large breakpoint, as the blog opens. WebKit ships no editorial media, so the covers here are the neutral `@aziontech/webkit/assets/placeholder-image.svg`; pass your own image URLs.",
+      "file": "autoplay.vue"
     }
   ],
   "site": [

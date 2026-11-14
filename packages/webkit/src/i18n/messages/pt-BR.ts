@@ -98,10 +98,22 @@ export const ptBR: Messages = {
     showAtSide: 'Mostrar ao lado do conteúdo',
     showAtBottom: 'Mostrar abaixo do conteúdo'
   },
+  articleBody: {
+    copiedLink: 'Link copiado',
+    copiedFeed: 'Link do feed copiado',
+    copiedPage: 'Página copiada como markdown',
+    copyFailed: 'Não foi possível copiar',
+    copyFailedHint: 'Seu navegador bloqueou o acesso à área de transferência.',
+    assistantPrompt: 'Leia {url} para que eu possa fazer perguntas sobre ele.'
+  },
+  articleCards: {
+    newTab: '(abre em uma nova aba)'
+  },
   articleIndex: {
     search: 'Buscar',
     searchFacet: 'Buscar {facet}',
-    empty: 'Nenhum resultado encontrado.'
+    empty: 'Nenhum resultado encontrado.',
+    newTab: '(abre em uma nova aba)'
   },
   attributeEditor: {
     add: 'Adicionar item',
@@ -606,6 +618,13 @@ export const ptBR: Messages = {
   link: {
     label: 'Saiba mais'
   },
+  listingBrowser: {
+    filters: 'Filtros',
+    filtersApplied: '{label} ({count})',
+    search: 'Buscar',
+    searchFacet: 'Buscar {facet}',
+    noMatch: 'Nenhum resultado encontrado.'
+  },
   logView: {
     searchPlaceholder: 'Buscar nos logs',
     search: 'Buscar logs',
@@ -845,7 +864,10 @@ export const ptBR: Messages = {
   storyLibrary: {
     search: 'Buscar',
     searchFacet: 'Buscar {facet}',
-    empty: 'Nenhum resultado encontrado.'
+    empty: 'Nenhum resultado encontrado.',
+    filters: 'Filtros',
+    filtersApplied: '{label} ({count})',
+    newTab: '(abre em uma nova aba)'
   },
   table: {
     selectAll: 'Selecionar todas as linhas',

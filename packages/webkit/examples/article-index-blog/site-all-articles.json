@@ -82,6 +82,10 @@
     },
     "rowLabel": "Read article",
     "moreLabel": "Load more",
+    "empty": {
+      "title": "No articles match these filters",
+      "action": "View all articles"
+    },
     "ariaLabel": "Articles"
   }
 }

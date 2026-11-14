@@ -1,7 +1,7 @@
 <script setup>
+  import ArticleIndexResourceHub from '@aziontech/webkit/article-index-resource-hub'
   import SectionContainer from '@aziontech/webkit/section-container'
   import SectionGap from '@aziontech/webkit/section-gap'
-  import ArticleIndexResourceHub from '@aziontech/webkit/article-index-resource-hub'
 
   const items = [
     {
@@ -98,6 +98,11 @@
       :facets="facets"
       row-label="Read article"
       more-label="Load more"
+      :empty="{
+        title: 'No resources match these filters',
+        description: 'Try another content type or industry.',
+        action: 'View all resources'
+      }"
       aria-label="Resources"
     />
 

@@ -3,6 +3,7 @@ import { render } from '@testing-library/vue'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
 import { expectNoA11yViolations } from '../../../test/axe'
+import { toast } from '../../feedback/toast/use-toast-store'
 import ArticleBody from './article-body.vue'
 
 const TESTID = 'sections-article-body'
@@ -166,16 +167,141 @@ describe('ArticleBody', () => {
 
     await userEvent.click(getByRole('button', { name: share.copyLink }))
 
-    expect(writeText).toHaveBeenCalledWith(article.href)
+    expect(writeText).toHaveBeenCalledWith(window.location.href)
   })
 
-  it('copies the body from the copy-page button', async () => {
+  it('copies the page as markdown from the copy-page button', async () => {
     const writeText = stubClipboard()
-    const { getByRole } = band()
+    const success = vi.spyOn(toast, 'success')
+    const { getByRole } = band({ share: { ...share, copiedPage: 'Copied!' } })
 
     await userEvent.click(getByRole('button', { name: 'Copy page' }))
 
-    expect(writeText).toHaveBeenCalledWith(body)
+    expect(writeText).toHaveBeenCalledWith(
+      `# ${article.title}\n\n${article.description}\n\n${body}`
+    )
+    expect(success).toHaveBeenCalledWith('Copied!')
+  })
+
+  it('confirms a copied link with the locale toast by default', async () => {
+    stubClipboard()
+    const success = vi.spyOn(toast, 'success')
+    const { getByRole } = band()
+
+    await userEvent.click(getByRole('button', { name: share.copyLink }))
+
+    expect(success).toHaveBeenCalledWith('Link copied')
+  })
+
+  it('raises an error toast when the clipboard refuses', async () => {
+    vi.spyOn(globalThis.navigator, 'clipboard', 'get').mockReturnValue({
+      writeText: vi.fn().mockRejectedValue(new Error('denied'))
+    } as unknown as Clipboard)
+    const error = vi.spyOn(toast, 'error')
+    const { getByRole } = band()
+
+    await userEvent.click(getByRole('button', { name: share.copyLink }))
+
+    expect(error).toHaveBeenCalledWith('Could not copy', {
+      description: 'Your browser blocked clipboard access.'
+    })
+  })
+
+  it('copies the feed URL from the copy-feed button only when both are set', async () => {
+    const writeText = stubClipboard()
+    const first = band()
+    expect(first.queryByRole('button', { name: 'Copy RSS feed' })).toBeNull()
+    first.unmount()
+
+    const { getByRole } = band({
+      share: { ...share, copyFeed: 'Copy RSS feed', feed: 'https://example.com/feed.xml' }
+    })
+    await userEvent.click(getByRole('button', { name: 'Copy RSS feed' }))
+
+    expect(writeText).toHaveBeenCalledWith('https://example.com/feed.xml')
+  })
+
+  it('opens an assistant from the copy-page menu with the encoded prompt', async () => {
+    const open = vi.spyOn(window, 'open').mockReturnValue(null)
+    const { getByRole, findByRole } = band({
+      copyPage: {
+        label: 'Copy page',
+        menu: [
+          ...copyPage.menu,
+          { value: 'claude', label: 'Open in Claude', icon: 'pi pi-sparkles' }
+        ]
+      },
+      assistants: { claude: 'https://claude.example.com/new?q={prompt}' }
+    })
+
+    await userEvent.click(getByRole('button', { name: /more|options|menu/i }))
+    await userEvent.click(await findByRole('menuitem', { name: 'Open in Claude' }))
+
+    const prompt = encodeURIComponent(`Read ${article.href} so I can ask questions about it.`)
+    expect(open).toHaveBeenCalledWith(
+      `https://claude.example.com/new?q=${prompt}`,
+      '_blank',
+      'noopener'
+    )
+  })
+
+  it('renders code blocks, numbered lists and inline runs', () => {
+    const { container, getByRole } = band({
+      body: [
+        'Read the [guide](https://example.com/docs) with **care**, *slowly*, and run `deploy`.',
+        '',
+        '```bash',
+        'npm run build',
+        '',
+        'npm run deploy',
+        '```',
+        '',
+        '1. First step',
+        '2. Second step'
+      ].join('\n')
+    })
+
+    const link = getByRole('link', { name: 'guide' })
+    expect(link.getAttribute('href')).toBe('https://example.com/docs')
+    expect(link.getAttribute('target')).toBe('_blank')
+    expect(container.querySelector('article strong')?.textContent).toBe('care')
+    expect(container.querySelector('article em')?.textContent).toBe('slowly')
+    expect(container.querySelector('article p code')?.textContent).toBe('deploy')
+    expect(container.querySelector('article pre code')?.textContent).toBe(
+      'npm run build\n\nnpm run deploy'
+    )
+    expect(
+      Array.from(container.querySelectorAll('article ol li')).map((li) => li.textContent?.trim())
+    ).toEqual(['First step', 'Second step'])
+  })
+
+  it('leads the byline with the writers and their photos', () => {
+    const { getByText, getByAltText } = band({
+      article: {
+        ...article,
+        author: 'Jane Doe and John Smith',
+        authors: [{ name: 'Jane Doe', avatar: '/people/jane.png' }, { name: 'John Smith' }]
+      }
+    })
+
+    expect(getByText('Jane Doe and John Smith')).toBeInTheDocument()
+    expect(getByAltText('Jane Doe').getAttribute('src')).toBe('/people/jane.png')
+  })
+
+  it('scrolls to a heading from the outline and writes its hash', async () => {
+    const before = window.location.href
+    try {
+      const { getAllByRole } = band()
+      const entry = getAllByRole('link').find(
+        (link) => link.getAttribute('href') === '#results-and-impact'
+      )!
+
+      await userEvent.click(entry)
+
+      expect(window.location.hash).toBe('#results-and-impact')
+    } finally {
+      window.history.replaceState(null, '', before)
+    }
   })
 
   it('opens external community links in a new tab', () => {

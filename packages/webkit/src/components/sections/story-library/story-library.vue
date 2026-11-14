@@ -1,10 +1,12 @@
 <script setup lang="ts">
-  import { computed, ref, useAttrs } from 'vue'
+  import { useMediaQuery, useMounted } from '@vueuse/core'
+  import { computed, onMounted, ref, useAttrs, useId, watch } from 'vue'
 
   import { useTranslate } from '../../../composables/use-locale/use-translate'
   import * as en from '../../../i18n/messages/en'
   import Button from '../../actions/button/button.vue'
   import EmptyState from '../../feedback/empty-state/empty-state.vue'
+  import Chip from '../../inputs/chip/chip.vue'
   import Input from '../../inputs/input/input.vue'
   import Select from '../../inputs/select/select.vue'
   import SelectContent from '../../inputs/select/select-content/select-content.vue'
@@ -41,6 +43,8 @@
     description: string
     /** The values the story carries per facet key. */
     facets?: Record<string, string[]>
+    /** Opens the destination in a new tab. */
+    external?: boolean
   }
 
   /** One option of a facet select. */
@@ -67,6 +71,8 @@
   export type StoryLibrarySearch = {
     /** Placeholder of the field. */
     placeholder: string
+    /** Shorter placeholder below the large breakpoint. */
+    shortPlaceholder?: string
     /** Accessible name of the field. */
     label: string
   }
@@ -84,18 +90,24 @@
     anchor?: string
     /** Headline of the band, rendered left-aligned as its `h2`; the band renders no header when empty. */
     title?: string
-    /** The stories, in order; each is `{ key, href, client, category, description, facets? }`. */
+    /** The stories, in order; each is `{ key, href, client, category, description, facets?, external? }`; an `external` story opens in a new tab. */
     items?: StoryLibraryItem[]
     /** The facet selects, in order; each is `{ key, label, allLabel, options }`. */
     facets?: StoryLibraryFacet[]
-    /** The search field's `placeholder` and accessible `label`; the field is omitted when absent. */
+    /** The search field's `placeholder`, optional `shortPlaceholder` (below the large breakpoint) and accessible `label`; the field is omitted when absent. */
     search?: StoryLibrarySearch
     /** The no-match state's `title` and the `action` label of its clear-filters button. */
     empty?: StoryLibraryEmpty
     /** Read cue at the foot of each card, also the lead of its accessible name. */
     linkLabel?: string
-    /** Label of the load-more button under the grid; the button is omitted when empty. */
+    /** Label of the load-more button under the grid; without it every match is listed and no button renders. */
     moreLabel?: string
+    /** Stories listed per page when `moreLabel` is set; the load-more button reveals the next page. */
+    pageSize?: number
+    /** Label of the filter button below the large breakpoint; empty uses the locale catalog (`Filters`). */
+    filterLabel?: string
+    /** Seeds each facet on mount from the URL query parameter named by its `key` when the value is one of its options. */
+    seedFromQuery?: boolean
     /** Accessible name of the list of stories. */
     ariaLabel?: string
   }
@@ -109,6 +121,9 @@
     empty: undefined,
     linkLabel: '',
     moreLabel: '',
+    pageSize: 12,
+    filterLabel: '',
+    seedFromQuery: false,
     ariaLabel: ''
   })
 
@@ -120,6 +135,18 @@
   const selection = ref<Record<string, string | undefined>>({})
 
   const optionQuery = ref<Record<string, string>>({})
+
+  const pages = ref(1)
+
+  const expanded = ref(false)
+
+  const panelId = useId()
+
+  const SEARCH_THRESHOLD = 7
+
+  const wideQuery = useMediaQuery('(min-width: 64rem)')
+  const mounted = useMounted()
+  const wide = computed(() => mounted.value && wideQuery.value)
 
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? 'sections-story-library'
@@ -144,16 +171,66 @@
     })
   })
 
+  const paged = computed(() => props.moreLabel.length > 0 && props.pageSize > 0)
+
+  const visible = computed(() =>
+    paged.value ? matches.value.slice(0, pages.value * props.pageSize) : matches.value
+  )
+
+  const hasMore = computed(() => paged.value && visible.value.length < matches.value.length)
+
+  const placeholder = computed(() =>
+    wide.value
+      ? (props.search?.placeholder ?? '')
+      : props.search?.shortPlaceholder || props.search?.placeholder || ''
+  )
+
+  const applied = computed(() =>
+    props.facets.flatMap((facet) => {
+      const value = selection.value[facet.key]
+      const option =
+        value === undefined
+          ? undefined
+          : facet.options.find((candidate) => candidate.value === value)
+      return option ? [{ key: facet.key, label: `${facet.label}: ${option.label}` }] : []
+    })
+  )
+
+  const filterButtonLabel = computed(() => {
+    const label = props.filterLabel || t('storyLibrary.filters')
+    return applied.value.length > 0
+      ? t('storyLibrary.filtersApplied', { label, count: applied.value.length })
+      : label
+  })
+
+  watch([query, selection], () => {
+    pages.value = 1
+  })
+
+  onMounted(() => {
+    if (!props.seedFromQuery) return
+    const params = new URLSearchParams(window.location.search)
+    const seeded = { ...selection.value }
+    props.facets.forEach((facet) => {
+      const value = params.get(facet.key)
+      if (value && facet.options.some((option) => option.value === value)) seeded[facet.key] = value
+    })
+    selection.value = seeded
+  })
+
   const optionsOf = (facet: StoryLibraryFacet): StoryLibraryFacetOption[] => {
     const term = (optionQuery.value[facet.key] ?? '').trim().toLowerCase()
     return facet.options.filter((option) => option.label.toLowerCase().includes(term))
   }
 
   const lastRowFrom = (columns: number): number =>
-    matches.value.length - (((matches.value.length - 1) % columns) + 1)
+    visible.value.length - (((visible.value.length - 1) % columns) + 1)
 
   const select = (key: string, value: unknown): void => {
-    selection.value = { ...selection.value, [key]: typeof value === 'string' ? value : undefined }
+    selection.value = {
+      ...selection.value,
+      [key]: typeof value === 'string' && value.length > 0 ? value : undefined
+    }
   }
 
   const resetOptionQuery = (key: string): void => {
@@ -169,8 +246,10 @@
     selection.value = {}
   }
 
-  const cardLabel = (item: StoryLibraryItem): string =>
-    props.linkLabel ? `${props.linkLabel}: ${item.client.name}` : item.client.name
+  const cardLabel = (item: StoryLibraryItem): string => {
+    const name = props.linkLabel ? `${props.linkLabel}: ${item.client.name}` : item.client.name
+    return item.external ? `${name} ${t('storyLibrary.newTab')}` : name
+  }
 </script>
 
 <template>
@@ -196,7 +275,7 @@
       </template>
 
       <FrameBox
-        key="frame-box-1"
+        key="toolbar"
         v-if="search || facets.length > 0"
         flush
         borders="y"
@@ -205,65 +284,108 @@
           role="search"
           class="grid items-center gap-(--spacing-md) px-(--spacing-xl) py-(--spacing-lg) lg:grid-cols-[minmax(0,4fr)_repeat(3,minmax(0,1fr))]"
         >
-          <Input
-            v-if="search"
-            v-model="query"
-            size="large"
-            type="text"
-            :placeholder="search.placeholder"
-            :aria-label="search.label"
-          >
-            <template #iconLeft>
-              <i class="pi pi-search text-(--text-muted)" />
-            </template>
-          </Input>
-          <Select
-            v-for="facet in facets"
-            :key="facet.key"
-            :model-value="selection[facet.key]"
-            size="large"
-            :placeholder="facet.allLabel"
-            @update:model-value="select(facet.key, $event)"
-            @update:open="resetOptionQuery(facet.key)"
-          >
-            <SelectTrigger :aria-label="facet.label" />
-            <SelectContent>
-              <template #search>
-                <Input
-                  :model-value="optionQuery[facet.key] ?? ''"
-                  size="small"
-                  :placeholder="t('storyLibrary.search')"
-                  :aria-label="t('storyLibrary.searchFacet', { facet: facet.label.toLowerCase() })"
-                  @update:model-value="setOptionQuery(facet.key, $event)"
-                >
-                  <template #iconLeft>
-                    <i
-                      class="pi pi-search"
-                      aria-hidden="true"
-                    />
-                  </template>
-                </Input>
+          <div class="flex items-center gap-(--spacing-sm) lg:contents">
+            <Button
+              v-if="facets.length > 0"
+              :data-testid="`${testId}__filter-button`"
+              :label="filterButtonLabel"
+              kind="outlined"
+              size="large"
+              icon="pi pi-filter"
+              :aria-expanded="expanded ? 'true' : 'false'"
+              :aria-controls="panelId"
+              class="shrink-0 lg:hidden"
+              @click="expanded = !expanded"
+            />
+            <Input
+              v-if="search"
+              v-model="query"
+              size="large"
+              type="text"
+              :placeholder="placeholder"
+              :aria-label="search.label"
+              class="min-w-0 flex-1"
+            >
+              <template #iconLeft>
+                <i class="pi pi-search text-(--text-muted)" />
               </template>
-              <SelectOption
-                v-for="option in optionsOf(facet)"
-                :key="option.value"
-                :value="option.value"
-              >
-                {{ option.label }}
-              </SelectOption>
-              <p
-                v-if="optionsOf(facet).length === 0"
-                role="status"
-                class="px-(--spacing-xs) py-(--spacing-xxs) text-label-sm text-(--text-muted)"
-              >
-                {{ t('storyLibrary.empty') }}
-              </p>
-            </SelectContent>
-          </Select>
+            </Input>
+          </div>
+          <div
+            v-if="facets.length > 0"
+            :id="panelId"
+            :data-testid="`${testId}__filters`"
+            :data-expanded="expanded || null"
+            class="flex flex-col gap-(--spacing-sm) max-lg:hidden max-lg:data-[expanded]:flex lg:contents"
+          >
+            <Select
+              v-for="facet in facets"
+              :key="facet.key"
+              :model-value="selection[facet.key]"
+              size="large"
+              :placeholder="facet.allLabel"
+              @update:model-value="select(facet.key, $event)"
+              @update:open="resetOptionQuery(facet.key)"
+            >
+              <SelectTrigger :aria-label="facet.label" />
+              <SelectContent>
+                <template
+                  v-if="facet.options.length > SEARCH_THRESHOLD"
+                  #search
+                >
+                  <Input
+                    :model-value="optionQuery[facet.key] ?? ''"
+                    size="small"
+                    :placeholder="t('storyLibrary.search')"
+                    :aria-label="
+                      t('storyLibrary.searchFacet', { facet: facet.label.toLowerCase() })
+                    "
+                    @update:model-value="setOptionQuery(facet.key, $event)"
+                  >
+                    <template #iconLeft>
+                      <i
+                        class="pi pi-search"
+                        aria-hidden="true"
+                      />
+                    </template>
+                  </Input>
+                </template>
+                <SelectOption value="">{{ facet.allLabel }}</SelectOption>
+                <SelectOption
+                  v-for="option in optionsOf(facet)"
+                  :key="option.value"
+                  :value="option.value"
+                >
+                  {{ option.label }}
+                </SelectOption>
+                <p
+                  v-if="optionsOf(facet).length === 0"
+                  role="status"
+                  class="px-(--spacing-xs) py-(--spacing-xxs) text-label-sm text-(--text-muted)"
+                >
+                  {{ t('storyLibrary.empty') }}
+                </p>
+              </SelectContent>
+            </Select>
+          </div>
+          <div
+            v-if="applied.length > 0"
+            :data-testid="`${testId}__applied`"
+            class="flex flex-wrap gap-(--spacing-xs) lg:hidden"
+          >
+            <Chip
+              v-for="chip in applied"
+              :key="chip.key"
+              :label="chip.label"
+              removable
+              size="medium"
+              @remove="select(chip.key, '')"
+            />
+          </div>
         </div>
       </FrameBox>
 
-      <template v-if="matches.length > 0">
+      <template v-if="visible.length > 0">
         <FrameBox
           flush
           borders="y"
@@ -274,7 +396,7 @@
             :aria-label="ariaLabel || undefined"
           >
             <li
-              v-for="(item, index) in matches"
+              v-for="(item, index) in visible"
               :key="item.key"
               :data-last-row-sm="index >= lastRowFrom(2) || undefined"
               :data-last-row-lg="index >= lastRowFrom(3) || undefined"
@@ -282,6 +404,8 @@
             >
               <a
                 :href="item.href"
+                :target="item.external ? '_blank' : undefined"
+                :rel="item.external ? 'noopener' : undefined"
                 :aria-label="cardLabel(item)"
                 class="group/card flex h-full flex-col gap-(--spacing-lg) p-(--spacing-xl) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-surface-raised) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-(--ring-color) motion-reduce:transition-none"
               >
@@ -312,7 +436,7 @@
         </FrameBox>
 
         <FrameBox
-          v-if="moreLabel"
+          v-if="hasMore"
           flush
           borders="y"
           marks="bottom"
@@ -322,13 +446,14 @@
               :label="moreLabel"
               kind="outlined"
               size="large"
+              @click="pages += 1"
             />
           </div>
         </FrameBox>
       </template>
 
       <FrameBox
-        key="frame-box-3"
+        key="empty"
         v-else-if="empty"
         flush
         borders="y"

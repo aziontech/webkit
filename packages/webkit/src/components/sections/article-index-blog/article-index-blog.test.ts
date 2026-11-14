@@ -133,10 +133,128 @@ describe('ArticleIndexBlog', () => {
   })
 
   it('renders the read cue and the load-more button from their labels', () => {
-    const { getByRole, getAllByText } = band()
+    const { getByRole, getAllByText } = band({ pageSize: 2 })
 
-    expect(getAllByText('Read article')).toHaveLength(items.length)
+    expect(getAllByText('Read article')).toHaveLength(2)
     expect(getByRole('button', { name: 'Load more' })).toBeInTheDocument()
+  })
+
+  it('lists one page and reveals the next with the load-more button', async () => {
+    const { getByRole, queryByRole } = band({ pageSize: 2 })
+
+    expect(headlines(getByRole)).toEqual([items[0]?.title, items[1]?.title])
+
+    await userEvent.click(getByRole('button', { name: 'Load more' }))
+    expect(headlines(getByRole)).toEqual(items.map((item) => item.title))
+    expect(queryByRole('button', { name: 'Load more' })).toBeNull()
+  })
+
+  it('returns to the first page when the filters change', async () => {
+    const { getByRole } = band({ pageSize: 1 })
+
+    await userEvent.click(getByRole('button', { name: 'Load more' }))
+    expect(headlines(getByRole)).toHaveLength(2)
+
+    await userEvent.click(getByRole('radio', { name: 'Serverless' }))
+    await userEvent.click(getByRole('radio', { name: 'All articles' }))
+    expect(headlines(getByRole)).toHaveLength(1)
+  })
+
+  it('lists every match and no button without a more label', () => {
+    const { getByRole, queryByRole } = band({ moreLabel: '', pageSize: 1 })
+
+    expect(headlines(getByRole)).toHaveLength(items.length)
+    expect(queryByRole('button', { name: 'Load more' })).toBeNull()
+  })
+
+  it('skips the leading articles until a filter applies', async () => {
+    const { getByRole } = band({ leading: 1 })
+
+    expect(headlines(getByRole)).toEqual([items[1]?.title, items[2]?.title])
+
+    await userEvent.click(getByRole('radio', { name: 'Developers' }))
+    expect(headlines(getByRole)).toEqual([items[0]?.title])
+  })
+
+  it('renders the empty state and clears every filter from its action', async () => {
+    const { getByRole, getByText } = band({
+      empty: {
+        title: 'No articles match these filters',
+        description: 'Try another category.',
+        action: 'View all articles'
+      }
+    })
+
+    await userEvent.type(getByRole('textbox', { name: SEARCH.label }), 'nothing like this')
+    expect(getByText('No articles match these filters')).toBeInTheDocument()
+    expect(getByText('Try another category.')).toBeInTheDocument()
+
+    await userEvent.click(getByRole('button', { name: 'View all articles' }))
+    expect(headlines(getByRole)).toHaveLength(items.length)
+    expect((getByRole('textbox', { name: SEARCH.label }) as HTMLInputElement).value).toBe('')
+  })
+
+  it('names the band by its title, drawn as the h2', () => {
+    const { getByRole } = band({ title: 'All articles' })
+
+    expect(getByRole('heading', { level: 2, name: 'All articles' })).toBeInTheDocument()
+    expect(getByRole('region', { name: 'All articles' })).toBeInTheDocument()
+  })
+
+  it('mirrors rowKind on the list', () => {
+    const { getByRole } = band({ rowKind: 'centered' })
+
+    expect(getByRole('list', { name: LIST }).getAttribute('data-kind')).toBe('centered')
+  })
+
+  it('draws the client mark when a row has no cover, and an author photo when given', () => {
+    const { getByAltText, getByRole } = band({
+      items: [
+        {
+          key: 'acme',
+          href: 'https://example.com/acme',
+          mark: { name: 'Acme', logo: '/logos/acme.svg' },
+          meta: 'Case study',
+          title: 'Acme moved its storefront',
+          authors: [{ name: 'Jane Doe', avatar: '/people/jane.png' }],
+          byline: 'Jane Doe · 4 min read',
+          external: true
+        }
+      ]
+    })
+
+    expect(getByAltText('Acme').getAttribute('src')).toBe('/logos/acme.svg')
+    expect(getByAltText('Jane Doe').getAttribute('src')).toBe('/people/jane.png')
+
+    const link = getByRole('link', { name: /Acme moved its storefront \(opens in a new tab\)/ })
+    expect(link.getAttribute('target')).toBe('_blank')
+    expect(link.getAttribute('rel')).toBe('noopener')
+  })
+
+  it('preselects the category named by the URL query parameter', async () => {
+    const before = window.location.href
+    window.history.replaceState(null, '', '?topic=Serverless')
+    try {
+      const { getByRole, findByRole } = band({ categoryParam: 'topic' })
+
+      expect(await findByRole('radio', { name: 'Serverless', checked: true })).toBeInTheDocument()
+      expect(headlines(getByRole)).toEqual(['How Do You Reduce AI Agent Latency?'])
+    } finally {
+      window.history.replaceState(null, '', before)
+    }
+  })
+
+  it('ignores a query value that is not a category', async () => {
+    const before = window.location.href
+    window.history.replaceState(null, '', '?topic=Unknown')
+    try {
+      const { getByRole } = band({ categoryParam: 'topic' })
+
+      await Promise.resolve()
+      expect(headlines(getByRole)).toHaveLength(items.length)
+    } finally {
+      window.history.replaceState(null, '', before)
+    }
   })
 
   it('omits the toolbar when there are no categories and no search', () => {
@@ -155,6 +273,15 @@ describe('ArticleIndexBlog', () => {
   it('has no a11y violations', async () => {
     const { container } = band()
 
+    await expectNoA11yViolations(container)
+  })
+
+  it('has no a11y violations in the empty state', async () => {
+    const { container, getByRole } = band({
+      empty: { title: 'No articles match these filters', action: 'View all articles' }
+    })
+
+    await userEvent.type(getByRole('textbox', { name: SEARCH.label }), 'zzz')
     await expectNoA11yViolations(container)
   })
 })

@@ -82,6 +82,11 @@
     ],
     "rowLabel": "Read article",
     "moreLabel": "Load more",
+    "empty": {
+      "title": "No resources match these filters",
+      "description": "Try another content type or industry.",
+      "action": "View all resources"
+    },
     "ariaLabel": "Resources"
   }
 }

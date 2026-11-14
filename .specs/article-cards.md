@@ -3,10 +3,11 @@ name: article-cards
 category: sections
 structure: monolithic
 status: implemented
-spec_version: 1
+spec_version: 2
+template: 2
 created: 2026-11-05
-last_updated: 2026-11-05
-checksum: d29ec0e278d4f8839d0e6d0fe15cab853f2fae740281f3401613b34b628a4d6f
+last_updated: 2026-11-14
+checksum: 9545e04804820e1e5f7543edc1d45b251c2e95249e78573090e68ab56fe9a442
 ---
 # ArticleCards — Component Spec
 
@@ -33,6 +34,7 @@ A titled row of three linked article cards on one hairline frame grid with no gu
 
 - Give a card either `image` or `mark`; the mark is drawn only when there is no cover.
 - Keep the band to three cards so the frame row stays full.
+- Set `external` on a card whose article lives on another site; it opens in a new tab and says so to assistive technology.
 
 ## Usage
 
@@ -65,9 +67,10 @@ import ArticleCards from '@aziontech/webkit/article-cards'
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
 | `kind` | `ArticleCardsKind` | `'left'` | false | Placement of the heading: `left` sets it at the start, `centered` centres it over the cards. |
+| `anchor` | `string` | `''` | false | Id set on the band so an in-page `#hash` link can target it. |
 | `eyebrow` | `string` | `''` | false | Overline above the heading. |
 | `title` | `string` | `''` | false | Headline of the band; the band renders no header when empty. |
-| `items` | `ArticleCardsItem[]` | `[]` | false | The cards, in order; each is `{ key, href, title, description, meta, image?, mark? }`. |
+| `items` | `ArticleCardsItem[]` | `[]` | false | The cards, in order; each is `{ key, href, title, description, meta, image?, mark?, external? }`; an `external` card opens in a new tab. |
 | `ariaLabel` | `string` | `''` | false | Accessible name of the card grid. |
 
 ## Events
@@ -84,6 +87,7 @@ import ArticleCards from '@aziontech/webkit/article-cards'
 - `data-kind` mirrors the `kind` prop and places the heading
 - Empty: when `items` is empty the band renders nothing — not the header, not the frame
 - The header renders only when `title` is set
+- `anchor` sets the band's `id`; an `external` card links with `target="_blank"` and `rel="noopener"`
 
 ## Motion & Animations
 
@@ -112,10 +116,38 @@ import ArticleCards from '@aziontech/webkit/article-cards'
 
 - Visible focus: each card is one link with an inset `focus-visible` ring.
 - Keyboard map: `Tab` moves card to card; `Enter` follows the link.
-- ARIA: the band is a `<section>` named by its title (`aria-label`) when one is set; the grid is a `group` named by `ariaLabel` when set; the headline is the section title's `h2` and each card's headline an `h3`; a cover is decorative (`alt=""`), a client mark is named by the client.
+- ARIA: the band is a `<section>` named by its title (`aria-label`) when one is set; the grid is a `group` named by `ariaLabel` when set; the headline is the section title's `h2` and each card's headline an `h3`; a cover is decorative (`alt=""`), a client mark is named by the client; an `external` card appends the visually hidden `(opens in a new tab)` to its name.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): text uses `--text-default` / `--text-muted` on the canvas.
 - `motion-reduce:transition-none` on every transition.
 - Touch target ≥40×40 px — the whole card is the target.
+
+## Internationalization
+
+| Key | English source | Override prop |
+|---|---|---|
+| `articleCards.opensInNewTab` | `(opens in a new tab)` | — |
+
+- Formatting: none. Every other string is editorial copy that arrives through props.
+
+## Right-to-left
+
+- Layout: logical utilities only; the frame grid mirrors through `CardGrid`.
+- Icons: none; a client mark is a logo and never mirrors.
+- Keyboard: unchanged (`Tab` order follows the DOM).
+- User data: none.
+
+## Responsive
+
+- Container queries: none; the grid is three columns from `md` and one column below (from `CardGrid`).
+- Narrow (≤ 640 px): the cards stack in one column and keep the 16:9 media cell.
+- Touch: the whole card is the target.
+- Reflow: no horizontal scroll at 320 px and 200 % zoom.
+
+## Performance
+
+- Bundle budget: the `./article-cards` entry in `.size-limit.json`.
+- Runtime budget: none: static.
+- Heavy parts: none; covers load lazily.
 
 ## Examples
 

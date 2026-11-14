@@ -13,10 +13,24 @@ export const appLayout = {
   showAtBottom: 'Show under the content'
 } as const
 
+export const articleBody = {
+  copiedLink: 'Link copied',
+  copiedFeed: 'Feed link copied',
+  copiedPage: 'Page copied as markdown',
+  copyFailed: 'Could not copy',
+  copyFailedHint: 'Your browser blocked clipboard access.',
+  assistantPrompt: 'Read {url} so I can ask questions about it.'
+} as const
+
+export const articleCards = {
+  newTab: '(opens in a new tab)'
+} as const
+
 export const articleIndex = {
   search: 'Search',
   searchFacet: 'Search {facet}',
-  empty: 'No results found.'
+  empty: 'No results found.',
+  newTab: '(opens in a new tab)'
 } as const
 
 export const attributeEditor = {
@@ -550,6 +564,14 @@ export const link = {
   label: 'Learn more'
 } as const
 
+export const listingBrowser = {
+  filters: 'Filters',
+  filtersApplied: '{label} ({count})',
+  search: 'Search',
+  searchFacet: 'Search {facet}',
+  noMatch: 'No results found.'
+} as const
+
 export const logView = {
   searchPlaceholder: 'Find in logs',
   search: 'Search logs',
@@ -813,7 +835,10 @@ export const stepper = {
 export const storyLibrary = {
   search: 'Search',
   searchFacet: 'Search {facet}',
-  empty: 'No results found.'
+  empty: 'No results found.',
+  filters: 'Filters',
+  filtersApplied: '{label} ({count})',
+  newTab: '(opens in a new tab)'
 } as const
 
 export const table = {
@@ -1230,6 +1255,8 @@ export const en = {
   aiLoading,
   alert,
   appLayout,
+  articleBody,
+  articleCards,
   articleIndex,
   artifactCanvas,
   artifactPreview,
@@ -1293,6 +1320,7 @@ export const en = {
   kbd,
   label,
   link,
+  listingBrowser,
   logoWall,
   logView,
   mapChart,

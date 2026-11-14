@@ -98,10 +98,22 @@ export const es: Messages = {
     showAtSide: 'Mostrar junto al contenido',
     showAtBottom: 'Mostrar debajo del contenido'
   },
+  articleBody: {
+    copiedLink: 'Enlace copiado',
+    copiedFeed: 'Enlace del feed copiado',
+    copiedPage: 'Página copiada como markdown',
+    copyFailed: 'No se pudo copiar',
+    copyFailedHint: 'Tu navegador bloqueó el acceso al portapapeles.',
+    assistantPrompt: 'Lee {url} para que pueda hacerte preguntas sobre él.'
+  },
+  articleCards: {
+    newTab: '(se abre en una pestaña nueva)'
+  },
   articleIndex: {
     search: 'Buscar',
     searchFacet: 'Buscar {facet}',
-    empty: 'No se encontraron resultados.'
+    empty: 'No se encontraron resultados.',
+    newTab: '(se abre en una pestaña nueva)'
   },
   attributeEditor: {
     add: 'Agregar elemento',
@@ -606,6 +618,13 @@ export const es: Messages = {
   link: {
     label: 'Más información'
   },
+  listingBrowser: {
+    filters: 'Filtros',
+    filtersApplied: '{label} ({count})',
+    search: 'Buscar',
+    searchFacet: 'Buscar {facet}',
+    noMatch: 'No se encontraron resultados.'
+  },
   logView: {
     searchPlaceholder: 'Buscar en los registros',
     search: 'Buscar registros',
@@ -845,7 +864,10 @@ export const es: Messages = {
   storyLibrary: {
     search: 'Buscar',
     searchFacet: 'Buscar {facet}',
-    empty: 'No se encontraron resultados.'
+    empty: 'No se encontraron resultados.',
+    filters: 'Filtros',
+    filtersApplied: '{label} ({count})',
+    newTab: '(se abre en una pestaña nueva)'
   },
   table: {
     selectAll: 'Seleccionar todas las filas',
