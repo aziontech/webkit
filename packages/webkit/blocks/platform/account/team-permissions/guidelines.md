@@ -1,6 +1,6 @@
 # Team permissions
 
-Who can do what in the account. An admin keeps one team per role (Administrators, Developers, Security, Finance), sees what each grants and how many people it covers, and creates or edits a team by ticking View and Edit per resource in one matrix. People get permissions only through teams; nothing is granted per person, so the list of teams is the whole access model. It is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header and the `main`.
+Who can do what in the account. An admin keeps one team per role (Administrators, Developers, Security, Finance), sees what each grants and how many people it covers, and creates or edits a team by ticking View and Edit per resource in one matrix. People get permissions only through teams; nothing is granted per person, so the list of teams is the whole access model. The list is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header and the `main`. Create Team and Edit Team are full pages in the creation frame instead (building block I).
 
 ## When to use
 
@@ -19,9 +19,9 @@ Who can do what in the account. An admin keeps one team per role (Administrators
 
 Title `Teams and permissions` and the sentence that states the model. Actions: Documentation and the primary `Create Team` at `size="large"`, which opens the CreateTeam page.
 
-### B. Search and refresh — `Input`, `Tooltip`, `IconButton` (required)
+### B. Controls row — `PropertyFilter`, `Tooltip`, `IconButton`, `CollectionPreferences` (required)
 
-A search `Input` bound with `v-bind="filterProps"` (name, description, status) and Refresh. Hidden when there is no team.
+The table-view controls row (`platform/view/table-view`): a `PropertyFilter` bound with `v-bind="propertyFilterProps"` over name, description and status, then Refresh and Download CSV as outlined `IconButton`s with a `Tooltip` each (Download CSV writes every match through the table's `exportCsv`, disabled with no match), and `CollectionPreferences` bound with `v-bind="preferencesProps"` for page size and visible columns. Hidden when there is no team.
 
 ### C. Team table — `Card`, `Table`, `Avatar`, `useCollection` (required)
 
@@ -33,7 +33,7 @@ A search `Input` bound with `v-bind="filterProps"` (name, description, status) a
 
 ### E. No match and empty — `EmptyState` (required)
 
-`No matching teams` with Clear search in the table's `#empty` slot; `No teams yet` with Create Team in a flush `Card` when the account has none.
+`No matching teams` with Clear filters in the table's `#empty` slot; `No teams yet` with Create Team in a flush `Card` when the account has none.
 
 ### F. Load failure — `Alert` (conditional)
 
@@ -48,6 +48,12 @@ On the Edit Team page, a Members section above the matrix: an Add member `Combob
 ### H. Delete team and save — `ConfirmDialog`, `Button` (EditTeam)
 
 A Delete team section at the end of the form opens a `ConfirmDialog` that says how many members lose what the team grants; the confirm button spins while the request runs. The `SaveBar` says `You have unsaved changes.` and offers Discard and Save changes only once something differs from the saved team; unchanged, it offers Back to teams and a disabled Save changes.
+
+### I. Creation frame — `IconButton`, `Avatar` (CreateTeam, EditTeam)
+
+Variants CreateTeam and EditTeam only; they add `GlobalHeader`, `Brand` and `Breadcrumb`.
+
+Creating or editing a team is a full page in the creation frame of `platform/create/single-page-create`, not a page body in `ConsoleLayout`: a `GlobalHeader` with no rail, a small outlined `IconButton` named `Back to Teams and permissions` that returns to the list, the `Brand` linking home, a `Breadcrumb` (`Teams and permissions` › `Create Team` or `Edit Team`) and the account `Avatar` on the right. The form scrolls in the `main` under it, and its `SaveBar` stays at the bottom of that scroll region.
 
 ### Outcomes — through `toast`
 
@@ -84,15 +90,17 @@ Duplicate and Delete end in a success toast. Team changes are not deploys, so th
 - Each matrix checkbox is named `View <Resource>` or `Edit <Resource>`; the area checkbox is named by its label and reports mixed when partly checked.
 - After a failed save, focus moves to the name field or to the permissions filter.
 - Members are a list named `Members`; after Remove, focus moves to the next member's Remove button, or to Add member when the list is empty.
+- The filter is named Filter teams; Refresh and Download CSV carry an accessible name and a tooltip.
+- The Back button of the creation frame is named `Back to Teams and permissions`.
 - Table name links say where they go on their tooltip; the row menu is named `Actions for <team>`.
 
 ## States
 
-- Default: five teams (one with every permission, one inactive with no members) with search, refresh, sorting, row menus, duplicate and delete wired.
-- CreateTeam: the create page with three permissions preselected; the matrix filter, Select all, Clear, Edit-implies-View, required name and at-least-one-permission errors, and a success toast on Create. Cancel and Create sit in a `SaveBar kind="centered"`, a raised card centred over the bottom of the scroll region; the Edit Team page keeps the full-width `plain` bar.
-- EditTeam: a saved team with three members and six permissions; add and remove members, Discard, Save changes with a success toast, Delete team behind a `ConfirmDialog`.
+- Default: five teams (one with every permission, one inactive with no members) with the property filter, Refresh, Download CSV, preferences, sorting, row menus, duplicate and delete wired.
+- CreateTeam: the create page in the creation frame (Back to Teams and permissions, no rail) with three permissions preselected; the matrix filter, Select all, Clear, Edit-implies-View, required name and at-least-one-permission errors, and a success toast on Create. Cancel and Create sit in a `SaveBar kind="centered"`, a raised card centred over the bottom of the scroll region; the Edit Team page keeps the full-width `plain` bar.
+- EditTeam: in the same creation frame, a saved team with three members and six permissions; add and remove members, Discard, Save changes with a success toast, Delete team behind a `ConfirmDialog`.
 - Empty: no team yet; the heading and an empty state with Create Team.
-- Loading: the first load; the search row and the table's loading rows.
+- Loading: the first load; the controls row and the table's loading rows.
 - Failed: the teams did not load; a danger Alert with Retry.
 
 ## Related

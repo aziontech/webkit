@@ -2,6 +2,7 @@
   import Alert from '@aziontech/webkit/alert'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
+  import CollectionPreferences from '@aziontech/webkit/collection-preferences'
   import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
   import CopyButton from '@aziontech/webkit/copy-button'
   import Dialog from '@aziontech/webkit/dialog'
@@ -27,14 +28,15 @@
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import PasswordInput from '@aziontech/webkit/password-input'
+  import PropertyFilter from '@aziontech/webkit/property-filter'
   import Select from '@aziontech/webkit/select'
   import SettingsSection from '@aziontech/webkit/settings-section'
-  import Table, { type TableColumn } from '@aziontech/webkit/table'
+  import Table, { type TableColumn, type TableExposed } from '@aziontech/webkit/table'
   import type { TagSeverity } from '@aziontech/webkit/tag'
   import Textarea from '@aziontech/webkit/textarea'
   import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
-  import { useCollection } from '@aziontech/webkit/use-collection'
+  import { type FilteringProperty, useCollection } from '@aziontech/webkit/use-collection'
   import { computed, nextTick, reactive, ref } from 'vue'
 
   interface Token {
@@ -47,6 +49,7 @@
     lastUsedAt: Date | null
     revoked: boolean
   }
+  type TokenRow = Token & { status: string; expires: string }
   interface TokenStatus {
     label: string
     severity: TagSeverity
@@ -75,7 +78,7 @@
     return { label: 'Active', severity: 'success' }
   }
 
-  const rows = computed(() =>
+  const rows = computed<TokenRow[]>(() =>
     tokens.value.map((token) => ({
       ...token,
       status: statusOf(token).label,
@@ -85,19 +88,36 @@
 
   const columns: TableColumn[] = [
     { accessorKey: 'name', header: 'Name', enableSorting: true, principal: true, hideable: false },
-    { accessorKey: 'status', header: 'Status', minWidth: 160 },
+    { accessorKey: 'description', header: 'Description', grow: 2, minWidth: 200 },
+    { accessorKey: 'status', header: 'Status', enableSorting: true, minWidth: 160 },
     { accessorKey: 'expires', header: 'Expires', minWidth: 130 },
     { accessorKey: 'lastUsedAt', header: 'Last used', minWidth: 140 },
     { accessorKey: 'createdAt', header: 'Created', enableSorting: true, minWidth: 160 },
     { id: 'actions', kind: 'action', hideable: false }
   ]
 
-  const { filterProps, tableProps, status, clearFilters } = useCollection({
-    items: rows,
-    columns,
-    filtering: { fields: ['name', 'description', 'status'] },
-    pagination: { pageSize: 10 }
-  })
+  const statusOptions = [...new Set(rows.value.map((row) => row.status))]
+    .sort()
+    .map((value) => ({ value }))
+
+  const properties: FilteringProperty[] = [
+    { key: 'name', label: 'Name' },
+    { key: 'description', label: 'Description' },
+    { key: 'status', label: 'Status', options: statusOptions }
+  ]
+
+  const { tableProps, propertyFilterProps, preferencesProps, status, matchingItems, clearFilters } =
+    useCollection({
+      items: rows,
+      columns,
+      filtering: { fields: ['name', 'description', 'status'] },
+      propertyFiltering: { properties },
+      pagination: { pageSize: 10, pageSizeOptions: [10, 25, 50] },
+      preferences: { storageKey: 'personal-tokens' }
+    })
+
+  const tokensTable = ref<TableExposed<TokenRow> | null>(null)
+  const exportCsv = () => tokensTable.value?.exportCsv({ filename: 'personal-tokens.csv' })
 
   const loading = ref(true)
   const loadFailed = ref(false)
@@ -260,36 +280,47 @@
       <section class="layout-section-start flex min-w-0 flex-col gap-(--layout-group-gap)">
         <header
           v-if="!loadFailed && (loading || status !== 'empty')"
-          class="flex items-center gap-(--layout-group-gap)"
+          class="flex flex-wrap items-start gap-(--layout-group-gap)"
         >
-          <div class="min-w-0 grow">
-            <Input
-              v-bind="filterProps"
-              placeholder="Search tokens"
-              aria-label="Search tokens"
-              class="w-full"
-            >
-              <template #iconLeft>
-                <i
-                  class="pi pi-search"
-                  aria-hidden="true"
-                />
-              </template>
-            </Input>
-          </div>
-          <Tooltip
-            text="Refresh"
-            class="shrink-0"
-          >
-            <IconButton
-              icon="pi pi-refresh"
-              kind="outlined"
-              size="medium"
-              :loading="refreshing"
-              aria-label="Refresh"
-              @click="refresh"
+          <div class="flex min-w-0 grow basis-(--container-2xs)">
+            <PropertyFilter
+              v-bind="propertyFilterProps"
+              placeholder="Filter tokens"
+              aria-label="Filter tokens"
             />
-          </Tooltip>
+          </div>
+          <div class="flex shrink-0 flex-wrap items-center gap-(--spacing-xs)">
+            <Tooltip
+              text="Refresh"
+              class="shrink-0"
+            >
+              <IconButton
+                icon="pi pi-refresh"
+                kind="outlined"
+                size="medium"
+                :loading="refreshing"
+                aria-label="Refresh"
+                @click="refresh"
+              />
+            </Tooltip>
+            <Tooltip
+              text="Download CSV"
+              class="shrink-0"
+            >
+              <IconButton
+                icon="pi pi-download"
+                kind="outlined"
+                size="medium"
+                :disabled="!matchingItems.length"
+                aria-label="Download CSV"
+                @click="exportCsv"
+              />
+            </Tooltip>
+            <CollectionPreferences
+              v-bind="preferencesProps"
+              title="Table preferences"
+            />
+          </div>
         </header>
 
         <Alert
@@ -339,21 +370,27 @@
         >
           <template #content>
             <Table
+              ref="tokensTable"
               v-bind="tableProps"
               :loading="loading || refreshing"
               enable-sorting
               :bordered="false"
               aria-label="Personal tokens"
             >
-              <template #cell-name="{ row }">
-                <div class="flex min-w-0 flex-col">
-                  <span class="truncate text-label-sm text-(--text-default)">{{ row.name }}</span>
-                  <span
-                    v-if="row.description"
-                    class="truncate text-body-xs text-(--text-muted)"
-                    >{{ row.description }}</span
-                  >
-                </div>
+              <template #cell-name="{ value }">
+                <span class="truncate text-label-sm text-(--text-default)">{{ value }}</span>
+              </template>
+              <template #cell-description="{ value }">
+                <span
+                  v-if="value"
+                  class="truncate text-body-sm text-(--text-muted)"
+                  >{{ value }}</span
+                >
+                <span
+                  v-else
+                  class="text-body-sm text-(--text-muted)"
+                  >No description</span
+                >
               </template>
               <template #cell-status="{ row }">
                 <Table.CellStatus
@@ -411,11 +448,11 @@
                   size="small"
                   icon="pi pi-search"
                   title="No matching tokens"
-                  description="No token matches this search."
+                  description="No token matches these filters."
                 >
                   <template #actions>
                     <Button
-                      label="Clear search"
+                      label="Clear filters"
                       kind="outlined"
                       size="small"
                       @click="clearFilters"

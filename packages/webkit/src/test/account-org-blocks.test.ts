@@ -3,6 +3,7 @@ import { afterEach, describe, expect, it } from 'vitest'
 import { userEvent } from 'vitest/browser'
 
 import Checkout from '../../blocks/platform/account/change-plan-drawer/variants/checkout.vue'
+import TeamPermissions from '../../blocks/platform/account/team-permissions/team-permissions.vue'
 import CreateTeam from '../../blocks/platform/account/team-permissions/variants/create-team.vue'
 import Tokens from '../../blocks/platform/account/tokens/tokens.vue'
 import MfaCode from '../../blocks/platform/auth/variants/mfa-code.vue'
@@ -72,6 +73,14 @@ describe('auth#MfaSetup', () => {
 })
 
 describe('account/tokens', () => {
+  it('lists the description in its own column under the table-view controls row', async () => {
+    const view = render(Tokens)
+    expect(view.getByRole('columnheader', { name: /Description/ })).toBeTruthy()
+    expect(view.getByText('Development laptop')).toBeTruthy()
+    expect(view.getByRole('button', { name: 'Refresh' })).toBeTruthy()
+    expect(view.getByRole('button', { name: 'Download CSV' })).not.toBeDisabled()
+  })
+
   it('creates a token, shows it once, and clears it on close', async () => {
     const view = render(Tokens)
     await fireEvent.click(buttonByText('Create Personal Token'))
@@ -125,7 +134,26 @@ describe('account/tokens', () => {
   })
 })
 
+describe('team-permissions', () => {
+  it('shows the table-view controls row over the teams', async () => {
+    const view = render(TeamPermissions)
+    expect(view.getByRole('button', { name: 'Download CSV' })).not.toBeDisabled()
+    expect(view.getByRole('button', { name: 'Refresh' })).toBeTruthy()
+    expect(view.getByText('Administrators')).toBeTruthy()
+  })
+})
+
 describe('team-permissions#CreateTeam', () => {
+  it('renders in the creation frame with a way back to the list', async () => {
+    const view = render(CreateTeam)
+    const back = view.getByRole('link', { name: 'Back to Teams and permissions' })
+    expect(back.getAttribute('href')).toBe('/account/teams')
+    expect(view.getByRole('main')).toBeTruthy()
+    expect(view.getByRole('navigation', { name: /breadcrumb/i }).textContent).toContain(
+      'Teams and permissions'
+    )
+  })
+
   it('makes Edit imply View and marks a partly checked group as mixed', async () => {
     const view = render(CreateTeam)
     const editFirewall = view.getByRole('checkbox', { name: 'Edit Firewall' })
