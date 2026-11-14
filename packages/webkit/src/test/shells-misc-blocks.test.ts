@@ -13,6 +13,7 @@ import ServerError from '../../blocks/platform/auth/variants/server-error.vue'
 import Submitting from '../../blocks/platform/auth/variants/submitting.vue'
 import DeleteWithConfirmation from '../../blocks/platform/delete/delete-with-confirmation/delete-with-confirmation.vue'
 import DeleteFailed from '../../blocks/platform/delete/delete-with-confirmation/variants/failed.vue'
+import SettingsForm from '../../blocks/platform/settings/settings-form/settings-form.vue'
 import ConsoleShell from '../../blocks/shells/console/console.vue'
 import AccountSwitch from '../../blocks/shells/console/variants/account-switch.vue'
 import Notifications from '../../blocks/shells/console/variants/notifications.vue'
@@ -192,5 +193,25 @@ describe('platform/delete/delete-with-confirmation', () => {
     const panel = dialog() as HTMLElement
     expect(panel.textContent).toContain('resource-01 is still used by 2 workloads')
     expect((panel.querySelector('input') as HTMLInputElement).value).toBe('resource-01')
+  })
+})
+
+describe('platform/settings/settings-form', () => {
+  it('renders each topic as a section heading', () => {
+    const view = render(SettingsForm)
+    for (const name of ['General', 'Preferences', 'Notifications'])
+      expect(view.getByRole('heading', { level: 2, name })).toBeTruthy()
+  })
+
+  it('keeps Save and Discard disabled until the form changes, then saves', async () => {
+    const view = render(SettingsForm)
+    const save = view.getByRole('button', { name: 'Save' }) as HTMLButtonElement
+    const discard = view.getByRole('button', { name: 'Discard' }) as HTMLButtonElement
+    expect(save.disabled).toBe(true)
+    expect(discard.disabled).toBe(true)
+    await fireEvent.update(view.getByLabelText('Email'), 'alex.morgan@example.com')
+    await waitFor(() => expect(save.disabled).toBe(false))
+    await fireEvent.click(save)
+    await waitFor(() => expect(save.disabled).toBe(true), { timeout: 2000 })
   })
 })

@@ -6,10 +6,13 @@
   import Item from '@aziontech/webkit/item'
   import PageHeader from '@aziontech/webkit/page-header'
   import SaveBar from '@aziontech/webkit/save-bar'
+  import SectionHeader from '@aziontech/webkit/section-header'
   import Select, { type SelectOptionItem } from '@aziontech/webkit/select'
   import SettingRow from '@aziontech/webkit/setting-row'
   import Switch from '@aziontech/webkit/switch'
-  import { computed, nextTick, reactive, ref } from 'vue'
+  import { toast } from '@aziontech/webkit/toast'
+  import { useUnsavedChanges } from '@aziontech/webkit/use-unsaved-changes'
+  import { computed, nextTick, onScopeDispose, reactive, ref } from 'vue'
 
   const timezones = [
     { label: '(UTC+00:00) UTC', value: 'utc' },
@@ -26,16 +29,28 @@
   const labelOf = (list: SelectOptionItem[]) => (value: string) =>
     list.find((option) => option.value === value)?.label ?? ''
 
-  const saved = ref({
+  const form = reactive({
     fullName: 'Alex Morgan',
     email: '',
     timezone: 'utc',
     language: 'en',
     productUpdates: true
   })
-  const form = reactive({ ...saved.value })
+  const failing = false
+  const SAVE_TOAST = 'profile-save'
   const submitted = ref(false)
   const submitting = ref(false)
+  let saveTimer: ReturnType<typeof setTimeout> | undefined
+
+  const {
+    isDirty: dirty,
+    commit,
+    discard: restore
+  } = useUnsavedChanges(() => form, {
+    onDiscard: (baseline) => Object.assign(form, baseline)
+  })
+
+  onScopeDispose(() => clearTimeout(saveTimer))
 
   const nameEmpty = computed(() => !form.fullName.trim())
   const emailEmpty = computed(() => !form.email.trim())
@@ -50,15 +65,26 @@
       return
     }
     submitting.value = true
-    setTimeout(() => {
-      saved.value = { ...form }
-      submitted.value = false
+    toast.dismiss(SAVE_TOAST)
+    clearTimeout(saveTimer)
+    saveTimer = setTimeout(() => {
       submitting.value = false
+      if (failing) {
+        toast.error("The profile wasn't saved.", {
+          id: SAVE_TOAST,
+          description: "The request didn't reach the server. Your changes are kept.",
+          action: { label: 'Retry', onClick: () => submit() }
+        })
+        return
+      }
+      commit()
+      submitted.value = false
+      toast.success('Profile saved.', { id: SAVE_TOAST })
     }, 900)
   }
 
   const discard = () => {
-    Object.assign(form, saved.value)
+    restore()
     submitted.value = false
   }
 </script>
@@ -85,7 +111,10 @@
         <legend class="sr-only">Profile settings</legend>
 
         <section class="flex flex-col gap-(--layout-group-gap)">
-          <p class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">General</p>
+          <SectionHeader
+            title="General"
+            size="small"
+          />
           <Card :padded="false">
             <template #content>
               <Item.List>
@@ -149,7 +178,10 @@
         </section>
 
         <section class="layout-section-start flex flex-col gap-(--layout-group-gap)">
-          <p class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">Preferences</p>
+          <SectionHeader
+            title="Preferences"
+            size="small"
+          />
           <Card :padded="false">
             <template #content>
               <Item.List>
@@ -215,7 +247,10 @@
         </section>
 
         <section class="layout-section-start flex flex-col gap-(--layout-group-gap)">
-          <p class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">Notifications</p>
+          <SectionHeader
+            title="Notifications"
+            size="small"
+          />
           <Card :padded="false">
             <template #content>
               <Item.List>
@@ -244,7 +279,7 @@
           label="Discard"
           kind="outlined"
           size="medium"
-          :disabled="submitting"
+          :disabled="submitting || !dirty"
           @click="discard"
         />
         <Button
@@ -252,6 +287,7 @@
           kind="primary"
           size="medium"
           :loading="submitting"
+          :disabled="!dirty"
           @click="submit"
         />
       </template>
