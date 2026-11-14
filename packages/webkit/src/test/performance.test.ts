@@ -853,7 +853,7 @@ function traceCase(): Case {
   }
 }
 
-function codeEditorCase(): Case {
+function codeEditorCase(change: 'line' | 'char' = 'line'): Case {
   const lines = Array.from({ length: 5000 }, (_, i) => `const value${i} = ${i} * 2`)
   const value = ref(lines.join('\n'))
   return {
@@ -865,8 +865,13 @@ function codeEditorCase(): Case {
           ariaLabel: 'Script'
         })
     }),
-    update: () => {
-      value.value = `${value.value}\nconst typed = true`
+    update: async () => {
+      if (change === 'line') {
+        value.value = `${value.value}\nconst typed = true`
+        return
+      }
+      const mid = Math.floor(value.value.length / 2)
+      await typeInto('textarea', `${value.value.slice(0, mid)}x${value.value.slice(mid)}`)
     }
   }
 }
@@ -1125,7 +1130,10 @@ describe('runtime budgets (perf-budgets.json)', () => {
     check('trace-1k', await measure(traceCase))
   })
   it('CodeEditor with 5k lines: mount and type', async () => {
-    check('code-editor-5k-lines', await measure(codeEditorCase))
+    check('code-editor-5k-lines', await measure(() => codeEditorCase()))
+  })
+  it('CodeEditor with 5k lines: type one character mid-document', async () => {
+    check('code-editor-5k-lines-char', await measure(() => codeEditorCase('char')))
   })
   it('PropertyFilter with 1k values: open and search', async () => {
     check('property-filter-1k', await measure(propertyFilterCase))

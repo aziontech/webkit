@@ -100,6 +100,30 @@ describe('CodeEditor · real monaco-editor (lazy loader with workers)', () => {
     await waitFor(() => expect(text(diff!.host)).toContain('// x'))
   }, 60_000)
 
+  it('reads the document once per edit', async () => {
+    await mounted()
+    const [main] = editors()
+    const monaco = await import('monaco-editor')
+    for (const editor of monaco.editor.getEditors())
+      editor.updateOptions({ quickSuggestions: false, suggestOnTriggerCharacters: false })
+    const input = main!.host.querySelector<HTMLElement>('[role="textbox"]')!
+    const editor = monaco.editor
+      .getEditors()
+      .find((candidate) => main!.host.contains(candidate.getDomNode()))!
+    const model = editor.getModel()!
+    const read = model.getValue.bind(model)
+    let reads = 0
+    model.getValue = ((...args: Parameters<typeof read>) => {
+      reads += 1
+      return read(...args)
+    }) as typeof model.getValue
+    input.focus()
+    await userEvent.keyboard('{Control>}{End}{/Control}x')
+    await nextTick()
+    await nextTick()
+    expect(reads).toBe(1)
+  }, 60_000)
+
   it('follows the theme: the editor background is the dark surface under data-theme="dark"', async () => {
     await mounted()
     document.documentElement.dataset['theme'] = 'dark'

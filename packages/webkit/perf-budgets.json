@@ -176,6 +176,11 @@
       "update": 130,
       "update_is": "append one typed line"
     },
+    "code-editor-5k-lines-char": {
+      "mount": 300,
+      "update": 100,
+      "update_is": "type one character in the middle of the document"
+    },
     "property-filter-1k": {
       "mount": 50,
       "update": 50,
