@@ -1,0 +1,11 @@
+{
+  "component": "doc-step",
+  "title": "Components/Documentation/DocStep",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "Each DocStep is one numbered step inside DocSteps: its title, then an optional body; it has no appearance outside the list.",
+      "file": "default.vue"
+    }
+  ]
+}
