@@ -27,7 +27,6 @@
     vendor?: string
     icon: string
     markClass: string
-    color?: string
   }
   interface HubSection {
     id: string
@@ -62,72 +61,63 @@
           title: 'Next.js Boilerplate',
           description: 'Deploy a full-stack Next.js application in a few steps.',
           icon: 'ai-cor ai-next',
-          markClass: '[[data-theme=dark]_&]:invert',
-          color: '#0070f3'
+          markClass: '[[data-theme=dark]_&]:invert'
         },
         {
           slug: 'react-boilerplate',
           title: 'React Boilerplate',
           description: 'Automate your React.js deployment process.',
           icon: 'ai-cor ai-react',
-          markClass: '',
-          color: '#61dafb'
+          markClass: ''
         },
         {
           slug: 'vue-boilerplate',
           title: 'Vue.js starter',
           description: 'A lightweight template to rapidly build Vue.js applications.',
           icon: 'ai-cor ai-vue',
-          markClass: '',
-          color: '#42b883'
+          markClass: ''
         },
         {
           slug: 'angular-boilerplate',
           title: 'Angular Boilerplate',
           description: 'Automate your Angular deployment process with this template.',
           icon: 'ai-cor ai-angular',
-          markClass: '',
-          color: '#dd0031'
+          markClass: ''
         },
         {
           slug: 'nuxt-ecommerce',
           title: 'Nuxt E-commerce',
           description: 'Launch a Nuxt e-commerce or content app.',
           icon: 'ai-cor ai-nuxt',
-          markClass: '',
-          color: '#00dc82'
+          markClass: ''
         },
         {
           slug: 'astro-starter',
           title: 'Astro Starter',
           description: 'Ship a content-driven Astro site that renders.',
           icon: 'ai-cor ai-astro',
-          markClass: '',
-          color: '#ff5d01'
+          markClass: ''
         },
         {
           slug: 'svelte-boilerplate',
           title: 'Svelte Boilerplate',
           description: 'Accelerate the deployment of Svelte applications.',
           icon: 'ai-cor ai-svelte',
-          markClass: '',
-          color: '#ff3e00'
+          markClass: ''
         },
         {
           slug: 'preact-starter',
           title: 'Preact Starter',
           description: 'Deploy a Preact app: the React API in a fraction of the bundle.',
           icon: 'ai ai-preact',
-          markClass: '',
-          color: '#673ab8'
+          markClass: ''
         },
         {
           slug: 'qwik-starter',
           title: 'Qwik Starter',
           description: 'Ship a resumable Qwik app that hydrates only what the reader touches.',
           icon: 'ai ai-qwik',
-          markClass: '',
-          color: '#ac7ef4'
+          markClass: ''
         }
       ]
     },
@@ -387,8 +377,6 @@
     }
   ]
   const skeletonRows = 6
-
-  const glow = (item: HubItem) => (item.color ? { '--template-glow': item.color } : undefined)
 
   const accounts = ref<Account[]>(ACCOUNTS)
   const connecting = ref(false)
@@ -817,13 +805,17 @@
                                 class="isolate w-full"
                                 role="button"
                                 tabindex="0"
-                                :style="glow(item)"
                               >
                                 <template #content>
                                   <span
                                     aria-hidden="true"
-                                    class="pointer-events-none absolute inset-0 -z-1 bg-[radial-gradient(120%_90%_at_18%_0%,color-mix(in_oklab,var(--template-glow,var(--primary))_20%,transparent),transparent_62%)] opacity-0 transition-opacity duration-moderate-01 ease-productive-entrance group-focus-within:opacity-100 group-hover:opacity-100 motion-reduce:transition-none rtl:bg-[radial-gradient(120%_90%_at_82%_0%,color-mix(in_oklab,var(--template-glow,var(--primary))_20%,transparent),transparent_62%)]"
-                                  />
+                                    class="pointer-events-none absolute inset-0 -z-1 overflow-hidden rounded-(--shape-card) opacity-0 transition-opacity duration-moderate-01 ease-productive-entrance group-focus-within:opacity-100 group-hover:opacity-100 motion-reduce:transition-none"
+                                  >
+                                    <i
+                                      :class="[item.icon, item.markClass]"
+                                      class="absolute start-(--spacing-xl) top-(--spacing-xl) scale-600 text-body-lg leading-none text-(--primary) opacity-25 blur-sm"
+                                    />
+                                  </span>
                                   <div
                                     class="relative z-10 flex flex-col items-start gap-(--spacing-md) text-start"
                                   >
