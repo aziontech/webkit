@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 1
 template: 2
-checksum: 13685cb96c9bec8a7cb047c090c89999f66a94ebaa2194794d3aeb866c8b113f
+checksum: caf854665741d50b9e141e7a351e1dbbe4563db6868ee036314b4193d5c03e59
 created: 2026-11-14
 last_updated: 2026-11-14
 ---
@@ -92,6 +92,7 @@ _none_
 - `data-kind` on the root: `color` | `monochrome` | `current` | `knockout`.
 - `data-route` on the root: `pair` (both files in the DOM, the theme reveals one), `single` (one file, filtered by `artwork` or the ink of `kind`), `wordmark` (no file: the name in type).
 - `data-artwork` on the root mirrors `artwork`.
+- `data-sized` on the root when the caller's class sets a height (`h-*` or `size-*`, with or without a breakpoint); without it the root falls back to `h-6`.
 - Not applicable: `loading`, `empty`, `error`, `disabled`, `readonly`, `invalid`, `open`/`closed` (a static mark).
 
 ## Motion & Animations
@@ -144,7 +145,7 @@ No built-in strings: the accessible name and the wordmark are the `name` the con
 
 ## Performance
 
-- Bundle budget: 11.5 KB gzip for `./logo` in `.size-limit.json`; almost all of it is `cn`, which merges the caller's height class over the default and is shared with every other component that merges classes, so a page that already renders one pays well under 1 KB for `Logo`.
+- Bundle budget: 1.5 KB gzip for `./logo` in `.size-limit.json`.
 - Runtime budget: one or two `img` elements per mark; files decode asynchronously (`decoding="async"`).
 - Heavy parts: none. The component imports no registry and no asset; the caller imports only the files it shows.
 

@@ -97,6 +97,17 @@ describe('Logo', () => {
     expect(root()).not.toHaveAttribute('aria-label')
   })
 
+  it('marks the root sized only when the caller sets a height', () => {
+    render(Logo, { props: { name: 'Acme Inc.', src: DARK } })
+    expect(root()).not.toHaveAttribute('data-sized')
+    cleanup()
+    render(Logo, { props: { name: 'Acme Inc.', src: DARK }, attrs: { class: 'max-w-40 md:h-10' } })
+    expect(root()).toHaveAttribute('data-sized')
+    cleanup()
+    render(Logo, { props: { name: 'Acme Inc.', src: DARK }, attrs: { class: 'max-h-8' } })
+    expect(root()).not.toHaveAttribute('data-sized')
+  })
+
   it.each([
     ['Default', Default],
     ['Types', Types]

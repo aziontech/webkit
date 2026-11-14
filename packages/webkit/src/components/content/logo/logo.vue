@@ -1,7 +1,5 @@
 <script setup lang="ts">
-  import { computed, useAttrs } from 'vue'
-
-  import { cn } from '../../../utils/cn'
+  import { computed, normalizeClass, useAttrs } from 'vue'
 
   defineOptions({
     name: 'Logo',
@@ -52,6 +50,8 @@
     return 'single'
   })
 
+  const sized = computed(() => /(^|[\s:])(h|size)-/.test(normalizeClass(attrs.class)))
+
   const maskStyle = computed(() => ({ '--logo-mask': `url('${file.value}')` }))
 </script>
 
@@ -62,10 +62,11 @@
     :data-kind="kind"
     :data-route="route"
     :data-artwork="artwork"
+    :data-sized="sized || undefined"
     :role="decorative ? undefined : 'img'"
     :aria-label="decorative ? undefined : ariaLabel || name"
     :aria-hidden="decorative ? 'true' : undefined"
-    :class="cn('relative inline-flex h-6 max-w-full shrink-0 items-center', attrs.class as string)"
+    class="relative inline-flex max-w-full shrink-0 items-center not-data-[sized]:h-6"
   >
     <template v-if="route === 'pair'">
       <img
