@@ -21,6 +21,11 @@
       "update": 480,
       "update_is": "open the list, then filter it"
     },
+    "multi-select-1k-toggle": {
+      "mount": 100,
+      "update": 350,
+      "update_is": "toggle 20 options one by one with all 1k options selected"
+    },
     "dropdown-menu-1k": {
       "mount": 1800,
       "update": 50,

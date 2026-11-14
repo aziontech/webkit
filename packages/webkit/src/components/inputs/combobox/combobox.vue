@@ -148,20 +148,27 @@
 
   const query = computed(() => (typing.value ? text.value.trim() : ''))
 
+  const folded = computed(() =>
+    props.options.map((option) => ({
+      option,
+      value: fold(option.value),
+      label: fold(labelOf(option))
+    }))
+  )
+
   const exactMatch = (value: string) => {
     const needle = fold(value)
-    return props.options.find(
-      (option) =>
-        !option.disabled && (fold(option.value) === needle || fold(labelOf(option)) === needle)
-    )
+    return folded.value.find(
+      (entry) => !entry.option.disabled && (entry.value === needle || entry.label === needle)
+    )?.option
   }
 
   const matches = computed(() => {
     if (!props.filter || !query.value) return props.options
     const needle = fold(query.value)
-    return props.options.filter(
-      (option) => fold(option.value).includes(needle) || fold(labelOf(option)).includes(needle)
-    )
+    return folded.value
+      .filter((entry) => entry.value.includes(needle) || entry.label.includes(needle))
+      .map((entry) => entry.option)
   })
 
   const showCustom = computed(

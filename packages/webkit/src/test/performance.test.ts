@@ -225,6 +225,42 @@ function selectCase(multiple: boolean): Case {
   }
 }
 
+function multiSelectToggleCase(): Case {
+  const options = Array.from({ length: 1000 }, (_, i) => ({ value: `v${i}`, label: `Option ${i}` }))
+  const selected = ref<string[]>(options.map((o) => o.value))
+  return {
+    mount: () => ({
+      render: () =>
+        h(
+          MultiSelect,
+          {
+            modelValue: selected.value,
+            'onUpdate:modelValue': (v: string[]) => (selected.value = v),
+            open: true
+          },
+          {
+            default: () => [
+              h(MultiSelect.Trigger),
+              h(MultiSelect.Content, null, {
+                default: () =>
+                  options.map((o) =>
+                    h(MultiSelect.Option, { key: o.value, value: o.value }, () => o.label)
+                  )
+              })
+            ]
+          }
+        )
+    }),
+    update: async () => {
+      const rows = document.body.querySelectorAll<HTMLElement>('[role="option"]')
+      for (let i = 0; i < 20; i++) {
+        rows[i]?.click()
+        await nextTick()
+      }
+    }
+  }
+}
+
 function donutCase(): Case {
   const make = (seed: number) =>
     Array.from({ length: 500 }, (_, i) => ({
@@ -1082,6 +1118,9 @@ describe('runtime budgets (perf-budgets.json)', () => {
   })
   it('MultiSelect with 1k options: open and filter', async () => {
     check('multi-select-1k', await measure(() => selectCase(true)))
+  })
+  it('MultiSelect with 1k options all selected: toggle 20 of them', async () => {
+    check('multi-select-1k-toggle', await measure(multiSelectToggleCase))
   })
   it('DonutChart with 500 slices', async () => {
     check('donut-chart-500', await measure(donutCase))
