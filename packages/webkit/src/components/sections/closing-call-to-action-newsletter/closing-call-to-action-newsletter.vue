@@ -1,6 +1,8 @@
 <script setup lang="ts">
   import { computed, nextTick, ref, useAttrs, useId, watch } from 'vue'
 
+  import { useTranslate } from '../../../composables/use-locale/use-translate'
+  import * as en from '../../../i18n/messages/en'
   import Button from '../../actions/button/button.vue'
   import Overline from '../../content/overline/overline.vue'
   import Alert from '../../feedback/alert/alert.vue'
@@ -71,6 +73,7 @@
   const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
   const attrs = useAttrs()
+  const { t } = useTranslate({ closingCallToActionNewsletter: en.closingCallToActionNewsletter })
   const inputId = useId()
 
   const email = ref('')
@@ -174,6 +177,13 @@
                 class="text-pretty text-heading-sm text-(--text-default)"
               >
                 {{ title }}
+              </label>
+              <label
+                v-else
+                :for="inputId"
+                class="sr-only"
+              >
+                {{ t('closingCallToActionNewsletter.email') }}
               </label>
               <form
                 novalidate

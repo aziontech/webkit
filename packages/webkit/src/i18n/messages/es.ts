@@ -1153,5 +1153,8 @@ export const es: Messages = {
     resumeRotation: 'Reanudar rotación',
     pauseScrolling: 'Pausar desplazamiento',
     resumeScrolling: 'Reanudar desplazamiento'
+  },
+  closingCallToActionNewsletter: {
+    email: 'Correo electrónico'
   }
 }

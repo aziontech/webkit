@@ -1240,6 +1240,10 @@ export const autoplayControl = {
   resumeScrolling: 'Resume scrolling'
 } as const
 
+export const closingCallToActionNewsletter = {
+  email: 'Email address'
+} as const
+
 export const sectionCommand = {
   command: 'Command',
   prompt: 'Prompt',
@@ -1445,5 +1449,6 @@ export const en = {
   searchTrigger,
   copyPromptButton,
   docAgentCard,
-  autoplayControl
+  autoplayControl,
+  closingCallToActionNewsletter
 }

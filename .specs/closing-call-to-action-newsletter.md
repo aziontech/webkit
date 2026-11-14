@@ -3,10 +3,10 @@ name: closing-call-to-action-newsletter
 category: sections
 structure: monolithic
 status: implemented
-spec_version: 2
+spec_version: 3
 created: 2026-11-05
 last_updated: 2026-11-14
-checksum: 40ab336a92a8845704b349c3646d2a4175275ea0d0206feb14b0798d7f1bf379
+checksum: a2d529fc32cd07d81a12d99a8c255333ecdc9e057e7d932f9c937f9127e6f54d
 template: 2
 ---
 
@@ -91,7 +91,7 @@ The closing band whose ask is a newsletter sign-up: the overline and a large hea
 | `form`        | `ClosingCallToActionNewsletterForm` | `—`     | true     | Copy of the subscribe form: `{ placeholder, submitLabel, successMessage, errorMessage, requiredMessage, invalidMessage }`.              |
 | `anchor`      | `string`                            | `''`    | false    | In-page id set on the band so a `#hash` link can scroll to it.                                                                          |
 | `eyebrow`     | `string`                            | `''`    | false    | Overline on the lead side, closed by the blinking cursor.                                                                               |
-| `title`       | `string`                            | `''`    | false    | The ask, rendered as the label of the email field; it also names the band.                                                              |
+| `title`       | `string`                            | `''`    | false    | The ask, rendered as the label of the email field; it also names the band. Empty, the field keeps a visually hidden built-in label.     |
 | `description` | `string`                            | `''`    | false    | The pitch, rendered as the band's large `h2` on the lead side.                                                                          |
 | `loading`     | `boolean`                           | `false` | false    | The site is sending the address: the field is disabled, the button shows its loading state and a submit is ignored.                     |
 | `submitted`   | `boolean`                           | `false` | false    | The site sent the address: the form gives way to `form.successMessage`.                                                                 |
@@ -141,14 +141,18 @@ _none_
 
 - Visible focus: owned by `input` and `button`.
 - Keyboard map: `Tab` reaches the field then the button; `Enter` in the field or on the button submits.
-- ARIA: the band is a `<section>` named by its title (`aria-label`); the ask is a `<label for>` bound to the field with `useId`; the field is an `<input type="email">` with `autocomplete="email"` and `spellcheck="false"`; the validation message is the field's helper text, an empty submit sets `aria-required` and a malformed address `aria-invalid`. The success message is a `status` region and the failure message an `alert`. The texture strip is `aria-hidden`.
+- ARIA: the band is a `<section>` named by its title (`aria-label`); the ask is a `<label for>` bound to the field with `useId`, and without a title a visually hidden label ("Email address") keeps the field named; the field is an `<input type="email">` with `autocomplete="email"` and `spellcheck="false"`; the validation message is the field's helper text, an empty submit sets `aria-required` and a malformed address `aria-invalid`. The success message is a `status` region and the failure message an `alert`. The texture strip is `aria-hidden`.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): headline and ask `var(--text-default)`.
 - `motion-reduce:transition-none motion-reduce:transform-none` — the band adds no motion; the texture and the button carry their own fallback.
 - Touch target ≥40×40 px — the field and the button are large.
 
 ## Internationalization
 
-No built-in strings: the ask, the button label and every message are props from the page JSON (`title`, `form.*`).
+| Key                                   | English source  | Override prop |
+| ------------------------------------- | --------------- | ------------- |
+| `closingCallToActionNewsletter.email` | `Email address` | `title`       |
+
+The ask, the button label and every message are props from the page JSON (`title`, `form.*`); the built-in label names the field only when `title` is empty.
 
 - Formatting: none.
 

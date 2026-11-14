@@ -1154,5 +1154,8 @@ export const ptBR: Messages = {
     resumeRotation: 'Retomar rotação',
     pauseScrolling: 'Pausar rolagem',
     resumeScrolling: 'Retomar rolagem'
+  },
+  closingCallToActionNewsletter: {
+    email: 'Endereço de e-mail'
   }
 }
