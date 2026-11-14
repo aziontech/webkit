@@ -81,6 +81,20 @@ describe('SaveBar', () => {
     )
   })
 
+  it.each(['floating', 'docked', 'plain', 'fade', 'centered'] as const)(
+    'announces the status sentence through a polite live region (%s)',
+    (kind) => {
+      const { getByRole } = render(SaveBar, {
+        props: { kind },
+        slots: {
+          default: 'You have unsaved changes',
+          actions: '<button type="button">Save</button>'
+        }
+      })
+      expect(getByRole('status').textContent).toContain('You have unsaved changes')
+    }
+  )
+
   it('renders the examples', () => {
     expect(within(render(Default).container).getByRole('button', { name: 'Save' })).toBeTruthy()
     expect(

@@ -134,6 +134,7 @@
         <div
           v-if="$slots['leading'] || $slots['default']"
           :data-testid="`${testId}__message`"
+          role="status"
           class="me-auto flex min-w-0 items-start gap-(--spacing-xs) @max-md/save-bar:me-0"
         >
           <slot name="leading">
@@ -164,6 +165,7 @@
           <div
             v-if="$slots['leading'] || $slots['default']"
             :data-testid="`${testId}__message`"
+            role="status"
             class="flex min-w-0 items-center gap-(--spacing-xs) ps-(--spacing-xs) text-body-sm text-(--text-default)"
           >
             <slot name="leading"><slot /></slot>
@@ -183,6 +185,7 @@
         <div
           v-if="$slots['leading'] || $slots['default']"
           :data-testid="`${testId}__message`"
+          role="status"
           class="me-auto flex min-w-0 items-center gap-(--spacing-xs)"
         >
           <slot name="leading">
@@ -209,6 +212,7 @@
         <div
           v-if="$slots['leading'] || $slots['default']"
           :data-testid="`${testId}__message`"
+          role="status"
           class="flex min-w-0 items-start gap-(--spacing-xs)"
         >
           <slot name="leading">
