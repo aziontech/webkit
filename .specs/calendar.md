@@ -3,13 +3,14 @@ name: calendar
 category: inputs
 structure: composition
 status: implemented
-spec_version: 4
+spec_version: 5
+template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=5087-17336
   node_id: 5087:17336
-checksum: 4048a2e66437007f33bd846791efe9148fa747bddce597c7facf8e3ec2bc1f38
+checksum: b4098e70275b269264c84678dd0006f0e7cc377b4f544dc9b9303a0ec5db06e3
 created: 2026-06-25
-last_updated: 2026-11-13
+last_updated: 2026-11-14
 ---
 
 # Calendar — Component Spec
@@ -33,6 +34,8 @@ Date-range picker. A trigger button opens a popover that holds a month grid, Sta
 ## Related
 
 - `select` — a fixed list of named periods without a grid.
+- `date-range-picker` — time ranges: relative windows (`last 15 minutes`) kept relative, and absolute ranges down to the minute. Calendar is for whole days (a date or a date range); its `period` mode overlaps DateRangePicker's Relative tab, so prefer DateRangePicker for a time window. In shadcn and Radix-based kits `Calendar` names the inline month grid and the popover picker is a `DatePicker`; this component is the popover picker.
+- `field` — inside a `Field`, the trigger takes the field's label (`for` points at it), description, `invalid` and `disabled`.
 - `input` — the trigger and the Start/End fields share its heights, hover, and disabled treatment, so they align side by side.
 - `number-input` — numeric durations instead of dates.
 
@@ -124,10 +127,13 @@ Tree-shaking alternative — the standalone root + each sub-component from its o
 | `presets`      | `CalendarPresetItem[]`           | `[]`        | false    | Consumer-provided shortcuts; each is `{ label, value }` where value is a `Date` or range. When present, the trigger becomes a two-part control whose left segment opens a dropdown of these presets. |
 | `showFields`   | `boolean`                        | `true`      | false    | Shows the Start/End date fields in the panel. Set false when the shortcuts and the grid are the whole interaction and typing a boundary by hand is not offered.                                      |
 | `showTime`     | `boolean`                        | `false`     | false    | Shows Start/End time fields alongside the date fields.                                                                                                                                               |
-| `showTimezone` | `boolean`                        | `false`     | false    | Shows the timezone selector below the fields.                                                                                                                                                        |
-| `timezone`     | `string`                         | `''`        | false    | Selected IANA timezone for display formatting (v-model:timezone). Empty resolves to the local zone.                                                                                                  |
-| `timezones`    | `string[]`                       | `[]`        | false    | Timezone options for the selector; empty falls back to a curated list derived from `Intl`.                                                                                                           |
-| `horizontal`   | `boolean`                        | `false`     | false    | Lays the fields/apply column beside the calendar instead of below it.                                                                                                                                |
+| `showTimeZone` | `boolean`                        | `false`     | false    | Shows the time zone selector below the fields.                                                                                                                                                       |
+| `showTimezone` | `boolean`                        | `false`     | false    | `@deprecated since 6.0 — use showTimeZone. Removed in 7.0.` Same effect as `showTimeZone`.                                                                                                          |
+| `timeZones`    | `string[]`                       | `[]`        | false    | Time zone options for the selector (IANA names); empty falls back to a curated list derived from `Intl`.                                                                                            |
+| `timezones`    | `string[]`                       | `[]`        | false    | `@deprecated since 6.0 — use timeZones. Removed in 7.0.` Read when `timeZones` is empty.                                                                                                            |
+| `orientation`  | `'vertical' \| 'horizontal'`     | `'vertical'` | false   | Places the fields and Apply column below the calendar (vertical) or beside it (horizontal).                                                                                                          |
+| `horizontal`   | `boolean`                        | `false`     | false    | `@deprecated since 6.0 — use orientation="horizontal". Removed in 7.0.` True has the effect of `orientation="horizontal"`.                                                                          |
+| `ariaLabel`    | `string`                         | `''`        | false    | Accessible name of the trigger; the current value is appended (`Billing period: Jan 1 – Jan 31`). Empty leaves the name to the Field label or the trigger text.                                      |
 | `clearable`    | `boolean`                        | `false`     | false    | Shows a clear control on the trigger that empties the committed selection.                                                                                                                           |
 | `showApply`    | `boolean`                        | `true`      | false    | Stages edits in a draft and requires Apply to commit; when false, every edit commits immediately.                                                                                                    |
 | `period`       | `boolean`                        | `false`     | false    | Enables the "Select period" relative-time mode: a relative-preset list plus a text input that parses spans like `45m` or `last month`.                                                               |
@@ -139,12 +145,15 @@ Tree-shaking alternative — the standalone root + each sub-component from its o
 | -------------- | ------------------------------- | ----------- | ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `v-model`      | `Date \| null \| CalendarRange` | `null`      | `update:modelValue` | The committed `Date` (single) or `{ start, end }` range via `defineModel`; empty value on clear. Only updated on Apply (or immediately when `showApply` is false). Uncontrolled when unbound. |
 | `v-model:open` | `boolean`                       | `undefined` | `update:open`       | Open state of the popover via `defineModel`. Fires when the popover opens or closes. Unbound, the popover keeps its own state and starts closed.                                              |
+| `v-model:time-zone` | `string`                   | `''`        | `update:timeZone`   | Selected IANA time zone for display formatting via `defineModel('timeZone')`. Empty resolves to the local zone. Unbound, the selector keeps its own choice. Same name as on `date-range-picker`. |
+| `v-model:timezone` | `string`                    | `''`        | `update:timezone`   | `@deprecated since 6.0 — use v-model:time-zone. Removed in 7.0.` Read when `timeZone` is empty; a selection updates both models.                                                             |
+
+**Booleans that default to true.** `showFields` and `showApply` default to `true`: they switch off parts of the default panel. Inverting them (`hideFields`, `instant`) would break every consumer, so they are recorded here as the exceptions to props.md's default-false rule.
 
 ## Events
 
 | Event             | Payload                                                | Notes                                                                                                                                                         |
 | ----------------- | ------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `update:timezone` | `string`                                               | v-model:timezone. Emitted when the timezone selection changes.                                                                                                |
 | `month-change`    | `CalendarMonth`                                        | Emitted when the first visible month changes via navigation or keyboard paging. Payload is `{ year, month }` (month is 0-indexed).                            |
 | `apply`           | `(event: Event, value: Date \| null \| CalendarRange)` | Emitted when the draft selection is committed via Apply, a preset or a period; `event` is the activating click or key event, `value` the committed selection. |
 
@@ -251,18 +260,31 @@ The period list and the presets menu take `min-w-(--container-3xs)` (256px), the
 - User data: dates and times are printed by `Intl` in the active locale; the typed field value uses the `Input` `dir="auto"`.
 - Teleported content: the teleported date popover and presets menu bind `dir` and `lang` from the nearest `WebkitProvider` (`usePortalLocale`), so it keeps the provider's direction and language although it renders under `body`. With no provider nothing is set and the document's own `dir` and `lang` apply.
 
+## Responsive
+
+- The root is capped at its container (`max-w-full`), so the trigger, presets included, never overflows a 320 px box; the popover is capped at `min(90vw, 44rem)` and scrolls inside.
+- `orientation="horizontal"` needs room for the grid and the fields side by side; on narrow screens keep the default vertical layout.
+- Touch: day cells are 32 / 36 / 40 px by `size`; use `size="large"` on touch-first surfaces.
+
+## Performance
+
+- Bundle budget: see `.size-limit.json` entries `calendar` and `calendar-root` (the period parser and the time zone list are included).
+- Runtime: renders one or two months of 42 day cells; the time zone list is built from `Intl` only after mount and only when the selector is shown.
+
 ## Examples
 
 - Default — baseline range picker (empty; opens on the current month) with `clearable`. Justified: shows the baseline trigger→popover→grid flow.
 - Sizes — composite story rendering every `size` value side-by-side (canonical, the component declares a `size` prop).
 - Single — single-date mode (`mode="single"`). Justified: single is a distinct, mutually-exclusive mode the range default cannot show.
-- Horizontal — `horizontal` layout with fields beside the calendar. Justified: a distinct layout the default vertical story cannot show.
+- Horizontal — `orientation="horizontal"` layout with fields beside the calendar. Justified: a distinct layout the default vertical story cannot show.
 - WithPresets — consumer `presets` (Last 3/7/14 days, Last month) driving the two-part trigger (preset dropdown + calendar). Justified: the two-part trigger and one-click preset behavior cannot be shown without it.
 - MinMax — `min`/`max` bounds that disable out-of-range days. Justified: the date-constraint behavior (disabled cells, clamped navigation) cannot be shown without it.
 - WithTime — `show-time` Start/End time fields. Justified: the time-field round-trip is a distinct capability.
-- WithTimezone — `show-timezone` selector. Justified: the timezone control is a distinct capability.
+- WithTimezone — `show-time-zone` selector. Justified: the time zone control is a distinct capability.
 - SelectPeriod — `period` relative-time mode (preset list + parsed text input); the committed period renders as the two-segment trigger (relative token beside the resolved window). Justified: the relative-time parsing mode is mutually exclusive with the absolute calendar flow.
 - Clearable — `clearable` trigger that empties the committed selection. Justified: the clear affordance and disabled-when-empty behavior cannot be shown without it.
+- Disabled — a disabled picker with a committed range (state example for the `disabled` prop).
+- PresetParts — `Calendar.Preset` items in `#presets` and `Calendar.Clear` in `#footer`. Justified: the compound sub-components cannot be shown by the data-driven `presets` prop.
 
 ## Constraints — DO NOT
 

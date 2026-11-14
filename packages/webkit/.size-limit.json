@@ -83,7 +83,7 @@
   {
     "name": "calendar-root",
     "path": "src/components/inputs/calendar/calendar.vue",
-    "limit": "20.95 KB"
+    "limit": "21.25 KB"
   },
   {
     "name": "date-range-picker",
@@ -1859,7 +1859,7 @@
   {
     "name": "calendar",
     "path": "src/components/inputs/calendar/index.ts",
-    "limit": "23.3 KB"
+    "limit": "21.75 KB"
   },
   {
     "name": "calendar-preset",

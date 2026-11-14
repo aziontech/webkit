@@ -4,7 +4,7 @@
   "examples": [
     {
       "name": "Default",
-      "summary": "Baseline range picker with Start/End time fields and a timezone selector (defaults to the user local zone; set `timezone` to pin a specific IANA zone).",
+      "summary": "Baseline range picker with Start/End time fields and a timezone selector (defaults to the user local zone; bind `v-model:time-zone` to pin a specific IANA zone).",
       "file": "default.vue"
     },
     {
@@ -19,7 +19,7 @@
     },
     {
       "name": "Horizontal",
-      "summary": "Horizontal layout places the Start/End fields and Apply beside the calendar, with a full-height divider.",
+      "summary": "`orientation=\"horizontal\"` places the Start/End fields and Apply beside the calendar, with a full-height divider.",
       "file": "horizontal.vue"
     },
     {
@@ -39,7 +39,7 @@
     },
     {
       "name": "WithTimezone",
-      "summary": "A timezone selector (IANA zones) labels the selection; defaults to the local zone.",
+      "summary": "A time zone selector (`show-time-zone`, IANA zones) labels the selection; defaults to the local zone.",
       "file": "with-timezone.vue"
     },
     {
@@ -51,6 +51,16 @@
       "name": "Clearable",
       "summary": "A clear control on the trigger empties the committed selection when present.",
       "file": "clearable.vue"
+    },
+    {
+      "name": "Disabled",
+      "summary": "A disabled picker keeps its committed range visible but cannot be opened.",
+      "file": "disabled.vue"
+    },
+    {
+      "name": "PresetParts",
+      "summary": "The compound parts: `Calendar.Preset` items in the `presets` slot and a `Calendar.Clear` in the `footer` slot, for presets that need their own markup.",
+      "file": "preset-parts.vue"
     }
   ]
 }

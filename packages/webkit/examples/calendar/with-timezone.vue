@@ -10,6 +10,6 @@
     v-model="range"
     mode="range"
     show-time
-    show-timezone
+    show-time-zone
   />
 </template>

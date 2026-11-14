@@ -9,7 +9,7 @@
   <CalendarRoot
     v-model="range"
     mode="range"
-    horizontal
+    orientation="horizontal"
     clearable
     show-time
   />
