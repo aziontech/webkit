@@ -1,12 +1,15 @@
 <script setup lang="ts">
+  import Alert from '@aziontech/webkit/alert'
   import claudeMark from '@aziontech/webkit/assets/claude-symbol-color.svg'
   import codexMark from '@aziontech/webkit/assets/codex-symbol-mono.svg'
   import cursorMark from '@aziontech/webkit/assets/cursor-symbol-mono.svg'
   import geminiMark from '@aziontech/webkit/assets/gemini-symbol-color.svg'
   import Card from '@aziontech/webkit/card'
-  import DropdownMenu from '@aziontech/webkit/dropdown-menu'
+  import EmptyState from '@aziontech/webkit/empty-state'
+  import Hint from '@aziontech/webkit/hint'
   import IconButton from '@aziontech/webkit/icon-button'
   import Item from '@aziontech/webkit/item'
+  import Link from '@aziontech/webkit/link'
   import Logo from '@aziontech/webkit/logo'
   import StatTile from '@aziontech/webkit/stat-tile'
   import StatTileGroup from '@aziontech/webkit/stat-tile-group'
@@ -168,7 +171,13 @@
     { name: 'Cursor', src: cursorMark, mono: true }
   ]
 
+  const resourcePath = (resource: { type: string; id: string }) =>
+    `/${resource.type}/${resource.id}`
+
   const agentOnboardingVisible = ref(true)
+  const failed = false
+
+  const emit = defineEmits<{ retry: [event: MouseEvent] }>()
 </script>
 
 <template>
@@ -191,7 +200,14 @@
         aria-label="Usage"
       >
         <div class="min-w-0 xl:flex-1">
-          <StatTileGroup>
+          <Alert
+            v-if="failed"
+            severity="danger"
+            label="Couldn't load usage. Check your connection and retry."
+            action-label="Retry"
+            @action="(event) => emit('retry', event)"
+          />
+          <StatTileGroup v-else>
             <StatTile
               v-for="metric in metrics"
               :key="metric.label"
@@ -201,12 +217,7 @@
               :delta="metric.delta"
             >
               <template #aside>
-                <Tooltip :text="metric.hint">
-                  <i
-                    class="pi pi-info-circle text-body-sm text-(--text-muted)"
-                    aria-hidden="true"
-                  />
-                </Tooltip>
+                <Hint :text="metric.hint" />
               </template>
             </StatTile>
           </StatTileGroup>
@@ -225,38 +236,40 @@
               class="w-full"
             >
               <template #content>
-                <button
-                  type="button"
-                  class="group relative flex h-full w-full flex-col items-start gap-(--spacing-md) rounded-(--shape-card) p-(--spacing-md) text-start transition-colors duration-150 ease-out motion-reduce:transition-none hover:bg-(--bg-surface-raised) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset"
+                <Item
+                  href="/agents/setup"
+                  class="h-full"
                 >
-                  <span
-                    class="flex items-center [&>*+*]:-ms-2 [&>*+*]:transition-[margin-left] [&>*+*]:duration-moderate-01 [&>*+*]:ease-productive-entrance group-hover:[&>*+*]:-ms-1.5 group-focus-visible:[&>*+*]:-ms-1.5 motion-reduce:[&>*+*]:transition-none"
-                    aria-hidden="true"
-                  >
+                  <span class="flex min-w-0 flex-col items-start gap-(--spacing-md)">
                     <span
-                      v-for="agent in agentMarks"
-                      :key="agent.name"
-                      class="flex size-8 shrink-0 items-center justify-center overflow-hidden rounded-(--shape-elements) border-(length:--border-width-default) border-(--border-muted) bg-(--bg-surface-raised) text-(--text-default)"
+                      class="flex items-center [&>*+*]:-ms-2 [&>*+*]:transition-[margin-left] [&>*+*]:duration-moderate-01 [&>*+*]:ease-productive-entrance group-hover/item:[&>*+*]:-ms-1.5 group-focus-visible/item:[&>*+*]:-ms-1.5 motion-reduce:[&>*+*]:transition-none"
+                      aria-hidden="true"
                     >
-                      <Logo
-                        :name="agent.name"
-                        :src="agent.src"
-                        :kind="agent.mono ? 'current' : 'color'"
-                        decorative
-                        size="small"
-                      />
+                      <span
+                        v-for="agent in agentMarks"
+                        :key="agent.name"
+                        class="flex size-8 shrink-0 items-center justify-center overflow-hidden rounded-(--shape-elements) border-(length:--border-width-default) border-(--border-muted) bg-(--bg-surface-raised) text-(--text-default)"
+                      >
+                        <Logo
+                          :name="agent.name"
+                          :src="agent.src"
+                          :kind="agent.mono ? 'current' : 'color'"
+                          decorative
+                          size="small"
+                        />
+                      </span>
+                    </span>
+
+                    <span class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+                      <span class="text-heading-xxs text-(--text-default)"
+                        >Set up your coding agent</span
+                      >
+                      <span class="text-pretty text-body-sm text-(--text-muted)"
+                        >Give your editor a prompt that teaches it to build and deploy here.</span
+                      >
                     </span>
                   </span>
-
-                  <span class="flex min-w-0 flex-col gap-(--spacing-xxs)">
-                    <span class="text-heading-xxs text-(--text-default)"
-                      >Set up your coding agent</span
-                    >
-                    <span class="text-pretty text-body-sm text-(--text-muted)"
-                      >Give your editor a prompt that teaches it to build and deploy here.</span
-                    >
-                  </span>
-                </button>
+                </Item>
               </template>
             </Card>
             <div class="absolute end-(--spacing-xs) top-(--spacing-xs)">
@@ -295,29 +308,32 @@
               class="shrink-0"
               aria-hidden="true"
             />
-            <a
+            <Link
               v-if="panel.path"
               :href="panel.path"
-              class="inline-flex items-center gap-(--spacing-xxs) rounded-(--shape-button) outline-none hover:underline focus-visible:ring-2 focus-visible:ring-(--ring-color)"
-            >
-              {{ panel.label }}
-              <i
-                class="pi pi-chevron-right text-body-xs leading-none text-(--text-muted)"
-                aria-hidden="true"
-              />
-            </a>
+              :label="panel.label"
+              size="small"
+              icon="pi pi-chevron-right"
+            />
             <span v-else>{{ panel.label }}</span>
           </h2>
 
           <div class="min-w-0 xl:min-h-0 xl:flex-1 xl:overflow-y-auto xl:overscroll-contain">
+            <Alert
+              v-if="failed"
+              severity="danger"
+              :label="`Couldn't load ${panel.label.toLowerCase()}. Check your connection and retry.`"
+              action-label="Retry"
+              @action="(event) => emit('retry', event)"
+            />
             <Item.List
-              v-if="panel.resources.length"
+              v-else-if="panel.resources.length"
               key="panel-rows"
             >
               <Item
                 v-for="resource in panel.resources"
                 :key="resource.type + '-' + resource.id"
-                role="listitem"
+                :href="resourcePath(resource)"
                 size="small"
               >
                 <Item.Content>
@@ -346,75 +362,31 @@
                         :title="resource.presetLabel"
                       />
                     </span>
-                    <button
-                      type="button"
-                      data-row-link
-                      class="min-w-0 cursor-pointer truncate text-start text-label-md text-(--text-default) outline-none group-hover/item:underline focus-visible:underline after:absolute after:inset-0 after:content-['']"
-                    >
+                    <span class="min-w-0 truncate text-label-md text-(--text-default)">
                       {{ resource.name }}
-                    </button>
+                    </span>
                   </Item.Title>
                 </Item.Content>
 
-                <div class="relative z-10 grid size-(--size-7) place-items-center">
-                  <Item.Actions class="w-full">
-                    <div
-                      class="col-start-1 row-start-1 opacity-0 transition-opacity duration-150 ease-out motion-reduce:transition-none group-hover/item:opacity-100 group-focus-within/item:opacity-100"
-                    >
-                      <DropdownMenu placement="bottom-end">
-                        <DropdownMenu.Trigger>
-                          <Tooltip text="Resource actions">
-                            <IconButton
-                              icon="pi pi-ellipsis-h"
-                              kind="transparent"
-                              size="small"
-                              :aria-label="'Actions for ' + resource.name"
-                            />
-                          </Tooltip>
-                        </DropdownMenu.Trigger>
-
-                        <DropdownMenu.Group>
-                          <DropdownMenu.Option
-                            value="view"
-                            label="View details"
-                          />
-                          <DropdownMenu.Option
-                            value="edit"
-                            label="Edit"
-                          />
-                        </DropdownMenu.Group>
-
-                        <DropdownMenu.Group>
-                          <DropdownMenu.Option
-                            value="delete"
-                            label="Delete"
-                          >
-                            <template #left>
-                              <i
-                                class="pi pi-trash"
-                                aria-hidden="true"
-                              />
-                            </template>
-                          </DropdownMenu.Option>
-                        </DropdownMenu.Group>
-                      </DropdownMenu>
-                    </div>
-
-                    <i
-                      class="pi pi-chevron-right col-start-1 row-start-1 shrink-0 text-body-xs text-(--text-muted) transition-opacity duration-150 ease-out motion-reduce:transition-none group-hover/item:opacity-0 group-focus-within/item:opacity-0"
-                      aria-hidden="true"
-                    />
-                  </Item.Actions>
-                </div>
+                <Item.Actions>
+                  <i
+                    class="pi pi-chevron-right shrink-0 text-body-xs text-(--text-muted)"
+                    aria-hidden="true"
+                  />
+                </Item.Actions>
               </Item>
             </Item.List>
 
-            <p
+            <EmptyState
               v-else
-              class="px-(--spacing-md) py-(--spacing-sm) text-body-sm text-(--text-muted)"
-            >
-              {{ panel.recent ? 'Nothing opened here yet.' : 'Nothing here yet.' }}
-            </p>
+              size="small"
+              :title="panel.recent ? 'Nothing opened yet' : `No ${panel.label.toLowerCase()} yet`"
+              :description="
+                panel.recent
+                  ? 'Resources you open show up here.'
+                  : `${panel.label} you create show up here.`
+              "
+            />
           </div>
         </div>
       </section>

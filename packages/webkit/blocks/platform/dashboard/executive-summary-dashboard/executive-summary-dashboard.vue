@@ -13,6 +13,8 @@
   import Skeleton from '@aziontech/webkit/skeleton'
   import StatTile from '@aziontech/webkit/stat-tile'
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
+  import { toast } from '@aziontech/webkit/toast'
+  import { type CsvColumn, downloadCsv, toCsv } from '@aziontech/webkit/utils/csv'
   import { ref } from 'vue'
 
   type MetricFormat = 'currency' | 'count' | 'percentage' | 'uptime' | 'score' | 'cost'
@@ -393,6 +395,48 @@
     score: (value) => value.toFixed(0),
     cost: (value) => `${value.toFixed(4)}`
   }
+  type CardId = 'executive-summary'
+
+  interface CsvReport {
+    columns: CsvColumn[]
+    rows: () => object[]
+  }
+
+  const reports: Record<CardId, CsvReport> = {
+    'executive-summary': {
+      columns: [
+        { id: 'section', header: 'Section' },
+        { id: 'metric', header: 'Metric' },
+        { id: 'value', header: 'Value' },
+        { id: 'detail', header: 'Change or target' }
+      ],
+      rows: () => [
+        ...figures.map((figure) => ({
+          section: 'Scorecard',
+          metric: figure.label,
+          value: figure.value === null ? '' : formatters[figure.format](figure.value),
+          detail: figure.delta === null ? '' : `${figure.delta}% ${comparison}`
+        })),
+        ...goals.map((goal) => ({
+          section: 'Goals',
+          metric: goal.label,
+          value: formatters[goal.format](goal.current),
+          detail: `Target ${formatters[goal.format](goal.target)}, ${goal.status.label}`
+        }))
+      ]
+    }
+  }
+
+  const exportCsv = (id: CardId) => {
+    const filename = `${id}-${quarter.value.toLowerCase().replaceAll(' ', '-')}.csv`
+    try {
+      const report = reports[id]
+      downloadCsv(filename, toCsv({ columns: report.columns, rows: report.rows() }))
+      toast.success('CSV exported.', { description: filename })
+    } catch {
+      toast.error('The CSV could not be exported.', { description: 'Try again in a moment.' })
+    }
+  }
 </script>
 
 <template>
@@ -425,6 +469,8 @@
             kind="outlined"
             size="medium"
             icon="pi pi-download"
+            :disabled="loading"
+            @click="exportCsv('executive-summary')"
           />
         </template>
       </PageHeader>

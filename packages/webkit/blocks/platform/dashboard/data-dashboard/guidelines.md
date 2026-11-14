@@ -22,10 +22,13 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 
 ## Building blocks
 
-### A. Page heading — `PageHeader` (required)
+### A. Page heading and period — `PageHeader`, `Select` (required)
 
 Title `Data usage` and one sentence on what the page shows, over the rest of the page in the standard
-`layout-column`.
+`layout-column`. The header actions hold one medium `Select` named `Period` by its `aria-label`
+(`Last hour`, `Last 24 hours`, `Last 7 days`, `Last 30 days`); it sets the comparison label of every
+delta (`vs previous 7 days`) and the period in the exported CSV file name
+(`requests-last-7-days.csv`). No card has a period control of its own.
 
 ### B. KPI row — `StatTile` (required)
 

@@ -16,6 +16,7 @@
   import PageHeader from '@aziontech/webkit/page-header'
   import PanelContent from '@aziontech/webkit/panel-content'
   import PanelHeader from '@aziontech/webkit/panel-header'
+  import Select from '@aziontech/webkit/select'
   import StatTile from '@aziontech/webkit/stat-tile'
   import TableRoot, { type TableColumn } from '@aziontech/webkit/table-root'
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
@@ -24,6 +25,25 @@
   import Tooltip from '@aziontech/webkit/tooltip'
   import { type CsvColumn, downloadCsv, toCsv } from '@aziontech/webkit/utils/csv'
   import { computed, ref } from 'vue'
+
+  const fallbackPeriod = {
+    value: '24h',
+    label: 'Last 24 hours',
+    comparison: 'vs previous 24 hours'
+  }
+  const periods = [
+    { value: '1h', label: 'Last hour', comparison: 'vs previous hour' },
+    fallbackPeriod,
+    { value: '7d', label: 'Last 7 days', comparison: 'vs previous 7 days' },
+    { value: '30d', label: 'Last 30 days', comparison: 'vs previous 30 days' }
+  ]
+  const period = ref(fallbackPeriod.value)
+  const periodLabel = (value: string) => periods.find((entry) => entry.value === value)?.label ?? ''
+  const currentPeriod = computed(
+    () => periods.find((entry) => entry.value === period.value) ?? fallbackPeriod
+  )
+  const periodComparison = computed(() => currentPeriod.value.comparison)
+  const periodSlug = computed(() => currentPeriod.value.label.toLowerCase().replaceAll(' ', '-'))
 
   type FigureFormat = 'count' | 'bytes' | 'percentage'
 
@@ -57,7 +77,6 @@
   }
 
   const loading = false
-  const comparison = 'vs previous 24 hours'
 
   const figures: Figure[] = [
     {
@@ -372,7 +391,7 @@
       copyQuery(report)
       return
     }
-    const filename = `${id}-last-24-hours.csv`
+    const filename = `${id}-${periodSlug.value}.csv`
     downloadCsv(filename, toCsv({ columns: report.columns, rows: report.rows() }))
     toast.success('CSV exported.', { description: filename })
   }
@@ -443,7 +462,26 @@
       <PageHeader
         title="Analytics"
         description="Requests, data transferred and errors your services handled in the period."
-      />
+      >
+        <template #actions>
+          <Select
+            v-model="period"
+            size="medium"
+            :display-value="periodLabel"
+          >
+            <Select.Trigger aria-label="Period" />
+            <Select.Content>
+              <Select.Option
+                v-for="option in periods"
+                :key="option.value"
+                :value="option.value"
+              >
+                {{ option.label }}
+              </Select.Option>
+            </Select.Content>
+          </Select>
+        </template>
+      </PageHeader>
       <ul class="grid grid-cols-1 gap-(--spacing-md) sm:grid-cols-2 xl:grid-cols-4">
         <li
           v-for="figure in figures"
@@ -455,7 +493,7 @@
             :value="figure.value"
             :format-value="formatters[figure.format]"
             :delta="figure.delta"
-            :delta-label="comparison"
+            :delta-label="periodComparison"
             :inverse="figure.inverse"
             :trend="figure.trend"
             :loading="loading"
@@ -507,6 +545,7 @@
                   kind="transparent"
                   size="small"
                   aria-label="Expand Requests over time"
+                  :disabled="loading"
                   @click="openExpanded('requests')"
                 />
               </Tooltip>
@@ -530,6 +569,7 @@
                   <DropdownMenu.Option
                     value="export"
                     label="Export CSV"
+                    :disabled="loading"
                   />
                 </DropdownMenu.Group>
               </DropdownMenu>
@@ -593,6 +633,7 @@
                   kind="transparent"
                   size="small"
                   aria-label="Expand Status codes"
+                  :disabled="loading"
                   @click="openExpanded('status-codes')"
                 />
               </Tooltip>
@@ -616,6 +657,7 @@
                   <DropdownMenu.Option
                     value="export"
                     label="Export CSV"
+                    :disabled="loading"
                   />
                 </DropdownMenu.Group>
               </DropdownMenu>
@@ -669,6 +711,7 @@
                   kind="transparent"
                   size="small"
                   aria-label="Expand Requests by country"
+                  :disabled="loading"
                   @click="openExpanded('countries')"
                 />
               </Tooltip>
@@ -692,6 +735,7 @@
                   <DropdownMenu.Option
                     value="export"
                     label="Export CSV"
+                    :disabled="loading"
                   />
                 </DropdownMenu.Group>
               </DropdownMenu>
@@ -741,6 +785,7 @@
                   kind="transparent"
                   size="small"
                   aria-label="Expand Top hosts"
+                  :disabled="loading"
                   @click="openExpanded('hosts')"
                 />
               </Tooltip>
@@ -764,6 +809,7 @@
                   <DropdownMenu.Option
                     value="export"
                     label="Export CSV"
+                    :disabled="loading"
                   />
                 </DropdownMenu.Group>
               </DropdownMenu>

@@ -26,9 +26,9 @@ Title `Dashboards` and one sentence that says what the views cover. The heading 
 
 A medium `Select`, a fixed `--container-3xs` wide from `sm` (full width below), with a muted chart icon in the trigger's `iconLeft` slot and `aria-label="Dashboard"` on the trigger. Options are grouped with `Select.Group`: Platform, Security, Business, then Yours for the reader's own layout. `displayValue` prints the dashboard name, never its id.
 
-### C. Shared period — `Popover`, `Button`, `Badge`, `RadioButton` (required)
+### C. Shared period — `FilterMenu` (required)
 
-An outlined medium Filter `Button` opens a `Popover` placed `bottom-start` with the Period presets as a `RadioButton` group in a `fieldset` (Last hour, Last 24 hours, Last 7 days, Last 30 days) and Cancel / Apply. A small `Badge` on the trigger counts the applied filter. Hidden for a dashboard that owns its period.
+A medium `FilterMenu` with one single-choice field, Period (Last hour, Last 24 hours, Last 7 days, Last 30 days). Its Filter button carries the count of applied filters; picking a period applies it at once. Hidden for a dashboard that owns its period. Never hand-build this filter from a `Popover`, a `Badge` and radios.
 
 ### D. Own period — `ToggleGroup` (optional)
 
@@ -38,13 +38,13 @@ When the chosen dashboard owns its period (Executive summary, Spend, Project sta
 
 An outlined medium `IconButton` at the end of the row, named Refresh by its `Tooltip` and `aria-label`; it shows `loading` while the body refetches.
 
-### F. Applied period — `Chip` (required)
+### F. Applied period — `FilterMenu.Chips` (required)
 
-The applied period as one filled medium `Chip` under the controls (`Period Last 24 hours`). Clicking it reopens the filter; removing it returns the dashboard to the default period (Last 24 hours) and the chip leaves. Hidden with the filter.
+The applied period as a chip under the controls (`Period: Last 24 hours`), bound to the same model as the menu. Removing it returns the dashboard to the default period (Last 24 hours) and the chip leaves. Hidden with the filter.
 
-### G. Dashboard body — `StatTile`, `Hint`, `ChartCard`, `Chart`, `BarList` (required)
+### G. Dashboard body — `StatTile`, `Hint`, `ChartCard`, `Chart`, `BarList`, `Alert` (required)
 
-The chosen dashboard, keyed by its id so switching remounts it: four `StatTile`s with a `Hint` each, the delta read against the comparison period (`vs previous 24 hours`, or `vs previous quarter`), then a `ChartCard` spanning 8 of 12 columns with the dashboard's `Chart` (stacked bars, areas or lines, a `Chart.Tooltip total` when it has more than one series, and a legend with totals) and a `ChartCard` spanning 4 with a ranked `BarList`. In an app, render the matching dashboard block here instead (the bodies of `analytics-dashboard`, `security-dashboard`, `scan-results-dashboard`, `composition-dashboard` and the rest).
+The chosen dashboard, keyed by its id so switching remounts it: four `StatTile`s with a `Hint` each, the delta read against the comparison period (`vs previous 24 hours`, or `vs previous quarter`), then a `ChartCard` spanning 8 of 12 columns with the dashboard's `Chart` (stacked bars, areas or lines, a `Chart.Tooltip total` when it has more than one series, and a legend with totals) and a `ChartCard` spanning 4 with a ranked `BarList`. When the body fails to load, each card keeps its header and shows a danger `Alert` with Retry. Each body here is a placeholder with sample figures: in an app, render the matching dashboard block in its place (the bodies of `analytics-dashboard`, `security-dashboard`, `scan-results-dashboard`, `composition-dashboard` and the rest), and render `configurable-dashboard` for the Custom entry under Yours. Don't ship the placeholder bodies as the real dashboards.
 
 ## Do
 
@@ -64,14 +64,13 @@ The chosen dashboard, keyed by its id so switching remounts it: four `StatTile`s
 - **Description:** one sentence on what the views cover. `Traffic, security and business views across every workload, plus a layout of your own.`
 - **Groups:** one word. `Platform`, `Security`, `Business`, `Yours`.
 - **Dashboard names:** a noun phrase in sentence case. `Edge health`, `Funnel and cohorts`.
-- **Chip:** the field, then its value. `Period` `Last 7 days`.
+- **Chip:** the field, then its value. `Period: Last 7 days`.
 - **Comparison:** `vs previous 24 hours`, `vs previous quarter`.
 
 ## Accessibility
 
 - The picker trigger is named `Dashboard`; the controls sit in a section labelled `Dashboard controls`, the body in a section named after the dashboard, with `aria-busy` while it loads or refetches.
-- The period presets are native radios in a `fieldset` with the legend `Period`; each label is tied to its radio.
-- The Filter button names the applied count (`Filter, 1 applied`); the visual `Badge` is `aria-hidden`.
+- The period lives in `FilterMenu`, which names its applied count on the Filter button and gives every row and chip its own name.
 - Refresh is an icon-only button with `aria-label="Refresh"`.
 
 ## States
@@ -79,6 +78,8 @@ The chosen dashboard, keyed by its id so switching remounts it: four `StatTile`s
 - Default: Traffic over the last 24 hours.
 - OwnPeriod: Executive summary chosen; the shared filter and chip are hidden and the quarter `ToggleGroup` shows.
 - Loading: the body loads after a switch; tiles, chart and list render their Skeletons.
+- Failed: the body could not load; the tiles show dashes and each card keeps its header with a danger `Alert` and Retry, which refetches.
+- Empty: the period has no data; the tiles show dashes, the chart and the ranked list show their empty state (`No data in this period`).
 - Refetching: after a period change or Refresh, the chart holds the previous render at reduced opacity and Refresh shows its spinner.
 
 ## Related

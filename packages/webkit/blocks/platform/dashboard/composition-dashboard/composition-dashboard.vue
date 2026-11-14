@@ -13,8 +13,10 @@
   import StatTile from '@aziontech/webkit/stat-tile'
   import TableRoot, { type TableColumn } from '@aziontech/webkit/table-root'
   import Tag from '@aziontech/webkit/tag'
+  import { toast } from '@aziontech/webkit/toast'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
-  import { ref } from 'vue'
+  import { type CsvColumn, downloadCsv, toCsv } from '@aziontech/webkit/utils/csv'
+  import { computed, ref } from 'vue'
 
   interface Contributor {
     id: string
@@ -339,6 +341,66 @@
 
   const period = ref('12m')
   const trendForm = ref('area')
+
+  type CardId = 'spend-by-category' | 'current-split' | 'top-contributors'
+
+  interface CsvReport {
+    columns: CsvColumn[]
+    rows: () => object[]
+  }
+
+  const reports: Record<CardId, CsvReport> = {
+    'spend-by-category': {
+      columns: [
+        { id: 'month', header: 'Month' },
+        ...series.map((entry) => ({ id: entry.id, header: entry.name }))
+      ],
+      rows: () =>
+        labels.map((month, index) => ({
+          month,
+          ...Object.fromEntries(series.map((entry) => [entry.id, entry.values[index] ?? '']))
+        }))
+    },
+    'current-split': {
+      columns: [
+        { id: 'category', header: 'Category' },
+        { id: 'amount', header: 'Spend (USD)' }
+      ],
+      rows: () => split.map((entry) => ({ category: entry.name, amount: entry.values[0] ?? '' }))
+    },
+    'top-contributors': {
+      columns: [
+        { id: 'rank', header: 'Rank' },
+        { id: 'name', header: 'Resource' },
+        { id: 'category', header: 'Category' },
+        { id: 'amount', header: 'Spend (USD)' },
+        { id: 'share', header: 'Share (%)' },
+        { id: 'change', header: 'Change (%)' }
+      ],
+      rows: () => contributors
+    }
+  }
+
+  const periodSlug = computed(() =>
+    (periods.find((option) => option.value === period.value)?.label ?? 'period')
+      .toLowerCase()
+      .replaceAll(' ', '-')
+  )
+
+  const exportCsv = (id: CardId) => {
+    const filename = `${id}-${periodSlug.value}.csv`
+    try {
+      const report = reports[id]
+      downloadCsv(filename, toCsv({ columns: report.columns, rows: report.rows() }))
+      toast.success('CSV exported.', { description: filename })
+    } catch {
+      toast.error('The CSV could not be exported.', { description: 'Try again in a moment.' })
+    }
+  }
+
+  const onCardOption = (id: CardId, value: string | number) => {
+    if (value === 'export') exportCsv(id)
+  }
 </script>
 
 <template>
@@ -374,6 +436,8 @@
             icon="pi pi-download"
             kind="outlined"
             size="medium"
+            :disabled="loading"
+            @click="exportCsv('spend-by-category')"
           />
         </template>
       </PageHeader>
@@ -419,7 +483,10 @@
                 size="small"
                 aria-label="Chart form for Spend by category"
               />
-              <DropdownMenu placement="bottom-end">
+              <DropdownMenu
+                placement="bottom-end"
+                @select="(_event, value) => onCardOption('spend-by-category', value)"
+              >
                 <DropdownMenu.Trigger>
                   <IconButton
                     icon="pi pi-ellipsis-h"
@@ -432,6 +499,7 @@
                   <DropdownMenu.Option
                     value="export"
                     label="Export CSV"
+                    :disabled="loading"
                   />
                 </DropdownMenu.Group>
               </DropdownMenu>
@@ -471,7 +539,10 @@
               <Hint text="This month’s spend by category, with the total in the center." />
             </span>
             <ChartCard.Controls>
-              <DropdownMenu placement="bottom-end">
+              <DropdownMenu
+                placement="bottom-end"
+                @select="(_event, value) => onCardOption('current-split', value)"
+              >
                 <DropdownMenu.Trigger>
                   <IconButton
                     icon="pi pi-ellipsis-h"
@@ -484,6 +555,7 @@
                   <DropdownMenu.Option
                     value="export"
                     label="Export CSV"
+                    :disabled="loading"
                   />
                 </DropdownMenu.Group>
               </DropdownMenu>
@@ -511,7 +583,10 @@
               />
             </span>
             <ChartCard.Controls>
-              <DropdownMenu placement="bottom-end">
+              <DropdownMenu
+                placement="bottom-end"
+                @select="(_event, value) => onCardOption('top-contributors', value)"
+              >
                 <DropdownMenu.Trigger>
                   <IconButton
                     icon="pi pi-ellipsis-h"
@@ -524,6 +599,7 @@
                   <DropdownMenu.Option
                     value="export"
                     label="Export CSV"
+                    :disabled="loading"
                   />
                 </DropdownMenu.Group>
               </DropdownMenu>

@@ -32,7 +32,7 @@ The reporting period, labelled `Quarter`. It scopes every region, including goal
 
 ### C. Export — `Button` (optional)
 
-`Export` the summary for sharing outside the product.
+`Export` downloads the scorecard and the goals of the chosen quarter as CSV (`executive-summary-q3-2026.csv`) for sharing outside the product, and confirms with a success toast naming the file (an error toast when it fails). Disabled while loading, and when the quarter failed or has no data.
 
 ### D. Scorecard — `StatTile` (required)
 

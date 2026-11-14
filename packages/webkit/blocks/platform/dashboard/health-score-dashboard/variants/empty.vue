@@ -9,6 +9,7 @@
   import PageHeader from '@aziontech/webkit/page-header'
   import Select from '@aziontech/webkit/select'
   import Skeleton from '@aziontech/webkit/skeleton'
+  import StatTile from '@aziontech/webkit/stat-tile'
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
   import Tracker, { type TrackerItem } from '@aziontech/webkit/tracker'
   import { computed, ref } from 'vue'
@@ -165,32 +166,17 @@
             <div
               class="grid grid-cols-1 items-center gap-(--spacing-lg) md:grid-cols-[minmax(0,12rem)_1fr]"
             >
-              <div
-                v-if="loading"
-                aria-busy="true"
-                class="flex flex-col gap-(--spacing-xs)"
-              >
-                <Skeleton
-                  width="6rem"
-                  height="2.5rem"
+              <div class="flex min-w-0 flex-col gap-(--spacing-xs)">
+                <StatTile
+                  label="Overall score"
+                  kind="sans"
+                  unit="/ 100"
+                  :value="overall.score"
+                  :format-value="formatScore"
+                  :loading="loading"
                 />
-                <Skeleton
-                  width="80%"
-                  height="1rem"
-                />
-              </div>
-              <div
-                v-else
-                class="flex flex-col gap-(--spacing-xxs)"
-              >
-                <p class="flex items-baseline gap-(--spacing-xxs)">
-                  <span class="text-heading-lg tabular-nums text-(--text-default)">
-                    {{ overall.score === null ? '—' : formatScore(overall.score) }}
-                  </span>
-                  <span class="text-body-sm text-(--text-muted)">/ 100</span>
-                </p>
                 <p
-                  v-if="overall.cause"
+                  v-if="overall.cause && !loading"
                   class="text-pretty text-body-sm text-(--text-muted)"
                 >
                   Top cause: {{ overall.cause }}
@@ -373,8 +359,8 @@
             <Item
               v-for="incident in incidents"
               :key="incident.id"
+              :href="`/incidents/${incident.id}`"
               size="small"
-              role="listitem"
             >
               <Item.Media kind="icon">
                 <i

@@ -33,7 +33,7 @@ Title `Cost breakdown` with one sentence on what it shows. Its actions hold the 
 
 ### C. Export — `Button` (optional)
 
-`Export CSV` in the page heading exports the whole breakdown. Per-card exports live in each card's menu.
+`Export CSV` in the page heading downloads the whole breakdown (spend per category per month, `spend-by-category-last-12-months.csv`). Per-card exports live in each card's menu. Each export confirms with a success toast naming the file, or an error toast when it fails, and is disabled while loading and when the period failed or has no data.
 
 ### D. Total and top categories — `StatTile` (required)
 
@@ -54,7 +54,7 @@ Switches the stacked trend between Area and Bar. Labelled `Chart form for Spend 
 
 ### H. More options — `DropdownMenu` (optional)
 
-Per-card secondary actions such as `Export CSV`, behind the more-options button.
+Per-card secondary actions such as `Export CSV`, behind the more-options button; it downloads that card's rows.
 
 ### I. More options trigger — `IconButton` (optional)
 

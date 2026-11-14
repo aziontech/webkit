@@ -13,7 +13,7 @@
   import Table from '@aziontech/webkit/table'
   import TableRoot, { type TableColumn } from '@aziontech/webkit/table-root'
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
-  import { ref } from 'vue'
+  import { computed, ref } from 'vue'
 
   type FigureFormat = 'count' | 'percentage'
   type AlertStatus = 'Open' | 'Investigating'
@@ -72,6 +72,11 @@
       label: 'Last 90 days'
     }
   ]
+
+  const periodPhrase = computed(
+    () =>
+      periods.find((option) => option.value === period.value)?.label.toLowerCase() ?? 'this period'
+  )
 
   const figures: Figure[] = [
     {
@@ -579,7 +584,7 @@
               :format-value="formatters.count"
               :height="240"
               empty-title="No alerts in this period"
-              empty-description="Nothing was raised in the last 30 days. Select a longer period."
+              :empty-description="`Nothing was raised in the ${periodPhrase}. Select a longer period.`"
               :loading="loading"
             >
               <Chart.Grid />

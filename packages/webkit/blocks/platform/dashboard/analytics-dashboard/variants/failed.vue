@@ -5,15 +5,33 @@
   import Hint from '@aziontech/webkit/hint'
   import IconButton from '@aziontech/webkit/icon-button'
   import PageHeader from '@aziontech/webkit/page-header'
+  import Select from '@aziontech/webkit/select'
   import StatTile from '@aziontech/webkit/stat-tile'
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
   import Tooltip from '@aziontech/webkit/tooltip'
-  import { ref } from 'vue'
+  import { computed, ref } from 'vue'
+
+  const fallbackPeriod = {
+    value: '24h',
+    label: 'Last 24 hours',
+    comparison: 'vs previous 24 hours'
+  }
+  const periods = [
+    { value: '1h', label: 'Last hour', comparison: 'vs previous hour' },
+    fallbackPeriod,
+    { value: '7d', label: 'Last 7 days', comparison: 'vs previous 7 days' },
+    { value: '30d', label: 'Last 30 days', comparison: 'vs previous 30 days' }
+  ]
+  const period = ref(fallbackPeriod.value)
+  const periodLabel = (value: string) => periods.find((entry) => entry.value === value)?.label ?? ''
+  const currentPeriod = computed(
+    () => periods.find((entry) => entry.value === period.value) ?? fallbackPeriod
+  )
+  const periodComparison = computed(() => currentPeriod.value.comparison)
 
   const loading = false
-  const comparison = 'vs previous 24 hours'
 
   const figures = [
     {
@@ -164,7 +182,26 @@
       <PageHeader
         title="Analytics"
         description="Requests, data transferred and errors your services handled in the period."
-      />
+      >
+        <template #actions>
+          <Select
+            v-model="period"
+            size="medium"
+            :display-value="periodLabel"
+          >
+            <Select.Trigger aria-label="Period" />
+            <Select.Content>
+              <Select.Option
+                v-for="option in periods"
+                :key="option.value"
+                :value="option.value"
+              >
+                {{ option.label }}
+              </Select.Option>
+            </Select.Content>
+          </Select>
+        </template>
+      </PageHeader>
       <ul class="grid grid-cols-1 gap-(--spacing-md) sm:grid-cols-2 xl:grid-cols-4">
         <li
           v-for="figure in figures"
@@ -176,7 +213,7 @@
             :value="figure.value"
             :format-value="formatters[figure.format]"
             :delta="figure.delta"
-            :delta-label="comparison"
+            :delta-label="periodComparison"
             :inverse="figure.inverse"
             :trend="figure.trend"
             :loading="loading"

@@ -46,7 +46,7 @@ closes the grid. Every card has the same header: title with `Hint`, its tags, an
 
 ### F. Card menu — `DropdownMenu` (optional)
 
-`Copy link` and `Export CSV`.
+`Copy link` copies a link to the card for the chosen project and sprint, and `Export CSV` downloads the card's rows (`owners-product-launch-sprint-6.csv`); each confirms with a success toast, or an error toast when it fails. Both are disabled while loading.
 
 ### G. Card menu trigger — `IconButton` (optional)
 

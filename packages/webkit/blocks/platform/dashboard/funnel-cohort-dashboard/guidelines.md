@@ -47,7 +47,7 @@ On every tile and card title. The funnel `Hint` states the counting rule:
 
 ### F. More options — `DropdownMenu` (optional)
 
-`Export CSV` in each card header.
+`Export CSV` in each card header downloads that card's rows (`weekly-cohorts-last-6-weeks.csv`) and confirms with a success toast naming the file, or an error toast when it fails. Disabled while loading and when the filters match nothing.
 
 ### G. More options trigger — `IconButton` (optional)
 
