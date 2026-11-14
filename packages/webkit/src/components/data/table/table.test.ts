@@ -1021,6 +1021,22 @@ describe('Table (composition + data-driven)', () => {
       window.scrollTo(0, 0)
     })
 
+    it('drops back to the rows in reach when the data or the sort changes at the top', async () => {
+      const host = document.createElement('div')
+      host.style.width = '1024px'
+      document.body.appendChild(host)
+      const view = render(Table, { props: { columns, data: many }, container: host })
+      const rendered = () => view.getAllByRole('row').length - 1
+      window.scrollTo(0, document.documentElement.scrollHeight)
+      await waitFor(() => expect(view.getByText('row-999')).toBeTruthy(), { timeout: 4000 })
+      window.scrollTo(0, 0)
+      await view.rerender({ columns, data: [...many].reverse() })
+      await waitFor(() => expect(rendered()).toBeLessThan(200))
+      expect(view.getByTestId('data-table__lazy-rows')).toBeTruthy()
+      await view.rerender({ columns, data: many, sorting: [{ id: 'name', desc: true }] })
+      expect(rendered()).toBeLessThan(200)
+    })
+
     it('renders every row of a short list at once', () => {
       const view = render(Table, { props: { columns, data: many.slice(0, 200) } })
       expect(view.getAllByRole('row')).toHaveLength(201)

@@ -1167,6 +1167,30 @@
     lazyObserver.observe(el)
   }
   watch([lazySentinel, lazyLimit, lazyActive], observeSentinel, { flush: 'post' })
+  const rowsInReach = (): number => {
+    const el = viewportEl()
+    if (!el || typeof el.getBoundingClientRect !== 'function') return LAZY_CHUNK
+    const scrollsItself =
+      el.scrollHeight > el.clientHeight &&
+      /(auto|scroll|overlay)/.test(getComputedStyle(el).overflowY)
+    const root = scrollsItself ? el : scrollParent(el)
+    const rootBottom = root ? root.getBoundingClientRect().bottom : globalThis.innerHeight
+    const top = el.getBoundingClientRect().top - (scrollsItself ? el.scrollTop : 0)
+    const reach = rootBottom + LAZY_MARGIN - top
+    return Math.max(LAZY_CHUNK, Math.ceil(reach / rowHeight.value) + LAZY_CHUNK / 2)
+  }
+  watch(
+    [
+      () => props.data,
+      () => props.sorting ?? internalSorting.value,
+      () => props.globalFilter ?? internalGlobalFilter.value,
+      () => mappedColumnFilters.value
+    ],
+    () => {
+      if (lazyLimit.value <= LAZY_CHUNK) return
+      lazyLimit.value = Math.min(lazyLimit.value, rowsInReach())
+    }
+  )
   onBeforeUnmount(() => {
     lazyObserver?.disconnect()
     rowObserver?.disconnect()
