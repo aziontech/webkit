@@ -3,12 +3,12 @@ name: avatar
 category: content
 structure: monolithic
 status: implemented
-spec_version: 3
+spec_version: 4
 template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=477-882
   node_id: 477:882
-checksum: ff08e322da860fa1c502e3d03101779a050d25117465e9a7db20cebccf34ffef
+checksum: 2fe5909ba9613f62f36f67a8a935b8f955d6ab3db9259d687656f13c4ffa8fa4
 created: 2026-05-22
 last_updated: 2026-11-14
 ---
@@ -69,16 +69,16 @@ Displays content or metadata in the UI. Lives at `packages/webkit/src/components
 
 ## Props
 
-| Prop    | Type         | Default        | Required | JSDoc                                                                                                    |
-| ------- | ------------ | -------------- | -------- | -------------------------------------------------------------------------------------------------------- |
-| `src`   | `string`     | `undefined`    | false    | Image URL. When set, renders a photo and takes precedence over label and icon.                           |
-| `alt`   | `string`     | `undefined`    | false    | Accessible name: the image's `alt` with `src`, and the name of the initials or icon fallback without it. |
-| `label` | `string`     | `undefined`    | false    | Initials shown when no image (normalized to two uppercase characters).                                   |
-| `icon`  | `string`     | `'pi pi-user'` | false    | Icon class for the fallback when no image or label (PrimeIcons class).                                   |
-| `kind`  | `AvatarKind` | `'circle'`     | false    | Visual shape of the avatar container.                                                                    |
-| `size`  | `AvatarSize` | `'medium'`     | false    | Size preset matching Figma sm / md / lg (24 / 32 / 48 px).                                               |
-| `pattern` | `AvatarPattern` | `undefined` | false | Generated fallback drawn when there is no image: `marble` blends three soft shapes seeded by `label` (or `alt`). |
-| `colors` | `string[]` | `['var(--text-primary)', 'var(--primary)', 'var(--warning)']` | false | CSS colors the generated pattern paints with, in order; theme tokens such as `var(--primary)`. |
+| Prop      | Type            | Default                                                       | Required | JSDoc                                                                                                            |
+| --------- | --------------- | ------------------------------------------------------------- | -------- | ---------------------------------------------------------------------------------------------------------------- |
+| `src`     | `string`        | `''`                                                          | false    | Image URL. When set, renders a photo and takes precedence over label and icon.                                   |
+| `alt`     | `string`        | `''`                                                          | false    | Accessible name: the image's `alt` with `src`, and the name of the initials or icon fallback without it.         |
+| `label`   | `string`        | `''`                                                          | false    | Initials shown when no image (normalized to two uppercase characters).                                           |
+| `icon`    | `string`        | `'pi pi-user'`                                                | false    | Icon class for the fallback when no image or label (PrimeIcons class).                                           |
+| `kind`    | `AvatarKind`    | `'circle'`                                                    | false    | Visual shape of the avatar container.                                                                            |
+| `size`    | `AvatarSize`    | `'medium'`                                                    | false    | Size preset matching Figma sm / md / lg (24 / 32 / 48 px).                                                       |
+| `pattern` | `AvatarPattern` | `undefined`                                                   | false    | Generated fallback drawn when there is no image: `marble` blends three soft shapes seeded by `label` (or `alt`). |
+| `colors`  | `string[]`      | `['var(--text-primary)', 'var(--primary)', 'var(--warning)']` | false    | CSS colors the generated pattern paints with, in order; theme tokens such as `var(--primary)`.                   |
 
 ## Events
 
@@ -92,6 +92,9 @@ Displays content or metadata in the UI. Lives at `packages/webkit/src/components
 
 - Visual states: `default`, `hover`, `focus-visible`, `active`, `disabled`
 - Content: `image` (`src`), `pattern` (`pattern` set, no `src`), `label` (initials), `icon`. `data-pattern` mirrors `pattern` on the root while the pattern renders.
+- Root attributes: `data-kind` and `data-size` mirror the props; `data-content` names the content that renders (`image`, `pattern`, `label`, `icon`). Variants are styled from these attributes.
+- Image error: when `src` fails to load, the avatar falls back to the next content in the precedence (`pattern`, `label`, `icon`) instead of a broken image; a new `src` tries the image again. An image that already failed before hydration is detected on mount.
+- Attributes: every consumer attribute (`id`, `title`, `aria-*`, `style`, listeners) lands on the root.
 - Marble: three layers seeded by a 32-bit string hash of `label` (falling back to `alt`): a filled square, then two blurred shapes translated, rotated and scaled by the seed, the last blended with `overlay`. Each layer takes the color at `(seed + layer) % colors.length`. The same seed and colors always draw the same mark, on the server and in the browser.
 
 ## Motion & Animations
@@ -100,14 +103,14 @@ _none_
 
 ## Tokens
 
-| Region     | Token (DESIGN.md)       |
-| ---------- | ----------------------- |
-| typography | .text-body-sm           |
-| surface    | `var(--bg-surface)`     |
-| text       | `var(--text-default)`   |
-| spacing    | `var(--spacing-3)`      |
-| shape      | `var(--shape-elements)` |
-| ring       | `var(--ring-color)`     |
+| Region                   | Token (DESIGN.md)                                           |
+| ------------------------ | ----------------------------------------------------------- |
+| typography               | .text-body-sm                                               |
+| surface                  | `var(--bg-surface)`                                         |
+| text                     | `var(--text-default)`                                       |
+| spacing                  | `var(--spacing-3)`                                          |
+| shape                    | `var(--shape-elements)`                                     |
+| ring                     | `var(--ring-color)`                                         |
 | pattern colors (default) | `var(--text-primary)` · `var(--primary)` · `var(--warning)` |
 
 ## Theme gaps

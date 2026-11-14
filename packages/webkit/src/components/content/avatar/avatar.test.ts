@@ -130,15 +130,56 @@ describe('Avatar', () => {
     expect(getByTestId('my-avatar__label')).toHaveTextContent('AB')
   })
 
-  // --- enum smoke floor (component has no data-kind/data-size attrs) -------
-  it.each(KINDS)('renders for kind=%s', (kind) => {
+  it.each(KINDS)('mirrors kind=%s on data-kind', (kind) => {
     const { getByTestId } = render(Avatar, { props: { label: 'AB', kind } })
-    expect(getByTestId('content-avatar')).toBeInTheDocument()
+    expect(getByTestId('content-avatar')).toHaveAttribute('data-kind', kind)
   })
 
-  it.each(SIZES)('renders for size=%s', (size) => {
+  it.each(SIZES)('mirrors size=%s on data-size', (size) => {
     const { getByTestId } = render(Avatar, { props: { label: 'AB', size } })
-    expect(getByTestId('content-avatar')).toBeInTheDocument()
+    expect(getByTestId('content-avatar')).toHaveAttribute('data-size', size)
+  })
+
+  it('names the rendered content on data-content', () => {
+    expect(
+      render(Avatar, { props: { label: 'AB' } }).getByTestId('content-avatar')
+    ).toHaveAttribute('data-content', 'label')
+  })
+
+  it('forwards consumer attributes and listeners to the root', async () => {
+    let clicks = 0
+    const { getByTestId } = render(Avatar, {
+      props: { label: 'AB' },
+      attrs: { id: 'owner', title: 'Jane Doe', 'aria-describedby': 'hint', onClick: () => clicks++ }
+    })
+    const root = getByTestId('content-avatar')
+    expect(root).toHaveAttribute('id', 'owner')
+    expect(root).toHaveAttribute('title', 'Jane Doe')
+    expect(root).toHaveAttribute('aria-describedby', 'hint')
+    root.click()
+    expect(clicks).toBe(1)
+  })
+
+  it('falls back to the initials when the image fails to load', async () => {
+    const { getByTestId, findByTestId, queryByTestId } = render(Avatar, {
+      props: { src: 'data:image/png;base64,broken', alt: 'Jane Doe', label: 'JD' }
+    })
+    expect(await findByTestId('content-avatar__label')).toHaveTextContent('JD')
+    expect(queryByTestId('content-avatar__image')).toBeNull()
+    const root = getByTestId('content-avatar')
+    expect(root).toHaveAttribute('role', 'img')
+    expect(root).toHaveAttribute('aria-label', 'Jane Doe')
+    expect(root).toHaveAttribute('data-content', 'label')
+  })
+
+  it('tries the image again when src changes after a failure', async () => {
+    const { findByTestId, rerender } = render(Avatar, {
+      props: { src: 'data:image/png;base64,broken', label: 'JD' }
+    })
+    await findByTestId('content-avatar__label')
+    const pixel = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'
+    await rerender({ src: pixel, label: 'JD' })
+    expect(await findByTestId('content-avatar__image')).toHaveAttribute('src', pixel)
   })
 
   // --- accessibility ------------------------------------------------------
