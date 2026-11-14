@@ -71,6 +71,11 @@
       "update": 170,
       "update_is": "sort 1k rows under useCollection (the table renders the first 50 rows; the rest load on scroll)"
     },
+    "code-block-diff-5k-lines": {
+      "mount": 420,
+      "update": 80,
+      "update_is": "switch the 5k-line computed diff from split to unified"
+    },
     "table-10k-virtual": {
       "mount": 110,
       "update": 150,

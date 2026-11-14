@@ -1,10 +1,12 @@
 import { fireEvent, render, waitFor, within } from '@testing-library/vue'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
+import ComputedDiff from '../../../../examples/code-block/computed-diff.vue'
 import Default from '../../../../examples/code-block/default.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import CodeBlock from './code-block.vue'
 import { highlightCodeLine } from './utils/highlight-code'
+import { diffLines, pairDiffLines } from './utils/line-diff'
 
 // The real Clipboard API rejects in headless Chromium ("Document is not
 // focused"), so writeText is stubbed to resolve. This is NOT a layout/focus
@@ -895,5 +897,130 @@ describe('CodeBlock docs surfaces', () => {
       await waitFor(() => expect(emitted().copy).toBeTruthy())
       expect(writeText).toHaveBeenCalledWith('azion deploy')
     })
+  })
+})
+
+describe('CodeBlock computed diff', () => {
+  const original = 'a\nb\nc\nd'
+  const modified = 'a\nx\nc\nd\ne'
+  const tab = [{ label: 'Diff', value: 'diff', language: 'plaintext', code: modified, original }]
+  const states = (view: ReturnType<typeof render>, id: string) =>
+    view.getAllByTestId(id).map((line) => line.getAttribute('data-state'))
+  const texts = (view: ReturnType<typeof render>, id: string) =>
+    view.getAllByTestId(id).map((line) => line.textContent?.trim())
+
+  it('computes a minimal line diff that rebuilds both versions', () => {
+    const rows = diffLines(original, modified)
+    expect(rows.map((row) => row.change)).toEqual([
+      'unchanged',
+      'removed',
+      'added',
+      'unchanged',
+      'unchanged',
+      'added'
+    ])
+    const before = original.split('\n')
+    const after = modified.split('\n')
+    expect(
+      rows.filter((row) => row.change !== 'added').map((row) => before[(row.oldNumber ?? 0) - 1])
+    ).toEqual(before)
+    expect(
+      rows.filter((row) => row.change !== 'removed').map((row) => after[(row.newNumber ?? 0) - 1])
+    ).toEqual(after)
+    expect(pairDiffLines(rows)).toHaveLength(5)
+  })
+
+  it('falls back to removed then added when the edits pass the limit', () => {
+    const rows = diffLines('a\nb', 'c\nd', 1)
+    expect(rows.map((row) => row.change)).toEqual(['removed', 'removed', 'added', 'added'])
+  })
+
+  it('diffs 5,000-line versions with scattered edits quickly', () => {
+    const before = Array.from({ length: 5000 }, (_, i) => `line ${i}`)
+    const after = before.map((line, i) => (i % 50 === 0 ? `${line} changed` : line))
+    const start = performance.now()
+    const rows = diffLines(before.join('\n'), after.join('\n'))
+    expect(performance.now() - start).toBeLessThan(200)
+    expect(rows.filter((row) => row.change === 'added')).toHaveLength(100)
+  })
+
+  it('draws a unified diff with markers, side numbers and spoken changes', () => {
+    const view = render(CodeBlock, { props: { tabs: tab } })
+    expect(states(view, 'code-code-block__line')).toEqual([
+      'default',
+      'removed',
+      'added',
+      'default',
+      'default',
+      'added'
+    ])
+    expect(texts(view, 'code-code-block__line-content')).toEqual(['a', 'b', 'x', 'c', 'd', 'e'])
+    expect(texts(view, 'code-code-block__line-number')).toEqual([
+      '01',
+      '02',
+      '02',
+      '03',
+      '04',
+      '05'
+    ])
+    expect(texts(view, 'code-code-block__diff-marker')).toEqual(['', '-', '+', '', '', '+'])
+    const lines = view.getAllByTestId('code-code-block__line')
+    expect(lines[1]?.querySelector('.sr-only')?.textContent).toBe('Removed')
+    expect(lines[2]?.querySelector('.sr-only')?.textContent).toBe('Added')
+  })
+
+  it('draws a split diff with aligned, paired columns and copies the modified code', async () => {
+    const writeText = stubClipboardResolved()
+    const view = render(CodeBlock, { props: { tabs: tab, diffView: 'split' } })
+    expect(view.getByTestId('code-code-block__panel').hasAttribute('data-split')).toBe(true)
+    expect(view.queryAllByTestId('code-code-block__line')).toHaveLength(0)
+    const [left, right] = view.getAllByRole('group') as HTMLElement[]
+    expect(left?.getAttribute('aria-label')).toBe('Original')
+    expect(right?.getAttribute('aria-label')).toBe('Modified')
+    const leftLines = within(left as HTMLElement).getAllByTestId('code-code-block__split-line')
+    const rightLines = within(right as HTMLElement).getAllByTestId('code-code-block__split-line')
+    expect(leftLines.map((line) => line.getAttribute('data-state'))).toEqual([
+      'default',
+      'removed',
+      'default',
+      'default',
+      'empty'
+    ])
+    expect(rightLines.map((line) => line.getAttribute('data-state'))).toEqual([
+      'default',
+      'added',
+      'default',
+      'default',
+      'added'
+    ])
+    await fireEvent.click(within(view.getByTestId('code-code-block__copy')).getByRole('button'))
+    await waitFor(() => expect(writeText).toHaveBeenCalledWith(modified))
+  })
+
+  it('mounts a long split diff in chunks', () => {
+    const before = Array.from({ length: 2000 }, (_, i) => `const v${i} = ${i}`)
+    const after = before.map((line, i) => (i % 100 === 0 ? `${line} + 1` : line))
+    const view = render(CodeBlock, {
+      props: {
+        diffView: 'split',
+        tabs: [
+          {
+            label: 'Long',
+            value: 'long',
+            language: 'javascript',
+            code: after.join('\n'),
+            original: before.join('\n')
+          }
+        ]
+      }
+    })
+    const mounted = view.getAllByTestId('code-code-block__split-line').length
+    expect(mounted).toBeGreaterThan(0)
+    expect(mounted).toBeLessThan(4000)
+  })
+
+  it('has no axe violations in the computed diff example', async () => {
+    const view = render(ComputedDiff)
+    await expectNoA11yViolations(view.container)
   })
 })

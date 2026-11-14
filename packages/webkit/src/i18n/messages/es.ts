@@ -243,7 +243,11 @@ export const es: Messages = {
   },
   codeBlock: {
     copy: 'Copiar código',
-    output: 'Salida'
+    output: 'Salida',
+    added: 'Añadida',
+    removed: 'Eliminada',
+    original: 'Original',
+    modified: 'Modificado'
   },
   codeEditor: {
     label: 'Editor de código',

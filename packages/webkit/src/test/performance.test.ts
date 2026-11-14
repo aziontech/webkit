@@ -416,6 +416,32 @@ function codeBlockCase(): Case {
   }
 }
 
+function codeBlockDiffCase(): Case {
+  const before = Array.from(
+    { length: 5000 },
+    (_, i) => `export const value${i} = await fetch('/api/${i}').then((r) => r.json()) // ${i}`
+  )
+  const after = before.map((line, i) => (i % 25 === 0 ? line.replace('fetch', 'retry') : line))
+  const view = ref<'split' | 'unified'>('split')
+  const tabs = [
+    {
+      label: 'Release',
+      value: 'release',
+      language: 'javascript',
+      code: after.join('\n'),
+      original: before.join('\n')
+    }
+  ]
+  return {
+    mount: () => ({
+      render: () => h(CodeBlock, { tabs, diffView: view.value, lineNumbers: true })
+    }),
+    update: () => {
+      view.value = 'unified'
+    }
+  }
+}
+
 function tableCase(n: number, virtual: boolean, change: 'sort' | 'filter' | 'select-all'): Case {
   const statuses = ['Live', 'Inactive', 'Pending']
   const items = Array.from({ length: n }, (_, i) => ({
@@ -1215,6 +1241,9 @@ describe('runtime budgets (perf-budgets.json)', () => {
   })
   it('CodeBlock with a 5k-line file: mount and switch tab', async () => {
     check('code-block-5k-lines', await measure(codeBlockCase))
+  })
+  it('CodeBlock with a 5k-line computed diff: mount split and switch to unified', async () => {
+    check('code-block-diff-5k-lines', await measure(codeBlockDiffCase))
   })
   it('UploadProgress with 1k files: mount and one progress tick', async () => {
     check('upload-progress-1k', await measure(uploadProgressCase))

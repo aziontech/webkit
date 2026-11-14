@@ -28,6 +28,11 @@
       "file": "with-diff.vue"
     },
     {
+      "name": "ComputedDiff",
+      "summary": "Two versions of one cache configuration passed as original and code: the block computes the line diff itself. Unified on top, removed lines before the added ones, each numbered on its own side; split below, the original and the modified file side by side with each change paired line for line.",
+      "file": "computed-diff.vue"
+    },
+    {
       "name": "WithHighlightedLine",
       "summary": "One active line with an info background and leading bar via `highlightedLine`.",
       "file": "with-highlighted-line.vue"

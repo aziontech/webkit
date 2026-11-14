@@ -43,10 +43,14 @@
     getDiffMarker,
     resolveLineState
   } from './utils/line-decorations'
+  import { diffLines, pairDiffLines } from './utils/line-diff'
 
   export type { CodeBlockLineChange }
 
   export type CodeBlockKind = 'code' | 'output'
+
+  /** How a tab with an `original` draws its diff: one column of removed and added lines, or the two versions side by side. */
+  export type CodeBlockDiffView = 'unified' | 'split'
 
   export type CodeBlockTab = {
     label: string
@@ -57,6 +61,7 @@
     fileIcon?: string
     highlightedLine?: number
     lineChanges?: CodeBlockLineChange[]
+    original?: string
   }
 
   defineOptions({
@@ -94,6 +99,8 @@
     animateLines?: boolean
     /** Draw the outer card border around the block. On by default; set to false to render flush inside a surface that already frames it. */
     bordered?: boolean
+    /** How a tab with an `original` draws the diff the block computes: `unified` (one column) or `split` (side by side). */
+    diffView?: CodeBlockDiffView
   }
 
   const props = withDefaults(defineProps<Props>(), {
@@ -109,7 +116,8 @@
     showLabel: false,
     title: '',
     animateLines: false,
-    bordered: true
+    bordered: true,
+    diffView: 'unified'
   })
 
   const emit = defineEmits<{
@@ -191,7 +199,7 @@
     activeTab.value ? normalizedTabs.value.indexOf(activeTab.value) : -1
   )
 
-  const isSingleLine = computed(() => highlightedLines.value.length === 1)
+  const isSingleLine = computed(() => displayLines.value.length === 1)
 
   const showFileNameBar = computed(() => Boolean(activeTab.value?.fileName))
 
@@ -217,7 +225,11 @@
     activeTab.value ? stripShellPrompts(activeTab.value.code, activeTab.value.language) : ''
   )
 
-  const showDiffGutter = computed(() => (activeTab.value?.lineChanges?.length ?? 0) > 0)
+  const isDiff = computed(() => typeof activeTab.value?.original === 'string')
+
+  const showDiffGutter = computed(
+    () => isDiff.value || (activeTab.value?.lineChanges?.length ?? 0) > 0
+  )
 
   const activeLineChangeMap = computed(() => buildLineChangeMap(activeTab.value?.lineChanges))
 
@@ -235,11 +247,67 @@
       : highlightCode(activeTab.value.code, activeTab.value.language)
   })
 
-  const { split: splitLines, observe: observeLineChunk } = useLazyChunks({ rowHeight: 24 })
-  const lineChunks = computed(() => splitLines(highlightedLines.value))
+  const originalLines = computed(() =>
+    isDiff.value ? highlightCode(activeTab.value?.original ?? '', activeTab.value?.language) : []
+  )
+
+  const diffRows = computed(() =>
+    isDiff.value ? diffLines(activeTab.value?.original ?? '', activeTab.value?.code ?? '') : []
+  )
 
   const getLineState = (lineNumber: number): CodeBlockLineState =>
     resolveLineState(lineNumber, activeLineChangeMap.value, activeTab.value?.highlightedLine)
+
+  const diffState = (change: 'unchanged' | 'added' | 'removed', number: number | null) => {
+    if (change !== 'unchanged') return change
+    return number !== null && number === activeTab.value?.highlightedLine
+      ? 'highlighted'
+      : 'default'
+  }
+
+  const displayLines = computed(() => {
+    if (!isDiff.value)
+      return highlightedLines.value.map((tokens, index) => ({
+        tokens,
+        number: index + 1,
+        state: getLineState(index + 1)
+      }))
+    return diffRows.value.map((row) => {
+      const removed = row.change === 'removed'
+      const number = (removed ? row.oldNumber : row.newNumber) ?? 0
+      return {
+        tokens: (removed ? originalLines.value : highlightedLines.value)[number - 1] ?? [],
+        number,
+        state: diffState(row.change, row.newNumber) as CodeBlockLineState
+      }
+    })
+  })
+
+  const isSplit = computed(() => isDiff.value && props.diffView === 'split')
+
+  const splitRows = computed(() =>
+    isSplit.value
+      ? pairDiffLines(diffRows.value).map((pair) => ({
+          left: pair.left && {
+            tokens: originalLines.value[pair.left.number - 1] ?? [],
+            number: pair.left.number,
+            state: pair.left.change === 'removed' ? 'removed' : 'default'
+          },
+          right: pair.right && {
+            tokens: highlightedLines.value[pair.right.number - 1] ?? [],
+            number: pair.right.number,
+            state: diffState(pair.right.change, pair.right.number)
+          }
+        }))
+      : []
+  )
+
+  const changeLabel = (state: string) =>
+    state === 'added' ? t('codeBlock.added') : state === 'removed' ? t('codeBlock.removed') : ''
+
+  const { split: splitLines, observe: observeLineChunk } = useLazyChunks({ rowHeight: 24 })
+  const lineChunks = computed(() => splitLines(isSplit.value ? [] : displayLines.value))
+  const splitChunks = computed(() => splitLines(splitRows.value))
 
   const indicatorTransitionStyle = computed(() => getCodeBlockIndicatorTransitionStyle())
 
@@ -603,7 +671,7 @@
   )
 
   watch(
-    () => highlightedLines.value.length,
+    () => displayLines.value.length,
     (length, previous) => {
       if (lineMotionMode.value !== 'enter' || !linesMotionReady.value || length <= previous) {
         return
@@ -769,10 +837,12 @@
           :role="showTabHeader ? 'tabpanel' : undefined"
           :id="showTabHeader ? panelId : undefined"
           :aria-labelledby="showTabHeader ? tabId(activeTabIndex) : undefined"
-          class="min-w-full w-max"
+          class="min-w-full w-max data-[split]:w-full"
+          :data-split="isSplit || null"
           :data-testid="`${testId}__panel`"
         >
           <div
+            v-if="!isSplit"
             dir="ltr"
             class="flex min-w-full w-max flex-col"
             :data-testid="`${testId}__lines`"
@@ -791,13 +861,13 @@
               />
               <template v-else>
                 <div
-                  v-for="(lineTokens, offset) in chunk.items"
+                  v-for="(line, offset) in chunk.items"
                   :key="`${activeTab.value}-${panelVersion}-${chunk.start + offset}`"
                   class="group relative flex min-w-full w-max shrink-0 items-center gap-(--spacing-xs) px-(--spacing-lg) py-(--spacing-xxs) text-label-code-sm data-[state=added]:bg-(--success)/40 data-[state=removed]:bg-(--danger)/40 data-[state=highlighted]:bg-(--info)/40"
                   :class="getLineMotionClasses(chunk.start + offset)"
                   :style="getLineMotionStyle(chunk.start + offset)"
                   :data-testid="`${testId}__line`"
-                  :data-state="getLineState(chunk.start + offset + 1)"
+                  :data-state="line.state"
                 >
                   <span
                     class="pointer-events-none absolute inset-0 z-0 bg-(--bg-hover) opacity-0 transition-opacity duration-fast-02 ease-productive-entrance motion-reduce:transition-none group-hover:opacity-100"
@@ -809,21 +879,26 @@
                     :data-testid="`${testId}__diff-marker`"
                     aria-hidden="true"
                   >
-                    {{ getDiffMarker(getLineState(chunk.start + offset + 1)) }}
+                    {{ getDiffMarker(line.state) }}
                   </span>
                   <span
                     v-if="gutter"
                     class="relative z-1 w-4 shrink-0 text-center text-(--code-sintax-line-number)"
                     :data-testid="`${testId}__line-number`"
                   >
-                    {{ formatLineNumber(chunk.start + offset + 1) }}
+                    {{ formatLineNumber(line.number) }}
                   </span>
+                  <span
+                    v-if="changeLabel(line.state)"
+                    class="sr-only"
+                    >{{ changeLabel(line.state) }}</span
+                  >
                   <code
                     class="text-label-code-sm relative z-1 shrink-0 whitespace-pre pe-(--spacing-sm) group-data-[copyable]/code-block:pe-11"
                     :data-testid="`${testId}__line-content`"
                   >
                     <span
-                      v-for="(token, tokenIndex) in lineTokens"
+                      v-for="(token, tokenIndex) in line.tokens"
                       :key="tokenIndex"
                       :class="getHighlightTokenClass(token.type)"
                     >
@@ -831,7 +906,7 @@
                     </span>
                   </code>
                   <span
-                    v-if="getLineState(chunk.start + offset + 1) !== 'default'"
+                    v-if="line.state !== 'default'"
                     :class="
                       cn(
                         'pointer-events-none absolute bottom-0 start-0 top-0 z-2 w-[2px]',
@@ -844,6 +919,81 @@
                 </div>
               </template>
             </template>
+          </div>
+          <div
+            v-else
+            dir="ltr"
+            class="grid w-full grid-cols-2"
+            :data-testid="`${testId}__split`"
+          >
+            <div
+              v-for="side in ['left', 'right'] as const"
+              :key="side"
+              role="group"
+              tabindex="0"
+              :aria-label="side === 'left' ? t('codeBlock.original') : t('codeBlock.modified')"
+              :data-side="side"
+              :data-testid="`${testId}__side`"
+              class="min-w-0 overflow-x-auto outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset data-[side=left]:border-e data-[side=left]:border-(--border-muted)"
+            >
+              <div class="flex min-w-full w-max flex-col">
+                <template
+                  v-for="chunk in splitChunks"
+                  :key="chunk.index"
+                >
+                  <div
+                    v-if="!chunk.mounted"
+                    :ref="(el) => side === 'left' && observeLineChunk(el, chunk.index)"
+                    :data-chunk="chunk.index"
+                    aria-hidden="true"
+                    class="shrink-0"
+                    :style="{ height: `${chunk.estimatedHeight}px` }"
+                  />
+                  <template v-else>
+                    <div
+                      v-for="(pair, offset) in chunk.items"
+                      :key="`${activeTab.value}-${side}-${chunk.start + offset}`"
+                      class="relative flex min-w-full w-max shrink-0 items-center gap-(--spacing-xs) px-(--spacing-sm) py-(--spacing-xxs) text-label-code-sm data-[state=added]:bg-(--success)/40 data-[state=removed]:bg-(--danger)/40 data-[state=highlighted]:bg-(--info)/40 data-[state=empty]:bg-(--bg-canvas)"
+                      :data-state="pair[side]?.state ?? 'empty'"
+                      :data-testid="`${testId}__split-line`"
+                    >
+                      <span
+                        class="w-2 shrink-0 text-center in-data-[state=added]:text-(--success-contrast) in-data-[state=removed]:text-(--danger-contrast)"
+                        aria-hidden="true"
+                        >{{
+                          getDiffMarker((pair[side]?.state ?? 'default') as CodeBlockLineState)
+                        }}</span
+                      >
+                      <span
+                        v-if="gutter"
+                        class="w-4 shrink-0 text-center text-(--code-sintax-line-number)"
+                        >{{ pair[side] ? formatLineNumber(pair[side].number) : '' }}</span
+                      >
+                      <span
+                        v-if="pair[side] && changeLabel(pair[side].state)"
+                        class="sr-only"
+                        >{{ changeLabel(pair[side].state) }}</span
+                      >
+                      <code
+                        class="text-label-code-sm shrink-0 whitespace-pre pe-(--spacing-sm)"
+                        :data-testid="`${testId}__split-content`"
+                        ><span
+                          v-for="(token, tokenIndex) in pair[side]?.tokens ?? []"
+                          :key="tokenIndex"
+                          :class="getHighlightTokenClass(token.type)"
+                          >{{ token.text }}</span
+                        >{{ pair[side] ? '' : ' ' }}</code
+                      >
+                      <span
+                        v-if="pair[side] && pair[side].state !== 'default'"
+                        class="pointer-events-none absolute inset-y-0 start-0 w-[2px] in-data-[state=added]:bg-(--success-border) in-data-[state=removed]:bg-(--danger-border) in-data-[state=highlighted]:bg-(--info-border)"
+                        aria-hidden="true"
+                      />
+                    </div>
+                  </template>
+                </template>
+              </div>
+            </div>
           </div>
         </div>
       </ScrollArea>

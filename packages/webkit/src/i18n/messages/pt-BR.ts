@@ -243,7 +243,11 @@ export const ptBR: Messages = {
   },
   codeBlock: {
     copy: 'Copiar código',
-    output: 'Saída'
+    output: 'Saída',
+    added: 'Adicionada',
+    removed: 'Removida',
+    original: 'Original',
+    modified: 'Modificado'
   },
   codeEditor: {
     label: 'Editor de código',
