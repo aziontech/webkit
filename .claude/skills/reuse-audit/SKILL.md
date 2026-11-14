@@ -22,8 +22,8 @@ Before scaffolding, prove whatever logic the new component needs does not alread
 - The full text of `.specs/<name>.md` (to know what props/events/states the component needs).
 - Read-only access to:
   - `packages/webkit/src/composables/`
-  - `packages/webkit/src/components/webkit/utils/`
-  - `packages/webkit/src/components/webkit/<category>/` (siblings of the new component)
+  - `packages/webkit/src/components/utils/`
+  - `packages/webkit/src/components/<category>/` (siblings of the new component)
   - `packages/theme/src/` (animations, transitions)
 
 ## Workflow

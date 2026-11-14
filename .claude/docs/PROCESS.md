@@ -57,8 +57,8 @@ nothing more — is declared here first.
 <details>
 <summary><b>▸ Details — what a spec contains and the status lifecycle</b></summary>
 
-**The spec file** follows [`.specs/_template.md`](../../../.specs/_template.md) and is
-validated against [`.specs/_schema.json`](../../../.specs/_schema.json). It declares:
+**The spec file** follows [`.specs/_template.md`](../../.specs/_template.md) and is
+validated against [`.specs/_schema.json`](../../.specs/_schema.json). It declares:
 
 - **Frontmatter** — `name` (kebab, the canonical name on all six surfaces), `category`,
   `structure` (`monolithic` | `composition`, decided by the `structure-decide` skill),
@@ -66,9 +66,9 @@ validated against [`.specs/_schema.json`](../../../.specs/_schema.json). It decl
 - **Purpose / Usage** — prose + a runnable usage block (compound dot-notation leads for
   composition components).
 - **Props / Events / Slots / Sub-components tables** — the complete public API. Names must
-  come from the [prop-vocabulary](../../../.claude/rules/prop-vocabulary.md) dictionary
+  come from the [prop-vocabulary](../rules/prop-vocabulary.md) dictionary
   (`kind`, not `variant`; `dismissible` for light-dismiss; `(event, item?)` payloads per
-  [event-payloads](../../../.claude/rules/event-payloads.md)).
+  [event-payloads](../rules/event-payloads.md)).
 - **Tokens & Motion tables** — every visual decision mapped to a theme token (list_tokens in the webkit MCP) or a
   catalogued `animate-*` utility (each motion class paired with `motion-reduce:`).
 - **Constraints block** — verbatim from the template; altering it fails validation.
@@ -85,7 +85,7 @@ draft ──spec-validate──▶ approved ──/component-create──▶ imp
 - `locked` — changes require an explicit `spec_version` bump.
 
 **Figma is an input, not an authority** — per
-[migration](../../../.claude/rules/migration.md), Figma variables/regions/states are
+[migration](../rules/migration.md), Figma variables/regions/states are
 _rewritten_ into our conventions (names, tokens, states); a Figma value with no token match
 is recorded as a theme gap, never inlined as a hex.
 
@@ -104,7 +104,7 @@ written to `src/` before this.
 - **Body rules** — required sections present (Purpose, Usage, Props, Events, Slots,
   Tokens, Motion, Examples, Sub-components when `structure: composition`).
 - **Constraints block** — must carry the canonical bullets verbatim
-  ([`_lib/spec.mjs`](../../../.claude/hooks/_lib/spec.mjs) →
+  ([`_lib/spec.mjs`](../hooks/_lib/spec.mjs) →
   `constraintsBlockHasCanonicalBullets`); this is the anti-drift seal against inherited
   or hand-edited specs.
 - **Checksum** — `sha256(body)` stored in frontmatter. Every later stage (the
@@ -142,10 +142,10 @@ Key properties:
 
 - **Isolation** — each sub-agent sees the spec + its rules, never the conversation or
   another agent's raw output. A missing datum surfaces as `BLOCKED: <reason>`, never as an
-  invention ([no-invention](../../../.claude/rules/no-invention.md)).
+  invention ([no-invention](../rules/no-invention.md)).
 - **Composition components** get the compound API by construction: `index.ts` with
   `Object.assign(Root, { Part })`, the flat compound export, and the tree-shakeable
-  `<name>-root` export ([compound-api](../../../.claude/rules/compound-api.md)).
+  `<name>-root` export ([compound-api](../rules/compound-api.md)).
 - **Double-entry bookkeeping** — Step 7 re-derives the public API from the written files
   with an independent parser and diffs it against the spec; hook and echo disagreeing is
   itself a failure state (`degraded`).
@@ -161,17 +161,17 @@ message naming the violated rule.
 <details>
 <summary><b>▸ Details — every hook and what it blocks</b></summary>
 
-Wired in [`.claude/settings.json`](../../../.claude/settings.json); all fail **open** on
+Wired in [`.claude/settings.json`](../settings.json); all fail **open** on
 unexpected errors (a hook bug never bricks the workflow) and fail **closed** on violations.
 
-| Hook                                                                              | Fires on                                | Blocks                                                                                                                                                                                                                      |
-| --------------------------------------------------------------------------------- | --------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [`enforce-component-create`](../../../.claude/hooks/enforce-component-create.mjs) | first `Write` of a new component `.vue` | creating a webkit component outside the `/spec-create` → `/component-create` pipeline                                                                                                                                       |
-| [`enforce-spec-exists`](../../../.claude/hooks/enforce-spec-exists.mjs)           | `Write` of a component `.vue`           | spec missing, not `approved`/`implemented`, or checksum-tampered (legacy whitelist exempt)                                                                                                                                  |
-| [`validate-tokens`](../../../.claude/hooks/validate-tokens.mjs)                   | `Write\|Edit\|MultiEdit`                | hex/RGB/HSL, Tailwind palette, raw typography, `class` in `defineProps`, `any`, `@ts-ignore` — engine: [`token-checks.js`](../src/eslint-plugin/token-checks.js)                                                            |
-| [`validate-references`](../../../.claude/hooks/validate-references.mjs)           | `Write\|Edit\|MultiEdit`                | phantom `@aziontech/webkit/*` subpaths, unresolved relative imports, uninstalled npm packages, forbidden positioning/animation libs                                                                                         |
-| [`validate-authoring`](../../../.claude/hooks/validate-authoring.mjs)             | `Write\|Edit\|MultiEdit`                | construction anti-patterns — manual `v-model`, runtime `defineProps`, undeclared slots, un-`readonly` composable state, silent breaking changes — engine: [`authoring-checks.js`](../src/eslint-plugin/authoring-checks.js) |
-| [`validate-spec-compliance`](../../../.claude/hooks/validate-spec-compliance.mjs) | **Post**ToolUse on component `.vue`     | any divergence from the spec: missing/extra prop/event/slot/sub-component, name/testid drift, uncatalogued animations, missing `motion-reduce:`                                                                             |
+| Hook                                                                | Fires on                                | Blocks                                                                                                                                                                                                                                         |
+| ------------------------------------------------------------------- | --------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [`enforce-component-create`](../hooks/enforce-component-create.mjs) | first `Write` of a new component `.vue` | creating a webkit component outside the `/spec-create` → `/component-create` pipeline                                                                                                                                                          |
+| [`enforce-spec-exists`](../hooks/enforce-spec-exists.mjs)           | `Write` of a component `.vue`           | spec missing, not `approved`/`implemented`, or checksum-tampered (legacy whitelist exempt)                                                                                                                                                     |
+| [`validate-tokens`](../hooks/validate-tokens.mjs)                   | `Write\|Edit\|MultiEdit`                | hex/RGB/HSL, Tailwind palette, raw typography, `class` in `defineProps`, `any`, `@ts-ignore` — engine: [`token-checks.js`](../../packages/webkit/src/eslint-plugin/token-checks.js)                                                            |
+| [`validate-references`](../hooks/validate-references.mjs)           | `Write\|Edit\|MultiEdit`                | phantom `@aziontech/webkit/*` subpaths, unresolved relative imports, uninstalled npm packages, forbidden positioning/animation libs                                                                                                            |
+| [`validate-authoring`](../hooks/validate-authoring.mjs)             | `Write\|Edit\|MultiEdit`                | construction anti-patterns — manual `v-model`, runtime `defineProps`, undeclared slots, un-`readonly` composable state, silent breaking changes — engine: [`authoring-checks.js`](../../packages/webkit/src/eslint-plugin/authoring-checks.js) |
+| [`validate-spec-compliance`](../hooks/validate-spec-compliance.mjs) | **Post**ToolUse on component `.vue`     | any divergence from the spec: missing/extra prop/event/slot/sub-component, name/testid drift, uncatalogued animations, missing `motion-reduce:`                                                                                                |
 
 **One engine, many surfaces.** The hooks do not own their logic — they call shared
 engines (`authoring-checks`, `token-checks`, `spec-compliance-checks`)
@@ -191,26 +191,26 @@ an off-pattern change either.
 <details>
 <summary><b>▸ Details — the governance jobs and the ratchet</b></summary>
 
-[`.github/workflows/governance.yml`](../../../.github/workflows/governance.yml) — jobs
+[`.github/workflows/governance.yml`](../../.github/workflows/governance.yml) — jobs
 gated by a `changes` path filter and summarized by a required `governance-check` gate:
 
-| Job                | Runs                                                                                                             | Fails the PR when                                                                                                   |
-| ------------------ | ---------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
-| `security`         | `pnpm audit` + TruffleHog + depcheck                                                                             | high-severity advisory, a leaked secret, or a ghost dependency                                                      |
-| `lint-canary`      | `node lint-canaries/index.js`                                                                                    | a deliberately broken fixture stops failing its rule (a lint was weakened)                                          |
-| `lint`             | eslint (`--max-warnings 0`) + stylelint + prettier `--check` over `packages/webkit`                              | any warning or format drift                                                                                         |
-| `types`            | `vue-tsc --noEmit` + `type-coverage --at-least 95`                                                               | type error or coverage below 95%                                                                                    |
-| `build`            | `pack:check` + `size` (after `lint` + `types`)                                                                   | a test file leaks into the tarball or an entry exceeds its [bundle budget](../../../.claude/rules/bundle-budget.md) |
-| `site`             | `docs:build` + `demos:build`, artifact for the visual shards (after `lint` + `types`)                            | a page, example, block or demo fails to build or prerender                                                          |
-| `toolkit`          | `catalog:check` + `test:toolkit` + `authoring` + `test:gate` + `doc-standards`                                   | catalog drift, toolkit test failure, a **new** authoring/doc violation, or a component without its test             |
-| `smoke`            | `smoke:consume` — packs the three packages, runs `webkit init` in a bare Vite app, builds a `Button`             | the published packages don't install, wire, render styled, or build for a real consumer                             |
-| `tests`            | Vitest browser mode (Playwright Chromium), 4 shards (after `lint` + `types`)                                     | any functional or axe assertion fails                                                                               |
-| `visual`           | Playwright styled screenshots in the Playwright image, 4 shards (after every job above except `toolkit`/`smoke`) | an example, block or demo route drifts from its committed baseline                                                  |
-| `governance-check` | summary gate over every job                                                                                      | any upstream job failed (skips count as pass)                                                                       |
+| Job                | Runs                                                                                                             | Fails the PR when                                                                                       |
+| ------------------ | ---------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
+| `security`         | `pnpm audit` + TruffleHog + depcheck                                                                             | high-severity advisory, a leaked secret, or a ghost dependency                                          |
+| `lint-canary`      | `node lint-canaries/index.js`                                                                                    | a deliberately broken fixture stops failing its rule (a lint was weakened)                              |
+| `lint`             | eslint (`--max-warnings 0`) + stylelint + prettier `--check` over `packages/webkit`                              | any warning or format drift                                                                             |
+| `types`            | `vue-tsc --noEmit` + `type-coverage --at-least 95`                                                               | type error or coverage below 95%                                                                        |
+| `build`            | `pack:check` + `size` (after `lint` + `types`)                                                                   | a test file leaks into the tarball or an entry exceeds its [bundle budget](../rules/bundle-budget.md)   |
+| `site`             | `docs:build` + `demos:build`, artifact for the visual shards (after `lint` + `types`)                            | a page, example, block or demo fails to build or prerender                                              |
+| `toolkit`          | `catalog:check` + `test:toolkit` + `authoring` + `test:gate` + `doc-standards`                                   | catalog drift, toolkit test failure, a **new** authoring/doc violation, or a component without its test |
+| `smoke`            | `smoke:consume` — packs the three packages, runs `webkit init` in a bare Vite app, builds a `Button`             | the published packages don't install, wire, render styled, or build for a real consumer                 |
+| `tests`            | Vitest browser mode (Playwright Chromium), 4 shards (after `lint` + `types`)                                     | any functional or axe assertion fails                                                                   |
+| `visual`           | Playwright styled screenshots in the Playwright image, 4 shards (after every job above except `toolkit`/`smoke`) | an example, block or demo route drifts from its committed baseline                                      |
+| `governance-check` | summary gate over every job                                                                                      | any upstream job failed (skips count as pass)                                                           |
 
-**The ratchet** ([`check-authoring.mjs`](../scripts/check-authoring.mjs)) re-runs the
+**The ratchet** ([`check-authoring.mjs`](../../packages/webkit/scripts/check-authoring.mjs)) re-runs the
 construction, token, and spec-compliance engines over every source file and
-compares against [`authoring-baseline.json`](../scripts/authoring-baseline.json):
+compares against [`authoring-baseline.json`](../../packages/webkit/scripts/authoring-baseline.json):
 
 - Existing debt is **frozen** (multiset semantics — a second occurrence of a baselined
   violation still blocks); new code must comply.
@@ -218,10 +218,10 @@ compares against [`authoring-baseline.json`](../scripts/authoring-baseline.json)
 - The remaining entries are legacy construction/token/spec debt.
 
 <a id="the-invariant"></a>**The invariant** —
-[`test/standards/invariant.test.mjs`](../test/standards/invariant.test.mjs) asserts in CI:
+[`test/standards/invariant.test.mjs`](../../packages/webkit/test/standards/invariant.test.mjs) asserts in CI:
 
 1. every `.claude/rules/*.md` has a registry entry in
-   [`standards.mjs`](../../../.claude/hooks/_lib/standards.mjs) and vice versa;
+   [`standards.mjs`](../hooks/_lib/standards.mjs) and vice versa;
 2. every standard has at least one **blocking** surface (nothing advisory);
 3. every declared enforcer resolves to a real hook / eslint rule / known CI gate;
 4. hook, CI ratchet, and consumer lint import the **same** engine modules;
@@ -244,17 +244,17 @@ event-payload shape, and design intent. Everything mechanical arrived already ve
 Standards whose registry entry includes `surface: 'review'` delegate a _part_ of their
 enforcement to humans (the rest is automated):
 
-- [accessibility](../../../.claude/rules/accessibility.md) — axe runs in every component test and harness,
+- [accessibility](../rules/accessibility.md) — axe runs in every component test and harness,
   but keyboard flows and semantics are judged by a person.
-- [event-payloads](../../../.claude/rules/event-payloads.md) — the emit _set_ is pinned to
+- [event-payloads](../rules/event-payloads.md) — the emit _set_ is pinned to
   the spec automatically; the `(event, item?)` shape is confirmed in review.
-- [component-states](../../../.claude/rules/component-states.md),
-  [root-element](../../../.claude/rules/root-element.md),
-  [component-structure](../../../.claude/rules/component-structure.md) — script-order and
+- [component-states](../rules/component-states.md),
+  [root-element](../rules/root-element.md),
+  [component-structure](../rules/component-structure.md) — script-order and
   polymorphism nuances.
-- [compound-api](../../../.claude/rules/compound-api.md),
-  [migration](../../../.claude/rules/migration.md),
-  [bundle-budget](../../../.claude/rules/bundle-budget.md) — anatomy naming, nothing
+- [compound-api](../rules/compound-api.md),
+  [migration](../rules/migration.md),
+  [bundle-budget](../rules/bundle-budget.md) — anatomy naming, nothing
   inherited as-is, budget exceptions.
 
 Branch protection makes the approvals required; the PR cannot merge without them.
@@ -271,7 +271,7 @@ identical across commitlint, release-please, CONTRIBUTING, and the PR flows.
 <details>
 <summary><b>▸ Details — type → bump mapping and the four synchronized sources</b></summary>
 
-Per [release-types](../../../.claude/rules/release-types.md):
+Per [release-types](../rules/release-types.md):
 
 | Type                                                                        | Release             |
 | --------------------------------------------------------------------------- | ------------------- |
@@ -282,9 +282,9 @@ Per [release-types](../../../.claude/rules/release-types.md):
 
 Stock release-please cannot remap types — anything that must ship is a `fix`/`feat`.
 The four places that carry this mapping —
-[`commitlint.config.js`](../../../commitlint.config.js),
+[`commitlint.config.js`](../../commitlint.config.js),
 release-please (stock `release-type: node` in `release-please-config.json`),
-[`CONTRIBUTING.md`](../../../CONTRIBUTING.md), and the
+[`CONTRIBUTING.md`](../../CONTRIBUTING.md), and the
 `/open-pr` + `/create-branch` flows — must be edited **in the same PR** when a type is
 added or removed. release-please only counts a commit toward a package when it touches
 files under that package.
@@ -309,7 +309,7 @@ carries the resolved version in its diff, so a footer added there arrives too la
 
 At publish time the publish workflow (`package-webkit.yml`) generates `.d.ts` files (`vue-tsc`); the
 repo itself ships source (`exports` points at `./src/...`) — `.d.ts` is never committed.
-The published package embeds [`catalog.json`](../catalog.json) — the version-locked
+The published package embeds [`catalog.json`](../../packages/webkit/catalog.json) — the version-locked
 manifest Part 2 runs on.
 
 </details>
@@ -350,9 +350,9 @@ husky pre-commit, and a `.claude/` guidance bundle. Idempotent; `--dry-run` prev
 6. **`.claude/` bundle** — the `general`-scope rules rewritten for consumers
    (`webkit-tokens`, `webkit-props`, `webkit-emits`, `webkit-styling`,
    `webkit-prefer-over-custom`, …), a `webkit-usage` skill, and reviewer/expert/adopter
-   agents (sources at the repo root: [`skills/`](../../../skills/), [`rules/`](../../../rules/),
-   [`adapters/claude/agents/`](../../../adapters/claude/agents/); the package ships them through `prepack`).
-7. **`AGENTS.md` / `CLAUDE.md` fragment** ([`adapters/AGENTS.fragment.md`](../../../adapters/AGENTS.fragment.md)) — the same block, fenced in both files.
+   agents (sources at the repo root: [`skills/`](../../skills/), [`rules/`](../../rules/),
+   [`adapters/claude/agents/`](../../adapters/claude/agents/); the package ships them through `prepack`).
+7. **`AGENTS.md` / `CLAUDE.md` fragment** ([`adapters/AGENTS.fragment.md`](../../adapters/AGENTS.fragment.md)) — the same block, fenced in both files.
 8. **Theme wiring advice** — suggests the theme import at your entry file, never edits it.
 
 Flags: `--dry-run` (plan only) · `--strict` (default preset — everything `error`) ·
@@ -384,7 +384,7 @@ right _before_ the linter would have to reject them.
 `init`): `list_components`,
 `list_categories`, `list_tokens`, `get_component`, `get_import`, `search_components`,
 `suggest_component`, `get_usage_example`, `validate_usage` — every answer derived from the
-installed [`catalog.json`](../catalog.json), never from training data.
+installed [`catalog.json`](../../packages/webkit/catalog.json), never from training data.
 
 **Building your own components?** The `general` construction standards apply to any Vue
 code and ship in the `init` bundle — the one-page digest is
@@ -402,7 +402,7 @@ block off-pattern usage at commit; the same lint runs in the project's CI.
 <details>
 <summary><b>▸ Details — rules, presets, autofix, and doctor</b></summary>
 
-**ESLint rules** ([`src/eslint-plugin/`](../src/eslint-plugin/)):
+**ESLint rules** ([`src/eslint-plugin/`](../../packages/webkit/src/eslint-plugin/)):
 `valid-import-path` (with typo suggestions), `no-deep-internal-import`,
 `no-barrel-import`, `no-whole-icon-set-import`, `no-hardcoded-color`,
 `prefer-tree-shakeable-root`, plus the shipped construction standards
@@ -430,7 +430,7 @@ major ahead; `doctor` reports the resolved versions to pin.
 <details>
 <summary><b>▸ Details — deprecation policy and staying current</b></summary>
 
-- Per [deprecation](../../../.claude/rules/deprecation.md): a renamed/removed API ships one
+- Per [deprecation](../rules/deprecation.md): a renamed/removed API ships one
   major with a `@deprecated` JSDoc naming the replacement and the removal version; the
   consumer lint flags usage of deprecated members, so migration happens before the removal
   major lands.
@@ -448,7 +448,7 @@ major ahead; `doctor` reports the resolved versions to pin.
 
 A **standard** is one `.claude/rules/<id>.md` (the human rule, written for the AI and for
 people) **plus** a registry entry in
-[`standards.mjs`](../../../.claude/hooks/_lib/standards.mjs) naming its blocking gates.
+[`standards.mjs`](../hooks/_lib/standards.mjs) naming its blocking gates.
 Nothing is advisory: every standard blocks the merge automatically or by mandatory review,
 and the [invariant test](#the-invariant) fails CI if a rule and its gate ever drift apart.
 
@@ -466,41 +466,41 @@ and the [invariant test](#the-invariant) fails CI if a rule and its gate ever dr
 Construction patterns for **any** Vue component, anywhere. These are the future
 [standards pack](#roadmap--the-standards-pack).
 
-| Standard                                                             | One line                                                                                   |
-| -------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
-| [prop-vocabulary](../../../.claude/rules/prop-vocabulary.md)         | one canonical name/type/default per concept (`kind`, `small/medium/large`, `dismissible`…) |
-| [props](../../../.claude/rules/props.md)                             | typed `interface Props` + `withDefaults` + JSDoc; no negative/prefixed booleans            |
-| [v-model](../../../.claude/rules/v-model.md)                         | two-way state via `defineModel`, never manual prop+emit                                    |
-| [emits](../../../.claude/rules/emits.md)                             | typed `defineEmits`; no echo events duplicating `update:*`                                 |
-| [event-payloads](../../../.claude/rules/event-payloads.md)           | activation events emit `(event, item?)` — DOM event always first                           |
-| [slots](../../../.claude/rules/slots.md)                             | typed `defineSlots`; fallback content lives in the slot                                    |
-| [composables](../../../.claude/rules/composables.md)                 | `readonly` state out, `toValue` args in, cleanup in `onScopeDispose`                       |
-| [styling](../../../.claude/rules/styling.md)                         | utilities inline on the root; variants via `data-*`; no class-map presets, no `<style>`    |
-| [component-structure](../../../.claude/rules/component-structure.md) | one folder per component; fixed `<script setup>` order                                     |
-| [root-element](../../../.claude/rules/root-element.md)               | own the root; `inheritAttrs:false` + `$attrs` + `cn`; polymorphism via `href`              |
-| [component-states](../../../.claude/rules/component-states.md)       | loading/empty/error rendered via `data-*` + DS components                                  |
-| [accessibility](../../../.claude/rules/accessibility.md)             | semantics, keyboard, `focus-visible`, `motion-reduce`, `useId`                             |
-| [testid](../../../.claude/rules/testid.md)                           | overridable `data-testid` derived `<category>-<name>`                                      |
-| [deprecation](../../../.claude/rules/deprecation.md)                 | `@deprecated` naming the replacement → one major → removal                                 |
-| [comments](../../../.claude/rules/comments.md)                       | no prose comments; only API JSDoc and tool directives                                      |
+| Standard                                               | One line                                                                                   |
+| ------------------------------------------------------ | ------------------------------------------------------------------------------------------ |
+| [prop-vocabulary](../rules/prop-vocabulary.md)         | one canonical name/type/default per concept (`kind`, `small/medium/large`, `dismissible`…) |
+| [props](../rules/props.md)                             | typed `interface Props` + `withDefaults` + JSDoc; no negative/prefixed booleans            |
+| [v-model](../rules/v-model.md)                         | two-way state via `defineModel`, never manual prop+emit                                    |
+| [emits](../rules/emits.md)                             | typed `defineEmits`; no echo events duplicating `update:*`                                 |
+| [event-payloads](../rules/event-payloads.md)           | activation events emit `(event, item?)` — DOM event always first                           |
+| [slots](../rules/slots.md)                             | typed `defineSlots`; fallback content lives in the slot                                    |
+| [composables](../rules/composables.md)                 | `readonly` state out, `toValue` args in, cleanup in `onScopeDispose`                       |
+| [styling](../rules/styling.md)                         | utilities inline on the root; variants via `data-*`; no class-map presets, no `<style>`    |
+| [component-structure](../rules/component-structure.md) | one folder per component; fixed `<script setup>` order                                     |
+| [root-element](../rules/root-element.md)               | own the root; `inheritAttrs:false` + `$attrs` + `cn`; polymorphism via `href`              |
+| [component-states](../rules/component-states.md)       | loading/empty/error rendered via `data-*` + DS components                                  |
+| [accessibility](../rules/accessibility.md)             | semantics, keyboard, `focus-visible`, `motion-reduce`, `useId`                             |
+| [testid](../rules/testid.md)                           | overridable `data-testid` derived `<category>-<name>`                                      |
+| [deprecation](../rules/deprecation.md)                 | `@deprecated` naming the replacement → one major → removal                                 |
+| [comments](../rules/comments.md)                       | no prose comments; only API JSDoc and tool directives                                      |
 
 ### `scope: webkit` — 12 standards (internal to the design system)
 
 How **this repo** authors, documents, and releases; they never ship to consumers.
 
-| Standard                                                   | One line                                                                                 |
-| ---------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
-| [no-invention](../../../.claude/rules/no-invention.md)     | the spec is a sealed contract; anything missing → `BLOCKED`, not invented                |
-| [naming](../../../.claude/rules/naming.md)                 | one kebab name across spec, folder, export, `defineOptions`, testid, story binding       |
-| [imports](../../../.claude/rules/imports.md)               | flat public export (`@aziontech/webkit/<name>`); category only in the folder             |
-| [compound-api](../../../.claude/rules/compound-api.md)     | composition = compound `index.ts` + tree-shakeable `-root` export                        |
-| [dependencies](../../../.claude/rules/dependencies.md)     | CSS-only positioning/animation; granted exceptions listed in the rule                    |
-| [migration](../../../.claude/rules/migration.md)           | external artifacts are rewritten to our conventions, never inherited                     |
-| [release-types](../../../.claude/rules/release-types.md)   | commit type ⇄ version bump identical across 4 sources                                    |
-| [git-workflow](../../../.claude/rules/git-workflow.md)     | branches/PRs only via `/create-branch` + `/open-pr`, base `main`                         |
-| [bundle-budget](../../../.claude/rules/bundle-budget.md)   | size-limit per entry; tree-shaking preserved                                             |
-| [testing](../../../.claude/rules/testing.md)               | one `<name>.test.ts` per component — Vitest browser mode, story fixture, axe             |
-| [authoring-docs](../../../.claude/rules/authoring-docs.md) | skills/agents carry conforming frontmatter + `enforced_by`; no source file as an example |
+| Standard                                     | One line                                                                                 |
+| -------------------------------------------- | ---------------------------------------------------------------------------------------- |
+| [no-invention](../rules/no-invention.md)     | the spec is a sealed contract; anything missing → `BLOCKED`, not invented                |
+| [naming](../rules/naming.md)                 | one kebab name across spec, folder, export, `defineOptions`, testid, story binding       |
+| [imports](../rules/imports.md)               | flat public export (`@aziontech/webkit/<name>`); category only in the folder             |
+| [compound-api](../rules/compound-api.md)     | composition = compound `index.ts` + tree-shakeable `-root` export                        |
+| [dependencies](../rules/dependencies.md)     | CSS-only positioning/animation; granted exceptions listed in the rule                    |
+| [migration](../rules/migration.md)           | external artifacts are rewritten to our conventions, never inherited                     |
+| [release-types](../rules/release-types.md)   | commit type ⇄ version bump identical across 4 sources                                    |
+| [git-workflow](../rules/git-workflow.md)     | branches/PRs only via `/create-branch` + `/open-pr`, base `main`                         |
+| [bundle-budget](../rules/bundle-budget.md)   | size-limit per entry; tree-shaking preserved                                             |
+| [testing](../rules/testing.md)               | one `<name>.test.ts` per component — Vitest browser mode, story fixture, axe             |
+| [authoring-docs](../rules/authoring-docs.md) | skills/agents carry conforming frontmatter + `enforced_by`; no source file as an example |
 
 ---
 
@@ -553,16 +553,16 @@ a non-webkit repo can adopt the pack with one command.
 
 ## Map of artifacts
 
-| Concern                          | Where                                                                                                                                                                             |
-| -------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Rule documents (25)              | [`.claude/rules/`](../../../.claude/rules/) — index in its [README](../../../.claude/rules/README.md)                                                                             |
-| Machine registry (scope + gates) | [`.claude/hooks/_lib/standards.mjs`](../../../.claude/hooks/_lib/standards.mjs)                                                                                                   |
-| Write-time hooks                 | [`.claude/hooks/`](../../../.claude/hooks/) — [README](../../../.claude/hooks/README.md)                                                                                          |
-| Shared check engines             | [`src/eslint-plugin/*.js`](../src/eslint-plugin/) + [`.claude/hooks/_lib/*.mjs`](../../../.claude/hooks/_lib/)                                                                    |
-| Specs                            | [`.specs/`](../../../.specs/) — template, schema, one `.md` per component                                                                                                         |
-| Pipeline commands & skills       | [`.claude/commands/`](../../../.claude/commands/) + [`.claude/skills/`](../../../.claude/skills/)                                                                                 |
-| CI                               | [`.github/workflows/governance.yml`](../../../.github/workflows/governance.yml) + [`scripts/check-authoring.mjs`](../scripts/check-authoring.mjs)                                 |
-| Invariant test                   | [`test/standards/invariant.test.mjs`](../test/standards/invariant.test.mjs)                                                                                                       |
-| Consumer toolkit                 | [`src/cli/`](../src/cli/) · [`src/mcp/`](../src/mcp/) · [`src/eslint-plugin/`](../src/eslint-plugin/) · [`catalog.json`](../catalog.json) — docs in [`docs/toolkit/`](./toolkit/) |
-| Consumer pattern digest          | [`GUIDELINES.md`](../../packages/webkit/docs/GUIDELINES.md) (one page) → [`STYLEGUIDE.md`](../../packages/webkit/docs/STYLEGUIDE.md) (full detail)                                |
-| Every lint in the stack          | [`DOC_LINTS.md`](./DOC_LINTS.md) — wrong ❌ vs correct ✅ per check                                                                                                               |
+| Concern                          | Where                                                                                                                                                                                                                                                                                  |
+| -------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Rule documents (25)              | [`.claude/rules/`](../rules/) — index in its [README](../rules/README.md)                                                                                                                                                                                                              |
+| Machine registry (scope + gates) | [`.claude/hooks/_lib/standards.mjs`](../hooks/_lib/standards.mjs)                                                                                                                                                                                                                      |
+| Write-time hooks                 | [`.claude/hooks/`](../hooks/) — [README](../hooks/README.md)                                                                                                                                                                                                                           |
+| Shared check engines             | [`src/eslint-plugin/*.js`](../../packages/webkit/src/eslint-plugin/) + [`.claude/hooks/_lib/*.mjs`](../hooks/_lib/)                                                                                                                                                                    |
+| Specs                            | [`.specs/`](../../.specs/) — template, schema, one `.md` per component                                                                                                                                                                                                                 |
+| Pipeline commands & skills       | [`.claude/commands/`](../commands/) + [`.claude/skills/`](../skills/)                                                                                                                                                                                                                  |
+| CI                               | [`.github/workflows/governance.yml`](../../.github/workflows/governance.yml) + [`scripts/check-authoring.mjs`](../../packages/webkit/scripts/check-authoring.mjs)                                                                                                                      |
+| Invariant test                   | [`test/standards/invariant.test.mjs`](../../packages/webkit/test/standards/invariant.test.mjs)                                                                                                                                                                                         |
+| Consumer toolkit                 | [`src/cli/`](../../packages/webkit/src/cli/) · [`src/mcp/`](../../packages/webkit/src/mcp/) · [`src/eslint-plugin/`](../../packages/webkit/src/eslint-plugin/) · [`catalog.json`](../../packages/webkit/catalog.json) — docs in [`docs/toolkit/`](../../packages/webkit/docs/toolkit/) |
+| Consumer pattern digest          | [`GUIDELINES.md`](../../packages/webkit/docs/GUIDELINES.md) (one page) → [`STYLEGUIDE.md`](../../packages/webkit/docs/STYLEGUIDE.md) (full detail)                                                                                                                                     |
+| Every lint in the stack          | [`DOC_LINTS.md`](./DOC_LINTS.md) — wrong ❌ vs correct ✅ per check                                                                                                                                                                                                                    |

@@ -242,7 +242,7 @@ export function collectSpecViolations(abs, ROOT, { requireSpec = false } = {}) {
         if (!catalogAnims.has(nameOnly)) {
           violations.push(
             `Animation "animate-${nameOnly}" is not in the theme catalog. Run /add-animation ${nameOnly} ` +
-              `to add it to packages/theme/src/tokens/semantic/animations.js + record a Theme gap.`
+              `to add it to packages/theme/src/tokens/primitives/animations/animate.js (keyframes.js) + record a Theme gap.`
           )
         }
       }

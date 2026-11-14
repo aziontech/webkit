@@ -4,7 +4,7 @@ Every component root carries a **`data-testid`** with a name derived from the co
 
 ## The rule
 
-> The root element sets `:data-testid`, defaulting to **`<category>-<name>`** — or **`input-<name>`** for input components. The consumer overrides it by passing `data-testid` as an attribute. Interactive sub-elements that a test needs to reach get their own derived testid.
+> The root element sets `:data-testid`, defaulting to **`<category>-<name>`** — or **`input-<name>`** for input components. The consumer overrides it by passing `data-testid` as an attribute. Interactive sub-elements that a test needs to reach get their own testid, `${testId}__<part>`.
 
 ```vue
 <script setup lang="ts">
@@ -22,7 +22,7 @@ Every component root carries a **`data-testid`** with a name derived from the co
 
 - **Fallback**: `input-<name>` for the `inputs` category, `<category>-<name>` for everything else (`content-badge`, `feedback-toast`, `data-table`).
 - **Override**: the consumer passes `data-testid="…"`; because the root reads `attrs['data-testid']` for its fallback and also spreads `v-bind="$attrs"`, the passed value wins. Read it from `attrs` for the computed fallback so it is not applied twice with different values.
-- **Sub-elements**: an interactive part a test must click (a sort button, a remove `×`) gets its own testid derived from the root (`data-table-sort-button`), so tests do not depend on DOM structure.
+- **Sub-elements**: an interactive part a test must click (a sort button, a remove `×`) gets its own testid: the root testid, two underscores, then the part name (`` `${testId}__sort-button` `` → `data-table__sort-button`), so tests do not depend on DOM structure and a consumer override of the root carries to its parts.
 - **PascalCase name** in `defineOptions` and **kebab** in the testid come from the same canonical name (see [`naming.md`](./naming.md)).
 
 ## Hard prohibitions

@@ -278,7 +278,7 @@ packages/webkit/src/components/actions/button/
 
 ## Animations — apply the spec's Motion & Animations table verbatim
 
-- Every animation class **must** come from `packages/theme/src/tokens/semantic/animations.js` (`animate-fade-in`, `animate-fade-out`, `animate-slide-down`, `animate-popup-scale-in`, `animate-popup-scale-out`, `animate-blink`, `animate-highlight-fade`) — see [`.claude/docs/DESIGN.md`](../../docs/DESIGN.md#animations--semanticanimationsjs).
+- Every animation class **must** come from `packages/theme/src/tokens/primitives/animations/animate.js` (`animate-fade-in`, `animate-fade-out`, `animate-slide-down`, `animate-popup-scale-in`, `animate-popup-scale-out`, `animate-blink`, `animate-highlight-fade`) — see [`.claude/docs/DESIGN.md`](../../docs/DESIGN.md#animations--semanticanimationsjs).
 - Every motion-bearing class pairs with the reduced-motion escape in the same class string:
   ```
   transition-colors duration-150 ease-out motion-reduce:transition-none

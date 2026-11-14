@@ -11,7 +11,7 @@ The webkit layer **must not** depend on external libraries for positioning, anch
 | Concern | Forbidden | Use instead |
 |---|---|---|
 | Positioning / anchoring | `@floating-ui/vue`, `@floating-ui/dom`, `@floating-ui/core`, `popper.js`, `@popperjs/core`, `tippy.js`, `@radix-ui/popper`, `@vue/popperjs` | Native CSS (`position: absolute/fixed`, `transform`, container queries, CSS anchor positioning, Popover API), Vue `<Teleport>` |
-| Animation runtime | `gsap`, `framer-motion`, `motion`, `@motionone/vue`, `@vueuse/motion`, `@formkit/auto-animate`, `lottie-web`, `lottie-react`, `popmotion` | The semantic utilities in [`semantic/animations.js`](../../packages/theme/src/tokens/semantic/animations.js), Tailwind `transition-*` / `duration-*` / `ease-*` utilities, Vue `<Transition>` / `<TransitionGroup>`, the easing primitives in [`primitives/animations/ease.js`](../../packages/theme/src/tokens/primitives/animations/ease.js) |
+| Animation runtime | `gsap`, `framer-motion`, `motion`, `@motionone/vue`, `@vueuse/motion`, `@formkit/auto-animate`, `lottie-web`, `lottie-react`, `popmotion` | The semantic utilities in [`primitives/animations/animate.js`](../../packages/theme/src/tokens/primitives/animations/animate.js), Tailwind `transition-*` / `duration-*` / `ease-*` utilities, Vue `<Transition>` / `<TransitionGroup>`, the easing primitives in [`primitives/animations/ease.js`](../../packages/theme/src/tokens/primitives/animations/ease.js) |
 | Drag & drop | `react-dnd`, `@vueuse/gesture`, `interact.js`, `sortablejs` | Native HTML5 DnD, Pointer Events |
 | Form field engines | additional form engines beyond what `core/form/*` already wraps (VeeValidate is the established choice) | Existing `core/form/*` |
 | Scroll virtualization | `@tanstack/virtual`, `vue-virtual-scroller` | Native scroll + CSS `content-visibility: auto` |
@@ -19,7 +19,7 @@ The webkit layer **must not** depend on external libraries for positioning, anch
 ## Allowed (already installed, used as building blocks)
 
 - **Vue 3** primitives — `<Teleport>`, `<Transition>`, `<TransitionGroup>`, `defineModel`, `provide`/`inject`.
-- **`clsx` + `tailwind-merge`** via [`@aziontech/webkit/utils/cn`](../../packages/webkit/src/utils/cn.ts) — class merging only.
+- **`clsx` + `tailwind-merge`** via [`@aziontech/webkit/utils/cn`](../../packages/webkit/src/utils/cn.js) — class merging only.
 - **`@vueuse/core`** — small reactive utilities (e.g. `useElementVisibility`). **Not** `@vueuse/motion`.
 - **VeeValidate** — only inside `core/form/*` per existing pattern.
 - **`@tanstack/vue-table`** — headless table state engine (sorting, pagination, row selection, column models) **only** inside the single `data/table` component's data-driven mode (`data` + `columns`); `data/data-table` is an alias of `data/table`. Granted via the **Exceptions** process below. This is `@tanstack/vue-table` / `@tanstack/table-core` (headless logic) — **not** `@tanstack/virtual` (scroll virtualization), which remains forbidden in the table above.
@@ -58,7 +58,7 @@ Use Vue `<Teleport to="body">` when the overlay must escape an `overflow: hidden
 </Transition>
 ```
 
-The catalog is in [`.claude/docs/DESIGN.md`](../docs/DESIGN.md#animations--semanticanimationsjs).
+The catalog is in [`.claude/docs/DESIGN.md`](../docs/DESIGN.md#animations).
 
 ## Hook coverage
 

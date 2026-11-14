@@ -1,6 +1,6 @@
 ---
 name: add-animation
-description: Scaffold a new webkit animation into the semantic catalog (semantic/animations.js) + record the Theme gap. Used when a component needs an animation the catalog lacks, instead of a component-local @keyframes or an off-catalog animate-[…].
+description: Scaffold a new webkit animation into the animation catalog (theme primitives/animations/animate.js + keyframes.js) + record the Theme gap. Used when a component needs an animation the catalog lacks, instead of a component-local @keyframes or an off-catalog animate-[…].
 scope: webkit
 enforced_by: [styling, no-invention, accessibility]
 ---
@@ -57,7 +57,7 @@ The consumer-facing form of all of this — including the full glitch catalog �
 
 ### 1. Add the utility + keyframes to `packages/theme/src/tokens/primitives/animations/`
 
-The theme is CSS-first (Tailwind v4) — `semantic/animations.js` and the v3 plugin are gone.
+The theme is CSS-first (Tailwind v4) — the old `semantic/animations.js` file and the v3 plugin are gone.
 An animation is now **two edits in two files**, both under
 `packages/theme/src/tokens/primitives/animations/`, compiled into `dist/v4/globals.css`
 by `pnpm --filter @aziontech/theme build:tokens`:
@@ -109,7 +109,7 @@ entrance whose box is a scroll container (the route transition) must NOT fill fo
 Add a row to the component's `## Theme gaps` table in `.specs/<component>.md`:
 
 ```
-| <name> animation | added to semantic/animations.js | done (this change) |
+| <name> animation | added to primitives/animations/animate.js + keyframes.js | done (this change) |
 ```
 
 ### 3. Regenerate the catalog

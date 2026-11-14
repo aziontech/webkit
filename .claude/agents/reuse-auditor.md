@@ -15,8 +15,8 @@ You are the `reuse-auditor` sub-agent. You execute the `reuse-audit` skill verba
 
 1. Index existing reusables under:
    - `packages/webkit/src/composables/`
-   - `packages/webkit/src/components/webkit/utils/`
-   - `packages/webkit/src/components/webkit/<spec.category>/` (siblings)
+   - `packages/webkit/src/components/utils/`
+   - `packages/webkit/src/components/<spec.category>/` (siblings)
    - `packages/theme/src/` (animations, transitions)
 2. For every need expressed in the spec (Props/Events/States/Motion), search for a matching reusable.
 3. Emit a JSON array with `{ spec_needs, reuse, rationale }`. Paths must resolve to real files.

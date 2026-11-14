@@ -9,15 +9,15 @@ All examples follow the repo's own conventions (PascalCase components, `<script 
 ## Contents
 
 1. [How to run](#1-how-to-run)
-2. [ESLint — Vue correctness](#2-eslint--vue-correctness) · [`eslint.config.js`](../eslint.config.js)
+2. [ESLint — Vue correctness](#2-eslint--vue-correctness) · [`eslint.config.js`](../../packages/webkit/eslint.config.js)
 3. [ESLint — Accessibility](#3-eslint--accessibility)
 4. [ESLint — TypeScript](#4-eslint--typescript)
 5. [ESLint — Import hygiene](#5-eslint--import-hygiene)
 6. [ESLint — Clean code](#6-eslint--clean-code)
-7. [Stylelint](#7-stylelint--cssscss) · [`.stylelintrc.json`](../../../.stylelintrc.json)
-8. [Prettier](#8-prettier--formatting) · [`.prettierrc.json`](../../../.prettierrc.json)
+7. [Stylelint](#7-stylelint--cssscss) · [`.stylelintrc.json`](../../.stylelintrc.json)
+8. [Prettier](#8-prettier--formatting) · [`.prettierrc.json`](../../.prettierrc.json)
 9. [Type gates — vue-tsc + type-coverage](#9-type-gates--vue-tsc--type-coverage)
-10. [commitlint](#10-commitlint--commit-messages) · [`commitlint.config.js`](../../../commitlint.config.js)
+10. [commitlint](#10-commitlint--commit-messages) · [`commitlint.config.js`](../../commitlint.config.js)
 11. [Write-time guardrail hooks (Layer 0)](#11-write-time-guardrail-hooks-layer-0)
 12. [Footnotes — configured but currently inert](#12-footnotes--configured-but-currently-inert)
 
@@ -34,7 +34,7 @@ All examples follow the repo's own conventions (PascalCase components, `<script 
 | `pnpm webkit:type-coverage`                        | type-coverage ≥ 95% (§9)                                      |
 | `pnpm governance`                                  | lint + type-check + format:check + audit — local mirror of CI |
 
-On `git commit`, husky runs lint-staged (ESLint/Stylelint/Prettier with auto-fix on staged files) and commitlint (§10). Never bypass with `--no-verify` — forbidden by [`git-workflow.md`](../../../.claude/rules/git-workflow.md).
+On `git commit`, husky runs lint-staged (ESLint/Stylelint/Prettier with auto-fix on staged files) and commitlint (§10). Never bypass with `--no-verify` — forbidden by [`git-workflow.md`](../rules/git-workflow.md).
 
 ---
 
@@ -44,7 +44,7 @@ Applies to `**/*.{js,ts,vue}` via `vue-eslint-parser` + `@typescript-eslint/pars
 
 ### `vue/component-definition-name-casing` — PascalCase
 
-The registered component name is PascalCase, matching the "one name, everywhere" rule ([`naming.md`](../../../.claude/rules/naming.md)).
+The registered component name is PascalCase, matching the "one name, everywhere" rule ([`naming.md`](../rules/naming.md)).
 
 **❌ Wrong**
 
@@ -65,7 +65,7 @@ The registered component name is PascalCase, matching the "one name, everywhere"
 
 ### `vue/component-name-in-template-casing` — PascalCase
 
-Component tags in templates are PascalCase. Native HTML elements stay lowercase — which is exactly why a compound root binding must be PascalCase (`Table`, never `table`; see [`compound-api.md`](../../../.claude/rules/compound-api.md)).
+Component tags in templates are PascalCase. Native HTML elements stay lowercase — which is exactly why a compound root binding must be PascalCase (`Table`, never `table`; see [`compound-api.md`](../rules/compound-api.md)).
 
 **❌ Wrong**
 
@@ -111,7 +111,7 @@ Every SFC reads in the same order.
 </template>
 ```
 
-> webkit components never reach the third slot: `<style>` blocks are forbidden entirely by [`styling.md`](../../../.claude/rules/styling.md).
+> webkit components never reach the third slot: `<style>` blocks are forbidden entirely by [`styling.md`](../rules/styling.md).
 
 ### `vue/multi-word-component-names` — **off, deliberately**
 
@@ -1039,7 +1039,7 @@ const testId = attrs['data-testid'] ?? 'actions-button'
 
 ## 7. Stylelint — CSS/SCSS
 
-Scans `packages/webkit/**/*.{css,scss,vue}`. Context: [`styling.md`](../../../.claude/rules/styling.md) forbids `<style>` blocks and component-local CSS in webkit components — Stylelint is the **backstop** for the few legitimate stylesheets (theme CSS, `styles/country-flags.css`, legacy components).
+Scans `packages/webkit/**/*.{css,scss,vue}`. Context: [`styling.md`](../rules/styling.md) forbids `<style>` blocks and component-local CSS in webkit components — Stylelint is the **backstop** for the few legitimate stylesheets (theme CSS, `styles/country-flags.css`, legacy components).
 
 ### `selector-class-pattern` — kebab-case
 
@@ -1112,7 +1112,7 @@ A duplicated property in one block means one of the two values is dead.
 
 ### `length-zero-no-unit`
 
-A zero is identical in every unit, so the unit is noise — and it lets the same value read three different ways (`0px` here, `0rem` there, `0em` in a token). Set to plain `true`, **dropping** the `stylelint-config-standard-scss` default `ignore: ['custom-properties']`: a design system is authored almost entirely as custom properties, which is exactly where the drift appeared (`--tracking-normal: 0em`). Only **length** units are in scope — `0%`, `0s`, `0deg`, `0fr` are untouched. Context: [`styling.md`](../../../.claude/rules/styling.md) § "A zero length carries no unit", which also lists the three non-CSS surfaces (token-checks engine, shipped stylelint config, theme `build:tokens` assertion).
+A zero is identical in every unit, so the unit is noise — and it lets the same value read three different ways (`0px` here, `0rem` there, `0em` in a token). Set to plain `true`, **dropping** the `stylelint-config-standard-scss` default `ignore: ['custom-properties']`: a design system is authored almost entirely as custom properties, which is exactly where the drift appeared (`--tracking-normal: 0em`). Only **length** units are in scope — `0%`, `0s`, `0deg`, `0fr` are untouched. Context: [`styling.md`](../rules/styling.md) § "A zero length carries no unit", which also lists the three non-CSS surfaces (token-checks engine, shipped stylelint config, theme `build:tokens` assertion).
 
 **❌ Wrong**
 
@@ -1337,7 +1337,7 @@ const label = computed(() => {
 
 ## 9. Type gates — vue-tsc + type-coverage
 
-Two gates: `vue-tsc --noEmit` (full program check over `.ts` **and** `.vue`, [`tsconfig.base.json`](../../../tsconfig.base.json)) and `type-coverage --at-least 95` (implicit-`any` hunter).
+Two gates: `vue-tsc --noEmit` (full program check over `.ts` **and** `.vue`, [`tsconfig.base.json`](../../tsconfig.base.json)) and `type-coverage --at-least 95` (implicit-`any` hunter).
 
 ### `strict` — no implicit `any`
 
@@ -1471,7 +1471,7 @@ Run `pnpm webkit:type-coverage` — `--detail` lists every offending expression.
 
 ## 10. commitlint — commit messages
 
-Commits **drive releases**: release-please parses the same header — on `main`, the squashed **PR title** — to compute version bumps ([`release-types.md`](../../../.claude/rules/release-types.md)). Its parser is **not configurable**: the header must start with the bare type, so a ticket tag lives at the start of the **subject** — and only when a real ticket exists (no ticket → no tag). Header anatomy:
+Commits **drive releases**: release-please parses the same header — on `main`, the squashed **PR title** — to compute version bumps ([`release-types.md`](../rules/release-types.md)). Its parser is **not configurable**: the header must start with the bare type, so a ticket tag lives at the start of the **subject** — and only when a real ticket exists (no ticket → no tag). Header anatomy:
 
 ```
 feat(webkit)!: [ENG-1231] add table export
@@ -1523,13 +1523,13 @@ BREAKING CHANGE: size "xlarge" was removed; use "large".
 | `chore` · `docs` · `style` · `refactor` · `perf` · `test` · `ci` · `revert` | none (hygiene only) |
 | any type with `!` or `BREAKING CHANGE:` footer                              | **major**           |
 
-Also enforced: never `Co-Authored-By` / attribution footers, never `--no-verify` ([`git-workflow.md`](../../../.claude/rules/git-workflow.md)).
+Also enforced: never `Co-Authored-By` / attribution footers, never `--no-verify` ([`git-workflow.md`](../rules/git-workflow.md)).
 
 ---
 
 ## 11. Write-time guardrail hooks (Layer 0)
 
-This repo is developed AI-assisted; `.claude/hooks/` lint the **writes themselves** — every `Write`/`Edit` is validated before (or right after) it lands, enforcing design-system invariants ESLint can't express. Most hooks flag only **newly introduced** violations. Pre-existing debt is not grandfathered by a whitelist — it is frozen in [`scripts/authoring-baseline.json`](../scripts/authoring-baseline.json), and the CI ratchet ([`check-authoring.mjs`](../scripts/check-authoring.mjs)) re-runs the same engines repo-wide, failing the PR on any **new** violation even from an editor push that never ran the hooks. Full rationale per rule lives in [`.claude/rules/`](../../../.claude/rules/).
+This repo is developed AI-assisted; `.claude/hooks/` lint the **writes themselves** — every `Write`/`Edit` is validated before (or right after) it lands, enforcing design-system invariants ESLint can't express. Most hooks flag only **newly introduced** violations. Pre-existing debt is not grandfathered by a whitelist — it is frozen in [`scripts/authoring-baseline.json`](../../packages/webkit/scripts/authoring-baseline.json), and the CI ratchet ([`check-authoring.mjs`](../../packages/webkit/scripts/check-authoring.mjs)) re-runs the same engines repo-wide, failing the PR on any **new** violation even from an editor push that never ran the hooks. Full rationale per rule lives in [`.claude/rules/`](../rules/).
 
 ### `validate-tokens.mjs` — tokens are the palette
 
@@ -1557,7 +1557,7 @@ import { cn } from '@aziontech/webkit/utils/cn'
 
 ### `validate-authoring.mjs` — construction standards at write time
 
-Blocks introduced construction anti-patterns ([`props`](../../../.claude/rules/props.md) / [`v-model`](../../../.claude/rules/v-model.md) / [`emits`](../../../.claude/rules/emits.md) / [`slots`](../../../.claude/rules/slots.md) / [`composables`](../../../.claude/rules/composables.md) / [`deprecation`](../../../.claude/rules/deprecation.md)). Engine: [`src/eslint-plugin/authoring-checks.js`](../src/eslint-plugin/authoring-checks.js) — the same module the CI ratchet and the consumer `authoring-standards` ESLint rule run.
+Blocks introduced construction anti-patterns ([`props`](../rules/props.md) / [`v-model`](../rules/v-model.md) / [`emits`](../rules/emits.md) / [`slots`](../rules/slots.md) / [`composables`](../rules/composables.md) / [`deprecation`](../rules/deprecation.md)). Engine: [`src/eslint-plugin/authoring-checks.js`](../../packages/webkit/src/eslint-plugin/authoring-checks.js) — the same module the CI ratchet and the consumer `authoring-standards` ESLint rule run.
 
 ```vue
 <!-- ❌ blocked — hand-rolled v-model + runtime props -->
@@ -1578,7 +1578,7 @@ Component code without an **approved** `.specs/<name>.md` (checksum-verified) is
 
 ### `validate-spec-compliance.mjs` — 1-to-1 with the spec
 
-A `.vue` whose props / events / slots / name / testid / animations diverge from its spec is flagged post-write. Adding a helpful `tone` prop the spec never mentions is exactly what this catches ([`no-invention.md`](../../../.claude/rules/no-invention.md)).
+A `.vue` whose props / events / slots / name / testid / animations diverge from its spec is flagged post-write. Adding a helpful `tone` prop the spec never mentions is exactly what this catches ([`no-invention.md`](../rules/no-invention.md)).
 
 ---
 

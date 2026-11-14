@@ -1,6 +1,6 @@
 # Design guidelines for `@aziontech/webkit`
 
-How to style components under `packages/webkit/src/components/webkit/` using tokens from `@aziontech/theme`. The theme compiles tokens into CSS custom properties and utility classes; components consume those outputs — they do not redefine typography or raw visual values.
+How to style components under `packages/webkit/src/components/` using tokens from `@aziontech/theme`. The theme compiles tokens into CSS custom properties and utility classes; components consume those outputs — they do not redefine typography or raw visual values.
 
 ## Prerequisites
 
@@ -56,7 +56,7 @@ const sizeClasses = {
 }
 ```
 
-Reference: `packages/webkit/src/components/webkit/actions/button/button.vue`.
+Reference: `packages/webkit/src/components/actions/button/button.vue`.
 
 ### Available text styles
 
@@ -78,7 +78,7 @@ These classes are **mobile-first**: font sizes can change at `sm`, `md`, etc. Do
 
 ### Do not declare typography primitives in components
 
-Inside `packages/webkit/src/components/webkit/`, **never** set:
+Inside `packages/webkit/src/components/`, **never** set:
 
 - `font-family` / `font-proto-mono` / `font-rubik`
 - `line-height` / `leading-*` (except `leading-none` on icons aligned to `text-[length:inherit]`)
@@ -127,11 +127,11 @@ Use **only** the spacing tokens declared in:
 
 Each key (for example `spacing-md`) becomes a CSS variable: `--spacing-md` (mobile-first; values can change at `sm`, `xl`, etc.).
 
-Do not use the primitive scale in `packages/theme/src/tokens/primitives/shape/spacing.js` (`--spacing-1`, `--spacing-4`, …) in `components/webkit/`.
+Do not use the primitive scale in `packages/theme/src/tokens/primitives/shape/spacing.js` (`--spacing-1`, `--spacing-4`, …) in `packages/webkit/src/components/`.
 
 ### How to apply
 
-Always reference the variable for **padding**, **gap**, and **margin** (including axis-specific utilities). Do not use generated `.p-spacing-*` / `.gap-spacing-*` classes in `components/webkit/`:
+Always reference the variable for **padding**, **gap**, and **margin** (including axis-specific utilities). Do not use generated `.p-spacing-*` / `.gap-spacing-*` classes in `packages/webkit/src/components/`:
 
 ```html
 p-(--spacing-md) px-(--spacing-sm) py-(--spacing-xs) gap-(--spacing-sm) gap-x-(--spacing-md)
@@ -274,7 +274,7 @@ Apply on the element that should cast elevation (panel shell, floating surface, 
 | `--shadow-xl`  | High emphasis overlays (use sparingly)                 |
 | `--shadow-2xl` | Maximum elevation (marketing hero cards, not forms)    |
 
-Reference: `packages/webkit/src/components/webkit/overlay/panel/panel.vue` (`shadow-(--shadow-md)`).
+Reference: `packages/webkit/src/components/overlay/panel/panel.vue` (`shadow-(--shadow-md)`).
 
 ### Related effect primitives
 
@@ -282,7 +282,7 @@ Reference: `packages/webkit/src/components/webkit/overlay/panel/panel.vue` (`sha
 
 ### Do not
 
-- Use legacy theme vars such as `--card-shadow` in `components/webkit/` — they are legacy SCSS aliases, not the primitive scale.
+- Use legacy theme vars such as `--card-shadow` in `packages/webkit/src/components/` — they are legacy SCSS aliases, not the primitive scale.
 - Hardcode `box-shadow` values or Tailwind default shadows (`shadow-md`, `shadow-lg` without `var(--shadow-*)`).
 - Use `rgb(...)` / `rgba(...)` / hex in component class strings for elevation.
 
@@ -351,7 +351,7 @@ Reference: `skeleton.vue`. The sweep pairs with `--animate-shimmer` (see § Moti
 ### Do not
 
 - Hardcode hex/rgb/hsl in component class strings.
-- Use Tailwind palette names (`bg-gray-500`, `text-violet-600`) in `components/webkit/`.
+- Use Tailwind palette names (`bg-gray-500`, `text-violet-600`) in `packages/webkit/src/components/`.
 - Use external/legacy color utilities (`text-color`, `surface-*`) in new webkit components — map to `var(--*)` tokens instead.
 - Build a loading placeholder from an opaque surface token (`--bg-surface-overlay`, `--bg-surface-raised`) — it only reads on the one surface it was picked against. Use `--bg-placeholder` / `--bg-placeholder-highlight`.
 
@@ -445,7 +445,7 @@ Named keyframe bundles in the same file (`popup-scale-in`, `popup-scale-out`, �
 
 Canonical pattern for **`data-state`** / open-close motion. Read values **only** from `animate.js`; never hardcode `110ms`, `400ms`, or raw `cubic-bezier(...)` in components.
 
-**Reference:** `packages/webkit/src/components/webkit/overlay/drawer/presets/transitions.ts`
+**Reference:** `packages/webkit/src/components/overlay/drawer/presets/transitions.ts`
 
 1. **Import primitives** — `import { curve, duration } from '…/animate.js'`.
 2. **Declare a preset map** — per target (`panel`, `overlay`, …) and phase (`open`, `close`), pick `duration[…]` + `curve[…]`.
@@ -521,7 +521,7 @@ after:ease-productive-entrance active:after:opacity-100 motion-reduce:before:tra
 motion-reduce:after:transition-none
 ```
 
-Reference: `packages/webkit/src/components/webkit/actions/button/button.vue`.
+Reference: `packages/webkit/src/components/actions/button/button.vue`.
 
 ### Reduced motion
 
@@ -579,4 +579,4 @@ The `validate-tokens.mjs` PreToolUse hook enforces these at write time. If a hoo
 - Monorepo agent guide: [`../AGENTS.md`](../AGENTS.md)
 - Agent rules (discipline layer): [`../rules/`](../rules/)
 - Per-component specs: [`../../.specs/`](../../.specs/)
-- Drawer motion preset: [`../../packages/webkit/src/components/webkit/overlay/drawer/presets/transitions.ts`](../../packages/webkit/src/components/webkit/overlay/drawer/presets/transitions.ts)
+- Drawer motion preset: [`../../packages/webkit/src/components/overlay/drawer/presets/transitions.ts`](../../packages/webkit/src/components/overlay/drawer/presets/transitions.ts)
