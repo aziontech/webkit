@@ -3,9 +3,9 @@ name: combobox
 category: inputs
 structure: monolithic
 status: implemented
-spec_version: 3
+spec_version: 4
 template: 2
-checksum: 76cb404e66e61298091f95393e777235afc835c903959db2e88a4540a2844e1c
+checksum: f99bcb2b14411d7ea21ce48789c52a4bf65469a99079aeed7d67030f7866675e
 created: 2026-11-11
 last_updated: 2026-11-14
 ---
@@ -107,6 +107,7 @@ _none_ — one `.vue` file. The list is rendered by the component itself (telepo
 | Model | Type | Default | Emits | Notes |
 | --- | --- | --- | --- | --- |
 | `v-model` | `string` | `''` | `update:modelValue` | The committed value via `defineModel`. Changes on pick, Enter, Tab, blur and clear, not on each keystroke. |
+| `v-model:open` | `boolean` | `false` | `update:open` | Whether the list is open, via `defineModel('open')`. Unbound, the combobox opens and closes on its own; bound, the parent can open or close it, and every open and close the combobox makes emits `update:open`. Opening is refused while `disabled` or `readonly`. The panel shows only while there is something to list (options, loading or a typed query). |
 
 ## Events
 
