@@ -1,5 +1,7 @@
 <script setup lang="ts">
-  import { computed, useAttrs } from 'vue'
+  import { computed, type ComputedRef, provide, shallowReactive, useAttrs } from 'vue'
+
+  import { multiSelectGroupContextKey } from '../injection-key'
 
   defineOptions({
     name: 'MultiSelectGroup',
@@ -22,6 +24,22 @@
 
   const attrs = useAttrs()
 
+  const options = shallowReactive(new Map<symbol, ComputedRef<boolean>>())
+  provide(multiSelectGroupContextKey, {
+    register: (id, visible) => {
+      options.set(id, visible)
+    },
+    unregister: (id) => {
+      options.delete(id)
+    }
+  })
+
+  const visible = computed(() => {
+    if (options.size === 0) return true
+    for (const option of options.values()) if (option.value) return true
+    return false
+  })
+
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? 'multi-select-group'
   )
@@ -29,6 +47,7 @@
 
 <template>
   <div
+    v-show="visible"
     v-bind="$attrs"
     role="group"
     :aria-label="label || undefined"

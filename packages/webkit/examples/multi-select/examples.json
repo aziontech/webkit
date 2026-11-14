@@ -46,6 +46,21 @@
       "name": "Disabled",
       "summary": "Disabled trigger; the dropdown cannot open.",
       "file": "disabled.vue"
+    },
+    {
+      "name": "Chips",
+      "summary": "kind=\"chips\" shows each selected value as a removable chip; chipLimit caps them with a +N more chip.",
+      "file": "chips.vue"
+    },
+    {
+      "name": "TypeToFilter",
+      "summary": "searchable types in the trigger to filter the options, Backspace removes the last chip, and allowCustom offers an Add row that emits create.",
+      "file": "type-to-filter.vue"
+    },
+    {
+      "name": "ListStates",
+      "summary": "The loading, error and empty states the panel renders in place of the options.",
+      "file": "list-states.vue"
     }
   ]
 }

@@ -5,17 +5,21 @@
     Fragment,
     inject,
     isVNode,
+    onBeforeUnmount,
     ref,
     useAttrs,
     type VNode,
-    type VNodeArrayChildren
+    type VNodeArrayChildren,
+    watch
   } from 'vue'
 
   import LazyNodes from '../../../../composables/use-lazy-chunks/lazy-nodes'
   import { useListboxContent } from '../../../../composables/use-listbox'
-  import { usePortalLocale } from '../../../../composables/use-locale/use-translate'
+  import { usePortalLocale, useTranslate } from '../../../../composables/use-locale/use-translate'
   import { usePlacement } from '../../../../composables/use-placement'
+  import * as en from '../../../../i18n/messages/en'
   import ScrollArea from '../../../layout/scroll-area/scroll-area.vue'
+  import Spinner from '../../../utils/spinner/spinner.vue'
   import { multiSelectContextKey } from '../injection-key'
 
   defineOptions({
@@ -38,6 +42,7 @@
   }>()
 
   const attrs = useAttrs()
+  const { t } = useTranslate({ multiSelect: en.multiSelect })
 
   const pickPending = (nodes: VNodeArrayChildren): VNode[] =>
     nodes.flatMap((node): VNode[] => {
@@ -69,22 +74,67 @@
     matchTriggerWidth: true
   })
 
-  const { onKeydown } = useListboxContent({
+  const focusTarget = computed(() => ctx.controlRef.value ?? ctx.triggerRef.value)
+
+  const { onKeydown, navigate } = useListboxContent({
     root,
     lazy,
     open: ctx.open,
     setOpen: ctx.setOpen,
     triggerRef: ctx.triggerRef,
     pendingFocus: ctx.pendingFocus,
-    textFieldSelector: 'input:not([type="checkbox"]), textarea'
+    textFieldSelector: 'input:not([type="checkbox"]), textarea',
+    focusTarget,
+    holdTab: ctx.searchable,
+    keepFocusOnOpen: ctx.searchable
   })
+
+  ctx.navigate.value = navigate
+
+  onBeforeUnmount(() => {
+    if (ctx.navigate.value === navigate) ctx.navigate.value = null
+  })
+
+  watch(
+    () => ctx.query.value,
+    (text) => {
+      if (text.trim() && lazy.value?.hasHidden()) lazy.value.revealAll()
+    }
+  )
 
   const listLabel = computed(() => ctx.ariaLabel.value)
   const listLabelledby = computed(() =>
     listLabel.value
       ? undefined
-      : (ctx.ariaLabelledby.value ?? ctx.labelledBy.value ?? ctx.triggerRef.value?.id ?? undefined)
+      : (ctx.ariaLabelledby.value ?? ctx.labelledBy.value ?? focusTarget.value?.id ?? undefined)
   )
+
+  const showOptions = computed(() => !ctx.loading.value && !ctx.error.value)
+  const empty = computed(
+    () => showOptions.value && ctx.visibleCount.value === 0 && !ctx.showCreate.value
+  )
+
+  const status = computed(() => {
+    if (!ctx.open.value) return ''
+    if (ctx.loading.value) return t('multiSelect.loading')
+    if (ctx.error.value) return ctx.error.value
+    if (!ctx.query.value.trim()) return ''
+    if (empty.value) return ctx.emptyText.value || t('multiSelect.empty')
+    return t('multiSelect.count', { count: ctx.visibleCount.value })
+  })
+
+  const onCreateKeydown = (event: globalThis.KeyboardEvent) => {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault()
+      ctx.create(event)
+      ctx.focusControl()
+    }
+  }
+
+  const onCreateClick = (event: globalThis.MouseEvent) => {
+    ctx.create(event)
+    ctx.focusControl()
+  }
 
   const portalLocale = usePortalLocale()
 </script>
@@ -121,15 +171,65 @@
           aria-multiselectable="true"
           :aria-label="listLabel"
           :aria-labelledby="listLabelledby"
+          :aria-busy="ctx.loading.value || undefined"
           class="group/options flex max-h-60 flex-col items-stretch px-(--spacing-xxs) py-(--spacing-xs)"
           :data-testid="`${testId}__list`"
         >
           <LazyNodes
+            v-if="showOptions"
             ref="lazy"
             :row-height="32"
           >
             <slot />
           </LazyNodes>
+          <div
+            v-if="showOptions && ctx.showCreate.value"
+            role="option"
+            tabindex="-1"
+            aria-selected="false"
+            data-kind="create"
+            :data-testid="`${testId}__create`"
+            class="flex h-8 cursor-pointer select-none items-center gap-(--spacing-xs) rounded-(--shape-elements) px-(--spacing-xs) py-(--spacing-xxs) text-label-sm text-(--text-default) outline-none transition-colors duration-150 ease-out motion-reduce:transition-none hover:bg-(--bg-hover) focus-visible:bg-(--bg-hover) focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-(--ring-color)"
+            @click="onCreateClick"
+            @keydown="onCreateKeydown"
+          >
+            <i
+              class="pi pi-plus shrink-0 text-body-xs text-(--text-muted)"
+              aria-hidden="true"
+            />
+            <span class="min-w-0 flex-1 truncate text-start"
+              ><bdi>{{ t('multiSelect.add', { value: ctx.query.value.trim() }) }}</bdi></span
+            >
+          </div>
+          <div
+            v-if="ctx.loading.value"
+            role="presentation"
+            :data-testid="`${testId}__loading`"
+            class="flex min-h-8 items-center gap-(--spacing-xs) px-(--spacing-xs) text-body-sm text-(--text-muted)"
+          >
+            <Spinner class="size-3.5" />
+            {{ t('multiSelect.loading') }}
+          </div>
+          <div
+            v-else-if="ctx.error.value"
+            role="presentation"
+            :data-testid="`${testId}__error`"
+            class="flex min-h-8 items-center gap-(--spacing-xs) px-(--spacing-xs) text-body-sm text-(--text-default)"
+          >
+            <i
+              class="pi pi-exclamation-circle shrink-0 text-(--danger)"
+              aria-hidden="true"
+            />
+            <span class="min-w-0 flex-1">{{ ctx.error.value }}</span>
+          </div>
+          <div
+            v-else-if="empty"
+            role="presentation"
+            :data-testid="`${testId}__empty`"
+            class="flex min-h-8 items-center px-(--spacing-xs) text-body-sm text-(--text-muted)"
+          >
+            {{ ctx.emptyText.value || t('multiSelect.empty') }}
+          </div>
         </ScrollArea>
         <div
           v-if="$slots['footer']"
@@ -141,6 +241,13 @@
       </div>
     </Transition>
   </Teleport>
+  <span
+    class="sr-only"
+    role="status"
+    aria-live="polite"
+    :data-testid="`${testId}__status`"
+    >{{ status }}</span
+  >
   <div
     v-if="!ctx.open.value && ctx.labelsPending.value"
     hidden

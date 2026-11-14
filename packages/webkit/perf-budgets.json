@@ -36,6 +36,11 @@
       "update": 350,
       "update_is": "toggle 20 options one by one with all 1k options selected"
     },
+    "multi-select-1k-typed": {
+      "mount": 560,
+      "update": 770,
+      "update_is": "mount a searchable chips field with 3 selected values, open it, then type a filter"
+    },
     "dropdown-menu-1k": {
       "mount": 1190,
       "update": 30,

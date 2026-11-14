@@ -3,9 +3,15 @@
 
   import { useFieldControl } from '../../../composables/use-field-control'
   import type { ListboxFocusIntent } from '../../../composables/use-listbox'
+  import { useTranslate } from '../../../composables/use-locale/use-translate'
   import { FormValue } from '../../../utils/form-value'
   import { fieldContextKey } from '../field/injection-key'
-  import { multiSelectContextKey, type MultiSelectSize } from './injection-key'
+  import {
+    type MultiSelectCommitEvent,
+    multiSelectContextKey,
+    type MultiSelectKind,
+    type MultiSelectSize
+  } from './injection-key'
 
   defineOptions({
     name: 'MultiSelect',
@@ -32,6 +38,22 @@
       displayValue?: (value: TValue[]) => string
       /** Form field name: renders one hidden input per selected value, so a native form submits them; required then blocks an empty submit. */
       name?: string
+      /** How the trigger shows the selection: joined labels, or one removable chip per value. */
+      kind?: MultiSelectKind
+      /** With kind chips, the most chips shown before a +N more chip; 0 shows every chip. */
+      chipLimit?: number
+      /** Types in the trigger: the text filters the options, Backspace in an empty field removes the last value. */
+      searchable?: boolean
+      /** With searchable, hides options whose label does not contain the typed text. Turn off when the server filters on search. */
+      filter?: boolean
+      /** With searchable, offers typed text that matches no option as an Add row that emits create. */
+      allowCustom?: boolean
+      /** Shows the loading row in place of the options while they are fetched. */
+      loading?: boolean
+      /** Message shown in place of the options when they failed to load; empty shows the options. */
+      error?: string
+      /** Text of the list when no option is visible. Empty uses the locale catalog. */
+      emptyText?: string
     }>(),
     {
       defaultOpen: false,
@@ -42,9 +64,22 @@
       required: false,
       invalid: false,
       displayValue: undefined,
-      name: ''
+      name: '',
+      kind: 'summary',
+      chipLimit: 0,
+      searchable: false,
+      filter: true,
+      allowCustom: false,
+      loading: false,
+      error: '',
+      emptyText: ''
     }
   )
+
+  const emit = defineEmits<{
+    search: [text: string]
+    create: [event: MouseEvent | KeyboardEvent, value: string]
+  }>()
 
   /** Two-way bound selection. Always an array; each item is the value of a selected option, typed as the bound array's items. */
   const model = defineModel<TValue[]>({ default: () => [] })
@@ -57,6 +92,7 @@
   }>()
 
   const attrs = useAttrs()
+  const { locale } = useTranslate()
 
   const {
     controlId,
@@ -84,9 +120,18 @@
 
   const openState = computed(() => openModel.value ?? props.defaultOpen)
 
+  const query = ref('')
+
+  const setQuery = (text: string) => {
+    if (text === query.value) return
+    query.value = text
+    emit('search', text)
+  }
+
   const setOpen = (value: boolean) => {
     if (isDisabled.value || props.readonly) return
     openModel.value = value
+    if (!value) setQuery('')
   }
 
   const currentArray = (): unknown[] => (Array.isArray(model.value) ? model.value : [])
@@ -113,16 +158,64 @@
 
   const labelsPending = computed(() => currentArray().some((value) => !labels.has(value)))
 
+  const labelOf = (value: unknown): string => labels.get(value) ?? String(value)
+
+  const fold = (text: string) =>
+    text
+      .normalize('NFD')
+      .replace(/\p{Diacritic}/gu, '')
+      .toLocaleLowerCase(locale.value)
+
+  const needle = computed(() => fold(query.value.trim()))
+
+  const filtering = computed(() => props.searchable && props.filter && needle.value !== '')
+
+  const matches = (label: string): boolean => !filtering.value || fold(label).includes(needle.value)
+
+  const mounted = shallowReactive(new Map<symbol, string>())
+  const registerOption = (id: symbol, label: string) => {
+    if (mounted.get(id) !== label) mounted.set(id, label)
+  }
+  const unregisterOption = (id: symbol) => {
+    mounted.delete(id)
+  }
+
+  const visibleCount = computed(() => {
+    if (!filtering.value) return mounted.size
+    let count = 0
+    for (const label of mounted.values()) if (fold(label).includes(needle.value)) count += 1
+    return count
+  })
+
+  const showCreate = computed(() => {
+    if (!props.searchable || !props.allowCustom || needle.value === '') return false
+    for (const label of mounted.values()) if (fold(label) === needle.value) return false
+    return true
+  })
+
+  const controlRef = ref<globalThis.HTMLElement | null>(null)
+  const triggerRef = ref<globalThis.HTMLElement | null>(null)
+  const focusControl = () => {
+    ;(controlRef.value ?? triggerRef.value)?.focus()
+  }
+
+  const create = (event: MultiSelectCommitEvent) => {
+    const value = query.value.trim()
+    if (!value || !showCreate.value) return
+    setQuery('')
+    emit('create', event, value)
+  }
+
   const displayValueComputed = computed((): string => {
     const current = currentArray()
     if (props.displayValue) return props.displayValue(current as TValue[])
     if (current.length === 0) return ''
-    return current.map((value) => labels.get(value) ?? String(value)).join(', ')
+    return current.map(labelOf).join(', ')
   })
 
   provide(multiSelectContextKey, {
     contentId: `multi-select-${useId()}`,
-    triggerRef: ref<globalThis.HTMLElement | null>(null),
+    triggerRef,
     open: openState,
     setOpen,
     modelValue: model as unknown as import('vue').Ref<unknown[]>,
@@ -143,7 +236,26 @@
     displayValue: displayValueComputed,
     filled,
     registerLabel,
-    labelsPending
+    labelsPending,
+    labelOf,
+    kind: computed(() => props.kind),
+    chipLimit: computed(() => Math.max(0, Math.floor(props.chipLimit))),
+    searchable: computed(() => props.searchable),
+    allowCustom: computed(() => props.allowCustom),
+    loading: computed(() => props.loading),
+    error: computed(() => props.error),
+    emptyText: computed(() => props.emptyText),
+    query,
+    setQuery,
+    matches,
+    registerOption,
+    unregisterOption,
+    visibleCount,
+    showCreate,
+    create,
+    controlRef,
+    focusControl,
+    navigate: ref<((key: string) => void) | null>(null)
   })
 </script>
 
@@ -158,6 +270,7 @@
     :data-invalid="isInvalid || null"
     :data-required="isRequired || null"
     :data-filled="filled || null"
+    :data-kind="kind"
     :class="attrs.class"
     class="relative inline-block w-full"
   >

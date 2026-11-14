@@ -1,8 +1,8 @@
 <script setup lang="ts">
-  import { computed, inject, onMounted, onUpdated, ref, useAttrs } from 'vue'
+  import { computed, inject, onBeforeUnmount, onMounted, onUpdated, ref, useAttrs } from 'vue'
 
   import Checkbox from '../../checkbox/checkbox.vue'
-  import { multiSelectContextKey } from '../injection-key'
+  import { multiSelectContextKey, multiSelectGroupContextKey } from '../injection-key'
 
   defineOptions({
     name: 'MultiSelectOption',
@@ -41,11 +41,27 @@
     () => (attrs['data-testid'] as string | undefined) ?? 'multi-select-option'
   )
 
+  const group = inject(multiSelectGroupContextKey, null)
+
+  const id = Symbol('MultiSelectOption')
   const labelRef = ref<globalThis.HTMLElement | null>(null)
-  const recordLabel = () =>
-    ctx.registerLabel(props.value, labelRef.value?.textContent?.trim() ?? '')
-  onMounted(recordLabel)
+  const labelText = ref('')
+  const recordLabel = () => {
+    const text = labelRef.value?.textContent?.trim() ?? ''
+    labelText.value = text
+    ctx.registerLabel(props.value, text)
+    ctx.registerOption(id, text)
+  }
+  const visible = computed(() => ctx.matches(labelText.value))
+  onMounted(() => {
+    recordLabel()
+    group?.register(id, visible)
+  })
   onUpdated(recordLabel)
+  onBeforeUnmount(() => {
+    ctx.unregisterOption(id)
+    group?.unregister(id)
+  })
 
   const selected = computed(() => ctx.isSelected(props.value))
 
@@ -65,6 +81,7 @@
 
 <template>
   <div
+    v-show="visible"
     v-bind="$attrs"
     role="option"
     tabindex="-1"

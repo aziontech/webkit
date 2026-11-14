@@ -708,6 +708,16 @@ export const ptBR: Messages = {
   miniButton: {
     label: 'Saiba mais'
   },
+  multiSelect: {
+    empty: 'Nenhum resultado',
+    loading: 'Carregando opções',
+    add: 'Adicionar "{value}"',
+    more: '+{count} mais',
+    count: {
+      one: '{count} opção',
+      other: '{count} opções'
+    }
+  },
   navigationMenu: {
     label: 'Principal'
   },
@@ -817,7 +827,17 @@ export const ptBR: Messages = {
     greater: 'Maior que',
     less: 'Menor que',
     greaterOrEqual: 'Maior ou igual a',
-    lessOrEqual: 'Menor ou igual a'
+    lessOrEqual: 'Menor ou igual a',
+    equality: 'Igualdade',
+    comparison: 'Comparação',
+    textMatch: 'Texto',
+    addGroup: 'Adicionar grupo',
+    newGroup: 'Novo grupo',
+    group: 'Grupo de filtros {index}',
+    groupOperation: 'Combinar filtros do grupo {index}',
+    loadingValues: 'Carregando valores',
+    valuesError: 'Não foi possível carregar os valores',
+    valueEditor: 'Valor de {property}'
   },
   resizable: {
     handle: 'Redimensionar painel'

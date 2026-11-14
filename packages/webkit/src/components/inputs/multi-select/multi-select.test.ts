@@ -793,3 +793,253 @@ describe('MultiSelect — native form submit', () => {
     expect((getByTestId('form') as HTMLFormElement).checkValidity()).toBe(false)
   })
 })
+
+const FieldHarness = defineComponent({
+  props: {
+    kind: { type: String, default: 'chips' },
+    searchable: { type: Boolean, default: false },
+    allowCustom: { type: Boolean, default: false },
+    filter: { type: Boolean, default: true },
+    chipLimit: { type: Number, default: 0 },
+    loading: { type: Boolean, default: false },
+    error: { type: String, default: '' },
+    emptyText: { type: String, default: '' },
+    disabled: { type: Boolean, default: false },
+    count: { type: Number, default: 4 },
+    initial: { type: Array as () => string[], default: () => ['a', 'b'] }
+  },
+  emits: ['create', 'search'],
+  setup(props) {
+    const value = ref<string[]>([...props.initial])
+    const open = ref(false)
+    return { value, open }
+  },
+  render() {
+    const labels = ['Alpha', 'Beta', 'Gamma', 'Délta']
+    const options = Array.from({ length: this.count }, (_, i) => ({
+      value: i < 4 ? 'abcd'[i] : `v${i}`,
+      label: i < 4 ? labels[i] : `Option ${i}`
+    }))
+    return h(
+      MultiSelect,
+      {
+        modelValue: this.value,
+        'onUpdate:modelValue': (v: string[]) => {
+          this.value = v
+        },
+        open: this.open,
+        'onUpdate:open': (o: boolean) => {
+          this.open = o
+        },
+        kind: this.kind,
+        searchable: this.searchable,
+        allowCustom: this.allowCustom,
+        filter: this.filter,
+        chipLimit: this.chipLimit,
+        loading: this.loading,
+        error: this.error,
+        emptyText: this.emptyText,
+        disabled: this.disabled,
+        placeholder: 'Pick',
+        'aria-label': 'Letters',
+        onCreate: (event: Event, value: string) => this.$emit('create', event, value),
+        onSearch: (text: string) => this.$emit('search', text)
+      },
+      {
+        default: () => [
+          h(MultiSelectTrigger),
+          h(MultiSelectContent, null, {
+            default: () =>
+              options.map((o) =>
+                h(MultiSelectOption, { key: o.value, value: o.value }, () => o.label)
+              )
+          })
+        ]
+      }
+    )
+  }
+})
+
+const visibleOptions = () =>
+  Array.from(
+    document.body.querySelectorAll<HTMLElement>('[role="listbox"] [role="option"]')
+  ).filter((el) => el.style.display !== 'none' && el.dataset['kind'] !== 'create')
+
+describe('MultiSelect chips, typed filter and list states (spec v4)', () => {
+  it('renders one removable chip per selected value with its label', async () => {
+    const { container } = render(FieldHarness)
+    await nextTick()
+    await nextTick()
+    const chips = container.querySelectorAll('[data-testid="multi-select-trigger__chip"]')
+    expect(Array.from(chips).map((c) => c.textContent?.trim())).toEqual(['Alpha', 'Beta'])
+    const trigger = container.querySelector('[data-testid="multi-select-trigger"]')
+    expect(trigger?.getAttribute('data-kind')).toBe('chips')
+    expect(container.querySelector('[role="combobox"]')?.tagName).toBe('BUTTON')
+    cleanupTeleported()
+  })
+
+  it('removing a chip updates the model without opening the panel', async () => {
+    const { container, getByRole } = render(FieldHarness)
+    await nextTick()
+    await nextTick()
+    await fireEvent.click(getByRole('button', { name: /Beta/ }))
+    await nextTick()
+    const chips = container.querySelectorAll('[data-testid="multi-select-trigger__chip"]')
+    expect(Array.from(chips).map((c) => c.textContent?.trim())).toEqual(['Alpha'])
+    expect(listbox()).toBeNull()
+    cleanupTeleported()
+  })
+
+  it('caps chips at chipLimit with a +N more chip', async () => {
+    const { container } = render(FieldHarness, {
+      props: { chipLimit: 1, initial: ['a', 'b', 'c'] }
+    })
+    await nextTick()
+    await nextTick()
+    expect(container.querySelectorAll('[data-testid="multi-select-trigger__chip"]')).toHaveLength(1)
+    expect(
+      container.querySelector('[data-testid="multi-select-trigger__more"]')?.textContent
+    ).toContain('+2 more')
+    cleanupTeleported()
+  })
+
+  it('disabled chips are not removable', async () => {
+    const { container } = render(FieldHarness, { props: { disabled: true } })
+    await nextTick()
+    expect(
+      container.querySelector('[data-testid="multi-select-trigger"] button[aria-label^="Remove"]')
+    ).toBeNull()
+    cleanupTeleported()
+  })
+
+  it('typing filters the options (case and accent insensitive) and emits search', async () => {
+    const { getByRole, emitted } = render(FieldHarness, { props: { searchable: true } })
+    const input = getByRole('combobox') as HTMLInputElement
+    expect(input.tagName).toBe('INPUT')
+    expect(input.getAttribute('aria-autocomplete')).toBe('list')
+    await userEvent.type(input, 'DEL')
+    await nextTick()
+    expect(listbox()).not.toBeNull()
+    expect(visibleOptions().map((o) => o.textContent?.trim())).toEqual(['Délta'])
+    expect(emitted('search')?.at(-1)).toEqual(['DEL'])
+    cleanupTeleported()
+  })
+
+  it('shows the empty row and announces it when nothing matches', async () => {
+    const { getByRole } = render(FieldHarness, {
+      props: { searchable: true, emptyText: 'Nothing' }
+    })
+    await userEvent.type(getByRole('combobox'), 'zzz')
+    await nextTick()
+    expect(
+      document.body.querySelector('[data-testid="multi-select-content__empty"]')?.textContent
+    ).toContain('Nothing')
+    expect(
+      document.body.querySelector('[data-testid="multi-select-content__status"]')?.textContent
+    ).toBe('Nothing')
+    cleanupTeleported()
+  })
+
+  it('filter=false leaves every option visible for server-side search', async () => {
+    const { getByRole } = render(FieldHarness, { props: { searchable: true, filter: false } })
+    await userEvent.type(getByRole('combobox'), 'zzz')
+    await nextTick()
+    expect(visibleOptions()).toHaveLength(4)
+    cleanupTeleported()
+  })
+
+  it('Backspace in an empty field removes the last chip', async () => {
+    const { container, getByRole } = render(FieldHarness, { props: { searchable: true } })
+    const input = getByRole('combobox')
+    input.focus()
+    await userEvent.keyboard('{Backspace}')
+    await nextTick()
+    const chips = container.querySelectorAll('[data-testid="multi-select-trigger__chip"]')
+    expect(Array.from(chips).map((c) => c.textContent?.trim())).toEqual(['Alpha'])
+    cleanupTeleported()
+  })
+
+  it('offers an Add row for unknown text and emits create (event, value) on Enter and click', async () => {
+    const { getByRole, emitted } = render(FieldHarness, {
+      props: { searchable: true, allowCustom: true }
+    })
+    const input = getByRole('combobox') as HTMLInputElement
+    await userEvent.type(input, 'alpha')
+    await nextTick()
+    expect(document.body.querySelector('[data-testid="multi-select-content__create"]')).toBeNull()
+    await userEvent.clear(input)
+    await userEvent.type(input, ' Omega ')
+    await nextTick()
+    const row = document.body.querySelector<HTMLElement>(
+      '[data-testid="multi-select-content__create"]'
+    )
+    expect(row?.getAttribute('role')).toBe('option')
+    expect(row?.textContent).toContain('Add "Omega"')
+    await userEvent.keyboard('{Enter}')
+    const [event, value] = emitted('create')?.[0] as [Event, string]
+    expect(event).toBeInstanceOf(KeyboardEvent)
+    expect(value).toBe('Omega')
+    expect(input.value).toBe('')
+    await userEvent.type(input, 'Zeta')
+    await nextTick()
+    await fireEvent.click(
+      document.body.querySelector('[data-testid="multi-select-content__create"]')!
+    )
+    expect((emitted('create')?.[1] as [Event, string])[1]).toBe('Zeta')
+    cleanupTeleported()
+  })
+
+  it('ArrowDown from the field focuses the first visible option; Escape returns to the field', async () => {
+    const { getByRole } = render(FieldHarness, { props: { searchable: true } })
+    const input = getByRole('combobox')
+    await userEvent.type(input, 'ga')
+    await userEvent.keyboard('{ArrowDown}')
+    await nextTick()
+    expect(document.activeElement?.textContent?.trim()).toBe('Gamma')
+    await userEvent.keyboard('{Escape}')
+    await nextTick()
+    await nextTick()
+    expect(document.activeElement).toBe(input)
+    expect(listbox()).toBeNull()
+    cleanupTeleported()
+  })
+
+  it('loading and error replace the options with their rows', async () => {
+    const { rerender } = render(FieldHarness, { props: { loading: true, kind: 'summary' } })
+    await fireEvent.click(document.querySelector('[role="combobox"]')!)
+    await nextTick()
+    expect(listbox()?.getAttribute('aria-busy')).toBe('true')
+    expect(
+      document.body.querySelector('[data-testid="multi-select-content__loading"]')
+    ).not.toBeNull()
+    expect(visibleOptions()).toHaveLength(0)
+    await rerender({ loading: false, error: 'Could not load' })
+    await nextTick()
+    expect(
+      document.body.querySelector('[data-testid="multi-select-content__error"]')?.textContent
+    ).toContain('Could not load')
+    expect(visibleOptions()).toHaveLength(0)
+    cleanupTeleported()
+  })
+
+  it('has no a11y violations as a searchable chips field', async () => {
+    const { container, getByRole } = render(FieldHarness, {
+      props: { searchable: true, allowCustom: true }
+    })
+    await userEvent.type(getByRole('combobox'), 'Om')
+    await nextTick()
+    await expectNoA11yViolations(container)
+    cleanupTeleported()
+  })
+
+  it('filters 1,000 options as the person types', async () => {
+    const { getByRole } = render(FieldHarness, { props: { searchable: true, count: 1000 } })
+    await userEvent.type(getByRole('combobox'), 'Option 99')
+    await nextTick()
+    expect(visibleOptions().map((o) => o.textContent?.trim())).toEqual([
+      'Option 99',
+      ...Array.from({ length: 10 }, (_, i) => `Option ${990 + i}`)
+    ])
+    cleanupTeleported()
+  })
+})

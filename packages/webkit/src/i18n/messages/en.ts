@@ -664,6 +664,17 @@ export const miniButton = {
   label: 'Learn more'
 } as const
 
+export const multiSelect = {
+  empty: 'No matches',
+  loading: 'Loading options',
+  add: 'Add "{value}"',
+  more: '+{count} more',
+  count: {
+    one: '{count} option',
+    other: '{count} options'
+  }
+} as const
+
 export const navigationMenu = {
   label: 'Main'
 } as const
@@ -770,7 +781,17 @@ export const propertyFilter = {
   greater: 'Greater than',
   less: 'Less than',
   greaterOrEqual: 'Greater than or equal to',
-  lessOrEqual: 'Less than or equal to'
+  lessOrEqual: 'Less than or equal to',
+  equality: 'Equality',
+  comparison: 'Comparison',
+  textMatch: 'Text match',
+  addGroup: 'Add group',
+  newGroup: 'New group',
+  group: 'Filter group {index}',
+  groupOperation: 'Combine filters in group {index}',
+  loadingValues: 'Loading values',
+  valuesError: 'Could not load values',
+  valueEditor: 'Value of {property}'
 } as const
 
 export const propertyFilterQuery = {
@@ -1422,6 +1443,7 @@ export const en = {
   mapChart,
   menu,
   miniButton,
+  multiSelect,
   navigationMenu,
   numberInput,
   outcomeMark,

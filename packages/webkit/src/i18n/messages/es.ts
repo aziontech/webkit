@@ -708,6 +708,16 @@ export const es: Messages = {
   miniButton: {
     label: 'Más información'
   },
+  multiSelect: {
+    empty: 'Sin resultados',
+    loading: 'Cargando opciones',
+    add: 'Añadir "{value}"',
+    more: '+{count} más',
+    count: {
+      one: '{count} opción',
+      other: '{count} opciones'
+    }
+  },
   navigationMenu: {
     label: 'Principal'
   },
@@ -817,7 +827,17 @@ export const es: Messages = {
     greater: 'Mayor que',
     less: 'Menor que',
     greaterOrEqual: 'Mayor o igual que',
-    lessOrEqual: 'Menor o igual que'
+    lessOrEqual: 'Menor o igual que',
+    equality: 'Igualdad',
+    comparison: 'Comparación',
+    textMatch: 'Texto',
+    addGroup: 'Añadir grupo',
+    newGroup: 'Nuevo grupo',
+    group: 'Grupo de filtros {index}',
+    groupOperation: 'Combinar filtros del grupo {index}',
+    loadingValues: 'Cargando valores',
+    valuesError: 'No se pudieron cargar los valores',
+    valueEditor: 'Valor de {property}'
   },
   resizable: {
     handle: 'Redimensionar panel'

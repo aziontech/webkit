@@ -260,6 +260,46 @@ function selectCase(multiple: boolean): Case {
   }
 }
 
+function multiSelectTypedCase(): Case {
+  const options = Array.from({ length: 1000 }, (_, i) => ({ value: `v${i}`, label: `Option ${i}` }))
+  const open = ref(false)
+  return {
+    mount: () => ({
+      render: () =>
+        h(
+          MultiSelect,
+          {
+            modelValue: ['v1', 'v2', 'v3'],
+            kind: 'chips',
+            searchable: true,
+            open: open.value,
+            'onUpdate:open': (v: boolean) => (open.value = v),
+            'aria-label': 'Options'
+          },
+          {
+            default: () => [
+              h(MultiSelect.Trigger),
+              h(MultiSelect.Content, null, {
+                default: () =>
+                  options.map((o) =>
+                    h(MultiSelect.Option, { key: o.value, value: o.value }, () => o.label)
+                  )
+              })
+            ]
+          }
+        )
+    }),
+    update: async () => {
+      open.value = true
+      await settle()
+      const input = document.querySelector<HTMLInputElement>('input[role="combobox"]')
+      if (!input) throw new Error('searchable input missing')
+      input.value = '1'
+      input.dispatchEvent(new Event('input', { bubbles: true }))
+    }
+  }
+}
+
 function multiSelectToggleCase(): Case {
   const options = Array.from({ length: 1000 }, (_, i) => ({ value: `v${i}`, label: `Option ${i}` }))
   const selected = ref<string[]>(options.map((o) => o.value))
@@ -1223,6 +1263,9 @@ describe('runtime budgets (perf-budgets.json)', () => {
   })
   it('MultiSelect with 1k options: open and filter', async () => {
     check('multi-select-1k', await measure(() => selectCase(true)))
+  })
+  it('MultiSelect searchable chips with 1k options: open and type', async () => {
+    check('multi-select-1k-typed', await measure(multiSelectTypedCase))
   })
   it('MultiSelect with 1k options all selected: toggle 20 of them', async () => {
     check('multi-select-1k-toggle', await measure(multiSelectToggleCase))
