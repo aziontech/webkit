@@ -18,13 +18,13 @@ describe('HelperText', () => {
     expect(root).toHaveAttribute('data-kind', 'helper')
   })
 
-  it('renders the value prop inside the __text span when no slot is provided', () => {
+  it('renders the label prop inside the __text span when no slot is provided', () => {
     const { getByTestId } = render(HelperText, { props: { label: 'Enter a valid email address.' } })
 
     expect(getByTestId('input-helper-text__text')).toHaveTextContent('Enter a valid email address.')
   })
 
-  it('prefers the default slot over the value prop', () => {
+  it('prefers the default slot over the label prop', () => {
     const { getByTestId } = render(HelperText, {
       props: { label: 'fallback value' },
       slots: { default: 'Slot content wins' }

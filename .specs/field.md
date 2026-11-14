@@ -3,17 +3,17 @@ name: field
 category: inputs
 structure: composition
 status: implemented
-spec_version: 1
-checksum: 586f6ef2618e067c2661545443a35d1c328a2df72f6e58374e61ff2d9b7c979e
+spec_version: 2
+checksum: ef214c9e07abeebf42c9e225da230184200b944e84b831d5a0a1b73667b5878f
 created: 2026-11-10
-last_updated: 2026-11-11
+last_updated: 2026-11-14
 ---
 
 # Field — Component Spec
 
 ## Purpose
 
-One composable form field that wraps **any** control — `Input`, `Textarea`, `Select`, `MultiSelect`, `NumberInput`, `PasswordInput`, `PhoneInput`, `InputGroup`, `Checkbox`, `RadioButton`, `Switch`, `Slider` — with its label, description and error. The root `Field` owns the field state (`invalid`, `disabled`, `required`) and the ids, and shares them through `provide`/`inject`: the control picks up its `id`, `aria-describedby`, `aria-invalid`, `disabled` and `required` from the Field, `Field.Label` points its `for` at the control and shows the Required marker, and `Field.Description` / `Field.Error` register themselves so the control is described by them. Grouping parts (`Field.Set`, `Field.Legend`, `Field.Group`, `Field.Content`, `Field.Title`, `Field.Separator`) build fieldsets, choice cards and settings rows. It replaces the v5 `field-*` family (`field-text`, `field-select`, `field-checkbox-block`, …), one wrapper per control, with a single anatomy.
+One composable form field that wraps **any** control — `Input`, `Textarea`, `Select`, `MultiSelect`, `NumberInput`, `PasswordInput`, `PhoneInput`, `InputGroup`, `Combobox`, `Calendar`, `DateRangePicker`, `Checkbox`, `RadioButton`, `RadioCards`, `Switch`, `Slider` — with its label, description and error. The root `Field` owns the field state (`invalid`, `disabled`, `required`) and the ids, and shares them through `provide`/`inject`: the control picks up its `id`, `aria-describedby`, `aria-invalid`, `disabled` and `required` from the Field, `Field.Label` points its `for` at the control and shows the Required marker, and `Field.Description` / `Field.Error` register themselves so the control is described by them. Grouping parts (`Field.Set`, `Field.Legend`, `Field.Group`, `Field.Content`, `Field.Title`, `Field.Separator`) build fieldsets, choice cards and settings rows. It replaces the v5 `field-*` family (`field-text`, `field-select`, `field-checkbox-block`, …), one wrapper per control, with a single anatomy.
 
 ## When to use
 
@@ -235,6 +235,7 @@ The field's examples live in `packages/webkit/examples/field/` and render on the
 - ChoiceCard — checkbox and switch choice cards (the v5 `*-block` variants).
 - Fieldset — `Field.Set` + `Field.Legend` grouping radio choices and fields.
 - InputGroup — `InputGroup` + `InputGroup.Input` inside a Field.
+- RequiredAndDisabled — a required field whose label carries a `hint`, and a disabled field (the state examples for `required` and `disabled`).
 
 ## Constraints — DO NOT
 
