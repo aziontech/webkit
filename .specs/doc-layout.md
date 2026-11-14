@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 2
 template: 2
-checksum: 56ca469b6f5254c22f74e495d46efd2e03a2a569df02e9d393e24db68d3c7112
+checksum: 351eebe5df6900e292932d0b3e722605f476a3aca88ceb1ce3b285db38113397
 created: 2026-11-12
 last_updated: 2026-11-14
 ---
@@ -40,7 +40,7 @@ The documentation chrome, composed once in the app: a sticky header (the Azion D
 - Compose the layout once, in the app's root; each route renders only its article. Never put a header, a rail or an inner scroll area in a page.
 - Give every navigation row an `id` and an `href` (an in-app path is followed with the router; never `to`); leave `activeId` empty so the current page follows the route.
 - Pass the page's headings as `outline` (`{ id, text, depth }`) with the same ids the `DocHeading`s carry; the layout tracks which one is in view.
-- Put the theme switch in `navigation-footer`, the GitHub and Console links in `actions`, a call to action (`DocCta`) in `aside`, and the site footer (`Footer kind="content"`) in `footer`.
+- Put the theme switch in `navigation-footer`, the GitHub and Console links in `actions`, a call to action (`DocCallToAction`) in `aside`, and the site footer (`Footer kind="content"`) in `footer`.
 - The page renders no `<main>` and no `ScrollArea` around the article: the document scrolls.
 - Bind `v-model:navigation-expanded` and `v-model:navigation-width` to state the app persists (local storage, a cookie) so the rail keeps the reader's size and collapsed state across pages and reloads; leave them unbound and the rail resets on each mount.
 - A drill row (`kind: 'drill'`) opens its level in place; the rail's Back then reads `Back to Docs` at the first level. Set `rootLabel` when the tree is not the whole docs (`Back to API reference`); never add a hand-made Back row to `navigation`.
@@ -104,7 +104,7 @@ The documentation chrome, composed once in the app: a sticky header (the Azion D
 | `default`           | —                   | The article, rendered inside the layout's `<main>`.                   |
 | `actions`           | —                   | The header's end actions after the search (GitHub, Console).          |
 | `navigation-footer` | —                   | The foot of the navigation rail and of the drawer (the theme switch). |
-| `aside`             | —                   | Content under the outline in the end rail (a `DocCta`).               |
+| `aside`             | —                   | Content under the outline in the end rail (a `DocCallToAction`).      |
 | `footer`            | —                   | The footer under the article (`Footer kind="content"`).               |
 | `search`            | `{ query: string }` | Extra `Command.Group`s listed before the navigation pages.            |
 
