@@ -12,11 +12,11 @@ export const text = {
   },
   dark: {
     'text-default': tokenRef('primitives.gray.50'),
-    'text-muted': tokenRef('primitives.gray.400'),
+    'text-muted': tokenRef('primitives.gray.300'),
     'text-disabled': tokenRef('primitives.gray.700'),
-    'text-primary': tokenRef('brand.primary.primary-500'),
-    'text-link': tokenRef('primitives.blue.400'),
-    'text-link-hover': tokenRef('primitives.blue.300'),
+    'text-primary': tokenRef('brand.primary.primary-300'),
+    'text-link': tokenRef('primitives.blue.200'),
+    'text-link-hover': tokenRef('primitives.blue.200'),
     'text-contrast': tokenRef('primitives.base.black')
   }
 }

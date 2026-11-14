@@ -2,7 +2,6 @@ import { tokenRef } from '../../scripts/refs.js'
 
 const shared = {
   'chart-series-1': tokenRef('primitives.orange.600'),
-  'chart-series-3': tokenRef('primitives.green.700'),
   'chart-series-4': tokenRef('primitives.red.500'),
   'chart-series-6': tokenRef('primitives.yellow.700'),
   'chart-series-other': tokenRef('primitives.gray.500'),
@@ -23,6 +22,7 @@ const shared = {
 export const chart = {
   light: {
     ...shared,
+    'chart-series-3': tokenRef('primitives.green.700'),
     'chart-series-2': tokenRef('primitives.blue.600'),
     'chart-series-5': tokenRef('primitives.violet.700'),
     'chart-sequential-1': tokenRef('primitives.blue.100'),
@@ -38,6 +38,7 @@ export const chart = {
   },
   dark: {
     ...shared,
+    'chart-series-3': tokenRef('primitives.green.600'),
     'chart-series-2': tokenRef('primitives.blue.500'),
     'chart-series-5': tokenRef('primitives.violet.600'),
     'chart-sequential-1': tokenRef('primitives.blue.900'),

@@ -9,10 +9,10 @@ export const severity = {
     'severity-info': tokenRef('primitives.gray.500')
   },
   dark: {
-    'severity-critical': tokenRef('primitives.red.400'),
+    'severity-critical': tokenRef('primitives.red.300'),
     'severity-high': tokenRef('primitives.orange.400'),
     'severity-medium': tokenRef('primitives.yellow.500'),
-    'severity-low': tokenRef('primitives.blue.400'),
+    'severity-low': tokenRef('primitives.blue.300'),
     'severity-info': tokenRef('primitives.gray.400')
   }
 }

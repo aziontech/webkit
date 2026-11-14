@@ -9,7 +9,7 @@ export const info = {
   dark: {
     info: tokenRef('primitives.blue.900'),
     'info-border': tokenRef('primitives.alpha.blue.400'),
-    'info-contrast': tokenRef('primitives.blue.300')
+    'info-contrast': tokenRef('primitives.blue.200')
   }
 }
 

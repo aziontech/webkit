@@ -5,7 +5,7 @@ export const ring = {
     'ring-color': tokenRef('theme.surfaces.surface-600')
   },
   dark: {
-    'ring-color': tokenRef('theme.surfaces.surface-700')
+    'ring-color': tokenRef('theme.surfaces.surface-500')
   }
 }
 

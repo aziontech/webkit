@@ -14,12 +14,12 @@ export const codeSintax = {
   dark: {
     'code-sintax-identifier': tokenRef('primitives.gray.50'),
     'code-sintax-line-number': tokenRef('primitives.gray.400'),
-    'code-sintax-keyword': tokenRef('primitives.blue.300'),
-    'code-sintax-punctuation': tokenRef('primitives.gray.400'),
+    'code-sintax-keyword': tokenRef('primitives.blue.200'),
+    'code-sintax-punctuation': tokenRef('primitives.gray.300'),
     'code-sintax-comment': tokenRef('primitives.gray.400'),
-    'code-sintax-function': tokenRef('brand.primary.primary-500'),
+    'code-sintax-function': tokenRef('brand.primary.primary-300'),
     'code-sintax-type': tokenRef('primitives.yellow.300'),
-    'code-sintax-string': tokenRef('primitives.blue.300')
+    'code-sintax-string': tokenRef('primitives.blue.200')
   }
 }
 
