@@ -39,7 +39,7 @@
         class="text-body-sm text-(--text-muted)"
       />
     </div>
-    <div class="grid grid-cols-1 gap-(--spacing-sm) 2xl:grid-cols-2">
+    <div class="flex flex-col gap-(--spacing-sm)">
       <div
         class="flex min-h-40 min-w-0 items-center justify-center overflow-auto rounded-(--shape-card) border border-(--border-default) bg-(--bg-canvas) p-(--spacing-lg)"
         :data-example="`${dir}/${example.file}`"
