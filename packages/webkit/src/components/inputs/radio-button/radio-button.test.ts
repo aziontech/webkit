@@ -5,6 +5,8 @@ import { defineComponent, h, nextTick, ref } from 'vue'
 import Default from '../../../../examples/radio-button/default.vue'
 import Disabled from '../../../../examples/radio-button/disabled.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
+import Field from '../field/field.vue'
+import FieldLabel from '../field/field-label/field-label.vue'
 import RadioButton from './radio-button.vue'
 
 describe('RadioButton', () => {
@@ -229,5 +231,25 @@ describe('RadioButton touch target', () => {
 
     expect(input.className).toContain('inset-[min(0rem,calc(50%-12px))]')
     expect(input.className).toContain('pointer-coarse:inset-[min(0rem,calc(50%-22px))]')
+  })
+})
+
+describe('RadioButton in a Field', () => {
+  it('takes the Field invalid and required state on its input', () => {
+    const { getByRole } = render({
+      components: { Field, FieldLabel, RadioButton },
+      template:
+        '<Field invalid required orientation="horizontal"><RadioButton value="pro" /><FieldLabel>Pro</FieldLabel></Field>'
+    })
+    const input = getByRole('radio') as HTMLInputElement
+    expect(input.getAttribute('aria-invalid')).toBe('true')
+    expect(input.required).toBe(true)
+  })
+
+  it('renders no empty name and stays unchecked with no value and no model', () => {
+    const { getByRole } = render(RadioButton, { attrs: { 'aria-label': 'Option' } })
+    const input = getByRole('radio') as HTMLInputElement
+    expect(input.hasAttribute('name')).toBe(false)
+    expect(input.checked).toBe(false)
   })
 })

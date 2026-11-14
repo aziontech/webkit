@@ -1924,7 +1924,7 @@
   {
     "name": "radio-button",
     "path": "src/components/inputs/radio-button/radio-button.vue",
-    "limit": "13.2 KB"
+    "limit": "1.75 KB"
   },
   {
     "name": "switch",

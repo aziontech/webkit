@@ -3,13 +3,13 @@ name: radio-button
 category: inputs
 structure: monolithic
 status: implemented
-spec_version: 4
+spec_version: 5
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2027-7554
   node_id: 2027:7554
-checksum: b6e19632dface8834b68652ba2f4b4671b4c362ccf6961c5e0ce8e95e9c7bec1
+checksum: 0c24c759f58e0f7d58c6905ff2124309690bc706114a169a8292c2880172a31c
 created: 2026-05-22
-last_updated: 2026-11-13
+last_updated: 2026-11-14
 ---
 
 # Radio Button — Component Spec
@@ -32,7 +32,8 @@ Atomic exclusive-choice control only — the circular radio input from Figma (no
 
 ## Related
 
-- `field` — a horizontal `Field` puts the radio beside its label and description (the default inside forms); a `Field.Label` wrapping it is a card-style option with a selected border and background. Group the options in `Field.Set` + `Field.Legend`.
+- `radio-group` (not shipped yet): one RadioButton per option still binds the same `v-model` and `name` by hand; RadioCards is the shipped group.
+- `field` — inside a `Field`, the input takes the field's id, description, `invalid` (`aria-invalid`), `required` and `disabled`. A horizontal `Field` puts the radio beside its label and description (the default inside forms); a `Field.Label` wrapping it is a card-style option with a selected border and background. Group the options in `Field.Set` + `Field.Legend`.
 - `radio-cards` — horizontal grid of selectable cards with its own model.
 - `checkbox` — the multi-pick counterpart.
 - `select` — single choice from a dropdown when the options do not fit inline.
@@ -79,10 +80,10 @@ Atomic exclusive-choice control only — the circular radio input from Figma (no
 
 | Prop       | Type      | Default     | Required | JSDoc                                               |
 | ---------- | --------- | ----------- | -------- | --------------------------------------------------- |
-| `value`    | `string`  | `undefined` | false    | Option value for this radio instance.               |
-| `name`     | `string`  | `undefined` | false    | HTML name shared across a mutually exclusive group. |
+| `value`    | `string`  | `''`        | false    | Option value for this radio instance.               |
+| `name`     | `string`  | `''`        | false    | HTML name shared across a mutually exclusive group; empty renders no `name`. |
 | `disabled` | `boolean` | `false`     | false    | Disables interaction and applies disabled tokens.   |
-| `inputId`  | `string`  | `undefined` | false    | id for the native input; links label to control.    |
+| `inputId`  | `string`  | `''`        | false    | id for the native input; links label to control. Empty uses `id`, then the enclosing Field's id. |
 
 ## v-model
 
@@ -103,6 +104,7 @@ _none_
 - Visual states: `default`, `hover`, `focus-visible`, `active`, `disabled`
 - `data-disabled` mirrors the `disabled` prop
 - `data-checked` mirrors selected state
+- Consumer `class` lands on the drawn circle as a plain class (no tailwind-merge): the utilities are one flat class on the root, so the entry stays near the checkbox budget.
 - Touch: the native input that receives the click extends past the 20 px circle to 24 × 24 px, and to 44 × 44 px on a coarse pointer; the drawn circle does not change.
 
 ## Motion & Animations
