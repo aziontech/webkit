@@ -8,7 +8,7 @@
 
   export type InputGroupInputType = 'text' | 'email' | 'number'
 
-  interface Props {
+  export interface Props {
     /** Native input type, the same restricted set as Input. */
     type?: InputGroupInputType
     /** Placeholder shown when the input is empty. */

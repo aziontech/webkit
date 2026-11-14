@@ -54,7 +54,7 @@
       return [node]
     })
 
-  const PendingLabels = () => pickPending(slots.default?.() ?? [])
+  const PendingLabels = () => pickPending((slots.default?.() ?? []) as VNodeArrayChildren)
 
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? 'multi-select-content'
