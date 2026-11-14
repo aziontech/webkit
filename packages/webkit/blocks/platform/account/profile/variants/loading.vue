@@ -224,6 +224,7 @@
             <div
               v-if="loading"
               class="mt-(--layout-section-gap) flex min-w-0 flex-col gap-(--layout-section-gap)"
+              role="status"
               aria-busy="true"
               aria-label="Loading the profile"
             >
