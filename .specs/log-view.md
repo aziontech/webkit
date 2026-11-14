@@ -3,12 +3,12 @@ name: log-view
 category: code
 structure: composition
 status: implemented
-spec_version: 4
+spec_version: 5
 template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3950-34695
   node_id: 3950:34695
-checksum: 4bdcd208ee925f8e3af9973ee4013df8640e7607c247f683b1ad5c70d97bf301
+checksum: 7b37fba2d192800c54144789823571bc2644434424097af3db8e95b71c752032
 created: 2026-05-26
 last_updated: 2026-11-14
 ---
@@ -256,7 +256,7 @@ the height of a single row the moment the root stopped stretching.
 ## Performance
 
 - Bundle budget: `log-view` (the compound `index.ts`, every part attached) 34.25 KB, `log-view-root` 12.75 KB, `log-view-header` 4.8 KB, `log-view-content` 23.25 KB (initial chunk, with `EmptyState` and `Alert`), `log-view-footer` 0.65 KB gzip in `.size-limit.json`.
-- Runtime budget: a 10,000-line log mounts within budget through chunked mounting (above 300 visible lines, chunks of 100); the level counts and filters are one pass over `lines`.
+- Runtime budget: a 10,000-line log mounts within budget through chunked mounting (above 300 visible lines, chunks of 100); a chunk that scrolls far out of view is unmounted again and keeps its measured height, so scrolling through a long log never keeps every line mounted. The level counts and filters are one pass over `lines`; each line's lowercased search text and its copy text are built once and reused until its `message` changes, so a live tail costs one new line, not the whole log. The `LogView with 10k lines and a search: tail 20 appended lines` scenario holds the tail to its budget in `perf-budgets.json`.
 - Heavy parts: none lazy-loaded; off-screen chunks stay unmounted.
 
 ## Examples

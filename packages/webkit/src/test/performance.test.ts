@@ -276,6 +276,38 @@ function logViewCase(): Case {
   }
 }
 
+function logViewTailCase(): Case {
+  const make = (i: number) => ({
+    id: String(i),
+    time: '13:47:33',
+    type: 'text' as const,
+    message: `Line ${i}: request handled in ${i % 97} ms`
+  })
+  const lines = ref(Array.from({ length: 10_000 }, (_, i) => make(i)))
+  const search = ref('handled')
+  return {
+    mount: () => ({
+      render: () =>
+        h(
+          LogView,
+          {
+            lines: lines.value,
+            search: search.value,
+            'onUpdate:search': (v: string) => (search.value = v),
+            style: 'height:640px'
+          },
+          { default: () => [h(LogViewHeader), h(LogViewContent)] }
+        )
+    }),
+    update: async () => {
+      for (let i = 0; i < 20; i++) {
+        lines.value = [...lines.value, make(lines.value.length)]
+        await nextTick()
+      }
+    }
+  }
+}
+
 function codeBlockCase(): Case {
   const code = Array.from(
     { length: 5000 },
@@ -1007,6 +1039,9 @@ describe('runtime budgets (perf-budgets.json)', () => {
   })
   it('LogView with 10k lines: mount and search', async () => {
     check('log-view-10k', await measure(logViewCase))
+  })
+  it('LogView with 10k lines and a search: tail 20 appended lines', async () => {
+    check('log-view-10k-tail', await measure(logViewTailCase))
   })
   it('CodeBlock with a 5k-line file: mount and switch tab', async () => {
     check('code-block-5k-lines', await measure(codeBlockCase))

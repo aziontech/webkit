@@ -70,4 +70,55 @@ describe('useLazyChunks', () => {
     )
     await expect.poll(() => view.container.querySelectorAll('p').length, { timeout: 2000 }).toBe(3)
   })
+
+  it('releases a mounted chunk that scrolls far out of view and keeps its measured height', async () => {
+    const items = Array.from({ length: 40 }, (_, i) => i)
+    const view = render(
+      defineComponent({
+        setup() {
+          const { split, observe } = useLazyChunks({
+            rowHeight: 20,
+            chunkSize: 10,
+            threshold: 10,
+            rootMargin: '0px',
+            release: true
+          })
+          return () =>
+            h(
+              'div',
+              { 'data-testid': 'scroller', style: 'height:100px;overflow-y:auto' },
+              split(items).map((c) =>
+                c.mounted
+                  ? h(
+                      'div',
+                      {
+                        key: c.index,
+                        ref: (el: unknown) => observe(el, c.index),
+                        'data-chunk': c.index,
+                        'data-chunk-count': c.items.length,
+                        'data-testid': 'mounted'
+                      },
+                      c.items.map((n) => h('p', { key: n, style: 'height:30px;margin:0' }, n))
+                    )
+                  : h('div', {
+                      key: c.index,
+                      ref: (el: unknown) => observe(el, c.index),
+                      'data-chunk': c.index,
+                      'data-testid': 'placeholder',
+                      style: { height: `${c.estimatedHeight}px` }
+                    })
+              )
+            )
+        }
+      })
+    )
+    const scroller = view.getByTestId('scroller')
+    const chunkOne = () => scroller.querySelector('[data-chunk="1"]') as HTMLElement
+    scroller.scrollTop = 250
+    await expect.poll(() => chunkOne().dataset['testid'], { timeout: 2000 }).toBe('mounted')
+    scroller.scrollTop = scroller.scrollHeight
+    await expect.poll(() => chunkOne().dataset['testid'], { timeout: 2000 }).toBe('placeholder')
+    expect(chunkOne().style.height).toBe('300px')
+    expect(scroller.querySelector('[data-chunk="0"]')?.getAttribute('data-testid')).toBe('mounted')
+  })
 })
