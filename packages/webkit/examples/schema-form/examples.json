@@ -16,6 +16,16 @@
       "name": "CustomField",
       "summary": "A `field:<path>` slot replaces one control and keeps the label, description and messages; `ui` orders the keys and sets a placeholder. `x-multiline` turns a string into a `Textarea`.",
       "file": "custom-field.vue"
+    },
+    {
+      "name": "DynamicFields",
+      "summary": "`ui[path].when` shows the TTL only while caching is on and a rule's Redirect to only for the redirect behavior; a hidden field is not validated and leaves the value. `ui[path].options` loads the origins from the app as the user types, and `widget: 'repeat'` edits the array of rule objects as fieldsets with Add and Remove.",
+      "file": "dynamic-fields.vue"
+    },
+    {
+      "name": "RequestSchema",
+      "summary": "An OpenAPI request body: `oneOf` with a `discriminator` becomes a choice and the chosen variant's fields, `writeOnly` strings become password fields that keep the stored secret when left empty, `format` checks the email, URL and date, a string map (`additionalProperties`) is edited as key/value rows, and `ui[''].sections` folds the rest under Advanced settings.",
+      "file": "request-schema.vue"
     }
   ]
 }

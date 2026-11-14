@@ -4,11 +4,13 @@ import { defineComponent, h, nextTick, ref } from 'vue'
 
 import CustomField from '../../../../examples/schema-form/custom-field.vue'
 import Default from '../../../../examples/schema-form/default.vue'
+import DynamicFields from '../../../../examples/schema-form/dynamic-fields.vue'
+import RequestSchema from '../../../../examples/schema-form/request-schema.vue'
 import WithValidation from '../../../../examples/schema-form/with-validation.vue'
 import { en, provideLocale } from '../../../composables/use-locale'
 import { expectNoA11yViolations } from '../../../test/axe'
 import { LOCALES } from '../../../test/locales'
-import { buildNodes, seedDefaults, validateNode } from './schema'
+import { buildNodes, expand, getAt, seedDefaults, setAt, validateNode } from './schema'
 import SchemaForm from './schema-form.vue'
 
 const schema = {
@@ -226,7 +228,9 @@ describe('SchemaForm', () => {
   it.each([
     ['Default', Default],
     ['WithValidation', WithValidation],
-    ['CustomField', CustomField]
+    ['CustomField', CustomField],
+    ['DynamicFields', DynamicFields],
+    ['RequestSchema', RequestSchema]
   ])('the %s example has no axe violations', async (_name, Example) => {
     const { container } = render(Example)
     await expectNoA11yViolations(container)
@@ -240,5 +244,376 @@ describe('SchemaForm', () => {
     await form.value!.validate()
     await nextTick()
     await expectNoA11yViolations(container)
+  })
+})
+
+const bound = (props: Record<string, unknown>, start: Record<string, unknown> = {}) => {
+  const model = ref<Record<string, unknown>>(start)
+  const form = ref<InstanceType<typeof SchemaForm> | null>(null)
+  const view = render(
+    defineComponent(
+      () => () =>
+        h(SchemaForm, {
+          ref: form,
+          ...props,
+          modelValue: model.value,
+          'onUpdate:modelValue': (v: Record<string, unknown>) => (model.value = v)
+        })
+    )
+  )
+  return { view, model, form }
+}
+
+describe('SchemaForm paths and expansion', () => {
+  it('reads and writes through array indexes', () => {
+    const value = { rules: [{ path: '/a' }, { path: '/b' }] }
+    expect(getAt(value, 'rules.1.path')).toBe('/b')
+    expect(setAt(value, 'rules.0.path', '/x')).toEqual({ rules: [{ path: '/x' }, { path: '/b' }] })
+    expect(setAt(value, 'rules.0.path', undefined)).toEqual({ rules: [{}, { path: '/b' }] })
+    expect(value.rules[0]).toEqual({ path: '/a' })
+  })
+
+  it('lists the fields a when predicate and an unchosen variant hide', () => {
+    const nodes = buildNodes(
+      {
+        properties: {
+          on: { type: 'boolean' },
+          ttl: { type: 'integer' },
+          auth: {
+            discriminator: { propertyName: 'kind' },
+            oneOf: [
+              { properties: { kind: { const: 'a' }, token: { type: 'string' } } },
+              { properties: { kind: { const: 'b' }, user: { type: 'string' } } }
+            ]
+          }
+        }
+      },
+      { ttl: { when: (value) => value.on === true } }
+    )
+    const view = expand(nodes, { on: false, auth: { kind: 'a' } })
+    expect(view.hidden.sort()).toEqual(['auth.user', 'ttl'])
+  })
+})
+
+describe('SchemaForm conditional fields', () => {
+  const conditional = {
+    type: 'object' as const,
+    properties: {
+      cache: { type: 'boolean' as const, title: 'Cache', default: false },
+      ttl: { type: 'integer' as const, title: 'TTL', minimum: 60, default: 3600 }
+    },
+    required: ['ttl']
+  }
+  const ui = { ttl: { when: (value: Record<string, unknown>) => value.cache === true } }
+
+  it('hides a field, leaves it out of the value and brings it back with its value', async () => {
+    const { view, model } = bound({ schema: conditional, ui })
+    await nextTick()
+    expect(view.queryByLabelText(/TTL/)).toBeNull()
+    expect(model.value).toEqual({ cache: false })
+    await fireEvent.click(view.getByRole('switch', { name: /Cache/ }))
+    await waitFor(() => expect(view.getByLabelText(/TTL/)).toBeTruthy())
+    expect(model.value).toEqual({ cache: true, ttl: 3600 })
+    await fireEvent.update(view.getByLabelText(/TTL/), '120')
+    await fireEvent.click(view.getByRole('switch', { name: /Cache/ }))
+    await nextTick()
+    expect(model.value).toEqual({ cache: false })
+    await fireEvent.click(view.getByRole('switch', { name: /Cache/ }))
+    await nextTick()
+    expect(model.value).toEqual({ cache: true, ttl: 120 })
+  })
+
+  it('does not validate a hidden required field', async () => {
+    const { form } = bound({ schema: conditional, ui }, { cache: false })
+    await nextTick()
+    const result = await form.value!.validate()
+    expect(result).toEqual({ valid: true, errors: {} })
+  })
+})
+
+describe('SchemaForm option loaders', () => {
+  const options = [
+    { value: 'o1', label: 'origin.example.com' },
+    { value: 'o2', label: 'assets.example.com' }
+  ]
+
+  it('loads options on mount, searches through the loader and writes the value', async () => {
+    const calls: string[] = []
+    const load = async (query: string) => {
+      calls.push(query)
+      return options.filter((option) => option.label.includes(query))
+    }
+    const { view, model } = bound({
+      schema: { type: 'object', properties: { origin: { type: 'string', title: 'Origin' } } },
+      ui: { origin: { options: load } }
+    })
+    await waitFor(() => expect(calls).toEqual(['']))
+    const input = view.getByLabelText(/Origin/) as HTMLInputElement
+    expect(input.getAttribute('role')).toBe('combobox')
+    await fireEvent.update(input, 'assets')
+    await waitFor(() => expect(calls).toEqual(['', 'assets']), { timeout: 1500 })
+    const option = await waitFor(() => {
+      const row = document.querySelector('[role="option"]')
+      expect(row?.textContent).toContain('assets.example.com')
+      return row as HTMLElement
+    })
+    await fireEvent.click(option)
+    await waitFor(() => expect(model.value).toEqual({ origin: 'o2' }))
+  })
+
+  it('selects several values for an array', async () => {
+    const { view, model } = bound({
+      schema: {
+        type: 'object',
+        properties: {
+          origins: { type: 'array', title: 'Origins', items: { type: 'string' } }
+        }
+      },
+      ui: { origins: { options: async () => options } }
+    })
+    const field = view.getByTestId('input-schema-form__field')
+    expect(field.getAttribute('data-widget')).toBe('multiselect')
+    await fireEvent.click(view.getByRole('combobox'))
+    const first = await waitFor(() => {
+      const row = Array.from(document.querySelectorAll('[role="option"]')).find((el) =>
+        el.textContent?.includes('origin.example.com')
+      )
+      expect(row).toBeTruthy()
+      return row as HTMLElement
+    })
+    await fireEvent.click(first)
+    await waitFor(() => expect(model.value).toEqual({ origins: ['o1'] }))
+  })
+
+  it('tells the user when the loader fails', async () => {
+    const { view } = bound({
+      schema: { type: 'object', properties: { origin: { type: 'string', title: 'Origin' } } },
+      ui: { origin: { options: () => Promise.reject(new Error('offline')) } }
+    })
+    await fireEvent.update(view.getByLabelText(/Origin/), 'x')
+    await waitFor(() => expect(document.body.textContent).toContain("Couldn't load the options."), {
+      timeout: 1500
+    })
+  })
+})
+
+describe('SchemaForm repeat', () => {
+  const repeat = {
+    type: 'object' as const,
+    properties: {
+      rules: {
+        type: 'array' as const,
+        title: 'Rules',
+        items: {
+          type: 'object' as const,
+          title: 'Rule',
+          required: ['path'],
+          properties: {
+            path: { type: 'string' as const, title: 'Path', default: '/' },
+            behavior: { type: 'string' as const, title: 'Behavior', enum: ['cache', 'redirect'] },
+            target: { type: 'string' as const, title: 'Target' }
+          }
+        }
+      }
+    }
+  }
+  const ui = {
+    rules: { widget: 'repeat' as const },
+    'rules.*.target': {
+      when: (_value: Record<string, unknown>, rule: Record<string, unknown>) =>
+        rule.behavior === 'redirect'
+    }
+  }
+
+  it('keeps arrays of objects as JSON unless the repeat widget is asked for', () => {
+    const [node] = buildNodes(repeat)
+    expect(node!.widget).toBe('json')
+    expect(buildNodes(repeat, ui)[0]!.widget).toBe('repeat')
+  })
+
+  it('adds, edits and removes items as fieldsets', async () => {
+    const { view, model } = bound({ schema: repeat, ui })
+    await nextTick()
+    expect(view.getByRole('group', { name: 'Rules' }).tagName).toBe('FIELDSET')
+    await fireEvent.click(view.getByRole('button', { name: /Add/ }))
+    await waitFor(() => expect(model.value).toEqual({ rules: [{ path: '/' }] }))
+    expect(view.getByRole('group', { name: 'Rule 1' })).toBeTruthy()
+    const path = view.getByLabelText(/Path/) as HTMLInputElement
+    path.focus()
+    await fireEvent.update(path, '/images')
+    expect(model.value).toEqual({ rules: [{ path: '/images' }] })
+    await nextTick()
+    expect(document.activeElement).toBe(view.getByLabelText(/Path/))
+    expect(view.queryByLabelText(/Target/)).toBeNull()
+    await fireEvent.click(view.getByRole('button', { name: /Add/ }))
+    await waitFor(() => expect(view.getAllByLabelText(/Path/)).toHaveLength(2))
+    await fireEvent.click(view.getAllByRole('button', { name: /Remove/ })[0]!)
+    await waitFor(() => expect(model.value).toEqual({ rules: [{ path: '/' }] }))
+  })
+
+  it('seeds item defaults and validates item fields by indexed path', async () => {
+    const { view, form, model } = bound({ schema: repeat, ui }, { rules: [{ behavior: 'cache' }] })
+    await nextTick()
+    expect(model.value).toEqual({ rules: [{ behavior: 'cache', path: '/' }] })
+    await fireEvent.update(view.getByLabelText(/Path/), '')
+    expect(model.value).toEqual({ rules: [{ behavior: 'cache' }] })
+    const failed = await form.value!.validate()
+    expect(failed.errors).toEqual({ 'rules.0.path': 'This field is required.' })
+  })
+})
+
+describe('SchemaForm OpenAPI keywords', () => {
+  it('renders oneOf with a discriminator as a choice and the chosen variant', async () => {
+    const { view, model } = bound(
+      {
+        schema: {
+          type: 'object',
+          properties: {
+            auth: {
+              title: 'Authentication',
+              discriminator: { propertyName: 'method' },
+              oneOf: [
+                {
+                  title: 'API token',
+                  properties: {
+                    method: { const: 'token' },
+                    token: { type: 'string', title: 'Token' }
+                  }
+                },
+                {
+                  title: 'Basic',
+                  properties: {
+                    method: { const: 'basic' },
+                    user: { type: 'string', title: 'User' }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      },
+      { auth: { method: 'basic', user: 'jane.doe' } }
+    )
+    await nextTick()
+    expect(view.getByRole('group', { name: 'Authentication' })).toBeTruthy()
+    expect(view.getByLabelText(/User/)).toBeTruthy()
+    expect(view.queryByLabelText(/Token/)).toBeNull()
+    expect(view.getByRole('combobox', { name: /method/ }).textContent).toContain('Basic')
+    await fireEvent.click(view.getByRole('combobox', { name: /method/ }))
+    const token = await waitFor(() => {
+      const row = Array.from(document.querySelectorAll('[role="option"]')).find((el) =>
+        el.textContent?.includes('API token')
+      )
+      expect(row).toBeTruthy()
+      return row as HTMLElement
+    })
+    await fireEvent.click(token)
+    await waitFor(() => expect(model.value).toEqual({ auth: { method: 'token' } }))
+    expect(view.getByLabelText(/Token/)).toBeTruthy()
+  })
+
+  it('edits a string map as key and value rows and flags duplicate keys', async () => {
+    const { view, model, form } = bound(
+      {
+        schema: {
+          type: 'object',
+          properties: {
+            headers: { type: 'object', title: 'Headers', additionalProperties: { type: 'string' } }
+          }
+        }
+      },
+      { headers: { 'X-Team': 'platform' } }
+    )
+    await nextTick()
+    expect(view.getByTestId('input-schema-form__set').getAttribute('data-widget')).toBe('map')
+    expect((view.getByDisplayValue('X-Team') as HTMLInputElement).value).toBe('X-Team')
+    await fireEvent.click(view.getByRole('button', { name: /Add/ }))
+    expect(model.value).toEqual({ headers: { 'X-Team': 'platform' } })
+    const keys = view.getAllByLabelText('Key')
+    await fireEvent.update(keys[1]!, 'X-Team')
+    await waitFor(() => expect(view.getByText('Each key must be unique.')).toBeTruthy())
+    const result = await form.value!.validate()
+    expect(result.errors).toEqual({ headers: 'Each key must be unique.' })
+    await fireEvent.update(view.getAllByLabelText('Key')[1]!, 'X-Env')
+    await fireEvent.update(view.getAllByLabelText('Value')[1]!, 'prod')
+    expect(model.value).toEqual({ headers: { 'X-Team': 'platform', 'X-Env': 'prod' } })
+  })
+
+  it('checks email, uri and date formats', async () => {
+    const nodes = buildNodes({
+      properties: {
+        email: { type: 'string', format: 'email' },
+        url: { type: 'string', format: 'uri' },
+        day: { type: 'string', format: 'date' }
+      }
+    })
+    const [email, url, day] = nodes
+    expect(validateNode(email!, 'jane.doe')).toEqual({ key: 'email' })
+    expect(validateNode(email!, 'jane.doe@example.com')).toBeNull()
+    expect(validateNode(url!, 'example.com')).toEqual({ key: 'uri' })
+    expect(validateNode(url!, 'https://example.com/docs')).toBeNull()
+    expect(validateNode(day!, '2026-02-30')).toEqual({ key: 'date' })
+    expect(validateNode(day!, '2026-02-28')).toBeNull()
+    const view = render(SchemaForm, {
+      props: {
+        schema: { properties: { email: { type: 'string', title: 'Email', format: 'email' } } }
+      }
+    })
+    expect((view.getByLabelText(/Email/) as HTMLInputElement).type).toBe('email')
+  })
+
+  it('renders writeOnly as a password field that omits the key when empty', async () => {
+    const { view, model } = bound({
+      schema: {
+        type: 'object',
+        properties: { secret: { type: 'string', title: 'Secret', writeOnly: true } }
+      }
+    })
+    const secret = view.getByLabelText(/Secret/) as HTMLInputElement
+    expect(secret.type).toBe('password')
+    expect(secret.placeholder).toBe('Leave empty to keep the current value')
+    await fireEvent.update(secret, 's3cret')
+    expect(model.value).toEqual({ secret: 's3cret' })
+    await fireEvent.update(secret, '')
+    expect(model.value).toEqual({})
+  })
+})
+
+describe('SchemaForm sections', () => {
+  const sectioned = {
+    type: 'object' as const,
+    required: ['retries'],
+    properties: {
+      name: { type: 'string' as const, title: 'Name' },
+      region: { type: 'string' as const, title: 'Region' },
+      retries: { type: 'integer' as const, title: 'Retries', minimum: 1 }
+    }
+  }
+  const ui = {
+    '': {
+      sections: [
+        { title: 'Placement', keys: ['region'] },
+        { keys: ['retries'], collapsed: true }
+      ]
+    }
+  }
+
+  it('groups keys under a legend and folds the collapsed one', async () => {
+    const view = render(SchemaForm, { props: { schema: sectioned, ui } })
+    await nextTick()
+    expect(view.getByRole('group', { name: 'Placement' }).tagName).toBe('FIELDSET')
+    const trigger = view.getByRole('button', { name: 'Advanced settings' })
+    expect(trigger.getAttribute('aria-expanded')).toBe('false')
+    expect(view.queryByLabelText(/Retries/)).toBeNull()
+    await fireEvent.click(trigger)
+    await waitFor(() => expect(view.getByLabelText(/Retries/)).toBeTruthy())
+  })
+
+  it('opens a folded section when validate() lands on it', async () => {
+    const { view, form } = bound({ schema: sectioned, ui })
+    await nextTick()
+    const result = await form.value!.validate()
+    expect(Object.keys(result.errors)).toEqual(['retries'])
+    await waitFor(() => expect(document.activeElement).toBe(view.getByLabelText(/Retries/)))
   })
 })
