@@ -145,10 +145,108 @@ describe('ArticleIndexResourceHub', () => {
   })
 
   it('renders the read cue and the load-more button from their labels', () => {
-    const { getByRole, getAllByText } = band()
+    const { getByRole, getAllByText } = band({ pageSize: 2 })
 
-    expect(getAllByText('Read article')).toHaveLength(items.length)
+    expect(getAllByText('Read article')).toHaveLength(2)
     expect(getByRole('button', { name: 'Load more' })).toBeInTheDocument()
+  })
+
+  it('lists one page and reveals the next with the load-more button', async () => {
+    const { getByRole, queryByRole } = band({ pageSize: 2 })
+
+    expect(headlines(getByRole)).toEqual([items[0]?.title, items[1]?.title])
+
+    await userEvent.click(getByRole('button', { name: 'Load more' }))
+    expect(headlines(getByRole)).toEqual(items.map((item) => item.title))
+    expect(queryByRole('button', { name: 'Load more' })).toBeNull()
+  })
+
+  it('returns to the first page when a facet changes', async () => {
+    const { getByRole } = band({ pageSize: 1 })
+
+    await userEvent.click(getByRole('button', { name: 'Load more' }))
+    expect(headlines(getByRole)).toHaveLength(2)
+
+    await pick('Industry', 'Tech')
+    expect(headlines(getByRole)).toEqual(['Azion MCP servers'])
+  })
+
+  it('lists every match and no button without a more label', () => {
+    const { getByRole, queryByRole } = band({ moreLabel: '', pageSize: 1 })
+
+    expect(headlines(getByRole)).toHaveLength(items.length)
+    expect(queryByRole('button', { name: 'Load more' })).toBeNull()
+  })
+
+  it('skips the leading resources until a facet applies', async () => {
+    const { getByRole } = band({ leading: 1 })
+
+    expect(headlines(getByRole)).toEqual([items[1]?.title, items[2]?.title])
+
+    await pick('Industry', 'Fintech')
+    expect(headlines(getByRole)).toEqual([items[0]?.title])
+  })
+
+  it('renders the empty state and resets every facet from its action', async () => {
+    const { getByRole, getByText } = band({
+      empty: {
+        title: 'No resources match these filters',
+        description: 'Try another content type or industry.',
+        action: 'View all resources'
+      }
+    })
+
+    await pick('Industry', 'Fintech')
+    await pick('Content type', 'Blog')
+    expect(getByText('No resources match these filters')).toBeInTheDocument()
+    expect(getByText('Try another content type or industry.')).toBeInTheDocument()
+
+    await userEvent.click(getByRole('button', { name: 'View all resources' }))
+    expect(headlines(getByRole)).toHaveLength(items.length)
+    expect(getByRole('combobox', { name: 'Industry' }).textContent).toContain('All industries')
+  })
+
+  it('searches the options only of a dropdown with more than seven', async () => {
+    const long = {
+      key: 'topic',
+      label: 'Topic',
+      allLabel: 'All topics',
+      options: ['Caching', 'Routing', 'Serverless', 'Security', 'Storage', 'Edge', 'Data', 'AI']
+    }
+    band({ facets: [facets[0], long] })
+
+    await userEvent.click(screen.getByRole('combobox', { name: 'Content type' }))
+    expect(screen.queryByRole('textbox', { name: 'Search content type' })).toBeNull()
+    await userEvent.keyboard('{Escape}')
+
+    await userEvent.click(screen.getByRole('combobox', { name: 'Topic' }))
+    expect(await screen.findByRole('textbox', { name: 'Search topic' })).toBeInTheDocument()
+  })
+
+  it('mirrors rowKind on the list', () => {
+    const { getByRole } = band({ rowKind: 'byline' })
+
+    expect(getByRole('list', { name: LIST }).getAttribute('data-kind')).toBe('byline')
+  })
+
+  it('draws the client mark when a row has no cover and opens an external row in a new tab', () => {
+    const { getByAltText, getByRole } = band({
+      items: [
+        {
+          key: 'acme',
+          href: 'https://example.com/acme',
+          mark: { name: 'Acme', logo: '/logos/acme.svg' },
+          meta: 'Success stories',
+          title: 'Acme moved its storefront',
+          external: true
+        }
+      ]
+    })
+
+    expect(getByAltText('Acme').getAttribute('src')).toBe('/logos/acme.svg')
+    const link = getByRole('link', { name: /Acme moved its storefront \(opens in a new tab\)/ })
+    expect(link.getAttribute('target')).toBe('_blank')
+    expect(link.getAttribute('rel')).toBe('noopener')
   })
 
   it('omits the toolbar when there is no title and no facet', () => {
