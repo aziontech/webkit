@@ -706,4 +706,48 @@ describe('DropdownMenu audit fixes', () => {
     window.dispatchEvent(new KeyboardEvent('keydown', { key: 'k', metaKey: true }))
     expect(onSelect).toHaveBeenCalledTimes(1)
   })
+
+  it('a shared shortcut fires the open menu, else the focused one, else the first', async () => {
+    const onSelect = vi.fn()
+    render(
+      defineComponent({
+        setup() {
+          return () =>
+            h(
+              'div',
+              null,
+              Array.from({ length: 20 }, (_, i) =>
+                h(
+                  DropdownMenu,
+                  { key: i, onSelect: (_event: Event, value: unknown) => onSelect(value) },
+                  () => [
+                    h(DropdownMenuTrigger, null, () => h('button', { type: 'button' }, `Row ${i}`)),
+                    h(DropdownMenuItem, { value: `copy-${i}`, label: 'Copy', command: '⌘K' })
+                  ]
+                )
+              )
+            )
+        }
+      })
+    )
+    await nextTick()
+    const press = () =>
+      window.dispatchEvent(new KeyboardEvent('keydown', { key: 'k', metaKey: true }))
+    const row = (i: number) =>
+      Array.from(document.querySelectorAll('button')).find((b) => b.textContent === `Row ${i}`)!
+
+    row(3).focus()
+    press()
+    expect(onSelect).toHaveBeenLastCalledWith('copy-3')
+
+    await fireEvent.click(row(7))
+    await nextTick()
+    press()
+    expect(onSelect).toHaveBeenLastCalledWith('copy-7')
+
+    ;(document.activeElement as HTMLElement | null)?.blur()
+    document.body.focus()
+    press()
+    expect(onSelect).toHaveBeenLastCalledWith('copy-0')
+  })
 })
