@@ -1,5 +1,6 @@
 <script setup lang="ts">
   import Button from '@aziontech/webkit/button'
+  import CopyButton from '@aziontech/webkit/copy-button'
   import EmptyState from '@aziontech/webkit/empty-state'
   import { ref } from 'vue'
 
@@ -20,13 +21,13 @@
     <div class="w-full max-w-(--container-md)">
       <EmptyState
         title="Something went wrong on our side"
-        description="This page could not load. Nothing you saved was lost. Try again in a moment; if it keeps failing, check the system status."
+        description="This page could not load. Nothing you saved was lost. Retry in a moment; if it keeps failing, check the system status."
         icon="pi pi-exclamation-triangle"
       >
         <template #actions>
           <div class="flex flex-wrap items-center justify-center gap-(--spacing-xs)">
             <Button
-              label="Try again"
+              label="Retry"
               kind="primary"
               size="medium"
               icon="pi pi-refresh"
@@ -42,8 +43,16 @@
               target="_blank"
             />
           </div>
-          <p class="m-0 text-body-xs text-(--text-muted)">
-            Error reference: <bdi class="font-mono">{{ reference }}</bdi>
+          <p
+            class="m-0 flex items-center justify-center gap-(--spacing-xxs) text-body-xs text-(--text-muted)"
+          >
+            Error reference:
+            <bdi class="text-label-code-sm text-(--text-default)">{{ reference }}</bdi>
+            <CopyButton
+              :value="reference"
+              aria-label="Copy the error reference"
+              copied-label="Error reference copied"
+            />
           </p>
         </template>
       </EmptyState>
