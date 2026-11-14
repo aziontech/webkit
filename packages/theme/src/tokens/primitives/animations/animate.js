@@ -1,19 +1,32 @@
+const PRODUCTIVE_ENTRANCE = 'cubic-bezier(0.39, 0.57, 0.56, 1)'
+const PRODUCTIVE_EXIT = 'cubic-bezier(0.55, 0.09, 0.68, 0.53)'
+const EXPRESSIVE_ENTRANCE = 'cubic-bezier(0.17, 0.84, 0.44, 1)'
+const EXPRESSIVE_EXIT = 'cubic-bezier(0.95, 0.05, 0.8, 0.04)'
+const FAST_01 = '70ms'
+const FAST_02 = '110ms'
+const MODERATE_01 = '150ms'
+const MODERATE_02 = '240ms'
+const SLOW_01 = '400ms'
+const SLOW_02 = '700ms'
+const SLOW_03 = '1100ms'
+const SLOW_04 = '2100ms'
+
 export const curve = {
-  'productive-entrance': 'cubic-bezier(0.39, 0.57, 0.56, 1)',
-  'productive-exit': 'cubic-bezier(0.55, 0.09, 0.68, 0.53)',
-  'expressive-entrance': 'cubic-bezier(0.17, 0.84, 0.44, 1)',
-  'expressive-exit': 'cubic-bezier(0.95, 0.05, 0.8, 0.04)'
+  'productive-entrance': PRODUCTIVE_ENTRANCE,
+  'productive-exit': PRODUCTIVE_EXIT,
+  'expressive-entrance': EXPRESSIVE_ENTRANCE,
+  'expressive-exit': EXPRESSIVE_EXIT
 }
 
 export const duration = {
-  'fast-01': '70ms',
-  'fast-02': '110ms',
-  'moderate-01': '150ms',
-  'moderate-02': '240ms',
-  'slow-01': '400ms',
-  'slow-02': '700ms',
-  'slow-03': '1100ms',
-  'slow-04': '2100ms'
+  'fast-01': FAST_01,
+  'fast-02': FAST_02,
+  'moderate-01': MODERATE_01,
+  'moderate-02': MODERATE_02,
+  'slow-01': SLOW_01,
+  'slow-02': SLOW_02,
+  'slow-03': SLOW_03,
+  'slow-04': SLOW_04
 }
 
 export const animate = {
@@ -26,18 +39,18 @@ export const animate = {
   'fade-in': 'fadeIn 220ms ease-in-out',
   'fade-out': 'fadeOut 220ms ease-in-out',
   'slide-down': 'slideDown 220ms ease-in-out',
-  'highlight-fade': `highlight ${duration['slow-03']} ease-in forwards`,
-  'page-enter': `pageEnter ${duration['moderate-02']} ${curve['productive-entrance']}`,
-  'content-enter': `contentEnter ${duration['moderate-02']} ${curve['productive-entrance']} var(--content-enter-delay, 0s) backwards`,
-  'popup-scale-in': `popupScaleIn ${duration['moderate-01']} ${curve['productive-entrance']}`,
-  'popup-scale-out': `popupScaleOut ${duration['fast-02']} ${curve['productive-exit']}`,
-  'slide-in-left': `slideInLeft ${duration['moderate-02']} ${curve['productive-entrance']}`,
-  'slide-out-left': `slideOutLeft ${duration['moderate-01']} ${curve['productive-exit']}`,
-  'slide-in-right': `slideInRight ${duration['moderate-02']} ${curve['productive-entrance']}`,
-  'slide-out-right': `slideOutRight ${duration['moderate-01']} ${curve['productive-exit']}`,
-  'progress-indeterminate': `progressIndeterminate ${duration['slow-04']} ${curve['productive-entrance']} infinite`,
-  'progress-indeterminate-short': `progressIndeterminateShort ${duration['slow-04']} ${curve['expressive-entrance']} ${duration['slow-03']} infinite`,
-  'flow-dash': `flowDash ${duration['slow-02']} linear infinite`,
+  'highlight-fade': `highlight ${SLOW_03} ease-in forwards`,
+  'page-enter': `pageEnter ${MODERATE_02} ${PRODUCTIVE_ENTRANCE}`,
+  'content-enter': `contentEnter ${MODERATE_02} ${PRODUCTIVE_ENTRANCE} var(--content-enter-delay, 0s) backwards`,
+  'popup-scale-in': `popupScaleIn ${MODERATE_01} ${PRODUCTIVE_ENTRANCE}`,
+  'popup-scale-out': `popupScaleOut ${FAST_02} ${PRODUCTIVE_EXIT}`,
+  'slide-in-left': `slideInLeft ${MODERATE_02} ${PRODUCTIVE_ENTRANCE}`,
+  'slide-out-left': `slideOutLeft ${MODERATE_01} ${PRODUCTIVE_EXIT}`,
+  'slide-in-right': `slideInRight ${MODERATE_02} ${PRODUCTIVE_ENTRANCE}`,
+  'slide-out-right': `slideOutRight ${MODERATE_01} ${PRODUCTIVE_EXIT}`,
+  'progress-indeterminate': `progressIndeterminate ${SLOW_04} ${PRODUCTIVE_ENTRANCE} infinite`,
+  'progress-indeterminate-short': `progressIndeterminateShort ${SLOW_04} ${EXPRESSIVE_ENTRANCE} ${SLOW_03} infinite`,
+  'flow-dash': `flowDash ${SLOW_02} linear infinite`,
   'texture-wave-a': 'textureWaveA 13s linear infinite',
   'texture-wave-b': 'textureWaveB 19s linear infinite',
   'brand-marquee': 'brandMarquee 59s linear infinite'
