@@ -7,6 +7,26 @@ import { expectNoA11yViolations } from '../../../test/axe'
 import StickyCarousel from './sticky-carousel.vue'
 
 describe('StickyCarousel', () => {
+  it('carries the fallback testid and lets a consumer testid win', () => {
+    const { getByTestId, unmount } = render(StickyCarousel, {
+      props: { title: 'T', items: [{ title: 'a', description: 'b' }] }
+    })
+    expect(getByTestId('sections-sticky-carousel')).toBeInTheDocument()
+    unmount()
+    const custom = render(StickyCarousel, {
+      props: { title: 'T', items: [{ title: 'a', description: 'b' }] },
+      attrs: { 'data-testid': 'custom' }
+    })
+    expect(custom.getByTestId('custom')).toBeInTheDocument()
+  })
+
+  it('sets the anchor as the band id on the band root', () => {
+    const { getByTestId } = render(StickyCarousel, {
+      props: { title: 'T', items: [{ title: 'a', description: 'b' }], anchor: 'steps' }
+    })
+    expect(getByTestId('sections-sticky-carousel')).toHaveAttribute('id', 'steps')
+  })
+
   it('renders nothing without a title or items', () => {
     const { queryByTestId } = render(StickyCarousel, { props: { title: 'T' } })
     expect(queryByTestId('sections-sticky-carousel')).toBeNull()

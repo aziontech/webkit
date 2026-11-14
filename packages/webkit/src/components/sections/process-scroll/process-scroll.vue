@@ -94,7 +94,7 @@
     :data-testid="testId"
     :data-pinned="pinned || null"
     :style="{ height: runwayHeight || undefined, '--process-scroll-offset': headerOffset }"
-    class="group/process"
+    class="scroll-mt-(--spacing-xxl) group/process"
   >
     <div
       ref="band"

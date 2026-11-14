@@ -66,7 +66,7 @@
     v-bind="$attrs"
     :id="anchor || undefined"
     :data-testid="testId"
-    class="p-(--spacing-lg)"
+    class="scroll-mt-(--spacing-xxl) p-(--spacing-lg)"
   >
     <Carousel
       kind="cards"

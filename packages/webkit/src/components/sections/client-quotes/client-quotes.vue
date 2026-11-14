@@ -81,6 +81,7 @@
   <div
     v-bind="$attrs"
     :id="anchor || undefined"
+    class="scroll-mt-(--spacing-xxl)"
     :data-testid="testId"
   >
     <SectionModule

@@ -85,6 +85,7 @@
     v-bind="$attrs"
     :data-testid="testId"
     :id="anchor || undefined"
+    class="scroll-mt-(--spacing-xxl)"
     :data-kind="kind"
     :aria-label="title || undefined"
   >

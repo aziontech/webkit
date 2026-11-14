@@ -137,6 +137,7 @@
   <section
     v-bind="$attrs"
     :id="anchor || undefined"
+    class="scroll-mt-(--spacing-xxl)"
     :data-testid="testId"
     :aria-label="ariaLabel || undefined"
   >
