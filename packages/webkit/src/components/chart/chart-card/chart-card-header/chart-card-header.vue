@@ -19,11 +19,11 @@
 </script>
 
 <template>
-  <header
+  <div
     v-bind="$attrs"
     :data-testid="testId"
     class="flex min-h-12 shrink-0 flex-wrap items-center gap-(--spacing-xs) px-(--spacing-md) pt-(--spacing-sm)"
   >
     <slot />
-  </header>
+  </div>
 </template>
