@@ -346,8 +346,8 @@
                   </span>
                   <p class="text-body-sm text-(--text-muted)">{{ group.notice }}</p>
                   <Button
-                    :label="group.action"
-                    :href="group.href"
+                    :label="group.action ?? ''"
+                    :href="group.href ?? ''"
                     kind="transparent"
                     size="small"
                     icon="pi pi-external-link"
