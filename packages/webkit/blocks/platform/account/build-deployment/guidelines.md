@@ -18,7 +18,7 @@ How every deploy in the account routes. A Deployment Setting holds a binding pol
 
 ### A. Page heading — `PageHeader`, `Button` (required)
 
-Title `Build and deployment` and one sentence that says every environment is linked automatically. Actions: Documentation and the primary `Create Deployment Settings` at `size="large"`, which opens the drawer (G).
+Title `Build and deployment` and one sentence that says every environment is linked automatically. Actions: Documentation and the primary `Create Deployment Setting` at `size="large"`, which opens the drawer (G).
 
 ### B. What a Deployment Setting is — `Alert` (required)
 
@@ -28,9 +28,9 @@ A small info `Alert`, closable, that explains the binding policy, the deployment
 
 A `SettingsSection` with an anchor around a flush `Card` and an `Item.List` of `SettingRow`s: Binding policy and Deployment policy as large `Select`s whose value reads the policy label, then `Apply to existing Deployment Settings` as a compact `Switch`. Changing any of them raises a `SaveBar` (entering and leaving with a short translate and fade, none under reduced motion) that says `You have unsaved changes.` with Discard and Save. Save spins, keeps the values, turns Apply off again and toasts what changed: with Apply on, how many settings now use the binding policy (Default is never changed).
 
-### D. All services — `Accordion`, `Input`, `Tag`, `Select` (required)
+### D. All services — `Accordion`, `Input`, `Tag`, `Select`, `Pagination` (required)
 
-A `SettingsSection` around a flush `Card` with one collapsible `Accordion` item, closed at first, its trigger a level 3 heading: `All services`, the count and a warning `Tag` with how many services use a shared setting. Inside: a search `Input` over service and setting names, then a list named Services with one entry per service (its name links to the service) and one row per environment: the environment and its deployment policy as small `Tag`s, a `Select` named `Deployment Setting for <service> <environment>` that offers only the settings with the same deployment policy (inactive ones disabled), `Linked automatically` while the link was never changed, and `Shared · N services` when the setting reaches more than one. A rebind applies at once and toasts; when the new setting is shared, the toast is a warning that says how many services a deploy now reaches.
+A `SettingsSection` around a flush `Card` with one collapsible `Accordion` item, closed at first, its trigger a level 3 heading: `All services`, the count and a warning `Tag` with how many services use a shared setting. Inside: a search `Input` over service and setting names (`v-bind="filterProps"` from a `useCollection` over the services), then a list named Services, ten services per page with a `Pagination` under it when more match, so an account with hundreds of services never mounts hundreds of `Select`s, with one entry per service (its name links to the service) and one row per environment: the environment and its deployment policy as small `Tag`s, a `Select` named `Deployment Setting for <service> <environment>` that offers only the settings with the same deployment policy (inactive ones disabled), `Linked automatically` while the link was never changed, and `Shared · N services` when the setting reaches more than one. A rebind applies at once and toasts; when the new setting is shared, the toast is a warning that says how many services a deploy now reaches. A search with no match shows a small `EmptyState` (`No matching services`) with Clear search, inside a polite status region.
 
 ### E. Deployment Settings controls — `PropertyFilter`, `Tooltip`, `IconButton`, `CollectionPreferences` (required)
 
@@ -42,7 +42,7 @@ The table-view controls row (`platform/view/table-view`): a `PropertyFilter` ove
 
 ### G. Create and edit drawer — `Drawer`, `DrawerPortal`, `DrawerOverlay`, `DrawerContent`, `DrawerTitle`, `DrawerClose`, `PanelHeader`, `PanelContent`, `PanelFooter`, `Field`, `Textarea`, `RadioButton` (required)
 
-The form of `platform/create/create-in-drawer#DeploymentSettings` in a medium right `Drawer`: General (Name, required and unique; Description; Active `Switch`) and Routing and policy (binding policy and deployment policy as `RadioButton` groups with a description each, starting from the saved defaults). Edit opens the same form filled, titled `Edit Deployment Settings`, with the deployment policy locked because it cannot change after creation. Cancel and the primary `Create Deployment Settings` or `Save changes`, which spins; the drawer cannot be dismissed while it saves. A missing or taken name shows on the field after submit and focus moves to it.
+This page owns the Deployment Setting form, in a medium right `Drawer` (`platform/create/create-in-drawer#DeploymentSettings` should match it field for field): General (Name, required and unique; Description; Active `Switch`) and Routing and policy (binding policy and deployment policy as `RadioButton` groups with a description each, starting from the saved defaults). Edit opens the same form filled, titled `Edit Deployment Setting`, with the deployment policy locked because it cannot change after creation. Cancel and the primary `Create Deployment Setting` or `Save changes`, which spins; the drawer cannot be dismissed while it saves. A missing or taken name shows on the field after submit and focus moves to it.
 
 ### H. Loading and no services — `Skeleton` (conditional)
 
@@ -67,7 +67,8 @@ Saving defaults, rebinding, creating, editing, cloning and deleting end in a toa
 
 ## Copy
 
-- **Title:** `Build and deployment`. **Action:** `Create Deployment Settings`; the drawer titles `Create Deployment Settings` and `Edit Deployment Settings`, the submits `Create Deployment Settings` and `Save changes`.
+- **Title:** `Build and deployment`. **Action:** `Create Deployment Setting`; the drawer titles `Create Deployment Setting` and `Edit Deployment Setting`, the submits `Create Deployment Setting` and `Save changes`. The label does not change on the way in.
+- **No match:** `No matching services`, `No service or setting matches “…”.`, `Clear search`.
 - **Sections:** `New service defaults`, `All services`, `Deployment Settings`.
 - **Policies:** `Strict`, `Flexible`; `Single`, `Versioned`.
 - **Tags:** `System`, `Shared`, `Linked automatically`, `Shared · 2 services`, `1 on a shared setting`.

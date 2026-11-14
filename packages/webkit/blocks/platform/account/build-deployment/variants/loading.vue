@@ -18,6 +18,7 @@
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
   import PageHeader from '@aziontech/webkit/page-header'
+  import Pagination from '@aziontech/webkit/pagination-root'
   import PanelContent from '@aziontech/webkit/panel-content'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
@@ -234,6 +235,7 @@
     applyToExisting: false
   }
 
+  const SERVICES_PAGE_SIZE = 10
   const settings = ref<DeploymentSetting[]>(seedSettings)
   const services = ref<Service[]>(seedServices)
   const loading = ref(true)
@@ -286,17 +288,25 @@
   const reachLabel = (count: number) =>
     count === 0 ? 'No services' : count === 1 ? '1 service' : `${count} services`
 
-  const query = ref('')
-  const visibleServices = computed(() => {
-    const needle = query.value.trim().toLowerCase()
-    if (!needle) return services.value
-    return services.value.filter(
-      (service) =>
-        service.name.toLowerCase().includes(needle) ||
-        service.environments.some((environment) =>
-          settingName(environment.settingId).toLowerCase().includes(needle)
-        )
-    )
+  const serviceRows = computed(() =>
+    services.value.map((service) => ({
+      ...service,
+      settings: service.environments
+        .map((environment) => settingName(environment.settingId))
+        .join(' ')
+    }))
+  )
+  const {
+    items: pagedServices,
+    totalCount: matchingServiceCount,
+    filterProps: serviceFilterProps,
+    paginationProps: servicePaginationProps,
+    clearFilters: clearServiceSearch
+  } = useCollection({
+    items: serviceRows,
+    columns: [{ accessorKey: 'name' }, { accessorKey: 'settings' }],
+    filtering: { fields: ['name', 'settings'] },
+    pagination: { pageSize: SERVICES_PAGE_SIZE, pageSizeOptions: [SERVICES_PAGE_SIZE] }
   })
   const sharedCount = computed(
     () =>
@@ -418,7 +428,7 @@
   const submitting = ref(false)
   const formEl = ref<HTMLFormElement | null>(null)
   const drawerTitle = computed(() =>
-    editingId.value ? 'Edit Deployment Settings' : 'Create Deployment Settings'
+    editingId.value ? 'Edit Deployment Setting' : 'Create Deployment Setting'
   )
 
   const openCreate = () => {
@@ -556,7 +566,7 @@
             target="_blank"
           />
           <Button
-            label="Create Deployment Settings"
+            label="Create Deployment Setting"
             icon="pi pi-plus"
             kind="primary"
             size="large"
@@ -704,7 +714,7 @@
                     <Accordion.Content>
                       <div class="flex min-w-0 flex-col gap-(--spacing-md)">
                         <Input
-                          v-model="query"
+                          v-bind="serviceFilterProps"
                           size="medium"
                           placeholder="Search services or settings"
                           aria-label="Search services or Deployment Settings"
@@ -717,20 +727,33 @@
                             />
                           </template>
                         </Input>
-                        <p
-                          v-if="!visibleServices.length"
-                          class="py-(--spacing-md) text-body-sm text-(--text-muted)"
+                        <div
+                          v-if="!matchingServiceCount"
                           role="status"
                         >
-                          No service or setting matches “{{ query }}”.
-                        </p>
+                          <EmptyState
+                            size="small"
+                            icon="pi pi-search"
+                            title="No matching services"
+                            :description="`No service or setting matches “${serviceFilterProps.modelValue}”.`"
+                          >
+                            <template #actions>
+                              <Button
+                                label="Clear search"
+                                kind="outlined"
+                                size="small"
+                                @click="clearServiceSearch"
+                              />
+                            </template>
+                          </EmptyState>
+                        </div>
                         <ul
                           v-else
                           class="m-0 flex list-none flex-col p-0"
                           aria-label="Services"
                         >
                           <li
-                            v-for="service in visibleServices"
+                            v-for="service in pagedServices"
                             :key="service.id"
                             class="flex min-w-0 flex-col gap-(--spacing-xs) border-b border-(--border-muted) py-(--spacing-sm) last:border-b-0"
                           >
@@ -792,6 +815,11 @@
                             </div>
                           </li>
                         </ul>
+                        <Pagination
+                          v-if="matchingServiceCount > SERVICES_PAGE_SIZE"
+                          v-bind="servicePaginationProps"
+                          aria-label="Services pages"
+                        />
                       </div>
                     </Accordion.Content>
                   </Accordion.Item>
@@ -1158,7 +1186,7 @@
                 />
                 <Button
                   type="submit"
-                  :label="editingId ? 'Save changes' : 'Create Deployment Settings'"
+                  :label="editingId ? 'Save changes' : 'Create Deployment Setting'"
                   kind="primary"
                   size="medium"
                   :loading="submitting"
