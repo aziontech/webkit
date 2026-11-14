@@ -9,12 +9,12 @@
     },
     {
       "name": "Toggle",
-      "summary": "`toggleable=true` (default) renders the visibility toggle button on the trailing edge; `toggleable=false` renders a plain password field and frees the `iconRight` slot.",
+      "summary": "`toggleable=true` (default) renders the visibility toggle button on the trailing edge; `toggleable=false` renders a plain password field and frees the `suffix` slot.",
       "file": "toggle.vue"
     },
     {
       "name": "IconLeft",
-      "summary": "Leading `iconLeft` slot \u2014 the only icon slot honored when `toggleable=true`.",
+      "summary": "Leading `prefix` slot \u2014 the only icon slot honored when `toggleable=true`.",
       "file": "icon-left.vue"
     },
     {

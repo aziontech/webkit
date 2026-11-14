@@ -438,7 +438,7 @@
         @blur="onBlur"
         @keydown="onKeydown"
       >
-        <template #iconLeft>
+        <template #prefix>
           <i
             class="pi pi-search text-(--text-muted)"
             aria-hidden="true"
@@ -446,7 +446,7 @@
         </template>
         <template
           v-if="loading"
-          #iconRight
+          #suffix
         >
           <Spinner
             class="size-3.5 text-(--text-muted)"

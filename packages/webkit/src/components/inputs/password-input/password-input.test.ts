@@ -11,7 +11,7 @@ describe('PasswordInput', () => {
   it('renders the input with the default testid and masks the value by default', () => {
     const { getByTestId } = render(PasswordInput)
 
-    const input = getByTestId('input-password-input') as HTMLInputElement
+    const input = getByTestId('password-input') as HTMLInputElement
     expect(input.tagName).toBe('INPUT')
     // visible defaults to false → type is "password".
     expect(input.getAttribute('type')).toBe('password')
@@ -31,7 +31,7 @@ describe('PasswordInput', () => {
       props: { modelValue: 'hunter2' }
     })
 
-    expect((getByTestId('input-password-input') as HTMLInputElement).value).toBe('hunter2')
+    expect((getByTestId('password-input') as HTMLInputElement).value).toBe('hunter2')
   })
 
   it('reflects the placeholder prop on the input', () => {
@@ -39,9 +39,7 @@ describe('PasswordInput', () => {
       props: { placeholder: 'Enter your password' }
     })
 
-    expect(getByTestId('input-password-input').getAttribute('placeholder')).toBe(
-      'Enter your password'
-    )
+    expect(getByTestId('password-input').getAttribute('placeholder')).toBe('Enter your password')
   })
 
   it('reflects the maxLength prop on the native maxlength attribute', () => {
@@ -49,18 +47,18 @@ describe('PasswordInput', () => {
       props: { maxLength: 8 }
     })
 
-    expect(getByTestId('input-password-input').getAttribute('maxlength')).toBe('8')
+    expect(getByTestId('password-input').getAttribute('maxlength')).toBe('8')
   })
 
   it('applies the autocomplete prop, defaulting to current-password', () => {
     const withDefault = render(PasswordInput)
-    expect(withDefault.getByTestId('input-password-input').getAttribute('autocomplete')).toBe(
+    expect(withDefault.getByTestId('password-input').getAttribute('autocomplete')).toBe(
       'current-password'
     )
     withDefault.unmount()
 
     const newPassword = render(PasswordInput, { props: { autocomplete: 'new-password' } })
-    expect(newPassword.getByTestId('input-password-input').getAttribute('autocomplete')).toBe(
+    expect(newPassword.getByTestId('password-input').getAttribute('autocomplete')).toBe(
       'new-password'
     )
   })
@@ -70,7 +68,7 @@ describe('PasswordInput', () => {
   it('emits update:modelValue with the new value on input', async () => {
     const { getByTestId, emitted } = render(PasswordInput)
 
-    const input = getByTestId('input-password-input') as HTMLInputElement
+    const input = getByTestId('password-input') as HTMLInputElement
     await fireEvent.update(input, 'new-secret')
 
     const events = emitted()['update:modelValue']
@@ -83,7 +81,7 @@ describe('PasswordInput', () => {
       props: { modelValue: '' }
     })
 
-    const input = getByTestId('input-password-input') as HTMLInputElement
+    const input = getByTestId('password-input') as HTMLInputElement
     await fireEvent.update(input, 'AbC123!@#')
 
     expect(emitted()['update:modelValue']).toEqual([['AbC123!@#']])
@@ -91,7 +89,7 @@ describe('PasswordInput', () => {
 
   it('keeps its own value when no v-model is bound', async () => {
     const { getByTestId, emitted } = render(PasswordInput)
-    const input = getByTestId('input-password-input') as HTMLInputElement
+    const input = getByTestId('password-input') as HTMLInputElement
     await fireEvent.update(input, 'secret')
     await nextTick()
     expect(input.value).toBe('secret')
@@ -110,7 +108,7 @@ describe('PasswordInput', () => {
         })
     })
     const { getByTestId } = render(Host)
-    const input = getByTestId('input-password-input') as HTMLInputElement
+    const input = getByTestId('password-input') as HTMLInputElement
     expect(input.value).toBe('first')
     await fireEvent.update(input, 'typed')
     expect(value.value).toBe('typed')
@@ -126,7 +124,7 @@ describe('PasswordInput', () => {
       props: { disabled: true }
     })
 
-    const input = getByTestId('input-password-input') as HTMLInputElement
+    const input = getByTestId('password-input') as HTMLInputElement
     // Native disabled attribute is the mechanism that blocks user editing.
     expect(input.disabled).toBe(true)
     expect(input.hasAttribute('disabled')).toBe(true)
@@ -136,7 +134,7 @@ describe('PasswordInput', () => {
 
   it('sets data-disabled on the root and disabled on the input only when disabled', () => {
     const on = render(PasswordInput, { props: { disabled: true } })
-    const onInput = on.getByTestId('input-password-input')
+    const onInput = on.getByTestId('password-input')
     const onRoot = onInput.closest('span[data-toggleable], span')
     expect(onInput.hasAttribute('disabled')).toBe(true)
     // data-disabled is rendered as `disabled || null` on the root span.
@@ -144,20 +142,20 @@ describe('PasswordInput', () => {
     on.unmount()
 
     const off = render(PasswordInput, { props: { disabled: false } })
-    const offInput = off.getByTestId('input-password-input')
+    const offInput = off.getByTestId('password-input')
     expect(offInput.hasAttribute('disabled')).toBe(false)
     expect(offInput.closest('span')?.getAttribute('data-disabled')).toBeNull()
   })
 
   it('sets aria-invalid on the input and data-invalid on the root only when invalid', () => {
     const on = render(PasswordInput, { props: { invalid: true } })
-    const onInput = on.getByTestId('input-password-input')
+    const onInput = on.getByTestId('password-input')
     expect(onInput.getAttribute('aria-invalid')).toBe('true')
     expect(onInput.closest('span')?.getAttribute('data-invalid')).toBe('true')
     on.unmount()
 
     const off = render(PasswordInput, { props: { invalid: false } })
-    const offInput = off.getByTestId('input-password-input')
+    const offInput = off.getByTestId('password-input')
     // aria-invalid is `invalid || undefined` → attribute absent when false.
     expect(offInput.hasAttribute('aria-invalid')).toBe(false)
     expect(offInput.closest('span')?.getAttribute('data-invalid')).toBeNull()
@@ -165,14 +163,14 @@ describe('PasswordInput', () => {
 
   it('sets aria-required + required on the input and data-required on the root only when required', () => {
     const on = render(PasswordInput, { props: { required: true } })
-    const onInput = on.getByTestId('input-password-input')
+    const onInput = on.getByTestId('password-input')
     expect(onInput.getAttribute('aria-required')).toBe('true')
     expect(onInput.hasAttribute('required')).toBe(true)
     expect(onInput.closest('span')?.getAttribute('data-required')).toBe('true')
     on.unmount()
 
     const off = render(PasswordInput, { props: { required: false } })
-    const offInput = off.getByTestId('input-password-input')
+    const offInput = off.getByTestId('password-input')
     expect(offInput.hasAttribute('aria-required')).toBe(false)
     expect(offInput.hasAttribute('required')).toBe(false)
     expect(offInput.closest('span')?.getAttribute('data-required')).toBeNull()
@@ -181,7 +179,7 @@ describe('PasswordInput', () => {
   it('sets the readonly attribute on the input when readonly', () => {
     const { getByTestId } = render(PasswordInput, { props: { readonly: true } })
 
-    expect((getByTestId('input-password-input') as HTMLInputElement).readOnly).toBe(true)
+    expect((getByTestId('password-input') as HTMLInputElement).readOnly).toBe(true)
   })
 
   // --- toggleable visibility button behavior ---
@@ -189,7 +187,7 @@ describe('PasswordInput', () => {
   it('renders the visibility toggle button by default and flips the input type on click', async () => {
     const { getByTestId, getByRole } = render(PasswordInput)
 
-    const input = getByTestId('input-password-input') as HTMLInputElement
+    const input = getByTestId('password-input') as HTMLInputElement
     const root = input.closest('span') as HTMLElement
     expect(input.getAttribute('type')).toBe('password')
     // data-visible is `visible || null` → absent while masked.
@@ -221,16 +219,16 @@ describe('PasswordInput', () => {
     expect(queryByRole('button')).toBeNull()
     // Root reflects data-toggleable only when true; false → attribute absent.
     expect(
-      getByTestId('input-password-input').closest('span')?.getAttribute('data-toggleable')
+      getByTestId('password-input').closest('span')?.getAttribute('data-toggleable')
     ).toBeNull()
   })
 
   it('reflects data-toggleable on the root when toggleable is true', () => {
     const { getByTestId } = render(PasswordInput, { props: { toggleable: true } })
 
-    expect(
-      getByTestId('input-password-input').closest('span')?.getAttribute('data-toggleable')
-    ).toBe('true')
+    expect(getByTestId('password-input').closest('span')?.getAttribute('data-toggleable')).toBe(
+      'true'
+    )
   })
 
   it('disables the toggle button when the field is disabled', () => {
@@ -241,6 +239,18 @@ describe('PasswordInput', () => {
   })
 
   // --- slots ---
+
+  it('renders the prefix slot, and the suffix slot only when toggleable is false', () => {
+    const plain = render(PasswordInput, {
+      props: { toggleable: false },
+      slots: { prefix: '<i data-testid="p-icon" />', suffix: '<i data-testid="s-icon" />' }
+    })
+    expect(plain.getByTestId('p-icon').closest('[aria-hidden="true"]')).toBeTruthy()
+    expect(plain.getByTestId('s-icon')).toBeTruthy()
+    plain.unmount()
+    const toggle = render(PasswordInput, { slots: { suffix: '<i data-testid="s-icon" />' } })
+    expect(toggle.queryByTestId('s-icon')).toBeNull()
+  })
 
   it('renders the iconLeft slot and marks its wrapper aria-hidden', () => {
     const { getByTestId } = render(PasswordInput, {
@@ -268,10 +278,7 @@ describe('PasswordInput', () => {
     })
     expect(noToggle.queryByTestId('right-icon')).toBeTruthy()
     expect(
-      noToggle
-        .getByTestId('input-password-input')
-        .closest('span')
-        ?.getAttribute('data-has-icon-right')
+      noToggle.getByTestId('password-input').closest('span')?.getAttribute('data-has-icon-right')
     ).toBe('true')
   })
 
@@ -315,7 +322,7 @@ describe('PasswordInput', () => {
     // the accessible name is supplied here rather than baked into the canonical story.
     const { getByTestId, container } = render(Default, { props: { 'aria-label': 'Password' } })
 
-    expect(getByTestId('input-password-input')).toBeTruthy()
+    expect(getByTestId('password-input')).toBeTruthy()
     await expectNoA11yViolations(container)
   })
 
@@ -330,12 +337,12 @@ describe('PasswordInput', () => {
 describe('PasswordInput — direction of the typed value', () => {
   it('uses dir="auto" so a value in another script keeps its own direction', () => {
     const { getByTestId } = render(PasswordInput)
-    expect(getByTestId('input-password-input').getAttribute('dir')).toBe('auto')
+    expect(getByTestId('password-input').getAttribute('dir')).toBe('auto')
   })
 
   it('lets a dir attribute override the default', () => {
     const { getByTestId } = render(PasswordInput, { attrs: { dir: 'ltr' } })
-    expect(getByTestId('input-password-input').getAttribute('dir')).toBe('ltr')
+    expect(getByTestId('password-input').getAttribute('dir')).toBe('ltr')
   })
 })
 
@@ -372,7 +379,7 @@ describe('PasswordInput — monospace', () => {
       props: { monospace: true, autocomplete: 'off' }
     })
     expect((container.firstElementChild as HTMLElement).hasAttribute('data-monospace')).toBe(true)
-    const input = getByTestId('input-password-input') as HTMLInputElement
+    const input = getByTestId('password-input') as HTMLInputElement
     await fireEvent.update(input, 'azn_token')
     expect(emitted()['update:modelValue']).toEqual([['azn_token']])
     await fireEvent.click(getByRole('button', { name: 'Show password' }))

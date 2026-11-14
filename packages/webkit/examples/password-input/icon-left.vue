@@ -11,7 +11,7 @@
       v-model="password"
       placeholder="Enter your password"
     >
-      <template #iconLeft>
+      <template #prefix>
         <i class="pi pi-lock" />
       </template>
     </PasswordInput>

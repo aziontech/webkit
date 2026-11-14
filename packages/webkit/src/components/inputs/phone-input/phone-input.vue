@@ -94,7 +94,7 @@
   const { t } = useTranslate({ phoneInput: en.phoneInput })
   const generatedId = useId()
 
-  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'input-phone-input')
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'phone-input')
 
   const {
     controlId,
@@ -249,7 +249,7 @@
             :data-testid="`${testId}__search`"
             @keydown="onSearchKeydown"
           >
-            <template #iconLeft>
+            <template #prefix>
               <i class="pi pi-search" />
             </template>
           </Input>

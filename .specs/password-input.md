@@ -3,13 +3,13 @@ name: password-input
 category: inputs
 structure: monolithic
 status: implemented
-spec_version: 3
+spec_version: 4
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3714-10788&m=dev
   node_id: 3714:10788
-checksum: 382ca16c28002cede5cba743c74b71d74c2fbd4a9f736dc1b4a37a769f5bcf2b
+checksum: 4ccbad9dc428d84e8269e49a395755ea0c3f068f2d9e2f4f2d2238b1e71f72f3
 created: 2026-06-16
-last_updated: 2026-11-13
+last_updated: 2026-11-14
 ---
 
 # Input Password — Component Spec
@@ -40,7 +40,7 @@ Aligned with Figma frame `3714:10788` (Webkit / PasswordInput). The token mappin
 ## Best practices
 
 - Set `autocomplete="new-password"` on sign-up and password-change forms; keep the default `current-password` on login.
-- Leave `toggleable` on; turn it off only when you need the `iconRight` slot, which is ignored while the toggle is shown.
+- Leave `toggleable` on; turn it off only when you need the `suffix` slot, which is ignored while the toggle is shown.
 - The field is a fixed 40px tall with no `size` prop; align it with `size="large"` siblings in the same row.
 - Give it an accessible name: a `label` whose `for` matches an `id` passed to the input, or `aria-label`.
 - Set `monospace` on a secret that is code-like: an API token, a client secret, a signing key. Pair it with `autocomplete="off"` and `:spellcheck="false"`, so a revealed token reads character by character (`0`/`O`, `l`/`1`).
@@ -75,7 +75,7 @@ Aligned with Figma frame `3714:10788` (Webkit / PasswordInput). The token mappin
 | `readonly`     | `boolean`                                       | `false`              | false    | Marks the field read-only; value is visible but not editable. Toggle button stays operable.                                                                                                           |
 | `required`     | `boolean`                                       | `false`              | false    | Marks the field as required; sets native `required` and `aria-required`. Visual indicator (asterisk) is owned by the wrapping form-field, not by this component.                                      |
 | `invalid`      | `boolean`                                       | `false`              | false    | Applies the invalid border + ring tokens and sets `aria-invalid`.                                                                                                                                     |
-| `toggleable`   | `boolean`                                       | `true`               | false    | When true, renders the visibility toggle button on the trailing edge of the field. When false, the field behaves as a plain password input with no toggle and the `iconRight` slot becomes available. |
+| `toggleable`   | `boolean`                                       | `true`               | false    | When true, renders the visibility toggle button on the trailing edge of the field. When false, the field behaves as a plain password input with no toggle and the `suffix` slot becomes available. |
 | `autocomplete` | `'current-password' \| 'new-password' \| 'off'` | `'current-password'` | false    | Native `autocomplete` hint for password managers. Use `new-password` for sign-up and password-change flows.                                                                                           |
 | `monospace`    | `boolean`                                       | `false`              | false    | Sets the value and placeholder in the monospace code face (`.text-label-code-sm`) for API tokens, client secrets and keys (`data-monospace`). Same prop as on `Input`.                                |
 
@@ -93,8 +93,10 @@ _none_
 
 | Slot        | Scope | Notes                                                                                                                                                                                                          |
 | ----------- | ----- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `iconLeft`  | —     | Leading icon rendered inside the field, before the input. Hidden from assistive tech (`aria-hidden="true"`).                                                                                                   |
-| `iconRight` | —     | Trailing icon rendered inside the field, after the input. **Only honored when `toggleable=false`** — the visibility toggle occupies this slot when enabled. Hidden from assistive tech (`aria-hidden="true"`). |
+| `prefix`    | —     | Leading adornment at the inline start of the field. Hidden from assistive tech (`aria-hidden="true"`). Same name as on `input` and `number-input`. |
+| `suffix`    | —     | Trailing adornment at the inline end. **Only honored when `toggleable=false`** — the visibility toggle sits there when enabled. Hidden from assistive tech (`aria-hidden="true"`). |
+| `iconLeft`  | —     | `@deprecated since 6.0 — use prefix. Removed in 7.0.` Rendered as the fallback of `prefix`. |
+| `iconRight` | —     | `@deprecated since 6.0 — use suffix. Removed in 7.0.` Rendered as the fallback of `suffix`. |
 
 ## Exposed
 
@@ -109,8 +111,8 @@ _none_
 - `data-disabled` mirrors the `disabled` prop
 - `data-invalid` mirrors the `invalid` prop
 - `data-required` mirrors the `required` prop; drives the warning-border treatment
-- `data-has-icon-left` mirrors `$slots.iconLeft` presence
-- `data-has-icon-right` mirrors `$slots.iconRight` presence (only relevant when `toggleable=false`)
+- `data-has-icon-left` mirrors `$slots.prefix` (or `$slots.iconLeft`) presence
+- `data-has-icon-right` mirrors `$slots.suffix` (or `$slots.iconRight`) presence (only relevant when `toggleable=false`)
 - `data-toggleable` mirrors the `toggleable` prop
 - `data-monospace` mirrors the `monospace` prop: the value (masked or revealed) and the placeholder render in `.text-label-code-sm` instead of `.text-label-sm`.
 - `data-visible` on the root mirrors the internal visibility state (`true` when the password is revealed as plain text)
@@ -173,7 +175,7 @@ _none_
 
 - Default
 - Toggle — justification: composite story rendering `toggleable=true` (default) and `toggleable=false` side by side; documents the built-in toggle behavior, which is the defining feature of this component vs `Input`.
-- IconLeft — justification: documents the `iconLeft` slot, which is the only icon slot honored when `toggleable=true`.
+- IconLeft — justification: documents the `prefix` slot, which is the only icon slot honored when `toggleable=true`.
 - Filled — justification: pre-populated `modelValue` shows the filled visual state and the masked rendering; not visible from the Default story.
 - Invalid — justification: documents the `invalid` visual treatment, which is a top-level prop with distinct token bindings.
 - MaxLength — justification: documents `maxLength` as a hard character cap; behavior is invisible from props alone and only observable while typing.

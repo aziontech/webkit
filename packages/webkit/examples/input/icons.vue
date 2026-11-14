@@ -13,7 +13,7 @@
       v-model="leading"
       placeholder="Leading icon"
     >
-      <template #iconLeft>
+      <template #prefix>
         <i class="pi pi-globe" />
       </template>
     </Input>
@@ -21,7 +21,7 @@
       v-model="trailing"
       placeholder="Trailing icon"
     >
-      <template #iconRight>
+      <template #suffix>
         <i class="pi pi-search" />
       </template>
     </Input>
@@ -29,10 +29,10 @@
       v-model="both"
       placeholder="Both icons"
     >
-      <template #iconLeft>
+      <template #prefix>
         <i class="pi pi-globe" />
       </template>
-      <template #iconRight>
+      <template #suffix>
         <i class="pi pi-search" />
       </template>
     </Input>

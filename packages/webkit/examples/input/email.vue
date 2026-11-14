@@ -1,6 +1,6 @@
 <script setup>
-  import Input from '@aziontech/webkit/input'
   import Button from '@aziontech/webkit/button'
+  import Input from '@aziontech/webkit/input'
   import { ref } from 'vue'
 
   const value = ref('')

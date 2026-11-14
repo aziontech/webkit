@@ -61,7 +61,13 @@
   const model = defineModel<string>({ default: '' })
 
   defineSlots<{
+    /** Leading adornment at the inline start of the field (an icon, a unit). */
+    prefix(): unknown
+    /** Trailing adornment at the inline end of the field. */
+    suffix(): unknown
+    /** @deprecated since 6.0 — use the prefix slot. Removed in 7.0. */
     iconLeft(): unknown
+    /** @deprecated since 6.0 — use the suffix slot. Removed in 7.0. */
     iconRight(): unknown
   }>()
 
@@ -101,8 +107,8 @@
     })
   )
 
-  const hasIconLeft = () => Boolean(slots['iconLeft'])
-  const hasIconRight = () => Boolean(slots['iconRight'])
+  const hasIconLeft = () => Boolean(slots['prefix'] || slots['iconLeft'])
+  const hasIconRight = () => Boolean(slots['suffix'] || slots['iconRight'])
 
   const handleInput = (event: globalThis.Event) => {
     const target = event.target as globalThis.HTMLInputElement
@@ -141,7 +147,7 @@
       class="inline-flex shrink-0 items-center justify-center text-(--text-muted)"
       aria-hidden="true"
     >
-      <slot name="iconLeft" />
+      <slot name="prefix"><slot name="iconLeft" /></slot>
     </span>
 
     <input
@@ -171,7 +177,7 @@
       class="inline-flex shrink-0 items-center justify-center text-(--text-muted)"
       aria-hidden="true"
     >
-      <slot name="iconRight" />
+      <slot name="suffix"><slot name="iconRight" /></slot>
     </span>
   </span>
 </template>
