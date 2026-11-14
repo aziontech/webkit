@@ -1231,6 +1231,11 @@
     "limit": "2.5 KB"
   },
   {
+    "name": "loader",
+    "path": "src/components/ai/loader/loader.vue",
+    "limit": "2.5 KB"
+  },
+  {
     "name": "artifact-canvas",
     "path": "src/components/ai/artifact-canvas/artifact-canvas.vue",
     "limit": "6.5 KB",

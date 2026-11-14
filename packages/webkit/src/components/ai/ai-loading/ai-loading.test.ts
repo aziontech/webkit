@@ -67,4 +67,10 @@ describe('AiLoading', () => {
     const { container } = render(AiLoading, { props: { delay: 0, kind: 'bar' } })
     await expectNoA11yViolations(container)
   })
+
+  it('stays a deprecated alias that renders Loader with its own test id', () => {
+    const { getByTestId } = render(AiLoading, { props: { delay: 0, kind: 'bar' } })
+    expect(getByTestId('ai-ai-loading')).toHaveAttribute('data-kind', 'bar')
+    expect(getByTestId('ai-ai-loading__bar')).toBeTruthy()
+  })
 })

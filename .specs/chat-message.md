@@ -3,11 +3,11 @@ name: chat-message
 category: ai
 structure: composition
 status: implemented
-spec_version: 2
+spec_version: 3
 template: 2
-checksum: 134629a4f5fab879fe6db827f3ee17ea4eda6a923a140aef1b2fbe87ee9e80e2
+checksum: d6a7993275c23b8ddd6eeee36f4e6b806a6c50fc1a4431b65ad030fe1006eeb7
 created: 2026-11-11
-last_updated: 2026-11-13
+last_updated: 2026-11-14
 ---
 
 # ChatMessage — Component Spec
@@ -41,7 +41,7 @@ mark; system messages are a muted centered line. Alignment comes from the enclos
 - `streaming-response` — the safe Markdown renderer for assistant content.
 - `reasoning`, `sources`, `tool-call`, `artifact-preview` — parts that stack inside an assistant message.
 - `copy-button`, `icon-button` — the actions composed into `ChatMessage.Actions`.
-- `ai-loading` — what `pending` renders.
+- `loader` — what `pending` renders.
 
 ## Best practices
 
@@ -64,7 +64,11 @@ mark; system messages are a muted centered line. Alignment comes from the enclos
 </script>
 
 <template>
-  <ChatMessage from="assistant" timestamp="10:42" state="complete">
+  <ChatMessage
+    from="assistant"
+    timestamp="10:42"
+    state="complete"
+  >
     <StreamingResponse :content="answer" />
     <template #actions>
       <ChatMessage.Actions>
@@ -92,7 +96,7 @@ Compound API through `index.ts` (`ChatMessage.Actions`, `ChatMessage.Feedback`);
   - `data-testid` fallback: `ai-chat-message-feedback`.
 
 Exported types: `ChatMessageFrom`, `ChatMessageState`, `ChatMessageFeedbackValue`. Composed DS
-components: `avatar`, `button`, `ai-loading`, `icon-button`, `tooltip`.
+components: `avatar`, `button`, `icon-button`, `loader`, `tooltip`.
 
 ```
 packages/webkit/src/components/ai/chat-message/
@@ -107,15 +111,15 @@ packages/webkit/src/components/ai/chat-message/
 
 ## Props
 
-| Prop           | Type                                               | Default       | Required | JSDoc                                                                                                                                         |
-| -------------- | -------------------------------------------------- | ------------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
-| `from`         | `'user' \| 'assistant' \| 'system'`                | `'assistant'` | false    | Who wrote the message: the person (`user`), the generative AI assistant, or the product (`system`).                                           |
-| `author`       | `string`                                           | `''`          | false    | Author name shown over the message and read in its accessible name. Empty uses the locale catalog (`You`, `AI assistant`, `System`).          |
-| `timestamp`    | `string`                                           | `''`          | false    | Time the message was sent, already formatted for display (`10:42`). Added to the accessible name.                                             |
+| Prop           | Type                                                | Default       | Required | JSDoc                                                                                                                                                       |
+| -------------- | --------------------------------------------------- | ------------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `from`         | `'user' \| 'assistant' \| 'system'`                 | `'assistant'` | false    | Who wrote the message: the person (`user`), the generative AI assistant, or the product (`system`).                                                         |
+| `author`       | `string`                                            | `''`          | false    | Author name shown over the message and read in its accessible name. Empty uses the locale catalog (`You`, `AI assistant`, `System`).                        |
+| `timestamp`    | `string`                                            | `''`          | false    | Time the message was sent, already formatted for display (`10:42`). Added to the accessible name.                                                           |
 | `state`        | `'pending' \| 'streaming' \| 'complete' \| 'error'` | `'complete'`  | false    | Lifecycle: `pending` shows the loading text, `streaming` marks the content busy, `complete` shows the actions, `error` shows the error line with Try again. |
-| `grouped`      | `boolean`                                          | `false`       | false    | Follows a message by the same author: drops the avatar and the author line so stacked messages read as one turn.                               |
-| `errorMessage` | `string`                                           | `''`          | false    | Error text shown while `state` is `error`. Empty uses the locale catalog.                                                                    |
-| `loadingLabel` | `string`                                           | `''`          | false    | Loading text shown while `state` is `pending`. Empty uses `AiLoading`'s own (`Generating a response`).                                        |
+| `grouped`      | `boolean`                                           | `false`       | false    | Follows a message by the same author: drops the avatar and the author line so stacked messages read as one turn.                                            |
+| `errorMessage` | `string`                                            | `''`          | false    | Error text shown while `state` is `error`. Empty uses the locale catalog.                                                                                   |
+| `loadingLabel` | `string`                                            | `''`          | false    | Loading text shown while `state` is `pending`. Empty uses `Loader`'s own (`Generating a response`).                                                         |
 
 ## Events
 
@@ -125,35 +129,35 @@ packages/webkit/src/components/ai/chat-message/
 
 ## Slots
 
-| Slot      | Scope | Notes                                                                                                  |
-| --------- | ----- | ------------------------------------------------------------------------------------------------------ |
+| Slot      | Scope | Notes                                                                                                    |
+| --------- | ----- | -------------------------------------------------------------------------------------------------------- |
 | `default` | —     | The content: text, `StreamingResponse`, `Reasoning`, `Sources`, artifacts. Not rendered while `pending`. |
-| `avatar`  | —     | Replaces the default avatar (person glyph for the user, the assistant mark for the AI).                 |
-| `actions` | —     | Inline actions, usually `ChatMessage.Actions`; shown only when `state` is `complete`.                   |
+| `avatar`  | —     | Replaces the default avatar (person glyph for the user, the assistant mark for the AI).                  |
+| `actions` | —     | Inline actions, usually `ChatMessage.Actions`; shown only when `state` is `complete`.                    |
 
 ## States
 
 - `data-from` (`user` | `assistant` | `system`), `data-status` (mirrors `state`), `data-alignment` (from the conversation), `data-grouped`.
 - `aria-busy="true"` while `pending` or `streaming`.
-- `pending`: `AiLoading` (inline, no delay — the owner decides when a message exists) in place of the content.
+- `pending`: `Loader` (inline, no delay — the owner decides when a message exists) in place of the content.
 - `error`: the content (whatever streamed) stays; an error line with a danger glyph and a Try again `Button` follows.
 - `complete`: the `actions` slot renders.
 
 ## Motion & Animations
 
-_No motion of its own — `AiLoading` owns the pulsing dots shown while `pending`, `IconButton` its loading spinner._
+_No motion of its own — `Loader` owns the pulsing dots shown while `pending`, `IconButton` its loading spinner._
 
 ## Tokens
 
-| Region                         | Token                                   |
-| ------------------------------ | --------------------------------------- |
-| user bubble surface            | `var(--bg-surface-raised)`, `var(--shape-card)` |
-| bubble padding                 | `var(--spacing-md)` / `var(--spacing-sm)` |
-| author line                    | `.text-label-sm`, `var(--text-default)`; time `.text-body-xs`, `var(--text-muted)` |
-| content                        | `.text-body-md`, `var(--text-default)`  |
-| system line                    | `.text-body-sm`, `var(--text-muted)`    |
-| error line                     | `.text-body-sm`, `var(--danger-contrast)` |
-| gaps                           | `var(--spacing-sm)`, `var(--spacing-xs)`, `var(--spacing-xxs)` |
+| Region              | Token                                                                              |
+| ------------------- | ---------------------------------------------------------------------------------- |
+| user bubble surface | `var(--bg-surface-raised)`, `var(--shape-card)`                                    |
+| bubble padding      | `var(--spacing-md)` / `var(--spacing-sm)`                                          |
+| author line         | `.text-label-sm`, `var(--text-default)`; time `.text-body-xs`, `var(--text-muted)` |
+| content             | `.text-body-md`, `var(--text-default)`                                             |
+| system line         | `.text-body-sm`, `var(--text-muted)`                                               |
+| error line          | `.text-body-sm`, `var(--danger-contrast)`                                          |
+| gaps                | `var(--spacing-sm)`, `var(--spacing-xs)`, `var(--spacing-xxs)`                     |
 
 ## Theme gaps
 
@@ -170,20 +174,20 @@ _None._
 
 ## Internationalization
 
-| Key                              | English source                           | Override prop  |
-| -------------------------------- | ---------------------------------------- | -------------- |
-| `chatMessage.user`               | `You`                                    | `author`       |
-| `chatMessage.assistant`          | `AI assistant`                           | `author`       |
-| `chatMessage.system`             | `System`                                 | `author`       |
-| `chatMessage.labelWithTime`      | `{author} at {time}`                     | —              |
-| `chatMessage.error`              | `The response could not be generated.`   | `errorMessage` |
-| `chatMessage.retry`              | `Try again`                              | —              |
-| `chatMessage.actions`            | `Message actions`                        | `ariaLabel` (Actions) |
-| `chatMessage.helpful`            | `Helpful`                                | —              |
-| `chatMessage.notHelpful`         | `Not helpful`                            | —              |
-| `chatMessage.feedback`           | `Response feedback`                      | —              |
-| `chatMessage.feedbackSubmitting` | `Submitting feedback`                    | —              |
-| `chatMessage.feedbackSubmitted`  | `Feedback submitted`                     | —              |
+| Key                              | English source                         | Override prop         |
+| -------------------------------- | -------------------------------------- | --------------------- |
+| `chatMessage.user`               | `You`                                  | `author`              |
+| `chatMessage.assistant`          | `AI assistant`                         | `author`              |
+| `chatMessage.system`             | `System`                               | `author`              |
+| `chatMessage.labelWithTime`      | `{author} at {time}`                   | —                     |
+| `chatMessage.error`              | `The response could not be generated.` | `errorMessage`        |
+| `chatMessage.retry`              | `Try again`                            | —                     |
+| `chatMessage.actions`            | `Message actions`                      | `ariaLabel` (Actions) |
+| `chatMessage.helpful`            | `Helpful`                              | —                     |
+| `chatMessage.notHelpful`         | `Not helpful`                          | —                     |
+| `chatMessage.feedback`           | `Response feedback`                    | —                     |
+| `chatMessage.feedbackSubmitting` | `Submitting feedback`                  | —                     |
+| `chatMessage.feedbackSubmitted`  | `Feedback submitted`                   | —                     |
 
 - Formatting: the owner formats `timestamp` (`Intl.DateTimeFormat` with the provider locale).
 

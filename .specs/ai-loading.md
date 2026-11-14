@@ -3,16 +3,18 @@ name: ai-loading
 category: ai
 structure: monolithic
 status: implemented
-spec_version: 1
+spec_version: 2
 template: 2
-checksum: 47a1f663c1e5039850fd69ef5702c00e02cda1369027c26066e779258d1f1f6f
+checksum: 70aef189464429282bfebcd0ab130d619a88234c9f0ee04cff045c9828afd7d6
 created: 2026-11-11
-last_updated: 2026-11-11
+last_updated: 2026-11-14
 ---
 
 # AiLoading — Component Spec
 
 ## Purpose
+
+> **@deprecated since 6.0 — use `Loader` (`@aziontech/webkit/loader`) instead. Removed in 7.0.** `AiLoading` keeps working: it renders `Loader` with the same props and keeps its `ai-ai-loading` test id. `AiLoadingKind` is deprecated in favour of `LoaderKind`.
 
 The loading state of a generative AI response (Cloudscape generative AI loading states and loading
 bar, AI Elements Loader): visible loading text — `Generating a response`, `Loading list of workloads`
@@ -36,6 +38,7 @@ response that arrives within a second never flickers a loading state.
 - `chat-message` — renders this while `pending`.
 - `progress` — the indeterminate bar it draws.
 - `reasoning` — thinking with a trace.
+- `loader` — the replacement, which this component renders.
 
 ## Best practices
 
@@ -52,7 +55,10 @@ response that arrives within a second never flickers a loading state.
 
 <template>
   <AiLoading />
-  <AiLoading kind="bar" label="Generating a table of cache hits" />
+  <AiLoading
+    kind="bar"
+    label="Generating a table of cache hits"
+  />
 </template>
 ```
 
@@ -62,11 +68,11 @@ _None. Exports: `"./ai-loading"`; type `AiLoadingKind`. Composed DS components: 
 
 ## Props
 
-| Prop    | Type                | Default    | Required | JSDoc                                                                                                                         |
-| ------- | ------------------- | ---------- | -------- | ----------------------------------------------------------------------------------------------------------------------------- |
-| `label` | `string`            | `''`       | false    | Visible loading text, `Generating <what>` or `Loading <what>`, with no end punctuation. Empty uses the locale catalog (`Generating a response`). |
+| Prop    | Type                | Default    | Required | JSDoc                                                                                                                                                         |
+| ------- | ------------------- | ---------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `label` | `string`            | `''`       | false    | Visible loading text, `Generating <what>` or `Loading <what>`, with no end punctuation. Empty uses the locale catalog (`Generating a response`).              |
 | `kind`  | `'inline' \| 'bar'` | `'inline'` | false    | `inline` pulses three dots beside the text (text responses); `bar` draws an indeterminate bar under it, where a table, list or code block is about to appear. |
-| `delay` | `number`            | `1000`     | false    | Milliseconds to wait before showing anything, so a fast response never flickers a loading state.                              |
+| `delay` | `number`            | `1000`     | false    | Milliseconds to wait before showing anything, so a fast response never flickers a loading state.                                                              |
 
 ## Events
 
@@ -82,25 +88,22 @@ _No slots._
 
 ## Motion & Animations
 
-| Trigger | Animation / Transition                                        | Token                     | Reduced-motion fallback                      |
-| ------- | ------------------------------------------------------------- | ------------------------- | -------------------------------------------- |
-| dots    | `animate-pulse`, staggered 200 ms                              | `pulse`                   | `motion-reduce:animate-none` (static dots)    |
-| bar     | `Progress` indeterminate sweep                                 | component                 | handled by `Progress` (full static bar)       |
+_None of its own — `Loader`, which this component renders, owns the pulsing dots and the bar._
 
 ## Tokens
 
-| Region | Token                                    |
-| ------ | ---------------------------------------- |
-| text   | `.text-body-sm`, `var(--text-muted)`      |
-| dots   | `var(--text-muted)`, `var(--radius-full)` |
+| Region | Token                                               |
+| ------ | --------------------------------------------------- |
+| text   | `.text-body-sm`, `var(--text-muted)`                |
+| dots   | `var(--text-muted)`, `var(--radius-full)`           |
 | bar    | `Progress` small rounded, max `var(--container-xs)` |
-| gaps   | `var(--spacing-xs)`, `var(--spacing-xxs)` |
+| gaps   | `var(--spacing-xs)`, `var(--spacing-xxs)`           |
 
 ## Theme gaps
 
-| Figma variable | Temporary primitive | Follow-up |
-| -------------- | ------------------- | --------- |
-| — | `var(--radius-full)` for the dots, as `help-panel` and `stepper` use | `TODO: document --radius-full in DESIGN.md § Shape` |
+| Figma variable | Temporary primitive                                                  | Follow-up                                           |
+| -------------- | -------------------------------------------------------------------- | --------------------------------------------------- |
+| —              | `var(--radius-full)` for the dots, as `help-panel` and `stepper` use | `TODO: document --radius-full in DESIGN.md § Shape` |
 
 ## Accessibility (WCAG 2.1 AA)
 
