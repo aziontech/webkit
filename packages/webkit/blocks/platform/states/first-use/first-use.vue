@@ -45,15 +45,11 @@
         <div class="border-t border-(--border-muted)">
           <Item.List>
             <Item>
-              <Item.Media>
-                <span
-                  class="flex size-8 shrink-0 items-center justify-center overflow-hidden rounded-(--shape-elements) border-(length:--border-width-default) border-(--border-muted) bg-(--bg-surface-raised) text-(--text-default)"
-                >
-                  <i
-                    class="ai ai-github text-body-lg leading-none text-(--text-default)"
-                    aria-hidden="true"
-                  />
-                </span>
+              <Item.Media kind="icon">
+                <i
+                  class="ai ai-github text-body-lg leading-none text-(--text-default)"
+                  aria-hidden="true"
+                />
               </Item.Media>
               <Item.Content>
                 <Item.Title>From GitHub</Item.Title>
@@ -70,20 +66,16 @@
               </Item.Actions>
             </Item>
             <Item>
-              <Item.Media>
-                <span
-                  class="flex size-8 shrink-0 items-center justify-center overflow-hidden rounded-(--shape-elements) border-(length:--border-width-default) border-(--border-muted) bg-(--bg-surface-raised)"
-                >
-                  <i
-                    class="pi pi-code text-body-lg leading-none text-(--text-default)"
-                    aria-hidden="true"
-                  />
-                </span>
+              <Item.Media kind="icon">
+                <i
+                  class="pi pi-code text-body-lg leading-none text-(--text-default)"
+                  aria-hidden="true"
+                />
               </Item.Media>
               <Item.Content>
                 <Item.Title>Via CLI</Item.Title>
                 <Item.Description
-                  >Run platform deploy and ship the branch you are on.</Item.Description
+                  >Run azion deploy and ship the branch you are on.</Item.Description
                 >
               </Item.Content>
               <div
@@ -93,7 +85,7 @@
                   <InputGroupRoot class="w-full">
                     <div class="flex min-w-0 flex-1">
                       <Input
-                        model-value="platform deploy"
+                        model-value="azion deploy"
                         size="large"
                         class="w-full"
                         aria-label="Via CLI command"
@@ -103,7 +95,7 @@
                       />
                     </div>
                     <CopyButton
-                      value="platform deploy"
+                      value="azion deploy"
                       aria-label="Copy the Via CLI command"
                       copied-label="Command copied"
                     />
@@ -112,15 +104,11 @@
               </div>
             </Item>
             <Item>
-              <Item.Media>
-                <span
-                  class="flex size-8 shrink-0 items-center justify-center overflow-hidden rounded-(--shape-elements) border-(length:--border-width-default) border-(--border-muted) bg-(--bg-surface-raised)"
-                >
-                  <i
-                    class="pi pi-globe text-body-lg leading-none text-(--text-default)"
-                    aria-hidden="true"
-                  />
-                </span>
+              <Item.Media kind="icon">
+                <i
+                  class="pi pi-globe text-body-lg leading-none text-(--text-default)"
+                  aria-hidden="true"
+                />
               </Item.Media>
               <Item.Content>
                 <Item.Title>From scratch</Item.Title>
@@ -145,9 +133,11 @@
         class="w-full"
       >
         <template #content>
-          <button
-            type="button"
-            class="group relative flex h-full w-full flex-col items-start gap-(--spacing-md) rounded-(--shape-card) p-(--spacing-md) text-start transition-colors duration-moderate-01 ease-productive-entrance motion-reduce:transition-none hover:bg-(--bg-surface-raised) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset"
+          <a
+            href="https://www.azion.com/en/templates/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="group relative flex h-full w-full flex-col items-start gap-(--spacing-md) rounded-(--shape-card) p-(--spacing-md) text-start no-underline transition-colors duration-moderate-01 ease-productive-entrance motion-reduce:transition-none hover:bg-(--bg-surface-raised) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset"
           >
             <span
               class="flex items-center [&>*+*]:-ms-2 [&>*+*]:transition-[margin-left] [&>*+*]:duration-moderate-01 [&>*+*]:ease-productive-entrance group-hover:[&>*+*]:-ms-1.5 group-focus-visible:[&>*+*]:-ms-1.5 motion-reduce:[&>*+*]:transition-none"
@@ -200,7 +190,8 @@
               class="pi pi-external-link absolute end-(--spacing-md) top-(--spacing-md) text-body-sm leading-none text-(--text-muted) transition-colors duration-moderate-01 ease-productive-entrance motion-reduce:transition-none group-hover:text-(--text-default)"
               aria-hidden="true"
             />
-          </button>
+            <span class="sr-only">(opens in a new tab)</span>
+          </a>
         </template>
       </Card>
 
@@ -209,9 +200,9 @@
         class="w-full"
       >
         <template #content>
-          <button
-            type="button"
-            class="group relative flex h-full w-full flex-col items-start gap-(--spacing-md) rounded-(--shape-card) p-(--spacing-md) text-start transition-colors duration-moderate-01 ease-productive-entrance motion-reduce:transition-none hover:bg-(--bg-surface-raised) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset"
+          <a
+            href="/agent-setup"
+            class="group relative flex h-full w-full flex-col items-start gap-(--spacing-md) rounded-(--shape-card) p-(--spacing-md) text-start no-underline transition-colors duration-moderate-01 ease-productive-entrance motion-reduce:transition-none hover:bg-(--bg-surface-raised) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset"
           >
             <span
               class="flex items-center [&>*+*]:-ms-2 [&>*+*]:transition-[margin-left] [&>*+*]:duration-moderate-01 [&>*+*]:ease-productive-entrance group-hover:[&>*+*]:-ms-1.5 group-focus-visible:[&>*+*]:-ms-1.5 motion-reduce:[&>*+*]:transition-none"
@@ -238,7 +229,7 @@
                 >Give your editor a prompt that teaches it to build and deploy here.</span
               >
             </span>
-          </button>
+          </a>
         </template>
       </Card>
     </div>

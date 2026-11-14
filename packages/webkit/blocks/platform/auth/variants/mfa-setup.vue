@@ -11,7 +11,7 @@
   import QrCode from '@aziontech/webkit/qr-code'
   import { nextTick, ref } from 'vue'
 
-  const account = 'grace.hall@example.com'
+  const account = 'jane.doe@example.com'
   const setupKey = 'JBSW Y3DP EHPK 3PXP'
   const otpauthUri = `otpauth://totp/Azion:${encodeURIComponent(account)}?secret=${setupKey.replaceAll(' ', '')}&issuer=Azion`
 

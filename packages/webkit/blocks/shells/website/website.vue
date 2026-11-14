@@ -359,7 +359,7 @@
     links: [{ label: 'Pricing', href: '/en/pricing/' }],
     contact: { label: 'Contact', href: '/en/contact-sales/' },
     primaryAction: { label: 'Start for free', href: 'https://console.azion.com/signup' },
-    secondaryAction: { label: 'Login', href: 'https://console.azion.com/login' }
+    secondaryAction: { label: 'Sign in', href: 'https://console.azion.com/login' }
   }
 
   const footer: SiteLayoutFooter = {
@@ -434,7 +434,7 @@
       { icon: 'pi pi-discord', label: 'Azion on Discord', href: 'https://discord.gg/azion' },
       { icon: 'pi pi-reddit', label: 'Azion on Reddit', href: 'https://www.reddit.com/r/aziontech' }
     ],
-    statusLabel: 'All Systems Operational',
+    statusLabel: 'All systems operational',
     languages: ['EN', 'PT-BR', 'ES'],
     languageAriaLabel: 'Language'
   }

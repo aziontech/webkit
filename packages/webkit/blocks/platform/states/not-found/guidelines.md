@@ -31,7 +31,7 @@ The title says what happened in the user's words (`Page not found`, `You don't h
 
 ### C. Actions — `Button` (required)
 
-Two at most, side by side, wrapping on narrow screens. The way out is primary (`Go to home`, `Try again`, `Back to services`); the help is outlined (`Docs`, `Switch account`, `System status`). Links that leave the app open in a new tab (`target="_blank"`).
+Two at most, side by side, wrapping on narrow screens. The way out is primary (`Go to home`, `Retry`, `Back to services`); the help is outlined (`Docs`, `Switch account`, `System status`). Links that leave the app open in a new tab (`target="_blank"`).
 
 ## Do
 
@@ -53,9 +53,9 @@ Two at most, side by side, wrapping on narrow screens. The way out is primary (`
 
 - **Title:** what happened, sentence case, no code: `Page not found`, `You don't have access to this page`, `Something went wrong on our side`, `Service 4821 not found`.
 - **Description:** why, and what to do: `There is nothing deployed at this address. Check the URL or head back to the start.` On a 500, reassure: `Nothing you saved was lost.`
-- **Primary action:** where it goes: `Go to home`, `Back to services`; or what it does: `Try again`.
+- **Primary action:** where it goes: `Go to home`, `Back to services`; or what it does: `Retry`.
 - **Secondary action:** `Docs`, `Switch account`, `System status`.
-- **Reference:** `Error reference: req_7f3c91ab`, in monospace, wrapped in `<bdi>` so it keeps its order in right-to-left pages.
+- **Reference:** `Error reference: req_7f3c91ab`, in `text-label-code-sm`, wrapped in `<bdi>` so it keeps its order in right-to-left pages, with a `CopyButton` (`Copy the error reference`) so the user can paste it to support.
 
 ## Accessibility
 
@@ -63,14 +63,14 @@ Two at most, side by side, wrapping on narrow screens. The way out is primary (`
 - Every variant is a body inside the layout's `main`, with no `main` of its own.
 - The figure is `aria-hidden` (inside the `EmptyState` icon wrapper); never put the only statement of the error in the art.
 - The `EmptyState` is `role="status"`, so a client-side route change to this page is announced.
-- Try again shows the `Button` loading state while the page reloads; the button keeps its label.
+- Retry shows the `Button` loading state while the page reloads; the button keeps its label.
 - Buttons that open a new tab carry an icon; do not rely on colour.
 
 ## States
 
 - Default: 404, the animated azion-404 line figure, Page not found, Go to home and Docs.
 - Forbidden: 403, the 403 numeral art, You don't have access to this page, Go to home and Switch account.
-- ServerError: 500, the warning icon tile, Something went wrong on our side, Try again, System status and the error reference.
+- ServerError: 500, the warning icon tile, Something went wrong on our side, Retry, System status and the error reference with its copy button.
 - ResourceNotFound: a bordered EmptyState in the console's content column naming the missing service and its ID, with Back to services.
 
 ## Related

@@ -21,7 +21,7 @@ Default `content` placement spanning the whole window, `aria-label="Console"`. T
 
 ### B. Back — `IconButton` (required until the flow is terminal)
 
-Small, outlined, chevron icon, with an `aria-label` that names the destination (`Back to Resources`). It returns to the list the flow started from. Drop it only on terminal screens (provisioning, success), where there is nothing left to go back to.
+Small, outlined, chevron icon, a link (`href`) to the list the flow started from, with an `aria-label` that names the destination (`Back to Resources`) and a `Tooltip` with the same text. Drop it only on terminal screens (provisioning, success), where there is nothing left to go back to.
 
 ### C. Brand — `Brand` (required)
 
@@ -31,9 +31,13 @@ Inside `GlobalHeader.Brand`, linked to the home route with `aria-label="Azion ho
 
 Where the flow lives: the module with an `href`, then the current page with none (`Resources › Create Resource`). The crumb links are a way out alongside the back button. A step of a wizard is not a crumb.
 
-### E. Account — `Avatar` (required)
+### E. Account — `DropdownMenu` + `Avatar` (required)
 
-The signed-in user, inside a button labelled `Account settings`. It stays on every screen of the flow, including terminal ones, so the user never looks signed out.
+The signed-in user, inside a button labelled `Account menu` that opens the account `DropdownMenu`: name and email on top, Account settings, then Docs and Log out. It stays on every screen of the flow, including terminal ones, so the user never looks signed out.
+
+### F. Hint — `Tooltip` (required)
+
+Names the icon-only back link with the same text as its `aria-label` (`Back to Resources`).
 
 ## Do
 
@@ -51,7 +55,7 @@ The signed-in user, inside a button labelled `Account settings`. It stays on eve
 
 - **Back label:** `Back to` plus the list name, matching the first crumb: `Back to Resources`.
 - **Breadcrumb:** the module as the sidebar names it, then the create action with the entity capitalized: `Create Resource`, `Create Network List`.
-- **Avatar label:** `Account settings`.
+- **Avatar label:** `Account menu`.
 
 ## Accessibility
 

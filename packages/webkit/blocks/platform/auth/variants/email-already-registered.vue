@@ -12,30 +12,28 @@
   import PasswordRequirements, {
     DEFAULT_PASSWORD_REQUIREMENTS
   } from '@aziontech/webkit/password-requirements'
-  import { nextTick, reactive, ref } from 'vue'
+  import Separator from '@aziontech/webkit/separator'
+  import { nextTick, onScopeDispose, reactive, ref } from 'vue'
 
   interface CardNotice {
     severity: AlertSeverity
     label: string
     exits?: boolean
-    retry?: () => void
   }
 
-  const failure = ref('email-taken')
-  const screen = ref('signup')
-
-  const signin = reactive({ email: 'name@example.com', password: '' })
-  const signup = reactive({ email: 'name@example.com', password: '' })
-
-  const errors = reactive({
-    signinEmail: '',
-    signinPassword: '',
-    signupEmail: '',
-    signupPassword: ''
+  const failure: string = 'email-taken'
+  const email = ref('jane.doe@example.com')
+  const password = ref('')
+  const errors = reactive({ email: '', password: '' })
+  const cardNotice = ref<CardNotice | null>({
+    severity: 'danger',
+    label: 'This email is already registered.',
+    exits: true
   })
-
-  const cardNotice = ref<CardNotice | null>(null)
   const verifying = ref(false)
+  let requestTimer: ReturnType<typeof setTimeout> | undefined
+
+  onScopeDispose(() => clearTimeout(requestTimer))
 
   const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
@@ -46,83 +44,40 @@
         ? ''
         : 'Enter a valid email address.'
 
-  const passwordMeetsRequirements = (value: string) =>
-    DEFAULT_PASSWORD_REQUIREMENTS.every((rule) => rule.test.test(value))
-
-  const focusField = (id: string) => nextTick(() => document.getElementById(id)?.focus())
-
-  const signIn = () => {
-    errors.signinEmail = emailError(signin.email)
-    errors.signinPassword = signin.password ? '' : 'This field is required.'
-    if (errors.signinEmail || errors.signinPassword) {
-      focusField(errors.signinEmail ? 'auth-signin-email' : 'auth-signin-password')
-      return
-    }
-    if (failure.value === 'bad-credentials') {
-      cardNotice.value = {
-        severity: 'danger',
-        label: 'Incorrect email or password. Check both and try again.'
-      }
-      signin.password = ''
-      focusField('auth-signin-password')
-    } else if (failure.value === 'service-unavailable')
-      cardNotice.value = {
-        severity: 'warning',
-        label: 'Sign-in is unavailable right now. Your credentials are fine.',
-        retry: signIn
-      }
-    else if (failure.value === 'server-error')
-      cardNotice.value = {
-        severity: 'danger',
-        label: 'Sign-in failed on our side. You are still signed out. Error 500.',
-        retry: signIn
-      }
-    else if (failure.value === 'timeout')
-      cardNotice.value = {
-        severity: 'warning',
-        label: 'The server did not answer in time. Your session may already be open.',
-        retry: signIn
-      }
-    else cardNotice.value = { severity: 'success', label: 'Signed in.' }
-  }
-
-  const signUp = () => {
-    errors.signupEmail = emailError(signup.email)
-    errors.signupPassword = !signup.password
+  const newPasswordError = (value: string) =>
+    !value
       ? 'This field is required.'
-      : passwordMeetsRequirements(signup.password)
+      : DEFAULT_PASSWORD_REQUIREMENTS.every((rule) => rule.test.test(value))
         ? ''
         : 'Password does not meet requirements.'
-    if (errors.signupEmail || errors.signupPassword) return
-    if (failure.value === 'email-taken')
-      cardNotice.value = {
-        severity: 'danger',
-        label: 'This email is already registered.',
-        exits: true
-      }
-    else
-      cardNotice.value = {
-        severity: 'success',
-        label: `Account created. We sent a verification link to ${signup.email.trim()}.`
-      }
-  }
 
-  const onSignUpEmailInput = () => {
-    errors.signupEmail = ''
+  const onEmailInput = () => {
+    errors.email = ''
     if (cardNotice.value?.exits) cardNotice.value = null
   }
 
-  const goToSignIn = () => {
-    signin.email = signup.email
-    failure.value = ''
+  const signUp = () => {
+    if (verifying.value) return
+    errors.email = emailError(email.value)
+    errors.password = newPasswordError(password.value)
     cardNotice.value = null
-    screen.value = 'signin'
-  }
-
-  cardNotice.value = {
-    severity: 'danger',
-    label: 'This email is already registered.',
-    exits: true
+    if (errors.email || errors.password) {
+      const id = errors.email ? 'signup-email' : 'signup-password'
+      nextTick(() => document.getElementById(id)?.focus())
+      return
+    }
+    verifying.value = true
+    clearTimeout(requestTimer)
+    requestTimer = setTimeout(() => {
+      verifying.value = false
+      cardNotice.value =
+        failure === 'email-taken'
+          ? { severity: 'danger', label: 'This email is already registered.', exits: true }
+          : {
+              severity: 'success',
+              label: `Account created. We sent a verification link to ${email.value.trim()}.`
+            }
+    }, 600)
   }
 </script>
 
@@ -162,290 +117,132 @@
           <div
             class="m-auto flex w-full flex-col items-center gap-(--spacing-md) transition-[translate,opacity] duration-slow-01 ease-expressive-entrance starting:-translate-x-6 starting:opacity-0 rtl:starting:translate-x-6 motion-reduce:transition-none"
           >
-            <div class="relative w-full max-w-(--container-sm)">
-              <Transition
-                enter-active-class="transition-opacity duration-moderate-01 ease-productive-entrance motion-reduce:transition-none"
-                enter-from-class="opacity-0"
-                enter-to-class="opacity-100"
-                leave-active-class="absolute inset-x-0 top-0 transition-opacity duration-fast-02 ease-productive-entrance motion-reduce:transition-none"
-                leave-from-class="opacity-100"
-                leave-to-class="opacity-0"
-              >
-                <Card
-                  v-if="screen === 'signin'"
-                  key="signin"
-                  class="w-full"
-                  :padded="false"
+            <Card
+              class="w-full max-w-(--container-sm)"
+              :padded="false"
+            >
+              <template #content>
+                <form
+                  class="flex flex-col gap-(--spacing-lg) p-(--spacing-lg)"
+                  aria-label="Sign up for a free account"
+                  :aria-busy="verifying || undefined"
+                  novalidate
+                  @submit.prevent="signUp"
                 >
-                  <template #content>
-                    <form
-                      class="flex flex-col gap-(--spacing-lg) p-(--spacing-lg)"
-                      aria-label="Sign in to your account"
-                      novalidate
-                      @submit.prevent="signIn"
-                    >
-                      <PageHeader
-                        title="Welcome back"
-                        description="Sign in to your account."
-                      />
+                  <PageHeader
+                    title="Sign up for a free account"
+                    size="small"
+                  />
 
-                      <Transition
-                        enter-active-class="transition duration-moderate-01 ease-productive-entrance motion-reduce:transition-none"
-                        enter-from-class="translate-y-2 opacity-0"
-                        enter-to-class="translate-y-0 opacity-100"
-                        leave-active-class="transition duration-fast-02 ease-productive-exit motion-reduce:transition-none"
-                        leave-from-class="translate-y-0 opacity-100"
-                        leave-to-class="-translate-y-2 opacity-0"
+                  <Alert
+                    v-if="cardNotice"
+                    :key="cardNotice.label"
+                    :severity="cardNotice.severity"
+                    size="small"
+                  >
+                    {{ cardNotice.label }}
+                    <template v-if="cardNotice.exits">
+                      <a
+                        class="text-link"
+                        href="/login"
+                        >Sign in</a
                       >
-                        <div v-if="cardNotice">
-                          <Alert
-                            :severity="cardNotice.severity"
-                            size="small"
-                          >
-                            {{ cardNotice.label }}
-                            <template v-if="cardNotice.exits">
-                              <a
-                                href="#"
-                                @click.prevent="goToSignIn"
-                                >Sign in</a
-                              >
-                              or
-                              <a
-                                href="#"
-                                @click.prevent
-                                >reset your password</a
-                              >.
-                            </template>
+                      or
+                      <a
+                        class="text-link"
+                        href="/login?reset=1"
+                        >reset your password</a
+                      >.
+                    </template>
+                  </Alert>
 
-                            <template
-                              v-if="cardNotice.retry"
-                              #action
-                            >
-                              <Button
-                                label="Retry"
-                                kind="secondary"
-                                size="small"
-                                :loading="verifying"
-                                @click="cardNotice.retry()"
-                              />
-                            </template>
-                          </Alert>
-                        </div>
-                      </Transition>
+                  <div class="flex flex-col gap-(--spacing-sm)">
+                    <Button
+                      type="button"
+                      label="Continue with Google"
+                      kind="outlined"
+                      size="large"
+                      icon="ai-cor ai-google"
+                      class="w-full"
+                      :disabled="verifying"
+                    />
+                    <Button
+                      type="button"
+                      label="Continue with GitHub"
+                      kind="outlined"
+                      size="large"
+                      icon="ai ai-github"
+                      class="w-full"
+                      :disabled="verifying"
+                    />
+                  </div>
 
-                      <fieldset
-                        class="m-0 flex min-w-0 flex-col gap-(--spacing-lg) border-0 p-0"
-                        :disabled="verifying"
-                      >
-                        <legend class="sr-only">Credentials</legend>
+                  <Separator label="or" />
 
-                        <Field :required="!!errors.signinEmail && !signin.email.trim()">
-                          <Field.Label for="auth-signin-email">Email</Field.Label>
-                          <Input
-                            id="auth-signin-email"
-                            v-model="signin.email"
-                            type="email"
-                            size="large"
-                            name="email"
-                            autocomplete="username"
-                            class="w-full"
-                            placeholder="name@example.com"
-                            :disabled="verifying"
-                            :required="!!errors.signinEmail && !signin.email.trim()"
-                            :invalid="!!errors.signinEmail && !!signin.email.trim()"
-                            :aria-describedby="
-                              errors.signinEmail && !verifying
-                                ? 'auth-signin-email-error'
-                                : undefined
-                            "
-                            @update:model-value="errors.signinEmail = ''"
-                          />
-                          <HelperText
-                            v-if="errors.signinEmail && !verifying"
-                            id="auth-signin-email-error"
-                            :kind="signin.email.trim() ? 'invalid' : 'required'"
-                            :label="errors.signinEmail"
-                          />
-                        </Field>
+                  <fieldset
+                    class="m-0 flex min-w-0 flex-col gap-(--spacing-lg) border-0 p-0"
+                    :disabled="verifying"
+                  >
+                    <legend class="sr-only">Account credentials</legend>
 
-                        <Field
-                          :disabled="verifying"
-                          :required="!!errors.signinPassword && !signin.password"
-                          :invalid="!!errors.signinPassword && !!signin.password"
-                        >
-                          <Field.Label for="auth-signin-password">Password</Field.Label>
-                          <PasswordInput
-                            id="auth-signin-password"
-                            v-model="signin.password"
-                            name="password"
-                            autocomplete="current-password"
-                            placeholder="Type your password"
-                            @update:model-value="errors.signinPassword = ''"
-                          />
-                          <Field.Description v-if="!verifying && errors.signinPassword">{{
-                            errors.signinPassword
-                          }}</Field.Description>
-                        </Field>
-                      </fieldset>
-
-                      <Button
-                        label="Sign in"
-                        kind="primary"
+                    <Field :required="!!errors.email && !email.trim()">
+                      <Field.Label for="signup-email">Work email</Field.Label>
+                      <Input
+                        id="signup-email"
+                        v-model="email"
+                        type="email"
+                        name="email"
                         size="large"
+                        autocomplete="email"
                         class="w-full"
-                        :loading="verifying"
-                        type="submit"
+                        placeholder="m@example.com"
+                        :required="!!errors.email && !email.trim()"
+                        :invalid="!!errors.email && !!email.trim()"
+                        :aria-describedby="errors.email ? 'signup-email-error' : undefined"
+                        @update:model-value="onEmailInput"
                       />
-                    </form>
-                  </template>
-                </Card>
+                      <HelperText
+                        v-if="errors.email"
+                        id="signup-email-error"
+                        :kind="email.trim() ? 'invalid' : 'required'"
+                        :label="errors.email"
+                      />
+                    </Field>
 
-                <Card
-                  v-else
-                  key="signup"
-                  class="w-full"
-                  :padded="false"
-                >
-                  <template #content>
-                    <form
-                      class="flex flex-col gap-(--spacing-lg) p-(--spacing-lg)"
-                      aria-label="Sign up for a free account"
-                      novalidate
-                      @submit.prevent="signUp"
+                    <Field
+                      :required="!!errors.password && !password"
+                      :invalid="!!errors.password && !!password"
                     >
-                      <PageHeader title="Sign up for a free account" />
-
-                      <Transition
-                        enter-active-class="transition duration-moderate-01 ease-productive-entrance motion-reduce:transition-none"
-                        enter-from-class="translate-y-2 opacity-0"
-                        enter-to-class="translate-y-0 opacity-100"
-                        leave-active-class="transition duration-fast-02 ease-productive-exit motion-reduce:transition-none"
-                        leave-from-class="translate-y-0 opacity-100"
-                        leave-to-class="-translate-y-2 opacity-0"
-                      >
-                        <div v-if="cardNotice">
-                          <Alert
-                            :severity="cardNotice.severity"
-                            size="small"
-                          >
-                            {{ cardNotice.label }}
-                            <template v-if="cardNotice.exits">
-                              <a
-                                href="#"
-                                @click.prevent="goToSignIn"
-                                >Sign in</a
-                              >
-                              or
-                              <a
-                                href="#"
-                                @click.prevent
-                                >reset your password</a
-                              >.
-                            </template>
-
-                            <template
-                              v-if="cardNotice.retry"
-                              #action
-                            >
-                              <Button
-                                label="Retry"
-                                kind="secondary"
-                                size="small"
-                                :loading="verifying"
-                                @click="cardNotice.retry()"
-                              />
-                            </template>
-                          </Alert>
-                        </div>
-                      </Transition>
-
-                      <fieldset
-                        class="m-0 flex min-w-0 flex-col gap-(--spacing-lg) border-0 p-0"
-                        :disabled="verifying"
-                      >
-                        <legend class="sr-only">Account credentials</legend>
-
-                        <Field :required="!!errors.signupEmail && !signup.email.trim()">
-                          <Field.Label for="auth-signup-email">Work email</Field.Label>
-                          <Input
-                            id="auth-signup-email"
-                            v-model="signup.email"
-                            type="email"
-                            size="large"
-                            name="email"
-                            autocomplete="email"
-                            class="w-full"
-                            placeholder="name@example.com"
-                            :disabled="verifying"
-                            :required="!!errors.signupEmail && !signup.email.trim()"
-                            :invalid="!!errors.signupEmail && !!signup.email.trim()"
-                            :aria-describedby="
-                              errors.signupEmail && !verifying
-                                ? 'auth-signup-email-error'
-                                : undefined
-                            "
-                            @update:model-value="onSignUpEmailInput"
-                          />
-                          <HelperText
-                            v-if="errors.signupEmail && !verifying"
-                            id="auth-signup-email-error"
-                            :kind="signup.email.trim() ? 'invalid' : 'required'"
-                            :label="errors.signupEmail"
-                          />
-                        </Field>
-
-                        <Field
-                          :disabled="verifying"
-                          :required="!!errors.signupPassword && !signup.password"
-                          :invalid="!!errors.signupPassword && !!signup.password"
-                        >
-                          <Field.Label>Password</Field.Label>
-                          <PasswordInput
-                            v-model="signup.password"
-                            name="new-password"
-                            autocomplete="new-password"
-                            placeholder="Create a password"
-                            @update:model-value="errors.signupPassword = ''"
-                          />
-                          <Field.Description v-if="!verifying && errors.signupPassword">{{
-                            errors.signupPassword
-                          }}</Field.Description>
-                          <PasswordRequirements :value="signup.password" />
-                        </Field>
-                      </fieldset>
-
-                      <Button
-                        label="Sign up"
-                        kind="primary"
-                        size="large"
-                        class="w-full"
-                        :loading="verifying"
-                        type="submit"
+                      <Field.Label for="signup-password">Password</Field.Label>
+                      <PasswordInput
+                        id="signup-password"
+                        v-model="password"
+                        name="password"
+                        autocomplete="new-password"
+                        placeholder="Create a password"
+                        @update:model-value="errors.password = ''"
                       />
-                    </form>
-                  </template>
-                </Card>
-              </Transition>
-            </div>
+                      <Field.Error v-if="errors.password">{{ errors.password }}</Field.Error>
+                      <PasswordRequirements :value="password" />
+                    </Field>
+                  </fieldset>
+
+                  <Button
+                    label="Sign up"
+                    kind="primary"
+                    size="large"
+                    class="w-full"
+                    type="submit"
+                    :loading="verifying"
+                  />
+                </form>
+              </template>
+            </Card>
 
             <div
               class="flex w-full max-w-(--container-sm) flex-col items-center gap-(--spacing-sm)"
             >
-              <div
-                v-if="screen === 'signin'"
-                class="flex items-center justify-center gap-(--spacing-xs)"
-              >
-                <p class="text-body-xs text-(--text-default)">Don't have an account?</p>
-                <a
-                  class="text-link text-body-xs"
-                  href="/signup"
-                  >Sign up</a
-                >
-              </div>
-              <div
-                v-else
-                class="flex items-center justify-center gap-(--spacing-xs)"
-              >
+              <div class="flex items-center justify-center gap-(--spacing-xs)">
                 <p class="text-body-xs text-(--text-default)">Already have an account?</p>
                 <a
                   class="text-link text-body-xs"

@@ -1,6 +1,6 @@
 # Form error
 
-The form-error pattern, taken from the design sample (`/forms/error-validation`): what a long create form does when the server rejects the save because of one section. The user's job is to create a service; another user deletes the origin it links to while the form is open, so the save comes back with an error the Origin section owns. The page takes the user to that section, says what happened and that nothing else was lost, offers the one action that recovers (Reload origins), and marks the field with its own reason. This is the standard for every server rejection that a section or a field owns.
+The form-error pattern, what a long create form does when the server rejects the save because of one section. The user's job is to create a service; another user deletes the origin it links to while the form is open, so the save comes back with an error the Origin section owns. The page takes the user to that section, says what happened and that nothing else was lost, offers the one action that recovers (Reload origins), and marks the field with its own reason. This is the standard for every server rejection that a section or a field owns.
 
 This block is a focused create page with its own creation header and no rail: render it outside `ConsoleLayout` (`shells/console`).
 
@@ -24,7 +24,7 @@ The full-width header of a creation page: back, brand and location on the start 
 
 ### B. Back — `IconButton` (required)
 
-`pi-chevron-left`, `kind="outlined"`, with `aria-label="Back to Forms"`.
+`pi-chevron-left`, `kind="outlined"`, a link to the list (`href="/services"`) with `aria-label="Back to Services"` and a `Tooltip` with the same text.
 
 ### C. Product mark — `Brand` (required)
 
@@ -32,79 +32,79 @@ Inside a link to Home.
 
 ### D. Location — `Breadcrumb` (required)
 
-Where the form sits, ending in the page.
+Where the form sits: the resource list, then the page (`Services › Create Service`).
 
-### E. Account — `Avatar` (required)
+### E. Account — `DropdownMenu` + `Avatar` (required)
 
-The signed-in user, inside a labelled button.
+The signed-in user, inside a button labelled `Account menu` that opens the account `DropdownMenu` (Account settings, Docs, Log out).
 
-### F. Simulation — `Tag` (simulation only)
+### F. Actions — `Button` (required)
 
-In the dashed `aside` labelled `Scenario simulation`: `Server in sync` (`success`) or `Deleted server-side: web-origin-prod` (`danger`). The panel is a story device that plays the other user; a real page has no such control.
+The recovery action on the section `Alert` (`Reload origins`, `kind="secondary"`, `loading` while it runs), and the footer's `Cancel` and `Save`.
 
-### G. Actions — `Button` (required)
-
-Simulation controls (`User 2 deletes the linked origin`, `Reset scenario`), the recovery action on the section `Alert` (`Reload origins`, `kind="secondary"`, `loading` while it runs), and the footer's `Cancel` and `Save`.
-
-### H. Section heading — `SectionHeader` (required)
+### G. Section heading — `SectionHeader` (required)
 
 Over every group. The Origin heading carries an id so the save can scroll it into view; the section `Alert` opens right under it.
 
-### I. Group surface — `Card` (required)
+### H. Group surface — `Card` (required)
 
 `:padded="false"` around each section's rows.
 
-### J. Rows — `Item` (required)
+### I. Rows — `Item` (required)
 
 `Item.List` inside each `Card`, one row per setting.
 
-### K. Setting row — `SettingRow` (required)
+### J. Setting row — `SettingRow` (required)
 
 Title and description on the start side, the control on the end side.
 
-### L. Text values — `Input` (required)
+### K. Text values — `Input` (required)
 
 Name and Host header, each with an `aria-label` and its error wired by `aria-describedby`.
 
-### M. Ports — `MultiSelect` (required)
+### L. Ports — `MultiSelect` (required)
 
 HTTP ports, with `MultiSelect.Trigger` carrying the id the error points at.
 
-### N. Linked resource — `Select` (required)
+### M. Linked resource — `Select` (required)
 
 The Origin. It takes `invalid` when the server says the chosen origin no longer exists, and `required` once the list is reloaded without it.
 
-### O. Choice cards — `Field` (required)
+### N. Choice cards — `Field` (required)
 
 Protocol usage, a `fieldset` of `Field`s each wrapping a `RadioButton` with a label and a description.
 
-### P. Choice — `RadioButton` (required)
+### O. Choice — `RadioButton` (required)
 
 One per protocol option.
 
-### Q. Toggles — `Switch` (required)
+### P. Toggles — `Switch` (required)
 
 The feature rows.
 
-### R. Numbers — `NumberInput` (required)
+### Q. Numbers — `NumberInput` (required)
 
 The cache TTLs, `min="0"`.
 
-### S. Field reason — `HelperText` (required)
+### R. Field reason — `HelperText` (required)
 
 Under the control, one line: `kind="invalid"` for a value the server refused (`This origin no longer exists.`), `kind="required"` for an empty one (`Select an origin to continue.`).
 
-### T. Section notice — `Alert` (rejection only)
+### S. Section notice — `Alert` (rejection only)
 
 One danger `Alert` under the section heading that owns the error, with the recovery action in its `action` slot. It opens with an expand transition (`motion-reduce:transition-none`) and closes once the user recovers or changes the value.
 
-### U. Loading — `Skeleton` (reloading only)
+### T. Loading — `Skeleton` (reloading only)
 
 Stands in for the Origin select while the list reloads, with an accessible name (`Loading origins`).
 
-### V. Footer — `SaveBar` (required)
+### U. Footer — `SaveBar` (required)
 
 Sticky at the end of the page, raised with `z-10`: `Cancel` and `Save`. Save shows `loading` while the request is in flight and is disabled while the list reloads.
+
+### V. Hint — `Tooltip` (required)
+
+Names the icon-only back link with the same text as its `aria-label` (`Back to Services`).
 
 ## Do
 
@@ -132,7 +132,6 @@ Sticky at the end of the page, raised with `z-10`: `Cancel` and `Save`. Save sho
 - **Field reason (refused):** `This origin no longer exists.`
 - **Field reason (after reload):** `Select an origin to continue.`
 - **Required messages:** `Name is required.`, `Host header is required.`, `Select an origin.`, `Select at least one HTTP port.`
-- **Simulation panel:** a colon, never a dash: `Simulation: the other user`.
 - **Actions:** `Cancel`, `Save`, `Reload origins`.
 
 ## Accessibility
@@ -146,8 +145,8 @@ Sticky at the end of the page, raised with `z-10`: `Cancel` and `Save`. Save sho
 
 ## States
 
-- InSync: the form filled in and linked to an origin that still exists; the simulation panel reads Server in sync.
-- Rejected: User 2 deleted the origin and Save was pressed; the page scrolls to Origin, the danger `Alert` opens under its heading with Reload origins, and focus lands on the Origin select, which reads This origin no longer exists.
+- InSync: the form filled in and linked to `web-origin-prod`, which another user has already deleted on the server; nothing on the page knows yet, and Save is where it surfaces.
+- Rejected: another user deleted the origin and Save was pressed; the page scrolls to Origin, the danger `Alert` opens under its heading with Reload origins, and focus lands on the Origin select, which reads This origin no longer exists.
 - Reloading: Reload origins in flight; its button loads, the select gives way to a `Skeleton`, Save is disabled.
 - Reloaded: the list is back without the deleted origin; the `Alert` closes, the select is cleared and flagged required with Select an origin to continue.
 

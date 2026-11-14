@@ -15,7 +15,7 @@
         description="Your role in this account does not include this page. Ask an account admin for access, or switch to an account that has it."
       >
         <template #icon>
-          <Error403 class="h-auto w-48 sm:w-64" />
+          <Error403 class="h-auto w-full max-w-(--container-3xs)" />
         </template>
         <template #actions>
           <div class="flex flex-wrap items-center justify-center gap-(--spacing-xs)">

@@ -1,6 +1,6 @@
 # Async submit
 
-The async-action pattern, taken from the design sample (`/forms/async-deployment`), and the standard for every build and deploy screen. A long-running action the user is free to walk away from: a deploy that runs for about half a minute and asks nothing while it does. The user's job is to start it, go on working anywhere in the console, and learn how it ended without coming back to check. The page that started the run shows its status in the heading, the logs while it runs and an inline outcome when it ends; in a full app the run lives outside the page, so its progress and its outcome also travel with the user as a toast, on success and on failure.
+The async-action pattern, and the standard for every build and deploy screen. A long-running action the user is free to walk away from: a deploy that runs for about half a minute and asks nothing while it does. The user's job is to start it, go on working anywhere in the console, and learn how it ended without coming back to check. The page that started the run shows its status in the heading, the logs while it runs and an inline outcome when it ends; in a full app the run lives outside the page, so its progress and its outcome also travel with the user as a toast, on success and on failure.
 
 This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`.
 
@@ -25,7 +25,7 @@ The toasts are raised through `toast` with one id per run so each state replaces
 
 ### A. Actions — `Button` (required)
 
-On the page: **Deploy** starts the run and shows `loading` while it runs, **Reset scenario** (`kind="transparent"`) belongs to the simulation only, and the `EmptyState` repeats **Deploy** as its action.
+**Deploy**, the `EmptyState` action, starts the run and shows `loading` while it runs; the outcome `Alert`s carry Edit and Redeploy.
 
 ### B. Page heading — `PageHeader` (required)
 
@@ -33,13 +33,9 @@ On the page: **Deploy** starts the run and shows `loading` while it runs, **Rese
 
 ### C. Run status — `Tag` (required)
 
-In the heading: `Idle` (`secondary`), `Deploying` (`info`), `Failed` (`danger`), `Deployed` (`success`). One to two words, never a sentence. In the simulation panel a `secondary` tag names the repository.
+In the heading: `Idle` (`secondary`), `Deploying` (`info`), `Failed` (`danger`), `Deployed` (`success`). One to two words, never a sentence.
 
-### D. Simulated ending — `ToggleGroup` (simulation only)
-
-`Succeeds` or `Fails`, in a dashed `aside` labelled `Scenario simulation`, disabled while a run is in progress. The ending is kept in the URL (`?outcome=`) so a run is linkable. It is a story device: a real page has no such control.
-
-### E. Nothing running — `EmptyState` (idle only)
+### D. Nothing running — `EmptyState` (idle only)
 
 `bordered`, the deploy glyph, a title, one sentence and **Deploy** as its only action. It gives way to the logs card once a run starts.
 
@@ -60,12 +56,12 @@ In the heading: `Idle` (`secondary`), `Deploying` (`info`), `Failed` (`danger`),
 - Don't tie the run to the component that started it; unmounting a page is not an event the run hears.
 - Don't let a failure toast expire; the user was not there when it arrived.
 - Don't point the toast at a list of runs ("View deployments"); it carries **Edit** and **Redeploy**.
-- Don't block the page with a modal or overlay while the run is in progress; the whole point is that the user can leave.
+- Don't block the page with a modal or overlay while the run is in progress; the user must be able to leave.
 - Don't claim an outcome before the server confirms it; the heading reads `Deploying` until it does.
 
 ## Copy
 
-- **Page heading:** names the action, sentence case: `Async deployment`. Lead: what the run does and that the user may leave: `A deploy runs for half a minute and asks nothing of you while it does.`
+- **Page heading:** names the action and the resource, sentence case: `Deploy web-app`. Lead: what the run does and that the user may leave: `Builds acme/web-app and publishes it to production. A deploy takes about half a minute and keeps running if you leave this page; the result reports back wherever you are.`
 - **Status tag:** one or two words: `Idle`, `Deploying`, `Failed`, `Deployed`.
 - **Empty state:** title states the fact, description says what to do: `No deployment running` / `Start one above. It takes about 25 seconds.`
 - **Progress toast:** present progressive with the single-character ellipsis, names the item: `Deploying web-app…`; description names the source and that the user may leave: `acme/web-app. It keeps running if you leave.`
@@ -73,7 +69,6 @@ In the heading: `Idle` (`secondary`), `Deploying` (`info`), `Failed` (`danger`),
 - **Success toast:** past tense, names the item and where it is live: `web-app is live.` / `It is available at web-app.example.com.` Actions: `Edit`, `Redeploy`.
 - **Failure Alert:** the reason the server gave, as full sentences, with `Edit` and `Redeploy`.
 - **Success Alert:** names the address and the attempts: `web-app is live at web-app.example.com. It took 1 attempt.`, with `Edit`, `Redeploy` and `Open service`.
-- **Simulation panel:** a colon, never a dash: `Simulation: how this deploy ends`.
 - **Actions:** `Deploy`, `Redeploy` (never "Retry deploy" or "Try again"), `Edit`, `Open service`.
 
 ## Accessibility
@@ -81,14 +76,13 @@ In the heading: `Idle` (`secondary`), `Deploying` (`info`), `Failed` (`danger`),
 - The run status is text in the heading's `Tag`, not color alone.
 - Toasts are announced politely by the app's `Toaster` region; the progress toast must not steal focus.
 - The failure toast's actions and close button are reachable by keyboard, and it stays until closed.
-- The simulation panel is an `aside` with its own label so screen reader users can skip it.
 - The logs card (Running and Failed) streams into a `LogView`; do not announce every log line.
 - Page entrance and the outcome `Alert` animate with `motion-reduce:animate-none`.
 
 ## States
 
 - Idle: nothing running; the heading reads Idle and the `EmptyState` offers Deploy.
-- Running: mid-run; the heading reads Deploying, the simulation controls are disabled, Deploy shows `loading`, the logs card streams under the Building status and the progress toast reads `Deploying web-app…`.
+- Running: mid-run; the heading reads Deploying, the logs card streams under the Building status and the progress toast reads `Deploying web-app…`.
 - Failed: the routing rules were refused; the heading reads Failed, the danger `Alert` carries the reason with Edit and Redeploy, the permanent failure toast carries the same two actions, and the logs stay open on the failed step.
 - Succeeded: the run is live; the heading reads Deployed, the success `Alert` names the new address with Edit, Redeploy and Open service, the success toast carries Edit and Redeploy, and the logs card is gone.
 

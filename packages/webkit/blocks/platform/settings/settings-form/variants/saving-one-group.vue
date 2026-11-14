@@ -5,9 +5,11 @@
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
   import PageHeader from '@aziontech/webkit/page-header'
+  import SectionHeader from '@aziontech/webkit/section-header'
   import Select from '@aziontech/webkit/select'
   import SettingRow from '@aziontech/webkit/setting-row'
   import Switch from '@aziontech/webkit/switch'
+  import { toast } from '@aziontech/webkit/toast'
   import { computed, nextTick, reactive, type Ref, ref } from 'vue'
 
   const languages = [
@@ -24,11 +26,12 @@
   const notifications = reactive({ productUpdates: true, securityAlerts: true })
   const savingNotifications = ref(false)
 
-  const saveGroup = (flag: Ref<boolean>) => {
+  const saveGroup = (flag: Ref<boolean>, label: string) => {
     if (flag.value) return
     flag.value = true
     setTimeout(() => {
       flag.value = false
+      toast.success(`${label} saved.`)
     }, 900)
   }
 
@@ -41,9 +44,9 @@
       return
     }
     generalSubmitted.value = false
-    saveGroup(savingGeneral)
+    saveGroup(savingGeneral, 'General settings')
   }
-  const saveNotifications = () => saveGroup(savingNotifications)
+  const saveNotifications = () => saveGroup(savingNotifications, 'Notification settings')
 </script>
 
 <template>
@@ -55,7 +58,10 @@
     />
 
     <section class="layout-section-start flex flex-col gap-(--layout-group-gap)">
-      <p class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">General</p>
+      <SectionHeader
+        title="General"
+        size="small"
+      />
       <Card :padded="false">
         <template #content>
           <fieldset
@@ -138,7 +144,10 @@
     </section>
 
     <section class="layout-section-start flex flex-col gap-(--layout-group-gap)">
-      <p class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">Notifications</p>
+      <SectionHeader
+        title="Notifications"
+        size="small"
+      />
       <Card :padded="false">
         <template #content>
           <fieldset

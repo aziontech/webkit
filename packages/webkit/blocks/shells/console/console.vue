@@ -6,7 +6,6 @@
   import ConsoleLayout, { type ConsoleLayoutNavGroup } from '@aziontech/webkit/console-layout-root'
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
   import IconButton from '@aziontech/webkit/icon-button'
-  import Input from '@aziontech/webkit/input'
   import PageHeader from '@aziontech/webkit/page-header'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
   import ThemeSwitcher, { type ThemeSwitcherValue } from '@aziontech/webkit/theme-switcher'
@@ -184,7 +183,6 @@
   ]
 
   const theme = ref<ThemeSwitcherValue>('system')
-  const search = ref('')
 
   const onSearchSelect = (_event: MouseEvent | KeyboardEvent, value: string | number) => {
     if (value === 'action:theme') theme.value = theme.value === 'dark' ? 'light' : 'dark'
@@ -359,7 +357,7 @@
           <div class="flex justify-center px-(--spacing-xs)">
             <StatusIndicator
               severity="success"
-              label="All systems normal"
+              label="All systems operational"
             />
           </div>
         </div>
@@ -389,55 +387,6 @@
             />
           </template>
         </PageHeader>
-
-        <div class="flex items-center gap-(--spacing-xs)">
-          <Button
-            label="Filter"
-            kind="outlined"
-            size="medium"
-            icon="pi pi-filter"
-          />
-          <div class="flex min-w-0 flex-1">
-            <Input
-              v-model="search"
-              size="medium"
-              placeholder="Search"
-              aria-label="Search applications"
-              class="w-full"
-            >
-              <template #iconLeft>
-                <i
-                  class="pi pi-search"
-                  aria-hidden="true"
-                />
-              </template>
-            </Input>
-          </div>
-          <Tooltip text="Refresh">
-            <IconButton
-              icon="pi pi-refresh"
-              kind="outlined"
-              size="medium"
-              aria-label="Refresh"
-            />
-          </Tooltip>
-          <Tooltip text="Download CSV">
-            <IconButton
-              icon="pi pi-download"
-              kind="outlined"
-              size="medium"
-              aria-label="Download CSV"
-            />
-          </Tooltip>
-          <Tooltip text="Columns">
-            <IconButton
-              icon="ai ai-column"
-              kind="outlined"
-              size="medium"
-              aria-label="Columns"
-            />
-          </Tooltip>
-        </div>
 
         <Card :padded="false">
           <template #content>

@@ -4,7 +4,7 @@ The top bar of the documentation site. A reader arrives from search or from the 
 
 ## When to use
 
-- On every documentation page, inside `shells/documentation`.
+- An app that does not use `DocLayout` and needs the documentation bar on its own. Inside `shells/documentation`, `DocLayout` already renders this bar; never add it to a page there.
 - On a docs-like reference site (API reference, changelog) that shares the documentation navigation.
 
 ## When not to use
@@ -16,7 +16,7 @@ The top bar of the documentation site. A reader arrives from search or from the 
 
 ### A. Bar — `GlobalHeader` (required)
 
-Default `content` placement, `aria-label="Azion documentation"`. Start cluster in `GlobalHeader.Left`, an empty `GlobalHeader.Nav`, the actions in `GlobalHeader.Right`.
+Default `content` placement, `aria-label="Azion documentation"`. Start cluster in `GlobalHeader.Left`, an empty `GlobalHeader.Middle`, the actions in `GlobalHeader.Right`.
 
 ### B. Navigation trigger and GitHub — `IconButton` (required)
 
@@ -28,7 +28,7 @@ Inside `GlobalHeader.Brand`, followed by a small `Docs` overline tag, both in on
 
 ### D. Section links — `NavigationMenu` (required from lg)
 
-The top-level sections (`Reference`, `Guides`, `Dev tools`) as `NavigationMenu.Trigger` links, with the popup (`Portal`, `Positioner` bottom-start, `Popup`, `Arrow`, `Viewport`) for sections that open a panel. Hidden below `lg`, where the trigger in B opens the same sections.
+The top-level sections (`Reference`, `Guides`, `Dev tools`) as `NavigationMenu.Link` items, each with its route. Use `NavigationMenu.Trigger` with `Content` and the popup (`Portal`, `Positioner` bottom-start, `Popup`, `Arrow`, `Viewport`) only for a section that opens a panel; a trigger that opens nothing is a bug. Hidden below `lg`, where the trigger in B opens the same sections.
 
 ### E. Console — `Button` (required)
 

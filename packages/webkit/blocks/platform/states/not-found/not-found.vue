@@ -15,7 +15,7 @@
         description="There is nothing deployed at this address. Check the URL or head back to the start."
       >
         <template #icon>
-          <div class="w-64 sm:w-80">
+          <div class="w-(--container-3xs) sm:w-(--container-2xs)">
             <LineFigure
               name="azion-404"
               play

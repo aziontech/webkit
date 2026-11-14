@@ -12,7 +12,7 @@ The signed-out screens of a platform app: sign in, sign up, reset password and c
 
 - First-run steps after the account exists (profile, plan, organization): use `platform/account/onboarding-form`.
 - Changing the password or email of a signed-in user: use `platform/account/profile`.
-- Signing out an expired session over a console page: the shell wire is `platform/states/page-wires` (SessionWire); this block is where it lands.
+- Signing out an expired session over a console page: the shell wire is `platform/states/page-wires` (Session); this block is where it lands.
 - Any signed-in form: use `platform/states/form-validation` for the submit states and `platform/settings/settings-form` for settings.
 
 ## Building blocks
@@ -35,7 +35,7 @@ Three roles, never more on one step:
 
 ### D. The card — `Card` (required)
 
-One `Card` with `:padded="false"`, capped at `max-w-(--container-sm)` and centred in the column. It holds the `<form novalidate>`, its heading (`h1` plus a muted lead), the notice slot, the step body and the primary action. Prompts that are not part of the form (Don't have an account? Sign up, the terms line) sit under the card, outside it.
+One `Card` with `:padded="false"`, capped at `max-w-(--container-sm)` and centred in the column. It holds the `<form novalidate>`, its heading (`PageHeader`, `size="small"`: the `h1` plus a muted lead), the notice slot, the step body inside one `fieldset` and the primary action. Prompts that are not part of the form (Don't have an account? Sign up, the terms line) sit under the card, outside it.
 
 ### E. Card notice — `Alert` (conditional)
 
@@ -46,7 +46,7 @@ The one place every outcome lands. It sits under the card heading and above **bo
 - **503** (`ServiceUnavailable`) and **no response** (`Timeout`): `warning`, with **Retry** in the `#action` slot. Severity follows certainty: a timeout is an unknown.
 - **500** (`ServerError`): `danger`, with **Retry**. Tied to no field, so where the console would toast, the card keeps it.
 - **409** (`EmailAlreadyRegistered`): `danger`, carrying the two exits as links in the default slot: Sign in or reset your password. The address stays in the field.
-- **Success** (signed in, account created): `success`, no action. Sign up reads `Account created. We sent a verification link to name@example.com.`
+- **Success** (signed in, account created, password updated, link resent): `success`, no action. Sign up reads `Account created. We sent a verification link to jane.doe@example.com.`
 
 Put the copy in the default slot when it carries links; animate the entrance on a wrapper, not on the `Alert` itself.
 
@@ -76,11 +76,11 @@ Names the icon-only back control: `Change email` on the password step, `Back to 
 
 ### L. Password field — `Field` (password and new-password steps)
 
-Wraps each `PasswordInput` with its `required` / `invalid` state and a `Field.Description` that holds the error. On the new-password step it also wraps the requirements list.
+Wraps each `PasswordInput` with its `required` / `invalid` state and a `Field.Error` that holds the error. On the new-password step it also wraps the requirements list.
 
 ### M. Password — `PasswordInput` (password and new-password steps)
 
-`autocomplete="current-password"` on sign in, `autocomplete="new-password"` on reset and sign up. Placeholders describe the expected value (`Type your password`, `Enter a new password`, `Repeat the new password`). `Forgot your password?` is a plain link under the sign-in password; it carries the email into the reset step.
+`autocomplete="current-password"` on sign in, `autocomplete="new-password"` on reset and sign up. Placeholders describe the expected value (`Type your password`, `Enter a new password`, `Repeat the new password`). `Forgot your password?` is a `Button` with `kind="link"` under the sign-in password (an in-page action, so never an anchor to `#`); it carries the email into the reset step. `Resend email` and `Set a new password` on the sent step are link buttons too.
 
 ### N. Password rules — `PasswordRequirements` (new-password step, sign up)
 
@@ -90,6 +90,10 @@ Live checklist bound to the new password (`:value`), driven by `DEFAULT_PASSWORD
 
 `severity="info"`, `size="small"`, `Last used`, pinned to the top-end corner of the primary action to point at the method the user signed in with last time. Decorative help, never a status.
 
+### P. Card heading — `PageHeader` (required)
+
+`size="small"`, the step's title and its lead (`Welcome back` / `Sign in to your account.`). The same part on every screen of the block, primary and variants, so the card always opens on one `h1`.
+
 ## Do
 
 - Keep one card and one notice slot for the whole flow; swap the step body, not the page.
@@ -97,7 +101,7 @@ Live checklist bound to the new password (`:value`), driven by `DEFAULT_PASSWORD
 - After a 401, put the message above both fields, clear the password and move focus back to it.
 - Keep the credentials after a 503, a 500 or a timeout; Retry re-sends the same request.
 - Carry the email between steps (sign in to reset, reset back to sign in) so the user never types it twice.
-- Release the in-flight lock on every outcome so Retry can run again.
+- While a request is in flight, show the primary `Button` `loading`, disable the step's `fieldset` and mark the form `aria-busy`; release the lock on every outcome so Retry can run again.
 - Enter the card column once, on mount: it slides in from the inline start with a fade (`starting:-translate-x-6 starting:opacity-0`, `rtl:starting:translate-x-6`, `transition-[translate,opacity] duration-slow-01 ease-expressive-entrance`). Steps inside the card do not replay it.
 - Let the card height follow the step: a `ResizeObserver` on the form sets the wrapper height, which eases with `transition-[height] duration-moderate-02 ease-productive-entrance` and clips only while it moves.
 - While the identity providers load, hold their place with two `Skeleton` bars of the buttons' height in a `role="status"` region named `Preparing sign-in providers`; keep email sign-in usable.
@@ -132,12 +136,12 @@ Live checklist bound to the new password (`:value`), driven by `DEFAULT_PASSWORD
 - **409 notice:** the fact plus the two exits as links: `This email is already registered. Sign in or reset your password.`
 - **Session expired:** `Your session expired. Sign in again to pick up where you left off.`
 - **Providers loading:** the status name says what is happening, no ellipsis: `Preparing sign-in providers`.
-- **Action in a notice:** `Retry`, never "Try again".
+- **Action in a notice:** `Retry`, never "Try again" (the console and assistant blocks use the same word).
 
 ## Accessibility
 
 - The form has an accessible name (`aria-label="Sign in to your account"`) and `novalidate`, so the browser does not show its own bubbles over the field messages.
-- Each input has a visible `Field.Label` tied to it by its `Field`; each error is linked with `aria-describedby` (or through `Field.Description` inside `Field`).
+- Each input has a visible `Field.Label` tied to it by its `Field`; each error is linked with `aria-describedby` (or through `Field.Error` inside `Field`).
 - Use the right `autocomplete` on every field (`username`, `current-password`, `new-password`, `email`) so password managers and autofill work.
 - Icon-only back buttons have an `aria-label` equal to their tooltip.
 - After a submit with errors, focus the first field that needs attention; after a 401, the password.
@@ -154,9 +158,10 @@ Live checklist bound to the new password (`:value`), driven by `DEFAULT_PASSWORD
 - Login: the sign-in flow on the email step, with Google and GitHub over the `or` divider; the same file walks through password, reset, sent and new-password.
 - SignUp: create an account with a work email (and a password checked by `PasswordRequirements`), Google or GitHub.
 - SessionExpired: opens on the password step for the same email, with an info notice that clears on the next action.
+- Submitting: Sign in in flight on the password step: the primary `Button` loading, the fieldset disabled, the form `aria-busy`.
 - ProvidersLoading: the Login card while the identity providers load; two `Skeleton` bars in a `role="status"` region (`Preparing sign-in providers`) replace Google and GitHub over the `or` divider, and the email step works meanwhile.
 - CheckInbox: the `/signup/verify` card: where the link went, the resend prompt and a secondary Return to sign in.
-- IncorrectCredentials: 401 on Sign in; a danger notice above both fields, no action, the password cleared and focused.
+- IncorrectCredentials: 401 on Sign in, on the password step of the same two-step card; a danger notice under the heading, no action, the password cleared.
 - ServiceUnavailable: 503 on Sign in; a warning notice with Retry, credentials kept.
 - ServerError: 500 on the request; a danger notice with Retry in the card instead of a toast.
 - Timeout: no response; the same notice as the 500 in warning, with Retry, because the request may have gone through.

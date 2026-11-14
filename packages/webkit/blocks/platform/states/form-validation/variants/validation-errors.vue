@@ -45,13 +45,13 @@
 
   const errors = computed<Record<FieldName, string>>(() => ({
     key: !form.key
-      ? 'Key is required.'
+      ? 'This field is required.'
       : !KEY_PATTERN.test(form.key)
         ? 'Use uppercase letters, digits and underscores, starting with a letter.'
         : form.key === takenKey.value
           ? `A variable named ${form.key} already exists.`
           : '',
-    value: form.value ? '' : 'Value is required.',
+    value: form.value ? '' : 'This field is required.',
     environment: form.environment ? '' : 'Select an environment.',
     description:
       form.description.length > DESCRIPTION_LIMIT
@@ -239,7 +239,7 @@
             kind="outlined"
             size="medium"
             :disabled="busy"
-            @click="reset"
+            href="/variables"
           />
         </div>
         <div class="w-full md:w-fit">

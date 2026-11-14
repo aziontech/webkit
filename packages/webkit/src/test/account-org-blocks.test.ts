@@ -209,7 +209,8 @@ describe('shells/console#AccountSwitch', () => {
       expect(dialog()?.textContent).toContain('Switch account')
       return dialog() as HTMLElement
     })
-    expect(panel.textContent).toContain('Acme Inc.')
+    expect(panel.querySelector('[aria-busy="true"]')).not.toBeNull()
+    await waitFor(() => expect(panel.textContent).toContain('Acme Inc.'))
     expect(buttonByText('Storefront EU', panel)).toHaveAttribute('aria-current', 'true')
     await expectNoA11yViolations(panel)
     await fireEvent.update(view.getByLabelText('Search accounts'), 'research')
@@ -225,7 +226,7 @@ describe('shells/console#AccountSwitch', () => {
     const view = render(AccountSwitch)
     await fireEvent.click(view.getByRole('button', { name: /Account: Storefront EU/ }))
     const panel = await waitFor(() => dialog() as HTMLElement)
-    const collapse = view.getByRole('button', { name: 'Collapse Retail' })
+    const collapse = await waitFor(() => view.getByRole('button', { name: 'Collapse Retail' }))
     expect(collapse).toHaveAttribute('aria-expanded', 'true')
     await fireEvent.click(collapse)
     await waitFor(() => expect(panel.textContent).not.toContain('Storefront US'))

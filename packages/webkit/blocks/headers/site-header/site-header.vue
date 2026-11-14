@@ -78,6 +78,10 @@
         </GlobalHeader.Middle>
 
         <GlobalHeader.Right>
+          <SearchTrigger
+            collapsible
+            @open="searchOpen = true"
+          />
           <div class="hidden xl:flex">
             <Button
               label="Contact"
@@ -87,7 +91,7 @@
             />
           </div>
           <Button
-            label="Login"
+            label="Sign in"
             kind="secondary"
             size="medium"
             href="#"
@@ -98,10 +102,6 @@
             size="medium"
             class="shrink-0"
             href="#"
-          />
-          <SearchTrigger
-            collapsible
-            @open="searchOpen = true"
           />
         </GlobalHeader.Right>
       </GlobalHeader>

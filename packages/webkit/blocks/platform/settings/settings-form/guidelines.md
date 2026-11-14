@@ -22,9 +22,9 @@ The place the user goes to change how an account or a project behaves. They scan
 
 A `PageHeader` at `size="small"` opens the form column (`layout-column-form`) with the page name and one sentence of purpose. Its `title-id` names the `form` through `aria-labelledby`. No actions in the heading: saving lives at the bottom.
 
-### B. Topic sections — `Card`, `Item` (required)
+### B. Topic sections — `SectionHeader`, `Card`, `Item` (required)
 
-Each topic is a section with a small heading (`text-heading-xxs`) over a flush `Card :padded="false"` whose content is an `Item.List`. Sections stack at the section step; the heading and its card sit at the group gap. In SaveAll the sections share one `fieldset` with a visually hidden `legend`; in SavePerGroup and SavePerCard each card holds its own `fieldset`.
+Each topic is a section with a `SectionHeader` at `size="small"` (so every topic is an `h2` under the page `h1`) over a flush `Card :padded="false"` whose content is an `Item.List`. Sections stack at the section step; the heading and its card sit at the group gap. In SaveAll the sections share one `fieldset` with a visually hidden `legend`; in SavePerGroup and SavePerCard each card holds its own `fieldset`.
 
 ### C. Setting rows — `SettingRow`, `Input`, `HelperText`, `Select`, `Switch` (required)
 
@@ -32,7 +32,7 @@ One `SettingRow` per setting, with a `title` and a one-sentence `description`. T
 
 ### D. Save — `SaveBar`, `Button` (required)
 
-SaveAll ends with one full-bleed sticky `SaveBar kind="plain"` holding an outlined Discard and the primary Save, both medium. While saving, the `fieldset` and Discard are disabled and Save takes `:loading`. Discard puts back the last saved values and clears the errors. In SavePerGroup and SavePerCard there is no `SaveBar`: each `Card` footer carries a secondary Save for that card only, and SavePerCard puts an optional docs `Link` on the footer's start.
+SaveAll ends with one full-bleed sticky `SaveBar kind="plain"` holding an outlined Discard and the primary Save, both medium. While saving, the `fieldset` and Discard are disabled and Save takes `:loading`. Discard and Save stay disabled until the form differs from what was saved (`useUnsavedChanges` tracks the baseline and `commit()` moves it on a successful save). Discard puts back the last saved values and clears the errors. A successful save shows a `Profile saved.` success toast; a rejected one shows an error toast (`The profile wasn't saved.`, the changes kept) with Retry, and leaves the form dirty. In SavePerGroup and SavePerCard there is no `SaveBar`: each `Card` footer carries a secondary Save for that card only, confirmed by a toast naming the card, and SavePerCard puts an optional docs `Link` on the footer's start.
 
 ## Do
 
@@ -76,6 +76,7 @@ SaveAll ends with one full-bleed sticky `SaveBar kind="plain"` holding an outlin
 
 - SaveAll: Profile with General, Preferences and Notifications in one fieldset and one sticky Discard and Save footer.
 - Saving: the whole fieldset and Discard are disabled and Save shows its loading state.
+- SaveFailed: the server rejects the save; an error toast with Retry says the changes are kept, and the form stays dirty with every entry.
 - SavePerGroup: Preferences split into General and Notifications cards, each with its own secondary Save.
 - SavingOneGroup: General is saving with its rows disabled while Notifications stays editable.
 - SavePerCard: Project settings with Preview Toolbar and Deployment Protection cards, each with an info `Alert`, its fields and its own Save.
@@ -86,6 +87,6 @@ SaveAll ends with one full-bleed sticky `SaveBar kind="plain"` holding an outlin
 - `platform/edit/edit-resource` — settings of one resource, with anchored sections.
 - `platform/account/profile` — the full account profile built on the same layout.
 - `platform/states/form-validation` — every outcome of a submit.
-- `platform/states/async-submit` — a save that runs long or fails on the server.
+- `platform/states/async-submit` — a save that runs long and reports back later.
 - `platform/delete/delete-with-confirmation` — the delete row a settings page can end with.
 - `SettingRow` — the row this form is made of; see `skills/webkit-form` for the ItemGroup settings and Card with independent saves types.

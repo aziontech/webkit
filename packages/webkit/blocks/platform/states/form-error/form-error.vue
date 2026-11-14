@@ -5,6 +5,7 @@
   import Breadcrumb from '@aziontech/webkit/breadcrumb-root'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
+  import DropdownMenu from '@aziontech/webkit/dropdown-menu'
   import Field from '@aziontech/webkit/field'
   import GlobalHeader from '@aziontech/webkit/global-header'
   import HelperText from '@aziontech/webkit/helper-text'
@@ -20,10 +21,10 @@
   import SettingRow from '@aziontech/webkit/setting-row'
   import Skeleton from '@aziontech/webkit/skeleton'
   import Switch from '@aziontech/webkit/switch'
-  import Tag from '@aziontech/webkit/tag'
+  import Tooltip from '@aziontech/webkit/tooltip'
   import { nextTick, reactive, ref } from 'vue'
 
-  const breadcrumb = [{ label: 'Forms', href: '/forms' }, { label: 'Error validation' }]
+  const breadcrumb = [{ label: 'Services', href: '/services' }, { label: 'Create Service' }]
 
   const catalog = [
     { value: 'origin-web-prod', label: 'web-origin-prod', kind: 'HTTP' },
@@ -55,7 +56,7 @@
     { label: '8008', value: '8008' }
   ]
 
-  const serverOrigins = ref(['origin-web-prod', 'origin-api-prod', 'origin-assets'])
+  const serverOrigins = ref(['origin-api-prod', 'origin-assets'])
   const origins = ref([
     { value: 'origin-web-prod', label: 'web-origin-prod', kind: 'HTTP' },
     { value: 'origin-api-prod', label: 'api-origin-prod', kind: 'HTTP' },
@@ -79,7 +80,6 @@
   const originError = ref('')
   const submitting = ref(false)
   const reloadingOrigins = ref(false)
-  const deletedByOtherUser = ref('')
 
   const originLabel = (value: string) =>
     origins.value.find((origin) => origin.value === value)?.label ?? ''
@@ -88,28 +88,6 @@
     (values ?? [])
       .map((value) => httpPortOptions.find((option) => option.value === value)?.label ?? value)
       .join(', ')
-
-  const simulateDelete = () => {
-    const target =
-      origins.value.find((origin) => origin.value === form.originId) ?? origins.value[0]
-    if (!target) return
-    serverOrigins.value = serverOrigins.value.filter((value) => value !== target.value)
-    deletedByOtherUser.value = target.label
-  }
-
-  const resetScenario = () => {
-    serverOrigins.value = catalog.map((origin) => origin.value)
-    origins.value = [...catalog]
-    deletedByOtherUser.value = ''
-    form.name = 'checkout-web'
-    form.originId = 'origin-web-prod'
-    form.hostHeader = '${host}'
-    originError.value = ''
-    errors.name = ''
-    errors.httpPorts = ''
-    errors.originId = ''
-    errors.hostHeader = ''
-  }
 
   const reloadOrigins = () => {
     if (reloadingOrigins.value) return
@@ -157,18 +135,26 @@
       ?.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' })
     document.getElementById('ev-origin')?.focus({ preventScroll: true })
   }
+
+  const account = { name: 'Amy Chen', email: 'amy.chen@example.com' }
 </script>
 
 <template>
   <div class="flex h-dvh flex-col bg-(--bg-canvas)">
     <GlobalHeader aria-label="Console">
       <GlobalHeader.Left>
-        <IconButton
-          icon="pi pi-chevron-left"
-          aria-label="Back to Forms"
-          kind="outlined"
-          size="small"
-        />
+        <Tooltip
+          text="Back to Services"
+          placement="bottom"
+        >
+          <IconButton
+            icon="pi pi-chevron-left"
+            aria-label="Back to Services"
+            kind="outlined"
+            size="small"
+            href="/services"
+          />
+        </Tooltip>
         <GlobalHeader.Brand>
           <a
             href="/home"
@@ -185,17 +171,64 @@
       </GlobalHeader.Left>
       <GlobalHeader.Middle />
       <GlobalHeader.Right>
-        <button
-          type="button"
-          aria-label="Account settings"
-          class="rounded-full transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
-        >
-          <Avatar
-            label="name@example.com"
-            size="medium"
-            kind="square"
-          />
-        </button>
+        <DropdownMenu placement="bottom-end">
+          <DropdownMenu.Trigger>
+            <button
+              type="button"
+              aria-label="Account menu"
+              class="rounded-(--shape-button) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
+            >
+              <Avatar
+                :label="account.name"
+                size="medium"
+                kind="square"
+              />
+            </button>
+          </DropdownMenu.Trigger>
+          <DropdownMenu.Group>
+            <template #top>
+              <div class="flex min-w-0 flex-col">
+                <span class="truncate text-label-md text-(--text-default)">{{ account.name }}</span>
+                <span class="truncate text-body-xs text-(--text-muted)">{{ account.email }}</span>
+              </div>
+            </template>
+            <DropdownMenu.Option
+              value="settings"
+              label="Account settings"
+            >
+              <template #right>
+                <i
+                  class="pi pi-cog"
+                  aria-hidden="true"
+                />
+              </template>
+            </DropdownMenu.Option>
+          </DropdownMenu.Group>
+          <DropdownMenu.Group>
+            <DropdownMenu.Option
+              value="docs"
+              label="Docs"
+            >
+              <template #right>
+                <i
+                  class="pi pi-book"
+                  aria-hidden="true"
+                />
+              </template>
+            </DropdownMenu.Option>
+            <DropdownMenu.Option
+              value="logout"
+              label="Log out"
+            >
+              <template #right>
+                <i
+                  class="pi pi-sign-out"
+                  aria-hidden="true"
+                />
+              </template>
+            </DropdownMenu.Option>
+          </DropdownMenu.Group>
+        </DropdownMenu>
       </GlobalHeader.Right>
     </GlobalHeader>
     <main class="animate-page-enter motion-reduce:animate-none min-h-0 flex-1 overflow-auto">
@@ -206,47 +239,6 @@
         @submit.prevent="submit"
       >
         <div class="layout-column-form layout-boundary flex flex-1 flex-col">
-          <aside
-            aria-label="Scenario simulation"
-            class="flex flex-col gap-(--spacing-md) rounded-(--shape-card) border border-dashed border-(--border-default) bg-(--bg-surface-raised) p-(--spacing-lg)"
-          >
-            <div class="flex flex-wrap items-center justify-between gap-(--spacing-sm)">
-              <p class="m-0 text-overline-sm text-(--text-muted)">Simulation: the other user</p>
-              <Tag
-                :label="
-                  deletedByOtherUser
-                    ? `Deleted server-side: ${deletedByOtherUser}`
-                    : 'Server in sync'
-                "
-                :severity="deletedByOtherUser ? 'danger' : 'success'"
-                size="medium"
-              />
-            </div>
-            <p class="m-0 text-body-sm text-(--text-muted)">
-              You are User 1: the service below is filled in and already linked to an origin, four
-              sections down. Have User 2 delete that origin through the API. Nothing will tell you,
-              your copy of the list goes stale. Then press Save, and watch the form take you to the
-              one section that needs you.
-            </p>
-            <div class="flex flex-wrap items-center gap-(--spacing-sm)">
-              <Button
-                label="User 2 deletes the linked origin"
-                kind="outlined"
-                size="medium"
-                icon="pi pi-trash"
-                :disabled="!!deletedByOtherUser || submitting"
-                @click="simulateDelete"
-              />
-              <Button
-                label="Reset scenario"
-                kind="transparent"
-                size="medium"
-                :disabled="submitting"
-                @click="resetScenario"
-              />
-            </div>
-          </aside>
-
           <fieldset
             class="layout-section-start mx-0 flex min-w-0 flex-col border-0 p-0"
             :disabled="submitting"

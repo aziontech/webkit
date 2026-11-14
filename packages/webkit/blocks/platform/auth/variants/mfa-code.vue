@@ -9,7 +9,7 @@
   import PageHeader from '@aziontech/webkit/page-header'
   import { computed, nextTick, onMounted, ref } from 'vue'
 
-  const account = 'grace.hall@example.com'
+  const account = 'jane.doe@example.com'
 
   const recovery = ref(false)
   const code = ref('')
@@ -192,12 +192,12 @@
                     </form>
 
                     <div class="flex flex-col items-start gap-(--spacing-xs)">
-                      <a
-                        class="text-link text-body-sm"
-                        href="#"
-                        @click.prevent="switchMethod"
-                        >{{ recovery ? 'Use your authenticator app' : 'Use a recovery code' }}</a
-                      >
+                      <Button
+                        type="button"
+                        :label="recovery ? 'Use your authenticator app' : 'Use a recovery code'"
+                        kind="link"
+                        @click="switchMethod"
+                      />
                       <a
                         class="text-link text-body-sm"
                         href="/login"

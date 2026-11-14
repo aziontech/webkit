@@ -1,39 +1,53 @@
 <script setup lang="ts">
+  import Button from '@aziontech/webkit/button'
+  import FileDropzone from '@aziontech/webkit/file-dropzone'
   import { ref } from 'vue'
 
-  const active = ref(true)
+  const folderInput = ref<HTMLInputElement | null>(null)
+  const received = ref(0)
+
+  const chooseFolder = () => folderInput.value?.click()
+
+  const onFolderChosen = (event: Event) => {
+    received.value = (event.target as HTMLInputElement).files?.length ?? 0
+  }
+
+  const onDrop = (_event: DragEvent, files: File[]) => {
+    received.value = files.length
+  }
 </script>
 
 <template>
-  <div class="relative flex min-h-full flex-1 flex-col">
-    <Transition
-      enter-active-class="animate-fade-in motion-reduce:animate-none"
-      leave-active-class="animate-fade-out motion-reduce:animate-none"
+  <div class="layout-boundary flex min-h-full flex-1 flex-col">
+    <FileDropzone
+      directories
+      title="Drop your project to deploy it"
+      description="A project folder, or the files inside one. We detect what it is built with."
+      class="flex-1"
+      @drop="onDrop"
     >
-      <div
-        v-if="active"
-        aria-hidden="true"
-        class="pointer-events-none absolute inset-[var(--drop-zone-inset,0)] z-40 overflow-hidden rounded-(--shape-card) border-2 border-dashed border-(--border-selected) bg-(--bg-canvas) [--drop-zone-inset:var(--layout-boundary-inline)]"
-      >
-        <div
-          class="sticky top-0 flex h-dvh max-h-full flex-col items-center justify-center gap-(--spacing-md) p-(--spacing-lg) text-center"
-        >
-          <span
-            class="flex size-12 items-center justify-center rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface-raised)"
-          >
-            <i
-              class="pi pi-cloud-upload text-body-lg leading-none text-(--text-default)"
-              aria-hidden="true"
-            />
-          </span>
-          <div class="flex max-w-(--container-md) flex-col gap-(--spacing-xxs)">
-            <p class="text-heading-xs text-(--text-default)">Drop your project to deploy it</p>
-            <p class="text-pretty text-body-sm text-(--text-muted)">
-              A project folder, or the files inside one. We detect what it is built with.
-            </p>
-          </div>
-        </div>
-      </div>
-    </Transition>
+      <Button
+        label="Choose a folder"
+        kind="outlined"
+        size="medium"
+        icon="pi pi-folder-open"
+        @click="chooseFolder"
+      />
+      <input
+        ref="folderInput"
+        type="file"
+        webkitdirectory
+        multiple
+        hidden
+        aria-label="Project folder"
+        @change="onFolderChosen"
+      />
+    </FileDropzone>
+    <p
+      class="sr-only"
+      role="status"
+    >
+      {{ received ? `${received} files received.` : '' }}
+    </p>
   </div>
 </template>

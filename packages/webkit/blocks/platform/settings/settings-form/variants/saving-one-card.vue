@@ -7,7 +7,8 @@
   import PageHeader from '@aziontech/webkit/page-header'
   import Select from '@aziontech/webkit/select'
   import Switch from '@aziontech/webkit/switch'
-  import { type Ref, reactive, ref } from 'vue'
+  import { toast } from '@aziontech/webkit/toast'
+  import { reactive, type Ref, ref } from 'vue'
 
   const toolbarOptions = [
     { label: 'Team default', value: 'default' },
@@ -29,16 +30,17 @@
   const protection = reactive({ level: 'standard', shareableLinks: true })
   const savingProtection = ref(false)
 
-  const saveCard = (flag: Ref<boolean>) => {
+  const saveCard = (flag: Ref<boolean>, label: string) => {
     if (flag.value) return
     flag.value = true
     setTimeout(() => {
       flag.value = false
+      toast.success(`${label} saved.`)
     }, 900)
   }
 
-  const saveToolbar = () => saveCard(savingToolbar)
-  const saveProtection = () => saveCard(savingProtection)
+  const saveToolbar = () => saveCard(savingToolbar, 'Preview Toolbar')
+  const saveProtection = () => saveCard(savingProtection, 'Deployment Protection')
 </script>
 
 <template>

@@ -2,6 +2,7 @@
   import ActionConfirmation, {
     type ActionConfirmationState
   } from '@aziontech/webkit/action-confirmation'
+  import Button from '@aziontech/webkit/button'
   import ChatMessage from '@aziontech/webkit/chat-message'
   import CodeBlock from '@aziontech/webkit/code-block'
   import Conversation from '@aziontech/webkit/conversation'
@@ -14,6 +15,7 @@
   const command = 'azion deploy --workload storefront --build b-4821 --env production'
   const decision = ref<ActionConfirmationState>('pending')
   const run = ref<ToolCallState | ''>('')
+  const stopped = ref(false)
   const prompt = ref('')
   let timer: ReturnType<typeof setTimeout> | undefined
 
@@ -21,6 +23,10 @@
     if (decision.value === 'denied')
       return 'Got it, nothing was deployed. Build `b-4821` stays ready if you change your mind.'
     if (decision.value === 'expired') return 'This request expired. Nothing was deployed.'
+    if (run.value === 'error' && stopped.value)
+      return 'You stopped the deployment before it finished. Production still serves the previous version `b-4790`.'
+    if (run.value === 'error')
+      return 'The deployment of build `b-4821` failed while uploading the build to the edge. Nothing changed: production still serves the previous version `b-4790`.'
     if (run.value === 'success')
       return 'storefront is live on production with build `b-4821`. The previous version `b-4790` stays available for rollback.'
     return ''
@@ -31,6 +37,7 @@
 
   function approve() {
     decision.value = 'approved'
+    stopped.value = false
     run.value = 'running'
     timer = setTimeout(() => (run.value = 'success'), 2500)
   }
@@ -42,6 +49,7 @@
 
   function stop() {
     clearTimeout(timer)
+    stopped.value = true
     run.value = 'error'
   }
 
@@ -105,6 +113,14 @@
         <template #actions>
           <ChatMessage.Actions>
             <CopyButton :value="followUp" />
+            <Button
+              v-if="run === 'error'"
+              label="Retry"
+              kind="outlined"
+              size="small"
+              icon="pi pi-refresh"
+              @click="approve"
+            />
           </ChatMessage.Actions>
         </template>
       </ChatMessage>

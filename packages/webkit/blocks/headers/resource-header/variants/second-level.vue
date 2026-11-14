@@ -4,17 +4,24 @@
   import Breadcrumb from '@aziontech/webkit/breadcrumb-root'
   import Button from '@aziontech/webkit/button'
   import ButtonHighlight from '@aziontech/webkit/button-highlight'
+  import Command from '@aziontech/webkit/command'
+  import DropdownMenu from '@aziontech/webkit/dropdown-menu'
   import GlobalHeader from '@aziontech/webkit/global-header'
   import IconButton from '@aziontech/webkit/icon-button'
   import SearchTrigger from '@aziontech/webkit/search-trigger'
   import Tooltip from '@aziontech/webkit/tooltip'
+  import { ref } from 'vue'
 
   const crumbs = [{ label: 'Applications', href: '/applications' }, { label: 'webkit-sample-vue' }]
+
+  const account = { name: 'Amy Chen', email: 'amy.chen@example.com' }
+  const searchPages = ['Home', 'Applications', 'Functions', 'Firewall', 'Settings']
+  const searchOpen = ref(false)
 </script>
 
 <template>
   <div class="@container w-full bg-(--bg-canvas)">
-    <GlobalHeader aria-label="Azion Console">
+    <GlobalHeader aria-label="Console">
       <GlobalHeader.Left>
         <div class="flex min-w-0 items-center justify-start gap-(--spacing-xs)">
           <span class="contents md:hidden">
@@ -30,16 +37,18 @@
               />
             </Tooltip>
           </span>
-          <a
-            href="/home"
-            aria-label="Azion home"
-            class="inline-flex w-fit items-center rounded-(--shape-elements) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) h-6 shrink-0 px-(--spacing-xxs)"
-          >
-            <Brand
-              kind="default"
-              size="small"
-            />
-          </a>
+          <GlobalHeader.Brand>
+            <a
+              href="/home"
+              aria-label="Azion home"
+              class="inline-flex shrink-0 items-center self-center rounded-(--shape-elements) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
+            >
+              <Brand
+                kind="default"
+                size="small"
+              />
+            </a>
+          </GlobalHeader.Brand>
           <div class="-ms-(--spacing-xs) hidden w-fit min-w-0 shrink md:flex">
             <Breadcrumb
               :items="crumbs"
@@ -50,7 +59,10 @@
       </GlobalHeader.Left>
       <GlobalHeader.Middle />
       <GlobalHeader.Right>
-        <SearchTrigger collapsible />
+        <SearchTrigger
+          collapsible
+          @open="searchOpen = true"
+        />
         <span class="contents md:hidden">
           <Tooltip
             text="Create"
@@ -88,18 +100,90 @@
             icon="ai ai-ask-azion"
           />
         </span>
-        <button
-          type="button"
-          aria-label="Account settings"
-          class="rounded-full transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
-        >
-          <Avatar
-            label="name@example.com"
-            size="medium"
-            kind="square"
-          />
-        </button>
+        <DropdownMenu placement="bottom-end">
+          <DropdownMenu.Trigger>
+            <button
+              type="button"
+              aria-label="Account menu"
+              class="rounded-(--shape-button) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
+            >
+              <Avatar
+                :label="account.name"
+                size="medium"
+                kind="square"
+              />
+            </button>
+          </DropdownMenu.Trigger>
+          <DropdownMenu.Group>
+            <template #top>
+              <div class="flex min-w-0 flex-col">
+                <span class="truncate text-label-md text-(--text-default)">{{ account.name }}</span>
+                <span class="truncate text-body-xs text-(--text-muted)">{{ account.email }}</span>
+              </div>
+            </template>
+            <DropdownMenu.Option
+              value="settings"
+              label="Account settings"
+            >
+              <template #right>
+                <i
+                  class="pi pi-cog"
+                  aria-hidden="true"
+                />
+              </template>
+            </DropdownMenu.Option>
+            <DropdownMenu.Option
+              value="personal-tokens"
+              label="Personal tokens"
+            >
+              <template #right>
+                <i
+                  class="pi pi-key"
+                  aria-hidden="true"
+                />
+              </template>
+            </DropdownMenu.Option>
+          </DropdownMenu.Group>
+          <DropdownMenu.Group>
+            <DropdownMenu.Option
+              value="docs"
+              label="Docs"
+            >
+              <template #right>
+                <i
+                  class="pi pi-book"
+                  aria-hidden="true"
+                />
+              </template>
+            </DropdownMenu.Option>
+            <DropdownMenu.Option
+              value="logout"
+              label="Log out"
+            >
+              <template #right>
+                <i
+                  class="pi pi-sign-out"
+                  aria-hidden="true"
+                />
+              </template>
+            </DropdownMenu.Option>
+          </DropdownMenu.Group>
+        </DropdownMenu>
       </GlobalHeader.Right>
     </GlobalHeader>
+    <Command v-model:open="searchOpen">
+      <Command.Input placeholder="Search" />
+      <Command.List>
+        <Command.Empty>No page matches your search.</Command.Empty>
+        <Command.Group heading="Pages">
+          <Command.Item
+            v-for="page in searchPages"
+            :key="page"
+            :value="page"
+            >{{ page }}</Command.Item
+          >
+        </Command.Group>
+      </Command.List>
+    </Command>
   </div>
 </template>

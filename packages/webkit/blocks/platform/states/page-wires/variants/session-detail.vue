@@ -146,12 +146,8 @@
                     <div
                       v-for="(field, index) in formRows"
                       :key="index"
-                      class="flex items-center gap-(--spacing-md) px-(--spacing-md) py-(--spacing-md)"
-                      :class="
-                        index > 0
-                          ? 'border-t-(length:--border-width-default) border-(--border-default)'
-                          : ''
-                      "
+                      :data-divided="index > 0 || null"
+                      class="flex items-center gap-(--spacing-md) px-(--spacing-md) py-(--spacing-md) data-divided:border-t-(length:--border-width-default) data-divided:border-(--border-default)"
                     >
                       <div class="flex min-w-0 flex-1 flex-col gap-(--spacing-xs)">
                         <Skeleton

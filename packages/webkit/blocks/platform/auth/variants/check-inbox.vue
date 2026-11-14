@@ -1,9 +1,27 @@
 <script setup lang="ts">
+  import Alert from '@aziontech/webkit/alert'
   import Brand from '@aziontech/webkit/brand'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import GlobalHeader from '@aziontech/webkit/global-header'
   import PageHeader from '@aziontech/webkit/page-header'
+  import { onScopeDispose, ref } from 'vue'
+
+  const resending = ref(false)
+  const resent = ref(false)
+  let resendTimer: ReturnType<typeof setTimeout> | undefined
+
+  onScopeDispose(() => clearTimeout(resendTimer))
+
+  const resend = () => {
+    resending.value = true
+    resent.value = false
+    clearTimeout(resendTimer)
+    resendTimer = setTimeout(() => {
+      resending.value = false
+      resent.value = true
+    }, 600)
+  }
 </script>
 
 <template>
@@ -51,17 +69,25 @@
                   <div class="flex flex-col gap-(--spacing-lg) p-(--spacing-lg)">
                     <PageHeader
                       title="Check your inbox"
-                      description="We sent a verification link to myemail@example.com. Check your inbox or spam folder and follow the instructions."
+                      description="We sent a verification link to jane.doe@example.com. Check your inbox or spam folder and follow the instructions."
+                    />
+
+                    <Alert
+                      v-if="resent"
+                      severity="success"
+                      size="small"
+                      label="We sent another link to jane.doe@example.com."
                     />
 
                     <div class="flex items-center gap-(--spacing-xs)">
                       <p class="text-body-sm text-(--text-default)">Didn't receive the email?</p>
-                      <a
-                        class="text-link text-body-sm"
-                        href="#"
-                        @click.prevent
-                        >Resend email</a
-                      >
+                      <Button
+                        type="button"
+                        label="Resend email"
+                        kind="link"
+                        :loading="resending"
+                        @click="resend"
+                      />
                     </div>
 
                     <Button
@@ -69,6 +95,7 @@
                       kind="secondary"
                       size="large"
                       class="w-full"
+                      href="/login"
                     />
                   </div>
                 </template>
