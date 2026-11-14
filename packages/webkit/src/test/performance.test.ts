@@ -255,7 +255,7 @@ function codeBlockCase(): Case {
           tabs,
           modelValue: active.value,
           'onUpdate:modelValue': (v: string) => (active.value = v),
-          showLineNumbers: true
+          lineNumbers: true
         })
     }),
     update: () => {

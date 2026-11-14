@@ -17,7 +17,7 @@
     <CodeBlock
       :tabs="tabs"
       default-value="highlighted"
-      show-line-numbers
+      line-numbers
     />
   </div>
 </template>

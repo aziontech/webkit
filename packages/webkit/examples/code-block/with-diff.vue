@@ -54,7 +54,7 @@
     <CodeBlock
       :tabs="tabs"
       default-value="diff"
-      show-line-numbers
+      line-numbers
     />
   </div>
 </template>

@@ -3,7 +3,7 @@
   "accordion-root": { "value": "modelValue" },
   "alert": { "severity": { "to": "severity", "values": { "error": "danger" } } },
   "button": { "kind": { "to": "kind", "values": { "text": "transparent" } } },
-  "code-block": { "border": "bordered", "value": "modelValue" },
+  "code-block": { "border": "bordered", "value": "modelValue", "showLineNumbers": "lineNumbers" },
   "doc-card": { "overline": "eyebrow", "link": "linkLabel" },
   "doc-card-group": { "mobileCols": "mobileColumns" },
   "doc-tooltip": { "headline": "title", "cta": "linkLabel" },

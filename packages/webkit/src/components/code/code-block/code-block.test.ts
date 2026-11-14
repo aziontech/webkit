@@ -369,12 +369,70 @@ describe('CodeBlock', () => {
       expect(queryAllByTestId('code-code-block__line-number')).toHaveLength(3)
     })
 
-    it('hides the line-number gutter when showLineNumbers is false', () => {
+    it('hides the line-number gutter when lineNumbers is false', () => {
       const { queryAllByTestId } = render(CodeBlock, {
-        props: { tabs: singleTab, defaultValue: 'only', showLineNumbers: false }
+        props: { tabs: singleTab, defaultValue: 'only', lineNumbers: false }
       })
 
       expect(queryAllByTestId('code-code-block__line-number')).toHaveLength(0)
+    })
+
+    it('still honours the deprecated showLineNumbers over lineNumbers', () => {
+      const off = render(CodeBlock, {
+        props: { tabs: singleTab, defaultValue: 'only', showLineNumbers: false }
+      })
+      expect(off.queryAllByTestId('code-code-block__line-number')).toHaveLength(0)
+      off.unmount()
+      const on = render(CodeBlock, {
+        props: { tabs: singleTab, lineNumbers: false, showLineNumbers: true }
+      })
+      expect(on.queryAllByTestId('code-code-block__line-number')).toHaveLength(3)
+    })
+  })
+
+  describe('single snippet (code + language)', () => {
+    it('renders the code prop when tabs is empty, with no tab strip', () => {
+      const view = render(CodeBlock, {
+        props: { code: CODE_TWO, language: 'javascript', showLabel: true }
+      })
+      expect(view.queryByRole('tablist')).toBeNull()
+      expect(view.getAllByTestId('code-code-block__line')).toHaveLength(2)
+      expect(view.getByTestId('code-code-block__label-text').textContent?.trim()).toBe('JavaScript')
+    })
+
+    it('ignores code when tabs are set', () => {
+      const view = render(CodeBlock, { props: { code: CODE_TWO, tabs: singleTab } })
+      expect(view.getAllByTestId('code-code-block__line')).toHaveLength(3)
+    })
+  })
+
+  describe('tab ids', () => {
+    it('gives two tabbed blocks on one page unique ids and correct labelling', async () => {
+      const spaced = [
+        { label: 'Node js', value: 'node js', language: 'javascript', code: CODE_ONE },
+        { label: 'Deno', value: 'deno', language: 'javascript', code: CODE_TWO }
+      ]
+      const view = render({
+        components: { CodeBlock },
+        setup: () => ({ spaced }),
+        template: '<div><CodeBlock :tabs="spaced" /><CodeBlock :tabs="spaced" /></div>'
+      })
+      const ids = Array.from(view.container.querySelectorAll('[id]')).map((el) => el.id)
+      expect(new Set(ids).size).toBe(ids.length)
+      ids.forEach((id) => expect(id).not.toMatch(/\s/))
+      const panels = view.getAllByRole('tabpanel')
+      expect(panels).toHaveLength(2)
+      panels.forEach((panel) => {
+        const tab = document.getElementById(panel.getAttribute('aria-labelledby') ?? '')
+        expect(tab?.getAttribute('aria-selected')).toBe('true')
+        expect(tab?.getAttribute('aria-controls')).toBe(panel.id)
+        expect(view.container.contains(tab)).toBe(true)
+        expect(panel.parentElement?.closest('[data-testid="code-code-block"]')).toBe(
+          tab?.closest('[data-testid="code-code-block"]')
+        )
+      })
+      const inactive = view.getAllByRole('tab', { selected: false })
+      inactive.forEach((tab) => expect(tab.hasAttribute('aria-controls')).toBe(false))
     })
   })
 

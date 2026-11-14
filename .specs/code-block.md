@@ -3,13 +3,14 @@ name: code-block
 category: code
 structure: monolithic
 status: implemented
-spec_version: 5
+spec_version: 6
+template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-33761
   node_id: 4567:33761
-checksum: 344fd06d5a9a3cce271601d158c6e596af3836a02a6e45768152130b30461778
+checksum: c971f7dfc7c4d80b2ae69c2e255bc4742b615855616ae28a69be5f36642e2adc
 created: 2026-05-28
-last_updated: 2026-11-12
+last_updated: 2026-11-14
 ---
 
 # CodeBlock — Component Spec
@@ -71,7 +72,7 @@ The other regions render conditionally from tab data. Tab header appears when `t
 
 ## Usage
 
-Pass source on each tab’s **`code`** field inside **`tabs`**. There is no top-level `code` prop.
+One snippet takes its source straight from **`code`** and **`language`**:
 
 ```vue
 <script setup>
@@ -82,6 +83,22 @@ Pass source on each tab’s **`code`** field inside **`tabs`**. There is no top-
     return new Response('OK')
   }
 }`
+</script>
+
+<template>
+  <CodeBlock
+    :code="code"
+    language="javascript"
+    show-label
+  />
+</template>
+```
+
+For several languages or files, pass one entry per snippet in **`tabs`** (each with its own `code`; `code` and `language` are ignored when `tabs` is set). Use `v-model` to control the active tab:
+
+```vue
+<script setup>
+  import CodeBlock from '@aziontech/webkit/code-block'
 
   const tabs = [
     {
@@ -89,7 +106,14 @@ Pass source on each tab’s **`code`** field inside **`tabs`**. There is no top-
       value: 'js',
       language: 'javascript',
       fileName: 'handler.js',
-      code
+      code: 'export default {}'
+    },
+    {
+      label: 'TypeScript',
+      value: 'ts',
+      language: 'typescript',
+      fileName: 'handler.ts',
+      code: 'export default {}'
     }
   ]
 </script>
@@ -98,12 +122,11 @@ Pass source on each tab’s **`code`** field inside **`tabs`**. There is no top-
   <CodeBlock
     :tabs="tabs"
     default-value="js"
-    show-line-numbers
   />
 </template>
 ```
 
-For multiple languages, add one tab per snippet (each with its own `code`). Use `v-model` to control the active tab. Replace `tabs[n].code` or rebuild `tabs` when the source should update reactively.
+Replace `tabs[n].code` (or `code`) or rebuild `tabs` when the source should update reactively.
 
 ## Props
 
@@ -111,7 +134,10 @@ For multiple languages, add one tab per snippet (each with its own `code`). Use 
 | ----------------- | -------------------- | ----------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `tabs`            | `CodeBlockTab[]`     | `[]`        | false    | Tab definitions with label, value, code, and optional language, filename, diff, or highlight metadata.                                                                                                                           |
 | `defaultValue`    | `string`             | `undefined` | false    | Initial active tab when uncontrolled.                                                                                                                                                                                            |
-| `showLineNumbers` | `boolean`            | `true`      | false    | Shows a fixed-width gutter with zero-padded line numbers before each code line.                                                                                                                                                  |
+| `code`            | `string`             | `''`        | false    | Code of a single snippet, used when `tabs` is empty.                                                                                                                                                                             |
+| `language`        | `string`             | `''`        | false    | Language of the single `code` snippet (highlighting and the label header).                                                                                                                                                       |
+| `lineNumbers`     | `boolean`            | `true`      | false    | Shows a fixed-width gutter with zero-padded line numbers before each code line (the same name as `code-editor`).                                                                                                                 |
+| `showLineNumbers` | `boolean`            | `undefined` | false    | **@deprecated since 6.0 — use `lineNumbers`. Removed in 7.0.** Shows the line-number gutter; when set it wins over `lineNumbers`.                                                                                                |
 | `copyAriaLabel`   | `string`             | `''`        | false    | Accessible name for the copy control (forwarded to CopyButton's aria-label). Empty uses the locale catalog (`Copy code`).                                                                                                        |
 | `copyable`        | `boolean`            | `undefined` | false    | Shows the copy control. Unset, a `code` block shows it and an `output` block does not; turn it off for a decorative block nobody copies from.                                                                                    |
 | `kind`            | `'code' \| 'output'` | `'code'`    | false    | What the block holds: `code` the reader runs or reads, or `output` — what a command prints — drawn flat and muted under an "Output" label, without a copy control.                                                               |
@@ -163,7 +189,7 @@ For multiple languages, add one tab per snippet (each with its own `code`). Use 
 ## States
 
 - Visual states: `default`, `hover`, `focus-visible` on tabs and copy control
-- `data-state` on tabs: `active` | `inactive`
+- `data-state` on tabs: `active` | `inactive`; the active tab's text colour switches on `data-[state=active]:` in the tab's flat class, never a `:class` ternary
 - `data-state` on code lines: `default` | `added` | `removed` | `highlighted`
 - `data-disabled` not used (tabs are not disabled in v2)
 - `data-kind` on the root: `code` | `output`; `output` paints the shell `--bg-canvas` and every line flat in `--text-muted`
@@ -183,8 +209,6 @@ When only one tab is provided and it has no `fileName`, the shell is code conten
 Code content scrolls inside `@aziontech/webkit/scroll-area` (`orientation="both"`, capped at a `320 px` max height so shorter snippets fit their content and taller ones scroll). Lines never wrap (`whitespace-pre`); on narrow viewports the scroll region grows horizontally so long lines stay on one row.
 
 **The shell is fluid: it takes the width its container gives it and never grows past it.** Long lines are a scroll, never a wider block — so the root is a size container (`@container`, i.e. inline-size containment) and its code width is invisible to the layout above it. Without that, the block's intrinsic width leaks upward: an `auto`-sized grid track or flex row (a one-column `grid` on mobile, a `md:grid-cols-2` panel below its breakpoint) sizes itself to the widest code line and the block overflows the viewport instead of scrolling — a consumer's `min-w-0` on the wrapper cannot fix it, because `min-width` is a floor on the intrinsic contribution, not a cap. The copy control (a `CopyButton`, `kind="outlined"` `size="small"`) is absolutely positioned on the non-scrolling content shell (`__content`) so it stays pinned top-right while lines scroll. **On a single-line block it centres on that row instead** (`data-single-line` on the anchor): the shell is 44 px, the control 28 px, so the `--spacing-sm` top inset would leave it 4 px below the line's own centre. Every line reserves the control's full footprint on its right (`pr-11` = 28 px control + its 12 px inset), so a long line always scrolls clear of it rather than under it. With `copyable` off (`data-copyable` absent on the root) the control is not rendered and lines reserve only `--spacing-sm` on their right.
-
-- Long files: above 300 lines the panel mounts lines in chunks of 100 as they scroll near view (unmounted chunks keep an estimated 24 px per line), so a 5,000-line file mounts and switches tabs within its runtime budget. Copy always copies the whole file.
 
 ## Motion & Animations
 
@@ -243,11 +267,20 @@ Code content scrolls inside `@aziontech/webkit/scroll-area` (`orientation="both"
 
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`
 - Keyboard map: `Tab` focuses tabs and copy; `ArrowLeft`/`ArrowRight`/`Home`/`End` move between tabs; `Enter`/`Space` activates tab; copy uses `Enter`/`Space` on the CopyButton (native `<button>`); when focus is in the code scroll region, `ArrowUp`/`ArrowDown`/`PageUp`/`PageDown`/`Home`/`End` scroll vertically and `ArrowLeft`/`ArrowRight` scroll horizontally via ScrollArea.
-- ARIA: tab list uses `role="tablist"` when visible; tabs use `role="tab"` with `aria-selected`; panel uses `role="tabpanel"` with `aria-labelledby`; copy uses CopyButton `ariaLabel` (forwarded to its inner IconButton); diff `+`/`-` markers are `aria-hidden="true"` (change semantics conveyed by row `data-state` and visible background).
+- ARIA: tab list uses `role="tablist"` when visible; tabs use `role="tab"` with `aria-selected`; panel uses `role="tabpanel"` with `aria-labelledby`. Tab and panel ids come from `useId()` (`<uid>-tab-<index>`, one `<uid>-panel`), so two tabbed blocks on one page never share an id and a tab value with spaces is still a valid id; only the selected tab carries `aria-controls`, pointing at the one rendered panel; copy uses CopyButton `ariaLabel` (forwarded to its inner IconButton); diff `+`/`-` markers are `aria-hidden="true"` (change semantics conveyed by row `data-state` and visible background).
 - Contrast ≥4.5:1 for code text on surface, including syntax token colors and diff/highlight row backgrounds in light and dark. Row backgrounds for `added`, `removed` and `highlighted` are the feedback fills at 40% (`bg-(--success)/40`, `bg-(--danger)/40`, `bg-(--info)/40`): at full strength the light fills (`--danger` `#F3A5A5`, `--info` `#99C9FF`) put the line numbers and the `function` and `type` syntax colours under 4.5:1 (3.93:1 for a line number on a removed row); at 40% every syntax colour clears 4.5:1 in light and dark (the lowest, the light `function` orange `#B03C02` on a removed row, is 4.6:1).
 - `motion-reduce:transition-none motion-reduce:transform-none` on indicator and panel motion.
 - When `animateLines` is enabled, line motion is disabled under `prefers-reduced-motion` (lines render fully visible immediately).
 - Copy control uses CopyButton `size="small"` (28×28 px).
+
+## Internationalization
+
+| Key                | English source | Override prop   |
+| ------------------ | -------------- | --------------- |
+| `codeBlock.copy`   | Copy code      | `copyAriaLabel` |
+| `codeBlock.output` | Output         | `title`         |
+
+- Formatting: none. Line numbers are zero-padded digits; code is never translated.
 
 ## Right-to-left
 
@@ -257,10 +290,23 @@ Code content scrolls inside `@aziontech/webkit/scroll-area` (`orientation="both"
 - Motion: the panel slide between tabs mirrors (`rtl:` flips the `translate-x` presets).
 - User data: code lines render `dir="ltr"`: code always reads left to right. The scroll area keeps the copy button's width free on its side (`pe-10` when `copyable`), so under `dir="rtl"` the button never covers the start of a line.
 
+## Responsive
+
+- Container queries: the root is a size container (`@container`), so long lines scroll inside the block instead of widening the layout above it.
+- Narrow (≤ 640 px or a narrow container): the shell takes the container width; lines never wrap and scroll horizontally inside `scroll-area`; the tab strip keeps one row.
+- Touch: tabs are 32 px tall inside the 40 px strip; the copy control is a 28 px CopyButton with its own touch target.
+- Reflow: no page-level horizontal scroll at 320 px; the code region scrolls on its own (code is an allowed two-dimensional exception, WCAG 1.4.10).
+
+## Performance
+
+- Bundle budget: 26.75 KB gzip for the initial chunk of `./code-block` in `.size-limit.json`.
+- Runtime budget: above 300 lines the panel mounts lines in chunks of 100 as they scroll near view (unmounted chunks keep an estimated 24 px per line), so a 5,000-line file mounts and switches tabs within the `code-block-5k-lines` budget of `perf-budgets.json`. Copy always copies the whole file.
+- Heavy parts: the highlighter is a small in-house tokeniser; no editor or highlighting library.
+
 ## Examples
 
 - Default — language switcher: two tabs, `fileName` on each tab, JavaScript sample, copy affordance (Figma: Language Switcher).
-- WithoutLineNumbers — same Default sample with `showLineNumbers={false}`.
+- WithoutLineNumbers — same Default sample with `line-numbers` off.
 - WithoutCopy — same Default sample with `copyable={false}`; the copy control is not rendered and lines reserve only `--spacing-sm` on their right.
 - WithFileName — single tab with `fileName` and no tab header (Figma: Show filename).
 - WithDiff — single tab with `lineChanges` for added/removed rows (Figma: Diff).
@@ -268,7 +314,7 @@ Code content scrolls inside `@aziontech/webkit/scroll-area` (`orientation="both"
 - WithAnimatedLines — single tab with `animateLines={true}` for staggered website entrance.
 - Shell — single tab with `language: 'bash'`; justified because the command tokeniser is a distinct rendered surface from the expression one (program, flags, operator hand-off, expansion, trailing comment) that no JavaScript sample exercises.
 - UnevenTabs — two tabs whose snippets have different line counts; the only geometry where the shell's height changes on a swap, so it is what exercises the height transition and the per-line entrance together.
-- SingleLine — one `bash` line, `showLineNumbers={false}`, no tabs and no filename bar: the minimal shell, and the one geometry where the copy control centres on its row instead of hanging from the top inset.
+- SingleLine — one `bash` line passed as `code` + `language` (the single-snippet API), `line-numbers` off, no tabs and no filename bar: the minimal shell, and the one geometry where the copy control centres on its row instead of hanging from the top inset.
 - Borderless — Default sample with `bordered={false}`; the outer card border is dropped so the block sits flush inside a surface that already frames it.
 - CommandAndOutput — a `$ `-prompted `curl -I` command with `show-label` ("Shell" header) and, under it, a second block with `kind="output"` holding `HTTP/2 200`; justified because the label header and the output kind are two rendered surfaces no other example shows, and they are the docs pattern for a command and what it prints.
 

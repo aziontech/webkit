@@ -89,6 +89,15 @@ component.
 | `tabs`            | `value`            | `modelValue`         |
 | `theme-switcher`  | `value`            | `modelValue`         |
 
+### Deprecated in 6.0, removed in 7.0
+
+These old names keep working through v6 and are marked `@deprecated` in the types; the codemod
+rewrites the prop renames, the rest are listed here so you can move at your own pace.
+
+| Component    | Deprecated        | Use instead   |
+| ------------ | ----------------- | ------------- |
+| `code-block` | `showLineNumbers` | `lineNumbers` |
+
 ## 4. Manual changes
 
 ### `@aziontech/theme` is a peer dependency
