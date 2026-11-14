@@ -1,12 +1,11 @@
 <script setup lang="ts">
   import { useMediaQuery, useMounted } from '@vueuse/core'
-  import { computed, onMounted, ref, useAttrs, useId, watch } from 'vue'
+  import { computed, defineAsyncComponent, onMounted, ref, useAttrs, useId, watch } from 'vue'
 
   import { useTranslate } from '../../../composables/use-locale/use-translate'
   import * as en from '../../../i18n/messages/en'
   import Button from '../../actions/button/button.vue'
   import EmptyState from '../../feedback/empty-state/empty-state.vue'
-  import Chip from '../../inputs/chip/chip.vue'
   import Input from '../../inputs/input/input.vue'
   import Select from '../../inputs/select/select.vue'
   import SelectContent from '../../inputs/select/select-content/select-content.vue'
@@ -127,6 +126,7 @@
     ariaLabel: ''
   })
 
+  const Chip = defineAsyncComponent(() => import('../../inputs/chip/chip.vue'))
   const attrs = useAttrs()
   const { t } = useTranslate({ storyLibrary: en.storyLibrary })
 

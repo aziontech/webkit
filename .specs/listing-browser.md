@@ -3,11 +3,11 @@ name: listing-browser
 category: sections
 structure: monolithic
 status: implemented
-spec_version: 2
+spec_version: 3
 template: 2
 created: 2026-11-05
 last_updated: 2026-11-14
-checksum: 33631f134f25ba380bbb771755ce54aeb889ca283cd7c6e0219b6b80ee13333b
+checksum: 63880daf2b3601081539f2e6040f4ba94442441bafe6b9a3534efa3dfa8f65a3
 ---
 
 # ListingBrowser — Component Spec
@@ -202,9 +202,9 @@ _none_
 
 ## Performance
 
-- Bundle budget: the `./listing-browser` entry in `.size-limit.json`.
+- Bundle budget: the `./listing-browser` entry in `.size-limit.json`, initial chunk only.
 - Runtime budget: filtering a few hundred rows on each keystroke stays under one frame.
-- Heavy parts: none; marks load lazily.
+- Heavy parts: none; marks load lazily, and the applied-filter `Chip`s load in their own chunk the first time a filter is applied.
 
 ## Examples
 

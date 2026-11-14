@@ -235,7 +235,7 @@ describe('StoryLibrary', () => {
 
     await pick('Industry', 'Tech')
     const applied = getByTestId(`${TESTID}__applied`)
-    expect(applied.textContent).toContain('Industry: Tech')
+    await waitFor(() => expect(applied.textContent).toContain('Industry: Tech'))
     expect(getByTestId(`${TESTID}__filter-button`).textContent).toContain('Refine (1)')
 
     await userEvent.click(within(applied).getByRole('button'))

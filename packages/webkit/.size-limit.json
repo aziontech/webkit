@@ -501,12 +501,12 @@
   {
     "name": "article-cards",
     "path": "src/components/sections/article-cards/article-cards.vue",
-    "limit": "6 KB"
+    "limit": "5.6 KB"
   },
   {
     "name": "article-highlight",
     "path": "src/components/sections/article-highlight/article-highlight.vue",
-    "limit": "10.25 KB"
+    "limit": "9.9 KB"
   },
   {
     "name": "article-index-blog",
@@ -527,7 +527,8 @@
   {
     "name": "story-library",
     "path": "src/components/sections/story-library/story-library.vue",
-    "limit": "33 KB"
+    "limit": "27.1 KB",
+    "entryOnly": true
   },
   {
     "name": "hero-band",
@@ -700,7 +701,8 @@
   {
     "name": "listing-browser",
     "path": "src/components/sections/listing-browser/listing-browser.vue",
-    "limit": "73 KB"
+    "limit": "67.25 KB",
+    "entryOnly": true
   },
   {
     "name": "platform-directory",
