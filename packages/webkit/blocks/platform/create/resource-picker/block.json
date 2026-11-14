@@ -3,7 +3,7 @@
   "name": "ResourcePicker",
   "title": "Templates/Platform/Create/ResourcePicker",
   "surface": "product",
-  "summary": "The card a create flow uses to bind one resource to another: a lead, a ToggleGroup choosing between an existing resource and a new one, then either a hint over a searchable list of the existing resources with a selected mark, paged five at a time with skeleton rows while the next page loads and a polite status line for screen readers, or a Name `Field` around an `Input` whose helper text carries the allowed characters and turns into the required message once Next is pressed empty. The ToggleGroup disappears and the card opens on New when nothing exists to bind. ProvisionWizard binds its project with it on the first step, and its second step reuses the same paged list to pick an existing deployment. Built from `Card`, `ToggleGroup`, `Field`, `Input`, `HelperText`, `Item`, `Skeleton` and `Button`.",
+  "summary": "The card a create flow uses to bind one resource to another: a lead, a ToggleGroup choosing between an existing resource and a new one, then either a hint over a searchable list of the existing resources with a selected mark, paged five at a time with skeleton rows while the next page loads and a polite status line for screen readers, or a Name `Field` around an `Input` whose helper text carries the allowed characters and turns into the required message once Next is pressed empty. The ToggleGroup disappears and the card opens on New when nothing exists to bind. ProvisionWizard binds its project with it on the first step, and its second step reuses the same paged list to pick an existing deployment. The OptionalBinding variant wraps the picker in an opt-in band: a compact `SettingRow` with a `Switch` that unfolds the Existing / New choice in place, where New shows a Name field over module switches with one locked on behind a `Tooltip`; the firewall binding of SourceWizard's last step uses it. Built from `Card`, `ToggleGroup`, `Field`, `Input`, `HelperText`, `Item`, `Skeleton` and `Button`.",
   "preview": {
     "layout": "padded",
     "background": "dark"
@@ -17,7 +17,12 @@
     "pick application",
     "seletor de recurso",
     "escolher recurso",
-    "existente ou novo"
+    "existente ou novo",
+    "optional binding",
+    "opt-in binding",
+    "protect with firewall",
+    "bind firewall",
+    "vincular firewall"
   ],
   "skills": ["webkit-form", "webkit-ui-states"],
   "primary": {
@@ -39,6 +44,11 @@
       "name": "Required",
       "summary": "Next pressed with no project selected: the required message sits under the search, above the list.",
       "file": "variants/required.vue"
+    },
+    {
+      "name": "OptionalBinding",
+      "summary": "An opt-in binding: a Protect with a firewall switch row, turned on, unfolds the Existing / New choice; New firewall shows the Name prefilled from the project and the Firewall modules switches, DDoS Protection disabled and always on with a tooltip that says why.",
+      "file": "variants/optional-binding.vue"
     }
   ]
 }
