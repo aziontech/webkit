@@ -5,6 +5,7 @@
   import Breadcrumb from '@aziontech/webkit/breadcrumb-root'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
+  import DropdownMenu from '@aziontech/webkit/dropdown-menu'
   import Field from '@aziontech/webkit/field'
   import GlobalHeader from '@aziontech/webkit/global-header'
   import HelperText from '@aziontech/webkit/helper-text'
@@ -21,9 +22,10 @@
   import Skeleton from '@aziontech/webkit/skeleton'
   import Switch from '@aziontech/webkit/switch'
   import Tag from '@aziontech/webkit/tag'
+  import Tooltip from '@aziontech/webkit/tooltip'
   import { nextTick, reactive, ref } from 'vue'
 
-  const breadcrumb = [{ label: 'Forms', href: '/forms' }, { label: 'Error validation' }]
+  const breadcrumb = [{ label: 'Services', href: '/services' }, { label: 'Create Service' }]
 
   const catalog = [
     { value: 'origin-web-prod', label: 'web-origin-prod', kind: 'HTTP' },
@@ -157,18 +159,26 @@
       ?.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' })
     document.getElementById('ev-origin')?.focus({ preventScroll: true })
   }
+
+  const account = { name: 'Amy Chen', email: 'amy.chen@example.com' }
 </script>
 
 <template>
   <div class="flex h-dvh flex-col bg-(--bg-canvas)">
     <GlobalHeader aria-label="Console">
       <GlobalHeader.Left>
-        <IconButton
-          icon="pi pi-chevron-left"
-          aria-label="Back to Forms"
-          kind="outlined"
-          size="small"
-        />
+        <Tooltip
+          text="Back to Services"
+          placement="bottom"
+        >
+          <IconButton
+            icon="pi pi-chevron-left"
+            aria-label="Back to Services"
+            kind="outlined"
+            size="small"
+            href="/services"
+          />
+        </Tooltip>
         <GlobalHeader.Brand>
           <a
             href="/home"
@@ -185,17 +195,64 @@
       </GlobalHeader.Left>
       <GlobalHeader.Middle />
       <GlobalHeader.Right>
-        <button
-          type="button"
-          aria-label="Account settings"
-          class="rounded-full transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
-        >
-          <Avatar
-            label="name@example.com"
-            size="medium"
-            kind="square"
-          />
-        </button>
+        <DropdownMenu placement="bottom-end">
+          <DropdownMenu.Trigger>
+            <button
+              type="button"
+              aria-label="Account menu"
+              class="rounded-(--shape-button) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
+            >
+              <Avatar
+                :label="account.name"
+                size="medium"
+                kind="square"
+              />
+            </button>
+          </DropdownMenu.Trigger>
+          <DropdownMenu.Group>
+            <template #top>
+              <div class="flex min-w-0 flex-col">
+                <span class="truncate text-label-md text-(--text-default)">{{ account.name }}</span>
+                <span class="truncate text-body-xs text-(--text-muted)">{{ account.email }}</span>
+              </div>
+            </template>
+            <DropdownMenu.Option
+              value="settings"
+              label="Account settings"
+            >
+              <template #right>
+                <i
+                  class="pi pi-cog"
+                  aria-hidden="true"
+                />
+              </template>
+            </DropdownMenu.Option>
+          </DropdownMenu.Group>
+          <DropdownMenu.Group>
+            <DropdownMenu.Option
+              value="docs"
+              label="Docs"
+            >
+              <template #right>
+                <i
+                  class="pi pi-book"
+                  aria-hidden="true"
+                />
+              </template>
+            </DropdownMenu.Option>
+            <DropdownMenu.Option
+              value="logout"
+              label="Log out"
+            >
+              <template #right>
+                <i
+                  class="pi pi-sign-out"
+                  aria-hidden="true"
+                />
+              </template>
+            </DropdownMenu.Option>
+          </DropdownMenu.Group>
+        </DropdownMenu>
       </GlobalHeader.Right>
     </GlobalHeader>
     <main class="animate-page-enter motion-reduce:animate-none min-h-0 flex-1 overflow-auto">

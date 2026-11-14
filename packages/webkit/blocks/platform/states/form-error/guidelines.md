@@ -24,7 +24,7 @@ The full-width header of a creation page: back, brand and location on the start 
 
 ### B. Back — `IconButton` (required)
 
-`pi-chevron-left`, `kind="outlined"`, with `aria-label="Back to Forms"`.
+`pi-chevron-left`, `kind="outlined"`, a link to the list (`href="/services"`) with `aria-label="Back to Services"` and a `Tooltip` with the same text.
 
 ### C. Product mark — `Brand` (required)
 
@@ -32,11 +32,11 @@ Inside a link to Home.
 
 ### D. Location — `Breadcrumb` (required)
 
-Where the form sits, ending in the page.
+Where the form sits: the resource list, then the page (`Services › Create Service`).
 
-### E. Account — `Avatar` (required)
+### E. Account — `DropdownMenu` + `Avatar` (required)
 
-The signed-in user, inside a labelled button.
+The signed-in user, inside a button labelled `Account menu` that opens the account `DropdownMenu` (Account settings, Docs, Log out).
 
 ### F. Simulation — `Tag` (simulation only)
 
@@ -105,6 +105,10 @@ Stands in for the Origin select while the list reloads, with an accessible name 
 ### V. Footer — `SaveBar` (required)
 
 Sticky at the end of the page, raised with `z-10`: `Cancel` and `Save`. Save shows `loading` while the request is in flight and is disabled while the list reloads.
+
+### W. Hint — `Tooltip` (required)
+
+Names the icon-only back link with the same text as its `aria-label` (`Back to Services`).
 
 ## Do
 
