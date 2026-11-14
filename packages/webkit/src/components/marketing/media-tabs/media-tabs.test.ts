@@ -68,7 +68,7 @@ describe('MediaTabs', () => {
     const { getAllByRole } = render(MediaTabs, {
       props: { items: ITEMS, autoplay: false }
     })
-    const buttons = getAllByRole('button')
+    const buttons = getAllByRole('button').filter((button) => button.closest('ul'))
 
     expect(buttons).toHaveLength(ITEMS.length)
     expect(buttons.map((button) => button.textContent?.trim())).toEqual(
@@ -177,6 +177,53 @@ describe('MediaTabs', () => {
     await fireEvent.click(getAllByRole('button')[1])
 
     expect(activeTitles(container)).toEqual([ITEMS[1].title])
+  })
+
+  it('offers a pause control while autoplay runs that stops and resumes the rotation', async () => {
+    vi.useFakeTimers()
+    const { container, getByRole, getByTestId } = render(MediaTabs, {
+      props: { items: ITEMS, autoplayInterval: INTERVAL }
+    })
+
+    const control = getByRole('button', { name: 'Pause rotation' })
+    await fireEvent.click(control)
+    expect(getByRole('button', { name: 'Resume rotation' })).toBe(control)
+    expect(getByTestId(TESTID)).toHaveAttribute('data-paused')
+
+    vi.advanceTimersByTime(INTERVAL * 2)
+    await nextTick()
+    expect(activeTitles(container)).toEqual([ITEMS[0].title])
+
+    await fireEvent.click(control)
+    vi.advanceTimersByTime(INTERVAL)
+    await nextTick()
+    expect(activeTitles(container)).toEqual([ITEMS[1].title])
+  })
+
+  it('renders no pause control when autoplay is off', () => {
+    const { queryByRole } = render(MediaTabs, { props: { items: ITEMS, autoplay: false } })
+    expect(queryByRole('button', { name: 'Pause rotation' })).toBeNull()
+  })
+
+  it('writes the shown tab back through v-model on a click and on an autoplay tick', async () => {
+    vi.useFakeTimers()
+    const { emitted, getAllByRole } = render(MediaTabs, {
+      props: { items: ITEMS, autoplayInterval: INTERVAL }
+    })
+
+    vi.advanceTimersByTime(INTERVAL)
+    await nextTick()
+    expect(emitted()['update:modelValue']).toEqual([[1]])
+
+    await fireEvent.click(getAllByRole('button')[2])
+    expect(emitted()['update:modelValue']).toEqual([[1], [2]])
+  })
+
+  it('opens on the tab a bound modelValue names', () => {
+    const { container } = render(MediaTabs, {
+      props: { items: ITEMS, modelValue: 2, autoplay: false }
+    })
+    expect(activeTitles(container)).toEqual([ITEMS[2].title])
   })
 
   it('marks a running band with data-autoplay', () => {
