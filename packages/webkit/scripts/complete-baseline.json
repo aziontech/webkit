@@ -2,11 +2,6 @@
   "app-layout::examples-count",
   "button::examples-count",
   "code-split::examples-count",
-  "doc-step::examples",
-  "examples/assets-console-application-scene::visual-baseline",
-  "examples/assets-console-trace-scene::visual-baseline",
-  "examples/assets-runtime-api-scene::visual-baseline",
-  "examples/site-page::visual-baseline",
   "hero-form::examples-count",
   "icon-button::examples-count",
   "password-requirements::root-export"
