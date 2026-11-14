@@ -1,8 +1,9 @@
 import userEvent from '@testing-library/user-event'
 import { fireEvent, render } from '@testing-library/vue'
-import { describe, expect, it } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import { defineComponent, h, nextTick, ref } from 'vue'
 
+import AutoResize from '../../../../examples/textarea/auto-resize.vue'
 import Default from '../../../../examples/textarea/default.vue'
 import Disabled from '../../../../examples/textarea/disabled.vue'
 import Invalid from '../../../../examples/textarea/invalid.vue'
@@ -378,5 +379,78 @@ describe('Textarea — exposed focus()', () => {
     field.value?.focus()
 
     expect(document.activeElement).toBe(native)
+  })
+})
+
+describe('Textarea — autoResize', () => {
+  afterEach(() => {
+    vi.restoreAllMocks()
+  })
+
+  it('keeps the fixed field and the chosen resize axis by default', () => {
+    const { getByTestId } = render(Textarea, { props: { resizable: 'both', maxRows: 4 } })
+
+    const control = getByTestId('input-textarea')
+    expect(control).not.toHaveAttribute('data-auto-resize')
+    expect(control).not.toHaveAttribute('data-max-rows')
+    expect(control).toHaveAttribute('data-resize', 'both')
+  })
+
+  it('marks the field, turns the drag handle off and passes the row bounds', () => {
+    const { getByTestId } = render(Textarea, {
+      props: { autoResize: true, resizable: 'both', minRows: 2, maxRows: 5 }
+    })
+
+    const control = getByTestId('input-textarea')
+    expect(control).toHaveAttribute('data-auto-resize')
+    expect(control).toHaveAttribute('data-resize', 'none')
+    expect(control).toHaveAttribute('data-max-rows', '5')
+    expect(control.style.getPropertyValue('--textarea-min-rows')).toBe('2')
+    expect(control.style.getPropertyValue('--textarea-max-rows')).toBe('5')
+  })
+
+  it('sets no row limit when maxRows is 0', () => {
+    const { getByTestId } = render(Textarea, { props: { autoResize: true } })
+
+    const control = getByTestId('input-textarea')
+    expect(control).not.toHaveAttribute('data-max-rows')
+    expect(control.style.getPropertyValue('--textarea-min-rows')).toBe('1')
+  })
+
+  it('measures a taller height as lines are typed where field-sizing is missing', async () => {
+    vi.spyOn(globalThis.CSS, 'supports').mockReturnValue(false)
+    const { getByTestId } = render(Textarea, {
+      props: { autoResize: true },
+      attrs: { 'aria-label': 'Question' }
+    })
+    await nextTick()
+    await nextTick()
+
+    const control = getByTestId('input-textarea') as HTMLTextAreaElement
+    const oneLine = parseFloat(control.style.height)
+    expect(oneLine).toBeGreaterThan(0)
+
+    await userEvent.type(control, 'one{Enter}two{Enter}three{Enter}four')
+    await nextTick()
+    await nextTick()
+
+    expect(parseFloat(control.style.height)).toBeGreaterThan(oneLine)
+  })
+
+  it('leaves the height to CSS where field-sizing is supported', async () => {
+    vi.spyOn(globalThis.CSS, 'supports').mockReturnValue(true)
+    const { getByTestId } = render(Textarea, { props: { autoResize: true } })
+    await nextTick()
+
+    expect(getByTestId('input-textarea').style.height).toBe('')
+  })
+
+  it('renders the AutoResize example as a labelled growing field with no a11y violations', async () => {
+    const { container, getByLabelText } = render(AutoResize)
+
+    const control = getByLabelText('Question')
+    expect(control).toHaveAttribute('data-auto-resize')
+    expect(control).toHaveAttribute('data-max-rows', '6')
+    await expectNoA11yViolations(container)
   })
 })

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed, ref, useAttrs } from 'vue'
+  import { computed, nextTick, onMounted, ref, useAttrs, watch } from 'vue'
 
   import { useFieldControl } from '../../../composables/use-field-control'
 
@@ -28,6 +28,12 @@
     resizable?: TextareaResize
     /** Sets the value and placeholder in the monospace code face, for pasted zone files, certificates, JSON and lists of IPs. */
     monospace?: boolean
+    /** Grows the field with its content instead of a fixed height; turns the drag handle off. */
+    autoResize?: boolean
+    /** Lines the field shows when empty while autoResize is on. */
+    minRows?: number
+    /** Lines the field grows to before it scrolls while autoResize is on; 0 sets no limit. */
+    maxRows?: number
   }
   export type TextareaProps = Props
 
@@ -39,7 +45,10 @@
     required: false,
     resize: 'vertical',
     resizable: 'vertical',
-    monospace: false
+    monospace: false,
+    autoResize: false,
+    minRows: 1,
+    maxRows: 0
   })
 
   /** Bound value (v-model). */
@@ -64,6 +73,39 @@
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'input-textarea')
   const isFilled = computed(() => (model.value ?? '').length > 0)
+
+  const resizeAxis = computed(() =>
+    props.autoResize ? 'none' : props.resize !== 'vertical' ? props.resize : props.resizable
+  )
+  const maxRows = computed(() => (props.autoResize && props.maxRows > 0 ? props.maxRows : null))
+  const sizing = computed(() =>
+    props.autoResize
+      ? {
+          width: '100%',
+          '--textarea-min-rows': props.minRows,
+          '--textarea-max-rows': maxRows.value
+        }
+      : { width: '100%' }
+  )
+
+  const measuresHeight = ref(false)
+
+  const fitHeight = () => {
+    const field = textareaRef.value
+    if (!field || !measuresHeight.value || !props.autoResize) return
+    field.style.height = 'auto'
+    field.style.height = `${field.scrollHeight + field.offsetHeight - field.clientHeight}px`
+  }
+
+  onMounted(() => {
+    measuresHeight.value = !globalThis.CSS?.supports?.('field-sizing', 'content')
+    fitHeight()
+  })
+
+  watch(
+    () => [model.value, props.autoResize, props.minRows, props.maxRows],
+    () => nextTick(fitHeight)
+  )
 
   const passthroughAttrs = computed(() => {
     const rest: Record<string, unknown> = { ...attrs }
@@ -90,7 +132,7 @@
     v-bind="passthroughAttrs"
     :id="controlId"
     :aria-describedby="describedBy"
-    style="width: 100%"
+    :style="sizing"
     :value="model"
     :placeholder="placeholder"
     :disabled="isDisabled"
@@ -106,8 +148,10 @@
     :data-readonly="readonly || null"
     :data-monospace="monospace || null"
     :data-filled="isFilled || null"
-    :data-resize="resize !== 'vertical' ? resize : resizable"
-    class="relative block min-w-0 min-h-[80px] px-(--spacing-sm) py-(--spacing-sm) rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface) text-body-xs text-(--text-default) data-[monospace]:text-body-code-sm placeholder:text-(--text-muted) transition-colors duration-150 ease-out motion-reduce:transition-none [&:not(:focus):not([data-disabled]):not([data-readonly])]:hover:border-(--border-strong) focus:outline-none focus-visible:outline-none focus:ring-2 focus:ring-(--ring-color) focus:ring-offset-2 focus:ring-offset-(--bg-canvas) data-[invalid]:border-(--danger-border) data-[required]:border-(--warning-border) data-[disabled]:bg-(--bg-disabled) data-[disabled]:text-(--text-disabled) data-[disabled]:placeholder:text-(--text-disabled) data-[disabled]:cursor-not-allowed data-[disabled]:hover:border-(--border-default) data-[disabled]:focus:ring-0 data-[disabled]:focus:ring-offset-0 data-[readonly]:cursor-default data-[resize=vertical]:resize-y data-[resize=horizontal]:resize-x data-[resize=both]:resize data-[resize=none]:resize-none"
+    :data-resize="resizeAxis"
+    :data-auto-resize="autoResize || null"
+    :data-max-rows="maxRows"
+    class="relative block min-w-0 min-h-[80px] px-(--spacing-sm) py-(--spacing-sm) rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface) text-body-xs text-(--text-default) data-[monospace]:text-body-code-sm placeholder:text-(--text-muted) transition-colors duration-150 ease-out motion-reduce:transition-none [&:not(:focus):not([data-disabled]):not([data-readonly])]:hover:border-(--border-strong) focus:outline-none focus-visible:outline-none focus:ring-2 focus:ring-(--ring-color) focus:ring-offset-2 focus:ring-offset-(--bg-canvas) data-[invalid]:border-(--danger-border) data-[required]:border-(--warning-border) data-[disabled]:bg-(--bg-disabled) data-[disabled]:text-(--text-disabled) data-[disabled]:placeholder:text-(--text-disabled) data-[disabled]:cursor-not-allowed data-[disabled]:hover:border-(--border-default) data-[disabled]:focus:ring-0 data-[disabled]:focus:ring-offset-0 data-[readonly]:cursor-default data-[resize=vertical]:resize-y data-[resize=horizontal]:resize-x data-[resize=both]:resize data-[resize=none]:resize-none data-[auto-resize]:field-sizing-content data-[auto-resize]:min-h-[calc(var(--textarea-min-rows)*1lh+var(--spacing-sm)*2+2px)] data-[max-rows]:max-h-[calc(var(--textarea-max-rows)*1lh+var(--spacing-sm)*2+2px)] data-[max-rows]:overflow-y-auto"
     :class="attrs.class"
     @input="handleInput"
   />

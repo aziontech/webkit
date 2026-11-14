@@ -1959,7 +1959,7 @@
   {
     "name": "textarea",
     "path": "src/components/inputs/textarea/textarea.vue",
-    "limit": "1.6 KB"
+    "limit": "1.85 KB"
   },
   {
     "name": "dropdown-menu",

@@ -33,6 +33,11 @@
       "file": "monospace.vue"
     },
     {
+      "name": "AutoResize",
+      "summary": "A question box that starts at one line and grows with the text up to six lines, then scrolls: `auto-resize` with `:min-rows` and `:max-rows`.",
+      "file": "auto-resize.vue"
+    },
+    {
       "name": "Resizable",
       "summary": "The `resize` prop on each axis: `vertical` (the default), `horizontal`, `both` and `none`.",
       "file": "resizable.vue"

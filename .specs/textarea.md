@@ -3,7 +3,8 @@ name: textarea
 category: inputs
 structure: monolithic
 status: implemented
-spec_version: 7
+spec_version: 8
+template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4722-6730
   node_id: 4722:6730
@@ -16,7 +17,7 @@ last_updated: 2026-11-14
 
 ## Purpose
 
-Collects multi-line free-form text from the user. Sibling of `input` in the `inputs` category; renders a fixed-size (`large`) multi-line field with a minimum height of 80px. The resize axis is controlled by the `resize` prop (defaults to `vertical`; `resizable` is its deprecated name until 7.0). Native textarea attributes (`rows`, `maxlength`, `name`, etc.) flow through via attribute fallthrough.
+Collects multi-line free-form text from the user. Sibling of `input` in the `inputs` category; renders a fixed-size (`large`) multi-line field with a minimum height of 80px. The resize axis is controlled by the `resize` prop (defaults to `vertical`; `resizable` is its deprecated name until 7.0). With `autoResize` the field instead grows with its content between `minRows` and `maxRows` lines. Native textarea attributes (`rows`, `maxlength`, `name`, etc.) flow through via attribute fallthrough.
 
 ## When to use
 
@@ -34,6 +35,8 @@ Collects multi-line free-form text from the user. Sibling of `input` in the `inp
 ## Best practices
 
 - Give it a sensible default size; avoid auto-growing beyond the viewport.
+- Set `autoResize` on a field whose length varies a lot (a prompt, a comment, a commit message): it starts at `minRows` lines and grows as the person types. Always set `maxRows` with it, so a long paste scrolls inside the field instead of pushing the page down.
+- `autoResize` turns the drag handle off; pick one or the other, never both.
 - Wrap it in a `Field` for the label, description and error.
 - Set `monospace` on a value that is code: a pasted zone file, a certificate, a JSON or YAML snippet, a list of IPs. Pair it with `:spellcheck="false"`. Prose (a description, a message) stays in the sans face.
 - A value people edit as code with highlighting and line numbers belongs in `CodeEditor`; `monospace` is for a plain paste box.
@@ -66,6 +69,15 @@ Collects multi-line free-form text from the user. Sibling of `input` in the `inp
     placeholder="Any direction"
     resize="both"
   />
+
+  <!-- Grow with the content from one line up to six, then scroll -->
+  <Textarea
+    v-model="value"
+    placeholder="Ask a question"
+    auto-resize
+    :min-rows="1"
+    :max-rows="6"
+  />
 </template>
 ```
 
@@ -81,6 +93,9 @@ Collects multi-line free-form text from the user. Sibling of `input` in the `inp
 | `resize`      | `'vertical' \| 'horizontal' \| 'both' \| 'none'` | `'vertical'` | false    | Which axes the user can drag to resize the field, named after the CSS `resize` property (`TextareaResize`, exported). `none` locks the size; `vertical` keeps the default behavior. |
 | `resizable`   | `'vertical' \| 'horizontal' \| 'both' \| 'none'` | `'vertical'` | false    | `@deprecated since 6.0 — use resize. Removed in 7.0.` Read when `resize` is left at `vertical`. |
 | `monospace`   | `boolean`                                        | `false`      | false    | Sets the value and placeholder in the monospace code face (`.text-body-code-sm`, which wraps) for pasted zone files, certificates, JSON and lists of IPs (`data-monospace`). Same prop as on `Input`.                                                                |
+| `autoResize`  | `boolean`                                        | `false`      | false    | Grows the field with its content instead of a fixed height (`data-auto-resize`): CSS `field-sizing: content`, with a measured height where the browser lacks it. Turns the drag handle off.                                                                          |
+| `minRows`     | `number`                                         | `1`          | false    | Lines the field shows when empty while `autoResize` is on. Ignored without `autoResize`.                                                                                                                                                                             |
+| `maxRows`     | `number`                                         | `0`          | false    | Lines the field grows to before it scrolls while `autoResize` is on (`data-max-rows`); `0` sets no limit. Ignored without `autoResize`.                                                                                                                              |
 
 ## v-model
 
@@ -111,7 +126,9 @@ _No slots._
 - `data-readonly` mirrors the `readonly` prop: a read-only textarea keeps the editable field's fill (`var(--bg-surface)`) and solid `var(--border-default)` border, as `Input` does and the design sample draws it; it only drops the hover border and takes a default cursor. The value keeps `var(--text-default)` and the textarea stays focusable. Why the value cannot change is said by the field's description, not by a different chrome.
 - `data-monospace` mirrors the `monospace` prop: the value and the placeholder render in `.text-body-code-sm` instead of `.text-body-xs`.
 - `data-filled` mirrors whether `modelValue` is non-empty
-- `data-resize` on the native `<textarea>` mirrors the `resize` prop (or the deprecated `resizable`) and drives the `resize-*` Tailwind variant
+- `data-resize` on the native `<textarea>` mirrors the `resize` prop (or the deprecated `resizable`) and drives the `resize-*` Tailwind variant; with `autoResize` it is `none`, since the content sets the height
+- `data-auto-resize` mirrors the `autoResize` prop: the field takes `field-sizing: content` and a minimum height of `minRows` lines (`--textarea-min-rows`) in place of the fixed 80 px; in a browser without `field-sizing` the component sets the height from `scrollHeight` on mount and on every value change
+- `data-max-rows` is set to `maxRows` when `autoResize` is on and `maxRows` is above 0: the field stops growing at that many lines (`--textarea-max-rows`) and scrolls its content
 
 ## Motion & Animations
 
@@ -154,7 +171,14 @@ _No slots._
 - ARIA: root is a native `<textarea>`; `aria-invalid` mirrors `invalid`; `aria-required` mirrors `required`; `aria-disabled` mirrors `disabled` when applicable.
 - Contrast ≥4.5:1 (text) / ≥3:1 (border + icons), including disabled state.
 - `motion-reduce:transition-none` on animated state transitions.
-- Touch target: field min-height ≥80px ensures adequate hit area.
+- Touch target: field min-height ≥80px ensures adequate hit area; with `autoResize` and `minRows: 1` the field is one line plus padding (≥ 32 px), above the 24 px minimum.
+- `autoResize` changes only the height: the field keeps its native role, and a capped field scrolls with the keyboard like any textarea.
+
+## Internationalization
+
+No built-in strings: the placeholder comes from the `placeholder` prop.
+
+- Formatting: none
 
 ## Right-to-left
 
@@ -162,6 +186,19 @@ _No slots._
 - Icons: none.
 - Keyboard: no horizontal arrow-key logic.
 - User data: the `<textarea>` renders `dir="auto"`; a `dir` attribute overrides it.
+
+## Responsive
+
+- Container queries: none; the field is `width: 100%` of its container.
+- Narrow (≤ 640 px or a narrow container): the text wraps; with `autoResize` a narrower field grows taller, since the height follows the wrapped lines.
+- Touch: the field is the target (≥ 32 px with `autoResize` and one row, 80 px otherwise); no hover-only affordance.
+- Reflow: no horizontal scroll at 320 px and 200 % zoom; a `resizable="horizontal"` or `"both"` field can be dragged wider by the person.
+
+## Performance
+
+- Bundle budget: 1.85 KB gzip for `textarea` in `.size-limit.json`.
+- Runtime budget: with `autoResize`, the height costs no script where `field-sizing` is supported; the fallback reads `scrollHeight` once per value change, on the next frame after the update.
+- Heavy parts: none.
 
 ## Examples
 
@@ -171,6 +208,7 @@ _No slots._
 - Required — justified: `required` swaps the border to the warning (yellow) token and must be verifiable in isolation.
 - ReadOnly — justified: the `readonly` look (filled, non-editable, no hover border) is a top-level prop and not visible from the other examples; shown as a generated certificate (`monospace`) inside a `Field` whose description says why it cannot change.
 - Monospace — justification: the code face is a top-level prop not visible in the other examples; shows a zone-file paste box.
+- AutoResize — justified: `autoResize` with `minRows` and `maxRows` is a distinct sizing mode none of the other examples shows; a prompt box that starts at one line and grows to six before it scrolls.
 - Resizable — justified: `resizable` exposes four discrete axis modes (`vertical`, `horizontal`, `both`, `none`); the composite story renders each side by side so the drag-handle affordance and the resulting `resize-*` CSS behavior are verifiable in a single frame.
 
 ## Constraints — DO NOT
@@ -190,6 +228,7 @@ _No slots._
 - Do not add examples beyond Default + Types + Sizes + state examples (`Loading`, `Disabled`) for the props the component actually declares, unless the spec's "Examples" section explicitly justifies the addition. Do not split Types/Sizes into one-example-per-variant — the composite examples are the canonical pattern.
 - Do not edit `.claude/docs/DESIGN.md`, `.claude/docs/COMPONENT_REQUIREMENTS.md`, or `.claude/docs/PRIMEVUE_ABSTRACTION.md`.
 - Do not edit the root `package.json` or `.github/workflows/*`.
+- Do not export composition sub-components without attaching them to the root compound (`index.ts` via `Object.assign`; vue-tsc generates `index.d.ts` — never hand-write it); the root export points at `index.ts`, and a standalone `./<name>-root` export points at the root `.vue` (tree-shaking). Do not invent overlay part names (`Trigger` / `Content`) on a component with no `data-state=open|closed`, and do not collapse a slot-shaped concern into a config-array prop. See `.claude/rules/compound-api.md`.
 - Do not change `structure` after `status: approved`. To change structure, bump `spec_version` and re-author the spec.
 - Do not create files outside the paths declared by your task (the orchestrator tells you exactly which files to write).
 - Do not run `git` commands, `pnpm install`, or any command that changes the lockfile.
