@@ -1,4 +1,4 @@
-import { render, waitFor } from '@testing-library/vue'
+import { fireEvent, render, waitFor } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
 import { expectNoA11yViolations } from '../../../test/axe'
@@ -45,6 +45,24 @@ describe('Ticker', () => {
 
     expect(getByTestId('trust-strip')).toBeInTheDocument()
     expect(queryByTestId(TESTID)).toBeNull()
+  })
+
+  it('offers a pause control that holds the loop and resumes it', async () => {
+    const { container, getByRole } = render(Ticker, { props: { marks: MARKS } })
+    const track = container.querySelector('ul')?.parentElement as HTMLElement
+
+    const control = getByRole('button', { name: 'Pause scrolling' })
+    expect(track).not.toHaveAttribute('data-paused')
+    await fireEvent.click(control)
+    expect(track).toHaveAttribute('data-paused')
+    expect(getByRole('button', { name: 'Resume scrolling' })).toBe(control)
+    await fireEvent.click(control)
+    expect(track).not.toHaveAttribute('data-paused')
+  })
+
+  it('renders no pause control without marks or items', () => {
+    const { queryByRole } = render(Ticker)
+    expect(queryByRole('button')).toBeNull()
   })
 
   it('renders the row twice so the loop can travel a whole copy', () => {
