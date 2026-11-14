@@ -21,7 +21,7 @@
   import Stepper, { type StepperStepState } from '@aziontech/webkit/stepper'
   import Switch from '@aziontech/webkit/switch'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
-  import { computed, reactive, ref } from 'vue'
+  import { computed, onBeforeUnmount, reactive, ref } from 'vue'
 
   interface WizardStep {
     id: string
@@ -104,27 +104,31 @@
     { value: 'docs-site', label: 'docs-site', description: 'Astro · acme/docs-site' },
     { value: 'docs-next', label: 'docs-next', description: 'Next.js · acme/docs-next' },
     { value: 'vue-sample', label: 'vue-sample', description: 'Vue · jane-doe/vue-sample' },
-    { value: 'hello-world', label: 'hello-world', description: 'JavaScript · ' },
+    { value: 'hello-world', label: 'hello-world', description: 'JavaScript · acme/hello-world' },
     { value: 'company-site', label: 'company-site', description: 'HTML · acme/company-site' },
-    { value: 'company-docs', label: 'company-docs', description: 'HTML · ' },
+    { value: 'company-docs', label: 'company-docs', description: 'HTML · acme/company-docs' },
     { value: 'analytics-pro', label: 'analytics-pro', description: 'Next.js · acme/analytics-pro' },
-    { value: 'analytics-api', label: 'analytics-api', description: 'Next.js · ' },
+    { value: 'analytics-api', label: 'analytics-api', description: 'Next.js · acme/analytics-api' },
     {
       value: 'react-dashboard',
       label: 'react-dashboard',
       description: 'React · acme/react-dashboard'
     },
-    { value: 'docs-portal', label: 'docs-portal', description: 'Vue · ' },
-    { value: 'ecommerce-v2', label: 'ecommerce-v2', description: 'Nuxt · shopco/ecommerce-v2' },
-    { value: 'ecommerce-storefront', label: 'ecommerce-storefront', description: 'Nuxt · ' },
+    { value: 'docs-portal', label: 'docs-portal', description: 'Vue · acme/docs-portal' },
+    { value: 'ecommerce-v2', label: 'ecommerce-v2', description: 'Nuxt · acme/ecommerce-v2' },
+    {
+      value: 'ecommerce-storefront',
+      label: 'ecommerce-storefront',
+      description: 'Nuxt · acme/ecommerce-storefront'
+    },
     {
       value: 'marketing-site',
       label: 'marketing-site',
       description: 'Astro · acme/marketing-site'
     },
-    { value: 'blog-platform', label: 'blog-platform', description: 'Astro · ' },
+    { value: 'blog-platform', label: 'blog-platform', description: 'Astro · acme/blog-platform' },
     { value: 'status-page', label: 'status-page', description: 'Svelte · acme/status-page' },
-    { value: 'mobile-app', label: 'mobile-app', description: 'Svelte · ' }
+    { value: 'mobile-app', label: 'mobile-app', description: 'Svelte · acme/mobile-app' }
   ]
   const cachePolicies: CachePolicy[] = [
     {
@@ -270,7 +274,7 @@
       description:
         'The platform’s own deployment. Versions keep the resource IDs they shipped with.'
     },
-    { value: 's1', label: 'shop-storefront', description: 'Storefront traffic for production.' },
+    { value: 's1', label: 'storefront-prod', description: 'Storefront traffic for production.' },
     { value: 's2', label: 'acme-storefront', description: 'Acme storefront, production traffic.' },
     {
       value: 's5',
@@ -520,6 +524,8 @@
     const message = ref(initial.message ?? '')
     const shown = ref(PAGE_SIZE)
     const loading = ref(initial.loading ?? false)
+    let timer: ReturnType<typeof setTimeout> | undefined
+    onBeforeUnmount(() => clearTimeout(timer))
 
     const chosenIndex = options.findIndex((option) => option.value === chosen.value)
     if (chosenIndex >= PAGE_SIZE) shown.value = Math.ceil((chosenIndex + 1) / PAGE_SIZE) * PAGE_SIZE
@@ -554,7 +560,8 @@
     const loadMore = () => {
       if (loading.value || !remaining.value) return
       loading.value = true
-      setTimeout(() => {
+      clearTimeout(timer)
+      timer = setTimeout(() => {
         shown.value += PAGE_SIZE
         loading.value = false
       }, 420)
@@ -705,9 +712,20 @@
     return Object.keys(errors).length === 0 && !deploymentPicker.message
   }
 
+  const submitting = ref(false)
+  let submitTimer: ReturnType<typeof setTimeout> | undefined
+  onBeforeUnmount(() => clearTimeout(submitTimer))
+
   const advance = () => {
-    if (!validate()) return
-    if (stepIndex.value < wizardSteps.length - 1) stepIndex.value += 1
+    if (submitting.value || !validate()) return
+    if (stepIndex.value < wizardSteps.length - 1) {
+      stepIndex.value += 1
+      return
+    }
+    submitting.value = true
+    submitTimer = setTimeout(() => {
+      submitting.value = false
+    }, 1200)
   }
 
   const nextLabel = computed(() =>
@@ -1708,10 +1726,7 @@
             </div>
           </div>
 
-          <SaveBar
-            v-if="stepIndex > 0 || nextLabel"
-            kind="fade"
-          >
+          <SaveBar kind="fade">
             <template
               v-if="stepIndex > 0"
               #leading
@@ -1721,16 +1736,17 @@
                 label="Back"
                 kind="outlined"
                 size="medium"
+                :disabled="submitting"
                 @click="goBack"
               />
             </template>
             <template #actions>
               <Button
-                v-if="nextLabel"
                 :label="nextLabel"
                 kind="primary"
                 size="medium"
                 type="submit"
+                :loading="submitting"
               />
             </template>
           </SaveBar>

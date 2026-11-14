@@ -22,11 +22,11 @@ The band a create flow uses when the resource being created needs another resour
 
 `Card :padded="false"` titled with the bound noun ("Project"), opening with one muted sentence on what the binding does. The card is flush so the list rows run edge to edge; text and controls carry their own padding. It sits in the form column (`layout-column-form`) like any other band.
 
-For an optional binding (OptionalBinding), the card has no title: its first row is a compact `SettingRow` titled with the action ("Protect with a firewall") whose `Switch` opts in, and the rest of the band unfolds under it with a grid-rows transition, `inert` while it is off. New then lists the resource's own modules as compact `SettingRow`s with a `Switch` each under the Name field; a module that cannot be turned off is a disabled, checked `Switch` in a `Tooltip` that says why.
+For an optional binding (OptionalBinding), the card has no title: its first row is a compact `SettingRow` titled with the action ("Protect with a firewall") whose `Switch` opts in, and the rest of the band unfolds under it with a grid-rows transition, `inert` while it is off. New then lists the resource's own modules as compact `SettingRow`s with a `Switch` each under the Name field; a module that cannot be turned off is a disabled, checked `Switch`, and its row description ends with why ("Always on."); a disabled control takes no focus, so a tooltip on it would never reach keyboard or screen-reader users.
 
 ### B. Existing / New choice — `ToggleGroup` (required when something exists)
 
-A `ToggleGroup` at `size="large"`, `fluid`, with two options, `Existing <noun>` and `New <noun>`, and an `aria-label` that names the question. Existing is the default when at least one resource exists. When none exist the toggle is not rendered and the card opens on New. Switching modes keeps both answers: going to New and back finds the same row still chosen.
+A `ToggleGroup` at `size="large"`, `fluid`, with two options, `Existing <noun>` and `New <noun>`, and an `aria-label` that names the question. Existing is the default when at least one resource exists. When none exist the toggle is not rendered, one line says a new resource is created, and the card opens on New (the Empty state). Switching modes keeps both answers: going to New and back finds the same row still chosen.
 
 ### C. New resource fields — `Field`, `Input` (required in New)
 
@@ -61,7 +61,7 @@ A transparent small full-width `Button` under the list while more matches remain
 - Don't validate the Name while it is being typed, or show required and invalid together.
 - Don't render a loading spinner in place of the rows; show skeleton rows in the row shape and keep the visible ones.
 - Don't put the create fields in a dialog or a second page; they belong in the same card.
-- Don't hide a locked module or leave it looking editable; disable it, keep it on and say why in a tooltip.
+- Don't hide a locked module or leave it looking editable; disable it, keep it on and say why in its row description, never only in a tooltip.
 
 ## Copy
 
@@ -73,7 +73,7 @@ A transparent small full-width `Button` under the list while more matches remain
 - **No match:** the fact, then both ways out, e.g. "No project matches “api”. Create one instead, or clear the search."
 - **Required:** what to do, as a sentence, e.g. "Select the project this service serves, or create a new one."
 - **Name guidance:** the allowed characters, e.g. "Lowercase letters, numbers, and hyphens."
-- **Opt-in row:** the action as the title, e.g. "Protect with a firewall", and what it does and that it is off by default as the description. A locked module's tooltip: the fact, e.g. "DDoS Protection is always on."
+- **Opt-in row:** the action as the title, e.g. "Protect with a firewall", and what it does and that it is off by default as the description. A locked module's description ends with the fact, e.g. "Always on."
 - Follow `skills/webkit-microcopy`: "Select", never "Pick" or "Choose"; sentence case; no em dash.
 
 ## Accessibility
@@ -92,6 +92,7 @@ A transparent small full-width `Button` under the list while more matches remain
 - New: the user switched to New; the list gives way to the Name field with the allowed characters as helper text.
 - Loading: Load more was pressed; five skeleton rows follow the visible ones and the button spins.
 - Required: Next was pressed with nothing chosen; the required message sits under the search, above the list.
+- Empty: nothing exists to bind; no toggle, one line saying a new project is created, and the Name field.
 - OptionalBinding: the Protect with a firewall switch is on and New firewall is selected; the Name is prefilled from the project and the Firewall modules list has DDoS Protection locked on.
 
 ## Related

@@ -21,7 +21,7 @@
     "criar serviço"
   ],
   "skills": ["webkit-create-surface", "webkit-form", "webkit-errors"],
-  "steps": ["project", "domain-and-deployment"],
+  "steps": ["project", "binding"],
   "primary": {
     "name": "Project",
     "file": "provision-wizard.vue"

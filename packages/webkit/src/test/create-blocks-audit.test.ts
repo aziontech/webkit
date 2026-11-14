@@ -15,6 +15,9 @@ import DeployTemplate from '../../blocks/platform/create/deploy-template/deploy-
 import DeployTemplateUpload from '../../blocks/platform/create/deploy-template/variants/upload.vue'
 import DeploymentFlowFailed from '../../blocks/platform/create/deployment-flow/variants/failed.vue'
 import DeploymentFlowRunning from '../../blocks/platform/create/deployment-flow/variants/running.vue'
+import ProvisionWizardBinding from '../../blocks/platform/create/provision-wizard/variants/domain-and-deployment.vue'
+import ResourcePicker from '../../blocks/platform/create/resource-picker/resource-picker.vue'
+import ResourcePickerEmpty from '../../blocks/platform/create/resource-picker/variants/empty.vue'
 import { expectNoA11yViolations } from './axe'
 import { useToastRegion } from './toast-region'
 
@@ -214,5 +217,31 @@ describe('deployment-flow', () => {
     await fireEvent.click(screen.getByRole('button', { name: 'Redeploy' }))
     expect(screen.queryByLabelText('Log view')).toBeNull()
     expect(document.body.textContent).toContain('Redeploying')
+  })
+})
+
+describe('resource-picker', () => {
+  it('opens on New with no toggle when nothing exists to bind', async () => {
+    const view = render(ResourcePickerEmpty)
+    expect(screen.queryByRole('radiogroup')).toBeNull()
+    expect(screen.queryByRole('radio', { name: 'Existing project' })).toBeNull()
+    expect(screen.getByRole('textbox', { name: /Name/ })).toBeTruthy()
+    await expectNoA11yViolations(view.container as HTMLElement)
+  })
+
+  it('keeps the toggle and gives every project a repository when projects exist', () => {
+    render(ResourcePicker)
+    expect(screen.getByRole('radio', { name: 'Existing project' })).toBeTruthy()
+    expect(document.body.textContent).not.toMatch(/· \s*(\n|$)/)
+    expect(document.body.textContent).not.toContain('shopco')
+  })
+})
+
+describe('provision-wizard', () => {
+  it('shows the loading state on Create and deploy once the step is valid', async () => {
+    render(ProvisionWizardBinding)
+    const submit = screen.getByRole('button', { name: 'Create and deploy' })
+    await fireEvent.click(submit)
+    await waitFor(() => expect(submit.getAttribute('aria-busy')).toBe('true'), wait)
   })
 })
