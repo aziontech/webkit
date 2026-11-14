@@ -33,6 +33,13 @@ describe('DocCta', () => {
     expect(queryByRole('link', { name: /start/i })).toBeNull()
   })
 
+  it('keeps its own testid fallback while it delegates to DocCallToAction', () => {
+    const { getByTestId } = render(DocCta, {
+      props: { title: 'T', primaryLabel: 'Start', primaryHref: '/signup' }
+    })
+    expect(getByTestId('documentation-doc-cta')).toHaveAttribute('role', 'complementary')
+  })
+
   it('lets a consumer testid win', () => {
     const { getByTestId } = render(DocCta, {
       props: { title: 'T' },

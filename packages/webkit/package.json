@@ -818,6 +818,10 @@
       "types": "./types/components/data/tree/tree.vue.d.ts",
       "default": "./src/components/data/tree/tree.vue"
     },
+    "./doc-call-to-action": {
+      "types": "./types/components/documentation/doc-call-to-action/doc-call-to-action.vue.d.ts",
+      "default": "./src/components/documentation/doc-call-to-action/doc-call-to-action.vue"
+    },
     "./doc-callout": {
       "types": "./types/components/documentation/doc-callout/doc-callout.vue.d.ts",
       "default": "./src/components/documentation/doc-callout/doc-callout.vue"

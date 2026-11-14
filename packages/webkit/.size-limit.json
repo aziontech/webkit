@@ -161,6 +161,11 @@
     "limit": "3.5 KB"
   },
   {
+    "name": "doc-call-to-action",
+    "path": "src/components/documentation/doc-call-to-action/doc-call-to-action.vue",
+    "limit": "12 KB"
+  },
+  {
     "name": "doc-callout",
     "path": "src/components/documentation/doc-callout/doc-callout.vue",
     "limit": "6.7 KB"
