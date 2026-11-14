@@ -3,13 +3,13 @@ name: alert
 category: feedback
 structure: monolithic
 status: implemented
-spec_version: 1
+spec_version: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=478-892
   node_id: 478:892
-checksum: afcb8518c242df22054e1af3b928144978180957deac00eb258a50a5a64c4ab1
+checksum: 20b8c37734739c42778c40ef54c0c17b2cc657e4ed9cdcb9a5d28607664ac1c0
 created: 2026-05-22
-last_updated: 2026-11-11
+last_updated: 2026-11-14
 ---
 
 # Alert — Component Spec
@@ -79,13 +79,14 @@ Inline feedback banner that communicates status, alerts, or progress. Presents a
 | `actionLabel` | `string`                                       | `''`       | false    | Label for the built-in secondary action button; hidden when empty.                                |
 | `closable`    | `boolean`                                      | `false`    | false    | When true, shows a close control that dismisses the message.                                      |
 | `life`        | `number`                                       | `0`        | false    | Duration in milliseconds before auto-dismiss; `0` disables auto-dismiss.                          |
+| `title`       | `string`                                       | `''`       | false    | Optional bold first line above the copy (the AlertTitle of the shadcn anatomy); hidden when empty. |
 
 ## Events
 
 | Event    | Payload      | Notes                                                                   |
 | -------- | ------------ | ----------------------------------------------------------------------- |
 | `action` | `MouseEvent` | Emitted when the built-in action button is clicked.                     |
-| `close`  | `void`       | Emitted when the message is dismissed manually or after `life` expires. |
+| `close`  | `(event?: Event)` | Emitted when the message is dismissed, after the fade. Carries the originating event: the close button's `MouseEvent` or the `Escape` `KeyboardEvent`; no argument after `life` expires. |
 
 ## Slots
 
@@ -103,7 +104,7 @@ Inline feedback banner that communicates status, alerts, or progress. Presents a
 
 | Trigger | Animation / Transition      | Token                                                           | Reduced-motion fallback         |
 | ------- | --------------------------- | --------------------------------------------------------------- | ------------------------------- |
-| dismiss | inline `opacity` transition | `duration['fast-02']` · `curve['productive-exit']` (animate.js) | `motion-reduce:transition-none` |
+| dismiss | `transition-opacity duration-fast-02 ease-productive-exit` on the leave-active class (no inline `transition`, so the reduced-motion class wins) | `duration['fast-02']` · `curve['productive-exit']` (animate.js) | `motion-reduce:transition-none` |
 
 ## Tokens
 
@@ -161,7 +162,7 @@ Inline feedback banner that communicates status, alerts, or progress. Presents a
 - ARIA: root uses `role="alert"` for danger/warning severities and `role="status"` for info/success.
 - Inline links are underlined, not colour-only, so they stay distinguishable against every severity surface (WCAG 1.4.1); the `.text-link` token supplies the focus outline.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state.
-- `motion-reduce:transition-none motion-reduce:transform-none` on animated states.
+- `motion-reduce:transition-none` on the dismiss fade; nothing sets the transition inline.
 - Touch target ≥40×40 px where the control is interactive.
 
 ## Examples
@@ -172,6 +173,7 @@ Inline feedback banner that communicates status, alerts, or progress. Presents a
 - WithLinks — the inline-link anatomy is the reason this component was reshaped; the default slot's link handling is not reachable from any arg-driven story, so it needs its own composite story.
 - Closable
 - AutoDismiss
+- WithTitle — the optional `title` line is an anatomy part (shadcn AlertTitle) that no other story shows.
 
 ## Constraints — DO NOT
 
