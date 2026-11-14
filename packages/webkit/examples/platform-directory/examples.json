@@ -11,6 +11,11 @@
       "name": "Three groups",
       "summary": "Three groups fan out to three columns; between the small and the large breakpoints the third spans the row, so no empty cell shows the rule colour.",
       "file": "three-groups.vue"
+    },
+    {
+      "name": "With header",
+      "summary": "An eyebrow, the headline and one sentence under it over the directory, with an anchor so a page can link to the band with a #hash.",
+      "file": "with-header.vue"
     }
   ],
   "site": [

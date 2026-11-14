@@ -138,6 +138,33 @@ describe('PlatformDirectory', () => {
     }
   )
 
+  it('renders the eyebrow and the description around the title', () => {
+    const { getByText } = band({
+      eyebrow: 'Platform',
+      description: 'Build, store, secure and observe applications on one platform.'
+    })
+
+    expect(getByText('Platform')).toBeInTheDocument()
+    expect(
+      getByText('Build, store, secure and observe applications on one platform.')
+    ).toBeInTheDocument()
+  })
+
+  it('sets the anchor as the band id, and no id without one', () => {
+    const { getByTestId, unmount } = band({ anchor: 'products' })
+
+    expect(getByTestId(TESTID)).toHaveAttribute('id', 'products')
+    unmount()
+
+    expect(band().getByTestId(TESTID).hasAttribute('id')).toBe(false)
+  })
+
+  it('names the directory navigation with the title when ariaLabel is empty', () => {
+    const { getByRole } = band({ ariaLabel: '' })
+
+    expect(getByRole('navigation', { name: TITLE })).toBeInTheDocument()
+  })
+
   it('renders no header and leaves the band unnamed without a title', () => {
     const { getByTestId, queryByRole } = band({ title: '' })
 
@@ -156,6 +183,15 @@ describe('PlatformDirectory', () => {
 
   it('has no a11y violations with a full band', async () => {
     const { container } = band()
+
+    await expectNoA11yViolations(container)
+  })
+
+  it('has no a11y violations with the eyebrow and the description', async () => {
+    const { container } = band({
+      eyebrow: 'Platform',
+      description: 'Build, store, secure and observe applications on one platform.'
+    })
 
     await expectNoA11yViolations(container)
   })

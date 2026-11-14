@@ -35,16 +35,25 @@
   }
 
   interface Props {
-    /** Headline over the directory, rendered by the section title as its `h2`; the band renders no header when empty. */
+    /** In-page id set on the band so a `#hash` link can scroll to it. */
+    anchor?: string
+    /** Short label above the headline; shown only with a title. */
+    eyebrow?: string
+    /** Headline over the directory, rendered by the section title as its `h2`; the band renders no header, eyebrow or description when empty. */
     title?: string
-    /** Accessible name of the directory's navigation landmark. */
+    /** One sentence under the headline; shown only with a title. */
+    description?: string
+    /** Accessible name of the directory's navigation landmark; empty uses the title. */
     ariaLabel?: string
     /** The columns, in order; each is `{ title, items }` where every item is `{ icon, title, description, href }`. Items without a title or an `href` are skipped, and so are groups left empty. */
     groups?: PlatformDirectoryGroup[]
   }
 
   const props = withDefaults(defineProps<Props>(), {
+    anchor: '',
+    eyebrow: '',
     title: '',
+    description: '',
     ariaLabel: '',
     groups: () => []
   })
@@ -80,13 +89,17 @@
   }
 
   const hasHeader = computed(() => hasColumns.value && props.title.length > 0)
+
+  const navigationLabel = computed(() => props.ariaLabel || props.title)
 </script>
 
 <template>
   <section
     v-bind="$attrs"
+    :id="anchor || undefined"
     :data-testid="testId"
     :aria-label="hasHeader ? title : undefined"
+    class="scroll-mt-(--spacing-xxl)"
   >
     <SectionModule
       v-if="hasColumns"
@@ -97,7 +110,11 @@
         v-if="hasHeader"
         #header
       >
-        <SectionTitle :title="title" />
+        <SectionTitle
+          :eyebrow="eyebrow"
+          :title="title"
+          :description="description"
+        />
       </template>
 
       <FrameBox
@@ -108,7 +125,7 @@
         <ColumnNavigation
           :columns="trackCount"
           :mobile-columns="1"
-          :aria-label="ariaLabel"
+          :aria-label="navigationLabel"
         >
           <ColumnNavigationColumn
             v-for="(group, index) in columns"
