@@ -11,6 +11,7 @@
   import DrawerTitle from '@aziontech/webkit/drawer-title'
   import EmptyState from '@aziontech/webkit/empty-state'
   import Field from '@aziontech/webkit/field'
+  import Input from '@aziontech/webkit/input'
   import KeyValuePairs from '@aziontech/webkit/key-value-pairs'
   import PageHeader from '@aziontech/webkit/page-header'
   import PanelContent from '@aziontech/webkit/panel-content'
@@ -184,19 +185,141 @@
     )
   ])
 
-  const templates = [
-    { id: 'next-starter', title: 'Next.js Starter', icon: 'ai ai-next', framework: 'Next.js' },
-    { id: 'astro-blog', title: 'Astro Blog', icon: 'ai ai-astro', framework: 'Astro' },
-    { id: 'nuxt-store', title: 'Nuxt Storefront', icon: 'ai ai-nuxt', framework: 'Nuxt' },
-    { id: 'static-site', title: 'Static Site', icon: 'ai ai-edge-storage', framework: 'Vite' },
-    {
-      id: 'reverse-proxy',
-      title: 'Reverse Proxy',
-      icon: 'ai ai-edge-connectors',
-      framework: 'JavaScript'
-    },
-    { id: 'rest-api', title: 'REST API', icon: 'ai ai-hono', framework: 'Hono' }
+  interface Template {
+    id: string
+    title: string
+    icon: string
+    description: string
+    color: string
+    markClass: string
+  }
+
+  const template = (
+    id: string,
+    title: string,
+    icon: string,
+    description: string,
+    color = '',
+    markClass = ''
+  ): Template => ({ id, title, icon, description, color, markClass })
+
+  const INVERT_IN_DARK = '[[data-theme=dark]_&]:invert'
+
+  const templates: Template[] = [
+    template(
+      'next-starter',
+      'Next.js Starter',
+      'ai-cor ai-next',
+      'A Next.js app with server rendering and static pages, ready to deploy.',
+      '#0070f3',
+      INVERT_IN_DARK
+    ),
+    template(
+      'react-starter',
+      'React Starter',
+      'ai-cor ai-react',
+      'A single-page React app built with Vite, every route served from the edge.',
+      '#61dafb'
+    ),
+    template(
+      'vue-starter',
+      'Vue Starter',
+      'ai-cor ai-vue',
+      'A lightweight Vue app with routing, built with Vite.',
+      '#42b883'
+    ),
+    template(
+      'nuxt-store',
+      'Nuxt Storefront',
+      'ai-cor ai-nuxt',
+      'A product catalog with a cart, rendered on the server and cached close to buyers.',
+      '#00dc82'
+    ),
+    template(
+      'astro-blog',
+      'Astro Blog',
+      'ai-cor ai-astro',
+      'A content-first blog with Markdown posts, an RSS feed and a sitemap.',
+      '#ff5d01'
+    ),
+    template(
+      'angular-dashboard',
+      'Angular Dashboard',
+      'ai-cor ai-angular',
+      'A single-page admin dashboard with routing and lazy-loaded modules.',
+      '#dd0031'
+    ),
+    template(
+      'svelte-starter',
+      'Svelte Starter',
+      'ai-cor ai-svelte',
+      'A SvelteKit app with server routes and prerendered pages.',
+      '#ff3e00'
+    ),
+    template(
+      'solid-starter',
+      'Solid Starter',
+      'ai-cor ai-solidjs',
+      'A SolidStart app with fine-grained updates and streaming server rendering.',
+      '#446b9e'
+    ),
+    template(
+      'qwik-starter',
+      'Qwik Starter',
+      'ai ai-qwik',
+      'A resumable Qwik app that loads only the code a visitor touches.',
+      '#ac7ef4'
+    ),
+    template(
+      'gatsby-site',
+      'Gatsby Site',
+      'ai ai-gatsby',
+      'A marketing site built at deploy time from Markdown and images.',
+      '#663399'
+    ),
+    template(
+      'docusaurus-docs',
+      'Docusaurus Docs',
+      'ai ai-docusaurus',
+      'A documentation site with versioned sections, search and a blog.',
+      '#3ecc5f'
+    ),
+    template(
+      'vitepress-docs',
+      'VitePress Docs',
+      'ai ai-vitepress',
+      'A fast documentation site written in Markdown, with a sidebar and search.',
+      '#646cff'
+    ),
+    template(
+      'hugo-docs',
+      'Hugo Docs',
+      'ai ai-hugo',
+      'A documentation site with search, versioned sections and dark mode.',
+      '#ff4088'
+    ),
+    template(
+      'static-site',
+      'Static Site',
+      'ai ai-edge-storage',
+      'Publish a folder of built files and serve it from the closest location.'
+    ),
+    template(
+      'reverse-proxy',
+      'Reverse Proxy',
+      'ai ai-edge-connectors',
+      'Front an origin you already run and pass every request on to it.'
+    ),
+    template(
+      'rest-api',
+      'REST API',
+      'ai ai-hono',
+      'A small Hono API with typed routes, running at the edge.',
+      '#e36002'
+    )
   ]
+
+  const glow = (item: Template) => (item.color ? { '--template-glow': item.color } : undefined)
 
   const withStatus = (item: Integration) => ({
     ...item,
@@ -241,6 +364,15 @@
   })
 
   const featured = computed(() => catalog.value.filter((item) => item.featured))
+
+  const templateQuery = ref('')
+  const filteredTemplates = computed(() => {
+    const term = templateQuery.value.trim().toLowerCase()
+    if (!term) return templates
+    return templates.filter((item) =>
+      `${item.title} ${item.description}`.toLowerCase().includes(term)
+    )
+  })
 
   const activeTab = ref('integrations')
 
@@ -337,15 +469,100 @@
         <Tabs.Root v-model="activeTab">
           <Tabs.List align="center">
             <Tabs.Item
-              value="integrations"
-              label="Integrations"
-            />
-            <Tabs.Item
               value="templates"
               label="Templates"
             />
+            <Tabs.Item
+              value="integrations"
+              label="Integrations"
+            />
           </Tabs.List>
           <Tabs.Content>
+            <Tabs.Panel value="templates">
+              <section
+                class="flex min-w-0 flex-col gap-(--layout-group-gap) pt-(--layout-group-gap)"
+                aria-label="Templates"
+              >
+                <Input
+                  v-model="templateQuery"
+                  size="medium"
+                  placeholder="Search templates"
+                  aria-label="Search templates"
+                  class="w-full"
+                >
+                  <template #iconLeft>
+                    <i class="pi pi-search" />
+                  </template>
+                </Input>
+
+                <EmptyState
+                  v-if="!filteredTemplates.length"
+                  bordered
+                  size="medium"
+                  icon="pi pi-search"
+                  title="No matching templates"
+                  description="No template matches this search. Try another name or framework."
+                >
+                  <template #actions>
+                    <Button
+                      label="Clear search"
+                      kind="outlined"
+                      size="small"
+                      @click="templateQuery = ''"
+                    />
+                  </template>
+                </EmptyState>
+
+                <ul
+                  v-else
+                  class="m-0 grid list-none grid-cols-2 gap-(--spacing-md) p-0 sm:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5"
+                >
+                  <li
+                    v-for="item in filteredTemplates"
+                    :key="item.id"
+                    class="flex min-w-0"
+                  >
+                    <Card
+                      class="group isolate w-full"
+                      :style="glow(item)"
+                    >
+                      <template #content>
+                        <span
+                          aria-hidden="true"
+                          class="pointer-events-none absolute inset-0 -z-1 bg-[radial-gradient(120%_90%_at_18%_0%,color-mix(in_oklab,var(--template-glow,var(--primary))_20%,transparent),transparent_62%)] opacity-0 transition-opacity duration-moderate-01 ease-productive-entrance group-focus-within:opacity-100 group-hover:opacity-100 motion-reduce:transition-none rtl:bg-[radial-gradient(120%_90%_at_82%_0%,color-mix(in_oklab,var(--template-glow,var(--primary))_20%,transparent),transparent_62%)]"
+                        />
+                        <div class="flex flex-col items-start gap-(--spacing-md)">
+                          <span
+                            class="flex size-10 shrink-0 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
+                          >
+                            <i
+                              :class="[item.icon, item.markClass]"
+                              class="text-body-lg leading-none text-(--text-default) grayscale transition duration-moderate-01 ease-productive-entrance group-focus-within:grayscale-0 group-hover:grayscale-0 motion-reduce:transition-none"
+                              aria-hidden="true"
+                            />
+                          </span>
+                          <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+                            <h3 class="text-label-md text-(--text-default)">
+                              <a
+                                :href="`/marketplace/templates/${item.id}`"
+                                class="text-(--text-default) no-underline outline-none after:absolute after:inset-0 after:content-[''] focus-visible:after:ring-2 focus-visible:after:ring-inset focus-visible:after:ring-(--ring-color)"
+                                >{{ item.title }}</a
+                              >
+                            </h3>
+                            <p
+                              class="m-0 line-clamp-2 text-pretty text-body-sm text-(--text-muted)"
+                            >
+                              {{ item.description }}
+                            </p>
+                          </div>
+                        </div>
+                      </template>
+                    </Card>
+                  </li>
+                </ul>
+              </section>
+            </Tabs.Panel>
+
             <Tabs.Panel value="integrations">
               <div class="flex min-w-0 flex-col gap-(--layout-section-gap) pt-(--layout-group-gap)">
                 <section
@@ -368,6 +585,7 @@
                       <Card
                         class="w-full"
                         kind="integration"
+                        featured
                         :title="item.name"
                         :vendor="item.vendor"
                         :logo="item.logo"
@@ -447,65 +665,6 @@
                   </ul>
                 </section>
               </div>
-            </Tabs.Panel>
-
-            <Tabs.Panel value="templates">
-              <section
-                class="flex min-w-0 flex-col gap-(--layout-group-gap) pt-(--layout-group-gap)"
-                aria-labelledby="marketplace-templates"
-              >
-                <div class="flex flex-wrap items-center justify-between gap-(--spacing-sm)">
-                  <h2
-                    id="marketplace-templates"
-                    class="text-heading-xxs text-(--text-default)"
-                  >
-                    Popular templates
-                  </h2>
-                  <Button
-                    label="Browse all templates"
-                    icon="pi pi-arrow-right"
-                    icon-position="trailing"
-                    kind="transparent"
-                    size="small"
-                    href="/templates"
-                  />
-                </div>
-                <ul
-                  class="m-0 grid list-none grid-cols-2 gap-(--spacing-md) p-0 sm:grid-cols-3 xl:grid-cols-6"
-                >
-                  <li
-                    v-for="template in templates"
-                    :key="template.id"
-                    class="flex min-w-0"
-                  >
-                    <Card class="w-full">
-                      <template #content>
-                        <div class="flex flex-col items-start gap-(--spacing-sm)">
-                          <span
-                            class="flex size-10 shrink-0 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
-                          >
-                            <i
-                              :class="template.icon"
-                              class="text-body-lg leading-none text-(--text-default)"
-                              aria-hidden="true"
-                            />
-                          </span>
-                          <h3 class="text-label-md text-(--text-default)">
-                            <a
-                              :href="`/templates?preview=${template.id}`"
-                              class="text-(--text-default) no-underline outline-none after:absolute after:inset-0 after:transition-colors after:content-[''] hover:after:bg-(--bg-hover) focus-visible:after:ring-2 focus-visible:after:ring-inset focus-visible:after:ring-(--ring-color) motion-reduce:after:transition-none"
-                              >{{ template.title }}</a
-                            >
-                          </h3>
-                          <span class="text-body-xs text-(--text-muted)">{{
-                            template.framework
-                          }}</span>
-                        </div>
-                      </template>
-                    </Card>
-                  </li>
-                </ul>
-              </section>
             </Tabs.Panel>
           </Tabs.Content>
         </Tabs.Root>

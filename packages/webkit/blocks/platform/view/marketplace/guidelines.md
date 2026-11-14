@@ -8,11 +8,11 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 
 - A catalog of installable add-ons (integrations, extensions, plugins) with a publisher, a category and an installed state per account.
 - Installing means choosing a target (an application) and waiting for an asynchronous run.
-- The same page also points people at templates, the other way to start from someone else's work.
+- The same page also lists the templates, the other way to start from someone else's work, as a searchable grid on the first tab.
 
 ## When not to use
 
-- Only templates, with a preview and a README: use `platform/view/template-browser`.
+- Only templates, grouped by category with a filter, a preview and a README: use `platform/view/template-browser`.
 - Deploying a chosen template: use `platform/create/deploy-template`.
 - The resources the account already created: use `platform/view/card-view` or `platform/view/table-view`.
 - Changing the settings of an installed integration on one application: use `platform/edit/edit-resource` from Configure.
@@ -25,11 +25,11 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 
 ### B. Item kinds — `Tabs` (required)
 
-`Tabs.Root` with Integrations and Templates, starting on the tab the URL names (Integrations by default here). The tab row is centred over the catalog with `Tabs.List align="center"`, as in the design sample; the solution page keeps its tabs at the start, since they head a resource page. Each tab is a `Tabs.Panel`; the panels keep their own state when the person switches.
+`Tabs.Root` with Templates first and Integrations second, starting on the tab the URL names (Templates by default here, as in the design sample). The tab row is centred over the catalog with `Tabs.List align="center"`, as in the design sample; the solution page keeps its tabs at the start, since they head a resource page. Each tab is a `Tabs.Panel`; the panels keep their own state when the person switches.
 
 ### C. Featured — `Card` (required)
 
-While no filter is set (`filtersActive` is false), a "Featured" `h2` over three `Card kind="integration"` tiles in a row (one a row on a phone). They carry the context as their badge and no action, so the row reads as a recommendation; the tile opens the drawer. Searching hides the row, so the results start at the top.
+While no filter is set (`filtersActive` is false), a "Featured" `h2` over three `Card kind="integration" featured` tiles in a row (one a row on a phone): the mark, the name, the publisher and the description centred on a raised surface with a primary glow at the top, and the context as a primary badge in the corner. They carry no action, so the row reads as a recommendation; the tile opens the drawer. Searching hides the row, so the results start at the top.
 
 ### D. Search and filter — `PropertyFilter` (required)
 
@@ -43,9 +43,9 @@ A `ul` grid, one to three tiles a row by width, of `Card kind="integration"`: th
 
 When `status` is `no-match`, the grid gives way to a medium `EmptyState` with the filter-slash glyph, "No matching integrations", one sentence, and an outlined small Clear filters `Button` bound to `clearFilters`.
 
-### G. Popular templates — `Card`, `Button` (required)
+### G. Templates — `Input`, `Card`, `EmptyState`, `Button` (required)
 
-The Templates tab: a "Popular templates" `h2` with a transparent small Browse all templates `Button` that leads to `platform/view/template-browser`, over a grid of small `Card` tiles (the mark, the name as a stretched link to the template's preview, the framework). The full catalog, its filter and the README live in the template browser.
+The first tab is the full template catalog. A medium `Input` with a leading search glyph (placeholder and `aria-label` "Search templates") matches the name and the description as the person types. Under it a `ul` grid of small `Card` tiles, two a row on a phone, then three, four and five as the page widens: the framework mark in a bordered square, grey until the tile is hovered or focused, then in colour; the name as an `h3` holding a stretched link to the template page (`/marketplace/templates/<id>`); two lines of description. Hovering or focusing a tile lights a soft radial glow from its top start corner in the framework's brand colour: the tile sets `--template-glow` from the item's colour through `:style`, and one bracketed `bg-[radial-gradient(...)]` reads it, falling back to `var(--primary)` for a template with no brand (a starter); `isolate` on the `Card` keeps the glow under the content. When the search matches nothing, the grid gives way to a bordered medium `EmptyState`, "No matching templates", with an outlined small Clear search `Button`.
 
 ### H. Integration drawer — `Drawer`, `DrawerPortal`, `DrawerOverlay`, `DrawerContent`, `DrawerTitle`, `DrawerClose`, `PanelHeader`, `PanelContent`, `PanelFooter` (required)
 
@@ -88,6 +88,8 @@ Raised through `toast` with one id for the install, so progress turns into the o
 - Run the catalog on one `useCollection` call with `filtering`, `propertyFiltering` and `url: true`; derive the Status property from where each integration is installed.
 - Use `Card kind="integration"` for every integration tile, with the installed state as the `installed` prop and one action in the `action` slot.
 - Hide the Featured row while any filter is set.
+- Open on Templates and keep the template search to one `Input`; the grouped catalog with category and framework filters is the template browser's job.
+- Give the template glow the framework's own colour, through a CSS variable on the tile, and the starters the primary fallback.
 - Open the detail in a drawer so the catalog, the filter and the scroll stay put.
 - Show the permissions before the install form, and the target as a required field.
 - Treat install as an async run: `loading` on Install, a progress toast, then the outcome as a toast and an inline `Alert`, with actions that fit an integration (Configure, Open application; Edit, Reinstall).
@@ -100,12 +102,14 @@ Raised through `toast` with one id for the install, so progress turns into the o
 - Don't use "Retry" or "Try again" for a failed install; the action is Reinstall.
 - Don't show Install for an application that already runs the integration; filter it out of the `Select`.
 - Don't badge every tile with more than one tag beside Installed; the publisher and the category are enough to compare.
-- Don't rebuild the template browser inside the Templates tab; link to it.
+- Don't rebuild the template browser inside the Templates tab: no categories, no property filter, no preview drawer; the tile links to the template page.
+- Don't use `featured` for every integration tile; it marks the short Featured row only.
 
 ## Copy
 
 - **Title:** "Marketplace". Description: "Find integrations and templates that run on your applications."
-- **Tabs:** "Integrations", "Templates". **Sections:** "Featured", "All integrations", "Popular templates".
+- **Tabs:** "Templates", "Integrations". **Sections:** "Featured", "All integrations".
+- **Template search:** placeholder and `aria-label` "Search templates"; no match: "No matching templates", "No template matches this search. Try another name or framework.", "Clear search".
 - **Filter:** placeholder and `aria-label` "Search integrations".
 - **Tile action:** "Install" or "Configure"; its `aria-label` adds the name.
 - **Drawer:** the name, "by <publisher>", "Overview", "Permissions", "Install" or "Install on another application", the field "Application" with "Select an application".
@@ -119,7 +123,8 @@ Raised through `toast` with one id for the install, so progress turns into the o
 ## Accessibility
 
 - The layout owns the one `main` landmark; the `PageHeader` title is the only `h1`, each section heading an `h2`, each tile name an `h3`.
-- The tabs follow the tablist pattern: arrow keys move between Integrations and Templates, and each panel is labelled by its tab.
+- The tabs follow the tablist pattern: arrow keys move between Templates and Integrations, and each panel is labelled by its tab.
+- Each template tile's target is a real link named by the template; the mark and the glow are decorative (`aria-hidden`), and the glow also follows keyboard focus.
 - Each tile's target is a real button named by the integration; the action button sits above it and is named with the integration, so "Install" is never ambiguous in a list.
 - The Installed state is text in a `Tag`, never colour alone.
 - The drawer traps focus, is named by `DrawerTitle`, closes on Escape and returns focus to what opened it; its form has an accessible name.
@@ -128,14 +133,15 @@ Raised through `toast` with one id for the install, so progress turns into the o
 
 ## States
 
-- Default: the Integrations tab with Featured, All integrations, the filter and the tiles; a tile opens the drawer and Install runs and lands as a success toast and Alert.
-- Templates: the Templates tab with popular templates linking to the template browser.
+- Default: the Templates tab with the search and the full template grid; each tile links to its template page.
+- Integrations: the Integrations tab with Featured, All integrations, the filter and the tiles; a tile opens the drawer and Install runs and lands as a success toast and Alert.
 - Detail: the drawer is open on Request Signer with its details, overview, permissions and the install form.
 - Installing: Install is running on storefront; the button is `loading`, the field disabled and the progress toast says it keeps running.
 - Installed: Request Signer is installed on storefront; the success Alert, the Installed tag, Configure in the footer and the success toast with Configure and Open application.
 - InstallFailed: the install on checkout failed; the danger Alert with the reason and Reinstall, and the permanent toast with Edit and Reinstall.
-- NoMatch: the search "kubernetes" matches nothing; the Featured row hides and the empty state offers Clear filters.
-- Loading: the filter is disabled and six `Skeleton` tiles (logo, name, two lines, badge, action) hold the grid in a band that is `aria-busy`.
+- NoMatch: the integration search "kubernetes" matches nothing; the Featured row hides and the empty state offers Clear filters.
+- TemplatesNoMatch: the template search "kubernetes" matches nothing; the bordered empty state offers Clear search.
+- Loading: on Templates, the search is disabled and ten `Skeleton` tiles (mark, name, two lines) hold the grid in a band that is `aria-busy`; the Integrations tab holds six skeleton integration tiles under a disabled filter.
 
 - SolutionPage: Waiting Room as a page, storefront on 1.3.0 (Update available) and checkout on 1.4.0.
 - Configure: Waiting Room settings on storefront, with the SaveBar after a change.
@@ -143,7 +149,7 @@ Raised through `toast` with one id for the install, so progress turns into the o
 
 ## Related
 
-- `platform/view/template-browser` — the full template catalog the Templates tab leads to.
+- `platform/view/template-browser` — the template catalog grouped by category, with a filter and a README preview.
 - `platform/create/deploy-template` — where a template's Deploy leads.
 - `platform/states/async-submit` — the toast and inline outcome every install follows.
 - `platform/states/form-error` — the field, section and toast placement of a form error.

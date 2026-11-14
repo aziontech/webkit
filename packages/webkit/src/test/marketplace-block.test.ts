@@ -5,6 +5,7 @@ import Marketplace from '../../blocks/platform/view/marketplace/marketplace.vue'
 import InstallFailed from '../../blocks/platform/view/marketplace/variants/install-failed.vue'
 import Installed from '../../blocks/platform/view/marketplace/variants/installed.vue'
 import NoMatch from '../../blocks/platform/view/marketplace/variants/no-match.vue'
+import TemplatesNoMatch from '../../blocks/platform/view/marketplace/variants/templates-no-match.vue'
 import TemplateBrowser from '../../blocks/platform/view/template-browser/template-browser.vue'
 import { useToastRegion } from './toast-region'
 
@@ -20,8 +21,34 @@ afterEach(() => {
 })
 
 describe('platform/view/marketplace block', () => {
+  it('opens on Templates, the first tab, and narrows the template grid with the search', async () => {
+    const view = render(Marketplace)
+    const tabs = view.getAllByRole('tab').map((tab) => tab.textContent?.trim())
+    expect(tabs).toEqual(['Templates', 'Integrations'])
+    expect(view.getByRole('tab', { name: 'Templates' })).toHaveAttribute('aria-selected', 'true')
+    expect(view.getByRole('link', { name: 'Astro Blog' })).toHaveAttribute(
+      'href',
+      '/marketplace/templates/astro-blog'
+    )
+
+    await fireEvent.update(view.getByRole('textbox', { name: 'Search templates' }), 'docs')
+
+    await waitFor(() => expect(view.queryByRole('link', { name: 'Astro Blog' })).toBeNull())
+    expect(view.getByRole('link', { name: 'Hugo Docs' })).toBeTruthy()
+  })
+
+  it('shows the bordered empty state when no template matches and clears the search', async () => {
+    const view = render(TemplatesNoMatch)
+    expect(view.getByText('No matching templates')).toBeTruthy()
+
+    await fireEvent.click(view.getByRole('button', { name: 'Clear search' }))
+
+    await waitFor(() => expect(view.getByRole('link', { name: 'Next.js Starter' })).toBeTruthy())
+  })
+
   it('opens an integration from its tile and refuses Install until an application is chosen', async () => {
     const view = render(Marketplace)
+    await fireEvent.click(view.getByRole('tab', { name: 'Integrations' }))
     await fireEvent.click(view.getByRole('button', { name: 'Install Rate Guard' }))
     const drawer = await waitFor(() => view.getByRole('dialog'))
     expect(
