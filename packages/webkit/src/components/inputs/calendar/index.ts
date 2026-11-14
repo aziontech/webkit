@@ -15,6 +15,7 @@ const CalendarRoot = Object.assign(Calendar, {
 export type {
   CalendarMode,
   CalendarMonth,
+  CalendarOrientation,
   CalendarRange,
   CalendarSize,
   CalendarValue

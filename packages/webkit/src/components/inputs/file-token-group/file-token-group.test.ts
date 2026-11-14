@@ -5,6 +5,7 @@ import { defineComponent, h, ref } from 'vue'
 
 import Default from '../../../../examples/file-token-group/default.vue'
 import Horizontal from '../../../../examples/file-token-group/horizontal.vue'
+import ReadOnly from '../../../../examples/file-token-group/readonly.vue'
 import Uploading from '../../../../examples/file-token-group/uploading.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import { LOCALES } from '../../../test/locales'
@@ -23,7 +24,7 @@ const Controlled = defineComponent({
     return () =>
       h(FileTokenGroup, {
         items: items.value,
-        onDismiss: (_event: MouseEvent, { index }: { index: number }) => {
+        onRemove: (_event: MouseEvent, { index }: { index: number }) => {
           items.value = items.value.filter((_, position) => position !== index)
         }
       })
@@ -71,7 +72,7 @@ describe('FileTokenGroup', () => {
     expect(id && document.getElementById(id)?.textContent).toContain('Larger than 300 MB')
   })
 
-  it('emits dismiss with the index and moves focus to the next token', async () => {
+  it('emits remove with the index and moves focus to the next token', async () => {
     const view = render(Controlled)
     const remove = view.getByRole('button', { name: 'Remove b.png' })
     remove.focus()
@@ -171,5 +172,32 @@ describe('FileTokenGroup', () => {
       await expectNoA11yViolations(view.container)
       view.unmount()
     }
+  })
+})
+
+describe('FileTokenGroup names', () => {
+  it('emits remove and the deprecated dismiss with the same payload', async () => {
+    const items = files()
+    const view = render(FileTokenGroup, { props: { items } })
+    await fireEvent.click(view.getByRole('button', { name: 'Remove a.txt' }))
+    expect(view.emitted('remove')?.[0]?.[1]).toEqual({ index: 0, item: items[0] })
+    expect(view.emitted('dismiss')?.[0]?.[1]).toEqual({ index: 0, item: items[0] })
+  })
+
+  it('lays tokens out with orientation and still honours the deprecated alignment', () => {
+    const next = render(FileTokenGroup, { props: { items: files(), orientation: 'horizontal' } })
+    expect(next.getByTestId('input-file-token-group').getAttribute('data-orientation')).toBe(
+      'horizontal'
+    )
+    next.unmount()
+    const legacy = render(FileTokenGroup, { props: { items: files(), alignment: 'horizontal' } })
+    expect(legacy.getByTestId('input-file-token-group').getAttribute('data-orientation')).toBe(
+      'horizontal'
+    )
+  })
+
+  it('renders the ReadOnly example with no remove buttons', () => {
+    const view = render(ReadOnly)
+    expect(view.queryAllByRole('button', { name: /^Remove/ })).toHaveLength(0)
   })
 })

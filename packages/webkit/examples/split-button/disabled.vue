@@ -13,6 +13,6 @@
     label="Save"
     icon="pi pi-check"
     disabled
-    :model="items"
+    :items="items"
   />
 </template>

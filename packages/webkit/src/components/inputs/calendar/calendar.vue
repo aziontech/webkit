@@ -10,6 +10,7 @@
     watch
   } from 'vue'
 
+  import { useFieldControl } from '../../../composables/use-field-control'
   import { useFocusTrap } from '../../../composables/use-focus-trap'
   import { usePortalLocale, useTranslate } from '../../../composables/use-locale/use-translate'
   import { usePlacement } from '../../../composables/use-placement'
@@ -31,6 +32,7 @@
     CalendarInjectionKey,
     type CalendarMode,
     type CalendarMonth,
+    type CalendarOrientation,
     type CalendarPresetItem,
     type CalendarRange,
     type CalendarSize,
@@ -61,14 +63,20 @@
     showFields?: boolean
     /** Shows Start/End time fields alongside the date fields. */
     showTime?: boolean
-    /** Shows the timezone selector below the fields. */
+    /** Shows the time zone selector below the fields. */
+    showTimeZone?: boolean
+    /** @deprecated since 6.0 — use `showTimeZone`. Removed in 7.0. */
     showTimezone?: boolean
-    /** Selected IANA timezone for display formatting (v-model:timezone). Empty resolves to the local zone. */
-    timezone?: string
-    /** Timezone options for the selector; empty falls back to a curated list derived from Intl. */
+    /** Time zone options for the selector (IANA names); empty falls back to a curated list derived from Intl. */
+    timeZones?: string[]
+    /** @deprecated since 6.0 — use `timeZones`. Removed in 7.0. */
     timezones?: string[]
-    /** Lays the fields/apply column beside the calendar instead of below it. */
+    /** Places the fields and Apply column below the calendar (vertical) or beside it (horizontal). */
+    orientation?: CalendarOrientation
+    /** @deprecated since 6.0 — use `orientation="horizontal"`. Removed in 7.0. */
     horizontal?: boolean
+    /** Accessible name of the trigger; the current value is appended. Empty uses the Field label or the trigger text. */
+    ariaLabel?: string
     /** Shows a clear control on the trigger that empties the committed selection. */
     clearable?: boolean
     /** Stages edits in a draft and requires Apply to commit; when false, every edit commits immediately. */
@@ -89,10 +97,13 @@
     presets: () => [],
     showFields: true,
     showTime: false,
+    showTimeZone: false,
     showTimezone: false,
-    timezone: '',
+    timeZones: () => [],
     timezones: () => [],
+    orientation: 'vertical',
     horizontal: false,
+    ariaLabel: '',
     clearable: false,
     showApply: true,
     period: false,
@@ -100,7 +111,6 @@
   })
 
   const emit = defineEmits<{
-    'update:timezone': [value: string]
     'month-change': [value: CalendarMonth]
     apply: [event: Event, value: CalendarValue]
   }>()
@@ -110,6 +120,12 @@
 
   /** Controlled open state of the popover (v-model:open); omit for uncontrolled. */
   const openModel = defineModel<boolean>('open', { default: undefined as never })
+
+  /** Selected IANA time zone for display formatting (v-model:time-zone). Empty resolves to the local zone. */
+  const timeZone = defineModel<string>('timeZone', { default: '' })
+
+  /** @deprecated since 6.0 — use `v-model:time-zone`. Removed in 7.0. */
+  const timezone = defineModel<string>('timezone', { default: '' })
 
   defineSlots<{
     trigger(props: { open: boolean; value: CalendarValue; displayValue: string }): unknown
@@ -122,7 +138,14 @@
   const placeholderText = computed(() => props.placeholder || t('calendar.placeholder'))
   const slots = useSlots()
 
+  const field = useFieldControl({ disabled: () => props.disabled })
+
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'input-calendar')
+
+  const isDisabled = computed(() => field.disabled.value)
+  const isHorizontal = computed(() => props.horizontal || props.orientation === 'horizontal')
+  const zoneOptions = computed(() => (props.timeZones.length ? props.timeZones : props.timezones))
+  const zoneSelectorShown = computed(() => props.showTimeZone || props.showTimezone)
 
   const triggerRef = ref<globalThis.HTMLElement | null>(null)
   const panelRef = ref<globalThis.HTMLElement | null>(null)
@@ -134,7 +157,7 @@
   const isOpenRef = computed(() => isOpen.value)
 
   const setOpen = (value: boolean) => {
-    if (value && props.disabled) {
+    if (value && isDisabled.value) {
       return
     }
     if (value) {
@@ -149,7 +172,7 @@
   const isPresetsOpenRef = computed(() => isPresetsOpen.value)
 
   const setPresetsOpen = (value: boolean) => {
-    if (value && props.disabled) {
+    if (value && isDisabled.value) {
       return
     }
     if (value) {
@@ -160,20 +183,11 @@
 
   const togglePresets = () => setPresetsOpen(!isPresetsOpen.value)
 
-  const internalTimezone = ref(props.timezone)
-  const timezoneValue = computed(() => props.timezone || internalTimezone.value)
+  const timezoneValue = computed(() => timeZone.value || timezone.value)
   const setTimezone = (value: string) => {
-    internalTimezone.value = value
-    emit('update:timezone', value)
+    timeZone.value = value
+    timezone.value = value
   }
-  watch(
-    () => props.timezone,
-    (value) => {
-      if (value) {
-        internalTimezone.value = value
-      }
-    }
-  )
 
   const emptyValue = (): CalendarValue =>
     props.mode === 'range' ? { start: null, end: null } : null
@@ -225,7 +239,7 @@
   }
 
   const selectDay = (date: Date) => {
-    if (props.disabled) {
+    if (isDisabled.value) {
       return
     }
     if (props.mode === 'range') {
@@ -247,7 +261,7 @@
   }
 
   const selectValue = (event: Event, value: Date | CalendarRange, periodLabel?: string) => {
-    if (props.disabled) {
+    if (isDisabled.value) {
       return
     }
     if (props.mode === 'range') {
@@ -272,7 +286,7 @@
   }
 
   const applyPreset = (event: Event, value: Date | CalendarRange, label: string) => {
-    if (props.disabled) {
+    if (isDisabled.value) {
       return
     }
     if (props.mode === 'range') {
@@ -292,7 +306,7 @@
   }
 
   const setEndpoint = (which: 'start' | 'end', date: Date | null) => {
-    if (props.disabled) {
+    if (isDisabled.value) {
       return
     }
     if (props.mode === 'range') {
@@ -306,7 +320,7 @@
   }
 
   const clearDraft = () => {
-    if (props.disabled) {
+    if (isDisabled.value) {
       return
     }
     draft.value = emptyValue()
@@ -330,7 +344,7 @@
   }
 
   const applySelection = (event: Event) => {
-    if (props.disabled) {
+    if (isDisabled.value) {
       return
     }
     committedPeriodLabel.value = ''
@@ -340,7 +354,7 @@
   }
 
   const clearCommitted = () => {
-    if (props.disabled) {
+    if (isDisabled.value) {
       return
     }
     committedPeriodLabel.value = ''
@@ -436,15 +450,15 @@
     testId: testId.value,
     mode: computed(() => props.mode),
     size: computed(() => props.size),
-    disabled: computed(() => props.disabled),
+    disabled: isDisabled,
     min: computed(() => props.min),
     max: computed(() => props.max),
     showTime: computed(() => props.showTime),
-    horizontal: computed(() => props.horizontal),
+    horizontal: isHorizontal,
     draft: draftRef,
     hasSelection,
     timezone: timezoneValue,
-    timezones: computed(() => props.timezones),
+    timezones: zoneOptions,
     selectDay,
     selectValue,
     setEndpoint,
@@ -462,7 +476,7 @@
     :data-testid="testId"
     :data-state="isOpen ? 'open' : 'closed'"
     :data-size="size"
-    :data-disabled="disabled || null"
+    :data-disabled="isDisabled || null"
     class="inline-flex max-w-full"
   >
     <span
@@ -478,7 +492,7 @@
         <span
           :data-size="size"
           :data-state="isOpen ? 'open' : 'closed'"
-          :data-disabled="disabled || null"
+          :data-disabled="isDisabled || null"
           :data-two-part="isTwoPart() || null"
           class="inline-flex w-(--container-3xs) max-w-full items-stretch overflow-hidden rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface) transition-colors duration-150 ease-out [&:not(:focus-within):not([data-disabled])]:hover:border-(--border-strong) data-[disabled]:cursor-not-allowed data-[disabled]:bg-(--bg-disabled) data-[disabled]:text-(--text-disabled) data-[two-part]:w-(--container-xs) motion-reduce:transition-none"
         >
@@ -486,7 +500,7 @@
             <button
               ref="presetsTriggerRef"
               type="button"
-              :disabled="disabled"
+              :disabled="isDisabled"
               :data-size="size"
               :data-testid="`${testId}__presets-trigger`"
               aria-haspopup="menu"
@@ -508,10 +522,14 @@
 
             <button
               type="button"
-              :disabled="disabled"
+              :disabled="isDisabled"
               :data-size="size"
               :data-empty="!hasCommitted || null"
               :data-testid="`${testId}__trigger`"
+              :id="field.controlId.value"
+              :aria-label="ariaLabel ? `${ariaLabel}: ${triggerText}` : undefined"
+              :aria-describedby="field.describedBy.value"
+              :aria-invalid="field.invalid.value || undefined"
               aria-haspopup="dialog"
               :aria-expanded="isOpen"
               class="text-label-sm inline-flex min-w-0 flex-1 items-center gap-(--spacing-xs) border-s border-(--border-default) px-(--spacing-sm) text-(--text-default) transition-colors duration-150 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) disabled:cursor-not-allowed disabled:text-(--text-disabled) data-[size=small]:h-7 data-[size=medium]:h-8 data-[size=large]:h-10 data-[empty]:text-(--text-muted) motion-reduce:transition-none"
@@ -529,9 +547,13 @@
             <button
               v-if="isPeriodDisplay"
               type="button"
-              :disabled="disabled"
+              :disabled="isDisabled"
               :data-size="size"
               :data-testid="`${testId}__trigger`"
+              :id="field.controlId.value"
+              :aria-label="ariaLabel ? `${ariaLabel}: ${triggerText}` : undefined"
+              :aria-describedby="field.describedBy.value"
+              :aria-invalid="field.invalid.value || undefined"
               aria-haspopup="dialog"
               :aria-expanded="isOpen"
               class="text-label-sm inline-flex min-w-0 flex-1 items-stretch text-(--text-default) transition-colors duration-150 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) disabled:cursor-not-allowed disabled:text-(--text-disabled) data-[size=small]:h-7 data-[size=medium]:h-8 data-[size=large]:h-10 motion-reduce:transition-none"
@@ -563,10 +585,14 @@
             <button
               v-else
               type="button"
-              :disabled="disabled"
+              :disabled="isDisabled"
               :data-size="size"
               :data-empty="!hasCommitted || null"
               :data-testid="`${testId}__trigger`"
+              :id="field.controlId.value"
+              :aria-label="ariaLabel ? `${ariaLabel}: ${triggerText}` : undefined"
+              :aria-describedby="field.describedBy.value"
+              :aria-invalid="field.invalid.value || undefined"
               aria-haspopup="dialog"
               :aria-expanded="isOpen"
               class="text-label-sm inline-flex min-w-0 flex-1 items-center gap-(--spacing-xs) px-(--spacing-sm) text-(--text-default) transition-colors duration-150 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) disabled:cursor-not-allowed disabled:text-(--text-disabled) data-[size=small]:h-7 data-[size=medium]:h-8 data-[size=large]:h-10 data-[empty]:text-(--text-muted) motion-reduce:transition-none"
@@ -589,7 +615,7 @@
             <button
               v-if="clearable && hasCommitted"
               type="button"
-              :disabled="disabled"
+              :disabled="isDisabled"
               :aria-label="t('calendar.clear')"
               :data-testid="`${testId}__clear-trigger`"
               class="inline-flex shrink-0 items-center justify-center px-(--spacing-xs) text-(--text-muted) transition-colors duration-150 ease-out hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
@@ -604,7 +630,7 @@
             <button
               v-if="split"
               type="button"
-              :disabled="disabled"
+              :disabled="isDisabled"
               :aria-label="t('calendar.open')"
               :aria-expanded="isOpen"
               :data-testid="`${testId}__split`"
@@ -643,8 +669,8 @@
         >
           <div
             class="flex items-stretch"
-            :data-horizontal="horizontal || null"
-            :class="horizontal ? 'flex-row' : 'flex-col'"
+            :data-horizontal="isHorizontal || null"
+            :class="isHorizontal ? 'flex-row' : 'flex-col'"
           >
             <div class="p-(--spacing-sm)">
               <CalendarPeriod v-if="period" />
@@ -656,7 +682,7 @@
               :data-size="size"
               class="flex flex-col gap-(--spacing-sm) p-(--spacing-sm)"
               :class="
-                horizontal
+                isHorizontal
                   ? 'min-w-(--container-3xs) border-s border-(--border-default)'
                   : 'border-t border-(--border-default) data-[size=small]:max-w-[calc(7*var(--size-8)_+_2*var(--spacing-sm))] data-[size=medium]:max-w-[calc(7*var(--size-9)_+_2*var(--spacing-sm))] data-[size=large]:max-w-[calc(7*var(--size-10)_+_2*var(--spacing-sm))]'
               "
@@ -675,14 +701,14 @@
                 :label="t('calendar.apply')"
                 kind="outlined"
                 :size="size"
-                :disabled="disabled"
+                :disabled="isDisabled"
                 icon="pi pi-arrow-down-left"
                 class="w-full justify-center"
                 :data-testid="`${testId}__apply`"
                 @click="applySelection"
               />
 
-              <CalendarTimezone v-if="showTimezone" />
+              <CalendarTimezone v-if="zoneSelectorShown" />
             </div>
           </div>
         </div>
@@ -714,7 +740,7 @@
               :key="preset.label"
               type="button"
               role="menuitem"
-              :disabled="disabled"
+              :disabled="isDisabled"
               :data-selected="preset.label === committedPeriodLabel || null"
               :data-testid="`${testId}__preset`"
               class="text-label-sm inline-flex h-8 min-h-8 w-full items-center justify-between gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-sm) py-(--spacing-xxs) text-start text-(--text-default) transition-colors duration-150 ease-out hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface-raised) data-[selected]:bg-(--bg-selected) disabled:cursor-not-allowed disabled:text-(--text-disabled) motion-reduce:transition-none"

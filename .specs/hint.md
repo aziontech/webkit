@@ -3,10 +3,10 @@ name: hint
 category: inputs
 structure: monolithic
 status: implemented
-spec_version: 1
-checksum: debcd65c25992a008d5257441fcb6e8ebcf158c5016293c92284367ce50fde5e
+spec_version: 2
+checksum: d83e7ef2bc9e73844f63472a603b5ccce6e1e3574f7674f71eb79b01df4eae9f
 created: 2026-08-10
-last_updated: 2026-08-10
+last_updated: 2026-11-14
 ---
 
 # Hint — Component Spec
@@ -104,7 +104,7 @@ The tooltip's own open/close motion belongs to `tooltip` and is specified there.
 - Keyboard map: `Tab` moves focus to the glyph and opens the tooltip; `Escape` closes it (owned by `Tooltip`); the button has no activation behaviour.
 - The button's default action is prevented on click, so a `Hint` rendered inside a `<label>` never toggles the labelled control.
 - Contrast ≥4.5:1 between `var(--text-muted)` and `var(--bg-canvas)`; the focus ring uses `var(--ring-color)` at 2px with an offset.
-- Touch target: the glyph is a 20×20 px affordance placed inline with 12 px label text; it is an enhancement, never the only path to the information.
+- Touch target: the glyph is drawn at 20×20 px inline with 12 px label text; a `[data-slot=touch-target]` span extends the hit area to 24×24 px (WCAG 2.5.8), and to 44×44 px on a coarse pointer. It is an enhancement, never the only path to the information.
 
 ## Examples
 

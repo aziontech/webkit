@@ -3,20 +3,20 @@ name: textarea
 category: inputs
 structure: monolithic
 status: implemented
-spec_version: 5
+spec_version: 6
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4722-6730
   node_id: 4722:6730
-checksum: 6fb9328c5fd6af7619e17a74650f549882b79d9964588b438425a109b12e357a
+checksum: e7e8b2709ab072a5deb799e01eaa4714194c8c3e8bfef65b22e4f40af9999b9d
 created: 2026-06-23
-last_updated: 2026-11-13
+last_updated: 2026-11-14
 ---
 
 # Textarea — Component Spec
 
 ## Purpose
 
-Collects multi-line free-form text from the user. Sibling of `input` in the `inputs` category; renders a fixed-size (`large`) multi-line field with a minimum height of 80px. The resize axis is controlled by the `resizable` prop (defaults to `vertical`). Native textarea attributes (`rows`, `maxlength`, `name`, etc.) flow through via attribute fallthrough.
+Collects multi-line free-form text from the user. Sibling of `input` in the `inputs` category; renders a fixed-size (`large`) multi-line field with a minimum height of 80px. The resize axis is controlled by the `resize` prop (defaults to `vertical`; `resizable` is its deprecated name until 7.0). Native textarea attributes (`rows`, `maxlength`, `name`, etc.) flow through via attribute fallthrough.
 
 ## When to use
 
@@ -59,7 +59,7 @@ Collects multi-line free-form text from the user. Sibling of `input` in the `inp
   <Textarea
     v-model="value"
     placeholder="Fixed size"
-    resizable="none"
+    resize="none"
   />
   <Textarea
     v-model="value"
@@ -78,7 +78,8 @@ Collects multi-line free-form text from the user. Sibling of `input` in the `inp
 | `readonly`    | `boolean`                                        | `false`      | false    | Marks the field read-only: the value is visible, focusable and copyable but not editable. Keeps the filled field (surface and solid border) with no hover border and a default cursor (`data-readonly`), the same look as `Input`; distinct from the disabled field. |
 | `invalid`     | `boolean`                                        | `false`      | false    | Applies invalid styling and sets `aria-invalid`. Combined with `required`, switches to warning border tone.                                                                                                                                                          |
 | `required`    | `boolean`                                        | `false`      | false    | Marks the field as required and sets `aria-required`.                                                                                                                                                                                                                |
-| `resizable`   | `'vertical' \| 'horizontal' \| 'both' \| 'none'` | `'vertical'` | false    | Which axes the user can drag to resize the field. `none` locks the size; `vertical` keeps the default behavior.                                                                                                                                                      |
+| `resize`      | `'vertical' \| 'horizontal' \| 'both' \| 'none'` | `'vertical'` | false    | Which axes the user can drag to resize the field, named after the CSS `resize` property (`TextareaResize`, exported). `none` locks the size; `vertical` keeps the default behavior. |
+| `resizable`   | `'vertical' \| 'horizontal' \| 'both' \| 'none'` | `'vertical'` | false    | `@deprecated since 6.0 — use resize. Removed in 7.0.` Read when `resize` is left at `vertical`. |
 | `monospace`   | `boolean`                                        | `false`      | false    | Sets the value and placeholder in the monospace code face (`.text-body-code-sm`, which wraps) for pasted zone files, certificates, JSON and lists of IPs (`data-monospace`). Same prop as on `Input`.                                                                |
 
 ## v-model
@@ -110,7 +111,7 @@ _No slots._
 - `data-readonly` mirrors the `readonly` prop: a read-only textarea keeps the editable field's fill (`var(--bg-surface)`) and solid `var(--border-default)` border, as `Input` does and the design sample draws it; it only drops the hover border and takes a default cursor. The value keeps `var(--text-default)` and the textarea stays focusable. Why the value cannot change is said by the field's description, not by a different chrome.
 - `data-monospace` mirrors the `monospace` prop: the value and the placeholder render in `.text-body-code-sm` instead of `.text-body-xs`.
 - `data-filled` mirrors whether `modelValue` is non-empty
-- `data-resize` on the native `<textarea>` mirrors the `resizable` prop and drives the `resize-*` Tailwind variant
+- `data-resize` on the native `<textarea>` mirrors the `resize` prop (or the deprecated `resizable`) and drives the `resize-*` Tailwind variant
 
 ## Motion & Animations
 

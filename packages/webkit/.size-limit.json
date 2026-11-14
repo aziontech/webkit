@@ -45,7 +45,7 @@
   {
     "name": "copy-prompt-button",
     "path": "src/components/actions/copy-prompt-button/copy-prompt-button.vue",
-    "limit": "7.9 KB",
+    "limit": "4.2 KB",
     "entryOnly": true
   },
   {
@@ -83,12 +83,12 @@
   {
     "name": "calendar-root",
     "path": "src/components/inputs/calendar/calendar.vue",
-    "limit": "20.95 KB"
+    "limit": "21.4 KB"
   },
   {
     "name": "date-range-picker",
     "path": "src/components/inputs/date-range-picker/date-range-picker.vue",
-    "limit": "33.65 KB"
+    "limit": "34 KB"
   },
   {
     "name": "table-root",
@@ -148,7 +148,7 @@
   {
     "name": "chip",
     "path": "src/components/inputs/chip/chip.vue",
-    "limit": "6.6 KB"
+    "limit": "6.7 KB"
   },
   {
     "name": "footer-root",
@@ -1179,18 +1179,18 @@
   {
     "name": "phone-input",
     "path": "src/components/inputs/phone-input/phone-input.vue",
-    "limit": "26.6 KB",
+    "limit": "27.35 KB",
     "entryOnly": true
   },
   {
     "name": "select",
     "path": "src/components/inputs/select/index.ts",
-    "limit": "20.1 KB"
+    "limit": "20.75 KB"
   },
   {
     "name": "multi-select",
     "path": "src/components/inputs/multi-select/index.ts",
-    "limit": "21.1 KB"
+    "limit": "21.65 KB"
   },
   {
     "name": "code-block",
@@ -1337,7 +1337,7 @@
   {
     "name": "combobox",
     "path": "src/components/inputs/combobox/combobox.vue",
-    "limit": "10.75 KB"
+    "limit": "11.85 KB"
   },
   {
     "name": "tag-editor",
@@ -1347,7 +1347,7 @@
   {
     "name": "schema-form",
     "path": "src/components/inputs/schema-form/schema-form.vue",
-    "limit": "52.5 KB"
+    "limit": "53.3 KB"
   },
   {
     "name": "use-unsaved-changes",
@@ -1453,7 +1453,7 @@
   {
     "name": "button-highlight",
     "path": "src/components/actions/button-highlight/button-highlight.vue",
-    "limit": "13.3 KB"
+    "limit": "2.25 KB"
   },
   {
     "name": "mini-button",
@@ -1469,7 +1469,7 @@
   {
     "name": "toggle-group",
     "path": "src/components/actions/toggle-group/toggle-group.vue",
-    "limit": "15.75 KB"
+    "limit": "13.85 KB"
   },
   {
     "name": "icon-button",
@@ -1479,7 +1479,7 @@
   {
     "name": "split-button",
     "path": "src/components/actions/split-button/split-button.vue",
-    "limit": "12.9 KB"
+    "limit": "12.05 KB"
   },
   {
     "name": "chart-card-content",
@@ -1864,7 +1864,7 @@
   {
     "name": "calendar",
     "path": "src/components/inputs/calendar/index.ts",
-    "limit": "23.3 KB"
+    "limit": "21.9 KB"
   },
   {
     "name": "calendar-preset",
@@ -1904,7 +1904,7 @@
   {
     "name": "hint",
     "path": "src/components/inputs/hint/hint.vue",
-    "limit": "5.3 KB"
+    "limit": "5.15 KB"
   },
   {
     "name": "label",
@@ -1919,7 +1919,7 @@
   {
     "name": "radio-cards",
     "path": "src/components/inputs/radio-cards/radio-cards.vue",
-    "limit": "14.15 KB"
+    "limit": "2.95 KB"
   },
   {
     "name": "checkbox",
@@ -1929,12 +1929,12 @@
   {
     "name": "radio-button",
     "path": "src/components/inputs/radio-button/radio-button.vue",
-    "limit": "13.2 KB"
+    "limit": "1.75 KB"
   },
   {
     "name": "switch",
     "path": "src/components/inputs/switch/switch.vue",
-    "limit": "12.95 KB"
+    "limit": "1.9 KB"
   },
   {
     "name": "theme-switcher",
@@ -1984,7 +1984,7 @@
   {
     "name": "multi-select-content",
     "path": "src/components/inputs/multi-select/multi-select-content/multi-select-content.vue",
-    "limit": "18.75 KB"
+    "limit": "17.65 KB"
   },
   {
     "name": "multi-select-group",
@@ -2009,7 +2009,7 @@
   {
     "name": "select-content",
     "path": "src/components/inputs/select/select-content/select-content.vue",
-    "limit": "18.75 KB"
+    "limit": "17.75 KB"
   },
   {
     "name": "select-group",

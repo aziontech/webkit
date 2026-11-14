@@ -7,6 +7,7 @@
   export type IconButtonKind = 'primary' | 'secondary' | 'outlined' | 'transparent' | 'danger'
   export type IconButtonSize = 'small' | 'medium' | 'large'
   export type IconButtonTarget = '_blank' | '_self'
+  export type IconButtonType = 'button' | 'submit' | 'reset'
 
   defineOptions({
     name: 'IconButton',
@@ -35,6 +36,8 @@
     iconTransition?: boolean
     /** Extra classes applied to the icon glyph. */
     iconClass?: string
+    /** Native button type. `submit` lets an icon-only control submit its form; `disabled` and `loading` still block it. Ignored when `href` is set. */
+    type?: IconButtonType
   }
 
   const props = withDefaults(defineProps<Props>(), {
@@ -46,7 +49,8 @@
     href: '',
     target: '_self',
     iconTransition: false,
-    iconClass: ''
+    iconClass: '',
+    type: 'button'
   })
 
   const emit = defineEmits<{
@@ -54,13 +58,6 @@
   }>()
 
   const attrs = useAttrs()
-
-  const forwardedAttrs = computed(() => {
-    const rest = { ...attrs }
-    delete rest.class
-    delete rest['data-testid']
-    return rest
-  })
 
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? 'actions-icon-button'
@@ -70,51 +67,8 @@
 
   const isAnchor = computed(() => Boolean(props.href))
 
-  const sharedClasses =
-    "relative inline-flex shrink-0 items-center justify-center rounded-(--shape-button) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) before:pointer-events-none before:absolute before:inset-0 before:rounded-[inherit] before:opacity-0 before:content-[''] before:transition-opacity before:duration-fast-02 before:ease-productive-entrance after:pointer-events-none after:absolute after:inset-0 after:rounded-[inherit] after:opacity-0 after:content-[''] after:transition-opacity after:duration-fast-02 after:ease-productive-entrance hover:before:opacity-100 active:after:opacity-100 motion-reduce:before:transition-none motion-reduce:after:transition-none disabled:before:hidden disabled:after:hidden"
-
-  const kindClasses: Record<IconButtonKind, string> = {
-    primary:
-      'bg-(--primary) text-(--primary-contrast) before:bg-(--bg-hover) after:bg-(--bg-active)',
-    secondary:
-      'bg-(--secondary) text-(--secondary-contrast) before:bg-(--bg-hover) after:bg-(--bg-active)',
-    outlined:
-      'border border-(--border-default) bg-(--bg-surface) text-(--text-default) before:bg-(--bg-mask) after:bg-(--bg-active)',
-    transparent:
-      'bg-transparent text-(--text-default) before:bg-(--bg-mask) after:bg-(--bg-active)',
-    danger:
-      'border border-(--danger-border) bg-(--danger) text-(--danger-contrast) before:bg-(--bg-hover) after:bg-(--bg-active)'
-  }
-
-  const inactiveClasses =
-    'border-transparent bg-(--bg-disabled) text-(--text-disabled) before:hidden after:hidden'
-
-  const iconClasses =
-    'inline-flex shrink-0 items-center justify-center text-[length:inherit] leading-none'
-
-  const sizeClasses: Record<IconButtonSize, string> = {
-    large: 'size-10 text-button-lg',
-    medium: 'size-8 text-button-md',
-    small: 'size-7 text-button-md'
-  }
-
-  const iconSlotSizeClasses: Record<IconButtonSize, string> = {
-    large: 'size-4',
-    medium: 'size-3',
-    small: 'size-3'
-  }
-
-  const spinnerSizeClasses = iconSlotSizeClasses
-
-  const rootClasses = computed(() => {
-    const cursor = props.disabled ? 'cursor-not-allowed' : props.loading ? 'cursor-wait' : ''
-    return [
-      sharedClasses,
-      cursor ? [cursor, inactiveClasses] : kindClasses[props.kind],
-      sizeClasses[props.size],
-      attrs.class
-    ]
-  })
+  const ROOT_CLASS =
+    "group/icon-button relative inline-flex shrink-0 items-center justify-center rounded-(--shape-button) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) before:pointer-events-none before:absolute before:inset-0 before:rounded-[inherit] before:opacity-0 before:content-[''] before:transition-opacity before:duration-fast-02 before:ease-productive-entrance after:pointer-events-none after:absolute after:inset-0 after:rounded-[inherit] after:opacity-0 after:content-[''] after:transition-opacity after:duration-fast-02 after:ease-productive-entrance hover:before:opacity-100 active:after:opacity-100 motion-reduce:before:transition-none motion-reduce:after:transition-none disabled:before:hidden disabled:after:hidden not-data-[inactive]:data-[kind=primary]:bg-(--primary) not-data-[inactive]:data-[kind=primary]:text-(--primary-contrast) not-data-[inactive]:data-[kind=primary]:before:bg-(--bg-hover) not-data-[inactive]:data-[kind=primary]:after:bg-(--bg-active) not-data-[inactive]:data-[kind=secondary]:bg-(--secondary) not-data-[inactive]:data-[kind=secondary]:text-(--secondary-contrast) not-data-[inactive]:data-[kind=secondary]:before:bg-(--bg-hover) not-data-[inactive]:data-[kind=secondary]:after:bg-(--bg-active) not-data-[inactive]:data-[kind=outlined]:border not-data-[inactive]:data-[kind=outlined]:border-(--border-default) not-data-[inactive]:data-[kind=outlined]:bg-(--bg-surface) not-data-[inactive]:data-[kind=outlined]:text-(--text-default) not-data-[inactive]:data-[kind=outlined]:before:bg-(--bg-mask) not-data-[inactive]:data-[kind=outlined]:after:bg-(--bg-active) not-data-[inactive]:data-[kind=transparent]:bg-transparent not-data-[inactive]:data-[kind=transparent]:text-(--text-default) not-data-[inactive]:data-[kind=transparent]:before:bg-(--bg-mask) not-data-[inactive]:data-[kind=transparent]:after:bg-(--bg-active) not-data-[inactive]:data-[kind=danger]:border not-data-[inactive]:data-[kind=danger]:border-(--danger-border) not-data-[inactive]:data-[kind=danger]:bg-(--danger) not-data-[inactive]:data-[kind=danger]:text-(--danger-contrast) not-data-[inactive]:data-[kind=danger]:before:bg-(--bg-hover) not-data-[inactive]:data-[kind=danger]:after:bg-(--bg-active) data-[inactive]:border-transparent data-[inactive]:bg-(--bg-disabled) data-[inactive]:text-(--text-disabled) data-[inactive]:before:hidden data-[inactive]:after:hidden data-[loading]:cursor-wait data-[disabled]:cursor-not-allowed data-[size=large]:size-10 data-[size=large]:text-button-lg data-[size=medium]:size-8 data-[size=medium]:text-button-md data-[size=small]:size-7 data-[size=small]:text-button-md"
 
   const loadingTestId = computed(() => `${testId.value}-loading`)
 
@@ -131,38 +85,36 @@
 <template>
   <a
     v-if="isAnchor"
-    v-bind="forwardedAttrs"
+    v-bind="$attrs"
     :href="href"
     :target="target"
     :rel="target === '_blank' ? 'noopener noreferrer' : undefined"
-    :class="rootClasses"
+    :class="ROOT_CLASS"
     :aria-label="ariaLabel || undefined"
     :aria-disabled="isInactive || undefined"
     :aria-busy="loading || undefined"
     :tabindex="isInactive ? -1 : undefined"
     :data-disabled="disabled ? '' : undefined"
+    :data-loading="loading ? '' : undefined"
+    :data-inactive="isInactive ? '' : undefined"
+    :data-kind="kind"
+    :data-size="size"
     :data-testid="testId"
     @click="handleClick"
   >
     <span
-      :class="
-        iconTransition
-          ? [
-              'relative z-1 inline-flex shrink-0 items-center justify-center overflow-hidden',
-              iconSlotSizeClasses[size]
-            ]
-          : 'relative z-1 inline-flex items-center justify-center'
-      "
+      :data-transition="iconTransition || null"
+      class="relative z-1 inline-flex items-center justify-center data-[transition]:shrink-0 data-[transition]:overflow-hidden data-[transition]:size-3 group-data-[size=large]/icon-button:data-[transition]:size-4"
     >
       <Spinner
         v-if="loading"
-        :class="spinnerSizeClasses[size]"
+        class="size-3 group-data-[size=large]/icon-button:size-4"
         :data-testid="loadingTestId"
       />
       <Transition
         v-else-if="iconTransition"
         mode="out-in"
-        enter-active-class="pointer-events-none absolute inset-0 inline-flex items-center justify-center transition-[transform,opacity] duration-moderate-01 ease-productive-entrance motion-reduce:transition-none motion-reduce:transform-none"
+        enter-active-class="pointer-events-none absolute inset-0 inline-flex items-center justify-center transition-[scale,opacity] duration-moderate-01 ease-productive-entrance motion-reduce:transition-none"
         enter-from-class="scale-0 opacity-0 motion-reduce:scale-100 motion-reduce:opacity-100"
         enter-to-class="scale-100 opacity-100"
         leave-active-class="pointer-events-none absolute inset-0 inline-flex items-center justify-center transition-opacity duration-fast-02 ease-productive-exit motion-reduce:transition-none"
@@ -174,8 +126,7 @@
           :class="[
             icon,
             directionalIconClass(icon),
-            iconClasses,
-            'pointer-events-none absolute inset-0 inline-flex items-center justify-center',
+            'inline-flex shrink-0 items-center justify-center text-[length:inherit] leading-none pointer-events-none absolute inset-0 inline-flex items-center justify-center',
             iconClass
           ]"
           aria-hidden="true"
@@ -183,7 +134,8 @@
       </Transition>
       <i
         v-else
-        :class="[icon, directionalIconClass(icon), iconClasses, iconClass]"
+        :class="[icon, directionalIconClass(icon), iconClass]"
+        class="inline-flex shrink-0 items-center justify-center text-[length:inherit] leading-none"
         aria-hidden="true"
       />
     </span>
@@ -196,36 +148,34 @@
 
   <button
     v-else
-    v-bind="forwardedAttrs"
-    type="button"
+    v-bind="$attrs"
+    :type="type"
     :disabled="disabled"
     :aria-label="ariaLabel || undefined"
     :aria-disabled="isInactive || undefined"
     :aria-busy="loading || undefined"
     :data-disabled="disabled ? '' : undefined"
-    :class="rootClasses"
+    :data-loading="loading ? '' : undefined"
+    :data-inactive="isInactive ? '' : undefined"
+    :data-kind="kind"
+    :data-size="size"
+    :class="ROOT_CLASS"
     :data-testid="testId"
     @click="handleClick"
   >
     <span
-      :class="
-        iconTransition
-          ? [
-              'relative z-1 inline-flex shrink-0 items-center justify-center overflow-hidden',
-              iconSlotSizeClasses[size]
-            ]
-          : 'relative z-1 inline-flex items-center justify-center'
-      "
+      :data-transition="iconTransition || null"
+      class="relative z-1 inline-flex items-center justify-center data-[transition]:shrink-0 data-[transition]:overflow-hidden data-[transition]:size-3 group-data-[size=large]/icon-button:data-[transition]:size-4"
     >
       <Spinner
         v-if="loading"
-        :class="spinnerSizeClasses[size]"
+        class="size-3 group-data-[size=large]/icon-button:size-4"
         :data-testid="loadingTestId"
       />
       <Transition
         v-else-if="iconTransition"
         mode="out-in"
-        enter-active-class="pointer-events-none absolute inset-0 inline-flex items-center justify-center transition-[transform,opacity] duration-moderate-01 ease-productive-entrance motion-reduce:transition-none motion-reduce:transform-none"
+        enter-active-class="pointer-events-none absolute inset-0 inline-flex items-center justify-center transition-[scale,opacity] duration-moderate-01 ease-productive-entrance motion-reduce:transition-none"
         enter-from-class="scale-0 opacity-0 motion-reduce:scale-100 motion-reduce:opacity-100"
         enter-to-class="scale-100 opacity-100"
         leave-active-class="pointer-events-none absolute inset-0 inline-flex items-center justify-center transition-opacity duration-fast-02 ease-productive-exit motion-reduce:transition-none"
@@ -237,8 +187,7 @@
           :class="[
             icon,
             directionalIconClass(icon),
-            iconClasses,
-            'pointer-events-none absolute inset-0 inline-flex items-center justify-center',
+            'inline-flex shrink-0 items-center justify-center text-[length:inherit] leading-none pointer-events-none absolute inset-0 inline-flex items-center justify-center',
             iconClass
           ]"
           aria-hidden="true"
@@ -246,7 +195,8 @@
       </Transition>
       <i
         v-else
-        :class="[icon, directionalIconClass(icon), iconClasses, iconClass]"
+        :class="[icon, directionalIconClass(icon), iconClass]"
+        class="inline-flex shrink-0 items-center justify-center text-[length:inherit] leading-none"
         aria-hidden="true"
       />
     </span>

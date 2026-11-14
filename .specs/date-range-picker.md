@@ -3,11 +3,11 @@ name: date-range-picker
 category: inputs
 structure: monolithic
 status: implemented
-spec_version: 1
+spec_version: 2
 template: 2
-checksum: 00dd0938be804af7f0cf369bded5b8026878d2a2f3e3268f3c363ccfb4378620
+checksum: 2008ab03684d6b248f1fe9360465f1acb307b7dda13b03e28fff8488f2359679
 created: 2026-11-11
-last_updated: 2026-11-12
+last_updated: 2026-11-14
 ---
 
 # DateRangePicker — Component Spec
@@ -30,7 +30,8 @@ A time range for queries over time: logs, events, traces and metrics. After the 
 
 ## Related
 
-- `calendar` — the month grid, the date and time fields and the time zone selector come from it, so both pickers look and behave the same.
+- `calendar` — the month grid, the date and time fields and the time zone selector come from it, so both pickers look and behave the same. Split: Calendar picks whole days (a date or a date range); DateRangePicker picks time ranges and keeps a relative window relative. Both name the zone `timeZone` / `timeZones` / `showTimeZone` / `v-model:time-zone`.
+- `field` — inside a `Field`, the trigger takes the field's label (`for` points at it), description, `invalid` and `disabled`.
 - `property-filter` — the query bar it sits next to in an events toolbar.
 - `chart` — the histogram whose brush usually writes an absolute range back into this picker.
 
@@ -76,9 +77,11 @@ A time range for queries over time: logs, events, traces and metrics. After the 
 | `max`               | `Date`                                            | undefined                     | false    | Latest instant an absolute range may end at.                                                                            |
 | `now`               | `Date`                                            | undefined                     | false    | Reference clock for relative ranges and stepping. Unset uses the nearest `WebkitProvider`'s `now`, then the real clock. |
 | `placeholder`       | `string`                                          | `''`                          | false    | Trigger text with no range. Empty uses the locale catalog.                                                              |
-| `ariaLabel`         | `string`                                          | `''`                          | false    | Accessible name of the trigger. Empty uses the locale catalog.                                                          |
+| `ariaLabel`         | `string`                                          | `''`                          | false    | Accessible name of the trigger. Empty uses the Field label inside a `Field`, else the locale catalog.                   |
 | `disabled`          | `boolean`                                         | `false`                       | false    | Disables the trigger and the step buttons.                                                                              |
 | `size`              | `'small' \| 'medium' \| 'large'`                  | `'medium'`                    | false    | Size token of the trigger and the panel controls.                                                                       |
+
+**Booleans that default to true.** `showTimeZone` defaults to `true`: an events toolbar always states the zone of its range. Inverting it would break every consumer, so it is recorded here as an exception to props.md's default-false rule.
 
 Types (exported from the component): `DateRangeUnit = 'second' | 'minute' | 'hour' | 'day' | 'week' | 'month' | 'year'`; `DateRangeValue = { type: 'relative'; amount: number; unit: DateRangeUnit; key?: string } | { type: 'absolute'; start: string; end: string }`; `RelativeOption = { key: string; amount: number; unit: DateRangeUnit; label?: string }` (an empty `label` prints `Last {count} {unit}` from the catalog).
 
@@ -140,7 +143,7 @@ _none_ — the trigger, the panel and its two tabs are fixed parts.
 
 - Visible focus: a 2 px `--ring-color` ring inset on each trigger segment; the quick ranges ring their row when the radio inside has focus.
 - Keyboard map: `Enter`/`Space` on the trigger opens the panel and the focus trap moves into it; `Tab` cycles inside the panel; the range type is a `ToggleGroup` (arrow keys); the quick ranges are native radios (`ArrowUp`/`ArrowDown` move and select); the grid keeps the `calendar` keyboard map; `Escape` closes without committing and returns focus to the trigger.
-- ARIA: the trigger has `aria-haspopup="dialog"`, `aria-expanded` and a name that starts with the picker's label and contains the visible range; the panel is a named `dialog`; the quick ranges are a `fieldset` with a `legend`; the custom duration and unit have visible labels; the error is `role="alert"` and described from the duration field; Previous and Next are named buttons.
+- ARIA: the trigger has `aria-haspopup="dialog"`, `aria-expanded` and a name that starts with the picker's label and contains the visible range (inside a `Field` with no `ariaLabel`, the Field label names it and the trigger also carries the Field's `aria-describedby` and `aria-invalid`); the panel is a named `dialog`; the quick ranges are a `fieldset` with a `legend`; the custom duration and unit have visible labels; the error is `role="alert"` and described from the duration field; Previous and Next are named buttons.
 - Targets: options are 32 px high (44 px on `pointer: coarse`).
 - Contrast ≥4.5:1 from the semantic text tokens.
 
@@ -192,6 +195,7 @@ _none_ — the trigger, the panel and its two tabs are fixed parts.
 
 - Default — a relative range.
 - Absolute, RelativeOnly, WithStep, TimeZone — justified: each documents one of the range modes or the time zone contract, which have no `kind`/`size` axis.
+- Disabled — a disabled picker with a committed range (state example for the `disabled` prop).
 
 ## Constraints — DO NOT
 

@@ -10,6 +10,7 @@ import DescriptionAndError from '../../../../examples/field/description-and-erro
 import Fieldset from '../../../../examples/field/fieldset.vue'
 import Horizontal from '../../../../examples/field/horizontal.vue'
 import InputGroupExample from '../../../../examples/field/input-group.vue'
+import RequiredAndDisabled from '../../../../examples/field/required-and-disabled.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Checkbox from '../checkbox/checkbox.vue'
 import Input from '../input/input.vue'
@@ -265,5 +266,26 @@ describe('Field orientation="responsive" in any container', () => {
     const view = mountIn(800)
 
     expect(getComputedStyle(view.getByTestId('input-field')).flexDirection).toBe('row')
+  })
+})
+
+describe('Field.Label hint and the RequiredAndDisabled example', () => {
+  it('renders the hint glyph beside a label with hint, named by the hint text', () => {
+    const view = render(RequiredAndDisabled)
+    expect(
+      view.getByRole('button', { name: 'Lowercase letters, numbers and hyphens.' })
+    ).toBeTruthy()
+  })
+
+  it('marks the first input required and disables the second', () => {
+    const view = render(RequiredAndDisabled)
+    const inputs = view.getAllByRole('textbox') as HTMLInputElement[]
+    expect(inputs[0]!.required).toBe(true)
+    expect(inputs[1]!.disabled).toBe(true)
+  })
+
+  it('has no axe violations', async () => {
+    const view = render(RequiredAndDisabled)
+    await expectNoA11yViolations(view.container)
   })
 })

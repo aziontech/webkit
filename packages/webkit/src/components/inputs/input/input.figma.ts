@@ -61,14 +61,14 @@ export default {
 >${
           iconLeft
             ? figma.code`
-  <template #iconLeft>
+  <template #prefix>
     <i class="pi pi-globe" />
   </template>`
             : ''
         }${
           iconRight
             ? figma.code`
-  <template #iconRight>
+  <template #suffix>
     <i class="pi pi-search" />
   </template>`
             : ''

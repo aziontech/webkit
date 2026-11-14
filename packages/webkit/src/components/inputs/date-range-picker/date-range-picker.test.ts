@@ -4,10 +4,14 @@ import { afterEach, describe, expect, it } from 'vitest'
 import { defineComponent, h, nextTick, ref } from 'vue'
 
 import Default from '../../../../examples/date-range-picker/default.vue'
+import Disabled from '../../../../examples/date-range-picker/disabled.vue'
 import TimeZone from '../../../../examples/date-range-picker/time-zone.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import { LOCALES } from '../../../test/locales'
 import WebkitProvider from '../../utils/webkit-provider/webkit-provider.vue'
+import Field from '../field/field.vue'
+import FieldDescription from '../field/field-description/field-description.vue'
+import FieldLabel from '../field/field-label/field-label.vue'
 import { fromWallClock, resolveDateRange, stepDateRange, toWallClock } from './date-range'
 import DateRangePicker, { type DateRangeValue } from './date-range-picker.vue'
 
@@ -403,5 +407,31 @@ describe('DateRangePicker — reference clock from WebkitProvider', () => {
       start: '2026-11-10T17:30:00.000Z',
       end: '2026-11-10T17:45:00.000Z'
     })
+  })
+})
+
+describe('DateRangePicker in a Field', () => {
+  it('takes the Field label, description, invalid and disabled state on its trigger', async () => {
+    const { getByTestId, getByRole } = render({
+      components: { Field, FieldLabel, FieldDescription, DateRangePicker },
+      template:
+        '<Field invalid disabled><FieldLabel>Events window</FieldLabel><DateRangePicker /><FieldDescription>Times are UTC.</FieldDescription></Field>'
+    })
+    const trigger = getByTestId('input-date-range-picker__trigger') as HTMLButtonElement
+    expect(getByRole('button', { name: 'Events window' })).toBe(trigger)
+    expect(trigger.getAttribute('aria-invalid')).toBe('true')
+    expect(trigger.disabled).toBe(true)
+    await waitFor(() =>
+      expect(
+        document.getElementById(trigger.getAttribute('aria-describedby') ?? '')?.textContent
+      ).toContain('Times are UTC.')
+    )
+  })
+
+  it('renders the Disabled example with a disabled trigger', () => {
+    const { getByTestId } = render(Disabled)
+    expect((getByTestId('input-date-range-picker__trigger') as HTMLButtonElement).disabled).toBe(
+      true
+    )
   })
 })

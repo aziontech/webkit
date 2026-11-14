@@ -5,6 +5,7 @@ import { defineComponent, h, nextTick, ref } from 'vue'
 
 import CustomCells from '../../../../examples/attribute-editor/custom-cells.vue'
 import Default from '../../../../examples/attribute-editor/default.vue'
+import EmptyAndDisabled from '../../../../examples/attribute-editor/empty-and-disabled.vue'
 import Grouped from '../../../../examples/attribute-editor/grouped.vue'
 import Reorderable from '../../../../examples/attribute-editor/reorderable.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
@@ -63,6 +64,21 @@ describe('AttributeEditor', () => {
     const view = render(Harness([{ key: 'A', value: '1' }]))
     await fireEvent.update(view.getByLabelText('Value'), '2')
     expect((view.getByLabelText('Value') as HTMLInputElement).value).toBe('2')
+  })
+
+  it('keeps its own rows when v-model:items is not bound', async () => {
+    const view = render(AttributeEditor, {
+      props: { items: [{ key: 'A', value: '1' }], definition, ariaLabel: 'Variables' }
+    })
+    await fireEvent.click(view.getByTestId('input-attribute-editor__add'))
+    expect(view.getAllByTestId('input-attribute-editor__row')).toHaveLength(2)
+    expect(view.emitted('update:items')?.[0]?.[0]).toHaveLength(2)
+  })
+
+  it('starts empty and adds rows with no items passed at all', async () => {
+    const view = render(AttributeEditor, { props: { definition, ariaLabel: 'Variables' } })
+    await fireEvent.click(view.getByTestId('input-attribute-editor__add'))
+    expect(view.getAllByTestId('input-attribute-editor__row')).toHaveLength(1)
   })
 
   it('adds a row, focuses its first control and announces it', async () => {
@@ -354,5 +370,17 @@ describe('AttributeEditor', () => {
   ])('renders the %s example with no axe violations', async (_name, Example) => {
     const { container } = render(Example)
     await expectNoA11yViolations(container)
+  })
+})
+
+describe('AttributeEditor EmptyAndDisabled example', () => {
+  it('shows the empty text in the first editor and disables the second', async () => {
+    const view = render(EmptyAndDisabled)
+    expect(view.getAllByTestId('input-attribute-editor__empty')[0]!.textContent).toContain(
+      'No environment variables yet.'
+    )
+    const adds = view.getAllByTestId('input-attribute-editor__add') as HTMLButtonElement[]
+    expect(adds[1]!.disabled).toBe(true)
+    await expectNoA11yViolations(view.container)
   })
 })

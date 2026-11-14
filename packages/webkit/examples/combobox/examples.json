@@ -16,6 +16,11 @@
       "name": "Server",
       "summary": "Server filtering: `filter` off, `search` starts a request and `loading` shows the spinner and the loading row. With `allowCustom` off, text that matches no region restores the last valid value.",
       "file": "server.vue"
+    },
+    {
+      "name": "States",
+      "summary": "`disabled`, `invalid` and `loading` side by side.",
+      "file": "states.vue"
     }
   ]
 }

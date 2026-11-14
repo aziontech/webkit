@@ -9,23 +9,23 @@
   <div class="flex flex-col gap-(--spacing-md)">
     <Textarea
       v-model="value"
-      placeholder="resizable=vertical (default)"
-      resizable="vertical"
+      placeholder="resize=vertical (default)"
+      resize="vertical"
     />
     <Textarea
       v-model="value"
-      placeholder="resizable=horizontal"
-      resizable="horizontal"
+      placeholder="resize=horizontal"
+      resize="horizontal"
     />
     <Textarea
       v-model="value"
-      placeholder="resizable=both"
-      resizable="both"
+      placeholder="resize=both"
+      resize="both"
     />
     <Textarea
       v-model="value"
-      placeholder="resizable=none"
-      resizable="none"
+      placeholder="resize=none"
+      resize="none"
     />
   </div>
 </template>

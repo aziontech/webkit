@@ -125,6 +125,42 @@ describe('Checkbox', () => {
 
       await fireEvent.click(getByTestId('input-checkbox__input'))
       expect(getByTestId('input-checkbox').getAttribute('data-state')).toBe('unchecked')
+      await nextTick()
+      expect((getByTestId('input-checkbox__input') as HTMLInputElement).checked).toBe(false)
+    })
+
+    it('toggles a boolean model with no value and no binary flag', async () => {
+      const { getByRole, emitted } = render(Checkbox, {
+        props: { modelValue: false },
+        attrs: { 'aria-label': 'Subscribe' }
+      })
+      await fireEvent.click(getByRole('checkbox'))
+      expect(emitted('update:modelValue')?.[0]).toEqual([true])
+    })
+
+    it('checks and unchecks a scalar model paired with value', async () => {
+      const model = ref<string | null>('pro')
+      const Host = defineComponent({
+        setup: () => () =>
+          h(Checkbox, {
+            value: 'pro',
+            modelValue: model.value,
+            'aria-label': 'Pro',
+            'onUpdate:modelValue': (next: string | null) => (model.value = next)
+          })
+      })
+      const { getByRole } = render(Host)
+      const input = getByRole('checkbox') as HTMLInputElement
+
+      await fireEvent.click(input)
+      expect(model.value).toBeNull()
+      await nextTick()
+      expect(input.checked).toBe(false)
+
+      await fireEvent.click(input)
+      expect(model.value).toBe('pro')
+      await nextTick()
+      expect(input.checked).toBe(true)
     })
   })
 
@@ -242,6 +278,18 @@ describe('Checkbox', () => {
       await fireEvent.change(getByTestId('input-checkbox__input'))
 
       expect(emitted()['update:modelValue']).toBeUndefined()
+    })
+
+    it('keeps the native input unchecked and exposes aria-readonly when clicked', async () => {
+      const { getByRole, emitted } = render(Checkbox, {
+        props: { modelValue: false, readonly: true },
+        attrs: { 'aria-label': 'Locked' }
+      })
+      const input = getByRole('checkbox') as HTMLInputElement
+      expect(input.getAttribute('aria-readonly')).toBe('true')
+      await fireEvent.click(input)
+      expect(input.checked).toBe(false)
+      expect(emitted('update:modelValue')).toBeUndefined()
     })
   })
 

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed, inject, useAttrs } from 'vue'
+  import { computed, inject, onMounted, onUpdated, ref, useAttrs } from 'vue'
 
   import { selectContextKey } from '../injection-key'
 
@@ -18,7 +18,7 @@
   }
 
   const props = withDefaults(defineProps<Props>(), {
-    icon: undefined,
+    icon: '',
     disabled: false
   })
 
@@ -35,7 +35,15 @@
 
   const attrs = useAttrs()
 
-  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'select-option')
+  const testId = computed(
+    () => (attrs['data-testid'] as string | undefined) ?? 'input-select-option'
+  )
+
+  const labelRef = ref<globalThis.HTMLElement | null>(null)
+  const recordLabel = () =>
+    ctx.registerLabel(props.value, labelRef.value?.textContent?.trim() ?? '')
+  onMounted(recordLabel)
+  onUpdated(recordLabel)
 
   const selected = computed(() => ctx.isSelected(props.value))
 
@@ -85,7 +93,10 @@
         :data-testid="`${testId}__icon`"
       />
     </span>
-    <span class="flex-1 truncate text-start">
+    <span
+      ref="labelRef"
+      class="flex-1 truncate text-start"
+    >
       <slot />
     </span>
     <slot

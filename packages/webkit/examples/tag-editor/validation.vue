@@ -5,7 +5,7 @@
 
   const tags = ref([
     { key: 'owner', value: 'platform-team', existing: true, markedForRemoval: true },
-    { key: 'azion:managed', value: 'true' },
+    { key: 'acme:managed', value: 'true' },
     { key: 'region', value: 'sa-east' },
     { key: 'region', value: 'us-east' }
   ])
@@ -27,6 +27,7 @@
       ref="editor"
       v-model:tags="tags"
       :limit="5"
+      reserved-prefix="acme:"
       aria-label="Resource tags"
     />
     <div>

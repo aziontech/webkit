@@ -16,6 +16,11 @@
       "name": "Horizontal",
       "summary": "`alignment=\"horizontal\"` wraps compact tokens in rows; `limit` shows three and a Show more toggle for the rest.",
       "file": "horizontal.vue"
+    },
+    {
+      "name": "ReadOnly",
+      "summary": "`readonly` hides the remove buttons: the files read as a list, for a request that was already sent.",
+      "file": "readonly.vue"
     }
   ]
 }

@@ -2,7 +2,7 @@ import '../../../test/reflow.css'
 
 import { fireEvent, render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
-import { defineComponent, h, nextTick, ref } from 'vue'
+import { createApp, defineComponent, h, nextTick, ref } from 'vue'
 
 import Default from '../../../../examples/switch/default.vue'
 import Disabled from '../../../../examples/switch/disabled.vue'
@@ -379,5 +379,31 @@ describe('Switch direction', () => {
     const handle = view.getByTestId('input-switch__handle').className
     expect(handle).toContain('group-data-[checked]:translate-x-3.5')
     expect(handle).toContain('rtl:group-data-[checked]:-translate-x-3.5')
+  })
+})
+
+describe('Switch autofocus and privacy lock', () => {
+  it('focuses itself on mount with autofocus', () => {
+    const host = document.createElement('div')
+    document.body.appendChild(host)
+    const app = createApp(Switch, { autofocus: true, 'aria-label': 'Public' })
+    app.mount(host)
+    const node = host.querySelector('[role="switch"]')
+    expect(document.activeElement).toBe(node)
+    expect(node?.hasAttribute('data-focused')).toBe(false)
+    app.unmount()
+    host.remove()
+  })
+
+  it('renders both lock glyphs for kind="privacy" and none for default', () => {
+    const privacy = render(Switch, {
+      props: { kind: 'privacy' },
+      attrs: { 'aria-label': 'Public' }
+    })
+    expect(privacy.getByTestId('input-switch__lock')).toBeTruthy()
+    expect(privacy.getByTestId('input-switch__lock-open')).toBeTruthy()
+    privacy.unmount()
+    const plain = render(Switch, { attrs: { 'aria-label': 'Public' } })
+    expect(plain.queryByTestId('input-switch__lock')).toBeNull()
   })
 })

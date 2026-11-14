@@ -111,7 +111,9 @@ const pick = async (trigger: HTMLElement, label: string) => {
 }
 
 afterEach(() => {
-  document.body.querySelectorAll('[data-testid="select-content"]').forEach((el) => el.remove())
+  document.body
+    .querySelectorAll('[data-testid="input-select-content"]')
+    .forEach((el) => el.remove())
   globalThis.history.replaceState(null, '', globalThis.location.pathname)
 })
 
@@ -237,7 +239,7 @@ describe('ListingBrowser', () => {
     globalThis.history.replaceState(null, '', '?area=Security')
     const { getByTestId, findByText } = band()
 
-    await findByText('Security', { selector: '[data-testid="select-trigger__value"] bdi' })
+    await findByText('Security', { selector: '[data-testid="input-select-trigger__value"] bdi' })
     expect(tableRoles(getByTestId)).toEqual(['GRC Analyst'])
   })
 
@@ -306,7 +308,9 @@ describe('ListingBrowser', () => {
 
     await fireEvent.click(getByRole('combobox', { name: 'Department' }))
     expect(document.body.querySelector('input[aria-label="Search department"]')).toBeNull()
-    document.body.querySelectorAll('[data-testid="select-content"]').forEach((el) => el.remove())
+    document.body
+      .querySelectorAll('[data-testid="input-select-content"]')
+      .forEach((el) => el.remove())
 
     await fireEvent.click(getByRole('combobox', { name: 'Location' }))
     expect(document.body.querySelector('input[aria-label="Search location"]')).not.toBeNull()

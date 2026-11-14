@@ -67,7 +67,11 @@ component.
 | `accordion`            | `value`            | `modelValue`         |
 | `alert`                | `severity="error"` | `severity="danger"`  |
 | `button`               | `kind="text"`      | `kind="transparent"` |
+| `calendar`             | `showTimezone`     | `showTimeZone`       |
+| `calendar`             | `timezone`         | `timeZone`           |
+| `calendar`             | `timezones`        | `timeZones`          |
 | `card-pricing`         | `planTitle`        | `title`              |
+| `checkbox`             | `inputId`          | `id`                 |
 | `code-block`           | `border`           | `bordered`           |
 | `code-block`           | `value`            | `modelValue`         |
 | `conversation-history` | `label`            | `ariaLabel`          |
@@ -78,6 +82,7 @@ component.
 | `doc-heading`          | `id`               | `anchor`             |
 | `doc-tooltip`          | `cta`              | `linkLabel`          |
 | `doc-tooltip`          | `headline`         | `title`              |
+| `file-token-group`     | `alignment`        | `orientation`        |
 | `item`                 | `kind="outline"`   | `kind="outlined"`    |
 | `log-view`             | `border`           | `bordered`           |
 | `log-view`             | `showCopy`         | `copyable`           |
@@ -96,8 +101,10 @@ component.
 | `shell-mockup`         | `still="false"`    | `animated="true"`    |
 | `shell-mockup`         | `still="true"`     | `animated="false"`   |
 | `skeleton`             | `kind="shape"`     | `kind="rectangle"`   |
+| `split-button`         | `model`            | `items`              |
 | `table`                | `border`           | `bordered`           |
 | `tabs`                 | `value`            | `modelValue`         |
+| `textarea`             | `resizable`        | `resize`             |
 | `theme-switcher`       | `value`            | `modelValue`         |
 | `wizard`               | `activeStep`       | `modelValue`         |
 
@@ -354,6 +361,12 @@ link shows no trailing icon unless `icon` is set), `Menu.Item` (`label`, `icon`,
 glyph on an item without `icon`), `Tabs.Item` (`label`) and `Breadcrumb.Item` (`label`, `href`).
 `Menu.SubTrigger` `click` now also passes `{ label, href }` as its second argument.
 
+`Select` now follows the `input-<name>` rule like the rest of the inputs category: `select` →
+`input-select`, and its parts `select-trigger`, `select-content`, `select-option` and `select-group`
+→ `input-select-trigger`, `input-select-content`, `input-select-option` and `input-select-group`
+(part ids follow, `select-trigger__value` → `input-select-trigger__value`). A `data-testid` you
+pass yourself still wins.
+
 ### Pagination ellipsis
 
 The `more` item of `Pagination` is now decorative (`aria-hidden`, not focusable, no `click`). Code
@@ -579,6 +592,29 @@ The navigation rail now has one name across the layouts: `open` on `Sidebar` and
 on `AppLayout` and `ConsoleLayout`. `@aziontech/webkit/sidebar` is now the compound
 (`Sidebar.Header`, `Sidebar.Group`, `Sidebar.Footer`); `@aziontech/webkit/sidebar-root` is the
 standalone root.
+
+### Changed defaults and deprecated names in the input and action controls
+
+- `TagEditor` reserves no key prefix by default (`reservedPrefix` was `'azion:'`). Pass
+  `reserved-prefix="azion:"` where the platform reserves it.
+
+These old names keep working in v6, marked `@deprecated`, and go in 7.0. The codemod rewrites the
+props in section 3; move the rest by hand:
+
+- `Calendar`: `v-model:timezone` → `v-model:time-zone`, `horizontal` → `orientation="horizontal"`
+  (the same names `DateRangePicker` uses).
+- `Checkbox`: a boolean `v-model` needs no `binary` (leave `value` unset); `tabindex` is an
+  attribute, not a prop.
+- `FileTokenGroup`: listen to `remove` instead of `dismiss` (both fire in v6);
+  `FileTokenGroupAlignment` → `FileTokenGroupOrientation`.
+- `Input`, `PasswordInput`, `Select.Trigger`, `MultiSelect.Trigger`: the `#iconLeft` slot →
+  `#prefix`, `#iconRight` → `#suffix`.
+- `MiniButton`: `:show-icon="false"` → `icon=""`.
+- `Select`: `multiple` → `MultiSelect`.
+- `SplitButton`: read or restore the mirrored action with `v-model:selected`.
+- `Switch`: `focused` → `autofocus`; `SwitchType` → `SwitchKind`.
+- `ToggleGroup`: a disabled option without `locked` still shows the lock; set `locked: true` on
+  the options that need it, since 7.0 draws the lock only for `locked`.
 
 ## 5. Field report: Azion Console
 

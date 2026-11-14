@@ -14,7 +14,6 @@
   import { useTranslate } from '../../../composables/use-locale/use-translate'
   import * as en from '../../../i18n/messages/en'
   import { cn } from '../../../utils/cn'
-  import { getSegmentedButtonIndicatorTransitionStyle } from './presets/transitions'
 
   defineOptions({
     name: 'ToggleGroup',
@@ -33,13 +32,16 @@
       size?: ToggleGroupSize
       /** Stretches the group to its container and lets the options share that width. */
       fluid?: boolean
+      /** Disables every option of the group. */
+      disabled?: boolean
     }>(),
     {
       options: () => [],
-      ariaLabel: undefined,
+      ariaLabel: '',
       defaultValue: undefined,
       size: 'large',
-      fluid: false
+      fluid: false,
+      disabled: false
     }
   )
 
@@ -55,13 +57,16 @@
   const indicatorHeight = ref(0)
   const indicatorOffsetX = ref(0)
   const indicatorOffsetY = ref(0)
-  const internalValue = ref<string>(props.defaultValue ?? '')
 
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? 'actions-toggle-group'
   )
 
-  const isControlled = computed(() => model.value !== undefined)
+  const forwardedAttrs = computed(() => {
+    const rest = { ...attrs }
+    delete rest['class']
+    return rest
+  })
 
   const normalizedOptions = computed(() =>
     props.options
@@ -73,20 +78,23 @@
           option.label ?? option.value ?? t('toggleGroup.option', { index: index + 1 })
         ),
         value: String(option.value ?? option.label ?? index),
-        disabled: Boolean(option.disabled)
+        disabled: props.disabled || Boolean(option.disabled),
+        locked: option.locked ?? Boolean(option.disabled)
       }))
   )
 
   const selectedValue = computed(() => {
-    if (isControlled.value) {
-      return model.value ?? ''
+    if (model.value !== undefined) {
+      return model.value
     }
 
-    if (internalValue.value) {
-      return internalValue.value
+    const options = normalizedOptions.value
+
+    if (props.defaultValue && options.some((option) => option.value === props.defaultValue)) {
+      return props.defaultValue
     }
 
-    return normalizedOptions.value.find((option) => !option.disabled)?.value ?? ''
+    return options.find((option) => !option.disabled)?.value ?? ''
   })
 
   const selectedIndex = computed(() =>
@@ -99,8 +107,6 @@
     if (selected && !selected.disabled) return selected.value
     return options.find((option) => !option.disabled)?.value
   })
-
-  const indicatorTransitionStyle = computed(() => getSegmentedButtonIndicatorTransitionStyle())
 
   const indicatorTransformStyle = computed(() => ({
     left: '0',
@@ -122,7 +128,7 @@
   const indicatorClasses = [
     'pointer-events-none absolute top-0 z-0',
     'rounded-(--shape-button) bg-(--bg-selected)',
-    'motion-reduce:transition-none'
+    'transition-[transform,width,height] duration-moderate-02 ease-productive-entrance motion-reduce:transition-none'
   ]
 
   const sharedOptionClasses = [
@@ -136,13 +142,13 @@
     'disabled:pointer-events-none disabled:cursor-not-allowed disabled:bg-(--bg-disabled) disabled:text-(--text-disabled)'
   ]
 
-  const optionClasses = (value: string, disabled: boolean) =>
+  const optionClasses = (value: string, locked: boolean) =>
     cn(
       sharedOptionClasses,
       value === selectedValue.value
         ? 'bg-transparent text-(--text-default)'
         : 'bg-transparent text-(--text-muted)',
-      disabled && 'pe-(--spacing-xs)'
+      locked && 'pe-(--spacing-xs)'
     )
 
   const resolveOptionElement = (
@@ -177,10 +183,6 @@
   const setValue = (value: string) => {
     if (value === selectedValue.value) {
       return
-    }
-
-    if (!isControlled.value) {
-      internalValue.value = value
     }
 
     model.value = value as TValue
@@ -297,17 +299,6 @@
   watch(
     normalizedOptions,
     (options) => {
-      if (isControlled.value) {
-        scheduleIndicatorSync()
-        return
-      }
-
-      const hasCurrentValue = options.some((option) => option.value === internalValue.value)
-
-      if (!hasCurrentValue) {
-        internalValue.value = options.find((option) => !option.disabled)?.value ?? ''
-      }
-
       optionRefs.value = optionRefs.value.slice(0, options.length)
       scheduleIndicatorSync()
     },
@@ -318,11 +309,12 @@
 </script>
 
 <script lang="ts">
-  /** One segment; type a list as ToggleGroupOption of the model's union so each value is one of it. A number value is coerced to its string. */
+  /** One segment; type a list as ToggleGroupOption of the model's union so each value is one of it. A number value is coerced to its string. `locked` draws the trailing lock icon; a disabled option without `locked` still draws it until 7.0. */
   export type ToggleGroupOption<TOptionValue extends string | number = string | number> = {
     label?: string | number
     value?: TOptionValue
     disabled?: boolean
+    locked?: boolean
   }
 
   /** Size token. Sets the group's own height on the 28 / 32 / 40 rhythm. */
@@ -331,18 +323,20 @@
 
 <template>
   <div
+    v-bind="forwardedAttrs"
     ref="rootRef"
     role="radiogroup"
     :class="rootClasses"
     :data-size="size"
     :data-fluid="fluid || null"
+    :data-disabled="disabled || null"
     :data-testid="testId"
-    :aria-label="ariaLabel"
+    :aria-label="ariaLabel || undefined"
   >
     <span
       v-show="indicatorVisible"
       :class="indicatorClasses"
-      :style="[indicatorTransitionStyle, indicatorTransformStyle]"
+      :style="indicatorTransformStyle"
       :data-testid="`${testId}__indicator`"
       aria-hidden="true"
     />
@@ -355,16 +349,21 @@
       :aria-checked="option.value === selectedValue"
       :tabindex="option.value === tabStopValue ? 0 : -1"
       :disabled="option.disabled"
-      :class="optionClasses(option.value, option.disabled)"
+      :class="optionClasses(option.value, option.locked)"
       :data-testid="`${testId}__option`"
       :data-state="option.value === selectedValue ? 'active' : 'inactive'"
       :data-disabled="option.disabled ? '' : undefined"
       @click="selectOption(option.value, option.disabled)"
       @keydown="onOptionKeydown($event, option.value, option.disabled)"
     >
+      <span
+        aria-hidden="true"
+        data-slot="touch-target"
+        class="absolute hidden inset-[min(0rem,calc(50%-22px))] pointer-coarse:block"
+      />
       <span class="min-w-0 truncate">{{ option.label }}</span>
       <i
-        v-if="option.disabled"
+        v-if="option.locked"
         class="pi pi-lock shrink-0 text-(--text-disabled)"
         aria-hidden="true"
         :data-testid="`${testId}__option-lock`"

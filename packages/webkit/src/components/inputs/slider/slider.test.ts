@@ -3,6 +3,11 @@ import { describe, expect, it } from 'vitest'
 import { userEvent } from 'vitest/browser'
 import { defineComponent, h, ref } from 'vue'
 
+import Default from '../../../../examples/slider/default.vue'
+import Disabled from '../../../../examples/slider/disabled.vue'
+import Invalid from '../../../../examples/slider/invalid.vue'
+import ReferenceValues from '../../../../examples/slider/reference-values.vue'
+import Ticks from '../../../../examples/slider/ticks.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Slider from './slider.vue'
 
@@ -327,5 +332,28 @@ describe('Slider', () => {
         await expectNoA11yViolations(container)
       }
     )
+  })
+})
+
+describe('Slider documented examples', () => {
+  it.each([
+    ['Default', Default],
+    ['Disabled', Disabled],
+    ['Invalid', Invalid],
+    ['ReferenceValues', ReferenceValues],
+    ['Ticks', Ticks]
+  ] as const)(
+    'renders the %s example with a named slider and no axe violations',
+    async (_, example) => {
+      const view = render(example)
+      expect(view.getAllByRole('slider').length).toBeGreaterThan(0)
+      await expectNoA11yViolations(view.container)
+    }
+  )
+
+  it('renders the Disabled example with a disabled slider', () => {
+    const view = render(Disabled)
+    const slider = view.getAllByRole('slider')[0] as HTMLInputElement
+    expect(slider.disabled || slider.getAttribute('aria-disabled') === 'true').toBe(true)
   })
 })

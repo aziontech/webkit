@@ -240,6 +240,18 @@ describe('PasswordInput', () => {
 
   // --- slots ---
 
+  it('renders the prefix slot, and the suffix slot only when toggleable is false', () => {
+    const plain = render(PasswordInput, {
+      props: { toggleable: false },
+      slots: { prefix: '<i data-testid="p-icon" />', suffix: '<i data-testid="s-icon" />' }
+    })
+    expect(plain.getByTestId('p-icon').closest('[aria-hidden="true"]')).toBeTruthy()
+    expect(plain.getByTestId('s-icon')).toBeTruthy()
+    plain.unmount()
+    const toggle = render(PasswordInput, { slots: { suffix: '<i data-testid="s-icon" />' } })
+    expect(toggle.queryByTestId('s-icon')).toBeNull()
+  })
+
   it('renders the iconLeft slot and marks its wrapper aria-hidden', () => {
     const { getByTestId } = render(PasswordInput, {
       slots: { iconLeft: '<i data-testid="left-icon" class="pi pi-lock" />' }

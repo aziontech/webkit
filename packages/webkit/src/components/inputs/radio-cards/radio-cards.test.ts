@@ -5,6 +5,7 @@ import Default from '../../../../examples/radio-cards/default.vue'
 import Disabled from '../../../../examples/radio-cards/disabled.vue'
 import WithTag from '../../../../examples/radio-cards/with-tag.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
+import Field from '../field/field.vue'
 import RadioCards from './radio-cards.vue'
 
 const items = [
@@ -80,7 +81,7 @@ describe('RadioCards', () => {
   })
 
   it('uses ariaLabel when provided, falling back to label otherwise', () => {
-    const { getAllByTestId } = render(RadioCards, {
+    const { getAllByTestId, getByRole } = render(RadioCards, {
       props: {
         items: [
           { value: 'a', label: 'Alpha', ariaLabel: 'Alpha option' },
@@ -91,7 +92,55 @@ describe('RadioCards', () => {
 
     const options = getAllByTestId('input-radio-cards__option')
     expect(options[0].getAttribute('aria-label')).toBe('Alpha option')
-    expect(options[1].getAttribute('aria-label')).toBe('Beta')
+    expect(options[1].hasAttribute('aria-label')).toBe(false)
+    expect(getByRole('radio', { name: 'Beta' })).toBe(options[1])
+  })
+
+  it('names a slotted option by its own content', () => {
+    const { getByRole } = render(RadioCards, {
+      props: { items: [{ value: 'a', label: 'Alpha' }] },
+      slots: { default: '<strong>Custom alpha text</strong>' }
+    })
+    expect(getByRole('radio', { name: 'Custom alpha text' })).toBeTruthy()
+  })
+
+  it('selects without a bound v-model', async () => {
+    const { getAllByRole, emitted } = render(RadioCards, { props: { items } })
+    await fireEvent.click(getAllByRole('radio')[1])
+    expect(getAllByRole('radio')[1].getAttribute('aria-checked')).toBe('true')
+    expect(emitted('update:modelValue')?.[0]).toEqual(['b'])
+  })
+
+  it('skips a disabled item and does not select it', async () => {
+    const { getAllByRole, emitted } = render(RadioCards, {
+      props: {
+        items: [
+          { value: 'a', label: 'Alpha' },
+          { value: 'b', label: 'Beta', disabled: true },
+          { value: 'c', label: 'Gamma' }
+        ]
+      }
+    })
+    const radios = getAllByRole('radio')
+    expect(radios[1].getAttribute('aria-disabled')).toBe('true')
+    expect(radios[1].getAttribute('tabindex')).toBe('-1')
+    await fireEvent.click(radios[1])
+    expect(emitted('update:modelValue')).toBeUndefined()
+    await fireEvent.keyDown(radios[0], { key: 'ArrowRight' })
+    expect(emitted('update:modelValue')?.[0]).toEqual(['c'])
+  })
+
+  it('takes the enclosing Field state', () => {
+    const { getByRole } = render({
+      components: { Field, RadioCards },
+      template:
+        '<Field invalid required disabled><RadioCards :items="items" aria-label="Plan" /></Field>',
+      setup: () => ({ items })
+    })
+    const group = getByRole('radiogroup', { name: 'Plan' })
+    expect(group.getAttribute('aria-invalid')).toBe('true')
+    expect(group.getAttribute('aria-required')).toBe('true')
+    expect(group.hasAttribute('data-disabled')).toBe(true)
   })
 
   it('emits update:modelValue with the option value on click', async () => {

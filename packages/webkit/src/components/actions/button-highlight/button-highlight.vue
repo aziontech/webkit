@@ -1,7 +1,6 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
-  import { cn } from '../../../utils/cn'
   import { directionalIconClass } from '../../../utils/directional-icons'
   import Spinner from '../../utils/spinner/spinner.vue'
 
@@ -101,8 +100,6 @@
     'data-[size=small]:px-(--spacing-xs) data-[size=small]:text-button-md ' +
     'group-data-[inactive]/highlight:text-(--text-disabled)'
 
-  const rootClasses = computed(() => cn(ROOT_CLASS, attrs.class as string | undefined))
-
   const handleClick = (event: MouseEvent) => {
     if (isInactive.value) {
       event.preventDefault()
@@ -116,10 +113,11 @@
 <template>
   <a
     v-if="isAnchor"
+    v-bind="$attrs"
     :href="href"
     :target="target"
     :rel="target === '_blank' ? 'noopener noreferrer' : undefined"
-    :class="rootClasses"
+    :class="ROOT_CLASS"
     :aria-disabled="isInactive || undefined"
     :aria-busy="loading || undefined"
     :tabindex="isInactive ? -1 : undefined"
@@ -163,11 +161,12 @@
 
   <button
     v-else
+    v-bind="$attrs"
     type="button"
     :disabled="disabled"
     :aria-disabled="isInactive || undefined"
     :aria-busy="loading || undefined"
-    :class="rootClasses"
+    :class="ROOT_CLASS"
     :data-size="size"
     :data-disabled="disabled ? '' : undefined"
     :data-loading="loading ? '' : undefined"

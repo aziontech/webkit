@@ -31,6 +31,11 @@
       "name": "InputGroup",
       "summary": "An `InputGroup` inside a `Field`: `InputGroup.Input` picks up the field's id, description and state like any other control.",
       "file": "input-group.vue"
+    },
+    {
+      "name": "RequiredAndDisabled",
+      "summary": "`required` on the `Field` shows the Required marker and a `hint` glyph on the label; `disabled` on the `Field` disables the input it wraps.",
+      "file": "required-and-disabled.vue"
     }
   ]
 }

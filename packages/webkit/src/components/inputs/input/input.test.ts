@@ -159,6 +159,24 @@ describe('Input', () => {
   })
 
   describe('icon slots', () => {
+    it('renders the prefix and suffix slots and flags both sides', () => {
+      const { getByTestId, getByText } = render(Input, {
+        slots: { prefix: '<i>P</i>', suffix: '<i>S</i>' }
+      })
+      expect(getByText('P')).toBeTruthy()
+      expect(getByText('S')).toBeTruthy()
+      const root = getByTestId('input').closest('[data-has-icon-left]')
+      expect(root?.hasAttribute('data-has-icon-right')).toBe(true)
+    })
+
+    it('prefers prefix over the deprecated iconLeft when both are passed', () => {
+      const { queryByText } = render(Input, {
+        slots: { prefix: '<i>New</i>', iconLeft: '<i>Old</i>' }
+      })
+      expect(queryByText('New')).toBeTruthy()
+      expect(queryByText('Old')).toBeNull()
+    })
+
     it('renders iconLeft slot content and flags data-has-icon-left on the root', () => {
       const { getByTestId, getByText } = render(Input, {
         slots: { iconLeft: '<i data-testid="left-icon">L</i>' }

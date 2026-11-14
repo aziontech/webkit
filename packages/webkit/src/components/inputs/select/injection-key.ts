@@ -54,6 +54,10 @@ export interface SelectContext {
   displayValue: ComputedRef<string>
   /** Whether the current selection is non-empty (drives data-filled). */
   filled: ComputedRef<boolean>
+  /** Records the visible label of an option so the trigger can show labels, not values. */
+  registerLabel: (value: unknown, label: string) => void
+  /** True while a selected value has no recorded label yet (options not mounted). */
+  labelsPending: ComputedRef<boolean>
 }
 
 export const selectContextKey: InjectionKey<SelectContext> = Symbol('SelectContext')

@@ -11,6 +11,6 @@
     mode="range"
     clearable
     show-time
-    show-timezone
+    show-time-zone
   />
 </template>

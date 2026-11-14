@@ -253,7 +253,7 @@ describe('values keep their own direction inside an rtl trigger', () => {
       container: rtlContainer('rtl'),
       props: { country: 'BR' }
     })
-    const value = getByTestId('select-trigger__value')
+    const value = getByTestId('input-select-trigger__value')
     const isolate = value.querySelector('bdi')
     expect(isolate?.getAttribute('dir')).toBe('ltr')
     expect(isolate?.textContent).toBe('+55')
@@ -271,7 +271,7 @@ describe('values keep their own direction inside an rtl trigger', () => {
       }),
       { container: rtlContainer('rtl') }
     )
-    const isolate = getByTestId('select-trigger__value').querySelector('bdi')
+    const isolate = getByTestId('input-select-trigger__value').querySelector('bdi')
     expect(isolate?.textContent).toBe('Alpha')
     expect(isolate?.hasAttribute('dir')).toBe(false)
   })

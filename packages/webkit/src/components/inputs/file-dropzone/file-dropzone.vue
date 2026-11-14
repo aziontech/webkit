@@ -29,7 +29,7 @@
     disabled?: boolean
     /** Paints the inline region with the danger border so a wrapping field can show a validation error. Drops still work. */
     invalid?: boolean
-    /** PrimeIcons class for the glyph above the title. */
+    /** PrimeIcons class for the glyph above the title. Empty draws the cloud-upload glyph. */
     icon?: string
   }
 
@@ -42,7 +42,7 @@
     directories: false,
     disabled: false,
     invalid: false,
-    icon: 'pi pi-cloud-upload'
+    icon: ''
   })
 
   const emit = defineEmits<{
@@ -204,7 +204,7 @@
           aria-hidden="true"
         >
           <i
-            :class="icon"
+            :class="icon || 'pi pi-cloud-upload'"
             class="text-body-lg text-(--text-default) group-data-[disabled]:text-(--text-disabled)"
             aria-hidden="true"
           />

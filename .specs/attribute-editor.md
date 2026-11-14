@@ -3,9 +3,9 @@ name: attribute-editor
 category: inputs
 structure: monolithic
 status: implemented
-spec_version: 3
+spec_version: 5
 template: 2
-checksum: 8e4e94d4ab0ad8a2edf9b2f0a9e96914594f00f29f19796b4e3990184d447750
+checksum: 3b4f1649129947dca44eca79d84b3cef1937a51f57ef6fcb5641207446b65b6a
 created: 2026-11-11
 last_updated: 2026-11-14
 ---
@@ -83,8 +83,6 @@ An editable list of rows with the same fields, after Cloudscape's attribute edit
 
 | Prop                | Type                             | Default     | Required | JSDoc                                                                                                                                                                                                                                                                                                   |
 | ------------------- | -------------------------------- | ----------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `items`             | `TItem[]`                        | `[]`        | false    | Rows in list mode. Supports v-model:items.                                                                                                                                                                                                                                                              |
-| `groups`            | `TItem[][]`                      | `undefined` | false    | Rows in grouped mode: every inner array is an AND group, groups are joined by OR. Supports v-model:groups.                                                                                                                                                                                              |
 | `definition`        | `AttributeEditorColumn[]`        | `[]`        | false    | Columns of every row: key of the item field, label, placeholder, required.                                                                                                                                                                                                                              |
 | `errors`            | `AttributeEditorErrors`          | `[]`        | false    | Error per cell, aligned with the rows (nested per group in grouped mode). Empty shows none.                                                                                                                                                                                                             |
 | `addButtonLabel`    | `string`                         | `''`        | false    | Label of the Add button. Empty uses the locale catalog.                                                                                                                                                                                                                                                 |
@@ -106,12 +104,17 @@ The component is generic over the row: `TItem extends object`, inferred from `it
 
 Types (exported from `@aziontech/webkit/attribute-editor`): `AttributeEditorItem = Record<string, unknown>`; `AttributeEditorColumn = { key: string; label: string; placeholder?: string; required?: boolean }`; `AttributeEditorRowErrors = Record<string, string | undefined>`; `AttributeEditorErrors = (AttributeEditorRowErrors | undefined)[] | (AttributeEditorRowErrors | undefined)[][]`; `AttributeEditorSize = 'small' | 'medium' | 'large'`; `AttributeEditorCellScope<TItem, TValue> = { item: TItem; index: number; groupIndex: number | undefined; value: TValue; update: (value: unknown) => void; invalid: boolean }`; `AttributeEditorCellSlots<TItem>` (one `cell-<key>` slot per field of `TItem`, plus `cell-<string>` with `unknown` for any other key); `AttributeEditorRowScope<TItem>` (its `update(key, value)` takes a field name of `TItem`; its `move(event, offset)` moves the row by `offset` positions inside its group when `reorderable` is on); `AttributeEditorRowActionsScope<TItem>`.
 
+## v-model
+
+| Model            | Type                     | Default     | Emits           | Notes                                                                                                                                                                         |
+| ---------------- | ------------------------ | ----------- | --------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `v-model:items`  | `TItem[]`                | `[]`        | `update:items`  | Rows in list mode, via `defineModel('items')`. A row added, removed, edited or moved goes out as the new array; unbound, the editor keeps its own rows.                         |
+| `v-model:groups` | `TItem[][] \| undefined` | `undefined` | `update:groups` | Rows in grouped mode, via `defineModel('groups')`: every inner array is an AND group, groups are joined by OR. Setting it (even to `[]`) switches the editor to grouped mode. |
+
 ## Events
 
 | Event           | Payload                                                                                             | Notes                                                               |
 | --------------- | --------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------- |
-| `update:items`  | `TItem[]`                                                                                           | A row was added, removed, edited or moved in list mode.             |
-| `update:groups` | `TItem[][]`                                                                                         | A row or group was added, removed, edited or moved in grouped mode. |
 | `add`           | `(event: MouseEvent, detail: { index: number; groupIndex?: number })`                               | After a row is added; `groupIndex` only in grouped mode.            |
 | `remove`        | `(event: MouseEvent \| KeyboardEvent, detail: { index: number; item: TItem; groupIndex?: number })` | After a row is removed.                                             |
 
@@ -220,6 +223,7 @@ Rows appear and leave without animation; the controls keep their own transitions
 - Grouped — rule criteria as AND groups joined by OR; justified because the grouped mode is a distinct anatomy.
 - CustomCells — a `Select` and a `Switch` in place of the default inputs through `cell-<key>`; justified because replacing a control is the main extension point.
 - Reorderable — request headers whose order matters, moved with the grip, the buttons or Alt+Arrow keys; justified because `reorderable` adds controls and keyboard behavior the other examples do not show.
+- EmptyAndDisabled — the `empty` state and the `disabled` state side by side (the state examples for those props).
 
 ## Constraints — DO NOT
 

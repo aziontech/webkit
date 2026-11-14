@@ -27,8 +27,6 @@
   })
 
   interface Props {
-    /** Tags being edited. Saved tags carry `existing`; Remove marks them `markedForRemoval` until Undo. Supports v-model:tags. */
-    tags?: TagEditorTag[]
     /** Keys offered while typing a key, for example the keys already used in the account. */
     keySuggestions?: string[]
     /** Values offered per key while typing a value. */
@@ -50,21 +48,18 @@
   }
 
   const props = withDefaults(defineProps<Props>(), {
-    tags: () => [],
     keySuggestions: () => [],
     valueSuggestions: () => ({}),
     limit: 50,
     keyMaxLength: 128,
     valueMaxLength: 256,
-    reservedPrefix: 'azion:',
+    reservedPrefix: '',
     errors: () => [],
     disabled: false,
     ariaLabel: ''
   })
 
-  const emit = defineEmits<{
-    'update:tags': [tags: TagEditorTag[]]
-  }>()
+  const tags = defineModel<TagEditorTag[]>('tags', { default: () => [] })
 
   const attrs = useAttrs()
   const { t } = useTranslate({ tagEditor: en.tagEditor })
@@ -80,8 +75,8 @@
     { key: 'value', label: t('tagEditor.value') }
   ])
 
-  const active = computed(() => props.tags.filter((tag) => !tag.markedForRemoval))
-  const marked = computed(() => props.tags.length - active.value.length)
+  const active = computed(() => tags.value.filter((tag) => !tag.markedForRemoval))
+  const marked = computed(() => tags.value.length - active.value.length)
   const left = computed(() => Math.max(props.limit - active.value.length, 0))
 
   const keyCounts = computed(() =>
@@ -112,7 +107,7 @@
   }
 
   const rowErrors = computed<(AttributeEditorRowErrors | undefined)[]>(() =>
-    props.tags.map((tag, index) => {
+    tags.value.map((tag, index) => {
       const server = props.errors[index]
       const key = server?.key ?? keyError(tag)
       const value = server?.value ?? valueError(tag)
@@ -122,11 +117,13 @@
 
   const asTag = (item: AttributeEditorItem) => item as unknown as TagEditorTag
 
-  const setTags = (items: AttributeEditorItem[]) => emit('update:tags', items.map(asTag))
+  const setTags = (items: AttributeEditorItem[]) => {
+    tags.value = items.map(asTag)
+  }
 
   const setRemoval = (index: number, markedForRemoval: boolean) => {
-    const next = props.tags.map((tag, i) => (i === index ? { ...tag, markedForRemoval } : tag))
-    emit('update:tags', next)
+    const next = tags.value.map((tag, i) => (i === index ? { ...tag, markedForRemoval } : tag))
+    tags.value = next
   }
 
   const newTag = () => ({ key: '', value: '' })
@@ -142,7 +139,7 @@
 
   const validate = () => {
     checkEmpty.value = true
-    return props.tags.every(
+    return tags.value.every(
       (tag, index) =>
         tag.markedForRemoval ||
         (!props.errors[index]?.key &&

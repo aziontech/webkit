@@ -3,10 +3,10 @@ name: input
 category: inputs
 structure: monolithic
 status: implemented
-spec_version: 3
-checksum: 3f1265c2f9c08c48f27f74b469d838fad6bdfaee0c80cf97ff0ceb91a868ba1f
+spec_version: 4
+checksum: 5597a2b9fc62bcac919cad05e4148636aebb6b465b950f5cf17d2797e5291430
 created: 2026-05-22
-last_updated: 2026-11-13
+last_updated: 2026-11-14
 ---
 
 # Input Text — Component Spec
@@ -59,7 +59,7 @@ Aligned with Figma frame `562:6774` (Webkit / Input).
     size="medium"
     aria-label="Domain"
   >
-    <template #iconLeft>
+    <template #prefix>
       <i class="pi pi-globe" />
     </template>
   </Input>
@@ -96,8 +96,10 @@ _none_
 
 | Slot        | Purpose                                                   | Notes                                              |
 | ----------- | --------------------------------------------------------- | -------------------------------------------------- |
-| `iconLeft`  | Leading icon rendered inside the field, before the input. | Hidden from assistive tech (`aria-hidden="true"`). |
-| `iconRight` | Trailing icon rendered inside the field, after the input. | Hidden from assistive tech (`aria-hidden="true"`). |
+| `prefix`    | Leading adornment at the inline start of the field (an icon, a unit). | Hidden from assistive tech (`aria-hidden="true"`). Logical: it sits on the right under `dir="rtl"`. |
+| `suffix`    | Trailing adornment at the inline end of the field.        | Hidden from assistive tech (`aria-hidden="true"`). |
+| `iconLeft`  | `@deprecated since 6.0 — use prefix. Removed in 7.0.`    | Rendered as the fallback of `prefix`.             |
+| `iconRight` | `@deprecated since 6.0 — use suffix. Removed in 7.0.`    | Rendered as the fallback of `suffix`.             |
 
 ## Exposed
 
@@ -115,7 +117,7 @@ _none_
 - `data-disabled` mirrors the `disabled` prop
 - `data-invalid` mirrors the `invalid` prop
 - `data-required` mirrors the `required` prop; drives the warning-border treatment
-- `data-has-icon-left` / `data-has-icon-right` mirror slot presence (driven by `$slots.iconLeft` / `$slots.iconRight`), read at render time: an icon slot passed behind a `v-if` adds or removes its icon box when the condition changes, never leaving an empty box behind
+- `data-has-icon-left` / `data-has-icon-right` mirror slot presence (driven by `$slots.prefix` or `$slots.iconLeft` / `$slots.suffix` or `$slots.iconRight`), read at render time: an icon slot passed behind a `v-if` adds or removes its icon box when the condition changes, never leaving an empty box behind
 - `filled` is detected via the native `:not(:placeholder-shown)` selector — no JS state
 
 ## Motion & Animations
@@ -172,7 +174,7 @@ _none_
 
 - Default
 - Sizes — composite story rendering all three sizes side by side (canonical composite example).
-- Icons — composite story showing the `iconLeft` slot, the `iconRight` slot, and both combined. Justification: documents the slot API surface from the Figma component (`hasIconLeft`/`iconLeft`, `hasIconRight`/`iconRight`) in a single browsable view.
+- Icons — composite story showing the `prefix` slot, the `suffix` slot, and both combined. Justification: documents the slot API surface from the Figma component (`hasIconLeft`/`iconLeft`, `hasIconRight`/`iconRight` in Figma) in a single browsable view.
 - Filled — justification: pre-populated `modelValue` shows the filled visual state, which is implicit (no prop) and not visible from the Default story.
 - Invalid — justification: documents the `invalid` visual treatment, which is a top-level prop with distinct token bindings.
 - Email — justification: documents `type="email"` (native browser keyboard / validation surface) since the `type` prop is restricted and only two values matter visually.

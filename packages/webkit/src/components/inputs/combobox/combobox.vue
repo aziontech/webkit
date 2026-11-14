@@ -1,7 +1,8 @@
 <script setup lang="ts">
-  import { computed, nextTick, ref, useAttrs, useId, watch } from 'vue'
+  import { computed, nextTick, onBeforeUpdate, ref, useAttrs, useId, watch } from 'vue'
 
   import { useFieldControl } from '../../../composables/use-field-control'
+  import LazyNodes from '../../../composables/use-lazy-chunks/lazy-nodes'
   import { usePortalLocale, useTranslate } from '../../../composables/use-locale/use-translate'
   import { usePlacement } from '../../../composables/use-placement'
   import * as en from '../../../i18n/messages/en'
@@ -286,7 +287,16 @@
     else restore()
   }
 
+  const lazyLists = new Set<{ revealAll: () => void }>()
+  onBeforeUpdate(() => lazyLists.clear())
+  const setLazy = (el: unknown) => {
+    if (el && typeof (el as { revealAll?: unknown }).revealAll === 'function') {
+      lazyLists.add(el as { revealAll: () => void })
+    }
+  }
+
   const scrollActiveIntoView = () => {
+    lazyLists.forEach((list) => list.revealAll())
     nextTick(() => {
       const id = activeId.value
       if (id) globalThis.document?.getElementById(id)?.scrollIntoView?.({ block: 'nearest' })
@@ -438,7 +448,7 @@
         @blur="onBlur"
         @keydown="onKeydown"
       >
-        <template #iconLeft>
+        <template #prefix>
           <i
             class="pi pi-search text-(--text-muted)"
             aria-hidden="true"
@@ -446,7 +456,7 @@
         </template>
         <template
           v-if="loading"
-          #iconRight
+          #suffix
         >
           <Spinner
             class="size-3.5 text-(--text-muted)"
@@ -509,55 +519,60 @@
               :aria-labelledby="section.title ? section.id : undefined"
               class="m-0 flex list-none flex-col gap-(--spacing-xxs) p-0"
             >
-              <li
-                v-for="row in section.rows"
-                :id="row.id"
-                :key="row.id"
-                role="option"
-                :aria-selected="row.kind === 'option' && row.option.value === model"
-                :aria-disabled="isDisabledRow(row) || undefined"
-                :data-active="(activeId === row.id && !isDisabledRow(row)) || null"
-                :data-selected="(row.kind === 'option' && row.option.value === model) || null"
-                :data-disabled="isDisabledRow(row) || null"
-                :data-kind="row.kind"
-                :data-testid="`${testId}__option`"
-                class="flex min-h-8 cursor-pointer select-none items-center gap-(--spacing-sm) rounded-(--shape-elements) px-(--spacing-sm) py-(--spacing-xxs) text-start text-label-sm text-(--text-default) transition-colors duration-150 ease-out hover:bg-(--bg-hover) data-[active]:bg-(--bg-hover) data-[selected]:bg-(--bg-selected) data-[disabled]:cursor-not-allowed data-[disabled]:text-(--text-disabled) data-[disabled]:hover:bg-transparent motion-reduce:transition-none pointer-coarse:min-h-11"
-                @click="commitRow($event, row)"
-                @keydown.enter.prevent="commitRow($event, row)"
-                @mousemove="active = isDisabledRow(row) ? active : rows.indexOf(row)"
+              <LazyNodes
+                :ref="setLazy"
+                :row-height="34"
               >
-                <template v-if="row.kind === 'option'">
-                  <slot
-                    name="option"
-                    :option="row.option"
-                    :active="activeId === row.id"
-                    :selected="row.option.value === model"
-                  >
-                    <span class="min-w-0 flex-1 truncate"
-                      ><bdi>{{ labelOf(row.option) }}</bdi></span
+                <li
+                  v-for="row in section.rows"
+                  :id="row.id"
+                  :key="row.id"
+                  role="option"
+                  :aria-selected="row.kind === 'option' && row.option.value === model"
+                  :aria-disabled="isDisabledRow(row) || undefined"
+                  :data-active="(activeId === row.id && !isDisabledRow(row)) || null"
+                  :data-selected="(row.kind === 'option' && row.option.value === model) || null"
+                  :data-disabled="isDisabledRow(row) || null"
+                  :data-kind="row.kind"
+                  :data-testid="`${testId}__option`"
+                  class="flex min-h-8 cursor-pointer select-none items-center gap-(--spacing-sm) rounded-(--shape-elements) px-(--spacing-sm) py-(--spacing-xxs) text-start text-label-sm text-(--text-default) transition-colors duration-150 ease-out hover:bg-(--bg-hover) data-[active]:bg-(--bg-hover) data-[selected]:bg-(--bg-selected) data-[disabled]:cursor-not-allowed data-[disabled]:text-(--text-disabled) data-[disabled]:hover:bg-transparent motion-reduce:transition-none pointer-coarse:min-h-11"
+                  @click="commitRow($event, row)"
+                  @keydown.enter.prevent="commitRow($event, row)"
+                  @mousemove="active = isDisabledRow(row) ? active : rows.indexOf(row)"
+                >
+                  <template v-if="row.kind === 'option'">
+                    <slot
+                      name="option"
+                      :option="row.option"
+                      :active="activeId === row.id"
+                      :selected="row.option.value === model"
                     >
-                    <span
-                      v-if="row.option.description"
-                      class="shrink-0 truncate text-body-sm text-(--text-muted)"
-                      >{{ row.option.description }}</span
-                    >
-                  </slot>
-                  <i
-                    v-if="row.option.value === model"
-                    class="pi pi-check shrink-0 text-body-xs text-(--text-default)"
-                    aria-hidden="true"
-                  />
-                </template>
-                <template v-else>
-                  <i
-                    class="pi pi-plus shrink-0 text-body-xs text-(--text-muted)"
-                    aria-hidden="true"
-                  />
-                  <span class="min-w-0 flex-1 truncate">{{
-                    t('combobox.useValue', { value: row.value })
-                  }}</span>
-                </template>
-              </li>
+                      <span class="min-w-0 flex-1 truncate"
+                        ><bdi>{{ labelOf(row.option) }}</bdi></span
+                      >
+                      <span
+                        v-if="row.option.description"
+                        class="shrink-0 truncate text-body-sm text-(--text-muted)"
+                        >{{ row.option.description }}</span
+                      >
+                    </slot>
+                    <i
+                      v-if="row.option.value === model"
+                      class="pi pi-check shrink-0 text-body-xs text-(--text-default)"
+                      aria-hidden="true"
+                    />
+                  </template>
+                  <template v-else>
+                    <i
+                      class="pi pi-plus shrink-0 text-body-xs text-(--text-muted)"
+                      aria-hidden="true"
+                    />
+                    <span class="min-w-0 flex-1 truncate">{{
+                      t('combobox.useValue', { value: row.value })
+                    }}</span>
+                  </template>
+                </li>
+              </LazyNodes>
             </ul>
           </li>
           <li

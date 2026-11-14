@@ -3,13 +3,14 @@ name: toggle-group
 category: actions
 structure: monolithic
 status: implemented
-spec_version: 1
+spec_version: 2
+template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2904-5892
   node_id: 2904:5892
-checksum: c9583f883b74f098c950cdf28bb4a40d2989402eec426d5b507f9f82db40e8c7
+checksum: a7d4a5146282ed6e635203f8606060ce2afe2167d9dba48bb4d4a4d55edbdd8f
 created: 2026-11-09
-last_updated: 2026-11-12
+last_updated: 2026-11-14
 ---
 
 # ToggleGroup — Component Spec
@@ -22,7 +23,7 @@ ToggleGroup is a connected group of buttons that picks exactly one value out of 
 
 - Switch in place between two to five related modes, views or ranges (a time range, a list/grid view, a filter scope) where exactly one is always active.
 - Offer a compact single choice in a toolbar or a card header where a radio list would take too much room.
-- Show a choice that is currently unavailable as a locked segment (`disabled` option) instead of hiding it.
+- Show a choice that is currently unavailable as a disabled segment instead of hiding it; mark it `locked` when it is unavailable because of a plan or a permission.
 
 ## When NOT to use
 
@@ -38,6 +39,7 @@ ToggleGroup is a connected group of buttons that picks exactly one value out of 
 - `field` — a horizontal `Field` with a `radio-button` is the form-field single choice with label and description; a `Field.Label` choice card when each option carries a title and description.
 - `switch` — a single boolean toggle.
 - `button` — a lone action; the segments here hold a value instead of firing one.
+- Naming: Radix and shadcn `ToggleGroup` is a group of `aria-pressed` toggles with `type="single" | "multiple"`. This component is the single-select segmented control (Cloudscape and Geist call it a segmented control): one value is always selected and the segments are radios. There is no multiple mode; for several independent toggles use `checkbox`es or `ButtonGroup` toggles.
 
 ## Best practices
 
@@ -77,11 +79,16 @@ ToggleGroup is a connected group of buttons that picks exactly one value out of 
 
 | Prop           | Type                                                                                                 | Default     | Required | JSDoc                                                                       |
 | -------------- | ---------------------------------------------------------------------------------------------------- | ----------- | -------- | --------------------------------------------------------------------------- |
-| `options`      | `ToggleGroupOption[]` (`{ label?: string \| number; value?: string \| number; disabled?: boolean }`) | `[]`        | false    | Segmented choices shown as a mutually exclusive group.                      |
-| `ariaLabel`    | `string`                                                                                             | `undefined` | false    | Accessible name when no visible group label is associated.                  |
+| `options`      | `ToggleGroupOption[]` (`{ label?: string \| number; value?: string \| number; disabled?: boolean; locked?: boolean }`) | `[]`        | false    | Segmented choices shown as a mutually exclusive group.                      |
+| `ariaLabel`    | `string`                                                                                             | `''`        | false    | Accessible name when no visible group label is associated.                  |
 | `defaultValue` | `string`                                                                                             | `undefined` | false    | Initial selection when `v-model` is not set.                                |
 | `size`         | `'small' \| 'medium' \| 'large'`                                                                     | `'large'`   | false    | Size token, on the same 28 / 32 / 40 rhythm every other control uses.       |
 | `fluid`        | `boolean`                                                                                            | `false`     | false    | Stretches the group to its container and lets the options share that width. |
+| `disabled`     | `boolean`                                                                                            | `false`     | false    | Disables every option of the group.                                         |
+
+**Generic.** Props stay an inline literal in `defineProps` because the component is generic (`TValue`): a named `interface Props` inside a generic `<script setup>` fails declaration emit (TS4025).
+
+**Locked options.** `locked: true` on an option draws the trailing lock icon (unavailable because of a plan or a permission). `locked: false` draws no lock even when the option is disabled. When `locked` is unset, a disabled option still draws the lock: this implicit lock is `@deprecated since 6.0 — set locked: true on the option. Removed in 7.0.`; from 7.0 a disabled option without `locked` draws no lock.
 
 ## v-model
 
@@ -102,8 +109,8 @@ ToggleGroup is a connected group of buttons that picks exactly one value out of 
 ## States
 
 - Visual states per segment: `default`, `focus-visible`, `selected`, `disabled`.
-- Root: `role="radiogroup"`; `data-size` mirrors `size` (`small` | `medium` | `large`); `data-fluid` is present only when `fluid` is set.
-- Segment: `role="radio"` with `aria-checked`; `data-state="active"` on the selected segment and `"inactive"` on the others; `data-disabled` and the native `disabled` attribute on a disabled option, which also renders a trailing lock icon (`pi pi-lock`).
+- Root: `role="radiogroup"`; consumer attributes (`id`, `aria-labelledby`, `aria-describedby`, …) land on it; `data-disabled` when `disabled`; `data-size` mirrors `size` (`small` | `medium` | `large`); `data-fluid` is present only when `fluid` is set.
+- Segment: `role="radio"` with `aria-checked`; `data-state="active"` on the selected segment and `"inactive"` on the others; `data-disabled` and the native `disabled` attribute on a disabled option (or every option when the root is `disabled`); a trailing lock icon (`pi pi-lock`) on a locked option (see Locked options). Each segment carries a touch-target span that grows its hit area to 44px under `pointer-coarse`.
 - Indicator: an `aria-hidden` span positioned under the selected segment from its measured size and offset; hidden when nothing is selected or the selected segment is not rendered. It re-measures on option, selection and size changes (`ResizeObserver`).
 - Option normalization: a missing `label` falls back to `value`, then to `Option <n>`; a missing `value` falls back to `label`, then to the index.
 - Test ids: root `actions-toggle-group` (consumer `data-testid` wins), `<testId>__indicator`, `<testId>__option`, `<testId>__option-lock`.
@@ -114,7 +121,7 @@ ToggleGroup is a connected group of buttons that picks exactly one value out of 
 | Trigger                                    | Animation / Transition                                                                | Token (see `.claude/docs/DESIGN.md` § Animations)                                             | Reduced-motion fallback                                                                                                  |
 | ------------------------------------------ | ------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
 | segment selected / deselected (text color) | `transition-colors duration-fast-02 ease-productive-entrance`                         | semantic `fast-02` · `productive-entrance`                                                    | `motion-reduce:transition-none`                                                                                          |
-| indicator slides to the selected segment   | inline `transition` on `transform`, `width`, `height` (from `presets/transitions.ts`) | `duration['moderate-02']` · `curve['productive-entrance']` from `@aziontech/theme/animations` | `motion-reduce:transition-none` is declared on the indicator, but the inline `transition` style takes precedence over it |
+| indicator slides to the selected segment   | `transition-[transform,width,height] duration-moderate-02 ease-productive-entrance` (the offset is an inline `transform`, the transition is a class) | semantic `moderate-02` · `productive-entrance` | `motion-reduce:transition-none` |
 
 ## Tokens
 
@@ -145,11 +152,11 @@ ToggleGroup is a connected group of buttons that picks exactly one value out of 
 
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color)` with `focus-visible:outline-none` on each segment.
 - Keyboard map: the group is one tab stop (roving `tabindex`): `Tab` lands on the selected segment, or on the first enabled one when nothing is selected, and the next `Tab` leaves the group; `Enter` / `Space` select the focused segment; `ArrowRight` / `ArrowLeft` move the selection to the next / previous enabled segment, wrapping at the ends, and focus moves with it so the newly checked radio is announced.
-- ARIA: root `role="radiogroup"` named by `ariaLabel` (`aria-label` is omitted when it is unset); each segment `role="radio"` with `aria-checked`; the indicator and the lock icon are `aria-hidden="true"`.
+- ARIA: root `role="radiogroup"` named by `ariaLabel` (`aria-label` is omitted when it is empty) or by a consumer `aria-labelledby` pointing at a visible label; each segment `role="radio"` with `aria-checked`; the indicator and the lock icon are `aria-hidden="true"`.
 - Disabled options use the native `disabled` attribute, so they are skipped by arrow navigation, never take the tab stop and cannot be clicked.
 - Contrast ≥4.5:1 (text) / ≥3:1 (icons): selected text uses `var(--text-default)` on `var(--bg-selected)`, unselected text `var(--text-muted)` on `var(--bg-surface)`.
-- `motion-reduce:transition-none` on the segment color transition; the indicator slide is set inline and is not suppressed by it.
-- Touch target: segments fill the group height minus its padding (40px group at `size="large"`).
+- `motion-reduce:transition-none` on the segment color transition and on the indicator slide.
+- Touch target: segments fill the group height minus its padding (40px group at `size="large"`); under `pointer-coarse` a touch-target span extends each segment's hit area to 44px.
 
 ## Right-to-left
 
@@ -159,10 +166,29 @@ ToggleGroup is a connected group of buttons that picks exactly one value out of 
 - Indicator: the selection pill is anchored with a physical `left: 0` and moved by the measured `offsetLeft`, which is already a physical distance, so it lands on the selected item in both directions.
 - User data: none.
 
+## Internationalization
+
+| Key                  | English source | Override prop                 |
+| -------------------- | -------------- | ----------------------------- |
+| `toggleGroup.option` | `Option {index}` | an option `label` (or `value`) |
+
+- Option labels are consumer copy; the catalog string is only the fallback for an option with neither `label` nor `value`.
+
+## Responsive
+
+- The root is capped at its container (`max-w-full`, `min-w-0`) and options shrink and truncate instead of overflowing; `fluid` makes the options share the full width.
+- Touch: a touch-target span grows each segment to 44px under `pointer-coarse`; prefer `size="large"` on touch-first surfaces.
+- No hover-only affordance: selection, focus and disabled states are all visible without hover.
+
+## Performance
+
+- Bundle budget: see `.size-limit.json` entry `toggle-group`.
+- Runtime: renders `options.length` buttons; one `ResizeObserver` re-measures the indicator on root and option resizes, disconnected on unmount.
+
 ## Examples
 
 - Default
-- WithDisabledOption — a group with one disabled option, showing the lock affordance and that arrow navigation skips it. Justified: disabled is per option, there is no root `disabled` prop to drive a Disabled story.
+- WithDisabledOption — a group with one disabled option, showing the lock affordance and that arrow navigation skips it. Justified: disabled is per option; the root `disabled` prop disables the whole group the same way.
 - Sizes — composite story rendering every `size` value side-by-side.
 - Fluid — the group with `fluid` inside a wider container. Justified: `fluid` changes the layout of the whole group and cannot be shown in the Default frame.
 

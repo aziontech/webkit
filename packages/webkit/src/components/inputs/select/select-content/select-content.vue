@@ -1,5 +1,19 @@
 <script setup lang="ts">
-  import { computed, inject, nextTick, onBeforeUnmount, onMounted, ref, useAttrs, watch } from 'vue'
+  import {
+    Comment,
+    computed,
+    Fragment,
+    inject,
+    isVNode,
+    nextTick,
+    onBeforeUnmount,
+    onMounted,
+    ref,
+    useAttrs,
+    type VNode,
+    type VNodeArrayChildren,
+    watch
+  } from 'vue'
 
   import LazyNodes from '../../../../composables/use-lazy-chunks/lazy-nodes'
   import { usePortalLocale } from '../../../../composables/use-locale/use-translate'
@@ -17,9 +31,34 @@
     throw new Error('SelectContent must be used inside <Select>.')
   }
 
+  const slots = defineSlots<{
+    /** The options (SelectOption, SelectGroup). */
+    default(): unknown
+    /** Pinned above the list, for a search field. */
+    search(): unknown
+    /** Pinned below the list, for an action such as Create. */
+    footer(): unknown
+  }>()
+
   const attrs = useAttrs()
 
-  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'select-content')
+  const pickPending = (nodes: VNodeArrayChildren): VNode[] =>
+    nodes.flatMap((node): VNode[] => {
+      if (Array.isArray(node)) return pickPending(node)
+      if (!isVNode(node) || node.type === Comment) return []
+      if (node.type === Fragment && Array.isArray(node.children)) {
+        return pickPending(node.children as VNodeArrayChildren)
+      }
+      const props = node.props as Record<string, unknown> | null
+      if (props && 'value' in props) return ctx.isSelected(props['value']) ? [node] : []
+      return [node]
+    })
+
+  const PendingLabels = () => pickPending((slots.default?.() ?? []) as VNodeArrayChildren)
+
+  const testId = computed(
+    () => (attrs['data-testid'] as string | undefined) ?? 'input-select-content'
+  )
 
   const root = ref<globalThis.HTMLDivElement | null>(null)
   const lazy = ref<{ revealAll: () => void; hasHidden: () => boolean } | null>(null)
@@ -43,6 +82,16 @@
       if (event.shiftKey) event.preventDefault()
       ctx.setOpen(false)
       ctx.triggerRef.value?.focus()
+      return
+    }
+    if (
+      event.key.length === 1 &&
+      event.key !== ' ' &&
+      !event.ctrlKey &&
+      !event.metaKey &&
+      !event.altKey
+    ) {
+      if (typeahead(event.key)) event.preventDefault()
       return
     }
     if (
@@ -77,6 +126,35 @@
     else if (key === 'Home') nextIndex = 0
     else if (key === 'End') nextIndex = options.length - 1
     options[nextIndex]?.focus()
+  }
+
+  let typed = ''
+  let typedAt = 0
+
+  const typeahead = (key: string): boolean => {
+    const el = root.value
+    if (!el) return false
+    if (
+      el.contains(document.activeElement) &&
+      document.activeElement?.matches('input:not([type="checkbox"]):not([type="radio"]), textarea')
+    )
+      return false
+    lazy.value?.revealAll()
+    const now = Date.now()
+    typed = now - typedAt > 500 ? key : typed + key
+    typedAt = now
+    const options = Array.from(
+      el.querySelectorAll<HTMLElement>('[role="option"]:not([data-disabled])')
+    )
+    const query = typed.toLocaleLowerCase()
+    const active = document.activeElement instanceof HTMLElement ? document.activeElement : null
+    const start = active ? options.indexOf(active) + (typed.length === 1 ? 1 : 0) : 0
+    const ordered = [...options.slice(start), ...options.slice(0, start)]
+    const match = ordered.find((option) =>
+      (option.textContent ?? '').trim().toLocaleLowerCase().startsWith(query)
+    )
+    match?.focus()
+    return Boolean(match)
   }
 
   const onDocumentPointerDown = (event: globalThis.PointerEvent) => {
@@ -186,4 +264,11 @@
       </div>
     </Transition>
   </Teleport>
+  <div
+    v-if="!ctx.open.value && ctx.labelsPending.value"
+    hidden
+    :data-testid="`${testId}__labels`"
+  >
+    <PendingLabels />
+  </div>
 </template>

@@ -6,6 +6,9 @@ export type CalendarMode = 'single' | 'range'
 /** Size token; affects the trigger, day-cell hit-area, and typography. */
 export type CalendarSize = 'small' | 'medium' | 'large'
 
+/** Where the fields and Apply column sit relative to the calendar grid. */
+export type CalendarOrientation = 'vertical' | 'horizontal'
+
 /** Range value emitted and accepted in range mode. */
 export interface CalendarRange {
   start: Date | null

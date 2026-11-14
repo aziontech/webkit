@@ -102,6 +102,35 @@ describe('CopyButton', () => {
     })
   })
 
+  describe('live announcement', () => {
+    it('announces the copied label in a status region after a copy', async () => {
+      stubClipboardResolved()
+      const { getByRole, getByTestId } = render(CopyButton, {
+        props: { value: 'secret-value', copiedLabel: 'Copied' }
+      })
+      const status = getByTestId('actions-copy-button__status')
+      expect(status.getAttribute('role')).toBe('status')
+      expect(status.textContent?.trim()).toBe('')
+
+      await fireEvent.click(getByRole('button', { name: 'Copy' }))
+
+      await waitFor(() => expect(status.textContent?.trim()).toBe('Copied'))
+    })
+  })
+
+  describe('attribute forwarding', () => {
+    it('lands consumer class, id and aria-describedby on the root', () => {
+      const { getByTestId } = render(CopyButton, {
+        props: { value: 'token' },
+        attrs: { class: 'ms-auto', id: 'copy-token', 'aria-describedby': 'token-hint' }
+      })
+      const root = getByTestId('actions-copy-button')
+      expect(root.id).toBe('copy-token')
+      expect(root.classList.contains('ms-auto')).toBe(true)
+      expect(root.getAttribute('aria-describedby')).toBe('token-hint')
+    })
+  })
+
   describe('disabled', () => {
     it('renders a natively disabled button and does not emit copy on click', async () => {
       const writeText = stubClipboardResolved()
@@ -199,17 +228,17 @@ describe('CopyButton', () => {
     })
   })
 
-  describe('variant smoke (kind/size forwarded to IconButton)', () => {
+  describe('kind and size forwarded to IconButton', () => {
     const kinds = ['primary', 'secondary', 'outlined', 'transparent', 'danger'] as const
     it.each(kinds)('renders an accessible button for kind=%s', (kind) => {
       const { getByRole } = render(CopyButton, { props: { value: 'token', kind } })
-      expect(getByRole('button', { name: 'Copy' }).tagName).toBe('BUTTON')
+      expect(getByRole('button', { name: 'Copy' }).getAttribute('data-kind')).toBe(kind)
     })
 
     const sizes = ['small', 'medium', 'large'] as const
     it.each(sizes)('renders an accessible button for size=%s', (size) => {
       const { getByRole } = render(CopyButton, { props: { value: 'token', size } })
-      expect(getByRole('button', { name: 'Copy' }).tagName).toBe('BUTTON')
+      expect(getByRole('button', { name: 'Copy' }).getAttribute('data-size')).toBe(size)
     })
   })
 })

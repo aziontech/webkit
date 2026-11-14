@@ -76,6 +76,14 @@ describe('Textarea', () => {
         expect(getByTestId('input-textarea')).toHaveAttribute('data-resize', resizable)
       }
     )
+    it.each(['vertical', 'horizontal', 'both', 'none'] as const)(
+      'maps resize="%s" onto data-resize',
+      (resize) => {
+        const { getByTestId } = render(Textarea, { props: { resize } })
+
+        expect(getByTestId('input-textarea')).toHaveAttribute('data-resize', resize)
+      }
+    )
   })
 
   describe('v-model / update:modelValue', () => {

@@ -4,6 +4,7 @@ import { defineComponent, h, nextTick, ref } from 'vue'
 
 import Clickable from '../../../../examples/chip/clickable.vue'
 import Default from '../../../../examples/chip/default.vue'
+import Disabled from '../../../../examples/chip/disabled.vue'
 import Removable from '../../../../examples/chip/removable.vue'
 import Selectable from '../../../../examples/chip/selectable.vue'
 import Sizes from '../../../../examples/chip/sizes.vue'
@@ -503,5 +504,20 @@ describe('Chip', () => {
         await expectNoA11yViolations(container)
       }
     )
+  })
+})
+
+describe('Chip remove touch target', () => {
+  it.each(['small', 'medium'] as const)('extends the %s remove hit area', (size) => {
+    const { getByTestId } = render(Chip, { props: { label: 'region', removable: true, size } })
+    const target = getByTestId('input-chip__remove').querySelector('[data-slot="touch-target"]')
+    expect(target?.getAttribute('aria-hidden')).toBe('true')
+  })
+})
+
+describe('Chip Disabled example', () => {
+  it('renders a disabled remove button', () => {
+    const { getAllByTestId } = render(Disabled)
+    expect((getAllByTestId('input-chip__remove')[0] as HTMLButtonElement).disabled).toBe(true)
   })
 })

@@ -7,12 +7,12 @@
     <MiniButton
       size="medium"
       label="Learn more"
-      href="#"
+      href="https://example.com/docs"
     />
     <MiniButton
       size="large"
       label="Learn more"
-      href="#"
+      href="https://example.com/docs"
     />
   </div>
 </template>

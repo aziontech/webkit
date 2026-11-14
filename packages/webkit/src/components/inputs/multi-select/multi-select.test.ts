@@ -571,6 +571,13 @@ describe('keyboard map (spec)', () => {
     return { trigger, view }
   }
 
+  it('typing a character moves focus to the next option whose label starts with it', async () => {
+    await openWith('{Enter}')
+    expect(focusedText()).toBe('Option 1')
+    await userEvent.keyboard('o')
+    expect(focusedText()).toBe('Option 2')
+  })
+
   it.each(['{Enter}', ' ', '{ArrowDown}'])(
     '%s on the trigger opens the list and focuses the first option',
     async (key) => {

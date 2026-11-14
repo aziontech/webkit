@@ -2,7 +2,7 @@
 // Budgets live in ../../perf-budgets.json, in milliseconds, set at 3–5× the median measured on a
 // developer machine so CI stays stable. A component over budget fails here; fix the component
 // (window long lists, render collapsed children lazily), do not raise the number.
-import { cleanup, render } from '@testing-library/vue'
+import { cleanup, fireEvent, render } from '@testing-library/vue'
 import { afterEach, describe, expect, it } from 'vitest'
 import { server } from 'vitest/browser'
 import { type Component, defineComponent, h, nextTick, ref } from 'vue'
@@ -32,7 +32,9 @@ import DocMarkdown from '../components/documentation/doc-markdown/doc-markdown.v
 import UploadProgress, {
   type UploadProgressItem
 } from '../components/feedback/upload-progress/upload-progress.vue'
+import Combobox from '../components/inputs/combobox/combobox.vue'
 import MultiSelect from '../components/inputs/multi-select'
+import SchemaForm from '../components/inputs/schema-form/schema-form.vue'
 import Select from '../components/inputs/select'
 import DropdownMenu, {
   DropdownMenuGroup,
@@ -621,6 +623,54 @@ function listingBrowserCase(): Case {
   }
 }
 
+function comboboxCase(): Case {
+  const options = Array.from({ length: 1000 }, (_, i) => ({ value: `v${i}`, label: `Option ${i}` }))
+  return {
+    mount: () => ({
+      render: () => h(Combobox, { options, ariaLabel: 'Origin', allowCustom: false })
+    }),
+    update: async () => {
+      const input = document.querySelector<HTMLInputElement>('[role="combobox"]')!
+      await fireEvent.focus(input)
+      await settle()
+      await fireEvent.update(input, '1')
+    }
+  }
+}
+
+function schemaFormCase(): Case {
+  const properties: Record<string, unknown> = {}
+  for (let i = 0; i < 200; i++) {
+    properties[`field${i}`] =
+      i % 4 === 0
+        ? {
+            type: 'string',
+            title: `Field ${i}`,
+            enum: Array.from({ length: 50 }, (_, j) => `v${j}`)
+          }
+        : i % 4 === 1
+          ? { type: 'integer', title: `Field ${i}`, minimum: 0, maximum: 1000 }
+          : i % 4 === 2
+            ? { type: 'boolean', title: `Field ${i}` }
+            : { type: 'string', title: `Field ${i}`, maxLength: 80 }
+  }
+  const schema = { type: 'object', properties }
+  const value = ref<Record<string, unknown>>({})
+  return {
+    mount: () => ({
+      render: () =>
+        h(SchemaForm, {
+          schema,
+          modelValue: value.value,
+          'onUpdate:modelValue': (next: Record<string, unknown>) => (value.value = next)
+        })
+    }),
+    update: () => {
+      value.value = { ...value.value, field3: 'acme' }
+    }
+  }
+}
+
 describe('runtime budgets (perf-budgets.json)', () => {
   afterEach(() => cleanup())
 
@@ -689,5 +739,17 @@ describe('runtime budgets (perf-budgets.json)', () => {
   })
   it('ListingBrowser with 1k rows: mount and search', async () => {
     check('listing-browser-1k', await measure(listingBrowserCase))
+  })
+  it('Select with 1k options and a preselected value: mount names it by label', async () => {
+    check('select-1k-preselected', await measure(() => selectCase(false, true)))
+  })
+  it('MultiSelect with 1k options and 10 preselected values: mount names them by label', async () => {
+    check('multi-select-1k-preselected', await measure(() => selectCase(true, true)))
+  })
+  it('Combobox with 1k options: open and type', async () => {
+    check('combobox-1k', await measure(comboboxCase))
+  })
+  it('SchemaForm with 200 fields: mount and edit one value', async () => {
+    check('schema-form-200-fields', await measure(schemaFormCase))
   })
 })

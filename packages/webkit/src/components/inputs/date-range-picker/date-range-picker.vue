@@ -11,6 +11,7 @@
     watch
   } from 'vue'
 
+  import { useFieldControl } from '../../../composables/use-field-control'
   import { useFocusTrap } from '../../../composables/use-focus-trap'
   import {
     useLocaleContext,
@@ -108,6 +109,8 @@
   const timeZone = defineModel<string>('timeZone', { default: '' })
 
   const attrs = useAttrs()
+  const field = useFieldControl({ disabled: () => props.disabled })
+  const isDisabled = computed(() => field.disabled.value)
   const { t, locale } = useTranslate({ dateRangePicker: en.dateRangePicker, calendar: en.calendar })
   const { context: localeContext } = useLocaleContext()
 
@@ -212,7 +215,7 @@
   }
 
   const setOpen = (open: boolean): void => {
-    if (open && props.disabled) return
+    if (open && isDisabled.value) return
     if (open) resetDraft()
     isOpen.value = open
   }
@@ -283,7 +286,7 @@
   }
 
   const step = (direction: -1 | 1): void => {
-    if (props.disabled) return
+    if (isDisabled.value) return
     const next = stepDateRange(model.value, direction, clock())
     if (next) model.value = next
   }
@@ -292,7 +295,7 @@
 
   const canStepBack = computed<boolean>(() => {
     const range = resolvedNow.value
-    if (!range || props.disabled) return false
+    if (!range || isDisabled.value) return false
     if (!props.min) return true
     const span = range.end.getTime() - range.start.getTime()
     return range.start.getTime() - span >= props.min.getTime()
@@ -300,7 +303,7 @@
 
   const canStepForward = computed<boolean>(() => {
     const range = resolvedNow.value
-    if (!range || props.disabled || model.value?.type === 'relative') return false
+    if (!range || isDisabled.value || model.value?.type === 'relative') return false
     const span = range.end.getTime() - range.start.getTime()
     const limit = props.max ?? clock()
     return range.end.getTime() + span <= limit.getTime()
@@ -346,7 +349,7 @@
     testId: testId.value,
     mode: computed(() => 'range' as const),
     size: computed(() => props.size),
-    disabled: computed(() => props.disabled),
+    disabled: isDisabled,
     min: minWall,
     max: maxWall,
     showTime: computed(() => true),
@@ -405,7 +408,7 @@
   }
 
   watch(
-    () => props.disabled,
+    () => isDisabled.value,
     (disabled) => {
       if (disabled) setOpen(false)
     }
@@ -428,12 +431,12 @@
     :data-testid="testId"
     :data-state="isOpen ? 'open' : 'closed'"
     :data-size="size"
-    :data-disabled="disabled || null"
+    :data-disabled="isDisabled || null"
     class="inline-flex max-w-full"
   >
     <span
       ref="triggerRef"
-      :data-disabled="disabled || null"
+      :data-disabled="isDisabled || null"
       class="inline-flex max-w-full items-stretch overflow-hidden rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface) transition-colors duration-150 ease-out [&:not(:focus-within):not([data-disabled])]:hover:border-(--border-strong) data-[disabled]:cursor-not-allowed data-[disabled]:bg-(--bg-disabled) data-[disabled]:text-(--text-disabled) motion-reduce:transition-none"
     >
       <button
@@ -454,11 +457,18 @@
       <button
         type="button"
         data-part="trigger"
-        :disabled="disabled"
+        :disabled="isDisabled"
         :data-size="size"
         :data-empty="!triggerText || null"
         :data-testid="`${testId}__trigger`"
-        :aria-label="`${ariaLabel || t('dateRangePicker.label')}: ${triggerText || placeholder || t('dateRangePicker.placeholder')}`"
+        :id="field.controlId.value"
+        :aria-label="
+          ariaLabel || !field.field
+            ? `${ariaLabel || t('dateRangePicker.label')}: ${triggerText || placeholder || t('dateRangePicker.placeholder')}`
+            : undefined
+        "
+        :aria-describedby="field.describedBy.value"
+        :aria-invalid="field.invalid.value || undefined"
         aria-haspopup="dialog"
         :aria-expanded="isOpen"
         class="text-label-sm inline-flex min-w-0 flex-1 items-center gap-(--spacing-xs) px-(--spacing-sm) text-(--text-default) transition-colors duration-150 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset disabled:cursor-not-allowed disabled:text-(--text-disabled) data-[size=small]:h-7 data-[size=medium]:h-8 data-[size=large]:h-10 data-[empty]:text-(--text-muted) motion-reduce:transition-none"

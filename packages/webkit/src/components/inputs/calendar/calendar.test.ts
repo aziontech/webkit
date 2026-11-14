@@ -8,7 +8,10 @@ import Single from '../../../../examples/calendar/single.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import { LOCALES } from '../../../test/locales'
 import WebkitProvider from '../../utils/webkit-provider/webkit-provider.vue'
-import Calendar from './calendar.vue'
+import Field from '../field/field.vue'
+import FieldDescription from '../field/field-description/field-description.vue'
+import FieldLabel from '../field/field-label/field-label.vue'
+import Calendar from './index'
 
 // A fixed anchor keeps every assertion deterministic — the visible month is
 // seeded from the committed value when the popover opens, so October 2026 is
@@ -979,5 +982,127 @@ describe('Calendar (defineModel)', () => {
     value.value = new Date(2026, 9, 3)
     await nextTick()
     expect(getByTestId('input-calendar__trigger').textContent).not.toBe(before)
+  })
+})
+
+describe('Calendar time zone model', () => {
+  const pickZone = async (zone: string) => {
+    const select = document.body.querySelector<HTMLSelectElement>(
+      '[data-testid="input-calendar__timezone"] select'
+    )!
+    await waitFor(() => expect(select.querySelector(`option[value="${zone}"]`)).toBeTruthy())
+    await fireEvent.update(select, zone)
+  }
+
+  it('emits update:timeZone and the deprecated update:timezone when a zone is picked', async () => {
+    const { getByTestId, emitted } = render(Calendar, {
+      props: {
+        modelValue: OCT_8,
+        mode: 'single',
+        showTimeZone: true,
+        timeZones: ['UTC', 'Asia/Tokyo']
+      }
+    })
+    await openCalendar(getByTestId)
+    await pickZone('Asia/Tokyo')
+    expect(emitted('update:timeZone')?.at(-1)).toEqual(['Asia/Tokyo'])
+    expect(emitted('update:timezone')?.at(-1)).toEqual(['Asia/Tokyo'])
+  })
+
+  it('keeps the deprecated timezone, timezones and showTimezone names working', async () => {
+    const { getByTestId, emitted } = render(Calendar, {
+      props: {
+        modelValue: OCT_8,
+        mode: 'single',
+        showTimezone: true,
+        timezones: ['UTC', 'Europe/Lisbon'],
+        timezone: 'UTC'
+      }
+    })
+    await openCalendar(getByTestId)
+    await pickZone('Europe/Lisbon')
+    expect(emitted('update:timezone')?.at(-1)).toEqual(['Europe/Lisbon'])
+  })
+
+  it('keeps its own zone when no time zone model is bound', async () => {
+    const { getByTestId } = render(Calendar, {
+      props: {
+        modelValue: OCT_8,
+        mode: 'single',
+        showTimeZone: true,
+        timeZones: ['UTC', 'Asia/Tokyo']
+      }
+    })
+    await openCalendar(getByTestId)
+    await pickZone('Asia/Tokyo')
+    const select = document.body.querySelector<HTMLSelectElement>(
+      '[data-testid="input-calendar__timezone"] select'
+    )!
+    await waitFor(() => expect(select.value).toBe('Asia/Tokyo'))
+  })
+})
+
+describe('Calendar in a Field', () => {
+  it('takes the Field label, description, invalid and disabled state on its trigger', async () => {
+    const { getByRole, getByTestId } = render({
+      components: { Field, FieldLabel, FieldDescription, Calendar },
+      template:
+        '<Field invalid disabled><FieldLabel>Billing period</FieldLabel><Calendar /><FieldDescription>UTC dates.</FieldDescription></Field>'
+    })
+    const trigger = getByTestId('input-calendar__trigger') as HTMLButtonElement
+    expect(getByRole('button', { name: 'Billing period' })).toBe(trigger)
+    expect(trigger.getAttribute('aria-invalid')).toBe('true')
+    expect(trigger.disabled).toBe(true)
+    await waitFor(() =>
+      expect(
+        document.getElementById(trigger.getAttribute('aria-describedby') ?? '')?.textContent
+      ).toContain('UTC dates.')
+    )
+  })
+
+  it('names the trigger with ariaLabel and the current value', () => {
+    const { getByTestId } = render(Calendar, {
+      props: { mode: 'single', modelValue: null, ariaLabel: 'Start date' }
+    })
+    expect(getByTestId('input-calendar__trigger').getAttribute('aria-label')).toMatch(
+      /^Start date: /
+    )
+  })
+
+  it('lays the fields beside the grid with orientation="horizontal"', async () => {
+    const { getByTestId } = render(Calendar, { props: { orientation: 'horizontal' } })
+    const popover = await openCalendar(getByTestId)
+    expect(popover.querySelector('[data-horizontal]')).toBeTruthy()
+  })
+})
+
+describe('Calendar composition', () => {
+  const OCT_1_7 = { start: new Date(2026, 9, 1), end: new Date(2026, 9, 7) }
+
+  it('applies a Calendar.Preset from the presets rail and clears it with Calendar.Clear', async () => {
+    const view = render({
+      components: { Calendar, CalendarPreset: Calendar.Preset, CalendarClear: Calendar.Clear },
+      template: `<Calendar v-model="value" :show-apply="false">
+        <template #presets><CalendarPreset :value="week">First week</CalendarPreset></template>
+        <template #footer><CalendarClear>Clear</CalendarClear></template>
+      </Calendar>`,
+      setup: () => ({ value: ref(null), week: OCT_1_7 })
+    })
+
+    await fireEvent.click(view.getByTestId('input-calendar__presets-trigger'))
+    const menu = await waitFor(() => {
+      const el = getPresetsMenu()
+      expect(el).toBeTruthy()
+      return el as HTMLElement
+    })
+    const preset = within(menu).getByTestId('input-calendar__preset')
+    await fireEvent.click(preset)
+    await waitFor(() => expect(preset.hasAttribute('data-selected')).toBe(true))
+
+    const popover = await openCalendar(view.getByTestId)
+    const clear = within(popover).getByTestId('input-calendar__clear') as HTMLButtonElement
+    expect(clear.disabled).toBe(false)
+    await fireEvent.click(clear)
+    await waitFor(() => expect(clear.disabled).toBe(true))
   })
 })

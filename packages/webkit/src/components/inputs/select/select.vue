@@ -1,5 +1,5 @@
 <script setup lang="ts" generic="TValue extends SelectValue = SelectValue">
-  import { computed, provide, type Ref, ref, useAttrs, useId, watch } from 'vue'
+  import { computed, provide, type Ref, ref, shallowReactive, useAttrs, useId, watch } from 'vue'
 
   import { useFieldControl } from '../../../composables/use-field-control'
   import { fieldContextKey } from '../field/injection-key'
@@ -17,7 +17,7 @@
 
   const props = withDefaults(
     defineProps<{
-      /** When true, switches the component to multi-select. */
+      /** @deprecated since 6.0 — use MultiSelect for several values. Removed in 7.0. */
       multiple?: boolean
       /** Initial open state when uncontrolled. */
       defaultOpen?: boolean
@@ -41,7 +41,7 @@
     {
       multiple: false,
       defaultOpen: false,
-      placeholder: undefined,
+      placeholder: '',
       size: 'medium',
       kind: 'outlined',
       disabled: false,
@@ -78,7 +78,7 @@
 
   provide(fieldContextKey, null)
 
-  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'select')
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'input-select')
 
   const rootAttrs = computed(() => {
     const { 'aria-label': _label, 'aria-labelledby': _labelledby, ...rest } = attrs
@@ -130,12 +130,25 @@
     return current !== undefined && current !== '' && current !== null
   })
 
+  const labels = shallowReactive(new Map<unknown, string>())
+  const registerLabel = (value: unknown, label: string) => {
+    if (label && labels.get(value) !== label) labels.set(value, label)
+  }
+  const selectedValues = (): unknown[] => {
+    const current = model.value
+    if (Array.isArray(current)) return current
+    return current === undefined || current === null || current === '' ? [] : [current]
+  }
+  const labelsPending = computed(
+    () => !props.displayValue && selectedValues().some((value) => !labels.has(value))
+  )
+
   const displayValueComputed = computed((): string => {
     const current = model.value
     if (props.displayValue) return props.displayValue(current as TValue)
-    if (Array.isArray(current)) return current.length === 0 ? '' : current.join(', ')
-    if (current === undefined || current === null) return ''
-    return String(current)
+    return selectedValues()
+      .map((value) => labels.get(value) ?? String(value))
+      .join(', ')
   })
 
   provide(selectContextKey, {
@@ -159,7 +172,9 @@
     ariaLabelledby: computed(() => attrs['aria-labelledby'] as string | undefined),
     placeholder: computed(() => props.placeholder),
     displayValue: displayValueComputed,
-    filled
+    filled,
+    registerLabel,
+    labelsPending
   })
 </script>
 

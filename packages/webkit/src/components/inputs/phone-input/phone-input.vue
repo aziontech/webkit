@@ -249,7 +249,7 @@
             :data-testid="`${testId}__search`"
             @keydown="onSearchKeydown"
           >
-            <template #iconLeft>
+            <template #prefix>
               <i class="pi pi-search" />
             </template>
           </Input>

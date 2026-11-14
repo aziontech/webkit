@@ -66,6 +66,13 @@ describe('FileDropzone', () => {
       expect(glyph?.className).toContain('pi-upload')
       expect(glyph?.getAttribute('aria-hidden')).toBe('true')
     })
+
+    it('draws the cloud-upload glyph when icon is left empty', () => {
+      const { getByTestId } = render(FileDropzone)
+      expect(getByTestId(TEST_ID).querySelector('i')?.classList.contains('pi-cloud-upload')).toBe(
+        true
+      )
+    })
   })
 
   describe('data attributes', () => {

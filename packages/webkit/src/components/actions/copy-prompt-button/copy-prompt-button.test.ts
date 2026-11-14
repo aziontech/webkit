@@ -106,6 +106,18 @@ describe('CopyPromptButton', () => {
     expect(queryByTestId('actions-copy-prompt-button__frame')).toBeNull()
   })
 
+  it('emits update:open on dismiss and stays hidden or shown from v-model:open', async () => {
+    const user = userEvent.setup()
+    const view = render(CopyPromptButton, { props: { value: PROMPT, closable: true } })
+    await user.click(await view.findByRole('button', { name: 'Dismiss' }))
+    expect(view.emitted('update:open')?.[0]).toEqual([false])
+    view.unmount()
+    const hidden = render(CopyPromptButton, { props: { value: PROMPT, open: false } })
+    expect(hidden.queryByTestId('actions-copy-prompt-button')).toBeNull()
+    await hidden.rerender({ value: PROMPT, open: true })
+    expect(hidden.getByTestId('actions-copy-prompt-button')).toBeTruthy()
+  })
+
   it('copies the value, emits copy, shows and announces Copied, then resets', async () => {
     vi.useFakeTimers({ shouldAdvanceTime: true })
     const spy = mockClipboard()

@@ -3,10 +3,11 @@ name: icon-button
 category: actions
 structure: monolithic
 status: implemented
-spec_version: 1
-checksum: 47b60e3b709cd4efb67edccfcfca95064e5d11cf26e3b46464cc64d695089609
+spec_version: 2
+template: 2
+checksum: 674d631637437c93f3e2469f93199cecf55ae9f3237f9b22590ba6c433acdeb4
 created: 2026-05-22
-last_updated: 2026-11-12
+last_updated: 2026-11-14
 ---
 
 # Icon Button — Component Spec
@@ -84,6 +85,7 @@ Interactive control for user actions. Lives at `packages/webkit/src/components/a
 | `target`         | `'_blank' \| '_self'`                                                 | `'_self'`   | false    | Link target when `href` is set.                                                                                                                                     |
 | `iconTransition` | `boolean`                                                             | `false`     | false    | Animates icon swaps with enter/leave transitions.                                                                                                                   |
 | `iconClass`      | `string`                                                              | `''`        | false    | Extra classes applied to the icon glyph.                                                                                                                            |
+| `type`           | `'button' \| 'submit' \| 'reset'`                                     | `'button'`  | false    | Native button type. `submit` lets an icon-only control submit its form (a search submit, a chat send); `disabled` and `loading` still block it. Ignored when `href` is set. |
 
 ## Events
 
@@ -98,7 +100,9 @@ Interactive control for user actions. Lives at `packages/webkit/src/components/a
 ## States
 
 - Visual states: `default`, `hover`, `focus-visible`, `active`, `disabled`
-- `data-disabled` mirrors the `disabled` prop
+- `data-disabled` mirrors the `disabled` prop; `data-loading` the `loading` prop; `data-inactive` is set while disabled or loading
+- `data-kind` mirrors `kind` and `data-size` mirrors `size` on the root; the variant utilities switch on them (no class presets)
+- `IconButtonType` is exported beside `IconButtonKind`, `IconButtonSize` and `IconButtonTarget`
 - Touch: the drawn size is unchanged (28/32/40 px); on a coarse pointer an invisible `[data-slot=touch-target]` span extends the hit area to at least 44 × 44 px.
 
 ## Motion & Animations
@@ -106,7 +110,7 @@ Interactive control for user actions. Lives at `packages/webkit/src/components/a
 | Trigger                           | Animation / Transition                                                                                                                            | Token                                        | Reduced-motion fallback                |
 | --------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------- | -------------------------------------- |
 | hover / active (state layer fade) | `before:transition-opacity before:duration-fast-02 before:ease-productive-entrance`                                                               | `@aziontech/theme` semantic duration + curve | `motion-reduce:before:transition-none` |
-| icon swap (enter / leave)         | `transition-[transform,opacity] duration-moderate-01` / `transition-opacity duration-fast-02 ease-productive-exit` (`presets/icon-transition.js`) | `@aziontech/theme` semantic duration + curve | `motion-reduce:transition-none`        |
+| icon swap (enter / leave)         | `transition-[scale,opacity] duration-moderate-01` / `transition-opacity duration-fast-02 ease-productive-exit` (inline on the `Transition`) | `@aziontech/theme` semantic duration + curve | `motion-reduce:transition-none`        |
 
 ## Tokens
 
@@ -131,7 +135,7 @@ Interactive control for user actions. Lives at `packages/webkit/src/components/a
 - Keyboard map: `Tab` focuses; `Enter`/`Space` activates; `Escape` closes overlays where applicable.
 - ARIA: root uses appropriate roles (`button`, `dialog`, `status`, etc.) per sub-component.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state.
-- `motion-reduce:transition-none motion-reduce:transform-none` on animated states.
+- `motion-reduce:transition-none` on animated states; the icon swap also starts from `scale-100` under reduced motion.
 - Accessible name: `aria-label` (static or bound) or `aria-labelledby` is mandatory; `webkit/accessible-name` flags an IconButton with neither, and an empty name renders no `aria-label` attribute.
 - Touch target ≥40×40 px where the control is interactive.
 
@@ -141,6 +145,20 @@ Interactive control for user actions. Lives at `packages/webkit/src/components/a
 - Icons: a directional glyph passed to `icon` (chevrons, angles, arrows, carets, `sign-in`/`sign-out`, `reply`, `undo`: the list in `utils/directional-icons.ts`) gets `rtl:-scale-x-100`; external-link arrows, media and brand glyphs do not mirror.
 - Keyboard: no horizontal arrow-key logic.
 - User data: none.
+
+## Internationalization
+
+- No built-in strings: the accessible name comes from the consumer (`aria-label`).
+
+## Responsive
+
+- The drawn size is fixed by `size` (28 / 32 / 40 px); on a coarse pointer the touch-target span grows the hit area to 44 px.
+- No hover-only affordance: the accessible name is the label, and a tooltip, when used, opens on focus too.
+
+## Performance
+
+- Bundle budget: see `.size-limit.json` entry `icon-button`.
+- Runtime: one element, no observers; the icon swap uses Vue `Transition` only when `iconTransition` is set.
 
 ## Examples
 

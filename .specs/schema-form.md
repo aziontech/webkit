@@ -3,9 +3,9 @@ name: schema-form
 category: inputs
 structure: monolithic
 status: implemented
-spec_version: 2
+spec_version: 3
 template: 2
-checksum: 28922f79d913c1afb789aa461260fc4f1c54927b48cb0c43159a21c160702eec
+checksum: b14423c4ec4f14fa13c6427b99ee975bdf5afbc21d7e6536aa07ece737808806
 created: 2026-11-11
 last_updated: 2026-11-14
 ---
@@ -269,7 +269,7 @@ The form has no motion of its own; the composed controls bring theirs (the `Sele
 ## Performance
 
 - Bundle budget: see `.size-limit.json` (`schema-form`); it pulls in `Field`, `Input`, `Select`, `Switch`, `Textarea`, `PasswordInput`, `Combobox`, `MultiSelect`, `AttributeEditor` and `Accordion`.
-- Runtime budget: a 50-property schema renders and validates in under 50 ms; validation is a plain walk, no schema compiler (no ajv). `when` predicates run on every change, so they must be cheap.
+- Runtime budget: `schema-form-200-fields` in `perf-budgets.json` (mount a 200-property schema mixing enums of 50 values, numbers, booleans and text, then set one value from the parent); a 50-property schema renders and validates in under 50 ms; validation is a plain walk, no schema compiler (no ajv). `when` predicates run on every change, so they must be cheap.
 - Network: none of its own; a loader runs once when its field appears and once per search pause (250 ms).
 - Heavy parts: none.
 
