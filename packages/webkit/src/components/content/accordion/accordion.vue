@@ -1,8 +1,6 @@
 <script setup lang="ts">
-  import { computed, onBeforeUnmount, provide, shallowRef, useAttrs, useId } from 'vue'
+  import { computed, onBeforeUnmount, provide, useAttrs, useId } from 'vue'
 
-  import { useControllable } from '../../../composables/use-controllable'
-  import { cn } from '../../../utils/cn'
   import {
     type AccordionArrowPosition,
     AccordionInjectionKey,
@@ -51,13 +49,13 @@
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'content-accordion')
 
-  const openValue = useControllable<AccordionValue>({
-    prop: computed(() => model.value),
-    defaultProp: props.defaultValue,
-    onChange: (next) => {
-      model.value = next
-    }
-  })
+  const openValue = computed<AccordionValue>(() =>
+    model.value === undefined ? props.defaultValue : model.value
+  )
+
+  const setOpen = (next: AccordionValue) => {
+    model.value = next
+  }
 
   const isOpen = (value: string): boolean => {
     const current = openValue.value
@@ -71,29 +69,35 @@
       const index = current.indexOf(value)
       if (index === -1) current.push(value)
       else current.splice(index, 1)
-      openValue.set(current)
+      setOpen(current)
       return
     }
 
     if (openValue.value === value) {
-      if (props.collapsible) openValue.set(null)
+      if (props.collapsible) setOpen(null)
       return
     }
-    openValue.set(value)
+    setOpen(value)
   }
 
-  const items = shallowRef<AccordionItemRegistration[]>([])
+  const items = new Map<string, AccordionItemRegistration>()
 
   const register = (registration: AccordionItemRegistration) => {
-    const existing = items.value.filter((item) => item.value !== registration.value)
-    items.value = [...existing, registration]
+    items.set(registration.value, registration)
   }
 
   const unregister = (value: string) => {
-    items.value = items.value.filter((item) => item.value !== value)
+    items.delete(value)
   }
 
-  const getEnabled = () => items.value.filter((item) => !item.disabled)
+  const domOrder = (a: AccordionItemRegistration, b: AccordionItemRegistration) => {
+    const first = a.el.value
+    const second = b.el.value
+    if (!first || !second) return 0
+    return first.compareDocumentPosition(second) & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1
+  }
+
+  const getEnabled = () => [...items.values()].filter((item) => !item.disabled).sort(domOrder)
 
   const focusTrigger = (item: AccordionItemRegistration | undefined) => {
     const trigger = item?.el.value?.querySelector<globalThis.HTMLButtonElement>('button')
@@ -135,7 +139,7 @@
   })
 
   onBeforeUnmount(() => {
-    items.value = []
+    items.clear()
   })
 </script>
 
@@ -147,7 +151,7 @@
     :data-type="type"
     :data-size="size"
     :data-arrow="arrowPosition"
-    :class="cn('flex w-full flex-col', attrs.class as string | undefined)"
+    class="flex w-full flex-col"
   >
     <slot />
   </div>

@@ -78,7 +78,7 @@
   {
     "name": "accordion-root",
     "path": "src/components/content/accordion/accordion.vue",
-    "limit": "13 KB"
+    "limit": "1.5 KB"
   },
   {
     "name": "calendar-root",
@@ -1540,12 +1540,12 @@
   {
     "name": "accordion",
     "path": "src/components/content/accordion/index.ts",
-    "limit": "14.3 KB"
+    "limit": "3.25 KB"
   },
   {
     "name": "accordion-item",
     "path": "src/components/content/accordion/accordion-item/accordion-item.vue",
-    "limit": "11.9 KB"
+    "limit": "0.9 KB"
   },
   {
     "name": "accordion-trigger",
