@@ -3,11 +3,11 @@ name: dropdown-menu
 category: navigation
 structure: composition
 status: implemented
-spec_version: 4
+spec_version: 5
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3775-16746&m=dev
   node_id: 3775:16746
-checksum: 73dc3a1dd0279625ed600bf402880269c94359989b4d883bf32e29ce6715aced
+checksum: 6fa766c3929b3c82c007bd09b1946a8c04b30373ea8511518606462944362fe6
 created: 2026-06-26
 last_updated: 2026-11-14
 ---
@@ -132,17 +132,18 @@ Tree-shaking alternative — the same sub-components as standalone imports:
 
 ## Props
 
-| Prop        | Type                                                                   | Default          | Required | JSDoc                                                                                                                       |
-| ----------- | ---------------------------------------------------------------------- | ---------------- | -------- | --------------------------------------------------------------------------------------------------------------------------- |
-| `placement` | `'auto' \| 'bottom-start' \| 'bottom-end' \| 'top-start' \| 'top-end'` | `'bottom-start'` | false    | Where the panel opens relative to the trigger. `'auto'` picks the best-fitting corner at open time based on viewport space. |
-| `offset`    | `number`                                                               | `4`              | false    | Pixel gap between the trigger and the panel.                                                                                |
-| `disabled`  | `boolean`                                                              | `false`          | false    | Prevents the trigger from opening the panel and applies disabled tokens.                                                    |
+| Prop          | Type                                                                   | Default          | Required | JSDoc                                                                                                                       |
+| ------------- | ---------------------------------------------------------------------- | ---------------- | -------- | --------------------------------------------------------------------------------------------------------------------------- |
+| `placement`   | `'auto' \| 'bottom-start' \| 'bottom-end' \| 'top-start' \| 'top-end'` | `'bottom-start'` | false    | Where the panel opens relative to the trigger. `'auto'` picks the best-fitting corner at open time based on viewport space. |
+| `offset`      | `number`                                                               | `4`              | false    | Pixel gap between the trigger and the panel.                                                                                |
+| `disabled`    | `boolean`                                                              | `false`          | false    | Prevents the trigger from opening the panel and applies disabled tokens.                                                    |
+| `defaultOpen` | `boolean`                                                              | `false`          | false    | Initial open state when uncontrolled (`v-model:open` unbound).                                                              |
 
 ## v-model
 
-| Model          | Type      | Default     | Emits         | Notes                                                                                                                                                                                                                                                                               |
-| -------------- | --------- | ----------- | ------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `v-model:open` | `boolean` | `undefined` | `update:open` | Open state via `defineModel('open')`, the only declaration of `open`, so `@update:open` is typed `(value: boolean) => void` and fires once per open/closed transition (trigger, option activation, `Esc`, outside click). While unbound the menu is uncontrolled and starts closed. |
+| Model          | Type      | Default     | Emits         | Notes                                                                                                                                                                                                                                                                                         |
+| -------------- | --------- | ----------- | ------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `v-model:open` | `boolean` | `undefined` | `update:open` | Open state via `defineModel('open')`, the only declaration of `open`, so `@update:open` is typed `(value: boolean) => void` and fires once per open/closed transition (trigger, option activation, `Esc`, outside click). While unbound the menu is uncontrolled and starts at `defaultOpen`. |
 
 ## Events
 

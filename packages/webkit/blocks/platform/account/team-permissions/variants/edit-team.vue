@@ -357,7 +357,7 @@
                               :allow-custom="false"
                               :invalid="!!errors.member"
                               placeholder="Search users of this account"
-                              empty-text="Everyone in this account is already a member."
+                              empty-title="Everyone in this account is already a member."
                               @update:model-value="errors.member = ''"
                             />
                           </div>

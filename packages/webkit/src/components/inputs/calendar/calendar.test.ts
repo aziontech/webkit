@@ -971,6 +971,20 @@ describe('Calendar slot presence', () => {
 })
 
 describe('Calendar (defineModel)', () => {
+  it('opens from defaultOpen while v-model:open is unbound', async () => {
+    const view = render(Calendar, { props: { defaultOpen: true } })
+    await waitFor(() => expect(getPopover()).toBeTruthy())
+    expect(view.getByTestId('input-calendar').getAttribute('data-state')).toBe('open')
+  })
+
+  it('marks the trigger invalid from its own prop', async () => {
+    const view = render(Calendar, { props: { invalid: true } })
+    expect(view.getByTestId('input-calendar__trigger').getAttribute('aria-invalid')).toBe('true')
+    expect(view.getByTestId('input-calendar').hasAttribute('data-invalid')).toBe(true)
+    await view.rerender({ invalid: false })
+    expect(view.getByTestId('input-calendar__trigger').hasAttribute('aria-invalid')).toBe(false)
+  })
+
   beforeEach(() => {
     document.body
       .querySelectorAll('[data-testid$="__popover"], [data-testid$="__presets-menu"]')

@@ -355,6 +355,11 @@ describe('ToggleGroup', () => {
       'Pro',
       'Legacy'
     ])
+    expect(
+      queryAllByTestId('actions-toggle-group__option').map((option) =>
+        option.hasAttribute('data-locked')
+      )
+    ).toEqual([false, true, false, true])
   })
 
   it('leaves the indicator transition to classes so reduced motion can turn it off', () => {

@@ -146,7 +146,7 @@
     >
       <Spinner
         v-if="loading"
-        :class="size === 'large' ? 'size-4' : 'size-3'"
+        class="size-3 group-data-[size=large]/highlight:size-4"
         :data-testid="loadingTestId"
       />
       <i
@@ -192,7 +192,7 @@
     >
       <Spinner
         v-if="loading"
-        :class="size === 'large' ? 'size-4' : 'size-3'"
+        class="size-3 group-data-[size=large]/highlight:size-4"
         :data-testid="loadingTestId"
       />
       <i

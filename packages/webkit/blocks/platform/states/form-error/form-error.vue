@@ -302,7 +302,7 @@
                                 v-model="form.protocolUsage"
                                 :value="option.value"
                                 name="protocolUsage"
-                                :input-id="`ev-protocolUsage-${option.value}`"
+                                :id="`ev-protocolUsage-${option.value}`"
                               />
                               <Field.Content>
                                 <Field.Title>{{ option.label }}</Field.Title>

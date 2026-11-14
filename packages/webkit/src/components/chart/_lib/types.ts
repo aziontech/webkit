@@ -1,8 +1,10 @@
+import type { Severity } from '../../../utils/severity'
+
 export type ChartLabel = string | number | Date
 
 export type ChartSlot = 1 | 2 | 3 | 4 | 5 | 6
 
-export type ChartStatus = 'success' | 'warning' | 'danger' | 'info'
+export type ChartStatus = Exclude<Severity, 'neutral'>
 
 export type ChartSeverity =
   'severity-critical' | 'severity-high' | 'severity-medium' | 'severity-low' | 'severity-info'

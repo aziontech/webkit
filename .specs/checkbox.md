@@ -3,8 +3,8 @@ name: checkbox
 category: inputs
 structure: monolithic
 status: implemented
-spec_version: 5
-checksum: d5c51df43921668e62177c9bf701fd461103d3e38fe33040cc5a5c71c91473b8
+spec_version: 6
+checksum: fd635b75300b4f8c2c6d87314a2fae1b46659ed7970fb5bed5fec11b57c40e39
 created: 2026-05-22
 last_updated: 2026-11-14
 ---
@@ -61,23 +61,24 @@ Binary selection control. Supports a single boolean (no `value`), a scalar paire
 
 ## Props
 
-| Prop            | Type      | Default     | Required | JSDoc                                                                                                                 |
-| --------------- | --------- | ----------- | -------- | --------------------------------------------------------------------------------------------------------------------- |
+| Prop            | Type      | Default     | Required | JSDoc                                                                                                                                                 |
+| --------------- | --------- | ----------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `value`         | `unknown` | `undefined` | false    | Identifier for this checkbox in a group: compared against a scalar model, or added to and removed from an array model. Unset, the model is a boolean. |
-| `binary`        | `boolean` | `false`     | false    | `@deprecated since 6.0 — leave value unset for a boolean model. Removed in 7.0.` Forces the boolean model even with a `value`. |
-| `indeterminate` | `boolean` | `false`     | false    | Renders the indeterminate visual (horizontal bar). Does not affect `modelValue`; the parent owns the tri-state logic. |
-| `disabled`      | `boolean` | `false`     | false    | Disables interaction and applies disabled tokens.                                                                     |
-| `readonly`      | `boolean` | `false`     | false    | Marks the field read-only; value is visible but cannot change via interaction.                                        |
-| `inputId`       | `string`  | `''`        | false    | `@deprecated since 6.0 — pass id (or let the enclosing Field set it). Removed in 7.0.` Wins over `id` while it is set. |
-| `name`          | `string`  | `''`        | false    | HTML name for form submission.                                                                                        |
-| `tabindex`      | `number`  | `0`         | false    | `@deprecated since 6.0 — pass the tabindex attribute; it falls through to the input. Removed in 7.0.` |
+| `binary`        | `boolean` | `false`     | false    | `@deprecated since 6.0 — leave value unset for a boolean model. Removed in 7.0.` Forces the boolean model even with a `value`.                        |
+| `indeterminate` | `boolean` | `false`     | false    | Renders the indeterminate visual (horizontal bar). Does not affect `modelValue`; the parent owns the tri-state logic.                                 |
+| `disabled`      | `boolean` | `false`     | false    | Disables interaction and applies disabled tokens.                                                                                                     |
+| `readonly`      | `boolean` | `false`     | false    | Marks the field read-only; value is visible but cannot change via interaction.                                                                        |
+| `invalid`       | `boolean` | `false`     | false    | Marks the control invalid: sets `aria-invalid` and the danger border (unchecked). An enclosing `Field`'s `invalid` sets it too.                       |
+| `inputId`       | `string`  | `''`        | false    | `@deprecated since 6.0 — pass id (or let the enclosing Field set it). Removed in 7.0.` Wins over `id` while it is set.                                |
+| `name`          | `string`  | `''`        | false    | HTML name for form submission.                                                                                                                        |
+| `tabindex`      | `number`  | `0`         | false    | `@deprecated since 6.0 — pass the tabindex attribute; it falls through to the input. Removed in 7.0.`                                                 |
 
 **Generic.** The component is generic over `TModel` (default `unknown`), the type of the bound `modelValue`: `v-model` on a `Ref<boolean>` (no `value`) or a `Ref<string[]>` (with `value`) sends `update:modelValue` as that same type, so a handler needs no narrowing. Bind the shape the mode emits: a boolean with no `value`, an array or a scalar with one.
 
 ## v-model
 
-| Model     | Type     | Default     | Emits               | Notes                                                                                                                                                                                                                                                |
-| --------- | -------- | ----------- | ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Model     | Type     | Default     | Emits               | Notes                                                                                                                                                                                                                                                                           |
+| --------- | -------- | ----------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `v-model` | `TModel` | `undefined` | `update:modelValue` | The bound value via `defineModel`: a boolean when `value` is unset (or `binary`); with `value`, an array (adds or removes `value`; an undefined model counts as an empty array) or a scalar (set to `value` when checked, to `null` when unchecked). Uncontrolled when unbound. |
 
 ## Events
@@ -98,6 +99,7 @@ The checkbox is a leaf primitive — no slots. Label/description live in the enc
 - `data-checked` mirrors `isChecked` (legacy; kept for backwards compatibility with existing `data-[checked]:` styling)
 - `data-indeterminate` mirrors the `indeterminate` prop
 - `data-disabled` mirrors the `disabled` prop
+- `data-invalid` mirrors `invalid` (own prop or the enclosing `Field`); with `aria-invalid` on the control, it paints the danger border while unchecked
 - `data-readonly` mirrors the `readonly` prop
 - Touch: the native input that receives the click extends past the 18 px box to 24 × 24 px, and to 44 × 44 px on a coarse pointer; the drawn box does not change.
 

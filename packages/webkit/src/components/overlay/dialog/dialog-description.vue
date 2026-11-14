@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed, inject, onBeforeUnmount, onMounted, useAttrs } from 'vue'
+  import { inject, onBeforeUnmount, onMounted, useAttrs } from 'vue'
 
   import { cn } from '../../../utils/cn'
   import { DialogInjectionKey } from './injection-key'
@@ -18,16 +18,12 @@
 
   onMounted(() => ctx?.registerDescription())
   onBeforeUnmount(() => ctx?.unregisterDescription())
-
-  const rootClasses = computed(() =>
-    cn('text-body-xs text-(--text-muted)', attrs.class as string | undefined)
-  )
 </script>
 
 <template>
   <p
     :id="ctx?.descriptionId"
-    :class="rootClasses"
+    :class="cn('text-body-xs text-(--text-muted)', attrs.class as string | undefined)"
     :data-testid="`${ctx?.testId}__description`"
   >
     <slot />

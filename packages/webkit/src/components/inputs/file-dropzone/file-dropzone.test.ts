@@ -1,8 +1,10 @@
 import { fireEvent, render, waitFor } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
+import { defineComponent, nextTick } from 'vue'
 
 import Folders from '../../../../examples/file-dropzone/folders.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
+import Field from '../field'
 import FileDropzone from './file-dropzone.vue'
 
 const TEST_ID = 'input-file-dropzone'
@@ -37,7 +39,39 @@ const recordDropEffect = (event: DragEvent): string[] => {
   return writes
 }
 
+const textOf = (ids: string | null): string =>
+  (ids ?? '')
+    .split(' ')
+    .map((id) => document.getElementById(id)?.textContent?.trim() ?? '')
+    .join(' ')
+
 describe('FileDropzone', () => {
+  describe('field', () => {
+    it('takes its name, description, invalid and disabled state from Field', async () => {
+      const Host = defineComponent({
+        components: { FileDropzone, Field, FieldTitle: Field.Title, FieldError: Field.Error },
+        emits: ['drop'],
+        template: `
+          <Field invalid disabled>
+            <FieldTitle>Site assets</FieldTitle>
+            <FileDropzone description="PNG only" @drop="(...args) => $emit('drop', ...args)" />
+            <FieldError>Add at least one file.</FieldError>
+          </Field>`
+      })
+      const view = render(Host)
+      await nextTick()
+      const group = view.getByRole('group', { name: /^Site assets/ })
+      expect(group.getAttribute('data-testid')).toBe(TEST_ID)
+      expect(group.getAttribute('aria-invalid')).toBe('true')
+      expect(group.getAttribute('aria-disabled')).toBe('true')
+      expect(textOf(group.getAttribute('aria-describedby'))).toBe('PNG only Add at least one file.')
+      group.dispatchEvent(fileDrag('drop'))
+      expect(view.emitted()['drop']).toBeUndefined()
+      await expectNoA11yViolations(view.container)
+      view.unmount()
+    })
+  })
+
   describe('render', () => {
     it('renders the fallback data-testid with the default title', () => {
       const { getByTestId, getByText } = render(FileDropzone)

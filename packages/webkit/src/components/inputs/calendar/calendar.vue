@@ -46,6 +46,10 @@
     max?: Date
     /** Disables the trigger, grid, and all controls, applying disabled tokens. */
     disabled?: boolean
+    /** Marks the trigger invalid: sets aria-invalid and the danger border. An enclosing Field's invalid sets it too. */
+    invalid?: boolean
+    /** Initial open state of the popover when uncontrolled (v-model:open unbound). */
+    defaultOpen?: boolean
     /** Trigger text shown when there is no selection. Empty uses the locale catalog (`Select a date range`). */
     placeholder?: string
     /** Data-driven shortcuts rendered in the presets rail; each is { label, value }. */
@@ -85,6 +89,8 @@
     min: undefined,
     max: undefined,
     disabled: false,
+    invalid: false,
+    defaultOpen: false,
     placeholder: '',
     presets: () => [],
     showFields: true,
@@ -110,7 +116,7 @@
   /** Committed selection for v-model. A Date (or null) in single mode; a range in range mode. Only updated on Apply (or immediately when showApply is false). */
   const model = defineModel<CalendarValue>({ default: null })
 
-  /** Controlled open state of the popover (v-model:open); omit for uncontrolled. */
+  /** Controlled open state of the popover (v-model:open); omit for uncontrolled, seeded by defaultOpen. */
   const openModel = defineModel<boolean>('open', { default: undefined as never })
 
   /** Selected IANA time zone for display formatting (v-model:time-zone). Empty resolves to the local zone. */
@@ -130,7 +136,10 @@
   const placeholderText = computed(() => props.placeholder || t('calendar.placeholder'))
   const slots = useSlots()
 
-  const field = useFieldControl({ disabled: () => props.disabled })
+  const field = useFieldControl({
+    invalid: () => props.invalid,
+    disabled: () => props.disabled
+  })
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'input-calendar')
 
@@ -145,7 +154,7 @@
   const presetsPanelRef = ref<globalThis.HTMLElement | null>(null)
 
   const internalPresetsOpen = ref(false)
-  const isOpen = computed(() => openModel.value ?? false)
+  const isOpen = computed(() => openModel.value ?? props.defaultOpen)
   const isOpenRef = computed(() => isOpen.value)
 
   const setOpen = (value: boolean) => {
@@ -474,6 +483,7 @@
     :data-state="isOpen ? 'open' : 'closed'"
     :data-size="size"
     :data-disabled="isDisabled || null"
+    :data-invalid="field.invalid.value || null"
     class="inline-flex max-w-full"
   >
     <span
@@ -490,8 +500,9 @@
           :data-size="size"
           :data-state="isOpen ? 'open' : 'closed'"
           :data-disabled="isDisabled || null"
+          :data-invalid="field.invalid.value || null"
           :data-two-part="isTwoPart() || null"
-          class="inline-flex w-(--container-3xs) max-w-full items-stretch overflow-hidden rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface) transition-colors duration-150 ease-out [&:not(:focus-within):not([data-disabled])]:hover:border-(--border-strong) data-[disabled]:cursor-not-allowed data-[disabled]:bg-(--bg-disabled) data-[disabled]:text-(--text-disabled) data-[two-part]:w-(--container-xs) motion-reduce:transition-none"
+          class="inline-flex w-(--container-3xs) max-w-full items-stretch overflow-hidden rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface) transition-colors duration-150 ease-out [&:not(:focus-within):not([data-disabled])]:hover:border-(--border-strong) data-[invalid]:border-(--danger-border) data-[disabled]:cursor-not-allowed data-[disabled]:bg-(--bg-disabled) data-[disabled]:text-(--text-disabled) data-[two-part]:w-(--container-xs) motion-reduce:transition-none"
         >
           <template v-if="isTwoPart()">
             <button

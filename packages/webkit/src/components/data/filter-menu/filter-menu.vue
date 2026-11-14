@@ -45,19 +45,28 @@
     size?: FilterMenuSize
     /** Disables the trigger: the menu does not open. */
     disabled?: boolean
+    /** Initial open state when uncontrolled (v-model:open unbound). */
+    defaultOpen?: boolean
   }
 
   const props = withDefaults(defineProps<Props>(), {
     fields: () => [],
     label: '',
     size: 'medium',
-    disabled: false
+    disabled: false,
+    defaultOpen: false
   })
 
   /** Applied values per field id; clearing a field deletes its key. */
   const model = defineModel<FilterMenuModel>({ default: () => ({}) })
-  /** Whether the menu is open. Supports v-model:open. */
-  const open = defineModel<boolean>('open', { default: false })
+  /** Whether the menu is open. Supports v-model:open; omit for uncontrolled, seeded by defaultOpen. */
+  const openModel = defineModel<boolean>('open', { default: undefined as never })
+  const open = computed<boolean>({
+    get: () => openModel.value ?? props.defaultOpen,
+    set: (next) => {
+      if (next !== open.value) openModel.value = next
+    }
+  })
 
   const Calendar = defineAsyncComponent(() => import('../../inputs/calendar/calendar.vue'))
 

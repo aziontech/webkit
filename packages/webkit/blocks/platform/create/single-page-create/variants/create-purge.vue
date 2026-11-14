@@ -240,7 +240,7 @@
                                 v-model="form.layer"
                                 :value="option.value"
                                 name="purge-layer"
-                                :input-id="'purge-layer-' + option.value"
+                                :id="'purge-layer-' + option.value"
                               />
                               <Field.Content>
                                 <Field.Title>
@@ -273,7 +273,7 @@
                                 v-model="form.type"
                                 :value="option.value"
                                 name="purge-type"
-                                :input-id="'purge-type-' + option.value"
+                                :id="'purge-type-' + option.value"
                               />
                               <Field.Content>
                                 <Field.Title>

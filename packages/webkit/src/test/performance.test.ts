@@ -900,7 +900,7 @@ function trackerCase(): Case {
   const statuses = ['success', 'success', 'warning', 'danger'] as const
   const items = Array.from({ length: 1000 }, (_, i) => ({
     id: `d${i}`,
-    status: statuses[i % statuses.length],
+    severity: statuses[i % statuses.length],
     label: `Day ${i}`
   }))
   const active = ref<number | null>(null)

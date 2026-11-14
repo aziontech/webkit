@@ -82,6 +82,7 @@
     "zod": "^4.6.7"
   },
   "peerDependencies": {
+    "@aziontech/icons": "^4.4.0",
     "@aziontech/theme": "^5.2.2",
     "eslint": ">=9",
     "monaco-editor": ">=0.50",
@@ -104,6 +105,7 @@
     }
   },
   "devDependencies": {
+    "@aziontech/icons": "workspace:^",
     "@aziontech/theme": "workspace:^",
     "@figma/code-connect": "^2.1.0",
     "@tailwindcss/vite": "^4.0.0",

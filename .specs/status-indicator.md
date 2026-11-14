@@ -3,8 +3,8 @@ name: status-indicator
 category: feedback
 structure: monolithic
 status: implemented
-spec_version: 3
-checksum: f8b4dfdd541a3eaaf8dbb54a1c6bd0dff309e3b829a12f1a586f203c8ac80fc5
+spec_version: 4
+checksum: 87778157f303f630a6cf466bf40c2466c8376f94a1e199ed54b9391f34273355
 created: 2026-05-22
 last_updated: 2026-11-14
 ---
@@ -58,11 +58,11 @@ Shows the settled or transitional state of one resource as a colored dot (or a s
 
 ## Props
 
-| Prop       | Type                                                                 | Default     | Required | JSDoc                                                         |
-| ---------- | -------------------------------------------------------------------- | ----------- | -------- | ------------------------------------------------------------- |
-| `severity` | `'success' \| 'info' \| 'neutral' \| 'warning' \| 'alt' \| 'danger'` | `'success'` | false    | Severity token driving the status dot color.                  |
-| `loading`  | `boolean`                                                            | `false`     | false    | Transitional state: a spinner replaces the dot and the label gains a trailing ellipsis (`…`), so pass the bare verb; a trailing `…` or `...` already in the label is not doubled. |
-| `label`    | `string`                                                             | `''`        | false    | Visible label text. Empty uses the locale catalog (`Status`). |
+| Prop       | Type                                                                                       | Default     | Required | JSDoc                                                                                                                                                                             |
+| ---------- | ------------------------------------------------------------------------------------------ | ----------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `severity` | `Severity \| 'alt'` (`'neutral' \| 'info' \| 'success' \| 'warning' \| 'danger' \| 'alt'`) | `'success'` | false    | Severity token driving the status dot color. `Severity` is the shared status scale, exported from this component (and from `badge` and `tag`).                                    |
+| `loading`  | `boolean`                                                                                  | `false`     | false    | Transitional state: a spinner replaces the dot and the label gains a trailing ellipsis (`…`), so pass the bare verb; a trailing `…` or `...` already in the label is not doubled. |
+| `label`    | `string`                                                                                   | `''`        | false    | Visible label text. Empty uses the locale catalog (`Status`).                                                                                                                     |
 
 ## Events
 

@@ -3,10 +3,12 @@
 
   import { useTranslate } from '../../../composables/use-locale/use-translate'
   import * as en from '../../../i18n/messages/en'
+  import type { Severity } from '../../../utils/severity'
   import Spinner from '../../utils/spinner/spinner.vue'
 
-  export type StatusIndicatorSeverity =
-    'success' | 'info' | 'neutral' | 'warning' | 'alt' | 'danger'
+  export type { Severity } from '../../../utils/severity'
+
+  export type StatusIndicatorSeverity = Severity | 'alt'
 
   defineOptions({
     name: 'StatusIndicator',

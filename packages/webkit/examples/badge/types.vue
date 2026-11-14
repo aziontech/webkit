@@ -26,7 +26,7 @@
     />
     <Badge
       label="99"
-      severity="default"
+      severity="neutral"
     />
   </div>
 </template>

@@ -3,12 +3,12 @@ name: toast
 category: feedback
 structure: composition
 status: implemented
-spec_version: 3
+spec_version: 4
 setup: "One-time app-level wiring before the first toast() call — service (recommended): import { ToastPlugin } from '@aziontech/webkit/toast' and chain .use(ToastPlugin) onto createApp() in the app entry; the plugin mounts the toast region automatically. Alternative: mount a Toaster component once near the app root. `webkit doctor` flags toast usage with no wired region."
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=478-938
   node_id: 478:938
-checksum: a9b413c4e63c41bfc5ba2ba6771fafac2b6f2d8e864f92c65808f6123e68a001
+checksum: 8233b6d4293a67c8e96c6a9f584fdff52f8d8837f1d654c865ab80e7e1e764a8
 created: 2026-06-23
 last_updated: 2026-11-14
 ---
@@ -91,6 +91,8 @@ app.use(ToastPlugin, { position: 'bottom-right' })
 ```
 
 The root is also reachable through the compound default export (`import Toast from '@aziontech/webkit/toast'` → `<Toast.Toaster>`, `<Toast.Item>`, …) for the per-part composition shown at the end of this section.
+
+**Public API.** Raise toasts with `toast()` (and its shortcuts) from anywhere, or with `useToast()` inside `setup` (it returns the same `toast`); mount the region once with `ToastPlugin` or one `<Toaster>`. That is the whole consumer surface. `toastStore` / `useToastStore` are the internal store the `Toaster` renders from: they stay exported for compatibility, but they are not part of the documented API, and `toast(message, { id })` (update in place) plus `toast.dismiss(id?)` cover every change a consumer needs.
 
 The imperative surface — `toast(message, options?)` returns the toast `id` (a string); the shortcuts share the same signature and the store auto-dismisses each entry after `duration` (per-toast `duration` overrides the Toaster default; `duration: 0` keeps it until dismissed):
 

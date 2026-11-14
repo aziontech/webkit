@@ -10,7 +10,7 @@
     v-model="selected"
     name="webkit-radio"
     value="a"
-    input-id="webkit-radio-a"
+    id="webkit-radio-a"
     aria-label="Option A"
   />
 </template>

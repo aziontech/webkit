@@ -3,9 +3,9 @@ name: date-range-picker
 category: inputs
 structure: monolithic
 status: implemented
-spec_version: 2
+spec_version: 3
 template: 2
-checksum: 2008ab03684d6b248f1fe9360465f1acb307b7dda13b03e28fff8488f2359679
+checksum: 23d50c80d3c5839c5119eddaba7ebbb2f4fb0b339543241fac143c75f10716d6
 created: 2026-11-11
 last_updated: 2026-11-14
 ---
@@ -79,6 +79,8 @@ A time range for queries over time: logs, events, traces and metrics. After the 
 | `placeholder`       | `string`                                          | `''`                          | false    | Trigger text with no range. Empty uses the locale catalog.                                                              |
 | `ariaLabel`         | `string`                                          | `''`                          | false    | Accessible name of the trigger. Empty uses the Field label inside a `Field`, else the locale catalog.                   |
 | `disabled`          | `boolean`                                         | `false`                       | false    | Disables the trigger and the step buttons.                                                                              |
+| `invalid`           | `boolean`                                         | `false`                       | false    | Marks the trigger invalid: sets `aria-invalid` and the danger border. An enclosing `Field`'s `invalid` sets it too.     |
+| `defaultOpen`       | `boolean`                                         | `false`                       | false    | Initial open state when uncontrolled (`v-model:open` unbound).                                                          |
 | `size`              | `'small' \| 'medium' \| 'large'`                  | `'medium'`                    | false    | Size token of the trigger and the panel controls.                                                                       |
 
 **Booleans that default to true.** `showTimeZone` defaults to `true`: an events toolbar always states the zone of its range. Inverting it would break every consumer, so it is recorded here as an exception to props.md's default-false rule.
@@ -87,10 +89,11 @@ Types (exported from the component): `DateRangeUnit = 'second' | 'minute' | 'hou
 
 ## v-model
 
-| Model              | Type                     | Default | Emits               | Notes                                                                                                                                                                                |
-| ------------------ | ------------------------ | ------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `v-model`          | `DateRangeValue \| null` | `null`  | `update:modelValue` | The committed range: relative (last N units, re-resolved against now) or absolute (ISO instants). Set on Apply with a valid draft, or by Previous / Next (always an absolute range). |
-| `v-model:timeZone` | `string`                 | `''`    | `update:timeZone`   | IANA time zone the absolute range is typed and shown in; empty uses the local zone. Set on Apply after the zone changed in the panel.                                                |
+| Model              | Type                     | Default     | Emits               | Notes                                                                                                                                                                                 |
+| ------------------ | ------------------------ | ----------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `v-model`          | `DateRangeValue \| null` | `null`      | `update:modelValue` | The committed range: relative (last N units, re-resolved against now) or absolute (ISO instants). Set on Apply with a valid draft, or by Previous / Next (always an absolute range).  |
+| `v-model:timeZone` | `string`                 | `''`        | `update:timeZone`   | IANA time zone the absolute range is typed and shown in; empty uses the local zone. Set on Apply after the zone changed in the panel.                                                 |
+| `v-model:open`     | `boolean`                | `undefined` | `update:open`       | Open state of the panel via `defineModel('open')`: the trigger, Apply, Cancel, `Esc` and an outside click update it. Unbound, the picker keeps it itself and starts at `defaultOpen`. |
 
 ## Events
 
@@ -103,7 +106,7 @@ _none_ — the trigger, the panel and its two tabs are fixed parts.
 ## States
 
 - Visual states: `default`, `hover`, `focus-visible`, `open`, `disabled`; the panel shows an inline error after an Apply that the draft cannot satisfy.
-- `data-state="open|closed"` on the root and the panel; `data-size`; `data-disabled`; `data-empty` on the trigger with no value; `data-selected` on the chosen quick range.
+- `data-state="open|closed"` on the root and the panel; `data-size`; `data-disabled`; `data-invalid` on the root and the trigger shell (own `invalid` or the enclosing `Field`'s, with `aria-invalid` on the trigger and the danger border); `data-empty` on the trigger with no value; `data-selected` on the chosen quick range.
 - The Next button is disabled while the range is relative (it already ends now) or when the step would pass `max` (or now); Previous is disabled when the step would pass `min`.
 
 ## Behaviour

@@ -14,10 +14,10 @@
       timeZone: 'UTC'
     })
     if (index === DAYS - 1) return { id, label: `${day} · No data` }
-    if (index === OUTAGE_DAY) return { id, status: 'danger', label: `${day} · Partial outage` }
+    if (index === OUTAGE_DAY) return { id, severity: 'danger', label: `${day} · Partial outage` }
     if (index === DEGRADED_DAY)
-      return { id, status: 'warning', label: `${day} · Degraded performance` }
-    return { id, status: 'success', label: `${day} · Operational` }
+      return { id, severity: 'warning', label: `${day} · Degraded performance` }
+    return { id, severity: 'success', label: `${day} · Operational` }
   })
 </script>
 

@@ -245,10 +245,27 @@ export function sourceDeprecation(source) {
   return notes[0] || 'Deprecated.'
 }
 
+export function componentDeprecation(source) {
+  const match = source.match(
+    /\/\*\*((?:(?!\*\/)[\s\S])*?@deprecated(?:(?!\*\/)[\s\S])*?)\*\/\s*defineOptions\(/
+  )
+  if (!match) return null
+  const tag = match[1].match(/@deprecated\b([\s\S]*?)(?=\n\s*\*\s*@|$)/)
+  return (
+    (tag?.[1] ?? '')
+      .split('\n')
+      .map((line) => line.replace(/^\s*\*\s?/, '').trim())
+      .join(' ')
+      .trim() || 'Deprecated.'
+  )
+}
+
 function targetDeprecation(target) {
-  if (typeof target !== 'string' || !/\.(js|mjs|ts)$/.test(target)) return null
+  if (typeof target !== 'string') return null
   const file = resolve(PKG_ROOT, target)
   if (!existsSync(file)) return null
+  if (/\.vue$/.test(target)) return componentDeprecation(readFileSync(file, 'utf-8'))
+  if (!/\.(js|mjs|ts)$/.test(target)) return null
   return sourceDeprecation(readFileSync(file, 'utf-8'))
 }
 
@@ -422,13 +439,13 @@ export async function build() {
       if (spec.replacedBy) entry.replacedBy = spec.replacedBy
       if (spec.styleSeam) entry.styleSeam = true
       if (spec.setup) entry.setup = spec.setup
-    } else {
-      if (entry.kind === 'component') entry.category = categoryFromTarget(target)
-      const deprecation = targetDeprecation(target)
-      if (deprecation) {
-        entry.deprecated = true
-        entry.deprecation = deprecation
-      }
+    } else if (entry.kind === 'component') {
+      entry.category = categoryFromTarget(target)
+    }
+    const deprecation = targetDeprecation(target)
+    if (deprecation) {
+      entry.deprecated = true
+      entry.deprecation = deprecation
     }
 
     const surface = surfaceFromTarget(target)

@@ -1132,7 +1132,7 @@
                           v-model="draft.bindingPolicy"
                           :value="policy.value"
                           name="deployment-settings-binding"
-                          :input-id="`deployment-settings-binding-${policy.value}`"
+                          :id="`deployment-settings-binding-${policy.value}`"
                         />
                         <Field.Content>
                           <Field.Label :for="`deployment-settings-binding-${policy.value}`">{{
@@ -1156,7 +1156,7 @@
                           v-model="draft.deploymentPolicy"
                           :value="policy.value"
                           name="deployment-settings-policy"
-                          :input-id="`deployment-settings-policy-${policy.value}`"
+                          :id="`deployment-settings-policy-${policy.value}`"
                         />
                         <Field.Content>
                           <Field.Label :for="`deployment-settings-policy-${policy.value}`">{{

@@ -191,6 +191,8 @@ describe('Accordion (compound / provide-inject)', () => {
       expect(region).toBeTruthy()
       expect(region.style.transition).toBe('')
       await waitFor(() => expect(region.style.height).toBe(''))
+      await fireEvent.click(trigger(view, 'What is Azion'))
+      await waitFor(() => expect(regions()).toHaveLength(0))
     })
   })
 
