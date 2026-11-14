@@ -50,7 +50,13 @@
   const model = defineModel<string>({ default: '' })
 
   defineSlots<{
+    /** Leading adornment at the inline start of the field (an icon, a unit). */
+    prefix(): unknown
+    /** Trailing adornment at the inline end of the field. */
+    suffix(): unknown
+    /** @deprecated since 6.0 — use the prefix slot. Removed in 7.0. */
     iconLeft(): unknown
+    /** @deprecated since 6.0 — use the suffix slot. Removed in 7.0. */
     iconRight(): unknown
   }>()
 
@@ -75,9 +81,7 @@
   const visible = ref(false)
   const inputRef = ref<globalThis.HTMLInputElement | null>(null)
 
-  const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? 'input-password-input'
-  )
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'password-input')
 
   const passthroughAttrs = computed(() => {
     const rest: Record<string, unknown> = { ...attrs }
@@ -86,8 +90,8 @@
     return rest
   })
 
-  const hasIconLeft = () => Boolean(slots['iconLeft'])
-  const hasIconRight = () => !props.toggleable && Boolean(slots['iconRight'])
+  const hasIconLeft = () => Boolean(slots['prefix'] || slots['iconLeft'])
+  const hasIconRight = () => !props.toggleable && Boolean(slots['suffix'] || slots['iconRight'])
 
   const toggleLabel = computed(() =>
     visible.value ? t('passwordInput.hide') : t('passwordInput.show')
@@ -138,7 +142,7 @@
       class="inline-flex shrink-0 items-center justify-center ps-(--spacing-md) text-(--text-muted)"
       aria-hidden="true"
     >
-      <slot name="iconLeft" />
+      <slot name="prefix"><slot name="iconLeft" /></slot>
     </span>
 
     <input
@@ -167,7 +171,7 @@
       class="inline-flex shrink-0 items-center justify-center text-(--text-muted)"
       aria-hidden="true"
     >
-      <slot name="iconRight" />
+      <slot name="suffix"><slot name="iconRight" /></slot>
     </span>
 
     <IconButton

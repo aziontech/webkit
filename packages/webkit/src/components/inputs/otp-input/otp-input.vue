@@ -65,9 +65,7 @@
     required: () => props.required
   })
 
-  const testId = computed<string>(
-    () => (attrs['data-testid'] as string | undefined) ?? 'input-otp-input'
-  )
+  const testId = computed<string>(() => (attrs['data-testid'] as string | undefined) ?? 'otp-input')
 
   const passthroughAttrs = computed<Record<string, unknown>>(() => {
     const rest: Record<string, unknown> = { ...attrs }

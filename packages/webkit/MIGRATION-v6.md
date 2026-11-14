@@ -286,13 +286,11 @@ Test ids follow the component name: `feedback-message` → `feedback-alert`, `la
 `input-radio-cards`, and so on for every renamed component. Update end-to-end selectors that use
 `data-testid`.
 
-Five input controls now follow the `input-<name>` rule like the rest of the inputs category:
-`number-input` → `input-number-input`, `otp-input` → `input-otp-input`, `password-input` →
-`input-password-input`, `phone-input` → `input-phone-input`, and `select` → `input-select`, with
-the Select parts `select-trigger`, `select-content`, `select-option` and `select-group` →
-`input-select-trigger`, `input-select-content`, `input-select-option` and `input-select-group`.
-Their part ids follow (`otp-input__box` → `input-otp-input__box`, `phone-input__dial-code` →
-`input-phone-input__dial-code`, …). A `data-testid` you pass yourself still wins.
+`Select` now follows the `input-<name>` rule like the rest of the inputs category: `select` →
+`input-select`, and its parts `select-trigger`, `select-content`, `select-option` and `select-group`
+→ `input-select-trigger`, `input-select-content`, `input-select-option` and `input-select-group`
+(part ids follow, `select-trigger__value` → `input-select-trigger__value`). A `data-testid` you
+pass yourself still wins.
 
 ### Pagination ellipsis
 
