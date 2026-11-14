@@ -3,9 +3,12 @@
   "accordion-root": { "value": "modelValue" },
   "alert": { "severity": { "to": "severity", "values": { "error": "danger" } } },
   "button": { "kind": { "to": "kind", "values": { "text": "transparent" } } },
+  "card-pricing": { "planTitle": "title" },
   "code-block": { "border": "bordered", "value": "modelValue" },
+  "conversation-history": { "label": "ariaLabel" },
   "doc-card": { "overline": "eyebrow", "link": "linkLabel" },
-  "doc-card-group": { "mobileCols": "mobileColumns" },
+  "doc-card-group": { "mobileCols": "mobileColumns", "cols": "columns" },
+  "doc-heading": { "id": "anchor" },
   "doc-tooltip": { "headline": "title", "cta": "linkLabel" },
   "item": {
     "kind": { "to": "kind", "values": { "outline": "outlined" } },
@@ -32,7 +35,11 @@
       "removed": "each NavigationMenu part renders a fixed element (nav, ul, li, a or button, div, span); wrap the part or style it instead of swapping its element."
     }
   },
+  "overline": { "showCursor": "cursor" },
+  "payment-brand": { "label": "ariaLabel" },
+  "qr-code": { "label": "ariaLabel" },
   "quote-tabs": { "autoPlay": "autoplay", "autoPlayInterval": "autoplayInterval" },
+  "response-branches": { "label": "ariaLabel" },
   "severity-tag": { "level": "severity" },
   "shell-mockup": { "still": { "to": "animated", "values": { "true": "false", "false": "true" } } },
   "shell-mockup-root": {

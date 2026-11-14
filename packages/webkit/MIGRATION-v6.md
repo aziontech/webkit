@@ -62,34 +62,55 @@ component.
 
 ## 3. Renamed props and values
 
-| Component         | v5                 | v6                   |
-| ----------------- | ------------------ | -------------------- |
-| `accordion`       | `value`            | `modelValue`         |
-| `alert`           | `severity="error"` | `severity="danger"`  |
-| `button`          | `kind="text"`      | `kind="transparent"` |
-| `code-block`      | `border`           | `bordered`           |
-| `code-block`      | `value`            | `modelValue`         |
-| `doc-card`        | `overline`         | `eyebrow`            |
-| `doc-card`        | `link`             | `linkLabel`          |
-| `doc-card-group`  | `mobileCols`       | `mobileColumns`      |
-| `doc-tooltip`     | `headline`         | `title`              |
-| `doc-tooltip`     | `cta`              | `linkLabel`          |
-| `item`            | `kind="outline"`   | `kind="outlined"`    |
-| `log-view`        | `border`           | `bordered`           |
-| `log-view`        | `showCopy`         | `copyable`           |
-| `media-tabs`      | `autoPlay`         | `autoplay`           |
-| `media-tabs`      | `autoPlayInterval` | `autoplayInterval`   |
-| `navigation-menu` | `value`            | `modelValue`         |
-| `quote-tabs`      | `autoPlay`         | `autoplay`           |
-| `quote-tabs`      | `autoPlayInterval` | `autoplayInterval`   |
-| `severity-tag`    | `level`            | `severity`           |
-| `shell-mockup`    | `still="true"`     | `animated="false"`   |
-| `shell-mockup`    | `still="false"`    | `animated="true"`    |
-| `table`           | `border`           | `bordered`           |
-| `tabs`            | `value`            | `modelValue`         |
-| `theme-switcher`  | `value`            | `modelValue`         |
+| Component              | v5                 | v6                   |
+| ---------------------- | ------------------ | -------------------- |
+| `accordion`            | `value`            | `modelValue`         |
+| `alert`                | `severity="error"` | `severity="danger"`  |
+| `button`               | `kind="text"`      | `kind="transparent"` |
+| `card-pricing`         | `planTitle`        | `title`              |
+| `code-block`           | `border`           | `bordered`           |
+| `code-block`           | `value`            | `modelValue`         |
+| `conversation-history` | `label`            | `ariaLabel`          |
+| `doc-card`             | `overline`         | `eyebrow`            |
+| `doc-card`             | `link`             | `linkLabel`          |
+| `doc-card-group`       | `mobileCols`       | `mobileColumns`      |
+| `doc-card-group`       | `cols`             | `columns`            |
+| `doc-heading`          | `id`               | `anchor`             |
+| `doc-tooltip`          | `headline`         | `title`              |
+| `doc-tooltip`          | `cta`              | `linkLabel`          |
+| `item`                 | `kind="outline"`   | `kind="outlined"`    |
+| `log-view`             | `border`           | `bordered`           |
+| `log-view`             | `showCopy`         | `copyable`           |
+| `media-tabs`           | `autoPlay`         | `autoplay`           |
+| `media-tabs`           | `autoPlayInterval` | `autoplayInterval`   |
+| `navigation-menu`      | `value`            | `modelValue`         |
+| `overline`             | `showCursor`       | `cursor`             |
+| `payment-brand`        | `label`            | `ariaLabel`          |
+| `qr-code`              | `label`            | `ariaLabel`          |
+| `quote-tabs`           | `autoPlay`         | `autoplay`           |
+| `quote-tabs`           | `autoPlayInterval` | `autoplayInterval`   |
+| `response-branches`    | `label`            | `ariaLabel`          |
+| `severity-tag`         | `level`            | `severity`           |
+| `shell-mockup`         | `still="true"`     | `animated="false"`   |
+| `shell-mockup`         | `still="false"`    | `animated="true"`    |
+| `table`                | `border`           | `bordered`           |
+| `tabs`                 | `value`            | `modelValue`         |
+| `theme-switcher`       | `value`            | `modelValue`         |
 
 ## 4. Manual changes
+
+### Deprecated in 6.0, removed in 7.0
+
+These still work in 6.x and are marked `@deprecated` in the types and the catalog:
+
+- `DocCta` (`@aziontech/webkit/doc-cta`) → `DocCallToAction` (`@aziontech/webkit/doc-call-to-action`).
+  The flat `primary-label` / `primary-href` / `secondary-label` / `secondary-href` become
+  `:primary-action="{ label, href }"` and `:secondary-action="{ label, href }"`, so the codemod does not
+  rewrite it: change the import and the four attributes by hand.
+- The old prop names in the table above that are marked as aliases: `card-pricing` `planTitle`,
+  `conversation-history` and `response-branches` `label`, `doc-card-group` `cols`, `doc-heading` `id`,
+  `overline` `showCursor`, `payment-brand` and `qr-code` `label`. The new name wins when both are set;
+  the codemod writes the new name.
 
 ### `@aziontech/theme` is a peer dependency
 
