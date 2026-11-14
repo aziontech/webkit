@@ -98,6 +98,9 @@ Live checklist bound to the new password (`:value`), driven by `DEFAULT_PASSWORD
 - Keep the credentials after a 503, a 500 or a timeout; Retry re-sends the same request.
 - Carry the email between steps (sign in to reset, reset back to sign in) so the user never types it twice.
 - Release the in-flight lock on every outcome so Retry can run again.
+- Enter the card column once, on mount: it slides in from the inline start with a fade (`starting:-translate-x-6 starting:opacity-0`, `rtl:starting:translate-x-6`, `transition-[translate,opacity] duration-slow-01 ease-expressive-entrance`). Steps inside the card do not replay it.
+- Let the card height follow the step: a `ResizeObserver` on the form sets the wrapper height, which eases with `transition-[height] duration-moderate-02 ease-productive-entrance` and clips only while it moves.
+- While the identity providers load, hold their place with two `Skeleton` bars of the buttons' height in a `role="status"` region named `Preparing sign-in providers`; keep email sign-in usable.
 
 - On a code screen, put the code in one `OtpInput` (autofill reads `autocomplete="one-time-code"`), submit on `complete`, and keep a Verify button.
 - Give every QR code a typed alternative: the setup key with a copy button.
@@ -110,6 +113,7 @@ Live checklist bound to the new password (`:value`), driven by `DEFAULT_PASSWORD
 - Don't put client-side validation in the `Alert`; it belongs on the field.
 - Don't call a timeout a failure (`danger`) or say the account was not created; the request may have landed.
 - Don't stack notices: a new outcome replaces the one in the slot.
+- Don't hide or disable the email field while the providers load, and don't show a spinner in place of the provider buttons.
 
 - Don't split a one-time code into separate inputs or move focus between them by hand; `OtpInput` is one field.
 - Don't toast a rejected code; it is the field's reason, and the field is cleared and focused.
@@ -127,6 +131,7 @@ Live checklist bound to the new password (`:value`), driven by `DEFAULT_PASSWORD
 - **Timeout notice:** names the unknown, never a failure: `The server did not answer in time. Your session may already be open.`
 - **409 notice:** the fact plus the two exits as links: `This email is already registered. Sign in or reset your password.`
 - **Session expired:** `Your session expired. Sign in again to pick up where you left off.`
+- **Providers loading:** the status name says what is happening, no ellipsis: `Preparing sign-in providers`.
 - **Action in a notice:** `Retry`, never "Try again".
 
 ## Accessibility
@@ -138,6 +143,8 @@ Live checklist bound to the new password (`:value`), driven by `DEFAULT_PASSWORD
 - After a submit with errors, focus the first field that needs attention; after a 401, the password.
 - The notice uses the `Alert` role from the component; don't add a second live region for the same message.
 - Every transition sets `motion-reduce:transition-none` and `motion-reduce:transform-none`.
+- Under reduced motion the column appears in place (no slide, no fade) and the card height jumps.
+- The provider placeholder is announced once by its status name; the `Skeleton` bars are decorative.
 - Social buttons are `type="button"` so Enter in the email field submits the email, not a provider.
 
 - MFA: the code field is named by its label (`Authentication code`, `Recovery code`) and described by the reason when rejected; the QR code is an image named after the account, and the setup key is real text.
@@ -147,6 +154,7 @@ Live checklist bound to the new password (`:value`), driven by `DEFAULT_PASSWORD
 - Login: the sign-in flow on the email step, with Google and GitHub over the `or` divider; the same file walks through password, reset, sent and new-password.
 - SignUp: create an account with a work email (and a password checked by `PasswordRequirements`), Google or GitHub.
 - SessionExpired: opens on the password step for the same email, with an info notice that clears on the next action.
+- ProvidersLoading: the Login card while the identity providers load; two `Skeleton` bars in a `role="status"` region (`Preparing sign-in providers`) replace Google and GitHub over the `or` divider, and the email step works meanwhile.
 - CheckInbox: the `/signup/verify` card: where the link went, the resend prompt and a secondary Return to sign in.
 - IncorrectCredentials: 401 on Sign in; a danger notice above both fields, no action, the password cleared and focused.
 - ServiceUnavailable: 503 on Sign in; a warning notice with Retry, credentials kept.
