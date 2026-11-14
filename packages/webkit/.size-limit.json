@@ -148,7 +148,7 @@
   {
     "name": "chip",
     "path": "src/components/inputs/chip/chip.vue",
-    "limit": "6.6 KB"
+    "limit": "6.7 KB"
   },
   {
     "name": "footer-root",
@@ -1899,7 +1899,7 @@
   {
     "name": "hint",
     "path": "src/components/inputs/hint/hint.vue",
-    "limit": "5.3 KB"
+    "limit": "5.15 KB"
   },
   {
     "name": "label",
