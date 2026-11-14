@@ -1073,7 +1073,17 @@ export const ptBR: Messages = {
     running: 'Em execução',
     attributes: 'Atributos',
     milliseconds: '{value} ms',
-    seconds: '{value} s'
+    seconds: '{value} s',
+    zoom: 'Zoom',
+    resetZoom: 'Redefinir zoom',
+    zoomStart: 'Início do zoom',
+    zoomEnd: 'Fim do zoom',
+    slowest: 'Mais lento',
+    events: 'Eventos',
+    eventCount: {
+      one: '{count} evento',
+      other: '{count} eventos'
+    }
   },
   topologyDiagram: {
     label: 'Topologia de implantação',

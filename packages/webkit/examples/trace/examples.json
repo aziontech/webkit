@@ -26,6 +26,16 @@
       "name": "Loading",
       "summary": "`loading` shows placeholder rows in a status region and disables the search until the spans arrive.",
       "file": "loading.vue"
+    },
+    {
+      "name": "Zoom",
+      "summary": "A long export whose short first steps are unreadable at full scale, zoomed into its first 120 ms. Drag across the minimap to draw a window, drag its edges or move them with the arrow keys, drag the window to pan, and Reset zoom to see the whole run.",
+      "file": "zoom.vue"
+    },
+    {
+      "name": "SpanEvents",
+      "summary": "Moments inside a span drawn as markers on its bar (a cache miss, the connection opening, the first byte), the slowest step flagged with a clock, and the selected span listing its events with their times in the details.",
+      "file": "span-events.vue"
     }
   ]
 }

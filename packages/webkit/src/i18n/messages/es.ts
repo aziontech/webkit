@@ -1073,7 +1073,17 @@ export const es: Messages = {
     running: 'En ejecución',
     attributes: 'Atributos',
     milliseconds: '{value} ms',
-    seconds: '{value} s'
+    seconds: '{value} s',
+    zoom: 'Zoom',
+    resetZoom: 'Restablecer zoom',
+    zoomStart: 'Inicio del zoom',
+    zoomEnd: 'Fin del zoom',
+    slowest: 'Más lento',
+    events: 'Eventos',
+    eventCount: {
+      one: '{count} evento',
+      other: '{count} eventos'
+    }
   },
   topologyDiagram: {
     label: 'Topología de despliegue',

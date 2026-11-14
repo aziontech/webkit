@@ -1073,7 +1073,17 @@ export const trace = {
   running: 'Running',
   attributes: 'Attributes',
   milliseconds: '{value} ms',
-  seconds: '{value} s'
+  seconds: '{value} s',
+  zoom: 'Zoom',
+  resetZoom: 'Reset zoom',
+  zoomStart: 'Zoom start',
+  zoomEnd: 'Zoom end',
+  slowest: 'Slowest',
+  events: 'Events',
+  eventCount: {
+    one: '{count} event',
+    other: '{count} events'
+  }
 } as const
 
 export const tracker = {

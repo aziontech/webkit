@@ -13,6 +13,16 @@
 
   export type TraceSpanStatus = 'ok' | 'error' | 'running'
 
+  export interface TraceSpanEvent {
+    /** Milliseconds from the start of the trace. */
+    at: number
+    /** What happened at that moment. */
+    name: string
+  }
+
+  /** Visible window of the run clock: start and end in milliseconds. */
+  export type TraceRange = [number, number]
+
   export interface TraceSpan {
     /** Stable key of the span. */
     id: string
@@ -34,6 +44,8 @@
     message?: string
     /** Extra facts listed in the details. */
     attributes?: Record<string, string | number>
+    /** Moments inside the span, drawn as markers on its bar and listed in the details. */
+    events?: TraceSpanEvent[]
   }
 
   type Row = {
@@ -49,7 +61,13 @@
     width: number
     wide: boolean
     flip: boolean
+    outside: boolean
+    marks: { key: string; at: number }[]
   }
+
+  type Edge = 'start' | 'end'
+
+  type Drag = { mode: 'draw' | 'pan' | Edge; anchor: number; origin: TraceRange }
 
   defineOptions({
     name: 'Trace',
@@ -65,17 +83,25 @@
     bordered?: boolean
     /** Shows placeholder rows while the spans load; search and selection wait. */
     loading?: boolean
+    /** Shows a minimap under the axis to zoom the waterfall into a window of the run. Supports v-model:range. */
+    zoomable?: boolean
+    /** Flags the span that took longest, other than the root, in its row and its details. */
+    highlightSlowest?: boolean
   }
 
   const props = withDefaults(defineProps<Props>(), {
     spans: () => [],
     ariaLabel: '',
     bordered: true,
-    loading: false
+    loading: false,
+    zoomable: false,
+    highlightSlowest: false
   })
 
   /** Id of the span whose details show under the waterfall. Supports v-model:selected. */
   const current = defineModel<string>('selected', { default: '' })
+
+  const range = defineModel<TraceRange | null>('range', { default: null })
 
   const attrs = useAttrs()
   const { t, locale } = useTranslate({ trace: en.trace })
@@ -88,7 +114,13 @@
     Object.fromEntries(Object.entries(attrs).filter(([key]) => key !== 'data-testid'))
   )
 
+  const MIN_SHARE = 0.01
+  const STEP_SHARE = 0.01
+  const PAGE_SHARE = 0.1
+
   const gridRef = ref<HTMLElement | null>(null)
+  const trackRef = ref<HTMLElement | null>(null)
+  let drag: Drag | null = null
   const dir = useDirection(gridRef)
 
   const search = ref<string>('')
@@ -112,6 +144,34 @@
   const total = computed<number>(() =>
     props.spans.reduce((max, span) => Math.max(max, span.start + span.duration), 1)
   )
+
+  const minSpan = computed<number>(() =>
+    Math.min(total.value, Math.max(1, total.value * MIN_SHARE))
+  )
+
+  const clamp = (value: number, low: number, high: number): number =>
+    Math.min(high, Math.max(low, value))
+
+  const view = computed<TraceRange>(() => {
+    const win = range.value
+    if (!win) return [0, total.value]
+    let low = clamp(Math.min(win[0], win[1]), 0, total.value)
+    let high = clamp(Math.max(win[0], win[1]), 0, total.value)
+    if (high - low < minSpan.value) {
+      high = Math.min(total.value, low + minSpan.value)
+      low = Math.max(0, high - minSpan.value)
+    }
+    return [low, high]
+  })
+
+  const zoomed = computed<boolean>(() => view.value[0] > 0 || view.value[1] < total.value)
+
+  const slowestId = computed<string>(() => {
+    if (!props.highlightSlowest || props.spans.length < 2) return ''
+    const nested = props.spans.filter((span) => span.parentId && known.value.has(span.parentId))
+    const pool = nested.length ? nested : props.spans
+    return pool.reduce((best, span) => (span.duration > best.duration ? span : best)).id
+  })
 
   const term = computed<string>(() => search.value.trim().toLocaleLowerCase())
 
@@ -141,8 +201,16 @@
       siblings.forEach((span, index) => {
         const hasChildren = (childrenOf.value.get(span.id) ?? []).length > 0
         const expanded = hasChildren && (Boolean(shown.value) || !collapsed.value.has(span.id))
-        const offset = Math.min(1, Math.max(0, span.start / total.value))
-        const width = Math.max(span.duration / total.value, 0.006)
+        const [low, high] = view.value
+        const length = high - low
+        const from = Math.max(span.start, low)
+        const to = Math.min(span.start + span.duration, high)
+        const outside = to < from || span.start > high || span.start + span.duration < low
+        const offset = outside ? 0 : clamp((from - low) / length, 0, 1)
+        const width = outside ? 0 : Math.max((to - from) / length, 0.006)
+        const marks = (span.events ?? [])
+          .map((event, order) => ({ key: `${order}`, at: (event.at - low) / length }))
+          .filter((mark) => mark.at >= 0 && mark.at <= 1)
         let tone: Row['tone'] = depth === 0 ? 'root' : 'ok'
         if (span.status === 'error') tone = 'error'
         if (span.status === 'running') tone = 'running'
@@ -158,7 +226,9 @@
           offset,
           width,
           wide: width >= 0.14,
-          flip: width < 0.14 && offset + width > 0.8
+          flip: width < 0.14 && offset + width > 0.8,
+          outside,
+          marks
         })
         if (expanded) walk(span.id, depth + 1)
       })
@@ -181,7 +251,7 @@
     [0, 0.25, 0.5, 0.75, 1].map((at) => ({
       at,
       edge: at === 0 ? 'start' : at === 1 ? 'end' : null,
-      label: formatDuration(total.value * at)
+      label: formatDuration(view.value[0] + (view.value[1] - view.value[0]) * at)
     }))
   )
 
@@ -210,6 +280,150 @@
     if (span.service) facts.unshift({ label: t('trace.service'), value: span.service })
     return facts
   })
+
+  const detailEvents = computed(() =>
+    [...(detail.value?.events ?? [])]
+      .sort((a, b) => a.at - b.at)
+      .map((event, order) => ({
+        key: `${order}`,
+        time: `+${formatDuration(event.at)}`,
+        name: event.name
+      }))
+  )
+
+  const minimapLines = computed(() => {
+    const ordered = [...props.spans].sort((a, b) => a.start - b.start)
+    const count = Math.max(1, ordered.length)
+    return ordered.map((span, index) => {
+      let tone: Row['tone'] = span.parentId && known.value.has(span.parentId) ? 'ok' : 'root'
+      if (span.status === 'error') tone = 'error'
+      if (span.status === 'running') tone = 'running'
+      return {
+        id: span.id,
+        tone,
+        style: {
+          '--line-offset': String(span.start / total.value),
+          '--line-width': String(span.duration / total.value),
+          '--line-top': String((index + 0.2) / count),
+          '--line-height': String(0.6 / count)
+        }
+      }
+    })
+  })
+
+  const windowStyle = computed(() => ({
+    '--window-start': String(view.value[0] / total.value),
+    '--window-size': String((view.value[1] - view.value[0]) / total.value)
+  }))
+
+  const setWindow = (a: number, b: number): void => {
+    let low = clamp(Math.min(a, b), 0, total.value)
+    let high = clamp(Math.max(a, b), 0, total.value)
+    if (high - low < minSpan.value) {
+      high = Math.min(total.value, low + minSpan.value)
+      low = Math.max(0, high - minSpan.value)
+    }
+    range.value = low <= 0 && high >= total.value ? null : [low, high]
+  }
+
+  const resetZoom = (): void => {
+    range.value = null
+  }
+
+  const msAt = (event: PointerEvent): number => {
+    const track = trackRef.value
+    if (!track) return 0
+    const rect = track.getBoundingClientRect()
+    const share = rect.width ? (event.clientX - rect.left) / rect.width : 0
+    return clamp(dir.value === 'rtl' ? 1 - share : share, 0, 1) * total.value
+  }
+
+  const capture = (event: PointerEvent): void => {
+    try {
+      trackRef.value?.setPointerCapture?.(event.pointerId)
+    } catch {
+      return
+    }
+  }
+
+  const onTrackDown = (event: PointerEvent): void => {
+    if (event.button !== 0) return
+    const at = msAt(event)
+    const [low, high] = view.value
+    drag = {
+      mode: zoomed.value && at >= low && at <= high ? 'pan' : 'draw',
+      anchor: at,
+      origin: [low, high]
+    }
+    capture(event)
+  }
+
+  const onThumbDown = (event: PointerEvent, edge: Edge): void => {
+    if (event.button !== 0) return
+    drag = { mode: edge, anchor: msAt(event), origin: [view.value[0], view.value[1]] }
+    capture(event)
+  }
+
+  const onTrackMove = (event: PointerEvent): void => {
+    if (!drag) return
+    const at = msAt(event)
+    const [low, high] = drag.origin
+    if (drag.mode === 'draw') {
+      if (Math.abs(at - drag.anchor) >= minSpan.value / 2) setWindow(drag.anchor, at)
+    } else if (drag.mode === 'start') setWindow(Math.min(at, high - minSpan.value), high)
+    else if (drag.mode === 'end') setWindow(low, Math.max(at, low + minSpan.value))
+    else {
+      const start = clamp(low + at - drag.anchor, 0, total.value - (high - low))
+      setWindow(start, start + high - low)
+    }
+  }
+
+  const onTrackUp = (): void => {
+    drag = null
+  }
+
+  const thumbLimits = (edge: Edge): [number, number] =>
+    edge === 'start'
+      ? [0, view.value[1] - minSpan.value]
+      : [view.value[0] + minSpan.value, total.value]
+
+  const onThumbKey = (event: KeyboardEvent, edge: Edge): void => {
+    const key = logicalArrowKey(event.key, dir.value)
+    const [low, high] = view.value
+    const [min, max] = thumbLimits(edge)
+    const current = edge === 'start' ? low : high
+    let next: number | null = null
+    if (key === 'ArrowRight' || key === 'ArrowUp') next = current + total.value * STEP_SHARE
+    else if (key === 'ArrowLeft' || key === 'ArrowDown') next = current - total.value * STEP_SHARE
+    else if (key === 'PageUp') next = current + total.value * PAGE_SHARE
+    else if (key === 'PageDown') next = current - total.value * PAGE_SHARE
+    else if (key === 'Home') next = min
+    else if (key === 'End') next = max
+    else if (key === 'Escape') {
+      event.preventDefault()
+      resetZoom()
+      return
+    } else return
+    event.preventDefault()
+    const value = clamp(next, min, max)
+    if (edge === 'start') setWindow(value, high)
+    else setWindow(low, value)
+  }
+
+  const thumbs = computed(() =>
+    (['start', 'end'] as const).map((edge) => {
+      const [min, max] = thumbLimits(edge)
+      const value = edge === 'start' ? view.value[0] : view.value[1]
+      return {
+        edge,
+        label: edge === 'start' ? t('trace.zoomStart') : t('trace.zoomEnd'),
+        min: Math.round(min),
+        max: Math.round(max),
+        now: Math.round(value),
+        text: formatDuration(value)
+      }
+    })
+  )
 
   const detailAttributes = computed(() =>
     Object.entries(detail.value?.attributes ?? {}).map(([key, value]) => ({
@@ -298,7 +512,9 @@
       row.span.service ?? '',
       `+${formatDuration(row.span.start)}`,
       formatDuration(row.span.duration),
-      statusLabel(row.span.status)
+      statusLabel(row.span.status),
+      row.span.id === slowestId.value ? t('trace.slowest') : '',
+      row.span.events?.length ? t('trace.eventCount', { count: row.span.events.length }) : ''
     ]
       .filter(Boolean)
       .join(', ')
@@ -361,6 +577,71 @@
       </div>
     </div>
 
+    <div
+      v-if="zoomable && spans.length"
+      :data-zoomed="zoomed || null"
+      :data-testid="`${testId}__minimap`"
+      class="[--trace-name:9rem] @xl/trace:[--trace-name:13rem] @3xl/trace:[--trace-name:16rem] @5xl/trace:[--trace-name:20rem] grid grid-cols-[var(--trace-name)_minmax(0,1fr)] items-stretch border-b border-(--border-muted)"
+    >
+      <div
+        class="flex min-w-0 items-center gap-(--spacing-xs) border-e border-(--border-muted) px-(--spacing-sm) py-(--spacing-xxs)"
+      >
+        <span class="truncate text-label-sm text-(--text-muted)">{{ t('trace.zoom') }}</span>
+        <Button
+          v-if="zoomed"
+          :label="t('trace.resetZoom')"
+          :data-testid="`${testId}__reset-zoom`"
+          kind="transparent"
+          size="small"
+          class="ms-auto shrink-0"
+          @click="resetZoom"
+        />
+      </div>
+      <div class="px-(--spacing-md) py-(--spacing-xs)">
+        <div
+          ref="trackRef"
+          :data-testid="`${testId}__track`"
+          class="relative h-8 cursor-crosshair touch-none rounded-(--shape-button) bg-(--bg-canvas) select-none"
+          @pointerdown="onTrackDown"
+          @pointermove="onTrackMove"
+          @pointerup="onTrackUp"
+          @pointercancel="onTrackUp"
+        >
+          <span
+            v-for="line in minimapLines"
+            :key="line.id"
+            :data-tone="line.tone"
+            :style="line.style"
+            aria-hidden="true"
+            class="pointer-events-none absolute start-[calc(var(--line-offset)*100%)] top-[calc(var(--line-top)*100%)] h-[max(1px,calc(var(--line-height)*100%))] w-[max(1px,calc(var(--line-width)*100%))] rounded-full data-[tone=error]:bg-(--danger-border) data-[tone=ok]:bg-(--success-border) data-[tone=root]:bg-(--info-border) data-[tone=running]:bg-(--warning-border)"
+          />
+          <span
+            :style="windowStyle"
+            :data-testid="`${testId}__window`"
+            class="pointer-events-none absolute inset-y-0 start-[calc(var(--window-start)*100%)] w-[calc(var(--window-size)*100%)] rounded-(--shape-button) border border-(--border-selected) bg-(--bg-selected)/40"
+          >
+            <span
+              v-for="thumb in thumbs"
+              :key="thumb.edge"
+              role="slider"
+              tabindex="0"
+              aria-orientation="horizontal"
+              :aria-label="thumb.label"
+              :aria-valuemin="thumb.min"
+              :aria-valuemax="thumb.max"
+              :aria-valuenow="thumb.now"
+              :aria-valuetext="thumb.text"
+              :data-edge="thumb.edge"
+              :data-testid="`${testId}__thumb`"
+              class="pointer-events-auto absolute inset-y-0 w-3 cursor-ew-resize rounded-(--shape-button) after:absolute after:inset-y-(--spacing-xxs) after:start-1/2 after:w-0.5 after:-ms-px after:rounded-full after:bg-(--border-selected) focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:outline-none data-[edge=end]:-end-1.5 data-[edge=start]:-start-1.5 pointer-coarse:w-6 pointer-coarse:data-[edge=end]:-end-3 pointer-coarse:data-[edge=start]:-start-3"
+              @pointerdown.stop="onThumbDown($event, thumb.edge)"
+              @keydown="onThumbKey($event, thumb.edge)"
+            />
+          </span>
+        </div>
+      </div>
+    </div>
+
     <div class="relative">
       <div
         aria-hidden="true"
@@ -418,6 +699,7 @@
           :aria-label="rowLabel(row)"
           :data-span-id="row.span.id"
           :data-selected="row.span.id === current || null"
+          :data-slowest="row.span.id === slowestId || null"
           :data-testid="`${testId}__row`"
           :style="{
             '--span-offset': String(row.offset),
@@ -466,11 +748,21 @@
               class="hidden shrink-0 truncate text-label-sm text-(--text-muted) @3xl/trace:block"
               ><bdi>{{ row.span.service }}</bdi></span
             >
-            <i
-              v-if="row.span.status === 'error'"
-              class="pi pi-exclamation-circle ms-auto shrink-0 text-(--danger-contrast)"
+            <span
+              v-if="row.span.status === 'error' || row.span.id === slowestId"
+              class="ms-auto flex shrink-0 items-center gap-(--spacing-xxs)"
               aria-hidden="true"
-            />
+            >
+              <i
+                v-if="row.span.id === slowestId"
+                class="pi pi-clock text-(--text-default)"
+                :data-testid="`${testId}__slowest`"
+              />
+              <i
+                v-if="row.span.status === 'error'"
+                class="pi pi-exclamation-circle text-(--danger-contrast)"
+              />
+            </span>
           </span>
           <span
             role="gridcell"
@@ -479,8 +771,9 @@
             <span class="relative h-(--size-6) w-full">
               <span
                 :data-tone="row.tone"
+                :data-outside="row.outside || null"
                 :data-testid="`${testId}__bar`"
-                class="absolute inset-y-0 start-[calc(var(--span-offset)*100%)] w-[calc(var(--span-width)*100%)] rounded-(--shape-button) border data-[tone=error]:border-(--danger-border) data-[tone=error]:bg-(--danger) data-[tone=ok]:border-(--success-border) data-[tone=ok]:bg-(--success) data-[tone=root]:border-(--info-border) data-[tone=root]:bg-(--info) data-[tone=running]:border-(--warning-border) data-[tone=running]:bg-(--warning)"
+                class="absolute inset-y-0 start-[calc(var(--span-offset)*100%)] w-[calc(var(--span-width)*100%)] rounded-(--shape-button) border data-outside:hidden data-[tone=error]:border-(--danger-border) data-[tone=error]:bg-(--danger) data-[tone=ok]:border-(--success-border) data-[tone=ok]:bg-(--success) data-[tone=root]:border-(--info-border) data-[tone=root]:bg-(--info) data-[tone=running]:border-(--warning-border) data-[tone=running]:bg-(--warning)"
               >
                 <span
                   :data-tone="row.tone"
@@ -491,6 +784,14 @@
                   >{{ formatDuration(row.span.duration) }}</span
                 >
               </span>
+              <span
+                v-for="mark in row.marks"
+                :key="mark.key"
+                :style="{ '--event-at': String(mark.at) }"
+                :data-testid="`${testId}__event`"
+                aria-hidden="true"
+                class="pointer-events-none absolute -inset-y-0.5 start-[calc(var(--event-at)*100%)] -ms-px w-0.5 rounded-full bg-(--text-default) ring-1 ring-(--bg-surface)"
+              />
             </span>
           </span>
         </div>
@@ -552,6 +853,14 @@
           :label="t('trace.running')"
           size="small"
         />
+        <Tag
+          v-if="detail.id === slowestId"
+          key="slowest"
+          severity="info"
+          :label="t('trace.slowest')"
+          size="small"
+          :data-testid="`${testId}__slowest-tag`"
+        />
         <CopyButton
           :value="detail.name"
           :aria-label="t('trace.copyName')"
@@ -588,6 +897,29 @@
       >
         {{ detail.message }}
       </p>
+
+      <div
+        v-if="detailEvents.length"
+        :data-testid="`${testId}__events`"
+        class="flex flex-col gap-(--spacing-xs) border-t border-(--border-muted) pt-(--spacing-sm)"
+      >
+        <p class="text-label-sm text-(--text-default)">{{ t('trace.events') }}</p>
+        <dl
+          class="m-0 grid grid-cols-[minmax(0,10rem)_minmax(0,1fr)] gap-x-(--spacing-md) gap-y-(--spacing-xxs)"
+        >
+          <template
+            v-for="item in detailEvents"
+            :key="item.key"
+          >
+            <dt class="truncate text-label-sm text-(--text-muted) tabular-nums">
+              {{ item.time }}
+            </dt>
+            <dd class="m-0 min-w-0 text-label-code-sm break-words text-(--text-default)">
+              <bdi>{{ item.name }}</bdi>
+            </dd>
+          </template>
+        </dl>
+      </div>
 
       <div
         v-if="detailAttributes.length"
