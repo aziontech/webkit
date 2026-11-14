@@ -3,10 +3,11 @@ name: resource-grid
 category: sections
 structure: monolithic
 status: implemented
-spec_version: 1
+spec_version: 2
+template: 2
 created: 2026-11-05
-last_updated: 2026-11-05
-checksum: e0a1a7de66040bb8937702d1826a34b59ccb93996001316bfe15e4441fc6307d
+last_updated: 2026-11-14
+checksum: bae8a9640c7f90922503a640294e060350d7cbad3f578a174270b3c02e833b3c
 ---
 # ResourceGrid — Component Spec
 
@@ -58,6 +59,7 @@ import ResourceGrid from '@aziontech/webkit/resource-grid'
 
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
+| `anchor` | `string` | `''` | false | Id set on the band so an in-page `#hash` link can target it. |
 | `eyebrow` | `string` | `''` | false | Overline above the headline. |
 | `title` | `string` | `''` | false | Headline of the band, which also names its region and the scroll area. |
 | `description` | `string` | `''` | false | Lead sentence beside the grid. |
@@ -78,6 +80,7 @@ import ResourceGrid from '@aziontech/webkit/resource-grid'
 - `data-scrollable` is set when more than four cards render, and the grid scrolls inside a fading scroll area
 - Empty: when no item has a title the band renders nothing
 - The button renders only when `primaryAction` has a label and a link
+- `anchor` sets the root's `id`
 
 ## Motion & Animations
 
@@ -104,6 +107,31 @@ _none_
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): owned by `media-split` and `topic`.
 - `motion-reduce:transition-none motion-reduce:transform-none` — the band adds no motion.
 - Touch target ≥40×40 px — every card is a full-cell link.
+
+## Internationalization
+
+- Built-in strings: none. Every visible string is marketing copy and arrives through props, so the page supplies it in its own language.
+- Formatting: none.
+
+## Right-to-left
+
+- Layout: logical utilities only; the copy and grid mirror through `media-split` and `card-grid`.
+- Icons: the button's trailing chevron mirrors (owned by `button`).
+- Keyboard: unchanged.
+- User data: none.
+
+## Responsive
+
+- Container queries: none.
+- Narrow (≤ 640 px): the copy stacks above the grid, which drops to one column (from `media-split` and `card-grid`).
+- Touch: every card is a full-cell link.
+- Reflow: no horizontal scroll at 320 px; past four cards the grid scrolls vertically inside its scroll area.
+
+## Performance
+
+- Bundle budget: the `./resource-grid` entry in `.size-limit.json`.
+- Runtime budget: none: static.
+- Heavy parts: none.
 
 ## Examples
 

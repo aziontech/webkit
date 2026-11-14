@@ -122,6 +122,18 @@ describe('ResourceGrid', () => {
     expect(queryByRole('heading', { level: 2 })).toBeNull()
   })
 
+  it('sets the anchor as the band id', () => {
+    const { getByTestId } = band({ anchor: 'resources' })
+
+    expect(getByTestId(TESTID).id).toBe('resources')
+  })
+
+  it('sets no id without an anchor', () => {
+    const { getByTestId } = band()
+
+    expect(getByTestId(TESTID).hasAttribute('id')).toBe(false)
+  })
+
   it('has no a11y violations', async () => {
     const { container } = band({ primaryAction: ACTION })
 

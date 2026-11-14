@@ -37,6 +37,8 @@
   }
 
   interface Props {
+    /** Id set on the band so an in-page hash link can target it. */
+    anchor?: string
     /** Overline above the headline. */
     eyebrow?: string
     /** Headline of the band, which also names its region and the scroll area. */
@@ -50,6 +52,7 @@
   }
 
   const props = withDefaults(defineProps<Props>(), {
+    anchor: '',
     eyebrow: '',
     title: '',
     description: '',
@@ -81,6 +84,7 @@
 <template>
   <div
     v-bind="$attrs"
+    :id="anchor || undefined"
     :data-testid="testId"
     :data-scrollable="scrollable || undefined"
   >
