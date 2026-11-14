@@ -21,9 +21,9 @@ export default {
   size="${size}"`
   }${
     showIcon
-      ? ''
-      : figma.code`
-  :show-icon="false"`
+      ? figma.code`
+  icon="pi pi-external-link"`
+      : ''
   }
   href="#"
 />`,

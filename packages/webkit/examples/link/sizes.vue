@@ -7,14 +7,17 @@
     <Link
       size="large"
       label="Learn more"
+      icon="pi pi-external-link"
     />
     <Link
       size="medium"
       label="Learn more"
+      icon="pi pi-external-link"
     />
     <Link
       size="small"
       label="Learn more"
+      icon="pi pi-external-link"
     />
   </div>
 </template>

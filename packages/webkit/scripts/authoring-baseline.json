@@ -352,7 +352,6 @@
   "packages/webkit/src/components/marketing/sticky-stack/sticky-stack.vue::token:zero-with-unit",
   "packages/webkit/src/components/marketing/sticky-stack/sticky-stack.vue::token:zero-with-unit",
   "packages/webkit/src/components/navigation/breadcrumb-item/breadcrumb-item.vue::i18n:hardcoded-default-string",
-  "packages/webkit/src/components/navigation/link/link.vue::token:js-class-preset",
   "packages/webkit/src/components/navigation/menu/menu-item/menu-item.vue::i18n:hardcoded-default-string",
   "packages/webkit/src/components/navigation/menu/menu-item/menu-item.vue::token:js-class-preset",
   "packages/webkit/src/components/navigation/menu/menu-item/menu-item.vue::token:js-class-preset",
