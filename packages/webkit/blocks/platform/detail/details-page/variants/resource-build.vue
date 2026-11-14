@@ -24,6 +24,7 @@
   ]
 
   const activeTab = ref('build')
+  const tabLabel = computed(() => tabs.find((tab) => tab.value === activeTab.value)?.label ?? '')
 
   const buildDefaults = { buildCommand: 'platform build', deployCommand: 'platform deploy --local' }
 
@@ -58,7 +59,10 @@
       </PageTabs>
     </div>
 
-    <div class="relative flex min-h-0 flex-1 flex-col">
+    <div
+      v-if="activeTab === 'build'"
+      class="relative flex min-h-0 flex-1 flex-col"
+    >
       <section class="min-h-0 flex-1">
         <div class="flex min-h-full flex-col">
           <div class="flex min-w-0 flex-col">
@@ -93,7 +97,7 @@
                       >
                         <EmptyState
                           size="medium"
-                          title="Connect your repository"
+                          title="Connect Git repository"
                           description="Select a Git provider, then select the repository this resource builds from. Until then, new code reaches it from the CLI only."
                           class="w-full"
                         >
@@ -292,6 +296,30 @@
           </div>
         </div>
       </section>
+    </div>
+    <div
+      v-else
+      class="relative flex min-h-0 flex-1 flex-col"
+    >
+      <div class="layout-column layout-boundary flex min-w-0 flex-col">
+        <div class="layout-section-start">
+          <EmptyState
+            size="medium"
+            icon="pi pi-external-link"
+            :title="tabLabel"
+            :description="`${tabLabel} opens on its own page.`"
+          >
+            <template #actions>
+              <Button
+                :label="`Open ${tabLabel}`"
+                kind="outlined"
+                size="small"
+                :href="`/resources/analytics-app/${activeTab}`"
+              />
+            </template>
+          </EmptyState>
+        </div>
+      </div>
     </div>
   </div>
 </template>

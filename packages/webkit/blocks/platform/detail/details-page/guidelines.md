@@ -18,17 +18,17 @@ The second-level page of one resource. The user arrives from a list row or a dep
 
 ## Building blocks
 
-### A. Tab bar — `PageTabs`, `Tabs` (required)
+### A. Tab bar — `PageTabs`, `Tabs`, `EmptyState` (required)
 
-A full-bleed `PageTabs` with one `Tabs.Item` per concern: Overview, Versions, Build, Deployments, first in the body and in a `sticky top-0` wrapper on the canvas fill, so it stays in view while the layout's content region scrolls the tab under it. On a tabbed page the primary action (an outlined Deploy) sits on the tab row at medium size. A deployment page has no tabs.
+A full-bleed `PageTabs` with one `Tabs.Item` per concern: Overview, Versions, Build, Deployments, first in the body and in a `sticky top-0` wrapper on the canvas fill, so it stays in view while the layout's content region scrolls the tab under it. On a tabbed page the primary action (an outlined Deploy) sits on the tab row at medium size. A deployment page has no tabs. Each tab is its own route: a variant renders the open tab's panel (Application renders all of its panels), and a tab whose panel lives on another route shows an `EmptyState` with an Open link to it, so no tab is dead.
 
 ### B. Summary subject band — `Card`, `Tooltip`, `Button`, `DropdownMenu`, `IconButton` (required)
 
-`Card :padded="false"` opens the tab. Its first band holds the resource glyph and its primary link, the live address that opens in a new tab and is named by a `Tooltip`, then a secondary Visit `Button` and an outlined Resource actions `IconButton` that opens a `DropdownMenu` placed `bottom-end` with Copy URL and, in its own group, Settings.
+`Card :padded="false"` opens the tab. Its first band holds the resource glyph and its primary link, the live address that opens in a new tab and is named by a `Tooltip`, then a secondary Visit `Button` that opens the same address in a new tab (`href`, `target="_blank"`) and an outlined Resource actions `IconButton` that opens a `DropdownMenu` placed `bottom-end` with Copy URL and, in its own group, Settings.
 
-### C. Summary facts band — `Tag`, `StatusIndicator`, `Avatar`, `Tooltip` (required)
+### C. Summary facts band — `Link`, `Tag`, `StatusIndicator`, `Avatar`, `Tooltip` (required)
 
-A grid of label and value pairs: Deployment (the ID as a link with a Production `Tag`), Domains, Status as a `StatusIndicator`, Created as a relative time with the author `Avatar`, Source and Framework. Each label is a small muted span over its value; links carry a `Tooltip` that says where they go. A service adds custom domains, environments and its ID with a `CopyButton`; a policy adds its rules and modules.
+A grid of label and value pairs: Deployment (the ID as a small `Link` with a Production `Tag`), Domains, Status as a `StatusIndicator`, Created as a relative time with the author `Avatar`, Source and Framework. Each label is a small muted span over its value; links carry a `Tooltip` that says where they go. A service adds custom domains (with a transparent small `IconButton`, Add a custom domain, inside a `Tooltip`), environments and its ID with a `CopyButton`; a policy adds its rules and modules.
 
 ### D. Summary state band — `Button` (optional)
 
@@ -58,7 +58,7 @@ For a resource made from the CLI, the `platform/detail/get-started` section foll
 - Open the Overview tab on the summary card; every other section of the tab comes after it.
 - Name the resource in the breadcrumb, not in a `PageHeader` title above the card.
 - Put the one primary page action (Deploy) on the tab row, medium and outlined; keep Visit in the summary.
-- Give Versions and Deployments the same controls row and table shape as `platform/view/table-view`, scoped to this resource, with a small section heading.
+- Give Versions and Deployments the same table shape as `platform/view/table-view`, scoped to this resource, with a small section heading, pages of 10 and an `EmptyState` for none yet.
 - On a deployment page, lead with a status banner (success, or danger with Redeploy) and disable Visit until the deployment is live.
 - Raise toasts with `toast` only; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shells/console` does), so this page body never renders a `Toaster`.
 
@@ -103,7 +103,7 @@ For a resource made from the CLI, the `platform/detail/get-started` section foll
 - DeploymentDetail: a deployment that went live, the success banner, the Deployment details card and the Deployment logs card.
 - DeploymentFailed: a deployment the rules rejected, the danger banner with Redeploy, Visit disabled and the logs open on the failed step.
 - Application: a whole application page body, with working tabs. Overview is the summary card; Versions and Deployments are a small `SectionHeader` over a flush `TableRoot`; Topology draws the request path with `TopologyDiagram` (domain, workload, firewall, application, function instance). Binding or removing the firewall or the function only stages the change: the node turns dashed with a Staged status, a polite status line names it, and the tab row shows the count as a warning `Tag` beside Deploy. Deploy opens a `Drawer` that lists each staged change as from and to, then runs on its own: a loading toast, then the async-submit toast with **Edit** (back to the Topology tab) and **Redeploy**, never View deployments.
-- FirstDeploy: the summary cards before and during the first deploy. A resource never deployed shows Not deployed yet in place of the address, None, Not deployed and Not yet as muted values, Connect Git Repository and Project upload under Source, and no Visit; a service on its first deploy reads Deploying · Build with a loading `StatusIndicator`, and one that serves nothing reads Inactive.
+- FirstDeploy: the summary cards before and during the first deploy. A resource never deployed shows Not deployed yet in place of the address, None, Not deployed and Not yet as muted values, Connect Git repository and Project upload under Source, and no Visit; a service on its first deploy reads Deploying · Build with a loading `StatusIndicator`, and one that serves nothing reads Inactive.
 - Invocation: the summary card of one function invocation, with the function link, the copyable invocation ID and its status, Replay, the Recent switcher, the Invocation actions menu, the Started, Completed, Duration and Location facts, and the triggering request with its outcome.
 - DeploymentQueued: a deployment waiting for a runner, the info banner, Visit disabled, Queued in the details and the logs header, and a not-started `EmptyState` in the logs card with no Phased or Complete switch.
 - ResourceBuildConnected: the Build tab of a resource with a connected repository, its link and a danger Disconnect, the Production branch and Preview branch rows, the Build configuration and Deployment bands, and the save bar once a value changes.
@@ -118,6 +118,6 @@ For a resource made from the CLI, the `platform/detail/get-started` section foll
 - `platform/detail/version-detail` — where a row of the Versions tab leads.
 - `platform/create/deploy-drawer` — the drawer the Deploy action opens.
 - `platform/states/project-intake` — the drop target an application page raises while files hover over it.
-- `platform/detail/invocations` — the page an invocation summary opens, with its request path, trace and logs.
+- `platform/detail/invocations` — the page an invocation summary opens, with its request path, trace and logs; it owns the invocation summary card, so take the card from there.
 - `platform/edit/edit-resource` — the service Settings tab.
 - `shells/console` — the `ConsoleLayout` this page body renders in; see `skills/webkit-navigation` and `skills/webkit-layout`.

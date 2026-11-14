@@ -236,7 +236,7 @@
       title: 'Publish',
       description: 'Repository wired and the deploy published',
       status: 'skipped',
-      duration: '4s',
+      duration: '',
       tag: { label: 'Skipped', severity: 'secondary' },
       lines: []
     }
@@ -266,7 +266,7 @@
     <div
       class="flex min-h-12 items-center justify-between gap-(--spacing-sm) border-b border-(--border-default) px-(--spacing-md) py-(--spacing-sm)"
     >
-      <p class="shrink-0 text-heading-xxs text-(--text-default)">Deployment logs</p>
+      <h2 class="m-0 shrink-0 text-heading-xxs text-(--text-default)">Deployment logs</h2>
       <div class="ms-auto flex min-w-0 items-center gap-(--spacing-sm)">
         <Tag
           label="Failed on Routing Rules"

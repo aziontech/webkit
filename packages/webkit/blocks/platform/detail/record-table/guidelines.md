@@ -41,23 +41,19 @@ A docked `SaveBar` slides up at the bottom of the form on the first edit, with t
 
 The Records tab opens with a small `PageHeader` titled Records with a one-sentence description, and two outlined medium actions: Documentation and Add Record. Inside a resource no action is primary and the create verb is Add.
 
-### G. Filter popover — `PopoverRoot`, `PopoverTrigger`, `PopoverContent`, `Button`, `Badge`, `IconButton`, `CalendarRoot`, `Input`, `Avatar` (optional)
+### G. Controls row — `PropertyFilter`, `Tooltip`, `IconButton`, `CollectionPreferences` (required)
 
-The outlined Filter `Button` opens one popover with the Type and Policy fields; a `Badge` on the trigger counts applied fields (the drill-down popover keeps its composed count; a filter in a table toolbar uses `Table.Filter`, whose trigger carries the count). Filters narrow `:data` and rewind pagination to the first page. It is the same recipe as `platform/view/table-view`.
+One row above the table: a `PropertyFilter` ("Filter records") that takes free text or a property token (Name, Type, Policy, Value), then outlined `IconButton`s for Refresh and Download CSV, each named by a `Tooltip`, and `CollectionPreferences` for page size and visible columns. `useCollection` owns the filter, sort, page and column state: the filter rewinds to the first page, ID is hidden by default and Name cannot be hidden. It is the same recipe as `platform/view/table-view`.
 
-### H. Toolbar and columns — `Input`, `Tooltip`, `IconButton`, `PopoverRoot`, `PopoverTrigger`, `PopoverContent`, `Field`, `Switch`, `Button` (optional)
+### H. Records table — `Card`, `TableRoot`, `Table.CellId`, `Table.CellLink`, `Table.CellActions`, `Tag` (required)
 
-A medium search `Input` bound to `v-model:globalFilter`, then outlined `IconButton`s for Refresh, Download CSV and Columns, each named by a `Tooltip`. The Columns popover holds one `Switch` per hideable column and a Show all columns `Button`. ID is hidden by default; Name cannot be hidden.
+`Card :padded="false"` around `TableRoot :bordered="false"` bound to `useCollection`'s `tableProps` (row key, sorting, pages of 10 and the column visibility) and `:loading`. Name is `principal`. Type is a secondary `Tag`. ID is `Table.CellId` ("Copy record ID") and Value is `Table.CellLink` with `copyable`, so their copy buttons stay pinned at the cell end while the text truncates; row actions are `Table.CellActions` named after the record. Weight and Description stay blank when they do not apply; no dash, no "None".
 
-### I. Applied filters — `Chip`, `Avatar` (optional)
+### I. Empty and no-match — `EmptyState`, `Button` (required)
 
-One wrapping row of filled medium `Chip`s, one per applied field, in field order. Each chip reopens its field and can be removed.
+The table's `#empty` slot tells the two cases apart through `useCollection`'s `status`. A filter that matches nothing shows "No matching records" with Clear filters; a zone with no records shows "No records yet" with Add Record and Import zone file.
 
-### J. Records table — `Card`, `TableRoot`, `Table.CellId`, `Table.CellLink`, `Table.CellActions`, `Tag` (required)
-
-`Card :padded="false"` around `TableRoot :bordered="false"` with `row-key="id"`, sorting, `paginated` at 8 rows and `:loading`. Name is `principal`. Type is a secondary `Tag`. ID is `Table.CellId` ("Copy record ID") and Value is `Table.CellLink` with `copyable`, so their copy buttons stay pinned at the cell end while the text truncates; row actions are `Table.CellActions` named after the record. Weight and Description show a dash glyph when empty.
-
-### K. Row actions — `Table.CellActions`, `DropdownMenuGroup`, `DropdownMenuOption` (required)
+### J. Row actions — `Table.CellActions`, `DropdownMenuGroup`, `DropdownMenuOption` (required)
 
 `Table.CellActions`, named after the record ("Actions for www"), opens a menu placed `bottom-end` with Edit in the first group and Delete alone in the last.
 
@@ -68,7 +64,8 @@ One wrapping row of filled medium `Chip`s, one per applied field, in field order
 - Make every copyable value read-only and pair it with a `CopyButton` whose label names the value.
 - Raise the save bar only when something changed, and keep it until Save lands or Discard restores the record.
 - Reuse the table view controls row and table recipe in the Records tab so filters, search and columns behave the same as on index pages.
-- Rewind pagination to the first page when filters or search change.
+- Rewind pagination to the first page when the filter changes.
+- Tell an empty zone (Add Record, Import zone file) apart from a filter that matches nothing (Clear filters).
 - Raise toasts with `toast` only; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shells/console` does), so this page body never renders a `Toaster`.
 
 ## Don't
@@ -94,20 +91,20 @@ One wrapping row of filled medium `Chip`s, one per applied field, in field order
 
 - The form is labeled "Zone settings" and its fieldset has a visually hidden legend with the same words.
 - Each `Input` has an `aria-label` matching its row title; an `Input` with an error points to its `HelperText` through `aria-describedby`.
-- Every icon-only control has an `aria-label` and a `Tooltip` with the same words; decorative icons carry `aria-hidden="true"`, and so does the filter `Badge`.
-- Search has an `aria-label` that matches its placeholder, "Search records".
-- Focus order follows reading order: tabs, form fields, save bar; or heading actions, Filter, search, toolbar, chips, table, pagination.
+- Every icon-only control has an `aria-label` and a `Tooltip` with the same words; decorative icons carry `aria-hidden="true"`.
+- The property filter has an `aria-label` that matches its placeholder, "Filter records".
+- Focus order follows reading order: tabs, form fields, save bar; or heading actions, the property filter, toolbar, table, pagination.
 - Tab panel entrances respect reduced motion.
 
 ## States
 
 - MainSettings: the Main settings tab with General, nameservers, DNSSEC and Status; the save bar appears on the first edit.
 - Records: the Records tab with the zone's one A record, the ID column hidden by default.
-- ImportZoneFile: Import zone file, beside Add Record, opens a large `Drawer`. The file comes from a `FileDropzone` (one `.zone`, `.txt` or `.db` file; a rejected or empty file shows an invalid `HelperText` under it) or is pasted into a `Textarea`. Every line is previewed in a `TableRoot`: line number, name relative to the origin, type, value and a Ready, Skipped or Error `Tag`, with the reason under the value. The counts sit in a polite status line, errors add a danger `Alert` above the preview, and Import N records (disabled at zero) adds only the ready lines, then a toast says how many were imported and how many lines were left out.
+- ImportZoneFile: Import zone file, beside Add Record, opens a large `Drawer`. The file comes from a `FileDropzone` (one `.zone`, `.txt` or `.db` file; a rejected or empty file shows an invalid `HelperText` under it) or is pasted into a `Textarea`. Every line is previewed in a `TableRoot` paginated at ten lines: line number, name relative to the origin, type, value and a Ready, Skipped or Error `Tag`, with the reason under the value. The counts sit in a polite status line, errors add a danger `Alert` above the preview, and Import N records (disabled at zero) adds only the ready lines, then a toast says how many were imported and how many lines were left out.
 
 ## Importing a zone file
 
-- Parse on the client as the text changes and preview every line before anything is written; never import on drop.
+- Parse on the client shortly after the text stops changing (a 250 ms pause; a dropped file parses at once) and preview every line, ten per page, before anything is written; never import on drop.
 - Name the line number on every row, so the user can fix the file.
 - Skip with a reason what the zone manages itself (SOA, apex NS) and types it does not support; mark as errors only values that are wrong.
 - Import what is ready even when some lines fail, and say in the toast how many were left out.

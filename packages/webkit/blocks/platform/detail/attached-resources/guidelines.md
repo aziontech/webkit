@@ -10,7 +10,7 @@ A short list of the things one resource is attached to, shown in place inside it
 
 ## When not to use
 
-- The related records are many and need search, filters or columns: use the records table in `platform/detail/record-table`.
+- The related records are many and need search, filters or columns: use the list of `platform/view/table-view`, scoped to the resource.
 - A first-level list of one resource type reached from the sidebar: use `platform/view/table-view`.
 - Pairs of keys and values the user types in place: use `platform/edit/attribute-editor`.
 - Choosing one existing resource inside a form: use `platform/create/resource-picker`.
@@ -48,7 +48,7 @@ Below a top rule, a muted count on the left ("3 domains") and an outlined medium
 
 ## Don't
 
-- Don't add search, filters or pagination; switch to `platform/detail/record-table` when the list needs them.
+- Don't add search, filters or pagination; switch to the `platform/view/table-view` list when the list needs them.
 - Don't use a primary or large button for Add; the page's Save belongs to the settings form.
 - Don't put Delete in the same group as Edit, or use a destructive color in the menu trigger.
 - Don't write a dash or "None" in cells that do not apply.
@@ -78,6 +78,6 @@ Below a top rule, a muted count on the left ("3 domains") and an outlined medium
 ## Related
 
 - `platform/edit/edit-resource` — the Settings tab whose Domains section renders this card.
-- `platform/detail/record-table` — the full records table for longer related lists.
+- `platform/view/table-view` — the full list, with filters and pages, for longer related lists.
 - `platform/delete/delete-with-confirmation` — the dialog behind the row menu's Delete.
 - `TableRoot` — the table this card wraps; see `skills/webkit-tables`.

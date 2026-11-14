@@ -5,6 +5,7 @@
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
   import Flow from '@aziontech/webkit/flow'
   import IconButton from '@aziontech/webkit/icon-button'
+  import Link from '@aziontech/webkit/link'
   import LogView, { type LogViewLine } from '@aziontech/webkit/log-view'
   import LogViewContent from '@aziontech/webkit/log-view-content'
   import PageHeader from '@aziontech/webkit/page-header'
@@ -392,8 +393,8 @@
   <div class="layout-boundary flex min-h-0 w-full flex-1 flex-col">
     <div class="layout-column flex min-w-0 flex-col pb-(--layout-section-gap)">
       <PageHeader
-        title="Invocations"
-        description="Every run of this function, end to end: the path the request took and what each step cost."
+        title="Invocation"
+        description="One run of this function, end to end: the path the request took and what each step cost."
         size="medium"
       />
 
@@ -415,14 +416,12 @@
                     :text="`Open ${FUNCTION.name} in Functions`"
                     class="w-full"
                   >
-                    <a
+                    <Link
+                      :label="FUNCTION.name"
                       :href="`/functions/${FUNCTION.id}`"
-                      class="group/link inline-flex min-w-0 items-center gap-(--spacing-xxs) rounded-(--shape-button) text-body-sm text-(--text-default) no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)"
-                    >
-                      <span class="truncate underline-offset-2 group-hover/link:underline">{{
-                        FUNCTION.name
-                      }}</span>
-                    </a>
+                      size="small"
+                      :show-icon="false"
+                    />
                   </Tooltip>
                 </div>
                 <span
@@ -455,44 +454,37 @@
                   @click="replay"
                 />
 
-                <Tooltip text="Pick another invocation of this function">
-                  <DropdownMenu
-                    placement="bottom-end"
-                    @select="(_event, value) => pickRun(String(value))"
-                  >
-                    <DropdownMenu.Trigger>
-                      <span
-                        class="flex h-8 min-w-0 items-center gap-(--spacing-xs) rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) text-label-sm text-(--text-default) transition-colors duration-150 ease-out motion-reduce:transition-none hover:border-(--border-strong)"
-                      >
-                        <i
-                          class="pi pi-history shrink-0 text-(--text-muted)"
-                          aria-hidden="true"
-                        />
-                        <span class="truncate">Recent</span>
-                        <i
-                          class="pi pi-chevron-down shrink-0 text-(--text-muted)"
-                          aria-hidden="true"
-                        />
-                      </span>
-                    </DropdownMenu.Trigger>
+                <DropdownMenu
+                  placement="bottom-end"
+                  @select="(_event, value) => pickRun(String(value))"
+                >
+                  <DropdownMenu.Trigger>
+                    <Tooltip text="Pick another invocation of this function">
+                      <Button
+                        label="Recent"
+                        kind="outlined"
+                        size="medium"
+                        icon="pi pi-history"
+                      />
+                    </Tooltip>
+                  </DropdownMenu.Trigger>
 
-                    <DropdownMenu.Group label="Recent invocations">
-                      <DropdownMenu.Option
-                        v-for="option in runs"
-                        :key="option.id"
-                        :value="option.id"
-                        :label="option.id"
-                        :selected="option.id === run.id"
-                      >
-                        <template #right>
-                          <span class="text-label-sm text-(--text-muted)">
-                            {{ option.status }} · {{ option.started }}
-                          </span>
-                        </template>
-                      </DropdownMenu.Option>
-                    </DropdownMenu.Group>
-                  </DropdownMenu>
-                </Tooltip>
+                  <DropdownMenu.Group label="Recent invocations">
+                    <DropdownMenu.Option
+                      v-for="option in runs"
+                      :key="option.id"
+                      :value="option.id"
+                      :label="option.id"
+                      :selected="option.id === run.id"
+                    >
+                      <template #right>
+                        <span class="text-label-sm text-(--text-muted)">
+                          {{ option.status }} · {{ option.started }}
+                        </span>
+                      </template>
+                    </DropdownMenu.Option>
+                  </DropdownMenu.Group>
+                </DropdownMenu>
 
                 <DropdownMenu placement="bottom-end">
                   <DropdownMenu.Trigger>
@@ -696,10 +688,21 @@
             title="Logs"
             description="What the function printed while it ran, on the same clock as the trace."
             size="small"
-          />
+          >
+            <template
+              v-if="running"
+              #actions
+            >
+              <StatusIndicator
+                severity="warning"
+                loading
+                label="Streaming"
+              />
+            </template>
+          </SectionHeader>
           <LogView
             :lines="lines"
-            :loading="running"
+            :loading="running && !lines.length"
             loading-label="Waiting for the function to finish…"
             copyable
           >

@@ -10,7 +10,9 @@
   import DrawerPortal from '@aziontech/webkit/drawer-portal'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
+  import EmptyState from '@aziontech/webkit/empty-state'
   import IconButton from '@aziontech/webkit/icon-button'
+  import Link from '@aziontech/webkit/link'
   import PageTabs from '@aziontech/webkit/page-tabs'
   import PanelContent from '@aziontech/webkit/panel-content'
   import PanelFooter from '@aziontech/webkit/panel-footer'
@@ -375,6 +377,8 @@
                 <div class="ms-auto flex shrink-0 items-center gap-(--spacing-xs)">
                   <Button
                     label="Visit"
+                    :href="`https://${APP.host}`"
+                    target="_blank"
                     kind="secondary"
                     size="medium"
                     icon="pi pi-external-link"
@@ -412,11 +416,12 @@
                 <div class="flex min-w-0 flex-col gap-(--spacing-xxs) lg:col-span-2">
                   <dt class="text-label-sm text-(--text-muted)">Deployment</dt>
                   <dd class="m-0 flex min-h-7 min-w-0 items-center gap-(--spacing-xs)">
-                    <a
+                    <Link
+                      :label="APP.deployment"
                       :href="`/deployments/${APP.deployment}`"
-                      class="truncate text-body-sm text-(--text-default) underline-offset-2 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)"
-                      >{{ APP.deployment }}</a
-                    >
+                      size="small"
+                      :show-icon="false"
+                    />
                     <Tag
                       label="Production"
                       severity="secondary"
@@ -496,6 +501,8 @@
                 :data="versions"
                 :columns="versionColumns"
                 row-key="id"
+                paginated
+                :page-size="10"
                 :bordered="false"
                 aria-label="Versions"
               >
@@ -518,6 +525,14 @@
                     size="small"
                   />
                 </template>
+                <template #empty>
+                  <EmptyState
+                    size="medium"
+                    icon="pi pi-history"
+                    title="No versions yet"
+                    description="Every deploy creates a version of this application."
+                  />
+                </template>
               </TableRoot>
             </template>
           </Card>
@@ -537,6 +552,8 @@
                 :data="deployments"
                 :columns="deploymentColumns"
                 row-key="id"
+                paginated
+                :page-size="10"
                 :bordered="false"
                 aria-label="Deployments"
               >
@@ -544,6 +561,14 @@
                   <StatusIndicator
                     :severity="deploymentSeverity[value]"
                     :label="value"
+                  />
+                </template>
+                <template #empty>
+                  <EmptyState
+                    size="medium"
+                    icon="pi pi-cloud-upload"
+                    title="No deployments yet"
+                    description="Deploy this application and each run lands here."
                   />
                 </template>
               </TableRoot>

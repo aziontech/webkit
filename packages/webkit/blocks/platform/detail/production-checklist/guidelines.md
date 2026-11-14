@@ -24,13 +24,17 @@ A service that is live on its generated hostname is not yet ready for real traff
 
 A small `Tag` beside the title: secondary with the count, "1 of 3", while gates remain; success with "Ready for production" when all are done. It is the only progress signal on the card.
 
-### C. Expand button — `IconButton` (required)
+### C. Expand button — `IconButton`, `Tooltip` (required)
 
-A small outlined `IconButton` with the maximize icon at the header's end, `aria-label="Expand the production checklist"`. It opens the drawer with the same steps, their descriptions and their actions.
+A small outlined `IconButton` with the maximize icon at the header's end, `aria-label="Expand the production checklist"`, named on hover by a `Tooltip` reading Expand. It opens the drawer with the same steps, their descriptions and their actions.
 
 ### D. Gate rows — `Item` (required)
 
 One small `Item` per gate, rendered as a full-width button: the gate's icon, its title and, at the end, a check when done. A done row takes the primary mask fill and a primary icon. Each row carries a screen-reader status, "Done" or "Not started", and opens the drawer like the expand button.
+
+### E. Checklist drawer — `Drawer`, `DrawerPortal`, `DrawerOverlay`, `DrawerContent`, `DrawerTitle`, `DrawerClose`, `PanelHeader`, `PanelContent`, `PanelFooter`, `Button` (required)
+
+A large right-side `Drawer` that the expand button and every row open. `PanelHeader` repeats the title with the progress `Tag` and one sentence on where the service stands, beside `DrawerClose`; `PanelContent` lists every gate as a medium `Item` with its description and either its outlined action `Button` or, once done, a Done `Tag` with what it now serves; `PanelFooter` ends with a primary Done `Button` that closes it.
 
 ## Do
 
@@ -67,7 +71,7 @@ One small `Item` per gate, rendered as a full-width button: the gate's icon, its
 
 ## States
 
-- Card: some gates done; the card lists every gate with the count in its tag.
+- Card: some gates done; the card lists every gate with the count in its tag, and the expand button and every row open the drawer.
 - Complete: every gate done; the tag reads Ready for production and the rows are gone.
 - DrawerDetail: the expand button opened the right-side drawer with every step, its description and its action or its Done tag and note, over a Done footer; a card row opens the same drawer.
 

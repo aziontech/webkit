@@ -31,11 +31,12 @@ Each open step shows its own borderless `LogView` with its lines, typed `text`, 
 
 ### D. Run progress — `Progress` (optional)
 
-A small, flat `Progress` flush on the bottom edge with `aria-label="Deployment progress"`, only while the run goes. It is dropped on a deployment detail page and once the run settles.
+A small, flat `Progress` flush on the bottom edge with `aria-label="Deployment progress"`, only while the run goes. Its value is the share of steps done (3 of 8 is 38), computed from the steps, never typed in. It is dropped on a deployment detail page and once the run settles.
 
 ## Do
 
-- Show the Logs row with the step count and the step in flight, e.g. "3/8 steps" and "Build", while the run goes.
+- Show a step's time only once it has run (done, running, failed); a pending or skipped step shows none.
+- Show the Logs row, titled by a level-2 "Deployment logs" heading, with the step count and the step in flight, both computed from the steps, e.g. "3/8 steps" and "Build", while the run goes.
 - Once settled, replace the count with the outcome `Tag`, the total time, and a medium `ToggleGroup` between Phased and Complete labelled "Log view".
 - Open the failed step automatically and mark every step after it Skipped.
 - Inside a deploy flow card, move the Logs row controls up to the card header; on a deployment page, drop the Logs row and progress and put the controls in the Deployment logs card header.

@@ -4,7 +4,9 @@
   import Card from '@aziontech/webkit/card'
   import CodeBlock from '@aziontech/webkit/code-block'
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
+  import EmptyState from '@aziontech/webkit/empty-state'
   import IconButton from '@aziontech/webkit/icon-button'
+  import Link from '@aziontech/webkit/link'
   import PageTabs from '@aziontech/webkit/page-tabs'
   import SectionHeader from '@aziontech/webkit/section-header'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
@@ -22,6 +24,7 @@
   ]
 
   const activeTab = ref('overview')
+  const tabLabel = computed(() => tabs.find((tab) => tab.value === activeTab.value)?.label ?? '')
 
   const PATHS = [
     { label: 'CLI', value: 'cli' },
@@ -151,7 +154,10 @@ jobs:
       </PageTabs>
     </div>
 
-    <div class="relative flex min-h-0 flex-1 flex-col">
+    <div
+      v-if="activeTab === 'overview'"
+      class="relative flex min-h-0 flex-1 flex-col"
+    >
       <section class="min-h-0 flex-1">
         <div class="flex min-h-full flex-col">
           <div class="layout-column layout-boundary flex min-w-0 flex-col">
@@ -198,6 +204,8 @@ jobs:
                     <div class="ms-auto flex shrink-0 items-center gap-(--spacing-xs)">
                       <Button
                         label="Visit"
+                        href="https://analytics-app-z1x2c3.example.com"
+                        target="_blank"
                         kind="secondary"
                         size="medium"
                         icon="pi pi-external-link"
@@ -257,19 +265,12 @@ jobs:
                             text="Open 1213275262 in Deployments"
                             class="w-full"
                           >
-                            <a
+                            <Link
+                              label="1213275262"
                               href="/deployments/1213275262"
-                              data-link
-                              class="group/link data-link:cursor-pointer inline-flex min-w-0 items-center gap-(--spacing-xxs) rounded-(--shape-button) text-body-sm text-(--text-default) no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)"
-                            >
-                              <span class="truncate underline-offset-2 group-hover/link:underline"
-                                >1213275262</span
-                              >
-                              <i
-                                class="pi pi-external-link shrink-0 text-body-xs leading-none"
-                                aria-hidden="true"
-                              />
-                            </a>
+                              size="small"
+                              :show-icon="false"
+                            />
                           </Tooltip>
                         </div>
                         <Tag
@@ -461,6 +462,30 @@ jobs:
           </div>
         </div>
       </section>
+    </div>
+    <div
+      v-else
+      class="relative flex min-h-0 flex-1 flex-col"
+    >
+      <div class="layout-column layout-boundary flex min-w-0 flex-col">
+        <div class="layout-section-start">
+          <EmptyState
+            size="medium"
+            icon="pi pi-external-link"
+            :title="tabLabel"
+            :description="`${tabLabel} opens on its own page.`"
+          >
+            <template #actions>
+              <Button
+                :label="`Open ${tabLabel}`"
+                kind="outlined"
+                size="small"
+                :href="`/resources/analytics-app/${activeTab}`"
+              />
+            </template>
+          </EmptyState>
+        </div>
+      </div>
     </div>
   </div>
 </template>
