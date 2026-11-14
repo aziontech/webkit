@@ -3,12 +3,12 @@ name: toggle-group
 category: actions
 structure: monolithic
 status: implemented
-spec_version: 3
+spec_version: 4
 template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2904-5892
   node_id: 2904:5892
-checksum: 7cb2e968057eda3a580b0203eb4b36a5d58407c6c149c9b9f620f078c50cecf3
+checksum: dd610634d75fc97a477fae5ca524609fd7d996db588418cefa71302c108cdc90
 created: 2026-11-09
 last_updated: 2026-11-14
 ---
@@ -77,14 +77,15 @@ ToggleGroup is a connected group of buttons that picks exactly one value out of 
 
 ## Props
 
-| Prop           | Type                                                                                                 | Default     | Required | JSDoc                                                                       |
-| -------------- | ---------------------------------------------------------------------------------------------------- | ----------- | -------- | --------------------------------------------------------------------------- |
-| `options`      | `ToggleGroupOption[]` (`{ label?: string \| number; value?: string \| number; disabled?: boolean; locked?: boolean }`) | `[]`        | false    | Segmented choices shown as a mutually exclusive group.                      |
-| `ariaLabel`    | `string`                                                                                             | `''`        | false    | Accessible name when no visible group label is associated.                  |
-| `defaultValue` | `string`                                                                                             | `undefined` | false    | Initial selection when `v-model` is not set.                                |
-| `size`         | `'small' \| 'medium' \| 'large'`                                                                     | `'large'`   | false    | Size token, on the same 28 / 32 / 40 rhythm every other control uses.       |
-| `fluid`        | `boolean`                                                                                            | `false`     | false    | Stretches the group to its container and lets the options share that width. |
-| `disabled`     | `boolean`                                                                                            | `false`     | false    | Disables every option of the group.                                         |
+| Prop           | Type                                                                                                                   | Default     | Required | JSDoc                                                                                                                    |
+| -------------- | ---------------------------------------------------------------------------------------------------------------------- | ----------- | -------- | ------------------------------------------------------------------------------------------------------------------------ |
+| `options`      | `ToggleGroupOption[]` (`{ label?: string \| number; value?: string \| number; disabled?: boolean; locked?: boolean }`) | `[]`        | false    | Segmented choices shown as a mutually exclusive group.                                                                   |
+| `ariaLabel`    | `string`                                                                                                               | `''`        | false    | Accessible name when no visible group label is associated.                                                               |
+| `defaultValue` | `string`                                                                                                               | `undefined` | false    | Initial selection when `v-model` is not set.                                                                             |
+| `size`         | `'small' \| 'medium' \| 'large'`                                                                                       | `'large'`   | false    | Size token, on the same 28 / 32 / 40 rhythm every other control uses.                                                    |
+| `fluid`        | `boolean`                                                                                                              | `false`     | false    | Stretches the group to its container and lets the options share that width.                                              |
+| `disabled`     | `boolean`                                                                                                              | `false`     | false    | Disables every option of the group.                                                                                      |
+| `name`         | `string`                                                                                                               | `''`        | false    | Form field name. Set, a hidden input carries the selected value so a native `form` submits it; `disabled` leaves it out. |
 
 **Generic.** Props stay an inline literal in `defineProps` because the component is generic (`TValue`): a named `interface Props` inside a generic `<script setup>` fails declaration emit (TS4025).
 
@@ -118,10 +119,10 @@ ToggleGroup is a connected group of buttons that picks exactly one value out of 
 
 ## Motion & Animations
 
-| Trigger                                    | Animation / Transition                                                                | Token (see `.claude/docs/DESIGN.md` § Animations)                                             | Reduced-motion fallback                                                                                                  |
-| ------------------------------------------ | ------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
-| segment selected / deselected (text color) | `transition-colors duration-fast-02 ease-productive-entrance`                         | semantic `fast-02` · `productive-entrance`                                                    | `motion-reduce:transition-none`                                                                                          |
-| indicator slides to the selected segment   | `transition-[transform,width,height] duration-moderate-02 ease-productive-entrance` (the offset is an inline `transform`, the transition is a class) | semantic `moderate-02` · `productive-entrance` | `motion-reduce:transition-none` |
+| Trigger                                    | Animation / Transition                                                                                                                               | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback         |
+| ------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------- | ------------------------------- |
+| segment selected / deselected (text color) | `transition-colors duration-fast-02 ease-productive-entrance`                                                                                        | semantic `fast-02` · `productive-entrance`        | `motion-reduce:transition-none` |
+| indicator slides to the selected segment   | `transition-[transform,width,height] duration-moderate-02 ease-productive-entrance` (the offset is an inline `transform`, the transition is a class) | semantic `moderate-02` · `productive-entrance`    | `motion-reduce:transition-none` |
 
 ## Tokens
 
@@ -168,8 +169,8 @@ ToggleGroup is a connected group of buttons that picks exactly one value out of 
 
 ## Internationalization
 
-| Key                  | English source | Override prop                 |
-| -------------------- | -------------- | ----------------------------- |
+| Key                  | English source   | Override prop                  |
+| -------------------- | ---------------- | ------------------------------ |
 | `toggleGroup.option` | `Option {index}` | an option `label` (or `value`) |
 
 - Option labels are consumer copy; the catalog string is only the fallback for an option with neither `label` nor `value`.

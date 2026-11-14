@@ -407,3 +407,20 @@ describe('Switch autofocus and privacy lock', () => {
     expect(plain.queryByTestId('input-switch__lock')).toBeNull()
   })
 })
+
+describe('Switch — native form submit', () => {
+  it('submits on under its name while on, and nothing while off', async () => {
+    const { getByTestId, getByRole } = render(
+      defineComponent({
+        components: { Switch },
+        setup: () => ({ on: ref(true) }),
+        template:
+          '<form data-testid="form"><Switch v-model="on" name="alerts" aria-label="Alerts" /></form>'
+      })
+    )
+    const form = getByTestId('form') as HTMLFormElement
+    expect(new FormData(form).get('alerts')).toBe('on')
+    await fireEvent.click(getByRole('switch'))
+    expect(new FormData(form).has('alerts')).toBe(false)
+  })
+})

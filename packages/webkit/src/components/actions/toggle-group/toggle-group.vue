@@ -14,6 +14,7 @@
   import { useTranslate } from '../../../composables/use-locale/use-translate'
   import * as en from '../../../i18n/messages/en'
   import { cn } from '../../../utils/cn'
+  import { FormValue } from '../../../utils/form-value'
 
   defineOptions({
     name: 'ToggleGroup',
@@ -34,6 +35,8 @@
       fluid?: boolean
       /** Disables every option of the group. */
       disabled?: boolean
+      /** Form field name: a hidden input carries the selected value, so a native form submits it. */
+      name?: string
     }>(),
     {
       options: () => [],
@@ -41,7 +44,8 @@
       defaultValue: undefined,
       size: 'large',
       fluid: false,
-      disabled: false
+      disabled: false,
+      name: ''
     }
   )
 
@@ -379,5 +383,10 @@
         :data-testid="`${testId}__option-lock`"
       />
     </button>
+    <FormValue
+      :name="name"
+      :value="selectedValue"
+      :disabled="disabled"
+    />
   </div>
 </template>

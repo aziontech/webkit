@@ -705,3 +705,43 @@ describe('MultiSelect (defineModel)', () => {
     cleanupTeleported()
   })
 })
+
+describe('MultiSelect — native form submit', () => {
+  it('submits every selected value under its name', () => {
+    const { getByTestId } = render(
+      defineComponent({
+        components: { MultiSelect, MultiSelectTrigger, MultiSelectContent, MultiSelectOption },
+        setup: () => ({ value: ref(['edge', 'storage']) }),
+        template: `
+          <form data-testid="form">
+            <MultiSelect v-model="value" name="products">
+              <MultiSelectTrigger aria-label="Products" />
+              <MultiSelectContent>
+                <MultiSelectOption value="edge">Edge</MultiSelectOption>
+                <MultiSelectOption value="storage">Storage</MultiSelectOption>
+              </MultiSelectContent>
+            </MultiSelect>
+          </form>
+        `
+      })
+    )
+    expect(new FormData(getByTestId('form') as HTMLFormElement).getAll('products')).toEqual([
+      'edge',
+      'storage'
+    ])
+  })
+
+  it('blocks an empty submit when required', () => {
+    const { getByTestId } = render(
+      defineComponent({
+        components: { MultiSelect, MultiSelectTrigger },
+        template: `
+          <form data-testid="form">
+            <MultiSelect name="products" required><MultiSelectTrigger aria-label="Products" /></MultiSelect>
+          </form>
+        `
+      })
+    )
+    expect((getByTestId('form') as HTMLFormElement).checkValidity()).toBe(false)
+  })
+})

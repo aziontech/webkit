@@ -3,11 +3,11 @@ name: switch
 category: inputs
 structure: monolithic
 status: implemented
-spec_version: 11
+spec_version: 12
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2027-1247
   node_id: 2027:1247
-checksum: 97dd9fc2add56709e8bbc806481995d77bd28fcb79cdd9ca67d25057bbf4feff
+checksum: 0a0b61106f497e912d1c79eac3933a77cd40b245ec6e55e1bd714cfd0e7ca0c0
 created: 2026-05-22
 last_updated: 2026-11-14
 ---
@@ -65,12 +65,13 @@ Control-only pill toggle `Switch` (36×20 px). Two visual types: `default` (plai
 
 ## Props
 
-| Prop       | Type                     | Default     | Required | JSDoc                                                                                              |
-| ---------- | ------------------------ | ----------- | -------- | -------------------------------------------------------------------------------------------------- |
-| `kind`     | `'default' \| 'privacy'` | `'default'` | false    | Visual variant (`SwitchKind`; `SwitchType` stays exported as a deprecated alias until 7.0). `privacy` renders a lock icon inside the handle (closed when off, open when on). |
-| `autofocus` | `boolean`               | `false`     | false    | Moves focus to the switch once, when it mounts.                                                    |
-| `focused`  | `boolean`                | `false`     | false    | `@deprecated since 6.0 — use autofocus. Removed in 7.0.` Forces the focused visual state and moves focus. Mirrors the Figma `focused` variant. |
-| `disabled` | `boolean`                | `false`     | false    | Disables interaction and applies the disabled tokens.                                              |
+| Prop        | Type                     | Default     | Required | JSDoc                                                                                                                                                                                        |
+| ----------- | ------------------------ | ----------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `kind`      | `'default' \| 'privacy'` | `'default'` | false    | Visual variant (`SwitchKind`; `SwitchType` stays exported as a deprecated alias until 7.0). `privacy` renders a lock icon inside the handle (closed when off, open when on).                 |
+| `autofocus` | `boolean`                | `false`     | false    | Moves focus to the switch once, when it mounts.                                                                                                                                              |
+| `focused`   | `boolean`                | `false`     | false    | `@deprecated since 6.0 — use autofocus. Removed in 7.0.` Forces the focused visual state and moves focus. Mirrors the Figma `focused` variant.                                               |
+| `disabled`  | `boolean`                | `false`     | false    | Disables interaction and applies the disabled tokens.                                                                                                                                        |
+| `name`      | `string`                 | `''`        | false    | Form field name. Set, a hidden input inside the button submits `on` under this name while the switch is on and nothing while it is off, as a native checkbox does; `disabled` leaves it out. |
 
 ## v-model
 

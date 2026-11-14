@@ -1,5 +1,6 @@
 import { fireEvent, render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
+import { ref } from 'vue'
 
 import Default from '../../../../examples/radio-cards/default.vue'
 import Disabled from '../../../../examples/radio-cards/disabled.vue'
@@ -376,5 +377,21 @@ describe('RadioCards on devices', () => {
     })
 
     expect(view.getAllByRole('radio')[0]?.className).toContain('max-w-full')
+  })
+})
+
+describe('RadioCards — native form submit', () => {
+  it('submits the selected value under its name and blocks an empty submit in a required Field', async () => {
+    const { getByTestId, getAllByRole } = render({
+      components: { Field, RadioCards },
+      setup: () => ({ items, value: ref<string | undefined>(undefined) }),
+      template:
+        '<form data-testid="form"><Field required><RadioCards v-model="value" :items="items" name="tier" aria-label="Tier" /></Field></form>'
+    })
+    const form = getByTestId('form') as HTMLFormElement
+    expect(form.checkValidity()).toBe(false)
+    await fireEvent.click(getAllByRole('radio')[1])
+    expect(new FormData(form).get('tier')).toBe(items[1].value)
+    expect(form.checkValidity()).toBe(true)
   })
 })
