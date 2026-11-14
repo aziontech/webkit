@@ -13,8 +13,8 @@
       "file": "page-opens-search.vue"
     },
     {
-      "name": "NavigationExpanded",
-      "summary": "`v-model:navigation-expanded` binds the rail: a `Collapse sidebar` / `Expand sidebar` command in the palette's `search` slot folds and restores it, and the app can persist the value.",
+      "name": "NavigationOpen",
+      "summary": "`v-model:navigation-open` binds the rail: a `Collapse sidebar` / `Expand sidebar` command in the palette's `search` slot folds and restores it, and the app can persist the value.",
       "file": "navigation-expanded.vue"
     },
     {

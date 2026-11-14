@@ -46,9 +46,7 @@
         v-model="environment"
         kind="transparent"
         size="small"
-        :display-value="
-          (value) => environments.find((entry) => entry.value === value)?.label ?? ''
-        "
+        :display-value="(value) => environments.find((entry) => entry.value === value)?.label ?? ''"
       >
         <Select.Trigger aria-label="Switch environment" />
         <Select.Content>

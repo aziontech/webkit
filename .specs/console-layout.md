@@ -3,9 +3,9 @@ name: console-layout
 category: layout
 structure: composition
 status: implemented
-spec_version: 4
+spec_version: 5
 template: 2
-checksum: a7046484668a52ed3d69a6d4328b250e72e9c3556448f6363883b91ac99baab3
+checksum: 274faed584d635251bbfd09b6226ac25714413e72ba95c5d0f55ddf94ac6e8c8
 created: 2026-11-12
 last_updated: 2026-11-14
 ---
@@ -46,7 +46,7 @@ The console chrome, composed once in the app: `AppLayout` with the navigation ra
 - Put an account switcher in `sidebar-header` (full width under the wordmark, the design sample's rail) and, below the compact breakpoint, in `header-start` while `compact`; page-level flash messages go in `notifications`, and help or the notifications list in `tools` (toggled from a bell in `actions` with `toggleTools`).
 - A page's control crumb is its `ConsoleLayout.Breadcrumbs`, never `App.vue`'s `breadcrumbs` slot.
 - A workspace page (editor, pinned panes) puts `data-layout-fill` on its root: the `<main>` becomes a fixed-height, non-scrolling region the root fills. Never size a body with `100dvh` or `calc(100dvh - var(--layout-header-height))` (lint `webkit/no-viewport-height-calc`, also run by the authoring ratchet over blocks and examples).
-- Bind `v-model:navigation-expanded` when the rail's state must survive a reload or be driven from elsewhere (a `Collapse sidebar` / `Expand sidebar` command in the `search` slot); persist it in the app. The rail's own collapse control and the edge affordance keep working either way.
+- Bind `v-model:navigation-open` when the rail's state must survive a reload or be driven from elsewhere (a `Collapse sidebar` / `Expand sidebar` command in the `search` slot); persist it in the app. The rail's own collapse control and the edge affordance keep working either way.
 - Open the palette from inside a page with `useConsoleLayout().openSearch()` (imported from `@aziontech/webkit/use-console-layout`); never mount a second `Command`. `useConsoleLayout()` throws outside a `ConsoleLayout`, so a misplaced call fails loudly.
 - A page body that also renders on its own (a block preview, a docs example, a test) calls `useConsoleLayout({ optional: true })`, which returns `null` outside a layout, and guards the call (`layout?.openSearch()`). Never wrap `useConsoleLayout()` in `try` / `catch`.
 - The page entrance (`animate-page-enter`) plays on every route path change: the `<main>` is keyed on the path, so the page body remounts when the path changes and is kept when only the query or the hash changes. Keep state that must survive a path change (a list filter, a draft) in the route query or in the app's store, not in the page body; a `KeepAlive` belongs inside a page body (tabbed views), not around `RouterView`.
@@ -160,7 +160,8 @@ packages/webkit/src/components/layout/console-layout/
 | ----------------------------- | --------- | ------- | --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `v-model:search-open`         | `boolean` | `false` | `update:searchOpen`         | Whether the search palette is open; the trigger, ⌘K / Ctrl K and `openSearch()` set it.                                                                                   |
 | `v-model:tools-open`          | `boolean` | `false` | `update:toolsOpen`          | Whether the tools region (help or notifications) is open beside the content; a drawer while compact.                                                                      |
-| `v-model:navigation-expanded` | `boolean` | `true`  | `update:navigationExpanded` | Whether the navigation rail is expanded on wide layouts; `false` collapses it (the Sidebar's collapsed rail). It has no effect while compact, where the rail is a drawer. |
+| `v-model:navigation-open`     | `boolean` | `true`  | `update:navigationOpen`     | Whether the navigation rail is shown on wide layouts; `false` collapses it (the Sidebar's `open`). It has no effect while compact, where the rail is a drawer. Same name as `AppLayout`'s `navigationOpen`. |
+| `v-model:navigation-expanded` | `boolean` | `true`  | `update:navigationExpanded` | **@deprecated since 6.0 — use `v-model:navigation-open`. Removed in 7.0.** Same state and polarity; both are emitted on every change, and a host that binds only this one still drives the rail. |
 
 ## Events
 
@@ -279,7 +280,7 @@ packages/webkit/src/components/layout/console-layout/
 
 - Default — the layout with console navigation (a drill level and a preview badge), breadcrumbs, header actions, the account menu with an `account-select` handler and a list page body.
 - Page opens search — a page body that opens the shared palette with `useConsoleLayout().openSearch()` from its own button.
-- Navigation expanded — `v-model:navigation-expanded` driven by a `Collapse sidebar` / `Expand sidebar` command in the palette's `search` slot.
+- Navigation open — `v-model:navigation-open` driven by a `Collapse sidebar` / `Expand sidebar` command in the palette's `search` slot.
 - Page breadcrumbs — a detail page body that sets its own trail with `ConsoleLayout.Breadcrumbs`, ending on an environment `Select` (`kind="transparent"`, `size="small"`).
 - Fill page — a workspace page body whose root carries `data-layout-fill`: the main stops scrolling and the body's own panes scroll.
 - Sidebar header — an account switcher in `sidebar-header` under the wordmark, moved to `header-start` while compact.
