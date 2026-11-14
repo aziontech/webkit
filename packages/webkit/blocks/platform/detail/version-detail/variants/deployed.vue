@@ -4,6 +4,7 @@
   import Card from '@aziontech/webkit/card'
   import ConsoleLayout from '@aziontech/webkit/console-layout'
   import DropdownMenu, { type DropdownMenuOptionValue } from '@aziontech/webkit/dropdown-menu'
+  import EmptyState from '@aziontech/webkit/empty-state'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
@@ -192,6 +193,7 @@
   const versionId = ref('AEO25I38')
   const query = ref('')
   const activeTab = ref('main-settings')
+  const tabLabel = computed(() => tabs.find((tab) => tab.value === activeTab.value)?.label ?? '')
   const settings = reactive<{ name: string; active: boolean; modules: Record<string, boolean> }>({
     name: 'web-app',
     active: true,
@@ -445,6 +447,7 @@
             </PageTabs>
 
             <section
+              v-if="activeTab === 'main-settings'"
               class="grid min-h-0 flex-1 grid-rows-[minmax(0,1fr)] transition-opacity duration-moderate-01 ease-productive-entrance data-processing:opacity-32 motion-reduce:transition-none"
             >
               <ScrollArea
@@ -582,6 +585,30 @@
                   </fieldset>
                 </div>
               </ScrollArea>
+            </section>
+            <section
+              v-else
+              class="grid min-h-0 flex-1 grid-rows-[minmax(0,1fr)] transition-opacity duration-moderate-01 ease-productive-entrance data-processing:opacity-32 motion-reduce:transition-none"
+            >
+              <div class="layout-column layout-boundary flex min-w-0 flex-col">
+                <div class="layout-section-start">
+                  <EmptyState
+                    size="medium"
+                    icon="pi pi-external-link"
+                    :title="tabLabel"
+                    :description="`${tabLabel} opens on its own page.`"
+                  >
+                    <template #actions>
+                      <Button
+                        :label="`Open ${tabLabel}`"
+                        kind="outlined"
+                        size="small"
+                        :href="`/resources/web-app/${activeTab}`"
+                      />
+                    </template>
+                  </EmptyState>
+                </div>
+              </div>
             </section>
 
             <Transition
@@ -736,9 +763,9 @@
                     class="absolute bottom-0 start-3.5 top-7 w-px -translate-x-1/2 bg-(--border-default)"
                     aria-hidden="true"
                   />
-                  <button
-                    type="button"
-                    class="group flex w-full min-w-0 gap-(--spacing-sm) rounded-(--shape-button) text-start focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)"
+                  <a
+                    :href="`/resources/web-app/versions/${entry.name}`"
+                    class="group flex w-full min-w-0 gap-(--spacing-sm) rounded-(--shape-button) text-start no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)"
                   >
                     <span
                       class="relative flex size-7 shrink-0 items-center justify-center rounded-full border border-(--border-default) bg-(--bg-surface) text-(--text-default)"
@@ -778,7 +805,7 @@
                         <span class="truncate">{{ entry.author }} · {{ entry.createdAgo }}</span>
                       </span>
                     </span>
-                  </button>
+                  </a>
                 </li>
               </ol>
 

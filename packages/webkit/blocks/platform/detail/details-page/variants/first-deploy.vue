@@ -120,7 +120,7 @@
                 href="#connect-repository"
                 class="inline-flex min-w-0 items-center rounded-(--shape-button) text-body-sm text-(--text-link) underline-offset-2 transition-colors duration-150 ease-out hover:text-(--text-link-hover) hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) motion-reduce:transition-none"
               >
-                <span class="truncate">Connect Git Repository</span>
+                <span class="truncate">Connect Git repository</span>
               </a>
               <div class="flex min-w-0 items-center gap-(--spacing-xxs)">
                 <i

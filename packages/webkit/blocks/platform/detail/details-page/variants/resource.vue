@@ -4,6 +4,7 @@
   import Card from '@aziontech/webkit/card'
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
   import IconButton from '@aziontech/webkit/icon-button'
+  import Link from '@aziontech/webkit/link'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
   import Tag from '@aziontech/webkit/tag'
   import Tooltip from '@aziontech/webkit/tooltip'
@@ -48,6 +49,8 @@
         <div class="ms-auto flex shrink-0 items-center gap-(--spacing-xs)">
           <Button
             label="Visit"
+            href="https://web-app-y6u7i8.example.com"
+            target="_blank"
             kind="secondary"
             size="medium"
             icon="pi pi-external-link"
@@ -107,19 +110,12 @@
                 text="Open 1213284258 in Deployments"
                 class="w-full"
               >
-                <a
+                <Link
+                  label="1213284258"
                   href="/deployments/1213284258"
-                  data-link
-                  class="group/link data-link:cursor-pointer inline-flex min-w-0 items-center gap-(--spacing-xxs) rounded-(--shape-button) text-body-sm text-(--text-default) no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)"
-                >
-                  <span class="truncate underline-offset-2 group-hover/link:underline"
-                    >1213284258</span
-                  >
-                  <i
-                    class="pi pi-external-link shrink-0 text-body-xs leading-none"
-                    aria-hidden="true"
-                  />
-                </a>
+                  size="small"
+                  :show-icon="false"
+                />
               </Tooltip>
             </div>
             <Tag

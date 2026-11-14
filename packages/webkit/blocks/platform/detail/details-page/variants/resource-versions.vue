@@ -3,6 +3,7 @@
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
+  import EmptyState from '@aziontech/webkit/empty-state'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
   import PageHeader from '@aziontech/webkit/page-header'
@@ -12,7 +13,7 @@
   import Tabs from '@aziontech/webkit/tabs'
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
   import Tooltip from '@aziontech/webkit/tooltip'
-  import { ref } from 'vue'
+  import { computed, ref } from 'vue'
 
   const tabs = [
     { value: 'overview', label: 'Overview' },
@@ -22,6 +23,7 @@
   ]
 
   const activeTab = ref('versions')
+  const tabLabel = computed(() => tabs.find((tab) => tab.value === activeTab.value)?.label ?? '')
 
   const columns: TableColumn[] = [
     {
@@ -196,7 +198,10 @@
       </PageTabs>
     </div>
 
-    <div class="relative flex min-h-0 flex-1 flex-col">
+    <div
+      v-if="activeTab === 'versions'"
+      class="relative flex min-h-0 flex-1 flex-col"
+    >
       <section class="min-h-0 flex-1">
         <div class="flex min-h-full flex-col">
           <div class="layout-column layout-boundary flex min-w-0 flex-col">
@@ -390,6 +395,30 @@
           </div>
         </div>
       </section>
+    </div>
+    <div
+      v-else
+      class="relative flex min-h-0 flex-1 flex-col"
+    >
+      <div class="layout-column layout-boundary flex min-w-0 flex-col">
+        <div class="layout-section-start">
+          <EmptyState
+            size="medium"
+            icon="pi pi-external-link"
+            :title="tabLabel"
+            :description="`${tabLabel} opens on its own page.`"
+          >
+            <template #actions>
+              <Button
+                :label="`Open ${tabLabel}`"
+                kind="outlined"
+                size="small"
+                :href="`/resources/analytics-app/${activeTab}`"
+              />
+            </template>
+          </EmptyState>
+        </div>
+      </div>
     </div>
   </div>
 </template>

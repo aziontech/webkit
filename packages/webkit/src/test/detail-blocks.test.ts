@@ -2,11 +2,15 @@ import { cleanup, fireEvent, render, waitFor, within } from '@testing-library/vu
 import { afterEach, describe, expect, it } from 'vitest'
 
 import DeploymentLogs from '../../blocks/platform/detail/deployment-logs/deployment-logs.vue'
+import DetailsPage from '../../blocks/platform/detail/details-page/details-page.vue'
+import Service from '../../blocks/platform/detail/details-page/variants/service.vue'
 import Running from '../../blocks/platform/detail/invocations/variants/running.vue'
 import ProductionChecklist from '../../blocks/platform/detail/production-checklist/production-checklist.vue'
 import Records from '../../blocks/platform/detail/record-table/variants/records.vue'
 import SectionedResource from '../../blocks/platform/detail/sectioned-resource/sectioned-resource.vue'
 import FewSiblings from '../../blocks/platform/detail/sectioned-resource/variants/few-siblings.vue'
+import DeviceGroups from '../../blocks/platform/detail/version-detail/variants/device-groups.vue'
+import Revert from '../../blocks/platform/detail/version-detail/variants/revert.vue'
 import { useToastRegion } from './toast-region'
 
 useToastRegion()
@@ -109,5 +113,42 @@ describe('platform/detail/deployment-logs', () => {
     expect(view.getByRole('progressbar').getAttribute('aria-valuenow')).toBe('38')
     const publish = within(root).getByText('Publish').closest('button') as HTMLElement
     expect(publish.textContent).not.toMatch(/\d+s/)
+  })
+})
+
+describe('platform/detail/details-page', () => {
+  it('gives Visit the live address and links the tabs that live on another route', async () => {
+    const view = render(DetailsPage)
+    const visit = view.getByRole('link', { name: /Visit/ })
+    expect(visit.getAttribute('href')).toBe('https://analytics-app-z1x2c3.example.com')
+    expect(view.getByRole('link', { name: '1213275262' }).getAttribute('href')).toBe(
+      '/deployments/1213275262'
+    )
+    await fireEvent.click(view.getByRole('tab', { name: 'Versions' }))
+    const open = await waitFor(() => view.getByRole('link', { name: 'Open Versions' }))
+    expect(open.getAttribute('href')).toBe('/resources/analytics-app/versions')
+  })
+
+  it('adds a custom domain from an IconButton', () => {
+    const view = render(Service)
+    expect(view.getByRole('button', { name: 'Add a custom domain' })).toBeTruthy()
+  })
+})
+
+describe('platform/detail/version-detail', () => {
+  it('opens earlier versions as links and marks the viewed one as the current page', () => {
+    render(Revert)
+    const history = document.querySelector('[aria-current="page"]') as HTMLAnchorElement
+    expect(history.tagName).toBe('A')
+    expect(history.getAttribute('href')).toBe('/resources/web-app/versions/AK7D0ZX4')
+  })
+
+  it('tells a search with no match apart from an empty list', async () => {
+    const view = render(DeviceGroups)
+    const root = view.container as HTMLElement
+    await fireEvent.update(view.getByRole('textbox', { name: 'Search device groups' }), 'zzz-none')
+    await waitFor(() => expect(root.textContent).toContain('No matching device groups'))
+    await fireEvent.click(buttonByText('Clear search', root))
+    await waitFor(() => expect(root.textContent).not.toContain('No matching device groups'))
   })
 })

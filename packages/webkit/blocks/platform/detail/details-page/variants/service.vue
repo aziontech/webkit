@@ -113,6 +113,8 @@
         <div class="ms-auto flex shrink-0 items-center gap-(--spacing-xs)">
           <Button
             label="Visit"
+            href="https://service-01.example.com"
+            target="_blank"
             kind="secondary"
             size="medium"
             icon="pi pi-external-link"
@@ -234,16 +236,12 @@
           <span class="flex min-w-0 items-center gap-(--spacing-xxs)">
             <span class="text-label-sm text-(--text-muted)">Custom domains</span>
             <Tooltip text="Add a custom domain">
-              <button
-                type="button"
-                class="-m-1 inline-flex size-6 shrink-0 items-center justify-center rounded-(--shape-button) p-1 text-(--text-muted) transition-colors duration-150 ease-out hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
+              <IconButton
+                icon="pi pi-plus-circle"
+                kind="transparent"
+                size="small"
                 aria-label="Add a custom domain"
-              >
-                <i
-                  class="pi pi-plus-circle text-body-sm leading-none"
-                  aria-hidden="true"
-                />
-              </button>
+              />
             </Tooltip>
           </span>
           <div class="flex min-h-7 min-w-0 items-center gap-(--spacing-xs)">

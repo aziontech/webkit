@@ -11,6 +11,7 @@
   import DrawerPortal from '@aziontech/webkit/drawer-portal'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
   import DropdownMenu, { type DropdownMenuOptionValue } from '@aziontech/webkit/dropdown-menu'
+  import EmptyState from '@aziontech/webkit/empty-state'
   import Field from '@aziontech/webkit/field'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
@@ -190,6 +191,7 @@
   const versionId = ref('ADA8FMMR')
   const query = ref('')
   const activeTab = ref('device-groups')
+  const tabLabel = computed(() => tabs.find((tab) => tab.value === activeTab.value)?.label ?? '')
   const saveAction = ref<string | undefined>('deploy')
 
   type DeviceGroup = {
@@ -554,6 +556,7 @@
             </PageTabs>
 
             <section
+              v-if="activeTab === 'device-groups'"
               class="grid min-h-0 flex-1 grid-rows-[minmax(0,1fr)] transition-opacity duration-moderate-01 ease-productive-entrance data-processing:opacity-32 motion-reduce:transition-none"
             >
               <ScrollArea
@@ -651,6 +654,8 @@
                             :columns="groupColumns"
                             row-key="id"
                             enable-sorting
+                            paginated
+                            :page-size="10"
                             :bordered="false"
                             :loading="loading"
                             aria-label="Device groups"
@@ -683,6 +688,43 @@
                                   row.modifiedAgo
                                 }}</span>
                               </div>
+                            </template>
+                            <template #empty>
+                              <EmptyState
+                                key="empty-state-1"
+                                v-if="search.trim()"
+                                size="medium"
+                                icon="pi pi-search"
+                                title="No matching device groups"
+                                :description="`Nothing matches ${search.trim()}.`"
+                              >
+                                <template #actions>
+                                  <Button
+                                    label="Clear search"
+                                    kind="outlined"
+                                    size="small"
+                                    @click="search = ''"
+                                  />
+                                </template>
+                              </EmptyState>
+                              <EmptyState
+                                key="empty-state-2"
+                                v-else
+                                size="medium"
+                                icon="pi pi-mobile"
+                                title="No device groups yet"
+                                description="Add the first one to this version."
+                              >
+                                <template #actions>
+                                  <Button
+                                    label="Add Device Group"
+                                    icon="pi pi-plus"
+                                    kind="secondary"
+                                    size="small"
+                                    @click="openGroup()"
+                                  />
+                                </template>
+                              </EmptyState>
                             </template>
                           </TableRoot>
                         </template>
@@ -796,6 +838,30 @@
                   </Drawer>
                 </div>
               </ScrollArea>
+            </section>
+            <section
+              v-else
+              class="grid min-h-0 flex-1 grid-rows-[minmax(0,1fr)] transition-opacity duration-moderate-01 ease-productive-entrance data-processing:opacity-32 motion-reduce:transition-none"
+            >
+              <div class="layout-column layout-boundary flex min-w-0 flex-col">
+                <div class="layout-section-start">
+                  <EmptyState
+                    size="medium"
+                    icon="pi pi-external-link"
+                    :title="tabLabel"
+                    :description="`${tabLabel} opens on its own page.`"
+                  >
+                    <template #actions>
+                      <Button
+                        :label="`Open ${tabLabel}`"
+                        kind="outlined"
+                        size="small"
+                        :href="`/resources/web-app/${activeTab}`"
+                      />
+                    </template>
+                  </EmptyState>
+                </div>
+              </div>
             </section>
 
             <Transition
@@ -1024,9 +1090,9 @@
                     class="absolute bottom-0 start-3.5 top-7 w-px -translate-x-1/2 bg-(--border-default)"
                     aria-hidden="true"
                   />
-                  <button
-                    type="button"
-                    class="group flex w-full min-w-0 gap-(--spacing-sm) rounded-(--shape-button) text-start focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)"
+                  <a
+                    :href="`/resources/web-app/versions/${entry.name}`"
+                    class="group flex w-full min-w-0 gap-(--spacing-sm) rounded-(--shape-button) text-start no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)"
                   >
                     <span
                       class="relative flex size-7 shrink-0 items-center justify-center rounded-full border border-(--border-default) bg-(--bg-surface) text-(--text-default)"
@@ -1066,7 +1132,7 @@
                         <span class="truncate">{{ entry.author }} · {{ entry.createdAgo }}</span>
                       </span>
                     </span>
-                  </button>
+                  </a>
                 </li>
               </ol>
 

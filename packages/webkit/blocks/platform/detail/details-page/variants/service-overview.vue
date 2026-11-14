@@ -14,6 +14,7 @@
   import DrawerPortal from '@aziontech/webkit/drawer-portal'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
+  import EmptyState from '@aziontech/webkit/empty-state'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
@@ -67,6 +68,7 @@
   ]
 
   const activeTab = ref('overview')
+  const tabLabel = computed(() => tabs.find((tab) => tab.value === activeTab.value)?.label ?? '')
   const environment = ref('Production')
   const environmentQuery = ref('')
   const environmentMatches = computed(() => {
@@ -91,14 +93,14 @@
       icon: 'pi pi-globe',
       title: 'Add a custom domain',
       description:
-        'Serve it on a domain of your own, with a free HTTPS certificate, instead of the generated hostname.',
+        'Serve this service on a domain of your own, with a free HTTPS certificate, instead of the generated hostname.',
       actionLabel: 'Add Domain',
       done: false
     },
     {
       id: 'policy',
       icon: 'pi pi-shield',
-      title: 'Attach a security policy',
+      title: 'Enable a security policy',
       description:
         'Bind a policy so requests are inspected before they reach the resource. Rate limiting, request inspection, and IP filtering.',
       actionLabel: 'Bind Policy',
@@ -490,7 +492,10 @@
       </PageTabs>
     </div>
 
-    <section class="min-h-0 flex-1">
+    <section
+      v-if="activeTab === 'overview'"
+      class="min-h-0 flex-1"
+    >
       <div>
         <div class="layout-column layout-boundary flex min-w-0 flex-col">
           <section class="layout-section-start flex min-w-0 flex-col gap-(--layout-section-gap)">
@@ -581,6 +586,8 @@
                   <div class="ms-auto flex shrink-0 items-center gap-(--spacing-xs)">
                     <Button
                       label="Visit"
+                      href="https://service-01.example.com"
+                      target="_blank"
                       kind="secondary"
                       size="medium"
                       icon="pi pi-external-link"
@@ -702,16 +709,12 @@
                     <span class="flex min-w-0 items-center gap-(--spacing-xxs)">
                       <span class="text-label-sm text-(--text-muted)">Custom domains</span>
                       <Tooltip text="Add a custom domain">
-                        <button
-                          type="button"
-                          class="-m-1 inline-flex size-6 shrink-0 items-center justify-center rounded-(--shape-button) p-1 text-(--text-muted) transition-colors duration-150 ease-out hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
+                        <IconButton
+                          icon="pi pi-plus-circle"
+                          kind="transparent"
+                          size="small"
                           aria-label="Add a custom domain"
-                        >
-                          <i
-                            class="pi pi-plus-circle text-body-sm leading-none"
-                            aria-hidden="true"
-                          />
-                        </button>
+                        />
                       </Tooltip>
                     </span>
                     <div class="flex min-h-7 min-w-0 items-center gap-(--spacing-xs)">
@@ -1097,6 +1100,30 @@
               </p>
             </div>
           </section>
+        </div>
+      </div>
+    </section>
+    <section
+      v-else
+      class="min-h-0 flex-1"
+    >
+      <div class="layout-column layout-boundary flex min-w-0 flex-col">
+        <div class="layout-section-start">
+          <EmptyState
+            size="medium"
+            icon="pi pi-external-link"
+            :title="tabLabel"
+            :description="`${tabLabel} opens on its own page.`"
+          >
+            <template #actions>
+              <Button
+                :label="`Open ${tabLabel}`"
+                kind="outlined"
+                size="small"
+                :href="`/services/service-01/${activeTab}`"
+              />
+            </template>
+          </EmptyState>
         </div>
       </div>
     </section>
