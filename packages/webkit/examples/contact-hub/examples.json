@@ -6,6 +6,11 @@
       "name": "Default",
       "summary": "The Contact page band: Sales and Support lanes, Support with its system status link, over three self-serve channels. Edit the props in the Controls panel — a band with no lanes and no channels renders nothing.",
       "file": "default.vue"
+    },
+    {
+      "name": "Secondary action",
+      "summary": "The Sales lane leads with its action and adds an outlined second button; two channels share the frame under the lanes, and the band carries an anchor for #hash links.",
+      "file": "secondary-action.vue"
     }
   ],
   "site": [

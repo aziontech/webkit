@@ -101,13 +101,9 @@
     },
     {
       name: 'Enterprise',
+      description: 'Custom terms and payment schedule. Commit up front and save on usage.',
       highlighted: false,
-      prices: [
-        {
-          value: 'Custom',
-          details: 'Custom terms and payment schedule. Commit up front and save on usage.'
-        }
-      ],
+      prices: [{ value: 'Custom' }],
       featuresTitle: 'All Pro features, plus:',
       features: [
         {

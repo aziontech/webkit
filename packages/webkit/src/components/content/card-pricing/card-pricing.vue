@@ -44,6 +44,8 @@
     showSuffix?: boolean
     /** action Label. */
     actionLabel?: string
+    /** Fades the old price out and the new one in when the price changes, such as on a billing-period switch. */
+    animated?: boolean
   }
 
   const props = withDefaults(defineProps<CardPricingProps>(), {
@@ -60,7 +62,8 @@
     suffix: '/ mon',
     showPrefix: true,
     showSuffix: true,
-    actionLabel: 'Label'
+    actionLabel: 'Label',
+    animated: false
   })
 
   defineSlots<{
@@ -78,6 +81,8 @@
 
   const currencyPrefix = computed(() => (props.showPrefix ? props.prefix : ''))
   const currencySuffix = computed(() => (props.showSuffix ? props.suffix : ''))
+
+  const priceKey = computed(() => `${currencyPrefix.value}|${props.value}|${currencySuffix.value}`)
 </script>
 
 <template>
@@ -87,6 +92,7 @@
     :data-slot-position="slotPosition"
     :data-kind="kind"
     :data-aligned="aligned || null"
+    :data-animated="animated || null"
     class="group/card flex w-full flex-col items-start overflow-clip p-(--spacing-lg) data-[slot-position=bottom]:gap-(--spacing-lg) data-[slot-position=middle]:justify-between data-[kind=contained]:rounded-(--shape-card) data-[kind=contained]:border-(length:--border-width-default) data-[kind=contained]:border-(--border-default) data-[kind=contained]:bg-(--bg-surface)"
   >
     <div
@@ -115,7 +121,23 @@
           class="flex w-full shrink-0 flex-col items-start gap-(--spacing-xxs) group-data-[slot-position=bottom]/card:min-h-11 group-data-[slot-position=middle]/card:min-h-16"
           :data-testid="`${testId}__pricing`"
         >
+          <Transition
+            v-if="animated"
+            mode="out-in"
+            enter-active-class="animate-fade-in motion-reduce:animate-none"
+            leave-active-class="animate-fade-out motion-reduce:animate-none"
+          >
+            <Currency
+              :key="priceKey"
+              :size="currencySize"
+              :value="value"
+              :prefix="currencyPrefix"
+              :suffix="currencySuffix"
+              :data-testid="`${testId}__currency`"
+            />
+          </Transition>
           <Currency
+            v-else
             :size="currencySize"
             :value="value"
             :prefix="currencyPrefix"

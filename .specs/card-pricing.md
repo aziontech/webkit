@@ -3,10 +3,10 @@ name: card-pricing
 category: content
 structure: monolithic
 status: implemented
-spec_version: 1
-checksum: ad00f6e415f7e2d5997dd002c01bb50f6dbdd1dbb34041dc2dc3bba7dfcc263e
+spec_version: 2
+checksum: b9e2a3bdbf8e0ce03671a164bb12553ef6444c7bf08a688626e08e6f42dfc772
 created: 2026-05-22
-last_updated: 2026-11-09
+last_updated: 2026-11-14
 ---
 
 # Card Pricing — Component Spec
@@ -96,22 +96,23 @@ The plan title is an **overline** (`.text-overline-md` on an `<h3>`): the token 
 
 ## Props
 
-| Prop                 | Type                           | Default       | Required | JSDoc                                                                                             |
-| -------------------- | ------------------------------ | ------------- | -------- | ------------------------------------------------------------------------------------------------- |
-| `planTitle`          | `string`                       | `'Pro'`       | false    | plan Title.                                                                                       |
-| `pricingDetails`     | `string`                       | `''`          | false    | pricing Details.                                                                                  |
-| `showPricingDetails` | `boolean`                      | `true`        | false    | show Pricing Details.                                                                             |
-| `showTag`            | `boolean`                      | `false`       | false    | show Tag.                                                                                         |
-| `tagLabel`           | `string`                       | `'Popular'`   | false    | tag Label.                                                                                        |
-| `aligned`            | `boolean`                      | `false`       | false    | Reserves the caveat's band so a row of cards aligns row-for-row. Set it on every card in the row. |
-| `slotPosition`       | `'bottom' \| 'middle'`         | `'bottom'`    | false    | slot Position.                                                                                    |
-| `kind`               | `'contained' \| 'transparent'` | `'contained'` | false    | card Style.                                                                                       |
-| `value`              | `string`                       | `'20'`        | false    | value.                                                                                            |
-| `prefix`             | `string`                       | `'$'`         | false    | prefix.                                                                                           |
-| `suffix`             | `string`                       | `'/ mon'`     | false    | suffix.                                                                                           |
-| `showPrefix`         | `boolean`                      | `true`        | false    | show Prefix.                                                                                      |
-| `showSuffix`         | `boolean`                      | `true`        | false    | show Suffix.                                                                                      |
-| `actionLabel`        | `string`                       | `'Label'`     | false    | action Label.                                                                                     |
+| Prop                 | Type                           | Default       | Required | JSDoc                                                                                                  |
+| -------------------- | ------------------------------ | ------------- | -------- | ------------------------------------------------------------------------------------------------------ |
+| `planTitle`          | `string`                       | `'Pro'`       | false    | plan Title.                                                                                            |
+| `pricingDetails`     | `string`                       | `''`          | false    | pricing Details.                                                                                       |
+| `showPricingDetails` | `boolean`                      | `true`        | false    | show Pricing Details.                                                                                  |
+| `showTag`            | `boolean`                      | `false`       | false    | show Tag.                                                                                              |
+| `tagLabel`           | `string`                       | `'Popular'`   | false    | tag Label.                                                                                             |
+| `aligned`            | `boolean`                      | `false`       | false    | Reserves the caveat's band so a row of cards aligns row-for-row. Set it on every card in the row.      |
+| `slotPosition`       | `'bottom' \| 'middle'`         | `'bottom'`    | false    | slot Position.                                                                                         |
+| `kind`               | `'contained' \| 'transparent'` | `'contained'` | false    | card Style.                                                                                            |
+| `value`              | `string`                       | `'20'`        | false    | value.                                                                                                 |
+| `prefix`             | `string`                       | `'$'`         | false    | prefix.                                                                                                |
+| `suffix`             | `string`                       | `'/ mon'`     | false    | suffix.                                                                                                |
+| `showPrefix`         | `boolean`                      | `true`        | false    | show Prefix.                                                                                           |
+| `showSuffix`         | `boolean`                      | `true`        | false    | show Suffix.                                                                                           |
+| `actionLabel`        | `string`                       | `'Label'`     | false    | action Label.                                                                                          |
+| `animated`           | `boolean`                      | `false`       | false    | Fades the old price out and the new one in when the price changes, such as on a billing-period switch. |
 
 ## Events
 
@@ -127,10 +128,14 @@ The plan title is an **overline** (`.text-overline-md` on an `<h3>`): the token 
 ## States
 
 - Visual states: `default`, `hover`, `focus-visible`, `active`, `disabled`
+- Animated: with `animated`, a change of `value`, `prefix` or `suffix` fades the old price out and the new one in (`data-animated` on the root); without it the price swaps in place
 
 ## Motion & Animations
 
-_none_
+| Trigger                        | Animation / Transition | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback      |
+| ------------------------------ | ---------------------- | ------------------------------------------------- | ---------------------------- |
+| price leaves (with `animated`) | `animate-fade-out`     | `animate-fade-out`                                | `motion-reduce:animate-none` |
+| price enters (with `animated`) | `animate-fade-in`      | `animate-fade-in`                                 | `motion-reduce:animate-none` |
 
 ## Tokens
 
@@ -161,7 +166,7 @@ _none_
 - Keyboard map: `Tab` focuses; `Enter`/`Space` activates; `Escape` closes overlays where applicable.
 - ARIA: root uses appropriate roles (`button`, `dialog`, `status`, etc.) per sub-component.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state.
-- `motion-reduce:transition-none motion-reduce:transform-none` on animated states.
+- `motion-reduce:transition-none motion-reduce:transform-none` on animated states; the `animated` price fade pairs each class with `motion-reduce:animate-none`, so the price swaps in place under reduced motion.
 - Touch target ≥40×40 px where the control is interactive.
 
 ## Examples
@@ -171,6 +176,7 @@ _none_
 - Aligned (a row of three tiers with uneven copy)
 - WithTag
 - Slots
+- Animated — a billing-period toggle switches the prices of a card with `animated`, the old price fading out and the new one in.
 
 ## Constraints — DO NOT
 

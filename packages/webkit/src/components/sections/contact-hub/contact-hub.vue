@@ -2,6 +2,7 @@
   import { computed, useAttrs } from 'vue'
 
   import Button from '../../actions/button/button.vue'
+  import StatusIndicator from '../../feedback/status-indicator/status-indicator.vue'
   import FrameBox from '../../layout/frame-box/frame-box.vue'
   import CardGrid from '../../marketing/card-grid/card-grid.vue'
   import CardGridCell from '../../marketing/card-grid/card-grid-cell/card-grid-cell.vue'
@@ -43,6 +44,8 @@
     description: string
     /** The button that reaches the team; `{ label, href, trailing? }`. Omitted when absent. */
     action?: ContactHubAction
+    /** A second, outlined button after the action; `{ label, href, trailing? }`. Omitted when absent. */
+    secondaryAction?: ContactHubAction
     /** The system status link beside the action; `{ label, href, target? }`. Omitted when absent. */
     statusLink?: ContactHubStatusLink
   }
@@ -62,13 +65,16 @@
   }
 
   interface Props {
-    /** The team lanes side by side, in order; each is `{ icon, title, description, action?, statusLink? }` where `action` is the lane's button and `statusLink` the system status link beside it. */
+    /** In-page id set on the band so a `#hash` link can scroll to it. */
+    anchor?: string
+    /** The team lanes side by side, in order; each is `{ icon, title, description, action?, secondaryAction?, statusLink? }` where `action` is the lane's leading button, `secondaryAction` an outlined button after it, and `statusLink` the system status link beside them. */
     lanes?: ContactHubLane[]
-    /** The self-serve channels under the lanes, in order; each is `{ icon, title, description, href, target? }`, rendered as a linked topic. */
+    /** The self-serve channels in the rows under the lanes, in order; each is `{ icon, title, description, href, target? }`, rendered as a linked topic. */
     channels?: ContactHubChannel[]
   }
 
   const props = withDefaults(defineProps<Props>(), {
+    anchor: '',
     lanes: () => [],
     channels: () => []
   })
@@ -87,7 +93,9 @@
 <template>
   <section
     v-bind="$attrs"
+    :id="anchor || undefined"
     :data-testid="testId"
+    class="scroll-mt-(--spacing-xxl)"
   >
     <SectionModule
       v-if="hasContent"
@@ -95,12 +103,13 @@
       :padded="false"
     >
       <FrameBox
-        v-if="lanes.length > 0"
         flush
         borders="y"
         marks="bottom"
       >
         <CardGrid
+          v-if="lanes.length > 0"
+          key="lanes"
           flush
           kind="frame"
           :columns="2"
@@ -129,11 +138,12 @@
                 </p>
               </div>
               <div
-                v-if="lane.action || lane.statusLink"
+                v-if="lane.action || lane.secondaryAction || lane.statusLink"
                 class="mt-auto flex flex-wrap gap-(--spacing-sm)"
               >
                 <Button
                   v-if="lane.action"
+                  key="action"
                   :label="lane.action.label"
                   :href="lane.action.href"
                   kind="secondary"
@@ -142,33 +152,37 @@
                   icon-position="trailing"
                   :animated="Boolean(lane.action.trailing)"
                 />
+                <Button
+                  v-if="lane.secondaryAction"
+                  key="secondary-action"
+                  :label="lane.secondaryAction.label"
+                  :href="lane.secondaryAction.href"
+                  kind="outlined"
+                  size="large"
+                  :icon="lane.secondaryAction.trailing ? 'pi pi-chevron-right' : ''"
+                  icon-position="trailing"
+                  :animated="Boolean(lane.secondaryAction.trailing)"
+                />
                 <a
                   v-if="lane.statusLink"
                   :href="lane.statusLink.href"
                   :target="lane.statusLink.target"
                   :rel="relOf(lane.statusLink.target)"
-                  class="inline-flex min-h-10 max-w-full items-center gap-(--spacing-xs) rounded-full border border-(--border-default) bg-(--bg-surface) px-(--spacing-md) text-button-lg text-(--text-default) no-underline transition-colors duration-150 ease-out hover:bg-(--bg-surface-raised) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) motion-reduce:transition-none"
+                  class="inline-flex min-h-10 max-w-full items-center rounded-full border border-(--border-default) bg-(--bg-surface) px-(--spacing-md) text-button-lg text-(--text-default) no-underline transition-colors duration-150 ease-out hover:bg-(--bg-surface-raised) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) motion-reduce:transition-none"
                 >
-                  <span
-                    class="size-2 shrink-0 rounded-full bg-(--success-contrast)"
-                    aria-hidden="true"
+                  <StatusIndicator
+                    severity="success"
+                    :label="lane.statusLink.label"
                   />
-                  {{ lane.statusLink.label }}
                 </a>
               </div>
             </div>
           </CardGridCell>
         </CardGrid>
-      </FrameBox>
 
-      <FrameBox
-        key="frame-box-2"
-        v-if="channels.length > 0"
-        flush
-        borders="y"
-        marks="bottom"
-      >
         <CardGrid
+          v-if="channels.length > 0"
+          key="channels"
           flush
           kind="frame"
           :columns="3"

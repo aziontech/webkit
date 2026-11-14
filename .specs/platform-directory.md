@@ -3,10 +3,10 @@ name: platform-directory
 category: sections
 structure: monolithic
 status: implemented
-spec_version: 1
+spec_version: 2
 created: 2026-11-05
-last_updated: 2026-11-12
-checksum: 0dc6b78d90d5a45a459190cf7e032ffd95d66786d3b352c838d9284d68ee89f2
+last_updated: 2026-11-14
+checksum: 27adf0f4d37f1b6f8ea9e9e7d66080f3366d5a7f81cc6c7a2f54f842f7261169
 ---
 
 # PlatformDirectory — Component Spec
@@ -35,30 +35,45 @@ A directory of Azion's products under a section title: one column per product gr
 
 - Keep to four groups or fewer; the directory fans out to one column per group at the large breakpoint, up to four, so one, two or three groups never leave an empty cell.
 - Give each item an `href`; an item without a title or a link is skipped, and a group left with no items is skipped too.
-- Set `ariaLabel` so the directory's navigation landmark is told apart from the site navigation.
+- Set `ariaLabel` so the directory's navigation landmark is told apart from the site navigation; left empty, the landmark takes the `title`.
+- Use `eyebrow` for the short label above the headline (the page's name for the product map) and `description` for one sentence under it.
+- Give the band an `anchor` when a page links to it with a `#hash`.
 
 ## Usage
 
 ```vue
 <script setup>
-import PlatformDirectory from '@aziontech/webkit/platform-directory'
+  import PlatformDirectory from '@aziontech/webkit/platform-directory'
 </script>
 
 <template>
   <PlatformDirectory
+    anchor="products"
+    eyebrow="Platform"
     title="Everything you need to build and run applications"
+    description="Build, store, secure and observe applications on one platform."
     aria-label="Azion products"
     :groups="[
       {
         title: 'Build',
         items: [
-          { icon: 'ai ai-edge-functions', title: 'Functions', description: 'Run code globally with no cold starts', href: '/products/functions' }
+          {
+            icon: 'ai ai-edge-functions',
+            title: 'Functions',
+            description: 'Run code globally with no cold starts',
+            href: '/products/functions'
+          }
         ]
       },
       {
         title: 'Store',
         items: [
-          { icon: 'ai ai-edge-kv', title: 'KV Store', description: 'Store key-value data with low latency', href: '/products/kv-store' }
+          {
+            icon: 'ai ai-edge-kv',
+            title: 'KV Store',
+            description: 'Store key-value data with low latency',
+            href: '/products/kv-store'
+          }
         ]
       }
     ]"
@@ -68,11 +83,14 @@ import PlatformDirectory from '@aziontech/webkit/platform-directory'
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `title` | `string` | `''` | false | Headline over the directory, rendered by the section title as its `h2`; the band renders no header when empty. |
-| `ariaLabel` | `string` | `''` | false | Accessible name of the directory's navigation landmark. |
-| `groups` | `PlatformDirectoryGroup[]` | `[]` | false | The columns, in order; each is `{ title, items }` where every item is `{ icon, title, description, href }`. Items without a title or an `href` are skipped, and so are groups left empty. |
+| Prop          | Type                       | Default | Required | JSDoc                                                                                                                                                                                     |
+| ------------- | -------------------------- | ------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `anchor`      | `string`                   | `''`    | false    | In-page id set on the band so a `#hash` link can scroll to it.                                                                                                                            |
+| `eyebrow`     | `string`                   | `''`    | false    | Short label above the headline; shown only with a title.                                                                                                                                  |
+| `title`       | `string`                   | `''`    | false    | Headline over the directory, rendered by the section title as its `h2`; the band renders no header, eyebrow or description when empty.                                                    |
+| `description` | `string`                   | `''`    | false    | One sentence under the headline; shown only with a title.                                                                                                                                 |
+| `ariaLabel`   | `string`                   | `''`    | false    | Accessible name of the directory's navigation landmark; empty uses the title.                                                                                                             |
+| `groups`      | `PlatformDirectoryGroup[]` | `[]`    | false    | The columns, in order; each is `{ title, items }` where every item is `{ icon, title, description, href }`. Items without a title or an `href` are skipped, and so are groups left empty. |
 
 ## Events
 
@@ -87,6 +105,8 @@ import PlatformDirectory from '@aziontech/webkit/platform-directory'
 - Visual states: `default`
 - One column per group from the large breakpoint, up to four (`column-navigation`'s `columns` is 2, 3 or 4), one column below the small one; the column layout is `column-navigation`'s own
 - No empty cell: a single group spans the whole row (`data-span="full"`), and with three groups the third spans both columns between the small and the large breakpoints (`data-span="pair"`), so the rule colour never shows through a missing column
+- Header: with a `title`, the section title renders the eyebrow and the description that are set around the headline; without one, no header renders
+- Anchor: the root carries `id` = `anchor` when set, with a scroll margin so a `#hash` jump clears a sticky header
 - Empty: when no group carries a linked item the band renders nothing — not the header, not the frame
 
 ## Motion & Animations
@@ -95,22 +115,23 @@ _none_
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
+| Region                | Token (DESIGN.md)       |
+| --------------------- | ----------------------- |
 | frame rules and marks | `var(--border-default)` |
-| column fill | `var(--bg-canvas)` |
+| column fill           | `var(--bg-canvas)`      |
+| anchor scroll offset  | `var(--spacing-xxl)`    |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 
 - Visible focus: owned by the composed `column-navigation` item links.
 - Keyboard map: `Tab` moves through the product links in reading order; `Enter` follows one. Nothing else in the band is interactive.
-- ARIA: the band is a `<section>` named by its title (`aria-label`) when one is set; the directory is `column-navigation`'s `nav`, named by `ariaLabel`, and each column's overline heading names its list of rows.
+- ARIA: the band is a `<section>` named by its title (`aria-label`) when one is set; the directory is `column-navigation`'s `nav`, named by `ariaLabel` (or the title when `ariaLabel` is empty), and each column's overline heading names its list of rows.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): owned by the composed components.
 - `motion-reduce:transition-none motion-reduce:transform-none` — the row hover belongs to `column-navigation`, which carries its own reduced-motion fallback; this band adds no motion.
 - Touch target ≥40×40 px — each row is a full-width link taller than 40 px.
@@ -119,6 +140,7 @@ _none_
 
 - Default
 - Three groups — the directory fans out to three columns, with no empty cell at any width.
+- With header — eyebrow, headline and description over the directory, with an `anchor` for in-page links.
 
 ## Constraints — DO NOT
 

@@ -18,7 +18,8 @@ Example: [`site-primitives.vue`](./site-primitives.vue)
 
 Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` are bound straight onto the component:
 
-- `title` heads the section, and `ariaLabel` names the directory for screen readers.
+- `title` heads the section, with an optional `eyebrow` above it and a one-sentence `description` under it; `ariaLabel` names the directory for screen readers (it falls back to the title).
+- `anchor` sets the band's id, so a page can link to it with a `#hash`.
 - `groups` sets the columns: a `title` and its `items`.
 - Each item takes an `icon` class, a `title`, a `description` and an `href`. An item without a title or a link is skipped, and so is a group left with no items.
 
@@ -31,3 +32,9 @@ Site JSON: [`site-primitives.json`](./site-primitives.json)
 The directory takes one column per group, up to four: three groups fan out to three columns, and between the small and the large breakpoints the third spans the row. A single group spans the whole row. No group count leaves an empty cell.
 
 Example: [`three-groups.vue`](./three-groups.vue)
+
+### With header
+
+An eyebrow above the headline and one sentence under it, the way the pricing, products and solution pages head the directory. The `anchor` lets a page link to the band with a `#hash`.
+
+Example: [`with-header.vue`](./with-header.vue)

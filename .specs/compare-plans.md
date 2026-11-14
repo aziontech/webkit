@@ -3,17 +3,17 @@ name: compare-plans
 category: sections
 structure: monolithic
 status: implemented
-spec_version: 2
+spec_version: 3
 created: 2026-11-05
-last_updated: 2026-11-11
-checksum: bba67c357de395f94da4ac6395b1a6416c090818fb39f4a4c455328a59f84b26
+last_updated: 2026-11-14
+checksum: 1390c116ad2c9639cd3da463c5f2d193875b5c363d78f735f1dd2989cb6ac94e
 ---
 
 # ComparePlans — Component Spec
 
 ## Purpose
 
-The feature-by-feature matrix under the plan cards on Pricing: one column per plan with its name and action button pinned in the header while the page scrolls, one band per product with an overline, a title and a lead, and one row per feature saying what each plan includes — a tick, a dash, or the allowance as text. The recommended plan carries an accent bar, and below the large breakpoint the table folds to one plan picked from a select. It is a page section — the site places it from a `{ _id: 'compare-plans', props }` entry and binds `props` straight onto it — and it composes `section-module`, `select`, `button`, `overline`, `hint`, `tag` and `link`.
+The feature-by-feature matrix under the plan cards on Pricing: one column per plan with its name and action button pinned in the header while the page scrolls, one band per product with an overline, a title and a lead, and one row per feature saying what each plan includes — an included mark, a not-included mark, or the allowance as text. The recommended plan carries an accent bar, and below the large breakpoint the table folds to one plan picked from a searchable select. It is a page section — the site places it from a `{ _id: 'compare-plans', props }` entry and binds `props` straight onto it — and it composes `section-module`, `select`, `input`, `button`, `icon-button`, `popover`, `tooltip`, `overline`, `tag` and `link`.
 
 ## When to use
 
@@ -34,6 +34,8 @@ The feature-by-feature matrix under the plan cards on Pricing: one column per pl
 - Give every plan a stable `id`; the narrow-screen picker selects by it.
 - Mark one plan `highlighted`; it gets the accent bar, the secondary button and opens the picker.
 - Give every row's `values` one entry per plan, in plan order.
+- Use a row's `hint` to define the term its label names; it opens in a popover titled with the label, so it can run to a sentence or two.
+- Set `includedLabel` and `excludedLabel` to the page's words; left empty, the marks read the locale's Included and Not included.
 
 ## Usage
 
@@ -81,17 +83,17 @@ The feature-by-feature matrix under the plan cards on Pricing: one column per pl
 
 ## Props
 
-| Prop              | Type                    | Default     | Required | JSDoc                                                                                                                                                                                                                                                                                        |
-| ----------------- | ----------------------- | ----------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `anchor`          | `string`                | `''`        | false    | In-page id set on the band so a hash link can target it.                                                                                                                                                                                                                                     |
-| `caption`         | `string`                | `''`        | false    | Screen-reader caption naming the table.                                                                                                                                                                                                                                                      |
-| `columnLabel`     | `string`                | `''`        | false    | Heading of the feature column, shown from the large breakpoint up.                                                                                                                                                                                                                           |
-| `pickerAriaLabel` | `string`                | `''`        | false    | Accessible name of the plan picker shown below the large breakpoint.                                                                                                                                                                                                                         |
-| `includedLabel`   | `string`                | `''`        | false    | Screen-reader text of a ticked cell.                                                                                                                                                                                                                                                         |
-| `excludedLabel`   | `string`                | `''`        | false    | Screen-reader text of a dashed cell.                                                                                                                                                                                                                                                         |
-| `plans`           | `ComparePlansPlan[]`    | `[]`        | false    | The plan columns, in order; each is `{ id, name, description?, highlighted?, action }` with `action` as `{ label, href }`; a plan without a name is dropped.                                                                                                                                 |
-| `sections`        | `ComparePlansSection[]` | `[]`        | false    | The product bands, in order; each is `{ eyebrow, title, description, rows, link? }` (`link` closes the band, `{ label, href }`) and a row is `{ label, values, group?, hint?, tag? }` with one value per plan: `true` or `✓` ticks, `—` dashes, other text shows as written, empty is blank. |
-| `primaryAction`   | `ComparePlansAction`    | `undefined` | false    | Closing link under the table, opened in a new tab; `{ label, href }`. Omitted when absent.                                                                                                                                                                                                   |
+| Prop              | Type                    | Default     | Required | JSDoc                                                                                                                                                                                                                                                                                                                                              |
+| ----------------- | ----------------------- | ----------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `anchor`          | `string`                | `''`        | false    | In-page id set on the band so a hash link can target it.                                                                                                                                                                                                                                                                                           |
+| `caption`         | `string`                | `''`        | false    | Screen-reader caption naming the table.                                                                                                                                                                                                                                                                                                            |
+| `columnLabel`     | `string`                | `''`        | false    | Heading of the feature column, shown from the large breakpoint up.                                                                                                                                                                                                                                                                                 |
+| `pickerAriaLabel` | `string`                | `''`        | false    | Accessible name of the plan picker shown below the large breakpoint.                                                                                                                                                                                                                                                                               |
+| `includedLabel`   | `string`                | `''`        | false    | Tooltip and screen-reader text of an included cell; empty uses the locale catalog (`Included`).                                                                                                                                                                                                                                                    |
+| `excludedLabel`   | `string`                | `''`        | false    | Tooltip and screen-reader text of a not-included cell; empty uses the locale catalog (`Not included`).                                                                                                                                                                                                                                             |
+| `plans`           | `ComparePlansPlan[]`    | `[]`        | false    | The plan columns, in order; each is `{ id, name, description?, highlighted?, action }` with `action` as `{ label, href }`; a plan without a name is dropped.                                                                                                                                                                                       |
+| `sections`        | `ComparePlansSection[]` | `[]`        | false    | The product bands, in order; each is `{ eyebrow, title, description, rows, link? }` (`link` closes the band, `{ label, href }`) and a row is `{ label, values, group?, hint?, tag? }` with one value per plan: `true` or `✓` is included, `—` is not included, other text shows as written, empty is blank; `hint` defines the label in a popover. |
+| `primaryAction`   | `ComparePlansAction`    | `undefined` | false    | Closing link under the table, opened in a new tab; `{ label, href }`. Omitted when absent.                                                                                                                                                                                                                                                         |
 
 ## Events
 
@@ -106,6 +108,10 @@ The feature-by-feature matrix under the plan cards on Pricing: one column per pl
 - Visual states: `default`
 - The highlighted plan carries the accent bar and the secondary button; the others carry an outlined button
 - Below the large breakpoint only the picked plan's column shows (`data-folded` on the others); the picker opens on the highlighted plan, or the first
+- Picker search: the picker's list carries a search field that narrows the plans by name; with no match it shows a `role="status"` line from the locale catalog (`No results found.`); the query clears each time the list opens or closes
+- Cells: an included cell is a `pi pi-check-circle` mark and a not-included cell an `ai ai-circle-minus` mark, each with a tooltip of its label on hover and the same label as `sr-only` text
+- Hint: a row with `hint` ends its label with an info icon button that opens a popover titled with the label and described by the hint
+- Closing rule: when neither the last band nor the table carries a closing link, the last row draws a bottom rule (`data-closing`) so the table never ends open
 - Below the large breakpoint the plan button's label wraps (auto height, at least 40 px) instead of widening the table, so the folded matrix fits a 320 px screen whatever the font metrics.
 - A group row (`group: true`) reads in the default text colour and draws a top rule unless it opens its band
 - Empty: when no plan has a name the band renders nothing but its root
@@ -125,7 +131,9 @@ _none_
 | typography (column head)    | `.text-overline-md`                                                                   |
 | header fill                 | `var(--bg-canvas)`                                                                    |
 | accent bar                  | `var(--border-selected)`                                                              |
-| tick                        | `var(--success-contrast)`                                                             |
+| included mark               | `var(--success-contrast)`, `.text-body-md`                                            |
+| not-included mark           | `var(--text-muted)`, `.text-body-md`                                                  |
+| picker empty status         | `.text-label-sm`, `var(--text-muted)`                                                 |
 | muted text                  | `var(--text-muted)`                                                                   |
 | default text                | `var(--text-default)`                                                                 |
 | rules                       | `var(--border-default)`                                                               |
@@ -139,9 +147,9 @@ _none_
 
 ## Accessibility (WCAG 2.1 AA)
 
-- Visible focus: owned by the composed `select`, `button`, `hint` and `link`.
-- Keyboard map: `Tab` reaches the picker (below `lg`), each plan button, each hint and the closing link; the picker's keyboard map is `select`'s.
-- ARIA: the table carries a `caption`, `scope="col"` plan heads, a `scope="colgroup"` head per band and a `scope="row"` head per feature, so each value is announced with its row and plan. The tick and dash glyphs are `aria-hidden` and carry `includedLabel` / `excludedLabel` as `sr-only` text; the accent bar is decorative; the plan names stay readable to screen readers below `lg`.
+- Visible focus: owned by the composed `select`, `input`, `button`, `icon-button` and `link`.
+- Keyboard map: `Tab` reaches the picker (below `lg`), each plan button, each hint button and the closing link; the picker's keyboard map is `select`'s and its search field takes typing while the list is open; `Enter` or `Space` on a hint button opens its popover and `Escape` closes it, returning focus to the button (`popover`'s map).
+- ARIA: the table carries a `caption`, `scope="col"` plan heads, a `scope="colgroup"` head per band and a `scope="row"` head per feature, so each value is announced with its row and plan. The included and not-included marks are `aria-hidden` and carry their label as `sr-only` text (the tooltip repeats it for pointer users); each hint button is named `About <label>` from the locale catalog and its popover is titled by the label; the picker's search field is named `Search <picker name>` and its no-match line is a `status`; the accent bar is decorative; the plan names stay readable to screen readers below `lg`.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): text colours are the tokens above.
 - `motion-reduce:transition-none motion-reduce:transform-none` — the composed controls carry their own reduced-motion fallback; this band adds no motion.
 - Touch target ≥40×40 px — the plan buttons and the picker are `large`.
@@ -150,6 +158,7 @@ _none_
 ## Examples
 
 - Default
+- Hints and marks — rows with a `hint` popover, included and not-included marks with their tooltips, and a table that ends without a closing link, so the last row draws the closing rule.
 
 ## Constraints — DO NOT
 
