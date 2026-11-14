@@ -1,9 +1,11 @@
 <script setup lang="ts">
+  import Accordion from '@aziontech/webkit/accordion'
   import Avatar from '@aziontech/webkit/avatar'
   import Brand from '@aziontech/webkit/brand'
   import Breadcrumb from '@aziontech/webkit/breadcrumb-root'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
+  import Checkbox from '@aziontech/webkit/checkbox'
   import Field from '@aziontech/webkit/field'
   import GlobalHeader from '@aziontech/webkit/global-header'
   import IconButton from '@aziontech/webkit/icon-button'
@@ -16,6 +18,23 @@
   import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, reactive, ref } from 'vue'
 
+  interface TemplateSetting {
+    name: string
+    label: string
+    placeholder: string
+    description: string
+    required: boolean
+    defaultValue: string
+  }
+
+  interface TemplateVariable {
+    name: string
+    variable: string
+    placeholder: string
+    required: boolean
+    secret: boolean
+  }
+
   const breadcrumb = [
     { label: 'Start from a template' },
     { label: 'Nuxt E-commerce', current: true }
@@ -27,40 +46,85 @@
     { label: 'acme-templates', value: 'acme-templates' }
   ]
 
-  const settings = [
-    {
-      name: 'storeAccessToken',
-      label: 'Store access token',
-      placeholder: 'Access token',
-      description: 'You can find this token in the API credentials of your store.',
-      required: true
-    },
-    {
-      name: 'storeRevalidationSecret',
-      label: 'Store revalidation secret',
-      placeholder: 'Revalidation secret',
-      description: 'You can find this secret in the API credentials of your store.',
-      required: false
-    },
+  const settings: TemplateSetting[] = [
     {
       name: 'storeDomain',
       label: 'Store domain',
       placeholder: 'https://shop.example.com',
-      description: 'The domain your store answers on',
-      required: false
+      description: 'The domain your store answers on.',
+      required: false,
+      defaultValue: ''
+    }
+  ]
+
+  const buildSettings: TemplateSetting[] = [
+    {
+      name: 'rootDirectory',
+      label: 'Root directory',
+      placeholder: '/',
+      description: "The folder that holds the project's package.json.",
+      required: true,
+      defaultValue: '/'
+    },
+    {
+      name: 'installCommand',
+      label: 'Install command',
+      placeholder: 'npm install',
+      description: "Installs the project's dependencies before the build runs.",
+      required: true,
+      defaultValue: 'npm install'
+    }
+  ]
+
+  const variables: TemplateVariable[] = [
+    {
+      name: 'storeAccessToken',
+      variable: 'NUXT_STORE_ACCESS_TOKEN',
+      placeholder: 'Access token',
+      required: true,
+      secret: true
+    },
+    {
+      name: 'storeRevalidationSecret',
+      variable: 'NUXT_STORE_REVALIDATION_SECRET',
+      placeholder: 'Revalidation secret',
+      required: false,
+      secret: true
     }
   ]
 
   const scope = ref('riley-carter')
   const repoName = ref('nuxt-ecommerce')
   const isPublic = ref(true)
-  const values = reactive(Object.fromEntries(settings.map((field) => [field.name, ''])))
+  const values = reactive<Record<string, string>>({
+    ...Object.fromEntries(settings.map((field) => [field.name, field.defaultValue])),
+    ...Object.fromEntries(buildSettings.map((field) => [field.name, field.defaultValue])),
+    ...Object.fromEntries(variables.map((field) => [field.name, '']))
+  })
+  const revealed = reactive<Record<string, boolean>>({})
+  const submitted = ref(false)
+  const buildOpen = ref<string | null>(null)
+  const variablesOpen = ref<string | null>('variables')
 
-  const canDeploy = computed(
-    () =>
-      Boolean(repoName.value.trim()) &&
-      settings.filter((field) => field.required).every((field) => (values[field.name] || '').trim())
+  const isMissing = (field: { name: string; required: boolean }) =>
+    field.required && !(values[field.name] || '').trim()
+
+  const errorOf = (field: {
+    name: string
+    required: boolean
+    label?: string
+    variable?: string
+  }) => (submitted.value && isMissing(field) ? `${field.label ?? field.variable} is required.` : '')
+
+  const repoNameError = computed(() =>
+    submitted.value && !repoName.value.trim() ? 'Repository name is required.' : ''
   )
+
+  const deploy = () => {
+    submitted.value = true
+    if (buildSettings.some(isMissing)) buildOpen.value = 'build'
+    if (variables.some(isMissing)) variablesOpen.value = 'variables'
+  }
 </script>
 
 <template>
@@ -110,7 +174,7 @@
         class="layout-column-focused relative flex min-h-full flex-col items-center gap-(--spacing-xl) px-(--spacing-md) py-(--spacing-xxl)"
       >
         <div
-          class="flex w-full items-start gap-(--spacing-md) overflow-hidden rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) p-(--spacing-md) no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas) max-w-none! motion-reduce:transition-none! motion-reduce:transform-none!"
+          class="flex w-full items-start gap-(--spacing-md) overflow-hidden rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) p-(--spacing-md)"
         >
           <span
             class="flex size-10 shrink-0 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
@@ -159,7 +223,7 @@
 
         <div
           data-phase="form"
-          class="flex w-full flex-col items-center gap-(--spacing-xl) data-[phase=success]:my-auto motion-reduce:transition-none! motion-reduce:transform-none!"
+          class="flex w-full flex-col items-center gap-(--spacing-xl)"
         >
           <Card class="w-full">
             <template #content>
@@ -185,7 +249,6 @@
                           v-for="option in scopes"
                           :key="String(option.value)"
                           :value="option.value"
-                          :disabled="option.disabled"
                         >
                           {{ option.label }}
                         </Select.Option>
@@ -193,7 +256,10 @@
                     </Select>
                   </Field>
 
-                  <Field required>
+                  <Field
+                    required
+                    :invalid="Boolean(repoNameError)"
+                  >
                     <Field.Label for="repoName">
                       {{ isPublic ? 'Public repository name' : 'Private repository name' }}
                     </Field.Label>
@@ -202,7 +268,6 @@
                         id="repoName"
                         v-model="repoName"
                         placeholder="my-repository"
-                        required
                       />
                       <InputGroupAddon>
                         <Tooltip text="Repository visibility">
@@ -214,14 +279,17 @@
                         </Tooltip>
                       </InputGroupAddon>
                     </InputGroupRoot>
+                    <Field.Error v-if="repoNameError">{{ repoNameError }}</Field.Error>
                   </Field>
                 </div>
 
                 <h3 class="text-heading-xxs text-(--text-default)">Template settings</h3>
-                <div class="flex flex-col gap-(--spacing-lg)">
+                <div class="grid grid-cols-1 items-start gap-(--spacing-lg) sm:grid-cols-2">
                   <Field
                     v-for="field in settings"
                     :key="field.name"
+                    :required="field.required"
+                    :invalid="Boolean(errorOf(field))"
                   >
                     <Field.Label>{{ field.label }}</Field.Label>
                     <Input
@@ -229,10 +297,177 @@
                       size="large"
                       :placeholder="field.placeholder"
                     />
-                    <Field.Description v-if="field.description">{{
+                    <Field.Error v-if="errorOf(field)">{{ errorOf(field) }}</Field.Error>
+                    <Field.Description v-else-if="field.description">{{
                       field.description
                     }}</Field.Description>
                   </Field>
+                </div>
+
+                <div class="flex flex-col gap-(--spacing-xs)">
+                  <div
+                    class="overflow-hidden rounded-(--shape-card) border border-(--border-default)"
+                  >
+                    <div class="-mb-px">
+                      <Accordion
+                        v-model="buildOpen"
+                        type="single"
+                        collapsible
+                        size="large"
+                        arrow-position="left"
+                      >
+                        <Accordion.Item value="build">
+                          <Accordion.Trigger>
+                            <span class="text-label-sm text-(--text-default)"
+                              >Build and output settings</span
+                            >
+                          </Accordion.Trigger>
+                          <Accordion.Content>
+                            <div class="flex min-w-0 flex-col gap-(--spacing-sm) p-(--spacing-md)">
+                              <div
+                                class="grid grid-cols-1 items-start gap-(--spacing-lg) sm:grid-cols-2"
+                              >
+                                <Field
+                                  v-for="field in buildSettings"
+                                  :key="field.name"
+                                  :required="field.required"
+                                  :invalid="Boolean(errorOf(field))"
+                                >
+                                  <Field.Label>{{ field.label }}</Field.Label>
+                                  <Input
+                                    v-model="values[field.name]"
+                                    size="large"
+                                    :placeholder="field.placeholder"
+                                  />
+                                  <Field.Error v-if="errorOf(field)">{{
+                                    errorOf(field)
+                                  }}</Field.Error>
+                                  <Field.Description v-else-if="field.description">{{
+                                    field.description
+                                  }}</Field.Description>
+                                </Field>
+                              </div>
+                            </div>
+                          </Accordion.Content>
+                        </Accordion.Item>
+                      </Accordion>
+                    </div>
+                  </div>
+                  <div
+                    class="overflow-hidden rounded-(--shape-card) border border-(--border-default)"
+                  >
+                    <div class="-mb-px">
+                      <Accordion
+                        v-model="variablesOpen"
+                        type="single"
+                        collapsible
+                        size="large"
+                        arrow-position="left"
+                      >
+                        <Accordion.Item value="variables">
+                          <Accordion.Trigger>
+                            <span class="text-label-sm text-(--text-default)"
+                              >Environment variables</span
+                            >
+                          </Accordion.Trigger>
+                          <Accordion.Content>
+                            <div class="flex min-w-0 flex-col gap-(--spacing-sm) p-(--spacing-md)">
+                              <Field
+                                v-for="field in variables"
+                                :key="field.name"
+                                :required="field.required"
+                                :invalid="Boolean(errorOf(field))"
+                              >
+                                <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+                                  <InputGroupRoot
+                                    size="large"
+                                    disabled
+                                  >
+                                    <InputGroupAddon>
+                                      <label
+                                        :for="`${field.name}-key`"
+                                        class="w-20"
+                                      >
+                                        Key
+                                      </label>
+                                    </InputGroupAddon>
+                                    <InputGroupInput
+                                      :id="`${field.name}-key`"
+                                      :model-value="field.variable"
+                                      readonly
+                                      disabled
+                                    />
+                                  </InputGroupRoot>
+                                  <InputGroupRoot size="large">
+                                    <InputGroupAddon>
+                                      <span class="w-20">
+                                        <Field.Label>Value</Field.Label>
+                                      </span>
+                                    </InputGroupAddon>
+                                    <InputGroupInput
+                                      v-model="values[field.name]"
+                                      :type="
+                                        field.secret && !revealed[field.name] ? 'password' : 'text'
+                                      "
+                                      :placeholder="field.placeholder"
+                                      autocomplete="off"
+                                      spellcheck="false"
+                                    />
+                                    <Tooltip
+                                      v-if="field.secret"
+                                      :text="revealed[field.name] ? 'Hide value' : 'Show value'"
+                                    >
+                                      <IconButton
+                                        :icon="
+                                          revealed[field.name] ? 'pi pi-eye-slash' : 'pi pi-eye'
+                                        "
+                                        kind="outlined"
+                                        size="large"
+                                        :aria-label="
+                                          revealed[field.name] ? 'Hide value' : 'Show value'
+                                        "
+                                        :aria-pressed="Boolean(revealed[field.name])"
+                                        @click="revealed[field.name] = !revealed[field.name]"
+                                      />
+                                    </Tooltip>
+                                    <InputGroupAddon>
+                                      <Tooltip
+                                        :text="
+                                          field.secret
+                                            ? 'The template keeps this value secret.'
+                                            : 'The template stores this value as plain text.'
+                                        "
+                                      >
+                                        <span class="flex items-center gap-(--spacing-xs)">
+                                          <label :for="`${field.name}-secret`">Secret</label>
+                                          <Checkbox
+                                            :model-value="field.secret"
+                                            binary
+                                            disabled
+                                            :input-id="`${field.name}-secret`"
+                                          />
+                                          <i
+                                            class="pi pi-lock text-body-xs"
+                                            aria-hidden="true"
+                                          />
+                                        </span>
+                                      </Tooltip>
+                                    </InputGroupAddon>
+                                  </InputGroupRoot>
+                                </div>
+                                <Field.Error v-if="errorOf(field)">{{
+                                  errorOf(field)
+                                }}</Field.Error>
+                              </Field>
+                              <p class="text-body-xs text-(--text-muted)">
+                                These values are passed to the build of Nuxt E-commerce.
+                              </p>
+                            </div>
+                          </Accordion.Content>
+                        </Accordion.Item>
+                      </Accordion>
+                    </div>
+                  </div>
                 </div>
               </div>
             </template>
@@ -243,7 +478,7 @@
                 label="Deploy"
                 kind="primary"
                 size="large"
-                :disabled="!canDeploy"
+                @click="deploy"
               />
             </template>
           </Card>
