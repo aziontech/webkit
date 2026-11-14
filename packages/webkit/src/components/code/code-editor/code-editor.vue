@@ -25,16 +25,23 @@
     type CodeEditorMonacoModule,
     fontFromTokens,
     highlightCalls,
+    jsonDefaultsOf,
     padLineNumber,
-    themeFromTokens
+    syncJsonSchema,
+    themeFromTokens,
+    toCodeEditorMarkers
   } from './monaco'
 
   export type {
     CodeEditorMonaco,
     CodeEditorMonacoDiffEditor,
     CodeEditorMonacoEditor,
+    CodeEditorMonacoJsonDefaults,
+    CodeEditorMonacoJsonDiagnostics,
+    CodeEditorMonacoJsonSchema,
     CodeEditorMonacoLanguage,
     CodeEditorMonacoLanguages,
+    CodeEditorMonacoMarker,
     CodeEditorMonacoModel,
     CodeEditorMonacoModule,
     CodeEditorMonacoTheme
@@ -82,12 +89,16 @@
     height?: string
     /** Fills a flex column instead of using `height`. */
     fill?: boolean
+    /** Draws the frame: border, corner radius and an offset focus ring. Off, the editor sits flush in its pane. */
+    bordered?: boolean
     /** Shows the line-number gutter. */
     lineNumbers?: boolean
     /** Zero-pads line numbers to two digits (01, 02…), as the console's full-page function and arguments editors do. */
     padLineNumbers?: boolean
     /** Model path for Monaco language services (`index.ts`, `args.json`). */
     path?: string
+    /** JSON Schema the value is checked against when `language` is `json` and Monaco is loaded. */
+    schema?: Record<string, unknown>
     /** Accessible name when no `Field` label names it. Empty uses the locale catalog. */
     ariaLabel?: string
   }
@@ -103,9 +114,11 @@
     markers: () => [],
     height: '16rem',
     fill: false,
+    bordered: true,
     lineNumbers: true,
     padLineNumbers: false,
     path: '',
+    schema: undefined,
     ariaLabel: ''
   })
 
@@ -114,6 +127,7 @@
   const emit = defineEmits<{
     ready: [editor: unknown]
     'load-error': [error: unknown]
+    validate: [markers: CodeEditorMarker[]]
   }>()
 
   defineSlots<{
@@ -122,11 +136,13 @@
   }>()
 
   const INDENT = '  '
+  const MARKER_OWNER = 'webkit'
 
   const attrs = useAttrs()
   const { t } = useTranslate({ codeEditor: en.codeEditor })
   const uid = useId()
   const summaryId = `${uid}-problems`
+  const schemaUri = `inmemory://webkit/${uid}/schema.json`
   const hintId = `${uid}-hint`
 
   const {
@@ -387,7 +403,7 @@
     const model = mainModel
     api.editor.setModelMarkers(
       model,
-      'webkit',
+      MARKER_OWNER,
       props.markers.map((marker) => ({
         startLineNumber: marker.line,
         startColumn: marker.column ?? 1,
@@ -399,6 +415,34 @@
         message: marker.message
       }))
     )
+  }
+
+  const applySchema = () => {
+    if (!api) return
+    const defaults = jsonDefaultsOf(api)
+    if (!defaults) return
+    const target = mainModel?.uri?.toString()
+    const active = props.schema && props.language === 'json' && target
+    syncJsonSchema(
+      defaults,
+      schemaUri,
+      active ? { fileMatch: target, schema: JSON.parse(JSON.stringify(props.schema)) } : null
+    )
+  }
+
+  const emitValidate = () => {
+    if (!api || !mainModel) return
+    const resource = mainModel.uri
+    const markers = resource ? (api.editor.getModelMarkers?.({ resource }) ?? []) : []
+    emit('validate', toCodeEditorMarkers(markers, api.MarkerSeverity, MARKER_OWNER))
+  }
+
+  const watchMarkers = () => {
+    const subscription = api?.editor.onDidChangeMarkers?.((resources) => {
+      const target = mainModel?.uri?.toString()
+      if (target && resources.some((resource) => String(resource) === target)) emitValidate()
+    })
+    if (subscription) disposables.push(subscription)
   }
 
   let themeObserver: MutationObserver | null = null
@@ -446,8 +490,8 @@
       if (!host || !rootRef.value) throw new Error('missing host')
       applyTheme()
       const font = fontFromTokens(rootRef.value)
-      const uri =
-        props.path && api.Uri ? api.Uri.parse(`inmemory://webkit/${uid}/${props.path}`) : undefined
+      const file = props.path || (props.schema ? 'model.json' : '')
+      const uri = file && api.Uri ? api.Uri.parse(`inmemory://webkit/${uid}/${file}`) : undefined
       mainModel = api.editor.createModel(model.value, props.language, uri)
       const options = { ...editorOptions(), ...font, theme: CODE_EDITOR_THEME }
       if (props.diff) {
@@ -472,6 +516,8 @@
         })
       )
       applyMarkers()
+      applySchema()
+      watchMarkers()
       watchTheme()
       emit('ready', diffEditor ?? editor)
     } catch (error) {
@@ -483,6 +529,10 @@
   }
 
   const disposeMonaco = () => {
+    if (api) {
+      const defaults = jsonDefaultsOf(api)
+      if (defaults) syncJsonSchema(defaults, schemaUri, null)
+    }
     disposables.splice(0).forEach((item) => item.dispose())
     diffEditor?.dispose()
     if (!diffEditor) editor?.dispose()
@@ -511,8 +561,11 @@
     (language) => {
       if (api && mainModel) api.editor.setModelLanguage?.(mainModel, language)
       if (api && originalModel) api.editor.setModelLanguage?.(originalModel, language)
+      applySchema()
     }
   )
+
+  watch(() => props.schema, applySchema, { deep: true })
 
   watch(
     [isReadonly, () => props.lineNumbers, () => props.padLineNumbers, () => props.ariaLabel],
@@ -557,8 +610,9 @@
     :data-disabled="isDisabled || null"
     :data-diff="diff || null"
     :data-fill="fill || null"
+    :data-bordered="bordered || null"
     :aria-busy="mode === 'loading' || undefined"
-    class="@container/code-editor flex w-full min-w-0 flex-col overflow-hidden rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface) transition-colors duration-150 ease-out focus-within:ring-2 focus-within:ring-(--ring-color) focus-within:ring-offset-2 focus-within:ring-offset-(--bg-canvas) data-[disabled]:bg-(--bg-disabled) data-[fill]:min-h-0 data-[fill]:flex-1 data-[invalid]:border-(--danger-border) motion-reduce:transition-none forced-colors:border-[CanvasText]"
+    class="@container/code-editor flex w-full min-w-0 flex-col overflow-hidden border-(--border-default) bg-(--bg-surface) transition-colors duration-150 ease-out focus-within:ring-2 focus-within:ring-(--ring-color) not-data-[bordered]:focus-within:ring-inset data-[bordered]:rounded-(--shape-elements) data-[bordered]:border data-[bordered]:focus-within:ring-offset-2 data-[bordered]:focus-within:ring-offset-(--bg-canvas) data-[disabled]:bg-(--bg-disabled) data-[fill]:min-h-0 data-[fill]:flex-1 data-[invalid]:border-(--danger-border) motion-reduce:transition-none forced-colors:data-[bordered]:border-[CanvasText]"
   >
     <div
       v-if="$slots['toolbar']"

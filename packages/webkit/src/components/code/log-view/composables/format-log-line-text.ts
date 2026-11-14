@@ -3,6 +3,8 @@ import type { LogViewLine } from '../injection-key'
 export function formatLogLineText(line: LogViewLine): string {
   const parts: string[] = [line.time]
 
+  if (line.level) parts.push(line.level.toUpperCase())
+
   if (line.type === 'success') {
     const hasCheckmark = line.message.includes('✔') || line.message.includes('✓')
 
@@ -20,5 +22,5 @@ export function formatLogLineText(line: LogViewLine): string {
     parts.push(line.message)
   }
 
-  return parts.join(' ')
+  return parts.filter(Boolean).join(' ')
 }

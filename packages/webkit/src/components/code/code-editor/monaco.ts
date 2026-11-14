@@ -8,6 +8,7 @@ export interface CodeEditorMonacoModel extends CodeEditorDisposable {
   setValue(value: string): void
   onDidChangeContent(listener: (event: unknown) => void): CodeEditorDisposable
   getLineMaxColumn?(line: number): number
+  readonly uri?: { toString(): string }
 }
 
 /** The part of a Monaco code editor CodeEditor uses. */
@@ -49,10 +50,45 @@ export interface CodeEditorMonaco {
     setTheme(name: string): void
     setModelMarkers(model: CodeEditorMonacoModel, owner: string, markers: object[]): void
     setModelLanguage?(model: CodeEditorMonacoModel, language: string): void
+    getModelMarkers?(filter: { resource?: unknown }): CodeEditorMonacoMarker[]
+    onDidChangeMarkers?(listener: (resources: readonly unknown[]) => void): CodeEditorDisposable
   }
   MarkerSeverity: { Error: number; Warning: number; Info: number }
   Uri?: { parse(value: string): unknown }
   languages?: CodeEditorMonacoLanguages
+  json?: { jsonDefaults: CodeEditorMonacoJsonDefaults }
+}
+
+/** A diagnostic as Monaco reports it. */
+export interface CodeEditorMonacoMarker {
+  owner: string
+  severity: number
+  message: string
+  startLineNumber: number
+  startColumn: number
+  endLineNumber: number
+  endColumn: number
+}
+
+/** One JSON Schema association in Monaco's JSON diagnostics options. */
+export interface CodeEditorMonacoJsonSchema {
+  readonly uri: string
+  readonly fileMatch?: string[]
+  readonly schema?: unknown
+}
+
+/** The part of Monaco's JSON diagnostics options CodeEditor reads and writes. */
+export interface CodeEditorMonacoJsonDiagnostics {
+  readonly validate?: boolean
+  readonly schemas?: readonly CodeEditorMonacoJsonSchema[]
+  readonly enableSchemaRequest?: boolean
+  readonly schemaValidation?: string
+}
+
+/** Monaco's JSON language defaults, where schemas are registered. */
+export interface CodeEditorMonacoJsonDefaults {
+  readonly diagnosticsOptions: CodeEditorMonacoJsonDiagnostics
+  setDiagnosticsOptions(options: CodeEditorMonacoJsonDiagnostics): void
 }
 
 /** A registered language; Monaco's built-in languages carry a `loader` for their Monarch grammar. */
@@ -207,6 +243,65 @@ export function highlightCalls(api: { languages?: CodeEditorMonacoLanguages }): 
   )
   highlighted.set(api, run)
   return run
+}
+
+const isJsonDefaults = (value: unknown): value is CodeEditorMonacoJsonDefaults =>
+  typeof value === 'object' &&
+  value !== null &&
+  typeof (value as CodeEditorMonacoJsonDefaults).setDiagnosticsOptions === 'function'
+
+export function jsonDefaultsOf(api: CodeEditorMonaco): CodeEditorMonacoJsonDefaults | null {
+  const modern = api.json?.jsonDefaults
+  if (isJsonDefaults(modern)) return modern
+  const legacy = (api.languages as { json?: { jsonDefaults?: unknown } } | undefined)?.json
+  return isJsonDefaults(legacy?.jsonDefaults) ? legacy.jsonDefaults : null
+}
+
+export function syncJsonSchema(
+  defaults: CodeEditorMonacoJsonDefaults,
+  schemaUri: string,
+  entry: { fileMatch: string; schema: unknown } | null
+): void {
+  const current = defaults.diagnosticsOptions
+  const others = (current.schemas ?? []).filter((item) => item.uri !== schemaUri)
+  if (!entry && others.length === (current.schemas ?? []).length) return
+  defaults.setDiagnosticsOptions({
+    ...current,
+    ...(entry ? { validate: true, schemaValidation: 'warning', enableSchemaRequest: false } : {}),
+    schemas: entry
+      ? [...others, { uri: schemaUri, fileMatch: [entry.fileMatch], schema: entry.schema }]
+      : others
+  })
+}
+
+export function toCodeEditorMarkers(
+  markers: CodeEditorMonacoMarker[],
+  severity: CodeEditorMonaco['MarkerSeverity'],
+  owner: string
+): {
+  line: number
+  column: number
+  endLine: number
+  endColumn: number
+  severity: 'error' | 'warning' | 'info'
+  message: string
+}[] {
+  return markers
+    .filter((marker) => marker.owner !== owner)
+    .map((marker) => ({
+      line: marker.startLineNumber,
+      column: marker.startColumn,
+      endLine: marker.endLineNumber,
+      endColumn: marker.endColumn,
+      severity:
+        marker.severity >= severity.Error
+          ? ('error' as const)
+          : marker.severity >= severity.Warning
+            ? ('warning' as const)
+            : ('info' as const),
+      message: marker.message
+    }))
+    .sort((a, b) => a.line - b.line || a.column - b.column)
 }
 
 export function padLineNumber(line: number): string {

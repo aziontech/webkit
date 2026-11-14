@@ -44,7 +44,7 @@
   >
     <div
       :data-testid="`${testId}__left`"
-      class="flex w-full min-w-0 items-center gap-(--spacing-sm) sm:w-auto"
+      class="flex w-full min-w-0 flex-wrap items-center gap-(--spacing-sm) sm:w-auto"
     >
       <slot name="left">
         <span
@@ -70,6 +70,40 @@
             :label="ctx.warningTagLabel.value"
           />
         </button>
+
+        <div
+          v-if="ctx.levels.value.length"
+          role="group"
+          :aria-label="t('logView.levels')"
+          :data-testid="`${testId}__levels`"
+          class="flex min-w-0 flex-wrap items-center gap-(--spacing-xxs)"
+        >
+          <button
+            v-for="name in ctx.levels.value"
+            :key="name"
+            type="button"
+            :data-level="name"
+            :data-active="ctx.level.value === name || null"
+            :aria-pressed="ctx.level.value === name"
+            :aria-label="
+              t('logView.levelCount', { level: name, count: ctx.levelCounts.value[name] })
+            "
+            :disabled="ctx.disabled.value"
+            :data-testid="`${testId}__level`"
+            class="inline-flex h-8 shrink-0 cursor-pointer items-center gap-(--spacing-xxs) rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface) px-(--spacing-xs) text-label-code-sm text-(--text-muted) transition-colors duration-150 ease-out hover:border-(--border-strong) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) disabled:cursor-not-allowed disabled:opacity-60 data-[active]:border-(--border-selected) data-[active]:bg-(--bg-selected) data-[active]:text-(--text-default) motion-reduce:transition-none pointer-coarse:h-11"
+            @click="ctx.toggleLevel(name)"
+          >
+            <span
+              :data-level="name"
+              aria-hidden="true"
+              class="size-2 shrink-0 rounded-full bg-(--text-muted) data-[level=error]:bg-(--danger-contrast) data-[level=info]:bg-(--info-contrast) data-[level=warn]:bg-(--warning-contrast) forced-colors:bg-[CanvasText]"
+            />
+            <span>{{ name }}</span>
+            <span class="tabular-nums text-(--text-default)">{{
+              ctx.levelCounts.value[name]
+            }}</span>
+          </button>
+        </div>
       </slot>
     </div>
 

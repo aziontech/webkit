@@ -2,6 +2,7 @@ import { fireEvent, render, waitFor } from '@testing-library/vue'
 import { describe, expect, it, vi } from 'vitest'
 import { defineComponent, h, nextTick, ref } from 'vue'
 
+import Borderless from '../../../../examples/code-editor/borderless.vue'
 import Default from '../../../../examples/code-editor/default.vue'
 import Diff from '../../../../examples/code-editor/diff.vue'
 import ReadOnly from '../../../../examples/code-editor/read-only.vue'
@@ -15,10 +16,13 @@ import FieldLabel from '../../inputs/field/field-label/field-label.vue'
 import CodeEditor from './code-editor.vue'
 import {
   type CodeEditorMonaco,
+  type CodeEditorMonacoJsonDiagnostics,
+  type CodeEditorMonacoMarker,
   type CodeEditorMonacoModel,
   fontFromTokens,
   highlightCalls,
-  padLineNumber
+  padLineNumber,
+  toCodeEditorMarkers
 } from './monaco'
 
 const fakeMonaco = () => {
@@ -398,6 +402,123 @@ describe('CodeEditor', () => {
     removeTokens()
   })
 
+  it('draws the frame by default and drops it with bordered false', () => {
+    const view = render(CodeEditor, { props: { modelValue: 'x', ariaLabel: 'Script' } })
+    expect(view.getByTestId('code-code-editor').hasAttribute('data-bordered')).toBe(true)
+    view.unmount()
+    const flush = render(CodeEditor, {
+      props: { modelValue: 'x', ariaLabel: 'Script', bordered: false }
+    })
+    expect(flush.getByTestId('code-code-editor').hasAttribute('data-bordered')).toBe(false)
+  })
+
+  it('maps Monaco markers to the marker shape, sorted, without its own', () => {
+    const marker = (line: number, severity: number, owner = 'json'): CodeEditorMonacoMarker => ({
+      owner,
+      severity,
+      message: `m${line}`,
+      startLineNumber: line,
+      startColumn: 3,
+      endLineNumber: line,
+      endColumn: 9
+    })
+    expect(
+      toCodeEditorMarkers(
+        [marker(4, 1), marker(2, 8), marker(3, 4), marker(1, 8, 'webkit')],
+        { Error: 8, Warning: 4, Info: 2 },
+        'webkit'
+      )
+    ).toEqual([
+      { line: 2, column: 3, endLine: 2, endColumn: 9, severity: 'error', message: 'm2' },
+      { line: 3, column: 3, endLine: 3, endColumn: 9, severity: 'warning', message: 'm3' },
+      { line: 4, column: 3, endLine: 4, endColumn: 9, severity: 'info', message: 'm4' }
+    ])
+  })
+
+  it('registers the JSON schema for its model and emits validate when its markers change', async () => {
+    const fake = fakeMonaco()
+    let options: CodeEditorMonacoJsonDiagnostics = {
+      validate: true,
+      schemas: [{ uri: 'inmemory://other/schema.json', fileMatch: ['other.json'], schema: {} }]
+    }
+    const listeners: ((resources: readonly unknown[]) => void)[] = []
+    const stored: CodeEditorMonacoMarker[] = []
+    const createModel = fake.api.editor.createModel
+    fake.api.Uri = { parse: (value: string) => ({ toString: () => value }) }
+    fake.api.editor.createModel = (value, language, uri) =>
+      Object.assign(createModel(value, language, uri), { uri: uri as { toString(): string } })
+    fake.api.editor.getModelMarkers = () => stored
+    fake.api.editor.onDidChangeMarkers = (listener) => {
+      listeners.push(listener)
+      return { dispose: () => listeners.splice(listeners.indexOf(listener), 1) }
+    }
+    fake.api.json = {
+      jsonDefaults: {
+        get diagnosticsOptions() {
+          return options
+        },
+        setDiagnosticsOptions: (next) => {
+          options = next
+        }
+      }
+    }
+    const schema = ref<Record<string, unknown> | undefined>({
+      type: 'object',
+      required: ['greeting']
+    })
+    const onValidate = vi.fn()
+    const view = render(
+      defineComponent({
+        setup: () => () =>
+          h(CodeEditor, {
+            modelValue: '{}',
+            loader: () => Promise.resolve(fake.api),
+            language: 'json',
+            schema: schema.value,
+            ariaLabel: 'Arguments',
+            onValidate
+          })
+      })
+    )
+    await waitFor(() =>
+      expect(view.getByTestId('code-code-editor').getAttribute('data-mode')).toBe('monaco')
+    )
+    const mine = options.schemas?.find((entry) => entry.uri !== 'inmemory://other/schema.json')
+    expect(options.schemas).toHaveLength(2)
+    expect(options).toMatchObject({ validate: true, enableSchemaRequest: false })
+    expect(mine?.schema).toEqual({ type: 'object', required: ['greeting'] })
+    expect(mine?.fileMatch?.[0]).toMatch(/model\.json$/)
+
+    stored.push({
+      owner: 'json',
+      severity: 4,
+      message: 'Missing property "greeting".',
+      startLineNumber: 1,
+      startColumn: 1,
+      endLineNumber: 1,
+      endColumn: 3
+    })
+    listeners.forEach((listener) => listener([{ toString: () => 'inmemory://elsewhere.json' }]))
+    expect(onValidate).not.toHaveBeenCalled()
+    listeners.forEach((listener) => listener([{ toString: () => mine?.fileMatch?.[0] }]))
+    expect(onValidate).toHaveBeenLastCalledWith([
+      {
+        line: 1,
+        column: 1,
+        endLine: 1,
+        endColumn: 3,
+        severity: 'warning',
+        message: 'Missing property "greeting".'
+      }
+    ])
+
+    schema.value = undefined
+    await nextTick()
+    expect(options.schemas).toHaveLength(1)
+    view.unmount()
+    expect(listeners).toHaveLength(0)
+  })
+
   it('keeps the plain editor and says so when the loader fails', async () => {
     const onError = vi.fn()
     const view = render(CodeEditor, {
@@ -458,6 +579,7 @@ describe('CodeEditor', () => {
   })
 
   it.each([
+    ['Borderless', Borderless],
     ['Default', Default],
     ['Diff', Diff],
     ['ReadOnly', ReadOnly],

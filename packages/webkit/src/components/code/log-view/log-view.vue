@@ -5,10 +5,10 @@
   import * as en from '../../../i18n/messages/en'
   import { cn } from '../../../utils/cn'
   import { formatLogLineText } from './composables/format-log-line-text'
-  import type { LogViewLine } from './injection-key'
+  import type { LogViewLine, LogViewLineLevel } from './injection-key'
   import { LogViewInjectionKey } from './injection-key'
 
-  export type { LogViewLine, LogViewLineType } from './injection-key'
+  export type { LogViewLine, LogViewLineLevel, LogViewLineType } from './injection-key'
 
   defineOptions({
     name: 'LogView',
@@ -30,6 +30,8 @@
     loading?: boolean
     /** Label shown beneath the spinner while `loading`. Empty uses the locale catalog (`Loading…`). */
     loadingLabel?: string
+    /** Levels the header offers as filter toggles, each with its line count; a level with no line is still offered. Empty hides the level filter. */
+    levels?: LogViewLineLevel[]
   }
 
   const props = withDefaults(defineProps<Props>(), {
@@ -39,13 +41,16 @@
     copyable: true,
     disabled: false,
     loading: false,
-    loadingLabel: ''
+    loadingLabel: '',
+    levels: () => []
   })
 
   /** Bound to LogViewHeader search; filters LogViewContent when set. */
   const search = defineModel<string>('search', { default: '' })
   /** When true, shows only lines whose `type` is `warning`. */
   const warningsOnly = defineModel<boolean>('warningsOnly', { default: false })
+  /** The level the log is filtered to; empty shows every level. */
+  const level = defineModel<LogViewLineLevel | ''>('level', { default: '' })
 
   const emit = defineEmits<{
     copy: [value: string]
@@ -71,6 +76,12 @@
 
   const warningCount = computed(() => props.lines.filter((line) => line.type === 'warning').length)
 
+  const levelCounts = computed(() => {
+    const counts: Record<LogViewLineLevel, number> = { debug: 0, info: 0, warn: 0, error: 0 }
+    for (const line of props.lines) if (line.level) counts[line.level] += 1
+    return counts
+  })
+
   const filteredLines = computed(() => {
     const query = search.value.trim().toLowerCase()
     let result = props.lines
@@ -79,10 +90,15 @@
       result = result.filter((line) => line.type === 'warning')
     }
 
+    if (level.value) {
+      result = result.filter((line) => line.level === level.value)
+    }
+
     if (query) {
       result = result.filter((line) => {
         const haystack = [
           line.time,
+          line.level,
           line.message,
           line.folderType,
           line.size,
@@ -126,6 +142,12 @@
     warningsOnly.value = !warningsOnly.value
   }
 
+  const toggleLevel = (next: LogViewLineLevel) => {
+    if (props.disabled) return
+
+    level.value = level.value === next ? '' : next
+  }
+
   const emitCopy = (value: string) => {
     emit('copy', value)
   }
@@ -136,6 +158,9 @@
     filteredLines,
     search: computed(() => search.value),
     warningsOnly: computed(() => warningsOnly.value),
+    levels: computed(() => props.levels),
+    level: computed(() => level.value),
+    levelCounts,
     disabled: computed(() => props.disabled),
     copyable: computed(() => props.copyable),
     loading: computed(() => props.loading),
@@ -148,6 +173,7 @@
     copyText,
     setSearch,
     toggleWarningsOnly,
+    toggleLevel,
     emitCopy
   })
 </script>
@@ -160,6 +186,7 @@
     :data-disabled="disabled || null"
     :data-loading="loading || null"
     :data-warnings-only="warningsOnly || null"
+    :data-level="level || null"
     :class="
       cn(
         'flex h-fit min-h-0 w-full min-w-0 max-w-full flex-col overflow-hidden data-[border]:rounded-(--shape-elements) data-[border]:border data-[border]:border-(--border-muted)',

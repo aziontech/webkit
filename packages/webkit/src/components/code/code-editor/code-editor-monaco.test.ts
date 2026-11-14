@@ -6,6 +6,7 @@ import { userEvent } from 'vitest/browser'
 import { nextTick } from 'vue'
 
 import Monaco from '../../../../examples/code-editor/monaco.vue'
+import Schema from '../../../../examples/code-editor/schema.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import type { CodeEditorMonacoModule } from './monaco'
 
@@ -151,6 +152,26 @@ describe('CodeEditor · real monaco-editor (lazy loader with workers)', () => {
     const api = 'editor' in module ? module : module.default
     expect(typeof api.languages?.getLanguages).toBe('function')
   }, 30_000)
+
+  it('checks a JSON document against its schema and emits the problems through validate', async () => {
+    const view = render(Schema)
+    await waitFor(
+      () => expect(view.getByTestId('code-code-editor')).toHaveAttribute('data-mode', 'monaco'),
+      { timeout: 30_000, interval: 100 }
+    )
+    const error = await waitFor(
+      () => {
+        const node = view.getByTestId('input-field-error')
+        expect(node.textContent).toMatch(/^\s*Line 3: /)
+        return node
+      },
+      { timeout: 20_000, interval: 100 }
+    )
+    expect(error.textContent).toMatch(/5/)
+    await waitFor(() => expect(view.container.querySelector('.squiggly-warning')).toBeTruthy(), {
+      timeout: 10_000
+    })
+  }, 60_000)
 
   it('has no axe violations once Monaco is live', async () => {
     const view = render(Monaco)
