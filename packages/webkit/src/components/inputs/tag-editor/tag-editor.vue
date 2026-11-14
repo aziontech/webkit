@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { computed, ref, useAttrs, useId } from 'vue'
 
+  import { useFieldControl } from '../../../composables/use-field-control'
   import { useTranslate } from '../../../composables/use-locale/use-translate'
   import * as en from '../../../i18n/messages/en'
   import Button from '../../actions/button/button.vue'
@@ -64,6 +65,18 @@
   const attrs = useAttrs()
   const { t } = useTranslate({ tagEditor: en.tagEditor })
   const baseId = useId()
+  const {
+    controlId,
+    describedBy,
+    labelledBy,
+    invalid: isInvalid,
+    disabled: isDisabled
+  } = useFieldControl({
+    id: () => attrs['id'] as string | undefined,
+    describedBy: () => attrs['aria-describedby'] as string | undefined,
+    labelledBy: () => attrs['aria-labelledby'] as string | undefined,
+    disabled: () => props.disabled
+  })
   const checkEmpty = ref(false)
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'input-tag-editor')
@@ -155,6 +168,13 @@
 <template>
   <div
     v-bind="$attrs"
+    :id="controlId"
+    role="group"
+    :aria-labelledby="labelledBy"
+    :aria-describedby="describedBy"
+    :aria-invalid="isInvalid || undefined"
+    :data-invalid="isInvalid || null"
+    :data-disabled="isDisabled || null"
     class="flex w-full min-w-0 flex-col"
     :data-testid="testId"
   >
@@ -164,7 +184,7 @@
       :errors="rowErrors"
       :new-item="newTag"
       :limit="limit + marked"
-      :disabled="disabled"
+      :disabled="isDisabled"
       :add-button-label="t('tagEditor.add')"
       :remove-button-label="t('tagEditor.remove')"
       :empty="t('tagEditor.empty')"
@@ -176,7 +196,7 @@
         <Input
           :model-value="String(value ?? '')"
           :placeholder="t('tagEditor.keyPlaceholder')"
-          :disabled="disabled || Boolean(asTag(item).markedForRemoval)"
+          :disabled="isDisabled || Boolean(asTag(item).markedForRemoval)"
           :readonly="Boolean(asTag(item).existing)"
           :list="keySuggestions.length ? `${baseId}-keys` : undefined"
           autocomplete="off"
@@ -188,7 +208,7 @@
         <Input
           :model-value="String(value ?? '')"
           :placeholder="t('tagEditor.valuePlaceholder')"
-          :disabled="disabled || Boolean(asTag(item).markedForRemoval)"
+          :disabled="isDisabled || Boolean(asTag(item).markedForRemoval)"
           :list="valueListId(item['key'])"
           autocomplete="off"
           :spellcheck="false"
@@ -208,7 +228,7 @@
           :aria-label="t('tagEditor.undoLabel', { index: index + 1 })"
           kind="transparent"
           size="medium"
-          :disabled="disabled || left === 0"
+          :disabled="isDisabled || left === 0"
           :data-testid="`${testId}__undo`"
           @click="setRemoval(index, false)"
         />

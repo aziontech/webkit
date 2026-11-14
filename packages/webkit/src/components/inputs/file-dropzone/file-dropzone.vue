@@ -2,6 +2,7 @@
   import { useEventListener } from '@vueuse/core'
   import { computed, ref, useAttrs, useId, watch } from 'vue'
 
+  import { useFieldControl } from '../../../composables/use-field-control'
   import { useTranslate } from '../../../composables/use-locale/use-translate'
   import * as en from '../../../i18n/messages/en'
   import { matchesAccept } from '../../../utils/file-accept'
@@ -61,6 +62,19 @@
   const { t } = useTranslate({ fileDropzone: en.fileDropzone })
   const titleId = useId()
   const descriptionId = useId()
+  const {
+    controlId,
+    describedBy: fieldDescribedBy,
+    labelledBy: fieldLabelledBy,
+    invalid: isInvalid,
+    disabled: isDisabled
+  } = useFieldControl({
+    id: () => attrs['id'] as string | undefined,
+    describedBy: () => attrs['aria-describedby'] as string | undefined,
+    labelledBy: () => attrs['aria-labelledby'] as string | undefined,
+    invalid: () => props.invalid,
+    disabled: () => props.disabled
+  })
 
   const depth = ref(0)
 
@@ -68,11 +82,17 @@
     () => (attrs['data-testid'] as string | undefined) ?? 'input-file-dropzone'
   )
   const isInline = computed(() => props.kind === 'inline')
-  const isOverlayLive = computed(() => props.kind === 'overlay' && !props.disabled)
-  const isActive = computed(() => !props.disabled && depth.value > 0)
+  const isOverlayLive = computed(() => props.kind === 'overlay' && !isDisabled.value)
+  const isActive = computed(() => !isDisabled.value && depth.value > 0)
+  const labelIds = computed(() => [fieldLabelledBy.value, titleId].filter(Boolean).join(' '))
+  const descriptionIds = computed(
+    () =>
+      [props.description ? descriptionId : '', fieldDescribedBy.value].filter(Boolean).join(' ') ||
+      undefined
+  )
 
   watch(
-    () => [props.kind, props.disabled],
+    () => [props.kind, isDisabled.value],
     () => {
       depth.value = 0
     }
@@ -114,7 +134,7 @@
   }
 
   function onRootDragEnter(event: DragEvent): void {
-    if (!isInline.value || props.disabled || !carriesFiles(event)) return
+    if (!isInline.value || isDisabled.value || !carriesFiles(event)) return
     depth.value += 1
   }
 
@@ -127,7 +147,7 @@
     if (!carriesFiles(event)) return
     if (!isInline.value && !isActive.value) return
     event.preventDefault()
-    if (event.dataTransfer) event.dataTransfer.dropEffect = props.disabled ? 'none' : 'copy'
+    if (event.dataTransfer) event.dataTransfer.dropEffect = isDisabled.value ? 'none' : 'copy'
   }
 
   function onRootDrop(event: DragEvent): void {
@@ -135,7 +155,7 @@
     if (!isInline.value && !isActive.value) return
     event.preventDefault()
     depth.value = 0
-    if (props.disabled) return
+    if (isDisabled.value) return
     deliver(event)
   }
 
@@ -183,12 +203,14 @@
       :data-testid="testId"
       :data-kind="kind"
       :data-state="isActive ? 'active' : 'idle'"
-      :data-disabled="disabled || null"
-      :data-invalid="invalid || null"
+      :id="isInline ? controlId : undefined"
+      :data-disabled="isDisabled || null"
+      :data-invalid="isInvalid || null"
       :role="isInline ? 'group' : undefined"
-      :aria-disabled="isInline && disabled ? 'true' : undefined"
-      :aria-labelledby="isInline ? titleId : undefined"
-      :aria-describedby="isInline && description ? descriptionId : undefined"
+      :aria-disabled="isInline && isDisabled ? 'true' : undefined"
+      :aria-invalid="isInline && isInvalid ? 'true' : undefined"
+      :aria-labelledby="isInline ? labelIds : undefined"
+      :aria-describedby="isInline ? descriptionIds : undefined"
       :aria-hidden="isInline ? undefined : 'true'"
       class="group flex flex-col rounded-(--shape-card) data-[kind=inline]:w-full data-[kind=inline]:border data-[kind=inline]:border-dashed data-[kind=inline]:border-(--border-strong) data-[kind=inline]:bg-(--bg-surface) data-[kind=inline]:p-(--spacing-lg) data-[kind=inline]:transition-[background-color,border-color] data-[kind=inline]:duration-fast-02 data-[kind=inline]:ease-productive-entrance motion-reduce:transition-none data-[kind=inline]:data-[state=active]:border-(--border-selected) data-[kind=inline]:data-[state=active]:bg-(--bg-selected) data-[kind=inline]:data-[state=idle]:data-[invalid]:not-data-[disabled]:border-(--danger-border) data-[kind=inline]:data-[disabled]:border-(--border-default) data-[kind=inline]:data-[disabled]:bg-(--bg-disabled) data-[disabled]:cursor-not-allowed data-[kind=overlay]:absolute data-[kind=overlay]:inset-0 data-[kind=overlay]:border-2 data-[kind=overlay]:border-dashed data-[kind=overlay]:border-(--border-selected) data-[kind=overlay]:bg-(--bg-canvas) data-[kind=overlay]:data-[state=idle]:pointer-events-none"
       @dragenter="onRootDragEnter"

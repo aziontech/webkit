@@ -3,9 +3,9 @@ name: tag-editor
 category: inputs
 structure: monolithic
 status: implemented
-spec_version: 2
+spec_version: 3
 template: 2
-checksum: b7792c3fbd55dc59290338632ea06df7e0bbba7956689408a2ef5c01d7dfe2f8
+checksum: 4d13c033f84e394933068db76b734cb87809056d62012874793b3519f4aa4a99
 created: 2026-11-11
 last_updated: 2026-11-14
 ---
@@ -71,24 +71,24 @@ Key and value tags of one resource, after Cloudscape's tag editor, built on `Att
 
 ## Props
 
-| Prop               | Type                       | Default    | Required | JSDoc                                                                                                                   |
-| ------------------ | -------------------------- | ---------- | -------- | ----------------------------------------------------------------------------------------------------------------------- |
-| `keySuggestions`   | `string[]`                 | `[]`       | false    | Keys offered while typing a key, for example the keys already used in the account.                                      |
-| `valueSuggestions` | `Record<string, string[]>` | `{}`       | false    | Values offered per key while typing a value.                                                                            |
-| `limit`            | `number`                   | `50`       | false    | Most tags allowed; tags marked for removal do not count.                                                                |
-| `keyMaxLength`     | `number`                   | `128`      | false    | Longest key allowed, in characters.                                                                                     |
-| `valueMaxLength`   | `number`                   | `256`      | false    | Longest value allowed, in characters.                                                                                   |
-| `reservedPrefix`   | `string`                   | `''`       | false    | Prefix reserved for the platform (for example `acme:`); keys may not start with it. Empty allows every prefix.           |
-| `errors`           | `TagEditorErrors`          | `[]`       | false    | Server errors per row, aligned with `tags`; shown in place of the built-in checks.                                      |
-| `disabled`         | `boolean`                  | `false`    | false    | Disables every control.                                                                                                 |
-| `ariaLabel`        | `string`                   | `''`       | false    | Accessible name of the list of tags. Empty uses the locale catalog.                                                     |
+| Prop               | Type                       | Default | Required | JSDoc                                                                                                          |
+| ------------------ | -------------------------- | ------- | -------- | -------------------------------------------------------------------------------------------------------------- |
+| `keySuggestions`   | `string[]`                 | `[]`    | false    | Keys offered while typing a key, for example the keys already used in the account.                             |
+| `valueSuggestions` | `Record<string, string[]>` | `{}`    | false    | Values offered per key while typing a value.                                                                   |
+| `limit`            | `number`                   | `50`    | false    | Most tags allowed; tags marked for removal do not count.                                                       |
+| `keyMaxLength`     | `number`                   | `128`   | false    | Longest key allowed, in characters.                                                                            |
+| `valueMaxLength`   | `number`                   | `256`   | false    | Longest value allowed, in characters.                                                                          |
+| `reservedPrefix`   | `string`                   | `''`    | false    | Prefix reserved for the platform (for example `acme:`); keys may not start with it. Empty allows every prefix. |
+| `errors`           | `TagEditorErrors`          | `[]`    | false    | Server errors per row, aligned with `tags`; shown in place of the built-in checks.                             |
+| `disabled`         | `boolean`                  | `false` | false    | Disables every control.                                                                                        |
+| `ariaLabel`        | `string`                   | `''`    | false    | Accessible name of the list of tags. Empty uses the locale catalog.                                            |
 
 Types: `TagEditorTag = { key: string; value: string; existing?: boolean; markedForRemoval?: boolean }`; `TagEditorErrors = ({ key?: string; value?: string } | undefined)[]`. Exposed: `validate(): boolean`.
 
 ## v-model
 
-| Model          | Type             | Default | Emits         | Notes                                                                                                                                                                              |
-| -------------- | ---------------- | ------- | ------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Model          | Type             | Default | Emits         | Notes                                                                                                                                                               |
+| -------------- | ---------------- | ------- | ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `v-model:tags` | `TagEditorTag[]` | `[]`    | `update:tags` | Tags being edited, via `defineModel('tags')`. Saved tags carry `existing`; Remove marks them `markedForRemoval` until Undo. Unbound, the editor keeps its own tags. |
 
 ## Events
@@ -128,6 +128,7 @@ _none_
 - ARIA: rows, labels, errors and announcements come from `attribute-editor`; Undo is named "Undo removal of tag n"; a marked tag keeps a visible note ("This tag will be removed when you save.").
 - Contrast ≥4.5:1 from the semantic text tokens.
 - Touch target: Remove and Undo are 32 px buttons (`medium`).
+- Inside a `Field`: the root is a `role="group"` that reads the field through `useFieldControl` — `id` from the field, `aria-labelledby` from `Field.Title`, `aria-describedby` from `Field.Description` / `Field.Error`, `aria-invalid` + `data-invalid` from the field's `invalid`, and the field's `disabled` disables every row. Each cell keeps its own inner field from `attribute-editor`, so the row inputs never take the outer field's id.
 
 ## Internationalization
 
