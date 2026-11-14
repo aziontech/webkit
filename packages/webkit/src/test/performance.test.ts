@@ -52,6 +52,12 @@ import DropdownMenu, {
   DropdownMenuItem,
   DropdownMenuTrigger
 } from '../components/navigation/dropdown-menu'
+import Command, {
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList
+} from '../components/overlay/command'
 import ListingBrowser from '../components/sections/listing-browser/listing-browser.vue'
 import ListingTable from '../components/sections/listing-table/listing-table.vue'
 import { useCollection, type UseCollectionReturn } from '../composables/use-collection'
@@ -551,6 +557,44 @@ function docLayoutCase(): Case {
       }),
     update: () => {
       searchOpen.value = true
+    }
+  }
+}
+
+function commandCase(): Case {
+  const open = ref(false)
+  return {
+    mount: () =>
+      defineComponent({
+        setup: () => () =>
+          h(
+            Command,
+            {
+              open: open.value,
+              shortcut: '',
+              'onUpdate:open': (value: boolean) => (open.value = value)
+            },
+            () => [
+              h(CommandInput, { placeholder: 'Search' }),
+              h(CommandList, null, () =>
+                Array.from({ length: 20 }, (_, g) =>
+                  h(CommandGroup, { key: g, heading: `Group ${g}` }, () =>
+                    Array.from({ length: 50 }, (_, i) =>
+                      h(CommandItem, { key: i, value: `g${g}-i${i}` }, () => `Page ${g}.${i}`)
+                    )
+                  )
+                )
+              )
+            ]
+          )
+      }),
+    update: async () => {
+      open.value = true
+      await settle()
+      for (const query of ['p', 'pa', 'page 1', 'page 12']) {
+        await typeInto('input', query)
+        await settle()
+      }
     }
   }
 }
@@ -1083,6 +1127,9 @@ describe('runtime budgets (perf-budgets.json)', () => {
   })
   it('DocLayout with 1k navigation rows: mount and open search', async () => {
     check('doc-layout-1k', await measure(docLayoutCase))
+  })
+  it('Command with 1k items in 20 groups: open and type four queries', async () => {
+    check('command-1k', await measure(commandCase))
   })
   it('Item.List with 1k items: mount and reorder', async () => {
     check('item-list-1k', await measure(itemListCase))

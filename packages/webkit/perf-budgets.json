@@ -61,6 +61,11 @@
       "update": 80,
       "update_is": "filter 10k virtual rows by text under useCollection"
     },
+    "command-1k": {
+      "mount": 50,
+      "update": 550,
+      "update_is": "open the palette over 1k items in 20 groups, then type four queries"
+    },
     "conversation-history-5k": {
       "mount": 680,
       "update": 100,
@@ -88,7 +93,7 @@
     },
     "doc-layout-1k": {
       "mount": 480,
-      "update": 800,
+      "update": 550,
       "update_is": "open the search palette"
     },
     "item-list-1k": {

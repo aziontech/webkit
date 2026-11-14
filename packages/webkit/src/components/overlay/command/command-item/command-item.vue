@@ -43,20 +43,14 @@
     () => (attrs['data-testid'] as string | undefined) ?? `${ctx.testId}__item`
   )
 
+  const haystack = computed(() => `${String(props.value)} ${itemText.value}`.toLowerCase())
   const isVisible = computed(() => {
     const q = ctx.query.value.trim().toLowerCase()
-    if (!q) return true
-    return `${String(props.value)} ${itemText.value}`.toLowerCase().includes(q)
+    return !q || haystack.value.includes(q)
   })
 
-  const shortcutTokens = computed(() =>
-    props.shortcut
-      .toLowerCase()
-      .split('+')
-      .map((token) => token.trim())
-      .filter(Boolean)
-  )
-  const hasShortcut = computed(() => shortcutTokens.value.length > 0)
+  const active = computed(() => ctx.activeValue.value === props.value)
+
   const NAMED_KEYS: Record<string, KbdKeyName> = {
     esc: 'escape',
     escape: 'escape',
@@ -68,13 +62,25 @@
     delete: 'delete',
     del: 'delete'
   }
-  const lastToken = computed(() => shortcutTokens.value.at(-1) ?? '')
-  const shortcutKeyName = computed<KbdKeyName | undefined>(() => NAMED_KEYS[lastToken.value])
-  const shortcutKey = computed(() => (shortcutKeyName.value ? '' : lastToken.value.toUpperCase()))
-  const shortcutMeta = computed(() => shortcutTokens.value.slice(0, -1).includes('meta'))
-  const shortcutCtrl = computed(() => shortcutTokens.value.slice(0, -1).includes('ctrl'))
-  const shortcutShift = computed(() => shortcutTokens.value.slice(0, -1).includes('shift'))
-  const shortcutAlt = computed(() => shortcutTokens.value.slice(0, -1).includes('alt'))
+  const shortcutHint = computed(() => {
+    const tokens = props.shortcut
+      .toLowerCase()
+      .split('+')
+      .map((token) => token.trim())
+      .filter(Boolean)
+    if (!tokens.length) return null
+    const last = tokens.at(-1) ?? ''
+    const modifiers = tokens.slice(0, -1)
+    const keyName: KbdKeyName | undefined = NAMED_KEYS[last]
+    return {
+      keyName,
+      key: keyName ? '' : last.toUpperCase(),
+      meta: modifiers.includes('meta'),
+      ctrl: modifiers.includes('ctrl'),
+      shift: modifiers.includes('shift'),
+      alt: modifiers.includes('alt')
+    }
+  })
 
   function activate(event: globalThis.MouseEvent | globalThis.KeyboardEvent) {
     if (props.disabled) return
@@ -110,10 +116,10 @@
     v-bind="attrs"
     role="option"
     tabindex="-1"
-    :aria-selected="ctx.isActive(value)"
+    :aria-selected="active"
     :aria-disabled="disabled || undefined"
     :data-testid="testId"
-    :data-active="ctx.isActive(value) || undefined"
+    :data-active="active || undefined"
     :data-disabled="disabled || undefined"
     class="flex min-h-8 items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-sm) py-(--spacing-xxs) text-label-sm text-(--text-default) transition-colors duration-150 ease-out motion-reduce:transition-none data-[active]:bg-(--bg-selected) data-[disabled]:cursor-not-allowed data-[disabled]:text-(--text-disabled)"
     @click="!disabled && activate($event)"
@@ -137,14 +143,14 @@
     </span>
 
     <Kbd
-      v-if="hasShortcut"
-      :meta="shortcutMeta"
-      :ctrl="shortcutCtrl"
-      :shift="shortcutShift"
-      :alt="shortcutAlt"
-      :key-name="shortcutKeyName"
+      v-if="shortcutHint"
+      :meta="shortcutHint.meta"
+      :ctrl="shortcutHint.ctrl"
+      :shift="shortcutHint.shift"
+      :alt="shortcutHint.alt"
+      :key-name="shortcutHint.keyName"
       size="small"
-      >{{ shortcutKey }}</Kbd
+      >{{ shortcutHint.key }}</Kbd
     >
     <span
       v-else-if="$slots['suffix']"

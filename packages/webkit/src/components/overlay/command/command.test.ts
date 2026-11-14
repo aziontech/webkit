@@ -533,3 +533,72 @@ describe('keyboard map (spec)', () => {
     expect(panel()!.contains(document.activeElement)).toBe(true)
   })
 })
+
+describe('Command at scale', () => {
+  it('moving the active item re-renders only the items whose state changed', async () => {
+    let itemUpdates = 0
+    const Many = defineComponent({
+      components: { Command, CommandInput, CommandList, CommandGroup, CommandItem },
+      setup() {
+        const values = Array.from({ length: 60 }, (_, i) => `page-${i}`)
+        return { values }
+      },
+      template: `
+        <Command default-open shortcut="">
+          <CommandInput placeholder="Search" />
+          <CommandList>
+            <CommandGroup heading="Pages">
+              <CommandItem v-for="value in values" :key="value" :value="value">{{ value }}</CommandItem>
+            </CommandGroup>
+          </CommandList>
+        </Command>
+      `
+    })
+    render(Many, {
+      global: {
+        mixins: [
+          {
+            updated(this: { $options: { name?: string } }) {
+              if (this.$options.name === 'CommandItem') itemUpdates += 1
+            }
+          }
+        ]
+      }
+    })
+    await settle()
+    const input = document.body.querySelector<HTMLInputElement>('input')!
+    await fireEvent.keyDown(input, { key: 'ArrowDown' })
+    await settle()
+    itemUpdates = 0
+    await fireEvent.keyDown(input, { key: 'ArrowDown' })
+    await settle()
+    expect(document.body.querySelector('[data-active]')).toHaveTextContent('page-1')
+    expect(itemUpdates).toBeLessThanOrEqual(2)
+  })
+
+  it('keeps DOM order when a group mounts after the palette opened', async () => {
+    const late = ref(false)
+    const onSelect = vi.fn()
+    const Late = defineComponent({
+      components: { Command, CommandInput, CommandList, CommandGroup, CommandItem },
+      setup: () => ({ late, onSelect }),
+      template: `
+        <Command default-open shortcut="" @select="onSelect">
+          <CommandInput placeholder="Search" />
+          <CommandList>
+            <CommandGroup v-if="late" heading="First"><CommandItem value="early">Early</CommandItem></CommandGroup>
+            <CommandGroup heading="Second"><CommandItem value="later">Later</CommandItem></CommandGroup>
+          </CommandList>
+        </Command>
+      `
+    })
+    render(Late)
+    await settle()
+    late.value = true
+    await settle()
+    const input = document.body.querySelector<HTMLInputElement>('input')!
+    await fireEvent.keyDown(input, { key: 'Home' })
+    await fireEvent.keyDown(input, { key: 'Enter' })
+    expect(onSelect).toHaveBeenCalledWith(expect.anything(), 'early')
+  })
+})
