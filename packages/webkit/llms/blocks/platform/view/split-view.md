@@ -196,7 +196,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/sp
   import PanelHeader from '@aziontech/webkit/panel-header'
   import Popover from '@aziontech/webkit/popover'
   import Resizable from '@aziontech/webkit/resizable'
-  import Sidebar from '@aziontech/webkit/sidebar'
+  import Sidebar from '@aziontech/webkit/sidebar-root'
   import Skeleton from '@aziontech/webkit/skeleton'
   import TableRoot, { type TableColumn, type TableExposed } from '@aziontech/webkit/table-root'
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'

@@ -52,7 +52,7 @@
   {
    "name": "modelValue",
    "type": "TItem['value']",
-   "default": "undefined",
+   "default": "undefined as never",
    "required": "false",
    "doc": "Two-way value (`v-model`)."
   }

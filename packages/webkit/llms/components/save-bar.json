@@ -40,55 +40,6 @@
    "default": "'floating'",
    "required": "false",
    "doc": "How the bar sits at the bottom of its scroll region. See the kind table below."
-  },
-  {
-   "name": "kind",
-   "type": "Placement",
-   "default": "Surface",
-   "required": "Use for",
-   "doc": ""
-  },
-  {
-   "name": "----------",
-   "type": "----------------------------------------------------------------",
-   "default": "-----------------------------------------------",
-   "required": "------------------------------------------------",
-   "doc": ""
-  },
-  {
-   "name": "floating",
-   "type": "overlays the bottom of the scroll region; the content does not move",
-   "default": "canvas band with a top border",
-   "required": "the dirty state of a settings page",
-   "doc": ""
-  },
-  {
-   "name": "docked",
-   "type": "its own row at the bottom of the region; the content ends above it",
-   "default": "canvas band with a top border",
-   "required": "the dirty state when nothing may be covered",
-   "doc": ""
-  },
-  {
-   "name": "plain",
-   "type": "the last row of a form column, always shown",
-   "default": "surface band with a muted top border",
-   "required": "a form saved as one unit",
-   "doc": ""
-  },
-  {
-   "name": "fade",
-   "type": "the last row of a wizard step, always shown",
-   "default": "a gradient from transparent to the canvas, no border",
-   "required": "a full-page wizard step (Back, Next)",
-   "doc": ""
-  },
-  {
-   "name": "centered",
-   "type": "a card centred at the bottom of the region, over the content",
-   "default": "raised card with a border and a large shadow",
-   "required": "a create page (Cancel, Create)",
-   "doc": ""
   }
  ],
  "events": [],

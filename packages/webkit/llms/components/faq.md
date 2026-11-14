@@ -148,7 +148,6 @@
 ```vue
 <script setup>
   import Faq from '@aziontech/webkit/faq'
-  import Link from '@aziontech/webkit/link'
 
   const items = [
     {
@@ -176,10 +175,11 @@
   >
     <template #answer="{ item }">
       {{ item.answer }}
-      <Link
-        :label="links[item.value].label"
+      <a
+        class="text-link"
         :href="links[item.value].href"
-      />
+        >{{ links[item.value].label }}</a
+      >
     </template>
   </Faq>
 </template>

@@ -5,7 +5,7 @@
 - Surface: product
 - Source: `blocks/platform/create/deployment-flow/deployment-flow.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/create/deployment-flow")`
-- Components: [Accordion](../../../components/accordion.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [LogView](../../../components/log-view.md), `LogViewContent`, [Progress](../../../components/progress.md), [Spinner](../../../components/spinner.md), [StatusIndicator](../../../components/status-indicator.md), [Tag](../../../components/tag.md), [ToggleGroup](../../../components/toggle-group.md)
+- Components: [Accordion](../../../components/accordion.md), [Button](../../../components/button.md), [Card](../../../components/card.md), `LogViewContent`, [LogView](../../../components/log-view.md), [Progress](../../../components/progress.md), [Spinner](../../../components/spinner.md), [StatusIndicator](../../../components/status-indicator.md), [Tag](../../../components/tag.md), [ToggleGroup](../../../components/toggle-group.md)
 - Skills: `webkit-ui-states`, `webkit-errors`
 
 ## Asked as

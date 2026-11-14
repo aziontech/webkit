@@ -5,7 +5,7 @@
 - Surface: product
 - Source: `blocks/platform/detail/deployment-logs/deployment-logs.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/detail/deployment-logs")`
-- Components: [Accordion](../../../components/accordion.md), [LogView](../../../components/log-view.md), `LogViewContent`, [Progress](../../../components/progress.md), [Spinner](../../../components/spinner.md), [Tag](../../../components/tag.md), [ToggleGroup](../../../components/toggle-group.md)
+- Components: [Accordion](../../../components/accordion.md), `LogViewContent`, [LogView](../../../components/log-view.md), [Progress](../../../components/progress.md), [Spinner](../../../components/spinner.md), [Tag](../../../components/tag.md), [ToggleGroup](../../../components/toggle-group.md)
 - Skills: `webkit-ui-states`, `webkit-errors`
 
 ## Asked as
@@ -113,8 +113,8 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
 ```vue
 <script setup lang="ts">
   import Accordion from '@aziontech/webkit/accordion'
-  import LogView, { type LogViewLine } from '@aziontech/webkit/log-view'
   import LogViewContent from '@aziontech/webkit/log-view-content'
+  import LogView, { type LogViewLine } from '@aziontech/webkit/log-view-root'
   import Progress from '@aziontech/webkit/progress'
   import Spinner from '@aziontech/webkit/spinner'
   import { computed, ref } from 'vue'

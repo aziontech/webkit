@@ -5,7 +5,7 @@
 - Surface: product
 - Source: `blocks/platform/states/async-submit/async-submit.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/states/async-submit")`
-- Components: [Accordion](../../../components/accordion.md), [Alert](../../../components/alert.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [EmptyState](../../../components/empty-state.md), [LogView](../../../components/log-view.md), `LogViewContent`, [PageHeader](../../../components/page-header.md), [Progress](../../../components/progress.md), [Spinner](../../../components/spinner.md), [StatusIndicator](../../../components/status-indicator.md), [Tag](../../../components/tag.md), [Toast](../../../components/toast.md), [ToggleGroup](../../../components/toggle-group.md)
+- Components: [Accordion](../../../components/accordion.md), [Alert](../../../components/alert.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [EmptyState](../../../components/empty-state.md), `LogViewContent`, [LogView](../../../components/log-view.md), [PageHeader](../../../components/page-header.md), [Progress](../../../components/progress.md), [Spinner](../../../components/spinner.md), [StatusIndicator](../../../components/status-indicator.md), [Tag](../../../components/tag.md), [Toast](../../../components/toast.md), [ToggleGroup](../../../components/toggle-group.md)
 - Skills: `webkit-errors`, `webkit-ui-states`, `webkit-form`
 
 ## Asked as
