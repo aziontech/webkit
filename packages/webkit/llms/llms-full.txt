@@ -2245,7 +2245,7 @@ What each part takes: [blocks/platform/account/billing.md](blocks/platform/accou
 - Surface: product
 - Source: `blocks/platform/account/build-deployment/build-deployment.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/account/build-deployment")`
-- Components: Accordion, Alert, Button, Card, CollectionPreferences, ConfirmDialog, Drawer, `DrawerClose`, `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, DropdownMenu, EmptyState, Field, IconButton, Input, Item, PageHeader, Pagination, `PanelContent`, `PanelFooter`, `PanelHeader`, PropertyFilter, RadioButton, SaveBar, Select, SettingRow, SettingsSection, Skeleton, Switch, Table, Tag, Textarea, Toast, Tooltip, `use-collection`
+- Components: Accordion, Alert, Button, Card, CollectionPreferences, ConfirmDialog, `DrawerClose`, `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, Drawer, `DrawerTitle`, DropdownMenu, EmptyState, Field, IconButton, Input, Item, PageHeader, Pagination, `PanelContent`, `PanelFooter`, `PanelHeader`, PropertyFilter, RadioButton, SaveBar, Select, SettingRow, SettingsSection, Skeleton, Switch, Table, Tag, Textarea, Toast, Tooltip, `use-collection`
 - Skills: `webkit-form`, `webkit-tables`, `webkit-lists`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -2342,7 +2342,7 @@ What each part takes: [blocks/platform/account/build-deployment.md](blocks/platf
 - Surface: product
 - Source: `blocks/platform/account/change-plan-drawer/change-plan-drawer.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/account/change-plan-drawer")`
-- Components: Alert, Button, Card, CardPricing, Checkbox, Drawer, `DrawerClose`, `DrawerContent`, `DrawerDescription`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, FeatureList, Field, Input, Link, `PanelContent`, `PanelFooter`, `PanelHeader`, PaymentBrand, Select, Separator, Toast, ToggleGroup
+- Components: Alert, Button, Card, CardPricing, Checkbox, `DrawerClose`, `DrawerContent`, `DrawerDescription`, `DrawerOverlay`, `DrawerPortal`, Drawer, `DrawerTitle`, FeatureList, Field, Input, Link, `PanelContent`, `PanelFooter`, `PanelHeader`, PaymentBrand, Select, Separator, Toast, ToggleGroup
 - Skills: `webkit-microcopy`, `webkit-ux-heuristics`, `webkit-form`, `webkit-errors`
 
 ## Asked as
@@ -2446,7 +2446,7 @@ What each part takes: [blocks/platform/account/change-plan-drawer.md](blocks/pla
 - Surface: product
 - Source: `blocks/platform/account/manage-resources/manage-resources.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/account/manage-resources")`
-- Components: Alert, Avatar, Button, Card, ConfirmDialog, Dialog, `DialogContent`, `DialogDescription`, `DialogOverlay`, `DialogPortal`, `DialogTitle`, DropdownMenu, EmptyState, Field, IconButton, Input, KeyValuePairs, Link, MultiSelect, PageHeader, `PanelContent`, `PanelFooter`, `PanelHeader`, Select, Table, Tabs, Tag, Toast, Tooltip
+- Components: Alert, Avatar, Button, Card, ConfirmDialog, `DialogContent`, `DialogDescription`, `DialogOverlay`, `DialogPortal`, Dialog, `DialogTitle`, DropdownMenu, EmptyState, Field, IconButton, Input, KeyValuePairs, Link, MultiSelect, PageHeader, `PanelContent`, `PanelFooter`, `PanelHeader`, Select, Table, Tabs, Tag, Toast, Tooltip
 - Skills: `webkit-lists`, `webkit-tables`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -2629,7 +2629,7 @@ What each part takes: [blocks/platform/account/mfa-management.md](blocks/platfor
 - Surface: product
 - Source: `blocks/platform/account/onboarding-form/onboarding-form.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/account/onboarding-form")`
-- Components: Alert, Avatar, Brand, Button, Card, Checkbox, Drawer, `DrawerClose`, `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, FeatureList, Field, GlobalHeader, HelperText, Input, Link, `PanelContent`, `PanelFooter`, `PanelHeader`, PaymentBrand, Progress, RadioCards, Select, Separator, Switch, Tag, ToggleGroup
+- Components: Alert, Avatar, Brand, Button, Card, Checkbox, `DrawerClose`, `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, Drawer, `DrawerTitle`, FeatureList, Field, GlobalHeader, HelperText, Input, Link, `PanelContent`, `PanelFooter`, `PanelHeader`, PaymentBrand, Progress, RadioCards, Select, Separator, Switch, Tag, ToggleGroup
 - Skills: `webkit-form`, `webkit-errors`, `webkit-microcopy`
 
 ## Asked as
@@ -3009,7 +3009,7 @@ What each part takes: [blocks/platform/account/team-permissions.md](blocks/platf
 - Surface: product
 - Source: `blocks/platform/account/tokens/tokens.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/account/tokens")`
-- Components: Alert, Button, Card, CollectionPreferences, ConfirmDialog, CopyButton, Dialog, `DialogContent`, `DialogDescription`, `DialogOverlay`, `DialogPortal`, `DialogTitle`, Drawer, `DrawerClose`, `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, DropdownMenu, EmptyState, Field, HelperText, IconButton, Input, PageHeader, `PanelContent`, `PanelFooter`, `PanelHeader`, PasswordInput, PropertyFilter, Select, SettingsSection, Table, Textarea, Toast, Tooltip, `use-collection`
+- Components: Alert, Button, Card, CollectionPreferences, ConfirmDialog, CopyButton, `DialogContent`, `DialogDescription`, `DialogOverlay`, `DialogPortal`, Dialog, `DialogTitle`, `DrawerClose`, `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, Drawer, `DrawerTitle`, DropdownMenu, EmptyState, Field, HelperText, IconButton, Input, PageHeader, `PanelContent`, `PanelFooter`, `PanelHeader`, PasswordInput, PropertyFilter, Select, SettingsSection, Table, Textarea, Toast, Tooltip, `use-collection`
 - Skills: `webkit-lists`, `webkit-tables`, `webkit-form`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -3103,7 +3103,7 @@ What each part takes: [blocks/platform/account/tokens.md](blocks/platform/accoun
 - Surface: product
 - Source: `blocks/platform/account/users/users.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/account/users")`
-- Components: Alert, Avatar, Button, Card, CollectionPreferences, ConfirmDialog, Dialog, `DialogContent`, `DialogDescription`, `DialogOverlay`, `DialogPortal`, `DialogTitle`, Drawer, `DrawerClose`, `DrawerContent`, `DrawerDescription`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, DropdownMenu, EmptyState, Field, IconButton, Input, KeyValuePairs, MultiSelect, PageHeader, `PanelContent`, `PanelFooter`, `PanelHeader`, PropertyFilter, Select, Table, Tag, Toast, Tooltip, `use-collection`
+- Components: Alert, Avatar, Button, Card, CollectionPreferences, ConfirmDialog, `DialogContent`, `DialogDescription`, `DialogOverlay`, `DialogPortal`, Dialog, `DialogTitle`, `DrawerClose`, `DrawerContent`, `DrawerDescription`, `DrawerOverlay`, `DrawerPortal`, Drawer, `DrawerTitle`, DropdownMenu, EmptyState, Field, IconButton, Input, KeyValuePairs, MultiSelect, PageHeader, `PanelContent`, `PanelFooter`, `PanelHeader`, PropertyFilter, Select, Table, Tag, Toast, Tooltip, `use-collection`
 - Skills: `webkit-lists`, `webkit-tables`, `webkit-form`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -3301,7 +3301,7 @@ What each part takes: [blocks/platform/ai/ai-action-approval.md](blocks/platform
 - Surface: product
 - Source: `blocks/platform/ai/ai-chat/ai-chat.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/ai/ai-chat")`
-- Components: ArtifactCanvas, ArtifactPreview, Button, ChatMessage, CodeBlock, Conversation, CopyButton, Drawer, `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, EmptyState, IconButton, PromptInput, Reasoning, Resizable, Sources, StreamingResponse, SuggestionGroup, Tag
+- Components: ArtifactCanvas, ArtifactPreview, Button, ChatMessage, CodeBlock, Conversation, CopyButton, `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, Drawer, `DrawerTitle`, EmptyState, IconButton, PromptInput, Reasoning, Resizable, Sources, StreamingResponse, SuggestionGroup, Tag
 - Skills: `webkit-genai`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -3410,7 +3410,7 @@ What each part takes: [blocks/platform/ai/ai-chat.md](blocks/platform/ai/ai-chat
 - Surface: product
 - Source: `blocks/platform/ai/ai-chat-drawer/ai-chat-drawer.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/ai/ai-chat-drawer")`
-- Components: Button, Card, ChatMessage, Conversation, CopyButton, Drawer, `DrawerClose`, `DrawerContent`, `DrawerPortal`, `DrawerTitle`, EmptyState, IconButton, KeyValuePairs, PageHeader, `PanelHeader`, PromptInput, Reasoning, Sources, StatusIndicator, StreamingResponse, SuggestionGroup, Tag
+- Components: Button, Card, ChatMessage, Conversation, CopyButton, `DrawerClose`, `DrawerContent`, `DrawerPortal`, Drawer, `DrawerTitle`, EmptyState, IconButton, KeyValuePairs, PageHeader, `PanelHeader`, PromptInput, Reasoning, Sources, StatusIndicator, StreamingResponse, SuggestionGroup, Tag
 - Skills: `webkit-genai`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -3757,7 +3757,7 @@ What each part takes: [blocks/platform/create/create-hub.md](blocks/platform/cre
 - Surface: product
 - Source: `blocks/platform/create/create-in-drawer/create-in-drawer.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/create/create-in-drawer")`
-- Components: Alert, Button, Card, CodeEditor, Drawer, `DrawerClose`, `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, `DrawerTrigger`, `DropdownMenuGroup`, `DropdownMenuOption`, `DropdownMenuRoot`, `DropdownMenuTrigger`, Field, HelperText, Hint, IconButton, Input, InputGroup, Item, KeyValuePairs, Link, NumberInput, PageHeader, `PanelContent`, `PanelFooter`, `PanelHeader`, RadioButton, SchemaForm, Select, SettingRow, SettingsSection, StatusIndicator, Switch, Textarea, Toast, ToggleGroup, Tooltip
+- Components: Alert, Button, Card, CodeEditor, `DrawerClose`, `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, Drawer, `DrawerTitle`, `DrawerTrigger`, `DropdownMenuGroup`, `DropdownMenuOption`, `DropdownMenuRoot`, `DropdownMenuTrigger`, Field, HelperText, Hint, IconButton, Input, InputGroup, Item, KeyValuePairs, Link, NumberInput, PageHeader, `PanelContent`, `PanelFooter`, `PanelHeader`, RadioButton, SchemaForm, Select, SettingRow, SettingsSection, StatusIndicator, Switch, Textarea, Toast, ToggleGroup, Tooltip
 - Skills: `webkit-create-surface`, `webkit-form`, `webkit-errors`
 
 ## Asked as
@@ -3876,7 +3876,7 @@ What each part takes: [blocks/platform/create/create-in-drawer.md](blocks/platfo
 - Surface: product
 - Source: `blocks/platform/create/deploy-drawer/deploy-drawer.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/create/deploy-drawer")`
-- Components: Accordion, Alert, Avatar, Button, Card, Drawer, `DrawerClose`, `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, `DrawerTrigger`, DropdownMenu, EmptyState, Field, Input, Item, Link, `PanelContent`, `PanelFooter`, `PanelHeader`, Popover, RadioButton, Separator, SettingsSection, Skeleton, Spinner, Tag, Toast, ToggleGroup, Tooltip
+- Components: Accordion, Alert, Avatar, Button, Card, `DrawerClose`, `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, Drawer, `DrawerTitle`, `DrawerTrigger`, DropdownMenu, EmptyState, Field, Input, Item, Link, `PanelContent`, `PanelFooter`, `PanelHeader`, Popover, RadioButton, Separator, SettingsSection, Skeleton, Spinner, Tag, Toast, ToggleGroup, Tooltip
 - Skills: `webkit-create-surface`, `webkit-form`, `webkit-ui-states`
 
 ## Asked as
@@ -4009,7 +4009,7 @@ What each part takes: [blocks/platform/create/deploy-drawer.md](blocks/platform/
 - Surface: product
 - Source: `blocks/platform/create/deploy-progress-dialog/deploy-progress-dialog.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/create/deploy-progress-dialog")`
-- Components: Button, Dialog, `DialogClose`, `DialogContent`, `DialogDescription`, `DialogOverlay`, `DialogPortal`, `DialogTitle`, EmptyState, Item, OutcomeMark, `PanelContent`, `PanelFooter`, `PanelHeader`, Progress, Spinner, Tag, Toast, ToggleGroup
+- Components: Button, `DialogClose`, `DialogContent`, `DialogDescription`, `DialogOverlay`, `DialogPortal`, Dialog, `DialogTitle`, EmptyState, Item, OutcomeMark, `PanelContent`, `PanelFooter`, `PanelHeader`, Progress, Spinner, Tag, Toast, ToggleGroup
 - Skills: `webkit-ui-states`, `webkit-errors`, `webkit-microcopy`
 
 ## Asked as
@@ -5330,7 +5330,7 @@ What each part takes: [blocks/platform/dashboard/alerts-dashboard.md](blocks/pla
 - Surface: product
 - Source: `blocks/platform/dashboard/analytics-dashboard/analytics-dashboard.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/dashboard/analytics-dashboard")`
-- Components: Alert, Chart, ChartCard, Dialog, `DialogClose`, `DialogContent`, `DialogDescription`, `DialogOverlay`, `DialogPortal`, `DialogTitle`, DropdownMenu, EmptyState, Hint, IconButton, Input, Link, PageHeader, PageTabs, `PanelContent`, `PanelHeader`, Select, StatTile, `TableRoot`, Tabs, Tag, Toast, ToggleGroup, Tooltip, `utils/csv`
+- Components: Alert, Chart, ChartCard, `DialogClose`, `DialogContent`, `DialogDescription`, `DialogOverlay`, `DialogPortal`, Dialog, `DialogTitle`, DropdownMenu, EmptyState, Hint, IconButton, Input, Link, PageHeader, PageTabs, `PanelContent`, `PanelHeader`, Select, StatTile, `TableRoot`, Tabs, Tag, Toast, ToggleGroup, Tooltip, `utils/csv`
 - Skills: `webkit-data-viz`, `webkit-tables`, `webkit-ui-states`
 
 ## Asked as
@@ -5766,7 +5766,7 @@ What each part takes: [blocks/platform/dashboard/dashboard-switcher.md](blocks/p
 - Surface: product
 - Source: `blocks/platform/dashboard/data-dashboard/data-dashboard.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/dashboard/data-dashboard")`
-- Components: Alert, Chart, ChartCard, Dialog, `DialogClose`, `DialogContent`, `DialogDescription`, `DialogOverlay`, `DialogPortal`, `DialogTitle`, DropdownMenu, EmptyState, Hint, IconButton, Input, PageHeader, `PanelContent`, `PanelHeader`, Select, StatTile, `TableRoot`, Tag, Toast, ToggleGroup, Tooltip, `utils/csv`
+- Components: Alert, Chart, ChartCard, `DialogClose`, `DialogContent`, `DialogDescription`, `DialogOverlay`, `DialogPortal`, Dialog, `DialogTitle`, DropdownMenu, EmptyState, Hint, IconButton, Input, PageHeader, `PanelContent`, `PanelHeader`, Select, StatTile, `TableRoot`, Tag, Toast, ToggleGroup, Tooltip, `utils/csv`
 - Skills: `webkit-data-viz`, `webkit-tables`, `webkit-ui-states`
 
 ## Asked as
@@ -6494,7 +6494,7 @@ What each part takes: [blocks/platform/dashboard/scan-results-dashboard.md](bloc
 - Surface: product
 - Source: `blocks/platform/dashboard/security-dashboard/security-dashboard.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/dashboard/security-dashboard")`
-- Components: Alert, BarList, Button, Chart, ChartCard, Dialog, `DialogClose`, `DialogContent`, `DialogDescription`, `DialogOverlay`, `DialogPortal`, `DialogTitle`, DropdownMenu, EmptyState, Hint, IconButton, Input, Item, Link, PageHeader, `PanelContent`, `PanelHeader`, Select, Skeleton, StatTile, `TableRoot`, Tag, Toast, ToggleGroup, Tooltip, `utils/csv`
+- Components: Alert, BarList, Button, Chart, ChartCard, `DialogClose`, `DialogContent`, `DialogDescription`, `DialogOverlay`, `DialogPortal`, Dialog, `DialogTitle`, DropdownMenu, EmptyState, Hint, IconButton, Input, Item, Link, PageHeader, `PanelContent`, `PanelHeader`, Select, Skeleton, StatTile, `TableRoot`, Tag, Toast, ToggleGroup, Tooltip, `utils/csv`
 - Skills: `webkit-data-viz`, `webkit-tables`, `webkit-ui-states`
 
 ## Asked as
@@ -6994,7 +6994,7 @@ What each part takes: [blocks/platform/detail/deployment-logs.md](blocks/platfor
 - Surface: product
 - Source: `blocks/platform/detail/details-page/details-page.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/detail/details-page")`
-- Components: Accordion, Alert, Avatar, Button, Card, CodeBlock, ConfirmDialog, ConsoleLayout, CopyButton, Drawer, `DrawerClose`, `DrawerContent`, `DrawerDescription`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, DropdownMenu, EmptyState, IconButton, Input, `InputGroupRoot`, Item, Link, `LogViewContent`, LogView, PageHeader, PageTabs, `PanelContent`, `PanelFooter`, `PanelHeader`, Popover, SaveBar, SectionHeader, Select, SettingRow, SettingsSection, StatusIndicator, `TableRoot`, Tabs, Tag, Toast, ToggleGroup, Tooltip, TopologyDiagram, `use-unsaved-changes`
+- Components: Accordion, Alert, Avatar, Button, Card, CodeBlock, ConfirmDialog, ConsoleLayout, CopyButton, `DrawerClose`, `DrawerContent`, `DrawerDescription`, `DrawerOverlay`, `DrawerPortal`, Drawer, `DrawerTitle`, DropdownMenu, EmptyState, IconButton, Input, `InputGroupRoot`, Item, Link, `LogViewContent`, LogView, PageHeader, PageTabs, `PanelContent`, `PanelFooter`, `PanelHeader`, Popover, SaveBar, SectionHeader, Select, SettingRow, SettingsSection, StatusIndicator, `TableRoot`, Tabs, Tag, Toast, ToggleGroup, Tooltip, TopologyDiagram, `use-unsaved-changes`
 - Skills: `webkit-layout`, `webkit-navigation`, `webkit-ui-states`
 
 ## Asked as
@@ -7309,7 +7309,7 @@ What each part takes: [blocks/platform/detail/invocations.md](blocks/platform/de
 - Surface: product
 - Source: `blocks/platform/detail/production-checklist/production-checklist.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/detail/production-checklist")`
-- Components: Button, Card, Drawer, `DrawerClose`, `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, IconButton, Item, `PanelContent`, `PanelFooter`, `PanelHeader`, Tag, Tooltip
+- Components: Button, Card, `DrawerClose`, `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, Drawer, `DrawerTitle`, IconButton, Item, `PanelContent`, `PanelFooter`, `PanelHeader`, Tag, Tooltip
 - Skills: `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -7401,7 +7401,7 @@ What each part takes: [blocks/platform/detail/production-checklist.md](blocks/pl
 - Surface: product
 - Source: `blocks/platform/detail/record-table/record-table.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/detail/record-table")`
-- Components: Alert, Button, Card, CollectionPreferences, CopyButton, Drawer, `DrawerClose`, `DrawerContent`, `DrawerDescription`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, `DropdownMenuGroup`, `DropdownMenuOption`, EmptyState, Field, FileDropzone, HelperText, IconButton, Input, `InputGroupRoot`, `ItemList`, PageHeader, PageTabs, `PanelContent`, `PanelFooter`, `PanelHeader`, PropertyFilter, SaveBar, SettingRow, SettingsSection, Switch, Table, `TableRoot`, Tabs, Tag, Textarea, Toast, Tooltip, `use-collection`
+- Components: Alert, Button, Card, CollectionPreferences, CopyButton, `DrawerClose`, `DrawerContent`, `DrawerDescription`, `DrawerOverlay`, `DrawerPortal`, Drawer, `DrawerTitle`, `DropdownMenuGroup`, `DropdownMenuOption`, EmptyState, Field, FileDropzone, HelperText, IconButton, Input, `InputGroupRoot`, `ItemList`, PageHeader, PageTabs, `PanelContent`, `PanelFooter`, `PanelHeader`, PropertyFilter, SaveBar, SettingRow, SettingsSection, Switch, Table, `TableRoot`, Tabs, Tag, Textarea, Toast, Tooltip, `use-collection`
 - Skills: `webkit-tables`, `webkit-form`, `webkit-navigation`
 
 ## Asked as
@@ -7609,7 +7609,7 @@ What each part takes: [blocks/platform/detail/sectioned-resource.md](blocks/plat
 - Surface: product
 - Source: `blocks/platform/detail/version-detail/version-detail.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/detail/version-detail")`
-- Components: Avatar, Breadcrumb, Button, Card, CodeEditor, ConfirmDialog, ConsoleLayout, Drawer, `DrawerClose`, `DrawerContent`, `DrawerDescription`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, DropdownMenu, EmptyState, Field, HelperText, IconButton, Input, Item, MultiSelect, NumberInput, PageHeader, PageTabs, `PanelContent`, `PanelFooter`, `PanelHeader`, Resizable, SchemaForm, ScrollArea, Select, SettingRow, SettingsSection, Skeleton, Spinner, SplitButton, Switch, Table, `TableRoot`, Tabs, Tag, Textarea, Toast, Tooltip
+- Components: Avatar, Breadcrumb, Button, Card, CodeEditor, ConfirmDialog, ConsoleLayout, `DrawerClose`, `DrawerContent`, `DrawerDescription`, `DrawerOverlay`, `DrawerPortal`, Drawer, `DrawerTitle`, DropdownMenu, EmptyState, Field, HelperText, IconButton, Input, Item, MultiSelect, NumberInput, PageHeader, PageTabs, `PanelContent`, `PanelFooter`, `PanelHeader`, Resizable, SchemaForm, ScrollArea, Select, SettingRow, SettingsSection, Skeleton, Spinner, SplitButton, Switch, Table, `TableRoot`, Tabs, Tag, Textarea, Toast, Tooltip
 - Skills: `webkit-layout`, `webkit-navigation`, `webkit-ui-states`
 
 ## Asked as
@@ -7742,7 +7742,7 @@ While Add Version copies a built version into a new draft, the workspace is draw
 - Surface: product
 - Source: `blocks/platform/edit/attribute-editor/attribute-editor.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/edit/attribute-editor")`
-- Components: Alert, AttributeEditor, Avatar, Button, Card, Checkbox, CollectionPreferences, ConfirmDialog, Drawer, `DrawerClose`, `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, `DrawerTrigger`, DropdownMenu, EmptyState, Field, HelperText, IconButton, Input, `InputGroupAddon`, `InputGroupInput`, `InputGroupRoot`, MultiSelect, PageHeader, `PanelContent`, `PanelFooter`, `PanelHeader`, PropertyFilter, SettingsSection, Switch, Table, `TableRoot`, Textarea, Toast, ToggleGroup, Tooltip, `use-collection`
+- Components: Alert, AttributeEditor, Avatar, Button, Card, Checkbox, CollectionPreferences, ConfirmDialog, `DrawerClose`, `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, Drawer, `DrawerTitle`, `DrawerTrigger`, DropdownMenu, EmptyState, Field, HelperText, IconButton, Input, `InputGroupAddon`, `InputGroupInput`, `InputGroupRoot`, MultiSelect, PageHeader, `PanelContent`, `PanelFooter`, `PanelHeader`, PropertyFilter, SettingsSection, Switch, Table, `TableRoot`, Textarea, Toast, ToggleGroup, Tooltip, `use-collection`
 - Skills: `webkit-lists`, `webkit-tables`, `webkit-form`, `webkit-create-surface`
 
 ## Asked as
@@ -7981,7 +7981,7 @@ What each part takes: [blocks/platform/edit/code-editor.md](blocks/platform/edit
 - Surface: product
 - Source: `blocks/platform/edit/edit-resource/edit-resource.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/edit/edit-resource")`
-- Components: Alert, Button, Card, CodeBlock, CodeEditor, ConfirmDialog, ConsoleLayout, CopyButton, Drawer, `DrawerClose`, `DrawerContent`, `DrawerDescription`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, DropdownMenu, Field, HelperText, IconButton, Input, Item, MultiSelect, NumberInput, PageHeader, PageTabs, `PanelContent`, `PanelFooter`, `PanelHeader`, PasswordInput, RadioButton, SaveBar, Select, SettingRow, SettingsSection, Switch, `TableRoot`, Tabs, Tag, Textarea, Toast, Tooltip, `use-unsaved-changes`
+- Components: Alert, Button, Card, CodeBlock, CodeEditor, ConfirmDialog, ConsoleLayout, CopyButton, `DrawerClose`, `DrawerContent`, `DrawerDescription`, `DrawerOverlay`, `DrawerPortal`, Drawer, `DrawerTitle`, DropdownMenu, Field, HelperText, IconButton, Input, Item, MultiSelect, NumberInput, PageHeader, PageTabs, `PanelContent`, `PanelFooter`, `PanelHeader`, PasswordInput, RadioButton, SaveBar, Select, SettingRow, SettingsSection, Switch, `TableRoot`, Tabs, Tag, Textarea, Toast, Tooltip, `use-unsaved-changes`
 - Skills: `webkit-form`, `webkit-errors`, `webkit-layout`, `webkit-ux-heuristics`
 
 ## Asked as
@@ -8132,7 +8132,7 @@ Some settings only take effect once the resource is deployed (cache settings of 
 - Surface: product
 - Source: `blocks/platform/edit/rule-builder/rule-builder.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/edit/rule-builder")`
-- Components: Alert, AttributeEditor, Button, Card, Combobox, Drawer, `DrawerClose`, `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, `DrawerTrigger`, Field, HelperText, Input, Item, `PanelContent`, `PanelFooter`, `PanelHeader`, RadioButton, Select, SettingRow, SettingsSection, Switch
+- Components: Alert, AttributeEditor, Button, Card, Combobox, `DrawerClose`, `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, Drawer, `DrawerTitle`, `DrawerTrigger`, Field, HelperText, Input, Item, `PanelContent`, `PanelFooter`, `PanelHeader`, RadioButton, Select, SettingRow, SettingsSection, Switch
 - Skills: `webkit-form`, `webkit-errors`, `webkit-create-surface`
 
 ## Asked as
@@ -8232,7 +8232,7 @@ What each part takes: [blocks/platform/edit/rule-builder.md](blocks/platform/edi
 - Surface: product
 - Source: `blocks/platform/edit/schema-editor/schema-editor.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/edit/schema-editor")`
-- Components: Alert, AttributeEditor, Button, Card, Checkbox, CodeEditor, ConfirmDialog, Drawer, `DrawerClose`, `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, DropdownMenu, Field, FileDropzone, FileTokenGroup, HelperText, IconButton, Input, `PanelContent`, `PanelFooter`, `PanelHeader`, Select, SettingsSection, Switch, Table, `TableRoot`, Tag, Toast, Tooltip
+- Components: Alert, AttributeEditor, Button, Card, Checkbox, CodeEditor, ConfirmDialog, `DrawerClose`, `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, Drawer, `DrawerTitle`, DropdownMenu, Field, FileDropzone, FileTokenGroup, HelperText, IconButton, Input, `PanelContent`, `PanelFooter`, `PanelHeader`, Select, SettingsSection, Switch, Table, `TableRoot`, Tag, Toast, Tooltip
 - Skills: `webkit-form`, `webkit-create-surface`, `webkit-tables`, `webkit-errors`, `webkit-ui-states`
 
 ## Asked as
@@ -9276,7 +9276,7 @@ What each part takes: [blocks/platform/view/card-view.md](blocks/platform/view/c
 - Surface: product
 - Source: `blocks/platform/view/file-browser/file-browser.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/view/file-browser")`
-- Components: Alert, Breadcrumb, Button, Card, Combobox, ConfirmDialog, Dialog, `DialogContent`, `DialogDescription`, `DialogOverlay`, `DialogPortal`, `DialogTitle`, `DropdownMenuGroup`, `DropdownMenuOption`, EmptyState, Field, FileDropzone, FileTokenGroup, IconButton, Input, `PanelContent`, `PanelFooter`, `PanelHeader`, SplitButton, Table, `TableRoot`, `TableSearch`, Toast, Tooltip, UploadProgress
+- Components: Alert, Breadcrumb, Button, Card, Combobox, ConfirmDialog, `DialogContent`, `DialogDescription`, `DialogOverlay`, `DialogPortal`, Dialog, `DialogTitle`, `DropdownMenuGroup`, `DropdownMenuOption`, EmptyState, Field, FileDropzone, FileTokenGroup, IconButton, Input, `PanelContent`, `PanelFooter`, `PanelHeader`, SplitButton, Table, `TableRoot`, `TableSearch`, Toast, Tooltip, UploadProgress
 - Skills: `webkit-tables`, `webkit-lists`, `webkit-ui-states`
 
 ## Asked as
@@ -9404,7 +9404,7 @@ What each part takes: [blocks/platform/view/file-browser.md](blocks/platform/vie
 - Surface: product
 - Source: `blocks/platform/view/marketplace/marketplace.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/view/marketplace")`
-- Components: Alert, Button, Card, DocProse, Drawer, `DrawerClose`, `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, EmptyState, Field, Input, Item, KeyValuePairs, Link, PageHeader, `PanelContent`, `PanelFooter`, `PanelHeader`, PropertyFilter, SaveBar, Select, SettingRow, SettingsSection, Skeleton, Switch, Table, Tabs, Tag, Toast, `use-collection`
+- Components: Alert, Button, Card, DocProse, `DrawerClose`, `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, Drawer, `DrawerTitle`, EmptyState, Field, Input, Item, KeyValuePairs, Link, PageHeader, `PanelContent`, `PanelFooter`, `PanelHeader`, PropertyFilter, SaveBar, Select, SettingRow, SettingsSection, Skeleton, Switch, Table, Tabs, Tag, Toast, `use-collection`
 - Skills: `webkit-lists`, `webkit-form`, `webkit-errors`, `webkit-ui-states`
 
 ## Asked as
@@ -9535,7 +9535,7 @@ What each part takes: [blocks/platform/view/marketplace.md](blocks/platform/view
 - Surface: product
 - Source: `blocks/platform/view/query-editor/query-editor.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/view/query-editor")`
-- Components: Alert, Avatar, Brand, Breadcrumb, Button, Card, CodeBlock, CodeEditor, Drawer, `DrawerClose`, `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, DropdownMenu, EmptyState, FileDropzone, FileTokenGroup, GlobalHeader, HelperText, IconButton, Input, Item, PageHeader, PageTabs, `PanelContent`, `PanelFooter`, `PanelHeader`, SaveBar, Select, SettingRow, SettingsSection, Sidebar, Skeleton, Switch, `TableRoot`, Tabs, Tag, Toast, ToggleGroup, Tooltip
+- Components: Alert, Avatar, Brand, Breadcrumb, Button, Card, CodeBlock, CodeEditor, `DrawerClose`, `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, Drawer, `DrawerTitle`, DropdownMenu, EmptyState, FileDropzone, FileTokenGroup, GlobalHeader, HelperText, IconButton, Input, Item, PageHeader, PageTabs, `PanelContent`, `PanelFooter`, `PanelHeader`, SaveBar, Select, SettingRow, SettingsSection, Sidebar, Skeleton, Switch, `TableRoot`, Tabs, Tag, Toast, ToggleGroup, Tooltip
 - Skills: `webkit-layout`, `webkit-tables`, `webkit-ui-states`
 
 ## Asked as
@@ -9658,7 +9658,7 @@ What each part takes: [blocks/platform/view/query-editor.md](blocks/platform/vie
 - Surface: product
 - Source: `blocks/platform/view/rules-list/rules-list.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/view/rules-list")`
-- Components: Accordion, Alert, AttributeEditor, Button, Card, Combobox, Dialog, `DialogClose`, `DialogContent`, `DialogDescription`, `DialogOverlay`, `DialogPortal`, `DialogTitle`, Drawer, `DrawerClose`, `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, EmptyState, Field, HelperText, IconButton, Input, Item, PageHeader, `PanelContent`, `PanelFooter`, `PanelHeader`, RadioButton, SaveBar, Select, SettingRow, SettingsSection, Switch, `TableRoot`, Tag, Toast, Tooltip
+- Components: Accordion, Alert, AttributeEditor, Button, Card, Combobox, `DialogClose`, `DialogContent`, `DialogDescription`, `DialogOverlay`, `DialogPortal`, Dialog, `DialogTitle`, `DrawerClose`, `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, Drawer, `DrawerTitle`, EmptyState, Field, HelperText, IconButton, Input, Item, PageHeader, `PanelContent`, `PanelFooter`, `PanelHeader`, RadioButton, SaveBar, Select, SettingRow, SettingsSection, Switch, `TableRoot`, Tag, Toast, Tooltip
 - Skills: `webkit-lists`, `webkit-tables`, `webkit-form`, `webkit-errors`
 
 ## Asked as
@@ -9766,7 +9766,7 @@ What each part takes: [blocks/platform/view/rules-list.md](blocks/platform/view/
 - Surface: product
 - Source: `blocks/platform/view/split-view/split-view.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/view/split-view")`
-- Components: Accordion, Alert, Button, Chart, Checkbox, Chip, CodeBlock, CopyButton, DateRangePicker, Drawer, `DrawerClose`, `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, DropdownMenu, EmptyState, Field, FilterMenu, IconButton, Input, Item, `PanelHeader`, Popover, PropertyFilter, Resizable, Sidebar, Skeleton, `TableRoot`, Tabs, Tag, Tooltip, `use-collection`
+- Components: Accordion, Alert, Button, Chart, Checkbox, Chip, CodeBlock, CopyButton, DateRangePicker, `DrawerClose`, `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, Drawer, `DrawerTitle`, DropdownMenu, EmptyState, Field, FilterMenu, IconButton, Input, Item, `PanelHeader`, Popover, PropertyFilter, Resizable, Sidebar, Skeleton, `TableRoot`, Tabs, Tag, Tooltip, `use-collection`
 - Skills: `webkit-data-viz`, `webkit-tables`, `webkit-ui-states`
 
 ## Asked as
@@ -10012,7 +10012,7 @@ What each part takes: [blocks/platform/view/table-view.md](blocks/platform/view/
 - Surface: product
 - Source: `blocks/platform/view/template-browser/template-browser.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/view/template-browser")`
-- Components: Alert, Button, Card, DocProse, Drawer, `DrawerClose`, `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, EmptyState, KeyValuePairs, PageHeader, `PanelContent`, `PanelFooter`, `PanelHeader`, PropertyFilter, Skeleton, `use-collection`
+- Components: Alert, Button, Card, DocProse, `DrawerClose`, `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, Drawer, `DrawerTitle`, EmptyState, KeyValuePairs, PageHeader, `PanelContent`, `PanelFooter`, `PanelHeader`, PropertyFilter, Skeleton, `use-collection`
 - Skills: `webkit-lists`, `webkit-create-surface`, `webkit-ui-states`
 
 ## Asked as
@@ -10121,7 +10121,7 @@ What each part takes: [blocks/platform/view/template-browser.md](blocks/platform
 - Surface: product
 - Source: `blocks/platform/view/waf-tuning/waf-tuning.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/view/waf-tuning")`
-- Components: Alert, Button, Card, Dialog, `DialogClose`, `DialogContent`, `DialogDescription`, `DialogOverlay`, `DialogPortal`, `DialogTitle`, EmptyState, Field, IconButton, Input, PageHeader, `PanelContent`, `PanelFooter`, `PanelHeader`, Select, Table, `TableRoot`, Textarea, Toast, Tooltip
+- Components: Alert, Button, Card, `DialogClose`, `DialogContent`, `DialogDescription`, `DialogOverlay`, `DialogPortal`, Dialog, `DialogTitle`, EmptyState, Field, IconButton, Input, PageHeader, `PanelContent`, `PanelFooter`, `PanelHeader`, Select, Table, `TableRoot`, Textarea, Toast, Tooltip
 - Skills: `webkit-tables`, `webkit-lists`, `webkit-form`, `webkit-errors`
 
 ## Asked as
@@ -10219,7 +10219,7 @@ What each part takes: [blocks/platform/view/waf-tuning.md](blocks/platform/view/
 - Surface: product
 - Source: `blocks/shells/console/console.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("shells/console")`
-- Components: Alert, Avatar, Badge, Button, ButtonHighlight, Card, Command, ConsoleLayout, ConsoleLayout, Dialog, `DialogClose`, `DialogContent`, `DialogDescription`, `DialogOverlay`, `DialogPortal`, `DialogTitle`, DropdownMenu, EmptyState, IconButton, Input, Item, PageHeader, PageTabs, `PanelContent`, `PanelFooter`, `PanelHeader`, Select, StatusIndicator, Table, Tabs, Tag, ThemeSwitcher, Toast, Tooltip, `use-color-mode`
+- Components: Alert, Avatar, Badge, Button, ButtonHighlight, Card, Command, ConsoleLayout, ConsoleLayout, `DialogClose`, `DialogContent`, `DialogDescription`, `DialogOverlay`, `DialogPortal`, Dialog, `DialogTitle`, DropdownMenu, EmptyState, IconButton, Input, Item, PageHeader, PageTabs, `PanelContent`, `PanelFooter`, `PanelHeader`, Select, StatusIndicator, Table, Tabs, Tag, ThemeSwitcher, Toast, Tooltip, `use-color-mode`
 - Skills: `webkit-navigation`, `webkit-layout`
 
 ## Asked as
@@ -38733,7 +38733,7 @@ packages/webkit/src/components/overlay/command/
 ```vue
 <script setup>
   import Button from '@aziontech/webkit/button'
-  import Panel from '@aziontech/webkit/panel'
+  import Panel from '@aziontech/webkit/panel-root'
   import PanelContent from '@aziontech/webkit/panel-content'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'

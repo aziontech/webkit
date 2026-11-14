@@ -5,7 +5,7 @@
 - Surface: product
 - Source: `blocks/platform/detail/production-checklist/production-checklist.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/detail/production-checklist")`
-- Components: [Button](../../../components/button.md), [Card](../../../components/card.md), [Drawer](../../../components/drawer.md), `DrawerClose`, `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, [IconButton](../../../components/icon-button.md), [Item](../../../components/item.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [Tag](../../../components/tag.md), [Tooltip](../../../components/tooltip.md)
+- Components: [Button](../../../components/button.md), [Card](../../../components/card.md), `DrawerClose`, `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, [Drawer](../../../components/drawer.md), `DrawerTitle`, [IconButton](../../../components/icon-button.md), [Item](../../../components/item.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [Tag](../../../components/tag.md), [Tooltip](../../../components/tooltip.md)
 - Skills: `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -108,7 +108,7 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
 <script setup lang="ts">
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
-  import Drawer from '@aziontech/webkit/drawer'
+  import Drawer from '@aziontech/webkit/drawer-root'
   import DrawerClose from '@aziontech/webkit/drawer-close'
   import DrawerContent from '@aziontech/webkit/drawer-content'
   import DrawerOverlay from '@aziontech/webkit/drawer-overlay'

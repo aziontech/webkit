@@ -1,9 +1,9 @@
 <script setup>
   import Button from '@aziontech/webkit/button'
-  import Panel from '@aziontech/webkit/panel'
   import PanelContent from '@aziontech/webkit/panel-content'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
+  import Panel from '@aziontech/webkit/panel-root'
 </script>
 
 <template>
