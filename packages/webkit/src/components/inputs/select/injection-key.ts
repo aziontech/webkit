@@ -1,5 +1,7 @@
 import type { ComputedRef, InjectionKey, Ref } from 'vue'
 
+import type { ListboxFocusIntent } from '../../../composables/use-listbox'
+
 export type SelectSize = 'small' | 'medium' | 'large'
 
 /** Trigger look: the bordered field, or no border or fill until hover for a switcher inside a line of text. */
@@ -45,6 +47,10 @@ export interface SelectContext {
   controlId: ComputedRef<string | undefined>
   /** Description and error ids of the enclosing Field, for the trigger's aria-describedby. */
   describedBy: ComputedRef<string | undefined>
+  /** Label ids of the enclosing Field; they name the list when the root has no aria-label. */
+  labelledBy: ComputedRef<string | undefined>
+  /** Where focus lands when the list opens: the selected option, the first, the last, or the first match of a typed character. */
+  pendingFocus: Ref<ListboxFocusIntent>
   /** `aria-label` set on the root, forwarded to the trigger. */
   ariaLabel: ComputedRef<string | undefined>
   /** `aria-labelledby` set on the root, forwarded to the trigger. */

@@ -1,16 +1,6 @@
 <script setup>
   import Button from '@aziontech/webkit/button'
   import Dialog from '@aziontech/webkit/dialog'
-  import DialogClose from '@aziontech/webkit/dialog-close'
-  import DialogContent from '@aziontech/webkit/dialog-content'
-  import DialogDescription from '@aziontech/webkit/dialog-description'
-  import DialogOverlay from '@aziontech/webkit/dialog-overlay'
-  import DialogPortal from '@aziontech/webkit/dialog-portal'
-  import DialogTitle from '@aziontech/webkit/dialog-title'
-  import DialogTrigger from '@aziontech/webkit/dialog-trigger'
-  import PanelContent from '@aziontech/webkit/panel-content'
-  import PanelFooter from '@aziontech/webkit/panel-footer'
-  import PanelHeader from '@aziontech/webkit/panel-header'
   import { ref } from 'vue'
 
   const open = ref(false)
@@ -22,25 +12,25 @@
     dismissible
     size="medium"
   >
-    <DialogTrigger>
+    <Dialog.Trigger>
       <Button
         label="Open dialog"
         kind="primary"
       />
-    </DialogTrigger>
-    <DialogPortal>
-      <DialogOverlay />
-      <DialogContent>
-        <PanelHeader class="w-full">
-          <DialogTitle>Dialog Title</DialogTitle>
-          <DialogClose />
-        </PanelHeader>
-        <PanelContent>
-          <DialogDescription>
+    </Dialog.Trigger>
+    <Dialog.Portal>
+      <Dialog.Overlay />
+      <Dialog.Content>
+        <Dialog.Header class="w-full">
+          <Dialog.Title>Dialog Title</Dialog.Title>
+          <Dialog.Close />
+        </Dialog.Header>
+        <Dialog.Body>
+          <Dialog.Description>
             Modal content. Uses the shared Panel header, body, and footer regions.
-          </DialogDescription>
-        </PanelContent>
-        <PanelFooter>
+          </Dialog.Description>
+        </Dialog.Body>
+        <Dialog.Footer>
           <div class="flex w-full flex-col gap-(--spacing-sm) md:flex-row md:justify-end">
             <Button
               label="Cancel"
@@ -52,8 +42,8 @@
               kind="primary"
             />
           </div>
-        </PanelFooter>
-      </DialogContent>
-    </DialogPortal>
+        </Dialog.Footer>
+      </Dialog.Content>
+    </Dialog.Portal>
   </Dialog>
 </template>

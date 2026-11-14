@@ -3,8 +3,8 @@ name: tree
 category: data
 structure: monolithic
 status: implemented
-checksum: 93394e7672dca304476035c807cafb0d8977cd90db96152dc012e2aaa72931cd
-spec_version: 2
+checksum: 1619810319a5146466e3a07dca4d78d755049913f17a048bc0e9bdd4101cb789
+spec_version: 3
 created: 2026-11-10
 last_updated: 2026-11-14
 ---
@@ -178,8 +178,9 @@ Layout: each row is `min-h-8` (32px), full width of its group. The chevron and t
   - `ArrowLeft` — on an expanded parent, collapse it (focus stays); otherwise focus the parent node; on a top-level collapsed parent or leaf, nothing.
   - `Home` / `End` — focus the first / last visible node.
   - `Enter` / `Space` — activate the node: select it when `selectable`, then emit `item-click`; nothing on a disabled node. `Space` does not scroll the page.
-  - `Tab` / `Shift+Tab` — leave the tree from the tab stop, passing through the focused row's `actions` controls (their natural tab order).
-  - Arrow keys, `*` and type-ahead are not handled inside the `actions` region; `*` (expand siblings) and type-ahead are not part of v1.
+  - `Tab` / `Shift+Tab` — leave the tree from the tab stop, passing through the tab-stop row's `actions` controls (their natural tab order). The `actions` controls of every other row are parked at `tabindex="-1"` (their own `tabindex` is restored when their row becomes the tab stop), so the tree is one tab stop plus the current row's controls.
+  - Type-ahead — a printable character focuses the next visible node whose label starts with it; characters typed within 500 ms add up to a prefix. Tests: `tree.test.ts` › moves focus to the next visible node whose label starts with the typed text.
+  - Arrow keys, `*` and type-ahead are not handled inside the `actions` region; `*` (expand siblings) is not part of v1.
 - Chevron: a `<button type="button" tabindex="-1" aria-hidden="true">` that toggles the parent on click (pointer affordance; keyboard expansion is ArrowRight / ArrowLeft on the treeitem). It never receives focus and is not announced.
 - Visible focus: the ring is drawn on the focused node's own row, not around its whole subtree — `focus-visible:outline-none` on the treeitem and `ring-2 ring-(--ring-color) ring-offset-1 ring-offset-(--bg-canvas)` on its direct row child (an arbitrary variant scoped to `:focus-visible > row`).
 - Loading: the root carries `aria-busy="true"`; the Skeleton rows are `aria-hidden`, and no `role="tree"` is rendered without treeitems.
@@ -210,7 +211,7 @@ Decisions taken in this draft that a reviewer should confirm before approval:
 1. **Row click on a parent does not toggle it.** Activation (click, Enter, Space) selects and emits `item-click`; expansion is the chevron and ArrowRight / ArrowLeft. File-explorer trees (VS Code) toggle folders on row click — confirm the Cloudscape-style split is wanted, or add a toggle-on-activate rule for parents when not `selectable`.
 2. **No children reveal animation in v1.** The group appears instantly; a height reveal would need the JS-driven `<Transition>` pattern `accordion` uses. Confirm instant is acceptable.
 3. **Indent guide lines are on**, as a `var(--border-muted)` hairline per nested group. Drop them if the design wants a cleaner Vercel-style tree.
-4. **`actions` controls stay in the natural Tab order**, always visible (no hover reveal, so touch users see them). In a large tree, Tab walks every visible row's actions; the formal fix is the `treegrid` pattern, out of scope for v1.
+4. **Only the tab-stop row's `actions` controls are in the Tab order**, always visible (no hover reveal, so touch users see them). The other rows' controls stay clickable but are parked at `tabindex="-1"`, so Tab never walks every row. The controls still sit inside `role="treeitem"` (axe `nested-interactive`); moving them out is the `treegrid` pattern, out of scope for v1.
 5. **Disabled parents still expand and collapse**, so enabled descendants stay reachable. Confirm, or make `disabled` freeze expansion too.
 6. **Lazy children (load on expand)** are out of scope: the tree renders the `items` it is given; an app that loads children on demand listens to `update:expanded` and patches `items`. A per-node loading state would need a new `TreeItem` field.
 7. **`emptyTitle` default** is `'No items'` (bar-list and donut-chart use `'No data available'`); align with the console microcopy standard if it differs.

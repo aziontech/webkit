@@ -37,7 +37,9 @@
         role="dialog"
         tabindex="-1"
         aria-modal="false"
-        :aria-labelledby="ctx.hasTitle.value ? ctx.titleId : undefined"
+        :aria-labelledby="
+          ctx.hasTitle.value ? ctx.titleId : ctx.triggerRef.value?.id || ctx.triggerId
+        "
         :aria-describedby="ctx.hasDescription.value ? ctx.descriptionId : undefined"
         :data-testid="`${ctx.testId}__panel`"
         :data-state="ctx.isOpen.value ? 'open' : 'closed'"

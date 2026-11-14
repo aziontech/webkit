@@ -114,6 +114,41 @@ describe('Tooltip (overlay: Teleport, data-state, hover/focus/Escape)', () => {
       expect(panel()).toBeNull()
     })
 
+    it('inside an open Dialog, Escape closes only the tooltip', async () => {
+      const { default: Dialog } = await import('../dialog/dialog.vue')
+      const { default: DialogPortal } = await import('../dialog/dialog-portal.vue')
+      const { default: DialogContent } = await import('../dialog/dialog-content.vue')
+      const { default: DialogTitle } = await import('../dialog/dialog-title.vue')
+      render(
+        defineComponent({
+          components: { Dialog, DialogPortal, DialogContent, DialogTitle, Tooltip },
+          template: `
+            <Dialog :default-open="true" data-testid="host-dialog">
+              <DialogPortal>
+                <DialogContent>
+                  <DialogTitle>Settings</DialogTitle>
+                  <Tooltip text="Delete domain"><button type="button">Delete</button></Tooltip>
+                </DialogContent>
+              </DialogPortal>
+            </Dialog>
+          `
+        })
+      )
+      await settle()
+      await fireEvent.focusIn(byTestId('overlay-tooltip') as HTMLElement)
+      await settle()
+      expect(panel()).not.toBeNull()
+
+      await fireEvent.keyDown(document, { key: 'Escape' })
+      await settle()
+      expect(panel()).toBeNull()
+      expect(byTestId('host-dialog')!.getAttribute('data-state')).toBe('open')
+
+      await fireEvent.keyDown(document, { key: 'Escape' })
+      await settle()
+      expect(byTestId('host-dialog')!.getAttribute('data-state')).toBe('closed')
+    })
+
     it('focusout to an element outside the trigger closes it', async () => {
       const { getByTestId } = render(composed())
       await settle()

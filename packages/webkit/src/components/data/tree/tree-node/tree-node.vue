@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed, inject, useId } from 'vue'
+  import { computed, inject, onMounted, onUpdated, ref, useId, watch } from 'vue'
 
   import { TreeInjectionKey } from '../injection-key'
   import type { TreeItem } from '../tree.vue'
@@ -41,6 +41,32 @@
     return expanded.value ? 'open' : 'closed'
   })
   const tabindex = computed(() => (ctx.tabStop.value === props.item.id ? 0 : -1))
+
+  const actionsRef = ref<HTMLElement | null>(null)
+
+  const ACTION_FOCUSABLE =
+    'a[href], button, input, select, textarea, [tabindex]:not([tabindex="-1"]), [data-tree-parked]'
+
+  function syncActionTabOrder() {
+    const region = actionsRef.value
+    if (!region) return
+    const isStop = tabindex.value === 0
+    for (const el of Array.from(region.querySelectorAll<HTMLElement>(ACTION_FOCUSABLE))) {
+      if (isStop && el.hasAttribute('data-tree-parked')) {
+        const original = el.getAttribute('data-tree-parked')
+        if (original) el.setAttribute('tabindex', original)
+        else el.removeAttribute('tabindex')
+        el.removeAttribute('data-tree-parked')
+      } else if (!isStop && !el.hasAttribute('data-tree-parked')) {
+        el.setAttribute('data-tree-parked', el.getAttribute('tabindex') ?? '')
+        el.setAttribute('tabindex', '-1')
+      }
+    }
+  }
+
+  onMounted(syncActionTabOrder)
+  onUpdated(syncActionTabOrder)
+  watch(tabindex, syncActionTabOrder, { flush: 'post' })
 
   function onToggle() {
     ctx.toggle(props.item.id)
@@ -102,6 +128,7 @@
       </span>
       <span
         v-if="$slots['actions']"
+        ref="actionsRef"
         data-tree-actions
         class="ms-auto flex shrink-0 items-center gap-(--spacing-xxs)"
         @mousedown.self.prevent

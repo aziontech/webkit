@@ -29,7 +29,7 @@
     ctx?.close()
   }
 
-  const isDisabled = computed(() => !ctx?.dismissible)
+  const isDisabled = computed(() => !ctx?.closable)
 </script>
 
 <template>

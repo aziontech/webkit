@@ -3,8 +3,8 @@ name: drawer
 category: overlay
 structure: composition
 status: implemented
-spec_version: 3
-checksum: 593b368f60425f249a75c71c451288354bd1958ee1ca5aa3e2ed96b53e81a418
+spec_version: 4
+checksum: 29c059f9dfdd0f7f0660b63ef7979f64f1f5c43399b3a559d987f0c66cfd5c3f
 created: 2026-05-22
 last_updated: 2026-11-14
 ---
@@ -38,21 +38,13 @@ A panel that slides in from an edge of the screen and keeps the page behind it i
 
 ## Usage
 
+The compound import leads: every part hangs off the root (`Drawer.Trigger`, `Drawer.Content`, …), and `Drawer.Header`, `Drawer.Body` and `Drawer.Footer` are the shared Panel regions, so one import builds the whole drawer.
+
 ```vue
 <script setup>
   import { ref } from 'vue'
   import Button from '@aziontech/webkit/button'
   import Drawer from '@aziontech/webkit/drawer'
-  import DrawerTrigger from '@aziontech/webkit/drawer-trigger'
-  import DrawerPortal from '@aziontech/webkit/drawer-portal'
-  import DrawerOverlay from '@aziontech/webkit/drawer-overlay'
-  import DrawerContent from '@aziontech/webkit/drawer-content'
-  import DrawerTitle from '@aziontech/webkit/drawer-title'
-  import DrawerDescription from '@aziontech/webkit/drawer-description'
-  import DrawerClose from '@aziontech/webkit/drawer-close'
-  import PanelHeader from '@aziontech/webkit/panel-header'
-  import PanelContent from '@aziontech/webkit/panel-content'
-  import PanelFooter from '@aziontech/webkit/panel-footer'
 
   const open = ref(false)
 </script>
@@ -63,25 +55,25 @@ A panel that slides in from an edge of the screen and keeps the page behind it i
     side="right"
     size="medium"
   >
-    <DrawerTrigger>
+    <Drawer.Trigger>
       <Button
         label="Add origin"
         kind="primary"
       />
-    </DrawerTrigger>
-    <DrawerPortal>
-      <DrawerOverlay />
-      <DrawerContent>
-        <PanelHeader>
-          <DrawerTitle>Add origin</DrawerTitle>
-          <DrawerClose />
-        </PanelHeader>
-        <PanelContent>
-          <DrawerDescription>
+    </Drawer.Trigger>
+    <Drawer.Portal>
+      <Drawer.Overlay />
+      <Drawer.Content>
+        <Drawer.Header>
+          <Drawer.Title>Add origin</Drawer.Title>
+          <Drawer.Close />
+        </Drawer.Header>
+        <Drawer.Body>
+          <Drawer.Description>
             Point the application at the server that holds the original content.
-          </DrawerDescription>
-        </PanelContent>
-        <PanelFooter>
+          </Drawer.Description>
+        </Drawer.Body>
+        <Drawer.Footer>
           <Button
             label="Cancel"
             kind="outlined"
@@ -91,15 +83,18 @@ A panel that slides in from an edge of the screen and keeps the page behind it i
             label="Save"
             kind="primary"
           />
-        </PanelFooter>
-      </DrawerContent>
-    </DrawerPortal>
+        </Drawer.Footer>
+      </Drawer.Content>
+    </Drawer.Portal>
   </Drawer>
 </template>
 ```
 
+Tree-shaking: `@aziontech/webkit/drawer-root` is the root alone (nothing attached), and every part keeps its own path (`@aziontech/webkit/drawer-trigger`, `-portal`, `-overlay`, `-content`, `-title`, `-description`, `-close`, and `@aziontech/webkit/panel-header`, `panel-content`, `panel-footer` for the regions), so code written against the per-part imports keeps working unchanged.
+
 ## Sub-components
 
+- `index.ts` — the compound: the root with every part attached by `Object.assign` (`Drawer.Trigger`, `.Portal`, `.Overlay`, `.Content`, `.Title`, `.Description`, `.Close`), plus the shared Panel regions as `Drawer.Header` (`panel-header`), `Drawer.Body` (`panel-content`) and `Drawer.Footer` (`panel-footer`). It adds no component of its own. Exported at `@aziontech/webkit/drawer`; the root alone is `@aziontech/webkit/drawer-root`. The parts stay in the root folder (flat) for 6.x path stability; per-part export paths are unchanged.
 - `drawer-close.vue` — Public sub-component `drawer-close`.
 - `drawer-content.vue` — Public sub-component `drawer-content`.
 - `drawer-description.vue` — Public sub-component `drawer-description`.
@@ -113,9 +108,12 @@ A panel that slides in from an edge of the screen and keeps the page behind it i
 | Prop          | Type         | Default    | Required | JSDoc                                                                                                   |
 | ------------- | ------------ | ---------- | -------- | ------------------------------------------------------------------------------------------------------- |
 | `defaultOpen` | `boolean`    | `false`    | false    | Initial open state when uncontrolled.                                                                   |
-| `dismissible` | `boolean`    | `true`     | false    | When true, overlay click and Escape close the drawer.                                                   |
+| `closable` | `boolean` | `undefined` | false | Whether the close button (DrawerClose) and the context close() close the drawer; false renders the close button disabled. Escape and overlay click follow `dismissible`. Unset, it follows `dismissible` for 6.x compatibility (deprecated coupling: set it explicitly; from 7.0 unset means true). |
+| `dismissible` | `boolean` | `true` | false | Light-dismiss: when true, overlay click and Escape close the drawer. It does not govern the close button; see `closable`. |
 | `side`        | `DrawerSide` | `'right'`  | false    | Edge the drawer panel slides from.                                                                      |
 | `size`        | `DrawerSize` | `'medium'` | false    | Panel max-width preset (`small` `--container-sm`, `medium` `--container-xl`, `large` `--container-4xl`). Height is always 100% viewport. |
+
+- Two close paths: `dismissible` gates the light-dismiss paths only (`Esc`, overlay click); `closable` gates the explicit close (`DrawerClose` and the context `close()`), as Radix and the prop vocabulary separate them. `:dismissible="false" :closable="true"` is a drawer that only its close button or a footer action closes. For 6.x compatibility an unset `closable` follows `dismissible`, so an existing `:dismissible="false"` still disables the close button; that coupling is deprecated and from 7.0 an unset `closable` means `true`. Tests: `drawer.test.ts` › closable.
 
 ## v-model
 

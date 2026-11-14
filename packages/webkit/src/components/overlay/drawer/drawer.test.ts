@@ -630,3 +630,73 @@ describe('nested overlays', () => {
     expect(drawerOpen.value).toBe(true)
   })
 })
+
+describe('closable (explicit close, separate from light-dismiss)', () => {
+  it('dismissible false with closable true: Escape and overlay stay shut, the close button closes', async () => {
+    const { getByTestId } = render(
+      composed({ defaultOpen: true, dismissible: false, closable: true })
+    )
+    await settle()
+    await settle()
+
+    await fireEvent.keyDown(document, { key: 'Escape' })
+    await fireEvent.click(byTestId('overlay-drawer__backdrop')!)
+    await settle()
+    expect(getByTestId('overlay-drawer').getAttribute('data-state')).toBe('open')
+
+    const close = byTestId('overlay-drawer__close')!
+    expect(close.hasAttribute('disabled')).toBe(false)
+    await fireEvent.click(close)
+    await settle()
+    expect(getByTestId('overlay-drawer').getAttribute('data-state')).toBe('closed')
+  })
+
+  it('closable false keeps light-dismiss and disables the close button', async () => {
+    const { getByTestId } = render(composed({ defaultOpen: true, closable: false }))
+    await settle()
+    await settle()
+
+    expect(byTestId('overlay-drawer__close')!.hasAttribute('disabled')).toBe(true)
+    await fireEvent.keyDown(document, { key: 'Escape' })
+    await settle()
+    expect(getByTestId('overlay-drawer').getAttribute('data-state')).toBe('closed')
+  })
+
+  it('unset closable still follows dismissible (6.x compatibility)', async () => {
+    render(composed({ defaultOpen: true, dismissible: false }))
+    await settle()
+    await settle()
+
+    expect(byTestId('overlay-drawer__close')!.hasAttribute('disabled')).toBe(true)
+  })
+})
+
+describe('compound API (index.ts)', () => {
+  it('attaches every part and the Panel regions for dot-notation', async () => {
+    const { default: Compound } = await import('./index')
+    const PanelHeader = (await import('../panel/panel-header.vue')).default
+    const PanelContent = (await import('../panel/panel-content.vue')).default
+    const PanelFooter = (await import('../panel/panel-footer.vue')).default
+    expect(Compound).toBe(Drawer)
+    expect(Compound.Trigger).toBe(DrawerTrigger)
+    expect(Compound.Portal).toBe(DrawerPortal)
+    expect(Compound.Overlay).toBe(DrawerOverlay)
+    expect(Compound.Content).toBe(DrawerContent)
+    expect(Compound.Title).toBe(DrawerTitle)
+    expect(Compound.Description).toBe(DrawerDescription)
+    expect(Compound.Close).toBe(DrawerClose)
+    expect(Compound.Header).toBe(PanelHeader)
+    expect(Compound.Body).toBe(PanelContent)
+    expect(Compound.Footer).toBe(PanelFooter)
+  })
+
+  it('renders the compound Default example and opens it', async () => {
+    const { default: Example } = await import('../../../../examples/drawer/default.vue')
+    const view = render(Example)
+    await settle()
+    await fireEvent.click(view.getByRole('button', { name: 'Open drawer' }))
+    await settle()
+    expect(byTestId('overlay-drawer__panel')).not.toBeNull()
+    expect(byTestId('overlay-drawer__close')).not.toBeNull()
+  })
+})

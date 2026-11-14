@@ -1045,7 +1045,8 @@ export const es: Messages = {
     light: 'Claro'
   },
   toast: {
-    close: 'Cerrar notificación'
+    close: 'Cerrar notificación',
+    region: 'Notificaciones ({hotkey})'
   },
   toggleGroup: {
     option: 'Opción {index}'

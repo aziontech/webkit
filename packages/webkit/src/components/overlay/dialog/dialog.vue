@@ -17,14 +17,17 @@
     defineProps<{
       /** Initial open state when uncontrolled. */
       defaultOpen?: boolean
-      /** When true, overlay click and Escape close the dialog. */
+      /** Light-dismiss: when true, overlay click and Escape close the dialog. It does not govern the close button; see `closable`. */
       dismissible?: boolean
+      /** Whether the close button (DialogClose) and the context close() close the dialog; false renders the close button disabled. Escape and overlay click follow `dismissible`. Unset, it follows `dismissible` for 6.x compatibility (deprecated coupling: set it explicitly; from 7.0 unset means true). */
+      closable?: boolean
       /** Panel max-width preset passed to the inner Panel. */
       size?: DialogSize
     }>(),
     {
       defaultOpen: false,
       dismissible: true,
+      closable: undefined,
       size: 'medium'
     }
   )
@@ -54,7 +57,14 @@
     isOpen.set(true)
   }
 
+  const isClosable = computed(() => props.closable ?? props.dismissible)
+
   const closeDialog = () => {
+    if (!isClosable.value) return
+    isOpen.set(false)
+  }
+
+  const dismissDialog = () => {
     if (!props.dismissible) return
     isOpen.set(false)
   }
@@ -75,11 +85,15 @@
     get dismissible() {
       return props.dismissible
     },
+    get closable() {
+      return isClosable.value
+    },
     get size() {
       return props.size
     },
     open: openDialog,
     close: closeDialog,
+    dismiss: dismissDialog,
     titleId: `${uid}-title`,
     descriptionId: `${uid}-description`,
     hasDescription,

@@ -1,5 +1,5 @@
 import { fireEvent, render, within } from '@testing-library/vue'
-import { afterEach, describe, expect, it } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import { userEvent } from 'vitest/browser'
 import { defineComponent, h, nextTick, ref } from 'vue'
 
@@ -96,6 +96,75 @@ afterEach(() => {
     .forEach((el) => el.remove())
 })
 
+describe('Select keyboard and naming (APG select-only combobox)', () => {
+  const focusedText = () => (document.activeElement as HTMLElement | null)?.textContent?.trim()
+
+  it('opens from the closed trigger with ArrowUp, Home, End and a typed character', async () => {
+    const { getByTestId } = render(Host)
+    const trigger = getByTestId('input-select-trigger')
+
+    trigger.focus()
+    await userEvent.keyboard('{End}')
+    await vi.waitFor(() => expect(focusedText()).toBe('Option 3'))
+    await userEvent.keyboard('{Escape}')
+    await vi.waitFor(() => expect(getContent()).toBeNull())
+
+    trigger.focus()
+    await userEvent.keyboard('{Home}')
+    await vi.waitFor(() => expect(focusedText()).toBe('Option 1'))
+    await userEvent.keyboard('{Escape}')
+    await vi.waitFor(() => expect(getContent()).toBeNull())
+
+    trigger.focus()
+    await userEvent.keyboard('{ArrowUp}')
+    await vi.waitFor(() => expect(getContent()).not.toBeNull())
+    await userEvent.keyboard('{Escape}')
+    await vi.waitFor(() => expect(getContent()).toBeNull())
+
+    trigger.focus()
+    await userEvent.keyboard('o')
+    await vi.waitFor(() => expect(focusedText()).toBe('Option 1'))
+  })
+
+  it('names the listbox and keeps the search field outside it', async () => {
+    render(
+      defineComponent({
+        setup() {
+          const value = ref('')
+          return () =>
+            h(
+              Select,
+              {
+                modelValue: value.value,
+                defaultOpen: true,
+                'aria-label': 'Region',
+                'onUpdate:modelValue': (v: unknown) => {
+                  value.value = v as string
+                }
+              },
+              () => [
+                h(SelectTrigger),
+                h(SelectContent, null, {
+                  search: () => h('input', { type: 'search', 'aria-label': 'Search regions' }),
+                  default: () =>
+                    OPTIONS.map((o) =>
+                      h(SelectOption, { key: o.value, value: o.value }, () => o.label)
+                    )
+                })
+              ]
+            )
+        }
+      })
+    )
+    await vi.waitFor(() => expect(getContent()).not.toBeNull())
+    const list = getContent()!.querySelector<HTMLElement>('[role="listbox"]')!
+    expect(list.getAttribute('aria-label')).toBe('Region')
+    expect(list.querySelector('input')).toBeNull()
+    expect(getContent()!.querySelector('input[type="search"]')).not.toBeNull()
+    await expectNoA11yViolations(getContent() as HTMLElement)
+  })
+})
+
 describe('Select (compound / overlay)', () => {
   it('mounts a 1,000-option list in chunks and mounts every option on the first arrow key', async () => {
     render(Host, { props: { startOpen: true, extraOptions: 997 } })
@@ -190,7 +259,7 @@ describe('Select (compound / overlay)', () => {
 
     const content = getContent()
     expect(content).not.toBeNull()
-    expect(content?.getAttribute('role')).toBe('listbox')
+    expect(content?.querySelector('[role="listbox"]')).not.toBeNull()
     // content is Teleported OUT of the render container, onto document.body
     expect(content?.closest('[data-testid="input-select"]')).toBeNull()
     // trigger aria-expanded now reflects open (shared context)
@@ -203,7 +272,9 @@ describe('Select (compound / overlay)', () => {
   it('sets aria-multiselectable on the listbox only in multiple mode', async () => {
     const single = render(Host)
     await fireEvent.click(single.getByTestId('input-select-trigger'))
-    expect(getContent()?.getAttribute('aria-multiselectable')).toBeNull()
+    expect(
+      getContent()?.querySelector('[role="listbox"]')?.getAttribute('aria-multiselectable')
+    ).toBeNull()
     single.unmount()
     document.body
       .querySelectorAll('[data-testid="input-select-content"]')
@@ -211,7 +282,9 @@ describe('Select (compound / overlay)', () => {
 
     const multi = render(Host, { props: { multiple: true } })
     await fireEvent.click(multi.getByTestId('input-select-trigger'))
-    expect(getContent()?.getAttribute('aria-multiselectable')).toBe('true')
+    expect(
+      getContent()?.querySelector('[role="listbox"]')?.getAttribute('aria-multiselectable')
+    ).toBe('true')
   })
 
   it('opens the dropdown from the trigger on Enter, Space and ArrowDown', async () => {

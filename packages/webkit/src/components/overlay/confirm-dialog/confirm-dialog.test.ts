@@ -1,6 +1,6 @@
 import userEvent from '@testing-library/user-event'
 import { fireEvent, render, within } from '@testing-library/vue'
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { defineComponent, nextTick, ref } from 'vue'
 
 import Default from '../../../../examples/confirm-dialog/default.vue'
@@ -99,7 +99,7 @@ describe('ConfirmDialog', () => {
     }
   )
 
-  it('locks Cancel, the close button and Escape while loading, then releases them', async () => {
+  it('locks Cancel and Escape while loading, then releases them', async () => {
     const { emitted, rerender } = render(ConfirmDialog, {
       props: { open: true, title: 'Delete resource', loading: true }
     })
@@ -107,7 +107,6 @@ describe('ConfirmDialog', () => {
 
     const cancel = byTestId('overlay-confirm-dialog__cancel') as HTMLButtonElement
     expect(cancel.disabled).toBe(true)
-    await fireEvent.click(byTestId('overlay-confirm-dialog__close') as HTMLElement)
     await fireEvent.keyDown(document, { key: 'Escape' })
     expect(emitted()['update:open']).toBeUndefined()
     expect(emitted()['cancel']).toBeUndefined()
@@ -115,6 +114,15 @@ describe('ConfirmDialog', () => {
     await rerender({ loading: false })
     await fireEvent.keyDown(document, { key: 'Escape' })
     expect(emitted()['update:open']).toContainEqual([false])
+  })
+
+  it('opens with focus on Cancel, the least destructive action, and shows no close button', async () => {
+    render(ConfirmDialog, { props: { open: true, title: 'Delete resource' } })
+    await settle()
+    await vi.waitFor(() =>
+      expect(document.activeElement).toBe(byTestId('overlay-confirm-dialog__cancel'))
+    )
+    expect(byTestId('overlay-confirm-dialog__close')).toBeNull()
   })
 
   it('replaces the buttons with the actions slot', async () => {
