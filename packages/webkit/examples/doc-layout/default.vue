@@ -82,19 +82,19 @@
         />
         <DocProse>
           <DocHeading
-            id="before-you-start"
+            anchor="before-you-start"
             :level="2"
             >Before you start</DocHeading
           >
           <p>You need an Azion account and a GitHub account.</p>
           <DocHeading
-            id="deploy-with-cli"
+            anchor="deploy-with-cli"
             :level="2"
             >Deploy with Azion CLI</DocHeading
           >
           <p>Install the CLI, log in and run the deploy command from your project folder.</p>
           <DocHeading
-            id="next-steps"
+            anchor="next-steps"
             :level="2"
             >Next steps</DocHeading
           >

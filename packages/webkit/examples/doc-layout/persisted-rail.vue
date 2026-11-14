@@ -61,7 +61,7 @@
         />
         <DocProse>
           <DocHeading
-            id="resize-the-rail"
+            anchor="resize-the-rail"
             :level="2"
             >Resize the rail</DocHeading
           >

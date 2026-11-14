@@ -5,22 +5,22 @@
 <template>
   <div class="flex flex-col gap-(--spacing-sm)">
     <DocHeading
-      id="cache"
+      anchor="cache"
       :level="1"
       label="Cache"
     />
     <DocHeading
-      id="cache-rules"
+      anchor="cache-rules"
       :level="2"
       label="Cache rules"
     />
     <DocHeading
-      id="cache-keys"
+      anchor="cache-keys"
       :level="3"
       label="Cache keys"
     />
     <DocHeading
-      id="query-strings"
+      anchor="query-strings"
       :level="4"
       label="Query strings"
     />

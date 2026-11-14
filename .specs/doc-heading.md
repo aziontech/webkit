@@ -3,18 +3,18 @@ name: doc-heading
 category: documentation
 structure: monolithic
 status: implemented
-spec_version: 1
+spec_version: 2
 template: 2
-checksum: 2f19adfcd4a242271bb359ae2133903281d284d352b07cfaf18838f83217c1e6
+checksum: 6f19eb9d7a1c077670f1badb17e0982e2341d6bcf70250d03163746a28e1506f
 created: 2026-11-11
-last_updated: 2026-11-11
+last_updated: 2026-11-14
 ---
 
 # DocHeading — Component Spec
 
 ## Purpose
 
-A documentation section heading that is also the link to itself. The whole text links to its own `id`, so a reader can copy the URL to the section; a rule under the text and a chain glyph after it appear on hover and keyboard focus without taking layout. The click goes through `useHeadingNav`, so the page decides how to scroll; with no page it falls back to the native hash jump. MDX renderers and hand-composed pages both render headings through it, so the two authoring paths cannot drift.
+A documentation section heading that is also the link to itself. The whole text links to its own `anchor` (the heading's `id`), so a reader can copy the URL to the section; a rule under the text and a chain glyph after it appear on hover and keyboard focus without taking layout. The click goes through `useHeadingNav`, so the page decides how to scroll; with no page it falls back to the native hash jump. MDX renderers and hand-composed pages both render headings through it, so the two authoring paths cannot drift.
 
 ## When to use
 
@@ -34,8 +34,8 @@ A documentation section heading that is also the link to itself. The whole text 
 
 ## Best practices
 
-- Give every heading a stable, slug-like `id`.
-- Without an `id` the heading renders plain text with no anchor — a link to nowhere is never drawn.
+- Give every heading a stable, slug-like `anchor`.
+- Without an `anchor` the heading renders plain text with no anchor — a link to nowhere is never drawn.
 
 ## Usage
 
@@ -47,7 +47,7 @@ A documentation section heading that is also the link to itself. The whole text 
 <template>
   <DocHeading
     :level="2"
-    id="purge-by-url"
+    anchor="purge-by-url"
     >Purge by URL</DocHeading
   >
 </template>
@@ -55,11 +55,12 @@ A documentation section heading that is also the link to itself. The whole text 
 
 ## Props
 
-| Prop    | Type     | Default | Required | JSDoc                                                                                                      |
-| ------- | -------- | ------- | -------- | ---------------------------------------------------------------------------------------------------------- |
-| `level` | `1 \\    | 2 \\    | 3 \\     | 4`                                                                                                         | `2` | false | Heading level; drives the tag and the prose type scale. |
-| `id`    | `string` | `''`    | false    | Anchor id: what the page rail entry and the copied URL point at. Empty renders the heading without a link. |
-| `label` | `string` | `''`    | false    | Fallback text when the default slot is empty.                                                              |
+| Prop     | Type               | Default | Required | JSDoc                                                                                                                             |
+| -------- | ------------------ | ------- | -------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| `level`  | `1 \| 2 \| 3 \| 4` | `2`     | false    | Heading level; drives the tag and the prose type scale.                                                                           |
+| `anchor` | `string`           | `''`    | false    | In-page anchor: the heading's id, what the page rail entry and the copied URL point at. Empty renders the heading without a link. |
+| `id`     | `string`           | `''`    | false    | @deprecated since 6.0 — use `anchor` instead. Removed in 7.0. Still read when `anchor` is empty.                                  |
+| `label`  | `string`           | `''`    | false    | Fallback text when the default slot is empty.                                                                                     |
 
 ## Events
 
@@ -121,7 +122,7 @@ The glyph fades in with `transition-opacity duration-150`; `motion-reduce:transi
 
 ## Examples
 
-- Default — an `h2` with an id.
+- Default — an `h2` with an anchor.
 - Levels — `h1` to `h4`.
 
 ## Constraints — DO NOT
