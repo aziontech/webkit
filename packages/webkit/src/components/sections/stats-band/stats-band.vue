@@ -25,10 +25,13 @@
   interface Props {
     /** The figures rendered as cells, in order; each item is `{ value, label, prefix?, suffix? }` where `value` is the figure, `label` its caption, and `prefix` / `suffix` the qualifier and unit set beside it. */
     items?: StatsBandItem[]
+    /** In-page id set on the band so a `#hash` link can scroll to it. */
+    anchor?: string
   }
 
   const props = withDefaults(defineProps<Props>(), {
-    items: () => []
+    items: () => [],
+    anchor: ''
   })
 
   const attrs = useAttrs()
@@ -43,7 +46,9 @@
 <template>
   <div
     v-bind="$attrs"
+    :id="anchor || undefined"
     :data-testid="testId"
+    class="scroll-mt-(--spacing-xxl)"
   >
     <SectionModule
       v-if="hasItems"

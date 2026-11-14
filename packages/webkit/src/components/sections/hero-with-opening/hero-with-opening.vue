@@ -17,6 +17,9 @@
     inheritAttrs: false
   })
 
+  /** Length of the headline, which sets the width of its column. */
+  export type HeroWithOpeningTitleLength = 'short' | 'long'
+
   /** A call to action under the headline. */
   export type HeroWithOpeningAction = {
     /** Visible label of the action. */
@@ -42,8 +45,12 @@
   interface Props {
     /** Short overline above the headline. */
     eyebrow?: string
-    /** Page headline, rendered as the page `h1`; the band renders nothing when empty. A title longer than 45 characters widens the headline column. */
+    /** Opening words of the headline, painted in the brand accent; reads as one sentence with `title`. */
+    highlight?: string
+    /** Page headline, rendered as the page `h1`; the band renders nothing when empty. Without `titleLength`, a title longer than 45 characters widens the headline column. */
     title?: string
+    /** Length of the headline: `short` keeps it on the narrow `xl` column, `long` widens it to `4xl` so it breaks into two lines instead of three; unset, the column follows the 45-character rule. */
+    titleLength?: HeroWithOpeningTitleLength
     /** Sentence under the headline. */
     description?: string
     /** First button under the headline; `{ label, href, trailing?, target? }`. Shown only with a label and a link. */
@@ -56,7 +63,9 @@
 
   const props = withDefaults(defineProps<Props>(), {
     eyebrow: '',
+    highlight: '',
     title: '',
+    titleLength: undefined,
     description: '',
     primaryAction: undefined,
     secondaryAction: undefined,
@@ -71,7 +80,12 @@
     () => (attrs['data-testid'] as string | undefined) ?? 'sections-hero-with-opening'
   )
 
-  const titleWidth = computed(() => (props.title.length > 45 ? '4xl' : 'xl'))
+  const headline = computed(() => [props.highlight, props.title].filter(Boolean).join(' '))
+
+  const titleWidth = computed(() => {
+    if (props.titleLength) return props.titleLength === 'long' ? '4xl' : 'xl'
+    return headline.value.length > 45 ? '4xl' : 'xl'
+  })
 
   const primary = computed(() =>
     props.primaryAction?.label && props.primaryAction.href ? props.primaryAction : null
@@ -92,13 +106,14 @@
         kind="band"
         max-width="5xl"
         size="large"
-        :aria-label="title"
+        :aria-label="headline"
       >
         <HeroTitle
           centered
           :max-width="titleWidth"
           :eyebrow="eyebrow"
           :eyebrow-prefix="EYEBROW_PREFIX"
+          :highlight="highlight"
           :title="title"
           :description="description"
         >

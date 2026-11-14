@@ -17,7 +17,7 @@
   {
     "name": "site-layout",
     "path": "src/components/layout/site-layout/site-layout.vue",
-    "limit": "71 KB"
+    "limit": "71.1 KB"
   },
   {
     "name": "doc-layout",
@@ -342,7 +342,7 @@
   {
     "name": "site-page",
     "path": "src/components/marketing/site-page/site-page.vue",
-    "limit": "2.5 KB",
+    "limit": "2.6 KB",
     "entryOnly": true
   },
   {
@@ -528,7 +528,7 @@
   {
     "name": "hero-band",
     "path": "src/components/sections/hero-band/hero-band.vue",
-    "limit": "9.5 KB",
+    "limit": "9.7 KB",
     "entryOnly": true
   },
   {
@@ -571,7 +571,7 @@
   {
     "name": "hero-form",
     "path": "src/components/sections/hero-form/hero-form.vue",
-    "limit": "40.6 KB",
+    "limit": "40.9 KB",
     "entryOnly": true
   },
   {
@@ -772,7 +772,8 @@
   {
     "name": "closing-call-to-action",
     "path": "src/components/sections/closing-call-to-action/closing-call-to-action.vue",
-    "limit": "8 KB"
+    "limit": "8 KB",
+    "entryOnly": true
   },
   {
     "name": "closing-call-to-action-agents",

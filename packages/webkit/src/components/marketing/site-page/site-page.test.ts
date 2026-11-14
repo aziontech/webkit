@@ -1,5 +1,5 @@
 import userEvent from '@testing-library/user-event'
-import { render } from '@testing-library/vue'
+import { render, waitFor } from '@testing-library/vue'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
 import { expectNoA11yViolations } from '../../../test/axe'
@@ -100,6 +100,53 @@ describe('SitePage', () => {
     expect(gaps).toHaveLength(2)
     expect(gaps[0].getAttribute('data-size')).toBe('small')
     expect(gaps[1].getAttribute('data-size')).toBe('medium')
+  })
+
+  it('closes a page that ends on a closing band with its frame, not a trailing gap', async () => {
+    const closing: SitePageSection = {
+      _id: 'closing-call-to-action',
+      props: { kind: 'panel', title: 'Ready to start?' }
+    }
+    const { findByTestId, getAllByTestId } = page({ sections: [uses, closing] })
+
+    const band = await findByTestId('sections-closing-call-to-action')
+    expect(band.querySelector('[data-hatch="true"]')).not.toBeNull()
+    expect(getAllByTestId('marketing-section-gap')).toHaveLength(2)
+  })
+
+  it('binds hatch off on a closing band stacked over another, so the page closes once', async () => {
+    const { findAllByRole, findAllByTestId, getAllByTestId } = page({
+      sections: [
+        { _id: 'closing-call-to-action', props: { kind: 'panel', title: 'Join us' } },
+        { _id: 'closing-call-to-action', props: { kind: 'primary', title: 'Start for free' } }
+      ]
+    })
+
+    await waitFor(async () => expect(await findAllByRole('heading', { level: 2 })).toHaveLength(2))
+    const bands = await findAllByTestId('sections-closing-call-to-action')
+    expect(bands).toHaveLength(2)
+    expect(bands[0].querySelector('[data-hatch="true"]')).toBeNull()
+    expect(bands[1].querySelector('[data-hatch="true"]')).not.toBeNull()
+    expect(getAllByTestId('marketing-section-gap')).toHaveLength(2)
+  })
+
+  it('draws no gap before a frame close, and no trailing gap after it', async () => {
+    const { findByTestId, getAllByTestId } = page({
+      sections: [uses, { _id: 'closing-call-to-action', props: { kind: 'frame' } }]
+    })
+
+    const frame = await findByTestId('sections-closing-call-to-action')
+    expect(frame.getAttribute('data-kind')).toBe('frame')
+    expect(getAllByTestId('marketing-section-gap')).toHaveLength(1)
+  })
+
+  it('keeps the trailing gap after a closing band whose page data turns hatch off', async () => {
+    const { findByTestId, getAllByTestId } = page({
+      sections: [{ _id: 'closing-call-to-action', props: { title: 'Ready?', hatch: false } }]
+    })
+
+    await findByTestId('sections-closing-call-to-action')
+    expect(getAllByTestId('marketing-section-gap')).toHaveLength(2)
   })
 
   it('renders no column at all when there are no column sections', () => {

@@ -6,6 +6,11 @@
       "name": "Default",
       "summary": "For humans opens on two actions; For agents swaps in the copyable prompt and the agent docs. The typed word loops under both.",
       "file": "default.vue"
+    },
+    {
+      "name": "Shell",
+      "summary": "A third audience whose line is a CLI command: `copy.shell` draws the `$` prompt before it, while the agent prompt stays bare.",
+      "file": "shell.vue"
     }
   ]
 }

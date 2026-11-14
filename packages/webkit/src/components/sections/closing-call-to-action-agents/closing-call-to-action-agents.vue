@@ -6,6 +6,7 @@
   import CopyButton from '../../actions/copy-button/copy-button.vue'
   import ToggleGroup from '../../actions/toggle-group/toggle-group.vue'
   import InputGroup from '../../inputs/input-group/input-group.vue'
+  import InputGroupAddon from '../../inputs/input-group/input-group-addon/input-group-addon.vue'
   import FrameBox from '../../layout/frame-box/frame-box.vue'
   import CallToAction from '../../marketing/call-to-action/call-to-action.vue'
   import SectionModule from '../../marketing/section-module/section-module.vue'
@@ -37,6 +38,8 @@
     label: string
     /** Line shown in the read-only field and copied as is. */
     text: string
+    /** Draws the `$` shell prompt before the line, so a command reads apart from a prompt meant for an agent. */
+    shell?: boolean
   }
 
   /** One way in, picked by the audience switch. */
@@ -62,12 +65,14 @@
     typedWords?: string[]
     /** Closing sentence under the typed line, the same for every audience. */
     description?: string
-    /** The ways in, in switch order; each is `{ value, label, copy?, actions? }` and the first one opens. The switch renders only with two or more. */
+    /** The ways in, in switch order; each is `{ value, label, copy?, actions? }` (`copy` is `{ label, text, shell? }`, `shell` drawing the `$` prompt) and the first one opens. The switch renders only with two or more. */
     audiences?: ClosingCallToActionAgentsAudience[]
     /** Accessible name of the audience switch. */
     audiencesAriaLabel?: string
     /** Accessible name of the read-only field that shows an audience's copyable line. */
     lineAriaLabel?: string
+    /** Draws the hatched closing frame under the band; turn it off when another closing band stacks directly below and draws the shared frame. */
+    hatch?: boolean
   }
 
   const props = withDefaults(defineProps<Props>(), {
@@ -78,7 +83,8 @@
     description: '',
     audiences: () => [],
     audiencesAriaLabel: '',
-    lineAriaLabel: ''
+    lineAriaLabel: '',
+    hatch: true
   })
 
   const TYPE_DELAY = 90
@@ -194,6 +200,11 @@
                     class="w-full min-w-0 max-w-(--container-xs) lg:w-(--container-xs)"
                   >
                     <InputGroup size="large">
+                      <InputGroupAddon
+                        v-if="current.copy.shell"
+                        aria-hidden="true"
+                        >$</InputGroupAddon
+                      >
                       <input
                         readonly
                         v-bind="PASSWORD_MANAGER_IGNORE"
@@ -260,6 +271,7 @@
         </CallToAction>
       </SectionModule>
       <FrameBox
+        v-if="hatch"
         borders="none"
         marks="all"
         data-hatch="true"

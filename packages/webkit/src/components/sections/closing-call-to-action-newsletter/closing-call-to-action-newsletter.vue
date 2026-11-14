@@ -49,6 +49,8 @@
     submitted?: boolean
     /** The site could not send the address: `form.errorMessage` shows under the form. */
     error?: boolean
+    /** Draws the hatched closing frame under the band; turn it off when another closing band stacks directly below and draws the shared frame. */
+    hatch?: boolean
   }
 
   const props = withDefaults(defineProps<Props>(), {
@@ -58,7 +60,8 @@
     description: '',
     loading: false,
     submitted: false,
-    error: false
+    error: false,
+    hatch: true
   })
 
   const emit = defineEmits<{
@@ -230,6 +233,7 @@
       </FrameBox>
     </SectionModule>
     <FrameBox
+      v-if="hatch"
       borders="none"
       marks="all"
       data-hatch="true"

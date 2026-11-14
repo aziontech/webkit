@@ -3,10 +3,11 @@ name: hero-form
 category: sections
 structure: monolithic
 status: implemented
-spec_version: 1
+spec_version: 2
 created: 2026-11-05
-last_updated: 2026-11-12
-checksum: da6a1e676a878433b0e9c0a6d7dd6d9c7e3549e9b8da3784694421a75e55d519
+last_updated: 2026-11-14
+checksum: aa184052b6fdc48b7f8070f81fd2ffbb9612b27a984fa596d92bdbcf8e486862
+template: 2
 ---
 
 # HeroForm — Component Spec
@@ -95,22 +96,27 @@ The opening band of a lead-capture page, where the form is the reason for the pa
 
 ## Props
 
-| Prop            | Type               | Default | Required | JSDoc                                                                                                                               |
-| --------------- | ------------------ | ------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------- |
-| `messages`      | `HeroFormMessages` | `—`     | true     | Copy of the form outcomes: `{ missing, invalidEmail, success, error }`.                                                             |
-| `eyebrow`       | `string`           | `''`    | false    | Short overline above the headline.                                                                                                  |
-| `highlight`     | `string`           | `''`    | false    | Opening words of the headline, painted in the brand accent.                                                                         |
-| `title`         | `string`           | `''`    | false    | Page headline, rendered as the page `h1`; the band renders nothing when empty.                                                      |
-| `description`   | `string`           | `''`    | false    | Sentence under the headline.                                                                                                        |
-| `items`         | `HeroFormItem[]`   | `[]`    | false    | The highlights under the description, in order; each is `{ icon, title, description }`. The list renders only when there are items. |
-| `formAriaLabel` | `string`           | `''`    | false    | Accessible name of the field group, read as its legend.                                                                             |
-| `fields`        | `HeroFormField[]`  | `[]`    | false    | The form fields in order; each is `{ name, kind, label, placeholder?, required?, half?, options?, country?, visuallyHiddenLabel? }`; `visuallyHiddenLabel` keeps the label as the accessible name but does not draw it.                      |
-| `submitLabel`   | `string`           | `''`    | false    | Label of the submit button.                                                                                                         |
-| `carouselLabel` | `string`           | `''`    | false    | Overline above the client strip.                                                                                                    |
-| `carouselMarks` | `string[]`         | `[]`    | false    | Registry names of the client marks, in order; the strip renders only when there are marks.                                          |
-| `loading`       | `boolean`          | `false` | false    | The site is sending the values: the button shows its loading state and a submit is ignored.                                         |
-| `submitted`     | `boolean`          | `false` | false    | The site sent the values: the form gives way to `messages.success`.                                                                 |
-| `error`         | `boolean`          | `false` | false    | The site could not send the values: `messages.error` shows under the form.                                                          |
+| Prop               | Type               | Default     | Required | JSDoc                                                                                                                                                                                                                   |
+| ------------------ | ------------------ | ----------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `messages`         | `HeroFormMessages` | `—`         | true     | Copy of the form outcomes: `{ missing, invalidEmail, success, error }`.                                                                                                                                                 |
+| `eyebrow`          | `string`           | `''`        | false    | Short overline above the headline.                                                                                                                                                                                      |
+| `highlight`        | `string`           | `''`        | false    | Opening words of the headline, painted in the brand accent.                                                                                                                                                             |
+| `title`            | `string`           | `''`        | false    | Page headline, rendered as the page `h1`; the band renders nothing when empty.                                                                                                                                          |
+| `description`      | `string`           | `''`        | false    | Sentence under the headline.                                                                                                                                                                                            |
+| `descriptionLink`  | `HeroFormLink`     | `undefined` | false    | A link continuing the description inline, such as a phone line; `{ label, href }`. Omitted when absent.                                                                                                                 |
+| `descriptionAfter` | `string`           | `''`        | false    | Copy after the inline link, closing the description's sentence.                                                                                                                                                         |
+| `primaryAction`    | `HeroFormAction`   | `undefined` | false    | First button under the copy; `{ label, href, trailing?, target? }`. Shown only with a label and a link.                                                                                                                 |
+| `secondaryAction`  | `HeroFormAction`   | `undefined` | false    | Second, outlined button beside the first; `{ label, href, trailing?, target? }`. Shown only with a label and a link.                                                                                                    |
+| `anchor`           | `string`           | `''`        | false    | In-page id set on the band so a `#hash` link can scroll to it.                                                                                                                                                          |
+| `items`            | `HeroFormItem[]`   | `[]`        | false    | The highlights under the description, in order; each is `{ icon, title, description }`. The list renders only when there are items.                                                                                     |
+| `formAriaLabel`    | `string`           | `''`        | false    | Accessible name of the field group, read as its legend.                                                                                                                                                                 |
+| `fields`           | `HeroFormField[]`  | `[]`        | false    | The form fields in order; each is `{ name, kind, label, placeholder?, required?, half?, options?, country?, visuallyHiddenLabel? }`; `visuallyHiddenLabel` keeps the label as the accessible name but does not draw it. |
+| `submitLabel`      | `string`           | `''`        | false    | Label of the submit button.                                                                                                                                                                                             |
+| `carouselLabel`    | `string`           | `''`        | false    | Overline above the client strip.                                                                                                                                                                                        |
+| `carouselMarks`    | `string[]`         | `[]`        | false    | Registry names of the client marks, in order; the strip renders only when there are marks.                                                                                                                              |
+| `loading`          | `boolean`          | `false`     | false    | The site is sending the values: the button shows its loading state and a submit is ignored.                                                                                                                             |
+| `submitted`        | `boolean`          | `false`     | false    | The site sent the values: the form gives way to `messages.success`.                                                                                                                                                     |
+| `error`            | `boolean`          | `false`     | false    | The site could not send the values: `messages.error` shows under the form.                                                                                                                                              |
 
 ## Events
 
@@ -131,17 +137,25 @@ The opening band of a lead-capture page, where the form is the reason for the pa
 - `error` (prop): a danger `Alert` with `messages.error` shows under the button; the form stays editable; `data-error` on the root
 - A field with `visuallyHiddenLabel` renders its `Label` visually hidden (`sr-only`), so the control keeps its accessible name and the page shows only the placeholder
 - The headline caps at `--container-md` while the description and highlights keep the `lg` column
+- `descriptionLink` renders inline after `description`, underlined, followed by `descriptionAfter`, so the copy reads as one sentence
+- Without `items`, the copy block is sticky from `lg` (it stays in view while the taller form scrolls past); with `items` it scrolls with the highlights
+- `loading` also sets `disabled` on the `fieldset`, so the browser locks every control in it
 - Empty: when `title` is empty the band renders nothing but its root; when `items` is empty the list is omitted; when `carouselMarks` is empty the strip is omitted
 
 ## Motion & Animations
 
-_none_
+| Trigger                       | Animation / Transition                                        | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback         |
+| ----------------------------- | ------------------------------------------------------------- | ------------------------------------------------- | ------------------------------- |
+| inline description link hover | `transition-colors duration-fast-02 ease-productive-entrance` | inline (matches catalog)                          | `motion-reduce:transition-none` |
 
 ## Tokens
 
-| Region | Token (DESIGN.md)                                                                   |
-| ------ | ----------------------------------------------------------------------------------- |
-| rhythm | `var(--spacing-xxl)`, `var(--spacing-xl)`, `var(--spacing-lg)`, `var(--spacing-md)` |
+| Region                 | Token (DESIGN.md)                                                                   |
+| ---------------------- | ----------------------------------------------------------------------------------- |
+| rhythm                 | `var(--spacing-xxl)`, `var(--spacing-xl)`, `var(--spacing-lg)`, `var(--spacing-md)` |
+| inline link hover      | `var(--text-default)`                                                               |
+| inline link focus ring | `var(--ring-color)`, shape `var(--shape-flat)`                                      |
+| anchor scroll offset   | `var(--spacing-xxl)`                                                                |
 
 ## Theme gaps
 
@@ -152,11 +166,37 @@ _none_
 ## Accessibility (WCAG 2.1 AA)
 
 - Visible focus: owned by the field controls and `button`.
-- Keyboard map: `Tab` walks the fields in order then the button; `Enter` in a text field or on the button submits.
+- Keyboard map: `Tab` reaches the inline description link and the actions under the copy, then walks the fields in order and the button; `Enter` in a text field or on the button submits.
 - ARIA: the band is the `hero` `<section>` named by the title (`aria-label`); the root is a plain `div`. The fields sit in a `fieldset` whose visually hidden `legend` is `formAriaLabel`; each control is labelled through its own `Label` with an id from `useId`; each label is a `Label` rendered by the band, carrying the persistent Required tag of a `required` field from first render. An `email` field is an `<input type="email">` with `autocomplete="email"` and `spellcheck="false"`. Validation runs on submit only: a required field left empty takes the field's amber `required` state (warning border, `kind=required` helper, `aria-required`), a malformed email the red `invalid` state (`aria-invalid`), never both at once; the message is the field's helper text, and editing the field clears it. The success message is a `status` region and the failure message an `alert`.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): owned by the composed components.
-- `motion-reduce:transition-none motion-reduce:transform-none` — the band adds no motion; the composed components carry their own fallback.
+- `motion-reduce:transition-none` on the inline description link's colour transition; the composed components carry their own fallback.
 - Touch target ≥40×40 px — the text fields and the button are large.
+
+## Internationalization
+
+No built-in strings: every label, placeholder, message and action is a prop from the page JSON (`fields`, `messages`, `submitLabel`, `formAriaLabel`).
+
+- Formatting: none of its own; the phone field formats the number for its country (owned by `phone-input`).
+
+## Right-to-left
+
+- Layout: logical utilities only; the copy and the form swap sides under `dir="rtl"`.
+- Icons: the action chevrons mirror with `button`; highlight icons are not mirrored.
+- Keyboard: no arrow-key handling beyond the select's own.
+- User data: email and phone values render as typed.
+
+## Responsive
+
+- Container queries: none; the copy and the form sit side by side from `lg` and stack below it.
+- Narrow (below `lg`): the copy, the highlights and the form stack; below `sm` every field takes the full row (`half` fields stop pairing).
+- Touch: the fields and the buttons are large; nothing depends on hover.
+- Reflow: no horizontal scroll at 320 px and 200 % zoom.
+
+## Performance
+
+- Bundle budget: 40.9 KB gzip, the `.size-limit.json` entry `hero-form` (entry chunk only; raised from 40.6 KB for the inline description link and the actions under the copy, 40.82 KB measured).
+- Runtime budget: validation runs on submit only.
+- Heavy parts: the client strip loads its marks on demand.
 
 ## Examples
 
@@ -166,6 +206,7 @@ _none_
 - Loading
 - Submitted
 - Failed
+- Contact line — justification: `descriptionLink`, `descriptionAfter` and the two actions are parts no other example shows (a phone line inline in the description, actions under the copy, no highlights so the copy stays sticky).
 
 ## Constraints — DO NOT
 

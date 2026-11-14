@@ -3,18 +3,18 @@ name: site-footer
 category: sections
 structure: monolithic
 status: implemented
-spec_version: 1
+spec_version: 2
 template: 2
 created: 2026-11-05
-last_updated: 2026-11-13
-checksum: 9103db8a77f430354ff72f95b14c71d7546571c029f3e5fa4008b4d44bb0d822
+last_updated: 2026-11-14
+checksum: 431d239f333c7fae6c8bd1d6b3ddc00b3a7018eb86ba0f3c676cd80a6f1b806a
 ---
 
 # SiteFooter — Component Spec
 
 ## Purpose
 
-The footer under every marketing page: the link columns, then the social row beside the status indicator and the language select. It is a page section — the site places it from a `{ _id: 'site-footer', props }` entry and binds `props` straight onto it — and it composes `footer`, `brand`, `icon-button`, `status-indicator` and `select`. From `md` the Azion mark leads the social row and the status indicator sits beside the language select on the bottom bar; below `md`, as on azion.com, there is no mark and no signature band, and the status indicator stacks over the language select, both at the start. The layout is CSS only, so the server HTML and the hydrated page are the same tree. The language select keeps its own value unless the page binds `v-model:language`; its options are the labels the reader sees.
+The footer under every marketing page: the link columns, then the social row beside the status indicator and the language select. It is a page section — the site places it from a `{ _id: 'site-footer', props }` entry and binds `props` straight onto it — and it composes `footer`, `brand`, `icon-button`, `status-indicator` and `select`. From `lg` the Azion mark leads the social row of small icon buttons; below `lg` it moves into the footer's signature band, centred under the social row, as the design sample draws it. The status indicator fills the footer's `status` slot and the language select its `language` slot, so the bottom bar lays them out as `footer` does. The layout is CSS only, so the server HTML and the hydrated page are the same tree. The language select keeps its own value unless the page binds `v-model:language`; its options are the labels the reader sees.
 
 ## When to use
 
@@ -92,11 +92,12 @@ The footer under every marketing page: the link columns, then the social row bes
 
 - Visual states: `default`
 - `data-kind` mirrors the `kind` prop on the footer
-- The footer never renders a signature band, so it ends on its social row on every width; the Azion mark leads the social row from `md` and is not shown below it
-- Below `md` the status indicator stacks over the language select at the start of the bottom bar; from `md` they sit side by side at its end
+- The footer's signature band is `compact`: below `lg` it carries the Azion mark, centred; from `lg` the band is hidden and the mark leads the social row instead
+- The status indicator sits in the footer's `status` slot and the language select in its `language` slot; below `md` they share the bottom bar at its two ends, from `md` they sit side by side at its end
+- The social buttons are small icon buttons
 - The status indicator, the language select and the Azion mark each render only when their prop is set
 - An `external` link sets `target="_blank"` and `rel="noopener noreferrer"`, draws the `pi pi-external-link` glyph after its label in the label's own colour (hidden from assistive tech) and appends the catalog's “(opens in a new tab)” as screen-reader text
-- Server render and hydration: the mark is always in the DOM and CSS shows it from `md`, so the server HTML, the first client render and every later render are the same tree — nothing moves on mount.
+- Server render and hydration: both marks are always in the DOM and CSS shows one per width (the social-row mark from `lg`, the signature mark below it), so the server HTML, the first client render and every later render are the same tree — nothing moves on mount.
 
 ## Motion & Animations
 
@@ -127,7 +128,7 @@ The footer under every marketing page: the link columns, then the social row bes
 - ARIA: the `footer` is the `contentinfo` landmark named by `ariaLabel`; each column is titled; the mark link is named by `homeAriaLabel`, each social button by its `label`, the select by `languageAriaLabel`; an external link's name ends with “(opens in a new tab)” from the locale catalog.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): owned by the composed components.
 - `motion-reduce:transition-none` on the mark link's opacity transition.
-- Touch target ≥40×40 px — owned by `icon-button` and `select`; the column links and the Azion mark link rely on the WCAG 2.5.8 spacing exception (see Responsive).
+- Touch target ≥24×24 px — the social buttons are small `icon-button`s (28 px, above the 24 px WCAG 2.5.8 minimum; the design keeps the social row quiet), the select follows `select`; the column links and the Azion mark link rely on the WCAG 2.5.8 spacing exception (see Responsive).
 
 ## Internationalization
 
@@ -150,8 +151,8 @@ The footer under every marketing page: the link columns, then the social row bes
 ## Responsive
 
 - Container queries: none; the bottom bar switches at the `md` viewport breakpoint.
-- Narrow (below `md`, 768 px; the footer reads the viewport, not its container): no Azion mark; the status indicator stacks over the language select at the start of the bar; the columns stack as `footer` lays them out.
-- Touch: social buttons and the select follow `icon-button` and `select`; the column links (26 px apart) and the Azion mark link (16 px tall, clear of the social buttons) are smaller than 24 px and rely on the WCAG 2.5.8 spacing exception; nothing depends on hover.
+- Narrow (below `lg`, 1024 px; the footer reads the viewport, not its container): the Azion mark leaves the social row for the signature band, centred under it; below `md` the status indicator and the language select share the bottom bar at its two ends and the columns stack as `footer` lays them out.
+- Touch: the small social buttons (28 px) and the select follow `icon-button` and `select`; the column links (26 px apart) and the Azion mark link (16 px tall, clear of the social buttons) are smaller than 24 px and rely on the WCAG 2.5.8 spacing exception; nothing depends on hover.
 - Reflow: no horizontal scroll at 320 px and 200 % zoom.
 
 ## Performance

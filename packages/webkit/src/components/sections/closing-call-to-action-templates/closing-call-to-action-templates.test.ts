@@ -44,6 +44,16 @@ const band = (props: Record<string, unknown> = {}) =>
   })
 
 describe('ClosingCallToActionTemplates', () => {
+  it('draws the closing frame by default and drops it when hatch is off', () => {
+    const on = band()
+    expect(on.getByTestId(TESTID).querySelector('[data-hatch="true"]')).not.toBeNull()
+    on.unmount()
+
+    const off = band({ hatch: false })
+    expect(off.getByTestId(TESTID).querySelector('[data-hatch="true"]')).toBeNull()
+    expect(off.getByRole('heading', { level: 2 })).toBeInTheDocument()
+  })
+
   it('renders the band under the default testid with the anchor as its id', () => {
     const { getByTestId } = band()
 

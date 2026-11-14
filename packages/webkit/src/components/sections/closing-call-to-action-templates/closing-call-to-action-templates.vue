@@ -58,6 +58,8 @@
     deployLabel?: string
     /** Accessible name of the scrolling grid of templates. */
     templatesAriaLabel?: string
+    /** Draws the hatched closing frame under the band; turn it off when another closing band stacks directly below and draws the shared frame. */
+    hatch?: boolean
   }
 
   const props = withDefaults(defineProps<Props>(), {
@@ -68,7 +70,8 @@
     secondaryAction: undefined,
     templates: () => [],
     deployLabel: '',
-    templatesAriaLabel: ''
+    templatesAriaLabel: '',
+    hatch: true
   })
 
   const attrs = useAttrs()
@@ -229,6 +232,7 @@
         </FrameBox>
       </SectionModule>
       <FrameBox
+        v-if="hatch"
         borders="none"
         marks="all"
         data-hatch="true"

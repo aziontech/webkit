@@ -77,11 +77,14 @@
     footer?: SiteLayoutFooter
     /** Placeholder of the palette's input. Empty uses the locale catalog (`Search the site`). */
     searchPlaceholder?: string
+    /** Floats the bar over the page's first band instead of stacking it above; the bar stays sticky over the whole page. */
+    navOverlay?: boolean
   }
 
   const props = withDefaults(defineProps<Props>(), {
     footer: undefined,
-    searchPlaceholder: ''
+    searchPlaceholder: '',
+    navOverlay: false
   })
 
   const emit = defineEmits<{
@@ -188,7 +191,8 @@
   <div
     v-bind="$attrs"
     :data-testid="testId"
-    class="flex min-h-dvh w-full min-w-0 flex-col bg-(--bg-canvas) text-(--text-default)"
+    :data-nav-overlay="navOverlay || null"
+    class="flex min-h-dvh w-full min-w-0 flex-col bg-(--bg-canvas) text-(--text-default) data-[nav-overlay]:grid data-[nav-overlay]:grid-rows-[1fr_auto] data-[nav-overlay]:[&>div>header]:[grid-area:1/1/3/2] data-[nav-overlay]:[&>div>header]:self-start data-[nav-overlay]:[&>main]:[grid-area:1/1] data-[nav-overlay]:[&>main+div]:[grid-area:2/1]"
   >
     <SiteNav
       v-bind="navigation"

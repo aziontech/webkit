@@ -19,6 +19,14 @@ const band = (props: Record<string, unknown> = {}) =>
   })
 
 describe('PhotoMarquee', () => {
+  it('sets the anchor as the band id, and no id without one', () => {
+    const { getByTestId, unmount } = band({ anchor: 'band-anchor' })
+
+    expect(getByTestId(TESTID)).toHaveAttribute('id', 'band-anchor')
+    unmount()
+    expect(band().getByTestId(TESTID)).not.toHaveAttribute('id')
+  })
+
   it('renders the band under the default testid', () => {
     const { getByTestId } = band()
 

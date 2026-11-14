@@ -3,10 +3,11 @@ name: closing-call-to-action-templates
 category: sections
 structure: monolithic
 status: implemented
-spec_version: 1
+spec_version: 2
 created: 2026-11-11
-last_updated: 2026-11-12
-checksum: 36541d9337d50b64cddedbf25858f7838f6b080a1baaa7ad427d560446ea3e2e
+last_updated: 2026-11-14
+checksum: 860810cf96a7d781e802df61a652623d57734402866e430f3f9d07b65a58c86b
+template: 2
 ---
 
 # ClosingCallToActionTemplates — Component Spec
@@ -41,7 +42,7 @@ The close for a page whose last ask is "start from a template": a framed split w
 
 ```vue
 <script setup>
-import ClosingCallToActionTemplates from '@aziontech/webkit/closing-call-to-action-templates'
+  import ClosingCallToActionTemplates from '@aziontech/webkit/closing-call-to-action-templates'
 </script>
 
 <template>
@@ -54,8 +55,19 @@ import ClosingCallToActionTemplates from '@aziontech/webkit/closing-call-to-acti
     deploy-label="Deploy"
     templates-aria-label="Templates you can deploy"
     :templates="[
-      { title: 'Next.js Commerce', description: 'Ecommerce template built with Next.js and Shopify.', icon: 'ai-cor ai-next', invertInDark: true, href: '/templates/nextjs-commerce' },
-      { title: 'Astro Odyssey', description: 'A business marketing website built with Astro.', icon: 'ai-cor ai-astro', href: '/templates/astro-odyssey' }
+      {
+        title: 'Next.js Commerce',
+        description: 'Ecommerce template built with Next.js and Shopify.',
+        icon: 'ai-cor ai-next',
+        invertInDark: true,
+        href: '/templates/nextjs-commerce'
+      },
+      {
+        title: 'Astro Odyssey',
+        description: 'A business marketing website built with Astro.',
+        icon: 'ai-cor ai-astro',
+        href: '/templates/astro-odyssey'
+      }
     ]"
   />
 </template>
@@ -63,16 +75,17 @@ import ClosingCallToActionTemplates from '@aziontech/webkit/closing-call-to-acti
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `anchor` | `string` | `''` | false | In-page id set on the band so a `#hash` link can scroll to it. |
-| `title` | `string` | `''` | false | Headline of the band, rendered as its `h2` and naming its region; the band renders nothing when empty. |
-| `description` | `string` | `''` | false | Sentence under the headline. |
-| `primaryAction` | `ClosingCallToActionTemplatesAction` | `undefined` | false | The white button under the copy; `{ label, href, trailing?, target? }` where `trailing` adds the chevron. Omitted when absent. |
-| `secondaryAction` | `ClosingCallToActionTemplatesAction` | `undefined` | false | The outlined button beside the primary one; `{ label, href, trailing?, target? }`. Omitted when absent. |
-| `templates` | `ClosingCallToActionTemplatesTemplate[]` | `[]` | false | The template cards of the scrolling grid beside the copy, in order; each is `{ title, description?, icon?, invertInDark?, href? }`. Templates without a title are skipped and the grid is omitted when none is left. |
-| `deployLabel` | `string` | `''` | false | Label of the deploy button on each card; a card renders its button only when both this and its `href` are set. |
-| `templatesAriaLabel` | `string` | `''` | false | Accessible name of the scrolling grid of templates. |
+| Prop                 | Type                                     | Default     | Required | JSDoc                                                                                                                                                                                                                |
+| -------------------- | ---------------------------------------- | ----------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `anchor`             | `string`                                 | `''`        | false    | In-page id set on the band so a `#hash` link can scroll to it.                                                                                                                                                       |
+| `title`              | `string`                                 | `''`        | false    | Headline of the band, rendered as its `h2` and naming its region; the band renders nothing when empty.                                                                                                               |
+| `description`        | `string`                                 | `''`        | false    | Sentence under the headline.                                                                                                                                                                                         |
+| `primaryAction`      | `ClosingCallToActionTemplatesAction`     | `undefined` | false    | The white button under the copy; `{ label, href, trailing?, target? }` where `trailing` adds the chevron. Omitted when absent.                                                                                       |
+| `secondaryAction`    | `ClosingCallToActionTemplatesAction`     | `undefined` | false    | The outlined button beside the primary one; `{ label, href, trailing?, target? }`. Omitted when absent.                                                                                                              |
+| `templates`          | `ClosingCallToActionTemplatesTemplate[]` | `[]`        | false    | The template cards of the scrolling grid beside the copy, in order; each is `{ title, description?, icon?, invertInDark?, href? }`. Templates without a title are skipped and the grid is omitted when none is left. |
+| `deployLabel`        | `string`                                 | `''`        | false    | Label of the deploy button on each card; a card renders its button only when both this and its `href` are set.                                                                                                       |
+| `templatesAriaLabel` | `string`                                 | `''`        | false    | Accessible name of the scrolling grid of templates.                                                                                                                                                                  |
+| `hatch`              | `boolean`                                | `true`      | false    | Draws the hatched closing frame under the band; turn it off when another closing band stacks directly below and draws the shared frame.                                                                              |
 
 ## Events
 
@@ -89,6 +102,7 @@ import ClosingCallToActionTemplates from '@aziontech/webkit/closing-call-to-acti
 - Layout: from `lg` up the ask and the grid sit side by side; below it they stack, the ask first, and the grid drops to one column below `sm`
 - Overflow: the grid holds a fixed height (32rem, 38rem from `lg`) and scrolls vertically, its top and bottom fading out
 - Empty: when `title` is empty the band renders nothing but its root; without titled templates the grid is omitted and the ask stands alone in the band; a card without `href` (or without `deployLabel`) shows no deploy button
+- `hatch` off: the band renders without its closing frame, so the closing band stacked below draws the page's one close
 
 ## Motion & Animations
 
@@ -96,29 +110,29 @@ _none_
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| typography (card title) | `.text-body-md` |
-| typography (card line) | `.text-body-sm` |
-| card title | `var(--text-default)` |
-| card line | `var(--text-muted)` |
-| card fill | `var(--bg-surface)` |
-| card inset | `var(--spacing-xl)` |
-| cell seam | `var(--border-default)` |
-| ask cell fill | `var(--bg-canvas)` |
-| scroll floor | `var(--spacing-xxl)` |
-| card rhythm | `var(--spacing-md)` |
-| mark tile fill | `var(--bg-surface-raised)` |
-| mark tile rule | `var(--border-muted)` |
-| mark tile shape | `var(--shape-elements)` |
-| deploy prefix mark | `var(--primary)` |
-| closing frame | `var(--spacing-xxl)` |
+| Region                  | Token (DESIGN.md)          |
+| ----------------------- | -------------------------- |
+| typography (card title) | `.text-body-md`            |
+| typography (card line)  | `.text-body-sm`            |
+| card title              | `var(--text-default)`      |
+| card line               | `var(--text-muted)`        |
+| card fill               | `var(--bg-surface)`        |
+| card inset              | `var(--spacing-xl)`        |
+| cell seam               | `var(--border-default)`    |
+| ask cell fill           | `var(--bg-canvas)`         |
+| scroll floor            | `var(--spacing-xxl)`       |
+| card rhythm             | `var(--spacing-md)`        |
+| mark tile fill          | `var(--bg-surface-raised)` |
+| mark tile rule          | `var(--border-muted)`      |
+| mark tile shape         | `var(--shape-elements)`    |
+| deploy prefix mark      | `var(--primary)`           |
+| closing frame           | `var(--spacing-xxl)`       |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 
@@ -129,9 +143,36 @@ _none_
 - `motion-reduce:transition-none motion-reduce:transform-none` — the waving texture, the button hover and the scrolling belong to `texture-material`, `button` and `scroll-area`, which carry their own reduced-motion fallback; this band adds no motion.
 - Touch target ≥40×40 px — the band's actions are large `button`s, the deploy buttons medium.
 
+## Internationalization
+
+No built-in strings: the deploy label, the grid name and every visible text are props from the page JSON (`deployLabel`, `templatesAriaLabel`).
+
+- Formatting: none.
+
+## Right-to-left
+
+- Layout: logical utilities only; the ask and the grid swap sides under `dir="rtl"` and the divider follows the start edge.
+- Icons: the deploy chevron mirrors with `button`; the template marks are not mirrored.
+- Keyboard: no arrow-key handling beyond the scroll area's own.
+- User data: template titles render as given.
+
+## Responsive
+
+- Container queries: none; the split switches at the `lg` viewport breakpoint.
+- Narrow (below `lg`): the ask stacks over the grid; below `sm` the grid drops to one column.
+- Touch: the band's actions are large and the deploy buttons medium; the card hover only lights the button, which works without it.
+- Reflow: no horizontal scroll at 320 px and 200 % zoom; the grid scrolls vertically inside its fixed height.
+
+## Performance
+
+- Bundle budget: 21 KB gzip, the `.size-limit.json` entry `closing-call-to-action-templates`.
+- Runtime budget: none: static; the texture animates on the compositor.
+- Heavy parts: none; template marks are icon glyphs.
+
 ## Examples
 
 - Default
+- Stacked — justification: `hatch` off is a layout no other example shows (the band without its closing frame, as when another closing band follows).
 
 ## Constraints — DO NOT
 

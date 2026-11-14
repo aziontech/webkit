@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { useMediaQuery } from '@vueuse/core'
   import {
     type ComponentPublicInstance,
     computed,
@@ -168,6 +169,12 @@
     await nextTick()
     const button = opener.value?.$el as globalThis.HTMLElement | null | undefined
     button?.focus()
+  })
+
+  const barQuery = useMediaQuery('(min-width: 80rem)')
+
+  watch(barQuery, (wide) => {
+    if (wide) navOpen.value = false
   })
 
   const onNavigate = (_event: globalThis.MouseEvent, node: MenuNode) => {

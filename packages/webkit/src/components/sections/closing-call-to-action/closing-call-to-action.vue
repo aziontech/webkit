@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed, useAttrs } from 'vue'
+  import { computed, defineAsyncComponent, useAttrs } from 'vue'
 
   import Button from '../../actions/button/button.vue'
   import FrameBox from '../../layout/frame-box/frame-box.vue'
@@ -13,7 +13,7 @@
   })
 
   /** Layout of the band. */
-  export type ClosingCallToActionKind = 'split' | 'panel' | 'primary'
+  export type ClosingCallToActionKind = 'split' | 'panel' | 'primary' | 'frame'
 
   /** One call to action of the band. */
   export type ClosingCallToActionAction = {
@@ -26,7 +26,7 @@
   }
 
   interface Props {
-    /** Layout of the band: `split` is a raised lead cell beside an aside cell over a tall closing frame, `panel` one surface over a short closing frame, `primary` a centred ask under a pixelated texture over a tall closing frame. */
+    /** Layout of the band: `split` is a raised lead cell beside an aside cell over a tall closing frame, `panel` one surface over a short closing frame, `primary` a centred ask under a pixelated texture over a tall closing frame, `frame` the tall closing frame alone. */
     kind?: ClosingCallToActionKind
     /** In-page id set on the band so a `#hash` link can scroll to it. */
     anchor?: string
@@ -42,6 +42,10 @@
     primaryAction?: ClosingCallToActionAction
     /** The outlined button of the band, in the aside cell in `split` and beside the primary one in `panel` and `primary`; `{ label, href, trailing? }`. Omitted when absent. */
     secondaryAction?: ClosingCallToActionAction
+    /** Shell command on a copyable line before the actions, copied as written; drawn in `split`, `panel` and `primary`. */
+    command?: string
+    /** Draws the hatched closing frame under the band; turn it off when another closing band stacks directly below and draws the shared frame. */
+    hatch?: boolean
   }
 
   const props = withDefaults(defineProps<Props>(), {
@@ -52,8 +56,14 @@
     titleMuted: '',
     description: '',
     primaryAction: undefined,
-    secondaryAction: undefined
+    secondaryAction: undefined,
+    command: '',
+    hatch: true
   })
+
+  const SectionCommand = defineAsyncComponent(
+    () => import('../section-command/section-command.vue')
+  )
 
   const attrs = useAttrs()
 
@@ -65,8 +75,12 @@
 
   const isPrimary = computed(() => props.kind === 'primary')
 
+  const isFrame = computed(() => props.kind === 'frame')
+
+  const bandKind = computed(() => (props.kind === 'frame' ? 'split' : props.kind))
+
   const hasActions = computed(() =>
-    Boolean(props.primaryAction || (!isSplit.value && props.secondaryAction))
+    Boolean(props.command || props.primaryAction || (!isSplit.value && props.secondaryAction))
   )
 </script>
 
@@ -78,14 +92,14 @@
     :data-kind="kind"
     class="group scroll-mt-(--spacing-xxl)"
   >
-    <template v-if="title">
+    <template v-if="title && !isFrame">
       <SectionModule
         :divided="false"
         :padded="false"
       >
         <CallToAction
           framed
-          :kind="kind"
+          :kind="bandKind"
           :eyebrow="isPrimary ? '' : eyebrow"
           :title="title"
           :title-muted="isSplit ? titleMuted : ''"
@@ -105,6 +119,10 @@
             v-if="hasActions"
             #actions
           >
+            <SectionCommand
+              v-if="command"
+              :value="command"
+            />
             <Button
               v-if="primaryAction"
               :label="primaryAction.label"
@@ -143,14 +161,15 @@
           </template>
         </CallToAction>
       </SectionModule>
-      <FrameBox
-        borders="none"
-        marks="all"
-        data-hatch="true"
-        class="h-[calc(var(--spacing-xxl)*2)] group-data-[kind=panel]:h-(--spacing-xxl)"
-      >
-        <TextureMaterial kind="lines" />
-      </FrameBox>
     </template>
+    <FrameBox
+      v-if="isFrame || (title && hatch)"
+      borders="none"
+      marks="all"
+      data-hatch="true"
+      class="h-[calc(var(--spacing-xxl)*2)] group-data-[kind=panel]:h-(--spacing-xxl)"
+    >
+      <TextureMaterial kind="lines" />
+    </FrameBox>
   </div>
 </template>

@@ -509,6 +509,10 @@ export const helpPanel = {
   tutorialProgress: '{complete} of {total} complete'
 } as const
 
+export const heroBand = {
+  carouselLabel: 'Proven on mission-critical workloads'
+} as const
+
 export const heroForm = {
   search: 'Search',
   empty: 'No results found.'
@@ -1282,6 +1286,7 @@ export const en = {
   gaugeChart,
   globalHeader,
   helpPanel,
+  heroBand,
   heroForm,
   hotspot,
   keyValuePairs,

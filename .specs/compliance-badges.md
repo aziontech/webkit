@@ -3,10 +3,11 @@ name: compliance-badges
 category: sections
 structure: monolithic
 status: implemented
-spec_version: 1
+spec_version: 2
 created: 2026-11-04
-last_updated: 2026-11-11
-checksum: 109d4b60edc1533a50355957e3e21bb27557d0eaac7eb14fe71777cfa9643dcd
+last_updated: 2026-11-14
+checksum: b954da24f34121d7772d7637c2791e18082647ec575a3f9dc85443353982245b
+template: 2
 ---
 
 # ComplianceBadges — Component Spec
@@ -63,6 +64,7 @@ The compliance band: a framed media split whose copy states the certifications a
 | `ariaLabel`      | `string`                          | `''`        | false    | Accessible name of the badge list.                                                                                |
 | `certifications` | `ComplianceBadgesCertification[]` | `[]`        | false    | The badges, in order; each is `{ label, badge, alt }` where `badge` is the picture URL and `label` the pill text. |
 | `primaryAction`  | `ComplianceBadgesAction`          | `undefined` | false    | The closing "see more" cell; `{ label, href }`. Omitted when absent.                                              |
+| `anchor`         | `string`                          | `''`        | false    | In-page id set on the band so a `#hash` link can scroll to it.                                                    |
 
 ## Events
 
@@ -101,6 +103,7 @@ The compliance band: a framed media split whose copy states the certifications a
 | cell rhythm           | `var(--spacing-lg)`        |
 | cell inset            | `var(--spacing-xl)`        |
 | pill gap              | `var(--spacing-xs)`        |
+| anchor scroll offset  | `var(--spacing-xxl)`       |
 
 ## Theme gaps
 
@@ -117,12 +120,31 @@ The compliance band: a framed media split whose copy states the certifications a
 - `motion-reduce:transition-none motion-reduce:transform-none` on both transitions above.
 - Touch target ≥40×40 px — the see-more cell is a full grid cell.
 
+## Internationalization
+
+No built-in strings: every visible and announced text is a prop from the page JSON.
+
+- Formatting: none.
+
 ## Right-to-left
 
 - Layout: logical utilities only (`ms-`/`me-`, `ps-`/`pe-`, `start-`/`end-`, `text-start`), so the layout mirrors under `dir="rtl"`.
 - Icons: the "more" chevron mirrors (`rtl:-scale-x-100`) and its hover nudge moves toward the end edge.
 - Keyboard: no horizontal arrow-key logic.
 - User data: none.
+
+## Responsive
+
+- Container queries: none of its own; `media-split` stacks the copy over the grid below its breakpoint.
+- Narrow (below `md`): the badge grid drops from three columns to two.
+- Touch: the see-more cell is a full grid cell; nothing depends on hover.
+- Reflow: no horizontal scroll at 320 px and 200 % zoom.
+
+## Performance
+
+- Bundle budget: 9 KB gzip, the `.size-limit.json` entry `compliance-badges`.
+- Runtime budget: none: static.
+- Heavy parts: none.
 
 ## Examples
 
