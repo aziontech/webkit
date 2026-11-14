@@ -47,7 +47,7 @@ Choice cards, one horizontal `Field` with a `RadioButton` per environment of the
 
 ### H. Projects impacted and commit — `Item`, `Tag`, `Tooltip`, `Popover`, `PanelFooter`, `Button` (required on a service)
 
-Every project the chosen environment's shared Deployment Settings publish to, grouped by environment, the current one tagged Selected, with its domains shown like the Project card. `PanelFooter` holds one primary medium `Button` reading Deploy, alone on the right, of `type="submit"`.
+Every project the chosen environment's shared Deployment Settings publish to, grouped by environment, the current one tagged Selected, with its domains shown like the Project card. `PanelFooter` holds one primary medium `Button` reading Deploy on the right, of `type="submit"`. On its left, once a version differs from the live one, one muted line counts the changes and names the environment they go live in.
 
 ## Do
 
@@ -61,6 +61,9 @@ Every project the chosen environment's shared Deployment Settings publish to, gr
 - Say in an info `Alert` when the deploy replaces another service on the chosen project, naming both.
 - When a choice changes what the deploy reaches, reload that section in place: `Skeleton` rows, `aria-busy` on the region and one `role="status"` line; never clear the whole drawer.
 - Tag a dependency other services reference as Shared, name them in a `Tooltip`, and say once that a shared dependency deploys at one version.
+- Resolve the drawer in place: while the resources and environments load, keep the section titles and render `Skeleton` blocks shaped like the Resources card and the environment cards, with `aria-busy` and one status line, and Deploy disabled.
+- When the targets fail to load, replace the sections with one danger `Alert` saying what failed and an outlined Retry; Deploy stays disabled.
+- When the project has no environment, show the Environment section as a bordered small `EmptyState` with Add environment, and say in the footer why Deploy is disabled. A Resources card with nothing bound says so in one line instead of disappearing.
 - When a dependency has no ready version, disable Deploy and say why in the footer, next to the button it disables.
 - After Deploy, follow `platform/states/async-submit`: the drawer closes and one toast per run turns from Deploying… into the outcome, with Edit (reopens the drawer with the same choices) and Redeploy.
 - Raise toasts with `toast` only; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shells/console` does), so this page body never renders a `Toaster`.
@@ -82,6 +85,9 @@ Every project the chosen environment's shared Deployment Settings publish to, gr
 - **Version control:** "Change version"; search placeholder and `aria-label` "Search versions"; footer "Load 10 more".
 - **Project modes:** "Use existing" and "Create new".
 - **Environment descriptions:** one sentence on how it serves, e.g. "Live traffic. One version serves the domain, and deploying replaces it."
+- **Footer summary:** "1 change goes live in Production." or "3 changes go live in Production."
+- **Load failure:** "The deploy targets for project-01 couldn't be loaded. Check your connection and try again." with "Retry".
+- **No environment:** "No environment on this project", one sentence on why there is no target, and "Add environment"; footer "Add an environment to deploy."
 - **Tags:** one or two words, e.g. "Ready", "Active", "Last used", "Selected", "New".
 - **In progress:** the progressive verb with `…`, e.g. "Building…".
 - **Run toast:** "Deploying web-app…" with "<version> to <environments>. It keeps running if you leave."; the outcome "web-app is live in Production." or "web-app wasn't deployed." with what failed and that nothing changed; actions "Edit" and "Redeploy".
@@ -104,11 +110,14 @@ Every project the chosen environment's shared Deployment Settings publish to, gr
 
 ## States
 
-- Service: a service deploying environment first; Resources, Project with the last used project, Environment and Projects impacted.
+- Service: a service deploying environment first; Resources, Project with the last used project, Environment and Projects impacted, and the footer counting the one version change that goes live in Production.
 - Building: no pinned version; titled Build and deployment with a Building row in place of Resources, the other sections faded and inert, Deploy disabled.
 - ServiceProjectFirst: the project-first flow; Resources, the Project card with the last used project and a Change popover, then every environment.
 - Project: deploying a project; its service and storage in Resources, Production and Preview, and a warning about other projects that share its storefront settings.
 - Environment: a locked Strict environment, an Also deploys tag, the replace and multi-environment `Alert`s, Projects impacted grouped per environment and reloaded on switch; the run ends in a success toast with Edit and Redeploy.
+- Loading: the resources and environments resolving; `Skeleton` blocks under the Resources and Environment titles, an `aria-busy` region with a status line, Deploy disabled.
+- LoadFailed: the deploy targets failed to load; a danger `Alert` with Retry, which reloads them as Skeletons, and Deploy disabled.
+- NoEnvironment: nothing bound and no environment; a one-line empty Resources card, an `EmptyState` with Add environment, and Deploy disabled with the reason in the footer.
 - Dependencies: the open Dependencies disclosure with a Shared dependency, a not-versioned integration and a dependency with no ready version that blocks Deploy; changing the service version reloads the list. The first run fails and its toast offers Edit and Redeploy; Redeploy succeeds.
 
 ## Related
