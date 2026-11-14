@@ -31,6 +31,11 @@
       "name": "Installed",
       "summary": "An installed integration shows the Installed tag and swaps Install for Configure; with `href` the tile is a link to the integration's page.",
       "file": "installed.vue"
+    },
+    {
+      "name": "Featured",
+      "summary": "`featured` turns the integration tile into a highlight for a short row above the catalog: the mark, the name, the vendor and the description centred on a raised surface with a primary glow at the top, and the context badge in the corner.",
+      "file": "featured.vue"
     }
   ]
 }
