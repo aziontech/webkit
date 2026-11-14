@@ -19,7 +19,9 @@ Example: [`site-terminal.vue`](./site-terminal.vue)
 Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` are bound straight onto the component:
 
 - `eyebrow`, `title` and `description` are the headline copy.
+- `script` is a recorded Azion CLI session the terminal types live, `start` or `deploy`; it wins over `session`.
 - `session` is the terminal session itself, commands and output verbatim; output lines are comments so the copied text still runs.
+- `anchor` is the band's id for in-page links.
 - `copyAriaLabel` names the copy button for screen readers.
 - `primaryAction` is the outlined button beside the headline, a `label`, an `href` and `trailing`. Leave it out to drop the button.
 

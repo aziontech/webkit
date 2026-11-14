@@ -106,6 +106,39 @@ describe('CliTerminal', () => {
     expect(queryByTestId('code-code-block')).toBeNull()
   })
 
+  it('sets the anchor as the band id', () => {
+    const { getByTestId } = band({ anchor: 'cli' })
+
+    expect(getByTestId(TESTID)).toHaveAttribute('id', 'cli')
+  })
+
+  it.each([
+    ['start', 'cli-terminal-start'],
+    ['deploy', 'cli-terminal-deploy']
+  ] as const)(
+    'types the %s script with its product widget instead of the session',
+    async (script, name) => {
+      const { findByTestId, queryByTestId } = band({ script })
+
+      expect(await findByTestId('content-product-widget')).toHaveAttribute('data-name', name)
+      expect(queryByTestId('code-code-block')).toBeNull()
+    }
+  )
+
+  it('renders the band from a script alone, with no session', async () => {
+    const { findByTestId, getByRole } = band({ script: 'deploy', session: '' })
+
+    expect(getByRole('heading', { level: 2, name: TITLE })).toBeInTheDocument()
+    expect(await findByTestId('content-product-widget')).toBeInTheDocument()
+  })
+
+  it('marks the script stage entered once it scrolls into view', async () => {
+    const { findByTestId } = band({ script: 'deploy' })
+
+    const widget = await findByTestId('content-product-widget')
+    await expect.poll(() => widget.parentElement?.hasAttribute('data-entered')).toBe(true)
+  })
+
   it('has no a11y violations', async () => {
     const { container } = band()
 
