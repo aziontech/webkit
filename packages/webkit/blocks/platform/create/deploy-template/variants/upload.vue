@@ -13,7 +13,7 @@
 
   interface ProjectFile {
     path: string
-    size: string
+    bytes: number
     glyph: string
   }
 
@@ -28,14 +28,49 @@
   ]
 
   const files: ProjectFile[] = [
-    { path: 'about.html', size: '4.2 KB', glyph: 'pi pi-code' },
-    { path: 'pricing.html', size: '6.8 KB', glyph: 'pi pi-code' },
-    { path: 'robots.txt', size: '68 B', glyph: 'pi pi-file' },
-    { path: 'assets/app.js', size: '31.0 KB', glyph: 'pi pi-code' },
-    { path: 'assets/logo.svg', size: '2.1 KB', glyph: 'pi pi-image' },
-    { path: 'assets/styles.css', size: '12.4 KB', glyph: 'pi pi-palette' },
-    { path: 'images/hero.webp', size: '184.5 KB', glyph: 'pi pi-image' }
+    { path: 'about.html', bytes: 4301, glyph: 'pi pi-code' },
+    { path: 'pricing.html', bytes: 6963, glyph: 'pi pi-code' },
+    { path: 'robots.txt', bytes: 68, glyph: 'pi pi-file' },
+    { path: 'assets/app.js', bytes: 31744, glyph: 'pi pi-code' },
+    { path: 'assets/logo.svg', bytes: 2150, glyph: 'pi pi-image' },
+    { path: 'assets/styles.css', bytes: 12698, glyph: 'pi pi-palette' },
+    { path: 'images/hero.webp', bytes: 188928, glyph: 'pi pi-image' }
   ]
+
+  const FILE_LIMIT = 100
+  const folderName = 'acme-landing'
+
+  const byteFormat = new Intl.NumberFormat('en-US', {
+    style: 'unit',
+    unit: 'byte',
+    unitDisplay: 'narrow'
+  })
+  const kilobyteFormat = new Intl.NumberFormat('en-US', {
+    style: 'unit',
+    unit: 'kilobyte',
+    unitDisplay: 'short',
+    maximumFractionDigits: 1
+  })
+  const megabyteFormat = new Intl.NumberFormat('en-US', {
+    style: 'unit',
+    unit: 'megabyte',
+    unitDisplay: 'short',
+    maximumFractionDigits: 1
+  })
+  const countFormat = new Intl.NumberFormat('en-US')
+
+  function formatSize(bytes: number): string {
+    if (bytes < 1024) return byteFormat.format(bytes)
+    if (bytes < 1024 * 1024) return kilobyteFormat.format(bytes / 1024)
+    return megabyteFormat.format(bytes / (1024 * 1024))
+  }
+
+  const totalBytes = files.reduce((sum, file) => sum + file.bytes, 0)
+  const folderSummary = `${folderName} · ${countFormat.format(files.length)} ${
+    files.length === 1 ? 'file' : 'files'
+  } · ${formatSize(totalBytes)}`
+  const shownFiles = files.slice(0, FILE_LIMIT)
+  const hiddenFileCount = files.length - shownFiles.length
 
   const rootOptions = files
     .filter((file) => !file.path.includes('/'))
@@ -105,29 +140,33 @@
       <div
         class="layout-column-focused relative flex min-h-full flex-col items-center gap-(--spacing-xl) px-(--spacing-md) py-(--spacing-xxl)"
       >
-        <div
-          class="flex w-full items-start gap-(--spacing-md) overflow-hidden rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) p-(--spacing-md)"
-        >
-          <span
-            class="flex size-10 shrink-0 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
-          >
-            <i
-              class="pi pi-folder text-body-lg leading-none text-(--text-default)"
-              aria-hidden="true"
-            />
-          </span>
+        <Card class="w-full">
+          <template #content>
+            <div class="flex w-full items-start gap-(--spacing-md)">
+              <span
+                class="flex size-10 shrink-0 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
+              >
+                <i
+                  class="pi pi-folder text-body-lg leading-none text-(--text-default)"
+                  aria-hidden="true"
+                />
+              </span>
 
-          <div class="flex min-w-0 flex-1 flex-col gap-(--spacing-md)">
-            <div class="flex w-full min-w-0 flex-col overflow-hidden">
-              <span class="flex items-center gap-(--spacing-xs)">
-                <span class="truncate text-heading-xxs text-(--text-default)">acme-landing</span>
-              </span>
-              <span class="text-body-xs text-(--text-muted)">
-                Deploy this project straight from your machine.
-              </span>
+              <div class="flex min-w-0 flex-1 flex-col gap-(--spacing-md)">
+                <div class="flex w-full min-w-0 flex-col overflow-hidden">
+                  <span class="flex items-center gap-(--spacing-xs)">
+                    <span class="truncate text-heading-xxs text-(--text-default)"
+                      >acme-landing</span
+                    >
+                  </span>
+                  <span class="text-body-xs text-(--text-muted)">
+                    Deploy this project straight from your machine.
+                  </span>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
+          </template>
+        </Card>
 
         <div
           data-phase="form"
@@ -190,34 +229,47 @@
                         />
                       </span>
                       <span class="text-label-md text-(--text-default)">
-                        acme-landing · 7 files · 241 KB
+                        {{ folderSummary }}
                       </span>
                     </div>
-                    <ul
-                      class="max-h-56 list-none overflow-auto overscroll-contain border-t border-(--border-muted) p-0"
-                      aria-label="Files in acme-landing"
+                    <div
+                      role="region"
+                      tabindex="0"
+                      :aria-label="`Files in ${folderName}`"
+                      class="max-h-56 overflow-auto overscroll-contain border-t border-(--border-muted) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-(--ring-color)"
                     >
-                      <li
-                        v-for="file in files"
-                        :key="file.path"
-                        class="flex items-center gap-(--spacing-sm) px-(--spacing-sm) py-(--spacing-xs)"
+                      <ul
+                        class="list-none p-0"
+                        :aria-label="`Files in ${folderName}`"
                       >
-                        <i
-                          :class="file.glyph"
-                          class="shrink-0 text-body-sm leading-none text-(--text-muted)"
-                          aria-hidden="true"
-                        />
-                        <span
-                          class="min-w-0 flex-1 truncate text-body-code-sm text-(--text-default)"
-                          :title="file.path"
+                        <li
+                          v-for="file in shownFiles"
+                          :key="file.path"
+                          class="flex items-center gap-(--spacing-sm) px-(--spacing-sm) py-(--spacing-xs)"
                         >
-                          {{ file.path }}
-                        </span>
-                        <span class="shrink-0 tabular-nums text-body-xs text-(--text-muted)">
-                          {{ file.size }}
-                        </span>
-                      </li>
-                    </ul>
+                          <i
+                            :class="file.glyph"
+                            class="shrink-0 text-body-sm leading-none text-(--text-muted)"
+                            aria-hidden="true"
+                          />
+                          <span
+                            class="min-w-0 flex-1 truncate text-body-code-sm text-(--text-default)"
+                            :title="file.path"
+                          >
+                            {{ file.path }}
+                          </span>
+                          <span class="shrink-0 tabular-nums text-body-xs text-(--text-muted)">
+                            {{ formatSize(file.bytes) }}
+                          </span>
+                        </li>
+                      </ul>
+                      <p
+                        v-if="hiddenFileCount > 0"
+                        class="px-(--spacing-sm) py-(--spacing-xs) text-body-xs text-(--text-muted)"
+                      >
+                        and {{ countFormat.format(hiddenFileCount) }} more
+                      </p>
+                    </div>
                   </div>
 
                   <Field
