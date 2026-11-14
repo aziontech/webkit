@@ -62,32 +62,39 @@ component.
 
 ## 3. Renamed props and values
 
-| Component         | v5                 | v6                   |
-| ----------------- | ------------------ | -------------------- |
-| `accordion`       | `value`            | `modelValue`         |
-| `alert`           | `severity="error"` | `severity="danger"`  |
-| `button`          | `kind="text"`      | `kind="transparent"` |
-| `code-block`      | `border`           | `bordered`           |
-| `code-block`      | `value`            | `modelValue`         |
-| `doc-card`        | `overline`         | `eyebrow`            |
-| `doc-card`        | `link`             | `linkLabel`          |
-| `doc-card-group`  | `mobileCols`       | `mobileColumns`      |
-| `doc-tooltip`     | `headline`         | `title`              |
-| `doc-tooltip`     | `cta`              | `linkLabel`          |
-| `item`            | `kind="outline"`   | `kind="outlined"`    |
-| `log-view`        | `border`           | `bordered`           |
-| `log-view`        | `showCopy`         | `copyable`           |
-| `media-tabs`      | `autoPlay`         | `autoplay`           |
-| `media-tabs`      | `autoPlayInterval` | `autoplayInterval`   |
-| `navigation-menu` | `value`            | `modelValue`         |
-| `quote-tabs`      | `autoPlay`         | `autoplay`           |
-| `quote-tabs`      | `autoPlayInterval` | `autoplayInterval`   |
-| `severity-tag`    | `level`            | `severity`           |
-| `shell-mockup`    | `still="true"`     | `animated="false"`   |
-| `shell-mockup`    | `still="false"`    | `animated="true"`    |
-| `table`           | `border`           | `bordered`           |
-| `tabs`            | `value`            | `modelValue`         |
-| `theme-switcher`  | `value`            | `modelValue`         |
+| Component          | v5                 | v6                   |
+| ------------------ | ------------------ | -------------------- |
+| `accordion`        | `value`            | `modelValue`         |
+| `alert`            | `severity="error"` | `severity="danger"`  |
+| `button`           | `kind="text"`      | `kind="transparent"` |
+| `calendar`         | `timezone`         | `timeZone`           |
+| `calendar`         | `timezones`        | `timeZones`          |
+| `calendar`         | `showTimezone`     | `showTimeZone`       |
+| `checkbox`         | `inputId`          | `id`                 |
+| `code-block`       | `border`           | `bordered`           |
+| `code-block`       | `value`            | `modelValue`         |
+| `doc-card`         | `overline`         | `eyebrow`            |
+| `doc-card`         | `link`             | `linkLabel`          |
+| `doc-card-group`   | `mobileCols`       | `mobileColumns`      |
+| `doc-tooltip`      | `headline`         | `title`              |
+| `doc-tooltip`      | `cta`              | `linkLabel`          |
+| `file-token-group` | `alignment`        | `orientation`        |
+| `item`             | `kind="outline"`   | `kind="outlined"`    |
+| `log-view`         | `border`           | `bordered`           |
+| `log-view`         | `showCopy`         | `copyable`           |
+| `media-tabs`       | `autoPlay`         | `autoplay`           |
+| `media-tabs`       | `autoPlayInterval` | `autoplayInterval`   |
+| `navigation-menu`  | `value`            | `modelValue`         |
+| `quote-tabs`       | `autoPlay`         | `autoplay`           |
+| `quote-tabs`       | `autoPlayInterval` | `autoplayInterval`   |
+| `severity-tag`     | `level`            | `severity`           |
+| `shell-mockup`     | `still="true"`     | `animated="false"`   |
+| `shell-mockup`     | `still="false"`    | `animated="true"`    |
+| `split-button`     | `model`            | `items`              |
+| `table`            | `border`           | `bordered`           |
+| `tabs`             | `value`            | `modelValue`         |
+| `textarea`         | `resizable`        | `resize`             |
+| `theme-switcher`   | `value`            | `modelValue`         |
 
 ## 4. Manual changes
 
@@ -478,6 +485,24 @@ components the same locale, `t()` and `Intl` helpers.
 
 - `TagEditor` reserves no key prefix by default (`reservedPrefix` was `'azion:'`). Pass
   `reserved-prefix="azion:"` where the platform reserves it.
+
+These old names keep working in v6, marked `@deprecated`, and go in 7.0. The codemod rewrites the
+props in section 3; move the rest by hand:
+
+- `Calendar`: `v-model:timezone` → `v-model:time-zone`, `horizontal` → `orientation="horizontal"`
+  (the same names `DateRangePicker` uses).
+- `Checkbox`: a boolean `v-model` needs no `binary` (leave `value` unset); `tabindex` is an
+  attribute, not a prop.
+- `FileTokenGroup`: listen to `remove` instead of `dismiss` (both fire in v6);
+  `FileTokenGroupAlignment` → `FileTokenGroupOrientation`.
+- `Input`, `PasswordInput`, `Select.Trigger`, `MultiSelect.Trigger`: the `#iconLeft` slot →
+  `#prefix`, `#iconRight` → `#suffix`.
+- `MiniButton`: `:show-icon="false"` → `icon=""`.
+- `Select`: `multiple` → `MultiSelect`.
+- `SplitButton`: read or restore the mirrored action with `v-model:selected`.
+- `Switch`: `focused` → `autofocus`; `SwitchType` → `SwitchKind`.
+- `ToggleGroup`: a disabled option without `locked` still shows the lock; set `locked: true` on
+  the options that need it, since 7.0 draws the lock only for `locked`.
 
 ## 5. Field report: Azion Console
 

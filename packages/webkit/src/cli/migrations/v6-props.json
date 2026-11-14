@@ -3,10 +3,18 @@
   "accordion-root": { "value": "modelValue" },
   "alert": { "severity": { "to": "severity", "values": { "error": "danger" } } },
   "button": { "kind": { "to": "kind", "values": { "text": "transparent" } } },
+  "calendar": { "showTimezone": "showTimeZone", "timezones": "timeZones", "timezone": "timeZone" },
+  "calendar-root": {
+    "showTimezone": "showTimeZone",
+    "timezones": "timeZones",
+    "timezone": "timeZone"
+  },
+  "checkbox": { "inputId": "id" },
   "code-block": { "border": "bordered", "value": "modelValue" },
   "doc-card": { "overline": "eyebrow", "link": "linkLabel" },
   "doc-card-group": { "mobileCols": "mobileColumns" },
   "doc-tooltip": { "headline": "title", "cta": "linkLabel" },
+  "file-token-group": { "alignment": "orientation" },
   "item": {
     "kind": { "to": "kind", "values": { "outline": "outlined" } },
     "asChild": {
@@ -38,8 +46,10 @@
   "shell-mockup-root": {
     "still": { "to": "animated", "values": { "true": "false", "false": "true" } }
   },
+  "split-button": { "model": "items" },
   "table": { "border": "bordered" },
   "table-root": { "border": "bordered" },
   "tabs": { "value": "modelValue" },
+  "textarea": { "resizable": "resize" },
   "theme-switcher": { "value": "modelValue" }
 }
