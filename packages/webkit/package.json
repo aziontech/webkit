@@ -755,6 +755,10 @@
       "types": "./types/components/data/table/table-refresh-button/table-refresh-button.vue.d.ts",
       "default": "./src/components/data/table/table-refresh-button/table-refresh-button.vue"
     },
+    "./table-live-button": {
+      "types": "./types/components/data/table/table-live-button/table-live-button.vue.d.ts",
+      "default": "./src/components/data/table/table-live-button/table-live-button.vue"
+    },
     "./property-filter": {
       "types": "./types/components/data/property-filter/property-filter.vue.d.ts",
       "default": "./src/components/data/property-filter/property-filter.vue"

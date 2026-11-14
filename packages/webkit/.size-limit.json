@@ -1747,6 +1747,11 @@
     "limit": "8.3 KB"
   },
   {
+    "name": "table-live-button",
+    "path": "src/components/data/table/table-live-button/table-live-button.vue",
+    "limit": "3.6 KB"
+  },
+  {
     "name": "pagination",
     "path": "src/components/data/pagination/index.ts",
     "limit": "5 KB"

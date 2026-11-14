@@ -41,11 +41,13 @@
   import { useTranslate } from '../../../composables/use-locale/use-translate'
   import * as en from '../../../i18n/messages/en'
   import { downloadCsv, toCsv } from '../../../utils/csv'
+  import Button from '../../actions/button/button.vue'
   import IconButton from '../../actions/icon-button/icon-button.vue'
   import EmptyState from '../../feedback/empty-state/empty-state.vue'
   import Skeleton from '../../feedback/skeleton/skeleton.vue'
   import Checkbox from '../../inputs/checkbox/checkbox.vue'
   import ScrollArea from '../../layout/scroll-area/scroll-area.vue'
+  import Spinner from '../../utils/spinner/spinner.vue'
   import Pagination from '../pagination/pagination.vue'
   import {
     type AppliedFilter,
@@ -171,6 +173,10 @@
       getSubRows?: (row: TRow) => TRow[] | undefined
       /** v-model:expanded (TanStack ExpandedState): `true` for every row, or `{ [rowId]: true }`. */
       expanded?: ExpandedState
+      /** Data-driven mode: more rows exist after the last one. The table emits `load-more` as the end of the rows nears the viewport (also in `virtual` mode) and offers a Load more button; false shows the end-of-results line once more rows were requested. */
+      moreRows?: boolean
+      /** Data-driven mode: the next rows are loading; shows a loading line under the rows and holds further `load-more` requests. */
+      loadingMore?: boolean
     }>(),
     {
       maxHeight: '',
@@ -213,7 +219,9 @@
       reorderable: false,
       rowReorderable: undefined,
       getSubRows: undefined,
-      expanded: undefined
+      expanded: undefined,
+      moreRows: false,
+      loadingMore: false
     }
   )
 
@@ -233,7 +241,11 @@
     'update:data': [value: TRow[]]
     reorder: [payload: { from: number; to: number; row: TRow }]
     'update:expanded': [value: ExpandedState]
+    'load-more': []
   }>()
+
+  /** Live tail: while true new rows are expected on top; the table scrolls to the newest row and marks the first row older than the live start. Bound with v-model:live; Table.LiveButton toggles it. */
+  const live = defineModel<boolean>('live', { default: false })
 
   defineSlots<
     {
@@ -258,7 +270,11 @@
   >()
 
   const attrs = useAttrs()
-  const { t } = useTranslate({ table: en.table, tableReorder: en.tableReorder })
+  const { t } = useTranslate({
+    table: en.table,
+    tableReorder: en.tableReorder,
+    tableLoadMore: en.tableLoadMore
+  })
 
   const headerDensity = computed<TableDensity>(() =>
     props.headerKind === 'compact' ? 'compact' : props.density
@@ -754,6 +770,8 @@
     selectedCount,
     clearSelection,
     loading: computed(() => props.loading),
+    live: computed(() => live.value),
+    setLive: (value: boolean) => (live.value = value),
     filterFields,
     appliedFilters,
     applyFilters,
@@ -1191,7 +1209,68 @@
       lazyLimit.value = Math.min(lazyLimit.value, rowsInReach())
     }
   )
+
+  const moreRequested = ref<boolean>(false)
+  const requestMore = (): void => {
+    if (!props.moreRows || props.loadingMore || props.loading) return
+    moreRequested.value = true
+    emit('load-more')
+  }
+  const moreShown = computed<boolean>(
+    () =>
+      dataDriven.value &&
+      !props.loading &&
+      rowTotal.value > 0 &&
+      (props.moreRows || props.loadingMore || moreRequested.value)
+  )
+  const moreArmed = computed<boolean>(
+    () => moreShown.value && props.moreRows && !props.loadingMore && !lazyActive.value
+  )
+  const moreSentinel = ref<HTMLElement | null>(null)
+  let moreObserver: IntersectionObserver | null = null
+  const observeMore = (): void => {
+    moreObserver?.disconnect()
+    moreObserver = null
+    const el = moreSentinel.value
+    if (!el || !moreArmed.value || typeof IntersectionObserver === 'undefined') return
+    moreObserver = new IntersectionObserver(
+      (entries) => {
+        if (entries[entries.length - 1]?.isIntersecting) requestMore()
+      },
+      { root: scrollParent(el), rootMargin: `${LAZY_MARGIN}px` }
+    )
+    moreObserver.observe(el)
+  }
+  watch([moreSentinel, moreArmed, rowTotal], observeMore, { flush: 'post' })
+
+  const liveStartId = ref<string | null>(null)
+  const liveBoundaryId = computed<string | null>(() => {
+    const id = liveStartId.value
+    if (!live.value || id === null) return null
+    return (rowIndexById.value.get(id) ?? 0) > 0 ? id : null
+  })
+  const scrollToNewest = (): void => {
+    const el = viewportEl()
+    if (el) el.scrollTop = 0
+    scrollTop.value = 0
+  }
+  watch(
+    live,
+    (on) => {
+      liveStartId.value = on && rowTotal.value > 0 ? rowIdAt(0) : null
+      if (on) scrollToNewest()
+    },
+    { immediate: true, flush: 'post' }
+  )
+  watch(rowTotal, (total, previous) => {
+    if (!live.value) return
+    if (liveStartId.value === null && total > 0) liveStartId.value = rowIdAt(0)
+    if (total > (previous ?? 0) && (viewportEl()?.scrollTop ?? 0) < rowHeight.value)
+      void nextTick(scrollToNewest)
+  })
+
   onBeforeUnmount(() => {
+    moreObserver?.disconnect()
     lazyObserver?.disconnect()
     rowObserver?.disconnect()
     edgeObserver?.disconnect()
@@ -1709,7 +1788,7 @@
           :role="treeActive ? 'treegrid' : 'table'"
           :data-tree="treeActive || undefined"
           :data-testid="`${testId}__table`"
-          :aria-busy="loading || undefined"
+          :aria-busy="loading || loadingMore || undefined"
           :aria-rowcount="windowed ? rowTotal + 1 : undefined"
           class="flex w-full flex-col"
         >
@@ -1861,7 +1940,8 @@
                     treeActive,
                     row.getIsExpanded(),
                     row.id === treeTabStop,
-                    treePlacement.get(row.id)
+                    treePlacement.get(row.id),
+                    row.id === liveBoundaryId
                   ]"
                   :selected="row.getIsSelected()"
                   :aria-rowindex="windowed ? windowStart + index + 2 : undefined"
@@ -1877,6 +1957,7 @@
                   :data-reorder-row="reorderActive ? row.id : undefined"
                   :data-dragging="dragId === row.id || undefined"
                   :data-drop="dropOf(row.id)"
+                  :data-live-boundary="row.id === liveBoundaryId || undefined"
                   :class="[
                     stacked
                       ? 'flex-wrap rounded-(--shape-elements) border! py-(--spacing-xxs)'
@@ -1884,7 +1965,7 @@
                     striped && (windowStart + index) % 2 === 1
                       ? '[--table-row-bg:var(--bg-surface-raised)]'
                       : undefined,
-                    'relative transition-[opacity] duration-fast-02 ease-productive-entrance motion-reduce:transition-none after:pointer-events-none after:absolute after:inset-0 after:z-20 data-[dragging]:opacity-60 data-[dragging]:after:outline-dashed data-[dragging]:after:outline-2 data-[dragging]:after:-outline-offset-2 data-[dragging]:after:outline-(--accent) data-[drop=before]:after:shadow-[inset_0_2px_0_var(--accent)] data-[drop=after]:after:shadow-[inset_0_-2px_0_var(--accent)] outline-none focus-visible:after:outline-2 focus-visible:after:-outline-offset-2 focus-visible:after:outline-solid focus-visible:after:outline-(--ring-color)'
+                    'relative transition-[opacity] duration-fast-02 ease-productive-entrance motion-reduce:transition-none after:pointer-events-none after:absolute after:inset-0 after:z-20 data-[dragging]:opacity-60 data-[dragging]:after:outline-dashed data-[dragging]:after:outline-2 data-[dragging]:after:-outline-offset-2 data-[dragging]:after:outline-(--accent) data-[drop=before]:after:shadow-[inset_0_2px_0_var(--accent)] data-[drop=after]:after:shadow-[inset_0_-2px_0_var(--accent)] data-[live-boundary]:shadow-[inset_0_2px_0_var(--success)] outline-none focus-visible:after:outline-2 focus-visible:after:-outline-offset-2 focus-visible:after:outline-solid focus-visible:after:outline-(--ring-color)'
                   ]"
                   @click="onRowClick($event, row)"
                   @keydown="onTreeKeydown($event, row)"
@@ -2000,6 +2081,44 @@
           </template>
 
           <slot v-else />
+        </div>
+      </div>
+      <div
+        v-if="moreShown"
+        :data-testid="`${testId}__more`"
+        class="sticky start-0 flex w-full flex-col"
+      >
+        <div
+          v-if="moreArmed"
+          ref="moreSentinel"
+          aria-hidden="true"
+          :data-testid="`${testId}__more-sentinel`"
+          class="h-px w-full"
+        />
+        <div
+          role="status"
+          class="flex min-h-10 items-center justify-center gap-(--spacing-xs) px-(--spacing-sm) py-(--spacing-xs) text-body-sm text-(--text-muted)"
+        >
+          <template v-if="loadingMore">
+            <Spinner
+              aria-hidden="true"
+              class="size-4"
+            />
+            <span :data-testid="`${testId}__more-loading`">{{ t('tableLoadMore.loading') }}</span>
+          </template>
+          <Button
+            v-else-if="moreRows"
+            kind="transparent"
+            size="small"
+            :label="t('tableLoadMore.action')"
+            :data-testid="`${testId}__more-button`"
+            @click="requestMore"
+          />
+          <span
+            v-else
+            :data-testid="`${testId}__more-end`"
+            >{{ t('tableLoadMore.end') }}</span
+          >
         </div>
       </div>
       <Transition

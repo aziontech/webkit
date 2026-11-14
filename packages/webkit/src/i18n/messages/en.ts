@@ -1019,6 +1019,16 @@ export const tableCellTime = {
   justNow: 'just now'
 } as const
 
+export const tableLiveButton = {
+  label: 'Live'
+} as const
+
+export const tableLoadMore = {
+  loading: 'Loading more rows',
+  action: 'Load more',
+  end: 'No more rows'
+} as const
+
 export const tableReorder = {
   column: 'Order',
   handle: 'Reorder {name}, position {position} of {total}',
@@ -1498,6 +1508,8 @@ export const en = {
   tableCellLink,
   tableCellTags,
   tableCellTime,
+  tableLiveButton,
+  tableLoadMore,
   tableReorder,
   tableSearch,
   tableSortButton,

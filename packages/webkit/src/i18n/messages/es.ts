@@ -1026,6 +1026,14 @@ export const es: Messages = {
   tableCellTime: {
     justNow: 'justo ahora'
   },
+  tableLiveButton: {
+    label: 'En vivo'
+  },
+  tableLoadMore: {
+    loading: 'Cargando más filas',
+    action: 'Cargar más',
+    end: 'No hay más filas'
+  },
   tableReorder: {
     column: 'Orden',
     handle: 'Reordenar {name}, posición {position} de {total}',

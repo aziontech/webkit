@@ -1026,6 +1026,14 @@ export const ptBR: Messages = {
   tableCellTime: {
     justNow: 'agora mesmo'
   },
+  tableLiveButton: {
+    label: 'Ao vivo'
+  },
+  tableLoadMore: {
+    loading: 'Carregando mais linhas',
+    action: 'Carregar mais',
+    end: 'Não há mais linhas'
+  },
   tableReorder: {
     column: 'Ordem',
     handle: 'Reordenar {name}, posição {position} de {total}',

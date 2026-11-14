@@ -126,6 +126,16 @@
       "name": "SerializableState",
       "summary": "`getState()` saves the sort, page, visible columns and filters as a plain object and `setState()` restores it, while `v-model:state` mirrors every change; the app keeps the snapshot in the URL or storage.",
       "file": "serializable-state.vue"
+    },
+    {
+      "name": "InfiniteLoading",
+      "summary": "`more-rows` with `@load-more` in a `virtual` table: as the end of the requests nears the viewport the table asks for the next page, shows `Loading more rows` while `loading-more` is true, offers a Load more button for keyboard users, and reads `No more rows` after the last page.",
+      "file": "infinite-loading.vue"
+    },
+    {
+      "name": "LiveTail",
+      "summary": "`Table.LiveButton` toggles `v-model:live`: while live the app prepends new requests, the table stays on the newest row and a line marks the first request older than the moment live started.",
+      "file": "live-tail.vue"
     }
   ]
 }
