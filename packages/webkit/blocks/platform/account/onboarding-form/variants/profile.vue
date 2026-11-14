@@ -248,7 +248,12 @@
 
                 <span class="flex min-w-0 items-center gap-(--spacing-xs)">
                   <Avatar
-                    src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2080%2080%22%20fill%3D%22none%22%3E%3Cdefs%3E%3Cfilter%20id%3D%22blur%22%20filterUnits%3D%22userSpaceOnUse%22%20color-interpolation-filters%3D%22sRGB%22%3E%3CfeGaussianBlur%20stdDeviation%3D%227%22%20%2F%3E%3C%2Ffilter%3E%3C%2Fdefs%3E%3Crect%20width%3D%2280%22%20height%3D%2280%22%20fill%3D%22%23F8CA3A%22%20%2F%3E%3Cpath%20filter%3D%22url(%23blur)%22%20transform%3D%22translate(0%200)%20rotate(-280%2040%2040)%20scale(1.2)%22%20fill%3D%22%23FFCFB3%22%20d%3D%22M32.414%2059.35L50.376%2070.5H72.5v-71H33.728L26.5%2013.381l19.057%2027.08L32.414%2059.35z%22%20%2F%3E%3Cpath%20filter%3D%22url(%23blur)%22%20transform%3D%22translate(0%200)%20rotate(-240%2040%2040)%20scale(1.2)%22%20fill%3D%22%23B03C02%22%20style%3D%22mix-blend-mode%3A%20overlay%22%20d%3D%22M22.216%2024L0%2046.75l14.108%2038.129L78%2086l-3.081-59.276-22.378%204.005%2012.972%2020.186-23.35%2027.395L22.215%2024z%22%20%2F%3E%3C%2Fsvg%3E"
+                    pattern="marble"
+                    :colors="[
+                      'var(--color-orange-200)',
+                      'var(--color-orange-700)',
+                      'var(--color-yellow-400)'
+                    ]"
                     alt="Your organization"
                     size="small"
                     kind="square"
