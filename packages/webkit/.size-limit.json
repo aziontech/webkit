@@ -1630,7 +1630,7 @@
   {
     "name": "kbd",
     "path": "src/components/content/kbd/kbd.vue",
-    "limit": "1.9 KB"
+    "limit": "2.15 KB"
   },
   {
     "name": "log-view",

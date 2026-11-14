@@ -653,7 +653,12 @@ export const ptBR: Messages = {
     space: 'Espaço',
     tab: 'Tab',
     backspace: 'Backspace',
-    delete: 'Del'
+    delete: 'Del',
+    return: '↵',
+    'arrow-up': '↑',
+    'arrow-down': '↓',
+    'arrow-left': '←',
+    'arrow-right': '→'
   },
   label: {
     required: '(Obrigatório)'

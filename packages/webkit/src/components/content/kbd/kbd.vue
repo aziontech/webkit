@@ -10,6 +10,8 @@
 
   export type KbdKeyName = keyof typeof en.kbd
 
+  export type KbdKind = 'combined' | 'separate'
+
   interface Props {
     /** Prepend the meta/command modifier glyph (⌘ on macOS, Ctrl elsewhere). */
     meta?: boolean
@@ -23,6 +25,10 @@
     size?: KbdSize
     /** Named key printed from the locale catalog (`escape` → `Esc`, `enter` → `Enter`); the slot still renders after it. */
     keyName?: KbdKeyName | ''
+    /** A key sequence drawn after the modifier props and keyName; modifier and named keys print from the catalog. */
+    keys?: string[]
+    /** Visual variant: one keycap holding every key, or one keycap per key. */
+    kind?: KbdKind
   }
 
   const props = withDefaults(defineProps<Props>(), {
@@ -31,7 +37,9 @@
     shift: false,
     alt: false,
     size: 'medium',
-    keyName: ''
+    keyName: '',
+    keys: () => [],
+    kind: 'combined'
   })
 
   defineSlots<{
@@ -50,16 +58,31 @@
     isMac.value = /mac/i.test(navigator.platform || navigator.userAgent || '')
   })
 
-  const modifierGlyphs = computed<{ id: string; glyph: string }[]>(() => {
+  function modifierGlyph(name: string): string | null {
+    if (name === 'meta') return isMac.value ? '⌘' : t('kbd.ctrl')
+    if (name === 'ctrl') return isMac.value ? '⌃' : t('kbd.ctrl')
+    if (name === 'alt') return isMac.value ? '⌥' : t('kbd.alt')
+    if (name === 'shift') return '⇧'
+    return null
+  }
+
+  function keyGlyph(key: string): string {
+    const name = key.toLowerCase()
+    const modifier = modifierGlyph(name)
+    if (modifier) return modifier
+    if (name in en.kbd) return t(`kbd.${name as KbdKeyName}`)
+    return key.length === 1 ? key.toUpperCase() : key
+  }
+
+  const caps = computed<{ id: string; glyph: string }[]>(() => {
     const list: { id: string; glyph: string }[] = []
-    if (props.meta) list.push({ id: 'meta', glyph: isMac.value ? '⌘' : t('kbd.ctrl') })
-    if (props.ctrl) list.push({ id: 'ctrl', glyph: isMac.value ? '⌃' : t('kbd.ctrl') })
-    if (props.alt) list.push({ id: 'alt', glyph: isMac.value ? '⌥' : t('kbd.alt') })
-    if (props.shift) list.push({ id: 'shift', glyph: '⇧' })
+    for (const name of ['meta', 'ctrl', 'alt', 'shift'] as const) {
+      if (props[name]) list.push({ id: name, glyph: modifierGlyph(name) ?? '' })
+    }
+    if (props.keyName) list.push({ id: 'key-name', glyph: t(`kbd.${props.keyName}`) })
+    props.keys.forEach((key, index) => list.push({ id: `key-${index}`, glyph: keyGlyph(key) }))
     return list
   })
-
-  const keyLabel = computed(() => (props.keyName ? t(`kbd.${props.keyName}`) : ''))
 </script>
 
 <template>
@@ -68,15 +91,34 @@
     v-bind="$attrs"
     :data-testid="testId"
     :data-size="size"
+    :data-kind="kind"
     :class="attrs.class"
-    class="inline-flex items-center justify-center gap-(--spacing-xxs) tabular-nums leading-none bg-(--bg-surface) text-(--text-default) border border-b-2 border-(--border-default) rounded-(--shape-elements) shadow-(--shadow-sm) px-(--spacing-xs) data-[size=medium]:text-overline-md data-[size=medium]:h-6 data-[size=medium]:min-w-6 data-[size=small]:text-overline-sm data-[size=small]:h-5 data-[size=small]:min-w-5"
+    class="inline-flex items-center justify-center gap-(--spacing-xxs) tabular-nums leading-none bg-(--bg-surface) text-(--text-default) border border-b-2 border-(--border-default) rounded-(--shape-elements) shadow-(--shadow-sm) px-(--spacing-xs) data-[size=medium]:text-overline-md data-[size=medium]:h-6 data-[size=medium]:min-w-6 data-[size=small]:text-overline-sm data-[size=small]:h-5 data-[size=small]:min-w-5 data-[kind=separate]:bg-transparent data-[kind=separate]:border-0 data-[kind=separate]:shadow-none data-[kind=separate]:px-0 data-[kind=separate]:min-w-0"
   >
-    <span
-      v-for="modifier in modifierGlyphs"
-      :key="modifier.id"
-      >{{ modifier.glyph }}</span
-    >
-    <span v-if="keyLabel">{{ keyLabel }}</span>
-    <slot />
+    <template v-if="kind === 'separate'">
+      <kbd
+        v-for="cap in caps"
+        :key="cap.id"
+        :data-size="size"
+        :data-testid="`${testId}__key`"
+        class="inline-flex items-center justify-center bg-(--bg-surface) text-(--text-default) border border-b-2 border-(--border-default) rounded-(--shape-elements) shadow-(--shadow-sm) px-(--spacing-xs) data-[size=medium]:h-6 data-[size=medium]:min-w-6 data-[size=small]:h-5 data-[size=small]:min-w-5"
+        >{{ cap.glyph }}</kbd
+      >
+      <kbd
+        v-if="$slots['default']"
+        :data-size="size"
+        :data-testid="`${testId}__key`"
+        class="inline-flex items-center justify-center bg-(--bg-surface) text-(--text-default) border border-b-2 border-(--border-default) rounded-(--shape-elements) shadow-(--shadow-sm) px-(--spacing-xs) data-[size=medium]:h-6 data-[size=medium]:min-w-6 data-[size=small]:h-5 data-[size=small]:min-w-5"
+        ><slot
+      /></kbd>
+    </template>
+    <template v-else>
+      <span
+        v-for="cap in caps"
+        :key="cap.id"
+        >{{ cap.glyph }}</span
+      >
+      <slot />
+    </template>
   </kbd>
 </template>

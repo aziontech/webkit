@@ -653,7 +653,12 @@ export const es: Messages = {
     space: 'Espacio',
     tab: 'Tab',
     backspace: 'Retroceso',
-    delete: 'Supr'
+    delete: 'Supr',
+    return: '↵',
+    'arrow-up': '↑',
+    'arrow-down': '↓',
+    'arrow-left': '←',
+    'arrow-right': '→'
   },
   label: {
     required: '(Obligatorio)'

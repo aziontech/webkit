@@ -601,7 +601,12 @@ export const kbd = {
   space: 'Space',
   tab: 'Tab',
   backspace: 'Backspace',
-  delete: 'Del'
+  delete: 'Del',
+  return: '↵',
+  'arrow-up': '↑',
+  'arrow-down': '↓',
+  'arrow-left': '←',
+  'arrow-right': '→'
 } as const
 
 export const label = {
