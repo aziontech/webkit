@@ -26,6 +26,11 @@
       "name": "VariantGrid",
       "summary": "Full matrix of shapes and sizes across the three content modes (initials, icon, image).",
       "file": "variant-grid.vue"
+    },
+    {
+      "name": "Pattern",
+      "summary": "Generated marble marks for organizations with no logo: each name seeds its own mark, in the default palette and in a palette passed through colors.",
+      "file": "pattern.vue"
     }
   ]
 }

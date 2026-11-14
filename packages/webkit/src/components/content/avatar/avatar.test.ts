@@ -2,6 +2,7 @@ import { render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
 import Default from '../../../../examples/avatar/default.vue'
+import Pattern from '../../../../examples/avatar/pattern.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Avatar from './avatar.vue'
 
@@ -166,5 +167,64 @@ describe('Avatar', () => {
     expect(root).toHaveAttribute('role', 'img')
     expect(root).toHaveAttribute('aria-label', 'AB')
     expect(getByTestId('content-avatar__label')).toHaveTextContent('AB')
+  })
+
+  it('draws the marble pattern in place of the initials and names it with the full label', () => {
+    const { getByTestId, queryByTestId } = render(Avatar, {
+      props: { label: 'Acme Inc.', pattern: 'marble' }
+    })
+
+    const root = getByTestId('content-avatar')
+    expect(root).toHaveAttribute('data-pattern', 'marble')
+    expect(root).toHaveAttribute('role', 'img')
+    expect(root).toHaveAttribute('aria-label', 'Acme Inc.')
+    expect(getByTestId('content-avatar__pattern')).toHaveAttribute('aria-hidden', 'true')
+    expect(queryByTestId('content-avatar__label')).toBeNull()
+    expect(queryByTestId('content-avatar__icon')).toBeNull()
+  })
+
+  it('lets src win over the pattern', () => {
+    const { getByTestId, queryByTestId } = render(Avatar, {
+      props: { src: SAMPLE_SRC, alt: 'Acme Inc.', label: 'Acme Inc.', pattern: 'marble' }
+    })
+
+    expect(getByTestId('content-avatar__image')).toBeTruthy()
+    expect(queryByTestId('content-avatar__pattern')).toBeNull()
+    expect(getByTestId('content-avatar')).not.toHaveAttribute('data-pattern')
+  })
+
+  it('paints the pattern only with the given colors and draws the same mark for the same name', () => {
+    const colors = ['var(--accent)', 'var(--info)', 'var(--success)']
+    const fills = (label: string) =>
+      Array.from(
+        render(Avatar, { props: { label, pattern: 'marble', colors } })
+          .getAllByTestId('content-avatar__pattern')
+          .at(-1)!
+          .querySelectorAll<SVGElement>('rect, path')
+      ).map((node) => [node.style.fill, node.getAttribute('transform')])
+
+    const first = fills('Acme Inc.')
+    expect(first).toHaveLength(3)
+    for (const [fill] of first) expect(colors).toContain(fill)
+    expect(fills('Acme Inc.')).toEqual(first)
+    expect(fills('Acme Labs')).not.toEqual(first)
+  })
+
+  it('points every blurred layer at its own filter', () => {
+    const { getByTestId } = render(Avatar, { props: { label: 'Acme Inc.', pattern: 'marble' } })
+    const svg = getByTestId('content-avatar__pattern')
+    const id = svg.querySelector('filter')!.id
+
+    expect(id).not.toBe('')
+    for (const path of svg.querySelectorAll('path')) {
+      expect(path.getAttribute('filter')).toBe(`url(#${id})`)
+    }
+  })
+
+  it('has no accessibility violations for the pattern example', async () => {
+    const { container, getAllByTestId } = render(Pattern)
+
+    expect(getAllByTestId('content-avatar__pattern')).toHaveLength(6)
+    await expectNoA11yViolations(container)
   })
 })
