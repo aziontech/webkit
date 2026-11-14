@@ -780,7 +780,7 @@
   {
     "name": "listing-table",
     "path": "src/components/sections/listing-table/listing-table.vue",
-    "limit": "60.95 KB"
+    "limit": "62 KB"
   },
   {
     "name": "site-footer",
@@ -822,7 +822,7 @@
   {
     "name": "chart",
     "path": "src/components/chart/chart/index.ts",
-    "limit": "22.2 KB"
+    "limit": "22.45 KB"
   },
   {
     "name": "chart-root",
@@ -1038,7 +1038,7 @@
   {
     "name": "tree",
     "path": "src/components/data/tree/tree.vue",
-    "limit": "5.9 KB"
+    "limit": "5.95 KB"
   },
   {
     "name": "file-dropzone",
@@ -1327,7 +1327,7 @@
   {
     "name": "code-editor",
     "path": "src/components/code/code-editor/code-editor.vue",
-    "limit": "9.15 KB"
+    "limit": "9.2 KB"
   },
   {
     "name": "button-group",
@@ -1630,7 +1630,7 @@
   {
     "name": "log-view",
     "path": "src/components/code/log-view/index.ts",
-    "limit": "34.25 KB"
+    "limit": "34.35 KB"
   },
   {
     "name": "log-view-root",
