@@ -3,15 +3,20 @@ import { afterEach, describe, expect, it } from 'vitest'
 import { userEvent } from 'vitest/browser'
 
 import Analytics from '../../blocks/platform/dashboard/analytics-dashboard/analytics-dashboard.vue'
+import Composition from '../../blocks/platform/dashboard/composition-dashboard/composition-dashboard.vue'
+import CompositionEmpty from '../../blocks/platform/dashboard/composition-dashboard/variants/empty.vue'
 import Switcher from '../../blocks/platform/dashboard/dashboard-switcher/dashboard-switcher.vue'
 import SwitcherEmpty from '../../blocks/platform/dashboard/dashboard-switcher/variants/empty.vue'
 import SwitcherFailed from '../../blocks/platform/dashboard/dashboard-switcher/variants/failed.vue'
 import SwitcherOwnPeriod from '../../blocks/platform/dashboard/dashboard-switcher/variants/own-period.vue'
 import Data from '../../blocks/platform/dashboard/data-dashboard/data-dashboard.vue'
+import Executive from '../../blocks/platform/dashboard/executive-summary-dashboard/executive-summary-dashboard.vue'
+import Funnel from '../../blocks/platform/dashboard/funnel-cohort-dashboard/funnel-cohort-dashboard.vue'
 import Health from '../../blocks/platform/dashboard/health-score-dashboard/health-score-dashboard.vue'
 import HealthEmpty from '../../blocks/platform/dashboard/health-score-dashboard/variants/empty.vue'
 import Home from '../../blocks/platform/dashboard/home-dashboard/home-dashboard.vue'
 import HomeFailed from '../../blocks/platform/dashboard/home-dashboard/variants/failed.vue'
+import ProjectStatus from '../../blocks/platform/dashboard/project-status-dashboard/project-status-dashboard.vue'
 import Security from '../../blocks/platform/dashboard/security-dashboard/security-dashboard.vue'
 import { useToastRegion } from './toast-region'
 
@@ -129,5 +134,61 @@ describe.each([
     await userEvent.click(option)
     await waitFor(() => expect(view.container.textContent).toContain('vs previous 7 days'))
     expect(view.container.textContent).not.toContain('vs previous 24 hours')
+  })
+})
+
+const pickMenuOption = async (trigger: HTMLElement, label: string) => {
+  await userEvent.click(trigger)
+  const option = await waitFor(() => {
+    const found = Array.from(document.querySelectorAll('[role="menuitem"]')).find(
+      (node) => node.textContent?.trim() === label
+    )
+    if (!found) throw new Error(`no ${label}`)
+    return found as HTMLElement
+  })
+  await userEvent.click(option)
+}
+
+describe('platform/dashboard exports', () => {
+  it.each([
+    ['composition-dashboard', Composition, 'More options for Current split'],
+    ['funnel-cohort-dashboard', Funnel, 'More options for Weekly cohorts'],
+    ['project-status-dashboard', ProjectStatus, 'More options for Owners']
+  ])('%s exports a card as CSV from its menu', async (_name, Block, trigger) => {
+    const view = render(Block)
+    await pickMenuOption(view.getByRole('button', { name: trigger }), 'Export CSV')
+    await waitFor(() => expect(document.body.textContent).toContain('CSV exported.'))
+  })
+
+  it('copies a link to a project status card', async () => {
+    const view = render(ProjectStatus)
+    await pickMenuOption(view.getByRole('button', { name: 'More options for Owners' }), 'Copy link')
+    await waitFor(() =>
+      expect(
+        document.body.textContent?.includes('Link copied.') ||
+          document.body.textContent?.includes('The link could not be copied.')
+      ).toBe(true)
+    )
+  })
+
+  it('exports from the page header buttons', async () => {
+    const composition = render(Composition)
+    await fireEvent.click(composition.getByRole('button', { name: 'Export CSV' }))
+    await waitFor(() =>
+      expect(document.body.textContent).toContain('spend-by-category-last-12-months.csv')
+    )
+    composition.unmount()
+    const executive = render(Executive)
+    await fireEvent.click(executive.getByRole('button', { name: 'Export' }))
+    await waitFor(() =>
+      expect(document.body.textContent).toContain('executive-summary-q3-2026.csv')
+    )
+  })
+
+  it('disables the exports when the period has no data', () => {
+    const view = render(CompositionEmpty)
+    expect((view.getByRole('button', { name: 'Export CSV' }) as HTMLButtonElement).disabled).toBe(
+      true
+    )
   })
 })

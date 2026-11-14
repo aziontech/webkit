@@ -16,7 +16,9 @@
   import StatusIndicator, { type StatusIndicatorSeverity } from '@aziontech/webkit/status-indicator'
   import TableRoot, { type TableColumn } from '@aziontech/webkit/table-root'
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
-  import { ref } from 'vue'
+  import { toast } from '@aziontech/webkit/toast'
+  import { type CsvColumn, downloadCsv, toCsv } from '@aziontech/webkit/utils/csv'
+  import { computed, ref } from 'vue'
 
   type FigureFormat = 'count' | 'percentage'
 
@@ -378,6 +380,86 @@
 
   const project = ref('product-launch')
   const sprint = ref('sprint-6')
+  const sprintSlug = computed(() => `${project.value}-${sprint.value}`)
+
+  type CardId = 'completion' | 'sprint-burndown' | 'milestones' | 'at-risk' | 'owners'
+
+  interface CsvReport {
+    columns: CsvColumn[]
+    rows: () => object[]
+  }
+
+  const reports: Record<CardId, CsvReport> = {
+    completion: {
+      columns: [
+        { id: 'status', header: 'Status' },
+        { id: 'tasks', header: 'Tasks' }
+      ],
+      rows: () => completion.map((entry) => ({ status: entry.name, tasks: entry.values[0] ?? '' }))
+    },
+    'sprint-burndown': {
+      columns: [
+        { id: 'day', header: 'Day' },
+        ...burndown.map((entry) => ({ id: entry.id, header: `${entry.name} (pts)` }))
+      ],
+      rows: () =>
+        sprintDays.map((day, index) => ({
+          day,
+          ...Object.fromEntries(burndown.map((entry) => [entry.id, entry.values[index] ?? '']))
+        }))
+    },
+    milestones: {
+      columns: [
+        { id: 'date', header: 'Date' },
+        { id: 'title', header: 'Milestone' },
+        { id: 'status', header: 'Status' }
+      ],
+      rows: () => milestones
+    },
+    'at-risk': {
+      columns: [
+        { id: 'title', header: 'Item' },
+        { id: 'reason', header: 'Reason' },
+        { id: 'tag', header: 'Risk' }
+      ],
+      rows: () => atRisk
+    },
+    owners: {
+      columns: [
+        { id: 'owner', header: 'Owner' },
+        { id: 'open', header: 'Open' },
+        { id: 'done', header: 'Done' },
+        { id: 'overdue', header: 'Overdue' }
+      ],
+      rows: () => owners
+    }
+  }
+
+  const exportCsv = (id: CardId) => {
+    const filename = `${id}-${sprintSlug.value}.csv`
+    try {
+      const report = reports[id]
+      downloadCsv(filename, toCsv({ columns: report.columns, rows: report.rows() }))
+      toast.success('CSV exported.', { description: filename })
+    } catch {
+      toast.error('The CSV could not be exported.', { description: 'Try again in a moment.' })
+    }
+  }
+
+  const copyLink = async (id: CardId) => {
+    const url = `https://app.example.com/projects/${project.value}/status?sprint=${sprint.value}#${id}`
+    try {
+      await globalThis.navigator.clipboard.writeText(url)
+      toast.success('Link copied.', { description: url })
+    } catch {
+      toast.error('The link could not be copied.')
+    }
+  }
+
+  const onCardOption = (id: CardId, value: string | number) => {
+    if (value === 'link') copyLink(id)
+    else if (value === 'export') exportCsv(id)
+  }
 </script>
 
 <template>
@@ -464,7 +546,10 @@
               <Hint text="Every task in the project, by its current status." />
             </span>
             <ChartCard.Controls>
-              <DropdownMenu placement="bottom-end">
+              <DropdownMenu
+                placement="bottom-end"
+                @select="(_event, value) => onCardOption('completion', value)"
+              >
                 <DropdownMenu.Trigger>
                   <IconButton
                     icon="pi pi-ellipsis-h"
@@ -477,10 +562,12 @@
                   <DropdownMenu.Option
                     value="link"
                     label="Copy link"
+                    :disabled="loading"
                   />
                   <DropdownMenu.Option
                     value="export"
                     label="Export CSV"
+                    :disabled="loading"
                   />
                 </DropdownMenu.Group>
               </DropdownMenu>
@@ -530,7 +617,10 @@
                 :icon="behind.icon"
                 size="small"
               />
-              <DropdownMenu placement="bottom-end">
+              <DropdownMenu
+                placement="bottom-end"
+                @select="(_event, value) => onCardOption('sprint-burndown', value)"
+              >
                 <DropdownMenu.Trigger>
                   <IconButton
                     icon="pi pi-ellipsis-h"
@@ -543,10 +633,12 @@
                   <DropdownMenu.Option
                     value="link"
                     label="Copy link"
+                    :disabled="loading"
                   />
                   <DropdownMenu.Option
                     value="export"
                     label="Export CSV"
+                    :disabled="loading"
                   />
                 </DropdownMenu.Group>
               </DropdownMenu>
@@ -587,7 +679,10 @@
               <Hint text="Dated checkpoints to launch, oldest first." />
             </span>
             <ChartCard.Controls>
-              <DropdownMenu placement="bottom-end">
+              <DropdownMenu
+                placement="bottom-end"
+                @select="(_event, value) => onCardOption('milestones', value)"
+              >
                 <DropdownMenu.Trigger>
                   <IconButton
                     icon="pi pi-ellipsis-h"
@@ -600,10 +695,12 @@
                   <DropdownMenu.Option
                     value="link"
                     label="Copy link"
+                    :disabled="loading"
                   />
                   <DropdownMenu.Option
                     value="export"
                     label="Export CSV"
+                    :disabled="loading"
                   />
                 </DropdownMenu.Group>
               </DropdownMenu>
@@ -679,7 +776,10 @@
                 severity="secondary"
                 size="small"
               />
-              <DropdownMenu placement="bottom-end">
+              <DropdownMenu
+                placement="bottom-end"
+                @select="(_event, value) => onCardOption('at-risk', value)"
+              >
                 <DropdownMenu.Trigger>
                   <IconButton
                     icon="pi pi-ellipsis-h"
@@ -692,10 +792,12 @@
                   <DropdownMenu.Option
                     value="link"
                     label="Copy link"
+                    :disabled="loading"
                   />
                   <DropdownMenu.Option
                     value="export"
                     label="Export CSV"
+                    :disabled="loading"
                   />
                 </DropdownMenu.Group>
               </DropdownMenu>
@@ -758,7 +860,10 @@
               <Hint text="Tasks per owner. Overdue counts open tasks past their due date." />
             </span>
             <ChartCard.Controls>
-              <DropdownMenu placement="bottom-end">
+              <DropdownMenu
+                placement="bottom-end"
+                @select="(_event, value) => onCardOption('owners', value)"
+              >
                 <DropdownMenu.Trigger>
                   <IconButton
                     icon="pi pi-ellipsis-h"
@@ -771,10 +876,12 @@
                   <DropdownMenu.Option
                     value="link"
                     label="Copy link"
+                    :disabled="loading"
                   />
                   <DropdownMenu.Option
                     value="export"
                     label="Export CSV"
+                    :disabled="loading"
                   />
                 </DropdownMenu.Group>
               </DropdownMenu>

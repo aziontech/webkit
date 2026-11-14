@@ -307,10 +307,12 @@
                   <DropdownMenu.Option
                     value="link"
                     label="Copy link"
+                    disabled
                   />
                   <DropdownMenu.Option
                     value="export"
                     label="Export CSV"
+                    disabled
                   />
                 </DropdownMenu.Group>
               </DropdownMenu>
@@ -373,10 +375,12 @@
                   <DropdownMenu.Option
                     value="link"
                     label="Copy link"
+                    disabled
                   />
                   <DropdownMenu.Option
                     value="export"
                     label="Export CSV"
+                    disabled
                   />
                 </DropdownMenu.Group>
               </DropdownMenu>
@@ -430,10 +434,12 @@
                   <DropdownMenu.Option
                     value="link"
                     label="Copy link"
+                    disabled
                   />
                   <DropdownMenu.Option
                     value="export"
                     label="Export CSV"
+                    disabled
                   />
                 </DropdownMenu.Group>
               </DropdownMenu>
@@ -522,10 +528,12 @@
                   <DropdownMenu.Option
                     value="link"
                     label="Copy link"
+                    disabled
                   />
                   <DropdownMenu.Option
                     value="export"
                     label="Export CSV"
+                    disabled
                   />
                 </DropdownMenu.Group>
               </DropdownMenu>
@@ -601,10 +609,12 @@
                   <DropdownMenu.Option
                     value="link"
                     label="Copy link"
+                    disabled
                   />
                   <DropdownMenu.Option
                     value="export"
                     label="Export CSV"
+                    disabled
                   />
                 </DropdownMenu.Group>
               </DropdownMenu>

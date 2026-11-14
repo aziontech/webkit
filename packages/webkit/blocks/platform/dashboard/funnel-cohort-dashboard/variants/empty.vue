@@ -10,6 +10,8 @@
   import Select, { type SelectOptionItem } from '@aziontech/webkit/select'
   import StatTile from '@aziontech/webkit/stat-tile'
   import TableRoot, { type TableColumn } from '@aziontech/webkit/table-root'
+  import { toast } from '@aziontech/webkit/toast'
+  import { type CsvColumn, downloadCsv, toCsv } from '@aziontech/webkit/utils/csv'
   import { computed, ref } from 'vue'
 
   type FigureFormat = 'number' | 'share'
@@ -449,6 +451,61 @@
 
   const activeIndex = ref<number | null>(null)
 
+  type CardId = 'conversion-funnel' | 'retention-by-cohort' | 'weekly-cohorts'
+
+  interface CsvReport {
+    columns: CsvColumn[]
+    rows: () => object[]
+  }
+
+  const reports: Record<CardId, CsvReport> = {
+    'conversion-funnel': {
+      columns: [
+        { id: 'step', header: 'Step' },
+        { id: 'users', header: 'Users' },
+        { id: 'share', header: 'Share of visitors (%)' },
+        { id: 'dropoff', header: 'Drop-off (%)' }
+      ],
+      rows: () => view.value.steps
+    },
+    'retention-by-cohort': {
+      columns: [
+        { id: 'week', header: 'Week' },
+        ...view.value.retention.map((entry) => ({ id: entry.id, header: entry.name }))
+      ],
+      rows: () =>
+        weekLabels.map((week, index) => ({
+          week,
+          ...Object.fromEntries(
+            view.value.retention.map((entry) => [entry.id, entry.values[index] ?? ''])
+          )
+        }))
+    },
+    'weekly-cohorts': {
+      columns: [
+        { id: 'cohort', header: 'Cohort' },
+        { id: 'size', header: 'Users' },
+        ...weeks.map((week) => ({ id: week.key, header: week.label }))
+      ],
+      rows: () => view.value.cohorts
+    }
+  }
+
+  const exportCsv = (id: CardId) => {
+    const filename = `${id}-${periodLabel(period.value).toLowerCase().replaceAll(' ', '-')}.csv`
+    try {
+      const report = reports[id]
+      downloadCsv(filename, toCsv({ columns: report.columns, rows: report.rows() }))
+      toast.success('CSV exported.', { description: filename })
+    } catch {
+      toast.error('The CSV could not be exported.', { description: 'Try again in a moment.' })
+    }
+  }
+
+  const onCardOption = (id: CardId, value: string | number) => {
+    if (value === 'export') exportCsv(id)
+  }
+
   const clearFilters = () => {
     period.value = '6w'
     segment.value = 'all'
@@ -541,7 +598,10 @@
             />
           </span>
           <ChartCard.Controls>
-            <DropdownMenu placement="bottom-end">
+            <DropdownMenu
+              placement="bottom-end"
+              @select="(_event, value) => onCardOption('conversion-funnel', value)"
+            >
               <DropdownMenu.Trigger>
                 <IconButton
                   icon="pi pi-ellipsis-h"
@@ -554,6 +614,7 @@
                 <DropdownMenu.Option
                   value="export"
                   label="Export CSV"
+                  :disabled="loading || !view.steps.length"
                 />
               </DropdownMenu.Group>
             </DropdownMenu>
@@ -630,7 +691,10 @@
             />
           </span>
           <ChartCard.Controls>
-            <DropdownMenu placement="bottom-end">
+            <DropdownMenu
+              placement="bottom-end"
+              @select="(_event, value) => onCardOption('retention-by-cohort', value)"
+            >
               <DropdownMenu.Trigger>
                 <IconButton
                   icon="pi pi-ellipsis-h"
@@ -643,6 +707,7 @@
                 <DropdownMenu.Option
                   value="export"
                   label="Export CSV"
+                  :disabled="loading || !view.retention.length"
                 />
               </DropdownMenu.Group>
             </DropdownMenu>
@@ -687,7 +752,10 @@
             />
           </span>
           <ChartCard.Controls>
-            <DropdownMenu placement="bottom-end">
+            <DropdownMenu
+              placement="bottom-end"
+              @select="(_event, value) => onCardOption('weekly-cohorts', value)"
+            >
               <DropdownMenu.Trigger>
                 <IconButton
                   icon="pi pi-ellipsis-h"
@@ -700,6 +768,7 @@
                 <DropdownMenu.Option
                   value="export"
                   label="Export CSV"
+                  :disabled="loading || !view.cohorts.length"
                 />
               </DropdownMenu.Group>
             </DropdownMenu>
