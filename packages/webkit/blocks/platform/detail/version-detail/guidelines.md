@@ -6,13 +6,13 @@ One version of a resource, opened from its Versions tab. The user is here to cha
 
 - A resource whose configuration is versioned: drafts are edited, built and deployed, and built versions are read-only.
 - The user opens a row of the Versions tab of `platform/detail/details-page`, or creates a new version.
-- The version has several areas of settings (Settings, Source, Variables, Cache Settings, Custom Code, Rules) that share one save and deploy action.
+- The version has several areas of settings (Settings, Source, Device Groups, Cache Settings, Functions Instances, Rules Engine) that share one save and deploy action.
 
 ## When not to use
 
 - The overview of the resource itself, its domains and deployments: use `platform/detail/details-page`.
 - A resource without versions whose settings save in place: use `platform/edit/edit-resource` or `platform/settings/settings-form`.
-- The Rules tab content: use `platform/edit/rule-builder`.
+- The Rules Engine tab content: use `platform/edit/rule-builder`.
 - Deploying from a list without opening a version: use `platform/create/deploy-drawer`.
 
 ## Building blocks
@@ -29,7 +29,7 @@ A horizontal `Resizable` named "Version workspace": the version settings pane, a
 
 ### C. Version tab bar — `PageTabs`, `Tabs`, `Tag`, `DropdownMenu`, `IconButton` (required)
 
-`PageTabs` with one `Tabs.Item` per area: Settings, Source, Variables, Cache Settings, Custom Code, Rules. The tab row ends on the version's state `Tag` and an outlined Version actions `IconButton` whose `DropdownMenu` holds Edit version info and the toggle for Version history.
+`PageTabs` with one `Tabs.Item` per area: Settings, Source, Device Groups, Cache Settings, Functions Instances, Rules Engine. The tab row ends on the version's state `Tag` and an outlined Version actions `IconButton` whose `DropdownMenu` holds Edit version info and the toggle for Version history.
 
 ### D. Settings panel — `ScrollArea`, `PageHeader`, `SettingsSection`, `Card`, `Item`, `SettingRow`, `Input`, `Switch`, `Tooltip` (required)
 
@@ -46,6 +46,14 @@ The side pane titled "Version history", closed with an `IconButton`. It starts o
 ### G. Revert — `Button`, `Tag` (optional, on an earlier Ready version)
 
 An earlier version opened from Version history keeps the page read-only and says Viewing an earlier version, with the entry in history marked by a Viewing `Tag` and `aria-current`. The version bar's primary action is Revert to <id>, the trigger of a `ConfirmDialog` with `kind="primary"` and `size="medium"`. Its body is the diff against the deployed version: a bordered list of the settings that change, each with its old and new value in words, a line with the rules added and removed, and a description saying that reverting deploys <id> to Production and that the deployed version stays in history. Confirm closes the dialog and starts the async-submit run: one toast id that turns from a loading toast ("Reverting to <id>…", "It keeps running if you leave.") into the outcome, which stays until closed and carries **Edit** and **Redeploy**, never View deployments. On success the version's `Tag` reads Deployed in the breadcrumb, the tab row and the history, and the bar offers Redeploy.
+
+## List tabs
+
+Source, Device Groups, Cache Settings and Functions Instances are lists inside the version: a small `PageHeader` with an outlined add action, the controls row of `platform/view/table-view` (search, Refresh, Download CSV, Columns) and a flush `TableRoot` in a `Card`. The name cell is a button that opens the edit `Drawer`, the same drawer the add action opens, built as in `platform/create/create-in-drawer`: `SettingsSection`s of `Field`s (Device Groups, Functions Instances) or of `SettingRow`s in a `Card` (Cache Settings, reusing the rows of `platform/edit/edit-resource#CacheSettings` plus Adaptive delivery and a Device groups `MultiSelect`). Functions Instances renders the arguments as a `SchemaForm` when the function declares a schema and as a JSON `CodeEditor` when it does not, and its function `Select` ends on Create Function. Source embeds the file browser: Upload Files in the heading, Open in Object Storage in the controls row, the folder path as a `Breadcrumb` and an `EmptyState` with Upload Files and Open Bucket. Saving a drawer changes the draft only; the version bar still deploys it.
+
+## Creating and not found
+
+While Add Version copies a built version into a new draft, the workspace is drawn as `Skeleton` wires in a busy status region named "Creating a new version from <id>." and the version bar shows a `Spinner`, "Creating new version…", the copy line, Add Version loading and Redeploy disabled. A version link that points nowhere keeps the trail and renders a bordered `EmptyState` with View Versions.
 
 ## Do
 
@@ -67,6 +75,8 @@ An earlier version opened from Version history keeps the page read-only and says
 - Don't name a tab in the breadcrumb.
 - Don't list every earlier version at once; show five and Show older.
 - Don't save a description edit without Cancel and Save buttons.
+- Don't edit a list row in place or on a new page; open the drawer, and let the version bar deploy.
+- Don't show the settings form while a new version is still being copied; draw the wires.
 - Don't revert without a confirmation, and don't make the diff depend on an arrow glyph or color alone.
 - Don't delete or hide the version a revert replaces; it stays in history.
 - Don't offer View deployments on the revert toast.
@@ -78,6 +88,8 @@ An earlier version opened from Version history keeps the page read-only and says
 - **Save actions:** verb first, three words or fewer, e.g. "Save and deploy", "Save and build", "Save".
 - **Built version actions:** "Add Version", "Redeploy"; on an earlier version "Revert to <id>".
 - **Revert:** bar "Viewing an earlier version"; dialog title "Revert to <id>?", description "Reverting deploys <id> to Production in place of <deployed>. <deployed> stays in the version history, so you can redeploy it later."; diff heading "What changes against <deployed>"; toasts "Reverting to <id>…" then "<id> is deployed.", actions "Edit" and "Redeploy".
+- **List tabs:** add actions name the object, e.g. "Add Device Group", "Add Cache Settings", "Add Functions Instance"; drawer titles "Add …" or "Edit …"; success toasts "Device group \"mobile\" saved." with "The change is part of this draft until you deploy it."
+- **Creating and not found:** "Creating new version…", "Copying <id> into a new draft."; "Version not found" with "View Versions".
 - **Version picker:** search placeholder "Search versions", no-match line `No versions match "<query>".`, footer "Add Version".
 - **Setting rows:** a noun title and one sentence with a period, e.g. "Active" with "When disabled, the resource stops serving traffic."
 - **History:** "Current version", an empty changes line, e.g. "No changes yet. Each change you save shows up here.", description placeholder "What changed in this version?".
@@ -100,11 +112,21 @@ An earlier version opened from Version history keeps the page read-only and says
 - Revert: an earlier Ready version, read-only, with history open, Revert to <id> in the bar, a confirmation with the diff, and the revert reported by a toast with Edit and Redeploy.
 - VersionHistory: the draft with Version history open beside it, the current version, the empty changes entry and the five newest earlier versions.
 - EnvironmentCrumb: a resource that is deployed to several environments. The page's `ConsoleLayout.Breadcrumbs` ends on two control crumbs, environment then version, each a small transparent `Select` with a search field (`Switch environment`, `Switch version`). Environments carry their deployment policy as a `Tag` and Add Environment in the footer; picking an environment moves the version crumb to the version live there, and each version option says where it is live (Live in Production). The environment always comes before the version, because a version is chosen within an environment.
+- Creating: Add Version copying AEO25I38 into a new draft, the workspace as `Skeleton` wires and the version bar busy.
+- NotFound: a version that does not exist, a bordered `EmptyState` with View Versions.
+- Source: the draft on its Source tab, the file list of the version bucket with its folder path and Open in Object Storage.
+- DeviceGroups: the draft on its Device Groups tab, the groups table and the add or edit drawer with the User-Agent expression.
+- CacheSettings: the draft on its Cache Settings tab, the cache settings table and the add or edit drawer with Adaptive delivery and Device groups.
+- FunctionsInstances: the draft on its Functions Instances tab, the instances table and the add or edit drawer with the function `Select` and its arguments.
 
 ## Related
 
 - `platform/detail/details-page` — its Versions tab lists the versions that open here.
-- `platform/edit/rule-builder` — the content of the Rules tab.
+- `platform/edit/rule-builder` — the content of the Rules Engine tab.
+- `platform/view/file-browser` — the full storage page the Source tab embeds.
+- `platform/edit/edit-resource` — its CacheSettings variant holds the rows the Cache Settings drawer reuses.
+- `platform/create/create-in-drawer` — the add and edit drawers of the list tabs.
+- `platform/states/page-wires` — the skeleton wires Creating draws.
 - `platform/create/deploy-drawer` — deploying a version outside this page.
 - `platform/states/async-submit` — how the version bar locks while Save and deploy runs.
 - `SettingRow` — the row primitive of every settings section; see `skills/webkit-form` and `skills/webkit-layout`.

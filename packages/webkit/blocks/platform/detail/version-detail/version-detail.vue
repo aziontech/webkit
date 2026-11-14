@@ -36,10 +36,10 @@
   const tabs = [
     { value: 'main-settings', label: 'Settings' },
     { value: 'source', label: 'Source' },
-    { value: 'variables', label: 'Variables' },
+    { value: 'device-groups', label: 'Device Groups' },
     { value: 'cache-settings', label: 'Cache Settings' },
-    { value: 'custom-code', label: 'Custom Code' },
-    { value: 'rules', label: 'Rules' }
+    { value: 'functions-instances', label: 'Functions Instances' },
+    { value: 'rules-engine', label: 'Rules Engine' }
   ]
   const versions: VersionEntry[] = [
     {
