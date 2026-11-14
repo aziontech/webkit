@@ -236,14 +236,14 @@
                     <span
                       v-for="agent in agentMarks"
                       :key="agent.name"
-                      class="flex size-8 shrink-0 items-center justify-center overflow-hidden rounded-(--shape-elements) border-(length:--border-width-default) border-(--border-muted) bg-(--bg-surface-raised)"
+                      class="flex size-8 shrink-0 items-center justify-center overflow-hidden rounded-(--shape-elements) border-(length:--border-width-default) border-(--border-muted) bg-(--bg-surface-raised) text-(--text-default)"
                     >
                       <Logo
                         :name="agent.name"
                         :src="agent.src"
                         :kind="agent.mono ? 'current' : 'color'"
                         decorative
-                        class="size-(--size-4) text-(--text-default)"
+                        size="small"
                       />
                     </span>
                   </span>

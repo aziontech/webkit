@@ -402,13 +402,14 @@
                   v-if="agent.logo"
                   #icon
                 >
-                  <Logo
-                    :name="agent.name"
-                    :src="agent.logo"
-                    :kind="agent.mono ? 'current' : 'color'"
-                    decorative
-                    class="size-6 text-(--text-default)"
-                  />
+                  <span class="flex text-(--text-default)">
+                    <Logo
+                      :name="agent.name"
+                      :src="agent.logo"
+                      :kind="agent.mono ? 'current' : 'color'"
+                      decorative
+                    />
+                  </span>
                 </template>
                 {{ agent.description }}
               </DocCard>
@@ -446,7 +447,7 @@
                   :src="row.logo"
                   :kind="row.mono ? 'current' : 'color'"
                   decorative
-                  class="size-4"
+                  size="small"
                 />
                 <i
                   v-else

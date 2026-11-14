@@ -439,10 +439,9 @@
             :key="step.title"
             :title="step.title"
           >
-            <DocMarkdown
-              :source="step.body"
-              class="[&>*:first-child]:pt-0!"
-            />
+            <div class="[&>*>*:first-child]:pt-0!">
+              <DocMarkdown :source="step.body" />
+            </div>
             <DocCodeGroup
               v-if="step.samples"
               :samples="step.samples"
@@ -583,10 +582,9 @@
             :key="entry.question"
             :title="entry.question"
           >
-            <DocMarkdown
-              :source="entry.answer"
-              class="[&>*:first-child]:pt-0!"
-            />
+            <div class="[&>*>*:first-child]:pt-0!">
+              <DocMarkdown :source="entry.answer" />
+            </div>
           </DocAccordionItem>
         </DocAccordionGroup>
 
@@ -601,10 +599,9 @@
             :key="entry.question"
             :title="entry.question"
           >
-            <DocMarkdown
-              :source="entry.answer"
-              class="[&>*:first-child]:pt-0!"
-            />
+            <div class="[&>*>*:first-child]:pt-0!">
+              <DocMarkdown :source="entry.answer" />
+            </div>
           </DocAccordionItem>
         </DocAccordionGroup>
 
@@ -626,13 +623,14 @@
               v-if="other.logo"
               #icon
             >
-              <Logo
-                :name="other.name"
-                :src="other.logo"
-                :kind="other.mono ? 'current' : 'color'"
-                decorative
-                class="size-6 text-(--text-default)"
-              />
+              <span class="flex text-(--text-default)">
+                <Logo
+                  :name="other.name"
+                  :src="other.logo"
+                  :kind="other.mono ? 'current' : 'color'"
+                  decorative
+                />
+              </span>
             </template>
             {{ other.description }}
           </DocCard>
