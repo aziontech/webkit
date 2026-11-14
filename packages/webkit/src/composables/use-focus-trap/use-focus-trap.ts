@@ -5,6 +5,8 @@ import { nextTick, toValue, watch } from 'vue'
 const FOCUSABLE_SELECTOR =
   'a[href], button:not([disabled]), textarea:not([disabled]), input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])'
 
+const AUTOFOCUS_SELECTOR = '[data-autofocus]:not([disabled])'
+
 export function useFocusTrap(
   containerRef: MaybeRefOrGetter<HTMLElement | null | undefined>,
   active: MaybeRefOrGetter<boolean>,
@@ -52,7 +54,9 @@ export function useFocusTrap(
       void nextTick(() => {
         const root = toValue(containerRef)
         if (!root) return
-        const first = root.querySelector<HTMLElement>(FOCUSABLE_SELECTOR)
+        const first =
+          root.querySelector<HTMLElement>(AUTOFOCUS_SELECTOR) ??
+          root.querySelector<HTMLElement>(FOCUSABLE_SELECTOR)
         if (first) {
           first.focus()
         } else {
