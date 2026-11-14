@@ -82,6 +82,18 @@ Searchable, paginated; requests and data transferred per project in tabular, rig
 `No usage yet` / `Usage appears here once a project serves requests.` when nothing was recorded, and
 `No matching rows` / `Change the search.` when the search matches nothing.
 
+### N. Real-user monitoring — `Select`, `StatTile`, `Hint` (optional)
+
+Variant RealUser only. Timings measured in the reader's browsers instead of consumption: title
+`Real-user monitoring`, and a medium Period `Select` (`Last hour`, `Last 24 hours`, `Last 7 days`,
+`Last 30 days`) in the `PageHeader` actions drives every figure. Four vitals `StatTile`s
+(`kind="sans"`) lead: `Page load time`, `Largest contentful paint`, `First input delay`,
+`Sessions`, each a median value beside its unit (`s`, `ms`, `K`) with no delta, and a `Hint` in the
+aside that defines the timing. Under them, a two-column grid of trend `StatTile`s, one per vital,
+each with the latest value, its unit, a sparkline of the period and the period name in the aside.
+A timing has no "previous period" the reader acts on here, so these tiles carry no delta and no
+`inverse`.
+
 ## Do
 
 - Compare against the previous period of the same length, and say so in the delta label.
@@ -103,6 +115,7 @@ Searchable, paginated; requests and data transferred per project in tabular, rig
 - **Series names:** `This period`, `Previous period`.
 - **Empty state:** `No usage yet` / `Usage appears here once a project serves requests.`
 - **No-match state:** `No matching rows` / `Change the search.`
+- **RealUser:** title `Real-user monitoring`, description `Real-user timings collected in the browser, for the selected period.`; tile labels are the timing in sentence case (`First input delay`); the aside of a trend tile is the period name (`Last 24 hours`).
 
 ## Accessibility
 
@@ -117,6 +130,7 @@ Searchable, paginated; requests and data transferred per project in tabular, rig
 - Loading: `Skeleton`s hold every tile, chart and table row in place.
 - Empty: no usage recorded yet; each tile shows a dash, and every chart and the table explain that nothing was recorded.
 - Failed: the request for the period failed; tiles show a dash, and every card keeps its header with a danger `Alert` that names what did not load and offers Retry.
+- RealUser: the real-user monitoring page; the vitals and the trend tiles follow the Period select.
 
 ## Related
 
