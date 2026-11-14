@@ -13,6 +13,7 @@
   import Select from '@aziontech/webkit/select'
   import Sidebar from '@aziontech/webkit/sidebar'
   import ThemeSwitcher from '@aziontech/webkit/theme-switcher'
+  import { Toaster } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, ref, watch } from 'vue'
   import { useRoute } from 'vue-router'
@@ -33,6 +34,10 @@
     { to: '/blocks', label: t.value.blocks },
     { to: '/assets', label: t.value.assets }
   ])
+
+  const COPY_ROUTES = new Set(['foundation', 'assets'])
+
+  const hasCopyToasts = computed(() => COPY_ROUTES.has(String(route.name)))
 
   const activeSection = computed(
     () => sections.value.find((section) => route.path.startsWith(section.to))?.to ?? ''
@@ -225,5 +230,9 @@
     </Drawer>
 
     <SearchCommand v-model:open="searchOpen" />
+    <Toaster
+      v-if="hasCopyToasts"
+      position="bottom-center"
+    />
   </div>
 </template>
