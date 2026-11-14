@@ -375,6 +375,7 @@ describe('Chip', () => {
         props: { label: 'Env', removable: true, disabled: true }
       })
 
+      expect(getByTestId('input-chip')).toHaveAttribute('aria-disabled', 'true')
       const removeBtn = getByTestId('input-chip__remove')
       expect(removeBtn).toBeDisabled()
 
