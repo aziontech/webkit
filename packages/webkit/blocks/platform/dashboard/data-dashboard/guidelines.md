@@ -55,13 +55,19 @@ Only on the period comparison chart, labelled with its card.
 
 Names Expand and More options on hover and focus.
 
-### H. Expand — `IconButton` (optional)
+### H. Expand — `IconButton`, `Dialog`, `DialogPortal`, `DialogOverlay`, `DialogContent`, `PanelHeader`, `DialogTitle`, `DialogDescription`, `DialogClose`, `PanelContent` (optional)
 
-Opens a card full size; its `aria-label` names the card.
+Its `aria-label` names the card (`Expand Data transferred by project`). It opens one large `Dialog`
+with the card title, its Hint sentence as the description, and the region at full size: the chart
+at a 420px plot with the same Line or Bar choice, or the usage table at ten rows per page. Closing
+it returns focus to Expand. Disabled while loading and after a failure.
 
-### I. More options — `DropdownMenu` (optional)
+### I. More options — `DropdownMenu`, `toast` (optional)
 
-`Copy query` and `Export CSV` in every card.
+`Copy query` copies the card's GraphQL query and confirms with `Query copied.`; `Export CSV` saves
+the card's rows with `toCsv` and `downloadCsv` from `@aziontech/webkit/utils/csv` and confirms with
+`CSV exported.` and the file name. Export is disabled while loading and after a failure; the app
+mounts the toast region.
 
 ### J. Charts — `Chart` (required)
 
