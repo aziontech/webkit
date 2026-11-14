@@ -22,7 +22,7 @@
 
 <template>
   <Wizard
-    v-model:active-step="step"
+    v-model="step"
     aria-label="Create resource"
     submit-label="Create"
   >

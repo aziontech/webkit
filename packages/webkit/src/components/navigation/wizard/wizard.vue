@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed, onMounted, provide, ref, useAttrs } from 'vue'
+  import { computed, onMounted, provide, ref, useAttrs, watch } from 'vue'
 
   import { useTranslate } from '../../../composables/use-locale/use-translate'
   import * as en from '../../../i18n/messages/en'
@@ -38,6 +38,10 @@
     cancel: [event: MouseEvent]
   }>()
 
+  /** Zero-based index of the active step. */
+  const modelValue = defineModel<number | undefined>()
+
+  /** @deprecated since 6.0 — use v-model. Removed in 7.0. */
   const activeStep = defineModel<number>('activeStep', { default: 0 })
 
   defineSlots<{
@@ -47,6 +51,18 @@
 
   const attrs = useAttrs()
   const { t } = useTranslate({ wizard: en.wizard })
+
+  watch(
+    modelValue,
+    (value) => {
+      if (value !== undefined && value !== activeStep.value) activeStep.value = value
+    },
+    { immediate: true }
+  )
+
+  watch(activeStep, (value) => {
+    if (modelValue.value !== value) modelValue.value = value
+  })
 
   const ids = ref<symbol[]>([])
   const metas = new Map<symbol, WizardStepMeta>()

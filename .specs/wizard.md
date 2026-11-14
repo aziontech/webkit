@@ -3,8 +3,8 @@ name: wizard
 category: navigation
 structure: composition
 status: implemented
-checksum: fcd7f9f828723c7aab952731f9fe4a8263330159c3dee653be6b05af150c2604
-spec_version: 1
+checksum: aae27e45c91ddcacbab853bc1855983384185dfc0aefac7dbd7cd67a86c9e0dd
+spec_version: 2
 created: 2026-11-10
 last_updated: 2026-11-11
 ---
@@ -93,7 +93,7 @@ completion.
 
 <template>
   <Wizard
-    v-model:active-step="step"
+    v-model="step"
     aria-label="Create resource"
     submit-label="Create"
     :loading="saving"
@@ -223,9 +223,10 @@ folder only):
 
 ## v-model
 
-| Model                | Type     | Default | Emits               | Notes                                                                                                                                                                                                                                                                                       |
-| -------------------- | -------- | ------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `v-model:activeStep` | `number` | `0`     | `update:activeStep` | Zero-based index of the step on screen, two-way through `defineModel('activeStep', { default: 0 })`. Written by Next (after an un-prevented `next`), by Previous (index − 1) and by a rail jump to an earlier step. Rendering clamps an out-of-range value to `0 … N − 1` without emitting. |
+| Model                | Type                  | Default     | Emits               | Notes                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+| -------------------- | --------------------- | ----------- | ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `v-model`            | `number \| undefined` | `undefined` | `update:modelValue` | Zero-based index of the step on screen, through `defineModel<number \| undefined>()`, the primary value as on `Stepper` and every sibling. Written by Next (after an un-prevented `next`), by Previous (index − 1) and by a rail jump to an earlier step. Rendering clamps an out-of-range value to `0 … N − 1` without emitting. Kept in sync with `activeStep`. The rail `Stepper` identifies steps by string `value`; the wizard by numeric index, because its steps are positional. |
+| `v-model:activeStep` | `number`              | `0`         | `update:activeStep` | `@deprecated since 6.0 — use v-model. Removed in 7.0.` Same index as `v-model`, kept in sync with it; two-way through `defineModel('activeStep', { default: 0 })`. Written by Next (after an un-prevented `next`), by Previous (index − 1) and by a rail jump to an earlier step. Rendering clamps an out-of-range value to `0 … N − 1` without emitting.                                                                                                                               |
 
 ## Events
 

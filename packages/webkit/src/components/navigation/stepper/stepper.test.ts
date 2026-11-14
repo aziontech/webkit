@@ -298,3 +298,26 @@ describe('useStepperContext', () => {
     expect(() => render(Loose)).toThrow(/must be used within a Stepper/)
   })
 })
+
+describe('Stepper step body', () => {
+  it('renders the default slot outside the step button so a link in it is not nested', async () => {
+    const { container, getByRole } = render(
+      defineComponent({
+        components: { Stepper, StepperStep },
+        template: `
+          <Stepper model-value="deploy" aria-label="Deploy">
+            <StepperStep value="deploy" title="Deploy" state="error">
+              <a href="https://example.com/logs">View logs</a>
+            </StepperStep>
+            <StepperStep value="verify" title="Verify" />
+          </Stepper>
+        `
+      })
+    )
+    await nextTick()
+    const link = getByRole('link', { name: 'View logs' })
+    expect(link.closest('button')).toBeNull()
+    expect(link.closest('li')).not.toBeNull()
+    await expectNoA11yViolations(container)
+  })
+})
