@@ -490,10 +490,8 @@
                       <Table
                         v-else
                         bordered
+                        aria-label="Permissions granted by this team"
                       >
-                        <Table.Caption class="sr-only"
-                          >Permissions granted by this team</Table.Caption
-                        >
                         <Table.Header>
                           <Table.Row>
                             <Table.HeadCell principal>Resource</Table.HeadCell>
