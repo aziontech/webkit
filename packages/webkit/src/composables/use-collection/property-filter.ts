@@ -11,16 +11,25 @@ export interface PropertyFilterToken {
   value: string
 }
 
-/** The whole property filter: its tokens and how they combine. */
+/** Tokens combined by their own operation, inside a query. */
+export interface PropertyFilterTokenGroup {
+  tokens: PropertyFilterToken[]
+  operation: PropertyFilterOperation
+}
+
+/** The whole property filter: its tokens and how they combine. Each of `groups` counts as one condition next to the tokens. */
 export interface PropertyFilterQuery {
   tokens: PropertyFilterToken[]
   operation: PropertyFilterOperation
+  groups?: PropertyFilterTokenGroup[]
 }
 
 /** A value suggested for a property. */
 export interface PropertyFilterOption {
   value: string
   label?: string
+  /** Items that hold this value, shown at the end of the suggestion. */
+  count?: number
 }
 
 /** One property the filter offers. */
@@ -35,6 +44,8 @@ export interface FilteringProperty {
   options?: PropertyFilterOption[]
   /** How values compare. */
   type?: 'text' | 'number' | 'date'
+  /** PropertyFilter hands the value to its value slot instead of suggesting values. */
+  customValue?: boolean
 }
 
 const TEXT_OPERATORS: PropertyFilterOperator[] = ['=', '!=', ':', '!:', '^', '!^']
@@ -60,6 +71,19 @@ export function operatorsOf(property: FilteringProperty): PropertyFilterOperator
 
 export function emptyQuery(): PropertyFilterQuery {
   return { tokens: [], operation: 'and' }
+}
+
+export function cloneQuery(query: PropertyFilterQuery): PropertyFilterQuery {
+  const groups = query.groups
+    ?.filter((group) => group.tokens.length > 0)
+    .map((group) => ({ tokens: [...group.tokens], operation: group.operation }))
+  return groups?.length
+    ? { tokens: [...query.tokens], operation: query.operation, groups }
+    : { tokens: [...query.tokens], operation: query.operation }
+}
+
+export function queryIsEmpty(query: PropertyFilterQuery): boolean {
+  return !query.tokens.length && !(query.groups ?? []).some((group) => group.tokens.length > 0)
 }
 
 const lower = (value: unknown): string => String(value ?? '').toLocaleLowerCase()
@@ -150,9 +174,19 @@ export function matchesQuery(
   properties: FilteringProperty[],
   fields?: string[]
 ): boolean {
-  if (!query.tokens.length) return true
   const check = (token: PropertyFilterToken) => matchesToken(item, token, properties, fields)
-  return query.operation === 'or' ? query.tokens.some(check) : query.tokens.every(check)
+  const groups = (query.groups ?? []).filter((group) => group.tokens.length > 0)
+  if (!query.tokens.length && !groups.length) return true
+  const conditions: (() => boolean)[] = [
+    ...query.tokens.map((token) => () => check(token)),
+    ...groups.map(
+      (group) => () =>
+        group.operation === 'or' ? group.tokens.some(check) : group.tokens.every(check)
+    )
+  ]
+  return query.operation === 'or'
+    ? conditions.some((condition) => condition())
+    : conditions.every((condition) => condition())
 }
 
 export interface ParsedFilterText {

@@ -416,3 +416,155 @@ describe('PropertyFilter', () => {
     })
   })
 })
+
+type Query = {
+  tokens: unknown[]
+  operation: string
+  groups?: { tokens: unknown[]; operation: string }[]
+}
+const latest = (emitted: Record<string, unknown[][]>) =>
+  emitted['update:query']?.at(-1)?.[0] as Query | undefined
+
+describe('PropertyFilter groups, async values, operator groups and value slot (spec v4)', () => {
+  it('groups the operator suggestions under named headings', async () => {
+    const view = render(PropertyFilter, { props: { properties } })
+    const input = view.getByRole('combobox')
+    await fireEvent.focus(input)
+    await fireEvent.update(input, 'Requests ')
+    const listbox = document.body.querySelector('[role="listbox"]') as HTMLElement
+    const groups = within(listbox).getAllByRole('group')
+    expect(
+      groups.map(
+        (g) =>
+          g.getAttribute('aria-labelledby') &&
+          document.getElementById(g.getAttribute('aria-labelledby')!)?.textContent
+      )
+    ).toEqual(['Equality', 'Comparison'])
+    expect(within(groups[1]!).getAllByRole('option')).toHaveLength(4)
+    await fireEvent.keyDown(input, { key: 'ArrowDown' })
+    await fireEvent.keyDown(input, { key: 'ArrowDown' })
+    await fireEvent.keyDown(input, { key: 'ArrowDown' })
+    expect(input.getAttribute('aria-activedescendant')).toBe(options()[2]?.id)
+    await expectNoA11yViolations(listbox)
+  })
+
+  it('builds groups with their own operation and an Add group action', async () => {
+    const view = render(PropertyFilter, { props: { properties, grouped: true } })
+    const input = view.getByRole('combobox')
+    await fireEvent.update(input, 'Status = Active')
+    await fireEvent.keyDown(input, { key: 'Enter' })
+    await fireEvent.update(input, 'Status = Inactive')
+    await fireEvent.keyDown(input, { key: 'Enter' })
+    expect(latest(view.emitted())).toEqual({
+      tokens: [],
+      operation: 'and',
+      groups: [
+        {
+          operation: 'or',
+          tokens: [
+            { propertyKey: 'status', operator: '=', value: 'Active' },
+            { propertyKey: 'status', operator: '=', value: 'Inactive' }
+          ]
+        }
+      ]
+    })
+    await fireEvent.click(view.getByRole('button', { name: 'Add group' }))
+    expect(view.getByTestId('data-property-filter__pending-group').textContent).toContain(
+      'New group'
+    )
+    await fireEvent.update(input, 'Requests > 10')
+    await fireEvent.keyDown(input, { key: 'Enter' })
+    expect(latest(view.emitted())?.groups).toHaveLength(2)
+    expect(view.getAllByTestId('data-property-filter__group')).toHaveLength(2)
+    expect(view.getByRole('group', { name: 'Filter group 2' })).toBeTruthy()
+
+    const groupToggle = view.getByRole('radiogroup', { name: 'Combine filters in group 1' })
+    await fireEvent.click(within(groupToggle).getByRole('radio', { name: 'Match all' }))
+    expect(latest(view.emitted())?.groups?.[0]?.operation).toBe('and')
+
+    await fireEvent.keyDown(input, { key: 'Backspace' })
+    expect(latest(view.emitted())?.groups).toHaveLength(1)
+    await expectNoA11yViolations(view.container)
+  })
+
+  it('loads values for the typed text, shows counts, and drops stale answers', async () => {
+    const calls: {
+      text: string
+      resolve: (v: { value: string; label?: string; count?: number }[]) => void
+    }[] = []
+    const loadValues = (_property: unknown, text: string) =>
+      new Promise<{ value: string; label?: string; count?: number }[]>((resolve) => {
+        calls.push({ text, resolve })
+      })
+    const view = render(PropertyFilter, {
+      props: { properties: [{ key: 'host', label: 'Host' }], loadValues }
+    })
+    const input = view.getByRole('combobox')
+    await fireEvent.focus(input)
+    await fireEvent.update(input, 'Host = a')
+    await nextTick()
+    expect(
+      document.body.querySelector('[data-testid="data-property-filter__loading"]')
+    ).not.toBeNull()
+    expect(document.body.querySelector('[role="listbox"]')?.getAttribute('aria-busy')).toBe('true')
+    await fireEvent.update(input, 'Host = ap')
+    await nextTick()
+    calls[1]!.resolve([{ value: 'api.example.com', label: 'API', count: 1200 }])
+    calls[0]!.resolve([{ value: 'stale.example.com' }])
+    await waitFor(() =>
+      expect(
+        document.body.querySelector('[data-testid="data-property-filter__loading"]')
+      ).toBeNull()
+    )
+    expect(calls.map((c) => c.text)).toEqual(['a', 'ap'])
+    const texts = options().map((o) => o.textContent ?? '')
+    expect(texts[0]).toContain('Host = API')
+    expect(texts[0]).toContain('1,200')
+    expect(texts.some((t) => t.includes('stale'))).toBe(false)
+    await fireEvent.click(options()[0]!)
+    expect(lastQuery(view.emitted())?.tokens).toEqual([
+      { propertyKey: 'host', operator: '=', value: 'api.example.com' }
+    ])
+    expect(view.getByTestId('data-property-filter__token').textContent).toContain('Host = API')
+  })
+
+  it('shows an error row when loading values fails', async () => {
+    const view = render(PropertyFilter, {
+      props: {
+        properties: [{ key: 'host', label: 'Host' }],
+        loadValues: () => Promise.reject(new Error('down'))
+      }
+    })
+    const input = view.getByRole('combobox')
+    await fireEvent.focus(input)
+    await fireEvent.update(input, 'Host = x')
+    await waitFor(() =>
+      expect(
+        document.body.querySelector('[data-testid="data-property-filter__values-error"]')
+          ?.textContent
+      ).toContain('Could not load values')
+    )
+  })
+
+  it('renders the value slot for a customValue property and applies its value', async () => {
+    const view = render(PropertyFilter, {
+      props: {
+        properties: [{ key: 'created', label: 'Created', type: 'date' as const, customValue: true }]
+      },
+      slots: {
+        value: `<template #value="{ property, operator, apply }">
+          <button type="button" @click="apply('2026-01-15')">Pick {{ property.label }} {{ operator }}</button>
+        </template>`
+      }
+    })
+    const input = view.getByRole('combobox')
+    expect(view.queryByTestId('data-property-filter__value-editor')).toBeNull()
+    await fireEvent.update(input, 'Created > ')
+    const editor = view.getByRole('group', { name: 'Value of Created' })
+    await fireEvent.click(within(editor).getByRole('button', { name: 'Pick Created >' }))
+    expect(lastQuery(view.emitted())?.tokens).toEqual([
+      { propertyKey: 'created', operator: '>', value: '2026-01-15' }
+    ])
+    expect(view.queryByTestId('data-property-filter__value-editor')).toBeNull()
+  })
+})

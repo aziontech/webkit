@@ -24,11 +24,13 @@ import {
   writePreferences
 } from './preferences'
 import {
+  cloneQuery,
   emptyQuery,
   type FilteringProperty,
   matchesQuery,
   matchesText,
-  type PropertyFilterQuery
+  type PropertyFilterQuery,
+  queryIsEmpty
 } from './property-filter'
 import { type CollectionUrlAdapter, historyAdapter, readUrlState, writeUrlState } from './url'
 
@@ -323,7 +325,7 @@ export function useCollection<T extends object, C extends CollectionColumn = Col
   const seen = new Map<string, T>()
 
   const filtersActive = computed<boolean>(
-    () => filteringText.value.trim() !== '' || query.value.tokens.length > 0
+    () => filteringText.value.trim() !== '' || !queryIsEmpty(query.value)
   )
 
   const fieldOf = (id: string): string => {
@@ -497,7 +499,7 @@ export function useCollection<T extends object, C extends CollectionColumn = Col
   }
 
   const setQuery = (next: PropertyFilterQuery): void => {
-    query.value = { tokens: [...next.tokens], operation: next.operation }
+    query.value = cloneQuery(next)
     onFiltersChanged()
   }
 
@@ -551,7 +553,7 @@ export function useCollection<T extends object, C extends CollectionColumn = Col
     try {
       const result = await options.fetch({
         filteringText: debouncedText.value,
-        filter: { tokens: [...query.value.tokens], operation: query.value.operation },
+        filter: cloneQuery(query.value),
         sort: [...sorting.value],
         page: page.value,
         pageSize: pageSize.value,
@@ -579,7 +581,7 @@ export function useCollection<T extends object, C extends CollectionColumn = Col
     if (!options.exportAll) return [...serverItems.value]
     return options.exportAll({
       filteringText: filteringText.value,
-      filter: { tokens: [...query.value.tokens], operation: query.value.operation },
+      filter: cloneQuery(query.value),
       sort: [...sorting.value],
       scope
     })

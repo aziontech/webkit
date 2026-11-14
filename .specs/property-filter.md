@@ -5,16 +5,16 @@ structure: monolithic
 status: implemented
 spec_version: 4
 template: 2
-checksum: 377e36cc84aeb72075a056439c73ba74a014f53dff5089b572abd5a8236103f6
+checksum: a6048352c684c23bc7ecb74f9c4ea289ff946088cef2ea04cd318941db60eff3
 created: 2026-11-11
-last_updated: 2026-11-14
+last_updated: 2026-11-15
 ---
 
 # PropertyFilter — Component Spec
 
 ## Purpose
 
-One field that filters a collection by properties and free text, after Cloudscape's property filter. Typing suggests a property, then an operator, then a value, and each choice becomes a removable token (`Status = Active`); text typed without a property becomes a free-text token. Two or more tokens combine with Match all (and) or Match any (or). With `mode="query"` the same field edits one query string instead (`level = Error AND method = GET`), after the Console Kit events query bar: suggestions follow the word at the caret (a field, an operator, a value, then AND or OR), a check explains what is wrong under the field, and Enter submits the text with its flat token list. It edits a `PropertyFilterQuery` and never filters anything itself: `useCollection` (or the server) applies the query, and `propertyFilterProps` binds the query, the properties and the match count in one `v-bind`.
+One field that filters a collection by properties and free text, after Cloudscape's property filter. Typing suggests a property, then an operator, then a value, and each choice becomes a removable token (`Status = Active`); text typed without a property becomes a free-text token. Two or more tokens combine with Match all (and) or Match any (or). With `mode="query"` the same field edits one query string instead (`level = Error AND method = GET`), after the Console Kit events query bar: suggestions follow the word at the caret (a field, an operator, a value, then AND or OR), a check explains what is wrong under the field, and Enter submits the text with its flat token list. Since spec v4, tokens mode also builds one level of nested conditions (`grouped`: each group has its own Match all / Match any, and the groups combine with the query's operation — `(Status = Active or Status = Paused) and (Region = US East or Region = EU West)`), fetches the values of a property as the person types (`loadValues`, with a loading and an error row and a count per value), groups the operator suggestions (Equality, Comparison, Text match), and hands the value of a property marked `customValue` to the `value` slot (a date picker, a number range). It edits a `PropertyFilterQuery` and never filters anything itself: `useCollection` (or the server) applies the query, and `propertyFilterProps` binds the query, the properties and the match count in one `v-bind`.
 
 ## When to use
 
@@ -42,6 +42,9 @@ One field that filters a collection by properties and free text, after Cloudscap
 - Give every property with a closed set of values its `options`, so values are suggested and tokens print labels.
 - Set `type: 'number'` or `type: 'date'` on ordered properties to offer `>`, `<`, `>=`, `<=`.
 - Bind `totalCount` so people hear how many items match after each change.
+- Turn on `grouped` only when people need both and and or in one filter; most filters read better flat.
+- Use `loadValues` when a property has too many values to ship (hostnames, users); return at most a few dozen per call, already filtered by the typed text, with `count` when the server knows it.
+- Mark a property `customValue` when its value is easier to pick than to type (a date), and render the editor in the `value` slot; call `apply` with the value text.
 - Name the field after the collection (`aria-label="Filter resources"`).
 - In query mode, fields are written by `key` (no spaces); quote values that hold spaces or operator characters (`"edge cache"`). Apply the `query` of `submit` when it is not null; keep the `text` for saved and recent queries.
 - A product grammar (`like`, `between`, parentheses) passes `validate` and `suggest`; `submit` then carries `query: null` for text the built-in grammar cannot flatten, and the product parses `text` itself.
@@ -66,6 +69,43 @@ One field that filters a collection by properties and free text, after Cloudscap
     :properties="properties"
     :total-count="12"
   />
+</template>
+```
+
+Groups, async values and a custom value editor:
+
+```vue
+<script setup>
+  import PropertyFilter from '@aziontech/webkit/property-filter'
+  import { ref } from 'vue'
+
+  const properties = [
+    { key: 'host', label: 'Host' },
+    { key: 'created', label: 'Created', type: 'date', customValue: true }
+  ]
+  const query = ref({ tokens: [], operation: 'and' })
+  const loadValues = async (property, text) => {
+    const response = await fetch(`/api/values?key=${property.key}&q=${encodeURIComponent(text)}`)
+    return response.json()
+  }
+</script>
+
+<template>
+  <PropertyFilter
+    v-model:query="query"
+    :properties="properties"
+    :load-values="loadValues"
+    grouped
+  >
+    <template #value="{ property, apply }">
+      <input
+        v-if="property.key === 'created'"
+        type="date"
+        aria-label="Created"
+        @change="apply($event.target.value)"
+      />
+    </template>
+  </PropertyFilter>
 </template>
 ```
 
@@ -95,8 +135,10 @@ Query mode:
 | `mode`        | `'tokens' \| 'query'`                                              | `'tokens'` | false    | `tokens` turns each choice into a token; `query` edits one query string.                                                    |
 | `validate`    | `(text: string) => string`                                         | undefined  | false    | Checks the query string in query mode: '' when valid, else the message shown under the field. Replaces the built-in check.  |
 | `suggest`     | `(text: string, caret: number) => PropertyFilterQuerySuggestion[]` | undefined  | false    | Suggestions for the word at the caret in query mode. Replaces the built-in field, operator, value and AND / OR suggestions. |
+| `grouped`     | `boolean`                                                                        | `false`    | false    | Tokens mode: tokens go into groups with their own Match all / Match any; Add group starts the next one.                     |
+| `loadValues`  | `(property: FilteringProperty, text: string) => Promise<PropertyFilterOption[]>` | undefined  | false    | Fetches the values of a property for the typed text, after the operator. Replaces its `options` in the suggestions.         |
 
-Types (from `@aziontech/webkit/use-collection`): `PropertyFilterQuery = { tokens: PropertyFilterToken[]; operation: 'and' | 'or' }`; `PropertyFilterToken = { propertyKey?: string; operator: '=' | '!=' | ':' | '!:' | '^' | '!^' | '>' | '<' | '>=' | '<='; value: string }`; `FilteringProperty = { key: string; label: string; operators?: PropertyFilterOperator[]; options?: { value: string; label?: string }[]; type?: 'text' | 'number' | 'date' }`. From `@aziontech/webkit/property-filter`: `PropertyFilterQuerySuggestion = { label: string; insert: string; description?: string }` (`insert` replaces the word at the caret); `PropertyFilterSubmit = { text: string; query: PropertyFilterQuery | null }`.
+Types (from `@aziontech/webkit/use-collection`): `PropertyFilterQuery = { tokens: PropertyFilterToken[]; operation: 'and' | 'or' }`; `PropertyFilterToken = { propertyKey?: string; operator: '=' | '!=' | ':' | '!:' | '^' | '!^' | '>' | '<' | '>=' | '<='; value: string }`; `FilteringProperty = { key: string; label: string; operators?: PropertyFilterOperator[]; options?: PropertyFilterOption[]; type?: 'text' | 'number' | 'date'; customValue?: boolean }`; `PropertyFilterOption = { value: string; label?: string; count?: number }`. Since v4, `PropertyFilterQuery` may carry `groups?: PropertyFilterTokenGroup[]` (`{ tokens, operation }`): each group is one condition next to the tokens, combined with the query's `operation`; `useCollection` matches it, sends it to `fetch` and keeps it in the URL (`groups` key). From `@aziontech/webkit/property-filter`: `PropertyFilterQuerySuggestion = { label: string; insert: string; description?: string }` (`insert` replaces the word at the caret); `PropertyFilterSubmit = { text: string; query: PropertyFilterQuery | null }`.
 
 Built-in query grammar: `clause (AND | OR clause)*`, where a clause is `<property key> <operator> <value>` or a lone value (free text, when `freeText`). Operators are the token operators (`=`, `!=`, `:`, `!:`, `^`, `!^`, `>`, `<`, `>=`, `<=`), limited to those of the property; values are a word or a quoted string (`"…"` or `'…'`); AND and OR are case-insensitive. Errors, first one wins: unknown field, operator that does not apply, missing operator, missing value, missing AND / OR, dangling AND / OR, unclosed quote. `query` in `submit` is the token list when every connective is the same (AND gives `and`, OR gives `or`), `{ tokens: [], operation }` for an empty text, and `null` when AND and OR mix or the text does not parse.
 
@@ -115,7 +157,9 @@ Built-in query grammar: `clause (AND | OR clause)*`, where a clause is `<propert
 
 ## Slots
 
-_none_ — the field, the suggestions and the tokens are fixed parts.
+| Slot    | Scope                                                                                               | Notes                                                                                                                                                                                      |
+| ------- | --------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `value` | `{ property: FilteringProperty, operator: PropertyFilterOperator, apply: (value: string) => void }` | Tokens mode. Rendered under the field, in a named `group`, once the typed text has a property marked `customValue` and an operator; `apply` adds the token and returns focus to the field. |
 
 ## States
 
@@ -123,6 +167,8 @@ _none_ — the field, the suggestions and the tokens are fixed parts.
 - `data-mode` on the field wrapper mirrors `mode`; query mode sets the typed text in the code type (`text-label-code-sm`)
 - `aria-expanded` on the field mirrors the open suggestions; `data-active` marks the active option
 - `data-disabled` mirrors the `disabled` prop; while disabled nothing is added, removed or submitted (no `update:query`, no `submit`)
+- `loading` (values): a `Loading values` row with a spinner in the suggestions while `loadValues` is pending, `aria-busy` on the listbox; `error`: a `Could not load values` row when it rejects. A newer call wins over a stale one.
+- Grouped (`grouped`): each group is a bordered `group` (`data-testid="…__group"`); a pending new group shows a dashed `New group` chip until its first token.
 
 ## Motion & Animations
 
@@ -131,18 +177,25 @@ _none_ — the field, the suggestions and the tokens are fixed parts.
 | suggestions open  | `animate-popup-scale-in`                  | semantic (150ms · cubic-bezier)                   | `motion-reduce:animate-none`    |
 | suggestions close | `animate-popup-scale-out`                 | semantic (110ms · cubic-bezier)                   | `motion-reduce:animate-none`    |
 | option hover      | `transition-colors duration-150 ease-out` | inline (matches catalog)                          | `motion-reduce:transition-none` |
+| values loading    | inherits from `Spinner`                   | inherits from `Spinner`                           | inherits from `Spinner`         |
 
 ## Tokens
 
-| Region              | Token (DESIGN.md)          |
-| ------------------- | -------------------------- |
-| suggestions surface | `var(--bg-surface-raised)` |
-| suggestions border  | `var(--border-default)`    |
-| suggestions shadow  | `var(--shadow-xs)`         |
-| active option       | `var(--bg-hover)`          |
-| muted text          | `var(--text-muted)`        |
-| gaps                | `var(--spacing-xs)`        |
-| shape               | `var(--shape-elements)`    |
+| Region              | Token (DESIGN.md)                                                 |
+| ------------------- | ----------------------------------------------------------------- |
+| suggestions surface | `var(--bg-surface-raised)`                                        |
+| suggestions border  | `var(--border-default)`                                           |
+| suggestions shadow  | `var(--shadow-xs)`                                                |
+| active option       | `var(--bg-hover)`                                                 |
+| muted text          | `var(--text-muted)`                                               |
+| gaps                | `var(--spacing-xs)`                                               |
+| shape               | `var(--shape-elements)`                                           |
+| group border        | `var(--border-default)`                                           |
+| group padding       | `var(--spacing-xxs)` / `var(--spacing-xs)`                        |
+| value count         | `.text-label-sm` + `var(--text-muted)`, `tabular-nums`            |
+| section heading     | `.text-label-sm` + `var(--text-muted)`                            |
+| error row icon      | `var(--danger)`                                                   |
+| value editor        | `var(--border-default)`, `var(--bg-surface)`, `var(--spacing-xs)` |
 
 ## Theme gaps
 
@@ -155,35 +208,44 @@ _none_ — the field, the suggestions and the tokens are fixed parts.
 - Visible focus: the field's own `focus-within` ring (from `input`); tokens and buttons keep theirs.
 - Keyboard map (query mode): typing opens the suggestions for the word at the caret; `ArrowDown`/`ArrowUp` move the active option (wrapping); `Enter` applies the active option (it replaces the word and moves the caret after it) or submits the query; `Escape` closes the suggestions, then clears the text; `ArrowLeft`/`ArrowRight`, `Home`/`End` and clicks move the caret and the suggestions follow it; `Backspace` only edits text.
 - In query mode an invalid query sets `aria-invalid` on the field and `aria-describedby` to the message, which sits in a polite live region under the field; the token group is not rendered.
-- Keyboard map (tokens mode): typing opens the suggestions; `ArrowDown`/`ArrowUp` move the active option (wrapping); `Enter` applies the active option or commits the typed text; `Escape` closes the suggestions, then clears the text; `Backspace` in an empty field removes the last token.
+- Keyboard map (tokens mode): typing opens the suggestions; `ArrowDown`/`ArrowUp` move the active option (wrapping); `Enter` applies the active option or commits the typed text; `Escape` closes the suggestions, then clears the text; `Backspace` in an empty field removes the last token (with `grouped`: cancels a pending new group first, then removes the last token of the last group).
+- Operator suggestions sit in named `group`s (Equality, Comparison, Text match) inside the listbox; the arrows move across groups as one list.
+- `grouped`: each group is a `group` named `Filter group <n>`; its Match all / Match any toggle is named `Combine filters in group <n>`; Add group is a button that returns focus to the field.
+- `value` slot: its wrapper is a `group` named `Value of <property>`; the editor inside owns its own keyboard.
 - ARIA: the field is a `combobox` (`aria-autocomplete="list"`, `aria-expanded`, `aria-controls`, `aria-activedescendant`); the suggestions are a named `listbox` of `option`s with `aria-selected` on the active one; the tokens sit in a named `group`; each token's remove button is named `Remove <token>`; the match count is a `status` region.
 - Option targets are 32 px high (44 px on `pointer: coarse`).
 - Contrast ≥4.5:1 from the semantic text tokens.
 
 ## Internationalization
 
-| Key                                                  | English source                                                                                | Override prop |
-| ---------------------------------------------------- | --------------------------------------------------------------------------------------------- | ------------- |
-| `propertyFilter.label`                               | Filter                                                                                        | `ariaLabel`   |
-| `propertyFilter.placeholder`                         | Filter by property or text                                                                    | `placeholder` |
-| `propertyFilter.suggestions`                         | Suggestions                                                                                   | —             |
-| `propertyFilter.useText`                             | Use: “{text}”                                                                                 | —             |
-| `propertyFilter.properties`                          | Properties                                                                                    | —             |
-| `propertyFilter.values`                              | Values                                                                                        | —             |
-| `propertyFilter.tokens`                              | Applied filters                                                                               | —             |
-| `propertyFilter.operation`                           | Combine filters                                                                               | —             |
-| `propertyFilter.matchAll` / `matchAny`               | Match all / Match any                                                                         | —             |
-| `propertyFilter.and` / `or`                          | and / or                                                                                      | —             |
-| `propertyFilter.clear`                               | Clear filters                                                                                 | —             |
-| `propertyFilter.matches`                             | {count} match / {count} matches (plural)                                                      | —             |
-| `propertyFilter.equals` … `lessOrEqual`              | operator names (Equals, Contains, …)                                                          | —             |
-| `propertyFilterQuery.label`                          | Query                                                                                         | `ariaLabel`   |
-| `propertyFilterQuery.placeholder`                    | Type a query, for example status = Active AND requests > 10                                   | `placeholder` |
-| `propertyFilterQuery.fields`                         | Fields                                                                                        | —             |
-| `propertyFilterQuery.all` / `any`                    | Every condition matches / Any condition matches (AND / OR)                                    | —             |
-| `propertyFilterQuery.unknownField` … `unclosedQuote` | the built-in check messages (`{field}`, `{operator}`, `{word}`, `{connective}`, `{position}`) | `validate`    |
+| Key                                                    | English source                                                                                | Override prop |
+| ------------------------------------------------------ | --------------------------------------------------------------------------------------------- | ------------- |
+| `propertyFilter.label`                                 | Filter                                                                                        | `ariaLabel`   |
+| `propertyFilter.placeholder`                           | Filter by property or text                                                                    | `placeholder` |
+| `propertyFilter.suggestions`                           | Suggestions                                                                                   | —             |
+| `propertyFilter.useText`                               | Use: “{text}”                                                                                 | —             |
+| `propertyFilter.properties`                            | Properties                                                                                    | —             |
+| `propertyFilter.values`                                | Values                                                                                        | —             |
+| `propertyFilter.tokens`                                | Applied filters                                                                               | —             |
+| `propertyFilter.operation`                             | Combine filters                                                                               | —             |
+| `propertyFilter.matchAll` / `matchAny`                 | Match all / Match any                                                                         | —             |
+| `propertyFilter.and` / `or`                            | and / or                                                                                      | —             |
+| `propertyFilter.clear`                                 | Clear filters                                                                                 | —             |
+| `propertyFilter.matches`                               | {count} match / {count} matches (plural)                                                      | —             |
+| `propertyFilter.equals` … `lessOrEqual`                | operator names (Equals, Contains, …)                                                          | —             |
+| `propertyFilter.equality` / `comparison` / `textMatch` | Equality / Comparison / Text match (operator groups)                                          | —             |
+| `propertyFilter.addGroup` / `newGroup`                 | Add group / New group                                                                         | —             |
+| `propertyFilter.group`                                 | Filter group {index}                                                                          | —             |
+| `propertyFilter.groupOperation`                        | Combine filters in group {index}                                                              | —             |
+| `propertyFilter.loadingValues` / `valuesError`         | Loading values / Could not load values                                                        | —             |
+| `propertyFilter.valueEditor`                           | Value of {property}                                                                           | —             |
+| `propertyFilterQuery.label`                            | Query                                                                                         | `ariaLabel`   |
+| `propertyFilterQuery.placeholder`                      | Type a query, for example status = Active AND requests > 10                                   | `placeholder` |
+| `propertyFilterQuery.fields`                           | Fields                                                                                        | —             |
+| `propertyFilterQuery.all` / `any`                      | Every condition matches / Any condition matches (AND / OR)                                    | —             |
+| `propertyFilterQuery.unknownField` … `unclosedQuote`   | the built-in check messages (`{field}`, `{operator}`, `{word}`, `{connective}`, `{position}`) | `validate`    |
 
-- Formatting: the match count goes through the plural rules and number format of the active locale (`Intl.PluralRules`, `Intl.NumberFormat`).
+- Formatting: value counts use `Intl.NumberFormat` of the active locale; the match count goes through the plural rules and number format of the active locale (`Intl.PluralRules`, `Intl.NumberFormat`).
 
 ## Right-to-left
 
@@ -203,9 +265,11 @@ _none_ — the field, the suggestions and the tokens are fixed parts.
 
 ## Performance
 
-- Bundle budget: 29.1 KB gzip for `./property-filter` (it carries `input`, `chip`, `button`, `toggle-group` and the placement composable) in `.size-limit.json`.
+- Bundle budget: 31.5 KB gzip for `./property-filter` (it carries `input`, `chip`, `button`, `toggle-group`, `spinner` and the placement composable) in `.size-limit.json`.
 - Query mode: the lexer and the checker run once per keystroke over the text (linear in its length); no editor library.
 - Runtime budget: suggestions recompute per keystroke over the properties and their options, and the list renders at most 100 rows (the typed-text row always stays last), so a property with thousands of values stays responsive; typing narrows the rest. The `PropertyFilter with 1k values` scenario of `performance.test.ts` measures it.
+- `loadValues`: one call per keystroke at the value step; stale responses are dropped by a request id. Debounce in the consumer when the server needs it.
+- Groups: matching is linear in tokens; `useCollection` evaluates each group once per item.
 - Heavy parts: none; the suggestions are teleported and positioned by `usePlacement`.
 
 ## Examples
@@ -214,6 +278,8 @@ _none_ — the field, the suggestions and the tokens are fixed parts.
 - WithCollection — bound to `useCollection` and a `Table`; justified because the binding is the main use.
 - QueryMode — `mode="query"` with a match count; justified because the mode changes the whole interaction.
 - Disabled — applied tokens shown read-only; justified because `disabled` locks every control and the state must be visible.
+- Groups — `grouped` with two groups bound to `useCollection`; justified because nested and / or is a separate interaction (Add group, per-group toggle).
+- AsyncValues — `loadValues` with counts, the loading row and an error, plus a `customValue` date property in the `value` slot; justified because neither the async states nor the slot are reachable from another example.
 
 ## Constraints — DO NOT
 

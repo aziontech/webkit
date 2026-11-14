@@ -2,7 +2,8 @@ import {
   PROPERTY_FILTER_OPERATORS,
   type PropertyFilterOperator,
   type PropertyFilterQuery,
-  type PropertyFilterToken
+  type PropertyFilterToken,
+  type PropertyFilterTokenGroup
 } from './property-filter'
 
 /** Reads and writes the query string. `useCollection` keeps its state in it when `url` is set. */
@@ -74,26 +75,49 @@ export interface CollectionUrlState {
   pageSize?: number
 }
 
-export const URL_KEYS = ['q', 'filter', 'op', 'sort', 'page', 'size'] as const
+export const URL_KEYS = ['q', 'filter', 'op', 'groups', 'sort', 'page', 'size'] as const
 
 const isOperator = (value: unknown): value is PropertyFilterOperator =>
   typeof value === 'string' && (PROPERTY_FILTER_OPERATORS as readonly string[]).includes(value)
+
+function tokensOf(parsed: unknown[]): PropertyFilterToken[] {
+  const tokens: PropertyFilterToken[] = []
+  for (const entry of parsed) {
+    if (!Array.isArray(entry) || entry.length !== 3) continue
+    const [key, operator, value] = entry as unknown[]
+    if (!isOperator(operator) || typeof value !== 'string') continue
+    tokens.push(
+      typeof key === 'string' && key ? { propertyKey: key, operator, value } : { operator, value }
+    )
+  }
+  return tokens
+}
+
+function parseGroups(raw: string | null): PropertyFilterTokenGroup[] | undefined {
+  if (!raw) return undefined
+  try {
+    const parsed: unknown = JSON.parse(raw)
+    if (!Array.isArray(parsed)) return undefined
+    const groups: PropertyFilterTokenGroup[] = []
+    for (const entry of parsed) {
+      if (!Array.isArray(entry) || entry.length !== 2 || !Array.isArray(entry[1])) continue
+      const tokens = tokensOf(entry[1] as unknown[])
+      if (tokens.length) groups.push({ operation: entry[0] === 'or' ? 'or' : 'and', tokens })
+    }
+    return groups.length ? groups : undefined
+  } catch {
+    return undefined
+  }
+}
+
+const tokenTuples = (tokens: PropertyFilterToken[]) =>
+  tokens.map((t) => [t.propertyKey ?? '', t.operator, t.value])
 
 function parseTokens(raw: string | null): PropertyFilterToken[] | undefined {
   if (!raw) return undefined
   try {
     const parsed: unknown = JSON.parse(raw)
-    if (!Array.isArray(parsed)) return undefined
-    const tokens: PropertyFilterToken[] = []
-    for (const entry of parsed) {
-      if (!Array.isArray(entry) || entry.length !== 3) continue
-      const [key, operator, value] = entry as unknown[]
-      if (!isOperator(operator) || typeof value !== 'string') continue
-      tokens.push(
-        typeof key === 'string' && key ? { propertyKey: key, operator, value } : { operator, value }
-      )
-    }
-    return tokens
+    return Array.isArray(parsed) ? tokensOf(parsed) : undefined
   } catch {
     return undefined
   }
@@ -105,7 +129,11 @@ export function readUrlState(params: URLSearchParams, prefix = ''): CollectionUr
   const text = get('q')
   if (text !== null) state.filteringText = text
   const tokens = parseTokens(get('filter'))
-  if (tokens) state.query = { tokens, operation: get('op') === 'or' ? 'or' : 'and' }
+  const groups = parseGroups(get('groups'))
+  if (tokens || groups) {
+    state.query = { tokens: tokens ?? [], operation: get('op') === 'or' ? 'or' : 'and' }
+    if (groups) state.query.groups = groups
+  }
   const sort = get('sort')
   if (sort !== null) {
     state.sorting = sort
@@ -131,12 +159,18 @@ export function writeUrlState(
   const params = new URLSearchParams(base)
   for (const key of URL_KEYS) params.delete(prefix + key)
   if (state.filteringText) params.set(`${prefix}q`, state.filteringText)
+  const groups = (state.query.groups ?? []).filter((group) => group.tokens.length > 0)
   if (state.query.tokens.length) {
+    params.set(`${prefix}filter`, JSON.stringify(tokenTuples(state.query.tokens)))
+  }
+  if (groups.length) {
     params.set(
-      `${prefix}filter`,
-      JSON.stringify(state.query.tokens.map((t) => [t.propertyKey ?? '', t.operator, t.value]))
+      `${prefix}groups`,
+      JSON.stringify(groups.map((group) => [group.operation, tokenTuples(group.tokens)]))
     )
-    if (state.query.operation === 'or') params.set(`${prefix}op`, 'or')
+  }
+  if ((state.query.tokens.length || groups.length) && state.query.operation === 'or') {
+    params.set(`${prefix}op`, 'or')
   }
   if (state.sorting.length) {
     params.set(`${prefix}sort`, state.sorting.map((s) => (s.desc ? `-${s.id}` : s.id)).join(','))

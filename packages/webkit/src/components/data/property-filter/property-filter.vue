@@ -1,14 +1,17 @@
 <script setup lang="ts">
-  import { computed, nextTick, ref, useAttrs, useId } from 'vue'
+  import { computed, nextTick, ref, useAttrs, useId, watch } from 'vue'
 
   import {
+    cloneQuery,
     type FilteringProperty,
     operatorsOf,
     parseFilterText,
     type PropertyFilterOperation,
     type PropertyFilterOperator,
+    type PropertyFilterOption,
     type PropertyFilterQuery,
     type PropertyFilterToken,
+    type PropertyFilterTokenGroup,
     tokenText
   } from '../../../composables/use-collection/property-filter'
   import { usePortalLocale, useTranslate } from '../../../composables/use-locale/use-translate'
@@ -19,6 +22,7 @@
   import Chip from '../../inputs/chip/chip.vue'
   import HelperText from '../../inputs/helper-text/helper-text.vue'
   import Input from '../../inputs/input/input.vue'
+  import Spinner from '../../utils/spinner/spinner.vue'
   import {
     flatQuery,
     parseQuery,
@@ -31,8 +35,10 @@
   export type {
     FilteringProperty,
     PropertyFilterOperator,
+    PropertyFilterOption,
     PropertyFilterQuery,
-    PropertyFilterToken
+    PropertyFilterToken,
+    PropertyFilterTokenGroup
   } from '../../../composables/use-collection/property-filter'
   export type { PropertyFilterQuerySuggestion, PropertyFilterSubmit } from './query-language'
 
@@ -41,8 +47,12 @@
     group: 'properties' | 'operators' | 'values' | 'text' | 'fields' | 'connectives'
     label: string
     description: string
+    count?: number
+    section?: OperatorSection
     apply: () => void
   }
+
+  type OperatorSection = 'equality' | 'comparison' | 'textMatch'
 
   defineOptions({
     name: 'PropertyFilter',
@@ -71,6 +81,10 @@
     validate?: (text: string) => string
     /** Suggestions for the word at the caret in query mode. Replaces the built-in field, operator, value and AND / OR suggestions. */
     suggest?: (text: string, caret: number) => PropertyFilterQuerySuggestion[]
+    /** Tokens mode: tokens go into groups with their own Match all / Match any; Add group starts the next one. */
+    grouped?: boolean
+    /** Fetches the values of a property for the typed text, after the operator. Replaces its options in the suggestions. */
+    loadValues?: (property: FilteringProperty, text: string) => Promise<PropertyFilterOption[]>
   }
 
   const props = withDefaults(defineProps<Props>(), {
@@ -82,7 +96,9 @@
     disabled: false,
     mode: 'tokens',
     validate: undefined,
-    suggest: undefined
+    suggest: undefined,
+    grouped: false,
+    loadValues: undefined
   })
 
   const emit = defineEmits<{
@@ -96,8 +112,17 @@
   /** The query string in query mode. Supports v-model:text. */
   const queryText = defineModel<string>('text', { default: '' })
 
+  defineSlots<{
+    /** Editor for the value of a property marked customValue; apply adds the token. */
+    value(props: {
+      property: FilteringProperty
+      operator: PropertyFilterOperator
+      apply: (value: string) => void
+    }): unknown
+  }>()
+
   const attrs = useAttrs()
-  const { t } = useTranslate({
+  const { t, locale } = useTranslate({
     propertyFilter: en.propertyFilter,
     propertyFilterQuery: en.propertyFilterQuery
   })
@@ -115,11 +140,19 @@
 
   const tokens = computed<PropertyFilterToken[]>(() => query.value.tokens)
   const operation = computed<PropertyFilterOperation>(() => query.value.operation)
+  const groups = computed<PropertyFilterTokenGroup[]>(() => query.value.groups ?? [])
+  const pendingGroup = ref<boolean>(false)
 
   const commitQuery = (next: PropertyFilterQuery): void => {
     if (props.disabled) return
-    query.value = next
+    query.value = cloneQuery(next)
   }
+
+  const withGroups = (
+    nextTokens: PropertyFilterToken[],
+    nextGroups: PropertyFilterTokenGroup[],
+    nextOperation: PropertyFilterOperation = operation.value
+  ): PropertyFilterQuery => ({ tokens: nextTokens, operation: nextOperation, groups: nextGroups })
 
   const draft = ref<string>('')
   const open = ref<boolean>(false)
@@ -153,12 +186,93 @@
   }
 
   const addToken = (token: PropertyFilterToken): void => {
-    commitQuery({ tokens: [...tokens.value, token], operation: operation.value })
+    if (props.grouped) {
+      const current = groups.value
+      const last = current[current.length - 1]
+      const nextGroups =
+        pendingGroup.value || !last
+          ? [...current, { tokens: [token], operation: 'or' as const }]
+          : [
+              ...current.slice(0, -1),
+              { tokens: [...last.tokens, token], operation: last.operation }
+            ]
+      pendingGroup.value = false
+      commitQuery(withGroups(tokens.value, nextGroups))
+    } else {
+      commitQuery(withGroups([...tokens.value, token], groups.value))
+    }
     draft.value = ''
     active.value = -1
   }
 
+  const loadedValues = ref<PropertyFilterOption[] | null>(null)
+  const valuesLoading = ref<boolean>(false)
+  const valuesFailed = ref<boolean>(false)
+  const loadedLabels = new Map<string, string>()
+  let loadId = 0
+
+  const numberFormat = computed(() => new Intl.NumberFormat(locale.value))
+
+  const sectionOf = (operator: PropertyFilterOperator): OperatorSection => {
+    if (operator === '=' || operator === '!=') return 'equality'
+    if (operator === ':' || operator === '!:' || operator === '^' || operator === '!^')
+      return 'textMatch'
+    return 'comparison'
+  }
+
+  const isQuery = computed<boolean>(() => props.mode === 'query')
+
   const parsed = computed(() => parseFilterText(draft.value, props.properties))
+
+  const valueStage = computed(() => {
+    const { property, operator, value } = parsed.value
+    return property && operator && !isQuery.value ? { property, operator, value } : null
+  })
+
+  watch(
+    () =>
+      valueStage.value && props.loadValues && !valueStage.value.property.customValue
+        ? `${valueStage.value.property.key}\u0000${valueStage.value.value}`
+        : null,
+    async (key) => {
+      const id = ++loadId
+      const stage = valueStage.value
+      if (key === null || !stage || !props.loadValues) {
+        loadedValues.value = null
+        valuesLoading.value = false
+        valuesFailed.value = false
+        return
+      }
+      valuesLoading.value = true
+      valuesFailed.value = false
+      try {
+        const values = await props.loadValues(stage.property, stage.value)
+        if (id !== loadId) return
+        values.forEach((option) => {
+          if (option.label)
+            loadedLabels.set(`${stage.property.key}\u0000${option.value}`, option.label)
+        })
+        loadedValues.value = values
+      } catch {
+        if (id !== loadId) return
+        loadedValues.value = []
+        valuesFailed.value = true
+      } finally {
+        if (id === loadId) valuesLoading.value = false
+      }
+    }
+  )
+
+  const editorStage = computed(() =>
+    valueStage.value?.property.customValue ? valueStage.value : null
+  )
+
+  const applyCustom = (value: string): void => {
+    const stage = editorStage.value
+    if (!stage || !value) return
+    addToken({ propertyKey: stage.property.key, operator: stage.operator, value })
+    void nextTick(() => inputEl()?.focus())
+  }
 
   const tokenSuggestions = computed<Suggestion[]>(() => {
     const { property, operator, value } = parsed.value
@@ -189,6 +303,7 @@
                 group: 'values',
                 label: `${p.label} = ${o.label ?? o.value}`,
                 description: '',
+                count: o.count,
                 apply: () => addToken({ propertyKey: p.key, operator: '=', value: o.value })
               })
             )
@@ -214,6 +329,7 @@
             group: 'operators',
             label: `${property.label} ${op}`,
             description: operatorLabel(op),
+            section: sectionOf(op),
             apply: () => {
               draft.value = `${property.label} ${op} `
               active.value = -1
@@ -222,19 +338,23 @@
         )
       return out
     }
+    if (property.customValue) return out
     const needle = value.toLocaleLowerCase()
-    ;(property.options ?? [])
-      .filter((o) => (o.label ?? o.value).toLocaleLowerCase().includes(needle))
+    const loaded = props.loadValues ? loadedValues.value : null
+    const source = loaded ?? (props.loadValues ? [] : (property.options ?? []))
+    source
+      .filter((o) => loaded !== null || (o.label ?? o.value).toLocaleLowerCase().includes(needle))
       .forEach((o) =>
         out.push({
           id: `v-${property.key}-${o.value}`,
           group: 'values',
           label: `${property.label} ${operator} ${o.label ?? o.value}`,
           description: '',
+          count: o.count,
           apply: () => addToken({ propertyKey: property.key, operator, value: o.value })
         })
       )
-    if (value && !property.options?.some((o) => o.value === value)) {
+    if (value && !source.some((o) => o.value === value)) {
       out.push({
         id: 'typed',
         group: 'text',
@@ -246,7 +366,6 @@
     return out
   })
 
-  const isQuery = computed<boolean>(() => props.mode === 'query')
   const caret = ref<number>(queryText.value.length)
   const touched = ref<boolean>(false)
 
@@ -381,9 +500,32 @@
     })
   }
 
+  const valueRows = computed<'loading' | 'error' | null>(() => {
+    if (!valueStage.value || !props.loadValues || valueStage.value.property.customValue) return null
+    if (valuesLoading.value) return 'loading'
+    return valuesFailed.value ? 'error' : null
+  })
+
   const expanded = computed<boolean>(
-    () => open.value && !props.disabled && suggestions.value.length > 0
+    () =>
+      open.value && !props.disabled && (suggestions.value.length > 0 || valueRows.value !== null)
   )
+
+  const sections = computed(() => {
+    const out: { id: string; title: string; items: { item: Suggestion; index: number }[] }[] = []
+    suggestions.value.forEach((item, index) => {
+      const key = item.section ?? ''
+      const last = out[out.length - 1]
+      if (last && last.id === `${uid}-section-${key}`) last.items.push({ item, index })
+      else
+        out.push({
+          id: `${uid}-section-${key}`,
+          title: item.section ? t(`propertyFilter.${item.section}`) : '',
+          items: [{ item, index }]
+        })
+    })
+    return out
+  })
   const activeId = computed<string | undefined>(() =>
     expanded.value && active.value >= 0 ? `${uid}-option-${active.value}` : undefined
   )
@@ -443,7 +585,15 @@
       return
     }
     if (isQuery.value) return
-    if (event.key === 'Backspace' && !draft.value && tokens.value.length) {
+    if (event.key !== 'Backspace' || draft.value) return
+    if (pendingGroup.value) {
+      pendingGroup.value = false
+      return
+    }
+    const lastGroup = groups.value.length - 1
+    if (props.grouped && lastGroup >= 0) {
+      removeGroupToken(lastGroup, (groups.value[lastGroup]?.tokens.length ?? 1) - 1)
+    } else if (tokens.value.length) {
       removeToken(tokens.value.length - 1)
     }
   }
@@ -456,18 +606,59 @@
   }
 
   const removeToken = (index: number): void => {
-    commitQuery({
-      tokens: tokens.value.filter((_, i) => i !== index),
-      operation: operation.value
-    })
+    commitQuery(
+      withGroups(
+        tokens.value.filter((_, i) => i !== index),
+        groups.value
+      )
+    )
+  }
+
+  const removeGroupToken = (groupIndex: number, tokenIndex: number): void => {
+    commitQuery(
+      withGroups(
+        tokens.value,
+        groups.value.map((group, i) =>
+          i === groupIndex
+            ? {
+                tokens: group.tokens.filter((_, j) => j !== tokenIndex),
+                operation: group.operation
+              }
+            : group
+        )
+      )
+    )
   }
 
   const setOperation = (value: string | undefined): void => {
     if (value !== 'and' && value !== 'or') return
-    commitQuery({ tokens: tokens.value, operation: value })
+    commitQuery(withGroups(tokens.value, groups.value, value))
   }
 
+  const setGroupOperation = (groupIndex: number, value: string | undefined): void => {
+    if (value !== 'and' && value !== 'or') return
+    commitQuery(
+      withGroups(
+        tokens.value,
+        groups.value.map((group, i) =>
+          i === groupIndex ? { tokens: group.tokens, operation: value } : group
+        )
+      )
+    )
+  }
+
+  const startGroup = (): void => {
+    pendingGroup.value = true
+    void nextTick(() => inputEl()?.focus())
+  }
+
+  const conditionCount = computed<number>(() => tokens.value.length + groups.value.length)
+  const showTokenRow = computed<boolean>(
+    () => !isQuery.value && (conditionCount.value > 0 || pendingGroup.value)
+  )
+
   const clearAll = (): void => {
+    pendingGroup.value = false
     commitQuery({ tokens: [], operation: operation.value })
     draft.value = ''
   }
@@ -477,10 +668,13 @@
     { label: t('propertyFilter.matchAny'), value: 'or' }
   ])
 
-  const labelOf = (token: PropertyFilterToken): string =>
-    token.propertyKey
-      ? tokenText(token, props.properties)
-      : `${operatorLabel(token.operator)}: ${token.value}`
+  const labelOf = (token: PropertyFilterToken): string => {
+    if (!token.propertyKey) return `${operatorLabel(token.operator)}: ${token.value}`
+    const loaded = loadedLabels.get(`${token.propertyKey}\u0000${token.value}`)
+    return loaded
+      ? tokenText({ ...token, value: loaded }, props.properties)
+      : tokenText(token, props.properties)
+  }
 
   const groupLabel = (group: Suggestion['group']): string => {
     if (group === 'properties') return t('propertyFilter.properties')
@@ -559,41 +753,103 @@
           ref="panelRef"
           role="listbox"
           :aria-label="t('propertyFilter.suggestions')"
+          :aria-busy="valueRows === 'loading' || undefined"
           :data-testid="`${testId}__suggestions`"
           :style="panelStyle"
           class="fixed z-(--z-input-overlay) flex max-h-80 flex-col gap-(--spacing-xxs) overflow-y-auto overscroll-contain rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface-raised) p-(--spacing-xxs) shadow-(--shadow-xs)"
         >
           <li
-            v-for="(item, index) in suggestions"
-            :id="`${uid}-option-${index}`"
-            :key="item.id"
-            role="option"
-            :aria-selected="index === active"
-            :data-active="index === active || null"
-            :data-group="item.group"
-            :data-testid="`${testId}__option`"
-            class="flex min-h-8 cursor-pointer items-center gap-(--spacing-sm) rounded-(--shape-elements) px-(--spacing-sm) py-(--spacing-xxs) text-start text-label-sm text-(--text-default) transition-colors duration-150 ease-out hover:bg-(--bg-hover) data-[active]:bg-(--bg-hover) motion-reduce:transition-none pointer-coarse:min-h-11"
-            @mousedown.prevent
-            @click="item.apply()"
-            @keydown.enter.prevent="item.apply()"
+            v-for="section in sections"
+            :key="section.id"
+            role="presentation"
+            class="flex flex-col gap-(--spacing-xxs)"
           >
-            <span class="min-w-0 flex-1 truncate"
-              ><bdi>{{ item.label }}</bdi></span
-            >
             <span
-              v-if="item.description"
-              class="shrink-0 text-(--text-muted)"
-              >{{ item.description }}</span
+              v-if="section.title"
+              :id="section.id"
+              :data-testid="`${testId}__section`"
+              class="flex min-h-7 items-center px-(--spacing-sm) text-label-sm text-(--text-muted)"
+              >{{ section.title }}</span
             >
-            <span
-              v-else-if="groupLabel(item.group)"
-              class="shrink-0 text-label-sm text-(--text-muted)"
-              >{{ groupLabel(item.group) }}</span
+            <ul
+              :role="section.title ? 'group' : 'presentation'"
+              :aria-labelledby="section.title ? section.id : undefined"
+              class="m-0 flex list-none flex-col gap-(--spacing-xxs) p-0"
             >
+              <li
+                v-for="{ item, index } in section.items"
+                :id="`${uid}-option-${index}`"
+                :key="item.id"
+                role="option"
+                :aria-selected="index === active"
+                :data-active="index === active || null"
+                :data-group="item.group"
+                :data-testid="`${testId}__option`"
+                class="flex min-h-8 cursor-pointer items-center gap-(--spacing-sm) rounded-(--shape-elements) px-(--spacing-sm) py-(--spacing-xxs) text-start text-label-sm text-(--text-default) transition-colors duration-150 ease-out hover:bg-(--bg-hover) data-[active]:bg-(--bg-hover) motion-reduce:transition-none pointer-coarse:min-h-11"
+                @mousedown.prevent
+                @click="item.apply()"
+                @keydown.enter.prevent="item.apply()"
+              >
+                <span class="min-w-0 flex-1 truncate"
+                  ><bdi>{{ item.label }}</bdi></span
+                >
+                <span
+                  v-if="item.count !== undefined"
+                  :data-testid="`${testId}__count-value`"
+                  class="shrink-0 text-label-sm text-(--text-muted) tabular-nums"
+                  >{{ numberFormat.format(item.count) }}</span
+                >
+                <span
+                  v-if="item.description"
+                  class="shrink-0 text-(--text-muted)"
+                  >{{ item.description }}</span
+                >
+                <span
+                  v-else-if="groupLabel(item.group)"
+                  class="shrink-0 text-label-sm text-(--text-muted)"
+                  >{{ groupLabel(item.group) }}</span
+                >
+              </li>
+            </ul>
+          </li>
+          <li
+            v-if="valueRows === 'loading'"
+            role="presentation"
+            :data-testid="`${testId}__loading`"
+            class="flex min-h-8 items-center gap-(--spacing-sm) px-(--spacing-sm) text-body-sm text-(--text-muted)"
+          >
+            <Spinner class="size-3.5" />
+            {{ t('propertyFilter.loadingValues') }}
+          </li>
+          <li
+            v-else-if="valueRows === 'error'"
+            role="presentation"
+            :data-testid="`${testId}__values-error`"
+            class="flex min-h-8 items-center gap-(--spacing-sm) px-(--spacing-sm) text-body-sm text-(--text-default)"
+          >
+            <i
+              class="pi pi-exclamation-circle shrink-0 text-(--danger)"
+              aria-hidden="true"
+            />
+            {{ t('propertyFilter.valuesError') }}
           </li>
         </ul>
       </Transition>
     </Teleport>
+    <div
+      v-if="editorStage && $slots['value']"
+      role="group"
+      :aria-label="t('propertyFilter.valueEditor', { property: editorStage.property.label })"
+      :data-testid="`${testId}__value-editor`"
+      class="flex min-w-0 flex-wrap items-center gap-(--spacing-xs) rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface) p-(--spacing-xs)"
+    >
+      <slot
+        name="value"
+        :property="editorStage.property"
+        :operator="editorStage.operator"
+        :apply="applyCustom"
+      />
+    </div>
     <div
       v-if="isQuery"
       class="flex min-w-0 flex-wrap items-start gap-(--spacing-xs)"
@@ -619,7 +875,7 @@
       >
     </div>
     <div
-      v-if="!isQuery && tokens.length"
+      v-if="showTokenRow"
       role="group"
       :aria-label="t('propertyFilter.tokens')"
       :data-testid="`${testId}__tokens`"
@@ -645,8 +901,80 @@
           @remove="removeToken(index)"
         />
       </template>
+      <template
+        v-for="(group, groupIndex) in groups"
+        :key="`group-${groupIndex}`"
+      >
+        <span
+          v-if="tokens.length || groupIndex > 0"
+          class="text-label-sm text-(--text-muted)"
+          >{{ operation === 'or' ? t('propertyFilter.or') : t('propertyFilter.and') }}</span
+        >
+        <div
+          role="group"
+          :aria-label="t('propertyFilter.group', { index: groupIndex + 1 })"
+          :data-testid="`${testId}__group`"
+          class="flex min-w-0 max-w-full flex-wrap items-center gap-(--spacing-xs) rounded-(--shape-elements) border border-(--border-default) px-(--spacing-xs) py-(--spacing-xxs)"
+        >
+          <template
+            v-for="(token, index) in group.tokens"
+            :key="`${groupIndex}-${index}-${token.propertyKey ?? ''}-${token.operator}-${token.value}`"
+          >
+            <span
+              v-if="index > 0"
+              class="text-label-sm text-(--text-muted)"
+              >{{
+                group.operation === 'or' ? t('propertyFilter.or') : t('propertyFilter.and')
+              }}</span
+            >
+            <Chip
+              :label="labelOf(token)"
+              :disabled="disabled"
+              :data-testid="`${testId}__token`"
+              kind="filled"
+              size="medium"
+              removable
+              class="max-w-full"
+              @remove="removeGroupToken(groupIndex, index)"
+            />
+          </template>
+          <ToggleGroup
+            v-if="group.tokens.length > 1"
+            :model-value="group.operation"
+            :options="operationOptions"
+            :aria-label="t('propertyFilter.groupOperation', { index: groupIndex + 1 })"
+            :disabled="disabled"
+            :data-testid="`${testId}__group-operation`"
+            size="small"
+            @update:model-value="setGroupOperation(groupIndex, $event)"
+          />
+        </div>
+      </template>
+      <template v-if="pendingGroup">
+        <span
+          v-if="conditionCount > 0"
+          class="text-label-sm text-(--text-muted)"
+          >{{ operation === 'or' ? t('propertyFilter.or') : t('propertyFilter.and') }}</span
+        >
+        <Chip
+          :label="t('propertyFilter.newGroup')"
+          :data-testid="`${testId}__pending-group`"
+          kind="dashed"
+          size="medium"
+        />
+      </template>
+      <Button
+        v-if="grouped && groups.length && !pendingGroup"
+        :label="t('propertyFilter.addGroup')"
+        :disabled="disabled"
+        :data-testid="`${testId}__add-group`"
+        icon="pi pi-plus"
+        kind="transparent"
+        size="small"
+        @click="startGroup"
+      />
       <ToggleGroup
-        v-if="tokens.length > 1"
+        v-if="conditionCount > 1"
         :model-value="operation"
         :options="operationOptions"
         :aria-label="t('propertyFilter.operation')"
