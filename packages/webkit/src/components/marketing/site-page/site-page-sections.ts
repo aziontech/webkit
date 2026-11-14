@@ -45,6 +45,7 @@ export const sitePageSections = {
   'hero-form': () => import('../../sections/hero-form/hero-form.vue'),
   'hero-with-opening': () => import('../../sections/hero-with-opening/hero-with-opening.vue'),
   'investor-marks': () => import('../../sections/investor-marks/investor-marks.vue'),
+  'job-posting': () => import('../../sections/job-posting/job-posting.vue'),
   'listing-browser': () => import('../../sections/listing-browser/listing-browser.vue'),
   'listing-table': () => import('../../sections/listing-table/listing-table.vue'),
   'logo-wall-quote': () => import('../../sections/logo-wall-quote/logo-wall-quote.vue'),

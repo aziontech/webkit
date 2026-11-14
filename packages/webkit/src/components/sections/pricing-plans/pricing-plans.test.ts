@@ -163,10 +163,8 @@ describe('PricingPlans', () => {
   it('lays the cards in a full-bleed band', () => {
     const { getByTestId } = band()
 
-    expect(within(getByTestId(TESTID)).getByTestId('marketing-hero')).toHaveAttribute(
-      'data-width',
-      'full'
-    )
+    const strip = within(getByTestId(TESTID)).getByTestId(`${TESTID}__band`)
+    expect(within(strip).getAllByTestId('content-card-pricing')).toHaveLength(plans.length)
   })
 
   it('names the toggle', () => {

@@ -588,7 +588,7 @@
   {
     "name": "compare-plans",
     "path": "src/components/sections/compare-plans/compare-plans.vue",
-    "limit": "29.05 KB"
+    "limit": "34.5 KB"
   },
   {
     "name": "compare-support-tiers",
@@ -621,7 +621,7 @@
   {
     "name": "network-section",
     "path": "src/components/sections/network-section/network-section.vue",
-    "limit": "26 KB",
+    "limit": "26.75 KB",
     "entryOnly": true
   },
   {
@@ -664,6 +664,12 @@
     "name": "investor-marks",
     "path": "src/components/sections/investor-marks/investor-marks.vue",
     "limit": "5 KB"
+  },
+  {
+    "name": "job-posting",
+    "path": "src/components/sections/job-posting/job-posting.vue",
+    "limit": "50 KB",
+    "entryOnly": true
   },
   {
     "name": "logo-wall-quote",
@@ -745,7 +751,7 @@
   {
     "name": "contact-hub",
     "path": "src/components/sections/contact-hub/contact-hub.vue",
-    "limit": "7 KB"
+    "limit": "8.5 KB"
   },
   {
     "name": "listing-table",

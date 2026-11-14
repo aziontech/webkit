@@ -33,6 +33,7 @@
     "sample:shared/ui/line-figure/figures/variables-keys": "line-figure (name=\"variables-keys\")",
     "sample:shared/ui/trace/RunLogs": "log-view (log-view-header and log-view-content), as composed in assets/console-trace-scene",
     "sample:shared/ui/trace/RunTrace": "trace, as composed in assets/console-trace-scene",
+    "sample:site/components/AzionCareersJob": "job-posting (description, rail and apply form; the opening stays hero-band title-band)",
     "sample:site/components/ConsoleApplicationBand": "console-panel (tabs, assets/console-application-scene in #scene) or media-tabs (position=\"right\", the scene in #media)",
     "sample:site/components/ConsoleTraceBand": "media-tabs (size=\"small\", assets/console-trace-scene in #media) or console-panel #scene",
     "sample:site/composables/useScrollProgress": "internal to assets/runtime-api-cloud (composables/use-scroll-progress)",
@@ -1855,6 +1856,10 @@
     },
     {
       "id": "investor-marks",
+      "surface": "marketing"
+    },
+    {
+      "id": "job-posting",
       "surface": "marketing"
     },
     {

@@ -2260,6 +2260,10 @@
       "types": "./types/components/sections/investor-marks/investor-marks.vue.d.ts",
       "default": "./src/components/sections/investor-marks/investor-marks.vue"
     },
+    "./job-posting": {
+      "types": "./types/components/sections/job-posting/job-posting.vue.d.ts",
+      "default": "./src/components/sections/job-posting/job-posting.vue"
+    },
     "./listing-browser": {
       "types": "./types/components/sections/listing-browser/listing-browser.vue.d.ts",
       "default": "./src/components/sections/listing-browser/listing-browser.vue"

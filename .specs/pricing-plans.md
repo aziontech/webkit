@@ -6,14 +6,14 @@ status: implemented
 spec_version: 2
 created: 2026-11-05
 last_updated: 2026-11-14
-checksum: 6c2ccda554db0ef2a0d7aad62fa632997b8aeeec6588fd12ec62f22f669a71d4
+checksum: 5de0f481a99a4bbd2d1124fb4ea330a79adc4b82497319acf794b452c325888c
 ---
 
 # PricingPlans — Component Spec
 
 ## Purpose
 
-The plan cards at the top of Pricing: a billing-period toggle over a framed row of pricing cards, each with its plan name, its price for the picked period, what it includes and one button. The recommended plan sits on a raised surface and carries a tag. It is a page section — the site places it from a `{ _id: 'pricing-plans', props }` entry and binds `props` straight onto it — and it composes `hero`, `frame-box`, `toggle-group`, `card-grid`, `card-pricing` and `button`; the picked period is local state. The band runs full bleed (a `hero` band at full width) and centres its frame at the site measure, with rules on its sides.
+The plan cards at the top of Pricing: a billing-period toggle over a framed row of pricing cards, each with its plan name, its price for the picked period, what it includes and one button. The recommended plan sits on a raised surface and carries a tag. It is a page section — the site places it from a `{ _id: 'pricing-plans', props }` entry and binds `props` straight onto it — and it composes `frame-box`, `toggle-group`, `card-grid`, `card-pricing` and `button`; the picked period is local state. The band runs full bleed (the page's inline inset only, closed by a bottom rule) and centres its frame at the site measure, with rules on its sides.
 
 ## When to use
 
@@ -97,7 +97,7 @@ The plan cards at the top of Pricing: a billing-period toggle over a framed row 
 - The picked period selects each plan's price; a plan with no price for it falls back to its period-less price
 - Price change: every card is `animated`, so a period switch fades the old price out and the new one in (the card's reduced-motion fallback swaps it in place)
 - Terms: the line under the price is the price's `details`, else the plan's `description`, else empty
-- Layout: a full-width `hero` band (`kind: 'band'`, `maxWidth: 'full'`, no vertical padding) with its bottom rule, and inside it a `frame-box` with side rules and bottom marks capped at `var(--layout-measure-site)` and centred
+- Layout: a full-width band (`__band`) on `var(--bg-canvas)` with the page's inline inset `var(--layout-boundary-inline)` and a bottom rule, and inside it a `frame-box` with side rules and bottom marks capped at `var(--layout-measure-site)` and centred
 - The highlighted plan sits on `var(--bg-surface)`, shows its tag and carries the secondary button; the others sit on `var(--bg-canvas)` with an outlined button
 - Empty: when no plan has a name the band renders nothing but its root
 
@@ -118,6 +118,7 @@ _none_
 | toggle rule           | `var(--border-default)`                   |
 | rhythm                | `var(--spacing-sm)` / `var(--spacing-md)` |
 | frame measure         | `var(--layout-measure-site)`              |
+| band inset            | `var(--layout-boundary-inline)`           |
 
 ## Theme gaps
 

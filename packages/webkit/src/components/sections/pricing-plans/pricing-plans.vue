@@ -6,7 +6,6 @@
   import CardPricing from '../../content/card-pricing/card-pricing.vue'
   import FrameBox from '../../layout/frame-box/frame-box.vue'
   import CardGrid from '../../marketing/card-grid/card-grid.vue'
-  import Hero from '../../marketing/hero/hero.vue'
 
   defineOptions({
     name: 'PricingPlans',
@@ -124,11 +123,10 @@
     :data-testid="testId"
     class="scroll-mt-(--spacing-xxl)"
   >
-    <Hero
+    <div
       v-if="visiblePlans.length > 0"
-      kind="band"
-      max-width="full"
-      :padded="false"
+      :data-testid="`${testId}__band`"
+      class="w-full border-b border-(--border-default) bg-(--bg-canvas) px-(--layout-boundary-inline)"
     >
       <FrameBox
         flush
@@ -211,6 +209,6 @@
           </CardPricing>
         </CardGrid>
       </FrameBox>
-    </Hero>
+    </div>
   </section>
 </template>
