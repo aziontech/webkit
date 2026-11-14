@@ -21,13 +21,11 @@
       (attrs['data-testid'] as string | undefined) ??
       `${ctx?.testId ?? 'layout-sidebar'}__header-region`
   )
-
-  const rootClasses = computed(() => cn('w-full shrink-0', attrs.class))
 </script>
 
 <template>
   <div
-    :class="rootClasses"
+    :class="cn('w-full shrink-0', attrs.class as string | undefined)"
     :data-testid="testId"
   >
     <slot />

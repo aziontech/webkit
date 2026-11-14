@@ -2088,6 +2088,11 @@
   },
   {
     "name": "sidebar",
+    "path": "src/components/layout/sidebar/index.ts",
+    "limit": "25.3 KB"
+  },
+  {
+    "name": "sidebar-root",
     "path": "src/components/layout/sidebar/sidebar.vue",
     "limit": "25.3 KB"
   },

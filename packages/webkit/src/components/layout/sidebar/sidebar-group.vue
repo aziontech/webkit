@@ -30,13 +30,11 @@
     () =>
       (attrs['data-testid'] as string | undefined) ?? `${ctx?.testId ?? 'layout-sidebar'}__group`
   )
-
-  const sectionClasses = computed(() => cn('flex w-full min-w-0 shrink-0 flex-col', attrs.class))
 </script>
 
 <template>
   <section
-    :class="sectionClasses"
+    :class="cn('flex w-full min-w-0 shrink-0 flex-col', attrs.class as string | undefined)"
     :aria-label="label || undefined"
     :data-testid="testId"
   >

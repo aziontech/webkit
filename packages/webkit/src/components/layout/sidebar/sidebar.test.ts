@@ -1,14 +1,89 @@
 import userEvent from '@testing-library/user-event'
 import { fireEvent, render, waitFor } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
-import { nextTick, ref } from 'vue'
+import { h, nextTick, ref } from 'vue'
 
 import Default from '../../../../examples/sidebar/default.vue'
 import Resizable from '../../../../examples/sidebar/resizable.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
+import SidebarCompound from './index'
 import Sidebar from './sidebar.vue'
+import SidebarFooter from './sidebar-footer.vue'
+import SidebarGroup from './sidebar-group.vue'
+import SidebarHeader from './sidebar-header.vue'
 
 describe('Sidebar', () => {
+  describe('v-model:open (the positive name; collapsed is deprecated)', () => {
+    it('open=false renders the rail collapsed', () => {
+      const { getByTestId } = render(Sidebar, { props: { collapsible: true, open: false } })
+      expect(getByTestId('layout-sidebar').getAttribute('data-collapsed')).toBe('')
+    })
+
+    it('the trigger emits update:open false and the deprecated update:collapsed true', async () => {
+      const { getByTestId, emitted } = render(Sidebar, { props: { collapsible: true } })
+      await fireEvent.click(getByTestId('layout-sidebar__collapse'))
+      expect(emitted()['update:open']?.at(-1)).toEqual([false])
+      expect(emitted()['update:collapsed']?.at(-1)).toEqual([true])
+    })
+
+    it('the expand button emits update:open true', async () => {
+      const { getByTestId, emitted } = render(Sidebar, {
+        props: { collapsible: true, open: false }
+      })
+      await fireEvent.click(getByTestId('layout-sidebar__expand-button'))
+      expect(emitted()['update:open']?.at(-1)).toEqual([true])
+    })
+
+    it('a parent that binds only the deprecated collapsed still drives the rail', async () => {
+      const { getByTestId, rerender } = render(Sidebar, {
+        props: { collapsible: true, collapsed: true }
+      })
+      expect(getByTestId('layout-sidebar').getAttribute('data-collapsed')).toBe('')
+      await rerender({ collapsible: true, collapsed: false })
+      expect(getByTestId('layout-sidebar').hasAttribute('data-collapsed')).toBe(false)
+    })
+
+    it('a parent that binds open follows it after an internal collapse', async () => {
+      const open = ref(true)
+      const { getByTestId } = render({
+        components: { Sidebar },
+        setup: () => ({ open }),
+        template: '<Sidebar v-model:open="open" collapsible />'
+      })
+      await fireEvent.click(getByTestId('layout-sidebar__collapse'))
+      expect(open.value).toBe(false)
+      open.value = true
+      await nextTick()
+      expect(getByTestId('layout-sidebar').hasAttribute('data-collapsed')).toBe(false)
+    })
+  })
+
+  describe('compound API', () => {
+    it('attaches Header, Group and Footer to the root for dot-notation', () => {
+      expect(SidebarCompound).toBe(Sidebar)
+      expect(SidebarCompound.Header).toBe(SidebarHeader)
+      expect(SidebarCompound.Group).toBe(SidebarGroup)
+      expect(SidebarCompound.Footer).toBe(SidebarFooter)
+    })
+
+    it('renders the parts through dot-notation', () => {
+      const { getByTestId } = render({
+        render: () =>
+          h(
+            SidebarCompound,
+            {},
+            {
+              header: () => h(SidebarCompound.Header, () => 'Acme'),
+              default: () => h(SidebarCompound.Group, { label: 'Build' }, () => h('li', 'Item')),
+              footer: () => h(SidebarCompound.Footer, () => 'Jane Doe')
+            }
+          )
+      })
+      expect(getByTestId('layout-sidebar__header-region').textContent).toContain('Acme')
+      expect(getByTestId('layout-sidebar__group')).toBeTruthy()
+      expect(getByTestId('layout-sidebar__footer-region').textContent).toContain('Jane Doe')
+    })
+  })
   describe('rendering (structure grounded in the template)', () => {
     it('renders an <aside> root carrying the default data-testid and its nav/scroll regions', () => {
       const { getByTestId } = render(Sidebar)

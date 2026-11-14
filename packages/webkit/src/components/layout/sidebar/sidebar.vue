@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed, onMounted, provide, ref, useAttrs, useSlots } from 'vue'
+  import { computed, getCurrentInstance, onMounted, provide, ref, useAttrs, useSlots } from 'vue'
 
   import { logicalArrowKey } from '../../../composables/use-direction'
   import { useTranslate } from '../../../composables/use-locale/use-translate'
@@ -38,13 +38,13 @@
     resizeAriaLabel: ''
   })
 
-  defineEmits<{
-    'update:collapsed': [value: boolean]
-    'update:width': [value: number | null]
-  }>()
+  /** Whether the rail is in the layout; false collapses it. Use with `v-model:open`. */
+  const open = defineModel<boolean>('open', { default: true })
 
-  const collapsed = defineModel<boolean>('collapsed', { default: false })
+  /** @deprecated since 6.0 — use `v-model:open` (inverted). Removed in 7.0. */
+  const collapsedModel = defineModel<boolean>('collapsed', { default: false })
 
+  /** The sized width in px; null until the rail measures itself. Use with `v-model:width`. */
   const width = defineModel<number | null>('width', { default: null })
 
   defineSlots<{
@@ -54,6 +54,7 @@
   }>()
 
   const attrs = useAttrs()
+  const instance = getCurrentInstance()
   const { t } = useTranslate({ sidebar: en.sidebar })
   const labels = computed(() => ({
     root: props.ariaLabel || t('sidebar.label'),
@@ -62,6 +63,19 @@
     resize: props.resizeAriaLabel || t('sidebar.resize')
   }))
   const slots = useSlots()
+
+  const passed = (name: string) => {
+    const raw = instance?.vnode.props
+    return Boolean(raw && name in raw)
+  }
+
+  const collapsed = computed<boolean>({
+    get: () => (passed('collapsed') && !passed('open') ? collapsedModel.value : !open.value),
+    set: (value) => {
+      open.value = !value
+      collapsedModel.value = value
+    }
+  })
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'layout-sidebar')
 

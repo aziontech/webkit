@@ -3,13 +3,13 @@ name: sidebar
 category: layout
 structure: composition
 status: implemented
-spec_version: 1
+spec_version: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3735-14866
   node_id: 3735:14866
-checksum: dff7a9515024b0312e2cc07691f9224654fbe15e3f490bc4e8fb973ca9114223
+checksum: 6a968b250a6dabc7afacdfaf677f914b6e4fc5faf2ca6f21a5b755363c30528d
 created: 2026-05-22
-last_updated: 2026-11-11
+last_updated: 2026-11-14
 ---
 
 # Sidebar — Component Spec
@@ -34,7 +34,7 @@ always has, with the host owning the width — every existing consumer is unaffe
 
 - The persistent navigation column of an app shell, with an optional header (brand, workspace switcher) and footer (profile, settings) around a scrolling `Menu`.
 - The user should be able to resize the rail by dragging its trailing edge (`resizable`) or take it out of the layout and bring it back (`collapsible`).
-- The rail's size or collapsed state must survive navigation or reloads — bind `v-model:width` and `v-model:collapsed` and persist them in the app.
+- The rail's size or collapsed state must survive navigation or reloads — bind `v-model:width` and `v-model:open` and persist them in the app.
 
 ## When NOT to use
 
@@ -199,7 +199,7 @@ Two details are what make the pair correct, and neither costs more than one attr
 
 Turn the gesture on and the sidebar owns its own width: `v-model:width` is the sized width in px
 (`null` until the sidebar measures its own natural width on mount, after which the drag owns it),
-and `v-model:collapsed` is whether it is in the layout at all. Persist both in the consuming app —
+and `v-model:open` is whether it is in the layout at all. Persist both in the consuming app —
 they are the user's choice, and a shell that remounts per route would otherwise lose them on every
 navigation.
 
@@ -289,7 +289,7 @@ this the only trace of a fully collapsed rail would be a 1 px line down the page
   import { ref } from 'vue'
 
   // Persisted by the app — the rail remounts per route, the user's choice must not.
-  const collapsed = ref(false)
+  const open = ref(true)
   const width = ref(null)
 </script>
 
@@ -298,7 +298,7 @@ this the only trace of a fully collapsed rail would be a 1 px line down the page
        positioned against it, because a collapsed rail is 0 px wide and would clip it. -->
   <div class="relative flex h-screen min-h-0">
     <Sidebar
-      v-model:collapsed="collapsed"
+      v-model:open="open"
       v-model:width="width"
       resizable
       collapsible
@@ -332,6 +332,11 @@ the freed space on the same frames.
 
 ## Sub-components
 
+The compound `@aziontech/webkit/sidebar` (its `index.ts`) attaches every part for dot-notation —
+`Sidebar.Header`, `Sidebar.Group`, `Sidebar.Footer` — and `@aziontech/webkit/sidebar-root` is the
+standalone, tree-shakeable root with nothing attached. The flat sub-component paths below keep
+working.
+
 - `sidebar-footer.vue` — Public sub-component `sidebar-footer`.
 - `sidebar-group.vue` — Public sub-component `sidebar-group`. One flat block of rows under an
   optional title, **superseded by `Menu.Group`**: the docs, the stories and every example here
@@ -357,23 +362,23 @@ between them is the ring-offset surface below.
 | `expandAriaLabel`   | `string`  | `''`                | false    | Accessible name for the control and the grab bar that bring a collapsed rail back. Empty uses the locale catalog (`Expand sidebar`). |
 | `resizeAriaLabel`   | `string`  | `''`                | false    | Accessible name for the drag handle separator. Empty uses the locale catalog (`Resize sidebar`).                                     |
 
-The root also owns two models:
+## v-model
 
-- **`v-model:collapsed`** — `boolean`, default `false`. Whether the rail is out of the layout.
-- **`v-model:width`** — `number | null`, default `null`. The sized width in px. `null` means _not
-  sized yet_: the sidebar seeds it from its own natural width on mount, after which the gesture owns
-  it. px is the model's native unit because it is the outcome of a pointer gesture; the **bounds** it
-  is clamped to are the ones that come from tokens (`minWidthToken` / `maxWidthToken`).
+| Model               | Type             | Default | Emits              | Notes                                                                                                                                                                                                                                                                                           |
+| ------------------- | ---------------- | ------- | ------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `v-model:open`      | `boolean`        | `true`  | `update:open`      | Whether the rail is in the layout. `false` collapses it — by the trigger, the drag crossing the snap boundary, the keyboard nudge, or a double-click on the handle. Same name as shadcn's Sidebar `open`; the layouts that compose it call the same state `navigationOpen`.                          |
+| `v-model:width`     | `number \| null` | `null`  | `update:width`     | The sized width in px, already clamped to the token bounds and emitted continuously during a drag. `null` means _not sized yet_: the sidebar seeds it from its own natural width on mount, after which the gesture owns it. px is the model's native unit because it is the outcome of a pointer gesture; the **bounds** come from tokens (`minWidthToken` / `maxWidthToken`). |
+| `v-model:collapsed` | `boolean`        | `false` | `update:collapsed` | **@deprecated since 6.0 — use `v-model:open` (inverted). Removed in 7.0.** Still works: it is the inverse of `open`, both are emitted on every change, and when a host binds only `collapsed` it drives the rail.                                                                                 |
 
-Both are inert unless `resizable` or `collapsible` is set. With neither, no inline width is applied
-and the host's own `class="w-[280px]"` governs exactly as before.
+Every model is inert unless `resizable` or `collapsible` is set. With neither, no inline width is
+applied and the host's own `class="w-[280px]"` governs exactly as before. The models are declared
+with `defineModel`, so their `update:*` events are not hand-declared.
 
 ## Events
 
-| Event              | Payload   | Notes                                                                                                                                                                |
-| ------------------ | --------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `update:collapsed` | `boolean` | `v-model:collapsed` — the rail entered or left the layout, by the trigger, the drag crossing the snap boundary, the keyboard nudge, or a double-click on the handle. |
-| `update:width`     | `number`  | `v-model:width` — the sized width in px, already clamped to the token bounds. Emitted continuously during a drag.                                                    |
+| _none_ | — | — |
+
+The only events are the `update:*` of the models above.
 
 ## Slots
 
@@ -406,7 +411,7 @@ and the host's own `class="w-[280px]"` governs exactly as before.
   rail's motion off until then, so a state restored at mount lands in place; see Motion &
   Animations); not a documented consumer styling hook.
 - Region testids derived from the root: `__panel` (the fixed-width inner panel),
-  `__collapse-input` (the hidden checkbox that carries `collapsed` for CSS — not an interactive
+  `__collapse-input` (the hidden checkbox that carries the collapsed state, `!open`, for CSS — not an interactive
   control; see Accessibility), `__header`, `__nav`, `__scroll`, `__footer`, `__collapse` (the
   trigger), `__handle` (the drag separator), `__expand` / `__expand-button` (the collapsed
   affordance)
@@ -434,7 +439,7 @@ restructuring this component does not take on.
 | --------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
 | rail expands                                                                                        | `width` 0 → sized **and `min-width` 0 → the min token, on the same curve**, `translate` -100% → 0, `opacity` → 1                                                                                                     | root `has-[>div>input:checked]:` off — base classes: `duration-moderate-02` · `ease-expressive-entrance`                                                                                                                                              | `motion-reduce:transition-none motion-reduce:translate-none`                                    |
 | rail collapses                                                                                      | `width` sized → 0 **and `min-width` → 0 with it**, `translate` 0 → -100%, `opacity` → floor                                                                                                                          | root `has-[>div>input:checked]:` on — `ease-productive-exit` (same duration)                                                                                                                                                                          | same                                                                                            |
-| state restored at mount (a host seeding its persisted `collapsed` / `width` in its own `onMounted`) | none — the restored rail lands in place                                                                                                                                                                              | `not-data-[settled]:transition-none` on the root **and the panel**: `data-settled` is set two frames after mount, so the first frame paints the restored state with motion off and the second gives every later change a rendered style to tween from | —                                                                                               |
+| state restored at mount (a host seeding its persisted `open` / `width` in its own `onMounted`) | none — the restored rail lands in place                                                                                                                                                                              | `not-data-[settled]:transition-none` on the root **and the panel**: `data-settled` is set two frames after mount, so the first frame paints the restored state with motion off and the second gives every later change a rendered style to tween from | —                                                                                               |
 | drag in flight                                                                                      | none — width tracks the pointer frame for frame; the panel's `translate` + `opacity` track the **pull progress** (`next / min`), so the pull is legible below the minimum where the rail itself can no longer narrow | `data-resizing` forces `transition-none` on the root **and the panel**; the panel's `translate`/`opacity` come from an inline style for the length of the drag                                                                                        | —                                                                                               |
 | collapsed edge affordance appears                                                                   | `opacity` 0 → 1                                                                                                                                                                                                      | Vue `<Transition>`, unchanged                                                                                                                                                                                                                         | `motion-reduce:transition-none`                                                                 |
 | collapsed rail previews / retracts                                                                  | `width` 0 ↔ `--size-10` (the panel does not move — the sliver is surface only)                                                                                                                                       | JS-computed inline `transition` (`duration['moderate-02']` · `curve['expressive-entrance']`) while entering; CSS `has-[>div>input:checked]:` exit curve takes over the instant the inline style is cleared on leave                                   | `prefers-reduced-motion` short-circuit while entering; `motion-reduce:transition-none` on leave |
@@ -569,7 +574,7 @@ canvas the tokens fall back to.
 - A **collapsed rail carries `inert` and `aria-hidden`** — the content is still mounted so its width
   can animate, and it must not be reachable while it is out of the layout. That is why the control
   that brings it back is a sibling of the rail rather than inside it.
-- The **hidden checkbox that mirrors `collapsed`** (`__collapse-input`) carries `aria-hidden="true"`
+- The **hidden checkbox that mirrors the collapsed state (`!open`)** (`__collapse-input`) carries `aria-hidden="true"`
   and `tabindex="-1"`: it is a CSS state carrier, not a second control, so it is never reachable by
   keyboard or announced by a screen reader. The trigger's accessible name and role are unaffected —
   the consumer-facing control is still the `IconButton`.

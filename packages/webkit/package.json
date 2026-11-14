@@ -1327,6 +1327,10 @@
       "default": "./src/components/layout/global-header/global-header.vue"
     },
     "./sidebar": {
+      "types": "./types/components/layout/sidebar/index.d.ts",
+      "default": "./src/components/layout/sidebar/index.ts"
+    },
+    "./sidebar-root": {
       "types": "./types/components/layout/sidebar/sidebar.vue.d.ts",
       "default": "./src/components/layout/sidebar/sidebar.vue"
     },
