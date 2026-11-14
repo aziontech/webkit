@@ -1,11 +1,9 @@
 <script setup lang="ts">
-  import { computed, defineAsyncComponent, onBeforeUnmount, ref, useAttrs, useId } from 'vue'
+  import { computed, defineAsyncComponent, h, onBeforeUnmount, ref, useAttrs, useId } from 'vue'
 
   import { useTranslate } from '../../../composables/use-locale/use-translate'
   import * as en from '../../../i18n/messages/en'
-  import Logo from '../../content/logo/logo.vue'
   import Tooltip from '../../overlay/tooltip/tooltip.vue'
-  import IconButton from '../icon-button/icon-button.vue'
 
   defineOptions({ name: 'CopyPromptButton', inheritAttrs: false })
 
@@ -58,6 +56,16 @@
   const CopyButtonFallback = defineAsyncComponent(
     () => import('../copy-button/copy-button-fallback.vue')
   )
+  const Logo = defineAsyncComponent({
+    loader: () => import('../../content/logo/logo.vue'),
+    loadingComponent: () => h('span', { 'aria-hidden': 'true', class: 'inline-block size-5' }),
+    delay: 0
+  })
+  const IconButton = defineAsyncComponent({
+    loader: () => import('../icon-button/icon-button.vue'),
+    loadingComponent: () => h('span', { 'aria-hidden': 'true', class: 'inline-block size-7' }),
+    delay: 0
+  })
 
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? 'actions-copy-prompt-button'
