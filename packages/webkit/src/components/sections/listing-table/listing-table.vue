@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
+  import LazyNodes from '../../../composables/use-lazy-chunks/lazy-nodes'
   import Button from '../../actions/button/button.vue'
   import Item from '../../content/item/item.vue'
   import ItemContent from '../../content/item/item-content.vue'
@@ -142,29 +143,31 @@
       >
         <div class="sm:hidden">
           <ItemList>
-            <Item
-              v-for="row in rows"
-              :key="row.href"
-              role="listitem"
-              class="relative px-(--spacing-xl)! py-(--spacing-lg)! hover:bg-(--bg-hover)"
-            >
-              <ItemContent class="gap-(--spacing-xs)">
-                <ItemTitle>
-                  <a
-                    :href="row.href"
-                    class="text-pretty text-label-lg text-(--text-default) after:absolute after:inset-0 after:content-['']"
+            <LazyNodes :row-height="76">
+              <Item
+                v-for="row in rows"
+                :key="row.href"
+                role="listitem"
+                class="relative px-(--spacing-xl)! py-(--spacing-lg)! hover:bg-(--bg-hover)"
+              >
+                <ItemContent class="gap-(--spacing-xs)">
+                  <ItemTitle>
+                    <a
+                      :href="row.href"
+                      class="text-pretty text-label-lg text-(--text-default) after:absolute after:inset-0 after:content-['']"
+                    >
+                      {{ row.values[titleKey] }}
+                    </a>
+                  </ItemTitle>
+                  <ItemDescription
+                    v-if="descriptionKey && row.values[descriptionKey]"
+                    class="line-clamp-none! text-overline-sm! text-pretty"
                   >
-                    {{ row.values[titleKey] }}
-                  </a>
-                </ItemTitle>
-                <ItemDescription
-                  v-if="descriptionKey && row.values[descriptionKey]"
-                  class="line-clamp-none! text-overline-sm! text-pretty"
-                >
-                  {{ row.values[descriptionKey] }}
-                </ItemDescription>
-              </ItemContent>
-            </Item>
+                    {{ row.values[descriptionKey] }}
+                  </ItemDescription>
+                </ItemContent>
+              </Item>
+            </LazyNodes>
           </ItemList>
           <div
             v-if="primaryAction"
@@ -201,37 +204,39 @@
           </TableHeader>
 
           <TableBody>
-            <TableRow
-              v-for="row in rows"
-              :key="row.href"
-              class="cursor-pointer hover:[--table-row-bg:var(--bg-hover)]!"
-              @click="followRow"
-            >
-              <TableCell
-                v-for="(column, index) in columns"
-                :key="column.key"
-                :grow="column.grow"
-                :align="column.align"
-                :principal="index === 0"
-                class="py-(--spacing-lg)! data-[first]:ps-(--spacing-xl)! data-[last]:pe-(--spacing-xl)! data-[value]:text-overline-sm! data-[value]:text-(--text-muted)"
-                :data-first="index === 0 || null"
-                :data-last="index === lastIndex || null"
-                :data-value="index > 0 || null"
+            <LazyNodes :row-height="56">
+              <TableRow
+                v-for="row in rows"
+                :key="row.href"
+                class="cursor-pointer hover:[--table-row-bg:var(--bg-hover)]!"
+                @click="followRow"
               >
-                <a
-                  v-if="index === 0"
-                  :href="row.href"
-                  class="text-label-lg text-(--text-default)"
-                  >{{ row.values[column.key] }}</a
+                <TableCell
+                  v-for="(column, index) in columns"
+                  :key="column.key"
+                  :grow="column.grow"
+                  :align="column.align"
+                  :principal="index === 0"
+                  class="py-(--spacing-lg)! data-[first]:ps-(--spacing-xl)! data-[last]:pe-(--spacing-xl)! data-[value]:text-overline-sm! data-[value]:text-(--text-muted)"
+                  :data-first="index === 0 || null"
+                  :data-last="index === lastIndex || null"
+                  :data-value="index > 0 || null"
                 >
-                <span
-                  v-else
-                  class="min-w-0 truncate"
-                  :title="row.values[column.key]"
-                  >{{ row.values[column.key] }}</span
-                >
-              </TableCell>
-            </TableRow>
+                  <a
+                    v-if="index === 0"
+                    :href="row.href"
+                    class="text-label-lg text-(--text-default)"
+                    >{{ row.values[column.key] }}</a
+                  >
+                  <span
+                    v-else
+                    class="min-w-0 truncate"
+                    :title="row.values[column.key]"
+                    >{{ row.values[column.key] }}</span
+                  >
+                </TableCell>
+              </TableRow>
+            </LazyNodes>
           </TableBody>
 
           <template

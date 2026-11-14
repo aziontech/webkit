@@ -3,11 +3,11 @@ name: listing-table
 category: sections
 structure: monolithic
 status: implemented
-spec_version: 3
+spec_version: 4
 template: 2
 created: 2026-11-05
 last_updated: 2026-11-14
-checksum: 3abeae4f1e9cb29638e678f555ecbfdf5727cce0c7f662797a5362a729106664
+checksum: 00c9f5b2c52a84611303b9561088357e87b7a09b6dbaab66718bed95be18d967
 ---
 # ListingTable — Component Spec
 
@@ -138,7 +138,7 @@ _none_
 
 - Bundle budget: the `./listing-table` entry in `.size-limit.json`.
 - Runtime budget: `listing-table-1k` in `perf-budgets.json` (mount and replace 1k rows), measured by `src/test/performance.test.ts`.
-- Heavy parts: the phone list and the table are both rendered and switched by CSS at the small breakpoint, so the DOM carries every row twice; the table composes the `table` root, which brings its state engine. Keep the listing to the dozens of rows a page shows and link to the full listing with `primaryAction`.
+- Heavy parts: the phone list and the table are both rendered and switched by CSS at the small breakpoint, so the server-rendered and hydrated markup stays one for every screen; the table composes the `table` root, which brings its state engine. Above 300 rows each of the two mounts its rows in chunks of 100 as the page scrolls near them (`LazyNodes`; an `aria-hidden` placeholder holds each chunk's place), so only the first 100 rows of a long listing are in the server-rendered HTML. Keep the listing to the dozens of rows a page shows and link to the full listing with `primaryAction`.
 
 ## Examples
 
