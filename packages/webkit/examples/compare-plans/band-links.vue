@@ -27,7 +27,7 @@
         { label: 'Custom domains', values: [true, true] },
         { label: 'Usage alerts', values: ['—', true] }
       ],
-      link: { label: 'See compute rates', href: '/pricing/compute' }
+      action: { label: 'See compute rates', href: '/pricing/compute' }
     },
     {
       eyebrow: 'Storage',
@@ -36,7 +36,7 @@
         { label: 'Storage included', values: ['5 GB', '100 GB'] },
         { label: 'Versioning', values: ['—', true] }
       ],
-      link: { label: 'See storage rates', href: '/pricing/storage' }
+      action: { label: 'See storage rates', href: '/pricing/storage' }
     }
   ]
 </script>

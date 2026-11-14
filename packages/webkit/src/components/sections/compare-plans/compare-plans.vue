@@ -76,6 +76,8 @@
     /** The feature rows, in order. */
     rows: ComparePlansRow[]
     /** Link closing the band, opened in a new tab; `{ label, href }`. */
+    action?: ComparePlansAction
+    /** @deprecated since 6.0 — use `action`. Removed in 7.0. */
     link?: ComparePlansAction
   }
 
@@ -94,7 +96,7 @@
     excludedLabel?: string
     /** The plan columns, in order; each is `{ id, name, description?, highlighted?, action }` with `action` as `{ label, href }`; a plan without a name is dropped. */
     plans?: ComparePlansPlan[]
-    /** The product bands, in order; each is `{ eyebrow, title, description, rows, link? }` (`link` closes the band, `{ label, href }`) and a row is `{ label, values, group?, hint?, tag? }` with one value per plan: `true` or a tick is included, a dash is not included, other text shows as written, empty is blank; `hint` defines the label in a popover. */
+    /** The product bands, in order; each is `{ eyebrow, title, description, rows, action? }` (`action` closes the band, `{ label, href }`; `link` is its deprecated name) and a row is `{ label, values, group?, hint?, tag? }` with one value per plan: `true` or a tick is included, a dash is not included, other text shows as written, empty is blank; `hint` defines the label in a popover. */
     sections?: ComparePlansSection[]
     /** Closing link under the table, opened in a new tab; `{ label, href }`. Omitted when absent. */
     primaryAction?: ComparePlansAction
@@ -172,10 +174,12 @@
 
   const isExcluded = (value: ComparePlansValue | undefined) => value === '—'
 
+  const closingOf = (section: ComparePlansSection | undefined) => section?.action ?? section?.link
+
   const isClosingRow = (sectionIndex: number, rowIndex: number) =>
     !props.primaryAction &&
     sectionIndex === props.sections.length - 1 &&
-    !props.sections[sectionIndex]?.link &&
+    !closingOf(props.sections[sectionIndex]) &&
     rowIndex === (props.sections[sectionIndex]?.rows.length ?? 0) - 1
 </script>
 
@@ -385,14 +389,14 @@
               <span v-else-if="row.values[index]">{{ row.values[index] }}</span>
             </td>
           </tr>
-          <tr v-if="section.link">
+          <tr v-if="closingOf(section)">
             <td
               :colspan="columns.length + 1"
               class="border-t border-(--border-default) px-(--spacing-lg) py-(--spacing-md)"
             >
               <Link
-                :label="section.link.label"
-                :href="section.link.href"
+                :label="closingOf(section)?.label"
+                :href="closingOf(section)?.href"
                 target="_blank"
                 icon="pi pi-arrow-right"
                 size="medium"
