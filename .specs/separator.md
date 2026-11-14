@@ -3,13 +3,13 @@ name: separator
 category: layout
 structure: monolithic
 status: implemented
-spec_version: 1
+spec_version: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=479-886
   node_id: 479:886
-checksum: ff8fe7a15bd825e6193e406756d0ab0de7e5ffbade6aa4b562d78afa20cef43f
+checksum: fc124542ba302063cf88dfce451a63e3c81febd40949df2354a2f2388c2634b5
 created: 2026-06-25
-last_updated: 2026-11-11
+last_updated: 2026-11-14
 ---
 
 # Separator — Component Spec
@@ -60,6 +60,7 @@ Thin separator line that visually splits content into groups. Renders as a full-
 | ------------- | ---------------------------- | -------------- | -------- | ------------------------------------------------------------ |
 | `orientation` | `'horizontal' \| 'vertical'` | `'horizontal'` | false    | Layout axis of the separator line.                           |
 | `label`       | `string`                     | `''`           | false    | Fallback centered text shown when the default slot is empty. |
+| `decorative`  | `boolean`                    | `false`        | false    | Purely visual line: renders role none instead of separator when there is no label. |
 
 ## Events
 
@@ -99,7 +100,7 @@ _none_
 
 - Visible focus: not applicable — the separator is non-interactive and not in the tab order.
 - Keyboard map: not applicable — no interactive controls.
-- ARIA: root carries `role="separator"` and `aria-orientation="{orientation}"`. A labelled divider keeps the `separator` role and is named by its label through `aria-labelledby` (a separator's children are presentational, so the text alone would not reach assistive technology).
+- ARIA: root carries `role="separator"` and `aria-orientation="{orientation}"`. A labelled divider keeps the `separator` role and is named by its label through `aria-labelledby` (a separator's children are presentational, so the text alone would not reach assistive technology). `decorative` marks a line that only draws (between items that are already grouped): without a label it renders `role="none"` and no `aria-orientation`, so assistive technology skips it. A labelled divider ignores `decorative` and stays a named separator. It defaults to `false` so existing dividers keep the `separator` role.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including the disabled state — the muted label text meets the body-text ratio against canvas/surface.
 - `motion-reduce:transition-none motion-reduce:transform-none` on animated states — not applicable; the component declares no motion.
 - Touch target ≥40×40 px — not applicable; the component is non-interactive.
