@@ -3,10 +3,11 @@ name: button
 category: actions
 structure: monolithic
 status: implemented
-spec_version: 2
-checksum: 25803f26ef121e0a63a7e5243d32581a54aaa54095f545bc54956a00ceff03b3
+spec_version: 3
+template: 2
+checksum: 65100cf52d4292e55f4061967430728919805da6411f96b4f30da73229aa86d4
 created: 2026-05-22
-last_updated: 2026-11-12
+last_updated: 2026-11-14
 ---
 
 # Button — Component Spec
@@ -105,7 +106,8 @@ Interactive control for user actions. Lives at `packages/webkit/src/components/a
 ## States
 
 - Visual states: `default`, `hover`, `focus-visible`, `active`, `disabled`
-- `data-disabled` mirrors the `disabled` prop
+- `data-disabled` mirrors the `disabled` prop; `data-loading` the `loading` prop; `data-inactive` is set while disabled or loading
+- `data-size` mirrors `size`; every kind, size and inactive utility switches on these `data-*` attributes in one flat class (no class presets in script)
 - `data-kind` mirrors `kind`; with `kind="link"` the button has no box (no height, padding, surface or state layer), the label is `text-body-sm` in `var(--text-link)` turning `var(--text-link-hover)` and underlined on hover, and `size` is ignored; disabled and loading drop it to `var(--text-disabled)`; under forced colors it reads as `LinkText` with no border.
 - With `type="submit"`, `disabled` (native) and `loading` (the click is cancelled) both stop the form from submitting, including implicit submission on `Enter`
 - Touch: the drawn size is unchanged (28/32/40 px, all above the 24 px minimum); on a coarse pointer an invisible `[data-slot=touch-target]` span extends the hit area to at least 44 × 44 px around the button.
@@ -153,6 +155,21 @@ Interactive control for user actions. Lives at `packages/webkit/src/components/a
 - Motion: the hover nudge of an `icon-position="right"` arrow moves toward the end (`rtl:` flips the `translate-x`).
 - Keyboard: no horizontal arrow-key logic.
 - User data: none.
+
+## Internationalization
+
+- No built-in strings: the label (and an `aria-label` when given) are consumer copy.
+
+## Responsive
+
+- The button never wraps its label (`whitespace-nowrap`); keep labels short, or let the layout stack buttons on narrow screens.
+- Touch: drawn heights are 28 / 32 / 40 px; a `[data-slot=touch-target]` span extends the hit area to 44 px on a coarse pointer.
+- No hover-only affordance: every state reads without hover.
+
+## Performance
+
+- Bundle budget: see `.size-limit.json` entry `button`.
+- Runtime: one element plus an optional Spinner; no observers.
 
 ## Examples
 

@@ -3,10 +3,11 @@ name: copy-button
 category: actions
 structure: monolithic
 status: implemented
-spec_version: 2
-checksum: 0b4c408c0fb6ef11005fd3c281646f75fc600f35e6a7d8cc74f642908969da58
+spec_version: 3
+template: 2
+checksum: dcfa61fd52ec9f78c8c1f9a5991005671603510ce966887bd3c93dc4f5cf43f6
 created: 2026-06-02
-last_updated: 2026-11-11
+last_updated: 2026-11-14
 ---
 
 # Copy Button — Component Spec
@@ -98,10 +99,11 @@ Icon-only control that copies a string to the clipboard and briefly confirms suc
 
 - Visible focus: inherited from `IconButton` (`focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`)
 - Keyboard map: `Tab` focuses; `Enter`/`Space` activates copy.
-- ARIA: `aria-label` toggles between `ariaLabel` and `copiedLabel` when copied.
+- ARIA: `aria-label` toggles between `ariaLabel` and `copiedLabel` when copied, and a visually hidden `role="status"` region (`<testId>__status`) announces the copied label for 2 s, since a name change on the focused button is not announced by most screen readers.
+- Attributes: consumer `class`, `id`, `aria-describedby` and listeners land on the root `span` (`inheritAttrs: false` + `v-bind="$attrs"`).
 - Fallback popover: `role="dialog"` named by its title and described by the key hint; focus moves into the selected read-only field and returns to the button on close.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state.
-- `motion-reduce:transition-none motion-reduce:transform-none` on animated states.
+- `motion-reduce:transition-none` on animated states (the icon swap comes from IconButton).
 - Touch target ≥40×40 px where the control is interactive.
 
 ## Usage
@@ -118,6 +120,29 @@ Icon-only control that copies a string to the clipboard and briefly confirms suc
   />
 </template>
 ```
+
+## Right-to-left
+
+- Layout: a single icon button; nothing to mirror. The copy and check glyphs do not mirror.
+- Keyboard: no arrow-key logic.
+- User data: the copied value is not rendered.
+
+## Internationalization
+
+| Key                 | English source | Override prop |
+| ------------------- | -------------- | ------------- |
+| `copyButton.copy`   | `Copy`         | `ariaLabel`   |
+| `copyButton.copied` | `Copied`       | `copiedLabel` |
+
+## Responsive
+
+- Size follows `size` (IconButton 28 / 32 / 40 px) with IconButton's 44 px coarse-pointer target.
+- The tooltip opens on focus as well as hover.
+
+## Performance
+
+- Bundle budget: see `.size-limit.json` entry `copy-button`; the manual-copy fallback popover is an async chunk loaded only when the clipboard is blocked.
+- Runtime: one timer for the 2 s copied state, cleared on unmount.
 
 ## Examples
 

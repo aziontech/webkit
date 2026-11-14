@@ -1448,7 +1448,7 @@
   {
     "name": "button-highlight",
     "path": "src/components/actions/button-highlight/button-highlight.vue",
-    "limit": "13.3 KB"
+    "limit": "2.25 KB"
   },
   {
     "name": "mini-button",

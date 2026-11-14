@@ -3,13 +3,14 @@ name: button-highlight
 category: actions
 structure: monolithic
 status: implemented
-spec_version: 1
+spec_version: 2
+template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4313-20621
   node_id: 4313:20500
-checksum: 1921ecfc004c9c6b6d627cefe7bb713fafb22089f7611423ece249b7f56217bb
+checksum: 4cdbddf1ac71ba9d77ef45b6197905ea0b9320aecb2a79589170f1d910ee26ab
 created: 2026-06-01
-last_updated: 2026-11-11
+last_updated: 2026-11-14
 ---
 
 # Button Highlight — Component Spec
@@ -141,6 +142,20 @@ Visually emphasized action trigger built on a brand-accent gradient with a conti
 - Icons: a directional glyph passed to `icon` (chevrons, angles, arrows, carets, `sign-in`/`sign-out`, `reply`, `undo`: the list in `utils/directional-icons.ts`) gets `rtl:-scale-x-100`; external-link arrows, media and brand glyphs do not mirror.
 - Keyboard: no horizontal arrow-key logic.
 - User data: none.
+
+## Internationalization
+
+- No built-in strings: the label is consumer copy.
+
+## Responsive
+
+- The control never wraps its label; drawn heights are 28 / 32 / 40 px. The glow needs `overflow-hidden` on the root, which also clips a touch-target extension, so prefer `size="large"` (40 px) on touch-first surfaces.
+- Consumer attributes (`id`, `aria-*`, `name`, `form`, `class`) land on the anchor or button (`v-bind="$attrs"`); the class is not merged with tailwind-merge, which keeps the entry near the Button budget.
+
+## Performance
+
+- Bundle budget: see `.size-limit.json` entry `button-highlight`.
+- Runtime: one element and three decorative layers; the glow animation stops under reduced motion.
 
 ## Examples
 
