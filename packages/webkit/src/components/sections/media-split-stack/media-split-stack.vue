@@ -1,6 +1,7 @@
 <script setup lang="ts">
-  import { computed, defineAsyncComponent, ref, useAttrs } from 'vue'
+  import { type Component, computed, defineAsyncComponent, ref, useAttrs } from 'vue'
 
+  import { resolveScene, type SceneRef } from '../../../assets/scene-registry'
   import Button from '../../actions/button/button.vue'
   import Illustration from '../../content/illustration/illustration.vue'
   import type { ProductWidgetName } from '../../content/product-widget/product-widget.vue'
@@ -26,13 +27,22 @@
     href: string
   }
 
+  /** A live scene drawn in a band's media cell. */
+  export type MediaSplitStackScene = SceneRef
+
   /** One band of the run: a claim beside its picture. */
   export type MediaSplitStackBand = {
     /** Headline of the band, naming its region. */
     title: string
     /** Supporting sentence under the headline. */
     description: string
-    /** Name of the product console widget shown in the media cell; wins over every other picture. */
+    /** Short overline above the band's headline. */
+    eyebrow?: string
+    /** Destination the whole band links to; falls back to the action's. */
+    href?: string
+    /** Live scene drawn in the media cell, `{ component, props? }` naming a webkit scene asset; wins over every other picture. */
+    scene?: MediaSplitStackScene
+    /** Name of the product console widget shown in the media cell when no scene is set. */
     widget?: ProductWidgetName
     /** Name of the request-flow diagram shown in the media cell, when no widget is set. */
     diagram?: DiagramName
@@ -46,25 +56,31 @@
     illustration?: string
     /** Accessible name of the illustration; empty keeps it decorative. */
     illustrationLabel?: string
-    /** The outlined button and the link the whole band follows; `{ label, href }`. Omitted when absent. */
+    /** The outlined button, whose `href` the whole band follows when the band has none; `{ label, href }`. Omitted when absent. */
     action?: MediaSplitStackAction
   }
 
   interface Props {
     /** Layout of the run: `media-end` sets every picture at the closing end, `alternating` starts it at the opening end and swaps sides band by band. */
     kind?: MediaSplitStackKind
+    /** In-page id set on the run so a `#hash` link can scroll to it. */
+    anchor?: string
     /** Overline above the section title. */
     eyebrow?: string
-    /** Headline of the run, rendered by the large centered section title as its `h2`; the run renders no header when empty. */
+    /** Headline of the run, rendered by the large centered section title as its `h2`; the run renders no header when empty, and with a header each band's headline drops to an `h3`. */
     title?: string
-    /** The bands, in order; each is `{ title, description, widget?, diagram?, image?, imageAlt?, imageFramed?, illustration?, illustrationLabel?, action? }` where `widget` is a `ProductWidget` name, `diagram` a `Diagram` name, `image` a picture URL, `illustration` a registry name, and `action` `{ label, href }` the outlined button and the link the whole band follows. */
+    /** Supporting sentence under the section title. */
+    description?: string
+    /** The bands, in order; each is `{ title, description, eyebrow?, href?, scene?, widget?, diagram?, image?, imageAlt?, imageFramed?, illustration?, illustrationLabel?, action? }` where `eyebrow` is the band's overline, `href` the link the whole band follows (falling back to the action's), `scene` a webkit scene asset, `widget` a `ProductWidget` name, `diagram` a `Diagram` name, `image` a picture URL, `illustration` a registry name, and `action` `{ label, href }` the outlined button. */
     bands?: MediaSplitStackBand[]
   }
 
   const props = withDefaults(defineProps<Props>(), {
     kind: 'media-end',
+    anchor: '',
     eyebrow: '',
     title: '',
+    description: '',
     bands: () => []
   })
 
@@ -85,7 +101,14 @@
 
   const hasHeader = computed(() => props.title.length > 0)
 
-  const mediaPadded = (band: MediaSplitStackBand) =>
+  const scenes = computed<(Component | null)[]>(() =>
+    props.bands.map((band) => (band.scene ? resolveScene(band.scene.component) : null))
+  )
+
+  const bandHref = (band: MediaSplitStackBand) => band.href || band.action?.href || ''
+
+  const mediaPadded = (band: MediaSplitStackBand, index: number) =>
+    !scenes.value[index] &&
     Boolean(band.widget || band.diagram || (band.imageFramed && band.image && !band.illustration))
 
   const mediaSide = (index: number) =>
@@ -95,9 +118,11 @@
 <template>
   <section
     v-bind="$attrs"
+    :id="anchor || undefined"
     :data-testid="testId"
     :data-kind="kind"
     :aria-label="title || undefined"
+    class="scroll-mt-(--spacing-xxl)"
   >
     <template v-if="hasBands">
       <SectionTitle
@@ -106,6 +131,7 @@
         size="large"
         :eyebrow="eyebrow"
         :title="title"
+        :description="description"
       />
 
       <SectionModule
@@ -121,22 +147,32 @@
             :key="band.title"
             :kind="mediaSide(index)"
             divided
-            :heading-level="2"
+            :heading-level="hasHeader ? 3 : 2"
             align="center"
             size="large"
             media-fill="canvas"
             texture="pixelate"
             texture-size="small"
             texture-fade="top"
+            :eyebrow="band.eyebrow ?? ''"
             :title="band.title"
             :description="band.description"
-            :media-href="band.action?.href ?? ''"
-            :media-padded="mediaPadded(band)"
+            :media-href="bandHref(band)"
+            :media-padded="mediaPadded(band, index)"
             @pointerenter="hovered = index"
             @pointerleave="hovered = null"
           >
             <template
-              v-if="band.widget"
+              v-if="scenes[index]"
+              #media
+            >
+              <component
+                :is="scenes[index]"
+                v-bind="band.scene?.props ?? {}"
+              />
+            </template>
+            <template
+              v-else-if="band.widget"
               #media
             >
               <ProductWidget

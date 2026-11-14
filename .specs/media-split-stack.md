@@ -3,11 +3,11 @@ name: media-split-stack
 category: sections
 structure: monolithic
 status: implemented
-spec_version: 2
+spec_version: 3
 template: 2
 created: 2026-11-05
-last_updated: 2026-11-12
-checksum: e38557d13eded04e56a919191b3d4100810c9be8b620414202b52f9aecef1bf3
+last_updated: 2026-11-14
+checksum: 0469860ad44c4815bedb264d9adcaf2090a04c3444ccf9aa67b6ab6f46805b85
 ---
 
 # MediaSplitStack — Component Spec
@@ -67,9 +67,11 @@ A run of large media-split bands that pile up under the site header as the page 
 | Prop      | Type                    | Default       | Required | JSDoc                                                                                                                                                                                                                                                                                                                                                                      |
 | --------- | ----------------------- | ------------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `kind`    | `MediaSplitStackKind`   | `'media-end'` | false    | Layout of the run: `media-end` sets every picture at the closing end, `alternating` starts it at the opening end and swaps sides band by band.                                                                                                                                                                                                                             |
+| `anchor` | `string` | `''` | false | In-page id set on the run so a `#hash` link can scroll to it. |
 | `eyebrow` | `string`                | `''`          | false    | Overline above the section title.                                                                                                                                                                                                                                                                                                                                          |
-| `title`   | `string`                | `''`          | false    | Headline of the run, rendered by the large centered section title as its `h2`; the run renders no header when empty.                                                                                                                                                                                                                                                       |
-| `bands`   | `MediaSplitStackBand[]` | `[]`          | false    | The bands, in order; each is `{ title, description, widget?, diagram?, image?, imageAlt?, imageFramed?, illustration?, illustrationLabel?, action? }` where `widget` is a `ProductWidget` name, `diagram` a `Diagram` name, `image` a picture URL, `illustration` a registry name, and `action` `{ label, href }` the outlined button and the link the whole band follows. |
+| `title` | `string` | `''` | false | Headline of the run, rendered by the large centered section title as its `h2`; the run renders no header when empty, and with a header each band's headline drops to an `h3`. |
+| `description` | `string` | `''` | false | Supporting sentence under the section title. |
+| `bands` | `MediaSplitStackBand[]` | `[]` | false | The bands, in order; each is `{ title, description, eyebrow?, href?, scene?, widget?, diagram?, image?, imageAlt?, imageFramed?, illustration?, illustrationLabel?, action? }` where `eyebrow` is the band's overline, `href` the link the whole band follows (falling back to the action's), `scene` a `{ component, props? }` webkit scene asset, `widget` a `ProductWidget` name, `diagram` a `Diagram` name, `image` a picture URL, `illustration` a registry name, and `action` `{ label, href }` the outlined button. |
 
 ## Events
 
@@ -84,8 +86,9 @@ A run of large media-split bands that pile up under the site header as the page 
 - Visual states: `default`; hovering a linked band reveals its link affordance (owned by `media-split`)
 - `data-kind` mirrors the `kind` prop
 - Empty: when `bands` is empty the run renders nothing — not the header, not the stack
-- The header renders only when `title` is set; a band renders its button and its link only when it has an `action`, and its media cell only when it has a picture
-- Media precedence per band: `widget`, then `diagram`, then `illustration`, then `image`. A widget or a diagram is inset from the cell's edges (`media-split`'s `mediaPadded`), and so is a framed image; an illustration and a plain image run flush
+- The header renders only when `title` is set; a band renders its button only when it has an `action`, links as a whole to its `href` (or its action's when it has none), and renders its media cell only when it has a picture; a band's `eyebrow` sits above its headline
+- Band headlines are `h2` when the run has no header and `h3` under the section title, so the outline never repeats a level
+- Media precedence per band: `scene`, then `widget`, then `diagram`, then `illustration`, then `image`. A widget or a diagram is inset from the cell's edges (`media-split`'s `mediaPadded`), and so is a framed image; an illustration and a plain image run flush
 - A widget plays its beat while the pointer is over its band (`hover`), and shows its finished state on touch and under reduced motion (owned by `product-widget`); it draws no collaborator cursor (`cursor` off), so the band reads as the product screen
 - Widget and diagram load on demand (`defineAsyncComponent`): a run that uses neither never downloads them
 
@@ -100,6 +103,7 @@ _none_
 | band rules and marks | `var(--border-default)`                                           |
 | framed image plate   | `var(--bg-surface)`, `var(--border-default)`, `var(--shape-card)` |
 | framed image inset   | `var(--spacing-md)`                                               |
+| anchor scroll offset | `var(--spacing-xxl)` |
 
 ## Theme gaps
 
@@ -111,7 +115,7 @@ _none_
 
 - Visible focus: owned by `button` and `media-split`'s media link.
 - Keyboard map: `Tab` reaches each band's media link and button; `Enter` follows them.
-- ARIA: the run is a `<section>` named by its title (`aria-label`) when one is set; each band is `media-split`'s own section named by the band's title, with its headline as an `h2`; illustrations are named by `illustrationLabel` and images by `imageAlt`, or decorative when empty; a diagram is a `figure` named by the description its library entry carries; a widget is an inert, `aria-hidden` picture of the console, so the band's copy carries its meaning.
+- ARIA: the run is a `<section>` named by its title (`aria-label`) when one is set; each band is `media-split`'s own section named by the band's title, with its headline as an `h3` under the run's `h2` (an `h2` when the run has no title); illustrations are named by `illustrationLabel` and images by `imageAlt`, or decorative when empty; a diagram is a `figure` named by the description its library entry carries; a widget is an inert, `aria-hidden` picture of the console, so the band's copy carries its meaning.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): owned by `section-title`, `media-split` and `button`.
 - `motion-reduce:transition-none motion-reduce:transform-none` — the run adds no motion.
 - Touch target ≥40×40 px: the medium buttons and the band links.
@@ -143,7 +147,7 @@ _none_
 
 ## Examples
 
-- Default
+- Default — carries a section `description`, a band `eyebrow`, a band `href` distinct from its button and a live `scene`.
 - Types — composite story rendering both `kind` values stacked.
 - Product media — bands whose pictures are a `ProductWidget`, a `Diagram` and a framed image (justified: `widget`, `diagram` and `imageFramed` are three render paths the default does not reach).
 
