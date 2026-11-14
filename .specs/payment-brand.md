@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 3
 template: 2
-checksum: 26848bc9e6ae0bbf3514bba5fc8e8209d940be38092bdea8301e9e0593594829
+checksum: 206251d8981a4af5f7f4f6299f1cf2d4226ba165f79753b830cdb7d7d3809fa9
 created: 2026-11-11
 last_updated: 2026-11-14
 ---
@@ -55,13 +55,13 @@ The card-brand plate shown beside a payment card: a small bordered plate with th
 
 ## Props
 
-| Prop         | Type                  | Default     | Required | JSDoc                                                                                                                                                                                                      |
-| ------------ | --------------------- | ----------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `brand`      | `string`              | `''`        | false    | The card network as the payment API names it (`visa`, `mastercard`, `amex`, `American Express`, `diners`, `jcb`, `discover`, `elo`, `hipercard`, `unionpay`…). Unknown values draw the generic card glyph. |
-| `size`       | `'small' \| 'medium'` | `'medium'`  | false    | Plate size: `small` 20 × 32 px for dense tables, `medium` 28 × 40 px for rows and forms.                                                                                                                   |
-| `ariaLabel`  | `string`              | `''`        | false    | Accessible name. Empty uses the brand's name (`Visa`), or the catalog's `Card` for an unknown brand.                                                                                                       |
-| `label`      | `string`              | `''`        | false    | @deprecated since 6.0 — use `ariaLabel` instead. Removed in 7.0.                                                                                                                                           |
-| `decorative` | `boolean`             | `false`     | false    | Hide the plate from assistive technology when the text next to it already names the brand.                                                                                                                 |
+| Prop         | Type                  | Default    | Required | JSDoc                                                                                                                                                                                                      |
+| ------------ | --------------------- | ---------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `brand`      | `string`              | `''`       | false    | The card network as the payment API names it (`visa`, `mastercard`, `amex`, `American Express`, `diners`, `jcb`, `discover`, `elo`, `hipercard`, `unionpay`…). Unknown values draw the generic card glyph. |
+| `size`       | `'small' \| 'medium'` | `'medium'` | false    | Plate size: `small` 20 × 32 px for dense tables, `medium` 28 × 40 px for rows and forms.                                                                                                                   |
+| `ariaLabel`  | `string`              | `''`       | false    | Accessible name. Empty uses the brand's name (`Visa`), or the catalog's `Card` for an unknown brand.                                                                                                       |
+| `label`      | `string`              | `''`       | false    | @deprecated since 6.0 — use `ariaLabel` instead. Removed in 7.0.                                                                                                                                           |
+| `decorative` | `boolean`             | `false`    | false    | Hide the plate from assistive technology when the text next to it already names the brand.                                                                                                                 |
 
 ## Events
 

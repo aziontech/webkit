@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 2
 template: 2
-checksum: 29f714ba9a9056e2c6c30da30ded858d17ffba7828abfa50eae29a422b7b5798
+checksum: 4708ca844716e798c4f81c33e6d6fabb8f2510a1339199c44dfdb4fa4d17bc19
 created: 2026-11-11
 last_updated: 2026-11-14
 ---
@@ -59,10 +59,10 @@ A small `+N` chip that stands for the items a slot cannot show, and opens a popo
 
 ## Props
 
-| Prop    | Type                                                | Default     | Required | JSDoc                                                                                                  |
-| ------- | --------------------------------------------------- | ----------- | -------- | ------------------------------------------------------------------------------------------------------ |
-| `items` | `Array<string \| { label: string; href?: string }>` | `[]`        | false    | The hidden items. The chip reads a plus sign and the count; an item with `href` opens in a new tab.   |
-| `noun`  | `string \| { one: string; other: string }`          | `''`        | false    | What the items are, for the summary and the trigger's name. Empty uses the catalog (`item` / `items`). |
+| Prop    | Type                                                | Default | Required | JSDoc                                                                                                  |
+| ------- | --------------------------------------------------- | ------- | -------- | ------------------------------------------------------------------------------------------------------ |
+| `items` | `Array<string \| { label: string; href?: string }>` | `[]`    | false    | The hidden items. The chip reads a plus sign and the count; an item with `href` opens in a new tab.    |
+| `noun`  | `string \| { one: string; other: string }`          | `''`    | false    | What the items are, for the summary and the trigger's name. Empty uses the catalog (`item` / `items`). |
 
 ## Events
 

@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 2
 template: 2
-checksum: 7ba9fbb4948dd44da3d93582184b278063dc5862a3fcb6bd2788107fb58c5d29
+checksum: e208e0a4094ba425196a5c7169bac416d68a5f8f716202c9f92bd59943d26d19
 created: 2026-11-11
 last_updated: 2026-11-14
 ---
@@ -55,13 +55,13 @@ A QR code drawn as SVG from a string, with no image request and no dependency: W
 
 ## Props
 
-| Prop              | Type                             | Default     | Required | JSDoc                                                                                                                                  |
-| ----------------- | -------------------------------- | ----------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------- |
-| `value`           | `string`                         | —           | true     | The text the code carries (a URI, a key), encoded as UTF-8 bytes.                                                                      |
-| `ariaLabel`       | `string`                         | `''`        | false    | Accessible name of the image. Empty uses the catalog's `QR code`; name it after what the scan does.                                    |
-| `label`           | `string`                         | `''`        | false    | @deprecated since 6.0 — use `ariaLabel` instead. Removed in 7.0.                                                                       |
-| `errorCorrection` | `'L' \| 'M' \| 'Q' \| 'H'`       | `'M'`       | false    | Error-correction level: `L` 7 %, `M` 15 %, `Q` 25 %, `H` 30 % of the code can be lost and still read. Higher levels make denser codes. |
-| `size`            | `'small' \| 'medium' \| 'large'` | `'medium'`  | false    | Rendered width: `small` 128 px, `medium` 160 px, `large` 224 px, quiet zone included.                                                  |
+| Prop              | Type                             | Default    | Required | JSDoc                                                                                                                                  |
+| ----------------- | -------------------------------- | ---------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| `value`           | `string`                         | —          | true     | The text the code carries (a URI, a key), encoded as UTF-8 bytes.                                                                      |
+| `ariaLabel`       | `string`                         | `''`       | false    | Accessible name of the image. Empty uses the catalog's `QR code`; name it after what the scan does.                                    |
+| `label`           | `string`                         | `''`       | false    | @deprecated since 6.0 — use `ariaLabel` instead. Removed in 7.0.                                                                       |
+| `errorCorrection` | `'L' \| 'M' \| 'Q' \| 'H'`       | `'M'`      | false    | Error-correction level: `L` 7 %, `M` 15 %, `Q` 25 %, `H` 30 % of the code can be lost and still read. Higher levels make denser codes. |
+| `size`            | `'small' \| 'medium' \| 'large'` | `'medium'` | false    | Rendered width: `small` 128 px, `medium` 160 px, `large` 224 px, quiet zone included.                                                  |
 
 ## Events
 
