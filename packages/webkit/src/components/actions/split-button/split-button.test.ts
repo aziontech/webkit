@@ -21,7 +21,7 @@ const panel = () =>
   document.body.querySelector<HTMLElement>('[data-testid="actions-split-button__menu__panel"]')
 
 const options = () =>
-  Array.from(document.body.querySelectorAll('[role="menuitem"]')) as HTMLElement[]
+  Array.from(document.body.querySelectorAll('[role^="menuitem"]')) as HTMLElement[]
 
 const host = (props: Record<string, unknown> = {}) =>
   defineComponent({

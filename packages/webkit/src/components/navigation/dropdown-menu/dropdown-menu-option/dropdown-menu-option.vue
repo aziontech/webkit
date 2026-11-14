@@ -1,7 +1,7 @@
 <script setup lang="ts">
-  import { computed, onBeforeUnmount, useAttrs, watch } from 'vue'
+  import { computed, inject, onBeforeUnmount, useAttrs, useSlots, watch } from 'vue'
 
-  import { useDropdownContext } from '../injection-key'
+  import { DropdownMenuGroupInjectionKey, useDropdownContext } from '../injection-key'
 
   defineOptions({
     name: 'DropdownMenuOption',
@@ -10,7 +10,11 @@
 
   defineSlots<{
     default(): unknown
+    leading(): unknown
+    trailing(): unknown
+    /** @deprecated since 6.0 — use the leading slot. Removed in 7.0. */
     left(): unknown
+    /** @deprecated since 6.0 — use the trailing slot. Removed in 7.0. */
     right(): unknown
   }>()
 
@@ -20,32 +24,40 @@
     /** Plain-text label; falls back to the default slot when omitted. */
     label?: string
     /**
-     * Keyboard-shortcut hint rendered on the right side. The root dropdown
-     * registers a window listener that matches the shortcut and emits
-     * `select` for this option. Mutually exclusive with the right slot.
+     * Keyboard-shortcut hint rendered on the trailing side. A shared window listener
+     * matches the shortcut and emits `select` for this option. Mutually exclusive with
+     * the trailing slot.
      */
     command?: string
     /** Disables interaction and applies disabled tokens. */
     disabled?: boolean
-    /** Marks the option as currently selected (background + checkmark). */
+    /** Marks the option as checked: a menuitemradio with aria-checked and a check mark. */
     selected?: boolean
+    /** Destination URL; the option renders as a link that still emits select. */
+    href?: string
   }
 
   const props = withDefaults(defineProps<Props>(), {
     label: '',
     command: '',
     disabled: false,
-    selected: false
+    selected: false,
+    href: ''
   })
 
   const attrs = useAttrs()
+  const slots = useSlots()
   const ctx = useDropdownContext()
+  const inGroup = inject(DropdownMenuGroupInjectionKey, false)
 
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? `${ctx.testId}__option`
   )
 
   const hasCommand = computed(() => props.command.length > 0)
+  const isLink = computed(() => props.href.length > 0 && !props.disabled)
+  const hasLeading = () => Boolean(slots['leading'] || slots['left'])
+  const hasTrailing = () => Boolean(slots['trailing'] || slots['right'])
 
   function activate(event: globalThis.MouseEvent | globalThis.KeyboardEvent) {
     if (props.disabled) return
@@ -57,6 +69,12 @@
   }
 
   function onKeydown(event: globalThis.KeyboardEvent) {
+    if (event.key === 'Enter' && isLink.value) return
+    if (event.key === ' ' && isLink.value) {
+      event.preventDefault()
+      ;(event.currentTarget as globalThis.HTMLElement | null)?.click()
+      return
+    }
     if (event.key === 'Enter' || event.key === ' ') {
       event.preventDefault()
       activate(event)
@@ -83,45 +101,61 @@
 </script>
 
 <template>
-  <div
-    v-bind="attrs"
-    role="menuitem"
-    :tabindex="disabled ? -1 : 0"
-    :aria-disabled="disabled || undefined"
-    :aria-current="selected ? 'true' : undefined"
-    :data-testid="testId"
-    :data-selected="selected || null"
-    :data-disabled="disabled || null"
-    class="flex h-8 min-h-8 cursor-pointer select-none items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-sm) py-(--spacing-xxs) text-label-sm text-(--text-default) outline-none transition-colors duration-150 ease-out motion-reduce:transition-none hover:bg-(--bg-hover) focus-visible:bg-(--bg-hover) focus-visible:ring-2 focus-visible:ring-(--ring-color) data-[selected]:bg-(--bg-selected) data-[disabled]:cursor-not-allowed data-[disabled]:text-(--text-disabled)"
-    @click="onClick"
-    @keydown="onKeydown"
+  <Teleport
+    v-if="inGroup || ctx.panelBodyRef.value"
+    :to="ctx.panelBodyRef.value ?? 'body'"
+    :disabled="inGroup"
   >
-    <span
-      v-if="$slots['left']"
-      :data-testid="`${testId}__left`"
-      class="flex shrink-0 items-center"
+    <component
+      :is="isLink ? 'a' : 'div'"
+      v-bind="attrs"
+      :href="isLink ? href : undefined"
+      :role="selected ? 'menuitemradio' : 'menuitem'"
+      tabindex="-1"
+      :aria-checked="selected ? 'true' : undefined"
+      :aria-disabled="disabled || undefined"
+      :data-testid="testId"
+      :data-selected="selected || null"
+      :data-disabled="disabled || null"
+      :data-ungrouped="inGroup ? null : ''"
+      class="flex h-8 min-h-8 cursor-pointer select-none items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-sm) py-(--spacing-xxs) text-label-sm text-(--text-default) no-underline outline-none transition-colors duration-150 ease-out motion-reduce:transition-none hover:bg-(--bg-hover) focus-visible:bg-(--bg-hover) focus-visible:ring-2 focus-visible:ring-(--ring-color) data-[selected]:bg-(--bg-selected) data-[disabled]:cursor-not-allowed data-[disabled]:text-(--text-disabled) data-[ungrouped]:mx-(--spacing-xxs)"
+      @click="onClick"
+      @keydown="onKeydown"
     >
-      <slot name="left" />
-    </span>
+      <span
+        v-if="hasLeading()"
+        :data-testid="`${testId}__leading`"
+        class="flex shrink-0 items-center"
+      >
+        <slot name="leading"><slot name="left" /></slot>
+      </span>
 
-    <span class="flex-1 truncate text-start">
-      <slot>{{ label }}</slot>
-    </span>
+      <span class="flex-1 truncate text-start">
+        <slot>{{ label }}</slot>
+      </span>
 
-    <span
-      v-if="$slots['right'] && !hasCommand"
-      :data-testid="`${testId}__right`"
-      class="flex shrink-0 items-center"
-    >
-      <slot name="right" />
-    </span>
+      <span
+        v-if="hasTrailing() && !hasCommand"
+        :data-testid="`${testId}__trailing`"
+        class="flex shrink-0 items-center"
+      >
+        <slot name="trailing"><slot name="right" /></slot>
+      </span>
 
-    <span
-      v-else-if="hasCommand"
-      :data-testid="`${testId}__command`"
-      class="flex shrink-0 items-center text-label-sm text-(--text-muted)"
-    >
-      {{ command }}
-    </span>
-  </div>
+      <span
+        v-else-if="hasCommand"
+        :data-testid="`${testId}__command`"
+        class="flex shrink-0 items-center text-label-sm text-(--text-muted)"
+      >
+        {{ command }}
+      </span>
+
+      <i
+        v-if="selected"
+        :data-testid="`${testId}__check`"
+        class="pi pi-check shrink-0 text-body-xs text-(--text-default)"
+        aria-hidden="true"
+      />
+    </component>
+  </Teleport>
 </template>

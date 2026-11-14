@@ -19,6 +19,11 @@ import Table from '../components/data/table/table.vue'
 import Tree from '../components/data/tree/tree.vue'
 import MultiSelect from '../components/inputs/multi-select'
 import Select from '../components/inputs/select'
+import DropdownMenu, {
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuTrigger
+} from '../components/navigation/dropdown-menu'
 import { useCollection, type UseCollectionReturn } from '../composables/use-collection'
 
 type Scenario = keyof typeof budgets.scenarios
@@ -307,6 +312,37 @@ function tableCase(n: number, virtual: boolean, change: 'sort' | 'filter'): Case
   }
 }
 
+function dropdownMenuCase(): Case {
+  const n = 1000
+  const Host = defineComponent({
+    setup() {
+      return () =>
+        h(
+          'div',
+          null,
+          Array.from({ length: n }, (_, i) =>
+            h(DropdownMenu, { key: i }, () => [
+              h(DropdownMenuTrigger, null, () => h('button', { type: 'button' }, `Row ${i}`)),
+              h(DropdownMenuGroup, null, () => [
+                h(DropdownMenuItem, { value: 'edit', label: 'Edit' }),
+                h(DropdownMenuItem, { value: 'delete', label: 'Delete' })
+              ])
+            ])
+          )
+        )
+    }
+  })
+  return {
+    mount: () => Host,
+    update: () => {
+      for (let i = 0; i < 20; i++) {
+        document.body.dispatchEvent(new MouseEvent('mousedown', { bubbles: true }))
+        window.dispatchEvent(new KeyboardEvent('keydown', { key: 'e', metaKey: true }))
+      }
+    }
+  }
+}
+
 describe('runtime budgets (perf-budgets.json)', () => {
   afterEach(() => cleanup())
 
@@ -342,5 +378,8 @@ describe('runtime budgets (perf-budgets.json)', () => {
   })
   it('Table with 10k virtual rows under useCollection: filter', async () => {
     check('table-10k-virtual-filter', await measure(() => tableCase(10_000, true, 'filter')))
+  })
+  it('DropdownMenu x1k closed instances: mount and global events', async () => {
+    check('dropdown-menu-1k', await measure(dropdownMenuCase))
   })
 })

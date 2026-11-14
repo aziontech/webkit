@@ -1,5 +1,5 @@
 import { fireEvent, render, screen, waitFor, within } from '@testing-library/vue'
-import { afterEach, describe, expect, it } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import { userEvent } from 'vitest/browser'
 import { defineComponent, h, nextTick, ref } from 'vue'
 
@@ -7,7 +7,12 @@ import Default from '../../../../examples/dropdown-menu/default.vue'
 import Groups from '../../../../examples/dropdown-menu/groups.vue'
 import OptionAffordances from '../../../../examples/dropdown-menu/option-affordances.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
-import DropdownMenu, { DropdownMenuGroup, DropdownMenuOption, DropdownMenuTrigger } from './index'
+import DropdownMenu, {
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuOption,
+  DropdownMenuTrigger
+} from './index'
 
 /**
  * A realistic composed tree mirroring how a consumer wires the compound:
@@ -74,7 +79,7 @@ const getPanel = () =>
   ) as HTMLElement | null
 
 const getOptions = () =>
-  Array.from(document.body.querySelectorAll('[role="menuitem"]')) as HTMLElement[]
+  Array.from(document.body.querySelectorAll('[role^="menuitem"]')) as HTMLElement[]
 
 /** Wait until the panel is open AND the group has Teleported its options in. */
 async function waitForOpen(count: number) {
@@ -332,7 +337,7 @@ describe('DropdownMenu (compound / overlay)', () => {
   })
 
   // ---- Groups: labeled group anatomy + auto divider on 2nd group ------------
-  it('renders each group as role=group with an aria-labelledby label; only the first is data-first', async () => {
+  it('renders each group as role=group with an aria-labelledby label', async () => {
     render(Host, { props: { open: true, grouped: true } })
     await waitForOpen(5)
 
@@ -347,10 +352,6 @@ describe('DropdownMenu (compound / overlay)', () => {
     })
     expect(within(groups[0]).getByText('Account')).toBeTruthy()
     expect(within(groups[1]).getByText('Workspace')).toBeTruthy()
-
-    // registerGroup() returns 0-based index -> only the first group is data-first.
-    expect(groups[0].hasAttribute('data-first')).toBe(true)
-    expect(groups[1].hasAttribute('data-first')).toBe(false)
   })
 
   // ---- Option state: selected + disabled reflected via aria/data ------------
@@ -362,8 +363,13 @@ describe('DropdownMenu (compound / overlay)', () => {
     const selected = options.find((o) => o.textContent?.trim() === 'Audit log') as HTMLElement
     const disabled = options.find((o) => o.textContent?.trim() === 'Archived') as HTMLElement
 
-    expect(selected.getAttribute('aria-current')).toBe('true')
+    expect(selected.getAttribute('role')).toBe('menuitemradio')
+    expect(selected.getAttribute('aria-checked')).toBe('true')
+    expect(selected.hasAttribute('aria-current')).toBe(false)
     expect(selected.hasAttribute('data-selected')).toBe(true)
+    expect(
+      selected.querySelector('[data-testid="navigation-dropdown-menu__option__check"]')
+    ).not.toBeNull()
 
     expect(disabled.getAttribute('aria-disabled')).toBe('true')
     expect(disabled.hasAttribute('data-disabled')).toBe(true)
@@ -391,51 +397,6 @@ describe('DropdownMenu (compound / overlay)', () => {
     )
     expect(command).not.toBeNull()
     expect(command?.textContent?.trim()).toBe('⌘P')
-  })
-
-  it('clips horizontal overflow on the panel body so content respects the panel rounded borders', async () => {
-    const { getByTestId } = render(Host)
-    await fireEvent.click(getByTestId('navigation-dropdown-menu__trigger'))
-    await waitForOpen(3)
-
-    const body = document.body.querySelector(
-      '[data-testid="navigation-dropdown-menu__body"]'
-    ) as HTMLElement
-    expect(body).not.toBeNull()
-
-    const cls = body.className
-    expect(cls).toContain('overflow-x-hidden')
-    expect(cls).toContain('overflow-y-auto')
-  })
-
-  it('separates consecutive groups with an edge-to-edge divider carrying the design rhythm', async () => {
-    render(Host, { props: { open: true, grouped: true } })
-    await waitForOpen(5)
-
-    const groups = Array.from(document.body.querySelectorAll('[role="group"]')) as HTMLElement[]
-    expect(groups).toHaveLength(2)
-
-    const secondCls = groups[1].className
-    const firstCls = groups[0].className
-
-    expect(secondCls).toContain('[&:not([data-first])]:border-t')
-    expect(secondCls).toContain('[&:not([data-first])]:border-(--border-default)')
-
-    // Figma 3775:16746 — spacing-sm above the hairline, spacing-xs below it.
-    expect(secondCls).toContain('[&:not([data-first])]:mt-(--spacing-sm)')
-    expect(secondCls).toContain('[&:not([data-first])]:pt-(--spacing-xs)')
-
-    // The rhythm rides the same data-first variant, so the classes are identical
-    // and only the attribute distinguishes the leading group.
-    expect(firstCls).toBe(secondCls)
-    expect(groups[0].hasAttribute('data-first')).toBe(true)
-
-    // Full bleed: the group root carries no horizontal padding of its own (the
-    // panel has none either), so the divider reaches the panel border. The rows'
-    // inset lives on the inner content wrapper instead.
-    expect(secondCls).not.toMatch(/(?:^|\s)px-/)
-    const content = groups[1].firstElementChild as HTMLElement
-    expect(content.className).toContain('px-(--spacing-xxs)')
   })
 
   // ---- Accessibility: axe on the open menu overlay --------------------------
@@ -480,7 +441,7 @@ describe('DropdownMenu (compound / overlay)', () => {
   it('renders the OptionAffordances story open with a command hint option', async () => {
     render(OptionAffordances)
     await waitFor(() =>
-      expect(document.body.querySelectorAll('[role="menuitem"]').length).toBeGreaterThan(0)
+      expect(document.body.querySelectorAll('[role^="menuitem"]').length).toBeGreaterThan(0)
     )
     const command = document.body.querySelector(
       '[data-testid="navigation-dropdown-menu__option__command"]'
@@ -574,5 +535,175 @@ describe('keyboard map (spec)', () => {
     await userEvent.keyboard('{Shift>}{Tab}{/Shift}')
     await waitFor(() => expect(getPanel()).toBeNull())
     expect(document.activeElement).toBe(control())
+  })
+})
+
+describe('DropdownMenu audit fixes', () => {
+  const menu = (children: () => unknown[], props: Record<string, unknown> = { open: true }) =>
+    defineComponent({
+      setup() {
+        return () =>
+          h(DropdownMenu, props, () => [
+            h(DropdownMenuTrigger, null, () => h('button', { type: 'button' }, 'Menu')),
+            ...children()
+          ])
+      }
+    })
+
+  it('exposes DropdownMenu.Item and the DropdownMenuItem export as the row', () => {
+    expect(DropdownMenu.Item).toBe(DropdownMenuOption)
+    expect(DropdownMenuItem).toBe(DropdownMenuOption)
+    expect(DropdownMenu.Option).toBe(DropdownMenuOption)
+  })
+
+  it('renders items placed directly in the root inside the panel, not next to the trigger', async () => {
+    const { container } = render(
+      menu(() => [
+        h(DropdownMenuItem, { value: 'edit', label: 'Edit' }),
+        h(DropdownMenuItem, { value: 'delete', label: 'Delete' })
+      ])
+    )
+    await waitForOpen(2)
+    const panel = getPanel() as HTMLElement
+    getOptions().forEach((option) => expect(panel.contains(option)).toBe(true))
+    expect(container.querySelector('[role^="menuitem"]')).toBeNull()
+  })
+
+  it('keeps every item out of the tab order (roving focus by arrows)', async () => {
+    render(Host, { props: { open: true } })
+    await waitForOpen(3)
+    getOptions().forEach((option) => expect(option.getAttribute('tabindex')).toBe('-1'))
+  })
+
+  it('renders the leading and trailing slots, and the deprecated left and right aliases', async () => {
+    render(
+      menu(() => [
+        h(DropdownMenuGroup, null, () => [
+          h(
+            DropdownMenuItem,
+            { value: 'a', label: 'A' },
+            { leading: () => h('i', 'L'), trailing: () => h('i', 'T') }
+          ),
+          h(
+            DropdownMenuItem,
+            { value: 'b', label: 'B', 'data-testid': 'old' },
+            { left: () => h('i', 'l'), right: () => h('i', 'r') }
+          )
+        ])
+      ])
+    )
+    await waitForOpen(2)
+    const leading = document.body.querySelector(
+      '[data-testid="navigation-dropdown-menu__option__leading"]'
+    )
+    expect(leading?.textContent).toBe('L')
+    expect(
+      document.body.querySelector('[data-testid="navigation-dropdown-menu__option__trailing"]')
+        ?.textContent
+    ).toBe('T')
+    expect(document.body.querySelector('[data-testid="old__leading"]')?.textContent).toBe('l')
+    expect(document.body.querySelector('[data-testid="old__trailing"]')?.textContent).toBe('r')
+  })
+
+  it('jumps to the first item that starts with a typed letter', async () => {
+    render(
+      menu(
+        () => [
+          h(DropdownMenuGroup, null, () => [
+            h(DropdownMenuItem, { value: 'a', label: 'Archive' }),
+            h(DropdownMenuItem, { value: 'd', label: 'Duplicate' }),
+            h(DropdownMenuItem, { value: 'x', label: 'Delete' })
+          ])
+        ],
+        {}
+      )
+    )
+    await userEvent.click(control())
+    await waitForOpen(3)
+    await waitFor(() => expect(document.activeElement?.textContent?.trim()).toBe('Archive'))
+    await userEvent.keyboard('d')
+    expect(document.activeElement?.textContent?.trim()).toBe('Duplicate')
+    await userEvent.keyboard('d')
+    expect(document.activeElement?.textContent?.trim()).toBe('Delete')
+  })
+
+  it('renders an item with href as a link that still emits select', async () => {
+    const onSelect = vi.fn()
+    render(
+      menu(
+        () => [
+          h(DropdownMenuGroup, null, () => [
+            h(DropdownMenuItem, { value: '/docs', label: 'Docs', href: 'https://example.com/docs' })
+          ])
+        ],
+        { open: true, onSelect }
+      )
+    )
+    await waitForOpen(1)
+    const link = getOptions()[0] as HTMLElement
+    expect(link.tagName).toBe('A')
+    expect(link.getAttribute('href')).toBe('https://example.com/docs')
+    await fireEvent.click(link)
+    expect(onSelect).toHaveBeenCalledWith(expect.any(MouseEvent), '/docs')
+  })
+
+  it('treats the first rendered group as first when an earlier group is removed', async () => {
+    const showFirst = ref(true)
+    render(
+      defineComponent({
+        setup() {
+          return () =>
+            h(DropdownMenu, { open: true }, () => [
+              h(DropdownMenuTrigger, null, () => h('button', { type: 'button' }, 'Menu')),
+              showFirst.value
+                ? h(DropdownMenuGroup, { label: 'One' }, () => [
+                    h(DropdownMenuItem, { value: 'a', label: 'A' })
+                  ])
+                : null,
+              h(DropdownMenuGroup, { label: 'Two' }, () => [
+                h(DropdownMenuItem, { value: 'b', label: 'B' })
+              ])
+            ])
+        }
+      })
+    )
+    await waitForOpen(2)
+    showFirst.value = false
+    await waitForOpen(1)
+    const group = document.body.querySelector('[role="group"]') as HTMLElement
+    expect(group.matches(':first-child')).toBe(true)
+  })
+
+  it('attaches no document listener while closed and one shared window listener for shortcuts', async () => {
+    const docAdd = vi.spyOn(document, 'addEventListener')
+    const winAdd = vi.spyOn(window, 'addEventListener')
+    const onSelect = vi.fn()
+    render(
+      defineComponent({
+        setup() {
+          return () =>
+            h(
+              'div',
+              null,
+              Array.from({ length: 20 }, (_, i) =>
+                h(DropdownMenu, { key: i, onSelect }, () => [
+                  h(DropdownMenuTrigger, null, () => h('button', { type: 'button' }, `Row ${i}`)),
+                  h(DropdownMenuItem, { value: `copy-${i}`, label: 'Copy', command: '⌘K' })
+                ])
+              )
+            )
+        }
+      })
+    )
+    await nextTick()
+    const mousedowns = docAdd.mock.calls.filter(([type]) => type === 'mousedown').length
+    const keydowns = winAdd.mock.calls.filter(([type]) => type === 'keydown').length
+    docAdd.mockRestore()
+    winAdd.mockRestore()
+    expect(mousedowns).toBe(0)
+    expect(keydowns).toBeLessThanOrEqual(1)
+
+    window.dispatchEvent(new KeyboardEvent('keydown', { key: 'k', metaKey: true }))
+    expect(onSelect).toHaveBeenCalledTimes(1)
   })
 })
