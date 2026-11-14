@@ -26,6 +26,11 @@
       "name": "Slots",
       "summary": "Default slot filled with a feature list and the actions slot replacing the default button.",
       "file": "slots.vue"
+    },
+    {
+      "name": "Animated",
+      "summary": "A billing-period toggle switches the card's price; with `animated` the old price fades out and the new one fades in. Under reduced motion the price swaps in place.",
+      "file": "animated.vue"
     }
   ]
 }
