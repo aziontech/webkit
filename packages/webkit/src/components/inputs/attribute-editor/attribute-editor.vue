@@ -28,10 +28,6 @@
 
   const props = withDefaults(
     defineProps<{
-      /** Rows in list mode. Supports v-model:items. */
-      items?: TItem[]
-      /** Rows in grouped mode: every inner array is an AND group, groups are joined by OR. Supports v-model:groups. */
-      groups?: TItem[][]
       /** Columns of every row: key of the item field, label, placeholder, required. */
       definition?: AttributeEditorColumn[]
       /** Error per cell, aligned with the rows (nested per group in grouped mode). Empty shows none. */
@@ -66,8 +62,6 @@
       ariaLabel?: string
     }>(),
     {
-      items: () => [],
-      groups: undefined,
       definition: () => [],
       errors: () => [],
       addButtonLabel: '',
@@ -88,14 +82,15 @@
   )
 
   const emit = defineEmits<{
-    'update:items': [items: TItem[]]
-    'update:groups': [groups: TItem[][]]
     add: [event: MouseEvent, detail: { index: number; groupIndex?: number }]
     remove: [
       event: MouseEvent | KeyboardEvent,
       detail: { index: number; item: TItem; groupIndex?: number }
     ]
   }>()
+
+  const items = defineModel<TItem[]>('items', { default: () => [] })
+  const groups = defineModel<TItem[][] | undefined>('groups')
 
   const slots = defineSlots<
     {
@@ -119,9 +114,9 @@
     () => (attrs['data-testid'] as string | undefined) ?? 'input-attribute-editor'
   )
 
-  const grouped = computed(() => props.groups !== undefined)
+  const grouped = computed(() => groups.value !== undefined)
   const groupList = computed<TItem[][]>(() =>
-    grouped.value ? (props.groups ?? []) : [props.items]
+    grouped.value ? (groups.value ?? []) : [items.value]
   )
   const total = computed(() => groupList.value.reduce((sum, group) => sum + group.length, 0))
 
@@ -197,8 +192,8 @@
   const fieldOf = (item: TItem, key: string): unknown => (item as Record<string, unknown>)[key]
 
   const commit = (next: TItem[][]) => {
-    if (grouped.value) emit('update:groups', next)
-    else emit('update:items', next[0] ?? [])
+    if (grouped.value) groups.value = next
+    else items.value = next[0] ?? []
   }
 
   const createItem = (): TItem =>

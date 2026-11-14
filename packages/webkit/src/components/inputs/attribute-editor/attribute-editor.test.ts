@@ -65,6 +65,21 @@ describe('AttributeEditor', () => {
     expect((view.getByLabelText('Value') as HTMLInputElement).value).toBe('2')
   })
 
+  it('keeps its own rows when v-model:items is not bound', async () => {
+    const view = render(AttributeEditor, {
+      props: { items: [{ key: 'A', value: '1' }], definition, ariaLabel: 'Variables' }
+    })
+    await fireEvent.click(view.getByTestId('input-attribute-editor__add'))
+    expect(view.getAllByTestId('input-attribute-editor__row')).toHaveLength(2)
+    expect(view.emitted('update:items')?.[0]?.[0]).toHaveLength(2)
+  })
+
+  it('starts empty and adds rows with no items passed at all', async () => {
+    const view = render(AttributeEditor, { props: { definition, ariaLabel: 'Variables' } })
+    await fireEvent.click(view.getByTestId('input-attribute-editor__add'))
+    expect(view.getAllByTestId('input-attribute-editor__row')).toHaveLength(1)
+  })
+
   it('adds a row, focuses its first control and announces it', async () => {
     const view = render(Harness([{ key: 'A', value: '1' }]))
     await fireEvent.click(view.getByTestId('input-attribute-editor__add'))
