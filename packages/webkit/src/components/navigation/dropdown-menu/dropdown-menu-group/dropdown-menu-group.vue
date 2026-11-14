@@ -1,7 +1,7 @@
 <script setup lang="ts">
-  import { computed, ref, useAttrs, useId } from 'vue'
+  import { computed, provide, useAttrs, useId } from 'vue'
 
-  import { useDropdownContext } from '../injection-key'
+  import { DropdownMenuGroupInjectionKey, useDropdownContext } from '../injection-key'
 
   defineOptions({
     name: 'DropdownMenuGroup',
@@ -29,7 +29,7 @@
   const uid = useId()
   const labelId = `${uid}-label`
 
-  const groupIndex = ref(ctx.registerGroup())
+  provide(DropdownMenuGroupInjectionKey, true)
 
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? `${ctx.testId}__group`
@@ -48,8 +48,7 @@
       role="group"
       :aria-labelledby="hasLabel ? labelId : undefined"
       :data-testid="testId"
-      :data-first="groupIndex === 0 || null"
-      class="flex flex-col [&:not([data-first])]:mt-(--spacing-sm) [&:not([data-first])]:border-t [&:not([data-first])]:border-(--border-default) [&:not([data-first])]:pt-(--spacing-xs)"
+      class="flex flex-col [&:not(:first-child)]:mt-(--spacing-sm) [&:not(:first-child)]:border-t [&:not(:first-child)]:border-(--border-default) [&:not(:first-child)]:pt-(--spacing-xs)"
     >
       <div class="flex flex-col px-(--spacing-xxs)">
         <div

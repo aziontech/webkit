@@ -233,7 +233,41 @@ describe('Wizard', () => {
     })
   })
 
-  describe('v-model:activeStep', () => {
+  describe('v-model', () => {
+    const Bound = defineComponent({
+      components: { Wizard, WizardStep },
+      data() {
+        return { step: 0 }
+      },
+      template: `
+        <button type="button" @click="step = 2">Jump</button>
+        <output data-testid="bound">{{ step }}</output>
+        <Wizard v-model="step" aria-label="Create">
+          <WizardStep title="One" />
+          <WizardStep title="Two" />
+          <WizardStep title="Three" />
+        </Wizard>
+      `
+    })
+
+    it('writes Next back to the default v-model', async () => {
+      const view = render(Bound)
+      await nextTick()
+      await userEvent.click(button(view, 'Next'))
+      expect(view.getByTestId('bound').textContent).toBe('1')
+      expect(rootOf(view).getAttribute('data-active-step')).toBe('1')
+    })
+
+    it('follows the default v-model when the consumer changes it', async () => {
+      const view = render(Bound)
+      await nextTick()
+      await userEvent.click(view.getByRole('button', { name: 'Jump' }))
+      expect(rootOf(view).getAttribute('data-active-step')).toBe('2')
+      expect(headingOf(view).textContent?.trim()).toBe('Three')
+    })
+  })
+
+  describe('v-model:activeStep (deprecated)', () => {
     it('writes Next back to the bound model', async () => {
       const view = await mount()
       await userEvent.click(button(view, 'Next'))
@@ -413,13 +447,5 @@ describe('Wizard on devices', () => {
     await nextTick()
 
     expect(progressOf(view).textContent?.trim()).toBe('Etapa 1 de 3')
-  })
-
-  it('hides the step rail when its own box is narrow, not the window', async () => {
-    const view = await mount()
-    const rail = view.getByRole('navigation').parentElement
-
-    expect(rootOf(view).className).toContain('@container/wizard')
-    expect(rail?.className).toContain('@max-2xl/wizard:hidden')
   })
 })

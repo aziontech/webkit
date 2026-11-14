@@ -4,7 +4,7 @@
   "examples": [
     {
       "name": "Default",
-      "summary": "Default large link with a trailing icon.",
+      "summary": "Default large link to an off-site page; the `_blank` target adds the external-link icon.",
       "file": "default.vue"
     },
     {

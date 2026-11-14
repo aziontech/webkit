@@ -42,5 +42,6 @@
   "table": { "border": "bordered" },
   "table-root": { "border": "bordered" },
   "tabs": { "value": "modelValue" },
-  "theme-switcher": { "value": "modelValue" }
+  "theme-switcher": { "value": "modelValue" },
+  "wizard": { "activeStep": "modelValue" }
 }

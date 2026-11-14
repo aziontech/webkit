@@ -3,10 +3,10 @@ name: link
 category: navigation
 structure: monolithic
 status: implemented
-spec_version: 2
-checksum: 1bfdff39505cee682031967030d7e64f2b14f74131e67239fa3746d1e511b60d
+spec_version: 3
+checksum: 3ff2c5fb99df5b2ff4534fabcf334e7fef0cafa6ead55d828f071664a6afc64d
 created: 2026-05-22
-last_updated: 2026-11-11
+last_updated: 2026-11-14
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3548-578
   node_id: 3548:578
@@ -21,7 +21,7 @@ Helps users move between views or sections. Migrated from the existing implement
 ## When to use
 
 - A standalone navigation link: a domain, a repository, a docs page, "View all".
-- An in-console navigation action ("Add custom domain") with `showIcon` set to false.
+- An in-console navigation action ("Add custom domain"): no trailing icon unless `icon` is set.
 
 ## When NOT to use
 
@@ -37,8 +37,10 @@ Helps users move between views or sections. Migrated from the existing implement
 
 ## Best practices
 
-- Always set `href` and a `label` that names the destination; the defaults (`'#'`, `'Learn more'`) are placeholders.
-- Keep the default `pi pi-external-link` icon for off-site targets with `target="_blank"` (`rel="noopener noreferrer"` is added for you); turn `showIcon` off for in-app destinations.
+- Always set `href` and a label that names the destination; an empty `href` renders `#` so the anchor stays focusable, and an empty label falls back to the locale catalog (`Learn more`).
+- Pass the label as the default slot or the `label` prop; the slot wins when both are set.
+- `target="_blank"` adds `rel="noopener noreferrer"` and, when `icon` is empty, the `pi pi-external-link` glyph so an off-site link reads as one; same-tab links show no icon unless `icon` is set.
+- An icon is shown when `icon` is set; `showIcon` is deprecated.
 - Match `size` to the controls around it; heights follow `button` (40 / 32 / 28 px).
 - `disabled` drops it from the tab order and suppresses `click`; hide a link that can never be followed instead.
 
@@ -56,25 +58,25 @@ Helps users move between views or sections. Migrated from the existing implement
     target="_blank"
   />
   <Link
-    label="Add custom domain"
     href="/domains/create"
     size="medium"
-    :show-icon="false"
-  />
+  >
+    Add custom domain
+  </Link>
 </template>
 ```
 
 ## Props
 
-| Prop       | Type                             | Default                 | Required | JSDoc                                                                                             |
-| ---------- | -------------------------------- | ----------------------- | -------- | ------------------------------------------------------------------------------------------------- |
-| `label`    | `string`                         | `''`                    | false    | Visible label rendered inside the link. Empty uses the locale catalog (`Learn more`).             |
-| `size`     | `'small' \| 'medium' \| 'large'` | `'large'`               | false    | Size token; affects height and typography (large 40px, medium 32px, small 28px), matching Button. |
-| `disabled` | `boolean`                        | `false`                 | false    | Disables interaction and applies disabled tokens.                                                 |
-| `showIcon` | `boolean`                        | `true`                  | false    | When true, renders the trailing icon.                                                             |
-| `icon`     | `string`                         | `'pi pi-external-link'` | false    | PrimeIcons class for the trailing icon.                                                           |
-| `href`     | `string`                         | `'#'`                   | false    | Destination URL for the anchor.                                                                   |
-| `target`   | `'_blank' \| '_self'`            | `'_self'`               | false    | Link target when navigating.                                                                      |
+| Prop       | Type                             | Default     | Required | JSDoc                                                                                                                                                                          |
+| ---------- | -------------------------------- | ----------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `label`    | `string`                         | `''`        | false    | Visible label, the default slot's fallback. Empty uses the locale catalog (`Learn more`).                                                                                      |
+| `size`     | `'small' \| 'medium' \| 'large'` | `'large'`   | false    | Size token; affects height and typography (large 40px, medium 32px, small 28px), matching Button.                                                                              |
+| `disabled` | `boolean`                        | `false`     | false    | Disables interaction and applies disabled tokens.                                                                                                                              |
+| `showIcon` | `boolean`                        | `undefined` | false    | @deprecated since 6.0 — use `icon` (set shows it, empty hides it). Removed in 7.0. `false` hides the icon; `true` shows `icon`, or `pi pi-external-link` when `icon` is empty. |
+| `icon`     | `string`                         | `''`        | false    | PrimeIcons class for the trailing icon; set shows it. Empty shows `pi pi-external-link` only when `target` is `_blank`.                                                        |
+| `href`     | `string`                         | `''`        | false    | Destination URL for the anchor. Empty renders `#`.                                                                                                                             |
+| `target`   | `'_blank' \| '_self'`            | `'_self'`   | false    | Link target when navigating.                                                                                                                                                   |
 
 ## Events
 
@@ -84,13 +86,16 @@ Helps users move between views or sections. Migrated from the existing implement
 
 ## Slots
 
-| _none_ | — | — |
+| Slot      | Props | Notes                                                      |
+| --------- | ----- | ---------------------------------------------------------- |
+| `default` | —     | The link text. Fallback: `label`, then the locale catalog. |
 
 ## States
 
 - Visual states: `default`, `hover`, `focus-visible`, `disabled`
 - `hover` and `focus-visible` underline the label (`underline-offset-4`); there is no surface behind the link
 - `data-disabled` mirrors the `disabled` prop
+- Consumer attributes (`id`, `aria-*`, `download`, `rel`, `data-*`, listeners) land on the anchor through `v-bind="$attrs"`; a consumer `rel` overrides the computed one
 
 ## Motion & Animations
 

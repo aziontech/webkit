@@ -27,10 +27,9 @@ describe('Link', () => {
     expect(getByTestId('custom-link__label').textContent?.trim()).toBe('Docs')
   })
 
-  it('underlines the label on hover and focus instead of painting a surface', () => {
-    const { getByTestId, queryByTestId } = render(Link, { props: { label: 'Docs' } })
+  it('renders no surface element behind the label', () => {
+    const { queryByTestId } = render(Link, { props: { label: 'Docs' } })
     expect(queryByTestId('navigation-link__ghost')).toBeNull()
-    expect(getByTestId('navigation-link__label').className).toContain('group-hover:underline')
   })
 
   it('applies href and defaults target to _self with no rel', () => {
@@ -54,15 +53,85 @@ describe('Link', () => {
     expect(root.getAttribute('rel')).toBe('noopener noreferrer')
   })
 
-  it('renders the trailing icon when showIcon is true', () => {
-    const { getByTestId } = render(Link, {
-      props: { showIcon: true, icon: 'pi pi-external-link' }
-    })
+  it('renders the trailing icon when icon is set, hidden from assistive tech', () => {
+    const { getByTestId } = render(Link, { props: { icon: 'pi pi-arrow-right' } })
     const icon = getByTestId('navigation-link__icon')
 
-    expect(icon.className).toContain('pi')
-    expect(icon.className).toContain('pi-external-link')
+    expect(icon.classList.contains('pi-arrow-right')).toBe(true)
     expect(icon.getAttribute('aria-hidden')).toBe('true')
+  })
+
+  it('renders no icon for a same-tab link by default', () => {
+    const { queryByTestId } = render(Link, { props: { href: '/domains' } })
+
+    expect(queryByTestId('navigation-link__icon')).toBeNull()
+  })
+
+  it('shows the external-link glyph for a _blank target when icon is empty', () => {
+    const { getByTestId } = render(Link, {
+      props: { href: 'https://example.com', target: '_blank' }
+    })
+
+    expect(getByTestId('navigation-link__icon').classList.contains('pi-external-link')).toBe(true)
+  })
+
+  it('keeps the deprecated showIcon: true showing the external-link glyph', () => {
+    const { getByTestId } = render(Link, { props: { showIcon: true } })
+
+    expect(getByTestId('navigation-link__icon').classList.contains('pi-external-link')).toBe(true)
+  })
+
+  it('keeps the deprecated showIcon: false hiding a set icon', () => {
+    const { queryByTestId } = render(Link, {
+      props: { showIcon: false, icon: 'pi pi-arrow-right', target: '_blank' }
+    })
+
+    expect(queryByTestId('navigation-link__icon')).toBeNull()
+  })
+
+  it('renders the default slot as the label, falling back to label and the catalog', () => {
+    const slotted = render(Link, {
+      props: { label: 'Prop label' },
+      slots: { default: 'Slotted label' }
+    })
+    expect(slotted.getByTestId('navigation-link__label').textContent?.trim()).toBe('Slotted label')
+    slotted.unmount()
+
+    const fallback = render(Link)
+    expect(fallback.getByTestId('navigation-link__label').textContent?.trim()).toBe('Learn more')
+  })
+
+  it('renders # when href is empty so the anchor stays focusable', () => {
+    const { getByTestId } = render(Link)
+
+    expect(getByTestId('navigation-link').getAttribute('href')).toBe('#')
+  })
+
+  it('forwards consumer attributes and listeners to the anchor', async () => {
+    let focused = 0
+    const { getByTestId } = render(Link, {
+      props: { label: 'Report', href: '/report.csv' },
+      attrs: {
+        id: 'report-link',
+        'aria-describedby': 'report-hint',
+        download: 'report.csv',
+        'data-track': 'report',
+        class: 'consumer-class',
+        onFocus: () => {
+          focused += 1
+        }
+      }
+    })
+    const root = getByTestId('navigation-link')
+
+    expect(root.id).toBe('report-link')
+    expect(root.getAttribute('aria-describedby')).toBe('report-hint')
+    expect(root.getAttribute('download')).toBe('report.csv')
+    expect(root.getAttribute('data-track')).toBe('report')
+    expect(root.classList.contains('consumer-class')).toBe(true)
+
+    root.focus()
+    expect(focused).toBe(1)
   })
 
   it('omits the trailing icon when showIcon is false', () => {

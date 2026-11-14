@@ -3,6 +3,7 @@ import NavigationMenuBackdrop from './navigation-menu-backdrop.vue'
 import NavigationMenuContent from './navigation-menu-content.vue'
 import NavigationMenuIcon from './navigation-menu-icon.vue'
 import NavigationMenuItem from './navigation-menu-item.vue'
+import NavigationMenuLink from './navigation-menu-link.vue'
 import NavigationMenuList from './navigation-menu-list.vue'
 import NavigationMenuPopup from './navigation-menu-popup.vue'
 import NavigationMenuPortal from './navigation-menu-portal.vue'
@@ -17,7 +18,7 @@ type CompoundNavigationMenu = typeof NavigationMenuRoot & {
   Trigger: typeof NavigationMenuTrigger
   Icon: typeof NavigationMenuIcon
   Content: typeof NavigationMenuContent
-  Link: typeof NavigationMenuTrigger
+  Link: typeof NavigationMenuLink
   Portal: typeof NavigationMenuPortal
   Backdrop: typeof NavigationMenuBackdrop
   Positioner: typeof NavigationMenuPositioner
@@ -32,7 +33,7 @@ const NavigationMenu = Object.assign(NavigationMenuRoot, {
   Trigger: NavigationMenuTrigger,
   Icon: NavigationMenuIcon,
   Content: NavigationMenuContent,
-  Link: NavigationMenuTrigger,
+  Link: NavigationMenuLink,
   Portal: NavigationMenuPortal,
   Backdrop: NavigationMenuBackdrop,
   Positioner: NavigationMenuPositioner,

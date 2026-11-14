@@ -5,6 +5,7 @@
 <template>
   <Link
     label="Learn more"
+    icon="pi pi-external-link"
     disabled
   />
 </template>

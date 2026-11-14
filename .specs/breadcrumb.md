@@ -3,11 +3,11 @@ name: breadcrumb
 category: navigation
 structure: composition
 status: implemented
-spec_version: 2
+spec_version: 3
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3374-6301
   node_id: 3374:6301
-checksum: f00a3989e17a582b71aac128d005ec44563800807735001768a7e33b7abb27a5
+checksum: a833205346f99ddccf24bccb4200434d8a6fe16637dad9a72c2262c2c6f23991
 created: 2026-05-25
 last_updated: 2026-11-13
 ---
@@ -21,7 +21,7 @@ Shows the page hierarchy so users can navigate back to parent views. Composes `B
 ## When to use
 
 - A page sits two or more levels deep and the reader needs a way back to its parents (resource detail under a list, a settings sub-page).
-- The trail is known as data — pass `items` and let the component render the segments, separators and the collapse below `md`.
+- The trail is known as data — pass `items` and let the component render the segments, separators and the collapse when its own box is narrower than 768px.
 - The trail needs a custom layout the `items` array cannot express — compose `Breadcrumb.List`, `Breadcrumb.Item` and `Breadcrumb.Separator` in the default slot.
 
 ## When NOT to use
@@ -38,7 +38,7 @@ Shows the page hierarchy so users can navigate back to parent views. Composes `B
 
 ## Best practices
 
-- Prefer `items`; only `items` mode collapses the middle segments into an overflow menu below `md`. The default slot renders only when `items` is empty, and a hand-composed trail never collapses.
+- Prefer `items`; only `items` mode collapses the middle segments into an overflow menu when its own box is narrower than 768px. The default slot renders only when `items` is empty, and a hand-composed trail never collapses.
 - Let the last entry be the current page — it is treated as current unless its `current` is set to `false`; give every ancestor an `href`.
 - Handle routing in `@navigate`, which receives `(event, href)` for ancestor segments; call `event.preventDefault()` when a client-side router takes over.
 - **Vue Router:** a segment has no `to`; put the route's path in `href` (for a named route, `router.resolve(to).href`) and write `@navigate="(event, href) => { event.preventDefault(); router.push(href) }"`. The segment stays a real link, so open-in-new-tab keeps working; leave a modified click (Ctrl, ⌘, Shift, middle button) to the browser.
@@ -83,16 +83,17 @@ Shows the page hierarchy so users can navigate back to parent views. Composes `B
 
 ## Sub-components
 
-- `breadcrumb.vue` — Root `<nav>` with `aria-label="Breadcrumb"`.
+- `breadcrumb.vue` — Root `<nav>` with `aria-label` from `ariaLabel`, or the locale catalog (`Breadcrumb`) when empty; a consumer `aria-label` lands on the prop and wins.
 - `breadcrumb-list.vue` — Ordered list wrapper (`<ol>`) for segments.
 - `breadcrumb-item.vue` — Re-exported segment control (same API as `@aziontech/webkit/breadcrumb-item`).
 - `breadcrumb-separator.vue` — Decorative chevron between segments (`aria-hidden`).
 
 ## Props
 
-| Prop    | Type                   | Default    | Required | JSDoc                                                                                                         |
-| ------- | ---------------------- | ---------- | -------- | ------------------------------------------------------------------------------------------------------------- |
-| `items` | `BreadcrumbItemData[]` | `() => []` | false    | Ordered path segments; the last entry is treated as the current page when `current` is omitted on that entry. |
+| Prop        | Type                   | Default    | Required | JSDoc                                                                                                         |
+| ----------- | ---------------------- | ---------- | -------- | ------------------------------------------------------------------------------------------------------------- |
+| `items`     | `BreadcrumbItemData[]` | `() => []` | false    | Ordered path segments; the last entry is treated as the current page when `current` is omitted on that entry. |
+| `ariaLabel` | `string`               | `''`       | false    | Accessible name of the navigation landmark; empty uses the locale catalog (`Breadcrumb`).                     |
 
 `BreadcrumbItemData`: `{ label: string; href?: string; showIcon?: boolean; icon?: string; current?: boolean }`
 
@@ -116,9 +117,9 @@ Shows the page hierarchy so users can navigate back to parent views. Composes `B
 ### Responsive contract
 
 - The trail is always a **single row**. A segment wider than the space available shrinks and ellipsizes its label; a trail that still does not fit scrolls horizontally. It never wraps to a second line and never extends past its container.
-- **`items` mode** additionally collapses below `md` (768px): first segment, an overflow menu holding the middle segments, then the current segment. The breakpoint is owned by the component's own `use-breadcrumb-collapse` composable.
+- **`items` mode** additionally collapses when the `nav`'s own width is below 768px (a `ResizeObserver` on the landmark, so a breadcrumb in a narrow panel or drawer collapses on a wide screen too): first segment, an overflow menu holding the middle segments, then the current segment. The overflow entries are links (`href`) inside the menu, so they navigate natively, open in a new tab, and still emit `navigate`. The breakpoint is owned by the component's own `use-breadcrumb-collapse` composable.
 - **Slot (hand-composed) mode** keeps every segment it was given, since the root cannot know which of the consumer's children are middle segments, so on a narrow screen it degrades through the single-row rules above rather than through a collapse.
-- Server render and hydration: the collapse reads the viewport only after mount (`use-breadcrumb-collapse` gates the media query on `useMounted`), so the server HTML and the first client render are the full trail and match; below `md` the collapse applies in the same tick as mount, before paint.
+- Server render and hydration: the collapse measures the `nav` only after mount (`use-breadcrumb-collapse` reads its width in `onMounted`, then follows a `ResizeObserver`), so the server HTML and the first client render are the full trail and match; in a narrow box the collapse applies in the same tick as mount, before paint.
 
 ## Motion & Animations
 

@@ -24,23 +24,21 @@
         label="Tab Item"
       />
     </Tabs.List>
-    <div class="mt-(--spacing-4)">
-      <Tabs.Content>
-        <Tabs.Panel value="tab-1">
-          <div class="rounded-(--shape-card) border border-(--border-default) p-(--spacing-4)">
-            <p class="text-body-sm text-(--text-default)">Content for tab 1</p>
-          </div>
-        </Tabs.Panel>
-        <Tabs.Panel value="tab-2">
-          <div class="rounded-(--shape-card) border border-(--border-default) p-(--spacing-4)">
-            <p class="text-body-sm text-(--text-default)">Content for tab 2</p>
-          </div>
-        </Tabs.Panel>
-        <Tabs.Panel value="tab-3">
-          <div class="rounded-(--shape-card) border border-(--border-default) p-(--spacing-4)">
-            <p class="text-body-sm text-(--text-default)">Content for tab 3</p>
-          </div>
-        </Tabs.Panel>
+    <div class="mt-(--spacing-4) w-full">
+      <Tabs.Content value="tab-1">
+        <div class="rounded-(--shape-card) border border-(--border-default) p-(--spacing-4)">
+          <p class="text-body-sm text-(--text-default)">Content for tab 1</p>
+        </div>
+      </Tabs.Content>
+      <Tabs.Content value="tab-2">
+        <div class="rounded-(--shape-card) border border-(--border-default) p-(--spacing-4)">
+          <p class="text-body-sm text-(--text-default)">Content for tab 2</p>
+        </div>
+      </Tabs.Content>
+      <Tabs.Content value="tab-3">
+        <div class="rounded-(--shape-card) border border-(--border-default) p-(--spacing-4)">
+          <p class="text-body-sm text-(--text-default)">Content for tab 3</p>
+        </div>
       </Tabs.Content>
     </div>
   </Tabs.Root>

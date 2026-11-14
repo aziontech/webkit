@@ -56,15 +56,15 @@ describe('Tabs (composition)', () => {
     it('renders the initially active panel visible and runs the enter motion only on a change', async () => {
       const { getByText } = render(Tree)
       const first = getByText('Content one') as HTMLElement
-      expect(first.className).not.toContain('opacity-0')
-      expect(first.className).toContain('opacity-100')
+      expect(first).not.toHaveAttribute('data-motion')
 
       await fireEvent.click(getByText('Second'))
       const second = getByText('Content two') as HTMLElement
-      expect(second.className).toContain('opacity-0')
+      expect(second).toHaveAttribute('data-motion', 'enter')
+      expect(second).toHaveAttribute('data-slide', 'end')
       await new Promise((resolve) => requestAnimationFrame(() => setTimeout(resolve, 0)))
       await nextTick()
-      expect(second.className).toContain('opacity-100')
+      expect(second).not.toHaveAttribute('data-motion')
     })
   })
 
@@ -503,5 +503,134 @@ describe('keyboard map (spec)', () => {
     const { getByText } = await setup()
     await keyboardUser.keyboard('{Tab}')
     expect(document.activeElement).toBe(getByText('Content one').closest('[role="tabpanel"]'))
+  })
+})
+
+describe('Tabs audit fixes', () => {
+  it('forwards consumer attributes to the root, the wrapper, the tab and the panel', () => {
+    const { getByTestId, getByRole } = render(
+      defineComponent({
+        components: { Tabs, TabsList, TabsItem, TabsContent, TabsPanel },
+        template: `
+          <Tabs id="tabs-root" dir="ltr" aria-describedby="hint" data-track="tabs" default-value="a">
+            <TabsList><TabsItem value="a" label="A" data-track="tab-a" /></TabsList>
+            <TabsContent id="wrapper" data-track="wrapper">
+              <TabsPanel value="a" data-track="panel-a">Panel A</TabsPanel>
+            </TabsContent>
+          </Tabs>
+        `
+      })
+    )
+    const root = getByTestId('navigation-tabs')
+    expect(root.id).toBe('tabs-root')
+    expect(root).toHaveAttribute('dir', 'ltr')
+    expect(root).toHaveAttribute('aria-describedby', 'hint')
+    expect(root).toHaveAttribute('data-track', 'tabs')
+    expect(root).toHaveAttribute('data-tabs-root', '')
+    expect(getByTestId('navigation-tabs__content')).toHaveAttribute('data-track', 'wrapper')
+    expect(getByTestId('navigation-tabs__content').id).toBe('wrapper')
+    expect(getByRole('tab')).toHaveAttribute('data-track', 'tab-a')
+    expect(getByRole('tabpanel')).toHaveAttribute('data-track', 'panel-a')
+  })
+
+  it('renders Tabs.Content with a value as the tabpanel, and exposes Tabs.Trigger', async () => {
+    expect(Tabs.Trigger).toBe(TabsItem)
+    const { getByRole, getAllByRole } = render(
+      defineComponent({
+        components: { Tabs, TabsList, TabsItem, TabsContent },
+        template: `
+          <Tabs default-value="a">
+            <TabsList>
+              <TabsItem value="a" label="A" />
+              <TabsItem value="b" label="B" />
+            </TabsList>
+            <TabsContent value="a">Panel A</TabsContent>
+            <TabsContent value="b">Panel B</TabsContent>
+          </Tabs>
+        `
+      })
+    )
+    await nextTick()
+    const panels = getAllByRole('tabpanel', { hidden: true })
+    expect(panels).toHaveLength(2)
+    const tab = getByRole('tab', { name: 'A' })
+    expect(tab.getAttribute('aria-controls')).toBe(panels[0]?.id)
+    expect(panels[0]?.getAttribute('aria-labelledby')).toBe(tab.id)
+    expect(panels[0]?.textContent).toContain('Panel A')
+  })
+
+  it('builds valid id tokens from values with spaces', async () => {
+    const { getByRole } = render(
+      defineComponent({
+        components: { Tabs, TabsList, TabsItem, TabsPanel },
+        template: `
+          <Tabs default-value="api keys">
+            <TabsList><TabsItem value="api keys" label="API keys" /></TabsList>
+            <TabsPanel value="api keys">Keys</TabsPanel>
+          </Tabs>
+        `
+      })
+    )
+    await nextTick()
+    const tab = getByRole('tab')
+    expect(tab.id).not.toMatch(/\s/)
+    const panel = getByRole('tabpanel')
+    expect(panel.id).not.toMatch(/\s/)
+    expect(tab.getAttribute('aria-controls')).toBe(panel.id)
+    expect(document.getElementById(panel.getAttribute('aria-labelledby') as string)).toBe(tab)
+  })
+
+  it('moves with the arrows in DOM order, including a tab inserted later', async () => {
+    const showMiddle = ref(false)
+    const { getByRole } = render(
+      defineComponent({
+        components: { Tabs, TabsList, TabsItem },
+        setup: () => ({ showMiddle }),
+        template: `
+          <Tabs default-value="a">
+            <TabsList>
+              <TabsItem value="a" label="A" />
+              <TabsItem v-if="showMiddle" value="m" label="M" />
+              <TabsItem value="z" label="Z" />
+            </TabsList>
+          </Tabs>
+        `
+      })
+    )
+    showMiddle.value = true
+    await nextTick()
+    const first = getByRole('tab', { name: 'A' })
+    first.focus()
+    await keyboardUser.keyboard('{ArrowRight}')
+    expect(document.activeElement).toBe(getByRole('tab', { name: 'M' }))
+  })
+
+  it('reads disabled reactively for the arrow path', async () => {
+    const off = ref(false)
+    const { getByRole } = render(
+      defineComponent({
+        components: { Tabs, TabsList, TabsItem },
+        setup: () => ({ off }),
+        template: `
+          <Tabs default-value="a">
+            <TabsList>
+              <TabsItem value="a" label="A" />
+              <TabsItem value="b" label="B" :disabled="off" />
+              <TabsItem value="c" label="C" />
+            </TabsList>
+          </Tabs>
+        `
+      })
+    )
+    off.value = true
+    await nextTick()
+    getByRole('tab', { name: 'A' }).focus()
+    await keyboardUser.keyboard('{ArrowRight}')
+    expect(document.activeElement).toBe(getByRole('tab', { name: 'C' }))
+  })
+
+  it('renders an empty label by default instead of placeholder text', () => {
+    const { getByTestId } = render(TabsItem)
+    expect(getByTestId('navigation-tabs-item__label').textContent?.trim()).toBe('')
   })
 })

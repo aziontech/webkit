@@ -3,8 +3,8 @@ name: page-tabs
 category: navigation
 structure: monolithic
 status: implemented
-checksum: 3309dda52fc4bca239c8d7fc604053c6d8f7b7b5e3fe3de560acc12315bdc0e6
-spec_version: 2
+checksum: 856fa0a0b88ee1ba0622b2d797db7478a07a4c3ac78f092693180d82d9512983
+spec_version: 3
 template: 2
 created: 2026-11-10
 last_updated: 2026-11-14
@@ -35,7 +35,7 @@ The second-level navigation strip of a resource detail page: a full-bleed bar ru
 
 ## Best practices
 
-- Bind `v-model` to the route (or a ref) and render the section below from it.
+- Bind `v-model` to the route (or a ref) and render the section below from it. PageTabs renders only the tab list, so it takes no `Tabs.Content` / `Tabs.Panel`: the page renders the active section itself from the `v-model` value.
 - Keep the labels to one word where possible.
 - Put only actions that apply to the whole resource in `actions`; page-level actions go in the `page-header`.
 - Set `column` to the column the page body uses (`form` over a settings form, `data` over a list) so the tabs start where the content starts.
@@ -76,8 +76,8 @@ The second-level navigation strip of a resource detail page: a full-bleed bar ru
 
 ## Props
 
-| Prop     | Type                                       | Default  | Required | JSDoc                                                                                                  |
-| -------- | ------------------------------------------ | -------- | -------- | ------------------------------------------------------------------------------------------------------ |
+| Prop     | Type                                      | Default  | Required | JSDoc                                                                                                    |
+| -------- | ----------------------------------------- | -------- | -------- | -------------------------------------------------------------------------------------------------------- |
 | `column` | `'full' \| 'data' \| 'form' \| 'focused'` | `'full'` | false    | The page column the tab row lines up with: the full width, or the data, form or focused column below it. |
 
 ## v-model

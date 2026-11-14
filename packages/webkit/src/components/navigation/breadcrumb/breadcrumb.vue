@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed, useAttrs } from 'vue'
+  import { computed, ref, useAttrs } from 'vue'
 
   import { useTranslate } from '../../../composables/use-locale/use-translate'
   import * as en from '../../../i18n/messages/en'
@@ -27,10 +27,13 @@
   interface Props {
     /** Ordered path segments; the last entry is the current page when `current` is omitted. */
     items?: BreadcrumbItemData[]
+    /** Accessible name of the navigation landmark; empty uses the locale catalog (`Breadcrumb`). */
+    ariaLabel?: string
   }
 
   const props = withDefaults(defineProps<Props>(), {
-    items: () => []
+    items: () => [],
+    ariaLabel: ''
   })
 
   const emit = defineEmits<{
@@ -48,7 +51,8 @@
     () => (attrs['data-testid'] as string | undefined) ?? 'navigation-breadcrumb'
   )
 
-  const isCollapsed = useBreadcrumbCollapse()
+  const navRef = ref<globalThis.HTMLElement | null>(null)
+  const isCollapsed = useBreadcrumbCollapse(navRef)
 
   const resolvedItems = computed(() =>
     props.items.map((item, index) => {
@@ -91,9 +95,10 @@
 
 <template>
   <nav
+    ref="navRef"
     v-bind="attrs"
     :class="cn('inline-flex w-full min-w-0 items-center', attrs.class as string | undefined)"
-    :aria-label="t('breadcrumb.label')"
+    :aria-label="ariaLabel || t('breadcrumb.label')"
     :data-testid="testId"
   >
     <template v-if="items.length">
@@ -170,12 +175,13 @@
                     v-for="(item, index) in middleItems"
                     :key="`${item.label}-${index}`"
                     :value="item.href ?? '#'"
+                    :href="item.href ?? '#'"
                     :label="item.label"
                     :data-testid="`${testId}__overflow-item-${index}`"
                   >
                     <template
                       v-if="item.showIcon && item.icon"
-                      #left
+                      #leading
                     >
                       <i
                         :class="[item.icon, directionalIconClass(item.icon)]"

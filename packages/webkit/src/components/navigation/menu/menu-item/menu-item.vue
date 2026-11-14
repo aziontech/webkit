@@ -15,7 +15,10 @@
   })
 
   interface Props {
-    /** Structural variant: navigable row or section overline label. */
+    /**
+     * Structural variant: navigable row or section overline label.
+     * @deprecated since 6.0 — kind group: use the Menu.Group label. Removed in 7.0.
+     */
     kind?: MenuItemKind
     /** Visible label for the row or group header. */
     label?: string
@@ -37,13 +40,13 @@
 
   const props = withDefaults(defineProps<Props>(), {
     kind: 'option',
-    label: 'Option 1',
+    label: '',
     selected: false,
     disabled: false,
-    icon: 'pi pi-home',
+    icon: '',
     href: '',
     target: '_self',
-    tagValue: undefined,
+    tagValue: '',
     tagSeverity: 'info'
   })
 

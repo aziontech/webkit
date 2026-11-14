@@ -29,7 +29,7 @@
     },
     {
       "name": "OptionAffordances",
-      "summary": "Panel forced open showing every option affordance: plain label, `command` keyboard hint, `left` icon slot, `right` content slot (with a `Tag`), `selected` state, and `disabled` state. The `command` prop and the `right` slot are mutually exclusive — pick one per option.",
+      "summary": "Panel forced open showing every option affordance: plain label, `command` keyboard hint, `leading` icon slot, `trailing` content slot (with a `Tag`), `selected` state (a checked radio item with a check mark), and `disabled` state. The `command` prop and the `trailing` slot are mutually exclusive — pick one per option.",
       "file": "option-affordances.vue"
     },
     {

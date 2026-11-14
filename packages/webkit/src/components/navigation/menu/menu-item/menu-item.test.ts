@@ -297,3 +297,18 @@ describe('MenuItem slot presence', () => {
     expect(queryByTestId('probe')).toBeNull()
   })
 })
+
+describe('MenuItem defaults', () => {
+  it('renders no placeholder label and no icon when neither is set', () => {
+    const { getByTestId, queryByTestId } = render(MenuItem, { props: { label: 'Logs' } })
+    expect(queryByTestId('navigation-menu-item__icon')).toBeNull()
+    expect(getByTestId('navigation-menu-item__label').textContent?.trim()).toBe('Logs')
+
+    const blank = render(MenuItem)
+    expect(
+      blank.container
+        .querySelector('[data-testid="navigation-menu-item__label"]')
+        ?.textContent?.trim()
+    ).toBe('')
+  })
+})

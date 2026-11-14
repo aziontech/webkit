@@ -32,14 +32,9 @@ export interface DropdownMenuContext {
     event: globalThis.MouseEvent | globalThis.KeyboardEvent
   ) => void
   /**
-   * Called once on mount per group. Returns the 0-based registration index
-   * so the group can render a top divider when it is not the first.
-   */
-  registerGroup: () => number
-  /**
-   * Registers a global shortcut for an option's `command` hint; the root listens at the
-   * window level and calls `activate` with the original event on match. Returns an
-   * unregister function the caller must invoke on unmount.
+   * Registers a global shortcut for an option's `command` hint in the shared registry,
+   * which holds one window listener for every menu on the page. Returns an unregister
+   * function the caller must invoke on unmount.
    */
   registerCommand: (
     command: string,
@@ -53,6 +48,8 @@ export interface DropdownMenuContext {
   /** Returns focus to the trigger element (used on Esc, Tab, outside-click). */
   focusTrigger: () => void
 }
+
+export const DropdownMenuGroupInjectionKey: InjectionKey<true> = Symbol('DropdownMenuGroup')
 
 export const DropdownMenuInjectionKey: InjectionKey<DropdownMenuContext> =
   Symbol('DropdownMenuContext')

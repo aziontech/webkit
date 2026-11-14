@@ -88,6 +88,7 @@ component.
 | `table`           | `border`           | `bordered`           |
 | `tabs`            | `value`            | `modelValue`         |
 | `theme-switcher`  | `value`            | `modelValue`         |
+| `wizard`          | `activeStep`       | `modelValue`         |
 
 ## 4. Manual changes
 
@@ -284,7 +285,29 @@ rewrite this, because the replacement depends on whether the child was a link or
 Test ids follow the component name: `feedback-message` → `feedback-alert`, `layout-divider` →
 `layout-separator`, `navigation-dropdown` → `navigation-dropdown-menu`, `input-box-grid-selection` →
 `input-radio-cards`, and so on for every renamed component. Update end-to-end selectors that use
-`data-testid`.
+`data-testid`. `NavigationMenu` moves from `navigation-menu` (the id `Menu` also uses) to
+`navigation-navigation-menu`, and its parts from `navigation-menu__*` to
+`navigation-navigation-menu__*`.
+
+### Navigation: deprecated names, removed in 7.0
+
+These keep working in v6 and are marked `@deprecated` in their JSDoc and spec; move to the new name before 7.0.
+
+| Component         | Deprecated                                   | Use                                                                   |
+| ----------------- | -------------------------------------------- | --------------------------------------------------------------------- |
+| `dropdown-menu`   | `DropdownMenu.Option`                        | `DropdownMenu.Item` (or the `DropdownMenuItem` export)                |
+| `dropdown-menu`   | `#left` / `#right` on an item                | `#leading` / `#trailing`                                              |
+| `link`            | `showIcon`                                   | `icon` (set shows it; `target="_blank"` adds the external-link glyph) |
+| `menu`            | `Menu.Item kind="group"`                     | the `label` of `Menu.Group`                                           |
+| `navigation-menu` | `native-button` on `NavigationMenu.Trigger`  | nothing: the trigger is always a button or an anchor                  |
+| `tabs`            | `Tabs.Content` without `value` (the wrapper) | a plain element; `Tabs.Content value="…"` is the panel                |
+| `tabs`            | `selected` on a standalone `Tabs.Item`       | `ToggleGroup`                                                         |
+| `wizard`          | `v-model:activeStep`                         | `v-model`                                                             |
+
+Defaults that showed placeholder content now default to empty: `Link` (`href`, `icon`: a same-tab
+link shows no trailing icon unless `icon` is set), `Menu.Item` (`label`, `icon`, `tagValue`: no home
+glyph on an item without `icon`), `Tabs.Item` (`label`) and `Breadcrumb.Item` (`label`, `href`).
+`Menu.SubTrigger` `click` now also passes `{ label, href }` as its second argument.
 
 ### Pagination ellipsis
 

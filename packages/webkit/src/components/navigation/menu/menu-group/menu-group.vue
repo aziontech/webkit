@@ -12,7 +12,9 @@
   })
 
   interface Props {
+    /** Overline label shown above the group's items. */
     label?: string
+    /** Accessible name of the group when it has no visible label. */
     ariaLabel?: string
   }
 

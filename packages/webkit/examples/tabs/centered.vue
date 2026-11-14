@@ -20,18 +20,16 @@
         label="Integrations"
       />
     </Tabs.List>
-    <div class="mt-(--spacing-lg)">
-      <Tabs.Content>
-        <Tabs.Panel value="templates">
-          <p class="text-center text-body-sm text-(--text-muted)">
-            Start a project from a template built for the edge.
-          </p>
-        </Tabs.Panel>
-        <Tabs.Panel value="integrations">
-          <p class="text-center text-body-sm text-(--text-muted)">
-            Connect the services your applications already use.
-          </p>
-        </Tabs.Panel>
+    <div class="mt-(--spacing-lg) w-full">
+      <Tabs.Content value="templates">
+        <p class="text-center text-body-sm text-(--text-muted)">
+          Start a project from a template built for the edge.
+        </p>
+      </Tabs.Content>
+      <Tabs.Content value="integrations">
+        <p class="text-center text-body-sm text-(--text-muted)">
+          Connect the services your applications already use.
+        </p>
       </Tabs.Content>
     </div>
   </Tabs.Root>

@@ -26,20 +26,20 @@
         label="With command hint"
         command="⌘P"
       />
-      <DropdownMenuOption value="left">
-        <template #left>
+      <DropdownMenuOption value="leading">
+        <template #leading>
           <i
             class="pi pi-user"
             aria-hidden="true"
           />
         </template>
-        Left icon
+        Leading icon
       </DropdownMenuOption>
       <DropdownMenuOption
-        value="right"
-        label="Right slot"
+        value="trailing"
+        label="Trailing slot"
       >
-        <template #right>
+        <template #trailing>
           <Tag label="New" />
         </template>
       </DropdownMenuOption>

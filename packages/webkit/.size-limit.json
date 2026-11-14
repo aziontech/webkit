@@ -1048,7 +1048,7 @@
   {
     "name": "wizard",
     "path": "src/components/navigation/wizard/index.ts",
-    "limit": "7.06 KB"
+    "limit": "7.3 KB"
   },
   {
     "name": "wizard-root",
@@ -1964,7 +1964,7 @@
   {
     "name": "dropdown-menu-option",
     "path": "src/components/navigation/dropdown-menu/dropdown-menu-option/dropdown-menu-option.vue",
-    "limit": "1.45 KB"
+    "limit": "1.75 KB"
   },
   {
     "name": "multi-select-root",

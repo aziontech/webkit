@@ -46,8 +46,15 @@
   defineSlots<{ default(): unknown }>()
 
   const attrs = useAttrs()
+  const passthroughAttrs = computed(() => {
+    const { class: omittedClass, ...rest } = attrs
+    void omittedClass
+    return rest
+  })
   const { t } = useTranslate({ navigationMenu: en.navigationMenu })
-  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'navigation-menu')
+  const testId = computed(
+    () => (attrs['data-testid'] as string | undefined) ?? 'navigation-navigation-menu'
+  )
 
   const ROOT_CLASS =
     'relative [--webkit-nav-selector:color-mix(in_srgb,var(--bg-hover)_60%,transparent)]'
@@ -78,6 +85,7 @@
 
 <template>
   <nav
+    v-bind="passthroughAttrs"
     :class="cn(ROOT_CLASS, attrs.class as string | undefined)"
     :data-testid="testId"
     :aria-label="ariaLabel || t('navigationMenu.label')"

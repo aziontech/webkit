@@ -81,7 +81,8 @@
     :data-testid="testId"
     :data-state="dataState"
     :data-disabled="disabled || null"
-    class="group/step w-full"
+    :data-has-body="$slots['default'] ? '' : null"
+    class="group/step relative w-full"
   >
     <button
       type="button"
@@ -119,15 +120,10 @@
         </span>
         <span
           v-if="!isLast"
-          data-step-connector
-          class="relative mt-(--spacing-xs) min-h-6 w-px flex-1 bg-(--border-default) transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none"
-        >
-          <span
-            class="absolute inset-0 origin-top scale-y-0 bg-(--secondary) transition-[scale] duration-moderate-02 ease-productive-entrance group-data-[state=complete]/step:scale-y-100 motion-reduce:transition-none"
-          />
-        </span>
+          class="mt-(--spacing-xs) min-h-6 w-px flex-1"
+        />
       </span>
-      <span class="flex min-w-0 flex-1 flex-col pb-(--spacing-sm)">
+      <span class="flex min-w-0 flex-1 flex-col pb-(--spacing-sm) group-data-[has-body]/step:pb-0">
         <span
           class="flex min-h-6 items-center text-label-md text-(--text-muted) transition-colors duration-fast-02 ease-productive-entrance group-data-[state=complete]/step:text-(--text-default) group-data-[state=current]/step:text-(--text-default) group-data-[disabled]/step:text-(--text-disabled) motion-reduce:transition-none"
           >{{ title }}</span
@@ -152,13 +148,24 @@
             >
           </span>
         </Transition>
-        <span
-          v-if="$slots['default']"
-          class="pt-(--spacing-xs)"
-        >
-          <slot />
-        </span>
       </span>
     </button>
+    <span
+      v-if="!isLast"
+      data-step-connector
+      aria-hidden="true"
+      class="pointer-events-none absolute start-[calc(var(--spacing-sm)+0.75rem-0.5px)] top-[calc(var(--spacing-xs)*2+1.5rem)] bottom-(--spacing-xs) min-h-6 w-px bg-(--border-default) transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none"
+    >
+      <span
+        class="absolute inset-0 origin-top scale-y-0 bg-(--secondary) transition-[scale] duration-moderate-02 ease-productive-entrance group-data-[state=complete]/step:scale-y-100 motion-reduce:transition-none"
+      />
+    </span>
+    <div
+      v-if="$slots['default']"
+      data-step-body
+      class="ps-[calc(var(--spacing-sm)*2+1.5rem)] pe-(--spacing-sm) pb-[calc(var(--spacing-sm)+var(--spacing-xs))]"
+    >
+      <slot />
+    </div>
   </li>
 </template>

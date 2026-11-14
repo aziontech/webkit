@@ -1,7 +1,7 @@
 import userEvent from '@testing-library/user-event'
 import { fireEvent, render, within } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
-import { nextTick } from 'vue'
+import { defineComponent, h, nextTick } from 'vue'
 
 import Default from '../../../../examples/breadcrumb/default.vue'
 import Depths from '../../../../examples/breadcrumb/depths.vue'
@@ -141,8 +141,6 @@ describe('Breadcrumb (composition, data-driven root)', () => {
     })
 
     it('renders a collapsed item icon inside its overflow option', async () => {
-      // DropdownMenu.Option declares `left` / `right` (not `leading`), so a mismatched
-      // slot name silently renders nothing — the icon has to be reachable here.
       const { getByTestId } = await renderMounted(Breadcrumb, {
         props: {
           items: [
@@ -474,5 +472,49 @@ describe('Breadcrumb (composition, data-driven root)', () => {
 
       await expectNoA11yViolations(container)
     })
+  })
+})
+
+describe('Breadcrumb audit fixes', () => {
+  const FIVE = [
+    { label: 'Home', href: '/home' },
+    { label: 'Projects', href: '/projects' },
+    { label: 'Acme', href: '/projects/acme' },
+    { label: 'Domains', href: '/projects/acme/domains' },
+    { label: 'Settings' }
+  ]
+
+  const inBox = (width: number, props: Record<string, unknown> = {}) =>
+    defineComponent({
+      setup: () => () =>
+        h('div', { style: { width: `${width}px` } }, [h(Breadcrumb, { items: FIVE, ...props })])
+    })
+
+  it('lets a consumer aria-label name the landmark', async () => {
+    const { getByTestId } = await renderMounted(Breadcrumb, {
+      props: { items: TRAIL },
+      attrs: { 'aria-label': 'You are here' }
+    })
+    expect(getByTestId(TESTID).getAttribute('aria-label')).toBe('You are here')
+  })
+
+  it('collapses on the width of its own box, not the window', async () => {
+    const wide = await renderMounted(inBox(1000))
+    expect(wide.queryByTestId(`${TESTID}__overflow-menu`)).toBeNull()
+    expect(wide.getByTestId(`${TESTID}__item-2`)).toBeTruthy()
+    wide.unmount()
+
+    const narrow = await renderMounted(inBox(400))
+    expect(narrow.getByTestId(`${TESTID}__overflow-menu`)).toBeTruthy()
+  })
+
+  it('renders collapsed segments as links in the overflow menu', async () => {
+    const { getByTestId } = await renderMounted(inBox(400))
+    await fireEvent.click(getByTestId(`${TESTID}__overflow-trigger`))
+    const option = document.body.querySelector(
+      `[data-testid="${TESTID}__overflow-item-0"]`
+    ) as HTMLElement
+    expect(option.tagName).toBe('A')
+    expect(option.getAttribute('href')).toBe('/projects')
   })
 })

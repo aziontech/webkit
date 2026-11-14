@@ -14,6 +14,7 @@
   import { useControllable } from '../../../composables/use-controllable'
   import { usePortalLocale } from '../../../composables/use-locale/use-translate'
   import { usePlacement } from '../../../composables/use-placement'
+  import { registerShortcut } from './composables/shortcut-registry'
   import type {
     DropdownMenuOptionValue,
     DropdownMenuPlacement,
@@ -70,7 +71,6 @@
   const panelRef = ref<globalThis.HTMLElement | null>(null)
   const panelBodyRef = ref<globalThis.HTMLElement | null>(null)
   const bodyTarget = ref<globalThis.HTMLElement | null>(null)
-  const groupCount = ref(0)
 
   watch(panelBodyRef, (el) => {
     if (el) bodyTarget.value = el
@@ -123,7 +123,7 @@
     const panel = panelRef.value
     if (!panel) return []
     const nodes = panel.querySelectorAll<globalThis.HTMLElement>(
-      '[role="menuitem"]:not([aria-disabled="true"])'
+      '[role^="menuitem"]:not([aria-disabled="true"])'
     )
     return Array.from(nodes)
   }
@@ -195,75 +195,49 @@
       if (event.shiftKey) event.preventDefault()
       setOpen(false)
       focusTrigger()
+    } else if (
+      !typing &&
+      event.key.length === 1 &&
+      event.key !== ' ' &&
+      !event.ctrlKey &&
+      !event.metaKey &&
+      !event.altKey
+    ) {
+      typeahead(event)
     }
   }
 
-  interface ParsedShortcut {
-    meta: boolean
-    ctrl: boolean
-    shift: boolean
-    alt: boolean
-    key: string
-  }
+  let typeaheadBuffer = ''
+  let typeaheadAt = 0
 
-  function parseCommand(command: string): ParsedShortcut | null {
-    let meta = false
-    let ctrl = false
-    let shift = false
-    let alt = false
-    let key = ''
-    const tokens = command.split(/\s*\+\s*/).flatMap((part) => Array.from(part))
-    for (const token of tokens) {
-      const lower = token.toLowerCase()
-      if (token === '⌘' || lower === 'cmd' || lower === 'meta') meta = true
-      else if (token === '⌃' || lower === 'ctrl' || lower === 'control') ctrl = true
-      else if (token === '⇧' || lower === 'shift') shift = true
-      else if (token === '⌥' || lower === 'alt' || lower === 'option' || lower === 'opt') alt = true
-      else key += token
-    }
-    if (!key) return null
-    return { meta, ctrl, shift, alt, key: key.toLowerCase() }
-  }
-
-  function matchesShortcut(event: globalThis.KeyboardEvent, parsed: ParsedShortcut): boolean {
-    return (
-      event.metaKey === parsed.meta &&
-      event.ctrlKey === parsed.ctrl &&
-      event.shiftKey === parsed.shift &&
-      event.altKey === parsed.alt &&
-      event.key.toLowerCase() === parsed.key
+  function typeahead(event: globalThis.KeyboardEvent) {
+    const options = getEnabledOptions()
+    if (options.length === 0) return
+    typeaheadBuffer =
+      event.timeStamp - typeaheadAt > 500 ? event.key : `${typeaheadBuffer}${event.key}`
+    typeaheadAt = event.timeStamp
+    const typed = typeaheadBuffer.toLocaleLowerCase()
+    const query = Array.from(typed).every((char) => char === typed[0]) ? typed[0] : typed
+    const active = globalThis.document?.activeElement as globalThis.HTMLElement | null
+    const start = active ? options.indexOf(active) : -1
+    const ordered =
+      query.length === 1
+        ? [...options.slice(start + 1), ...options.slice(0, start + 1)]
+        : [...options.slice(Math.max(start, 0)), ...options.slice(0, Math.max(start, 0))]
+    const match = ordered.find((option) =>
+      (option.textContent ?? '').trim().toLocaleLowerCase().startsWith(query)
     )
+    if (match) {
+      event.preventDefault()
+      match.focus({ preventScroll: true })
+    }
   }
-
-  interface CommandEntry {
-    parsed: ParsedShortcut
-    activate: (event: globalThis.KeyboardEvent) => void
-  }
-
-  const commands = new Set<CommandEntry>()
 
   function registerCommand(
     command: string,
     activate: (event: globalThis.KeyboardEvent) => void
   ): () => void {
-    const parsed = parseCommand(command)
-    if (!parsed) return () => {}
-    const entry: CommandEntry = { parsed, activate }
-    commands.add(entry)
-    return () => {
-      commands.delete(entry)
-    }
-  }
-
-  function onWindowKeydown(event: globalThis.KeyboardEvent) {
-    if (props.disabled) return
-    for (const { parsed, activate } of commands) {
-      if (matchesShortcut(event, parsed)) {
-        event.preventDefault()
-        activate(event)
-        return
-      }
-    }
+    return registerShortcut(command, () => !props.disabled, activate)
   }
 
   function onDocumentMousedown(event: globalThis.MouseEvent) {
@@ -275,9 +249,15 @@
     setOpen(false)
   }
 
+  function listenOutside(active: boolean) {
+    if (active) globalThis.document?.addEventListener('mousedown', onDocumentMousedown)
+    else globalThis.document?.removeEventListener('mousedown', onDocumentMousedown)
+  }
+
   watch(
     () => isOpenState.value,
     async (open) => {
+      listenOutside(open)
       if (!open) return
       await nextTick()
       focusFirstOption()
@@ -285,20 +265,12 @@
   )
 
   onMounted(() => {
-    globalThis.document?.addEventListener('mousedown', onDocumentMousedown)
-    globalThis.window?.addEventListener('keydown', onWindowKeydown)
+    if (isOpenState.value) listenOutside(true)
   })
 
   onBeforeUnmount(() => {
-    globalThis.document?.removeEventListener('mousedown', onDocumentMousedown)
-    globalThis.window?.removeEventListener('keydown', onWindowKeydown)
+    listenOutside(false)
   })
-
-  function registerGroup(): number {
-    const index = groupCount.value
-    groupCount.value = index + 1
-    return index
-  }
 
   provide(DropdownMenuInjectionKey, {
     testId: testId.value,
@@ -312,7 +284,6 @@
     panelBodyRef: bodyTarget,
     setOpen,
     selectOption,
-    registerGroup,
     registerCommand,
     focusFirstOption,
     focusLastOption,

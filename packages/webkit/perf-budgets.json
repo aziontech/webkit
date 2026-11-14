@@ -5,6 +5,11 @@
     "tree-5k": { "mount": 60, "update": 170, "update_is": "expand two folders of 99 nodes" },
     "select-1k": { "mount": 50, "update": 260, "update_is": "open the list, then filter it" },
     "multi-select-1k": { "mount": 50, "update": 480, "update_is": "open the list, then filter it" },
+    "dropdown-menu-1k": {
+      "mount": 1800,
+      "update": 50,
+      "update_is": "20 document mousedowns and window keydowns with 1k closed menus mounted"
+    },
     "donut-chart-500": { "mount": 50, "update": 50, "update_is": "replace the 500 slices" },
     "bar-list-1k": { "mount": 240, "update": 160, "update_is": "replace the 1k rows" },
     "log-view-10k": { "mount": 60, "update": 60, "update_is": "search the 10k lines" },

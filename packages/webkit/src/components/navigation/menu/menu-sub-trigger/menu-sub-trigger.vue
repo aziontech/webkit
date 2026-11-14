@@ -43,7 +43,7 @@
   })
 
   const emit = defineEmits<{
-    click: [event: globalThis.MouseEvent]
+    click: [event: globalThis.MouseEvent, item: { label: string; href: string }]
   }>()
 
   defineSlots<{
@@ -147,7 +147,7 @@
 
   const activate = (event: globalThis.MouseEvent) => {
     if (props.disabled) return
-    emit('click', event)
+    emit('click', event, { label: props.label, href: props.href })
   }
 
   const reveal = () => {

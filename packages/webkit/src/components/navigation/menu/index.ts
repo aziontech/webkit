@@ -6,11 +6,6 @@ import MenuSub from './menu-sub/menu-sub.vue'
 import MenuSubContent from './menu-sub-content/menu-sub-content.vue'
 import MenuSubTrigger from './menu-sub-trigger/menu-sub-trigger.vue'
 
-/**
- * Members declared explicitly: `Object.assign`'s return type inlines the root's private
- * `Props` interface, which `vue-tsc` rejects in the default export (TS4082); casting to a
- * declared static keeps the compound fully typed without exporting `Props`.
- */
 interface MenuStatic {
   Group: typeof MenuGroup
   Item: typeof MenuItem

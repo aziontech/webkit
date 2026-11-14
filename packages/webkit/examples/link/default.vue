@@ -6,6 +6,7 @@
   <Link
     label="Learn more"
     size="large"
-    href="#"
+    href="https://example.com/docs"
+    target="_blank"
   />
 </template>

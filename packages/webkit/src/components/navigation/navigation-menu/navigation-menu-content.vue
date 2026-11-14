@@ -25,7 +25,7 @@
 
   const attrs = useAttrs()
   const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? 'navigation-menu__content'
+    () => (attrs['data-testid'] as string | undefined) ?? 'navigation-navigation-menu__content'
   )
 
   const root = useNavigationMenuRoot()
@@ -129,6 +129,7 @@
     :to="viewportTarget"
   >
     <div
+      :id="item.contentId"
       ref="contentRef"
       :class="cn(ROOT_CLASS, attrs.class as string | undefined)"
       :style="contentStyle"

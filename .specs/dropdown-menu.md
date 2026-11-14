@@ -3,11 +3,11 @@ name: dropdown-menu
 category: navigation
 structure: composition
 status: implemented
-spec_version: 2
+spec_version: 3
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3775-16746&m=dev
   node_id: 3775:16746
-checksum: 87fb5076c00d8f3e2aba2b92bdac293fa2bf3b2b2695552d5db935174144e5e5
+checksum: 5f0263bfd2873d0572ce2e939a68adebfe8bb0a155ace5d9d0047148b4e78d6a
 created: 2026-06-26
 last_updated: 2026-11-12
 ---
@@ -16,7 +16,7 @@ last_updated: 2026-11-12
 
 ## Purpose
 
-Overlay menu that opens from a consumer-supplied trigger and renders a list of selectable options grouped into named sections. The root `DropdownMenu` owns open/closed state, positioning, focus return, and keyboard navigation; `DropdownMenu.Trigger` wires `aria-haspopup`/`aria-expanded`/`aria-controls` onto whatever element the consumer passes through its slot; `DropdownMenu.Group` groups options under an optional label; `DropdownMenu.Option` is the selectable row with left/right/command affordances. Replaces and removes the legacy monolithic input `dropdown` and the previous `dropdown-menu` composition — there is one `DropdownMenu` in the project, in `navigation/`.
+Overlay menu that opens from a consumer-supplied trigger and renders a list of selectable options grouped into named sections. The root `DropdownMenu` owns open/closed state, positioning, focus return, and keyboard navigation; `DropdownMenu.Trigger` wires `aria-haspopup`/`aria-expanded`/`aria-controls` onto whatever element the consumer passes through its slot; `DropdownMenu.Group` groups options under an optional label; `DropdownMenu.Item` (the shadcn / Radix name; `DropdownMenu.Option` is the same component, deprecated since 6.0 and removed in 7.0) is the selectable row with leading/trailing/command affordances. Replaces and removes the legacy monolithic input `dropdown` and the previous `dropdown-menu` composition — there is one `DropdownMenu` in the project, in `navigation/`.
 
 ## When to use
 
@@ -42,7 +42,8 @@ Overlay menu that opens from a consumer-supplied trigger and renders a list of s
 
 - Give every `DropdownMenu.Option` a unique `value` and handle the root `select` event as `(event, value)`. The panel closes and focus returns to the trigger on its own.
 - `selected` is a display flag. The dropdown never sets it, so derive it from your own state.
-- Use the `command` prop or the `right` slot on an option, not both. A `command` shortcut is live only while the panel is open.
+- Use the `command` prop or the `trailing` slot on an option, not both. A `command` shortcut is live while its option is mounted (inside a group, only while the panel is open). Every menu on the page shares one `window` listener, so a shortcut fires one option only.
+- Write `DropdownMenu.Item` (also exported as `DropdownMenuItem`); `DropdownMenu.Option` and the `left` / `right` slots keep working as deprecated aliases until 7.0. Items may sit directly in the root: an item outside a group renders inside the panel like a grouped one.
 - Add a `label` to each `DropdownMenu.Group` when there is more than one group. Put search in the root `top` slot and footer actions in `bottom`; those regions stay outside the scrolling list.
 - Bind the open state with `v-model:open`, or `:open` plus an `@update:open` handler typed `(open: boolean) => void`. The payload is always a `boolean`, so the handler needs no cast and no `Boolean(...)`.
 
@@ -118,15 +119,16 @@ Tree-shaking alternative — the same sub-components as standalone imports:
   - Props: `label: string` default `''` — section label rendered above the options. Omit for an unlabeled group.
   - Events: _none_.
   - Slots: `default` — one or more `<DropdownMenu.Option>`; `top` — inline region rendered between the group label and the options (e.g. a per-section search or description); `bottom` — inline region rendered after the options (e.g. a "see all" link).
-- `dropdown-menu-option/dropdown-menu-option.vue` — selectable row. Renders the left slot, the label, the right slot, and an optional `command` hint. Calls injected `selectOption(value, event)` on click / `Enter` / `Space`.
+- `dropdown-menu-option/dropdown-menu-option.vue` — selectable row, attached as `DropdownMenu.Item` and as the deprecated alias `DropdownMenu.Option` (`@deprecated since 6.0 — use DropdownMenu.Item. Removed in 7.0.`). Renders the leading slot, the label, the trailing slot, an optional `command` hint and, when `selected`, a check mark. Calls injected `selectOption(value, event)` on click / `Enter` / `Space`. Every row is `tabindex="-1"`; the root moves focus with the arrows and typeahead. Outside a group the row teleports itself into the panel body (`data-ungrouped`, with the group's horizontal inset).
   - Props:
     - `value: string | number` (required) — identifier emitted on the root `select` event when this option is activated.
     - `label: string` default `''` — plain-text label; falls back to the default slot when omitted.
-    - `command: string` default `''` — keyboard-shortcut hint rendered on the right side (e.g. `'⌘P'`, `'⇧⌘P'`, `'Ctrl+,'`). While the panel is open the root listens for `window` `keydown`, matches the shortcut against every mounted option, and emits `select` for the matching option (preventing the browser default). Shortcuts are active only while the panel is open, since options are only mounted then. Mutually exclusive with the `right` slot.
+    - `command: string` default `''` — keyboard-shortcut hint rendered on the trailing side (e.g. `'⌘P'`, `'⇧⌘P'`, `'Ctrl+,'`). A module-level registry holds one `window` `keydown` listener for every menu on the page (attached while at least one shortcut is registered); it matches the shortcut against the registered options of enabled menus and emits `select` for the first match only (preventing the browser default). Mutually exclusive with the `trailing` slot.
     - `disabled: boolean` default `false` — disables interaction and applies disabled tokens.
-    - `selected: boolean` default `false` — marks the option as currently selected (background + checkmark).
+    - `selected: boolean` default `false` — marks the option as checked: `role="menuitemradio"` with `aria-checked="true"`, the selected background and a trailing `pi pi-check`.
+    - `href: string` default `''` — destination URL; the row renders as an anchor (still `role="menuitem"`) that emits `select` and then follows the link, so it can be opened in a new tab. `Enter` follows it natively; `Space` clicks it.
   - Events: _none_ (root emits `select`).
-  - Slots: `default` (override of the `label` prop, for rich label content), `left` (left icon / avatar), `right` (right icon / badge; mutually exclusive with `command`).
+  - Slots: `default` (override of the `label` prop, for rich label content), `leading` (icon / avatar before the label), `trailing` (icon / badge after the label; mutually exclusive with `command`), `left` / `right` (`@deprecated since 6.0 — use leading / trailing. Removed in 7.0.`; rendered as the fallback of `leading` / `trailing`).
 
 ## Props
 
@@ -213,8 +215,8 @@ Tree-shaking alternative — the same sub-components as standalone imports:
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)` on trigger and option.
 - Keyboard map:
   - On the trigger: `Enter` / `Space` opens the panel and focuses the first enabled option; `Down` opens and focuses the first option; `Up` opens and focuses the last option.
-  - Inside the panel: `Down` / `Up` move between enabled options (wrap-around); `Home` / `End` jump to first/last enabled option; `Enter` / `Space` activate the focused option; `Esc` closes the panel and returns focus to the trigger; `Tab` closes the panel and lets focus proceed to the next focusable element after the trigger; `Shift+Tab` closes it and returns focus to the trigger. Typing in a search field inside the top slot keeps `Home` / `End` for the caret. Tests: `dropdown-menu.test.ts` › keyboard map (spec).
-- ARIA: the slotted control (or the wrapper, when the slot has none) exposes `aria-haspopup="menu"`, `aria-expanded`, `aria-controls`, with a single tab stop; the panel's `aria-labelledby` follows the control's `id`; the `role="menu"` element wraps only the groups and options, and the optional top and bottom slots (search fields, footers with buttons) sit beside it inside the floating panel, because a `menu` may own only menu items, groups and separators (`aria-required-children`); each group uses `role="group"` + `aria-labelledby` pointing at its label id (when `label` is set); each option uses `role="menuitem"`, `aria-disabled` mirrors `disabled`; selected option uses `aria-current="true"`.
+  - Inside the panel: `Down` / `Up` move between enabled options (wrap-around); `Home` / `End` jump to first/last enabled option; a printable character moves to the next enabled option whose label starts with it (typeahead: characters typed within 500 ms accumulate, a repeated character cycles); `Enter` / `Space` activate the focused option; `Esc` closes the panel and returns focus to the trigger; `Tab` closes the panel and lets focus proceed to the next focusable element after the trigger; `Shift+Tab` closes it and returns focus to the trigger. Typing in a search field inside the top slot keeps `Home` / `End` for the caret. Tests: `dropdown-menu.test.ts` › keyboard map (spec).
+- ARIA: the slotted control (or the wrapper, when the slot has none) exposes `aria-haspopup="menu"`, `aria-expanded`, `aria-controls`, with a single tab stop; the panel's `aria-labelledby` follows the control's `id`; the `role="menu"` element wraps only the groups and options, and the optional top and bottom slots (search fields, footers with buttons) sit beside it inside the floating panel, because a `menu` may own only menu items, groups and separators (`aria-required-children`); each group uses `role="group"` + `aria-labelledby` pointing at its label id (when `label` is set); each option uses `role="menuitem"`, `aria-disabled` mirrors `disabled`; a selected option is `role="menuitemradio"` with `aria-checked="true"` and a visible check mark. Options are `tabindex="-1"` (roving focus through the arrows), so `Tab` leaves the menu. While closed, a menu attaches no `document` listener; the outside-`mousedown` listener lives only while the panel is open.
 - Contrast ≥4.5:1 (text) / ≥3:1 (icons), including the disabled state (validated via `--text-disabled` token).
 - `motion-reduce:animate-none` on `animate-popup-scale-*`; `motion-reduce:transition-none` on `transition-colors` for hover/selected states.
 - Teleported panel: the `role="menu"` panel binds `dir` and `lang` from the nearest `WebkitProvider` (`usePortalLocale`), so it lays out and is announced in the provider's direction and language although it renders under `body`.
@@ -224,12 +226,12 @@ Tree-shaking alternative — the same sub-components as standalone imports:
 
 Canonical layout — composite examples (`types.vue`, `sizes.vue`) render every variant of one axis side-by-side in a single frame; state examples (`loading.vue`, `disabled.vue`) change only the prop they demonstrate.
 
-- Default — one trigger, one group, six options, no left/right affordances.
+- Default — one trigger, one group, six options, no leading/trailing affordances.
 - Groups — composite story rendering two `<DropdownMenu.Group>` with labels and a divider between them; required because grouping is the central anatomy of this component and is not covered by `Default`.
 - States — composite story rendering one panel with options in each option state side-by-side: `default`, `hover` (simulated via `data-state`), `selected`, `disabled`. Required because `DropdownMenu.Option` has no `kind` / `size` axis but a state axis that is the component's visual identity.
 - Placements — composite story rendering all four explicit `placement` values (`bottom-start`, `bottom-end`, `top-start`, `top-end`) side-by-side. Required because `placement` is a multi-value prop axis with no other coverage; consumers need to see how each placement anchors against its trigger.
 - AutoPlacement — composite story demonstrating `placement="auto"`: four triggers anchored near each viewport corner so the resolver opens the panel toward the corner with the most available space. Required because `'auto'` is the only `placement` value not covered by `Placements` and is the recommended default for consumer-positioned triggers.
-- OptionAffordances — composite story rendering options that demonstrate the `command` prop and the `left` + `right` slots in a single panel. Required because these affordances are public Option API surface the existing stories do not exercise, and the spec calls out their mutual exclusivity.
+- OptionAffordances — composite story rendering options that demonstrate the `command` prop and the `leading` + `trailing` slots in a single panel. Required because these affordances are public Option API surface the existing stories do not exercise, and the spec calls out their mutual exclusivity.
 - WithTopAndBottomSlots — single panel forced open showing the root `top` and `bottom` named slots in use (e.g. a search input on top, a footer action on bottom). Required because both slots are public root API documented in the Slots table and have no other coverage.
 - GroupsWithTopAndBottomSlots — panel forced open with two `<DropdownMenu.Group>` each using its own `top` (per-section caption) and `bottom` (per-section action) slots. Required because the group-level `top`/`bottom` are public API on `DropdownMenu.Group` and behave differently from the root slots (inline, per-section — not sticky).
 - CustomTriggers — composite story showing the abstract `<DropdownMenu.Trigger>` wrapping different elements (Button, IconButton, plain text). Required because the spec mandates the trigger is abstract and the consumer chooses the inner element; the existing stories only show a `Button`.
