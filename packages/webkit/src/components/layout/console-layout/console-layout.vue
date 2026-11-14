@@ -154,6 +154,8 @@
     actions(props: { compact: boolean; toggleTools: () => void }): unknown
     /** Content at the start of the header, before the breadcrumbs. */
     'header-start'(props: { compact: boolean }): unknown
+    /** Content in the rail under the wordmark, above the navigation; compact is true in the compact drawer. */
+    'sidebar-header'(props: { compact: boolean }): unknown
     /** A composed trail that replaces the one built from the breadcrumbs prop. */
     breadcrumbs(): unknown
     /** Flash messages above the page. */
@@ -477,19 +479,31 @@
           :data-testid="`${testId}__navigation`"
         >
           <template #header>
-            <div
-              class="-m-(--spacing-md) flex h-14 shrink-0 items-center border-b border-(--border-default) px-(--spacing-md)"
-            >
-              <a
-                :href="home"
-                :aria-label="t('consoleLayout.home')"
-                class="flex h-6 w-fit items-center rounded-(--shape-button) px-(--spacing-xs) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
+            <div class="-m-(--spacing-md) flex flex-col">
+              <div
+                class="flex h-14 shrink-0 items-center border-b border-(--border-default) px-(--spacing-md)"
               >
-                <Brand
-                  kind="default"
-                  size="small"
+                <a
+                  :href="home"
+                  :aria-label="t('consoleLayout.home')"
+                  class="flex h-6 w-fit items-center rounded-(--shape-button) px-(--spacing-xs) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
+                >
+                  <Brand
+                    kind="default"
+                    size="small"
+                  />
+                </a>
+              </div>
+              <div
+                v-if="$slots['sidebar-header']"
+                :data-testid="`${testId}__sidebar-header`"
+                class="p-(--spacing-md) empty:hidden"
+              >
+                <slot
+                  name="sidebar-header"
+                  :compact="drawer"
                 />
-              </a>
+              </div>
             </div>
           </template>
 

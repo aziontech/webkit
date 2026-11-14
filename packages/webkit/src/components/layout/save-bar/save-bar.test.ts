@@ -1,7 +1,8 @@
 import '../../../test/reflow.css'
 
 import { render, within } from '@testing-library/vue'
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
+import { nextTick, ref } from 'vue'
 
 import Centered from '../../../../examples/save-bar/centered.vue'
 import Default from '../../../../examples/save-bar/default.vue'
@@ -183,5 +184,76 @@ describe('SaveBar fade in a narrow box', () => {
     expect(back.getBoundingClientRect().left).toBeLessThan(next.getBoundingClientRect().left)
     expect(getComputedStyle(root).borderTopWidth).toBe('0px')
     expect(getComputedStyle(root).backgroundImage).toContain('gradient')
+  })
+})
+
+describe('SaveBar floating inset', () => {
+  const documentStyle = () => document.documentElement.style
+  const inset = () => documentStyle().getPropertyValue('--save-bar-inset')
+  const toastOffset = () => documentStyle().getPropertyValue('--toast-offset-bottom')
+
+  it('publishes its height on the document root while mounted and clears it on unmount', async () => {
+    const view = render(SaveBar, { slots: { default: 'You have unsaved changes.' } })
+
+    await vi.waitFor(() => expect(inset()).toMatch(/^[1-9]\d*px$/))
+    expect(toastOffset()).toBe(inset())
+
+    view.unmount()
+    expect(inset()).toBe('')
+    expect(toastOffset()).toBe('')
+  })
+
+  it.each(['docked', 'plain', 'fade', 'centered'] as const)(
+    'publishes nothing for kind=%s',
+    async (kind) => {
+      const view = render(SaveBar, {
+        props: { kind },
+        slots: { default: 'You have unsaved changes.' }
+      })
+      await nextTick()
+      await nextTick()
+
+      expect(inset()).toBe('')
+      expect(toastOffset()).toBe('')
+      view.unmount()
+    }
+  )
+
+  it('clears the inset when the kind changes away from floating', async () => {
+    const view = render(SaveBar, { slots: { default: 'You have unsaved changes.' } })
+    await vi.waitFor(() => expect(inset()).not.toBe(''))
+
+    await view.rerender({ kind: 'docked' })
+    await nextTick()
+
+    expect(inset()).toBe('')
+    expect(toastOffset()).toBe('')
+    view.unmount()
+  })
+
+  it('reserves scroll room when it would cover the end of a scroll region', async () => {
+    const shown = ref(true)
+    const host = document.createElement('div')
+    host.style.cssText = 'height: 200px; overflow-y: auto'
+    document.body.appendChild(host)
+    const view = render(
+      {
+        components: { SaveBar },
+        setup: () => ({ shown }),
+        template:
+          '<div><div style="height: 600px">Form</div><SaveBar v-if="shown">You have unsaved changes.</SaveBar></div>'
+      },
+      { container: host }
+    )
+    const root = view.getByTestId('layout-save-bar')
+
+    await vi.waitFor(() => expect(root.style.height).toMatch(/^[1-9]\d*px$/))
+    expect(root.style.height).toBe(inset())
+
+    shown.value = false
+    await nextTick()
+    expect(inset()).toBe('')
+    view.unmount()
+    host.remove()
   })
 })

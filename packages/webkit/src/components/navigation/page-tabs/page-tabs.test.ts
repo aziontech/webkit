@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest'
 import { defineComponent, h, ref } from 'vue'
 
 import Default from '../../../../examples/page-tabs/default.vue'
+import FormColumn from '../../../../examples/page-tabs/form-column.vue'
 import WithActions from '../../../../examples/page-tabs/with-actions.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import TabsItem from '../tabs/tabs-item.vue'
@@ -72,8 +73,37 @@ describe('PageTabs', () => {
     expect(within(actions).getByRole('button', { name: 'Deploy' })).toBeTruthy()
   })
 
+  it('lines the tab row up with the full width by default', () => {
+    const { Harness } = harness('overview')
+    const { getByTestId } = within(render(Harness).container)
+
+    expect(getByTestId('navigation-page-tabs').getAttribute('data-column')).toBe('full')
+  })
+
+  it.each(['data', 'form', 'focused'] as const)('mirrors column=%s on the root', (column) => {
+    const { getByTestId } = within(
+      render(PageTabs, {
+        props: { column },
+        slots: { default: () => h(TabsItem, { value: 'overview', label: 'Overview' }) }
+      }).container
+    )
+
+    expect(getByTestId('navigation-page-tabs').getAttribute('data-column')).toBe(column)
+    expect(
+      getByTestId('navigation-page-tabs__row').contains(getByTestId('navigation-page-tabs__tabs'))
+    ).toBe(true)
+  })
+
+  it('renders the form column example with its tabs', () => {
+    const { getByTestId, getAllByRole } = within(render(FormColumn).container)
+
+    expect(getByTestId('navigation-page-tabs').getAttribute('data-column')).toBe('form')
+    expect(getAllByRole('tab')).toHaveLength(3)
+  })
+
   it('has no accessibility violations', async () => {
     await expectNoA11yViolations(render(Default).container)
     await expectNoA11yViolations(render(WithActions).container)
+    await expectNoA11yViolations(render(FormColumn).container)
   })
 })

@@ -11,6 +11,11 @@
       "name": "WithActions",
       "summary": "A service's detail tabs with the actions the resource owns on the right: the staged-changes Tag and the outlined medium Deploy button.",
       "file": "with-actions.vue"
+    },
+    {
+      "name": "FormColumn",
+      "summary": "Account settings tabs over a settings form: the strip stays full bleed while the tab row starts at the edge of the form column below it.",
+      "file": "form-column.vue"
     }
   ]
 }

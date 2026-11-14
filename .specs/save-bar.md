@@ -3,10 +3,11 @@ name: save-bar
 category: layout
 structure: monolithic
 status: implemented
-checksum: 84ac0ca73c78c87ab13bc3df96d1887287bb8bfa4ef7edba5f260d364d11b552
-spec_version: 1
+checksum: 3ebfca0655bceabbfda37796be5bd3e474b02d465f9ead6eadf9ab19d1e94fd2
+spec_version: 2
+template: 2
 created: 2026-11-10
-last_updated: 2026-11-12
+last_updated: 2026-11-14
 ---
 
 # SaveBar — Component Spec
@@ -92,6 +93,7 @@ The bar at the bottom of a settings or create page that holds the status of unsa
 
 - Visual states: `default`
 - `data-kind` mirrors the `kind` prop on the root
+- Floating inset: while a `floating` bar is mounted it publishes its measured height on the document root as `--save-bar-inset` (for a scroll region of its own, such as a code editor, to pad its bottom) and `--toast-offset-bottom` (so the `toaster` stacks above the bar), and updates both when the bar resizes. When the bar would cover the end of the content, the root grows to the bar's height so the last field can scroll clear of it; when there is nothing left to cover, the root stays at zero height. Both properties are removed when the bar unmounts or changes to another `kind`. The other kinds publish nothing.
 - Responsive: the root is the `@container/save-bar`. `floating` and `docked` put the message and the actions on one row from `@xl` of the bar; below it the actions stack full width under the message, Save on top. `plain` stacks the same way below `@md`. `fade` keeps `leading` (Back) and the actions on one row at every width, the actions at the inline end. `centered` keeps the card centred and one row at every width: the optional `leading` or `default` content first, then the actions; the card never grows wider than the bar and lets clicks through around it. The bar keeps `env(safe-area-inset-bottom)` clear on phones.
 
 ## Motion & Animations
@@ -121,6 +123,32 @@ _none_
 - Keyboard map: `Tab` reaches Discard, then Save, in reading order (the column is reversed visually on a phone so Save sits on top).
 - ARIA: the root is a `footer`; the status glyph is `aria-hidden`.
 - Contrast ≥4.5:1 for the status sentence.
+
+## Internationalization
+
+No built-in strings: the status sentence and the action labels come from the consumer's slots.
+
+- Formatting: none.
+
+## Right-to-left
+
+- Layout: logical utilities only (`ms-auto`, `me-auto`, `ps-`); the message sits at the inline start and the actions at the inline end.
+- Icons: the info glyph is not mirrored.
+- Keyboard: none of its own; `Tab` order follows the actions in the slot.
+- User data: none.
+
+## Responsive
+
+- Container queries: the root is `@container/save-bar`; `floating` and `docked` go to one row from `@xl`, `plain` stacks below `@md`.
+- Narrow (≤ 640 px or a narrow container): the actions stack full width under the message, Save on top; the bar keeps `env(safe-area-inset-bottom)` clear.
+- Touch: the actions are `Button` at `medium`, full width when stacked; no hover-only affordance.
+- Reflow: no horizontal scroll at 320 px and 200 % zoom; the floating bar reserves scroll room so it never hides the last field.
+
+## Performance
+
+- Bundle budget: 2.1 KB gzip for `./save-bar` in `.size-limit.json`.
+- Runtime budget: one `ResizeObserver` on the floating bar while it is mounted; a resize writes two custom properties on the document root and measures the nearest scroll container once.
+- Heavy parts: none.
 
 ## Examples
 

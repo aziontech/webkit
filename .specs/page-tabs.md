@@ -3,10 +3,11 @@ name: page-tabs
 category: navigation
 structure: monolithic
 status: implemented
-checksum: c1478c684b50f585f62f7f08a3ce4387b8d562a238a3bd7d72055ac11846cf1f
-spec_version: 1
+checksum: 3309dda52fc4bca239c8d7fc604053c6d8f7b7b5e3fe3de560acc12315bdc0e6
+spec_version: 2
+template: 2
 created: 2026-11-10
-last_updated: 2026-11-10
+last_updated: 2026-11-14
 ---
 
 # PageTabs — Component Spec
@@ -37,6 +38,7 @@ The second-level navigation strip of a resource detail page: a full-bleed bar ru
 - Bind `v-model` to the route (or a ref) and render the section below from it.
 - Keep the labels to one word where possible.
 - Put only actions that apply to the whole resource in `actions`; page-level actions go in the `page-header`.
+- Set `column` to the column the page body uses (`form` over a settings form, `data` over a list) so the tabs start where the content starts.
 
 ## Usage
 
@@ -74,7 +76,9 @@ The second-level navigation strip of a resource detail page: a full-bleed bar ru
 
 ## Props
 
-| _none_ | — | — | — | — |
+| Prop     | Type                                       | Default  | Required | JSDoc                                                                                                  |
+| -------- | ------------------------------------------ | -------- | -------- | ------------------------------------------------------------------------------------------------------ |
+| `column` | `'full' \| 'data' \| 'form' \| 'focused'` | `'full'` | false    | The page column the tab row lines up with: the full width, or the data, form or focused column below it. |
 
 ## v-model
 
@@ -94,6 +98,7 @@ The second-level navigation strip of a resource detail page: a full-bleed bar ru
 ## States
 
 - Visual states: `default`; the tab states are owned by `tabs`
+- `data-column` mirrors the `column` prop on the root. The strip and its rule stay full bleed; with `data`, `form` or `focused` the tab row inside is capped at the same measure as the page column it sits over (`layout-column`, `layout-column-form`, `layout-column-focused`) and centred, so the first tab lines up with the content below. `full` leaves the row at the page boundary inset.
 
 ## Motion & Animations
 
@@ -119,10 +124,37 @@ _none_
 - ARIA: `role="tablist"` and `role="tab"` come from `tabs`.
 - Contrast ≥4.5:1, owned by `tabs`.
 
+## Internationalization
+
+No built-in strings: the tab labels and the actions come from the consumer's slots.
+
+- Formatting: none.
+
+## Right-to-left
+
+- Layout: logical utilities only (`-ms-`, `margin-inline` from the column utilities); the tabs start at the inline start and the actions sit at the inline end.
+- Icons: none of its own.
+- Keyboard: owned by `tabs` (the arrow keys follow the reading direction).
+- User data: none.
+
+## Responsive
+
+- Container queries: none; the column utilities cap the tab row at the page column's measure and fall back to the full width below it.
+- Narrow (≤ 640 px or a narrow container): the tablist scrolls inline inside its own region (owned by `tabs`); the actions keep their size at the inline end.
+- Touch: tab targets are owned by `tabs`; no hover-only affordance.
+- Reflow: no page-level horizontal scroll at 320 px and 200 % zoom; only the tablist scrolls.
+
+## Performance
+
+- Bundle budget: 14.5 KB gzip for `./page-tabs` (it carries `tabs`) in `.size-limit.json`.
+- Runtime budget: none: static strip.
+- Heavy parts: none.
+
 ## Examples
 
 - Default — the detail-page strip.
 - WithActions — the strip with a Tag and Deploy; justified because the actions region is the part `tabs` does not have.
+- FormColumn — the strip over a settings form with `column="form"`; justified because `column` changes where the tab row starts.
 
 ## Constraints — DO NOT
 
