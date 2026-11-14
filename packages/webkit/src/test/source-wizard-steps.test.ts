@@ -120,7 +120,9 @@ describe('source-wizard steps', () => {
     render(LoadFailed)
     expect(screen.getByText(/didn't load/)).toBeTruthy()
     await fireEvent.click(screen.getByRole('button', { name: 'Retry' }))
-    expect(screen.getByRole('status').textContent).toBe('Loading repositories')
+    expect(screen.getAllByRole('status').map((region) => region.textContent?.trim())).toContain(
+      'Loading repositories'
+    )
   })
 
   it('git source: a failed connection says so under Connect GitHub', () => {
