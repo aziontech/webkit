@@ -15,6 +15,11 @@
       "update": 360,
       "update_is": "open the list, then filter it (mount collects the 10 selected labels)"
     },
+    "schema-form-200-fields": {
+      "mount": 400,
+      "update": 150,
+      "update_is": "set one of the 200 values from the parent"
+    },
     "combobox-1k": {
       "mount": 50,
       "update": 160,

@@ -19,6 +19,7 @@ import Table from '../components/data/table/table.vue'
 import Tree from '../components/data/tree/tree.vue'
 import Combobox from '../components/inputs/combobox/combobox.vue'
 import MultiSelect from '../components/inputs/multi-select'
+import SchemaForm from '../components/inputs/schema-form/schema-form.vue'
 import Select from '../components/inputs/select'
 import { useCollection, type UseCollectionReturn } from '../composables/use-collection'
 
@@ -198,6 +199,39 @@ function comboboxCase(): Case {
   }
 }
 
+function schemaFormCase(): Case {
+  const properties: Record<string, unknown> = {}
+  for (let i = 0; i < 200; i++) {
+    properties[`field${i}`] =
+      i % 4 === 0
+        ? {
+            type: 'string',
+            title: `Field ${i}`,
+            enum: Array.from({ length: 50 }, (_, j) => `v${j}`)
+          }
+        : i % 4 === 1
+          ? { type: 'integer', title: `Field ${i}`, minimum: 0, maximum: 1000 }
+          : i % 4 === 2
+            ? { type: 'boolean', title: `Field ${i}` }
+            : { type: 'string', title: `Field ${i}`, maxLength: 80 }
+  }
+  const schema = { type: 'object', properties }
+  const value = ref<Record<string, unknown>>({})
+  return {
+    mount: () => ({
+      render: () =>
+        h(SchemaForm, {
+          schema,
+          modelValue: value.value,
+          'onUpdate:modelValue': (next: Record<string, unknown>) => (value.value = next)
+        })
+    }),
+    update: () => {
+      value.value = { ...value.value, field3: 'acme' }
+    }
+  }
+}
+
 function donutCase(): Case {
   const make = (seed: number) =>
     Array.from({ length: 500 }, (_, i) => ({
@@ -352,6 +386,9 @@ describe('runtime budgets (perf-budgets.json)', () => {
   })
   it('Combobox with 1k options: open and type', async () => {
     check('combobox-1k', await measure(comboboxCase))
+  })
+  it('SchemaForm with 200 fields: mount and edit one value', async () => {
+    check('schema-form-200-fields', await measure(schemaFormCase))
   })
   it('DonutChart with 500 slices', async () => {
     check('donut-chart-500', await measure(donutCase))
