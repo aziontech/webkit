@@ -809,5 +809,6 @@ in a `computed` and rewound the page in a `watch` becomes one call:
 ## 7. Unchanged
 
 Theme tokens (apart from the sans stack and the container variants above), icons, the `init` / `doctor` / `report` / `sync` commands and the flat import style
-(`@aziontech/webkit/<name>`) are the same. The AI bundle (`skills/`, `rules/`) is updated by
+(`@aziontech/webkit/<name>`) are the same. `@aziontech/theme` deprecates the unused `--surface-*`, `--height-*`, `--width-*` and
+`--z-input-popup` variables; they still ship in theme 5.x, and its README lists the replacements. The AI bundle (`skills/`, `rules/`) is updated by
 `npx @aziontech/webkit sync`.

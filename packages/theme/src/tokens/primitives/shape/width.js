@@ -1,5 +1,6 @@
 import { tokenRef } from '../../../scripts/refs.js'
 
+/** @deprecated since 5.3 — the `--width-*` CSS variables: use `--container-*`, which hold the same values. Removed in 6.0. */
 export const width = {
   '3xs': tokenRef('shape.container.3xs'),
   '2xs': tokenRef('shape.container.2xs'),
