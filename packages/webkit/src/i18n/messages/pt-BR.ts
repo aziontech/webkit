@@ -203,7 +203,8 @@ export const ptBR: Messages = {
     summaryRange: ', de {from} a {to}',
     otherSeries: 'Outros',
     rangeDraft: 'Selecionando de {from} a {to}',
-    rangeSelected: 'Selecionado de {from} a {to}'
+    rangeSelected: 'Selecionado de {from} a {to}',
+    total: 'Total'
   },
   chartCard: {
     resize: 'Redimensionar cartão',

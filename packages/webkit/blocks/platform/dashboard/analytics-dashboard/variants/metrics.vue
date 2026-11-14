@@ -2,14 +2,20 @@
   import Chart, { type ChartColor, type ChartSeries } from '@aziontech/webkit/chart'
   import ChartCard from '@aziontech/webkit/chart-card'
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
+  import EmptyState from '@aziontech/webkit/empty-state'
   import Hint from '@aziontech/webkit/hint'
   import IconButton from '@aziontech/webkit/icon-button'
+  import Input from '@aziontech/webkit/input'
   import PageHeader from '@aziontech/webkit/page-header'
   import PageTabs from '@aziontech/webkit/page-tabs'
   import Select from '@aziontech/webkit/select'
   import StatTile from '@aziontech/webkit/stat-tile'
+  import TableRoot, { type TableColumn } from '@aziontech/webkit/table-root'
   import Tabs, { type TabsValue } from '@aziontech/webkit/tabs'
   import Tag from '@aziontech/webkit/tag'
+  import { toast } from '@aziontech/webkit/toast'
+  import ToggleGroup, { type ToggleGroupOption } from '@aziontech/webkit/toggle-group'
+  import { type CsvColumn, downloadCsv, toCsv } from '@aziontech/webkit/utils/csv'
   import { computed, ref } from 'vue'
 
   type MetricFormat = 'count' | 'bytes' | 'percentage' | 'ms' | 'seconds'
@@ -18,6 +24,8 @@
   interface Period {
     value: string
     label: string
+    begin: string
+    end: string
     comparison: string
     scale: number
     labels: string[]
@@ -51,17 +59,162 @@
     series: PanelSeries[]
   }
 
+  type BreakdownRow = Record<string, string | number>
+
+  interface Breakdown {
+    id: string
+    title: string
+    hint: string
+    search: string
+    columns: TableColumn[]
+    rows: BreakdownRow[]
+    classes?: boolean
+  }
+
+  interface View {
+    id: string
+    label: string
+    panels: string[]
+    breakdowns: Breakdown[]
+  }
+
   interface Product {
     id: string
     label: string
     description: string
+    dataset: string
     tiles: Tile[]
     panels: Panel[]
+    views?: View[]
   }
+
+  const breakdownColumn = (
+    id: string,
+    header: string,
+    align: 'start' | 'end' = 'start'
+  ): TableColumn => ({
+    id,
+    accessorKey: id,
+    header,
+    align,
+    enableSorting: true,
+    principal: id === 'status' || id === 'remoteAddress'
+  })
+
+  const statusBreakdown: Breakdown = {
+    id: 'status-upstream',
+    title: 'Status and upstream status',
+    hint: 'Requests per status code returned to the user and the status the origin answered with.',
+    search: 'Search status codes',
+    classes: true,
+    columns: [
+      breakdownColumn('status', 'Status'),
+      breakdownColumn('upstreamStatus', 'Upstream status'),
+      breakdownColumn('requests', 'Requests', 'end')
+    ],
+    rows: [
+      [200, 200, 1284310],
+      [304, 304, 214880],
+      [200, 0, 182410],
+      [404, 404, 41620],
+      [301, 301, 28940],
+      [206, 206, 19330],
+      [403, 0, 12780],
+      [302, 302, 8210],
+      [401, 401, 5140],
+      [502, 502, 3410],
+      [499, 0, 2960],
+      [503, 503, 1870],
+      [429, 0, 1420],
+      [500, 500, 960],
+      [504, 504, 410]
+    ].map(([status, upstreamStatus, requests]) => ({
+      id: `${status}-${upstreamStatus}`,
+      status: String(status),
+      upstreamStatus: upstreamStatus ? String(upstreamStatus) : '—',
+      requests: requests ?? 0
+    }))
+  }
+
+  const addressBreakdown: Breakdown = {
+    id: 'addresses',
+    title: 'IP address information',
+    hint: 'Requests per client address, with its network, country and region.',
+    search: 'Search addresses, networks or countries',
+    columns: [
+      breakdownColumn('remoteAddress', 'IP address'),
+      breakdownColumn('asn', 'Network'),
+      breakdownColumn('country', 'Country'),
+      breakdownColumn('region', 'Region'),
+      breakdownColumn('requests', 'Requests', 'end')
+    ],
+    rows: [
+      ['203.0.113.10', 'AS64496 Cloud provider', 'United States', 'California', 84120],
+      ['198.51.100.212', 'AS64497 Residential ISP', 'United States', 'Texas', 61870],
+      ['192.0.2.77', 'AS64498 Cloud provider', 'United States', 'Virginia', 48310],
+      ['203.0.113.142', 'AS64499 Mobile carrier', 'Canada', 'Ontario', 37940],
+      ['198.51.100.9', 'AS64496 Cloud provider', 'Germany', 'Hesse', 29660],
+      ['192.0.2.2', 'AS64500 Content network', 'United States', 'California', 22180],
+      ['203.0.113.88', 'AS64501 Residential ISP', 'United Kingdom', 'England', 18420],
+      ['198.51.100.48', 'AS64496 Cloud provider', 'India', 'Maharashtra', 12870],
+      ['192.0.2.12', 'AS64502 Transit network', 'Netherlands', 'North Holland', 9350],
+      ['203.0.113.5', 'AS64501 Residential ISP', 'United Kingdom', 'Scotland', 7210],
+      ['198.51.100.1', 'AS64503 Search crawler', 'United States', 'Oregon', 6480],
+      ['192.0.2.20', 'AS64504 Search crawler', 'United States', 'Washington', 4120]
+    ].map(([remoteAddress, asn, country, region, requests]) => ({
+      id: String(remoteAddress),
+      remoteAddress: remoteAddress ?? '',
+      asn: asn ?? '',
+      country: country ?? '',
+      region: region ?? '',
+      requests: requests ?? 0
+    }))
+  }
+
+  const sourceBreakdown: Breakdown = {
+    id: 'sources',
+    title: 'Top denied sources',
+    hint: 'Client addresses the firewall denied most often, with their network and main threat.',
+    search: 'Search addresses, networks or threats',
+    columns: [
+      breakdownColumn('remoteAddress', 'IP address'),
+      breakdownColumn('asn', 'Network'),
+      breakdownColumn('country', 'Country'),
+      breakdownColumn('threat', 'Main threat'),
+      breakdownColumn('requests', 'Denied requests', 'end')
+    ],
+    rows: [
+      ['203.0.113.233', 'AS64505 Hosting provider', 'Netherlands', 'SQL injection', 9120],
+      ['198.51.100.47', 'AS64506 Anonymizing proxy', 'Germany', 'Cross-site scripting', 7640],
+      ['192.0.2.159', 'AS64507 Unmanaged network', 'Romania', 'Path traversal', 6210],
+      ['203.0.113.172', 'AS64505 Hosting provider', 'Netherlands', 'Bad bots', 5480],
+      ['198.51.100.139', 'AS64508 VPN service', 'Seychelles', 'SQL injection', 4360],
+      ['192.0.2.221', 'AS64509 Research scanner', 'United States', 'Bad bots', 3790],
+      ['198.51.100.130', 'AS64510 Cloud provider', 'United States', 'Path traversal', 2810],
+      ['192.0.2.23', 'AS64511 Residential ISP', 'United States', 'Cross-site scripting', 1960]
+    ].map(([remoteAddress, asn, country, threat, requests]) => ({
+      id: String(remoteAddress),
+      remoteAddress: remoteAddress ?? '',
+      asn: asn ?? '',
+      country: country ?? '',
+      threat: threat ?? '',
+      requests: requests ?? 0
+    }))
+  }
+
+  const statusClasses: ToggleGroupOption[] = [
+    { label: 'All', value: 'all' },
+    { label: '2xx', value: '2' },
+    { label: '3xx', value: '3' },
+    { label: '4xx', value: '4' },
+    { label: '5xx', value: '5' }
+  ]
 
   const periods: Period[] = [
     {
       value: '1h',
+      begin: '2026-11-14T13:30:00Z',
+      end: '2026-11-14T14:30:00Z',
       label: 'Last hour',
       comparison: 'vs previous hour',
       scale: 1 / 24,
@@ -82,6 +235,8 @@
     },
     {
       value: '24h',
+      begin: '2026-11-13T14:00:00Z',
+      end: '2026-11-14T14:00:00Z',
       label: 'Last 24 hours',
       comparison: 'vs previous 24 hours',
       scale: 1,
@@ -102,6 +257,8 @@
     },
     {
       value: '7d',
+      begin: '2026-11-04T00:00:00Z',
+      end: '2026-11-10T23:59:59Z',
       label: 'Last 7 days',
       comparison: 'vs previous 7 days',
       scale: 7,
@@ -109,6 +266,8 @@
     },
     {
       value: '30d',
+      begin: '2026-10-12T00:00:00Z',
+      end: '2026-11-10T23:59:59Z',
       label: 'Last 30 days',
       comparison: 'vs previous 30 days',
       scale: 30,
@@ -132,6 +291,27 @@
       id: 'applications',
       label: 'Applications',
       description: 'Requests, data transferred, cache and errors across your applications.',
+      dataset: 'httpMetrics',
+      views: [
+        {
+          id: 'overview',
+          label: 'Overview',
+          panels: ['requests', 'data', 'status', 'cache'],
+          breakdowns: []
+        },
+        {
+          id: 'status-codes',
+          label: 'Status codes',
+          panels: ['status'],
+          breakdowns: [statusBreakdown]
+        },
+        {
+          id: 'request-breakdown',
+          label: 'Request breakdown',
+          panels: [],
+          breakdowns: [addressBreakdown]
+        }
+      ],
       tiles: [
         {
           id: 'requests',
@@ -215,6 +395,7 @@
       id: 'functions',
       label: 'Functions',
       description: 'Invocations, errors and duration of your functions.',
+      dataset: 'functionMetrics',
       tiles: [
         {
           id: 'invocations',
@@ -295,6 +476,21 @@
       id: 'firewall',
       label: 'Firewall',
       description: 'Requests allowed, denied and rate limited by your firewalls.',
+      dataset: 'firewallMetrics',
+      views: [
+        {
+          id: 'overview',
+          label: 'Overview',
+          panels: ['decisions', 'threats', 'limited', 'inspected'],
+          breakdowns: []
+        },
+        {
+          id: 'sources',
+          label: 'Denied sources',
+          panels: ['decisions'],
+          breakdowns: [sourceBreakdown]
+        }
+      ],
       tiles: [
         {
           id: 'inspected',
@@ -379,6 +575,7 @@
       id: 'dns',
       label: 'DNS',
       description: 'Queries your hosted zones answered, and how they were answered.',
+      dataset: 'dnsMetrics',
       tiles: [
         {
           id: 'queries',
@@ -466,6 +663,7 @@
       id: 'data-stream',
       label: 'Data stream',
       description: 'Records collected and delivered to your endpoints.',
+      dataset: 'dataStreamMetrics',
       tiles: [
         {
           id: 'collected',
@@ -588,6 +786,9 @@
   }
 
   const activeProduct = ref<TabsValue | null>('applications')
+  const view = ref('overview')
+  const searches = ref<Record<string, string>>({})
+  const classes = ref<Record<string, string>>({})
   const period = ref('24h')
   const activeIndex = ref<number | null>(null)
 
@@ -619,26 +820,123 @@
     })
   )
 
-  const panels = computed(() =>
-    product.value.panels.map((panel) => ({
-      ...panel,
-      series: panel.series.map((entry): ChartSeries => ({
-        id: entry.id,
-        name: entry.name,
-        ...(entry.color ? { color: entry.color } : {}),
-        values: seriesValues(
-          `${product.value.id}:${panel.id}:${entry.id}:${currentPeriod.value.value}`,
-          entry.base,
-          currentPeriod.value,
-          panel.rate
-        )
-      }))
-    }))
+  const currentView = computed(
+    () => product.value.views?.find((entry) => entry.id === view.value) ?? null
   )
+
+  const viewOptions = computed<ToggleGroupOption[]>(
+    () => product.value.views?.map(({ id, label }) => ({ label, value: id })) ?? []
+  )
+
+  const breakdowns = computed(() => currentView.value?.breakdowns ?? [])
+
+  const panels = computed(() =>
+    product.value.panels
+      .filter((panel) => !currentView.value || currentView.value.panels.includes(panel.id))
+      .map((panel) => ({
+        ...panel,
+        series: panel.series.map((entry): ChartSeries => ({
+          id: entry.id,
+          name: entry.name,
+          ...(entry.color ? { color: entry.color } : {}),
+          values: seriesValues(
+            `${product.value.id}:${panel.id}:${entry.id}:${currentPeriod.value.value}`,
+            entry.base,
+            currentPeriod.value,
+            panel.rate
+          )
+        }))
+      }))
+  )
+
+  const breakdownRows = (breakdown: Breakdown) => {
+    const statusClass = classes.value[breakdown.id] ?? 'all'
+    const rows = breakdown.rows.map((row): BreakdownRow => ({
+      ...row,
+      requests: Math.round(Number(row.requests) * currentPeriod.value.scale)
+    }))
+    if (!breakdown.classes || statusClass === 'all') return rows
+    return rows.filter((row) => String(row.status).startsWith(statusClass))
+  }
 
   const selectProduct = (value: TabsValue | null) => {
     activeProduct.value = value
     activeIndex.value = null
+    view.value = 'overview'
+  }
+
+  const selectView = (value: string | undefined) => {
+    view.value = value ?? 'overview'
+    activeIndex.value = null
+  }
+
+  const cardQuery = (fields: string[], orderBy: string) =>
+    [
+      'query {',
+      `  ${product.value.dataset}(`,
+      '    limit: 5000',
+      '    aggregate: { sum: requests }',
+      `    filter: { tsRange: { begin: "${currentPeriod.value.begin}", end: "${currentPeriod.value.end}" } }`,
+      `    orderBy: [${orderBy}]`,
+      '  ) {',
+      ...fields.map((field) => `    ${field}`),
+      '  }',
+      '}'
+    ].join('\n')
+
+  const copyQuery = async (query: string) => {
+    try {
+      await globalThis.navigator.clipboard.writeText(query)
+      toast.success('Query copied.', {
+        description: 'Paste it into any GraphQL client that sends your token.'
+      })
+    } catch {
+      toast.error('The query could not be copied.')
+    }
+  }
+
+  const exportCsv = (id: string, columns: CsvColumn[], rows: object[]) => {
+    const filename = `${product.value.id}-${id}-${currentPeriod.value.value}.csv`
+    downloadCsv(filename, toCsv({ columns, rows }))
+    toast.success('CSV exported.', { description: filename })
+  }
+
+  const onPanelOption = (panel: { id: string; series: ChartSeries[] }, value: string | number) => {
+    if (value === 'query') {
+      copyQuery(cardQuery(['ts', ...panel.series.map((entry) => entry.id)], 'ts_ASC'))
+      return
+    }
+    exportCsv(
+      panel.id,
+      [
+        { id: 'ts', header: 'Time' },
+        ...panel.series.map((entry) => ({ id: entry.id, header: entry.name }))
+      ],
+      currentPeriod.value.labels.map((label, index) => ({
+        ts: label,
+        ...Object.fromEntries(panel.series.map((entry) => [entry.id, entry.values[index] ?? '']))
+      }))
+    )
+  }
+
+  const onBreakdownOption = (breakdown: Breakdown, value: string | number) => {
+    if (value === 'query') {
+      copyQuery(
+        cardQuery(
+          breakdown.columns.map((column) => column.id ?? ''),
+          'requests_DESC'
+        )
+      )
+      return
+    }
+    exportCsv(
+      breakdown.id,
+      breakdown.columns.map((column) => ({
+        id: column.id ?? '',
+        header: String(column.header ?? '')
+      })),
+      breakdownRows(breakdown)
+    )
   }
 </script>
 
@@ -681,8 +979,18 @@
         />
       </PageTabs>
 
+      <ToggleGroup
+        v-if="viewOptions.length > 1"
+        :model-value="view"
+        :options="viewOptions"
+        size="medium"
+        :aria-label="`${product.label} dashboards`"
+        class="self-start"
+        @update:model-value="selectView"
+      />
+
       <section
-        :aria-label="`${product.label} metrics, ${currentPeriod.label}`"
+        :aria-label="`${product.label} metrics, ${currentView ? `${currentView.label}, ` : ''}${currentPeriod.label}`"
         class="flex min-w-0 flex-col gap-(--layout-group-gap)"
       >
         <ul class="grid grid-cols-1 gap-(--spacing-md) sm:grid-cols-2 xl:grid-cols-4">
@@ -730,7 +1038,10 @@
                     icon="pi pi-calculator"
                   />
                 </span>
-                <DropdownMenu placement="bottom-end">
+                <DropdownMenu
+                  placement="bottom-end"
+                  @select="(_event, value) => onPanelOption(panel, value)"
+                >
                   <DropdownMenu.Trigger>
                     <IconButton
                       icon="pi pi-ellipsis-h"
@@ -774,6 +1085,111 @@
                 <Chart.Tooltip />
                 <Chart.Legend :totals="!panel.rate" />
               </Chart>
+            </ChartCard.Content>
+          </ChartCard>
+
+          <ChartCard
+            v-for="breakdown in breakdowns"
+            :key="`${product.id}-${breakdown.id}`"
+            :span="12"
+          >
+            <ChartCard.Header>
+              <span class="inline-flex min-w-0 items-center gap-(--spacing-xxs)">
+                <ChartCard.Title>{{ breakdown.title }}</ChartCard.Title>
+                <Hint :text="breakdown.hint" />
+              </span>
+              <ChartCard.Controls>
+                <span class="hidden items-center gap-(--spacing-xs) sm:flex">
+                  <Tag
+                    label="Sum"
+                    severity="secondary"
+                    size="small"
+                    icon="pi pi-calculator"
+                  />
+                </span>
+                <DropdownMenu
+                  placement="bottom-end"
+                  @select="(_event, value) => onBreakdownOption(breakdown, value)"
+                >
+                  <DropdownMenu.Trigger>
+                    <IconButton
+                      icon="pi pi-ellipsis-h"
+                      kind="transparent"
+                      size="small"
+                      :aria-label="`More options for ${breakdown.title}`"
+                    />
+                  </DropdownMenu.Trigger>
+                  <DropdownMenu.Group>
+                    <DropdownMenu.Option
+                      value="query"
+                      label="Copy query"
+                    />
+                    <DropdownMenu.Option
+                      value="export"
+                      label="Export CSV"
+                    />
+                  </DropdownMenu.Group>
+                </DropdownMenu>
+              </ChartCard.Controls>
+            </ChartCard.Header>
+            <ChartCard.Content>
+              <div class="flex min-w-0 flex-col gap-(--spacing-sm)">
+                <div class="flex min-w-0 flex-wrap items-center gap-(--spacing-xs)">
+                  <div class="min-w-36 grow basis-(--container-3xs)">
+                    <Input
+                      v-model="searches[breakdown.id]"
+                      size="medium"
+                      :placeholder="breakdown.search"
+                      :aria-label="breakdown.search"
+                    >
+                      <template #iconLeft>
+                        <i
+                          class="pi pi-search"
+                          aria-hidden="true"
+                        />
+                      </template>
+                    </Input>
+                  </div>
+                  <ToggleGroup
+                    v-if="breakdown.classes"
+                    :model-value="classes[breakdown.id] ?? 'all'"
+                    :options="statusClasses"
+                    size="medium"
+                    :aria-label="`Filter ${breakdown.title.toLowerCase()} by status class`"
+                    @update:model-value="(value) => (classes[breakdown.id] = value ?? 'all')"
+                  />
+                </div>
+
+                <TableRoot
+                  v-model:global-filter="searches[breakdown.id]"
+                  :data="breakdownRows(breakdown)"
+                  :columns="breakdown.columns"
+                  row-key="id"
+                  enable-sorting
+                  paginated
+                  :page-size="5"
+                  :rows-per-page-options="[5, 10, 25]"
+                  header-kind="compact"
+                  bordered
+                >
+                  <template #empty>
+                    <EmptyState
+                      size="small"
+                      icon="pi pi-search"
+                      title="No matching rows"
+                      :description="
+                        breakdown.classes
+                          ? 'Change the search or the status class.'
+                          : 'Change the search.'
+                      "
+                    />
+                  </template>
+
+                  <template #cell-requests="{ row }">
+                    <span class="tabular-nums">{{ formatters.count(Number(row.requests)) }}</span>
+                  </template>
+                </TableRoot>
+              </div>
             </ChartCard.Content>
           </ChartCard>
         </div>

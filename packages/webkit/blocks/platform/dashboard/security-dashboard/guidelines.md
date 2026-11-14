@@ -55,13 +55,20 @@ Only on `Matched requests over time`.
 
 Names Expand and More options.
 
-### H. Expand — `IconButton` (optional)
+### H. Expand — `IconButton`, `Dialog`, `DialogPortal`, `DialogOverlay`, `DialogContent`, `PanelHeader`, `DialogTitle`, `DialogDescription`, `DialogClose`, `PanelContent` (optional)
 
-Its `aria-label` names the card (`Expand Matched requests over time`).
+Its `aria-label` names the card (`Expand Matched requests over time`). It opens one large `Dialog`
+with the card title, its Hint sentence as the description, and the region at full size: the matched
+requests chart at a 420px plot with the same Line or Bar choice, the breakdown `BarList`, or the
+source IP table at ten rows per page. Closing it returns focus to Expand. Disabled while loading and
+after a failure.
 
-### I. More options — `DropdownMenu` (optional)
+### I. More options — `DropdownMenu`, `toast` (optional)
 
-`Copy query` and `Export CSV`.
+`Copy query` copies the card's GraphQL query (`securityMetrics`, the period as `tsRange`) and
+confirms with `Query copied.`; `Export CSV` saves the card's rows with `toCsv` and `downloadCsv`
+from `@aziontech/webkit/utils/csv` and confirms with `CSV exported.` and the file name. Export is
+disabled while loading and after a failure; the app mounts the toast region.
 
 ### J. Matched requests — `Chart` (required)
 
@@ -121,6 +128,7 @@ replaces the whole grid with one bordered `EmptyState` and its `Add rule set` bu
 
 - Every icon-only control has an `aria-label` that names its card, plus a `Tooltip`.
 - The search `Input` has an `aria-label` equal to its placeholder.
+- The expanded `Dialog` traps focus, closes on Escape and returns focus to the Expand button.
 - Severity is a word in the `Tag`, not color alone.
 - Figures use `tabular-nums`.
 

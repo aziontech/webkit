@@ -10,6 +10,7 @@
   import StatTile from '@aziontech/webkit/stat-tile'
   import TableRoot, { type TableColumn } from '@aziontech/webkit/table-root'
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
+  import { toast } from '@aziontech/webkit/toast'
   import ToggleGroup, { type ToggleGroupOption } from '@aziontech/webkit/toggle-group'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { ref } from 'vue'
@@ -277,6 +278,65 @@
   const statusForm = ref('line')
   const activeIndex = ref<number | null>(null)
   const search = ref('')
+
+  interface CardQuery {
+    dataset: string
+    fields: string[]
+    orderBy: string
+  }
+
+  const periodStart = '2026-11-13T11:00:00Z'
+  const periodEnd = '2026-11-14T10:59:59Z'
+
+  const cardQuery = (report: CardQuery) =>
+    [
+      'query {',
+      `  ${report.dataset}(`,
+      '    limit: 5000',
+      '    aggregate: { sum: requests }',
+      `    filter: { tsRange: { begin: "${periodStart}", end: "${periodEnd}" } }`,
+      `    orderBy: [${report.orderBy}]`,
+      '  ) {',
+      ...report.fields.map((field) => `    ${field}`),
+      '  }',
+      '}'
+    ].join('\n')
+
+  const copyQuery = async (report: CardQuery) => {
+    try {
+      await globalThis.navigator.clipboard.writeText(cardQuery(report))
+      toast.success('Query copied.', {
+        description: 'Paste it into any GraphQL client that sends your token.'
+      })
+    } catch {
+      toast.error('The query could not be copied.')
+    }
+  }
+
+  type CardId = 'requests' | 'status-codes' | 'countries' | 'hosts'
+
+  const queries: Record<CardId, CardQuery> = {
+    requests: { dataset: 'httpMetrics', fields: ['ts', 'requests'], orderBy: 'ts_ASC' },
+    'status-codes': {
+      dataset: 'httpMetrics',
+      fields: ['ts', 'status', 'requests'],
+      orderBy: 'ts_ASC'
+    },
+    countries: {
+      dataset: 'httpMetrics',
+      fields: ['country', 'requests'],
+      orderBy: 'requests_DESC'
+    },
+    hosts: {
+      dataset: 'httpMetrics',
+      fields: ['host', 'service', 'requests'],
+      orderBy: 'requests_DESC'
+    }
+  }
+
+  const onCardOption = (id: CardId, value: string | number) => {
+    if (value === 'query') copyQuery(queries[id])
+  }
 </script>
 
 <template>
@@ -349,9 +409,13 @@
                   kind="transparent"
                   size="small"
                   aria-label="Expand Requests over time"
+                  disabled
                 />
               </Tooltip>
-              <DropdownMenu placement="bottom-end">
+              <DropdownMenu
+                placement="bottom-end"
+                @select="(_event, value) => onCardOption('requests', value)"
+              >
                 <DropdownMenu.Trigger>
                   <IconButton
                     icon="pi pi-ellipsis-h"
@@ -368,6 +432,7 @@
                   <DropdownMenu.Option
                     value="export"
                     label="Export CSV"
+                    disabled
                   />
                 </DropdownMenu.Group>
               </DropdownMenu>
@@ -431,9 +496,13 @@
                   kind="transparent"
                   size="small"
                   aria-label="Expand Status codes"
+                  disabled
                 />
               </Tooltip>
-              <DropdownMenu placement="bottom-end">
+              <DropdownMenu
+                placement="bottom-end"
+                @select="(_event, value) => onCardOption('status-codes', value)"
+              >
                 <DropdownMenu.Trigger>
                   <IconButton
                     icon="pi pi-ellipsis-h"
@@ -450,6 +519,7 @@
                   <DropdownMenu.Option
                     value="export"
                     label="Export CSV"
+                    disabled
                   />
                 </DropdownMenu.Group>
               </DropdownMenu>
@@ -503,9 +573,13 @@
                   kind="transparent"
                   size="small"
                   aria-label="Expand Requests by country"
+                  disabled
                 />
               </Tooltip>
-              <DropdownMenu placement="bottom-end">
+              <DropdownMenu
+                placement="bottom-end"
+                @select="(_event, value) => onCardOption('countries', value)"
+              >
                 <DropdownMenu.Trigger>
                   <IconButton
                     icon="pi pi-ellipsis-h"
@@ -522,6 +596,7 @@
                   <DropdownMenu.Option
                     value="export"
                     label="Export CSV"
+                    disabled
                   />
                 </DropdownMenu.Group>
               </DropdownMenu>
@@ -571,9 +646,13 @@
                   kind="transparent"
                   size="small"
                   aria-label="Expand Top hosts"
+                  disabled
                 />
               </Tooltip>
-              <DropdownMenu placement="bottom-end">
+              <DropdownMenu
+                placement="bottom-end"
+                @select="(_event, value) => onCardOption('hosts', value)"
+              >
                 <DropdownMenu.Trigger>
                   <IconButton
                     icon="pi pi-ellipsis-h"
@@ -590,6 +669,7 @@
                   <DropdownMenu.Option
                     value="export"
                     label="Export CSV"
+                    disabled
                   />
                 </DropdownMenu.Group>
               </DropdownMenu>

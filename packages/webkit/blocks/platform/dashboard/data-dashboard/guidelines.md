@@ -55,13 +55,19 @@ Only on the period comparison chart, labelled with its card.
 
 Names Expand and More options on hover and focus.
 
-### H. Expand — `IconButton` (optional)
+### H. Expand — `IconButton`, `Dialog`, `DialogPortal`, `DialogOverlay`, `DialogContent`, `PanelHeader`, `DialogTitle`, `DialogDescription`, `DialogClose`, `PanelContent` (optional)
 
-Opens a card full size; its `aria-label` names the card.
+Its `aria-label` names the card (`Expand Data transferred by project`). It opens one large `Dialog`
+with the card title, its Hint sentence as the description, and the region at full size: the chart
+at a 420px plot with the same Line or Bar choice, or the usage table at ten rows per page. Closing
+it returns focus to Expand. Disabled while loading and after a failure.
 
-### I. More options — `DropdownMenu` (optional)
+### I. More options — `DropdownMenu`, `toast` (optional)
 
-`Copy query` and `Export CSV` in every card.
+`Copy query` copies the card's GraphQL query and confirms with `Query copied.`; `Export CSV` saves
+the card's rows with `toCsv` and `downloadCsv` from `@aziontech/webkit/utils/csv` and confirms with
+`CSV exported.` and the file name. Export is disabled while loading and after a failure; the app
+mounts the toast region.
 
 ### J. Charts — `Chart` (required)
 
@@ -81,6 +87,18 @@ Searchable, paginated; requests and data transferred per project in tabular, rig
 
 `No usage yet` / `Usage appears here once a project serves requests.` when nothing was recorded, and
 `No matching rows` / `Change the search.` when the search matches nothing.
+
+### N. Real-user monitoring — `StatTile`, `Hint` (optional)
+
+Variant RealUser only; it adds `Select` to the page. Timings measured in the reader's browsers instead of consumption: title
+`Real-user monitoring`, and a medium Period `Select` (`Last hour`, `Last 24 hours`, `Last 7 days`,
+`Last 30 days`) in the `PageHeader` actions drives every figure. Four vitals `StatTile`s
+(`kind="sans"`) lead: `Page load time`, `Largest contentful paint`, `First input delay`,
+`Sessions`, each a median value beside its unit (`s`, `ms`, `K`) with no delta, and a `Hint` in the
+aside that defines the timing. Under them, a two-column grid of trend `StatTile`s, one per vital,
+each with the latest value, its unit, a sparkline of the period and the period name in the aside.
+A timing has no "previous period" the reader acts on here, so these tiles carry no delta and no
+`inverse`.
 
 ## Do
 
@@ -103,6 +121,7 @@ Searchable, paginated; requests and data transferred per project in tabular, rig
 - **Series names:** `This period`, `Previous period`.
 - **Empty state:** `No usage yet` / `Usage appears here once a project serves requests.`
 - **No-match state:** `No matching rows` / `Change the search.`
+- **RealUser:** title `Real-user monitoring`, description `Real-user timings collected in the browser, for the selected period.`; tile labels are the timing in sentence case (`First input delay`); the aside of a trend tile is the period name (`Last 24 hours`).
 
 ## Accessibility
 
@@ -117,6 +136,7 @@ Searchable, paginated; requests and data transferred per project in tabular, rig
 - Loading: `Skeleton`s hold every tile, chart and table row in place.
 - Empty: no usage recorded yet; each tile shows a dash, and every chart and the table explain that nothing was recorded.
 - Failed: the request for the period failed; tiles show a dash, and every card keeps its header with a danger `Alert` that names what did not load and offers Retry.
+- RealUser: the real-user monitoring page; the vitals and the trend tiles follow the Period select.
 
 ## Related
 

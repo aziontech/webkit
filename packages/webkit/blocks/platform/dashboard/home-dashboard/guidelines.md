@@ -59,6 +59,26 @@ The `Projects`, `Resources`, `Domains` and `Recents` panels in a region labelled
 is one full-width link to the resource, with its actions menu revealed on hover and focus. An empty
 panel says `Nothing here yet.` (`Nothing opened here yet.` for Recents).
 
+### G. Classic summary — `StatTile`, `Card`, `IconButton`, `Tooltip` (optional)
+
+Variant Summary only; it adds `Hint`, `TableRoot`, `Table`, `Tag` and `Link` to the page: the classic overview for readers who want figures and tables on Home instead of
+resource panels. A main column and, from `xl`, an aside rail of `--container-xs` beside it (below
+`xl` the aside follows the main column).
+
+- **Metrics**: an `h2` with a `Hint` on what the figures cover, four `StatTile`s with a `Hint` in the
+  aside (label, figure, unit; no delta and no sparkline), and the window they cover as a muted caption
+  aligned to the end (`Jul 14, 2026, 6:56 PM – Jul 14, 2026, 7:56 PM UTC`).
+- **Resources**: an `h2` with a `Hint`, then an unpadded `Card` around a compact `TableRoot` of the
+  resources changed last (name, domain as `Table.CellLink`, status as a small `Tag`, `Table.CellTime`
+  with the author, `Table.CellActions`), and a `View all DNS zones` `Link` in the card footer.
+- **Recent activity**: an unpadded `Card` around a compact `TableRoot` of the last five operations
+  (date, operation, type, resource, author email); `Created` and `Deleted` read as small success and
+  danger `Tag`s, any other operation as plain text. `View all activity` in the footer.
+- **Aside**: a `Monthly usage` `Card` with a key and value list and `View all usage`, then a
+  `Marketplace trends` `Card` featuring one template (mark, name `Link`, one sentence, vendor and
+  version) with Previous and Next `IconButton`s and position dots in the footer; the position is
+  announced politely (`Template 2 of 3: Image optimizer`).
+
 ## Do
 
 - Greet by first name in a muted heading; it is the only personal line on the page.
@@ -86,6 +106,7 @@ panel says `Nothing here yet.` (`Nothing opened here yet.` for Recents).
 - **Agent card:** imperative title plus one sentence. `Set up your coding agent` / `Give your editor a prompt that teaches it to build and deploy here.`
 - **Empty panel:** `Nothing here yet.`
 - **Prompt label:** `Search resources, pages and commands`.
+- **Summary:** section headings `Metrics`, `Resources`, `Recent activity`; card titles `Monthly usage`, `Marketplace trends`; footer links `View all <thing>` in sentence case (`View all DNS zones`).
 
 ## Accessibility
 
@@ -99,6 +120,7 @@ panel says `Nothing here yet.` (`Nothing opened here yet.` for Recents).
 
 - Default: populated Home for an account that owns resources (usage band, agent card, resource panels).
 - Empty: a brand-new account; the first-access screen with the greeting, the command prompt that opens the palette, and the three doors (create a project, add a domain with an availability check, set up an agent).
+- Summary: the classic overview; metric tiles with the window caption, the resources and recent activity tables, and the aside with monthly usage and a featured marketplace template.
 
 ## Related
 

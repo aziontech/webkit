@@ -203,7 +203,8 @@ export const es: Messages = {
     summaryRange: ', de {from} a {to}',
     otherSeries: 'Otros',
     rangeDraft: 'Seleccionando de {from} a {to}',
-    rangeSelected: 'Seleccionado de {from} a {to}'
+    rangeSelected: 'Seleccionado de {from} a {to}',
+    total: 'Total'
   },
   chartCard: {
     resize: 'Redimensionar tarjeta',

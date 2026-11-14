@@ -18,7 +18,12 @@
     "breakdown charts",
     "métricas",
     "painel de dados",
-    "painel de uso"
+    "painel de uso",
+    "real user monitoring",
+    "rum",
+    "web vitals",
+    "core web vitals",
+    "monitoramento de usuário real"
   ],
   "skills": ["webkit-data-viz", "webkit-tables", "webkit-ui-states"],
   "primary": {
@@ -40,6 +45,11 @@
       "name": "Failed",
       "summary": "The request for the period failed: the tiles read as dashes, and every card keeps its header with a danger Alert that names what did not load and offers Retry.",
       "file": "variants/failed.vue"
+    },
+    {
+      "name": "RealUser",
+      "summary": "Real-user monitoring: a Period Select in the header drives four vitals StatTiles (page load time, largest contentful paint, first input delay, sessions) that read a median value beside its unit with no delta and a Hint on the label, over a two-column grid of trend StatTiles with the latest value, a sparkline of the period and the period name in the aside.",
+      "file": "variants/real-user.vue"
     }
   ]
 }

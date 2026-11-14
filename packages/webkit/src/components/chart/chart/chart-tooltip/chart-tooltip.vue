@@ -1,13 +1,30 @@
 <script setup lang="ts">
   import { computed, ref, useAttrs, watch } from 'vue'
 
+  import { useTranslate } from '../../../../composables/use-locale/use-translate'
+  import * as en from '../../../../i18n/messages/en'
   import { isFiniteNumber } from '../../_lib'
   import { useChartContext } from '../composables/use-chart-context'
 
   defineOptions({ name: 'ChartTooltip', inheritAttrs: false })
 
+  interface Props {
+    /** Adds a Total row that sums the visible series at the active index. */
+    total?: boolean
+  }
+
+  withDefaults(defineProps<Props>(), {
+    total: false
+  })
+
+  const slots = defineSlots<{
+    /** A hint line under the rows, such as what a click on the plot does. */
+    footer?(): unknown
+  }>()
+
   const attrs = useAttrs()
   const ctx = useChartContext()
+  const { t } = useTranslate({ chart: en.chart })
   const moving = ref(false)
 
   watch(
@@ -43,6 +60,12 @@
       x,
       y,
       side,
+      total: ctx.formatValue(
+        ctx.visibleSeries.value.reduce((sum, entry) => {
+          const value = entry.values[index]
+          return isFiniteNumber(value) ? sum + value : sum
+        }, 0)
+      ),
       rows: ctx.visibleSeries.value.map((entry) => {
         const value = entry.values[index]
         return {
@@ -95,6 +118,23 @@
               {{ row.value }}
             </span>
           </span>
+        </span>
+        <span
+          v-if="total"
+          :data-testid="`${testId}__total`"
+          class="flex items-center gap-(--spacing-xs) border-t border-(--chart-tooltip-border) px-(--spacing-sm) py-(--spacing-xs)"
+        >
+          <span class="min-w-0 flex-1 truncate text-label-md">{{ t('chart.total') }}</span>
+          <span class="shrink-0 ps-(--spacing-sm) text-label-code-md tabular-nums">
+            {{ readout.total }}
+          </span>
+        </span>
+        <span
+          v-if="slots.footer"
+          :data-testid="`${testId}__footer`"
+          class="border-t border-(--chart-tooltip-border) px-(--spacing-sm) py-(--spacing-xs) text-body-sm text-(--chart-tooltip-muted)"
+        >
+          <slot name="footer" />
         </span>
       </div>
     </div>

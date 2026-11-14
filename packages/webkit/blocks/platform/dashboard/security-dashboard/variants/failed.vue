@@ -7,6 +7,7 @@
   import PageHeader from '@aziontech/webkit/page-header'
   import StatTile from '@aziontech/webkit/stat-tile'
   import Tag from '@aziontech/webkit/tag'
+  import { toast } from '@aziontech/webkit/toast'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { ref } from 'vue'
@@ -51,6 +52,69 @@
 
   const form = ref('line')
   const emit = defineEmits<{ retry: [event: MouseEvent] }>()
+
+  interface CardQuery {
+    dataset: string
+    fields: string[]
+    orderBy: string
+  }
+
+  const periodStart = '2026-11-09T00:00:00Z'
+  const periodEnd = '2026-11-09T23:59:59Z'
+
+  const cardQuery = (report: CardQuery) =>
+    [
+      'query {',
+      `  ${report.dataset}(`,
+      '    limit: 5000',
+      '    aggregate: { sum: requests }',
+      `    filter: { tsRange: { begin: "${periodStart}", end: "${periodEnd}" } }`,
+      `    orderBy: [${report.orderBy}]`,
+      '  ) {',
+      ...report.fields.map((field) => `    ${field}`),
+      '  }',
+      '}'
+    ].join('\n')
+
+  const copyQuery = async (report: CardQuery) => {
+    try {
+      await globalThis.navigator.clipboard.writeText(cardQuery(report))
+      toast.success('Query copied.', {
+        description: 'Paste it into any GraphQL client that sends your token.'
+      })
+    } catch {
+      toast.error('The query could not be copied.')
+    }
+  }
+
+  type CardId = 'matched' | 'categories' | 'countries' | 'ips'
+
+  const queries: Record<CardId, CardQuery> = {
+    matched: {
+      dataset: 'securityMetrics',
+      fields: ['ts', 'action', 'requests'],
+      orderBy: 'ts_ASC'
+    },
+    categories: {
+      dataset: 'securityMetrics',
+      fields: ['attackCategory', 'requests'],
+      orderBy: 'requests_DESC'
+    },
+    countries: {
+      dataset: 'securityMetrics',
+      fields: ['country', 'requests'],
+      orderBy: 'requests_DESC'
+    },
+    ips: {
+      dataset: 'securityMetrics',
+      fields: ['remoteAddress', 'asn', 'country', 'attackCategory', 'requests'],
+      orderBy: 'requests_DESC'
+    }
+  }
+
+  const onCardOption = (id: CardId, value: string | number) => {
+    if (value === 'query') copyQuery(queries[id])
+  }
 </script>
 
 <template>
@@ -140,9 +204,13 @@
                   kind="transparent"
                   size="small"
                   aria-label="Expand Matched requests over time"
+                  disabled
                 />
               </Tooltip>
-              <DropdownMenu placement="bottom-end">
+              <DropdownMenu
+                placement="bottom-end"
+                @select="(_event, value) => onCardOption('matched', value)"
+              >
                 <DropdownMenu.Trigger>
                   <IconButton
                     icon="pi pi-ellipsis-h"
@@ -159,6 +227,7 @@
                   <DropdownMenu.Option
                     value="export"
                     label="Export CSV"
+                    disabled
                   />
                 </DropdownMenu.Group>
               </DropdownMenu>
@@ -227,9 +296,13 @@
                   kind="transparent"
                   size="small"
                   aria-label="Expand Blocked requests by attack category"
+                  disabled
                 />
               </Tooltip>
-              <DropdownMenu placement="bottom-end">
+              <DropdownMenu
+                placement="bottom-end"
+                @select="(_event, value) => onCardOption('categories', value)"
+              >
                 <DropdownMenu.Trigger>
                   <IconButton
                     icon="pi pi-ellipsis-h"
@@ -246,6 +319,7 @@
                   <DropdownMenu.Option
                     value="export"
                     label="Export CSV"
+                    disabled
                   />
                 </DropdownMenu.Group>
               </DropdownMenu>
@@ -289,9 +363,13 @@
                   kind="transparent"
                   size="small"
                   aria-label="Expand Blocked requests by country"
+                  disabled
                 />
               </Tooltip>
-              <DropdownMenu placement="bottom-end">
+              <DropdownMenu
+                placement="bottom-end"
+                @select="(_event, value) => onCardOption('countries', value)"
+              >
                 <DropdownMenu.Trigger>
                   <IconButton
                     icon="pi pi-ellipsis-h"
@@ -308,6 +386,7 @@
                   <DropdownMenu.Option
                     value="export"
                     label="Export CSV"
+                    disabled
                   />
                 </DropdownMenu.Group>
               </DropdownMenu>
@@ -352,9 +431,13 @@
                   kind="transparent"
                   size="small"
                   aria-label="Expand Top source IPs by blocked requests"
+                  disabled
                 />
               </Tooltip>
-              <DropdownMenu placement="bottom-end">
+              <DropdownMenu
+                placement="bottom-end"
+                @select="(_event, value) => onCardOption('ips', value)"
+              >
                 <DropdownMenu.Trigger>
                   <IconButton
                     icon="pi pi-ellipsis-h"
@@ -371,6 +454,7 @@
                   <DropdownMenu.Option
                     value="export"
                     label="Export CSV"
+                    disabled
                   />
                 </DropdownMenu.Group>
               </DropdownMenu>
