@@ -22,7 +22,9 @@
 
   const attrs = useAttrs()
 
-  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'select-trigger')
+  const testId = computed(
+    () => (attrs['data-testid'] as string | undefined) ?? 'input-select-trigger'
+  )
   const triggerId = computed(() => (attrs['id'] as string | undefined) ?? ctx.controlId.value)
   const describedBy = computed(
     () => (attrs['aria-describedby'] as string | undefined) ?? ctx.describedBy.value

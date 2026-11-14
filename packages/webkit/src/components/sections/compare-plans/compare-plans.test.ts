@@ -60,7 +60,9 @@ const planHeads = (container: Element) =>
   Array.from(container.querySelectorAll('thead th[scope="col"]')).slice(1) as HTMLElement[]
 
 afterEach(() => {
-  document.body.querySelectorAll('[data-testid="select-content"]').forEach((el) => el.remove())
+  document.body
+    .querySelectorAll('[data-testid="input-select-content"]')
+    .forEach((el) => el.remove())
 })
 
 describe('ComparePlans', () => {
@@ -186,7 +188,7 @@ describe('ComparePlans', () => {
   it('narrows the picker by its search field and reports no match', async () => {
     const { getByTestId } = band()
 
-    await fireEvent.click(getByTestId('select-trigger'))
+    await fireEvent.click(getByTestId('input-select-trigger'))
     const search = await waitFor(() => {
       const field = document.body.querySelector<HTMLInputElement>(
         'input[aria-label="Search plan being compared"]'
@@ -195,8 +197,8 @@ describe('ComparePlans', () => {
       return field as HTMLInputElement
     })
     const optionNames = () =>
-      Array.from(document.body.querySelectorAll('[data-testid="select-option"]')).map((node) =>
-        node.textContent?.trim()
+      Array.from(document.body.querySelectorAll('[data-testid="input-select-option"]')).map(
+        (node) => node.textContent?.trim()
       )
 
     await fireEvent.update(search, 'ent')
@@ -231,10 +233,10 @@ describe('ComparePlans', () => {
       true
     ])
 
-    await fireEvent.click(getByTestId('select-trigger'))
-    const option = Array.from(document.body.querySelectorAll('[data-testid="select-option"]')).find(
-      (node) => node.textContent?.trim() === 'Enterprise'
-    ) as HTMLElement
+    await fireEvent.click(getByTestId('input-select-trigger'))
+    const option = Array.from(
+      document.body.querySelectorAll('[data-testid="input-select-option"]')
+    ).find((node) => node.textContent?.trim() === 'Enterprise') as HTMLElement
     await fireEvent.click(option)
 
     expect(planHeads(container).map((head) => head.hasAttribute('data-folded'))).toEqual([

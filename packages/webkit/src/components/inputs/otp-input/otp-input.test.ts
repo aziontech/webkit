@@ -14,9 +14,9 @@ import OtpInput from './otp-input.vue'
 afterEach(() => cleanup())
 
 const boxes = (): HTMLElement[] =>
-  Array.from(document.body.querySelectorAll<HTMLElement>('[data-testid="otp-input__box"]'))
+  Array.from(document.body.querySelectorAll<HTMLElement>('[data-testid="input-otp-input__box"]'))
 const field = (): HTMLInputElement =>
-  document.body.querySelector<HTMLInputElement>('[data-testid="otp-input__input"]')!
+  document.body.querySelector<HTMLInputElement>('[data-testid="input-otp-input__input"]')!
 
 const mountBound = (props: Record<string, unknown> = {}) => {
   const value = ref('')
@@ -120,7 +120,7 @@ describe('OtpInput', () => {
 
   it('draws a separator between groups', () => {
     render(OtpInput, { props: { group: 3 } })
-    const separators = document.body.querySelectorAll('[data-testid="otp-input__separator"]')
+    const separators = document.body.querySelectorAll('[data-testid="input-otp-input__separator"]')
     expect(separators).toHaveLength(1)
     expect(separators[0]).toHaveAttribute('aria-hidden', 'true')
   })
@@ -165,7 +165,7 @@ describe('OtpInput', () => {
 
   it('keeps the code left to right under rtl', () => {
     render({ render: () => h('div', { dir: 'rtl' }, [h(OtpInput, { modelValue: '12' })]) })
-    const root = document.body.querySelector('[data-testid="otp-input"]')!
+    const root = document.body.querySelector('[data-testid="input-otp-input"]')!
     expect(root).toHaveAttribute('dir', 'ltr')
     expect(boxes()[0]!.compareDocumentPosition(boxes()[1]!)).toBe(Node.DOCUMENT_POSITION_FOLLOWING)
     expect(boxes()[0]!.textContent).toBe('1')
@@ -189,7 +189,7 @@ describe('OtpInput', () => {
   it('disables the input', () => {
     render(OtpInput, { props: { disabled: true } })
     expect(field()).toBeDisabled()
-    expect(document.body.querySelector('[data-testid="otp-input"]')).toHaveAttribute(
+    expect(document.body.querySelector('[data-testid="input-otp-input"]')).toHaveAttribute(
       'data-disabled'
     )
   })

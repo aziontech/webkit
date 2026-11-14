@@ -94,7 +94,7 @@
   const { t } = useTranslate({ phoneInput: en.phoneInput })
   const generatedId = useId()
 
-  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'phone-input')
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'input-phone-input')
 
   const {
     controlId,

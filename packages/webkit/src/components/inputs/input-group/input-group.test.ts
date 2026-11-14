@@ -257,10 +257,10 @@ describe('InputGroup', () => {
     it('renders the WithSelect story with a closed combobox trigger showing USD', () => {
       const { getByTestId } = render(WithSelect)
 
-      const trigger = getByTestId('select-trigger')
+      const trigger = getByTestId('input-select-trigger')
       expect(trigger.getAttribute('role')).toBe('combobox')
       expect(trigger.getAttribute('aria-expanded')).toBe('false')
-      expect(getByTestId('select-trigger__value').textContent?.trim()).toBe('USD')
+      expect(getByTestId('input-select-trigger__value').textContent?.trim()).toBe('USD')
     })
 
     it('renders the Sizes story with one group per size, each carrying data-size', () => {

@@ -78,7 +78,7 @@
 
   provide(fieldContextKey, null)
 
-  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'select')
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'input-select')
 
   const rootAttrs = computed(() => {
     const { 'aria-label': _label, 'aria-labelledby': _labelledby, ...rest } = attrs

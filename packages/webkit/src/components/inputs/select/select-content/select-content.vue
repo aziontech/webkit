@@ -19,7 +19,9 @@
 
   const attrs = useAttrs()
 
-  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'select-content')
+  const testId = computed(
+    () => (attrs['data-testid'] as string | undefined) ?? 'input-select-content'
+  )
 
   const root = ref<globalThis.HTMLDivElement | null>(null)
   const lazy = ref<{ revealAll: () => void; hasHidden: () => boolean } | null>(null)

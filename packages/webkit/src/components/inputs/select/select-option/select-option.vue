@@ -35,7 +35,9 @@
 
   const attrs = useAttrs()
 
-  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'select-option')
+  const testId = computed(
+    () => (attrs['data-testid'] as string | undefined) ?? 'input-select-option'
+  )
 
   const selected = computed(() => ctx.isSelected(props.value))
 

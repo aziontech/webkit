@@ -65,7 +65,9 @@ const tierHeads = (container: Element) =>
   Array.from(container.querySelectorAll('thead th[scope="col"]')).slice(1) as HTMLElement[]
 
 afterEach(() => {
-  document.body.querySelectorAll('[data-testid="select-content"]').forEach((el) => el.remove())
+  document.body
+    .querySelectorAll('[data-testid="input-select-content"]')
+    .forEach((el) => el.remove())
 })
 
 describe('CompareSupportTiers', () => {
@@ -169,10 +171,10 @@ describe('CompareSupportTiers', () => {
       true
     ])
 
-    await fireEvent.click(getByTestId('select-trigger'))
-    const option = Array.from(document.body.querySelectorAll('[data-testid="select-option"]')).find(
-      (node) => node.textContent?.trim() === 'Developer'
-    ) as HTMLElement
+    await fireEvent.click(getByTestId('input-select-trigger'))
+    const option = Array.from(
+      document.body.querySelectorAll('[data-testid="input-select-option"]')
+    ).find((node) => node.textContent?.trim() === 'Developer') as HTMLElement
     await fireEvent.click(option)
 
     expect(tierHeads(container).map((head) => head.hasAttribute('data-folded'))).toEqual([
