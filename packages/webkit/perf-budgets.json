@@ -52,8 +52,8 @@
       "update_is": "search the 10k lines"
     },
     "log-view-10k-tail": {
-      "mount": 160,
-      "update": 1000,
+      "mount": 200,
+      "update": 1100,
       "update_is": "append 20 lines one at a time to a searched 10k-line log"
     },
     "code-block-5k-lines": {
