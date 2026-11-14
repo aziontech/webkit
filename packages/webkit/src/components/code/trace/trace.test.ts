@@ -3,6 +3,8 @@ import { describe, expect, it } from 'vitest'
 import { nextTick } from 'vue'
 
 import Default from '../../../../examples/trace/default.vue'
+import Empty from '../../../../examples/trace/empty.vue'
+import Loading from '../../../../examples/trace/loading.vue'
 import Selected from '../../../../examples/trace/selected.vue'
 import WithError from '../../../../examples/trace/with-error.vue'
 import { BUILT_IN_CATALOGS, provideLocale } from '../../../composables/use-locale'
@@ -146,6 +148,49 @@ describe('Trace', () => {
     expect(view.getByTestId('code-trace__empty').textContent).toContain('No spans in this trace.')
   })
 
+  it('keeps the selection itself when no v-model is bound', async () => {
+    const view = render(Trace, { props: { spans } })
+    const fetchRow = rows(view)[1] as HTMLElement
+    await fireEvent.click(fetchRow)
+    expect(fetchRow.getAttribute('aria-selected')).toBe('true')
+    expect(view.getByRole('region', { name: 'Details of fetch' })).toBeTruthy()
+  })
+
+  it('renders the empty and no-match states through EmptyState', async () => {
+    const view = render(Trace, { props: { spans } })
+    await fireEvent.update(view.getByRole('textbox', { name: 'Search spans' }), 'nothing')
+    const empty = view.getByTestId('code-trace__empty')
+    expect(within(empty).getByTestId('feedback-empty-state')).toBeTruthy()
+    expect(within(empty).getByRole('button', { name: 'Clear search' })).toBeTruthy()
+  })
+
+  it('shows placeholder rows in a status region while loading', () => {
+    const view = render(Trace, { props: { spans, loading: true, selected: 'b' } })
+    expect(view.getByTestId('code-trace').getAttribute('aria-busy')).toBe('true')
+    expect(view.getByRole('status', { name: 'Loading spans' })).toBeTruthy()
+    expect(view.getAllByTestId('code-trace__skeleton').length).toBeGreaterThan(0)
+    expect(view.queryByRole('treegrid')).toBeNull()
+    expect(view.queryByRole('region')).toBeNull()
+    expect((view.getByRole('textbox', { name: 'Search spans' }) as HTMLInputElement).disabled).toBe(
+      true
+    )
+  })
+
+  it('drops the outer border when bordered is off', () => {
+    const on = render(Trace, { props: { spans } })
+    expect(on.getByTestId('code-trace').hasAttribute('data-bordered')).toBe(true)
+    on.unmount()
+    const off = render(Trace, { props: { spans, bordered: false } })
+    expect(off.getByTestId('code-trace').hasAttribute('data-bordered')).toBe(false)
+  })
+
+  it('takes the consumer data-testid over the fallback', () => {
+    const view = render(Trace, { props: { spans }, attrs: { 'data-testid': 'run-trace' } })
+    expect(view.getByTestId('run-trace')).toBeTruthy()
+    expect(view.queryByTestId('code-trace')).toBeNull()
+    expect(view.getAllByTestId('run-trace__row')).toHaveLength(4)
+  })
+
   it('mirrors under rtl: bars at the inline start and swapped arrows', async () => {
     const view = render({
       components: { Trace },
@@ -183,7 +228,7 @@ describe('Trace', () => {
   })
 
   it('has no axe violations in its examples', async () => {
-    for (const example of [Default, WithError, Selected]) {
+    for (const example of [Default, WithError, Selected, Empty, Loading]) {
       const view = render(example)
       await expectNoA11yViolations(view.container)
       view.unmount()

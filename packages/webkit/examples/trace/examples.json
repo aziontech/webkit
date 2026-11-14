@@ -16,6 +16,16 @@
       "name": "Selected",
       "summary": "A selected span with its details: service, start, duration, share of the run and its attributes (method, URL, status code).",
       "file": "selected.vue"
+    },
+    {
+      "name": "Empty",
+      "summary": "A trace with no spans shows the package empty state. Searching for a name no span has shows the no-match state with a Clear search action.",
+      "file": "empty.vue"
+    },
+    {
+      "name": "Loading",
+      "summary": "`loading` shows placeholder rows in a status region and disables the search until the spans arrive.",
+      "file": "loading.vue"
     }
   ]
 }

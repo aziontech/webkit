@@ -1044,6 +1044,7 @@ export const es: Messages = {
     noMatch: 'Ningún span coincide con “{query}”.',
     clearSearch: 'Borrar búsqueda',
     empty: 'No hay spans en esta traza.',
+    loading: 'Cargando spans',
     details: 'Detalles de {name}',
     close: 'Cerrar',
     copyName: 'Copiar nombre del span',

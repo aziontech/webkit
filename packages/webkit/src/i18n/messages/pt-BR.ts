@@ -1044,6 +1044,7 @@ export const ptBR: Messages = {
     noMatch: 'Nenhum span corresponde a “{query}”.',
     clearSearch: 'Limpar busca',
     empty: 'Nenhum span neste rastreamento.',
+    loading: 'Carregando spans',
     details: 'Detalhes de {name}',
     close: 'Fechar',
     copyName: 'Copiar nome do span',

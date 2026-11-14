@@ -3,11 +3,11 @@ name: trace
 category: code
 structure: monolithic
 status: implemented
-spec_version: 1
+spec_version: 2
 template: 2
-checksum: 9d99e1ee1f5c7f08729a66626f1ef3e141912ece093502f9b3c12372dfc15968
+checksum: 171261780e20ca66c3ee5b5a358bb55265782c995fa9ede6a119c9cdaaf14b31
 created: 2026-11-11
-last_updated: 2026-11-11
+last_updated: 2026-11-14
 ---
 
 # Trace — Component Spec
@@ -80,16 +80,21 @@ A span waterfall: one row per span of a run (a function invocation, a request th
 | Prop        | Type          | Default | Required | JSDoc                                                                                                                                 |
 | ----------- | ------------- | ------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------- |
 | `spans`     | `TraceSpan[]` | `[]`    | false    | Spans of the trace, each `{ id, parentId?, name, service?, icon?, start, duration, status?, message?, attributes? }` in milliseconds. |
-| `selected`  | `string`      | `''`    | false    | Id of the span whose details show under the waterfall. Supports v-model:selected.                                                     |
 | `ariaLabel` | `string`      | `''`    | false    | Accessible name of the waterfall. Empty uses the locale catalog.                                                                      |
+| `bordered`  | `boolean`     | `true`  | false    | Draws the outer border and radius. Off for a trace inside a card or panel that has its own.                                           |
+| `loading`   | `boolean`     | `false` | false    | Shows placeholder rows while the spans load; search and selection wait.                                                               |
 
 Types (exported from the component): `TraceSpan = { id: string; parentId?: string; name: string; service?: string; icon?: string; start: number; duration: number; status?: 'ok' | 'error' | 'running'; message?: string; attributes?: Record<string, string | number> }`.
 
+## v-model
+
+| Model              | Type     | Default | Emits             | Notes                                                                                                                                                                                                       |
+| ------------------ | -------- | ------- | ----------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `v-model:selected` | `string` | `''`    | `update:selected` | Id of the span whose details show under the waterfall, via `defineModel('selected')`. A row was selected, selected again (empty: deselected), or Close used. Unbound, the trace keeps the selection itself. |
+
 ## Events
 
-| Event             | Payload  | Notes                                                                  |
-| ----------------- | -------- | ---------------------------------------------------------------------- |
-| `update:selected` | `string` | A row was selected, selected again (empty: deselected), or Close used. |
+_None of its own._ The selection above is the only emit.
 
 ## Slots
 
@@ -97,9 +102,9 @@ _none_ — the search, the axis, the rows and the details are fixed parts.
 
 ## States
 
-- Visual states: `default`, `hover` (row), `focus-visible` (row), `selected` (row and details band), `collapsed` / `expanded` (parent rows), `searching` (rows narrowed, every match's ancestors shown), `empty` (no spans, or no match with Clear search).
+- Visual states: `default`, `hover` (row), `focus-visible` (row), `selected` (row and details band), `collapsed` / `expanded` (parent rows), `searching` (rows narrowed, every match's ancestors shown), `loading` (placeholder rows in a `role="status"` region, `aria-busy` on the root, search disabled, no details), `empty` (the package `EmptyState`, small: no spans, or no match with a Clear search action).
 - Bar tones on `data-tone`: `root` (info), `ok` (success), `error` (danger), `running` (warning).
-- `data-selected` on the selected row; `aria-expanded` on parent rows.
+- `data-selected` on the selected row; `aria-expanded` on parent rows; `data-bordered` and `data-loading` on the root mirror their props.
 
 ## Motion & Animations
 
@@ -143,6 +148,7 @@ _none_ — the search, the axis, the rows and the details are fixed parts.
 | `trace.noMatch`                                      | No span matches “{query}”.                       | —             |
 | `trace.clearSearch`                                  | Clear search                                     | —             |
 | `trace.empty`                                        | No spans in this trace.                          | —             |
+| `trace.loading`                                      | Loading spans                                    | —             |
 | `trace.details`                                      | Details of {name}                                | —             |
 | `trace.close`                                        | Close                                            | —             |
 | `trace.copyName`                                     | Copy span name                                   | —             |
@@ -170,8 +176,8 @@ _none_ — the search, the axis, the rows and the details are fixed parts.
 
 ## Performance
 
-- Bundle budget: 20 KB gzip for `./trace` (it carries `input`, `button`, `copy-button` and `tag`) in `.size-limit.json`.
-- Runtime budget: the tree and the visible rows recompute per search keystroke or toggle; a few hundred spans stay under one frame.
+- Bundle budget: 14.75 KB gzip for the initial chunk of `./trace` (it carries `input`, `button`, `copy-button`, `tag`, `empty-state` and `skeleton`) in `.size-limit.json`.
+- Runtime budget: the tree and the visible rows recompute per search keystroke or toggle. The `Trace with 1k spans: mount and search` scenario of `performance.test.ts` holds it to its budget in `perf-budgets.json`; the trace length is a reduce, never a spread, so very long traces do not hit the argument limit.
 - Heavy parts: none; no virtualisation (a trace with thousands of spans should be paged by the product).
 
 ## Examples
@@ -179,6 +185,8 @@ _none_ — the search, the axis, the rows and the details are fixed parts.
 - Default — a successful run, every span expanded.
 - WithError — a failed run with the error bubbling to its parents.
 - Selected — a selected span with its details and attributes.
+- Empty — a trace with no spans, and the no-match state with Clear search; justified because both states use EmptyState.
+- Loading — placeholder rows while the spans load; justified because `loading` is a state the consumer triggers.
 
 ## Constraints — DO NOT
 

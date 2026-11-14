@@ -1044,6 +1044,7 @@ export const trace = {
   noMatch: 'No span matches “{query}”.',
   clearSearch: 'Clear search',
   empty: 'No spans in this trace.',
+  loading: 'Loading spans',
   details: 'Details of {name}',
   close: 'Close',
   copyName: 'Copy span name',
