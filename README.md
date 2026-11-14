@@ -10,6 +10,23 @@
 
 The shared front-end foundation for Azion products. Webkit ships the Vue components, design tokens, and icon fonts that keep Console, Marketplace, and partner surfaces visually and behaviorally consistent.
 
+## The goal: an agentic AI WebKit
+
+WebKit is built so that **AI agents build Azion screens, and people review them**. Every part of
+the package exists to make an agent's first attempt correct:
+
+- **Agents find the right piece instead of guessing.** The `webkit` MCP server, `catalog.json` and
+  `webkit search` answer "which component or screen fits this job" from the real package.
+- **Agents start from reviewed screens, not from scratch.** Blocks (`webkit add <block-id>`) are
+  finished, accessible screens an agent copies and only changes the content of.
+- **Machines check the result, not reviewers' memory.** Lint rules, `webkit check`, type checks
+  and browser tests reject off-standard code in the agent's own loop, before a person looks at it.
+- **One way to do each thing.** Same prop names, event shapes and file layout everywhere, so what
+  an agent learns from one component holds for all of them.
+
+Old or unused parts are removed rather than kept for compatibility. Breaking changes ship as a new
+major version (v6), with `webkit migrate` to move existing apps across.
+
 Every component follows one [component lifecycle](./CONTRIBUTING.md#component-lifecycle) — Add, Change, Deprecate, Remove — spec first, enforced by CI gates.
 
 ## For AI agents: start here
