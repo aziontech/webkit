@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import { useElementSize } from '@vueuse/core'
-  import { computed, ref, useAttrs, watch } from 'vue'
+  import { computed, ref, useAttrs, useId, watch } from 'vue'
 
   import { logicalArrowKey, useDirection } from '../../../composables/use-direction'
   import { useTranslate } from '../../../composables/use-locale/use-translate'
@@ -14,17 +14,21 @@
   export interface TrackerItem {
     /** Stable key for the period. */
     id?: string
-    /** State of the period. No severity renders a neutral no-data block. */
+    /** State of the period. No status renders a neutral no-data block. */
+    status?: ChartStatus
+    /** State of the period. @deprecated since 6.0 — use `status`. Removed in 7.0. */
     severity?: ChartStatus
     /** Period plus state, read in the readout and announced to assistive tech. */
     label: string
   }
 
   interface Props {
-    /** One block per period, oldest first; each item is { id?: string; severity?: ChartStatus; label: string }. No severity renders a neutral no-data block. */
+    /** One block per period, oldest first; each item is { id?: string; status?: ChartStatus; label: string }. No status renders a neutral no-data block. */
     items?: TrackerItem[]
     /** Renders a Skeleton strip in place of the blocks. */
     loading?: boolean
+    /** Error message; when set, the strip renders it inline in place of the blocks. */
+    error?: string
     /** Accessible name of the strip. */
     ariaLabel?: string
   }
@@ -32,8 +36,12 @@
   const props = withDefaults(defineProps<Props>(), {
     items: () => [],
     loading: false,
+    error: '',
     ariaLabel: ''
   })
+
+  /** Index of the active block, or null. Supports v-model:active-index to sync with a sibling chart. */
+  const activeIndex = defineModel<number | null>('activeIndex', { default: null })
 
   const attrs = useAttrs()
   const dir = useDirection()
@@ -41,21 +49,35 @@
   const stripRef = ref<globalThis.HTMLDivElement | null>(null)
   const { width: stripWidth } = useElementSize(stripRef)
 
-  const activeIndex = ref<number | null>(null)
+  const uid = useId()
+  const summaryId = `${uid}-summary`
   const shownIndex = ref<number | null>(null)
   const moving = ref(false)
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'chart-tracker')
-  const count = computed(() => (props.loading ? 0 : props.items.length))
-  const isEmpty = computed(() => !props.loading && props.items.length === 0)
+  const hasError = computed(() => !props.loading && props.error.length > 0)
+  const count = computed(() => (props.loading || hasError.value ? 0 : props.items.length))
+  const isEmpty = computed(() => !props.loading && !hasError.value && props.items.length === 0)
+  const statusOf = (item: TrackerItem): ChartStatus | undefined => item.status ?? item.severity
+
+  const WORST: ChartStatus[] = ['danger', 'warning', 'info', 'success']
+  const summary = computed<string>(() => {
+    if (props.loading || hasError.value || isEmpty.value) return ''
+    const statuses = props.items.map(statusOf)
+    const worst = WORST.find((status) => statuses.includes(status))
+    const worstItem = worst ? props.items.find((item) => statusOf(item) === worst) : undefined
+    return worstItem
+      ? t('tracker.summaryWorst', { count: props.items.length, label: worstItem.label })
+      : t('tracker.summary', { count: props.items.length })
+  })
 
   const blocks = computed(() =>
     isEmpty.value
       ? [{ key: 'empty', severity: 'none', color: colorToken('other') }]
       : props.items.map((item, index) => ({
           key: item.id ?? String(index),
-          severity: item.severity ?? 'none',
-          color: colorToken(item.severity ?? 'other')
+          severity: statusOf(item) ?? 'none',
+          color: colorToken(statusOf(item) ?? 'other')
         }))
   )
 
@@ -132,6 +154,8 @@
     role="group"
     :aria-roledescription="t('tracker.roleDescription')"
     :aria-label="ariaLabel || undefined"
+    :aria-describedby="summary ? summaryId : undefined"
+    :data-error="hasError || null"
     tabindex="0"
     class="relative w-full min-w-0 rounded-(--shape-elements) outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-surface)"
     @keydown="onKeydown"
@@ -142,6 +166,18 @@
       height="2rem"
       :data-testid="`${testId}__skeleton`"
     />
+    <p
+      v-else-if="hasError"
+      role="alert"
+      :data-testid="`${testId}__error`"
+      class="flex h-8 items-center gap-(--spacing-xs) rounded-(--shape-elements) border border-(--danger-border) bg-(--danger) px-(--spacing-sm) text-label-sm text-(--danger-contrast)"
+    >
+      <i
+        class="pi pi-exclamation-triangle shrink-0"
+        aria-hidden="true"
+      />
+      <span class="min-w-0 truncate">{{ error }}</span>
+    </p>
     <template v-else>
       <div
         v-if="readout"
@@ -173,6 +209,26 @@
         />
       </div>
     </template>
+    <p
+      v-if="summary"
+      :id="summaryId"
+      class="sr-only"
+      :data-testid="`${testId}__summary`"
+    >
+      {{ summary }}
+    </p>
+    <ul
+      v-if="!loading && !hasError && items.length"
+      class="sr-only"
+      :data-testid="`${testId}__list`"
+    >
+      <li
+        v-for="(item, index) in items"
+        :key="item.id ?? String(index)"
+      >
+        {{ item.label }}
+      </li>
+    </ul>
     <p
       aria-live="polite"
       class="sr-only"

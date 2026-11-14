@@ -1085,6 +1085,11 @@ export const es: Messages = {
   },
   tracker: {
     noData: 'Sin datos',
+    summary: { one: '{count} periodo', other: '{count} periodos' },
+    summaryWorst: {
+      one: '{count} periodo. Peor: {label}',
+      other: '{count} periodos. Peor: {label}'
+    },
     roleDescription: 'historial de estado'
   },
   tree: {

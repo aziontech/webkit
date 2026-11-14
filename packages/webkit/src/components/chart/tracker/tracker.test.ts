@@ -150,6 +150,48 @@ describe('Tracker', () => {
     expect(blocks[0]?.hasAttribute('data-active')).toBe(false)
   })
 
+  it('reads the data in browse mode: a summary with the worst state and one entry per period', () => {
+    const view = mount()
+    const root = view.getByTestId('chart-tracker')
+    const summary = view.getByTestId('chart-tracker__summary')
+    expect(root.getAttribute('aria-describedby')).toBe(summary.id)
+    expect(summary.textContent?.trim()).toBe('4 periods. Worst: Nov 6 · Partial outage')
+    expect(
+      Array.from(view.getByTestId('chart-tracker__list').querySelectorAll('li')).map((li) =>
+        li.textContent?.trim()
+      )
+    ).toEqual(week.map((item) => item.label))
+  })
+
+  it('reads the status field, and still the deprecated severity', () => {
+    const view = render(Tracker, {
+      props: {
+        items: [
+          { status: 'danger', label: 'A' },
+          { severity: 'warning', label: 'B' }
+        ]
+      }
+    })
+    expect(
+      view.getAllByTestId('chart-tracker__block').map((block) => block.dataset['severity'])
+    ).toEqual(['danger', 'warning'])
+  })
+
+  it('syncs the active block through v-model:active-index', async () => {
+    const view = mount({ activeIndex: 2 })
+    expect(activeIndexOf(view)).toBe(2)
+    const strip = view.getByTestId('chart-tracker')
+    await fireEvent.keyDown(strip, { key: 'ArrowRight' })
+    expect(view.emitted()['update:activeIndex']?.at(-1)).toEqual([3])
+  })
+
+  it('shows the error inline in place of the blocks', () => {
+    const view = mount({ error: 'Uptime could not be loaded.' })
+    expect(view.getByRole('alert').textContent).toContain('Uptime could not be loaded.')
+    expect(view.queryAllByTestId('chart-tracker__block')).toHaveLength(0)
+    expect(view.queryByTestId('chart-tracker__summary')).toBeNull()
+  })
+
   it('has no axe violations on the default, loading and empty renders', async () => {
     const defaultView = mount()
     await fireEvent.keyDown(defaultView.getByTestId('chart-tracker'), { key: 'Home' })

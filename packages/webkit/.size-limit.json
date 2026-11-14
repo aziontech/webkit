@@ -938,7 +938,7 @@
   {
     "name": "tracker",
     "path": "src/components/chart/tracker/tracker.vue",
-    "limit": "5.1 KB"
+    "limit": "5.75 KB"
   },
   {
     "name": "severity-tag",

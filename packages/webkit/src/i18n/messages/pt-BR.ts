@@ -1085,6 +1085,11 @@ export const ptBR: Messages = {
   },
   tracker: {
     noData: 'Sem dados',
+    summary: { one: '{count} período', other: '{count} períodos' },
+    summaryWorst: {
+      one: '{count} período. Pior: {label}',
+      other: '{count} períodos. Pior: {label}'
+    },
     roleDescription: 'histórico de status'
   },
   tree: {

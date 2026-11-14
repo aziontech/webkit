@@ -1073,6 +1073,8 @@ export const trace = {
 
 export const tracker = {
   noData: 'No data',
+  summary: { one: '{count} period', other: '{count} periods' },
+  summaryWorst: { one: '{count} period. Worst: {label}', other: '{count} periods. Worst: {label}' },
   roleDescription: 'status history'
 } as const
 
