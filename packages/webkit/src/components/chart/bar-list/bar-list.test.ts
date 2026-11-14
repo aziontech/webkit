@@ -132,9 +132,12 @@ describe('BarList', () => {
     )
   })
 
-  it('renders the error Alert in place of the rows, and the error slot over it', () => {
+  it('renders the error Alert in place of the rows, and the error slot over it', async () => {
     const view = render(BarList, { props: { items: ITEMS, error: 'Timed out' } })
     expect(view.getByTestId('chart-bar-list__error').textContent).toContain('Timed out')
+    expect(view.getByRole('alert')).toHaveTextContent('Timed out')
+    expect(view.getByRole('list').children[0]?.tagName).toBe('LI')
+    await expectNoA11yViolations(view.container)
     expect(view.queryAllByTestId('chart-bar-list__row')).toHaveLength(0)
     expect(view.getByTestId('chart-bar-list').hasAttribute('data-error')).toBe(true)
     view.unmount()
