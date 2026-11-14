@@ -73,6 +73,9 @@ describe('SettingsSection', () => {
     expect(queryByTestId('layout-settings-section__trigger')).toBeNull()
     expect(getByTestId('layout-settings-section__body').hasAttribute('data-open')).toBe(true)
     expect(getByTestId('layout-settings-section__body').hasAttribute('inert')).toBe(false)
+    expect(getByTestId('layout-settings-section__body').hasAttribute('data-collapsible')).toBe(
+      false
+    )
   })
 
   it('toggles a collapsible band and emits update:open', async () => {
@@ -87,6 +90,7 @@ describe('SettingsSection', () => {
     expect(trigger.getAttribute('aria-controls')).toBe(body.id)
     expect(body.hasAttribute('inert')).toBe(true)
     expect(body.getAttribute('aria-hidden')).toBe('true')
+    expect(body.hasAttribute('data-collapsible')).toBe(true)
 
     await fireEvent.click(trigger)
 

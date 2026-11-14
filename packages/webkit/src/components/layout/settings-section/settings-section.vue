@@ -144,9 +144,10 @@
       :id="regionId"
       :data-testid="`${testId}__body`"
       :data-open="expanded || null"
+      :data-collapsible="collapsible || null"
       :inert="!expanded || undefined"
       :aria-hidden="!expanded || undefined"
-      class="grid min-w-0 grid-rows-[0fr] transition-[grid-template-rows] duration-moderate-02 ease-expressive-entrance data-open:grid-rows-[1fr] motion-reduce:transition-none"
+      class="min-w-0 transition-[grid-template-rows] duration-moderate-02 ease-expressive-entrance data-collapsible:grid data-collapsible:grid-rows-[0fr] data-collapsible:data-open:grid-rows-[1fr] motion-reduce:transition-none"
     >
       <div
         :data-collapsible="collapsible || null"

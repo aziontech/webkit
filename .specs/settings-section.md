@@ -3,10 +3,10 @@ name: settings-section
 category: layout
 structure: monolithic
 status: implemented
-checksum: 5061b2867990bdd34a7682718f49fa174f99994e869cc2c2f254ff29b017ae1a
+checksum: ebbc0145e394f757f02329ff9f71e5932b383f545f346fad9e71733c55c22497
 spec_version: 1
 created: 2026-11-10
-last_updated: 2026-11-11
+last_updated: 2026-11-14
 ---
 
 # SettingsSection — Component Spec
@@ -111,6 +111,7 @@ A band of a settings page: an h2 with a `Hint` glyph that carries the one-senten
 - Visual states: `default`, `hover` / `focus-within` (reveals the copy-link button)
 - `data-state` on the root: `open` | `closed` when `collapsible`
 - `data-open` on the body mirrors whether it is unfolded
+- Only a collapsible band folds along the `0fr`/`1fr` grid track (`data-collapsible` on the body); a band that is not collapsible lays its body out in normal flow, so it has no track that can resolve to zero height.
 - Responsive: the body is the `@container/settings-section`, so rows and fields inside lay out for the section, not the window.
 - Hover-free devices: the copy-link button is shown inline after the title where the pointer cannot hover (`@media (hover: none)`), instead of floating outside the start edge on hover.
 
