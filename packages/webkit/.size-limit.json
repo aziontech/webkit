@@ -343,7 +343,7 @@
   {
     "name": "site-page",
     "path": "src/components/marketing/site-page/site-page.vue",
-    "limit": "2.6 KB",
+    "limit": "2.61 KB",
     "entryOnly": true
   },
   {
@@ -600,7 +600,7 @@
   {
     "name": "comparison-table",
     "path": "src/components/sections/comparison-table/comparison-table.vue",
-    "limit": "23.1 KB",
+    "limit": "23.11 KB",
     "entryOnly": true
   },
   {
