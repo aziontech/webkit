@@ -418,7 +418,7 @@
                     >
                     <Button
                       label="Contact sales"
-                      kind="secondary"
+                      kind="primary"
                       size="medium"
                       href="https://example.com/contact-sales"
                       target="_blank"
