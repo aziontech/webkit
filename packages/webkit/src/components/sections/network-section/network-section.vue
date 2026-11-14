@@ -3,6 +3,7 @@
 
   import NetworkMap from '../../content/network-map/network-map.vue'
   import FrameBox from '../../layout/frame-box/frame-box.vue'
+  import BigNumbers from '../../marketing/big-numbers/big-numbers.vue'
   import type { CardGridColumns } from '../../marketing/card-grid/card-grid.vue'
   import CardGrid from '../../marketing/card-grid/card-grid.vue'
   import CardGridCell from '../../marketing/card-grid/card-grid-cell/card-grid-cell.vue'
@@ -17,7 +18,7 @@
   })
 
   /** Which floor closes the band. */
-  export type NetworkSectionKind = 'outcomes' | 'benefits'
+  export type NetworkSectionKind = 'outcomes' | 'benefits' | 'stats'
 
   /** How a client mark is rendered: `monochrome` flattens it and inverts it in the dark theme, `as-is` keeps its colours. */
   export type NetworkSectionLogoTreatment = 'monochrome' | 'as-is'
@@ -36,41 +37,67 @@
     highlights?: string[]
   }
 
-  /** One benefit, rendered as a cell on the `benefits` floor. */
+  /** One benefit, rendered as a topic on the `benefits` floor. */
   export type NetworkSectionBenefit = {
-    /** The benefit as a short sentence, set bold and running into the description; with an icon it becomes the topic's h3. */
+    /** The benefit in a few words, the topic's h3. */
     title: string
-    /** The sentences that continue the title. */
+    /** One or two sentences that explain the benefit. */
     description: string
-    /** Icon class of a glyph that leads the benefit; with it the benefit renders as an icon-led topic. */
+    /** Icon class of a glyph that leads the topic. */
     icon?: string
   }
 
+  /** One claim chip that can sit out the narrow band. */
+  export type NetworkSectionClaim = {
+    /** The claim, a few words. */
+    label: string
+    /** Shows the chip below the medium breakpoint; `false` keeps it to wider screens. Defaults to `true`. */
+    mobile?: boolean
+  }
+
+  /** One headline figure on the `stats` floor. */
+  export type NetworkSectionStat = {
+    /** The figure itself. */
+    value: string
+    /** Caption naming what the figure measures. */
+    label: string
+    /** Qualifier set before the figure. */
+    prefix?: string
+    /** Unit set after the figure. */
+    suffix?: string
+  }
+
   interface Props {
-    /** Which floor closes the band: `outcomes` renders the client quotes, `benefits` the run-in benefit topics on a four-column floor. */
+    /** Which floor closes the band: `outcomes` renders the client quotes, `benefits` the benefit topics on up to three columns, `stats` the headline figures. */
     kind?: NetworkSectionKind
+    /** In-page id set on the band so a `#hash` link can scroll to it. */
+    anchor?: string
     /** Overline above the headline. */
     eyebrow?: string
     /** Headline of the band, rendered by the small section title as its `h2`; the band renders nothing when empty. */
     title?: string
     /** Overline-set line above the claims. */
     lead?: string
-    /** Short figures rendered as chips under the lead, in order. */
-    claims?: string[]
+    /** Short figures rendered as chips under the lead, in order; each is a string or `{ label, mobile? }`, where `mobile: false` hides the chip below the medium breakpoint. */
+    claims?: (string | NetworkSectionClaim)[]
     /** Client results for the `outcomes` floor, in order, one column each up to four; each is `{ logo?, logoAlt?, logoTreatment?, text, highlights? }` where `logo` is the mark URL (the cell renders no mark without it), `logoAlt` names the client, `logoTreatment` is `'monochrome'` or `'as-is'`, and `highlights` are the phrases of `text` set in the accent. */
     outcomes?: NetworkSectionOutcome[]
-    /** Topics for the `benefits` floor, in order, on four columns from the large breakpoint; each is `{ title, description, icon? }` where `title` is set bold and runs into `description`, and an `icon` turns the topic into an icon-led one with its own heading. */
+    /** Topics for the `benefits` floor, in order, on up to three columns balanced so every row is full; each is `{ title, description, icon? }`, rendered as a topic whose title is an `h3`. */
     benefits?: NetworkSectionBenefit[]
+    /** Figures for the `stats` floor, in order, rendered by `big-numbers`; each is `{ value, label, prefix?, suffix? }`. */
+    stats?: NetworkSectionStat[]
   }
 
   const props = withDefaults(defineProps<Props>(), {
     kind: 'outcomes',
+    anchor: '',
     eyebrow: '',
     title: '',
     lead: '',
     claims: () => [],
     outcomes: () => [],
-    benefits: () => []
+    benefits: () => [],
+    stats: () => []
   })
 
   const attrs = useAttrs()
@@ -78,6 +105,14 @@
   const floorColumns = (count: number): CardGridColumns => (count <= 2 ? 2 : count === 3 ? 3 : 4)
 
   const outcomeColumns = computed<CardGridColumns>(() => floorColumns(props.outcomes.length))
+
+  const chips = computed(() =>
+    props.claims.map((claim) =>
+      typeof claim === 'string'
+        ? { label: claim, mobile: true }
+        : { label: claim.label, mobile: claim.mobile ?? true }
+    )
+  )
 
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? 'sections-network-section'
@@ -87,9 +122,11 @@
 <template>
   <section
     v-bind="$attrs"
+    :id="anchor || undefined"
     :data-testid="testId"
     :data-kind="kind"
     :aria-label="title || undefined"
+    class="scroll-mt-(--spacing-xxl)"
   >
     <SectionModule
       v-if="title.length > 0"
@@ -137,9 +174,9 @@
                 animated
                 :opacity="0.3"
                 density="medium"
-                :scale="1.8"
-                :offset-x="0.24"
-                :offset-y="0.03"
+                :scale="3.3"
+                :offset-x="0.31"
+                :offset-y="0.14"
               />
             </div>
 
@@ -152,15 +189,16 @@
               </p>
 
               <ul
-                v-if="claims.length"
+                v-if="chips.length"
                 class="m-0 flex max-w-(--container-sm) list-none flex-wrap gap-(--spacing-xs) p-0"
               >
                 <li
-                  v-for="claim in claims"
-                  :key="claim"
-                  class="inline-flex h-6 items-center rounded-(--shape-elements) border border-(--primary) bg-[color-mix(in_srgb,var(--primary)_10%,var(--bg-canvas))] px-(--spacing-xs) text-label-sm text-(--text-default)"
+                  v-for="claim in chips"
+                  :key="claim.label"
+                  :data-mobile="claim.mobile ? null : 'hidden'"
+                  class="inline-flex h-6 items-center rounded-(--shape-elements) border border-(--primary) bg-[color-mix(in_srgb,var(--primary)_10%,var(--bg-canvas))] px-(--spacing-xs) text-label-sm text-(--text-default) max-md:data-[mobile=hidden]:hidden sm:h-7 sm:px-(--spacing-sm) sm:text-label-md"
                 >
-                  {{ claim }}
+                  {{ claim.label }}
                 </li>
               </ul>
             </div>
@@ -205,8 +243,7 @@
             v-else-if="kind === 'benefits' && benefits.length"
             flush
             kind="frame"
-            layout="fixed"
-            :columns="4"
+            :columns="3"
             class="border-t border-(--border-default)"
           >
             <CardGridCell
@@ -215,21 +252,20 @@
               kind="canvas"
             >
               <Topic
-                v-if="benefit.icon"
                 :heading-level="3"
-                :icon="benefit.icon"
+                :icon="benefit.icon ?? ''"
                 :title="benefit.title"
                 :description="benefit.description"
               />
-              <p
-                v-else
-                class="m-0 text-pretty text-body-md text-(--text-muted)"
-              >
-                <strong class="font-medium text-(--text-default)">{{ benefit.title }}</strong>
-                {{ benefit.description }}
-              </p>
             </CardGridCell>
           </CardGrid>
+
+          <BigNumbers
+            v-else-if="kind === 'stats' && stats.length"
+            key="big-numbers"
+            :items="stats"
+            class="border-t border-(--border-default)"
+          />
         </div>
       </FrameBox>
     </SectionModule>

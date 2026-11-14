@@ -86,7 +86,7 @@ describe('NetworkSection', () => {
     expect(queryByTestId(TESTID)).toBeNull()
   })
 
-  it.each(['outcomes', 'benefits'] as const)('mirrors kind=%s on data-kind', (kind) => {
+  it.each(['outcomes', 'benefits', 'stats'] as const)('mirrors kind=%s on data-kind', (kind) => {
     const { getByTestId } = band({ kind })
 
     expect(getByTestId(TESTID).getAttribute('data-kind')).toBe(kind)
@@ -171,7 +171,11 @@ describe('NetworkSection', () => {
     expect(container.querySelector('[data-columns]')?.getAttribute('data-columns')).toBe(columns)
   })
 
-  it.each([2, 3, 4])('keeps the benefits floor at four fixed columns with %i benefits', (count) => {
+  it.each([
+    [3, '3'],
+    [4, '2'],
+    [6, '3']
+  ])('balances %i benefits on up to three columns, %s per row', (count, perRow) => {
     const { container } = band({
       kind: 'benefits',
       benefits: Array.from({ length: count }, (_, index) => ({
@@ -180,22 +184,64 @@ describe('NetworkSection', () => {
       }))
     })
 
-    const floor = container.querySelector('[data-columns]')
-    expect(floor?.getAttribute('data-columns')).toBe('4')
-    expect(floor?.getAttribute('data-layout')).toBe('fixed')
+    const floor = container.querySelector<HTMLElement>('[data-columns]')
+    expect(floor?.getAttribute('data-layout')).toBe('balanced')
+    expect(floor?.style.getPropertyValue('--card-grid-cols-lg')).toBe(perRow)
   })
 
-  it('runs a benefit without an icon into its description after a bold lead-in', () => {
-    const plain = benefits.map(({ title, description }) => ({ title: `${title}.`, description }))
-    const { container, queryAllByRole } = band({ kind: 'benefits', benefits: plain })
+  it('renders a benefit without an icon as a topic with its h3', () => {
+    const plain = benefits.map(({ title, description }) => ({ title, description }))
+    const { getAllByRole, getByText } = band({ kind: 'benefits', benefits: plain })
 
-    expect(queryAllByRole('heading', { level: 3 })).toHaveLength(0)
-    const leads = Array.from(container.querySelectorAll('strong'))
-    expect(leads.map((lead) => lead.textContent)).toEqual(plain.map((benefit) => benefit.title))
-    leads.forEach((lead, index) => {
-      expect(lead.parentElement?.tagName).toBe('P')
-      expect(lead.parentElement?.textContent).toContain(plain[index]?.description)
+    expect(
+      getAllByRole('heading', { level: 3 }).map((heading) => heading.textContent?.trim())
+    ).toEqual(plain.map((benefit) => benefit.title))
+    expect(getByText(plain[0]!.description)).toBeInTheDocument()
+  })
+
+  it('renders one figure per stat on the stats floor', () => {
+    const stats = [
+      { value: '100', suffix: '+', label: 'Data centers' },
+      { value: '30', suffix: 'ms', label: 'Median latency' },
+      { value: '100', suffix: '+ Tbps', label: 'Network capacity' },
+      { value: '100', suffix: '%', label: 'Availability' }
+    ]
+    const { container, getByTestId } = band({ kind: 'stats', stats })
+
+    expect(getByTestId('marketing-big-numbers')).toBeInTheDocument()
+    const figures = Array.from(container.querySelectorAll('figure'))
+    expect(figures).toHaveLength(stats.length)
+    figures.forEach((figure, index) => expect(figure).toHaveTextContent(stats[index]!.label))
+    expect(container.querySelectorAll('blockquote')).toHaveLength(0)
+  })
+
+  it('renders no stats floor without stats', () => {
+    const { queryByTestId } = band({ kind: 'stats', stats: [] })
+
+    expect(queryByTestId('marketing-big-numbers')).toBeNull()
+  })
+
+  it('marks a claim that sits out the narrow band, and keeps string claims on it', () => {
+    const { getAllByRole } = band({
+      claims: ['100+ data centers', { label: '100% availability', mobile: false }]
     })
+
+    const items = getAllByRole('listitem')
+    expect(items.map((item) => item.textContent?.trim())).toEqual([
+      '100+ data centers',
+      '100% availability'
+    ])
+    expect(items[0]?.hasAttribute('data-mobile')).toBe(false)
+    expect(items[1]).toHaveAttribute('data-mobile', 'hidden')
+  })
+
+  it('sets the anchor as the band id, and no id without one', () => {
+    const { getByTestId, unmount } = band({ anchor: 'network' })
+
+    expect(getByTestId(TESTID)).toHaveAttribute('id', 'network')
+    unmount()
+
+    expect(band().getByTestId(TESTID).hasAttribute('id')).toBe(false)
   })
 
   it('renders an outcome without a logo as its quote alone', () => {
@@ -227,6 +273,18 @@ describe('NetworkSection', () => {
 
   it('has no a11y violations on the benefits floor', async () => {
     const { container } = band({ kind: 'benefits' })
+
+    await expectNoA11yViolations(container)
+  })
+
+  it('has no a11y violations on the stats floor', async () => {
+    const { container } = band({
+      kind: 'stats',
+      stats: [
+        { value: '100', suffix: '+', label: 'Data centers' },
+        { value: '30', suffix: 'ms', label: 'Median latency' }
+      ]
+    })
 
     await expectNoA11yViolations(container)
   })
