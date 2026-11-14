@@ -2,11 +2,12 @@
 name: template-gallery
 category: sections
 structure: monolithic
+template: 2
 status: implemented
-spec_version: 2
+spec_version: 3
 created: 2026-11-05
 last_updated: 2026-11-14
-checksum: ad569ae1c887c5e6412027aff13839c98e8f54897449e78154cea6b741ca8e33
+checksum: 514eec270ea0d2fa6bb63d42ea3e9ee07573f6f07588d8586556824e8e4bcca9
 ---
 
 # TemplateGallery — Component Spec
@@ -130,6 +131,26 @@ _none_
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): card titles `var(--text-default)`, card lines `var(--text-muted)`; marks flagged `invertInDark` invert under the dark theme.
 - `motion-reduce:transition-none motion-reduce:transform-none` — the button hover and the ticker scroll belong to `button` and `ticker`, which carry their own reduced-motion fallback; this band adds no motion.
 - Touch target ≥40×40 px — the deploy buttons are medium `button`s, the copy's actions are large.
+
+## Internationalization
+
+- No built-in strings: every visible string arrives through props.
+
+## Right-to-left
+
+- Layout: logical utilities and the composed components' own mirroring, so the ask and the template grid follow the reading direction.
+- Icons: action chevrons mirror (owned by `button`).
+- Keyboard: unchanged.
+
+## Responsive
+
+- The composed `media-split` sets the ask beside the template grid and stacks them on narrow screens; the grid scrolls inside its `scroll-area`, at least 36rem tall and 44rem from large.
+- No horizontal scroll at 320 px.
+
+## Performance
+
+- Bundle budget: 27.7 KB for `./template-gallery` gzip in `.size-limit.json`, initial chunk only.
+- Renders every template it is given: keep the list to the dozen or so a closing band shows, and link to the full gallery for the rest.
 
 ## Examples
 
