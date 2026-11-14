@@ -412,12 +412,7 @@
     disarm()
   }
 
-  const onDrop = (
-    event: DragEvent,
-    scope: DragScope,
-    index: number,
-    groupIndex: number | undefined
-  ) => {
+  const onDrop = (event: DragEvent, scope: DragScope, groupIndex: number | undefined) => {
     if (!sameList(scope, groupIndex) || !drag.value || !drop.value) return
     event.preventDefault()
     const from = drag.value.index
@@ -503,7 +498,7 @@
             grouped && onDragStart($event, 'group', groupKey(group), groupIndex, undefined)
           "
           @dragover="grouped && onDragOver($event, 'group', groupIndex, undefined)"
-          @drop="grouped && onDrop($event, 'group', groupIndex, undefined)"
+          @drop="grouped && onDrop($event, 'group', undefined)"
           @dragend="onDragEnd"
         >
           <div
@@ -603,7 +598,7 @@
                   onDragStart($event, 'row', rowKey(item), index, grouped ? groupIndex : undefined)
                 "
                 @dragover="onDragOver($event, 'row', index, grouped ? groupIndex : undefined)"
-                @drop="onDrop($event, 'row', index, grouped ? groupIndex : undefined)"
+                @drop="onDrop($event, 'row', grouped ? groupIndex : undefined)"
                 @dragend="onDragEnd"
               >
                 <span
