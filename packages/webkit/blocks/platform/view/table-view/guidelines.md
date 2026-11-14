@@ -6,7 +6,7 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 
 ## When to use
 
-- The module the sidebar routes to lists resources of one type (applications, workloads, users, tokens, environments, activity history).
+- The module the sidebar routes to lists resources of one type that has no dedicated block (applications, workloads, domains).
 - Users compare many records by the same few attributes (status, domain, owner, last change) and need to sort, filter and page through them.
 - The filtered list must survive a reload or a shared link, and each person's page size and columns must survive the next visit.
 - The list must survive its last row being deleted: the page keeps its heading and controls and the table gives way to an empty state.
@@ -15,6 +15,7 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 
 - Resources people recognise by a few fields or a picture rather than compare column by column: use `platform/view/card-view`.
 - A list nested inside one resource (a tab of a details page): use the table inside `platform/detail/details-page` or `platform/detail/record-table`, with `Add <Module>` instead of `Create`.
+- People on the account: use `platform/account/users`. Teams and their permissions: use `platform/account/team-permissions`. API tokens: use `platform/account/tokens`. The audit log: use `platform/account/activity-history`.
 - Files and folders of a storage resource: use `platform/view/file-browser`.
 - Events or logs explored over time with a chart and a document pane: use `platform/view/split-view`.
 - An account that has never created the resource: use `platform/states/first-use`, which teaches the module before any list exists.
@@ -40,11 +41,11 @@ The last control of the row. `CollectionPreferences` bound with `v-bind="prefere
 
 ### E. Resource table — `Card`, `TableRoot` (required)
 
-`Card :padded="false"` around `TableRoot :bordered="false"` bound with `v-bind="tableProps"`, which hands it one page of rows, the ordered and visible columns, the sort, the pagination footer, density, wrap and stripes; the table renders and never filters or slices on its own. `enable-sorting` makes Name, Status and Last Modified sortable; `:loading` joins Refresh with the collection's own fetch. The Name column is `principal`; the actions column is `kind: 'action'`. On a phone the table keeps its grid and scrolls sideways inside the card, as the console does; do not set `stackable` on a resource index, whose rows are compared across columns.
+`Card :padded="false"` around `TableRoot :bordered="false"` bound with `v-bind="tableProps"`, which hands it one page of rows, the ordered and visible columns, the sort, the pagination footer, density, wrap and stripes; the table renders and never filters or slices on its own. `enable-sorting` makes Name, Status and Last modified sortable; `:loading` joins Refresh with the collection's own fetch. The Name column is `principal`; the actions column is `kind: 'action'`. On a phone the table keeps its grid and scrolls sideways inside the card, as the console does; do not set `stackable` on a resource index, whose rows are compared across columns.
 
 ### F. Cell presets — `Table.CellLink`, `Table.CellId`, `Table.CellStatus`, `Table.CellTime` (optional)
 
-Every cell is a preset from `@aziontech/webkit/table`, so the list reads like every other WebKit list. Name is `Table.CellLink` with `to` and `destination="Resources"` (the tooltip says where it leads). ID is `Table.CellId` (copy button named after the resource). The domain is `Table.CellLink` with `href` (opens in a new tab, external mark, copy button) and the other domains as `more`: a `+N` `OverflowCount` whose popover counts them and searches once the list is long. Status is `Table.CellStatus`. Last Modified is `Table.CellTime`: the author's avatar and a relative time that updates every minute, the absolute time in its tooltip.
+Every cell is a preset from `@aziontech/webkit/table`, so the list reads like every other WebKit list. Name is `Table.CellLink` with `to` and `destination="Resources"` (the tooltip says where it leads). ID is `Table.CellId` (copy button named after the resource). The domain is `Table.CellLink` with `href` (opens in a new tab, external mark, copy button) and the other domains as `more`: a `+N` `OverflowCount` whose popover counts them and searches once the list is long. Status is `Table.CellStatus`. Last modified is `Table.CellTime` on the `modifiedAt` timestamp: the author's avatar and a relative time that updates every minute, the absolute time in its tooltip.
 
 ### G. Row actions — `Table.CellActions`, `DropdownMenuGroup`, `DropdownMenuOption` (required)
 
@@ -58,7 +59,9 @@ The `platform/delete/delete-with-confirmation` dialog, opened from the row menu 
 
 When `status` is `no-match`, the table's `#empty` slot holds a medium `EmptyState` with the filter-slash glyph, "No matching resources", one sentence, and an outlined small Clear filters `Button` bound to `clearFilters`. The heading, the filter tokens and the table header stay, so the user can see and undo what hid the rows.
 
-### J. Empty listing — `Card`, `EmptyState`, `Button` (required)
+### J. Failed and empty listing — `Alert`, `Card`, `EmptyState`, `Button` (required)
+
+When `status` is `error`, a danger `Alert` ("Couldn't load the resources. Check your connection and retry.") with a Retry action bound to the collection's `refresh` takes the table's place; the heading and the controls row stay.
 
 When `status` is `empty`, the table and its header and footer give way to a flush `Card :padded="false"` holding only a medium `EmptyState`: the resource glyph, one sentence, then a small secondary `Create <Object>` with the heading's label and a small outlined Documentation on one row.
 
@@ -69,7 +72,7 @@ When `status` is `empty`, the table and its header and footer give way to a flus
 - Set `url: true` so the tokens, the sort and the page live in the query string and a filtered list can be shared or reloaded.
 - Give the list a `storageKey` of its own and lock the column that names the row.
 - Keep `CollectionPreferences` the last control of the row and every control on it medium.
-- Branch on `status`: `empty` swaps the table for the empty listing, `no-match` fills the table's `#empty` slot with Clear filters.
+- Branch on `status`: `loading` shows the table's skeleton rows, `error` swaps the table for a danger `Alert` with Retry, `empty` swaps it for the empty listing, `no-match` fills the table's `#empty` slot with Clear filters.
 - Give every icon-only control a `Tooltip` and an `aria-label` with the same words.
 - Put Delete last in the row menu, in its own group, and always behind the confirmation dialog.
 
@@ -90,7 +93,7 @@ When `status` is `empty`, the table and its header and footer give way to a flus
 - **Filter:** placeholder and `aria-label` name what is filtered, e.g. "Filter resources".
 - **Properties:** the column header's words, e.g. "Name", "Author", "Status", "Domain".
 - **Icon buttons:** a verb or noun in sentence case, e.g. "Refresh", "Download CSV", "Row actions". Preferences title: "Table preferences".
-- **Column headers:** one or two words without punctuation, e.g. "Name", "ID", "Domains", "Status", "Last Modified".
+- **Column headers:** one or two words without punctuation, e.g. "Name", "ID", "Domains", "Status", "Last modified".
 - **No match:** "No matching resources", then "No resource matches these filters.", and the action "Clear filters".
 - **Empty:** title states the fact, e.g. "No resources yet"; description is one sentence with what to do, e.g. "Create a resource to start serving traffic on your domains."
 - **Copy buttons:** name what they copy, e.g. "Copy resource ID", "Copy domain name".
@@ -111,6 +114,8 @@ When `status` is `empty`, the table and its header and footer give way to a flus
 
 - Default: resources exist; the table shows them with the property filter, refresh, export, preferences, sorting and pagination wired, and filtering to nothing shows No matching resources with Clear filters.
 - Empty: every resource was deleted on an account that is not new; `useCollection` reports `empty`, the heading and controls stay, and a flush card with Create Resource and Documentation replaces the table.
+- Loading: the first load; the heading stays, the filter, Download CSV and preferences are disabled, Refresh spins and the table shows its skeleton rows.
+- Failed: the resources could not load; the heading and the disabled controls stay, and a danger `Alert` with Retry takes the table's place (`status` is `error` when a server-mode `fetch` rejects).
 - Deployments: the deployments list with Version (Current tag), Status with a spinner while Building and the run's duration, the project link, the environment tag and the author with the time; a row click opens the deployment, the row menu holds View details, Redeploy and Promote to production, and Refresh, no match and empty behave as in Default and Empty.
 
 ## Related
