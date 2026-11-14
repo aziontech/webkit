@@ -26,6 +26,16 @@
       "name": "ReadOnly",
       "summary": "`readonly` code that can be read, selected and copied but not changed.",
       "file": "read-only.vue"
+    },
+    {
+      "name": "Schema",
+      "summary": "A JSON document checked against a JSON Schema: with Monaco loaded and `language=\"json\"`, `schema` registers the schema for this editor's model only (no remote fetch), Monaco underlines what breaks it, and `validate` hands back the problems as markers so the `Field` turns invalid and `Field.Error` shows the first one. The plain editor does not validate.",
+      "file": "schema.vue"
+    },
+    {
+      "name": "Borderless",
+      "summary": "`:bordered=\"false\"` for an editor that fills a pane which already frames it, as a full-page function editor does: no border or radius of its own, the focus ring drawn inset, `fill` taking the pane's height and the `toolbar` band kept.",
+      "file": "borderless.vue"
     }
   ]
 }

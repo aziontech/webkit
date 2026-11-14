@@ -1296,7 +1296,7 @@
   {
     "name": "code-editor",
     "path": "src/components/code/code-editor/code-editor.vue",
-    "limit": "8.5 KB"
+    "limit": "9.15 KB"
   },
   {
     "name": "button-group",

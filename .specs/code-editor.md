@@ -3,11 +3,11 @@ name: code-editor
 category: code
 structure: monolithic
 status: implemented
-spec_version: 3
+spec_version: 4
 template: 2
-checksum: b0bc114e3192e362dd31b15366e23f345c6a4cdb7afb0368919d5a7777b12601
+checksum: 64d6d1b518cd111d6fc6651cff42f183187ea5a7ad96e301d0eed5707c877ddb
 created: 2026-11-11
-last_updated: 2026-11-12
+last_updated: 2026-11-14
 ---
 
 # CodeEditor — Component Spec
@@ -21,6 +21,7 @@ An editable code surface with line numbers, diagnostics and a read-only and a di
 - Editing a function, a script, a SQL query, a JSON or YAML document inside the product.
 - Showing the change between two versions of code side by side (diff mode), for example before a deploy or a revert.
 - Code that the server validates: the diagnostics come back as `markers` and show on their lines and in a list.
+- A JSON document with a known shape (a function's argument schema, a configuration file): pass its JSON Schema as `schema` and Monaco checks the document against it as the user types.
 - A read-only view of code that still needs the editor's navigation (find, folding) once Monaco is loaded.
 
 ## When NOT to use
@@ -46,6 +47,8 @@ An editable code surface with line numbers, diagnostics and a read-only and a di
 - Set `padLineNumbers` on a full-page code editor (`fill`, a function's Code or Arguments document), as the console does (01, 02…); leave it off on a small editor inside a form.
 - Function calls are coloured for you (JavaScript and TypeScript, with `--code-sintax-function`); do not register your own Monarch grammar for that.
 - Send server diagnostics as `markers` with 1-based lines; keep each message one sentence.
+- Pass a JSON Schema as `schema` for a JSON document with a known shape, and listen to `validate` to show the first problem in a `Field.Error`; keep `markers` for what only the server knows.
+- Set `:bordered="false"` when the editor fills a pane that already frames it (a resizable pane, a full-page function editor, a drawer body); keep the default frame inside a form.
 - Give the editor a fixed `height`, or `fill` inside a flex column that has its own height; never let it grow with the content.
 - Use `readonly` for code the user may read and select but not change; use `disabled` only when the whole form is locked.
 - In diff mode, `original` is the left side and `v-model` the right side; keep the right side editable only when the change can still be edited.
@@ -115,12 +118,14 @@ _none_ — monolithic. The gutter, the fallback textarea, the Monaco host, the t
 | `markers`        | `CodeEditorMarker[]`              | `[]`          | false    | Diagnostics shown on their lines and in the problems list.                                                    |
 | `height`         | `string`                          | `'16rem'`     | false    | CSS height of the editing area.                                                                               |
 | `fill`           | `boolean`                         | `false`       | false    | Fills a flex column instead of using `height`.                                                                |
+| `bordered`       | `boolean`                         | `true`        | false    | Draws the frame: border, corner radius and an offset focus ring. Off, the editor sits flush in its pane.      |
 | `lineNumbers`    | `boolean`                         | `true`        | false    | Shows the line-number gutter.                                                                                 |
 | `padLineNumbers` | `boolean`                         | `false`       | false    | Zero-pads line numbers to two digits (01, 02…), as the console's full-page function and arguments editors do. |
 | `path`           | `string`                          | `''`          | false    | Model path for Monaco language services (`index.ts`, `args.json`).                                            |
+| `schema`         | `Record<string, unknown>`         | `undefined`   | false    | JSON Schema the value is checked against when `language` is `json` and Monaco is loaded.                      |
 | `ariaLabel`      | `string`                          | `''`          | false    | Accessible name when no `Field` label names it. Empty uses the locale catalog.                                |
 
-Types: `CodeEditorMarker = { line: number; column?: number; endLine?: number; endColumn?: number; severity: 'error' | 'warning' | 'info'; message: string }`. `CodeEditorMonaco` is a structural subset of the `monaco-editor` module (`editor.create`, `editor.createDiffEditor`, `editor.createModel`, `editor.defineTheme`, `editor.setTheme`, `editor.setModelMarkers`, `MarkerSeverity`, and the optional `languages.getLanguages` / `languages.setMonarchTokensProvider`), so `import('monaco-editor')` satisfies it without WebKit depending on Monaco's types.
+Types: `CodeEditorMarker = { line: number; column?: number; endLine?: number; endColumn?: number; severity: 'error' | 'warning' | 'info'; message: string }`. `CodeEditorMonaco` is a structural subset of the `monaco-editor` module (`editor.create`, `editor.createDiffEditor`, `editor.createModel`, `editor.defineTheme`, `editor.setTheme`, `editor.setModelMarkers`, `MarkerSeverity`, and the optional `editor.getModelMarkers`, `editor.onDidChangeMarkers`, `json.jsonDefaults`, `languages.getLanguages` / `languages.setMonarchTokensProvider`), so `import('monaco-editor')` satisfies it without WebKit depending on Monaco's types.
 
 ## v-model
 
@@ -130,10 +135,11 @@ Types: `CodeEditorMarker = { line: number; column?: number; endLine?: number; en
 
 ## Events
 
-| Event        | Payload   | Notes                                                             |
-| ------------ | --------- | ----------------------------------------------------------------- |
-| `ready`      | `unknown` | Monaco mounted; the payload is the editor instance (for actions). |
-| `load-error` | `unknown` | The loader rejected; the plain editor stays.                      |
+| Event        | Payload              | Notes                                                                                                                                                                                                                         |
+| ------------ | -------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `ready`      | `unknown`            | Monaco mounted; the payload is the editor instance (for actions).                                                                                                                                                             |
+| `load-error` | `unknown`            | The loader rejected; the plain editor stays.                                                                                                                                                                                  |
+| `validate`   | `CodeEditorMarker[]` | The diagnostics Monaco's language services (JSON syntax and `schema`, TypeScript) put on the value, as markers sorted by line, each time they change. The `markers` prop is not echoed back; the plain editor never fires it. |
 
 ## Slots
 
@@ -145,7 +151,8 @@ Types: `CodeEditorMarker = { line: number; column?: number; endLine?: number; en
 
 - Visual states: `default`, `focus-visible` (ring on the frame), `invalid`, `readonly`, `disabled`, `loading` (Monaco on the way, the plain editor is live)
 - `data-mode`: `plain` | `loading` | `monaco` — which editor is live
-- `data-invalid`, `data-readonly`, `data-disabled`, `data-diff`, `data-fill` mirror their props
+- `data-invalid`, `data-readonly`, `data-disabled`, `data-diff`, `data-fill`, `data-bordered` mirror their props
+- Borderless (`bordered` false): no border and no radius; the focus ring is drawn inset so a pane edge never clips it
 - Each gutter line with a marker carries `data-severity` (`error` | `warning` | `info`)
 - Load failure: the plain editor stays and a muted note says the full editor could not load
 
@@ -179,10 +186,10 @@ Types: `CodeEditorMarker = { line: number; column?: number; endLine?: number; en
 
 ## Accessibility (WCAG 2.1 AA)
 
-- Visible focus: the frame shows `focus-within:ring-2 ring-(--ring-color)` for both editors.
+- Visible focus: the frame shows `focus-within:ring-2 ring-(--ring-color)` for both editors; a borderless editor draws the same ring inset.
 - Keyboard map (plain editor): typing edits; `Tab` inserts two spaces and `Shift+Tab` removes them at the line start; `Escape` releases the trap so the next `Tab` / `Shift+Tab` leaves the editor (WCAG 2.1.2); the problems list buttons move the caret to the marker's line. Monaco runs in tab-focus mode by default, so `Tab` moves focus out unless the user toggles it with `Ctrl+M`.
 - ARIA: the textarea is a native multi-line text box named by the `Field` label or `ariaLabel`; `aria-invalid`, `aria-readonly` and `aria-describedby` (the field's description plus the problems summary); the gutter is `aria-hidden`; the problems list is a named list; the problem count is a polite `status`.
-- Diagnostics are never colour only: each one is a list item with its line and severity in text.
+- Diagnostics are never colour only: each one is a list item with its line and severity in text. Schema problems reach the user through Monaco's own hover and, when the app shows them, through `validate` in a `Field.Error`.
 - Contrast ≥4.5:1: code and line numbers use the code syntax tokens tuned for both themes.
 - Forced colors: the frame keeps a system border and the gutter marker becomes a system glyph colour.
 
@@ -219,7 +226,7 @@ Types: `CodeEditorMarker = { line: number; column?: number; endLine?: number; en
 
 ## Performance
 
-- Bundle budget: 8.5 KB gzip for `./code-editor` in `.size-limit.json` (measured 8.46 KB on 2026-11-12, up from 7.97 KB for the function-call rules and `padLineNumbers`; Monaco is never bundled: the app's `loader` code-splits it).
+- Bundle budget: 9.15 KB gzip for `./code-editor` in `.size-limit.json` (measured 8.46 KB on 2026-11-12, up from 7.97 KB for the function-call rules and `padLineNumbers`; `schema`, `bordered` and `validate` brought it to 9.11 KB on 2026-11-14; Monaco is never bundled: the app's `loader` code-splits it).
 - Runtime budget: the plain editor re-renders the gutter per line count change only; tested to 5,000 lines.
 - Heavy parts: Monaco loads on mount, after the plain editor is interactive; the theme is rebuilt only when the theme attribute or the colour scheme changes.
 
@@ -230,6 +237,8 @@ Types: `CodeEditorMarker = { line: number; column?: number; endLine?: number; en
 - WithToolbar — the console's function editor: the Code / Arguments switch in `toolbar` and `padLineNumbers`.
 - Diff — `diff` with `original`; justified as a distinct mode.
 - ReadOnly — the `readonly` state.
+- Schema — a JSON document checked against `schema` with Monaco loaded; `validate` puts the first problem in a `Field.Error`. Justified: schema checking and the `validate` event only run in Monaco.
+- Borderless — `:bordered="false"` filling a framed pane under its own toolbar, as the console's full-page function editor sits. Justified as a distinct look of the `bordered` prop.
 
 ## Decisions and open questions
 
@@ -240,6 +249,9 @@ Types: `CodeEditorMarker = { line: number; column?: number; endLine?: number; en
 - **Padded line numbers are opt-in.** The design sample pads (`String(line).padStart(2, '0')`) only its full-page function and arguments editors and keeps plain numbers on the small JSON field of a drawer, so `padLineNumbers` defaults to `false`; both the plain gutter and Monaco's `lineNumbers` formatter follow it. Lines past 99 show three digits.
 - **Code line height (M2.10 row 77).** Monaco draws code at the console's 16 px line, not at the `.text-body-code-sm` line height (12 px × 1.625 ≈ 20 px). The value is the theme token `--code-editor-line-height` (`var(--line-height-4)`), read from the host element when the editor is created; `px` and `rem` are converted to pixels, and an absent or unparseable value falls back to 16. The font size stays `--text-body-code-sm-font-size` (12 px), which the console reference also uses (7 px per character, 16 px lines). The plain editor keeps `.text-body-code-sm`.
 - **Theme is global in Monaco.** Every editor shares the `webkit` theme, so it is defined and set only when its content changes (`applyThemeOnce`, per Monaco instance): several editors on a page no longer each re-define it on every `class`/`data-theme` change of the document, and a `setTheme` that touched those classes could not make two editors ping-pong (`code-editor.test.ts`).
+- **JSON Schema (`schema`).** The design sample checks the arguments schema editor against a JSON Schema. When Monaco is loaded and `language` is `json`, CodeEditor registers `schema` with Monaco's JSON defaults (`json.jsonDefaults` since monaco-editor 0.55, `languages.json.jsonDefaults` before) under its own schema URI with `fileMatch` set to the model's URI, keeping every other entry, so several editors on a page each keep their own schema. It turns on `validate`, reports schema problems as warnings (as the sample does) and never fetches remote schemas. The model gets a URI even without `path` when a schema is set. The entry is removed when the schema is cleared, the language changes or the editor unmounts. The plain editor does not validate.
+- **`validate` payload.** It emits WebKit's `CodeEditorMarker` shape (1-based `line`, `column`, `endLine`, `endColumn`, `severity`, `message`), not Monaco's `IMarker`, so the payload is typed without Monaco's types and matches `markers`. Monaco's `Hint` maps to `info`. Markers WebKit set from the `markers` prop (owner `webkit`) are left out, so the app never receives its own diagnostics back. It is a value event, not an activation, so it carries no DOM event.
+- **`bordered` (sample `flush`).** The vocabulary name for an outline is `bordered` (default `true`, like `log-view` and `code-block`). Off, the root drops its border, radius and ring offset and the ring is drawn inset (`ring-inset`), so the focus stays visible when a pane's `overflow: hidden` would clip an outer ring. The toolbar and problems bands keep their dividers.
 - **Diff names.** Both sides of the diff are named after the editor (`<name>, Original` and `<name>, Modified`), since Monaco leaves them empty.
 - **Plain editor is the default.** Not a skeleton: it is fully usable, so the SSR markup is an editor and slow networks never block typing.
 - **Theme.** Colours are read from the host element's computed tokens (hex values) at mount and when `class`/`data-theme` changes on `<html>` or `<body>` or the colour scheme changes; Monaco's theme is global, so the last editor to apply it wins, which is fine because all read the same tokens.
