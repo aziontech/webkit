@@ -25,6 +25,8 @@
     description: string
     /** URL of the picture shown above the caption. */
     image?: string
+    /** Alternative text of the picture; empty keeps it decorative. */
+    alt?: string
     /** Registry name of the illustration drawn fluid above the caption, instead of `image`. */
     illustration?: string
     /** Scale of the illustration inside its frame, around its centre. */
@@ -42,7 +44,7 @@
     title?: string
     /** Supporting sentence under the headline. */
     description?: string
-    /** The tiles rendered as frame cells, in order; each is `{ title, description, image?, illustration?, scale? }` where `image` is a picture URL, `illustration` a registry name drawn fluid, and `scale` its media scale. */
+    /** The tiles rendered as frame cells, in order; each is `{ title, description, image?, alt?, illustration?, scale? }` where `image` is a picture URL, `alt` its alternative text, `illustration` a registry name drawn fluid, and `scale` its media scale. */
     tiles?: FeatureTilesTile[]
   }
 
@@ -125,6 +127,7 @@
               :title="tile.title"
               :description="tile.description"
               :src="tile.image"
+              :alt="tile.alt ?? ''"
             />
           </CardGridCell>
         </CardGrid>

@@ -156,6 +156,25 @@ describe('FeatureTiles', () => {
     })
   })
 
+  it('keeps an artwork picture decorative when its tile has no alt', () => {
+    const { getAllByTestId } = band()
+
+    const image = getAllByTestId(TILE_TESTID)[0]?.querySelector('img')
+    expect(image?.getAttribute('alt')).toBe('')
+    expect(image).toHaveAttribute('aria-hidden', 'true')
+  })
+
+  it('names an artwork picture by its tile alt', () => {
+    const { getByRole } = band({
+      tiles: [{ ...artworkTiles[0], alt: 'A branch diagram of two environments' }]
+    })
+
+    expect(getByRole('img', { name: 'A branch diagram of two environments' })).toHaveAttribute(
+      'src',
+      artworkTiles[0]?.image
+    )
+  })
+
   it('renders an illustrated tile without an image', () => {
     const { container, getAllByTestId } = band({ kind: 'illustrated', tiles: illustratedTiles })
 
