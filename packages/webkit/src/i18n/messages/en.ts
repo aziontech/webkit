@@ -1042,7 +1042,8 @@ export const themeSwitcher = {
 } as const
 
 export const toast = {
-  close: 'Close notification'
+  close: 'Close notification',
+  region: 'Notifications ({hotkey})'
 } as const
 
 export const toggleGroup = {

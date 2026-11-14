@@ -420,6 +420,33 @@ describe('live region (spec)', () => {
     ).toBeNull()
   })
 
+  it('renders every corner region empty before any toast, so the first toast anywhere is announced', async () => {
+    await mountToaster({ position: 'bottom-right', duration: 0 })
+    await nextTick()
+    for (const position of [
+      'top-left',
+      'top-center',
+      'top-right',
+      'bottom-left',
+      'bottom-center',
+      'bottom-right'
+    ]) {
+      const region = await regionFor(position)
+      expect(region?.getAttribute('aria-live')).toBe('polite')
+    }
+  })
+
+  it('names a region that holds toasts after the focus hotkey', async () => {
+    await mountToaster({ position: 'bottom-right', duration: 0 })
+    const empty = await regionFor('bottom-right')
+    expect(empty!.hasAttribute('role')).toBe(false)
+    toast('Saved')
+    const region = await regionFor('bottom-right')
+    expect(region!.getAttribute('role')).toBe('region')
+    expect(region!.getAttribute('aria-label')).toBe('Notifications (Alt+T)')
+    await expectNoA11yViolations(region!)
+  })
+
   it('ToastItem outside a Toaster keeps its own status/alert role', () => {
     const { getAllByTestId } = render({
       components: { ToastItem },
@@ -535,6 +562,24 @@ describe('timing adjustable (audit: WCAG 2.2.1)', () => {
     view.getByTestId('work').focus()
     await keyboardUser.keyboard('{Alt>}t{/Alt}')
     expect(document.activeElement).toBe(within(region!).getByText('Undo').closest('button'))
+  })
+})
+
+describe('Escape dismisses the focused toast', () => {
+  it('closes the toast that holds focus and returns focus to where Alt+T came from', async () => {
+    const view = render({
+      components: { Toaster },
+      template: `<div><button type="button" data-testid="work">Work</button><Toaster :duration="0" /></div>`
+    })
+    await nextTick()
+    await nextTick()
+    toast('Saved', { action: { label: 'Undo', onClick: () => {} } })
+    await regionFor('bottom-right')
+    view.getByTestId('work').focus()
+    await keyboardUser.keyboard('{Alt>}t{/Alt}')
+    await keyboardUser.keyboard('{Escape}')
+    await vi.waitFor(() => expect(useToastStore().toasts).toHaveLength(0))
+    expect(document.activeElement).toBe(view.getByTestId('work'))
   })
 })
 
