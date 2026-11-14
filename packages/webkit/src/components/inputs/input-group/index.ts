@@ -10,3 +10,4 @@ const InputGroup = Object.assign(InputGroupRoot, {
 export default InputGroup
 export { InputGroupAddon, InputGroupInput }
 export type { InputGroupSize } from './input-group.vue'
+export type { InputGroupInputType } from './input-group-input/input-group-input.vue'
