@@ -59,9 +59,9 @@ The `Projects`, `Resources`, `Domains` and `Recents` panels in a region labelled
 is one full-width link to the resource, with its actions menu revealed on hover and focus. An empty
 panel says `Nothing here yet.` (`Nothing opened here yet.` for Recents).
 
-### G. Classic summary — `StatTile`, `Hint`, `Card`, `TableRoot`, `Table`, `Tag`, `Link`, `IconButton`, `Tooltip` (optional)
+### G. Classic summary — `StatTile`, `Card`, `IconButton`, `Tooltip` (optional)
 
-Variant Summary only: the classic overview for readers who want figures and tables on Home instead of
+Variant Summary only; it adds `Hint`, `TableRoot`, `Table`, `Tag` and `Link` to the page: the classic overview for readers who want figures and tables on Home instead of
 resource panels. A main column and, from `xl`, an aside rail of `--container-xs` beside it (below
 `xl` the aside follows the main column).
 

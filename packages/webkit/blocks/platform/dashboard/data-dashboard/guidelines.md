@@ -82,9 +82,9 @@ Searchable, paginated; requests and data transferred per project in tabular, rig
 `No usage yet` / `Usage appears here once a project serves requests.` when nothing was recorded, and
 `No matching rows` / `Change the search.` when the search matches nothing.
 
-### N. Real-user monitoring — `Select`, `StatTile`, `Hint` (optional)
+### N. Real-user monitoring — `StatTile`, `Hint` (optional)
 
-Variant RealUser only. Timings measured in the reader's browsers instead of consumption: title
+Variant RealUser only; it adds `Select` to the page. Timings measured in the reader's browsers instead of consumption: title
 `Real-user monitoring`, and a medium Period `Select` (`Last hour`, `Last 24 hours`, `Last 7 days`,
 `Last 30 days`) in the `PageHeader` actions drives every figure. Four vitals `StatTile`s
 (`kind="sans"`) lead: `Page load time`, `Largest contentful paint`, `First input delay`,
