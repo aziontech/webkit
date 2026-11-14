@@ -709,7 +709,19 @@ export const schemaForm = {
   numberPlaceholder: 'A number',
   numberFrom: 'From {min}',
   listPlaceholder: 'One value per line',
-  jsonPlaceholder: 'A JSON value'
+  jsonPlaceholder: 'A JSON value',
+  email: 'Enter a valid email address.',
+  uri: 'Enter a full URL, such as https://example.com.',
+  date: 'Enter a date as YYYY-MM-DD.',
+  datePlaceholder: 'YYYY-MM-DD',
+  searchPlaceholder: 'Search',
+  optionsError: "Couldn't load the options.",
+  writeOnlyPlaceholder: 'Leave empty to keep the current value',
+  item: 'Item {index}',
+  advanced: 'Advanced settings',
+  mapKey: 'Key',
+  mapValue: 'Value',
+  duplicateKey: 'Each key must be unique.'
 } as const
 
 export const sectionHeader = {

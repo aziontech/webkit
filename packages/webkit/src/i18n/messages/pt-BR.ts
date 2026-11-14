@@ -746,7 +746,19 @@ export const ptBR: Messages = {
     numberPlaceholder: 'Um número',
     numberFrom: 'A partir de {min}',
     listPlaceholder: 'Um valor por linha',
-    jsonPlaceholder: 'Um valor JSON'
+    jsonPlaceholder: 'Um valor JSON',
+    email: 'Informe um e-mail válido.',
+    uri: 'Informe uma URL completa, como https://example.com.',
+    date: 'Informe uma data no formato AAAA-MM-DD.',
+    datePlaceholder: 'AAAA-MM-DD',
+    searchPlaceholder: 'Buscar',
+    optionsError: 'Não foi possível carregar as opções.',
+    writeOnlyPlaceholder: 'Deixe vazio para manter o valor atual',
+    item: 'Item {index}',
+    advanced: 'Configurações avançadas',
+    mapKey: 'Chave',
+    mapValue: 'Valor',
+    duplicateKey: 'Cada chave deve ser única.'
   },
   sectionHeader: {
     copyLink: 'Copiar link da seção {title}',

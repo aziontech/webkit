@@ -746,7 +746,19 @@ export const es: Messages = {
     numberPlaceholder: 'Un número',
     numberFrom: 'Desde {min}',
     listPlaceholder: 'Un valor por línea',
-    jsonPlaceholder: 'Un valor JSON'
+    jsonPlaceholder: 'Un valor JSON',
+    email: 'Ingresa un correo electrónico válido.',
+    uri: 'Ingresa una URL completa, como https://example.com.',
+    date: 'Ingresa una fecha con el formato AAAA-MM-DD.',
+    datePlaceholder: 'AAAA-MM-DD',
+    searchPlaceholder: 'Buscar',
+    optionsError: 'No se pudieron cargar las opciones.',
+    writeOnlyPlaceholder: 'Déjalo vacío para conservar el valor actual',
+    item: 'Elemento {index}',
+    advanced: 'Configuración avanzada',
+    mapKey: 'Clave',
+    mapValue: 'Valor',
+    duplicateKey: 'Cada clave debe ser única.'
   },
   sectionHeader: {
     copyLink: 'Copiar enlace a la sección {title}',
