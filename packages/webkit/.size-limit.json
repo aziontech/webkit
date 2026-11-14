@@ -400,7 +400,7 @@
   {
     "name": "logo",
     "path": "src/components/content/logo/logo.vue",
-    "limit": "11.5 KB"
+    "limit": "1.5 KB"
   },
   {
     "name": "product-widget",
@@ -588,7 +588,8 @@
   {
     "name": "comparison-table",
     "path": "src/components/sections/comparison-table/comparison-table.vue",
-    "limit": "22.3 KB"
+    "limit": "23.1 KB",
+    "entryOnly": true
   },
   {
     "name": "compare-plans",

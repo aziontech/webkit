@@ -4,8 +4,13 @@
   "examples": [
     {
       "name": "Default",
-      "summary": "The Cloudflare comparison as the migration guide places it: six categories, each capability with a definition behind its info button and a support glyph per platform. The header row stays pinned while the page scrolls. Edit the props in the Controls panel \u2014 a band with no groups renders nothing at all.",
+      "summary": "The Cloudflare comparison as the migration guide places it: six categories, each capability with a definition behind its info button and a support glyph per platform. The header row stays pinned while the page scrolls. Edit the props in the Controls panel — a band with no groups renders nothing at all.",
       "file": "default.vue"
+    },
+    {
+      "name": "Registry",
+      "summary": "The competitor given by `name` alone: once the page is interactive the band takes Fastly's light and dark logos from the competitor registry, which loads on demand outside the band's bundle. `anchor=\"compare\"` makes the band the target of a `#compare` link.",
+      "file": "registry.vue"
     }
   ],
   "site": [

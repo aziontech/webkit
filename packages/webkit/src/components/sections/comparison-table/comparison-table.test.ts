@@ -1,5 +1,5 @@
 import { render, within } from '@testing-library/vue'
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 
 import { expectNoA11yViolations } from '../../../test/axe'
 import ComparisonTable from './comparison-table.vue'
@@ -116,20 +116,55 @@ describe('ComparisonTable', () => {
   })
 
   it('renders both theme logos when both files are set', () => {
-    const { getAllByRole } = band()
+    const { getByTestId } = band()
 
-    expect(
-      getAllByRole('img', { name: 'Cloudflare', hidden: true }).map((img) =>
-        img.getAttribute('src')
-      )
-    ).toEqual(['/dark.svg', '/light.svg'])
+    const mark = getByTestId(`${TESTID}__competitor-logo`)
+    expect(mark).toHaveAttribute('data-route', 'pair')
+    expect(mark).toHaveAccessibleName('Cloudflare')
+    expect(Array.from(mark.querySelectorAll('img')).map((img) => img.getAttribute('src'))).toEqual([
+      '/dark.svg',
+      '/light.svg'
+    ])
   })
 
-  it('falls back to the competitor name when no logo is set', () => {
-    const { getByRole, queryAllByRole } = band({ competitor: { name: 'Vercel' } })
+  it('carries the artwork of a single logo file', () => {
+    const { getByTestId } = band({
+      competitor: { name: 'Acme', logo: '/acme.svg', artwork: 'dark' }
+    })
 
-    expect(queryAllByRole('img', { name: 'Vercel', hidden: true })).toHaveLength(0)
-    expect(getByRole('columnheader', { name: 'Vercel' })).toBeInTheDocument()
+    const mark = getByTestId(`${TESTID}__competitor-logo`)
+    expect(mark).toHaveAttribute('data-route', 'single')
+    expect(mark).toHaveAttribute('data-artwork', 'dark')
+  })
+
+  it('falls back to the competitor name when no logo is set and the registry has none', async () => {
+    const { getByRole, getByTestId } = band({ competitor: { name: 'Acme' } })
+
+    expect(getByRole('columnheader', { name: 'Acme' })).toBeInTheDocument()
+    await new Promise((resolve) => setTimeout(resolve, 50))
+    const mark = getByTestId(`${TESTID}__competitor-logo`)
+    expect(mark).toHaveAttribute('data-route', 'wordmark')
+    expect(mark).toHaveTextContent('Acme')
+  })
+
+  it('takes the logo from the competitor registry when only a name is given', async () => {
+    const { getByRole, getByTestId } = band({ competitor: { name: 'Fastly' } })
+
+    expect(getByRole('columnheader', { name: 'Fastly' })).toBeInTheDocument()
+    await vi.waitFor(() =>
+      expect(getByTestId(`${TESTID}__competitor-logo`)).toHaveAttribute('data-route', 'pair')
+    )
+    const files = getByTestId(`${TESTID}__competitor-logo`).querySelectorAll('img')
+    expect(files).toHaveLength(2)
+    const sources = Array.from(files).map((file) => file.getAttribute('src'))
+    sources.forEach((source) => expect(source).toBeTruthy())
+    expect(sources[0]).not.toBe(sources[1])
+  })
+
+  it('sets the anchor as the band id', () => {
+    const { getByTestId } = band({ anchor: 'compare' })
+
+    expect(getByTestId(TESTID)).toHaveAttribute('id', 'compare')
   })
 
   it('renders no header when the title is empty', () => {
@@ -168,9 +203,19 @@ describe('ComparisonTable', () => {
     await expectNoA11yViolations(container)
   })
 
+  it('has no a11y violations in the registry example', async () => {
+    const { default: Registry } = await import('../../../../examples/comparison-table/registry.vue')
+    const { container, getByTestId } = render(Registry)
+    await vi.waitFor(() =>
+      expect(getByTestId(`${TESTID}__competitor-logo`)).toHaveAttribute('data-route', 'pair')
+    )
+
+    await expectNoA11yViolations(container)
+  })
+
   it('has no a11y violations with a text-only competitor', async () => {
     const { container } = band({
-      competitor: { name: 'Vercel' },
+      competitor: { name: 'Acme' },
       groups: [{ title: 'Security', rows: [{ capability: 'Zero Trust', azion: 'full' }] }]
     })
 
