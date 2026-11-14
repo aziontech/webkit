@@ -96,6 +96,49 @@ describe('ContactHub', () => {
     expect(status.getAttribute('rel')).toBe('noopener noreferrer')
   })
 
+  it('draws the status link with a success status indicator carrying its label', () => {
+    const { getByRole } = band()
+
+    const indicator = getByRole('link', { name: 'System status' }).querySelector(
+      '[data-testid="feedback-status-indicator"]'
+    )
+    expect(indicator).not.toBeNull()
+    expect(indicator).toHaveAttribute('data-severity', 'success')
+    expect(indicator).toHaveTextContent('System status')
+  })
+
+  it('renders a secondary action after the lead action of its lane', () => {
+    const { getAllByRole } = band({
+      lanes: [
+        {
+          ...lanes[0],
+          secondaryAction: { label: 'See pricing', href: '/pricing' }
+        }
+      ],
+      channels: []
+    })
+
+    const links = getAllByRole('link')
+    expect(links.map((link) => link.textContent?.trim())).toEqual(['Talk to sales', 'See pricing'])
+    expect(links[1]).toHaveAttribute('href', '/pricing')
+  })
+
+  it('sets the anchor as the band id, and no id without one', () => {
+    const { getByTestId, unmount } = band({ anchor: 'contact' })
+
+    expect(getByTestId(TESTID)).toHaveAttribute('id', 'contact')
+    unmount()
+
+    expect(band().getByTestId(TESTID).hasAttribute('id')).toBe(false)
+  })
+
+  it('draws the lanes and the channels in one frame', () => {
+    const { getAllByTestId } = band()
+
+    const [laneGrid, channelGrid] = getAllByTestId('marketing-card-grid')
+    expect(laneGrid?.parentElement).toBe(channelGrid?.parentElement)
+  })
+
   it('renders no status link or action when a lane carries none', () => {
     const { queryByRole } = band({
       lanes: [{ icon: 'pi pi-briefcase', title: 'Sales', description: 'Talk to us.' }],
@@ -157,6 +200,14 @@ describe('ContactHub', () => {
 
   it('has no a11y violations', async () => {
     const { container } = band()
+
+    await expectNoA11yViolations(container)
+  })
+
+  it('has no a11y violations with a secondary action', async () => {
+    const { container } = band({
+      lanes: [{ ...lanes[0], secondaryAction: { label: 'See pricing', href: '/pricing' } }]
+    })
 
     await expectNoA11yViolations(container)
   })

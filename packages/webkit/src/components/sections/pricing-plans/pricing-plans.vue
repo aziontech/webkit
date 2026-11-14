@@ -6,7 +6,6 @@
   import CardPricing from '../../content/card-pricing/card-pricing.vue'
   import FrameBox from '../../layout/frame-box/frame-box.vue'
   import CardGrid from '../../marketing/card-grid/card-grid.vue'
-  import SectionModule from '../../marketing/section-module/section-module.vue'
 
   defineOptions({
     name: 'PricingPlans',
@@ -55,6 +54,8 @@
   export type PricingPlansPlan = {
     /** Plan name heading the card; a plan without one is dropped. */
     name: string
+    /** Line under the price when the picked period's price states no billing terms. */
+    description?: string
     /** Raises the recommended plan, shows its tag and gives it the secondary button. */
     highlighted?: boolean
     /** Text of the highlighted plan's tag. */
@@ -76,7 +77,7 @@
     periods?: PricingPlansPeriod[]
     /** Accessible name of the billing-period toggle. */
     periodsAriaLabel?: string
-    /** The plan cards, in order; each is `{ name, highlighted?, tagLabel?, prices, featuresTitle?, features?, action? }` where a price is `{ period?, value, prefix?, suffix?, details? }`, a feature is `{ icon, label }` and `action` is `{ label, href }`; a plan without a name is dropped, and an action without a label or href is dropped. */
+    /** The plan cards, in order; each is `{ name, description?, highlighted?, tagLabel?, prices, featuresTitle?, features?, action? }` where a price is `{ period?, value, prefix?, suffix?, details? }`, a feature is `{ icon, label }` and `action` is `{ label, href }`; `description` stands in for a price without `details`, a plan without a name is dropped, and an action without a label or href is dropped. */
     plans?: PricingPlansPlan[]
   }
 
@@ -110,6 +111,8 @@
     plan.prices.find((price) => price.period === period.value) ??
     plan.prices.find((price) => !price.period) ?? { value: '' }
 
+  const detailsOf = (plan: PricingPlansPlan) => priceOf(plan).details || plan.description || ''
+
   const hasAction = (plan: PricingPlansPlan) => Boolean(plan.action?.label && plan.action?.href)
 </script>
 
@@ -120,15 +123,16 @@
     :data-testid="testId"
     class="scroll-mt-(--spacing-xxl)"
   >
-    <SectionModule
+    <div
       v-if="visiblePlans.length > 0"
-      :divided="false"
-      :padded="false"
+      :data-testid="`${testId}__band`"
+      class="w-full border-b border-(--border-default) bg-(--bg-canvas) px-(--layout-boundary-inline)"
     >
       <FrameBox
         flush
-        borders="y"
+        borders="x"
         marks="bottom"
+        class="mx-auto max-w-(--layout-measure-site)"
       >
         <div
           v-if="hasToggle"
@@ -148,6 +152,7 @@
             v-for="plan in visiblePlans"
             :key="plan.name"
             aligned
+            animated
             slot-position="middle"
             kind="transparent"
             :data-highlighted="plan.highlighted || null"
@@ -158,7 +163,7 @@
             :suffix="priceOf(plan).suffix ?? ''"
             :show-prefix="Boolean(priceOf(plan).prefix)"
             :show-suffix="Boolean(priceOf(plan).suffix)"
-            :pricing-details="priceOf(plan).details ?? ''"
+            :pricing-details="detailsOf(plan)"
             :show-tag="Boolean(plan.highlighted)"
             :tag-label="plan.tagLabel ?? ''"
             action-label=""
@@ -204,6 +209,6 @@
           </CardPricing>
         </CardGrid>
       </FrameBox>
-    </SectionModule>
+    </div>
   </section>
 </template>

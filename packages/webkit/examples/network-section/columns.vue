@@ -45,28 +45,30 @@
 
   const benefits = [
     {
-      title: 'Global resilience beyond anycast.',
+      title: 'Global resilience beyond anycast',
       description:
         'Traffic is steered around failures and network degradation faster than BGP can reconverge.'
     },
     {
-      title: 'Low latency everywhere.',
+      title: 'Low latency everywhere',
       description:
         'Compute, AI, databases, and security run in every data center, close to your users.'
     },
     {
-      title: 'Zero-ops autoscaling and failover.',
+      title: 'Zero-ops autoscaling and failover',
       description:
         'Absorbs any traffic spike with no cold starts, no capacity planning and no provisioning.'
     },
     {
-      title: 'Always-on protection.',
+      title: 'Always-on protection',
       description:
         'DDoS mitigation and a programmable security layer run in front of every application.'
     }
   ]
 
   const counts = [2, 3, 4]
+
+  const benefitCounts = [3, 4]
 </script>
 
 <template>
@@ -82,11 +84,11 @@
       :outcomes="outcomes.slice(0, count)"
     />
     <NetworkSection
-      v-for="count in counts"
+      v-for="count in benefitCounts"
       :key="`benefits-${count}`"
       kind="benefits"
       eyebrow="Region: Earth."
-      :title="`${count} benefits on the four-column floor`"
+      :title="`${count} benefits balanced on up to three columns`"
       lead="Built around your users. Distributed around your data."
       :claims="claims"
       :benefits="benefits.slice(0, count)"

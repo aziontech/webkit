@@ -1,4 +1,4 @@
-import { fireEvent, render, within } from '@testing-library/vue'
+import { fireEvent, render, waitFor, within } from '@testing-library/vue'
 import { afterEach, describe, expect, it } from 'vitest'
 
 import { expectNoA11yViolations } from '../../../test/axe'
@@ -139,11 +139,87 @@ describe('ComparePlans', () => {
     expect(within(inference[0]).getByText('Not included')).toBeInTheDocument()
   })
 
-  it('renders the hint and the tag next to a label', () => {
+  it('renders the hint button and the tag next to a label', () => {
     const { getByRole, getByText } = band()
 
-    expect(getByRole('button', { name: 'Conditional rules.' })).toBeInTheDocument()
+    expect(getByRole('button', { name: 'About Rules Engine' })).toBeInTheDocument()
     expect(getByText('Preview')).toBeInTheDocument()
+  })
+
+  it('opens the hint in a popover titled by the label', async () => {
+    const { getByRole } = band()
+
+    await fireEvent.click(getByRole('button', { name: 'About Rules Engine' }))
+
+    const dialog = await waitFor(() => {
+      const panel = document.body.querySelector<HTMLElement>('[role="dialog"]')
+      expect(panel).not.toBeNull()
+      return panel as HTMLElement
+    })
+    expect(within(dialog).getByText('Rules Engine')).toBeInTheDocument()
+    expect(within(dialog).getByText('Conditional rules.')).toBeInTheDocument()
+  })
+
+  it('draws included and not-included marks with tooltips of their labels', () => {
+    const { getAllByRole } = band()
+
+    const rows = getAllByRole('row').filter((row) => within(row).queryByRole('rowheader'))
+    const included = within(rows[1]).getAllByRole('cell')[0]!
+    expect(included.querySelector('.pi-check-circle')).not.toBeNull()
+    expect(within(included).getByTestId('overlay-tooltip')).toBeInTheDocument()
+    const excluded = within(rows[3]).getAllByRole('cell')[0]!
+    expect(excluded.querySelector('.ai-circle-minus')).not.toBeNull()
+  })
+
+  it('falls back to the locale labels when the cell labels are empty', () => {
+    const { getAllByRole } = band({ includedLabel: '', excludedLabel: '' })
+
+    const rows = getAllByRole('row').filter((row) => within(row).queryByRole('rowheader'))
+    expect(
+      within(within(rows[1]).getAllByRole('cell')[0]!).getByText('Included')
+    ).toBeInTheDocument()
+    expect(
+      within(within(rows[3]).getAllByRole('cell')[0]!).getByText('Not included')
+    ).toBeInTheDocument()
+  })
+
+  it('narrows the picker by its search field and reports no match', async () => {
+    const { getByTestId } = band()
+
+    await fireEvent.click(getByTestId('select-trigger'))
+    const search = await waitFor(() => {
+      const field = document.body.querySelector<HTMLInputElement>(
+        'input[aria-label="Search plan being compared"]'
+      )
+      expect(field).not.toBeNull()
+      return field as HTMLInputElement
+    })
+    const optionNames = () =>
+      Array.from(document.body.querySelectorAll('[data-testid="select-option"]')).map((node) =>
+        node.textContent?.trim()
+      )
+
+    await fireEvent.update(search, 'ent')
+    expect(optionNames()).toEqual(['Enterprise'])
+
+    await fireEvent.update(search, 'zzz')
+    expect(optionNames()).toEqual([])
+    expect(document.body.querySelector('[role="status"]')?.textContent?.trim()).toBe(
+      'No results found.'
+    )
+  })
+
+  it('draws the closing rule on the last row only when no closing link follows it', () => {
+    const lastRow = (container: Element) =>
+      Array.from(container.querySelectorAll('tbody tr')).at(-1) as HTMLElement
+
+    const { container, unmount } = band({ primaryAction: undefined })
+    expect(lastRow(container)).toHaveAttribute('data-closing', 'true')
+    expect(container.querySelectorAll('[data-closing]')).toHaveLength(1)
+    unmount()
+
+    const withLink = band()
+    expect(withLink.container.querySelectorAll('[data-closing]')).toHaveLength(0)
   })
 
   it('folds every column but the highlighted plan, and switches on a pick', async () => {

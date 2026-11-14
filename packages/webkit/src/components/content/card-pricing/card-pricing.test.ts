@@ -1,4 +1,4 @@
-import { render } from '@testing-library/vue'
+import { render, waitFor } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
 import Default from '../../../../examples/card-pricing/default.vue'
@@ -223,5 +223,30 @@ describe('CardPricing', () => {
     expect(getByTestId(`${ROOT}__title`)).toHaveTextContent('Pro')
     expect(getByTestId(`${ROOT}__currency__value`)).toHaveTextContent('20')
     expect(getByTestId(`${ROOT}__action`)).toHaveTextContent('Label')
+  })
+
+  it('leaves data-animated off by default', () => {
+    const { getByTestId } = render(CardPricing, { props: {} })
+    expect(getByTestId(ROOT).getAttribute('data-animated')).toBeNull()
+  })
+
+  it('swaps to the new price when animated and the price changes', async () => {
+    const { getByTestId, rerender } = render(CardPricing, {
+      props: { animated: true, value: '20', suffix: '/ mon' }
+    })
+    expect(getByTestId(ROOT).getAttribute('data-animated')).toBe('true')
+    expect(getByTestId(`${ROOT}__currency__value`)).toHaveTextContent('20')
+
+    await rerender({ animated: true, value: '200', suffix: '/ year' })
+
+    await waitFor(() => {
+      expect(getByTestId(`${ROOT}__currency__value`)).toHaveTextContent('200')
+      expect(getByTestId(`${ROOT}__currency__suffix`)).toHaveTextContent('/ year')
+    })
+  })
+
+  it('has no accessibility violations when animated', async () => {
+    const { container } = render(CardPricing, { props: { animated: true } })
+    await expectNoA11yViolations(container)
   })
 })

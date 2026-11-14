@@ -63,20 +63,39 @@
       ]"
       :benefits="[
         {
-          title: 'Global resilience beyond anycast.',
+          title: 'Global resilience beyond anycast',
           description:
             'Azion\'s software-defined global router steers traffic around failures and network degradation faster than BGP can reconverge. Always-on DDoS protection across 100+ data centers worldwide.'
         },
         {
-          title: 'Low latency everywhere.',
+          title: 'Low latency everywhere',
           description:
             'Compute, AI, databases, and security run in every data center, close to your users. Median global latency stays under 30 ms, with a built-in CDN and tiered caching for every app.'
         },
         {
-          title: 'Zero-ops autoscaling and failover.',
+          title: 'Zero-ops autoscaling and failover',
           description:
             'Absorbs any traffic spike with no cold starts, instantly scaling from zero to millions. No capacity planning, no provisioning. Scale-to-zero with no idle costs: you pay only for what you run.'
         }
+      ]"
+    />
+    <NetworkSection
+      kind="stats"
+      anchor="network-figures"
+      eyebrow="Region: Earth."
+      title="One distributed infrastructure without the complexity of managing, securing and scaling it"
+      lead="Built around your users. Distributed around your data."
+      :claims="[
+        '100+ data centers',
+        '100+ Tbps network capacity',
+        '30 ms median latency',
+        { label: '100% availability', mobile: false }
+      ]"
+      :stats="[
+        { value: '7', suffix: 'x', label: 'faster pages' },
+        { value: '90', suffix: '%', label: 'lower cloud costs' },
+        { value: '40', suffix: 'x', label: 'more simultaneous connections' },
+        { value: '100', suffix: '%', label: 'OWASP Top 10 mitigation' }
       ]"
     />
   </div>

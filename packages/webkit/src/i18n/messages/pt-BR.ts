@@ -299,6 +299,14 @@ export const ptBR: Messages = {
     placeholder: 'Buscar em tudo',
     title: 'Menu de comandos'
   },
+  comparePlans: {
+    about: 'Sobre {label}',
+    search: 'Buscar',
+    searchPicker: 'Buscar {picker}',
+    empty: 'Nenhum resultado encontrado.',
+    included: 'Incluído',
+    excluded: 'Não incluído'
+  },
   comparisonTable: {
     about: 'Sobre {capability}'
   },

@@ -9,12 +9,12 @@
     },
     {
       "name": "Types",
-      "summary": "Both floors stacked: the `outcomes` kind closes the band with four client quotes on one column each, the `benefits` kind with three run-in benefits on its four-column floor, the fourth cell left empty as on azion.com. The map, title, lead and claims above are the same in both.",
+      "summary": "The three floors stacked: `outcomes` closes the band with four client quotes on one column each, `benefits` with three benefit topics in one row, and `stats` with four headline figures; the stats band also keeps one claim to wider screens (`mobile: false`) and carries an anchor. The map, title, lead and claims above are the same in all three.",
       "file": "types.vue"
     },
     {
       "name": "Columns",
-      "summary": "The `outcomes` floor takes one column per entry, two at least and four at most: two, three and four outcomes. The `benefits` floor keeps four columns whatever it holds, so two, three and four benefits leave the trailing cells empty, as azion.com does.",
+      "summary": "The `outcomes` floor takes one column per entry, two at least and four at most: two, three and four outcomes. The `benefits` floor balances up to three columns: three benefits fill one row, four split 2 × 2.",
       "file": "columns.vue"
     }
   ],
@@ -27,7 +27,7 @@
     },
     {
       "name": "Benefits",
-      "summary": "Three network benefits on the four-column floor, each a bold lead-in sentence running into its explanation, with no icon, as on azion.com's solution pages.",
+      "summary": "Three network benefits on the floor, one topic each, in one row of three.",
       "file": "site-benefits.vue",
       "json": "site-benefits.json"
     }

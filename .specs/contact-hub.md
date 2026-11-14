@@ -3,17 +3,17 @@ name: contact-hub
 category: sections
 structure: monolithic
 status: implemented
-spec_version: 1
+spec_version: 2
 created: 2026-11-05
-last_updated: 2026-11-12
-checksum: 1c1353129624e15ee6c12dc4e13fe0b0f47ec4b3c7a03a15986de76a6b12d25e
+last_updated: 2026-11-14
+checksum: 5fda21edcfc097aa05c9ad6e0ff7e017cb68ff7134073c705ded8bf722f63630
 ---
 
 # ContactHub — Component Spec
 
 ## Purpose
 
-The band under the Contact title band: the team lanes side by side (Sales and Support), each with its scope in one sentence and the action that reaches that team, over a row of self-serve channels. It is a page section — the site places it from a `{ _id: 'contact-hub', props }` entry and binds `props` straight onto it — and it composes `section-module`, `frame-box`, `card-grid`, `topic` and `button`. A lane can carry a second link to the system status page, so a reader can check for an incident before opening a ticket.
+The band under the Contact title band: the team lanes side by side (Sales and Support), each with its scope in one sentence and the action that reaches that team, over a row of self-serve channels. It is a page section — the site places it from a `{ _id: 'contact-hub', props }` entry and binds `props` straight onto it — and it composes `section-module`, `frame-box`, `card-grid`, `topic`, `button` and `status-indicator`. Lanes and channels share one frame, the channels in the rows under the lanes. A lane can carry a second button and a link to the system status page, so a reader can check for an incident before opening a ticket.
 
 ## When to use
 
@@ -35,6 +35,8 @@ The band under the Contact title band: the team lanes side by side (Sales and Su
 - Don't pad `channels` to three or drop one to make the row fit.
 - Keep each lane's description to one sentence that states what that team handles.
 - Set `target: '_blank'` on a channel or status link that leaves the site.
+- Lead each lane with its `action`; add a `secondaryAction` only for a second route to the same team (an outlined button after the first).
+- Give the band an `anchor` when a page links to it with a `#hash`.
 
 ## Usage
 
@@ -45,12 +47,14 @@ The band under the Contact title band: the team lanes side by side (Sales and Su
 
 <template>
   <ContactHub
+    anchor="contact"
     :lanes="[
       {
         icon: 'pi pi-briefcase',
         title: 'Sales',
         description: 'Discuss your requirements or get custom pricing.',
-        action: { label: 'Talk to sales', href: '/contact/sales' }
+        action: { label: 'Talk to sales', href: '/contact/sales' },
+        secondaryAction: { label: 'See pricing', href: '/pricing' }
       }
     ]"
     :channels="[
@@ -68,10 +72,11 @@ The band under the Contact title band: the team lanes side by side (Sales and Su
 
 ## Props
 
-| Prop       | Type                  | Default | Required | JSDoc                                                                                                                                                                                      |
-| ---------- | --------------------- | ------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `lanes`    | `ContactHubLane[]`    | `[]`    | false    | The team lanes side by side, in order; each is `{ icon, title, description, action?, statusLink? }` where `action` is the lane's button and `statusLink` the system status link beside it. |
-| `channels` | `ContactHubChannel[]` | `[]`    | false    | The self-serve channels under the lanes, in order; each is `{ icon, title, description, href, target? }`, rendered as a linked topic.                                                      |
+| Prop       | Type                  | Default | Required | JSDoc                                                                                                                                                                                                                                                                  |
+| ---------- | --------------------- | ------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `anchor`   | `string`              | `''`    | false    | In-page id set on the band so a `#hash` link can scroll to it.                                                                                                                                                                                                         |
+| `lanes`    | `ContactHubLane[]`    | `[]`    | false    | The team lanes side by side, in order; each is `{ icon, title, description, action?, secondaryAction?, statusLink? }` where `action` is the lane's leading button, `secondaryAction` an outlined button after it, and `statusLink` the system status link beside them. |
+| `channels` | `ContactHubChannel[]` | `[]`    | false    | The self-serve channels in the rows under the lanes, in order; each is `{ icon, title, description, href, target? }`, rendered as a linked topic.                                                                                                                      |
 
 ## Events
 
@@ -84,9 +89,12 @@ The band under the Contact title band: the team lanes side by side (Sales and Su
 ## States
 
 - Visual states: `default`
-- Empty: the lanes frame renders only when `lanes` is set and the channels frame only when `channels` is set; with neither the band renders nothing but its root
-- A lane's action and status link render only when given
-- Lanes fill rows of up to two and channels rows of up to three, each balanced so every row is full
+- Empty: with neither `lanes` nor `channels` the band renders nothing but its root
+- Empty frame: with neither lanes nor channels the frame is left out; lanes alone or channels alone still draw one frame
+- A lane's action, secondary action and status link render only when given, in that order
+- Status link: the pill carries a `status-indicator` (success dot and the link's label)
+- One frame: lanes fill rows of up to two and the channels the rows under them, up to three per row, each group balanced so every row is full
+- Anchor: the root carries `id` = `anchor` when set, with a scroll margin so a `#hash` jump clears a sticky header
 
 ## Motion & Animations
 
@@ -102,7 +110,7 @@ The band under the Contact title band: the team lanes side by side (Sales and Su
 | lane description      | `.text-heading-sm`, `var(--text-default)`                                                   |
 | lane glyph            | `var(--primary)`                                                                            |
 | status link           | `var(--bg-surface)`, `var(--bg-surface-raised)`, `var(--border-default)`, `.text-button-lg` |
-| status dot            | `var(--success-contrast)`                                                                   |
+| anchor scroll offset  | `var(--spacing-xxl)`                                                                        |
 | frame rules and marks | `var(--border-default)`                                                                     |
 
 ## Theme gaps
@@ -114,16 +122,17 @@ The band under the Contact title band: the team lanes side by side (Sales and Su
 ## Accessibility (WCAG 2.1 AA)
 
 - Visible focus: the status link carries `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`; buttons and topics own theirs.
-- Keyboard map: `Tab` reaches each lane action, the status link and each channel; `Enter` follows it.
-- ARIA: the band is an unnamed `<section>`; each lane heading and each channel is an `h2`, so the outline reads one entry per route. Glyphs and the status dot are `aria-hidden`. A link with `target: '_blank'` carries `rel="noopener noreferrer"`.
+- Keyboard map: `Tab` reaches each lane action, its secondary action, the status link and each channel; `Enter` follows it.
+- ARIA: the band is an unnamed `<section>`; each lane heading and each channel is an `h2`, so the outline reads one entry per route. Glyphs are `aria-hidden`; the status pill's dot belongs to `status-indicator`, which hides it and keeps the label as the link's name. A link with `target: '_blank'` carries `rel="noopener noreferrer"`.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): lane heading `var(--text-muted)`, description `var(--text-default)`.
 - `motion-reduce:transition-none` on the status link's colour transition.
 - Touch target ≥40×40 px — the status link is at least `h-10` (`min-h-10`), buttons are large, channels are whole-cell links.
-- Reflow: the status link has `min-h-10` and wraps its label inside `max-w-full`, so it never overflows a narrow column or a 200% zoom.
+- Reflow: the status link has `min-h-10` and `max-w-full`, and the lane floor wraps its buttons and the status link onto new lines, so nothing overflows a narrow column or a 200% zoom.
 
 ## Examples
 
 - Default
+- Secondary action — a lane with a second, outlined button after its lead action, with an `anchor` on the band.
 
 ## Constraints — DO NOT
 
