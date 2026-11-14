@@ -3,8 +3,8 @@ const TEST_PATH = /\.(test|spec)\.[^/]+$|(^|\/)(test|tests|__tests__|fixtures?)\
 const JS_EXT = /\.(js|jsx|mjs|cjs)$/
 
 const DIRECTIVE =
-  /^(!|eslint-|eslint\s|global\s|@ts-|prettier-ignore|@vite-ignore|@vue-ignore|v8\s+ignore|c8\s+ignore|istanbul\s+ignore|[#@]__PURE__|[#@]__NO_SIDE_EFFECTS__|#\s*source(Mapping)?URL|#(end)?region\b|webpack[A-Z])/
-const HTML_DIRECTIVE = /^(eslint-|prettier-ignore)/
+  /^(!|eslint-|eslint\s|global\s|@ts-|prettier-ignore|@vite-ignore|@vue-ignore|v8\s+ignore|c8\s+ignore|istanbul\s+ignore|[#@]__PURE__|[#@]__NO_SIDE_EFFECTS__|#\s*source(Mapping)?URL|#(end)?region\b|webpack[A-Z]|webkit-local-navigation$)/
+const HTML_DIRECTIVE = /^(eslint-|prettier-ignore|webkit-local-navigation$)/
 const CODE_CONNECT_FILE = /\.figma\.(ts|js)$/
 const CODE_CONNECT_DIRECTIVE = /^\/\/\s*(url|source|component)=\S/
 const DEPRECATED_TAG = /@deprecated\b/

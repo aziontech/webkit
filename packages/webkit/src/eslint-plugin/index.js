@@ -14,6 +14,7 @@ import noHardcodedColor from './rules/no-hardcoded-color.js'
 import noHardcodedMotion from './rules/no-hardcoded-motion.js'
 import noLinkInSentence from './rules/no-link-in-sentence.js'
 import noOutputInCommand from './rules/no-output-in-command.js'
+import noPageNavigationMenu from './rules/no-page-navigation-menu.js'
 import noPhysicalDirection from './rules/no-physical-direction.js'
 import noPolymorphicAsProp from './rules/no-polymorphic-as-prop.js'
 import noRootRelativeAsset from './rules/no-root-relative-asset.js'
@@ -53,7 +54,8 @@ const rules = {
   'no-link-in-sentence': noLinkInSentence,
   'composable-readonly-return': composableReadonlyReturn,
   'composable-scope-cleanup': composableScopeCleanup,
-  'no-polymorphic-as-prop': noPolymorphicAsProp
+  'no-polymorphic-as-prop': noPolymorphicAsProp,
+  'no-page-navigation-menu': noPageNavigationMenu
 }
 
 const FILES = [
@@ -112,10 +114,15 @@ const RECOMMENDED = {
   'no-link-in-sentence': 'error',
   'composable-readonly-return': 'error',
   'composable-scope-cleanup': 'error',
-  'no-polymorphic-as-prop': 'error'
+  'no-polymorphic-as-prop': 'error',
+  'no-page-navigation-menu': 'warn'
 }
 
-export const HEURISTIC_RULES = Object.freeze(['container-needs-width', 'no-output-in-command'])
+export const HEURISTIC_RULES = Object.freeze([
+  'container-needs-width',
+  'no-output-in-command',
+  'no-page-navigation-menu'
+])
 
 const STRICT = Object.fromEntries(
   Object.keys(rules).map((r) => [r, HEURISTIC_RULES.includes(r) ? 'warn' : 'error'])
