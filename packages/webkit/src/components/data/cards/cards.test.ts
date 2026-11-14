@@ -2,7 +2,10 @@ import { fireEvent, render, within } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
 import Default from '../../../../examples/cards/default.vue'
+import EmptyExample from '../../../../examples/cards/empty.vue'
+import LoadingExample from '../../../../examples/cards/loading.vue'
 import Selectable from '../../../../examples/cards/selectable.vue'
+import SingleSelection from '../../../../examples/cards/single-selection.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Cards from './cards.vue'
 
@@ -49,6 +52,33 @@ describe('Cards', () => {
     loading.unmount()
     const empty = render(Cards, { props: { items: [] } })
     expect(empty.getByText('No items yet')).toBeTruthy()
+  })
+
+  it('renders the data-testid fallback and lets a consumer data-testid win', () => {
+    const fallback = render(Cards, { props: { items }, slots })
+    expect(fallback.getByTestId('data-cards')).toBeTruthy()
+    fallback.unmount()
+    const view = render(Cards, { props: { items }, slots, attrs: { 'data-testid': 'apps' } })
+    expect(view.getByTestId('apps')).toBeTruthy()
+    expect(view.queryByTestId('data-cards')).toBeNull()
+    expect(view.getAllByTestId('apps__card')).toHaveLength(3)
+  })
+
+  it('replaces the default empty state with the empty slot', () => {
+    const view = render(EmptyExample)
+    expect(view.getByText('No applications yet')).toBeTruthy()
+    expect(view.queryByText('No items yet')).toBeNull()
+    expect(view.getByRole('button', { name: 'Create application' })).toBeTruthy()
+  })
+
+  it('renders the loading and single selection examples without axe violations', async () => {
+    for (const example of [LoadingExample, SingleSelection]) {
+      const view = render(example)
+      await expectNoA11yViolations(view.container)
+      view.unmount()
+    }
+    const single = render(SingleSelection)
+    expect((single.getByRole('radio', { name: 'Pro' }) as HTMLInputElement).checked).toBe(true)
   })
 
   it('keeps the selection across pages with useCollection', async () => {
