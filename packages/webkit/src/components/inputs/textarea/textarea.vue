@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import type { StyleValue } from 'vue'
   import { computed, nextTick, onMounted, ref, useAttrs, watch } from 'vue'
 
   import { useFieldControl } from '../../../composables/use-field-control'
@@ -78,12 +79,12 @@
     props.autoResize ? 'none' : props.resize !== 'vertical' ? props.resize : props.resizable
   )
   const maxRows = computed(() => (props.autoResize && props.maxRows > 0 ? props.maxRows : null))
-  const sizing = computed(() =>
+  const sizing = computed<StyleValue>(() =>
     props.autoResize
       ? {
           width: '100%',
           '--textarea-min-rows': props.minRows,
-          '--textarea-max-rows': maxRows.value
+          '--textarea-max-rows': maxRows.value ?? undefined
         }
       : { width: '100%' }
   )
