@@ -110,6 +110,14 @@ describe('platform/dashboard/health-score-dashboard', () => {
     expect(tile.textContent).toContain('/ 100')
   })
 
+  it('links every open incident to its page', () => {
+    const view = render(Health)
+    const links = view
+      .getAllByRole('link')
+      .filter((link) => link.getAttribute('href')?.startsWith('/incidents/'))
+    expect(links.length).toBeGreaterThan(0)
+  })
+
   it('prints a dash for the overall score when the period is empty', () => {
     const view = render(HealthEmpty)
     const tile = byTestId('chart-stat-tile', view.container)!

@@ -1255,8 +1255,8 @@
             <Item
               v-for="incident in incidents"
               :key="incident.id"
+              :href="`/incidents/${incident.id}`"
               size="small"
-              role="listitem"
             >
               <Item.Media kind="icon">
                 <i

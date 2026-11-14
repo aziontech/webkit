@@ -111,7 +111,7 @@ so it is a `Table.CellStatus` (one semantic `Tag`), separate from severity. The 
 - **Description:** one sentence on the page's job. `What is open, how severe it is, what kind it is and who is involved.`
 - **Tile labels:** sentence case, no parentheses. `Critical or high open`, `False positives`.
 - **Hint:** one sentence definition ending with a period. `Alerts nobody has closed yet, at any severity.`
-- **Empty states:** state the fact, then the next step. `No alerts in this period` / `Nothing was raised in the last 30 days. Select a longer period.`
+- **Empty states:** state the fact, then the next step. `No alerts in this period` / `Nothing was raised in the last 30 days. Select a longer period.`, with the chosen period named in the sentence
 - **Severity labels:** the level only. `Critical`, `High`, `Medium`, `Low`, `Info`.
 
 ## Accessibility

@@ -83,8 +83,9 @@ A card titled `Open incidents` under the grid.
 
 ### M. Incident rows — `Item` (required)
 
-One `Item` per incident: what is affected, the cause, how many devices and what share of samples,
-when it opened, and its band.
+One `Item` per incident, with `href` to the incident's page (`/incidents/incident-03`) so the whole row
+is a link: what is affected, the cause, how many devices and what share of samples, when it opened,
+and its band.
 
 ## Do
 
