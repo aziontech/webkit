@@ -572,7 +572,7 @@
                     v-else-if="row.kind === 'folder'"
                     kind="link"
                     :label="value"
-                    class="min-w-0 truncate"
+                    class="min-w-0"
                     @click.stop="enterFolder(row.name)"
                   />
                   <span

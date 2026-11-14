@@ -262,7 +262,7 @@
                 <Link
                   :label="item.name"
                   :href="`/applications/${item.id}`"
-                  class="min-w-0 truncate"
+                  class="min-w-0"
                 />
               </template>
               <template #default="{ item }">

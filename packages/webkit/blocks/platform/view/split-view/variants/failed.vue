@@ -14,7 +14,7 @@
   import FilterMenu, { type FilterMenuField } from '@aziontech/webkit/filter-menu'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
-  import Item from '@aziontech/webkit/item'
+  import Item from '@aziontech/webkit/item-root'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import Popover from '@aziontech/webkit/popover'
   import Resizable from '@aziontech/webkit/resizable'
@@ -872,24 +872,25 @@
                             clickable
                             kind="option"
                             :aria-pressed="isValueApplied(field.id, entry.value)"
-                            class="flex-nowrap"
                             @click="toggleFieldValue(field.id, entry.value)"
                           >
-                            <span
-                              class="min-w-0 flex-1 truncate text-label-code-sm text-(--text-default)"
-                            >
-                              {{ formatEventValue(field, entry.value) }}
+                            <span class="flex min-w-0 flex-1 items-center gap-(--spacing-xs)">
+                              <span
+                                class="min-w-0 flex-1 truncate text-label-code-sm text-(--text-default)"
+                              >
+                                {{ formatEventValue(field, entry.value) }}
+                              </span>
+                              <span
+                                class="shrink-0 text-label-code-sm tabular-nums text-(--text-muted)"
+                              >
+                                {{ entry.count }}
+                              </span>
+                              <i
+                                v-if="isValueApplied(field.id, entry.value)"
+                                class="pi pi-check shrink-0 text-(--primary)"
+                                aria-hidden="true"
+                              />
                             </span>
-                            <span
-                              class="shrink-0 text-label-code-sm tabular-nums text-(--text-muted)"
-                            >
-                              {{ entry.count }}
-                            </span>
-                            <i
-                              v-if="isValueApplied(field.id, entry.value)"
-                              class="pi pi-check shrink-0 text-(--primary)"
-                              aria-hidden="true"
-                            />
                           </Item>
 
                           <p
@@ -991,24 +992,27 @@
                                     clickable
                                     kind="option"
                                     :aria-pressed="isValueApplied(field.id, entry.value)"
-                                    class="flex-nowrap"
                                     @click="toggleFieldValue(field.id, entry.value)"
                                   >
                                     <span
-                                      class="min-w-0 flex-1 truncate text-label-code-sm text-(--text-default)"
+                                      class="flex min-w-0 flex-1 items-center gap-(--spacing-xs)"
                                     >
-                                      {{ formatEventValue(field, entry.value) }}
+                                      <span
+                                        class="min-w-0 flex-1 truncate text-label-code-sm text-(--text-default)"
+                                      >
+                                        {{ formatEventValue(field, entry.value) }}
+                                      </span>
+                                      <span
+                                        class="shrink-0 text-label-code-sm tabular-nums text-(--text-muted)"
+                                      >
+                                        {{ entry.count }}
+                                      </span>
+                                      <i
+                                        v-if="isValueApplied(field.id, entry.value)"
+                                        class="pi pi-check shrink-0 text-(--primary)"
+                                        aria-hidden="true"
+                                      />
                                     </span>
-                                    <span
-                                      class="shrink-0 text-label-code-sm tabular-nums text-(--text-muted)"
-                                    >
-                                      {{ entry.count }}
-                                    </span>
-                                    <i
-                                      v-if="isValueApplied(field.id, entry.value)"
-                                      class="pi pi-check shrink-0 text-(--primary)"
-                                      aria-hidden="true"
-                                    />
                                   </Item>
 
                                   <p

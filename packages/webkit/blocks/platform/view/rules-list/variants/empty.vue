@@ -466,7 +466,7 @@
                             :label="row.name"
                             data-rule-name
                             :aria-label="`Edit ${row.name}`"
-                            class="min-w-0 truncate"
+                            class="min-w-0"
                             @click="(event: MouseEvent) => emit('edit', event, row)"
                           />
                           <Tag

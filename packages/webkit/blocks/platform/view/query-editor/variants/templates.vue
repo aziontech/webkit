@@ -604,14 +604,16 @@ LIMIT 3;`
                   clickable
                   kind="option"
                   :aria-pressed="selectedTable?.id === table.id"
-                  class="min-w-0 flex-1 flex-nowrap"
+                  class="min-w-0 flex-1"
                   @click="selectTable(table.id)"
                 >
-                  <i
-                    class="pi pi-table shrink-0 text-(--text-muted)"
-                    aria-hidden="true"
-                  />
-                  <span class="min-w-0 truncate text-label-sm">{{ table.name }}</span>
+                  <span class="flex min-w-0 flex-1 items-center gap-(--spacing-xs)">
+                    <i
+                      class="pi pi-table shrink-0 text-(--text-muted)"
+                      aria-hidden="true"
+                    />
+                    <span class="min-w-0 truncate text-label-sm">{{ table.name }}</span>
+                  </span>
                 </Item>
                 <DropdownMenu placement="bottom-end">
                   <DropdownMenu.Trigger>
@@ -936,13 +938,15 @@ LIMIT 3;`
                 <Item
                   clickable
                   kind="option"
-                  class="min-w-0 flex-1 flex-nowrap"
+                  class="min-w-0 flex-1"
                   :title="oneLine(item.sql)"
                   @click="loadFromHistory(item)"
                 >
-                  <span class="min-w-0 truncate font-code text-label-code-sm">{{
-                    oneLine(item.sql)
-                  }}</span>
+                  <span class="flex min-w-0 flex-1 items-center gap-(--spacing-xs)">
+                    <span class="min-w-0 truncate font-code text-label-code-sm">{{
+                      oneLine(item.sql)
+                    }}</span>
+                  </span>
                 </Item>
                 <DropdownMenu
                   placement="bottom-end"
