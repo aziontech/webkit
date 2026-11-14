@@ -802,39 +802,41 @@
                               class="flex group relative min-h-(--size-44) cursor-pointer"
                             >
                               <Card
-                                class="isolate w-full"
+                                class="w-full"
                                 role="button"
                                 tabindex="0"
                               >
                                 <template #content>
-                                  <span
-                                    aria-hidden="true"
-                                    class="pointer-events-none absolute inset-0 -z-1 overflow-hidden rounded-(--shape-card) opacity-0 transition-opacity duration-moderate-01 ease-productive-entrance group-focus-within:opacity-100 group-hover:opacity-100 motion-reduce:transition-none"
-                                  >
-                                    <i
-                                      :class="[item.icon, item.markClass]"
-                                      class="absolute start-(--spacing-xl) top-(--spacing-xl) scale-600 text-body-lg leading-none text-(--primary) opacity-25 blur-sm"
-                                    />
-                                  </span>
-                                  <div
-                                    class="relative z-10 flex flex-col items-start gap-(--spacing-md) text-start"
-                                  >
+                                  <div class="isolate flex flex-1 flex-col">
                                     <span
-                                      class="flex size-10 shrink-0 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
+                                      aria-hidden="true"
+                                      class="pointer-events-none absolute inset-0 -z-1 overflow-hidden rounded-(--shape-card) opacity-0 transition-opacity duration-moderate-01 ease-productive-entrance group-focus-within:opacity-100 group-hover:opacity-100 motion-reduce:transition-none"
                                     >
                                       <i
                                         :class="[item.icon, item.markClass]"
-                                        class="text-body-lg leading-none text-(--text-default) grayscale transition duration-moderate-01 ease-productive-entrance group-focus-within:grayscale-0 group-hover:grayscale-0 motion-reduce:transition-none"
-                                        aria-hidden="true"
+                                        class="absolute start-(--spacing-xl) top-(--spacing-xl) scale-600 text-body-lg leading-none text-(--primary) opacity-25 blur-sm"
                                       />
                                     </span>
-                                    <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
-                                      <h3 class="text-label-md text-(--text-default)">
-                                        {{ item.title }}
-                                      </h3>
-                                      <p class="text-pretty text-body-sm text-(--text-muted)">
-                                        {{ item.description }}
-                                      </p>
+                                    <div
+                                      class="relative z-10 flex flex-col items-start gap-(--spacing-md) text-start"
+                                    >
+                                      <span
+                                        class="flex size-10 shrink-0 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
+                                      >
+                                        <i
+                                          :class="[item.icon, item.markClass]"
+                                          class="text-body-lg leading-none text-(--text-default) grayscale transition duration-moderate-01 ease-productive-entrance group-focus-within:grayscale-0 group-hover:grayscale-0 motion-reduce:transition-none"
+                                          aria-hidden="true"
+                                        />
+                                      </span>
+                                      <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+                                        <h3 class="text-label-md text-(--text-default)">
+                                          {{ item.title }}
+                                        </h3>
+                                        <p class="text-pretty text-body-sm text-(--text-muted)">
+                                          {{ item.description }}
+                                        </p>
+                                      </div>
                                     </div>
                                   </div>
                                 </template>

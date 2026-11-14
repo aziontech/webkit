@@ -1157,37 +1157,39 @@
                         <div
                           class="flex flex-col gap-(--spacing-sm) border-b border-(--border-default) p-(--spacing-md) sm:flex-row"
                         >
-                          <Select
-                            :model-value="account"
-                            size="large"
-                            class="shrink-0 sm:w-(--container-3xs)"
-                            :display-value="accountLabel"
-                            @update:model-value="selectAccount"
-                          >
-                            <Select.Trigger aria-label="Git account">
-                              <template #iconLeft>
-                                <i
-                                  class="ai ai-github shrink-0 text-body-md leading-none text-(--text-default)"
-                                  aria-hidden="true"
-                                />
-                              </template>
-                            </Select.Trigger>
-                            <Select.Content>
-                              <Select.Option
-                                v-for="option in accounts"
-                                :key="option.value"
-                                :value="option.value"
-                              >
-                                {{ option.label }}
-                              </Select.Option>
-                              <Select.Option
-                                :value="ADD_ACCOUNT"
-                                icon="pi pi-plus-circle"
-                              >
-                                Add GitHub account
-                              </Select.Option>
-                            </Select.Content>
-                          </Select>
+                          <div class="shrink-0 sm:w-(--container-3xs)">
+                            <Select
+                              :model-value="account"
+                              size="large"
+                              class="w-full"
+                              :display-value="accountLabel"
+                              @update:model-value="selectAccount"
+                            >
+                              <Select.Trigger aria-label="Git account">
+                                <template #iconLeft>
+                                  <i
+                                    class="ai ai-github shrink-0 text-body-md leading-none text-(--text-default)"
+                                    aria-hidden="true"
+                                  />
+                                </template>
+                              </Select.Trigger>
+                              <Select.Content>
+                                <Select.Option
+                                  v-for="option in accounts"
+                                  :key="option.value"
+                                  :value="option.value"
+                                >
+                                  {{ option.label }}
+                                </Select.Option>
+                                <Select.Option
+                                  :value="ADD_ACCOUNT"
+                                  icon="pi pi-plus-circle"
+                                >
+                                  Add GitHub account
+                                </Select.Option>
+                              </Select.Content>
+                            </Select>
+                          </div>
 
                           <Input
                             v-model="repoQuery"
@@ -1945,62 +1947,64 @@
                           title="Build and deploy commands"
                         >
                           <template #content>
-                            <Accordion type="multiple">
-                              <Accordion.Item
-                                v-for="command in commands"
-                                :key="command.field"
-                                :value="command.field"
-                                class="last:border-b-0"
-                              >
-                                <Accordion.Trigger :level="3">
-                                  <span class="flex min-w-0 items-center gap-(--spacing-sm)">
-                                    <span class="shrink-0 text-label-md text-(--text-default)">
-                                      {{ command.label }}
-                                    </span>
-                                    <span
-                                      class="min-w-0 flex-1 truncate font-(family-name:--font-code) text-body-sm text-(--text-muted)"
-                                    >
-                                      {{ form[command.field].trim() || command.empty }}
-                                    </span>
-                                    <Tag
-                                      v-if="isEdited(command)"
-                                      label="Edited"
-                                      severity="info"
-                                      size="small"
-                                      class="shrink-0"
-                                    />
-                                  </span>
-                                </Accordion.Trigger>
-                                <Accordion.Content>
-                                  <div
-                                    class="flex min-w-0 flex-col gap-(--spacing-sm) px-(--spacing-md) pb-(--spacing-md) pt-(--spacing-sm)"
-                                  >
-                                    <Input
-                                      v-model="form[command.field]"
-                                      size="large"
-                                      class="w-full font-(family-name:--font-code)"
-                                      :aria-label="command.label"
-                                      :placeholder="command.fallback"
-                                    />
-                                    <div
-                                      class="flex min-w-0 items-center justify-between gap-(--spacing-sm)"
-                                    >
-                                      <p class="min-w-0 text-body-sm text-(--text-muted)">
-                                        {{ command.description }}
-                                      </p>
-                                      <Button
+                            <div class="[&>*>*:last-child]:border-b-0">
+                              <Accordion type="multiple">
+                                <Accordion.Item
+                                  v-for="command in commands"
+                                  :key="command.field"
+                                  :value="command.field"
+                                >
+                                  <Accordion.Trigger :level="3">
+                                    <span class="flex min-w-0 items-center gap-(--spacing-sm)">
+                                      <span class="shrink-0 text-label-md text-(--text-default)">
+                                        {{ command.label }}
+                                      </span>
+                                      <span
+                                        class="min-w-0 flex-1 truncate font-(family-name:--font-code) text-body-sm text-(--text-muted)"
+                                      >
+                                        {{ form[command.field].trim() || command.empty }}
+                                      </span>
+                                      <Tag
                                         v-if="isEdited(command)"
-                                        type="button"
-                                        label="Use the default"
-                                        kind="transparent"
+                                        label="Edited"
+                                        severity="info"
                                         size="small"
-                                        @click="resetCommand(command)"
+                                        class="shrink-0"
                                       />
+                                    </span>
+                                  </Accordion.Trigger>
+                                  <Accordion.Content>
+                                    <div
+                                      class="flex min-w-0 flex-col gap-(--spacing-sm) px-(--spacing-md) pb-(--spacing-md) pt-(--spacing-sm)"
+                                    >
+                                      <Input
+                                        v-model="form[command.field]"
+                                        size="large"
+                                        monospace
+                                        class="w-full"
+                                        :aria-label="command.label"
+                                        :placeholder="command.fallback"
+                                      />
+                                      <div
+                                        class="flex min-w-0 items-center justify-between gap-(--spacing-sm)"
+                                      >
+                                        <p class="min-w-0 text-body-sm text-(--text-muted)">
+                                          {{ command.description }}
+                                        </p>
+                                        <Button
+                                          v-if="isEdited(command)"
+                                          type="button"
+                                          label="Use the default"
+                                          kind="transparent"
+                                          size="small"
+                                          @click="resetCommand(command)"
+                                        />
+                                      </div>
                                     </div>
-                                  </div>
-                                </Accordion.Content>
-                              </Accordion.Item>
-                            </Accordion>
+                                  </Accordion.Content>
+                                </Accordion.Item>
+                              </Accordion>
+                            </div>
                           </template>
                         </Card>
 
@@ -2065,43 +2069,45 @@
                                     >
                                   </div>
 
-                                  <Item.List
+                                  <div
                                     v-if="protection.mode === 'existing'"
                                     class="border-t border-(--border-default)"
                                   >
-                                    <Item
-                                      v-for="option in firewalls"
-                                      :key="option.value"
-                                      size="small"
-                                      clickable
-                                      :aria-pressed="option.value === protection.firewall"
-                                      @click="protection.firewall = option.value"
-                                    >
-                                      <Item.Media>
-                                        <span
-                                          class="flex size-8 shrink-0 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
-                                        >
+                                    <Item.List>
+                                      <Item
+                                        v-for="option in firewalls"
+                                        :key="option.value"
+                                        size="small"
+                                        clickable
+                                        :aria-pressed="option.value === protection.firewall"
+                                        @click="protection.firewall = option.value"
+                                      >
+                                        <Item.Media>
+                                          <span
+                                            class="flex size-8 shrink-0 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
+                                          >
+                                            <i
+                                              class="ai ai-edge-firewall text-body-md leading-none text-(--text-default)"
+                                              aria-hidden="true"
+                                            />
+                                          </span>
+                                        </Item.Media>
+                                        <Item.Content>
+                                          <Item.Title>{{ option.label }}</Item.Title>
+                                          <Item.Description>{{
+                                            option.description
+                                          }}</Item.Description>
+                                        </Item.Content>
+                                        <Item.Actions>
                                           <i
-                                            class="ai ai-edge-firewall text-body-md leading-none text-(--text-default)"
+                                            v-if="option.value === protection.firewall"
+                                            class="pi pi-check shrink-0 text-(--text-default)"
                                             aria-hidden="true"
                                           />
-                                        </span>
-                                      </Item.Media>
-                                      <Item.Content>
-                                        <Item.Title>{{ option.label }}</Item.Title>
-                                        <Item.Description>{{
-                                          option.description
-                                        }}</Item.Description>
-                                      </Item.Content>
-                                      <Item.Actions>
-                                        <i
-                                          v-if="option.value === protection.firewall"
-                                          class="pi pi-check shrink-0 text-(--text-default)"
-                                          aria-hidden="true"
-                                        />
-                                      </Item.Actions>
-                                    </Item>
-                                  </Item.List>
+                                        </Item.Actions>
+                                      </Item>
+                                    </Item.List>
+                                  </div>
 
                                   <div
                                     v-else

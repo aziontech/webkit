@@ -501,25 +501,29 @@
                               'Type a position to move the rule there'
                             "
                           >
-                            <Input
-                              :model-value="positionValue(group.value, row)"
-                              size="small"
-                              inputmode="numeric"
-                              autocomplete="off"
-                              data-control="position"
-                              class="w-14 shrink-0 [&_input]:text-center [&_input]:tabular-nums"
-                              :disabled="Boolean(lockReason(group.value, row))"
-                              :aria-label="
-                                lockReason(group.value, row)
-                                  ? `Position ${position(group.value, row) + 1} of ${row.name} in the ${group.label} phase. ${lockReason(group.value, row)}`
-                                  : `Position of ${row.name} in the ${group.label} phase. Type a number from ${pinned(group.value) + 1} to ${group.total} to move it.`
-                              "
-                              @update:model-value="onPositionInput(row, $event)"
-                              @focus="($event.target as HTMLInputElement).select()"
-                              @keydown.enter.prevent="commitPosition(group.value, row, true)"
-                              @keydown.esc.prevent="cancelPosition()"
-                              @blur="commitPosition(group.value, row, false)"
-                            />
+                            <span
+                              class="inline-flex w-14 shrink-0 tabular-nums [&_input]:text-center"
+                            >
+                              <Input
+                                :model-value="positionValue(group.value, row)"
+                                size="small"
+                                inputmode="numeric"
+                                autocomplete="off"
+                                data-control="position"
+                                class="w-full"
+                                :disabled="Boolean(lockReason(group.value, row))"
+                                :aria-label="
+                                  lockReason(group.value, row)
+                                    ? `Position ${position(group.value, row) + 1} of ${row.name} in the ${group.label} phase. ${lockReason(group.value, row)}`
+                                    : `Position of ${row.name} in the ${group.label} phase. Type a number from ${pinned(group.value) + 1} to ${group.total} to move it.`
+                                "
+                                @update:model-value="onPositionInput(row, $event)"
+                                @focus="($event.target as HTMLInputElement).select()"
+                                @keydown.enter.prevent="commitPosition(group.value, row, true)"
+                                @keydown.esc.prevent="cancelPosition()"
+                                @blur="commitPosition(group.value, row, false)"
+                              />
+                            </span>
                           </Tooltip>
                           <Tooltip :text="lockReason(group.value, row) || 'Move up'">
                             <IconButton
