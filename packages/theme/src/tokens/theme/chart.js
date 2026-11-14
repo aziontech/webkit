@@ -39,6 +39,7 @@ export const chart = {
   dark: {
     ...shared,
     'chart-series-3': tokenRef('primitives.green.600'),
+    'chart-tooltip-muted': tokenRef('primitives.gray.275'),
     'chart-series-2': tokenRef('primitives.blue.500'),
     'chart-series-5': tokenRef('primitives.violet.600'),
     'chart-sequential-1': tokenRef('primitives.blue.900'),
