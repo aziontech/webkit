@@ -28,7 +28,7 @@
   import ThemeSwitcher, { type ThemeSwitcherValue } from '@aziontech/webkit/theme-switcher'
   import { toast, Toaster } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
-  import { computed, nextTick, onMounted, onUnmounted, ref } from 'vue'
+  import { computed, nextTick, onMounted, onUnmounted, ref, useId } from 'vue'
 
   const navigation: ConsoleLayoutNavGroup[] = [
     {
@@ -201,7 +201,6 @@
   ]
 
   const theme = ref<ThemeSwitcherValue>('system')
-  const search = ref('')
 
   const onSearchSelect = (_event: MouseEvent | KeyboardEvent, value: string | number) => {
     if (value === 'action:theme') theme.value = theme.value === 'dark' ? 'light' : 'dark'
@@ -258,6 +257,7 @@
     () => accounts.find((entry) => entry.id === currentAccountId.value) ?? accounts[0]
   )
 
+  const searchId = useId()
   const switchOpen = ref(true)
   const loadFailed = ref(true)
   const accountQuery = ref('')
@@ -316,7 +316,7 @@
   const openSwitch = () => {
     accountQuery.value = ''
     switchOpen.value = true
-    nextTick(() => document.getElementById('account-switch-search')?.focus())
+    nextTick(() => document.getElementById(searchId)?.focus())
   }
 
   const chooseAccount = (row: Account) => {
@@ -578,7 +578,7 @@
             <div class="flex justify-center px-(--spacing-xs)">
               <StatusIndicator
                 severity="success"
-                label="All systems normal"
+                label="All systems operational"
               />
             </div>
           </div>
@@ -608,55 +608,6 @@
               />
             </template>
           </PageHeader>
-
-          <div class="flex items-center gap-(--spacing-xs)">
-            <Button
-              label="Filter"
-              kind="outlined"
-              size="medium"
-              icon="pi pi-filter"
-            />
-            <div class="flex min-w-0 flex-1">
-              <Input
-                v-model="search"
-                size="medium"
-                placeholder="Search"
-                aria-label="Search applications"
-                class="w-full"
-              >
-                <template #iconLeft>
-                  <i
-                    class="pi pi-search"
-                    aria-hidden="true"
-                  />
-                </template>
-              </Input>
-            </div>
-            <Tooltip text="Refresh">
-              <IconButton
-                icon="pi pi-refresh"
-                kind="outlined"
-                size="medium"
-                aria-label="Refresh"
-              />
-            </Tooltip>
-            <Tooltip text="Download CSV">
-              <IconButton
-                icon="pi pi-download"
-                kind="outlined"
-                size="medium"
-                aria-label="Download CSV"
-              />
-            </Tooltip>
-            <Tooltip text="Columns">
-              <IconButton
-                icon="ai ai-column"
-                kind="outlined"
-                size="medium"
-                aria-label="Columns"
-              />
-            </Tooltip>
-          </div>
 
           <Card :padded="false">
             <template #content>
@@ -688,7 +639,7 @@
                 Pick the account to work in. Search matches a name, an ID or a client ID.
               </DialogDescription>
               <Input
-                id="account-switch-search"
+                :id="searchId"
                 v-model="accountQuery"
                 placeholder="Search accounts"
                 aria-label="Search accounts"
@@ -718,6 +669,8 @@
                     :columns="accountColumns"
                     row-key="id"
                     :bordered="false"
+                    paginated
+                    :page-size="10"
                     aria-label="Accounts"
                   >
                     <template #cell-name="{ row }">
@@ -745,14 +698,14 @@
                           class="shrink-0 text-body-sm text-(--text-muted)"
                           aria-hidden="true"
                         />
-                        <button
-                          type="button"
-                          class="min-w-0 truncate rounded-(--shape-button) text-start text-label-sm text-(--text-default) hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)"
+                        <Button
+                          :label="row.name"
+                          kind="link"
+                          size="small"
+                          class="min-w-0"
                           :aria-current="row.id === currentAccountId ? 'true' : undefined"
                           @click="chooseAccount(row)"
-                        >
-                          {{ row.name }}
-                        </button>
+                        />
                         <Tag
                           v-if="row.id === currentAccountId"
                           label="Current"

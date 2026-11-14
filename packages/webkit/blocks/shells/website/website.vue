@@ -434,7 +434,7 @@
       { icon: 'pi pi-discord', label: 'Azion on Discord', href: 'https://discord.gg/azion' },
       { icon: 'pi pi-reddit', label: 'Azion on Reddit', href: 'https://www.reddit.com/r/aziontech' }
     ],
-    statusLabel: 'All Systems Operational',
+    statusLabel: 'All systems operational',
     languages: ['EN', 'PT-BR', 'ES'],
     languageAriaLabel: 'Language'
   }

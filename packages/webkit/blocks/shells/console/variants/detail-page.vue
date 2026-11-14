@@ -397,7 +397,7 @@
           <div class="flex justify-center px-(--spacing-xs)">
             <StatusIndicator
               severity="success"
-              label="All systems normal"
+              label="All systems operational"
             />
           </div>
         </div>

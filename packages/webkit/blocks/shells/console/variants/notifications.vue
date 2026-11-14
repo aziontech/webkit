@@ -9,10 +9,12 @@
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
   import EmptyState from '@aziontech/webkit/empty-state'
   import IconButton from '@aziontech/webkit/icon-button'
-  import Input from '@aziontech/webkit/input'
+  import Item from '@aziontech/webkit/item'
   import PageHeader from '@aziontech/webkit/page-header'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
+  import Tag from '@aziontech/webkit/tag'
   import ThemeSwitcher, { type ThemeSwitcherValue } from '@aziontech/webkit/theme-switcher'
+  import { toast, Toaster } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, ref } from 'vue'
 
@@ -187,7 +189,6 @@
   ]
 
   const theme = ref<ThemeSwitcherValue>('system')
-  const search = ref('')
 
   const onSearchSelect = (_event: MouseEvent | KeyboardEvent, value: string | number) => {
     if (value === 'action:theme') theme.value = theme.value === 'dark' ? 'light' : 'dark'
@@ -204,11 +205,13 @@
     read: boolean
   }
 
-  const icons: Record<NotificationKind, { icon: string; tone: string }> = {
-    'deploy-failed': { icon: 'pi pi-times-circle', tone: 'text-(--danger)' },
-    'deploy-succeeded': { icon: 'pi pi-check-circle', tone: 'text-(--success)' },
-    info: { icon: 'pi pi-info-circle', tone: 'text-(--text-muted)' }
+  const icons: Record<NotificationKind, string> = {
+    'deploy-failed': 'pi pi-times-circle',
+    'deploy-succeeded': 'pi pi-check-circle',
+    info: 'pi pi-info-circle'
   }
+
+  const PAGE_SIZE = 5
 
   const notifications = ref<Notification[]>([
     {
@@ -248,8 +251,26 @@
     notifications.value = notifications.value.map((item) => ({ ...item, read: true }))
   }
 
+  const shown = ref(PAGE_SIZE)
+  const visibleNotifications = computed(() => notifications.value.slice(0, shown.value))
+  const hiddenCount = computed(() => Math.max(notifications.value.length - shown.value, 0))
+
+  const showOlder = () => {
+    shown.value += PAGE_SIZE
+  }
+
   const clearAll = () => {
+    const cleared = notifications.value
     notifications.value = []
+    toast.info('Notifications cleared.', {
+      id: 'notifications-cleared',
+      action: {
+        label: 'Undo',
+        onClick: () => {
+          notifications.value = cleared
+        }
+      }
+    })
   }
 
   const markRead = (id: string) => {
@@ -455,7 +476,7 @@
           <div class="flex justify-center px-(--spacing-xs)">
             <StatusIndicator
               severity="success"
-              label="All systems normal"
+              label="All systems operational"
             />
           </div>
         </div>
@@ -515,36 +536,42 @@
           </div>
         </div>
 
-        <ul
+        <Item.List
           v-if="notifications.length"
-          class="m-0 flex list-none flex-col p-0"
+          aria-label="Notifications"
         >
-          <li
-            v-for="item in notifications"
+          <Item
+            v-for="item in visibleNotifications"
             :key="item.id"
-            :data-unread="!item.read || null"
-            class="flex gap-(--spacing-sm) border-b border-(--border-default) px-(--spacing-md) py-(--spacing-sm) data-[unread]:bg-(--bg-surface-raised)"
+            size="small"
           >
-            <i
-              :class="`${icons[item.kind].icon} ${icons[item.kind].tone}`"
-              class="mt-(--spacing-xxs) shrink-0"
-              aria-hidden="true"
-            />
-            <div class="flex min-w-0 flex-1 flex-col gap-(--spacing-xxs)">
-              <p class="m-0 text-label-md text-(--text-default)">
+            <Item.Media kind="icon">
+              <i
+                :class="icons[item.kind]"
+                :data-kind="item.kind"
+                class="data-[kind=deploy-failed]:text-(--danger) data-[kind=deploy-succeeded]:text-(--success) data-[kind=info]:text-(--text-muted)"
+                aria-hidden="true"
+              />
+            </Item.Media>
+            <Item.Content>
+              <Item.Title>
                 <span
                   v-if="!item.read"
                   class="sr-only"
                   >Unread:
                 </span>
                 {{ item.title }}
-              </p>
-              <p class="m-0 text-body-sm text-(--text-muted)">{{ item.description }}</p>
+                <Tag
+                  v-if="!item.read"
+                  label="New"
+                  severity="info"
+                  size="small"
+                  aria-hidden="true"
+                />
+              </Item.Title>
+              <Item.Description>{{ item.description }}</Item.Description>
               <span class="text-label-sm text-(--text-muted)">{{ item.time }}</span>
-              <div
-                v-if="item.kind !== 'info'"
-                class="flex flex-wrap items-center gap-(--spacing-xs) pt-(--spacing-xxs)"
-              >
+              <Item.Actions v-if="item.kind !== 'info'">
                 <Button
                   label="Edit"
                   kind="outlined"
@@ -558,10 +585,21 @@
                   icon="pi pi-refresh"
                   @click="markRead(item.id)"
                 />
-              </div>
-            </div>
-          </li>
-        </ul>
+              </Item.Actions>
+            </Item.Content>
+          </Item>
+        </Item.List>
+        <div
+          v-if="hiddenCount"
+          class="flex justify-center px-(--spacing-md) py-(--spacing-xs)"
+        >
+          <Button
+            :label="`Show ${Math.min(hiddenCount, PAGE_SIZE)} older`"
+            kind="transparent"
+            size="small"
+            @click="showOlder"
+          />
+        </div>
 
         <div
           v-else
@@ -601,55 +639,6 @@
           </template>
         </PageHeader>
 
-        <div class="flex items-center gap-(--spacing-xs)">
-          <Button
-            label="Filter"
-            kind="outlined"
-            size="medium"
-            icon="pi pi-filter"
-          />
-          <div class="flex min-w-0 flex-1">
-            <Input
-              v-model="search"
-              size="medium"
-              placeholder="Search"
-              aria-label="Search applications"
-              class="w-full"
-            >
-              <template #iconLeft>
-                <i
-                  class="pi pi-search"
-                  aria-hidden="true"
-                />
-              </template>
-            </Input>
-          </div>
-          <Tooltip text="Refresh">
-            <IconButton
-              icon="pi pi-refresh"
-              kind="outlined"
-              size="medium"
-              aria-label="Refresh"
-            />
-          </Tooltip>
-          <Tooltip text="Download CSV">
-            <IconButton
-              icon="pi pi-download"
-              kind="outlined"
-              size="medium"
-              aria-label="Download CSV"
-            />
-          </Tooltip>
-          <Tooltip text="Columns">
-            <IconButton
-              icon="ai ai-column"
-              kind="outlined"
-              size="medium"
-              aria-label="Columns"
-            />
-          </Tooltip>
-        </div>
-
         <Card :padded="false">
           <template #content>
             <div
@@ -662,4 +651,5 @@
       </div>
     </div>
   </ConsoleLayout>
+  <Toaster position="bottom-right" />
 </template>
