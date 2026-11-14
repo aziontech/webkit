@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 3
 template: 2
-checksum: f51410f10a206b6bf524e4997b4b5b2d7630b9576ca42a704cd36fc8779115d5
+checksum: ee87149ad383f0dd2d8e67fe44cdede7be57a96cc0307bcf6249006a12e75790
 created: 2026-11-12
 last_updated: 2026-11-14
 ---
@@ -162,7 +162,7 @@ _none_
 
 ## Performance
 
-- Bundle budget: 4.25 KB gzip for `./copy-prompt-button` in `.size-limit.json`, initial chunk only; `Tooltip` is the growth.
+- Bundle budget: 7.9 KB gzip for `./copy-prompt-button` in `.size-limit.json`, initial chunks only (the entry and the chunks it imports statically); `Tooltip` is the growth.
 - Runtime budget: none; one timer while the copied state shows.
 - Heavy parts: the copy fallback popover is an async component, requested only when the clipboard write is refused. The dismiss `IconButton` loads only when `closable` is set and `Logo` only when an agent sets `logo`; each keeps its box with an empty placeholder of the same size until its chunk arrives, and server rendering resolves both before it writes the HTML.
 

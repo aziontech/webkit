@@ -28,7 +28,7 @@
   {
     "name": "doc-markdown",
     "path": "src/components/documentation/doc-markdown/doc-markdown.vue",
-    "limit": "15 KB",
+    "limit": "14.65 KB",
     "entryOnly": true
   },
   {
@@ -45,7 +45,7 @@
   {
     "name": "copy-prompt-button",
     "path": "src/components/actions/copy-prompt-button/copy-prompt-button.vue",
-    "limit": "4.25 KB",
+    "limit": "7.9 KB",
     "entryOnly": true
   },
   {
@@ -56,7 +56,7 @@
   {
     "name": "doc-agent-card",
     "path": "src/components/documentation/doc-agent-card/doc-agent-card.vue",
-    "limit": "7 KB",
+    "limit": "8.4 KB",
     "entryOnly": true
   },
   {
@@ -108,7 +108,7 @@
   {
     "name": "card",
     "path": "src/components/content/card/card.vue",
-    "limit": "13.5 KB"
+    "limit": "13.75 KB"
   },
   {
     "name": "cards",
@@ -496,7 +496,8 @@
   {
     "name": "article-body",
     "path": "src/components/sections/article-body/article-body.vue",
-    "limit": "40.5 KB"
+    "limit": "40.2 KB",
+    "entryOnly": true
   },
   {
     "name": "article-cards",
@@ -517,7 +518,7 @@
   {
     "name": "article-index-resource-hub",
     "path": "src/components/sections/article-index-resource-hub/article-index-resource-hub.vue",
-    "limit": "29 KB"
+    "limit": "28.65 KB"
   },
   {
     "name": "resource-grid",
@@ -527,7 +528,7 @@
   {
     "name": "story-library",
     "path": "src/components/sections/story-library/story-library.vue",
-    "limit": "27.1 KB",
+    "limit": "30.65 KB",
     "entryOnly": true
   },
   {
@@ -605,7 +606,7 @@
   {
     "name": "compare-plans",
     "path": "src/components/sections/compare-plans/compare-plans.vue",
-    "limit": "34.5 KB"
+    "limit": "34 KB"
   },
   {
     "name": "compare-support-tiers",
@@ -685,13 +686,13 @@
   {
     "name": "job-posting",
     "path": "src/components/sections/job-posting/job-posting.vue",
-    "limit": "50 KB",
+    "limit": "49.2 KB",
     "entryOnly": true
   },
   {
     "name": "logo-wall-quote",
     "path": "src/components/sections/logo-wall-quote/logo-wall-quote.vue",
-    "limit": "22 KB"
+    "limit": "23.15 KB"
   },
   {
     "name": "photo-marquee",
@@ -701,7 +702,7 @@
   {
     "name": "listing-browser",
     "path": "src/components/sections/listing-browser/listing-browser.vue",
-    "limit": "67.25 KB",
+    "limit": "71.15 KB",
     "entryOnly": true
   },
   {
@@ -769,12 +770,12 @@
   {
     "name": "contact-hub",
     "path": "src/components/sections/contact-hub/contact-hub.vue",
-    "limit": "8.5 KB"
+    "limit": "8.25 KB"
   },
   {
     "name": "listing-table",
     "path": "src/components/sections/listing-table/listing-table.vue",
-    "limit": "60.1 KB"
+    "limit": "60.3 KB"
   },
   {
     "name": "site-footer",
@@ -816,7 +817,7 @@
   {
     "name": "chart",
     "path": "src/components/chart/chart/index.ts",
-    "limit": "22.3 KB"
+    "limit": "22.2 KB"
   },
   {
     "name": "chart-root",
@@ -1158,17 +1159,17 @@
   {
     "name": "webkit-provider",
     "path": "src/components/utils/webkit-provider/webkit-provider.vue",
-    "limit": "9.5 KB"
+    "limit": "10.2 KB"
   },
   {
     "name": "locales-pt-BR",
     "path": "src/locales/pt-BR.ts",
-    "limit": "8.75 KB"
+    "limit": "9.5 KB"
   },
   {
     "name": "locales-es",
     "path": "src/locales/es.ts",
-    "limit": "8.9 KB"
+    "limit": "9.65 KB"
   },
   {
     "name": "phone-input",
@@ -1244,7 +1245,7 @@
   {
     "name": "chat-message-root",
     "path": "src/components/ai/chat-message/chat-message.vue",
-    "limit": "17.75 KB"
+    "limit": "17.95 KB"
   },
   {
     "name": "chat-message-actions",
@@ -1426,7 +1427,8 @@
   {
     "name": "filter-menu-chips",
     "path": "src/components/data/filter-menu/filter-menu-chips/filter-menu-chips.vue",
-    "limit": "20 KB"
+    "limit": "19.9 KB",
+    "entryOnly": true
   },
   {
     "name": "upload-progress",
@@ -1694,19 +1696,19 @@
   {
     "name": "table-filter",
     "path": "src/components/data/table/table-filter/table-filter.vue",
-    "limit": "48.6 KB",
+    "limit": "15.7 KB",
     "entryOnly": true
   },
   {
     "name": "table-applied-filters",
     "path": "src/components/data/table/table-applied-filters/table-applied-filters.vue",
-    "limit": "22.4 KB",
+    "limit": "9.6 KB",
     "entryOnly": true
   },
   {
     "name": "table-column-selector",
     "path": "src/components/data/table/table-column-selector/table-column-selector.vue",
-    "limit": "20.8 KB",
+    "limit": "9.05 KB",
     "entryOnly": true
   },
   {
