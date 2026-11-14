@@ -14,6 +14,7 @@
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
   import InputGroupAddon from '@aziontech/webkit/input-group-addon'
+  import InputGroupInput from '@aziontech/webkit/input-group-input'
   import InputGroupRoot from '@aziontech/webkit/input-group-root'
   import MultiSelect from '@aziontech/webkit/multi-select'
   import PanelContent from '@aziontech/webkit/panel-content'
@@ -59,8 +60,6 @@
     { label: 'Form', value: 'Form' },
     { label: 'JSON', value: 'JSON' }
   ]
-  const fieldClass =
-    'h-full min-w-0 flex-1 border-0 bg-transparent px-(--spacing-md) text-(--text-default) outline-none placeholder:text-(--text-muted) disabled:cursor-not-allowed disabled:text-(--text-disabled)'
 
   const formId = useId()
   const fieldId = (entry: Entry, part: string) => `${formId}-${part}-${entry.id}`
@@ -458,23 +457,19 @@
                                   >
                                 </span>
                               </InputGroupAddon>
-                              <input
+                              <InputGroupInput
                                 :id="fieldId(entries[index], 'key')"
-                                :value="entries[index].key"
+                                :model-value="entries[index].key"
                                 placeholder="MY_VARIABLE"
                                 autocomplete="off"
                                 spellcheck="false"
-                                :aria-invalid="!!keyError(entries[index]) || undefined"
+                                :invalid="!!keyError(entries[index])"
                                 :aria-describedby="
                                   keyError(entries[index])
                                     ? messageId(entries[index], 'key')
                                     : undefined
                                 "
-                                :class="fieldClass"
-                                class="text-label-code-sm"
-                                @input="
-                                  setKey(entries[index], ($event.target as HTMLInputElement).value)
-                                "
+                                @update:model-value="(value) => setKey(entries[index], value)"
                                 @paste="pasteIntoKey($event, index)"
                               />
                               <Tooltip
@@ -504,7 +499,7 @@
                                   >
                                 </span>
                               </InputGroupAddon>
-                              <input
+                              <InputGroupInput
                                 :id="fieldId(entries[index], 'value')"
                                 v-model="entries[index].value"
                                 :type="
@@ -517,14 +512,12 @@
                                 "
                                 autocomplete="off"
                                 spellcheck="false"
-                                :aria-invalid="!!valueError(entries[index]) || undefined"
+                                :invalid="!!valueError(entries[index])"
                                 :aria-describedby="
                                   valueError(entries[index])
                                     ? messageId(entries[index], 'value')
                                     : undefined
                                 "
-                                :class="fieldClass"
-                                class="text-label-sm"
                               />
                               <Tooltip
                                 v-if="entries[index].secret"
