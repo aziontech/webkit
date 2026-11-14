@@ -351,8 +351,40 @@
       active-id="applications"
       @search-select="onSearchSelect"
     >
+      <template #sidebar-header="{ compact }">
+        <Tooltip
+          v-if="!compact"
+          :text="`Switch account (${shortcut})`"
+          placement="right"
+          class="w-full"
+        >
+          <button
+            type="button"
+            :aria-label="`Account: ${currentAccount.name}. Switch account`"
+            aria-haspopup="dialog"
+            aria-keyshortcuts="Control+O Meta+O"
+            class="flex h-10 w-full min-w-0 items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-xs) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
+            @click="openSwitch"
+          >
+            <Avatar
+              :label="currentAccount.name"
+              size="small"
+              kind="square"
+            />
+            <span class="min-w-0 flex-1 truncate text-start text-label-sm text-(--text-default)">{{
+              currentAccount.name
+            }}</span>
+            <i
+              class="pi pi-sort shrink-0 text-body-xs text-(--text-muted)"
+              aria-hidden="true"
+            />
+          </button>
+        </Tooltip>
+      </template>
+
       <template #header-start="{ compact }">
         <Tooltip
+          v-if="compact"
           :text="`Switch account (${shortcut})`"
           placement="bottom"
         >
@@ -361,7 +393,7 @@
             :aria-label="`Account: ${currentAccount.name}. Switch account`"
             aria-haspopup="dialog"
             aria-keyshortcuts="Control+O Meta+O"
-            class="flex h-7 max-w-(--container-3xs) min-w-0 items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-xxs) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
+            class="flex h-7 min-w-0 items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-xxs) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
             @click="openSwitch"
           >
             <Avatar
@@ -369,11 +401,6 @@
               size="small"
               kind="square"
             />
-            <span
-              v-if="!compact"
-              class="min-w-0 truncate text-label-sm text-(--text-default)"
-              >{{ currentAccount.name }}</span
-            >
             <i
               class="pi pi-chevron-down shrink-0 text-body-xs text-(--text-muted)"
               aria-hidden="true"

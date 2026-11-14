@@ -38,7 +38,10 @@
     "console layout component",
     "ConsoleLayout",
     "app layout with router view",
-    "layout do console com RouterView"
+    "layout do console com RouterView",
+    "account list failed to load",
+    "switch account error",
+    "erro ao carregar contas"
   ],
   "skills": ["webkit-navigation", "webkit-layout"],
   "primary": {
@@ -58,8 +61,13 @@
     },
     {
       "name": "AccountSwitch",
-      "summary": "The ListPage rendered through `ConsoleLayout` with the account switcher in its `header-start` slot (square `Avatar`, the account name, a chevron; avatar and chevron only while compact; Ctrl+O or ⌘O): a large `Dialog` with search over the organization, group and workspace `Table` tree (expand and collapse, type, ID and client ID), the current account marked, a toast on switch, and Account settings in the footer.",
+      "summary": "The ListPage rendered through `ConsoleLayout` with the account switcher in its `sidebar-header` slot, full width in the rail under the wordmark (square `Avatar`, the account name, a sort glyph; tooltip on the right; Ctrl+O or ⌘O), and in its `header-start` slot while compact (avatar and chevron only): a large `Dialog` with search over the organization, group and workspace `Table` tree (expand and collapse, type, ID and client ID), the current account marked, a toast on switch, and Account settings in the footer.",
       "file": "variants/account-switch.vue"
+    },
+    {
+      "name": "AccountSwitchFailed",
+      "summary": "The AccountSwitch dialog when the account list fails to load: a danger `Alert`, The account list could not be loaded., with Try again replaces the account `Table` under the search; Try again loads the tree.",
+      "file": "variants/account-switch-failed.vue"
     }
   ]
 }
