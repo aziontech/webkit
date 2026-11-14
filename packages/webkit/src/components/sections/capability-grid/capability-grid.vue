@@ -92,13 +92,12 @@
     Boolean(action?.label && action.href)
 
   const buttons = computed<CapabilityGridAction[]>(() => {
-    if (props.primaryAction || props.secondaryAction)
-      return [
-        shown(props.primaryAction) ? { ...props.primaryAction, kind: 'secondary' as const } : null,
-        shown(props.secondaryAction)
-          ? { ...props.secondaryAction, kind: 'outlined' as const }
-          : null
-      ].filter((action): action is CapabilityGridAction => action !== null)
+    if (props.primaryAction || props.secondaryAction) {
+      const named: CapabilityGridAction[] = []
+      if (shown(props.primaryAction)) named.push({ ...props.primaryAction, kind: 'secondary' })
+      if (shown(props.secondaryAction)) named.push({ ...props.secondaryAction, kind: 'outlined' })
+      return named
+    }
     return props.actions.map((action, index) => ({
       ...action,
       kind: action.kind ?? (index === 0 ? 'secondary' : 'outlined')
