@@ -1,7 +1,7 @@
 import { cleanup, fireEvent, render, waitFor } from '@testing-library/vue'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { userEvent } from 'vitest/browser'
-import { defineComponent, nextTick } from 'vue'
+import { defineComponent, nextTick, ref } from 'vue'
 
 import Default from '../../../../examples/popover/default.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
@@ -224,34 +224,43 @@ describe('Popover (compound / overlay)', () => {
     expect(dialog.getAttribute('aria-describedby')).toBe(description.id)
   })
 
-  it('omits aria-labelledby / aria-describedby when no Title / Description exist', async () => {
+  it('is named by its trigger and omits aria-describedby when no Title / Description exist', async () => {
     render(host({}, { withTitle: false, withDescription: false }))
     await fireEvent.click(byTestId('overlay-popover__trigger') as HTMLElement)
     await waitFor(() => expect(panel()).not.toBeNull())
 
     const dialog = panel() as HTMLElement
-    expect(dialog.hasAttribute('aria-labelledby')).toBe(false)
+    expect(dialog.getAttribute('aria-labelledby')).toBe(control().id)
+    expect(control().id).not.toBe('')
     expect(dialog.hasAttribute('aria-describedby')).toBe(false)
+    await expectNoA11yViolations(dialog)
   })
 
   // ---- Focus management -------------------------------------------------------
-  it('keeps focus on the trigger on open — does not pull it into the panel', async () => {
+  it('moves focus to the first control in the panel on open', async () => {
     render(host())
     await fireEvent.click(byTestId('overlay-popover__trigger') as HTMLElement)
     await waitFor(() => expect(panel()).not.toBeNull())
 
-    // Focus is NOT auto-moved to the close button (or anywhere inside the panel).
-    const close = byTestId('overlay-popover__close') as HTMLElement
-    expect(document.activeElement).not.toBe(close)
+    await waitFor(() => expect(document.activeElement).toBe(byTestId('overlay-popover__close')))
+  })
+
+  it('does not steal focus on a first render that starts open', async () => {
+    render(host({ defaultOpen: true }))
+    await waitFor(() => expect(panel()).not.toBeNull())
+    await nextTick()
+
     expect((panel() as HTMLElement).contains(document.activeElement)).toBe(false)
   })
 
-  it('does not auto-focus the panel when it has no focusable content', async () => {
+  it('leaves focus where it was when the panel has no focusable content', async () => {
     render(textOnlyHost)
+    control().focus()
     await fireEvent.click(byTestId('overlay-popover__trigger') as HTMLElement)
     await waitFor(() => expect(panel()).not.toBeNull())
+    await nextTick()
 
-    expect(document.activeElement).not.toBe(panel())
+    expect(document.activeElement).toBe(control())
   })
 
   it('does not close when focus moves to an outside element (Tab never dismisses)', async () => {
@@ -269,15 +278,13 @@ describe('Popover (compound / overlay)', () => {
     expect(panel()).not.toBeNull()
   })
 
-  it('Tab / Shift+Tab do not close the panel (focus is contained in trigger + panel)', async () => {
+  it('Shift+Tab from the first control returns to the trigger and keeps the panel open', async () => {
     render(host())
     await fireEvent.click(byTestId('overlay-popover__trigger') as HTMLElement)
-    await waitFor(() => expect(panel()).not.toBeNull())
+    await waitFor(() => expect(document.activeElement).toBe(byTestId('overlay-popover__close')))
 
-    await fireEvent.keyDown(document, { key: 'Tab' })
-    expect(panel()).not.toBeNull()
-
-    await fireEvent.keyDown(document, { key: 'Tab', shiftKey: true })
+    await userEvent.keyboard('{Shift>}{Tab}{/Shift}')
+    expect(document.activeElement).toBe(control())
     expect(panel()).not.toBeNull()
   })
 
@@ -686,26 +693,35 @@ describe('keyboard map (spec)', () => {
   }
 
   it.each(['{Enter}', ' '])(
-    '%s on the trigger opens the panel and keeps focus on the trigger',
+    '%s on the trigger opens the panel and moves focus to its first control',
     async (key) => {
       await openWith(key)
-      expect(document.activeElement).toBe(control())
+      await waitFor(() => expect(document.activeElement).toBe(byTestId('overlay-popover__close')))
     }
   )
 
   it('Tab from the trigger moves into the panel, to its first control', async () => {
     await openWith('{Enter}')
+    control().focus()
     await userEvent.keyboard('{Tab}')
     expect(document.activeElement).toBe(byTestId('overlay-popover__close'))
   })
 
-  it('Tab on the last control returns focus to the trigger', async () => {
-    await openWith('{Enter}')
+  it('Tab on the last control closes the panel and moves on to the control after the trigger', async () => {
+    render(
+      defineComponent({
+        components: { Host: host() },
+        template: `<div><Host /><button type="button" data-testid="after">After</button></div>`
+      })
+    )
+    control().focus()
+    await userEvent.keyboard('{Enter}')
+    await waitFor(() => expect(panel()).not.toBeNull())
     const controls = panel()!.querySelectorAll<HTMLElement>('button')
     controls[controls.length - 1]!.focus()
     await userEvent.keyboard('{Tab}')
-    expect(document.activeElement).toBe(control())
-    expect(panel()).not.toBeNull()
+    expect(document.activeElement).toBe(byTestId('after'))
+    await waitFor(() => expect(panel()).toBeNull())
   })
 
   it('Shift+Tab on the first control returns focus to the trigger', async () => {
@@ -748,7 +764,7 @@ describe('text input as the trigger control', () => {
 })
 
 describe('nested in a Dialog (overlay layer stack)', () => {
-  it('Escape closes the popover only, and Tab does not leave it for the dialog', async () => {
+  it('Escape closes the popover only, and Tab past its last control stays inside the dialog', async () => {
     const { default: Dialog } = await import('../dialog/dialog.vue')
     const { default: DialogPortal } = await import('../dialog/dialog-portal.vue')
     const { default: DialogContent } = await import('../dialog/dialog-content.vue')
@@ -788,11 +804,15 @@ describe('nested in a Dialog (overlay layer stack)', () => {
     await fireEvent.click(control())
     await waitFor(() => expect(panel()).not.toBeNull())
 
+    await fireEvent.keyDown(document, { key: 'Escape' })
+    await waitFor(() => expect(panel()).toBeNull())
+    expect(byTestId('host-dialog')!.getAttribute('data-state')).toBe('open')
+
+    await fireEvent.click(control())
+    await waitFor(() => expect(panel()).not.toBeNull())
     byTestId('pop-b')!.focus()
     await userEvent.keyboard('{Tab}')
-    expect(document.activeElement).toBe(control())
-
-    await fireEvent.keyDown(document, { key: 'Escape' })
+    expect(document.activeElement).toBe(byTestId('dialog-first'))
     await waitFor(() => expect(panel()).toBeNull())
     expect(byTestId('host-dialog')!.getAttribute('data-state')).toBe('open')
   })
@@ -827,5 +847,136 @@ describe('Popover global listeners', () => {
     } finally {
       vi.restoreAllMocks()
     }
+  })
+})
+
+describe('portalled children (overlay layer stack)', () => {
+  const inPopover = (inner: string, components: Record<string, unknown>) =>
+    defineComponent({
+      components: { Popover, PopoverTrigger, PopoverContent, ...components },
+      setup() {
+        return { value: ref(''), items: ['Alpha', 'Beta'] }
+      },
+      template: `
+        <Popover>
+          <PopoverTrigger><button type="button">Filters</button></PopoverTrigger>
+          <PopoverContent>${inner}</PopoverContent>
+        </Popover>
+      `
+    })
+
+  const openPopover = async () => {
+    await fireEvent.click(control())
+    await waitFor(() => expect(panel()).not.toBeNull())
+  }
+
+  it('picking a Select option or pressing Escape in its list keeps the popover open', async () => {
+    const {
+      default: Select,
+      SelectContent,
+      SelectOption,
+      SelectTrigger
+    } = await import('../../inputs/select/index')
+    render(
+      inPopover(
+        `<Select v-model="value" aria-label="Status">
+           <SelectTrigger />
+           <SelectContent>
+             <SelectOption value="active">Active</SelectOption>
+             <SelectOption value="paused">Paused</SelectOption>
+           </SelectContent>
+         </Select>`,
+        { Select, SelectContent, SelectOption, SelectTrigger }
+      )
+    )
+    await openPopover()
+    const trigger = byTestId('input-select-trigger')!
+
+    await userEvent.click(trigger)
+    await waitFor(() => expect(byTestId('input-select-content')).not.toBeNull())
+    await userEvent.click(document.body.querySelector<HTMLElement>('[role="option"]')!)
+    await waitFor(() => expect(byTestId('input-select-content')).toBeNull())
+    expect(panel()).not.toBeNull()
+    expect(trigger.textContent).toContain('Active')
+
+    await userEvent.click(trigger)
+    await waitFor(() => expect(byTestId('input-select-content')).not.toBeNull())
+    await userEvent.keyboard('{Escape}')
+    await waitFor(() => expect(byTestId('input-select-content')).toBeNull())
+    expect(panel()).not.toBeNull()
+
+    await userEvent.keyboard('{Escape}')
+    await waitFor(() => expect(panel()).toBeNull())
+  })
+
+  it('picking a DropdownMenu option keeps the popover open', async () => {
+    const {
+      default: DropdownMenu,
+      DropdownMenuOption,
+      DropdownMenuTrigger
+    } = await import('../../navigation/dropdown-menu/index')
+    render(
+      inPopover(
+        `<DropdownMenu>
+           <DropdownMenuTrigger><button type="button">Sort</button></DropdownMenuTrigger>
+           <DropdownMenuOption value="name">Name</DropdownMenuOption>
+           <DropdownMenuOption value="date">Date</DropdownMenuOption>
+         </DropdownMenu>`,
+        { DropdownMenu, DropdownMenuOption, DropdownMenuTrigger }
+      )
+    )
+    await openPopover()
+    await userEvent.click(
+      panel()!.querySelector<HTMLElement>('button:not([data-testid$="__close"])')!
+    )
+    await waitFor(() =>
+      expect(
+        document.body.querySelector('[data-testid="navigation-dropdown-menu__panel"]')
+      ).not.toBeNull()
+    )
+    await userEvent.click(document.body.querySelector<HTMLElement>('[role^="menuitem"]')!)
+    await waitFor(() =>
+      expect(
+        document.body.querySelector('[data-testid="navigation-dropdown-menu__panel"]')
+      ).toBeNull()
+    )
+    expect(panel()).not.toBeNull()
+  })
+
+  it('picking a Combobox suggestion or pressing Escape in it keeps the popover open', async () => {
+    const { default: Combobox } = await import('../../inputs/combobox/combobox.vue')
+    render(
+      defineComponent({
+        components: { Popover, PopoverTrigger, PopoverContent, Combobox },
+        setup() {
+          return {
+            value: ref(''),
+            options: [{ value: 'Alpha' }, { value: 'Beta' }]
+          }
+        },
+        template: `
+          <Popover>
+            <PopoverTrigger><button type="button">Filters</button></PopoverTrigger>
+            <PopoverContent>
+              <Combobox v-model="value" :options="options" aria-label="Name" />
+            </PopoverContent>
+          </Popover>
+        `
+      })
+    )
+    await openPopover()
+    const input = panel()!.querySelector<HTMLInputElement>('input')!
+    await userEvent.click(input)
+    const listbox = () => document.body.querySelector<HTMLElement>('[role="listbox"]')
+    await waitFor(() => expect(listbox()?.style.display).not.toBe('none'))
+    await userEvent.keyboard('{Escape}')
+    await waitFor(() => expect(listbox()?.style.display).toBe('none'))
+    expect(panel()).not.toBeNull()
+
+    await userEvent.keyboard('{ArrowDown}')
+    await waitFor(() => expect(listbox()?.style.display).not.toBe('none'))
+    await userEvent.click(listbox()!.querySelector<HTMLElement>('[role="option"]')!)
+    expect(panel()).not.toBeNull()
+    expect(input.value).toBe('Alpha')
   })
 })

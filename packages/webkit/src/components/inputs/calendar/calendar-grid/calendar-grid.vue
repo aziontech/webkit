@@ -263,6 +263,13 @@
     goToMonth(viewYear.value, viewMonth.value - 1)
   }
 
+  const goToYearOffset = (years: number) => {
+    if (disabledAll.value) {
+      return
+    }
+    goToMonth(viewYear.value + years, viewMonth.value)
+  }
+
   const goToNextMonth = () => {
     if (disabledAll.value) {
       return
@@ -308,14 +315,24 @@
         event.preventDefault()
         moveFocus(day.time, 7)
         break
+      case 'Home':
+        event.preventDefault()
+        moveFocus(day.time, -day.date.getDay())
+        break
+      case 'End':
+        event.preventDefault()
+        moveFocus(day.time, 6 - day.date.getDay())
+        break
       case 'PageUp':
         event.preventDefault()
-        goToPreviousMonth()
+        if (event.shiftKey) goToYearOffset(-1)
+        else goToPreviousMonth()
         focusActiveCell()
         break
       case 'PageDown':
         event.preventDefault()
-        goToNextMonth()
+        if (event.shiftKey) goToYearOffset(1)
+        else goToNextMonth()
         focusActiveCell()
         break
       case 'Enter':

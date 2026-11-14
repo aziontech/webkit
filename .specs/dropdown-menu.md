@@ -7,7 +7,7 @@ spec_version: 4
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3775-16746&m=dev
   node_id: 3775:16746
-checksum: fec501a43d757b9b5e3141f443f037dbce6a43a93cd7a31de9339913785bb5fc
+checksum: 4b8624f29b7ae9d4bcbe79a1299e97b8cf55ae1f248abb389000add0665ea794
 created: 2026-06-26
 last_updated: 2026-11-14
 ---
@@ -216,6 +216,7 @@ Tree-shaking alternative — the same sub-components as standalone imports:
 - Keyboard map:
   - On the trigger: `Enter` / `Space` opens the panel and focuses the first enabled option; `Down` opens and focuses the first option; `Up` opens and focuses the last option.
   - Inside the panel: `Down` / `Up` move between enabled options (wrap-around); `Home` / `End` jump to first/last enabled option; a printable character moves to the next enabled option whose label starts with it (typeahead: characters typed within 500 ms accumulate, a repeated character cycles); `Enter` / `Space` activate the focused option; `Esc` closes the panel and returns focus to the trigger; `Tab` closes the panel and lets focus proceed to the next focusable element after the trigger; `Shift+Tab` closes it and returns focus to the trigger. Typing in a search field inside the top slot keeps `Home` / `End` for the caret. Tests: `dropdown-menu.test.ts` › keyboard map (spec).
+  - Nested overlays: the open panel joins the shared overlay layer stack (`useOverlayLayer`), so inside a `Popover`, `Dialog` or `Drawer` activating an option or pressing `Esc` closes only the menu; a pointer-down inside a higher layer (a `Select` list opened from the top slot) does not close the menu.
 - ARIA: the slotted control (or the wrapper, when the slot has none) exposes `aria-haspopup="menu"`, `aria-expanded`, `aria-controls`, with a single tab stop; the panel's `aria-labelledby` follows the control's `id`; the `role="menu"` element wraps only the groups and options, and the optional top and bottom slots (search fields, footers with buttons) sit beside it inside the floating panel, because a `menu` may own only menu items, groups and separators (`aria-required-children`); each group uses `role="group"` + `aria-labelledby` pointing at its label id (when `label` is set); each option uses `role="menuitem"`, `aria-disabled` mirrors `disabled`; a selected option is `role="menuitemradio"` with `aria-checked="true"` and a visible check mark. Options are `tabindex="-1"` (roving focus through the arrows), so `Tab` leaves the menu. While closed, a menu attaches no `document` listener; the outside-`mousedown` listener lives only while the panel is open.
 - Contrast ≥4.5:1 (text) / ≥3:1 (icons), including the disabled state (validated via `--text-disabled` token).
 - `motion-reduce:animate-none` on `animate-popup-scale-*`; `motion-reduce:transition-none` on `transition-colors` for hover/selected states.

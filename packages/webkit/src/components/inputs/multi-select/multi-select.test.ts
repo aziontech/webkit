@@ -1,9 +1,10 @@
 import { fireEvent, render } from '@testing-library/vue'
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { userEvent } from 'vitest/browser'
 import { defineComponent, h, nextTick, ref } from 'vue'
 
 import Default from '../../../../examples/multi-select/default.vue'
+import { expectNoA11yViolations } from '../../../test/axe'
 import MultiSelect, {
   MultiSelectContent,
   MultiSelectGroup,
@@ -14,7 +15,9 @@ import MultiSelect, {
 // Content Teleports to body, escaping the render container — query it from
 // document.body and remove lingering listbox nodes between tests for isolation.
 const cleanupTeleported = () => {
-  document.body.querySelectorAll('[role="listbox"]').forEach((el) => el.remove())
+  document.body
+    .querySelectorAll('[data-testid="multi-select-content"], [role="listbox"]')
+    .forEach((el) => el.remove())
 }
 
 const listbox = () => document.body.querySelector<HTMLElement>('[role="listbox"]')
@@ -212,7 +215,9 @@ describe('MultiSelect (composition / overlay)', () => {
     await nextTick()
     await nextTick()
 
-    const panel = listbox() as HTMLElement
+    const panel = document.body.querySelector<HTMLElement>(
+      '[data-testid="multi-select-content"]'
+    ) as HTMLElement
     const panelRect = panel.getBoundingClientRect()
     const triggerRect = trigger.getBoundingClientRect()
     expect(panelRect.top).toBeGreaterThanOrEqual(triggerRect.bottom)
@@ -221,6 +226,49 @@ describe('MultiSelect (composition / overlay)', () => {
     // No CSS in browser mode: the ScrollArea's own overflow utilities do not apply here,
     // so assert that the capped panel holds more content than its box (what scrolls).
     expect(panel.scrollHeight).toBeGreaterThan(panel.clientHeight)
+    cleanupTeleported()
+  })
+
+  it('closes from its own trigger on a real pointer click instead of reopening', async () => {
+    const { getByTestId } = render(Harness, { props: { open: false } })
+    cleanupTeleported()
+    const trigger = getByTestId('multi-select-trigger')
+
+    await userEvent.click(trigger)
+    expect(listbox()).not.toBeNull()
+
+    await userEvent.click(trigger)
+    await nextTick()
+    expect(listbox()).toBeNull()
+    expect(trigger.getAttribute('aria-expanded')).toBe('false')
+    cleanupTeleported()
+  })
+
+  it('opens from the closed trigger with Home, End and a typed character', async () => {
+    const { getByTestId } = render(Harness, { props: { open: false } })
+    cleanupTeleported()
+    const trigger = getByTestId('multi-select-trigger')
+    const focused = () => (document.activeElement as HTMLElement | null)?.textContent?.trim()
+
+    trigger.focus()
+    await userEvent.keyboard('{End}')
+    await vi.waitFor(() => expect(focused()).toBe('Option 2'))
+    await userEvent.keyboard('{Escape}')
+    await vi.waitFor(() => expect(listbox()).toBeNull())
+
+    trigger.focus()
+    await userEvent.keyboard('{Home}')
+    await vi.waitFor(() => expect(focused()).toBe('Option 1'))
+    cleanupTeleported()
+  })
+
+  it('names the listbox after the trigger label and keeps it free of axe violations', async () => {
+    render(Harness, { props: { open: true } })
+    await nextTick()
+    await nextTick()
+    const list = listbox() as HTMLElement
+    expect(list.getAttribute('aria-label') ?? list.getAttribute('aria-labelledby')).toBeTruthy()
+    await expectNoA11yViolations(list.parentElement as HTMLElement)
     cleanupTeleported()
   })
 

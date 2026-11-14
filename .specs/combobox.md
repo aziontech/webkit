@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 4
 template: 2
-checksum: 865701ede23596a3fc5ece39ae3b5d8654233bd8119201b5c98691e9c2e9986e
+checksum: 4b8106238589d4c6252685831dcf3fc8abc7b130c654d4b7ee8ab35382caf44b
 created: 2026-11-11
 last_updated: 2026-11-14
 ---
@@ -162,6 +162,7 @@ _none_ — one `.vue` file. The list is rendered by the component itself (telepo
 
 - ARIA 1.2 combobox: the `<input>` has `role="combobox"`, `aria-autocomplete="list"`, `aria-expanded`, `aria-controls` (the listbox id) and `aria-activedescendant` (the highlighted option); the list is `role="listbox"`, rows are `role="option"` with `aria-selected` and `aria-disabled`; grouped rows sit in `role="group"` named by their title (`aria-labelledby`).
 - Keyboard map: focus or `ArrowDown` opens the list; `ArrowDown`/`ArrowUp` move the highlight (wrapping, skipping disabled rows); `Home`/`End` move it to the first/last option while the list is open (otherwise the caret moves); `Enter` commits the highlighted option, or the typed text when nothing is highlighted (`allowCustom`); `Escape` closes the list, and a second `Escape` restores the last committed text; `Tab` commits the highlighted option or the typed text and moves on; `Alt+ArrowUp` closes.
+- Nested overlays: the open list joins the shared overlay layer stack (`useOverlayLayer`) as a transient layer (focus stays in the input), so inside a `Popover`, `Dialog` or `Drawer` picking a suggestion or pressing `Escape` closes only the list; the host overlay stays open.
 - Focus stays in the input the whole time; pointer clicks on rows do not move focus (`mousedown.prevent`).
 - A polite status region announces the number of options after each change of the typed text ("3 options"), "No matches" and "Loading options"; it is visually hidden.
 - The clear button is a real button with an accessible name ("Clear"), reachable by Tab only while there is a value, and returns focus to the input.

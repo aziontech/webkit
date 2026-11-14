@@ -13,6 +13,7 @@
 
   import { useControllable } from '../../../composables/use-controllable'
   import { usePortalLocale } from '../../../composables/use-locale/use-translate'
+  import { useOverlayLayer } from '../../../composables/use-overlay-layer'
   import { usePlacement } from '../../../composables/use-placement'
   import { registerShortcut } from './composables/shortcut-registry'
   import type {
@@ -246,12 +247,15 @@
     return registerShortcut(command, () => !props.disabled, activate, shortcutPriority)
   }
 
+  const { isInsideHigherLayer } = useOverlayLayer(isOpenRef, { element: panelRef })
+
   function onDocumentMousedown(event: globalThis.MouseEvent) {
     if (!isOpenState.value) return
     const target = event.target as globalThis.Node | null
     if (!target) return
     if (triggerRef.value?.contains(target)) return
     if (panelRef.value?.contains(target)) return
+    if (isInsideHigherLayer(target)) return
     setOpen(false)
   }
 

@@ -16,7 +16,7 @@
 
   const handleClick = () => {
     if (!ctx?.dismissible) return
-    ctx.close()
+    ctx.dismiss()
   }
 </script>
 

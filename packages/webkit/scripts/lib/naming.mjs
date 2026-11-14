@@ -2,7 +2,7 @@ import { existsSync, readdirSync, readFileSync } from 'node:fs'
 import { join, relative } from 'node:path'
 
 export const MARKET_ALIASES = {
-  'alert-dialog': 'dialog',
+  'alert-dialog': 'confirm-dialog',
   'bordered-box': 'frame-box',
   breadcrumbs: 'breadcrumb',
   callout: 'alert',
@@ -10,17 +10,21 @@ export const MARKET_ALIASES = {
   'config-provider': 'webkit-provider',
   'data-table': 'table',
   datatable: 'table',
+  'date-picker': 'calendar',
+  'input-otp': 'otp-input',
   keyboard: 'kbd',
   loader: 'spinner',
   'locale-provider': 'webkit-provider',
   modal: 'dialog',
   notification: 'toast',
+  'radio-group': 'radio-button',
   'segmented-control': 'toggle-group',
   sheet: 'drawer',
   snackbar: 'toast',
   steps: 'stepper',
   'text-field': 'input',
-  tiles: 'radio-cards'
+  tiles: 'radio-cards',
+  toggle: 'toggle-group'
 }
 
 export const NON_ENGLISH_WORDS = [

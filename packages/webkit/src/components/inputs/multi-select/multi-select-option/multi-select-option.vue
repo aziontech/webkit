@@ -77,14 +77,19 @@
     @click="onClick"
     @keydown="onKeydown"
   >
-    <Checkbox
-      :model-value="selected"
-      binary
-      class="pointer-events-none"
+    <span
+      inert
       aria-hidden="true"
-      :tabindex="-1"
-      :data-testid="`${testId}__indicator`"
-    />
+      class="contents"
+    >
+      <Checkbox
+        :model-value="selected"
+        binary
+        class="pointer-events-none"
+        :tabindex="-1"
+        :data-testid="`${testId}__indicator`"
+      />
+    </span>
     <span
       :data-leading="$slots['left'] || icon ? '' : undefined"
       :data-testid="`${testId}__leading`"

@@ -366,6 +366,15 @@ code. The codemod rewrites `popover` `width`, `progress` `shape` and `skeleton` 
 | `popover`         | `PopoverWidth`                 | `PopoverSize`                                                          |
 | `progress`        | `ProgressShape`                | `ProgressKind`                                                         |
 
+`Dialog` and `Drawer` gain `closable`, separate from `dismissible`: `dismissible` gates `Esc` and the
+overlay click, `closable` gates the close button and the context `close()`. Left unset, `closable`
+follows `dismissible`, so `:dismissible="false"` still disables the close button in 6.x; that coupling
+is deprecated and in 7.0 an unset `closable` means `true`. To keep a locked dialog locked in 7.0, write
+`:closable="false"` next to `:dismissible="false"`; to keep only the close button working, write
+`:closable="true"`. `ConfirmDialog` opens with focus on Cancel and has no close button (an alert
+dialog is answered with Cancel, the confirm button or `Esc`). `Popover` moves focus to its first
+control on open, and `Tab` past its last control closes it and moves on.
+
 Behaviour that changed with them: `ConfirmDialog` renders `role="alertdialog"`; `StatusIndicator` is
 no longer a `role="status"` live region (announce a change you need heard through a toast);
 `Drawer` widths come from container tokens (`small` 408px, `medium` 644px, `large` 1024px instead of

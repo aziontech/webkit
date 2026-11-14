@@ -17,8 +17,10 @@
     defineProps<{
       /** Initial open state when uncontrolled. */
       defaultOpen?: boolean
-      /** When true, overlay click and Escape close the drawer. */
+      /** Light-dismiss: when true, overlay click and Escape close the drawer. It does not govern the close button; see `closable`. */
       dismissible?: boolean
+      /** Whether the close button (DrawerClose) and the context close() close the drawer; false renders the close button disabled. Escape and overlay click follow `dismissible`. Unset, it follows `dismissible` for 6.x compatibility (deprecated coupling: set it explicitly; from 7.0 unset means true). */
+      closable?: boolean
       /** Edge the drawer panel slides from. */
       side?: DrawerSide
       /** Panel max-width preset (`small` `--container-sm`, `medium` `--container-xl`, `large` `--container-4xl`). Height is always 100% viewport. */
@@ -27,6 +29,7 @@
     {
       defaultOpen: false,
       dismissible: true,
+      closable: undefined,
       side: 'right',
       size: 'medium'
     }
@@ -57,7 +60,14 @@
     isOpen.set(true)
   }
 
+  const isClosable = computed(() => props.closable ?? props.dismissible)
+
   const closeDrawer = () => {
+    if (!isClosable.value) return
+    isOpen.set(false)
+  }
+
+  const dismissDrawer = () => {
     if (!props.dismissible) return
     isOpen.set(false)
   }
@@ -78,9 +88,13 @@
     get dismissible() {
       return props.dismissible
     },
+    get closable() {
+      return isClosable.value
+    },
     size: toRef(props, 'size'),
     open: openDrawer,
     close: closeDrawer,
+    dismiss: dismissDrawer,
     titleId: `${uid}-title`,
     descriptionId: `${uid}-description`,
     hasDescription,

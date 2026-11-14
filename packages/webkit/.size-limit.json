@@ -1038,7 +1038,7 @@
   {
     "name": "tree",
     "path": "src/components/data/tree/tree.vue",
-    "limit": "5.9 KB"
+    "limit": "6.35 KB"
   },
   {
     "name": "file-dropzone",
@@ -1179,18 +1179,18 @@
   {
     "name": "phone-input",
     "path": "src/components/inputs/phone-input/phone-input.vue",
-    "limit": "27.35 KB",
+    "limit": "28.65 KB",
     "entryOnly": true
   },
   {
     "name": "select",
     "path": "src/components/inputs/select/index.ts",
-    "limit": "20.75 KB"
+    "limit": "21.95 KB"
   },
   {
     "name": "multi-select",
     "path": "src/components/inputs/multi-select/index.ts",
-    "limit": "21.65 KB"
+    "limit": "22.95 KB"
   },
   {
     "name": "code-block",
@@ -1291,7 +1291,7 @@
   {
     "name": "streaming-response",
     "path": "src/components/ai/streaming-response/streaming-response.vue",
-    "limit": "32 KB",
+    "limit": "33.1 KB",
     "entryOnly": true
   },
   {
@@ -1337,7 +1337,7 @@
   {
     "name": "combobox",
     "path": "src/components/inputs/combobox/combobox.vue",
-    "limit": "11.85 KB"
+    "limit": "12.55 KB"
   },
   {
     "name": "tag-editor",
@@ -1954,12 +1954,12 @@
   {
     "name": "dropdown-menu",
     "path": "src/components/navigation/dropdown-menu/index.ts",
-    "limit": "8.65 KB"
+    "limit": "9.25 KB"
   },
   {
     "name": "dropdown-menu-root",
     "path": "src/components/navigation/dropdown-menu/dropdown-menu.vue",
-    "limit": "5.7 KB"
+    "limit": "6.25 KB"
   },
   {
     "name": "dropdown-menu-trigger",
@@ -1984,12 +1984,12 @@
   {
     "name": "multi-select-trigger",
     "path": "src/components/inputs/multi-select/multi-select-trigger/multi-select-trigger.vue",
-    "limit": "1.65 KB"
+    "limit": "1.8 KB"
   },
   {
     "name": "multi-select-content",
     "path": "src/components/inputs/multi-select/multi-select-content/multi-select-content.vue",
-    "limit": "17.65 KB"
+    "limit": "18.65 KB"
   },
   {
     "name": "multi-select-group",
@@ -2009,12 +2009,12 @@
   {
     "name": "select-trigger",
     "path": "src/components/inputs/select/select-trigger/select-trigger.vue",
-    "limit": "1.85 KB"
+    "limit": "1.95 KB"
   },
   {
     "name": "select-content",
     "path": "src/components/inputs/select/select-content/select-content.vue",
-    "limit": "17.75 KB"
+    "limit": "18.7 KB"
   },
   {
     "name": "select-group",
@@ -2249,7 +2249,7 @@
   {
     "name": "tooltip",
     "path": "src/components/overlay/tooltip/tooltip.vue",
-    "limit": "5 KB"
+    "limit": "5.3 KB"
   },
   {
     "name": "command",
@@ -2293,6 +2293,11 @@
   },
   {
     "name": "dialog",
+    "path": "src/components/overlay/dialog/index.ts",
+    "limit": "22.35 KB"
+  },
+  {
+    "name": "dialog-root",
     "path": "src/components/overlay/dialog/dialog.vue",
     "limit": "1 KB"
   },
@@ -2333,8 +2338,13 @@
   },
   {
     "name": "drawer",
+    "path": "src/components/overlay/drawer/index.ts",
+    "limit": "22.45 KB"
+  },
+  {
+    "name": "drawer-root",
     "path": "src/components/overlay/drawer/drawer.vue",
-    "limit": "1 KB"
+    "limit": "1.05 KB"
   },
   {
     "name": "drawer-close",
@@ -2373,6 +2383,11 @@
   },
   {
     "name": "panel",
+    "path": "src/components/overlay/panel/index.ts",
+    "limit": "14.4 KB"
+  },
+  {
+    "name": "panel-root",
     "path": "src/components/overlay/panel/panel.vue",
     "limit": "11.75 KB"
   },
@@ -2399,7 +2414,7 @@
   {
     "name": "popover-root",
     "path": "src/components/overlay/popover/popover.vue",
-    "limit": "4.4 KB"
+    "limit": "4.95 KB"
   },
   {
     "name": "popover-trigger",
