@@ -23,6 +23,12 @@
       "mount": 240,
       "update": 80,
       "update_is": "filter 10k virtual rows by text under useCollection"
+    },
+    "listing-table-1k": { "mount": 1900, "update": 2200, "update_is": "replace the 1k rows" },
+    "listing-browser-1k": {
+      "mount": 1900,
+      "update": 200,
+      "update_is": "type a query into the search of 1k grouped rows"
     }
   }
 }

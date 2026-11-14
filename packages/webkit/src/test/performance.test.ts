@@ -19,6 +19,8 @@ import Table from '../components/data/table/table.vue'
 import Tree from '../components/data/tree/tree.vue'
 import MultiSelect from '../components/inputs/multi-select'
 import Select from '../components/inputs/select'
+import ListingBrowser from '../components/sections/listing-browser/listing-browser.vue'
+import ListingTable from '../components/sections/listing-table/listing-table.vue'
 import { useCollection, type UseCollectionReturn } from '../composables/use-collection'
 
 type Scenario = keyof typeof budgets.scenarios
@@ -307,6 +309,74 @@ function tableCase(n: number, virtual: boolean, change: 'sort' | 'filter'): Case
   }
 }
 
+function listingTableCase(): Case {
+  const columns = [
+    { key: 'name', label: 'Name', grow: 2 as const },
+    { key: 'region', label: 'Region' },
+    { key: 'plan', label: 'Plan', align: 'end' as const }
+  ]
+  const make = (prefix: string) =>
+    Array.from({ length: 1000 }, (_, i) => ({
+      href: `/customers/${prefix}-${i}`,
+      values: { name: `${prefix} ${i}`, region: `Region ${i % 12}`, plan: `Plan ${i % 4}` }
+    }))
+  const rows = ref(make('Acme'))
+  const Host = defineComponent({
+    setup: () => () => h(ListingTable, { title: 'Customers', columns, rows: rows.value })
+  })
+  return {
+    mount: () => Host,
+    update: () => {
+      rows.value = make('Northwind')
+    }
+  }
+}
+
+function listingBrowserCase(): Case {
+  const groups = Array.from({ length: 10 }, (_, i) => `Group ${i}`)
+  const columns = [
+    { key: 'name', label: 'Name', grow: 2 as const },
+    { key: 'industry', label: 'Industry' }
+  ]
+  const rows = Array.from({ length: 1000 }, (_, i) => ({
+    href: `/customers/acme-${i}`,
+    group: groups[i % groups.length],
+    values: { name: `Acme ${i}`, industry: `Industry ${i % 7}` },
+    facets: { industry: [`industry-${i % 7}`] }
+  }))
+  const facets = [
+    {
+      key: 'industry',
+      label: 'Industry',
+      allLabel: 'All industries',
+      options: Array.from({ length: 7 }, (_, i) => ({
+        value: `industry-${i}`,
+        label: `Industry ${i}`
+      }))
+    }
+  ]
+  const Host = defineComponent({
+    setup: () => () =>
+      h(ListingBrowser, {
+        title: 'Customers',
+        columns,
+        rows,
+        groups,
+        facets,
+        search: { placeholder: 'Search customers', label: 'Search customers' }
+      })
+  })
+  return {
+    mount: () => Host,
+    update: async () => {
+      const field = document.querySelector<HTMLInputElement>('input[type="text"]')
+      if (!field) throw new Error('listing-browser search field not found')
+      field.value = 'acme 12'
+      field.dispatchEvent(new Event('input', { bubbles: true }))
+    }
+  }
+}
+
 describe('runtime budgets (perf-budgets.json)', () => {
   afterEach(() => cleanup())
 
@@ -342,5 +412,11 @@ describe('runtime budgets (perf-budgets.json)', () => {
   })
   it('Table with 10k virtual rows under useCollection: filter', async () => {
     check('table-10k-virtual-filter', await measure(() => tableCase(10_000, true, 'filter')))
+  })
+  it('ListingTable with 1k rows: mount and replace', async () => {
+    check('listing-table-1k', await measure(listingTableCase))
+  })
+  it('ListingBrowser with 1k rows: mount and search', async () => {
+    check('listing-browser-1k', await measure(listingBrowserCase))
   })
 })
