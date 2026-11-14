@@ -38,6 +38,8 @@
     description: string
     /** Name of the diagram drawn while the tab is active. */
     diagram: DiagramName
+    /** Accessible description of the diagram, replacing the one it ships; empty keeps its own. */
+    diagramAriaLabel?: string
   }
 
   interface Props {
@@ -51,8 +53,10 @@
     description?: string
     /** Side of the diagram the tabs sit on: `top`, `bottom`, `left` or `right`; left and right hold up to three tabs. */
     position?: ArchitectureTabsPosition
-    /** The architectures, in order; each is `{ value, title, description, diagram }` where `diagram` is the name of the diagram drawn while the tab is active. */
+    /** The architectures, in order; each is `{ value, title, description, diagram, diagramAriaLabel? }` where `diagram` is the name of the diagram drawn while the tab is active and `diagramAriaLabel` replaces the description it ships. */
     tabs?: ArchitectureTabsTab[]
+    /** Milliseconds each tab holds before the next one opens. */
+    interval?: number
     /** Large button in the section title; `{ label, href, trailing?, target? }`. Omitted when absent. */
     primaryAction?: ArchitectureTabsAction
   }
@@ -64,6 +68,7 @@
     description: '',
     position: 'top',
     tabs: () => [],
+    interval: 6000,
     primaryAction: undefined
   })
 
@@ -133,13 +138,14 @@
           :position="position"
           size="small"
           :items="items"
-          :autoplay-interval="6000"
+          :autoplay-interval="interval"
           class="[--media-tabs-media-bg:var(--bg-surface)] [--media-tabs-media-min-lg:28rem] [--media-tabs-media-min:24rem]"
         >
           <template #media="{ index }">
             <Diagram
               :key="tabs[index]?.value"
               :name="tabs[index]?.diagram"
+              :aria-label="tabs[index]?.diagramAriaLabel ?? ''"
               class="w-full"
             />
           </template>
