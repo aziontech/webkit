@@ -182,6 +182,83 @@ describe('HeroBand', () => {
     expect(bare.getByTestId(HERO_TESTID).hasAttribute('data-media')).toBe(false)
   })
 
+  it('sets the anchor as the band id, and no id without one', () => {
+    const { getByTestId, unmount } = band({ anchor: 'top' })
+
+    expect(getByTestId(TESTID)).toHaveAttribute('id', 'top')
+    unmount()
+    expect(band().getByTestId(TESTID)).not.toHaveAttribute('id')
+  })
+
+  it('labels the client strip from the locale catalog when no label is set', async () => {
+    const { getByText } = band({ carouselMarks: MARKS })
+
+    await waitFor(
+      () => expect(getByText('Proven on mission-critical workloads')).toBeInTheDocument(),
+      {
+        timeout: 5000
+      }
+    )
+  })
+
+  it('draws the eyebrow prefix it is given, and none without an eyebrow', () => {
+    const custom = band({ eyebrowPrefix: '</>' })
+    expect(custom.getByTestId('marketing-hero-title').textContent).toContain('</>')
+    custom.unmount()
+
+    const bare = band({ eyebrow: '', eyebrowPrefix: '</>' })
+    expect(bare.getByTestId('marketing-hero-title').textContent).not.toContain('</>')
+  })
+
+  it('sizes a known illustration from its drawn bounds and any other from the default bounds', () => {
+    const art = (illustration: string) => {
+      const view = band({ kind: 'copy-beside-art', illustration })
+      const box = view
+        .getByTestId(HERO_TESTID)
+        .querySelector<HTMLElement>('[style*="--hero-art-width"]')
+      const vars = ['width', 'bleed', 'trim-top', 'trim-bottom'].map((name) =>
+        box?.style.getPropertyValue(`--hero-art-${name}`)
+      )
+      view.unmount()
+      return vars
+    }
+
+    expect(art('azion-to-vercel')).toEqual(['169.95%', '29.95%', '13.78%', '13.78%'])
+    expect(art('global-network')).toEqual(['161.45%', '35.73%', '0.00%', '0.00%'])
+  })
+
+  it('sets an image beside the copy when no illustration is given, marking a portrait one', () => {
+    const portrait = { src: '/team.jpg', alt: 'The team at the office', width: 900, height: 1600 }
+    const { getByRole, unmount } = band({ kind: 'copy-beside-art', image: portrait })
+
+    const img = getByRole('img', { name: portrait.alt })
+    expect(img).toHaveAttribute('src', '/team.jpg')
+    expect(img).toHaveAttribute('data-orientation', 'portrait')
+    unmount()
+
+    const landscape = band({
+      kind: 'copy-beside-art',
+      image: { ...portrait, width: 1600, height: 900 }
+    })
+    expect(landscape.getByRole('img', { name: portrait.alt })).not.toHaveAttribute(
+      'data-orientation'
+    )
+  })
+
+  it('fills a screen with centered copy and the top scene in copy-on-top-art', () => {
+    const { getByTestId } = render(HeroBand, {
+      props: { kind: 'copy-on-top-art', title: TITLE },
+      slots: { top: '<div data-testid="scene">scene</div>' }
+    })
+
+    const hero = getByTestId(HERO_TESTID)
+    expect(getByTestId(TESTID)).toHaveAttribute('data-kind', 'copy-on-top-art')
+    expect(hero).toHaveAttribute('data-kind', 'screen')
+    expect(hero).not.toHaveAttribute('data-padded')
+    expect(hero).toContainElement(getByTestId('scene'))
+    expect(getByTestId('marketing-hero-title')).toHaveAttribute('data-centered')
+  })
+
   it('renders only the root when title is empty', () => {
     const { getByTestId, queryByTestId, queryByRole } = band({ title: '' })
 
@@ -190,7 +267,16 @@ describe('HeroBand', () => {
     expect(queryByRole('heading')).toBeNull()
   })
 
-  it.each(['centered', 'title-band', 'pixel-floor', 'copy-beside-art'] as const)(
+  it('has no a11y violations with an image beside the copy', async () => {
+    const { container } = band({
+      kind: 'copy-beside-art',
+      image: { src: '/team.jpg', alt: 'The team at the office', width: 900, height: 1600 }
+    })
+
+    await expectNoA11yViolations(container)
+  })
+
+  it.each(['centered', 'title-band', 'pixel-floor', 'copy-beside-art', 'copy-on-top-art'] as const)(
     'has no a11y violations with kind=%s',
     async (kind) => {
       const { container } = band({

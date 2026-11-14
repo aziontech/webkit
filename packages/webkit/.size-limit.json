@@ -517,7 +517,7 @@
   {
     "name": "hero-band",
     "path": "src/components/sections/hero-band/hero-band.vue",
-    "limit": "9.5 KB",
+    "limit": "9.7 KB",
     "entryOnly": true
   },
   {

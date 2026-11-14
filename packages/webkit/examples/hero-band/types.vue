@@ -1,5 +1,6 @@
 <script setup>
   import HeroBand from '@aziontech/webkit/hero-band'
+  import SectionCommand from '@aziontech/webkit/section-command'
 </script>
 
 <template>
@@ -44,5 +45,16 @@
       carousel-label="Trusted by teams running critical workloads"
       :carousel-marks="['agibank', 'radware', 'america-movil', 'gpa', 'fourbank']"
     />
+    <HeroBand
+      kind="copy-on-top-art"
+      eyebrow="Workloads"
+      title="Put your application close to users in seconds"
+      description="Create a workload and it is live in every data center."
+      :primary-action="{ label: 'Start for free', href: '/signup' }"
+    >
+      <template #bottom>
+        <SectionCommand value="npm create azion@latest" />
+      </template>
+    </HeroBand>
   </div>
 </template>

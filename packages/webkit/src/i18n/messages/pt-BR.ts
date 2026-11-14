@@ -556,6 +556,9 @@ export const ptBR: Messages = {
     tutorialCompleted: 'Concluído',
     tutorialProgress: '{complete} de {total} concluídas'
   },
+  heroBand: {
+    carouselLabel: 'Comprovada em cargas de trabalho críticas'
+  },
   heroForm: {
     search: 'Buscar',
     empty: 'Nenhum resultado encontrado.'

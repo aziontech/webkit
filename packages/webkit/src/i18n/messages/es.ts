@@ -556,6 +556,9 @@ export const es: Messages = {
     tutorialCompleted: 'Completado',
     tutorialProgress: '{complete} de {total} completadas'
   },
+  heroBand: {
+    carouselLabel: 'Probada en cargas de trabajo críticas'
+  },
   heroForm: {
     search: 'Buscar',
     empty: 'No se encontraron resultados.'
