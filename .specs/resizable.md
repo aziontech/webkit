@@ -3,12 +3,12 @@ name: resizable
 category: layout
 structure: composition
 status: implemented
-spec_version: 1
-checksum: 9d8515c8873576187b932fdb95feb57b7025e1dd217f7bee74ea1e447c62416a
+spec_version: 2
+checksum: 2c79fe7d888abcf6b0f96867b0cf985521be2b8c0f9b0683ccbfc7e80e9d552c
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit
 created: 2026-08-16
-last_updated: 2026-11-11
+last_updated: 2026-11-14
 ---
 
 # Resizable Panel — Component Spec
@@ -55,7 +55,7 @@ It exists because `Sidebar` was being used for both jobs. `Sidebar` is the app's
   import Resizable from '@aziontech/webkit/resizable'
 
   const previewWidth = ref(480)
-  const previewCollapsed = ref(false)
+  const previewExpanded = ref(true)
 </script>
 
 <template>
@@ -68,7 +68,7 @@ It exists because `Sidebar` was being used for both jobs. `Sidebar` is the app's
 
     <Resizable.Pane
       v-model:basis="previewWidth"
-      v-model:collapsed="previewCollapsed"
+      v-model:expanded="previewExpanded"
       collapsible
       :min="280"
       :max="720"
@@ -101,7 +101,8 @@ Neither part is an overlay, so neither is named `Trigger` or `Content` and neith
 - `basis` — `number`, default unset. The pane length in pixels along the group axis, two-way through `v-model:basis`. Leave unset for the pane that absorbs the remaining space.
 - `min` — `number`, default `96`. Smallest length in pixels a drag may set.
 - `max` — `number`, default `720`. Largest length in pixels a drag may set.
-- `collapsed` — `boolean`, default unset. Whether the pane renders at zero length, two-way through `v-model:collapsed`. The pane stays mounted, so its content keeps its state.
+- `expanded` — `boolean`, default `true`. Whether the pane is shown at its length; `false` renders it at zero length. Two-way through `v-model:expanded`. The pane stays mounted, so its content keeps its state.
+- `collapsed` — `boolean`, default unset. **@deprecated since 6.0 — use `v-model:expanded` (inverted). Removed in 7.0.** The inverse of `expanded`; a host that binds only `collapsed` still drives the pane.
 - `collapsible` — `boolean`, default `false`. Whether dragging past the minimum collapses the pane instead of stopping at it.
 - `ariaLabel` — `string`, default `''`. Accessible name for the region.
 
@@ -111,8 +112,9 @@ Neither part is an overlay, so neither is named `Trigger` or `Content` and neith
 - `disabled` — `boolean`, default `false`. Disables the drag and the keyboard nudge, and removes the separator from the tab order.
 
 `resizable-pane` events: `update:basis` (`number`) on every step of a drag and on a
-keyboard nudge, and `update:collapsed` (`boolean`) when a drag past the minimum collapses
-the pane or a drag back out restores it. Both are the `v-model` half of the props above.
+keyboard nudge, and `update:expanded` (`boolean`) when a drag past the minimum or `Enter` on the
+handle collapses the pane, or a drag back out restores it; the deprecated `update:collapsed` is
+emitted with the inverse value on the same change. Each is the `v-model` half of the props above.
 
 `resizable-handle` emits nothing: it drives the pane beside it through the group's
 context, so a consumer never wires one part to the other.
@@ -145,7 +147,7 @@ PANE that owns the two-way values (see Sub-components) and the root only carries
 
 - Visual states: `default`, `hover`, `focus-visible`, `active`, `disabled`
 - `data-orientation`: `horizontal` | `vertical` — on the root, and mirrored onto every pane and handle so each part styles itself off one fact.
-- `data-collapsed` mirrors the pane's `collapsed` state
+- `data-collapsed` is set while the pane is collapsed (`expanded` false)
 - `data-resizing` on the handle while a drag is in flight
 - `data-disabled` mirrors the handle's `disabled` prop
 - Reflow: the group clips on its main axis (`overflow-x-clip` / `overflow-y-clip`), so the hit area of a handle at the edge (a collapsed end pane) never adds overflow.
@@ -194,7 +196,7 @@ _none_
 
 - Default
 - Orientations — composite story rendering a horizontal group and a vertical group side by side. The axis is this component's only variant axis, so it takes the place a `Types` story would.
-- Collapsed — the state story for `collapsible` + `collapsed`, showing a pane at zero length and the control outside it that brings it back.
+- Collapsed — the state story for `collapsible` + `v-model:expanded`, showing a pane at zero length and the control outside it that brings it back.
 - Disabled — the state story for the handle's `disabled` prop.
 
 There is no `Sizes` story: the component has no `size` prop, because a pane's length is data the reader sets rather than a token the author picks.
