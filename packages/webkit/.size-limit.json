@@ -1196,7 +1196,7 @@
   {
     "name": "log-view-content",
     "path": "src/components/code/log-view/log-view-content.vue",
-    "limit": "22.75 KB",
+    "limit": "23.25 KB",
     "entryOnly": true
   },
   {
@@ -1624,8 +1624,13 @@
   },
   {
     "name": "log-view",
+    "path": "src/components/code/log-view/index.ts",
+    "limit": "34.25 KB"
+  },
+  {
+    "name": "log-view-root",
     "path": "src/components/code/log-view/log-view.vue",
-    "limit": "13.45 KB"
+    "limit": "12.75 KB"
   },
   {
     "name": "log-view-footer",

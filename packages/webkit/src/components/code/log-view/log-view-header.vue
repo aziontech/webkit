@@ -23,17 +23,8 @@
   const ctx = useLogViewContext()
 
   const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? `${ctx.testId}__header`
+    () => (attrs['data-testid'] as string | undefined) ?? `${ctx.testId.value}__header`
   )
-
-  const handleWarningsKeydown = (event: globalThis.KeyboardEvent) => {
-    if (ctx.disabled.value) return
-
-    if (event.key === 'Enter' || event.key === ' ') {
-      event.preventDefault()
-      ctx.toggleWarningsOnly()
-    }
-  }
 </script>
 
 <template>
@@ -60,9 +51,8 @@
           :data-testid="`${testId}__warnings-filter`"
           :aria-pressed="ctx.warningsOnly.value"
           :disabled="ctx.disabled.value"
-          class="inline-flex h-8 min-w-8 items-center justify-center rounded-(--shape-elements) p-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) disabled:cursor-not-allowed disabled:opacity-60"
+          class="inline-flex h-8 min-w-8 items-center justify-center rounded-(--shape-elements) p-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) disabled:cursor-not-allowed disabled:opacity-60 pointer-coarse:h-11"
           @click="ctx.toggleWarningsOnly"
-          @keydown="handleWarningsKeydown"
         >
           <Tag
             severity="warning"

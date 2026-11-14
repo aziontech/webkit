@@ -1,11 +1,13 @@
+import userEvent from '@testing-library/user-event'
 import { fireEvent, render, within } from '@testing-library/vue'
 import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from 'vitest'
-import { defineComponent, h, ref } from 'vue'
+import { defineComponent, h, nextTick, ref } from 'vue'
 
+import Borderless from '../../../../examples/log-view/borderless.vue'
 import Default from '../../../../examples/log-view/default.vue'
-import Flush from '../../../../examples/log-view/flush.vue'
 import Levels from '../../../../examples/log-view/levels.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
+import LogViewCompound from './index'
 import type { LogViewLine } from './injection-key'
 import LogView from './log-view.vue'
 import LogViewContent from './log-view-content.vue'
@@ -228,9 +230,10 @@ describe('LogView (composition: provide/inject over Header/Content/Footer)', () 
       const { Host } = makeHost({ lines: [] })
       const { getByTestId, queryAllByTestId } = render(Host)
       expect(queryAllByTestId('code-log-view__line')).toHaveLength(0)
-      expect(getByTestId('code-log-view__empty').textContent).toContain(
-        'No log lines match the current filters.'
-      )
+      expect(getByTestId('code-log-view__empty').textContent).toContain('No log lines yet.')
+      expect(
+        within(getByTestId('code-log-view__empty')).getByTestId('feedback-empty-state')
+      ).toBeTruthy()
     })
   })
 
@@ -273,7 +276,10 @@ describe('LogView (composition: provide/inject over Header/Content/Footer)', () 
       await fireEvent.update(getByTestId('code-log-view__header__search'), 'zzz-no-match-zzz')
 
       expect(queryAllByTestId('code-log-view__line')).toHaveLength(0)
-      expect(getByTestId('code-log-view__empty')).toBeTruthy()
+      const empty = getByTestId('code-log-view__empty')
+      expect(empty.textContent).toContain('No line matches “zzz-no-match-zzz”.')
+      await fireEvent.click(within(empty).getByRole('button', { name: 'Clear search' }))
+      expect(queryAllByTestId('code-log-view__line')).toHaveLength(LINES.length)
     })
   })
 
@@ -305,8 +311,8 @@ describe('LogView (composition: provide/inject over Header/Content/Footer)', () 
       const { getByTestId } = render(Host)
 
       const filter = getByTestId('code-log-view__header__warnings-filter')
-      // handleWarningsKeydown preventDefaults Enter/Space and toggles.
-      await fireEvent.keyDown(filter, { key: 'Enter' })
+      filter.focus()
+      await userEvent.keyboard('{Enter}')
 
       expect(warningsOnly.value).toBe(true)
       expect(filter.getAttribute('aria-pressed')).toBe('true')
@@ -531,6 +537,86 @@ describe('LogView (composition: provide/inject over Header/Content/Footer)', () 
     })
   })
 
+  describe('compound API', () => {
+    it('attaches Header / Content / Footer to the root for dot-notation', () => {
+      expect(LogViewCompound).toBe(LogView)
+      expect(LogViewCompound.Header).toBe(LogViewHeader)
+      expect(LogViewCompound.Content).toBe(LogViewContent)
+      expect(LogViewCompound.Footer).toBe(LogViewFooter)
+    })
+  })
+
+  describe('loading, error and test ids', () => {
+    it('replaces the body with a labelled status while loading and hides copy', () => {
+      const view = render(LogView, {
+        props: { lines: LINES, loading: true, loadingLabel: 'Fetching logs' },
+        slots: { default: () => [h(LogViewHeader), h(LogViewContent)] }
+      })
+      const status = view.getByRole('status')
+      expect(status.textContent).toContain('Fetching logs')
+      expect(view.queryAllByTestId('code-log-view__line')).toHaveLength(0)
+      expect(view.queryByTestId('code-log-view__copy')).toBeNull()
+      expect(view.getByTestId('code-log-view').hasAttribute('data-loading')).toBe(true)
+    })
+
+    it('shows the error message in place of the body and hides copy', () => {
+      const view = render(LogView, {
+        props: { lines: LINES, error: 'The log could not be loaded.' },
+        slots: { default: () => [h(LogViewContent)] }
+      })
+      const error = view.getByTestId('code-log-view__content__error')
+      expect(error.textContent).toContain('The log could not be loaded.')
+      expect(view.queryAllByTestId('code-log-view__line')).toHaveLength(0)
+      expect(view.queryByTestId('code-log-view__copy')).toBeNull()
+    })
+
+    it('takes the consumer data-testid on the root and derives the children from it', async () => {
+      const testid = ref('deploy-log')
+      const view = render(
+        defineComponent({
+          setup: () => () =>
+            h(LogView, { lines: LINES, 'data-testid': testid.value }, () => [
+              h(LogViewHeader),
+              h(LogViewContent)
+            ])
+        })
+      )
+      expect(view.getByTestId('deploy-log')).toBeTruthy()
+      expect(view.queryByTestId('code-log-view')).toBeNull()
+      expect(view.getByTestId('deploy-log__header')).toBeTruthy()
+      testid.value = 'build-log'
+      await nextTick()
+      expect(view.getByTestId('build-log__header')).toBeTruthy()
+      expect(view.getAllByTestId('build-log__line')).toHaveLength(LINES.length)
+    })
+  })
+
+  describe('one severity axis', () => {
+    it('counts and filters a deprecated type warning line as level warn', async () => {
+      const level = ref<'' | 'warn'>('')
+      const view = render(
+        defineComponent({
+          setup: () => () =>
+            h(
+              LogView,
+              {
+                lines: LINES,
+                levels: ['warn'],
+                level: level.value,
+                'onUpdate:level': (v: '' | 'warn') => (level.value = v)
+              },
+              () => [h(LogViewHeader), h(LogViewContent)]
+            )
+        })
+      )
+      const toggle = view.getByRole('button', { name: 'warn, 1 line' })
+      await fireEvent.click(toggle)
+      const rows = view.getAllByTestId('code-log-view__line')
+      expect(rows).toHaveLength(1)
+      expect(rows[0]?.getAttribute('data-type')).toBe('warning')
+    })
+  })
+
   describe('documented examples (the example file runs in-test)', () => {
     it('Default story renders the composed viewer over the deploy log with rows', () => {
       const { getByTestId, getAllByTestId } = render(Default)
@@ -544,8 +630,8 @@ describe('LogView (composition: provide/inject over Header/Content/Footer)', () 
     // The frame-inside-a-frame this story exists to prevent is only visible with
     // real styling, so the pixels are the visual layer's job; here we prove the
     // fixture composes and that it is the borderless shell being shot.
-    it('Flush story renders the shell without the outer border', () => {
-      const { getByTestId } = render(Flush)
+    it('Borderless story renders the shell without the outer border', () => {
+      const { getByTestId } = render(Borderless)
 
       expect(getByTestId('code-log-view').hasAttribute('data-border')).toBe(false)
       expect(getByTestId('code-log-view__content')).toBeTruthy()

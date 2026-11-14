@@ -16,7 +16,7 @@
   const ctx = useLogViewContext()
 
   const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? `${ctx.testId}__footer`
+    () => (attrs['data-testid'] as string | undefined) ?? `${ctx.testId.value}__footer`
   )
 </script>
 

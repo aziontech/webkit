@@ -6,7 +6,7 @@
   import { cn } from '../../../utils/cn'
   import { formatLogLineText } from './composables/format-log-line-text'
   import type { LogViewLine, LogViewLineLevel } from './injection-key'
-  import { LogViewInjectionKey } from './injection-key'
+  import { lineLevel, LogViewInjectionKey } from './injection-key'
 
   export type { LogViewLine, LogViewLineLevel, LogViewLineType } from './injection-key'
 
@@ -32,6 +32,8 @@
     loadingLabel?: string
     /** Levels the header offers as filter toggles, each with its line count; a level with no line is still offered. Empty hides the level filter. */
     levels?: LogViewLineLevel[]
+    /** Message shown in place of the log body when the log failed to load. Empty shows the log. */
+    error?: string
   }
 
   const props = withDefaults(defineProps<Props>(), {
@@ -42,12 +44,16 @@
     disabled: false,
     loading: false,
     loadingLabel: '',
-    levels: () => []
+    levels: () => [],
+    error: ''
   })
 
   /** Bound to LogViewHeader search; filters LogViewContent when set. */
   const search = defineModel<string>('search', { default: '' })
-  /** When true, shows only lines whose `type` is `warning`. */
+  /**
+   * When true, shows only warning lines (`level: 'warn'`, or the deprecated `type: 'warning'`).
+   * @deprecated since 6.0 — use `v-model:level` with `'warn'`. Removed in 7.0.
+   */
   const warningsOnly = defineModel<boolean>('warningsOnly', { default: false })
   /** The level the log is filtered to; empty shows every level. */
   const level = defineModel<LogViewLineLevel | ''>('level', { default: '' })
@@ -74,11 +80,16 @@
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'code-log-view')
 
-  const warningCount = computed(() => props.lines.filter((line) => line.type === 'warning').length)
+  const warningCount = computed(
+    () => props.lines.filter((line) => lineLevel(line) === 'warn').length
+  )
 
   const levelCounts = computed(() => {
     const counts: Record<LogViewLineLevel, number> = { debug: 0, info: 0, warn: 0, error: 0 }
-    for (const line of props.lines) if (line.level) counts[line.level] += 1
+    for (const line of props.lines) {
+      const value = lineLevel(line)
+      if (value) counts[value] += 1
+    }
     return counts
   })
 
@@ -87,11 +98,11 @@
     let result = props.lines
 
     if (warningsOnly.value) {
-      result = result.filter((line) => line.type === 'warning')
+      result = result.filter((line) => lineLevel(line) === 'warn')
     }
 
     if (level.value) {
-      result = result.filter((line) => line.level === level.value)
+      result = result.filter((line) => lineLevel(line) === level.value)
     }
 
     if (query) {
@@ -129,7 +140,12 @@
   )
 
   const canCopy = computed(
-    () => props.copyable && !props.disabled && !props.loading && copyText.value.length > 0
+    () =>
+      props.copyable &&
+      !props.disabled &&
+      !props.loading &&
+      !props.error &&
+      copyText.value.length > 0
   )
 
   const setSearch = (value: string) => {
@@ -153,7 +169,7 @@
   }
 
   provide(LogViewInjectionKey, {
-    testId: testId.value,
+    testId,
     lines: computed(() => props.lines),
     filteredLines,
     search: computed(() => search.value),
@@ -165,6 +181,7 @@
     copyable: computed(() => props.copyable),
     loading: computed(() => props.loading),
     loadingLabel: computed(() => props.loadingLabel || t('logView.loading')),
+    error: computed(() => props.error),
     searchPlaceholder: computed(() => props.searchPlaceholder || t('logView.searchPlaceholder')),
     warningCount,
     lineCountLabel,
@@ -185,6 +202,7 @@
     :data-border="bordered || null"
     :data-disabled="disabled || null"
     :data-loading="loading || null"
+    :data-error="error ? true : null"
     :data-warnings-only="warningsOnly || null"
     :data-level="level || null"
     :class="
