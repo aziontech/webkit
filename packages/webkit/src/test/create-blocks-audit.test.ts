@@ -18,6 +18,9 @@ import DeploymentFlowRunning from '../../blocks/platform/create/deployment-flow/
 import ProvisionWizardBinding from '../../blocks/platform/create/provision-wizard/variants/domain-and-deployment.vue'
 import ResourcePicker from '../../blocks/platform/create/resource-picker/resource-picker.vue'
 import ResourcePickerEmpty from '../../blocks/platform/create/resource-picker/variants/empty.vue'
+import SinglePageCreate from '../../blocks/platform/create/single-page-create/single-page-create.vue'
+import CreatePurge from '../../blocks/platform/create/single-page-create/variants/create-purge.vue'
+import CreateService from '../../blocks/platform/create/single-page-create/variants/create-service.vue'
 import { expectNoA11yViolations } from './axe'
 import { useToastRegion } from './toast-region'
 
@@ -243,5 +246,31 @@ describe('provision-wizard', () => {
     const submit = screen.getByRole('button', { name: 'Create and deploy' })
     await fireEvent.click(submit)
     await waitFor(() => expect(submit.getAttribute('aria-busy')).toBe('true'), wait)
+  })
+})
+
+describe('single-page-create', () => {
+  it('creates the domain with a loading submit and a toast, and offers no inert Import', async () => {
+    render(SinglePageCreate)
+    expect(screen.queryByRole('button', { name: 'Import' })).toBeNull()
+    await fireEvent.update(screen.getByRole('textbox', { name: 'Name' }), 'acme-domain')
+    await fireEvent.update(screen.getByRole('textbox', { name: 'Domain name' }), 'example.com')
+    const save = screen.getByRole('button', { name: 'Save' })
+    await fireEvent.click(save)
+    await waitFor(() => expect(save.getAttribute('aria-busy')).toBe('true'), wait)
+    await waitFor(() => expect(screen.getByText('example.com created.')).toBeTruthy(), wait)
+  })
+
+  it('gives Create Service a page heading and one h2 per group', () => {
+    render(CreateService)
+    expect(screen.getByRole('heading', { level: 1, name: 'Create Service' })).toBeTruthy()
+    expect(screen.getByRole('heading', { level: 2, name: 'General' })).toBeTruthy()
+    expect(screen.getByRole('button', { name: 'Back to Services' })).toBeTruthy()
+  })
+
+  it('sets the purge list in the monospace face through the Textarea prop', () => {
+    render(CreatePurge)
+    const list = screen.getByRole('textbox', { name: /list$/ })
+    expect(list.closest('[data-monospace]')).toBeTruthy()
   })
 })

@@ -50,7 +50,7 @@ On/off settings use `SettingRow kind="compact"` with a `Switch` hard right at it
 - Give every control an `aria-label` that repeats its row title.
 - Keep Cancel and the submit in the same bar, submit last, and name the submit after what it does (Save, Purge, Deploy).
 - Lock the whole `fieldset` and every control with one `submitting` flag while the request is in flight, and put `:loading` on the submit.
-- On success, show a toast that names the resource and opens it (`skills/webkit-errors`).
+- On success, show a toast that names the resource and opens it; on failure, an error toast with Retry that keeps the values (`skills/webkit-errors`). Every submit in this block models the request: Default, CreateZone, CreatePurge, CreateService and CreateOrganization.
 
 ## Don't
 
@@ -80,15 +80,15 @@ On/off settings use `SettingRow kind="compact"` with a `Switch` hard right at it
 - Each message is tied to its control with `aria-describedby` and appears only on submit; required and invalid are announced through the control's own state.
 - The collapsed Advanced region is `inert` while closed, so keyboard focus never lands in hidden fields.
 - The back `IconButton` and the account trigger have `aria-label`s; decorative icons carry `aria-hidden="true"`.
-- Focus order follows reading order: header, heading, General, Advanced toggle, then the bar's Import, Cancel and Save.
+- Focus order follows reading order: header, heading, General, Advanced toggle, then the bar's Cancel and Save (CreateZone adds Import before them).
 
 ## States
 
-- Default: the Create Domain page at rest; General holds Name and Domain name, Advanced is collapsed, the bar shows Import, Cancel and Save.
-- CreateZone: Create Zone after a zone file is imported; a Records section lists each imported record (type `Tag`, value, TTL) with a Remove `IconButton` per row and Discard import in the card footer. Import in the bar and a paste into Domain name both read a BIND zone file, skip the SOA and nameserver records, fill an empty Name and Domain name from `$ORIGIN`, and confirm in a toast; a file with no records raises an error toast.
-- CreateOrganization: General with Name and a Mark color chosen from seven `RadioCards`, each an `Avatar` with `pattern="marble"` seeded by the name in that color's `colors`, above an In the header preview drawn the same way, an Owner `Item` with Owner and Active `Tag`s, First workspace and a collapsed Advanced of `Select`s; a name already in use is invalid on submit, and the request ends in a success toast or an error toast with Retry.
+- Default: the Create Domain page at rest; General holds Name and Domain name, Advanced is collapsed, the bar shows Cancel and Save. Importing a zone file belongs to CreateZone, not to this page.
+- CreateZone: Create Zone after a zone file is imported; a Records section lists each imported record (type `Tag`, value, TTL) with a Remove `IconButton` per row and Discard import in the card footer. Import in the bar and a paste into Domain name both read a BIND zone file, skip the SOA and nameserver records, fill an empty Name and Domain name from `$ORIGIN`, and confirm in a toast; a file with no records raises an error toast. The list previews the first 50 records with an "and N more" line, and a re-import skips records already listed.
+- CreateOrganization: General with Name and a Mark color chosen from six `RadioCards` (each color built from semantic tokens: primary, warning, danger, success, info and the text grays, never palette primitives), each an `Avatar` with `pattern="marble"` seeded by the name in that color's `colors`, above an In the header preview drawn the same way, an Owner `Item` with Owner and Active `Tag`s, First workspace and a collapsed Advanced of `Select`s; a name already in use is invalid on submit, and the request ends in a success toast or an error toast with Retry.
 - CreatePurge: a Target band of radio choice cards for Layer and Purge type, an Arguments textarea that follows the type, a warning alert and a bar with Cancel and Purge.
-- CreateService: a long create in five groups of rows under the same centred `SaveBar` with Cancel and Save.
+- CreateService: a long create with a small `PageHeader` (Create Service, breadcrumb Services / Create Service) and five groups of rows, each under an `h2`, under the same centred `SaveBar` with Cancel and Save.
 - RequiredFields: Create Service after Save on the empty form; Name and Address show "This field is required." until edited.
 - ImportFromGit: the same job as a page body for `ConsoleLayout` (the layout owns the rail, the header and the `main`) with standalone field stacks under plain headings, an acknowledgement checkbox and one Deploy button at the end of the column.
 - ImportFromGitSubmitted: Import from Git after Deploy on the untouched form; every required field shows its required state and message.

@@ -14,6 +14,7 @@
   import SettingRow from '@aziontech/webkit/setting-row'
   import SettingsSection from '@aziontech/webkit/settings-section'
   import Switch from '@aziontech/webkit/switch'
+  import { toast } from '@aziontech/webkit/toast'
   import { reactive, ref } from 'vue'
 
   interface FormErrors {
@@ -33,7 +34,6 @@
     domainKind: 'required'
   })
   const advancedOpen = ref(false)
-  const fileRef = ref<HTMLInputElement | null>(null)
 
   const NAME_MAX = 50
   const DOMAIN_PATTERN = /^(?=.{4,253}$)((?!-)[a-zA-Z0-9-]{0,62}[a-zA-Z0-9]\.)+[a-zA-Z]{2,63}$/
@@ -64,8 +64,37 @@
     return !errors.name && !errors.domain
   }
 
-  const submit = () => validate()
-  const openImport = () => fileRef.value?.click()
+  const submitting = ref(false)
+  const SAVE_FAILURES = 0
+  let failuresLeft = SAVE_FAILURES
+
+  const sendRequest = () =>
+    new Promise<void>((resolve, reject) => {
+      setTimeout(() => {
+        if (failuresLeft > 0) {
+          failuresLeft -= 1
+          reject(new Error('The service did not answer. Check your connection and try again.'))
+          return
+        }
+        resolve()
+      }, 900)
+    })
+
+  const submit = async () => {
+    if (submitting.value || !validate()) return
+    submitting.value = true
+    try {
+      await sendRequest()
+      toast.success(`${form.domain.trim()} created.`)
+    } catch (error) {
+      toast.error('Could not create the domain.', {
+        description: error instanceof Error ? error.message : 'Try again.',
+        action: { label: 'Retry', onClick: () => submit() }
+      })
+    } finally {
+      submitting.value = false
+    }
+  }
 </script>
 
 <template>
@@ -126,7 +155,10 @@
               title-id="create-domain-title"
             />
 
-            <fieldset class="mx-0 mt-(--layout-section-gap) flex min-w-0 flex-col border-0 p-0">
+            <fieldset
+              :disabled="submitting"
+              class="mx-0 mt-(--layout-section-gap) flex min-w-0 flex-col border-0 p-0"
+            >
               <legend class="sr-only">Create Domain</legend>
 
               <SettingsSection
@@ -161,7 +193,7 @@
                       </SettingRow>
                       <SettingRow
                         title="Domain name"
-                        description="The root hostname this domain answers for, without a subdomain. Pasting a zone file here imports its records instead."
+                        description="The root hostname this domain answers for, without a subdomain."
                       >
                         <Input
                           v-model="form.domain"
@@ -225,29 +257,6 @@
             </fieldset>
           </div>
           <SaveBar kind="centered">
-            <template #leading>
-              <div class="flex min-w-0 items-center gap-(--spacing-sm)">
-                <Button
-                  type="button"
-                  label="Import"
-                  kind="outlined"
-                  size="medium"
-                  icon="pi pi-upload"
-                  @click="openImport"
-                />
-                <p class="min-w-0 text-body-sm text-(--text-muted)">
-                  or paste zone file contents in Domain name
-                </p>
-                <input
-                  ref="fileRef"
-                  type="file"
-                  accept=".zone,.txt,.db,text/plain"
-                  class="sr-only"
-                  tabindex="-1"
-                  aria-hidden="true"
-                />
-              </div>
-            </template>
             <template #actions>
               <Button
                 type="button"
@@ -260,6 +269,7 @@
                 kind="primary"
                 size="medium"
                 type="submit"
+                :loading="submitting"
               />
             </template>
           </SaveBar>

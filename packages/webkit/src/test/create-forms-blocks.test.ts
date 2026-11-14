@@ -84,9 +84,9 @@ describe('single-page-create#CreateOrganization', () => {
     await fireEvent.update(screen.getByRole('textbox', { name: 'Name' }), 'Northwind Studio')
     expect(preview.textContent).toContain('Northwind Studio')
     const fill = () => preview.querySelector<SVGRectElement>('rect')?.style.fill ?? ''
-    await waitFor(() => expect(fill()).toMatch(/--color-(orange|yellow)-/), wait)
+    await waitFor(() => expect(fill()).toMatch(/--(text-primary|primary|warning)\b/), wait)
     await fireEvent.click(screen.getByRole('radio', { name: 'Green mark' }))
-    await waitFor(() => expect(fill()).toMatch(/--color-(green|blue)-/), wait)
+    await waitFor(() => expect(fill()).toMatch(/--success/), wait)
   })
 
   it('flags an empty name and a name already in use only after submit', async () => {
