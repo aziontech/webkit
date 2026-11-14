@@ -49,7 +49,7 @@
   ] as const
 
   type Phase = (typeof PHASES)[number]['value']
-  type Control = 'up' | 'down'
+  type Control = 'up' | 'down' | 'position'
 
   interface Rule {
     id: string
@@ -391,6 +391,25 @@
   }
 
   const position = (phase: Phase, item: Rule) => rules[phase].indexOf(item)
+  const positionDraft = ref<{ id: string; value: string } | null>(null)
+  const positionValue = (phase: Phase, item: Rule) =>
+    positionDraft.value?.id === item.id
+      ? positionDraft.value.value
+      : String(position(phase, item) + 1)
+  const onPositionInput = (item: Rule, value: string) => {
+    positionDraft.value = { id: item.id, value }
+  }
+  const commitPosition = (phase: Phase, item: Rule, refocus: boolean) => {
+    const draft = positionDraft.value
+    positionDraft.value = null
+    if (!draft || draft.id !== item.id) return
+    const typed = Number.parseInt(draft.value, 10)
+    if (!Number.isFinite(typed)) return
+    moveTo(phase, position(phase, item), typed - 1, refocus ? 'position' : undefined)
+  }
+  const cancelPosition = () => {
+    positionDraft.value = null
+  }
   const reorderRows = (phase: Phase, next: Rule[]) => {
     if (searching.value) return
     rules[phase] = next
@@ -398,7 +417,7 @@
   const reorderable = (phase: Phase) => (row: Rule) => !lockReason(phase, row)
 
   const columns: TableColumn[] = [
-    { id: 'move', header: 'Move', width: 96, hideable: false },
+    { id: 'move', header: 'Position', width: 168, hideable: false },
     { accessorKey: 'name', header: 'Name', principal: true, hideable: false },
     { accessorKey: 'description', header: 'Description', grow: 3 },
     { id: 'status', header: 'Status', width: 152 },
@@ -1182,6 +1201,32 @@
                           :data-rule-id="row.id"
                           class="flex items-center gap-(--spacing-xxs)"
                         >
+                          <Tooltip
+                            :text="
+                              lockReason(group.value, row) ||
+                              'Type a position to move the rule there'
+                            "
+                          >
+                            <Input
+                              :model-value="positionValue(group.value, row)"
+                              size="small"
+                              inputmode="numeric"
+                              autocomplete="off"
+                              data-control="position"
+                              class="w-14 shrink-0 [&_input]:text-center [&_input]:tabular-nums"
+                              :disabled="Boolean(lockReason(group.value, row))"
+                              :aria-label="
+                                lockReason(group.value, row)
+                                  ? `Position ${position(group.value, row) + 1} of ${row.name} in the ${group.label} phase. ${lockReason(group.value, row)}`
+                                  : `Position of ${row.name} in the ${group.label} phase. Type a number from ${pinned(group.value) + 1} to ${group.total} to move it.`
+                              "
+                              @update:model-value="onPositionInput(row, $event)"
+                              @focus="($event.target as HTMLInputElement).select()"
+                              @keydown.enter.prevent="commitPosition(group.value, row, true)"
+                              @keydown.esc.prevent="cancelPosition()"
+                              @blur="commitPosition(group.value, row, false)"
+                            />
+                          </Tooltip>
                           <Tooltip :text="lockReason(group.value, row) || 'Move up'">
                             <IconButton
                               icon="pi pi-chevron-up"

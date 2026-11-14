@@ -115,6 +115,54 @@ describe('platform/view/rules-list block', () => {
     )
   })
 
+  it('moves a rule to the position typed in its Order cell and keeps focus in the field', async () => {
+    const view = render(RulesList)
+    const field = view.getByRole('textbox', {
+      name: 'Position of Docs rewrite in the Request phase. Type a number from 2 to 5 to move it.'
+    }) as HTMLInputElement
+    expect(field.value).toBe('5')
+    field.focus()
+    await fireEvent.update(field, '2')
+    await fireEvent.keyDown(field, { key: 'Enter' })
+    expect(requestNames(view.container).slice(0, 3)).toEqual([
+      'Default rule',
+      'Docs rewrite',
+      'Maintenance page'
+    ])
+    await waitFor(() =>
+      expect(view.getByTestId('rules-list__announcer').textContent).toContain(
+        'Docs rewrite moved to position 2 of 5 in the Request phase.'
+      )
+    )
+    await waitFor(() =>
+      expect(document.activeElement?.getAttribute('data-control')).toBe('position')
+    )
+    expect((document.activeElement as HTMLInputElement).value).toBe('2')
+  })
+
+  it('keeps a rule in place when the typed position is cancelled or not a number', async () => {
+    const view = render(RulesList)
+    const name =
+      'Position of Redirect www in the Request phase. Type a number from 2 to 5 to move it.'
+    const field = view.getByRole('textbox', { name }) as HTMLInputElement
+    await fireEvent.update(field, '5')
+    await fireEvent.keyDown(field, { key: 'Escape' })
+    await fireEvent.blur(field)
+    expect(requestNames(view.container)[2]).toBe('Redirect www')
+    expect((view.getByRole('textbox', { name }) as HTMLInputElement).value).toBe('3')
+    await fireEvent.update(view.getByRole('textbox', { name }), 'x')
+    await fireEvent.blur(view.getByRole('textbox', { name }))
+    expect(requestNames(view.container)[2]).toBe('Redirect www')
+  })
+
+  it('disables the position of the locked rule with its reason', () => {
+    const view = render(RulesList)
+    const field = view.getByRole('textbox', {
+      name: 'Position 1 of Default rule in the Request phase. The default rule runs first and stays first.'
+    }) as HTMLInputElement
+    expect(field.disabled).toBe(true)
+  })
+
   it('turns reordering off while a search narrows the list', async () => {
     const view = render(Searching)
     expect(view.getByText(/Reordering is off while a search narrows the list/)).toBeTruthy()
