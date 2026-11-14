@@ -3,11 +3,11 @@ name: multi-select
 category: inputs
 structure: composition
 status: implemented
-spec_version: 5
+spec_version: 6
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3899-29362
   node_id: 3899:29362
-checksum: e34e5c496e1067615738c8e2a72a6d017d7ae66bda986ed2357c60ab0fa1873d
+checksum: e9ae78d3b31290deb15454ef6809856aaaa8e6bbe628fbe3c5a420b4f735518c
 created: 2026-06-25
 last_updated: 2026-11-14
 ---
@@ -93,16 +93,17 @@ Aligned with Figma frame `3899:29362` (options panel). The trigger reuses the `I
 
 ## Props
 
-| Prop           | Type                             | Default     | Required | JSDoc                                                                                                                                                     |
-| -------------- | -------------------------------- | ----------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `defaultOpen`  | `boolean`                        | `false`     | false    | Initial open state when uncontrolled.                                                                                                                     |
-| `placeholder`  | `string`                         | `''`        | false    | Trigger placeholder shown when no option is selected.                                                                                                     |
-| `size`         | `'small' \| 'medium' \| 'large'` | `'medium'`  | false    | Size token; affects trigger height (small=28px, medium=32px, large=40px) matching `Input`.                                                                |
-| `disabled`     | `boolean`                        | `false`     | false    | Disables the trigger and prevents opening; applies disabled tokens.                                                                                       |
-| `readonly`     | `boolean`                        | `false`     | false    | Marks the field read-only; the current selection is visible but the dropdown cannot open.                                                                 |
-| `required`     | `boolean`                        | `false`     | false    | Marks the field as required; sets `aria-required` on the trigger. Visual indicator (asterisk) is owned by the wrapping form-field, not by this component. |
-| `invalid`      | `boolean`                        | `false`     | false    | Applies the invalid border + ring tokens and sets `aria-invalid` on the trigger.                                                                          |
-| `displayValue` | `(value: TValue[]) => string`    | `undefined` | false    | Custom formatter used by the trigger to render the selected labels; receives the current `modelValue` array.                                              |
+| Prop           | Type                             | Default     | Required | JSDoc                                                                                                                                                                                                                                                                |
+| -------------- | -------------------------------- | ----------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `defaultOpen`  | `boolean`                        | `false`     | false    | Initial open state when uncontrolled.                                                                                                                                                                                                                                |
+| `placeholder`  | `string`                         | `''`        | false    | Trigger placeholder shown when no option is selected.                                                                                                                                                                                                                |
+| `size`         | `'small' \| 'medium' \| 'large'` | `'medium'`  | false    | Size token; affects trigger height (small=28px, medium=32px, large=40px) matching `Input`.                                                                                                                                                                           |
+| `disabled`     | `boolean`                        | `false`     | false    | Disables the trigger and prevents opening; applies disabled tokens.                                                                                                                                                                                                  |
+| `readonly`     | `boolean`                        | `false`     | false    | Marks the field read-only; the current selection is visible but the dropdown cannot open.                                                                                                                                                                            |
+| `required`     | `boolean`                        | `false`     | false    | Marks the field as required; sets `aria-required` on the trigger. Visual indicator (asterisk) is owned by the wrapping form-field, not by this component.                                                                                                            |
+| `invalid`      | `boolean`                        | `false`     | false    | Applies the invalid border + ring tokens and sets `aria-invalid` on the trigger.                                                                                                                                                                                     |
+| `displayValue` | `(value: TValue[]) => string`    | `undefined` | false    | Custom formatter used by the trigger to render the selected labels; receives the current `modelValue` array.                                                                                                                                                         |
+| `name`         | `string`                         | `''`        | false    | Form field name. Set, the root renders one hidden input per selected value so a native `form` and `FormData` submit every selection under that name; `required` then adds a hidden required proxy that blocks an empty submit, and `disabled` leaves the values out. |
 
 **Generic.** The root is generic over `TValue` (default `unknown`), the item type of the bound `modelValue`: with a `string[]` model, `displayValue` takes `(value: string[]) => string` and `update:modelValue` sends a `string[]`, so a handler needs no cast. `@aziontech/webkit/multi-select` exports the type `MultiSelectSize`.
 

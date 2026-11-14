@@ -2,6 +2,7 @@
   import { computed, onMounted, ref, useAttrs, watch } from 'vue'
 
   import { useFieldControl } from '../../../composables/use-field-control'
+  import { FormValue } from '../../../utils/form-value'
 
   defineOptions({
     name: 'Switch',
@@ -22,13 +23,17 @@
     focused?: boolean
     /** Disables interaction and applies the disabled tokens. */
     disabled?: boolean
+    /** Form field name: while on, a hidden input submits `on` under this name, like a native checkbox. */
+    name?: string
   }
+  export type SwitchProps = Props
 
   const props = withDefaults(defineProps<Props>(), {
     kind: 'default',
     autofocus: false,
     focused: false,
-    disabled: false
+    disabled: false,
+    name: ''
   })
 
   /** Toggled-on state. Bind with `v-model`. */
@@ -132,5 +137,10 @@
         />
       </template>
     </span>
+    <FormValue
+      :name="name"
+      :value="isChecked"
+      :disabled="isDisabled"
+    />
   </button>
 </template>

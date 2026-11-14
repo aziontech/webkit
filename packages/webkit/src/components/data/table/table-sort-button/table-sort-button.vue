@@ -19,6 +19,7 @@
     /** Hides the button while keeping its layout slot. */
     visible?: boolean
   }
+  export type TableSortButtonProps = Props
 
   const props = withDefaults(defineProps<Props>(), {
     direction: 'none',
@@ -58,8 +59,8 @@
 
 <template>
   <IconButton
+    v-bind="{ ...$attrs, ariaLabel }"
     :icon="icon"
-    v-bind="{ ariaLabel }"
     kind="transparent"
     size="small"
     :data-testid="testId"

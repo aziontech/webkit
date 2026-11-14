@@ -7,7 +7,7 @@ spec_version: 6
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3374-6191
   node_id: 3374:6191
-checksum: a79b03bc6731277b8d34353d16dfc74e95c700fdbb018b66f5a2b5db3a3a0878
+checksum: 83381e1657b7f959b019cbf28f0c952c8044dc28e9a651132dabec031e45d6d7
 created: 2026-05-22
 last_updated: 2026-11-14
 ---
@@ -95,11 +95,12 @@ Switches between peer views of one page or panel, showing one at a time: Overvie
 
 ## Props
 
-| Prop           | Type                | Default | Required | JSDoc                                 |
-| -------------- | ------------------- | ------- | -------- | ------------------------------------- |
-| `defaultValue` | `TabsValue \| null` | `null`  | false    | Initial active tab when uncontrolled. |
+| Prop             | Type                      | Default       | Required | JSDoc                                                                                                                                                                                  |
+| ---------------- | ------------------------- | ------------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `defaultValue`   | `TabsValue \| null`       | `null`        | false    | Initial active tab when uncontrolled.                                                                                                                                                  |
+| `activationMode` | `'automatic' \| 'manual'` | `'automatic'` | false    | `automatic` selects a tab as the arrow keys focus it; `manual` only moves focus, and `Enter` or `Space` selects (APG tabs with manual activation, for panels that are slow to render). |
 
-Types (exported from `@aziontech/webkit/tabs`): `TabsValue = string | number`, the value of a tab and of its panel; `TabsListAlign = 'start' | 'center'`. The compound is typed from `index.ts` (`Tabs.Root`, `Tabs.List`, `Tabs.Item`, `Tabs.Trigger`, `Tabs.Content`, `Tabs.Panel`), so a wrong prop on a part is a type error.
+Types (exported from `@aziontech/webkit/tabs`): `TabsValue = string | number`, `TabsActivationMode = 'automatic' | 'manual'`, the value of a tab and of its panel; `TabsListAlign = 'start' | 'center'`. The compound is typed from `index.ts` (`Tabs.Root`, `Tabs.List`, `Tabs.Item`, `Tabs.Trigger`, `Tabs.Content`, `Tabs.Panel`), so a wrong prop on a part is a type error.
 
 ## v-model
 
@@ -155,7 +156,7 @@ Types (exported from `@aziontech/webkit/tabs`): `TabsValue = string | number`, t
 ## Accessibility (WCAG 2.1 AA)
 
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`
-- Keyboard map (inside `Tabs.List`): `Tab` moves into the list onto the selected tab and out of it to the panel (roving `tabindex`: only the selected tab is `0`); `ArrowRight`/`ArrowLeft` select and focus the next/previous enabled tab in DOM order (a tab inserted later with `v-if`, or moved by a keyed list, takes its rendered place) and wrap, swapped under `dir="rtl"` (`useDirection`); `Home`/`End` select the first/last enabled tab; `Enter`/`Space` activate the focused tab; `Delete` on a `closable` tab emits `close` (the tab carries `aria-keyshortcuts="Delete"`). Focus after a close is the consumer's call (the neighbouring tab, as `split-view#Sessions` does).
+- Keyboard map (inside `Tabs.List`): `Tab` moves into the list onto the selected tab and out of it to the panel (roving `tabindex`: only the selected tab is `0`); `ArrowRight`/`ArrowLeft` select and focus the next/previous enabled tab in DOM order (a tab inserted later with `v-if`, or moved by a keyed list, takes its rendered place) and wrap, swapped under `dir="rtl"` (`useDirection`); `Home`/`End` select the first/last enabled tab; `Enter`/`Space` activate the focused tab; with `activationMode="manual"` the arrow keys and `Home`/`End` move focus only, from the focused tab, and the selection changes on `Enter`/`Space` or a click; `Delete` on a `closable` tab emits `close` (the tab carries `aria-keyshortcuts="Delete"`). Focus after a close is the consumer's call (the neighbouring tab, as `split-view#Sessions` does).
 - Close control: the `closable` glyph is a pointer target only (`aria-hidden="true"`, no role, no `tabindex`, a `title` with "Close tab"); keyboard and screen-reader users close with `Delete`, the WAI-ARIA tabs pattern. A focusable close button cannot sit next to the tab: anything focusable inside `role="tablist"` that is not a `tab` fails axe `aria-required-children` (unallowed child), and inside the tab it is `nested-interactive`.
 - ARIA: inside `Tabs.List` each item is `role="tab"` with `aria-selected` and `aria-controls` (when its panel is mounted); a `Tabs.Item` rendered on its own, outside any `Tabs`, is a toggle `<button>` with `aria-pressed` and no `tab` role, because a `tab` outside a `tablist` fails `aria-required-parent`. `Tabs.Panel` is `role="tabpanel"` labelled by its tab.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state. The dirty dot is `var(--warning-contrast)` (≥3:1 on the canvas in both themes) and the tab's accessible name carries "Unsaved changes", so colour is never the only cue.

@@ -121,6 +121,11 @@
     "limit": "6 KB"
   },
   {
+    "name": "use-color-mode",
+    "path": "src/composables/use-color-mode/index.ts",
+    "limit": "1.5 KB"
+  },
+  {
     "name": "frame-box",
     "path": "src/components/layout/frame-box/frame-box.vue",
     "limit": "2.5 KB"
@@ -1920,6 +1925,11 @@
     "name": "password-input",
     "path": "src/components/inputs/password-input/password-input.vue",
     "limit": "4.95 KB"
+  },
+  {
+    "name": "radio-group-root",
+    "path": "src/components/inputs/radio-group/radio-group.vue",
+    "limit": "1.5 KB"
   },
   {
     "name": "radio-cards",

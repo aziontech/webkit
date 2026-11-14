@@ -2,6 +2,7 @@
   import { computed, provide, type Ref, ref, shallowReactive, useAttrs, useId, watch } from 'vue'
 
   import { useFieldControl } from '../../../composables/use-field-control'
+  import { FormValue } from '../../../utils/form-value'
   import { fieldContextKey } from '../field/injection-key'
   import {
     selectContextKey,
@@ -37,6 +38,8 @@
       invalid?: boolean
       /** Custom formatter for the trigger label; receives the current modelValue, typed as the bound model. */
       displayValue?: (value: TValue) => string
+      /** Form field name: renders hidden inputs carrying the selection, so a native form submits it; required then blocks an empty submit. */
+      name?: string
     }>(),
     {
       multiple: false,
@@ -48,7 +51,8 @@
       readonly: false,
       required: false,
       invalid: false,
-      displayValue: undefined
+      displayValue: undefined,
+      name: ''
     }
   )
 
@@ -200,5 +204,11 @@
     class="relative inline-block w-full data-[kind=transparent]:w-auto data-[kind=transparent]:max-w-full"
   >
     <slot />
+    <FormValue
+      :name="name"
+      :value="selectedValues()"
+      :required="isRequired"
+      :disabled="isDisabled"
+    />
   </div>
 </template>

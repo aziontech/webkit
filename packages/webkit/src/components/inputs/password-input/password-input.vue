@@ -33,6 +33,7 @@
     /** Sets the value and placeholder in the monospace code face, for API tokens, client secrets and keys. */
     monospace?: boolean
   }
+  export type PasswordInputProps = Props
 
   const props = withDefaults(defineProps<Props>(), {
     placeholder: '',

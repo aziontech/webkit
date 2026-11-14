@@ -12,6 +12,7 @@
     /** Visual weight: `legend` titles a section, `label` matches a FieldLabel for a group of choices. */
     kind?: FieldLegendKind
   }
+  export type FieldLegendProps = Props
 
   withDefaults(defineProps<Props>(), {
     kind: 'legend'

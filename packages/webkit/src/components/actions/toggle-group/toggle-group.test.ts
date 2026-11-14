@@ -165,6 +165,19 @@ describe('ToggleGroup', () => {
     expect(emitted()['update:modelValue'][1]).toEqual(['one'])
   })
 
+  it('moves the selection with ArrowDown / ArrowUp and jumps with Home / End, as a radio group does', async () => {
+    const { getAllByTestId, emitted } = render(ToggleGroup, {
+      props: { options: OPTIONS }
+    })
+
+    const [first] = getAllByTestId('actions-toggle-group__option')
+    await fireEvent.keyDown(first, { key: 'ArrowDown' })
+    await fireEvent.keyDown(first, { key: 'End' })
+    await fireEvent.keyDown(first, { key: 'ArrowUp' })
+    await fireEvent.keyDown(first, { key: 'Home' })
+    expect(emitted()['update:modelValue']).toEqual([['two'], ['three'], ['two'], ['one']])
+  })
+
   it('is one tab stop and moves focus with the selection', async () => {
     const { getAllByTestId } = render(ToggleGroup, {
       props: { options: OPTIONS_WITH_DISABLED }
@@ -349,5 +362,20 @@ describe('ToggleGroup', () => {
       props: { options: OPTIONS, ariaLabel: 'Count' }
     })
     expect(getByTestId('actions-toggle-group__indicator').style.transition).toBe('')
+  })
+})
+
+describe('ToggleGroup — native form submit', () => {
+  it('submits the selected value under its name', async () => {
+    const { getByTestId, getAllByTestId } = render({
+      components: { ToggleGroup },
+      setup: () => ({ options: OPTIONS }),
+      template:
+        '<form data-testid="form"><ToggleGroup :options="options" name="range" aria-label="Range" /></form>'
+    })
+    const form = getByTestId('form') as HTMLFormElement
+    expect(new FormData(form).get('range')).toBe('one')
+    await fireEvent.click(getAllByTestId('actions-toggle-group__option')[2])
+    expect(new FormData(form).get('range')).toBe('three')
   })
 })

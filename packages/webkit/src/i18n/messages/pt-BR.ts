@@ -963,7 +963,8 @@ export const ptBR: Messages = {
     between: 'entre'
   },
   tableHeadCell: {
-    resize: 'Redimensionar coluna'
+    resize: 'Redimensionar coluna',
+    sortBy: 'Ordenar por'
   },
   tableRefreshButton: {
     label: 'Atualizar'

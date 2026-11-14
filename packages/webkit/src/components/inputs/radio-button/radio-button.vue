@@ -18,6 +18,7 @@
     /** id for the native input; associate an external label via htmlFor. */
     inputId?: string
   }
+  export type RadioButtonProps = Props
 
   const props = withDefaults(defineProps<Props>(), {
     value: '',
@@ -89,7 +90,6 @@
       :required="isRequired || undefined"
       :checked="isChecked"
       :disabled="isDisabled"
-      :aria-checked="isChecked"
       :data-testid="`${testId}__input`"
       v-bind="passthroughAttrs"
       @change="handleChange"

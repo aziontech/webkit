@@ -16,13 +16,20 @@
     inheritAttrs: false
   })
 
+  /** How the arrow keys treat the active tab: select as focus moves, or only move focus until Enter or Space. */
+  export type TabsActivationMode = 'automatic' | 'manual'
+
   interface Props {
     /** Initial active tab when uncontrolled. */
     defaultValue?: TabsValue | null
+    /** `automatic` selects a tab as the arrow keys focus it; `manual` only moves focus, and Enter or Space selects. */
+    activationMode?: TabsActivationMode
   }
+  export type TabsRootProps = Props
 
   const props = withDefaults(defineProps<Props>(), {
-    defaultValue: null
+    defaultValue: null,
+    activationMode: 'automatic'
   })
 
   defineSlots<{ default(): unknown }>()
@@ -157,13 +164,18 @@
     }
 
     let next: TabsValue | null = null
+    const manual = props.activationMode === 'manual'
+    const focused = manual
+      ? (enabled.find((tab) => tab.el.value === globalThis.document?.activeElement)?.value ??
+        activeValue.value)
+      : activeValue.value
 
     switch (logicalArrowKey(event.key, dir.value)) {
       case 'ArrowRight':
-        next = getNextTabValue(tabs.value, activeValue.value, 1)
+        next = getNextTabValue(tabs.value, focused, 1)
         break
       case 'ArrowLeft':
-        next = getNextTabValue(tabs.value, activeValue.value, -1)
+        next = getNextTabValue(tabs.value, focused, -1)
         break
       case 'Home':
         next = enabled[0]?.value ?? null
@@ -178,7 +190,7 @@
     event.preventDefault()
 
     if (next !== null) {
-      setValue(next)
+      if (!manual) setValue(next)
       focusTab(next)
     }
   }

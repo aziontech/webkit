@@ -32,6 +32,7 @@
     /** PrimeIcons class for the glyph above the title. Empty draws the cloud-upload glyph. */
     icon?: string
   }
+  export type FileDropzoneProps = Props
 
   const props = withDefaults(defineProps<Props>(), {
     kind: 'inline',

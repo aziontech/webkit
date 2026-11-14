@@ -39,6 +39,7 @@
     /** Native button type. `submit` lets the control submit its form; `disabled` and `loading` still block it. Ignored when `href` is set. */
     type?: ButtonType
   }
+  export type ButtonProps = Props
 
   const props = withDefaults(defineProps<Props>(), {
     kind: 'primary',

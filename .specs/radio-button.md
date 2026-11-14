@@ -3,11 +3,11 @@ name: radio-button
 category: inputs
 structure: monolithic
 status: implemented
-spec_version: 5
+spec_version: 6
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2027-7554
   node_id: 2027:7554
-checksum: 0c24c759f58e0f7d58c6905ff2124309690bc706114a169a8292c2880172a31c
+checksum: 8ea6418079199ec51185fc214fd24129e2adf6d569003a288775a0a91e5348eb
 created: 2026-05-22
 last_updated: 2026-11-14
 ---
@@ -32,7 +32,7 @@ Atomic exclusive-choice control only — the circular radio input from Figma (no
 
 ## Related
 
-- `radio-group` (not shipped yet): one RadioButton per option still binds the same `v-model` and `name` by hand; RadioCards is the shipped group.
+- `radio-group` — the group for a list of labelled options: it shares the `v-model`, the `name` and the Field state with every `RadioGroup.Item`, each of which draws this circle. Reach for a bare RadioButton only when the layout around the circle is fully custom.
 - `field` — inside a `Field`, the input takes the field's id, description, `invalid` (`aria-invalid`), `required` and `disabled`. A horizontal `Field` puts the radio beside its label and description (the default inside forms); a `Field.Label` wrapping it is a card-style option with a selected border and background. Group the options in `Field.Set` + `Field.Legend`.
 - `radio-cards` — horizontal grid of selectable cards with its own model.
 - `checkbox` — the multi-pick counterpart.
@@ -78,12 +78,12 @@ Atomic exclusive-choice control only — the circular radio input from Figma (no
 
 ## Props
 
-| Prop       | Type      | Default     | Required | JSDoc                                               |
-| ---------- | --------- | ----------- | -------- | --------------------------------------------------- |
-| `value`    | `string`  | `''`        | false    | Option value for this radio instance.               |
-| `name`     | `string`  | `''`        | false    | HTML name shared across a mutually exclusive group; empty renders no `name`. |
-| `disabled` | `boolean` | `false`     | false    | Disables interaction and applies disabled tokens.   |
-| `inputId`  | `string`  | `''`        | false    | id for the native input; links label to control. Empty uses `id`, then the enclosing Field's id. |
+| Prop       | Type      | Default | Required | JSDoc                                                                                            |
+| ---------- | --------- | ------- | -------- | ------------------------------------------------------------------------------------------------ |
+| `value`    | `string`  | `''`    | false    | Option value for this radio instance.                                                            |
+| `name`     | `string`  | `''`    | false    | HTML name shared across a mutually exclusive group; empty renders no `name`.                     |
+| `disabled` | `boolean` | `false` | false    | Disables interaction and applies disabled tokens.                                                |
+| `inputId`  | `string`  | `''`    | false    | id for the native input; links label to control. Empty uses `id`, then the enclosing Field's id. |
 
 ## v-model
 
@@ -135,8 +135,8 @@ _none_
 ## Accessibility (WCAG 2.1 AA)
 
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`
-- Keyboard map: `Tab` focuses native input; `Space` selects within group.
-- ARIA: native `type="radio"` input with `aria-checked`.
+- Keyboard map: `Tab` focuses the native input; `Space` selects it; with a shared `name`, the arrow keys move the selection within the group.
+- ARIA: native `type="radio"` input; the checked state is native, so it carries no `aria-checked`. Several radios that share one `name` are one tab stop and move with the arrow keys; `RadioGroup` wires that, plus the group name and the Field state, for you.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state.
 - `motion-reduce:transition-none motion-reduce:transform-none` on animated states.
 - Touch target ≥40×40 px where the control is interactive.

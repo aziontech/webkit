@@ -5,6 +5,7 @@
   import { useTranslate } from '../../../composables/use-locale/use-translate'
   import { useSelectSearch } from '../../../composables/use-select-search'
   import * as en from '../../../i18n/messages/en'
+  import { FormValue } from '../../../utils/form-value'
   import { fieldContextKey } from '../field/injection-key'
   import Input from '../input/input.vue'
   import InputGroup from '../input-group/input-group.vue'
@@ -62,13 +63,14 @@
     required?: boolean
     /** Applies the invalid border on the InputGroup and sets aria-invalid on the input. */
     invalid?: boolean
-    /** HTML name for the internal input (form + vee-validate integration). */
+    /** Form field name: a hidden input submits the full E.164 number (dial code and digits) under this name; the visible input carries no name. */
     name?: string
     /** Placeholder of the search box that filters the dial-code list. Empty uses the locale catalog (`Search country`). */
     searchPlaceholder?: string
     /** Shown in the dial-code list when no country matches the search. Empty uses the locale catalog (`No country found.`). */
     searchEmptyLabel?: string
   }
+  export type PhoneInputProps = Props
 
   const props = withDefaults(defineProps<Props>(), {
     countries: () => defaultCountries,
@@ -293,10 +295,14 @@
           {{ searchEmptyLabel || t('phoneInput.empty') }}
         </p>
       </SelectContent>
+      <FormValue
+        :name="name"
+        :value="phone.number"
+        :disabled="isDisabled"
+      />
     </Select>
     <input
       :id="resolvedInputId"
-      :name="name"
       type="tel"
       dir="ltr"
       inputmode="tel"

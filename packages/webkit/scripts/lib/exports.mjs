@@ -39,3 +39,12 @@ export function typesTargets(exportsMap) {
     )
   ]
 }
+
+export function typesVersionsFor(exportsMap) {
+  const paths = {}
+  for (const [key, entry] of Object.entries(exportsMap)) {
+    if (!key.startsWith('./') || key === './package.json') continue
+    if (entry && typeof entry === 'object' && entry.types) paths[key.slice(2)] = [entry.types]
+  }
+  return { '*': paths }
+}

@@ -14,6 +14,7 @@
   import { useTranslate } from '../../../composables/use-locale/use-translate'
   import * as en from '../../../i18n/messages/en'
   import { cn } from '../../../utils/cn'
+  import { FormValue } from '../../../utils/form-value'
 
   defineOptions({
     name: 'ToggleGroup',
@@ -34,6 +35,8 @@
       fluid?: boolean
       /** Disables every option of the group. */
       disabled?: boolean
+      /** Form field name: a hidden input carries the selected value, so a native form submits it. */
+      name?: string
     }>(),
     {
       options: () => [],
@@ -41,7 +44,8 @@
       defaultValue: undefined,
       size: 'large',
       fluid: false,
-      disabled: false
+      disabled: false,
+      name: ''
     }
   )
 
@@ -196,13 +200,18 @@
     setValue(value)
   }
 
-  const moveSelection = (direction: 'next' | 'prev') => {
+  const moveSelection = (direction: 'next' | 'prev' | 'first' | 'last') => {
     if (!normalizedOptions.value.length) {
       return
     }
 
-    const directionStep = direction === 'next' ? 1 : -1
-    let index = selectedIndex.value
+    const directionStep = direction === 'next' || direction === 'first' ? 1 : -1
+    let index =
+      direction === 'first'
+        ? -1
+        : direction === 'last'
+          ? normalizedOptions.value.length
+          : selectedIndex.value
 
     for (let i = 0; i < normalizedOptions.value.length; i += 1) {
       index =
@@ -217,6 +226,15 @@
     }
   }
 
+  const KEY_MOVES: Partial<Record<string, 'next' | 'prev' | 'first' | 'last'>> = {
+    ArrowRight: 'next',
+    ArrowDown: 'next',
+    ArrowLeft: 'prev',
+    ArrowUp: 'prev',
+    Home: 'first',
+    End: 'last'
+  }
+
   const onOptionKeydown = (event: globalThis.KeyboardEvent, value: string, disabled: boolean) => {
     if (event.key === 'Enter' || event.key === ' ') {
       event.preventDefault()
@@ -226,15 +244,11 @@
 
     const key = logicalArrowKey(event.key, dir.value)
 
-    if (key === 'ArrowRight') {
-      event.preventDefault()
-      moveSelection('next')
-      return
-    }
+    const move = KEY_MOVES[key]
 
-    if (key === 'ArrowLeft') {
+    if (move) {
       event.preventDefault()
-      moveSelection('prev')
+      moveSelection(move)
     }
   }
 
@@ -369,5 +383,10 @@
         :data-testid="`${testId}__option-lock`"
       />
     </button>
+    <FormValue
+      :name="name"
+      :value="selectedValue"
+      :disabled="disabled"
+    />
   </div>
 </template>

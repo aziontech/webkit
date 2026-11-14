@@ -24,9 +24,10 @@
   import Table from '@aziontech/webkit/table'
   import type { TableColumn } from '@aziontech/webkit/table-root'
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
-  import ThemeSwitcher, { type ThemeSwitcherValue } from '@aziontech/webkit/theme-switcher'
+  import ThemeSwitcher from '@aziontech/webkit/theme-switcher'
   import { toast, Toaster } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
+  import { useColorMode } from '@aziontech/webkit/use-color-mode'
   import { computed, nextTick, onMounted, onUnmounted, ref, useId } from 'vue'
 
   const navigation: ConsoleLayoutNavGroup[] = [
@@ -199,7 +200,7 @@
     { id: 'shop-assets', label: 'shop-assets', icon: 'ai ai-edge-storage', type: 'Bucket' }
   ]
 
-  const theme = ref<ThemeSwitcherValue>('system')
+  const { mode: theme } = useColorMode()
 
   const onSearchSelect = (_event: MouseEvent | KeyboardEvent, value: string | number) => {
     if (value === 'action:theme') theme.value = theme.value === 'dark' ? 'light' : 'dark'

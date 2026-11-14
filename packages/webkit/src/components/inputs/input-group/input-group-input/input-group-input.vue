@@ -24,6 +24,7 @@
     /** Sets aria-invalid. */
     invalid?: boolean
   }
+  export type InputGroupInputProps = Props
 
   const props = withDefaults(defineProps<Props>(), {
     type: 'text',

@@ -899,3 +899,45 @@ describe('Select labels, typeahead and slots', () => {
     expect(legacy.getByTestId('l')).toBeTruthy()
   })
 })
+
+describe('Select — native form submit', () => {
+  const FormHost = defineComponent({
+    components: { Select, SelectTrigger, SelectContent, SelectOption },
+    props: {
+      initial: { type: null, default: undefined },
+      required: { type: Boolean, default: false },
+      disabled: { type: Boolean, default: false }
+    },
+    setup(props) {
+      return { value: ref(props.initial), options: OPTIONS }
+    },
+    template: `
+      <form data-testid="form">
+        <Select v-model="value" name="plan" :required="required" :disabled="disabled">
+          <SelectTrigger aria-label="Plan" />
+          <SelectContent>
+            <SelectOption v-for="o in options" :key="o.value" :value="o.value">{{ o.label }}</SelectOption>
+          </SelectContent>
+        </Select>
+      </form>
+    `
+  })
+
+  it('submits the selected value under its name', () => {
+    const { getByTestId } = render(FormHost, { props: { initial: 'opt-2' } })
+    const form = getByTestId('form') as HTMLFormElement
+    expect(new FormData(form).getAll('plan')).toEqual(['opt-2'])
+  })
+
+  it('blocks an empty submit when required, and leaves a disabled value out', async () => {
+    const empty = render(FormHost, { props: { required: true } })
+    expect((empty.getByTestId('form') as HTMLFormElement).checkValidity()).toBe(false)
+    await expectNoA11yViolations(empty.container)
+    empty.unmount()
+    const filled = render(FormHost, { props: { required: true, initial: 'opt-1' } })
+    expect((filled.getByTestId('form') as HTMLFormElement).checkValidity()).toBe(true)
+    filled.unmount()
+    const disabled = render(FormHost, { props: { disabled: true, initial: 'opt-1' } })
+    expect(new FormData(disabled.getByTestId('form') as HTMLFormElement).has('plan')).toBe(false)
+  })
+})

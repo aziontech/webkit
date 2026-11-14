@@ -29,6 +29,7 @@
     /** Sets the value and placeholder in the monospace code face, for pasted zone files, certificates, JSON and lists of IPs. */
     monospace?: boolean
   }
+  export type TextareaProps = Props
 
   const props = withDefaults(defineProps<Props>(), {
     placeholder: '',

@@ -15,6 +15,7 @@ const ROOT = resolve(PKG, '..', '..')
 export const CREATE_VITE = 'create-vite@9.3.4'
 
 export const APP_VUE = `<script setup lang="ts">
+  import Button, { type ButtonKind, type ButtonProps } from '@aziontech/webkit/button'
   import HeroBand from '@aziontech/webkit/hero-band'
   import SiteNav from '@aziontech/webkit/site-nav'
   import Table from '@aziontech/webkit/table'
@@ -36,6 +37,8 @@ export const APP_VUE = `<script setup lang="ts">
     toast.success('Saved')
   }
   const heroClass = cn('a', 'b')
+  const saveKind: ButtonKind = 'secondary'
+  const saveProps: ButtonProps = { kind: saveKind, label: 'Save' }
 </script>
 
 <template>
@@ -51,7 +54,7 @@ export const APP_VUE = `<script setup lang="ts">
         </Table.Row>
       </Table.Body>
     </Table>
-    <button type="button" @click="notify">Notify</button>
+    <Button v-bind="saveProps" @click="notify" />
   </WebkitProvider>
 </template>
 `
