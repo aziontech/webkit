@@ -88,10 +88,11 @@ const navigation = [
 
 ## Enforced
 
-- `webkit/no-page-navigation-menu` (ESLint, warning) flags an import of `@aziontech/webkit/menu`
-  or `menu-root` in a page body (under `views/` or `pages/`, or with a `PageHeader` / `PageTabs`
-  import), unless the file is the `platform/detail/sectioned-resource` block or carries
-  `/* webkit-local-navigation */`. It is static and approximate, so it warns.
+- `webkit/no-page-navigation-menu` (ESLint, warning) flags a `Menu` rendered in a page body (under
+  `views/` or `pages/`, or with a `PageHeader` / `PageTabs` import) outside a navigation host
+  (`Sidebar`, `ConsoleLayout`, `DocLayout`, `AppLayout`), unless the file is the
+  `platform/detail/sectioned-resource` block or carries `/* webkit-local-navigation */`. It is
+  static and approximate, so it warns.
 - `ConsoleLayout` warns in development when a `Menu` in its default slot has a row whose `href`
   matches a rail row, naming both labels and the route.
 - `npx @aziontech/webkit check --url <url,...>` and `/webkit-ui-verify` fail a visited route with a duplicate
