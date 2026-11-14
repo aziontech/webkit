@@ -30,7 +30,8 @@
   const sections = computed(() => [
     { to: '/foundations', label: t.value.foundations },
     { to: '/components', label: t.value.components },
-    { to: '/blocks', label: t.value.blocks }
+    { to: '/blocks', label: t.value.blocks },
+    { to: '/assets', label: t.value.assets }
   ])
 
   const activeSection = computed(

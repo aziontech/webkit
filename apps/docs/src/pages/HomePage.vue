@@ -1,88 +1,144 @@
 <script setup lang="ts">
   import Button from '@aziontech/webkit/button'
-  import CodeBlock from '@aziontech/webkit/code-block'
-  import DocCard from '@aziontech/webkit/doc-card'
-  import DocCardGroup from '@aziontech/webkit/doc-card-group'
+  import CardGrid from '@aziontech/webkit/card-grid'
+  import CopyPromptButton from '@aziontech/webkit/copy-prompt-button'
+  import Hero from '@aziontech/webkit/hero'
+  import SectionContainer from '@aziontech/webkit/section-container'
+  import SectionModule from '@aziontech/webkit/section-module'
   import { useHead } from '@unhead/vue'
+  import { computed } from 'vue'
 
   import { index } from '../lib/data'
-  import { messages } from '../lib/i18n'
+  import { format, messages } from '../lib/i18n'
 
   const t = messages
-  useHead({ title: 'WebKit — Azion design system' })
+  useHead({
+    title: 'WebKit — Azion design system',
+    meta: [{ name: 'description', content: computed(() => t.value.homeLead) }]
+  })
 
-  const install = [
-    {
-      label: 'npm',
-      value: 'npm',
-      language: 'bash',
-      code: 'npm install @aziontech/webkit @aziontech/theme @aziontech/icons\nnpx @aziontech/webkit init'
-    }
-  ]
   const exampleCount = index.components.reduce((sum, item) => sum + item.exampleCount, 0)
+
+  const explore = computed(() => [
+    {
+      to: '/foundations',
+      label: t.value.foundations,
+      icon: 'pi pi-palette',
+      text: t.value.exploreFoundations
+    },
+    {
+      to: '/components',
+      label: t.value.components,
+      icon: 'pi pi-th-large',
+      text: t.value.exploreComponents
+    },
+    {
+      to: '/blocks',
+      label: t.value.blocks,
+      icon: 'pi pi-window-maximize',
+      text: t.value.exploreBlocks
+    },
+    { to: '/assets', label: t.value.assets, icon: 'pi pi-images', text: t.value.exploreAssets }
+  ])
+
+  const features = computed(() => [
+    { title: t.value.whyQualityTitle, body: t.value.whyQualityBody },
+    { title: t.value.whyPeopleTitle, body: t.value.whyPeopleBody },
+    { title: t.value.whyNextTitle, body: t.value.whyNextBody }
+  ])
+
+  const whyLead = computed(() =>
+    format(t.value.whyLead, {
+      components: index.components.length,
+      examples: exampleCount,
+      blocks: index.blocks.length
+    })
+  )
 </script>
 
 <template>
-  <div
-    class="flex w-full flex-col gap-(--spacing-xxl) px-(--spacing-md) py-(--spacing-xl) lg:px-(--spacing-xl)"
-  >
-    <section class="flex max-w-3xl flex-col gap-(--spacing-md)">
-      <p class="text-overline-sm uppercase text-(--text-muted)">
-        @aziontech/webkit {{ index.version }}
-      </p>
-      <h1 class="text-heading-2xl">{{ t.heroTitle }}</h1>
-      <p class="text-body-lg text-(--text-muted)">{{ t.heroLead }}</p>
-      <div class="flex flex-wrap gap-(--spacing-sm)">
-        <Button
-          :label="t.browseComponents"
-          kind="primary"
-          href="/components"
-          icon="pi pi-arrow-right"
-          icon-position="trailing"
-        />
-        <Button
-          :label="t.browseBlocks"
-          kind="outlined"
-          href="/blocks"
-        />
-        <Button
-          v-if="index.llmsTxt"
-          label="llms.txt"
-          kind="transparent"
-          href="/llms.txt"
-          icon="pi pi-file"
-        />
-      </div>
-      <CodeBlock
-        :tabs="install"
-        default-value="npm"
-      />
-    </section>
+  <div class="flex w-full flex-col">
+    <Hero
+      max-width="7xl"
+      size="large"
+    >
+      <Hero.Title
+        :eyebrow="`${t.homeEyebrow} ${index.version}`"
+        :title="t.homeTitle"
+        :description="t.homeLead"
+        size="medium"
+        max-width="3xl"
+      >
+        <template #actions>
+          <Button
+            :label="t.gettingStarted"
+            kind="primary"
+            size="large"
+            href="/foundations/getting-started"
+          />
+          <CopyPromptButton
+            :value="t.agentPrompt"
+            :label="t.startWithAgents"
+            :copied-label="t.copied"
+          />
+        </template>
+      </Hero.Title>
+    </Hero>
 
-    <DocCardGroup :cols="3">
-      <DocCard
-        :title="t.components"
-        icon="pi pi-th-large"
-        href="/components"
+    <SectionContainer max-width="7xl">
+      <SectionModule
+        :divided="false"
+        :padded="false"
+        :title="t.exploreTitle"
+        :description="t.exploreLead"
       >
-        {{ index.components.length }} components and {{ exampleCount }} live examples.
-      </DocCard>
-      <DocCard
-        :title="t.blocks"
-        icon="pi pi-window-maximize"
-        href="/blocks"
+        <CardGrid
+          :columns="4"
+          kind="divider"
+        >
+          <a
+            v-for="section in explore"
+            :key="section.to"
+            :href="section.to"
+            class="relative flex h-full min-h-56 flex-col justify-center gap-(--spacing-sm) bg-(--bg-canvas) p-(--spacing-xl) transition-colors duration-moderate-01 ease-productive-entrance hover:bg-(--bg-surface) focus-visible:z-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-(--ring-color) motion-reduce:transition-none"
+          >
+            <i
+              :class="section.icon"
+              class="text-heading-sm text-(--text-default)"
+              aria-hidden="true"
+            />
+            <span class="text-heading-xs text-(--text-default)">{{ section.label }}</span>
+            <span class="text-pretty text-body-sm text-(--text-muted)">{{ section.text }}</span>
+          </a>
+        </CardGrid>
+      </SectionModule>
+
+      <SectionModule
+        :padded="false"
+        :title="t.whyTitle"
+        :description="whyLead"
       >
-        {{ index.blocks.length }} blocks with
-        {{ index.blocks.reduce((sum, block) => sum + block.states.length, 0) }} states, in a
-        resizable frame.
-      </DocCard>
-      <DocCard
-        :title="t.foundations"
-        icon="pi pi-palette"
-        href="/foundations"
-      >
-        Tokens, languages, right-to-left, layout and accessibility.
-      </DocCard>
-    </DocCardGroup>
+        <CardGrid
+          :columns="3"
+          kind="divider"
+          divider-color="muted"
+        >
+          <div
+            v-for="feature in features"
+            :key="feature.title"
+            class="flex flex-col gap-(--spacing-sm) bg-(--bg-canvas) p-(--spacing-xl)"
+          >
+            <i
+              class="pi pi-asterisk text-heading-sm text-(--primary)"
+              aria-hidden="true"
+            />
+            <h3 class="max-w-[20ch] text-balance text-heading-xs text-(--text-default)">
+              {{ feature.title }}
+            </h3>
+            <p class="text-pretty text-body-sm text-(--text-muted)">{{ feature.body }}</p>
+          </div>
+        </CardGrid>
+      </SectionModule>
+    </SectionContainer>
   </div>
 </template>
