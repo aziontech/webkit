@@ -1929,7 +1929,7 @@
   {
     "name": "switch",
     "path": "src/components/inputs/switch/switch.vue",
-    "limit": "12.95 KB"
+    "limit": "1.9 KB"
   },
   {
     "name": "theme-switcher",

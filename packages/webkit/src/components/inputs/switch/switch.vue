@@ -1,20 +1,24 @@
 <script setup lang="ts">
-  import { computed, ref, useAttrs, watch } from 'vue'
+  import { computed, onMounted, ref, useAttrs, watch } from 'vue'
 
   import { useFieldControl } from '../../../composables/use-field-control'
-  import { cn } from '../../../utils/cn'
 
   defineOptions({
     name: 'Switch',
     inheritAttrs: false
   })
 
-  export type SwitchType = 'default' | 'privacy'
+  /** Visual variant of the switch. */
+  export type SwitchKind = 'default' | 'privacy'
+  /** @deprecated since 6.0 — use `SwitchKind`. Removed in 7.0. */
+  export type SwitchType = SwitchKind
 
   interface Props {
     /** Visual variant. Privacy renders a lock icon inside the handle. */
-    kind?: SwitchType
-    /** Forces the focused visual state regardless of keyboard focus. */
+    kind?: SwitchKind
+    /** Moves focus to the switch once, when it mounts. */
+    autofocus?: boolean
+    /** @deprecated since 6.0 — use `autofocus` (or call focus on the element). Removed in 7.0. */
     focused?: boolean
     /** Disables interaction and applies the disabled tokens. */
     disabled?: boolean
@@ -22,6 +26,7 @@
 
   const props = withDefaults(defineProps<Props>(), {
     kind: 'default',
+    autofocus: false,
     focused: false,
     disabled: false
   })
@@ -60,12 +65,16 @@
 
   watch(
     () => props.focused,
-    (next) => {
+    (next, previous) => {
       if (next) buttonRef.value?.focus()
-      else buttonRef.value?.blur()
+      else if (previous) buttonRef.value?.blur()
     },
     { immediate: true, flush: 'post' }
   )
+
+  onMounted(() => {
+    if (props.autofocus) buttonRef.value?.focus()
+  })
 
   function handleToggle() {
     if (isDisabled.value) return
@@ -79,18 +88,6 @@
       handleToggle()
     }
   }
-
-  const ROOT_CLASS =
-    'group relative inline-flex h-5 w-9 shrink-0 cursor-pointer items-center rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface) px-0.5 transition-colors duration-150 ease-out motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) data-[focused]:ring-2 data-[focused]:ring-(--ring-color) data-[focused]:ring-offset-2 data-[focused]:ring-offset-(--bg-canvas) hover:shadow-[inset_0_0_0_999px_var(--bg-hover)] data-[checked]:border-transparent data-[checked]:bg-(--accent) forced-colors:border-[CanvasText] forced-colors:data-[checked]:border-[Highlight] data-[disabled]:cursor-not-allowed data-[disabled]:border-(--border-default) data-[disabled]:bg-(--bg-disabled) data-[disabled]:hover:shadow-none after:absolute after:inset-[min(0rem,calc(50%-12px))] pointer-coarse:after:inset-[min(0rem,calc(50%-22px))]'
-
-  const HANDLE_CLASS =
-    'pointer-events-none relative inline-flex h-4 w-4 items-center justify-center rounded-(--radius) bg-(--text-muted) transition-transform duration-150 ease-out motion-reduce:transition-none motion-reduce:transform-none group-data-[checked]:translate-x-3.5 rtl:group-data-[checked]:-translate-x-3.5 group-data-[checked]:bg-(--color-base-white) group-data-[disabled]:bg-(--text-disabled) forced-colors:forced-color-adjust-none forced-colors:bg-[CanvasText] forced-colors:group-data-[checked]:bg-[Highlight] forced-colors:group-data-[disabled]:bg-[GrayText]'
-
-  const LOCK_ICON_CLASS = 'pi text-body-xxs leading-none'
-  const LOCK_OFF_CLASS = `${LOCK_ICON_CLASS} pi-lock text-(--bg-surface)`
-  const LOCK_ON_CLASS = `${LOCK_ICON_CLASS} pi-lock-open text-(--color-base-black)`
-
-  const rootClass = computed(() => cn(ROOT_CLASS, attrs.class as string | undefined))
 </script>
 
 <template>
@@ -111,21 +108,29 @@
     :data-checked="isChecked || null"
     :data-focused="focused || null"
     :data-disabled="isDisabled || null"
-    :class="rootClass"
+    :class="attrs.class"
+    class="group relative inline-flex h-5 w-9 shrink-0 cursor-pointer items-center rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface) px-0.5 transition-colors duration-150 ease-out motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) data-[focused]:ring-2 data-[focused]:ring-(--ring-color) data-[focused]:ring-offset-2 data-[focused]:ring-offset-(--bg-canvas) hover:shadow-[inset_0_0_0_999px_var(--bg-hover)] data-[checked]:border-transparent data-[checked]:bg-(--accent) forced-colors:border-[CanvasText] forced-colors:data-[checked]:border-[Highlight] data-[disabled]:cursor-not-allowed data-[disabled]:border-(--border-default) data-[disabled]:bg-(--bg-disabled) data-[disabled]:hover:shadow-none after:absolute after:inset-[min(0rem,calc(50%-12px))] pointer-coarse:after:inset-[min(0rem,calc(50%-22px))]"
     v-bind="passthroughAttrs"
     @click="handleToggle"
     @keydown="handleKeydown"
   >
     <span
       aria-hidden="true"
-      :class="HANDLE_CLASS"
+      class="pointer-events-none relative inline-flex h-4 w-4 items-center justify-center rounded-(--radius) bg-(--text-muted) transition-transform duration-150 ease-out motion-reduce:transition-none motion-reduce:transform-none group-data-[checked]:translate-x-3.5 rtl:group-data-[checked]:-translate-x-3.5 group-data-[checked]:bg-(--color-base-white) group-data-[disabled]:bg-(--text-disabled) forced-colors:forced-color-adjust-none forced-colors:bg-[CanvasText] forced-colors:group-data-[checked]:bg-[Highlight] forced-colors:group-data-[disabled]:bg-[GrayText]"
       :data-testid="`${testId}__handle`"
     >
-      <i
-        v-if="kind === 'privacy'"
-        aria-hidden="true"
-        :class="isChecked ? LOCK_ON_CLASS : LOCK_OFF_CLASS"
-      />
+      <template v-if="kind === 'privacy'">
+        <i
+          aria-hidden="true"
+          :data-testid="`${testId}__lock`"
+          class="pi pi-lock text-body-xxs leading-none text-(--bg-surface) group-data-[checked]:hidden"
+        />
+        <i
+          aria-hidden="true"
+          :data-testid="`${testId}__lock-open`"
+          class="pi pi-lock-open hidden text-body-xxs leading-none text-(--color-base-black) group-data-[checked]:inline"
+        />
+      </template>
     </span>
   </button>
 </template>
