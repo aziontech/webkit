@@ -96,8 +96,8 @@
         <div
           v-for="panel in panels"
           :key="panel"
-          class="flex min-w-0 flex-col gap-(--spacing-xs) xl:min-h-0"
-          :class="panel === 4 ? 'sm:col-span-2 lg:col-span-3 xl:col-span-2' : ''"
+          :data-wide="panel === 4 || null"
+          class="flex min-w-0 flex-col gap-(--spacing-xs) xl:min-h-0 data-wide:sm:col-span-2 data-wide:lg:col-span-3 data-wide:xl:col-span-2"
         >
           <div
             class="flex min-h-(--size-6) items-center gap-(--spacing-xs) px-[calc(var(--spacing-md)+1px)]"
@@ -122,10 +122,8 @@
               >
                 <Item.Content>
                   <div
-                    class="flex h-(--size-5) flex-col justify-center"
-                    :class="
-                      panel === 1 || panel === 4 ? 'ps-[calc(var(--size-4)+var(--spacing-xs))]' : ''
-                    "
+                    :data-indented="panel === 1 || panel === 4 || null"
+                    class="flex h-(--size-5) flex-col justify-center data-indented:ps-[calc(var(--size-4)+var(--spacing-xs))]"
                   >
                     <Skeleton
                       :width="row % 2 ? '55%' : '42%'"

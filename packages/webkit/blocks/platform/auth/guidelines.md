@@ -12,7 +12,7 @@ The signed-out screens of a platform app: sign in, sign up, reset password and c
 
 - First-run steps after the account exists (profile, plan, organization): use `platform/account/onboarding-form`.
 - Changing the password or email of a signed-in user: use `platform/account/profile`.
-- Signing out an expired session over a console page: the shell wire is `platform/states/page-wires` (SessionWire); this block is where it lands.
+- Signing out an expired session over a console page: the shell wire is `platform/states/page-wires` (Session); this block is where it lands.
 - Any signed-in form: use `platform/states/form-validation` for the submit states and `platform/settings/settings-form` for settings.
 
 ## Building blocks
