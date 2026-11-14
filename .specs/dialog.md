@@ -3,11 +3,11 @@ name: dialog
 category: overlay
 structure: composition
 status: implemented
-spec_version: 2
+spec_version: 4
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=482-935
   node_id: 482:935
-checksum: e900389778d3fb856cb7a96423eb45169455efcae29ac707d7788401292279a1
+checksum: 1829702722e99e361ccf150ca70bc5a60a7e9e1448a62a9aa07cf53114cf2f70
 created: 2026-05-22
 last_updated: 2026-11-14
 ---
@@ -41,21 +41,13 @@ Modal surface above the page, built on the shared Panel shell. The consumer comp
 
 ## Usage
 
+The compound import leads: every part hangs off the root (`Dialog.Trigger`, `Dialog.Content`, …), and `Dialog.Header`, `Dialog.Body` and `Dialog.Footer` are the shared Panel regions, so one import builds the whole dialog.
+
 ```vue
 <script setup>
   import { ref } from 'vue'
   import Button from '@aziontech/webkit/button'
   import Dialog from '@aziontech/webkit/dialog'
-  import DialogTrigger from '@aziontech/webkit/dialog-trigger'
-  import DialogPortal from '@aziontech/webkit/dialog-portal'
-  import DialogOverlay from '@aziontech/webkit/dialog-overlay'
-  import DialogContent from '@aziontech/webkit/dialog-content'
-  import DialogTitle from '@aziontech/webkit/dialog-title'
-  import DialogDescription from '@aziontech/webkit/dialog-description'
-  import DialogClose from '@aziontech/webkit/dialog-close'
-  import PanelHeader from '@aziontech/webkit/panel-header'
-  import PanelContent from '@aziontech/webkit/panel-content'
-  import PanelFooter from '@aziontech/webkit/panel-footer'
 
   const open = ref(false)
 </script>
@@ -65,25 +57,25 @@ Modal surface above the page, built on the shared Panel shell. The consumer comp
     v-model:open="open"
     size="medium"
   >
-    <DialogTrigger>
+    <Dialog.Trigger>
       <Button
         label="Delete domain"
         kind="outlined"
       />
-    </DialogTrigger>
-    <DialogPortal>
-      <DialogOverlay />
-      <DialogContent>
-        <PanelHeader>
-          <DialogTitle>Delete domain</DialogTitle>
-          <DialogClose />
-        </PanelHeader>
-        <PanelContent>
-          <DialogDescription>
+    </Dialog.Trigger>
+    <Dialog.Portal>
+      <Dialog.Overlay />
+      <Dialog.Content>
+        <Dialog.Header>
+          <Dialog.Title>Delete domain</Dialog.Title>
+          <Dialog.Close />
+        </Dialog.Header>
+        <Dialog.Body>
+          <Dialog.Description>
             The domain stops serving traffic immediately. This action cannot be undone.
-          </DialogDescription>
-        </PanelContent>
-        <PanelFooter>
+          </Dialog.Description>
+        </Dialog.Body>
+        <Dialog.Footer>
           <Button
             label="Cancel"
             kind="outlined"
@@ -93,15 +85,18 @@ Modal surface above the page, built on the shared Panel shell. The consumer comp
             label="Delete"
             kind="danger"
           />
-        </PanelFooter>
-      </DialogContent>
-    </DialogPortal>
+        </Dialog.Footer>
+      </Dialog.Content>
+    </Dialog.Portal>
   </Dialog>
 </template>
 ```
 
+Tree-shaking: `@aziontech/webkit/dialog-root` is the root alone (nothing attached), and every part keeps its own path (`@aziontech/webkit/dialog-trigger`, `-portal`, `-overlay`, `-content`, `-title`, `-description`, `-close`, and `@aziontech/webkit/panel-header`, `panel-content`, `panel-footer` for the regions), so code written against the per-part imports keeps working unchanged.
+
 ## Sub-components
 
+- `index.ts` — the compound: the root with every part attached by `Object.assign` (`Dialog.Trigger`, `.Portal`, `.Overlay`, `.Content`, `.Title`, `.Description`, `.Close`), plus the shared Panel regions as `Dialog.Header` (`panel-header`), `Dialog.Body` (`panel-content`) and `Dialog.Footer` (`panel-footer`). It adds no component of its own. Exported at `@aziontech/webkit/dialog`; the root alone is `@aziontech/webkit/dialog-root`. The parts stay in the root folder (flat) for 6.x path stability; per-part export paths are unchanged.
 - `dialog-close.vue` — Public sub-component `dialog-close`.
 - `dialog-content.vue` — Public sub-component `dialog-content`.
 - `dialog-description.vue` — Public sub-component `dialog-description`.
@@ -115,8 +110,11 @@ Modal surface above the page, built on the shared Panel shell. The consumer comp
 | Prop          | Type         | Default    | Required | JSDoc                                                 |
 | ------------- | ------------ | ---------- | -------- | ----------------------------------------------------- |
 | `defaultOpen` | `boolean`    | `false`    | false    | Initial open state when uncontrolled.                 |
-| `dismissible` | `boolean`    | `true`     | false    | When true, overlay click and Escape close the dialog. |
+| `closable` | `boolean` | `undefined` | false | Whether the close button (DialogClose) and the context close() close the dialog; false renders the close button disabled. Escape and overlay click follow `dismissible`. Unset, it follows `dismissible` for 6.x compatibility (deprecated coupling: set it explicitly; from 7.0 unset means true). |
+| `dismissible` | `boolean` | `true` | false | Light-dismiss: when true, overlay click and Escape close the dialog. It does not govern the close button; see `closable`. |
 | `size`        | `DialogSize` | `'medium'` | false    | Panel max-width preset passed to the inner Panel.     |
+
+- Two close paths: `dismissible` gates the light-dismiss paths only (`Esc`, overlay click); `closable` gates the explicit close (`DialogClose` and the context `close()`), as Radix and the prop vocabulary separate them. `:dismissible="false" :closable="true"` is a dialog that only its close button or a footer action closes. For 6.x compatibility an unset `closable` follows `dismissible`, so an existing `:dismissible="false"` still disables the close button; that coupling is deprecated and from 7.0 an unset `closable` means `true`. Tests: `dialog.test.ts` › closable.
 
 ## v-model
 

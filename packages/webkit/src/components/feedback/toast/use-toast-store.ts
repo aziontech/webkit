@@ -193,7 +193,10 @@ const resumeAll = () => {
   })
 }
 
+const onServer = () => typeof window === 'undefined'
+
 const add: ToastStore['add'] = (entry) => {
+  if (onServer()) return entry.id
   const fallback = hasActions(entry)
     ? defaultDuration.value === 0
       ? 0
@@ -213,6 +216,7 @@ const add: ToastStore['add'] = (entry) => {
 }
 
 const update: ToastStore['update'] = (id, patch) => {
+  if (onServer()) return
   const index = entries.findIndex((entry) => entry.id === id)
   if (index === -1) {
     return

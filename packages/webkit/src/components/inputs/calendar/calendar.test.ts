@@ -521,6 +521,35 @@ describe('Calendar', () => {
     expect(events[events.length - 1][0]).toEqual({ year: 2026, month: 10 })
   })
 
+  it('Home and End move to the first and last day of the week (real keyboard)', async () => {
+    const { getByTestId } = render(Calendar, {
+      props: { mode: 'single', modelValue: OCT_8 }
+    })
+
+    const popover = await openCalendar(getByTestId)
+
+    findDayButton(popover, 8).focus()
+    await userEvent.keyboard('{Home}')
+    await waitFor(() => expect(findDayButton(popover, 4).getAttribute('tabindex')).toBe('0'))
+    await userEvent.keyboard('{End}')
+    await waitFor(() => expect(findDayButton(popover, 10).getAttribute('tabindex')).toBe('0'))
+  })
+
+  it('Shift+PageDown and Shift+PageUp page by a year (real keyboard)', async () => {
+    const { getByTestId } = render(Calendar, {
+      props: { mode: 'single', modelValue: OCT_8 }
+    })
+
+    const popover = await openCalendar(getByTestId)
+    const label = () => within(popover).getByRole('grid').getAttribute('aria-label')
+
+    findDayButton(popover, 8).focus()
+    await userEvent.keyboard('{Shift>}{PageDown}{/Shift}')
+    await waitFor(() => expect(label()).toBe('October 2027'))
+    await userEvent.keyboard('{Shift>}{PageUp}{/Shift}')
+    await waitFor(() => expect(label()).toBe('October 2026'))
+  })
+
   // ---- Bounds & disabled -------------------------------------------------------
 
   it('disables days out of the [min, max] bounds and does not commit when they are clicked', async () => {

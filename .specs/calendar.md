@@ -8,7 +8,7 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=5087-17336
   node_id: 5087:17336
-checksum: 31b3c0024dde59ee08ab75bb300cc8166b0c87570d4cc28c7d5c8915041f7576
+checksum: d538c2d19fafc5d415849b5f621f9357d068881632495dc399383bb2827a45bf
 created: 2026-06-25
 last_updated: 2026-11-14
 ---
@@ -238,7 +238,7 @@ The period list and the presets menu take `min-w-(--container-3xs)` (256px), the
 
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)` on the trigger and `focus-visible:ring-offset-(--bg-surface-raised)` inside the popover. The Start/End date+time fields reuse `input`, whose ring offset resolves `var(--input-ring-offset, var(--bg-canvas))`; the fields container declares `--input-ring-offset: var(--bg-surface-raised)` once and it inherits to every field, so the ring gap matches the raised popover the fields sit on.
 - Field labels: each visible Start / End / Date label is a `<label for>` bound to its date field through `useId()`; the time field beside it carries its own `aria-label` (`Start time` / `End time` / `Time`), so every field has a programmatic accessible name.
-- Keyboard map: the trigger toggles the popover with `Enter`/`Space` and exposes `aria-haspopup`/`aria-expanded`; `Escape` and click-outside close it and return focus to the trigger; focus is trapped in the open popover. In the grid, `Tab` enters at the focused day, `Arrow` keys move focus (paging the visible window when crossing its first/last month), `Enter`/`Space` selects, `PageUp`/`PageDown` change month. Apply, Clear, presets, fields, and the timezone control are all reachable by `Tab`.
+- Keyboard map: the trigger toggles the popover with `Enter`/`Space` and exposes `aria-haspopup`/`aria-expanded`; `Escape` and click-outside close it and return focus to the trigger; focus is trapped in the open popover. In the grid, `Tab` enters at the focused day, `Arrow` keys move focus (paging the visible window when crossing its first/last month), `Enter`/`Space` selects, `Home`/`End` move to the first/last day of the week (the grid starts on Sunday; logical, so the same under `dir="rtl"`), `PageUp`/`PageDown` change month, `Shift+PageUp`/`Shift+PageDown` change year. Tests: `calendar.test.ts` › Home and End, Shift+PageDown and Shift+PageUp. Apply, Clear, presets, fields, and the timezone control are all reachable by `Tab`.
 - ARIA: each month grid uses `role="grid"` with `role="row"` and `role="gridcell"` descendants; selected cells set `aria-selected="true"`; the current date sets `aria-current="date"`; navigation buttons carry `aria-label`; the popover is labelled by the trigger; decorative icons are `aria-hidden="true"`.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including the disabled state.
 - `motion-reduce:animate-none` on the popover and `motion-reduce:transition-none` on animated states.

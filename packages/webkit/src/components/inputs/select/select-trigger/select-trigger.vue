@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { computed, inject, useAttrs } from 'vue'
 
+  import { useListboxTrigger } from '../../../../composables/use-listbox'
   import { selectContextKey } from '../injection-key'
 
   defineOptions({
@@ -33,7 +34,9 @@
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? 'input-select-trigger'
   )
-  const triggerId = computed(() => (attrs['id'] as string | undefined) ?? ctx.controlId.value)
+  const triggerId = computed(
+    () => (attrs['id'] as string | undefined) ?? ctx.controlId.value ?? `${ctx.contentId}-trigger`
+  )
   const describedBy = computed(
     () => (attrs['aria-describedby'] as string | undefined) ?? ctx.describedBy.value
   )
@@ -43,16 +46,12 @@
     ctx.setOpen(!ctx.open.value)
   }
 
-  const onKeydown = (event: globalThis.KeyboardEvent) => {
-    if (ctx.disabled.value || ctx.readonly.value) return
-    if (event.key === 'Enter' || event.key === ' ' || event.key === 'ArrowDown') {
-      event.preventDefault()
-      ctx.setOpen(true)
-    } else if (event.key === 'Escape' && ctx.open.value) {
-      event.preventDefault()
-      ctx.setOpen(false)
-    }
-  }
+  const { onKeydown } = useListboxTrigger({
+    open: ctx.open,
+    setOpen: ctx.setOpen,
+    locked: () => ctx.disabled.value || ctx.readonly.value,
+    pendingFocus: ctx.pendingFocus
+  })
 </script>
 
 <template>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed, onBeforeUnmount, provide, ref, useAttrs, useId, watch } from 'vue'
+  import { computed, nextTick, onBeforeUnmount, provide, ref, useAttrs, useId, watch } from 'vue'
 
   import { useControllable } from '../../../composables/use-controllable'
   import { useOverlayLayer } from '../../../composables/use-overlay-layer'
@@ -99,7 +99,9 @@
     autoPlacements: ['bottom-start', 'bottom-end', 'top-start', 'top-end']
   })
 
-  const { isTop } = useOverlayLayer(isOpenRef)
+  const { isTop, isFocusTop, isInsideHigherLayer, lowerLayerElement } = useOverlayLayer(isOpenRef, {
+    element: panelRef
+  })
 
   const resolvedPlacementRef = computed(() => resolvedPlacement.value as PopoverPlacement)
 
@@ -125,19 +127,36 @@
 
   function onDocumentMousedown(event: globalThis.MouseEvent) {
     if (!isOpenState.value) return
-    if (!props.dismissible || !isTop.value) return
+    if (!props.dismissible) return
     const target = event.target as globalThis.Node | null
     if (!target) return
+    if (isInsideHigherLayer(target) || !isFocusTop.value) return
     if (triggerRef.value?.contains(target)) return
     if (panelRef.value?.contains(target)) return
     setOpen(false)
   }
 
+  function tabbableAfterTrigger(): globalThis.HTMLElement | null {
+    const trigger = triggerRef.value
+    const scope = lowerLayerElement() ?? globalThis.document?.body
+    if (!trigger || !scope) return null
+    const panel = panelRef.value
+    const all = Array.from(
+      scope.querySelectorAll<globalThis.HTMLElement>(FOCUSABLE_SELECTOR)
+    ).filter(
+      (el) => !panel?.contains(el) && !trigger.contains(el) && el.getClientRects().length > 0
+    )
+    const after = all.find((el) =>
+      Boolean(trigger.compareDocumentPosition(el) & globalThis.Node.DOCUMENT_POSITION_FOLLOWING)
+    )
+    return after ?? (scope === globalThis.document?.body ? null : (all[0] ?? null))
+  }
+
   function onDocumentKeydown(event: globalThis.KeyboardEvent) {
-    if (!isOpenState.value || !isTop.value || event.defaultPrevented) return
+    if (!isOpenState.value || event.defaultPrevented) return
 
     if (event.key === 'Escape') {
-      if (!props.dismissible) return
+      if (!isTop.value || !props.dismissible) return
       event.preventDefault()
       setOpen(false)
       focusTrigger()
@@ -145,6 +164,7 @@
     }
 
     if (event.key === 'Tab') {
+      if (!isFocusTop.value) return
       const trigger = triggerRef.value
       const panel = panelRef.value
       if (!trigger || !panel) return
@@ -153,23 +173,29 @@
       const active = globalThis.document?.activeElement as globalThis.HTMLElement | null
       const first = focusables[0]
       const last = focusables[focusables.length - 1]
+      const inPanel = Boolean(active && panel.contains(active))
+      const onTrigger = Boolean(active && trigger.contains(active))
 
-      if (active === trigger || !panel.contains(active)) {
+      if (onTrigger && !event.shiftKey && first) {
         event.preventDefault()
-        const target = event.shiftKey ? (last ?? trigger) : (first ?? trigger)
-        target.focus({ preventScroll: true })
+        first.focus({ preventScroll: true })
         return
       }
 
-      if (focusables.length === 0) {
+      if (!inPanel) return
+
+      if (event.shiftKey && (active === first || focusables.length === 0)) {
         event.preventDefault()
-        trigger.focus({ preventScroll: true })
-      } else if (!event.shiftKey && active === last) {
+        focusTrigger()
+        return
+      }
+
+      if (!event.shiftKey && (active === last || focusables.length === 0)) {
         event.preventDefault()
-        trigger.focus({ preventScroll: true })
-      } else if (event.shiftKey && active === first) {
-        event.preventDefault()
-        trigger.focus({ preventScroll: true })
+        const next = tabbableAfterTrigger()
+        setOpen(false)
+        if (next) next.focus({ preventScroll: true })
+        else focusTrigger()
       }
     }
   }
@@ -187,6 +213,14 @@
     },
     { immediate: true }
   )
+
+  watch(isOpenRef, async (open, wasOpen) => {
+    if (!open || wasOpen) return
+    await nextTick()
+    const panel = panelRef.value
+    if (!panel || panel.contains(globalThis.document?.activeElement ?? null)) return
+    getFocusable()[0]?.focus({ preventScroll: true })
+  })
 
   onBeforeUnmount(() => {
     globalThis.document?.removeEventListener('mousedown', onDocumentMousedown)

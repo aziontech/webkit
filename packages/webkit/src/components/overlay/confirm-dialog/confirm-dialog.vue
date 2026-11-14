@@ -5,7 +5,6 @@
   import * as en from '../../../i18n/messages/en'
   import Button from '../../actions/button/button.vue'
   import Dialog from '../dialog/dialog.vue'
-  import DialogClose from '../dialog/dialog-close.vue'
   import DialogContent from '../dialog/dialog-content.vue'
   import DialogDescription from '../dialog/dialog-description.vue'
   import DialogOverlay from '../dialog/dialog-overlay.vue'
@@ -121,7 +120,6 @@
       >
         <PanelHeader class="w-full">
           <DialogTitle>{{ title }}</DialogTitle>
-          <DialogClose />
         </PanelHeader>
         <PanelContent>
           <DialogDescription v-if="description">{{ description }}</DialogDescription>
@@ -138,6 +136,7 @@
             >
               <Button
                 :data-testid="`${testId}__cancel`"
+                data-autofocus
                 :label="cancelLabel || t('confirmDialog.cancel')"
                 kind="transparent"
                 size="medium"

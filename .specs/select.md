@@ -7,7 +7,7 @@ spec_version: 5
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3714-10801
   node_id: 3714:10801
-checksum: 4196d4169db8efa1be71d855c2f21bc820726630ad8a89da1e945080e29fbc08
+checksum: d9b9a200794c24fa3f645e9591c00e8143a01d2b40bb910538cfebc3274e5e50
 created: 2026-06-15
 last_updated: 2026-11-14
 ---
@@ -194,8 +194,10 @@ _none_
 
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)` on trigger and on every option row.
 - Keyboard map (trigger): `Tab` focuses; `Space`/`Enter`/`ArrowDown` opens the panel; `Escape` closes it.
+- Keyboard map (closed trigger): `Enter`, `Space`, `ArrowDown` and `ArrowUp` open the list (focus lands as described below); `Home` opens it on the first enabled option and `End` on the last; typing a printable character opens it on the first enabled option whose label starts with that character (with a search field, focus goes to the search field instead). Clicking the trigger while the list is open closes it. Tests: `select.test.ts` › Select keyboard and naming (APG select-only combobox).
 - Keyboard map (open panel): opening focuses the search field when there is one, else the selected option, else the first enabled option; `ArrowDown`/`ArrowUp` move the active option and wrap; `Home`/`End` jump to first/last; `Enter`/`Space` select, close and return focus to the trigger; typing a printable character moves focus to the next enabled option whose label starts with the typed text (characters typed within 500 ms add up; ignored while the search field has focus); `Escape` closes and returns focus to the trigger; `Tab` closes and moves focus to the control after the trigger; `Shift+Tab` closes and returns focus to the trigger. Tests: `select.test.ts` › keyboard map (spec).
-- ARIA: trigger uses `role="combobox"` with `aria-haspopup="listbox"`, `aria-expanded` bound to open state, `aria-controls` pointing to the content element. Content uses `role="listbox"` with `aria-multiselectable` mirroring `multiple`. Each option uses `role="option"` with `aria-selected` mirroring its selection. Decorative icons (`pi pi-chevron-down`, `pi-heart`, etc.) are `aria-hidden="true"`.
+- ARIA: trigger uses `role="combobox"` with `aria-haspopup="listbox"`, `aria-expanded` bound to open state, `aria-controls` pointing to the list. The teleported content is a plain panel holding the optional search field, the list and the optional footer; the list (not the panel) carries `role="listbox"`, so the search field sits outside it, and is named by the root's `aria-label`, else by the root's `aria-labelledby`, else by the enclosing `Field` label, else by the trigger (which always has an `id`). The list uses `role="listbox"` with `aria-multiselectable` mirroring `multiple`. Each option uses `role="option"` with `aria-selected` mirroring its selection. Decorative icons (`pi pi-chevron-down`, `pi-heart`, etc.) are `aria-hidden="true"`.
+- Nested overlays: the open list joins the shared overlay layer stack (`useOverlayLayer`), so inside a `Popover`, `Dialog` or `Drawer` an option click or `Escape` in the list closes only the list; the host overlay stays open.
 - `aria-invalid` and `aria-required` on the trigger mirror the matching props.
 - Contrast ≥4.5:1 (text) / ≥3:1 (icons + borders), including disabled state.
 - `motion-reduce:transition-none motion-reduce:animate-none` on every transition/animation-bearing class.

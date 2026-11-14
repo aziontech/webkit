@@ -307,6 +307,44 @@ describe('Tree', () => {
     )
   })
 
+  it('keeps only the tab-stop row actions in the Tab order', async () => {
+    const view = mount(
+      {},
+      {
+        slots: {
+          actions: (scope: { item: TreeItem }) =>
+            h('button', { type: 'button', 'aria-label': `More ${scope.item.label}` })
+        }
+      }
+    )
+    await nextTick()
+    const more = (label: string) => view.getByRole('button', { name: `More ${label}` })
+    expect(more('assets').hasAttribute('tabindex')).toBe(false)
+    expect(more('src').getAttribute('tabindex')).toBe('-1')
+    expect(more('azion.config.js').getAttribute('tabindex')).toBe('-1')
+
+    node(view.container, 'assets').focus()
+    await userEvent.keyboard('{ArrowDown}')
+    await nextTick()
+    expect(more('src').hasAttribute('tabindex')).toBe(false)
+    expect(more('assets').getAttribute('tabindex')).toBe('-1')
+
+    await userEvent.tab()
+    expect(document.activeElement).toBe(more('src'))
+    await userEvent.tab()
+    expect(view.container.contains(document.activeElement)).toBe(false)
+  })
+
+  it('moves focus to the next visible node whose label starts with the typed text', async () => {
+    const view = mount({ expanded: ['assets'] })
+    node(view.container, 'assets').focus()
+    await userEvent.keyboard('h')
+    expect(document.activeElement).toBe(node(view.container, HERO.id))
+    await new Promise((resolve) => setTimeout(resolve, 600))
+    await userEvent.keyboard('az')
+    expect(document.activeElement).toBe(node(view.container, CONFIG.id))
+  })
+
   it('renders the default label fallback with glyph, label and description', () => {
     const view = mount()
     const row = rowOf(view.container, CONFIG.id)

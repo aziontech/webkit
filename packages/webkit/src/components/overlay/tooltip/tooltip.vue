@@ -3,6 +3,7 @@
 
   import { useControllable } from '../../../composables/use-controllable'
   import { usePortalLocale } from '../../../composables/use-locale/use-translate'
+  import { useOverlayLayer } from '../../../composables/use-overlay-layer'
   import { usePlacement } from '../../../composables/use-placement'
   import { triggerControl } from '../../../utils/trigger-control'
 
@@ -95,6 +96,11 @@
 
   const resolvedPlacementRef = computed(() => resolvedPlacement.value as TooltipPlacement)
 
+  const { isTop } = useOverlayLayer(() => isOpen.value && Boolean(props.text), {
+    element: panelRef,
+    transient: true
+  })
+
   function clearHoverTimer() {
     if (hoverTimer.value) {
       clearTimeout(hoverTimer.value)
@@ -157,7 +163,7 @@
   }
 
   function onDocumentKeydown(event: globalThis.KeyboardEvent) {
-    if (!isOpen.value) return
+    if (!isOpen.value || !isTop.value || event.defaultPrevented) return
     if (event.key === 'Escape') {
       event.preventDefault()
       closeTooltip()

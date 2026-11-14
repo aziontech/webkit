@@ -4,6 +4,7 @@
   import { useFieldControl } from '../../../composables/use-field-control'
   import LazyNodes from '../../../composables/use-lazy-chunks/lazy-nodes'
   import { usePortalLocale, useTranslate } from '../../../composables/use-locale/use-translate'
+  import { useOverlayLayer } from '../../../composables/use-overlay-layer'
   import { usePlacement } from '../../../composables/use-placement'
   import * as en from '../../../i18n/messages/en'
   import IconButton from '../../actions/icon-button/icon-button.vue'
@@ -214,6 +215,8 @@
       open.value &&
       (rows.value.length > 0 || props.loading || (typing.value && Boolean(query.value)))
   )
+
+  useOverlayLayer(expanded, { element: panelRef, transient: true })
 
   const activeId = computed(() =>
     expanded.value && active.value >= 0 ? rows.value[active.value]?.id : undefined

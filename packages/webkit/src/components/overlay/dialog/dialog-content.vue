@@ -24,7 +24,7 @@
   const motionCtx = inject(DialogMotionInjectionKey)
   const motionState = computed(() => motionCtx?.motionState.value ?? 'closed')
   const isScrollLocked = useScrollLock(defaultDocument?.body)
-  const { isTop } = useOverlayLayer(isOpen)
+  const { isTop, isFocusTop } = useOverlayLayer(isOpen, { element: contentRef })
 
   const forwardedAttrs = computed(() =>
     Object.fromEntries(Object.entries(attrs).filter(([key]) => key !== 'class'))
@@ -37,14 +37,14 @@
     },
     { immediate: true }
   )
-  useFocusTrap(contentRef, isOpen, isTop)
+  useFocusTrap(contentRef, isOpen, isFocusTop)
 
   useEventListener(defaultDocument, 'keydown', (event: globalThis.KeyboardEvent) => {
     if (!isOpen.value || event.key !== 'Escape' || event.defaultPrevented) return
     if (!isTop.value) return
     if (!ctx?.dismissible) return
     event.preventDefault()
-    ctx.close()
+    ctx.dismiss()
   })
 
   watch(isOpen, async (open, wasOpen) => {

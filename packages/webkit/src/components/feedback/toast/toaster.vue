@@ -11,7 +11,8 @@
     watch
   } from 'vue'
 
-  import { usePortalLocale } from '../../../composables/use-locale/use-translate'
+  import { usePortalLocale, useTranslate } from '../../../composables/use-locale/use-translate'
+  import * as en from '../../../i18n/messages/en'
   import { ToastInjectionKey } from './injection-key'
   import { TOAST_UNMOUNT_MS } from './presets/transitions'
   import ToastAction from './toast-action/toast-action.vue'
@@ -178,8 +179,17 @@
     live: ToastView[]
   }
 
+  const POSITIONS: ToastPosition[] = [
+    'top-left',
+    'top-center',
+    'top-right',
+    'bottom-left',
+    'bottom-center',
+    'bottom-right'
+  ]
+
   const regions = computed<Region[]>(() => {
-    const map = new Map<ToastPosition, ToastView[]>([[props.position, []]])
+    const map = new Map<ToastPosition, ToastView[]>(POSITIONS.map((position) => [position, []]))
     items.value.forEach((item) => {
       const pos = item.entry.position ?? props.position
       const bucket = map.get(pos)
@@ -226,6 +236,8 @@
     else regionEls.delete(position)
   }
 
+  let returnFocus: HTMLElement | null = null
+
   const focusFrontToast = () => {
     const region = regions.value.find((r) => r.live.length > 0)
     if (!region) return false
@@ -240,7 +252,24 @@
 
   const onHotkey = (event: KeyboardEvent) => {
     if (!event.altKey || event.code !== 'KeyT' || !isActive.value) return
-    if (focusFrontToast()) event.preventDefault()
+    const previous = document.activeElement instanceof HTMLElement ? document.activeElement : null
+    if (focusFrontToast()) {
+      event.preventDefault()
+      if (previous && !previous.closest('[data-toast-region]')) returnFocus = previous
+    }
+  }
+
+  const onRegionKeydown = (event: KeyboardEvent) => {
+    if (event.key !== 'Escape' || event.defaultPrevented) return
+    const card = (event.target as HTMLElement | null)?.closest<HTMLElement>('[data-toast-id]')
+    const id = card?.dataset['toastId']
+    if (!id) return
+    event.preventDefault()
+    event.stopPropagation()
+    dismiss(id)
+    const target = returnFocus
+    returnFocus = null
+    if (target?.isConnected) target.focus()
   }
 
   onMounted(() => document.addEventListener('keydown', onHotkey))
@@ -345,6 +374,8 @@
   }
 
   const portalLocale = usePortalLocale()
+  const { t } = useTranslate({ toast: en.toast })
+  const regionLabel = computed(() => t('toast.region', { hotkey: 'Alt+T' }))
 </script>
 
 <template>
@@ -358,6 +389,9 @@
         :data-testid="`${testId}-${region.position}`"
         :data-position="region.position"
         :data-expanded="isExpanded(region) || null"
+        data-toast-region
+        :role="region.all.length ? 'region' : undefined"
+        :aria-label="region.all.length ? regionLabel : undefined"
         aria-live="polite"
         aria-relevant="additions text"
         aria-atomic="false"
@@ -368,10 +402,12 @@
         @mouseleave="onLeave"
         @focusin="onFocusIn(region.position)"
         @focusout="onFocusOut"
+        @keydown="onRegionKeydown"
       >
         <div
           v-for="(item, indexInAll) in region.all"
           :key="item.entry.id"
+          :data-toast-id="item.entry.id"
           :data-front="region.live.indexOf(item) === 0 || null"
           :data-severity="item.entry.severity"
           :data-type="item.entry.type"

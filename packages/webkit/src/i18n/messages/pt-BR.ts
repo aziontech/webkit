@@ -1045,7 +1045,8 @@ export const ptBR: Messages = {
     light: 'Claro'
   },
   toast: {
-    close: 'Fechar notificação'
+    close: 'Fechar notificação',
+    region: 'Notificações ({hotkey})'
   },
   toggleGroup: {
     option: 'Opção {index}'

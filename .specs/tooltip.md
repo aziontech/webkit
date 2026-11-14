@@ -3,11 +3,11 @@ name: tooltip
 category: overlay
 structure: monolithic
 status: implemented
-spec_version: 2
+spec_version: 3
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4281-4543
   node_id: 4281:4543
-checksum: 4bc5ba44cdc230a6bfab40d6dc899dbc7b302a1e4a0877435bec8a2f2e6f5481
+checksum: be270c4495c8c6016f0be3788a9bb09a35f114d22d423cfdf591a88a59407865
 created: 2026-06-02
 last_updated: 2026-11-14
 ---
@@ -137,6 +137,7 @@ The panel is positioned with the standalone **`translate`** property, never `top
 - Hoverable (WCAG 1.4.13): the panel takes the pointer. Leaving the trigger closes the tooltip after a 100 ms grace, and entering the panel within the grace keeps it open (so text can be read under magnification); leaving the panel closes it after the same grace. Tests: `tooltip.test.ts` › hoverable content.
 - Touch: a long-press (500 ms `pointerdown` with `pointerType` `touch`) opens the tooltip; it hides 1.5 s after the finger lifts. A mouse press never opens it.
 - Keyboard map: `Tab` onto the trigger opens the tooltip at once (no hover delay); `Escape` closes it and focus stays on the trigger; `Tab` away closes it; the tooltip never takes or traps focus. Tests: `tooltip.test.ts` › keyboard map (spec).
+- Nested overlays: while open, the tooltip joins the shared overlay layer stack (`useOverlayLayer`) as a transient layer (it never takes focus, so it does not pause a dialog's focus trap). Inside a `Dialog`, `Drawer` or `Popover`, the first `Escape` closes only the tooltip; the next one reaches the host. Tests: `tooltip.test.ts` › inside an open Dialog, Escape closes only the tooltip.
 - ARIA: `role="tooltip"` on the panel; the slotted control references the panel via `aria-describedby` (merged into a WebKit `Button` / `IconButton` or native control at render, otherwise forwarded onto the first focusable element in the slot after mount; on the wrapper only when the slot has none). The wrapper itself has no `role` and no tab stop. `aria-hidden="true"` when `data-state="closed"`.
 - Contrast ≥4.5:1 — text against surface verified in both light and dark modes.
 - `motion-reduce:animate-none` on the panel; reduced-motion users get instant show/hide.
