@@ -4,6 +4,7 @@
 
 <template>
   <TemplateGallery
+    anchor="templates"
     eyebrow="Your Stack, Your Way"
     title="Quick Start with Templates"
     description="Launch storefronts faster with pre-built templates and starter kits. Deploy complete projects in seconds with popular frameworks."

@@ -42,6 +42,8 @@
   }
 
   interface Props {
+    /** In-page id set on the band so a `#hash` link can scroll to it. */
+    anchor?: string
     /** Overline above the headline. */
     eyebrow?: string
     /** Headline of the band, rendered by the media split as its `h2` and naming its region. */
@@ -65,6 +67,7 @@
   }
 
   const props = withDefaults(defineProps<Props>(), {
+    anchor: '',
     eyebrow: '',
     title: '',
     description: '',
@@ -93,7 +96,9 @@
 <template>
   <div
     v-bind="$attrs"
+    :id="anchor || undefined"
     :data-testid="testId"
+    class="scroll-mt-(--spacing-xxl)"
   >
     <SectionModule
       v-if="hasCards"
@@ -128,7 +133,8 @@
                   :padded="false"
                 >
                   <div
-                    class="group/template flex h-full min-w-0 cursor-pointer flex-col gap-(--spacing-md) bg-(--bg-surface) p-(--spacing-xl)"
+                    :data-linked="template.href ? true : null"
+                    class="group/template relative flex h-full min-w-0 flex-col gap-(--spacing-md) bg-(--bg-surface) p-(--spacing-xl) data-[linked]:cursor-pointer"
                   >
                     <span
                       class="flex size-10 shrink-0 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
@@ -150,6 +156,15 @@
                         {{ template.description }}
                       </span>
                     </div>
+                    <a
+                      v-if="template.href"
+                      :href="template.href"
+                      :tabindex="deployLabel ? -1 : undefined"
+                      :aria-hidden="deployLabel ? 'true' : undefined"
+                      :aria-label="deployLabel ? undefined : template.title"
+                      :data-testid="`${testId}__card-link`"
+                      class="absolute inset-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset"
+                    />
                     <Button
                       v-if="deployLabel && template.href"
                       :label="deployLabel"
@@ -159,7 +174,7 @@
                       icon-position="trailing"
                       animated
                       :href="template.href"
-                      class="mt-auto self-start group-hover/template:before:opacity-100 group-active/template:after:opacity-100 group-hover/template:[&_[data-animated]]:translate-x-0.5 rtl:group-hover/template:[&_[data-animated]]:-translate-x-0.5"
+                      class="z-1 mt-auto self-start group-hover/template:before:opacity-100 group-active/template:after:opacity-100 group-hover/template:[&_[data-animated]]:translate-x-0.5 rtl:group-hover/template:[&_[data-animated]]:-translate-x-0.5"
                     >
                       <template #prefix>
                         <i

@@ -105,6 +105,60 @@ describe('TemplateGallery', () => {
     expect(withoutHref.getByText('Bare')).toBeInTheDocument()
   })
 
+  it('makes the whole card a pointer link to its href, hidden behind the deploy button', () => {
+    const { getAllByTestId } = band()
+
+    const cardLinks = getAllByTestId(`${TESTID}__card-link`)
+    expect(cardLinks.map((link) => link.getAttribute('href'))).toEqual(
+      templates.map((template) => template.href)
+    )
+    cardLinks.forEach((link) => {
+      expect(link).toHaveAttribute('tabindex', '-1')
+      expect(link).toHaveAttribute('aria-hidden', 'true')
+      expect(link.parentElement).toHaveAttribute('data-linked', 'true')
+    })
+  })
+
+  it('keeps one tab stop per card', () => {
+    const { getAllByRole } = band()
+
+    expect(getAllByRole('link', { name: DEPLOY })).toHaveLength(templates.length)
+    expect(
+      getAllByRole('link').filter((link) => link.getAttribute('tabindex') === '-1')
+    ).toHaveLength(0)
+  })
+
+  it('names the card link by the template title when the card has no deploy button', () => {
+    const { getByRole } = band({ deployLabel: '' })
+
+    templates.forEach((template) => {
+      const link = getByRole('link', { name: template.title })
+      expect(link).toHaveAttribute('href', template.href)
+      expect(link.hasAttribute('tabindex')).toBe(false)
+    })
+  })
+
+  it('renders no card link and no pointer for a card without an href', () => {
+    const { getByText, queryByTestId } = band({
+      templates: [{ title: 'Bare', description: 'No link.' }]
+    })
+
+    expect(queryByTestId(`${TESTID}__card-link`)).toBeNull()
+    expect(getByText('Bare').closest('[data-linked]')).toBeNull()
+  })
+
+  it('sets the anchor as the band id', () => {
+    const { getByTestId } = band({ anchor: 'templates' })
+
+    expect(getByTestId(TESTID)).toHaveAttribute('id', 'templates')
+  })
+
+  it('has no a11y violations when the cards link without a deploy button', async () => {
+    const { container } = band({ deployLabel: '' })
+
+    await expectNoA11yViolations(container)
+  })
+
   it('skips templates without a title', () => {
     const { getAllByRole } = band({
       templates: [...templates, { title: '', description: 'Untitled', href: '/untitled' }]
