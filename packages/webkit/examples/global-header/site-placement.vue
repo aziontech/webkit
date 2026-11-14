@@ -19,7 +19,7 @@
             size="small"
         /></a>
       </GlobalHeader.Brand>
-      <GlobalHeader.Middle>
+      <GlobalHeader.Center>
         <div class="flex w-full min-w-0 items-center">
           <a
             class="text-label-md text-(--text-default) no-underline"
@@ -27,14 +27,14 @@
             >Pricing</a
           >
         </div>
-      </GlobalHeader.Middle>
-      <GlobalHeader.Right>
+      </GlobalHeader.Center>
+      <GlobalHeader.End>
         <Button
           label="Start for Free"
           kind="primary"
           size="medium"
         />
-      </GlobalHeader.Right>
+      </GlobalHeader.End>
     </GlobalHeader>
     <section
       class="mx-auto w-full max-w-(--layout-measure-site) px-(--layout-boundary-inline) py-(--spacing-xl)"

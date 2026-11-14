@@ -3,13 +3,13 @@ name: global-header
 category: layout
 structure: composition
 status: implemented
-spec_version: 2
+spec_version: 3
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4310-19617
   node_id: 4310:19617
-checksum: f742220b9bc515a9ba0e667f41c3b2befdf197593c70a6a96c8269354e0854e1
+checksum: 62a76a6fac61019c664c5ca3c0f1992a2440a4535174983db662c58fafb3c9e5
 created: 2026-05-23
-last_updated: 2026-11-13
+last_updated: 2026-11-14
 ---
 
 # Global Header — Component Spec
@@ -41,18 +41,18 @@ The cap is the bar's OWN measure — `--layout-measure-site-header` (1620px), on
 ## Related
 
 - `site-nav` — the marketing navigation band built on `global-header`, `brand` and `navigation-menu`.
-- `navigation-menu` — the dropdown navigation that usually goes in `GlobalHeader.Middle`.
+- `navigation-menu` — the dropdown navigation that usually goes in `GlobalHeader.Center`.
 - `brand` — the Azion lockup to place inside `GlobalHeader.Brand`.
 - `platform-shell` — the console layout template that composes the header with the sidebar and the page.
 
 ## Best practices
 
 - Keep the default `kind="content"` for app shells; use `kind="site"` only on framed marketing pages.
-- Group the menu trigger and the brand in `GlobalHeader.Container` so they stay together and never shrink; `GlobalHeader.Nav` is the same component as `GlobalHeader.Middle`.
+- Group the menu trigger and the brand in `GlobalHeader.Container` so they stay together and never shrink.
 - Wrap the logo in `GlobalHeader.Brand` inside a link with its own accessible name (for example `aria-label="Azion home"`).
 - Set `aria-label` on the root (default `'Global header'`) when the page has more than one banner-style bar.
 - Keep the regions free of layout overrides — the bar owns height, padding and the bottom hairline; put only controls in each region.
-- Every header that navigates (console, demo, docs, site) carries `SearchTrigger` first in `GlobalHeader.Right`, wired to a `Command` palette; wrap the header in an `@container` so it unfolds into the `Search … ⌘K` field. Never hand-roll the field or use a bare magnifier `IconButton` (lint `webkit/header-search-trigger`).
+- Every header that navigates (console, demo, docs, site) carries `SearchTrigger` first in `GlobalHeader.End`, wired to a `Command` palette; wrap the header in an `@container` so it unfolds into the `Search … ⌘K` field. Never hand-roll the field or use a bare magnifier `IconButton` (lint `webkit/header-search-trigger`).
 
 ## Usage
 
@@ -67,13 +67,13 @@ The cap is the bar's OWN measure — `--layout-measure-site-header` (1620px), on
 <template>
   <GlobalHeader aria-label="Console header">
     <GlobalHeader.Container>
-      <GlobalHeader.Left>
+      <GlobalHeader.Start>
         <IconButton
           icon="pi pi-bars"
           aria-label="Open navigation"
           kind="transparent"
         />
-      </GlobalHeader.Left>
+      </GlobalHeader.Start>
       <GlobalHeader.Brand>
         <a
           href="/"
@@ -86,25 +86,33 @@ The cap is the bar's OWN measure — `--layout-measure-site-header` (1620px), on
         </a>
       </GlobalHeader.Brand>
     </GlobalHeader.Container>
-    <GlobalHeader.Middle />
-    <GlobalHeader.Right>
+    <GlobalHeader.Center />
+    <GlobalHeader.End>
       <Button
         label="Create"
         kind="secondary"
         size="medium"
         icon="pi pi-plus-circle"
       />
-    </GlobalHeader.Right>
+    </GlobalHeader.End>
   </GlobalHeader>
 </template>
 ```
 
 ## Sub-components
 
-- `global-header-container.vue` — Start cluster wrapper; groups the menu trigger (`Left`) and `Brand` into one `shrink-0` flex unit, mirroring the Figma `Container` region. Optional — consumers may still place `Left`/`Brand` directly in the root.
-- `global-header-left.vue` — Start region; flex row for menu and leading actions.
-- `global-header-middle.vue` — Center region; grows to fill space between start and end. Also exposed as `GlobalHeader.Nav` (Figma `Nav` name); both names reference the same component.
-- `global-header-right.vue` — End region; trailing actions aligned to the end.
+- `global-header-container.vue` — Start cluster wrapper; groups the menu trigger (`Start`) and `Brand` into one `shrink-0` flex unit, mirroring the Figma `Container` region. Optional — consumers may still place `Start`/`Brand` directly in the root.
+- `global-header-start.vue` — `GlobalHeader.Start`. Start region; flex row for the menu trigger and leading actions. Logical name: it sits on the right under `dir="rtl"`.
+- `global-header-center.vue` — `GlobalHeader.Center`. Center region; grows to fill the space between start and end.
+- `global-header-end.vue` — `GlobalHeader.End`. End region; trailing actions aligned to the end.
+- `global-header-left.vue` — `GlobalHeader.Left`. **@deprecated since 6.0 — use `GlobalHeader.Start`. Removed in 7.0.** Same region and markup; keeps its `__left` testid.
+- `global-header-middle.vue` — `GlobalHeader.Middle`, also `GlobalHeader.Nav` (the Figma `Nav` name). **@deprecated since 6.0 — use `GlobalHeader.Center`. Removed in 7.0.** Same region and markup; keeps its `__middle` testid.
+- `global-header-right.vue` — `GlobalHeader.Right`. **@deprecated since 6.0 — use `GlobalHeader.End`. Removed in 7.0.** Same region and markup; keeps its `__right` testid.
+
+The regions are named start / center / end, not left / right, because the bar mirrors under
+right-to-left: the start region is on the right there. The deprecated physical names render the
+same markup and keep working until 7.0. The new parts derive `__start`, `__center` and `__end`
+testids from the root.
 - `global-header-brand.vue` — Brand slot wrapper sized for Azion logo SVGs (default / min).
 
 ## Props
@@ -122,7 +130,7 @@ The cap is the bar's OWN measure — `--layout-measure-site-header` (1620px), on
 
 | Slot      | Scope | Notes                                                                                        |
 | --------- | ----- | -------------------------------------------------------------------------------------------- |
-| `default` | —     | Root: compose `Container` (or `Left` + `Brand`), `Middle`/`Nav`, and `Right` sub-components. |
+| `default` | —     | Root: compose `Container` (or `Start` + `Brand`), `Center`, and `End` sub-components. |
 | `default` | —     | Each sub-component (incl. `Container`) exposes `default` for region content.                 |
 | `default` | —     | `global-header-brand` exposes `default` for logo markup.                                     |
 
@@ -145,8 +153,8 @@ _none_
 | shell padding-x (`kind="site"`)    | `max(var(--layout-boundary-inline), calc((100% - var(--layout-measure-site-header)) / 2 + var(--layout-boundary-inline)))` |
 | shell region gap                   | `var(--spacing-md)`                                                                                                        |
 | start cluster (container) gap      | `var(--spacing-md)`                                                                                                        |
-| start (left) region gap            | `var(--spacing-xs)`                                                                                                        |
-| end (right) region gap             | `var(--spacing-sm)`                                                                                                        |
+| start region gap                   | `var(--spacing-xs)`                                                                                                        |
+| end region gap                     | `var(--spacing-sm)`                                                                                                        |
 | brand logo height                  | `18px`                                                                                                                     |
 | surface                            | `var(--bg-surface)`                                                                                                        |
 | border (bottom)                    | `var(--border-default)`                                                                                                    |

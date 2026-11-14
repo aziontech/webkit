@@ -7,20 +7,20 @@
 <template>
   <div class="flex w-full flex-col bg-(--bg-canvas)">
     <GlobalHeader aria-label="Console header">
-      <GlobalHeader.Left>
+      <GlobalHeader.Start>
         <div class="flex w-full min-w-0 items-center gap-(--spacing-xs)">
           <Breadcrumb :items="[{ label: 'Build', href: '/build' }, { label: 'Custom Pages' }]" />
         </div>
-      </GlobalHeader.Left>
-      <GlobalHeader.Middle />
-      <GlobalHeader.Right>
+      </GlobalHeader.Start>
+      <GlobalHeader.Center />
+      <GlobalHeader.End>
         <Button
           label="Create"
           kind="secondary"
           size="medium"
           icon="pi pi-plus-circle"
         />
-      </GlobalHeader.Right>
+      </GlobalHeader.End>
     </GlobalHeader>
     <div class="layout-boundary">
       <h1 class="text-heading-xl text-(--text-default)">Custom Pages</h1>

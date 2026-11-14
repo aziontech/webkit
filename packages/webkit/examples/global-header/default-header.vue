@@ -5,7 +5,7 @@
 
 <template>
   <GlobalHeader aria-label="Global header">
-    <GlobalHeader.Left>
+    <GlobalHeader.Start>
       <GlobalHeader.Brand>
         <a
           href="/"
@@ -14,8 +14,8 @@
           <Default />
         </a>
       </GlobalHeader.Brand>
-    </GlobalHeader.Left>
-    <GlobalHeader.Middle />
-    <GlobalHeader.Right />
+    </GlobalHeader.Start>
+    <GlobalHeader.Center />
+    <GlobalHeader.End />
   </GlobalHeader>
 </template>

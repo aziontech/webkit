@@ -114,6 +114,39 @@ describe('GlobalHeader', () => {
     })
   })
 
+  describe('logical region names (Start / Center / End; Left / Middle / Nav / Right are deprecated)', () => {
+    it('attaches Start, Center and End to the compound', () => {
+      expect(GlobalHeader.Start).toBeTruthy()
+      expect(GlobalHeader.Center).toBeTruthy()
+      expect(GlobalHeader.End).toBeTruthy()
+      expect(GlobalHeader.Start).not.toBe(GlobalHeader.Left)
+    })
+
+    it('derives __start / __center / __end from the root testid and keeps the old parts working', () => {
+      const { getByTestId } = render({
+        components: {
+          GlobalHeader,
+          GlobalHeaderStart: GlobalHeader.Start,
+          GlobalHeaderCenter: GlobalHeader.Center,
+          GlobalHeaderEnd: GlobalHeader.End,
+          GlobalHeaderLeft: GlobalHeader.Left
+        },
+        template: `
+          <GlobalHeader data-testid="app-chrome">
+            <GlobalHeaderStart>Menu</GlobalHeaderStart>
+            <GlobalHeaderCenter>Products</GlobalHeaderCenter>
+            <GlobalHeaderEnd>Account</GlobalHeaderEnd>
+            <GlobalHeaderLeft>Legacy</GlobalHeaderLeft>
+          </GlobalHeader>
+        `
+      })
+      expect(getByTestId('app-chrome__start').textContent).toContain('Menu')
+      expect(getByTestId('app-chrome__center').textContent).toContain('Products')
+      expect(getByTestId('app-chrome__end').textContent).toContain('Account')
+      expect(getByTestId('app-chrome__left').textContent).toContain('Legacy')
+    })
+  })
+
   describe('provide/inject — the root testId flows to every region', () => {
     it('derives each region testid from the root fallback testId', () => {
       const { getByTestId } = renderComposed()
@@ -301,14 +334,14 @@ describe('GlobalHeader', () => {
   })
 
   describe('documented example (the Default story fixture runs in-test)', () => {
-    it('Default story renders the banner with its Left/Brand/Middle/Right regions', () => {
+    it('Default story renders the banner with its Start/Brand/Center/End regions', () => {
       const { getByTestId, getByRole } = render(DefaultHeader)
-      // The story composes Left>Brand (Azion logo), plus empty Middle and Right.
+      // The story composes Start>Brand (Azion logo), plus empty Center and End.
       expect(getByRole('banner', { name: 'Global header' })).toBeTruthy()
-      expect(getByTestId('layout-global-header__left')).toBeTruthy()
+      expect(getByTestId('layout-global-header__start')).toBeTruthy()
       expect(getByTestId('layout-global-header__brand')).toBeTruthy()
-      expect(getByTestId('layout-global-header__middle')).toBeTruthy()
-      expect(getByTestId('layout-global-header__right')).toBeTruthy()
+      expect(getByTestId('layout-global-header__center')).toBeTruthy()
+      expect(getByTestId('layout-global-header__end')).toBeTruthy()
     })
 
     it('Default story has no a11y violations', async () => {
@@ -321,8 +354,8 @@ describe('GlobalHeader', () => {
       const root = getByTestId('layout-global-header')
       // data-kind is what carries the boundary inset instead of the shell step.
       expect(root.getAttribute('data-kind')).toBe('content')
-      expect(root.contains(getByTestId('layout-global-header__left'))).toBe(true)
-      expect(root.contains(getByTestId('layout-global-header__right'))).toBe(true)
+      expect(root.contains(getByTestId('layout-global-header__start'))).toBe(true)
+      expect(root.contains(getByTestId('layout-global-header__end'))).toBe(true)
     })
 
     it('Content zone story has no a11y violations', async () => {
@@ -335,8 +368,8 @@ describe('GlobalHeader', () => {
       const root = getByTestId('layout-global-header')
       expect(root.getAttribute('data-kind')).toBe('site')
       expect(root.contains(getByTestId('layout-global-header__brand'))).toBe(true)
-      expect(root.contains(getByTestId('layout-global-header__middle'))).toBe(true)
-      expect(root.contains(getByTestId('layout-global-header__right'))).toBe(true)
+      expect(root.contains(getByTestId('layout-global-header__center'))).toBe(true)
+      expect(root.contains(getByTestId('layout-global-header__end'))).toBe(true)
     })
 
     it('Site placement story has no a11y violations', async () => {
