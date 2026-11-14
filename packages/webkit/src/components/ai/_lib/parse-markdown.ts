@@ -148,9 +148,49 @@ function splitRow(line: string): string[] {
     .map((cell) => cell.trim())
 }
 
+export interface MarkdownParse {
+  source: string
+  blocks: MarkdownBlock[]
+  starts: number[]
+}
+
+const normalizeNewlines = (source: string): string =>
+  source.includes('\r') ? source.replace(/\r\n?/g, '\n') : source
+
 export function parseMarkdown(source: string): MarkdownBlock[] {
-  const lines = source.replace(/\r\n?/g, '\n').split('\n')
+  return parseBlocks(normalizeNewlines(source).split('\n')).blocks
+}
+
+const sameBlock = (a: MarkdownBlock, b: MarkdownBlock): boolean =>
+  a.type === b.type && JSON.stringify(a) === JSON.stringify(b)
+
+export function parseMarkdownIncremental(source: string, previous?: MarkdownParse): MarkdownParse {
+  const text = normalizeNewlines(source)
+  if (previous && previous.source === text) return previous
+  const appended = Boolean(previous && text.startsWith(previous.source))
+  const keep = previous && appended ? Math.max(0, previous.blocks.length - 2) : 0
+  const from = previous && keep > 0 ? (previous.starts[keep] as number) : 0
+  const tail = parseBlocks(text.slice(from).split('\n'))
+  const blocks = previous ? previous.blocks.slice(0, keep) : []
+  const starts = previous ? previous.starts.slice(0, keep) : []
+  tail.blocks.forEach((block, j) => {
+    const index = keep + j
+    const old = previous?.blocks[index]
+    blocks.push(old && sameBlock(old, block) ? old : block)
+    starts.push(from + (tail.starts[j] as number))
+  })
+  return { source: text, blocks, starts }
+}
+
+function parseBlocks(lines: string[]): { blocks: MarkdownBlock[]; starts: number[] } {
   const blocks: MarkdownBlock[] = []
+  const lineStarts: number[] = []
+  const offsets: number[] = []
+  let offset = 0
+  for (const line of lines) {
+    offsets.push(offset)
+    offset += line.length + 1
+  }
   let i = 0
   while (i < lines.length) {
     const line = lines[i] as string
@@ -158,6 +198,7 @@ export function parseMarkdown(source: string): MarkdownBlock[] {
       i += 1
       continue
     }
+    lineStarts[blocks.length] = offsets[i] as number
     const fence = FENCE.exec(line)
     if (fence) {
       const marker = fence[1] as string
@@ -255,7 +296,7 @@ export function parseMarkdown(source: string): MarkdownBlock[] {
     }
     blocks.push({ type: 'paragraph', children: parseInline(paragraph.join('\n')) })
   }
-  return blocks
+  return { blocks, starts: lineStarts }
 }
 
 export function plainText(nodes: MarkdownInline[]): string {

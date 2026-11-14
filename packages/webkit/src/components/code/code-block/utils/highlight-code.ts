@@ -166,12 +166,15 @@ const withLineComment = (
   return tokens
 }
 
+const JS_TOKEN = new RegExp(
+  `\\/\\/.*$|\\b(?:${JS_KEYWORDS.join('|')})\\b|[{}\\[\\]().,:;=<>]|'(?:\\\\'|[^'])*'|"(?:\\\\"|[^"])*"|\\b[A-Z][A-Za-z0-9_]*\\b|\\b[a-zA-Z_$][\\w$]*\\b|\\s+|[^\\s]+`,
+  'g'
+)
+
 const highlightJavaScriptLine = (line: string): CodeBlockHighlightToken[] => {
   const tokens: CodeBlockHighlightToken[] = []
-  const keywordRegex = new RegExp(
-    `\\/\\/.*$|\\b(?:${JS_KEYWORDS.join('|')})\\b|[{}\\[\\]().,:;=<>]|'(?:\\\\'|[^'])*'|"(?:\\\\"|[^"])*"|\\b[A-Z][A-Za-z0-9_]*\\b|\\b[a-zA-Z_$][\\w$]*\\b|\\s+|[^\\s]+`,
-    'g'
-  )
+  const keywordRegex = JS_TOKEN
+  keywordRegex.lastIndex = 0
 
   let previousChunk = ''
   let match: RegExpExecArray | null

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed, onBeforeUnmount, onMounted, provide, ref, useAttrs, useId } from 'vue'
+  import { computed, onBeforeUnmount, provide, ref, useAttrs, useId, watch } from 'vue'
 
   import { useControllable } from '../../../composables/use-controllable'
   import { useOverlayLayer } from '../../../composables/use-overlay-layer'
@@ -174,10 +174,19 @@
     }
   }
 
-  onMounted(() => {
-    globalThis.document?.addEventListener('mousedown', onDocumentMousedown)
-    globalThis.document?.addEventListener('keydown', onDocumentKeydown, true)
-  })
+  watch(
+    isOpenRef,
+    (open) => {
+      if (open) {
+        globalThis.document?.addEventListener('mousedown', onDocumentMousedown)
+        globalThis.document?.addEventListener('keydown', onDocumentKeydown, true)
+      } else {
+        globalThis.document?.removeEventListener('mousedown', onDocumentMousedown)
+        globalThis.document?.removeEventListener('keydown', onDocumentKeydown, true)
+      }
+    },
+    { immediate: true }
+  )
 
   onBeforeUnmount(() => {
     globalThis.document?.removeEventListener('mousedown', onDocumentMousedown)

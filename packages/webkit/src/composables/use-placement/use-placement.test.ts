@@ -1,5 +1,5 @@
 import { render } from '@testing-library/vue'
-import { afterEach, describe, expect, it } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import { defineComponent, h, nextTick, ref, Teleport } from 'vue'
 
 import {
@@ -413,5 +413,45 @@ describe('usePlacement (composable, real layout)', () => {
     await nextTick()
     await scrollBy(getByTestId('up-ancestor'), 40)
     expect(getByTestId('up-dismissed').textContent).toBe('1')
+  })
+})
+
+describe('usePlacement listeners', () => {
+  it('adds the window resize and document scroll listeners only while open', async () => {
+    const addDoc = vi.spyOn(document, 'addEventListener')
+    const removeDoc = vi.spyOn(document, 'removeEventListener')
+    const addWin = vi.spyOn(window, 'addEventListener')
+    const isOpen = ref(false)
+    const Closed = defineComponent({
+      setup() {
+        const triggerRef = ref<HTMLElement | null>(null)
+        const panelRef = ref<HTMLElement | null>(null)
+        usePlacement({ triggerRef, panelRef, isOpen, placement: 'bottom-start' })
+        return () => [
+          h('button', { ref: triggerRef, type: 'button' }, 'trigger'),
+          isOpen.value ? h('div', { ref: panelRef }, 'panel') : null
+        ]
+      }
+    })
+    const scrolls = (spy: typeof addDoc) =>
+      spy.mock.calls.filter(([type]) => type === 'scroll').length
+    const resizes = () => addWin.mock.calls.filter(([type]) => type === 'resize').length
+    try {
+      const { unmount } = render(Closed)
+      await nextTick()
+      expect(scrolls(addDoc)).toBe(0)
+      expect(resizes()).toBe(0)
+      isOpen.value = true
+      await nextTick()
+      expect(scrolls(addDoc)).toBe(1)
+      expect(resizes()).toBe(1)
+      isOpen.value = false
+      await nextTick()
+      expect(scrolls(removeDoc)).toBe(1)
+      unmount()
+      expect(scrolls(addDoc)).toBe(1)
+    } finally {
+      vi.restoreAllMocks()
+    }
   })
 })

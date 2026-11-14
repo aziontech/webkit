@@ -1,5 +1,5 @@
 import { fireEvent, render, waitFor } from '@testing-library/vue'
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { defineComponent, nextTick, ref } from 'vue'
 
 import Default from '../../../../examples/combobox/default.vue'
@@ -49,6 +49,23 @@ describe('Combobox', () => {
     expect(view.getByTestId('input-combobox__status').textContent).toBe('2 options')
     expect(view.emitted()['search']?.at(-1)).toEqual(['lóg'])
     view.unmount()
+  })
+
+  it('folds the option strings once, not again on every keystroke', async () => {
+    const many = Array.from({ length: 200 }, (_, i) => ({ value: `v${i}`, label: `Café ${i}` }))
+    const view = render(Combobox, { props: { options: many, ariaLabel: 'Origin' } })
+    const input = view.getByRole('combobox')
+    await fireEvent.focus(input)
+    await fireEvent.update(input, 'c')
+    const normalize = vi.spyOn(String.prototype, 'normalize')
+    try {
+      for (const query of ['ca', 'caf', 'cafe']) await fireEvent.update(input, query)
+      expect(optionEls()).toHaveLength(201)
+      expect(normalize.mock.calls.length).toBeLessThan(20)
+    } finally {
+      normalize.mockRestore()
+      view.unmount()
+    }
   })
 
   it('moves the highlight with arrows, skips disabled options and commits with Enter', async () => {

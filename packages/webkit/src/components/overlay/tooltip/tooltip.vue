@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed, onBeforeUnmount, onMounted, ref, useAttrs, useId, watch } from 'vue'
+  import { computed, onBeforeUnmount, ref, useAttrs, useId, watch } from 'vue'
 
   import { useControllable } from '../../../composables/use-controllable'
   import { usePortalLocale } from '../../../composables/use-locale/use-translate'
@@ -194,9 +194,14 @@
     }
   )
 
-  onMounted(() => {
-    globalThis.document?.addEventListener('keydown', onDocumentKeydown)
-  })
+  watch(
+    () => isOpen.value,
+    (open) => {
+      if (open) globalThis.document?.addEventListener('keydown', onDocumentKeydown)
+      else globalThis.document?.removeEventListener('keydown', onDocumentKeydown)
+    },
+    { immediate: true }
+  )
 
   onBeforeUnmount(() => {
     clearHoverTimer()

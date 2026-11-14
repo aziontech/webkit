@@ -141,9 +141,9 @@
   const root = ref<globalThis.HTMLElement | null>(null)
   const frame = ref({ width: props.width, height: 600, scale: 1 })
 
-  const reduced = globalThis.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches ?? false
+  const reduced = ref(false)
 
-  const entered = ref(reduced || !props.animated)
+  const entered = ref(!props.animated)
   const onScreen = ref(false)
 
   let observer: globalThis.ResizeObserver | null = null
@@ -168,6 +168,8 @@
   }))
 
   onMounted(() => {
+    reduced.value = globalThis.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches ?? false
+    if (reduced.value) entered.value = true
     if (typeof globalThis.ResizeObserver === 'function') {
       observer = new globalThis.ResizeObserver(measure)
       if (root.value) observer.observe(root.value)
@@ -180,7 +182,7 @@
   watch(
     () => props.active,
     (active) => {
-      if (reduced || !props.animated) return
+      if (reduced.value || !props.animated) return
       if (active) arm()
       else entered.value = false
     }
@@ -218,7 +220,8 @@
   }
 
   function arm() {
-    if (reduced || !props.animated || entered.value || !onScreen.value || !props.active) return
+    if (reduced.value || !props.animated || entered.value || !onScreen.value || !props.active)
+      return
     globalThis.requestAnimationFrame(() =>
       globalThis.requestAnimationFrame(() => {
         if (onScreen.value && props.active) entered.value = true
@@ -227,7 +230,7 @@
   }
 
   function beatStyle(order: number): Record<string, string> {
-    if (reduced || !props.animated) return { '--part-duration': '0ms', '--part-delay': '0ms' }
+    if (reduced.value || !props.animated) return { '--part-duration': '0ms', '--part-delay': '0ms' }
     return {
       '--part-duration': duration[props.travel],
       '--part-delay': `${Math.round(globalThis.parseFloat(duration[props.beat]) * order)}ms`

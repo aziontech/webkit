@@ -21,6 +21,11 @@
       "update": 360,
       "update_is": "open the list, then filter it"
     },
+    "multi-select-1k-toggle": {
+      "mount": 100,
+      "update": 350,
+      "update_is": "toggle 20 options one by one with all 1k options selected"
+    },
     "dropdown-menu-1k": {
       "mount": 1190,
       "update": 30,
@@ -61,8 +66,13 @@
       "update": 50,
       "update_is": "filter 10k virtual rows by text under useCollection"
     },
+    "command-1k": {
+      "mount": 50,
+      "update": 550,
+      "update_is": "open the palette over 1k items in 20 groups, then type four queries"
+    },
     "conversation-history-5k": {
-      "mount": 480,
+      "mount": 80,
       "update": 40,
       "update_is": "select a conversation"
     },
@@ -73,8 +83,13 @@
     },
     "streaming-response-2k-lines": {
       "mount": 320,
-      "update": 740,
+      "update": 40,
       "update_is": "stream 20 tokens"
+    },
+    "streaming-response-code-fences": {
+      "mount": 200,
+      "update": 25,
+      "update_is": "stream 20 tokens after three closed code fences of 400, 300 and 500 lines"
     },
     "doc-markdown-5k-lines": {
       "mount": 420,
@@ -83,7 +98,7 @@
     },
     "doc-layout-1k": {
       "mount": 410,
-      "update": 610,
+      "update": 550,
       "update_is": "open the search palette"
     },
     "item-list-1k": {

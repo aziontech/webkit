@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, inject, ref, useId, watch } from 'vue'
 
-  import { useTranslate } from '../../../../composables/use-locale/use-translate'
+  import { useLocaleContext, useTranslate } from '../../../../composables/use-locale/use-translate'
   import * as en from '../../../../i18n/messages/en'
   import Input from '../../input/input.vue'
   import { asRange, asSingle, formatDate, formatTime } from '../format'
@@ -53,7 +53,8 @@
 
   watch([() => ctx?.draft.value, locale], syncFromDraft, { immediate: true, deep: true })
 
-  const placeholderYear = new Date().getFullYear()
+  const { context: localeContext } = useLocaleContext()
+  const placeholderYear = new Date(localeContext?.now?.value ?? Date.now()).getFullYear()
   const startDatePlaceholder = computed(() =>
     formatDate(new Date(placeholderYear, 5, 1), '', locale.value)
   )

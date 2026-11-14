@@ -104,11 +104,12 @@
     }
   )
 
-  const isSelected = (value: unknown): boolean => {
-    const current = model.value
-    if (Array.isArray(current)) return current.includes(value)
-    return current === value
-  }
+  const selectedSet = computed<Set<unknown> | null>(() =>
+    Array.isArray(model.value) ? new Set(model.value) : null
+  )
+
+  const isSelected = (value: unknown): boolean =>
+    selectedSet.value ? selectedSet.value.has(value) : model.value === value
 
   const toggleValue = (value: unknown) => {
     if (isDisabled.value || props.readonly) return

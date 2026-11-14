@@ -79,7 +79,12 @@
 
   const query = ref('')
   const activeValue = ref<CommandItemValue | null>(null)
-  const items = shallowRef<CommandRegisteredItem[]>([])
+  const registry = new Set<CommandRegisteredItem>()
+  const registryVersion = shallowRef(0)
+  const items = computed<CommandRegisteredItem[]>(() => {
+    void registryVersion.value
+    return Array.from(registry)
+  })
   const previousActiveElement = ref<HTMLElement | null>(null)
 
   const isMac = computed(
@@ -88,9 +93,16 @@
       /mac/i.test(navigator.platform || navigator.userAgent || '')
   )
 
-  const navigableItems = computed(() => {
-    const visible = items.value.filter((item) => item.isVisible.value && !item.disabled.value)
-    return visible
+  const precedes = (left: HTMLElement | null, right: HTMLElement | null) =>
+    !left || !right || !(left.compareDocumentPosition(right) & Node.DOCUMENT_POSITION_PRECEDING)
+
+  const orderedItems = computed<CommandRegisteredItem[]>(() => {
+    const list = items.value
+    const inOrder = list.every(
+      (item, index) => index === 0 || precedes(list[index - 1]!.el.value, item.el.value)
+    )
+    if (inOrder) return list
+    return list
       .map((item, index) => ({ item, index }))
       .sort((a, b) => {
         const left = a.item.el.value
@@ -104,7 +116,17 @@
       .map((entry) => entry.item)
   })
 
-  const hasVisibleItems = computed(() => items.value.some((item) => item.isVisible.value))
+  const navigableItems = computed(() =>
+    orderedItems.value.filter((item) => item.isVisible.value && !item.disabled.value)
+  )
+
+  const visibleGroups = computed(() => {
+    const groups = new Set<string | null>()
+    for (const item of items.value) if (item.isVisible.value) groups.add(item.groupId)
+    return groups
+  })
+
+  const hasVisibleItems = computed(() => visibleGroups.value.size > 0)
 
   function setOpen(value: boolean) {
     isOpen.set(value)
@@ -123,7 +145,7 @@
   }
 
   function groupHasVisibleItems(groupId: string) {
-    return items.value.some((item) => item.groupId === groupId && item.isVisible.value)
+    return visibleGroups.value.has(groupId)
   }
 
   function resetActive() {
@@ -132,10 +154,14 @@
   }
 
   function registerItem(item: CommandRegisteredItem) {
-    items.value = [...items.value, item]
+    registry.add(item)
+    registryVersion.value += 1
     return () => {
-      items.value = items.value.filter((entry) => entry !== item)
-      if (activeValue.value === item.value) resetActive()
+      registry.delete(item)
+      registryVersion.value += 1
+      if (activeValue.value !== item.value) return
+      if (isOpen.value) resetActive()
+      else activeValue.value = null
     }
   }
 

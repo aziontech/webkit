@@ -3,9 +3,9 @@ name: streaming-response
 category: ai
 structure: monolithic
 status: implemented
-spec_version: 2
+spec_version: 3
 template: 2
-checksum: 35f26ed47463209de216dfd71f281f85427942b3067f37e3be4d66cd7a9e9968
+checksum: 69b444afc1094b38b977b87e0c2aec515a1c6d643d42d714bebbdce3cd1067fa
 created: 2026-11-11
 last_updated: 2026-11-14
 ---
@@ -159,7 +159,7 @@ No built-in strings (the content is the model's; `Citation` and `CodeBlock` carr
 ## Performance
 
 - Bundle budget: see `.size-limit.json` (`streaming-response`; includes `CodeBlock`).
-- Runtime budget: re-parse of a 4 000-character response < 1 ms; blocks keyed by position so earlier blocks keep their DOM, and a block whose parse is unchanged keeps its object, so its inline content does not re-render on each token. `streaming-response-2k-lines` in `perf-budgets.json` holds streaming into a 2k-line answer.
+- Runtime budget: parsing is incremental. When the new content extends the previous one, only the last two blocks are parsed again; every earlier block keeps its object. Blocks are keyed by position and memoized on their object, so a settled block (a paragraph, a table, a closed code fence) does not re-render on later tokens, and a closed fence is never highlighted again. `streaming-response-2k-lines` and `streaming-response-code-fences` (20 tokens after 1.2k lines of closed fences) in `perf-budgets.json` hold both, well under one frame per token.
 - Heavy parts: `CodeBlock` highlighting runs only for closed fences.
 
 ## Examples

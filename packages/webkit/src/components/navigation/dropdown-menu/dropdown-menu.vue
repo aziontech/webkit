@@ -233,11 +233,17 @@
     }
   }
 
+  function shortcutPriority(): number {
+    if (isOpenState.value) return 2
+    const focused = globalThis.document?.activeElement ?? null
+    return focused && triggerRef.value?.contains(focused) ? 1 : 0
+  }
+
   function registerCommand(
     command: string,
     activate: (event: globalThis.KeyboardEvent) => void
   ): () => void {
-    return registerShortcut(command, () => !props.disabled, activate)
+    return registerShortcut(command, () => !props.disabled, activate, shortcutPriority)
   }
 
   function onDocumentMousedown(event: globalThis.MouseEvent) {

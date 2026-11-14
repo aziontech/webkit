@@ -436,3 +436,30 @@ describe('keyboard map (spec)', () => {
     await vi.waitFor(() => expect(panel()).toBeNull())
   })
 })
+
+describe('global listeners', () => {
+  it('listens for Escape on the document only while open', async () => {
+    const add = vi.spyOn(document, 'addEventListener')
+    const remove = vi.spyOn(document, 'removeEventListener')
+    const keydowns = (spy: typeof add) =>
+      spy.mock.calls.filter(
+        ([type, listener]) =>
+          type === 'keydown' && (listener as { name?: string }).name === 'onDocumentKeydown'
+      ).length
+    try {
+      const { getByRole } = render(composed())
+      await settle()
+      expect(keydowns(add)).toBe(0)
+      await fireEvent.focusIn(getByRole('button', { name: 'Trigger' }))
+      await settle()
+      expect(panel()).not.toBeNull()
+      expect(keydowns(add)).toBe(1)
+      const removedBefore = keydowns(remove)
+      await fireEvent.keyDown(document, { key: 'Escape' })
+      await settle()
+      expect(keydowns(remove)).toBe(removedBefore + 1)
+    } finally {
+      vi.restoreAllMocks()
+    }
+  })
+})

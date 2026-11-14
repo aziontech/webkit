@@ -1,6 +1,6 @@
 import userEvent from '@testing-library/user-event'
 import { fireEvent, render, waitFor, within } from '@testing-library/vue'
-import { beforeEach, describe, expect, it } from 'vitest'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { defineComponent, h, nextTick, ref } from 'vue'
 
 import Default from '../../../../examples/calendar/default.vue'
@@ -148,6 +148,24 @@ describe('Calendar', () => {
 
     await waitFor(() => expect(getPopover()).toBeNull())
     expect(getByTestId('input-calendar').getAttribute('data-state')).toBe('closed')
+  })
+
+  it('listens for outside mousedowns on the document only while open', async () => {
+    const add = vi.spyOn(document, 'addEventListener')
+    const outside = () =>
+      add.mock.calls.filter(
+        ([type, listener]) =>
+          type === 'mousedown' && (listener as { name?: string }).name === 'onDocumentMousedown'
+      ).length
+    try {
+      const { getByTestId } = render(Calendar, { props: { mode: 'single', modelValue: OCT_8 } })
+      await nextTick()
+      expect(outside()).toBe(0)
+      await openCalendar(getByTestId)
+      expect(outside()).toBe(1)
+    } finally {
+      vi.restoreAllMocks()
+    }
   })
 
   // ---- Grid structure & a11y roles ------------------------------------------
@@ -1104,5 +1122,23 @@ describe('Calendar composition', () => {
     expect(clear.disabled).toBe(false)
     await fireEvent.click(clear)
     await waitFor(() => expect(clear.disabled).toBe(true))
+  })
+})
+
+describe('Calendar reference time', () => {
+  it('opens on the WebkitProvider now and marks that day as today', async () => {
+    const { getByTestId } = render(
+      defineComponent({
+        setup: () => () =>
+          h(
+            WebkitProvider,
+            { now: '2030-03-15T12:00:00' },
+            { default: () => h(Calendar, { mode: 'single' }) }
+          )
+      })
+    )
+    const popover = await openCalendar(getByTestId)
+    expect(popover.querySelector('[aria-current="date"]')?.textContent?.trim()).toBe('15')
+    expect(popover.textContent).toContain('2030')
   })
 })

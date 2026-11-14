@@ -2,7 +2,11 @@
   import { computed, inject, nextTick, ref, watch } from 'vue'
 
   import { eventDirection, logicalArrowKey } from '../../../../composables/use-direction'
-  import { intlLocale, useTranslate } from '../../../../composables/use-locale/use-translate'
+  import {
+    intlLocale,
+    useLocaleContext,
+    useTranslate
+  } from '../../../../composables/use-locale/use-translate'
   import * as en from '../../../../i18n/messages/en'
   import {
     getTabViewPanelTransitionStyle,
@@ -17,6 +21,8 @@
   })
 
   const { t, locale } = useTranslate({ calendar: en.calendar })
+  const { context: localeContext } = useLocaleContext()
+  const now = (): Date => new Date(localeContext?.now?.value ?? Date.now())
   const monthLabel = computed(
     () => new Intl.DateTimeFormat(intlLocale(locale.value), { month: 'long', year: 'numeric' })
   )
@@ -49,7 +55,7 @@
         return single
       }
     }
-    return new Date()
+    return now()
   }
 
   const seed = seedDate()
@@ -97,7 +103,7 @@
     }
   )
 
-  const today = startOfDay(new Date())
+  const today = startOfDay(now())
 
   const isBeforeMin = (date: Date): boolean => {
     const min = ctx?.min.value

@@ -3,12 +3,12 @@ name: calendar
 category: inputs
 structure: composition
 status: implemented
-spec_version: 5
+spec_version: 6
 template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=5087-17336
   node_id: 5087:17336
-checksum: b4098e70275b269264c84678dd0006f0e7cc377b4f544dc9b9303a0ec5db06e3
+checksum: 7b7c629bae59dc36535230b2f613062dff0780a1bae1884a3d2f4d48faeaa9b4
 created: 2026-06-25
 last_updated: 2026-11-14
 ---
@@ -174,7 +174,7 @@ Tree-shaking alternative — the standalone root + each sub-component from its o
 - `data-size` mirrors the `size` prop on the root, trigger, and each day cell (`small` | `medium` | `large`)
 - `data-selected` mirrors a fully-selected day cell (single value, or a range endpoint) and an active preset
 - `data-band` on each day cell drives the connected range highlight: `none` | `single` | `start` | `middle` | `end`
-- `data-today` marks the current date; `data-outside` marks an adjacent-month day cell
+- `data-today` marks the current date, taken from the nearest `WebkitProvider` `now` when set (so a server render and the hydrating client agree), else the current time; the grid also opens on that month when there is no value; `data-outside` marks an adjacent-month day cell
 - `data-disabled` mirrors the `disabled` prop on the root, unselectable day cells, and the clear control when there is no selection
 - When `presets` are supplied, the trigger is a two-part control: a left preset button (`aria-haspopup="menu"`, clock glyph, `data-testid` `…__presets-trigger`) opening the preset dropdown, and a right calendar button (`aria-haspopup="dialog"`, calendar glyph) opening the popover; the two dropdowns are mutually exclusive, and each preset menu item sets `data-selected` when it is the active preset
 - In period mode, a committed selection renders the trigger as two side-by-side segments: the relative token (e.g. `45m`, with a clock glyph) beside the resolved concrete window (e.g. `14:44 – 23:59`, with a calendar glyph), separated by a divider

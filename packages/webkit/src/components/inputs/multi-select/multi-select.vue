@@ -85,7 +85,9 @@
 
   const currentArray = (): unknown[] => (Array.isArray(model.value) ? model.value : [])
 
-  const isSelected = (value: unknown): boolean => currentArray().indexOf(value) !== -1
+  const selectedSet = computed(() => new Set(currentArray()))
+
+  const isSelected = (value: unknown): boolean => selectedSet.value.has(value)
 
   const toggleValue = (value: unknown) => {
     if (isDisabled.value || props.readonly) return

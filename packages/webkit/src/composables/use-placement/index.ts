@@ -1,7 +1,6 @@
 import {
   type MaybeRefOrGetter,
   nextTick,
-  onMounted,
   onScopeDispose,
   readonly,
   type Ref,
@@ -379,9 +378,24 @@ export function usePlacement({
     updatePosition()
   }
 
+  let listening = false
+
+  function listen(on: boolean) {
+    if (on === listening) return
+    listening = on
+    if (on) {
+      globalThis.window?.addEventListener('resize', onResize)
+      globalThis.document?.addEventListener('scroll', onScroll, true)
+    } else {
+      globalThis.window?.removeEventListener('resize', onResize)
+      globalThis.document?.removeEventListener('scroll', onScroll, true)
+    }
+  }
+
   watch(
     () => toValue(isOpen),
     async (open) => {
+      if (!disposed) listen(open)
       if (!open) {
         anchored.value = false
         anchorRect = null
@@ -428,17 +442,11 @@ export function usePlacement({
     () => observePanelSize()
   )
 
-  onMounted(() => {
-    globalThis.window?.addEventListener('resize', onResize)
-    globalThis.document?.addEventListener('scroll', onScroll, true)
-  })
-
   onScopeDispose(() => {
     disposed = true
     if (anchorFrame) globalThis.cancelAnimationFrame?.(anchorFrame)
     anchorFrame = 0
-    globalThis.window?.removeEventListener('resize', onResize)
-    globalThis.document?.removeEventListener('scroll', onScroll, true)
+    listen(false)
     panelObserver?.disconnect()
     panelObserver = null
   })

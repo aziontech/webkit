@@ -52,6 +52,12 @@ import DropdownMenu, {
   DropdownMenuItem,
   DropdownMenuTrigger
 } from '../components/navigation/dropdown-menu'
+import Command, {
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList
+} from '../components/overlay/command'
 import ListingBrowser from '../components/sections/listing-browser/listing-browser.vue'
 import ListingTable from '../components/sections/listing-table/listing-table.vue'
 import { useCollection, type UseCollectionReturn } from '../composables/use-collection'
@@ -215,6 +221,42 @@ function selectCase(multiple: boolean): Case {
       open.value = true
       await settle()
       search.value = '1'
+    }
+  }
+}
+
+function multiSelectToggleCase(): Case {
+  const options = Array.from({ length: 1000 }, (_, i) => ({ value: `v${i}`, label: `Option ${i}` }))
+  const selected = ref<string[]>(options.map((o) => o.value))
+  return {
+    mount: () => ({
+      render: () =>
+        h(
+          MultiSelect,
+          {
+            modelValue: selected.value,
+            'onUpdate:modelValue': (v: string[]) => (selected.value = v),
+            open: true
+          },
+          {
+            default: () => [
+              h(MultiSelect.Trigger),
+              h(MultiSelect.Content, null, {
+                default: () =>
+                  options.map((o) =>
+                    h(MultiSelect.Option, { key: o.value, value: o.value }, () => o.label)
+                  )
+              })
+            ]
+          }
+        )
+    }),
+    update: async () => {
+      const rows = document.body.querySelectorAll<HTMLElement>('[role="option"]')
+      for (let i = 0; i < 20; i++) {
+        rows[i]?.click()
+        await nextTick()
+      }
     }
   }
 }
@@ -462,6 +504,47 @@ function streamingResponseCase(): Case {
   }
 }
 
+function streamingFencesCase(): Case {
+  const fence = (lang: string, n: number, name: string) =>
+    [
+      '```' + lang,
+      ...Array.from(
+        { length: n },
+        (_, i) => `export const ${name}${i} = await fetch('https://api.example.com/${name}/${i}')`
+      ),
+      '```'
+    ].join('\n')
+  const prose = (n: number) =>
+    Array.from(
+      { length: n },
+      (_, i) => `Step ${i} sets the **cache key** and the \`ttl\` of the edge route.`
+    ).join('\n')
+  const content = ref(
+    [
+      '### Configure the origin',
+      prose(20),
+      fence('ts', 400, 'origin'),
+      prose(20),
+      fence('js', 300, 'route'),
+      prose(20),
+      fence('ts', 500, 'rule'),
+      'The rule above'
+    ].join('\n\n')
+  )
+  return {
+    mount: () =>
+      defineComponent({
+        setup: () => () => h(StreamingResponse, { content: content.value, streaming: true })
+      }),
+    update: async () => {
+      for (let i = 0; i < 20; i++) {
+        content.value += ' token'
+        await nextTick()
+      }
+    }
+  }
+}
+
 function docMarkdownCase(): Case {
   const page = (suffix: string) =>
     [
@@ -510,6 +593,44 @@ function docLayoutCase(): Case {
       }),
     update: () => {
       searchOpen.value = true
+    }
+  }
+}
+
+function commandCase(): Case {
+  const open = ref(false)
+  return {
+    mount: () =>
+      defineComponent({
+        setup: () => () =>
+          h(
+            Command,
+            {
+              open: open.value,
+              shortcut: '',
+              'onUpdate:open': (value: boolean) => (open.value = value)
+            },
+            () => [
+              h(CommandInput, { placeholder: 'Search' }),
+              h(CommandList, null, () =>
+                Array.from({ length: 20 }, (_, g) =>
+                  h(CommandGroup, { key: g, heading: `Group ${g}` }, () =>
+                    Array.from({ length: 50 }, (_, i) =>
+                      h(CommandItem, { key: i, value: `g${g}-i${i}` }, () => `Page ${g}.${i}`)
+                    )
+                  )
+                )
+              )
+            ]
+          )
+      }),
+    update: async () => {
+      open.value = true
+      await settle()
+      for (const query of ['p', 'pa', 'page 1', 'page 12']) {
+        await typeInto('input', query)
+        await settle()
+      }
     }
   }
 }
@@ -998,6 +1119,9 @@ describe('runtime budgets (perf-budgets.json)', () => {
   it('MultiSelect with 1k options: open and filter', async () => {
     check('multi-select-1k', await measure(() => selectCase(true)))
   })
+  it('MultiSelect with 1k options all selected: toggle 20 of them', async () => {
+    check('multi-select-1k-toggle', await measure(multiSelectToggleCase))
+  })
   it('DonutChart with 500 slices', async () => {
     check('donut-chart-500', await measure(donutCase))
   })
@@ -1034,11 +1158,17 @@ describe('runtime budgets (perf-budgets.json)', () => {
   it('StreamingResponse streaming a 2k-line answer', async () => {
     check('streaming-response-2k-lines', await measure(streamingResponseCase))
   })
+  it('StreamingResponse streaming 20 tokens after 1.2k lines of closed code fences', async () => {
+    check('streaming-response-code-fences', await measure(streamingFencesCase))
+  })
   it('DocMarkdown with a 5k-line page: mount and replace', async () => {
     check('doc-markdown-5k-lines', await measure(docMarkdownCase))
   })
   it('DocLayout with 1k navigation rows: mount and open search', async () => {
     check('doc-layout-1k', await measure(docLayoutCase))
+  })
+  it('Command with 1k items in 20 groups: open and type four queries', async () => {
+    check('command-1k', await measure(commandCase))
   })
   it('Item.List with 1k items: mount and reorder', async () => {
     check('item-list-1k', await measure(itemListCase))
