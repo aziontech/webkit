@@ -13,7 +13,9 @@
       value: 'failover',
       title: 'Provider failover',
       description: 'When a provider degrades, the gateway moves to the next model on the alias.',
-      diagram: 'ai-gateway-provider-failover'
+      diagram: 'ai-gateway-provider-failover',
+      diagramAriaLabel:
+        'A request falls back from a degraded model provider to the next model on the alias'
     },
     {
       value: 'costs',
@@ -49,6 +51,7 @@
     title="Every AI request through one control point"
     description="Every client calls one endpoint. Firewall stops abuse, then a function checks the key, routes the call, and logs it."
     position="bottom"
+    :interval="8000"
     :tabs="tabs"
     :primary-action="primaryAction"
   />

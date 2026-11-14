@@ -1,6 +1,6 @@
 # FeatureScroll
 
-A list of features with the media that shows each one. The band pins under the site header while the page scrolls; as the reader scrolls, the open feature moves on and the media beside it changes to match. On the site the media is a live console widget; here an `Illustration` stands in for it.
+A list of features with the media that shows each one. The band pins under the site header while the page scrolls; as the reader scrolls, the open feature moves on and the media beside it changes to match. The media is a live console scene (an item `scene` naming a `ProductWidget`) or an `Illustration`.
 
 It is the sibling of `StickyScrollCode`: the same pinned band, with media in place of a code sample. Below `lg` it turns into a FeatureTiles grid: each feature becomes a tile, its media over the title and description.
 

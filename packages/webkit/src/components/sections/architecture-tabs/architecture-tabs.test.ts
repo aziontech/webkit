@@ -115,6 +115,19 @@ describe('ArchitectureTabs', () => {
     tabs.forEach((tab) => expect(names).toContain(tab.diagram))
   })
 
+  it('names a diagram by its tab diagramAriaLabel', () => {
+    const label = 'Requests routed through the gateway to three model providers'
+    const { container } = band({
+      tabs: [{ ...tabs[0], diagramAriaLabel: label }, tabs[1]]
+    })
+
+    const labelled = Array.from(
+      container.querySelectorAll('[data-testid="marketing-diagram"]')
+    ).filter((diagram) => diagram.getAttribute('data-name') === tabs[0]?.diagram)
+    expect(labelled.length).toBeGreaterThan(0)
+    labelled.forEach((diagram) => expect(diagram.getAttribute('aria-label')).toBe(label))
+  })
+
   it('moves the active tab on click', async () => {
     const { container } = band()
 

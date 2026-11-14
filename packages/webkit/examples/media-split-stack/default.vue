@@ -5,6 +5,7 @@
   const bands = [
     {
       image: quickStartWithTemplates,
+      eyebrow: 'Web applications',
       title: 'Modern applications',
       description: 'Build static sites, run serverless applications, or modernize legacy systems.',
       action: {
@@ -14,6 +15,8 @@
     },
     {
       illustration: 'improve-application-performance-and-reliability',
+      eyebrow: 'Performance',
+      href: '/en/solutions/performance/overview/',
       title: 'Optimized workloads',
       description:
         'Speed up applications, deliver content through the CDN, and process images on demand.',
@@ -23,7 +26,9 @@
       }
     },
     {
+      scene: { component: 'ProductWidget', props: { name: 'ai-inference-model' } },
       illustration: 'ai-applications',
+      eyebrow: 'AI Inference',
       title: 'AI applications',
       description:
         'Build and deploy AI agents and AI-powered applications on a distributed platform, with inference close to users.',
@@ -58,6 +63,9 @@
 <template>
   <MediaSplitStack
     kind="media-end"
+    eyebrow="Solutions"
+    title="One platform for every workload you run"
+    description="Pick the outcome you need; the same distributed platform serves it."
     :bands="bands"
   />
 </template>

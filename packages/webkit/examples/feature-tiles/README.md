@@ -20,7 +20,7 @@ Add this entry to the `sections` array of the page JSON. `_id` picks the block a
 
 - `kind` is `artwork`.
 - `eyebrow`, `title` and `description` make the heading. Without a title the heading is left out.
-- `tiles` are the reasons, each a `title`, a `description` and an `image` URL.
+- `tiles` are the reasons, each a `title`, a `description` and an `image` URL. Give a tile an `alt` only when its picture says something the caption does not; without one the picture stays decorative.
 
 Example:
 

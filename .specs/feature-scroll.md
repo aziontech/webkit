@@ -3,16 +3,16 @@ name: feature-scroll
 category: sections
 structure: monolithic
 status: implemented
-spec_version: 1
+spec_version: 2
 created: 2026-11-04
-last_updated: 2026-11-04
-checksum: 3da92f650844d85940b5fbbdfccd01e2e5416fcd20c81aa47580cc3a63f30b43
+last_updated: 2026-11-14
+checksum: 4e56f5a9becdc00c6db976a6edec02f46c5fd5de3258db9378c80abdb20e55b2
 ---
 # FeatureScroll — Component Spec
 
 ## Purpose
 
-The walkthrough band of a product page: a large section title over one screen per feature. From the large breakpoint up the features scroll through a sticky stack — the copy advances while the illustration stays pinned in a framed, textured stage with one small action under each step; below it the same features are a three-column grid of media tiles. It is a page section — the site places it from a `{ _id: 'feature-scroll', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `frame-box`, `card-grid`, `media-tile`, `illustration`, `sticky-stack`, `texture-material` and `button`.
+The walkthrough band of a product page: a large section title over one screen per feature. From the large breakpoint up the features scroll through a sticky stack — the copy advances while the feature's live scene or illustration stays pinned in a framed, textured stage with one small action under each step; below it the same features are a three-column grid of media tiles. It is a page section — the site places it from a `{ _id: 'feature-scroll', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `frame-box`, `card-grid`, `media-tile`, `illustration`, `sticky-stack`, `texture-material`, `button` and the webkit scene assets (a `ProductWidget` console fragment, most often).
 
 ## When to use
 
@@ -31,7 +31,7 @@ The walkthrough band of a product page: a large section title over one screen pe
 ## Best practices
 
 - Four to six items; the stack needs enough steps to earn the scroll.
-- Give every item an `illustration`; it is the pinned picture on large screens and the tile media on small ones.
+- Give every item a `scene` or an `illustration`; it is the pinned picture on large screens and the tile media on small ones. On a product page prefer a `scene` naming a `ProductWidget` (`{ component: 'ProductWidget', props: { name } }`): it shows the console itself.
 - Keep `action` to a short label such as "Docs" — it sits under the step copy at the small size.
 
 ## Usage
@@ -58,10 +58,11 @@ import FeatureScroll from '@aziontech/webkit/feature-scroll'
 
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
+| `anchor` | `string` | `''` | false | In-page id set on the band so a `#hash` link can scroll to it. |
 | `eyebrow` | `string` | `''` | false | Overline above the section title. |
 | `title` | `string` | `''` | false | Headline of the band, rendered by the large section title as its `h2`; the band renders no header when empty. |
 | `description` | `string` | `''` | false | Supporting sentence under the headline. |
-| `items` | `FeatureScrollItem[]` | `[]` | false | The features, in order; each is `{ title, description, illustration, action? }` where `illustration` is a registry name and `action` is `{ label, href, trailing? }` rendered as a small secondary button under the step. |
+| `items` | `FeatureScrollItem[]` | `[]` | false | The features, in order; each is `{ title, description, scene?, illustration?, action? }` where `scene` is `{ component, props? }` naming a webkit scene asset (drawn live in the stack, still in the grid), `illustration` is a registry name drawn when no scene is set, and `action` is `{ label, href, trailing? }` rendered as a small secondary button under the step. |
 
 ## Events
 
@@ -76,6 +77,7 @@ import FeatureScroll from '@aziontech/webkit/feature-scroll'
 - Visual states: `default`
 - Below the large breakpoint the features render as a three-column grid of media tiles; from it up they render as a sticky stack whose active step is `sticky-stack`'s own
 - Empty: when `items` is empty the band renders nothing — not the header, not the frames
+- Media: an item's `scene` wins over its `illustration`; in the stack the scene receives `active` for the open step only, so a console fragment plays its beat while its step is open and rests on its settled frame otherwise; in the grid every scene is drawn still (`active: false`) in a 20rem window. A scene name that is not registered draws nothing.
 
 ## Motion & Animations
 
@@ -90,6 +92,7 @@ _none_
 | stage inset | `var(--spacing-md)` |
 | stage inset (large) | `var(--spacing-xl)` |
 | frame rules and marks | `var(--border-default)` |
+| anchor scroll offset | `var(--spacing-xxl)` |
 
 ## Theme gaps
 
@@ -101,7 +104,7 @@ _none_
 
 - Visible focus: owned by the composed `button`.
 - Keyboard map: `Tab` reaches each step's action; `Enter` follows it; the stack's own progression is scroll-driven and never traps focus.
-- ARIA: the band is a `<section>` named by its title (`aria-label`) when one is set; the step headings are `sticky-stack`'s and `media-tile`'s; the texture layer and the pinned illustration are decorative.
+- ARIA: the band is a `<section>` named by its title (`aria-label`) when one is set; the step headings are `sticky-stack`'s and `media-tile`'s; the texture layer and the pinned illustration are decorative; a scene carries its own semantics (a `ProductWidget` is a decorative console picture).
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): owned by the composed components.
 - `motion-reduce:transition-none motion-reduce:transform-none` — the step transition belongs to `sticky-stack`, which carries its own fallback; this band adds no motion.
 - Touch target ≥40×40 px — the per-step action is a small `button` on the large layout only, where pointer precision is available.
@@ -109,6 +112,7 @@ _none_
 ## Examples
 
 - Default
+- Live scenes — each item draws a `ProductWidget` console fragment instead of an illustration.
 
 ## Constraints — DO NOT
 

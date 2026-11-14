@@ -3,10 +3,10 @@ name: sticky-scroll-code
 category: sections
 structure: monolithic
 status: implemented
-spec_version: 1
+spec_version: 2
 created: 2026-11-05
-last_updated: 2026-11-05
-checksum: 2c5696bf31f6a4028f48f75517ea1852f97c14765d4ca3d2dd12b90b0d587767
+last_updated: 2026-11-14
+checksum: ae45211e8f7d7e89a78fb1aa878e902cf5a9fe2934c110ab95c51bd03f01f2f8
 ---
 # StickyScrollCode — Component Spec
 
@@ -60,10 +60,11 @@ import StickyScrollCode from '@aziontech/webkit/sticky-scroll-code'
 
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
+| `anchor` | `string` | `''` | false | In-page id set on the band so a `#hash` link can scroll to it. |
 | `eyebrow` | `string` | `''` | false | Overline above the section title. |
 | `title` | `string` | `''` | false | Headline of the band, rendered by the large section title as its `h2`; the band renders no header when empty. |
 | `description` | `string` | `''` | false | Supporting sentence under the headline. |
-| `items` | `StickyScrollCodeItem[]` | `[]` | false | The capabilities, in reading order; each is `{ title, description, code, action? }` where `code` is the one-file sample `{ fileName, code, language?, fileIcon?, copyAriaLabel? }` and `action` is `{ label, href, trailing? }` rendered as a small secondary button under the open item. |
+| `items` | `StickyScrollCodeItem[]` | `[]` | false | The capabilities, in reading order; each is `{ title, description, code, action? }` where `code` is the one-file sample `{ fileName, code, language?, fileIcon?, copyAriaLabel? }` and `action` is `{ label, href, trailing?, target?, kind? }` rendered as a small button under the open item, `secondary` unless `kind` says `outlined` or `transparent`, opening in a new tab when `target` is `_blank`. |
 
 ## Events
 
@@ -77,7 +78,7 @@ import StickyScrollCode from '@aziontech/webkit/sticky-scroll-code'
 
 - Visual states: `default`; the open item, its progress and the pinned frame are scroll-driven state owned by `sticky-stack`
 - Empty: when `items` is empty the band renders nothing — not the header, not the frame
-- The header renders only when `title` is set; an item's button renders only when it has an `action`
+- The header renders only when `title` is set; an item's button renders only when it has an `action`; it is `secondary` unless the action sets `kind` (`outlined` or `transparent`) and carries the action's `target`
 
 ## Motion & Animations
 
@@ -91,6 +92,7 @@ _none_
 | sample shadow | `var(--shadow-sm)` |
 | media gap | `var(--spacing-md)` |
 | frame rules and marks | `var(--border-default)` |
+| anchor scroll offset | `var(--spacing-xxl)` |
 
 ## Theme gaps
 
@@ -109,7 +111,7 @@ _none_
 
 ## Examples
 
-- Default
+- Default — carries an `anchor` and an external action (`target: '_blank'`).
 
 ## Constraints — DO NOT
 

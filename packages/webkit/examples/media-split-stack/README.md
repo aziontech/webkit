@@ -19,7 +19,8 @@ Example: [`site-solutions.vue`](./site-solutions.vue)
 Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` are bound straight onto the component:
 
 - `kind` is `media-end`.
-- `bands` are the solutions, each a `title`, a `description`, an `action` (`label` and `href`, the button and the link the whole band follows), and an `illustration` name or an `image` with `imageAlt`.
+- `bands` are the solutions, each a `title`, a `description`, an `action` (`label` and `href`, the button and the link the whole band follows unless the band sets its own `href`), an optional `eyebrow`, and a `scene`, an `illustration` name or an `image` with `imageAlt`.
+- `anchor` is the run's id for in-page links; `description` sits under the section title. With a title the band headlines are `h3`.
 - A band without `action` has no button and no link. A band with no picture renders without its media cell.
 
 Example:

@@ -1,13 +1,14 @@
 <script setup lang="ts">
   import { computed, defineAsyncComponent, ref, useAttrs } from 'vue'
 
-  import { resolveScene } from '../../../assets/scene-registry'
+  import { resolveScene, type SceneName } from '../../../assets/scene-registry'
   import Button from '../../actions/button/button.vue'
   import Illustration from '../../content/illustration/illustration.vue'
   import type { ProductWidgetName } from '../../content/product-widget/product-widget.vue'
   import type { DiagramName } from '../../marketing/diagram/diagram.vue'
   import MediaSplit from '../../marketing/media-split/media-split.vue'
   import SectionModule from '../../marketing/section-module/section-module.vue'
+  import type { TextureMaterialKind } from '../../marketing/texture-material/texture-material.vue'
 
   defineOptions({
     name: 'MediaSplitBand',
@@ -17,13 +18,18 @@
   /** Type scale of the copy. */
   export type MediaSplitBandSize = 'medium' | 'large'
 
+  /** Axis the band splits on. */
+  export type MediaSplitBandOrientation = 'horizontal' | 'vertical'
+
   /** Name of a webkit scene asset. */
-  export type MediaSplitBandSceneName = 'BrandGlobeScene' | 'SpinningGlobe'
+  export type MediaSplitBandSceneName = SceneName
 
   /** A scene drawn in the media cell. */
   export type MediaSplitBandScene = {
     /** The webkit scene asset to draw. */
     component: MediaSplitBandSceneName
+    /** Props bound onto the scene. */
+    props?: Record<string, unknown>
   }
 
   /** A picture drawn in the media cell. */
@@ -53,15 +59,23 @@
   }
 
   interface Props {
+    /** In-page id set on the band so a `#hash` link can scroll to it. */
+    anchor?: string
     /** Short overline above the headline. */
     eyebrow?: string
     /** Headline of the band, rendered by the media split as its `h2` and naming its region; the band renders nothing when empty. */
     title?: string
     /** Paragraph under the headline. */
     description?: string
-    /** Type scale of the copy; `large` sets the headline at heading-xl and centres the copy beside the media. */
+    /** Type scale of the copy; `large` sets the headline at heading-xl and centres the copy beside the media, `medium` aligns it to the top of the media. */
     size?: MediaSplitBandSize
-    /** Scene drawn in the media cell, `{ component }` naming a webkit scene asset; wins over every other media. */
+    /** Axis the band splits on; `vertical` stacks the media under the copy for a wide scene. */
+    orientation?: MediaSplitBandOrientation
+    /** Texture painted under the media: `dots`, `grid`, `lines`, `dither`, `pixelate` or `none`. */
+    texture?: TextureMaterialKind
+    /** Links the whole band to a lone action; turn it off when the media holds controls of its own. */
+    linked?: boolean
+    /** Scene drawn in the media cell, `{ component, props? }` naming a webkit scene asset and the props bound onto it; wins over every other media. */
     scene?: MediaSplitBandScene
     /** Name of the product console widget drawn in the media cell when no scene is set. */
     widget?: ProductWidgetName
@@ -73,17 +87,21 @@
     illustration?: string
     /** Accessible name of the illustration; empty keeps it decorative. */
     illustrationAriaLabel?: string
-    /** First button under the copy; `{ label, href, trailing?, target? }`. When it is the only action, the whole band links to it. */
+    /** First button under the copy; `{ label, href, trailing?, target? }`. When it is the only action it renders outlined with a trailing chevron, and the whole band links to it. */
     primaryAction?: MediaSplitBandAction
     /** Second, outlined button beside the first; `{ label, href, trailing?, target? }`. With two actions the band stays unlinked. */
     secondaryAction?: MediaSplitBandAction
   }
 
   const props = withDefaults(defineProps<Props>(), {
+    anchor: '',
     eyebrow: '',
     title: '',
     description: '',
     size: 'medium',
+    orientation: 'horizontal',
+    texture: 'pixelate',
+    linked: true,
     scene: undefined,
     widget: undefined,
     diagram: undefined,
@@ -134,16 +152,20 @@
     props.secondaryAction?.label && props.secondaryAction.href ? props.secondaryAction : null
   )
 
-  const bandHref = computed(() => {
-    const actions = [primary.value, secondary.value].filter(Boolean)
-    return actions.length === 1 ? (actions[0]?.href ?? '') : ''
+  const lone = computed(() => {
+    const actions = [primary.value, secondary.value].filter((action) => action !== null)
+    return actions.length === 1 ? (actions[0] ?? null) : null
   })
+
+  const bandHref = computed(() => (props.linked && lone.value ? lone.value.href : ''))
 </script>
 
 <template>
   <div
     v-bind="$attrs"
+    :id="anchor || undefined"
     :data-testid="testId"
+    class="scroll-mt-(--spacing-xxl)"
   >
     <SectionModule
       v-if="title"
@@ -152,10 +174,11 @@
     >
       <MediaSplit
         framed
-        align="center"
+        :orientation="orientation"
+        :align="size === 'large' ? 'center' : 'top'"
         :size="size"
         media-fill="surface"
-        texture="pixelate"
+        :texture="texture"
         texture-size="small"
         texture-fade="top"
         :eyebrow="eyebrow"
@@ -173,6 +196,7 @@
           <component
             :is="sceneComponent"
             v-if="media === 'scene'"
+            v-bind="scene?.props ?? {}"
           />
           <ProductWidget
             v-else-if="media === 'widget' && widget"
@@ -221,7 +245,20 @@
           #actions
         >
           <Button
-            v-if="primary"
+            key="button-1"
+            v-if="lone"
+            :label="lone.label"
+            :href="lone.href"
+            :target="lone.target"
+            kind="outlined"
+            size="medium"
+            icon="pi pi-chevron-right"
+            icon-position="trailing"
+            animated
+          />
+          <Button
+            key="button-2"
+            v-else-if="primary"
             :label="primary.label"
             :href="primary.href"
             :target="primary.target"
@@ -232,8 +269,8 @@
             :animated="Boolean(primary.trailing)"
           />
           <Button
-            key="button-2"
-            v-if="secondary"
+            key="button-3"
+            v-if="secondary && !lone"
             :label="secondary.label"
             :href="secondary.href"
             :target="secondary.target"

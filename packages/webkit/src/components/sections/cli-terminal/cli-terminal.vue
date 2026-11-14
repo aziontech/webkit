@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed, useAttrs } from 'vue'
+  import { computed, defineAsyncComponent, onScopeDispose, ref, useAttrs, watch } from 'vue'
 
   import Button from '../../actions/button/button.vue'
   import CodeBlock from '../../code/code-block/code-block.vue'
@@ -25,14 +25,21 @@
     target?: '_blank' | '_self'
   }
 
+  /** A recorded Azion CLI session the terminal types. */
+  export type CliTerminalScript = 'start' | 'deploy'
+
   interface Props {
+    /** In-page id set on the band so a `#hash` link can scroll to it. */
+    anchor?: string
     /** Overline above the section title. */
     eyebrow?: string
     /** Headline of the band, rendered by the horizontal section title as its `h2`; the band renders no header when empty. */
     title?: string
     /** Supporting sentence beside the headline. */
     description?: string
-    /** The terminal session shown under the header, commands and their output verbatim, highlighted as bash; the band renders nothing when empty. */
+    /** Recorded Azion CLI session the terminal types live: `start` or `deploy`; wins over `session`. */
+    script?: CliTerminalScript
+    /** The terminal session shown under the header when no `script` is set, commands and their output verbatim, highlighted as bash; the band renders nothing when neither is set. */
     session?: string
     /** Accessible name of the session's copy button; empty keeps the code block's own. */
     copyAriaLabel?: string
@@ -41,15 +48,27 @@
   }
 
   const props = withDefaults(defineProps<Props>(), {
+    anchor: '',
     eyebrow: '',
     title: '',
     description: '',
+    script: undefined,
     session: '',
     copyAriaLabel: '',
     primaryAction: undefined
   })
 
+  const ProductWidget = defineAsyncComponent(
+    () => import('../../content/product-widget/product-widget.vue')
+  )
+
   const attrs = useAttrs()
+
+  const stage = ref<globalThis.HTMLElement | null>(null)
+
+  const entered = ref(false)
+
+  let arrival: globalThis.IntersectionObserver | null = null
 
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? 'sections-cli-terminal'
@@ -62,16 +81,44 @@
       ? [{ label: 'session', value: 'session', code: props.session, language: 'bash' }]
       : []
   )
+
+  const widget = computed(() =>
+    props.script === 'start' ? 'cli-terminal-start' : 'cli-terminal-deploy'
+  )
+
+  const hasTerminal = computed(() => Boolean(props.script) || tabs.value.length > 0)
+
+  watch(stage, (element) => {
+    arrival?.disconnect()
+    if (!element || entered.value) return
+    if (typeof globalThis.IntersectionObserver === 'undefined') {
+      entered.value = true
+      return
+    }
+    arrival = new globalThis.IntersectionObserver(
+      ([entry]) => {
+        if (!entry?.isIntersecting) return
+        entered.value = true
+        arrival?.disconnect()
+      },
+      { threshold: 0.2 }
+    )
+    arrival.observe(element)
+  })
+
+  onScopeDispose(() => arrival?.disconnect())
 </script>
 
 <template>
   <section
     v-bind="$attrs"
+    :id="anchor || undefined"
     :data-testid="testId"
     :aria-label="title || undefined"
+    class="scroll-mt-(--spacing-xxl)"
   >
     <SectionModule
-      v-if="tabs.length > 0"
+      v-if="hasTerminal"
       :divided="false"
       :padded="false"
     >
@@ -122,6 +169,15 @@
             fade="none"
           />
           <div
+            v-if="script"
+            ref="stage"
+            :data-entered="entered || null"
+            class="relative z-10 mx-auto -mb-(--spacing-xs) h-(--size-72) w-full max-w-(--container-4xl) translate-y-(--spacing-xl) scale-95 rounded-(--shape-elements) opacity-0 shadow-(--shadow-2xl) transition-[translate,scale,opacity] duration-slow-02 ease-expressive-entrance data-entered:translate-y-0 data-entered:scale-100 data-entered:opacity-100 md:h-(--size-96) motion-reduce:translate-y-0 motion-reduce:scale-100 motion-reduce:opacity-100 motion-reduce:transition-none"
+          >
+            <ProductWidget :name="widget" />
+          </div>
+          <div
+            v-else
             class="relative z-10 mx-auto -mb-(--spacing-xs) w-full max-w-(--container-4xl) rounded-(--shape-elements) shadow-(--shadow-2xl)"
           >
             <CodeBlock

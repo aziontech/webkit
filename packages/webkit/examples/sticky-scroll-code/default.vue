@@ -77,7 +77,8 @@
       action: {
         label: 'Docs',
         href: 'https://www.azion.com/en/documentation/devtools/',
-        trailing: true
+        trailing: true,
+        target: '_blank'
       },
       code: {
         fileName: 'requests.graphql',
@@ -92,6 +93,7 @@
 
 <template>
   <StickyScrollCode
+    anchor="ship-it"
     eyebrow="Ship It"
     title="Everything You Need to Build and Deploy"
     description="Deploy from Git or the CLI, automate with APIs and Terraform, and query every metric over GraphQL. One platform carries your web app from the first push to the traffic it serves."

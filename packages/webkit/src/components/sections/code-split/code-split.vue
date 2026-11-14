@@ -49,12 +49,16 @@
   }
 
   interface Props {
+    /** In-page id set on the band so a `#hash` link can scroll to it. */
+    anchor?: string
     /** Headline of the band, rendered by the media split as its `h2` and naming its region; the band renders nothing when empty. */
     title?: string
     /** Supporting sentence under the headline. */
     description?: string
     /** The files of the code sample, in order; each is `{ label, value, code, language?, fileName?, fileIcon?, icon? }` where `icon` is a mark drawn beside the tab label. A tab without `code` is skipped. */
     codeTabs?: CodeSplitTab[]
+    /** `value` of the tab open first; empty, or a value no tab carries, opens the first tab. */
+    defaultFile?: string
     /** Accessible name of the sample's copy button; empty keeps the code block's own. */
     copyAriaLabel?: string
     /** First button under the copy; `{ label, href, trailing?, icon?, target?, kind? }` where `kind` defaults to `secondary`. Omitted when absent. */
@@ -64,9 +68,11 @@
   }
 
   const props = withDefaults(defineProps<Props>(), {
+    anchor: '',
     title: '',
     description: '',
     codeTabs: () => [],
+    defaultFile: '',
     copyAriaLabel: '',
     primaryAction: undefined,
     secondaryAction: undefined
@@ -84,6 +90,10 @@
     Object.fromEntries(tabs.value.map((tab) => [tab.value, tab.icon ?? '']))
   )
 
+  const openFile = computed(() =>
+    tabs.value.some((tab) => tab.value === props.defaultFile) ? props.defaultFile : undefined
+  )
+
   const hasTabIcons = computed(() => tabs.value.some((tab) => Boolean(tab.icon)))
 
   const actionIcon = (action: CodeSplitAction) =>
@@ -93,7 +103,9 @@
 <template>
   <div
     v-bind="$attrs"
+    :id="anchor || undefined"
     :data-testid="testId"
+    class="scroll-mt-(--spacing-xxl)"
   >
     <SectionModule
       v-if="title.length > 0"
@@ -118,6 +130,7 @@
           >
             <CodeBlock
               :tabs="tabs"
+              :default-value="openFile"
               show-line-numbers
               :bordered="false"
               v-bind="{ animateLines: true }"

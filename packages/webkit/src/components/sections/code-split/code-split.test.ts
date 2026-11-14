@@ -126,6 +126,31 @@ describe('CodeSplit', () => {
     expect(container.querySelectorAll('[role="tab"] i.ai-cor')).toHaveLength(markedTabs.length)
   })
 
+  it('opens the first tab when no defaultFile is set', () => {
+    const { getAllByRole } = band({ codeTabs: markedTabs })
+
+    expect(getAllByRole('tab')[0]).toHaveAttribute('aria-selected', 'true')
+  })
+
+  it('opens the tab named by defaultFile first', () => {
+    const { getAllByRole } = band({ codeTabs: markedTabs, defaultFile: 'github-copilot' })
+
+    expect(getAllByRole('tab')[1]).toHaveAttribute('aria-selected', 'true')
+    expect(getAllByRole('tab')[0]).toHaveAttribute('aria-selected', 'false')
+  })
+
+  it('opens the first tab when defaultFile names no tab', () => {
+    const { getAllByRole } = band({ codeTabs: markedTabs, defaultFile: 'missing' })
+
+    expect(getAllByRole('tab')[0]).toHaveAttribute('aria-selected', 'true')
+  })
+
+  it('sets the anchor as the band id', () => {
+    const { getByTestId } = band({ anchor: 'sdk' })
+
+    expect(getByTestId(TESTID)).toHaveAttribute('id', 'sdk')
+  })
+
   it('draws no tab marks when no tab carries an icon', () => {
     const { container } = band({
       codeTabs: markedTabs.map((tab) => ({ ...tab, icon: undefined }))

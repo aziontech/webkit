@@ -117,6 +117,66 @@ describe('MediaSplitStack', () => {
     expect(getByText(EYEBROW)).toBeInTheDocument()
   })
 
+  it('drops the band headlines to h3 under a section title', () => {
+    const { getByRole, queryAllByRole } = run({ title: TITLE })
+
+    expect(queryAllByRole('heading', { level: 2 })).toHaveLength(1)
+    bands.forEach((band) => {
+      expect(getByRole('heading', { level: 3, name: band.title })).toBeInTheDocument()
+    })
+  })
+
+  it('renders the description under the section title', () => {
+    const { getByText } = run({ title: TITLE, description: 'Ship without picking a region.' })
+
+    expect(getByText('Ship without picking a region.')).toBeInTheDocument()
+  })
+
+  it('renders a band eyebrow above its headline', () => {
+    const { getByText } = run({ bands: [{ ...bands[1], eyebrow: 'AI Inference' }] })
+
+    expect(getByText('AI Inference')).toBeInTheDocument()
+  })
+
+  it('links the whole band to its href, ahead of its action', () => {
+    const { getAllByRole, getByTestId } = run({
+      bands: [{ ...bands[0], href: '/solutions/overview/' }]
+    })
+
+    expect(getByTestId(BAND_TESTID).hasAttribute('data-media-href')).toBe(true)
+    const hrefs = getAllByRole('link').map((link) => link.getAttribute('href'))
+    expect(hrefs).toContain('/solutions/overview/')
+    expect(hrefs).toContain(bands[0]?.action?.href)
+  })
+
+  it('links a band with an href and no action', () => {
+    const { getByTestId } = run({ bands: [{ ...bands[2], href: '/solutions/security/' }] })
+
+    expect(getByTestId(BAND_TESTID).hasAttribute('data-media-href')).toBe(true)
+  })
+
+  it('draws a band scene ahead of its other media', async () => {
+    const { findByTestId } = run({
+      bands: [
+        {
+          ...bands[1],
+          scene: { component: 'ProductWidget', props: { name: 'kv-store-key' } }
+        }
+      ]
+    })
+
+    expect(await findByTestId('content-product-widget')).toHaveAttribute(
+      'data-name',
+      'kv-store-key'
+    )
+  })
+
+  it('sets the anchor as the run id', () => {
+    const { getByTestId } = run({ anchor: 'solutions' })
+
+    expect(getByTestId(TESTID)).toHaveAttribute('id', 'solutions')
+  })
+
   it('renders no header and leaves the run unnamed when no title is set', () => {
     const { getByTestId, queryByText } = run({ eyebrow: EYEBROW })
 

@@ -94,12 +94,71 @@ describe('FeatureTabs', () => {
     expect(tabButtons(container)[2]?.getAttribute('aria-current')).toBe('true')
   })
 
-  it('links the primary action under the frame', () => {
-    const { getByRole } = band()
+  it('links the primary action from the section title', () => {
+    const { getByRole, getByTestId } = band()
 
+    const link = getByRole('link', { name: primaryAction.label })
+    expect(link.getAttribute('href')).toBe(primaryAction.href)
+    expect(getByTestId('marketing-section-title').contains(link)).toBe(true)
+  })
+
+  it('links the primary action under the frame when there is no title', () => {
+    const { getByRole, queryByTestId } = band({ title: '' })
+
+    expect(queryByTestId('marketing-section-title')).toBeNull()
     expect(getByRole('link', { name: primaryAction.label }).getAttribute('href')).toBe(
       primaryAction.href
     )
+  })
+
+  it('sets the anchor as the band id', () => {
+    const { getByTestId } = band({ anchor: 'observability' })
+
+    expect(getByTestId(TESTID)).toHaveAttribute('id', 'observability')
+  })
+
+  it('opens a tab code file as its media, with line numbers and a named copy button', () => {
+    const { getAllByRole, getAllByText, getByTestId } = band({
+      copyAriaLabel: 'Copy the handler',
+      tabs: [
+        {
+          title: 'Handler',
+          description: 'One function per route.',
+          code: {
+            label: 'handler.js',
+            value: 'handler',
+            language: 'javascript',
+            fileName: 'handler.js',
+            code: 'export default { fetch: () => new Response("ok") }'
+          }
+        },
+        tabs[1]
+      ]
+    })
+
+    expect(getByTestId(TESTID).querySelector('[data-code]')).not.toBeNull()
+    expect(getAllByText('handler.js').length).toBeGreaterThanOrEqual(1)
+    expect(getAllByRole('button', { name: 'Copy the handler' }).length).toBeGreaterThanOrEqual(1)
+  })
+
+  it('marks no code stage when no tab carries code', () => {
+    const { getByTestId } = band()
+
+    expect(getByTestId(TESTID).querySelector('[data-code]')).toBeNull()
+  })
+
+  it('draws the band scene as the media of every tab', async () => {
+    const { findAllByTestId } = band({
+      scene: { component: 'ProductWidget', props: { name: 'functions-start' } },
+      tabs: [
+        { title: 'Agents', description: 'Ask an agent.', value: 'agents' },
+        { title: 'Console', description: 'Click through.', value: 'console' }
+      ]
+    })
+
+    const widgets = await findAllByTestId('content-product-widget')
+    expect(widgets.length).toBeGreaterThanOrEqual(2)
+    widgets.forEach((widget) => expect(widget).toHaveAttribute('data-name', 'functions-start'))
   })
 
   it('renders no link when no action is set', () => {

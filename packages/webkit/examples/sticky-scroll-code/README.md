@@ -18,9 +18,10 @@ Example: [`site-default.vue`](./site-default.vue)
 
 Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` are bound straight onto the component:
 
+- `anchor` is the band's id for in-page links.
 - `eyebrow`, `title` and `description` fill the section title.
 - `items[]` are the capabilities in reading order, each a `title` and a `description`.
-- `items[].action` is the capability's own button, with `label`, `href` and `trailing`; it shows under the description while the capability is open. Leave it out to drop the button.
+- `items[].action` is the capability's own button, with `label`, `href`, `trailing`, `target` (`_blank` opens a new tab) and `kind` (`secondary` by default, `outlined` or `transparent`); it shows under the description while the capability is open. Leave it out to drop the button.
 - `items[].code` is the one-file sample: `fileName`, `fileIcon`, `language`, the `code` itself and the `copyAriaLabel` that names its copy button.
 
 Example:

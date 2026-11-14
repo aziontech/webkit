@@ -1,6 +1,7 @@
 <script setup lang="ts">
-  import { computed, useAttrs } from 'vue'
+  import { type Component, computed, useAttrs } from 'vue'
 
+  import { resolveScene, type SceneRef } from '../../../assets/scene-registry'
   import Button from '../../actions/button/button.vue'
   import Illustration from '../../content/illustration/illustration.vue'
   import FrameBox from '../../layout/frame-box/frame-box.vue'
@@ -33,24 +34,29 @@
     title: string
     /** One sentence explaining the feature. */
     description: string
-    /** Registry name of the illustration pinned for this step and shown as the tile's media. */
-    illustration: string
+    /** Live scene pinned for this step and shown still as the tile's media, `{ component, props? }` naming a webkit scene asset; wins over the illustration. */
+    scene?: SceneRef
+    /** Registry name of the illustration pinned for this step and shown as the tile's media when no scene is set. */
+    illustration?: string
     /** Small secondary button under the step; `{ label, href, trailing? }`. Omitted when absent. */
     action?: FeatureScrollAction
   }
 
   interface Props {
+    /** In-page id set on the band so a `#hash` link can scroll to it. */
+    anchor?: string
     /** Overline above the section title. */
     eyebrow?: string
     /** Headline of the band, rendered by the large section title as its `h2`; the band renders no header when empty. */
     title?: string
     /** Supporting sentence under the headline. */
     description?: string
-    /** The features, in order; each is `{ title, description, illustration, action? }` where `illustration` is a registry name and `action` is `{ label, href, trailing? }` rendered as a small secondary button under the step. */
+    /** The features, in order; each is `{ title, description, scene?, illustration?, action? }` where `scene` is `{ component, props? }` naming a webkit scene asset (drawn live in the stack, still in the grid), `illustration` is a registry name drawn when no scene is set, and `action` is `{ label, href, trailing? }` rendered as a small secondary button under the step. */
     items?: FeatureScrollItem[]
   }
 
   const props = withDefaults(defineProps<Props>(), {
+    anchor: '',
     eyebrow: '',
     title: '',
     description: '',
@@ -66,13 +72,19 @@
   const hasItems = computed(() => props.items.length > 0)
 
   const hasHeader = computed(() => props.title.length > 0)
+
+  const scenes = computed<(Component | null)[]>(() =>
+    props.items.map((item) => (item.scene ? resolveScene(item.scene.component) : null))
+  )
 </script>
 
 <template>
   <section
     v-bind="$attrs"
+    :id="anchor || undefined"
     :data-testid="testId"
     :aria-label="title || undefined"
+    class="scroll-mt-(--spacing-xxl)"
   >
     <SectionModule
       v-if="hasItems"
@@ -103,7 +115,7 @@
           :columns="3"
         >
           <CardGridCell
-            v-for="item in items"
+            v-for="(item, index) in items"
             :key="item.title"
             kind="canvas"
             :padded="false"
@@ -114,7 +126,19 @@
               :description="item.description"
             >
               <template #media>
-                <Illustration :name="item.illustration" />
+                <div
+                  v-if="scenes[index]"
+                  class="h-80 w-full min-w-0"
+                >
+                  <component
+                    :is="scenes[index]"
+                    v-bind="{ ...item.scene?.props, active: false }"
+                  />
+                </div>
+                <Illustration
+                  v-else-if="item.illustration"
+                  :name="item.illustration"
+                />
               </template>
             </MediaTile>
           </CardGridCell>
@@ -128,7 +152,7 @@
         class="hidden lg:block [--sticky-stack-top:3.5rem] [--sticky-stack-height:min(40rem,calc(100dvh-3.5rem))] [--sticky-stack-align:stretch] [--sticky-stack-frame-border:1px]"
       >
         <StickyStack :items="items">
-          <template #media="{ index }">
+          <template #media="{ index, active }">
             <div class="contents">
               <div
                 class="relative h-[30rem] w-full min-w-0 overflow-hidden rounded-(--shape-card) bg-(--bg-surface) lg:absolute lg:inset-0 lg:h-auto lg:rounded-none lg:border-0 [background-clip:var(--illustration-rim-boxes)] [background-image:linear-gradient(var(--bg-surface),var(--bg-surface)),var(--illustration-rim),linear-gradient(var(--bg-surface),var(--bg-surface))] [background-origin:var(--illustration-rim-boxes)] [border:var(--illustration-rim-width-hairline)_solid_transparent]"
@@ -141,7 +165,19 @@
                 <div
                   class="relative z-10 flex h-full w-full items-center justify-center p-(--spacing-md) lg:p-(--spacing-xl)"
                 >
-                  <div class="w-full min-w-0">
+                  <div
+                    v-if="scenes[index]"
+                    class="h-[30rem] max-h-full w-full min-w-0"
+                  >
+                    <component
+                      :is="scenes[index]"
+                      v-bind="{ ...items[index].scene?.props, active }"
+                    />
+                  </div>
+                  <div
+                    v-else-if="items[index].illustration"
+                    class="w-full min-w-0"
+                  >
                     <Illustration :name="items[index].illustration" />
                   </div>
                 </div>

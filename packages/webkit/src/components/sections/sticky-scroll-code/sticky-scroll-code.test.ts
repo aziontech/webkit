@@ -106,6 +106,34 @@ describe('StickyScrollCode', () => {
       })
   })
 
+  it('draws an item action secondary unless it sets its kind, and carries its target', () => {
+    const { getByRole } = band({
+      items: [
+        items[0],
+        {
+          ...items[1],
+          action: {
+            label: 'Terraform registry',
+            href: 'https://registry.terraform.io/',
+            kind: 'outlined',
+            target: '_blank'
+          }
+        }
+      ]
+    })
+
+    expect(getByRole('link', { name: 'Deploy docs' })).toHaveAttribute('data-kind', 'secondary')
+    const external = getByRole('link', { name: 'Terraform registry' })
+    expect(external).toHaveAttribute('data-kind', 'outlined')
+    expect(external).toHaveAttribute('target', '_blank')
+  })
+
+  it('sets the anchor as the band id', () => {
+    const { getByTestId } = band({ anchor: 'anatomy' })
+
+    expect(getByTestId(TESTID)).toHaveAttribute('id', 'anatomy')
+  })
+
   it('renders no link for an item without an action', () => {
     const { queryByRole } = band({ items: [items[2]] })
 

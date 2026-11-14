@@ -133,6 +133,51 @@ describe('FeatureScroll', () => {
     expect(queryAllByRole('heading')).toHaveLength(0)
   })
 
+  it('sets the anchor as the band id', () => {
+    const { getByTestId } = band({ anchor: 'features' })
+
+    expect(getByTestId(TESTID)).toHaveAttribute('id', 'features')
+  })
+
+  it('sets no id when no anchor is given', () => {
+    const { getByTestId } = band()
+
+    expect(getByTestId(TESTID).hasAttribute('id')).toBe(false)
+  })
+
+  it('draws an item scene in place of its illustration, in the grid and in the stack', async () => {
+    const sceneItems = [
+      {
+        title: 'Keys at the edge',
+        description: 'Read and write keys from a function.',
+        scene: { component: 'ProductWidget', props: { name: 'kv-store-key' } },
+        illustration: 'global-network'
+      },
+      items[1]
+    ]
+    const { findAllByTestId, getByTestId } = render(FeatureScroll, {
+      props: { title: TITLE, items: sceneItems }
+    })
+
+    const widgets = await findAllByTestId('content-product-widget')
+    expect(widgets.length).toBeGreaterThanOrEqual(2)
+    widgets.forEach((widget) => expect(widget).toHaveAttribute('data-name', 'kv-store-key'))
+    expect(getByTestId(TESTID).querySelectorAll('[data-name="kv-store-key"]').length).toBe(
+      widgets.length
+    )
+  })
+
+  it('draws nothing for a scene name that is not registered', () => {
+    const { queryByTestId } = render(FeatureScroll, {
+      props: {
+        title: TITLE,
+        items: [{ title: 'Unknown', description: 'No scene.', scene: { component: 'Nope' } }]
+      }
+    })
+
+    expect(queryByTestId('content-product-widget')).toBeNull()
+  })
+
   it('has no a11y violations with a full band', async () => {
     const { container } = band()
 

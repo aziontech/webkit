@@ -158,6 +158,83 @@ describe('FeatureWidgets', () => {
     expect(writeText).toHaveBeenCalledWith(copy.text)
   })
 
+  it('reads Copied for two seconds after a copy, then its label again', async () => {
+    stubClipboard()
+    vi.useFakeTimers()
+    try {
+      const { findByRole, getByRole } = band()
+
+      await fireEvent.click(getByRole('button', { name: copy.label }))
+      expect(await findByRole('button', { name: 'Copied' })).toBeInTheDocument()
+
+      await vi.advanceTimersByTimeAsync(2000)
+      expect(getByRole('button', { name: copy.label })).toBeInTheDocument()
+    } finally {
+      vi.useRealTimers()
+    }
+  })
+
+  it('reads the copiedLabel after a copy when one is set', async () => {
+    stubClipboard()
+    const { findByRole, getByRole } = band({ copiedLabel: 'Prompt copied' })
+
+    await fireEvent.click(getByRole('button', { name: copy.label }))
+
+    expect(await findByRole('button', { name: 'Prompt copied' })).toBeInTheDocument()
+  })
+
+  it('keeps the copy label when the clipboard write fails', async () => {
+    Object.defineProperty(navigator, 'clipboard', {
+      value: { writeText: vi.fn(() => Promise.reject(new Error('denied'))) },
+      configurable: true
+    })
+    const { getByRole, queryByRole } = band()
+
+    await fireEvent.click(getByRole('button', { name: copy.label }))
+    await Promise.resolve()
+
+    expect(queryByRole('button', { name: 'Copied' })).toBeNull()
+  })
+
+  it('renders the link and the copy button together when an item carries both', () => {
+    const { getByRole } = band({
+      items: [{ ...items[0], action: { label: 'Agent docs', href: '/site/docs/agents' } }]
+    })
+
+    expect(getByRole('link', { name: 'Agent docs' })).toHaveAttribute('href', '/site/docs/agents')
+    expect(getByRole('button', { name: copy.label })).toBeInTheDocument()
+  })
+
+  it('lays the grid in two columns and centres the title by default', () => {
+    const { getByTestId } = band()
+
+    expect(getByTestId('marketing-bento-grid')).toHaveAttribute('data-columns', '2')
+    expect(getByTestId('marketing-section-title')).toHaveAttribute('data-kind', 'centered')
+  })
+
+  it('passes columns and titleKind through', () => {
+    const { getByTestId } = band({ columns: 3, titleKind: 'left' })
+
+    expect(getByTestId('marketing-bento-grid')).toHaveAttribute('data-columns', '3')
+    expect(getByTestId('marketing-section-title')).toHaveAttribute('data-kind', 'left')
+  })
+
+  it('draws an item scene in place of its illustration', async () => {
+    const { findByTestId } = band({
+      items: [
+        {
+          ...consoleItem,
+          scene: { component: 'ProductWidget', props: { name: 'kv-store-key' } }
+        }
+      ]
+    })
+
+    expect(await findByTestId('content-product-widget')).toHaveAttribute(
+      'data-name',
+      'kv-store-key'
+    )
+  })
+
   it('renders a link for an item with an action', () => {
     const { getByRole } = band()
 
