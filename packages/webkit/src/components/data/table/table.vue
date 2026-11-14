@@ -337,6 +337,28 @@
   const appliedFilters = computed<AppliedFilter[]>(() => props.filters ?? internalFilters.value)
   const filterFields = computed<FilterField[]>(() => props.filterFields)
 
+  const timeOf = (raw: unknown): number | null => {
+    if (raw instanceof Date) return raw.getTime()
+    if (typeof raw === 'number') return raw
+    if (typeof raw !== 'string' || raw === '') return null
+    const time = Date.parse(raw)
+    return Number.isNaN(time) ? null : time
+  }
+  const PERIOD_MS: Record<string, number> = {
+    '24h': 86_400_000,
+    '7d': 604_800_000,
+    '30d': 2_592_000_000
+  }
+  const periodStart = (period: string): number | null => {
+    if (period === '3m') {
+      const date = new Date()
+      date.setMonth(date.getMonth() - 3)
+      return date.getTime()
+    }
+    const span = PERIOD_MS[period]
+    return span === undefined ? null : Date.now() - span
+  }
+
   const matchesApplied = (raw: unknown, operator: FilterOperator, value: FilterValue): boolean => {
     const text = (input: unknown): string => String(input ?? '').toLowerCase()
     const list = Array.isArray(value) ? value.map(String) : []
@@ -369,6 +391,20 @@
         return raw === null || raw === undefined || raw === ''
       case 'is-not-empty':
         return !(raw === null || raw === undefined || raw === '')
+      case 'within': {
+        const start = periodStart(String(value))
+        const time = timeOf(raw)
+        return start === null || (time !== null && time >= start)
+      }
+      case 'between': {
+        const [from, to] = Array.isArray(value) ? value : []
+        const time = timeOf(raw)
+        if (time === null) return false
+        return (
+          (from === undefined || from === '' || time >= Number(from)) &&
+          (to === undefined || to === '' || time <= Number(to))
+        )
+      }
       default:
         return true
     }

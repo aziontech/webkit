@@ -10,7 +10,7 @@ import type { ComputedRef, InjectionKey, Ref } from 'vue'
 
 export type TableRowRecord = Record<string, unknown>
 
-/** Comparison operators offered by the built-in filter builder. */
+/** Comparison operators; `within` (a period id such as `7d`) and `between` (epoch-millisecond bounds) back the filter menu's date fields. */
 export type FilterOperator =
   | 'eq'
   | 'neq'
@@ -26,6 +26,8 @@ export type FilterOperator =
   | 'not-in'
   | 'is-empty'
   | 'is-not-empty'
+  | 'within'
+  | 'between'
 
 /** A filterable value; arrays back the `in` / `not-in` (multi-select) operators. */
 export type FilterValue = string | number | boolean | Array<string | number>
@@ -41,6 +43,9 @@ export interface FilterField {
   /** Options for `select` / `multi-select` fields. */
   options?: { label: string; value: string | number | boolean }[]
 }
+
+/** How Table.Filter and Table.AppliedFilters render: the field/operator/value builder, or the drill-in filter menu. */
+export type TableFilterKind = 'builder' | 'menu'
 
 /** One committed filter condition (a chip). */
 export interface AppliedFilter {
