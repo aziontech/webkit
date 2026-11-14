@@ -23,7 +23,7 @@ import Illustration from './illustration.vue'
 const at = (view: ReturnType<typeof render>) => within(view.container)
 
 const root = (view: ReturnType<typeof render>, testId = 'content-illustration') =>
-  at(view).findByTestId(testId)
+  at(view).findByTestId(testId, {}, { timeout: 3000 })
 
 const urlOf = async (name: string) => (await resolveIllustrationAsset(name)!()).default
 

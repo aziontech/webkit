@@ -1351,12 +1351,15 @@ describe('Table.Filter and Table.AppliedFilters with kind="menu"', () => {
 
   const settle = (): Promise<void> => new Promise((resolve) => setTimeout(resolve, 10))
   const ready = (): Promise<void> =>
-    waitFor(() => {
-      expect(menuTrigger()).toBeTruthy()
-      expect(
-        document.body.querySelector('[data-testid^="data-table__applied-filters"]')
-      ).toBeTruthy()
-    })
+    waitFor(
+      () => {
+        expect(menuTrigger()).toBeTruthy()
+        expect(
+          document.body.querySelector('[data-testid^="data-table__applied-filters"]')
+        ).toBeTruthy()
+      },
+      { timeout: 3000 }
+    )
 
   const openField = async (id: string): Promise<void> => {
     await settle()

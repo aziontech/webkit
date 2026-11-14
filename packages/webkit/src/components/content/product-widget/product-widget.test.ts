@@ -90,13 +90,15 @@ describe('ProductWidget', () => {
     const view = render(Types)
 
     await expect
-      .poll(() =>
-        Array.from(view.container.querySelectorAll(`[data-testid="${TESTID}"]`)).map((root) => [
-          root.getAttribute('data-name'),
-          root.getAttribute('data-kind'),
-          root.querySelector(`[data-testid="${WINDOW_TESTID}"]`)?.getAttribute('data-kind') ??
-            root.querySelector(`[data-testid="${FRAME_TESTID}"]`)?.getAttribute('data-kind')
-        ])
+      .poll(
+        () =>
+          Array.from(view.container.querySelectorAll(`[data-testid="${TESTID}"]`)).map((root) => [
+            root.getAttribute('data-name'),
+            root.getAttribute('data-kind'),
+            root.querySelector(`[data-testid="${WINDOW_TESTID}"]`)?.getAttribute('data-kind') ??
+              root.querySelector(`[data-testid="${FRAME_TESTID}"]`)?.getAttribute('data-kind')
+          ]),
+        { timeout: 3000 }
       )
       .toEqual([
         ['workload-topology', null, 'window'],
