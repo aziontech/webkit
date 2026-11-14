@@ -211,7 +211,7 @@
             id="data-stream-api-key"
             model-value=""
             :placeholder="fields.key"
-            resizable="none"
+            resize="none"
             rows="2"
             aria-label="API Key"
           />

@@ -736,7 +736,7 @@
 <template>
   <div class="flex h-dvh flex-col bg-(--bg-canvas)">
     <GlobalHeader aria-label="Console">
-      <GlobalHeader.Left>
+      <GlobalHeader.Start>
         <IconButton
           icon="pi pi-chevron-left"
           aria-label="Back to Services"
@@ -756,9 +756,9 @@
           </a>
         </GlobalHeader.Brand>
         <Breadcrumb :items="breadcrumb" />
-      </GlobalHeader.Left>
-      <GlobalHeader.Middle />
-      <GlobalHeader.Right>
+      </GlobalHeader.Start>
+      <GlobalHeader.Center />
+      <GlobalHeader.End>
         <button
           type="button"
           aria-label="Account settings"
@@ -770,7 +770,7 @@
             kind="square"
           />
         </button>
-      </GlobalHeader.Right>
+      </GlobalHeader.End>
     </GlobalHeader>
 
     <div class="flex min-h-0 flex-1">
@@ -900,7 +900,7 @@
                                 placeholder="Search projects"
                                 aria-label="Search projects"
                               >
-                                <template #iconLeft>
+                                <template #prefix>
                                   <i
                                     class="pi pi-search"
                                     aria-hidden="true"
@@ -957,7 +957,7 @@
                                   >
                                     <Item.Media>
                                       <Skeleton
-                                        kind="shape"
+                                        kind="rectangle"
                                         width="2rem"
                                         height="2rem"
                                       />
@@ -1274,7 +1274,7 @@
                                   size="large"
                                   placeholder="my-first-app"
                                 >
-                                  <template #iconRight>
+                                  <template #suffix>
                                     <span
                                       class="whitespace-nowrap text-label-sm text-(--text-muted)"
                                       aria-hidden="true"
@@ -1493,7 +1493,7 @@
                                     placeholder="Search deployments"
                                     aria-label="Search deployments"
                                   >
-                                    <template #iconLeft>
+                                    <template #prefix>
                                       <i
                                         class="pi pi-search"
                                         aria-hidden="true"
@@ -1552,7 +1552,7 @@
                                       >
                                         <Item.Media>
                                           <Skeleton
-                                            kind="shape"
+                                            kind="rectangle"
                                             width="2rem"
                                             height="2rem"
                                           />

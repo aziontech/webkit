@@ -329,7 +329,7 @@
     toast.info('Upload Files', {
       description: `Files you upload land in ${bucket} and ship with the next build of this version.`
     })
-  const historyCollapsed = ref(true)
+  const historyExpanded = ref(false)
   const historyBasis = ref(348)
   const description = ref('Cache static assets for 30 days')
   const draftText = ref('')
@@ -341,13 +341,13 @@
   )
 
   const openHistory = (_event: MouseEvent | KeyboardEvent, value: DropdownMenuOptionValue) => {
-    if (value === 'history' && !historyCollapsed.value) {
-      historyCollapsed.value = true
+    if (value === 'history' && historyExpanded.value) {
+      historyExpanded.value = false
       return
     }
     editing.value = value === 'edit'
     if (editing.value) draftText.value = description.value
-    historyCollapsed.value = false
+    historyExpanded.value = true
   }
 </script>
 
@@ -383,7 +383,7 @@
               aria-label="Search versions"
               @keydown.stop
             >
-              <template #iconLeft>
+              <template #prefix>
                 <i
                   class="pi pi-search"
                   aria-hidden="true"
@@ -467,7 +467,7 @@
                 aria-label="Search versions"
                 @keydown.stop
               >
-                <template #iconLeft>
+                <template #prefix>
                   <i
                     class="pi pi-search"
                     aria-hidden="true"
@@ -550,28 +550,28 @@
                     />
                   </DropdownMenu.Trigger>
                   <DropdownMenu.Group>
-                    <DropdownMenu.Option
+                    <DropdownMenu.Item
                       value="edit"
                       label="Edit version info"
                     >
-                      <template #left>
+                      <template #leading>
                         <i
                           class="pi pi-pencil"
                           aria-hidden="true"
                         />
                       </template>
-                    </DropdownMenu.Option>
-                    <DropdownMenu.Option
+                    </DropdownMenu.Item>
+                    <DropdownMenu.Item
                       value="history"
-                      :label="historyCollapsed ? 'Show version history' : 'Hide version history'"
+                      :label="historyExpanded ? 'Hide version history' : 'Show version history'"
                     >
-                      <template #left>
+                      <template #leading>
                         <i
                           class="pi pi-history"
                           aria-hidden="true"
                         />
                       </template>
-                    </DropdownMenu.Option>
+                    </DropdownMenu.Item>
                   </DropdownMenu.Group>
                 </DropdownMenu>
               </template>
@@ -617,7 +617,7 @@
                             aria-label="Search in folder"
                             class="w-full"
                           >
-                            <template #iconLeft>
+                            <template #prefix>
                               <i
                                 class="pi pi-search"
                                 aria-hidden="true"
@@ -853,7 +853,7 @@
                       :icon="saveAction === 'deploy' ? 'pi pi-cloud-upload' : ''"
                       kind="primary"
                       size="medium"
-                      :model="saveOptions"
+                      :items="saveOptions"
                       @item-click="(_event, item) => (saveAction = item.value)"
                     />
                   </div>
@@ -863,23 +863,23 @@
           </div>
         </Resizable.Pane>
         <Resizable.Handle
-          v-if="!historyCollapsed"
+          v-if="historyExpanded"
           aria-label="Resize the version history"
         />
         <Resizable.Pane
           v-model:basis="historyBasis"
-          v-model:collapsed="historyCollapsed"
+          v-model:expanded="historyExpanded"
           collapsible
           :min="280"
           :max="560"
           aria-label="Version history"
         >
           <aside
-            :inert="historyCollapsed"
+            :inert="!historyExpanded"
             aria-labelledby="version-history-title"
             class="flex min-h-0 min-w-0 flex-1 flex-col bg-(--bg-surface)"
             data-testid="version-detail-history"
-            @keydown.esc="historyCollapsed = true"
+            @keydown.esc="historyExpanded = false"
           >
             <header
               class="flex min-h-14 shrink-0 items-center justify-between gap-(--spacing-xs) border-b border-(--border-default) py-(--spacing-xs) ps-(--spacing-lg) pe-(--spacing-sm)"
@@ -895,7 +895,7 @@
                 kind="transparent"
                 size="small"
                 aria-label="Close version history"
-                @click="historyCollapsed = true"
+                @click="historyExpanded = false"
               />
             </header>
             <div class="min-h-0 flex-1 overflow-y-auto overscroll-contain p-(--spacing-lg)">

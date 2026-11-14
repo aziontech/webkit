@@ -13,7 +13,6 @@
     <Field orientation="horizontal">
       <Checkbox
         v-model="terms"
-        binary
         name="terms"
       />
       <Field.Content>

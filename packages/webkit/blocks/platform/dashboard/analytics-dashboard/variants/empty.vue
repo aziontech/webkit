@@ -415,7 +415,7 @@
               <ChartCard.Title>Requests over time</ChartCard.Title>
               <Hint text="Sum of requests served by every service, per interval." />
             </span>
-            <ChartCard.Controls>
+            <ChartCard.Action>
               <span
                 data-wide
                 class="hidden items-center gap-(--spacing-xs) sm:flex lg:hidden xl:flex data-wide:lg:flex"
@@ -462,18 +462,18 @@
                   />
                 </DropdownMenu.Trigger>
                 <DropdownMenu.Group>
-                  <DropdownMenu.Option
+                  <DropdownMenu.Item
                     value="query"
                     label="Copy query"
                   />
-                  <DropdownMenu.Option
+                  <DropdownMenu.Item
                     value="export"
                     label="Export CSV"
                     disabled
                   />
                 </DropdownMenu.Group>
               </DropdownMenu>
-            </ChartCard.Controls>
+            </ChartCard.Action>
           </ChartCard.Header>
           <ChartCard.Content>
             <Chart
@@ -492,7 +492,7 @@
               <Chart.Area v-else />
               <Chart.Crosshair />
               <Chart.Tooltip />
-              <Chart.Legend totals />
+              <Chart.Legend total />
             </Chart>
           </ChartCard.Content>
         </ChartCard>
@@ -503,7 +503,7 @@
               <ChartCard.Title>Status codes</ChartCard.Title>
               <Hint text="Sum of requests per status class. Switch to Bar to stack the classes." />
             </span>
-            <ChartCard.Controls>
+            <ChartCard.Action>
               <span
                 class="hidden items-center gap-(--spacing-xs) sm:flex lg:hidden xl:flex data-wide:lg:flex"
               >
@@ -549,18 +549,18 @@
                   />
                 </DropdownMenu.Trigger>
                 <DropdownMenu.Group>
-                  <DropdownMenu.Option
+                  <DropdownMenu.Item
                     value="query"
                     label="Copy query"
                   />
-                  <DropdownMenu.Option
+                  <DropdownMenu.Item
                     value="export"
                     label="Export CSV"
                     disabled
                   />
                 </DropdownMenu.Group>
               </DropdownMenu>
-            </ChartCard.Controls>
+            </ChartCard.Action>
           </ChartCard.Header>
           <ChartCard.Content>
             <Chart
@@ -582,7 +582,7 @@
               <Chart.Line v-else />
               <Chart.Crosshair />
               <Chart.Tooltip />
-              <Chart.Legend totals />
+              <Chart.Legend total />
             </Chart>
           </ChartCard.Content>
         </ChartCard>
@@ -593,7 +593,7 @@
               <ChartCard.Title>Requests by country</ChartCard.Title>
               <Hint text="Sum of requests per country of origin, top countries first." />
             </span>
-            <ChartCard.Controls>
+            <ChartCard.Action>
               <span
                 class="hidden items-center gap-(--spacing-xs) sm:flex lg:hidden xl:flex data-wide:lg:flex"
               >
@@ -626,18 +626,18 @@
                   />
                 </DropdownMenu.Trigger>
                 <DropdownMenu.Group>
-                  <DropdownMenu.Option
+                  <DropdownMenu.Item
                     value="query"
                     label="Copy query"
                   />
-                  <DropdownMenu.Option
+                  <DropdownMenu.Item
                     value="export"
                     label="Export CSV"
                     disabled
                   />
                 </DropdownMenu.Group>
               </DropdownMenu>
-            </ChartCard.Controls>
+            </ChartCard.Action>
           </ChartCard.Header>
           <ChartCard.Content>
             <Chart
@@ -665,7 +665,7 @@
               <ChartCard.Title>Top hosts</ChartCard.Title>
               <Hint text="Hosts that served the most requests in the period, with their service." />
             </span>
-            <ChartCard.Controls>
+            <ChartCard.Action>
               <span
                 data-wide
                 class="hidden items-center gap-(--spacing-xs) sm:flex lg:hidden xl:flex data-wide:lg:flex"
@@ -699,18 +699,18 @@
                   />
                 </DropdownMenu.Trigger>
                 <DropdownMenu.Group>
-                  <DropdownMenu.Option
+                  <DropdownMenu.Item
                     value="query"
                     label="Copy query"
                   />
-                  <DropdownMenu.Option
+                  <DropdownMenu.Item
                     value="export"
                     label="Export CSV"
                     disabled
                   />
                 </DropdownMenu.Group>
               </DropdownMenu>
-            </ChartCard.Controls>
+            </ChartCard.Action>
           </ChartCard.Header>
           <ChartCard.Content>
             <div class="flex min-w-0 flex-col gap-(--spacing-sm)">
@@ -722,7 +722,7 @@
                     placeholder="Search hosts or services"
                     aria-label="Search hosts or services"
                   >
-                    <template #iconLeft>
+                    <template #prefix>
                       <i
                         class="pi pi-search"
                         aria-hidden="true"
@@ -740,8 +740,8 @@
                 enable-sorting
                 paginated
                 :page-size="5"
-                :rows-per-page-options="[5, 10, 25]"
-                header-kind="compact"
+                :page-size-options="[5, 10, 25]"
+                density="compact"
                 bordered
                 :loading="loading"
               >
@@ -815,7 +815,7 @@
                 <Chart.Area v-else />
                 <Chart.Crosshair />
                 <Chart.Tooltip />
-                <Chart.Legend totals />
+                <Chart.Legend total />
               </Chart>
               <Chart
                 key="chart-2"
@@ -838,7 +838,7 @@
                 <Chart.Line v-else />
                 <Chart.Crosshair />
                 <Chart.Tooltip />
-                <Chart.Legend totals />
+                <Chart.Legend total />
               </Chart>
               <Chart
                 key="chart-3"
@@ -866,7 +866,7 @@
                 enable-sorting
                 paginated
                 :page-size="10"
-                header-kind="compact"
+                density="compact"
                 bordered
               >
                 <template #empty>

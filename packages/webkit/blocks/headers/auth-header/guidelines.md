@@ -16,7 +16,7 @@ The top bar of every signed-out and first-run screen: sign in, sign up, password
 
 ### A. Bar — `GlobalHeader` (required)
 
-The bar in its default `content` placement, labelled `aria-label="Console"`. Fill `GlobalHeader.Brand` and `GlobalHeader.Right`; keep `GlobalHeader.Middle` empty. Never a bare `<header>`.
+The bar in its default `content` placement, labelled `aria-label="Console"`. Fill `GlobalHeader.Brand` and `GlobalHeader.End`; keep `GlobalHeader.Center` empty. Never a bare `<header>`.
 
 ### B. Brand — `Brand` (required)
 

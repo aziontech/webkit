@@ -169,7 +169,7 @@
               :display-value="scopeLabel"
             >
               <Select.Trigger id="tpl-scope">
-                <template #iconLeft>
+                <template #prefix>
                   <i
                     class="ai ai-github"
                     aria-hidden="true"
@@ -226,7 +226,7 @@
               placeholder="Access token"
               size="large"
             >
-              <template #iconRight>
+              <template #suffix>
                 <i
                   class="pi pi-lock"
                   aria-hidden="true"
@@ -251,7 +251,7 @@
               placeholder="Revalidation secret"
               size="large"
             >
-              <template #iconRight>
+              <template #suffix>
                 <i
                   class="pi pi-lock"
                   aria-hidden="true"
@@ -275,13 +275,13 @@
               placeholder="https://store.example.com"
               size="large"
             >
-              <template #iconLeft>
+              <template #prefix>
                 <i
                   class="pi pi-globe"
                   aria-hidden="true"
                 />
               </template>
-              <template #iconRight>
+              <template #suffix>
                 <i
                   class="pi pi-lock"
                   aria-hidden="true"
@@ -523,10 +523,7 @@
                 orientation="horizontal"
                 :disabled="submitting"
               >
-                <Checkbox
-                  v-model="form.caching"
-                  binary
-                />
+                <Checkbox v-model="form.caching" />
                 <Field.Content>
                   <Field.Title>Caching</Field.Title>
                   <Field.Description>
@@ -540,10 +537,7 @@
                 orientation="horizontal"
                 :disabled="submitting"
               >
-                <Checkbox
-                  v-model="form.http3"
-                  binary
-                />
+                <Checkbox v-model="form.http3" />
                 <Field.Content>
                   <Field.Title>HTTP/3</Field.Title>
                   <Field.Description>
@@ -557,10 +551,7 @@
                 orientation="horizontal"
                 :disabled="submitting"
               >
-                <Checkbox
-                  v-model="form.requestFiltering"
-                  binary
-                />
+                <Checkbox v-model="form.requestFiltering" />
                 <Field.Content>
                   <Field.Title>Request filtering</Field.Title>
                   <Field.Description>
@@ -580,8 +571,7 @@
           >
             <Checkbox
               v-model="form.acceptDeploy"
-              binary
-              input-id="tpl-accept-deploy"
+              id="tpl-accept-deploy"
               name="acceptDeploy"
             />
             <Field.Content>

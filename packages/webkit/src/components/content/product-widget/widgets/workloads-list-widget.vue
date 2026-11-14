@@ -143,7 +143,7 @@
             aria-label="Search workloads"
             class="w-60 max-md:flex-1"
           >
-            <template #iconLeft>
+            <template #prefix>
               <i
                 class="pi pi-search"
                 aria-hidden="true"

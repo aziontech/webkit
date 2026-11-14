@@ -101,7 +101,7 @@
           :label="row.domains[0]"
           :href="`https://${row.domains[0]}`"
           :more="row.domains.slice(1).map((label) => ({ label, href: `https://${label}` }))"
-          :more-noun="{ one: 'domain', other: 'domains' }"
+          :noun="{ one: 'domain', other: 'domains' }"
           copyable
         />
       </template>
@@ -123,17 +123,17 @@
           @select="(event, value) => onAction(event, value, row)"
         >
           <DropdownMenu.Group>
-            <DropdownMenu.Option
+            <DropdownMenu.Item
               value="edit"
               label="Edit"
             />
-            <DropdownMenu.Option
+            <DropdownMenu.Item
               value="clone"
               label="Clone"
             />
           </DropdownMenu.Group>
           <DropdownMenu.Group>
-            <DropdownMenu.Option
+            <DropdownMenu.Item
               value="delete"
               label="Delete"
             />

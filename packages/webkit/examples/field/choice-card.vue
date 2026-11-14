@@ -12,10 +12,7 @@
   <Field.Group class="max-w-(--container-xs)">
     <Field.Label>
       <Field orientation="horizontal">
-        <Checkbox
-          v-model="backups"
-          binary
-        />
+        <Checkbox v-model="backups" />
         <Field.Content>
           <Field.Title>Daily backups</Field.Title>
           <Field.Description>Keep seven days of snapshots.</Field.Description>
@@ -36,7 +33,7 @@
         orientation="horizontal"
         disabled
       >
-        <Checkbox binary />
+        <Checkbox />
         <Field.Content>
           <Field.Title>Dedicated IP</Field.Title>
           <Field.Description>Available on the Enterprise plan.</Field.Description>

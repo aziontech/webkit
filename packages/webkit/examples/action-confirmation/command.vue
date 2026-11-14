@@ -25,7 +25,7 @@
             language: 'bash'
           }
         ]"
-        :show-line-numbers="false"
+        :line-numbers="false"
       />
     </ActionConfirmation>
   </div>

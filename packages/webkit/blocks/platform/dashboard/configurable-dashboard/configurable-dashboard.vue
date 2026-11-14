@@ -295,14 +295,14 @@
                 <ChartCard.Title>{{ cards[card.id].title }}</ChartCard.Title>
                 <Hint :text="cards[card.id].hint" />
               </span>
-              <ChartCard.Controls v-if="editing">
+              <ChartCard.Action v-if="editing">
                 <Tag
                   :label="card.span + '/12'"
                   severity="secondary"
                   size="small"
                   icon="pi pi-arrows-h"
                 />
-              </ChartCard.Controls>
+              </ChartCard.Action>
             </ChartCard.Header>
             <ChartCard.Content>
               <DonutChart
@@ -346,7 +346,7 @@
                 <Chart.Tooltip />
                 <Chart.Legend
                   v-if="cards[card.id].series.length > 1"
-                  totals
+                  total
                 />
               </Chart>
             </ChartCard.Content>

@@ -731,7 +731,7 @@
               <Chart.Bar stacked />
               <Chart.Crosshair />
               <Chart.Tooltip />
-              <Chart.Legend totals />
+              <Chart.Legend total />
             </Chart>
           </ChartCard.Content>
         </ChartCard>
@@ -800,14 +800,14 @@
                 text="The latest requests, newest first, with the rule that decided each one."
               />
             </span>
-            <ChartCard.Controls>
+            <ChartCard.Action>
               <Tag
                 v-if="!loading && filteredRows.length"
                 :label="filteredRows.length + ' requests'"
                 severity="secondary"
                 size="small"
               />
-            </ChartCard.Controls>
+            </ChartCard.Action>
           </ChartCard.Header>
           <ChartCard.Content>
             <TableRoot
@@ -818,8 +818,8 @@
               enable-sorting
               paginated
               :page-size="10"
-              :rows-per-page-options="[10, 25, 50]"
-              header-kind="compact"
+              :page-size-options="[10, 25, 50]"
+              density="compact"
               bordered
               :loading="loading"
             >

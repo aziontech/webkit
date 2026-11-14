@@ -136,7 +136,6 @@
           href="/marketplace"
           label="Back to Marketplace"
           size="medium"
-          :show-icon="false"
         />
       </nav>
       <PageHeader

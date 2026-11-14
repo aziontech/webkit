@@ -66,17 +66,17 @@
               </DropdownMenu.Trigger>
 
               <DropdownMenu.Group>
-                <DropdownMenu.Option
+                <DropdownMenu.Item
                   value="settings"
                   label="Settings"
                 >
-                  <template #left>
+                  <template #leading>
                     <i
                       class="pi pi-cog"
                       aria-hidden="true"
                     />
                   </template>
-                </DropdownMenu.Option>
+                </DropdownMenu.Item>
               </DropdownMenu.Group>
             </DropdownMenu>
           </div>
@@ -233,31 +233,31 @@
               </DropdownMenu.Trigger>
 
               <DropdownMenu.Group>
-                <DropdownMenu.Option
+                <DropdownMenu.Item
                   value="copy-url"
                   label="Copy URL"
                 >
-                  <template #left>
+                  <template #leading>
                     <i
                       class="pi pi-copy"
                       aria-hidden="true"
                     />
                   </template>
-                </DropdownMenu.Option>
+                </DropdownMenu.Item>
               </DropdownMenu.Group>
 
               <DropdownMenu.Group>
-                <DropdownMenu.Option
+                <DropdownMenu.Item
                   value="settings"
                   label="Settings"
                 >
-                  <template #left>
+                  <template #leading>
                     <i
                       class="pi pi-cog"
                       aria-hidden="true"
                     />
                   </template>
-                </DropdownMenu.Option>
+                </DropdownMenu.Item>
               </DropdownMenu.Group>
             </DropdownMenu>
           </div>

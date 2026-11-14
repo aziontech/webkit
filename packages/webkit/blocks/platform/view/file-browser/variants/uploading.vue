@@ -331,7 +331,7 @@
     { id: 'u-4', name: 'intro.mp4', size: 96_400_000, status: 'queued', target: '' },
     { id: 'u-5', name: 'hero.webp', size: 1_482_000, status: 'queued', target: '' }
   ])
-  const transferCollapsed = ref(false)
+  const transferExpanded = ref(true)
   const retried = new Set<string>()
   let seq = 5
   let timer = 0
@@ -424,7 +424,7 @@
     }))
     const kept = transfer.value.some(isActive) ? transfer.value : []
     transfer.value = [...kept, ...next]
-    transferCollapsed.value = false
+    transferExpanded.value = true
     run()
   }
 
@@ -503,7 +503,7 @@
               manual-sorting
               paginated
               :page-size="50"
-              :rows-per-page-options="[25, 50, 100]"
+              :page-size-options="[25, 50, 100]"
               :bordered="false"
               :loading="loading"
               export-filename="files.csv"
@@ -575,7 +575,7 @@
                         icon="pi pi-plus"
                         kind="primary"
                         size="medium"
-                        :model="addToFilesActions"
+                        :items="addToFilesActions"
                         @click="onAddClick"
                         @item-click="onAddItem"
                       />
@@ -651,7 +651,7 @@
                       value="open"
                       label="Open"
                     >
-                      <template #left
+                      <template #leading
                         ><i
                           class="pi pi-folder-open"
                           aria-hidden="true"
@@ -663,7 +663,7 @@
                       value="download"
                       label="Download"
                     >
-                      <template #left
+                      <template #leading
                         ><i
                           class="pi pi-download"
                           aria-hidden="true"
@@ -675,7 +675,7 @@
                       value="delete"
                       label="Delete"
                     >
-                      <template #left
+                      <template #leading
                         ><i
                           class="pi pi-trash"
                           aria-hidden="true"
@@ -716,7 +716,7 @@
                       icon="pi pi-plus"
                       kind="secondary"
                       size="medium"
-                      :model="addToFilesActions"
+                      :items="addToFilesActions"
                       @click="onAddClick"
                       @item-click="onAddItem"
                     />
@@ -843,7 +843,7 @@
                 :items="picked"
                 :limit="5"
                 aria-label="Files to upload"
-                @dismiss="(_event, { index }) => removePicked(index)"
+                @remove="(_event, { index }) => removePicked(index)"
               />
             </div>
           </PanelContent>
@@ -870,7 +870,7 @@
     </Dialog>
     <UploadProgress
       v-if="transfer.length"
-      v-model:collapsed="transferCollapsed"
+      v-model:expanded="transferExpanded"
       :items="transfer"
       @cancel="(_event, id) => cancel(id)"
       @retry="(_event, id) => retry(id)"

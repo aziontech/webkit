@@ -19,9 +19,9 @@
   import Brand from '../../content/brand/brand.vue'
   import GlobalHeader from '../../layout/global-header/global-header.vue'
   import GlobalHeaderBrand from '../../layout/global-header/global-header-brand.vue'
-  import GlobalHeaderLeft from '../../layout/global-header/global-header-left.vue'
-  import GlobalHeaderMiddle from '../../layout/global-header/global-header-middle.vue'
-  import GlobalHeaderRight from '../../layout/global-header/global-header-right.vue'
+  import GlobalHeaderCenter from '../../layout/global-header/global-header-center.vue'
+  import GlobalHeaderEnd from '../../layout/global-header/global-header-end.vue'
+  import GlobalHeaderStart from '../../layout/global-header/global-header-start.vue'
   import ScrollArea from '../../layout/scroll-area/scroll-area.vue'
   import type { MenuGroupNode, MenuNode } from '../../navigation/menu/injection-key'
   import Menu from '../../navigation/menu/menu.vue'
@@ -209,7 +209,7 @@
       aria-label="Azion"
       class="sticky top-0 z-40"
     >
-      <GlobalHeaderLeft class="justify-start!">
+      <GlobalHeaderStart class="justify-start!">
         <IconButton
           ref="opener"
           icon="pi pi-bars"
@@ -231,9 +231,9 @@
             />
           </a>
         </GlobalHeaderBrand>
-      </GlobalHeaderLeft>
+      </GlobalHeaderStart>
 
-      <GlobalHeaderMiddle class="justify-start!">
+      <GlobalHeaderCenter class="justify-start!">
         <NavigationMenu
           aria-label="Azion"
           class="min-w-0"
@@ -324,9 +324,9 @@
             </NavigationMenuPositioner>
           </NavigationMenuPortal>
         </NavigationMenu>
-      </GlobalHeaderMiddle>
+      </GlobalHeaderCenter>
 
-      <GlobalHeaderRight>
+      <GlobalHeaderEnd>
         <div
           v-if="contact"
           class="hidden xl:flex"
@@ -366,7 +366,7 @@
           class="shrink-0"
           @open="emit('search', $event)"
         />
-      </GlobalHeaderRight>
+      </GlobalHeaderEnd>
     </GlobalHeader>
 
     <Drawer

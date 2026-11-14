@@ -206,7 +206,7 @@
       <Skeleton
         v-for="width in SKELETON_WIDTHS"
         :key="width"
-        kind="shape"
+        kind="rectangle"
         :width="width"
         height="2rem"
       />

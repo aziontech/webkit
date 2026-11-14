@@ -67,7 +67,7 @@
     >
     <div class="@container sticky top-0 z-40 w-full">
       <GlobalHeader :aria-label="t.navigation">
-        <GlobalHeader.Left>
+        <GlobalHeader.Start>
           <div class="flex min-w-0 items-center gap-(--spacing-xs)">
             <div class="shrink-0 lg:hidden">
               <IconButton
@@ -112,9 +112,9 @@
               >
             </nav>
           </div>
-        </GlobalHeader.Left>
-        <GlobalHeader.Nav />
-        <GlobalHeader.Right>
+        </GlobalHeader.Start>
+        <GlobalHeader.Center />
+        <GlobalHeader.End>
           <SearchTrigger
             collapsible
             :label="t.search"
@@ -127,7 +127,7 @@
               :display-value="localeLabel"
             >
               <Select.Trigger :aria-label="t.language">
-                <template #iconLeft>
+                <template #prefix>
                   <i
                     class="pi pi-globe text-(--text-muted)"
                     aria-hidden="true"
@@ -171,7 +171,7 @@
             target="_blank"
             class="hidden shrink-0 sm:inline-flex"
           />
-        </GlobalHeader.Right>
+        </GlobalHeader.End>
       </GlobalHeader>
     </div>
 

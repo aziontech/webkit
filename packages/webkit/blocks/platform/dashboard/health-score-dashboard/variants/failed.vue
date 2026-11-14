@@ -79,14 +79,14 @@
                 text="Average of every sample in the period, out of 100. Good is 80 or more, fair 50 to 79, poor under 50."
               />
             </span>
-            <ChartCard.Controls>
+            <ChartCard.Action>
               <Tag
                 v-if="overall.band && !loading"
                 :label="overall.band.label"
                 :severity="overall.band.severity"
                 size="small"
               />
-            </ChartCard.Controls>
+            </ChartCard.Action>
           </ChartCard.Header>
           <ChartCard.Content>
             <Alert

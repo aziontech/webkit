@@ -353,7 +353,7 @@
               :aria-label="search.label"
               class="min-w-0 flex-1"
             >
-              <template #iconLeft>
+              <template #prefix>
                 <i class="pi pi-search text-(--text-muted)" />
               </template>
             </Input>
@@ -390,7 +390,7 @@
                     "
                     @update:model-value="setOptionQuery(facet.key, $event)"
                   >
-                    <template #iconLeft>
+                    <template #prefix>
                       <i
                         class="pi pi-search"
                         aria-hidden="true"
@@ -438,7 +438,7 @@
                     "
                     @update:model-value="setOptionQuery(SORT_KEY, $event)"
                   >
-                    <template #iconLeft>
+                    <template #prefix>
                       <i
                         class="pi pi-search"
                         aria-hidden="true"

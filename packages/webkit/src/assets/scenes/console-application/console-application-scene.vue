@@ -214,7 +214,7 @@
               aria-label="Search"
               class="min-w-36 grow basis-(--container-2xs)"
             >
-              <template #iconLeft>
+              <template #prefix>
                 <i
                   class="pi pi-search"
                   aria-hidden="true"
@@ -236,7 +236,7 @@
             :reorderable="Boolean(step.table.reorderable)"
             :data-testid="`${testId}__table`"
             row-key="id"
-            header-kind="compact"
+            density="compact"
             enable-sorting
             :aria-label="step.heading"
           >

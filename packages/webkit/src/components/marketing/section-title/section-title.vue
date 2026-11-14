@@ -92,7 +92,7 @@
         <Overline
           v-if="eyebrow"
           :prefix="EYEBROW_PREFIX"
-          show-cursor
+          cursor
           >{{ eyebrow }}</Overline
         >
         <div class="grid gap-(--spacing-xl) md:grid-cols-3">
@@ -117,7 +117,7 @@
         <Overline
           v-if="eyebrow"
           :prefix="EYEBROW_PREFIX"
-          show-cursor
+          cursor
           >{{ eyebrow }}</Overline
         >
         <h2

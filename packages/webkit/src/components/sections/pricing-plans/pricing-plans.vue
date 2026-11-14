@@ -157,7 +157,7 @@
             kind="transparent"
             :data-highlighted="plan.highlighted || null"
             class="bg-(--bg-canvas) data-[highlighted]:bg-(--bg-surface)"
-            :plan-title="plan.name"
+            :title="plan.name"
             :value="priceOf(plan).value"
             :prefix="priceOf(plan).prefix ?? ''"
             :suffix="priceOf(plan).suffix ?? ''"

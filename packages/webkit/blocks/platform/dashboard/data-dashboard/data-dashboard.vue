@@ -500,7 +500,7 @@
                 text="Data delivered by every project in the selected period, drawn over the same span of the previous period."
               />
             </span>
-            <ChartCard.Controls>
+            <ChartCard.Action>
               <span
                 data-wide
                 class="hidden items-center gap-(--spacing-xs) sm:flex lg:hidden xl:flex data-wide:lg:flex"
@@ -548,18 +548,18 @@
                   />
                 </DropdownMenu.Trigger>
                 <DropdownMenu.Group>
-                  <DropdownMenu.Option
+                  <DropdownMenu.Item
                     value="query"
                     label="Copy query"
                   />
-                  <DropdownMenu.Option
+                  <DropdownMenu.Item
                     value="export"
                     label="Export CSV"
                     :disabled="loading"
                   />
                 </DropdownMenu.Group>
               </DropdownMenu>
-            </ChartCard.Controls>
+            </ChartCard.Action>
           </ChartCard.Header>
           <ChartCard.Content>
             <Chart
@@ -581,7 +581,7 @@
               <Chart.Line v-else />
               <Chart.Crosshair />
               <Chart.Tooltip />
-              <Chart.Legend totals />
+              <Chart.Legend total />
             </Chart>
           </ChartCard.Content>
         </ChartCard>
@@ -592,7 +592,7 @@
               <ChartCard.Title>Data transferred by project</ChartCard.Title>
               <Hint text="The projects that delivered the most data in the period." />
             </span>
-            <ChartCard.Controls>
+            <ChartCard.Action>
               <span
                 class="hidden items-center gap-(--spacing-xs) sm:flex lg:hidden xl:flex data-wide:lg:flex"
               >
@@ -626,18 +626,18 @@
                   />
                 </DropdownMenu.Trigger>
                 <DropdownMenu.Group>
-                  <DropdownMenu.Option
+                  <DropdownMenu.Item
                     value="query"
                     label="Copy query"
                   />
-                  <DropdownMenu.Option
+                  <DropdownMenu.Item
                     value="export"
                     label="Export CSV"
                     :disabled="loading"
                   />
                 </DropdownMenu.Group>
               </DropdownMenu>
-            </ChartCard.Controls>
+            </ChartCard.Action>
           </ChartCard.Header>
           <ChartCard.Content>
             <Chart
@@ -665,7 +665,7 @@
               <ChartCard.Title>Usage by project</ChartCard.Title>
               <Hint text="Requests and data transferred per project in the period." />
             </span>
-            <ChartCard.Controls>
+            <ChartCard.Action>
               <span
                 class="hidden items-center gap-(--spacing-xs) sm:flex lg:hidden xl:flex data-wide:lg:flex"
               >
@@ -699,18 +699,18 @@
                   />
                 </DropdownMenu.Trigger>
                 <DropdownMenu.Group>
-                  <DropdownMenu.Option
+                  <DropdownMenu.Item
                     value="query"
                     label="Copy query"
                   />
-                  <DropdownMenu.Option
+                  <DropdownMenu.Item
                     value="export"
                     label="Export CSV"
                     :disabled="loading"
                   />
                 </DropdownMenu.Group>
               </DropdownMenu>
-            </ChartCard.Controls>
+            </ChartCard.Action>
           </ChartCard.Header>
           <ChartCard.Content>
             <div class="flex min-w-0 flex-col gap-(--spacing-sm)">
@@ -722,7 +722,7 @@
                     placeholder="Search projects"
                     aria-label="Search projects"
                   >
-                    <template #iconLeft>
+                    <template #prefix>
                       <i
                         class="pi pi-search"
                         aria-hidden="true"
@@ -740,8 +740,8 @@
                 enable-sorting
                 paginated
                 :page-size="5"
-                :rows-per-page-options="[5, 10, 25]"
-                header-kind="compact"
+                :page-size-options="[5, 10, 25]"
+                density="compact"
                 bordered
                 :loading="loading"
               >
@@ -817,7 +817,7 @@
                   <Chart.Line v-else />
                   <Chart.Crosshair />
                   <Chart.Tooltip />
-                  <Chart.Legend totals />
+                  <Chart.Legend total />
                 </Chart>
               </template>
               <Chart
@@ -845,7 +845,7 @@
                 enable-sorting
                 paginated
                 :page-size="10"
-                header-kind="compact"
+                density="compact"
                 bordered
               >
                 <template #empty>

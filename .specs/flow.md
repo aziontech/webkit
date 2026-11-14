@@ -3,11 +3,11 @@ name: flow
 category: data
 structure: composition
 status: implemented
-spec_version: 3
+spec_version: 4
 figma:
   url: https://www.figma.com/design/y38AUdg5uXuMeXofUkOxv6/Illustrations?node-id=129-2056
   node_id: 129:2056
-checksum: a153ac8ed0e08af2ccfaf455c60f3ae448509bb6f393062d422101e02001733b
+checksum: accb25ec378b4a2e83860b2d63ea920c525a3085af391d865a48b9e6b8d72a3e
 created: 2026-06-25
 last_updated: 2026-11-14
 ---
@@ -60,12 +60,12 @@ Composition mode — one import of the root; every part is reached via dot-notat
       <div
         class="rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface-overlay)"
       >
-        <Flow.Anchor type="end">
+        <Flow.Anchor side="end">
           <div class="flex h-10 items-center px-(--spacing-sm) text-label-md text-(--text-muted)">
             my-worker
           </div>
         </Flow.Anchor>
-        <Flow.Anchor type="start">
+        <Flow.Anchor side="start">
           <div
             class="m-(--spacing-xxs) mt-0 rounded-(--shape-button) border border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) py-(--spacing-xxs) text-label-md text-(--text-default)"
           >

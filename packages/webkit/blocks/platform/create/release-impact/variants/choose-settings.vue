@@ -175,7 +175,7 @@
               aria-label="Search Deployment Settings"
               class="min-w-0 grow basis-(--container-2xs)"
             >
-              <template #iconLeft>
+              <template #prefix>
                 <i
                   class="pi pi-search"
                   aria-hidden="true"

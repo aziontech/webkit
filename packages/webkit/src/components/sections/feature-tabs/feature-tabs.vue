@@ -176,7 +176,7 @@
                 <div class="min-w-0 rounded-(--shape-elements) shadow-(--shadow-sm)">
                   <CodeBlock
                     :tabs="codeFiles[index]"
-                    show-line-numbers
+                    line-numbers
                     v-bind="{ animateLines: active }"
                     :copy-aria-label="copyAriaLabel || undefined"
                   />
@@ -206,8 +206,7 @@
             :label="primaryAction.label"
             :href="primaryAction.href"
             :target="primaryAction.target"
-            :show-icon="Boolean(primaryAction.trailing)"
-            icon="pi pi-angle-right"
+            :icon="primaryAction.trailing ? 'pi pi-angle-right' : ''"
           />
         </div>
       </FrameBox>

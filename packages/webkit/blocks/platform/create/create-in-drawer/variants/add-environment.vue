@@ -221,7 +221,7 @@
           :value="ADD_ENVIRONMENT"
           label="Add Environment"
         >
-          <template #left
+          <template #leading
             ><i
               class="pi pi-plus"
               aria-hidden="true"

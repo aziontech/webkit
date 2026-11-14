@@ -173,7 +173,7 @@ jobs:
                 <div class="mt-(--spacing-xxs) min-w-0">
                   <CodeBlock
                     :tabs="step.tabs"
-                    :show-line-numbers="false"
+                    :line-numbers="false"
                     :copy-aria-label="`Copy the commands for ${step.title}`"
                     class="w-full"
                   />

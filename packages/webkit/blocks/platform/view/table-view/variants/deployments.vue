@@ -386,7 +386,7 @@
                           value="view"
                           label="View details"
                         >
-                          <template #left
+                          <template #leading
                             ><i
                               class="pi pi-eye"
                               aria-hidden="true"
@@ -396,7 +396,7 @@
                           value="redeploy"
                           label="Redeploy"
                         >
-                          <template #left
+                          <template #leading
                             ><i
                               class="pi pi-refresh"
                               aria-hidden="true"
@@ -407,7 +407,7 @@
                           label="Promote to production"
                           :disabled="row.environment === 'Production' || row.status !== 'Ready'"
                         >
-                          <template #left
+                          <template #leading
                             ><i
                               class="pi pi-arrow-circle-up"
                               aria-hidden="true"

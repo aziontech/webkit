@@ -169,7 +169,7 @@
   >
     <Overline
       v-if="label"
-      show-cursor
+      cursor
       class="[&>span:first-child]:text-(--text-muted)"
       >{{ label }}</Overline
     >

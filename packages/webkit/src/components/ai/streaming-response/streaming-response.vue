@@ -119,7 +119,7 @@
         :tabs="[
           { label: block.language, value: 'code', code: block.value, language: block.language }
         ]"
-        :show-line-numbers="false"
+        :line-numbers="false"
         dir="ltr"
       />
       <pre

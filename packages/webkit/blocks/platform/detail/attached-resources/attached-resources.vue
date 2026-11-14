@@ -91,7 +91,7 @@
                   value="edit"
                   label="Edit"
                 >
-                  <template #left
+                  <template #leading
                     ><i
                       class="pi pi-pencil"
                       aria-hidden="true"
@@ -103,7 +103,7 @@
                   value="delete"
                   label="Delete"
                 >
-                  <template #left
+                  <template #leading
                     ><i
                       class="pi pi-trash"
                       aria-hidden="true"

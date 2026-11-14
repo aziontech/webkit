@@ -334,7 +334,7 @@
                                   placeholder="Search versions"
                                   aria-label="Search versions"
                                 >
-                                  <template #iconLeft>
+                                  <template #prefix>
                                     <i
                                       class="pi pi-search"
                                       aria-hidden="true"
@@ -344,7 +344,7 @@
                               </div>
                             </template>
                             <DropdownMenu.Group>
-                              <DropdownMenu.Option
+                              <DropdownMenu.Item
                                 v-for="entry in row.versions"
                                 :key="entry.id"
                                 :value="entry.id"
@@ -352,7 +352,7 @@
                                 :selected="entry.id === versionOf(row).id"
                                 :aria-label="`${entry.name}${entry.active ? ', active' : ''}, by ${entry.author}, ${entry.createdAgo}`"
                               >
-                                <template #left>
+                                <template #leading>
                                   <Avatar
                                     :alt="entry.author"
                                     :label="entry.author"
@@ -370,12 +370,12 @@
                                     class="shrink-0"
                                   />
                                 </span>
-                                <template #right>
+                                <template #trailing>
                                   <span class="text-body-xs text-(--text-muted)">{{
                                     entry.createdAgo
                                   }}</span>
                                 </template>
-                              </DropdownMenu.Option>
+                              </DropdownMenu.Item>
                             </DropdownMenu.Group>
                             <template
                               v-if="row.total > row.versions.length"
@@ -486,7 +486,7 @@
                                               placeholder="Search versions"
                                               aria-label="Search versions"
                                             >
-                                              <template #iconLeft>
+                                              <template #prefix>
                                                 <i
                                                   class="pi pi-search"
                                                   aria-hidden="true"
@@ -496,7 +496,7 @@
                                           </div>
                                         </template>
                                         <DropdownMenu.Group>
-                                          <DropdownMenu.Option
+                                          <DropdownMenu.Item
                                             v-for="entry in dependency.versions"
                                             :key="entry.id"
                                             :value="entry.id"
@@ -504,7 +504,7 @@
                                             :selected="entry.id === versionOf(dependency).id"
                                             :aria-label="`${entry.name}${entry.active ? ', active' : ''}, by ${entry.author}, ${entry.createdAgo}`"
                                           >
-                                            <template #left>
+                                            <template #leading>
                                               <Avatar
                                                 :alt="entry.author"
                                                 :label="entry.author"
@@ -524,12 +524,12 @@
                                                 class="shrink-0"
                                               />
                                             </span>
-                                            <template #right>
+                                            <template #trailing>
                                               <span class="text-body-xs text-(--text-muted)">{{
                                                 entry.createdAgo
                                               }}</span>
                                             </template>
-                                          </DropdownMenu.Option>
+                                          </DropdownMenu.Item>
                                         </DropdownMenu.Group>
                                         <template
                                           v-if="dependency.total > dependency.versions.length"

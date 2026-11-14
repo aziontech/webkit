@@ -3,11 +3,11 @@ name: artifact-preview
 category: ai
 structure: monolithic
 status: implemented
-spec_version: 2
+spec_version: 3
 template: 2
-checksum: ab5a5db5a0643f6fece55904a93f32f443683d283d068ec77a794466f7af6989
+checksum: 237361a9873589e00a9aaaa07937c455547fbcf749cb4651e0f6da2d94b2d9c5
 created: 2026-11-11
-last_updated: 2026-11-13
+last_updated: 2026-11-14
 ---
 
 # ArtifactPreview — Component Spec
@@ -56,7 +56,7 @@ preview (Cloudscape's inline preview): the first lines of code, the first rows o
 
 <template>
   <ArtifactPreview title="cache-rules.json" meta="1 KB · JSON" icon="pi pi-code" :copy-value="rules" openable @open="showInDrawer">
-    <CodeBlock :tabs="[{ label: 'JSON', value: 'json', code: rules, language: 'json' }]" :show-line-numbers="false" :bordered="false" />
+    <CodeBlock :tabs="[{ label: 'JSON', value: 'json', code: rules, language: 'json' }]" :line-numbers="false" :bordered="false" />
   </ArtifactPreview>
 </template>
 ```

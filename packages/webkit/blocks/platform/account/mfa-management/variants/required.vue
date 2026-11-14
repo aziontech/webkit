@@ -357,13 +357,13 @@
                     @select="(_event, value) => onAction(value, row)"
                   >
                     <DropdownMenu.Group>
-                      <DropdownMenu.Option
+                      <DropdownMenu.Item
                         key="dropdown-menu.option-1"
                         v-if="row.enabled"
                         value="reset"
                         label="Reset MFA"
                       />
-                      <DropdownMenu.Option
+                      <DropdownMenu.Item
                         key="dropdown-menu.option-2"
                         v-else
                         value="remind"

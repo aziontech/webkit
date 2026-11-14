@@ -163,7 +163,7 @@
                       placeholder="user_id
 session_token
 product_id"
-                      resizable="none"
+                      resize="none"
                       rows="3"
                       data-cursor="cookies"
                       aria-label="Fields"

@@ -515,7 +515,7 @@
                       v-else
                       :items="fileTokens(field)"
                       :readonly="loading"
-                      @dismiss="setFile(field, null)"
+                      @remove="setFile(field, null)"
                     />
                     <input
                       :ref="(element) => bindFileInput(field, element)"

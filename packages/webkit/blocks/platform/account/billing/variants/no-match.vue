@@ -708,14 +708,14 @@
                       @select="(_event, value) => onMethodAction(value, row)"
                     >
                       <DropdownMenu.Group>
-                        <DropdownMenu.Option
+                        <DropdownMenu.Item
                           value="default"
                           label="Set as default"
                           :disabled="row.default"
                         />
                       </DropdownMenu.Group>
                       <DropdownMenu.Group>
-                        <DropdownMenu.Option
+                        <DropdownMenu.Item
                           value="remove"
                           label="Remove"
                           :disabled="row.default"

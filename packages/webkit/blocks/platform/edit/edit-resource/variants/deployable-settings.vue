@@ -294,7 +294,7 @@
               aria-label="Search environments"
               @keydown.stop
             >
-              <template #iconLeft>
+              <template #prefix>
                 <i
                   class="pi pi-search"
                   aria-hidden="true"
@@ -483,28 +483,28 @@
                               </Tooltip>
                             </DropdownMenu.Trigger>
                             <DropdownMenu.Group>
-                              <DropdownMenu.Option
+                              <DropdownMenu.Item
                                 value="edit"
                                 label="Edit"
                               >
-                                <template #left
+                                <template #leading
                                   ><i
                                     class="pi pi-pencil"
                                     aria-hidden="true"
                                 /></template>
-                              </DropdownMenu.Option>
+                              </DropdownMenu.Item>
                             </DropdownMenu.Group>
                             <DropdownMenu.Group>
-                              <DropdownMenu.Option
+                              <DropdownMenu.Item
                                 value="delete"
                                 label="Delete"
                               >
-                                <template #left
+                                <template #leading
                                   ><i
                                     class="pi pi-trash"
                                     aria-hidden="true"
                                 /></template>
-                              </DropdownMenu.Option>
+                              </DropdownMenu.Item>
                             </DropdownMenu.Group>
                           </DropdownMenu>
                         </template>

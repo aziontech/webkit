@@ -219,7 +219,7 @@
                     value="logout"
                     label="Log Out"
                   >
-                    <template #right
+                    <template #trailing
                       ><i
                         class="pi pi-sign-out"
                         aria-hidden="true"

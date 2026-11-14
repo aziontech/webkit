@@ -239,7 +239,7 @@
                       aria-label="Search versions"
                       class="w-full"
                     >
-                      <template #iconLeft>
+                      <template #prefix>
                         <i
                           class="pi pi-search"
                           aria-hidden="true"
@@ -362,29 +362,29 @@
                           </Tooltip>
                         </DropdownMenu.Trigger>
                         <DropdownMenu.Group>
-                          <DropdownMenu.Option
+                          <DropdownMenu.Item
                             value="open"
                             label="Open configuration"
                           >
-                            <template #left>
+                            <template #leading>
                               <i
                                 class="pi pi-eye"
                                 aria-hidden="true"
                               />
                             </template>
-                          </DropdownMenu.Option>
-                          <DropdownMenu.Option
+                          </DropdownMenu.Item>
+                          <DropdownMenu.Item
                             value="deploy"
                             label="Deploy"
                             :disabled="!deployable.includes(row.state)"
                           >
-                            <template #left>
+                            <template #leading>
                               <i
                                 class="pi pi-cloud-upload"
                                 aria-hidden="true"
                               />
                             </template>
-                          </DropdownMenu.Option>
+                          </DropdownMenu.Item>
                         </DropdownMenu.Group>
                       </DropdownMenu>
                     </template>

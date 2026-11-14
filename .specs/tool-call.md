@@ -3,9 +3,9 @@ name: tool-call
 category: ai
 structure: monolithic
 status: implemented
-spec_version: 2
+spec_version: 3
 template: 2
-checksum: d6a20e61f8b32a7b5051b9b8d5f74a8256871bbec9933dfe2e3d4d1357468d18
+checksum: 3628644a3ce63272a2245ea642e8c7d36f016fea07200a98ee3530f22f4b0105
 created: 2026-11-11
 last_updated: 2026-11-14
 ---
@@ -61,7 +61,7 @@ collapsible panel. It is the record of what the agent did; authorization before 
         :tabs="[
           { label: 'JSON', value: 'in', code: '{ &quot;limit&quot;: 10 }', language: 'json' }
         ]"
-        :show-line-numbers="false"
+        :line-numbers="false"
       />
     </template>
   </ToolCall>

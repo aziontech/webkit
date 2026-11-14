@@ -173,7 +173,7 @@
                 text="Monthly spend stacked by category; the top edge is the total. Legend totals sum the whole range."
               />
             </span>
-            <ChartCard.Controls>
+            <ChartCard.Action>
               <ToggleGroup
                 v-model="trendForm"
                 :options="forms"
@@ -190,14 +190,14 @@
                   />
                 </DropdownMenu.Trigger>
                 <DropdownMenu.Group>
-                  <DropdownMenu.Option
+                  <DropdownMenu.Item
                     value="export"
                     label="Export CSV"
                     disabled
                   />
                 </DropdownMenu.Group>
               </DropdownMenu>
-            </ChartCard.Controls>
+            </ChartCard.Action>
           </ChartCard.Header>
           <ChartCard.Content>
             <Alert
@@ -215,7 +215,7 @@
               <ChartCard.Title>Current split</ChartCard.Title>
               <Hint text="This month’s spend by category, with the total in the center." />
             </span>
-            <ChartCard.Controls>
+            <ChartCard.Action>
               <DropdownMenu placement="bottom-end">
                 <DropdownMenu.Trigger>
                   <IconButton
@@ -226,14 +226,14 @@
                   />
                 </DropdownMenu.Trigger>
                 <DropdownMenu.Group>
-                  <DropdownMenu.Option
+                  <DropdownMenu.Item
                     value="export"
                     label="Export CSV"
                     disabled
                   />
                 </DropdownMenu.Group>
               </DropdownMenu>
-            </ChartCard.Controls>
+            </ChartCard.Action>
           </ChartCard.Header>
           <ChartCard.Content>
             <Alert
@@ -253,7 +253,7 @@
                 text="The resources that cost the most this month, their share of the total and the change against last month."
               />
             </span>
-            <ChartCard.Controls>
+            <ChartCard.Action>
               <DropdownMenu placement="bottom-end">
                 <DropdownMenu.Trigger>
                   <IconButton
@@ -264,14 +264,14 @@
                   />
                 </DropdownMenu.Trigger>
                 <DropdownMenu.Group>
-                  <DropdownMenu.Option
+                  <DropdownMenu.Item
                     value="export"
                     label="Export CSV"
                     disabled
                   />
                 </DropdownMenu.Group>
               </DropdownMenu>
-            </ChartCard.Controls>
+            </ChartCard.Action>
           </ChartCard.Header>
           <ChartCard.Content>
             <Alert

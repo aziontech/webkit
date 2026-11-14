@@ -249,7 +249,7 @@
   })
 
   const leftWidth = ref(288)
-  const leftCollapsed = ref(false)
+  const leftOpen = ref(true)
 
   const tableView = ref('data')
   const tableViewOptions = [
@@ -848,7 +848,7 @@ LIMIT 3;`
       <div class="contents [--sidebar-width:var(--container-2xs)]">
         <Sidebar
           v-model:width="leftWidth"
-          v-model:collapsed="leftCollapsed"
+          v-model:open="leftOpen"
           resizable
           collapsible
           aria-label="Tables"
@@ -886,7 +886,7 @@ LIMIT 3;`
                 placeholder="Search tables"
                 aria-label="Search tables"
               >
-                <template #iconLeft>
+                <template #prefix>
                   <i
                     class="pi pi-search"
                     aria-hidden="true"
@@ -953,16 +953,16 @@ LIMIT 3;`
                     </Tooltip>
                   </DropdownMenu.Trigger>
                   <DropdownMenu.Group>
-                    <DropdownMenu.Option
+                    <DropdownMenu.Item
                       value="delete"
                       label="Delete table"
                     >
-                      <template #left
+                      <template #leading
                         ><i
                           class="pi pi-trash"
                           aria-hidden="true"
                       /></template>
-                    </DropdownMenu.Option>
+                    </DropdownMenu.Item>
                   </DropdownMenu.Group>
                 </DropdownMenu>
               </div>
@@ -1036,7 +1036,7 @@ LIMIT 3;`
                   :placeholder="filterPlaceholder"
                   aria-label="Filter rows"
                 >
-                  <template #iconLeft>
+                  <template #prefix>
                     <i
                       class="pi pi-search"
                       aria-hidden="true"
@@ -1081,7 +1081,7 @@ LIMIT 3;`
                 enable-sorting
                 paginated
                 :page-size="25"
-                :rows-per-page-options="[25, 50, 100]"
+                :page-size-options="[25, 50, 100]"
                 density="compact"
                 :bordered="false"
                 :aria-label="`Rows of ${selectedTable.name}`"
@@ -1225,7 +1225,7 @@ LIMIT 3;`
       <div class="contents [--sidebar-width:var(--container-2xs)]">
         <Sidebar
           v-model:width="leftWidth"
-          v-model:collapsed="leftCollapsed"
+          v-model:open="leftOpen"
           resizable
           collapsible
           aria-label="Query history"
@@ -1243,7 +1243,7 @@ LIMIT 3;`
                 placeholder="Search queries"
                 aria-label="Search queries"
               >
-                <template #iconLeft>
+                <template #prefix>
                   <i
                     class="pi pi-search"
                     aria-hidden="true"
@@ -1301,26 +1301,26 @@ LIMIT 3;`
                     </Tooltip>
                   </DropdownMenu.Trigger>
                   <DropdownMenu.Group>
-                    <DropdownMenu.Option
+                    <DropdownMenu.Item
                       value="run"
                       label="Run query"
                     >
-                      <template #left
+                      <template #leading
                         ><i
                           class="pi pi-play"
                           aria-hidden="true"
                       /></template>
-                    </DropdownMenu.Option>
-                    <DropdownMenu.Option
+                    </DropdownMenu.Item>
+                    <DropdownMenu.Item
                       value="delete"
                       label="Delete query"
                     >
-                      <template #left
+                      <template #leading
                         ><i
                           class="pi pi-trash"
                           aria-hidden="true"
                       /></template>
-                    </DropdownMenu.Option>
+                    </DropdownMenu.Item>
                   </DropdownMenu.Group>
                 </DropdownMenu>
               </div>
@@ -1386,7 +1386,7 @@ LIMIT 3;`
                 aria-label="Search results"
                 :disabled="!resultRows.length"
               >
-                <template #iconLeft>
+                <template #prefix>
                   <i
                     class="pi pi-search"
                     aria-hidden="true"
@@ -1456,7 +1456,7 @@ LIMIT 3;`
               row-key="__k"
               paginated
               :page-size="50"
-              :rows-per-page-options="[10, 25, 50, 100]"
+              :page-size-options="[10, 25, 50, 100]"
               :bordered="false"
             />
             <CodeBlock
@@ -1516,7 +1516,7 @@ LIMIT 3;`
                 placeholder="Search templates"
                 aria-label="Search templates"
               >
-                <template #iconLeft>
+                <template #prefix>
                   <i
                     class="pi pi-search"
                     aria-hidden="true"
@@ -1633,7 +1633,7 @@ LIMIT 3;`
                     <FileTokenGroup
                       v-if="importFile"
                       :items="importTokens"
-                      @dismiss="clearImport"
+                      @remove="clearImport"
                     />
                     <p
                       v-if="importFileMissing"

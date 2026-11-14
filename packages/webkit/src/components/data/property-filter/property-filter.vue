@@ -538,7 +538,7 @@
         @focus="open = true"
         @blur="onBlur"
       >
-        <template #iconLeft>
+        <template #prefix>
           <i
             class="pi pi-filter text-(--text-muted)"
             aria-hidden="true"

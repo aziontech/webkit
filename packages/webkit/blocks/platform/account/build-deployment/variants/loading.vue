@@ -720,7 +720,7 @@
                           aria-label="Search services or Deployment Settings"
                           class="w-full"
                         >
-                          <template #iconLeft>
+                          <template #prefix>
                             <i
                               class="pi pi-search"
                               aria-hidden="true"
@@ -960,17 +960,17 @@
                         @select="(_event, value) => onAction(value, row)"
                       >
                         <DropdownMenu.Group>
-                          <DropdownMenu.Option
+                          <DropdownMenu.Item
                             value="edit"
                             label="Edit"
                           />
-                          <DropdownMenu.Option
+                          <DropdownMenu.Item
                             value="clone"
                             label="Clone"
                           />
                         </DropdownMenu.Group>
                         <DropdownMenu.Group>
-                          <DropdownMenu.Option
+                          <DropdownMenu.Item
                             value="delete"
                             label="Delete"
                           />

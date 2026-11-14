@@ -687,7 +687,7 @@
               :columns="entityColumns"
               row-key="id"
               enable-sorting
-              header-kind="compact"
+              density="compact"
               bordered
               :loading="loading"
             >
@@ -737,8 +737,8 @@
               enable-sorting
               paginated
               :page-size="10"
-              :rows-per-page-options="[10, 25, 50]"
-              header-kind="compact"
+              :page-size-options="[10, 25, 50]"
+              density="compact"
               bordered
               :loading="loading"
             >

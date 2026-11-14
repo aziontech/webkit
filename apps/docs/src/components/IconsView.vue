@@ -44,7 +44,7 @@
           :aria-label="t.iconsSearch"
           size="medium"
         >
-          <template #iconLeft>
+          <template #prefix>
             <i
               class="pi pi-search text-(--text-muted)"
               aria-hidden="true"

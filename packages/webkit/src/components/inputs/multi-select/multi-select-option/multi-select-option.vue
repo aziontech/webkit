@@ -79,7 +79,6 @@
   >
     <Checkbox
       :model-value="selected"
-      binary
       class="pointer-events-none"
       aria-hidden="true"
       :tabindex="-1"

@@ -1029,7 +1029,7 @@
                 <ChartCard.Title>{{ panel.title }}</ChartCard.Title>
                 <Hint :text="panel.hint" />
               </span>
-              <ChartCard.Controls>
+              <ChartCard.Action>
                 <span class="hidden items-center gap-(--spacing-xs) sm:flex">
                   <Tag
                     :label="panel.aggregation"
@@ -1051,17 +1051,17 @@
                     />
                   </DropdownMenu.Trigger>
                   <DropdownMenu.Group>
-                    <DropdownMenu.Option
+                    <DropdownMenu.Item
                       value="query"
                       label="Copy query"
                     />
-                    <DropdownMenu.Option
+                    <DropdownMenu.Item
                       value="export"
                       label="Export CSV"
                     />
                   </DropdownMenu.Group>
                 </DropdownMenu>
-              </ChartCard.Controls>
+              </ChartCard.Action>
             </ChartCard.Header>
             <ChartCard.Content>
               <Chart
@@ -1083,7 +1083,7 @@
                 <Chart.Area v-else />
                 <Chart.Crosshair />
                 <Chart.Tooltip />
-                <Chart.Legend :totals="!panel.rate" />
+                <Chart.Legend :total="!panel.rate" />
               </Chart>
             </ChartCard.Content>
           </ChartCard>
@@ -1098,7 +1098,7 @@
                 <ChartCard.Title>{{ breakdown.title }}</ChartCard.Title>
                 <Hint :text="breakdown.hint" />
               </span>
-              <ChartCard.Controls>
+              <ChartCard.Action>
                 <span class="hidden items-center gap-(--spacing-xs) sm:flex">
                   <Tag
                     label="Sum"
@@ -1120,17 +1120,17 @@
                     />
                   </DropdownMenu.Trigger>
                   <DropdownMenu.Group>
-                    <DropdownMenu.Option
+                    <DropdownMenu.Item
                       value="query"
                       label="Copy query"
                     />
-                    <DropdownMenu.Option
+                    <DropdownMenu.Item
                       value="export"
                       label="Export CSV"
                     />
                   </DropdownMenu.Group>
                 </DropdownMenu>
-              </ChartCard.Controls>
+              </ChartCard.Action>
             </ChartCard.Header>
             <ChartCard.Content>
               <div class="flex min-w-0 flex-col gap-(--spacing-sm)">
@@ -1142,7 +1142,7 @@
                       :placeholder="breakdown.search"
                       :aria-label="breakdown.search"
                     >
-                      <template #iconLeft>
+                      <template #prefix>
                         <i
                           class="pi pi-search"
                           aria-hidden="true"
@@ -1168,8 +1168,8 @@
                   enable-sorting
                   paginated
                   :page-size="5"
-                  :rows-per-page-options="[5, 10, 25]"
-                  header-kind="compact"
+                  :page-size-options="[5, 10, 25]"
+                  density="compact"
                   bordered
                 >
                   <template #empty>

@@ -173,7 +173,7 @@ export async function handleRequest(request, args = {}) {
   const expanded = ref(new Set<string>())
   const touched = ref(new Set<string>())
   const schemaWidth = ref(420)
-  const schemaCollapsed = ref(false)
+  const schemaExpanded = ref(true)
   const nameError = ref('')
   const codeError = ref('')
   const formId = useId()
@@ -447,7 +447,7 @@ export async function handleRequest(request, args = {}) {
                       >
                         <ResizablePane
                           v-model:basis="schemaWidth"
-                          v-model:collapsed="schemaCollapsed"
+                          v-model:expanded="schemaExpanded"
                           collapsible
                           :min="280"
                           :max="720"
@@ -1021,7 +1021,7 @@ export async function handleRequest(request, args = {}) {
                           readonly
                           disabled
                         >
-                          <template #iconRight>
+                          <template #suffix>
                             <i
                               class="pi pi-lock"
                               aria-hidden="true"

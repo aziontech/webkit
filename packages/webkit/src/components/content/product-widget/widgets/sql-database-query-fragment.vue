@@ -156,7 +156,7 @@
           <Textarea
             :model-value="SQL"
             :disabled="running"
-            resizable="none"
+            resize="none"
             class="w-full rounded-none! border-0! font-code"
             aria-label="SQL editor"
             placeholder="Write your SQL query here"
@@ -177,7 +177,7 @@
                   aria-label="Search results"
                   :disabled="!frame.results"
                 >
-                  <template #iconLeft>
+                  <template #prefix>
                     <i
                       class="pi pi-search"
                       aria-hidden="true"

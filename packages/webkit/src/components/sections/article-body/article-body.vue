@@ -621,7 +621,7 @@
                   size="medium"
                   icon="pi pi-copy"
                   :label="copyPage.label"
-                  :model="copyPage.menu"
+                  :items="copyPage.menu"
                   class="self-start"
                   @click="copyBody"
                   @item-click="onMenu"

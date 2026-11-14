@@ -328,28 +328,28 @@
             <span class="truncate text-body-xs text-(--text-muted)">{{ account.email }}</span>
           </div>
         </template>
-        <DropdownMenu.Option
+        <DropdownMenu.Item
           value="settings"
           label="Account settings"
         >
-          <template #right>
+          <template #trailing>
             <i
               class="pi pi-cog"
               aria-hidden="true"
             />
           </template>
-        </DropdownMenu.Option>
-        <DropdownMenu.Option
+        </DropdownMenu.Item>
+        <DropdownMenu.Item
           value="personal-tokens"
           label="Personal tokens"
         >
-          <template #right>
+          <template #trailing>
             <i
               class="pi pi-key"
               aria-hidden="true"
             />
           </template>
-        </DropdownMenu.Option>
+        </DropdownMenu.Item>
       </DropdownMenu.Group>
       <DropdownMenu.Group>
         <div
@@ -363,28 +363,28 @@
         </div>
       </DropdownMenu.Group>
       <DropdownMenu.Group>
-        <DropdownMenu.Option
+        <DropdownMenu.Item
           value="docs"
           label="Docs"
         >
-          <template #right>
+          <template #trailing>
             <i
               class="pi pi-book"
               aria-hidden="true"
             />
           </template>
-        </DropdownMenu.Option>
-        <DropdownMenu.Option
+        </DropdownMenu.Item>
+        <DropdownMenu.Item
           value="logout"
           label="Log out"
         >
-          <template #right>
+          <template #trailing>
             <i
               class="pi pi-sign-out"
               aria-hidden="true"
             />
           </template>
-        </DropdownMenu.Option>
+        </DropdownMenu.Item>
       </DropdownMenu.Group>
       <DropdownMenu.Group>
         <div class="flex flex-col gap-(--spacing-sm) px-(--spacing-xxs) py-(--spacing-xxs)">
@@ -423,7 +423,7 @@
               aria-label="Search environments"
               @keydown.stop
             >
-              <template #iconLeft>
+              <template #prefix>
                 <i
                   class="pi pi-search"
                   aria-hidden="true"

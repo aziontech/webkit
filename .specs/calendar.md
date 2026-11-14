@@ -3,12 +3,12 @@ name: calendar
 category: inputs
 structure: composition
 status: implemented
-spec_version: 5
+spec_version: 6
 template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=5087-17336
   node_id: 5087:17336
-checksum: b4098e70275b269264c84678dd0006f0e7cc377b4f544dc9b9303a0ec5db06e3
+checksum: a9febc5ff7b6c616e3f52cf558dc71761a4b152f312756eec1edcd00cf3622e3
 created: 2026-06-25
 last_updated: 2026-11-14
 ---
@@ -69,7 +69,7 @@ Date-range picker. A trigger button opens a popover that holds a month grid, Sta
     mode="range"
     :presets="presets"
     show-time
-    show-timezone
+    show-time-zone
     clearable
   />
 </template>

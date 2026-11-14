@@ -157,7 +157,6 @@
                   >
                     <Checkbox
                       :model-value="checked(method.key)"
-                      binary
                       :aria-label="method.title"
                     />
                   </span>

@@ -43,7 +43,7 @@
         size="medium"
         :aria-label="t.filter"
       >
-        <template #iconLeft>
+        <template #prefix>
           <i
             class="pi pi-filter text-(--text-muted)"
             aria-hidden="true"
@@ -60,7 +60,7 @@
         {{ group.label }}
         <span class="text-body-sm text-(--text-muted)">{{ group.items.length }}</span>
       </h2>
-      <DocCardGroup :cols="3">
+      <DocCardGroup :columns="3">
         <DocCard
           v-for="item in group.items"
           :key="item.to"

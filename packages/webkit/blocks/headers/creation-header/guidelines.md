@@ -17,7 +17,7 @@ The top bar of the focused creation shell: create, edit and deploy flows that ru
 
 ### A. Bar — `GlobalHeader` (required)
 
-Default `content` placement spanning the whole window, `aria-label="Console"`. The start cluster lives in `GlobalHeader.Left`, the avatar in `GlobalHeader.Right`; `GlobalHeader.Middle` stays empty. Exactly one header per page.
+Default `content` placement spanning the whole window, `aria-label="Console"`. The start cluster lives in `GlobalHeader.Start`, the avatar in `GlobalHeader.End`; `GlobalHeader.Center` stays empty. Exactly one header per page.
 
 ### B. Back — `IconButton` (required until the flow is terminal)
 

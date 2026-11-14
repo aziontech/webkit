@@ -863,7 +863,7 @@
 <template>
   <div class="flex h-dvh flex-col bg-(--bg-canvas)">
     <GlobalHeader aria-label="Console">
-      <GlobalHeader.Left>
+      <GlobalHeader.Start>
         <IconButton
           icon="pi pi-chevron-left"
           aria-label="Back to Projects"
@@ -883,9 +883,9 @@
           </a>
         </GlobalHeader.Brand>
         <Breadcrumb :items="breadcrumb" />
-      </GlobalHeader.Left>
-      <GlobalHeader.Middle />
-      <GlobalHeader.Right>
+      </GlobalHeader.Start>
+      <GlobalHeader.Center />
+      <GlobalHeader.End>
         <button
           type="button"
           aria-label="Account settings"
@@ -897,7 +897,7 @@
             kind="square"
           />
         </button>
-      </GlobalHeader.Right>
+      </GlobalHeader.End>
     </GlobalHeader>
 
     <div class="flex min-h-0 flex-1">
@@ -1197,7 +1197,7 @@
                               @update:model-value="selectAccount"
                             >
                               <Select.Trigger aria-label="Git account">
-                                <template #iconLeft>
+                                <template #prefix>
                                   <i
                                     class="ai ai-github shrink-0 text-body-md leading-none text-(--text-default)"
                                     aria-hidden="true"
@@ -1230,7 +1230,7 @@
                             aria-label="Search repositories"
                             autocomplete="off"
                           >
-                            <template #iconLeft>
+                            <template #prefix>
                               <i
                                 class="pi pi-search"
                                 aria-hidden="true"
@@ -1264,7 +1264,7 @@
                             >
                               <Item.Media>
                                 <Skeleton
-                                  kind="shape"
+                                  kind="rectangle"
                                   width="2rem"
                                   height="2rem"
                                 />
@@ -1552,7 +1552,7 @@
                                 id="repository-account"
                                 aria-label="Account"
                               >
-                                <template #iconLeft>
+                                <template #prefix>
                                   <i
                                     class="ai ai-github shrink-0 text-body-md leading-none text-(--text-default)"
                                     aria-hidden="true"
@@ -1625,7 +1625,7 @@
                               aria-label="Search repositories"
                               autocomplete="off"
                             >
-                              <template #iconLeft>
+                              <template #prefix>
                                 <i
                                   class="pi pi-search"
                                   aria-hidden="true"
@@ -1668,7 +1668,7 @@
                             >
                               <Item.Media>
                                 <Skeleton
-                                  kind="shape"
+                                  kind="rectangle"
                                   width="2rem"
                                   height="2rem"
                                 />

@@ -107,7 +107,7 @@ themes, microcopy — is verified at runtime by `/webkit-ui-verify` (the `webkit
 runs axe + screenshots), and taste is a review concern.
 
 - **Search in every app header.** A header that navigates (console, demo, docs, site) puts
-  `SearchTrigger` first in `GlobalHeader.Right`, wired to a `Command` palette (`⌘K` / `Ctrl K`);
+  `SearchTrigger` first in `GlobalHeader.End`, wired to a `Command` palette (`⌘K` / `Ctrl K`);
   never a hand-rolled field or a bare magnifier button. Lint: `webkit/header-search-trigger`
   (rule `webkit-header-search`).
 - **Docs home.** Start from `shells/documentation` variant `Landing`: `DocHero` with `Get started`

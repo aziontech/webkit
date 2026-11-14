@@ -112,8 +112,7 @@
       class="flex min-h-10 items-center gap-(--spacing-xs)"
     >
       <Checkbox
-        binary
-        :input-id="`${uid}-select-all`"
+        :id="`${uid}-select-all`"
         :model-value="allSelected"
         :indeterminate="someSelected"
         @update:model-value="(value: unknown) => toggleAll(!!value)"
@@ -177,7 +176,6 @@
           </div>
           <Checkbox
             v-if="selectionMode === 'multi'"
-            binary
             :model-value="isSelected(item)"
             :aria-labelledby="headerId(index)"
             :data-testid="`${testId}__select`"

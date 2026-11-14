@@ -195,7 +195,7 @@
       <CodeBlock
         class="flex-1"
         :tabs="[tab]"
-        :show-line-numbers="false"
+        :line-numbers="false"
         :bordered="!flush"
         :copyable="copyable"
         :animateLines="true"

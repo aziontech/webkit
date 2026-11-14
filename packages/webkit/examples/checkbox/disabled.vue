@@ -11,13 +11,13 @@
     <Checkbox
       v-model="checked"
       disabled
-      input-id="webkit-checkbox-disabled-on"
+      id="webkit-checkbox-disabled-on"
       aria-label="Disabled checked"
     />
     <Checkbox
       v-model="unchecked"
       disabled
-      input-id="webkit-checkbox-disabled-off"
+      id="webkit-checkbox-disabled-off"
       aria-label="Disabled unchecked"
     />
   </div>

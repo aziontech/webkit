@@ -148,7 +148,7 @@
                 placeholder="Filter by id, name, email… or ask AI"
                 aria-label="Filter rows"
               >
-                <template #iconLeft>
+                <template #prefix>
                   <i
                     class="pi pi-search"
                     aria-hidden="true"
@@ -188,7 +188,6 @@
                   class="flex w-10 shrink-0 items-center justify-center border-e border-(--border-muted) py-(--spacing-xs)"
                 >
                   <Checkbox
-                    binary
                     disabled
                     aria-label="Select all rows"
                   />
@@ -219,7 +218,6 @@
                   class="flex w-10 shrink-0 items-center justify-center border-e border-(--border-muted) py-(--spacing-xs)"
                 >
                   <Checkbox
-                    binary
                     disabled
                     :aria-label="`Select row ${row.id}`"
                   />
@@ -250,7 +248,6 @@
                       class="flex w-10 shrink-0 items-center justify-center border-e border-(--border-muted) py-(--spacing-xs)"
                     >
                       <Checkbox
-                        binary
                         disabled
                         aria-label="Select row 4"
                       />

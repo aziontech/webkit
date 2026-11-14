@@ -674,8 +674,7 @@
                                     >
                                     <Checkbox
                                       v-model="entries[index].secret"
-                                      binary
-                                      :input-id="fieldId(entries[index], 'secret')"
+                                      :id="fieldId(entries[index], 'secret')"
                                       :aria-label="secretAriaLabel(entries[index])"
                                     />
                                   </Field>
@@ -785,7 +784,7 @@
                                 aria-label="Search"
                                 @keydown.stop
                               >
-                                <template #iconLeft>
+                                <template #prefix>
                                   <i
                                     class="pi pi-search"
                                     aria-hidden="true"

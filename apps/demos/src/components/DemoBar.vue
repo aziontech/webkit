@@ -98,19 +98,19 @@
         </Tooltip>
       </DropdownMenu.Trigger>
       <DropdownMenu.Group>
-        <DropdownMenu.Option
+        <DropdownMenu.Item
           v-for="flow in flows"
           :key="flow.value"
           :value="flow.value"
           :label="flow.label"
         >
-          <template #left>
+          <template #leading>
             <i
               :class="flow.icon"
               aria-hidden="true"
             />
           </template>
-        </DropdownMenu.Option>
+        </DropdownMenu.Item>
       </DropdownMenu.Group>
     </DropdownMenu>
     <Tooltip :text="settings.theme === 'dark' ? t.light : t.dark">
@@ -139,7 +139,7 @@
         :display-value="localeLabel"
       >
         <Select.Trigger :aria-label="t.language">
-          <template #iconLeft>
+          <template #prefix>
             <i
               class="pi pi-globe text-(--text-muted)"
               aria-hidden="true"

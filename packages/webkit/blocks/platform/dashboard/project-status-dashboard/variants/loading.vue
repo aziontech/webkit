@@ -545,7 +545,7 @@
               <ChartCard.Title>Completion</ChartCard.Title>
               <Hint text="Every task in the project, by its current status." />
             </span>
-            <ChartCard.Controls>
+            <ChartCard.Action>
               <DropdownMenu
                 placement="bottom-end"
                 @select="(_event, value) => onCardOption('completion', value)"
@@ -559,19 +559,19 @@
                   />
                 </DropdownMenu.Trigger>
                 <DropdownMenu.Group>
-                  <DropdownMenu.Option
+                  <DropdownMenu.Item
                     value="link"
                     label="Copy link"
                     :disabled="loading"
                   />
-                  <DropdownMenu.Option
+                  <DropdownMenu.Item
                     value="export"
                     label="Export CSV"
                     :disabled="loading"
                   />
                 </DropdownMenu.Group>
               </DropdownMenu>
-            </ChartCard.Controls>
+            </ChartCard.Action>
           </ChartCard.Header>
           <ChartCard.Content>
             <DonutChart
@@ -603,7 +603,7 @@
                 text="Story points left in the sprint each working day, against a straight line to zero."
               />
             </span>
-            <ChartCard.Controls>
+            <ChartCard.Action>
               <Tag
                 label="Story points"
                 severity="secondary"
@@ -630,19 +630,19 @@
                   />
                 </DropdownMenu.Trigger>
                 <DropdownMenu.Group>
-                  <DropdownMenu.Option
+                  <DropdownMenu.Item
                     value="link"
                     label="Copy link"
                     :disabled="loading"
                   />
-                  <DropdownMenu.Option
+                  <DropdownMenu.Item
                     value="export"
                     label="Export CSV"
                     :disabled="loading"
                   />
                 </DropdownMenu.Group>
               </DropdownMenu>
-            </ChartCard.Controls>
+            </ChartCard.Action>
           </ChartCard.Header>
           <ChartCard.Content>
             <Chart
@@ -678,7 +678,7 @@
               <ChartCard.Title>Milestones</ChartCard.Title>
               <Hint text="Dated checkpoints to launch, oldest first." />
             </span>
-            <ChartCard.Controls>
+            <ChartCard.Action>
               <DropdownMenu
                 placement="bottom-end"
                 @select="(_event, value) => onCardOption('milestones', value)"
@@ -692,21 +692,21 @@
                   />
                 </DropdownMenu.Trigger>
                 <DropdownMenu.Group>
-                  <DropdownMenu.Option
+                  <DropdownMenu.Item
                     value="link"
                     label="Copy link"
                     :disabled="loading"
                   />
-                  <DropdownMenu.Option
+                  <DropdownMenu.Item
                     value="export"
                     label="Export CSV"
                     :disabled="loading"
                   />
                 </DropdownMenu.Group>
               </DropdownMenu>
-            </ChartCard.Controls>
+            </ChartCard.Action>
           </ChartCard.Header>
-          <ChartCard.Content :flush="!loading && milestones.length > 0">
+          <ChartCard.Content :padded="!(!loading && milestones.length > 0)">
             <div
               v-if="loading"
               class="flex flex-col gap-(--spacing-md)"
@@ -769,7 +769,7 @@
               <ChartCard.Title>At risk</ChartCard.Title>
               <Hint text="Tasks that threaten the next milestone, with the reason." />
             </span>
-            <ChartCard.Controls>
+            <ChartCard.Action>
               <Tag
                 v-if="atRisk.length && !loading"
                 :label="atRisk.length + ' open'"
@@ -789,21 +789,21 @@
                   />
                 </DropdownMenu.Trigger>
                 <DropdownMenu.Group>
-                  <DropdownMenu.Option
+                  <DropdownMenu.Item
                     value="link"
                     label="Copy link"
                     :disabled="loading"
                   />
-                  <DropdownMenu.Option
+                  <DropdownMenu.Item
                     value="export"
                     label="Export CSV"
                     :disabled="loading"
                   />
                 </DropdownMenu.Group>
               </DropdownMenu>
-            </ChartCard.Controls>
+            </ChartCard.Action>
           </ChartCard.Header>
-          <ChartCard.Content :flush="!loading && atRisk.length > 0">
+          <ChartCard.Content :padded="!(!loading && atRisk.length > 0)">
             <div
               v-if="loading"
               class="flex flex-col gap-(--spacing-md)"
@@ -859,7 +859,7 @@
               <ChartCard.Title>Owners</ChartCard.Title>
               <Hint text="Tasks per owner. Overdue counts open tasks past their due date." />
             </span>
-            <ChartCard.Controls>
+            <ChartCard.Action>
               <DropdownMenu
                 placement="bottom-end"
                 @select="(_event, value) => onCardOption('owners', value)"
@@ -873,19 +873,19 @@
                   />
                 </DropdownMenu.Trigger>
                 <DropdownMenu.Group>
-                  <DropdownMenu.Option
+                  <DropdownMenu.Item
                     value="link"
                     label="Copy link"
                     :disabled="loading"
                   />
-                  <DropdownMenu.Option
+                  <DropdownMenu.Item
                     value="export"
                     label="Export CSV"
                     :disabled="loading"
                   />
                 </DropdownMenu.Group>
               </DropdownMenu>
-            </ChartCard.Controls>
+            </ChartCard.Action>
           </ChartCard.Header>
           <ChartCard.Content>
             <TableRoot
@@ -893,7 +893,7 @@
               :columns="ownerColumns"
               row-key="id"
               enable-sorting
-              header-kind="compact"
+              density="compact"
               bordered
               :loading="loading"
             >

@@ -307,7 +307,7 @@
                 <ChartCard.Title>{{ trend.title }}</ChartCard.Title>
                 <Hint :text="trend.description" />
               </span>
-              <ChartCard.Controls>
+              <ChartCard.Action>
                 <Tag
                   v-if="trend.change && !loading"
                   :label="trend.change.label"
@@ -315,7 +315,7 @@
                   :icon="trend.change.icon"
                   size="small"
                 />
-              </ChartCard.Controls>
+              </ChartCard.Action>
             </ChartCard.Header>
             <ChartCard.Content>
               <Chart

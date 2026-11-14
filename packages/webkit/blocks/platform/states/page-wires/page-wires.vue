@@ -68,7 +68,7 @@
                   <Skeleton
                     v-for="mark in 4"
                     :key="mark"
-                    kind="shape"
+                    kind="rectangle"
                     width="2rem"
                     height="2rem"
                   />

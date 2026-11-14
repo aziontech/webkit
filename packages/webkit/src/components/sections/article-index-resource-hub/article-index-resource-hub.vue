@@ -239,7 +239,7 @@
                     "
                     @update:model-value="setOptionQuery(facet.key, $event)"
                   >
-                    <template #iconLeft>
+                    <template #prefix>
                       <i
                         class="pi pi-search"
                         aria-hidden="true"

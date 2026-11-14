@@ -234,13 +234,13 @@ export async function handleRequest(request, args = {}) {
   const runStatus = ref('completed')
   const selectedSpan = ref('origin')
   const resultsHeight = ref(380)
-  const resultsCollapsed = ref(false)
+  const resultsExpanded = ref(true)
   let runTimer: ReturnType<typeof setTimeout> | undefined
 
   const running = computed(() => runStatus.value === 'running')
 
   const runTest = () => {
-    resultsCollapsed.value = false
+    resultsExpanded.value = true
     activeDocument.value = 'code'
     selectedSpan.value = ''
     runStatus.value = 'running'
@@ -296,7 +296,7 @@ export async function handleRequest(request, args = {}) {
   const expanded = ref(new Set<string>())
   const touched = ref(new Set<string>())
   const schemaWidth = ref(420)
-  const schemaCollapsed = ref(false)
+  const schemaExpanded = ref(true)
   const nameError = ref('')
   const codeError = ref('')
   const formId = useId()
@@ -552,7 +552,7 @@ export async function handleRequest(request, args = {}) {
                       <ResizableHandle aria-label="Resize the test run" />
                       <ResizablePane
                         v-model:basis="resultsHeight"
-                        v-model:collapsed="resultsCollapsed"
+                        v-model:expanded="resultsExpanded"
                         collapsible
                         :min="200"
                         :max="720"
@@ -691,7 +691,7 @@ export async function handleRequest(request, args = {}) {
                       >
                         <ResizablePane
                           v-model:basis="schemaWidth"
-                          v-model:collapsed="schemaCollapsed"
+                          v-model:expanded="schemaExpanded"
                           collapsible
                           :min="280"
                           :max="720"
@@ -1265,7 +1265,7 @@ export async function handleRequest(request, args = {}) {
                           readonly
                           disabled
                         >
-                          <template #iconRight>
+                          <template #suffix>
                             <i
                               class="pi pi-lock"
                               aria-hidden="true"

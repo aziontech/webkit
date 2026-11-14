@@ -229,7 +229,7 @@
                       :placeholder="t('comparePlans.search')"
                       :aria-label="pickerSearchLabel"
                     >
-                      <template #iconLeft>
+                      <template #prefix>
                         <i
                           class="pi pi-search"
                           aria-hidden="true"

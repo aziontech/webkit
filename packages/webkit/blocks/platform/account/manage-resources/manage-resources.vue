@@ -515,7 +515,7 @@
               aria-label="Search resources"
               class="w-full"
             >
-              <template #iconLeft>
+              <template #prefix>
                 <i
                   class="pi pi-search"
                   aria-hidden="true"
@@ -661,21 +661,21 @@
                       @select="(_event, value) => onRowAction(value, row)"
                     >
                       <DropdownMenu.Group>
-                        <DropdownMenu.Option
+                        <DropdownMenu.Item
                           value="details"
                           label="View details"
                         />
-                        <DropdownMenu.Option
+                        <DropdownMenu.Item
                           value="move"
                           label="Move"
                         />
-                        <DropdownMenu.Option
+                        <DropdownMenu.Item
                           value="labels"
                           label="Edit labels"
                         />
                       </DropdownMenu.Group>
                       <DropdownMenu.Group>
-                        <DropdownMenu.Option
+                        <DropdownMenu.Item
                           value="delete"
                           label="Delete"
                         />

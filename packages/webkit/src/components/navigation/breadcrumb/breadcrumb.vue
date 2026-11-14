@@ -171,7 +171,7 @@
                   />
                 </DropdownMenu.Trigger>
                 <DropdownMenu.Group>
-                  <DropdownMenu.Option
+                  <DropdownMenu.Item
                     v-for="(item, index) in middleItems"
                     :key="`${item.label}-${index}`"
                     :value="item.href ?? '#'"
@@ -189,7 +189,7 @@
                         aria-hidden="true"
                       />
                     </template>
-                  </DropdownMenu.Option>
+                  </DropdownMenu.Item>
                 </DropdownMenu.Group>
               </DropdownMenu>
             </li>

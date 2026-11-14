@@ -218,7 +218,7 @@
               id="network-list-items"
               :model-value="listValue"
               rows="7"
-              resizable="none"
+              resize="none"
               aria-label="List"
             />
           </span>

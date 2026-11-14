@@ -275,7 +275,7 @@
                 :data="zones"
                 :columns="zoneColumns"
                 row-key="id"
-                header-kind="compact"
+                density="compact"
                 :bordered="false"
               >
                 <template #cell-domain="{ row }">
@@ -327,7 +327,6 @@
               <Link
                 label="View all DNS zones"
                 size="medium"
-                :show-icon="false"
                 href="#"
               />
             </template>
@@ -351,7 +350,7 @@
                 :data="activity"
                 :columns="activityColumns"
                 row-key="id"
-                header-kind="compact"
+                density="compact"
                 :bordered="false"
               >
                 <template #cell-date="{ value }">
@@ -376,7 +375,6 @@
               <Link
                 label="View all activity"
                 size="medium"
-                :show-icon="false"
                 href="#"
               />
             </template>
@@ -409,7 +407,6 @@
             <Link
               label="View all usage"
               size="medium"
-              :show-icon="false"
               href="#"
             />
           </template>
@@ -435,7 +432,6 @@
                 <Link
                   :label="featured.name"
                   size="medium"
-                  :show-icon="false"
                   href="#"
                 />
               </div>

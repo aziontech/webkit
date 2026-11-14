@@ -9,7 +9,7 @@
   <Checkbox
     v-model="checked"
     indeterminate
-    input-id="webkit-checkbox-indeterminate"
+    id="webkit-checkbox-indeterminate"
     aria-label="Toggle option"
   />
 </template>

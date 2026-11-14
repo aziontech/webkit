@@ -202,7 +202,6 @@
                 </p>
                 <MiniButton
                   :label="linkLabel"
-                  show-icon
                   icon="pi pi-angle-right"
                   :href="cell.href"
                 />

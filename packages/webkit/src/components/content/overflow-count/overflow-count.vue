@@ -117,7 +117,7 @@
     <Popover
       v-model:open="open"
       placement="bottom-start"
-      width="small"
+      size="small"
       :data-testid="`${testId}__popover`"
     >
       <PopoverTrigger
@@ -152,7 +152,7 @@
             :aria-label="t('overflowCount.search')"
             :data-testid="`${testId}__search`"
           >
-            <template #iconLeft>
+            <template #prefix>
               <i
                 class="pi pi-search"
                 aria-hidden="true"

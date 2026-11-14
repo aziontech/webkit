@@ -88,7 +88,7 @@
             <Overline
               v-if="eyebrow"
               :prefix="EYEBROW_PREFIX"
-              show-cursor
+              cursor
               >{{ eyebrow }}</Overline
             >
             <h2 class="m-0 max-w-(--container-xl) text-balance text-heading-xl">
@@ -136,7 +136,7 @@
           <Overline
             v-if="eyebrow"
             :prefix="EYEBROW_PREFIX"
-            show-cursor
+            cursor
             >{{ eyebrow }}</Overline
           >
           <h2 class="m-0 text-balance text-heading-xl">

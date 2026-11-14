@@ -409,7 +409,7 @@
                 <CardPricing
                   aligned
                   class="w-full"
-                  :plan-title="plan.name"
+                  :title="plan.name"
                   :value="plan.value"
                   :prefix="plan.prefix"
                   :suffix="plan.suffix"
@@ -717,7 +717,6 @@
                       <Field orientation="horizontal">
                         <Checkbox
                           v-model="address.useAccountInformation"
-                          binary
                           name="useAccountInformation"
                         />
                         <Field.Content>

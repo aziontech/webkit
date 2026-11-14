@@ -470,7 +470,7 @@
                     key="dropdown-menu.group-1"
                     v-if="!row.revoked && row.status !== 'Expired'"
                   >
-                    <DropdownMenu.Option
+                    <DropdownMenu.Item
                       value="revoke"
                       label="Revoke"
                     />
@@ -479,7 +479,7 @@
                     key="dropdown-menu.group-2"
                     v-else
                   >
-                    <DropdownMenu.Option
+                    <DropdownMenu.Item
                       value="delete"
                       label="Delete"
                     />

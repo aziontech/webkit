@@ -146,7 +146,7 @@
               <div class="w-full min-w-0 rounded-(--shape-elements) shadow-(--shadow-sm)">
                 <CodeBlock
                   :tabs="sampleTabs(items[index].code)"
-                  show-line-numbers
+                  line-numbers
                   v-bind="{ animateLines: true }"
                   :copy-aria-label="items[index].code.copyAriaLabel || undefined"
                 />

@@ -8,7 +8,7 @@
 <template>
   <Checkbox
     v-model="checked"
-    input-id="webkit-checkbox"
+    id="webkit-checkbox"
     aria-label="Toggle option"
   />
 </template>

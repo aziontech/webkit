@@ -56,7 +56,7 @@ default, is stuck in one language and drifts from the rest of the product.
     :messages="messages"
   >
     <Wizard
-      v-model:active-step="step"
+      v-model="step"
       aria-label="Criar aplicação"
     >
       <Wizard.Step title="Configurar">…</Wizard.Step>

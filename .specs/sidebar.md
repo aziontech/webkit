@@ -3,11 +3,11 @@ name: sidebar
 category: layout
 structure: composition
 status: implemented
-spec_version: 2
+spec_version: 3
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3735-14866
   node_id: 3735:14866
-checksum: 6a968b250a6dabc7afacdfaf677f914b6e4fc5faf2ca6f21a5b755363c30528d
+checksum: 2ccb6366763abdeb5caae4ab9a02b5c5722f5a051ac4bbb1e7cc6d562abb0210
 created: 2026-05-22
 last_updated: 2026-11-14
 ---
@@ -179,11 +179,11 @@ Two details are what make the pair correct, and neither costs more than one attr
             />
           </DropdownMenu.Trigger>
           <DropdownMenu.Group>
-            <DropdownMenu.Option
+            <DropdownMenu.Item
               value="settings"
               label="Account Settings"
             />
-            <DropdownMenu.Option
+            <DropdownMenu.Item
               value="logout"
               label="Log Out"
             />

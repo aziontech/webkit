@@ -330,7 +330,7 @@
           :data-testid="`${testId}__search`"
           class="w-full"
         >
-          <template #iconLeft>
+          <template #prefix>
             <i
               class="pi pi-search text-(--text-muted)"
               aria-hidden="true"

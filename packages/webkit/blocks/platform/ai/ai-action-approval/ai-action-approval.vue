@@ -95,7 +95,7 @@
         >
           <CodeBlock
             :tabs="[{ label: 'Shell', value: 'command', code: command, language: 'bash' }]"
-            :show-line-numbers="false"
+            :line-numbers="false"
           />
         </ActionConfirmation>
         <ToolCall
