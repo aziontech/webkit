@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 2
 template: 2
-checksum: b74b62e71c13cb20bedec85ffb8542fc2caadf06333a7652ec30df676079e199
+checksum: d6a20e61f8b32a7b5051b9b8d5f74a8256871bbec9933dfe2e3d4d1357468d18
 created: 2026-11-11
 last_updated: 2026-11-14
 ---
@@ -129,7 +129,7 @@ _None._
 
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color)` on the trigger.
 - Keyboard map: `Tab` to the trigger, `Enter` / `Space` toggles the details.
-- ARIA: the trigger is a `button` with `aria-expanded` / `aria-controls`; the status is `StatusIndicator` (`role="status"`), so a change from Running to Completed is announced; Input and Output are `section`s labelled by their `h4`.
+- ARIA: the trigger is a `button` with `aria-expanded` / `aria-controls`; the status is a `StatusIndicator` inside a `role="status"` region the ToolCall owns (StatusIndicator itself is not live), so a change from Running to Completed is announced; Input and Output are `section`s labelled by their `h4`.
 - Status is conveyed in text, never by color alone.
 
 ## Internationalization
