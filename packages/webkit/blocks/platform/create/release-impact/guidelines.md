@@ -17,29 +17,31 @@ The Review and deploy page of a release that carries several resources at once: 
 
 ## Building blocks
 
-The page opens with an `h1` reading Review and deploy and one sentence on what the page is for. No breadcrumb of its own; the shell gives it.
+### A. Page heading — `PageHeader` (required)
 
-### A. Outcome — `Alert`, `Button` (required after a run)
+The page opens with a large `PageHeader` (its `h1` reads Review and deploy) and one sentence on what the page is for. No breadcrumb of its own; the shell gives it.
 
-When a run ends, one `Alert` above the columns says how it ended: `severity="danger"` with what was refused and that nothing changed in traffic, or `severity="success"` with what serves now. Both carry **Edit** and **Redeploy** in the `action` slot, the same two actions as the toast.
+### B. Outcome — `Alert`, `Button` (required after a run)
 
-### B. Resource cards — `Switch`, `Tag`, `Tooltip` (required)
+When a run ends, one `Alert` above the columns says how it ended: `severity="danger"` with what was refused and that nothing changed in traffic, or `severity="success"` with what serves now. Both carry **Edit** and **Redeploy** in the `action` slot. The page `Alert` is the persistent outcome; the run's toast auto-dismisses and carries no actions, so the user never meets the same pair twice.
 
-One bordered card per resource, in the order of the request path (service, policy, storage, error page). The header has the type icon and label and, on the end side, a Required `Tag` (warning), a Read-only `Tag` with a lock when the release keeps the active version, or an include `Switch` named by `aria-label` and explained by a `Tooltip` ("Leave edge-policy out of this release"). A left-out resource collapses to one sentence saying what keeps serving.
+### C. Resource cards — `Card`, `Switch`, `Tag`, `Tooltip` (required)
 
-### C. Resource and version — `Field`, `Select`, `Tag` (required)
+One flush `Card` per resource (a named `section`, its `header` slot holding the type, the tags and the switch), in the order of the request path (service, policy, storage, error page). The header has the type icon and label and, on the end side, a Required `Tag` (warning), a Read-only `Tag` with a lock when the release keeps the active version, or an include `Switch` named by `aria-label` and explained by a `Tooltip` ("Leave edge-policy out of this release"). A left-out resource collapses to one sentence saying what keeps serving.
 
-Two `Field`s side by side from `sm` up: the resource (read-only box) and its version. The version `Select` offers Track latest Ready first (with "resolves at deploy") and a Pin a ready version group, each option with a Current `Tag` and its age. When the version tracks the latest, the `Field.Description` names the version it resolves to now. When nothing is Ready, the `Select` is disabled and `invalid`, `Field.Error` gives the reason, and a transparent Build a version `Button` links to its versions.
+### D. Resource and version — `Field`, `Input`, `Select`, `Tag` (required)
 
-### D. Dependencies — `Badge`, `Accordion`, `Alert`, `Tag`, `Tooltip`, `Select` (required when a resource references others)
+Two `Field`s side by side from `sm` up: the resource as a `readonly` `Input` (so its `Field.Label` names a real control) and its version. The version `Select` offers Track latest Ready first (with "resolves at deploy") and a Pin a ready version group, each option with a Current `Tag` and its age. When the version tracks the latest, the `Field.Description` names the version it resolves to now. When nothing is Ready, the `Select` is disabled and `invalid`, `Field.Error` gives the reason, and a transparent Build a version `Button` links to its versions.
+
+### E. Dependencies — `Badge`, `Accordion`, `Alert`, `Tag`, `Tooltip`, `Select` (required when a resource references others)
 
 A box under the resource fields headed Dependencies with a count `Badge`. A `type="multiple"` `Accordion`, open by default, groups them by type (Modules, Integrations) with a count each. Each dependency has its own version `Select` labelled "Version of <name>" for screen readers. A dependency referenced by other resources carries a Shared `Tag` whose `Tooltip` names them, and its group opens with one info `Alert`: a shared dependency deploys at one version.
 
-### E. Impact — `Card`, `ToggleGroup`, `Spinner`, `Skeleton`, `Alert`, `Button` (required)
+### F. Impact — `Card`, `ToggleGroup`, `Spinner`, `Skeleton`, `Alert`, `Button` (required)
 
 The right column, sticky from `xl`. The `Card` header has the title Impact and, once ready, a small `ToggleGroup` named Impact view with Tree and Flow.
 
-- **Tree** — a nested list: each Deployment Setting with its domain count, its environments with their project count, and the projects with theirs. Rails are drawn with logical borders, so they mirror under RTL.
+- **Tree** — a nested list: each Deployment Setting with its domain count, its environments with their project count, and the projects with theirs. Rails are drawn with logical borders, so they mirror under RTL. It is a static read-out, not `Tree`: `Tree` is an interactive `role="tree"` (arrow keys, expand and select), and a tree role with nothing to operate would announce controls that do nothing. Use `Tree` once the impact becomes navigable.
 - **Flow** — the same data left to right: the setting as a raised card, an arrow, then one card per environment listing its projects. It is plain lists and cards, not `Flow`: `Flow` still carries `aria-required-parent` and `aria-required-children` findings, and this view has nothing to connect beyond one level.
 - **Loading** — Computing impact… with a `Spinner` and three `Skeleton` lines; the region is `aria-busy` and a status line announces it.
 - **Unavailable** — a warning `Alert` saying the impact is unknown, how many settings are selected, and Retry. Deploying stays possible.
@@ -47,13 +49,13 @@ The right column, sticky from `xl`. The `Card` header has the title Impact and, 
 
 The `Card` footer sums the reach in one sentence: projects, environments and Deployment Settings.
 
-### F. Footer and commit — `Button`, `ConfirmDialog` (required)
+### G. Footer and commit — `SaveBar`, `Button`, `ConfirmDialog` (required)
 
-A sticky bar: the hint on the start side; on the end side the blocker (if any) with a warning icon, Cancel (outlined, back to the service) and Deploy release (primary, cloud icon). Deploy release opens a `ConfirmDialog` (`kind="primary"`) titled "Deploy this release?" that lists every resource and version and the reach. Confirm closes it and starts the run as an async action (`platform/states/async-submit`): one toast id turns from `toast.loading` ("Deploying release…", with "It keeps running if you leave.") into `toast.success` or `toast.error`, `duration: 0`, `closable`, with **Edit** and **Redeploy**. Never View deployments. This page body only calls `toast` from `@aziontech/webkit/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shells/console` does), so the page never renders a `Toaster`.
+`SaveBar kind="docked"` at the bottom of the page: the hint on the start side; on the end side the blocker (if any) with a warning icon, Cancel (outlined, back to the service) and Deploy release (primary, cloud icon). Deploy release opens a `ConfirmDialog` (`kind="primary"`) titled "Deploy this release?" that lists every resource and version and the reach. Confirm closes it and starts the run as an async action (`platform/states/async-submit`): one toast id turns from `toast.loading` ("Deploying release…", with "It keeps running if you leave.") into `toast.success` or `toast.error`, `duration: 0`, `closable`, with **Edit** and **Redeploy**. Never View deployments. This page body only calls `toast` from `@aziontech/webkit/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shells/console` does), so the page never renders a `Toaster`.
 
 ### Before the review: choosing the Deployment Settings
 
-When the release starts from the settings rather than from a service, a ChooseSettings step comes first, with the same page frame and footer. One sentence says what a Deployment Setting binds and that picking one deploys into everything that uses it. Below it, a large search `Input` counting the settings, and on the end side the number selected with transparent Select all and Clear. The settings are horizontal `Field` choice cards with a `Checkbox`, grouped under a small heading (Your Deployment Settings, Managed): the name with a Shared (warning) or Managed `Tag`, the policy line, up to three environment `Tag`s and a +N `Tag` whose `Tooltip` names the rest (repeated for screen readers), and the workloads it affects, a `Skeleton` while that count loads. An inactive setting cannot be picked: it sits in its own group as a dashed note with an Inactive `Tag`, one sentence and a link to activate it. A search with no match says so with Clear search. Continue (primary) stays disabled, with the reason in the footer hint, until one setting is selected.
+When the release starts from the settings rather than from a service, a ChooseSettings step comes first, with the same page frame and footer. One sentence says what a Deployment Setting binds and that picking one deploys into everything that uses it. Below it, a large search `Input` counting the settings, and on the end side the number selected with transparent Select all and Clear. The settings are horizontal `Field` choice cards with a `Checkbox`, grouped under a small heading (Your Deployment Settings, Managed): the name with a Shared (warning) or Managed `Tag`, the policy line, up to three environment `Tag`s and an `OverflowCount` chip (+N) that names the rest from the keyboard and to screen readers, and the workloads it affects, a `Skeleton` while that count loads. An inactive setting cannot be picked: it sits in its own group as a dashed note with an Inactive `Tag`, one sentence and a link to activate it. A search with no match shows a small `EmptyState` with Clear search. Continue (primary) stays disabled, with the reason in the footer hint, until one setting is selected.
 
 ## Do
 
@@ -61,7 +63,7 @@ When the release starts from the settings rather than from a service, a ChooseSe
 - Say what tracking the latest Ready version resolves to now.
 - Block Deploy release only for something the user can fix here, and say what it is in the footer.
 - Keep Deploy possible when the impact cannot be computed; say the impact is unknown.
-- Report the outcome through the toast and the page `Alert`, both with Edit and Redeploy.
+- Report the outcome in the page `Alert` with Edit and Redeploy; the toast only announces it and dismisses itself.
 
 ## Don't
 
@@ -74,7 +76,7 @@ When the release starts from the settings rather than from a service, a ChooseSe
 
 - **Title:** "Review and deploy". **Commit:** "Deploy release"; in progress "Deploying…".
 - **Confirmation:** "Deploy this release?" and one sentence with the resources, versions and reach.
-- **Choosing settings:** title "Choose Deployment Settings"; search "Search 6 Deployment Settings"; "2 selected", "Select all", "Clear"; workloads "4 workloads affected" or "No workloads deploy with it yet"; no match "No Deployment Settings match this search." with "Clear search"; footer "Select at least one Deployment Setting to continue."
+- **Selecting settings:** title "Select Deployment Settings"; search "Search 6 Deployment Settings"; "2 selected", "Select all", "Clear"; workloads "4 workloads affected" or "No workloads deploy with it yet"; no match "No Deployment Settings match" with "Clear search"; footer "Select at least one Deployment Setting to continue."
 - **Versions:** "Track latest Ready", "resolves at deploy", "Pin a ready version", tag "Current".
 - **Blockers:** "<name> has no Ready version, so the release cannot be deployed."
 - **Outcome:** "Release deployed." / "The release wasn't deployed." with the cause and that nothing changed in traffic.
@@ -97,7 +99,7 @@ When the release starts from the settings rather than from a service, a ChooseSe
 - Loading: the impact being computed.
 - Unavailable: the impact could not be read; Retry lands on a truncated list.
 - MissingVersion: a resource without a Ready version blocks the deploy.
-- Failed: the last run was refused; Edit and Redeploy on the toast and the page `Alert`.
+- Failed: the last run was refused; an error toast announces it, and Edit and Redeploy sit on the page `Alert`.
 
 ## Related
 
