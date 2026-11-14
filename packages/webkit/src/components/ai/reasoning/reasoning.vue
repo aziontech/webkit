@@ -1,7 +1,6 @@
 <script setup lang="ts">
   import { computed, ref, useAttrs, useId, watch } from 'vue'
 
-  import { useControllable } from '../../../composables/use-controllable'
   import { useTranslate } from '../../../composables/use-locale/use-translate'
   import * as en from '../../../i18n/messages/en'
   import Button from '../../actions/button/button.vue'
@@ -16,8 +15,6 @@
     streaming?: boolean
     /** Seconds the reasoning took, when the server reports it. Without it the component measures from `streaming` turning on to turning off. */
     duration?: number
-    /** Controlled open state. Use with `v-model:open`. */
-    open?: boolean
     /** Initial open state when uncontrolled; collapsed is the default in a chat, where the response is the main content. */
     defaultOpen?: boolean
     /** Offers `Skip thinking` while streaming, for a model that can answer before it finishes reasoning. */
@@ -27,17 +24,17 @@
   const props = withDefaults(defineProps<Props>(), {
     streaming: false,
     duration: undefined,
-    open: undefined,
     defaultOpen: false,
     skippable: false
   })
 
   const emit = defineEmits<{
-    /** The reasoning was expanded or collapsed. */
-    'update:open': [value: boolean]
     /** The reader asked for the response now; the owner stops the reasoning and sets `streaming` to false. */
     skip: [event: MouseEvent]
   }>()
+
+  /** Controlled open state. Use with `v-model:open`; while unbound it follows `defaultOpen` and toggles locally. */
+  const open = defineModel<boolean>('open', { default: undefined as never })
 
   defineSlots<{
     /** The reasoning trace: short narration, steps, inline code for identifiers. It stays as it was once thinking ends. */
@@ -53,15 +50,10 @@
     () => (attrs['data-testid'] as string | undefined) ?? 'ai-reasoning'
   )
 
-  const openProp = computed(() => props.open)
-  const isOpen = useControllable<boolean>({
-    prop: openProp,
-    defaultProp: props.defaultOpen,
-    onChange: (value) => emit('update:open', value)
-  })
+  const isOpen = computed<boolean>(() => open.value ?? props.defaultOpen)
 
   function toggle(): void {
-    isOpen.set(!isOpen.value)
+    open.value = !isOpen.value
   }
 
   const startedAt = ref<number | null>(props.streaming ? Date.now() : null)

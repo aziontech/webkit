@@ -3,11 +3,11 @@ name: sources
 category: ai
 structure: monolithic
 status: implemented
-spec_version: 1
+spec_version: 2
 template: 2
-checksum: 10fc734bc2b55299cf0df8d2bd3dd365d0e8c2299254931295e732292cfc93b4
+checksum: 99baa28d12e55ca3ca2113cdd70cce7ff935edfc5076929ce1f01286a4376e76
 created: 2026-11-11
-last_updated: 2026-11-11
+last_updated: 2026-11-14
 ---
 
 # Sources — Component Spec
@@ -52,7 +52,11 @@ view.
   <Sources
     anchor="answer-1"
     :items="[
-      { title: 'Real-Time Purge', href: 'https://www.azion.com/en/documentation/', description: 'Azion documentation' },
+      {
+        title: 'Real-Time Purge',
+        href: 'https://www.azion.com/en/documentation/',
+        description: 'Azion documentation'
+      },
       { title: 'Cache settings', href: 'https://www.azion.com/en/documentation/' }
     ]"
   />
@@ -67,19 +71,22 @@ shared with `StreamingResponse`._
 
 ## Props
 
-| Prop          | Type         | Default     | Required | JSDoc                                                                                                       |
-| ------------- | ------------ | ----------- | -------- | ----------------------------------------------------------------------------------------------------------- |
-| `items`       | `AiSource[]` | `[]`        | false    | The sources behind the response, in citation order; item `n` is what `[n]` points at.                      |
-| `anchor`      | `string`     | `''`        | false    | Id prefix of the list items (`<anchor>-source-<n>`); pass the same value to `StreamingResponse` so its citations link here. |
-| `title`       | `string`     | `''`        | false    | Heading of the disclosure. Empty uses the locale catalog (`3 sources`).                                    |
-| `open`        | `boolean`    | `undefined` | false    | Controlled open state. Use with `v-model:open`.                                                             |
-| `defaultOpen` | `boolean`    | `false`     | false    | Initial open state when uncontrolled.                                                                       |
+| Prop          | Type         | Default | Required | JSDoc                                                                                                                       |
+| ------------- | ------------ | ------- | -------- | --------------------------------------------------------------------------------------------------------------------------- |
+| `items`       | `AiSource[]` | `[]`    | false    | The sources behind the response, in citation order; item `n` is what `[n]` points at.                                       |
+| `anchor`      | `string`     | `''`    | false    | Id prefix of the list items (`<anchor>-source-<n>`); pass the same value to `StreamingResponse` so its citations link here. |
+| `title`       | `string`     | `''`    | false    | Heading of the disclosure. Empty uses the locale catalog (`3 sources`).                                                     |
+| `defaultOpen` | `boolean`    | `false` | false    | Initial open state when uncontrolled.                                                                                       |
+
+## v-model
+
+| Model          | Type      | Default     | Emits         | Notes                                                                                                                        |
+| -------------- | --------- | ----------- | ------------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| `v-model:open` | `boolean` | `undefined` | `update:open` | Expanded or collapsed, by the trigger or by following a citation. Unbound, the state is local and starts from `defaultOpen`. |
 
 ## Events
 
-| Event         | Payload   | When                                                         |
-| ------------- | --------- | ------------------------------------------------------------ |
-| `update:open` | `boolean` | Expanded or collapsed, by the trigger or by following a citation. |
+_No events._
 
 ## Slots
 
@@ -99,12 +106,12 @@ _No slots._
 
 ## Tokens
 
-| Region        | Token                                                        |
-| ------------- | ------------------------------------------------------------ |
-| trigger       | `.text-label-sm`, `var(--text-muted)`                         |
-| number chip   | `var(--bg-surface-raised)`, `var(--shape-elements)`, `.text-label-sm` |
-| title         | `.text-body-sm`, `var(--text-link)`                           |
-| description   | `.text-body-xs`, `var(--text-muted)`                          |
+| Region      | Token                                                                 |
+| ----------- | --------------------------------------------------------------------- |
+| trigger     | `.text-label-sm`, `var(--text-muted)`                                 |
+| number chip | `var(--bg-surface-raised)`, `var(--shape-elements)`, `.text-label-sm` |
+| title       | `.text-body-sm`, `var(--text-link)`                                   |
+| description | `.text-body-xs`, `var(--text-muted)`                                  |
 
 ## Theme gaps
 
@@ -119,10 +126,10 @@ _None._
 
 ## Internationalization
 
-| Key             | English source                  | Override prop |
-| --------------- | ------------------------------- | ------------- |
-| `sources.count` | `{count} source(s)` (plural)    | `title`       |
-| `sources.label` | `Sources`                       | —             |
+| Key             | English source               | Override prop |
+| --------------- | ---------------------------- | ------------- |
+| `sources.count` | `{count} source(s)` (plural) | `title`       |
+| `sources.label` | `Sources`                    | —             |
 
 - Formatting: `Intl.PluralRules` and `Intl.NumberFormat` through `t()`.
 

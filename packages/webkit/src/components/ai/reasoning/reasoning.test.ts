@@ -48,6 +48,22 @@ describe('Reasoning', () => {
     expect(emitted('update:open')?.[0]).toEqual([true])
   })
 
+  it('starts from defaultOpen when unbound and follows the parent when bound', async () => {
+    const free = render(Reasoning, { props: { defaultOpen: true }, slots })
+    expect(free.getByTestId('ai-reasoning__content')).toBeVisible()
+    expect(free.emitted('update:open')).toBeUndefined()
+    free.unmount()
+    const bound = render(Reasoning, {
+      props: { open: true, 'onUpdate:open': () => undefined },
+      slots
+    })
+    await userEvent.click(bound.getByRole('button'))
+    expect(bound.emitted('update:open')?.[0]).toEqual([false])
+    expect(bound.getByTestId('ai-reasoning__content')).toBeVisible()
+    await bound.rerender({ open: false, 'onUpdate:open': () => undefined })
+    expect(bound.getByTestId('ai-reasoning__content')).not.toBeVisible()
+  })
+
   it('offers Skip thinking only while streaming and skippable', async () => {
     const { queryByRole, getByRole, emitted, rerender } = render(Reasoning, {
       props: { streaming: true, skippable: true },
