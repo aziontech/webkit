@@ -5,8 +5,10 @@
   import { usePortalLocale, useTranslate } from '../../../../composables/use-locale/use-translate'
   import { usePlacement } from '../../../../composables/use-placement'
   import * as en from '../../../../i18n/messages/en'
+  import Button from '../../../actions/button/button.vue'
   import IconButton from '../../../actions/icon-button/icon-button.vue'
-  import Checkbox from '../../../inputs/checkbox/checkbox.vue'
+  import Switch from '../../../inputs/switch/switch.vue'
+  import Tooltip from '../../../overlay/tooltip/tooltip.vue'
   import { TableInjectionKey, type TableRowRecord } from '../injection-key'
 
   defineOptions({
@@ -78,8 +80,20 @@
 
   const columns = computed<Column<TableRowRecord, unknown>[]>(() => {
     const table = ctx?.table.value
-    return table ? table.getAllLeafColumns().filter((column) => column.getCanHide()) : []
+    if (!table) return []
+    return table.getAllLeafColumns().filter((column) => {
+      const meta = column.columnDef.meta as { kind?: string } | undefined
+      return column.getCanHide() || meta?.kind !== 'action'
+    })
   })
+
+  const hiddenCount = computed<number>(
+    () => columns.value.filter((column) => column.getCanHide() && !column.getIsVisible()).length
+  )
+
+  const showAll = (): void => {
+    for (const column of columns.value) if (column.getCanHide()) column.toggleVisibility(true)
+  }
 
   const labelOf = (column: Column<TableRowRecord, unknown>): string => {
     const meta = column.columnDef.meta as { label?: string } | undefined
@@ -98,15 +112,20 @@
         name="trigger"
         :open="() => (open = true)"
       >
-        <IconButton
-          :data-testid="testId"
-          icon="ai ai-column"
-          :ariaLabel="heading"
-          kind="outlined"
-          size="medium"
-          :aria-expanded="open"
-          @click="toggle"
-        />
+        <Tooltip
+          :text="heading"
+          :disabled="open"
+        >
+          <IconButton
+            :data-testid="testId"
+            icon="ai ai-column"
+            :ariaLabel="heading"
+            kind="outlined"
+            size="medium"
+            :aria-expanded="open"
+            @click="toggle"
+          />
+        </Tooltip>
       </slot>
     </span>
 
@@ -124,27 +143,57 @@
           :aria-label="heading"
           :data-testid="`${testId}__panel`"
           :style="panelStyle"
-          class="flex min-w-(--container-3xs) max-w-(--container-2xs) flex-col gap-(--spacing-xs) overflow-y-auto rounded-(--shape-card) border border-solid border-(length:--border-width-default) border-(--border-default) bg-(--bg-surface) p-(--spacing-sm) shadow-(--shadow-sm) outline-none [transform-origin:var(--popup-origin,top_left)]"
+          class="flex min-w-(--container-3xs) max-w-(--container-2xs) flex-col overflow-hidden rounded-(--shape-card) border border-solid border-(length:--border-width-default) border-(--border-default) bg-(--bg-surface) shadow-(--shadow-sm) outline-none [transform-origin:var(--popup-origin,top_left)]"
         >
-          <p class="text-label-md text-(--text-default)">{{ heading }}</p>
-          <label
-            v-for="column in columns"
-            :key="column.id"
-            class="flex items-center gap-(--spacing-sm) text-body-sm text-(--text-default)"
-          >
-            <Checkbox
-              binary
-              :model-value="column.getIsVisible()"
-              @update:model-value="(value) => column.toggleVisibility(!!value)"
-            />
-            <span class="min-w-0 truncate">{{ labelOf(column) }}</span>
-          </label>
           <p
-            v-if="columns.length === 0"
-            class="text-body-sm text-(--text-muted)"
+            class="border-b border-solid border-(length:--border-width-default) border-(--border-default) px-(--spacing-md) py-(--spacing-xs) text-label-md text-(--text-default)"
           >
-            {{ t('tableColumnSelector.empty') }}
+            {{ heading }}
           </p>
+          <div
+            class="flex max-h-(--container-xs) flex-col gap-(--spacing-xxs) overflow-y-auto overscroll-contain p-(--spacing-xxs)"
+          >
+            <label
+              v-for="column in columns"
+              :key="column.id"
+              :data-testid="`${testId}__column-${column.id}`"
+              :data-locked="!column.getCanHide() || null"
+              class="flex min-h-8 pointer-coarse:min-h-11 cursor-pointer items-center gap-(--spacing-sm) rounded-(--shape-elements) px-(--spacing-sm) py-(--spacing-xs) text-label-sm text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) motion-reduce:transition-none data-[locked]:cursor-default data-[locked]:text-(--text-muted) data-[locked]:hover:bg-transparent"
+            >
+              <Switch
+                :data-testid="`${testId}__switch-${column.id}`"
+                :model-value="column.getIsVisible()"
+                :disabled="!column.getCanHide()"
+                @update:model-value="(value) => column.toggleVisibility(!!value)"
+              />
+              <span class="min-w-0 truncate">{{ labelOf(column) }}</span>
+              <span
+                v-if="!column.getCanHide()"
+                class="ms-auto shrink-0 text-label-sm text-(--text-muted)"
+              >
+                {{ t('tableColumnSelector.alwaysShown') }}
+              </span>
+            </label>
+            <p
+              v-if="columns.length === 0"
+              class="px-(--spacing-sm) py-(--spacing-xs) text-body-sm text-(--text-muted)"
+            >
+              {{ t('tableColumnSelector.empty') }}
+            </p>
+          </div>
+          <div
+            v-if="hiddenCount > 0"
+            class="border-t border-solid border-(length:--border-width-default) border-(--border-default) p-(--spacing-xxs)"
+          >
+            <Button
+              :data-testid="`${testId}__show-all`"
+              :label="t('tableColumnSelector.showAll')"
+              kind="transparent"
+              size="small"
+              class="w-full"
+              @click="showAll"
+            />
+          </div>
         </div>
       </Transition>
     </Teleport>
