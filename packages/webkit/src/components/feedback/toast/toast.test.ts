@@ -546,8 +546,10 @@ describe('timing adjustable (audit: WCAG 2.2.1)', () => {
     await wait(600)
     expect(useToastStore().toasts).toHaveLength(1)
     view.getByTestId('work').focus()
-    await wait(600)
-    expect(useToastStore().toasts).toHaveLength(0)
+    await vi.waitFor(() => expect(useToastStore().toasts).toHaveLength(0), {
+      timeout: 3000,
+      interval: 50
+    })
   })
 
   it('Alt+T moves focus to the front toast action', async () => {

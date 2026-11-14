@@ -125,7 +125,7 @@ describe('screen-reader smoke · overlays', () => {
     const snapshot = await openAndRead(SelectDefault, () => byRole('combobox'), 'body')
     expect(snapshot).toMatchInlineSnapshot(`
       "- combobox "Option" [expanded]: Select an option
-      - listbox:
+      - listbox "Option":
         - option "Option 1"
         - option "Option 2"
         - option "Option 3"
@@ -137,7 +137,7 @@ describe('screen-reader smoke · overlays', () => {
     const snapshot = await openAndRead(MultiSelectDefault, () => byRole('combobox'), 'body')
     expect(snapshot).toMatchInlineSnapshot(`
       "- combobox "Options" [expanded]: Option 1
-      - listbox:
+      - listbox "Options":
         - option "Option 1" [selected]
         - option "Option 2"
         - option "Option 3"
