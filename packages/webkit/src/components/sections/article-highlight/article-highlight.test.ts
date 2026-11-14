@@ -239,9 +239,12 @@ describe('ArticleHighlight', () => {
     await waitFor(() => expect(root.hasAttribute('data-autoplay')).toBe(true))
     await fireEvent.pointerEnter(root)
     await waitFor(() => expect(root.hasAttribute('data-autoplay')).toBe(false))
+    const selected = () =>
+      getAllByRole('tab').findIndex((tab) => tab.getAttribute('aria-selected') === 'true')
+    const paused = selected()
 
     await new Promise((resolve) => setTimeout(resolve, 500))
-    expect(getAllByRole('tab')[0]?.getAttribute('aria-selected')).toBe('true')
+    expect(selected()).toBe(paused)
 
     await fireEvent.pointerLeave(root)
     await waitFor(() => expect(root.hasAttribute('data-autoplay')).toBe(true))
