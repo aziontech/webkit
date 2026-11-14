@@ -425,6 +425,9 @@ export const es: Messages = {
     expandNavigation: 'Expandir navegación',
     resizeNavigation: 'Cambiar el tamaño de la navegación'
   },
+  docMarkdown: {
+    newTab: '(se abre en una pestaña nueva)'
+  },
   docOnThisPage: {
     title: 'En esta página'
   },

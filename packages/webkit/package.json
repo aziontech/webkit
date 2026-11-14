@@ -838,6 +838,10 @@
       "types": "./types/components/documentation/doc-layout/doc-layout.vue.d.ts",
       "default": "./src/components/documentation/doc-layout/doc-layout.vue"
     },
+    "./doc-markdown": {
+      "types": "./types/components/documentation/doc-markdown/doc-markdown.vue.d.ts",
+      "default": "./src/components/documentation/doc-markdown/doc-markdown.vue"
+    },
     "./doc-on-this-page": {
       "types": "./types/components/documentation/doc-on-this-page/doc-on-this-page.vue.d.ts",
       "default": "./src/components/documentation/doc-on-this-page/doc-on-this-page.vue"

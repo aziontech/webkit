@@ -425,6 +425,9 @@ export const ptBR: Messages = {
     expandNavigation: 'Expandir navegação',
     resizeNavigation: 'Redimensionar navegação'
   },
+  docMarkdown: {
+    newTab: '(abre em uma nova aba)'
+  },
   docOnThisPage: {
     title: 'Nesta página'
   },

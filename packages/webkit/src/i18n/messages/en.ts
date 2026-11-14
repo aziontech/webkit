@@ -347,6 +347,10 @@ export const docFrame = {
   close: 'Close'
 } as const
 
+export const docMarkdown = {
+  newTab: '(opens in a new tab)'
+} as const
+
 export const docOnThisPage = {
   title: 'On this page'
 } as const
@@ -1247,6 +1251,7 @@ export const en = {
   dialog,
   docFrame,
   docLayout,
+  docMarkdown,
   docOnThisPage,
   docPageHeader,
   docPagination,
