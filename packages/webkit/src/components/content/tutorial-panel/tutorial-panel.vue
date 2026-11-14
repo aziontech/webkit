@@ -4,6 +4,7 @@
   import { useTranslate } from '../../../composables/use-locale/use-translate'
   import * as en from '../../../i18n/messages/en'
   import Button from '../../actions/button/button.vue'
+  import EmptyState from '../../feedback/empty-state/empty-state.vue'
   import HelpPanel from '../help-panel/help-panel.vue'
   import HelpPanelHeader from '../help-panel/help-panel-header/help-panel-header.vue'
   import HelpPanelTask from '../help-panel/help-panel-task/help-panel-task.vue'
@@ -141,13 +142,12 @@
         >
           {{ t('tutorialPanel.listLabel') }}
         </h3>
-        <p
+        <EmptyState
           v-if="context.tutorials.value.length === 0"
+          :title="t('tutorialPanel.empty')"
+          size="small"
           :data-testid="`${testId}__empty`"
-          class="text-body-sm text-(--text-muted)"
-        >
-          {{ t('tutorialPanel.empty') }}
-        </p>
+        />
         <ul
           v-else
           :data-testid="`${testId}__list`"

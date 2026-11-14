@@ -963,12 +963,12 @@
   {
     "name": "tutorial-panel",
     "path": "src/components/content/tutorial-panel/index.ts",
-    "limit": "8.75 KB"
+    "limit": "9.25 KB"
   },
   {
     "name": "tutorial-panel-root",
     "path": "src/components/content/tutorial-panel/tutorial-panel.vue",
-    "limit": "8 KB"
+    "limit": "8.5 KB"
   },
   {
     "name": "tutorial-panel-provider",

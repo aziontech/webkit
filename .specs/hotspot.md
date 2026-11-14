@@ -3,11 +3,11 @@ name: hotspot
 category: content
 structure: monolithic
 status: implemented
-spec_version: 1
+spec_version: 2
 template: 2
-checksum: 1a5cc94311ab9e359edfa1d6356772b109b174bf61190632959df359a884e4d1
+checksum: 5dee225febc5c80b6123dda9961ef514e524b7c4c541ffb591b76ecc497e372f
 created: 2026-11-11
-last_updated: 2026-11-11
+last_updated: 2026-11-14
 ---
 
 # Hotspot — Component Spec
@@ -155,6 +155,8 @@ _None._
 ## Examples
 
 - Default — two hotspots inside a running tutorial; the first step's popover open.
+- Idle — outside a running tutorial the hotspot renders only its control. Justified: the idle state is the one most pages show.
+- Sides — `side="start"` beside the default `end`. Justified: `side` changes where the marker sits.
 
 ## Open questions
 

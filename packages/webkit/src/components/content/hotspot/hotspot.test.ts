@@ -111,4 +111,33 @@ describe('Hotspot', () => {
     await tick()
     await expectNoA11yViolations(container)
   })
+
+  it('renders the testid fallback and lets a consumer testid win', async () => {
+    const { container } = render({
+      components: { TutorialPanelProvider, Hotspot },
+      setup: () => ({ tutorials }),
+      template: `
+        <TutorialPanelProvider :tutorials="tutorials" active="guide" :step="0">
+          <Hotspot hotspot-id="a"><button type="button">Alpha</button></Hotspot>
+          <Hotspot hotspot-id="b" data-testid="beta-spot"><button type="button">Beta</button></Hotspot>
+        </TutorialPanelProvider>
+      `
+    })
+    await tick()
+    expect(container.querySelectorAll('[data-testid="content-hotspot"]')).toHaveLength(1)
+    expect(container.querySelector('[data-testid="beta-spot"]')?.textContent).toContain('Beta')
+    expect(container.querySelector('[data-testid="beta-spot__marker"]')).not.toBeNull()
+  })
+
+  it('closes the open step on Escape and returns focus to its marker', async () => {
+    render(Host, { props: { active: 'guide', step: 0 } })
+    await tick()
+    const marker = markers()[0] as HTMLElement
+    expect(marker.getAttribute('aria-expanded')).toBe('true')
+    await userEvent.keyboard('{Escape}')
+    await tick()
+    await new Promise((resolve) => setTimeout(resolve, 50))
+    expect(marker.getAttribute('aria-expanded')).toBe('false')
+    expect(document.activeElement).toBe(marker)
+  })
 })
