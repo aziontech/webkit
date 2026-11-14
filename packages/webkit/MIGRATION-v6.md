@@ -331,6 +331,33 @@ the old look.
 - `ArticleIndexBlog`, `ArticleIndexResourceHub`, `StoryLibrary`: with `moreLabel` set the list pages
   by `pageSize` (default `12`), and the load-more button shows only while more remain.
 
+### Marketing names deprecated in 6.0
+
+These still work in 6.x and are removed in 7.0. `webkit migrate` rewrites the prop renames marked
+with a codemod; move the rest by hand. When both names are set, the new one wins (except
+`banner-art`, where a set `art` still picks the backdrop, and `architecture-tabs` / `feature-tabs`,
+where a non-zero `interval` still sets the hold).
+
+| Component                | Deprecated                                   | Use                                    | Codemod |
+| ------------------------ | -------------------------------------------- | -------------------------------------- | ------- |
+| `architecture-tabs`      | `interval`                                   | `autoplayInterval` (and `autoplay`)    | yes     |
+| `banner-art`             | `art`                                        | `kind`                                 | yes     |
+| `capability-grid`        | `actions`                                    | `primaryAction` / `secondaryAction`    | no      |
+| `compare-plans`          | section `link`                               | section `action`                       | no      |
+| `console-panel`          | `actions`                                    | `primaryAction` / `secondaryAction`    | no      |
+| `customer-spotlight`     | `cards`, `storyLabel`                        | `items`, `linkLabel`                   | yes     |
+| `feature-tabs`           | `interval`                                   | `autoplayInterval` (and `autoplay`)    | yes     |
+| `hero`                   | `carousel`, `carouselMarks`, `carouselLabel` | `ticker`, `tickerMarks`, `tickerLabel` | yes     |
+| `hero-band`, `hero-form` | `carouselMarks`, `carouselLabel`             | `tickerMarks`, `tickerLabel`           | yes     |
+| `media-tabs`             | `@tab-change`                                | `v-model` (`update:modelValue`)        | no      |
+| `logo-wall` (types)      | `LogoItem`, `LogoShape`                      | `LogoWallItem`, `LogoWallShape`        | no      |
+| `big-numbers` (type)     | `BigNumberItem`                              | `BigNumbersItem`                       | no      |
+| `content-columns` (type) | `ContentColumnItem`                          | `ContentColumnsItem`                   | no      |
+
+Site JSON written for these sections can keep the old keys through 6.x; the examples now show the
+new ones. `media-tabs`, `quote-tabs`, `ticker`, `article-highlight` (with `autoplay`) and the
+sections that compose them now draw a visible pause control while they move (WCAG 2.2.2).
+
 ### Right-to-left
 
 Components, blocks and examples use logical utilities only, so a page under `dir="rtl"` mirrors:

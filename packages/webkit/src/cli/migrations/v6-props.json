@@ -2,11 +2,18 @@
   "accordion": { "value": "modelValue" },
   "accordion-root": { "value": "modelValue" },
   "alert": { "severity": { "to": "severity", "values": { "error": "danger" } } },
+  "architecture-tabs": { "interval": "autoplayInterval" },
+  "banner-art": { "art": "kind" },
   "button": { "kind": { "to": "kind", "values": { "text": "transparent" } } },
   "code-block": { "border": "bordered", "value": "modelValue" },
+  "customer-spotlight": { "cards": "items", "storyLabel": "linkLabel" },
   "doc-card": { "overline": "eyebrow", "link": "linkLabel" },
   "doc-card-group": { "mobileCols": "mobileColumns" },
   "doc-tooltip": { "headline": "title", "cta": "linkLabel" },
+  "feature-tabs": { "interval": "autoplayInterval" },
+  "hero": { "carousel": "ticker", "carouselMarks": "tickerMarks", "carouselLabel": "tickerLabel" },
+  "hero-band": { "carouselMarks": "tickerMarks", "carouselLabel": "tickerLabel" },
+  "hero-form": { "carouselMarks": "tickerMarks", "carouselLabel": "tickerLabel" },
   "item": {
     "kind": { "to": "kind", "values": { "outline": "outlined" } },
     "asChild": {
