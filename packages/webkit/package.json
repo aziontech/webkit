@@ -1122,6 +1122,18 @@
       "types": "./types/components/inputs/password-requirements/index.d.ts",
       "default": "./src/components/inputs/password-requirements/index.ts"
     },
+    "./radio-group": {
+      "types": "./types/components/inputs/radio-group/index.d.ts",
+      "default": "./src/components/inputs/radio-group/index.ts"
+    },
+    "./radio-group-item": {
+      "types": "./types/components/inputs/radio-group/radio-group-item/radio-group-item.vue.d.ts",
+      "default": "./src/components/inputs/radio-group/radio-group-item/radio-group-item.vue"
+    },
+    "./radio-group-root": {
+      "types": "./types/components/inputs/radio-group/radio-group.vue.d.ts",
+      "default": "./src/components/inputs/radio-group/radio-group.vue"
+    },
     "./radio-cards": {
       "types": "./types/components/inputs/radio-cards/radio-cards.vue.d.ts",
       "default": "./src/components/inputs/radio-cards/radio-cards.vue"
@@ -3244,6 +3256,15 @@
       ],
       "password-requirements": [
         "./types/components/inputs/password-requirements/index.d.ts"
+      ],
+      "radio-group": [
+        "./types/components/inputs/radio-group/index.d.ts"
+      ],
+      "radio-group-item": [
+        "./types/components/inputs/radio-group/radio-group-item/radio-group-item.vue.d.ts"
+      ],
+      "radio-group-root": [
+        "./types/components/inputs/radio-group/radio-group.vue.d.ts"
       ],
       "radio-cards": [
         "./types/components/inputs/radio-cards/radio-cards.vue.d.ts"

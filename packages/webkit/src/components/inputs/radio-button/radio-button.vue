@@ -90,7 +90,6 @@
       :required="isRequired || undefined"
       :checked="isChecked"
       :disabled="isDisabled"
-      :aria-checked="isChecked"
       :data-testid="`${testId}__input`"
       v-bind="passthroughAttrs"
       @change="handleChange"

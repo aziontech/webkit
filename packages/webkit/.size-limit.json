@@ -1927,6 +1927,11 @@
     "limit": "4.95 KB"
   },
   {
+    "name": "radio-group-root",
+    "path": "src/components/inputs/radio-group/radio-group.vue",
+    "limit": "1.5 KB"
+  },
+  {
     "name": "radio-cards",
     "path": "src/components/inputs/radio-cards/radio-cards.vue",
     "limit": "2.95 KB"
