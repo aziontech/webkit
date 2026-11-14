@@ -263,7 +263,7 @@
             class="flex flex-col"
           >
             <DocHeading
-              id="start-by-interface"
+              anchor="start-by-interface"
               :level="2"
               >Start by interface</DocHeading
             >
@@ -275,7 +275,7 @@
               :prompt="prompt"
               action-href="/docs/agent-setup"
             />
-            <DocCardGroup :cols="3">
+            <DocCardGroup :columns="3">
               <DocCard
                 v-for="item in interfaces"
                 :key="item.title"
@@ -293,12 +293,12 @@
             class="flex flex-col"
           >
             <DocHeading
-              id="start-by-objective"
+              anchor="start-by-objective"
               :level="2"
               >Start by objective</DocHeading
             >
             <p>Build something, make it faster, lock it down, or run AI on it.</p>
-            <DocCardGroup :cols="2">
+            <DocCardGroup :columns="2">
               <DocCard
                 v-for="item in objectives"
                 :key="item.title"
@@ -325,13 +325,13 @@
             class="flex flex-col"
           >
             <DocHeading
-              id="templates"
+              anchor="templates"
               :level="2"
               >Ready-made templates</DocHeading
             >
             <p>Deploy in one step, with CI/CD already wired up.</p>
             <DocCardGroup
-              :cols="4"
+              :columns="4"
               :mobile-columns="2"
             >
               <DocCard
@@ -353,14 +353,14 @@
             class="flex flex-col"
           >
             <DocHeading
-              id="stop-attacks"
+              anchor="stop-attacks"
               :level="2"
               >Stop attacks</DocHeading
             >
             <p>
               Everything you need to protect applications, APIs, and the traffic that reaches them.
             </p>
-            <DocCardGroup :cols="3">
+            <DocCardGroup :columns="3">
               <DocCard
                 v-for="item in attacks"
                 :key="item.title"
@@ -383,7 +383,7 @@
             class="flex flex-col"
           >
             <DocHeading
-              id="compliance"
+              anchor="compliance"
               :level="2"
               >Assess risk and prove compliance</DocHeading
             >
@@ -391,7 +391,7 @@
               What the platform covers, what stays with you, and where the evidence lives when an
               auditor asks for it.
             </p>
-            <DocCardGroup :cols="3">
+            <DocCardGroup :columns="3">
               <DocCard
                 v-for="item in compliance"
                 :key="item.title"
@@ -408,7 +408,7 @@
             class="flex flex-col"
           >
             <DocHeading
-              id="follow-along"
+              anchor="follow-along"
               :level="2"
               >Follow along</DocHeading
             >
@@ -416,7 +416,7 @@
               Release notes as things ship, plus the blog, the YouTube channel, and the Discord
               where questions get answered.
             </p>
-            <DocCardGroup :cols="3">
+            <DocCardGroup :columns="3">
               <DocCard
                 v-for="item in followAlong"
                 :key="item.title"

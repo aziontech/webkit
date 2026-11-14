@@ -670,29 +670,17 @@ describe('ConsoleLayout — navigation rail state', () => {
     expect(rail(view).hasAttribute('data-collapsed')).toBe(true)
   })
 
-  it('emits update:navigationOpen and the deprecated update:navigationExpanded together', async () => {
+  it('emits update:navigationOpen when the rail collapses itself', async () => {
     const onOpen = vi.fn()
-    const onExpanded = vi.fn()
-    const view = mount({
-      'onUpdate:navigationOpen': onOpen,
-      'onUpdate:navigationExpanded': onExpanded
-    })
+    const view = mount({ 'onUpdate:navigationOpen': onOpen })
     await userEvent.click(view.getByRole('button', { name: 'Collapse sidebar' }))
     expect(onOpen).toHaveBeenCalledWith(false)
-    expect(onExpanded).toHaveBeenCalledWith(false)
-  })
-
-  it('collapses the rail when navigationExpanded is false', () => {
-    const view = mount({ navigationExpanded: false })
-    expect(rail(view).hasAttribute('data-collapsed')).toBe(true)
-  })
-
-  it('emits update:navigationExpanded when the rail collapses itself', async () => {
-    const onExpanded = vi.fn()
-    const view = mount({ 'onUpdate:navigationExpanded': onExpanded })
-    await userEvent.click(view.getByRole('button', { name: 'Collapse sidebar' }))
-    expect(onExpanded).toHaveBeenCalledWith(false)
     await waitFor(() => expect(rail(view).hasAttribute('data-collapsed')).toBe(true))
+  })
+
+  it('ignores the removed navigationExpanded model', () => {
+    const view = mount({ navigationExpanded: false })
+    expect(rail(view).hasAttribute('data-collapsed')).toBe(false)
   })
 
   it('folds and restores the rail from the palette in the NavigationExpanded example', async () => {

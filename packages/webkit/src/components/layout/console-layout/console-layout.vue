@@ -4,7 +4,6 @@
     computed,
     Fragment,
     type FunctionalComponent,
-    getCurrentInstance,
     h,
     isVNode,
     nextTick,
@@ -148,9 +147,6 @@
   /** Whether the navigation rail is shown on wide layouts; false collapses it. Use with `v-model:navigation-open`. */
   const navigationOpen = defineModel<boolean>('navigationOpen', { default: true })
 
-  /** @deprecated since 6.0 — use `v-model:navigation-open`. Removed in 7.0. */
-  const navigationExpanded = defineModel<boolean>('navigationExpanded', { default: true })
-
   defineSlots<{
     /** The page body, rendered inside the layout's main landmark. */
     default(): unknown
@@ -196,26 +192,10 @@
   })
 
   const attrs = useAttrs()
-  const instance = getCurrentInstance()
   const { t } = useTranslate({ consoleLayout: en.consoleLayout })
 
   const query = ref('')
   const railWidth = ref<number | null>(null)
-  const passed = (...names: string[]) => {
-    const raw = instance?.vnode.props
-    return Boolean(raw && names.some((name) => name in raw))
-  }
-  const railOpen = computed({
-    get: () =>
-      passed('navigationExpanded', 'navigation-expanded') &&
-      !passed('navigationOpen', 'navigation-open')
-        ? navigationExpanded.value
-        : navigationOpen.value,
-    set: (value: boolean) => {
-      navigationOpen.value = value
-      navigationExpanded.value = value
-    }
-  })
   const menuPath = ref<string[]>([])
   const menuExpanded = ref<string[]>([])
   const navEl = ref<globalThis.HTMLElement | null>(null)
@@ -486,7 +466,7 @@
       <template #navigation="{ drawer, closeNavigation }">
         <Sidebar
           v-model:width="railWidth"
-          v-model:open="railOpen"
+          v-model:open="navigationOpen"
           :resizable="!drawer"
           :collapsible="!drawer"
           :aria-label="ariaLabel || t('consoleLayout.navigation')"

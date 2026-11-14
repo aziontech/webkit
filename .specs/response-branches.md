@@ -3,9 +3,9 @@ name: response-branches
 category: ai
 structure: monolithic
 status: implemented
-spec_version: 2
+spec_version: 3
 template: 2
-checksum: 1ba3fa41d2292815bd72f7c66269fcc3c99de29dbf3cc6a0cc0a3e0898f44ce3
+checksum: 022ebaafa9d3560ddd95e8ac0e68b04a2239dde6d37b0b5d40a1f33a0e3d43d4
 created: 2026-11-11
 last_updated: 2026-11-14
 ---
@@ -63,12 +63,11 @@ Pages through alternative versions of one assistant response: after Regenerate, 
 
 ## Props
 
-| Prop        | Type      | Default | Required | JSDoc                                                                                            |
-| ----------- | --------- | ------- | -------- | ------------------------------------------------------------------------------------------------ |
-| `count`     | `number`  | —       | true     | How many versions exist. With one or none the pager is not drawn.                                |
-| `ariaLabel` | `string`  | `''`    | false    | Accessible name of the pager group. Empty uses the locale catalog (`Response versions`).         |
-| `label`     | `string`  | `''`    | false    | @deprecated since 6.0 — use `ariaLabel` instead. Removed in 7.0. Read when `ariaLabel` is empty. |
-| `disabled`  | `boolean` | `false` | false    | Locks the pager, for example while a new version streams.                                        |
+| Prop        | Type      | Default | Required | JSDoc                                                                                    |
+| ----------- | --------- | ------- | -------- | ---------------------------------------------------------------------------------------- |
+| `count`     | `number`  | —       | true     | How many versions exist. With one or none the pager is not drawn.                        |
+| `ariaLabel` | `string`  | `''`    | false    | Accessible name of the pager group. Empty uses the locale catalog (`Response versions`). |
+| `disabled`  | `boolean` | `false` | false    | Locks the pager, for example while a new version streams.                                |
 
 ## v-model
 

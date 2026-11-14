@@ -183,7 +183,7 @@
     const value = pick === undefined ? deployed[key] : pick
     const base = {
       key,
-      kind: target.kind,
+      type: target.kind,
       icon: target.icon,
       bindable: true,
       bindOptions: target.options,
@@ -219,7 +219,7 @@
       nodes: [
         {
           key: 'domains',
-          kind: 'Domains',
+          type: 'Domains',
           icon: 'pi pi-globe',
           name: 'service-01.example.com',
           status: '1 domain',
@@ -240,7 +240,7 @@
       nodes: [
         {
           key: 'service',
-          kind: 'Service',
+          type: 'Service',
           icon: 'pi pi-server',
           name: SERVICE.name,
           status: 'Live',
@@ -265,7 +265,7 @@
       nodes: [
         {
           key: 'resource',
-          kind: 'Resource',
+          type: 'Resource',
           icon: 'pi pi-box',
           name: 'web-app',
           status: 'Active',
@@ -286,7 +286,7 @@
       nodes: [
         {
           key: 'storage',
-          kind: 'Storage',
+          type: 'Storage',
           icon: 'pi pi-inbox',
           name: 'web-app-assets',
           status: 'Public',
@@ -416,7 +416,7 @@
               aria-label="Search environments"
               @keydown.stop
             >
-              <template #iconLeft>
+              <template #prefix>
                 <i
                   class="pi pi-search"
                   aria-hidden="true"
@@ -536,7 +536,7 @@
                     </div>
                     <Popover
                       placement="bottom-start"
-                      width="small"
+                      size="small"
                     >
                       <Popover.Trigger>
                         <div class="shrink-0 cursor-pointer">
@@ -622,7 +622,7 @@
                           </DropdownMenu.Trigger>
 
                           <DropdownMenu.Group label="Environments">
-                            <DropdownMenu.Option
+                            <DropdownMenu.Item
                               v-for="option in environments"
                               :key="option.name"
                               :value="option.name"
@@ -632,17 +632,17 @@
                           </DropdownMenu.Group>
 
                           <DropdownMenu.Group>
-                            <DropdownMenu.Option
+                            <DropdownMenu.Item
                               value="__add-environment__"
                               label="Add Environment"
                             >
-                              <template #left>
+                              <template #leading>
                                 <i
                                   class="pi pi-plus"
                                   aria-hidden="true"
                                 />
                               </template>
-                            </DropdownMenu.Option>
+                            </DropdownMenu.Item>
                           </DropdownMenu.Group>
                         </DropdownMenu>
                       </Tooltip>
@@ -661,42 +661,42 @@
                       </DropdownMenu.Trigger>
 
                       <DropdownMenu.Group>
-                        <DropdownMenu.Option
+                        <DropdownMenu.Item
                           value="copy-url"
                           label="Copy URL"
                         >
-                          <template #left>
+                          <template #leading>
                             <i
                               class="pi pi-copy"
                               aria-hidden="true"
                             />
                           </template>
-                        </DropdownMenu.Option>
+                        </DropdownMenu.Item>
                       </DropdownMenu.Group>
 
                       <DropdownMenu.Group>
-                        <DropdownMenu.Option
+                        <DropdownMenu.Item
                           value="manage-domains"
                           label="Manage domains"
                         >
-                          <template #left>
+                          <template #leading>
                             <i
                               class="pi pi-globe"
                               aria-hidden="true"
                             />
                           </template>
-                        </DropdownMenu.Option>
-                        <DropdownMenu.Option
+                        </DropdownMenu.Item>
+                        <DropdownMenu.Item
                           value="settings"
                           label="Settings"
                         >
-                          <template #left>
+                          <template #leading>
                             <i
                               class="pi pi-cog"
                               aria-hidden="true"
                             />
                           </template>
-                        </DropdownMenu.Option>
+                        </DropdownMenu.Item>
                       </DropdownMenu.Group>
                     </DropdownMenu>
                   </div>

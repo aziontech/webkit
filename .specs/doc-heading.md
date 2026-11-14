@@ -3,9 +3,9 @@ name: doc-heading
 category: documentation
 structure: monolithic
 status: implemented
-spec_version: 2
+spec_version: 3
 template: 2
-checksum: 6f19eb9d7a1c077670f1badb17e0982e2341d6bcf70250d03163746a28e1506f
+checksum: ee9cf5a06423503a121ccf0df865e6e077654d4aeab364ab5fa2340c6a163ce8
 created: 2026-11-11
 last_updated: 2026-11-14
 ---
@@ -59,7 +59,6 @@ A documentation section heading that is also the link to itself. The whole text 
 | -------- | ------------------ | ------- | -------- | --------------------------------------------------------------------------------------------------------------------------------- |
 | `level`  | `1 \| 2 \| 3 \| 4` | `2`     | false    | Heading level; drives the tag and the prose type scale.                                                                           |
 | `anchor` | `string`           | `''`    | false    | In-page anchor: the heading's id, what the page rail entry and the copied URL point at. Empty renders the heading without a link. |
-| `id`     | `string`           | `''`    | false    | @deprecated since 6.0 — use `anchor` instead. Removed in 7.0. Still read when `anchor` is empty.                                  |
 | `label`  | `string`           | `''`    | false    | Fallback text when the default slot is empty.                                                                                     |
 
 ## Events

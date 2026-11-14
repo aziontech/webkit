@@ -222,11 +222,6 @@
     "entryOnly": true
   },
   {
-    "name": "doc-cta",
-    "path": "src/components/documentation/doc-cta/doc-cta.vue",
-    "limit": "12 KB"
-  },
-  {
     "name": "doc-heading",
     "path": "src/components/documentation/doc-heading/doc-heading.vue",
     "limit": "1.5 KB"

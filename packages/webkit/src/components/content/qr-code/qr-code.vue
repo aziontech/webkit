@@ -18,10 +18,6 @@
     value: string
     /** Accessible name of the image. Empty uses the catalog's `QR code`; name it after what the scan does. */
     ariaLabel?: string
-    /**
-     * @deprecated since 6.0 — use `ariaLabel` instead. Removed in 7.0.
-     */
-    label?: string
     /** Error-correction level: `L` 7 %, `M` 15 %, `Q` 25 %, `H` 30 % of the code can be lost and still read. Higher levels make denser codes. */
     errorCorrection?: QrErrorCorrection
     /** Rendered width: `small` 128 px, `medium` 160 px, `large` 224 px, quiet zone included. */
@@ -30,7 +26,6 @@
 
   const props = withDefaults(defineProps<Props>(), {
     ariaLabel: '',
-    label: '',
     errorCorrection: 'M',
     size: 'medium'
   })
@@ -74,7 +69,7 @@
     return d
   })
 
-  const name = computed<string>(() => props.ariaLabel || props.label || t('qrCode.label'))
+  const name = computed<string>(() => props.ariaLabel || t('qrCode.label'))
 </script>
 
 <template>

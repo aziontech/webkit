@@ -15,17 +15,12 @@
     count: number
     /** Accessible name of the pager group. Empty uses the locale catalog (`Response versions`). */
     ariaLabel?: string
-    /**
-     * @deprecated since 6.0 — use `ariaLabel` instead. Removed in 7.0.
-     */
-    label?: string
     /** Locks the pager, for example while a new version streams. */
     disabled?: boolean
   }
 
   const props = withDefaults(defineProps<Props>(), {
     ariaLabel: '',
-    label: '',
     disabled: false
   })
 
@@ -67,7 +62,7 @@
     <div
       v-if="count > 1"
       role="group"
-      :aria-label="ariaLabel || label || t('responseBranches.label')"
+      :aria-label="ariaLabel || t('responseBranches.label')"
       :data-testid="`${testId}__pager`"
       :data-disabled="disabled || null"
       class="group inline-flex items-center gap-(--spacing-xxs) self-start"

@@ -28,20 +28,11 @@ describe('CapabilityGrid', () => {
     expect(getByRole('link', { name: 'Docs' })).toHaveAttribute('data-kind', 'outlined')
   })
 
-  it('still reads the deprecated actions when no named action is set', () => {
-    const { getByRole } = render(CapabilityGrid, {
-      props: { items, title: 'T', actions: [{ label: 'Docs', href: '/docs' }] }
+  it('draws no button from the removed actions array', () => {
+    const { queryByRole } = render(CapabilityGrid, {
+      props: { items, title: 'T', actions: [{ label: 'Docs', href: '/docs' }] } as never
     })
-    expect(getByRole('link', { name: 'Docs' })).toHaveAttribute('href', '/docs')
-    const both = render(CapabilityGrid, {
-      props: {
-        items,
-        title: 'T',
-        actions: [{ label: 'Old', href: '/old' }],
-        primaryAction: { label: 'New', href: '/new' }
-      }
-    })
-    expect(both.queryByRole('link', { name: 'Old' })).toBeNull()
+    expect(queryByRole('link', { name: 'Docs' })).toBeNull()
   })
 
   it('renders nothing without items', () => {

@@ -31,7 +31,7 @@ const parts = () => [
   h(ChartLine, { ids: ['blocked'] }),
   h(ChartCrosshair),
   h(ChartTooltip),
-  h(ChartLegend, { totals: true })
+  h(ChartLegend, { total: true })
 ]
 
 const mount = (props: Record<string, unknown> = {}, children = parts) =>
@@ -533,12 +533,12 @@ describe('Chart table twin on devices', () => {
 })
 
 describe('ChartLegend total', () => {
-  it('shows the totals with total, and still with the deprecated totals', () => {
+  it('shows the totals with total, and not with the removed totals', () => {
     const next = mount({}, () => [h(ChartLine), h(ChartLegend, { total: true })])
     const withTotal = next.getAllByTestId('chart-chart__legend-item')[0]!.textContent
     next.unmount()
     const legacy = mount({}, () => [h(ChartLine), h(ChartLegend, { totals: true })])
-    expect(legacy.getAllByTestId('chart-chart__legend-item')[0]!.textContent).toBe(withTotal)
+    expect(legacy.getAllByTestId('chart-chart__legend-item')[0]!.textContent).not.toBe(withTotal)
     legacy.unmount()
     const none = mount({}, () => [h(ChartLine), h(ChartLegend)])
     expect(none.getAllByTestId('chart-chart__legend-item')[0]!.textContent).not.toBe(withTotal)

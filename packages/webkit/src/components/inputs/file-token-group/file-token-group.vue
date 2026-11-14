@@ -10,8 +10,6 @@
 
   /** Layout axis of the tokens. */
   export type FileTokenGroupOrientation = 'vertical' | 'horizontal'
-  /** @deprecated since 6.0 — use `FileTokenGroupOrientation`. Removed in 7.0. */
-  export type FileTokenGroupAlignment = FileTokenGroupOrientation
 
   export interface FileTokenGroupFile {
     name: string
@@ -36,8 +34,6 @@
     items?: FileTokenGroupItem[]
     /** Vertical stacks full-width tokens; horizontal wraps compact tokens in rows. */
     orientation?: FileTokenGroupOrientation
-    /** @deprecated since 6.0 — use `orientation`. Removed in 7.0. */
-    alignment?: FileTokenGroupAlignment
     /** Shows this many tokens and a Show more toggle for the rest. 0 shows them all. */
     limit?: number
     /** Shows the size beside the name, formatted for the locale. */
@@ -53,7 +49,6 @@
   const props = withDefaults(defineProps<Props>(), {
     items: () => [],
     orientation: 'vertical',
-    alignment: 'vertical',
     limit: 0,
     showFileSize: true,
     showFileLastModified: false,
@@ -64,8 +59,6 @@
   const emit = defineEmits<{
     /** The remove button of the token at `index` was pressed. The parent removes it from `items`. */
     remove: [event: MouseEvent, payload: { index: number; item: FileTokenGroupItem }]
-    /** @deprecated since 6.0 — listen to `remove`. Removed in 7.0. */
-    dismiss: [event: MouseEvent, payload: { index: number; item: FileTokenGroupItem }]
   }>()
 
   const attrs = useAttrs()
@@ -83,7 +76,7 @@
   )
 
   const layout = computed<FileTokenGroupOrientation>(() =>
-    props.orientation === 'horizontal' ? 'horizontal' : props.alignment
+    props.orientation === 'horizontal' ? 'horizontal' : 'vertical'
   )
 
   const hidden = computed<number>(() =>
@@ -151,7 +144,6 @@
     const item = props.items[index]
     if (!item) return
     emit('remove', event, { index, item })
-    emit('dismiss', event, { index, item })
     void focusAfterRemoval(index)
   }
 </script>
@@ -160,7 +152,6 @@
   <div
     v-bind="rootAttrs"
     :data-testid="testId"
-    :data-alignment="layout"
     :data-orientation="layout"
     :data-readonly="readonly || null"
     class="group/ftg flex w-full flex-col gap-(--spacing-xs)"
@@ -171,14 +162,14 @@
       tabindex="-1"
       :aria-label="ariaLabel || t('fileTokenGroup.label')"
       :data-testid="`${testId}__list`"
-      class="m-0 flex list-none gap-(--spacing-xs) p-0 outline-none group-data-[alignment=vertical]/ftg:flex-col group-data-[alignment=horizontal]/ftg:flex-row group-data-[alignment=horizontal]/ftg:flex-wrap"
+      class="m-0 flex list-none gap-(--spacing-xs) p-0 outline-none group-data-[orientation=vertical]/ftg:flex-col group-data-[orientation=horizontal]/ftg:flex-row group-data-[orientation=horizontal]/ftg:flex-wrap"
     >
       <li
         v-for="(item, index) in visible"
         :key="`${index}-${relativePathOf(item.file)}`"
         :data-testid="`${testId}__token`"
         :data-status="statusOf(item)"
-        class="flex min-w-0 flex-col gap-(--spacing-xxs) rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) py-(--spacing-xs) transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none data-[status=warning]:border-(--warning-border) data-[status=error]:border-(--danger-border) group-data-[alignment=horizontal]/ftg:w-(--container-3xs) group-data-[alignment=horizontal]/ftg:max-w-full"
+        class="flex min-w-0 flex-col gap-(--spacing-xxs) rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) py-(--spacing-xs) transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none data-[status=warning]:border-(--warning-border) data-[status=error]:border-(--danger-border) group-data-[orientation=horizontal]/ftg:w-(--container-3xs) group-data-[orientation=horizontal]/ftg:max-w-full"
       >
         <div class="flex min-w-0 items-center gap-(--spacing-xs)">
           <i
@@ -220,7 +211,7 @@
           :value="item.progress ?? 0"
           :indeterminate="typeof item.progress !== 'number'"
           size="small"
-          shape="rounded"
+          kind="rounded"
           :aria-label="t('fileTokenGroup.uploading', { name: relativePathOf(item.file) })"
         />
         <p

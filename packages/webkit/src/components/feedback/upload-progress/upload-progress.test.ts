@@ -110,31 +110,21 @@ describe('UploadProgress', () => {
     })
     await fireEvent.click(getByRole('button', { name: 'Hide files' }))
     expect(emitted()['update:expanded']).toEqual([[false]])
-    expect(emitted()['update:collapsed']).toEqual([[true]])
+    expect(emitted()['update:collapsed']).toBeUndefined()
   })
 
-  it('starts expanded when neither model is bound', () => {
+  it('starts expanded when the model is unbound', () => {
     const { getByRole } = render(UploadProgress, { props: { items: running(), floating: false } })
     expect(getByRole('button', { name: 'Hide files' }).getAttribute('aria-expanded')).toBe('true')
   })
 
-  it('keeps the deprecated v-model:collapsed working', async () => {
-    const collapsed = ref(true)
-    const view = render(
-      defineComponent({
-        setup: () => () =>
-          h(UploadProgress, {
-            items: running(),
-            floating: false,
-            collapsed: collapsed.value,
-            'onUpdate:collapsed': (value: boolean) => (collapsed.value = value)
-          })
-      })
+  it('ignores the removed collapsed model', () => {
+    const view = render(UploadProgress, {
+      props: { items: running(), floating: false, collapsed: true } as never
+    })
+    expect(view.getByRole('button', { name: 'Hide files' }).getAttribute('aria-expanded')).toBe(
+      'true'
     )
-    await fireEvent.click(view.getByRole('button', { name: 'Show files' }))
-    await nextTick()
-    expect(collapsed.value).toBe(false)
-    expect(view.getByRole('button', { name: 'Hide files' })).toBeTruthy()
   })
 
   it('mounts a long transfer in chunks, not every row at once', () => {

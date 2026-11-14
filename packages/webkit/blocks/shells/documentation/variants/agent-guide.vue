@@ -7,11 +7,11 @@
   import Button from '@aziontech/webkit/button'
   import DocAccordionGroup from '@aziontech/webkit/doc-accordion-group'
   import DocAccordionItem from '@aziontech/webkit/doc-accordion-item'
+  import DocCallToAction from '@aziontech/webkit/doc-call-to-action'
   import DocCallout from '@aziontech/webkit/doc-callout'
   import DocCard from '@aziontech/webkit/doc-card'
   import DocCardGroup from '@aziontech/webkit/doc-card-group'
   import DocCodeGroup, { type DocCodeSample } from '@aziontech/webkit/doc-code-group'
-  import DocCta from '@aziontech/webkit/doc-cta'
   import DocHeading from '@aziontech/webkit/doc-heading'
   import DocItem from '@aziontech/webkit/doc-item'
   import DocLayout, { type DocLayoutNavGroup } from '@aziontech/webkit/doc-layout'
@@ -429,7 +429,7 @@
 
       <DocProse>
         <DocHeading
-          id="quick-start"
+          anchor="quick-start"
           :level="2"
           >Quick start</DocHeading
         >
@@ -460,7 +460,7 @@
         </DocSteps>
 
         <DocHeading
-          id="platform-access"
+          anchor="platform-access"
           :level="2"
           >Azion platform access</DocHeading
         >
@@ -470,7 +470,7 @@
           file so it starts each session knowing your account.
         </p>
         <DocHeading
-          id="mcp-tools"
+          anchor="mcp-tools"
           :level="3"
           >MCP server</DocHeading
         >
@@ -497,7 +497,7 @@
           </Table>
         </div>
         <DocHeading
-          id="cli"
+          anchor="cli"
           :level="3"
           >Azion CLI</DocHeading
         >
@@ -508,7 +508,7 @@
         </p>
         <DocCodeGroup :samples="cliSamples" />
         <DocHeading
-          id="agent-context"
+          anchor="agent-context"
           :level="3"
           >Agent context</DocHeading
         >
@@ -519,7 +519,7 @@
         <DocCodeGroup :samples="contextSample" />
 
         <DocHeading
-          id="agent-friendly-docs"
+          anchor="agent-friendly-docs"
           :level="2"
           >Agent-friendly docs</DocHeading
         >
@@ -548,7 +548,7 @@
         >
 
         <DocHeading
-          id="example-prompts"
+          anchor="example-prompts"
           :level="2"
           >Example prompts</DocHeading
         >
@@ -560,7 +560,7 @@
         >
 
         <DocHeading
-          id="tips"
+          anchor="tips"
           :level="2"
           >Tips</DocHeading
         >
@@ -572,7 +572,7 @@
         />
 
         <DocHeading
-          id="faq"
+          anchor="faq"
           :level="2"
           >FAQ</DocHeading
         >
@@ -589,7 +589,7 @@
         </DocAccordionGroup>
 
         <DocHeading
-          id="troubleshooting"
+          anchor="troubleshooting"
           :level="2"
           >Troubleshooting</DocHeading
         >
@@ -606,11 +606,11 @@
         </DocAccordionGroup>
 
         <DocHeading
-          id="other-agents"
+          anchor="other-agents"
           :level="2"
           >Other agents</DocHeading
         >
-        <DocCardGroup :cols="3">
+        <DocCardGroup :columns="3">
           <DocCard
             v-for="other in others"
             :key="other.slug"
@@ -669,15 +669,13 @@
     </template>
 
     <template #aside>
-      <DocCta
+      <DocCallToAction
         title="Ready to build?"
-        primary-label="Start for free"
-        primary-href="https://console.azion.com/signup"
-        secondary-label="See our plans"
-        secondary-href="https://www.azion.com/en/pricing/"
+        :primary-action="{ label: 'Start for free', href: 'https://console.azion.com/signup' }"
+        :secondary-action="{ label: 'See our plans', href: 'https://www.azion.com/en/pricing/' }"
       >
         Deploy your first application in minutes.
-      </DocCta>
+      </DocCallToAction>
     </template>
 
     <template #footer>

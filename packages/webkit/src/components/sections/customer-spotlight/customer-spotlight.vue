@@ -40,10 +40,6 @@
     ariaLabel?: string
     /** Label revealed under the description while the card is open; empty uses the built-in "Read story". */
     linkLabel?: string
-    /** @deprecated since 6.0 — use `items`. Removed in 7.0. */
-    cards?: CustomerSpotlightCard[]
-    /** @deprecated since 6.0 — use `linkLabel`. Removed in 7.0. */
-    storyLabel?: string
     /** In-page id set on the band so a hash link can target it. */
     anchor?: string
   }
@@ -52,8 +48,6 @@
     items: () => [],
     ariaLabel: '',
     linkLabel: '',
-    cards: () => [],
-    storyLabel: '',
     anchor: ''
   })
 
@@ -65,8 +59,8 @@
   )
 
   const listName = computed(() => props.ariaLabel || t('customerSpotlight.list'))
-  const story = computed(() => props.linkLabel || props.storyLabel || t('customerSpotlight.story'))
-  const list = computed(() => (props.items.length ? props.items : props.cards))
+  const story = computed(() => props.linkLabel || t('customerSpotlight.story'))
+  const list = computed(() => props.items)
 
   const active = ref(-1)
   const panels = ref<HTMLElement[]>([])

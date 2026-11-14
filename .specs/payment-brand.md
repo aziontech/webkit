@@ -3,9 +3,9 @@ name: payment-brand
 category: content
 structure: monolithic
 status: implemented
-spec_version: 3
+spec_version: 4
 template: 2
-checksum: 206251d8981a4af5f7f4f6299f1cf2d4226ba165f79753b830cdb7d7d3809fa9
+checksum: fcd4e091c9343722c46d08f3e35fb5762638adccc9ba7004cd138d868a11cd83
 created: 2026-11-11
 last_updated: 2026-11-14
 ---
@@ -60,7 +60,6 @@ The card-brand plate shown beside a payment card: a small bordered plate with th
 | `brand`      | `string`              | `''`       | false    | The card network as the payment API names it (`visa`, `mastercard`, `amex`, `American Express`, `diners`, `jcb`, `discover`, `elo`, `hipercard`, `unionpay`…). Unknown values draw the generic card glyph. |
 | `size`       | `'small' \| 'medium'` | `'medium'` | false    | Plate size: `small` 20 × 32 px for dense tables, `medium` 28 × 40 px for rows and forms.                                                                                                                   |
 | `ariaLabel`  | `string`              | `''`       | false    | Accessible name. Empty uses the brand's name (`Visa`), or the catalog's `Card` for an unknown brand.                                                                                                       |
-| `label`      | `string`              | `''`       | false    | @deprecated since 6.0 — use `ariaLabel` instead. Removed in 7.0.                                                                                                                                           |
 | `decorative` | `boolean`             | `false`    | false    | Hide the plate from assistive technology when the text next to it already names the brand.                                                                                                                 |
 
 ## Events
@@ -101,7 +100,7 @@ _none_
 
 ## Accessibility (WCAG 2.1 AA)
 
-- The root is `role="img"` named by `ariaLabel` (the consumer writes `aria-label`; the deprecated `label` still works) or the brand's name; with `decorative` it is `aria-hidden="true"` and has no role.
+- The root is `role="img"` named by `ariaLabel` (the consumer writes `aria-label`) or the brand's name; with `decorative` it is `aria-hidden="true"` and has no role.
 - The SVG inside is `aria-hidden` and not focusable; the plate takes no focus.
 - Contrast: the mark is `--text-default` on `--bg-surface` (above 4.5:1 in both themes); forced colors draw it in `CanvasText` because it uses `currentColor`.
 

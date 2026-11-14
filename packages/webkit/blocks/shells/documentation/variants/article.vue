@@ -1,10 +1,10 @@
 <script setup lang="ts">
   import Button from '@aziontech/webkit/button'
   import CodeBlock from '@aziontech/webkit/code-block'
+  import DocCallToAction from '@aziontech/webkit/doc-call-to-action'
   import DocCallout from '@aziontech/webkit/doc-callout'
   import DocCard from '@aziontech/webkit/doc-card'
   import DocCardGroup from '@aziontech/webkit/doc-card-group'
-  import DocCta from '@aziontech/webkit/doc-cta'
   import DocHeading from '@aziontech/webkit/doc-heading'
   import DocItem from '@aziontech/webkit/doc-item'
   import DocLayout, { type DocLayoutNavGroup } from '@aziontech/webkit/doc-layout'
@@ -186,7 +186,7 @@
           Three complete paths get you there. Pick one; each ends with the same application live on
           its domain.
         </p>
-        <DocCardGroup :cols="3">
+        <DocCardGroup :columns="3">
           <DocCard
             title="Deploy a template"
             icon="pi pi-th-large"
@@ -211,7 +211,7 @@
         </DocCallout>
 
         <DocHeading
-          id="before-you-start"
+          anchor="before-you-start"
           :level="2"
           >Before you start</DocHeading
         >
@@ -221,7 +221,7 @@
         </p>
 
         <DocHeading
-          id="deploy-a-template"
+          anchor="deploy-a-template"
           :level="2"
           >Deploy a template via Console</DocHeading
         >
@@ -235,7 +235,7 @@
           <DocStep title="Select Deploy and wait for the status to read Live." />
         </DocSteps>
         <DocHeading
-          id="test-the-template"
+          anchor="test-the-template"
           :level="3"
           >Test it</DocHeading
         >
@@ -245,7 +245,7 @@
         />
 
         <DocHeading
-          id="deploy-with-cli"
+          anchor="deploy-with-cli"
           :level="2"
           >Deploy with Azion CLI</DocHeading
         >
@@ -258,24 +258,24 @@
             <CodeBlock
               :tabs="installTabs"
               default-value="shell"
-              :show-line-numbers="false"
+              :line-numbers="false"
             />
           </DocStep>
           <DocStep title="Log in and deploy">
             <CodeBlock
               :tabs="deployTabs"
               default-value="shell"
-              :show-line-numbers="false"
+              :line-numbers="false"
             />
           </DocStep>
         </DocSteps>
 
         <DocHeading
-          id="next-steps"
+          anchor="next-steps"
           :level="2"
           >Next steps</DocHeading
         >
-        <DocCardGroup :cols="3">
+        <DocCardGroup :columns="3">
           <DocCard
             title="Go live"
             icon="pi pi-globe"
@@ -297,7 +297,7 @@
         </DocCardGroup>
 
         <DocHeading
-          id="related-resources"
+          anchor="related-resources"
           :level="2"
           >Related resources</DocHeading
         >
@@ -347,15 +347,13 @@
     </template>
 
     <template #aside>
-      <DocCta
+      <DocCallToAction
         title="Ready to build?"
-        primary-label="Start for free"
-        primary-href="https://console.azion.com/signup"
-        secondary-label="See our plans"
-        secondary-href="https://www.azion.com/en/pricing/"
+        :primary-action="{ label: 'Start for free', href: 'https://console.azion.com/signup' }"
+        :secondary-action="{ label: 'See our plans', href: 'https://www.azion.com/en/pricing/' }"
       >
         Deploy your first application in minutes.
-      </DocCta>
+      </DocCallToAction>
     </template>
 
     <template #footer>

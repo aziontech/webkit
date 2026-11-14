@@ -8,16 +8,16 @@ import { expectNoA11yViolations } from '../../../test/axe'
 import BannerArt from './banner-art.vue'
 
 describe('BannerArt', () => {
-  it('still reads the deprecated art prop', () => {
+  it('draws the backdrop from kind and ignores the removed art prop', () => {
     const { getByTestId } = render(BannerArt, { props: { art: 'globe' } })
-    expect(getByTestId('marketing-banner-art')).toHaveAttribute('data-kind', 'globe')
-    expect(getByTestId('marketing-banner-art')).toHaveAttribute('data-art', 'globe')
+    expect(getByTestId('marketing-banner-art')).toHaveAttribute('data-kind', 'map')
+    expect(getByTestId('marketing-banner-art')).not.toHaveAttribute('data-art')
   })
 
   it('defaults to the map backdrop and hides it from assistive technology', () => {
     const { getByTestId } = render(BannerArt)
     const root = getByTestId('marketing-banner-art')
-    expect(root).toHaveAttribute('data-art', 'map')
+    expect(root).toHaveAttribute('data-kind', 'map')
     expect(root).toHaveAttribute('aria-hidden', 'true')
     expect(root.querySelector('[data-testid="content-network-map"]')).toHaveAttribute(
       'data-region',

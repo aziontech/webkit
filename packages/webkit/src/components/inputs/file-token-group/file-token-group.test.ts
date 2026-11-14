@@ -83,14 +83,14 @@ describe('FileTokenGroup', () => {
     )
   })
 
-  it('emits dismiss with the event first and the index and item, from pointer and keyboard', async () => {
+  it('emits remove with the event first and the index and item, from pointer and keyboard', async () => {
     const user = userEvent.setup()
     const items = files()
     const view = render(FileTokenGroup, { props: { items } })
     await user.click(view.getByRole('button', { name: 'Remove b.png' }))
     view.getByRole('button', { name: 'Remove c.css' }).focus()
     await user.keyboard('{Enter}')
-    const dismissed = view.emitted('dismiss') as [
+    const dismissed = view.emitted('remove') as [
       Event,
       { index: number; item: FileTokenGroupItem }
     ][]
@@ -108,7 +108,7 @@ describe('FileTokenGroup', () => {
         return () =>
           h(FileTokenGroup, {
             items: items.value,
-            onDismiss: () => {
+            onRemove: () => {
               items.value = []
             }
           })
@@ -176,15 +176,15 @@ describe('FileTokenGroup', () => {
 })
 
 describe('FileTokenGroup names', () => {
-  it('emits remove and the deprecated dismiss with the same payload', async () => {
+  it('emits remove only, not the removed dismiss', async () => {
     const items = files()
     const view = render(FileTokenGroup, { props: { items } })
     await fireEvent.click(view.getByRole('button', { name: 'Remove a.txt' }))
     expect(view.emitted('remove')?.[0]?.[1]).toEqual({ index: 0, item: items[0] })
-    expect(view.emitted('dismiss')?.[0]?.[1]).toEqual({ index: 0, item: items[0] })
+    expect(view.emitted('dismiss')).toBeUndefined()
   })
 
-  it('lays tokens out with orientation and still honours the deprecated alignment', () => {
+  it('lays tokens out with orientation and ignores the removed alignment', () => {
     const next = render(FileTokenGroup, { props: { items: files(), orientation: 'horizontal' } })
     expect(next.getByTestId('input-file-token-group').getAttribute('data-orientation')).toBe(
       'horizontal'
@@ -192,7 +192,7 @@ describe('FileTokenGroup names', () => {
     next.unmount()
     const legacy = render(FileTokenGroup, { props: { items: files(), alignment: 'horizontal' } })
     expect(legacy.getByTestId('input-file-token-group').getAttribute('data-orientation')).toBe(
-      'horizontal'
+      'vertical'
     )
   })
 

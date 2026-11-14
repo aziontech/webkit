@@ -120,22 +120,21 @@ describe('Table cell presets', () => {
       props: {
         label: 'a.example.com',
         more: ['b.example.com', 'c.example.com'],
-        moreNoun: { one: 'domain', other: 'domains' }
+        noun: { one: 'domain', other: 'domains' }
       }
     })
     expect(view.getByRole('button', { name: 'Show all 2 domains' })).toBeTruthy()
   })
 
-  it('CellLink: noun names the more values, over the deprecated moreNoun', () => {
+  it('CellLink: the removed moreNoun no longer names the more values', () => {
     const view = render(TableCellLink, {
       props: {
         label: 'a.example.com',
         more: ['b.example.com', 'c.example.com'],
-        noun: { one: 'origin', other: 'origins' },
         moreNoun: { one: 'domain', other: 'domains' }
-      }
+      } as never
     })
-    expect(view.getByRole('button', { name: 'Show all 2 origins' })).toBeTruthy()
+    expect(view.queryByRole('button', { name: 'Show all 2 domains' })).toBeNull()
   })
 
   it('CellTime shows a relative time, the absolute one for screen readers, and the author', () => {

@@ -12,8 +12,6 @@ interface ChartCardStatic {
   Header: typeof ChartCardHeader
   Title: typeof ChartCardTitle
   Description: typeof ChartCardDescription
-  /** @deprecated since 6.0 — use `Action`. Removed in 7.0. */
-  Controls: typeof ChartCardControls
   Action: typeof ChartCardControls
   DragHandle: typeof ChartCardDragHandle
   Content: typeof ChartCardContent
@@ -25,7 +23,6 @@ const ChartCard = ChartCardRoot as typeof ChartCardRoot & ChartCardStatic
 ChartCard.Header = ChartCardHeader
 ChartCard.Title = ChartCardTitle
 ChartCard.Description = ChartCardDescription
-ChartCard.Controls = ChartCardControls
 ChartCard.Action = ChartCardControls
 ChartCard.DragHandle = ChartCardDragHandle
 ChartCard.Content = ChartCardContent

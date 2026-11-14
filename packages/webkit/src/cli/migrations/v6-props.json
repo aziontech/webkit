@@ -16,9 +16,6 @@
   "architecture-tabs": {
     "interval": "autoplayInterval"
   },
-  "banner-art": {
-    "art": "kind"
-  },
   "button": {
     "kind": {
       "to": "kind",
@@ -35,16 +32,6 @@
     "value": "modelValue",
     "showLineNumbers": "lineNumbers"
   },
-  "console-layout": {
-    "navigationExpanded": "navigationOpen"
-  },
-  "conversation-history": {
-    "label": "ariaLabel"
-  },
-  "customer-spotlight": {
-    "cards": "items",
-    "storyLabel": "linkLabel"
-  },
   "doc-card": {
     "overline": "eyebrow",
     "link": "linkLabel"
@@ -52,9 +39,6 @@
   "doc-card-group": {
     "mobileCols": "mobileColumns",
     "cols": "columns"
-  },
-  "doc-heading": {
-    "id": "anchor"
   },
   "doc-tooltip": {
     "headline": "title",
@@ -120,12 +104,6 @@
   "overline": {
     "showCursor": "cursor"
   },
-  "payment-brand": {
-    "label": "ariaLabel"
-  },
-  "qr-code": {
-    "label": "ariaLabel"
-  },
   "popover": {
     "width": "size"
   },
@@ -135,9 +113,6 @@
   "quote-tabs": {
     "autoPlay": "autoplay",
     "autoPlayInterval": "autoplayInterval"
-  },
-  "response-branches": {
-    "label": "ariaLabel"
   },
   "severity-tag": {
     "level": "severity"
@@ -182,9 +157,6 @@
   "theme-switcher": {
     "value": "modelValue"
   },
-  "wizard": {
-    "activeStep": "modelValue"
-  },
   "calendar": {
     "showTimezone": "showTimeZone",
     "timezones": "timeZones",
@@ -198,17 +170,11 @@
   "checkbox": {
     "inputId": "id"
   },
-  "file-token-group": {
-    "alignment": "orientation"
-  },
   "split-button": {
     "model": "items"
   },
   "textarea": {
     "resizable": "resize"
-  },
-  "chart-legend": {
-    "totals": "total"
   },
   "flow-anchor": {
     "type": "side"
@@ -218,9 +184,6 @@
   },
   "pick-list-root": {
     "dataKey": "trackBy"
-  },
-  "table-cell-link": {
-    "moreNoun": "noun"
   },
   "table-header": {
     "kind": {

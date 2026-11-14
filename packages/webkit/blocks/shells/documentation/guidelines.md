@@ -28,7 +28,7 @@ In the `actions` slot: GitHub, `kind="outlined"`, with an `ariaLabel`. In the fo
 
 In the `navigation-footer` slot, labelled `Theme`; the layout shows it at the foot of the rail and of the drawer.
 
-### E. Call to action — `DocCta` (optional)
+### E. Call to action — `DocCallToAction` (optional)
 
 In the `aside` slot, under the outline: "Ready to build?" with a primary and a secondary link.
 
@@ -101,7 +101,7 @@ In the footer's language slot, trigger labelled `Language`.
 
 ## States
 
-- Default: the chrome around a short guide; rail from `lg` (drawer below), outline with the GitHub and Community groups and the `DocCta` from `xl`, the full footer under the article.
+- Default: the chrome around a short guide; rail from `lg` (drawer below), outline with the GitHub and Community groups and the `DocCallToAction` from `xl`, the full footer under the article.
 - Article: a tutorial page from the `Doc*` parts, pager in both directions, outline with an indented level 3 entry.
 - Reference: a product reference page with a callout, the request-path diagram, a JSON rule and a term list; pager forward only.
 - AgentSetup: an index page; the picker tabs filter the agent cards, the comparison table scrolls inside its frame on a narrow page, the outline indents its three level 3 entries.

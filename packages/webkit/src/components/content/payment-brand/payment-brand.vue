@@ -30,10 +30,6 @@
     size?: PaymentBrandSize
     /** Accessible name. Empty uses the brand's name (`Visa`), or the catalog's `Card` for an unknown brand. */
     ariaLabel?: string
-    /**
-     * @deprecated since 6.0 — use `ariaLabel` instead. Removed in 7.0.
-     */
-    label?: string
     /** Hide the plate from assistive technology when the text next to it already names the brand. */
     decorative?: boolean
   }
@@ -42,7 +38,6 @@
     brand: '',
     size: 'medium',
     ariaLabel: '',
-    label: '',
     decorative: false
   })
 
@@ -96,7 +91,6 @@
 
   const name = computed<string>(() => {
     if (props.ariaLabel) return props.ariaLabel
-    if (props.label) return props.label
     if (id.value === 'unknown') return t('paymentBrand.unknown')
     return NAMES[id.value]
   })

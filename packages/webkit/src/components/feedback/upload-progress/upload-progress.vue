@@ -48,12 +48,6 @@
   /** Shows the file list; false hides it. While unbound the card starts expanded. */
   const expanded = defineModel<boolean>('expanded', { default: undefined as never })
 
-  /**
-   * Hides the file list.
-   * @deprecated since 6.0 — use `v-model:expanded` (inverted). Removed in 7.0.
-   */
-  const collapsed = defineModel<boolean>('collapsed', { default: undefined as never })
-
   const emit = defineEmits<{
     /** Cancel on one file (its `id`) or Cancel all (no `id`). The parent stops the transfer. */
     cancel: [event: MouseEvent, id?: string]
@@ -146,14 +140,10 @@
   const { split, observe } = useLazyChunks({ rowHeight: 56 })
   const chunks = computed(() => split(props.items))
 
-  const isCollapsed = computed<boolean>(() =>
-    expanded.value !== undefined ? !expanded.value : (collapsed.value ?? false)
-  )
+  const isCollapsed = computed<boolean>(() => expanded.value === false)
 
   const toggleList = () => {
-    const next = !isCollapsed.value
-    expanded.value = !next
-    collapsed.value = next
+    expanded.value = isCollapsed.value
   }
 
   const showActions = () => state.value !== 'running' && Boolean(slots['actions'])

@@ -30,10 +30,6 @@
     loading?: boolean
     /** Accessible name of the list. Empty uses the locale catalog (`Conversation history`). */
     ariaLabel?: string
-    /**
-     * @deprecated since 6.0 — use `ariaLabel` instead. Removed in 7.0.
-     */
-    label?: string
   }
 
   const props = withDefaults(defineProps<Props>(), {
@@ -41,8 +37,7 @@
     now: undefined,
     removable: false,
     loading: false,
-    ariaLabel: '',
-    label: ''
+    ariaLabel: ''
   })
 
   const model = defineModel<string | null>({ default: null })
@@ -102,7 +97,7 @@
 <template>
   <nav
     v-bind="$attrs"
-    :aria-label="ariaLabel || label || t('conversationHistory.label')"
+    :aria-label="ariaLabel || t('conversationHistory.label')"
     :aria-busy="loading || undefined"
     :data-testid="testId"
     class="flex min-w-0 flex-col gap-(--spacing-md)"
@@ -118,7 +113,7 @@
         class="px-(--spacing-xs)"
       >
         <Skeleton
-          kind="shape"
+          kind="rectangle"
           :width="`${90 - n * 8}%`"
           height="var(--size-5)"
         />

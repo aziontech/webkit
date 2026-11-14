@@ -3,9 +3,9 @@ name: upload-progress
 category: feedback
 structure: monolithic
 status: implemented
-spec_version: 3
+spec_version: 4
 template: 2
-checksum: fd8201c24fe2e3555cb9a402ff11f77c9e9397fad7572539f77cc0f29888ae54
+checksum: 8aa07331a622bd9e62b067a80527e0b1a2f15f459bf33be4701cfa0538677fad
 created: 2026-11-11
 last_updated: 2026-11-14
 ---
@@ -78,8 +78,7 @@ Types: `UploadProgressStatus = 'queued' | 'running' | 'done' | 'error' | 'cancel
 
 | Model               | Type      | Default | Emits              | Notes                                                     |
 | ------------------- | --------- | ------- | ------------------ | --------------------------------------------------------- |
-| `v-model:expanded`  | `boolean` | `undefined` (resolves to `true`) | `update:expanded`  | Shows the file list; `false` hides it and keeps the header and overall bar. While neither model is bound the card starts expanded. Takes precedence over `collapsed` when both are bound. |
-| `v-model:collapsed` | `boolean` | `undefined` (resolves to `false`) | `update:collapsed` | **@deprecated since 6.0 — use `v-model:expanded` (inverted). Removed in 7.0.** Kept working: it is read when `expanded` is unbound, and the toggle emits both `update:expanded` and `update:collapsed`. |
+| `v-model:expanded`  | `boolean` | `undefined` (resolves to `true`) | `update:expanded`  | Shows the file list; `false` hides it and keeps the header and overall bar. While it is unbound the card starts expanded. |
 
 ## Events
 

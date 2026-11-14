@@ -3,9 +3,9 @@ name: topology-diagram
 category: data
 structure: monolithic
 status: implemented
-spec_version: 3
+spec_version: 4
 template: 2
-checksum: fb93b436a646954fa2738a26ab14554e7882f6e2ee38b0cf7b8bb386ce33aa11
+checksum: 263f6d306c40e62c206b57acd3a938c4a2239ccf70fc8ba9801b06892452db3e
 created: 2026-11-11
 last_updated: 2026-11-14
 ---
@@ -125,7 +125,7 @@ The deployment topology of a resource as a left-to-right diagram: each column is
 | `loading`   | `boolean`         | `false` | false    | Shows placeholder cards while the topology loads.                                      |
 | `ariaLabel` | `string`          | `''`    | false    | Accessible name of the diagram. Empty uses the locale catalog (`Deployment topology`). |
 
-Types: `TopologyLevel = { key: string; label?: string; nodes: TopologyNode[] }`; `TopologyNode = { key: string; type?: string; kind?: string; icon?: string; name?: string; status?: string; severity?: TopologyNodeSeverity; dashed?: boolean; message?: string; fields?: TopologyNodeField[]; href?: string; terminal?: boolean; bindable?: boolean; bindOptions?: TopologyBindOption[]; boundValue?: string; removable?: boolean }`; `TopologyNodeField = { label: string; value: string; href?: string; copyable?: boolean }`; `TopologyBindOption = { value: string; label: string }`; `TopologyNodeSeverity = 'success' | 'info' | 'warning' | 'danger' | 'neutral'`. `type` is the resource type shown in the node header (`Policy`); `kind` is the same field under its old name, **@deprecated since 6.0 — use `type`. Removed in 7.0.** (`kind` is the vocabulary word for a visual variant), read when `type` is unset.
+Types: `TopologyLevel = { key: string; label?: string; nodes: TopologyNode[] }`; `TopologyNode = { key: string; type?: string; icon?: string; name?: string; status?: string; severity?: TopologyNodeSeverity; dashed?: boolean; message?: string; fields?: TopologyNodeField[]; href?: string; terminal?: boolean; bindable?: boolean; bindOptions?: TopologyBindOption[]; boundValue?: string; removable?: boolean }`; `TopologyNodeField = { label: string; value: string; href?: string; copyable?: boolean }`; `TopologyBindOption = { value: string; label: string }`; `TopologyNodeSeverity = 'success' | 'info' | 'warning' | 'danger' | 'neutral'`. `type` is the resource type shown in the node header (`Policy`).
 
 ## v-model
 

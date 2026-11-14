@@ -133,12 +133,14 @@ describe('ConversationHistory — reference time from WebkitProvider', () => {
 })
 
 describe('ConversationHistory naming and test ids', () => {
-  it('takes its accessible name from ariaLabel and still reads the deprecated label', () => {
+  it('takes its accessible name from ariaLabel, not from the removed label', () => {
     const named = render(ConversationHistory, { props: { items, now, ariaLabel: 'Chats' } })
     expect(named.getByRole('navigation', { name: 'Chats' })).toBeInTheDocument()
     named.unmount()
-    const legacy = render(ConversationHistory, { props: { items, now, label: 'Old chats' } })
-    expect(legacy.getByRole('navigation', { name: 'Old chats' })).toBeInTheDocument()
+    const legacy = render(ConversationHistory, {
+      props: { items, now, label: 'Old chats' } as never
+    })
+    expect(legacy.queryByRole('navigation', { name: 'Old chats' })).toBeNull()
   })
 
   it('lets a consumer data-testid win over the fallback', () => {

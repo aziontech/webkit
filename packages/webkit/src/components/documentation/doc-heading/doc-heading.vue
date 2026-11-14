@@ -10,10 +10,6 @@
     level?: 1 | 2 | 3 | 4
     /** In-page anchor: the heading's id, what the page rail's entry and the copied URL point at. */
     anchor?: string
-    /**
-     * @deprecated since 6.0 — use `anchor` instead. Removed in 7.0.
-     */
-    id?: string
     /** Fallback text when the default slot is empty. */
     label?: string
   }
@@ -21,7 +17,6 @@
   const props = withDefaults(defineProps<Props>(), {
     level: 2,
     anchor: '',
-    id: '',
     label: ''
   })
 
@@ -33,7 +28,7 @@
   const attrs = useAttrs()
   const nav = useHeadingNav()
 
-  const target = computed(() => props.anchor || props.id)
+  const target = computed(() => props.anchor)
 
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? 'documentation-doc-heading'

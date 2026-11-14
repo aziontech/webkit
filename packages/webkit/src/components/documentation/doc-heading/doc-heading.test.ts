@@ -23,10 +23,12 @@ describe('DocHeading', () => {
     expect(getByRole('link', { name: 'Purge' })).toHaveAttribute('href', '#purge')
   })
 
-  it('still reads the deprecated id prop when anchor is empty', () => {
-    const { getByRole } = render(DocHeading, { props: { id: 'legacy', label: 'Legacy' } })
-    expect(getByRole('heading', { name: 'Legacy' })).toHaveAttribute('id', 'legacy')
-    expect(getByRole('link', { name: 'Legacy' })).toHaveAttribute('href', '#legacy')
+  it('links only from anchor, not from the removed id prop', () => {
+    const { getByRole, queryByRole } = render(DocHeading, {
+      props: { id: 'legacy', label: 'Legacy' } as never
+    })
+    expect(getByRole('heading', { name: 'Legacy' })).toBeTruthy()
+    expect(queryByRole('link', { name: 'Legacy' })).toBeNull()
   })
 
   it('draws no link without an id', () => {

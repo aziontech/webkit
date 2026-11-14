@@ -8,16 +8,10 @@
   interface Props {
     /** Shows each series total beside its name (the same name as ChartTooltip). */
     total?: boolean
-    /**
-     * Shows each series total beside its name.
-     * @deprecated since 6.0 — use `total`. Removed in 7.0.
-     */
-    totals?: boolean
   }
 
   withDefaults(defineProps<Props>(), {
-    total: false,
-    totals: false
+    total: false
   })
 
   const attrs = useAttrs()
@@ -70,7 +64,7 @@
         />
         <span>{{ entry.name }}</span>
         <span
-          v-if="total || totals"
+          v-if="total"
           class="tabular-nums text-(--text-muted)"
         >
           {{ entry.total }}

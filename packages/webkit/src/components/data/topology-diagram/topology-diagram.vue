@@ -71,13 +71,13 @@
   const label = computed<string>(() => props.ariaLabel || t('topologyDiagram.label'))
 
   const PLACEHOLDER: TopologyLevel[] = [
-    { key: 'a', nodes: [{ key: 'a', kind: '' }] },
-    { key: 'b', nodes: [{ key: 'b', kind: '' }] },
+    { key: 'a', nodes: [{ key: 'a', type: '' }] },
+    { key: 'b', nodes: [{ key: 'b', type: '' }] },
     {
       key: 'c',
       nodes: [
-        { key: 'c', kind: '' },
-        { key: 'd', kind: '', terminal: true }
+        { key: 'c', type: '' },
+        { key: 'd', type: '', terminal: true }
       ]
     }
   ]
