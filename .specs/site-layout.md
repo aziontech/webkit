@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 2
 template: 2
-checksum: 122b7ee36fb1672f9b41e1015bbf1a2fff9718ea8d4163b12d1f7497a3f951c7
+checksum: e7ea4b3de71d822ba6cb9f5bc1c0cc9edb8f64790d0ac32e62dbf919cf9c1853
 created: 2026-11-12
 last_updated: 2026-11-14
 ---
@@ -146,7 +146,7 @@ The marketing site's chrome, composed once in the app: `SiteNav` on top, the pag
 
 ## Performance
 
-- Bundle budget: 71.1 KB gzip for `./site-layout` in `.size-limit.json` (71.03 KB measured; it pulls `SiteNav`, `SiteFooter` and `Command`; raised from 71 KB for the `navOverlay` grid placement).
+- Bundle budget: 71.1 KB gzip for `./site-layout` in `.size-limit.json` (71.08 KB measured; it pulls `SiteNav`, `SiteFooter` and `Command`; raised from 71 KB for the `navOverlay` grid placement).
 - Runtime budget: the palette destinations are a computed list over the menus.
 - Heavy parts: none beyond the composed components; the palette content renders only while open.
 
