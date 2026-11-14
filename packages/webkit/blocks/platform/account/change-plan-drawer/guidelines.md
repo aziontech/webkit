@@ -60,7 +60,7 @@ Says why the user is here before the cards: `Compare what each tier includes bef
 
 ### L. Plan — `CardPricing` (required)
 
-One per tier, `kind="contained"`, aligned, actions at the bottom: price with prefix and suffix, details line, the `Current plan` tag on the current tier, a feature list headed by what it builds on (`All Free features, plus:`).
+One per tier, `kind="contained"`, aligned, actions at the bottom: price with prefix and suffix, details line, the `Current plan` tag on the current tier, a `FeatureList` headed by what it builds on (`All Free features, plus:`).
 
 ### M. Divider — `Separator` (required)
 
@@ -104,7 +104,7 @@ The plate before the card on file in the Payment method section, named after the
 
 ### W. Included features — `FeatureList` (required)
 
-What's included in the upgrade drawer, under its visible heading: one check per feature, with the usage allowance as the label and the overage price as its description. Do not hand-write the list with your own check icons. The pricing cards keep their own icon list, since each icon names the feature.
+What's included in the upgrade drawer, under its visible heading: one check per feature, with the usage allowance as the label and the overage price as its description. Do not hand-write the list with your own check icons. The pricing cards use the same `FeatureList` in their slot, so every feature list in the flow reads the same.
 
 ### Toasts — through `toast`
 

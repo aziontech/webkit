@@ -436,7 +436,7 @@
                                     >
                                       <div class="flex flex-col gap-(--spacing-xs)">
                                         <h3
-                                          class="flex shrink-0 items-center px-(--spacing-xs) text-label-lg text-(--text-default) lg:min-h-[calc(var(--spacing-sm)*2+var(--spacing-10)+1px)] lg:border-t lg:border-t-transparent lg:py-(--spacing-sm)"
+                                          class="flex shrink-0 items-center px-(--spacing-xs) text-label-lg text-(--text-default) lg:py-(--spacing-sm)"
                                         >
                                           What's included
                                         </h3>
