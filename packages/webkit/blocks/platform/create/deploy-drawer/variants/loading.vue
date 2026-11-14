@@ -45,7 +45,7 @@
             <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
               <DrawerTitle>Deploy</DrawerTitle>
               <p class="text-body-sm text-(--text-muted)">
-                Publish project-01. Review what this release carries and where it lands.
+                Deploy project-01. Review what goes live and where.
               </p>
             </div>
             <DrawerClose />
@@ -58,7 +58,7 @@
             >
               <SettingsSection
                 title="Resources"
-                hint="Everything this project serves, at the version this deployment publishes, with the version of every dependency they reference."
+                hint="Everything this project serves, at the version this deployment sends live, with the version of every dependency they reference."
               >
                 <div aria-hidden="true">
                   <Skeleton height="var(--size-40)" />
@@ -67,7 +67,7 @@
 
               <SettingsSection
                 title="Environment"
-                hint="Where the deployment goes live. Each environment publishes with its own Deployment Settings."
+                hint="Where the deployment goes live. Each environment goes live with its own Deployment Settings."
               >
                 <div
                   class="flex min-w-0 flex-col gap-(--spacing-xs)"

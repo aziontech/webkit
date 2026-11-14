@@ -331,7 +331,7 @@
               <legend class="sr-only">Deploy</legend>
               <SettingsSection
                 title="Resources"
-                hint="The service version this deployment publishes, and the version of every module and integration it references."
+                hint="The service version this deployment sends live, and the version of every module and integration it references."
               >
                 <Card :padded="false">
                   <template #content>
@@ -382,6 +382,7 @@
                             <DropdownMenu.Trigger>
                               <Button
                                 label="Change version"
+                                :aria-label="`Change version of ${row.name}`"
                                 kind="outlined"
                                 size="small"
                                 icon="pi pi-chevron-down"
@@ -533,6 +534,7 @@
                                         <DropdownMenu.Trigger>
                                           <Button
                                             label="Change version"
+                                            :aria-label="`Change version of ${dependency.name}`"
                                             kind="outlined"
                                             size="small"
                                             icon="pi pi-chevron-down"
@@ -633,7 +635,7 @@
 
               <SettingsSection
                 title="Project"
-                hint="The project whose domains serve the service. Create one to publish it on a new domain."
+                hint="The project whose domains serve the service. Create one to deploy it on a new domain."
               >
                 <Card :padded="false">
                   <template #header>
@@ -745,7 +747,7 @@
 
               <SettingsSection
                 title="Environment"
-                hint="Where the deployment goes live. Each environment publishes with its own Deployment Settings."
+                hint="Where the deployment goes live. Each environment goes live with its own Deployment Settings."
               >
                 <div
                   role="radiogroup"

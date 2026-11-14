@@ -7,6 +7,7 @@ import CreateHubLoadFailed from '../../blocks/platform/create/create-hub/variant
 import CreateHubLoading from '../../blocks/platform/create/create-hub/variants/loading-repositories.vue'
 import CreateInDrawer from '../../blocks/platform/create/create-in-drawer/create-in-drawer.vue'
 import CreateInDrawerSaveFailed from '../../blocks/platform/create/create-in-drawer/variants/save-failed.vue'
+import DeployDrawer from '../../blocks/platform/create/deploy-drawer/deploy-drawer.vue'
 import DeployTemplate from '../../blocks/platform/create/deploy-template/deploy-template.vue'
 import DeployTemplateUpload from '../../blocks/platform/create/deploy-template/variants/upload.vue'
 import { expectNoA11yViolations } from './axe'
@@ -131,5 +132,25 @@ describe('create-in-drawer', () => {
     await expectNoA11yViolations(view.baseElement as HTMLElement)
     await fireEvent.click(within(dialog).getByRole('button', { name: 'Retry' }))
     await waitFor(() => expect(screen.getByText('acme-store.azion.app added.')).toBeTruthy(), wait)
+  })
+})
+
+describe('deploy-drawer', () => {
+  it('opens domains through Link in a new tab and names the version and overflow controls', async () => {
+    render(DeployDrawer)
+    await fireEvent.click(screen.getByRole('button', { name: 'Deploy' }))
+    const dialog = await screen.findByRole('dialog')
+    const external = within(dialog)
+      .getAllByRole('link')
+      .filter((link) => link.getAttribute('target') === '_blank')
+    expect(external.length).toBeGreaterThan(0)
+    external.forEach((link) => expect(link.getAttribute('rel')).toBe('noopener noreferrer'))
+    expect(
+      within(dialog).getAllByRole('button', { name: /^Change version of / }).length
+    ).toBeGreaterThan(0)
+    expect(within(dialog).getAllByRole('button', { name: /more domains$/ }).length).toBeGreaterThan(
+      0
+    )
+    expect(dialog.textContent).not.toMatch(/publish/i)
   })
 })

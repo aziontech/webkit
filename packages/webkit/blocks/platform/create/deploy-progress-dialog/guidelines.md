@@ -1,13 +1,13 @@
 # Deploy progress dialog
 
-The modal progress of one deploy that activates several Deployment Settings, each on its own, and the drop-to-deploy confirm that starts it. The user dropped a folder (or started a deploy whose environment publishes through several Deployment Settings) and wants to see each one activate, know which failed and why, and retry only those. The page behind the dialog is a page body for `ConsoleLayout` (the layout owns the rail, the header and the `main`); the dialog teleports over it.
+The modal progress of one deploy that sends several Deployment Settings live, each on its own, and the drop-to-deploy confirm that starts it. The user dropped a folder (or started a deploy whose environment deploys through several Deployment Settings) and wants to see each one go live, know which failed and why, and retry only those. The page behind the dialog is a page body for `ConsoleLayout` (the layout owns the rail, the header and the `main`); the dialog teleports over it.
 
 **The toast stays the standard.** Every deploy reports through one toast with Edit and Redeploy (`platform/states/async-submit`). This dialog is only for the drop-to-deploy path and for a deploy that fans out to several Deployment Settings; even there the outcome still reaches the user through the toast, so they can close the dialog and leave.
 
 ## When to use
 
 - A folder dropped on a service deploys straight to an environment.
-- One deploy activates several Deployment Settings that can succeed or fail independently.
+- One deploy sends several Deployment Settings live that can succeed or fail independently.
 
 ## When not to use
 
@@ -19,7 +19,7 @@ The modal progress of one deploy that activates several Deployment Settings, eac
 
 ### A. Drop confirm — `Dialog`, `PanelHeader`, `DialogTitle`, `DialogDescription`, `Tag`, `PanelFooter`, `Button` (required on the drop path)
 
-Titled "New production deployment" (the environment in lower case), with a `DialogClose` in the header. The service name with the environment as a secondary `Tag`, one sentence on what the files replace and how many Deployment Settings the environment publishes with, then the dropped folder: its file count and total size, and a scrollable list (focusable, named "Dropped files") of paths in code type with their sizes. Sizes go through `Intl.NumberFormat` with `style: 'unit'`. The footer has Cancel (transparent) and "Deploy to Production" (primary).
+Titled "New production deployment" (the environment in lower case), with a `DialogClose` in the header. The service name with the environment as a secondary `Tag`, one sentence on what the files replace and how many Deployment Settings the environment deploys with, then the dropped folder: its file count and total size, and a scrollable list (focusable, named "Dropped files") of paths in code type with their sizes. Sizes go through `Intl.NumberFormat` with `style: 'unit'`. The footer has Cancel (transparent) and "Deploy to Production" (primary).
 
 ### B. Progress frame — `Dialog`, `DialogPortal`, `DialogOverlay`, `DialogContent`, `PanelHeader`, `DialogTitle`, `DialogDescription`, `OutcomeMark` (required)
 
@@ -27,7 +27,7 @@ Titled "New production deployment" (the environment in lower case), with a `Dial
 
 ### C. Progress — `PanelContent`, `Progress` (required)
 
-The share of settled settings, named "Deploy progress", with "Activating <name>" under it while one runs.
+The share of settled settings, named "Deploy progress", with "Deploying <name>" under it while one runs.
 
 ### D. Filter — `ToggleGroup` (required)
 
@@ -62,7 +62,7 @@ One toast id for the run: `toast.loading` with "It keeps running if you leave." 
 
 - **Drop:** "New production deployment", "Dropped files", "Deploy to Production".
 - **Title:** "Deploying 2 of 5…", "Deployed 5 Deployment Settings", "Deployed 4 of 5 Deployment Settings".
-- **Tally:** "4 succeeded, 1 failed. Each Deployment Setting activates on its own, and the ones that succeeded stay live."
+- **Tally:** "4 succeeded, 1 failed. Each Deployment Setting deploys on its own, and the ones that succeeded stay live."
 - **Tags:** Queued, Deploying, Done, Failed. **Actions:** Retry failed, Close.
 - Follow `skills/webkit-microcopy`: sentence case, no em dash, the progressive verb with `…`.
 

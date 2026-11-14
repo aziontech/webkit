@@ -66,7 +66,7 @@ When the release starts from the settings rather than from a service, a ChooseSe
 ## Don't
 
 - Don't hide shared dependencies; changing one changes it everywhere in the release.
-- Don't confirm twice: the page is the review, the `ConfirmDialog` is the only step before the run.
+- Don't confirm twice: the page is the review, the `ConfirmDialog` is the only step before the run. Deploying one service or one project is `platform/create/deploy-drawer`, which confirms nothing after Deploy; this page is only for a release of several resources.
 - Don't keep the user on the page while it runs; the run reports wherever they are.
 - Don't draw the Flow view with `Flow` until its list semantics pass axe.
 

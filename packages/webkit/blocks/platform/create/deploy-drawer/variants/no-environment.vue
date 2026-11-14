@@ -46,7 +46,7 @@
             <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
               <DrawerTitle>Deploy</DrawerTitle>
               <p class="text-body-sm text-(--text-muted)">
-                Publish project-01. Review what this release carries and where it lands.
+                Deploy project-01. Review what goes live and where.
               </p>
             </div>
             <DrawerClose />
@@ -55,7 +55,7 @@
           <PanelContent>
             <SettingsSection
               title="Resources"
-              hint="Everything this project serves, at the version this deployment publishes, with the version of every dependency they reference."
+              hint="Everything this project serves, at the version this deployment sends live, with the version of every dependency they reference."
             >
               <Card>
                 <template #content>
@@ -72,7 +72,7 @@
                 size="small"
                 icon="pi pi-link"
                 title="No environment on this project"
-                description="project-01 publishes into nothing yet, so there is no target for a release. Add a domain and the environment it answers in, then deploy."
+                description="project-01 has no environment yet, so there is nowhere to deploy it. Add a domain and the environment it answers in, then deploy."
               >
                 <template #actions>
                   <Button

@@ -15,6 +15,7 @@
   import Field from '@aziontech/webkit/field'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
+  import Link from '@aziontech/webkit/link'
   import PanelContent from '@aziontech/webkit/panel-content'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
@@ -597,7 +598,7 @@
                 <legend class="sr-only">Deploy</legend>
                 <SettingsSection
                   title="Resources"
-                  hint="The service version this deployment publishes, and the version of every module and integration it references."
+                  hint="The service version this deployment sends live, and the version of every module and integration it references."
                 >
                   <Card :padded="false">
                     <template #content>
@@ -648,6 +649,7 @@
                               <DropdownMenu.Trigger>
                                 <Button
                                   label="Change version"
+                                  :aria-label="`Change version of ${row.name}`"
                                   kind="outlined"
                                   size="small"
                                   icon="pi pi-chevron-down"
@@ -867,6 +869,7 @@
                                             <DropdownMenu.Trigger>
                                               <Button
                                                 label="Change version"
+                                                :aria-label="`Change version of ${dependency.name}`"
                                                 kind="outlined"
                                                 size="small"
                                                 icon="pi pi-chevron-down"
@@ -976,7 +979,7 @@
 
                 <SettingsSection
                   title="Project"
-                  hint="The project whose domains serve the service. Create one to publish it on a new domain."
+                  hint="The project whose domains serve the service. Create one to deploy it on a new domain."
                 >
                   <Card :padded="false">
                     <template #header>
@@ -1039,24 +1042,12 @@
                                     :text="`Open ${domainGroup.domains[0]} in a new tab`"
                                     class="w-full"
                                   >
-                                    <a
+                                    <Link
+                                      :label="domainGroup.domains[0]"
                                       :href="`https://${domainGroup.domains[0]}`"
                                       target="_blank"
-                                      rel="noopener noreferrer"
-                                      data-link="true"
-                                      class="group/link data-link:cursor-pointer inline-flex min-w-0 items-center gap-(--spacing-xxs) rounded-(--shape-button) text-body-sm text-(--text-default) no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)"
-                                    >
-                                      <span
-                                        class="truncate underline-offset-2 group-hover/link:underline"
-                                      >
-                                        {{ domainGroup.domains[0] }}
-                                      </span>
-                                      <span class="sr-only">{{ ' (opens in a new tab)' }}</span>
-                                      <i
-                                        class="pi pi-external-link shrink-0 text-body-xs leading-none"
-                                        aria-hidden="true"
-                                      />
-                                    </a>
+                                      size="small"
+                                    />
                                   </Tooltip>
                                 </div>
                                 <Popover
@@ -1064,7 +1055,9 @@
                                   placement="bottom-start"
                                   width="small"
                                 >
-                                  <Popover.Trigger>
+                                  <Popover.Trigger
+                                    :aria-label="`${domainGroup.total - 1} more domains`"
+                                  >
                                     <div class="shrink-0 cursor-pointer">
                                       <Tag
                                         :label="`+${domainGroup.total - 1}`"
@@ -1098,20 +1091,18 @@
                                     <div
                                       class="max-h-(--container-xs) overflow-auto overscroll-contain p-(--spacing-xxs)"
                                     >
-                                      <a
+                                      <div
                                         v-for="domain in domainGroup.domains"
                                         :key="domain"
-                                        :href="`https://${domain}`"
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        class="flex items-center gap-(--spacing-xxs) rounded-(--shape-elements) px-(--spacing-xs) py-(--spacing-xxs) text-body-sm text-(--text-default) hover:bg-(--bg-hover) hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)"
+                                        class="flex min-w-0 px-(--spacing-xs) py-(--spacing-xxs)"
                                       >
-                                        <span class="truncate">{{ domain }}</span>
-                                        <i
-                                          class="pi pi-external-link ms-auto shrink-0 text-body-xs leading-none"
-                                          aria-hidden="true"
+                                        <Link
+                                          :label="domain"
+                                          :href="`https://${domain}`"
+                                          target="_blank"
+                                          size="small"
                                         />
-                                      </a>
+                                      </div>
                                     </div>
 
                                     <div
@@ -1180,7 +1171,7 @@
 
                 <SettingsSection
                   title="Environment"
-                  hint="Where the deployment goes live, from the environments this project serves. Each one publishes with the Deployment Settings set on the project."
+                  hint="Where the deployment goes live, from the environments this project serves. Each one goes live with the Deployment Settings set on the project."
                 >
                   <div
                     role="radiogroup"
@@ -1225,7 +1216,7 @@
 
                 <SettingsSection
                   title="Projects impacted"
-                  hint="This environment publishes with shared Deployment Settings, so the deployment reaches every project below, in every environment they are linked to, and the domains they serve."
+                  hint="This environment deploys with shared Deployment Settings, so the deployment reaches every project below, in every environment they are linked to, and the domains they serve."
                 >
                   <div class="flex min-w-0 flex-col gap-(--spacing-md)">
                     <div
@@ -1286,24 +1277,12 @@
                                       :text="`Open ${domainGroup.domains[0]} in a new tab`"
                                       class="w-full"
                                     >
-                                      <a
+                                      <Link
+                                        :label="domainGroup.domains[0]"
                                         :href="`https://${domainGroup.domains[0]}`"
                                         target="_blank"
-                                        rel="noopener noreferrer"
-                                        data-link="true"
-                                        class="group/link data-link:cursor-pointer inline-flex min-w-0 items-center gap-(--spacing-xxs) rounded-(--shape-button) text-body-sm text-(--text-default) no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)"
-                                      >
-                                        <span
-                                          class="truncate underline-offset-2 group-hover/link:underline"
-                                        >
-                                          {{ domainGroup.domains[0] }}
-                                        </span>
-                                        <span class="sr-only">{{ ' (opens in a new tab)' }}</span>
-                                        <i
-                                          class="pi pi-external-link shrink-0 text-body-xs leading-none"
-                                          aria-hidden="true"
-                                        />
-                                      </a>
+                                        size="small"
+                                      />
                                     </Tooltip>
                                   </div>
                                   <Popover
@@ -1311,7 +1290,9 @@
                                     placement="bottom-start"
                                     width="small"
                                   >
-                                    <Popover.Trigger>
+                                    <Popover.Trigger
+                                      :aria-label="`${domainGroup.total - 1} more domains`"
+                                    >
                                       <div class="shrink-0 cursor-pointer">
                                         <Tag
                                           :label="`+${domainGroup.total - 1}`"
@@ -1345,20 +1326,18 @@
                                       <div
                                         class="max-h-(--container-xs) overflow-auto overscroll-contain p-(--spacing-xxs)"
                                       >
-                                        <a
+                                        <div
                                           v-for="domain in domainGroup.domains"
                                           :key="domain"
-                                          :href="`https://${domain}`"
-                                          target="_blank"
-                                          rel="noopener noreferrer"
-                                          class="flex items-center gap-(--spacing-xxs) rounded-(--shape-elements) px-(--spacing-xs) py-(--spacing-xxs) text-body-sm text-(--text-default) hover:bg-(--bg-hover) hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)"
+                                          class="flex min-w-0 px-(--spacing-xs) py-(--spacing-xxs)"
                                         >
-                                          <span class="truncate">{{ domain }}</span>
-                                          <i
-                                            class="pi pi-external-link ms-auto shrink-0 text-body-xs leading-none"
-                                            aria-hidden="true"
+                                          <Link
+                                            :label="domain"
+                                            :href="`https://${domain}`"
+                                            target="_blank"
+                                            size="small"
                                           />
-                                        </a>
+                                        </div>
                                       </div>
 
                                       <div

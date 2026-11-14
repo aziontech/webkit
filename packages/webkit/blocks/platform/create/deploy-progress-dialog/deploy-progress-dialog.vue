@@ -133,7 +133,7 @@
 
   const tally = computed(
     () =>
-      `${counts.value.done} succeeded, ${counts.value.failed} failed. Each Deployment Setting activates on its own, and the ones that succeeded stay live.`
+      `${counts.value.done} succeeded, ${counts.value.failed} failed. Each Deployment Setting deploys on its own, and the ones that succeeded stay live.`
   )
 
   const outcomeSeverity = computed(() => (counts.value.failed ? 'warning' : 'success'))
@@ -245,7 +245,7 @@
     <header class="flex min-w-0 flex-col gap-(--spacing-xxs)">
       <h1 class="text-balance text-heading-lg text-(--text-default)">web-app</h1>
       <p class="text-body-md text-(--text-muted)">
-        Deploys to {{ items.length }} {{ noun(items.length) }}, each activating on its own.
+        Deploys to {{ items.length }} {{ noun(items.length) }}, each going live on its own.
       </p>
     </header>
     <div class="flex flex-wrap items-center gap-(--spacing-sm)">
@@ -296,7 +296,7 @@
                   v-if="activeName"
                   class="truncate text-body-sm text-(--text-muted)"
                 >
-                  Activating {{ activeName }}
+                  Deploying {{ activeName }}
                 </p>
               </div>
 
