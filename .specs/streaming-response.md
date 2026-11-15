@@ -3,7 +3,7 @@ name: streaming-response
 category: ai
 structure: monolithic
 status: implemented
-spec_version: 4
+spec_version: 5
 template: 2
 checksum: 5b7660534581fabed4421feb9c06569283975757dda75b0786d89714542645bc
 created: 2026-11-11

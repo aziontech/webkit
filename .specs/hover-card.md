@@ -3,7 +3,7 @@ name: hover-card
 category: overlay
 structure: composition
 status: implemented
-spec_version: 3
+spec_version: 4
 template: 2
 checksum: 8a9ccc38fa799fad5907270b842a8d6988bbb758e40af8d9c4c90130193482d9
 created: 2026-11-14

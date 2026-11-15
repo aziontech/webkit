@@ -3,7 +3,7 @@ name: doc-call-to-action
 category: docs
 structure: monolithic
 status: implemented
-spec_version: 2
+spec_version: 3
 template: 2
 checksum: 25e2e5011bcf80892d08f7dc35b2732791a0dcebfcbd715bdc3a821e56d9370b
 created: 2026-11-14

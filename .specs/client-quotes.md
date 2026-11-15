@@ -3,7 +3,7 @@ name: client-quotes
 category: section
 structure: monolithic
 status: implemented
-spec_version: 5
+spec_version: 6
 created: 2026-11-04
 last_updated: 2026-11-15
 checksum: 166041ce3b736eb6834dd467654a99878a5ab1ea5f52a65a23e3d1ca6aa52a73

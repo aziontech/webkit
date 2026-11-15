@@ -16,7 +16,7 @@
 </script>
 
 <template>
-  <div style="display: flex; width: 320px; flex-direction: column; gap: 12px">
+  <div style="display: flex; flex-direction: column; gap: 12px; width: 320px">
     <ToggleGroup
       v-model="state"
       :options="states"

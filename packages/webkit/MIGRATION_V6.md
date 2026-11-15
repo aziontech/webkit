@@ -250,6 +250,13 @@ The codemod cannot see data objects, so rename the field by hand where you build
 The codemod rewrites these where you import them, together with the component they belong to (the
 types this guide names elsewhere are left out):
 
+Props and events whose type is only renamed keep their shape: `Sources` `items` and `StreamingResponse`
+`sources` take `SourcesItem[]` (was `AiSource[]`); `DocOnThisPage` `items`, `groups` and the `select`
+payload take `DocOnThisPageItem` / `DocOnThisPageGroup` (was `DocTocItem` / `DocTocGroup`);
+`ContextMenu` and `ContextMenuRoot` `select` pass a `DropdownMenuItemValue` (was
+`DropdownMenuOptionValue`); `CliTerminal` `primaryAction` is a `SectionTitleAction` (was
+`CliTerminalAction`).
+
 | v5 type                                | v6 type                                 |
 | -------------------------------------- | --------------------------------------- |
 | `AppliedFilter`                        | `TableAppliedFilter`                    |

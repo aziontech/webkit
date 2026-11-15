@@ -3,7 +3,7 @@ name: doc-on-this-page
 category: docs
 structure: monolithic
 status: implemented
-spec_version: 3
+spec_version: 4
 checksum: d1e41e1c4f8b5475379cb56494d4bab0200462096a3a2f438bf2354d4600c74b
 created: 2026-08-22
 last_updated: 2026-11-15

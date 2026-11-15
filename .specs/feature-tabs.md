@@ -3,7 +3,7 @@ name: feature-tabs
 category: section
 structure: monolithic
 status: implemented
-spec_version: 4
+spec_version: 5
 created: 2026-11-05
 last_updated: 2026-11-15
 checksum: dd03bd7b92af6ceaefb58951dbdf1fef13e4e74117cd849c5c78b54cfec29112

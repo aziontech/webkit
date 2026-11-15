@@ -3,7 +3,7 @@ name: cli-terminal
 category: section
 structure: monolithic
 status: implemented
-spec_version: 3
+spec_version: 4
 created: 2026-11-05
 last_updated: 2026-11-15
 checksum: 2279f4351552e8348a3455d4d46b63dbf4681a035285f47068e564ee8ae18238
