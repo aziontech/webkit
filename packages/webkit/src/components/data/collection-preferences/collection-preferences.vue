@@ -5,8 +5,8 @@
     CollectionColumnPreference,
     CollectionDensity,
     CollectionPreferencesValue
-  } from '../../../composables/use-collection/preferences'
-  import { useTranslate } from '../../../composables/use-locale/use-translate'
+  } from '../../../composables/use-collection/lib/preferences'
+  import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../i18n/messages/en'
   import Button from '../../actions/button/button.vue'
   import IconButton from '../../actions/icon-button/icon-button.vue'
@@ -29,7 +29,7 @@
     CollectionColumnPreference,
     CollectionDensity,
     CollectionPreferencesValue
-  } from '../../../composables/use-collection/preferences'
+  } from '../../../composables/use-collection/lib/preferences'
 
   /** A section of the preferences panel. */
   export type CollectionPreferencesSection =

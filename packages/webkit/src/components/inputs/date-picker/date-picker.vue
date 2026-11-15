@@ -3,8 +3,8 @@
 
   import { useFieldControl } from '../../../composables/use-field-control'
   import { useFocusTrap } from '../../../composables/use-focus-trap'
-  import { usePortalLocale, useTranslate } from '../../../composables/use-locale/use-translate'
   import { usePlacement } from '../../../composables/use-placement'
+  import { usePortalLocale, useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../i18n/messages/en'
   import Button from '../../actions/button/button.vue'
   import DatePickerFields from './date-picker-fields/date-picker-fields.vue'

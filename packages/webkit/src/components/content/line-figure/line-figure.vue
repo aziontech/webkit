@@ -1,8 +1,8 @@
 <script setup lang="ts">
   import { computed, ref, useAttrs } from 'vue'
 
+  import { useLineFigure } from './composables/use-line-figure'
   import type { LineFigureName } from './figures/registry'
-  import { useLineFigure } from './use-line-figure'
 
   defineOptions({ name: 'LineFigure', inheritAttrs: false })
 

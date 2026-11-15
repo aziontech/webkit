@@ -2,7 +2,7 @@
   import { computed, onMounted, ref, useAttrs, watch } from 'vue'
 
   import { useFieldControl } from '../../../composables/use-field-control'
-  import { useTranslate } from '../../../composables/use-locale/use-translate'
+  import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../i18n/messages/en'
 
   export type OtpInputMode = 'numeric' | 'alphanumeric'

@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, useAttrs, useSlots } from 'vue'
 
-  import { useTranslate } from '../../../../composables/use-locale/use-translate'
+  import { useTranslate } from '../../../../composables/use-translate'
   import * as en from '../../../../i18n/messages/en'
   import { hasRenderedContent } from '../../../../utils/rendered-content'
   import Skeleton from '../../../feedback/skeleton/skeleton.vue'

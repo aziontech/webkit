@@ -2,7 +2,7 @@
   import { computed, ref, useAttrs } from 'vue'
 
   import { logicalArrowKey, useDirection } from '../../../composables/use-direction'
-  import { useTranslate } from '../../../composables/use-locale/use-translate'
+  import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../i18n/messages/en'
   import DropdownMenu from '../../navigation/dropdown-menu/dropdown-menu.vue'
   import DropdownMenuGroup from '../../navigation/dropdown-menu/dropdown-menu-group/dropdown-menu-group.vue'

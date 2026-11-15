@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, inject, ref, useId, watch } from 'vue'
 
-  import { useLocaleContext, useTranslate } from '../../../../composables/use-locale/use-translate'
+  import { useLocaleContext, useTranslate } from '../../../../composables/use-translate'
   import * as en from '../../../../i18n/messages/en'
   import Input from '../../input/input.vue'
   import { asRange, asSingle, formatDate, formatTime } from '../format'

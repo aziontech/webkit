@@ -2,7 +2,7 @@
   import { computed, onMounted, onScopeDispose, ref, useAttrs } from 'vue'
 
   import { clientBrand } from '../../../assets/logos/clients/brands'
-  import { useTranslate } from '../../../composables/use-locale/use-translate'
+  import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../i18n/messages/en'
   import FrameBox from '../../layout/frame-box/frame-box.vue'
   import LogoWall from '../../marketing/logo-wall/logo-wall.vue'

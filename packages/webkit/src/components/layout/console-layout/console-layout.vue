@@ -28,7 +28,7 @@
     toMenuGroups,
     useAppNavigation
   } from '../../../composables/use-app-navigation'
-  import { useTranslate } from '../../../composables/use-locale/use-translate'
+  import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../i18n/messages/en'
   import { cn } from '../../../utils/cn'
   import IconButton from '../../actions/icon-button/icon-button.vue'

@@ -12,7 +12,7 @@ import {
 } from 'vue'
 
 import * as en from '../../i18n/messages/en'
-import { useTranslate } from '../use-locale/use-translate'
+import { useTranslate } from '../use-translate'
 
 /** Options of `useUnsavedChanges`. */
 export interface UseUnsavedChangesOptions<T> {

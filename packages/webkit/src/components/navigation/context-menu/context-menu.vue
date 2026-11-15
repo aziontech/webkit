@@ -3,9 +3,9 @@
 
   import { useControllable } from '../../../composables/use-controllable'
   import { resolveDirection } from '../../../composables/use-direction'
-  import { usePortalLocale } from '../../../composables/use-locale/use-translate'
   import { type MenuPlacement, useMenuRoot } from '../../../composables/use-menu-root'
   import { usePlacement } from '../../../composables/use-placement'
+  import { usePortalLocale } from '../../../composables/use-translate'
   import type { DropdownMenuOptionValue } from '../dropdown-menu/injection-key'
   import { DropdownMenuInjectionKey } from '../dropdown-menu/injection-key'
   import { ContextMenuInjectionKey } from './injection-key'

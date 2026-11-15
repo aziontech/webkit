@@ -3,7 +3,7 @@
   import { computed, ref, useAttrs, useId, watch } from 'vue'
 
   import { useFieldControl } from '../../../composables/use-field-control'
-  import { useTranslate } from '../../../composables/use-locale/use-translate'
+  import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../i18n/messages/en'
   import { matchesAccept } from '../../../utils/file-accept'
   import { dropEntries, filesFromEntries } from '../../../utils/file-entries'

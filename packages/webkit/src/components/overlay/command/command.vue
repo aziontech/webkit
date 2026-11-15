@@ -15,7 +15,7 @@
   } from 'vue'
 
   import { useControllable } from '../../../composables/use-controllable'
-  import { useTranslate } from '../../../composables/use-locale/use-translate'
+  import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../i18n/messages/en'
   import Dialog from '../dialog/dialog.vue'
   import DialogContent from '../dialog/dialog-content.vue'

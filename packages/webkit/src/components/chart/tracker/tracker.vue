@@ -3,7 +3,7 @@
   import { computed, ref, useAttrs, useId, watch } from 'vue'
 
   import { logicalArrowKey, useDirection } from '../../../composables/use-direction'
-  import { useTranslate } from '../../../composables/use-locale/use-translate'
+  import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../i18n/messages/en'
   import Skeleton from '../../feedback/skeleton/skeleton.vue'
   import { categoryLayout, type ChartStatus, colorToken } from '../_lib'

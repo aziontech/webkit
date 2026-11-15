@@ -1,6 +1,6 @@
 import type { ComputedRef, InjectionKey, Ref } from 'vue'
 
-import type { ListboxFocusIntent } from '../../../composables/use-listbox'
+import type { ListboxFocusIntent } from '../../../composables/use-listbox-content'
 
 export type MultiSelectSize = 'small' | 'medium' | 'large'
 

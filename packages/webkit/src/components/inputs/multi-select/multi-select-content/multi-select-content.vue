@@ -13,10 +13,10 @@
     watch
   } from 'vue'
 
-  import LazyNodes from '../../../../composables/use-lazy-chunks/lazy-nodes'
-  import { useListboxContent } from '../../../../composables/use-listbox'
-  import { usePortalLocale, useTranslate } from '../../../../composables/use-locale/use-translate'
+  import LazyNodes from '../../../../composables/use-lazy-chunks/lib/lazy-nodes'
+  import { useListboxContent } from '../../../../composables/use-listbox-content'
   import { usePlacement } from '../../../../composables/use-placement'
+  import { usePortalLocale, useTranslate } from '../../../../composables/use-translate'
   import * as en from '../../../../i18n/messages/en'
   import ScrollArea from '../../../layout/scroll-area/scroll-area.vue'
   import Spinner from '../../../utils/spinner/spinner.vue'

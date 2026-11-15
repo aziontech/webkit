@@ -38,7 +38,7 @@
 
   import { eventDirection, logicalArrowKey } from '../../../composables/use-direction'
   import { scrollParent } from '../../../composables/use-lazy-chunks'
-  import { useTranslate } from '../../../composables/use-locale/use-translate'
+  import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../i18n/messages/en'
   import { downloadCsv, toCsv } from '../../../utils/csv'
   import Button from '../../actions/button/button.vue'

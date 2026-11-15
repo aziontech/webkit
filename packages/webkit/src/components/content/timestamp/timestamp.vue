@@ -2,7 +2,7 @@
   import { computed, inject, nextTick, onMounted, ref, useAttrs } from 'vue'
 
   import { useLocale } from '../../../composables/use-locale/use-locale'
-  import { LocaleInjectionKey } from '../../../composables/use-locale/use-translate'
+  import { LocaleInjectionKey } from '../../../composables/use-translate'
   import * as en from '../../../i18n/messages/en'
   import CopyButton from '../../actions/copy-button/copy-button.vue'
   import { useMinuteClock } from '../../data/table/table-cell-time/minute-clock'

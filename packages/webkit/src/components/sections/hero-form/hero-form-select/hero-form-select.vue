@@ -1,8 +1,8 @@
 <script setup lang="ts">
   import { computed, useAttrs, useId } from 'vue'
 
-  import { useTranslate } from '../../../../composables/use-locale/use-translate'
   import { useSelectSearch } from '../../../../composables/use-select-search'
+  import { useTranslate } from '../../../../composables/use-translate'
   import * as en from '../../../../i18n/messages/en'
   import Input from '../../../inputs/input/input.vue'
   import Select from '../../../inputs/select/select.vue'

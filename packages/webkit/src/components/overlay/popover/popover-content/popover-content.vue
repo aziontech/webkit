@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { type ComponentPublicInstance } from 'vue'
 
-  import { usePortalLocale } from '../../../../composables/use-locale/use-translate'
+  import { usePortalLocale } from '../../../../composables/use-translate'
   import { usePopoverContext } from '../injection-key'
 
   defineOptions({

@@ -2,7 +2,7 @@
   import { useResizeObserver } from '@vueuse/core'
   import { computed, ref, useAttrs } from 'vue'
 
-  import { useTranslate } from '../../../composables/use-locale/use-translate'
+  import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../i18n/messages/en'
   import EmptyState from '../../feedback/empty-state/empty-state.vue'
   import Skeleton from '../../feedback/skeleton/skeleton.vue'

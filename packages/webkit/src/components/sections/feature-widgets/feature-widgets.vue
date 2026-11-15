@@ -2,7 +2,7 @@
   import { type Component, computed, onScopeDispose, ref, useAttrs } from 'vue'
 
   import { resolveScene, type SceneRef } from '../../../assets/scene-registry'
-  import { useTranslate } from '../../../composables/use-locale/use-translate'
+  import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../i18n/messages/en'
   import Button from '../../actions/button/button.vue'
   import ButtonHighlight from '../../actions/button-highlight/button-highlight.vue'

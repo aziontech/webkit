@@ -2,9 +2,9 @@
   import { computed, onBeforeUnmount, ref, useAttrs, useId, watch } from 'vue'
 
   import { useControllable } from '../../../composables/use-controllable'
-  import { usePortalLocale } from '../../../composables/use-locale/use-translate'
   import { useOverlayLayer } from '../../../composables/use-overlay-layer'
   import { usePlacement } from '../../../composables/use-placement'
+  import { usePortalLocale } from '../../../composables/use-translate'
   import { triggerControl } from '../../../utils/trigger-control'
 
   export type TooltipPlacement = 'top' | 'right' | 'bottom' | 'left'

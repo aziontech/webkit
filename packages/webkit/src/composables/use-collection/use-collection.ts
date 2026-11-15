@@ -22,7 +22,7 @@ import {
   type PreferencesStorage,
   readPreferences,
   writePreferences
-} from './preferences'
+} from './lib/preferences'
 import {
   cloneQuery,
   emptyQuery,
@@ -31,8 +31,8 @@ import {
   matchesText,
   type PropertyFilterQuery,
   queryIsEmpty
-} from './property-filter'
-import { type CollectionUrlAdapter, historyAdapter, readUrlState, writeUrlState } from './url'
+} from './lib/property-filter'
+import { type CollectionUrlAdapter, historyAdapter, readUrlState, writeUrlState } from './lib/url'
 
 /** One sorted column; the same shape as the Table `sorting` model. */
 export interface CollectionSort {

@@ -2,8 +2,8 @@
   import { computed, provide, shallowRef, useAttrs, useId, watch } from 'vue'
 
   import { useFieldControl } from '../../../composables/use-field-control'
-  import { useTranslate } from '../../../composables/use-locale/use-translate'
   import { useSelectSearch } from '../../../composables/use-select-search'
+  import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../i18n/messages/en'
   import { FormValue } from '../../../utils/form-value'
   import { FieldInjectionKey } from '../field/injection-key'

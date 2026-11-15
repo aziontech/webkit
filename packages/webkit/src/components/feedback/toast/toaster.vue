@@ -11,9 +11,11 @@
     watch
   } from 'vue'
 
-  import { usePortalLocale, useTranslate } from '../../../composables/use-locale/use-translate'
+  import { usePortalLocale, useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../i18n/messages/en'
   import Progress from '../progress/progress.vue'
+  import type { ToastEntry, ToastPosition } from './composables/use-toast-store'
+  import { registerToaster, useToastStore } from './composables/use-toast-store'
   import { ToastInjectionKey } from './injection-key'
   import { TOAST_UNMOUNT_MS } from './presets/transitions'
   import ToastAction from './toast-action/toast-action.vue'
@@ -21,8 +23,6 @@
   import ToastDescription from './toast-description/toast-description.vue'
   import ToastItem from './toast-item/toast-item.vue'
   import ToastTitle from './toast-title/toast-title.vue'
-  import type { ToastEntry, ToastPosition } from './use-toast-store'
-  import { registerToaster, useToastStore } from './use-toast-store'
 
   export type { ToastPosition }
 

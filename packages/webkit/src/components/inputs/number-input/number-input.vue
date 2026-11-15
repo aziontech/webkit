@@ -2,7 +2,7 @@
   import { computed, useAttrs } from 'vue'
 
   import { useFieldControl } from '../../../composables/use-field-control'
-  import { useTranslate } from '../../../composables/use-locale/use-translate'
+  import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../i18n/messages/en'
   import { PASSWORD_MANAGER_IGNORE } from '../../../utils/autofill'
 

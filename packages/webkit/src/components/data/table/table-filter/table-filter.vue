@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, defineAsyncComponent, inject, ref, useAttrs, watch } from 'vue'
 
-  import type { PropertyFilterQuery } from '../../../../composables/use-collection/property-filter'
+  import type { PropertyFilterQuery } from '../../../../composables/use-collection/lib/property-filter'
   import { useFilterMenuLabels } from '../../filter-menu/composables/use-filter-menu-labels'
   import type FilterMenuComponent from '../../filter-menu/filter-menu.vue'
   import type { FilterMenuModel } from '../../filter-menu/types'

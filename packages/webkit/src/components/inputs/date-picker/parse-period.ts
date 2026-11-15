@@ -1,4 +1,4 @@
-import { intlLocale } from '../../../composables/use-locale/use-translate'
+import { intlLocale } from '../../../composables/use-translate'
 import { endOfDay, startOfDay } from './format'
 import type { DatePickerRange } from './injection-key'
 

@@ -17,7 +17,7 @@ import {
   LocaleInjectionKey,
   useDeviceLocale,
   useLocaleContext
-} from './use-translate'
+} from '../use-translate'
 
 export { DEFAULT_LOCALE, type LocaleContext, LocaleInjectionKey }
 

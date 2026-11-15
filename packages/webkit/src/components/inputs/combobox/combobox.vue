@@ -2,10 +2,10 @@
   import { computed, nextTick, onBeforeUpdate, ref, useAttrs, useId, watch } from 'vue'
 
   import { useFieldControl } from '../../../composables/use-field-control'
-  import LazyNodes from '../../../composables/use-lazy-chunks/lazy-nodes'
-  import { usePortalLocale, useTranslate } from '../../../composables/use-locale/use-translate'
+  import LazyNodes from '../../../composables/use-lazy-chunks/lib/lazy-nodes'
   import { useOverlayLayer } from '../../../composables/use-overlay-layer'
   import { usePlacement } from '../../../composables/use-placement'
+  import { usePortalLocale, useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../i18n/messages/en'
   import IconButton from '../../actions/icon-button/icon-button.vue'
   import Spinner from '../../utils/spinner/spinner.vue'

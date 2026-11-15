@@ -3,7 +3,7 @@
   import { computed, ref, useAttrs, useId } from 'vue'
 
   import { eventDirection, logicalArrowKey } from '../../../composables/use-direction'
-  import { useTranslate } from '../../../composables/use-locale/use-translate'
+  import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../i18n/messages/en'
   import CopyButton from '../../actions/copy-button/copy-button.vue'
   import { useFrameDocument } from './composables/use-frame-document'

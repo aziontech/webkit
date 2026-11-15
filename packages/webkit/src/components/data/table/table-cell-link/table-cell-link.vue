@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { type Component, computed, getCurrentInstance, inject, useAttrs } from 'vue'
 
-  import { useTranslate } from '../../../../composables/use-locale/use-translate'
+  import { useTranslate } from '../../../../composables/use-translate'
   import * as en from '../../../../i18n/messages/en'
   import CopyButton from '../../../actions/copy-button/copy-button.vue'
   import OverflowCount, {

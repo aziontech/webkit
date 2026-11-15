@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, inject, useAttrs } from 'vue'
 
-  import { useListboxTrigger } from '../../../../composables/use-listbox'
+  import { useListboxTrigger } from '../../../../composables/use-listbox-trigger'
   import { SelectInjectionKey } from '../injection-key'
 
   defineOptions({

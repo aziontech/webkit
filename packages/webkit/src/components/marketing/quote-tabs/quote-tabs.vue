@@ -15,7 +15,7 @@
   } from 'vue'
 
   import { eventDirection, logicalArrowKey } from '../../../composables/use-direction'
-  import { useTranslate } from '../../../composables/use-locale/use-translate'
+  import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../i18n/messages/en'
   import { brandMarkLabel, resolveBrandMark } from '../../../svg/brands/registry'
   import IconButton from '../../actions/icon-button/icon-button.vue'

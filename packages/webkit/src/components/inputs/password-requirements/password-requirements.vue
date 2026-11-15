@@ -3,7 +3,7 @@
   import { computed, ref, useAttrs, useId } from 'vue'
 
   import { type MessageKey } from '../../../composables/use-locale'
-  import { useTranslate } from '../../../composables/use-locale/use-translate'
+  import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../i18n/messages/en'
   import { DEFAULT_PASSWORD_REQUIREMENTS, type PasswordRequirement } from './rules'
 

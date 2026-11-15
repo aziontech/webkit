@@ -1,6 +1,6 @@
 import { type MaybeRefOrGetter, type Ref, toValue } from 'vue'
 
-import type { ListboxFocusIntent } from './use-listbox-content'
+import type { ListboxFocusIntent } from '../use-listbox-content'
 
 export interface UseListboxTriggerOptions {
   open: MaybeRefOrGetter<boolean>

@@ -6,7 +6,7 @@ import {
   type PropertyFilterOperator,
   type PropertyFilterQuery,
   type PropertyFilterToken
-} from '../../../composables/use-collection/property-filter'
+} from '../../../composables/use-collection/lib/property-filter'
 
 export type QueryLexeme = {
   kind: 'word' | 'operator'

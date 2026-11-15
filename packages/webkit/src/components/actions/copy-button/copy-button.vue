@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, defineAsyncComponent, onBeforeUnmount, ref, useAttrs } from 'vue'
 
-  import { useTranslate } from '../../../composables/use-locale/use-translate'
+  import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../i18n/messages/en'
   import Tooltip from '../../overlay/tooltip/tooltip.vue'
   import type { IconButtonKind, IconButtonSize } from '../icon-button/icon-button.vue'

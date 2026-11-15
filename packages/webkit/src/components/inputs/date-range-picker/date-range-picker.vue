@@ -13,12 +13,12 @@
 
   import { useFieldControl } from '../../../composables/use-field-control'
   import { useFocusTrap } from '../../../composables/use-focus-trap'
+  import { usePlacement } from '../../../composables/use-placement'
   import {
     useLocaleContext,
     usePortalLocale,
     useTranslate
-  } from '../../../composables/use-locale/use-translate'
-  import { usePlacement } from '../../../composables/use-placement'
+  } from '../../../composables/use-translate'
   import * as en from '../../../i18n/messages/en'
   import Button from '../../actions/button/button.vue'
   import ToggleGroup from '../../actions/toggle-group/toggle-group.vue'

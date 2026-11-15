@@ -3,7 +3,7 @@
   import { computed, onMounted, provide, type Ref, ref, shallowReadonly, useAttrs } from 'vue'
 
   import { resolveDirection } from '../../../composables/use-direction'
-  import { useTranslate } from '../../../composables/use-locale/use-translate'
+  import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../i18n/messages/en'
   import { CarouselInjectionKey, type CarouselLayout } from './injection-key'
 

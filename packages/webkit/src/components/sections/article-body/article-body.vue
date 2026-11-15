@@ -2,7 +2,7 @@
   import { useEventListener } from '@vueuse/core'
   import { computed, onMounted, ref, useAttrs } from 'vue'
 
-  import { useTranslate } from '../../../composables/use-locale/use-translate'
+  import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../i18n/messages/en'
   import IconButton from '../../actions/icon-button/icon-button.vue'
   import type { SplitButtonItem } from '../../actions/split-button/split-button.vue'
@@ -10,7 +10,7 @@
   import Avatar from '../../content/avatar/avatar.vue'
   import DocOnThisPage from '../../documentation/doc-on-this-page/doc-on-this-page.vue'
   import DocProse from '../../documentation/doc-prose/doc-prose.vue'
-  import { toast } from '../../feedback/toast/use-toast-store'
+  import { toast } from '../../feedback/toast/composables/use-toast-store'
   import FrameBox from '../../layout/frame-box/frame-box.vue'
   import Separator from '../../layout/separator/separator.vue'
   import HeroTitle from '../../marketing/hero/hero-title/hero-title.vue'

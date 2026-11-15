@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, onBeforeUnmount, onMounted, ref, useAttrs } from 'vue'
 
-  import { usePortalLocale, useTranslate } from '../../../composables/use-locale/use-translate'
+  import { usePortalLocale, useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../i18n/messages/en'
 
   defineOptions({ name: 'DocProse', inheritAttrs: false })

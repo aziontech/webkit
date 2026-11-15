@@ -2,7 +2,7 @@
   import { computed, useAttrs, useId } from 'vue'
 
   import { useLazyChunks } from '../../../composables/use-lazy-chunks'
-  import { useLocaleContext, useTranslate } from '../../../composables/use-locale/use-translate'
+  import { useLocaleContext, useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../i18n/messages/en'
   import IconButton from '../../actions/icon-button/icon-button.vue'
   import Skeleton from '../../feedback/skeleton/skeleton.vue'

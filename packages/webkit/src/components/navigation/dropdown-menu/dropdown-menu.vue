@@ -2,9 +2,9 @@
   import { computed, provide, ref, useAttrs, useId, watch } from 'vue'
 
   import { useControllable } from '../../../composables/use-controllable'
-  import { usePortalLocale } from '../../../composables/use-locale/use-translate'
   import { useMenuRoot } from '../../../composables/use-menu-root'
   import { usePlacement } from '../../../composables/use-placement'
+  import { usePortalLocale } from '../../../composables/use-translate'
   import type {
     DropdownMenuOptionValue,
     DropdownMenuPlacement,

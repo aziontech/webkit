@@ -2,7 +2,7 @@
   import { computed, provide, type Ref, ref, shallowReactive, useAttrs, useId } from 'vue'
 
   import { useFieldControl } from '../../../composables/use-field-control'
-  import type { ListboxFocusIntent } from '../../../composables/use-listbox'
+  import type { ListboxFocusIntent } from '../../../composables/use-listbox-content'
   import { FormValue } from '../../../utils/form-value'
   import { FieldInjectionKey } from '../field/injection-key'
   import {

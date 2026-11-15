@@ -13,9 +13,9 @@
     type PropertyFilterToken,
     type PropertyFilterTokenGroup,
     tokenText
-  } from '../../../composables/use-collection/property-filter'
-  import { usePortalLocale, useTranslate } from '../../../composables/use-locale/use-translate'
+  } from '../../../composables/use-collection/lib/property-filter'
   import { usePlacement } from '../../../composables/use-placement'
+  import { usePortalLocale, useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../i18n/messages/en'
   import Button from '../../actions/button/button.vue'
   import ToggleGroup from '../../actions/toggle-group/toggle-group.vue'
@@ -39,7 +39,7 @@
     PropertyFilterQuery,
     PropertyFilterToken,
     PropertyFilterTokenGroup
-  } from '../../../composables/use-collection/property-filter'
+  } from '../../../composables/use-collection/lib/property-filter'
   export type { PropertyFilterQuerySuggestion, PropertyFilterSubmit } from './query-language'
 
   type Suggestion = {

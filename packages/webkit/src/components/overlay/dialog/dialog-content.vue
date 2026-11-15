@@ -3,8 +3,8 @@
   import { computed, inject, nextTick, onBeforeUnmount, provide, ref, useAttrs, watch } from 'vue'
 
   import { useFocusTrap } from '../../../composables/use-focus-trap'
-  import { usePortalLocale } from '../../../composables/use-locale/use-translate'
   import { useOverlayLayer } from '../../../composables/use-overlay-layer'
+  import { usePortalLocale } from '../../../composables/use-translate'
   import { cn } from '../../../utils/cn'
   import { PanelHeaderEndInjectionKey } from '../panel/injection-key'
   import Panel from '../panel/panel.vue'

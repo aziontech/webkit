@@ -1,4 +1,4 @@
-import { intlLocale } from '../../../composables/use-locale/use-translate'
+import { intlLocale } from '../../../composables/use-translate'
 import type { DatePickerDraft, DatePickerMode, DatePickerRange } from './injection-key'
 
 export const startOfDay = (date: Date): Date =>

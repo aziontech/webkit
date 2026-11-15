@@ -2,11 +2,7 @@
   import { computed, inject, nextTick, ref, watch } from 'vue'
 
   import { eventDirection, logicalArrowKey } from '../../../../composables/use-direction'
-  import {
-    intlLocale,
-    useLocaleContext,
-    useTranslate
-  } from '../../../../composables/use-locale/use-translate'
+  import { intlLocale, useLocaleContext, useTranslate } from '../../../../composables/use-translate'
   import * as en from '../../../../i18n/messages/en'
   import {
     getTabViewPanelTransitionStyle,

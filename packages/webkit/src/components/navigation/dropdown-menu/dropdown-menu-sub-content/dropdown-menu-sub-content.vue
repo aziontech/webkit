@@ -2,9 +2,9 @@
   import { computed, nextTick, onBeforeUnmount, provide, ref, useAttrs, watch } from 'vue'
 
   import { resolveDirection } from '../../../../composables/use-direction'
-  import { usePortalLocale } from '../../../../composables/use-locale/use-translate'
   import { focusMenuItem, useMenuLevel } from '../../../../composables/use-menu-root'
   import { usePlacement } from '../../../../composables/use-placement'
+  import { usePortalLocale } from '../../../../composables/use-translate'
   import {
     DropdownMenuGroupInjectionKey,
     DropdownMenuInjectionKey,

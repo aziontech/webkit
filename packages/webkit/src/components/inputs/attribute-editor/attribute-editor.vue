@@ -1,7 +1,7 @@
 <script setup lang="ts" generic="TItem extends object = Record<string, unknown>">
   import { computed, nextTick, ref, toRaw, useAttrs, useId } from 'vue'
 
-  import { useTranslate } from '../../../composables/use-locale/use-translate'
+  import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../i18n/messages/en'
   import Button from '../../actions/button/button.vue'
   import IconButton from '../../actions/icon-button/icon-button.vue'

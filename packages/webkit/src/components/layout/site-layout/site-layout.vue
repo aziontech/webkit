@@ -2,7 +2,7 @@
   import { computed, ref, useAttrs, watch } from 'vue'
 
   import { useAppNavigation } from '../../../composables/use-app-navigation'
-  import { useTranslate } from '../../../composables/use-locale/use-translate'
+  import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../i18n/messages/en'
   import Command from '../../overlay/command/command.vue'
   import CommandEmpty from '../../overlay/command/command-empty/command-empty.vue'

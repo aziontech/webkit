@@ -10,7 +10,7 @@
   } from 'vue'
 
   import { useAppNavigation } from '../../../composables/use-app-navigation'
-  import { useTranslate } from '../../../composables/use-locale/use-translate'
+  import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../i18n/messages/en'
   import ItemList from '../../content/item/item-list.vue'
   import FrameBox from '../../layout/frame-box/frame-box.vue'

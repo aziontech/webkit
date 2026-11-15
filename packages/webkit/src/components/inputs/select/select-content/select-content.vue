@@ -11,10 +11,10 @@
     type VNodeArrayChildren
   } from 'vue'
 
-  import LazyNodes from '../../../../composables/use-lazy-chunks/lazy-nodes'
-  import { useListboxContent } from '../../../../composables/use-listbox'
-  import { usePortalLocale } from '../../../../composables/use-locale/use-translate'
+  import LazyNodes from '../../../../composables/use-lazy-chunks/lib/lazy-nodes'
+  import { useListboxContent } from '../../../../composables/use-listbox-content'
   import { usePlacement } from '../../../../composables/use-placement'
+  import { usePortalLocale } from '../../../../composables/use-translate'
   import ScrollArea from '../../../layout/scroll-area/scroll-area.vue'
   import { SelectInjectionKey } from '../injection-key'
 

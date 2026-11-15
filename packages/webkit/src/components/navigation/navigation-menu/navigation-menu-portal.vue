@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
-  import { usePortalLocale } from '../../../composables/use-locale/use-translate'
+  import { usePortalLocale } from '../../../composables/use-translate'
   import { cn } from '../../../utils/cn'
   import { useNavigationMenuContext } from './composables/use-navigation-menu-context'
 

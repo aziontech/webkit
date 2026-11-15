@@ -1,8 +1,8 @@
 <script setup lang="ts">
   import { computed, inject, nextTick, useAttrs } from 'vue'
 
-  import { useListboxTrigger } from '../../../../composables/use-listbox'
-  import { useTranslate } from '../../../../composables/use-locale/use-translate'
+  import { useListboxTrigger } from '../../../../composables/use-listbox-trigger'
+  import { useTranslate } from '../../../../composables/use-translate'
   import * as en from '../../../../i18n/messages/en'
   import Chip from '../../chip/chip.vue'
   import { MultiSelectInjectionKey } from '../injection-key'

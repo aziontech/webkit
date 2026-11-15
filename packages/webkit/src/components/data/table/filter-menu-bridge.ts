@@ -2,7 +2,7 @@ import type {
   FilteringProperty,
   PropertyFilterOperator,
   PropertyFilterQuery
-} from '../../../composables/use-collection/property-filter'
+} from '../../../composables/use-collection/lib/property-filter'
 import type { FilterMenuField, FilterMenuModel, FilterMenuValue } from '../filter-menu/types'
 import type { AppliedFilter, FilterField, FilterOperator, FilterValue } from './injection-key'
 

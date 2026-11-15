@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, onMounted, provide, ref, useAttrs, watch } from 'vue'
 
-  import { useTranslate } from '../../../composables/use-locale/use-translate'
+  import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../i18n/messages/en'
   import Button from '../../actions/button/button.vue'
   import Stepper from '../stepper/stepper.vue'

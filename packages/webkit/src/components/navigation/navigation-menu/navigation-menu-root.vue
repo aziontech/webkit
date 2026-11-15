@@ -2,7 +2,7 @@
   import { computed, ref, useAttrs } from 'vue'
 
   import { useDirection } from '../../../composables/use-direction'
-  import { useTranslate } from '../../../composables/use-locale/use-translate'
+  import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../i18n/messages/en'
   import { cn } from '../../../utils/cn'
   import { provideNavigationMenuContext } from './composables/use-navigation-menu-context'

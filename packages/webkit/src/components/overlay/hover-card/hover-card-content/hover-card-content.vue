@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
-  import { usePortalLocale } from '../../../../composables/use-locale/use-translate'
+  import { usePortalLocale } from '../../../../composables/use-translate'
   import { HOVER_CARD_FOCUSABLE, useHoverCardContext } from '../injection-key'
 
   defineOptions({

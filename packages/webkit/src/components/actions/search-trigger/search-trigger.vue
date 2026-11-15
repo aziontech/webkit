@@ -2,7 +2,7 @@
   import { defaultWindow, useEventListener, useResizeObserver } from '@vueuse/core'
   import { computed, type FunctionalComponent, ref, useAttrs } from 'vue'
 
-  import { useTranslate } from '../../../composables/use-locale/use-translate'
+  import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../i18n/messages/en'
   import Kbd from '../../content/kbd/kbd.vue'
   import { isShortcutClaimed } from '../../overlay/command/shortcut-registry'

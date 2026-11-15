@@ -2,8 +2,8 @@
   import { computed, inject, useAttrs } from 'vue'
 
   import Spinner from '../../../utils/spinner/spinner.vue'
+  import type { ToastSeverity } from '../composables/use-toast-store'
   import { ToastInjectionKey } from '../injection-key'
-  import type { ToastSeverity } from '../use-toast-store'
 
   defineOptions({
     name: 'ToastItem',

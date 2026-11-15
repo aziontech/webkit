@@ -1,7 +1,7 @@
 import { nextTick, onScopeDispose, readonly, type Ref, ref, watch } from 'vue'
 
 import { useOverlayLayer } from '../use-overlay-layer'
-import { registerShortcut } from './shortcut-registry'
+import { registerShortcut } from './lib/shortcut-registry'
 
 /** Identifier an option emits on the root `select` event. */
 export type MenuOptionValue = string | number
