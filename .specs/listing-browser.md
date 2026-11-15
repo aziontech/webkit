@@ -3,11 +3,11 @@ name: listing-browser
 category: sections
 structure: monolithic
 status: implemented
-spec_version: 5
+spec_version: 6
 template: 2
 created: 2026-11-05
-last_updated: 2026-11-14
-checksum: 8f8715bf620230f78aed0b14ee371b8d120dd54077d0c33a289701b16a1da7bd
+last_updated: 2026-11-15
+checksum: 7de51441cc43e9cf57570e33e4e330bc7393d8dde88767a7a90973243759957b
 ---
 
 # ListingBrowser — Component Spec
@@ -18,7 +18,7 @@ The full, browsable listing of a page such as the Careers jobs list: a headline 
 
 ## When to use
 
-- For a listing a reader narrows by text and by a few facets, such as open positions grouped by department.
+- Use ListingBrowser for a filterable list of non-article rows (jobs): a listing a reader narrows by text and by a few facets, such as open positions grouped by department.
 - When every row links to its own page and the listing fits in the page JSON.
 
 ## When NOT to use
@@ -26,6 +26,8 @@ The full, browsable listing of a page such as the Careers jobs list: a headline 
 - For a short, unfiltered preview of the same rows → use `listing-table`.
 - For a data table with sorting, selection and pagination inside the product → use `table`.
 - For a grid of linked topic cards → use `subject-library`.
+- For the full filterable list of articles or resources → use `article-index`.
+- For a card grid of customer stories with search and facets → use `story-library`.
 
 ## Related
 

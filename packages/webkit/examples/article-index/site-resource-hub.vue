@@ -1,5 +1,5 @@
 <script setup>
-  import ArticleIndexResourceHub from '@aziontech/webkit/article-index-resource-hub'
+  import ArticleIndex from '@aziontech/webkit/article-index'
   import SectionContainer from '@aziontech/webkit/section-container'
   import SectionGap from '@aziontech/webkit/section-gap'
 
@@ -91,7 +91,8 @@
   <SectionContainer max-width="site">
     <SectionGap hatch />
 
-    <ArticleIndexResourceHub
+    <ArticleIndex
+      filters="facets"
       anchor="resources"
       title="Explore all resources"
       :items="items"

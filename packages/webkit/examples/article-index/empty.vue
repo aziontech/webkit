@@ -1,10 +1,10 @@
 <script setup>
-  import ArticleIndexBlog from '@aziontech/webkit/article-index-blog'
+  import ArticleIndex from '@aziontech/webkit/article-index'
   import placeholderImage from '@aziontech/webkit/assets/placeholder-image.svg'
 </script>
 
 <template>
-  <ArticleIndexBlog
+  <ArticleIndex
     anchor="posts"
     title="All articles"
     all-label="All articles"

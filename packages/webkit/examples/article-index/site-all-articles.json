@@ -1,5 +1,5 @@
 {
-  "_id": "article-index-blog",
+  "_id": "article-index",
   "props": {
     "anchor": "posts",
     "items": [

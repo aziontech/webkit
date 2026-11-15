@@ -6,8 +6,8 @@ status: implemented
 spec_version: 3
 template: 2
 created: 2026-11-05
-last_updated: 2026-11-14
-checksum: 23b31077b972da4b2e6c02730dbdaf1941f0c7af930696003557faa243d0e340
+last_updated: 2026-11-15
+checksum: a5f52ae0c3820b9fddf97301376dddb2e1a758d13bb5dd7163d5ff5599ad4014
 ---
 
 # ArticleBody — Component Spec
@@ -22,7 +22,7 @@ The reading page of an article. A brand banner sits over a three-column grid: th
 
 ## When NOT to use
 
-- For a list of articles → use `article-index-blog`.
+- For a list of articles → use `article-index`.
 - For a closing row of related articles → use `article-cards`.
 
 ## Related

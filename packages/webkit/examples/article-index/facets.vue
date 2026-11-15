@@ -1,9 +1,10 @@
 <script setup>
-  import ArticleIndexResourceHub from '@aziontech/webkit/article-index-resource-hub'
+  import ArticleIndex from '@aziontech/webkit/article-index'
 </script>
 
 <template>
-  <ArticleIndexResourceHub
+  <ArticleIndex
+    filters="facets"
     anchor="resources"
     title="Explore all resources"
     row-label="Read article"

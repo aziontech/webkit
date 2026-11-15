@@ -1,6 +1,7 @@
 {
-  "_id": "article-index-resource-hub",
+  "_id": "article-index",
   "props": {
+    "filters": "facets",
     "anchor": "resources",
     "title": "Explore all resources",
     "items": [

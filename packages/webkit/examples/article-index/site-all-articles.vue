@@ -1,5 +1,5 @@
 <script setup>
-  import ArticleIndexBlog from '@aziontech/webkit/article-index-blog'
+  import ArticleIndex from '@aziontech/webkit/article-index'
   import placeholderImage from '@aziontech/webkit/assets/placeholder-image.svg'
   import SectionContainer from '@aziontech/webkit/section-container'
   import SectionGap from '@aziontech/webkit/section-gap'
@@ -92,7 +92,7 @@
   <SectionContainer max-width="site">
     <SectionGap hatch />
 
-    <ArticleIndexBlog
+    <ArticleIndex
       anchor="posts"
       :items="items"
       :categories="categories"
