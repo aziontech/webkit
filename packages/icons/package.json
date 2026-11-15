@@ -1,7 +1,7 @@
 {
   "name": "@aziontech/icons",
   "version": "4.4.0",
-  "description": "Azion icon font library — azionicons + primeicons as CSS/woff2",
+  "description": "Azion icon font library — azionicons as CSS/woff2, plus the legacy primeicons entry",
   "license": "MIT",
   "repository": {
     "type": "git",

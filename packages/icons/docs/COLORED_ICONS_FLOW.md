@@ -24,7 +24,7 @@ So the package splits by _colorability_:
 
 |               | Monochrome (`ai`, `pi`)                         | Colored (`ai-cor`)                                            |
 | ------------- | ----------------------------------------------- | ------------------------------------------------------------- |
-| Source        | `src/svg-raw/ai/` (141), `src/svg-raw/pi/` (317) | `src/svg-raw/ai-cor/` (35)                                   |
+| Source        | `src/svg-raw/ai/` (436), `src/svg-raw/pi/` (317, legacy) | `src/svg-raw/ai-cor/` (35)                                   |
 | SVG fill      | `fill="currentColor"` (recolorable)             | `fill="#DA0B36"`, gradients, `fill="white"` (fixed palette)   |
 | Compiler      | **fantasticon** → woff2 font                    | custom scripts → CSS data-URI + JSON                          |
 | Delivery      | `@font-face` glyph                              | `background-image` data-URI **+** inline SVG                  |
@@ -94,7 +94,7 @@ flowchart TD
 1. **Validate** — `validate-svg.mjs` gates the build; failure aborts.
 2. **Clean** — wipe & recreate `dist/`.
 3. **Fonts** — `build-woff2.mjs` runs **fantasticon** for `ai` and `pi` (per `fantasticon.config.mjs`): emits `azionicons.woff2` + `azionicons.css`, `primeicons.woff2` + `primeicons.css` from the `templates/css.hbs` Handlebars template. **Colored icons are not touched here.**
-4. **Barrel** — write `index.css` = `@import` of `azionicons.css` + **`azionicons-color.css`** + `primeicons.css`.
+4. **Barrel** — write `index.css` = `@import` of `azionicons.css` + **`azionicons-color.css`** (`primeicons.css` is a separate, opt-in entry).
 5. **`dist/package.json`** — publishable manifest with the `exports` map (`.`, `./azionicons`, `./azionicons-color`, `./primeicons`, `./catalog`, `./color-catalog`).
 6. **Copy** `LICENSE` + `README.md`.
 7. **Catalogs + colored CSS** — runs three scripts in sequence:
