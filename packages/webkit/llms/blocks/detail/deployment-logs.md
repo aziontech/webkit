@@ -90,8 +90,8 @@ A page body for `ConsoleLayout`, with no tabs: a status banner (success; danger 
 - Running: the run is in flight; the toolbar shows 3/8 steps and Build, Build is open with the spinner and the progress bar runs along the bottom.
 - Success: every step checked, the last one open, a Completed tag with Deployed in 42s and the view switch, copy on every step log.
 - Error: the Routing Rules step is open on its error output with a Failed tag, the steps after it read Skipped and the toolbar names the failed step.
-- CompleteView: a finished run in the Complete view, every line as one `LogViewer` with its copy button.
-- CompleteViewError: the failed run in the Complete view, the lines up to the error and nothing from the skipped steps.
+- ContinuousLog: a finished run in the Complete view, every line as one `LogViewer` with its copy button.
+- ContinuousLogError: the failed run in the Complete view, the lines up to the error and nothing from the skipped steps.
 - InCreateFlow: Deploy was just pressed in a create flow; the Deployment card with a Cloning indicator on the cloning splash.
 - InCreateFlowError: the create-flow card after a failure, the switch in the header, the failed step open and Edit and Redeploy in the footer.
 - DeploymentDetail: a deployment that went live, the success banner, the Deployment details card and the Deployment logs card.
@@ -111,8 +111,8 @@ A page body for `ConsoleLayout`, with no tabs: a status banner (success; danger 
 - `Running` — primary (the code below)
 - `Success` — A run that went live: every step checked, the last one open, a Completed Tag with Deployed in 42s and the view switch in the Logs row, and copy on every step log.
 - `Error` — A run whose routing rules were rejected: that step is open on its error output with a Failed Tag and the reason in full, the steps behind it read Skipped, and the Logs row names the failed step beside the view switch.
-- `CompleteView` — The Complete view of a finished run: every line the pipeline printed as one continuous LogViewer with its copy button.
-- `CompleteViewError` — The Complete view of the failed run: the lines up to the error, as one LogViewer, nothing from the steps that never ran.
+- `ContinuousLog` — The Complete view of a finished run: every line the pipeline printed as one continuous LogViewer with its copy button.
+- `ContinuousLogError` — The Complete view of the failed run: the lines up to the error, as one LogViewer, nothing from the steps that never ran.
 - `InCreateFlow` — Deploy was just pressed in a create flow: the Deployment Card with a Cloning StatusIndicator in its header, opening on the cloning splash (the Git provider tile, a dashed connector marching toward a large destination tile, still under reduced motion) with one polite screen-reader line naming the repository and the scope; the steps replace the splash as the first one starts.
 - `InCreateFlowError` — The create-flow card after the routing rules were rejected: the Deployment header swaps the status for the Phased or Complete switch, the Logs row names the failed step, that step is open on its error output with a Failed Tag, the steps behind it read Skipped, and the card footer offers Edit (back to the form, values kept) and Redeploy.
 - `DeploymentDetail` — A deployment that went live: the success banner, the Deployment details card with every fact and its Deployment Settings band for Default, and the Deployment logs card with the run duration and the Phased or Complete switch over the steps.

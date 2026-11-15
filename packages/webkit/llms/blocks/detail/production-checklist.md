@@ -85,7 +85,7 @@ A large right-side `Drawer` that the expand button and every row open. `PanelHea
 ## States
 
 - Card: some gates done; the card lists every gate with the count in its tag, and the expand button and every row open the drawer.
-- Completed: every gate done; the tag reads Ready for production and the rows are gone.
+- Success: every gate done; the tag reads Ready for production and the rows are gone.
 - DrawerDetail: the expand button opened the right-side drawer with every step, its description and its action or its Done tag and note, over a Done footer; a card row opens the same drawer.
 
 ## Related
@@ -98,7 +98,7 @@ A large right-side `Drawer` that the expand button and every row open. `PanelHea
 ## Variants
 
 - `Card` — primary (the code below)
-- `Completed` — Every gate done: the Tag turns into a success Ready for production, the rows are gone and the header loses its bottom border, so the card closes down to its title and the expand button.
+- `Success` — Every gate done: the Tag turns into a success Ready for production, the rows are gone and the header loses its bottom border, so the card closes down to its title and the expand button.
 - `DrawerDetail` — The drawer open, as the expand button or a row opens it: a right-side drawer with the same progress Tag, the checklist description, every step with its description, and either its action or, once done, a Tag with what it now serves, over a Done footer.
 
 Each variant is the same screen in another state: `get_block("detail/production-checklist", { variant })`, or the file under `blocks/detail/production-checklist/variants/`.

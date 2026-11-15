@@ -31946,10 +31946,10 @@
      "name": "Error"
     },
     {
-     "name": "CompleteView"
+     "name": "ContinuousLog"
     },
     {
-     "name": "CompleteViewError"
+     "name": "ContinuousLogError"
     },
     {
      "name": "InCreateFlow"
@@ -32263,7 +32263,7 @@
    "guidelinesSummary": "A service that is live on its generated hostname is not yet ready for real traffic. This card tells the user what stands between the service and production (a custom domain, a security policy, custom error pages), how many of those gates are done and which one to take next. It expands into a drawer where each gate explains itself and offers its action, and it shrinks to a single line once every gate is done.",
    "variants": [
     {
-     "name": "Completed"
+     "name": "Success"
     },
     {
      "name": "DrawerDetail"
@@ -35589,9 +35589,10 @@
   "platform/delete/delete-with-confirmation#LabelledField": "edit/delete-dialog#settings-row",
   "platform/detail/attached-resources": "detail/attached-resources",
   "platform/detail/deployment-logs": "detail/deployment-logs",
+  "platform/detail/deployment-logs#CompleteView": "detail/deployment-logs#continuous-log",
   "platform/detail/deployment-logs#DeploymentFailed": "detail/deployment-logs#deployment-error",
   "platform/detail/deployment-logs#Failed": "detail/deployment-logs#error",
-  "platform/detail/deployment-logs#FailedCompleteView": "detail/deployment-logs#complete-view-error",
+  "platform/detail/deployment-logs#FailedCompleteView": "detail/deployment-logs#continuous-log-error",
   "platform/detail/deployment-logs#InCreateFlowFailed": "detail/deployment-logs#in-create-flow-error",
   "platform/detail/deployment-logs#Succeeded": "detail/deployment-logs#success",
   "platform/detail/details-page": "detail/resource-detail",
@@ -35600,7 +35601,7 @@
   "platform/detail/invocations": "detail/invocations",
   "platform/detail/invocations#Failed": "detail/invocations#error",
   "platform/detail/production-checklist": "detail/production-checklist",
-  "platform/detail/production-checklist#Complete": "detail/production-checklist#completed",
+  "platform/detail/production-checklist#Complete": "detail/production-checklist#success",
   "platform/detail/record-table": "detail/dns-zone-detail",
   "platform/detail/sectioned-resource": "detail/sectioned-resource",
   "platform/detail/version-detail": "detail/version-detail",
