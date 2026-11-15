@@ -66,7 +66,8 @@
   },
   "code-block": {
     "border": "bordered",
-    "value": "modelValue"
+    "value": "modelValue",
+    "lineNumbers": "showLineNumbers"
   },
   "doc-card": {
     "overline": "eyebrow",
@@ -786,7 +787,8 @@
     "expanded": "openKeys"
   },
   "sidebar-menu-root": {
-    "selected": "active"
+    "selected": "active",
+    "expanded": "openKeys"
   },
   "sidebar-menu-item": {
     "selected": "active",
@@ -1080,5 +1082,19 @@
     "empty": {
       "removed": "split into emptyTitle and emptyActionLabel (was action)"
     }
+  },
+  "chat-message-root": {
+    "state": {
+      "to": "status",
+      "values": {
+        "complete": "success"
+      }
+    }
+  },
+  "conversation": {
+    "alignment": "layout"
+  },
+  "job-posting": {
+    "error": "failed"
   }
 }

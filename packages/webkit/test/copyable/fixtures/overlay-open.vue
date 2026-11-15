@@ -27,14 +27,14 @@
   />
   <Drawer v-model:open="open" />
   <Tooltip
-    text="Hint"
+    content="Hint"
     @update:open="onOpen"
   >
     <button type="button">Hint</button>
   </Tooltip>
   <Tooltip
     v-model:open="open"
-    text="Hint"
+    content="Hint"
   />
   <Command
     :open="open"
@@ -54,7 +54,7 @@
   <Drawer @update:open="(value: string) => value.trim()" />
   <!-- @vue-expect-error update:open sends a boolean -->
   <Tooltip
-    text="Hint"
+    content="Hint"
     @update:open="(value) => label(value)"
   />
   <!-- @vue-expect-error update:open sends a boolean -->
