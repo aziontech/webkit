@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest'
 import { h } from 'vue'
 
 import { expectNoA11yViolations } from '../../../test/axe'
-import type { ChartSeries } from '../_lib'
+import type { ChartSeries } from '../lib'
 import DonutChart from './donut-chart.vue'
 
 const countries: ChartSeries[] = [

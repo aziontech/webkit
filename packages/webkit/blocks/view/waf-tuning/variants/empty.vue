@@ -90,9 +90,9 @@
 
   const formatHits = (value: number) => formatNumber(value)
 
-  const tuningTable = ref<TableExposed<Match> | null>(null)
+  const tuningTableEl = ref<TableExposed<Match> | null>(null)
   const resultsEl = ref<HTMLElement | null>(null)
-  const exportCsv = () => tuningTable.value?.exportCsv({ filename: 'waf-tuning.csv' })
+  const exportCsv = () => tuningTableEl.value?.exportCsv({ filename: 'waf-tuning.csv' })
 
   const refresh = () => {
     if (loading.value) return
@@ -113,7 +113,7 @@
   const submitted = ref(false)
   const allowing = ref(false)
   const reasonMissing = computed(() => submitted.value && !reason.value.trim())
-  const reasonField = ref<HTMLElement | null>(null)
+  const reasonFieldEl = ref<HTMLElement | null>(null)
   let failuresLeft = ALLOW_FAILURES
 
   const openAllow = () => {
@@ -127,7 +127,7 @@
     submitted.value = true
     if (allowing.value) return
     if (!reason.value.trim()) {
-      nextTick(() => reasonField.value?.querySelector('textarea')?.focus())
+      nextTick(() => reasonFieldEl.value?.querySelector('textarea')?.focus())
       return
     }
     allowing.value = true
@@ -272,7 +272,7 @@
             />
             <DataTable
               v-else
-              ref="tuningTable"
+              ref="tuningTableEl"
               v-model:global-filter="search"
               v-model:row-selection="selection"
               v-model:sorting="sorting"
@@ -384,7 +384,7 @@
                   >
                 </li>
               </ul>
-              <div ref="reasonField">
+              <div ref="reasonFieldEl">
                 <Field
                   required
                   :invalid="reasonMissing"

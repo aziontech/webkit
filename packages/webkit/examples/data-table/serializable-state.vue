@@ -15,15 +15,15 @@
     { accessorKey: 'modified', header: 'Last Modified', grow: 2 }
   ]
 
-  const table = ref(null)
+  const tableEl = ref(null)
   const saved = ref(null)
   const state = ref(null)
 
   const save = () => {
-    saved.value = table.value?.getState() ?? null
+    saved.value = tableEl.value?.getState() ?? null
   }
   const restore = () => {
-    if (saved.value) table.value?.setState(saved.value)
+    if (saved.value) tableEl.value?.setState(saved.value)
   }
 </script>
 
@@ -45,7 +45,7 @@
       />
     </div>
     <DataTable
-      ref="table"
+      ref="tableEl"
       v-model:state="state"
       :data="rows"
       :columns="columns"

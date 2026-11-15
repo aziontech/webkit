@@ -35,4 +35,4 @@ export interface ResizableContext {
   paneFor: (el: globalThis.Element | null) => ResizablePaneApi | null
 }
 
-export const ResizableInjectionKey: InjectionKey<ResizableContext> = Symbol('ResizableContext')
+export const ResizableInjectionKey: InjectionKey<ResizableContext> = Symbol('Resizable')

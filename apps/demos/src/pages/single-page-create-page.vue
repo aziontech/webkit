@@ -26,7 +26,7 @@
   const form = reactive({ name: '', domain: '', dnssec: false, active: true })
   const errors = reactive({ name: '', nameKind: 'required', domain: '', domainKind: 'required' })
   const advancedOpen = ref(false)
-  const fileRef = ref(null)
+  const fileEl = ref(null)
 
   const NAME_MAX = 50
   const DOMAIN_PATTERN = /^(?=.{4,253}$)((?!-)[a-zA-Z0-9-]{0,62}[a-zA-Z0-9]\.)+[a-zA-Z]{2,63}$/
@@ -67,7 +67,7 @@
     toast.success(`${resource.name} was created.`, { closable: true })
     router.push(`/resources/${resource.id}`)
   }
-  const openImport = () => fileRef.value?.click()
+  const openImport = () => fileEl.value?.click()
 </script>
 
 <template>
@@ -242,7 +242,7 @@
                   or paste zone file contents in Domain name
                 </p>
                 <input
-                  ref="fileRef"
+                  ref="fileEl"
                   type="file"
                   accept=".zone,.txt,.db,text/plain"
                   class="sr-only"

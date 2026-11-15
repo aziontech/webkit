@@ -28,7 +28,7 @@
 
   const attrs = useAttrs()
   const board = useBoardContext()
-  const rootRef = ref<globalThis.HTMLElement | null>(null)
+  const rootEl = ref<globalThis.HTMLElement | null>(null)
   const over = ref(false)
 
   const testId = computed(
@@ -48,7 +48,7 @@
   onScopeDispose(board.registerLabel(props.itemId, () => props.label))
 
   function measure(): BoardMeasure {
-    const root = rootRef.value
+    const root = rootEl.value
     const grid = root?.parentElement
     if (!root || !grid) return { height: root?.offsetHeight ?? 0, columns: 1, columnWidth: 0 }
     const style = globalThis.getComputedStyle(grid)
@@ -63,22 +63,22 @@
     await nextTick()
     if (
       active instanceof globalThis.HTMLElement &&
-      rootRef.value?.contains(active) &&
+      rootEl.value?.contains(active) &&
       globalThis.document.activeElement !== active
     )
       active.focus()
   }
 
-  function onDragOver(event: globalThis.DragEvent) {
+  function onDragover(event: globalThis.DragEvent) {
     if (!droppable.value) return
     event.preventDefault()
     if (event.dataTransfer) event.dataTransfer.dropEffect = 'move'
     over.value = true
   }
 
-  function onDragLeave(event: globalThis.DragEvent) {
+  function onDragleave(event: globalThis.DragEvent) {
     const next = event.relatedTarget
-    if (next instanceof globalThis.Node && rootRef.value?.contains(next)) return
+    if (next instanceof globalThis.Node && rootEl.value?.contains(next)) return
     over.value = false
   }
 
@@ -117,15 +117,15 @@
 
 <template>
   <li
-    ref="rootRef"
+    ref="rootEl"
     v-bind="$attrs"
     :data-testid="testId"
     :data-item-id="itemId"
     :data-over="over || null"
     :style="sizeVars"
     class="flex min-w-0 flex-col rounded-(--shape-card) [grid-column:span_min(var(--board-item-span),var(--board-grid-columns,1))] [height:var(--board-item-height,auto)] transition-shadow duration-fast-02 ease-productive-entrance motion-reduce:transition-none data-[over]:ring-2 data-[over]:ring-(--ring-color) data-[over]:ring-offset-2 data-[over]:ring-offset-(--bg-canvas)"
-    @dragover="onDragOver"
-    @dragleave="onDragLeave"
+    @dragover="onDragover"
+    @dragleave="onDragleave"
     @drop="onDrop"
   >
     <slot />

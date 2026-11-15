@@ -66,7 +66,7 @@
   const { t, formatFileSize, formatDate } = useLocale({ fileTokenGroup: en.fileTokenGroup })
   const baseId = useId()
 
-  const root = ref<HTMLUListElement | null>(null)
+  const rootEl = ref<HTMLUListElement | null>(null)
   const expanded = ref(false)
 
   const testId = computed<string>(
@@ -132,13 +132,13 @@
   const focusAfterRemoval = async (index: number): Promise<void> => {
     await nextTick()
     const buttons = Array.from(
-      root.value?.querySelectorAll<HTMLElement>(
+      rootEl.value?.querySelectorAll<HTMLElement>(
         '[data-file-token-remove] button, [data-file-token-remove] a'
       ) ?? []
     )
     const target = buttons[index] ?? buttons[index - 1]
     if (target) target.focus()
-    else root.value?.focus()
+    else rootEl.value?.focus()
   }
 
   const onDismiss = (event: MouseEvent, index: number): void => {
@@ -158,7 +158,7 @@
     class="group/ftg flex w-full flex-col gap-(--spacing-xs)"
   >
     <ul
-      ref="root"
+      ref="rootEl"
       role="list"
       tabindex="-1"
       :aria-label="ariaLabel || t('fileTokenGroup.label')"

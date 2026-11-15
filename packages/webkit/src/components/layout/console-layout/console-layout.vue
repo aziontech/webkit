@@ -28,7 +28,7 @@
     toMenuGroups,
     useAppNavigation
   } from '../../../composables/use-app-navigation'
-  import { useTranslate } from '../../../composables/use-locale/use-translate'
+  import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../i18n/messages/en'
   import { cn } from '../../../utils/cn'
   import IconButton from '../../actions/icon-button/icon-button.vue'
@@ -61,7 +61,7 @@
   import {
     ConsoleLayoutInjectionKey,
     type ConsoleLayoutTrail,
-    ConsoleLayoutTrailsKey
+    ConsoleLayoutTrailsInjectionKey
   } from './injection-key'
 
   defineOptions({
@@ -182,7 +182,7 @@
 
   const trails = shallowRef<ConsoleLayoutTrail[]>([])
 
-  provide(ConsoleLayoutTrailsKey, {
+  provide(ConsoleLayoutTrailsInjectionKey, {
     add: (trail) => {
       trails.value = [...trails.value.filter((entry) => entry !== trail), trail]
     },

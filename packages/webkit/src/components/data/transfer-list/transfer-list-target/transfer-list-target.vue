@@ -1,12 +1,12 @@
 <script setup lang="ts">
   import { computed, inject, ref, useAttrs, watch } from 'vue'
 
-  import { useTranslate } from '../../../../composables/use-locale/use-translate'
+  import { useTranslate } from '../../../../composables/use-translate'
   import * as en from '../../../../i18n/messages/en'
   import EmptyState from '../../../feedback/empty-state/empty-state.vue'
   import Spinner from '../../../utils/spinner/spinner.vue'
   import { useTransferListSide } from '../composables/use-transfer-list-side'
-  import { transferListContextKey, type TransferListSide } from '../injection-key'
+  import { TransferListInjectionKey, type TransferListSide } from '../injection-key'
   import { getItemTransitionStyle, transferListItemTransitionClasses } from '../presets/transitions'
 
   defineOptions({
@@ -33,15 +33,15 @@
 
   const side: TransferListSide = 'target'
 
-  const ctx = inject(transferListContextKey)
+  const ctx = inject(TransferListInjectionKey)
   if (!ctx) {
     throw new Error('TransferListTarget must be used inside <TransferList>.')
   }
 
   const attrs = useAttrs()
   const { t } = useTranslate({ transferList: en.transferList })
-  const listRef = ref<HTMLElement | null>(null)
-  const { tabindexFor, onFocus, onKeydown } = useTransferListSide(side, ctx, listRef)
+  const listEl = ref<HTMLElement | null>(null)
+  const { tabindexFor, onFocus, onKeydown } = useTransferListSide(side, ctx, listEl)
 
   const testId = computed<string>(
     () => (attrs['data-testid'] as string | undefined) ?? 'transfer-list-target'
@@ -58,9 +58,9 @@
     { immediate: true }
   )
 
-  const setListRef = (el: unknown): void => {
+  const setListEl = (el: unknown): void => {
     const node = (el as { $el?: unknown } | null)?.$el ?? el
-    listRef.value = node instanceof HTMLElement ? node : null
+    listEl.value = node instanceof HTMLElement ? node : null
   }
 </script>
 
@@ -79,7 +79,7 @@
     </h3>
     <div class="relative flex min-w-0 flex-col">
       <TransitionGroup
-        :ref="setListRef"
+        :ref="setListEl"
         tag="ul"
         role="listbox"
         aria-multiselectable="true"

@@ -1,14 +1,14 @@
 <script setup lang="ts">
   import { computed, nextTick, ref, useAttrs, useId, watch } from 'vue'
 
-  import { useTranslate } from '../../../composables/use-locale/use-translate'
+  import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../i18n/messages/en'
   import Button from '../../actions/button/button.vue'
   import EmptyState from '../../feedback/empty-state/empty-state.vue'
   import HelpPanel from '../help-panel/help-panel.vue'
   import HelpPanelHeader from '../help-panel/help-panel-header/help-panel-header.vue'
   import Tag from '../tag/tag.vue'
-  import { useTutorialContext } from './composables/use-tutorial-context'
+  import { useTutorialPanelContext } from './composables/use-tutorial-panel-context'
   import type { Tutorial, TutorialTaskStatus } from './injection-key'
   import TutorialPanelTask from './tutorial-panel-task/tutorial-panel-task.vue'
   import TutorialPanelTasks from './tutorial-panel-tasks/tutorial-panel-tasks.vue'
@@ -43,7 +43,7 @@
 
   const attrs = useAttrs()
   const { t } = useTranslate({ tutorialPanel: en.tutorialPanel })
-  const context = useTutorialContext()
+  const context = useTutorialPanelContext()
   const uid = useId()
 
   const testId = computed<string>(
@@ -53,9 +53,9 @@
   const heading = computed<string>(() => props.title || t('tutorialPanel.title'))
   const lede = computed<string>(() => props.description || t('tutorialPanel.description'))
 
-  const listHeading = ref<globalThis.HTMLElement | null>(null)
-  const doneHeading = ref<globalThis.HTMLElement | null>(null)
-  const root = ref<globalThis.HTMLElement | null>(null)
+  const listHeadingEl = ref<globalThis.HTMLElement | null>(null)
+  const doneHeadingEl = ref<globalThis.HTMLElement | null>(null)
+  const rootEl = ref<globalThis.HTMLElement | null>(null)
 
   const taskRanges = computed(() => {
     const ranges: { first: number; last: number }[] = []
@@ -82,7 +82,7 @@
     tutorial.tasks.reduce((sum, task) => sum + task.steps.length, 0)
 
   const focusCurrentStep = () => {
-    root.value
+    rootEl.value
       ?.querySelector<globalThis.HTMLElement>('[data-tutorial-step][aria-current="step"]')
       ?.focus({ preventScroll: true })
   }
@@ -103,7 +103,7 @@
     async (finished) => {
       if (!finished) return
       await nextTick()
-      doneHeading.value?.focus({ preventScroll: true })
+      doneHeadingEl.value?.focus({ preventScroll: true })
     },
     { flush: 'post' }
   )
@@ -111,13 +111,13 @@
   const exit = async () => {
     context.exit()
     await nextTick()
-    listHeading.value?.focus({ preventScroll: true })
+    listHeadingEl.value?.focus({ preventScroll: true })
   }
 </script>
 
 <template>
   <div
-    ref="root"
+    ref="rootEl"
     v-bind="$attrs"
     :data-testid="testId"
     :data-view="context.active.value ? (context.finished.value ? 'complete' : 'running') : 'list'"
@@ -135,7 +135,7 @@
 
       <template v-if="!context.active.value">
         <h3
-          ref="listHeading"
+          ref="listHeadingEl"
           tabindex="-1"
           class="sr-only"
         >
@@ -206,7 +206,7 @@
         >
           <h3
             :id="`${uid}-done`"
-            ref="doneHeading"
+            ref="doneHeadingEl"
             tabindex="-1"
             class="flex items-center gap-(--spacing-2xs) text-heading-2xs text-(--text-default) outline-none"
           >

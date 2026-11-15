@@ -2,7 +2,7 @@
   import { computed, useAttrs } from 'vue'
 
   import { cn } from '../../../utils/cn'
-  import { useNavigationMenuRoot } from './composables/use-navigation-menu-context'
+  import { useNavigationMenuContext } from './composables/use-navigation-menu-context'
 
   defineOptions({ name: 'NavigationMenuBackdrop', inheritAttrs: false })
 
@@ -11,7 +11,7 @@
     () => (attrs['data-testid'] as string | undefined) ?? 'navigation-navigation-menu__backdrop'
   )
 
-  const root = useNavigationMenuRoot()
+  const root = useNavigationMenuContext()
 
   const ROOT_CLASS =
     'fixed inset-0 z-40 bg-[color-mix(in_srgb,var(--bg-canvas)_20%,transparent)] ' +

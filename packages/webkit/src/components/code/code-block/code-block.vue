@@ -13,12 +13,28 @@
 
   import { logicalArrowKey, useDirection } from '../../../composables/use-direction'
   import { useLazyChunks } from '../../../composables/use-lazy-chunks'
-  import { useTranslate } from '../../../composables/use-locale/use-translate'
+  import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../i18n/messages/en'
   import { cn } from '../../../utils/cn'
   import { diffLines, pairDiffLines } from '../../../utils/line-diff'
   import CopyButton from '../../actions/copy-button/copy-button.vue'
   import ScrollArea from '../../layout/scroll-area/scroll-area.vue'
+  import { resolveFileIcon } from './lib/file-icon'
+  import {
+    type CodeBlockHighlightToken,
+    formatLineNumber,
+    getHighlightTokenClass,
+    highlightCode,
+    plainLines
+  } from './lib/highlight-code'
+  import { languageName, stripShellPrompts } from './lib/language-name'
+  import {
+    buildLineChangeMap,
+    type CodeBlockLineChange,
+    type CodeBlockLineState,
+    getDiffMarker,
+    resolveLineState
+  } from './lib/line-decorations'
   import {
     codeBlockEnterOffsetClasses,
     codeBlockLineEnterMotion,
@@ -28,22 +44,6 @@
     getCodeBlockLineSwapTransitionStyle,
     getCodeBlockLineTransitionStyle
   } from './presets/transitions'
-  import { resolveFileIcon } from './utils/file-icon'
-  import {
-    type CodeBlockHighlightToken,
-    formatLineNumber,
-    getHighlightTokenClass,
-    highlightCode,
-    plainLines
-  } from './utils/highlight-code'
-  import { languageName, stripShellPrompts } from './utils/language-name'
-  import {
-    buildLineChangeMap,
-    type CodeBlockLineChange,
-    type CodeBlockLineState,
-    getDiffMarker,
-    resolveLineState
-  } from './utils/line-decorations'
 
   export type { CodeBlockLineChange }
 
@@ -128,8 +128,8 @@
   const attrs = useAttrs()
   const dir = useDirection()
   const { t } = useTranslate({ codeBlock: en.codeBlock })
-  const tabListRef = ref<HTMLElement | null>(null)
-  const tabRefs = ref<HTMLElement[]>([])
+  const tabListEl = ref<HTMLElement | null>(null)
+  const tabEls = ref<HTMLElement[]>([])
   const indicatorVisible = ref(false)
   const indicatorWidth = ref(0)
   const indicatorOffsetX = ref(0)
@@ -138,7 +138,7 @@
   const linesMotionReady = ref(!props.animateLines)
   const revealedLines = ref(Number.POSITIVE_INFINITY)
   const lineMotionMode = ref<CodeBlockLineMotionMode>(props.animateLines ? 'enter' : null)
-  const contentRef = ref<HTMLElement | null>(null)
+  const contentEl = ref<HTMLElement | null>(null)
   const panelVersion = ref(0)
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'code-code-block')
@@ -369,7 +369,7 @@
     return el instanceof HTMLElement ? el : null
   }
 
-  const setTabRef = (
+  const setTabEl = (
     element: globalThis.Element | ComponentPublicInstance | null,
     index: number
   ) => {
@@ -379,7 +379,7 @@
       return
     }
 
-    tabRefs.value[index] = el
+    tabEls.value[index] = el
   }
 
   const resolveSlideDirection = (
@@ -398,7 +398,7 @@
     globalThis.matchMedia('(prefers-reduced-motion: reduce)').matches
 
   const flushStyles = () => {
-    void contentRef.value?.offsetHeight
+    void contentEl.value?.offsetHeight
   }
 
   const runLinesMotion = (mode: CodeBlockLineMotionMode) => {
@@ -424,13 +424,13 @@
   const layoutHeight = (el: HTMLElement) => el.getBoundingClientRect().height / layoutScale(el)
 
   const captureContentHeight = () => {
-    const el = contentRef.value
+    const el = contentEl.value
 
     return el && !prefersReducedMotion() ? layoutHeight(el) : null
   }
 
   const runHeightMotion = (from: number | null) => {
-    const el = contentRef.value
+    const el = contentEl.value
 
     if (!el || from === null) {
       return
@@ -450,8 +450,8 @@
     })
   }
 
-  const onContentTransitionEnd = (event: globalThis.TransitionEvent) => {
-    const el = contentRef.value
+  const onContentTransitionend = (event: globalThis.TransitionEvent) => {
+    const el = contentEl.value
 
     if (el && event.propertyName === 'height' && event.target === el) {
       el.style.height = ''
@@ -537,12 +537,12 @@
 
   const focusTab = (tabValue: string) => {
     const index = normalizedTabs.value.findIndex((tab) => tab.value === tabValue)
-    tabRefs.value[index]?.focus()
+    tabEls.value[index]?.focus()
   }
 
   const syncIndicator = () => {
-    const listEl = tabListRef.value
-    const activeTabEl = tabRefs.value[activeIndex.value]
+    const listEl = tabListEl.value
+    const activeTabEl = tabEls.value[activeIndex.value]
 
     if (!listEl || !activeTabEl || activeIndex.value < 0) {
       indicatorVisible.value = false
@@ -577,18 +577,18 @@
       syncIndicator()
     })
 
-    if (tabListRef.value) {
-      resizeObserver.observe(tabListRef.value)
+    if (tabListEl.value) {
+      resizeObserver.observe(tabListEl.value)
     }
 
-    for (const element of tabRefs.value) {
+    for (const element of tabEls.value) {
       if (element) {
         resizeObserver.observe(element)
       }
     }
   }
 
-  const handleCopy = (event: MouseEvent, code: string) => {
+  const onCopy = (event: MouseEvent, code: string) => {
     emit('copy', event, code)
   }
 
@@ -630,7 +630,7 @@
         valueModel.value = next
       }
 
-      tabRefs.value = tabRefs.value.slice(0, tabs.length)
+      tabEls.value = tabEls.value.slice(0, tabs.length)
       scheduleIndicatorSync()
     },
     { immediate: true }
@@ -641,7 +641,7 @@
   watch(
     [activeValue, () => activeTab.value?.code],
     ([nextValue, nextCode], [previousValue, previousCode]) => {
-      if (!previousValue || !contentRef.value) {
+      if (!previousValue || !contentEl.value) {
         return
       }
 
@@ -729,7 +729,7 @@
       :data-testid="`${testId}__header`"
     >
       <div
-        ref="tabListRef"
+        ref="tabListEl"
         role="tablist"
         class="relative flex items-center gap-(--spacing-2xs)"
         :data-testid="`${testId}__tabs`"
@@ -744,7 +744,7 @@
         <button
           v-for="(tab, index) in normalizedTabs"
           :key="tab.value"
-          :ref="(element) => setTabRef(element, index)"
+          :ref="(element) => setTabEl(element, index)"
           type="button"
           role="tab"
           :id="tabId(index)"
@@ -795,10 +795,10 @@
     </div>
 
     <div
-      ref="contentRef"
+      ref="contentEl"
       class="relative flex max-h-[var(--code-block-max-height,320px)] min-h-0 shrink flex-col overflow-hidden transition-[height] duration-moderate-02 ease-productive-entrance motion-reduce:transition-none"
       :data-testid="`${testId}__content`"
-      @transitionend="onContentTransitionEnd"
+      @transitionend="onContentTransitionend"
     >
       <div
         v-if="canCopy"
@@ -812,7 +812,7 @@
           kind="outlined"
           size="small"
           :data-testid="`${testId}__copy`"
-          @copy="handleCopy"
+          @copy="onCopy"
         />
       </div>
 

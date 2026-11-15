@@ -69,7 +69,6 @@ yarn.lock
 !packages/webkit/src/components/overlay/presets/mobile-position.d.ts
 !packages/webkit/src/components/overlay/tooltip/presets/popup-scale-transition.d.ts
 !packages/webkit/src/composables/use-focus-trap/index.d.ts
-!packages/webkit/src/utils/cn.d.ts
 !apps/docs/src/env.d.ts
 !apps/docs/src/lib/virtual/*.d.ts
 

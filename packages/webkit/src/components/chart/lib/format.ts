@@ -1,4 +1,4 @@
-import { intlLocale } from '../../../composables/use-locale/use-translate'
+import { intlLocale } from '../../../composables/use-translate'
 import type { ChartLabel } from './types'
 
 const DEFAULT_LOCALE = 'en-US'

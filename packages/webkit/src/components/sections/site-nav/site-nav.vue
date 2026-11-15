@@ -11,7 +11,7 @@
     watch
   } from 'vue'
 
-  import { useTranslate } from '../../../composables/use-locale/use-translate'
+  import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../i18n/messages/en'
   import Button from '../../actions/button/button.vue'
   import IconButton from '../../actions/icon-button/icon-button.vue'
@@ -127,8 +127,8 @@
 
   const navOpen = ref(false)
   const navPath = ref<string[]>([])
-  const bar = ref<ComponentPublicInstance | null>(null)
-  const opener = ref<ComponentPublicInstance | null>(null)
+  const barEl = ref<ComponentPublicInstance | null>(null)
+  const openerEl = ref<ComponentPublicInstance | null>(null)
   const columnInset = ref(0)
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'sections-site-nav')
@@ -167,7 +167,7 @@
     if (open) return
     navPath.value = []
     await nextTick()
-    const button = opener.value?.$el as globalThis.HTMLElement | null | undefined
+    const button = openerEl.value?.$el as globalThis.HTMLElement | null | undefined
     button?.focus()
   })
 
@@ -182,7 +182,8 @@
   }
 
   const readColumnInset = () => {
-    const node = bar.value?.$el as globalThis.Element | globalThis.CharacterData | null | undefined
+    const node = barEl.value?.$el as
+      globalThis.Element | globalThis.CharacterData | null | undefined
     const el = node instanceof globalThis.Element ? node : node?.nextElementSibling
     if (el) {
       columnInset.value = Number.parseFloat(globalThis.getComputedStyle(el).paddingLeft) || 0
@@ -204,7 +205,7 @@
     class="contents"
   >
     <GlobalHeader
-      ref="bar"
+      ref="barEl"
       kind="site"
       aria-label="Azion"
       class="sticky top-0 z-40"

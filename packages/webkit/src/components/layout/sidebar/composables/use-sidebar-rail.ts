@@ -121,7 +121,7 @@ export function useSidebarRail(options: UseSidebarRailOptions): UseSidebarRailRe
     }
   }
 
-  const onPointerMove = (event: globalThis.PointerEvent) => {
+  const onPointermove = (event: globalThis.PointerEvent) => {
     const travel = (event.clientX - startX) * (dir.value === 'rtl' ? -1 : 1)
     const next = startWidth + travel
 
@@ -158,7 +158,7 @@ export function useSidebarRail(options: UseSidebarRailOptions): UseSidebarRailRe
     capturedId = -1
     globalThis.document.body.style.removeProperty('user-select')
     globalThis.document.body.style.removeProperty('cursor')
-    globalThis.removeEventListener('pointermove', onPointerMove)
+    globalThis.removeEventListener('pointermove', onPointermove)
     globalThis.removeEventListener('pointerup', endResize)
     globalThis.removeEventListener('pointercancel', endResize)
     globalThis.removeEventListener('blur', endResize)
@@ -189,7 +189,7 @@ export function useSidebarRail(options: UseSidebarRailOptions): UseSidebarRailRe
     }
     globalThis.document.body.style.userSelect = 'none'
     globalThis.document.body.style.cursor = 'col-resize'
-    globalThis.addEventListener('pointermove', onPointerMove)
+    globalThis.addEventListener('pointermove', onPointermove)
     globalThis.addEventListener('pointerup', endResize)
     globalThis.addEventListener('pointercancel', endResize)
     globalThis.addEventListener('blur', endResize)

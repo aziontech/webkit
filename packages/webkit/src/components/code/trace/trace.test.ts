@@ -49,7 +49,7 @@ describe('Trace', () => {
     const bars = view.getAllByTestId('code-trace__bar')
     expect(bars[3]?.getAttribute('data-tone')).toBe('error')
     expect(bars[0]?.getAttribute('data-tone')).toBe('root')
-    expect(b?.style.getPropertyValue('--span-offset')).toBe(String(220 / 1720))
+    expect(b?.style.getPropertyValue('--trace-span-offset')).toBe(String(220 / 1720))
     expect(bars[3]?.textContent).toContain('1.50 s')
     expect(bars[1]?.textContent).toContain('200 ms')
     expect(b?.getAttribute('aria-label')).toBe('encode, +220 ms, 1.50 s, Failed')
@@ -200,7 +200,7 @@ describe('Trace', () => {
       template: `<div dir="rtl"><Trace :spans="spans" /></div>`
     })
     const bar = view.getAllByTestId('code-trace__bar')[0] as HTMLElement
-    expect(bar.className).toContain('start-[calc(var(--span-offset)*100%)]')
+    expect(bar.className).toContain('start-[calc(var(--trace-span-offset)*100%)]')
     expect(bar.className).not.toMatch(/(^|\s)left-/)
     const grid = view.getByRole('treegrid')
     const barBox = bar.getBoundingClientRect()
@@ -239,15 +239,15 @@ describe('Trace', () => {
 
   describe('zoom, span events and slowest span', () => {
     const offsets = (view: ReturnType<typeof render>) =>
-      rows(view).map((row) => Number(row.style.getPropertyValue('--span-offset')))
+      rows(view).map((row) => Number(row.style.getPropertyValue('--trace-span-offset')))
 
     it('places bars, ticks and hides spans outside a range window', () => {
       const view = render(Trace, { props: { spans, range: [200, 400] } })
       const [root, a, a1, b] = rows(view) as HTMLElement[]
-      expect(root?.style.getPropertyValue('--span-offset')).toBe('0')
-      expect(root?.style.getPropertyValue('--span-width')).toBe('1')
-      expect(a?.style.getPropertyValue('--span-width')).toBe(String(10 / 200))
-      expect(Number(b?.style.getPropertyValue('--span-offset'))).toBeCloseTo(0.1)
+      expect(root?.style.getPropertyValue('--trace-span-offset')).toBe('0')
+      expect(root?.style.getPropertyValue('--trace-span-width')).toBe('1')
+      expect(a?.style.getPropertyValue('--trace-span-width')).toBe(String(10 / 200))
+      expect(Number(b?.style.getPropertyValue('--trace-span-offset'))).toBeCloseTo(0.1)
       const bars = view.getAllByTestId('code-trace__bar')
       expect(bars[2]?.hasAttribute('data-outside')).toBe(true)
       expect(a1?.getAttribute('aria-label')).toBe('dns, +10 ms, 20 ms')
@@ -314,7 +314,7 @@ describe('Trace', () => {
       })
       const marks = view.getAllByTestId('code-trace__event')
       expect(marks).toHaveLength(2)
-      expect(marks[0]?.style.getPropertyValue('--event-at')).toBe(String(110 / 400))
+      expect(marks[0]?.style.getPropertyValue('--trace-event-at')).toBe(String(110 / 400))
       expect(rows(view)[1]?.getAttribute('aria-label')).toBe(
         'fetch, Network, +10 ms, 200 ms, 2 events'
       )

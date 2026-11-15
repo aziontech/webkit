@@ -2,7 +2,7 @@
   import { computed, inject, onBeforeUnmount, onMounted, onUpdated, ref, useAttrs } from 'vue'
 
   import Checkbox from '../../checkbox/checkbox.vue'
-  import { multiSelectContextKey, multiSelectGroupContextKey } from '../injection-key'
+  import { MultiSelectGroupInjectionKey, MultiSelectInjectionKey } from '../injection-key'
 
   defineOptions({
     name: 'MultiSelectOption',
@@ -30,7 +30,7 @@
     tag(): unknown
   }>()
 
-  const ctx = inject(multiSelectContextKey)
+  const ctx = inject(MultiSelectInjectionKey)
   if (!ctx) {
     throw new Error('MultiSelectOption must be used inside MultiSelect.')
   }
@@ -41,13 +41,13 @@
     () => (attrs['data-testid'] as string | undefined) ?? 'multi-select-option'
   )
 
-  const group = inject(multiSelectGroupContextKey, null)
+  const group = inject(MultiSelectGroupInjectionKey, null)
 
   const id = Symbol('MultiSelectOption')
-  const labelRef = ref<globalThis.HTMLElement | null>(null)
+  const labelEl = ref<globalThis.HTMLElement | null>(null)
   const labelText = ref('')
   const recordLabel = () => {
-    const text = labelRef.value?.textContent?.trim() ?? ''
+    const text = labelEl.value?.textContent?.trim() ?? ''
     labelText.value = text
     ctx.registerLabel(props.value, text)
     ctx.registerOption(id, text)
@@ -124,7 +124,7 @@
       />
     </span>
     <span
-      ref="labelRef"
+      ref="labelEl"
       class="flex-1 truncate text-start"
     >
       <slot />

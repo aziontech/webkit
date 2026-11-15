@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
-  import LazyNodes from '../../../composables/use-lazy-chunks/lazy-nodes'
+  import LazyNodes from '../../../composables/use-lazy-chunks/lib/lazy-nodes'
   import Button from '../../actions/button/button.vue'
   import Item from '../../content/item/item.vue'
   import ItemContent from '../../content/item/item-content.vue'

@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { type ComponentPublicInstance } from 'vue'
 
-  import { usePortalLocale } from '../../../../composables/use-locale/use-translate'
+  import { usePortalLocale } from '../../../../composables/use-translate'
   import { usePopoverContext } from '../injection-key'
 
   defineOptions({
@@ -15,8 +15,8 @@
 
   const ctx = usePopoverContext()
 
-  const setPanelRef = (el: globalThis.Element | ComponentPublicInstance | null) => {
-    ctx.panelRef.value = el instanceof HTMLElement ? el : null
+  const setPanelEl = (el: globalThis.Element | ComponentPublicInstance | null) => {
+    ctx.panelEl.value = el instanceof HTMLElement ? el : null
   }
 
   const portalLocale = usePortalLocale()
@@ -33,12 +33,12 @@
         :dir="portalLocale.dir"
         :lang="portalLocale.lang"
         :id="ctx.contentId"
-        :ref="setPanelRef"
+        :ref="setPanelEl"
         role="dialog"
         tabindex="-1"
         aria-modal="false"
         :aria-labelledby="
-          ctx.hasTitle.value ? ctx.titleId : ctx.triggerRef.value?.id || ctx.triggerId
+          ctx.hasTitle.value ? ctx.titleId : ctx.triggerEl.value?.id || ctx.triggerId
         "
         :aria-describedby="ctx.hasDescription.value ? ctx.descriptionId : undefined"
         :data-testid="`${ctx.testId}__panel`"

@@ -2,7 +2,7 @@
   import { computed, provide, ref } from 'vue'
 
   import type { Tutorial, TutorialFlatStep } from '../injection-key'
-  import { TutorialInjectionKey } from '../injection-key'
+  import { TutorialPanelInjectionKey } from '../injection-key'
 
   defineOptions({
     name: 'TutorialPanelProvider',
@@ -98,7 +98,7 @@
     if (currentStep.value > 0) move(currentStep.value - 1)
   }
 
-  provide(TutorialInjectionKey, {
+  provide(TutorialPanelInjectionKey, {
     tutorials,
     active: activeTutorial,
     steps,

@@ -158,8 +158,8 @@
       preferences: { storageKey: 'personal-tokens' }
     })
 
-  const tokensTable = ref<TableExposed<TokenRow> | null>(null)
-  const exportCsv = () => tokensTable.value?.exportCsv({ filename: 'personal-tokens.csv' })
+  const tokensTableEl = ref<TableExposed<TokenRow> | null>(null)
+  const exportCsv = () => tokensTableEl.value?.exportCsv({ filename: 'personal-tokens.csv' })
 
   const loading = ref(false)
   const loadFailed = ref(true)
@@ -413,7 +413,7 @@
         >
           <template #content>
             <DataTable
-              ref="tokensTable"
+              ref="tokensTableEl"
               v-bind="tableProps"
               :loading="loading || refreshing"
               enable-sorting

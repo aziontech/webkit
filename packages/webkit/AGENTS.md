@@ -47,7 +47,7 @@ Type coverage threshold: **95%**.
 
 - **`@testing-library/user-event`** — installed in `packages/webkit` for the browser tests (`import userEvent from '@testing-library/user-event'`); `vitest/browser` also exports a `userEvent`.
 - **`@figma/code-connect`** — installed; config at [`figma.config.json`](./figma.config.json). Authoring `.figma.ts` works locally; publishing requires `FIGMA_ACCESS_TOKEN`.
-- **`cn` helper** — installed (`clsx` + `tailwind-merge`) at [`src/utils/cn.js`](./src/utils/cn.js), exported as `@aziontech/webkit/utils/cn`. Use it inside `:class` when the consumer must be able to override internal token choices.
+- **`cn` helper** — installed (`clsx` + `tailwind-merge`) at [`src/utils/cn.ts`](./src/utils/cn.ts), exported as `@aziontech/webkit/utils/cn`. Use it inside `:class` when the consumer must be able to override internal token choices.
 - **`asChild` Slot helper** — **pending**. No helper exists yet. Do not import a phantom path — `validate-references.mjs` will block.
 
 ## 6) Common pitfalls

@@ -2,7 +2,7 @@
   import { computed, useAttrs } from 'vue'
 
   import { cn } from '../../../utils/cn'
-  import { useNavigationMenuItem } from './composables/use-navigation-menu-context'
+  import { useNavigationMenuItemContext } from './composables/use-navigation-menu-context'
 
   defineOptions({ name: 'NavigationMenuIcon', inheritAttrs: false })
 
@@ -13,7 +13,7 @@
     () => (attrs['data-testid'] as string | undefined) ?? 'navigation-navigation-menu__icon'
   )
 
-  const item = useNavigationMenuItem()
+  const item = useNavigationMenuItemContext()
 
   const ROOT_CLASS =
     'inline-flex transition-transform duration-moderate-02 ease-productive-entrance motion-reduce:transition-none ' +

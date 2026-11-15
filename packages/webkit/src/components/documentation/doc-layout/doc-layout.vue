@@ -12,7 +12,7 @@
     useAppNavigation
   } from '../../../composables/use-app-navigation'
   import { type HeadingNavItem, provideHeadingNav } from '../../../composables/use-heading-nav'
-  import { useTranslate } from '../../../composables/use-locale/use-translate'
+  import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../i18n/messages/en'
   import IconButton from '../../actions/icon-button/icon-button.vue'
   import SearchTrigger from '../../actions/search-trigger/search-trigger.vue'
@@ -139,7 +139,7 @@
   const menuExpanded = ref<string[]>([])
   const menuPath = ref<string[]>([])
   const headingId = ref('')
-  const header = ref<globalThis.HTMLElement | null>(null)
+  const headerEl = ref<globalThis.HTMLElement | null>(null)
 
   const NAV_VALUE = 'doc-layout:nav:'
 
@@ -200,7 +200,7 @@
     }
   )
 
-  const headerOffset = () => header.value?.getBoundingClientRect().height ?? 0
+  const headerOffset = () => headerEl.value?.getBoundingClientRect().height ?? 0
 
   let frame = 0
 
@@ -294,7 +294,7 @@
     class="flex min-h-dvh w-full min-w-0 flex-col bg-(--bg-canvas) text-(--text-default)"
   >
     <div
-      ref="header"
+      ref="headerEl"
       class="@container sticky top-0 z-30 w-full"
     >
       <GlobalHeader :data-testid="`${testId}__header`">

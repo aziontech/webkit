@@ -3,9 +3,9 @@
 
   import { useControllable } from '../../../composables/use-controllable'
   import { resolveDirection } from '../../../composables/use-direction'
-  import { usePortalLocale } from '../../../composables/use-locale/use-translate'
   import { type MenuPlacement, useMenuRoot } from '../../../composables/use-menu-root'
   import { usePlacement } from '../../../composables/use-placement'
+  import { usePortalLocale } from '../../../composables/use-translate'
   import type { DropdownMenuOptionValue } from '../dropdown-menu/injection-key'
   import { DropdownMenuInjectionKey } from '../dropdown-menu/injection-key'
   import { ContextMenuInjectionKey } from './injection-key'
@@ -49,20 +49,20 @@
   const attrs = useAttrs()
   const uid = useId()
 
-  const anchorRef = ref<globalThis.HTMLElement | null>(null)
-  const areaRef = ref<globalThis.HTMLElement | null>(null)
-  const panelRef = ref<globalThis.HTMLElement | null>(null)
-  const panelBodyRef = ref<globalThis.HTMLElement | null>(null)
-  const bodyTarget = ref<globalThis.HTMLElement | null>(null)
+  const anchorEl = ref<globalThis.HTMLElement | null>(null)
+  const areaEl = ref<globalThis.HTMLElement | null>(null)
+  const panelEl = ref<globalThis.HTMLElement | null>(null)
+  const panelBodyEl = ref<globalThis.HTMLElement | null>(null)
+  const bodyTargetEl = ref<globalThis.HTMLElement | null>(null)
   const point = ref<{ x: number; y: number } | null>(null)
   let returnFocus: globalThis.Element | null = null
 
-  watch(panelBodyRef, (el) => {
-    if (el) bodyTarget.value = el
+  watch(panelBodyEl, (el) => {
+    if (el) bodyTargetEl.value = el
   })
 
   function onPanelAfterLeave() {
-    bodyTarget.value = null
+    bodyTargetEl.value = null
   }
 
   const testId = computed(
@@ -83,14 +83,14 @@
   const disabledRef = computed(() => props.disabled)
 
   const autoPlacements = computed<MenuPlacement[]>(() =>
-    resolveDirection(areaRef.value) === 'rtl'
+    resolveDirection(areaEl.value) === 'rtl'
       ? ['bottom-end', 'bottom-start', 'top-end', 'top-start']
       : ['bottom-start', 'bottom-end', 'top-start', 'top-end']
   )
 
   const { resolvedPlacement, panelStyle, updatePosition } = usePlacement({
-    triggerRef: anchorRef,
-    panelRef,
+    triggerRef: anchorEl,
+    panelRef: panelEl,
     isOpen: isOpenRef,
     placement: () => autoPlacements.value[0],
     offset: 2
@@ -108,15 +108,15 @@
   }
 
   function areaCorner(): { x: number; y: number } {
-    const rect = areaRef.value?.getBoundingClientRect()
+    const rect = areaEl.value?.getBoundingClientRect()
     if (!rect) return { x: 0, y: 0 }
-    return { x: resolveDirection(areaRef.value) === 'rtl' ? rect.right : rect.left, y: rect.top }
+    return { x: resolveDirection(areaEl.value) === 'rtl' ? rect.right : rect.left, y: rect.top }
   }
 
   function openAt(x: number, y: number, source: globalThis.Element | null) {
     if (props.disabled) return
     const active = globalThis.document?.activeElement ?? null
-    returnFocus = active && areaRef.value?.contains(active) ? active : source
+    returnFocus = active && areaEl.value?.contains(active) ? active : source
     point.value = { x, y }
     setOpen(true)
     nextTick(() => {
@@ -144,9 +144,9 @@
     placement: resolvedPlacementRef,
     triggerId: `${uid}-anchor`,
     panelId: `${uid}-panel`,
-    triggerRef: anchorRef,
-    panelRef,
-    panelBodyRef: bodyTarget,
+    triggerEl: anchorEl,
+    panelEl,
+    panelBodyEl: bodyTargetEl,
     setOpen,
     onSelect: (event, value) => emit('select', event, value),
     focusTrigger
@@ -158,7 +158,7 @@
     testId: testId.value,
     isOpen: isOpenRef,
     disabled: disabledRef,
-    areaRef,
+    areaEl,
     openAt
   })
 
@@ -177,7 +177,7 @@
     <Teleport to="body">
       <span
         v-if="isOpenRef"
-        ref="anchorRef"
+        ref="anchorEl"
         aria-hidden="true"
         :style="anchorStyle"
         class="pointer-events-none fixed size-0"
@@ -189,7 +189,7 @@
       >
         <div
           v-if="isOpenRef"
-          ref="panelRef"
+          ref="panelEl"
           :dir="portalLocale.dir"
           :lang="portalLocale.lang"
           :data-testid="`${testId}__panel`"
@@ -201,7 +201,7 @@
         >
           <div
             :id="`${uid}-panel`"
-            ref="panelBodyRef"
+            ref="panelBodyEl"
             role="menu"
             tabindex="-1"
             :aria-label="ariaLabel || undefined"

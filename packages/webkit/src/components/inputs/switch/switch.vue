@@ -2,7 +2,7 @@
   import { computed, onMounted, ref, useAttrs } from 'vue'
 
   import { useFieldControl } from '../../../composables/use-field-control'
-  import { FormValue } from '../../../utils/form-value'
+  import { FormValue } from '../parts/form-value'
 
   defineOptions({
     name: 'Switch',
@@ -65,29 +65,29 @@
 
   const isChecked = computed(() => model.value === true)
 
-  const buttonRef = ref<globalThis.HTMLButtonElement | null>(null)
+  const buttonEl = ref<globalThis.HTMLButtonElement | null>(null)
 
   onMounted(() => {
-    if (props.autofocus) buttonRef.value?.focus()
+    if (props.autofocus) buttonEl.value?.focus()
   })
 
-  function handleToggle() {
+  function onToggle() {
     if (isDisabled.value) return
     model.value = !isChecked.value
   }
 
-  function handleKeydown(event: globalThis.KeyboardEvent) {
+  function onKeydown(event: globalThis.KeyboardEvent) {
     if (isDisabled.value) return
     if (event.key === ' ' || event.key === 'Enter') {
       event.preventDefault()
-      handleToggle()
+      onToggle()
     }
   }
 </script>
 
 <template>
   <button
-    ref="buttonRef"
+    ref="buttonEl"
     type="button"
     role="switch"
     :id="controlId"
@@ -106,8 +106,8 @@
     :class="attrs.class"
     class="group relative inline-flex h-5 w-9 shrink-0 cursor-pointer items-center rounded-(--shape-control) border border-(--border-input) bg-(--bg-surface) px-0.5 transition-colors duration-150 ease-out motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) hover:shadow-[inset_0_0_0_999px_var(--bg-hover)] data-[invalid]:not-data-[checked]:border-(--danger-border) data-[checked]:border-transparent data-[checked]:bg-(--accent) forced-colors:border-[CanvasText] forced-colors:data-[checked]:border-[Highlight] data-[disabled]:cursor-not-allowed data-[disabled]:border-(--border-input) data-[disabled]:bg-(--bg-disabled) data-[disabled]:hover:shadow-none after:absolute after:inset-[min(0rem,calc(50%-12px))] pointer-coarse:after:inset-[min(0rem,calc(50%-22px))]"
     v-bind="passthroughAttrs"
-    @click="handleToggle"
-    @keydown="handleKeydown"
+    @click="onToggle"
+    @keydown="onKeydown"
   >
     <span
       aria-hidden="true"

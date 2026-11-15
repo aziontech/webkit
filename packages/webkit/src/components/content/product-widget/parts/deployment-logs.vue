@@ -16,7 +16,7 @@
     type DeploymentStep,
     LOG_VIEWS,
     STEP_GAP_MS
-  } from '../data/deployment-steps'
+  } from '../lib/deployment-steps'
 
   defineOptions({ name: 'DeploymentLogs' })
 

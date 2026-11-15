@@ -17,7 +17,7 @@
     AGENT_CLIENTS,
     AGENT_TRANSCRIPT,
     type AgentTranscriptEntry
-  } from '../data/functions-start'
+  } from '../lib/functions-start'
 
   defineOptions({ name: 'FunctionsAgent' })
 
@@ -36,7 +36,7 @@
     done: { label: 'Done', severity: 'success' }
   } as const
 
-  const root = ref<HTMLElement | null>(null)
+  const rootEl = ref<HTMLElement | null>(null)
   const windowEl = ref<HTMLElement | null>(null)
   const trackEl = ref<ComponentPublicInstance | null>(null)
   const shown = shallowRef<AgentTranscriptEntry[]>([])
@@ -91,7 +91,7 @@
 
   const [prompt, ...replies] = AGENT_TRANSCRIPT
 
-  useSceneScript(root, {
+  useSceneScript(rootEl, {
     active: () => props.active,
     reset: () => {
       glide.value = false
@@ -129,7 +129,7 @@
 
 <template>
   <div
-    ref="root"
+    ref="rootEl"
     class="flex h-full min-w-0 flex-col gap-(--spacing-md)"
   >
     <div

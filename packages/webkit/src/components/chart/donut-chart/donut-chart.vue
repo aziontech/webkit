@@ -4,12 +4,12 @@
   import { computed, onMounted, onScopeDispose, ref, useAttrs, useId, watch } from 'vue'
 
   import { logicalArrowKey, useDirection } from '../../../composables/use-direction'
-  import { useTranslate } from '../../../composables/use-locale/use-translate'
+  import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../i18n/messages/en'
   import Alert from '../../feedback/alert/alert.vue'
   import EmptyState from '../../feedback/empty-state/empty-state.vue'
   import Skeleton from '../../feedback/skeleton/skeleton.vue'
-  import { type ChartSeries, formatCompact, formatShare, normalizeSeries } from '../_lib'
+  import { type ChartSeries, formatCompact, formatShare, normalizeSeries } from '../lib'
 
   defineOptions({ name: 'DonutChart', inheritAttrs: false })
 

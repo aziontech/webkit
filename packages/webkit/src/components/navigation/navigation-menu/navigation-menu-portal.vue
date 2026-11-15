@@ -1,9 +1,9 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
-  import { usePortalLocale } from '../../../composables/use-locale/use-translate'
+  import { usePortalLocale } from '../../../composables/use-translate'
   import { cn } from '../../../utils/cn'
-  import { useNavigationMenuRoot } from './composables/use-navigation-menu-context'
+  import { useNavigationMenuContext } from './composables/use-navigation-menu-context'
 
   defineOptions({ name: 'NavigationMenuPortal', inheritAttrs: false })
 
@@ -26,7 +26,7 @@
     () => (attrs['data-testid'] as string | undefined) ?? 'navigation-navigation-menu__portal'
   )
 
-  const root = useNavigationMenuRoot()
+  const root = useNavigationMenuContext()
 
   const teleportTarget = computed(() => props.container ?? 'body')
 

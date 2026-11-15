@@ -207,8 +207,8 @@
       preferences: { storageKey: 'billing-invoices' }
     })
 
-  const invoicesTable = ref<TableExposed<Invoice> | null>(null)
-  const exportCsv = () => invoicesTable.value?.exportCsv({ filename: 'invoices.csv' })
+  const invoicesTableEl = ref<TableExposed<Invoice> | null>(null)
+  const exportCsv = () => invoicesTableEl.value?.exportCsv({ filename: 'invoices.csv' })
 
   const methodColumns: TableColumn[] = [
     {
@@ -519,7 +519,7 @@
             >
               <template #content>
                 <DataTable
-                  ref="invoicesTable"
+                  ref="invoicesTableEl"
                   v-bind="tableProps"
                   :loading="loading"
                   enable-sorting

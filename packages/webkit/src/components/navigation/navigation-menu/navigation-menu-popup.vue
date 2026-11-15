@@ -3,9 +3,9 @@
   import { computed, type CSSProperties, shallowRef, useAttrs, watch } from 'vue'
 
   import { cn } from '../../../utils/cn'
-  import { resolveHostElement } from './composables/resolve-host-element'
-  import { useNavigationMenuRoot } from './composables/use-navigation-menu-context'
+  import { useNavigationMenuContext } from './composables/use-navigation-menu-context'
   import { createChangeEventDetails } from './composables/use-navigation-menu-root'
+  import { resolveHostElement } from './lib/host-element'
 
   defineOptions({ name: 'NavigationMenuPopup', inheritAttrs: false })
 
@@ -28,17 +28,17 @@
     () => (attrs['data-testid'] as string | undefined) ?? 'navigation-navigation-menu__popup'
   )
 
-  const root = useNavigationMenuRoot()
-  const popupHostRef = shallowRef<MaybeElement>(null)
+  const root = useNavigationMenuContext()
+  const popupHostEl = shallowRef<MaybeElement>(null)
 
   const ROOT_CLASS =
-    'w-[var(--popup-width,auto)] h-[var(--popup-height,auto)] [transform-origin:var(--popup-origin,top_left)] ' +
+    'w-[var(--navigation-menu-popup-width,auto)] h-[var(--navigation-menu-popup-height,auto)] [transform-origin:var(--popup-origin,top_left)] ' +
     'transition-[opacity,scale,width,height] duration-moderate-02 ease-productive-entrance motion-reduce:transition-none ' +
     'data-[starting-style]:scale-95 data-[starting-style]:opacity-0 data-[starting-style]:transition-none ' +
     'data-[ending-style]:scale-95 data-[ending-style]:opacity-0 data-[ending-style]:transition-[opacity,scale] ' +
     'relative overflow-hidden rounded-(--shape-card) border border-solid border-(--border-default) ' +
     'bg-(--bg-surface-raised) shadow-(--shadow-lg) ' +
-    'max-h-[var(--available-height,100vh)] max-w-[var(--available-width,100vw)] ' +
+    'max-h-[var(--navigation-menu-available-height,100vh)] max-w-[var(--navigation-menu-available-width,100vw)] ' +
     'data-[kind=contrast]:[--bg-surface-raised:var(--bg-contrast)] ' +
     'data-[kind=contrast]:[--border-default:color-mix(in_srgb,var(--text-contrast)_20%,var(--bg-contrast))] ' +
     'data-[kind=contrast]:[--text-default:var(--text-contrast)] ' +
@@ -57,19 +57,18 @@
   }))
 
   const popupStyle = computed((): CSSProperties => ({
-    '--transform-origin': 'var(--transform-origin, center)',
     ...(root.menuOpen.value ? {} : { pointerEvents: 'none' })
   }))
 
   watch(
-    popupHostRef,
+    popupHostEl,
     (target) => {
       root.setPopupEl(resolveHostElement(target))
     },
     { immediate: true }
   )
 
-  onClickOutside(popupHostRef, (event) => {
+  onClickOutside(popupHostEl, (event) => {
     if (!root.menuOpen.value) {
       return
     }
@@ -77,26 +76,26 @@
     root.setValue(null, createChangeEventDetails('outside-press', event, undefined))
   })
 
-  const onPointerEnter = () => {
+  const onPointerenter = () => {
     root.cancelTimers()
   }
 
-  const onPointerLeave = (event: globalThis.PointerEvent) => {
+  const onPointerleave = (event: globalThis.PointerEvent) => {
     root.scheduleClose(createChangeEventDetails('trigger-hover', event, undefined))
   }
 </script>
 
 <template>
   <nav
-    ref="popupHostRef"
+    ref="popupHostEl"
     :hidden="popupHidden"
     :class="cn(ROOT_CLASS, attrs.class as string | undefined)"
     :style="popupStyle"
     :data-testid="testId"
     v-bind="popupDataAttrs"
     role="navigation"
-    @pointerenter="onPointerEnter"
-    @pointerleave="onPointerLeave"
+    @pointerenter="onPointerenter"
+    @pointerleave="onPointerleave"
     @keydown="root.onPopupKeydown"
   >
     <slot />

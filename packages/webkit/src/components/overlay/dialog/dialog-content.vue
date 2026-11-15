@@ -3,8 +3,8 @@
   import { computed, inject, nextTick, onBeforeUnmount, provide, ref, useAttrs, watch } from 'vue'
 
   import { useFocusTrap } from '../../../composables/use-focus-trap'
-  import { usePortalLocale } from '../../../composables/use-locale/use-translate'
   import { useOverlayLayer } from '../../../composables/use-overlay-layer'
+  import { usePortalLocale } from '../../../composables/use-translate'
   import { cn } from '../../../utils/cn'
   import { PanelHeaderEndInjectionKey } from '../panel/injection-key'
   import Panel from '../panel/panel.vue'
@@ -24,12 +24,12 @@
 
   const attrs = useAttrs()
   const ctx = inject(DialogInjectionKey)
-  const contentRef = ref<HTMLElement | null>(null)
+  const contentEl = ref<HTMLElement | null>(null)
   const isOpen = computed(() => ctx?.isOpen.value ?? false)
   const { motionState } = useDialogMotionState(isOpen)
   const portalLocale = usePortalLocale()
   const isScrollLocked = useScrollLock(defaultDocument?.body)
-  const { isTop, isFocusTop } = useOverlayLayer(isOpen, { element: contentRef })
+  const { isTop, isFocusTop } = useOverlayLayer(isOpen, { element: contentEl })
   const testId = computed(() => ctx?.testId ?? 'overlay-dialog')
 
   const forwardedAttrs = computed(() =>
@@ -76,7 +76,7 @@
     },
     { immediate: true }
   )
-  useFocusTrap(contentRef, isOpen, isFocusTop)
+  useFocusTrap(contentEl, isOpen, isFocusTop)
 
   useEventListener(defaultDocument, 'keydown', (event: globalThis.KeyboardEvent) => {
     if (!isOpen.value || event.key !== 'Escape' || event.defaultPrevented) return
@@ -89,7 +89,7 @@
   watch(isOpen, async (open, wasOpen) => {
     if (open || !wasOpen || !ctx) return
     await nextTick()
-    const target = ctx.triggerRef.value ?? ctx.returnFocusRef.value
+    const target = ctx.triggerEl.value ?? ctx.returnFocusEl.value
     if (target?.isConnected) target.focus()
   })
 
@@ -118,7 +118,7 @@
         @click="onOverlayClick"
       />
       <div
-        ref="contentRef"
+        ref="contentEl"
         role="dialog"
         v-bind="forwardedAttrs"
         :class="

@@ -225,7 +225,7 @@
   const deployedId = ref('AEO25I38')
   const confirmOpen = ref(false)
   const reverting = ref(false)
-  const addVersionHost = ref<HTMLElement | null>(null)
+  const addVersionHostEl = ref<HTMLElement | null>(null)
   let runTimer = 0
 
   const tagFor = (entry: VersionEntry): VersionEntry['tag'] => {
@@ -238,7 +238,7 @@
 
   const edit = () => {
     toast.dismiss(RUN_TOAST)
-    addVersionHost.value?.querySelector('button')?.focus()
+    addVersionHostEl.value?.querySelector('button')?.focus()
   }
 
   const finish = () => {
@@ -719,7 +719,7 @@
 
                   <div class="flex shrink-0 items-center gap-(--spacing-xs)">
                     <span
-                      ref="addVersionHost"
+                      ref="addVersionHostEl"
                       class="contents"
                     >
                       <Button

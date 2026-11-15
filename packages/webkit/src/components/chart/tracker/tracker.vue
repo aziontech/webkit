@@ -3,10 +3,10 @@
   import { computed, ref, useAttrs, useId, watch } from 'vue'
 
   import { logicalArrowKey, useDirection } from '../../../composables/use-direction'
-  import { useTranslate } from '../../../composables/use-locale/use-translate'
+  import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../i18n/messages/en'
   import Skeleton from '../../feedback/skeleton/skeleton.vue'
-  import { categoryLayout, type ChartStatus, colorToken } from '../_lib'
+  import { categoryLayout, type ChartStatus, colorToken } from '../lib'
 
   defineOptions({ name: 'Tracker', inheritAttrs: false })
 
@@ -44,8 +44,8 @@
   const attrs = useAttrs()
   const dir = useDirection()
   const { t } = useTranslate({ tracker: en.tracker })
-  const stripRef = ref<globalThis.HTMLDivElement | null>(null)
-  const { width: stripWidth } = useElementSize(stripRef)
+  const stripEl = ref<globalThis.HTMLDivElement | null>(null)
+  const { width: stripWidth } = useElementSize(stripEl)
 
   const uid = useId()
   const summaryId = `${uid}-summary`
@@ -127,8 +127,8 @@
     event.preventDefault()
   }
 
-  function onPointerMove(event: globalThis.PointerEvent) {
-    const strip = stripRef.value
+  function onPointermove(event: globalThis.PointerEvent) {
+    const strip = stripEl.value
     if (!strip || !count.value) return
     const rect = strip.getBoundingClientRect()
     setActiveIndex(
@@ -138,7 +138,7 @@
     )
   }
 
-  function onPointerLeave() {
+  function onPointerleave() {
     setActiveIndex(null)
   }
 </script>
@@ -189,11 +189,11 @@
         {{ readout.label }}
       </div>
       <div
-        ref="stripRef"
+        ref="stripEl"
         :data-testid="`${testId}__strip`"
         class="flex h-8 w-full gap-0.5"
-        @pointermove="onPointerMove"
-        @pointerleave="onPointerLeave"
+        @pointermove="onPointermove"
+        @pointerleave="onPointerleave"
       >
         <span
           v-for="(block, index) in blocks"

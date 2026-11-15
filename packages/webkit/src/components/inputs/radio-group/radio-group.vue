@@ -2,7 +2,7 @@
   import { computed, provide, useAttrs, useId } from 'vue'
 
   import { useFieldControl } from '../../../composables/use-field-control'
-  import { fieldContextKey } from '../field/injection-key'
+  import { FieldInjectionKey } from '../field/injection-key'
   import {
     RadioGroupInjectionKey,
     type RadioGroupKind,
@@ -70,7 +70,7 @@
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'input-radio-group')
 
-  provide(fieldContextKey, {
+  provide(FieldInjectionKey, {
     controlId: '',
     describedBy: computed(() => undefined),
     labelledBy: computed(() => undefined),

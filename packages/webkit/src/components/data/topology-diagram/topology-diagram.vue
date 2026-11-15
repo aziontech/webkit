@@ -2,7 +2,7 @@
   import { useResizeObserver } from '@vueuse/core'
   import { computed, ref, useAttrs } from 'vue'
 
-  import { useTranslate } from '../../../composables/use-locale/use-translate'
+  import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../i18n/messages/en'
   import EmptyState from '../../feedback/empty-state/empty-state.vue'
   import Skeleton from '../../feedback/skeleton/skeleton.vue'
@@ -83,15 +83,15 @@
   ]
   const shown = computed<TopologyLevel[]>(() => (props.loading ? PLACEHOLDER : props.levels))
 
-  const scrollRef = ref<HTMLElement | null>(null)
-  const containerRef = ref<HTMLElement | null>(null)
+  const scrollEl = ref<HTMLElement | null>(null)
+  const containerEl = ref<HTMLElement | null>(null)
   const scrollable = ref<boolean>(false)
-  const { paths, viewBox } = useFlowConnectors(containerRef)
+  const { paths, viewBox } = useFlowConnectors(containerEl)
 
   useResizeObserver(
-    () => scrollRef.value,
+    () => scrollEl.value,
     () => {
-      const el = scrollRef.value
+      const el = scrollEl.value
       scrollable.value = Boolean(el && el.scrollWidth > el.clientWidth)
     }
   )
@@ -128,7 +128,7 @@
     </div>
     <div
       v-else
-      ref="scrollRef"
+      ref="scrollEl"
       :tabindex="scrollable ? 0 : undefined"
       :aria-label="scrollable ? label : undefined"
       :role="scrollable ? 'group' : undefined"
@@ -160,7 +160,7 @@
           />
         </svg>
         <ol
-          ref="containerRef"
+          ref="containerEl"
           :aria-hidden="loading || undefined"
           class="relative m-0 flex w-full list-none flex-row items-start gap-(--spacing-xl) p-0 [&>[data-flow-leading]_[data-flow-port=end]]:hidden [&>[data-flow-trailing]_[data-flow-port=start]]:hidden [&_[data-flow-terminal]_[data-flow-port=start]]:hidden"
         >

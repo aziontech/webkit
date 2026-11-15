@@ -1,7 +1,7 @@
 <script setup lang="ts" generic="TItem extends object = Record<string, unknown>">
   import { computed, nextTick, ref, toRaw, useAttrs, useId } from 'vue'
 
-  import { useTranslate } from '../../../composables/use-locale/use-translate'
+  import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../i18n/messages/en'
   import Button from '../../actions/button/button.vue'
   import IconButton from '../../actions/icon-button/icon-button.vue'
@@ -106,8 +106,8 @@
   const attrs = useAttrs()
   const { t } = useTranslate({ attributeEditor: en.attributeEditor })
   const baseId = useId()
-  const rootRef = ref<HTMLElement | null>(null)
-  const addRef = ref<{ $el?: HTMLElement } | null>(null)
+  const rootEl = ref<HTMLElement | null>(null)
+  const addEl = ref<{ $el?: HTMLElement } | null>(null)
   const announcement = ref('')
 
   const testId = computed(
@@ -203,7 +203,7 @@
 
   const focusRow = async (selector: string) => {
     await nextTick()
-    const row = rootRef.value?.querySelector<HTMLElement>(selector)
+    const row = rootEl.value?.querySelector<HTMLElement>(selector)
     const target = row?.querySelector<HTMLElement>(
       'input:not([type=hidden]):not(:disabled), select:not(:disabled), textarea:not(:disabled), button:not(:disabled), [tabindex="0"]'
     )
@@ -211,7 +211,7 @@
       target.focus()
       return
     }
-    addRef.value?.$el?.focus()
+    addEl.value?.$el?.focus()
   }
 
   const rowSelector = (index: number, groupIndex: number | undefined) =>
@@ -298,13 +298,13 @@
     if (
       active instanceof HTMLElement &&
       active.isConnected &&
-      rootRef.value?.contains(active) &&
+      rootEl.value?.contains(active) &&
       !active.matches(':disabled')
     ) {
       if (document.activeElement !== active) active.focus()
       return
     }
-    rootRef.value?.querySelector<HTMLElement>(fallback)?.focus()
+    rootEl.value?.querySelector<HTMLElement>(fallback)?.focus()
   }
 
   const moveRow = (index: number, groupIndex: number | undefined, to: number) => {
@@ -367,7 +367,7 @@
     armed.value = ''
   }
 
-  const onDragStart = (
+  const onDragstart = (
     event: DragEvent,
     scope: DragScope,
     key: string,
@@ -387,7 +387,7 @@
     drag.value.scope === scope &&
     (scope === 'group' || drag.value.groupIndex === groupIndex)
 
-  const onDragOver = (
+  const onDragover = (
     event: DragEvent,
     scope: DragScope,
     index: number,
@@ -401,7 +401,7 @@
     drop.value = { index, groupIndex: scope === 'group' ? undefined : groupIndex, edge }
   }
 
-  const onDragEnd = () => {
+  const onDragend = () => {
     drag.value = null
     drop.value = null
     disarm()
@@ -413,7 +413,7 @@
     const from = drag.value.index
     let to = drop.value.index + (drop.value.edge === 'after' ? 1 : 0)
     if (from < to) to -= 1
-    onDragEnd()
+    onDragend()
     if (scope === 'group') moveGroup(from, to)
     else moveRow(from, groupIndex, to)
   }
@@ -446,7 +446,7 @@
 
 <template>
   <div
-    ref="rootRef"
+    ref="rootEl"
     v-bind="$attrs"
     class="group/attribute-editor @container/attribute-editor flex w-full min-w-0 flex-col gap-(--spacing-md)"
     :style="columnsStyle"
@@ -490,11 +490,11 @@
           :draggable="grouped && armed === groupKey(group) ? 'true' : undefined"
           :data-testid="grouped ? `${testId}__group` : undefined"
           @dragstart="
-            grouped && onDragStart($event, 'group', groupKey(group), groupIndex, undefined)
+            grouped && onDragstart($event, 'group', groupKey(group), groupIndex, undefined)
           "
-          @dragover="grouped && onDragOver($event, 'group', groupIndex, undefined)"
+          @dragover="grouped && onDragover($event, 'group', groupIndex, undefined)"
           @drop="grouped && onDrop($event, 'group', undefined)"
-          @dragend="onDragEnd"
+          @dragend="onDragend"
         >
           <div
             v-if="groupReorderShown"
@@ -590,11 +590,11 @@
                 :data-testid="`${testId}__row`"
                 @keydown="onRowKeydown($event, index, grouped ? groupIndex : undefined)"
                 @dragstart="
-                  onDragStart($event, 'row', rowKey(item), index, grouped ? groupIndex : undefined)
+                  onDragstart($event, 'row', rowKey(item), index, grouped ? groupIndex : undefined)
                 "
-                @dragover="onDragOver($event, 'row', index, grouped ? groupIndex : undefined)"
+                @dragover="onDragover($event, 'row', index, grouped ? groupIndex : undefined)"
                 @drop="onDrop($event, 'row', grouped ? groupIndex : undefined)"
-                @dragend="onDragEnd"
+                @dragend="onDragend"
               >
                 <span
                   v-if="grouped && index > 0"
@@ -812,7 +812,7 @@
         <Button
           v-if="!grouped"
           key="add"
-          ref="addRef"
+          ref="addEl"
           :label="addLabel"
           icon="ai ai-plus"
           kind="outlined"
@@ -824,7 +824,7 @@
         <Button
           v-else
           key="add-group"
-          ref="addRef"
+          ref="addEl"
           :label="groupAddLabel"
           icon="ai ai-plus"
           kind="outlined"

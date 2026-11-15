@@ -3,8 +3,8 @@
 
   import { useFieldControl } from '../../../composables/use-field-control'
   import { useFocusTrap } from '../../../composables/use-focus-trap'
-  import { usePortalLocale, useTranslate } from '../../../composables/use-locale/use-translate'
   import { usePlacement } from '../../../composables/use-placement'
+  import { usePortalLocale, useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../i18n/messages/en'
   import Button from '../../actions/button/button.vue'
   import DatePickerFields from './date-picker-fields/date-picker-fields.vue'
@@ -106,8 +106,8 @@
   const isDisabled = computed(() => field.disabled.value)
   const isHorizontal = computed(() => props.orientation === 'horizontal')
 
-  const triggerRef = ref<globalThis.HTMLElement | null>(null)
-  const panelRef = ref<globalThis.HTMLElement | null>(null)
+  const triggerEl = ref<globalThis.HTMLElement | null>(null)
+  const panelEl = ref<globalThis.HTMLElement | null>(null)
 
   const isOpen = computed(() => openModel.value ?? props.defaultOpen)
   const isOpenRef = computed(() => isOpen.value)
@@ -208,8 +208,8 @@
   const triggerText = computed(() => displayValue.value || placeholderText.value)
 
   const { resolvedPlacement, panelStyle } = usePlacement({
-    triggerRef,
-    panelRef,
+    triggerRef: triggerEl,
+    panelRef: panelEl,
     isOpen: isOpenRef,
     placement: 'bottom-start',
     offset: 6,
@@ -217,14 +217,14 @@
     onDismiss: () => setOpen(false)
   })
 
-  useFocusTrap(panelRef, isOpenRef)
+  useFocusTrap(panelEl, isOpenRef)
 
   const onDocumentMousedown = (event: globalThis.MouseEvent) => {
     const target = event.target as globalThis.Node | null
     if (!target) {
       return
     }
-    if (isOpen.value && !triggerRef.value?.contains(target) && !panelRef.value?.contains(target)) {
+    if (isOpen.value && !triggerEl.value?.contains(target) && !panelEl.value?.contains(target)) {
       setOpen(false)
     }
   }
@@ -233,7 +233,7 @@
     if (event.key === 'Escape') {
       event.preventDefault()
       setOpen(false)
-      triggerRef.value?.querySelector<globalThis.HTMLElement>('button')?.focus()
+      triggerEl.value?.querySelector<globalThis.HTMLElement>('button')?.focus()
     }
   }
 
@@ -287,7 +287,7 @@
     class="inline-flex max-w-full"
   >
     <span
-      ref="triggerRef"
+      ref="triggerEl"
       class="inline-flex max-w-full"
     >
       <slot
@@ -375,7 +375,7 @@
           v-if="isOpen"
           :dir="portalLocale.dir"
           :lang="portalLocale.lang"
-          ref="panelRef"
+          ref="panelEl"
           role="dialog"
           :aria-label="t('datePicker.chooseDate')"
           :data-testid="`${testId}__popover`"

@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // Test runner for the spec pipeline hooks and shared lib.
-// Usage: node .claude/hooks/__tests__/run.mjs
+// Usage: node .claude/hooks/test/run.mjs
 // Exit 0 = all tests passed; exit 1 = at least one failure.
 //
 // No external deps. Uses spawnSync to feed JSON to the hooks via stdin.
@@ -26,9 +26,9 @@ import {
   isLegacyComponent,
   templateSectionErrors,
   TEMPLATE_2_SECTIONS
-} from '../_lib/spec.mjs'
-import { collectSpecViolations } from '../_lib/spec-compliance-checks.mjs'
-import { checkAllSpecs, checkSpecFile } from '../_lib/spec-integrity.mjs'
+} from '../lib/spec.mjs'
+import { collectSpecViolations } from '../lib/spec-compliance-checks.mjs'
+import { checkAllSpecs, checkSpecFile } from '../lib/spec-integrity.mjs'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
@@ -330,9 +330,9 @@ group('lib: component path resolution', () => {
 // Every component has a spec since #1148, so the shipped whitelist is empty; the bypass is
 // exercised against a fixture root that lists one component.
 const LEGACY_ROOT = mkdtempSync(join(tmpdir(), 'webkit-legacy-'))
-mkdirSync(resolve(LEGACY_ROOT, '.claude/hooks/_lib'), { recursive: true })
+mkdirSync(resolve(LEGACY_ROOT, '.claude/hooks/lib'), { recursive: true })
 writeFileSync(
-  resolve(LEGACY_ROOT, '.claude/hooks/_lib/legacy-components.json'),
+  resolve(LEGACY_ROOT, '.claude/hooks/lib/legacy-components.json'),
   JSON.stringify([{ category: 'actions', name: 'button' }])
 )
 const MISSING_SPEC_VUE = 'packages/webkit/src/components/feedback/no-such-widget/no-such-widget.vue'
@@ -340,7 +340,7 @@ const MISSING_SPEC_VUE = 'packages/webkit/src/components/feedback/no-such-widget
 group('lib: legacy whitelist', () => {
   test('the shipped whitelist is empty', () => {
     assertEqual(
-      JSON.parse(readFileSync(resolve(ROOT, '.claude/hooks/_lib/legacy-components.json'), 'utf-8')),
+      JSON.parse(readFileSync(resolve(ROOT, '.claude/hooks/lib/legacy-components.json'), 'utf-8')),
       []
     )
     assertTrue(!isLegacyComponent('actions', 'button', ROOT))

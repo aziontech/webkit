@@ -2,7 +2,7 @@
   import { computed, inject, provide, useAttrs } from 'vue'
 
   import { useFieldControl } from '../../../composables/use-field-control'
-  import { fieldContextKey } from '../field/injection-key'
+  import { FieldInjectionKey } from '../field/injection-key'
 
   defineOptions({ name: 'InputGroup', inheritAttrs: false })
 
@@ -43,9 +43,9 @@
     required: () => props.required
   })
 
-  const parentField = inject(fieldContextKey, null)
+  const parentField = inject(FieldInjectionKey, null)
 
-  provide(fieldContextKey, {
+  provide(FieldInjectionKey, {
     controlId: parentField?.controlId ?? '',
     describedBy: computed(() => parentField?.describedBy.value),
     labelledBy: computed(() => parentField?.labelledBy.value),

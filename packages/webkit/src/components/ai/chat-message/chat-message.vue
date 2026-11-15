@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, inject, onMounted, provide, ref, useAttrs, watch } from 'vue'
 
-  import { useTranslate } from '../../../composables/use-locale/use-translate'
+  import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../i18n/messages/en'
   import Button from '../../actions/button/button.vue'
   import Avatar from '../../content/avatar/avatar.vue'
@@ -75,14 +75,14 @@
   const busy = computed<boolean>(() => props.state === 'pending' || props.state === 'streaming')
   const showActions = () => props.state === 'complete' && Boolean(slots.actions)
 
-  const body = ref<HTMLElement | null>(null)
+  const bodyEl = ref<HTMLElement | null>(null)
 
   function announce(): void {
     if (!conversation || props.from === 'user') return
     const text =
       props.state === 'error'
         ? props.errorMessage || t('chatMessage.error')
-        : (body.value?.textContent ?? '')
+        : (bodyEl.value?.textContent ?? '')
     conversation.announce(name.value, text.slice(0, 600))
   }
 
@@ -159,7 +159,7 @@
       />
       <div
         v-else
-        ref="body"
+        ref="bodyEl"
         :data-from="from"
         :data-testid="`${testId}__content`"
         class="flex min-w-0 flex-col gap-(--spacing-sm) text-body-md text-(--text-default) break-words data-[from=user]:rounded-(--shape-card) data-[from=user]:bg-(--bg-surface-raised) data-[from=user]:px-(--spacing-md) data-[from=user]:py-(--spacing-sm) data-[from=system]:text-body-sm data-[from=system]:text-(--text-muted) data-[from=system]:text-center"

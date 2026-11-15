@@ -14,7 +14,7 @@ import {
   type VNodeArrayChildren
 } from 'vue'
 
-import { triggerControl } from './trigger-control'
+import { triggerControl } from '../../../utils/trigger-control'
 
 export type TriggerAria = Record<string, string | undefined>
 
@@ -120,7 +120,7 @@ export const TriggerHost = defineComponent({
   },
   emits: ['control'],
   setup(props, { slots, emit }) {
-    const hostRef = ref<globalThis.HTMLElement | null>(null)
+    const hostEl = ref<globalThis.HTMLElement | null>(null)
     let control: globalThis.HTMLElement | null = null
     let ownsId = false
 
@@ -132,12 +132,12 @@ export const TriggerHost = defineComponent({
 
     const release = (el: globalThis.HTMLElement) => {
       for (const name of [...Object.keys(props.aria), 'role', 'tabindex'])
-        if (name in props.aria || el === hostRef.value) el.removeAttribute(name)
+        if (name in props.aria || el === hostEl.value) el.removeAttribute(name)
       if (ownsId) el.removeAttribute('id')
     }
 
     const sync = () => {
-      const host = hostRef.value
+      const host = hostEl.value
       if (!host) return
       const next = triggerControl(host)
       if (control !== next) {
@@ -166,8 +166,8 @@ export const TriggerHost = defineComponent({
     return () => {
       const nodes = flatten(slots['default']?.() ?? [])
       if (merge(nodes, () => ({ ...props.aria, id: props.controlId })))
-        return h('span', { ref: hostRef }, nodes)
-      return h('span', { ref: hostRef, ...(isInert(nodes) && hostAttrs()) }, nodes)
+        return h('span', { ref: hostEl }, nodes)
+      return h('span', { ref: hostEl, ...(isInert(nodes) && hostAttrs()) }, nodes)
     }
   }
 })

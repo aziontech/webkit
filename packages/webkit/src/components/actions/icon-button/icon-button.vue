@@ -72,7 +72,7 @@
 
   const loadingTestId = computed(() => `${testId.value}__loading`)
 
-  const handleClick = (event: MouseEvent) => {
+  const onClick = (event: MouseEvent) => {
     if (isInactive.value) {
       event.preventDefault()
       return
@@ -100,7 +100,7 @@
     :data-kind="kind"
     :data-size="size"
     :data-testid="testId"
-    @click="handleClick"
+    @click="onClick"
   >
     <span
       :data-transition="iconTransition || null"
@@ -161,7 +161,7 @@
     :data-size="size"
     :class="ROOT_CLASS"
     :data-testid="testId"
-    @click="handleClick"
+    @click="onClick"
   >
     <span
       :data-transition="iconTransition || null"

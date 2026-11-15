@@ -30,8 +30,8 @@
   let pressStart: { x: number; y: number } | null = null
   let openedAt = 0
 
-  function setAreaRef(el: unknown) {
-    ctx.areaRef.value = el instanceof HTMLElement ? el : null
+  function setAreaEl(el: unknown) {
+    ctx.areaEl.value = el instanceof HTMLElement ? el : null
   }
 
   function open(x: number, y: number, source: globalThis.Element | null) {
@@ -87,14 +87,14 @@
 
   onBeforeUnmount(() => {
     cancelPress()
-    ctx.areaRef.value = null
+    ctx.areaEl.value = null
   })
 </script>
 
 <template>
   <div
     v-bind="attrs"
-    :ref="setAreaRef"
+    :ref="setAreaEl"
     :data-testid="testId"
     :data-state="isOpen ? 'open' : 'closed'"
     :data-disabled="ctx.disabled.value || null"

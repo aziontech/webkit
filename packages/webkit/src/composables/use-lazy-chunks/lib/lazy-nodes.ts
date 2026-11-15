@@ -8,7 +8,7 @@ import {
   type VNodeArrayChildren
 } from 'vue'
 
-import { useLazyChunks } from './index'
+import { useLazyChunks } from '../use-lazy-chunks'
 
 function flatten(children: VNodeArrayChildren, out: VNode[] = []): VNode[] {
   for (const child of children) {

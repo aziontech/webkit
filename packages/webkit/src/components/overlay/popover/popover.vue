@@ -50,8 +50,8 @@
   const attrs = useAttrs()
   const uid = useId()
 
-  const triggerRef = ref<globalThis.HTMLElement | null>(null)
-  const panelRef = ref<globalThis.HTMLElement | null>(null)
+  const triggerEl = ref<globalThis.HTMLElement | null>(null)
+  const panelEl = ref<globalThis.HTMLElement | null>(null)
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'overlay-popover')
 
@@ -80,8 +80,8 @@
   const hasDescription = ref(false)
 
   const { resolvedPlacement, panelStyle } = usePlacement({
-    triggerRef,
-    panelRef,
+    triggerRef: triggerEl,
+    panelRef: panelEl,
     isOpen: isOpenRef,
     placement: placementRef,
     offset: offsetRef,
@@ -89,7 +89,7 @@
   })
 
   const { isTop, isFocusTop, isInsideHigherLayer, lowerLayerElement } = useOverlayLayer(isOpenRef, {
-    element: panelRef
+    element: panelEl
   })
 
   const resolvedPlacementRef = computed(() => resolvedPlacement.value as PopoverPlacement)
@@ -100,7 +100,7 @@
   }
 
   function focusTrigger() {
-    const trigger = triggerRef.value
+    const trigger = triggerEl.value
     if (!trigger) return
     const target = trigger.matches(FOCUSABLE_SELECTOR)
       ? trigger
@@ -109,7 +109,7 @@
   }
 
   function getFocusable(): globalThis.HTMLElement[] {
-    const panel = panelRef.value
+    const panel = panelEl.value
     if (!panel) return []
     return Array.from(panel.querySelectorAll<globalThis.HTMLElement>(FOCUSABLE_SELECTOR))
   }
@@ -120,16 +120,16 @@
     const target = event.target as globalThis.Node | null
     if (!target) return
     if (isInsideHigherLayer(target) || !isFocusTop.value) return
-    if (triggerRef.value?.contains(target)) return
-    if (panelRef.value?.contains(target)) return
+    if (triggerEl.value?.contains(target)) return
+    if (panelEl.value?.contains(target)) return
     setOpen(false)
   }
 
   function tabbableAfterTrigger(): globalThis.HTMLElement | null {
-    const trigger = triggerRef.value
+    const trigger = triggerEl.value
     const scope = lowerLayerElement() ?? globalThis.document?.body
     if (!trigger || !scope) return null
-    const panel = panelRef.value
+    const panel = panelEl.value
     const all = Array.from(
       scope.querySelectorAll<globalThis.HTMLElement>(FOCUSABLE_SELECTOR)
     ).filter(
@@ -154,8 +154,8 @@
 
     if (event.key === 'Tab') {
       if (!isFocusTop.value) return
-      const trigger = triggerRef.value
-      const panel = panelRef.value
+      const trigger = triggerEl.value
+      const panel = panelEl.value
       if (!trigger || !panel) return
 
       const focusables = getFocusable()
@@ -206,7 +206,7 @@
   watch(isOpenRef, async (open, wasOpen) => {
     if (!open || wasOpen) return
     await nextTick()
-    const panel = panelRef.value
+    const panel = panelEl.value
     if (!panel || panel.contains(globalThis.document?.activeElement ?? null)) return
     getFocusable()[0]?.focus({ preventScroll: true })
   })
@@ -227,8 +227,8 @@
     contentId,
     titleId,
     descriptionId,
-    triggerRef,
-    panelRef,
+    triggerEl,
+    panelEl,
     setOpen,
     focusTrigger,
     registerTitle: () => {

@@ -53,13 +53,13 @@
   const environmentHeadingId = useId()
   const SCROLL_INSET = 16
 
-  const topologyRef = ref<globalThis.HTMLElement | null>(null)
+  const topologyEl = ref<globalThis.HTMLElement | null>(null)
   const scrolled = ref(0)
 
   const measure = () => {
     scrolled.value =
-      props.tab === 'topology' && topologyRef.value
-        ? Math.max(topologyRef.value.offsetTop - SCROLL_INSET, 0)
+      props.tab === 'topology' && topologyEl.value
+        ? Math.max(topologyEl.value.offsetTop - SCROLL_INSET, 0)
         : 0
   }
 
@@ -330,7 +330,7 @@
             </Card>
           </ShellMockupPart>
 
-          <div ref="topologyRef">
+          <div ref="topologyEl">
             <ShellMockupPart :order="2">
               <div class="flex flex-col gap-(--layout-group-gap)">
                 <h2 class="m-0 text-heading-xs text-(--text-default)">Deployment topology</h2>

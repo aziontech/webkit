@@ -13,7 +13,7 @@
   } from 'vue'
 
   import { logicalArrowKey, useDirection } from '../../../composables/use-direction'
-  import { useTranslate } from '../../../composables/use-locale/use-translate'
+  import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../i18n/messages/en'
   import { cn } from '../../../utils/cn'
   import {
@@ -92,8 +92,8 @@
   const motion = ref<SidebarMenuMotion>('none')
   const leaving = ref<string[]>([])
   const backEl = shallowRef<globalThis.HTMLElement | null>(null)
-  const levelHost = shallowRef<globalThis.HTMLElement | null>(null)
-  const backHost = shallowRef<globalThis.HTMLElement | null>(null)
+  const levelHostEl = shallowRef<globalThis.HTMLElement | null>(null)
+  const backHostEl = shallowRef<globalThis.HTMLElement | null>(null)
 
   let motionTimer: ReturnType<typeof globalThis.setTimeout> | undefined
 
@@ -149,7 +149,7 @@
   }
 
   const setBackHost = (el: globalThis.HTMLElement | null) => {
-    backHost.value = el
+    backHostEl.value = el
   }
 
   const seededExpandable = new Set<string>()
@@ -173,14 +173,14 @@
     levels,
     motion: computed(() => motion.value),
     enterOnMount: computed(() => props.enterOnMount),
-    levelHost,
+    levelHost: levelHostEl,
     isCurrentLevel,
     isLevelMounted,
     push,
     registerLevel,
     pop,
     setBackElement,
-    backHost,
+    backHost: backHostEl,
     setBackHost,
     isExpanded,
     setExpanded,
@@ -283,7 +283,7 @@
       :key="index"
     />
     <div
-      ref="levelHost"
+      ref="levelHostEl"
       :data-testid="`${testId}__levels`"
       class="flex w-full flex-col"
     />

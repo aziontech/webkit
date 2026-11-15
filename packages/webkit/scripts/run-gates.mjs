@@ -100,7 +100,7 @@ export const GATES = [
   {
     id: 'hooks',
     label: 'Hook tests',
-    steps: [['node', '../../.claude/hooks/__tests__/run.mjs']]
+    steps: [['node', '../../.claude/hooks/test/run.mjs']]
   },
   {
     id: 'toolkit',

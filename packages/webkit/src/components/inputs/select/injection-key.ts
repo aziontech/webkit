@@ -1,6 +1,6 @@
 import type { ComputedRef, InjectionKey, Ref } from 'vue'
 
-import type { ListboxFocusIntent } from '../../../composables/use-listbox'
+import type { ListboxFocusIntent } from '../../../composables/use-listbox-content'
 
 export type SelectSize = 'small' | 'medium' | 'large'
 
@@ -25,7 +25,7 @@ export interface SelectContext {
   /** Stable id used to wire trigger `aria-controls` and content element id. */
   contentId: string
   /** Trigger element ref; the content reads it to anchor below. */
-  triggerRef: Ref<globalThis.HTMLElement | null>
+  triggerEl: Ref<globalThis.HTMLElement | null>
   /** Current open state. */
   open: Ref<boolean>
   setOpen: (value: boolean) => void
@@ -64,4 +64,4 @@ export interface SelectContext {
   labelsPending: ComputedRef<boolean>
 }
 
-export const selectContextKey: InjectionKey<SelectContext> = Symbol('SelectContext')
+export const SelectInjectionKey: InjectionKey<SelectContext> = Symbol('Select')

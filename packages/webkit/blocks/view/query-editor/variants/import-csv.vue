@@ -338,7 +338,7 @@
     ].join('\n')
   }
   const importOpen = ref(true)
-  const importInput = ref<HTMLInputElement | null>(null)
+  const importInputEl = ref<HTMLInputElement | null>(null)
   const importFile = ref<ImportFile | null>(null)
   const importFileError = ref('')
   const importHeaders = ref<string[]>([])
@@ -1608,11 +1608,11 @@ LIMIT 3;`
                       label="Browse files"
                       kind="secondary"
                       size="medium"
-                      @click="importInput?.click()"
+                      @click="importInputEl?.click()"
                     />
                   </FileDropzone>
                   <input
-                    ref="importInput"
+                    ref="importInputEl"
                     type="file"
                     accept=".csv,text/csv"
                     class="hidden"

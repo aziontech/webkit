@@ -1,8 +1,8 @@
 <script setup lang="ts">
   import { computed, provide, useAttrs } from 'vue'
 
-  import { useTranslate } from '../../../composables/use-locale/use-translate'
   import { useStepRegistry } from '../../../composables/use-step-registry'
+  import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../i18n/messages/en'
   import { StepperInjectionKey } from './injection-key'
 

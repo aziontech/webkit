@@ -42,8 +42,8 @@
 
 <template>
   <Teleport
-    v-if="inPanel || ctx.panelBodyRef.value"
-    :to="ctx.panelBodyRef.value ?? 'body'"
+    v-if="inPanel || ctx.panelBodyEl.value"
+    :to="ctx.panelBodyEl.value ?? 'body'"
     :disabled="inPanel"
   >
     <div

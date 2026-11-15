@@ -119,8 +119,8 @@
       preferences: { storageKey: 'account-mfa' }
     })
 
-  const membersTable = ref<TableExposed<MemberRow> | null>(null)
-  const exportCsv = () => membersTable.value?.exportCsv({ filename: 'mfa-status.csv' })
+  const membersTableEl = ref<TableExposed<MemberRow> | null>(null)
+  const exportCsv = () => membersTableEl.value?.exportCsv({ filename: 'mfa-status.csv' })
 
   const refreshing = ref(false)
   const refresh = () => {
@@ -307,7 +307,7 @@
           >
             <template #content>
               <DataTable
-                ref="membersTable"
+                ref="membersTableEl"
                 v-bind="tableProps"
                 :loading="loading"
                 enable-sorting

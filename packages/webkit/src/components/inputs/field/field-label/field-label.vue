@@ -1,10 +1,10 @@
 <script setup lang="ts">
   import { computed, inject, useAttrs } from 'vue'
 
-  import { useTranslate } from '../../../../composables/use-locale/use-translate'
+  import { useTranslate } from '../../../../composables/use-translate'
   import * as en from '../../../../i18n/messages/en'
   import Hint from '../../hint/hint.vue'
-  import { fieldContextKey } from '../injection-key'
+  import { FieldInjectionKey } from '../injection-key'
 
   defineOptions({
     name: 'FieldLabel',
@@ -28,7 +28,7 @@
     default(): unknown
   }>()
 
-  const field = inject(fieldContextKey, null)
+  const field = inject(FieldInjectionKey, null)
   const attrs = useAttrs()
   const { t } = useTranslate({ field: en.field })
 

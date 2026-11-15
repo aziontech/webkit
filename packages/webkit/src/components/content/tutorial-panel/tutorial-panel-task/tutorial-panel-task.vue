@@ -1,9 +1,9 @@
 <script setup lang="ts">
   import { computed, onBeforeUnmount, onMounted, ref, useAttrs } from 'vue'
 
-  import { useTranslate } from '../../../../composables/use-locale/use-translate'
+  import { useTranslate } from '../../../../composables/use-translate'
   import * as en from '../../../../i18n/messages/en'
-  import { useTutorialTasksContext } from '../composables/use-tutorial-tasks-context'
+  import { useTutorialPanelTasksContext } from '../composables/use-tutorial-panel-tasks-context'
   import type { TutorialTaskStatus } from '../injection-key'
 
   defineOptions({
@@ -30,13 +30,13 @@
 
   const attrs = useAttrs()
   const { t } = useTranslate({ helpPanel: en.helpPanel })
-  const context = useTutorialTasksContext()
+  const context = useTutorialPanelTasksContext()
 
   const id = Symbol('TutorialPanelTask')
   const { index } = context.register(id, () => props.status)
-  const root = ref<globalThis.HTMLElement | null>(null)
+  const rootEl = ref<globalThis.HTMLElement | null>(null)
 
-  onMounted(() => context.attach(id, root.value))
+  onMounted(() => context.attach(id, rootEl.value))
   onBeforeUnmount(() => context.unregister(id))
 
   const testId = computed<string>(
@@ -52,7 +52,7 @@
 
 <template>
   <li
-    ref="root"
+    ref="rootEl"
     v-bind="$attrs"
     :data-testid="testId"
     :data-status="status"

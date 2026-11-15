@@ -2,7 +2,7 @@
   import { computed, nextTick, onBeforeUnmount, ref, useAttrs, useId } from 'vue'
 
   import { eventDirection, logicalArrowKey } from '../../../composables/use-direction'
-  import { intlLocale, useTranslate } from '../../../composables/use-locale/use-translate'
+  import { intlLocale, useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../i18n/messages/en'
   import EmptyState from '../../feedback/empty-state/empty-state.vue'
   import Checkbox from '../../inputs/checkbox/checkbox.vue'

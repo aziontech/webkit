@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, nextTick, onMounted, ref, useAttrs, watch } from 'vue'
 
-  import { useTranslate } from '../../../composables/use-locale/use-translate'
+  import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../i18n/messages/en'
   import Button from '../../actions/button/button.vue'
   import ToggleGroup from '../../actions/toggle-group/toggle-group.vue'
@@ -163,7 +163,7 @@
 
   const SEARCH_THRESHOLD = 7
 
-  const root = ref<HTMLElement | null>(null)
+  const rootEl = ref<HTMLElement | null>(null)
 
   const category = ref<string | undefined>(props.allLabel)
 
@@ -243,7 +243,7 @@
     if (!requested || !props.categories.includes(requested)) return
     category.value = requested
     await nextTick()
-    root.value?.scrollIntoView()
+    rootEl.value?.scrollIntoView()
   })
 
   const clearFilters = (): void => {
@@ -279,7 +279,7 @@
   <section
     v-bind="$attrs"
     :id="anchor || undefined"
-    ref="root"
+    ref="rootEl"
     :data-testid="testId"
     :aria-label="title || undefined"
     class="scroll-mt-(--spacing-2xl)"

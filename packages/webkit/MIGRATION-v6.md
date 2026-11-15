@@ -1207,6 +1207,12 @@ The old ids are gone, so a config or `eslint-disable` comment that names one rep
 | `webkit/menu-node-href`        | `webkit/prefer-href-in-menu-node` |
 | `webkit/valid-import-path`     | `webkit/no-unknown-import`        |
 
+### Component CSS variables carry the component name
+
+A CSS variable a component reads is named `--<component>-<part>-<property>`. The one you may set
+yourself changed: a sticky bar above a `Hero` declares its height as `--hero-banner-offset`
+(was `--banner-offset`), so a `kind="screen"` band still measures one screen beneath it.
+
 ## 5. Field report: Azion Console
 
 The codemod ran on a copy of `azion-console-kit` (November 2026). The console declares

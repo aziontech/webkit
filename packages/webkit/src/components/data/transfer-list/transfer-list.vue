@@ -3,7 +3,7 @@
 
   import {
     type MoveDirection,
-    transferListContextKey,
+    TransferListInjectionKey,
     type TransferListItems,
     type TransferListSide,
     type TransferListValue
@@ -189,7 +189,7 @@
     moveItem(side, index)
   }
 
-  provide(transferListContextKey, {
+  provide(TransferListInjectionKey, {
     trackBy: keyField,
     disabled: computed(() => props.disabled),
     anyLoading,

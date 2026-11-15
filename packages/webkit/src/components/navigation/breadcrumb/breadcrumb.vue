@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, ref, useAttrs } from 'vue'
 
-  import { useTranslate } from '../../../composables/use-locale/use-translate'
+  import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../i18n/messages/en'
   import { cn } from '../../../utils/cn'
   import { directionalIconClass } from '../../../utils/directional-icons'
@@ -51,8 +51,8 @@
     () => (attrs['data-testid'] as string | undefined) ?? 'navigation-breadcrumb'
   )
 
-  const navRef = ref<globalThis.HTMLElement | null>(null)
-  const isCollapsed = useBreadcrumbCollapse(navRef)
+  const navEl = ref<globalThis.HTMLElement | null>(null)
+  const isCollapsed = useBreadcrumbCollapse(navEl)
 
   const resolvedItems = computed(() =>
     props.items.map((item, index) => {
@@ -78,7 +78,7 @@
     () => resolvedItems.value.length > 1 && firstItem.value !== lastItem.value
   )
 
-  const handleItemClick = (event: MouseEvent, href: string) => {
+  const onItemClick = (event: MouseEvent, href: string) => {
     emit('navigate', event, href)
   }
 
@@ -88,14 +88,14 @@
   ) => {
     const href = typeof value === 'string' ? value : undefined
     if (href) {
-      handleItemClick(event as MouseEvent, href)
+      onItemClick(event as MouseEvent, href)
     }
   }
 </script>
 
 <template>
   <nav
-    ref="navRef"
+    ref="navEl"
     v-bind="attrs"
     :class="cn('inline-flex w-full min-w-0 items-center', attrs.class as string | undefined)"
     :aria-label="ariaLabel || t('breadcrumb.label')"
@@ -119,7 +119,7 @@
                 :show-icon="item.showIcon"
                 :icon="item.icon"
                 :data-testid="`${testId}__item-${index}`"
-                @click="(event) => !item.current && handleItemClick(event, item.href ?? '#')"
+                @click="(event) => !item.current && onItemClick(event, item.href ?? '#')"
               />
             </li>
             <BreadcrumbSeparator
@@ -141,9 +141,7 @@
               :show-icon="firstItem.showIcon"
               :icon="firstItem.icon"
               :data-testid="`${testId}__item-0`"
-              @click="
-                (event) => !firstItem.current && handleItemClick(event, firstItem.href ?? '#')
-              "
+              @click="(event) => !firstItem.current && onItemClick(event, firstItem.href ?? '#')"
             />
           </li>
 
@@ -208,9 +206,7 @@
                 :icon="lastItem.icon"
                 class="text-(--text-default)"
                 :data-testid="`${testId}__item-last`"
-                @click="
-                  (event) => !lastItem.current && handleItemClick(event, lastItem.href ?? '#')
-                "
+                @click="(event) => !lastItem.current && onItemClick(event, lastItem.href ?? '#')"
               />
             </li>
           </template>

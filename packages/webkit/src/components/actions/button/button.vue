@@ -79,7 +79,7 @@
 
   const loadingTestId = computed(() => `${testId.value}__loading`)
 
-  const handleClick = (event: MouseEvent) => {
+  const onClick = (event: MouseEvent) => {
     if (isInactive.value) {
       event.preventDefault()
       return
@@ -107,7 +107,7 @@
     :data-size="size"
     :data-icon-position="icon ? iconPosition : undefined"
     :data-testid="testId"
-    @click="handleClick"
+    @click="onClick"
   >
     <span class="relative z-1 inline-flex items-center gap-(--spacing-xs)">
       <slot name="prefix" />
@@ -148,7 +148,7 @@
     :data-icon-position="icon ? iconPosition : undefined"
     :class="ROOT_CLASS"
     :data-testid="testId"
-    @click="handleClick"
+    @click="onClick"
   >
     <span class="relative z-1 inline-flex items-center gap-(--spacing-xs)">
       <slot name="prefix" />

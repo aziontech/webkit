@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, nextTick, ref, useAttrs, useId, watch } from 'vue'
 
-  import { useTranslate } from '../../../composables/use-locale/use-translate'
+  import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../i18n/messages/en'
   import Button from '../../actions/button/button.vue'
   import Overline from '../../content/overline/overline.vue'
@@ -86,12 +86,12 @@
       (attrs['data-testid'] as string | undefined) ?? 'sections-closing-call-to-action-newsletter'
   )
 
-  const outcome = ref<HTMLElement | null>(null)
+  const outcomeEl = ref<HTMLElement | null>(null)
 
   watch(
     () => props.submitted,
     (submitted) => {
-      if (!submitted || !outcome.value?.contains(document.activeElement)) return
+      if (!submitted || !outcomeEl.value?.contains(document.activeElement)) return
       nextTick(() => document.getElementById(`${inputId}-success`)?.focus())
     }
   )
@@ -152,7 +152,7 @@
           </div>
 
           <div
-            ref="outcome"
+            ref="outcomeEl"
             class="flex flex-col gap-(--spacing-md)"
           >
             <template v-if="submitted">

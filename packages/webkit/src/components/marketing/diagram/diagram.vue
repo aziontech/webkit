@@ -69,7 +69,7 @@
 
   const dev = (import.meta as ImportMeta & { env?: { DEV?: boolean } }).env?.DEV === true
 
-  const canvas = ref<globalThis.HTMLElement | null>(null)
+  const canvasEl = ref<globalThis.HTMLElement | null>(null)
   const named = shallowRef<DiagramSpec | null>(null)
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'marketing-diagram')
@@ -101,7 +101,7 @@
   )
 
   const { width, height, paths, labels, ports, ready } = useDiagramConnectors(
-    canvas,
+    canvasEl,
     () => drawn.value?.edges ?? []
   )
 
@@ -119,7 +119,7 @@
   >
     <div
       v-if="drawn"
-      ref="canvas"
+      ref="canvasEl"
       aria-hidden="true"
       :data-testid="`${testId}__canvas`"
       :data-ready="ready || null"

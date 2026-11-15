@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, onBeforeUnmount, onMounted, ref, useAttrs } from 'vue'
 
-  import { useTranslate } from '../../../../composables/use-locale/use-translate'
+  import { useTranslate } from '../../../../composables/use-translate'
   import * as en from '../../../../i18n/messages/en'
   import Spinner from '../../../utils/spinner/spinner.vue'
   import { useStepperContext } from '../composables/use-stepper-context'
@@ -46,9 +46,9 @@
 
   const id = Symbol('StepperStep')
   const { index, isLast } = context.register(id)
-  const root = ref<globalThis.HTMLElement | null>(null)
+  const rootEl = ref<globalThis.HTMLElement | null>(null)
 
-  onMounted(() => context.attach(id, root.value))
+  onMounted(() => context.attach(id, rootEl.value))
   onBeforeUnmount(() => context.unregister(id))
 
   const testId = computed(
@@ -76,7 +76,7 @@
 
 <template>
   <li
-    ref="root"
+    ref="rootEl"
     v-bind="$attrs"
     :data-testid="testId"
     :data-state="dataState"

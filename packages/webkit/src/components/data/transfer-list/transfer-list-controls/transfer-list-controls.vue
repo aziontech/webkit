@@ -1,16 +1,16 @@
 <script setup lang="ts">
   import { computed, inject, useAttrs } from 'vue'
 
-  import { useTranslate } from '../../../../composables/use-locale/use-translate'
+  import { useTranslate } from '../../../../composables/use-translate'
   import * as en from '../../../../i18n/messages/en'
-  import { transferListContextKey } from '../injection-key'
+  import { TransferListInjectionKey } from '../injection-key'
 
   defineOptions({
     name: 'TransferListControls',
     inheritAttrs: false
   })
 
-  const ctx = inject(transferListContextKey)
+  const ctx = inject(TransferListInjectionKey)
   if (!ctx) {
     throw new Error('TransferListControls must be used inside <TransferList>.')
   }

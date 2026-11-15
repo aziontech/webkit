@@ -65,13 +65,13 @@
 
   const rowName = computed(() => props.ariaLabel || props.title)
 
-  const runway = ref<HTMLElement | null>(null)
-  const band = ref<HTMLElement | null>(null)
-  const viewport = ref<HTMLElement | null>(null)
-  const track = ref<HTMLElement | null>(null)
+  const runwayEl = ref<HTMLElement | null>(null)
+  const bandEl = ref<HTMLElement | null>(null)
+  const viewportEl = ref<HTMLElement | null>(null)
+  const trackEl = ref<HTMLElement | null>(null)
 
   const { runwayHeight, shift } = usePinnedRow(
-    { runway, pinned: band, viewport, track },
+    { runway: runwayEl, pinned: bandEl, viewport: viewportEl, track: trackEl },
     () => props.pinned
   )
 
@@ -90,14 +90,14 @@
     v-if="title && steps.length"
     v-bind="$attrs"
     :id="anchor || undefined"
-    ref="runway"
+    ref="runwayEl"
     :data-testid="testId"
     :data-pinned="pinned || null"
     :style="{ height: runwayHeight || undefined, '--process-scroll-offset': headerOffset }"
     class="scroll-mt-(--spacing-2xl) group/process"
   >
     <div
-      ref="band"
+      ref="bandEl"
       class="flex flex-col lg:motion-safe:group-data-[pinned]/process:sticky lg:motion-safe:group-data-[pinned]/process:top-(--process-scroll-offset) lg:motion-safe:group-data-[pinned]/process:h-[calc(100dvh-var(--process-scroll-offset))]"
     >
       <SectionModule
@@ -122,14 +122,14 @@
           marks="bottom"
         >
           <div
-            ref="viewport"
+            ref="viewportEl"
             role="region"
             :aria-label="rowName"
             tabindex="0"
             class="h-full snap-x snap-mandatory overflow-x-auto scrollbar-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-(--ring-color) lg:motion-safe:group-data-[pinned]/process:snap-none lg:motion-safe:group-data-[pinned]/process:overflow-hidden [&::-webkit-scrollbar]:hidden"
           >
             <ol
-              ref="track"
+              ref="trackEl"
               :style="{ translate: shift }"
               class="m-0 grid h-full min-h-56 w-max list-none auto-cols-[min(22rem,80vw)] grid-flow-col grid-rows-[1fr_auto_auto] p-0 lg:min-h-96 lg:w-full lg:auto-cols-fr lg:group-data-[pinned]/process:w-max lg:group-data-[pinned]/process:auto-cols-[26rem]"
             >

@@ -93,10 +93,10 @@
   const wanted = () => props.active && (props.hover || !canHover.value)
 
   const step = ref(0)
-  const stage = ref<globalThis.HTMLElement | null>(null)
+  const stageEl = ref<globalThis.HTMLElement | null>(null)
 
   const frame = computed(() => FRAMES[step.value])
-  const { position } = useMockupCursor(stage, () => frame.value.cursor)
+  const { position } = useMockupCursor(stageEl, () => frame.value.cursor)
 
   const activeBucket = computed(() => BUCKETS[frame.value.hovered] ?? null)
 
@@ -151,7 +151,7 @@
     :mobile-width="380"
   >
     <div
-      ref="stage"
+      ref="stageEl"
       class="relative flex flex-col gap-(--spacing-sm) py-(--spacing-xs)"
     >
       <ShellMockupPart :order="0">

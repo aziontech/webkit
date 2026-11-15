@@ -29,17 +29,17 @@
 
   const testId = computed<string>(() => (attrs['data-testid'] as string | undefined) ?? 'data-flow')
 
-  const rootRef = ref<HTMLElement | null>(null)
-  const containerRef = ref<HTMLElement | null>(null)
-  const { paths, viewBox } = useFlowConnectors(containerRef)
+  const rootEl = ref<HTMLElement | null>(null)
+  const containerEl = ref<HTMLElement | null>(null)
+  const { paths, viewBox } = useFlowConnectors(containerEl)
 
   const overflowing = ref(false)
   const measureOverflow = () => {
-    const el = rootRef.value
+    const el = rootEl.value
     overflowing.value = !!el && el.scrollWidth > el.clientWidth + 1
   }
-  useResizeObserver(rootRef, measureOverflow)
-  useResizeObserver(containerRef, measureOverflow)
+  useResizeObserver(rootEl, measureOverflow)
+  useResizeObserver(containerEl, measureOverflow)
 
   provide(FlowInjectionKey, {
     testId,
@@ -56,7 +56,7 @@
 
 <template>
   <div
-    ref="rootRef"
+    ref="rootEl"
     v-bind="$attrs"
     role="list"
     :data-testid="testId"
@@ -64,7 +64,7 @@
     :class="outerClass"
   >
     <div
-      ref="containerRef"
+      ref="containerEl"
       :data-align="align"
       class="relative flex w-fit flex-row gap-(--spacing-xl) text-(--text-default) data-[align=center]:items-center data-[align=start]:items-start [&>[data-flow-leading]_[data-flow-port=end]]:hidden [&>[data-flow-trailing]_[data-flow-port=start]]:hidden [&_[data-flow-terminal]_[data-flow-port=start]]:hidden"
     >

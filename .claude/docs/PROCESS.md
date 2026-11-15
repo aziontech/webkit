@@ -104,7 +104,7 @@ written to `src/` before this.
 - **Body rules** — required sections present (Purpose, Usage, Props, Events, Slots,
   Tokens, Motion, Examples, Sub-components when `structure: composition`).
 - **Constraints block** — must carry the canonical bullets verbatim
-  ([`_lib/spec.mjs`](../hooks/_lib/spec.mjs) →
+  ([`lib/spec.mjs`](../hooks/lib/spec.mjs) →
   `constraintsBlockHasCanonicalBullets`); this is the anti-drift seal against inherited
   or hand-edited specs.
 - **Checksum** — `sha256(body)` stored in frontmatter. Every later stage (the
@@ -221,7 +221,7 @@ compares against [`authoring-baseline.json`](../../packages/webkit/scripts/autho
 [`test/standards/invariant.test.mjs`](../../packages/webkit/test/standards/invariant.test.mjs) asserts in CI:
 
 1. every `.claude/rules/*.md` has a registry entry in
-   [`standards.mjs`](../hooks/_lib/standards.mjs) and vice versa;
+   [`standards.mjs`](../hooks/lib/standards.mjs) and vice versa;
 2. every standard has at least one **blocking** surface (nothing advisory);
 3. every declared enforcer resolves to a real hook / eslint rule / known CI gate;
 4. hook, CI ratchet, and consumer lint import the **same** engine modules;
@@ -450,7 +450,7 @@ major ahead; `doctor` reports the resolved versions to pin.
 
 A **standard** is one `.claude/rules/<id>.md` (the human rule, written for the AI and for
 people) **plus** a registry entry in
-[`standards.mjs`](../hooks/_lib/standards.mjs) naming its blocking gates.
+[`standards.mjs`](../hooks/lib/standards.mjs) naming its blocking gates.
 Nothing is advisory: every standard blocks the merge automatically or by mandatory review,
 and the [invariant test](#the-invariant) fails CI if a rule and its gate ever drift apart.
 
@@ -558,9 +558,9 @@ a non-webkit repo can adopt the pack with one command.
 | Concern                          | Where                                                                                                                                                                                                                                                                                                                                                 |
 | -------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Rule documents (25)              | [`.claude/rules/`](../rules/) — index in its [README](../rules/README.md)                                                                                                                                                                                                                                                                             |
-| Machine registry (scope + gates) | [`.claude/hooks/_lib/standards.mjs`](../hooks/_lib/standards.mjs)                                                                                                                                                                                                                                                                                     |
+| Machine registry (scope + gates) | [`.claude/hooks/lib/standards.mjs`](../hooks/lib/standards.mjs)                                                                                                                                                                                                                                                                                     |
 | Write-time hooks                 | [`.claude/hooks/`](../hooks/) — [README](../hooks/README.md)                                                                                                                                                                                                                                                                                          |
-| Shared check engines             | [`src/eslint-plugin/lib/*.js`](../../packages/webkit/src/eslint-plugin/lib/) + [`.claude/hooks/_lib/*.mjs`](../hooks/_lib/)                                                                                                                                                                                                                                   |
+| Shared check engines             | [`src/eslint-plugin/lib/*.js`](../../packages/webkit/src/eslint-plugin/lib/) + [`.claude/hooks/lib/*.mjs`](../hooks/lib/)                                                                                                                                                                                                                                   |
 | Specs                            | [`.specs/`](../../.specs/) — template, schema, one `.md` per component                                                                                                                                                                                                                                                                                |
 | Pipeline commands & skills       | [`.claude/commands/`](../commands/) + [`.claude/skills/`](../skills/)                                                                                                                                                                                                                                                                                 |
 | CI                               | [`.github/workflows/governance.yml`](../../.github/workflows/governance.yml) + [`scripts/check-authoring.mjs`](../../packages/webkit/scripts/check-authoring.mjs)                                                                                                                                                                                     |

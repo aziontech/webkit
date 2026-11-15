@@ -5,12 +5,12 @@
 // its frontmatter + body match .claude/rules/authoring-docs.md. Blocks (exit 2) on any
 // NEW violation; pre-existing debt is grandfathered via authoring-docs-baseline.json,
 // exactly like validate-spec-compliance reads authoring-baseline.json. Same engine
-// (_lib/authoring-docs-checks.mjs) as the CI ratchet. Fail-open on any error.
+// (lib/authoring-docs-checks.mjs) as the CI ratchet. Fail-open on any error.
 
 import { readFileSync } from 'node:fs'
 import { relative, resolve, sep } from 'node:path'
 
-import { scanDoc, docFileKind } from './_lib/authoring-docs-checks.mjs'
+import { scanDoc, docFileKind } from './lib/authoring-docs-checks.mjs'
 
 const ROOT = process.cwd()
 

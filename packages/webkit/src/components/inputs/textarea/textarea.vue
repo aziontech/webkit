@@ -53,7 +53,7 @@
   const model = defineModel<string>({ default: '' })
 
   const attrs = useAttrs()
-  const textareaRef = ref<globalThis.HTMLTextAreaElement | null>(null)
+  const textareaEl = ref<globalThis.HTMLTextAreaElement | null>(null)
 
   const {
     controlId,
@@ -87,7 +87,7 @@
   const measuresHeight = ref(false)
 
   const fitHeight = () => {
-    const field = textareaRef.value
+    const field = textareaEl.value
     if (!field || !measuresHeight.value || !props.autoResize) return
     field.style.height = 'auto'
     field.style.height = `${field.scrollHeight + field.offsetHeight - field.clientHeight}px`
@@ -110,20 +110,20 @@
     return rest
   })
 
-  const handleInput = (event: globalThis.Event) => {
+  const onInput = (event: globalThis.Event) => {
     const target = event.target as globalThis.HTMLTextAreaElement
     model.value = target.value
   }
 
   defineExpose({
     /** Moves focus to the native field. */
-    focus: (): void => textareaRef.value?.focus()
+    focus: (): void => textareaEl.value?.focus()
   })
 </script>
 
 <template>
   <textarea
-    ref="textareaRef"
+    ref="textareaEl"
     dir="auto"
     v-bind="passthroughAttrs"
     :id="controlId"
@@ -149,6 +149,6 @@
     :data-max-rows="maxRows"
     class="relative block min-w-0 min-h-[80px] px-(--spacing-sm) py-(--spacing-sm) rounded-(--shape-control) border border-(--border-input) bg-(--bg-surface) text-body-xs text-(--text-default) data-[monospace]:text-body-code-sm placeholder:text-(--text-muted) transition-colors duration-150 ease-out motion-reduce:transition-none [&:not(:focus):not([data-disabled]):not([data-readonly])]:hover:border-(--border-strong) focus:outline-none focus-visible:outline-none focus:ring-2 focus:ring-(--ring-color) focus:ring-offset-2 focus:ring-offset-(--bg-canvas) data-[invalid]:border-(--danger-border) data-[required]:border-(--warning-border) data-[disabled]:bg-(--bg-disabled) data-[disabled]:text-(--text-disabled) data-[disabled]:placeholder:text-(--text-disabled) data-[disabled]:cursor-not-allowed data-[disabled]:hover:border-(--border-input) data-[disabled]:focus:ring-0 data-[disabled]:focus:ring-offset-0 data-[readonly]:cursor-default data-[resize=vertical]:resize-y data-[resize=horizontal]:resize-x data-[resize=both]:resize data-[resize=none]:resize-none data-[auto-resize]:field-sizing-content data-[auto-resize]:min-h-[calc(var(--textarea-min-rows)*1lh+var(--spacing-sm)*2+2px)] data-[max-rows]:max-h-[calc(var(--textarea-max-rows)*1lh+var(--spacing-sm)*2+2px)] data-[max-rows]:overflow-y-auto"
     :class="attrs.class"
-    @input="handleInput"
+    @input="onInput"
   />
 </template>

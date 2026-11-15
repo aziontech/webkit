@@ -14,7 +14,7 @@ One page to **see every pattern** you need, whether you are:
 Everything here is **enforced** — automatically (lint / CI) or by mandatory review — so the
 pattern is the path of least resistance, not a checklist you have to remember. The machine-
 readable source of these standards (and their `scope`) is
-[`.claude/hooks/_lib/standards.mjs`](../../../.claude/hooks/_lib/standards.mjs); each rule
+[`.claude/hooks/lib/standards.mjs`](../../../.claude/hooks/lib/standards.mjs); each rule
 lives in [`.claude/rules/`](../../../.claude/rules/).
 
 > **General vs. webkit.** The patterns in **Part A** are `scope: general` — they ship to your

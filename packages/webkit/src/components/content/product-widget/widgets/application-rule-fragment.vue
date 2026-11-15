@@ -118,12 +118,12 @@
 
   const step = ref(0)
   const goingBack = ref(false)
-  const stage = ref<globalThis.HTMLElement | null>(null)
+  const stageEl = ref<globalThis.HTMLElement | null>(null)
 
   const frame = computed(() => FRAMES[step.value])
   const pressed = computed(() => frame.value.pressed && !goingBack.value)
   const variable = computed(() => VARIABLE.slice(0, frame.value.variable))
-  const { position } = useMockupCursor(stage, () => frame.value.cursor)
+  const { position } = useMockupCursor(stageEl, () => frame.value.cursor)
   const argument = computed(() => ARGUMENT.slice(0, frame.value.argument))
 
   let timer: ReturnType<typeof globalThis.setTimeout> | null = null
@@ -170,7 +170,7 @@
     :mobile-width="380"
   >
     <div
-      ref="stage"
+      ref="stageEl"
       class="relative flex h-full flex-col gap-(--spacing-md) py-(--spacing-xs)"
     >
       <div class="flex flex-col">

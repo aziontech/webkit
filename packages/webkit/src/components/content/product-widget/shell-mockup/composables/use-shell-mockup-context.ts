@@ -1,9 +1,9 @@
 import { inject } from 'vue'
 
-import { SHELL_MOCKUP_KEY, type ShellMockupContext } from '../injection-key'
+import { type ShellMockupContext, ShellMockupInjectionKey } from '../injection-key'
 
 export function useShellMockupContext(): ShellMockupContext {
-  const context = inject(SHELL_MOCKUP_KEY, null)
+  const context = inject(ShellMockupInjectionKey, null)
 
   if (!context) {
     throw new Error('useShellMockupContext must be used within ShellMockup.')

@@ -32,6 +32,5 @@ export interface ConsoleLayoutTrails {
 
 export const ConsoleLayoutInjectionKey: InjectionKey<ConsoleLayoutContext> = Symbol('ConsoleLayout')
 
-export const ConsoleLayoutTrailsKey: InjectionKey<ConsoleLayoutTrails> = Symbol(
-  'ConsoleLayoutBreadcrumbs'
-)
+export const ConsoleLayoutTrailsInjectionKey: InjectionKey<ConsoleLayoutTrails> =
+  Symbol('ConsoleLayoutTrails')

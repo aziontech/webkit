@@ -603,11 +603,11 @@
   })
 
   const sessionNotice = ref('')
-  const sessionStrip = ref<HTMLElement | null>(null)
+  const sessionStripEl = ref<HTMLElement | null>(null)
 
   const focusSessionTab = async (id: string) => {
     await nextTick()
-    sessionStrip.value?.querySelector<HTMLElement>(`[data-testid="session-tab-${id}"]`)?.focus()
+    sessionStripEl.value?.querySelector<HTMLElement>(`[data-testid="session-tab-${id}"]`)?.focus()
   }
 
   const newSession = () => {
@@ -661,11 +661,11 @@
   const renamingId = ref('')
   const renameDraft = ref('')
   const renameBox = ref({ left: 0, width: 0 })
-  const renameInput = ref<{ $el: HTMLElement } | null>(null)
+  const renameInputEl = ref<{ $el: HTMLElement } | null>(null)
 
   const startRename = (id: string) => {
     const session = sessions.value.find((entry) => entry.id === id)
-    const strip = sessionStrip.value
+    const strip = sessionStripEl.value
     const tab = strip?.querySelector(`[data-testid="session-tab-${id}"]`)
     if (!session || !strip || !tab) return
     const stripBox = strip.getBoundingClientRect()
@@ -675,7 +675,7 @@
     renamingId.value = id
     requestAnimationFrame(() =>
       requestAnimationFrame(() => {
-        const input = renameInput.value?.$el?.querySelector('input') ?? null
+        const input = renameInputEl.value?.$el?.querySelector('input') ?? null
         input?.focus()
         input?.select()
       })
@@ -777,8 +777,8 @@
     }, 700)
   }
 
-  const tableRef = ref<TableExposed<EventRecord> | null>(null)
-  const exportCsv = () => tableRef.value?.exportCsv({ filename: 'events.csv' })
+  const tableEl = ref<TableExposed<EventRecord> | null>(null)
+  const exportCsv = () => tableEl.value?.exportCsv({ filename: 'events.csv' })
 
   const matchedEvents = computed(() => searchEvents(filteredEvents.value, search.value))
 
@@ -1124,7 +1124,7 @@
     class="flex h-dvh min-h-0 flex-col"
   >
     <section
-      ref="sessionStrip"
+      ref="sessionStripEl"
       aria-label="Investigations"
       class="relative flex shrink-0 flex-col gap-(--spacing-2xs) border-b border-(--border-default) px-(--spacing-lg) pt-(--spacing-xs)"
       data-testid="session-strip"
@@ -1198,7 +1198,7 @@
         :style="{ left: `${renameBox.left}px`, width: `${Math.max(renameBox.width, 160)}px` }"
       >
         <Input
-          ref="renameInput"
+          ref="renameInputEl"
           v-model="renameDraft"
           size="small"
           aria-label="Investigation name"
@@ -1268,7 +1268,7 @@
               icon="ai ai-download"
               kind="outlined"
               size="medium"
-              :disabled="!tableRef"
+              :disabled="!tableEl"
               aria-label="Download CSV"
               data-testid="export-button"
               @click="exportCsv"
@@ -1627,7 +1627,7 @@
               <section class="flex min-h-0 min-w-0 flex-1 flex-col">
                 <div class="flex min-h-0 flex-1">
                   <DataTable
-                    ref="tableRef"
+                    ref="tableEl"
                     v-model:pagination="pagination"
                     :data="matchedEvents"
                     :columns="columns"

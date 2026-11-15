@@ -29,7 +29,7 @@
   }
 
   const attrs = useAttrs()
-  const root = ref<globalThis.HTMLElement | null>(null)
+  const rootEl = ref<globalThis.HTMLElement | null>(null)
 
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? 'content-accordion-item'
@@ -54,7 +54,7 @@
       get disabled() {
         return props.disabled
       },
-      el: root
+      el: rootEl
     })
   })
 
@@ -65,7 +65,7 @@
 
 <template>
   <div
-    ref="root"
+    ref="rootEl"
     v-bind="$attrs"
     :data-testid="testId"
     :data-state="open ? 'open' : 'closed'"

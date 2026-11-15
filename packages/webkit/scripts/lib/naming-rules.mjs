@@ -6,14 +6,14 @@ import {
   checkEventVocabulary,
   checkPropVocabulary,
   checkSlotVocabulary
-} from '../../../../.claude/hooks/_lib/prop-vocabulary.mjs'
+} from '../../../../.claude/hooks/lib/prop-vocabulary.mjs'
 import {
   getSection,
   parseTable,
   parseTable2,
   parseVueSfc,
   resolveTypeUnion
-} from '../../../../.claude/hooks/_lib/spec.mjs'
+} from '../../../../.claude/hooks/lib/spec.mjs'
 import { checkSubpaths, checkSynonyms, retiredNames } from './naming.mjs'
 
 export const NAMING_STAGED_BLOCKS = false
@@ -1434,7 +1434,7 @@ export function checkToolingName(rel) {
           'tooling-name',
           rel,
           1,
-          `hook "${name}.mjs" must be ${HOOK_VERBS.map((h) => `${h}-<x>`).join(' / ')} (a data registry belongs in _lib/) (${RULE_DOC}).`
+          `hook "${name}.mjs" must be ${HOOK_VERBS.map((h) => `${h}-<x>`).join(' / ')} (a data registry belongs in lib/) (${RULE_DOC}).`
         )
       )
   }

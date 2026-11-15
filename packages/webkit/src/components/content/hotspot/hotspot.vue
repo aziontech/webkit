@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, nextTick, onBeforeUnmount, onMounted, ref, useAttrs, watch } from 'vue'
 
-  import { useTranslate } from '../../../composables/use-locale/use-translate'
+  import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../i18n/messages/en'
   import Button from '../../actions/button/button.vue'
   import Popover from '../../overlay/popover/popover.vue'
@@ -12,7 +12,7 @@
   import PopoverHeader from '../../overlay/popover/popover-header/popover-header.vue'
   import PopoverTitle from '../../overlay/popover/popover-title/popover-title.vue'
   import PopoverTrigger from '../../overlay/popover/popover-trigger/popover-trigger.vue'
-  import { useOptionalTutorialContext } from '../tutorial-panel/composables/use-tutorial-context'
+  import { useOptionalTutorialPanelContext } from '../tutorial-panel/composables/use-tutorial-panel-context'
 
   defineOptions({
     name: 'Hotspot',
@@ -40,7 +40,7 @@
 
   const attrs = useAttrs()
   const { t } = useTranslate({ hotspot: en.hotspot })
-  const context = useOptionalTutorialContext()
+  const context = useOptionalTutorialPanelContext()
 
   const testId = computed<string>(
     () => (attrs['data-testid'] as string | undefined) ?? 'content-hotspot'
@@ -64,8 +64,8 @@
     return context?.active.value?.tasks[entry.value.taskIndex]?.title ?? ''
   })
 
-  const marker = ref<globalThis.HTMLElement | null>(null)
-  const body = ref<globalThis.HTMLElement | null>(null)
+  const markerEl = ref<globalThis.HTMLElement | null>(null)
+  const bodyEl = ref<globalThis.HTMLElement | null>(null)
 
   const setOpen = (value: boolean) => {
     if (!context || !entry.value) return
@@ -76,8 +76,8 @@
   const reveal = async () => {
     await nextTick()
     const reduce = globalThis.matchMedia?.('(prefers-reduced-motion: reduce)').matches
-    marker.value?.scrollIntoView?.({ block: 'nearest', behavior: reduce ? 'auto' : 'smooth' })
-    body.value?.closest<globalThis.HTMLElement>('[role="dialog"]')?.focus({ preventScroll: true })
+    markerEl.value?.scrollIntoView?.({ block: 'nearest', behavior: reduce ? 'auto' : 'smooth' })
+    bodyEl.value?.closest<globalThis.HTMLElement>('[role="dialog"]')?.focus({ preventScroll: true })
   }
 
   watch(
@@ -113,7 +113,7 @@
     >
       <PopoverTrigger :data-testid="`${testId}__trigger`">
         <button
-          ref="marker"
+          ref="markerEl"
           type="button"
           :aria-label="t('hotspot.label', { title: entry.title })"
           :data-testid="`${testId}__marker`"
@@ -133,7 +133,7 @@
       </PopoverTrigger>
       <PopoverContent>
         <div
-          ref="body"
+          ref="bodyEl"
           :data-testid="`${testId}__step`"
           class="flex flex-col"
         >

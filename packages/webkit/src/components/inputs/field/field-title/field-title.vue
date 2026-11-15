@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, inject, onBeforeUnmount, useAttrs, useId } from 'vue'
 
-  import { fieldContextKey } from '../injection-key'
+  import { FieldInjectionKey } from '../injection-key'
 
   defineOptions({
     name: 'FieldTitle',
@@ -12,7 +12,7 @@
     default(): unknown
   }>()
 
-  const field = inject(fieldContextKey, null)
+  const field = inject(FieldInjectionKey, null)
   const attrs = useAttrs()
   const generatedId = `field-title-${useId()}`
 

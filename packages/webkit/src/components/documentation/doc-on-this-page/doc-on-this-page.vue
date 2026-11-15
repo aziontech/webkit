@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, nextTick, onBeforeUnmount, onMounted, ref, useAttrs, watch } from 'vue'
 
-  import { useTranslate } from '../../../composables/use-locale/use-translate'
+  import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../i18n/messages/en'
   import { buildRail, measureRail, RAIL_INDENT, RAIL_STROKE } from './toc-rail'
 
@@ -73,9 +73,9 @@
 
   const isExternal = (href: string) => /^[a-z]+:/i.test(href) || href.startsWith('//')
 
-  const listRef = ref<HTMLElement | null>(null)
-  const probeRef = ref<SVGPathElement | null>(null)
-  const entryRefs = ref<HTMLElement[]>([])
+  const listEl = ref<HTMLElement | null>(null)
+  const probeEl = ref<SVGPathElement | null>(null)
+  const entryEls = ref<HTMLElement[]>([])
 
   const highlight = ref({ top: 0, left: 0, width: 0, height: 0 })
   const highlighting = ref(false)
@@ -90,8 +90,8 @@
   }))
 
   function moveHighlight(index: number) {
-    const list = listRef.value
-    const anchor = entryRefs.value[index]?.querySelector('a')
+    const list = listEl.value
+    const anchor = entryEls.value[index]?.querySelector('a')
     if (!list || !anchor) return
     const listBox = list.getBoundingClientRect()
     const box = anchor.getBoundingClientRect()
@@ -105,9 +105,9 @@
     highlightIndex.value = index
   }
 
-  function handleListLeave(event: PointerEvent) {
+  function onListLeave(event: PointerEvent) {
     const related = event.relatedTarget as Node | null
-    if (related && listRef.value?.contains(related)) return
+    if (related && listEl.value?.contains(related)) return
     highlighting.value = false
   }
 
@@ -134,15 +134,15 @@
   })
 
   function remeasure() {
-    const list = listRef.value
-    const probe = probeRef.value
+    const list = listEl.value
+    const probe = probeEl.value
     if (!list || !probe || !props.items.length) {
       path.value = ''
       return
     }
     const listTop = list.getBoundingClientRect().top
-    entryRefs.value.length = props.items.length
-    const bands = entryRefs.value.filter(Boolean).map((element, index) => {
+    entryEls.value.length = props.items.length
+    const bands = entryEls.value.filter(Boolean).map((element, index) => {
       const box = element.getBoundingClientRect()
       return {
         top: box.top - listTop,
@@ -166,9 +166,9 @@
   onMounted(async () => {
     await nextTick()
     remeasure()
-    if (typeof globalThis.ResizeObserver === 'function' && listRef.value) {
+    if (typeof globalThis.ResizeObserver === 'function' && listEl.value) {
       observer = new globalThis.ResizeObserver(() => remeasure())
-      observer.observe(listRef.value)
+      observer.observe(listEl.value)
     }
   })
 
@@ -209,7 +209,7 @@
           aria-hidden="true"
         >
           <path
-            ref="probeRef"
+            ref="probeEl"
             fill="none"
             stroke="none"
           />
@@ -236,16 +236,16 @@
         />
 
         <ul
-          ref="listRef"
+          ref="listEl"
           class="relative m-0 flex list-none flex-col p-0 ps-[17px]"
-          @pointerleave="handleListLeave"
+          @pointerleave="onListLeave"
         >
           <li
             v-for="(item, index) in items"
             :key="item.id"
             :ref="
               (element) => {
-                if (element) entryRefs[index] = element as HTMLElement
+                if (element) entryEls[index] = element as HTMLElement
               }
             "
             :data-depth="item.depth"

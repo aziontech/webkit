@@ -62,13 +62,13 @@
     tabindex: tabindex.value
   }))
 
-  const actionsRef = ref<HTMLElement | null>(null)
+  const actionsEl = ref<HTMLElement | null>(null)
 
   const ACTION_FOCUSABLE =
     'a[href], button, input, select, textarea, [tabindex]:not([tabindex="-1"]), [data-tree-parked]'
 
   function syncActionTabOrder() {
-    const region = actionsRef.value
+    const region = actionsEl.value
     if (!region) return
     const isStop = !grid.value && tabindex.value === 0
     for (const el of Array.from(region.querySelectorAll<HTMLElement>(ACTION_FOCUSABLE))) {
@@ -188,7 +188,7 @@
       </span>
       <span
         v-if="actionable"
-        ref="actionsRef"
+        ref="actionsEl"
         :role="grid ? 'gridcell' : undefined"
         data-tree-actions
         class="ms-auto flex shrink-0 items-center gap-(--spacing-2xs)"

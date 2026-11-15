@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { type ComponentPublicInstance, computed, useAttrs } from 'vue'
 
-  import { useTranslate } from '../../../../composables/use-locale/use-translate'
+  import { useTranslate } from '../../../../composables/use-translate'
   import * as en from '../../../../i18n/messages/en'
   import { cn } from '../../../../utils/cn'
   import { useSidebarMenuContext } from '../composables/use-sidebar-menu-context'

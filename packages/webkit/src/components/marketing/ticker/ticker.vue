@@ -119,7 +119,7 @@
     :data-size="size"
     :data-kind="kind"
     :data-content="isItems ? 'items' : 'marks'"
-    class="group/strip flex flex-col items-center gap-(--spacing-xl) data-[kind=band]:w-full data-[kind=band]:bg-(--bg-canvas) data-[kind=band]:py-(--spacing-xl) data-[size=medium]:[--brand-cell:150px] data-[size=medium]:[--brand-mark:32px] data-[size=small]:[--brand-cell:120px] data-[size=small]:[--brand-mark:24px] md:data-[size=medium]:[--brand-cell:200px] md:data-[size=medium]:[--brand-mark:40px] lg:data-[size=medium]:[--brand-cell:240px] lg:data-[size=medium]:[--brand-mark:48px]"
+    class="group/strip flex flex-col items-center gap-(--spacing-xl) data-[kind=band]:w-full data-[kind=band]:bg-(--bg-canvas) data-[kind=band]:py-(--spacing-xl) data-[size=medium]:[--ticker-brand-cell:150px] data-[size=medium]:[--ticker-brand-mark:32px] data-[size=small]:[--ticker-brand-cell:120px] data-[size=small]:[--ticker-brand-mark:24px] md:data-[size=medium]:[--ticker-brand-cell:200px] md:data-[size=medium]:[--ticker-brand-mark:40px] lg:data-[size=medium]:[--ticker-brand-cell:240px] lg:data-[size=medium]:[--ticker-brand-mark:48px]"
   >
     <Overline
       v-if="label"
@@ -161,13 +161,13 @@
           v-for="mark in resolved"
           :key="`${copy}-${mark.name}`"
           :title="mark.label"
-          class="flex w-(--brand-cell) shrink-0 items-center group-data-[size=small]/strip:w-auto justify-center text-(--text-default) opacity-70 transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-100 motion-reduce:transition-none"
+          class="flex w-(--ticker-brand-cell) shrink-0 items-center group-data-[size=small]/strip:w-auto justify-center text-(--text-default) opacity-70 transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-100 motion-reduce:transition-none"
         >
           <component
             :is="mark.art"
             v-if="mark.art"
             :data-mark="mark.name"
-            class="h-(--brand-mark) w-auto max-w-(--brand-cell) object-contain"
+            class="h-(--ticker-brand-mark) w-auto max-w-(--ticker-brand-cell) object-contain"
           />
           <span
             v-else

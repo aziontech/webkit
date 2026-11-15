@@ -189,7 +189,7 @@
   const files = ref<Record<string, File>>({})
   const errors = ref<Record<string, string>>({})
   const confirming = ref(props.submitted)
-  const fileInputs = ref<Record<string, HTMLInputElement | null>>({})
+  const fileInputEls = ref<Record<string, HTMLInputElement | null>>({})
 
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? 'sections-job-posting'
@@ -217,7 +217,7 @@
   }
 
   const syncInput = (field: JobPostingField, file: File | null) => {
-    const input = fileInputs.value[field.name]
+    const input = fileInputEls.value[field.name]
     if (!input || typeof DataTransfer === 'undefined') return
     const transfer = new DataTransfer()
     if (file) transfer.items.add(file)
@@ -234,10 +234,10 @@
   }
 
   const bindFileInput = (field: JobPostingField, element: unknown) => {
-    fileInputs.value[field.name] = element instanceof HTMLInputElement ? element : null
+    fileInputEls.value[field.name] = element instanceof HTMLInputElement ? element : null
   }
 
-  const browse = (field: JobPostingField) => fileInputs.value[field.name]?.click()
+  const browse = (field: JobPostingField) => fileInputEls.value[field.name]?.click()
 
   const onFilePick = (field: JobPostingField, event: Event) => {
     const input = event.target as HTMLInputElement

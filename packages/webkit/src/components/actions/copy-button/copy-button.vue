@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, defineAsyncComponent, onBeforeUnmount, ref, useAttrs } from 'vue'
 
-  import { useTranslate } from '../../../composables/use-locale/use-translate'
+  import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../i18n/messages/en'
   import Tooltip from '../../overlay/tooltip/tooltip.vue'
   import type { IconButtonKind, IconButtonSize } from '../icon-button/icon-button.vue'
@@ -44,7 +44,7 @@
 
   const CopyButtonFallback = defineAsyncComponent(() => import('./copy-button-fallback.vue'))
 
-  const root = ref<globalThis.HTMLElement | null>(null)
+  const rootEl = ref<globalThis.HTMLElement | null>(null)
   const fallbackRequested = ref(false)
   const fallbackOpen = ref(false)
 
@@ -63,7 +63,7 @@
       : props.ariaLabel || t('copyButton.copy')
   )
 
-  async function handleCopy(event: MouseEvent) {
+  async function onCopy(event: MouseEvent) {
     event.stopPropagation()
 
     if (props.disabled || !props.value || typeof globalThis.navigator === 'undefined') return
@@ -99,7 +99,7 @@
 <template>
   <span
     v-bind="$attrs"
-    ref="root"
+    ref="rootEl"
     class="inline-flex"
     :data-state="copied ? 'copied' : 'default'"
     :data-disabled="disabled ? '' : undefined"
@@ -117,7 +117,7 @@
         :size="size"
         :disabled="disabled"
         iconTransition
-        @click="handleCopy"
+        @click="onCopy"
       />
     </Tooltip>
     <span
@@ -130,7 +130,7 @@
       v-if="fallbackRequested"
       v-model:open="fallbackOpen"
       :value="value"
-      :anchor="root?.querySelector('button') ?? root"
+      :anchor="rootEl?.querySelector('button') ?? rootEl"
       :test-id="testId"
     />
   </span>

@@ -35,8 +35,8 @@
 
   const isOpen = computed(() => sub.isOpen.value)
 
-  function setRowRef(el: unknown) {
-    sub.triggerRef.value = el instanceof HTMLElement ? el : null
+  function setRowEl(el: unknown) {
+    sub.triggerEl.value = el instanceof HTMLElement ? el : null
   }
 
   function onPointerenter() {
@@ -63,7 +63,7 @@
   }
 
   onBeforeUnmount(() => {
-    sub.triggerRef.value = null
+    sub.triggerEl.value = null
   })
 </script>
 
@@ -71,7 +71,7 @@
   <div
     v-bind="attrs"
     :id="sub.triggerId"
-    :ref="setRowRef"
+    :ref="setRowEl"
     role="menuitem"
     aria-haspopup="menu"
     :aria-expanded="isOpen ? 'true' : 'false'"

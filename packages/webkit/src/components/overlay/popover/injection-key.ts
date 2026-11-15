@@ -40,9 +40,9 @@ export interface PopoverContext {
   titleId: string
   descriptionId: string
   /** Mutable refs the sub-components attach DOM elements to. */
-  triggerRef: Ref<globalThis.HTMLElement | null>
+  triggerEl: Ref<globalThis.HTMLElement | null>
   /** The floating panel element. `Popover.Content` renders the panel and assigns this. */
-  panelRef: Ref<globalThis.HTMLElement | null>
+  panelEl: Ref<globalThis.HTMLElement | null>
   /** Drives open state. Sub-components never call defineEmits directly. */
   setOpen: (value: boolean) => void
   /** Returns focus to the trigger element (used on Esc and Popover.Close). */
@@ -59,7 +59,7 @@ export interface PopoverContext {
   hasDescription: Ref<boolean>
 }
 
-export const PopoverInjectionKey: InjectionKey<PopoverContext> = Symbol('PopoverContext')
+export const PopoverInjectionKey: InjectionKey<PopoverContext> = Symbol('Popover')
 
 export function usePopoverContext(): PopoverContext {
   const ctx = inject(PopoverInjectionKey)

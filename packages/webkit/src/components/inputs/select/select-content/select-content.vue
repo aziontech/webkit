@@ -11,19 +11,19 @@
     type VNodeArrayChildren
   } from 'vue'
 
-  import LazyNodes from '../../../../composables/use-lazy-chunks/lazy-nodes'
-  import { useListboxContent } from '../../../../composables/use-listbox'
-  import { usePortalLocale } from '../../../../composables/use-locale/use-translate'
+  import LazyNodes from '../../../../composables/use-lazy-chunks/lib/lazy-nodes'
+  import { useListboxContent } from '../../../../composables/use-listbox-content'
   import { usePlacement } from '../../../../composables/use-placement'
+  import { usePortalLocale } from '../../../../composables/use-translate'
   import ScrollArea from '../../../layout/scroll-area/scroll-area.vue'
-  import { selectContextKey } from '../injection-key'
+  import { SelectInjectionKey } from '../injection-key'
 
   defineOptions({
     name: 'SelectContent',
     inheritAttrs: false
   })
 
-  const ctx = inject(selectContextKey)
+  const ctx = inject(SelectInjectionKey)
   if (!ctx) {
     throw new Error('SelectContent must be used inside <Select>.')
   }
@@ -57,12 +57,12 @@
     () => (attrs['data-testid'] as string | undefined) ?? 'input-select-content'
   )
 
-  const root = ref<globalThis.HTMLDivElement | null>(null)
+  const rootEl = ref<globalThis.HTMLDivElement | null>(null)
   const lazy = ref<{ revealAll: () => void; hasHidden: () => boolean } | null>(null)
 
   const { panelStyle } = usePlacement({
-    triggerRef: ctx.triggerRef,
-    panelRef: root,
+    triggerRef: ctx.triggerEl,
+    panelRef: rootEl,
     isOpen: ctx.open,
     placement: 'bottom-start',
     offset: 4,
@@ -70,11 +70,11 @@
   })
 
   const { onKeydown } = useListboxContent({
-    root,
+    root: rootEl,
     lazy,
     open: ctx.open,
     setOpen: ctx.setOpen,
-    triggerRef: ctx.triggerRef,
+    triggerEl: ctx.triggerEl,
     pendingFocus: ctx.pendingFocus,
     textFieldSelector: 'input:not([type="checkbox"]):not([type="radio"]), textarea'
   })
@@ -83,7 +83,7 @@
   const listLabelledby = computed(() =>
     listLabel.value
       ? undefined
-      : (ctx.ariaLabelledby.value ?? ctx.labelledBy.value ?? ctx.triggerRef.value?.id ?? undefined)
+      : (ctx.ariaLabelledby.value ?? ctx.labelledBy.value ?? ctx.triggerEl.value?.id ?? undefined)
   )
 
   const portalLocale = usePortalLocale()
@@ -99,7 +99,7 @@
         v-if="ctx.open.value"
         :dir="portalLocale.dir"
         :lang="portalLocale.lang"
-        ref="root"
+        ref="rootEl"
         v-bind="$attrs"
         :data-testid="testId"
         :data-state="ctx.open.value ? 'open' : 'closed'"

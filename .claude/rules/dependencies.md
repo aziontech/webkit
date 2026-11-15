@@ -19,7 +19,7 @@ The webkit layer **must not** depend on external libraries for positioning, anch
 ## Allowed (already installed, used as building blocks)
 
 - **Vue 3** primitives — `<Teleport>`, `<Transition>`, `<TransitionGroup>`, `defineModel`, `provide`/`inject`.
-- **`clsx` + `tailwind-merge`** via [`@aziontech/webkit/utils/cn`](../../packages/webkit/src/utils/cn.js) — class merging only.
+- **`clsx` + `tailwind-merge`** via [`@aziontech/webkit/utils/cn`](../../packages/webkit/src/utils/cn.ts) — class merging only.
 - **`@vueuse/core`** — small reactive utilities (e.g. `useElementVisibility`). **Not** `@vueuse/motion`.
 - **VeeValidate** — only inside `core/form/*` per existing pattern.
 - **`@tanstack/vue-table`** — headless table state engine (sorting, pagination, row selection, column models) **only** inside the `data/data-table` component (the data-driven table, `data` + `columns`). The hand-composed `data/table` root and its parts never import it, so a composed table does not bundle it. Granted via the **Exceptions** process below. This is `@tanstack/vue-table` / `@tanstack/table-core` (headless logic) — **not** `@tanstack/virtual` (scroll virtualization), which remains forbidden in the table above.

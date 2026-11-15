@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, useAttrs, useId } from 'vue'
 
-  import { useTranslate } from '../../../composables/use-locale/use-translate'
+  import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../i18n/messages/en'
   import type { StatusIndicatorSeverity } from '../../feedback/status-indicator/status-indicator.vue'
   import StatusIndicator from '../../feedback/status-indicator/status-indicator.vue'

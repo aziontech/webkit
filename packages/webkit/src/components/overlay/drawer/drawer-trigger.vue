@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, inject, onBeforeUnmount, useAttrs } from 'vue'
 
-  import { TriggerHost } from '../../../utils/trigger-host'
+  import { TriggerHost } from '../parts/trigger-host'
   import { DrawerInjectionKey } from './injection-key'
 
   defineOptions({
@@ -34,11 +34,11 @@
   }
 
   function onControl(el: globalThis.HTMLElement | null) {
-    if (ctx) ctx.triggerRef.value = el
+    if (ctx) ctx.triggerEl.value = el
   }
 
   onBeforeUnmount(() => {
-    if (ctx) ctx.triggerRef.value = null
+    if (ctx) ctx.triggerEl.value = null
   })
 </script>
 

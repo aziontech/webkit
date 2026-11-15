@@ -18,7 +18,7 @@
   ])
   const expanded = ref(['src'])
   const opened = ref('')
-  const tree = ref(null)
+  const treeEl = ref(null)
 
   function relabel(nodes, id, label) {
     return nodes.map((node) => {
@@ -40,7 +40,7 @@
 <template>
   <div class="flex max-w-(--container-sm) flex-col gap-(--spacing-md)">
     <Tree
-      ref="tree"
+      ref="treeEl"
       v-model:expanded="expanded"
       :items="items"
       editable
@@ -54,7 +54,7 @@
           kind="transparent"
           size="small"
           :aria-label="`Rename ${item.label}`"
-          @click="tree?.startRename(item.id)"
+          @click="treeEl?.startRename(item.id)"
         />
       </template>
     </Tree>

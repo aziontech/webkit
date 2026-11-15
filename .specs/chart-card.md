@@ -3,7 +3,7 @@ name: chart-card
 category: chart
 structure: composition
 status: implemented
-checksum: caa52d11bd470f321a8314194eb9cd8b671ce30893f1f2e4e0c5ec94b60e968d
+checksum: a03ae77f78fd16476c4774fe50ea054a6062dfde4f98ae89381741bb7a4ee11b
 spec_version: 5
 created: 2026-10-20
 last_updated: 2026-11-15
@@ -226,7 +226,7 @@ A pointer resize follows the pointer 1:1 with no transition; it is direct manipu
 - Layout: logical utilities only (`ms-`/`me-`, `ps-`/`pe-`, `start-`/`end-`, `text-start`), so the layout mirrors under `dir="rtl"`.
 - Icons: the drag and resize grips are symmetric and do not mirror.
 - Keyboard: the drag handle moves the card one slot with the arrow keys and the resize handle grows (`ArrowRight`) or shrinks (`ArrowLeft`) the column span; both swap under `dir="rtl"` (`logicalArrowKey`).
-- Pointer: the resize delta is inverted under `rtl` (`useDirection(handleRef)`), so dragging toward the end edge widens the card.
+- Pointer: the resize delta is inverted under `rtl` (`useDirection(handleEl)`), so dragging toward the end edge widens the card.
 - User data: chart values keep the number format of the locale.
 
 ## Examples

@@ -2,7 +2,7 @@
   import { computed, onMounted, onScopeDispose, ref, useAttrs } from 'vue'
 
   import { clientBrand } from '../../../assets/logos/clients/brands'
-  import { useTranslate } from '../../../composables/use-locale/use-translate'
+  import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../i18n/messages/en'
   import FrameBox from '../../layout/frame-box/frame-box.vue'
   import LogoWall from '../../marketing/logo-wall/logo-wall.vue'
@@ -86,8 +86,9 @@
   const faceStyle = (cell: ClientMosaicColumnsCell): Record<string, string> => {
     const brand = cell.brand ?? clientBrand(cell.name) ?? NO_BRAND
     return {
-      '--wall-face': `radial-gradient(354px 354px at -15% -15%, ${brand.glow}, transparent 70%), radial-gradient(354px 354px at 45% 115%, ${brand.glow}, transparent 70%), ${brand.base}`,
-      '--wall-ink': brand.ink === 'dark' ? 'var(--color-base-black)' : 'var(--color-base-white)'
+      '--client-mosaic-columns-wall-face': `radial-gradient(354px 354px at -15% -15%, ${brand.glow}, transparent 70%), radial-gradient(354px 354px at 45% 115%, ${brand.glow}, transparent 70%), ${brand.base}`,
+      '--client-mosaic-columns-wall-ink':
+        brand.ink === 'dark' ? 'var(--color-base-black)' : 'var(--color-base-white)'
     }
   }
 
@@ -95,7 +96,7 @@
   const story = computed(() => props.linkLabel || t('customerSpotlight.story'))
 
   const active = ref(-1)
-  const panels = ref<HTMLElement[]>([])
+  const panelEls = ref<HTMLElement[]>([])
   const panelHeights = ref<number[]>([])
 
   const glowOf = (color: string, at: string, radius: string) =>
@@ -127,11 +128,11 @@
 
   let observer: ResizeObserver | undefined
   onMounted(() => {
-    if (!panels.value.length) return
+    if (!panelEls.value.length) return
     observer = new ResizeObserver(() => {
-      panelHeights.value = panels.value.map((panel) => panel.offsetHeight)
+      panelHeights.value = panelEls.value.map((panel) => panel.offsetHeight)
     })
-    panels.value.forEach((panel) => observer?.observe(panel))
+    panelEls.value.forEach((panel) => observer?.observe(panel))
   })
   onScopeDispose(() => observer?.disconnect())
 </script>
@@ -185,8 +186,10 @@
                 />
 
                 <div
-                  :style="{ '--panel-h': `${panelHeights[index] ?? 0}px` }"
-                  class="absolute inset-x-0 top-1/2 flex -translate-y-1/2 justify-center transition-[translate] duration-moderate-02 ease-productive-entrance motion-reduce:transition-none max-lg:-translate-y-[calc(50%+var(--panel-h)/2)] lg:group-data-[state=open]/spot:-translate-y-[calc(50%+var(--panel-h)/2)]"
+                  :style="{
+                    '--client-mosaic-columns-panel-height': `${panelHeights[index] ?? 0}px`
+                  }"
+                  class="absolute inset-x-0 top-1/2 flex -translate-y-1/2 justify-center transition-[translate] duration-moderate-02 ease-productive-entrance motion-reduce:transition-none max-lg:-translate-y-[calc(50%+var(--client-mosaic-columns-panel-height)/2)] lg:group-data-[state=open]/spot:-translate-y-[calc(50%+var(--client-mosaic-columns-panel-height)/2)]"
                 >
                   <img
                     :src="cell.logo"
@@ -198,7 +201,7 @@
                 </div>
 
                 <div
-                  ref="panels"
+                  ref="panelEls"
                   class="absolute inset-x-0 bottom-0 bg-(--bg-canvas) px-[5.625cqw] py-[6cqw] transition-[translate,opacity] duration-moderate-02 ease-productive-entrance motion-reduce:transition-none lg:group-data-[state=closed]/spot:translate-y-full lg:group-data-[state=closed]/spot:opacity-0"
                 >
                   <p class="m-0 text-body-lg text-balance text-(--text-default)">
@@ -248,7 +251,7 @@
                 :link-label="linkLabel"
                 :items="[{ src: cell.logo, alt: cell.name, href: cell.href }]"
                 :style="faceStyle(cell)"
-                class="[&_[role=list]]:grid-cols-1! [&_a]:[background:var(--wall-face)] [&_a]:[--text-default:var(--wall-ink)] group-hover/card:[&_a]:before:opacity-100 group-hover/card:[&_a>span:first-child]:-translate-y-(--spacing-sm) group-hover/card:[&_a>span:last-child]:translate-y-0 group-hover/card:[&_a>span:last-child]:opacity-100"
+                class="[&_[role=list]]:grid-cols-1! [&_a]:[background:var(--client-mosaic-columns-wall-face)] [&_a]:[--text-default:var(--client-mosaic-columns-wall-ink)] group-hover/card:[&_a]:before:opacity-100 group-hover/card:[&_a>span:first-child]:-translate-y-(--spacing-sm) group-hover/card:[&_a>span:last-child]:translate-y-0 group-hover/card:[&_a>span:last-child]:opacity-100"
               >
                 <template #mark>
                   <img

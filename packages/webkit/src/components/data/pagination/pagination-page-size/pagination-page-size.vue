@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, inject, useAttrs } from 'vue'
 
-  import { useTranslate } from '../../../../composables/use-locale/use-translate'
+  import { useTranslate } from '../../../../composables/use-translate'
   import * as en from '../../../../i18n/messages/en'
   import { PaginationInjectionKey } from '../injection-key'
 
@@ -38,7 +38,7 @@
       : [...props.options, model.value].sort((a, b) => a - b)
   )
 
-  const handleChange = (event: Event) => {
+  const onChange = (event: Event) => {
     model.value = Number((event.target as HTMLSelectElement).value)
   }
 </script>
@@ -53,7 +53,7 @@
       :value="model"
       class="h-full w-full cursor-pointer appearance-none rounded-(--shape-control) border-0 bg-transparent ps-(--spacing-sm) pe-7 text-label-sm text-(--text-muted) focus-visible:outline-none pointer-coarse:-my-2 pointer-coarse:h-11 [&>option]:bg-(--bg-surface) [&>option]:text-(--text-default)"
       :aria-label="t('pagination.pageSize')"
-      @change="handleChange"
+      @change="onChange"
     >
       <option
         v-for="opt in displayOptions"

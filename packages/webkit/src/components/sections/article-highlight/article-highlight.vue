@@ -3,7 +3,7 @@
   import { computed, nextTick, ref, useAttrs, useId, watch } from 'vue'
 
   import { eventDirection, logicalArrowKey } from '../../../composables/use-direction'
-  import { useTranslate } from '../../../composables/use-locale/use-translate'
+  import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../i18n/messages/en'
   import Button from '../../actions/button/button.vue'
   import IconButton from '../../actions/icon-button/icon-button.vue'
@@ -72,7 +72,7 @@
 
   const baseId = useId()
 
-  const wall = ref<HTMLElement | null>(null)
+  const wallEl = ref<HTMLElement | null>(null)
 
   const TICK_MS = 100
 
@@ -159,11 +159,11 @@
     elapsed.value = 0
   })
 
-  const onFocusIn = (event: FocusEvent): void => {
+  const onFocusin = (event: FocusEvent): void => {
     focusInside.value = (event.target as Element | null)?.matches(':focus-visible') ?? false
   }
 
-  const onFocusOut = (): void => {
+  const onFocusout = (): void => {
     focusInside.value = false
   }
 
@@ -172,7 +172,7 @@
     const next = ((index % count) + count) % count
     select(next)
     await nextTick()
-    wall.value?.querySelectorAll<HTMLElement>('[role="tab"]')[next]?.focus()
+    wallEl.value?.querySelectorAll<HTMLElement>('[role="tab"]')[next]?.focus()
   }
 
   const onKeydown = (event: KeyboardEvent, index: number): void => {
@@ -218,8 +218,8 @@
           class="group/highlight relative flex flex-col lg:data-[fill]:h-[calc(100dvh-var(--layout-header-height)-var(--spacing-2xl)*2)]"
           @pointerenter="pointerInside = true"
           @pointerleave="pointerInside = false"
-          @focusin="onFocusIn"
-          @focusout="onFocusOut"
+          @focusin="onFocusin"
+          @focusout="onFocusout"
         >
           <IconButton
             v-if="autoplaying"
@@ -332,7 +332,7 @@
             />
           </FrameBox>
 
-          <div ref="wall">
+          <div ref="wallEl">
             <CardGrid
               kind="frame"
               flush

@@ -3,7 +3,7 @@ import { render } from '@testing-library/vue'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
 import { expectNoA11yViolations } from '../../../test/axe'
-import { toast } from '../../feedback/toast/use-toast-store'
+import { toast } from '../../feedback/toast/composables/use-toast-store'
 import ArticleBody from './article-body.vue'
 
 const TESTID = 'sections-article-body'

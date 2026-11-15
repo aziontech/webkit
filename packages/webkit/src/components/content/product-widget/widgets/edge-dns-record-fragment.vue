@@ -110,9 +110,9 @@
   const frame = computed(() => FRAMES[step.value])
   const selected = computed(() => RECORD_TYPES[frame.value.type])
 
-  const stage = ref<globalThis.HTMLElement | null>(null)
+  const stageEl = ref<globalThis.HTMLElement | null>(null)
 
-  const { position } = useMockupCursor(stage, () => frame.value.cursor)
+  const { position } = useMockupCursor(stageEl, () => frame.value.cursor)
 
   let timer: ReturnType<typeof globalThis.setTimeout> | null = null
 
@@ -154,7 +154,7 @@
     :mobile-width="380"
   >
     <div
-      ref="stage"
+      ref="stageEl"
       class="relative"
     >
       <div class="flex flex-col gap-(--spacing-lg) py-(--spacing-xs)">

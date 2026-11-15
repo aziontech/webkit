@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
-  import { usePortalLocale } from '../../../../composables/use-locale/use-translate'
+  import { usePortalLocale } from '../../../../composables/use-translate'
   import { HOVER_CARD_FOCUSABLE, useHoverCardContext } from '../injection-key'
 
   defineOptions({
@@ -20,8 +20,8 @@
     () => (attrs['data-testid'] as string | undefined) ?? `${ctx.testId}__content`
   )
 
-  function setPanelRef(el: unknown) {
-    ctx.panelRef.value = el instanceof HTMLElement ? el : null
+  function setPanelEl(el: unknown) {
+    ctx.panelEl.value = el instanceof HTMLElement ? el : null
   }
 
   function onPointerleave(event: globalThis.PointerEvent) {
@@ -31,13 +31,13 @@
 
   function onFocusout(event: globalThis.FocusEvent) {
     const next = event.relatedTarget as globalThis.Node | null
-    if (next && (ctx.panelRef.value?.contains(next) || ctx.triggerRef.value?.contains(next))) return
+    if (next && (ctx.panelEl.value?.contains(next) || ctx.triggerEl.value?.contains(next))) return
     ctx.scheduleClose()
   }
 
   function onKeydown(event: globalThis.KeyboardEvent) {
     if (event.key !== 'Tab') return
-    const items = ctx.panelRef.value?.querySelectorAll(HOVER_CARD_FOCUSABLE) ?? []
+    const items = ctx.panelEl.value?.querySelectorAll(HOVER_CARD_FOCUSABLE) ?? []
     if (event.target !== items[event.shiftKey ? 0 : items.length - 1]) return
     if (event.shiftKey) event.preventDefault()
     ctx.focusTrigger()
@@ -56,7 +56,7 @@
         v-if="ctx.isOpen.value"
         v-bind="attrs"
         :id="ctx.contentId"
-        :ref="setPanelRef"
+        :ref="setPanelEl"
         :dir="portalLocale.dir"
         :lang="portalLocale.lang"
         :data-testid="testId"

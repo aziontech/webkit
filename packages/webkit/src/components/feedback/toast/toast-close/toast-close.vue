@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
-  import { useTranslate } from '../../../../composables/use-locale/use-translate'
+  import { useTranslate } from '../../../../composables/use-translate'
   import * as en from '../../../../i18n/messages/en'
   import IconButton from '../../../actions/icon-button/icon-button.vue'
 
@@ -20,7 +20,7 @@
     () => (attrs['data-testid'] as string | undefined) ?? 'feedback-toast__close'
   )
 
-  const handleClick = (event: MouseEvent) => emit('click', event)
+  const onClick = (event: MouseEvent) => emit('click', event)
 </script>
 
 <template>
@@ -31,6 +31,6 @@
     size="small"
     :ariaLabel="t('toast.close')"
     :data-testid="testId"
-    @click="handleClick"
+    @click="onClick"
   />
 </template>

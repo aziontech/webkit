@@ -71,7 +71,7 @@
   const attrs = useAttrs()
   const slots = useSlots()
 
-  const inputRef = ref<globalThis.HTMLInputElement | null>(null)
+  const inputEl = ref<globalThis.HTMLInputElement | null>(null)
 
   const {
     controlId,
@@ -107,21 +107,21 @@
   const hasIconLeft = () => Boolean(slots['prefix'])
   const hasIconRight = () => Boolean(slots['suffix'])
 
-  const handleInput = (event: globalThis.Event) => {
+  const onInput = (event: globalThis.Event) => {
     const target = event.target as globalThis.HTMLInputElement
     model.value = target.value
   }
 
-  const handleChromeMouseDown = (event: globalThis.MouseEvent) => {
+  const onChromeMousedown = (event: globalThis.MouseEvent) => {
     if (isDisabled.value) return
-    if (event.target === inputRef.value) return
+    if (event.target === inputEl.value) return
     event.preventDefault()
-    inputRef.value?.focus()
+    inputEl.value?.focus()
   }
 
   defineExpose({
     /** Moves focus to the native field. */
-    focus: (): void => inputRef.value?.focus()
+    focus: (): void => inputEl.value?.focus()
   })
 </script>
 
@@ -137,7 +137,7 @@
     :data-has-icon-right="hasIconRight() || null"
     class="group/input relative inline-flex items-center w-full cursor-text gap-(--spacing-xs) px-(--spacing-sm) rounded-(--shape-control) border border-(--border-input) bg-(--bg-surface) text-(--text-default) transition-colors duration-150 ease-out motion-reduce:transition-none [&:not(:focus-within):not([data-disabled]):not([data-readonly])]:hover:border-(--border-strong) focus-within:outline-none focus-within:ring-2 focus-within:ring-(--ring-color) focus-within:ring-offset-2 focus-within:ring-offset-[var(--input-ring-offset,var(--bg-canvas))] data-[size=small]:h-7 data-[size=medium]:h-8 data-[size=large]:h-10 data-[invalid]:border-(--danger-border) data-[required]:border-(--warning-border) data-[readonly]:cursor-default data-[disabled]:bg-(--bg-disabled) data-[disabled]:text-(--text-disabled) data-[disabled]:cursor-not-allowed data-[disabled]:hover:border-(--border-input) data-[disabled]:focus-within:ring-0 data-[disabled]:focus-within:ring-offset-0"
     :class="attrs.class"
-    @mousedown="handleChromeMouseDown"
+    @mousedown="onChromeMousedown"
   >
     <span
       v-if="hasIconLeft()"
@@ -148,7 +148,7 @@
     </span>
 
     <input
-      ref="inputRef"
+      ref="inputEl"
       :type="type"
       :value="model"
       :placeholder="placeholder"
@@ -166,7 +166,7 @@
       v-bind="{ ...autofillHints, ...passthroughAttrs }"
       :id="controlId"
       :aria-describedby="describedBy"
-      @input="handleInput"
+      @input="onInput"
     />
 
     <span

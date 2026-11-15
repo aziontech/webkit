@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, type ComputedRef, provide, shallowReactive, useAttrs } from 'vue'
 
-  import { multiSelectGroupContextKey } from '../injection-key'
+  import { MultiSelectGroupInjectionKey } from '../injection-key'
 
   defineOptions({
     name: 'MultiSelectGroup',
@@ -25,7 +25,7 @@
   const attrs = useAttrs()
 
   const options = shallowReactive(new Map<symbol, ComputedRef<boolean>>())
-  provide(multiSelectGroupContextKey, {
+  provide(MultiSelectGroupInjectionKey, {
     register: (id, visible) => {
       options.set(id, visible)
     },

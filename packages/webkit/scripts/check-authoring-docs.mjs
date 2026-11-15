@@ -8,7 +8,7 @@ import {
   docFileKind,
   scanDoc,
   MESSAGES
-} from '../../../.claude/hooks/_lib/authoring-docs-checks.mjs'
+} from '../../../.claude/hooks/lib/authoring-docs-checks.mjs'
 
 const SCRIPT_DIR = dirname(fileURLToPath(import.meta.url))
 const ROOT = resolve(SCRIPT_DIR, '../../..')

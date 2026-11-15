@@ -23,12 +23,12 @@ export interface DrawerContext {
   hasDescription: Readonly<Ref<boolean>>
   registerDescription: () => void
   unregisterDescription: () => void
-  triggerRef: Ref<HTMLElement | null>
+  triggerEl: Ref<HTMLElement | null>
   /** Element focused when the overlay opened; focus returns to it when there is no trigger. */
-  returnFocusRef: Ref<HTMLElement | null>
+  returnFocusEl: Ref<HTMLElement | null>
   side: DrawerSide
 }
 
-export const DrawerInjectionKey: InjectionKey<DrawerContext> = Symbol('DrawerContext')
+export const DrawerInjectionKey: InjectionKey<DrawerContext> = Symbol('Drawer')
 
 export const DrawerPanelScrollInjectionKey: InjectionKey<boolean> = Symbol('DrawerPanelScroll')

@@ -21,9 +21,9 @@ export interface HoverCardContext {
   /** Inline position style computed by the shared placement engine. */
   panelStyle: Readonly<Ref<Record<string, string>>>
   /** Trigger wrapper element, the positioning anchor. */
-  triggerRef: Ref<globalThis.HTMLElement | null>
+  triggerEl: Ref<globalThis.HTMLElement | null>
   /** The floating card element. */
-  panelRef: Ref<globalThis.HTMLElement | null>
+  panelEl: Ref<globalThis.HTMLElement | null>
   /** Opens after the open delay, cancelling a pending close. */
   scheduleOpen: () => void
   /** Closes after the close delay, cancelling a pending open. */

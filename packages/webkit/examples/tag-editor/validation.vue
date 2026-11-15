@@ -10,10 +10,10 @@
     { key: 'region', value: 'us-east' }
   ])
 
-  const editor = ref(null)
+  const editorEl = ref(null)
   const valid = ref(true)
   const save = () => {
-    valid.value = editor.value?.validate() ?? false
+    valid.value = editorEl.value?.validate() ?? false
   }
 </script>
 
@@ -24,7 +24,7 @@
     @submit.prevent="save"
   >
     <TagEditor
-      ref="editor"
+      ref="editorEl"
       v-model:tags="tags"
       :limit="5"
       reserved-prefix="acme:"

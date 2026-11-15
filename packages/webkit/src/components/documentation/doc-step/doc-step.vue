@@ -25,17 +25,17 @@
 
   const id = Symbol('DocStep')
   const { index } = context.register(id)
-  const root = ref<globalThis.HTMLElement | null>(null)
+  const rootEl = ref<globalThis.HTMLElement | null>(null)
 
   const testId = computed(() => (attrs['data-testid'] as string) ?? 'documentation-doc-step')
 
-  onMounted(() => context.attach(id, root.value))
+  onMounted(() => context.attach(id, rootEl.value))
   onBeforeUnmount(() => context.unregister(id))
 </script>
 
 <template>
   <div
-    ref="root"
+    ref="rootEl"
     v-bind="$attrs"
     :data-testid="testId"
     class="flex w-full items-stretch gap-(--spacing-md) last:[&_[data-step-body]]:pb-0 last:[&_[data-step-connector]]:hidden"

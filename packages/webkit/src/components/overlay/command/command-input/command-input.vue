@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, nextTick, ref, useAttrs, watch } from 'vue'
 
-  import { useTranslate } from '../../../../composables/use-locale/use-translate'
+  import { useTranslate } from '../../../../composables/use-translate'
   import * as en from '../../../../i18n/messages/en'
   import Kbd from '../../../content/kbd/kbd.vue'
   import Input from '../../../inputs/input/input.vue'
@@ -29,13 +29,13 @@
   const { t } = useTranslate({ command: en.command })
   const placeholderText = computed(() => props.placeholder || t('command.placeholder'))
   const ctx = useCommandMenuContext()
-  const fieldRef = ref<InstanceType<typeof Input> | null>(null)
+  const fieldEl = ref<InstanceType<typeof Input> | null>(null)
 
   const onPage = computed(() => ctx.page.value !== '')
   const backLabel = computed(() => t('command.back', { page: ctx.pageHeading.value }))
 
   function focusField() {
-    const root = fieldRef.value?.$el as HTMLElement | undefined
+    const root = fieldEl.value?.$el as HTMLElement | undefined
     root?.querySelector('input')?.focus()
   }
 
@@ -78,7 +78,7 @@
       <span class="truncate">{{ ctx.pageHeading.value }}</span>
     </button>
     <Input
-      ref="fieldRef"
+      ref="fieldEl"
       v-bind="attrs"
       :model-value="ctx.query.value"
       :placeholder="placeholderText"

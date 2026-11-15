@@ -1,7 +1,7 @@
 import { nextTick, onScopeDispose, readonly, type Ref, ref, watch } from 'vue'
 
 import { useOverlayLayer } from '../use-overlay-layer'
-import { registerShortcut } from './shortcut-registry'
+import { registerShortcut } from './lib/shortcut-registry'
 
 /** Identifier an option emits on the root `select` event. */
 export type MenuOptionValue = string | number
@@ -30,11 +30,11 @@ export interface MenuContext {
   /** Id of the top-level menu element. */
   panelId: string
   /** Anchor element of the top-level panel. */
-  triggerRef: Ref<globalThis.HTMLElement | null>
+  triggerEl: Ref<globalThis.HTMLElement | null>
   /** Top-level floating panel. */
-  panelRef: Ref<globalThis.HTMLElement | null>
+  panelEl: Ref<globalThis.HTMLElement | null>
   /** Element groups of this menu level teleport their content into. */
-  panelBodyRef: Ref<globalThis.HTMLElement | null>
+  panelBodyEl: Ref<globalThis.HTMLElement | null>
   /** Opens or closes the whole menu. */
   setOpen: (value: boolean) => void
   /** Emits select for an item; closes the whole menu unless `close` is false. */
@@ -78,9 +78,9 @@ export interface UseMenuRootOptions {
   placement: Readonly<Ref<MenuPlacement>>
   triggerId: string
   panelId: string
-  triggerRef: Ref<globalThis.HTMLElement | null>
-  panelRef: Ref<globalThis.HTMLElement | null>
-  panelBodyRef: Ref<globalThis.HTMLElement | null>
+  triggerEl: Ref<globalThis.HTMLElement | null>
+  panelEl: Ref<globalThis.HTMLElement | null>
+  panelBodyEl: Ref<globalThis.HTMLElement | null>
   setOpen: (value: boolean) => void
   onSelect: (event: MenuActivationEvent, value: MenuOptionValue) => void
   focusTrigger: () => void
@@ -146,15 +146,15 @@ export function useMenuLevel(): MenuLevel {
 }
 
 export function useMenuRoot(options: UseMenuRootOptions): UseMenuRootReturn {
-  const { isOpen, disabled, panelRef, triggerRef, setOpen, focusTrigger } = options
+  const { isOpen, disabled, panelEl, triggerEl, setOpen, focusTrigger } = options
 
   const level = useMenuLevel()
   const subPanels = new Set<() => globalThis.HTMLElement | null>()
 
-  const focusFirstOption = () => focusMenuItem(panelRef.value, 'first')
-  const focusLastOption = () => focusMenuItem(panelRef.value, 'last')
-  const focusNextOption = () => focusMenuItem(panelRef.value, 'next')
-  const focusPrevOption = () => focusMenuItem(panelRef.value, 'prev')
+  const focusFirstOption = () => focusMenuItem(panelEl.value, 'first')
+  const focusLastOption = () => focusMenuItem(panelEl.value, 'last')
+  const focusNextOption = () => focusMenuItem(panelEl.value, 'next')
+  const focusPrevOption = () => focusMenuItem(panelEl.value, 'prev')
 
   function selectOption(value: MenuOptionValue, event: MenuActivationEvent, close = true) {
     const wasOpen = isOpen.value
@@ -175,7 +175,7 @@ export function useMenuRoot(options: UseMenuRootOptions): UseMenuRootReturn {
   function shortcutPriority(): number {
     if (isOpen.value) return 2
     const focused = globalThis.document?.activeElement ?? null
-    return focused && triggerRef.value?.contains(focused) ? 1 : 0
+    return focused && triggerEl.value?.contains(focused) ? 1 : 0
   }
 
   function registerSubPanel(panel: () => globalThis.HTMLElement | null): () => void {
@@ -189,7 +189,7 @@ export function useMenuRoot(options: UseMenuRootOptions): UseMenuRootReturn {
   let typeaheadAt = 0
 
   function typeahead(event: globalThis.KeyboardEvent) {
-    const items = menuItems(panelRef.value)
+    const items = menuItems(panelEl.value)
     if (items.length === 0) return
     typeaheadBuffer =
       event.timeStamp - typeaheadAt > 500 ? event.key : `${typeaheadBuffer}${event.key}`
@@ -246,14 +246,14 @@ export function useMenuRoot(options: UseMenuRootOptions): UseMenuRootReturn {
     }
   }
 
-  const { isInsideHigherLayer } = useOverlayLayer(isOpen, { element: panelRef })
+  const { isInsideHigherLayer } = useOverlayLayer(isOpen, { element: panelEl })
 
   function onDocumentMousedown(event: globalThis.MouseEvent) {
     if (!isOpen.value) return
     const target = event.target as globalThis.Node | null
     if (!target) return
-    if (triggerRef.value?.contains(target)) return
-    if (panelRef.value?.contains(target)) return
+    if (triggerEl.value?.contains(target)) return
+    if (panelEl.value?.contains(target)) return
     for (const panel of subPanels) if (panel()?.contains(target)) return
     if (isInsideHigherLayer(target)) return
     setOpen(false)
@@ -284,9 +284,9 @@ export function useMenuRoot(options: UseMenuRootOptions): UseMenuRootReturn {
     placement: options.placement,
     triggerId: options.triggerId,
     panelId: options.panelId,
-    triggerRef,
-    panelRef,
-    panelBodyRef: options.panelBodyRef,
+    triggerEl,
+    panelEl,
+    panelBodyEl: options.panelBodyEl,
     setOpen,
     selectOption,
     registerCommand,

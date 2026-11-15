@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, onScopeDispose, useAttrs } from 'vue'
 
-  import { type ChartThresholdSeverity, isFiniteNumber, thresholdToken } from '../../_lib'
+  import { type ChartThresholdSeverity, isFiniteNumber, thresholdToken } from '../../lib'
   import { useChartContext } from '../composables/use-chart-context'
 
   defineOptions({ name: 'ChartReference', inheritAttrs: false })

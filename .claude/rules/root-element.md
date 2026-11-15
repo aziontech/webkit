@@ -58,10 +58,10 @@ A component exposes an imperative method only when the DOM genuinely requires it
 
 ```vue
 <script setup lang="ts">
-  const inputRef = ref<HTMLInputElement | null>(null)
+  const inputEl = ref<HTMLInputElement | null>(null)
   defineExpose({
     /** Move focus to the field. */
-    focus: () => inputRef.value?.focus()
+    focus: () => inputEl.value?.focus()
   })
 </script>
 ```

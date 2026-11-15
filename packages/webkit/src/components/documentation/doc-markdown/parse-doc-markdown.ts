@@ -1,4 +1,4 @@
-import { type MarkdownInline, parseInline, plainText } from '../../ai/_lib/parse-markdown'
+import { type MarkdownInline, parseInline, plainText } from '../../ai/lib/parse-markdown'
 import { slugify } from '../doc-update/slugify'
 
 /** An attribute value an MDX tag may carry. */

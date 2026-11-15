@@ -2,7 +2,7 @@
   import { computed, useAttrs } from 'vue'
 
   import { useFieldControl } from '../../../composables/use-field-control'
-  import { useTranslate } from '../../../composables/use-locale/use-translate'
+  import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../i18n/messages/en'
   import { PASSWORD_MANAGER_IGNORE } from '../../../utils/autofill'
 
@@ -120,11 +120,11 @@
     return toModel(clamp(Number.isNaN(raw) ? fallback() : raw))
   }
 
-  const handleInput = (event: Event) => {
+  const onInput = (event: Event) => {
     model.value = readValue(event)
   }
 
-  const handleChange = (event: Event) => {
+  const onChange = (event: Event) => {
     emit('change', readValue(event))
   }
 
@@ -135,12 +135,12 @@
     return toModel(clamp(current === null ? fallback() : current + delta))
   }
 
-  const handleIncrement = () => {
+  const onIncrement = () => {
     if (!canInteract.value) return
     model.value = stepBy(props.step)
   }
 
-  const handleDecrement = () => {
+  const onDecrement = () => {
     if (!canInteract.value) return
     model.value = stepBy(-props.step)
   }
@@ -191,8 +191,8 @@
       dir="auto"
       v-bind="{ ...PASSWORD_MANAGER_IGNORE, ...passthroughAttrs }"
       class="relative z-(--z-control) w-full min-w-0 border-0 bg-transparent outline-none px-(--spacing-md) text-label-sm text-(--text-default) placeholder:text-(--text-muted) disabled:cursor-not-allowed disabled:text-(--text-disabled) read-only:cursor-default [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-      @input="handleInput"
-      @change="handleChange"
+      @input="onInput"
+      @change="onChange"
     />
 
     <span
@@ -220,7 +220,7 @@
         :aria-label="t('numberInput.increment')"
         :disabled="isDisabled || readonly"
         class="flex flex-1 items-center justify-center border-b border-(--border-input) text-(--text-default) transition-colors duration-150 ease-out motion-reduce:transition-none hover:bg-(--bg-hover) disabled:cursor-not-allowed disabled:text-(--text-disabled)"
-        @click="handleIncrement"
+        @click="onIncrement"
       >
         <i
           class="ai ai-chevron-up text-[0.625rem] leading-none"
@@ -233,7 +233,7 @@
         :aria-label="t('numberInput.decrement')"
         :disabled="isDisabled || readonly"
         class="flex flex-1 items-center justify-center text-(--text-default) transition-colors duration-150 ease-out motion-reduce:transition-none hover:bg-(--bg-hover) disabled:cursor-not-allowed disabled:text-(--text-disabled)"
-        @click="handleDecrement"
+        @click="onDecrement"
       >
         <i
           class="ai ai-chevron-down text-[0.625rem] leading-none"

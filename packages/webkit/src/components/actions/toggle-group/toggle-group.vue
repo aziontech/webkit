@@ -11,10 +11,10 @@
   } from 'vue'
 
   import { logicalArrowKey, useDirection } from '../../../composables/use-direction'
-  import { useTranslate } from '../../../composables/use-locale/use-translate'
+  import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../i18n/messages/en'
   import { cn } from '../../../utils/cn'
-  import { FormValue } from '../../../utils/form-value'
+  import { FormValue } from '../../inputs/parts/form-value'
 
   defineOptions({
     name: 'ToggleGroup',
@@ -53,9 +53,9 @@
 
   const attrs = useAttrs()
   const { t } = useTranslate({ toggleGroup: en.toggleGroup })
-  const rootRef = ref<HTMLElement | null>(null)
-  const dir = useDirection(rootRef)
-  const optionRefs = ref<HTMLElement[]>([])
+  const rootEl = ref<HTMLElement | null>(null)
+  const dir = useDirection(rootEl)
+  const optionEls = ref<HTMLElement[]>([])
   const indicatorVisible = ref(false)
   const indicatorWidth = ref(0)
   const indicatorHeight = ref(0)
@@ -138,7 +138,7 @@
     return el instanceof HTMLElement ? el : null
   }
 
-  const setOptionRef = (
+  const setOptionEl = (
     element: globalThis.Element | ComponentPublicInstance | null,
     index: number
   ) => {
@@ -148,7 +148,7 @@
       return
     }
 
-    optionRefs.value[index] = el
+    optionEls.value[index] = el
   }
 
   const setValue = (value: string) => {
@@ -187,7 +187,7 @@
 
       if (!option.disabled) {
         setValue(option.value)
-        optionRefs.value[index]?.focus()
+        optionEls.value[index]?.focus()
         return
       }
     }
@@ -220,10 +220,10 @@
   }
 
   const syncIndicator = () => {
-    const rootEl = rootRef.value
-    const activeOptionEl = optionRefs.value[selectedIndex.value]
+    const root = rootEl.value
+    const activeOptionEl = optionEls.value[selectedIndex.value]
 
-    if (!rootEl || !activeOptionEl || selectedIndex.value < 0 || !activeOptionEl.offsetParent) {
+    if (!root || !activeOptionEl || selectedIndex.value < 0 || !activeOptionEl.offsetParent) {
       indicatorVisible.value = false
       return
     }
@@ -251,11 +251,11 @@
 
     resizeObserver.disconnect()
 
-    if (rootRef.value) {
-      resizeObserver.observe(rootRef.value)
+    if (rootEl.value) {
+      resizeObserver.observe(rootEl.value)
     }
 
-    optionRefs.value.forEach((el) => {
+    optionEls.value.forEach((el) => {
       if (el) {
         resizeObserver?.observe(el)
       }
@@ -280,7 +280,7 @@
   watch(
     normalizedOptions,
     (options) => {
-      optionRefs.value = optionRefs.value.slice(0, options.length)
+      optionEls.value = optionEls.value.slice(0, options.length)
       scheduleIndicatorSync()
     },
     { immediate: true }
@@ -305,7 +305,7 @@
 <template>
   <div
     v-bind="forwardedAttrs"
-    ref="rootRef"
+    ref="rootEl"
     role="radiogroup"
     :class="cn(ROOT_CLASS, attrs.class as string | undefined)"
     :data-size="size"
@@ -324,7 +324,7 @@
     <button
       v-for="(option, index) in normalizedOptions"
       :key="option.value"
-      :ref="(element) => setOptionRef(element, index)"
+      :ref="(element) => setOptionEl(element, index)"
       type="button"
       role="radio"
       :aria-checked="option.value === selectedValue"

@@ -256,7 +256,7 @@ describe('Checkbox', () => {
 
       await fireEvent.click(getByTestId('input-checkbox__input'))
 
-      // indeterminate is a visual only; handleChange runs the binary branch on modelValue=false.
+      // indeterminate is a visual only; onChange runs the binary branch on modelValue=false.
       expect(emitted()['update:modelValue'][0]).toEqual([true])
     })
   })

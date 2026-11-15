@@ -28,7 +28,7 @@ Two parsers agreeing is the precision boost.
 ## Workflow
 
 1. **Re-read** every `<name>.vue`, every sub-component `.vue`, the `examples/<name>/examples.json` with its `.vue` files, and (if present) `<name>.figma.ts`.
-2. **Independent parsing.** Do **not** call into `_lib/spec.mjs`. Parse with a hand-rolled regex/AST pass:
+2. **Independent parsing.** Do **not** call into `lib/spec.mjs`. Parse with a hand-rolled regex/AST pass:
    - `defineProps<{...}>()` block → list of `{ name, type, optional, default }`.
    - `defineEmits<{ name: [args] }>()` → list of `{ name, payload }`.
    - `defineSlots<{ name(...): unknown }>()` → list of `{ name }`.
@@ -57,7 +57,7 @@ Two parsers agreeing is the precision boost.
 
 ## Rules
 
-- **Do not** use `_lib/spec.mjs`. The whole point is an independent parser.
+- **Do not** use `lib/spec.mjs`. The whole point is an independent parser.
 - **Do not** edit any file. This is read-only.
 - **Do not** swallow mismatches. Every mismatch is surfaced verbatim.
 

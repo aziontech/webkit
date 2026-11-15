@@ -3,10 +3,10 @@
   import FileDropzone from '@aziontech/webkit/file-dropzone'
   import { ref } from 'vue'
 
-  const folderInput = ref<HTMLInputElement | null>(null)
+  const folderInputEl = ref<HTMLInputElement | null>(null)
   const received = ref(0)
 
-  const chooseFolder = () => folderInput.value?.click()
+  const chooseFolder = () => folderInputEl.value?.click()
 
   const onFolderChosen = (event: Event) => {
     received.value = (event.target as HTMLInputElement).files?.length ?? 0
@@ -34,7 +34,7 @@
         @click="chooseFolder"
       />
       <input
-        ref="folderInput"
+        ref="folderInputEl"
         type="file"
         webkitdirectory
         multiple

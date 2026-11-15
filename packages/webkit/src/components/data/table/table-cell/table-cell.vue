@@ -49,14 +49,14 @@
       event.stopPropagation()
   }
 
-  const cellRef = ref<HTMLElement | null>(null)
-  onMounted(() => cellRef.value?.addEventListener('click', stopOwnedClick))
-  onBeforeUnmount(() => cellRef.value?.removeEventListener('click', stopOwnedClick))
+  const cellEl = ref<HTMLElement | null>(null)
+  onMounted(() => cellEl.value?.addEventListener('click', stopOwnedClick))
+  onBeforeUnmount(() => cellEl.value?.removeEventListener('click', stopOwnedClick))
 </script>
 
 <template>
   <div
-    ref="cellRef"
+    ref="cellEl"
     v-bind="$attrs"
     role="cell"
     :data-testid="$attrs['data-testid'] ?? fallbackTestId"

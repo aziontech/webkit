@@ -58,7 +58,7 @@ Review the draft. Edit anything that's wrong. Then mark `status: approved` and r
 ## Legacy components
 
 Components created **before** the spec-driven workflow live in
-`.claude/hooks/_lib/legacy-components.json`. The two new hooks consult that
+`.claude/hooks/lib/legacy-components.json`. The two new hooks consult that
 whitelist and bypass spec checks for them. **Backfilling specs for legacy
 components is intentionally a separate task** — do not mix it with new-component
 PRs.

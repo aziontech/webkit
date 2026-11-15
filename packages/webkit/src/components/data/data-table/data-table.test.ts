@@ -701,12 +701,12 @@ describe('DataTable', () => {
       document.body.appendChild(host)
       const selection = ref<Record<string, boolean>>({})
       const exported = vi.fn()
-      const tableRef = ref<{ exportCsv: (o?: object) => Promise<void> } | null>(null)
+      const tableEl = ref<{ exportCsv: (o?: object) => Promise<void> } | null>(null)
       const view = render(
         defineComponent({
           setup: () => () =>
             h(DataTable, {
-              ref: tableRef,
+              ref: tableEl,
               columns,
               data: many,
               virtual: true,
@@ -742,7 +742,7 @@ describe('DataTable', () => {
       await nextTick()
       expect(Object.keys(selection.value)).toHaveLength(0)
 
-      await tableRef.value?.exportCsv({ scope: 'all' })
+      await tableEl.value?.exportCsv({ scope: 'all' })
       expect(exported).toHaveBeenCalledTimes(1)
       expect((exported.mock.calls[0][0] as unknown[]).length).toBe(10000)
       view.unmount()
@@ -984,12 +984,12 @@ describe('DataTable', () => {
         })
       const revoke = vi.spyOn(URL, 'revokeObjectURL').mockImplementation(() => {})
       const click = vi.spyOn(HTMLAnchorElement.prototype, 'click').mockImplementation(() => {})
-      const tableRef = ref<{ exportCsv: (o?: object) => Promise<void> } | null>(null)
+      const tableEl = ref<{ exportCsv: (o?: object) => Promise<void> } | null>(null)
       render(
         defineComponent({
           setup: () => () =>
             h(DataTable, {
-              ref: tableRef,
+              ref: tableEl,
               columns: [
                 { id: 'label', accessorKey: 'name', header: 'Name' },
                 { accessorKey: 'status', header: 'Status' }
@@ -998,7 +998,7 @@ describe('DataTable', () => {
             })
         })
       )
-      await tableRef.value?.exportCsv({ rows: [{ id: '9', name: 'Zulu', status: 'Active' }] })
+      await tableEl.value?.exportCsv({ rows: [{ id: '9', name: 'Zulu', status: 'Active' }] })
       await waitFor(() => expect(created).toHaveLength(1))
       expect(created[0]).toBe('Name,Status\r\nZulu,Active')
       createObjectURL.mockRestore()
@@ -1387,7 +1387,7 @@ describe('DataTable', () => {
     })
 
     it('round-trips getState and setState and mirrors update:state', async () => {
-      const tableRef = ref<{
+      const tableEl = ref<{
         getState: () => { sorting: unknown[] }
         setState: (next: { sorting: { id: string; desc: boolean }[] }) => void
       } | null>(null)
@@ -1396,7 +1396,7 @@ describe('DataTable', () => {
         defineComponent({
           setup: () => () =>
             h(DataTable, {
-              ref: tableRef,
+              ref: tableEl,
               columns: [{ accessorKey: 'name', header: 'Name', enableSorting: true }],
               data: rows,
               enableSorting: true,
@@ -1404,10 +1404,10 @@ describe('DataTable', () => {
             })
         })
       )
-      expect(tableRef.value?.getState().sorting).toEqual([])
-      tableRef.value?.setState({ sorting: [{ id: 'name', desc: true }] })
+      expect(tableEl.value?.getState().sorting).toEqual([])
+      tableEl.value?.setState({ sorting: [{ id: 'name', desc: true }] })
       await nextTick()
-      expect(tableRef.value?.getState().sorting).toEqual([{ id: 'name', desc: true }])
+      expect(tableEl.value?.getState().sorting).toEqual([{ id: 'name', desc: true }])
       await waitFor(() => expect(states.length).toBeGreaterThan(0))
       expect((states.at(-1) as { sorting: unknown[] }).sorting).toEqual([
         { id: 'name', desc: true }

@@ -89,7 +89,7 @@
   const ICON_CLASS =
     'size-4 shrink-0 leading-none text-[length:inherit] text-(--text-muted) group-hover:text-(--text-default) group-focus-visible:text-(--text-default) group-data-[selected]:text-(--text-default) group-data-[disabled]:text-(--text-disabled)'
 
-  const handleClick = (event: MouseEvent) => {
+  const onClick = (event: MouseEvent) => {
     if (props.disabled) {
       event.preventDefault()
       return
@@ -132,7 +132,7 @@
         :aria-disabled="disabled || undefined"
         :tabindex="disabled ? -1 : undefined"
         :data-testid="`${testId}__link`"
-        @click="handleClick"
+        @click="onClick"
       >
         <span
           v-if="icon"
@@ -178,7 +178,7 @@
         :aria-disabled="disabled || undefined"
         :disabled="disabled"
         :data-testid="`${testId}__button`"
-        @click="handleClick"
+        @click="onClick"
       >
         <span
           v-if="icon"

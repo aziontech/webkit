@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, inject, useAttrs } from 'vue'
 
-  import { useTranslate } from '../../../../composables/use-locale/use-translate'
+  import { useTranslate } from '../../../../composables/use-translate'
   import * as en from '../../../../i18n/messages/en'
   import IconButton from '../../../actions/icon-button/icon-button.vue'
   import { type SortDirection, TableInjectionKey } from '../injection-key'
@@ -52,7 +52,7 @@
     return t('tableSortButton.unsorted')
   })
 
-  const handleClick = () => {
+  const onClick = () => {
     emit('toggle', props.direction === 'ascending' ? 'descending' : 'ascending')
   }
 </script>
@@ -67,6 +67,6 @@
     :data-visible="visible"
     :data-direction="direction"
     class="data-[visible=false]:invisible data-[visible=false]:pointer-events-none"
-    @click="handleClick"
+    @click="onClick"
   />
 </template>

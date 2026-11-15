@@ -31,7 +31,7 @@
 
   const isOpen = computed(() => parent.activeSub.value === uid)
   const focusOnOpen = ref(false)
-  const triggerRef = ref<globalThis.HTMLElement | null>(null)
+  const triggerEl = ref<globalThis.HTMLElement | null>(null)
 
   function setOpen(value: boolean, focusFirst = false) {
     focusOnOpen.value = value && focusFirst
@@ -50,7 +50,7 @@
     isOpen,
     setOpen,
     focusOnOpen,
-    triggerRef,
+    triggerEl,
     parent
   })
 </script>

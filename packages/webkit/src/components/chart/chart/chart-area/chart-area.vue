@@ -9,7 +9,7 @@
     keepIds,
     linePath,
     stackValues
-  } from '../../_lib'
+  } from '../../lib'
   import { useChartContext } from '../composables/use-chart-context'
 
   defineOptions({ name: 'ChartArea', inheritAttrs: false })

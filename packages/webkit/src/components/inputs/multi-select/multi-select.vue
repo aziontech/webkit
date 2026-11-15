@@ -2,13 +2,13 @@
   import { computed, provide, ref, shallowReactive, useAttrs, useId } from 'vue'
 
   import { useFieldControl } from '../../../composables/use-field-control'
-  import type { ListboxFocusIntent } from '../../../composables/use-listbox'
-  import { useTranslate } from '../../../composables/use-locale/use-translate'
-  import { FormValue } from '../../../utils/form-value'
-  import { fieldContextKey } from '../field/injection-key'
+  import type { ListboxFocusIntent } from '../../../composables/use-listbox-content'
+  import { useTranslate } from '../../../composables/use-translate'
+  import { FieldInjectionKey } from '../field/injection-key'
+  import { FormValue } from '../parts/form-value'
   import {
     type MultiSelectCommitEvent,
-    multiSelectContextKey,
+    MultiSelectInjectionKey,
     type MultiSelectKind,
     type MultiSelectSize
   } from './injection-key'
@@ -107,7 +107,7 @@
     required: () => props.required
   })
 
-  provide(fieldContextKey, null)
+  provide(FieldInjectionKey, null)
 
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? 'input-multi-select'
@@ -193,10 +193,10 @@
     return true
   })
 
-  const controlRef = ref<globalThis.HTMLElement | null>(null)
-  const triggerRef = ref<globalThis.HTMLElement | null>(null)
+  const controlEl = ref<globalThis.HTMLElement | null>(null)
+  const triggerEl = ref<globalThis.HTMLElement | null>(null)
   const focusControl = () => {
-    ;(controlRef.value ?? triggerRef.value)?.focus()
+    ;(controlEl.value ?? triggerEl.value)?.focus()
   }
 
   const create = (event: MultiSelectCommitEvent) => {
@@ -213,9 +213,9 @@
     return current.map(labelOf).join(', ')
   })
 
-  provide(multiSelectContextKey, {
+  provide(MultiSelectInjectionKey, {
     contentId: `multi-select-${useId()}`,
-    triggerRef,
+    triggerEl,
     open: openState,
     setOpen,
     modelValue: model as unknown as import('vue').Ref<unknown[]>,
@@ -253,7 +253,7 @@
     visibleCount,
     showCreate,
     create,
-    controlRef,
+    controlEl,
     focusControl,
     navigate: ref<((key: string) => void) | null>(null)
   })

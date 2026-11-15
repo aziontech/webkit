@@ -245,7 +245,7 @@
     })
   )
 
-  const csvInput = ref<HTMLInputElement | null>(null)
+  const csvInputEl = ref<HTMLInputElement | null>(null)
   const csvFile = ref<CsvFile | null>(null)
   const csvHeaders = ref<string[]>([])
   const csvRows = ref<CsvRow[]>([])
@@ -816,11 +816,11 @@
                       label="Browse files"
                       kind="secondary"
                       size="medium"
-                      @click="csvInput?.click()"
+                      @click="csvInputEl?.click()"
                     />
                   </FileDropzone>
                   <input
-                    ref="csvInput"
+                    ref="csvInputEl"
                     type="file"
                     accept=".csv,text/csv"
                     class="hidden"

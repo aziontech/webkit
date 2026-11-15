@@ -3,7 +3,7 @@
   import { computed, onMounted, provide, type Ref, ref, shallowReadonly, useAttrs } from 'vue'
 
   import { resolveDirection } from '../../../composables/use-direction'
-  import { useTranslate } from '../../../composables/use-locale/use-translate'
+  import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../i18n/messages/en'
   import { CarouselInjectionKey, type CarouselLayout } from './injection-key'
 
@@ -39,7 +39,7 @@
   const attrs = useAttrs()
   const { t } = useTranslate({ carousel: en.carousel })
 
-  const track = ref<globalThis.HTMLUListElement | null>(null)
+  const trackEl = ref<globalThis.HTMLUListElement | null>(null)
   const scrolled = ref(0)
   const visibleWidth = ref(0)
   const contentWidth = ref(0)
@@ -66,7 +66,7 @@
   const canScroll = computed(() => contentWidth.value > visibleWidth.value + roundingTolerance)
 
   function measure() {
-    const element = track.value
+    const element = trackEl.value
     if (!element) return
     scrolled.value = Math.abs(element.scrollLeft)
     visibleWidth.value = element.clientWidth
@@ -84,7 +84,7 @@
   }
 
   function step(direction: 1 | -1) {
-    const element = track.value
+    const element = trackEl.value
     if (!element) return
     const sign = resolveDirection(element) === 'rtl' ? -direction : direction
     element.scrollBy({ left: sign * slideStep(element), behavior: 'smooth' })
@@ -99,7 +99,7 @@
   }
 
   function startDrag(event: globalThis.PointerEvent) {
-    const element = track.value
+    const element = trackEl.value
     if (!element || event.pointerType !== 'mouse' || event.button !== 0) return
     if (!canScroll.value) return
     dragging.value = true
@@ -109,7 +109,7 @@
   }
 
   function moveDrag(event: globalThis.PointerEvent) {
-    const element = track.value
+    const element = trackEl.value
     if (!dragging.value || !element) return
     const travelled = event.clientX - dragOrigin
     dragDistance = Math.max(dragDistance, Math.abs(travelled))
@@ -129,18 +129,18 @@
     dragDistance = 0
   }
 
-  useEventListener(track, 'scroll', measure, { passive: true })
-  useEventListener(track, 'pointerdown', startDrag)
-  useEventListener(track, 'click', suppressClickAfterDrag, { capture: true })
+  useEventListener(trackEl, 'scroll', measure, { passive: true })
+  useEventListener(trackEl, 'pointerdown', startDrag)
+  useEventListener(trackEl, 'click', suppressClickAfterDrag, { capture: true })
   useEventListener(globalThis.window, 'pointermove', moveDrag)
   useEventListener(globalThis.window, 'pointerup', endDrag)
   useEventListener(globalThis.window, 'pointercancel', endDrag)
-  useResizeObserver(track, measure)
+  useResizeObserver(trackEl, measure)
   onMounted(measure)
 
   provide(CarouselInjectionKey, {
     kind: computed(() => props.kind),
-    track: shallowReadonly(track) as Readonly<Ref<globalThis.HTMLUListElement | null>>,
+    trackEl: shallowReadonly(trackEl) as Readonly<Ref<globalThis.HTMLUListElement | null>>,
     canScrollPrev,
     canScrollNext,
     canScroll,
@@ -179,7 +179,7 @@
       </div>
     </div>
     <ul
-      ref="track"
+      ref="trackEl"
       tabindex="0"
       :data-scrollable="canScroll || null"
       :data-can-scroll-prev="canScrollPrev || null"

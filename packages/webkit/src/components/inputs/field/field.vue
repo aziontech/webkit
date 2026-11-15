@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, provide, ref, useAttrs, useId } from 'vue'
 
-  import { fieldContextKey, type FieldOrientation, type FieldPartKind } from './injection-key'
+  import { FieldInjectionKey, type FieldOrientation, type FieldPartKind } from './injection-key'
 
   defineOptions({
     name: 'Field',
@@ -49,7 +49,7 @@
 
   const invalid = computed(() => props.invalid || errors.value.length > 0)
 
-  provide(fieldContextKey, {
+  provide(FieldInjectionKey, {
     controlId: `field-${useId()}`,
     describedBy: computed(() => [...descriptions.value, ...errors.value].join(' ') || undefined),
     labelledBy: computed(() => titles.value.join(' ') || undefined),

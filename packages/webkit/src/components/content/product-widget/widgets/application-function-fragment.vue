@@ -65,7 +65,7 @@ addEventListener("fetch", (event) => {
     }
   ]
 
-  const host = ref<globalThis.HTMLElement | null>(null)
+  const hostEl = ref<globalThis.HTMLElement | null>(null)
 
   const reduced = useMediaQuery('(prefers-reduced-motion: reduce)')
   const GLIDE = globalThis.parseFloat(duration['slow-04'])
@@ -73,7 +73,7 @@ addEventListener("fetch", (event) => {
   const scrolled = computed(() => props.active && (props.hover || !canHover.value))
 
   const scroller = () => {
-    const area = host.value?.querySelector<globalThis.HTMLElement>('[data-testid$="__scroll"]')
+    const area = hostEl.value?.querySelector<globalThis.HTMLElement>('[data-testid$="__scroll"]')
     if (!area) return null
     return [area, ...area.querySelectorAll<globalThis.HTMLElement>('*')].find(
       (element) => element.scrollHeight > element.clientHeight + 1
@@ -130,7 +130,7 @@ addEventListener("fetch", (event) => {
         class="min-h-0 flex-1"
       >
         <div
-          ref="host"
+          ref="hostEl"
           class="h-full"
         >
           <div

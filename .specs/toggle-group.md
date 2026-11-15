@@ -8,7 +8,7 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2904-5892
   node_id: 2904:5892
-checksum: 552ca30f11a035c3554030569ab95f2a6f61881465b17124e85604da4087fedb
+checksum: 5d68ef992e3263275ff7173a763ba92160176ededdfcb2eceae7dfd3e7351c51
 created: 2026-11-09
 last_updated: 2026-11-15
 ---
@@ -165,7 +165,7 @@ ToggleGroup is a connected group of buttons that picks exactly one value out of 
 
 - Layout: logical utilities only (`ms-`/`me-`, `ps-`/`pe-`, `start-`/`end-`, `text-start`), so the layout mirrors under `dir="rtl"`.
 - Icons: item icons are the consumer's and do not mirror.
-- Keyboard: `ArrowRight`/`ArrowLeft` move to the next/previous item, swapped under `dir="rtl"` (`useDirection(rootRef)` + `logicalArrowKey`): `ArrowLeft` moves forward.
+- Keyboard: `ArrowRight`/`ArrowLeft` move to the next/previous item, swapped under `dir="rtl"` (`useDirection(rootEl)` + `logicalArrowKey`): `ArrowLeft` moves forward.
 - Indicator: the selection pill is anchored with a physical `left: 0` and moved by the measured `offsetLeft`, which is already a physical distance, so it lands on the selected item in both directions.
 - User data: none.
 

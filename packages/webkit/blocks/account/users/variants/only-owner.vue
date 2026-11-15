@@ -176,8 +176,8 @@
       preferences: { storageKey: 'account-users' }
     })
 
-  const usersTable = ref<TableExposed<User> | null>(null)
-  const exportCsv = () => usersTable.value?.exportCsv({ filename: 'users.csv' })
+  const usersTableEl = ref<TableExposed<User> | null>(null)
+  const exportCsv = () => usersTableEl.value?.exportCsv({ filename: 'users.csv' })
 
   const alone = computed(() => !loading.value && users.value.length === 1 && users.value[0].owner)
 
@@ -430,7 +430,7 @@
         >
           <template #content>
             <DataTable
-              ref="usersTable"
+              ref="usersTableEl"
               v-bind="tableProps"
               :loading="loading || refreshing"
               enable-sorting

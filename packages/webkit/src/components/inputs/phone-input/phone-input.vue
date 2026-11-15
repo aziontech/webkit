@@ -2,13 +2,13 @@
   import { computed, provide, shallowRef, useAttrs, useId, watch } from 'vue'
 
   import { useFieldControl } from '../../../composables/use-field-control'
-  import { useTranslate } from '../../../composables/use-locale/use-translate'
   import { useSelectSearch } from '../../../composables/use-select-search'
+  import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../i18n/messages/en'
-  import { FormValue } from '../../../utils/form-value'
-  import { fieldContextKey } from '../field/injection-key'
+  import { FieldInjectionKey } from '../field/injection-key'
   import Input from '../input/input.vue'
   import InputGroup from '../input-group/input-group.vue'
+  import { FormValue } from '../parts/form-value'
   import Select from '../select/select.vue'
   import SelectContent from '../select/select-content/select-content.vue'
   import SelectOption from '../select/select-option/select-option.vue'
@@ -112,7 +112,7 @@
     required: () => props.required
   })
 
-  provide(fieldContextKey, null)
+  provide(FieldInjectionKey, null)
 
   const resolvedInputId = computed(() => controlId.value ?? generatedId)
 

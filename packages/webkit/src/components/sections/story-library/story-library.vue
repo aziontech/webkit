@@ -2,7 +2,7 @@
   import { useMediaQuery, useMounted } from '@vueuse/core'
   import { computed, defineAsyncComponent, onMounted, ref, useAttrs, useId, watch } from 'vue'
 
-  import { useTranslate } from '../../../composables/use-locale/use-translate'
+  import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../i18n/messages/en'
   import Button from '../../actions/button/button.vue'
   import EmptyState from '../../feedback/empty-state/empty-state.vue'

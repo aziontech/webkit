@@ -323,11 +323,11 @@
     stagedNote.value = `Opens the create flow for a new ${targets[key].kind.toLowerCase()}.`
   }
 
-  const topologyRef = ref<HTMLElement | null>(null)
+  const topologyEl = ref<HTMLElement | null>(null)
   const showTopology = (key: string) => {
     detailOpen.value = false
     if (!expanded.value.includes(key)) expanded.value = [...expanded.value, key]
-    topologyRef.value?.scrollIntoView({ block: 'start' })
+    topologyEl.value?.scrollIntoView({ block: 'start' })
   }
 
   const deployOpen = ref(false)
@@ -337,7 +337,7 @@
 
   const editStaged = () => {
     toast.dismiss(RUN_TOAST)
-    topologyRef.value?.scrollIntoView({ block: 'start' })
+    topologyEl.value?.scrollIntoView({ block: 'start' })
   }
 
   const runDeploy = () => {
@@ -1048,7 +1048,7 @@
             </Drawer>
 
             <div
-              ref="topologyRef"
+              ref="topologyEl"
               class="flex scroll-mt-(--spacing-lg) flex-col gap-(--layout-group-gap)"
             >
               <SectionHeader

@@ -394,7 +394,9 @@ describe('NavigationMenu', () => {
         })
         const p = positioner()
         expect(p).toHaveAttribute('data-side', 'bottom')
-        const available = Number.parseFloat(p.style.getPropertyValue('--available-height'))
+        const available = Number.parseFloat(
+          p.style.getPropertyValue('--navigation-menu-available-height')
+        )
         const triggerRect = trigger.getBoundingClientRect()
         // The cap ends collisionPadding (8px) above the viewport edge, below the trigger.
         expect(available).toBeGreaterThan(0)

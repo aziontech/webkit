@@ -8,7 +8,7 @@
   import Separator from '../../../layout/separator/separator.vue'
   import Card from '../../card/card.vue'
   import Tag from '../../tag/tag.vue'
-  import { DEFAULT_DEPLOYMENT_STEPS } from '../data/deployment-steps'
+  import { DEFAULT_DEPLOYMENT_STEPS } from '../lib/deployment-steps'
   import DeploymentLogs from '../parts/deployment-logs.vue'
   import ShellMockup, {
     type ShellMockupFade,
@@ -64,8 +64,8 @@
 
   const reduced = useMediaQuery('(prefers-reduced-motion: reduce)')
 
-  const shell = ref<InstanceType<typeof ShellMockup> | null>(null)
-  const visible = useElementVisibility(shell, { threshold: 0.35 })
+  const shellEl = ref<InstanceType<typeof ShellMockup> | null>(null)
+  const visible = useElementVisibility(shellEl, { threshold: 0.35 })
 
   const run = ref(0)
   const deployed = ref(false)
@@ -99,7 +99,7 @@
 
 <template>
   <ShellMockup
-    ref="shell"
+    ref="shellEl"
     :kind="kind"
     :chrome="chrome"
     :width="width"

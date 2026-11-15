@@ -1,6 +1,6 @@
 import { computed, type ComputedRef, inject, onBeforeUnmount, onMounted, ref } from 'vue'
 
-import { LocaleInjectionKey } from '../../../../composables/use-locale/use-translate'
+import { LocaleInjectionKey } from '../../../../composables/use-translate'
 
 const TICK_MS = 60_000
 const now = ref<number>(Date.now())

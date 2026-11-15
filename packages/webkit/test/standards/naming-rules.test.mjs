@@ -17,7 +17,7 @@ import {
 import {
   checkPropVocabulary,
   vocabularySnapshot
-} from '../../../../.claude/hooks/_lib/prop-vocabulary.mjs'
+} from '../../../../.claude/hooks/lib/prop-vocabulary.mjs'
 
 const ROOT = fileURLToPath(new URL('../../../../', import.meta.url))
 const C = 'packages/webkit/src/components'

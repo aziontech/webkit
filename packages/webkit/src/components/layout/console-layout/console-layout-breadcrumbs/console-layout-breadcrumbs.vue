@@ -2,7 +2,7 @@
   import { inject, onActivated, onBeforeUnmount, onDeactivated, onMounted } from 'vue'
 
   import type { ConsoleLayoutCrumb } from '../console-layout.vue'
-  import { type ConsoleLayoutTrail, ConsoleLayoutTrailsKey } from '../injection-key'
+  import { type ConsoleLayoutTrail, ConsoleLayoutTrailsInjectionKey } from '../injection-key'
 
   defineOptions({
     name: 'ConsoleLayoutBreadcrumbs',
@@ -24,7 +24,7 @@
     default?(): unknown
   }>()
 
-  const trails = inject(ConsoleLayoutTrailsKey, null)
+  const trails = inject(ConsoleLayoutTrailsInjectionKey, null)
 
   const trail: ConsoleLayoutTrail = {
     items: () => props.items,

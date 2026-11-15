@@ -2,7 +2,7 @@
   import { computed, inject, onBeforeUnmount, useAttrs, useId } from 'vue'
 
   import HelperText, { type HelperTextKind } from '../../helper-text/helper-text.vue'
-  import { fieldContextKey } from '../injection-key'
+  import { FieldInjectionKey } from '../injection-key'
 
   defineOptions({
     name: 'FieldDescription',
@@ -13,7 +13,7 @@
     default(): unknown
   }>()
 
-  const field = inject(fieldContextKey, null)
+  const field = inject(FieldInjectionKey, null)
   const attrs = useAttrs()
   const generatedId = `field-description-${useId()}`
 

@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, inject, onMounted, onUpdated, ref, useAttrs } from 'vue'
 
-  import { selectContextKey } from '../injection-key'
+  import { SelectInjectionKey } from '../injection-key'
 
   defineOptions({
     name: 'SelectOption',
@@ -29,7 +29,7 @@
     tag(): unknown
   }>()
 
-  const ctx = inject(selectContextKey)
+  const ctx = inject(SelectInjectionKey)
   if (!ctx) {
     throw new Error('SelectOption must be used inside <Select>.')
   }
@@ -40,9 +40,8 @@
     () => (attrs['data-testid'] as string | undefined) ?? 'input-select-option'
   )
 
-  const labelRef = ref<globalThis.HTMLElement | null>(null)
-  const recordLabel = () =>
-    ctx.registerLabel(props.value, labelRef.value?.textContent?.trim() ?? '')
+  const labelEl = ref<globalThis.HTMLElement | null>(null)
+  const recordLabel = () => ctx.registerLabel(props.value, labelEl.value?.textContent?.trim() ?? '')
   onMounted(recordLabel)
   onUpdated(recordLabel)
 
@@ -94,7 +93,7 @@
       />
     </span>
     <span
-      ref="labelRef"
+      ref="labelEl"
       class="flex-1 truncate text-start"
     >
       <slot />

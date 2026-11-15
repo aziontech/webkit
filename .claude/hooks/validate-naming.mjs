@@ -8,7 +8,7 @@
 import { readFileSync } from 'node:fs'
 import { relative, resolve } from 'node:path'
 
-import { addedViolations, checkFile, isBlocking, loadContext } from './_lib/naming-checks.mjs'
+import { addedViolations, checkFile, isBlocking, loadContext } from './lib/naming-checks.mjs'
 
 const ROOT = process.cwd()
 

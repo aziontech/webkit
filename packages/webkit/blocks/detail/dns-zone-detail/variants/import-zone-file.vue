@@ -202,7 +202,7 @@
     }, 700)
   }
 
-  const tableRef = ref<TableExposed<DnsRecord> | null>(null)
+  const tableEl = ref<TableExposed<DnsRecord> | null>(null)
 
   const SUPPORTED = ['A', 'AAAA', 'CNAME', 'MX', 'TXT', 'CAA', 'SRV', 'NS', 'PTR']
 
@@ -356,7 +356,7 @@ legacy  IN HINFO "PC" "Linux"`
   const importOpen = ref(true)
   const zoneText = ref(SAMPLE_ZONE)
   const zoneSource = ref('the pasted zone file')
-  const fileInput = ref<HTMLInputElement | null>(null)
+  const fileInputEl = ref<HTMLInputElement | null>(null)
   const dropError = ref('')
   const parsedText = ref(SAMPLE_ZONE)
   let parseTimer: ReturnType<typeof setTimeout> | undefined
@@ -769,7 +769,7 @@ legacy  IN HINFO "PC" "Linux"`
                     size="medium"
                     :disabled="!matchingItems.length"
                     aria-label="Download CSV"
-                    @click="tableRef?.exportCsv({ filename: 'records.csv' })"
+                    @click="tableEl?.exportCsv({ filename: 'records.csv' })"
                   />
                 </Tooltip>
                 <CollectionPreferences
@@ -781,7 +781,7 @@ legacy  IN HINFO "PC" "Linux"`
             <Card :padded="false">
               <template #content>
                 <DataTable
-                  ref="tableRef"
+                  ref="tableEl"
                   v-bind="tableProps"
                   :loading="loading || fetching"
                   enable-sorting
@@ -940,11 +940,11 @@ legacy  IN HINFO "PC" "Linux"`
                   label="Browse files"
                   kind="secondary"
                   size="medium"
-                  @click="fileInput?.click()"
+                  @click="fileInputEl?.click()"
                 />
               </FileDropzone>
               <input
-                ref="fileInput"
+                ref="fileInputEl"
                 type="file"
                 accept=".zone,.txt,.db,text/plain"
                 class="hidden"

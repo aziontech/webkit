@@ -128,7 +128,7 @@ import DialogContent from '@aziontech/webkit/dialog-content'
 
 <!-- Resulting layout (composition, canonical):
 
-  packages/webkit/src/components/webkit/<category>/<name>/
+  packages/webkit/src/components/<category>/<name>/
   ├── <name>.vue
   ├── index.ts                    (compound: Object.assign attaches every sub-component; vue-tsc emits index.d.ts)
   ├── package.json                (main/module → ./index.ts, types → ./index.d.ts)

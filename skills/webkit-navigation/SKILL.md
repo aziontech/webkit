@@ -589,7 +589,7 @@ opens flush on the tab bar:
   <KeepAlive>
     <component
       :is="activeView.component"
-      ref="viewRef"
+      ref="viewEl"
       v-bind="activeView.props"
     />
   </KeepAlive>

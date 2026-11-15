@@ -9,7 +9,7 @@ setup: "One-time app-level wiring before the first toast() call — service (rec
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=478-938
   node_id: 478:938
-checksum: b48c4a3eed546887e051b9411651bbf8c294f866904f0eead1e038a2072cd22b
+checksum: c522b523edd03772c1b289f2afa51a4e85235139f770e6f878423da932f6e538
 created: 2026-06-23
 last_updated: 2026-11-15
 ---
@@ -176,7 +176,7 @@ Each part is also a standalone import (`import ToastItem from '@aziontech/webkit
 
 The imperative API is backed by a small reactive store composable, declared here (undeclared composables are forbidden):
 
-- `use-toast-store.ts` — a singleton reactive store (one module-level reactive list of toast entries) exposing `add(entry)`, `update(id, patch)`, `dismiss(id?)`, and the reactive `toasts` list. The exported `toast()` function and its shortcuts (`success`/`error`/`info`/`warning`/`loading`/`progress`/`promise`/`dismiss`) are thin wrappers over `add`/`update`/`dismiss`; the `Toaster` injects the same store to render the stack. Lives beside `injection-key.ts` at the component root (one directory up from each sub-component).
+- `composables/use-toast-store.ts` — a singleton reactive store (one module-level reactive list of toast entries) exposing `add(entry)`, `update(id, patch)`, `dismiss(id?)`, and the reactive `toasts` list. The exported `toast()` function and its shortcuts (`success`/`error`/`info`/`warning`/`loading`/`progress`/`promise`/`dismiss`) are thin wrappers over `add`/`update`/`dismiss`; the `Toaster` injects the same store to render the stack. Lives in the component's `composables/` folder, beside `injection-key.ts`.
 
 <!-- Resulting layout:
 
@@ -184,7 +184,7 @@ The imperative API is backed by a small reactive store composable, declared here
   ├── toaster.vue            (root region — Teleport + TransitionGroup + polite and assertive live regions)
   ├── index.ts               (compound: Object.assign attaches sub-components + re-exports `toast`; vue-tsc emits index.d.ts)
   ├── injection-key.ts       (shared provide/inject key for the store)
-  ├── use-toast-store.ts      (singleton reactive store backing toast())
+  ├── composables/           { use-toast-store.ts — singleton reactive store backing toast() }
   ├── toast-item/            { toast-item.vue }
   ├── toast-title/           { toast-title.vue }
   ├── toast-description/     { toast-description.vue }

@@ -13,11 +13,12 @@
   } from 'vue'
 
   import { logicalArrowKey, useDirection } from '../../../composables/use-direction'
-  import { useTranslate } from '../../../composables/use-locale/use-translate'
+  import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../i18n/messages/en'
   import Alert from '../../feedback/alert/alert.vue'
   import EmptyState from '../../feedback/empty-state/empty-state.vue'
   import Skeleton from '../../feedback/skeleton/skeleton.vue'
+  import { ChartCardInjectionKey } from '../chart-card/injection-key'
   import {
     categoryLayout,
     type ChartLabel,
@@ -37,8 +38,7 @@
     niceTicks,
     normalizeSeries,
     stackedMax
-  } from '../_lib'
-  import { ChartCardInjectionKey } from '../chart-card/injection-key'
+  } from '../lib'
   import {
     type ChartAxisKind,
     ChartInjectionKey,
@@ -151,8 +151,8 @@
   const reducedMotion = usePreferredReducedMotion()
   const direction = useDirection()
   const rtl = computed(() => direction.value === 'rtl')
-  const stageRef = ref<globalThis.HTMLElement | null>(null)
-  const { width: stageWidth, height: stageHeight } = useElementSize(stageRef)
+  const stageEl = ref<globalThis.HTMLElement | null>(null)
+  const { width: stageWidth, height: stageHeight } = useElementSize(stageEl)
 
   const marks = shallowReactive(new Map<symbol, () => ChartMarkRegistration>())
   const axes = shallowReactive(new Map<symbol, () => ChartAxisKind>())
@@ -490,42 +490,42 @@
   }
 
   function indexAtPointer(event: globalThis.PointerEvent): number | null {
-    const stage = stageRef.value
+    const stage = stageEl.value
     if (!stage || !count.value) return null
     const rect = stage.getBoundingClientRect()
     const offset = vertical.value ? event.clientX - rect.left : event.clientY - rect.top
     return category.value.indexAt(offset)
   }
 
-  function onPointerDown(event: globalThis.PointerEvent) {
+  function onPointerdown(event: globalThis.PointerEvent) {
     if (!hasBrush.value || event.button !== 0) return
     const index = indexAtPointer(event)
     if (index === null) return
     draft.value = [index, index]
     setActiveIndex(index)
     try {
-      stageRef.value?.setPointerCapture?.(event.pointerId)
+      stageEl.value?.setPointerCapture?.(event.pointerId)
     } catch {
       return
     }
   }
 
-  function onPointerMove(event: globalThis.PointerEvent) {
+  function onPointermove(event: globalThis.PointerEvent) {
     const index = indexAtPointer(event)
     if (index === null) return
     if (draft.value) draft.value = [draft.value[0], index]
     setActiveIndex(index)
   }
 
-  function onPointerUp() {
+  function onPointerup() {
     if (draft.value) commitRange(draft.value)
   }
 
-  function onPointerCancel() {
+  function onPointercancel() {
     draft.value = null
   }
 
-  function onPointerLeave() {
+  function onPointerleave() {
     if (!draft.value) setActiveIndex(null)
   }
 
@@ -731,7 +731,7 @@
     </div>
     <template v-else>
       <div
-        ref="stageRef"
+        ref="stageEl"
         role="group"
         :aria-roledescription="t('chart.roleDescription')"
         tabindex="0"
@@ -742,11 +742,11 @@
         :data-brush="hasBrush || null"
         :style="{ minHeight: `${height}px` }"
         class="col-start-1 row-start-1 min-h-0 min-w-0 cursor-crosshair rounded-(--shape-control) outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) data-[brush]:touch-pan-y"
-        @pointerdown="onPointerDown"
-        @pointermove="onPointerMove"
-        @pointerup="onPointerUp"
-        @pointercancel="onPointerCancel"
-        @pointerleave="onPointerLeave"
+        @pointerdown="onPointerdown"
+        @pointermove="onPointermove"
+        @pointerup="onPointerup"
+        @pointercancel="onPointercancel"
+        @pointerleave="onPointerleave"
         @click="onClick"
         @keydown="onKeydown"
       />

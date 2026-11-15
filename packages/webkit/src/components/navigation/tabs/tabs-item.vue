@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, inject, onBeforeUnmount, onMounted, ref, useAttrs } from 'vue'
 
-  import { useTranslate } from '../../../composables/use-locale/use-translate'
+  import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../i18n/messages/en'
   import { cn } from '../../../utils/cn'
   import { type TabsContext, TabsInjectionKey, type TabsValue } from './injection-key'
@@ -45,7 +45,7 @@
 
   const attrs = useAttrs()
   const { t } = useTranslate({ tabs: en.tabs })
-  const buttonRef = ref<HTMLElement | null>(null)
+  const buttonEl = ref<HTMLElement | null>(null)
   const resolvedValue = computed(() => props.value ?? props.label)
 
   const context = inject(TabsInjectionKey, null) as TabsContext | null
@@ -117,7 +117,7 @@
       get disabled() {
         return props.disabled
       },
-      el: buttonRef
+      el: buttonEl
     })
   })
 
@@ -132,7 +132,7 @@
 
 <template>
   <button
-    ref="buttonRef"
+    ref="buttonEl"
     type="button"
     :role="context ? 'tab' : undefined"
     v-bind="passthroughAttrs"

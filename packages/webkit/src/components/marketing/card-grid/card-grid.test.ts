@@ -108,7 +108,7 @@ describe('CardGrid', () => {
 
       const fixed = render(framed({ layout: 'fixed' }))
       expect(fixed.getByTestId(TESTID)).toHaveAttribute('data-layout', 'fixed')
-      expect(fixed.getByTestId(TESTID).style.getPropertyValue('--card-grid-cols-lg')).toBe('3')
+      expect(fixed.getByTestId(TESTID).style.getPropertyValue('--card-grid-columns-lg')).toBe('3')
     })
 
     it('keeps the declared track counts in the fixed layout whatever the count', () => {
@@ -117,9 +117,9 @@ describe('CardGrid', () => {
         slots: { default: cells(5) }
       })
       const root = getByTestId(TESTID)
-      expect(root.style.getPropertyValue('--card-grid-cols-base')).toBe('2')
-      expect(root.style.getPropertyValue('--card-grid-cols-sm')).toBe('2')
-      expect(root.style.getPropertyValue('--card-grid-cols-lg')).toBe('4')
+      expect(root.style.getPropertyValue('--card-grid-columns-base')).toBe('2')
+      expect(root.style.getPropertyValue('--card-grid-columns-sm')).toBe('2')
+      expect(root.style.getPropertyValue('--card-grid-columns-lg')).toBe('4')
       expect(root).not.toHaveAttribute('data-fill-trailing')
     })
 
@@ -128,7 +128,7 @@ describe('CardGrid', () => {
         props: { columns: 5 },
         slots: { default: cells(5) }
       })
-      expect(getByTestId(TESTID).style.getPropertyValue('--card-grid-cols-lg')).toBe('5')
+      expect(getByTestId(TESTID).style.getPropertyValue('--card-grid-columns-lg')).toBe('5')
     })
 
     it('fills the trailing tracks of a short last row in a balanced divider grid', () => {
@@ -182,9 +182,9 @@ describe('CardGrid', () => {
         })
         const root = getByTestId(TESTID)
         expect(root).toHaveAttribute('data-count', String(count))
-        expect(root.style.getPropertyValue('--card-grid-cols-base')).toBe(base)
-        expect(root.style.getPropertyValue('--card-grid-cols-sm')).toBe(sm)
-        expect(root.style.getPropertyValue('--card-grid-cols-lg')).toBe(lg)
+        expect(root.style.getPropertyValue('--card-grid-columns-base')).toBe(base)
+        expect(root.style.getPropertyValue('--card-grid-columns-sm')).toBe(sm)
+        expect(root.style.getPropertyValue('--card-grid-columns-lg')).toBe(lg)
       }
     )
 
@@ -195,7 +195,7 @@ describe('CardGrid', () => {
         template: `<CardGrid :columns="3"><!-- x --><div v-for="item in items" :key="item">{{ item }}</div></CardGrid>`
       })
       expect(getByTestId(TESTID)).toHaveAttribute('data-count', '4')
-      expect(getByTestId(TESTID).style.getPropertyValue('--card-grid-cols-lg')).toBe('2')
+      expect(getByTestId(TESTID).style.getPropertyValue('--card-grid-columns-lg')).toBe('2')
     })
 
     it('resolves the Cell through the compound root', () => {

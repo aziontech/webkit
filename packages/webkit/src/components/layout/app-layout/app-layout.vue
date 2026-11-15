@@ -3,7 +3,7 @@
   import { computed, onMounted, onScopeDispose, ref, useAttrs, useId, watch } from 'vue'
 
   import { useDirection } from '../../../composables/use-direction'
-  import { useTranslate } from '../../../composables/use-locale/use-translate'
+  import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../i18n/messages/en'
   import IconButton from '../../actions/icon-button/icon-button.vue'
   import Drawer from '../../overlay/drawer/drawer.vue'
@@ -89,10 +89,10 @@
     () => (attrs['data-testid'] as string | undefined) ?? 'layout-app-layout'
   )
 
-  const rootRef = ref<globalThis.HTMLElement | null>(null)
-  const rowRef = ref<globalThis.HTMLElement | null>(null)
-  const separatorRef = ref<globalThis.HTMLElement | null>(null)
-  const dir = useDirection(rootRef)
+  const rootEl = ref<globalThis.HTMLElement | null>(null)
+  const rowEl = ref<globalThis.HTMLElement | null>(null)
+  const separatorEl = ref<globalThis.HTMLElement | null>(null)
+  const dir = useDirection(rootEl)
 
   const width = ref(0)
   const rowWidth = ref(0)
@@ -106,14 +106,14 @@
   }
   onScopeDispose(() => globalThis.cancelAnimationFrame?.(frame))
 
-  useResizeObserver(rootRef, (entries) => {
+  useResizeObserver(rootEl, (entries) => {
     const rect = entries[0]?.contentRect
     measure(() => {
       width.value = rect?.width ?? 0
       height.value = rect?.height ?? 0
     })
   })
-  useResizeObserver(rowRef, (entries) => {
+  useResizeObserver(rowEl, (entries) => {
     const rect = entries[0]?.contentRect
     globalThis.requestAnimationFrame?.(() => {
       rowWidth.value = rect?.width ?? 0
@@ -209,7 +209,7 @@
     const origin = side ? event.clientX : event.clientY
     const start = size.value
     resizing.value = true
-    separatorRef.value?.setPointerCapture?.(event.pointerId)
+    separatorEl.value?.setPointerCapture?.(event.pointerId)
     globalThis.document.body.style.userSelect = 'none'
 
     const onMove = (moveEvent: globalThis.PointerEvent) => {
@@ -290,7 +290,7 @@
 
 <template>
   <div
-    ref="rootRef"
+    ref="rootEl"
     v-bind="$attrs"
     :data-testid="testId"
     :data-compact="compact || null"
@@ -322,7 +322,7 @@
       />
 
       <div
-        ref="rowRef"
+        ref="rowEl"
         class="flex min-h-0 min-w-0 flex-1"
       >
         <div class="flex min-h-0 min-w-0 flex-1 flex-col">
@@ -361,7 +361,7 @@
             :style="{ height: `${size}px` }"
           >
             <div
-              ref="separatorRef"
+              ref="separatorEl"
               role="separator"
               tabindex="0"
               aria-orientation="horizontal"
@@ -423,7 +423,7 @@
           :style="{ width: `${size}px` }"
         >
           <div
-            ref="separatorRef"
+            ref="separatorEl"
             role="separator"
             tabindex="0"
             aria-orientation="vertical"

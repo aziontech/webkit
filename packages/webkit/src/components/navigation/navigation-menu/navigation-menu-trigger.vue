@@ -2,13 +2,13 @@
   import { computed, onMounted, onUnmounted, ref, useAttrs, watch } from 'vue'
 
   import { cn } from '../../../utils/cn'
-  import { resolveHostElement } from './composables/resolve-host-element'
   import {
-    useNavigationMenuRoot,
-    useOptionalNavigationMenuItem
+    useNavigationMenuContext,
+    useOptionalNavigationMenuItemContext
   } from './composables/use-navigation-menu-context'
-  import { useNavigationMenuListHighlight } from './composables/use-navigation-menu-list-highlight-context'
+  import { useNavigationMenuListHighlightContext } from './composables/use-navigation-menu-list-highlight-context'
   import { createChangeEventDetails } from './composables/use-navigation-menu-root'
+  import { resolveHostElement } from './lib/host-element'
 
   defineOptions({ name: 'NavigationMenuTrigger', inheritAttrs: false })
 
@@ -39,10 +39,10 @@
     () => (attrs['data-testid'] as string | undefined) ?? 'navigation-navigation-menu__trigger'
   )
 
-  const root = useNavigationMenuRoot()
-  const listHighlight = useNavigationMenuListHighlight()
-  const itemContext = useOptionalNavigationMenuItem()
-  const controlRef = ref<HTMLElement | null>(null)
+  const root = useNavigationMenuContext()
+  const listHighlight = useNavigationMenuListHighlightContext()
+  const itemContext = useOptionalNavigationMenuItemContext()
+  const controlEl = ref<HTMLElement | null>(null)
 
   const isLink = computed(() => props.href !== '')
 
@@ -63,7 +63,7 @@
     'focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) ' +
     'data-[popup-open]:text-(--text-default) data-[pressed]:text-(--text-default) data-[active]:text-(--text-default)'
 
-  const resolveElement = () => resolveHostElement(controlRef.value)
+  const resolveElement = () => resolveHostElement(controlEl.value)
 
   const syncHighlight = () => {
     if (isLink.value && props.active) {
@@ -93,7 +93,7 @@
     }
   }
 
-  const onPointerEnter = (event: globalThis.PointerEvent) => {
+  const onPointerenter = (event: globalThis.PointerEvent) => {
     listHighlight?.setTarget(resolveElement())
 
     if (isLink.value) {
@@ -108,8 +108,8 @@
     )
   }
 
-  const onPointerLeave = (event: globalThis.PointerEvent) => {
-    listHighlight?.handleTargetPointerLeave(event, resolveElement())
+  const onPointerleave = (event: globalThis.PointerEvent) => {
+    listHighlight?.onTargetPointerleave(event, resolveElement())
 
     if (isLink.value) {
       return
@@ -159,7 +159,7 @@
     syncHighlight()
   })
 
-  watch(controlRef, syncTriggerRegistration)
+  watch(controlEl, syncTriggerRegistration)
   watch(() => props.active, syncHighlight)
 
   watch(itemOpen, (open) => {
@@ -178,7 +178,7 @@
 <template>
   <component
     :is="componentTag"
-    ref="controlRef"
+    ref="controlEl"
     v-bind="passthroughAttrs"
     :href="isLink ? href : undefined"
     :type="isLink ? undefined : 'button'"
@@ -190,8 +190,8 @@
     :data-active="isLink && active ? '' : undefined"
     :data-popup-open="!isLink && itemOpen ? '' : undefined"
     :data-pressed="!isLink && itemOpen ? '' : undefined"
-    @pointerenter="onPointerEnter"
-    @pointerleave="onPointerLeave"
+    @pointerenter="onPointerenter"
+    @pointerleave="onPointerleave"
     @click="onClick"
     @keydown="onKeydown"
   >

@@ -3,7 +3,7 @@
 The 27 construction standards, each a single `.md` in this folder. `scope: general` ships to
 consuming projects; `scope: webkit` is internal to the design system. The **machine-readable
 source of truth** for rule → enforcement is
-[`../hooks/_lib/standards.mjs`](../hooks/_lib/standards.mjs), whose pairing with the rule
+[`../hooks/lib/standards.mjs`](../hooks/lib/standards.mjs), whose pairing with the rule
 files is checked in CI by
 [`packages/webkit/test/standards/invariant.test.mjs`](../../packages/webkit/test/standards/invariant.test.mjs).
 This table is the human-readable summary of that registry — when in doubt, the registry wins.

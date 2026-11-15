@@ -2,9 +2,9 @@
   import { computed, provide, ref, useAttrs, useId, watch } from 'vue'
 
   import { useControllable } from '../../../composables/use-controllable'
-  import { usePortalLocale } from '../../../composables/use-locale/use-translate'
   import { useMenuRoot } from '../../../composables/use-menu-root'
   import { usePlacement } from '../../../composables/use-placement'
+  import { usePortalLocale } from '../../../composables/use-translate'
   import type {
     DropdownMenuOptionValue,
     DropdownMenuPlacement,
@@ -61,17 +61,17 @@
   const attrs = useAttrs()
   const uid = useId()
 
-  const triggerRef = ref<globalThis.HTMLElement | null>(null)
-  const panelRef = ref<globalThis.HTMLElement | null>(null)
-  const panelBodyRef = ref<globalThis.HTMLElement | null>(null)
-  const bodyTarget = ref<globalThis.HTMLElement | null>(null)
+  const triggerEl = ref<globalThis.HTMLElement | null>(null)
+  const panelEl = ref<globalThis.HTMLElement | null>(null)
+  const panelBodyEl = ref<globalThis.HTMLElement | null>(null)
+  const bodyTargetEl = ref<globalThis.HTMLElement | null>(null)
 
-  watch(panelBodyRef, (el) => {
-    if (el) bodyTarget.value = el
+  watch(panelBodyEl, (el) => {
+    if (el) bodyTargetEl.value = el
   })
 
   function onPanelAfterLeave() {
-    bodyTarget.value = null
+    bodyTargetEl.value = null
   }
 
   const testId = computed(
@@ -97,8 +97,8 @@
   const offsetRef = computed(() => props.offset)
 
   const { resolvedPlacement, panelStyle } = usePlacement({
-    triggerRef,
-    panelRef,
+    triggerRef: triggerEl,
+    panelRef: panelEl,
     isOpen: isOpenRef,
     placement: placementRef,
     offset: offsetRef,
@@ -114,7 +114,7 @@
   }
 
   function focusTrigger() {
-    triggerRef.value?.focus({ preventScroll: true })
+    triggerEl.value?.focus({ preventScroll: true })
   }
 
   const { context, onPanelKeydown } = useMenuRoot({
@@ -124,9 +124,9 @@
     placement: resolvedPlacementRef,
     triggerId,
     panelId,
-    triggerRef,
-    panelRef,
-    panelBodyRef: bodyTarget,
+    triggerEl,
+    panelEl,
+    panelBodyEl: bodyTargetEl,
     setOpen,
     onSelect: (event, value) => emit('select', event, value),
     focusTrigger
@@ -158,7 +158,7 @@
           v-if="isOpenRef"
           :dir="portalLocale.dir"
           :lang="portalLocale.lang"
-          ref="panelRef"
+          ref="panelEl"
           :aria-hidden="!isOpenRef || undefined"
           :data-testid="`${testId}__panel`"
           :data-state="isOpenRef ? 'open' : 'closed'"
@@ -177,10 +177,10 @@
 
           <div
             :id="panelId"
-            ref="panelBodyRef"
+            ref="panelBodyEl"
             role="menu"
             tabindex="-1"
-            :aria-labelledby="triggerRef?.id || triggerId"
+            :aria-labelledby="triggerEl?.id || triggerId"
             :data-testid="`${testId}__body`"
             class="flex min-h-0 flex-1 flex-col overflow-x-hidden overflow-y-auto"
           />

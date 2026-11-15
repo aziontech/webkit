@@ -89,11 +89,11 @@
     })
   }
 
-  const handleClick = (event: MouseEvent) => {
+  const onClick = (event: MouseEvent) => {
     if (props.readonly) event.preventDefault()
   }
 
-  const handleChange = (event: Event) => {
+  const onChange = (event: Event) => {
     const input = event.target as HTMLInputElement
 
     if (isDisabled.value || props.readonly) {
@@ -154,8 +154,8 @@
       :aria-readonly="readonly || undefined"
       :data-testid="`${testId}__input`"
       v-bind="passthroughAttrs"
-      @click="handleClick"
-      @change="handleChange"
+      @click="onClick"
+      @change="onChange"
     />
     <svg
       v-if="indeterminate"

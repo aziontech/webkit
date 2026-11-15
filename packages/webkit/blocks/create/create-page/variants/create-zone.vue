@@ -47,7 +47,7 @@
     domainKind: 'required'
   })
   const advancedOpen = ref(false)
-  const fileRef = ref<HTMLInputElement | null>(null)
+  const fileEl = ref<HTMLInputElement | null>(null)
 
   const records = ref<ZoneRecord[]>([
     { name: '@', type: 'A', value: '192.0.2.10', ttl: 3600 },
@@ -222,7 +222,7 @@
       submitting.value = false
     }
   }
-  const openImport = () => fileRef.value?.click()
+  const openImport = () => fileEl.value?.click()
 </script>
 
 <template>
@@ -465,7 +465,7 @@
                   or paste zone file contents in Domain name
                 </p>
                 <input
-                  ref="fileRef"
+                  ref="fileEl"
                   type="file"
                   accept=".zone,.txt,.db,text/plain"
                   class="sr-only"

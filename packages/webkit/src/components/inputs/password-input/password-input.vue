@@ -2,7 +2,7 @@
   import { computed, ref, useAttrs, useSlots } from 'vue'
 
   import { useFieldControl } from '../../../composables/use-field-control'
-  import { useTranslate } from '../../../composables/use-locale/use-translate'
+  import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../i18n/messages/en'
   import IconButton from '../../actions/icon-button/icon-button.vue'
 
@@ -76,7 +76,7 @@
   const slots = useSlots()
 
   const visible = ref(false)
-  const inputRef = ref<globalThis.HTMLInputElement | null>(null)
+  const inputEl = ref<globalThis.HTMLInputElement | null>(null)
 
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? 'input-password-input'
@@ -97,7 +97,7 @@
   )
   const toggleIcon = computed(() => (visible.value ? 'ai ai-eye-off' : 'ai ai-eye'))
 
-  const handleInput = (event: globalThis.Event) => {
+  const onInput = (event: globalThis.Event) => {
     const target = event.target as globalThis.HTMLInputElement
     model.value = target.value
   }
@@ -108,7 +108,7 @@
 
   defineExpose({
     /** Moves focus to the native field. */
-    focus: (): void => inputRef.value?.focus()
+    focus: (): void => inputEl.value?.focus()
   })
 </script>
 
@@ -145,7 +145,7 @@
     </span>
 
     <input
-      ref="inputRef"
+      ref="inputEl"
       :type="visible ? 'text' : 'password'"
       :id="controlId"
       :aria-describedby="describedBy"
@@ -162,7 +162,7 @@
       dir="auto"
       class="relative z-(--z-control) w-full min-w-0 border-0 bg-transparent py-0 pe-0 ps-(--spacing-md) group-data-[has-icon-left]:ps-0 outline-none text-label-sm group-data-[monospace]:text-label-code-sm text-(--text-default) placeholder:text-(--text-muted) disabled:cursor-not-allowed disabled:text-(--text-disabled) read-only:cursor-default transition-opacity duration-150 ease-out motion-reduce:transition-none"
       v-bind="passthroughAttrs"
-      @input="handleInput"
+      @input="onInput"
     />
 
     <span

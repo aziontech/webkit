@@ -177,7 +177,7 @@
     deleteOpen.value = false
   }
 
-  const tableRef = ref<TableExposed<FileRow> | null>(null)
+  const tableEl = ref<TableExposed<FileRow> | null>(null)
   const isFolder = (entry: TreeEntry | undefined): entry is FolderEntry =>
     Boolean(entry && 'children' in entry)
   const isFileEntry = (pair: [string, TreeEntry]): pair is [string, FileEntry] => !isFolder(pair[1])
@@ -290,10 +290,10 @@
 
   const uploadOpen = ref(false)
   const picked = ref<PickedFile[]>([])
-  const pickerInput = ref<HTMLInputElement | null>(null)
-  const folderInput = ref<HTMLInputElement | null>(null)
+  const pickerInputEl = ref<HTMLInputElement | null>(null)
+  const folderInputEl = ref<HTMLInputElement | null>(null)
   const uploadMode = ref<UploadMode>('files')
-  const addHost = ref<HTMLElement | null>(null)
+  const addHostEl = ref<HTMLElement | null>(null)
 
   const toPicked = (file: File): PickedFile => ({
     file,
@@ -469,7 +469,7 @@
   const closeTransfer = async () => {
     transfer.value = []
     await nextTick()
-    addHost.value?.querySelector('button')?.focus()
+    addHostEl.value?.querySelector('button')?.focus()
   }
 
   onMounted(run)
@@ -492,7 +492,7 @@
         <Card :padded="false">
           <template #content>
             <DataTable
-              ref="tableRef"
+              ref="tableEl"
               v-model:sorting="sorting"
               v-model:global-filter="search"
               :data="sortedRows"
@@ -549,9 +549,9 @@
                         icon="ai ai-download"
                         kind="outlined"
                         size="large"
-                        :disabled="!tableRef"
+                        :disabled="!tableEl"
                         aria-label="Download CSV"
-                        @click="tableRef?.exportCsv({ filename: 'files.csv' })"
+                        @click="tableEl?.exportCsv({ filename: 'files.csv' })"
                       />
                     </Tooltip>
                     <CollectionPreferences
@@ -569,7 +569,7 @@
                       />
                     </div>
                     <div
-                      ref="addHost"
+                      ref="addHostEl"
                       class="shrink-0"
                     >
                       <SplitButton
@@ -809,7 +809,7 @@
                 kind="secondary"
                 size="medium"
                 icon="ai ai-folder-open"
-                @click="folderInput?.click()"
+                @click="folderInputEl?.click()"
               />
               <Button
                 key="button-2"
@@ -817,11 +817,11 @@
                 label="Browse files"
                 kind="secondary"
                 size="medium"
-                @click="pickerInput?.click()"
+                @click="pickerInputEl?.click()"
               />
             </FileDropzone>
             <input
-              ref="pickerInput"
+              ref="pickerInputEl"
               type="file"
               multiple
               class="hidden"
@@ -830,7 +830,7 @@
               @change="onPick"
             />
             <input
-              ref="folderInput"
+              ref="folderInputEl"
               type="file"
               webkitdirectory
               class="hidden"

@@ -17,11 +17,11 @@
 // already returns null for sub-components nested in their own folder.
 //
 // Bypassed for components on the legacy whitelist
-// (.claude/hooks/_lib/legacy-components.json).
+// (.claude/hooks/lib/legacy-components.json).
 
 import { existsSync } from 'node:fs'
 import { dirname, relative, resolve } from 'node:path'
-import { componentRootName, isLegacyComponent, resolveSpecForComponentPath } from './_lib/spec.mjs'
+import { componentRootName, isLegacyComponent, resolveSpecForComponentPath } from './lib/spec.mjs'
 
 const ROOT = process.cwd()
 
@@ -52,7 +52,7 @@ async function main() {
   const info = resolveSpecForComponentPath(abs, ROOT)
   if (!info) process.exit(0)
 
-  // Root component only — shared componentRootName predicate (_lib/spec.mjs), the same
+  // Root component only — shared componentRootName predicate (lib/spec.mjs), the same
   // definition check-tests.mjs and spec-compliance-checks.mjs use. Sub-components are
   // tested through their root, so skip them.
   if (componentRootName(abs.split('/src/components/').pop()) !== info.name) process.exit(0)
@@ -73,7 +73,7 @@ async function main() {
       `a11y via expectNoA11yViolations), and run it in Vitest browser mode (never\n` +
       `jsdom). If this is a legacy component, add\n` +
       `  { "category": "${info.category}", "name": "${info.name}" }\n` +
-      `to .claude/hooks/_lib/legacy-components.json.\n`
+      `to .claude/hooks/lib/legacy-components.json.\n`
   )
   process.exit(2)
 }

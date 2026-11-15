@@ -22,7 +22,7 @@
     () => (attrs['data-testid'] as string | undefined) ?? 'feedback-toast__action'
   )
 
-  const handleClick = (event: MouseEvent) => emit('click', event)
+  const onClick = (event: MouseEvent) => emit('click', event)
 </script>
 
 <template>
@@ -32,6 +32,6 @@
     size="small"
     :label="label"
     :data-testid="testId"
-    @click="handleClick"
+    @click="onClick"
   />
 </template>

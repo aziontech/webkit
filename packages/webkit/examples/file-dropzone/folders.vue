@@ -4,8 +4,8 @@
   import FileTokenGroup from '@aziontech/webkit/file-token-group'
   import { ref } from 'vue'
 
-  const filesInput = ref(null)
-  const folderInput = ref(null)
+  const filesInputEl = ref(null)
+  const folderInputEl = ref(null)
   const items = ref([])
 
   const add = (files) => {
@@ -33,19 +33,19 @@
           label="Browse files"
           kind="secondary"
           size="medium"
-          @click="filesInput?.click()"
+          @click="filesInputEl?.click()"
         />
         <Button
           label="Browse folder"
           kind="secondary"
           size="medium"
           icon="ai ai-folder-open"
-          @click="folderInput?.click()"
+          @click="folderInputEl?.click()"
         />
       </div>
     </FileDropzone>
     <input
-      ref="filesInput"
+      ref="filesInputEl"
       type="file"
       multiple
       class="hidden"
@@ -54,7 +54,7 @@
       @change="onPick"
     />
     <input
-      ref="folderInput"
+      ref="folderInputEl"
       type="file"
       webkitdirectory
       class="hidden"

@@ -245,7 +245,7 @@ function Component() {
 <template>
   <img src="photo.jpg" />
   <!-- Missing alt text -->
-  <div @click="handleClick">Click me</div>
+  <div @click="onClick">Click me</div>
   <!-- No keyboard handler -->
 </template>
 
@@ -256,8 +256,8 @@ function Component() {
     alt="Profile photo"
   />
   <div
-    @click="handleClick"
-    @keypress.enter="handleClick"
+    @click="onClick"
+    @keypress.enter="onClick"
     tabindex="0"
   >
     Click me

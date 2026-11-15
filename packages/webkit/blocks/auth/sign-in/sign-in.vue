@@ -64,7 +64,7 @@
     confirmPassword: ''
   })
 
-  const cardContent = ref<HTMLElement | null>(null)
+  const cardContentEl = ref<HTMLElement | null>(null)
   const cardHeight = ref(0)
   const resizing = ref(false)
   let resizeObserver: ResizeObserver | null = null
@@ -77,9 +77,9 @@
   }
 
   onMounted(() => {
-    if (typeof ResizeObserver === 'undefined' || !cardContent.value) return
+    if (typeof ResizeObserver === 'undefined' || !cardContentEl.value) return
     resizeObserver = new ResizeObserver(onCardResize)
-    resizeObserver.observe(cardContent.value)
+    resizeObserver.observe(cardContentEl.value)
   })
 
   onScopeDispose(() => {
@@ -188,7 +188,7 @@
     })
   }
 
-  const handlePrimary = () => {
+  const onPrimary = () => {
     if (verifying.value) return
     cardNotice.value = null
     if (step.value === 'email') {
@@ -273,12 +273,12 @@
                     @transitionend.self="resizing = false"
                   >
                     <form
-                      ref="cardContent"
+                      ref="cardContentEl"
                       class="flex flex-col gap-(--spacing-lg)"
                       aria-label="Sign in to your account"
                       :aria-busy="verifying || undefined"
                       novalidate
-                      @submit.prevent="handlePrimary"
+                      @submit.prevent="onPrimary"
                     >
                       <PageHeader
                         :title="heading.title"

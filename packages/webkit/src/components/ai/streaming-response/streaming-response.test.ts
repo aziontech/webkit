@@ -9,7 +9,7 @@ import {
   parseMarkdown,
   parseMarkdownIncremental,
   safeHref
-} from '../_lib/parse-markdown'
+} from '../lib/parse-markdown'
 import StreamingResponse from './streaming-response.vue'
 
 const rich = [

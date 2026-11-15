@@ -2,7 +2,7 @@
   import { computed, ref, useAttrs } from 'vue'
 
   import { logicalArrowKey, useDirection } from '../../../composables/use-direction'
-  import { useTranslate } from '../../../composables/use-locale/use-translate'
+  import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../i18n/messages/en'
   import DropdownMenu from '../../navigation/dropdown-menu/dropdown-menu.vue'
   import DropdownMenuGroup from '../../navigation/dropdown-menu/dropdown-menu-group/dropdown-menu-group.vue'
@@ -98,8 +98,8 @@
 
   const attrs = useAttrs()
   const { t } = useTranslate({ buttonGroup: en.buttonGroup })
-  const rootRef = ref<HTMLElement | null>(null)
-  const dir = useDirection(rootRef)
+  const rootEl = ref<HTMLElement | null>(null)
+  const dir = useDirection(rootEl)
   const focusedId = ref<string | null>(null)
 
   const OVERFLOW_ID = '__overflow'
@@ -179,10 +179,10 @@
 
   const controls = () =>
     Array.from(
-      rootRef.value?.querySelectorAll<HTMLElement>('[data-button-group-item]') ?? []
+      rootEl.value?.querySelectorAll<HTMLElement>('[data-button-group-item]') ?? []
     ).filter((el) => !el.hasAttribute('disabled'))
 
-  const onFocusIn = (event: FocusEvent) => {
+  const onFocusin = (event: FocusEvent) => {
     const id = (event.target as HTMLElement | null)
       ?.closest('[data-button-group-item]')
       ?.getAttribute('data-button-group-item')
@@ -207,7 +207,7 @@
 
 <template>
   <div
-    ref="rootRef"
+    ref="rootEl"
     v-bind="rootAttrs"
     role="toolbar"
     aria-orientation="horizontal"
@@ -216,7 +216,7 @@
     :data-kind="kind"
     :data-size="size"
     class="inline-flex max-w-full min-w-0 flex-wrap items-center gap-(--spacing-2xs)"
-    @focusin="onFocusIn"
+    @focusin="onFocusin"
     @keydown="onKeydown"
   >
     <template

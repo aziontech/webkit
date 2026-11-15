@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, onScopeDispose, ref, watch } from 'vue'
 
-  import { useTranslate } from '../../../composables/use-locale/use-translate'
+  import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../i18n/messages/en'
   import IconButton from '../../actions/icon-button/icon-button.vue'
 
@@ -41,8 +41,8 @@
 
   const { t } = useTranslate({ autoplayControl: en.autoplayControl })
 
-  const loop = ref<globalThis.HTMLElement | null>(null)
-  const track = ref<globalThis.HTMLElement | null>(null)
+  const loopEl = ref<globalThis.HTMLElement | null>(null)
+  const trackEl = ref<globalThis.HTMLElement | null>(null)
   const repeats = ref(1)
   const copies = computed(() => (props.fill ? repeats.value * 2 : 2))
 
@@ -56,18 +56,18 @@
   )
 
   const firstRow = computed(
-    () => (track.value?.firstElementChild as globalThis.HTMLElement | null) ?? null
+    () => (trackEl.value?.firstElementChild as globalThis.HTMLElement | null) ?? null
   )
 
   const measureRepeats = () => {
-    const strip = loop.value?.clientWidth ?? 0
+    const strip = loopEl.value?.clientWidth ?? 0
     const row = firstRow.value?.offsetWidth ?? 0
     repeats.value = row > 0 ? Math.max(1, Math.ceil(strip / row)) : 1
   }
 
   let observer: globalThis.ResizeObserver | null = null
 
-  watch([loop, firstRow, () => props.fill], ([strip, row, fill]) => {
+  watch([loopEl, firstRow, () => props.fill], ([strip, row, fill]) => {
     observer?.disconnect()
     observer = null
     if (!fill) return
@@ -83,7 +83,7 @@
 <template>
   <div class="relative w-full">
     <div
-      ref="loop"
+      ref="loopEl"
       :role="reduced === 'scroll' ? 'region' : undefined"
       :aria-label="(reduced === 'scroll' && ariaLabel) || undefined"
       :tabindex="reduced === 'scroll' ? 0 : undefined"
@@ -92,7 +92,7 @@
       class="group/loop relative w-full overflow-hidden focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:outline-none focus-visible:ring-inset data-[faded]:mask-[linear-gradient(to_right,transparent,black_8%,black_92%,transparent)] data-[reduced=scroll]:motion-reduce:overflow-x-auto"
     >
       <div
-        ref="track"
+        ref="trackEl"
         :style="{ animationDuration: `${passDuration}s` }"
         :data-loading="loading || null"
         :data-paused="paused || null"

@@ -72,8 +72,8 @@
     }, 700)
   }
 
-  const resourcesTable = ref(null)
-  const exportCsv = () => resourcesTable.value?.exportCsv({ filename: 'resources.csv' })
+  const resourcesTableEl = ref(null)
+  const exportCsv = () => resourcesTableEl.value?.exportCsv({ filename: 'resources.csv' })
 
   const onRowAction = (value, row) => {
     if (value === 'view') router.push(`/resources/${row.id}`)
@@ -192,7 +192,7 @@
             >
               <template #content>
                 <DataTable
-                  ref="resourcesTable"
+                  ref="resourcesTableEl"
                   v-bind="tableProps"
                   :loading="loading || fetching"
                   enable-sorting

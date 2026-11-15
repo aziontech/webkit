@@ -205,8 +205,8 @@
     }, 700)
   }
 
-  const deploymentsTable = ref<TableExposed<Deployment> | null>(null)
-  const exportCsv = () => deploymentsTable.value?.exportCsv({ filename: 'deployments.csv' })
+  const deploymentsTableEl = ref<TableExposed<Deployment> | null>(null)
+  const exportCsv = () => deploymentsTableEl.value?.exportCsv({ filename: 'deployments.csv' })
 
   const openDeployment = (row: Deployment) => {
     window.location.assign(`/deployments/${row.id}`)
@@ -311,7 +311,7 @@
             >
               <template #content>
                 <DataTable
-                  ref="deploymentsTable"
+                  ref="deploymentsTableEl"
                   v-bind="tableProps"
                   :loading="loading || fetching"
                   enable-sorting

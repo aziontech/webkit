@@ -38,14 +38,14 @@
   const FOCUSABLE =
     'a[href],button:not([disabled]),input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])'
 
-  const contentRef = ref<HTMLElement | null>(null)
+  const contentEl = ref<HTMLElement | null>(null)
   const needsFocus = ref(false)
   const measure = () => {
-    const el = contentRef.value
+    const el = contentEl.value
     needsFocus.value = !!el && el.scrollHeight > el.clientHeight + 1 && !el.querySelector(FOCUSABLE)
   }
-  useResizeObserver(contentRef, measure)
-  useMutationObserver(contentRef, measure, { childList: true, subtree: true })
+  useResizeObserver(contentEl, measure)
+  useMutationObserver(contentEl, measure, { childList: true, subtree: true })
 
   const scrollTestId = computed(
     () => `${drawerCtx?.testId ?? ctx?.testId ?? 'overlay-panel'}__scroll`
@@ -67,7 +67,7 @@
   </ScrollArea>
   <div
     v-else
-    ref="contentRef"
+    ref="contentEl"
     :tabindex="needsFocus ? 0 : undefined"
     :class="contentClasses"
     :data-testid="`${ctx?.testId}__content`"

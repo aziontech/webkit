@@ -14,7 +14,7 @@
     },
     {
       "name": "Screen",
-      "summary": "With `kind=\"screen\"` the band measures one viewport, minus whatever `--banner-offset` a sticky bar above it declares.",
+      "summary": "With `kind=\"screen\"` the band measures one viewport, minus whatever `--hero-banner-offset` a sticky bar above it declares.",
       "file": "screen.vue"
     },
     {
@@ -44,7 +44,7 @@
     },
     {
       "name": "Alignment",
-      "summary": "In a `screen` band the copy is placed by `align`, so a page never computes the band’s height itself. `center` is the default and puts the headline on the page’s own centre line, minus `--banner-offset`.",
+      "summary": "In a `screen` band the copy is placed by `align`, so a page never computes the band’s height itself. `center` is the default and puts the headline on the page’s own centre line, minus `--hero-banner-offset`.",
       "file": "alignment.vue"
     },
     {

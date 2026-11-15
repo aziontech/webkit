@@ -5,7 +5,7 @@ import { dirname, join, relative, resolve } from 'node:path'
 import { fileURLToPath, pathToFileURL } from 'node:url'
 
 import { exportTarget } from './lib/exports.mjs'
-import { getSection, parseSpecFile } from '../../../.claude/hooks/_lib/spec.mjs'
+import { getSection, parseSpecFile } from '../../../.claude/hooks/lib/spec.mjs'
 
 const SCRIPT_DIR = dirname(fileURLToPath(import.meta.url))
 export const DEFAULT_ROOT = resolve(SCRIPT_DIR, '../../..')

@@ -64,9 +64,9 @@
   const step = ref(0)
   const frame = computed(() => FRAMES[step.value])
 
-  const stage = ref<globalThis.HTMLElement | null>(null)
+  const stageEl = ref<globalThis.HTMLElement | null>(null)
 
-  const { position } = useMockupCursor(stage, () => frame.value.cursor)
+  const { position } = useMockupCursor(stageEl, () => frame.value.cursor)
 
   const altered = (name: string) => frame.value.order.indexOf(name) !== SAVED.indexOf(name)
 
@@ -113,7 +113,7 @@
     :mobile-width="380"
   >
     <div
-      ref="stage"
+      ref="stageEl"
       :data-lifted="frame.review || null"
       class="relative flex flex-col py-(--spacing-xs) transition-[translate] duration-slow-01 ease-productive-entrance data-lifted:-translate-y-14 motion-reduce:transition-none"
     >

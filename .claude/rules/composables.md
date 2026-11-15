@@ -12,7 +12,7 @@ It rests on three decisions, in priority order:
 
 Verifiable by lint/signature, without executing anything.
 
-- **Name & file.** `useXxx`, one composable per file, kebab filename (`use-controllable.ts`). **Co-located** in the component's own `composables/` folder when it is specific to that component; in [`src/composables/`](../../packages/webkit/src/composables/) when it is shared across components.
+- **Name & file.** `useXxx`, one composable per file, kebab filename (`use-controllable.ts`). **Co-located** in the component's own `composables/` folder when it is specific to that component; in [`src/composables/`](../../packages/webkit/src/composables/) when it is shared across components. A shared composable is a folder `src/composables/use-x/` holding `use-x.ts` (the code), `index.ts` (re-export only) and `use-x.test.ts`. A composable's or component's private helpers that are not composables live in a **`lib/`** folder next to it (`navigation-menu/lib/css-dimensions.ts`) — never `_lib/`, `_helpers/`, `utils/` or `data/`; `composables/` holds only `use-*.ts`.
 - **Return.** An **object of refs / computed / functions** — never a `reactive()` object (destructuring a `reactive` loses reactivity). Reactive state that escapes is wrapped in **`readonly()`**; mutation happens only through returned functions.
 - **Arguments.** Accept **`MaybeRefOrGetter<T>`** and resolve with **`toValue()`** (the successor to `unref`) — so a caller may pass a ref, a getter, or a raw value. Do not accept a `reactive` object as an argument for the same reason you do not return one.
 - **Types.** Generics + an **explicit return type**; no `any`. Export the return type when a consumer needs to hold it (`UseControllableReturn<T>`).
@@ -63,17 +63,18 @@ Compound components (`structure: composition`, see [`compound-api.md`](./compoun
 
 ```ts
 // injection-key.ts
-export const LOG_VIEW_KEY: InjectionKey<LogViewContext> = Symbol('LogView')
+export const LogViewInjectionKey: InjectionKey<LogViewContext> = Symbol('LogView')
 
-// use-log-view-context.ts
+// composables/use-log-view-context.ts
 export function useLogViewContext(): LogViewContext {
-  const ctx = inject(LOG_VIEW_KEY, null)
+  const ctx = inject(LogViewInjectionKey, null)
   if (!ctx) throw new Error('useLogViewContext must be used within <LogView>.')
   return ctx
 }
 ```
 
-- A **typed `InjectionKey<T>`** lives in `injection-key.ts` next to the root; its `Symbol()` description is the PascalCase component name (see [`imports.md`](./imports.md) for why `injection-key.ts` is imported as source).
+- A **typed `InjectionKey<T>`** lives in `injection-key.ts` next to the root, named **`<Component>[<Part>]InjectionKey`** (`LogViewInjectionKey`, `TableRowGroupInjectionKey`); its `Symbol()` description is the same PascalCase name without the suffix (`Symbol('LogView')`, `Symbol('TableRowGroup')`) — never `…Context`, `…Key`, `xContextKey` or `SCREAMING_CASE` (see [`imports.md`](./imports.md) for why `injection-key.ts` is imported as source).
+- The context composable is **`composables/use-<component>[-<part>]-context.ts`** exporting **`use<Component>[<Part>]Context`** (and `provide<Component>[<Part>]Context` when the root wraps the `provide`), with the full component name (`useTutorialPanelContext`, not `useTutorialContext`).
 - `useXxxContext()` does the `inject` and **throws a clear error when used outside its provider** — a leaf rendered loose fails loudly, not silently with `undefined`.
 - The root `provide`s the context; only the root. Leaves only `inject` via this composable.
 

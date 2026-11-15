@@ -12,11 +12,11 @@ import {
   watch
 } from 'vue'
 
-import { waitForCloseTransition, waitForOpenTransition } from '../presets/animations'
 import {
   createChangeEventDetails,
   type NavigationMenuChangeEventDetails
-} from './create-change-event-details'
+} from '../lib/change-event-details'
+import { waitForCloseTransition, waitForOpenTransition } from '../presets/animations'
 import {
   type NavigationMenuPopupSize,
   useNavigationMenuViewportSize
@@ -36,14 +36,14 @@ export interface NavigationMenuRootEmit {
   (event: 'open-change-complete', open: boolean): void
 }
 
-export interface UseNavigationMenuRootStateOptions {
+export interface UseNavigationMenuRootOptions {
   delay: MaybeRefOrGetter<number>
   closeDelay: MaybeRefOrGetter<number>
   orientation: MaybeRefOrGetter<NavigationMenuRootOrientation>
   dir?: MaybeRefOrGetter<'ltr' | 'rtl'>
 }
 
-export interface UseNavigationMenuRootStateReturn {
+export interface UseNavigationMenuRootReturn {
   value: ComputedRef<NavigationMenuItemValue | null>
   open: ComputedRef<boolean>
   orientation: ComputedRef<NavigationMenuRootOrientation>
@@ -86,13 +86,13 @@ interface TriggerEntry {
 const PANEL_FOCUSABLE =
   'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
 
-export function useNavigationMenuRootState(
+export function useNavigationMenuRoot(
   controlledValue: MaybeRefOrGetter<NavigationMenuItemValue | null>,
   isControlled: MaybeRefOrGetter<boolean>,
   internalValue: Ref<NavigationMenuItemValue | null>,
-  options: UseNavigationMenuRootStateOptions,
+  options: UseNavigationMenuRootOptions,
   emit: NavigationMenuRootEmit
-): UseNavigationMenuRootStateReturn {
+): UseNavigationMenuRootReturn {
   const activationDirection = ref<NavigationMenuActivationDirection>(null)
   const viewportTargetEl = shallowRef<HTMLElement | null>(null)
   const activeTriggerEl = shallowRef<HTMLElement | null>(null)

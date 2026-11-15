@@ -24,6 +24,10 @@ src/components/<name>/
     <name>-<part>.vue
 ```
 
+- **Name internals one way**: an event handler is `onX` with the DOM event spelled as Vue compiles it
+  (`onClick`, `onKeydown`, `onPointerdown`, never `handleClick`); a template ref to an element is
+  `xEl` / `xEls` (`triggerEl`, never `triggerRef`); an injection key is
+  `<Component>[<Part>]InjectionKey`; private helpers live in `lib/`.
 - **Co-locate** what only this component uses (its composables, its `injection-key.ts`, its
   sub-components). Promote to a shared `src/composables/` only when a second component needs it.
 - Start every `<script setup lang="ts">` with `defineOptions({ name, inheritAttrs: false })` —

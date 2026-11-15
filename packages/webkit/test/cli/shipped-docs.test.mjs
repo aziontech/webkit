@@ -4,7 +4,7 @@ import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs'
 import { join, relative } from 'node:path'
 
 import { LAYOUT_CLASS_FAMILIES, nonLayoutClasses } from '../../src/eslint-plugin/lib/layout-classes.js'
-import { PKG_ROOT } from './_helpers/cli-project.mjs'
+import { PKG_ROOT } from './lib/cli-project.mjs'
 
 const REPO_ROOT = join(PKG_ROOT, '..', '..')
 const THEME_ROOT = join(PKG_ROOT, '..', 'theme')

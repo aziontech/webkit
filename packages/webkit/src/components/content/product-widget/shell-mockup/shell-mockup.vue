@@ -12,7 +12,7 @@
   import Avatar from '../../avatar/avatar.vue'
   import Brand from '../../brand/brand.vue'
   import Kbd from '../../kbd/kbd.vue'
-  import { SHELL_MOCKUP_KEY } from './injection-key'
+  import { ShellMockupInjectionKey } from './injection-key'
 
   defineOptions({ name: 'ShellMockup', inheritAttrs: false })
 
@@ -138,7 +138,7 @@
     '--text-body-xs-line-height': '1.5'
   }
 
-  const root = ref<globalThis.HTMLElement | null>(null)
+  const rootEl = ref<globalThis.HTMLElement | null>(null)
   const frame = ref({ width: props.width, height: 600, scale: 1 })
 
   const reduced = ref(false)
@@ -172,7 +172,7 @@
     if (reduced.value) entered.value = true
     if (typeof globalThis.ResizeObserver === 'function') {
       observer = new globalThis.ResizeObserver(measure)
-      if (root.value) observer.observe(root.value)
+      if (rootEl.value) observer.observe(rootEl.value)
     }
     measure()
   })
@@ -189,7 +189,7 @@
   )
 
   watch(
-    root,
+    rootEl,
     (element) => {
       intersection?.disconnect()
       if (!element || typeof globalThis.IntersectionObserver !== 'function') return
@@ -211,7 +211,7 @@
   })
 
   function measure() {
-    const host = root.value
+    const host = rootEl.value
     if (!host?.offsetWidth) return
     const mobile = !(globalThis.matchMedia?.('(min-width: 768px)')?.matches ?? true)
     const width = mobile ? props.mobileWidth : props.width
@@ -230,19 +230,20 @@
   }
 
   function beatStyle(order: number): Record<string, string> {
-    if (reduced.value || !props.animated) return { '--part-duration': '0ms', '--part-delay': '0ms' }
+    if (reduced.value || !props.animated)
+      return { '--shell-mockup-part-duration': '0ms', '--shell-mockup-part-delay': '0ms' }
     return {
-      '--part-duration': duration[props.travel],
-      '--part-delay': `${Math.round(globalThis.parseFloat(duration[props.beat]) * order)}ms`
+      '--shell-mockup-part-duration': duration[props.travel],
+      '--shell-mockup-part-delay': `${Math.round(globalThis.parseFloat(duration[props.beat]) * order)}ms`
     }
   }
 
-  provide(SHELL_MOCKUP_KEY, { entered: readonly(entered), beatStyle })
+  provide(ShellMockupInjectionKey, { entered: readonly(entered), beatStyle })
 </script>
 
 <template>
   <figure
-    ref="root"
+    ref="rootEl"
     v-bind="$attrs"
     :data-testid="testId"
     :inert="interactive ? undefined : true"

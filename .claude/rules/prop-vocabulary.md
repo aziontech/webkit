@@ -7,7 +7,7 @@ rule fixes the canonical word for each recurring concept, and it is machine-enfo
 component **creation and on every edit**. It is the prop part of the naming standard
 ([`naming.md`](./naming.md), decisions N1–N7 and finding api-76).
 
-The single source of truth is [`.claude/hooks/_lib/prop-vocabulary.mjs`](../hooks/_lib/prop-vocabulary.mjs).
+The single source of truth is [`.claude/hooks/lib/prop-vocabulary.mjs`](../hooks/lib/prop-vocabulary.mjs).
 This document is its human-readable form; the two must agree. `build-catalog.mjs` stamps the
 vocabulary into `catalog.json` so the MCP steers AI-written consumer code toward the canonical
 names.
@@ -216,5 +216,5 @@ old → new map, with value renames, is `packages/webkit/src/cli/migrations/v6-p
 - Do not prefix a boolean with `is`/`has`, and do not name it negatively or as `hide*`.
 - Do not use `left`/`right` for a position, side or alignment value.
 - Do not let the spec's Default column disagree with `withDefaults`.
-- Do not edit `prop-vocabulary.md` without editing `_lib/prop-vocabulary.mjs` in the same PR
+- Do not edit `prop-vocabulary.md` without editing `lib/prop-vocabulary.mjs` in the same PR
   (and vice-versa) — they are one source in two forms.

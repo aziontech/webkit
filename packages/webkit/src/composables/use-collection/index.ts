@@ -3,7 +3,7 @@ export type {
   CollectionDensity,
   CollectionPreferencesValue,
   PreferencesStorage
-} from './preferences'
+} from './lib/preferences'
 export type {
   FilteringProperty,
   PropertyFilterOperation,
@@ -12,10 +12,10 @@ export type {
   PropertyFilterQuery,
   PropertyFilterToken,
   PropertyFilterTokenGroup
-} from './property-filter'
-export { matchesQuery, matchesText, parseFilterText, tokenText } from './property-filter'
-export type { CollectionUrlAdapter, RouterLike } from './url'
-export { historyAdapter, routerAdapter } from './url'
+} from './lib/property-filter'
+export { matchesQuery, matchesText, parseFilterText, tokenText } from './lib/property-filter'
+export type { CollectionUrlAdapter, RouterLike } from './lib/url'
+export { historyAdapter, routerAdapter } from './lib/url'
 export type {
   CollectionCardListProps,
   CollectionColumn,

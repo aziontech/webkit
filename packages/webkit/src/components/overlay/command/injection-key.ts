@@ -74,11 +74,11 @@ export interface CommandContext {
   onInputKeydown: (event: globalThis.KeyboardEvent) => void
 }
 
-export const CommandInjectionKey: InjectionKey<CommandContext> = Symbol('CommandContext')
+export const CommandInjectionKey: InjectionKey<CommandContext> = Symbol('Command')
 
-export const CommandGroupIdKey: InjectionKey<string | null> = Symbol('CommandGroupId')
+export const CommandGroupInjectionKey: InjectionKey<string | null> = Symbol('CommandGroup')
 
-export const CommandPageKey: InjectionKey<string> = Symbol('CommandPage')
+export const CommandPageInjectionKey: InjectionKey<string> = Symbol('CommandPage')
 
 export function useCommandMenuContext(): CommandContext {
   const ctx = inject(CommandInjectionKey)

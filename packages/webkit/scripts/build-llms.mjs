@@ -4,7 +4,7 @@ import { existsSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync
 import { dirname, join, posix, relative, resolve } from 'node:path'
 import { fileURLToPath, pathToFileURL } from 'node:url'
 
-import { getSection, parseSpecFile } from '../../../.claude/hooks/_lib/spec.mjs'
+import { getSection, parseSpecFile } from '../../../.claude/hooks/lib/spec.mjs'
 
 const SCRIPT_DIR = dirname(fileURLToPath(import.meta.url))
 const PKG_ROOT = resolve(SCRIPT_DIR, '..')

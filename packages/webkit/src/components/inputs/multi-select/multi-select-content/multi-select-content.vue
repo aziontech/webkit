@@ -13,21 +13,21 @@
     watch
   } from 'vue'
 
-  import LazyNodes from '../../../../composables/use-lazy-chunks/lazy-nodes'
-  import { useListboxContent } from '../../../../composables/use-listbox'
-  import { usePortalLocale, useTranslate } from '../../../../composables/use-locale/use-translate'
+  import LazyNodes from '../../../../composables/use-lazy-chunks/lib/lazy-nodes'
+  import { useListboxContent } from '../../../../composables/use-listbox-content'
   import { usePlacement } from '../../../../composables/use-placement'
+  import { usePortalLocale, useTranslate } from '../../../../composables/use-translate'
   import * as en from '../../../../i18n/messages/en'
   import ScrollArea from '../../../layout/scroll-area/scroll-area.vue'
   import Spinner from '../../../utils/spinner/spinner.vue'
-  import { multiSelectContextKey } from '../injection-key'
+  import { MultiSelectInjectionKey } from '../injection-key'
 
   defineOptions({
     name: 'MultiSelectContent',
     inheritAttrs: false
   })
 
-  const ctx = inject(multiSelectContextKey)
+  const ctx = inject(MultiSelectInjectionKey)
   if (!ctx) {
     throw new Error('MultiSelectContent must be used inside MultiSelect.')
   }
@@ -62,26 +62,26 @@
     () => (attrs['data-testid'] as string | undefined) ?? 'multi-select-content'
   )
 
-  const root = ref<globalThis.HTMLDivElement | null>(null)
+  const rootEl = ref<globalThis.HTMLDivElement | null>(null)
   const lazy = ref<{ revealAll: () => void; hasHidden: () => boolean } | null>(null)
 
   const { panelStyle } = usePlacement({
-    triggerRef: ctx.triggerRef,
-    panelRef: root,
+    triggerRef: ctx.triggerEl,
+    panelRef: rootEl,
     isOpen: ctx.open,
     placement: 'bottom-start',
     offset: 4,
     matchTriggerWidth: true
   })
 
-  const focusTarget = computed(() => ctx.controlRef.value ?? ctx.triggerRef.value)
+  const focusTarget = computed(() => ctx.controlEl.value ?? ctx.triggerEl.value)
 
   const { onKeydown, navigate } = useListboxContent({
-    root,
+    root: rootEl,
     lazy,
     open: ctx.open,
     setOpen: ctx.setOpen,
-    triggerRef: ctx.triggerRef,
+    triggerEl: ctx.triggerEl,
     pendingFocus: ctx.pendingFocus,
     textFieldSelector: 'input:not([type="checkbox"]), textarea',
     focusTarget,
@@ -149,7 +149,7 @@
         v-if="ctx.open.value"
         :dir="portalLocale.dir"
         :lang="portalLocale.lang"
-        ref="root"
+        ref="rootEl"
         v-bind="$attrs"
         :data-testid="testId"
         :data-state="ctx.open.value ? 'open' : 'closed'"

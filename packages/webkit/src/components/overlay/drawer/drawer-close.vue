@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { inject, useAttrs } from 'vue'
 
-  import { useTranslate } from '../../../composables/use-locale/use-translate'
+  import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../i18n/messages/en'
   import IconButton from '../../actions/icon-button/icon-button.vue'
   import { DrawerInjectionKey } from './injection-key'
@@ -25,7 +25,7 @@
   const { t } = useTranslate({ drawer: en.drawer })
   const ctx = inject(DrawerInjectionKey)
 
-  const handleClick = () => {
+  const onClick = () => {
     ctx?.close()
   }
 </script>
@@ -39,6 +39,6 @@
     :ariaLabel="props.ariaLabel || t('drawer.close')"
     :data-testid="`${ctx.testId}__close`"
     :class="attrs.class"
-    @click="handleClick"
+    @click="onClick"
   />
 </template>

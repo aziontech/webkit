@@ -429,8 +429,8 @@
     }, 700)
   }
 
-  const tableRef = ref<TableExposed<EventRecord> | null>(null)
-  const exportCsv = () => tableRef.value?.exportCsv({ filename: 'events.csv' })
+  const tableEl = ref<TableExposed<EventRecord> | null>(null)
+  const exportCsv = () => tableEl.value?.exportCsv({ filename: 'events.csv' })
 
   const matchedEvents = computed(() => searchEvents(filteredEvents.value, search.value))
 
@@ -757,7 +757,7 @@
               icon="ai ai-download"
               kind="outlined"
               size="medium"
-              :disabled="!tableRef"
+              :disabled="!tableEl"
               aria-label="Download CSV"
               data-testid="export-button"
               @click="exportCsv"

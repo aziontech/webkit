@@ -167,8 +167,8 @@
   })
 
   const loading = ref(false)
-  const table = ref<TableExposed<Variable> | null>(null)
-  const exportCsv = () => table.value?.exportCsv({ filename: 'variables.csv' })
+  const tableEl = ref<TableExposed<Variable> | null>(null)
+  const exportCsv = () => tableEl.value?.exportCsv({ filename: 'variables.csv' })
 
   const refresh = () => {
     if (loading.value) return
@@ -311,7 +311,7 @@
   const view = ref('Form')
   const jsonText = ref('{}')
   const jsonError = ref('')
-  const fileInput = ref<HTMLInputElement | null>(null)
+  const fileInputEl = ref<HTMLInputElement | null>(null)
 
   const filledEntries = computed(() => entries.value.filter((entry) => !isEmptyEntry(entry)))
   const keyCounts = computed(() =>
@@ -739,7 +739,7 @@
           >
             <template #content>
               <DataTable
-                ref="table"
+                ref="tableEl"
                 v-bind="tableProps"
                 :loading="loading || fetching"
                 enable-sorting
@@ -930,10 +930,10 @@
                       icon="ai ai-upload"
                       kind="outlined"
                       size="medium"
-                      @click="fileInput?.click()"
+                      @click="fileInputEl?.click()"
                     />
                     <input
-                      ref="fileInput"
+                      ref="fileInputEl"
                       type="file"
                       accept=".env,.txt,text/plain"
                       class="sr-only"

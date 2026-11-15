@@ -155,7 +155,7 @@ Banned file names: `types`, `kinds`, `basic`, `overview`, `playground`, `demo`, 
 
 The full dictionary (concept → canonical name, banned aliases, values) is
 [`prop-vocabulary.md`](./prop-vocabulary.md), with its machine side
-`.claude/hooks/_lib/prop-vocabulary.mjs`. The decisions it encodes:
+`.claude/hooks/lib/prop-vocabulary.mjs`. The decisions it encodes:
 
 - **The look is `variant`** (N1). Where `kind` meant "which sort of part" (a table cell that is
   a checkbox, a page button that means "next", a chart axis), it is `type`.
@@ -432,7 +432,7 @@ A rule name starts with a verb prefix: `no-`, `prefer-`, `require-`, `valid-` or
 - **Agents:** end in an agent noun (`-er` / `-or`), the skill they run plus the suffix:
   `figma-extract` → `figma-extractor`, `spec-create` → `spec-creator`.
 - **Hooks:** `validate-<x>.mjs` (checks content), `enforce-<x>.mjs` (requires a step) or
-  `check-<x>.mjs`; a data module is not a hook and lives in `.claude/hooks/_lib/`.
+  `check-<x>.mjs`; a data module is not a hook and lives in `.claude/hooks/lib/`.
 
 | ✅                        | ❌                      |
 | ------------------------- | ----------------------- |
@@ -546,7 +546,7 @@ These cannot be decided by a machine; the reviewer holds them.
   runs the same engine on the file being written and blocks only violations the write adds.
   It fails open on any error.
 - **Vocabulary:** prop, value, event, slot and data-attribute words live in
-  `.claude/hooks/_lib/prop-vocabulary.mjs`, shared with `validate-spec-compliance` (see
+  `.claude/hooks/lib/prop-vocabulary.mjs`, shared with `validate-spec-compliance` (see
   [`prop-vocabulary.md`](./prop-vocabulary.md)).
 - **Consumers:** the ESLint rule `webkit/no-deprecated-name` reads
   `src/cli/migrations/v6*.json` and flags retired component imports, renamed props on WebKit

@@ -138,7 +138,7 @@ export interface TableContext {
   registerCaption?: () => () => void
 }
 
-export const TableInjectionKey: InjectionKey<TableContext> = Symbol('TableContext')
+export const TableInjectionKey: InjectionKey<TableContext> = Symbol('Table')
 
 export interface TableRowGroupContext {
   /** Body rows highlight on hover; header/footer rows do not. */
@@ -147,7 +147,7 @@ export interface TableRowGroupContext {
   compact?: boolean
 }
 
-export const TableRowGroupKey: InjectionKey<TableRowGroupContext> = Symbol('TableRowGroupContext')
+export const TableRowGroupInjectionKey: InjectionKey<TableRowGroupContext> = Symbol('TableRowGroup')
 
 export interface TableColumn {
   /** Column id; falls back to accessorKey. */

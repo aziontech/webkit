@@ -4,4 +4,4 @@ export interface FooterContext {
   testId: string
 }
 
-export const FooterInjectionKey: InjectionKey<FooterContext> = Symbol('FooterContext')
+export const FooterInjectionKey: InjectionKey<FooterContext> = Symbol('Footer')

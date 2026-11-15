@@ -4,7 +4,7 @@ category: layout
 structure: composition
 status: implemented
 spec_version: 3
-checksum: f5cf7f8247bb80ee4eec9ca8f2ba15d9e6caa1549a59a79f193db12b848e217c
+checksum: be5a2f62fddd6efb27d8c88766e52537915a0640112740c2bd57a17c8ca4d1ad
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit
 created: 2026-08-16
@@ -186,7 +186,7 @@ _none_
 
 - Layout: logical utilities only (`ms-`/`me-`, `ps-`/`pe-`, `start-`/`end-`, `text-start`), so the layout mirrors under `dir="rtl"`.
 - Icons: the grip is symmetric and does not mirror.
-- Keyboard: on a horizontal group `ArrowLeft`/`ArrowRight` nudge the handle toward the start/end panel, swapped under `dir="rtl"` (`useDirection(handleRef)`), so `ArrowRight` always moves the handle right on screen.
+- Keyboard: on a horizontal group `ArrowLeft`/`ArrowRight` nudge the handle toward the start/end panel, swapped under `dir="rtl"` (`useDirection(handleEl)`), so `ArrowRight` always moves the handle right on screen.
 - Pointer: the drag delta is inverted on horizontal groups under `rtl`, because the first panel sits on the right.
 - User data: none.
 

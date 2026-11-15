@@ -23,4 +23,4 @@ export interface FieldContext {
   register: (kind: FieldPartKind, id: string) => () => void
 }
 
-export const fieldContextKey: InjectionKey<FieldContext | null> = Symbol('Field')
+export const FieldInjectionKey: InjectionKey<FieldContext | null> = Symbol('Field')

@@ -13,4 +13,4 @@ export interface SidebarContext {
   expand?: () => void
 }
 
-export const SidebarInjectionKey: InjectionKey<SidebarContext> = Symbol('SidebarContext')
+export const SidebarInjectionKey: InjectionKey<SidebarContext> = Symbol('Sidebar')

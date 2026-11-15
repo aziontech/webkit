@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, onMounted, onScopeDispose, ref, useAttrs } from 'vue'
 
-  import { useTranslate } from '../../../composables/use-locale/use-translate'
+  import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../i18n/messages/en'
   import { useScrollProgress } from './composables/use-scroll-progress'
   import { RUNTIME_API_ROWS, RUNTIME_APIS } from './runtime-api-data'
@@ -28,9 +28,9 @@
   const DRIFT = 72
   const REST = 26
 
-  const field = ref<globalThis.HTMLElement | null>(null)
+  const fieldEl = ref<globalThis.HTMLElement | null>(null)
   const lit = ref(RUNTIME_APIS.map((api) => Boolean(api.lit || api.azion)))
-  const { progress } = useScrollProgress(() => (props.animated ? field.value : null))
+  const { progress } = useScrollProgress(() => (props.animated ? fieldEl.value : null))
 
   const shufflable = RUNTIME_APIS.flatMap((api, index) => (api.pinned || api.azion ? [] : [index]))
 
@@ -86,7 +86,7 @@
 
   function rowStyle(row: number): Record<string, string> {
     const direction = row % 2 === 0 ? 1 : -1
-    return { '--row-drift': `${(REST + progress.value * DRIFT) * direction}px` }
+    return { '--runtime-api-cloud-row-drift': `${(REST + progress.value * DRIFT) * direction}px` }
   }
 
   function toneOf(pill: { azion: boolean; index: number }): 'azion' | 'lit' | 'muted' {
@@ -97,7 +97,7 @@
 
 <template>
   <div
-    ref="field"
+    ref="fieldEl"
     v-bind="$attrs"
     :data-testid="testId"
     role="list"
@@ -109,7 +109,7 @@
       :key="rowIndex"
       role="none"
       :style="rowStyle(rowIndex)"
-      class="flex w-max shrink-0 translate-x-(--row-drift) items-center gap-(--spacing-xs) will-change-[translate] rtl:-translate-x-(--row-drift)"
+      class="flex w-max shrink-0 translate-x-(--runtime-api-cloud-row-drift) items-center gap-(--spacing-xs) will-change-[translate] rtl:-translate-x-(--runtime-api-cloud-row-drift)"
     >
       <span
         v-for="pill in row"

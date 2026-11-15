@@ -14,7 +14,7 @@ You are the echo-reporter sub-agent. You execute the echo-report skill verbatim.
 ## What to do
 
 1. Re-read every file the orchestrator listed (root .vue, sub-component .vue files, examples/<name>/*, .figma.ts).
-2. Parse them with your own regex/AST pass — do NOT call into .claude/hooks/_lib/spec.mjs. Two independent parsers agreeing is the precision boost.
+2. Parse them with your own regex/AST pass — do NOT call into .claude/hooks/lib/spec.mjs. Two independent parsers agreeing is the precision boost.
 3. Diff defineProps / defineEmits / defineSlots / defineOptions / story exports / .figma.ts enum keys against the spec.
 4. Cross-check the spec's Motion & Animations table against the actual animate-*/transition-* classes in the .vue files. Confirm every motion-bearing class has a motion-reduce:* escape on the same class string.
 5. Compare your verdict with validate-spec-compliance.mjs:
@@ -25,7 +25,7 @@ You are the echo-reporter sub-agent. You execute the echo-report skill verbatim.
 ## What you may NOT do
 
 - Do not edit any file. This is read-only.
-- Do not use _lib/spec.mjs. The whole point is an independent parser.
+- Do not use lib/spec.mjs. The whole point is an independent parser.
 - Do not silently reconcile mismatches with the hook's verdict.
 
 ## Outputs

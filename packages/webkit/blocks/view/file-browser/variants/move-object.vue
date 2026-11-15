@@ -166,7 +166,7 @@
     deleteOpen.value = false
   }
 
-  const tableRef = ref<TableExposed<FileRow> | null>(null)
+  const tableEl = ref<TableExposed<FileRow> | null>(null)
   const isFolder = (entry: TreeEntry | undefined): entry is FolderEntry =>
     Boolean(entry && 'children' in entry)
   const isFileEntry = (pair: [string, TreeEntry]): pair is [string, FileEntry] => !isFolder(pair[1])
@@ -298,7 +298,7 @@
   )
   const destination = ref('')
   const destinationError = ref('')
-  const selectionHost = ref<HTMLElement | null>(null)
+  const selectionHostEl = ref<HTMLElement | null>(null)
 
   const moveTitle = computed(() =>
     moving.value.length === 1 ? `Move ${moving.value[0].name}` : `Move ${moving.value.length} files`
@@ -408,7 +408,7 @@
   const closeTransfer = async () => {
     transfer.value = []
     await nextTick()
-    selectionHost.value?.querySelector<HTMLElement>('input, button')?.focus()
+    selectionHostEl.value?.querySelector<HTMLElement>('input, button')?.focus()
   }
 
   onBeforeUnmount(() => {
@@ -424,7 +424,7 @@
         <Card :padded="false">
           <template #content>
             <DataTable
-              ref="tableRef"
+              ref="tableEl"
               v-model:sorting="sorting"
               v-model:global-filter="search"
               v-model:row-selection="rowSelection"
@@ -445,7 +445,7 @@
             >
               <template #toolbar="{ selectedRows, selectedCount, clearSelection }">
                 <div
-                  ref="selectionHost"
+                  ref="selectionHostEl"
                   class="flex w-full flex-col gap-(--spacing-sm)"
                 >
                   <div class="flex min-w-0 items-center gap-(--spacing-xs)">
@@ -487,9 +487,9 @@
                         icon="ai ai-download"
                         kind="outlined"
                         size="large"
-                        :disabled="!tableRef"
+                        :disabled="!tableEl"
                         aria-label="Download CSV"
-                        @click="tableRef?.exportCsv({ filename: 'files.csv' })"
+                        @click="tableEl?.exportCsv({ filename: 'files.csv' })"
                       />
                     </Tooltip>
                     <CollectionPreferences

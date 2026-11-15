@@ -159,7 +159,7 @@ mr+L2DBwFXtW2qJfNedf/9rU
   const submitted = ref(false)
   const submitting = ref(false)
   const formEl = ref<HTMLFormElement | null>(null)
-  const fileInput = ref<HTMLInputElement | null>(null)
+  const fileInputEl = ref<HTMLInputElement | null>(null)
   const uploadStatus = ref('')
   const NOW = Date.UTC(2026, 10, 10, 12)
 
@@ -332,7 +332,7 @@ mr+L2DBwFXtW2qJfNedf/9rU
                       icon="ai ai-upload"
                       kind="outlined"
                       size="small"
-                      @click="fileInput?.click()"
+                      @click="fileInputEl?.click()"
                     />
                   </div>
                   <div class="[&_textarea]:font-code [&_textarea]:text-body-sm">
@@ -349,7 +349,7 @@ mr+L2DBwFXtW2qJfNedf/9rU
                   <Field.Error v-if="errors.certificate">{{ errors.certificate }}</Field.Error>
                 </Field>
                 <input
-                  ref="fileInput"
+                  ref="fileInputEl"
                   type="file"
                   accept=".pem,.crt,.cer,application/x-pem-file"
                   class="sr-only"

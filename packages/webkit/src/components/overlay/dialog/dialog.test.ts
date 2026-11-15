@@ -192,7 +192,7 @@ describe('Dialog', () => {
         await settle()
 
         expect(getByTestId('overlay-dialog').getAttribute('data-state')).toBe('closed')
-        // Focus is restored to the trigger element (watch on isOpen -> triggerRef.focus()).
+        // Focus is restored to the trigger element (watch on isOpen -> triggerEl.focus()).
         await vi.waitFor(() => {
           expect(document.activeElement).toBe(trigger.querySelector('button'))
         })

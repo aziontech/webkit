@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 4
 template: 2
-checksum: b4d0c5f7d8c269a176d3ff049b99af620f855ccd63786442780309a5b3586169
+checksum: 9e2ef22a03db5d23579a890fddf56adea3d6487217863c6cae41dabc85d3002d
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -79,7 +79,7 @@ Numbered citations `[1]` become `Citation` references resolved against `sources`
 
 ## Sub-components
 
-_None public. Internals shared by the AI family in `src/components/ai/_lib/`: `parse-markdown.ts`
+_None public. Internals shared by the AI family in `src/components/ai/lib/`: `parse-markdown.ts`
 (`parseMarkdown`, `parseInline`, `safeHref`, `plainText`) and `markdown-inline.vue` (recursive inline
 renderer, also used by `ToolApproval` for backticks in its title). Exports: `"./streaming-response"`. Composed DS
 components: `code-block`, `citation`._

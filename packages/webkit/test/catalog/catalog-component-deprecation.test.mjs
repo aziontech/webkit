@@ -7,7 +7,7 @@ import { fileURLToPath } from 'node:url'
 
 import { Linter } from 'eslint'
 
-import { parseSpecFile } from '../../../../.claude/hooks/_lib/spec.mjs'
+import { parseSpecFile } from '../../../../.claude/hooks/lib/spec.mjs'
 import { build, componentDeprecation } from '../../scripts/build-catalog.mjs'
 import { exportTarget } from '../../scripts/lib/exports.mjs'
 

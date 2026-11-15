@@ -2,9 +2,9 @@
   import { computed, type CSSProperties, provide, ref, useAttrs, watch } from 'vue'
 
   import { cn } from '../../../utils/cn'
-  import { useNavigationMenuRoot } from './composables/use-navigation-menu-context'
+  import { useNavigationMenuContext } from './composables/use-navigation-menu-context'
   import { useNavigationMenuPositioner } from './composables/use-navigation-menu-positioner'
-  import { NAVIGATION_MENU_POSITIONER_KEY } from './composables/use-navigation-menu-positioner-context'
+  import { NavigationMenuPositionerInjectionKey } from './injection-key'
 
   defineOptions({ name: 'NavigationMenuPositioner', inheritAttrs: false })
 
@@ -50,13 +50,11 @@
     () => (attrs['data-testid'] as string | undefined) ?? 'navigation-navigation-menu__positioner'
   )
 
-  const root = useNavigationMenuRoot()
-  const positionerRef = ref<HTMLElement | null>(null)
-  const arrowRef = ref<HTMLElement | null>(null)
+  const root = useNavigationMenuContext()
+  const positionerEl = ref<HTMLElement | null>(null)
+  const arrowEl = ref<HTMLElement | null>(null)
 
-  const anchorRef = computed(() =>
-    props.disableAnchorTracking ? null : root.activeTriggerEl.value
-  )
+  const anchorEl = computed(() => (props.disableAnchorTracking ? null : root.activeTriggerEl.value))
 
   const positionerOptions = computed(() => ({
     side: props.side,
@@ -78,9 +76,9 @@
     popupOrigin,
     resetPlacement
   } = useNavigationMenuPositioner(
-    anchorRef,
-    positionerRef,
-    arrowRef,
+    anchorEl,
+    positionerEl,
+    arrowEl,
     positionerOptions,
     root.popupSize
   )
@@ -94,9 +92,9 @@
     }
   )
 
-  provide(NAVIGATION_MENU_POSITIONER_KEY, {
+  provide(NavigationMenuPositionerInjectionKey, {
     setArrowEl: (element) => {
-      arrowRef.value = element
+      arrowEl.value = element
     },
     arrowStyles,
     resolvedSide,
@@ -117,19 +115,21 @@
   const positionerStyle = computed((): CSSProperties => ({
     ...floatingStyles.value,
     '--popup-origin': popupOrigin.value,
-    '--available-width': availableWidth.value === null ? '100vw' : `${availableWidth.value}px`,
-    '--available-height': availableHeight.value === null ? '100vh' : `${availableHeight.value}px`,
+    '--navigation-menu-available-width':
+      availableWidth.value === null ? '100vw' : `${availableWidth.value}px`,
+    '--navigation-menu-available-height':
+      availableHeight.value === null ? '100vh' : `${availableHeight.value}px`,
     ...(root.menuOpen.value ? {} : { pointerEvents: 'none' })
   }))
 
-  const onPointerEnter = () => {
+  const onPointerenter = () => {
     root.cancelTimers()
   }
 </script>
 
 <template>
   <div
-    ref="positionerRef"
+    ref="positionerEl"
     :hidden="positionerHidden"
     :class="cn(ROOT_CLASS, attrs.class as string | undefined)"
     :style="positionerStyle"
@@ -142,7 +142,7 @@
     :data-side="resolvedSide"
     :data-align="resolvedAlign"
     :data-constrained="constrained ? '' : undefined"
-    @pointerenter="onPointerEnter"
+    @pointerenter="onPointerenter"
   >
     <slot />
   </div>

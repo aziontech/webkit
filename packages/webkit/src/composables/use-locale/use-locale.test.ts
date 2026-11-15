@@ -4,6 +4,7 @@ import { defineComponent, h, nextTick } from 'vue'
 
 import { es } from '../../locales/es'
 import { ptBR } from '../../locales/pt-BR'
+import { createMessageHelpers, intlLocale, useTranslate } from '../use-translate'
 import {
   BUILT_IN_CATALOGS,
   directionOf,
@@ -14,7 +15,6 @@ import {
   provideLocale,
   useLocale
 } from './index'
-import { createMessageHelpers, intlLocale, useTranslate } from './use-translate'
 
 const ALL = { ...BUILT_IN_CATALOGS, 'pt-BR': ptBR, es }
 

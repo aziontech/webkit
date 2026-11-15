@@ -16,7 +16,7 @@
 
   import { brandMarkLabel, resolveBrandMark } from '../../../assets/brands/registry'
   import { eventDirection, logicalArrowKey } from '../../../composables/use-direction'
-  import { useTranslate } from '../../../composables/use-locale/use-translate'
+  import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../i18n/messages/en'
   import IconButton from '../../actions/icon-button/icon-button.vue'
   import FrameBox from '../../layout/frame-box/frame-box.vue'

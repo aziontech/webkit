@@ -75,7 +75,7 @@ export interface TutorialContext {
   hasHotspot: (id: string) => boolean
 }
 
-export const TutorialInjectionKey: InjectionKey<TutorialContext> = Symbol('TutorialPanelProvider')
+export const TutorialPanelInjectionKey: InjectionKey<TutorialContext> = Symbol('TutorialPanel')
 
 /** Where the reader is in a tutorial task, as confirmed by the real UI. */
 export type TutorialTaskStatus = 'upcoming' | 'current' | 'complete'
@@ -98,5 +98,5 @@ export interface TutorialTasksContext {
   complete: ComputedRef<number>
 }
 
-export const TutorialTasksInjectionKey: InjectionKey<TutorialTasksContext> =
+export const TutorialPanelTasksInjectionKey: InjectionKey<TutorialTasksContext> =
   Symbol('TutorialPanelTasks')

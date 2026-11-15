@@ -2,7 +2,7 @@
   import { duration } from '@aziontech/theme/animations'
   import { computed, onScopeDispose, useAttrs } from 'vue'
 
-  import { type ChartCurve, isFiniteNumber, keepIds, linePath } from '../../_lib'
+  import { type ChartCurve, isFiniteNumber, keepIds, linePath } from '../../lib'
   import { useChartContext } from '../composables/use-chart-context'
 
   defineOptions({ name: 'ChartLine', inheritAttrs: false })

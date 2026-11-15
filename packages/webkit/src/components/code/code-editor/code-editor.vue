@@ -12,7 +12,7 @@
   } from 'vue'
 
   import { useFieldControl } from '../../../composables/use-field-control'
-  import { useTranslate } from '../../../composables/use-locale/use-translate'
+  import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../i18n/messages/en'
   import { diffLines } from '../../../utils/line-diff'
   import {
@@ -170,10 +170,10 @@
     return rest
   })
 
-  const rootRef = ref<HTMLElement | null>(null)
-  const monacoHost = ref<HTMLElement | null>(null)
-  const textareas = ref<Record<string, HTMLTextAreaElement | null>>({})
-  const scrollers = ref<Record<string, HTMLElement | null>>({})
+  const rootEl = ref<HTMLElement | null>(null)
+  const monacoHostEl = ref<HTMLElement | null>(null)
+  const textareaEls = ref<Record<string, HTMLTextAreaElement | null>>({})
+  const scrollerEls = ref<Record<string, HTMLElement | null>>({})
   const mode = ref<CodeEditorMode>('plain')
   const loadFailed = ref(false)
   const escapeArmed = ref(false)
@@ -257,11 +257,11 @@
   }
 
   const setTextarea = (key: string, el: unknown) => {
-    textareas.value[key] = el instanceof HTMLTextAreaElement ? el : null
+    textareaEls.value[key] = el instanceof HTMLTextAreaElement ? el : null
   }
 
   const setScroller = (key: string, el: unknown) => {
-    scrollers.value[key] = el instanceof HTMLElement ? el : null
+    scrollerEls.value[key] = el instanceof HTMLElement ? el : null
   }
 
   const onInput = (event: Event) => {
@@ -360,12 +360,12 @@
       editor.focus()
       return
     }
-    const el = textareas.value['modified']
+    const el = textareaEls.value['modified']
     if (!el) return
     const offset = offsetOf(el.value, marker.line, column)
     el.focus()
     el.setSelectionRange(offset, offset)
-    const scroller = scrollers.value['modified']
+    const scroller = scrollerEls.value['modified']
     if (scroller) {
       const lineHeight = parseFloat(getComputedStyle(el).lineHeight) || 20
       const top = (marker.line - 1) * lineHeight
@@ -406,8 +406,8 @@
   }
 
   const applyTheme = () => {
-    if (!api || !rootRef.value) return
-    applyThemeOnce(api, CODE_EDITOR_THEME, themeFromTokens(rootRef.value))
+    if (!api || !rootEl.value) return
+    applyThemeOnce(api, CODE_EDITOR_THEME, themeFromTokens(rootEl.value))
   }
 
   const severityOf = (severity: CodeEditorMarkerSeverity) => {
@@ -505,10 +505,10 @@
     mode.value = 'monaco'
     await nextTick()
     try {
-      const host = monacoHost.value
-      if (!host || !rootRef.value) throw new Error('missing host')
+      const host = monacoHostEl.value
+      if (!host || !rootEl.value) throw new Error('missing host')
       applyTheme()
-      const font = fontFromTokens(rootRef.value)
+      const font = fontFromTokens(rootEl.value)
       const file = props.path || (props.schema ? 'model.json' : '')
       const uri = file && api.Uri ? api.Uri.parse(`inmemory://webkit/${uid}/${file}`) : undefined
       mainModel = api.editor.createModel(model.value, props.language, uri)
@@ -613,7 +613,7 @@
 
   defineExpose({
     /** Focuses the live editor. */
-    focus: () => (editor ? editor.focus() : textareas.value['modified']?.focus()),
+    focus: () => (editor ? editor.focus() : textareaEls.value['modified']?.focus()),
     /** Moves the caret to a marker's position. */
     goTo,
     /** The Monaco editor once mounted, for actions such as formatting. */
@@ -623,7 +623,7 @@
 
 <template>
   <div
-    ref="rootRef"
+    ref="rootEl"
     v-bind="rootAttrs"
     :data-testid="testId"
     :data-mode="mode"
@@ -652,7 +652,7 @@
     >
       <div
         v-show="mode === 'monaco'"
-        ref="monacoHost"
+        ref="monacoHostEl"
         dir="ltr"
         class="absolute inset-0"
         :data-testid="`${testId}__monaco`"

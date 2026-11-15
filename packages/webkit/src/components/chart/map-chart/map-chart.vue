@@ -13,14 +13,14 @@
   } from 'vue'
 
   import { logicalArrowKey, useDirection } from '../../../composables/use-direction'
-  import { useTranslate } from '../../../composables/use-locale/use-translate'
+  import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../i18n/messages/en'
   import { NETWORK_MAP_LAND, NETWORK_MAP_REGIONS } from '../../content/network-map/network-map-data'
   import Alert from '../../feedback/alert/alert.vue'
   import EmptyState from '../../feedback/empty-state/empty-state.vue'
   import Skeleton from '../../feedback/skeleton/skeleton.vue'
-  import { type ChartColor, colorToken, formatCompact, isFiniteNumber, maxOf, minOf } from '../_lib'
   import { ChartCardInjectionKey } from '../chart-card/injection-key'
+  import { type ChartColor, colorToken, formatCompact, isFiniteNumber, maxOf, minOf } from '../lib'
 
   defineOptions({ name: 'MapChart', inheritAttrs: false })
 
@@ -120,8 +120,8 @@
   const mounted = useMounted()
   const reducedMotion = usePreferredReducedMotion()
   const uid = useId()
-  const stageRef = ref<globalThis.HTMLElement | null>(null)
-  const { width: stageWidth, height: stageHeight } = useElementSize(stageRef)
+  const stageEl = ref<globalThis.HTMLElement | null>(null)
+  const { width: stageWidth, height: stageHeight } = useElementSize(stageEl)
   const geometry = shallowRef<Readonly<Record<string, string>> | null>(null)
   const entered = ref(false)
   let frame = 0
@@ -526,7 +526,7 @@
     </div>
     <template v-else>
       <div
-        ref="stageRef"
+        ref="stageEl"
         role="group"
         :aria-roledescription="t('mapChart.roleDescription')"
         tabindex="0"

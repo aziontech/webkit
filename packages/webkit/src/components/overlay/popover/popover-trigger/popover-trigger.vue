@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, onBeforeUnmount, useAttrs } from 'vue'
 
-  import { TriggerHost } from '../../../../utils/trigger-host'
+  import { TriggerHost } from '../../parts/trigger-host'
   import { usePopoverContext } from '../injection-key'
 
   defineOptions({
@@ -45,11 +45,11 @@
   }
 
   function onControl(el: globalThis.HTMLElement | null) {
-    ctx.triggerRef.value = el
+    ctx.triggerEl.value = el
   }
 
   onBeforeUnmount(() => {
-    ctx.triggerRef.value = null
+    ctx.triggerEl.value = null
   })
 </script>
 

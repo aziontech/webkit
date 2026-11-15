@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, onMounted, onScopeDispose, useAttrs, useId } from 'vue'
 
-  import { useTranslate } from '../../../composables/use-locale/use-translate'
+  import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../i18n/messages/en'
   import type { AiSource } from './types'
   import { sourceAnchor } from './types'

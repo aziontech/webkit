@@ -1,4 +1,4 @@
-import { COMPONENT_CATEGORIES } from '../../../../.claude/hooks/_lib/component-categories.mjs'
+import { COMPONENT_CATEGORIES } from '../../../../.claude/hooks/lib/component-categories.mjs'
 
 const PROSE_KEYS = ['purpose', 'useWhen', 'avoidWhen', 'bestPractices']
 const KEBAB = /^[a-z][a-z0-9]*(-[a-z0-9]+)*$/

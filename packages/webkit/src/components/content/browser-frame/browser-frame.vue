@@ -3,7 +3,7 @@
   import { computed, ref, useAttrs, useId } from 'vue'
 
   import { eventDirection, logicalArrowKey } from '../../../composables/use-direction'
-  import { useTranslate } from '../../../composables/use-locale/use-translate'
+  import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../i18n/messages/en'
   import CopyButton from '../../actions/copy-button/copy-button.vue'
   import { useFrameDocument } from './composables/use-frame-document'
@@ -58,10 +58,10 @@
 
   const attrs = useAttrs()
   const { t } = useTranslate({ browserFrame: en.browserFrame })
-  const sizerRef = ref<globalThis.HTMLElement | null>(null)
-  const iframeRef = ref<globalThis.HTMLIFrameElement | null>(null)
-  const { width: containerWidth } = useElementSize(sizerRef)
-  const { body: frameBody } = useFrameDocument(iframeRef)
+  const sizerEl = ref<globalThis.HTMLElement | null>(null)
+  const iframeEl = ref<globalThis.HTMLIFrameElement | null>(null)
+  const { width: containerWidth } = useElementSize(sizerEl)
+  const { bodyEl: frameBodyEl } = useFrameDocument(iframeEl)
   const viewportId = useId()
 
   const dragAxis = ref<ResizeAxis | null>(null)
@@ -198,7 +198,7 @@
     class="group relative w-full min-w-0"
   >
     <div
-      ref="sizerRef"
+      ref="sizerEl"
       aria-hidden="true"
       class="h-0 w-full"
     />
@@ -257,7 +257,7 @@
       >
         <iframe
           :id="viewportId"
-          ref="iframeRef"
+          ref="iframeEl"
           srcdoc=""
           :title="frameTitle"
           :data-testid="`${testId}__viewport`"
@@ -331,8 +331,8 @@
       </div>
     </div>
     <Teleport
-      v-if="frameBody"
-      :to="frameBody"
+      v-if="frameBodyEl"
+      :to="frameBodyEl"
     >
       <slot />
     </Teleport>

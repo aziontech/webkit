@@ -80,7 +80,7 @@
   const view = ref('Form')
   const jsonText = ref('{}')
   const jsonError = ref('')
-  const fileInput = ref<HTMLInputElement | null>(null)
+  const fileInputEl = ref<HTMLInputElement | null>(null)
 
   const filledEntries = computed(() => entries.value.filter((entry) => !isEmptyEntry(entry)))
   const keyCounts = computed(() =>
@@ -325,7 +325,7 @@
   const pasteOpen = ref(false)
   const pasteText = ref('')
   const pasteStatus = ref('')
-  const pasteToggle = ref<{ $el?: HTMLElement } | null>(null)
+  const pasteToggleEl = ref<{ $el?: HTMLElement } | null>(null)
 
   const pasteReport = computed(() => {
     const { parsed, invalidLines } = parseEnvFile(pasteText.value)
@@ -356,13 +356,13 @@
     pasteOpen.value = false
     pasteText.value = ''
     await nextTick()
-    pasteToggle.value?.$el?.focus()
+    pasteToggleEl.value?.$el?.focus()
   }
 
   const cancelPaste = async () => {
     pasteOpen.value = false
     await nextTick()
-    pasteToggle.value?.$el?.focus()
+    pasteToggleEl.value?.$el?.focus()
   }
 
   watch(drawerOpen, (isOpen) => {
@@ -459,7 +459,7 @@
               <div class="flex min-w-0 flex-col gap-(--spacing-sm)">
                 <div class="flex items-center gap-(--spacing-xs) self-end">
                   <Button
-                    ref="pasteToggle"
+                    ref="pasteToggleEl"
                     label="Paste .env"
                     icon="ai ai-clipboard"
                     kind="outlined"
@@ -474,10 +474,10 @@
                     icon="ai ai-upload"
                     kind="outlined"
                     size="medium"
-                    @click="fileInput?.click()"
+                    @click="fileInputEl?.click()"
                   />
                   <input
-                    ref="fileInput"
+                    ref="fileInputEl"
                     type="file"
                     accept=".env,.txt,text/plain"
                     class="sr-only"

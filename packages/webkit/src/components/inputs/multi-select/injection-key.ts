@@ -1,6 +1,6 @@
 import type { ComputedRef, InjectionKey, Ref } from 'vue'
 
-import type { ListboxFocusIntent } from '../../../composables/use-listbox'
+import type { ListboxFocusIntent } from '../../../composables/use-listbox-content'
 
 export type MultiSelectSize = 'small' | 'medium' | 'large'
 
@@ -13,7 +13,7 @@ export interface MultiSelectContext {
   /** Stable id used to wire trigger `aria-controls` and content element id. */
   contentId: string
   /** Trigger element ref; the content reads it to anchor below. */
-  triggerRef: Ref<globalThis.HTMLElement | null>
+  triggerEl: Ref<globalThis.HTMLElement | null>
   /** Current open state. */
   open: Ref<boolean>
   setOpen: (value: boolean) => void
@@ -71,13 +71,13 @@ export interface MultiSelectContext {
   showCreate: ComputedRef<boolean>
   create: (event: MultiSelectCommitEvent) => void
   /** The control that holds focus for the trigger: the input when searchable, else the trigger button. */
-  controlRef: Ref<globalThis.HTMLElement | null>
+  controlEl: Ref<globalThis.HTMLElement | null>
   focusControl: () => void
   /** Set by the content: moves focus into the list for an arrow, Home or End key. */
   navigate: Ref<((key: string) => void) | null>
 }
 
-export const multiSelectContextKey: InjectionKey<MultiSelectContext> = Symbol('MultiSelectContext')
+export const MultiSelectInjectionKey: InjectionKey<MultiSelectContext> = Symbol('MultiSelect')
 
 export interface MultiSelectGroupContext {
   /** Records whether one option of the group passes the typed filter. */
@@ -85,5 +85,5 @@ export interface MultiSelectGroupContext {
   unregister: (id: symbol) => void
 }
 
-export const multiSelectGroupContextKey: InjectionKey<MultiSelectGroupContext> =
+export const MultiSelectGroupInjectionKey: InjectionKey<MultiSelectGroupContext> =
   Symbol('MultiSelectGroup')

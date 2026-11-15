@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, useAttrs, useSlots } from 'vue'
 
-  import { useTranslate } from '../../../composables/use-locale/use-translate'
+  import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../i18n/messages/en'
   import { cn } from '../../../utils/cn'
   import Tag, { type TagSeverity } from '../tag/tag.vue'

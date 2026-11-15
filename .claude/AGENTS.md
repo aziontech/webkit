@@ -125,7 +125,7 @@ For onboarding content, prioritize the docs site's `Foundations` pages.
 
 ## 11) Webkit Layer Components (mandatory for agents)
 
-**Scope:** any file under `packages/webkit/src/components/<category>/<name>/` (categories `actions`, `ai`, `chart`, `code`, `content`, `data`, `documentation`, `feedback`, `inputs`, `layout`, `marketing`, `navigation`, `overlay`, `sections`, `utils` — the registry is [`.claude/hooks/_lib/component-categories.mjs`](./hooks/_lib/component-categories.mjs)).
+**Scope:** any file under `packages/webkit/src/components/<category>/<name>/` (categories `actions`, `ai`, `chart`, `code`, `content`, `data`, `documentation`, `feedback`, `inputs`, `layout`, `marketing`, `navigation`, `overlay`, `sections`, `utils` — the registry is [`.claude/hooks/lib/component-categories.mjs`](./hooks/lib/component-categories.mjs)).
 
 ### 11.1) Sources of truth (read first)
 
@@ -167,7 +167,7 @@ building blocks it calls.
 | Slash commands                             | [`.claude/commands/`](commands/) (`component-new`, `block-new`, `spec-create`, `component-create`, `component-verify`, `animation-add`, `branch-create`, `pr-open`, `icons-add`, `baselines-regenerate`)                                                                                      |
 | Focused skills (one per phase)             | [`.claude/skills/`](skills/) — `spec-create`, `spec-validate`, `figma-extract`, `token-map`, `reuse-audit`, `structure-decide`, `component-scaffold`, `code-connect-write`, `component-validate`, `echo-report`, plus `ui-craft` (review gate), `animation-add`, `audit-fix`, `baselines-regenerate` |
 | Isolated sub-agent prompts                 | [`.claude/agents/`](agents/) — one per skill, plus `spec-reviewer` (second-agent spec review); no chat history, no cross-talk                                                                                                                                                                    |
-| Construction standards (injected verbatim) | [`.claude/rules/`](rules/) — 27 rules, indexed in [`rules/README.md`](rules/README.md) and registered in [`standards.mjs`](hooks/_lib/standards.mjs)                                                                                                                                             |
+| Construction standards (injected verbatim) | [`.claude/rules/`](rules/) — 27 rules, indexed in [`rules/README.md`](rules/README.md) and registered in [`standards.mjs`](hooks/lib/standards.mjs)                                                                                                                                             |
 | Centralized design docs (sources of truth) | [`.claude/docs/`](docs/) — `DESIGN.md` (tokens + animations + forbidden list), `COMPONENT_REQUIREMENTS.md` (component pattern + examples discipline)                                                                                                                                             |
 | Run logs (audit trail)                     | `.claude/logs/<run-id>.jsonl` (gitignored, written per run)                                                                                                                                                                                                                                      |
 
@@ -259,12 +259,12 @@ Eight hooks in [`.claude/hooks/`](hooks/) act as physical guard rails on top of 
 
 ### 12.2) Spec-driven enforcement
 
-- **[`.claude/hooks/enforce-spec-exists.mjs`](hooks/enforce-spec-exists.mjs)** (PreToolUse `Write`) — blocks Writes of a webkit-layer `.vue` when `.specs/<name>.md` is missing, has `status ∉ {approved, implemented}`, misses a template-2 section (`Internationalization`, `Right-to-left`, `Responsive`, `Performance` — required with `template: 2` and on every spec created on or after 2026-11-12), or the body sha256 no longer matches the frontmatter `checksum` (tamper detection). Legacy components on the whitelist (`.claude/hooks/_lib/legacy-components.json`) bypass this hook.
+- **[`.claude/hooks/enforce-spec-exists.mjs`](hooks/enforce-spec-exists.mjs)** (PreToolUse `Write`) — blocks Writes of a webkit-layer `.vue` when `.specs/<name>.md` is missing, has `status ∉ {approved, implemented}`, misses a template-2 section (`Internationalization`, `Right-to-left`, `Responsive`, `Performance` — required with `template: 2` and on every spec created on or after 2026-11-12), or the body sha256 no longer matches the frontmatter `checksum` (tamper detection). Legacy components on the whitelist (`.claude/hooks/lib/legacy-components.json`) bypass this hook.
 - **[`.claude/hooks/validate-spec-compliance.mjs`](hooks/validate-spec-compliance.mjs)** (PostToolUse `Write|Edit|MultiEdit`) — re-reads the just-written `.vue`, parses `defineProps`/`defineEmits`/`defineSlots`/`defineOptions.name`/animation classes, and diffs them against `.specs/<name>.md`. Blocks on any divergence: missing prop, extra event, slot not in spec, animation class outside the Motion & Animations table, missing `motion-reduce:*` escape.
 - **[`.claude/hooks/enforce-test-exists.mjs`](hooks/enforce-test-exists.mjs)** (PostToolUse `Write|Edit|MultiEdit`) — blocks a root component `.vue` whose co-located `<name>.test.ts` is missing (see [`rules/testing.md`](rules/testing.md)).
 - **[`.claude/hooks/validate-authoring-docs.mjs`](hooks/validate-authoring-docs.mjs)** (PostToolUse `Write|Edit|MultiEdit`) — blocks a skill or agent doc whose frontmatter breaks [`rules/authoring-docs.md`](rules/authoring-docs.md).
 
-Shared parser library: [`.claude/hooks/_lib/spec.mjs`](hooks/_lib/spec.mjs). Legacy whitelist: [`.claude/hooks/_lib/legacy-components.json`](hooks/_lib/legacy-components.json).
+Shared parser library: [`.claude/hooks/lib/spec.mjs`](hooks/lib/spec.mjs). Legacy whitelist: [`.claude/hooks/lib/legacy-components.json`](hooks/lib/legacy-components.json).
 
 When a hook blocks a Write, the stderr message states the rule that fired and how to fix it — replace the offending tokens, install the missing dep, create the missing file, fix the spec or the `.vue` so they match, or invoke the skill. The hooks **fail open** on unexpected errors (e.g. invalid JSON input) — they never silently break workflows.
 

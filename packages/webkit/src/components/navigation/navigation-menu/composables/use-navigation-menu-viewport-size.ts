@@ -1,7 +1,7 @@
 import { nextTick, onScopeDispose, readonly, type Ref, ref, watch } from 'vue'
 
-import { getCssDimensions } from './get-css-dimensions'
-import { POPUP_HEIGHT, POPUP_WIDTH, VIEWPORT_WIDTH } from './navigation-menu-css-vars'
+import { getCssDimensions } from '../lib/css-dimensions'
+import { POPUP_HEIGHT, POPUP_WIDTH, VIEWPORT_WIDTH } from '../lib/css-vars'
 
 export interface NavigationMenuPopupSize {
   width: number

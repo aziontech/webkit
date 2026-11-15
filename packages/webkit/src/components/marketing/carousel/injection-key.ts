@@ -7,7 +7,7 @@ export interface CarouselContext {
   /** Layout of the row the items render in. */
   kind: ComputedRef<CarouselLayout>
   /** The scrollable track element, or null before the root mounts. */
-  track: Readonly<Ref<globalThis.HTMLUListElement | null>>
+  trackEl: Readonly<Ref<globalThis.HTMLUListElement | null>>
   /** Whether the track has room left to step back toward its start. */
   canScrollPrev: ComputedRef<boolean>
   /** Whether the track has room left to step forward toward its end. */

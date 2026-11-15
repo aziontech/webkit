@@ -27,7 +27,7 @@
   const turns = ref([])
   const state = ref('ready')
   const prompt = ref('')
-  const composer = ref(null)
+  const composerEl = ref(null)
 
   const knowledge = {
     cache: {
@@ -126,7 +126,7 @@
     turn.state = 'complete'
     turn.thinking = false
     state.value = 'ready'
-    composer.value?.focus()
+    composerEl.value?.focus()
   }
 
   function respond(turn) {
@@ -309,7 +309,7 @@
     </div>
     <footer class="layout-column-content layout-boundary-inline pb-(--spacing-md)">
       <PromptInput
-        ref="composer"
+        ref="composerEl"
         v-model="prompt"
         :state="state"
         :max-length="4000"

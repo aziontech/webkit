@@ -5,7 +5,7 @@ import test from 'node:test'
 import { fileURLToPath } from 'node:url'
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../../../..')
-const { STANDARDS } = await import(join(ROOT, '.claude/hooks/_lib/standards.mjs'))
+const { STANDARDS } = await import(join(ROOT, '.claude/hooks/lib/standards.mjs'))
 const readme = readFileSync(join(ROOT, '.claude/rules/README.md'), 'utf8')
 
 const rows = [...readme.matchAll(/^\| \[([a-z-]+)\]\(\.\/\1\.md\) \| (general|webkit) \|/gm)].map(

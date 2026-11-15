@@ -3,13 +3,13 @@
 // re-read the file and verify the props/events/slots/animations in the code
 // match the spec at .specs/<name>.md 1-to-1. Blocks on any divergence.
 //
-// The checks themselves live in ./_lib/spec-compliance-checks.mjs and are ALSO run
+// The checks themselves live in ./lib/spec-compliance-checks.mjs and are ALSO run
 // repo-wide by the CI ratchet (packages/webkit/scripts/check-authoring.mjs) — one
 // definition, two surfaces, so an editor push can't bypass this hook.
 
 import { readFileSync } from 'node:fs'
 import { relative, resolve, sep } from 'node:path'
-import { collectSpecViolations } from './_lib/spec-compliance-checks.mjs'
+import { collectSpecViolations } from './lib/spec-compliance-checks.mjs'
 
 const ROOT = process.cwd()
 

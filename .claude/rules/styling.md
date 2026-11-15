@@ -395,4 +395,4 @@ The old `kindClasses` Record pattern looks clean but rots over time:
 - Code Connect can map Figma variants to `data-*` attributes more naturally than to JS dictionaries.
 - Removes the need for `computed` arrays whose only purpose is class composition.
 
-Legacy components (in `.claude/hooks/_lib/legacy-components.json`) still use the old pattern — that's fine, they're whitelisted. **Every new component starts with the new pattern.**
+Legacy components (in `.claude/hooks/lib/legacy-components.json`) still use the old pattern — that's fine, they're whitelisted. **Every new component starts with the new pattern.**

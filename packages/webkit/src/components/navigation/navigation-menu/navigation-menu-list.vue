@@ -2,9 +2,9 @@
   import { computed, ref, useAttrs, useId } from 'vue'
 
   import { cn } from '../../../utils/cn'
-  import { useNavigationMenuRoot } from './composables/use-navigation-menu-context'
+  import { useNavigationMenuContext } from './composables/use-navigation-menu-context'
   import { useNavigationMenuListHighlight } from './composables/use-navigation-menu-list-highlight'
-  import { provideNavigationMenuListHighlight } from './composables/use-navigation-menu-list-highlight-context'
+  import { provideNavigationMenuListHighlightContext } from './composables/use-navigation-menu-list-highlight-context'
   import { createChangeEventDetails } from './composables/use-navigation-menu-root'
 
   defineOptions({ name: 'NavigationMenuList', inheritAttrs: false })
@@ -34,9 +34,9 @@
     () => (attrs['data-testid'] as string | undefined) ?? 'navigation-navigation-menu__list'
   )
 
-  const root = useNavigationMenuRoot()
+  const root = useNavigationMenuContext()
   const headingId = useId()
-  const listContainerRef = ref<HTMLElement | null>(null)
+  const listContainerEl = ref<HTMLElement | null>(null)
 
   const isGroup = computed(() => props.label != null && props.label !== '')
 
@@ -51,13 +51,13 @@
 
   const useHighlight = computed(() => props.highlight && !isGroup.value)
 
-  const { selectorStyle, setTarget, handleTargetPointerLeave, handleListPointerLeave } =
-    useNavigationMenuListHighlight(listContainerRef, root)
+  const { selectorStyle, setTarget, onTargetPointerleave, onListPointerleave } =
+    useNavigationMenuListHighlight(listContainerEl, root)
 
   if (useHighlight.value) {
-    provideNavigationMenuListHighlight({
+    provideNavigationMenuListHighlightContext({
       setTarget,
-      handleTargetPointerLeave
+      onTargetPointerleave
     })
   }
 
@@ -116,14 +116,14 @@
   </div>
   <div
     v-else-if="useHighlight"
-    ref="listContainerRef"
+    ref="listContainerEl"
     class="relative"
     :data-testid="`${testId}__highlight`"
-    @pointerleave="handleListPointerLeave"
+    @pointerleave="onListPointerleave"
   >
     <span
       aria-hidden="true"
-      class="pointer-events-none absolute z-0 rounded-(--shape-button) bg-(--webkit-nav-selector) transition-[left,top,width,height,opacity] duration-moderate-02 ease-productive-entrance motion-reduce:transition-none"
+      class="pointer-events-none absolute z-0 rounded-(--shape-button) bg-(--navigation-menu-highlight-background) transition-[left,top,width,height,opacity] duration-moderate-02 ease-productive-entrance motion-reduce:transition-none"
       :style="selectorStyle"
       :data-testid="`${testId}__selector`"
     />

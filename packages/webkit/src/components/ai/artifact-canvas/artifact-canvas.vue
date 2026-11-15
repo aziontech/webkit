@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, ref, useAttrs, useId } from 'vue'
 
-  import { useTranslate } from '../../../composables/use-locale/use-translate'
+  import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../i18n/messages/en'
   import CopyButton from '../../actions/copy-button/copy-button.vue'
   import IconButton from '../../actions/icon-button/icon-button.vue'
@@ -59,7 +59,7 @@
   const attrs = useAttrs()
   const { t } = useTranslate({ artifactCanvas: en.artifactCanvas })
   const titleId = `${useId()}-title`
-  const heading = ref<HTMLElement | null>(null)
+  const headingEl = ref<HTMLElement | null>(null)
 
   const testId = computed<string>(
     () => (attrs['data-testid'] as string | undefined) ?? 'ai-artifact-canvas'
@@ -79,7 +79,7 @@
   }
 
   function focus(): void {
-    heading.value?.focus()
+    headingEl.value?.focus()
   }
 
   defineExpose({ focus })
@@ -107,7 +107,7 @@
       <div class="flex min-w-0 flex-1 flex-col">
         <h2
           :id="titleId"
-          ref="heading"
+          ref="headingEl"
           tabindex="-1"
           dir="auto"
           :data-testid="`${testId}__title`"

@@ -212,12 +212,12 @@
     return ''
   }
 
-  const outcome = ref<HTMLElement | null>(null)
+  const outcomeEl = ref<HTMLElement | null>(null)
 
   watch(
     () => props.submitted,
     (submitted) => {
-      if (!submitted || !outcome.value?.contains(document.activeElement)) return
+      if (!submitted || !outcomeEl.value?.contains(document.activeElement)) return
       nextTick(() => document.getElementById(`${baseId}-success`)?.focus())
     }
   )
@@ -323,7 +323,7 @@
         </ul>
 
         <div
-          ref="outcome"
+          ref="outcomeEl"
           class="min-w-0 lg:col-start-2 lg:row-span-2 lg:row-start-1"
         >
           <Alert

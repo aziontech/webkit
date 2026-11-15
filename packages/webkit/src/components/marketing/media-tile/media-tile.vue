@@ -77,7 +77,7 @@
       :data-testid="`${testId}__frame`"
       :data-kind="kind"
       :data-padded="padded || null"
-      class="overflow-hidden data-[kind=frame]:min-h-64 data-[kind=plain]:min-h-32 [--illustration-fill:var(--bg-canvas)] data-[kind=frame]:bg-(--bg-canvas) data-[kind=frame]:data-[padded]:p-(--spacing-xl) data-[kind=plain]:data-[padded]:px-(--spacing-lg) data-[kind=plain]:data-[padded]:pt-(--spacing-lg)"
+      class="overflow-hidden data-[kind=frame]:min-h-64 data-[kind=plain]:min-h-32 [--product-widget-fill:var(--bg-canvas)] data-[kind=frame]:bg-(--bg-canvas) data-[kind=frame]:data-[padded]:p-(--spacing-xl) data-[kind=plain]:data-[padded]:px-(--spacing-lg) data-[kind=plain]:data-[padded]:pt-(--spacing-lg)"
     >
       <div
         :data-testid="`${testId}__media`"

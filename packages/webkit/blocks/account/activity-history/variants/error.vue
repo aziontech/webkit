@@ -209,8 +209,8 @@
     }, 700)
   }
 
-  const activityTable = ref<TableExposed<ActivityEvent> | null>(null)
-  const exportCsv = () => activityTable.value?.exportCsv({ filename: 'activity-history.csv' })
+  const activityTableEl = ref<TableExposed<ActivityEvent> | null>(null)
+  const exportCsv = () => activityTableEl.value?.exportCsv({ filename: 'activity-history.csv' })
 
   const RETENTION_DAYS = 90
   const widerRange = computed<RelativeOption | null>(() => {
@@ -358,7 +358,7 @@
         >
           <template #content>
             <DataTable
-              ref="activityTable"
+              ref="activityTableEl"
               v-bind="tableProps"
               :loading="loading"
               enable-sorting

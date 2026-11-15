@@ -76,9 +76,9 @@
   const gridStyle = computed(() => {
     const [base, sm, lg] = trackCounts.value
     const style: Record<string, string | number> = {
-      '--card-grid-cols-base': base,
-      '--card-grid-cols-sm': sm,
-      '--card-grid-cols-lg': lg
+      '--card-grid-columns-base': base,
+      '--card-grid-columns-sm': sm,
+      '--card-grid-columns-lg': lg
     }
     if (!fillsTrailingTracks.value) return style
     const breakpoints = { base, sm, lg }
@@ -105,7 +105,7 @@
     :data-filled="hasCells || null"
     :data-fill-trailing="fillsTrailingTracks || null"
     :style="gridStyle"
-    class="grid grid-cols-[repeat(var(--card-grid-cols),minmax(0,1fr))] [--card-grid-cols:var(--card-grid-cols-base)] sm:[--card-grid-cols:var(--card-grid-cols-sm)] lg:[--card-grid-cols:var(--card-grid-cols-lg)] [&>*]:h-auto [&>*]:min-w-0 data-[fill-trailing]:[--card-grid-rest:var(--card-grid-rest-base)] data-[fill-trailing]:sm:[--card-grid-rest:var(--card-grid-rest-sm)] data-[fill-trailing]:lg:[--card-grid-rest:var(--card-grid-rest-lg)] data-[fill-trailing]:[--card-grid-fill:var(--card-grid-fill-base)] data-[fill-trailing]:sm:[--card-grid-fill:var(--card-grid-fill-sm)] data-[fill-trailing]:lg:[--card-grid-fill:var(--card-grid-fill-lg)] data-[fill-trailing]:after:[display:var(--card-grid-fill)] data-[fill-trailing]:after:bg-(--bg-canvas) data-[fill-trailing]:after:content-[''] data-[fill-trailing]:after:[grid-column:span_var(--card-grid-rest)/span_var(--card-grid-rest)] data-[kind=gap]:gap-(--spacing-md) data-[kind=divider]:gap-px data-[kind=divider]:data-[divider-color=default]:bg-(--border-default) data-[kind=divider]:data-[divider-color=muted]:bg-(--border-muted) data-[kind=frame]:border-(--border-default) data-[kind=frame]:data-[filled]:data-[flush=false]:border-s data-[kind=frame]:data-[filled]:data-[flush=false]:border-t data-[kind=frame]:data-[flush=true]:-mb-px data-[kind=frame]:data-[flush=true]:-me-px"
+    class="grid grid-cols-[repeat(var(--card-grid-columns),minmax(0,1fr))] [--card-grid-columns:var(--card-grid-columns-base)] sm:[--card-grid-columns:var(--card-grid-columns-sm)] lg:[--card-grid-columns:var(--card-grid-columns-lg)] [&>*]:h-auto [&>*]:min-w-0 data-[fill-trailing]:[--card-grid-rest:var(--card-grid-rest-base)] data-[fill-trailing]:sm:[--card-grid-rest:var(--card-grid-rest-sm)] data-[fill-trailing]:lg:[--card-grid-rest:var(--card-grid-rest-lg)] data-[fill-trailing]:[--card-grid-fill:var(--card-grid-fill-base)] data-[fill-trailing]:sm:[--card-grid-fill:var(--card-grid-fill-sm)] data-[fill-trailing]:lg:[--card-grid-fill:var(--card-grid-fill-lg)] data-[fill-trailing]:after:[display:var(--card-grid-fill)] data-[fill-trailing]:after:bg-(--bg-canvas) data-[fill-trailing]:after:content-[''] data-[fill-trailing]:after:[grid-column:span_var(--card-grid-rest)/span_var(--card-grid-rest)] data-[kind=gap]:gap-(--spacing-md) data-[kind=divider]:gap-px data-[kind=divider]:data-[divider-color=default]:bg-(--border-default) data-[kind=divider]:data-[divider-color=muted]:bg-(--border-muted) data-[kind=frame]:border-(--border-default) data-[kind=frame]:data-[filled]:data-[flush=false]:border-s data-[kind=frame]:data-[filled]:data-[flush=false]:border-t data-[kind=frame]:data-[flush=true]:-mb-px data-[kind=frame]:data-[flush=true]:-me-px"
   >
     <slot />
   </div>

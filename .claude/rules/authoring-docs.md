@@ -13,7 +13,7 @@ The `.claude` bundle that steers the AI — the **skills** and **agents**, both 
 | Consumer skills | `skills/<name>/SKILL.md` (repo root) | `general` |
 | Consumer agents | `adapters/claude/agents/<name>.md` (repo root) | `general` |
 
-A file inside a skill folder that is not `SKILL.md` (a `references/*.md`) is not governed; nor is `_README.md`; nor are the `.claude/rules/*.md` docs (those are governed by [`standards.mjs`](../hooks/_lib/standards.mjs) and the invariant test).
+A file inside a skill folder that is not `SKILL.md` (a `references/*.md`) is not governed; nor is `_README.md`; nor are the `.claude/rules/*.md` docs (those are governed by [`standards.mjs`](../hooks/lib/standards.mjs) and the invariant test).
 
 ## The frontmatter contract
 
@@ -36,7 +36,7 @@ Internal skills do **not** require `status` / `last_updated`, and agents (either
 
 ## Every skill declares what enforces it (`enforced_by`)
 
-A skill is *guidance*, not a mechanical invariant — so on its own it is advisory, exactly the drift the standards forbid in rules. To close that, **every skill** (`SKILL.md`, internal **and** consumer) declares a non-empty **`enforced_by:`** flow array in its frontmatter, naming the enforcement arm(s) that actually back its prescriptions. This is a **traceability matrix**: each piece of guidance is paired to the mechanism that makes it non-optional, exactly as every rule pairs to a gate in [`standards.mjs`](../hooks/_lib/standards.mjs).
+A skill is *guidance*, not a mechanical invariant — so on its own it is advisory, exactly the drift the standards forbid in rules. To close that, **every skill** (`SKILL.md`, internal **and** consumer) declares a non-empty **`enforced_by:`** flow array in its frontmatter, naming the enforcement arm(s) that actually back its prescriptions. This is a **traceability matrix**: each piece of guidance is paired to the mechanism that makes it non-optional, exactly as every rule pairs to a gate in [`standards.mjs`](../hooks/lib/standards.mjs).
 
 - `enforced-by-missing` — a skill has a non-empty `enforced_by: [ … ]`.
 
@@ -78,8 +78,8 @@ The current tree carries 7 pre-existing file-as-example references (component-sc
 
 - **[`validate-authoring-docs.mjs`](../hooks/validate-authoring-docs.mjs)** (PostToolUse on `Write|Edit|MultiEdit`) re-reads a written/edited skill or agent doc and blocks (exit 2) on any **new** violation; pre-existing debt is grandfathered via [`authoring-docs-baseline.json`](../../packages/webkit/scripts/authoring-docs-baseline.json). Fail-open on error.
 - **[`check-authoring-docs.mjs`](../../packages/webkit/scripts/check-authoring-docs.mjs)** is the CI ratchet (the `toolkit` job of [`governance.yml`](../../.github/workflows/governance.yml)) over all four populations; it fails on any introduced key even from an editor that never ran the hook.
-- Both share the single engine **[`_lib/authoring-docs-checks.mjs`](../hooks/_lib/authoring-docs-checks.mjs)** — one definition, two surfaces, so a push cannot bypass the hook.
-- The standard is registered in [`standards.mjs`](../hooks/_lib/standards.mjs) (`authoring-docs`), paired to these gates, and the pairing is checked by [`invariant.test.mjs`](../../packages/webkit/test/standards/invariant.test.mjs).
+- Both share the single engine **[`lib/authoring-docs-checks.mjs`](../hooks/lib/authoring-docs-checks.mjs)** — one definition, two surfaces, so a push cannot bypass the hook.
+- The standard is registered in [`standards.mjs`](../hooks/lib/standards.mjs) (`authoring-docs`), paired to these gates, and the pairing is checked by [`invariant.test.mjs`](../../packages/webkit/test/standards/invariant.test.mjs).
 - **`enforced_by` resolution** is enforced by that same [`invariant.test.mjs`](../../packages/webkit/test/standards/invariant.test.mjs): it reads both rule populations (`.claude/rules/` and `rules/`), and fails the build if any skill's `enforced_by` entry is not a rule id of its own population, `ui-verify`, or `review`. Presence (`enforced-by-missing`) is caught earlier, write-time and in the ratchet, by the shared engine.
 
 ## Why this rule exists

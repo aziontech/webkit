@@ -2,15 +2,15 @@
 // PreToolUse hook: blocks Write of a webkit-layer .vue when the matching spec
 // at .specs/<name>.md is missing, not approved, or its body checksum no longer
 // matches the frontmatter.checksum (tamper detection). The checks live in
-// _lib/spec-integrity.mjs, shared with packages/webkit/scripts/check-spec-integrity.mjs (CI).
+// lib/spec-integrity.mjs, shared with packages/webkit/scripts/check-spec-integrity.mjs (CI).
 //
 // Bypassed for components on the legacy whitelist
-// (.claude/hooks/_lib/legacy-components.json).
+// (.claude/hooks/lib/legacy-components.json).
 
 import { existsSync } from 'node:fs'
 import { relative, resolve } from 'node:path'
-import { isLegacyComponent, resolveSpecForComponentPath } from './_lib/spec.mjs'
-import { checkSpecFile } from './_lib/spec-integrity.mjs'
+import { isLegacyComponent, resolveSpecForComponentPath } from './lib/spec.mjs'
+import { checkSpecFile } from './lib/spec-integrity.mjs'
 
 const ROOT = process.cwd()
 

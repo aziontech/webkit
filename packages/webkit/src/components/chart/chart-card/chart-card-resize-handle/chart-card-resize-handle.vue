@@ -2,7 +2,7 @@
   import { computed, onScopeDispose, ref, useAttrs } from 'vue'
 
   import { eventDirection, logicalArrowKey } from '../../../../composables/use-direction'
-  import { useTranslate } from '../../../../composables/use-locale/use-translate'
+  import { useTranslate } from '../../../../composables/use-translate'
   import * as en from '../../../../i18n/messages/en'
   import { useChartCardContext } from '../composables/use-chart-card-context'
 
@@ -20,7 +20,7 @@
   const attrs = useAttrs()
   const { t } = useTranslate({ chartCard: en.chartCard })
   const ctx = useChartCardContext()
-  const handleRef = ref<globalThis.HTMLElement | null>(null)
+  const handleEl = ref<globalThis.HTMLElement | null>(null)
 
   const HEIGHT_STEP = 24
 
@@ -48,13 +48,13 @@
   })
 
   function release() {
-    const handle = handleRef.value
+    const handle = handleEl.value
     if (origin && handle?.hasPointerCapture(origin.pointerId))
       handle.releasePointerCapture(origin.pointerId)
     origin = null
   }
 
-  function onPointerDown(event: globalThis.PointerEvent) {
+  function onPointerdown(event: globalThis.PointerEvent) {
     if (event.button !== 0) return
     const measure = ctx.measure()
     origin = {
@@ -67,13 +67,13 @@
       columnWidth: measure.columnWidth
     }
     try {
-      handleRef.value?.setPointerCapture(event.pointerId)
+      handleEl.value?.setPointerCapture(event.pointerId)
     } catch {}
     event.preventDefault()
     ctx.startResize(event)
   }
 
-  function onPointerMove(event: globalThis.PointerEvent) {
+  function onPointermove(event: globalThis.PointerEvent) {
     if (!origin || event.pointerId !== origin.pointerId) return
     const dx = (event.clientX - origin.x) * (eventDirection(event) === 'rtl' ? -1 : 1)
     const dy = event.clientY - origin.y
@@ -81,7 +81,7 @@
     ctx.setHeight(origin.height + dy)
   }
 
-  function onPointerUp(event: globalThis.PointerEvent) {
+  function onPointerup(event: globalThis.PointerEvent) {
     if (!origin || event.pointerId !== origin.pointerId) return
     release()
     ctx.endResize(event)
@@ -115,7 +115,7 @@
 <template>
   <div
     v-if="ctx.resizable.value"
-    ref="handleRef"
+    ref="handleEl"
     v-bind="$attrs"
     role="separator"
     tabindex="0"
@@ -126,10 +126,10 @@
     :aria-valuetext="valueText"
     :data-testid="testId"
     class="absolute bottom-0 end-0 z-1 flex size-6 before:absolute before:-inset-2 before:content-[''] cursor-nwse-resize touch-none items-center justify-center rounded-(--shape-button) text-(--text-muted) transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)"
-    @pointerdown="onPointerDown"
-    @pointermove="onPointerMove"
-    @pointerup="onPointerUp"
-    @pointercancel="onPointerUp"
+    @pointerdown="onPointerdown"
+    @pointermove="onPointermove"
+    @pointerup="onPointerup"
+    @pointercancel="onPointerup"
     @keydown="onKeydown"
   >
     <svg

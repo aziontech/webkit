@@ -2,7 +2,7 @@
   import { computed, nextTick, onBeforeUnmount, onMounted, ref, useAttrs, watch } from 'vue'
 
   import { logicalArrowKey, useDirection } from '../../../composables/use-direction'
-  import { useTranslate } from '../../../composables/use-locale/use-translate'
+  import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../i18n/messages/en'
   import { cn } from '../../../utils/cn'
   import Tooltip from '../../overlay/tooltip/tooltip.vue'
@@ -43,17 +43,17 @@
     { value: 'light', icon: 'ai ai-sun', key: 'themeSwitcher.light' }
   ] as const
 
-  const rootRef = ref<globalThis.HTMLElement | null>(null)
-  const segmentRefs = ref<globalThis.HTMLButtonElement[]>([])
+  const rootEl = ref<globalThis.HTMLElement | null>(null)
+  const segmentEls = ref<globalThis.HTMLButtonElement[]>([])
   const indicatorVisible = ref(false)
   const indicatorOffsetX = ref(0)
   const indicatorOffsetY = ref(0)
 
   const selectedIndex = computed(() => MODES.findIndex((mode) => mode.value === model.value))
 
-  function setSegmentRef(el: globalThis.HTMLButtonElement | null, index: number) {
+  function setSegmentEl(el: globalThis.HTMLButtonElement | null, index: number) {
     if (el) {
-      segmentRefs.value[index] = el
+      segmentEls.value[index] = el
     }
   }
 
@@ -64,7 +64,7 @@
   }
 
   function focusSegment(index: number) {
-    segmentRefs.value[index]?.focus()
+    segmentEls.value[index]?.focus()
   }
 
   function onKeydown(event: globalThis.KeyboardEvent, index: number) {
@@ -105,9 +105,9 @@
   }
 
   function syncIndicator() {
-    const activeSegmentEl = segmentRefs.value[selectedIndex.value]
+    const activeSegmentEl = segmentEls.value[selectedIndex.value]
 
-    if (!rootRef.value || !activeSegmentEl || selectedIndex.value < 0) {
+    if (!rootEl.value || !activeSegmentEl || selectedIndex.value < 0) {
       indicatorVisible.value = false
       return
     }
@@ -128,11 +128,11 @@
   onMounted(() => {
     scheduleIndicatorSync()
 
-    if (typeof ResizeObserver !== 'undefined' && rootRef.value) {
+    if (typeof ResizeObserver !== 'undefined' && rootEl.value) {
       resizeObserver = new ResizeObserver(() => {
         syncIndicator()
       })
-      resizeObserver.observe(rootRef.value)
+      resizeObserver.observe(rootEl.value)
     }
   })
 
@@ -152,7 +152,7 @@
 
 <template>
   <div
-    ref="rootRef"
+    ref="rootEl"
     v-bind="$attrs"
     role="radiogroup"
     :aria-label="ariaLabel || t('themeSwitcher.label')"
@@ -178,7 +178,7 @@
       placement="bottom"
     >
       <button
-        :ref="(el) => setSegmentRef(el as globalThis.HTMLButtonElement | null, index)"
+        :ref="(el) => setSegmentEl(el as globalThis.HTMLButtonElement | null, index)"
         type="button"
         role="radio"
         :aria-checked="mode.value === model"

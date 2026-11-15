@@ -96,11 +96,11 @@
     registerCaption
   })
 
-  const viewportRef = ref<HTMLElement | null>(null)
+  const viewportEl = ref<HTMLElement | null>(null)
   const overflowStart = ref<boolean>(false)
   const overflowEnd = ref<boolean>(false)
   const measureEdges = (): void => {
-    const el = viewportRef.value
+    const el = viewportEl.value
     if (!el) return
     const offset = Math.abs(el.scrollLeft)
     overflowStart.value = offset > 1
@@ -110,7 +110,7 @@
   onMounted(() => {
     void nextTick(() => {
       measureEdges()
-      const el = viewportRef.value
+      const el = viewportEl.value
       if (!el || typeof ResizeObserver === 'undefined') return
       edgeObserver = new ResizeObserver(measureEdges)
       edgeObserver.observe(el)
@@ -151,7 +151,7 @@
     </div>
 
     <div
-      ref="viewportRef"
+      ref="viewportEl"
       tabindex="0"
       :data-scroll="maxHeight ? 'both' : 'horizontal'"
       :data-testid="`${testId}__viewport`"

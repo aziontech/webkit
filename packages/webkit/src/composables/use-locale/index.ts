@@ -7,6 +7,8 @@ export type {
   PartialMessages,
   PluralMessage
 } from '../../i18n/types'
+export type { PortalLocaleAttrs } from '../use-translate'
+export { usePortalLocale } from '../use-translate'
 export type {
   DirectionSetting,
   FileSizeUnit,
@@ -25,5 +27,3 @@ export {
   provideLocale,
   useLocale
 } from './use-locale'
-export type { PortalLocaleAttrs } from './use-translate'
-export { usePortalLocale } from './use-translate'

@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, defineAsyncComponent, h, onBeforeUnmount, ref, useAttrs, useId } from 'vue'
 
-  import { useTranslate } from '../../../composables/use-locale/use-translate'
+  import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../i18n/messages/en'
   import Tooltip from '../../overlay/tooltip/tooltip.vue'
 
@@ -85,7 +85,7 @@
       : ''
   )
 
-  const root = ref<globalThis.HTMLButtonElement | null>(null)
+  const rootEl = ref<globalThis.HTMLButtonElement | null>(null)
   const copied = ref(false)
   const fallbackRequested = ref(false)
   const fallbackOpen = ref(false)
@@ -132,7 +132,7 @@
       class="min-w-0 max-w-full"
     >
       <button
-        ref="root"
+        ref="rootEl"
         type="button"
         v-bind="$attrs"
         data-theme="dark"
@@ -236,7 +236,7 @@
       v-if="fallbackRequested"
       v-model:open="fallbackOpen"
       :value="value"
-      :anchor="root"
+      :anchor="rootEl"
       :test-id="testId"
     />
   </span>

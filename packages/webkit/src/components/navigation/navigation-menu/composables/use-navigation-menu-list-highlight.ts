@@ -11,27 +11,27 @@ import {
   watch
 } from 'vue'
 
-import { resolveHostElement } from './resolve-host-element'
-import type { UseNavigationMenuRootReturn } from './use-navigation-menu-context'
+import { resolveHostElement } from '../lib/host-element'
+import type { UseNavigationMenuContextReturn } from './use-navigation-menu-context'
 
 export type NavigationMenuHighlightTarget = HTMLElement | ComponentPublicInstance | null
 
 export interface UseNavigationMenuListHighlightReturn {
   selectorStyle: ComputedRef<CSSProperties>
   setTarget: (target: NavigationMenuHighlightTarget) => void
-  handleTargetPointerLeave: (event: PointerEvent, target: NavigationMenuHighlightTarget) => void
-  handleListPointerLeave: (event: PointerEvent) => void
+  onTargetPointerleave: (event: PointerEvent, target: NavigationMenuHighlightTarget) => void
+  onListPointerleave: (event: PointerEvent) => void
   syncToActiveTrigger: () => void
   hide: () => void
 }
 
-type HighlightRoot = Pick<UseNavigationMenuRootReturn, 'activeTriggerEl' | 'menuOpen'>
+type HighlightRoot = Pick<UseNavigationMenuContextReturn, 'activeTriggerEl' | 'menuOpen'>
 
 export function useNavigationMenuListHighlight(
   container: MaybeRefOrGetter<NavigationMenuHighlightTarget>,
   root: HighlightRoot
 ): UseNavigationMenuListHighlightReturn {
-  const activeTarget = shallowRef<HTMLElement | null>(null)
+  const activeTargetEl = shallowRef<HTMLElement | null>(null)
   const isVisible = ref(false)
 
   const metrics = ref({
@@ -76,7 +76,7 @@ export function useNavigationMenuListHighlight(
 
   const hide = () => {
     isVisible.value = false
-    activeTarget.value = null
+    activeTargetEl.value = null
   }
 
   const setTarget = (target: NavigationMenuHighlightTarget) => {
@@ -86,7 +86,7 @@ export function useNavigationMenuListHighlight(
       return
     }
 
-    activeTarget.value = element
+    activeTargetEl.value = element
     measureTarget(element)
   }
 
@@ -101,7 +101,7 @@ export function useNavigationMenuListHighlight(
     return Boolean(related && resolveContainer()?.contains(related))
   }
 
-  const handleTargetPointerLeave = (event: PointerEvent, target: NavigationMenuHighlightTarget) => {
+  const onTargetPointerleave = (event: PointerEvent, target: NavigationMenuHighlightTarget) => {
     if (leftTowardsList(event)) {
       return
     }
@@ -111,12 +111,12 @@ export function useNavigationMenuListHighlight(
       return
     }
 
-    if (resolveHostElement(target) === activeTarget.value) {
+    if (resolveHostElement(target) === activeTargetEl.value) {
       hide()
     }
   }
 
-  const handleListPointerLeave = (event: PointerEvent) => {
+  const onListPointerleave = (event: PointerEvent) => {
     if (leftTowardsList(event)) {
       return
     }
@@ -130,8 +130,8 @@ export function useNavigationMenuListHighlight(
   }
 
   const remeasure = () => {
-    if (activeTarget.value) {
-      measureTarget(activeTarget.value)
+    if (activeTargetEl.value) {
+      measureTarget(activeTargetEl.value)
     }
   }
 
@@ -180,8 +180,8 @@ export function useNavigationMenuListHighlight(
   return {
     selectorStyle,
     setTarget,
-    handleTargetPointerLeave,
-    handleListPointerLeave,
+    onTargetPointerleave,
+    onListPointerleave,
     syncToActiveTrigger,
     hide
   }

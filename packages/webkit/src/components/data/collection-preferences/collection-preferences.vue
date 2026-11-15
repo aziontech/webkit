@@ -5,8 +5,8 @@
     CollectionColumnPreference,
     CollectionDensity,
     CollectionPreferencesValue
-  } from '../../../composables/use-collection/preferences'
-  import { useTranslate } from '../../../composables/use-locale/use-translate'
+  } from '../../../composables/use-collection/lib/preferences'
+  import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../i18n/messages/en'
   import Button from '../../actions/button/button.vue'
   import IconButton from '../../actions/icon-button/icon-button.vue'
@@ -29,7 +29,7 @@
     CollectionColumnPreference,
     CollectionDensity,
     CollectionPreferencesValue
-  } from '../../../composables/use-collection/preferences'
+  } from '../../../composables/use-collection/lib/preferences'
 
   /** A section of the preferences panel. */
   export type CollectionPreferencesSection =
@@ -180,7 +180,7 @@
     draftDensity.value = preferences.value.density ?? 'comfortable'
   }
 
-  const triggerHost = ref<HTMLElement | null>(null)
+  const triggerHostEl = ref<HTMLElement | null>(null)
   const openPanel = (): void => {
     if (props.disabled) return
     open.value = true
@@ -195,7 +195,7 @@
       }
       if (!before) return
       await nextTick()
-      triggerHost.value?.querySelector<HTMLElement>('button, [tabindex]')?.focus()
+      triggerHostEl.value?.querySelector<HTMLElement>('button, [tabindex]')?.focus()
     },
     { immediate: true }
   )
@@ -262,7 +262,7 @@
 
 <template>
   <span
-    ref="triggerHost"
+    ref="triggerHostEl"
     v-bind="rootAttrs"
     :data-testid="testId"
     :data-state="open ? 'open' : 'closed'"

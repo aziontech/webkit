@@ -924,7 +924,7 @@
   const isDragging = (scope: DragScope, index: number) => dnd.scope === scope && dnd.from === index
   const isDropTarget = (scope: DragScope, index: number) =>
     dnd.scope === scope && dnd.over === index && dnd.from !== index
-  const onDragStart = (scope: DragScope, index: number, event: DragEvent) => {
+  const onDragstart = (scope: DragScope, index: number, event: DragEvent) => {
     dnd.scope = scope
     dnd.from = index
     if (event.dataTransfer) {
@@ -934,10 +934,10 @@
       if (row) event.dataTransfer.setDragImage(row, 12, 12)
     }
   }
-  const onDragEnter = (scope: DragScope, index: number) => {
+  const onDragenter = (scope: DragScope, index: number) => {
     if (dnd.scope === scope) dnd.over = index
   }
-  const onDragEnd = () => {
+  const onDragend = () => {
     dnd.scope = null
     dnd.from = -1
     dnd.over = -1
@@ -950,7 +950,7 @@
   const dropOnBehavior = (index: number) => {
     if (dnd.scope !== 'behavior') return
     reorder(form.behaviors, dnd.from, index)
-    onDragEnd()
+    onDragend()
   }
 
   const behaviorFilled = (behavior: Behavior) => {
@@ -1648,7 +1648,7 @@
                             :data-dragging="isDragging('behavior', bIdx) || null"
                             :data-drop="isDropTarget('behavior', bIdx) || null"
                             class="relative grid grid-cols-1 items-start gap-(--spacing-xs) rounded-(--shape-card) transition-[opacity,scale,outline-color] motion-reduce:transition-none data-dragging:scale-[0.98] data-dragging:opacity-70 data-dragging:outline-2 data-dragging:outline-(--accent) data-dragging:outline-dashed data-drop:before:pointer-events-none data-drop:before:absolute data-drop:before:inset-x-0 data-drop:before:-top-(--spacing-2xs) data-drop:before:border-t-2 data-drop:before:border-(--accent) data-drop:before:content-[''] sm:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_auto]"
-                            @dragenter.prevent="onDragEnter('behavior', bIdx)"
+                            @dragenter.prevent="onDragenter('behavior', bIdx)"
                             @dragover.prevent
                             @drop="dropOnBehavior(bIdx)"
                           >
@@ -1791,8 +1791,8 @@
                                 aria-label="Drag to reorder behavior, or use arrow keys"
                                 draggable="true"
                                 class="inline-flex size-10 shrink-0 cursor-grab items-center justify-center rounded-(--shape-button) text-(--text-muted) outline-none transition-colors hover:bg-(--bg-hover) hover:text-(--text-default) focus-visible:ring-2 focus-visible:ring-(--ring-color) active:cursor-grabbing motion-reduce:transition-none"
-                                @dragstart="onDragStart('behavior', bIdx, $event)"
-                                @dragend="onDragEnd"
+                                @dragstart="onDragstart('behavior', bIdx, $event)"
+                                @dragend="onDragend"
                                 @keydown.up.prevent="moveBehavior(bIdx, -1)"
                                 @keydown.down.prevent="moveBehavior(bIdx, 1)"
                               >

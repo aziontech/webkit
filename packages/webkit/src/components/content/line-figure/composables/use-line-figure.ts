@@ -11,10 +11,10 @@ import {
   watch
 } from 'vue'
 
-import { parameter } from './engine/intensity'
-import { tour, type TourHandle } from './engine/stage'
-import type { FigureDefinition, FigureHandle } from './engine/types'
-import { resolveLineFigure } from './figures/registry'
+import { parameter } from '../engine/intensity'
+import { tour, type TourHandle } from '../engine/stage'
+import type { FigureDefinition, FigureHandle } from '../engine/types'
+import { resolveLineFigure } from '../figures/registry'
 
 export interface UseLineFigureOptions {
   name: MaybeRefOrGetter<string>

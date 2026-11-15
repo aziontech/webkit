@@ -8,7 +8,7 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2053-7649
   node_id: 2053:7649
-checksum: 428f761e2df20dec734bab010492237710b96d569192b62f38bb500338068d9c
+checksum: 32adc7280a2be5fcb51ffb33552b91e62323d6ae40c304fabb8107c8357c1404
 created: 2026-11-15
 last_updated: 2026-11-15
 ---
@@ -130,7 +130,7 @@ A full list — the toolbar controls are context-aware (they read the injected t
   import DataTable from '@aziontech/webkit/data-table'
   import Table from '@aziontech/webkit/table'
 
-  const tableRef = ref()
+  const tableEl = ref()
   const filters = ref([])
   const state = ref()
   const data = ref([{ id: '1', name: 'acme-prod', status: 'active' }])
@@ -152,7 +152,7 @@ A full list — the toolbar controls are context-aware (they read the injected t
 
 <template>
   <DataTable
-    ref="tableRef"
+    ref="tableEl"
     :data="data"
     :columns="columns"
     :filter-fields="filterFields"
@@ -179,7 +179,7 @@ A full list — the toolbar controls are context-aware (they read the injected t
 </template>
 ```
 
-For a query language of your own (e.g. AQL), bind `PropertyFilter` in `query` mode yourself; drive the table imperatively through the ref (`tableRef.value.clearFilters()`, `tableRef.value.exportCsv()`, `tableRef.value.getState()` / `setState(snapshot)`). The app owns URL / localStorage persistence — encode `state` where it wants; the component never touches the router.
+For a query language of your own (e.g. AQL), bind `PropertyFilter` in `query` mode yourself; drive the table imperatively through the ref (`tableEl.value.clearFilters()`, `tableEl.value.exportCsv()`, `tableEl.value.getState()` / `setState(snapshot)`). The app owns URL / localStorage persistence — encode `state` where it wants; the component never touches the router.
 
 ## Props
 

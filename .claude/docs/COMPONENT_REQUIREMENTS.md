@@ -561,7 +561,7 @@ Some components may require Vue Router for navigation or routing features.
   const instance = getCurrentInstance()
   const router = instance?.appContext.config.globalProperties.$router
 
-  const handleClick = () => {
+  const onClick = () => {
     if (router) {
       router.push('/path')
     } else {
@@ -633,7 +633,7 @@ interface Props {
 - **Boolean states** are exposed without `is`/`has` prefix on the prop (`disabled`, `loading`, `open`, `selected`, `expanded`, `readonly`). Internal computeds may use `isInactive` etc.
 - **Events** are emitted in kebab-case (`update:open`, `before-close`) and typed via `defineEmits<{ 'update:open': [value: boolean] }>()`.
 - **v-model** follows Vue 3 standard via `defineModel<T>('propName')`.
-- **Refs / composables** use descriptive prefixes (`triggerRef`, `panelRef`, `useFocusTrap`).
+- **Internal names** follow [`component-structure.md`](../rules/component-structure.md) § "Internal names": event handlers `onX` with the DOM event spelled as Vue compiles it (`onClick`, `onKeydown`, `onPointerdown`), template refs to elements or component instances `xEl` / `xEls` (`triggerEl`, `panelEl`, `optionEls`), composables `use-x.ts` exporting `useX` (`useFocusTrap`), injection keys `<Component>[<Part>]InjectionKey`.
 
 ### 2.3. Estados controlados vs não-controlados
 
@@ -698,7 +698,7 @@ This unlocks state-driven styling without computed class strings:
 
 ### 2.7. `cn` helper (tailwind-merge)
 
-> **Status: available today.** `clsx` and `tailwind-merge` are installed in [`packages/webkit/package.json`](../../packages/webkit/package.json). The helper lives at [`src/utils/cn.js`](../../packages/webkit/src/utils/cn.js) and is exported as `@aziontech/webkit/utils/cn`.
+> **Status: available today.** `clsx` and `tailwind-merge` are installed in [`packages/webkit/package.json`](../../packages/webkit/package.json). The helper lives at [`src/utils/cn.ts`](../../packages/webkit/src/utils/cn.ts) and is exported as `@aziontech/webkit/utils/cn`.
 
 The naive `[base, attrs.class]` array works for additive cases but fails when consumer classes need to **override** internal ones (e.g. consumer passes `px-6` while the component sets `px-4` — both end up applied; the later one wins by source order, not intent). `cn(...)` (built on `clsx` + `tailwind-merge`) makes consumer classes win predictably.
 

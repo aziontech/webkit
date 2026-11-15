@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, provide, useAttrs, useId } from 'vue'
 
-  import { CommandGroupIdKey, useCommandMenuContext } from '../injection-key'
+  import { CommandGroupInjectionKey, useCommandMenuContext } from '../injection-key'
 
   defineOptions({
     name: 'CommandGroup',
@@ -29,7 +29,7 @@
   const headingId = `${uid}-heading`
   const groupId = uid
 
-  provide(CommandGroupIdKey, groupId)
+  provide(CommandGroupInjectionKey, groupId)
 
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? `${ctx.testId}__group`

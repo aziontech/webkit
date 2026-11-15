@@ -2,7 +2,7 @@
   import { computed, nextTick, onBeforeUpdate, provide, ref, useAttrs } from 'vue'
 
   import { eventDirection, logicalArrowKey } from '../../../composables/use-direction'
-  import { useTranslate } from '../../../composables/use-locale/use-translate'
+  import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../i18n/messages/en'
   import EmptyState from '../../feedback/empty-state/empty-state.vue'
   import Skeleton from '../../feedback/skeleton/skeleton.vue'
@@ -114,7 +114,7 @@
     selected: activeSelection
   })
 
-  const treeRef = ref<globalThis.HTMLElement | null>(null)
+  const treeEl = ref<globalThis.HTMLElement | null>(null)
 
   const SKELETON_WIDTHS = ['100%', '80%', '64%', '48%', '32%']
 
@@ -201,7 +201,7 @@
   }
 
   function focusItem(id: string) {
-    if (!id || !treeRef.value) return
+    if (!id || !treeEl.value) return
     const target = rowElement(id)
     if (!target) return
     navigation.setFocused(id)
@@ -253,7 +253,7 @@
   }
 
   function rowElement(id: string) {
-    const nodes = treeRef.value?.querySelectorAll<globalThis.HTMLElement>('[data-tree-focus]') ?? []
+    const nodes = treeEl.value?.querySelectorAll<globalThis.HTMLElement>('[data-tree-focus]') ?? []
     return Array.from(nodes).find((node) => node.dataset['itemId'] === id) ?? null
   }
 
@@ -495,7 +495,7 @@
     <component
       :is="grid ? 'div' : 'ul'"
       v-else
-      ref="treeRef"
+      ref="treeEl"
       :role="grid ? 'treegrid' : 'tree'"
       :aria-label="ariaLabel || t('tree.label')"
       :aria-multiselectable="multiple || undefined"

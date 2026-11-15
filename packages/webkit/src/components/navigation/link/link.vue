@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
-  import { useTranslate } from '../../../composables/use-locale/use-translate'
+  import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../i18n/messages/en'
   import { directionalIconClass } from '../../../utils/directional-icons'
 
@@ -58,7 +58,7 @@
     return props.target === '_blank' ? EXTERNAL_ICON : ''
   })
 
-  const handleClick = (event: MouseEvent) => {
+  const onClick = (event: MouseEvent) => {
     if (props.disabled) {
       event.preventDefault()
       return
@@ -80,7 +80,7 @@
     :data-size="size"
     :data-testid="testId"
     class="group inline-flex shrink-0 items-center whitespace-nowrap rounded-(--shape-button) text-(--text-link) transition-colors duration-150 ease-out motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) data-[size=large]:h-10 data-[size=large]:min-h-10 data-[size=large]:text-button-lg data-[size=medium]:h-8 data-[size=medium]:min-h-8 data-[size=medium]:text-button-md data-[size=small]:h-7 data-[size=small]:min-h-7 data-[size=small]:text-button-md data-[disabled]:pointer-events-none data-[disabled]:cursor-not-allowed data-[disabled]:text-(--text-disabled)!"
-    @click="handleClick"
+    @click="onClick"
   >
     <span
       class="inline-flex flex-nowrap items-center gap-(--spacing-xs)"

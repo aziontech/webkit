@@ -4,7 +4,7 @@
 //   - .claude/hooks/validate-spec-compliance.mjs  → write-time gate (AI pipeline)
 //   - packages/webkit/scripts/check-authoring.mjs → DS CI ratchet (repo-wide), so an
 //     editor push that never ran the hook cannot merge off-spec code either.
-// DS-internal only (depends on .specs/), so it lives in _lib — not in the package.
+// DS-internal only (depends on .specs/), so it lives in lib — not in the package.
 
 import { existsSync, readdirSync, readFileSync } from 'node:fs'
 import { join, resolve } from 'node:path'

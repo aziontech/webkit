@@ -1,8 +1,8 @@
 <script setup lang="ts">
   import { computed, inject, useAttrs } from 'vue'
 
-  import { useListboxTrigger } from '../../../../composables/use-listbox'
-  import { selectContextKey } from '../injection-key'
+  import { useListboxTrigger } from '../../../../composables/use-listbox-trigger'
+  import { SelectInjectionKey } from '../injection-key'
 
   defineOptions({
     name: 'SelectTrigger',
@@ -22,7 +22,7 @@
     prefix(): unknown
   }>()
 
-  const ctx = inject(selectContextKey)
+  const ctx = inject(SelectInjectionKey)
   if (!ctx) {
     throw new Error('SelectTrigger must be used inside <Select>.')
   }
@@ -56,7 +56,7 @@
   <button
     :ref="
       (el) => {
-        ctx.triggerRef.value = el as globalThis.HTMLElement | null
+        ctx.triggerEl.value = el as globalThis.HTMLElement | null
       }
     "
     v-bind="$attrs"

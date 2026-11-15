@@ -56,7 +56,7 @@
   const attrs = useAttrs()
   const boardItem = inject(BoardItemInjectionKey, null)
   const uid = useId()
-  const rootRef = ref<globalThis.HTMLElement | null>(null)
+  const rootEl = ref<globalThis.HTMLElement | null>(null)
   const armed = ref(false)
   const dragging = ref(false)
   const resizing = ref(false)
@@ -94,7 +94,7 @@
   }
 
   function measure(): ChartCardMeasure {
-    const root = rootRef.value
+    const root = rootEl.value
     const grid = root?.parentElement
     if (!root || !grid)
       return { height: root?.offsetHeight ?? 0, columns: DEFAULT_COLUMNS, columnWidth: 0 }
@@ -119,7 +119,7 @@
     if (value !== height.value) height.value = value
   }
 
-  function onDragStart(event: globalThis.DragEvent) {
+  function onDragstart(event: globalThis.DragEvent) {
     if (!armed.value) return
     dragging.value = true
     if (event.dataTransfer) event.dataTransfer.effectAllowed = 'move'
@@ -127,7 +127,7 @@
     emit('drag-start', event)
   }
 
-  function onDragEnd(event: globalThis.DragEvent) {
+  function onDragend(event: globalThis.DragEvent) {
     if (!dragging.value) return
     dragging.value = false
     armed.value = false
@@ -179,7 +179,7 @@
 
 <template>
   <div
-    ref="rootRef"
+    ref="rootEl"
     v-bind="$attrs"
     role="group"
     :data-testid="testId"
@@ -193,8 +193,8 @@
     :aria-describedby="describedBy"
     :style="sizeVars"
     class="@container/chart-card relative flex min-w-0 flex-col overflow-clip rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) [grid-column:span_min(var(--chart-card-span),var(--chart-grid-columns,12))] [height:var(--chart-card-height,auto)] transition-opacity duration-fast-02 ease-productive-entrance motion-reduce:transition-none data-[dragging]:opacity-50"
-    @dragstart="onDragStart"
-    @dragend="onDragEnd"
+    @dragstart="onDragstart"
+    @dragend="onDragend"
   >
     <slot />
   </div>

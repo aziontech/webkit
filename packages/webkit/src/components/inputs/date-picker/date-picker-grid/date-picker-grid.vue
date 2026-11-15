@@ -2,11 +2,7 @@
   import { computed, inject, nextTick, ref, watch } from 'vue'
 
   import { eventDirection, logicalArrowKey } from '../../../../composables/use-direction'
-  import {
-    intlLocale,
-    useLocaleContext,
-    useTranslate
-  } from '../../../../composables/use-locale/use-translate'
+  import { intlLocale, useLocaleContext, useTranslate } from '../../../../composables/use-translate'
   import * as en from '../../../../i18n/messages/en'
   import {
     getTabViewPanelTransitionStyle,
@@ -239,12 +235,12 @@
     return firstEnabled ? firstEnabled.time : null
   })
 
-  const gridRef = ref<globalThis.HTMLElement | null>(null)
+  const gridEl = ref<globalThis.HTMLElement | null>(null)
 
   const focusActiveCell = () => {
     nextTick(() => {
       const buttons =
-        gridRef.value?.querySelectorAll<globalThis.HTMLButtonElement>('button[tabindex="0"]')
+        gridEl.value?.querySelectorAll<globalThis.HTMLButtonElement>('button[tabindex="0"]')
       const target =
         [...(buttons ?? [])].find((button) => !button.closest('.absolute')) ?? buttons?.[0]
       target?.focus()
@@ -348,7 +344,7 @@
 
 <template>
   <div
-    ref="gridRef"
+    ref="gridEl"
     data-testid="input-date-picker__grid"
     class="flex flex-col items-start gap-(--spacing-md)"
   >

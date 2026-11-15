@@ -2,7 +2,7 @@
   import { createReusableTemplate } from '@vueuse/core'
   import { computed, markRaw, nextTick, onBeforeUnmount, reactive, ref, useAttrs, watch } from 'vue'
 
-  import { useTranslate } from '../../../composables/use-locale/use-translate'
+  import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../i18n/messages/en'
   import IconButton from '../../actions/icon-button/icon-button.vue'
   import Accordion from '../../content/accordion/accordion.vue'
@@ -126,7 +126,7 @@
   const { t } = useTranslate({ schemaForm: en.schemaForm })
   const [DefineNodes, ReuseNodes] = createReusableTemplate<{ nodes: SchemaFormNode[] }>()
 
-  const rootRef = ref<HTMLElement | null>(null)
+  const rootEl = ref<HTMLElement | null>(null)
   const touched = reactive(new Set<string>())
   const dismissed = reactive(new Set<string>())
   const drafts = reactive(new Map<string, { text: string; snapshot: string }>())
@@ -482,7 +482,7 @@
     return undefined
   }
 
-  const onFocusOut = (node: SchemaFormNode, event: globalThis.FocusEvent) => {
+  const onFocusout = (node: SchemaFormNode, event: globalThis.FocusEvent) => {
     const next = event.relatedTarget as HTMLElement | null
     const field = event.currentTarget as HTMLElement | null
     if (next && (field?.contains(next) || next.closest('[role="listbox"]'))) return
@@ -516,7 +516,7 @@
     if (first) {
       for (const section of sectionsHolding(tree.value.nodes, first)) openSections.add(section.path)
       await nextTick()
-      const field = rootRef.value?.querySelector<HTMLElement>(`[data-path="${CSS.escape(first)}"]`)
+      const field = rootEl.value?.querySelector<HTMLElement>(`[data-path="${CSS.escape(first)}"]`)
       field
         ?.querySelector<HTMLElement>('input, textarea, button, [tabindex]:not([tabindex="-1"])')
         ?.focus()
@@ -597,7 +597,7 @@
         :data-path="node.path"
         :data-widget="node.widget"
         :data-testid="`${testId}__set`"
-        @focusout="onFocusOut(node, $event)"
+        @focusout="onFocusout(node, $event)"
       >
         <FieldLegend>{{ node.label }}</FieldLegend>
         <FieldDescription v-if="node.description && !errorOf(node)">{{
@@ -666,7 +666,7 @@
         :required="node.required"
         :invalid="Boolean(errorOf(node))"
         :disabled="isDisabled(node)"
-        @focusout="onFocusOut(node, $event)"
+        @focusout="onFocusout(node, $event)"
       >
         <FieldLabel>{{ node.label }}</FieldLabel>
         <slot
@@ -807,7 +807,7 @@
   </DefineNodes>
 
   <div
-    ref="rootRef"
+    ref="rootEl"
     v-bind="rootAttrs"
     data-slot="schema-form"
     :data-testid="testId"

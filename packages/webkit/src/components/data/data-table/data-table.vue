@@ -38,7 +38,7 @@
 
   import { eventDirection, logicalArrowKey } from '../../../composables/use-direction'
   import { scrollParent } from '../../../composables/use-lazy-chunks'
-  import { useTranslate } from '../../../composables/use-locale/use-translate'
+  import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../i18n/messages/en'
   import { downloadCsv, toCsv } from '../../../utils/csv'
   import Button from '../../actions/button/button.vue'
@@ -948,9 +948,9 @@
   )
   const selectAllId = `${useId()}-select-all`
 
-  const viewportRef = ref<ComponentPublicInstance | null>(null)
-  const viewportEl = (): HTMLElement | undefined =>
-    viewportRef.value?.$el as HTMLElement | undefined
+  const viewportEl = ref<ComponentPublicInstance | null>(null)
+  const viewportElement = (): HTMLElement | undefined =>
+    viewportEl.value?.$el as HTMLElement | undefined
   const scrollTop = ref<number>(0)
   const viewportClientHeight = ref<number>(0)
   const VIRTUAL_OVERSCAN = 8
@@ -1028,7 +1028,7 @@
   const overflowStart = ref<boolean>(false)
   const overflowEnd = ref<boolean>(false)
   const measureEdges = (): void => {
-    const el = viewportEl()
+    const el = viewportElement()
     if (!el) return
     const offset = Math.abs(el.scrollLeft)
     overflowStart.value = offset > 1
@@ -1057,7 +1057,7 @@
   let rowObserver: ResizeObserver | null = null
   let heightsFrame = 0
   const onRowsResized = (entries: ResizeObserverEntry[]): void => {
-    const el = viewportEl()
+    const el = viewportElement()
     const anchor = el ? indexAt(rowOffsets.value, el.scrollTop) : 0
     const estimate = rowHeight.value
     let shift = 0
@@ -1122,7 +1122,7 @@
     () => [virtualActive.value, renderedRows.value.length],
     () =>
       void nextTick(() => {
-        const el = viewportEl()
+        const el = viewportElement()
         if (el && virtualActive.value) viewportClientHeight.value = visibleHeightOf(el)
       }),
     { flush: 'post' }
@@ -1132,7 +1132,7 @@
     lazyActive.value ? (rowTotal.value - windowEnd.value) * rowHeight.value : 0
   )
   const windowed = computed<boolean>(() => virtualActive.value || lazyActive.value)
-  const lazySentinel = ref<HTMLElement | null>(null)
+  const lazySentinelEl = ref<HTMLElement | null>(null)
   let lazyObserver: IntersectionObserver | null = null
   const onLazyIntersect = (entries: IntersectionObserverEntry[]): void => {
     const entry = entries[entries.length - 1]
@@ -1145,7 +1145,7 @@
   const observeSentinel = (): void => {
     lazyObserver?.disconnect()
     lazyObserver = null
-    const el = lazySentinel.value
+    const el = lazySentinelEl.value
     if (!el || !lazyActive.value || typeof IntersectionObserver === 'undefined') return
     lazyObserver = new IntersectionObserver(onLazyIntersect, {
       root: scrollParent(el),
@@ -1153,9 +1153,9 @@
     })
     lazyObserver.observe(el)
   }
-  watch([lazySentinel, lazyLimit, lazyActive], observeSentinel, { flush: 'post' })
+  watch([lazySentinelEl, lazyLimit, lazyActive], observeSentinel, { flush: 'post' })
   const rowsInReach = (): number => {
-    const el = viewportEl()
+    const el = viewportElement()
     if (!el || typeof el.getBoundingClientRect !== 'function') return LAZY_CHUNK
     const scrollsItself =
       el.scrollHeight > el.clientHeight &&
@@ -1194,12 +1194,12 @@
   const moreArmed = computed<boolean>(
     () => moreShown.value && props.moreRows && !props.loadingMore && !lazyActive.value
   )
-  const moreSentinel = ref<HTMLElement | null>(null)
+  const moreSentinelEl = ref<HTMLElement | null>(null)
   let moreObserver: IntersectionObserver | null = null
   const observeMore = (): void => {
     moreObserver?.disconnect()
     moreObserver = null
-    const el = moreSentinel.value
+    const el = moreSentinelEl.value
     if (!el || !moreArmed.value || typeof IntersectionObserver === 'undefined') return
     moreObserver = new IntersectionObserver(
       (entries) => {
@@ -1209,7 +1209,7 @@
     )
     moreObserver.observe(el)
   }
-  watch([moreSentinel, moreArmed, rowTotal], observeMore, { flush: 'post' })
+  watch([moreSentinelEl, moreArmed, rowTotal], observeMore, { flush: 'post' })
 
   const liveStartId = ref<string | null>(null)
   const liveBoundaryId = computed<string | null>(() => {
@@ -1218,7 +1218,7 @@
     return (rowIndexById.value.get(id) ?? 0) > 0 ? id : null
   })
   const scrollToNewest = (): void => {
-    const el = viewportEl()
+    const el = viewportElement()
     if (el) el.scrollTop = 0
     scrollTop.value = 0
   }
@@ -1233,7 +1233,7 @@
   watch(rowTotal, (total, previous) => {
     if (!live.value) return
     if (liveStartId.value === null && total > 0) liveStartId.value = rowIdAt(0)
-    if (total > (previous ?? 0) && (viewportEl()?.scrollTop ?? 0) < rowHeight.value)
+    if (total > (previous ?? 0) && (viewportElement()?.scrollTop ?? 0) < rowHeight.value)
       void nextTick(scrollToNewest)
   })
 
@@ -1333,7 +1333,7 @@
     void nextTick(() => {
       measureAutoWidths()
       measureEdges()
-      const el = viewportEl()
+      const el = viewportElement()
       if (!el || typeof ResizeObserver === 'undefined') return
       edgeObserver = new ResizeObserver(measureEdges)
       edgeObserver.observe(el)
@@ -1361,11 +1361,11 @@
   const leadingCells = computed<number>(
     () => (props.enableRowSelection ? 1 : 0) + (reorderActive.value ? 1 : 0)
   )
-  const handleFrozen = computed<boolean>(
+  const reorderHandleFrozen = computed<boolean>(
     () => reorderActive.value && leftFrozenCols.value.length > 0
   )
   const selectionStyle = computed<Record<string, string> | undefined>(() =>
-    handleFrozen.value && selectionFrozen.value && !stacked.value
+    reorderHandleFrozen.value && selectionFrozen.value && !stacked.value
       ? { insetInlineStart: `${SELECTION_WIDTH}px` }
       : undefined
   )
@@ -1388,7 +1388,7 @@
     const value = record && key ? record[key] : undefined
     return value === undefined || value === null || value === '' ? id : String(value)
   }
-  const handleLabelOf = (id: string, index: number): string =>
+  const reorderHandleLabelOf = (id: string, index: number): string =>
     t('tableReorder.handle', {
       name: rowNameOf(id),
       position: index + 1,
@@ -1465,7 +1465,7 @@
   }
 
   const REORDER_EDGE = 32
-  const onHandlePointerDown = (event: PointerEvent, id: string): void => {
+  const onHandlePointerdown = (event: PointerEvent, id: string): void => {
     if (reorderLocked.value || event.button !== 0 || !canMoveId(id)) return
     const handle = event.currentTarget as HTMLElement
     if (event.isTrusted) handle.setPointerCapture(event.pointerId)
@@ -1474,27 +1474,27 @@
     dragId.value = id
     overId.value = id
   }
-  const onHandlePointerMove = (event: PointerEvent): void => {
+  const onHandlePointermove = (event: PointerEvent): void => {
     if (!dragId.value) return
     const hit = globalThis.document
       .elementFromPoint(event.clientX, event.clientY)
       ?.closest<HTMLElement>('[data-reorder-row]')
     const hitId = hit && rootEl.value?.contains(hit) ? hit.getAttribute('data-reorder-row') : null
     if (hitId && canMoveId(hitId)) overId.value = hitId
-    const viewport = viewportEl()
+    const viewport = viewportElement()
     if (!viewport) return
     const box = viewport.getBoundingClientRect()
     if (event.clientY < box.top + REORDER_EDGE) viewport.scrollTop -= REORDER_EDGE / 2
     else if (event.clientY > box.bottom - REORDER_EDGE) viewport.scrollTop += REORDER_EDGE / 2
   }
-  const onHandlePointerUp = (): void => {
+  const onHandlePointerup = (): void => {
     const id = dragId.value
     const target = overId.value
     dragId.value = null
     overId.value = null
     if (id && target && target !== id) moveRow(id, target, 'dropped')
   }
-  const onHandlePointerCancel = (): void => {
+  const onHandlePointercancel = (): void => {
     dragId.value = null
     overId.value = null
   }
@@ -1580,7 +1580,7 @@
     treeFocusId.value = id
     await nextTick()
     let el = treeRowEl(id)
-    const viewport = viewportEl()
+    const viewport = viewportElement()
     const index = rowIndexById.value.get(id)
     if (!el && virtualActive.value && viewport && index !== undefined) {
       viewport.scrollTop = rowOffsets.value[index] ?? 0
@@ -1719,7 +1719,7 @@
     </div>
 
     <ScrollArea
-      ref="viewportRef"
+      ref="viewportEl"
       :orientation="viewportHeight ? 'both' : 'horizontal'"
       :data-testid="`${testId}__viewport`"
       class="min-w-0 max-h-(--table-viewport-height)"
@@ -1771,7 +1771,7 @@
                   v-if="reorderActive"
                   key="reorder"
                   kind="checkbox"
-                  :frozen="handleFrozen ? 'start' : undefined"
+                  :frozen="reorderHandleFrozen ? 'start' : undefined"
                   data-reorder-cell
                 >
                   <span class="sr-only">{{ t('tableReorder.column') }}</span>
@@ -1836,7 +1836,7 @@
                   v-if="reorderActive"
                   key="reorder"
                   kind="checkbox"
-                  :frozen="handleFrozen ? 'start' : undefined"
+                  :frozen="reorderHandleFrozen ? 'start' : undefined"
                   :class="stacked ? 'static! before:hidden! after:hidden!' : undefined"
                 />
                 <TableCell
@@ -1940,7 +1940,7 @@
                     v-if="reorderActive"
                     key="reorder"
                     kind="checkbox"
-                    :frozen="handleFrozen ? 'start' : undefined"
+                    :frozen="reorderHandleFrozen ? 'start' : undefined"
                     data-reorder-cell
                     :class="stacked ? 'static! before:hidden! after:hidden!' : undefined"
                   >
@@ -1948,7 +1948,7 @@
                       icon="ai ai-menu"
                       kind="outlined"
                       size="small"
-                      :ariaLabel="handleLabelOf(row.id, windowStart + index)"
+                      :ariaLabel="reorderHandleLabelOf(row.id, windowStart + index)"
                       :aria-describedby="reorderHintId"
                       :disabled="reorderLocked || !canMoveId(row.id)"
                       :data-reorder-handle="row.id"
@@ -1956,10 +1956,10 @@
                       class="cursor-grab touch-none active:cursor-grabbing"
                       @click.stop
                       @keydown="(event: KeyboardEvent) => onHandleKeydown(event, row.id)"
-                      @pointerdown="(event: PointerEvent) => onHandlePointerDown(event, row.id)"
-                      @pointermove="onHandlePointerMove"
-                      @pointerup="onHandlePointerUp"
-                      @pointercancel="onHandlePointerCancel"
+                      @pointerdown="(event: PointerEvent) => onHandlePointerdown(event, row.id)"
+                      @pointermove="onHandlePointermove"
+                      @pointerup="onHandlePointerup"
+                      @pointercancel="onHandlePointercancel"
                     />
                   </TableCell>
                   <TableCell
@@ -2035,7 +2035,7 @@
                 </TableRow>
                 <div
                   v-if="lazyActive"
-                  ref="lazySentinel"
+                  ref="lazySentinelEl"
                   role="presentation"
                   aria-hidden="true"
                   :data-testid="`${testId}__lazy-rows`"
@@ -2053,7 +2053,7 @@
       >
         <div
           v-if="moreArmed"
-          ref="moreSentinel"
+          ref="moreSentinelEl"
           aria-hidden="true"
           :data-testid="`${testId}__more-sentinel`"
           class="h-px w-full"
