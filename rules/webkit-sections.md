@@ -36,7 +36,7 @@ JSON. Never rebuild a band from primitives when a section exists.
 - Reach for the section's own switches before anything else: `ClientQuotes` `autoplay` /
   `autoplayInterval` / `v-model`, `ArticleHighlight` `v-model`, `CapabilityGrid` `titleKind`,
   `CodeSplit` action `kind` (`transparent` for a "Learn more" text button), `SiteFooter` link
-  `external`, `UseCaseLinks` items without `href` for a link-less grid, `ProcessScroll` `pinned`
+  `external`, `CapabilityGrid` items with `href` for a linked grid, `ProcessScroll` `pinned`
   (a band that pins while its tall cards slide sideways), a `HeroForm` field's
   `visuallyHiddenLabel` (a field labelled by its placeholder), `NetworkSection` benefits without
   `icon` (the bold run-in lead-in) and outcomes without `logo`.

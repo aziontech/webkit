@@ -1,9 +1,10 @@
 <script setup>
-  import UseCaseLinks from '@aziontech/webkit/use-case-links'
+  import CapabilityGrid from '@aziontech/webkit/capability-grid'
 </script>
 
 <template>
-  <UseCaseLinks
+  <CapabilityGrid
+    title-kind="left"
     eyebrow="Use Cases"
     title="What teams use Application Accelerator for"
     description="Cache what standard CDN caching cannot, with the methods, query strings and cookies you choose."

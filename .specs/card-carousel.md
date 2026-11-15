@@ -5,9 +5,9 @@ structure: monolithic
 status: implemented
 spec_version: 1
 template: 2
-checksum: 736d5d2d3f65c6f89832740fbff986a4ede2ba0527fd7c8e384b3df27dc5be19
+checksum: 69d7b0f4775d39fb077c69129e72dd6c9bdaf457ea7d61dd5b9ca69c39ed7ce6
 created: 2026-11-12
-last_updated: 2026-11-13
+last_updated: 2026-11-15
 ---
 
 # CardCarousel — Component Spec
@@ -25,7 +25,7 @@ It is a page section — the site places it from a `{ _id: 'card-carousel', prop
 
 ## When NOT to use
 
-- When every case must be visible, or there are three or six of equal weight → use `use-case-links` (linked grid) or `use-cases` (grid with one action).
+- When every case must be visible, or there are three or six of equal weight → use `capability-grid` (linked grid) or `use-cases` (grid with one action).
 - For a quote or testimonial row → use `quote-carousel` or `client-quotes`.
 - For numbered principles pinned while the page scrolls → use `sticky-carousel`.
 - For articles with images → use `article-cards`.
@@ -33,7 +33,7 @@ It is a page section — the site places it from a `{ _id: 'card-carousel', prop
 ## Related
 
 - `carousel` — the primitive this band composes; reach for it directly only for a non-card row.
-- `use-case-links` — the same content as a static, fully visible grid.
+- `capability-grid` — the same content as a static, fully visible grid.
 - `sticky-carousel` — numbered dark cards pinned on scroll.
 
 ## Best practices

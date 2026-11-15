@@ -4,6 +4,7 @@ import { h } from 'vue'
 
 import Default from '../../../../examples/capability-grid/default.vue'
 import LeftTitle from '../../../../examples/capability-grid/left-title.vue'
+import Links from '../../../../examples/capability-grid/links.vue'
 import Points from '../../../../examples/capability-grid/points.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import CapabilityGrid from './capability-grid.vue'
@@ -78,6 +79,30 @@ describe('CapabilityGrid', () => {
       'href',
       '/platform'
     )
+  })
+
+  it('links each item with an href by its heading and leaves the rest plain', () => {
+    const { getByRole, queryByRole } = render(CapabilityGrid, {
+      props: {
+        items: [
+          { title: 'Functions', description: 'Run code.', href: '/functions' },
+          { title: 'Storage', description: 'Keep files.' }
+        ]
+      }
+    })
+    expect(getByRole('link', { name: /Functions/ })).toHaveAttribute('href', '/functions')
+    expect(queryByRole('link', { name: /Storage/ })).toBeNull()
+  })
+
+  it('draws a cell without an icon when the item has none', () => {
+    const { container } = render(CapabilityGrid, { props: { items } })
+    expect(container.querySelector('i, [class*="pi-"]')).toBeNull()
+  })
+
+  it('renders the links example as six linked use cases with no axe violations', async () => {
+    const { getAllByRole, container } = render(Links)
+    expect(getAllByRole('link')).toHaveLength(6)
+    await expectNoA11yViolations(container)
   })
 
   it('sets the anchor and lets a consumer testid win', () => {

@@ -4,10 +4,10 @@ category: sections
 structure: monolithic
 template: 2
 status: implemented
-spec_version: 2
+spec_version: 3
 created: 2026-11-04
-last_updated: 2026-11-14
-checksum: 45a552f2c8a0db8cc206b2285c1cb9e15672c4af518d88f1440e22b91b1a3061
+last_updated: 2026-11-15
+checksum: 1a62b75902ee1e35763a947dfdcdf205aa3ef4f6a7b5e0885653b46c83890bbf
 ---
 
 # UseCases — Component Spec
@@ -18,13 +18,14 @@ The "what teams use it for" band of a product page: a three-column frame whose f
 
 ## When to use
 
+- Use UseCases when the band's title sits in the first grid cell with one action.
 - On a product or solution page, right after the opening band, to name the concrete jobs the product is bought for.
 - Whenever a page needs three to six short, icon-led use cases with one link out to the documentation.
 
 ## When NOT to use
 
 - For a grid of features with artwork → use `feature-tiles`.
-- For use cases that each link to their own page → use `use-case-links`.
+- For use cases that each link to their own page, or any grid of claims with no single action → use `capability-grid`.
 - Inside another band's cell → compose `topic` directly.
 
 ## Related

@@ -3,10 +3,10 @@ name: topic
 category: marketing
 structure: monolithic
 status: implemented
-spec_version: 1
-checksum: 18016ea7679fe1bf93c8bb6ea228e4f2d5c033e79bd849df82d211af310f52a4
+spec_version: 2
+checksum: 9b4ee388cbbe6590cbdd409ad415102b8e4960a3d3d26a5df2f0e03ad4f7788b
 created: 2026-09-24
-last_updated: 2026-11-11
+last_updated: 2026-11-15
 ---
 
 # Topic — Component Spec
@@ -17,6 +17,7 @@ One claim stated in three parts: a glyph, a short headline it shares a line with
 
 ## When to use
 
+- Use Topic for one icon + headline + sentence claim inside a grid cell.
 - For each cell of a "what you get" band: a row of equal claims under a section's headline.
 - Inside `CardGrid.Cell` or `BentoGrid.Cell`, where the grid owns the frame and the fill and the topic owns only the copy.
 - Whenever a claim is glyph-led and one sentence long, repeated three to six times across a band.
@@ -26,6 +27,7 @@ One claim stated in three parts: a glyph, a short headline it shares a line with
 - For a tile with its own border and surface → keep the topic and put it in a `CardGrid.Cell`, which draws the frame and the fill.
 - For a claim that carries an eyebrow, a media region or a button → use `media-split`.
 - For the headline that opens the whole section → use `section-title`.
+- For a whole band of claims or links placed from page JSON → use `capability-grid`, which lays topics out for you.
 - For a measured figure with a unit → use `big-numbers`.
 - For a console list row with media and actions → use `item`.
 
