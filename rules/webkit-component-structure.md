@@ -2,7 +2,7 @@
 
 Two components should differ only in what they _do_, never in how their files are arranged
 or in what order their `<script setup>` reads. Parts of this rule are machine-enforced by
-the `webkit/authoring-standards` ESLint rule: runtime `defineProps({})` / `defineEmits([])`
+the `webkit/require-authoring-standards` ESLint rule: runtime `defineProps({})` / `defineEmits([])`
 (use the type-based forms), a manual `modelValue` prop + `update:modelValue` emit (use
 `defineModel`), a `<slot>` without a `defineSlots` declaration, a composable returning
 `reactive()` or authored as `.js`, and a bare `@deprecated` tag are all blocked. The folder

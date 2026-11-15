@@ -5,8 +5,8 @@ import * as vueParser from 'vue-eslint-parser'
 import tsParser from '@typescript-eslint/parser'
 
 import plugin from '../../src/eslint-plugin/index.js'
-import composableReadonlyReturn from '../../src/eslint-plugin/rules/composable-readonly-return.js'
-import composableScopeCleanup from '../../src/eslint-plugin/rules/composable-scope-cleanup.js'
+import requireReadonlyComposableReturn from '../../src/eslint-plugin/rules/require-readonly-composable-return.js'
+import requireComposableScopeCleanup from '../../src/eslint-plugin/rules/require-composable-scope-cleanup.js'
 import noPolymorphicAsProp from '../../src/eslint-plugin/rules/no-polymorphic-as-prop.js'
 import {
   scanSignatures,
@@ -30,8 +30,8 @@ const vueTs = new RuleTester({
 
 const FILE = 'src/composables/use-thing/use-thing.ts'
 
-test('composable-readonly-return', () => {
-  ts.run('composable-readonly-return', composableReadonlyReturn, {
+test('require-readonly-composable-return', () => {
+  ts.run('require-readonly-composable-return', requireReadonlyComposableReturn, {
     valid: [
       {
         filename: FILE,
@@ -138,8 +138,8 @@ test('composable-readonly-return', () => {
   })
 })
 
-test('composable-scope-cleanup', () => {
-  ts.run('composable-scope-cleanup', composableScopeCleanup, {
+test('require-composable-scope-cleanup', () => {
+  ts.run('require-composable-scope-cleanup', requireComposableScopeCleanup, {
     valid: [
       {
         filename: FILE,
@@ -277,8 +277,8 @@ test('scanSignatures feeds the hook and the ratchet with rule ids and lines', ()
   assert.deepEqual(
     scanSignatures('/abs/src/use-a.ts', composable).map((f) => [f.id, f.line]),
     [
-      ['composable-readonly-return', 1],
-      ['composable-readonly-return', 3]
+      ['require-readonly-composable-return', 1],
+      ['require-readonly-composable-return', 3]
     ]
   )
   const sfc =

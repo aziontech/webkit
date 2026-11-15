@@ -1,6 +1,3 @@
-import authoringStandards from './rules/authoring-standards.js'
-import composableReadonlyReturn from './rules/composable-readonly-return.js'
-import composableScopeCleanup from './rules/composable-scope-cleanup.js'
 import noBarrelImport from './rules/no-barrel-import.js'
 import noDeepInternalImport from './rules/no-deep-internal-import.js'
 import noDeprecatedComponent from './rules/no-deprecated-component.js'
@@ -25,8 +22,11 @@ import preferHrefInMenuNode from './rules/prefer-href-in-menu-node.js'
 import preferTreeShakeableRoot from './rules/prefer-tree-shakeable-root.js'
 import preferWebkitComponent from './rules/prefer-webkit-component.js'
 import requireAccessibleName from './rules/require-accessible-name.js'
+import requireAuthoringStandards from './rules/require-authoring-standards.js'
+import requireComposableScopeCleanup from './rules/require-composable-scope-cleanup.js'
 import requireContainerWidth from './rules/require-container-width.js'
 import requireHeaderSearch from './rules/require-header-search.js'
+import requireReadonlyComposableReturn from './rules/require-readonly-composable-return.js'
 
 const rules = {
   'no-unknown-import': noUnknownImport,
@@ -42,7 +42,7 @@ const rules = {
   'prefer-webkit-component': preferWebkitComponent,
   'prefer-define-model': preferDefineModel,
   'no-style-override': noStyleOverride,
-  'authoring-standards': authoringStandards,
+  'require-authoring-standards': requireAuthoringStandards,
   'require-container-width': requireContainerWidth,
   'require-header-search': requireHeaderSearch,
   'no-wrapped-page-chrome': noWrappedPageChrome,
@@ -54,8 +54,8 @@ const rules = {
   'no-dropped-children': noDroppedChildren,
   'no-viewport-height-calc': noViewportHeightCalc,
   'no-link-in-sentence': noLinkInSentence,
-  'composable-readonly-return': composableReadonlyReturn,
-  'composable-scope-cleanup': composableScopeCleanup,
+  'require-readonly-composable-return': requireReadonlyComposableReturn,
+  'require-composable-scope-cleanup': requireComposableScopeCleanup,
   'no-polymorphic-as-prop': noPolymorphicAsProp,
   'no-page-navigation-menu': noPageNavigationMenu
 }
@@ -103,7 +103,7 @@ const RECOMMENDED = {
   'prefer-webkit-component': 'error',
   'prefer-define-model': 'error',
   'no-style-override': 'error',
-  'authoring-standards': 'error',
+  'require-authoring-standards': 'error',
   'require-container-width': 'warn',
   'require-header-search': 'error',
   'no-wrapped-page-chrome': 'error',
@@ -115,8 +115,8 @@ const RECOMMENDED = {
   'no-dropped-children': 'error',
   'no-viewport-height-calc': 'error',
   'no-link-in-sentence': 'error',
-  'composable-readonly-return': 'error',
-  'composable-scope-cleanup': 'error',
+  'require-readonly-composable-return': 'error',
+  'require-composable-scope-cleanup': 'error',
   'no-polymorphic-as-prop': 'error',
   'no-page-navigation-menu': 'warn'
 }

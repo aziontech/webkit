@@ -113,7 +113,7 @@ test('the generated eslint config lints a fresh app clean and never the build ou
     const [own] = await eslint.lintFiles(['src/format.ts'])
     assert.deepEqual(
       own.messages.map((m) => m.ruleId),
-      ['webkit/authoring-standards'],
+      ['webkit/require-authoring-standards'],
       'the tool-config exemption must not reach the source'
     )
   } finally {

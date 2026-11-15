@@ -4,7 +4,7 @@ Removing or renaming a public part of a component this project authors — the c
 itself, a prop, an event, a slot — is a **breaking change** for everyone who uses it. The
 lifecycle is fixed: mark the part `@deprecated` (naming its replacement and its removal
 version), ship it working for **at least one major version**, then remove it in a
-subsequent major. The `webkit/authoring-standards` ESLint rule blocks a **bare
+subsequent major. The `webkit/require-authoring-standards` ESLint rule blocks a **bare
 `@deprecated`** tag as an error; the cycle length and the version bumps are convention,
 upheld in code review.
 
@@ -33,7 +33,7 @@ least one major, then removed, and `webkit/no-deprecated-component` tells you be
 - Never remove or rename a public part without a deprecation cycle first — no silent
   removals.
 - Never write a bare `@deprecated` (no replacement, no removal version) — blocked by
-  `webkit/authoring-standards`.
+  `webkit/require-authoring-standards`.
 - Never change a deprecated part's behavior during its cycle — annotate, don't mutate.
 - Never ship a removal as anything other than a major, breaking release.
 - Never keep building on a deprecated webkit part once the replacement is named — the

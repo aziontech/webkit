@@ -157,7 +157,7 @@ export const STANDARDS = [
       { surface: 'write-time', by: 'validate-spec-compliance' },
       { surface: 'write-time', by: 'validate-tokens' },
       { surface: 'ci', by: 'check-authoring' },
-      { surface: 'lint', by: 'authoring-standards' }
+      { surface: 'lint', by: 'require-authoring-standards' }
     ]
   },
   {
@@ -168,7 +168,7 @@ export const STANDARDS = [
       { surface: 'write-time', by: 'validate-authoring' },
       { surface: 'ci', by: 'check-authoring' },
       { surface: 'lint', by: 'prefer-define-model' },
-      { surface: 'lint', by: 'authoring-standards' }
+      { surface: 'lint', by: 'require-authoring-standards' }
     ]
   },
   {
@@ -179,7 +179,7 @@ export const STANDARDS = [
       { surface: 'write-time', by: 'validate-authoring' },
       { surface: 'write-time', by: 'validate-spec-compliance' },
       { surface: 'ci', by: 'check-authoring' },
-      { surface: 'lint', by: 'authoring-standards' }
+      { surface: 'lint', by: 'require-authoring-standards' }
     ]
   },
   {
@@ -202,7 +202,7 @@ export const STANDARDS = [
       { surface: 'write-time', by: 'validate-authoring' },
       { surface: 'write-time', by: 'validate-spec-compliance' },
       { surface: 'ci', by: 'check-authoring' },
-      { surface: 'lint', by: 'authoring-standards' },
+      { surface: 'lint', by: 'require-authoring-standards' },
       { surface: 'lint', by: 'no-dropped-children' }
     ]
   },
@@ -213,9 +213,9 @@ export const STANDARDS = [
     enforce: [
       { surface: 'write-time', by: 'validate-authoring' },
       { surface: 'ci', by: 'check-authoring' },
-      { surface: 'lint', by: 'authoring-standards' },
-      { surface: 'lint', by: 'composable-readonly-return' },
-      { surface: 'lint', by: 'composable-scope-cleanup' }
+      { surface: 'lint', by: 'require-authoring-standards' },
+      { surface: 'lint', by: 'require-readonly-composable-return' },
+      { surface: 'lint', by: 'require-composable-scope-cleanup' }
     ]
   },
   {
@@ -271,7 +271,7 @@ export const STANDARDS = [
       { surface: 'write-time', by: 'validate-authoring' },
       { surface: 'ci', by: 'check-authoring' },
       { surface: 'lint', by: 'no-deprecated-component' },
-      { surface: 'lint', by: 'authoring-standards' },
+      { surface: 'lint', by: 'require-authoring-standards' },
       { surface: 'ci', by: 'check-api-diff' }
     ],
     note: 'check-api-diff diffs the public API of the base catalog.json with head: a removal or rename is breaking and needs "!" in the PR title plus a migration (a src/cli/migrations/ codemod entry or a new MIGRATION-v<N>.md line naming the component). 6.0 is the clean-break major: old names were removed outright (MIGRATION-v6.md + webkit migrate); the mark, one major, remove lifecycle applies from 6.0 on.'
@@ -309,7 +309,7 @@ export const STANDARDS = [
     enforce: [
       { surface: 'write-time', by: 'validate-authoring' },
       { surface: 'ci', by: 'check-authoring' },
-      { surface: 'lint', by: 'authoring-standards' },
+      { surface: 'lint', by: 'require-authoring-standards' },
       { surface: 'review', by: 'required-approval' }
     ],
     note: 'Implementation code carries no prose comments: only component API JSDoc (props, emits, slots, models, exposed members, exported types), tool directives, @deprecated and .js JSDoc type tags. prose-comment in the shared authoring-checks engine (comment-scan.js), one key per comment, scoped to every non-test source under packages/.'

@@ -144,7 +144,7 @@ export default [
   ...webkitPlugin.configs.${severityConfig},
   {
     files: ['${TOOL_CONFIG_FILES}'],
-    rules: { 'webkit/authoring-standards': 'off' }
+    rules: { 'webkit/require-authoring-standards': 'off' }
   },
   {
     files: ['**/*.vue'],

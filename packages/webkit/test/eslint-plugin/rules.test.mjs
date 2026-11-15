@@ -38,8 +38,9 @@ const { LAYOUT_CLASS_FAMILIES: ALLOWED_LAYOUT } =
   await import('../../src/eslint-plugin/lib/layout-classes.js')
 const preferDefineModel = (await import('../../src/eslint-plugin/rules/prefer-define-model.js'))
   .default
-const authoringStandards = (await import('../../src/eslint-plugin/rules/authoring-standards.js'))
-  .default
+const requireAuthoringStandards = (
+  await import('../../src/eslint-plugin/rules/require-authoring-standards.js')
+).default
 const requireContainerWidth = (
   await import('../../src/eslint-plugin/rules/require-container-width.js')
 ).default
@@ -1071,10 +1072,10 @@ test('prefer-define-model', () => {
   })
 })
 
-test('authoring-standards (shared engine: hook + ratchet + consumer lint)', () => {
+test('require-authoring-standards (shared engine: hook + ratchet + consumer lint)', () => {
   const sfc = (script, template = '<div />') =>
     `<script setup lang="ts">${script}</script><template>${template}</template>`
-  vueTs.run('authoring-standards', authoringStandards, {
+  vueTs.run('require-authoring-standards', requireAuthoringStandards, {
     valid: [
       { code: sfc('const model = defineModel<string>()'), filename: 'a.vue' },
       {
@@ -1179,7 +1180,7 @@ test('authoring-standards (shared engine: hook + ratchet + consumer lint)', () =
       }
     ]
   })
-  js.run('authoring-standards', authoringStandards, {
+  js.run('require-authoring-standards', requireAuthoringStandards, {
     valid: [
       // a well-formed composable in .ts
       {

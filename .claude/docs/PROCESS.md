@@ -406,7 +406,7 @@ block off-pattern usage at commit; the same lint runs in the project's CI.
 `no-unknown-import` (with typo suggestions), `no-deep-internal-import`,
 `no-barrel-import`, `no-whole-icon-set-import`, `no-hardcoded-color`,
 `prefer-tree-shakeable-root`, plus the shipped construction standards
-(`authoring-standards`) and `prefer-webkit-component` (adoption steering). Deterministic
+(`require-authoring-standards`) and `prefer-webkit-component` (adoption steering). Deterministic
 import rules are **autofixable**. Presets: `strict` (default), `recommended`,
 `performance` — in every preset the correctness rules are `error`, never `warn`.
 

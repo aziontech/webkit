@@ -32,7 +32,7 @@ file: `webkit-v-model.md`, `webkit-props.md`, `webkit-prop-vocabulary.md`,
 
 - These are the design system's `scope: general` standards — they apply to any Vue
   component, not only to webkit's. The mechanizable ones are **blocked** by the
-  `webkit/authoring-standards` ESLint rule (error) at commit and in CI; the rest are
+  `webkit/require-authoring-standards` ESLint rule (error) at commit and in CI; the rest are
   convention + review.
 - Before building, check the catalog first (`suggest_component` on the `webkit` MCP or
   `node_modules/@aziontech/webkit/catalog.json`) — the component may already exist.

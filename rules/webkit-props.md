@@ -4,7 +4,7 @@ Props are the **data + scalar configuration** surface of a component — anatomy
 things go) is slots and sub-components, never props. Declare props with a named
 `interface Props` consumed by `defineProps<Props>()`, wrapped in `withDefaults`, with a
 one-line JSDoc on every public prop and named, exported variant unions. The
-`webkit/authoring-standards` ESLint rule blocks the runtime object form
+`webkit/require-authoring-standards` ESLint rule blocks the runtime object form
 (`defineProps({ ... })`) as an **error**; prop naming and defaults are convention,
 checked in review.
 
@@ -28,7 +28,7 @@ checked in review.
 ## Do not
 
 - Never use the runtime object form `defineProps({ variant: { type: String } })` — blocked
-  by `webkit/authoring-standards`. Same for runtime `defineEmits([...])`.
+  by `webkit/require-authoring-standards`. Same for runtime `defineEmits([...])`.
 - Never use `any` or `@ts-ignore` in a prop type — use precise unions or generics.
 - Never declare `class` or `style` in `defineProps` — consumer classes flow through
   attribute fallthrough (`useAttrs()`), not a prop.
@@ -73,7 +73,7 @@ checked in review.
 <!-- prettier-ignore -->
 ```vue
 <script setup lang="ts">
-  // Runtime object form — blocked by webkit/authoring-standards.
+  // Runtime object form — blocked by webkit/require-authoring-standards.
   const props = defineProps({
     variant: { type: String, default: 'primary' }, // inline, untyped, no exported union
     isDisabled: Boolean, // "is" prefix — should be `disabled`

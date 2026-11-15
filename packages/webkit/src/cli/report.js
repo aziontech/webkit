@@ -26,7 +26,7 @@ export const RULE_PURPOSE = {
   'prefer-webkit-component': 'foreign UI library where a webkit component exists',
   'prefer-define-model': 'hand-rolled modelValue + update:modelValue pair',
   'no-style-override': 'class/style on a webkit component — restyling it',
-  'authoring-standards': 'shared authoring standards (typed slots, comments, deprecation)',
+  'require-authoring-standards': 'shared authoring standards (typed slots, comments, deprecation)',
   'require-container-width': 'Card, StatTile or ChartCard as a flex item with no width',
   'require-header-search': 'app header without SearchTrigger, or a hand-rolled ⌘K field',
   'no-wrapped-page-chrome': 'SiteFooter or SiteHeader inside a bordered or padded wrapper',
