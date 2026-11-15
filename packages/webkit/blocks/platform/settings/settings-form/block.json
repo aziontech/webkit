@@ -3,16 +3,17 @@
   "name": "SettingsForm",
   "title": "Templates/Platform/Settings/SettingsForm",
   "surface": "product",
-  "summary": "A settings form and its save strategy, one variant per strategy. SaveAll, the default (a form that is one logical unit has one save): account-level settings as `Item` rows saved as one unit, a page body for ConsoleLayout (the layout owns the shell and the main landmark): the form column opening with a small page heading, topic sections each a `SectionHeader` (an h2) over a flush `Card` of rows, and one full-bleed sticky footer with Discard and Save, both disabled until the form differs from what was saved (dirty tracking through `useUnsavedChanges`); a successful save confirms with a `Profile saved.` toast and a rejected one shows an error toast with Retry, the entries kept (SaveFailed); Profile is the example, with General (Full name, Email), Preferences (Timezone, Language) and Notifications (Product updates), and Full name and Email flag only after Save is pressed. SavePerGroup splits the page into topic groups whose `Card` footers each carry a secondary Save for that group only. SavePerCard splits a long configuration page into titled cards, each with an info `Alert`, its stacked fields and its own Save beside an optional docs `Link`. Saving one group or card disables just its own fieldset; the others stay editable, and each save confirms with a toast. Built from `PageHeader`, `SectionHeader`, `SettingRow`, `SaveBar`, `Card`, `Item`, `Alert`, `Field`, `Input`, `Select`, `Switch`, `Link`, `HelperText` and `Button`.",
+  "summary": "A settings form and its save strategy, one variant per strategy. SaveAll, the default (a form that is one logical unit has one save): account-level settings as `Item` rows saved as one unit, a page body for ConsoleLayout (the layout owns the shell and the main landmark): the form column opening with a small page heading, topic sections each a `SectionHeader` (an h2) over a flush `Card` of rows, and one full-bleed sticky footer with Discard and Save, both disabled until the form differs from what was saved (dirty tracking through `useUnsavedChanges`); a successful save confirms with a `Profile saved.` toast and a rejected one shows an error toast with Retry, the entries kept (SaveFailed); Profile is the example, with General (Full name, Email), Preferences (Timezone, Language) and Notifications (Product updates), and Full name and Email flag only after Save is pressed. SavePerGroup splits the page into topic groups whose `Card` footers each carry a secondary Save for that group only. SavePerCard splits a long configuration page into titled cards, each with an info `Alert`, its stacked fields and its own Save beside an optional docs `Link`. Profile is the full profile page of a signed-in account, and the layout every account settings page follows: seven `SettingsSection`s of flush `Card`s of rows with the unsaved-changes `SaveBar`, MFA linked to `platform/account/mfa-management`, and Delete account behind a type-to-confirm `ConfirmDialog`; ProfileLoading and ProfileFailed are its first load and its load failure. Saving one group or card disables just its own fieldset; the others stay editable, and each save confirms with a toast. Built from `PageHeader`, `SectionHeader`, `SettingsSection`, `SettingRow`, `SaveBar`, `Card`, `Item`, `Alert`, `Field`, `Input`, `Textarea`, `Select`, `Switch`, `Tag`, `Link`, `HelperText`, `ConfirmDialog`, `Skeleton` and `Button`.",
   "preview": {
     "layout": "fullscreen",
     "background": "dark"
   },
   "intents": [
+    "account settings form",
+    "organization or account settings",
     "save all",
     "single save for the page",
     "sticky footer save",
-    "account settings form",
     "save as one unit",
     "cancel and save footer",
     "salvar tudo",
@@ -35,7 +36,22 @@
     "long settings page",
     "salvar por card",
     "configurações do projeto",
-    "salvar cada seção"
+    "salvar cada seção",
+    "account settings",
+    "account profile",
+    "profile page",
+    "user profile",
+    "my profile",
+    "my account",
+    "organization settings",
+    "company information",
+    "login settings",
+    "danger zone",
+    "configurações da conta",
+    "perfil",
+    "página de perfil",
+    "minha conta",
+    "configuración de la cuenta"
   ],
   "skills": ["webkit-form", "webkit-errors", "webkit-ux-heuristics"],
   "primary": {
@@ -72,6 +88,21 @@
       "name": "SavingOneCard",
       "summary": "Preview Toolbar is saving: its Save shows the loading state and its selects are disabled, while Deployment Protection stays editable.",
       "file": "variants/saving-one-card.vue"
+    },
+    {
+      "name": "Profile",
+      "summary": "The profile page of a signed-in account: a small page heading over seven stacked `SettingsSection`s (General, Company information, Address information, Login settings, Source control, Appearance, Danger zone), each a flush `Card` of rows, with the `SaveBar` that rises once a saved field changes. Account name comes filled; Billing emails starts empty and is required; both are checked on Save. Requiring MFA lives in `platform/account/mfa-management`, linked from the Login settings row; source-control actions open the provider; Delete account asks in a `ConfirmDialog` that takes the account name typed. A save that fails with no field to blame raises an error toast with Retry and keeps the changes.",
+      "file": "variants/profile.vue"
+    },
+    {
+      "name": "ProfileLoading",
+      "summary": "The profile's first load: three cards of Skeleton rows in place of the sections, the heading kept.",
+      "file": "variants/profile-loading.vue"
+    },
+    {
+      "name": "ProfileFailed",
+      "summary": "The account did not load: a danger Alert with Retry replaces the profile sections; Retry loads them.",
+      "file": "variants/profile-failed.vue"
     }
   ]
 }

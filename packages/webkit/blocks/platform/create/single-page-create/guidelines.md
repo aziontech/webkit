@@ -4,17 +4,17 @@ The page a first-level resource is created on when everything it needs fits on o
 
 ## When to use
 
+- Use single-page-create only to create a first-level resource on one page; its settings page is edit-resource (`platform/edit/edit-resource`).
 - The resource is one the sidebar routes to (a domain, a service, a purge) and the user came only to create it (`skills/webkit-create-surface`).
 - Its fields fit in a few sections without depending on each other's answers step by step.
 - An action that takes a form and runs once, whose submit names what it does (Save, Purge, Deploy).
-- The settings page of the same resource: it reuses these sections in the same order.
 
 ## When not to use
 
 - The fields split into steps that unlock in order, or one answer adds a step: use `platform/create/multipage-create`.
 - The resource binds another one and then deploys: use `platform/create/provision-wizard` or `platform/create/source-wizard`.
 - The thing is created inside another resource (a record in a zone, a rule in an application): use `platform/create/create-in-drawer`.
-- Editing an existing resource where the commit bar should mount only after a change: use `platform/settings/settings-form`.
+- The settings page of an existing resource, with the save bar that mounts only after a change: use `platform/edit/edit-resource`.
 - Never put a create form in a dialog.
 
 ## Building blocks

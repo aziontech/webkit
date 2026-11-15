@@ -137,4 +137,4 @@ A failure no section owns (the payment service did not answer) is `toast.error` 
 
 - `platform/account/payment-method-card` — the Payment method card on its own, with its editing state.
 - `platform/account/onboarding-form` — the plan choice during sign-up opens the same upgrade drawer.
-- `platform/account/profile` — the account settings layout Billing shares.
+- `platform/settings/settings-form` (Profile) — the account settings layout Billing shares.

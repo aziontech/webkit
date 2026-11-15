@@ -4,6 +4,7 @@ The settings page of one existing resource. The user comes here to change how th
 
 ## When to use
 
+- Use edit-resource for the Settings tab or settings page of one resource, with anchored sections and a save bar that appears after the first edit.
 - A resource has a Settings tab (or, with no tabs, its own `/<resource>/:id/settings` page) with fields grouped into a few sections.
 - Changes are reviewed together and committed in one save, with a way to discard them all.
 - Some settings are fixed or paid and must be shown locked, with the reason beside them.
@@ -11,7 +12,7 @@ The settings page of one existing resource. The user comes here to change how th
 ## When not to use
 
 - Creating the resource for the first time: use `platform/create/single-page-create`, which shares this field list.
-- Account or organization settings outside one resource: use `platform/settings/settings-form`.
+- Account or organization settings outside one resource (profile, preferences, notifications): use `platform/settings/settings-form`.
 - A resource whose content is code or a document: use `platform/edit/code-editor`.
 - Deleting the resource: the Danger zone action opens `platform/delete/delete-with-confirmation`.
 - A short list of attached records inside a section: use `platform/detail/attached-resources` as that section's body.
