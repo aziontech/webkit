@@ -346,10 +346,10 @@ test('planSync reads the adapters layout (adapters/claude/agents, adapters/AGENT
   const templatesDir = makeTemplatesDir()
   try {
     mkdirSync(join(templatesDir, 'adapters/claude/agents'), { recursive: true })
-    writeFileSync(join(templatesDir, 'adapters/claude/agents/webkit-expert.md'), '# Agent\n')
+    writeFileSync(join(templatesDir, 'adapters/claude/agents/webkit-advisor.md'), '# Agent\n')
     writeFileSync(join(templatesDir, 'adapters/AGENTS_FRAGMENT.md'), '## webkit\n\nNew layout.\n')
     applyPlan(project, planSync(project, { templatesDir, version: VERSION }).actions)
-    assert.ok(existsSync(join(project, '.claude/agents/webkit-expert.md')))
+    assert.ok(existsSync(join(project, '.claude/agents/webkit-advisor.md')))
     assert.match(readFileSync(join(project, 'AGENTS.md'), 'utf8'), /New layout\./)
   } finally {
     rmSync(project, { recursive: true, force: true })

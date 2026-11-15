@@ -32,11 +32,11 @@ test('docFileKind resolves each population and skips non-governed paths', () => 
     scope: 'general',
     unit: 'webkit-usage'
   })
-  assert.deepEqual(docFileKind('adapters/claude/agents/webkit-expert.md'), {
+  assert.deepEqual(docFileKind('adapters/claude/agents/webkit-advisor.md'), {
     kind: 'agent',
     variant: 'consumer',
     scope: 'general',
-    unit: 'webkit-expert'
+    unit: 'webkit-advisor'
   })
   // not governed
   assert.equal(docFileKind('.claude/agents/_README.md'), null)

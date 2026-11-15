@@ -334,7 +334,7 @@ test('the bundle is read from the repo-root layout: skills/, rules/, adapters/',
   assert.ok(bundle.includes('rules/webkit-navigation-levels.md'))
   assert.ok(bundle.includes('rules/webkit-direction.md'))
   assert.ok(bundle.includes('rules/webkit-strings.md'))
-  assert.ok(bundle.includes('agents/webkit-expert.md'))
+  assert.ok(bundle.includes('agents/webkit-advisor.md'))
   assert.equal(bundle.filter((rel) => rel.startsWith('skills/')).length, 19)
 })
 
