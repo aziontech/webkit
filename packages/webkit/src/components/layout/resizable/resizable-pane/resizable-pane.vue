@@ -1,14 +1,5 @@
 <script setup lang="ts">
-  import {
-    computed,
-    getCurrentInstance,
-    inject,
-    onBeforeUnmount,
-    onMounted,
-    ref,
-    useAttrs,
-    watch
-  } from 'vue'
+  import { computed, inject, onBeforeUnmount, onMounted, ref, useAttrs, watch } from 'vue'
 
   import { ResizableInjectionKey } from '../injection-key'
 
@@ -36,15 +27,12 @@
   const basis = defineModel<number | undefined>('basis', { default: undefined })
   /** Whether the pane is shown at its length; false renders it at zero length. It stays mounted, so its content keeps its state. */
   const expanded = defineModel<boolean>('expanded', { default: true })
-  /** @deprecated since 6.0 — use `v-model:expanded` (inverted). Removed in 7.0. */
-  const collapsed = defineModel<boolean | undefined>('collapsed', { default: undefined })
 
   defineSlots<{
     default(): unknown
   }>()
 
   const attrs = useAttrs()
-  const instance = getCurrentInstance()
   const ctx = inject(ResizableInjectionKey, null)
 
   const testId = computed<string>(
@@ -54,16 +42,9 @@
   )
 
   const flexible = computed(() => basis.value === undefined)
-  const passed = (name: string) => {
-    const raw = instance?.vnode.props
-    return Boolean(raw && name in raw)
-  }
-  const isCollapsed = computed(() =>
-    passed('collapsed') && !passed('expanded') ? collapsed.value === true : !expanded.value
-  )
+  const isCollapsed = computed(() => !expanded.value)
   const setCollapsed = (value: boolean) => {
     expanded.value = !value
-    collapsed.value = value
   }
   const orientation = computed(() => ctx?.orientation.value ?? 'horizontal')
 
