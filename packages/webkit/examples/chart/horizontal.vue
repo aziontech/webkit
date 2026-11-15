@@ -29,7 +29,7 @@
   >
     <Chart.Grid />
     <Chart.Axis kind="y" />
-    <Chart.Bar labeled />
+    <Chart.Bar show-labels />
     <Chart.Tooltip />
   </Chart>
 </template>

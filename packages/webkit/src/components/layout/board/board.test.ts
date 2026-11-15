@@ -29,6 +29,7 @@ function mount(props: Record<string, unknown> = {}, start = initial()) {
   const layout = ref<BoardLayoutItem[]>(start)
   const moves: unknown[] = []
   const resizes: unknown[] = []
+  const triggers: Event[] = []
   const board = () =>
     h(
       Board,
@@ -37,8 +38,14 @@ function mount(props: Record<string, unknown> = {}, start = initial()) {
         'onUpdate:layout': (next: BoardLayoutItem[]) => {
           layout.value = next
         },
-        onItemMove: (payload: unknown) => moves.push(payload),
-        onItemResize: (payload: unknown) => resizes.push(payload),
+        onItemMove: (event: Event, payload: unknown) => {
+          triggers.push(event)
+          moves.push(payload)
+        },
+        onItemResize: (event: Event, payload: unknown) => {
+          triggers.push(event)
+          resizes.push(payload)
+        },
         style: 'width: 1200px',
         ...props
       },
@@ -68,7 +75,7 @@ function mount(props: Record<string, unknown> = {}, start = initial()) {
       }
     )
   const view = render({ render: board })
-  return { view, layout, moves, resizes }
+  return { view, layout, moves, resizes, triggers }
 }
 
 const order = (layout: { value: BoardLayoutItem[] }) => layout.value.map((item) => item.id)
@@ -106,7 +113,7 @@ describe('Board', () => {
   })
 
   it('moves an item from the keyboard, keeps focus on its handle and announces it', async () => {
-    const { view, layout, moves } = mount({ editing: true })
+    const { view, layout, moves, triggers } = mount({ editing: true })
     const handle = view.getByTestId('drag-requests')
     handle.focus()
     await fireEvent.keyDown(handle, { key: 'ArrowDown' })
@@ -118,6 +125,7 @@ describe('Board', () => {
       'Requests moved to position 2 of 3.'
     )
     expect(moves).toEqual([{ id: 'requests', from: 0, to: 1 }])
+    expect(triggers[0]).toBeInstanceOf(KeyboardEvent)
     await fireEvent.keyDown(view.getByTestId('drag-requests'), { key: 'ArrowUp' })
     await fireEvent.keyDown(view.getByTestId('drag-requests'), { key: 'ArrowUp' })
     expect(order(layout)).toEqual(['requests', 'regions', 'errors'])

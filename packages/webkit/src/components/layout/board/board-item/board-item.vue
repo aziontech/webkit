@@ -57,9 +57,9 @@
     return { height: root.offsetHeight, columns, columnWidth: (grid.clientWidth + gap) / columns }
   }
 
-  async function move(_event: globalThis.KeyboardEvent, direction: BoardMoveDirection) {
+  async function move(event: globalThis.KeyboardEvent, direction: BoardMoveDirection) {
     const active = globalThis.document?.activeElement
-    board.move(props.itemId, direction)
+    board.move(event, props.itemId, direction)
     await nextTick()
     if (
       active instanceof globalThis.HTMLElement &&
@@ -86,7 +86,7 @@
     over.value = false
     if (!droppable.value) return
     event.preventDefault()
-    board.drop(props.itemId)
+    board.drop(event, props.itemId)
   }
 
   provide(BoardItemInjectionKey, {
@@ -111,7 +111,7 @@
     setSpan: (next) => board.setSpan(props.itemId, next),
     setHeight: (next) => board.setHeight(props.itemId, next),
     startResize: () => undefined,
-    endResize: () => board.announceResize(props.itemId)
+    endResize: (event) => board.announceResize(event, props.itemId)
   })
 </script>
 

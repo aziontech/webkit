@@ -3,10 +3,10 @@ name: tracker
 category: chart
 structure: monolithic
 status: implemented
-spec_version: 5
+spec_version: 6
 created: 2026-11-10
 last_updated: 2026-11-15
-checksum: a25df00c6ea90076181d202527e024e6b31384db1950bda96179a83f62dcf6de
+checksum: 8602d954c5612414b7d3ae4ae4b14e1d13da2a5d19c35e6271c6acad760a7cfc
 ---
 
 # Tracker — Component Spec
@@ -94,7 +94,7 @@ _No slots._
 - `data-loading` mirrors `loading`
 - `data-severity` on each block: `success` | `warning` | `danger` | `info` | `none`
 - `data-active` on the active block; `data-dimmed` on every other block while one is active
-- `data-visible` on the readout while a block is active; `data-moving` while it follows from one block to the next
+- `data-state="open|closed"` on the readout: `open` while a block is active; `data-moving` while it follows from one block to the next
 
 ## Motion & Animations
 

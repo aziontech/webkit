@@ -25,13 +25,13 @@ export interface BoardContext {
   draggingId: Readonly<Ref<string | null>>
   entry: (id: string) => BoardLayoutItem | undefined
   registerLabel: (id: string, label: () => string) => () => void
-  move: (id: string, direction: BoardMoveDirection) => void
+  move: (event: KeyboardEvent, id: string, direction: BoardMoveDirection) => void
   startDrag: (id: string) => void
   endDrag: () => void
-  drop: (targetId: string) => void
+  drop: (event: DragEvent, targetId: string) => void
   setSpan: (id: string, next: number) => void
   setHeight: (id: string, next: number | undefined) => void
-  announceResize: (id: string) => void
+  announceResize: (event: PointerEvent | KeyboardEvent, id: string) => void
 }
 
 export interface BoardItemContext {
@@ -50,7 +50,7 @@ export interface BoardItemContext {
   setSpan: (next: number) => void
   setHeight: (next: number | undefined) => void
   startResize: () => void
-  endResize: () => void
+  endResize: (event: PointerEvent | KeyboardEvent) => void
 }
 
 export const BoardInjectionKey: InjectionKey<BoardContext> = Symbol('Board')

@@ -120,11 +120,11 @@ describe('Tracker', () => {
     await fireEvent.keyDown(root, { key: 'ArrowRight' })
     const readout = view.getByTestId('chart-tracker__readout')
     expect(readout.getAttribute('aria-hidden')).toBe('true')
-    expect(readout.hasAttribute('data-visible')).toBe(true)
+    expect(readout.getAttribute('data-state')).toBe('open')
     expect(readout.textContent?.trim()).toBe('Nov 5 · Degraded performance')
 
     await fireEvent.keyDown(root, { key: 'Escape' })
-    expect(view.getByTestId('chart-tracker__readout').hasAttribute('data-visible')).toBe(false)
+    expect(view.getByTestId('chart-tracker__readout').getAttribute('data-state')).toBe('closed')
   })
 
   it('renders a Skeleton strip while loading and suppresses the blocks', async () => {

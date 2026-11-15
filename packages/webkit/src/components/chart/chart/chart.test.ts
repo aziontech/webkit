@@ -456,7 +456,7 @@ describe('Chart', () => {
   it('lays bars down the side when horizontal', async () => {
     const view = mount({ orientation: 'horizontal' }, () => [
       h(ChartAxis, { kind: 'y' }),
-      h(ChartBar, { ids: ['allowed'], labeled: true })
+      h(ChartBar, { ids: ['allowed'], showLabels: true })
     ])
     await measured(view)
     expect(view.getByTestId('chart-chart').getAttribute('data-orientation')).toBe('horizontal')
