@@ -29,7 +29,7 @@
       />
       <Tag
         label="production"
-        severity="secondary"
+        severity="neutral"
         size="small"
       />
     </template>
