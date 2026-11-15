@@ -742,8 +742,8 @@ function foundations(catalog) {
       ]
     },
     {
-      slug: 'i18n',
-      title: 'Languages (i18n)',
+      slug: 'internationalization',
+      title: 'Languages (internationalization)',
       summary:
         'Built-in strings in en, pt-BR and es, the provider, useLocale and locale-aware formatting.',
       body: [
@@ -753,7 +753,7 @@ function foundations(catalog) {
       ]
     },
     {
-      slug: 'rtl',
+      slug: 'right-to-left',
       title: 'Right-to-left',
       summary:
         'Logical sides only, so every screen mirrors under dir="rtl"; what mirrors and what does not.',
