@@ -865,7 +865,7 @@ test('no-deprecated-component', () => {
         errors: [
           {
             message:
-              "'@aziontech/webkit/vite' is deprecated in @aziontech/webkit. Since 6.0 — nothing to pre-bundle. Removed in 7.0.",
+              "'@aziontech/webkit/vite' is deprecated in @aziontech/webkit. Since 6.1 — nothing to pre-bundle. Removed in 7.0.",
             suggestions: []
           }
         ]

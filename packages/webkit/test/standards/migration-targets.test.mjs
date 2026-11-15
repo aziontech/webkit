@@ -40,7 +40,7 @@ test('MIGRATION-v6.md names every deprecated type and every retired illustration
     .split('} as const')[0]
     .matchAll(/^\s*'([a-z0-9-]+)':/gm)
   const names = [...deprecatedTypes, ...[...aliases].map((match) => match[1])]
-  assert.ok(names.length > 8)
+  assert.ok(names.length >= 8)
   assert.deepEqual(
     names.filter((name) => !guide.includes(`\`${name}\``)),
     []

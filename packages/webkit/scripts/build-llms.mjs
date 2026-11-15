@@ -300,7 +300,7 @@ function assetRows(kind, items) {
       items.map((i) => [
         `\`${i.name}\``,
         i.canvas ?? '',
-        i.deprecated ? `Deprecated: use \`${i.replacedBy}\`. Removed in 7.0.` : ''
+        i.deprecated ? `Old name, kept so existing page data renders: use \`${i.replacedBy}\`.` : ''
       ])
     )
   if (kind === 'icons')
