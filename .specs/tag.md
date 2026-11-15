@@ -7,9 +7,9 @@ spec_version: 4
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=476-940&vars=1
   node_id: 476:940
-checksum: 1d20429b91e942273f6c0cc2104ddeb5c5b8b094b5626812cd81f44c1e5977d1
+checksum: 3b23507f60ee95b61fec89c2c51ff119bd66746f729d50fa069d2c7accf28c71
 created: 2026-05-22
-last_updated: 2026-11-14
+last_updated: 2026-11-15
 ---
 
 # Tag — Component Spec

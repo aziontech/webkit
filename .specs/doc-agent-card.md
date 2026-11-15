@@ -5,9 +5,9 @@ structure: monolithic
 status: implemented
 spec_version: 2
 template: 2
-checksum: 9f47452d35946a8a19d3501986354ba876448e41b17d81f5b4ab09c1bf48ceb2
+checksum: 87bf237a926e2e7382ebba5bba5f3208e3c63cc425cae7f79470905b91ddc953
 created: 2026-11-12
-last_updated: 2026-11-14
+last_updated: 2026-11-15
 ---
 
 # DocAgentCard — Component Spec

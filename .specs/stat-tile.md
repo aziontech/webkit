@@ -3,10 +3,10 @@ name: stat-tile
 category: chart
 structure: monolithic
 status: implemented
-checksum: 56b022dfefaacfd32a4d0b9649ae10d32318557fb03c968480ce7f2ba9b58b7b
+checksum: e98fccb16a12327146334f13795af2effa3734db3ba6f0bfd273a9deb1574a47
 spec_version: 3
 created: 2026-10-20
-last_updated: 2026-11-14
+last_updated: 2026-11-15
 ---
 
 # StatTile — Component Spec

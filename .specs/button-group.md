@@ -5,9 +5,9 @@ structure: monolithic
 status: implemented
 spec_version: 3
 template: 2
-checksum: b7a3d4629c590cc8c8474b09effe9ec342416d22d82249ebe745625021b5b6b6
+checksum: 57ba406c1ff80cdd76facd9dc1e6b891243d83aa2326cdccc6898845d1f10099
 created: 2026-11-11
-last_updated: 2026-11-13
+last_updated: 2026-11-15
 ---
 
 # ButtonGroup — Component Spec

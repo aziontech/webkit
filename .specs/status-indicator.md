@@ -4,9 +4,9 @@ category: feedback
 structure: monolithic
 status: implemented
 spec_version: 5
-checksum: 87778157f303f630a6cf466bf40c2466c8376f94a1e199ed54b9391f34273355
+checksum: 973af310f9f80c971a0e899eb92f858d3087631ee03ac4e357354479144db551
 created: 2026-05-22
-last_updated: 2026-11-14
+last_updated: 2026-11-15
 ---
 
 # Status Indicator — Component Spec

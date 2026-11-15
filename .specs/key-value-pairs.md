@@ -3,10 +3,10 @@ name: key-value-pairs
 category: content
 structure: composition
 status: implemented
-checksum: c2e51b8dc14b387f9e2f4f1ca6a36271a320daa8a92c518d32d614c27a48cf36
+checksum: 856de3fd1780ec631ea90fba072383e46f89171d62d0b45274c643deef6ef9bc
 spec_version: 2
 created: 2026-11-10
-last_updated: 2026-11-12
+last_updated: 2026-11-15
 ---
 
 # KeyValuePairs — Component Spec

@@ -8,9 +8,9 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3950-34695
   node_id: 3950:34695
-checksum: 4f1a0bc14ebf28e82d787365a3961e69e3e81343f67056308d677c1828aa07a0
+checksum: 81cdc2ece251ddc682e24d3fb7ea1b2e856c13238eb8dca9757a1df88aae6b84
 created: 2026-05-26
-last_updated: 2026-11-14
+last_updated: 2026-11-15
 ---
 
 # Log View — Component Spec

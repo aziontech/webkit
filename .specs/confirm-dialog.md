@@ -3,10 +3,10 @@ name: confirm-dialog
 category: overlay
 structure: monolithic
 status: implemented
-checksum: f6e5da15ed7296fd7526ea2dec4e030600f1220f1a9bf77460e5a3da3313a8d3
+checksum: 2f5d20e448a107458b58d4086ca1b032e05f4b7a1a163289d26fc232997db3c2
 spec_version: 5
 created: 2026-11-10
-last_updated: 2026-11-14
+last_updated: 2026-11-15
 ---
 
 # ConfirmDialog — Component Spec

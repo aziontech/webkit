@@ -5,9 +5,9 @@ structure: monolithic
 status: implemented
 spec_version: 5
 template: 2
-checksum: 019955d56a7c5390b5a0f1b26d8ac3b0ef59983464bd504e9f9b479ce0c04616
+checksum: 9cd84537504904d288e63cd5adae81571e825ead117d92c81dcf2fe2ebdbfb15
 created: 2026-11-12
-last_updated: 2026-11-14
+last_updated: 2026-11-15
 ---
 
 # CopyPromptButton — Component Spec

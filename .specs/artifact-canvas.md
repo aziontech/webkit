@@ -5,9 +5,9 @@ structure: monolithic
 status: implemented
 spec_version: 3
 template: 2
-checksum: b5aabf722dbd16b236b351b55c39dc517dacb2556c81eb2afcdc782f16fdf28a
+checksum: a8fe5f1e5e498a70b4ab8ac0f31466f8220f5e130825a416e0d4ae81196ba8ad
 created: 2026-11-11
-last_updated: 2026-11-13
+last_updated: 2026-11-15
 ---
 
 # ArtifactCanvas — Component Spec

@@ -4,12 +4,12 @@ category: feedback
 structure: monolithic
 status: implemented
 spec_version: 3
-checksum: 555415f23139891669bcc3173120a30bd5958089ab3b488582a987d2e606a599
+checksum: 94c9641add86bb297dee97398ffbe8701029ce6f94d9651bbe60c3ba92b0e3e3
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=479-870
   node_id: 479:870
 created: 2026-06-26
-last_updated: 2026-11-14
+last_updated: 2026-11-15
 ---
 
 # Progress Bar — Component Spec

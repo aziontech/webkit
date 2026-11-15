@@ -8,7 +8,7 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-33761
   node_id: 4567:33761
-checksum: 8a42d16af0d85fc78c91a71bb9789a598ae4372e68f7894745193fc39773a32d
+checksum: 3725b180af94150934df8ecd716869e71c4c862665121ed17ea1189a4c8226be
 created: 2026-05-28
 last_updated: 2026-11-15
 ---

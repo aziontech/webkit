@@ -4,9 +4,9 @@ category: marketing
 structure: composition
 status: implemented
 spec_version: 4
-checksum: f8670c57b2f623421a1f5fbe5b79a78a84f974d8ff8dd3a8ea412c12ba719181
+checksum: b8335431aaabc22bfa9f65816d37caa91726eb407c3554fa598baa153dfa892c
 created: 2026-09-22
-last_updated: 2026-11-14
+last_updated: 2026-11-15
 ---
 
 # Hero — Component Spec

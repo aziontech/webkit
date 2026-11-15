@@ -5,9 +5,9 @@ structure: composition
 status: implemented
 spec_version: 3
 template: 2
-checksum: c2335ba72be2d84496ce08584dd4444cef6d7f4d399e3856abae46084a47ec73
+checksum: 008b15930b93418a84f754d30d9f49a6669ade2f7dd91e49dec6d6ac164e4993
 created: 2026-11-11
-last_updated: 2026-11-14
+last_updated: 2026-11-15
 ---
 
 # Board — Component Spec

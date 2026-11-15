@@ -5,9 +5,9 @@ structure: monolithic
 status: implemented
 spec_version: 4
 template: 2
-checksum: 237361a9873589e00a9aaaa07937c455547fbcf749cb4651e0f6da2d94b2d9c5
+checksum: 99e43d9c319e6e265477732ac4a03ab91d193f18843f83c8228ab3a349e2cd2f
 created: 2026-11-11
-last_updated: 2026-11-14
+last_updated: 2026-11-15
 ---
 
 # ArtifactPreview — Component Spec

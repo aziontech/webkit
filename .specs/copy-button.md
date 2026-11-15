@@ -5,9 +5,9 @@ structure: monolithic
 status: implemented
 spec_version: 4
 template: 2
-checksum: dcfa61fd52ec9f78c8c1f9a5991005671603510ce966887bd3c93dc4f5cf43f6
+checksum: adfa3a902cea4fbce7e7f2744deda921abdd9fa613ef840efa29bd3e4151eae4
 created: 2026-06-02
-last_updated: 2026-11-14
+last_updated: 2026-11-15
 ---
 
 # Copy Button — Component Spec

@@ -4,9 +4,9 @@ category: content
 structure: monolithic
 status: implemented
 spec_version: 2
-checksum: 3fc77ec6c800b130b5c2dbadeb191ef49fe604505b7e4e64c38c6b173b6731c5
+checksum: 1e2ce9c3a9dc64f3c884bda72d6e23a023d1adad9062bf395bd249883628be42
 created: 2026-05-22
-last_updated: 2026-11-09
+last_updated: 2026-11-15
 ---
 
 # Currency — Component Spec
