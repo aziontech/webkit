@@ -13,19 +13,17 @@
   import Item from '@aziontech/webkit/item'
   import PageHeader from '@aziontech/webkit/page-header'
   import RadioGroup from '@aziontech/webkit/radio-group'
-  import SaveBar from '@aziontech/webkit/save-bar'
   import SectionHeader from '@aziontech/webkit/section-header'
   import SettingRow from '@aziontech/webkit/setting-row'
-  import Stepper, { type StepperStepState } from '@aziontech/webkit/stepper'
   import Switch from '@aziontech/webkit/switch'
   import Tag from '@aziontech/webkit/tag'
   import Textarea from '@aziontech/webkit/textarea'
   import { toast } from '@aziontech/webkit/toast'
+  import Wizard from '@aziontech/webkit/wizard'
   import { computed, onBeforeUnmount, reactive, ref } from 'vue'
 
   type ListType = 'asn' | 'ip_cidr' | 'countries'
   type FieldName = 'name' | 'type' | 'items'
-  type Direction = 'forward' | 'back'
 
   interface PolicyOption {
     value: string
@@ -49,16 +47,7 @@
     value: string
     title: string
     description: string
-    heading?: boolean
     fields: FieldName[]
-  }
-
-  interface StepItem {
-    value: string
-    title: string
-    description: string
-    state: StepperStepState
-    disabled: boolean
   }
 
   const breadcrumb = [
@@ -147,7 +136,6 @@
   const VISIBLE = 6
 
   const current = ref('where-it-runs')
-  const direction = ref<Direction | null>(null)
   const choice = ref('')
   const enableModule = ref(false)
   const query = ref('')
@@ -157,7 +145,8 @@
     items: ''
   })
   const errors = reactive<Partial<Record<FieldName, FieldError>>>({})
-  const unlocked = ref(['where-it-runs'])
+  const answered = ref(choice.value !== '')
+  const whereMissing = ref(false)
 
   const moduleMissing = computed(
     () => !!choice.value && !policies.find((option) => option.value === choice.value)?.ready
@@ -168,7 +157,6 @@
       value: 'where-it-runs',
       title: 'Where it runs',
       description: 'Select the policy whose rules match it. It needs IP filtering on.',
-      heading: false,
       fields: []
     },
     ...(moduleMissing.value
@@ -209,23 +197,16 @@
       definitions.value.findIndex((entry) => entry.value === current.value)
     )
   )
-  const step = computed(() => definitions.value[index.value])
-  const isFirst = computed(() => index.value === 0)
-  const isLast = computed(() => index.value === definitions.value.length - 1)
+  const stepIndex = computed({
+    get: () => index.value,
+    set: (position: number) => {
+      const next = definitions.value[position]
+      if (next) current.value = next.value
+    }
+  })
 
-  const steps = computed(() =>
-    definitions.value.map((entry, position): StepItem => ({
-      value: entry.value,
-      title: entry.title,
-      description: entry.description,
-      state: entry.fields.some((field) => errors[field])
-        ? 'error'
-        : position < index.value
-          ? 'complete'
-          : 'upcoming',
-      disabled: !unlocked.value.includes(entry.value)
-    }))
-  )
+  const byValue = (value: string) =>
+    definitions.value.find((entry) => entry.value === value) ?? definitions.value[0]
 
   const listField = computed(() => listFields[form.type])
 
@@ -255,33 +236,17 @@
     return fields.every((field) => !errors[field])
   }
 
-  const goNext = () => {
-    if (!validate(step.value.fields)) return
-    const next = definitions.value[index.value + 1]
-    if (!next) return
-    if (!unlocked.value.includes(next.value)) unlocked.value.push(next.value)
-    direction.value = 'forward'
-    current.value = next.value
-  }
-
-  const goBack = () => {
-    const previous = definitions.value[index.value - 1]
-    if (!previous) return
-    direction.value = 'back'
-    current.value = previous.value
-  }
-
-  const choose = (option: PolicyOption) => {
-    choice.value = option.value
+  const answer = (value: string) => {
+    choice.value = value
+    answered.value = true
     enableModule.value = false
-    goNext()
+    whereMissing.value = false
+    stepIndex.value = 1
   }
 
-  const skip = () => {
-    choice.value = ''
-    enableModule.value = false
-    goNext()
-  }
+  const choose = (option: PolicyOption) => answer(option.value)
+
+  const skip = () => answer('')
 
   const onSearchEnter = () => {
     if (matches.value.length) choose(matches.value[0])
@@ -313,18 +278,24 @@
   ]
 
   const editStep = (value: string) => {
-    direction.value = 'back'
     current.value = value
+  }
+
+  const onNext = (event: MouseEvent, position: number) => {
+    const entry = definitions.value[position]
+    if (entry?.value === 'where-it-runs' && !answered.value) {
+      whereMissing.value = true
+      event.preventDefault()
+      return
+    }
+    if (entry && !validate(entry.fields)) event.preventDefault()
   }
 
   const creating = ref(false)
   let timer: ReturnType<typeof setTimeout> | undefined
 
   const commit = () => {
-    if (!isLast.value) {
-      goNext()
-      return
-    }
+    if (creating.value) return
     if (!validate(['name', 'type', 'items'])) {
       const failed = definitions.value.find((entry) => entry.fields.some((field) => errors[field]))
       if (failed) editStep(failed.value)
@@ -385,491 +356,417 @@
       </GlobalHeader.End>
     </GlobalHeader>
 
-    <div class="flex min-h-0 flex-1">
-      <aside
-        class="hidden h-full w-64 shrink-0 overflow-auto border-e border-(--border-default) px-(--spacing-md) py-(--layout-section-gap) md:block"
+    <main class="animate-page-enter motion-reduce:animate-none min-h-0 flex-1 overflow-auto">
+      <div
+        class="layout-form-create layout-boundary-inline flex flex-col gap-(--layout-section-gap) py-(--layout-section-gap)"
       >
-        <div class="flex h-full">
-          <Stepper
-            v-model="current"
-            aria-label="Create Access List"
-            class="w-full"
-          >
-            <Stepper.Step
-              v-for="entry in steps"
-              :key="entry.value"
-              :value="entry.value"
-              :title="entry.title"
-              :description="entry.value === current ? entry.description : ''"
-              :state="entry.state"
-              :disabled="entry.disabled"
-            />
-          </Stepper>
-        </div>
-      </aside>
+        <PageHeader
+          title="Create Access List"
+          description="An access list groups IP addresses, countries or ASNs that policy rules match on. Answer each step, review, then create it."
+          size="small"
+        />
 
-      <form
-        class="flex min-w-0 flex-1 flex-col"
-        :aria-label="step.title"
-        novalidate
-        @submit.prevent="commit"
-      >
-        <main
-          :data-direction="direction"
-          class="group/main data-[direction=forward]:[--page-enter-distance:calc(var(--layout-boundary-inline)*-1)] animate-page-enter motion-reduce:animate-none min-h-0 flex-1 overflow-auto"
+        <Wizard
+          v-model="stepIndex"
+          aria-label="Create Access List"
+          submit-label="Create Access List"
+          :loading="creating"
+          @next="onNext"
+          @submit="commit"
         >
-          <div class="flex min-h-full flex-col">
-            <div
-              class="layout-form-create layout-boundary-inline flex flex-1 flex-col pt-(--layout-section-gap) pb-(--layout-section-gap)"
-            >
-              <p class="pb-(--spacing-sm) text-label-sm text-(--text-muted) md:hidden">
-                Step {{ index + 1 }} of {{ steps.length }}
-              </p>
+          <Wizard.Step
+            title="Where it runs"
+            :description="byValue('where-it-runs').description"
+          >
+            <section class="mx-auto flex w-full max-w-(--container-md) flex-col gap-(--spacing-lg)">
+              <div class="flex w-full min-w-0 flex-col gap-(--spacing-xs)">
+                <Input
+                  v-model="query"
+                  size="large"
+                  class="w-full"
+                  placeholder="Search policies"
+                  aria-label="Search policies"
+                  autocomplete="off"
+                  @keydown.enter.prevent="onSearchEnter"
+                />
 
-              <PageHeader
-                v-if="step.heading !== false"
-                :title="step.title"
-                :description="step.description"
-                size="small"
-              />
-
-              <fieldset
-                class="mx-0 flex min-w-0 flex-1 flex-col border-0 p-0 data-headed:mt-(--layout-section-gap)"
-                :data-headed="step.heading !== false || null"
-              >
-                <legend class="sr-only">{{ step.title }}</legend>
-                <section
-                  v-if="current === 'where-it-runs'"
-                  class="mx-auto flex w-full max-w-(--container-md) flex-col items-center gap-(--spacing-lg)"
-                  aria-labelledby="create-access-list-host-title"
-                >
-                  <header class="flex flex-col items-center gap-(--spacing-xs) text-center">
-                    <span
-                      class="flex size-10 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
-                    >
+                <div class="flex flex-col">
+                  <Item
+                    v-for="option in visible"
+                    :key="option.value"
+                    size="small"
+                    clickable
+                    :aria-pressed="choice === option.value"
+                    @click="choose(option)"
+                  >
+                    <Item.Media>
                       <i
-                        class="pi pi-list text-body-lg leading-none text-(--text-default)"
+                        class="pi pi-shield text-body-md leading-none text-(--text-muted)"
                         aria-hidden="true"
                       />
-                    </span>
-                    <h1
-                      id="create-access-list-host-title"
-                      class="text-heading-xs text-(--text-default)"
-                    >
-                      Create Access List
-                    </h1>
-                    <p class="text-body-sm text-(--text-muted)">Select a policy to continue</p>
-                  </header>
-
-                  <div class="flex w-full min-w-0 flex-col gap-(--spacing-xs)">
-                    <Input
-                      v-model="query"
-                      size="large"
-                      class="w-full"
-                      placeholder="Search policies"
-                      aria-label="Search policies"
-                      autocomplete="off"
-                      @keydown.enter.prevent="onSearchEnter"
-                    />
-
-                    <div class="flex flex-col">
-                      <Item
-                        v-for="option in visible"
-                        :key="option.value"
+                    </Item.Media>
+                    <Item.Content>
+                      <Item.Title>{{ option.label }}</Item.Title>
+                    </Item.Content>
+                    <Item.Actions>
+                      <Tag
+                        v-if="!option.ready"
+                        label="IP filtering off"
+                        severity="warning"
                         size="small"
-                        clickable
-                        :aria-pressed="choice === option.value"
-                        @click="choose(option)"
+                      />
+                      <i
+                        v-if="choice === option.value"
+                        class="pi pi-check text-body-sm leading-none text-(--text-default)"
+                        aria-hidden="true"
+                      />
+                    </Item.Actions>
+                  </Item>
+
+                  <p
+                    v-if="hidden"
+                    class="px-(--spacing-sm) py-(--spacing-xs) text-body-sm text-(--text-muted)"
+                  >
+                    {{ hidden }} more. Type to narrow the list.
+                  </p>
+                  <p
+                    v-else-if="!matches.length"
+                    class="px-(--spacing-sm) py-(--spacing-xs) text-body-sm text-(--text-muted)"
+                  >
+                    No policy matches “{{ query.trim() }}”.
+                  </p>
+                </div>
+                <HelperText
+                  v-if="whereMissing"
+                  kind="required"
+                  label="Select a policy, or continue without one."
+                />
+              </div>
+
+              <div class="flex flex-col items-center gap-(--spacing-xxs)">
+                <Button
+                  type="button"
+                  label="Create a policy"
+                  kind="transparent"
+                  size="small"
+                />
+                <Button
+                  type="button"
+                  label="Continue without a policy"
+                  kind="transparent"
+                  size="small"
+                  @click="skip"
+                />
+              </div>
+            </section>
+          </Wizard.Step>
+          <Wizard.Step
+            v-if="moduleMissing"
+            title="IP filtering"
+            :description="'Off on ' + choice + '.'"
+          >
+            <Card :padded="false">
+              <template #content>
+                <div class="flex flex-col gap-(--spacing-md) p-(--spacing-md)">
+                  <Alert
+                    severity="warning"
+                    size="small"
+                    :label="
+                      'An access list is only read by policy rules, and ' +
+                      choice +
+                      ' has IP filtering off, so nothing reads this one until the module is on.'
+                    "
+                  />
+
+                  <Field.Label>
+                    <Field orientation="horizontal">
+                      <Switch v-model="enableModule" />
+                      <Field.Content>
+                        <Field.Title> Turn on IP filtering </Field.Title>
+                        <Field.Description>
+                          {{
+                            'Sets modules.ip_filtering on the policy ' +
+                            choice +
+                            ' when this access list is created.'
+                          }}
+                        </Field.Description>
+                      </Field.Content>
+                    </Field>
+                  </Field.Label>
+
+                  <p class="text-body-sm text-(--text-muted)">
+                    Leaving it off still creates the access list. It is not read until someone turns
+                    IP filtering on.
+                  </p>
+                </div>
+              </template>
+            </Card>
+          </Wizard.Step>
+          <Wizard.Step
+            title="General"
+            :description="byValue('general').description"
+          >
+            <section
+              class="grid grid-cols-1 gap-y-(--spacing-md) [&:not(:first-of-type)]:mt-(--layout-section-gap)"
+            >
+              <div class="flex min-w-0 flex-col gap-(--spacing-lg)">
+                <Card :padded="false">
+                  <template #content>
+                    <Item.List>
+                      <SettingRow
+                        title="Name"
+                        description="Give a unique and descriptive name to identify the access list."
                       >
-                        <Item.Media>
-                          <i
-                            class="pi pi-shield text-body-md leading-none text-(--text-muted)"
-                            aria-hidden="true"
-                          />
-                        </Item.Media>
+                        <Input
+                          v-model="form.name"
+                          size="large"
+                          class="w-full"
+                          aria-label="Name"
+                          placeholder="office-ranges"
+                          autocomplete="off"
+                          :required="errors.name?.kind === 'required'"
+                          :aria-describedby="
+                            errors.name ? 'create-access-list-name-message' : undefined
+                          "
+                          @update:model-value="delete errors.name"
+                        />
+                        <HelperText
+                          v-if="errors.name"
+                          id="create-access-list-name-message"
+                          :kind="errors.name.kind"
+                          :label="errors.name.message"
+                        />
+                      </SettingRow>
+                    </Item.List>
+                  </template>
+                </Card>
+              </div>
+            </section>
+          </Wizard.Step>
+          <Wizard.Step
+            title="List settings"
+            :description="byValue('settings').description"
+          >
+            <section
+              class="grid grid-cols-1 gap-y-(--spacing-md) [&:not(:first-of-type)]:mt-(--layout-section-gap)"
+            >
+              <div class="flex min-w-0 flex-col gap-(--spacing-lg)">
+                <Card :padded="false">
+                  <template #content>
+                    <Item.List>
+                      <SettingRow
+                        title="Type"
+                        kind="stacked"
+                      >
+                        <RadioGroup
+                          v-model="form.type"
+                          kind="card"
+                          class="w-full"
+                          name="access-lists-type"
+                          aria-label="Type"
+                        >
+                          <RadioGroup.Item
+                            v-for="option in types"
+                            :key="option.value"
+                            :value="option.value"
+                            :description="option.description"
+                            >{{ option.label }}</RadioGroup.Item
+                          >
+                        </RadioGroup>
+                      </SettingRow>
+                      <SettingRow
+                        :title="listField.label"
+                        :description="listField.helper"
+                        kind="stacked"
+                      >
+                        <Textarea
+                          v-model="form.items"
+                          class="w-full"
+                          :rows="5"
+                          :aria-label="listField.label"
+                          :placeholder="listField.placeholder"
+                          :required="errors.items?.kind === 'required'"
+                          :aria-describedby="
+                            errors.items ? 'create-access-list-items-message' : undefined
+                          "
+                          @update:model-value="delete errors.items"
+                        />
+                        <HelperText
+                          v-if="errors.items"
+                          id="create-access-list-items-message"
+                          :kind="errors.items.kind"
+                          :label="errors.items.message"
+                        />
+                      </SettingRow>
+                    </Item.List>
+                  </template>
+                </Card>
+              </div>
+            </section>
+          </Wizard.Step>
+          <Wizard.Step
+            title="Review"
+            :description="byValue('review').description"
+          >
+            <section class="flex min-w-0 flex-col gap-(--layout-section-gap)">
+              <section class="flex min-w-0 flex-col gap-(--layout-group-gap)">
+                <SectionHeader
+                  title="Where it runs"
+                  size="small"
+                >
+                  <template #actions>
+                    <Button
+                      type="button"
+                      label="Edit"
+                      kind="outlined"
+                      size="small"
+                      aria-label="Edit where it runs"
+                      @click="editStep('where-it-runs')"
+                    />
+                  </template>
+                </SectionHeader>
+                <Alert
+                  key="alert-1"
+                  v-if="!choice"
+                  severity="warning"
+                >
+                  Bound to no policy. The list is created, but no rule can match on it until a
+                  policy uses it.
+                </Alert>
+                <Alert
+                  key="alert-2"
+                  v-else-if="moduleMissing && !enableModule"
+                  severity="warning"
+                >
+                  IP filtering is off on {{ choice }}, so no rule reads this list until it is on.
+                </Alert>
+                <Alert
+                  key="alert-3"
+                  severity="success"
+                >
+                  Runs on {{ choice }}.
+                </Alert>
+              </section>
+
+              <section class="flex min-w-0 flex-col gap-(--layout-group-gap)">
+                <SectionHeader
+                  title="What gets created"
+                  description="Each value is sent as the property named under it."
+                  size="small"
+                >
+                  <template #actions>
+                    <Button
+                      type="button"
+                      label="Edit"
+                      kind="outlined"
+                      size="small"
+                      aria-label="Edit list settings"
+                      @click="editStep('settings')"
+                    />
+                  </template>
+                </SectionHeader>
+                <Card :padded="false">
+                  <template #content>
+                    <Item.List>
+                      <Item>
                         <Item.Content>
-                          <Item.Title>{{ option.label }}</Item.Title>
+                          <Item.Title>Name</Item.Title>
+                          <Item.Description>name</Item.Description>
                         </Item.Content>
                         <Item.Actions>
-                          <Tag
-                            v-if="!option.ready"
-                            label="IP filtering off"
-                            severity="warning"
+                          <span class="max-w-80 truncate text-label-sm text-(--text-default)">{{
+                            form.name
+                          }}</span>
+                          <Button
+                            type="button"
+                            label="Edit"
+                            kind="transparent"
                             size="small"
-                          />
-                          <i
-                            v-if="choice === option.value"
-                            class="pi pi-check text-body-sm leading-none text-(--text-default)"
-                            aria-hidden="true"
+                            aria-label="Edit name"
+                            @click="editStep('general')"
                           />
                         </Item.Actions>
                       </Item>
-
-                      <p
-                        v-if="hidden"
-                        class="px-(--spacing-sm) py-(--spacing-xs) text-body-sm text-(--text-muted)"
-                      >
-                        {{ hidden }} more. Type to narrow the list.
-                      </p>
-                      <p
-                        v-else-if="!matches.length"
-                        class="px-(--spacing-sm) py-(--spacing-xs) text-body-sm text-(--text-muted)"
-                      >
-                        No policy matches “{{ query.trim() }}”.
-                      </p>
-                    </div>
-                  </div>
-
-                  <div class="flex flex-col items-center gap-(--spacing-xxs)">
-                    <Button
-                      type="button"
-                      label="Create a policy"
-                      kind="transparent"
-                      size="small"
-                    />
-                    <Button
-                      type="button"
-                      label="Continue without a policy"
-                      kind="transparent"
-                      size="small"
-                      @click="skip"
-                    />
-                  </div>
-                </section>
-
-                <Card
-                  v-else-if="current === 'module'"
-                  :padded="false"
-                >
-                  <template #content>
-                    <div class="flex flex-col gap-(--spacing-md) p-(--spacing-md)">
-                      <Alert
-                        severity="warning"
-                        size="small"
-                        :label="
-                          'An access list is only read by policy rules, and ' +
-                          choice +
-                          ' has IP filtering off, so nothing reads this one until the module is on.'
-                        "
-                      />
-
-                      <Field.Label>
-                        <Field orientation="horizontal">
-                          <Switch v-model="enableModule" />
-                          <Field.Content>
-                            <Field.Title> Turn on IP filtering </Field.Title>
-                            <Field.Description>
-                              {{
-                                'Sets modules.ip_filtering on the policy ' +
-                                choice +
-                                ' when this access list is created.'
-                              }}
-                            </Field.Description>
-                          </Field.Content>
-                        </Field>
-                      </Field.Label>
-
-                      <p class="text-body-sm text-(--text-muted)">
-                        Leaving it off still creates the access list. It is not read until someone
-                        turns IP filtering on.
-                      </p>
-                    </div>
-                  </template>
-                </Card>
-
-                <section
-                  v-else-if="current === 'general'"
-                  class="grid grid-cols-1 gap-y-(--spacing-md) [&:not(:first-of-type)]:mt-(--layout-section-gap)"
-                >
-                  <div class="flex min-w-0 flex-col gap-(--spacing-lg)">
-                    <Card :padded="false">
-                      <template #content>
-                        <Item.List>
-                          <SettingRow
-                            title="Name"
-                            description="Give a unique and descriptive name to identify the access list."
+                      <Item>
+                        <Item.Content>
+                          <Item.Title>Type</Item.Title>
+                          <Item.Description>type</Item.Description>
+                        </Item.Content>
+                        <Item.Actions>
+                          <span class="text-label-sm text-(--text-default)">{{ typeLabel }}</span>
+                        </Item.Actions>
+                      </Item>
+                      <Item>
+                        <Item.Content>
+                          <Item.Title>{{ listField.label }}</Item.Title>
+                          <Item.Description>items</Item.Description>
+                          <ul
+                            class="m-0 mt-(--spacing-xs) flex list-none flex-wrap gap-(--spacing-xxs) p-0"
+                            :aria-label="`${entries.length} entries`"
                           >
-                            <Input
-                              v-model="form.name"
-                              size="large"
-                              class="w-full"
-                              aria-label="Name"
-                              placeholder="office-ranges"
-                              autocomplete="off"
-                              :required="errors.name?.kind === 'required'"
-                              :aria-describedby="
-                                errors.name ? 'create-access-list-name-message' : undefined
-                              "
-                              @update:model-value="delete errors.name"
-                            />
-                            <HelperText
-                              v-if="errors.name"
-                              id="create-access-list-name-message"
-                              :kind="errors.name.kind"
-                              :label="errors.name.message"
-                            />
-                          </SettingRow>
-                        </Item.List>
-                      </template>
-                    </Card>
-                  </div>
-                </section>
-
-                <section
-                  v-else-if="current === 'settings'"
-                  class="grid grid-cols-1 gap-y-(--spacing-md) [&:not(:first-of-type)]:mt-(--layout-section-gap)"
-                >
-                  <div class="flex min-w-0 flex-col gap-(--spacing-lg)">
-                    <Card :padded="false">
-                      <template #content>
-                        <Item.List>
-                          <SettingRow
-                            title="Type"
-                            kind="stacked"
-                          >
-                            <RadioGroup
-                              v-model="form.type"
-                              kind="card"
-                              class="w-full"
-                              name="access-lists-type"
-                              aria-label="Type"
+                            <li
+                              v-for="entry in entries.slice(0, PREVIEW)"
+                              :key="entry"
                             >
-                              <RadioGroup.Item
-                                v-for="option in types"
-                                :key="option.value"
-                                :value="option.value"
-                                :description="option.description"
-                                >{{ option.label }}</RadioGroup.Item
-                              >
-                            </RadioGroup>
-                          </SettingRow>
-                          <SettingRow
-                            :title="listField.label"
-                            :description="listField.helper"
-                            kind="stacked"
-                          >
-                            <Textarea
-                              v-model="form.items"
-                              class="w-full"
-                              :rows="5"
-                              :aria-label="listField.label"
-                              :placeholder="listField.placeholder"
-                              :required="errors.items?.kind === 'required'"
-                              :aria-describedby="
-                                errors.items ? 'create-access-list-items-message' : undefined
-                              "
-                              @update:model-value="delete errors.items"
-                            />
-                            <HelperText
-                              v-if="errors.items"
-                              id="create-access-list-items-message"
-                              :kind="errors.items.kind"
-                              :label="errors.items.message"
-                            />
-                          </SettingRow>
-                        </Item.List>
-                      </template>
-                    </Card>
-                  </div>
-                </section>
-                <section
-                  v-else
-                  class="flex min-w-0 flex-col gap-(--layout-section-gap)"
-                >
-                  <section class="flex min-w-0 flex-col gap-(--layout-group-gap)">
-                    <SectionHeader
-                      title="Where it runs"
-                      size="small"
-                    >
-                      <template #actions>
-                        <Button
-                          type="button"
-                          label="Edit"
-                          kind="outlined"
-                          size="small"
-                          aria-label="Edit where it runs"
-                          @click="editStep('where-it-runs')"
-                        />
-                      </template>
-                    </SectionHeader>
-                    <Alert
-                      key="alert-1"
-                      v-if="!choice"
-                      severity="warning"
-                    >
-                      Bound to no policy. The list is created, but no rule can match on it until a
-                      policy uses it.
-                    </Alert>
-                    <Alert
-                      key="alert-2"
-                      v-else-if="moduleMissing && !enableModule"
-                      severity="warning"
-                    >
-                      IP filtering is off on {{ choice }}, so no rule reads this list until it is
-                      on.
-                    </Alert>
-                    <Alert
-                      key="alert-3"
-                      v-else
-                      severity="success"
-                    >
-                      Runs on {{ choice }}.
-                    </Alert>
-                  </section>
-
-                  <section class="flex min-w-0 flex-col gap-(--layout-group-gap)">
-                    <SectionHeader
-                      title="What gets created"
-                      description="Each value is sent as the property named under it."
-                      size="small"
-                    >
-                      <template #actions>
-                        <Button
-                          type="button"
-                          label="Edit"
-                          kind="outlined"
-                          size="small"
-                          aria-label="Edit list settings"
-                          @click="editStep('settings')"
-                        />
-                      </template>
-                    </SectionHeader>
-                    <Card :padded="false">
-                      <template #content>
-                        <Item.List>
-                          <Item>
-                            <Item.Content>
-                              <Item.Title>Name</Item.Title>
-                              <Item.Description>name</Item.Description>
-                            </Item.Content>
-                            <Item.Actions>
-                              <span class="max-w-80 truncate text-label-sm text-(--text-default)">{{
-                                form.name
-                              }}</span>
-                              <Button
-                                type="button"
-                                label="Edit"
-                                kind="transparent"
-                                size="small"
-                                aria-label="Edit name"
-                                @click="editStep('general')"
-                              />
-                            </Item.Actions>
-                          </Item>
-                          <Item>
-                            <Item.Content>
-                              <Item.Title>Type</Item.Title>
-                              <Item.Description>type</Item.Description>
-                            </Item.Content>
-                            <Item.Actions>
-                              <span class="text-label-sm text-(--text-default)">{{
-                                typeLabel
-                              }}</span>
-                            </Item.Actions>
-                          </Item>
-                          <Item>
-                            <Item.Content>
-                              <Item.Title>{{ listField.label }}</Item.Title>
-                              <Item.Description>items</Item.Description>
-                              <ul
-                                class="m-0 mt-(--spacing-xs) flex list-none flex-wrap gap-(--spacing-xxs) p-0"
-                                :aria-label="`${entries.length} entries`"
-                              >
-                                <li
-                                  v-for="entry in entries.slice(0, PREVIEW)"
-                                  :key="entry"
-                                >
-                                  <Tag
-                                    :label="entry"
-                                    severity="neutral"
-                                    size="small"
-                                  />
-                                </li>
-                                <li
-                                  v-if="entries.length > PREVIEW"
-                                  class="text-label-sm text-(--text-muted)"
-                                >
-                                  and {{ entries.length - PREVIEW }} more
-                                </li>
-                              </ul>
-                            </Item.Content>
-                            <Item.Actions>
-                              <span class="text-label-sm text-(--text-default)"
-                                >{{ entries.length }}
-                                {{ entries.length === 1 ? 'entry' : 'entries' }}</span
-                              >
-                            </Item.Actions>
-                          </Item>
-                        </Item.List>
-                      </template>
-                    </Card>
-                  </section>
-
-                  <section class="flex min-w-0 flex-col gap-(--layout-group-gap)">
-                    <SectionHeader
-                      title="What can reference it"
-                      description="Everything that can point at this list once it exists, and the field that carries the reference."
-                      size="small"
-                    />
-                    <Card :padded="false">
-                      <template #content>
-                        <Item.List>
-                          <Item
-                            v-for="row in consumers"
-                            :key="row.by"
-                          >
-                            <Item.Content>
-                              <Item.Title>{{ row.by }}</Item.Title>
-                              <Item.Description>{{ row.path }}</Item.Description>
-                            </Item.Content>
-                            <Item.Actions>
                               <Tag
-                                :label="row.as"
+                                :label="entry"
                                 severity="neutral"
                                 size="small"
                               />
-                            </Item.Actions>
-                          </Item>
-                        </Item.List>
-                      </template>
-                    </Card>
-                  </section>
-                </section>
-              </fieldset>
-            </div>
-          </div>
-        </main>
+                            </li>
+                            <li
+                              v-if="entries.length > PREVIEW"
+                              class="text-label-sm text-(--text-muted)"
+                            >
+                              and {{ entries.length - PREVIEW }} more
+                            </li>
+                          </ul>
+                        </Item.Content>
+                        <Item.Actions>
+                          <span class="text-label-sm text-(--text-default)"
+                            >{{ entries.length }}
+                            {{ entries.length === 1 ? 'entry' : 'entries' }}</span
+                          >
+                        </Item.Actions>
+                      </Item>
+                    </Item.List>
+                  </template>
+                </Card>
+              </section>
 
-        <div class="shrink-0 [--layout-measure-form:var(--layout-measure-form-create)]">
-          <SaveBar kind="fade">
-            <template #leading>
-              <Button
-                type="button"
-                label="Cancel"
-                kind="transparent"
-                size="medium"
-              />
-            </template>
-            <template #actions>
-              <Button
-                v-if="!isFirst"
-                type="button"
-                label="Back"
-                kind="outlined"
-                size="medium"
-                @click="goBack"
-              />
-              <Button
-                :label="isLast ? 'Create Access List' : 'Next'"
-                kind="primary"
-                size="medium"
-                type="submit"
-                :loading="creating"
-              />
-            </template>
-          </SaveBar>
-        </div>
-      </form>
-    </div>
+              <section class="flex min-w-0 flex-col gap-(--layout-group-gap)">
+                <SectionHeader
+                  title="What can reference it"
+                  description="Everything that can point at this list once it exists, and the field that carries the reference."
+                  size="small"
+                />
+                <Card :padded="false">
+                  <template #content>
+                    <Item.List>
+                      <Item
+                        v-for="row in consumers"
+                        :key="row.by"
+                      >
+                        <Item.Content>
+                          <Item.Title>{{ row.by }}</Item.Title>
+                          <Item.Description>{{ row.path }}</Item.Description>
+                        </Item.Content>
+                        <Item.Actions>
+                          <Tag
+                            :label="row.as"
+                            severity="neutral"
+                            size="small"
+                          />
+                        </Item.Actions>
+                      </Item>
+                    </Item.List>
+                  </template>
+                </Card>
+              </section>
+            </section>
+          </Wizard.Step>
+        </Wizard>
+      </div>
+    </main>
   </div>
 </template>

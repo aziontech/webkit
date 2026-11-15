@@ -280,8 +280,8 @@ the form. The only chrome is one `GlobalHeader`: a **back** button, the Azion br
 breadcrumb and the account avatar.
 
 There is no layout component for it today. It is the `top-bars/creation-bar` block, and every
-`platform/create/*` block (`single-page-create`, `multipage-create`, `source-wizard`,
-`provision-wizard`, `create-hub`) already renders that bar above its own `<main>`. Route these flows
+`platform/create/*` block (`single-page-create`, `multipage-create`, `create-hub`,
+`deploy-template`) already renders that bar above its own `<main>`. Route these flows
 **outside** `ConsoleLayout` (`meta: { shell: 'focused' }` in the `App.vue` above), so the rail never
 renders: a focused flow is a whole screen, the one kind of page that owns its header and its `<main>`.
 Signed-out screens (`platform/auth`, headed by `top-bars/auth-bar`) are routed outside the layout

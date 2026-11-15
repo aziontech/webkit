@@ -12,7 +12,7 @@ The page a first-level resource is created on when everything it needs fits on o
 ## When not to use
 
 - The fields split into steps that unlock in order, or one answer adds a step: use `platform/create/multipage-create`.
-- The resource binds another one and then deploys: use `platform/create/provision-wizard` or `platform/create/source-wizard`.
+- The resource binds another one and then deploys: use `platform/create/multipage-create` (CreateAndDeploy).
 - The thing is created inside another resource (a record in a zone, a rule in an application): use `platform/create/create-in-drawer`.
 - The settings page of an existing resource, with the save bar that mounts only after a change: use `platform/edit/edit-resource`.
 - Never put a create form in a dialog.

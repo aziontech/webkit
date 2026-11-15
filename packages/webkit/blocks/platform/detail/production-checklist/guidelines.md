@@ -11,7 +11,7 @@ A service that is live on its generated hostname is not yet ready for real traff
 ## When not to use
 
 - Commands to build and deploy a resource for the first time: use `platform/detail/get-started`.
-- Ordered steps the user must complete before the resource exists: use `platform/create/provision-wizard` or `platform/create/multipage-create`.
+- Ordered steps the user must complete before the resource exists: use `platform/create/multipage-create`.
 - A list of resources already bound to this one: use `platform/detail/attached-resources`.
 - A module the account has never used: use `platform/states/first-use`.
 

@@ -13,7 +13,7 @@ A focused page, outside the console shell, where the user turns a template into 
 - Choosing what to start from: use `platform/create/create-hub`.
 - A first-level resource created from a form with no source code: use `platform/create/single-page-create`.
 - A source that needs several steps (where it runs, how it builds): use `platform/create/source-wizard`.
-- Provisioning a resource and binding it to another: use `platform/create/provision-wizard`.
+- Provisioning a resource and binding it to another: use `platform/create/multipage-create` (CreateAndDeploy).
 
 ## Building blocks
 
@@ -40,7 +40,7 @@ An outlined medium `Button` under the step that returns to the template list. It
 - Let Deploy check the form: show each missing required value under its field and open the collapsed group that holds it. Disable Deploy only while the settings load, or on an upload until a Root (/) is picked.
 - Keep build and variable settings in their collapsible groups, prefilled with defaults, so a template that needs nothing more deploys in one press.
 - Mark a secret variable with the locked Secret checkbox and mask its value, with a show control beside it.
-- Hand the same column to `platform/create/deployment-flow` on Deploy, then to `platform/create/deploy-success`.
+- Hand the same column to the create-flow card of `platform/detail/deployment-logs` (InCreateFlow) on Deploy, then to `platform/create/deploy-success`.
 - Trim the form to the repository fields for Import from Git, and to the uploaded files for Upload a Project.
 
 ## Don't
@@ -88,7 +88,7 @@ An outlined medium `Button` under the step that returns to the template list. It
 ## Related
 
 - `platform/create/create-hub` — where the user picks the template.
-- `platform/create/deployment-flow` — the build card the column shows after Deploy.
+- `platform/detail/deployment-logs` — the build card (InCreateFlow) the column shows after Deploy.
 - `platform/create/deploy-success` — the outcome the column ends on.
 - `top-bars/creation-bar` — the header this page uses.
 - `platform/states/project-intake` — the upload path that reaches this page with files instead of a template.

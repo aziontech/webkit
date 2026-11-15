@@ -10,7 +10,7 @@ The screen a create flow ends on. The user has just watched a deploy finish and 
 
 ## When not to use
 
-- The run is still going or has failed: keep `platform/create/deployment-flow` on screen.
+- The run is still going or has failed: keep the create-flow card of `platform/detail/deployment-logs` (InCreateFlow) on screen.
 - A resource created from a form that does not deploy: end on the resource's page with a success toast that names it, as `skills/webkit-create-surface` describes; there is no outcome screen.
 - An item added inside a resource from a drawer: use `platform/create/create-in-drawer` and close it on save.
 - The onboarding steps for a CLI resource on its Overview tab: use `platform/detail/get-started`.
@@ -79,9 +79,9 @@ One full-width secondary large `Button`, "Manage service", at the end of the col
 
 ## Related
 
-- `platform/create/deployment-flow` — the run this screen follows.
+- `platform/detail/deployment-logs` — the run this screen follows (InCreateFlow).
 - `platform/create/deploy-template` — a flow that ends here.
 - `platform/create/source-wizard` — a wizard that ends here.
-- `platform/create/provision-wizard` — a wizard that ends here with its own title.
+- `platform/create/multipage-create` — its CreateAndDeploy variant ends here with its own title.
 - `platform/detail/get-started` — the source of the CLI and GitHub Actions steps the CliCreated state embeds; CliCreated copies its section verbatim, so change the command copy there first and copy it here.
 - `platform/detail/details-page` — where Manage leads.

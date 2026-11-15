@@ -13,7 +13,7 @@ The drawer a platform deploys from, opened by Deploy on a service or a project. 
 - A release of several resources reviewed together: use `platform/create/release-impact`. This drawer is the canonical surface for deploying one service or one project.
 
 - Creating or editing an item inside a resource: use `platform/create/create-in-drawer`.
-- The first deploy at the end of a create flow: use `platform/create/deploy-template` or `platform/create/provision-wizard`, which stream `platform/create/deployment-flow` in the page.
+- The first deploy at the end of a create flow: use `platform/create/deploy-template` or `platform/create/multipage-create` (CreateAndDeploy), which stream the create-flow card of `platform/detail/deployment-logs` in the page.
 - Reading what a past deploy did: use `platform/detail/deployment-logs` or `platform/detail/version-detail`.
 - Binding one resource to another without deploying: use `platform/create/resource-picker`.
 
@@ -125,7 +125,7 @@ Every project the chosen environment's shared Deployment Settings deploy to, gro
 ## Related
 
 - `platform/create/create-in-drawer` — the drawer that creates items rather than deploying.
-- `platform/create/deployment-flow` — the run a deploy streams once it starts.
+- `platform/detail/deployment-logs` — the run a deploy streams once it starts.
 - `platform/states/async-submit` — the toast and outcome rule every deploy started here follows.
 - `platform/detail/deployment-logs` — the logs of a deploy after it ran.
 - `platform/detail/version-detail` — what a version contains before it is deployed.

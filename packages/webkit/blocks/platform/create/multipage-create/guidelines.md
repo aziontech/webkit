@@ -1,38 +1,40 @@
 # Multipage create
 
-The page a first-level resource is created on one step at a time. The user first says where the resource runs, then answers each step's fields in order, and only reaches the create action on the last step. A rail on the left shows how far they are and lets them return to any step already reached; if the host they chose lacks a module the resource needs, a step is inserted that offers to turn it on, so nothing is created that would silently never be read.
+The page a first-level resource is created on one step at a time. It is the `Wizard` component in a creation page: the user first says where the resource runs, then answers each step's fields in order, and only reaches the create action on the last step. The Wizard's rail shows how far they are and lets them return to any step already passed; if the host they chose lacks a module the resource needs, a step is inserted that offers to turn it on, so nothing is created that would silently never be read. The same frame creates a resource that must be bound and deployed in one act (CreateAndDeploy).
 
 ## When to use
 
+- Use multipage-create when a first-level resource is created in ordered steps (a later answer changes what is asked); it is the Wizard component in a creation page.
 - A first-level resource whose fields fall into groups that make sense one at a time (general, then type, then entries) and where a later group depends on an earlier answer.
 - The resource must first bind to a host (a policy, an application) and that choice can change what is asked next.
+- A resource that is useless until it is bound to another and deployed, such as a service that serves a project on a domain: use the CreateAndDeploy variant, whose last action creates and deploys.
 - A code resource whose editor needs a whole step to itself.
 
 ## When not to use
 
 - Everything fits on one screen without order: use `platform/create/single-page-create`.
 - The resource is created inside another one: use `platform/create/create-in-drawer`.
-- The flow provisions a service, binds a project and deploys: use `platform/create/provision-wizard`.
-- The flow starts from a code source (Git, CLI, template): use `platform/create/source-wizard`.
+- A new project from a code source (Git, a template, an upload): start at `platform/create/create-hub` and deploy with `platform/create/deploy-template`.
 - Binding an existing or new resource inside a form step: use `platform/create/resource-picker`.
+- Deploying an existing package from inside a resource: use `platform/create/deploy-drawer`.
 
 ## Building blocks
 
 ### A. Creation header — `GlobalHeader`, `IconButton`, `Brand`, `Breadcrumb`, `Avatar` (required)
 
-`GlobalHeader` with no sidebar: a back `IconButton` to the module, the `Brand` linking home, a `Breadcrumb` of the module and the create label, and the account `Avatar`. The breadcrumb's last item repeats the create button's label exactly.
+The `top-bars/creation-bar` header, with no sidebar: a back `IconButton` to the module, the `Brand` linking home, a `Breadcrumb` of the module and the create label, and the account `Avatar`. The breadcrumb's last item repeats the create button's label exactly.
 
-### B. Step rail — `Stepper` (required)
+### B. Page heading — `PageHeader` (required)
 
-A `Stepper` in an aside on the left, `v-model` bound to the current step and labelled with the create label. Each `Stepper.Step` has a title, a `state` (`complete`, `upcoming` or `error`) and is `disabled` until it has been reached. Only the current step shows its description. A step whose fields failed validation turns to `error` so the rail points at it. On a phone the rail gives way to a "Step 2 of 4" line over the heading.
+`PageHeader size="small"` over the wizard, on the create measure (`layout-form-create`): the create label as the page's `h1` and one or two sentences on what the resource is and what the last step does. It stays the same on every step.
 
-### C. Step heading — `PageHeader` (required)
+### C. Wizard — `Wizard`, `Wizard.Step` (required)
 
-`PageHeader size="small"` titled with the step's name and described with the step's sentence. The Where it runs step has no `PageHeader`; it carries its own centred heading instead.
+One `Wizard` labelled with the create label, `v-model` bound to the step index, `submit-label` set to the create label and `loading` bound to the create request. Each step is a `Wizard.Step` with a short noun title and a one-sentence description; the Wizard draws the rail (completed steps reachable, later ones locked), the step heading (`h2`), the "Step 2 of 4" line on a narrow box, and the footer: Cancel on the start side, Previous and Next on the end side, Next becoming the create action on the last step. A conditional step is a `Wizard.Step` with `v-if`; the Wizard numbers steps in the order they render. Validation runs in the `next` handler, which calls `preventDefault()` to keep the user on a failed step.
 
-### D. Where it runs — `Input`, `Item`, `Tag`, `Button` (required)
+### D. Where it runs — `Input`, `Item`, `Tag`, `HelperText`, `Button` (required)
 
-A centred chooser: an icon, the create label as the page's `h1`, one line of instruction, a large search `Input` and up to six host rows. Each row is a small `clickable` `Item` (a native `button`) with `aria-pressed`, which fills the chosen row; a host missing the module the resource needs carries a small warning `Tag`. A chosen host past the first six is kept visible. Picking a row advances to the next step, so this step has no Next. A count line tells how many more match, a no-match line replaces the rows, and two transparent small `Button`s offer to create a host or continue without one.
+The first step: a large search `Input` and up to six host rows. Each row is a small `clickable` `Item` (a native `button`) with `aria-pressed`, which fills the chosen row; a host missing the module the resource needs carries a small warning `Tag`. Picking a row answers the step and moves on. A chosen host past the first six is kept visible. A count line tells how many more match, a no-match line replaces the rows, and two transparent small `Button`s offer to create a host or continue without one. Next with no answer stays and shows a `HelperText` asking for one.
 
 ### E. Module step — `Card`, `Alert`, `Field`, `Switch` (conditional)
 
@@ -54,45 +56,49 @@ A stacked row with a five-row `Textarea` whose label, placeholder and guidance f
 
 The last step, read-only: three bands under small `SectionHeader`s (Where it runs, What gets created, What can reference it), each with Edit back to its step; see Review step below.
 
-### J. Footer — `SaveBar` (required)
+### J. Create and deploy — `Card`, `Field`, `Input`, `Item`, `RadioGroup` (CreateAndDeploy)
 
-`SaveBar kind="fade"` fixed under the form (the footer every create wizard shares: `platform/create/source-wizard` and `platform/create/provision-wizard` use the same Cancel on the left and Back plus the primary on the right), on the create measure (a wrapper sets `--layout-measure-form` to `--layout-measure-form-create`, since the bar takes no classes of its own): transparent Cancel in its `#leading` slot, on the left; outlined Back (hidden on the first step) and the primary submit in `#actions`, on the right, all medium `Button`s. The submit reads Next and becomes the create label on the last step. It is the form's only `type="submit"`, so Enter advances. On the last step (Review) it shows its loading state while the request runs and the result arrives as a toast; every state of the flow reaches that path.
+Two steps, Project then Domain and deployment, with the last action reading "Create and deploy".
+
+- **Project.** The `platform/create/resource-picker` band, copied from that block (the source of truth for the paged picker; change it there first): a flush `Card` titled Project, a lead sentence, a large fluid `ToggleGroup` of Existing project and New project, then either a searchable `Item` list paged five at a time with `Skeleton` rows and a Load more `Button`, or a Name `Field`. In New mode the project is configured in place: a Cache Settings `Card` whose policy `Switch`es open their fields, and an Add an origin `SettingRow` whose `Switch` opens a `RadioGroup kind="card"` of origin types and the type's fields. Each opened field is required only while its switch is on.
+- **Domain and deployment.** A read-back `Item` of the bound project with a transparent Change `Button` back to step one (the answer is kept); a Domain `Card` with a `ToggleGroup` of Free platform domain and Your own domain and a preview line of the address traffic arrives on; Environment as a `RadioGroup kind="card"` and Certificate as a `Select`; a Deployment `Card` with Create one or Use existing (the paged picker again); and a collapsed `SettingsSection` titled Advanced holding only fields that have defaults.
+- **After submit.** Create and deploy shows its loading state; the consumer then hands the column to `platform/detail/deployment-logs` (InCreateFlow) and ends on `platform/create/deploy-success`.
 
 ## Do
 
 - Ask where the resource runs first, and insert the module step only when the chosen host needs it.
-- Validate one step at a time on Next, and mark a failed step `error` on the rail.
-- Unlock a step on the rail only once it has been reached, and let the user jump back to any unlocked step.
-- Keep Cancel apart from Back and Next, on the opposite side.
+- Validate one step at a time in the `next` handler, and show the message under the field that failed.
+- Keep Cancel apart from Previous and Next, on the opposite side; the Wizard footer does this.
 - Keep the create action on the last step only; every step before it says Next.
 - Keep the chosen host visible in the chooser even when it falls outside the first six.
+- Label the final action with every act it performs: "Create and deploy" when it also deploys.
 - Raise toasts with `toast` only; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shells/console` does), so this page body never renders a `Toaster`.
 
 ## Don't
 
-- Don't let the rail skip ahead to steps not reached yet.
-- Don't put a Next button on a step answered by a click; picking the host is the answer.
+- Don't build the rail, the step heading or the footer by hand; the `Wizard` owns them.
+- Don't let the user skip ahead to steps not reached yet.
 - Don't block the create when a module is off; warn, offer the switch and let the user go on.
 - Don't repeat the step title as a second heading inside the card.
 - Don't validate fields of later steps, or judge a field while it is being typed.
-- Don't use more than one step for fields that only make sense together.
+- Don't put a required field inside Advanced, or show both the existing list and the new fields at once.
 
 ## Copy
 
-- **Title, breadcrumb and last submit:** the create label with the entity's capitalization, e.g. "Create Access List".
-- **Step titles:** short nouns, e.g. "Where it runs", "General", "List settings".
+- **Title, breadcrumb and last submit:** the create label with the entity's capitalization, e.g. "Create Access List"; "Create and deploy" when the last step also deploys.
+- **Step titles:** short nouns, e.g. "Where it runs", "General", "List settings", "Project", "Domain and deployment".
 - **Step descriptions:** one sentence with a period, e.g. "Select the policy whose rules match it. It needs IP filtering on."
-- **Chooser:** instruction with "Select", e.g. "Select a policy to continue"; the search placeholder and `aria-label` name what is searched, e.g. "Search policies".
+- **Chooser:** the search placeholder and `aria-label` name what is searched, e.g. "Search policies"; Next with no answer says "Select a policy, or continue without one."
 - **Module tag:** the missing module and its state, e.g. "IP filtering off".
 - **Module alert:** the consequence in one sentence, e.g. "acme-staging has IP filtering off, so no rule reads this list until the module is on."
 - **Escape routes:** verb first, e.g. "Create a policy", "Continue without a policy".
-- **Required message:** "This field is required."
+- **Required message:** "This field is required.", or what to do, e.g. "Select the project this service serves, or create a new one."
 - Follow `skills/webkit-microcopy`: "Select", never "Choose"; no em dash; no "simply".
 
 ## Accessibility
 
-- The `Stepper` has an `aria-label` naming the flow; disabled steps cannot be focused or activated.
-- The `form` takes the current step's title as its `aria-label`; a `fieldset` with a visually hidden `legend` repeats it.
+- The `Wizard` takes an `aria-label` naming the flow; locked rail steps cannot be focused or activated, and focus moves to the new step's heading on every step change.
+- The page has one `h1` (the `PageHeader`); each step heading is an `h2` drawn by the Wizard.
 - Host rows are native `button`s with `aria-pressed`; the chooser's search has an `aria-label` and Enter selects the first match.
 - Choice cards are a `RadioGroup` named with `aria-label`; each `RadioGroup.Item` is labelled by its card.
 - Required messages are tied to their control with `aria-describedby`; focus stays on the step after a failed Next.
@@ -100,10 +106,11 @@ The last step, read-only: three bands under small `SectionHeader`s (Where it run
 
 ## States
 
-- WhereItRuns: the first step; the centred chooser of policies with search, module tags and the two escape routes.
+- WhereItRuns: the first step; the chooser of policies with search, module tags and the two escape routes.
 - ModuleOff: acme-staging was chosen with IP filtering off, so the IP filtering step shows the warning, the switch card and the note.
-- ListSettings: the settings step; Type as radio choice cards and the List textarea, with Back and Next (Review follows). An empty list marks the step red on the rail.
+- ListSettings: the settings step; Type as radio choice cards and the List textarea, with Previous and Next (Review follows). Next with an empty list stays and shows the message.
 - Review: the last step, read-only, with the create action in the footer. Where it runs is one `Alert` whose severity says whether anything will read the resource; What gets created pairs each value with the property it is sent as and shows long lists as their first five `Tag`s and a count; What can reference it names the consumers. Each band that maps to a step has an outlined Edit (`aria-label` names the band) that jumps back to that step. Create re-validates every step and, on a failure, opens the first step with an error.
+- CreateAndDeploy: Create Service on its Project step with the paged project list; Next is gated on the project, and step two ends on Create and deploy with its loading state.
 
 ## Review step
 
@@ -114,9 +121,11 @@ The last step, read-only: three bands under small `SectionHeader`s (Where it run
 
 ## Related
 
+- `Wizard` — the component this block is built on; see `skills/webkit-form`.
 - `platform/create/single-page-create` — the same job when the fields fit one screen.
-- `platform/create/source-wizard` — a step wizard that starts from a code source and deploys.
-- `platform/create/provision-wizard` — a two-step wizard that binds a project and deploys.
+- `platform/create/create-hub` and `platform/create/deploy-template` — a new project from Git, a template or an upload.
+- `platform/create/resource-picker` — the Existing or New band CreateAndDeploy binds its project with.
+- `platform/detail/deployment-logs` — the build log Create and deploy hands the column to (InCreateFlow).
+- `platform/create/deploy-success` — the screen a create-and-deploy ends on.
 - `platform/edit/function-editor` — the editor a code resource can use as one step.
 - `platform/states/form-validation` — required and invalid states on Next.
-- `Stepper` — the step rail; see `skills/webkit-form`.

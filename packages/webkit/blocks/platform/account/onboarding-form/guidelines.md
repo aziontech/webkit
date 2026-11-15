@@ -10,7 +10,7 @@ The `/signup/onboarding` screen, frame included. A new user has an account but n
 ## When not to use
 
 - Signing in or creating the account itself: use `platform/auth`.
-- Creating a resource inside the console: use `platform/create/multipage-create` or `platform/create/provision-wizard`.
+- Creating a resource inside the console: use `platform/create/multipage-create`.
 - Changing an existing plan: use `platform/account/change-plan-drawer`.
 
 ## Building blocks
