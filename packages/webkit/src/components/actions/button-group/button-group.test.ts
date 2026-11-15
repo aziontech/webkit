@@ -24,7 +24,7 @@ const items: ButtonGroupItem[] = [
 ]
 
 const buttons = (root: HTMLElement) =>
-  Array.from(root.querySelectorAll<HTMLButtonElement>('[data-button-group-item]'))
+  Array.from(root.querySelectorAll<HTMLButtonElement>('[data-slot="button-group-item"]'))
 
 const menuItems = () => Array.from(document.body.querySelectorAll<HTMLElement>('[role="menuitem"]'))
 
@@ -42,7 +42,7 @@ describe('ButtonGroup', () => {
     ])
   })
 
-  it('emits click with the id, and toggle with the next pressed state', async () => {
+  it('emits click with the id, and toggle with the event and the next pressed state', async () => {
     const view = render(ButtonGroup, { props: { items, ariaLabel: 'Actions' } })
     const [copy, disabled, wrap] = buttons(view.getByRole('toolbar'))
     expect(wrap!.getAttribute('aria-pressed')).toBe('true')
@@ -54,7 +54,10 @@ describe('ButtonGroup', () => {
     expect(clicks).toHaveLength(1)
     expect(clicks[0]![0]).toBeInstanceOf(MouseEvent)
     expect(clicks[0]![1]).toBe('copy')
-    expect(view.emitted('toggle')).toEqual([[{ id: 'wrap', pressed: false }]])
+    const toggles = view.emitted('toggle') as [Event, { id: string; pressed: boolean }][]
+    expect(toggles).toHaveLength(1)
+    expect(toggles[0]![0]).toBeInstanceOf(MouseEvent)
+    expect(toggles[0]![1]).toEqual({ id: 'wrap', pressed: false })
   })
 
   it('emits click with the keyboard event first when an action is activated with Enter', async () => {
@@ -135,7 +138,10 @@ describe('ButtonGroup', () => {
     ])
     expect(menuItems()[0]!.getAttribute('aria-disabled')).toBe('true')
     await fireEvent.click(menuItems()[1]!)
-    expect(view.emitted('toggle')).toEqual([[{ id: 'wrap', pressed: false }]])
+    const toggles = view.emitted('toggle') as [Event, { id: string; pressed: boolean }][]
+    expect(toggles).toHaveLength(1)
+    expect(toggles[0]![0]).toBeInstanceOf(Event)
+    expect(toggles[0]![1]).toEqual({ id: 'wrap', pressed: false })
   })
 
   it('uses the overflowLabel override', () => {

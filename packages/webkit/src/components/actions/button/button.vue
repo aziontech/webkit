@@ -63,24 +63,24 @@
     /** The visible label; falls back to `label`. */
     default?(): unknown
     /** A mark drawn before the label, ahead of a leading icon; it stays first when the icon trails. */
-    prefix?(): unknown
+    leading?(): unknown
   }>()
 
   const attrs = useAttrs()
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'actions-button')
 
-  const isInactive = computed(() => props.disabled || props.loading)
+  const isInert = computed(() => props.disabled || props.loading)
 
   const isAnchor = computed(() => Boolean(props.href))
 
   const ROOT_CLASS =
-    "group/button relative inline-flex items-center justify-center whitespace-nowrap rounded-(--shape-button) forced-colors:border forced-colors:border-[ButtonBorder] forced-colors:disabled:border-[GrayText] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) before:pointer-events-none before:absolute before:inset-0 before:rounded-[inherit] before:opacity-0 before:content-[''] before:transition-opacity before:duration-fast-02 before:ease-productive-entrance after:pointer-events-none after:absolute after:inset-0 after:rounded-[inherit] after:opacity-0 after:content-[''] after:transition-opacity after:duration-fast-02 after:ease-productive-entrance hover:before:opacity-100 active:after:opacity-100 motion-reduce:before:transition-none motion-reduce:after:transition-none disabled:before:hidden disabled:after:hidden not-data-[inactive]:data-[kind=primary]:bg-(--primary) not-data-[inactive]:data-[kind=primary]:text-(--primary-foreground) not-data-[inactive]:data-[kind=primary]:before:bg-(--bg-hover) not-data-[inactive]:data-[kind=primary]:after:bg-(--bg-active) not-data-[inactive]:data-[kind=secondary]:bg-(--secondary) not-data-[inactive]:data-[kind=secondary]:text-(--secondary-foreground) not-data-[inactive]:data-[kind=secondary]:before:bg-(--bg-hover) not-data-[inactive]:data-[kind=secondary]:after:bg-(--bg-active) not-data-[inactive]:data-[kind=outlined]:border not-data-[inactive]:data-[kind=outlined]:border-(--border-default) not-data-[inactive]:data-[kind=outlined]:bg-(--bg-surface) not-data-[inactive]:data-[kind=outlined]:text-(--text-default) not-data-[inactive]:data-[kind=outlined]:before:bg-(--bg-mask) not-data-[inactive]:data-[kind=outlined]:after:bg-(--bg-active) not-data-[inactive]:data-[kind=transparent]:bg-transparent not-data-[inactive]:data-[kind=transparent]:text-(--text-default) not-data-[inactive]:data-[kind=transparent]:before:bg-(--bg-mask) not-data-[inactive]:data-[kind=transparent]:after:bg-(--bg-active) not-data-[inactive]:data-[kind=danger]:border not-data-[inactive]:data-[kind=danger]:border-(--danger-border) not-data-[inactive]:data-[kind=danger]:bg-(--danger) not-data-[inactive]:data-[kind=danger]:text-(--danger-foreground) not-data-[inactive]:data-[kind=danger]:before:bg-(--bg-hover) not-data-[inactive]:data-[kind=danger]:after:bg-(--bg-active) not-data-[inactive]:data-[kind=link]:bg-transparent not-data-[inactive]:data-[kind=link]:text-(--text-link) not-data-[inactive]:data-[kind=link]:underline-offset-2 not-data-[inactive]:data-[kind=link]:transition-colors not-data-[inactive]:data-[kind=link]:duration-fast-02 not-data-[inactive]:data-[kind=link]:ease-productive-entrance not-data-[inactive]:data-[kind=link]:hover:text-(--text-link-hover) not-data-[inactive]:data-[kind=link]:hover:underline not-data-[inactive]:data-[kind=link]:motion-reduce:transition-none not-data-[inactive]:data-[kind=link]:before:hidden not-data-[inactive]:data-[kind=link]:after:hidden not-data-[inactive]:data-[kind=link]:forced-colors:border-0 not-data-[inactive]:data-[kind=link]:forced-colors:text-[LinkText] data-[inactive]:not-data-[kind=link]:border-transparent data-[inactive]:not-data-[kind=link]:bg-(--bg-disabled) data-[inactive]:not-data-[kind=link]:text-(--text-disabled) data-[inactive]:not-data-[kind=link]:before:hidden data-[inactive]:not-data-[kind=link]:after:hidden data-[inactive]:data-[kind=link]:border-transparent data-[inactive]:data-[kind=link]:text-(--text-disabled) data-[inactive]:data-[kind=link]:before:hidden data-[inactive]:data-[kind=link]:after:hidden data-[inactive]:data-[kind=link]:forced-colors:border-0 data-[loading]:cursor-wait data-[disabled]:cursor-not-allowed not-data-[kind=link]:data-[size=large]:min-w-20 not-data-[kind=link]:data-[size=large]:h-10 not-data-[kind=link]:data-[size=large]:px-(--spacing-md) not-data-[kind=link]:data-[size=large]:text-button-lg not-data-[kind=link]:data-[size=medium]:min-w-16 not-data-[kind=link]:data-[size=medium]:h-8 not-data-[kind=link]:data-[size=medium]:px-(--spacing-sm) not-data-[kind=link]:data-[size=medium]:text-button-md not-data-[kind=link]:data-[size=small]:min-w-14 not-data-[kind=link]:data-[size=small]:h-7 not-data-[kind=link]:data-[size=small]:px-(--spacing-xs) not-data-[kind=link]:data-[size=small]:text-button-md data-[kind=link]:text-body-sm"
+    "group/button relative inline-flex items-center justify-center whitespace-nowrap rounded-(--shape-button) forced-colors:border forced-colors:border-[ButtonBorder] forced-colors:disabled:border-[GrayText] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) before:pointer-events-none before:absolute before:inset-0 before:rounded-[inherit] before:opacity-0 before:content-[''] before:transition-opacity before:duration-fast-02 before:ease-productive-entrance after:pointer-events-none after:absolute after:inset-0 after:rounded-[inherit] after:opacity-0 after:content-[''] after:transition-opacity after:duration-fast-02 after:ease-productive-entrance hover:before:opacity-100 active:after:opacity-100 motion-reduce:before:transition-none motion-reduce:after:transition-none disabled:before:hidden disabled:after:hidden not-data-[inert]:data-[kind=primary]:bg-(--primary) not-data-[inert]:data-[kind=primary]:text-(--primary-foreground) not-data-[inert]:data-[kind=primary]:before:bg-(--bg-hover) not-data-[inert]:data-[kind=primary]:after:bg-(--bg-active) not-data-[inert]:data-[kind=secondary]:bg-(--secondary) not-data-[inert]:data-[kind=secondary]:text-(--secondary-foreground) not-data-[inert]:data-[kind=secondary]:before:bg-(--bg-hover) not-data-[inert]:data-[kind=secondary]:after:bg-(--bg-active) not-data-[inert]:data-[kind=outlined]:border not-data-[inert]:data-[kind=outlined]:border-(--border-default) not-data-[inert]:data-[kind=outlined]:bg-(--bg-surface) not-data-[inert]:data-[kind=outlined]:text-(--text-default) not-data-[inert]:data-[kind=outlined]:before:bg-(--bg-mask) not-data-[inert]:data-[kind=outlined]:after:bg-(--bg-active) not-data-[inert]:data-[kind=transparent]:bg-transparent not-data-[inert]:data-[kind=transparent]:text-(--text-default) not-data-[inert]:data-[kind=transparent]:before:bg-(--bg-mask) not-data-[inert]:data-[kind=transparent]:after:bg-(--bg-active) not-data-[inert]:data-[kind=danger]:border not-data-[inert]:data-[kind=danger]:border-(--danger-border) not-data-[inert]:data-[kind=danger]:bg-(--danger) not-data-[inert]:data-[kind=danger]:text-(--danger-foreground) not-data-[inert]:data-[kind=danger]:before:bg-(--bg-hover) not-data-[inert]:data-[kind=danger]:after:bg-(--bg-active) not-data-[inert]:data-[kind=link]:bg-transparent not-data-[inert]:data-[kind=link]:text-(--text-link) not-data-[inert]:data-[kind=link]:underline-offset-2 not-data-[inert]:data-[kind=link]:transition-colors not-data-[inert]:data-[kind=link]:duration-fast-02 not-data-[inert]:data-[kind=link]:ease-productive-entrance not-data-[inert]:data-[kind=link]:hover:text-(--text-link-hover) not-data-[inert]:data-[kind=link]:hover:underline not-data-[inert]:data-[kind=link]:motion-reduce:transition-none not-data-[inert]:data-[kind=link]:before:hidden not-data-[inert]:data-[kind=link]:after:hidden not-data-[inert]:data-[kind=link]:forced-colors:border-0 not-data-[inert]:data-[kind=link]:forced-colors:text-[LinkText] data-[inert]:not-data-[kind=link]:border-transparent data-[inert]:not-data-[kind=link]:bg-(--bg-disabled) data-[inert]:not-data-[kind=link]:text-(--text-disabled) data-[inert]:not-data-[kind=link]:before:hidden data-[inert]:not-data-[kind=link]:after:hidden data-[inert]:data-[kind=link]:border-transparent data-[inert]:data-[kind=link]:text-(--text-disabled) data-[inert]:data-[kind=link]:before:hidden data-[inert]:data-[kind=link]:after:hidden data-[inert]:data-[kind=link]:forced-colors:border-0 data-[loading]:cursor-wait data-[disabled]:cursor-not-allowed not-data-[kind=link]:data-[size=large]:min-w-20 not-data-[kind=link]:data-[size=large]:h-10 not-data-[kind=link]:data-[size=large]:px-(--spacing-md) not-data-[kind=link]:data-[size=large]:text-button-lg not-data-[kind=link]:data-[size=medium]:min-w-16 not-data-[kind=link]:data-[size=medium]:h-8 not-data-[kind=link]:data-[size=medium]:px-(--spacing-sm) not-data-[kind=link]:data-[size=medium]:text-button-md not-data-[kind=link]:data-[size=small]:min-w-14 not-data-[kind=link]:data-[size=small]:h-7 not-data-[kind=link]:data-[size=small]:px-(--spacing-xs) not-data-[kind=link]:data-[size=small]:text-button-md data-[kind=link]:text-body-sm"
 
   const loadingTestId = computed(() => `${testId.value}__loading`)
 
   const handleClick = (event: MouseEvent) => {
-    if (isInactive.value) {
+    if (isInert.value) {
       event.preventDefault()
       return
     }
@@ -97,12 +97,12 @@
     :target="target"
     :rel="target === '_blank' ? 'noopener noreferrer' : undefined"
     :class="ROOT_CLASS"
-    :aria-disabled="isInactive || undefined"
+    :aria-disabled="isInert || undefined"
     :aria-busy="loading || undefined"
-    :tabindex="isInactive ? -1 : undefined"
+    :tabindex="isInert ? -1 : undefined"
     :data-disabled="disabled ? '' : undefined"
     :data-loading="loading ? '' : undefined"
-    :data-inactive="isInactive ? '' : undefined"
+    :data-inert="isInert ? '' : undefined"
     :data-kind="kind"
     :data-size="size"
     :data-icon-position="icon ? iconPosition : undefined"
@@ -110,7 +110,7 @@
     @click="handleClick"
   >
     <span class="relative z-1 inline-flex items-center gap-(--spacing-xs)">
-      <slot name="prefix" />
+      <slot name="leading" />
       <Spinner
         v-if="loading"
         class="size-3 group-data-[size=large]/button:size-4 group-data-[icon-position=trailing]/button:order-last"
@@ -138,11 +138,11 @@
     v-bind="$attrs"
     :type="type"
     :disabled="disabled"
-    :aria-disabled="isInactive || undefined"
+    :aria-disabled="isInert || undefined"
     :aria-busy="loading || undefined"
     :data-disabled="disabled ? '' : undefined"
     :data-loading="loading ? '' : undefined"
-    :data-inactive="isInactive ? '' : undefined"
+    :data-inert="isInert ? '' : undefined"
     :data-kind="kind"
     :data-size="size"
     :data-icon-position="icon ? iconPosition : undefined"
@@ -151,7 +151,7 @@
     @click="handleClick"
   >
     <span class="relative z-1 inline-flex items-center gap-(--spacing-xs)">
-      <slot name="prefix" />
+      <slot name="leading" />
       <Spinner
         v-if="loading"
         class="size-3 group-data-[size=large]/button:size-4 group-data-[icon-position=trailing]/button:order-last"

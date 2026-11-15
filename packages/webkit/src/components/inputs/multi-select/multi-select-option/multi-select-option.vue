@@ -26,7 +26,7 @@
 
   defineSlots<{
     default(): unknown
-    left(): unknown
+    leading(): unknown
     tag(): unknown
   }>()
 
@@ -108,13 +108,13 @@
       />
     </span>
     <span
-      :data-leading="$slots['left'] || icon ? '' : undefined"
+      :data-leading="$slots['leading'] || icon ? '' : undefined"
       :data-testid="`${testId}__leading`"
       class="hidden size-4 shrink-0 items-center justify-center overflow-hidden group-has-[[data-leading]]/options:flex"
     >
       <slot
-        v-if="$slots['left']"
-        name="left"
+        v-if="$slots['leading']"
+        name="leading"
       />
       <i
         v-else-if="icon"

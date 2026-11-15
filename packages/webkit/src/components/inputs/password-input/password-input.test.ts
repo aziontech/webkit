@@ -192,25 +192,25 @@ describe('PasswordInput', () => {
     const input = getByTestId('input-password-input') as HTMLInputElement
     const root = input.closest('span') as HTMLElement
     expect(input.getAttribute('type')).toBe('password')
-    // data-visible is `visible || null` → absent while masked.
-    expect(root.getAttribute('data-visible')).toBeNull()
+    // data-revealed is `visible || null` → absent while masked.
+    expect(root.getAttribute('data-revealed')).toBeNull()
 
     // The IconButton exposes an accessible name; default label is "Show password".
     const toggle = getByRole('button', { name: 'Show password' })
 
     await fireEvent.click(toggle)
 
-    // Type flips to text, the accessible name becomes "Hide password", data-visible set.
+    // Type flips to text, the accessible name becomes "Hide password", data-revealed set.
     expect(input.getAttribute('type')).toBe('text')
     expect(getByRole('button', { name: 'Hide password' })).toBeTruthy()
-    expect(root.getAttribute('data-visible')).toBe('true')
+    expect(root.getAttribute('data-revealed')).toBe('true')
 
     await fireEvent.click(getByRole('button', { name: 'Hide password' }))
 
     // And back to masked.
     expect(input.getAttribute('type')).toBe('password')
     expect(getByRole('button', { name: 'Show password' })).toBeTruthy()
-    expect(root.getAttribute('data-visible')).toBeNull()
+    expect(root.getAttribute('data-revealed')).toBeNull()
   })
 
   it('does not render the toggle button when toggleable is false', () => {
@@ -242,21 +242,21 @@ describe('PasswordInput', () => {
 
   // --- slots ---
 
-  it('renders the prefix slot, and the suffix slot only when toggleable is false', () => {
+  it('renders the leading slot, and the trailing slot only when toggleable is false', () => {
     const plain = render(PasswordInput, {
       props: { toggleable: false },
-      slots: { prefix: '<i data-testid="p-icon" />', suffix: '<i data-testid="s-icon" />' }
+      slots: { leading: '<i data-testid="p-icon" />', trailing: '<i data-testid="s-icon" />' }
     })
     expect(plain.getByTestId('p-icon').closest('[aria-hidden="true"]')).toBeTruthy()
     expect(plain.getByTestId('s-icon')).toBeTruthy()
     plain.unmount()
-    const toggle = render(PasswordInput, { slots: { suffix: '<i data-testid="s-icon" />' } })
+    const toggle = render(PasswordInput, { slots: { trailing: '<i data-testid="s-icon" />' } })
     expect(toggle.queryByTestId('s-icon')).toBeNull()
   })
 
-  it('renders the prefix slot and marks its wrapper aria-hidden', () => {
+  it('renders the leading slot and marks its wrapper aria-hidden', () => {
     const { getByTestId } = render(PasswordInput, {
-      slots: { prefix: '<i data-testid="left-icon" class="ai ai-lock" />' }
+      slots: { leading: '<i data-testid="left-icon" class="ai ai-lock" />' }
     })
 
     const icon = getByTestId('left-icon')
@@ -265,25 +265,22 @@ describe('PasswordInput', () => {
     expect(icon.closest('[aria-hidden="true"]')).toBeTruthy()
   })
 
-  it('renders the suffix slot only when toggleable is false', () => {
+  it('renders the trailing slot only when toggleable is false', () => {
     const withToggle = render(PasswordInput, {
       props: { toggleable: true },
-      slots: { suffix: '<i data-testid="right-icon" class="ai ai-key" />' }
+      slots: { trailing: '<i data-testid="right-icon" class="ai ai-key" />' }
     })
-    // hasIconRight is `!toggleable && hasSlot` → not rendered while toggleable.
+    // hasTrailing is `!toggleable && hasSlot` → not rendered while toggleable.
     expect(withToggle.queryByTestId('right-icon')).toBeNull()
     withToggle.unmount()
 
     const noToggle = render(PasswordInput, {
       props: { toggleable: false },
-      slots: { suffix: '<i data-testid="right-icon" class="ai ai-key" />' }
+      slots: { trailing: '<i data-testid="right-icon" class="ai ai-key" />' }
     })
     expect(noToggle.queryByTestId('right-icon')).toBeTruthy()
     expect(
-      noToggle
-        .getByTestId('input-password-input')
-        .closest('span')
-        ?.getAttribute('data-has-icon-right')
+      noToggle.getByTestId('input-password-input').closest('span')?.getAttribute('data-trailing')
     ).toBe('true')
   })
 
@@ -310,11 +307,11 @@ describe('PasswordInput', () => {
     await expectNoA11yViolations(container)
   })
 
-  it('has no a11y violations when toggleable is false with a suffix slot', async () => {
+  it('has no a11y violations when toggleable is false with a trailing slot', async () => {
     const { container } = render(PasswordInput, {
       props: { toggleable: false, placeholder: 'Password' },
       attrs: { 'aria-label': 'Password' },
-      slots: { suffix: '<i class="ai ai-key" aria-hidden="true" />' }
+      slots: { trailing: '<i class="ai ai-key" aria-hidden="true" />' }
     })
 
     await expectNoA11yViolations(container)
@@ -356,18 +353,18 @@ describe('PasswordInput', () => {
       const { queryByTestId, container } = render({
         components: { PasswordInput },
         setup: () => ({ shown }),
-        template: `<PasswordInput><template v-if="shown" #prefix><span data-testid="probe">Slotted</span></template></PasswordInput>`
+        template: `<PasswordInput><template v-if="shown" #leading><span data-testid="probe">Slotted</span></template></PasswordInput>`
       })
-      expect(container.querySelector('[data-has-icon-left]')).toBeNull()
+      expect(container.querySelector('[data-leading]')).toBeNull()
 
       shown.value = true
       await nextTick()
-      expect(container.querySelector('[data-has-icon-left]')).not.toBeNull()
+      expect(container.querySelector('[data-leading]')).not.toBeNull()
       expect(queryByTestId('probe')).not.toBeNull()
 
       shown.value = false
       await nextTick()
-      expect(container.querySelector('[data-has-icon-left]')).toBeNull()
+      expect(container.querySelector('[data-leading]')).toBeNull()
       expect(queryByTestId('probe')).toBeNull()
     })
   })

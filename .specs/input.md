@@ -3,8 +3,8 @@ name: input
 category: inputs
 structure: monolithic
 status: implemented
-spec_version: 6
-checksum: 9a9d6fa511912ca502d6257b11e695f2283d1aacfdaa3bccb830c6b97ddc7f7b
+spec_version: 7
+checksum: e7deedbf62fa96e033da6796695c00029dc4c252c102951b7c307135736ba403
 created: 2026-05-22
 last_updated: 2026-11-15
 ---
@@ -60,7 +60,7 @@ Aligned with Figma frame `562:6774` (Webkit / Input).
     size="medium"
     aria-label="Domain"
   >
-    <template #prefix>
+    <template #leading>
       <i class="ai ai-globe" />
     </template>
   </Input>
@@ -95,10 +95,10 @@ _none_
 
 ## Slots
 
-| Slot     | Purpose                                                               | Notes                                                                                               |
-| -------- | --------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
-| `prefix` | Leading adornment at the inline start of the field (an icon, a unit). | Hidden from assistive tech (`aria-hidden="true"`). Logical: it sits on the right under `dir="rtl"`. |
-| `suffix` | Trailing adornment at the inline end of the field.                    | Hidden from assistive tech (`aria-hidden="true"`).                                                  |
+| Slot       | Purpose                                                               | Notes                                                                                               |
+| ---------- | --------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
+| `leading`  | Leading adornment at the inline start of the field (an icon, a unit). | Hidden from assistive tech (`aria-hidden="true"`). Logical: it sits on the right under `dir="rtl"`. |
+| `trailing` | Trailing adornment at the inline end of the field.                    | Hidden from assistive tech (`aria-hidden="true"`).                                                  |
 
 ## Exposed
 
@@ -116,7 +116,7 @@ _none_
 - `data-disabled` mirrors the `disabled` prop
 - `data-invalid` mirrors the `invalid` prop
 - `data-required` mirrors the `required` prop; drives the warning-border treatment
-- `data-has-icon-left` / `data-has-icon-right` mirror slot presence (driven by `$slots.prefix` / `$slots.suffix`), read at render time: an icon slot passed behind a `v-if` adds or removes its icon box when the condition changes, never leaving an empty box behind
+- `data-leading` / `data-trailing` mirror slot presence (driven by `$slots.leading` / `$slots.trailing`), read at render time: an icon slot passed behind a `v-if` adds or removes its icon box when the condition changes, never leaving an empty box behind
 - `filled` is detected via the native `:not(:placeholder-shown)` selector — no JS state
 
 ## Motion & Animations
@@ -173,7 +173,7 @@ _none_
 
 - Default
 - Sizes — composite story rendering all three sizes side by side (canonical composite example).
-- Icons — composite story showing the `prefix` slot, the `suffix` slot, and both combined. Justification: documents the slot API surface from the Figma component (`hasIconLeft`/`iconLeft`, `hasIconRight`/`iconRight` in Figma) in a single browsable view.
+- Icons — composite story showing the `leading` slot, the `trailing` slot, and both combined. Justification: documents the slot API surface from the Figma component (`hasIconLeft`/`iconLeft`, `hasIconRight`/`iconRight` in Figma) in a single browsable view.
 - Filled — justification: pre-populated `modelValue` shows the filled visual state, which is implicit (no prop) and not visible from the Default story.
 - Invalid — justification: documents the `invalid` visual treatment, which is a top-level prop with distinct token bindings.
 - Email — justification: documents `type="email"` (native browser keyboard / validation surface) since the `type` prop is restricted and only two values matter visually.

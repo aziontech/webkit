@@ -126,7 +126,7 @@
     class="inline-flex max-w-full items-center gap-(--spacing-2xs)"
   >
     <Tooltip
-      :text="t('copyPromptButton.tooltip')"
+      :content="t('copyPromptButton.tooltip')"
       placement="top"
       :data-testid="`${testId}__tooltip`"
       class="min-w-0 max-w-full"
@@ -208,7 +208,7 @@
     </Tooltip>
     <Tooltip
       v-if="closable"
-      :text="t('copyPromptButton.dismiss')"
+      :content="t('copyPromptButton.dismiss')"
       placement="top"
     >
       <IconButton

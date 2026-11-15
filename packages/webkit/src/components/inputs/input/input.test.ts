@@ -159,14 +159,14 @@ describe('Input', () => {
   })
 
   describe('icon slots', () => {
-    it('renders the prefix and suffix slots and flags both sides', () => {
+    it('renders the leading and trailing slots and flags both sides', () => {
       const { getByTestId, getByText } = render(Input, {
-        slots: { prefix: '<i>P</i>', suffix: '<i>S</i>' }
+        slots: { leading: '<i>P</i>', trailing: '<i>S</i>' }
       })
       expect(getByText('P')).toBeTruthy()
       expect(getByText('S')).toBeTruthy()
-      const root = getByTestId('input-input').closest('[data-has-icon-left]')
-      expect(root?.hasAttribute('data-has-icon-right')).toBe(true)
+      const root = getByTestId('input-input').closest('[data-leading]')
+      expect(root?.hasAttribute('data-trailing')).toBe(true)
     })
 
     it('ignores the removed iconLeft and iconRight slots', () => {
@@ -176,25 +176,25 @@ describe('Input', () => {
       expect(queryByText('Old')).toBeNull()
       expect(queryByText('Gone')).toBeNull()
       const root = getByTestId('input-input').parentElement
-      expect(root?.hasAttribute('data-has-icon-left')).toBe(false)
-      expect(root?.hasAttribute('data-has-icon-right')).toBe(false)
+      expect(root?.hasAttribute('data-leading')).toBe(false)
+      expect(root?.hasAttribute('data-trailing')).toBe(false)
     })
 
-    it('renders prefix slot content and flags data-has-icon-left on the root', () => {
+    it('renders leading slot content and flags data-leading on the root', () => {
       const { getByTestId, getByText } = render(Input, {
-        slots: { prefix: '<i data-testid="left-icon">L</i>' }
+        slots: { leading: '<i data-testid="left-icon">L</i>' }
       })
       expect(getByText('L')).toBeTruthy()
-      const root = getByTestId('input-input').closest('[data-has-icon-left]')
+      const root = getByTestId('input-input').closest('[data-leading]')
       expect(root).not.toBeNull()
     })
 
-    it('renders suffix slot content and flags data-has-icon-right on the root', () => {
+    it('renders trailing slot content and flags data-trailing on the root', () => {
       const { getByTestId, getByText } = render(Input, {
-        slots: { suffix: '<i>R</i>' }
+        slots: { trailing: '<i>R</i>' }
       })
       expect(getByText('R')).toBeTruthy()
-      const root = getByTestId('input-input').closest('[data-has-icon-right]')
+      const root = getByTestId('input-input').closest('[data-trailing]')
       expect(root).not.toBeNull()
     })
 
@@ -205,26 +205,28 @@ describe('Input', () => {
           h(
             Input,
             null,
-            shown.value ? { prefix: () => h('i', null, 'L'), suffix: () => h('i', null, 'R') } : {}
+            shown.value
+              ? { leading: () => h('i', null, 'L'), trailing: () => h('i', null, 'R') }
+              : {}
           )
       })
       const { getByTestId, queryByText } = render(Host)
       const root = getByTestId('input-input').closest('[data-size]') as HTMLElement
-      expect(root.hasAttribute('data-has-icon-left')).toBe(false)
+      expect(root.hasAttribute('data-leading')).toBe(false)
       expect(root.querySelectorAll('[aria-hidden="true"]').length).toBe(0)
 
       shown.value = true
       await nextTick()
       expect(queryByText('L')).not.toBeNull()
       expect(queryByText('R')).not.toBeNull()
-      expect(root.hasAttribute('data-has-icon-left')).toBe(true)
-      expect(root.hasAttribute('data-has-icon-right')).toBe(true)
+      expect(root.hasAttribute('data-leading')).toBe(true)
+      expect(root.hasAttribute('data-trailing')).toBe(true)
 
       shown.value = false
       await nextTick()
       expect(queryByText('L')).toBeNull()
-      expect(root.hasAttribute('data-has-icon-left')).toBe(false)
-      expect(root.hasAttribute('data-has-icon-right')).toBe(false)
+      expect(root.hasAttribute('data-leading')).toBe(false)
+      expect(root.hasAttribute('data-trailing')).toBe(false)
       expect(root.querySelectorAll('[aria-hidden="true"]').length).toBe(0)
     })
   })
@@ -253,7 +255,7 @@ describe('Input', () => {
     it('focuses the input when the press lands on a decorative icon', () => {
       const { getByTestId, getByText } = render(Input, {
         props: { size: 'large' },
-        slots: { prefix: '<i>L</i>' }
+        slots: { leading: '<i>L</i>' }
       })
       const input = getByTestId('input-input') as HTMLInputElement
       pressOn(getByText('L'))

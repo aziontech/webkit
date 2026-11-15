@@ -67,8 +67,8 @@
   })
 
   defineSlots<{
-    prefix(): unknown
-    suffix(): unknown
+    leading(): unknown
+    trailing(): unknown
   }>()
 
   const attrs = useAttrs()
@@ -167,10 +167,10 @@
     ]"
   >
     <span
-      v-if="$slots['prefix']"
+      v-if="$slots['leading']"
       class="relative z-(--z-control) flex items-center ps-(--spacing-md) text-(--text-muted)"
     >
-      <slot name="prefix" />
+      <slot name="leading" />
     </span>
 
     <input
@@ -196,10 +196,10 @@
     />
 
     <span
-      v-if="$slots['suffix']"
+      v-if="$slots['trailing']"
       class="relative z-(--z-control) flex items-center pe-(--spacing-md) text-(--text-muted)"
     >
-      <slot name="suffix" />
+      <slot name="trailing" />
     </span>
 
     <span

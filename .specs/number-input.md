@@ -3,11 +3,11 @@ name: number-input
 category: inputs
 structure: monolithic
 status: implemented
-spec_version: 3
+spec_version: 4
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3714-10789&m=dev
   node_id: 3714:10789
-checksum: 1340002e2a1fdd229521071d19d06dd5c6e8360e18c9f346970d5ca516dd804b
+checksum: 96bab2c8c38a5c4c1d4b2a76ade74b664d189a9da20f39022d2bf73e90452dc6
 created: 2026-06-22
 last_updated: 2026-11-15
 ---
@@ -103,16 +103,16 @@ An optional field binds a `number | null` model and sets `nullable`:
 
 ## Events
 
-| Event    | Payload                                     | Notes                                                                                                       |
-| -------- | ------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| Event    | Payload  | Notes                                                                                                                             |
+| -------- | -------- | --------------------------------------------------------------------------------------------------------------------------------- |
 | `change` | `number` | Emitted when the user commits the value (blur or Enter). With `nullable` the payload is `null` when the field is committed empty. |
 
 ## Slots
 
-| Slot     | Scope | Notes                                                                    |
-| -------- | ----- | ------------------------------------------------------------------------ |
-| `prefix` | —     | Content rendered before the input (e.g. `$`).                            |
-| `suffix` | —     | Content rendered after the input, before the spinner buttons (e.g. `%`). |
+| Slot       | Scope | Notes                                                                    |
+| ---------- | ----- | ------------------------------------------------------------------------ |
+| `leading`  | —     | Content rendered before the input (e.g. `$`).                            |
+| `trailing` | —     | Content rendered after the input, before the spinner buttons (e.g. `%`). |
 
 ## States
 
@@ -136,7 +136,7 @@ An optional field binds a `number | null` model and sets `nullable`:
 | text               | `var(--text-default)`   |
 | placeholder        | `var(--text-muted)`     |
 | spacing.x          | `var(--spacing-md)`     |
-| shape              | `var(--shape-control)` |
+| shape              | `var(--shape-control)`  |
 | ring               | `var(--ring-color)`     |
 | ring-offset        | `var(--bg-canvas)`      |
 | border             | `var(--border-default)` |

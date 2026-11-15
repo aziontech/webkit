@@ -3,9 +3,9 @@ name: icon-button
 category: actions
 structure: monolithic
 status: implemented
-spec_version: 4
+spec_version: 5
 template: 2
-checksum: 29c5a99e230efb7e1dfd9ac399fc57d8bd78b50cd802f27612d74eea32b668a3
+checksum: bbc4d28828f852fe806799dd8d3e8b2d0a18b687c615f02af936c8319a07c555
 created: 2026-05-22
 last_updated: 2026-11-15
 ---
@@ -73,18 +73,18 @@ A square control that triggers an action with a glyph and no visible text: close
 
 ## Props
 
-| Prop             | Type                                                                  | Default     | Required | JSDoc                                                                                                                                                               |
-| ---------------- | --------------------------------------------------------------------- | ----------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `icon`           | `string`                                                              | `—`         | true     | Azion icon class for the leading/trailing icon.                                                                                                                     |
-| `ariaLabel`      | `string`                                                              | `''`        | false    | Accessible name for the icon-only control, written as the `aria-label` attribute. Empty only when `aria-labelledby` names the button; then no `aria-label` renders. |
-| `kind`           | `'primary' \| 'secondary' \| 'outlined' \| 'transparent' \| 'danger'` | `'primary'` | false    | Visual variant.                                                                                                                                                     |
-| `size`           | `'small' \| 'medium' \| 'large'`                                      | `'large'`   | false    | Size token; affects height, padding, and typography.                                                                                                                |
-| `disabled`       | `boolean`                                                             | `false`     | false    | Disables interaction and applies disabled tokens.                                                                                                                   |
-| `loading`        | `boolean`                                                             | `false`     | false    | Shows loading state and disables activation.                                                                                                                        |
-| `href`           | `string`                                                              | `''`        | false    | When set, renders as a link (`<a>`).                                                                                                                                |
-| `target`         | `'_blank' \| '_self'`                                                 | `'_self'`   | false    | Link target when `href` is set.                                                                                                                                     |
-| `iconTransition` | `boolean`                                                             | `false`     | false    | Animates icon swaps with enter/leave transitions.                                                                                                                   |
-| `iconClass`      | `string`                                                              | `''`        | false    | Extra classes applied to the icon glyph.                                                                                                                            |
+| Prop             | Type                                                                  | Default     | Required | JSDoc                                                                                                                                                                       |
+| ---------------- | --------------------------------------------------------------------- | ----------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `icon`           | `string`                                                              | `—`         | true     | Azion icon class for the leading/trailing icon.                                                                                                                             |
+| `ariaLabel`      | `string`                                                              | `''`        | false    | Accessible name for the icon-only control, written as the `aria-label` attribute. Empty only when `aria-labelledby` names the button; then no `aria-label` renders.         |
+| `kind`           | `'primary' \| 'secondary' \| 'outlined' \| 'transparent' \| 'danger'` | `'primary'` | false    | Visual variant.                                                                                                                                                             |
+| `size`           | `'small' \| 'medium' \| 'large'`                                      | `'large'`   | false    | Size token; affects height, padding, and typography.                                                                                                                        |
+| `disabled`       | `boolean`                                                             | `false`     | false    | Disables interaction and applies disabled tokens.                                                                                                                           |
+| `loading`        | `boolean`                                                             | `false`     | false    | Shows loading state and disables activation.                                                                                                                                |
+| `href`           | `string`                                                              | `''`        | false    | When set, renders as a link (`<a>`).                                                                                                                                        |
+| `target`         | `'_blank' \| '_self'`                                                 | `'_self'`   | false    | Link target when `href` is set.                                                                                                                                             |
+| `iconTransition` | `boolean`                                                             | `false`     | false    | Animates icon swaps with enter/leave transitions.                                                                                                                           |
+| `iconClass`      | `string`                                                              | `''`        | false    | Extra classes applied to the icon glyph.                                                                                                                                    |
 | `type`           | `'button' \| 'submit' \| 'reset'`                                     | `'button'`  | false    | Native button type. `submit` lets an icon-only control submit its form (a search submit, a chat send); `disabled` and `loading` still block it. Ignored when `href` is set. |
 
 ## Events
@@ -100,28 +100,28 @@ A square control that triggers an action with a glyph and no visible text: close
 ## States
 
 - Visual states: `default`, `hover`, `focus-visible`, `active`, `disabled`
-- `data-disabled` mirrors the `disabled` prop; `data-loading` the `loading` prop; `data-inactive` is set while disabled or loading
+- `data-disabled` mirrors the `disabled` prop; `data-loading` the `loading` prop; `data-inert` is set while disabled or loading
 - `data-kind` mirrors `kind` and `data-size` mirrors `size` on the root; the variant utilities switch on them (no class presets)
 - `IconButtonType` is exported beside `IconButtonKind`, `IconButtonSize` and `IconButtonTarget`
 - Touch: the drawn size is unchanged (28/32/40 px); on a coarse pointer an invisible `[data-slot=touch-target]` span extends the hit area to at least 44 × 44 px.
 
 ## Motion & Animations
 
-| Trigger                           | Animation / Transition                                                                                                                            | Token                                        | Reduced-motion fallback                |
-| --------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------- | -------------------------------------- |
-| hover / active (state layer fade) | `before:transition-opacity before:duration-fast-02 before:ease-productive-entrance`                                                               | `@aziontech/theme` semantic duration + curve | `motion-reduce:before:transition-none` |
+| Trigger                           | Animation / Transition                                                                                                                      | Token                                        | Reduced-motion fallback                |
+| --------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------- | -------------------------------------- |
+| hover / active (state layer fade) | `before:transition-opacity before:duration-fast-02 before:ease-productive-entrance`                                                         | `@aziontech/theme` semantic duration + curve | `motion-reduce:before:transition-none` |
 | icon swap (enter / leave)         | `transition-[scale,opacity] duration-moderate-01` / `transition-opacity duration-fast-02 ease-productive-exit` (inline on the `Transition`) | `@aziontech/theme` semantic duration + curve | `motion-reduce:transition-none`        |
 
 ## Tokens
 
-| Region     | Token (DESIGN.md)       |
-| ---------- | ----------------------- |
-| typography | .text-button-lg         |
-| surface    | `var(--bg-surface)`     |
-| text       | `var(--text-default)`   |
-| spacing    | `var(--spacing-3)`      |
+| Region     | Token (DESIGN.md)      |
+| ---------- | ---------------------- |
+| typography | .text-button-lg        |
+| surface    | `var(--bg-surface)`    |
+| text       | `var(--text-default)`  |
+| spacing    | `var(--spacing-3)`     |
 | shape      | `var(--shape-control)` |
-| ring       | `var(--ring-color)`     |
+| ring       | `var(--ring-color)`    |
 
 ## Theme gaps
 

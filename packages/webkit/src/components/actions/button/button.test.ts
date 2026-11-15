@@ -69,10 +69,10 @@ describe('Button', () => {
       const loading = render(Button, { props: { label: 'Save', loading: true } })
       const node = loading.getByRole('button', { name: 'Save' })
       expect(node.hasAttribute('data-loading')).toBe(true)
-      expect(node.hasAttribute('data-inactive')).toBe(true)
+      expect(node.hasAttribute('data-inert')).toBe(true)
       loading.unmount()
       const idle = render(Button, { props: { label: 'Save' } })
-      expect(idle.getByRole('button', { name: 'Save' }).hasAttribute('data-inactive')).toBe(false)
+      expect(idle.getByRole('button', { name: 'Save' }).hasAttribute('data-inert')).toBe(false)
     })
 
     it('lands a consumer class on the root', () => {
@@ -299,7 +299,7 @@ describe('Button', () => {
       expect(getByRole('button').querySelector('[data-animated]')).toBeNull()
     })
 
-    it('draws the prefix slot first, ahead of a trailing glyph, without renaming the control', () => {
+    it('draws the leading slot first, ahead of a trailing glyph, without renaming the control', () => {
       const { getByRole } = render(Button, {
         props: {
           label: 'Deploy now',
@@ -308,7 +308,7 @@ describe('Button', () => {
           animated: true,
           href: '/deploy'
         },
-        slots: { prefix: '<i data-mark class="ai ai-azion" aria-hidden="true"></i>' }
+        slots: { leading: '<i data-mark class="ai ai-azion" aria-hidden="true"></i>' }
       })
       const node = getByRole('link', { name: 'Deploy now' })
       const mark = node.querySelector('[data-mark]')
@@ -344,7 +344,7 @@ describe('Button', () => {
     it('Prefix + trailing glyph has no violations', async () => {
       const { container } = render(Button, {
         props: { label: 'Deploy now', icon: 'ai ai-chevron-right', iconPosition: 'trailing' },
-        slots: { prefix: '<i class="ai ai-azion" aria-hidden="true"></i>' }
+        slots: { leading: '<i class="ai ai-azion" aria-hidden="true"></i>' }
       })
       await expectNoA11yViolations(container)
     })
