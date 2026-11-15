@@ -3,30 +3,34 @@ name: badge
 category: content
 structure: monolithic
 status: implemented
-spec_version: 2
+spec_version: 3
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=476-909
   node_id: 476:909
-checksum: c4fc25c25fc50457a1ec3e3516aa8a689eb3a8e8d4efa2dd36274c91abe576d4
+checksum: 32c36afb6c40ce5275652cb0a53d58fb10071d2f9b642bd0310dd57d37aaa830
 created: 2026-06-23
-last_updated: 2026-11-14
+last_updated: 2026-11-15
 ---
 
 # Badge — Component Spec
 
 ## Purpose
 
-Badge is a compact, non-interactive indicator that surfaces a numeric count or a very short status label with severity-based color coding. Use it to draw attention to a small piece of state — an unread count, a quantity, a short status word — and it is commonly overlaid on icons, avatars, or buttons. It differs from its sibling `tag`: `tag` is a labelled status/category chip (optional leading icon, optional pill shape, masked surfaces), whereas `badge` is a denser count/short-label indicator with fully filled severity surfaces and no icon affordance.
+Use Badge only for a number attached to something else (unread count, 12, 99+). For the state of a resource use StatusIndicator, for a category or outcome word use Tag, for a removable or selectable token use Chip, and for the "+N" of a truncated list use OverflowCount.
+
+Badge is a compact, non-interactive count with severity-based color coding, commonly overlaid on icons, avatars or buttons, or set beside a heading. It differs from its sibling `tag`: `tag` carries words (optional leading icon, optional pill shape, masked surfaces), whereas `badge` carries a number on a fully filled surface with no icon affordance.
 
 ## When to use
 
-- Surface a numeric count or a very short status label attached to another element (a bell with unread count, a status dot with a label).
-- Convey severity through `kind` (neutral / success / danger / …) with a fully filled surface.
+- A number attached to another element: a bell with its unread count, a section heading with how many items it holds.
+- Color the count through `severity` (neutral / success / danger / …) with a fully filled surface.
 
 ## When NOT to use
 
+- A status word (Active, Failed, Deploying) → use `status-indicator`.
+- A category or outcome word (Production, Beta, Allowed) → use `tag`.
 - The label is user-removable or selectable → use `chip`.
-- It is a labelled category/status with an optional leading icon or pill shape → use `tag`.
+- The "+N" that opens the hidden items of a truncated list → use `overflow-count`.
 
 ## Related
 
@@ -35,8 +39,8 @@ Badge is a compact, non-interactive indicator that surfaces a numeric count or a
 
 ## Best practices
 
-- Keep the content to a count or a 1–2 word label; longer text belongs in `tag`.
-- Drive color from `kind`, never a hardcoded color or a raw palette class.
+- Keep the content to a number (`12`, `99+`); words belong in `tag` or `status-indicator`.
+- Drive color from `severity`, never a hardcoded color or a raw palette class.
 
 ## Usage
 
@@ -59,7 +63,7 @@ Badge is a compact, non-interactive indicator that surfaces a numeric count or a
 | Prop       | Type                                                                                       | Default     | Required | JSDoc                                                                                                                                                                                                                                                                                                             |
 | ---------- | ------------------------------------------------------------------------------------------ | ----------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `label`    | `string`                                                                                   | `''`        | false    | Fallback text when the default slot is empty.                                                                                                                                                                                                                                                                     |
-| `severity` | `'primary' \| 'secondary' \| 'success' \| 'warning' \| 'danger' \| 'neutral' \| 'default'` | `'primary'` | false    | Color style for the badge surface and label; `neutral` uses the `var(--bg-surface)` / `var(--text-default)` surface. The status values come from the shared `Severity` scale (exported from this component). `default` is the same look under its old name, deprecated since 6.0 — use `neutral`. Removed in 7.0. |
+| `severity` | `'primary' \| 'secondary' \| 'success' \| 'warning' \| 'danger' \| 'neutral'` | `'primary'` | false    | Color style for the badge surface and label; `neutral` uses the `var(--bg-surface)` / `var(--text-default)` surface. The status values come from the shared `Severity` scale (exported from this component). |
 | `size`     | `'small' \| 'medium' \| 'large'`                                                           | `'medium'`  | false    | Size token; `small` is 20px tall, `medium` is 24px, `large` is 30px.                                                                                                                                                                                                                                              |
 
 ## Events
@@ -76,7 +80,7 @@ Badge is a compact, non-interactive indicator that surfaces a numeric count or a
 
 Badge is non-interactive: it has no hover, focus, active, or disabled states and emits no events. Variants are exposed verbatim as `data-*` attributes on the root for Tailwind variant styling and for test/Code-Connect hooks:
 
-- `data-severity` mirrors the `severity` prop (`primary` | `secondary` | `success` | `warning` | `danger` | `neutral` | `default`).
+- `data-severity` mirrors the `severity` prop (`primary` | `secondary` | `success` | `warning` | `danger` | `neutral`).
 - `data-size` mirrors the `size` prop (`small` | `medium` | `large`).
 
 ## Motion & Animations
