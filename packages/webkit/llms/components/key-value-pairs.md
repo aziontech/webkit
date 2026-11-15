@@ -292,7 +292,7 @@ Markup is valid HTML in both shapes: an Item is a `<div>` wrapping one `<dt>` an
       </KeyValuePairs.Item>
       <KeyValuePairs.Item label="Region">
         <template #info>
-          <Hint text="Where the workload was first provisioned." />
+          <Hint content="Where the workload was first provisioned." />
         </template>
         US East (Virginia)
       </KeyValuePairs.Item>

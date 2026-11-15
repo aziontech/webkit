@@ -8,7 +8,7 @@
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],
- "purpose": "Use CardList to show a collection of records as selectable cards instead of table rows; for one bordered box use Card, and for the frame of a dashboard chart use ChartCard. A collection shown as cards, after Cloudscape's cards: one card per item, named by its `header` slot, with the item's fields in the default slot. It follows Cloudscape's collection model — `items`, `trackBy`, `selectedKeys` (a key array) — which is not yet the same as Table's (`data`, `rowKey`, `rowSelection` record); `useCollection` binds it through `cardListProps`, and selection (single or multi, with a visible select-all) survives paging. Four cards a row in a wide container, then three, two and one as the container narrows.",
+ "purpose": "Use CardList to show a collection of records as selectable cards instead of table rows; for one bordered box use Card, and for the frame of a dashboard chart use ChartCard. A collection shown as cards, after Cloudscape's cards: one card per item, named by its `header` slot, with the item's fields in the default slot. It follows Cloudscape's collection model — `items`, `itemKey`, `selectedKeys` (a key array) — which is not yet the same as Table's (`data`, `rowKey`, `rowSelection` record); `useCollection` binds it through `cardListProps`, and selection (single or multiple, with a visible select-all) survives paging. Four cards a row in a wide container, then three, two and one as the container narrows.",
  "setup": null,
  "useWhen": [
   "Items people recognise by a few fields or a picture rather than compare column by column (applications, templates, environments).",
@@ -28,7 +28,7 @@
  "bestPractices": [
   "Put the item's name, as a link to the item, in the `header` slot: it also names the selection control.",
   "Keep each card to a handful of label and value pairs; let `collection-preferences` choose which.",
-  "Use `selectionMode=\"multi\"` only when a bulk action exists next to the list.",
+  "Use `selectionMode=\"multiple\"` only when a bulk action exists next to the list.",
   "Pass items typed with your own interface (`Domain[]`): the slots read `item.name` with that type, so never cast `item` in a slot or widen the items to `Record<string, unknown>[]`."
  ],
  "props": [
@@ -40,7 +40,7 @@
    "doc": "The items, one card each."
   },
   {
-   "name": "trackBy",
+   "name": "itemKey",
    "type": "string",
    "default": "'id'",
    "required": "false",
@@ -48,7 +48,7 @@
   },
   {
    "name": "selectionMode",
-   "type": "'none' | 'single' | 'multi'",
+   "type": "'none' | 'single' | 'multiple'",
    "default": "'none'",
    "required": "false",
    "doc": "No selection, one card, or several cards with a select-all above them."
@@ -102,7 +102,7 @@
   },
   {
    "name": "Selectable",
-   "sfc": "<script setup>\n  import CardList from '@aziontech/webkit/card-list'\n  import Pagination from '@aziontech/webkit/pagination-root'\n  import { useCollection } from '@aziontech/webkit/use-collection'\n\n  const edges = Array.from({ length: 14 }, (_, i) => ({\n    id: `edge-${i + 1}`,\n    name: `Edge node ${i + 1}`,\n    region: ['sa-east', 'us-east', 'eu-west'][i % 3]\n  }))\n\n  const { cardListProps, paginationProps, selectedCount } = useCollection({\n    items: edges,\n    pagination: { pageSize: 6 },\n    selection: { mode: 'multi' }\n  })\n</script>\n\n<template>\n  <div class=\"flex flex-col gap-(--spacing-sm)\">\n    <p\n      class=\"text-body-sm text-(--text-muted)\"\n      role=\"status\"\n    >\n      {{ selectedCount }} selected\n    </p>\n    <CardList v-bind=\"cardListProps\">\n      <template #header=\"{ item }\">{{ item.name }}</template>\n      <template #default=\"{ item }\">\n        <span class=\"text-(--text-muted)\">{{ item.region }}</span>\n      </template>\n    </CardList>\n    <Pagination v-bind=\"paginationProps\" />\n  </div>\n</template>"
+   "sfc": "<script setup>\n  import CardList from '@aziontech/webkit/card-list'\n  import Pagination from '@aziontech/webkit/pagination-root'\n  import { useCollection } from '@aziontech/webkit/use-collection'\n\n  const edges = Array.from({ length: 14 }, (_, i) => ({\n    id: `edge-${i + 1}`,\n    name: `Edge node ${i + 1}`,\n    region: ['sa-east', 'us-east', 'eu-west'][i % 3]\n  }))\n\n  const { cardListProps, paginationProps, selectedCount } = useCollection({\n    items: edges,\n    pagination: { pageSize: 6 },\n    selection: { mode: 'multiple' }\n  })\n</script>\n\n<template>\n  <div class=\"flex flex-col gap-(--spacing-sm)\">\n    <p\n      class=\"text-body-sm text-(--text-muted)\"\n      role=\"status\"\n    >\n      {{ selectedCount }} selected\n    </p>\n    <CardList v-bind=\"cardListProps\">\n      <template #header=\"{ item }\">{{ item.name }}</template>\n      <template #default=\"{ item }\">\n        <span class=\"text-(--text-muted)\">{{ item.region }}</span>\n      </template>\n    </CardList>\n    <Pagination v-bind=\"paginationProps\" />\n  </div>\n</template>"
   },
   {
    "name": "SingleSelection",

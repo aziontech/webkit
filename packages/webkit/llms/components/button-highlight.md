@@ -29,7 +29,7 @@
 
 ## Related
 
-- [button](button.md) — the default action control; adds `kind`, `iconPosition`, `animated`, `type` and a `prefix` slot that this component does not have.
+- [button](button.md) — the default action control; adds `kind`, `iconPosition`, `animated`, `type` and a `leading` slot that this component does not have.
 - [icon-button](icon-button.md) — icon-only action when there is no room for a label.
 
 ## Props

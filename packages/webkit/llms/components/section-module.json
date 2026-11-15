@@ -58,7 +58,7 @@
   {
    "name": "kind",
    "type": "SectionModuleKind",
-   "default": "'left'",
+   "default": "'start'",
    "required": "false",
    "doc": "Layout of the default header row."
   },
@@ -104,7 +104,7 @@
   },
   {
    "name": "Kinds",
-   "sfc": "<script setup>\n  import SectionModule from '@aziontech/webkit/section-module'\n</script>\n\n<template>\n  <div>\n    <SectionModule\n      :divided=\"false\"\n      kind=\"left\"\n      eyebrow=\"Platform\"\n      title=\"Left\"\n    >\n      <p class=\"m-0 text-body-md text-(--text-muted)\">The header sits at the start edge.</p>\n    </SectionModule>\n    <SectionModule\n      kind=\"centered\"\n      eyebrow=\"Platform\"\n      title=\"Centered\"\n    >\n      <p class=\"m-0 text-body-md text-(--text-muted)\">The header is centered.</p>\n    </SectionModule>\n    <SectionModule\n      kind=\"horizontal\"\n      eyebrow=\"Platform\"\n      title=\"Horizontal\"\n      description=\"The description takes its own column.\"\n    >\n      <p class=\"m-0 text-body-md text-(--text-muted)\">\n        The headline and its description share a row.\n      </p>\n    </SectionModule>\n  </div>\n</template>"
+   "sfc": "<script setup>\n  import SectionModule from '@aziontech/webkit/section-module'\n</script>\n\n<template>\n  <div>\n    <SectionModule\n      :divided=\"false\"\n      kind=\"start\"\n      eyebrow=\"Platform\"\n      title=\"Left\"\n    >\n      <p class=\"m-0 text-body-md text-(--text-muted)\">The header sits at the start edge.</p>\n    </SectionModule>\n    <SectionModule\n      kind=\"center\"\n      eyebrow=\"Platform\"\n      title=\"Centered\"\n    >\n      <p class=\"m-0 text-body-md text-(--text-muted)\">The header is centered.</p>\n    </SectionModule>\n    <SectionModule\n      kind=\"split\"\n      eyebrow=\"Platform\"\n      title=\"Horizontal\"\n      description=\"The description takes its own column.\"\n    >\n      <p class=\"m-0 text-body-md text-(--text-muted)\">\n        The headline and its description share a row.\n      </p>\n    </SectionModule>\n  </div>\n</template>"
   },
   {
    "name": "Divided",

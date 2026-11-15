@@ -29,12 +29,12 @@
  "bestPractices": [
   "One sentence, ending in a period. If it needs two, it belongs in `helper-text` or a `popover`.",
   "Never hide required information behind a hint — hover is not discoverable on touch, so treat it as an enhancement.",
-  "The `text` doubles as the button's accessible name, so write it as prose a screen reader can read verbatim.",
+  "The `content` doubles as the button's accessible name, so write it as prose a screen reader can read verbatim.",
   "Place it immediately after the thing it explains, not at the end of a row."
  ],
  "props": [
   {
-   "name": "text",
+   "name": "content",
    "type": "string",
    "default": "''",
    "required": "true",
@@ -55,11 +55,11 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import Hint from '@aziontech/webkit/hint'\n</script>\n\n<template>\n  <Hint text=\"Values are encrypted at rest and never displayed again after saving.\" />\n</template>"
+   "sfc": "<script setup>\n  import Hint from '@aziontech/webkit/hint'\n</script>\n\n<template>\n  <Hint content=\"Values are encrypted at rest and never displayed again after saving.\" />\n</template>"
   },
   {
    "name": "Placements",
-   "sfc": "<script setup>\n  import Hint from '@aziontech/webkit/hint'\n</script>\n\n<template>\n  <div class=\"flex items-center gap-(--spacing-lg)\">\n    <Hint\n      text=\"Anchored above the glyph.\"\n      placement=\"top\"\n    />\n    <Hint\n      text=\"Anchored to the right of the glyph.\"\n      placement=\"right\"\n    />\n    <Hint\n      text=\"Anchored below the glyph.\"\n      placement=\"bottom\"\n    />\n    <Hint\n      text=\"Anchored to the left of the glyph.\"\n      placement=\"left\"\n    />\n  </div>\n</template>"
+   "sfc": "<script setup>\n  import Hint from '@aziontech/webkit/hint'\n</script>\n\n<template>\n  <div class=\"flex items-center gap-(--spacing-lg)\">\n    <Hint\n      content=\"Anchored above the glyph.\"\n      placement=\"top\"\n    />\n    <Hint\n      content=\"Anchored to the right of the glyph.\"\n      placement=\"right\"\n    />\n    <Hint\n      content=\"Anchored below the glyph.\"\n      placement=\"bottom\"\n    />\n    <Hint\n      content=\"Anchored to the left of the glyph.\"\n      placement=\"left\"\n    />\n  </div>\n</template>"
   }
  ],
  "docs": "components/hint.md"

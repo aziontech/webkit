@@ -21,7 +21,7 @@
  "bestPractices": [
   "Give every step a title that names the decision (`Where it runs`), not the control (`Select`).",
   "Keep steps reachable backwards and closed forwards: mark a step `disabled` until the one before it is answered.",
-  "Set `state=\"error\"` only after the reader tried to advance — a step is not wrong while it is unanswered.",
+  "Set `status=\"error\"` only after the reader tried to advance — a step is not wrong while it is unanswered.",
   "One `Stepper` per surface. Two rails on one screen ask the reader which task they are in.",
   "The rail is navigation, not the form. Put the fields in the content column, never inside a step's slot."
  ]

@@ -66,7 +66,7 @@
 - Register: `data-kind="inline" | "signed" | "highlight"` on the root
 - No mark is rendered when neither `logo` nor the `mark` slot is given, and the quotation moves up to lead the block
 - No `figcaption` is rendered when neither `name` nor `jobTitle` is given
-- Highlighted: when `highlights` matches at least one phrase of `text`, the `blockquote` carries `data-highlighted` and its text recedes to the muted ink; each matched phrase is a `data-highlight` span in the default ink. A phrase absent from `text` is skipped, and when none match the quotation renders unhighlighted
+- Highlighted: when `highlights` matches at least one phrase of `text`, the `blockquote` carries `data-highlighted` and its text recedes to the muted ink; each matched phrase is a `data-slot="highlight"` span in the default ink. A phrase absent from `text` is skipped, and when none match the quotation renders unhighlighted
 - In `highlight`, the likeness is drawn only when `photo` is given; there is no initials fallback
 - In `highlight`, the mark takes its own column beside the quotation from `md` up, and leads the block above it below `md`
 - In `highlight`, a quote stretched taller than its content by the band holding it gives the slack to the quotation: the attribution and the `actions` area floor at the bottom, so quotations of different lengths share one line for both

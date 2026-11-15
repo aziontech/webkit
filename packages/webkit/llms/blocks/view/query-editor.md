@@ -46,7 +46,7 @@ A database with no tables replaces the pane with a `Card` holding an `EmptyState
 
 ### D. Table data — `ToggleGroup`, `Input`, `Button`, `Tooltip`, `IconButton`, `DataTable` (required)
 
-The pane opens with the table name and a `ToggleGroup` switching Data and Definition. Data has a Filter rows `Input`, an outlined Sort `Button`, a Refresh `IconButton` and the primary Insert `Button`, over the rows. The rows are a compact `DataTable` (`row-key="__k"`, `enable-row-selection`, `enable-sorting`, `paginated` at 25 rows with 25, 50 and 100 per page) named `Rows of <table>`: one column per table column with a `header-<name>` slot that shows the name, its type muted and a key on the primary key, a `cell-<name>` slot that renders values in the code font and `NULL` in muted italics, and a trailing action column with a Delete row `IconButton`. Sorting by a header sorts the loaded rows; selection resets when another table is picked. An empty table fills the `#empty` slot with a small `EmptyState` holding Insert row and Import data from CSV; a filter that matches nothing shows a small `EmptyState` named with the filter text and a Clear filter button. Each Delete row button names its row (`Delete row 3`).
+The pane opens with the table name and a `ToggleGroup` switching Data and Definition. Data has a Filter rows `Input`, an outlined Sort `Button`, a Refresh `IconButton` and the primary Insert `Button`, over the rows. The rows are a compact `DataTable` (`row-key="__k"`, `selectable`, `sortable`, `paginated` at 25 rows with 25, 50 and 100 per page) named `Rows of <table>`: one column per table column with a `header-<name>` slot that shows the name, its type muted and a key on the primary key, a `cell-<name>` slot that renders values in the code font and `NULL` in muted italics, and a trailing action column with a Delete row `IconButton`. Sorting by a header sorts the loaded rows; selection resets when another table is picked. An empty table fills the `#empty` slot with a small `EmptyState` holding Insert row and Import data from CSV; a filter that matches nothing shows a small `EmptyState` named with the filter text and a Clear filter button. Each Delete row button names its row (`Delete row 3`).
 
 ### E. Table definition — `Button`, `Card`, `DataTable`, `Tag` (optional)
 
@@ -385,7 +385,7 @@ Each variant is the same screen in another state: `get_block("view/query-editor"
       id: column.name,
       accessorKey: column.name,
       header: column.name,
-      enableSorting: true,
+      sortable: true,
       minWidth: 160
     })),
     { id: '__actions', kind: 'action', hideable: false }
@@ -706,7 +706,7 @@ LIMIT 3;`
               <div class="flex items-center justify-between gap-(--spacing-xs)">
                 <span class="text-heading-2xs text-(--text-default)">Tables</span>
                 <div class="flex items-center gap-(--spacing-2xs)">
-                  <Tooltip text="Refresh tables">
+                  <Tooltip content="Refresh tables">
                     <IconButton
                       icon="ai ai-refresh"
                       kind="outlined"
@@ -714,7 +714,7 @@ LIMIT 3;`
                       aria-label="Refresh tables"
                     />
                   </Tooltip>
-                  <Tooltip text="Create Table">
+                  <Tooltip content="Create Table">
                     <IconButton
                       icon="ai ai-plus"
                       kind="outlined"
@@ -731,7 +731,7 @@ LIMIT 3;`
                 placeholder="Search tables"
                 aria-label="Search tables"
               >
-                <template #prefix>
+                <template #leading>
                   <i
                     class="ai ai-search"
                     aria-hidden="true"
@@ -788,7 +788,7 @@ LIMIT 3;`
                 </Item>
                 <DropdownMenu placement="bottom-end">
                   <DropdownMenu.Trigger>
-                    <Tooltip :text="`Actions for ${table.name}`">
+                    <Tooltip :content="`Actions for ${table.name}`">
                       <IconButton
                         icon="ai ai-ellipsis"
                         kind="transparent"
@@ -881,7 +881,7 @@ LIMIT 3;`
                   :placeholder="filterPlaceholder"
                   aria-label="Filter rows"
                 >
-                  <template #prefix>
+                  <template #leading>
                     <i
                       class="ai ai-search"
                       aria-hidden="true"
@@ -896,7 +896,7 @@ LIMIT 3;`
                   size="medium"
                   icon="ai ai-sort"
                 />
-                <Tooltip text="Refresh">
+                <Tooltip content="Refresh">
                   <IconButton
                     icon="ai ai-refresh"
                     kind="outlined"
@@ -919,8 +919,8 @@ LIMIT 3;`
                 :data="filteredRows"
                 :columns="dataColumns"
                 row-key="__k"
-                enable-row-selection
-                enable-sorting
+                selectable
+                sortable
                 paginated
                 :page-size="25"
                 :page-size-options="[25, 50, 100]"
@@ -956,7 +956,7 @@ LIMIT 3;`
                   >
                 </template>
                 <template #cell-__actions="{ row }">
-                  <Tooltip :text="`Delete row ${row['id'] ?? row.__k}`">
+                  <Tooltip :content="`Delete row ${row['id'] ?? row.__k}`">
                     <IconButton
                       icon="ai ai-trash"
                       kind="transparent"
@@ -1028,7 +1028,7 @@ LIMIT 3;`
               />
             </div>
             <Card :padded="false">
-              <template #content>
+              <template #default>
                 <DataTable
                   :data="schemaRows"
                   :columns="schemaColumns"
@@ -1081,7 +1081,7 @@ LIMIT 3;`
                 placeholder="Search queries"
                 aria-label="Search queries"
               >
-                <template #prefix>
+                <template #leading>
                   <i
                     class="ai ai-search"
                     aria-hidden="true"
@@ -1129,7 +1129,7 @@ LIMIT 3;`
                   "
                 >
                   <DropdownMenu.Trigger>
-                    <Tooltip :text="`Actions for ${oneLine(item.sql)}`">
+                    <Tooltip :content="`Actions for ${oneLine(item.sql)}`">
                       <IconButton
                         icon="ai ai-ellipsis"
                         kind="transparent"
@@ -1224,7 +1224,7 @@ LIMIT 3;`
                 aria-label="Search results"
                 :disabled="!resultRows.length"
               >
-                <template #prefix>
+                <template #leading>
                   <i
                     class="ai ai-search"
                     aria-hidden="true"
@@ -1238,7 +1238,7 @@ LIMIT 3;`
                 :options="resultViewOptions"
                 aria-label="Result view"
               />
-              <Tooltip text="Refresh results">
+              <Tooltip content="Refresh results">
                 <IconButton
                   icon="ai ai-refresh"
                   kind="outlined"
@@ -1248,7 +1248,7 @@ LIMIT 3;`
                   @click="runQuery"
                 />
               </Tooltip>
-              <Tooltip text="Download results">
+              <Tooltip content="Download results">
                 <IconButton
                   icon="ai ai-download"
                   kind="outlined"
@@ -1257,7 +1257,7 @@ LIMIT 3;`
                   :disabled="!resultRows.length"
                 />
               </Tooltip>
-              <Tooltip text="Toggle columns">
+              <Tooltip content="Toggle columns">
                 <IconButton
                   icon="ai ai-table"
                   kind="outlined"
@@ -1330,7 +1330,7 @@ LIMIT 3;`
     <Drawer
       v-model:open="templatesOpen"
       size="large"
-      side="right"
+      side="end"
     >
       <DrawerContent>
         <PanelHeader class="w-full">
@@ -1351,7 +1351,7 @@ LIMIT 3;`
               placeholder="Search templates"
               aria-label="Search templates"
             >
-              <template #prefix>
+              <template #leading>
                 <i
                   class="ai ai-search"
                   aria-hidden="true"

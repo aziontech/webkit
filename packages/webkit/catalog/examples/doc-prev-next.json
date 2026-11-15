@@ -3,12 +3,12 @@
   {
    "name": "Default",
    "summary": "Both neighbours present. Hover either side and the chevron travels outward.",
-   "sfc": "<script setup>\n  import DocPrevNext from '@aziontech/webkit/doc-prev-next'\n</script>\n\n<template>\n  <DocPrevNext\n    :previous=\"{ title: 'Deploy an application', href: '/docs/deploy' }\"\n    :next=\"{ title: 'Bind a domain', href: '/docs/domains' }\"\n    @navigate=\"(event, page) => router.push(page.href)\"\n  />\n</template>"
+   "sfc": "<script setup>\n  import DocPrevNext from '@aziontech/webkit/doc-prev-next'\n</script>\n\n<template>\n  <DocPrevNext\n    :previous=\"{ label: 'Deploy an application', href: '/docs/deploy' }\"\n    :next=\"{ label: 'Bind a domain', href: '/docs/domains' }\"\n    @navigate=\"(event, page) => router.push(page.href)\"\n  />\n</template>"
   },
   {
    "name": "Ends",
    "summary": "The first and last pages of a series. The one remaining link stays anchored to its own edge — an absent side leaves a placeholder rather than collapsing, so a lone \"Next\" never drifts into the middle of the row. Each is given its own `aria-label` here because two nav landmarks may not share an accessible name; a real page carries one pagination and takes the default.",
-   "sfc": "<script setup>\n  import DocPrevNext from '@aziontech/webkit/doc-prev-next'\n</script>\n\n<template>\n  <div class=\"flex flex-col gap-(--spacing-xl)\">\n    <DocPrevNext\n      aria-label=\"First page navigation\"\n      :next=\"{ title: 'Deploy an application', href: '/docs/deploy' }\"\n    />\n    <DocPrevNext\n      aria-label=\"Last page navigation\"\n      :previous=\"{ title: 'Bind a domain', href: '/docs/domains' }\"\n    />\n  </div>\n</template>"
+   "sfc": "<script setup>\n  import DocPrevNext from '@aziontech/webkit/doc-prev-next'\n</script>\n\n<template>\n  <div class=\"flex flex-col gap-(--spacing-xl)\">\n    <DocPrevNext\n      aria-label=\"First page navigation\"\n      :next=\"{ label: 'Deploy an application', href: '/docs/deploy' }\"\n    />\n    <DocPrevNext\n      aria-label=\"Last page navigation\"\n      :previous=\"{ label: 'Bind a domain', href: '/docs/domains' }\"\n    />\n  </div>\n</template>"
   }
  ]
 }

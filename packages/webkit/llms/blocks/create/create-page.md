@@ -295,7 +295,7 @@ Each variant is the same screen in another state: `get_block("create/create-page
                 hint="The two fields this endpoint requires: what the domain is called here, and the hostname it answers for."
               >
                 <Card :padded="false">
-                  <template #content>
+                  <template #default>
                     <Item.List>
                       <SettingRow
                         title="Name"
@@ -357,7 +357,7 @@ Each variant is the same screen in another state: `get_block("create/create-page
                 collapsible
               >
                 <Card :padded="false">
-                  <template #content>
+                  <template #default>
                     <Item.List>
                       <SettingRow
                         title="DNSSEC"

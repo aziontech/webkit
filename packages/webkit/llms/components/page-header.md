@@ -1,6 +1,6 @@
 # Page Header
 
-> The heading that opens a console page: an h1 whose `size` picks the heading token by page level, a one-line description, and the actions the page owns on the right. When the row runs out of room the actions move below the copy together; on a phone they stack, each at full width. Four optional regions complete a detail page's header without local markup: a `breadcrumb` trail above the title, an `icon` before it, `meta` (a status tag, a version) beside it, and `tabs` across the bottom. It replaces the header markup every list, detail, settings and create page used to copy by hand.
+> The heading that opens a console page: an h1 whose `size` picks the heading token by page level, a one-line description, and the actions the page owns on the right. When the row runs out of room the actions move below the copy together; on a phone they stack, each at full width. Four optional regions complete a detail page's header without local markup: a `breadcrumbs` trail above the title, an `icon` before it, `meta` (a status tag, a version) beside it, and `tabs` across the bottom. It replaces the header markup every list, detail, settings and create page used to copy by hand.
 
 - Import: `import PageHeader from '@aziontech/webkit/page-header'`
 - Category: layout · Surface: app · Structure: monolithic
@@ -11,7 +11,7 @@
 - Use PageHeader once per console page for the h1, description and page actions; a band inside the page uses SectionHeader.
 - The top of any console page: a first-level list (`medium`), a detail tab or settings sub-page (`small`), a creation hub headline (`large`).
 - A page that owns actions (Documentation, a create action) that belong next to its title.
-- A resource detail page whose header carries the trail back to the list, the resource's icon, its status and the tabs of its sections (`breadcrumb`, `icon`, `meta`, `tabs`).
+- A resource detail page whose header carries the trail back to the list, the resource's icon, its status and the tabs of its sections (`breadcrumbs`, `icon`, `meta`, `tabs`).
 
 ## Do
 
@@ -19,7 +19,7 @@
 - Put the Documentation link first and the create action on the outer edge, both outlined at the medium size.
 - Do not set `class="w-full"` on the action buttons; the header makes them full width on a phone.
 - Set `titleId` when a form or landmark names itself with `aria-labelledby`.
-- breadcrumb`: pass a `Breadcrumb` with `items`; its last entry is the current page and should match the title.
+- breadcrumbs`: pass a `Breadcrumb` with `items`; its last entry is the current page and should match the title.
 - icon`: one decorative glyph or a square `Avatar`, at most 32 px; it is `aria-hidden` by default, since the title already names the page.
 - meta`: one or two small `Tag`s (status, environment). Longer facts (owner, created date) belong in the page body, not the header.
 - tabs`: a `Tabs` row of the page's sections. A page that already shows `PageTabs` above the header leaves this slot empty; never both.
@@ -35,7 +35,7 @@
 
 - [section-header](section-header.md) — the h2 band heading inside a page.
 - [page-tabs](page-tabs.md) — the second-level navigation strip that sits above a detail page's header; a header-local tab row goes in the `tabs` slot.
-- [breadcrumb](breadcrumb.md) — the usual content of the `breadcrumb` slot.
+- [breadcrumb](breadcrumb.md) — the usual content of the `breadcrumbs` slot.
 - [tag](tag.md) — the usual content of the `meta` slot (a status, an environment, a version).
 - [button](button.md) — the usual content of the `actions` slot (outlined, `size="medium"`).
 
@@ -54,7 +54,7 @@
 | --- | --- | --- |
 | `description` | — | Rich description content (links, inline buttons); replaces the `description` prop. |
 | `actions` | — | The actions the page owns, Documentation first and the create action on the outer edge. |
-| `breadcrumb` | — | The trail back to the parent pages, above the title row; usually a `Breadcrumb` with `items`. |
+| `breadcrumbs` | — | The trail back to the parent pages, above the title row; usually a `Breadcrumb` with `items`. |
 | `icon` | — | A leading glyph or square avatar before the title, decorative (`aria-hidden`). |
 | `meta` | — | Short facts beside the title, such as a status `Tag`; wraps under the title when the row is narrow. |
 | `tabs` | — | The tabs of the page's sections, across the full width under the title and actions. |
@@ -63,7 +63,7 @@
 
 - Visual states: `default`
 - `data-size` mirrors the `size` prop on the root and the h1
-- Each region renders only when its slot is filled: `__breadcrumb` (a full-width row above the title row), `__icon` (before the h1, `aria-hidden`), `__meta` (after the h1 on the same line, wrapping under it), `__tabs` (a full-width row after the copy and the actions). With no region slot the header renders exactly as before.
+- Each region renders only when its slot is filled: `__breadcrumbs` (a full-width row above the title row), `__icon` (before the h1, `aria-hidden`), `__meta` (after the h1 on the same line, wrapping under it), `__tabs` (a full-width row after the copy and the actions). With no region slot the header renders exactly as before.
 - Responsive: the root is the `@container/page-header`. Below `@md` of its own box the actions drop under the copy and each one stretches to the full width; from `@md` they sit beside the title at their own width. A header inside a drawer or a split view lays out for that box, not the window.
 
 ## Accessibility

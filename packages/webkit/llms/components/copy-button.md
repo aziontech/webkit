@@ -52,8 +52,8 @@
 
 ## States
 
-- Visual states: `default`, `copied`, `disabled`
-- `data-state` mirrors `default` or `copied`
+- Visual states: `idle`, `copied`, `disabled`
+- `data-state` mirrors `idle` or `copied`
 - `data-disabled` mirrors the `disabled` prop
 - The composed `Tooltip` carries its own `data-state` (`open` | `closed`) and is disabled with the button
 - Fallback: when `navigator.clipboard.writeText` rejects (permission denied, insecure context, unfocused document), the button loads a small `Popover` anchored to itself (lazily, through `defineAsyncComponent`, so entries that copy do not grow): the title `Copy manually`, the value in a read-only small `Input` labelled `Value to copy`, focused and selected, and `Press Ctrl+C to copy.` (`⌘C` on macOS). `copy` is not emitted and the state stays `default`. `Esc` or a click outside closes it and returns focus to the button. Strings come from the `copyFallback` catalog group.

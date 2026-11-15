@@ -1,6 +1,6 @@
 # Prompt Input
 
-> The composer of a generative AI chat (Cloudscape prompt input, AI Elements PromptInput): a text area that grows with the prompt up to `maxRows`, a Submit control that becomes Stop while a response is being generated, a toolbar row for secondary controls (attach, mode), an attachments row above the text, an optional character limit with a counter, and constraint text under it (a disclaimer or the shortcuts it accepts). Enter submits; Shift+Enter adds a line; an IME composition never submits. It is controlled: the owner holds the text, receives `submit` with the trimmed prompt, and clears it. While `state` is `submitted` or `streaming` the reader can keep typing the next prompt, but cannot submit it until the response ends or they press Stop.
+> The composer of a generative AI chat (Cloudscape prompt input, AI Elements PromptInput): a text area that grows with the prompt up to `maxRows`, a Submit control that becomes Stop while a response is being generated, a toolbar row for secondary controls (attach, mode), an attachments row above the text, an optional character limit with a counter, and constraint text under it (a disclaimer or the shortcuts it accepts). Enter submits; Shift+Enter adds a line; an IME composition never submits. It is controlled: the owner holds the text, receives `submit` with the trimmed prompt, and clears it. While `status` is `pending` or `streaming` the reader can keep typing the next prompt, but cannot submit it until the response ends or they press Stop.
 
 - Import: `import PromptInput from '@aziontech/webkit/prompt-input'`
 - Category: ai · Surface: app · Structure: monolithic
@@ -15,7 +15,7 @@
 
 - Placeholder is a suggested question with no end punctuation (`Ask a question`); never the only instruction.
 - Put the disclaimer and the shortcuts in `hint`, not in the placeholder.
-- Set `state` from the request so Submit turns into Stop; wire `stop` to abort it.
+- Set `status` from the request so Submit turns into Stop; wire `stop` to abort it.
 - Clear `v-model` in the `submit` handler and keep focus in the input.
 - Use `maxLength` only when the backend has a limit; the counter is the warning.
 
@@ -42,7 +42,7 @@
 | `maxLength` | `number` | `0` | false | Character limit; shows an `n/max` counter and blocks submit over it. `0` means no limit. |
 | `minRows` | `number` | `1` | false | Rows shown while empty. |
 | `maxRows` | `number` | `6` | false | Rows the text area grows to before it scrolls. |
-| `state` | `'ready' \| 'submitted' \| 'streaming'` | `'ready'` | false | Request lifecycle: `submitted` and `streaming` swap Submit for Stop and block another submit; typing stays allowed. |
+| `status` | `'ready' \| 'pending' \| 'streaming'` | `'ready'` | false | Request lifecycle: `pending` and `streaming` swap Submit for Stop and block another submit; typing stays allowed. |
 | `disabled` | `boolean` | `false` | false | Disables the text area, the submit control and every control in the slots' row. |
 | `menus` | `PromptInputMenu[]` | `[]` | false | Shortcut menus opened by a trigger character at the start of a word: `/` for commands, `@` for things to reference. Choosing an option inserts `<trigger><label>` and adds it to `references`. |
 | `modelValue` | `string` | `''` | false | Two-way value (`v-model`). |
@@ -66,7 +66,7 @@
 ## Sub-components
 
 _None — monolithic with slots. Exports: `"./prompt-input": "./src/components/ai/prompt-input/prompt-input.vue"`.
-Exported type: `PromptInputState = 'ready' | 'submitted' | 'streaming'`. Composed DS components:
+Exported type: `PromptInputStatus = 'ready' | 'pending' | 'streaming'`. Composed DS components:
 `icon-button` (Submit, Stop). Exposes `focus()`._
 
 ## v-model
@@ -78,9 +78,9 @@ Exported type: `PromptInputState = 'ready' | 'submitted' | 'streaming'`. Compose
 
 ## States
 
-- `data-status` mirrors `state`; `data-disabled`; `data-invalid` while over `maxLength`.
+- `data-status` mirrors `status`; `data-disabled`; `data-invalid` while over `maxLength`.
 - `ready`: Submit (primary `IconButton`, `ai ai-arrow-up`), disabled while the prompt is empty, over the limit or `disabled`.
-- `submitted` / `streaming`: Stop (secondary `IconButton`, `ai ai-stop`) replaces Submit; Enter does nothing.
+- `pending` / `streaming`: Stop (secondary `IconButton`, `ai ai-stop`) replaces Submit; Enter does nothing.
 - Over the limit: border turns `--danger-border`, the counter turns danger, `aria-invalid="true"`, and a polite live region says how many characters are over.
 
 ## Accessibility
@@ -166,21 +166,21 @@ Exported type: `PromptInputState = 'ready' | 'submitted' | 'streaming'`. Compose
   import { onBeforeUnmount, ref } from 'vue'
 
   const prompt = ref('Why did my cache hit ratio drop?')
-  const state = ref('ready')
+  const status = ref('ready')
   let timer
 
   function send() {
     prompt.value = ''
-    state.value = 'submitted'
+    status.value = 'pending'
     timer = setTimeout(() => {
-      state.value = 'streaming'
-      timer = setTimeout(() => (state.value = 'ready'), 4000)
+      status.value = 'streaming'
+      timer = setTimeout(() => (status.value = 'ready'), 4000)
     }, 800)
   }
 
   function stop() {
     clearTimeout(timer)
-    state.value = 'ready'
+    status.value = 'ready'
   }
 
   onBeforeUnmount(() => clearTimeout(timer))
@@ -190,7 +190,7 @@ Exported type: `PromptInputState = 'ready' | 'submitted' | 'streaming'`. Compose
   <div class="w-full max-w-(--container-3xl)">
     <PromptInput
       v-model="prompt"
-      :state="state"
+      :status="status"
       @submit="send"
       @stop="stop"
     />

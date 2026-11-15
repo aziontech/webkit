@@ -1,6 +1,6 @@
 # Card List
 
-> Use CardList to show a collection of records as selectable cards instead of table rows; for one bordered box use Card, and for the frame of a dashboard chart use ChartCard. A collection shown as cards, after Cloudscape's cards: one card per item, named by its `header` slot, with the item's fields in the default slot. It follows Cloudscape's collection model — `items`, `trackBy`, `selectedKeys` (a key array) — which is not yet the same as Table's (`data`, `rowKey`, `rowSelection` record); `useCollection` binds it through `cardListProps`, and selection (single or multi, with a visible select-all) survives paging. Four cards a row in a wide container, then three, two and one as the container narrows.
+> Use CardList to show a collection of records as selectable cards instead of table rows; for one bordered box use Card, and for the frame of a dashboard chart use ChartCard. A collection shown as cards, after Cloudscape's cards: one card per item, named by its `header` slot, with the item's fields in the default slot. It follows Cloudscape's collection model — `items`, `itemKey`, `selectedKeys` (a key array) — which is not yet the same as Table's (`data`, `rowKey`, `rowSelection` record); `useCollection` binds it through `cardListProps`, and selection (single or multiple, with a visible select-all) survives paging. Four cards a row in a wide container, then three, two and one as the container narrows.
 
 - Import: `import CardList from '@aziontech/webkit/card-list'`
 - Category: data · Surface: app · Structure: monolithic
@@ -15,7 +15,7 @@
 
 - Put the item's name, as a link to the item, in the `header` slot: it also names the selection control.
 - Keep each card to a handful of label and value pairs; let `collection-preferences` choose which.
-- Use `selectionMode="multi"` only when a bulk action exists next to the list.
+- Use `selectionMode="multiple"` only when a bulk action exists next to the list.
 - Pass items typed with your own interface (`Domain[]`): the slots read `item.name` with that type, so never cast `item` in a slot or widen the items to `Record<string, unknown>[]`.
 
 ## Don’t
@@ -37,8 +37,8 @@
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
 | `items` | `TItem[]` | `[]` | false | The items, one card each. |
-| `trackBy` | `string` | `'id'` | false | Field that identifies an item; selection keys read it. |
-| `selectionMode` | `'none' \| 'single' \| 'multi'` | `'none'` | false | No selection, one card, or several cards with a select-all above them. |
+| `itemKey` | `string` | `'id'` | false | Field that identifies an item; selection keys read it. |
+| `selectionMode` | `'none' \| 'single' \| 'multiple'` | `'none'` | false | No selection, one card, or several cards with a select-all above them. |
 | `loading` | `boolean` | `false` | false | Shows placeholder cards and sets aria-busy while true. |
 | `ariaLabel` | `string` | `''` | false | Accessible name of the list. Empty uses the locale catalog. |
 | `selectedKeys` | `string[]` | `() => []` | false | Two-way value (`v-model:selectedKeys`). |
@@ -53,7 +53,7 @@
 
 ## v-model
 
-- **`v-model:selected-keys`** — `string[]`, default `[]`. Keys (`item[trackBy]`) of the selected cards; keys of items not on the current page are kept.
+- **`v-model:selected-keys`** — `string[]`, default `[]`. Keys (`item[itemKey]`) of the selected cards; keys of items not on the current page are kept.
 
 ## States
 
@@ -165,7 +165,7 @@
   const { cardListProps, paginationProps, selectedCount } = useCollection({
     items: edges,
     pagination: { pageSize: 6 },
-    selection: { mode: 'multi' }
+    selection: { mode: 'multiple' }
   })
 </script>
 

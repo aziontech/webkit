@@ -39,7 +39,7 @@
   {
    "name": "titleKind",
    "type": "SectionTitleKind",
-   "default": "'centered'",
+   "default": "'center'",
    "required": "false",
    "doc": "Layout of the headline block."
   },

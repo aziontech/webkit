@@ -17,7 +17,7 @@
 - Title is a question naming the action and target; put tool and command names in backticks (code).
 - Match the approve label to the title verb (`Deploy`, `Delete`) when it is not a generic tool call.
 - Never pre-focus or pre-select Approve for a risky action.
-- Do not leave a request pending forever: expire it (`state="expired"`) and have the assistant say nothing ran.
+- Do not leave a request pending forever: expire it (`status="expired"`) and have the assistant say nothing ran.
 - After Deny, the assistant acknowledges in the conversation ("Skipping that step.").
 
 ## Don’t
@@ -40,7 +40,7 @@
 | --- | --- | --- | --- | --- |
 | `title` | `string` | `—` | true | The question, naming the action: ``Allow `npm test`?``, `Approve deployment to production?`. Backticks render as code. |
 | `description` | `string` | `''` | false | One or two sentences on what will happen and to what; backticks render as code. |
-| `state` | `'pending' \| 'approved' \| 'denied' \| 'expired'` | `'pending'` | false | pending` asks; `approved`, `denied` and `expired` replace the buttons with the outcome in text. |
+| `status` | `'pending' \| 'approved' \| 'denied' \| 'expired'` | `'pending'` | false | pending` asks; `approved`, `denied` and `expired` replace the buttons with the outcome in text. |
 | `kind` | `'default' \| 'danger'` | `'default'` | false | danger` for an action that cannot be undone: the approve button turns destructive. |
 | `confirmationPhrase` | `string` | `''` | false | A word the reader must type before Approve enables, for irreversible actions (the resource name). Empty asks for no typing. |
 | `approveLabel` | `string` | `''` | false | Text of the approve button, the verb of the title (`Deploy`, `Delete`). Empty uses the locale catalog (`Approve`). |
@@ -62,13 +62,13 @@
 
 ## Sub-components
 
-_None. Exports: `"./tool-approval"`; types `ToolApprovalState`, `ToolApprovalKind`.
+_None. Exports: `"./tool-approval"`; types `ToolApprovalStatus`, `ToolApprovalKind`.
 Composed DS components: `button`, `status-indicator`; the title and description reuse
 `StreamingResponse`'s inline renderer so backticks render as code (no HTML). Exposes `focus()`._
 
 ## States
 
-- `data-status` mirrors `state`; `data-kind`.
+- `data-status` mirrors `status`; `data-kind`.
 - `pending`: phrase field (when `confirmationPhrase`), Deny (outlined) and Approve (primary, or danger with `kind="danger"`); Approve disabled until the phrase matches.
 - `approved` (success), `denied` (warning), `expired` (neutral): a `StatusIndicator` with the outcome; the typed phrase resets when the card returns to `pending`.
 
@@ -115,7 +115,7 @@ Composed DS components: `button`, `status-indicator`; the title and description 
   import ToolApproval from '@aziontech/webkit/tool-approval'
   import { ref } from 'vue'
 
-  const state = ref('pending')
+  const status = ref('pending')
 </script>
 
 <template>
@@ -124,9 +124,9 @@ Composed DS components: `button`, `status-indicator`; the title and description 
       title="Allow `azion deploy --env production`?"
       description="Deploys the current build of storefront to production. The previous version stays available for rollback."
       approve-label="Deploy"
-      :state="state"
-      @approve="state = 'approved'"
-      @deny="state = 'denied'"
+      :status="status"
+      @approve="status = 'approved'"
+      @deny="status = 'denied'"
     >
       <CodeBlock
         :tabs="[
@@ -137,7 +137,7 @@ Composed DS components: `button`, `status-indicator`; the title and description 
             language: 'bash'
           }
         ]"
-        :line-numbers="false"
+        :show-line-numbers="false"
       />
     </ToolApproval>
   </div>
@@ -151,7 +151,7 @@ Composed DS components: `button`, `status-indicator`; the title and description 
   import ToolApproval from '@aziontech/webkit/tool-approval'
   import { ref } from 'vue'
 
-  const state = ref('pending')
+  const status = ref('pending')
 </script>
 
 <template>
@@ -162,9 +162,9 @@ Composed DS components: `button`, `status-indicator`; the title and description 
       kind="danger"
       confirmation-phrase="www.example.com"
       approve-label="Delete"
-      :state="state"
-      @approve="state = 'approved'"
-      @deny="state = 'denied'"
+      :status="status"
+      @approve="status = 'approved'"
+      @deny="status = 'denied'"
     />
   </div>
 </template>
@@ -182,17 +182,17 @@ Composed DS components: `button`, `status-indicator`; the title and description 
     <ToolApproval
       title="Allow `purge_urls`?"
       description="Purges https://www.example.com/styles.css from every edge location."
-      state="approved"
+      status="approved"
     />
     <ToolApproval
       title="Approve deployment to production?"
       description="Deploys the current build of storefront to production."
-      state="denied"
+      status="denied"
     />
     <ToolApproval
       title="Allow `delete_cache_rule`?"
       description="Removes the rule that caches images for one day."
-      state="expired"
+      status="expired"
     />
   </div>
 </template>

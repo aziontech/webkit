@@ -20,9 +20,9 @@
  ],
  "bestPractices": [
   "Wrap a focusable element. The tooltip opens on the wrapper's `focusin`, and the wrapper itself is not focusable.",
-  "Keep `text` to a few words. It renders as plain text, with no markup.",
+  "Keep `content` to a few words. It renders as plain text, with no markup.",
   "The tooltip describes its trigger (`aria-describedby`) but does not name it. Icon-only triggers still need their own accessible name.",
-  "Use `disabled` to suppress the tooltip. An empty `text` also blocks opening, but it reads as a bug.",
+  "Use `disabled` to suppress the tooltip. An empty `content` also blocks opening, but it reads as a bug.",
   "Keep the default `delay` (200 ms) unless a dense toolbar needs a longer one.",
   "Bind the open state with `v-model:open`, or `:open` plus an `@update:open` handler typed `(open: boolean) => void`. The payload is always a `boolean`, so the handler needs no cast and no `Boolean(...)`."
  ]

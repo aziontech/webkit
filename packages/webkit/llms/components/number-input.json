@@ -120,12 +120,12 @@
  ],
  "slots": [
   {
-   "name": "prefix",
+   "name": "leading",
    "scope": "—",
    "notes": "Content rendered before the input (e.g. `$`)."
   },
   {
-   "name": "suffix",
+   "name": "trailing",
    "scope": "—",
    "notes": "Content rendered after the input, before the spinner buttons (e.g. `%`)."
   }

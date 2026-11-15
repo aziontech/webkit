@@ -14,7 +14,7 @@
 
 ## Do
 
-- Set `current` on the last segment only; it renders a `span` with `aria-current="page"`, drops out of the tab order and ignores `href`.
+- Set `active` on the last segment only; it renders a `span` with `aria-current="page"`, drops out of the tab order and ignores `href`.
 - Always pass a real `href` on ancestors — an empty `href` (the default) renders `#`, and the segment renders an `a`.
 - Use `show-icon` together with `icon` (an Azion icon class; empty shows `ai ai-box`); `icon` alone renders nothing.
 - disabled` suppresses the `click` emit and removes the segment from the tab order; prefer omitting an unreachable ancestor over disabling it.
@@ -36,8 +36,8 @@
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
 | `label` | `string` | `''` | false | Visible segment label. |
-| `href` | `string` | `''` | false | Destination when the segment is a link (ignored when `current` is true); empty renders `#`. |
-| `current` | `boolean` | `false` | false | Marks the current page (last segment); renders as span with `aria-current="page"`. |
+| `href` | `string` | `''` | false | Destination when the segment is a link (ignored when `active` is true); empty renders `#`. |
+| `active` | `boolean` | `false` | false | Marks the current page (last segment); renders as span with `aria-current="page"`. |
 | `showIcon` | `boolean` | `false` | false | When true, renders a leading icon before the label. |
 | `icon` | `string` | `''` | false | Azion icon class for the leading icon when `showIcon` is true; empty shows `ai ai-box`. |
 | `disabled` | `boolean` | `false` | false | Disables interaction and applies disabled tokens. |
@@ -46,12 +46,12 @@
 
 | Event | Payload | Notes |
 | --- | --- | --- |
-| `click` | `(event: MouseEvent, item: { label: string; href: string })` | Fires when the segment's link is activated (the `current` segment renders a non-interactive `span`). `item` carries the segment's `label` and `href`. |
+| `click` | `(event: MouseEvent, item: { label: string; href: string })` | Fires when the segment's link is activated (the `active` segment renders a non-interactive `span`). `item` carries the segment's `label` and `href`. |
 
 ## States
 
 - Visual states: `default`, `hover`, `focus-visible`, `disabled`
-- `data-current` mirrors the `current` prop
+- `data-active` mirrors the `active` prop
 - `data-disabled` mirrors the `disabled` prop
 
 ## Accessibility
@@ -87,7 +87,7 @@
 </template>
 ```
 
-### Current
+### Active
 
 ```vue
 <script setup>
@@ -97,7 +97,7 @@
 <template>
   <BreadcrumbItem
     label="Current Page"
-    current
+    active
   />
 </template>
 ```

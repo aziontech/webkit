@@ -19,8 +19,8 @@
  "bestPractices": [
   "Give every `Accordion.Item` a unique `value`; the open state is keyed by it, and `default-value` / `v-model` refer to it.",
   "Bind `v-model` to a string in `type=\"single\"` and to an array in `type=\"multiple\"`; set `collapsible` to `false` only when one item must always stay open.",
-  "Set the trigger's `level` to fit the page outline (default `3`) — each trigger is wrapped in a real heading.",
+  "Set the trigger's `headingLevel` to fit the page outline (default `3`) — each trigger is wrapped in a real heading.",
   "Accordion.Content` applies no padding; pad the content you put inside it.",
-  "Set `size` and `arrow-position` on the root, not per item — they are provided to every item through context."
+  "Set `size` and `icon-position` on the root, not per item — they are provided to every item through context."
  ]
 }

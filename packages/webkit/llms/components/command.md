@@ -18,7 +18,7 @@
 - Write items as Title Case verb phrases describing an action ("Deploy Project"), not navigation labels.
 - Keep the palette controlled via `v-model:open` so the app can open it from a button and from the global ⌘K shortcut.
 - Bind the open state with `v-model:open`, or `:open` plus an `@update:open` handler typed `(open: boolean) => void`. The payload is always a `boolean`, so the handler needs no cast and no `Boolean(...)`.
-- Group related actions with `<Command.Group heading="…">` and separate distinct sections with `<Command.Separator>`.
+- Group related actions with `<Command.Group label="…">` and separate distinct sections with `<Command.Separator>`.
 - Give an item `keywords` for the words people type that are not in its label (`['org', 'team']` on "Switch organization"). Keywords match, they are never shown.
 - Use a `Page` for a choice that needs its own list ("Switch project", "Change theme"), not for a deep tree: pages are one stack, and every page is one Backspace away from the previous one.
 
@@ -95,8 +95,8 @@ packages/webkit/src/components/overlay/command/
   - Props: _none_.
   - Events: _none_.
   - Slots: `default` — one or more `<Command.Group>` / `<Command.Item>` / `<Command.Separator>`, plus an optional `<Command.Empty>`.
-- `command-group/command-group.vue` — labeled section. Renders a `heading` row (`text-label-sm` in `--text-muted`, sentence case) above its items; hides itself entirely when all of its items are filtered out. Carries `--spacing-sm` above itself when it follows another group, and deliberately **not** when it follows a `<Command.Separator>` — the separator owns the space around itself, so the two rules are mutually exclusive and never stack. While ranked (`data-ranked`) the group is ordered by its best item and its items by their own score, the heading staying first; every group but the leading one carries `--spacing-sm` above itself (`data-leading` marks the first).
-  - Props: `heading: string` default `''` — section label; omit for an unlabeled group.
+- `command-group/command-group.vue` — labeled section. Renders a `label` row (`text-label-sm` in `--text-muted`, sentence case) above its items; hides itself entirely when all of its items are filtered out. Carries `--spacing-sm` above itself when it follows another group, and deliberately **not** when it follows a `<Command.Separator>` — the separator owns the space around itself, so the two rules are mutually exclusive and never stack. While ranked (`data-ranked`) the group is ordered by its best item and its items by their own score, the heading staying first; every group but the leading one carries `--spacing-sm` above itself (`data-leading` marks the first).
+  - Props: `label: string` default `''` — section label; omit for an unlabeled group.
   - Events: _none_.
   - Slots: `default` — one or more `<Command.Item>`.
 - `command-item/command-item.vue` — a selectable command row. `role="option"`. Registers itself with the context (value + searchable text + score) so the root can filter, rank and track the active item. Activated by click, `Enter` while active, or a full-row pointer; activation calls the context, which emits the root `select` and closes the palette — or, when the item names a `page`, opens that page instead (no `select`, the palette stays open). Shows an optional keyboard-shortcut hint rendered with `Kbd`, or a trailing `chevron-right` (mirrored under `dir="rtl"`) when it opens a page. When the label is plain text and the query matches it, the matched characters render in `<mark>` with `font-semibold` on a transparent fill (weight, not color, so the emphasis survives the active row's `--bg-selected` and forced colors); a rich label (elements in the slot) still filters and ranks but is not highlighted.
@@ -107,8 +107,8 @@ packages/webkit/src/components/overlay/command/
     - `page: string` default `''` — the `name` of a `<Command.Page>` this item opens instead of selecting.
     - `shortcut: string` default `''` — a `'+'`-delimited shortcut hint (e.g. `'meta+d'`, `'meta+shift+p'`, `'esc'`) rendered on the right via `Kbd`. Modifier tokens (`meta`/`ctrl`/`shift`/`alt`) map to `Kbd` modifier props; the final token is the key. A named final token (`esc`/`escape`, `enter`/`return`, `space`, `tab`, `backspace`, `delete`/`del`) is printed from the locale catalog through `Kbd` `key-name` (`Esc`, `Enter`, `Espaço`…); any other key is upper-cased. Display only — it does not register a global keybinding.
   - Events: _none_ (root emits `select`).
-  - Slots: `default` — the item label (rich content allowed); `prefix` — leading icon/avatar; `suffix` — trailing content (mutually exclusive with `shortcut`).
-  - **The icon box belongs to the item that has an icon.** An item renders the leading box only when it actually supplies a `prefix`; an icon-less item puts no empty element in the DOM and pays no indent, so a list that mixes iconed and icon-less rows lets each label start at the row inset it earns rather than every label inheriting the widest row's indent. The box is a fixed `size-4` — the same glyph size a `SidebarMenu` row uses — so an oversized icon cannot widen the row and pull its own label out of line with the iconed rows around it.
+  - Slots: `default` — the item label (rich content allowed); `leading` — leading icon/avatar; `trailing` — trailing content (mutually exclusive with `shortcut`).
+  - **The icon box belongs to the item that has an icon.** An item renders the leading box only when it actually supplies a `leading`; an icon-less item puts no empty element in the DOM and pays no indent, so a list that mixes iconed and icon-less rows lets each label start at the row inset it earns rather than every label inheriting the widest row's indent. The box is a fixed `size-4` — the same glyph size a `SidebarMenu` row uses — so an oversized icon cannot widen the row and pull its own label out of line with the iconed rows around it.
 - `command-empty/command-empty.vue` — the no-results state, shown only when the filter produces zero visible items. Fallback copy lives inside the slot.
   - Props: _none_.
   - Events: _none_.
@@ -118,7 +118,7 @@ packages/webkit/src/components/overlay/command/
   - Events: _none_.
   - Slots: _none_.
 - `command-page/command-page.vue` — a nested list the palette swaps in when an item with a matching `page` is activated (or when `v-model:page` is set to its `name`). Renders its content only while it is the current page, inside a `display: contents` wrapper so its groups and items rank like top-level ones; every item, group and separator outside any page belongs to the first page and hides while a nested page is open. Pages are siblings inside the list; opening one pushes onto a single stack, and going back pops it. Registers its `heading` with the root so the input's back control can name it.
-  - Props: `name: string` (required) — the identifier items open with `page="…"`. `heading: string` default `''` — the page title shown in the back control; empty falls back to `name`.
+  - Props: `name: string` (required) — the identifier items open with `page="…"`. `title: string` default `''` — the page title shown in the back control; empty falls back to `name`.
   - Events: _none_.
   - Slots: `default` — the page's `<Command.Group>` / `<Command.Item>` / `<Command.Separator>`.
 
@@ -203,13 +203,13 @@ packages/webkit/src/components/overlay/command/
   >
     <CommandInput placeholder="Search commands…" />
     <CommandList>
-      <CommandGroup heading="Suggestions">
+      <CommandGroup label="Suggestions">
         <CommandItem value="deploy">Deploy Project</CommandItem>
         <CommandItem value="new-app">Create Application</CommandItem>
         <CommandItem value="settings">Go to Settings</CommandItem>
       </CommandGroup>
       <CommandSeparator />
-      <CommandGroup heading="Commands">
+      <CommandGroup label="Commands">
         <CommandItem
           value="search"
           shortcut="meta+k"
@@ -260,9 +260,9 @@ packages/webkit/src/components/overlay/command/
   >
     <CommandInput placeholder="Search commands…" />
     <CommandList>
-      <CommandGroup heading="Actions">
+      <CommandGroup label="Actions">
         <CommandItem value="deploy">
-          <template #prefix
+          <template #leading
             ><i
               class="ai ai-cloud-upload"
               aria-hidden="true"
@@ -272,9 +272,9 @@ packages/webkit/src/components/overlay/command/
         <CommandItem value="new-app">Create Application</CommandItem>
       </CommandGroup>
       <CommandSeparator />
-      <CommandGroup heading="Navigation">
+      <CommandGroup label="Navigation">
         <CommandItem value="settings">
-          <template #prefix
+          <template #leading
             ><i
               class="ai ai-settings"
               aria-hidden="true"
@@ -283,9 +283,9 @@ packages/webkit/src/components/overlay/command/
         </CommandItem>
         <CommandItem value="billing">Go to Billing</CommandItem>
       </CommandGroup>
-      <CommandGroup heading="Account">
+      <CommandGroup label="Account">
         <CommandItem value="profile">
-          <template #prefix
+          <template #leading
             ><i
               class="ai ai-user"
               aria-hidden="true"
@@ -327,7 +327,7 @@ packages/webkit/src/components/overlay/command/
   >
     <CommandInput placeholder="Search commands…" />
     <CommandList>
-      <CommandGroup heading="Actions">
+      <CommandGroup label="Actions">
         <CommandItem
           value="command"
           shortcut="meta+k"

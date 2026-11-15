@@ -12,7 +12,7 @@
  "setup": null,
  "useWhen": [
   "A number attached to another element: a bell with its unread count, a section heading with how many items it holds.",
-  "Color the count through `severity` (neutral / success / danger / …) with a fully filled surface."
+  "Color the count through `variant` (the brand look: `primary`, `secondary`) or `severity` (neutral / info / success / warning / danger) with a fully filled surface; `severity` wins when both are set."
  ],
  "avoidWhen": [
   "A status word (Active, Failed, Deploying) → use `status-indicator`.",
@@ -26,7 +26,7 @@
  ],
  "bestPractices": [
   "Keep the content to a number (`12`, `99+`); words belong in `tag` or `status-indicator`.",
-  "Drive color from `severity`, never a hardcoded color or a raw palette class."
+  "Drive color from `variant` or `severity`, never a hardcoded color or a raw palette class."
  ],
  "props": [
   {
@@ -37,11 +37,18 @@
    "doc": "Fallback text when the default slot is empty."
   },
   {
-   "name": "severity",
-   "type": "'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'neutral'",
+   "name": "variant",
+   "type": "'primary' | 'secondary'",
    "default": "'primary'",
    "required": "false",
-   "doc": "Color style for the badge surface and label; `neutral` uses the `var(--bg-surface)` / `var(--text-default)` surface. The status values come from the shared `Severity` scale (exported from this component)."
+   "doc": "Brand look of the badge surface and label, used when `severity` is not set."
+  },
+  {
+   "name": "severity",
+   "type": "'neutral' | 'info' | 'success' | 'warning' | 'danger'",
+   "default": "—",
+   "required": "false",
+   "doc": "Status colour of the badge surface and label; wins over `variant` when set. `neutral` uses the `var(--bg-surface)` / `var(--text-default)` surface. The values are the shared `Severity` scale (exported from this component)."
   },
   {
    "name": "size",
@@ -64,11 +71,11 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import Badge from '@aziontech/webkit/badge'\n</script>\n\n<template>\n  <Badge\n    label=\"99\"\n    severity=\"primary\"\n    size=\"medium\"\n  />\n</template>"
+   "sfc": "<script setup>\n  import Badge from '@aziontech/webkit/badge'\n</script>\n\n<template>\n  <Badge\n    label=\"99\"\n    variant=\"primary\"\n    size=\"medium\"\n  />\n</template>"
   },
   {
    "name": "Types",
-   "sfc": "<script setup>\n  import Badge from '@aziontech/webkit/badge'\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-center gap-4\">\n    <Badge\n      label=\"99\"\n      severity=\"primary\"\n    />\n    <Badge\n      label=\"99\"\n      severity=\"secondary\"\n    />\n    <Badge\n      label=\"99\"\n      severity=\"success\"\n    />\n    <Badge\n      label=\"99\"\n      severity=\"warning\"\n    />\n    <Badge\n      label=\"99\"\n      severity=\"danger\"\n    />\n    <Badge\n      label=\"99\"\n      severity=\"neutral\"\n    />\n  </div>\n</template>"
+   "sfc": "<script setup>\n  import Badge from '@aziontech/webkit/badge'\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-center gap-4\">\n    <Badge\n      label=\"99\"\n      variant=\"primary\"\n    />\n    <Badge\n      label=\"99\"\n      variant=\"secondary\"\n    />\n    <Badge\n      label=\"99\"\n      severity=\"success\"\n    />\n    <Badge\n      label=\"99\"\n      severity=\"info\"\n    />\n    <Badge\n      label=\"99\"\n      severity=\"warning\"\n    />\n    <Badge\n      label=\"99\"\n      severity=\"danger\"\n    />\n    <Badge\n      label=\"99\"\n      severity=\"neutral\"\n    />\n  </div>\n</template>"
   },
   {
    "name": "Sizes",

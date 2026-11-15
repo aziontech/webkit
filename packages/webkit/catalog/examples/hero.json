@@ -3,7 +3,7 @@
   {
    "name": "Default",
    "summary": "The band spans the window; its copy stays on the page’s measure.",
-   "sfc": "<script setup>\n  import Hero from '@aziontech/webkit/hero'\n</script>\n\n<template>\n  <Hero max-width=\"7xl\">\n    <Hero.Title\n      centered\n      eyebrow=\"Infrastructure\"\n      eyebrow-prefix=\"//\"\n      title=\"A global network built for fast applications\"\n      description=\"Run closer to users with low-latency delivery and stable routing.\"\n    />\n  </Hero>\n</template>"
+   "sfc": "<script setup>\n  import Hero from '@aziontech/webkit/hero'\n</script>\n\n<template>\n  <Hero max-width=\"7xl\">\n    <Hero.Title\n      align=\"center\"\n      eyebrow=\"Infrastructure\"\n      eyebrow-prefix=\"//\"\n      title=\"A global network built for fast applications\"\n      description=\"Run closer to users with low-latency delivery and stable routing.\"\n    />\n  </Hero>\n</template>"
   },
   {
    "name": "Widths",
@@ -13,7 +13,7 @@
   {
    "name": "Screen",
    "summary": "With `kind=\"screen\"` the band measures one viewport, minus whatever `--hero-banner-offset` a sticky bar above it declares.",
-   "sfc": "<script setup>\n  import Hero from '@aziontech/webkit/hero'\n</script>\n\n<template>\n  <Hero\n    kind=\"screen\"\n    max-width=\"site\"\n  >\n    <Hero.Title\n      centered\n      eyebrow=\"Infrastructure\"\n      eyebrow-prefix=\"//\"\n      title=\"A global network built for fast applications\"\n    />\n  </Hero>\n</template>"
+   "sfc": "<script setup>\n  import Hero from '@aziontech/webkit/hero'\n</script>\n\n<template>\n  <Hero\n    kind=\"screen\"\n    max-width=\"site\"\n  >\n    <Hero.Title\n      align=\"center\"\n      eyebrow=\"Infrastructure\"\n      eyebrow-prefix=\"//\"\n      title=\"A global network built for fast applications\"\n    />\n  </Hero>\n</template>"
   }
  ]
 }

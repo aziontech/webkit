@@ -378,7 +378,7 @@ Each variant is the same screen in another state: `get_block("dashboard/home-das
               :delta="metric.delta"
             >
               <template #aside>
-                <Hint :text="metric.hint" />
+                <Hint :content="metric.hint" />
               </template>
             </StatTile>
           </StatTileGroup>
@@ -396,7 +396,7 @@ Each variant is the same screen in another state: `get_block("dashboard/home-das
               :padded="false"
               class="w-full"
             >
-              <template #content>
+              <template #default>
                 <Item
                   href="/agents/setup"
                   class="h-full"
@@ -435,7 +435,7 @@ Each variant is the same screen in another state: `get_block("dashboard/home-das
             </Card>
             <div class="absolute end-(--spacing-xs) top-(--spacing-xs)">
               <Tooltip
-                text="Dismiss"
+                content="Dismiss"
                 placement="top"
               >
                 <IconButton

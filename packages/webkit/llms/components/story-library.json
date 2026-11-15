@@ -24,7 +24,7 @@
  ],
  "bestPractices": [
   "Derive each facet's `options` from the values the items carry, so every option matches at least one story.",
-  "Give every item a `facets` entry per facet `key`; an item without one never matches a selection on that facet.",
+  "Give every item a `facets` entry per facet `id`; an item without one never matches a selection on that facet.",
   "Pass `client.logo` as any image URL or imported asset (`import gpaExtendedReversed from '@aziontech/webkit/assets/gpa-extended-reversed.svg'`); the card fits a mark of any intrinsic size, so do not pre-scale or crop it."
  ],
  "props": [
@@ -47,28 +47,49 @@
    "type": "StoryLibraryItem[]",
    "default": "[]",
    "required": "false",
-   "doc": "The stories, in order; each is `{ key, href, client, category, description, facets?, external? }`; an `external` story opens in a new tab."
+   "doc": "The stories, in order; each is `{ id, href, client, category, description, facets?, target? }`; a story whose `target` is `_blank` opens in a new tab."
   },
   {
    "name": "facets",
    "type": "StoryLibraryFacet[]",
    "default": "[]",
    "required": "false",
-   "doc": "The facet selects, in order; each is `{ key, label, allLabel, options }`."
+   "doc": "The facet selects, in order; each is `{ id, label, allLabel, options }`."
   },
   {
-   "name": "search",
-   "type": "StoryLibrarySearch",
-   "default": "undefined",
+   "name": "searchPlaceholder",
+   "type": "string",
+   "default": "''",
    "required": "false",
-   "doc": "The search field's `placeholder`, optional `shortPlaceholder` (below `lg`) and accessible `label`; the field is omitted when absent."
+   "doc": "Placeholder of the search field; the field is omitted when this and `searchAriaLabel` are both empty."
   },
   {
-   "name": "empty",
-   "type": "StoryLibraryEmpty",
-   "default": "undefined",
+   "name": "searchShortPlaceholder",
+   "type": "string",
+   "default": "''",
    "required": "false",
-   "doc": "The no-match state's `title` and the `action` label of its clear-filters button."
+   "doc": "Shorter placeholder of the search field below `lg`; empty uses `searchPlaceholder`."
+  },
+  {
+   "name": "searchAriaLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Accessible name of the search field."
+  },
+  {
+   "name": "emptyTitle",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Message of the no-match state; the state renders only with it."
+  },
+  {
+   "name": "emptyActionLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Label of the no-match state's button that clears every filter; no button renders without it."
   },
   {
    "name": "linkLabel",
@@ -103,7 +124,7 @@
    "type": "boolean",
    "default": "false",
    "required": "false",
-   "doc": "Seeds each facet on mount from the URL query parameter named by its `key` when the value is one of its options."
+   "doc": "Seeds each facet on mount from the URL query parameter named by its `id` when the value is one of its options."
   },
   {
    "name": "ariaLabel",
@@ -120,15 +141,15 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import StoryLibrary from '@aziontech/webkit/story-library'\n  import axurExtendedReversed from '@aziontech/webkit/assets/axur-extended-reversed.svg'\n  import exameExtendedReversed from '@aziontech/webkit/assets/exame-extended-reversed.svg'\n  import gpaExtendedReversed from '@aziontech/webkit/assets/gpa-extended-reversed.svg'\n</script>\n\n<template>\n  <StoryLibrary\n    anchor=\"cases\"\n    title=\"Companies building with Azion\"\n    aria-label=\"Success stories\"\n    link-label=\"Read story\"\n    more-label=\"Load more\"\n    :items=\"[\n      {\n        key: 'case-gpa',\n        href: '/site/success-cases/gpa',\n        client: { name: 'GPA', logo: gpaExtendedReversed },\n        category: 'Retail',\n        description:\n          'Grupo Pão de Açúcar (GPA) solved a targeted DNS attack, secured 100+ critical applications in 15 days, and reduced costs by 30%.',\n        facets: { industry: ['Retail'], solution: ['Secure'] }\n      },\n      {\n        key: 'case-axur',\n        href: '/site/success-cases/axur',\n        client: { name: 'Axur', logo: axurExtendedReversed },\n        category: 'Tech',\n        description:\n          'See how moving AI inference off managed infrastructure unlocked the fastest automatic takedown in the market.',\n        facets: { industry: ['Tech'], solution: ['Build', 'Secure'] }\n      },\n      {\n        key: 'case-exame',\n        href: '/site/success-cases/exame',\n        client: { name: 'Exame', logo: exameExtendedReversed },\n        category: 'Media',\n        description:\n          'Faster content delivery and resilient infrastructure enabled Exame to handle large traffic spikes during major news events.',\n        facets: { industry: ['Media'], solution: ['Build', 'Deploy'] }\n      }\n    ]\"\n    :facets=\"[\n      {\n        key: 'industry',\n        label: 'Industry',\n        allLabel: 'All industries',\n        options: [\n          { value: 'Media', label: 'Media' },\n          { value: 'Retail', label: 'Retail' },\n          { value: 'Tech', label: 'Tech' }\n        ]\n      },\n      {\n        key: 'solution',\n        label: 'Solution',\n        allLabel: 'All solutions',\n        options: [\n          { value: 'Build', label: 'Build' },\n          { value: 'Deploy', label: 'Deploy' },\n          { value: 'Secure', label: 'Secure' }\n        ]\n      }\n    ]\"\n    :search=\"{ placeholder: 'Search by company or story', label: 'Search success stories' }\"\n    :empty=\"{ title: 'No stories match these filters.', action: 'View all success stories' }\"\n  />\n</template>"
+   "sfc": "<script setup>\n  import axurExtendedReversed from '@aziontech/webkit/assets/axur-extended-reversed.svg'\n  import exameExtendedReversed from '@aziontech/webkit/assets/exame-extended-reversed.svg'\n  import gpaExtendedReversed from '@aziontech/webkit/assets/gpa-extended-reversed.svg'\n  import StoryLibrary from '@aziontech/webkit/story-library'\n</script>\n\n<template>\n  <StoryLibrary\n    anchor=\"cases\"\n    title=\"Companies building with Azion\"\n    aria-label=\"Success stories\"\n    link-label=\"Read story\"\n    more-label=\"Load more\"\n    :items=\"[\n      {\n        id: 'case-gpa',\n        href: '/site/success-cases/gpa',\n        client: { name: 'GPA', logo: gpaExtendedReversed },\n        category: 'Retail',\n        description:\n          'Grupo Pão de Açúcar (GPA) solved a targeted DNS attack, secured 100+ critical applications in 15 days, and reduced costs by 30%.',\n        facets: { industry: ['Retail'], solution: ['Secure'] }\n      },\n      {\n        id: 'case-axur',\n        href: '/site/success-cases/axur',\n        client: { name: 'Axur', logo: axurExtendedReversed },\n        category: 'Tech',\n        description:\n          'See how moving AI inference off managed infrastructure unlocked the fastest automatic takedown in the market.',\n        facets: { industry: ['Tech'], solution: ['Build', 'Secure'] }\n      },\n      {\n        id: 'case-exame',\n        href: '/site/success-cases/exame',\n        client: { name: 'Exame', logo: exameExtendedReversed },\n        category: 'Media',\n        description:\n          'Faster content delivery and resilient infrastructure enabled Exame to handle large traffic spikes during major news events.',\n        facets: { industry: ['Media'], solution: ['Build', 'Deploy'] }\n      }\n    ]\"\n    :facets=\"[\n      {\n        id: 'industry',\n        label: 'Industry',\n        allLabel: 'All industries',\n        options: [\n          { value: 'Media', label: 'Media' },\n          { value: 'Retail', label: 'Retail' },\n          { value: 'Tech', label: 'Tech' }\n        ]\n      },\n      {\n        id: 'solution',\n        label: 'Solution',\n        allLabel: 'All solutions',\n        options: [\n          { value: 'Build', label: 'Build' },\n          { value: 'Deploy', label: 'Deploy' },\n          { value: 'Secure', label: 'Secure' }\n        ]\n      }\n    ]\"\n    search-placeholder=\"Search by company or story\"\n    search-aria-label=\"Search success stories\"\n    empty-title=\"No stories match these filters.\"\n    empty-action-label=\"View all success stories\"\n  />\n</template>"
   },
   {
    "name": "NoResults",
-   "sfc": "<script setup>\n  import StoryLibrary from '@aziontech/webkit/story-library'\n</script>\n\n<template>\n  <StoryLibrary\n    anchor=\"cases\"\n    title=\"Companies building with Azion\"\n    aria-label=\"Success stories\"\n    :items=\"[]\"\n    :facets=\"[\n      {\n        key: 'industry',\n        label: 'Industry',\n        allLabel: 'All industries',\n        options: [\n          { value: 'Media', label: 'Media' },\n          { value: 'Retail', label: 'Retail' },\n          { value: 'Tech', label: 'Tech' }\n        ]\n      },\n      {\n        key: 'solution',\n        label: 'Solution',\n        allLabel: 'All solutions',\n        options: [\n          { value: 'Build', label: 'Build' },\n          { value: 'Deploy', label: 'Deploy' },\n          { value: 'Secure', label: 'Secure' }\n        ]\n      }\n    ]\"\n    :search=\"{ placeholder: 'Search by company or story', label: 'Search success stories' }\"\n    :empty=\"{ title: 'No stories match these filters.', action: 'View all success stories' }\"\n  />\n</template>"
+   "sfc": "<script setup>\n  import StoryLibrary from '@aziontech/webkit/story-library'\n</script>\n\n<template>\n  <StoryLibrary\n    anchor=\"cases\"\n    title=\"Companies building with Azion\"\n    aria-label=\"Success stories\"\n    :items=\"[]\"\n    :facets=\"[\n      {\n        id: 'industry',\n        label: 'Industry',\n        allLabel: 'All industries',\n        options: [\n          { value: 'Media', label: 'Media' },\n          { value: 'Retail', label: 'Retail' },\n          { value: 'Tech', label: 'Tech' }\n        ]\n      },\n      {\n        id: 'solution',\n        label: 'Solution',\n        allLabel: 'All solutions',\n        options: [\n          { value: 'Build', label: 'Build' },\n          { value: 'Deploy', label: 'Deploy' },\n          { value: 'Secure', label: 'Secure' }\n        ]\n      }\n    ]\"\n    search-placeholder=\"Search by company or story\"\n    search-aria-label=\"Search success stories\"\n    empty-title=\"No stories match these filters.\"\n    empty-action-label=\"View all success stories\"\n  />\n</template>"
   },
   {
    "name": "Paged",
-   "sfc": "<script setup>\n  import axurExtendedReversed from '@aziontech/webkit/assets/axur-extended-reversed.svg'\n  import exameExtendedReversed from '@aziontech/webkit/assets/exame-extended-reversed.svg'\n  import gpaExtendedReversed from '@aziontech/webkit/assets/gpa-extended-reversed.svg'\n  import StoryLibrary from '@aziontech/webkit/story-library'\n</script>\n\n<template>\n  <StoryLibrary\n    anchor=\"cases\"\n    title=\"Companies building with Azion\"\n    aria-label=\"Success stories\"\n    link-label=\"Read story\"\n    more-label=\"Load more\"\n    :page-size=\"2\"\n    :items=\"[\n      {\n        key: 'case-gpa',\n        href: '/site/success-cases/gpa',\n        client: { name: 'GPA', logo: gpaExtendedReversed },\n        category: 'Retail',\n        description:\n          'Grupo Pão de Açúcar (GPA) solved a targeted DNS attack, secured 100+ critical applications in 15 days, and reduced costs by 30%.',\n        facets: { industry: ['Retail'], solution: ['Secure'] }\n      },\n      {\n        key: 'case-axur',\n        href: '/site/success-cases/axur',\n        client: { name: 'Axur', logo: axurExtendedReversed },\n        category: 'Tech',\n        description:\n          'See how moving AI inference off managed infrastructure unlocked the fastest automatic takedown in the market.',\n        facets: { industry: ['Tech'], solution: ['Build', 'Secure'] }\n      },\n      {\n        key: 'case-exame',\n        href: '/site/success-cases/exame',\n        client: { name: 'Exame', logo: exameExtendedReversed },\n        category: 'Media',\n        description:\n          'Faster content delivery and resilient infrastructure enabled Exame to handle large traffic spikes during major news events.',\n        facets: { industry: ['Media'], solution: ['Build', 'Deploy'] }\n      }\n    ]\"\n    :facets=\"[\n      {\n        key: 'industry',\n        label: 'Industry',\n        allLabel: 'All industries',\n        options: [\n          { value: 'Media', label: 'Media' },\n          { value: 'Retail', label: 'Retail' },\n          { value: 'Tech', label: 'Tech' }\n        ]\n      },\n      {\n        key: 'solution',\n        label: 'Solution',\n        allLabel: 'All solutions',\n        options: [\n          { value: 'Build', label: 'Build' },\n          { value: 'Deploy', label: 'Deploy' },\n          { value: 'Secure', label: 'Secure' }\n        ]\n      }\n    ]\"\n    :search=\"{\n      placeholder: 'Search by company or story',\n      shortPlaceholder: 'Search stories',\n      label: 'Search success stories'\n    }\"\n    :empty=\"{ title: 'No stories match these filters.', action: 'View all success stories' }\"\n  />\n</template>"
+   "sfc": "<script setup>\n  import axurExtendedReversed from '@aziontech/webkit/assets/axur-extended-reversed.svg'\n  import exameExtendedReversed from '@aziontech/webkit/assets/exame-extended-reversed.svg'\n  import gpaExtendedReversed from '@aziontech/webkit/assets/gpa-extended-reversed.svg'\n  import StoryLibrary from '@aziontech/webkit/story-library'\n</script>\n\n<template>\n  <StoryLibrary\n    anchor=\"cases\"\n    title=\"Companies building with Azion\"\n    aria-label=\"Success stories\"\n    link-label=\"Read story\"\n    more-label=\"Load more\"\n    :page-size=\"2\"\n    :items=\"[\n      {\n        id: 'case-gpa',\n        href: '/site/success-cases/gpa',\n        client: { name: 'GPA', logo: gpaExtendedReversed },\n        category: 'Retail',\n        description:\n          'Grupo Pão de Açúcar (GPA) solved a targeted DNS attack, secured 100+ critical applications in 15 days, and reduced costs by 30%.',\n        facets: { industry: ['Retail'], solution: ['Secure'] }\n      },\n      {\n        id: 'case-axur',\n        href: '/site/success-cases/axur',\n        client: { name: 'Axur', logo: axurExtendedReversed },\n        category: 'Tech',\n        description:\n          'See how moving AI inference off managed infrastructure unlocked the fastest automatic takedown in the market.',\n        facets: { industry: ['Tech'], solution: ['Build', 'Secure'] }\n      },\n      {\n        id: 'case-exame',\n        href: '/site/success-cases/exame',\n        client: { name: 'Exame', logo: exameExtendedReversed },\n        category: 'Media',\n        description:\n          'Faster content delivery and resilient infrastructure enabled Exame to handle large traffic spikes during major news events.',\n        facets: { industry: ['Media'], solution: ['Build', 'Deploy'] }\n      }\n    ]\"\n    :facets=\"[\n      {\n        id: 'industry',\n        label: 'Industry',\n        allLabel: 'All industries',\n        options: [\n          { value: 'Media', label: 'Media' },\n          { value: 'Retail', label: 'Retail' },\n          { value: 'Tech', label: 'Tech' }\n        ]\n      },\n      {\n        id: 'solution',\n        label: 'Solution',\n        allLabel: 'All solutions',\n        options: [\n          { value: 'Build', label: 'Build' },\n          { value: 'Deploy', label: 'Deploy' },\n          { value: 'Secure', label: 'Secure' }\n        ]\n      }\n    ]\"\n    search-placeholder=\"Search by company or story\"\n    search-short-placeholder=\"Search stories\"\n    search-aria-label=\"Search success stories\"\n    empty-title=\"No stories match these filters.\"\n    empty-action-label=\"View all success stories\"\n  />\n</template>"
   }
  ],
  "docs": "components/story-library.md"

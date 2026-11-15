@@ -62,7 +62,7 @@
 ## States
 
 - Visual states: `default`, `hover` (row), `focus-visible` (row), `selected` (row and details band), `collapsed` / `expanded` (parent rows), `searching` (rows narrowed, every match's ancestors shown), `loading` (placeholder rows in a `role="status"` region, `aria-busy` on the root, search disabled, no details), `empty` (the package `EmptyState`, small: no spans, or no match with a Clear search action).
-- Bar tones on `data-tone`: `root` (info), `ok` (success), `error` (danger), `running` (warning).
+- Bar colour on `data-status` (`success`, `error`, `running`) plus `data-root` on a successful root span: root (info), `success`, `error` (danger), `running` (warning).
 - `data-selected` on the selected row; `aria-expanded` on parent rows; `data-bordered` and `data-loading` on the root mirror their props.
 - `zoomed` (a window narrower than the run): the axis, the bars and the event markers are placed against the window; a bar outside it is hidden (`data-outside`) while its row stays; the minimap shows the window and Reset zoom.
 - `data-slowest` on the slowest span's row (with `highlightSlowest`).
@@ -76,7 +76,7 @@
 - Event markers are decorative; a row with events is named with their count, and the details list each event with its time. The slowest flag is named in the row (`Slowest`) and shown as a Tag in the details.
 - Rows are 36 px high (44 px on `pointer: coarse`).
 - Colour is never the only signal: a failed span also carries an icon in the row and a Failed tag in the details.
-- Contrast ≥4.5:1 from the semantic text tokens; duration labels use the `-contrast` tokens of their tone.
+- Contrast ≥4.5:1 from the semantic text tokens; duration labels use the `-foreground` tokens of their status.
 
 ## Right-to-left
 

@@ -223,7 +223,7 @@
 <template>
   <div class="relative w-full max-w-(--container-md)">
     <Card title="Project files">
-      <template #content>
+      <template #default>
         <div class="flex min-h-48 flex-col gap-(--spacing-xs)">
           <p class="text-body-sm text-(--text-muted)">
             Drag a file from your computer over this window. The drop target covers this card until

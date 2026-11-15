@@ -631,7 +631,7 @@ Each variant is the same screen in another state: `get_block("create/create-wiza
             :description="'Off on ' + choice + '.'"
           >
             <Card :padded="false">
-              <template #content>
+              <template #default>
                 <div class="flex flex-col gap-(--spacing-md) p-(--spacing-md)">
                   <Alert
                     severity="warning"
@@ -676,7 +676,7 @@ Each variant is the same screen in another state: `get_block("create/create-wiza
             >
               <div class="flex min-w-0 flex-col gap-(--spacing-lg)">
                 <Card :padded="false">
-                  <template #content>
+                  <template #default>
                     <Item.List>
                       <SettingRow
                         title="Name"
@@ -717,7 +717,7 @@ Each variant is the same screen in another state: `get_block("create/create-wiza
             >
               <div class="flex min-w-0 flex-col gap-(--spacing-lg)">
                 <Card :padded="false">
-                  <template #content>
+                  <template #default>
                     <Item.List>
                       <SettingRow
                         title="Type"
@@ -831,7 +831,7 @@ Each variant is the same screen in another state: `get_block("create/create-wiza
                   </template>
                 </SectionHeader>
                 <Card :padded="false">
-                  <template #content>
+                  <template #default>
                     <Item.List>
                       <Item>
                         <Item.Content>
@@ -906,7 +906,7 @@ Each variant is the same screen in another state: `get_block("create/create-wiza
                   size="small"
                 />
                 <Card :padded="false">
-                  <template #content>
+                  <template #default>
                     <Item.List>
                       <Item
                         v-for="row in consumers"

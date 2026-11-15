@@ -55,7 +55,7 @@
 | `validate` | `(text: string) => string` | `undefined` | false | Checks the query string in query mode: '' when valid, else the message shown under the field. Replaces the built-in check. |
 | `suggest` | `(text: string, caret: number) => PropertyFilterQuerySuggestion[]` | `undefined` | false | Suggestions for the word at the caret in query mode. Replaces the built-in field, operator, value and AND / OR suggestions. |
 | `grouped` | `boolean` | `false` | false | Tokens mode: tokens go into groups with their own Match all / Match any; Add group starts the next one. |
-| `hideOperations` | `boolean` | `false` | false | Hides the Match all / Match any toggle, so the tokens always combine with AND (a model that holds only AND conditions, such as a table's filters). |
+| `showOperations` | `boolean` | `true` | false | Shows the Match all / Match any toggle; false keeps the tokens combined with AND (a model that holds only AND conditions, such as a table's filters). |
 | `loadValues` | `(property: FilteringProperty, text: string) => Promise<PropertyFilterOption[]>` | `undefined` | false | Fetches the values of a property for the typed text, after the operator. Replaces its `options` in the suggestions. |
 | `query` | `PropertyFilterQuery` | `—` | false | Two-way value (`v-model:query`). |
 | `text` | `string` | `''` | false | Two-way value (`v-model:text`). |
@@ -218,10 +218,10 @@
   ]
 
   const columns = [
-    { accessorKey: 'name', header: 'Name', enableSorting: true },
-    { accessorKey: 'status', header: 'Status', enableSorting: true },
+    { accessorKey: 'name', header: 'Name', sortable: true },
+    { accessorKey: 'status', header: 'Status', sortable: true },
     { accessorKey: 'region', header: 'Region' },
-    { accessorKey: 'requests', header: 'Requests', enableSorting: true, align: 'end' }
+    { accessorKey: 'requests', header: 'Requests', sortable: true, align: 'end' }
   ]
 
   const { propertyFilterProps, tableProps } = useCollection({

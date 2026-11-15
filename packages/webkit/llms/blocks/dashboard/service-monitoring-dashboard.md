@@ -657,7 +657,7 @@ Each variant is the same screen in another state: `get_block("dashboard/service-
             <ChartCard.Header>
               <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
                 <ChartCard.Title>Latency</ChartCard.Title>
-                <Hint text="Time to the first byte, by percentile, across every service." />
+                <Hint content="Time to the first byte, by percentile, across every service." />
               </span>
             </ChartCard.Header>
             <ChartCard.Content>
@@ -684,7 +684,9 @@ Each variant is the same screen in another state: `get_block("dashboard/service-
             <ChartCard.Header>
               <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
                 <ChartCard.Title>Error rate</ChartCard.Title>
-                <Hint text="Share of responses with a 4xx or 5xx status, across every service." />
+                <Hint
+                  content="Share of responses with a 4xx or 5xx status, across every service."
+                />
               </span>
             </ChartCard.Header>
             <ChartCard.Content>

@@ -565,7 +565,7 @@ Each variant is the same screen in another state: `get_block("view/marketplace",
                   :installed="item.status === 'installed'"
                   @select="openDetail(item.id)"
                 >
-                  <template #action>
+                  <template #actions>
                     <Button
                       :label="item.status === 'installed' ? 'Configure' : 'Install'"
                       :aria-label="`${item.status === 'installed' ? 'Configure' : 'Install'} ${item.name}`"
@@ -585,7 +585,7 @@ Each variant is the same screen in another state: `get_block("view/marketplace",
     <Drawer
       v-model:open="detailOpen"
       size="large"
-      side="right"
+      side="end"
     >
       <DrawerContent>
         <form

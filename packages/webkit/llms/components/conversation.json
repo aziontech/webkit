@@ -8,7 +8,7 @@
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],
- "purpose": "The scrolling message log of a generative AI chat. It holds the thread (`ChatMessage` items, then whatever follows the last response: suggestions, an approval card), keeps the newest message in view while the reader is at the end, and stops following the moment they scroll up to read or copy an older message — a \"Scroll to the latest message\" button brings them back. It is a `role=\"log\"` whose own live behavior is off, so streamed tokens are never read one by one; instead each `ChatMessage` that finishes (or fails) hands its text to the conversation's polite live region, once. It also sets where messages sit for the whole thread (`alignment`): `split` for a full chat page, `start` for a dense side panel or drawer (Cloudscape's rule for embedded surfaces).",
+ "purpose": "The scrolling message log of a generative AI chat. It holds the thread (`ChatMessage` items, then whatever follows the last response: suggestions, an approval card), keeps the newest message in view while the reader is at the end, and stops following the moment they scroll up to read or copy an older message — a \"Scroll to the latest message\" button brings them back. It is a `role=\"log\"` whose own live behavior is off, so streamed tokens are never read one by one; instead each `ChatMessage` that finishes (or fails) hands its text to the conversation's polite live region, once. It also sets where messages sit for the whole thread (`layout`): `split` for a full chat page, `start` for a dense side panel or drawer (Cloudscape's rule for embedded surfaces).",
  "setup": null,
  "useWhen": [
   "Any surface where a person and the generative AI assistant exchange messages: the assistant page, the assistant drawer, an in-flow helper.",
@@ -29,7 +29,7 @@
  "bestPractices": [
   "Pin the prompt input under the conversation; only the log scrolls.",
   "Never auto-scroll while the reader is reading an older message: the component already stops following when they scroll up.",
-  "Use `alignment=\"start\"` in drawers and side panels, `split` on a full page.",
+  "Use `layout=\"start\"` in drawers and side panels, `split` on a full page.",
   "Keep one conversation per surface; a second thread is a second page or a history list."
  ],
  "props": [
@@ -41,7 +41,7 @@
    "doc": "Accessible name of the message log. Empty uses the locale catalog (`Conversation`)."
   },
   {
-   "name": "alignment",
+   "name": "layout",
    "type": "'split' | 'start'",
    "default": "'split'",
    "required": "false",
@@ -65,7 +65,7 @@
   },
   {
    "name": "StartAlignment",
-   "sfc": "<script setup>\n  import ChatMessageRoot from '@aziontech/webkit/chat-message-root'\n  import Conversation from '@aziontech/webkit/conversation'\n  import StreamingResponse from '@aziontech/webkit/streaming-response'\n  import SuggestionGroup from '@aziontech/webkit/suggestion-group'\n\n  const followUps = [\n    { id: 'wildcard', label: 'How do I purge a whole folder?' },\n    { id: 'ttl', label: 'What TTL should my images use?' }\n  ]\n</script>\n\n<template>\n  <div\n    class=\"flex h-[28rem] w-full max-w-(--container-xs) flex-col rounded-(--shape-card) border border-(--border-default)\"\n  >\n    <Conversation alignment=\"start\">\n      <ChatMessageRoot\n        from=\"user\"\n        timestamp=\"10:41\"\n      >\n        How do I purge the cache of one URL?\n      </ChatMessageRoot>\n      <ChatMessageRoot timestamp=\"10:41\">\n        <StreamingResponse\n          content=\"Open **Real-Time Purge**, choose *URL* as the purge type and paste the address.\"\n        />\n      </ChatMessageRoot>\n      <ChatMessageRoot\n        from=\"user\"\n        timestamp=\"10:43\"\n      >\n        Can I do it from the CLI?\n      </ChatMessageRoot>\n      <ChatMessageRoot timestamp=\"10:43\">\n        <StreamingResponse\n          :content=\"'Yes:\\n\\n```bash\\nazion purge urls --urls https://www.example.com/styles.css\\n```'\"\n        />\n      </ChatMessageRoot>\n      <SuggestionGroup\n        :items=\"followUps\"\n        aria-label=\"Follow-up questions\"\n      />\n    </Conversation>\n  </div>\n</template>"
+   "sfc": "<script setup>\n  import ChatMessageRoot from '@aziontech/webkit/chat-message-root'\n  import Conversation from '@aziontech/webkit/conversation'\n  import StreamingResponse from '@aziontech/webkit/streaming-response'\n  import SuggestionGroup from '@aziontech/webkit/suggestion-group'\n\n  const followUps = [\n    { id: 'wildcard', label: 'How do I purge a whole folder?' },\n    { id: 'ttl', label: 'What TTL should my images use?' }\n  ]\n</script>\n\n<template>\n  <div\n    class=\"flex h-[28rem] w-full max-w-(--container-xs) flex-col rounded-(--shape-card) border border-(--border-default)\"\n  >\n    <Conversation layout=\"start\">\n      <ChatMessageRoot\n        from=\"user\"\n        timestamp=\"10:41\"\n      >\n        How do I purge the cache of one URL?\n      </ChatMessageRoot>\n      <ChatMessageRoot timestamp=\"10:41\">\n        <StreamingResponse\n          content=\"Open **Real-Time Purge**, choose *URL* as the purge type and paste the address.\"\n        />\n      </ChatMessageRoot>\n      <ChatMessageRoot\n        from=\"user\"\n        timestamp=\"10:43\"\n      >\n        Can I do it from the CLI?\n      </ChatMessageRoot>\n      <ChatMessageRoot timestamp=\"10:43\">\n        <StreamingResponse\n          :content=\"'Yes:\\n\\n```bash\\nazion purge urls --urls https://www.example.com/styles.css\\n```'\"\n        />\n      </ChatMessageRoot>\n      <SuggestionGroup\n        :items=\"followUps\"\n        aria-label=\"Follow-up questions\"\n      />\n    </Conversation>\n  </div>\n</template>"
   },
   {
    "name": "LongThread",

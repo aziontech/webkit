@@ -50,7 +50,7 @@
 | `defaultValue` | `string` | `undefined` | false | Initial active tab when uncontrolled. |
 | `code` | `string` | `''` | false | Code of a single snippet, used when `tabs` is empty. |
 | `language` | `string` | `''` | false | Language of the single `code` snippet (highlighting and the label header). |
-| `lineNumbers` | `boolean` | `true` | false | Shows a fixed-width gutter with zero-padded line numbers before each code line (the same name as `code-editor`). |
+| `showLineNumbers` | `boolean` | `true` | false | Shows a fixed-width gutter with zero-padded line numbers before each code line (the same name as `code-editor`). |
 | `copyAriaLabel` | `string` | `''` | false | Accessible name for the copy control (forwarded to CopyButton's aria-label). Empty uses the locale catalog (`Copy code`). |
 | `copyable` | `boolean` | `undefined` | false | Shows the copy control. Unset, a `code` block shows it and an `output` block does not; turn it off for a decorative block nobody copies from. |
 | `kind` | `'code' \| 'output'` | `'code'` | false | What the block holds: `code` the reader runs or reads, or `output` — what a command prints — drawn flat and muted under an "Output" label, without a copy control. |
@@ -177,7 +177,7 @@ Code content scrolls inside `@aziontech/webkit/scroll-area` (`orientation="both"
     <CodeBlock
       :tabs="tabs"
       default-value="js"
-      line-numbers
+      show-line-numbers
     />
   </div>
 </template>
@@ -212,7 +212,7 @@ Code content scrolls inside `@aziontech/webkit/scroll-area` (`orientation="both"
     <CodeBlock
       :tabs="tabs"
       default-value="js"
-      :line-numbers="false"
+      :show-line-numbers="false"
     />
   </div>
 </template>
@@ -247,7 +247,7 @@ Code content scrolls inside `@aziontech/webkit/scroll-area` (`orientation="both"
     <CodeBlock
       :tabs="tabs"
       default-value="js"
-      line-numbers
+      show-line-numbers
       :copyable="false"
     />
   </div>

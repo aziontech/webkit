@@ -1,6 +1,6 @@
 # Phone Input
 
-> International phone-number control: an `InputGroup` with a searchable dial-code `Select` on the left and a `type="tel"` input on the right that applies the selected country's mask as the user types and accepts exactly the lengths that country allows. Two v-models (`v-model` for the national digits, `v-model:country` for the ISO 3166-1 alpha-2 code) carry the editable state; the one-way `update:phone` event hands the form the full E.164 number and whether it is complete. It carries no label or helper text: wrap it in a `Field` (`Field.Label` + `PhoneInput` + `Field.Description`), and it picks up `id`, `aria-describedby`, `invalid`, `disabled` and `required` from the Field.
+> International phone-number control: an `InputGroup` with a searchable dial-code `Select` on the left and a `type="tel"` input on the right that applies the selected country's mask as the user types and accepts exactly the lengths that country allows. Two v-models (`v-model` for the national digits, `v-model:country` for the ISO 3166-1 alpha-2 code) carry the editable state; the one-way `phone-change` event hands the form the full E.164 number and whether it is complete. It carries no label or helper text: wrap it in a `Field` (`Field.Label` + `PhoneInput` + `Field.Description`), and it picks up `id`, `aria-describedby`, `invalid`, `disabled` and `required` from the Field.
 
 - Import: `import PhoneInput from '@aziontech/webkit/phone-input'`
 - Category: inputs · Surface: app · Structure: monolithic
@@ -14,8 +14,8 @@
 ## Do
 
 - Put it in a `Field` with a `Field.Label`; the label targets the tel input.
-- v-model` holds the national digits only; read `number` from the `update:phone` payload when you need the E.164 value.
-- Use `complete` from `update:phone` to decide `invalid` and the `Field.Error` on submit; the control shows no incomplete-number message of its own.
+- v-model` holds the national digits only; read `number` from the `phone-change` payload when you need the E.164 value.
+- Use `complete` from `phone-change` to decide `invalid` and the `Field.Error` on submit; the control shows no incomplete-number message of its own.
 - v-model:country` defaults to `'US'`; seed it with the user's country when you know it.
 - searchPlaceholder` and `searchEmptyLabel` default to English; pass translated copy in localized UIs.
 
@@ -52,7 +52,7 @@
 
 | Event | Payload | Notes |
 | --- | --- | --- |
-| `update:phone` | `[value: PhoneNumber]` | One-way snapshot of the number, emitted once on mount and again whenever the digits or the country change. `PhoneNumber` (exported from the component) is `{ country: string; dialCode: string; digits: string; number: string; complete: boolean }`: `number` is the full E.164 number (`dialCode + digits`, e.g. `'+14155550100'`; `''` while empty) and `complete` is true when the digit count is one the selected country allows. Not a v-model — the field never reads it back. |
+| `phone-change` | `[value: PhoneNumber]` | One-way snapshot of the number, emitted once on mount and again whenever the digits or the country change. `PhoneNumber` (exported from the component) is `{ country: string; dialCode: string; digits: string; number: string; complete: boolean }`: `number` is the full E.164 number (`dialCode + digits`, e.g. `'+14155550100'`; `''` while empty) and `complete` is true when the digit count is one the selected country allows. Not a v-model — the field never reads it back. |
 
 ## v-model
 
@@ -66,7 +66,7 @@
 - Visual states delegated to `InputGroup`: `default`, `hover`, `focus-within`, `invalid`, `required`, `disabled`.
 - `invalid`, `disabled` and `required` combine the prop with the enclosing `Field`.
 - The dial-code `Select` is disabled whenever the control is `disabled` **or** `readonly`.
-- Completeness is reported through `update:phone`, never rendered.
+- Completeness is reported through `phone-change`, never rendered.
 - The flag sprite (`country-flags.png`, about 80 KB) loads with a dynamic `import()` the first time the dial-code list opens; until it arrives each option keeps its flag box blank. The closed field never fetches it.
 
 ## Accessibility
@@ -103,7 +103,7 @@
       v-model="digits"
       v-model:country="country"
       name="phone"
-      @update:phone="phone = $event"
+      @phone-change="phone = $event"
     />
     <Field.Description>We'll use this to send the verification code.</Field.Description>
   </Field>

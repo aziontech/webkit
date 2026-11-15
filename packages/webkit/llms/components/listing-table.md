@@ -34,7 +34,7 @@
 | `anchor` | `string` | `''` | false | In-page id set on the band so a `#hash` link can scroll to it. |
 | `title` | `string` | `''` | false | Headline of the band, rendered by the left-aligned section title as its `h2`; the band renders no header when empty. |
 | `columns` | `ListingTableColumn[]` | `[]` | false | The columns left to right; each is `{ key, label, grow?, align? }` where `key` picks the row value, `grow` is the flex weight (1, 2 or 3) and `align` is `start` or `end`. The first column names the row and the second describes it on phones. |
-| `rows` | `ListingTableRow[]` | `[]` | false | The linked rows, in order; each is `{ href, values }` where `values` maps a column key to its text. |
+| `data` | `ListingTableRow[]` | `[]` | false | The linked rows, in order; each is `{ href, values }` where `values` maps a column key to its text. |
 | `primaryAction` | `ListingTableAction` | `undefined` | false | Outlined button into the full listing, in the table footer; `{ label, href, trailing? }` where `trailing` adds the chevron. Omitted when absent. |
 
 ## States
@@ -42,7 +42,7 @@
 - Visual states: `default`, `hover` (row fill `var(--bg-hover)` in both the table and the list)
 - Whole-row navigation: a click on a row outside its link is forwarded to the link, keeping `ctrl`/`meta`/`shift`/`alt`; a click that ends a text selection is not forwarded
 - Metadata cells (every column after the first) render `text-overline-sm`, truncated to one line, with their full value as `title`
-- Empty: when `rows` or `columns` is empty the band renders nothing — not the header, not the frame
+- Empty: when `data` or `columns` is empty the band renders nothing — not the header, not the frame
 - The header renders only when `title` is set; the footer button only when `primaryAction` is set
 - Below `sm` the table is hidden and the rows render as an item list
 
@@ -91,7 +91,7 @@
       { key: 'team', label: 'Team and location', grow: 2 },
       { key: 'type', label: 'Work type', align: 'end' }
     ]"
-    :rows="[
+    :data="[
       {
         href: '/careers/senior-platform-engineer',
         values: {

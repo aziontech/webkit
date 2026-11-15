@@ -52,7 +52,7 @@ A small `EmptyState` titled with the resource ("Ask about storefront") and three
 
 ### F. Message log — `Conversation`
 
-`alignment="start"`: every message at the inline start, distinguished by avatar and author line, as Cloudscape asks for dense side panels. It is the only part of the drawer that scrolls.
+`layout="start"`: every message at the inline start, distinguished by avatar and author line, as Cloudscape asks for dense side panels. It is the only part of the drawer that scrolls.
 
 ### G. Messages — `ChatMessage`, `Reasoning`, `StreamingResponse`, `Sources`, `CopyButton`
 
@@ -71,7 +71,7 @@ At the foot of the drawer above a divider: four rows at most, a placeholder that
 - Write support prompts and the placeholder about the resource on screen.
 - Keep the page visible and unchanged while the drawer is open.
 - Keep the conversation when the drawer closes and reopens during the visit.
-- Use `alignment="start"` for every message in the drawer.
+- Use `layout="start"` for every message in the drawer.
 
 ## Don't
 
@@ -128,7 +128,7 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat-drawer"
   import Card from '@aziontech/webkit/card'
   import ChatMessage, {
     type ChatMessageFeedbackValue,
-    type ChatMessageState
+    type ChatMessageStatus
   } from '@aziontech/webkit/chat-message'
   import Conversation from '@aziontech/webkit/conversation'
   import CopyButton from '@aziontech/webkit/copy-button'
@@ -140,7 +140,7 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat-drawer"
   import KeyValuePairs from '@aziontech/webkit/key-value-pairs'
   import PageHeader from '@aziontech/webkit/page-header'
   import PanelHeader from '@aziontech/webkit/panel-header'
-  import PromptInput, { type PromptInputState } from '@aziontech/webkit/prompt-input'
+  import PromptInput, { type PromptInputStatus } from '@aziontech/webkit/prompt-input'
   import Reasoning from '@aziontech/webkit/reasoning'
   import Sources, { type AiSource } from '@aziontech/webkit/sources'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
@@ -168,7 +168,7 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat-drawer"
   interface AssistantTurn {
     id: number
     from: 'assistant'
-    state: ChatMessageState
+    status: ChatMessageStatus
     content: string
     thinking: boolean
     answer: Answer
@@ -191,7 +191,7 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat-drawer"
   ]
 
   const turns = ref<Turn[]>([])
-  const state = ref<PromptInputState>('ready')
+  const state = ref<PromptInputStatus>('ready')
   const prompt = ref('')
   const composerEl = ref<InstanceType<typeof PromptInput> | null>(null)
   const assistantOpen = ref(true)
@@ -278,7 +278,7 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat-drawer"
 
   function stream(turn: AssistantTurn) {
     const full = turn.answer.content
-    turn.state = 'streaming'
+    turn.status = 'streaming'
     state.value = 'streaming'
     let index = turn.content.length
     timer = setInterval(() => {
@@ -290,17 +290,17 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat-drawer"
 
   function finish(turn: AssistantTurn) {
     stopTimers()
-    turn.state = 'complete'
+    turn.status = 'success'
     turn.thinking = false
     state.value = 'ready'
     composerEl.value?.focus()
   }
 
   function respond(turn: AssistantTurn) {
-    turn.state = 'pending'
+    turn.status = 'pending'
     turn.thinking = true
     turn.content = ''
-    state.value = 'submitted'
+    state.value = 'pending'
     timer = setTimeout(() => {
       turn.thinking = false
       stream(turn)
@@ -314,7 +314,7 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat-drawer"
     const turn = reactive<AssistantTurn>({
       id: nextId++,
       from: 'assistant',
-      state: 'pending',
+      status: 'pending',
       content: '',
       thinking: true,
       answer: answerFor(text),
@@ -329,7 +329,7 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat-drawer"
     stopTimers()
     const turn = turns.value[turns.value.length - 1]
     if (turn?.from === 'assistant') {
-      turn.state = 'complete'
+      turn.status = 'success'
       turn.thinking = false
       turn.stopped = true
     }
@@ -351,7 +351,7 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat-drawer"
 
   const lastAnswer = computed(() => {
     const turn = turns.value[turns.value.length - 1]
-    return turn?.from === 'assistant' && turn.state === 'complete' && !turn.stopped ? turn : null
+    return turn?.from === 'assistant' && turn.status === 'success' && !turn.stopped ? turn : null
   })
 
   onBeforeUnmount(stopTimers)
@@ -377,7 +377,7 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat-drawer"
           </template>
         </PageHeader>
         <Card>
-          <template #content>
+          <template #default>
             <div class="p-(--spacing-md)">
               <KeyValuePairs
                 :columns="3"
@@ -405,7 +405,7 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat-drawer"
 
     <Drawer
       v-model:open="assistantOpen"
-      side="right"
+      side="end"
       size="medium"
       :modal="false"
     >
@@ -450,14 +450,14 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat-drawer"
             </div>
             <Conversation
               v-else
-              alignment="start"
+              layout="start"
               aria-label="Conversation with the AI assistant"
             >
               <ChatMessage
                 v-for="turn in turns"
                 :key="turn.id"
                 :from="turn.from"
-                :state="turn.from === 'user' ? 'complete' : turn.state"
+                :status="turn.from === 'user' ? 'success' : turn.status"
                 :timestamp="turn.time"
                 :error-message="turn.error"
                 @retry="retry(turn)"
@@ -472,7 +472,7 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat-drawer"
                   </Reasoning>
                   <StreamingResponse
                     :content="turn.content"
-                    :streaming="turn.state === 'streaming'"
+                    :streaming="turn.status === 'streaming'"
                     :sources="turn.answer.sources"
                     :anchor="`answer-${turn.id}`"
                   />
@@ -483,7 +483,7 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat-drawer"
                     You stopped this response.
                   </p>
                   <Sources
-                    v-if="turn.state === 'complete' && !turn.stopped"
+                    v-if="turn.status === 'success' && !turn.stopped"
                     :items="turn.answer.sources"
                     :anchor="`answer-${turn.id}`"
                   />
@@ -525,7 +525,7 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat-drawer"
             <PromptInput
               ref="composerEl"
               v-model="prompt"
-              :state="state"
+              :status="state"
               :max-rows="4"
               placeholder="Ask about storefront"
               @submit="(_event, { value }) => send(value)"

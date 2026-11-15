@@ -255,12 +255,12 @@ Each variant is the same screen in another state: `get_block("account/personal-t
   )
 
   const columns: TableColumn[] = [
-    { accessorKey: 'name', header: 'Name', enableSorting: true, principal: true, hideable: false },
+    { accessorKey: 'name', header: 'Name', sortable: true, principal: true, hideable: false },
     { accessorKey: 'description', header: 'Description', grow: 2, minWidth: 200 },
-    { accessorKey: 'status', header: 'Status', enableSorting: true, minWidth: 160 },
+    { accessorKey: 'status', header: 'Status', sortable: true, minWidth: 160 },
     { accessorKey: 'expires', header: 'Expires', minWidth: 130 },
     { accessorKey: 'lastUsedAt', header: 'Last used', minWidth: 140 },
-    { accessorKey: 'createdAt', header: 'Created', enableSorting: true, minWidth: 160 },
+    { accessorKey: 'createdAt', header: 'Created', sortable: true, minWidth: 160 },
     { id: 'actions', kind: 'action', hideable: false }
   ]
 
@@ -459,7 +459,7 @@ Each variant is the same screen in another state: `get_block("account/personal-t
           </div>
           <div class="flex shrink-0 flex-wrap items-center gap-(--spacing-xs)">
             <Tooltip
-              text="Refresh"
+              content="Refresh"
               class="shrink-0"
             >
               <IconButton
@@ -472,7 +472,7 @@ Each variant is the same screen in another state: `get_block("account/personal-t
               />
             </Tooltip>
             <Tooltip
-              text="Download CSV"
+              content="Download CSV"
               class="shrink-0"
             >
               <IconButton
@@ -496,7 +496,7 @@ Each variant is the same screen in another state: `get_block("account/personal-t
           severity="danger"
         >
           The tokens could not be loaded. Nothing was changed; try again.
-          <template #action>
+          <template #actions>
             <Button
               label="Retry"
               kind="secondary"
@@ -511,7 +511,7 @@ Each variant is the same screen in another state: `get_block("account/personal-t
           v-else-if="!loading && status === 'empty'"
           :padded="false"
         >
-          <template #content>
+          <template #default>
             <EmptyState
               size="medium"
               icon="ai ai-key"
@@ -536,12 +536,12 @@ Each variant is the same screen in another state: `get_block("account/personal-t
           v-else
           :padded="false"
         >
-          <template #content>
+          <template #default>
             <DataTable
               ref="tokensTableEl"
               v-bind="tableProps"
               :loading="loading || refreshing"
-              enable-sorting
+              sortable
               :bordered="false"
               aria-label="Personal tokens"
             >
@@ -637,7 +637,7 @@ Each variant is the same screen in another state: `get_block("account/personal-t
     <Drawer
       v-model:open="createOpen"
       size="large"
-      side="right"
+      side="end"
     >
       <DrawerContent>
         <form

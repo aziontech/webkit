@@ -44,7 +44,7 @@
 | `closable` | `boolean` | `true` | false | Shows the close (X) button at the end of the drawer header. False removes it; Escape and overlay click still follow `dismissible`. |
 | `dismissible` | `boolean` | `true` | false | Light-dismiss: when true, overlay click and Escape close the drawer. It does not govern the close button; see `closable`. |
 | `modal` | `boolean` | `true` | false | Renders the overlay, traps focus and locks page scroll. False leaves the page beside the drawer usable: no overlay, no focus trap, no scroll lock, `aria-modal` false; Escape, the close button and focus restore still work. |
-| `side` | `DrawerSide` | `'right'` | false | Edge the drawer panel slides from. |
+| `side` | `DrawerSide` | `'end'` | false | Edge the drawer panel slides from, in reading direction (`start` or `end`). |
 | `size` | `DrawerSize` | `'medium'` | false | Panel max-width preset (`small` `--container-sm`, `medium` `--container-xl`, `large` `--container-4xl`). Height is always 100% viewport. |
 | `open` | `boolean` | `undefined as never` | false | Two-way value (`v-model:open`). |
 
@@ -115,7 +115,7 @@
   <Drawer
     v-model:open="open"
     dismissible
-    side="right"
+    side="end"
     size="large"
   >
     <Drawer.Trigger>
@@ -195,7 +195,7 @@
       :size="size"
       v-model:open="openBySize[size]"
       dismissible
-      side="right"
+      side="end"
     >
       <DrawerTrigger>
         <Button
@@ -257,7 +257,7 @@
   <Drawer
     v-model:open="open"
     dismissible
-    side="right"
+    side="end"
     size="large"
   >
     <DrawerTrigger>

@@ -234,11 +234,11 @@ Each variant is the same screen in another state: `get_block("edit/variables", {
   }
 
   const columns: TableColumn[] = [
-    { accessorKey: 'key', header: 'Key', enableSorting: true, principal: true, hideable: false },
+    { accessorKey: 'key', header: 'Key', sortable: true, principal: true, hideable: false },
     { accessorKey: 'id', header: 'ID', minWidth: 80 },
     { accessorKey: 'value', header: 'Value', grow: 2 },
     { accessorKey: 'scope', header: 'Scope', minWidth: 80 },
-    { accessorKey: 'lastModified', header: 'Last modified', enableSorting: true, minWidth: 80 },
+    { accessorKey: 'lastModified', header: 'Last modified', sortable: true, minWidth: 80 },
     { id: 'actions', kind: 'action', hideable: false }
   ]
   const seed: VariableSeed[] = [
@@ -833,7 +833,7 @@ Each variant is the same screen in another state: `get_block("edit/variables", {
           </div>
           <div class="flex shrink-0 items-center gap-(--spacing-xs)">
             <Tooltip
-              text="Refresh"
+              content="Refresh"
               class="shrink-0"
             >
               <IconButton
@@ -846,7 +846,7 @@ Each variant is the same screen in another state: `get_block("edit/variables", {
               />
             </Tooltip>
             <Tooltip
-              text="Download CSV"
+              content="Download CSV"
               class="shrink-0"
             >
               <IconButton
@@ -871,7 +871,7 @@ Each variant is the same screen in another state: `get_block("edit/variables", {
             key="first-use"
             :padded="false"
           >
-            <template #content>
+            <template #default>
               <EmptyState
                 size="medium"
                 icon="ai ai-key"
@@ -905,12 +905,12 @@ Each variant is the same screen in another state: `get_block("edit/variables", {
             key="table"
             :padded="false"
           >
-            <template #content>
+            <template #default>
               <DataTable
                 ref="tableEl"
                 v-bind="tableProps"
                 :loading="loading || fetching"
-                enable-sorting
+                sortable
                 :bordered="false"
               >
                 <template #cell-key="{ value }">
@@ -945,7 +945,7 @@ Each variant is the same screen in another state: `get_block("edit/variables", {
                   >
                     <Tooltip
                       v-if="row.lastEditor"
-                      :text="row.lastEditor"
+                      :content="row.lastEditor"
                     >
                       <Avatar
                         :src="row.lastEditorAvatar || undefined"
@@ -1049,7 +1049,7 @@ Each variant is the same screen in another state: `get_block("edit/variables", {
     <Drawer
       v-model:open="drawerOpen"
       size="large"
-      side="right"
+      side="end"
     >
       <DrawerContent>
         <form
@@ -1160,7 +1160,7 @@ Each variant is the same screen in another state: `get_block("edit/variables", {
                               />
                               <Tooltip
                                 v-if="removable"
-                                text="Remove variable"
+                                content="Remove variable"
                               >
                                 <IconButton
                                   icon="ai ai-trash"
@@ -1207,7 +1207,7 @@ Each variant is the same screen in another state: `get_block("edit/variables", {
                               />
                               <Tooltip
                                 v-if="entries[index].secret"
-                                :text="entries[index].visible ? 'Hide value' : 'Show value'"
+                                :content="entries[index].visible ? 'Hide value' : 'Show value'"
                               >
                                 <IconButton
                                   :icon="entries[index].visible ? 'ai ai-eye-off' : 'ai ai-eye'"
@@ -1219,7 +1219,7 @@ Each variant is the same screen in another state: `get_block("edit/variables", {
                                 />
                               </Tooltip>
                               <InputGroupAddon>
-                                <Tooltip :text="secretTooltip(entries[index])">
+                                <Tooltip :content="secretTooltip(entries[index])">
                                   <Field
                                     orientation="horizontal"
                                     :disabled="Boolean(editing?.secret)"
@@ -1342,7 +1342,7 @@ Each variant is the same screen in another state: `get_block("edit/variables", {
                                 aria-label="Search"
                                 @keydown.stop
                               >
-                                <template #prefix>
+                                <template #leading>
                                   <i
                                     class="ai ai-search"
                                     aria-hidden="true"

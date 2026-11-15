@@ -9,12 +9,12 @@
 ## When to use
 
 - A number attached to another element: a bell with its unread count, a section heading with how many items it holds.
-- Color the count through `severity` (neutral / success / danger / …) with a fully filled surface.
+- Color the count through `variant` (the brand look: `primary`, `secondary`) or `severity` (neutral / info / success / warning / danger) with a fully filled surface; `severity` wins when both are set.
 
 ## Do
 
 - Keep the content to a number (`12`, `99+`); words belong in `tag` or `status-indicator`.
-- Drive color from `severity`, never a hardcoded color or a raw palette class.
+- Drive color from `variant` or `severity`, never a hardcoded color or a raw palette class.
 
 ## Don’t
 
@@ -34,7 +34,8 @@
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
 | `label` | `string` | `''` | false | Fallback text when the default slot is empty. |
-| `severity` | `'primary' \| 'secondary' \| 'success' \| 'warning' \| 'danger' \| 'neutral'` | `'primary'` | false | Color style for the badge surface and label; `neutral` uses the `var(--bg-surface)` / `var(--text-default)` surface. The status values come from the shared `Severity` scale (exported from this component). |
+| `variant` | `'primary' \| 'secondary'` | `'primary'` | false | Brand look of the badge surface and label, used when `severity` is not set. |
+| `severity` | `'neutral' \| 'info' \| 'success' \| 'warning' \| 'danger'` | `—` | false | Status colour of the badge surface and label; wins over `variant` when set. `neutral` uses the `var(--bg-surface)` / `var(--text-default)` surface. The values are the shared `Severity` scale (exported from this component). |
 | `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | false | Size token; `small` is 20px tall, `medium` is 24px, `large` is 30px. |
 
 ## Slots
@@ -47,7 +48,8 @@
 
 Badge is non-interactive: it has no hover, focus, active, or disabled states and emits no events. Variants are exposed verbatim as `data-*` attributes on the root for Tailwind variant styling and for test/Code-Connect hooks:
 
-- `data-severity` mirrors the `severity` prop (`primary` | `secondary` | `success` | `warning` | `danger` | `neutral`).
+- `data-severity` mirrors the `severity` prop when it is set (`neutral` | `info` | `success` | `warning` | `danger`).
+- `data-variant` mirrors the `variant` prop when `severity` is not set (`primary` | `secondary`).
 - `data-size` mirrors the `size` prop (`small` | `medium` | `large`).
 
 ## Accessibility
@@ -55,7 +57,7 @@ Badge is non-interactive: it has no hover, focus, active, or disabled states and
 - Visible focus: not applicable — Badge is non-interactive (no focus, no keyboard, no tab stop).
 - Keyboard map: none — Badge is not focusable and exposes no interactive affordance.
 - ARIA: the root is a presentational `<span>`; consumers that use the badge as a live count should label the host control (e.g. `aria-label="3 unread"`) since the visual label alone is not announced as status.
-- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): every severity pairs a surface token with its matching `-contrast` (or `--text-default` for `default`), which the theme guarantees in both light and dark.
+- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): every severity pairs a surface token with its matching `-foreground` (or `--text-default` for `neutral`), which the theme guarantees in both light and dark.
 - `motion-reduce:*`: not applicable — Badge is static (no motion).
 - Touch target: not applicable — Badge is non-interactive.
 
@@ -78,7 +80,7 @@ Badge is non-interactive: it has no hover, focus, active, or disabled states and
 <template>
   <Badge
     label="99"
-    severity="primary"
+    variant="primary"
     size="medium"
   />
 </template>
@@ -95,15 +97,19 @@ Badge is non-interactive: it has no hover, focus, active, or disabled states and
   <div class="flex flex-wrap items-center gap-4">
     <Badge
       label="99"
-      severity="primary"
+      variant="primary"
     />
     <Badge
       label="99"
-      severity="secondary"
+      variant="secondary"
     />
     <Badge
       label="99"
       severity="success"
+    />
+    <Badge
+      label="99"
+      severity="info"
     />
     <Badge
       label="99"

@@ -183,7 +183,7 @@ Each variant is the same screen in another state: `get_block("detail/version-det
   import SplitButton from '@aziontech/webkit/split-button'
   import Switch from '@aziontech/webkit/switch'
   import Tabs from '@aziontech/webkit/tabs'
-  import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
+  import Tag, { type TagSeverity, type TagVariant } from '@aziontech/webkit/tag'
   import Textarea from '@aziontech/webkit/textarea'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, reactive, ref } from 'vue'
@@ -192,7 +192,7 @@ Each variant is the same screen in another state: `get_block("detail/version-det
     id: string
     name: string
     state: string
-    tag: { label: string; severity: TagSeverity; icon: string }
+    tag: { label: string; severity?: TagSeverity; variant?: TagVariant; icon: string }
     comment: string
     author: string
     createdAgo: string
@@ -220,7 +220,7 @@ Each variant is the same screen in another state: `get_block("detail/version-det
       id: 'AEO25I38',
       name: 'AEO25I38',
       state: 'active',
-      tag: { label: 'Deployed', severity: 'primary', icon: '' },
+      tag: { label: 'Deployed', variant: 'primary', icon: '' },
       comment: 'Remove rule"Legacy load balancer"',
       author: 'Sam Lee',
       createdAgo: '1 day ago'
@@ -285,7 +285,7 @@ Each variant is the same screen in another state: `get_block("detail/version-det
       id: 'AEO25I38',
       name: 'AEO25I38',
       state: 'active',
-      tag: { label: 'Deployed', severity: 'primary', icon: '' },
+      tag: { label: 'Deployed', variant: 'primary', icon: '' },
       comment: 'Remove rule"Legacy load balancer"',
       author: 'Sam Lee',
       createdAgo: '1 day ago'
@@ -443,7 +443,7 @@ Each variant is the same screen in another state: `get_block("detail/version-det
               aria-label="Search versions"
               @keydown.stop
             >
-              <template #prefix>
+              <template #leading>
                 <i
                   class="ai ai-search"
                   aria-hidden="true"
@@ -461,6 +461,7 @@ Each variant is the same screen in another state: `get_block("detail/version-det
               <template #tag>
                 <Tag
                   :label="entry.tag.label"
+                  :variant="entry.tag.variant"
                   :severity="entry.tag.severity"
                   :icon="entry.tag.icon"
                   size="small"
@@ -495,7 +496,7 @@ Each variant is the same screen in another state: `get_block("detail/version-det
       aria-label="Breadcrumb"
       class="flex min-w-0 items-center gap-(--spacing-xs) border-b border-(--border-default) bg-(--bg-surface) px-(--spacing-md) py-(--spacing-xs) md:hidden"
     >
-      <Tooltip text="Back to web-app versions">
+      <Tooltip content="Back to web-app versions">
         <IconButton
           icon="ai ai-arrow-left"
           kind="transparent"
@@ -527,7 +528,7 @@ Each variant is the same screen in another state: `get_block("detail/version-det
                 aria-label="Search versions"
                 @keydown.stop
               >
-                <template #prefix>
+                <template #leading>
                   <i
                     class="ai ai-search"
                     aria-hidden="true"
@@ -545,6 +546,7 @@ Each variant is the same screen in another state: `get_block("detail/version-det
                 <template #tag>
                   <Tag
                     :label="entry.tag.label"
+                    :variant="entry.tag.variant"
                     :severity="entry.tag.severity"
                     :icon="entry.tag.icon"
                     size="small"
@@ -674,7 +676,7 @@ Each variant is the same screen in another state: `get_block("detail/version-det
                             anchor="general"
                           >
                             <Card :padded="false">
-                              <template #content>
+                              <template #default>
                                 <Item.List>
                                   <SettingRow
                                     title="Name"
@@ -708,7 +710,7 @@ Each variant is the same screen in another state: `get_block("detail/version-det
                             anchor="modules"
                           >
                             <Card :padded="false">
-                              <template #content>
+                              <template #default>
                                 <Item.List>
                                   <SettingRow
                                     v-for="mod in defaultModules"
@@ -733,7 +735,7 @@ Each variant is the same screen in another state: `get_block("detail/version-det
                             anchor="subscription-modules"
                           >
                             <Card :padded="false">
-                              <template #content>
+                              <template #default>
                                 <Item.List>
                                   <SettingRow
                                     title="WebSocket Proxy"
@@ -755,7 +757,7 @@ Each variant is the same screen in another state: `get_block("detail/version-det
                                         />
                                       </a>
                                     </template>
-                                    <Tooltip text="Contact sales to activate this module.">
+                                    <Tooltip content="Contact sales to activate this module.">
                                       <Switch
                                         v-model="settings.modules.web_socket_proxy"
                                         disabled
@@ -860,7 +862,7 @@ Each variant is the same screen in another state: `get_block("detail/version-det
         />
         <Resizable.Pane
           v-model:basis="historyBasis"
-          v-model:expanded="historyExpanded"
+          v-model:open="historyExpanded"
           collapsible
           :min="280"
           :max="560"
@@ -911,6 +913,7 @@ Each variant is the same screen in another state: `get_block("detail/version-det
                       <span class="flex shrink-0">
                         <Tag
                           :label="version.tag.label"
+                          :variant="version.tag.variant"
                           :severity="version.tag.severity"
                           size="small"
                         />
@@ -1045,6 +1048,7 @@ Each variant is the same screen in another state: `get_block("detail/version-det
                         <span class="flex shrink-0">
                           <Tag
                             :label="entry.tag.label"
+                            :variant="entry.tag.variant"
                             :severity="entry.tag.severity"
                             size="small"
                           />

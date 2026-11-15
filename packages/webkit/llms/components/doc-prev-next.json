@@ -71,11 +71,11 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import DocPrevNext from '@aziontech/webkit/doc-prev-next'\n</script>\n\n<template>\n  <DocPrevNext\n    :previous=\"{ title: 'Deploy an application', href: '/docs/deploy' }\"\n    :next=\"{ title: 'Bind a domain', href: '/docs/domains' }\"\n    @navigate=\"(event, page) => router.push(page.href)\"\n  />\n</template>"
+   "sfc": "<script setup>\n  import DocPrevNext from '@aziontech/webkit/doc-prev-next'\n</script>\n\n<template>\n  <DocPrevNext\n    :previous=\"{ label: 'Deploy an application', href: '/docs/deploy' }\"\n    :next=\"{ label: 'Bind a domain', href: '/docs/domains' }\"\n    @navigate=\"(event, page) => router.push(page.href)\"\n  />\n</template>"
   },
   {
    "name": "Ends",
-   "sfc": "<script setup>\n  import DocPrevNext from '@aziontech/webkit/doc-prev-next'\n</script>\n\n<template>\n  <div class=\"flex flex-col gap-(--spacing-xl)\">\n    <DocPrevNext\n      aria-label=\"First page navigation\"\n      :next=\"{ title: 'Deploy an application', href: '/docs/deploy' }\"\n    />\n    <DocPrevNext\n      aria-label=\"Last page navigation\"\n      :previous=\"{ title: 'Bind a domain', href: '/docs/domains' }\"\n    />\n  </div>\n</template>"
+   "sfc": "<script setup>\n  import DocPrevNext from '@aziontech/webkit/doc-prev-next'\n</script>\n\n<template>\n  <div class=\"flex flex-col gap-(--spacing-xl)\">\n    <DocPrevNext\n      aria-label=\"First page navigation\"\n      :next=\"{ label: 'Deploy an application', href: '/docs/deploy' }\"\n    />\n    <DocPrevNext\n      aria-label=\"Last page navigation\"\n      :previous=\"{ label: 'Bind a domain', href: '/docs/domains' }\"\n    />\n  </div>\n</template>"
   }
  ],
  "docs": "components/doc-prev-next.md"

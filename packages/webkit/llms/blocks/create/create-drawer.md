@@ -354,7 +354,7 @@ Each variant is the same screen in another state: `get_block("create/create-draw
   <Drawer
     v-model:open="open"
     size="large"
-    side="right"
+    side="end"
   >
     <DrawerContent>
       <form

@@ -58,7 +58,7 @@
 | Event | Payload | Notes |
 | --- | --- | --- |
 | `click` | `(event: MouseEvent \| KeyboardEvent, id: string)` | An action or a menu option was chosen (from the bar or the overflow). |
-| `toggle` | `{ id: string; pressed: boolean }` | A toggle was activated; `pressed` is the new state to store. |
+| `toggle` | `(event: MouseEvent \| KeyboardEvent, detail: { id: string; pressed: boolean })` | A toggle was activated; `pressed` is the new state to store. |
 
 ## Sub-components
 
@@ -67,7 +67,7 @@ _none_ — items are data (`items`), because every item has the same anatomy (ic
 ## States
 
 - Visual states per item: `default`, `hover`, `focus-visible`, `pressed` (toggle, `data-pressed`, `--bg-selected`), `loading` (action), `disabled`.
-- Root data attributes: `data-kind`, `data-size`; each item `data-button-group-item="<id>"`.
+- Root data attributes: `data-kind`, `data-size`; each item `data-slot="button-group-item"` with `data-id="<id>"`.
 - Overflow: a pressed toggle shows a check and a hidden "On" in the More actions menu; a menu item becomes a labelled group of its options.
 
 ## Accessibility
@@ -132,7 +132,7 @@ _none_ — items are data (`items`), because every item has the same anatomy (ic
     items.map((item) => (item.type === 'toggle' ? { ...item, pressed: wrap.value } : item))
   )
 
-  const onToggle = ({ id, pressed }) => {
+  const onToggle = (event, { id, pressed }) => {
     if (id === 'wrap') wrap.value = pressed
     last.value = `${id}: ${pressed ? 'on' : 'off'}`
   }
@@ -198,7 +198,7 @@ _none_ — items are data (`items`), because every item has the same anatomy (ic
     kind="outlined"
     size="small"
     aria-label="Record actions"
-    @toggle="({ pressed }) => (pinned = pressed)"
+    @toggle="(event, { pressed }) => (pinned = pressed)"
   />
 </template>
 ```

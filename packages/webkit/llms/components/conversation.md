@@ -1,6 +1,6 @@
 # Conversation
 
-> The scrolling message log of a generative AI chat. It holds the thread (`ChatMessage` items, then whatever follows the last response: suggestions, an approval card), keeps the newest message in view while the reader is at the end, and stops following the moment they scroll up to read or copy an older message — a "Scroll to the latest message" button brings them back. It is a `role="log"` whose own live behavior is off, so streamed tokens are never read one by one; instead each `ChatMessage` that finishes (or fails) hands its text to the conversation's polite live region, once. It also sets where messages sit for the whole thread (`alignment`): `split` for a full chat page, `start` for a dense side panel or drawer (Cloudscape's rule for embedded surfaces).
+> The scrolling message log of a generative AI chat. It holds the thread (`ChatMessage` items, then whatever follows the last response: suggestions, an approval card), keeps the newest message in view while the reader is at the end, and stops following the moment they scroll up to read or copy an older message — a "Scroll to the latest message" button brings them back. It is a `role="log"` whose own live behavior is off, so streamed tokens are never read one by one; instead each `ChatMessage` that finishes (or fails) hands its text to the conversation's polite live region, once. It also sets where messages sit for the whole thread (`layout`): `split` for a full chat page, `start` for a dense side panel or drawer (Cloudscape's rule for embedded surfaces).
 
 - Import: `import Conversation from '@aziontech/webkit/conversation'`
 - Category: ai · Surface: app · Structure: monolithic
@@ -15,7 +15,7 @@
 
 - Pin the prompt input under the conversation; only the log scrolls.
 - Never auto-scroll while the reader is reading an older message: the component already stops following when they scroll up.
-- Use `alignment="start"` in drawers and side panels, `split` on a full page.
+- Use `layout="start"` in drawers and side panels, `split` on a full page.
 - Keep one conversation per surface; a second thread is a second page or a history list.
 
 ## Don’t
@@ -38,7 +38,7 @@
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
 | `ariaLabel` | `string` | `''` | false | Accessible name of the message log. Empty uses the locale catalog (`Conversation`). |
-| `alignment` | `'split' \| 'start'` | `'split'` | false | split` puts the user's messages at the inline end (a full chat page); `start` keeps every message at the inline start (a side panel or drawer). |
+| `layout` | `'split' \| 'start'` | `'split'` | false | split` puts the user's messages at the inline end (a full chat page); `start` keeps every message at the inline start (a side panel or drawer). |
 
 ## Slots
 
@@ -49,16 +49,16 @@
 ## Sub-components
 
 _None — a single root. Messages reach it through `provide`/`inject` (`injection-key.ts`): the
-conversation provides `alignment`, a `ready` flag (true after mount, so only messages added later are
+conversation provides its layout (context member `alignment`), a `ready` flag (true after mount, so only messages added later are
 announced) and `announce(author, text)`._
 
 Exports: `"./conversation": "./src/components/ai/conversation/conversation.vue"`. Exported type:
-`ConversationAlignment = 'split' | 'start'`. Composed DS components: `icon-button` (scroll to latest).
+`ConversationLayout = 'split' | 'start'`. Composed DS components: `icon-button` (scroll to latest).
 
 ## States
 
 - `data-pinned` on the root while the log follows the newest message; absent once the reader scrolled up (the Scroll to latest button shows). Only the reader's own scrolling unpins it (wheel, touch, pointer on the scrollbar, keys): a scroll the browser causes — a host moving the log in the DOM, a drawer opening — is corrected back to the end while pinned.
-- `data-alignment` mirrors `alignment`.
+- `data-layout` mirrors `layout`; each message carries it as `data-alignment`.
 - No `data-state` — nothing opens or closes.
 
 ## Accessibility
@@ -90,7 +90,7 @@ Exports: `"./conversation": "./src/components/ai/conversation/conversation.vue"`
 ## Responsive
 
 - Container queries: none; the thread centers at `--layout-measure-content` and fills narrower hosts.
-- Narrow (≤ 640 px or a drawer): full width; the owner should pass `alignment="start"`.
+- Narrow (≤ 640 px or a drawer): full width; the owner should pass `layout="start"`.
 - Touch: scroll button meets 44 px on coarse pointers.
 - Reflow: no horizontal scroll at 320 px; wide code and tables scroll inside their own blocks.
 
@@ -166,7 +166,7 @@ Exports: `"./conversation": "./src/components/ai/conversation/conversation.vue"`
   <div
     class="flex h-[28rem] w-full max-w-(--container-xs) flex-col rounded-(--shape-card) border border-(--border-default)"
   >
-    <Conversation alignment="start">
+    <Conversation layout="start">
       <ChatMessageRoot
         from="user"
         timestamp="10:41"

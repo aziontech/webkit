@@ -246,10 +246,10 @@ Each variant is the same screen in another state: `get_block("detail/sectioned-r
   ]
 
   const columns: TableColumn[] = [
-    { accessorKey: 'name', header: 'Name', enableSorting: true, principal: true, hideable: false },
+    { accessorKey: 'name', header: 'Name', sortable: true, principal: true, hideable: false },
     { accessorKey: 'id', header: 'ID', minWidth: 80 },
-    { accessorKey: 'status', header: 'Status', enableSorting: true, minWidth: 104 },
-    { accessorKey: 'modifiedAt', header: 'Last Modified', enableSorting: true, minWidth: 80 }
+    { accessorKey: 'status', header: 'Status', sortable: true, minWidth: 104 },
+    { accessorKey: 'modifiedAt', header: 'Last Modified', sortable: true, minWidth: 80 }
   ]
 
   const {
@@ -391,7 +391,7 @@ Each variant is the same screen in another state: `get_block("detail/sectioned-r
                   />
                 </div>
                 <Tooltip
-                  text="Refresh"
+                  content="Refresh"
                   class="shrink-0"
                 >
                   <IconButton
@@ -405,11 +405,11 @@ Each variant is the same screen in another state: `get_block("detail/sectioned-r
                 </Tooltip>
               </header>
               <Card :padded="false">
-                <template #content>
+                <template #default>
                   <DataTable
                     v-bind="tableProps"
                     :loading="loading || fetching"
-                    enable-sorting
+                    sortable
                     :bordered="false"
                   >
                     <template #cell-name="{ row }">

@@ -74,9 +74,9 @@
   {
    "name": "titleKind",
    "type": "SectionTitleKind",
-   "default": "'centered'",
+   "default": "'center'",
    "required": "false",
-   "doc": "Alignment of the section title over the grid: `centered`, `left` or `horizontal`."
+   "doc": "Alignment of the section title over the grid: `center`, `start` or `split`."
   },
   {
    "name": "columns",

@@ -54,8 +54,8 @@
 
 | Slot | Scope | Notes |
 | --- | --- | --- |
-| `prefix` |  | Hidden from assistive tech (`aria-hidden="true"`). Logical: it sits on the right under `dir="rtl"`. |
-| `suffix` |  | Hidden from assistive tech (`aria-hidden="true"`). |
+| `leading` |  | Hidden from assistive tech (`aria-hidden="true"`). Logical: it sits on the right under `dir="rtl"`. |
+| `trailing` |  | Hidden from assistive tech (`aria-hidden="true"`). |
 
 ## v-model
 
@@ -73,7 +73,7 @@
 - `data-disabled` mirrors the `disabled` prop
 - `data-invalid` mirrors the `invalid` prop
 - `data-required` mirrors the `required` prop; drives the warning-border treatment
-- `data-has-icon-left` / `data-has-icon-right` mirror slot presence (driven by `$slots.prefix` / `$slots.suffix`), read at render time: an icon slot passed behind a `v-if` adds or removes its icon box when the condition changes, never leaving an empty box behind
+- `data-leading` / `data-trailing` mirror slot presence (driven by `$slots.leading` / `$slots.trailing`), read at render time: an icon slot passed behind a `v-if` adds or removes its icon box when the condition changes, never leaving an empty box behind
 - `filled` is detected via the native `:not(:placeholder-shown)` selector — no JS state
 
 ## Accessibility
@@ -164,7 +164,7 @@
       v-model="leading"
       placeholder="Leading icon"
     >
-      <template #prefix>
+      <template #leading>
         <i class="ai ai-globe" />
       </template>
     </Input>
@@ -172,7 +172,7 @@
       v-model="trailing"
       placeholder="Trailing icon"
     >
-      <template #suffix>
+      <template #trailing>
         <i class="ai ai-search" />
       </template>
     </Input>
@@ -180,10 +180,10 @@
       v-model="both"
       placeholder="Both icons"
     >
-      <template #prefix>
+      <template #leading>
         <i class="ai ai-globe" />
       </template>
-      <template #suffix>
+      <template #trailing>
         <i class="ai ai-search" />
       </template>
     </Input>

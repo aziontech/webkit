@@ -64,7 +64,7 @@ For a resource made from the CLI, the `detail/get-started` section follows the s
 - Bind, create and remove act on staged state only. Nothing reaches Production until Deploy, and the deploy drawer lists every staged change before it runs.
 - Show the staged count on the tab row next to Deploy, so it stays visible from every tab.
 - Report the deploy through the async-submit toast (Edit and Redeploy) and clear the staged marks once it succeeds.
-- A node that collects many resources adds to itself through the diagram's `actions` slot: the Domains node of ServiceOverview carries an outlined small `IconButton` (`ai ai-plus`) named Add domain inside a `Tooltip`, picked by `node.key === 'domains'`. Never hand-draw a node card to get the `+`.
+- A node that collects many resources adds to itself through the diagram's `actions` slot: the Domains node of ServiceOverview carries an outlined small `IconButton` (`ai ai-plus`) named Add domain inside a `Tooltip`, picked by `node.id === 'domains'`. Never hand-draw a node card to get the `+`.
 
 ## Do
 
@@ -330,7 +330,7 @@ jobs:
               class="layout-section-start flex min-w-0 flex-col gap-(--layout-section-gap) pb-(--layout-section-gap)"
             >
               <Card :padded="false">
-                <template #content>
+                <template #default>
                   <div
                     class="@container/band flex min-h-(--size-14) flex-wrap items-center gap-x-(--spacing-md) gap-y-(--spacing-xs) px-(--spacing-md) py-(--spacing-xs)"
                   >
@@ -343,7 +343,7 @@ jobs:
                       />
                       <div class="flex min-w-0">
                         <Tooltip
-                          text="Open analytics-app-z1x2c3.example.com in a new tab"
+                          content="Open analytics-app-z1x2c3.example.com in a new tab"
                           class="w-full"
                         >
                           <a
@@ -378,7 +378,7 @@ jobs:
 
                       <DropdownMenu placement="bottom-end">
                         <DropdownMenu.Trigger>
-                          <Tooltip text="Resource actions">
+                          <Tooltip content="Resource actions">
                             <IconButton
                               icon="ai ai-ellipsis"
                               kind="outlined"
@@ -427,7 +427,7 @@ jobs:
                       <div class="flex min-h-7 min-w-0 items-center gap-(--spacing-xs)">
                         <div class="flex min-w-0">
                           <Tooltip
-                            text="Open 1213275262 in Deployments"
+                            content="Open 1213275262 in Deployments"
                             class="w-full"
                           >
                             <Link
@@ -451,7 +451,7 @@ jobs:
                       <div class="flex min-h-7 min-w-0 items-center gap-(--spacing-xs)">
                         <div class="flex min-w-0">
                           <Tooltip
-                            text="Open analytics-app-z1x2c3.example.com in a new tab"
+                            content="Open analytics-app-z1x2c3.example.com in a new tab"
                             class="w-full"
                           >
                             <a
@@ -592,7 +592,7 @@ jobs:
                         :padded="false"
                         class="w-full"
                       >
-                        <template #content>
+                        <template #default>
                           <div class="flex min-w-0 flex-col gap-(--spacing-sm) p-(--spacing-lg)">
                             <div class="flex min-w-0 items-center gap-(--spacing-xs)">
                               <span
@@ -610,7 +610,7 @@ jobs:
                             <div class="mt-(--spacing-2xs) min-w-0">
                               <CodeBlock
                                 :tabs="step.tabs"
-                                :line-numbers="false"
+                                :show-line-numbers="false"
                                 :copy-aria-label="`Copy the commands for ${step.title}`"
                                 class="w-full"
                               />

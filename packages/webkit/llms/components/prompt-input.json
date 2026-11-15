@@ -8,7 +8,7 @@
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],
- "purpose": "The composer of a generative AI chat (Cloudscape prompt input, AI Elements PromptInput): a text area that grows with the prompt up to `maxRows`, a Submit control that becomes Stop while a response is being generated, a toolbar row for secondary controls (attach, mode), an attachments row above the text, an optional character limit with a counter, and constraint text under it (a disclaimer or the shortcuts it accepts). Enter submits; Shift+Enter adds a line; an IME composition never submits. It is controlled: the owner holds the text, receives `submit` with the trimmed prompt, and clears it. While `state` is `submitted` or `streaming` the reader can keep typing the next prompt, but cannot submit it until the response ends or they press Stop.",
+ "purpose": "The composer of a generative AI chat (Cloudscape prompt input, AI Elements PromptInput): a text area that grows with the prompt up to `maxRows`, a Submit control that becomes Stop while a response is being generated, a toolbar row for secondary controls (attach, mode), an attachments row above the text, an optional character limit with a counter, and constraint text under it (a disclaimer or the shortcuts it accepts). Enter submits; Shift+Enter adds a line; an IME composition never submits. It is controlled: the owner holds the text, receives `submit` with the trimmed prompt, and clears it. While `status` is `pending` or `streaming` the reader can keep typing the next prompt, but cannot submit it until the response ends or they press Stop.",
  "setup": null,
  "useWhen": [
   "The input of any conversation with the generative AI assistant.",
@@ -28,7 +28,7 @@
  "bestPractices": [
   "Placeholder is a suggested question with no end punctuation (`Ask a question`); never the only instruction.",
   "Put the disclaimer and the shortcuts in `hint`, not in the placeholder.",
-  "Set `state` from the request so Submit turns into Stop; wire `stop` to abort it.",
+  "Set `status` from the request so Submit turns into Stop; wire `stop` to abort it.",
   "Clear `v-model` in the `submit` handler and keep focus in the input.",
   "Use `maxLength` only when the backend has a limit; the counter is the warning."
  ],
@@ -69,11 +69,11 @@
    "doc": "Rows the text area grows to before it scrolls."
   },
   {
-   "name": "state",
-   "type": "'ready' | 'submitted' | 'streaming'",
+   "name": "status",
+   "type": "'ready' | 'pending' | 'streaming'",
    "default": "'ready'",
    "required": "false",
-   "doc": "Request lifecycle: `submitted` and `streaming` swap Submit for Stop and block another submit; typing stays allowed."
+   "doc": "Request lifecycle: `pending` and `streaming` swap Submit for Stop and block another submit; typing stays allowed."
   },
   {
    "name": "disabled",
@@ -142,7 +142,7 @@
   },
   {
    "name": "Streaming",
-   "sfc": "<script setup>\n  import PromptInput from '@aziontech/webkit/prompt-input'\n  import { onBeforeUnmount, ref } from 'vue'\n\n  const prompt = ref('Why did my cache hit ratio drop?')\n  const state = ref('ready')\n  let timer\n\n  function send() {\n    prompt.value = ''\n    state.value = 'submitted'\n    timer = setTimeout(() => {\n      state.value = 'streaming'\n      timer = setTimeout(() => (state.value = 'ready'), 4000)\n    }, 800)\n  }\n\n  function stop() {\n    clearTimeout(timer)\n    state.value = 'ready'\n  }\n\n  onBeforeUnmount(() => clearTimeout(timer))\n</script>\n\n<template>\n  <div class=\"w-full max-w-(--container-3xl)\">\n    <PromptInput\n      v-model=\"prompt\"\n      :state=\"state\"\n      @submit=\"send\"\n      @stop=\"stop\"\n    />\n  </div>\n</template>"
+   "sfc": "<script setup>\n  import PromptInput from '@aziontech/webkit/prompt-input'\n  import { onBeforeUnmount, ref } from 'vue'\n\n  const prompt = ref('Why did my cache hit ratio drop?')\n  const status = ref('ready')\n  let timer\n\n  function send() {\n    prompt.value = ''\n    status.value = 'pending'\n    timer = setTimeout(() => {\n      status.value = 'streaming'\n      timer = setTimeout(() => (status.value = 'ready'), 4000)\n    }, 800)\n  }\n\n  function stop() {\n    clearTimeout(timer)\n    status.value = 'ready'\n  }\n\n  onBeforeUnmount(() => clearTimeout(timer))\n</script>\n\n<template>\n  <div class=\"w-full max-w-(--container-3xl)\">\n    <PromptInput\n      v-model=\"prompt\"\n      :status=\"status\"\n      @submit=\"send\"\n      @stop=\"stop\"\n    />\n  </div>\n</template>"
   },
   {
    "name": "CharacterLimit",

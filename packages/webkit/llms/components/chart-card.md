@@ -196,7 +196,7 @@ The root `chart-card.vue` renders a `div` with `role="group"` and the card surfa
     <ChartCard.Header>
       <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
         <ChartCard.Title>Threats vs requests</ChartCard.Title>
-        <Hint text="Requests WAF analyzed, split into blocked, logged and allowed." />
+        <Hint content="Requests WAF analyzed, split into blocked, logged and allowed." />
       </span>
     </ChartCard.Header>
     <ChartCard.Content>
@@ -347,7 +347,7 @@ The root `chart-card.vue` renders a `div` with `role="group"` and the card surfa
     <ChartCard.Header>
       <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
         <ChartCard.Title>Cross-site scripting threats</ChartCard.Title>
-        <Hint text="Requests carrying cross-site scripting attacks against your domains." />
+        <Hint content="Requests carrying cross-site scripting attacks against your domains." />
       </span>
       <ChartCard.Action>
         <Tag

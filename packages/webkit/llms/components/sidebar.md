@@ -98,7 +98,7 @@ with `defineModel`, so their `update:*` events are not hand-declared.
 ## States
 
 - Visual states: `default`, `hover`, `focus-visible`, `active`, `disabled`
-- `data-collapsed` on the root while the rail is collapsed (out of the layout, or down to the icon rail)
+- `data-state="closed"` on the root while the rail is collapsed (out of the layout, or down to the icon rail), `data-state="open"` otherwise
 - `data-rail` on the root while `collapsible="icon"` and collapsed; the rail stays in the layout at
   `var(--size-14)`, is **not** `inert` or `aria-hidden`, renders no edge affordance, and its footer
   trigger becomes `__expand-button` (`Expand sidebar`). Menu rows inside it carry `data-rail` too:
@@ -106,7 +106,7 @@ with `defineModel`, so their `update:*` events are not hand-declared.
   rows without an icon and inline sub-menus are hidden.
 - `data-resizing` on the root and on the handle while a pointer drag is in flight
 - `data-preview` on the collapsed edge zone while it is showing the rail's preview sliver
-- `data-collapsed` / `data-resizing` / `data-preview` are **reported state, not the motion
+- `data-state` / `data-resizing` / `data-preview` are **reported state, not the motion
   driver**: the collapse/expand animation itself runs off the hidden checkbox's `:checked` (see
   Motion & Animations), so these attributes exist for consumer styling hooks and for tests, not
   because the component's own CSS depends on them for that transition.
@@ -246,9 +246,9 @@ with `defineModel`, so their `update:*` events are not hand-declared.
           <Command v-model:open="paletteOpen">
             <CommandInput placeholder="Search navigation and commands" />
             <CommandList>
-              <CommandGroup heading="Build">
+              <CommandGroup label="Build">
                 <CommandItem value="nav:applications">
-                  <template #prefix
+                  <template #leading
                     ><i
                       class="ai ai-edge-application"
                       aria-hidden="true"
@@ -256,7 +256,7 @@ with `defineModel`, so their `update:*` events are not hand-declared.
                   Applications
                 </CommandItem>
                 <CommandItem value="nav:variables">
-                  <template #prefix
+                  <template #leading
                     ><i
                       class="ai ai-variables"
                       aria-hidden="true"
@@ -267,9 +267,9 @@ with `defineModel`, so their `update:*` events are not hand-declared.
 
               <CommandSeparator />
 
-              <CommandGroup heading="Account">
+              <CommandGroup label="Account">
                 <CommandItem value="cmd:settings">
-                  <template #prefix
+                  <template #leading
                     ><i
                       class="ai ai-settings"
                       aria-hidden="true"
@@ -290,7 +290,7 @@ with `defineModel`, so their `update:*` events are not hand-declared.
             label="Home"
             icon="ai ai-home"
             href="/"
-            selected
+            active
           />
           <SidebarMenuItem
             label="Marketplace"
@@ -337,7 +337,7 @@ with `defineModel`, so their `update:*` events are not hand-declared.
             icon="ai ai-edge-sql"
             href="/sql-database"
             tag-value="Preview"
-            tag-severity="primary"
+            tag-variant="primary"
           />
         </SidebarMenuGroup>
         <SidebarMenuGroup label="Account">
@@ -391,7 +391,7 @@ with `defineModel`, so their `update:*` events are not hand-declared.
                 />
               </DropdownMenuTrigger>
               <DropdownMenuGroup>
-                <template #top>
+                <template #header>
                   <div class="flex min-w-0 flex-col">
                     <span class="truncate text-label-md text-(--text-default)">Alex Morgan</span>
                     <span class="truncate text-body-xs text-(--text-muted)"
@@ -464,7 +464,7 @@ with `defineModel`, so their `update:*` events are not hand-declared.
               label="Home"
               icon="ai ai-home"
               href="/"
-              selected
+              active
             />
             <SidebarMenuItem
               label="Marketplace"
@@ -495,7 +495,7 @@ with `defineModel`, so their `update:*` events are not hand-declared.
               icon="ai ai-edge-sql"
               href="/sql-database"
               tag-value="Preview"
-              tag-severity="primary"
+              tag-variant="primary"
             />
           </SidebarMenuGroup>
           <SidebarMenuGroup label="Account">

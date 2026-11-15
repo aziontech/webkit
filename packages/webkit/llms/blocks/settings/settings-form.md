@@ -253,7 +253,7 @@ Each variant is the same screen in another state: `get_block("settings/settings-
             size="small"
           />
           <Card :padded="false">
-            <template #content>
+            <template #default>
               <Item.List>
                 <SettingRow
                   title="Full name"
@@ -320,7 +320,7 @@ Each variant is the same screen in another state: `get_block("settings/settings-
             size="small"
           />
           <Card :padded="false">
-            <template #content>
+            <template #default>
               <Item.List>
                 <SettingRow
                   title="Timezone"
@@ -389,7 +389,7 @@ Each variant is the same screen in another state: `get_block("settings/settings-
             size="small"
           />
           <Card :padded="false">
-            <template #content>
+            <template #default>
               <Item.List>
                 <SettingRow
                   title="Product updates"

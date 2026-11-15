@@ -426,7 +426,7 @@ Each variant is the same screen in another state: `get_block("view/template-brow
     <Drawer
       v-model:open="previewOpen"
       size="large"
-      side="right"
+      side="end"
     >
       <DrawerContent>
         <PanelHeader class="w-full">
@@ -475,7 +475,7 @@ Each variant is the same screen in another state: `get_block("view/template-brow
                 README
               </h3>
               <Card>
-                <template #content>
+                <template #default>
                   <DocProse>
                     <p>{{ selected.description }}</p>
                     <h4>Deploy</h4>

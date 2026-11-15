@@ -255,11 +255,11 @@ Each variant is the same screen in another state: `get_block("detail/dns-zone-de
     POLICY_TYPES.find((policy) => policy.value === value)?.label ?? ''
 
   const columns: TableColumn[] = [
-    { accessorKey: 'name', header: 'Name', enableSorting: true, principal: true, hideable: false },
-    { accessorKey: 'id', header: 'ID', enableSorting: true, minWidth: 80 },
-    { accessorKey: 'type', header: 'Type', enableSorting: true, minWidth: 104 },
+    { accessorKey: 'name', header: 'Name', sortable: true, principal: true, hideable: false },
+    { accessorKey: 'id', header: 'ID', sortable: true, minWidth: 80 },
+    { accessorKey: 'type', header: 'Type', sortable: true, minWidth: 104 },
     { accessorKey: 'value', header: 'Value', grow: 2 },
-    { accessorKey: 'ttl', header: 'TTL (seconds)', enableSorting: true, minWidth: 80 },
+    { accessorKey: 'ttl', header: 'TTL (seconds)', sortable: true, minWidth: 80 },
     { accessorKey: 'policy', header: 'Policy', minWidth: 80 },
     { accessorKey: 'weight', header: 'Weight', minWidth: 80 },
     { accessorKey: 'description', header: 'Description', grow: 2 },
@@ -360,7 +360,7 @@ Each variant is the same screen in another state: `get_block("detail/dns-zone-de
                 anchor="general"
               >
                 <Card :padded="false">
-                  <template #content>
+                  <template #default>
                     <ItemList>
                       <SettingRow
                         title="Name"
@@ -418,7 +418,7 @@ Each variant is the same screen in another state: `get_block("detail/dns-zone-de
                 anchor="configure-your-nameserver"
               >
                 <Card :padded="false">
-                  <template #content>
+                  <template #default>
                     <ItemList>
                       <SettingRow
                         title="Nameservers"
@@ -465,7 +465,7 @@ Each variant is the same screen in another state: `get_block("detail/dns-zone-de
                 anchor="dnssec"
               >
                 <Card :padded="false">
-                  <template #content>
+                  <template #default>
                     <ItemList>
                       <SettingRow
                         title="Enable DNSSEC"
@@ -518,7 +518,7 @@ Each variant is the same screen in another state: `get_block("detail/dns-zone-de
                 anchor="status"
               >
                 <Card :padded="false">
-                  <template #content>
+                  <template #default>
                     <ItemList>
                       <SettingRow
                         title="Active"
@@ -611,7 +611,7 @@ Each variant is the same screen in another state: `get_block("detail/dns-zone-de
               </div>
               <div class="flex shrink-0 items-center gap-(--spacing-xs)">
                 <Tooltip
-                  text="Refresh"
+                  content="Refresh"
                   class="shrink-0"
                 >
                   <IconButton
@@ -624,7 +624,7 @@ Each variant is the same screen in another state: `get_block("detail/dns-zone-de
                   />
                 </Tooltip>
                 <Tooltip
-                  text="Download CSV"
+                  content="Download CSV"
                   class="shrink-0"
                 >
                   <IconButton
@@ -643,12 +643,12 @@ Each variant is the same screen in another state: `get_block("detail/dns-zone-de
               </div>
             </header>
             <Card :padded="false">
-              <template #content>
+              <template #default>
                 <DataTable
                   ref="tableEl"
                   v-bind="tableProps"
                   :loading="loading || fetching"
-                  enable-sorting
+                  sortable
                   :bordered="false"
                 >
                   <template #cell-name="{ value }">

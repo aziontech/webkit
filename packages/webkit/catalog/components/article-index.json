@@ -15,9 +15,9 @@
  ],
  "bestPractices": [
   "With `filters=\"category-search\"`, list the articles newest first and file every article under at least one of `categories`; keep the category list short enough to scroll on one row.",
-  "With `filters=\"facets\"`, give every item a `facets` entry per facet `key` it can be filtered by (an item without one never matches a selection on that facet), and keep each facet's `options` to values some item carries.",
-  "Set `empty` so a reader who filters everything away gets a way back; without it the list just disappears.",
+  "With `filters=\"facets\"`, give every item a `facets` entry per facet `id` it can be filtered by (an item without one never matches a selection on that facet), and keep each facet's `options` to values some item carries.",
+  "Set `emptyTitle` (and `emptyActionLabel`) so a reader who filters everything away gets a way back; without it the list just disappears.",
   "Set `leading` to the number of entries a highlight band above already shows, so they are not listed twice until the reader filters.",
-  "Leave `rowKind` unset to get the layout that fits the filter bar: `byline` for `category-search`, `centered` for `facets`."
+  "Leave `rowKind` unset to get the layout that fits the filter bar: `byline` for `category-search`, `center` for `facets`."
  ]
 }

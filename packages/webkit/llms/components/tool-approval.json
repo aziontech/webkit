@@ -30,7 +30,7 @@
   "Title is a question naming the action and target; put tool and command names in backticks (code).",
   "Match the approve label to the title verb (`Deploy`, `Delete`) when it is not a generic tool call.",
   "Never pre-focus or pre-select Approve for a risky action.",
-  "Do not leave a request pending forever: expire it (`state=\"expired\"`) and have the assistant say nothing ran.",
+  "Do not leave a request pending forever: expire it (`status=\"expired\"`) and have the assistant say nothing ran.",
   "After Deny, the assistant acknowledges in the conversation (\"Skipping that step.\")."
  ],
  "props": [
@@ -49,7 +49,7 @@
    "doc": "One or two sentences on what will happen and to what; backticks render as code."
   },
   {
-   "name": "state",
+   "name": "status",
    "type": "'pending' | 'approved' | 'denied' | 'expired'",
    "default": "'pending'",
    "required": "false",
@@ -115,15 +115,15 @@
  "examples": [
   {
    "name": "Command",
-   "sfc": "<script setup>\n  import CodeBlock from '@aziontech/webkit/code-block'\n  import ToolApproval from '@aziontech/webkit/tool-approval'\n  import { ref } from 'vue'\n\n  const state = ref('pending')\n</script>\n\n<template>\n  <div class=\"w-full max-w-(--container-3xl)\">\n    <ToolApproval\n      title=\"Allow `azion deploy --env production`?\"\n      description=\"Deploys the current build of storefront to production. The previous version stays available for rollback.\"\n      approve-label=\"Deploy\"\n      :state=\"state\"\n      @approve=\"state = 'approved'\"\n      @deny=\"state = 'denied'\"\n    >\n      <CodeBlock\n        :tabs=\"[\n          {\n            label: 'Shell',\n            value: 'cmd',\n            code: 'azion deploy --env production --workload storefront',\n            language: 'bash'\n          }\n        ]\"\n        :line-numbers=\"false\"\n      />\n    </ToolApproval>\n  </div>\n</template>"
+   "sfc": "<script setup>\n  import CodeBlock from '@aziontech/webkit/code-block'\n  import ToolApproval from '@aziontech/webkit/tool-approval'\n  import { ref } from 'vue'\n\n  const status = ref('pending')\n</script>\n\n<template>\n  <div class=\"w-full max-w-(--container-3xl)\">\n    <ToolApproval\n      title=\"Allow `azion deploy --env production`?\"\n      description=\"Deploys the current build of storefront to production. The previous version stays available for rollback.\"\n      approve-label=\"Deploy\"\n      :status=\"status\"\n      @approve=\"status = 'approved'\"\n      @deny=\"status = 'denied'\"\n    >\n      <CodeBlock\n        :tabs=\"[\n          {\n            label: 'Shell',\n            value: 'cmd',\n            code: 'azion deploy --env production --workload storefront',\n            language: 'bash'\n          }\n        ]\"\n        :show-line-numbers=\"false\"\n      />\n    </ToolApproval>\n  </div>\n</template>"
   },
   {
    "name": "Irreversible",
-   "sfc": "<script setup>\n  import ToolApproval from '@aziontech/webkit/tool-approval'\n  import { ref } from 'vue'\n\n  const state = ref('pending')\n</script>\n\n<template>\n  <div class=\"w-full max-w-(--container-3xl)\">\n    <ToolApproval\n      title=\"Delete the domain `www.example.com`?\"\n      description=\"The domain stops answering at once and its certificate is revoked. This cannot be undone.\"\n      kind=\"danger\"\n      confirmation-phrase=\"www.example.com\"\n      approve-label=\"Delete\"\n      :state=\"state\"\n      @approve=\"state = 'approved'\"\n      @deny=\"state = 'denied'\"\n    />\n  </div>\n</template>"
+   "sfc": "<script setup>\n  import ToolApproval from '@aziontech/webkit/tool-approval'\n  import { ref } from 'vue'\n\n  const status = ref('pending')\n</script>\n\n<template>\n  <div class=\"w-full max-w-(--container-3xl)\">\n    <ToolApproval\n      title=\"Delete the domain `www.example.com`?\"\n      description=\"The domain stops answering at once and its certificate is revoked. This cannot be undone.\"\n      kind=\"danger\"\n      confirmation-phrase=\"www.example.com\"\n      approve-label=\"Delete\"\n      :status=\"status\"\n      @approve=\"status = 'approved'\"\n      @deny=\"status = 'denied'\"\n    />\n  </div>\n</template>"
   },
   {
    "name": "Resolved",
-   "sfc": "<script setup>\n  import ToolApproval from '@aziontech/webkit/tool-approval'\n</script>\n\n<template>\n  <div class=\"flex w-full max-w-(--container-3xl) flex-col gap-(--spacing-sm)\">\n    <ToolApproval\n      title=\"Allow `purge_urls`?\"\n      description=\"Purges https://www.example.com/styles.css from every edge location.\"\n      state=\"approved\"\n    />\n    <ToolApproval\n      title=\"Approve deployment to production?\"\n      description=\"Deploys the current build of storefront to production.\"\n      state=\"denied\"\n    />\n    <ToolApproval\n      title=\"Allow `delete_cache_rule`?\"\n      description=\"Removes the rule that caches images for one day.\"\n      state=\"expired\"\n    />\n  </div>\n</template>"
+   "sfc": "<script setup>\n  import ToolApproval from '@aziontech/webkit/tool-approval'\n</script>\n\n<template>\n  <div class=\"flex w-full max-w-(--container-3xl) flex-col gap-(--spacing-sm)\">\n    <ToolApproval\n      title=\"Allow `purge_urls`?\"\n      description=\"Purges https://www.example.com/styles.css from every edge location.\"\n      status=\"approved\"\n    />\n    <ToolApproval\n      title=\"Approve deployment to production?\"\n      description=\"Deploys the current build of storefront to production.\"\n      status=\"denied\"\n    />\n    <ToolApproval\n      title=\"Allow `delete_cache_rule`?\"\n      description=\"Removes the rule that caches images for one day.\"\n      status=\"expired\"\n    />\n  </div>\n</template>"
   }
  ],
  "docs": "components/tool-approval.md"

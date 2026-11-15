@@ -35,7 +35,7 @@
    "type": "'critical' | 'high' | 'medium' | 'low' | 'info'",
    "default": "'info'",
    "required": "false",
-   "doc": "Severity level; sets how many glyph bars fill, their colour and the default label."
+   "doc": "Severity level on the findings scale (exported as `SeverityTagLevel`, distinct from the shared status `Severity`); sets how many glyph bars fill, their colour and the default label."
   },
   {
    "name": "label",

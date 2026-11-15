@@ -1,6 +1,6 @@
 # Hero Band
 
-> The opening band of a marketing page: the page `h1` with its overline, accent phrase, sentence and up to two actions, full width above the page column, with an optional client strip on the floor. It is a page section — the site places it from a `{ _id: 'hero-band', props }` entry and binds `props` straight onto it — and it composes `hero`, `hero-title`, `button` and `illustration`, plus `flow` and `tag` for the topology and `section-container`, `section-module`, `frame-box`, `card-grid`, `topic` and `section-gap` for the argument grid. `kind` picks the layout only: `centered` fills a screen over a dot field with the copy centered, `title-band` is a padded band with the copy centered, `pixel-floor` sets the copy at the start over an animated pixel floor, `copy-beside-art` sets an illustration (or an `image`) beside the copy, sized from that illustration's own drawn bounds so it bleeds past the column edge and trims its empty top and bottom, and `copy-on-top-art` fills a screen with the copy centered over a scene in its `top` or `bottom` slot, unpadded so the scene reaches the band's edges, and draws a `Flow` topology from `levels` in the bottom window when neither slot is given, so page JSON can carry the scene as data; every layout takes the same copy, actions and client strip, and any layout can set a framed grid of arguments (`items`, three to a row, each a `Topic`) under the band. The client strip's overline falls back to the locale catalog (`Proven on mission-critical workloads`).
+> The opening band of a marketing page: the page `h1` with its overline, accent phrase, sentence and up to two actions, full width above the page column, with an optional client strip on the floor. It is a page section — the site places it from a `{ _id: 'hero-band', props }` entry and binds `props` straight onto it — and it composes `hero`, `hero-title`, `button` and `illustration`, plus `flow` and `tag` for the topology and `section-container`, `section-module`, `frame-box`, `card-grid`, `topic` and `section-gap` for the argument grid. `kind` picks the layout only: `center` fills a screen over a dot field with the copy centered, `title-band` is a padded band with the copy centered, `pixel-floor` sets the copy at the start over an animated pixel floor, `copy-beside-art` sets an illustration (or an `image`) beside the copy, sized from that illustration's own drawn bounds so it bleeds past the column edge and trims its empty top and bottom, and `copy-on-top-art` fills a screen with the copy centered over a scene in its `top` or `bottom` slot, unpadded so the scene reaches the band's edges, and draws a `Flow` topology from `levels` in the bottom window when neither slot is given, so page JSON can carry the scene as data; every layout takes the same copy, actions and client strip, and any layout can set a framed grid of arguments (`items`, three to a row, each a `Topic`) under the band. The client strip's overline falls back to the locale catalog (`Proven on mission-critical workloads`).
 
 - Import: `import HeroBand from '@aziontech/webkit/hero-band'`
 - Category: sections · Surface: site · Structure: monolithic
@@ -16,7 +16,7 @@
 
 - Use `title-band` with `size="large"` for a product page and `size="medium"` for a page whose bands start right under the headline.
 - Give `illustration` and `illustrationAriaLabel` only to the `copy-beside-art` layout; the other layouts ignore them.
-- Leave `titleLength` at `short` for a headline of up to about seven words: like azion.com, the `centered`, `title-band` and `centered-band` layouts set it on a narrower measure than the sentence under it, so "Certifications and Compliance" breaks over two lines. Use `long` only for a headline that would run to three lines.
+- Leave `titleLength` at `short` for a headline of up to about seven words: like azion.com, the `center`, `title-band` and `center-band` layouts set it on a narrower measure than the sentence under it, so "Certifications and Compliance" breaks over two lines. Use `long` only for a headline that would run to three lines.
 - Leave `headerOffset` at its default under `SiteNav`: it takes the bar's `--layout-header-height` out of a band that fills a screen, so the band fills exactly the first screen with it. Set it empty only on a page with no header above the band; never a literal length.
 
 ## Don’t
@@ -38,10 +38,10 @@
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `kind` | `HeroBandKind` | `'title-band'` | false | Layout of the band: `centered` fills a screen over a dot field, `title-band` is a padded band, `centered-band` is a large site-wide band with the copy centered, `compact-band` is a short site-wide band with the copy at the start, `pixel-floor` sets the copy over an animated pixel floor, `copy-beside-art` sets an illustration or an image beside the copy, `copy-on-top-art` fills a screen with the copy centered over a scene in the `top` or `bottom` slot. |
+| `kind` | `HeroBandKind` | `'title-band'` | false | Layout of the band: `center` fills a screen over a dot field, `title-band` is a padded band, `center-band` is a large site-wide band with the copy centered, `compact-band` is a short site-wide band with the copy at the start, `pixel-floor` sets the copy over an animated pixel floor, `copy-beside-art` sets an illustration or an image beside the copy, `copy-on-top-art` fills a screen with the copy centered over a scene in the `top` or `bottom` slot. |
 | `size` | `HeroBandSize` | `'medium'` | false | Vertical rhythm of the band; `large` is the opening a product page leads with. |
 | `eyebrow` | `string` | `''` | false | Short overline above the headline. |
-| `highlight` | `string` | `''` | false | Opening words of the headline, painted in the brand accent; reads as one sentence with `title`. |
+| `titleHighlight` | `string` | `''` | false | Opening words of the headline, painted in the brand accent; reads as one sentence with `title`. |
 | `title` | `string` | `''` | false | Page headline, rendered as the page `h1`; the band renders nothing when empty. |
 | `description` | `string` | `''` | false | Sentence under the headline. |
 | `primaryAction` | `HeroBandAction` | `undefined` | false | First button under the headline; `{ label, href, trailing?, target? }`. Shown only with a label and a link. |
@@ -55,7 +55,7 @@
 | `anchor` | `string` | `''` | false | In-page id set on the band so a `#hash` link can scroll to it. |
 | `headerOffset` | `string` | `'var(--layout-header-height)'` | false | Height of the site header above the band, taken out of a band that fills a screen; defaults to the `SiteNav` bar's token, any CSS length, empty for a page with no header above it. |
 | `titleLength` | `HeroBandTitleLength` | `'short'` | false | Length of the headline: `short` sets it on the site's narrow headline measure in the centered layouts, so a four-to-seven-word headline breaks over two balanced lines while the sentence under it keeps the full column; `long` lets the headline take the whole column. |
-| `plain` | `boolean` | `false` | false | Drops the dot texture of the `centered` layout. |
+| `plain` | `boolean` | `false` | false | Drops the dot texture of the `center` layout. |
 | `levels` | `HeroBandLevel[]` | `[]` | false | Columns of the topology the `copy-on-top-art` layout draws under the copy when neither scene slot is given, left to right; each is `{ nodes }`, the cards top to bottom, each `{ eyebrow, icon, title, label, severity, lit? }`. A card without `title` is skipped. |
 | `items` | `HeroBandItem[]` | `[]` | false | Arguments in a framed grid under the band, three to a row; each is `{ icon, title, description }`. The grid renders only when there are items. |
 
@@ -75,7 +75,7 @@
 
 - Visual states: `default`
 - `data-kind` mirrors the `kind` prop and drives the hero's height, width, backdrop and the copy alignment
-- `data-title-measure="narrow"` on the root when the headline is set on the narrow measure (`titleLength: 'short'` in the `centered`, `title-band` and `centered-band` layouts); the headline then caps at `--container-lg` while the description keeps the column
+- `data-title-measure="narrow"` on the root when the headline is set on the narrow measure (`titleLength: 'short'` in the `center`, `title-band` and `center-band` layouts); the headline then caps at `--container-lg` while the description keeps the column
 - Empty: when `title` is empty the band renders nothing but its root
 - The client strip renders only when `tickerMarks` has marks; each action renders only with a label and a link; the art renders only in the `copy-beside-art` layout with `illustration` or `image` set (`illustration` wins when both are given)
 - `copy-beside-art` art bounds: a registered illustration whose drawn area is known (the `azion-to-*` comparisons and the solution illustrations) takes a width, a bleed past the column's end edge and a top and bottom trim computed from where it is drawn on its canvas, set as `--hero-art-width`, `--hero-art-bleed`, `--hero-art-trim-top` and `--hero-art-trim-bottom` on the art box from `md` up; any other illustration keeps the default bounds (161.45 % wide, 35.73 % bleed, no trim); an `image` fills the media column. Below `md` the art takes the column width
@@ -151,8 +151,8 @@
 <template>
   <div class="flex flex-col">
     <HeroBand
-      kind="centered"
-      highlight="Build and run applications"
+      kind="center"
+      title-highlight="Build and run applications"
       title="globally, with no ops"
       description="Run code, AI, data, and security on 100+ data centers worldwide."
       :primary-action="{ label: 'Start for free', href: '/signup' }"
@@ -216,7 +216,7 @@
 <template>
   <div class="flex flex-col">
     <HeroBand
-      kind="centered-band"
+      kind="center-band"
       eyebrow="Pricing"
       title="Pay for what runs, not for what waits"
       description="Start free and grow without changing plans."
@@ -230,7 +230,7 @@
       description="New features and fixes, newest first."
     />
     <HeroBand
-      kind="centered"
+      kind="center"
       plain
       title="Ship from your terminal"
       description="One command creates, builds and deploys a project."

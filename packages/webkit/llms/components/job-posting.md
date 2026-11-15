@@ -1,6 +1,6 @@
 # Job Posting
 
-> The body of a careers posting page, under the posting's title band: the description in rows, one per section of the posting (a heading, then its paragraphs and bullet lists), beside a sticky rail that restates the posting (its area, its title and its facets such as department, location and contract) with the link to the application; then the application form, and a dialog that confirms a sent application with a way back to the open positions. From the design sample's careers job page. It is a page section — the site places it from a `{ _id: 'job-posting', props }` entry and binds `props` straight onto it — and it composes `section-module`, `frame-box`, `section-title`, `overline`, `button`, `field`, `label`, `input`, `phone-input`, `file-dropzone`, `file-token-group`, `alert`, `dialog` and `panel`. It collects data, so it follows the forms exception of the page-section contract: it validates on submit only and emits `submit`; the site sends the application and hands the outcome back through `loading`, `submitted` and `error`.
+> The body of a careers posting page, under the posting's title band: the description in rows, one per section of the posting (a heading, then its paragraphs and bullet lists), beside a sticky rail that restates the posting (its area, its title and its facets such as department, location and contract) with the link to the application; then the application form, and a dialog that confirms a sent application with a way back to the open positions. From the design sample's careers job page. It is a page section — the site places it from a `{ _id: 'job-posting', props }` entry and binds `props` straight onto it — and it composes `section-module`, `frame-box`, `section-title`, `overline`, `button`, `field`, `label`, `input`, `phone-input`, `file-dropzone`, `file-token-group`, `alert`, `dialog` and `panel`. It collects data, so it follows the forms exception of the page-section contract: it validates on submit only and emits `submit`; the site sends the application and hands the outcome back through `loading`, `submitted` and `failed`.
 
 - Import: `import JobPosting from '@aziontech/webkit/job-posting'`
 - Category: sections · Surface: site · Structure: monolithic
@@ -17,7 +17,7 @@
 - Set `form.anchor` (for example `apply`) and point the title band's action at `#apply`; the rail's apply button links there too.
 - Put the format and size limits of a `file` field in its `helper`, and the accepted types in `accept`.
 - Mark only what the team needs as `required`; say "Optional." in the `helper` of the rest.
-- Send the application from the `submit` handler, read the file from `new FormData(event.target)`, and set `loading`, then `submitted` or `error`.
+- Send the application from the `submit` handler, read the file from `new FormData(event.target)`, and set `loading`, then `submitted` or `failed`.
 
 ## Don’t
 
@@ -29,7 +29,7 @@
 ## Related
 
 - [hero-band](hero-band.md) — the title band above the posting; its action links to `#` plus `form.anchor`.
-- [hero-form](hero-form.md) — the sibling page section that also emits `submit` and takes `loading`, `submitted` and `error`.
+- [hero-form](hero-form.md) — the sibling page section that also emits `submit` and takes `loading`, `submitted` and `failed`.
 
 ## Props
 
@@ -46,7 +46,7 @@
 | `secondaryAction` | `JobPostingAction` | `undefined` | false | Link in the confirmation dialog back to the open positions; `{ label, href }`. Omitted when absent. |
 | `loading` | `boolean` | `false` | false | The site is sending the application: the submit button shows its loading state, every control is disabled and a submit is ignored. |
 | `submitted` | `boolean` | `false` | false | The site sent the application: the confirmation dialog opens. |
-| `error` | `boolean` | `false` | false | The site could not send the application: `messages.error` shows under the submit button. |
+| `failed` | `boolean` | `false` | false | The site could not send the application: `messages.error` shows under the submit button. |
 
 ## Events
 
@@ -56,11 +56,11 @@
 
 ## States
 
-- Visual states: `default`, `invalid`, `loading`, `submitted`, `error`
+- Visual states: `default`, `invalid`, `loading`, `submitted`, `failed`
 - `invalid`: on submit, an empty required field shows `messages.missing`, a malformed email `messages.invalidEmail` and a URL that does not start with `http://` or `https://` `messages.invalidUrl` under the field; focus moves to the first field in error; editing the field (or picking a file) clears its message; nothing is emitted
 - `loading` (prop): the submit button shows its loading state, the `fieldset` and every control are disabled and a submit emits nothing; `data-loading` on the root
 - `submitted` (prop): when it turns on, the confirmation dialog opens with `messages.successTitle`, `messages.successDescription`, the `secondaryAction` link and a `messages.done` button; closing the dialog (Done, the close button, `Escape` or the overlay) clears the form; `data-submitted` on the root
-- `error` (prop): a danger `Alert` with `messages.error` shows under the submit button; the form stays editable; `data-error` on the root
+- `failed` (prop): a danger `Alert` with `messages.error` shows under the submit button; the form stays editable; `data-failed` on the root
 - File field: an inline `file-dropzone` with a browse button takes one file; once picked, the file shows in a `file-token-group` whose remove button clears it and brings the dropzone back
 - Description: each section row after the first draws a rule above it (`data-ruled`); a `list` block is a bulleted list
 - Rail: shown from the large breakpoint up, sticky under the site header while the description scrolls; the apply button renders only when `applyLabel` is set
@@ -338,7 +338,7 @@ No built-in strings: every visible string and accessible name comes from the pro
       :messages="messages"
       :secondary-action="{ label: 'See open positions', href: '/careers' }"
       :submitted="submitted"
-      error
+      failed
     />
   </div>
 </template>

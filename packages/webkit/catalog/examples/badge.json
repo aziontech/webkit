@@ -3,12 +3,12 @@
   {
    "name": "Default",
    "summary": "A single badge driven by the controls.",
-   "sfc": "<script setup>\n  import Badge from '@aziontech/webkit/badge'\n</script>\n\n<template>\n  <Badge\n    label=\"99\"\n    severity=\"primary\"\n    size=\"medium\"\n  />\n</template>"
+   "sfc": "<script setup>\n  import Badge from '@aziontech/webkit/badge'\n</script>\n\n<template>\n  <Badge\n    label=\"99\"\n    variant=\"primary\"\n    size=\"medium\"\n  />\n</template>"
   },
   {
    "name": "Types",
-   "summary": "All severities side by side.",
-   "sfc": "<script setup>\n  import Badge from '@aziontech/webkit/badge'\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-center gap-4\">\n    <Badge\n      label=\"99\"\n      severity=\"primary\"\n    />\n    <Badge\n      label=\"99\"\n      severity=\"secondary\"\n    />\n    <Badge\n      label=\"99\"\n      severity=\"success\"\n    />\n    <Badge\n      label=\"99\"\n      severity=\"warning\"\n    />\n    <Badge\n      label=\"99\"\n      severity=\"danger\"\n    />\n    <Badge\n      label=\"99\"\n      severity=\"neutral\"\n    />\n  </div>\n</template>"
+   "summary": "Both variants and every severity side by side.",
+   "sfc": "<script setup>\n  import Badge from '@aziontech/webkit/badge'\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-center gap-4\">\n    <Badge\n      label=\"99\"\n      variant=\"primary\"\n    />\n    <Badge\n      label=\"99\"\n      variant=\"secondary\"\n    />\n    <Badge\n      label=\"99\"\n      severity=\"success\"\n    />\n    <Badge\n      label=\"99\"\n      severity=\"info\"\n    />\n    <Badge\n      label=\"99\"\n      severity=\"warning\"\n    />\n    <Badge\n      label=\"99\"\n      severity=\"danger\"\n    />\n    <Badge\n      label=\"99\"\n      severity=\"neutral\"\n    />\n  </div>\n</template>"
   },
   {
    "name": "Sizes",

@@ -41,7 +41,7 @@
 | `title` | `string` | `''` | false | Headline of the module's header row, rendered as its `h2`. |
 | `description` | `string` | `''` | false | Supporting sentence under the headline. |
 | `eyebrow` | `string` | `''` | false | Short uppercase overline rendered above the headline. |
-| `kind` | `SectionModuleKind` | `'left'` | false | Layout of the default header row. |
+| `kind` | `SectionModuleKind` | `'start'` | false | Layout of the default header row. |
 | `divided` | `boolean` | `true` | false | Draw the top rule that divides this module from the one above it. |
 | `padded` | `boolean` | `true` | false | Pad the module's body. Leave off for an edge-to-edge grid that owns its cell padding. |
 
@@ -100,21 +100,21 @@
   <div>
     <SectionModule
       :divided="false"
-      kind="left"
+      kind="start"
       eyebrow="Platform"
       title="Left"
     >
       <p class="m-0 text-body-md text-(--text-muted)">The header sits at the start edge.</p>
     </SectionModule>
     <SectionModule
-      kind="centered"
+      kind="center"
       eyebrow="Platform"
       title="Centered"
     >
       <p class="m-0 text-body-md text-(--text-muted)">The header is centered.</p>
     </SectionModule>
     <SectionModule
-      kind="horizontal"
+      kind="split"
       eyebrow="Platform"
       title="Horizontal"
       description="The description takes its own column."

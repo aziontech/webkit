@@ -17,7 +17,7 @@
 
 - One sentence, ending in a period. If it needs two, it belongs in `helper-text` or a `popover`.
 - Never hide required information behind a hint — hover is not discoverable on touch, so treat it as an enhancement.
-- The `text` doubles as the button's accessible name, so write it as prose a screen reader can read verbatim.
+- The `content` doubles as the button's accessible name, so write it as prose a screen reader can read verbatim.
 - Place it immediately after the thing it explains, not at the end of a row.
 
 ## Don’t
@@ -37,7 +37,7 @@
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `text` | `string` | `''` | true | Guidance text revealed on hover or focus; also the trigger's accessible name. |
+| `content` | `string` | `''` | true | Guidance text revealed on hover or focus; also the trigger's accessible name. |
 | `placement` | `'top' \| 'right' \| 'bottom' \| 'left' \| 'auto'` | `'top'` | false | Anchor side of the tooltip relative to the glyph. |
 
 ## States
@@ -49,7 +49,7 @@
 ## Accessibility
 
 - The trigger is a native `<button type="button">`, so it is in the tab order and the tooltip opens on `focus` as well as hover (`Tooltip` opens on `focusin`).
-- The glyph is decorative (`aria-hidden="true"`); the button's accessible name is the `text` prop, so the hint is reachable by screen readers that never see the tooltip.
+- The glyph is decorative (`aria-hidden="true"`); the button's accessible name is the `content` prop, so the hint is reachable by screen readers that never see the tooltip.
 - Keyboard map: `Tab` moves focus to the glyph and opens the tooltip; `Escape` closes it (owned by `Tooltip`); the button has no activation behaviour.
 - The button's default action is prevented on click, so a `Hint` rendered inside a `<label>` never toggles the labelled control.
 - Contrast ≥4.5:1 between `var(--text-muted)` and `var(--bg-canvas)`; the focus ring uses `var(--ring-color)` at 2px with an offset.
@@ -65,7 +65,7 @@
 </script>
 
 <template>
-  <Hint text="Values are encrypted at rest and never displayed again after saving." />
+  <Hint content="Values are encrypted at rest and never displayed again after saving." />
 </template>
 ```
 
@@ -79,19 +79,19 @@
 <template>
   <div class="flex items-center gap-(--spacing-lg)">
     <Hint
-      text="Anchored above the glyph."
+      content="Anchored above the glyph."
       placement="top"
     />
     <Hint
-      text="Anchored to the right of the glyph."
+      content="Anchored to the right of the glyph."
       placement="right"
     />
     <Hint
-      text="Anchored below the glyph."
+      content="Anchored below the glyph."
       placement="bottom"
     />
     <Hint
-      text="Anchored to the left of the glyph."
+      content="Anchored to the left of the glyph."
       placement="left"
     />
   </div>

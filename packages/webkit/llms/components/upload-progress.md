@@ -41,7 +41,7 @@
 | `title` | `string` | `''` | false | Overrides the header text. Empty builds it from the operation and the counts. |
 | `floating` | `boolean` | `true` | false | Fixes the card to the inline-end bottom corner of the viewport; false renders it in the flow. |
 | `cancelable` | `boolean` | `true` | false | Shows Cancel on running and waiting files and Cancel all in the header. |
-| `expanded` | `boolean` | `undefined as never` | false | Two-way value (`v-model:expanded`). |
+| `open` | `boolean` | `undefined as never` | false | Two-way value (`v-model:open`). |
 
 ## Events
 
@@ -61,13 +61,13 @@
 
 | Model               | Type      | Default | Emits              | Notes                                                     |
 | ------------------- | --------- | ------- | ------------------ | --------------------------------------------------------- |
-| `v-model:expanded`  | `boolean` | `undefined` (resolves to `true`) | `update:expanded`  | Shows the file list; `false` hides it and keeps the header and overall bar. While it is unbound the card starts expanded. |
+| `v-model:open`      | `boolean` | `undefined` (resolves to `true`) | `update:open`      | Shows the file list; `false` hides it and keeps the header and overall bar. While it is unbound the card starts open. |
 
 ## States
 
-- Root `data-state`: `running` (some file queued or running) | `done` (all finished, none failed) | `failed` (all finished, at least one error).
-- Root `data-floating` when floating; `data-collapsed` when the list is hidden.
-- Row `data-status`: `queued` | `running` | `done` | `error` | `canceled`.
+- Root `data-status`: `running` (some file pending or running) | `success` (all finished, none failed) | `error` (all finished, at least one error).
+- Root `data-floating` when floating; `data-state="open|closed"` for the file list.
+- Row `data-status`: `pending` | `running` | `success` | `error` | `canceled`.
 
 ## Accessibility
 
@@ -129,10 +129,10 @@
   import { onBeforeUnmount, ref } from 'vue'
 
   const initial = () => [
-    { id: 'logo', name: 'logo.svg', size: 4210, status: 'done' },
+    { id: 'logo', name: 'logo.svg', size: 4210, status: 'success' },
     { id: 'app', name: 'app.js', size: 248_320, status: 'running', progress: 64 },
     { id: 'styles', name: 'styles.css', size: 52_100, status: 'running' },
-    { id: 'hero', name: 'hero.webp', size: 1_482_000, status: 'queued' }
+    { id: 'hero', name: 'hero.webp', size: 1_482_000, status: 'pending' }
   ]
 
   const items = ref(initial())
@@ -143,15 +143,15 @@
     items.value = items.value.map((item) => {
       if (item.status === 'running') {
         const progress = Math.min(100, (item.progress ?? 0) + 18)
-        return progress >= 100 ? { ...item, status: 'done', progress } : { ...item, progress }
+        return progress >= 100 ? { ...item, status: 'success', progress } : { ...item, progress }
       }
-      if (item.status === 'queued' && !started) {
+      if (item.status === 'pending' && !started) {
         started = true
         return { ...item, status: 'running', progress: 0 }
       }
       return item
     })
-    if (items.value.every((item) => item.status !== 'running' && item.status !== 'queued')) {
+    if (items.value.every((item) => item.status !== 'running' && item.status !== 'pending')) {
       clearInterval(timer)
     }
   }
@@ -165,7 +165,7 @@
   const cancel = (id) => {
     items.value = items.value.map((item) =>
       (id === undefined || item.id === id) &&
-      (item.status === 'running' || item.status === 'queued')
+      (item.status === 'running' || item.status === 'pending')
         ? { ...item, status: 'canceled' }
         : item
     )
@@ -200,10 +200,10 @@
   import UploadProgress from '@aziontech/webkit/upload-progress'
 
   const items = [
-    { id: 'logo', name: 'logo.svg', size: 4210, status: 'done' },
-    { id: 'app', name: 'app.js', size: 248_320, status: 'done' },
+    { id: 'logo', name: 'logo.svg', size: 4210, status: 'success' },
+    { id: 'app', name: 'app.js', size: 248_320, status: 'success' },
     { id: 'video', name: 'intro.mp4', size: 96_400_000, status: 'error', error: 'Connection lost' },
-    { id: 'styles', name: 'styles.css', size: 52_100, status: 'done' }
+    { id: 'styles', name: 'styles.css', size: 52_100, status: 'success' }
   ]
 </script>
 
@@ -232,19 +232,19 @@
   import UploadProgress from '@aziontech/webkit/upload-progress'
   import { ref } from 'vue'
 
-  const expanded = ref(false)
+  const open = ref(false)
 
   const items = [
-    { id: 'a', name: 'reports/2026-10.csv', size: 18_200, status: 'done' },
+    { id: 'a', name: 'reports/2026-10.csv', size: 18_200, status: 'success' },
     { id: 'b', name: 'reports/2026-11.csv', size: 19_400, status: 'running', progress: 40 },
-    { id: 'c', name: 'reports/summary.pdf', size: 402_000, status: 'queued' }
+    { id: 'c', name: 'reports/summary.pdf', size: 402_000, status: 'pending' }
   ]
 </script>
 
 <template>
   <div class="w-full max-w-(--container-xs)">
     <UploadProgress
-      v-model:expanded="expanded"
+      v-model:open="open"
       :items="items"
       operation="move"
       :floating="false"

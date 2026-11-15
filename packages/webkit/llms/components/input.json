@@ -121,12 +121,12 @@
  "events": [],
  "slots": [
   {
-   "name": "prefix",
+   "name": "leading",
    "scope": "",
    "notes": "Hidden from assistive tech (`aria-hidden=\"true\"`). Logical: it sits on the right under `dir=\"rtl\"`."
   },
   {
-   "name": "suffix",
+   "name": "trailing",
    "scope": "",
    "notes": "Hidden from assistive tech (`aria-hidden=\"true\"`)."
   }
@@ -144,7 +144,7 @@
   },
   {
    "name": "Icons",
-   "sfc": "<script setup>\n  import Input from '@aziontech/webkit/input'\n  import { ref } from 'vue'\n\n  const leading = ref('')\n  const trailing = ref('')\n  const both = ref('')\n</script>\n\n<template>\n  <div class=\"flex flex-col items-stretch gap-4 w-[280px]\">\n    <Input\n      v-model=\"leading\"\n      placeholder=\"Leading icon\"\n    >\n      <template #prefix>\n        <i class=\"ai ai-globe\" />\n      </template>\n    </Input>\n    <Input\n      v-model=\"trailing\"\n      placeholder=\"Trailing icon\"\n    >\n      <template #suffix>\n        <i class=\"ai ai-search\" />\n      </template>\n    </Input>\n    <Input\n      v-model=\"both\"\n      placeholder=\"Both icons\"\n    >\n      <template #prefix>\n        <i class=\"ai ai-globe\" />\n      </template>\n      <template #suffix>\n        <i class=\"ai ai-search\" />\n      </template>\n    </Input>\n  </div>\n</template>"
+   "sfc": "<script setup>\n  import Input from '@aziontech/webkit/input'\n  import { ref } from 'vue'\n\n  const leading = ref('')\n  const trailing = ref('')\n  const both = ref('')\n</script>\n\n<template>\n  <div class=\"flex flex-col items-stretch gap-4 w-[280px]\">\n    <Input\n      v-model=\"leading\"\n      placeholder=\"Leading icon\"\n    >\n      <template #leading>\n        <i class=\"ai ai-globe\" />\n      </template>\n    </Input>\n    <Input\n      v-model=\"trailing\"\n      placeholder=\"Trailing icon\"\n    >\n      <template #trailing>\n        <i class=\"ai ai-search\" />\n      </template>\n    </Input>\n    <Input\n      v-model=\"both\"\n      placeholder=\"Both icons\"\n    >\n      <template #leading>\n        <i class=\"ai ai-globe\" />\n      </template>\n      <template #trailing>\n        <i class=\"ai ai-search\" />\n      </template>\n    </Input>\n  </div>\n</template>"
   }
  ],
  "docs": "components/input.md"

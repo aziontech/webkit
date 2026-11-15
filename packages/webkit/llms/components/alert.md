@@ -9,7 +9,7 @@
 ## When to use
 
 - A status, warning or error that belongs to a page, section or form and should stay visible in context.
-- A notice with an inline link, or with one follow-up action (`actionLabel` or the `action` slot).
+- A notice with an inline link, or with one follow-up action (`actionLabel` or the `actions` slot).
 - A notice that needs a short headline and a sentence of detail (`title` over the copy): "Maintenance scheduled" over the window and what changes.
 
 ## Do
@@ -17,7 +17,7 @@
 - Pick `severity` by meaning. `danger` and `warning` render with `role="alert"`.
 - Use `label` for plain copy and the default slot when the copy needs inline links.
 - Set `title` when the alert says two things: what happened (the title, a few words, no end period) and what it means or what to do (the copy). A one-sentence alert needs no title. A title alone, with no copy, is allowed for a short notice that still wants the heading weight.
-- Use either the built-in action (`actionLabel` with `@action`) or the `action` slot, not both. The slot replaces the button.
+- Use either the built-in action (`actionLabel` with `@action`) or the `actions` slot, not both. The slot replaces the button.
 - Once `closable` or `life` dismisses the message, it stays hidden until it is remounted. Listen to `close` to keep your own state in sync.
 - Use `size="small"` inside dense surfaces such as cards and drawers.
 
@@ -54,13 +54,13 @@
 | Event | Payload | Notes |
 | --- | --- | --- |
 | `action` | `MouseEvent` | Emitted when the built-in action button is clicked. |
-| `close` | `(event?: Event)` | Emitted when the message is dismissed, after the fade. Carries the originating event: the close button's `MouseEvent` or the `Escape` `KeyboardEvent`; no argument after `life` expires. |
+| `close` | `(event: Event)` | Emitted when the message is dismissed, after the fade. Carries the originating event: the close button's `MouseEvent`, the `Escape` `KeyboardEvent`, or an `Event` of type `timeout` after `life` expires. |
 
 ## Slots
 
 | Slot | Scope | Notes |
 | --- | --- | --- |
-| `action` | — | Custom action control; replaces the built-in Button when provided. |
+| `actions` | — | Custom action control; replaces the built-in Button when provided. |
 | `default` | — | Alert copy. Inline content — plain text plus anchors, which the message region styles with the `.text-link` token — or flow content such as paragraphs and a list. The copy region is a flow container (a `div`, not a `p`), so block markup arriving from a server render stays inside it instead of being closed out beside the copy. Falls back to `label` when empty. |
 
 ## Assets
@@ -71,7 +71,7 @@
 
 - Visual states: default (per severity)
 - `data-titled` on the root mirrors a non-empty `title`: the title renders above the copy in `.text-heading-2xs` (`__title`), and the copy keeps its size below it. With a title and no copy (no default slot, empty `label`), only the title renders.
-- Responsive: the root is the `@container/alert`. Below `@sm` of its box the action (built-in or the `action` slot, wrapped in `[data-slot=alert-action]`) moves to its own line under the message while the close button stays on the message line.
+- Responsive: the root is the `@container/alert`. Below `@sm` of its box the action (built-in or the `actions` slot, wrapped in `[data-slot=alert-actions]`) moves to its own line under the message while the close button stays on the message line.
 
 ## Accessibility
 

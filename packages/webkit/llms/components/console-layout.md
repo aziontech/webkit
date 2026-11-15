@@ -21,7 +21,7 @@
 - A page that owns its trail (a loaded name, a control crumb) renders `ConsoleLayout.Breadcrumbs`: `items` are the crumbs, the default slot the trailing controls (a `Select` with `kind="transparent"`, `size="small"`, an `aria-label`, no `w-full`). It replaces the layout's trail while the page is mounted and renders nothing in place.
 - Put the app's own header actions (`Create`, `Agent`) in the `actions` slot and render them icon-only while `compact`.
 - Put the account menu groups (`DropdownMenu.Group`) in the `account-menu` slot; the layout renders the avatar and the trigger.
-- Put an account switcher in `sidebar-header` (full width under the wordmark, the design sample's rail) and, below the compact breakpoint, in `header-start` while `compact`; page-level flash messages go in `notifications`, and help or the notifications list in `tools` (toggled from a bell in `actions` with `toggleTools`).
+- Put an account switcher in `sidebar-header` (full width under the wordmark, the design sample's rail) and, below the compact breakpoint, in `header-leading` while `compact`; page-level flash messages go in `notifications`, and help or the notifications list in `tools` (toggled from a bell in `actions` with `toggleTools`).
 - A page's control crumb is its `ConsoleLayout.Breadcrumbs`, never `App.vue`'s `breadcrumbs` slot.
 - A workspace page (editor, pinned panes) puts `data-layout-fill` on its root: the `<main>` becomes a fixed-height, non-scrolling region the root fills. Never size a body with `100dvh` or `calc(100dvh - var(--layout-header-height))` (lint `webkit/no-viewport-height-calc`, also run by the authoring ratchet over blocks and examples).
 - Bind `v-model:navigation-open` when the rail's state must survive a reload or be driven from elsewhere (a `Collapse sidebar` / `Expand sidebar` command in the `search` slot); persist it in the app. The rail's own collapse control and the edge affordance keep working either way.
@@ -76,8 +76,8 @@
 | --- | --- | --- |
 | `default` | — | The page body, rendered inside the layout's `<main>`; a body whose root carries `data-layout-fill` fills a fixed-height, non-scrolling main. |
 | `actions` | { compact: boolean, toggleTools: () => void } | The app's header actions, between the search trigger and the avatar; render them icon-only while `compact`; `toggleTools` opens and closes the tools region (a notifications bell). |
-| `header-start` | { compact: boolean } | Content at the start of the header, before the breadcrumbs (an account or organization switcher). |
-| `sidebar-header` | { compact: boolean } | Content in the rail under the wordmark, above the navigation (a full-width account or organization switcher); `compact` is true when the rail is the compact drawer (render nothing there to keep the switcher in `header-start`). Rendered only when given; a region whose slot renders nothing (a false `v-if`) is hidden. |
+| `header-leading` | { compact: boolean } | Content at the start of the header, before the breadcrumbs (an account or organization switcher). |
+| `sidebar-header` | { compact: boolean } | Content in the rail under the wordmark, above the navigation (a full-width account or organization switcher); `compact` is true when the rail is the compact drawer (render nothing there to keep the switcher in `header-leading`). Rendered only when given; a region whose slot renders nothing (a false `v-if`) is hidden. |
 | `breadcrumbs` | — | An app-wide composed trail that replaces the one built from `breadcrumbs`; a page's `ConsoleLayout.Breadcrumbs` replaces both; hidden while compact. |
 | `notifications` | — | Flash messages (`Alert`) above the page, kept in view while the page scrolls. |
 | `tools` | — | The tools region's body (a `HelpPanel` or the notifications list), opened with `v-model:tools-open`. |
@@ -162,7 +162,7 @@ packages/webkit/src/components/layout/console-layout/
 ## Responsive
 
 - Container queries: `AppLayout` measures its own width; below its `compactBelow` the rail is a drawer and the header shows the hamburger and the brand instead of the breadcrumbs. The header bar is an `@container`, so `SearchTrigger collapsible` folds to the magnifier on narrow headers.
-- Narrow: the `actions` slot receives `compact` so the app renders icon-only actions; the breadcrumb truncates. Below the header's `@xs` (a 320 px phone) the header drops the brand mark and keeps the hamburger, so `header-start` and the actions fit; the brand stays in the navigation drawer.
+- Narrow: the `actions` slot receives `compact` so the app renders icon-only actions; the breadcrumb truncates. Below the header's `@xs` (a 320 px phone) the header drops the brand mark and keeps the hamburger, so `header-leading` and the actions fit; the brand stays in the navigation drawer.
 - Rail header: `sidebar-header` sits under the wordmark at the rail's width; it is hidden with the rest of the rail content when the rail collapses, and in the compact drawer it renders with `compact: true`.
 - Touch: hamburger and avatar keep the 32 px controls of `IconButton` / `Avatar` and grow on coarse pointers through those components.
 - Reflow: no horizontal scroll at 320 px; the page body scrolls inside `AppLayout`'s content region.
@@ -256,7 +256,7 @@ packages/webkit/src/components/layout/console-layout/
     <template #actions="{ compact }">
       <Tooltip
         v-if="compact"
-        text="Create"
+        content="Create"
         placement="bottom"
       >
         <IconButton
@@ -284,7 +284,7 @@ packages/webkit/src/components/layout/console-layout/
     <template #search="{ query }">
       <Command.Group
         v-if="!query"
-        heading="Recents"
+        label="Recents"
       >
         <Command.Item value="recent:edge-shop">edge-shop</Command.Item>
         <Command.Item value="recent:auth-handler">auth-handler</Command.Item>
@@ -418,9 +418,9 @@ packages/webkit/src/components/layout/console-layout/
     @search-select="onSearchSelect"
   >
     <template #search>
-      <Command.Group heading="Actions">
+      <Command.Group label="Actions">
         <Command.Item value="action:sidebar">
-          <template #prefix>
+          <template #leading>
             <i
               :class="navigationOpen ? 'ai ai-chevrons-left' : 'ai ai-chevrons-right'"
               aria-hidden="true"

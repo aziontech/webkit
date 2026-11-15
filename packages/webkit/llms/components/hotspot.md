@@ -46,8 +46,8 @@
 
 ## States
 
-- Visual states: `inactive` (no marker), `active` (static marker: the step belongs to the running tutorial), `current` (marker filled and pulsing, popover open), `dismissed` (current step closed by the reader: marker filled, no pulse, popover closed)
-- `data-active` on the root when the marker shows; `data-current` on the root and on the marker for the current step
+- Visual states: `idle` (no marker), `marked` (static marker: the step belongs to the running tutorial), `active` (the current step: marker filled and pulsing, popover open), `dismissed` (active step closed by the reader: marker filled, no pulse, popover closed)
+- `data-marker` on the root when the marker shows; `data-active` on the root and on the marker for the current step (the step you are on)
 - `data-side` mirrors `side`
 - The popover's `data-state` is `open` | `closed` (owned by `Popover`)
 

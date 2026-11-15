@@ -194,7 +194,7 @@ Each variant is the same screen in another state: `get_block("account/mfa-settin
   const withoutMfa = computed(() => members.value.filter((member) => !member.enabled))
 
   const columns: TableColumn[] = [
-    { accessorKey: 'name', header: 'Name', enableSorting: true, principal: true, hideable: false },
+    { accessorKey: 'name', header: 'Name', sortable: true, principal: true, hideable: false },
     { accessorKey: 'status', header: 'MFA', minWidth: 120 },
     { accessorKey: 'method', header: 'Method', minWidth: 160 },
     { accessorKey: 'since', header: 'Set up', minWidth: 160 },
@@ -322,7 +322,7 @@ Each variant is the same screen in another state: `get_block("account/mfa-settin
 
       <section class="layout-section-start flex min-w-0 flex-col gap-(--layout-section-gap)">
         <Card :padded="false">
-          <template #content>
+          <template #default>
             <Item.List>
               <SettingRow
                 title="Require MFA"
@@ -362,7 +362,7 @@ Each variant is the same screen in another state: `get_block("account/mfa-settin
             </div>
             <div class="flex shrink-0 flex-wrap items-center gap-(--spacing-xs)">
               <Tooltip
-                text="Refresh"
+                content="Refresh"
                 class="shrink-0"
               >
                 <IconButton
@@ -375,7 +375,7 @@ Each variant is the same screen in another state: `get_block("account/mfa-settin
                 />
               </Tooltip>
               <Tooltip
-                text="Download CSV"
+                content="Download CSV"
                 class="shrink-0"
               >
                 <IconButton
@@ -399,7 +399,7 @@ Each variant is the same screen in another state: `get_block("account/mfa-settin
             severity="danger"
           >
             The MFA status could not be loaded. Nothing was changed; try again.
-            <template #action>
+            <template #actions>
               <Button
                 label="Retry"
                 kind="secondary"
@@ -413,12 +413,12 @@ Each variant is the same screen in another state: `get_block("account/mfa-settin
             v-else
             :padded="false"
           >
-            <template #content>
+            <template #default>
               <DataTable
                 ref="membersTableEl"
                 v-bind="tableProps"
                 :loading="loading"
-                enable-sorting
+                sortable
                 :bordered="false"
                 aria-label="People and their MFA status"
               >

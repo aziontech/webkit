@@ -18,7 +18,7 @@
 - Pass the page's headings as `outline` (`{ id, text, depth }`) with the same ids the `DocHeading`s carry; the layout tracks which one is in view.
 - Put the theme switch in `navigation-footer`, the GitHub and Console links in `actions`, a call to action (`DocCallToAction`) in `aside`, and the site footer (`Footer kind="content"`) in `footer`.
 - The page renders no `<main>` and no `ScrollArea` around the article: the document scrolls.
-- Bind `v-model:navigation-expanded` and `v-model:navigation-width` to state the app persists (local storage, a cookie) so the rail keeps the reader's size and collapsed state across pages and reloads; leave them unbound and the rail resets on each mount.
+- Bind `v-model:navigation-open` and `v-model:navigation-width` to state the app persists (local storage, a cookie) so the rail keeps the reader's size and collapsed state across pages and reloads; leave them unbound and the rail resets on each mount.
 - A drill row (`kind: 'drill'`) opens its level in place; the rail's Back then reads `Back to Docs` at the first level. Set `rootLabel` when the tree is not the whole docs (`Back to API reference`); never add a hand-made Back row to `navigation`.
 
 ## Don’t
@@ -49,7 +49,7 @@
 | `ariaLabel` | `string` | `''` | false | Accessible name of the navigation landmark. Empty uses the locale catalog (`Documentation`). |
 | `rootLabel` | `string` | `''` | false | Names the top of the docs tree in the rail's Back button on the first drill level (`Back to Docs`); deeper levels name their parent row. Empty uses the locale catalog (`Docs`). |
 | `searchOpen` | `boolean` | `false` | false | Two-way value (`v-model:searchOpen`). |
-| `navigationExpanded` | `boolean` | `true` | false | Two-way value (`v-model:navigationExpanded`). |
+| `navigationOpen` | `boolean` | `true` | false | Two-way value (`v-model:navigationOpen`). |
 | `navigationWidth` | `number \| null` | `null` | false | Two-way value (`v-model:navigationWidth`). |
 
 ## Events
@@ -72,11 +72,11 @@
 
 ## v-model
 
-| Model                         | Type             | Default | Emits                       | Notes                                                                                                                                                                                          |
-| ----------------------------- | ---------------- | ------- | --------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `v-model:search-open`         | `boolean`        | `false` | `update:searchOpen`         | Whether the search palette is open; the header search and ⌘K / Ctrl K set it.                                                                                                                  |
-| `v-model:navigation-expanded` | `boolean`        | `true`  | `update:navigationExpanded` | Whether the navigation rail is expanded from `lg`; `false` collapses it to the edge affordance that brings it back. No effect below `lg`, where the rail is a drawer.                          |
-| `v-model:navigation-width`    | `number \| null` | `null`  | `update:navigationWidth`    | The rail's width in px after the reader drags its edge; `null` uses the natural width (`var(--container-2xs)`). Clamped by `Sidebar` between `var(--container-3xs)` and `var(--container-sm)`. |
+| Model                      | Type             | Default | Emits                    | Notes                                                                                                                                                                                          |
+| -------------------------- | ---------------- | ------- | ------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `v-model:search-open`      | `boolean`        | `false` | `update:searchOpen`      | Whether the search palette is open; the header search and ⌘K / Ctrl K set it.                                                                                                                  |
+| `v-model:navigation-open`  | `boolean`        | `true`  | `update:navigationOpen`  | Whether the navigation rail is open from `lg`; `false` collapses it to the edge affordance that brings it back. No effect below `lg`, where the rail is a drawer.                              |
+| `v-model:navigation-width` | `number \| null` | `null`  | `update:navigationWidth` | The rail's width in px after the reader drags its edge; `null` uses the natural width (`var(--container-2xs)`). Clamped by `Sidebar` between `var(--container-3xs)` and `var(--container-sm)`. |
 
 ## States
 
@@ -206,7 +206,7 @@
         <DocPageHeader
           title="First deploy"
           description="Deploy a template and see it served from the edge."
-          :breadcrumb="[
+          :breadcrumbs="[
             { label: 'Get started', href: '/docs/get-started' },
             { label: 'First deploy' }
           ]"
@@ -260,14 +260,14 @@
     }
   ]
 
-  const expanded = ref(true)
+  const open = ref(true)
   const width = ref<number | null>(null)
 
   onMounted(() => {
     try {
       const saved = JSON.parse(globalThis.localStorage.getItem(STORAGE_KEY) ?? 'null')
       if (saved) {
-        expanded.value = saved.expanded !== false
+        open.value = saved.open !== false
         width.value = typeof saved.width === 'number' ? saved.width : null
       }
     } catch {
@@ -275,11 +275,11 @@
     }
   })
 
-  watch([expanded, width], () => {
+  watch([open, width], () => {
     try {
       globalThis.localStorage.setItem(
         STORAGE_KEY,
-        JSON.stringify({ expanded: expanded.value, width: width.value })
+        JSON.stringify({ open: open.value, width: width.value })
       )
     } catch {
       return
@@ -289,7 +289,7 @@
 
 <template>
   <DocLayout
-    v-model:navigation-expanded="expanded"
+    v-model:navigation-open="open"
     v-model:navigation-width="width"
     :navigation="navigation"
     :outline="[{ id: 'resize-the-rail', text: 'Resize the rail', depth: 2 }]"

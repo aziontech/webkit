@@ -25,7 +25,7 @@
   "link` — a general-purpose link without the segment's ghost hover and current-page treatment."
  ],
  "bestPractices": [
-  "Set `current` on the last segment only; it renders a `span` with `aria-current=\"page\"`, drops out of the tab order and ignores `href`.",
+  "Set `active` on the last segment only; it renders a `span` with `aria-current=\"page\"`, drops out of the tab order and ignores `href`.",
   "Always pass a real `href` on ancestors — an empty `href` (the default) renders `#`, and the segment renders an `a`.",
   "Use `show-icon` together with `icon` (an Azion icon class; empty shows `ai ai-box`); `icon` alone renders nothing.",
   "disabled` suppresses the `click` emit and removes the segment from the tab order; prefer omitting an unreachable ancestor over disabling it."
@@ -43,10 +43,10 @@
    "type": "string",
    "default": "''",
    "required": "false",
-   "doc": "Destination when the segment is a link (ignored when `current` is true); empty renders `#`."
+   "doc": "Destination when the segment is a link (ignored when `active` is true); empty renders `#`."
   },
   {
-   "name": "current",
+   "name": "active",
    "type": "boolean",
    "default": "false",
    "required": "false",
@@ -78,7 +78,7 @@
   {
    "name": "click",
    "payload": "(event: MouseEvent, item: { label: string; href: string })",
-   "notes": "Fires when the segment's link is activated (the `current` segment renders a non-interactive `span`). `item` carries the segment's `label` and `href`."
+   "notes": "Fires when the segment's link is activated (the `active` segment renders a non-interactive `span`). `item` carries the segment's `label` and `href`."
   }
  ],
  "slots": [],
@@ -90,8 +90,8 @@
    "sfc": "<script setup>\n  import BreadcrumbItem from '@aziontech/webkit/breadcrumb-item'\n</script>\n\n<template>\n  <BreadcrumbItem\n    label=\"Page Name\"\n    href=\"#\"\n  />\n</template>"
   },
   {
-   "name": "Current",
-   "sfc": "<script setup>\n  import BreadcrumbItem from '@aziontech/webkit/breadcrumb-item'\n</script>\n\n<template>\n  <BreadcrumbItem\n    label=\"Current Page\"\n    current\n  />\n</template>"
+   "name": "Active",
+   "sfc": "<script setup>\n  import BreadcrumbItem from '@aziontech/webkit/breadcrumb-item'\n</script>\n\n<template>\n  <BreadcrumbItem\n    label=\"Current Page\"\n    active\n  />\n</template>"
   },
   {
    "name": "WithIcon",

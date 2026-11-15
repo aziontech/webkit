@@ -19,7 +19,7 @@
   "Write items as Title Case verb phrases describing an action (\"Deploy Project\"), not navigation labels.",
   "Keep the palette controlled via `v-model:open` so the app can open it from a button and from the global ⌘K shortcut.",
   "Bind the open state with `v-model:open`, or `:open` plus an `@update:open` handler typed `(open: boolean) => void`. The payload is always a `boolean`, so the handler needs no cast and no `Boolean(...)`.",
-  "Group related actions with `<Command.Group heading=\"…\">` and separate distinct sections with `<Command.Separator>`.",
+  "Group related actions with `<Command.Group label=\"…\">` and separate distinct sections with `<Command.Separator>`.",
   "Give an item `keywords` for the words people type that are not in its label (`['org', 'team']` on \"Switch organization\"). Keywords match, they are never shown.",
   "Use a `Page` for a choice that needs its own list (\"Switch project\", \"Change theme\"), not for a deep tree: pages are one stack, and every page is one Backspace away from the previous one."
  ]
