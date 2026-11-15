@@ -60,3 +60,6 @@ export const ToastPlugin: Plugin = {
 }
 
 export { toast, toastStore, useToast, useToastStore }
+export type { ToastProps } from './toast.vue'
+export type { ToastActionProps } from './toast-action/toast-action.vue'
+export type { ToastItemProps } from './toast-item/toast-item.vue'

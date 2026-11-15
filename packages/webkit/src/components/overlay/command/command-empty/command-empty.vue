@@ -2,7 +2,7 @@
   import { computed, useAttrs } from 'vue'
 
   import { useTranslate } from '../../../../composables/use-translate'
-  import * as en from '../../../../i18n/messages/en'
+  import * as en from '../../../../locales/en'
   import { useCommandMenuContext } from '../injection-key'
 
   defineOptions({
@@ -30,6 +30,6 @@
     :data-testid="testId"
     class="p-(--spacing-sm) text-label-sm text-(--text-muted)"
   >
-    <slot>{{ t('command.empty') }}</slot>
+    <slot>{{ t('command.noMatch') }}</slot>
   </div>
 </template>

@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, provide, ref } from 'vue'
 
-  import type { Tutorial, TutorialFlatStep } from '../injection-key'
+  import type { TutorialPanelFlatStep, TutorialPanelTutorial } from '../injection-key'
   import { TutorialPanelInjectionKey } from '../injection-key'
 
   defineOptions({
@@ -9,12 +9,12 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface TutorialPanelProviderProps {
     /** The tutorials the panel lists and the hotspots on the page belong to. */
-    tutorials?: Tutorial[]
+    tutorials?: TutorialPanelTutorial[]
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<TutorialPanelProviderProps>(), {
     tutorials: () => []
   })
 
@@ -39,14 +39,14 @@
   const focusRequest = ref(0)
   const hotspots = ref<Record<string, number>>({})
 
-  const tutorials = computed<Tutorial[]>(() => props.tutorials)
+  const tutorials = computed<TutorialPanelTutorial[]>(() => props.tutorials)
 
-  const activeTutorial = computed<Tutorial | null>(
+  const activeTutorial = computed<TutorialPanelTutorial | null>(
     () => tutorials.value.find((tutorial) => tutorial.id === active.value) ?? null
   )
 
-  const steps = computed<TutorialFlatStep[]>(() => {
-    const out: TutorialFlatStep[] = []
+  const steps = computed<TutorialPanelFlatStep[]>(() => {
+    const out: TutorialPanelFlatStep[] = []
     activeTutorial.value?.tasks.forEach((task, taskIndex) => {
       task.steps.forEach((step) => out.push({ ...step, index: out.length, taskIndex }))
     })

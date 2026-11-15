@@ -14,7 +14,7 @@
 
   defineOptions({ name: 'NavigationMenuViewport', inheritAttrs: false })
 
-  interface Props {
+  export interface NavigationMenuViewportProps {
     /** Preferred placement relative to the active trigger. */
     side?: NavigationMenuSide
     /** Alignment along the anchor edge. */
@@ -43,7 +43,7 @@
     keepMounted?: boolean
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<NavigationMenuViewportProps>(), {
     side: 'bottom',
     align: 'center',
     sideOffset: 8,

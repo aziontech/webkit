@@ -53,13 +53,13 @@ Every `<script setup lang="ts">` reads top-to-bottom in this fixed order. Omit a
 
   // 3. types (props/emits/slots interfaces, exported variant unions)
   export type ChipVariant = 'primary' | 'secondary'
-  interface Props {
+  export interface ChipProps {
     variant?: ChipVariant
     disabled?: boolean
   }
 
   // 4. props
-  const props = withDefaults(defineProps<Props>(), { variant: 'primary', disabled: false })
+  const props = withDefaults(defineProps<ChipProps>(), { variant: 'primary', disabled: false })
 
   // 5. emits
   const emit = defineEmits<{ click: [event: MouseEvent, label: string] }>()

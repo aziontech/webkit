@@ -7,8 +7,9 @@ spec_version: 5
 template: 2
 created: 2026-11-05
 last_updated: 2026-11-15
-checksum: c9f6b85b36faeb9758c8c48b90fb0b3f7e29ee8e71e706bc8650e9a703008617
+checksum: 3fa342e9dfca99b2d30655d30fecec9fa8baa8c499a1f8f9c51fd0c488e82374
 ---
+
 # ListingTable — Component Spec
 
 ## Purpose
@@ -39,7 +40,7 @@ A titled preview of a longer listing: a few linked rows in columns, and one outl
 
 ```vue
 <script setup>
-import ListingTable from '@aziontech/webkit/listing-table'
+  import ListingTable from '@aziontech/webkit/listing-table'
 </script>
 
 <template>
@@ -51,7 +52,14 @@ import ListingTable from '@aziontech/webkit/listing-table'
       { key: 'type', label: 'Work type', align: 'end' }
     ]"
     :data="[
-      { href: '/careers/software-engineer-go', values: { role: 'Software Engineer (Go)', team: 'Engineering · Porto Alegre', type: 'Hybrid · Full-time' } }
+      {
+        href: '/careers/software-engineer-go',
+        values: {
+          role: 'Software Engineer (Go)',
+          team: 'Engineering · Porto Alegre',
+          type: 'Hybrid · Full-time'
+        }
+      }
     ]"
     :primary-action="{ label: 'See all 23 roles', href: '/careers/jobs', trailing: true }"
   />
@@ -60,13 +68,13 @@ import ListingTable from '@aziontech/webkit/listing-table'
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `anchor` | `string` | `''` | false | In-page id set on the band so a `#hash` link can scroll to it. |
-| `title` | `string` | `''` | false | Headline of the band, rendered by the left-aligned section title as its `h2`; the band renders no header when empty. |
-| `columns` | `ListingTableColumn[]` | `[]` | false | The columns left to right; each is `{ key, label, grow?, align? }` where `key` picks the row value, `grow` is the flex weight (1, 2 or 3) and `align` is `start` or `end`. The first column names the row and the second describes it on phones. |
-| `data` | `ListingTableRow[]` | `[]` | false | The linked rows, in order; each is `{ href, values }` where `values` maps a column key to its text. |
-| `primaryAction` | `ListingTableAction` | `undefined` | false | Outlined button into the full listing, in the table footer; `{ label, href, trailing? }` where `trailing` adds the chevron. Omitted when absent. |
+| Prop            | Type                   | Default     | Required | JSDoc                                                                                                                                                                                                                                            |
+| --------------- | ---------------------- | ----------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `anchor`        | `string`               | `''`        | false    | In-page id set on the band so a `#hash` link can scroll to it.                                                                                                                                                                                   |
+| `title`         | `string`               | `''`        | false    | Headline of the band, rendered by the left-aligned section title as its `h2`; the band renders no header when empty.                                                                                                                             |
+| `columns`       | `ListingTableColumn[]` | `[]`        | false    | The columns left to right; each is `{ key, label, grow?, align? }` where `key` picks the row value, `grow` is the flex weight (1, 2 or 3) and `align` is `start` or `end`. The first column names the row and the second describes it on phones. |
+| `data`          | `ListingTableRow[]`    | `[]`        | false    | The linked rows, in order; each is `{ href, values }` where `values` maps a column key to its text.                                                                                                                                              |
+| `primaryAction` | `SectionTitleAction`   | `undefined` | false    | Outlined button into the full listing, in the table footer; `{ label, href, trailing? }` where `trailing` adds the chevron. Omitted when absent.                                                                                                 |
 
 ## Events
 
@@ -91,20 +99,20 @@ _none_
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| column headers | `.text-overline-md`, `var(--text-muted)` |
-| row title | `.text-label-lg`, `var(--text-default)` |
-| row values | `.text-overline-sm`, `var(--text-muted)` |
-| row hover | `var(--bg-hover)` |
-| cell insets | `var(--spacing-xl)`, `var(--spacing-lg)` |
-| frame rules and marks | `var(--border-default)` |
+| Region                | Token (DESIGN.md)                        |
+| --------------------- | ---------------------------------------- |
+| column headers        | `.text-overline-md`, `var(--text-muted)` |
+| row title             | `.text-label-lg`, `var(--text-default)`  |
+| row values            | `.text-overline-sm`, `var(--text-muted)` |
+| row hover             | `var(--bg-hover)`                        |
+| cell insets           | `var(--spacing-xl)`, `var(--spacing-lg)` |
+| frame rules and marks | `var(--border-default)`                  |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 

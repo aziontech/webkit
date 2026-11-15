@@ -12,6 +12,7 @@
   import Textarea from '../../inputs/textarea/textarea.vue'
   import Hero from '../../marketing/hero/hero.vue'
   import HeroTitle from '../../marketing/hero/hero-title/hero-title.vue'
+  import type { SectionTitleAction } from '../../marketing/section-title/section-title.vue'
   import Topic from '../../marketing/topic/topic.vue'
   import HeroFormSelect from './parts/hero-form-select.vue'
 
@@ -19,6 +20,8 @@
     name: 'HeroForm',
     inheritAttrs: false
   })
+
+  export type { SectionTitleAction }
 
   /** Control a form field renders as. */
   export type HeroFormFieldType = 'text' | 'email' | 'select' | 'phone' | 'textarea'
@@ -75,19 +78,7 @@
     href: string
   }
 
-  /** A call to action under the copy. */
-  export type HeroFormAction = {
-    /** Visible label of the action. */
-    label: string
-    /** Destination the action links to. */
-    href: string
-    /** Closes the label on a trailing chevron that reads as "go". */
-    trailing?: boolean
-    /** Link target of the action. */
-    target?: '_blank' | '_self'
-  }
-
-  interface Props {
+  export interface HeroFormProps {
     /** Copy of the form outcomes: `{ missing, invalidEmail, success, error }`. */
     messages: HeroFormMessages
     /** Short overline above the headline. */
@@ -103,9 +94,9 @@
     /** Copy after the inline link, closing the description's sentence. */
     descriptionAfter?: string
     /** First button under the copy; `{ label, href, trailing?, target? }`. Shown only with a label and a link. */
-    primaryAction?: HeroFormAction
+    primaryAction?: SectionTitleAction
     /** Second, outlined button beside the first; `{ label, href, trailing?, target? }`. Shown only with a label and a link. */
-    secondaryAction?: HeroFormAction
+    secondaryAction?: SectionTitleAction
     /** In-page id set on the band so a `#hash` link can scroll to it. */
     anchor?: string
     /** The highlights under the description, in order; each is `{ icon, title, description }`. The list renders only when there are items. */
@@ -128,7 +119,7 @@
     failed?: boolean
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<HeroFormProps>(), {
     eyebrow: '',
     titleHighlight: '',
     title: '',
@@ -164,12 +155,12 @@
   const countries = ref<Record<string, string>>({})
   const errors = ref<Record<string, string>>({})
 
-  const usable = (action?: HeroFormAction) => Boolean(action?.label && action.href)
+  const usable = (action?: SectionTitleAction) => Boolean(action?.label && action.href)
 
   const primary = computed(() => usable(props.primaryAction))
 
   const actions = computed(() =>
-    [props.primaryAction, props.secondaryAction].filter((action): action is HeroFormAction =>
+    [props.primaryAction, props.secondaryAction].filter((action): action is SectionTitleAction =>
       usable(action)
     )
   )

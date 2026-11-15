@@ -2,7 +2,7 @@
   import { computed, defineComponent, nextTick, watch } from 'vue'
 
   import { useTranslate } from '../../../composables/use-translate'
-  import * as en from '../../../i18n/messages/en'
+  import * as en from '../../../locales/en'
   import Input from '../../inputs/input/input.vue'
   import { usePopoverContext } from '../../overlay/popover/injection-key'
   import Popover from '../../overlay/popover/popover.vue'
@@ -20,7 +20,7 @@
 
   const open = defineModel<boolean>('open', { required: true })
 
-  const { t } = useTranslate({ copyFallback: en.copyFallback })
+  const { t } = useTranslate({ copyButton: en.copyButton })
 
   const Anchor = defineComponent({
     props: { el: { type: Object as () => globalThis.HTMLElement | null, default: null } },
@@ -65,16 +65,16 @@
     <Anchor :el="anchor" />
     <PopoverContent>
       <div class="flex flex-col gap-(--spacing-xs) p-(--spacing-sm)">
-        <PopoverTitle>{{ t('copyFallback.title') }}</PopoverTitle>
+        <PopoverTitle>{{ t('copyButton.fallbackTitle') }}</PopoverTitle>
         <Input
           :model-value="value"
           readonly
           size="small"
-          :aria-label="t('copyFallback.field')"
+          :aria-label="t('copyButton.fallbackField')"
           :data-testid="`${testId}__fallback-input`"
           @focus="(event: FocusEvent) => (event.target as HTMLInputElement | null)?.select()"
         />
-        <PopoverDescription>{{ t('copyFallback.hint', { keys }) }}</PopoverDescription>
+        <PopoverDescription>{{ t('copyButton.fallbackHint', { keys }) }}</PopoverDescription>
       </div>
     </PopoverContent>
   </Popover>

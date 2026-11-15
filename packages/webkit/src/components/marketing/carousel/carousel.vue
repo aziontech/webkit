@@ -4,7 +4,7 @@
 
   import { resolveDirection } from '../../../composables/use-direction'
   import { useTranslate } from '../../../composables/use-translate'
-  import * as en from '../../../i18n/messages/en'
+  import * as en from '../../../locales/en'
   import { CarouselInjectionKey, type CarouselLayout } from './injection-key'
 
   defineOptions({
@@ -15,14 +15,14 @@
   /** Layout of the row: one ruled strip, or standalone cards with a gutter. */
   export type CarouselVariant = CarouselLayout
 
-  interface Props {
+  export interface CarouselProps {
     /** Accessible name for the scrollable track, announced before its contents. */
     ariaLabel?: string
     /** Layout of the row: `strip` sets the cards edge to edge as one ruled strip, `cards` separates them with a gutter and rounds each card. */
     variant?: CarouselVariant
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<CarouselProps>(), {
     ariaLabel: '',
     variant: 'strip'
   })

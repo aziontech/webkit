@@ -14,7 +14,7 @@
 
   defineOptions({ name: 'ChartArea', inheritAttrs: false })
 
-  interface Props {
+  export interface ChartAreaProps {
     /** Ids of the series drawn as areas; empty draws every visible series. */
     ids?: string[]
     /** Stacks the areas on top of each other instead of overlapping them. */
@@ -23,7 +23,7 @@
     curve?: ChartCurve
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<ChartAreaProps>(), {
     ids: () => [],
     stacked: false,
     curve: 'linear'

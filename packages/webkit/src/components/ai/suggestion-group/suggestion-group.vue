@@ -2,11 +2,11 @@
   import { computed, useAttrs } from 'vue'
 
   import { useTranslate } from '../../../composables/use-translate'
-  import * as en from '../../../i18n/messages/en'
+  import * as en from '../../../locales/en'
 
   export type SuggestionGroupOrientation = 'horizontal' | 'vertical'
 
-  export interface SuggestionItem {
+  export interface SuggestionGroupItem {
     /** Stable identity, returned in `select`. */
     id: string
     /** The prompt as the reader would say it, under 72 characters. */
@@ -20,9 +20,9 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface SuggestionGroupProps {
     /** Up to five prompts, most likely first. */
-    items?: SuggestionItem[]
+    items?: SuggestionGroupItem[]
     /** Accessible name of the group. Empty uses the locale catalog (`Suggested prompts`). */
     ariaLabel?: string
     /** `horizontal` wraps chips in a row (follow-up questions under a response); `vertical` stacks them (support prompts on an empty conversation). */
@@ -31,7 +31,7 @@
     disabled?: boolean
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<SuggestionGroupProps>(), {
     items: () => [],
     ariaLabel: '',
     orientation: 'horizontal',
@@ -40,7 +40,7 @@
 
   const emit = defineEmits<{
     /** The reader chose a prompt; send it, or put it in the prompt input to edit first. */
-    select: [event: MouseEvent, item: SuggestionItem]
+    select: [event: MouseEvent, item: SuggestionGroupItem]
   }>()
 
   const attrs = useAttrs()
@@ -50,7 +50,7 @@
     () => (attrs['data-testid'] as string | undefined) ?? 'ai-suggestion-group'
   )
 
-  function choose(event: MouseEvent, item: SuggestionItem): void {
+  function choose(event: MouseEvent, item: SuggestionGroupItem): void {
     if (props.disabled) return
     emit('select', event, item)
   }

@@ -13,12 +13,12 @@
   /** Where the tabs sit in the row. */
   export type TabsListAlign = 'start' | 'center'
 
-  interface Props {
+  export interface TabsListProps {
     /** Where the tabs sit in the row: `center` for a page whose content below is centred. */
     align?: TabsListAlign
   }
 
-  withDefaults(defineProps<Props>(), {
+  withDefaults(defineProps<TabsListProps>(), {
     align: 'start'
   })
 

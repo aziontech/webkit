@@ -2,7 +2,7 @@
   import { computed, useAttrs } from 'vue'
 
   import { useTranslate } from '../../../../composables/use-translate'
-  import * as en from '../../../../i18n/messages/en'
+  import * as en from '../../../../locales/en'
   import { useChatMessageContext } from '../composables/use-chat-message-context'
 
   defineOptions({
@@ -10,12 +10,12 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface ChatMessageActionsProps {
     /** Accessible name of the action group. Empty uses the locale catalog (`Message actions`). */
     ariaLabel?: string
   }
 
-  withDefaults(defineProps<Props>(), {
+  withDefaults(defineProps<ChatMessageActionsProps>(), {
     ariaLabel: ''
   })
 

@@ -1,4 +1,4 @@
-import type { en } from './messages/en'
+import type { en } from '../locales/en'
 
 /** One message per CLDR plural category; `other` is required, the rest are optional. */
 export interface PluralMessage {

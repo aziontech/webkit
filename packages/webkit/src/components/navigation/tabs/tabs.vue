@@ -19,15 +19,13 @@
   /** How the arrow keys treat the active tab: select as focus moves, or only move focus until Enter or Space. */
   export type TabsActivationMode = 'automatic' | 'manual'
 
-  interface Props {
+  export interface TabsProps {
     /** Initial active tab when uncontrolled. */
     defaultValue?: TabsValue | null
     /** `automatic` selects a tab as the arrow keys focus it; `manual` only moves focus, and Enter or Space selects. */
     activationMode?: TabsActivationMode
   }
-  export type TabsProps = Props
-
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<TabsProps>(), {
     defaultValue: null,
     activationMode: 'automatic'
   })

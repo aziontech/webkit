@@ -9,7 +9,7 @@
   /** Reading distance of the amount, on the house size ladder. */
   export type CurrencySize = 'small' | 'medium' | 'large'
 
-  interface CurrencyProps {
+  export interface CurrencyProps {
     /** Monetary value content. */
     value?: string
     /** Text displayed before the value. Empty hides the symbol entirely. */

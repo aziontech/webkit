@@ -45,7 +45,7 @@ export const EXAMPLE_DATA_DIRS = [
 export function exampleDataApplies(rel) {
   if (!/\.(vue|ts|js|mjs|json|md)$/.test(rel) || rel.endsWith('.d.ts')) return false
   if (/\.(test|spec)\.|\/(test|__tests__|fixtures)\//.test(rel)) return false
-  if (/\/(i18n\/messages|locales)\/(pt-BR|es)\b/.test(rel)) return false
+  if (/\/locales\/(pt-BR|es)\b/.test(rel)) return false
   if (rel.endsWith('/eslint-plugin/lib/example-data.js')) return false
   if (rel === 'rules/webkit-example-data.md') return false
   if (rel.endsWith('/phone-input/countries.ts')) return false

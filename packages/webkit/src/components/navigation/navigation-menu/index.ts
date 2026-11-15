@@ -26,7 +26,14 @@ const NavigationMenu = Object.assign(NavigationMenuRoot, {
 
 export default NavigationMenu
 export type { NavigationMenuOrientation, NavigationMenuValue } from './navigation-menu.vue'
+export type { NavigationMenuProps } from './navigation-menu.vue'
+export type { NavigationMenuContentProps } from './navigation-menu-content.vue'
 export type { NavigationMenuItemLayout } from './navigation-menu-item.vue'
+export type { NavigationMenuItemProps } from './navigation-menu-item.vue'
+export type { NavigationMenuLinkProps } from './navigation-menu-link.vue'
+export type { NavigationMenuListProps } from './navigation-menu-list.vue'
+export type { NavigationMenuTriggerProps } from './navigation-menu-trigger.vue'
+export type { NavigationMenuViewportProps } from './navigation-menu-viewport.vue'
 export type { NavigationMenuPopupVariant } from './parts/navigation-menu-popup.vue'
 export type {
   NavigationMenuAlign,

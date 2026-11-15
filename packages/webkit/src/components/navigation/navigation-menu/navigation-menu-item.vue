@@ -12,7 +12,7 @@
 
   export type NavigationMenuItemLayout = 'root' | 'entry'
 
-  interface Props {
+  export interface NavigationMenuItemProps {
     /** Root submenu item vs panel entry row. */
     layout?: NavigationMenuItemLayout
     /** Entry link URL when `layout="entry"`. */
@@ -29,7 +29,7 @@
     value?: string | number
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<NavigationMenuItemProps>(), {
     layout: 'root',
     href: undefined,
     description: undefined,

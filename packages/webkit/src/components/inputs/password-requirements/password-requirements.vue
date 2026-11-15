@@ -4,8 +4,8 @@
 
   import { type MessageKey } from '../../../composables/use-locale'
   import { useTranslate } from '../../../composables/use-translate'
-  import * as en from '../../../i18n/messages/en'
-  import { DEFAULT_PASSWORD_REQUIREMENTS, type PasswordRequirement } from './rules'
+  import * as en from '../../../locales/en'
+  import { DEFAULT_PASSWORD_REQUIREMENTS, type PasswordRequirementsRule } from './rules'
 
   defineOptions({
     name: 'PasswordRequirements',
@@ -14,7 +14,7 @@
 
   interface Props {
     /** Rules rendered as chips, one per entry. Defaults to the built-in rule set; an empty array renders only the caption. */
-    requirements?: PasswordRequirement[]
+    requirements?: PasswordRequirementsRule[]
     /** Caption that opens the row and names the group for assistive tech. Empty uses the locale catalog (`Must contain:`). */
     title?: string
     /** Password every rule is evaluated against; pass the PasswordInput value. */
@@ -40,10 +40,10 @@
   const { height: contentHeight } = useElementSize(contentEl)
   const rowHeight = computed(() => (contentHeight.value ? `${contentHeight.value}px` : undefined))
 
-  const builtInRules: readonly PasswordRequirement[] = DEFAULT_PASSWORD_REQUIREMENTS
+  const builtInRules: readonly PasswordRequirementsRule[] = DEFAULT_PASSWORD_REQUIREMENTS
 
   const evaluated = computed(() =>
-    props.requirements.map((requirement: PasswordRequirement) => {
+    props.requirements.map((requirement: PasswordRequirementsRule) => {
       const met =
         typeof requirement.test === 'function'
           ? requirement.test(props.value)

@@ -17,7 +17,7 @@
   import { useListboxContent } from '../../../../composables/use-listbox-content'
   import { usePlacement } from '../../../../composables/use-placement'
   import { usePortalLocale, useTranslate } from '../../../../composables/use-translate'
-  import * as en from '../../../../i18n/messages/en'
+  import * as en from '../../../../locales/en'
   import ScrollArea from '../../../layout/scroll-area/scroll-area.vue'
   import Spinner from '../../../utils/spinner/spinner.vue'
   import { MultiSelectInjectionKey } from '../injection-key'
@@ -119,7 +119,7 @@
     if (ctx.loading.value) return t('multiSelect.loading')
     if (ctx.error.value) return ctx.error.value
     if (!ctx.query.value.trim()) return ''
-    if (empty.value) return ctx.emptyTitle.value || t('multiSelect.empty')
+    if (empty.value) return ctx.emptyTitle.value || t('multiSelect.noMatch')
     return t('multiSelect.count', { count: ctx.visibleCount.value })
   })
 
@@ -228,7 +228,7 @@
             :data-testid="`${testId}__empty`"
             class="flex min-h-8 items-center px-(--spacing-xs) text-body-sm text-(--text-muted)"
           >
-            {{ ctx.emptyTitle.value || t('multiSelect.empty') }}
+            {{ ctx.emptyTitle.value || t('multiSelect.noMatch') }}
           </div>
         </ScrollArea>
         <div

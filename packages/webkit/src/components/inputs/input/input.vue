@@ -12,7 +12,7 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface InputProps {
     /** Placeholder shown when the field is empty. */
     placeholder?: string
     /** Native input type. Restricted to plain-text variants the field treats identically. */
@@ -42,9 +42,7 @@
     /** Sets the value and placeholder in the monospace code face, for CLI commands, IDs, tokens and hashes. */
     monospace?: boolean
   }
-  export type InputProps = Props
-
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<InputProps>(), {
     placeholder: '',
     size: 'medium',
     disabled: false,

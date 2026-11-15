@@ -2,7 +2,7 @@
   import { computed, useAttrs, useSlots } from 'vue'
 
   import { useTranslate } from '../../../../composables/use-translate'
-  import * as en from '../../../../i18n/messages/en'
+  import * as en from '../../../../locales/en'
   import { hasRenderedContent } from '../../../../utils/rendered-content'
   import Skeleton from '../../../feedback/skeleton/skeleton.vue'
   import { useKeyValueListContext } from '../composables/use-key-value-list-context'
@@ -12,12 +12,12 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface KeyValueListItemProps {
     /** The key, rendered in the term. */
     label: string
   }
 
-  defineProps<Props>()
+  defineProps<KeyValueListItemProps>()
 
   defineSlots<{
     /** The value: text or composed components. Shows the empty-value marker when omitted or empty. */

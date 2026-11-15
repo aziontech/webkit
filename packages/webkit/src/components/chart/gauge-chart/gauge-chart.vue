@@ -4,7 +4,7 @@
 
   import { useDirection } from '../../../composables/use-direction'
   import { useTranslate } from '../../../composables/use-translate'
-  import * as en from '../../../i18n/messages/en'
+  import * as en from '../../../locales/en'
   import Alert from '../../feedback/alert/alert.vue'
   import EmptyState from '../../feedback/empty-state/empty-state.vue'
   import Skeleton from '../../feedback/skeleton/skeleton.vue'
@@ -17,7 +17,7 @@
 
   export type { ChartThreshold, ChartThresholdSeverity } from '../lib'
 
-  interface Props {
+  export interface GaugeChartProps {
     /** The reading. Null or absent renders the empty state. */
     value?: number | null
     /** Start of the scale. */
@@ -46,7 +46,7 @@
     ariaLabel?: string
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<GaugeChartProps>(), {
     value: null,
     min: 0,
     max: 100,

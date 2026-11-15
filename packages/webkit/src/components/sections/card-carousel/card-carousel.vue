@@ -27,7 +27,7 @@
     linkLabel?: string
   }
 
-  interface Props {
+  export interface CardCarouselProps {
     /** In-page id set on the band so a hash link can target it. */
     anchor?: string
     /** Overline above the band title. */
@@ -42,7 +42,7 @@
     ariaLabel?: string
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<CardCarouselProps>(), {
     anchor: '',
     eyebrow: '',
     title: '',

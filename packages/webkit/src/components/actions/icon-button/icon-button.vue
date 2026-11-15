@@ -15,7 +15,7 @@
     components: { Transition }
   })
 
-  interface Props {
+  export interface IconButtonProps {
     /** Azion icon class for the icon. */
     icon: string
     /** Accessible name for the icon-only control; write it as the aria-label attribute. Leave it empty only when aria-labelledby names the button. */
@@ -40,7 +40,7 @@
     type?: IconButtonType
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<IconButtonProps>(), {
     ariaLabel: '',
     variant: 'primary',
     size: 'large',

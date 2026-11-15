@@ -11,7 +11,7 @@
   } from 'vue'
 
   import { useTranslate } from '../../../composables/use-translate'
-  import * as en from '../../../i18n/messages/en'
+  import * as en from '../../../locales/en'
   import Button from '../../actions/button/button.vue'
   import CopyButton from '../../actions/copy-button/copy-button.vue'
 
@@ -20,7 +20,7 @@
   /** How the prompt occupies its row: a wrapping paragraph, or one unbroken line. */
   export type DocPromptVariant = 'block' | 'line'
 
-  interface Props {
+  export interface DocPromptProps {
     /** Wrapping paragraph capped at four lines, or one line that scrolls sideways. */
     variant?: DocPromptVariant
     /** What the block is, in a word or two. Renders as a titled row above the prompt. */
@@ -31,7 +31,7 @@
     label?: string
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<DocPromptProps>(), {
     variant: 'block',
     title: '',
     icon: 'ai ai-sparkles',

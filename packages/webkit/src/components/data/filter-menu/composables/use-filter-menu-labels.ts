@@ -2,7 +2,7 @@ import { computed } from 'vue'
 
 import type { UseLocaleReturn } from '../../../../composables/use-locale'
 import { useLocale } from '../../../../composables/use-locale'
-import * as en from '../../../../i18n/messages/en'
+import * as en from '../../../../locales/en'
 import { DATE_PERIODS, type FilterMenuSummary, kindOf, summarize, valuesOf } from '../summarize'
 import type { FilterMenuField, FilterMenuModel, FilterMenuOption, FilterMenuRange } from '../types'
 

@@ -13,7 +13,7 @@
 
   import { useFieldControl } from '../../../composables/use-field-control'
   import { useTranslate } from '../../../composables/use-translate'
-  import * as en from '../../../i18n/messages/en'
+  import * as en from '../../../locales/en'
   import { diffLines } from '../../../utils/line-diff'
   import {
     applyThemeOnce,
@@ -69,7 +69,7 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface CodeEditorProps {
     /** Monaco language id (`javascript`, `typescript`, `json`, `sql`, `lua`, `yaml`…). The plain editor ignores it. */
     language?: string
     /** Loads Monaco lazily, e.g. `() => import('monaco-editor')`; without it the plain editor is the editor. */
@@ -104,7 +104,7 @@
     ariaLabel?: string
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<CodeEditorProps>(), {
     language: 'plaintext',
     loader: undefined,
     readonly: false,

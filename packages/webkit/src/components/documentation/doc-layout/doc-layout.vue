@@ -13,7 +13,7 @@
   } from '../../../composables/use-app-navigation'
   import { type HeadingNavItem, provideHeadingNav } from '../../../composables/use-heading-nav'
   import { useTranslate } from '../../../composables/use-translate'
-  import * as en from '../../../i18n/messages/en'
+  import * as en from '../../../locales/en'
   import IconButton from '../../actions/icon-button/icon-button.vue'
   import SearchTrigger from '../../actions/search-trigger/search-trigger.vue'
   import Brand from '../../content/brand/brand.vue'
@@ -42,8 +42,8 @@
   import PanelFooter from '../../overlay/panel/panel-footer.vue'
   import PanelHeader from '../../overlay/panel/panel-header.vue'
   import DocOnThisPage, {
-    type DocTocGroup,
-    type DocTocItem
+    type DocOnThisPageGroup,
+    type DocOnThisPageItem
   } from '../doc-on-this-page/doc-on-this-page.vue'
 
   defineOptions({
@@ -65,7 +65,7 @@
     href?: string
   }
 
-  interface Props {
+  export interface DocLayoutProps {
     /** The docs tree: groups of rows, each with an id, a label and an `href`. */
     navigation?: DocLayoutNavGroup[]
     /** Id of the current row. Empty matches the current route against each row's `href`. */
@@ -75,16 +75,16 @@
     /** Where the Azion Docs mark links. */
     home?: string
     /** The article's headings for the On this page rail; the rail is not rendered when empty. */
-    outline?: DocTocItem[]
+    outline?: DocOnThisPageItem[]
     /** Complementary link groups under the outline. */
-    outlineGroups?: DocTocGroup[]
+    outlineGroups?: DocOnThisPageGroup[]
     /** Accessible name of the navigation landmark. Empty uses the locale catalog (`Documentation`). */
     ariaLabel?: string
     /** Names the top of the docs tree in the rail's Back button when a drill level is open. Empty uses the locale catalog (Docs). */
     rootLabel?: string
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<DocLayoutProps>(), {
     navigation: () => [],
     activeId: '',
     sections: () => [],
@@ -486,7 +486,7 @@
             {{ item.label }}
           </CommandItem>
         </CommandGroup>
-        <CommandEmpty>{{ t('docLayout.searchEmpty') }}</CommandEmpty>
+        <CommandEmpty>{{ t('docLayout.noMatch') }}</CommandEmpty>
       </CommandList>
     </Command>
   </div>

@@ -27,7 +27,7 @@ const outcomes = [
   {
     logo: '/logos/renner.svg',
     logoAlt: 'Renner',
-    logoTreatment: 'as-is' as const,
+    logoTreatment: 'color' as const,
     text: '67% saved on data transfer, even during massive traffic spikes.',
     highlights: ['67% saved']
   },
@@ -139,8 +139,8 @@ describe('NetworkSection', () => {
     )
     expect(marks.map((mark) => mark.getAttribute('data-treatment'))).toEqual([
       'monochrome',
-      'as-is',
-      'as-is'
+      'color',
+      'color'
     ])
     expect(
       Array.from(container.querySelectorAll('blockquote')).map((quote) => quote.textContent?.trim())

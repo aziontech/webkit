@@ -1,7 +1,7 @@
 import { inject, type InjectionKey, type Ref } from 'vue'
 
 /** Side of the trigger the panel opens on, optionally aligned to its start or end. */
-export type PopoverPlacement =
+export type PopoverPlacementSide =
   | 'top'
   | 'top-start'
   | 'top-end'
@@ -16,7 +16,7 @@ export type PopoverPlacement =
   | 'left-end'
 
 /** Prop-level placement; `'auto'` lets the popover pick the best-fitting vertical corner at open time. */
-export type PopoverPlacementInput = PopoverPlacement | 'auto'
+export type PopoverPlacement = PopoverPlacementSide | 'auto'
 
 /** Panel width preset. */
 export type PopoverSize = 'small' | 'medium' | 'large'
@@ -29,7 +29,7 @@ export interface PopoverContext {
   /** Whether the root is disabled — trigger refuses to open. */
   disabled: Ref<boolean>
   /** Resolved placement passed to the floating panel as data-placement. */
-  placement: Ref<PopoverPlacement>
+  placement: Ref<PopoverPlacementSide>
   /** Panel width preset (data-size); undefined = fluid default. */
   size: Ref<PopoverSize | undefined>
   /** Fixed-position style (top/left/z-index/--popup-origin) for the floating panel. */

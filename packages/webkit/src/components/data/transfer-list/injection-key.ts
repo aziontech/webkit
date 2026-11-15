@@ -3,7 +3,7 @@ import type { ComputedRef, InjectionKey } from 'vue'
 export type TransferListItems = unknown[]
 export type TransferListValue = [TransferListItems, TransferListItems]
 export type TransferListSide = 'source' | 'target'
-export type MoveDirection = 'to-target' | 'to-source'
+export type TransferListMoveDirection = 'to-target' | 'to-source'
 
 export interface TransferListContext {
   /** Item field that uniquely identifies a record (`itemKey`); enables stable keys. */
@@ -27,9 +27,9 @@ export interface TransferListContext {
   /** Whether `side` has at least one selected option. */
   hasSelection: (side: TransferListSide) => boolean
   /** Moves the current selection of the originating list across. */
-  move: (event: Event, direction: MoveDirection) => void
+  move: (event: Event, direction: TransferListMoveDirection) => void
   /** Moves every item of the originating list across. */
-  moveAll: (event: Event, direction: MoveDirection) => void
+  moveAll: (event: Event, direction: TransferListMoveDirection) => void
   /** Handles a double-click on the option at `index` in `side`: emits `item-double-click` and, unless cancelled, moves that item to the opposite list. */
   itemDoubleClick: (event: MouseEvent, side: TransferListSide, index: number) => void
   /** Reads the loading flag a list reported. */

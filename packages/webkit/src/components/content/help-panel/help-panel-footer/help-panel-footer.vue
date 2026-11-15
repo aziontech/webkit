@@ -2,7 +2,7 @@
   import { computed, useAttrs, useId } from 'vue'
 
   import { useTranslate } from '../../../../composables/use-translate'
-  import * as en from '../../../../i18n/messages/en'
+  import * as en from '../../../../locales/en'
   import Separator from '../../../layout/separator/separator.vue'
 
   defineOptions({
@@ -10,12 +10,12 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface HelpPanelFooterProps {
     /** The heading over the links. Absent uses the locale catalog (`Learn more`); an empty string renders no heading. */
     title?: string
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<HelpPanelFooterProps>(), {
     title: undefined
   })
 

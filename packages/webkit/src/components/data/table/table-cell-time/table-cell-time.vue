@@ -2,7 +2,7 @@
   import { computed, inject, onMounted, ref, useAttrs } from 'vue'
 
   import { useLocale } from '../../../../composables/use-locale/use-locale'
-  import * as en from '../../../../i18n/messages/en'
+  import * as en from '../../../../locales/en'
   import Avatar from '../../../content/avatar/avatar.vue'
   import { relativeText, toDate } from '../../../content/timestamp/timestamp-format'
   import Tooltip from '../../../overlay/tooltip/tooltip.vue'
@@ -14,21 +14,20 @@
     inheritAttrs: false
   })
 
-  const props = withDefaults(
-    defineProps<{
-      /** The moment: a `Date`, an epoch in milliseconds or an ISO string. Empty or unparseable renders a muted dash. */
-      value?: string | number | Date
-      /** Who made the change: a name or an email (`jane.doe@example.com` reads `Jane Doe`). Shows an avatar with the name on its tooltip. */
-      author?: string
-      /** Avatar image for `author`. */
-      avatarSrc?: string
-    }>(),
-    {
-      value: undefined,
-      author: '',
-      avatarSrc: ''
-    }
-  )
+  export interface TableCellTimeProps {
+    /** The moment: a `Date`, an epoch in milliseconds or an ISO string. Empty or unparseable renders a muted dash. */
+    value?: string | number | Date
+    /** Who made the change: a name or an email (`jane.doe@example.com` reads `Jane Doe`). Shows an avatar with the name on its tooltip. */
+    author?: string
+    /** Avatar image for `author`. */
+    avatarSrc?: string
+  }
+
+  const props = withDefaults(defineProps<TableCellTimeProps>(), {
+    value: undefined,
+    author: '',
+    avatarSrc: ''
+  })
 
   const attrs = useAttrs()
   const now = useMinuteClock()

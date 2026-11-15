@@ -14,7 +14,7 @@
   import { logicalArrowKey, useDirection } from '../../../composables/use-direction'
   import { useLazyChunks } from '../../../composables/use-lazy-chunks'
   import { useTranslate } from '../../../composables/use-translate'
-  import * as en from '../../../i18n/messages/en'
+  import * as en from '../../../locales/en'
   import { cn } from '../../../utils/cn'
   import { diffLines, pairDiffLines } from '../../../utils/line-diff'
   import CopyButton from '../../actions/copy-button/copy-button.vue'
@@ -69,7 +69,7 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface CodeBlockProps {
     /** Tab definitions with label, value, code, and optional language, filename, diff, or highlight metadata. */
     tabs?: CodeBlockTab[]
     /** Initial active tab when uncontrolled. */
@@ -98,7 +98,7 @@
     diffView?: CodeBlockDiffView
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<CodeBlockProps>(), {
     tabs: () => [],
     defaultValue: undefined,
     code: '',

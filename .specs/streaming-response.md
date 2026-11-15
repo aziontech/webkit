@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 4
 template: 2
-checksum: 9e2ef22a03db5d23579a890fddf56adea3d6487217863c6cae41dabc85d3002d
+checksum: 7f01817ae120dbc93baadcda4041735ce8fccb07087c1e6fb912ceff16187681
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -86,12 +86,12 @@ components: `code-block`, `citation`._
 
 ## Props
 
-| Prop        | Type         | Default | Required | JSDoc                                                                                                                                                         |
-| ----------- | ------------ | ------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `content`   | `string`     | `''`    | false    | The model's Markdown so far. Parsed into elements, never injected as HTML: raw tags render as text and only http(s), mailto, relative and hash links survive. |
-| `streaming` | `boolean`    | `false` | false    | Tokens are still arriving: shows the caret, marks the region busy and keeps an unclosed code fence as plain text until it closes.                             |
-| `sources`   | `AiSource[]` | `[]`    | false    | Sources the `[n]` citations in the content resolve against (title in the tooltip and the accessible name).                                                    |
-| `anchor`    | `string`     | `''`    | false    | The `anchor` of the `Sources` list under the response; citations link to its items. Empty renders unlinked numbers.                                           |
+| Prop        | Type            | Default | Required | JSDoc                                                                                                                                                         |
+| ----------- | --------------- | ------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `content`   | `string`        | `''`    | false    | The model's Markdown so far. Parsed into elements, never injected as HTML: raw tags render as text and only http(s), mailto, relative and hash links survive. |
+| `streaming` | `boolean`       | `false` | false    | Tokens are still arriving: shows the caret, marks the region busy and keeps an unclosed code fence as plain text until it closes.                             |
+| `sources`   | `SourcesItem[]` | `[]`    | false    | Sources the `[n]` citations in the content resolve against (title in the tooltip and the accessible name).                                                    |
+| `anchor`    | `string`        | `''`    | false    | The `anchor` of the `Sources` list under the response; citations link to its items. Empty renders unlinked numbers.                                           |
 
 ## Events
 

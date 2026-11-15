@@ -3,9 +3,9 @@ name: feedback-reason-dialog
 category: ai
 structure: monolithic
 status: implemented
-spec_version: 5
+spec_version: 4
 template: 2
-checksum: a3c523f2cb3a7323af72fcea3b1317da658cd593b19f8ae4b464878c4af97feb
+checksum: 891ebdbc263b942f97a8923acbe1ebe9ba9ef75a28c965650bc942ac5eac1113
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -119,17 +119,17 @@ _none_
 
 ## Internationalization
 
-| Key                                                                            | English source                                                                                    | Override prop |
-| ------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------- | ------------- |
-| `feedbackReason.title`                                                         | `What went wrong?`                                                                                | `title`       |
-| `feedbackReason.description`                                                   | `Your answer helps improve future responses.`                                                     | —             |
-| `feedbackReason.reason`                                                        | `Reason`                                                                                          | —             |
-| `feedbackReason.details`                                                       | `Details (optional)`                                                                              | —             |
-| `feedbackReason.detailsPlaceholder`                                            | `What did you expect instead?`                                                                    | —             |
-| `feedbackReason.required`                                                      | `Choose a reason.`                                                                                | —             |
-| `feedbackReason.cancel`                                                        | `Cancel`                                                                                          | —             |
-| `feedbackReason.send`                                                          | `Send feedback`                                                                                   | —             |
-| `feedbackReason.inaccurate`, `notHelpful`, `ignoredRequest`, `unsafe`, `other` | `Inaccurate or made up`, `Not helpful`, `Did not follow my request`, `Unsafe or harmful`, `Other` | `reasons`     |
+| Key                                                                                  | English source                                                                                    | Override prop |
+| ------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------- | ------------- |
+| `feedbackReasonDialog.title`                                                         | `What went wrong?`                                                                                | `title`       |
+| `feedbackReasonDialog.description`                                                   | `Your answer helps improve future responses.`                                                     | —             |
+| `feedbackReasonDialog.reason`                                                        | `Reason`                                                                                          | —             |
+| `feedbackReasonDialog.details`                                                       | `Details (optional)`                                                                              | —             |
+| `feedbackReasonDialog.detailsPlaceholder`                                            | `What did you expect instead?`                                                                    | —             |
+| `feedbackReasonDialog.required`                                                      | `Choose a reason.`                                                                                | —             |
+| `feedbackReasonDialog.cancel`                                                        | `Cancel`                                                                                          | —             |
+| `feedbackReasonDialog.send`                                                          | `Send feedback`                                                                                   | —             |
+| `feedbackReasonDialog.inaccurate`, `notHelpful`, `ignoredRequest`, `unsafe`, `other` | `Inaccurate or made up`, `Not helpful`, `Did not follow my request`, `Unsafe or harmful`, `Other` | `reasons`     |
 
 ## Right-to-left
 

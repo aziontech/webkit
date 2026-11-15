@@ -10,7 +10,7 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface PaginationButtonProps {
     /** Button role within the pagination. */
     type?: PaginationButtonType
     /** Marks the current page (filled surface + aria-current). */
@@ -19,7 +19,7 @@
     disabled?: boolean
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<PaginationButtonProps>(), {
     type: 'number',
     active: false,
     disabled: false

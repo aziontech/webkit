@@ -2,7 +2,7 @@
   import { computed, onScopeDispose, ref, watch } from 'vue'
 
   import { useTranslate } from '../../../composables/use-translate'
-  import * as en from '../../../i18n/messages/en'
+  import * as en from '../../../locales/en'
   import IconButton from '../../actions/icon-button/icon-button.vue'
 
   defineOptions({ name: 'TickerLoop' })
@@ -39,7 +39,7 @@
     default(props: { copy: number; duplicate: boolean }): unknown
   }>()
 
-  const { t } = useTranslate({ autoplayControl: en.autoplayControl })
+  const { t } = useTranslate({ common: en.common })
 
   const loopEl = ref<globalThis.HTMLElement | null>(null)
   const trackEl = ref<globalThis.HTMLElement | null>(null)
@@ -48,7 +48,7 @@
 
   const paused = ref(false)
   const pauseLabel = computed(() =>
-    paused.value ? t('autoplayControl.resumeScrolling') : t('autoplayControl.pauseScrolling')
+    paused.value ? t('common.resumeScrolling') : t('common.pauseScrolling')
   )
 
   const passDuration = computed(

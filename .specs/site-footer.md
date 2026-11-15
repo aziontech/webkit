@@ -7,7 +7,7 @@ spec_version: 6
 template: 2
 created: 2026-11-05
 last_updated: 2026-11-15
-checksum: ebf580fb14de811a80a31ce6e2848a4a2576c2fd6b1b9122735d774f343e914c
+checksum: f1de6b75f3f8e5a85b9e12d94a7f11c05d7f39bf60cb0585151470e5638393bc
 ---
 
 # SiteFooter — Component Spec
@@ -64,17 +64,17 @@ The footer under every marketing page: the link columns, then the social row bes
 
 ## Props
 
-| Prop                | Type                 | Default  | Required | JSDoc                                                                                                                                                                                 |
-| ------------------- | -------------------- | -------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `variant`              | `SiteFooterVariant`     | `'site'` | false    | Where the footer sits: `site` closes a framed marketing page and draws its frame, `content` runs the bands full bleed.                                                                |
-| `ariaLabel`         | `string`             | `''`     | false    | Accessible name of the footer landmark. Empty uses the locale catalog (`Footer`).                                                                                                     |
-| `home`              | `string`             | `''`     | false    | Destination of the Azion mark; the mark is not rendered when empty.                                                                                                                   |
-| `homeAriaLabel`     | `string`             | `''`     | false    | Accessible name of the Azion mark link. Empty uses the locale catalog (`Azion home`).                                                                                                 |
+| Prop                | Type                 | Default  | Required | JSDoc                                                                                                                                                                            |
+| ------------------- | -------------------- | -------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `variant`           | `SiteFooterVariant`  | `'site'` | false    | Where the footer sits: `site` closes a framed marketing page and draws its frame, `content` runs the bands full bleed.                                                           |
+| `ariaLabel`         | `string`             | `''`     | false    | Accessible name of the footer landmark. Empty uses the locale catalog (`Footer`).                                                                                                |
+| `home`              | `string`             | `''`     | false    | Destination of the Azion mark; the mark is not rendered when empty.                                                                                                              |
+| `homeAriaLabel`     | `string`             | `''`     | false    | Accessible name of the Azion mark link. Empty uses the locale catalog (`Azion home`).                                                                                            |
 | `columns`           | `SiteFooterColumn[]` | `[]`     | false    | The link columns, in order; each is `{ title, links }` where every link is `{ label, href, target? }`; a `_blank` link opens in a new tab and closes on the external-link glyph. |
-| `socials`           | `SiteFooterSocial[]` | `[]`     | false    | The profile icon buttons, in order; each is `{ icon, label, href }` where `label` names the button for assistive tech. They open in a new tab.                                        |
-| `statusLabel`       | `string`             | `''`     | false    | Line of the system status indicator; the indicator is not rendered when empty.                                                                                                        |
-| `languages`         | `string[]`           | `[]`     | false    | Options of the language select, as the reader sees them; the first one is selected until `v-model:language` holds another. The select is not rendered when empty.                     |
-| `languageAriaLabel` | `string`             | `''`     | false    | Accessible name of the language select, also its placeholder. Empty uses the locale catalog (`Language`).                                                                             |
+| `socials`           | `SiteFooterSocial[]` | `[]`     | false    | The profile icon buttons, in order; each is `{ icon, label, href }` where `label` names the button for assistive tech. They open in a new tab.                                   |
+| `statusLabel`       | `string`             | `''`     | false    | Line of the system status indicator; the indicator is not rendered when empty.                                                                                                   |
+| `languages`         | `string[]`           | `[]`     | false    | Options of the language select, as the reader sees them; the first one is selected until `v-model:language` holds another. The select is not rendered when empty.                |
+| `languageAriaLabel` | `string`             | `''`     | false    | Accessible name of the language select, also its placeholder. Empty uses the locale catalog (`Language`).                                                                        |
 
 ## v-model
 
@@ -139,7 +139,7 @@ The footer under every marketing page: the link columns, then the social row bes
 | `siteFooter.label`    | Footer               | `ariaLabel`         |
 | `siteFooter.home`     | Azion home           | `homeAriaLabel`     |
 | `siteFooter.language` | Language             | `languageAriaLabel` |
-| `siteFooter.newTab`   | (opens in a new tab) | —                   |
+| `common.newTab`       | (opens in a new tab) | —                   |
 
 - Formatting: none; link labels, the status line and the language options are the page's own text.
 

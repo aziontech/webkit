@@ -3,7 +3,7 @@
 
   import { useLocale } from '../../../composables/use-locale/use-locale'
   import { LocaleInjectionKey } from '../../../composables/use-translate'
-  import * as en from '../../../i18n/messages/en'
+  import * as en from '../../../locales/en'
   import CopyButton from '../../actions/copy-button/copy-button.vue'
   import { useMinuteClock } from '../../data/table/table-cell-time/minute-clock'
   import Popover from '../../overlay/popover/popover.vue'
@@ -17,7 +17,7 @@
   /** What the text of the timestamp shows. */
   export type TimestampFormat = 'relative' | 'local' | 'utc'
 
-  interface Props {
+  export interface TimestampProps {
     /** The moment: a `Date`, an epoch in milliseconds (microseconds when the number has 15 digits or more), a numeric string, or an ISO string. Empty or unparseable renders a muted dash with no panel. */
     value?: string | number | Date
     /** What the text shows: the relative phrase that updates every minute, the date and time in the time zone, or the date and time in UTC. The panel always lists every form. */
@@ -26,7 +26,7 @@
     timeZone?: string
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<TimestampProps>(), {
     value: undefined,
     format: 'local',
     timeZone: ''

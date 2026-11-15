@@ -8,12 +8,12 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface FooterLinkProps {
     /** Destination URL of the link. */
     href: string
   }
 
-  defineProps<Props>()
+  defineProps<FooterLinkProps>()
 
   defineSlots<{
     /** The link label. */

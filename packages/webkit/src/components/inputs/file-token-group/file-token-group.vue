@@ -2,7 +2,7 @@
   import { computed, nextTick, onMounted, ref, useAttrs, useId } from 'vue'
 
   import { useLocale } from '../../../composables/use-locale/use-locale'
-  import * as en from '../../../i18n/messages/en'
+  import * as en from '../../../locales/en'
   import { relativePathOf } from '../../../utils/file-entries'
   import Button from '../../actions/button/button.vue'
   import IconButton from '../../actions/icon-button/icon-button.vue'
@@ -29,7 +29,7 @@
 
   defineOptions({ name: 'FileTokenGroup', inheritAttrs: false })
 
-  interface Props {
+  export interface FileTokenGroupProps {
     /** The files, in order; each with its optional upload state, error and warning. */
     items?: FileTokenGroupItem[]
     /** Vertical stacks full-width tokens; horizontal wraps compact tokens in rows. */
@@ -45,9 +45,7 @@
     /** Accessible name of the list. Empty uses the locale catalog (`Files`). */
     ariaLabel?: string
   }
-  export type FileTokenGroupProps = Props
-
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<FileTokenGroupProps>(), {
     items: () => [],
     orientation: 'vertical',
     limit: 0,
@@ -239,7 +237,7 @@
         variant="ghost"
         size="small"
         :label="
-          expanded ? t('fileTokenGroup.showFewer') : t('fileTokenGroup.showMore', { count: hidden })
+          expanded ? t('fileTokenGroup.showLess') : t('fileTokenGroup.showMore', { count: hidden })
         "
         :icon="expanded ? 'ai ai-chevron-up' : 'ai ai-chevron-down'"
         :aria-expanded="expanded ? 'true' : 'false'"

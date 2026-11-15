@@ -2,7 +2,7 @@
   import { computed, useAttrs } from 'vue'
 
   import { useTranslate } from '../../../composables/use-translate'
-  import * as en from '../../../i18n/messages/en'
+  import * as en from '../../../locales/en'
   import FrameBox from '../../layout/frame-box/frame-box.vue'
   import CardGrid from '../card-grid/card-grid.vue'
   import CardGridCell from '../card-grid/card-grid-cell/card-grid-cell.vue'
@@ -30,7 +30,7 @@
     shape?: LogoWallShape
   }
 
-  interface Props {
+  export interface LogoWallProps {
     /** The cell's proportion; `rectangle` sets every cell at 3:2, keeps three columns below `sm`, and holds three columns beside `aside` from `lg`. */
     variant?: LogoWallVariant
     /** The marks rendered in the grid, in order; each item is `{ src, alt, href?, shape? }` where `src` is the mark's URL, `alt` names the company, `href` links the cell to that customer's story, and `shape` sets a near-square mark taller than a wordmark. */
@@ -41,7 +41,7 @@
     linkLabel?: string
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<LogoWallProps>(), {
     variant: 'square',
     items: () => [],
     ariaLabel: '',

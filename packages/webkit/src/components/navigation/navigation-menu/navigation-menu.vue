@@ -3,7 +3,7 @@
 
   import { useDirection } from '../../../composables/use-direction'
   import { useTranslate } from '../../../composables/use-translate'
-  import * as en from '../../../i18n/messages/en'
+  import * as en from '../../../locales/en'
   import { cn } from '../../../utils/cn'
   import { provideNavigationMenuContext } from './composables/use-navigation-menu-context'
   import {
@@ -16,7 +16,7 @@
   export type NavigationMenuOrientation = 'horizontal' | 'vertical'
   export type NavigationMenuValue = string | number | null
 
-  interface Props {
+  export interface NavigationMenuProps {
     /** Uncontrolled initial open item value. */
     defaultValue?: NavigationMenuValue
     /** Hover-open delay in milliseconds. */
@@ -29,7 +29,7 @@
     ariaLabel?: string
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<NavigationMenuProps>(), {
     defaultValue: null,
     delay: 50,
     closeDelay: 300,

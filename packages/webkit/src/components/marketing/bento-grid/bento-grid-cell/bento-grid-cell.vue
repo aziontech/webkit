@@ -15,7 +15,7 @@
   /** The cell's fill. */
   export type BentoGridCellVariant = 'surface' | 'canvas' | 'none'
 
-  interface Props {
+  export interface BentoGridCellProps {
     /** How many columns the cell claims from the medium breakpoint up; below it every cell claims one, and only `full` takes the whole row. */
     span?: BentoGridCellSpan
     /** How many rows the cell claims from the medium breakpoint up. */
@@ -26,7 +26,7 @@
     padded?: boolean
   }
 
-  withDefaults(defineProps<Props>(), {
+  withDefaults(defineProps<BentoGridCellProps>(), {
     span: '1',
     rows: '1',
     variant: 'surface',

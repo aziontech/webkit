@@ -17,3 +17,7 @@ const HelpPanelRoot = Object.assign(HelpPanel, {
 
 export default HelpPanelRoot
 export { HelpPanelFooter, HelpPanelGroup, HelpPanelHeader }
+export type { HelpPanelProps } from './help-panel.vue'
+export type { HelpPanelFooterProps } from './help-panel-footer/help-panel-footer.vue'
+export type { HelpPanelGroupProps } from './help-panel-group/help-panel-group.vue'
+export type { HelpPanelHeaderProps } from './help-panel-header/help-panel-header.vue'

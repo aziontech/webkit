@@ -17,10 +17,10 @@
   import PanelHeader from '@aziontech/webkit/panel-header'
   import PromptInput, { type PromptInputStatus } from '@aziontech/webkit/prompt-input'
   import Reasoning from '@aziontech/webkit/reasoning'
-  import Sources, { type AiSource } from '@aziontech/webkit/sources'
+  import Sources, { type SourcesItem } from '@aziontech/webkit/sources'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
   import StreamingResponse from '@aziontech/webkit/streaming-response'
-  import SuggestionGroup, { type SuggestionItem } from '@aziontech/webkit/suggestion-group'
+  import SuggestionGroup, { type SuggestionGroupItem } from '@aziontech/webkit/suggestion-group'
   import Tag from '@aziontech/webkit/tag'
   import { useLocale } from '@aziontech/webkit/use-locale'
   import { computed, onBeforeUnmount, reactive, ref } from 'vue'
@@ -28,8 +28,8 @@
   interface Answer {
     reasoning: string
     content: string
-    sources: AiSource[]
-    followUps: SuggestionItem[]
+    sources: SourcesItem[]
+    followUps: SuggestionGroupItem[]
   }
 
   interface UserTurn {
@@ -55,7 +55,7 @@
 
   type Turn = UserTurn | AssistantTurn
 
-  const supportPrompts: SuggestionItem[] = [
+  const supportPrompts: SuggestionGroupItem[] = [
     {
       id: 'errors',
       label: 'Why is storefront answering with 502 errors?',

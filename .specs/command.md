@@ -5,7 +5,7 @@ structure: composition
 status: implemented
 spec_version: 11
 template: 2
-checksum: d81d4b5ee8ea35bf0121fb08e7724872ea28e05aa6eb80ec8864a7cda8e07cea
+checksum: 9a9578e7a1787bcf95492294680e9675693d3da0c52dec29da23ccf205659366
 created: 2026-07-23
 last_updated: 2026-11-15
 ---
@@ -271,7 +271,7 @@ _none_
 | --------------------- | ------------------- | --------------------- |
 | `command.title`       | `Command menu`      | —                     |
 | `command.placeholder` | `Search everything` | `placeholder` (Input) |
-| `command.empty`       | `No results found.` | default slot (Empty)  |
+| `command.noMatch`     | `No results found.` | default slot (Empty)  |
 | `command.back`        | `Back from {page}`  | —                     |
 
 - Item labels, keywords, group and page headings are consumer copy.

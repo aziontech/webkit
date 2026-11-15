@@ -8,13 +8,11 @@
 
   export type FieldLegendType = 'legend' | 'label'
 
-  export interface Props {
+  export interface FieldLegendProps {
     /** Visual weight: `legend` titles a section, `label` matches a FieldLabel for a group of choices. */
     type?: FieldLegendType
   }
-  export type FieldLegendProps = Props
-
-  withDefaults(defineProps<Props>(), {
+  withDefaults(defineProps<FieldLegendProps>(), {
     type: 'legend'
   })
 

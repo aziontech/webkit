@@ -7,7 +7,7 @@ spec_version: 3
 template: 2
 created: 2026-11-04
 last_updated: 2026-11-15
-checksum: 7d416186cc3b406dc90f5d633614ca1a13296880f3ab5394c0fb543edd7446a8
+checksum: b998cddd52418044c336d7c0a50ab2148a121fe804b3e73269d911b404458dc5
 ---
 
 # ClientMosaic — Component Spec
@@ -81,7 +81,7 @@ The client mosaic: a framed bento grid of customer cells where a story cell carr
 | `linkLabel` | `string`              | `''`    | false    | Label of the link under every story.                                                                                                                                                                                                                                                                                                   |
 | `anchor`    | `string`              | `''`    | false    | In-page id set on the band so a hash link can target it.                                                                                                                                                                                                                                                                               |
 | `stories`   | `ClientMosaicStory[]` | `[]`    | false    | The story cells, in order; each is `{ logo, logoAlt, photo?, text, href, fill?, logoTreatment? }`. The first spans two columns and two rows, the rest one column and two rows.                                                                                                                                                         |
-| `logos`     | `ClientMosaicLogo[]`  | `[]`    | false    | The mark cells, in order; each is `{ logo, logoAlt, href, fill?, logoTreatment? }` where `fill` is `'canvas'`, `'surface'`, `'white'` or `'primary'` and `logoTreatment` is `'monochrome'`, `'knockout'` or `'as-is'`.                                                                                                                 |
+| `logos`     | `ClientMosaicLogo[]`  | `[]`    | false    | The mark cells, in order; each is `{ logo, logoAlt, href, fill?, logoTreatment? }` where `fill` is `'canvas'`, `'surface'`, `'white'` or `'primary'` and `logoTreatment` is `'color'`, `'monochrome'` or `'knockout'` (the shared `LogoTreatment`).                                                                                    |
 | `cells`     | `ClientMosaicCell[]`  | `[]`    | false    | The cells in placement order, story and mark cells interleaved; each is `{ logo, logoAlt, href, text?, photo?, span?, rows?, fill?, logoTreatment?, stacked? }` where a cell with `text` is a story cell, `span` and `rows` are `'1'` (default) or `'2'`, and `fill` defaults to `canvas`. When set it replaces `stories` and `logos`. |
 
 ## Events

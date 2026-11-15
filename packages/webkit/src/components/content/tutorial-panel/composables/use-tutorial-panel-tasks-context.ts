@@ -1,9 +1,9 @@
 import { inject } from 'vue'
 
-import type { TutorialTasksContext } from '../injection-key'
+import type { TutorialPanelTasksContext } from '../injection-key'
 import { TutorialPanelTasksInjectionKey } from '../injection-key'
 
-export function useTutorialPanelTasksContext(): TutorialTasksContext {
+export function useTutorialPanelTasksContext(): TutorialPanelTasksContext {
   const context = inject(TutorialPanelTasksInjectionKey, null)
 
   if (!context) {

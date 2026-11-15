@@ -2,7 +2,7 @@
   import { computed, inject, ref, useId, watch } from 'vue'
 
   import { useLocaleContext, useTranslate } from '../../../../composables/use-translate'
-  import * as en from '../../../../i18n/messages/en'
+  import * as en from '../../../../locales/en'
   import Input from '../../input/input.vue'
   import { asRange, asSingle, formatDate, formatTime } from '../format'
   import { DatePickerInjectionKey } from '../injection-key'

@@ -6,13 +6,11 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface SelectGroupProps {
     /** Heading text rendered above the grouped options. */
     label?: string
   }
-  export type SelectGroupProps = Props
-
-  withDefaults(defineProps<Props>(), {
+  withDefaults(defineProps<SelectGroupProps>(), {
     label: ''
   })
 

@@ -10,18 +10,17 @@
     inheritAttrs: false
   })
 
-  const props = withDefaults(
-    defineProps<{
-      /** Colour meaning; drives the leading icon and its color. */
-      severity?: ToastSeverity
-      /** Work in progress: a spinner replaces the leading icon. */
-      loading?: boolean
-    }>(),
-    {
-      severity: 'neutral',
-      loading: false
-    }
-  )
+  export interface ToastItemProps {
+    /** Colour meaning; drives the leading icon and its color. */
+    severity?: ToastSeverity
+    /** Work in progress: a spinner replaces the leading icon. */
+    loading?: boolean
+  }
+
+  const props = withDefaults(defineProps<ToastItemProps>(), {
+    severity: 'neutral',
+    loading: false
+  })
 
   defineSlots<{
     /** Title + description column. */

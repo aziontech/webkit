@@ -4,29 +4,24 @@
   import Button from '../../actions/button/button.vue'
   import Brand from '../../content/brand/brand.vue'
   import FrameBox from '../../layout/frame-box/frame-box.vue'
+  import type { SectionTitleAction } from '../../marketing/section-title/section-title.vue'
 
   defineOptions({ name: 'DocCallToAction', inheritAttrs: false })
 
-  /** One action of the offer: its visible label and where it goes. */
-  export interface DocCallToActionAction {
-    /** Visible label; empty renders no action. */
-    label: string
-    /** Where the action goes. */
-    href: string
-  }
+  export type { SectionTitleAction }
 
-  interface Props {
+  export interface DocCallToActionProps {
     /** The offer's headline; names the complementary landmark. */
     title?: string
     /** Fallback copy when the default slot is empty. */
     label?: string
     /** The primary action, label and href; unset or an empty label renders none. */
-    primaryAction?: DocCallToActionAction
+    primaryAction?: SectionTitleAction
     /** The outlined secondary action, label and href; unset renders none. */
-    secondaryAction?: DocCallToActionAction
+    secondaryAction?: SectionTitleAction
   }
 
-  withDefaults(defineProps<Props>(), {
+  withDefaults(defineProps<DocCallToActionProps>(), {
     title: '',
     label: '',
     primaryAction: undefined,

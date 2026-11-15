@@ -15,3 +15,6 @@ const KeyValueListRoot = Object.assign(KeyValueList, {
 export default KeyValueListRoot
 export { KeyValueListGroup, KeyValueListItem }
 export type { KeyValueListColumns, KeyValueListVariant } from './key-value-list.vue'
+export type { KeyValueListProps } from './key-value-list.vue'
+export type { KeyValueListGroupProps } from './key-value-list-group/key-value-list-group.vue'
+export type { KeyValueListItemProps } from './key-value-list-item/key-value-list-item.vue'

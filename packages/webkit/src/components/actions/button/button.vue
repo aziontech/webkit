@@ -15,7 +15,7 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface ButtonProps {
     /** Visible label text, the fallback of the default slot. Use IconButton for icon-only controls. */
     label?: string
     /** Visual variant. `link` draws an inline text action in the link colour, with no box; `size` does not apply to it. */
@@ -39,9 +39,7 @@
     /** Native button type. `submit` lets the control submit its form; `disabled` and `loading` still block it. Ignored when `href` is set. */
     type?: ButtonType
   }
-  export type ButtonProps = Props
-
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<ButtonProps>(), {
     label: '',
     variant: 'primary',
     size: 'large',

@@ -3,7 +3,7 @@
 
   import { useLazyChunks } from '../../../composables/use-lazy-chunks'
   import { useLocale } from '../../../composables/use-locale/use-locale'
-  import * as en from '../../../i18n/messages/en'
+  import * as en from '../../../locales/en'
   import Button from '../../actions/button/button.vue'
   import IconButton from '../../actions/icon-button/icon-button.vue'
   import OutcomeMark from '../outcome-mark/outcome-mark.vue'
@@ -24,7 +24,7 @@
 
   defineOptions({ name: 'UploadProgress', inheritAttrs: false })
 
-  interface Props {
+  export interface UploadProgressProps {
     /** The files in the transfer, in order, with their state and progress. */
     items?: UploadProgressItem[]
     /** What the transfer does; picks the header wording and the glyph. */
@@ -37,7 +37,7 @@
     cancelable?: boolean
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<UploadProgressProps>(), {
     items: () => [],
     operation: 'upload',
     title: '',

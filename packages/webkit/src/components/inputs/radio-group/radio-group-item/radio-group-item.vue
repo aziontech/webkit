@@ -9,7 +9,7 @@
     inheritAttrs: false
   })
 
-  export interface Props {
+  export interface RadioGroupItemProps {
     /** Value written to the group when this option is selected. */
     value: string
     /** Disables this option only. */
@@ -21,9 +21,7 @@
     /** Accessible name of the radio when the label alone is ambiguous or is not text. */
     ariaLabel?: string
   }
-  export type RadioGroupItemProps = Props
-
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<RadioGroupItemProps>(), {
     disabled: false,
     description: '',
     icon: '',

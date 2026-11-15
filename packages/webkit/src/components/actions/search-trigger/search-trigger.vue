@@ -3,14 +3,14 @@
   import { computed, type FunctionalComponent, ref, useAttrs } from 'vue'
 
   import { useTranslate } from '../../../composables/use-translate'
-  import * as en from '../../../i18n/messages/en'
+  import * as en from '../../../locales/en'
   import Kbd from '../../content/kbd/kbd.vue'
   import { isShortcutClaimed } from '../../overlay/command/shortcut-registry'
   import Tooltip from '../../overlay/tooltip/tooltip.vue'
 
   defineOptions({ name: 'SearchTrigger', inheritAttrs: false })
 
-  interface Props {
+  export interface SearchTriggerProps {
     /** Visible muted text and accessible name; empty uses the catalog's `Search`. */
     label?: string
     /** Key that opens search with ⌘ or Ctrl: drawn in the keycap, announced through `aria-keyshortcuts` and bound on the window unless a mounted `Command` already listens for it; empty removes all three. */
@@ -21,7 +21,7 @@
     disabled?: boolean
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<SearchTriggerProps>(), {
     label: '',
     shortcut: 'K',
     collapsible: false,

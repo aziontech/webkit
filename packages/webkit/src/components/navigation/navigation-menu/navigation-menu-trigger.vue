@@ -12,7 +12,7 @@
 
   defineOptions({ name: 'NavigationMenuTrigger', inheritAttrs: false })
 
-  interface Props {
+  export interface NavigationMenuTriggerProps {
     /** Renders as a plain link when set. */
     href?: string
     /** Marks the link as the current page. */
@@ -21,7 +21,7 @@
     closeOnClick?: boolean
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<NavigationMenuTriggerProps>(), {
     href: '',
     active: false,
     closeOnClick: false

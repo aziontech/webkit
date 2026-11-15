@@ -2,7 +2,7 @@
   import { computed, useAttrs } from 'vue'
 
   import { useTranslate } from '../../../../composables/use-translate'
-  import * as en from '../../../../i18n/messages/en'
+  import * as en from '../../../../locales/en'
   import { useCarouselContext } from '../composables/use-carousel-context'
 
   defineOptions({
@@ -10,12 +10,12 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface CarouselPreviousProps {
     /** Accessible name for the control that steps the track back. Empty uses the locale catalog (`Previous slide`). */
     ariaLabel?: string
   }
 
-  withDefaults(defineProps<Props>(), {
+  withDefaults(defineProps<CarouselPreviousProps>(), {
     ariaLabel: ''
   })
 

@@ -7,6 +7,7 @@
   import CardGrid from '../../marketing/card-grid/card-grid.vue'
   import CardGridCell from '../../marketing/card-grid/card-grid-cell/card-grid-cell.vue'
   import SectionModule from '../../marketing/section-module/section-module.vue'
+  import type { SectionTitleAction } from '../../marketing/section-title/section-title.vue'
   import Topic from '../../marketing/topic/topic.vue'
 
   defineOptions({
@@ -14,15 +15,7 @@
     inheritAttrs: false
   })
 
-  /** The call to action pinned to the foot of the title cell. */
-  export type UseCasesAction = {
-    /** Visible label of the action. */
-    label: string
-    /** Destination the action links to. */
-    href: string
-    /** Closes the label on a trailing chevron that reads as "go". */
-    trailing?: boolean
-  }
+  export type { SectionTitleAction }
 
   /** One use case, rendered as a frame cell. */
   export type UseCasesItem = {
@@ -34,7 +27,7 @@
     description: string
   }
 
-  interface Props {
+  export interface UseCasesProps {
     /** Overline above the headline in the title cell, closed by the blinking cursor. */
     eyebrow?: string
     /** Headline of the band, rendered as its `h2` in the title cell. */
@@ -42,14 +35,14 @@
     /** One-line lead under the headline. */
     description?: string
     /** Button pinned to the foot of the title cell; `{ label, href, trailing? }` where `trailing` adds the chevron. Omitted when absent. */
-    primaryAction?: UseCasesAction
+    primaryAction?: SectionTitleAction
     /** The use cases rendered as frame cells, in order; each item is `{ icon, title, description }`. */
     items?: UseCasesItem[]
     /** In-page id set on the band so a hash link can target it. */
     anchor?: string
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<UseCasesProps>(), {
     eyebrow: '',
     title: '',
     description: '',

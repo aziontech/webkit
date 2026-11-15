@@ -12,7 +12,7 @@
    */
   defineOptions({ name: 'DocUpdate', inheritAttrs: false })
 
-  interface Props {
+  export interface DocUpdateProps {
     /** The entry's name — a date, a release name. Also its anchor. */
     label?: string
     /** The release's heading, shown above the notes. The label becomes the date beside it. */
@@ -25,7 +25,7 @@
     anchor?: string
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<DocUpdateProps>(), {
     label: '',
     title: '',
     description: '',

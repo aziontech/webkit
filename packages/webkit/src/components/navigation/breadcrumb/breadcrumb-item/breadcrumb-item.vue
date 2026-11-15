@@ -9,7 +9,7 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface BreadcrumbItemProps {
     /** Visible segment label. */
     label?: string
     /** Destination when the segment is a link (ignored when `active` is true); empty renders `#`. */
@@ -24,7 +24,7 @@
     disabled?: boolean
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<BreadcrumbItemProps>(), {
     label: '',
     href: '',
     active: false,

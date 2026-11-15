@@ -7,7 +7,7 @@ status: implemented
 spec_version: 6
 created: 2026-11-05
 last_updated: 2026-11-15
-checksum: 0ca53158487a147b7df3fd4672c269d79239af074ce35c0fb868b14e84db54a1
+checksum: 9bcfc804be13380fb65b8f1fbc58f8954320b61a8ee7eb8033e6d8676c362127
 ---
 
 # TemplateGallery — Component Spec
@@ -46,7 +46,7 @@ The templates band of a solution page: a framed media split whose copy side invi
 
 ```vue
 <script setup>
-import TemplateGallery from '@aziontech/webkit/template-gallery'
+  import TemplateGallery from '@aziontech/webkit/template-gallery'
 </script>
 
 <template>
@@ -57,8 +57,19 @@ import TemplateGallery from '@aziontech/webkit/template-gallery'
     :primary-action="{ label: 'Start for free', href: '/signup' }"
     :secondary-action="{ label: 'Talk to a specialist', href: '/contact', trailing: true }"
     :templates="[
-      { title: 'Astro Odyssey', description: 'A marketing website starter built with Astro.', icon: 'ai-color ai-astro', href: '/templates/astro-odyssey' },
-      { title: 'Next.js Commerce', description: 'Ecommerce template built with Next.js.', icon: 'ai-color ai-nextjs', invertInDark: true, href: '/templates/nextjs-commerce' }
+      {
+        title: 'Astro Odyssey',
+        description: 'A marketing website starter built with Astro.',
+        icon: 'ai-color ai-astro',
+        href: '/templates/astro-odyssey'
+      },
+      {
+        title: 'Next.js Commerce',
+        description: 'Ecommerce template built with Next.js.',
+        icon: 'ai-color ai-nextjs',
+        invertInDark: true,
+        href: '/templates/nextjs-commerce'
+      }
     ]"
     deploy-label="Deploy now"
     templates-aria-label="Templates you can deploy"
@@ -70,21 +81,21 @@ import TemplateGallery from '@aziontech/webkit/template-gallery'
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `anchor` | `string` | `''` | false | In-page id set on the band so a `#hash` link can scroll to it. |
-| `eyebrow` | `string` | `''` | false | Overline above the headline. |
-| `title` | `string` | `''` | false | Headline of the band, rendered by the media split as its `h2` and naming its region. |
-| `description` | `string` | `''` | false | Paragraph under the headline. |
-| `primaryAction` | `TemplateGalleryAction` | `undefined` | false | First button under the copy, drawn as the large secondary button; `{ label, href, trailing?, target? }`. Omitted when absent. |
-| `secondaryAction` | `TemplateGalleryAction` | `undefined` | false | Second button under the copy, drawn as the large outlined button; `{ label, href, trailing?, target? }`. Omitted when absent. |
-| `templates` | `TemplateGalleryTemplate[]` | `[]` | false | The template cards of the scrolling wall, in order; each is `{ title, description?, icon?, invertInDark?, href? }` where `href` makes the whole card a link to the template. Templates without a title are skipped. |
-| `deployLabel` | `string` | `''` | false | Label of the deploy button on each card; a card renders its button only when both this and its `href` are set. |
-| `templatesAriaLabel` | `string` | `''` | false | Accessible name of the scrolling wall of templates. |
-| `tickerLabel` | `string` | `''` | false | Overline above the row of marks. |
-| `tickerMarks` | `string[]` | `[]` | false | Registry names of the frameworks and clouds in the row of marks, in order; the ticker is omitted when empty. |
-| `closing` | `boolean` | `false` | false | Makes the band the page's closing band: the hatched closing frame follows it, as the closing call to action draws it. |
-| `hatch` | `boolean` | `true` | false | Draws the hatched closing frame under a `closing` band; turn it off when another closing band stacks directly below and draws the shared frame. Ignored without `closing`. |
+| Prop                 | Type                        | Default     | Required | JSDoc                                                                                                                                                                                                               |
+| -------------------- | --------------------------- | ----------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `anchor`             | `string`                    | `''`        | false    | In-page id set on the band so a `#hash` link can scroll to it.                                                                                                                                                      |
+| `eyebrow`            | `string`                    | `''`        | false    | Overline above the headline.                                                                                                                                                                                        |
+| `title`              | `string`                    | `''`        | false    | Headline of the band, rendered by the media split as its `h2` and naming its region.                                                                                                                                |
+| `description`        | `string`                    | `''`        | false    | Paragraph under the headline.                                                                                                                                                                                       |
+| `primaryAction`      | `SectionTitleAction`        | `undefined` | false    | First button under the copy, drawn as the large secondary button; `{ label, href, trailing?, target? }`. Omitted when absent.                                                                                       |
+| `secondaryAction`    | `SectionTitleAction`        | `undefined` | false    | Second button under the copy, drawn as the large outlined button; `{ label, href, trailing?, target? }`. Omitted when absent.                                                                                       |
+| `templates`          | `TemplateGalleryTemplate[]` | `[]`        | false    | The template cards of the scrolling wall, in order; each is `{ title, description?, icon?, invertInDark?, href? }` where `href` makes the whole card a link to the template. Templates without a title are skipped. |
+| `deployLabel`        | `string`                    | `''`        | false    | Label of the deploy button on each card; a card renders its button only when both this and its `href` are set.                                                                                                      |
+| `templatesAriaLabel` | `string`                    | `''`        | false    | Accessible name of the scrolling wall of templates.                                                                                                                                                                 |
+| `tickerLabel`        | `string`                    | `''`        | false    | Overline above the row of marks.                                                                                                                                                                                    |
+| `tickerMarks`        | `string[]`                  | `[]`        | false    | Registry names of the frameworks and clouds in the row of marks, in order; the ticker is omitted when empty.                                                                                                        |
+| `closing`            | `boolean`                   | `false`     | false    | Makes the band the page's closing band: the hatched closing frame follows it, as the closing call to action draws it.                                                                                               |
+| `hatch`              | `boolean`                   | `true`      | false    | Draws the hatched closing frame under a `closing` band; turn it off when another closing band stacks directly below and draws the shared frame. Ignored without `closing`.                                          |
 
 ## Events
 
@@ -108,27 +119,27 @@ _none_
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| typography (card title) | `.text-body-md` |
-| typography (card line) | `.text-body-sm` |
-| card title | `var(--text-default)` |
-| card line | `var(--text-muted)` |
-| card fill | `var(--bg-surface)` |
-| card inset | `var(--spacing-xl)` |
-| card rhythm | `var(--spacing-md)` |
-| mark tile fill | `var(--bg-surface-raised)` |
-| mark tile rule | `var(--border-muted)` |
-| mark tile shape | `var(--shape-control)` |
-| deploy prefix mark | `var(--primary)` |
-| card link focus ring | `var(--ring-color)` |
-| anchor scroll offset | `var(--spacing-2xl)` |
+| Region                  | Token (DESIGN.md)          |
+| ----------------------- | -------------------------- |
+| typography (card title) | `.text-body-md`            |
+| typography (card line)  | `.text-body-sm`            |
+| card title              | `var(--text-default)`      |
+| card line               | `var(--text-muted)`        |
+| card fill               | `var(--bg-surface)`        |
+| card inset              | `var(--spacing-xl)`        |
+| card rhythm             | `var(--spacing-md)`        |
+| mark tile fill          | `var(--bg-surface-raised)` |
+| mark tile rule          | `var(--border-muted)`      |
+| mark tile shape         | `var(--shape-control)`     |
+| deploy prefix mark      | `var(--primary)`           |
+| card link focus ring    | `var(--ring-color)`        |
+| anchor scroll offset    | `var(--spacing-2xl)`       |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 

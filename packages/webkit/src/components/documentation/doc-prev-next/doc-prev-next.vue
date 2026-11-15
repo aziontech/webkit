@@ -2,7 +2,7 @@
   import { computed, useAttrs } from 'vue'
 
   import { useTranslate } from '../../../composables/use-translate'
-  import * as en from '../../../i18n/messages/en'
+  import * as en from '../../../locales/en'
 
   /**
    * The previous / next pair closing a docs page. A side with no destination
@@ -11,25 +11,25 @@
   defineOptions({ name: 'DocPrevNext', inheritAttrs: false })
 
   /** A neighbouring page. */
-  export type DocPageLink = {
+  export type DocPrevNextLink = {
     /** The text of the link: the page title. */
     label: string
     /** The destination. */
     href: string
   }
 
-  interface Props {
+  export interface DocPrevNextProps {
     /** The page before this one. */
-    previous?: DocPageLink | null
+    previous?: DocPrevNextLink | null
     /** The page after this one. */
-    next?: DocPageLink | null
+    next?: DocPrevNextLink | null
     /** Eyebrow over the previous link. Empty uses the locale catalog (`Previous`). */
     previousLabel?: string
     /** Eyebrow over the next link. Empty uses the locale catalog (`Next`). */
     nextLabel?: string
   }
 
-  withDefaults(defineProps<Props>(), {
+  withDefaults(defineProps<DocPrevNextProps>(), {
     previous: null,
     next: null,
     previousLabel: '',
@@ -38,7 +38,7 @@
 
   const emit = defineEmits<{
     /** Fired when either neighbour is activated. */
-    navigate: [event: MouseEvent, page: DocPageLink]
+    navigate: [event: MouseEvent, page: DocPrevNextLink]
   }>()
 
   const attrs = useAttrs()

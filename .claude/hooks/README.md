@@ -44,7 +44,7 @@ Blocks `Write`/`Edit`/`MultiEdit` when the resulting file introduces a construct
 - A composable returning `reactive()` state or authored as `.js`
 - `@deprecated` without a named replacement + removal version
 - A prose comment (`prose-comment`) in any non-test source under `packages/` — only component API JSDoc and tool directives are allowed ([`comments`](../rules/comments.md)); blocks when the count grows
-- A built-in string typed in a component (`i18n:hardcoded-ui-string`, `i18n:hardcoded-default-string`): a literal UI text attribute in a `src/components/**/*.vue` template, or an English prop default; the text goes to `src/i18n/messages/*.ts` ([`webkit-strings`](../../rules/webkit-strings.md)); blocks when the count grows
+- A built-in string typed in a component (`i18n:hardcoded-ui-string`, `i18n:hardcoded-default-string`): a literal UI text attribute in a `src/components/**/*.vue` template, or an English prop default; the text goes to `src/locales/*.ts` ([`webkit-strings`](../../rules/webkit-strings.md)); blocks when the count grows
 
 Engine: [`lib/authoring-checks.mjs`](./lib/authoring-checks.mjs) → [`packages/webkit/src/eslint-plugin/lib/authoring-checks.js`](../../packages/webkit/src/eslint-plugin/lib/authoring-checks.js) — the same module the CI ratchet and the consumer ESLint rule (`authoring-standards`) run. The string check is [`_lib/built-in-strings.mjs`](./lib/built-in-strings.mjs) → [`packages/webkit/src/eslint-plugin/lib/built-in-strings.js`](../../packages/webkit/src/eslint-plugin/lib/built-in-strings.js), shared with `scripts/check-authoring.mjs`.
 

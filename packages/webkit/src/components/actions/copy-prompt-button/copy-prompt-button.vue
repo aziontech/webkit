@@ -2,13 +2,13 @@
   import { computed, defineAsyncComponent, h, onBeforeUnmount, ref, useAttrs, useId } from 'vue'
 
   import { useTranslate } from '../../../composables/use-translate'
-  import * as en from '../../../i18n/messages/en'
+  import * as en from '../../../locales/en'
   import Tooltip from '../../overlay/tooltip/tooltip.vue'
 
   defineOptions({ name: 'CopyPromptButton', inheritAttrs: false })
 
   /** One coding agent the prompt works with, drawn as a single-colour mark after the label. */
-  export type CopyPromptAgent = {
+  export type CopyPromptButtonAgent = {
     /** Brand name, read by screen readers in the "Works with" description. */
     name: string
     /** Icon-font class of the single-colour mark, such as `ai ai-claude`; used when `logo` is not set. */
@@ -17,7 +17,7 @@
     logo?: string
   }
 
-  interface Props {
+  export interface CopyPromptButtonProps {
     /** The prompt copied to the clipboard on activation. */
     value: string
     /** Visible text and accessible name while idle; empty uses the catalog's `Copy prompt`. */
@@ -25,14 +25,14 @@
     /** Visible text announced after a copy; empty uses the catalog's `Copied`. */
     copiedLabel?: string
     /** The agents whose marks follow the label, in order; an empty list draws no marks. */
-    agents?: CopyPromptAgent[]
+    agents?: CopyPromptButtonAgent[]
     /** Disables the button; `copy` is not emitted. */
     disabled?: boolean
     /** Shows a dismiss button beside the chip; activating it removes both from the layout and emits `close`. */
     closable?: boolean
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<CopyPromptButtonProps>(), {
     label: '',
     copiedLabel: '',
     agents: () => [

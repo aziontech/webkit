@@ -3,9 +3,9 @@ name: trace
 category: code
 structure: monolithic
 status: implemented
-spec_version: 6
+spec_version: 5
 template: 2
-checksum: 61add433cf9ae1c49b0d370cbc07f96278632c67922832b667d51bd71e1658b3
+checksum: d63878e77b81add983ca67f86630ad41e1d9f5dfbb3c17a61eebbfa369cdc074
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -161,7 +161,7 @@ _none_ — the search, the axis, the rows and the details are fixed parts.
 | `trace.search`                                       | Search spans                                     | —             |
 | `trace.noMatch`                                      | No span matches “{query}”.                       | —             |
 | `trace.clearSearch`                                  | Clear search                                     | —             |
-| `trace.empty`                                        | No spans in this trace.                          | —             |
+| `trace.emptyTitle`                                   | No spans in this trace.                          | —             |
 | `trace.loading`                                      | Loading spans                                    | —             |
 | `trace.details`                                      | Details of {name}                                | —             |
 | `trace.close`                                        | Close                                            | —             |

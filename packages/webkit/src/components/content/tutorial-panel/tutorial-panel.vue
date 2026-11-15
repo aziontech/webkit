@@ -2,14 +2,14 @@
   import { computed, nextTick, ref, useAttrs, useId, watch } from 'vue'
 
   import { useTranslate } from '../../../composables/use-translate'
-  import * as en from '../../../i18n/messages/en'
+  import * as en from '../../../locales/en'
   import Button from '../../actions/button/button.vue'
   import EmptyState from '../../feedback/empty-state/empty-state.vue'
   import HelpPanel from '../help-panel/help-panel.vue'
   import HelpPanelHeader from '../help-panel/help-panel-header/help-panel-header.vue'
   import Tag from '../tag/tag.vue'
   import { useTutorialPanelContext } from './composables/use-tutorial-panel-context'
-  import type { Tutorial, TutorialTaskStatus } from './injection-key'
+  import type { TutorialPanelTaskStatus, TutorialPanelTutorial } from './injection-key'
   import TutorialPanelTask from './parts/tutorial-panel-task.vue'
   import TutorialPanelTasks from './parts/tutorial-panel-tasks.vue'
 
@@ -18,7 +18,7 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface TutorialPanelProps {
     /** The panel's heading. Empty uses the locale catalog (`Tutorials`). */
     title?: string
     /** One line under the heading. Empty uses the locale catalog. */
@@ -29,7 +29,7 @@
     loading?: boolean
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<TutorialPanelProps>(), {
     title: '',
     description: '',
     ariaLabel: '',
@@ -38,7 +38,7 @@
 
   defineSlots<{
     /** Extra content on the completion screen, such as a feedback link. */
-    completion?(scope: { tutorial: Tutorial }): unknown
+    completion?(scope: { tutorial: TutorialPanelTutorial }): unknown
   }>()
 
   const attrs = useAttrs()
@@ -67,7 +67,7 @@
     return ranges
   })
 
-  const taskStatus = (taskIndex: number): TutorialTaskStatus => {
+  const taskStatus = (taskIndex: number): TutorialPanelTaskStatus => {
     const range = taskRanges.value[taskIndex]
     return range && context.step.value > range.last ? 'success' : 'pending'
   }
@@ -80,7 +80,7 @@
   const stepIndex = (taskIndex: number, local: number): number =>
     (taskRanges.value[taskIndex]?.first ?? 0) + local
 
-  const stepCount = (tutorial: Tutorial): number =>
+  const stepCount = (tutorial: TutorialPanelTutorial): number =>
     tutorial.tasks.reduce((sum, task) => sum + task.steps.length, 0)
 
   const focusCurrentStep = () => {
@@ -145,7 +145,7 @@
         </h3>
         <EmptyState
           v-if="context.tutorials.value.length === 0"
-          :title="t('tutorialPanel.empty')"
+          :title="t('tutorialPanel.emptyTitle')"
           size="small"
           :data-testid="`${testId}__empty`"
         />

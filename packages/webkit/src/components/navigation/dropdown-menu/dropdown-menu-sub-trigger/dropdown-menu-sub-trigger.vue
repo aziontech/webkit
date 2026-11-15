@@ -14,14 +14,14 @@
     leading(): unknown
   }>()
 
-  interface Props {
+  export interface DropdownMenuSubTriggerProps {
     /** Plain-text label; falls back to the default slot when omitted. */
     label?: string
     /** Prevents the row from opening its sub-menu and applies disabled tokens. */
     disabled?: boolean
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<DropdownMenuSubTriggerProps>(), {
     label: '',
     disabled: false
   })

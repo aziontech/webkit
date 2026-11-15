@@ -2,7 +2,7 @@
   import { computed, onMounted, ref, shallowRef, useAttrs, watch } from 'vue'
 
   import { useTranslate } from '../../../composables/use-translate'
-  import * as en from '../../../i18n/messages/en'
+  import * as en from '../../../locales/en'
   import IconButton from '../../actions/icon-button/icon-button.vue'
   import Brand from '../../content/brand/brand.vue'
   import Logo, { type LogoArtwork } from '../../content/logo/logo.vue'
@@ -56,7 +56,7 @@
     rows: ComparisonTableRow[]
   }
 
-  interface Props {
+  export interface ComparisonTableProps {
     /** In-page id set on the band so a hash link can target it. */
     anchor?: string
     /** Overline above the section title. */
@@ -79,7 +79,7 @@
     groups?: ComparisonTableGroup[]
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<ComparisonTableProps>(), {
     anchor: '',
     eyebrow: '',
     title: '',

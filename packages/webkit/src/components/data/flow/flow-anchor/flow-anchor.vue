@@ -11,15 +11,14 @@
   /** Which connector attaches to the anchor. */
   export type FlowAnchorSide = 'start' | 'end'
 
-  const props = withDefaults(
-    defineProps<{
-      /** Which connector attaches here: `end` is the incoming endpoint, `start` the outgoing origin; empty marks both. */
-      side?: FlowAnchorSide
-    }>(),
-    {
-      side: undefined
-    }
-  )
+  export interface FlowAnchorProps {
+    /** Which connector attaches here: `end` is the incoming endpoint, `start` the outgoing origin; empty marks both. */
+    side?: FlowAnchorSide
+  }
+
+  const props = withDefaults(defineProps<FlowAnchorProps>(), {
+    side: undefined
+  })
 
   defineSlots<{
     default(): unknown

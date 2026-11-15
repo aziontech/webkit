@@ -1,9 +1,9 @@
 import { inject } from 'vue'
 
-import type { TutorialContext } from '../injection-key'
+import type { TutorialPanelContext } from '../injection-key'
 import { TutorialPanelInjectionKey } from '../injection-key'
 
-export function useTutorialPanelContext(): TutorialContext {
+export function useTutorialPanelContext(): TutorialPanelContext {
   const context = inject(TutorialPanelInjectionKey, null)
 
   if (!context) {
@@ -13,6 +13,6 @@ export function useTutorialPanelContext(): TutorialContext {
   return context
 }
 
-export function useOptionalTutorialPanelContext(): TutorialContext | null {
+export function useOptionalTutorialPanelContext(): TutorialPanelContext | null {
   return inject(TutorialPanelInjectionKey, null)
 }

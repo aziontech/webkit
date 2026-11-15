@@ -118,6 +118,13 @@ describe('Kbd', () => {
       expect(getByTestId('content-kbd')).toHaveTextContent('↑↓↵')
     })
 
+    it('matches a named key in camelCase, kebab-case or the DOM spelling', () => {
+      const { getByTestId } = render(Kbd, {
+        props: { keyName: 'arrowLeft', keys: ['arrowUp', 'ArrowDown', 'arrow-right'] }
+      })
+      expect(getByTestId('content-kbd')).toHaveTextContent('←↑↓→')
+    })
+
     it('resolves modifiers, named keys and single characters in a keys list', async () => {
       vi.stubGlobal('navigator', { platform: 'MacIntel', userAgent: 'Macintosh' })
       const { getByTestId } = render(Kbd, { props: { keys: ['meta', 'shift', 'p', 'Enter'] } })

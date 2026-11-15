@@ -8,7 +8,7 @@ import { expectNoA11yViolations } from '../../../test/axe'
 import Field from '../field/field.vue'
 import FieldLabel from '../field/field-label/field-label.vue'
 import { defaultCountries } from './countries'
-import PhoneInput, { type PhoneNumber } from './phone-input.vue'
+import PhoneInput, { type PhoneInputValue } from './phone-input.vue'
 
 /** The dial-code dropdown Teleports to document.body — query it from there. */
 const getContent = () =>
@@ -26,7 +26,7 @@ const optionText = (option: HTMLElement) =>
     .join(' ')
 
 const lastPhone = (emitted: Record<string, unknown[]>) => {
-  const events = emitted['phone-change'] as PhoneNumber[][]
+  const events = emitted['phone-change'] as PhoneInputValue[][]
   return events[events.length - 1][0]
 }
 

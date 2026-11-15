@@ -5,7 +5,7 @@
 
   import { logicalArrowKey, useDirection } from '../../../composables/use-direction'
   import { useTranslate } from '../../../composables/use-translate'
-  import * as en from '../../../i18n/messages/en'
+  import * as en from '../../../locales/en'
   import Alert from '../../feedback/alert/alert.vue'
   import EmptyState from '../../feedback/empty-state/empty-state.vue'
   import Skeleton from '../../feedback/skeleton/skeleton.vue'
@@ -16,7 +16,7 @@
   export type DonutChartType = 'donut' | 'pie'
   export type DonutChartSize = 'small' | 'medium' | 'large'
 
-  interface Props {
+  export interface DonutChartProps {
     /** One slice per series; a slice is the sum of its values. The first six take the categorical slots, the rest fold into Other. */
     series?: ChartSeries[]
     /** Ring or solid disc. */
@@ -47,7 +47,7 @@
     ariaLabel?: string
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<DonutChartProps>(), {
     series: () => [],
     type: 'donut',
     size: 'medium',

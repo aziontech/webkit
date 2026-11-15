@@ -1,6 +1,6 @@
 import type { InjectionKey, Ref } from 'vue'
 
-import type { ConsoleLayoutCrumb } from './console-layout.vue'
+import type { BreadcrumbItemData } from './console-layout.vue'
 
 /** What a page rendered inside `ConsoleLayout` can reach of its chrome. */
 export interface ConsoleLayoutContext {
@@ -15,7 +15,7 @@ export interface ConsoleLayoutContext {
 /** One page's trail, registered by `ConsoleLayout.Breadcrumb`. */
 export interface ConsoleLayoutTrail {
   /** The page's crumbs. */
-  items: () => ConsoleLayoutCrumb[]
+  items: () => BreadcrumbItemData[]
   /** Whether the page passed a control crumb. */
   hasControl: () => boolean
   /** Renders the page's control crumb. */

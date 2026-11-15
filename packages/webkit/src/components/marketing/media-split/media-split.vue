@@ -28,7 +28,7 @@
   /** Type scale of the copy. */
   export type MediaSplitSize = 'medium' | 'large'
 
-  interface Props {
+  export interface MediaSplitProps {
     /** Headline of the band, rendered as its `h2`. */
     title: string
     /** Supporting paragraph under the headline; overridden by the default slot. */
@@ -69,7 +69,7 @@
     size?: MediaSplitSize
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<MediaSplitProps>(), {
     description: '',
     eyebrow: '',
     src: '',

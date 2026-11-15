@@ -82,7 +82,7 @@ packages/webkit/src/components/actions/button/
      export type PascalNameVariant = 'primary' | 'secondary'
      export type PascalNameSize = 'small' | 'medium' | 'large'
 
-     interface Props {
+     export interface PascalNameProps {
        /** From spec */
        variant?: PascalNameVariant
        /** From spec */
@@ -91,7 +91,7 @@ packages/webkit/src/components/actions/button/
        disabled?: boolean
      }
 
-     const props = withDefaults(defineProps<Props>(), {
+     const props = withDefaults(defineProps<PascalNameProps>(), {
        variant: 'primary',
        size: 'large',
        disabled: false

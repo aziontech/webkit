@@ -15,7 +15,7 @@
   export type SitePageScene = {
     /** Scene registry name. */
     component: string
-    /** Props bound onto the scene; the slot's own props win on a clash. */
+    /** SitePageProps bound onto the scene; the slot's own props win on a clash. */
     props?: Record<string, unknown>
   }
 
@@ -23,7 +23,7 @@
   export type SitePageSection = {
     /** Public subpath of the section to render. */
     _id: string
-    /** Props bound onto the section. */
+    /** SitePageProps bound onto the section. */
     props?: Record<string, unknown>
     /** Slot name of the section mapped to the scene drawn in it. */
     scenes?: Record<string, SitePageScene>
@@ -52,14 +52,14 @@
     gapSize: 'small' | 'medium' | null
   }
 
-  interface Props {
+  export interface SitePageProps {
     /** Opening sections, rendered full bleed above the column in order. */
     hero?: SitePageSection[]
     /** Column sections, rendered in order inside the site column with a hatched gap before each and after the last. */
     sections?: SitePageSection[]
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<SitePageProps>(), {
     hero: () => [],
     sections: () => []
   })

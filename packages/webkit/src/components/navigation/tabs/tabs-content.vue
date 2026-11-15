@@ -9,12 +9,12 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface TabsContentProps {
     /** Tab value this panel is bound to. */
     value: TabsValue
   }
 
-  const props = defineProps<Props>()
+  const props = defineProps<TabsContentProps>()
 
   defineSlots<{ default(): unknown }>()
 

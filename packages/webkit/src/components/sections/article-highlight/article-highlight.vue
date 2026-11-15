@@ -4,7 +4,7 @@
 
   import { eventDirection, logicalArrowKey } from '../../../composables/use-direction'
   import { useTranslate } from '../../../composables/use-translate'
-  import * as en from '../../../i18n/messages/en'
+  import * as en from '../../../locales/en'
   import Button from '../../actions/button/button.vue'
   import IconButton from '../../actions/icon-button/icon-button.vue'
   import FrameBox from '../../layout/frame-box/frame-box.vue'
@@ -38,7 +38,7 @@
     readTime: string
   }
 
-  interface Props {
+  export interface ArticleHighlightProps {
     /** In-page id set on the band so a `#hash` link can scroll to it. */
     anchor?: string
     /** The highlight articles in wall order, the one at the bound index (the first by default) selected on load; each is `{ key, href, image, highlightImage?, meta, title, description, readTime }`. */
@@ -55,7 +55,7 @@
     fill?: boolean
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<ArticleHighlightProps>(), {
     anchor: '',
     items: () => [],
     actionLabel: '',
@@ -113,9 +113,9 @@
   )
 
   const paused = ref(false)
-  const { t } = useTranslate({ autoplayControl: en.autoplayControl })
+  const { t } = useTranslate({ common: en.common })
   const pauseLabel = computed(() =>
-    paused.value ? t('autoplayControl.resumeRotation') : t('autoplayControl.pauseRotation')
+    paused.value ? t('common.resumeRotation') : t('common.pauseRotation')
   )
 
   const running = computed(

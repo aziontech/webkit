@@ -2,7 +2,7 @@
   import { computed, provide, useAttrs } from 'vue'
 
   import { useTranslate } from '../../../composables/use-translate'
-  import * as en from '../../../i18n/messages/en'
+  import * as en from '../../../locales/en'
   import FrameBox from '../frame-box/frame-box.vue'
   import { FooterInjectionKey } from './injection-key'
 
@@ -16,7 +16,7 @@
   /** Widths at which the signature band renders. */
   export type FooterSignature = 'always' | 'compact'
 
-  interface Props {
+  export interface FooterProps {
     /** Accessible name for the contentinfo landmark. Empty uses the locale catalog (`Footer`). */
     ariaLabel?: string
     /** Where the footer sits: `content` is the default — the bands run full bleed across whatever zone holds the footer, opening on the page boundary; `site` closes a framed marketing page instead, capping the bands at the site measure and drawing the frame that page carries: the side rules, the hatched gutters and the corner marks, closing on a full-bleed bottom rule. */
@@ -25,7 +25,7 @@
     signature?: FooterSignature
   }
 
-  withDefaults(defineProps<Props>(), {
+  withDefaults(defineProps<FooterProps>(), {
     ariaLabel: '',
     variant: 'content',
     signature: 'always'

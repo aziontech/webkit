@@ -13,7 +13,7 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface TableCellProps {
     /** checkbox holds the row checkbox; action holds the row menu trigger. */
     type?: TableCellType
     /** Text alignment. */
@@ -28,7 +28,7 @@
     clickable?: boolean
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<TableCellProps>(), {
     type: 'default',
     align: 'start',
     grow: undefined,

@@ -10,14 +10,14 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface BandStackProps {
     /** Pin each band under the site header from `lg` up, a step lower than the band before it, so the run piles up as the page scrolls. */
     sticky?: boolean
     /** Drop the first band's top rule, for a stack sitting directly under an element that already draws one. */
     flush?: boolean
   }
 
-  withDefaults(defineProps<Props>(), {
+  withDefaults(defineProps<BandStackProps>(), {
     sticky: false,
     flush: false
   })

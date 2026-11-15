@@ -16,7 +16,7 @@
   } from '../../../composables/use-collection/lib/property-filter'
   import { usePlacement } from '../../../composables/use-placement'
   import { usePortalLocale, useTranslate } from '../../../composables/use-translate'
-  import * as en from '../../../i18n/messages/en'
+  import * as en from '../../../locales/en'
   import Button from '../../actions/button/button.vue'
   import ToggleGroup from '../../actions/toggle-group/toggle-group.vue'
   import Chip from '../../inputs/chip/chip.vue'
@@ -62,7 +62,7 @@
   /** How the field edits the query. */
   export type PropertyFilterMode = 'tokens' | 'query'
 
-  interface Props {
+  export interface PropertyFilterProps {
     /** Properties the suggestions offer, with their operators and values. */
     properties?: FilteringProperty[]
     /** Items that match the query, announced next to the tokens. Hidden when unset. */
@@ -89,7 +89,7 @@
     showOperations?: boolean
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<PropertyFilterProps>(), {
     properties: () => [],
     totalCount: undefined,
     placeholder: '',
@@ -125,10 +125,7 @@
   }>()
 
   const attrs = useAttrs()
-  const { t, locale } = useTranslate({
-    propertyFilter: en.propertyFilter,
-    propertyFilterQuery: en.propertyFilterQuery
-  })
+  const { t, locale } = useTranslate({ propertyFilter: en.propertyFilter })
 
   const testId = computed<string>(
     () => (attrs['data-testid'] as string | undefined) ?? 'data-property-filter'
@@ -381,7 +378,7 @@
     if (!queryText.value.trim()) return ''
     if (props.validate) return props.validate(queryText.value)
     const error = builtInParse.value.error
-    return error ? t(`propertyFilterQuery.${error.code}`, error.params) : ''
+    return error ? t(`propertyFilter.${error.code}`, error.params) : ''
   })
   const showError = computed<boolean>(
     () => isQuery.value && touched.value && Boolean(queryError.value)
@@ -465,7 +462,7 @@
         id: `c-${c}`,
         group: 'connectives',
         label: c,
-        description: c === 'AND' ? t('propertyFilterQuery.all') : t('propertyFilterQuery.any'),
+        description: c === 'AND' ? t('propertyFilter.queryAll') : t('propertyFilter.queryAny'),
         apply: () => insertAtCaret(c)
       }))
   })
@@ -682,7 +679,7 @@
   const groupLabel = (group: Suggestion['group']): string => {
     if (group === 'properties') return t('propertyFilter.properties')
     if (group === 'values') return t('propertyFilter.values')
-    if (group === 'fields') return t('propertyFilterQuery.fields')
+    if (group === 'fields') return t('propertyFilter.queryFields')
     return ''
   }
 
@@ -716,12 +713,12 @@
         :aria-controls="listId"
         :aria-activedescendant="activeId"
         :aria-label="
-          ariaLabel || (isQuery ? t('propertyFilterQuery.label') : t('propertyFilter.label'))
+          ariaLabel || (isQuery ? t('propertyFilter.queryLabel') : t('propertyFilter.label'))
         "
         :aria-describedby="showError ? errorId : undefined"
         :placeholder="
           placeholder ||
-          (isQuery ? t('propertyFilterQuery.placeholder') : t('propertyFilter.placeholder'))
+          (isQuery ? t('propertyFilter.queryPlaceholder') : t('propertyFilter.placeholder'))
         "
         :disabled="disabled"
         :invalid="showError"

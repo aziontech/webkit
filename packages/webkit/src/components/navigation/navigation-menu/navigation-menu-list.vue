@@ -9,7 +9,7 @@
 
   defineOptions({ name: 'NavigationMenuList', inheritAttrs: false })
 
-  interface Props {
+  export interface NavigationMenuListProps {
     /** Group heading for column lists inside content panels. */
     label?: string
     /** Optional marker rendered before the group heading. */
@@ -20,7 +20,7 @@
     showHighlight?: boolean
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<NavigationMenuListProps>(), {
     label: undefined,
     prefix: '',
     href: '',

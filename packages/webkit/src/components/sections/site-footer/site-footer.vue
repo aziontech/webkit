@@ -2,7 +2,7 @@
   import { computed, useAttrs } from 'vue'
 
   import { useTranslate } from '../../../composables/use-translate'
-  import * as en from '../../../i18n/messages/en'
+  import * as en from '../../../locales/en'
   import IconButton from '../../actions/icon-button/icon-button.vue'
   import Brand from '../../content/brand/brand.vue'
   import StatusIndicator from '../../feedback/status-indicator/status-indicator.vue'
@@ -50,7 +50,7 @@
     href: string
   }
 
-  interface Props {
+  export interface SiteFooterProps {
     /** Where the footer sits: `site` closes a framed marketing page and draws its frame, `content` runs the bands full bleed. */
     variant?: SiteFooterVariant
     /** Accessible name of the footer landmark. Empty uses the locale catalog (`Footer`). */
@@ -71,7 +71,7 @@
     languageAriaLabel?: string
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<SiteFooterProps>(), {
     variant: 'site',
     ariaLabel: '',
     home: '',
@@ -87,7 +87,7 @@
   const language = defineModel<string>('language', { default: '' })
 
   const attrs = useAttrs()
-  const { t } = useTranslate({ siteFooter: en.siteFooter })
+  const { t } = useTranslate({ siteFooter: en.siteFooter, common: en.common })
 
   const selectedLanguage = computed({
     get: () => language.value || props.languages[0] || '',
@@ -134,7 +134,7 @@
               class="ai ai-external-link shrink-0 text-body-xs leading-none"
               aria-hidden="true"
             />
-            <span class="sr-only">{{ ` ${t('siteFooter.newTab')}` }}</span>
+            <span class="sr-only">{{ ` ${t('common.newTab')}` }}</span>
           </template>
         </FooterLink>
       </FooterColumn>

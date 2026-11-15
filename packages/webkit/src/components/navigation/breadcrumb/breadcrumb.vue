@@ -2,7 +2,7 @@
   import { computed, ref, useAttrs } from 'vue'
 
   import { useTranslate } from '../../../composables/use-translate'
-  import * as en from '../../../i18n/messages/en'
+  import * as en from '../../../locales/en'
   import { cn } from '../../../utils/cn'
   import { directionalIconClass } from '../../../utils/directional-icons'
   import DropdownMenu from '../dropdown-menu'
@@ -24,14 +24,14 @@
     active?: boolean
   }
 
-  interface Props {
+  export interface BreadcrumbProps {
     /** Ordered path segments; the last entry is the current page when `active` is omitted. */
     items?: BreadcrumbItemData[]
     /** Accessible name of the navigation landmark; empty uses the locale catalog (`Breadcrumb`). */
     ariaLabel?: string
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<BreadcrumbProps>(), {
     items: () => [],
     ariaLabel: ''
   })

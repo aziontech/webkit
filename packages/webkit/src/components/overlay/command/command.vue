@@ -16,7 +16,7 @@
 
   import { useControllable } from '../../../composables/use-controllable'
   import { useTranslate } from '../../../composables/use-translate'
-  import * as en from '../../../i18n/messages/en'
+  import * as en from '../../../locales/en'
   import Dialog from '../dialog/dialog.vue'
   import DialogContent from '../dialog/dialog-content.vue'
   import DialogTitle from '../dialog/dialog-title.vue'
@@ -32,21 +32,20 @@
     inheritAttrs: false
   })
 
-  const props = withDefaults(
-    defineProps<{
-      /** Initial open state when uncontrolled. */
-      defaultOpen?: boolean
-      /** When true, backdrop click and Escape close the palette. */
-      dismissible?: boolean
-      /** Global `'+'`-delimited shortcut that toggles the palette (matched against Ctrl on non-macOS). */
-      shortcut?: string
-    }>(),
-    {
-      defaultOpen: false,
-      dismissible: true,
-      shortcut: 'meta+k'
-    }
-  )
+  export interface CommandProps {
+    /** Initial open state when uncontrolled. */
+    defaultOpen?: boolean
+    /** When true, backdrop click and Escape close the palette. */
+    dismissible?: boolean
+    /** Global `'+'`-delimited shortcut that toggles the palette (matched against Ctrl on non-macOS). */
+    shortcut?: string
+  }
+
+  const props = withDefaults(defineProps<CommandProps>(), {
+    defaultOpen: false,
+    dismissible: true,
+    shortcut: 'meta+k'
+  })
 
   const emit = defineEmits<{
     select: [event: globalThis.MouseEvent | globalThis.KeyboardEvent, value: CommandItemValue]

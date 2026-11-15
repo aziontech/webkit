@@ -12,18 +12,18 @@
   import Avatar from '../../avatar/avatar.vue'
   import Card from '../../card/card.vue'
   import Tag, { type TagSeverity } from '../../tag/tag.vue'
-  import ShellMockup, { type ShellMockupFade } from '../shell-mockup/shell-mockup.vue'
+  import ShellMockup, { type ProductWidgetShellMockupFade } from '../shell-mockup/shell-mockup.vue'
   import ShellMockupPart from '../shell-mockup/shell-mockup-part/shell-mockup-part.vue'
 
   defineOptions({ name: 'WorkloadOverviewWidget' })
 
-  export type WorkloadOverviewTab = 'overview' | 'topology' | 'deploy'
+  export type ProductWidgetWorkloadOverviewTab = 'overview' | 'topology' | 'deploy'
 
   interface Props {
     /** Beat the mockup plays: the page top, the topology scrolled into view, or the deploy drawer open. */
-    tab?: WorkloadOverviewTab
+    tab?: ProductWidgetWorkloadOverviewTab
     /** Edge the mockup fades out along. */
-    fade?: ShellMockupFade
+    fade?: ProductWidgetShellMockupFade
     /** Texture the frame is grounded with. */
     texture?: TextureMaterialVariant
     /** Whether this widget is the one showing. */

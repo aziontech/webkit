@@ -2,7 +2,7 @@
   import { computed, inject, useAttrs, useId } from 'vue'
 
   import { useTranslate } from '../../../composables/use-translate'
-  import * as en from '../../../i18n/messages/en'
+  import * as en from '../../../locales/en'
   import Tag, { type TagSeverity } from '../../content/tag/tag.vue'
   import Skeleton from '../../feedback/skeleton/skeleton.vue'
   import Separator from '../../layout/separator/separator.vue'
@@ -17,7 +17,7 @@
   /** Figure face: the big-number mono figure or the large heading figure. */
   export type StatTileVariant = 'mono' | 'sans'
 
-  interface Props {
+  export interface StatTileProps {
     /** Metric name, in sentence case. Fallback for the default slot. */
     label?: string
     /** The current value. It counts up from the previous value on change; null renders a dash. */
@@ -40,7 +40,7 @@
     loading?: boolean
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<StatTileProps>(), {
     label: '',
     value: null,
     formatValue: formatCompact,

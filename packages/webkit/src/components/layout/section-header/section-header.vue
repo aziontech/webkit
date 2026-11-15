@@ -2,7 +2,7 @@
   import { computed, useAttrs } from 'vue'
 
   import { useTranslate } from '../../../composables/use-translate'
-  import * as en from '../../../i18n/messages/en'
+  import * as en from '../../../locales/en'
   import CopyButton from '../../actions/copy-button/copy-button.vue'
 
   /** Heading scale: medium for a band heading, small for the smallest heading, a band nested inside another. */
@@ -13,7 +13,7 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface SectionHeaderProps {
     /** The band title, rendered as an h2. */
     title: string
     /** One sentence under the title. */
@@ -24,7 +24,7 @@
     anchor?: string
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<SectionHeaderProps>(), {
     description: '',
     size: 'medium',
     anchor: ''

@@ -6,7 +6,7 @@
   import { useOverlayLayer } from '../../../composables/use-overlay-layer'
   import { usePlacement } from '../../../composables/use-placement'
   import { usePortalLocale, useTranslate } from '../../../composables/use-translate'
-  import * as en from '../../../i18n/messages/en'
+  import * as en from '../../../locales/en'
   import IconButton from '../../actions/icon-button/icon-button.vue'
   import Spinner from '../../utils/spinner/spinner.vue'
   import Input from '../input/input.vue'
@@ -41,7 +41,7 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface ComboboxProps {
     /** Suggestions: `{ value, label?, description?, group?, disabled? }`. */
     options?: ComboboxOption[]
     /** Placeholder of the field. */
@@ -71,9 +71,7 @@
     /** Initial open state of the list when uncontrolled (v-model:open unbound). */
     defaultOpen?: boolean
   }
-  export type ComboboxProps = Props
-
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<ComboboxProps>(), {
     options: () => [],
     placeholder: '',
     ariaLabel: '',
@@ -226,7 +224,7 @@
 
   useOverlayLayer(expanded, { element: panelEl, transient: true })
 
-  const emptyLabel = computed(() => props.emptyTitle || t('combobox.empty'))
+  const emptyLabel = computed(() => props.emptyTitle || t('combobox.noMatch'))
 
   const activeId = computed(() =>
     expanded.value && active.value >= 0 ? rows.value[active.value]?.id : undefined

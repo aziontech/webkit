@@ -2,24 +2,22 @@
   import { computed, inject, useAttrs } from 'vue'
 
   import { useTranslate } from '../../../../composables/use-translate'
-  import * as en from '../../../../i18n/messages/en'
+  import * as en from '../../../../locales/en'
   import IconButton from '../../../actions/icon-button/icon-button.vue'
-  import { type SortDirection, TableInjectionKey } from '../injection-key'
+  import { TableInjectionKey, type TableSortDirection } from '../injection-key'
 
-  export type { SortDirection }
+  export type { TableSortDirection }
 
   defineOptions({
     name: 'TableSortButton',
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface TableSortButtonProps {
     /** Current sort direction shown by the glyph. */
-    sortDirection?: SortDirection
+    sortDirection?: TableSortDirection
   }
-  export type TableSortButtonProps = Props
-
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<TableSortButtonProps>(), {
     sortDirection: 'none'
   })
 

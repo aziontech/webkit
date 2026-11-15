@@ -2,12 +2,12 @@
   import { computed, provide, ref, shallowRef, useAttrs, watch } from 'vue'
 
   import { useTranslate } from '../../../composables/use-translate'
-  import * as en from '../../../i18n/messages/en'
+  import * as en from '../../../locales/en'
   import { BoardInjectionKey, type BoardLayoutItem, type BoardMoveDirection } from './injection-key'
 
   defineOptions({ name: 'Board', inheritAttrs: false })
 
-  interface Props {
+  export interface BoardProps {
     /** Columns of the grid in a wide container; one column below `@3xl`. */
     columns?: number
     /** Fewest columns an item may span. */
@@ -24,7 +24,7 @@
     ariaLabel?: string
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<BoardProps>(), {
     columns: 12,
     minSpan: 3,
     maxSpan: 12,

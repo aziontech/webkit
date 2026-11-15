@@ -4,10 +4,10 @@
   import { useControllable } from '../../../composables/use-controllable'
   import { usePlacement } from '../../../composables/use-placement'
   import { triggerControl } from '../../../utils/trigger-control'
-  import type { HoverCardPlacement, HoverCardPlacementInput } from './injection-key'
+  import type { HoverCardPlacement, HoverCardPlacementSide } from './injection-key'
   import { HOVER_CARD_FOCUSABLE, HoverCardInjectionKey } from './injection-key'
 
-  export type { HoverCardPlacement, HoverCardPlacementInput } from './injection-key'
+  export type { HoverCardPlacement, HoverCardPlacementSide } from './injection-key'
 
   defineOptions({
     name: 'HoverCard',
@@ -18,9 +18,9 @@
     default(): unknown
   }>()
 
-  interface Props {
+  export interface HoverCardProps {
     /** Side of the trigger the card opens on, flipped when it does not fit; `'auto'` picks the side with room. */
-    placement?: HoverCardPlacementInput
+    placement?: HoverCardPlacement
     /** Pixel gap between the trigger and the card. */
     offset?: number
     /** Milliseconds the pointer or focus must stay on the trigger before the card opens. */
@@ -33,7 +33,7 @@
     defaultOpen?: boolean
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<HoverCardProps>(), {
     placement: 'bottom',
     offset: 8,
     openDelay: 500,
@@ -79,7 +79,7 @@
     onDismiss: () => setOpen(false)
   })
 
-  const resolvedPlacementRef = computed(() => resolvedPlacement.value as HoverCardPlacement)
+  const resolvedPlacementRef = computed(() => resolvedPlacement.value as HoverCardPlacementSide)
 
   function clearTimers() {
     if (openTimer !== undefined) clearTimeout(openTimer)

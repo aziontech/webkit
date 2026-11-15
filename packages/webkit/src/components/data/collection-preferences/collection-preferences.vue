@@ -7,7 +7,7 @@
     CollectionPreferencesValue
   } from '../../../composables/use-collection/lib/preferences'
   import { useTranslate } from '../../../composables/use-translate'
-  import * as en from '../../../i18n/messages/en'
+  import * as en from '../../../locales/en'
   import Button from '../../actions/button/button.vue'
   import IconButton from '../../actions/icon-button/icon-button.vue'
   import ToggleGroup from '../../actions/toggle-group/toggle-group.vue'
@@ -50,7 +50,7 @@
   /** Overlay the panel opens in. */
   export type CollectionPreferencesContainer = 'dialog' | 'drawer'
 
-  interface Props {
+  export interface CollectionPreferencesProps {
     /** Columns to show, hide and order. Empty reads the enclosing DataTable's columns, or hides the columns section outside one. */
     columns?: CollectionPreferencesColumn[]
     /** Page sizes offered. Empty hides the page size section. */
@@ -67,7 +67,7 @@
     defaultOpen?: boolean
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<CollectionPreferencesProps>(), {
     columns: () => [],
     pageSizeOptions: () => [],
     sections: () => ['page-size', 'columns', 'wrap-lines', 'striped', 'density'],

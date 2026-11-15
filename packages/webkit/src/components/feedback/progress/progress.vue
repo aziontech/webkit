@@ -2,7 +2,7 @@
   import { computed, useAttrs } from 'vue'
 
   import { useTranslate } from '../../../composables/use-translate'
-  import * as en from '../../../i18n/messages/en'
+  import * as en from '../../../locales/en'
 
   export type ProgressVariant = 'rounded' | 'flat'
   export type ProgressSize = 'small' | 'medium' | 'large'
@@ -12,7 +12,7 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface ProgressProps {
     /** Current progress, relative to `max`. */
     value?: number
     /** Upper bound; percentage = `value / max * 100`. */
@@ -25,7 +25,7 @@
     indeterminate?: boolean
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<ProgressProps>(), {
     value: 0,
     max: 100,
     variant: 'flat',

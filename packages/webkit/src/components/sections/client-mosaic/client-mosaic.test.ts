@@ -174,7 +174,7 @@ describe('ClientMosaic', () => {
           logo: '/logos/agibank.svg',
           logoAlt: 'Agibank',
           href: '/success-case/agibank',
-          logoTreatment: 'as-is'
+          logoTreatment: 'color'
         }
       ]
     })

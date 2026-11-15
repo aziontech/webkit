@@ -17,7 +17,9 @@ default, is stuck in one language and drifts from the rest of the product.
   locale).
 - Rename a built-in string for the whole app with `messages` on `WebkitProvider`:
   `:messages="{ wizard: { submit: 'Deploy' }, kbd: { ctrl: 'Strg' } }"`. The keys are the
-  catalog's (`group.key`); anything you leave out keeps the built-in text.
+  catalog's (`group.key`): `group` is the component's camelCase name (`sidebarMenu`,
+  `feedbackReasonDialog`) and strings several components share are in `common` (`common.copy`,
+  `common.newTab`); anything you leave out keeps the built-in text.
 - Pass a prop only when the text is product copy specific to that screen (a dialog title, a field
   label, the action of this form), and write it by the `webkit-microcopy` skill: sentence case, one
   word per concept, no em dash.
@@ -72,5 +74,5 @@ default, is stuck in one language and drifts from the rest of the product.
   webkit's own components.
 - Inside the package the same check runs at write time (the authoring hook) and in CI
   (`scripts/check-authoring.mjs`): a literal UI string in a component template attribute, or an
-  English prop default, is blocked; the text goes to `src/i18n/messages/*.ts`.
+  English prop default, is blocked; the text goes to `src/locales/*.ts`.
 - Product copy, the text no component ships, follows the `webkit-microcopy` skill.

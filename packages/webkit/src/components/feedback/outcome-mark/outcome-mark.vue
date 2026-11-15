@@ -2,7 +2,7 @@
   import { computed, onBeforeUnmount, onMounted, ref, useAttrs, watch } from 'vue'
 
   import { useTranslate } from '../../../composables/use-translate'
-  import * as en from '../../../i18n/messages/en'
+  import * as en from '../../../locales/en'
 
   export type OutcomeMarkSeverity = 'success' | 'danger' | 'warning' | 'neutral'
 
@@ -13,7 +13,7 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface OutcomeMarkProps {
     /** The outcome the mark shows: a check, a cross, an exclamation or a dash. */
     severity?: OutcomeMarkSeverity
     /** Size token: 16, 20 or 48 px. */
@@ -24,7 +24,7 @@
     ariaLabel?: string
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<OutcomeMarkProps>(), {
     severity: 'success',
     size: 'medium',
     animated: false,

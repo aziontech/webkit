@@ -1032,10 +1032,22 @@ export function checkSpecVocabulary(rel, text) {
 
 export function checkI18n(rel, text, ctx) {
   const out = []
-  const known = ctx?.componentNames ? new Set([...ctx.componentNames].map(kebabToCamel)) : null
+  const owners = [
+    ...(ctx?.componentNames || []),
+    ...[...(ctx?.exports || [])].map((k) =>
+      k
+        .split('/')
+        .pop()
+        .replace(/^use-/, '')
+        .replace(/-root$/, '')
+    )
+  ]
+  const known = ctx?.componentNames ? new Set(owners.map(kebabToCamel)) : null
+  const locale = rel.split('/').pop().replace(/\.ts$|-/g, '').toLowerCase()
   for (const m of text.matchAll(/export\s+const\s+(\w+)\s*=/g)) {
     const ns = m[1]
     const line = lineOf(text, m.index)
+    if (ns.toLowerCase() === locale) continue
     if (!CAMEL.test(ns))
       out.push(v('i18n-key', rel, line, `namespace "${ns}" must be camelCase (${RULE_DOC}).`))
     else if (known && known.size && !known.has(ns) && ns !== 'common')
@@ -1637,7 +1649,7 @@ export function checkFile(rel, text, ctx = {}) {
     out.push(...checkExampleIndex(rel, text, ctx))
   if (/^packages\/webkit\/blocks\/.+\/block\.json$/.test(rel))
     out.push(...checkBlockFile(rel, text))
-  if (/^packages\/webkit\/src\/i18n\/messages\/[^/]+\.ts$/.test(rel))
+  if (/^packages\/webkit\/src\/locales\/[^/]+\.ts$/.test(rel))
     out.push(...checkI18n(rel, text, ctx))
   if (/^packages\/theme\/src\/tokens\//.test(rel) && /\.(js|mjs|css)$/.test(rel))
     out.push(...checkTokenNames(rel, text))

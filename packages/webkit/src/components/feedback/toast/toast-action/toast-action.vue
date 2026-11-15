@@ -8,10 +8,12 @@
     inheritAttrs: false
   })
 
-  defineProps<{
+  export interface ToastActionProps {
     /** Visible label of the action control. */
     label: string
-  }>()
+  }
+
+  defineProps<ToastActionProps>()
 
   const emit = defineEmits<{
     click: [event: MouseEvent]

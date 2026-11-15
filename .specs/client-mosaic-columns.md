@@ -6,7 +6,7 @@ status: implemented
 spec_version: 5
 created: 2026-11-04
 last_updated: 2026-11-15
-checksum: 3204d01464e7784b4a4a5a665866af4b775029265a40048b6c939c2d3040b5e3
+checksum: 7d9963a85f08376fcee3f4b9efb7ca8b1a7c792ee73ffdb5a4e589f8992775b2
 ---
 
 # ClientMosaicColumns — Component Spec
@@ -71,13 +71,13 @@ Three featured success stories side by side: each column is a client's mark on a
 
 ## Props
 
-| Prop        | Type                        | Default    | Required | JSDoc                                                                                                                                                                                                                                                                                                                                                                                                           |
-| ----------- | --------------------------- | ---------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `anchor`    | `string`                    | `''`       | false    | In-page id set on the band so a hash link can target it.                                                                                                                                                                                                                                                                                                                                                        |
-| `ariaLabel` | `string`                    | `''`       | false    | Accessible name of the list of stories.                                                                                                                                                                                                                                                                                                                                                                         |
-| `linkLabel` | `string`                    | `''`       | false    | Label the mark face reveals on hover and the link's accessible name.                                                                                                                                                                                                                                                                                                                                            |
-| `cells`     | `ClientMosaicColumnsCell[]` | `[]`       | false    | The stories, in order; each is `{ name, logo, href, story, brand?, logoTreatment?, logoWidth? }` where `brand` is `{ base, glow, ink? }` (CSS colours painting the face, `ink` `'dark'` or `'light'`) and defaults to the client registry's colours for `name`, `logoTreatment` is `'monochrome'`, `'knockout'` or `'as-is'`, and `logoWidth` (read by `reveal="hover"`) sizes the mark as a share of the card. |
-| `reveal`    | `ClientMosaicColumnsReveal` | `'always'` | false    | When the story shows: `always` under each face, or `hover`, where each card opens to reveal it while hovered or focused and stays open below the large breakpoint.                                                                                                                                                                                                                                              |
+| Prop        | Type                        | Default    | Required | JSDoc                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+| ----------- | --------------------------- | ---------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `anchor`    | `string`                    | `''`       | false    | In-page id set on the band so a hash link can target it.                                                                                                                                                                                                                                                                                                                                                                                     |
+| `ariaLabel` | `string`                    | `''`       | false    | Accessible name of the list of stories.                                                                                                                                                                                                                                                                                                                                                                                                      |
+| `linkLabel` | `string`                    | `''`       | false    | Label the mark face reveals on hover and the link's accessible name.                                                                                                                                                                                                                                                                                                                                                                         |
+| `cells`     | `ClientMosaicColumnsCell[]` | `[]`       | false    | The stories, in order; each is `{ name, logo, href, story, brand?, logoTreatment?, logoWidth? }` where `brand` is `{ base, glow, ink? }` (CSS colours painting the face, `ink` `'dark'` or `'light'`) and defaults to the client registry's colours for `name`, `logoTreatment` is `'color'`, `'monochrome'` or `'knockout'` (the shared `LogoTreatment`), and `logoWidth` (read by `reveal="hover"`) sizes the mark as a share of the card. |
+| `reveal`    | `ClientMosaicColumnsReveal` | `'always'` | false    | When the story shows: `always` under each face, or `hover`, where each card opens to reveal it while hovered or focused and stays open below the large breakpoint.                                                                                                                                                                                                                                                                           |
 
 ## Events
 
@@ -131,10 +131,10 @@ Three featured success stories side by side: each column is a client's mark on a
 
 ## Internationalization
 
-| Key                       | English source     | Override prop                          |
-| ------------------------- | ------------------ | -------------------------------------- |
-| `customerSpotlight.list`  | `Customer stories` | `ariaLabel` (read by `reveal="hover"`) |
-| `customerSpotlight.story` | `Read story`       | `linkLabel` (read by `reveal="hover"`) |
+| Key                         | English source     | Override prop                          |
+| --------------------------- | ------------------ | -------------------------------------- |
+| `clientMosaicColumns.list`  | `Customer stories` | `ariaLabel` (read by `reveal="hover"`) |
+| `clientMosaicColumns.story` | `Read story`       | `linkLabel` (read by `reveal="hover"`) |
 
 ## Examples
 

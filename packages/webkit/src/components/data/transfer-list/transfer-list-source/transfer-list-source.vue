@@ -2,7 +2,7 @@
   import { computed, inject, ref, useAttrs, watch } from 'vue'
 
   import { useTranslate } from '../../../../composables/use-translate'
-  import * as en from '../../../../i18n/messages/en'
+  import * as en from '../../../../locales/en'
   import EmptyState from '../../../feedback/empty-state/empty-state.vue'
   import Spinner from '../../../utils/spinner/spinner.vue'
   import { useTransferListSide } from '../composables/use-transfer-list-side'
@@ -14,14 +14,14 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface TransferListSourceProps {
     /** Heading text for the list; also its accessible name. */
     title?: string
     /** Shows a spinner in place of options and locks this list's controls while data loads. */
     loading?: boolean
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<TransferListSourceProps>(), {
     title: '',
     loading: false
   })
@@ -138,7 +138,7 @@
       >
         <EmptyState
           size="small"
-          :title="t('transferList.empty')"
+          :title="t('transferList.emptyTitle')"
         />
       </div>
     </div>

@@ -15,7 +15,7 @@
   import PromptInput, { type PromptInputStatus } from '@aziontech/webkit/prompt-input'
   import Resizable from '@aziontech/webkit/resizable'
   import StreamingResponse from '@aziontech/webkit/streaming-response'
-  import SuggestionGroup, { type SuggestionItem } from '@aziontech/webkit/suggestion-group'
+  import SuggestionGroup, { type SuggestionGroupItem } from '@aziontech/webkit/suggestion-group'
   import Tag from '@aziontech/webkit/tag'
   import { computed, nextTick, onBeforeUnmount, onMounted, reactive, ref } from 'vue'
 
@@ -93,7 +93,7 @@
       })
     ])
   )
-  const followUps = computed<SuggestionItem[]>(() =>
+  const followUps = computed<SuggestionGroupItem[]>(() =>
     versions.value.length < drafts.length && state.value === 'ready'
       ? [
           { id: 'email', label: 'Show the customer email too' },

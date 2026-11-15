@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 7
 template: 2
-checksum: a9ebc48bc98fa09ab88dc69611098154ee40bcd9b76d88dea1d0b33095378c57
+checksum: 18316b125334b49e3eaa8dde1087e8545383c239b4855f2b5ed925bbd1d502c1
 created: 2026-06-02
 last_updated: 2026-11-15
 ---
@@ -69,7 +69,7 @@ Icon-only control that copies a string to the clipboard and briefly confirms suc
 - `data-state` mirrors `idle` or `copied`
 - `data-disabled` mirrors the `disabled` prop
 - The composed `Tooltip` carries its own `data-state` (`open` | `closed`) and is disabled with the button
-- Fallback: when `navigator.clipboard.writeText` rejects (permission denied, insecure context, unfocused document), the button loads a small `Popover` anchored to itself (lazily, through `defineAsyncComponent`, so entries that copy do not grow): the title `Copy manually`, the value in a read-only small `Input` labelled `Value to copy`, focused and selected, and `Press Ctrl+C to copy.` (`⌘C` on macOS). `copy` is not emitted and the state stays `default`. `Esc` or a click outside closes it and returns focus to the button. Strings come from the `copyFallback` catalog group.
+- Fallback: when `navigator.clipboard.writeText` rejects (permission denied, insecure context, unfocused document), the button loads a small `Popover` anchored to itself (lazily, through `defineAsyncComponent`, so entries that copy do not grow): the title `Copy manually`, the value in a read-only small `Input` labelled `Value to copy`, focused and selected, and `Press Ctrl+C to copy.` (`⌘C` on macOS). `copy` is not emitted and the state stays `default`. `Esc` or a click outside closes it and returns focus to the button. Strings come from `copyButton.fallbackTitle`, `fallbackField` and `fallbackHint`.
 
 ## Motion & Animations
 
@@ -130,10 +130,10 @@ Icon-only control that copies a string to the clipboard and briefly confirms suc
 
 ## Internationalization
 
-| Key                 | English source | Override prop |
-| ------------------- | -------------- | ------------- |
-| `copyButton.copy`   | `Copy`         | `ariaLabel`   |
-| `copyButton.copied` | `Copied`       | `copiedLabel` |
+| Key             | English source | Override prop |
+| --------------- | -------------- | ------------- |
+| `common.copy`   | `Copy`         | `ariaLabel`   |
+| `common.copied` | `Copied`       | `copiedLabel` |
 
 ## Responsive
 

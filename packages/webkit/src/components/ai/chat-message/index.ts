@@ -14,4 +14,7 @@ const ChatMessageRoot = Object.assign(ChatMessage, {
 
 export default ChatMessageRoot
 export { ChatMessageActions, ChatMessageFeedback }
+export type { ChatMessageProps } from './chat-message.vue'
+export type { ChatMessageActionsProps } from './chat-message-actions/chat-message-actions.vue'
+export type { ChatMessageFeedbackProps } from './chat-message-feedback/chat-message-feedback.vue'
 export type { ChatMessageFeedbackValue, ChatMessageFrom, ChatMessageStatus } from './injection-key'

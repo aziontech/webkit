@@ -2,7 +2,7 @@
   import { computed, inject, onMounted, provide, ref, useAttrs, watch } from 'vue'
 
   import { useTranslate } from '../../../composables/use-translate'
-  import * as en from '../../../i18n/messages/en'
+  import * as en from '../../../locales/en'
   import Button from '../../actions/button/button.vue'
   import Avatar from '../../content/avatar/avatar.vue'
   import AiLoading from '../ai-loading/ai-loading.vue'
@@ -17,7 +17,7 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface ChatMessageProps {
     /** Who wrote the message: the person (`user`), the generative AI assistant, or the product (`system`). */
     from?: ChatMessageFrom
     /** Author name shown over the message and read in its accessible name. Empty uses the locale catalog (`You`, `AI assistant`, `System`). */
@@ -34,7 +34,7 @@
     loadingLabel?: string
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<ChatMessageProps>(), {
     from: 'assistant',
     author: '',
     timestamp: '',

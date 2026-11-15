@@ -3,7 +3,7 @@
 
   import { logicalArrowKey, useDirection } from '../../../composables/use-direction'
   import { useTranslate } from '../../../composables/use-translate'
-  import * as en from '../../../i18n/messages/en'
+  import * as en from '../../../locales/en'
   import Button from '../../actions/button/button.vue'
   import CopyButton from '../../actions/copy-button/copy-button.vue'
   import Tag from '../../content/tag/tag.vue'
@@ -75,7 +75,7 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface TraceProps {
     /** Spans of the trace, each `{ id, parentId?, name, service?, icon?, start, duration, status?, message?, attributes? }` in milliseconds. */
     spans?: TraceSpan[]
     /** Accessible name of the waterfall. Empty uses the locale catalog. */
@@ -90,7 +90,7 @@
     highlightSlowest?: boolean
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<TraceProps>(), {
     spans: () => [],
     ariaLabel: '',
     bordered: true,
@@ -809,7 +809,7 @@
         <EmptyState
           size="small"
           :icon="term ? 'ai ai-search' : 'ai ai-sitemap'"
-          :title="term ? t('trace.noMatch', { query: search.trim() }) : t('trace.empty')"
+          :title="term ? t('trace.noMatch', { query: search.trim() }) : t('trace.emptyTitle')"
         >
           <template
             v-if="term"

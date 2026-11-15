@@ -1,7 +1,7 @@
 import type { ComputedRef, InjectionKey } from 'vue'
 
 /** One step of a tutorial task: what the reader does at one place on the page. */
-export interface TutorialStep {
+export interface TutorialPanelStep {
   /** The step's title, shown in the hotspot popover and in the panel's step list. */
   title: string
   /** The step's instructions, shown in the hotspot popover. */
@@ -11,15 +11,15 @@ export interface TutorialStep {
 }
 
 /** One task of a tutorial: an ordered group of steps with one outcome. */
-export interface TutorialTask {
+export interface TutorialPanelTaskData {
   /** What the reader does, in their words. */
   title: string
   /** The task's steps, in order. */
-  steps: TutorialStep[]
+  steps: TutorialPanelStep[]
 }
 
 /** One tutorial the panel lists and the reader can run. */
-export interface Tutorial {
+export interface TutorialPanelTutorial {
   /** Stable identifier, the value of `v-model:active` while this tutorial runs. */
   id: string
   /** The tutorial's name. */
@@ -29,24 +29,24 @@ export interface Tutorial {
   /** The owner marks the tutorial done (from what the product recorded); the list shows it as completed. */
   completed?: boolean
   /** The tasks, in order. */
-  tasks: TutorialTask[]
+  tasks: TutorialPanelTaskData[]
 }
 
 /** A step of the running tutorial with its position, flattened across tasks. */
-export interface TutorialFlatStep extends TutorialStep {
+export interface TutorialPanelFlatStep extends TutorialPanelStep {
   /** 0-based position across every task of the running tutorial. */
   index: number
   /** 0-based position of the task that holds the step. */
   taskIndex: number
 }
 
-export interface TutorialContext {
+export interface TutorialPanelContext {
   /** Every tutorial the provider holds. */
-  tutorials: ComputedRef<Tutorial[]>
+  tutorials: ComputedRef<TutorialPanelTutorial[]>
   /** The running tutorial, or null when none runs. */
-  active: ComputedRef<Tutorial | null>
+  active: ComputedRef<TutorialPanelTutorial | null>
   /** The running tutorial's steps, flattened across tasks. */
-  steps: ComputedRef<TutorialFlatStep[]>
+  steps: ComputedRef<TutorialPanelFlatStep[]>
   /** 0-based index of the current step; equals the step count once the tutorial is finished. */
   step: ComputedRef<number>
   /** True once the reader finished the running tutorial. */
@@ -75,19 +75,19 @@ export interface TutorialContext {
   hasHotspot: (id: string) => boolean
 }
 
-export const TutorialPanelInjectionKey: InjectionKey<TutorialContext> = Symbol('TutorialPanel')
+export const TutorialPanelInjectionKey: InjectionKey<TutorialPanelContext> = Symbol('TutorialPanel')
 
 /** Whether the reader has done a tutorial task, as confirmed by the real UI. */
-export type TutorialTaskStatus = 'pending' | 'success'
+export type TutorialPanelTaskStatus = 'pending' | 'success'
 
-export interface TutorialTaskHandle {
+export interface TutorialPanelTaskHandle {
   /** 1-based position of the task in document order. */
   index: ComputedRef<number>
 }
 
-export interface TutorialTasksContext {
+export interface TutorialPanelTasksContext {
   /** Registers a task with a getter for its status and returns its reactive handle. */
-  register: (id: symbol, status: () => TutorialTaskStatus) => TutorialTaskHandle
+  register: (id: symbol, status: () => TutorialPanelTaskStatus) => TutorialPanelTaskHandle
   /** Hands the task's root element over once mounted, so order is read from the DOM. */
   attach: (id: symbol, el: globalThis.HTMLElement | null) => void
   /** Removes a previously registered task; called by the task on unmount. */
@@ -98,5 +98,5 @@ export interface TutorialTasksContext {
   complete: ComputedRef<number>
 }
 
-export const TutorialPanelTasksInjectionKey: InjectionKey<TutorialTasksContext> =
+export const TutorialPanelTasksInjectionKey: InjectionKey<TutorialPanelTasksContext> =
   Symbol('TutorialPanelTasks')

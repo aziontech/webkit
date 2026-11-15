@@ -4,15 +4,20 @@ import type {
   PropertyFilterQuery
 } from '../../../composables/use-collection/lib/property-filter'
 import type { FilterMenuField, FilterMenuModel, FilterMenuValue } from '../filter-menu/types'
-import type { AppliedFilter, FilterField, FilterOperator, FilterValue } from './injection-key'
+import type {
+  TableAppliedFilter,
+  TableFilterField,
+  TableFilterOperator,
+  TableFilterValue
+} from './injection-key'
 
-const TYPES: Partial<Record<FilterField['type'], FilterMenuField['type']>> = {
+const TYPES: Partial<Record<TableFilterField['type'], FilterMenuField['type']>> = {
   'multi-select': 'multiple',
   select: 'single',
   date: 'date'
 }
 
-export const toMenuFields = (fields: FilterField[]): FilterMenuField[] =>
+export const toMenuFields = (fields: TableFilterField[]): FilterMenuField[] =>
   fields.flatMap((field) => {
     const type = TYPES[field.type]
     if (!type) return []
@@ -27,7 +32,7 @@ const toTime = (value: string | number | undefined): Date | null =>
   value === undefined || value === '' ? null : new Date(Number(value))
 
 export const toMenuModel = (
-  applied: AppliedFilter[],
+  applied: TableAppliedFilter[],
   fields: FilterMenuField[]
 ): FilterMenuModel => {
   const model: FilterMenuModel = {}
@@ -48,7 +53,7 @@ export const toMenuModel = (
 const toAppliedFilter = (
   field: FilterMenuField,
   values: FilterMenuValue[]
-): AppliedFilter | null => {
+): TableAppliedFilter | null => {
   const first = values[0]
   if (first === undefined) return null
   if (field.type === 'multiple')
@@ -70,13 +75,13 @@ export const toAppliedFilters = (
   model: FilterMenuModel,
   fields: FilterMenuField[],
   label: (field: FilterMenuField) => string
-): AppliedFilter[] =>
+): TableAppliedFilter[] =>
   fields.flatMap((field) => {
     const filter = toAppliedFilter(field, model[field.id] ?? [])
     return filter ? [{ ...filter, label: `${field.label}: ${label(field)}` }] : []
   })
 
-const TO_APPLIED: Partial<Record<PropertyFilterOperator, FilterOperator>> = {
+const TO_APPLIED: Partial<Record<PropertyFilterOperator, TableFilterOperator>> = {
   '=': 'eq',
   '!=': 'neq',
   ':': 'contains',
@@ -90,9 +95,9 @@ const TO_APPLIED: Partial<Record<PropertyFilterOperator, FilterOperator>> = {
 
 const TO_PROPERTY = Object.fromEntries(
   Object.entries(TO_APPLIED).map(([token, applied]) => [applied, token])
-) as Partial<Record<FilterOperator, PropertyFilterOperator>>
+) as Partial<Record<TableFilterOperator, PropertyFilterOperator>>
 
-const PROPERTY_OPERATORS: Record<FilterField['type'], PropertyFilterOperator[]> = {
+const PROPERTY_OPERATORS: Record<TableFilterField['type'], PropertyFilterOperator[]> = {
   text: ['=', '!=', ':', '!:', '^'],
   number: ['=', '!=', '>', '<', '>=', '<='],
   date: ['=', '!=', '>', '<', '>=', '<='],
@@ -101,19 +106,19 @@ const PROPERTY_OPERATORS: Record<FilterField['type'], PropertyFilterOperator[]> 
   boolean: ['=', '!=']
 }
 
-const PROPERTY_TYPES: Partial<Record<FilterField['type'], FilteringProperty['type']>> = {
+const PROPERTY_TYPES: Partial<Record<TableFilterField['type'], FilteringProperty['type']>> = {
   number: 'number',
   date: 'date'
 }
 
-const operatorsOf = (field: FilterField): PropertyFilterOperator[] => {
+const operatorsOf = (field: TableFilterField): PropertyFilterOperator[] => {
   const own = (field.operators ?? [])
     .map((operator) => TO_PROPERTY[operator])
     .filter((operator): operator is PropertyFilterOperator => Boolean(operator))
   return own.length ? own : PROPERTY_OPERATORS[field.type]
 }
 
-export const toProperties = (fields: FilterField[]): FilteringProperty[] =>
+export const toProperties = (fields: TableFilterField[]): FilteringProperty[] =>
   fields.map((field) => ({
     key: field.id,
     label: field.label,
@@ -125,15 +130,18 @@ export const toProperties = (fields: FilterField[]): FilteringProperty[] =>
     }))
   }))
 
-const representable = (filter: AppliedFilter): boolean =>
+const representable = (filter: TableAppliedFilter): boolean =>
   Boolean(TO_PROPERTY[filter.operator]) && !Array.isArray(filter.value)
 
-const tokenValue = (field: FilterField | undefined, value: FilterValue): string =>
+const tokenValue = (field: TableFilterField | undefined, value: TableFilterValue): string =>
   field?.type === 'date' && typeof value === 'number'
     ? new Date(value).toISOString().slice(0, 10)
     : String(value)
 
-export const toQuery = (applied: AppliedFilter[], fields: FilterField[]): PropertyFilterQuery => ({
+export const toQuery = (
+  applied: TableAppliedFilter[],
+  fields: TableFilterField[]
+): PropertyFilterQuery => ({
   operation: 'and',
   tokens: applied
     .filter((filter) => representable(filter) && fields.some((field) => field.id === filter.field))
@@ -147,7 +155,7 @@ export const toQuery = (applied: AppliedFilter[], fields: FilterField[]): Proper
     }))
 })
 
-const valueOf = (field: FilterField | undefined, value: string): FilterValue => {
+const valueOf = (field: TableFilterField | undefined, value: string): TableFilterValue => {
   if (field?.type === 'number') {
     const number = Number(value)
     return Number.isNaN(number) ? value : number
@@ -163,9 +171,9 @@ const valueOf = (field: FilterField | undefined, value: string): FilterValue => 
 
 export const fromQuery = (
   query: PropertyFilterQuery,
-  applied: AppliedFilter[],
-  fields: FilterField[]
-): AppliedFilter[] => {
+  applied: TableAppliedFilter[],
+  fields: TableFilterField[]
+): TableAppliedFilter[] => {
   const kept = applied.filter(
     (filter) => !representable(filter) || !fields.some((field) => field.id === filter.field)
   )

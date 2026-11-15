@@ -12,14 +12,14 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface SidebarMenuGroupProps {
     /** Overline label shown above the group's items. */
     label?: string
     /** Accessible name of the group when it has no visible label. */
     ariaLabel?: string
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<SidebarMenuGroupProps>(), {
     label: '',
     ariaLabel: ''
   })

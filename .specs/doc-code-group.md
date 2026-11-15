@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 4
 template: 2
-checksum: 85c78f29a3b4516f3814f6d5646dcb167495ef095ef9ee9112680ecc3d29387c
+checksum: b4af57e1198d83af30343103a06ba3a660c1ac71bc1470d71271bf1499867f25
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -61,14 +61,14 @@ One or more code samples of the same thing in different languages or package man
 
 ## Props
 
-| Prop              | Type                 | Default  | Required | JSDoc                                                                                                                                                             |
-| ----------------- | -------------------- | -------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `samples`         | `DocCodeSample[]`    | `[]`     | false    | The samples, in tab order: `{ label?, language?, fileName?, code, output? }`. One renders a plain block, several render a joined tab strip; none renders nothing. |
-| `showLineNumbers` | `boolean`            | `false`  | false    | Shows the line-number gutter.                                                                                                                                     |
-| `showLabel`       | `boolean`            | `true`   | false    | Shows the label header (the sample label or the language name) on a single sample.                                                                                |
-| `type`            | `'code' \| 'output'` | `'code'` | false    | What the samples hold: `code` the reader runs, or `output` — what a command prints — drawn muted under an "Output" label, without a copy control.                 |
+| Prop              | Type                   | Default  | Required | JSDoc                                                                                                                                                             |
+| ----------------- | ---------------------- | -------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `samples`         | `DocCodeGroupSample[]` | `[]`     | false    | The samples, in tab order: `{ label?, language?, fileName?, code, output? }`. One renders a plain block, several render a joined tab strip; none renders nothing. |
+| `showLineNumbers` | `boolean`              | `false`  | false    | Shows the line-number gutter.                                                                                                                                     |
+| `showLabel`       | `boolean`              | `true`   | false    | Shows the label header (the sample label or the language name) on a single sample.                                                                                |
+| `type`            | `'code' \| 'output'`   | `'code'` | false    | What the samples hold: `code` the reader runs, or `output` — what a command prints — drawn muted under an "Output" label, without a copy control.                 |
 
-`DocCodeSample` is `{ label?, language?, fileName?, code, output? }`: `label` falls back to the language's readable name; `output` is what `code` prints, drawn in its own "Output" block under the sample while that sample is the active tab.
+`DocCodeGroupSample` is `{ label?, language?, fileName?, code, output? }`: `label` falls back to the language's readable name; `output` is what `code` prints, drawn in its own "Output" block under the sample while that sample is the active tab.
 
 The defaults differ from `CodeBlock` on purpose: `showLineNumbers` is `false` and `showLabel` is `true` here (prose code samples are short, and the label names the sample), while `CodeBlock` shows line numbers and hides the label. `samples` is this component's name for `CodeBlock`'s `tabs`, after Mintlify's `CodeGroup`.
 

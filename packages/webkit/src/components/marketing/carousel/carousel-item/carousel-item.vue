@@ -11,12 +11,12 @@
   /** Width of a card in the track. */
   export type CarouselItemSize = 'small' | 'medium' | 'large'
 
-  interface Props {
+  export interface CarouselItemProps {
     /** Width of the card: `small`, `medium` or `large` on the container scale, each at most 85% of the viewport below the small breakpoint. */
     size?: CarouselItemSize
   }
 
-  withDefaults(defineProps<Props>(), {
+  withDefaults(defineProps<CarouselItemProps>(), {
     size: 'medium'
   })
 

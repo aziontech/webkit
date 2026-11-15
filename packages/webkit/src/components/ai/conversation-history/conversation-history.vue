@@ -3,7 +3,7 @@
 
   import { useLazyChunks } from '../../../composables/use-lazy-chunks'
   import { useLocaleContext, useTranslate } from '../../../composables/use-translate'
-  import * as en from '../../../i18n/messages/en'
+  import * as en from '../../../locales/en'
   import IconButton from '../../actions/icon-button/icon-button.vue'
   import Skeleton from '../../feedback/skeleton/skeleton.vue'
 
@@ -20,7 +20,7 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface ConversationHistoryProps {
     /** Conversations, any order; they are sorted newest first inside their group. */
     items?: ConversationHistoryItem[]
     /** Reference time for the groups. Empty uses the nearest WebkitProvider now, then the current time; set either when the list is rendered on the server. */
@@ -33,7 +33,7 @@
     ariaLabel?: string
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<ConversationHistoryProps>(), {
     items: () => [],
     now: undefined,
     removable: false,
@@ -131,7 +131,7 @@
       class="m-0 px-(--spacing-xs) text-body-sm text-(--text-muted)"
       :data-testid="`${testId}__empty`"
     >
-      {{ t('conversationHistory.empty') }}
+      {{ t('conversationHistory.emptyTitle') }}
     </p>
     <template v-else>
       <div
@@ -186,7 +186,7 @@
                 <IconButton
                   v-if="removable"
                   icon="ai ai-trash"
-                  :ariaLabel="t('conversationHistory.remove', { title: item.title })"
+                  :ariaLabel="t('conversationHistory.delete', { title: item.title })"
                   variant="ghost"
                   size="small"
                   :data-testid="`${testId}__remove`"

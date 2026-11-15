@@ -8,7 +8,7 @@
    */
   defineOptions({ name: 'DocCard', inheritAttrs: false })
 
-  interface Props {
+  export interface DocCardProps {
     /** Card heading. */
     title?: string
     /** Small muted line above the title — who makes the thing, when the title does not say. */
@@ -25,7 +25,7 @@
     linkLabel?: string
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<DocCardProps>(), {
     title: '',
     eyebrow: '',
     icon: '',

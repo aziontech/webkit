@@ -6,12 +6,12 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface HelpPanelGroupProps {
     /** The question this section answers; the section renders no heading when empty. */
     title?: string
   }
 
-  withDefaults(defineProps<Props>(), {
+  withDefaults(defineProps<HelpPanelGroupProps>(), {
     title: ''
   })
 

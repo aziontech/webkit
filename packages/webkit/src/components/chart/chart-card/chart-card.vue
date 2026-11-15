@@ -10,7 +10,7 @@
 
   defineOptions({ name: 'ChartCard', inheritAttrs: false })
 
-  interface Props {
+  export interface ChartCardProps {
     /** Shows the drag handle and lets the card be dragged to a new position. */
     draggable?: boolean
     /** Shows the resize handle. */
@@ -27,7 +27,7 @@
     ariaLabel?: string
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<ChartCardProps>(), {
     draggable: false,
     resizable: false,
     minSpan: 3,

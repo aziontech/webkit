@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 2
 template: 2
-checksum: aec9d5ea59991b276334858685ba736ea225393da50e35fbb01818b0aa536d9a
+checksum: b43c90a223fc5335f71f000a4bf294e8a203be758c3ea59bcd323d94249c33a2
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -66,17 +66,17 @@ view.
 ## Sub-components
 
 _None. Data-driven: a source list is a record set the response already holds, like table rows.
-Exports: `"./sources"`; exported type `AiSource` (`title`, `href?`, `description?`) from `sources/types.ts`,
+Exports: `"./sources"`; exported type `SourcesItem` (`title`, `href?`, `description?`) from `sources/types.ts`,
 shared with `StreamingResponse`._
 
 ## Props
 
-| Prop          | Type         | Default | Required | JSDoc                                                                                                                       |
-| ------------- | ------------ | ------- | -------- | --------------------------------------------------------------------------------------------------------------------------- |
-| `items`       | `AiSource[]` | `[]`    | false    | The sources behind the response, in citation order; item `n` is what `[n]` points at.                                       |
-| `anchor`      | `string`     | `''`    | false    | Id prefix of the list items (`<anchor>-source-<n>`); pass the same value to `StreamingResponse` so its citations link here. |
-| `title`       | `string`     | `''`    | false    | Heading of the disclosure. Empty uses the locale catalog (`3 sources`).                                                     |
-| `defaultOpen` | `boolean`    | `false` | false    | Initial open state when uncontrolled.                                                                                       |
+| Prop          | Type            | Default | Required | JSDoc                                                                                                                       |
+| ------------- | --------------- | ------- | -------- | --------------------------------------------------------------------------------------------------------------------------- |
+| `items`       | `SourcesItem[]` | `[]`    | false    | The sources behind the response, in citation order; item `n` is what `[n]` points at.                                       |
+| `anchor`      | `string`        | `''`    | false    | Id prefix of the list items (`<anchor>-source-<n>`); pass the same value to `StreamingResponse` so its citations link here. |
+| `title`       | `string`        | `''`    | false    | Heading of the disclosure. Empty uses the locale catalog (`3 sources`).                                                     |
+| `defaultOpen` | `boolean`       | `false` | false    | Initial open state when uncontrolled.                                                                                       |
 
 ## v-model
 

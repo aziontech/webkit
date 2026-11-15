@@ -2,7 +2,7 @@
   import { computed, ref, useAttrs, useId, watch } from 'vue'
 
   import { useTranslate } from '../../../composables/use-translate'
-  import * as en from '../../../i18n/messages/en'
+  import * as en from '../../../locales/en'
   import Button from '../../actions/button/button.vue'
   import StatusIndicator from '../../feedback/status-indicator/status-indicator.vue'
   import MarkdownInline from '../lib/markdown-inline'
@@ -16,7 +16,7 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface ToolApprovalProps {
     /** The question, naming the action: ``Allow `npm test`?``, `Approve deployment to production?`. Backticks render as code. */
     title: string
     /** One or two sentences on what will happen and to what; backticks render as code. */
@@ -35,7 +35,7 @@
     loading?: boolean
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<ToolApprovalProps>(), {
     description: '',
     status: 'pending',
     variant: 'default',

@@ -14,7 +14,7 @@
 
   import { logicalArrowKey, useDirection } from '../../../composables/use-direction'
   import { useTranslate } from '../../../composables/use-translate'
-  import * as en from '../../../i18n/messages/en'
+  import * as en from '../../../locales/en'
   import { cn } from '../../../utils/cn'
   import {
     type SidebarMenuGroupNode,
@@ -35,7 +35,7 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface SidebarMenuProps {
     /** Data-driven tree of groups and items; leave empty to compose the parts in the default slot. */
     groups?: SidebarMenuGroupNode[]
     /** Id of the node rendered as the current page. */
@@ -46,7 +46,7 @@
     ariaLabel?: string
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<SidebarMenuProps>(), {
     groups: () => [],
     activeId: '',
     enterOnMount: false,
@@ -67,7 +67,7 @@
 
   const attrs = useAttrs()
   const dir = useDirection()
-  const { t } = useTranslate({ menu: en.menu })
+  const { t } = useTranslate({ sidebarMenu: en.sidebarMenu })
 
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? 'navigation-sidebar-menu'
@@ -77,7 +77,7 @@
   const ariaLabelAttr = computed(() =>
     role.value === 'presentation' || role.value === 'none'
       ? undefined
-      : props.ariaLabel || t('menu.label')
+      : props.ariaLabel || t('sidebarMenu.label')
   )
 
   const hasGroups = computed(() => props.groups.length > 0)

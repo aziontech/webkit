@@ -11,7 +11,7 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface ScrollAreaProps {
     /** Scroll direction: `vertical` (lists, sidebars), `horizontal` (wide tables), `both` for two-axis overflow. */
     orientation?: ScrollAreaOrientation
     /** Accessible name when the region is not labelled by visible text; omit when content provides context. */
@@ -20,7 +20,7 @@
     fade?: boolean
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<ScrollAreaProps>(), {
     orientation: 'vertical',
     ariaLabel: '',
     fade: false

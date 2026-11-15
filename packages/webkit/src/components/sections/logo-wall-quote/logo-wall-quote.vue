@@ -2,11 +2,16 @@
   import { computed, useAttrs } from 'vue'
 
   import Button from '../../actions/button/button.vue'
-  import Logo, { type LogoArtwork, type LogoVariant } from '../../content/logo/logo.vue'
+  import Logo, {
+    type LogoArtwork,
+    type LogoTreatment,
+    type LogoVariant
+  } from '../../content/logo/logo.vue'
   import FrameBox from '../../layout/frame-box/frame-box.vue'
   import LogoWall from '../../marketing/logo-wall/logo-wall.vue'
   import Quote from '../../marketing/quote/quote.vue'
   import SectionModule from '../../marketing/section-module/section-module.vue'
+  import type { SectionTitleAction } from '../../marketing/section-title/section-title.vue'
   import SectionTitle from '../../marketing/section-title/section-title.vue'
 
   defineOptions({
@@ -14,8 +19,9 @@
     inheritAttrs: false
   })
 
-  /** How a mark follows the theme: `as-is` keeps its colours, `monochrome` draws it in the text ink, `invert-light` flips it on the light theme. */
-  export type LogoWallQuoteLogoTreatment = 'as-is' | 'monochrome' | 'invert-light'
+  export type { LogoTreatment }
+
+  export type { SectionTitleAction }
 
   /** One client mark in the wall, optionally linked to that client's story. */
   export type LogoWallQuoteLogo = {
@@ -25,8 +31,8 @@
     logo: string
     /** URL of the mark shown on the light theme when it needs a different drawing. */
     logoLight?: string
-    /** How the mark follows the theme; defaults to `as-is`. */
-    logoTreatment?: LogoWallQuoteLogoTreatment
+    /** How the mark is inked: `color`, `monochrome` or `knockout`; defaults to `color`. A reversed file sets `artwork: 'light'` instead. */
+    logoTreatment?: LogoTreatment
     /** The ink a single file is drawn in, as the client registry records it: `light` art is inverted on the light theme, `dark` art on the dark theme. */
     artwork?: LogoArtwork
     /** Destination the mark links to, such as that client's success case. */
@@ -57,19 +63,7 @@
     artwork?: LogoArtwork
   }
 
-  /** The call to action set under the quote. */
-  export type LogoWallQuoteAction = {
-    /** Visible label of the action. */
-    label: string
-    /** Destination the action links to. */
-    href: string
-    /** Closes the label on a trailing chevron that reads as "go". */
-    trailing?: boolean
-    /** Link target of the action. */
-    target?: '_blank' | '_self'
-  }
-
-  interface Props {
+  export interface LogoWallQuoteProps {
     /** Layout of the band; `quote` renders the quote alone and needs no logos. */
     variant?: LogoWallQuoteVariant
     /** Register of the quote in the `quote` layout. */
@@ -87,12 +81,12 @@
     /** The signed quote in the wall's aside; `{ text, name, jobTitle, logo, logoAlt }`. Omitted when absent. */
     quote?: LogoWallQuoteQuote
     /** Button under the quote; `{ label, href, trailing?, target? }`. Omitted when absent. */
-    primaryAction?: LogoWallQuoteAction
+    primaryAction?: SectionTitleAction
     /** Outlined button beside the primary one under the quote; `{ label, href, trailing?, target? }`. Omitted when absent. */
-    secondaryAction?: LogoWallQuoteAction
+    secondaryAction?: SectionTitleAction
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<LogoWallQuoteProps>(), {
     variant: 'wall',
     quoteVariant: 'signed',
     anchor: '',
@@ -119,11 +113,9 @@
 
   const hasActions = computed(() => Boolean(props.primaryAction || props.secondaryAction))
 
-  const markKind = (logo: LogoWallQuoteLogo): LogoVariant =>
-    logo.logoTreatment === 'monochrome' ? 'monochrome' : 'color'
+  const markKind = (logo: LogoWallQuoteLogo): LogoVariant => logo.logoTreatment ?? 'color'
 
-  const markArtwork = (logo: LogoWallQuoteLogo): LogoArtwork =>
-    logo.artwork ?? (logo.logoTreatment === 'invert-light' ? 'light' : 'color')
+  const markArtwork = (logo: LogoWallQuoteLogo): LogoArtwork => logo.artwork ?? 'color'
 
   const wallItems = computed(() =>
     props.logos.map((logo) => ({
@@ -244,7 +236,7 @@
               :src-light="logos[index].logoLight"
               :artwork="markArtwork(logos[index])"
               :variant="markKind(logos[index])"
-              :data-treatment="logos[index].logoTreatment ?? 'as-is'"
+              :data-treatment="logos[index].logoTreatment ?? 'color'"
               class="h-5 sm:max-w-24"
             />
           </template>

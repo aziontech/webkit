@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 2
 template: 2
-checksum: 29d7d830c9a35c9caf4a68e9331edf3f862405ecb5e31cc5acecab96c3861ccd
+checksum: 68823a81c1a147d372c678c56533f08a5cb0c33e8c65c7667b6a129b6ddafb45
 created: 2026-11-14
 last_updated: 2026-11-15
 ---
@@ -136,9 +136,9 @@ You need an Acme account. Run \`acme login\` first.
 
 ## Internationalization
 
-| Key                  | English source         | Override prop |
-| -------------------- | ---------------------- | ------------- |
-| `docMarkdown.newTab` | `(opens in a new tab)` | —             |
+| Key             | English source         | Override prop |
+| --------------- | ---------------------- | ------------- |
+| `common.newTab` | `(opens in a new tab)` | —             |
 
 - Formatting: none. All visible text is the source's; code sample labels fall back to `DocCodeGroup`'s language names.
 

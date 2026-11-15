@@ -3,8 +3,8 @@ name: password-requirements
 category: inputs
 structure: monolithic
 status: implemented
-spec_version: 3
-checksum: ca7dce9f5df4813c7b00855cf6d881e176d2f431954af5637a5d3b9f53451e8e
+spec_version: 2
+checksum: 1827f7473885841a5ca2cd45f9e5e67be02b1dc39fd60bd2fbc6c581795c4b7d
 created: 2026-11-10
 last_updated: 2026-11-15
 ---
@@ -13,7 +13,7 @@ last_updated: 2026-11-15
 
 ## Purpose
 
-Live checklist of password rules shown under a `PasswordInput`: a caption followed by one chip per rule, each chip turning to the success tone with a check as the typed value satisfies it. Put it in the same `Field` as the `PasswordInput`, under it; the entry also exports `DEFAULT_PASSWORD_REQUIREMENTS` and the `PasswordRequirement` type so a form validates with the same rules it shows. `@aziontech/webkit/password-requirements` resolves to the `index.ts` that adds those exports. `DEFAULT_PASSWORD_REQUIREMENTS` is typed `PasswordPatternRequirement[]` (exported too): every built-in rule has a `key` and a `RegExp` `test`, so `rule.test.test(value)` type-checks without narrowing; a custom rule list stays `PasswordRequirement[]`, whose `test` may be a predicate.
+Live checklist of password rules shown under a `PasswordInput`: a caption followed by one chip per rule, each chip turning to the success tone with a check as the typed value satisfies it. Put it in the same `Field` as the `PasswordInput`, under it; the entry also exports `DEFAULT_PASSWORD_REQUIREMENTS` and the `PasswordRequirementsRule` type so a form validates with the same rules it shows. `DEFAULT_PASSWORD_REQUIREMENTS` is typed `PasswordPatternRequirement[]` (exported too): every built-in rule has a `key` and a `RegExp` `test`, so `rule.test.test(value)` type-checks without narrowing; a custom rule list stays `PasswordRequirementsRule[]`, whose `test` may be a predicate.
 
 ## When to use
 
@@ -64,11 +64,11 @@ Live checklist of password rules shown under a `PasswordInput`: a caption follow
 
 ## Props
 
-| Prop           | Type                    | Default                         | Required | JSDoc                                                                                                               |
-| -------------- | ----------------------- | ------------------------------- | -------- | ------------------------------------------------------------------------------------------------------------------- |
-| `requirements` | `PasswordRequirement[]` | `DEFAULT_PASSWORD_REQUIREMENTS` | false    | Rules rendered as chips, one per entry. Defaults to the built-in rule set; an empty array renders only the caption. |
-| `title`        | `string`                | `''`                            | false    | Caption that opens the row and names the group for assistive tech. Empty uses the locale catalog (`Must contain:`). |
-| `value`        | `string`                | `''`                            | false    | Password every rule is evaluated against; pass the PasswordInput value.                                             |
+| Prop           | Type                         | Default                         | Required | JSDoc                                                                                                               |
+| -------------- | ---------------------------- | ------------------------------- | -------- | ------------------------------------------------------------------------------------------------------------------- |
+| `requirements` | `PasswordRequirementsRule[]` | `DEFAULT_PASSWORD_REQUIREMENTS` | false    | Rules rendered as chips, one per entry. Defaults to the built-in rule set; an empty array renders only the caption. |
+| `title`        | `string`                     | `''`                            | false    | Caption that opens the row and names the group for assistive tech. Empty uses the locale catalog (`Must contain:`). |
+| `value`        | `string`                     | `''`                            | false    | Password every rule is evaluated against; pass the PasswordInput value.                                             |
 
 ## Events
 

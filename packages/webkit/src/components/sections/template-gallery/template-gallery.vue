@@ -8,6 +8,7 @@
   import CardGridCell from '../../marketing/card-grid/card-grid-cell/card-grid-cell.vue'
   import MediaSplit from '../../marketing/media-split/media-split.vue'
   import SectionModule from '../../marketing/section-module/section-module.vue'
+  import type { SectionTitleAction } from '../../marketing/section-title/section-title.vue'
   import TextureMaterial from '../../marketing/texture-material/texture-material.vue'
   import Ticker from '../../marketing/ticker/ticker.vue'
 
@@ -16,17 +17,7 @@
     inheritAttrs: false
   })
 
-  /** One call to action under the band's copy. */
-  export type TemplateGalleryAction = {
-    /** Visible label of the action. */
-    label: string
-    /** Destination the action links to. */
-    href: string
-    /** Closes the label on a trailing chevron that reads as "go". */
-    trailing?: boolean
-    /** Browsing context the link opens in: `_self` or `_blank`. */
-    target?: '_self' | '_blank'
-  }
+  export type { SectionTitleAction }
 
   /** One deployable template, rendered as a card of the scrolling wall. */
   export type TemplateGalleryTemplate = {
@@ -42,7 +33,7 @@
     href?: string
   }
 
-  interface Props {
+  export interface TemplateGalleryProps {
     /** In-page id set on the band so a `#hash` link can scroll to it. */
     anchor?: string
     /** Overline above the headline. */
@@ -52,9 +43,9 @@
     /** Paragraph under the headline. */
     description?: string
     /** First button under the copy, drawn as the large secondary button; `{ label, href, trailing?, target? }`. Omitted when absent. */
-    primaryAction?: TemplateGalleryAction
+    primaryAction?: SectionTitleAction
     /** Second button under the copy, drawn as the large outlined button; `{ label, href, trailing?, target? }`. Omitted when absent. */
-    secondaryAction?: TemplateGalleryAction
+    secondaryAction?: SectionTitleAction
     /** The template cards of the scrolling wall, in order; each is `{ title, description?, icon?, invertInDark?, href? }`. Templates without a title are skipped. */
     templates?: TemplateGalleryTemplate[]
     /** Label of the deploy button on each card; a card renders its button only when both this and its `href` are set. */
@@ -71,7 +62,7 @@
     hatch?: boolean
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<TemplateGalleryProps>(), {
     anchor: '',
     eyebrow: '',
     title: '',

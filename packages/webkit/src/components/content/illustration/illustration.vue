@@ -9,14 +9,14 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface IllustrationProps {
     /** Name of an official scene in the illustration asset library. */
     name?: string
     /** Accessible name; empty keeps the illustration decorative and hidden from assistive tech. */
     ariaLabel?: string
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<IllustrationProps>(), {
     name: '',
     ariaLabel: ''
   })

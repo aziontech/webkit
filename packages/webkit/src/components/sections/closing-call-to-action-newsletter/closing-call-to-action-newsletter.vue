@@ -2,7 +2,7 @@
   import { computed, nextTick, ref, useAttrs, useId, watch } from 'vue'
 
   import { useTranslate } from '../../../composables/use-translate'
-  import * as en from '../../../i18n/messages/en'
+  import * as en from '../../../locales/en'
   import Button from '../../actions/button/button.vue'
   import Overline from '../../content/overline/overline.vue'
   import Alert from '../../feedback/alert/alert.vue'
@@ -34,7 +34,7 @@
     invalidMessage: string
   }
 
-  interface Props {
+  export interface ClosingCallToActionNewsletterProps {
     /** Copy of the subscribe form: `{ placeholder, submitLabel, successMessage, errorMessage, requiredMessage, invalidMessage }`. */
     form: ClosingCallToActionNewsletterForm
     /** In-page id set on the band so a `#hash` link can scroll to it. */
@@ -55,7 +55,7 @@
     hatch?: boolean
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<ClosingCallToActionNewsletterProps>(), {
     anchor: '',
     eyebrow: '',
     title: '',

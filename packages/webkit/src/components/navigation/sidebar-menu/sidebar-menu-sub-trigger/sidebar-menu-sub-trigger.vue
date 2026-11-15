@@ -12,7 +12,7 @@
 
   import { logicalArrowKey, useDirection } from '../../../../composables/use-direction'
   import { useTranslate } from '../../../../composables/use-translate'
-  import * as en from '../../../../i18n/messages/en'
+  import * as en from '../../../../locales/en'
   import { cn } from '../../../../utils/cn'
   import IconButton from '../../../actions/icon-button/icon-button.vue'
   import { SidebarInjectionKey } from '../../../layout/sidebar/injection-key'
@@ -24,7 +24,7 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface SidebarMenuSubTriggerProps {
     /** Visible row text. */
     label?: string
     /** Whether the children expand in place or replace the menu. */
@@ -37,7 +37,7 @@
     disabled?: boolean
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<SidebarMenuSubTriggerProps>(), {
     label: '',
     type: 'inline',
     icon: '',
@@ -57,7 +57,7 @@
   const sidebar = inject(SidebarInjectionKey, null)
   const attrs = useAttrs()
   const dir = useDirection()
-  const { t } = useTranslate({ menu: en.menu })
+  const { t } = useTranslate({ sidebarMenu: en.sidebarMenu })
   const labelEl = shallowRef<globalThis.HTMLElement | null>(null)
   const arrowEl = shallowRef<ComponentPublicInstance | null>(null)
 
@@ -86,9 +86,11 @@
 
   const arrowAriaLabel = computed(() => {
     const name = props.label
-    if (!isInline.value) return name ? t('menu.openNamed', { label: name }) : t('menu.open')
-    if (sub.open.value) return name ? t('menu.collapseNamed', { label: name }) : t('menu.collapse')
-    return name ? t('menu.expandNamed', { label: name }) : t('menu.expand')
+    if (!isInline.value)
+      return name ? t('sidebarMenu.openNamed', { label: name }) : t('sidebarMenu.open')
+    if (sub.open.value)
+      return name ? t('sidebarMenu.collapseNamed', { label: name }) : t('sidebarMenu.collapse')
+    return name ? t('sidebarMenu.expandNamed', { label: name }) : t('sidebarMenu.expand')
   })
 
   const arrowIcon = computed(() => (isInline.value ? 'ai ai-chevron-down' : 'ai ai-chevron-right'))

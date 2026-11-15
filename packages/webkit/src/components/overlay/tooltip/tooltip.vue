@@ -7,8 +7,8 @@
   import { usePortalLocale } from '../../../composables/use-translate'
   import { triggerControl } from '../../../utils/trigger-control'
 
-  export type TooltipPlacement = 'top' | 'right' | 'bottom' | 'left'
-  export type TooltipPlacementInput = TooltipPlacement | 'auto'
+  export type TooltipPlacementSide = 'top' | 'right' | 'bottom' | 'left'
+  export type TooltipPlacement = TooltipPlacementSide | 'auto'
 
   defineOptions({
     name: 'Tooltip',
@@ -19,11 +19,11 @@
     default(): unknown
   }>()
 
-  interface Props {
+  export interface TooltipProps {
     /** Plain text shown inside the tooltip. */
     content: string
     /** Anchor side relative to the trigger. `'auto'` picks the side with the most room at open time. */
-    placement?: TooltipPlacementInput
+    placement?: TooltipPlacement
     /** Hover-open delay in milliseconds. */
     delay?: number
     /** Disables tooltip activation. */
@@ -32,7 +32,7 @@
     defaultOpen?: boolean
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<TooltipProps>(), {
     placement: 'top',
     delay: 200,
     disabled: false,
@@ -81,7 +81,7 @@
     onDismiss: () => closeTooltip()
   })
 
-  const resolvedPlacementRef = computed(() => resolvedPlacement.value as TooltipPlacement)
+  const resolvedPlacementRef = computed(() => resolvedPlacement.value as TooltipPlacementSide)
 
   const { isTop } = useOverlayLayer(() => isOpen.value && Boolean(props.content), {
     element: panelEl,

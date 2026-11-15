@@ -2,7 +2,7 @@
   import { computed, inject, useAttrs } from 'vue'
 
   import { useTranslate } from '../../../../composables/use-translate'
-  import * as en from '../../../../i18n/messages/en'
+  import * as en from '../../../../locales/en'
   import IconButton from '../../../actions/icon-button/icon-button.vue'
   import Tooltip from '../../../overlay/tooltip/tooltip.vue'
   import { type TableExportScope, TableInjectionKey } from '../injection-key'
@@ -12,18 +12,17 @@
     inheritAttrs: false
   })
 
-  const props = withDefaults(
-    defineProps<{
-      /** Download filename; falls back to the table's `exportFilename`. */
-      filename?: string
-      /** Which rows to export. */
-      scope?: TableExportScope
-    }>(),
-    {
-      filename: '',
-      scope: 'filtered'
-    }
-  )
+  export interface TableExportProps {
+    /** Download filename; falls back to the table's `exportFilename`. */
+    filename?: string
+    /** Which rows to export. */
+    scope?: TableExportScope
+  }
+
+  const props = withDefaults(defineProps<TableExportProps>(), {
+    filename: '',
+    scope: 'filtered'
+  })
 
   defineSlots<{
     /** Replace the default download control; receives the `export` action. */

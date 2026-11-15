@@ -1,7 +1,7 @@
 import { defineComponent, h, type PropType, type VNodeChild } from 'vue'
 
 import Citation from '../citation/citation.vue'
-import type { AiSource } from '../sources/types'
+import type { SourcesItem } from '../sources/types'
 import { sourceAnchor } from '../sources/types'
 import type { MarkdownInline as MarkdownInlineNode } from './parse-markdown'
 
@@ -9,7 +9,7 @@ const EXTERNAL = /^https?:/i
 
 function renderNodes(
   nodes: MarkdownInlineNode[],
-  sources: AiSource[],
+  sources: SourcesItem[],
   anchor: string
 ): VNodeChild[] {
   return nodes.map((node) => {
@@ -60,7 +60,7 @@ export default defineComponent({
   name: 'MarkdownInline',
   props: {
     nodes: { type: Array as PropType<MarkdownInlineNode[]>, required: true },
-    sources: { type: Array as PropType<AiSource[]>, default: () => [] },
+    sources: { type: Array as PropType<SourcesItem[]>, default: () => [] },
     anchor: { type: String, default: '' }
   },
   setup(props) {

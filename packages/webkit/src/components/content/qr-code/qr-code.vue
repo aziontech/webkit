@@ -2,10 +2,10 @@
   import { computed, useAttrs } from 'vue'
 
   import { useTranslate } from '../../../composables/use-translate'
-  import * as en from '../../../i18n/messages/en'
-  import { encodeQr, type QrErrorCorrection } from './qr-encode'
+  import * as en from '../../../locales/en'
+  import { encodeQr, type QrCodeErrorCorrection } from './qr-encode'
 
-  export type { QrErrorCorrection }
+  export type { QrCodeErrorCorrection }
   export type QrCodeSize = 'small' | 'medium' | 'large'
 
   defineOptions({
@@ -13,18 +13,18 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface QrCodeProps {
     /** The text the code carries (a URI, a key), encoded as UTF-8 bytes. */
     value: string
     /** Accessible name of the image. Empty uses the catalog's `QR code`; name it after what the scan does. */
     ariaLabel?: string
     /** Error-correction level: `L` 7 %, `M` 15 %, `Q` 25 %, `H` 30 % of the code can be lost and still read. Higher levels make denser codes. */
-    errorCorrection?: QrErrorCorrection
+    errorCorrection?: QrCodeErrorCorrection
     /** Rendered width: `small` 128 px, `medium` 160 px, `large` 224 px, quiet zone included. */
     size?: QrCodeSize
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<QrCodeProps>(), {
     ariaLabel: '',
     errorCorrection: 'M',
     size: 'medium'

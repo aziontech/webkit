@@ -7,7 +7,9 @@ import Default from '../../../../examples/feedback-reason-dialog/default.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import { LOCALES } from '../../../test/locales'
 import WebkitProvider from '../../utils/webkit-provider/webkit-provider.vue'
-import FeedbackReasonDialog, { type FeedbackReasonPayload } from './feedback-reason-dialog.vue'
+import FeedbackReasonDialog, {
+  type FeedbackReasonDialogPayload
+} from './feedback-reason-dialog.vue'
 
 afterEach(() => cleanup())
 
@@ -24,7 +26,8 @@ const Harness = defineComponent({
         'onUpdate:open': (value: boolean) => (open.value = value),
         reasons: props.reasons,
         loading: props.loading,
-        onSubmit: (event: Event, payload: FeedbackReasonPayload) => emit('sent', event, payload)
+        onSubmit: (event: Event, payload: FeedbackReasonDialogPayload) =>
+          emit('sent', event, payload)
       })
   }
 })
@@ -90,7 +93,7 @@ describe('FeedbackReasonDialog', () => {
     const details = view.getByLabelText('Details (optional)')
     await userEvent.fill(details, '  It took a minute.  ')
     await fireEvent.click(view.getByRole('button', { name: 'Send feedback' }))
-    const [event, payload] = view.emitted('sent')![0] as [Event, FeedbackReasonPayload]
+    const [event, payload] = view.emitted('sent')![0] as [Event, FeedbackReasonDialogPayload]
     expect(event).toBeInstanceOf(SubmitEvent)
     expect(payload).toEqual({ reason: 'slow', details: 'It took a minute.' })
   })

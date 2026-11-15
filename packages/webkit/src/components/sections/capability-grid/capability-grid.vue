@@ -46,7 +46,7 @@
     variant?: CapabilityGridActionVariant
   }
 
-  interface Props {
+  export interface CapabilityGridProps {
     /** Overline above the title. */
     eyebrow?: string
     /** Headline over the grid, rendered as the band `h2`; without it the grid is bare and each capability heading is an `h2`. */
@@ -67,7 +67,7 @@
     titleVariant?: SectionTitleVariant
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<CapabilityGridProps>(), {
     eyebrow: '',
     title: '',
     description: '',

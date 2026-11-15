@@ -17,8 +17,19 @@
   export type SectionTitlePadding = 'small' | 'medium'
   /** Column span of the description in the split layout. */
   export type SectionTitleDescriptionWidth = 'narrow' | 'wide'
+  /** One call to action of a section: the shape every section's `primaryAction` and `secondaryAction` take. */
+  export type SectionTitleAction = {
+    /** Visible label of the action. */
+    label: string
+    /** Destination the action links to. */
+    href: string
+    /** Closes the label on a trailing chevron that reads as "go", where the section draws one. */
+    trailing?: boolean
+    /** Browsing context the link opens in: `_self` or `_blank`. */
+    target?: '_self' | '_blank'
+  }
 
-  interface Props {
+  export interface SectionTitleProps {
     /** Headline of the section, rendered as the section's `h2`. */
     title: string
     /** Supporting sentence under the headline; overridden by the default slot. */
@@ -37,7 +48,7 @@
     descriptionWidth?: SectionTitleDescriptionWidth
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<SectionTitleProps>(), {
     description: '',
     eyebrow: '',
     variant: 'center',

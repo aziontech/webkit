@@ -17,7 +17,7 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface SidebarMenuItemProps {
     /** Visible label of the row. */
     label?: string
     /** Marks the row as the page you are on: applies the selected surface and `aria-current`. */
@@ -38,7 +38,7 @@
     tagSeverity?: SidebarMenuItemTagSeverity
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<SidebarMenuItemProps>(), {
     label: '',
     active: false,
     disabled: false,

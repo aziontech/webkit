@@ -17,12 +17,15 @@
   import TableRow from '../../data/table/table-row/table-row.vue'
   import FrameBox from '../../layout/frame-box/frame-box.vue'
   import SectionModule from '../../marketing/section-module/section-module.vue'
+  import type { SectionTitleAction } from '../../marketing/section-title/section-title.vue'
   import SectionTitle from '../../marketing/section-title/section-title.vue'
 
   defineOptions({
     name: 'ListingTable',
     inheritAttrs: false
   })
+
+  export type { SectionTitleAction }
 
   /** Flex weight of a column. */
   export type ListingTableColumnGrow = 1 | 2 | 3
@@ -50,17 +53,7 @@
     values: Record<string, string>
   }
 
-  /** The button into the full listing. */
-  export type ListingTableAction = {
-    /** Visible label of the action. */
-    label: string
-    /** Destination the action links to. */
-    href: string
-    /** Closes the label on a trailing chevron that reads as "go". */
-    trailing?: boolean
-  }
-
-  interface Props {
+  export interface ListingTableProps {
     /** In-page id set on the band so a `#hash` link can scroll to it. */
     anchor?: string
     /** Headline of the band, rendered by the left-aligned section title as its `h2`; the band renders no header when empty. */
@@ -70,10 +63,10 @@
     /** The linked rows, in order; each is `{ href, values }` where `values` maps a column key to its text. */
     data?: ListingTableRow[]
     /** Outlined button into the full listing, in the table footer; `{ label, href, trailing? }` where `trailing` adds the chevron. Omitted when absent. */
-    primaryAction?: ListingTableAction
+    primaryAction?: SectionTitleAction
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<ListingTableProps>(), {
     anchor: '',
     title: '',
     columns: () => [],

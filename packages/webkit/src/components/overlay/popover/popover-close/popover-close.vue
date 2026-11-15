@@ -2,7 +2,7 @@
   import { computed, useAttrs } from 'vue'
 
   import { useTranslate } from '../../../../composables/use-translate'
-  import * as en from '../../../../i18n/messages/en'
+  import * as en from '../../../../locales/en'
   import IconButton from '../../../actions/icon-button/icon-button.vue'
   import { usePopoverContext } from '../injection-key'
 

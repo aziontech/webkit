@@ -2,7 +2,7 @@
   import { computed, nextTick, onBeforeUnmount, onMounted, ref, useAttrs, watch } from 'vue'
 
   import { useTranslate } from '../../../composables/use-translate'
-  import * as en from '../../../i18n/messages/en'
+  import * as en from '../../../locales/en'
   import { buildRail, measureRail, RAIL_INDENT, RAIL_STROKE } from './toc-rail'
 
   /**
@@ -13,7 +13,7 @@
   defineOptions({ name: 'DocOnThisPage', inheritAttrs: false })
 
   /** One entry in the rail. */
-  export type DocTocItem = {
+  export type DocOnThisPageItem = {
     /** The heading's anchor id. */
     id: string
     /** The visible heading text. */
@@ -23,7 +23,7 @@
   }
 
   /** One link in a complementary group below the outline. */
-  export type DocTocLink = {
+  export type DocOnThisPageLink = {
     /** The visible link text. */
     label: string
     /** Where the link goes. */
@@ -33,25 +33,25 @@
   }
 
   /** A complementary group: its overline and its links. */
-  export type DocTocGroup = {
+  export type DocOnThisPageGroup = {
     /** The group's overline label. */
     label: string
     /** The group's links, in the order they should read. */
-    links: DocTocLink[]
+    links: DocOnThisPageLink[]
   }
 
-  interface Props {
+  export interface DocOnThisPageProps {
     /** The headings, in document order. */
-    items?: DocTocItem[]
+    items?: DocOnThisPageItem[]
     /** The id of the heading currently in view. */
     activeId?: string
     /** The rail's own heading. Empty uses the locale catalog (`On this page`). */
     title?: string
     /** Complementary groups rendered below the outline, in order. */
-    groups?: DocTocGroup[]
+    groups?: DocOnThisPageGroup[]
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<DocOnThisPageProps>(), {
     items: () => [],
     activeId: '',
     title: '',
@@ -60,7 +60,7 @@
 
   const emit = defineEmits<{
     /** Fired when a rail entry is activated. */
-    select: [event: MouseEvent, item: DocTocItem]
+    select: [event: MouseEvent, item: DocOnThisPageItem]
   }>()
 
   const attrs = useAttrs()

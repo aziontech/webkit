@@ -20,7 +20,7 @@
   /** Width the copy block is capped at. */
   export type HeroTitleWidth = 'lg' | 'xl' | '2xl' | '3xl' | '4xl'
 
-  interface Props {
+  export interface HeroTitleProps {
     /** Headline of the page, rendered as the page's `h1`. */
     title: string
     /** Opening phrase of the headline, painted in the brand accent; reads as one sentence with `title`. */
@@ -43,7 +43,7 @@
     sticky?: boolean
   }
 
-  withDefaults(defineProps<Props>(), {
+  withDefaults(defineProps<HeroTitleProps>(), {
     titleHighlight: '',
     description: '',
     eyebrow: '',

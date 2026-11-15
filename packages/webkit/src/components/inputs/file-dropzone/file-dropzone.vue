@@ -4,7 +4,7 @@
 
   import { useFieldControl } from '../../../composables/use-field-control'
   import { useTranslate } from '../../../composables/use-translate'
-  import * as en from '../../../i18n/messages/en'
+  import * as en from '../../../locales/en'
   import { matchesAccept } from '../../../utils/file-accept'
   import { dropEntries, filesFromEntries } from '../../../utils/file-entries'
 
@@ -13,7 +13,7 @@
   /** Placement of the drop target. */
   export type FileDropzoneVariant = 'inline' | 'overlay'
 
-  interface Props {
+  export interface FileDropzoneProps {
     /** Placement. Inline is an always-visible dashed region; overlay stays hidden until files are dragged over the window, then covers its nearest positioned ancestor. */
     variant?: FileDropzoneVariant
     /** Instruction shown under the icon. Empty uses the locale catalog (`Drop files to upload`). */
@@ -33,9 +33,7 @@
     /** Azion icon class for the glyph above the title. Empty draws the cloud-upload glyph. */
     icon?: string
   }
-  export type FileDropzoneProps = Props
-
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<FileDropzoneProps>(), {
     variant: 'inline',
     title: '',
     description: '',

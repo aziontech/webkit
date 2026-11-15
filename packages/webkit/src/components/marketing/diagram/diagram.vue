@@ -50,7 +50,7 @@
     | 'workloads-isolate-per-request'
     | 'workloads-security'
 
-  interface Props {
+  export interface DiagramProps {
     /** Name of an official diagram in the asset library; ignored when spec is set. */
     name?: DiagramName
     /** The nodes, their layout and the edges between them, for a diagram the library does not have. */
@@ -59,7 +59,7 @@
     ariaLabel?: string
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<DiagramProps>(), {
     name: undefined,
     spec: undefined,
     ariaLabel: ''

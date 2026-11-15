@@ -13,7 +13,7 @@
   /** How many columns the mosaic holds below the medium breakpoint. */
   export type BentoGridMobileColumns = 1 | 2
 
-  interface Props {
+  export interface BentoGridProps {
     /** Accessible name for the grid, when the surrounding section does not already name it. */
     ariaLabel?: string
     /** How many columns the mosaic lays out from the medium breakpoint up. */
@@ -24,7 +24,7 @@
     flush?: boolean
   }
 
-  withDefaults(defineProps<Props>(), {
+  withDefaults(defineProps<BentoGridProps>(), {
     ariaLabel: '',
     columns: 2,
     mobileColumns: 1,

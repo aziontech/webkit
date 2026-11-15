@@ -3,7 +3,7 @@
 
   import { useAppNavigation } from '../../../composables/use-app-navigation'
   import { useTranslate } from '../../../composables/use-translate'
-  import * as en from '../../../i18n/messages/en'
+  import * as en from '../../../locales/en'
   import Command from '../../overlay/command/command.vue'
   import CommandEmpty from '../../overlay/command/command-empty/command-empty.vue'
   import CommandGroup from '../../overlay/command/command-group/command-group.vue'
@@ -70,7 +70,7 @@
     href: string
   }
 
-  interface Props {
+  export interface SiteLayoutProps {
     /** The bar, bound onto `SiteNav`. */
     navigation: SiteLayoutNavigation
     /** The footer, bound onto `SiteFooter`; `variant` defaults to `site`. No footer when absent. */
@@ -81,7 +81,7 @@
     navOverlay?: boolean
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<SiteLayoutProps>(), {
     footer: undefined,
     searchPlaceholder: '',
     navOverlay: false
@@ -238,7 +238,7 @@
             {{ page.label }}
           </CommandItem>
         </CommandGroup>
-        <CommandEmpty>{{ t('siteLayout.searchEmpty') }}</CommandEmpty>
+        <CommandEmpty>{{ t('siteLayout.noMatch') }}</CommandEmpty>
       </CommandList>
     </Command>
   </div>

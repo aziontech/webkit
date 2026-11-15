@@ -2,7 +2,7 @@
   import { computed, onMounted, provide, ref, useAttrs, watch } from 'vue'
 
   import { useTranslate } from '../../../composables/use-translate'
-  import * as en from '../../../i18n/messages/en'
+  import * as en from '../../../locales/en'
   import Button from '../../actions/button/button.vue'
   import Stepper from '../stepper/stepper.vue'
   import StepperStep from '../stepper/stepper-step/stepper-step.vue'
@@ -14,7 +14,7 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface WizardProps {
     /** Label of the primary action on the last step, where Next becomes the submit action. Empty uses the locale catalog (`Create`). */
     submitLabel?: string
     /** Submit in progress: the primary action shows its loading state, and Cancel, Previous and every rail step are disabled. */
@@ -23,7 +23,7 @@
     ariaLabel?: string
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<WizardProps>(), {
     submitLabel: '',
     loading: false,
     ariaLabel: ''

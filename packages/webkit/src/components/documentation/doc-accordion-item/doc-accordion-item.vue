@@ -3,14 +3,14 @@
 
   defineOptions({ name: 'DocAccordionItem', inheritAttrs: false })
 
-  interface Props {
+  export interface DocAccordionItemProps {
     /** The question the trigger shows; `DocAccordionGroup` reads it to build the row. */
     title?: string
     /** Opens this entry on first render. */
     defaultOpen?: boolean
   }
 
-  withDefaults(defineProps<Props>(), { title: '', defaultOpen: false })
+  withDefaults(defineProps<DocAccordionItemProps>(), { title: '', defaultOpen: false })
 
   defineSlots<{
     /** The answer shown when the entry is open. */

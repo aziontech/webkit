@@ -88,7 +88,7 @@ avatar), the ⌘K `Command` palette and the single `<main>`. Compose it **once**
      (meta.shell === 'focused') render outside it, with no rail. -->
 <script setup lang="ts">
   import Button from '@aziontech/webkit/button'
-  import ConsoleLayout, { type ConsoleLayoutCrumb } from '@aziontech/webkit/console-layout'
+  import ConsoleLayout, { type BreadcrumbItemData } from '@aziontech/webkit/console-layout'
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
   import IconButton from '@aziontech/webkit/icon-button'
   import Tooltip from '@aziontech/webkit/tooltip'
@@ -99,7 +99,7 @@ avatar), the ⌘K `Command` palette and the single `<main>`. Compose it **once**
 
   const route = useRoute()
   const focused = computed(() => route.meta.shell === 'focused')
-  const breadcrumbs = computed(() => (route.meta.breadcrumbs ?? []) as ConsoleLayoutCrumb[])
+  const breadcrumbs = computed(() => (route.meta.breadcrumbs ?? []) as BreadcrumbItemData[])
 </script>
 
 <template>

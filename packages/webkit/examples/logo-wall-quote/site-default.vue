@@ -44,7 +44,7 @@
     {
       name: 'Crefisa',
       logo: crefisaExtendedReversed,
-      logoTreatment: 'invert-light',
+      artwork: 'light',
       href: 'https://www.azion.com/en/success-case/crefisa/'
     },
     {
@@ -55,7 +55,7 @@
     {
       name: 'Fourbank',
       logo: fourbankExtendedReversed,
-      logoTreatment: 'invert-light',
+      artwork: 'light',
       href: 'https://www.azion.com/en/success-case/fourbank/'
     },
     {

@@ -3,7 +3,7 @@
   import { computed, onMounted, onScopeDispose, ref, useAttrs, watch } from 'vue'
 
   import { useTranslate } from '../../../composables/use-translate'
-  import * as en from '../../../i18n/messages/en'
+  import * as en from '../../../locales/en'
   import IconButton from '../../actions/icon-button/icon-button.vue'
   import FrameBox from '../../layout/frame-box/frame-box.vue'
   import TextureMaterial, {
@@ -36,7 +36,7 @@
   /** Height each row is held to beside the media, and the title scale of a row of tabs. */
   export type MediaTabsSize = 'small' | 'medium' | 'large'
 
-  interface Props {
+  export interface MediaTabsProps {
     /** The tabs, in order, at most three when the tabs side is start or end and five when it is top or bottom; each item is a title, its description, and the image shown while it is active. Items past the limit are not rendered. */
     items?: MediaTabsItem[]
     /** Which side of the media the tabs sit on. Below the large breakpoint every side stacks, with the active tab's media inside its row. */
@@ -59,7 +59,7 @@
     textureFade?: TextureMaterialFade
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<MediaTabsProps>(), {
     items: () => [],
     tabsSide: 'start',
     size: 'medium',
@@ -82,7 +82,7 @@
 
   const attrs = useAttrs()
   const reducedMotion = usePreferredReducedMotion()
-  const { t } = useTranslate({ autoplayControl: en.autoplayControl })
+  const { t } = useTranslate({ common: en.common })
 
   const PROGRESS_TICK_MS = 100
   const MAX_TABS = { vertical: 3, horizontal: 5 } as const
@@ -114,7 +114,7 @@
   )
 
   const pauseLabel = computed(() =>
-    paused.value ? t('autoplayControl.resumeRotation') : t('autoplayControl.pauseRotation')
+    paused.value ? t('common.resumeRotation') : t('common.pauseRotation')
   )
 
   const progress = computed(() =>

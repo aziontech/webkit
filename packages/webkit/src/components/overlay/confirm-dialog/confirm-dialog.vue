@@ -2,7 +2,7 @@
   import { computed, useAttrs } from 'vue'
 
   import { useTranslate } from '../../../composables/use-translate'
-  import * as en from '../../../i18n/messages/en'
+  import * as en from '../../../locales/en'
   import Button from '../../actions/button/button.vue'
   import Dialog from '../dialog/dialog.vue'
   import DialogContent from '../dialog/dialog-content.vue'
@@ -23,7 +23,7 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface ConfirmDialogProps {
     /** The question or the outcome, as the dialog title. */
     title: string
     /** One sentence that says what happens on confirm. */
@@ -44,7 +44,7 @@
     defaultOpen?: boolean
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<ConfirmDialogProps>(), {
     description: '',
     confirmLabel: '',
     cancelLabel: '',

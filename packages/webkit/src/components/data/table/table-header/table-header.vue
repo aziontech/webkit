@@ -8,14 +8,14 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface TableHeaderProps {
     /** Sticks the header to the top of the scroll container. */
     frozen?: boolean
     /** `compact` shrinks the header cells' height and padding for a denser header. */
     density?: TableDensity
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<TableHeaderProps>(), {
     frozen: false,
     density: undefined
   })

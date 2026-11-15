@@ -196,7 +196,7 @@
     <Drawer
       v-model:open="navOpen"
       dismissible
-      :side="settings.dir === 'rtl' ? 'right' : 'left'"
+      :side="settings.dir === 'rtl' ? 'end' : 'start'"
       size="small"
     >
       <DrawerContent>

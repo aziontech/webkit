@@ -10,15 +10,13 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface HintProps {
     /** Guidance text revealed on hover or focus; also the trigger's accessible name. */
     content: string
     /** Anchor side of the tooltip relative to the glyph. */
     placement?: HintPlacement
   }
-  export type HintProps = Props
-
-  withDefaults(defineProps<Props>(), {
+  withDefaults(defineProps<HintProps>(), {
     placement: 'top'
   })
 

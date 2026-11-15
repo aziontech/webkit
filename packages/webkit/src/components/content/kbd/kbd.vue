@@ -2,7 +2,7 @@
   import { computed, onMounted, ref, useAttrs } from 'vue'
 
   import { useTranslate } from '../../../composables/use-translate'
-  import * as en from '../../../i18n/messages/en'
+  import * as en from '../../../locales/en'
 
   defineOptions({ name: 'Kbd', inheritAttrs: false })
 
@@ -12,7 +12,7 @@
 
   export type KbdVariant = 'combined' | 'separate'
 
-  interface Props {
+  export interface KbdProps {
     /** Prepend the meta/command modifier glyph (⌘ on macOS, Ctrl elsewhere). */
     meta?: boolean
     /** Prepend the Control modifier glyph (⌃ on macOS, Ctrl elsewhere). */
@@ -31,7 +31,7 @@
     variant?: KbdVariant
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<KbdProps>(), {
     meta: false,
     ctrl: false,
     shift: false,
@@ -52,6 +52,8 @@
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'content-kbd')
 
+  const KEY_NAMES = Object.keys(en.kbd) as KbdKeyName[]
+
   const isMac = ref(false)
 
   onMounted(() => {
@@ -70,7 +72,8 @@
     const name = key.toLowerCase()
     const modifier = modifierGlyph(name)
     if (modifier) return modifier
-    if (name in en.kbd) return t(`kbd.${name as KbdKeyName}`)
+    const named = KEY_NAMES.find((k) => k.toLowerCase() === name.replace(/-/g, ''))
+    if (named) return t(`kbd.${named}`)
     return key.length === 1 ? key.toUpperCase() : key
   }
 

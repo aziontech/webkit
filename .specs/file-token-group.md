@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 6
 template: 2
-checksum: c642a5c3c12fbe121703511d608fab32970e97ddc7ddf6df8f9756b663fec8f2
+checksum: 0b4d2f9b378d135a206474487da1abe4bcb9a7a6bfe1a5104caec87da060d8bf
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -66,15 +66,15 @@ The files a person picked for upload, shown as removable tokens before or while 
 
 ## Props
 
-| Prop                   | Type                         | Default      | Required | JSDoc                                                                         |
-| ---------------------- | ---------------------------- | ------------ | -------- | ----------------------------------------------------------------------------- |
-| `items`                | `FileTokenGroupItem[]`       | `[]`         | false    | The files, in order; each with its optional upload state, error and warning.  |
+| Prop                   | Type                         | Default      | Required | JSDoc                                                                                                    |
+| ---------------------- | ---------------------------- | ------------ | -------- | -------------------------------------------------------------------------------------------------------- |
+| `items`                | `FileTokenGroupItem[]`       | `[]`         | false    | The files, in order; each with its optional upload state, error and warning.                             |
 | `orientation`          | `'vertical' \| 'horizontal'` | `'vertical'` | false    | Vertical stacks full-width tokens; horizontal wraps compact tokens in rows. Same name as `field`'s axis. |
-| `limit`                | `number`                     | `0`          | false    | Shows this many tokens and a Show more toggle for the rest. 0 shows them all. |
-| `showFileSize`         | `boolean`                    | `true`       | false    | Shows the size beside the name, formatted for the locale.                     |
-| `showFileLastModified` | `boolean`                    | `false`      | false    | Shows the last-modified date, formatted for the locale.                       |
-| `readonly`             | `boolean`                    | `false`      | false    | Hides the remove buttons; the list is for reading only.                       |
-| `ariaLabel`            | `string`                     | `''`         | false    | Accessible name of the list. Empty uses the locale catalog (`Files`).         |
+| `limit`                | `number`                     | `0`          | false    | Shows this many tokens and a Show more toggle for the rest. 0 shows them all.                            |
+| `showFileSize`         | `boolean`                    | `true`       | false    | Shows the size beside the name, formatted for the locale.                                                |
+| `showFileLastModified` | `boolean`                    | `false`      | false    | Shows the last-modified date, formatted for the locale.                                                  |
+| `readonly`             | `boolean`                    | `false`      | false    | Hides the remove buttons; the list is for reading only.                                                  |
+| `ariaLabel`            | `string`                     | `''`         | false    | Accessible name of the list. Empty uses the locale catalog (`Files`).                                    |
 
 **Booleans that default to true.** `showFileSize` defaults to `true`: the size is what tells two files apart and what an upload limit is checked against. Inverting it would break every consumer, so it is recorded as an exception to props.md's default-false rule.
 
@@ -82,9 +82,9 @@ Types (`FileTokenGroupOrientation`): `FileTokenGroupFile = { name: string; webki
 
 ## Events
 
-| Event     | Payload                                   | Notes                                                                                      |
-| --------- | ----------------------------------------- | ------------------------------------------------------------------------------------------ |
-| `remove`  | `(event: MouseEvent, payload: { index: number; item: FileTokenGroupItem })` | The remove button of the token at `index` was pressed. The parent removes it from `items`. Same name as Chip and AttributeEditor. |
+| Event    | Payload                                                                     | Notes                                                                                                                             |
+| -------- | --------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| `remove` | `(event: MouseEvent, payload: { index: number; item: FileTokenGroupItem })` | The remove button of the token at `index` was pressed. The parent removes it from `items`. Same name as Chip and AttributeEditor. |
 
 ## Slots
 
@@ -106,12 +106,12 @@ _none_
 
 ## Tokens
 
-| Region        | Token                                                                               |
-| ------------- | ----------------------------------------------------------------------------------- |
+| Region        | Token                                                                              |
+| ------------- | ---------------------------------------------------------------------------------- |
 | token surface | `var(--bg-surface)`, border `var(--border-default)`, radius `var(--shape-control)` |
-| error token   | border `var(--danger-border)`, text `var(--danger-foreground)`                        |
-| warning token | border `var(--warning-border)`, text `var(--warning-foreground)`                      |
-| name / meta   | `var(--text-default)` / `var(--text-muted)`                                         |
+| error token   | border `var(--danger-border)`, text `var(--danger-foreground)`                     |
+| warning token | border `var(--warning-border)`, text `var(--warning-foreground)`                   |
+| name / meta   | `var(--text-default)` / `var(--text-muted)`                                        |
 
 ## Theme gaps
 
@@ -136,7 +136,7 @@ _none_
 | `fileTokenGroup.uploading` | Uploading {name}                                              | —             |
 | `fileTokenGroup.modified`  | Modified {date}                                               | —             |
 | `fileTokenGroup.showMore`  | `Show {count} more file` / `Show {count} more files` (plural) | —             |
-| `fileTokenGroup.showFewer` | Show fewer files                                              | —             |
+| `fileTokenGroup.showLess`  | Show fewer files                                              | —             |
 
 - Formatting: sizes with `formatFileSize`, dates with `formatDate` (`dateStyle: 'medium'`), both from `useLocale`.
 

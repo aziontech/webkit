@@ -15,7 +15,7 @@
    */
   defineOptions({ name: 'DocItem', inheritAttrs: false })
 
-  interface Props {
+  export interface DocItemProps {
     /** The row's name — what the reader is choosing. */
     title?: string
     /** Azion icon class for the leading glyph. */
@@ -28,7 +28,7 @@
     label?: string
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<DocItemProps>(), {
     title: '',
     icon: '',
     href: '',

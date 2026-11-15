@@ -2,7 +2,7 @@
   import { computed, inject, useAttrs } from 'vue'
 
   import { useTranslate } from '../../../../composables/use-translate'
-  import * as en from '../../../../i18n/messages/en'
+  import * as en from '../../../../locales/en'
   import IconButton from '../../../actions/icon-button/icon-button.vue'
   import DropdownMenu from '../../../navigation/dropdown-menu/dropdown-menu.vue'
   import DropdownMenuTrigger from '../../../navigation/dropdown-menu/dropdown-menu-trigger/dropdown-menu-trigger.vue'
@@ -14,18 +14,17 @@
     inheritAttrs: false
   })
 
-  const props = withDefaults(
-    defineProps<{
-      /** The row's name, for the trigger's accessible name (`Actions for edge-app`). Empty uses `Row actions`. */
-      name?: string
-      /** Disables the trigger. */
-      disabled?: boolean
-    }>(),
-    {
-      name: '',
-      disabled: false
-    }
-  )
+  export interface TableCellActionsProps {
+    /** The row's name, for the trigger's accessible name (`Actions for edge-app`). Empty uses `Row actions`. */
+    name?: string
+    /** Disables the trigger. */
+    disabled?: boolean
+  }
+
+  const props = withDefaults(defineProps<TableCellActionsProps>(), {
+    name: '',
+    disabled: false
+  })
 
   const emit = defineEmits<{
     /** An option was chosen; `value` is the option's `value`. */

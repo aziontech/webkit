@@ -9,7 +9,7 @@
   /** Level of the heading element. */
   export type TopicHeadingLevel = 2 | 3 | 4
 
-  interface Props {
+  export interface TopicProps {
     /** The claim, rendered as the topic's heading. */
     title: string
     /** One sentence explaining the claim; overridden by the default slot. */
@@ -22,7 +22,7 @@
     headingLevel?: TopicHeadingLevel
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<TopicProps>(), {
     description: '',
     icon: '',
     href: '',

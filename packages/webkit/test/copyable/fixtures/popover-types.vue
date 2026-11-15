@@ -1,12 +1,12 @@
 <script setup lang="ts">
   import Popover, {
     type PopoverPlacement,
-    type PopoverPlacementInput
+    type PopoverPlacementSide
   } from '@aziontech/webkit/popover'
   import { ref } from 'vue'
 
-  const side: PopoverPlacement = 'right-start'
-  const placements: PopoverPlacementInput[] = ['auto', 'left-end', 'top', side]
+  const side: PopoverPlacementSide = 'right-start'
+  const placements: PopoverPlacement[] = ['auto', 'left-end', 'top', side]
   const open = ref(false)
   const lastOpen = ref<boolean>(false)
   const record = (value: boolean): void => {

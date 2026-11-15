@@ -3,19 +3,19 @@
 
   import { useDirection } from '../../../../composables/use-direction'
   import { useTranslate } from '../../../../composables/use-translate'
-  import * as en from '../../../../i18n/messages/en'
+  import * as en from '../../../../locales/en'
   import { ResizableInjectionKey, type ResizablePaneApi } from '../injection-key'
 
   defineOptions({ name: 'ResizableHandle', inheritAttrs: false })
 
-  interface Props {
+  export interface ResizableHandleProps {
     /** Accessible name of the separator; name the edge it moves. Empty uses the locale catalog (`Resize panel`). */
     ariaLabel?: string
     /** Disables the drag and the keyboard nudge, and removes the separator from the tab order. */
     disabled?: boolean
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<ResizableHandleProps>(), {
     ariaLabel: '',
     disabled: false
   })

@@ -12,12 +12,12 @@
 
   defineOptions({ name: 'NavigationMenuContent', inheritAttrs: false })
 
-  interface Props {
+  export interface NavigationMenuContentProps {
     /** Keeps content mounted when closed. */
     keepMounted?: boolean
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<NavigationMenuContentProps>(), {
     keepMounted: false
   })
 

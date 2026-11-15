@@ -2,7 +2,7 @@
   import { computed, ref, useAttrs, useId } from 'vue'
 
   import { useTranslate } from '../../../composables/use-translate'
-  import * as en from '../../../i18n/messages/en'
+  import * as en from '../../../locales/en'
   import CopyButton from '../../actions/copy-button/copy-button.vue'
   import IconButton from '../../actions/icon-button/icon-button.vue'
   import ResponseBranches from '../response-branches/response-branches.vue'
@@ -14,7 +14,7 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface ArtifactCanvasProps {
     /** File name or title of the artifact (`top-orders.sql`); names the panel. */
     title: string
     /** Facts that help recognize it, after the title: language, size, rows (`SQL · 12 lines`). */
@@ -31,7 +31,7 @@
     streaming?: boolean
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<ArtifactCanvasProps>(), {
     meta: '',
     type: 'document',
     versions: 1,

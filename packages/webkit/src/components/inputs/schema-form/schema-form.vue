@@ -3,7 +3,7 @@
   import { computed, markRaw, nextTick, onBeforeUnmount, reactive, ref, useAttrs, watch } from 'vue'
 
   import { useTranslate } from '../../../composables/use-translate'
-  import * as en from '../../../i18n/messages/en'
+  import * as en from '../../../locales/en'
   import IconButton from '../../actions/icon-button/icon-button.vue'
   import Accordion from '../../content/accordion/accordion.vue'
   import AccordionContent from '../../content/accordion/accordion-content/accordion-content.vue'
@@ -79,7 +79,7 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface SchemaFormProps {
     /** JSON schema of an object (draft-07 subset); each property becomes a Field. */
     schema: SchemaFormSchema
     /** Server or external messages by field path; a field shows its message until it is edited. */
@@ -93,8 +93,6 @@
     /** Shows every value without letting it change. */
     readonly?: boolean
   }
-  export type SchemaFormProps = Props
-
   /** Scope of a `field:<path>` slot, which replaces that field's control. */
   export interface SchemaFormFieldSlotProps {
     path: string
@@ -108,7 +106,7 @@
     readonly: boolean
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<SchemaFormProps>(), {
     errors: () => ({}),
     ui: () => ({}),
     validateOn: 'blur',

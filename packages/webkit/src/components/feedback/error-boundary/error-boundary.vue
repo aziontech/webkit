@@ -10,7 +10,7 @@
   } from 'vue'
 
   import { useTranslate } from '../../../composables/use-translate'
-  import * as en from '../../../i18n/messages/en'
+  import * as en from '../../../locales/en'
   import Alert from '../alert/alert.vue'
 
   defineOptions({
@@ -25,7 +25,7 @@
     info: string
   }
 
-  interface Props {
+  export interface ErrorBoundaryProps {
     /** Heading of the built-in fallback. Empty uses the locale catalog (`This section failed to load`). */
     title?: string
     /** Sentence under the heading of the built-in fallback. Empty uses the locale catalog. */
@@ -38,7 +38,7 @@
     propagate?: boolean
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<ErrorBoundaryProps>(), {
     title: '',
     description: '',
     retryLabel: '',

@@ -154,7 +154,7 @@ describe('Timestamp', () => {
 
   it('names its panel and labels in the provider locale', async () => {
     const user = userEvent.setup()
-    const { ptBR } = await import('../../../i18n/messages/pt-BR')
+    const { ptBR } = await import('../../../locales/pt-BR')
     render(inProvider({ value: VALUE }, { locale: 'pt-BR', catalogs: { 'pt-BR': ptBR } }))
 
     await user.click(screen.getByRole('button'))

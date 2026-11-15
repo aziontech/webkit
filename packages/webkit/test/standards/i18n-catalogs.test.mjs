@@ -4,7 +4,7 @@ import { dirname, join, resolve } from 'node:path'
 import test from 'node:test'
 import { fileURLToPath, pathToFileURL } from 'node:url'
 
-const MESSAGES = resolve(dirname(fileURLToPath(import.meta.url)), '../../src/i18n/messages')
+const MESSAGES = resolve(dirname(fileURLToPath(import.meta.url)), '../../src/locales')
 
 function leaves(catalog, prefix = '') {
   return Object.entries(catalog).flatMap(([key, value]) =>

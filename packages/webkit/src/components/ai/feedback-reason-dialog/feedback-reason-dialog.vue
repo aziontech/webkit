@@ -2,7 +2,7 @@
   import { computed, nextTick, ref, useAttrs, useId, watch } from 'vue'
 
   import { useTranslate } from '../../../composables/use-translate'
-  import * as en from '../../../i18n/messages/en'
+  import * as en from '../../../locales/en'
   import Button from '../../actions/button/button.vue'
   import Field from '../../inputs/field/field.vue'
   import FieldError from '../../inputs/field/field-error/field-error.vue'
@@ -20,12 +20,12 @@
   import PanelFooter from '../../overlay/panel/panel-footer.vue'
   import PanelHeader from '../../overlay/panel/panel-header.vue'
 
-  export interface FeedbackReason {
+  export interface FeedbackReasonDialogReason {
     value: string
     label: string
   }
 
-  export interface FeedbackReasonPayload {
+  export interface FeedbackReasonDialogPayload {
     reason: string
     details: string
   }
@@ -35,9 +35,9 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface FeedbackReasonDialogProps {
     /** Reasons offered, in order. Empty uses the catalog's five: inaccurate, not helpful, did not follow the request, unsafe or harmful, other. */
-    reasons?: FeedbackReason[]
+    reasons?: FeedbackReasonDialogReason[]
     /** The feedback is being sent: Send feedback shows a spinner and the form is locked. */
     loading?: boolean
     /** Dialog title. Empty uses the locale catalog (`What went wrong?`). */
@@ -46,7 +46,7 @@
     defaultOpen?: boolean
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<FeedbackReasonDialogProps>(), {
     reasons: () => [],
     loading: false,
     title: '',
@@ -63,22 +63,22 @@
   })
 
   const emit = defineEmits<{
-    submit: [event: SubmitEvent, payload: FeedbackReasonPayload]
+    submit: [event: SubmitEvent, payload: FeedbackReasonDialogPayload]
   }>()
 
   const attrs = useAttrs()
-  const { t } = useTranslate({ feedbackReason: en.feedbackReason })
+  const { t } = useTranslate({ feedbackReasonDialog: en.feedbackReasonDialog })
   const uid = useId()
 
   const testId = computed<string>(
     () => (attrs['data-testid'] as string | undefined) ?? 'ai-feedback-reason-dialog'
   )
 
-  const options = computed<FeedbackReason[]>(() =>
+  const options = computed<FeedbackReasonDialogReason[]>(() =>
     props.reasons.length
       ? props.reasons
       : (['inaccurate', 'notHelpful', 'ignoredRequest', 'unsafe', 'other'] as const).map(
-          (value) => ({ value, label: t(`feedbackReason.${value}`) })
+          (value) => ({ value, label: t(`feedbackReasonDialog.${value}`) })
         )
   )
 
@@ -121,8 +121,8 @@
     <DialogContent>
       <PanelHeader class="w-full">
         <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
-          <DialogTitle>{{ title || t('feedbackReason.title') }}</DialogTitle>
-          <DialogDescription>{{ t('feedbackReason.description') }}</DialogDescription>
+          <DialogTitle>{{ title || t('feedbackReasonDialog.title') }}</DialogTitle>
+          <DialogDescription>{{ t('feedbackReasonDialog.description') }}</DialogDescription>
         </div>
       </PanelHeader>
       <form
@@ -137,7 +137,7 @@
               :aria-describedby="missing ? `${uid}-error` : undefined"
               :disabled="loading"
             >
-              <FieldLegend type="label">{{ t('feedbackReason.reason') }}</FieldLegend>
+              <FieldLegend type="label">{{ t('feedbackReasonDialog.reason') }}</FieldLegend>
               <RadioGroup
                 :id="`${uid}-reasons`"
                 v-model="reason"
@@ -155,14 +155,14 @@
               <FieldError
                 v-if="missing"
                 :id="`${uid}-error`"
-                >{{ t('feedbackReason.required') }}</FieldError
+                >{{ t('feedbackReasonDialog.required') }}</FieldError
               >
             </FieldSet>
             <Field :disabled="loading">
-              <FieldLabel>{{ t('feedbackReason.details') }}</FieldLabel>
+              <FieldLabel>{{ t('feedbackReasonDialog.details') }}</FieldLabel>
               <Textarea
                 v-model="details"
-                :placeholder="t('feedbackReason.detailsPlaceholder')"
+                :placeholder="t('feedbackReasonDialog.detailsPlaceholder')"
                 :data-testid="`${testId}__details`"
               />
             </Field>
@@ -172,7 +172,7 @@
           <Button
             class="w-full md:w-auto"
             type="button"
-            :label="t('feedbackReason.cancel')"
+            :label="t('feedbackReasonDialog.cancel')"
             variant="outline"
             :disabled="loading"
             @click="open = false"
@@ -180,7 +180,7 @@
           <Button
             class="w-full md:w-auto"
             type="submit"
-            :label="t('feedbackReason.send')"
+            :label="t('feedbackReasonDialog.send')"
             variant="primary"
             :loading="loading"
           />

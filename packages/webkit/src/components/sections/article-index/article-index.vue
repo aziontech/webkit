@@ -2,10 +2,11 @@
   import { computed, nextTick, onMounted, ref, useAttrs, watch } from 'vue'
 
   import { useTranslate } from '../../../composables/use-translate'
-  import * as en from '../../../i18n/messages/en'
+  import * as en from '../../../locales/en'
   import Button from '../../actions/button/button.vue'
   import ToggleGroup from '../../actions/toggle-group/toggle-group.vue'
   import Avatar from '../../content/avatar/avatar.vue'
+  import type { LogoMark } from '../../content/logo/logo.vue'
   import EmptyState from '../../feedback/empty-state/empty-state.vue'
   import Input from '../../inputs/input/input.vue'
   import Select from '../../inputs/select/select.vue'
@@ -20,6 +21,8 @@
     inheritAttrs: false
   })
 
+  export type { LogoMark }
+
   /** Filter bar: category-search draws a category picker and a search field, facets draws one dropdown per facet. */
   export type ArticleIndexFilters = 'category-search' | 'facets'
 
@@ -31,14 +34,6 @@
     avatar?: string
   }
 
-  /** The client mark drawn in the cover cell of a row that has no cover. */
-  export type ArticleIndexMark = {
-    /** The client's name, the mark's alternative text. */
-    name: string
-    /** URL of the client's logo, drawn in one ink that follows the theme. */
-    logo: string
-  }
-
   /** One article or resource, rendered as a linked row. */
   export type ArticleIndexItem = {
     /** Stable identity of the entry within the list. */
@@ -48,7 +43,7 @@
     /** URL of the cover drawn at the start of the row. */
     image?: string
     /** Client mark drawn in the cover cell when there is no cover. */
-    mark?: ArticleIndexMark
+    mark?: LogoMark
     /** Overline, usually the category or the content type and the date. */
     meta: string
     /** Headline of the entry, naming the row link. */
@@ -82,7 +77,7 @@
   /** Row layout: byline pins the writers to the foot of the copy, center centres the copy. */
   export type ArticleIndexRowVariant = 'byline' | 'center'
 
-  interface Props {
+  export interface ArticleIndexProps {
     /** In-page id set on the band so a `#hash` link can scroll to it. */
     anchor?: string
     /** Headline beside the controls, rendered as the band's `h2`; it also names the band. */
@@ -125,7 +120,7 @@
     ariaLabel?: string
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<ArticleIndexProps>(), {
     anchor: '',
     title: '',
     filters: 'category-search',
@@ -150,7 +145,7 @@
 
   const attrs = useAttrs()
 
-  const { t } = useTranslate({ articleIndex: en.articleIndex })
+  const { t } = useTranslate({ articleIndex: en.articleIndex, common: en.common })
 
   const SEARCH_THRESHOLD = 7
 
@@ -380,7 +375,7 @@
                   role="status"
                   class="px-(--spacing-xs) py-(--spacing-2xs) text-label-sm text-(--text-muted)"
                 >
-                  {{ t('articleIndex.empty') }}
+                  {{ t('articleIndex.noMatch') }}
                 </p>
               </SelectContent>
             </Select>
@@ -448,7 +443,7 @@
                           <span
                             v-if="item.target === '_blank'"
                             class="sr-only"
-                            >{{ t('articleIndex.newTab') }}</span
+                            >{{ t('common.newTab') }}</span
                           >
                         </a>
                       </h3>

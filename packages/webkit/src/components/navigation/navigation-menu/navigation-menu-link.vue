@@ -3,7 +3,7 @@
 
   defineOptions({ name: 'NavigationMenuLink', inheritAttrs: false })
 
-  interface Props {
+  export interface NavigationMenuLinkProps {
     /** Destination URL of the link. */
     href?: string
     /** Marks the link as the current page. */
@@ -12,7 +12,7 @@
     closeOnClick?: boolean
   }
 
-  withDefaults(defineProps<Props>(), {
+  withDefaults(defineProps<NavigationMenuLinkProps>(), {
     href: '',
     active: false,
     closeOnClick: false

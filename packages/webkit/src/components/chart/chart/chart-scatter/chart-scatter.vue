@@ -7,12 +7,12 @@
 
   defineOptions({ name: 'ChartScatter', inheritAttrs: false })
 
-  interface Props {
+  export interface ChartScatterProps {
     /** Ids of the series drawn as dots; empty draws every visible series. */
     ids?: string[]
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<ChartScatterProps>(), {
     ids: () => []
   })
 

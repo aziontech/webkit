@@ -3,7 +3,7 @@
 
   import { useFieldControl } from '../../../composables/use-field-control'
   import { useTranslate } from '../../../composables/use-translate'
-  import * as en from '../../../i18n/messages/en'
+  import * as en from '../../../locales/en'
   import Button from '../../actions/button/button.vue'
   import IconButton from '../../actions/icon-button/icon-button.vue'
   import Tooltip from '../../overlay/tooltip/tooltip.vue'
@@ -27,7 +27,7 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface TagEditorProps {
     /** Keys offered while typing a key, for example the keys already used in the account. */
     keySuggestions?: string[]
     /** Values offered per key while typing a value. */
@@ -47,9 +47,7 @@
     /** Accessible name of the list of tags. Empty uses the locale catalog. */
     ariaLabel?: string
   }
-  export type TagEditorProps = Props
-
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<TagEditorProps>(), {
     keySuggestions: () => [],
     valueSuggestions: () => ({}),
     limit: 50,
@@ -188,7 +186,7 @@
       :disabled="isDisabled"
       :add-button-label="t('tagEditor.add')"
       :remove-button-label="t('tagEditor.remove')"
-      :empty-title="t('tagEditor.empty')"
+      :empty-title="t('tagEditor.emptyTitle')"
       :aria-label="ariaLabel || t('tagEditor.label')"
       :data-testid="`${testId}__editor`"
       @update:items="setTags"

@@ -3,7 +3,7 @@
 
   import { logicalArrowKey, useDirection } from '../../../composables/use-direction'
   import { useTranslate } from '../../../composables/use-translate'
-  import * as en from '../../../i18n/messages/en'
+  import * as en from '../../../locales/en'
   import DropdownMenu from '../../navigation/dropdown-menu/dropdown-menu.vue'
   import DropdownMenuGroup from '../../navigation/dropdown-menu/dropdown-menu-group/dropdown-menu-group.vue'
   import DropdownMenuItem from '../../navigation/dropdown-menu/dropdown-menu-item/dropdown-menu-item.vue'
@@ -67,7 +67,7 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface ButtonGroupProps {
     /** Actions, toggles and menus, in reading order. */
     items?: ButtonGroupItem[]
     /** Accessible name of the toolbar; write it as the aria-label attribute. Leave it empty only when aria-labelledby names the toolbar. */
@@ -82,7 +82,7 @@
     overflowLabel?: string
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<ButtonGroupProps>(), {
     items: () => [],
     ariaLabel: '',
     variant: 'ghost',

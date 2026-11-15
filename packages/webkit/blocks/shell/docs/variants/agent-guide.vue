@@ -12,7 +12,7 @@
   import DocCallout from '@aziontech/webkit/doc-callout'
   import DocCard from '@aziontech/webkit/doc-card'
   import DocCardGroup from '@aziontech/webkit/doc-card-group'
-  import DocCodeGroup, { type DocCodeSample } from '@aziontech/webkit/doc-code-group'
+  import DocCodeGroup, { type DocCodeGroupSample } from '@aziontech/webkit/doc-code-group'
   import DocHeading from '@aziontech/webkit/doc-heading'
   import DocItem from '@aziontech/webkit/doc-item'
   import DocLayout, { type DocLayoutNavGroup } from '@aziontech/webkit/doc-layout'
@@ -36,7 +36,7 @@
   type Step = {
     title: string
     body: string
-    samples?: DocCodeSample[]
+    samples?: DocCodeGroupSample[]
     note?: string
     prompt?: string
   }
@@ -267,12 +267,12 @@
     { id: 'description', accessorKey: 'description', header: 'What it does', grow: 2 as const }
   ]
 
-  const cliSamples: DocCodeSample[] = [
+  const cliSamples: DocCodeGroupSample[] = [
     { label: 'Install', language: 'bash', code: 'npm install -g azion\nazion login' },
     { label: 'Deploy', language: 'bash', code: 'azion init\nazion deploy' }
   ]
 
-  const contextSample: DocCodeSample[] = [
+  const contextSample: DocCodeGroupSample[] = [
     {
       language: 'markdown',
       fileName: 'CLAUDE.md',

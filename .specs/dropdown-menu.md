@@ -3,12 +3,12 @@ name: dropdown-menu
 category: navigation
 structure: composition
 status: implemented
-spec_version: 12
+spec_version: 11
 template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3775-16746&m=dev
   node_id: 3775:16746
-checksum: 807bc0c79e72ee11aef6db91f77d47e3d6d4883681915f4c0377d8bfc488f648
+checksum: 9c6c8c9464a8b41f328f76d31c9a2e401f31410a7e24292d9a61ad2b67e11fba
 created: 2026-06-26
 last_updated: 2026-11-15
 ---
@@ -210,11 +210,11 @@ Sub-menus and checkable options:
 
 ## Events
 
-| Event    | Payload                                                              | Notes                                                                                                                                                                                                                                                                                                                                                                                                                    |
-| -------- | -------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Event    | Payload                                                                | Notes                                                                                                                                                                                                                                                                                                                                                                                                                    |
+| -------- | ---------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `select` | `(event: MouseEvent \| KeyboardEvent, value: DropdownMenuItemValue)` | Fires when an enabled option is activated (click, `Enter`/`Space`, or a `command` shortcut). `event` is the activation event; `value` is the activated option's identifier. The panel closes automatically and focus returns to the trigger when activated from inside the open panel, except for `type="checkbox"` / `type="radio"` options, which keep it open. Options inside a sub-menu emit on the same root event. |
 
-**Types.** `@aziontech/webkit/dropdown-menu` (and `-root`) export `DropdownMenuItemValue` (`string | number`, the `select` payload and `DropdownMenu.Item`'s `value`), `DropdownMenuPlacement` and `DropdownMenuPlacementInput` (the `placement` prop), so a `select` handler is typed without a local alias.
+**Types.** `@aziontech/webkit/dropdown-menu` (and `-root`) export `DropdownMenuItemValue` (`string | number`, the `select` payload and `DropdownMenu.Item`'s `value`), `DropdownMenuPlacementSide` and `DropdownMenuPlacement` (the `placement` prop), so a `select` handler is typed without a local alias.
 
 ## Slots
 

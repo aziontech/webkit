@@ -39,7 +39,7 @@
   import { eventDirection, logicalArrowKey } from '../../../composables/use-direction'
   import { scrollParent } from '../../../composables/use-lazy-chunks'
   import { useTranslate } from '../../../composables/use-translate'
-  import * as en from '../../../i18n/messages/en'
+  import * as en from '../../../locales/en'
   import { downloadCsv, toCsv } from '../../../utils/csv'
   import Button from '../../actions/button/button.vue'
   import IconButton from '../../actions/icon-button/icon-button.vue'
@@ -50,15 +50,15 @@
   import Spinner from '../../utils/spinner/spinner.vue'
   import Pagination from '../pagination/pagination.vue'
   import {
-    type AppliedFilter,
-    type FilterField,
-    type FilterOperator,
-    type FilterValue,
+    type TableAppliedFilter,
     type TableCellSlots,
     type TableColumn,
     type TableDensity,
     type TableExportScope,
     type TableExposed,
+    type TableFilterField,
+    type TableFilterOperator,
+    type TableFilterValue,
     type TableHeaderSlots,
     TableInjectionKey,
     type TableStateSnapshot,
@@ -120,7 +120,7 @@
       /** Message of a failed load, shown in place of the rows (the `error` slot replaces it). Empty shows the rows. */
       error?: string
       /** Fields Table.Filter offers, as facets in the menu or as properties in the property filter. */
-      filterFields?: FilterField[]
+      filterFields?: TableFilterField[]
       /** Uncontrolled seed applied once on mount (per-concern v-model wins over it). */
       initialState?: Partial<TableStateSnapshot>
       /** Default filename for Table.Export and exportCsv(). */
@@ -188,8 +188,8 @@
 
   const emit = defineEmits<{
     'row-click': [event: MouseEvent, row: TRow]
-    'filter-apply': [event: Event, filters: AppliedFilter[]]
-    'filter-remove': [event: Event, filter: AppliedFilter]
+    'filter-apply': [event: Event, filters: TableAppliedFilter[]]
+    'filter-remove': [event: Event, filter: TableAppliedFilter]
     refresh: [event: Event]
     export: [event: Event, rows: TRow[]]
     reorder: [event: KeyboardEvent | PointerEvent, payload: { from: number; to: number; row: TRow }]
@@ -209,7 +209,7 @@
   /** TanStack PaginationState (v-model:pagination). */
   const pagination = defineModel<PaginationState>('pagination')
   /** Structured applied conditions, distinct from globalFilter (v-model:filters). */
-  const filters = defineModel<AppliedFilter[]>('filters')
+  const filters = defineModel<TableAppliedFilter[]>('filters')
   /** Aggregate serializable snapshot layered over the per-concern models (v-model:state). */
   const state = defineModel<TableStateSnapshot>('state')
   /** TanStack ExpandedState: `true` for every row, or `{ [rowId]: true }` (v-model:expanded). */
@@ -237,11 +237,7 @@
   >()
 
   const attrs = useAttrs()
-  const { t } = useTranslate({
-    table: en.table,
-    tableReorder: en.tableReorder,
-    tableLoadMore: en.tableLoadMore
-  })
+  const { t } = useTranslate({ table: en.table, dataTable: en.dataTable })
 
   const slots = useSlots()
   const hasSlot = (name: string): boolean => Boolean((slots as Record<string, unknown>)[name])
@@ -287,7 +283,7 @@
     pagination.value ?? seed('pagination') ?? { pageIndex: 0, pageSize: props.pageSize }
   )
   const internalColumnOrder = ref<ColumnOrderState>(seed('columnOrder') ?? [])
-  const internalFilters = ref<AppliedFilter[]>(filters.value ?? seed('filters') ?? [])
+  const internalFilters = ref<TableAppliedFilter[]>(filters.value ?? seed('filters') ?? [])
   const internalExpanded = ref<ExpandedState>(expanded.value ?? {})
   watch(
     () => expanded.value,
@@ -331,8 +327,10 @@
     return typeof updater === 'function' ? (updater as (old: T) => T)(current) : updater
   }
 
-  const appliedFilters = computed<AppliedFilter[]>(() => filters.value ?? internalFilters.value)
-  const filterFields = computed<FilterField[]>(() => props.filterFields)
+  const appliedFilters = computed<TableAppliedFilter[]>(
+    () => filters.value ?? internalFilters.value
+  )
+  const filterFields = computed<TableFilterField[]>(() => props.filterFields)
 
   const timeOf = (raw: unknown): number | null => {
     if (raw instanceof Date) return raw.getTime()
@@ -356,7 +354,11 @@
     return span === undefined ? null : Date.now() - span
   }
 
-  const matchesApplied = (raw: unknown, operator: FilterOperator, value: FilterValue): boolean => {
+  const matchesApplied = (
+    raw: unknown,
+    operator: TableFilterOperator,
+    value: TableFilterValue
+  ): boolean => {
     const text = (input: unknown): string => String(input ?? '').toLowerCase()
     const list = Array.isArray(value) ? value.map(String) : []
     switch (operator) {
@@ -408,7 +410,10 @@
   }
 
   const appliedFilterFn: FilterFn<RowRecord> = (row, columnId, filterValue) => {
-    const { operator, value } = filterValue as { operator: FilterOperator; value: FilterValue }
+    const { operator, value } = filterValue as {
+      operator: TableFilterOperator
+      value: TableFilterValue
+    }
     const raw: unknown = row.getValue(columnId)
     return matchesApplied(raw, operator, value)
   }
@@ -592,17 +597,17 @@
   }
   const clearSelection = () => table.resetRowSelection()
 
-  const editingFilter = ref<AppliedFilter | null>(null)
+  const editingFilter = ref<TableAppliedFilter | null>(null)
 
-  const filterKey = (filter: AppliedFilter): string =>
+  const filterKey = (filter: TableAppliedFilter): string =>
     `${filter.field}|${filter.operator}|${JSON.stringify(filter.value)}`
 
-  const applyFilters = (event: Event, next: AppliedFilter[]): void => {
+  const applyFilters = (event: Event, next: TableAppliedFilter[]): void => {
     internalFilters.value = next
     filters.value = next
     emit('filter-apply', event, next)
   }
-  const removeFilter = (event: Event, filter: AppliedFilter): void => {
+  const removeFilter = (event: Event, filter: TableAppliedFilter): void => {
     const key = filterKey(filter)
     const next = appliedFilters.value.filter((entry) => filterKey(entry) !== key)
     internalFilters.value = next
@@ -619,7 +624,7 @@
       globalFilter.value = ''
     }
   }
-  const editFilter = (filter: AppliedFilter): void => {
+  const editFilter = (filter: TableAppliedFilter): void => {
     editingFilter.value = filter
   }
 
@@ -1377,7 +1382,7 @@
     return value === undefined || value === null || value === '' ? id : String(value)
   }
   const reorderHandleLabelOf = (id: string, index: number): string =>
-    t('tableReorder.handle', {
+    t('dataTable.reorderHandle', {
       name: rowNameOf(id),
       position: index + 1,
       total: orderedIds.value.length
@@ -1405,11 +1410,14 @@
     const next = [...records()]
     const [moved] = next.splice(from, 1)
     next.splice(to, 0, moved)
-    reorderMessage.value = t(`tableReorder.${message}`, {
-      name: rowNameOf(id),
-      position: orderedIds.value.indexOf(targetId) + 1,
-      total: orderedIds.value.length
-    })
+    reorderMessage.value = t(
+      message === 'moved' ? 'dataTable.reorderMoved' : 'dataTable.reorderDropped',
+      {
+        name: rowNameOf(id),
+        position: orderedIds.value.indexOf(targetId) + 1,
+        total: orderedIds.value.length
+      }
+    )
     focusAfterMove = id
     data.value = typed<TRow[]>(next)
     emit('reorder', event, { from, to, row: typed<TRow>(moved) })
@@ -1436,7 +1444,7 @@
     if (event.key === 'Escape' && dragId.value) {
       dragId.value = null
       overId.value = null
-      reorderMessage.value = t('tableReorder.cancelled')
+      reorderMessage.value = t('dataTable.reorderCancelled')
       event.preventDefault()
       return
     }
@@ -1767,7 +1775,7 @@
                   :frozen="reorderHandleFrozen ? 'start' : undefined"
                   data-slot="reorder-cell"
                 >
-                  <span class="sr-only">{{ t('tableReorder.column') }}</span>
+                  <span class="sr-only">{{ t('dataTable.reorderColumn') }}</span>
                 </TableHeadCell>
                 <TableHeadCell
                   v-if="selectable"
@@ -2060,20 +2068,20 @@
               aria-hidden="true"
               class="size-4"
             />
-            <span :data-testid="`${testId}__more-loading`">{{ t('tableLoadMore.loading') }}</span>
+            <span :data-testid="`${testId}__more-loading`">{{ t('dataTable.loadingMore') }}</span>
           </template>
           <Button
             v-else-if="moreRows"
             variant="ghost"
             size="small"
-            :label="t('tableLoadMore.action')"
+            :label="t('dataTable.loadMore')"
             :data-testid="`${testId}__more-button`"
             @click="requestMore"
           />
           <span
             v-else
             :data-testid="`${testId}__more-end`"
-            >{{ t('tableLoadMore.end') }}</span
+            >{{ t('dataTable.noMoreRows') }}</span
           >
         </div>
       </div>
@@ -2120,7 +2128,7 @@
       <span
         :id="reorderHintId"
         class="sr-only"
-        >{{ reorderLocked ? t('tableReorder.locked') : t('tableReorder.hint') }}</span
+        >{{ reorderLocked ? t('dataTable.reorderLocked') : t('dataTable.reorderHint') }}</span
       >
       <span
         role="status"

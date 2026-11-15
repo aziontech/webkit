@@ -23,7 +23,7 @@ Add this entry to the `sections` array of the page JSON. `_id` picks the block a
 - `logos` holds up to six linked logos; each needs `logo` and `logoAlt` (the name screen readers hear).
 - `linkLabel` is the link text under each story.
 - `ariaLabel` names the mosaic for screen readers.
-- Each story and logo may set `fill` (`canvas`, `surface`, `white` or `primary`) and `logoTreatment` (`monochrome`, `knockout` or `as-is`); placement follows the order: the first story spans two by two, the next stories two rows tall, then the logos one cell each.
+- Each story and logo may set `fill` (`canvas`, `surface`, `white` or `primary`) and `logoTreatment` (`color`, `monochrome` or `knockout`); placement follows the order: the first story spans two by two, the next stories two rows tall, then the logos one cell each.
 
 Example:
 

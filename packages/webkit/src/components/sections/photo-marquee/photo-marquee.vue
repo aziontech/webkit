@@ -26,7 +26,7 @@
     height: number
   }
 
-  interface Props {
+  export interface PhotoMarqueeProps {
     /** Headline of the band, rendered by the horizontal section title as its `h2`; the band renders no header when empty. */
     title?: string
     /** Paragraph beside the headline. */
@@ -43,7 +43,7 @@
     anchor?: string
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<PhotoMarqueeProps>(), {
     title: '',
     description: '',
     descriptionWidth: 'narrow',

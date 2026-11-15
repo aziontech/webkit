@@ -19,7 +19,7 @@
   /** How the cells fill the rows. */
   export type CardGridLayout = 'balanced' | 'fixed'
 
-  interface Props {
+  export interface CardGridProps {
     /** Register of the grid: gutters between self-contained cards, hairline rules drawn by the gaps, or framed cells that draw their own rules and marks. */
     variant?: CardGridVariant
     /** How many columns the grid fans out to at the large breakpoint. */
@@ -34,7 +34,7 @@
     layout?: CardGridLayout
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<CardGridProps>(), {
     variant: 'gap',
     columns: 3,
     mobileColumns: 1,

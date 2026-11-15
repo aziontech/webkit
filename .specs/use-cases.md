@@ -7,7 +7,7 @@ status: implemented
 spec_version: 4
 created: 2026-11-04
 last_updated: 2026-11-15
-checksum: 94f6ed5ba6b92e98f7c6d4a8f390cdff67c07db59b101fd97e2f4dfa247ce4a0
+checksum: da6ab8d518075b3ff4c38cde4de559c2408af1b67a329d35043a4b7a5d6133d4
 ---
 
 # UseCases — Component Spec
@@ -71,14 +71,14 @@ The "what teams use it for" band of a product page: a three-column frame whose f
 
 ## Props
 
-| Prop            | Type             | Default     | Required | JSDoc                                                                                                                             |
-| --------------- | ---------------- | ----------- | -------- | --------------------------------------------------------------------------------------------------------------------------------- |
-| `eyebrow`       | `string`         | `''`        | false    | Overline above the headline in the title cell, closed by the blinking cursor.                                                     |
-| `title`         | `string`         | `''`        | false    | Headline of the band, rendered as its `h2` in the title cell.                                                                     |
-| `description`   | `string`         | `''`        | false    | One-line lead under the headline.                                                                                                 |
-| `primaryAction` | `UseCasesAction` | `undefined` | false    | Button pinned to the foot of the title cell; `{ label, href, trailing? }` where `trailing` adds the chevron. Omitted when absent. |
-| `items`         | `UseCasesItem[]` | `[]`        | false    | The use cases rendered as frame cells, in order; each item is `{ icon, title, description }`.                                     |
-| `anchor`        | `string`         | `''`        | false    | In-page id set on the band so a hash link can target it.                                                                          |
+| Prop            | Type                 | Default     | Required | JSDoc                                                                                                                             |
+| --------------- | -------------------- | ----------- | -------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| `eyebrow`       | `string`             | `''`        | false    | Overline above the headline in the title cell, closed by the blinking cursor.                                                     |
+| `title`         | `string`             | `''`        | false    | Headline of the band, rendered as its `h2` in the title cell.                                                                     |
+| `description`   | `string`             | `''`        | false    | One-line lead under the headline.                                                                                                 |
+| `primaryAction` | `SectionTitleAction` | `undefined` | false    | Button pinned to the foot of the title cell; `{ label, href, trailing? }` where `trailing` adds the chevron. Omitted when absent. |
+| `items`         | `UseCasesItem[]`     | `[]`        | false    | The use cases rendered as frame cells, in order; each item is `{ icon, title, description }`.                                     |
+| `anchor`        | `string`             | `''`        | false    | In-page id set on the band so a hash link can target it.                                                                          |
 
 ## Events
 

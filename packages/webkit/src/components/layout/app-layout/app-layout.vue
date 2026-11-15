@@ -4,7 +4,7 @@
 
   import { useDirection } from '../../../composables/use-direction'
   import { useTranslate } from '../../../composables/use-translate'
-  import * as en from '../../../i18n/messages/en'
+  import * as en from '../../../locales/en'
   import IconButton from '../../actions/icon-button/icon-button.vue'
   import Drawer from '../../overlay/drawer/drawer.vue'
   import DrawerContent from '../../overlay/drawer/drawer-content.vue'
@@ -18,7 +18,7 @@
   /** Where the split panel sits relative to the content. */
   export type AppLayoutSplitPanelPosition = 'bottom' | 'side'
 
-  interface Props {
+  export interface AppLayoutProps {
     /** Accessible name of the navigation drawer. Empty uses the locale catalog (`Navigation`). */
     navigationAriaLabel?: string
     /** Title of the tools region, shown in its header. Empty uses the locale catalog (`Help`). */
@@ -33,7 +33,7 @@
     compactBelow?: number
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<AppLayoutProps>(), {
     navigationAriaLabel: '',
     toolsLabel: '',
     toolsWidth: 320,

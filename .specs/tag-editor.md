@@ -3,9 +3,9 @@ name: tag-editor
 category: inputs
 structure: monolithic
 status: implemented
-spec_version: 6
+spec_version: 5
 template: 2
-checksum: 21ce02cb1980155d2d54655997051ccf97e501ef787b7c34c3ddc28c27d62606
+checksum: c5ee4b4af8060943b9b8a24f9aed1a1c8a1fcbe736ab4da25c7f6be5ca5bb9be
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -144,7 +144,7 @@ _none_
 | `tagEditor.undo`             | Undo                                                   | —                                |
 | `tagEditor.undoLabel`        | Undo removal of tag {index}                            | —                                |
 | `tagEditor.markedForRemoval` | This tag will be removed when you save.                | —                                |
-| `tagEditor.empty`            | No tags associated with the resource.                  | —                                |
+| `tagEditor.emptyTitle`       | No tags associated with the resource.                  | —                                |
 | `tagEditor.remaining`        | You can add {count} more tag(s) (plural)               | —                                |
 | `tagEditor.limitReached`     | You have reached the limit of {limit} tags.            | —                                |
 | `tagEditor.keyRequired`      | Enter a key.                                           | —                                |

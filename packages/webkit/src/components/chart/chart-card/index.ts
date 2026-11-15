@@ -40,4 +40,8 @@ export {
   ChartCardResizeHandle,
   ChartCardTitle
 }
+export type { ChartCardProps } from './chart-card.vue'
+export type { ChartCardContentProps } from './chart-card-content/chart-card-content.vue'
+export type { ChartCardDragHandleProps } from './chart-card-drag-handle/chart-card-drag-handle.vue'
+export type { ChartCardResizeHandleProps } from './chart-card-resize-handle/chart-card-resize-handle.vue'
 export type { ChartCardMoveDirection } from './injection-key'

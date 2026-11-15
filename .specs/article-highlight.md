@@ -7,7 +7,7 @@ spec_version: 3
 template: 2
 created: 2026-11-05
 last_updated: 2026-11-15
-checksum: bf45ac9680748cfe3cdb4834cd7e00df7d7cd8cc4c0d54623a35a2e354515f19
+checksum: 949e63358c1f768b66a83244a3b960a4aa5b745abe5eb1d5d18e6c4158bb6fe2
 ---
 
 # ArticleHighlight — Component Spec
@@ -147,10 +147,10 @@ The band that opens a blog under its hero. One article is shown large — its co
 
 ## Internationalization
 
-| Key                              | English source    | Override prop |
-| -------------------------------- | ----------------- | ------------- |
-| `autoplayControl.pauseRotation`  | `Pause rotation`  | —             |
-| `autoplayControl.resumeRotation` | `Resume rotation` | —             |
+| Key                     | English source    | Override prop |
+| ----------------------- | ----------------- | ------------- |
+| `common.pauseRotation`  | `Pause rotation`  | —             |
+| `common.resumeRotation` | `Resume rotation` | —             |
 
 - Every other visible string arrives through props.
 - Formatting: none; dates and read times arrive pre-formatted.

@@ -35,7 +35,7 @@
       {
         "name": "Crefisa",
         "logo": "/marketing-components/logos/crefisa-extended-reversed.svg",
-        "logoTreatment": "invert-light",
+        "artwork": "light",
         "href": "https://www.azion.com/en/success-case/crefisa/"
       },
       {
@@ -46,7 +46,7 @@
       {
         "name": "Fourbank",
         "logo": "/marketing-components/logos/fourbank-extended-reversed.svg",
-        "logoTreatment": "invert-light",
+        "artwork": "light",
         "href": "https://www.azion.com/en/success-case/fourbank/"
       },
       {

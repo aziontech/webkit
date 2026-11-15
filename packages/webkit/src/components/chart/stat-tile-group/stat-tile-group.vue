@@ -5,12 +5,12 @@
 
   defineOptions({ name: 'StatTileGroup', inheritAttrs: false })
 
-  interface Props {
+  export interface StatTileGroupProps {
     /** Accessible name of the strip, such as Usage; empty leaves the group unnamed. */
     ariaLabel?: string
   }
 
-  withDefaults(defineProps<Props>(), {
+  withDefaults(defineProps<StatTileGroupProps>(), {
     ariaLabel: ''
   })
 

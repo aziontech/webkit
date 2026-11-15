@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 8
 template: 2
-checksum: dc6c89919fb245c97c7b95aee3d37fa5bca9a85687e3c7adae9d4210b95d8997
+checksum: 1026ebe7624795095f66bf528bd4367fb3dfe3a1d37ea5ba18435d3cc5abcaf1
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -14,7 +14,7 @@ last_updated: 2026-11-15
 
 ## Purpose
 
-The deployment topology of a resource as a left-to-right diagram: each column is a depth (domains, project, policy, service, cache rules, integration, storage), each node a collapsible card with the resource kind, its status tag, its name and, when opened, a message and labelled fields; dashed connectors join every node of a column to the next. A node without a name is an unbound slot (dashed, Not bound) and a `bindable` node carries the bind control (bind an existing resource, change it, create one, remove it). Taken from the design sample's workload topology (`TopologyNode`, `TopologyNodeCard`, `TopologyBindNode`, `TopologyBindControl`, the empty node). It reuses `Flow`'s connector engine and anchors and draws its own list semantics, with no node-graph dependency.
+The deployment topology of a resource as a left-to-right diagram: each column is a depth (domains, project, policy, service, cache rules, integration, storage), each node a collapsible card with the resource kind, its status tag, its name and, when opened, a message and labelled fields; dashed connectors join every node of a column to the next. A node without a name is an unbound slot (dashed, Not bound) and a `bindable` node carries the bind control (bind an existing resource, change it, create one, remove it). Taken from the design sample's workload topology (`TopologyDiagramNodeData`, `TopologyNodeCard`, `TopologyBindNode`, `TopologyBindControl`, the empty node). It reuses `Flow`'s connector engine and anchors and draws its own list semantics, with no node-graph dependency.
 
 ## When to use
 
@@ -119,13 +119,13 @@ The deployment topology of a resource as a left-to-right diagram: each column is
 
 ## Props
 
-| Prop        | Type              | Default | Required | JSDoc                                                                                  |
-| ----------- | ----------------- | ------- | -------- | -------------------------------------------------------------------------------------- |
-| `levels`    | `TopologyLevel[]` | `[]`    | false    | Columns of the diagram, from the entry point to the last dependency.                   |
-| `loading`   | `boolean`         | `false` | false    | Shows placeholder cards while the topology loads.                                      |
-| `ariaLabel` | `string`          | `''`    | false    | Accessible name of the diagram. Empty uses the locale catalog (`Deployment topology`). |
+| Prop        | Type                     | Default | Required | JSDoc                                                                                  |
+| ----------- | ------------------------ | ------- | -------- | -------------------------------------------------------------------------------------- |
+| `levels`    | `TopologyDiagramLevel[]` | `[]`    | false    | Columns of the diagram, from the entry point to the last dependency.                   |
+| `loading`   | `boolean`                | `false` | false    | Shows placeholder cards while the topology loads.                                      |
+| `ariaLabel` | `string`                 | `''`    | false    | Accessible name of the diagram. Empty uses the locale catalog (`Deployment topology`). |
 
-Types: `TopologyLevel = { id: string; label?: string; nodes: TopologyNode[] }`; `TopologyNode = { id: string; type?: string; icon?: string; name?: string; status?: string; severity?: TopologyNodeSeverity; dashed?: boolean; message?: string; fields?: TopologyNodeField[]; href?: string; terminal?: boolean; bindable?: boolean; bindOptions?: TopologyBindOption[]; boundValue?: string; removable?: boolean }`; `TopologyNodeField = { label: string; value: string; href?: string; copyable?: boolean }`; `TopologyBindOption = { value: string; label: string }`; `TopologyNodeSeverity = 'success' | 'info' | 'warning' | 'danger' | 'neutral'`. `type` is the resource type shown in the node header (`Policy`).
+Types: `TopologyDiagramLevel = { id: string; label?: string; nodes: TopologyDiagramNodeData[] }`; `TopologyDiagramNodeData = { id: string; type?: string; icon?: string; name?: string; status?: string; severity?: TopologyDiagramNodeSeverity; dashed?: boolean; message?: string; fields?: TopologyDiagramNodeField[]; href?: string; terminal?: boolean; bindable?: boolean; bindOptions?: TopologyDiagramBindOption[]; boundValue?: string; removable?: boolean }`; `TopologyDiagramNodeField = { label: string; value: string; href?: string; copyable?: boolean }`; `TopologyDiagramBindOption = { value: string; label: string }`; `TopologyDiagramNodeSeverity = 'success' | 'info' | 'warning' | 'danger' | 'neutral'`. `type` is the resource type shown in the node header (`Policy`).
 
 ## v-model
 
@@ -141,10 +141,10 @@ Types: `TopologyLevel = { id: string; label?: string; nodes: TopologyNode[] }`; 
 
 ## Slots
 
-| Slot      | Scope                    | Notes                                                                                                                       |
-| --------- | ------------------------ | --------------------------------------------------------------------------------------------------------------------------- |
-| `actions` | `{ node: TopologyNode }` | Extra controls in a node's identity row, before the bind control.                                                           |
-| `empty`   | —                        | Replaces the default empty state (the package `EmptyState`, small, `topologyDiagram.empty`) shown when there are no levels. |
+| Slot      | Scope                               | Notes                                                                                                                            |
+| --------- | ----------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| `actions` | `{ node: TopologyDiagramNodeData }` | Extra controls in a node's identity row, before the bind control.                                                                |
+| `empty`   | —                                   | Replaces the default empty state (the package `EmptyState`, small, `topologyDiagram.emptyTitle`) shown when there are no levels. |
 
 ## States
 
@@ -196,7 +196,7 @@ Types: `TopologyLevel = { id: string; label?: string; nodes: TopologyNode[] }`; 
 | `topologyDiagram.existing`                              | Existing                                                    | —             |
 | `topologyDiagram.noOptions`                             | No options yet.                                             | —             |
 | `topologyDiagram.copy`                                  | Copy {field}                                                | —             |
-| `topologyDiagram.empty`                                 | Nothing is connected yet.                                   | `empty` slot  |
+| `topologyDiagram.emptyTitle`                            | Nothing is connected yet.                                   | `empty` slot  |
 | `topologyDiagram.loading`                               | Loading the topology                                        | —             |
 
 - Formatting: none; kinds, names, statuses and fields are data.

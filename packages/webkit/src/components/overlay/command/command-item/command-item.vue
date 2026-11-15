@@ -34,26 +34,25 @@
     trailing(): unknown
   }>()
 
-  const props = withDefaults(
-    defineProps<{
-      /** Identifier emitted on the root `select` event when this item is activated. */
-      value: CommandItemValue
-      /** Disables interaction; the item is skipped by roving navigation and never activates. */
-      disabled?: boolean
-      /** Extra search terms matched as substrings of the query; never shown. */
-      keywords?: string[]
-      /** Name of a Command.Page this item opens instead of selecting. */
-      page?: string
-      /** A `'+'`-delimited shortcut hint (e.g. `'meta+d'`) rendered on the right via `Kbd`. Display only. */
-      shortcut?: string
-    }>(),
-    {
-      disabled: false,
-      keywords: () => [],
-      page: '',
-      shortcut: ''
-    }
-  )
+  export interface CommandItemProps {
+    /** Identifier emitted on the root `select` event when this item is activated. */
+    value: CommandItemValue
+    /** Disables interaction; the item is skipped by roving navigation and never activates. */
+    disabled?: boolean
+    /** Extra search terms matched as substrings of the query; never shown. */
+    keywords?: string[]
+    /** Name of a Command.Page this item opens instead of selecting. */
+    page?: string
+    /** A `'+'`-delimited shortcut hint (e.g. `'meta+d'`) rendered on the right via `Kbd`. Display only. */
+    shortcut?: string
+  }
+
+  const props = withDefaults(defineProps<CommandItemProps>(), {
+    disabled: false,
+    keywords: () => [],
+    page: '',
+    shortcut: ''
+  })
 
   const attrs = useAttrs()
   const ctx = useCommandMenuContext()
@@ -108,10 +107,10 @@
     backspace: 'backspace',
     delete: 'delete',
     del: 'delete',
-    up: 'arrow-up',
-    down: 'arrow-down',
-    left: 'arrow-left',
-    right: 'arrow-right'
+    up: 'arrowUp',
+    down: 'arrowDown',
+    left: 'arrowLeft',
+    right: 'arrowRight'
   }
   const shortcutHint = computed(() => {
     const tokens = props.shortcut

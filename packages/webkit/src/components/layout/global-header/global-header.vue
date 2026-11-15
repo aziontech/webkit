@@ -2,7 +2,7 @@
   import { computed, provide, useAttrs } from 'vue'
 
   import { useTranslate } from '../../../composables/use-translate'
-  import * as en from '../../../i18n/messages/en'
+  import * as en from '../../../locales/en'
   import { GlobalHeaderInjectionKey } from './injection-key'
 
   defineOptions({
@@ -13,14 +13,14 @@
   /** Where the bar sits in the app shell. */
   export type GlobalHeaderVariant = 'content' | 'site'
 
-  interface Props {
+  export interface GlobalHeaderProps {
     /** Accessible name for the header landmark. Empty uses the locale catalog (`Global header`). */
     ariaLabel?: string
     /** Where the bar sits: `content` is the default — full bleed across whatever zone holds it, insetting its regions by the page boundary so the first region opens on the same vertical as the page content under or beside it; `site` keeps that full-bleed surface on a framed marketing page but caps the regions at the site header measure and centres them, so they land on the bar's own column, one rung wider than the page frame under it. */
     variant?: GlobalHeaderVariant
   }
 
-  withDefaults(defineProps<Props>(), {
+  withDefaults(defineProps<GlobalHeaderProps>(), {
     ariaLabel: '',
     variant: 'content'
   })

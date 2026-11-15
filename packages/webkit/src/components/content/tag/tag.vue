@@ -18,7 +18,7 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface TagProps {
     /** Fallback text when the default slot is empty. */
     label?: string
     /** Brand look of the tag surface and label, used when `severity` is not set. */
@@ -33,7 +33,7 @@
     icon?: string
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<TagProps>(), {
     label: '',
     variant: 'primary',
     severity: undefined,

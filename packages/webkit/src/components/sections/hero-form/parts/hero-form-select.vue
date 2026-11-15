@@ -3,7 +3,7 @@
 
   import { useSelectSearch } from '../../../../composables/use-select-search'
   import { useTranslate } from '../../../../composables/use-translate'
-  import * as en from '../../../../i18n/messages/en'
+  import * as en from '../../../../locales/en'
   import Input from '../../../inputs/input/input.vue'
   import Select from '../../../inputs/select/select.vue'
   import SelectContent from '../../../inputs/select/select-content/select-content.vue'
@@ -131,7 +131,7 @@
         :data-testid="`${testId}__search-empty`"
         class="px-(--spacing-xs) py-(--spacing-2xs) text-label-sm text-(--text-muted)"
       >
-        {{ t('heroForm.empty') }}
+        {{ t('heroForm.noMatch') }}
       </p>
     </SelectContent>
   </Select>

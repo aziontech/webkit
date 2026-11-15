@@ -2,7 +2,7 @@
   import { computed, useAttrs, useSlots } from 'vue'
 
   import { useTranslate } from '../../../composables/use-translate'
-  import * as en from '../../../i18n/messages/en'
+  import * as en from '../../../locales/en'
   import { cn } from '../../../utils/cn'
   import Tag, { type TagSeverity, type TagVariant } from '../tag/tag.vue'
 
@@ -26,7 +26,7 @@
     severity?: CardBadgeSeverity
   }
 
-  interface Props {
+  export interface CardProps {
     /** Heading rendered in the header when the `header` slot is empty; with `variant="integration"`, the item name. */
     title?: string
     /** Pads the content region. Set false for flush, edge-to-edge content such as an ItemList with full-width dividers. */
@@ -49,7 +49,7 @@
     featured?: boolean
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<CardProps>(), {
     title: '',
     padded: true,
     variant: 'default',

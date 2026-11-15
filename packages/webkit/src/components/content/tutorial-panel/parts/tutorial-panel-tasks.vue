@@ -2,10 +2,10 @@
   import { computed, provide, ref, useAttrs, useId, useSlots } from 'vue'
 
   import { useTranslate } from '../../../../composables/use-translate'
-  import * as en from '../../../../i18n/messages/en'
+  import * as en from '../../../../locales/en'
   import { hasRenderedContent } from '../../../../utils/rendered-content'
   import Tag from '../../tag/tag.vue'
-  import type { TutorialTaskHandle, TutorialTaskStatus } from '../injection-key'
+  import type { TutorialPanelTaskHandle, TutorialPanelTaskStatus } from '../injection-key'
   import { TutorialPanelTasksInjectionKey } from '../injection-key'
 
   defineOptions({
@@ -36,12 +36,12 @@
   }>()
 
   const attrs = useAttrs()
-  const { t } = useTranslate({ helpPanel: en.helpPanel })
+  const { t } = useTranslate({ helpPanel: en.helpPanel, tutorialPanel: en.tutorialPanel })
   const slots = useSlots()
   const headingId = useId()
 
   const tasks = ref<symbol[]>([])
-  const statuses = new Map<symbol, () => TutorialTaskStatus>()
+  const statuses = new Map<symbol, () => TutorialPanelTaskStatus>()
   const elements = new Map<symbol, globalThis.HTMLElement>()
 
   const ordered = computed(() =>
@@ -62,7 +62,7 @@
     () => tasks.value.filter((id) => statuses.get(id)?.() === 'success').length
   )
 
-  const register = (id: symbol, status: () => TutorialTaskStatus): TutorialTaskHandle => {
+  const register = (id: symbol, status: () => TutorialPanelTaskStatus): TutorialPanelTaskHandle => {
     statuses.set(id, status)
     tasks.value.push(id)
     return {
@@ -121,7 +121,7 @@
         <Tag
           v-if="completed"
           :data-testid="`${testId}__completed`"
-          :label="t('helpPanel.tutorialCompleted')"
+          :label="t('tutorialPanel.completed')"
           severity="success"
           size="small"
         />
@@ -137,7 +137,7 @@
         aria-live="polite"
         class="text-label-sm text-(--text-muted)"
       >
-        {{ t('helpPanel.tutorialProgress', { complete, total }) }}
+        {{ t('tutorialPanel.progress', { complete, total }) }}
       </p>
     </div>
     <ol class="flex w-full flex-col gap-(--spacing-sm)">

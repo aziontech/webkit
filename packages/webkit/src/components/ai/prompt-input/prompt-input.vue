@@ -11,7 +11,7 @@
   } from 'vue'
 
   import { useTranslate } from '../../../composables/use-translate'
-  import * as en from '../../../i18n/messages/en'
+  import * as en from '../../../locales/en'
   import IconButton from '../../actions/icon-button/icon-button.vue'
 
   export type PromptInputStatus = 'ready' | 'pending' | 'streaming'
@@ -40,7 +40,7 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface PromptInputProps {
     /** Hint shown while empty, a suggested question with no end punctuation. Empty uses the locale catalog (`Ask a question`). */
     placeholder?: string
     /** Accessible name of the text area; the input has no visible label. Empty uses the locale catalog (`Prompt`). */
@@ -59,7 +59,7 @@
     menus?: PromptInputMenu[]
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<PromptInputProps>(), {
     placeholder: '',
     ariaLabel: '',
     maxLength: 0,
@@ -97,7 +97,7 @@
   )
 
   const attrs = useAttrs()
-  const { t } = useTranslate({ promptInput: en.promptInput, promptInputMenu: en.promptInputMenu })
+  const { t } = useTranslate({ promptInput: en.promptInput })
   const uid = useId()
   const counterId = `${uid}-counter`
   const hintId = `${uid}-hint`
@@ -158,8 +158,8 @@
   const announcement = computed<string>(() => {
     if (!query.value) return ''
     return matches.value.length
-      ? t('promptInputMenu.results', { count: matches.value.length })
-      : t('promptInputMenu.noMatches')
+      ? t('promptInput.menuResults', { count: matches.value.length })
+      : t('promptInput.noMatch')
   })
 
   function readQuery(): void {
@@ -298,7 +298,7 @@
         <PromptInputReferences
           v-if="references.length"
           :references="references"
-          :label="t('promptInputMenu.references')"
+          :label="t('promptInput.menuReferences')"
           :disabled="disabled"
           :test-id="testId"
           @remove="

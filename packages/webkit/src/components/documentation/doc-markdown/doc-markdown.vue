@@ -11,7 +11,7 @@
 
   import { useAppNavigation } from '../../../composables/use-app-navigation'
   import { useTranslate } from '../../../composables/use-translate'
-  import * as en from '../../../i18n/messages/en'
+  import * as en from '../../../locales/en'
   import ItemList from '../../content/item/item-list.vue'
   import FrameBox from '../../layout/frame-box/frame-box.vue'
   import Link from '../../navigation/link/link.vue'
@@ -21,7 +21,7 @@
   import DocCallout from '../doc-callout/doc-callout.vue'
   import DocCard from '../doc-card/doc-card.vue'
   import DocCardGroup from '../doc-card-group/doc-card-group.vue'
-  import type { DocCodeSample } from '../doc-code-group/doc-code-group.vue'
+  import type { DocCodeGroupSample } from '../doc-code-group/doc-code-group.vue'
   import DocHeading from '../doc-heading/doc-heading.vue'
   import DocStep from '../doc-step/doc-step.vue'
   import DocSteps from '../doc-steps/doc-steps.vue'
@@ -50,7 +50,7 @@
   )
 
   const attrs = useAttrs()
-  const { t } = useTranslate({ docMarkdown: en.docMarkdown })
+  const { t } = useTranslate({ common: en.common })
   const { follow } = useAppNavigation()
 
   const testId = computed(
@@ -154,9 +154,7 @@
         rel: external ? 'noreferrer' : undefined,
         onClick: external ? undefined : (event: globalThis.MouseEvent) => follow(event, { href })
       },
-      external
-        ? [...children, h('span', { class: 'sr-only' }, ` ${t('docMarkdown.newTab')}`)]
-        : children
+      external ? [...children, h('span', { class: 'sr-only' }, ` ${t('common.newTab')}`)] : children
     )
   }
 
@@ -192,7 +190,7 @@
     return bare || lang || undefined
   }
 
-  const toSample = (node: Extract<DocMarkdownNode, { type: 'code' }>): DocCodeSample => ({
+  const toSample = (node: Extract<DocMarkdownNode, { type: 'code' }>): DocCodeGroupSample => ({
     label: sampleLabel(node.meta, node.lang),
     language: node.lang || undefined,
     fileName: typeof node.meta['title'] === 'string' ? node.meta['title'] : undefined,

@@ -3,8 +3,9 @@
   import { computed, defineAsyncComponent, onMounted, ref, useAttrs, useId, watch } from 'vue'
 
   import { useTranslate } from '../../../composables/use-translate'
-  import * as en from '../../../i18n/messages/en'
+  import * as en from '../../../locales/en'
   import Button from '../../actions/button/button.vue'
+  import type { LogoMark } from '../../content/logo/logo.vue'
   import EmptyState from '../../feedback/empty-state/empty-state.vue'
   import Input from '../../inputs/input/input.vue'
   import Select from '../../inputs/select/select.vue'
@@ -20,13 +21,7 @@
     inheritAttrs: false
   })
 
-  /** The client a story is about. */
-  export type StoryLibraryClient = {
-    /** The client's name, naming the card. */
-    name: string
-    /** URL of the client's mark, drawn in a single ink that follows the theme. */
-    logo: string
-  }
+  export type { LogoMark }
 
   /** One success story, rendered as a linked card. */
   export type StoryLibraryItem = {
@@ -35,7 +30,7 @@
     /** Destination of the story. */
     href: string
     /** The client the story is about. */
-    client: StoryLibraryClient
+    client: LogoMark
     /** Overline of the card, usually the industry. */
     category: string
     /** One or two sentences on the story. */
@@ -66,7 +61,7 @@
     options: StoryLibraryFacetOption[]
   }
 
-  interface Props {
+  export interface StoryLibraryProps {
     /** In-page id set on the band so a `#hash` link can scroll to it. */
     anchor?: string
     /** Headline of the band, rendered left-aligned as its `h2`; the band renders no header when empty. */
@@ -99,7 +94,7 @@
     ariaLabel?: string
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<StoryLibraryProps>(), {
     anchor: '',
     title: '',
     items: () => [],
@@ -119,7 +114,7 @@
 
   const Chip = defineAsyncComponent(() => import('../../inputs/chip/chip.vue'))
   const attrs = useAttrs()
-  const { t } = useTranslate({ storyLibrary: en.storyLibrary })
+  const { t } = useTranslate({ storyLibrary: en.storyLibrary, common: en.common })
 
   const query = ref('')
 
@@ -239,7 +234,7 @@
 
   const cardLabel = (item: StoryLibraryItem): string => {
     const name = props.linkLabel ? `${props.linkLabel}: ${item.client.name}` : item.client.name
-    return item.target === '_blank' ? `${name} ${t('storyLibrary.newTab')}` : name
+    return item.target === '_blank' ? `${name} ${t('common.newTab')}` : name
   }
 </script>
 
@@ -354,7 +349,7 @@
                   role="status"
                   class="px-(--spacing-xs) py-(--spacing-2xs) text-label-sm text-(--text-muted)"
                 >
-                  {{ t('storyLibrary.empty') }}
+                  {{ t('storyLibrary.noMatch') }}
                 </p>
               </SelectContent>
             </Select>

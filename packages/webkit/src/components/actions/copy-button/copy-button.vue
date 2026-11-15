@@ -2,7 +2,7 @@
   import { computed, defineAsyncComponent, onBeforeUnmount, ref, useAttrs } from 'vue'
 
   import { useTranslate } from '../../../composables/use-translate'
-  import * as en from '../../../i18n/messages/en'
+  import * as en from '../../../locales/en'
   import Tooltip from '../../overlay/tooltip/tooltip.vue'
   import type { IconButtonSize, IconButtonVariant } from '../icon-button/icon-button.vue'
   import IconButton from '../icon-button/icon-button.vue'
@@ -12,7 +12,7 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface CopyButtonProps {
     /** Text copied to the clipboard on activation. */
     value: string
     /** Accessible name while idle. Empty uses the locale catalog (`Copy`). */
@@ -27,7 +27,7 @@
     disabled?: boolean
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<CopyButtonProps>(), {
     ariaLabel: '',
     copiedLabel: '',
     variant: 'ghost',
@@ -40,7 +40,7 @@
   }>()
 
   const attrs = useAttrs()
-  const { t } = useTranslate({ copyButton: en.copyButton })
+  const { t } = useTranslate({ copyButton: en.copyButton, common: en.common })
 
   const CopyButtonFallback = defineAsyncComponent(() => import('./copy-button-fallback.vue'))
 
@@ -58,9 +58,7 @@
   const icon = computed(() => (copied.value ? 'ai ai-check' : 'ai ai-copy'))
 
   const label = computed(() =>
-    copied.value
-      ? props.copiedLabel || t('copyButton.copied')
-      : props.ariaLabel || t('copyButton.copy')
+    copied.value ? props.copiedLabel || t('common.copied') : props.ariaLabel || t('common.copy')
   )
 
   async function onCopy(event: MouseEvent) {

@@ -5,12 +5,12 @@
 
   defineOptions({ name: 'ChartCardContent', inheritAttrs: false })
 
-  interface Props {
+  export interface ChartCardContentProps {
     /** Inner padding; off for an edge-to-edge plot (the same name as Card). */
     padded?: boolean
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<ChartCardContentProps>(), {
     padded: true
   })
 

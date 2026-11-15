@@ -6,11 +6,14 @@
   import CallToAction from '../../marketing/call-to-action/call-to-action.vue'
   import CardGrid from '../../marketing/card-grid/card-grid.vue'
   import SectionModule from '../../marketing/section-module/section-module.vue'
+  import type { SectionTitleAction } from '../../marketing/section-title/section-title.vue'
 
   defineOptions({
     name: 'SubjectLibrary',
     inheritAttrs: false
   })
+
+  export type { SectionTitleAction }
 
   /** One article link under a subject. */
   export type SubjectLibraryArticle = {
@@ -32,18 +35,6 @@
     articles: SubjectLibraryArticle[]
   }
 
-  /** One call to action of the closing cell. */
-  export type SubjectLibraryAction = {
-    /** Visible label of the action. */
-    label: string
-    /** Destination the action links to. */
-    href: string
-    /** Closes the label on a trailing chevron that reads as "go". */
-    trailing?: boolean
-    /** Browsing context the link opens in: `_self` or `_blank`. */
-    target?: '_self' | '_blank'
-  }
-
   /** The call to action spanning the grid's last two cells. */
   export type SubjectLibraryClosing = {
     /** Short overline above the headline. */
@@ -55,12 +46,12 @@
     /** Supporting sentence under the headline. */
     description?: string
     /** First action, drawn as the large secondary button. */
-    primaryAction?: SubjectLibraryAction
+    primaryAction?: SectionTitleAction
     /** Second action, drawn as the large outlined button. */
-    secondaryAction?: SubjectLibraryAction
+    secondaryAction?: SectionTitleAction
   }
 
-  interface Props {
+  export interface SubjectLibraryProps {
     /** In-page `id` of the band, the target of a `#hash` link. */
     anchor?: string
     /** The subject cards, in order; each is `{ slug, title, description, articles }` where every article is `{ label, href }`. Subjects without a title or a linked article are skipped. */
@@ -71,7 +62,7 @@
     ariaLabel?: string
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<SubjectLibraryProps>(), {
     anchor: '',
     subjects: () => [],
     closing: undefined,

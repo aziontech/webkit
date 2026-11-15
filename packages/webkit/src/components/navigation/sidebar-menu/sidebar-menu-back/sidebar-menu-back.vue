@@ -2,7 +2,7 @@
   import { type ComponentPublicInstance, computed, useAttrs } from 'vue'
 
   import { useTranslate } from '../../../../composables/use-translate'
-  import * as en from '../../../../i18n/messages/en'
+  import * as en from '../../../../locales/en'
   import { cn } from '../../../../utils/cn'
   import { useSidebarMenuContext } from '../composables/use-sidebar-menu-context'
 
@@ -11,12 +11,12 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface SidebarMenuBackProps {
     /** Names the destination Back returns to, overriding the level below it on the stack. Set it to name the menu root, which has no trigger to name itself. */
     label?: string
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<SidebarMenuBackProps>(), {
     label: ''
   })
 
@@ -26,7 +26,7 @@
 
   const ctx = useSidebarMenuContext()
   const attrs = useAttrs()
-  const { t } = useTranslate({ menu: en.menu })
+  const { t } = useTranslate({ sidebarMenu: en.sidebarMenu })
 
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? 'navigation-sidebar-menu-back'
@@ -40,7 +40,9 @@
   })
 
   const text = computed(() =>
-    destination.value ? t('menu.backTo', { label: destination.value }) : t('menu.back')
+    destination.value
+      ? t('sidebarMenu.backTo', { label: destination.value })
+      : t('sidebarMenu.back')
   )
 
   const ROOT_CLASS =

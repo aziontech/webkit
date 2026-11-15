@@ -14,7 +14,7 @@
 
   import { logicalArrowKey, useDirection } from '../../../composables/use-direction'
   import { useTranslate } from '../../../composables/use-translate'
-  import * as en from '../../../i18n/messages/en'
+  import * as en from '../../../locales/en'
   import Alert from '../../feedback/alert/alert.vue'
   import EmptyState from '../../feedback/empty-state/empty-state.vue'
   import Skeleton from '../../feedback/skeleton/skeleton.vue'
@@ -49,7 +49,7 @@
 
   defineOptions({ name: 'Chart', inheritAttrs: false })
 
-  interface Props {
+  export interface ChartProps {
     /** Series to plot. The first six take the fixed categorical slots in order; the rest fold into Other. */
     series?: ChartSeries[]
     /** One category label per index: a string, a number, or a Date. */
@@ -90,7 +90,7 @@
     ariaLabel?: string
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<ChartProps>(), {
     series: () => [],
     labels: () => [],
     orientation: 'vertical',

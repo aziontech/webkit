@@ -2,7 +2,7 @@
   import { computed, onBeforeUnmount, onMounted, ref, useAttrs } from 'vue'
 
   import { useTranslate } from '../../../../composables/use-translate'
-  import * as en from '../../../../i18n/messages/en'
+  import * as en from '../../../../locales/en'
   import Spinner from '../../../utils/spinner/spinner.vue'
   import { useStepperContext } from '../composables/use-stepper-context'
 
@@ -14,7 +14,7 @@
   /** What the owner knows about a step. The active step is derived from the root. */
   export type StepperStepStatus = 'pending' | 'running' | 'success' | 'error'
 
-  interface Props {
+  export interface StepperStepProps {
     /** Identity of this step; matches the root's v-model when it is the active one. */
     value?: string
     /** What this step asks, in the reader's words. */
@@ -27,7 +27,7 @@
     disabled?: boolean
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<StepperStepProps>(), {
     value: '',
     title: '',
     description: '',

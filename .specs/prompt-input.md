@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 5
 template: 2
-checksum: 92e6a5e34c92bb316c05d17643191406f1d1d4857cdca8fc784142d1f6b4be18
+checksum: ce95d1e9fc03da279f385acb8b499bfd05f32c510c8b330772dfe195001376fb
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -86,16 +86,16 @@ Exported type: `PromptInputStatus = 'ready' | 'pending' | 'streaming'`. Composed
 
 ## Props
 
-| Prop          | Type                                    | Default   | Required | JSDoc                                                                                                                                                                                          |
-| ------------- | --------------------------------------- | --------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `placeholder` | `string`                                | `''`      | false    | Hint shown while empty, a suggested question with no end punctuation. Empty uses the locale catalog (`Ask a question`).                                                                        |
-| `ariaLabel`   | `string`                                | `''`      | false    | Accessible name of the text area; the input has no visible label. Empty uses the locale catalog (`Prompt`).                                                                                    |
-| `maxLength`   | `number`                                | `0`       | false    | Character limit; shows an `n/max` counter and blocks submit over it. `0` means no limit.                                                                                                       |
-| `minRows`     | `number`                                | `1`       | false    | Rows shown while empty.                                                                                                                                                                        |
-| `maxRows`     | `number`                                | `6`       | false    | Rows the text area grows to before it scrolls.                                                                                                                                                 |
-| `status`      | `'ready' \| 'pending' \| 'streaming'`   | `'ready'` | false    | Request lifecycle: `pending` and `streaming` swap Submit for Stop and block another submit; typing stays allowed.                                                                            |
-| `disabled`    | `boolean`                               | `false`   | false    | Disables the text area, the submit control and every control in the slots' row.                                                                                                                |
-| `menus`       | `PromptInputMenu[]`                     | `[]`      | false    | Shortcut menus opened by a trigger character at the start of a word: `/` for commands, `@` for things to reference. Choosing an option inserts `<trigger><label>` and adds it to `references`. |
+| Prop          | Type                                  | Default   | Required | JSDoc                                                                                                                                                                                          |
+| ------------- | ------------------------------------- | --------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `placeholder` | `string`                              | `''`      | false    | Hint shown while empty, a suggested question with no end punctuation. Empty uses the locale catalog (`Ask a question`).                                                                        |
+| `ariaLabel`   | `string`                              | `''`      | false    | Accessible name of the text area; the input has no visible label. Empty uses the locale catalog (`Prompt`).                                                                                    |
+| `maxLength`   | `number`                              | `0`       | false    | Character limit; shows an `n/max` counter and blocks submit over it. `0` means no limit.                                                                                                       |
+| `minRows`     | `number`                              | `1`       | false    | Rows shown while empty.                                                                                                                                                                        |
+| `maxRows`     | `number`                              | `6`       | false    | Rows the text area grows to before it scrolls.                                                                                                                                                 |
+| `status`      | `'ready' \| 'pending' \| 'streaming'` | `'ready'` | false    | Request lifecycle: `pending` and `streaming` swap Submit for Stop and block another submit; typing stays allowed.                                                                              |
+| `disabled`    | `boolean`                             | `false`   | false    | Disables the text area, the submit control and every control in the slots' row.                                                                                                                |
+| `menus`       | `PromptInputMenu[]`                   | `[]`      | false    | Shortcut menus opened by a trigger character at the start of a word: `/` for commands, `@` for things to reference. Choosing an option inserts `<trigger><label>` and adds it to `references`. |
 
 Types: `PromptInputMenu = { trigger: string; label: string; options: PromptInputMenuOption[] }`, `PromptInputMenuOption = { value: string; label: string; description?: string; icon?: string }`, `PromptInputReference = { trigger: string; value: string; label: string }`.
 
@@ -108,10 +108,10 @@ Types: `PromptInputMenu = { trigger: string; label: string; options: PromptInput
 
 ## Events
 
-| Event    | Payload                                                                                                   | When                                                                                                                                                                                                                                 |
-| -------- | --------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Event    | Payload                                                                                                | When                                                                                                                                                                                                                                                                                                    |
+| -------- | ------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `submit` | `(event: MouseEvent \| KeyboardEvent, payload: { value: string; references: PromptInputReference[] })` | Enter (without Shift, outside an IME composition) or Submit, with a non-empty prompt within the limit while `status` is `ready`. `event` is the Enter keydown or the Submit click; `payload.value` is trimmed; `payload.references` holds the references whose `<trigger><label>` is still in the text. |
-| `stop`   | `(event: MouseEvent)`                                                                                     | Stop pressed while `pending` or `streaming`.                                                                                                                                                                                       |
+| `stop`   | `(event: MouseEvent)`                                                                                  | Stop pressed while `pending` or `streaming`.                                                                                                                                                                                                                                                            |
 
 ## Slots
 
@@ -142,7 +142,7 @@ Types: `PromptInputMenu = { trigger: string; label: string; options: PromptInput
 | invalid border   | `var(--danger-border)`                                                                                                |
 | disabled surface | `var(--bg-disabled)`                                                                                                  |
 | text             | `.text-body-md`, `var(--text-default)`; placeholder `var(--text-muted)`                                               |
-| counter, hint    | `.text-body-xs`, `var(--text-muted)`; over limit `var(--danger-foreground)`                                             |
+| counter, hint    | `.text-body-xs`, `var(--text-muted)`; over limit `var(--danger-foreground)`                                           |
 | padding / gaps   | `var(--spacing-xs)`, `var(--spacing-2xs)`, `var(--spacing-sm)`                                                        |
 
 ## Theme gaps
@@ -168,9 +168,9 @@ _None._
 | `promptInput.stop`           | `Stop generating`                   | —             |
 | `promptInput.count`          | `{count}/{max}`                     | —             |
 | `promptInput.overLimit`      | `{count} characters over the limit` | —             |
-| `promptInputMenu.results`    | `{count} suggestion(s)` (plural)    | —             |
-| `promptInputMenu.noMatches`  | `No matches`                        | —             |
-| `promptInputMenu.references` | `References`                        | —             |
+| `promptInput.menuResults`    | `{count} suggestion(s)` (plural)    | —             |
+| `promptInput.noMatch`        | `No matches`                        | —             |
+| `promptInput.menuReferences` | `References`                        | —             |
 
 - Formatting: counts go through `Intl.NumberFormat` (the `t()` number formatting).
 

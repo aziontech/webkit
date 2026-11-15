@@ -7,7 +7,7 @@
 
   defineOptions({ name: 'ChartLine', inheritAttrs: false })
 
-  interface Props {
+  export interface ChartLineProps {
     /** Ids of the series drawn as lines; empty draws every visible series. */
     ids?: string[]
     /** Line interpolation between points. */
@@ -16,7 +16,7 @@
     markers?: boolean
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<ChartLineProps>(), {
     ids: () => [],
     curve: 'linear',
     markers: false

@@ -11,14 +11,14 @@
   /** The cell's fill. */
   export type CardGridCellVariant = 'surface' | 'canvas' | 'none'
 
-  interface Props {
+  export interface CardGridCellProps {
     /** The cell's fill; `none` leaves the surface to the content composed inside it. */
     variant?: CardGridCellVariant
     /** Pads the cell's content away from its rules; off for content that reaches the cell's edges. */
     padded?: boolean
   }
 
-  withDefaults(defineProps<Props>(), {
+  withDefaults(defineProps<CardGridCellProps>(), {
     variant: 'surface',
     padded: true
   })

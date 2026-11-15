@@ -3,7 +3,7 @@
 
   import { useStepRegistry } from '../../../composables/use-step-registry'
   import { useTranslate } from '../../../composables/use-translate'
-  import * as en from '../../../i18n/messages/en'
+  import * as en from '../../../locales/en'
   import { StepperInjectionKey } from './injection-key'
 
   defineOptions({
@@ -11,15 +11,14 @@
     inheritAttrs: false
   })
 
-  withDefaults(
-    defineProps<{
-      /** Accessible name for the step rail. Empty uses the locale catalog (`Steps`). */
-      ariaLabel?: string
-    }>(),
-    {
-      ariaLabel: ''
-    }
-  )
+  export interface StepperProps {
+    /** Accessible name for the step rail. Empty uses the locale catalog (`Steps`). */
+    ariaLabel?: string
+  }
+
+  withDefaults(defineProps<StepperProps>(), {
+    ariaLabel: ''
+  })
 
   defineSlots<{
     /** The Stepper.Step children, in the order they are numbered. */

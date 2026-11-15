@@ -2,7 +2,7 @@
   import { computed, inject, useAttrs } from 'vue'
 
   import { useTranslate } from '../../../../composables/use-translate'
-  import * as en from '../../../../i18n/messages/en'
+  import * as en from '../../../../locales/en'
   import CopyButton from '../../../actions/copy-button/copy-button.vue'
   import { TableInjectionKey } from '../injection-key'
 
@@ -11,18 +11,17 @@
     inheritAttrs: false
   })
 
-  const props = withDefaults(
-    defineProps<{
-      /** The identifier shown and copied. */
-      value?: string | number
-      /** What the identifier belongs to, for the copy button's name (`Copy workload ID`). */
-      resource?: string
-    }>(),
-    {
-      value: '',
-      resource: ''
-    }
-  )
+  export interface TableCellIdProps {
+    /** The identifier shown and copied. */
+    value?: string | number
+    /** What the identifier belongs to, for the copy button's name (`Copy workload ID`). */
+    resource?: string
+  }
+
+  const props = withDefaults(defineProps<TableCellIdProps>(), {
+    value: '',
+    resource: ''
+  })
 
   const attrs = useAttrs()
   const { t } = useTranslate({ tableCellId: en.tableCellId })

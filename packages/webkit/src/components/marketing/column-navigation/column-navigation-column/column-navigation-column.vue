@@ -6,12 +6,12 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface ColumnNavigationColumnProps {
     /** The column's overline heading, which also names its list of rows. */
     title?: string
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<ColumnNavigationColumnProps>(), {
     title: ''
   })
 

@@ -3,7 +3,7 @@
 
   import { logicalArrowKey, useDirection } from '../../../composables/use-direction'
   import { useTranslate } from '../../../composables/use-translate'
-  import * as en from '../../../i18n/messages/en'
+  import * as en from '../../../locales/en'
   import { PaginationInjectionKey } from './injection-key'
   import PaginationButton from './pagination-button/pagination-button.vue'
   import PaginationDescription from './pagination-description/pagination-description.vue'
@@ -16,7 +16,7 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface PaginationProps {
     /** Total item count. When set, the Pagination runs in data-driven mode and renders its own controls. */
     total?: number
     /** Page-size options offered in the rows-per-page selector. */
@@ -27,7 +27,7 @@
     ariaLabel?: string
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<PaginationProps>(), {
     total: undefined,
     pageSizeOptions: () => [10, 25, 50, 100],
     siblingCount: 1,

@@ -2,7 +2,7 @@
   import { computed, inject, useAttrs } from 'vue'
 
   import { useTranslate } from '../../../../composables/use-translate'
-  import * as en from '../../../../i18n/messages/en'
+  import * as en from '../../../../locales/en'
   import { PaginationInjectionKey } from '../injection-key'
 
   defineOptions({
@@ -10,12 +10,12 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface PaginationPageSizeProps {
     /** Available page-size options. */
     options?: number[]
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<PaginationPageSizeProps>(), {
     options: () => [10, 25, 50, 100]
   })
 

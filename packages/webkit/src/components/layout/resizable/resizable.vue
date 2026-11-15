@@ -8,14 +8,14 @@
   /** Axis the panes are laid out on. */
   export type ResizableOrientation = 'horizontal' | 'vertical'
 
-  interface Props {
+  export interface ResizableProps {
     /** Axis the panes are laid out on; horizontal places them side by side, vertical stacks them. */
     orientation?: ResizableOrientation
     /** Accessible name for the group as a whole. */
     ariaLabel?: string
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<ResizableProps>(), {
     orientation: 'horizontal',
     ariaLabel: ''
   })

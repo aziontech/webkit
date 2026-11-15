@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 7
 template: 2
-checksum: 97c7246a302172907135817dbe6dfc3518db62032178d6913ab08d1c18a85659
+checksum: 7cb3ea3cab522e63a17ba0490149ef66c3c046596a4c48e4e5e1e5e70bab896d
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -177,7 +177,7 @@ _none_ — one `.vue` file. The list is rendered by the component itself (telepo
 
 | Key                    | English source                                | Override prop |
 | ---------------------- | --------------------------------------------- | ------------- |
-| `combobox.empty`       | `No matches`                                  | `emptyTitle`  |
+| `combobox.noMatch`     | `No matches`                                  | `emptyTitle`  |
 | `combobox.loading`     | `Loading options`                             | —             |
 | `combobox.useValue`    | `Use "{value}"`                               | —             |
 | `combobox.clear`       | `Clear`                                       | —             |

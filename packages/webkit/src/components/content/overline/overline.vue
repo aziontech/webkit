@@ -5,7 +5,7 @@
 
   export type OverlinePrefix = '' | '//' | '\x3C\x3E' | '\x3C/\x3E'
 
-  interface Props {
+  export interface OverlineProps {
     /** Keeps the prefix unbroken and the label on one line while it fits; a longer label wraps instead of overflowing. */
     singleLine?: boolean
     /** Shows a blinking terminal-style cursor after the label. */
@@ -14,7 +14,7 @@
     prefix?: OverlinePrefix
   }
 
-  withDefaults(defineProps<Props>(), {
+  withDefaults(defineProps<OverlineProps>(), {
     singleLine: true,
     cursor: false,
     prefix: ''

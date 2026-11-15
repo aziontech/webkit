@@ -37,7 +37,7 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface FilterMenuProps {
     /** Fields the menu lists, in order, each with its type and values. */
     fields?: FilterMenuField[]
     /** Text of the trigger button. Empty uses the locale catalog (`Filter`). */
@@ -50,7 +50,7 @@
     defaultOpen?: boolean
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<FilterMenuProps>(), {
     fields: () => [],
     label: '',
     size: 'medium',

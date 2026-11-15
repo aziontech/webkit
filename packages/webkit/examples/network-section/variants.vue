@@ -30,14 +30,14 @@
         {
           logo: madeiramadeiraExtendedReversed,
           logoAlt: 'MadeiraMadeira',
-          logoTreatment: 'as-is',
+          logoTreatment: 'color',
           text: '90% lower cloud costs and faster applications at scale.',
           highlights: ['90% lower cloud costs']
         },
         {
           logo: rennerExtendedColor,
           logoAlt: 'Renner',
-          logoTreatment: 'as-is',
+          logoTreatment: 'color',
           text: '67% saved on data transfer, even during massive traffic spikes.',
           highlights: ['67% saved']
         },

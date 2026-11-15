@@ -2,7 +2,7 @@
   import { computed, useAttrs } from 'vue'
 
   import { useTranslate } from '../../../composables/use-translate'
-  import * as en from '../../../i18n/messages/en'
+  import * as en from '../../../locales/en'
   import Tooltip from '../../overlay/tooltip/tooltip.vue'
 
   defineOptions({
@@ -10,7 +10,7 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface CitationProps {
     /** 1-based number of the source, in the order the response first cites it. */
     index: number
     /** Title of the source, shown in the tooltip and read in the accessible name. */
@@ -19,7 +19,7 @@
     href?: string
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<CitationProps>(), {
     title: '',
     href: ''
   })

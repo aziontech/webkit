@@ -2,7 +2,7 @@
   import { computed, useAttrs } from 'vue'
 
   import { useTranslate } from '../../../composables/use-translate'
-  import * as en from '../../../i18n/messages/en'
+  import * as en from '../../../locales/en'
   import Skeleton from '../../feedback/skeleton/skeleton.vue'
 
   defineOptions({
@@ -10,14 +10,14 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface HelpPanelProps {
     /** Accessible name for the complementary landmark the panel renders. Empty uses the locale catalog (`Help`). */
     ariaLabel?: string
     /** Renders skeleton lines in place of the content while the help topic loads; sets aria-busy. */
     loading?: boolean
   }
 
-  withDefaults(defineProps<Props>(), {
+  withDefaults(defineProps<HelpPanelProps>(), {
     ariaLabel: '',
     loading: false
   })

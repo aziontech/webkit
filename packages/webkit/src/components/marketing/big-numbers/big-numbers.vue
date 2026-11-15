@@ -26,14 +26,14 @@
   /** Size token; picks the big-number scale the figures are set at. */
   export type BigNumbersSize = 'small' | 'medium' | 'large'
 
-  interface Props {
+  export interface BigNumbersProps {
     /** The figures rendered as cells, in order; each item is a value, a label, and an optional prefix and suffix — the figure, its caption, and the qualifier and unit set beside it. */
     items?: BigNumbersItem[]
     /** Size token; picks the big-number scale the figures are set at. */
     size?: BigNumbersSize
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<BigNumbersProps>(), {
     items: () => [],
     size: 'medium'
   })

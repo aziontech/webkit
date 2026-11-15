@@ -3,9 +3,9 @@ name: attribute-editor
 category: inputs
 structure: monolithic
 status: implemented
-spec_version: 8
+spec_version: 7
 template: 2
-checksum: 383aced23d36193e06c9570072a97c3481143bbc9c8d67205a640786b2557575
+checksum: 7f348d1628010453d7118c6c2f5314692eef8116e12beecec3df6206200f956d
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -180,7 +180,7 @@ Rows appear and leave without animation; the controls keep their own transitions
 | `attributeEditor.remove`        | Remove item                                    | `removeButtonLabel` |
 | `attributeEditor.rowAction`     | {label} {index}                                | —                   |
 | `attributeEditor.addGroup`      | Add OR group                                   | `addGroupLabel`     |
-| `attributeEditor.empty`         | No items yet.                                  | `emptyTitle`        |
+| `attributeEditor.emptyTitle`    | No items yet.                                  | `emptyTitle`        |
 | `attributeEditor.remaining`     | You can add {count} more item(s) (plural)      | —                   |
 | `attributeEditor.limitReached`  | You have reached the limit of {limit} items.   | —                   |
 | `attributeEditor.added`         | Item {index} added.                            | —                   |

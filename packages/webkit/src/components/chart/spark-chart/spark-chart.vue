@@ -22,7 +22,7 @@
   /** Height of the spark: 32, 48 or 64 pixels. */
   export type SparkChartSize = 'small' | 'medium' | 'large'
 
-  interface Props {
+  export interface SparkChartProps {
     /** The series, oldest first; null leaves a gap. */
     values?: (number | null)[]
     /** Mark drawn for the series. */
@@ -37,7 +37,7 @@
     ariaLabel?: string
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<SparkChartProps>(), {
     values: () => [],
     type: 'area',
     color: 1,

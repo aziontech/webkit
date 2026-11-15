@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
+  import type { LogoTreatment } from '../../content/logo/logo.vue'
   import NetworkMap from '../../content/network-map/network-map.vue'
   import FrameBox from '../../layout/frame-box/frame-box.vue'
   import BigNumbers from '../../marketing/big-numbers/big-numbers.vue'
@@ -17,11 +18,10 @@
     inheritAttrs: false
   })
 
+  export type { LogoTreatment }
+
   /** Which floor closes the band. */
   export type NetworkSectionVariant = 'outcomes' | 'benefits' | 'stats'
-
-  /** How a client mark is rendered: `monochrome` flattens it and inverts it in the dark theme, `as-is` keeps its colours. */
-  export type NetworkSectionLogoTreatment = 'monochrome' | 'as-is'
 
   /** One client result, rendered as a quote cell on the `outcomes` floor. */
   export type NetworkSectionOutcome = {
@@ -29,8 +29,8 @@
     logo?: string
     /** Client name, read as the mark's alt text. */
     logoAlt?: string
-    /** Treatment applied to the mark; defaults to `as-is`. */
-    logoTreatment?: NetworkSectionLogoTreatment
+    /** Treatment applied to the mark: `color` or `monochrome`; defaults to `color`. */
+    logoTreatment?: Exclude<LogoTreatment, 'knockout'>
     /** The result, quoted. */
     text: string
     /** Phrases of `text` set in the accent. */
@@ -67,7 +67,7 @@
     suffix?: string
   }
 
-  interface Props {
+  export interface NetworkSectionProps {
     /** Which floor closes the band: `outcomes` renders the client quotes, `benefits` the benefit topics on up to three columns, `stats` the headline figures. */
     variant?: NetworkSectionVariant
     /** In-page id set on the band so a `#hash` link can scroll to it. */
@@ -80,7 +80,7 @@
     claimsEyebrow?: string
     /** Short figures rendered as chips under the claims eyebrow, in order; each is a string or `{ label, mobile? }`, where `mobile: false` hides the chip below the medium breakpoint. */
     claims?: (string | NetworkSectionClaim)[]
-    /** Client results for the `outcomes` floor, in order, one column each up to four; each is `{ logo?, logoAlt?, logoTreatment?, text, highlights? }` where `logo` is the mark URL (the cell renders no mark without it), `logoAlt` names the client, `logoTreatment` is `'monochrome'` or `'as-is'`, and `highlights` are the phrases of `text` set in the accent. */
+    /** Client results for the `outcomes` floor, in order, one column each up to four; each is `{ logo?, logoAlt?, logoTreatment?, text, highlights? }` where `logo` is the mark URL (the cell renders no mark without it), `logoAlt` names the client, `logoTreatment` is `'monochrome'` or `'color'`, and `highlights` are the phrases of `text` set in the accent. */
     outcomes?: NetworkSectionOutcome[]
     /** Topics for the `benefits` floor, in order, on up to three columns balanced so every row is full; each is `{ title, description, icon? }`, rendered as a topic whose title is an `h3`. */
     benefits?: NetworkSectionBenefit[]
@@ -88,7 +88,7 @@
     stats?: NetworkSectionStat[]
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<NetworkSectionProps>(), {
     variant: 'outcomes',
     anchor: '',
     eyebrow: '',
@@ -230,7 +230,7 @@
                     :src="outcome.logo"
                     :alt="outcome.logoAlt ?? ''"
                     decoding="async"
-                    :data-treatment="outcome.logoTreatment ?? 'as-is'"
+                    :data-treatment="outcome.logoTreatment ?? 'color'"
                     class="h-full w-auto max-w-32 object-contain data-[treatment=monochrome]:brightness-0 [[data-theme=dark]_&[data-treatment=monochrome]]:invert"
                   />
                 </template>

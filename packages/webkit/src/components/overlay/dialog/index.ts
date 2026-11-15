@@ -20,4 +20,6 @@ export default Object.assign(Dialog, {
 })
 
 export { DialogClose, DialogContent, DialogDescription, DialogTitle, DialogTrigger }
+export type { DialogProps } from './dialog.vue'
+export type { DialogCloseProps } from './dialog-close.vue'
 export type { DialogSize } from './injection-key'

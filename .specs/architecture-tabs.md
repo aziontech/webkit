@@ -6,7 +6,7 @@ status: implemented
 spec_version: 5
 created: 2026-11-05
 last_updated: 2026-11-15
-checksum: 947f823eb6b3c8fc50e5f99fc84ed798d7ba10011b6bd19686fc83a4943c0738
+checksum: ee9fa86e29d2495f2c4cca0ec410fb9694ec1f4dcd8ad951f51a499c082c6c17
 ---
 
 # ArchitectureTabs — Component Spec
@@ -69,17 +69,17 @@ The architecture band of a product page: a horizontal section title with one lar
 
 ## Props
 
-| Prop               | Type                       | Default     | Required | JSDoc                                                                                                                                                                                                                                         |
-| ------------------ | -------------------------- | ----------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `anchor`           | `string`                   | `''`        | false    | In-page id set on the band so a `#hash` link can scroll to it.                                                                                                                                                                                |
-| `eyebrow`          | `string`                   | `''`        | false    | Overline above the section title.                                                                                                                                                                                                             |
-| `title`            | `string`                   | `''`        | false    | Headline of the band, rendered by the horizontal section title as its `h2`; the band renders no header when empty.                                                                                                                            |
-| `description`      | `string`                   | `''`        | false    | Supporting sentence beside the headline.                                                                                                                                                                                                      |
-| `tabsSide`         | `ArchitectureTabsSide`     | `'top'`     | false    | Side of the diagram the tabs sit on: `top`, `bottom`, `start` or `end`; start and end hold up to three tabs.                                                                                                                                  |
-| `tabs`             | `ArchitectureTabsTab[]`    | `[]`        | false    | The architectures, in order; each is `{ value, title, description, diagram, diagramAriaLabel? }` where `diagram` is the name of the diagram drawn while the tab is active and `diagramAriaLabel` replaces the description that diagram ships. |
-| `autoplay`         | `boolean`                  | `true`      | false    | Opens the next tab on a timer, with the composed tabs' visible pause control.                                                                                                                                                                 |
-| `autoplayInterval` | `number`                   | `6000`      | false    | Milliseconds each tab holds before the next one opens.                                                                                                                                                                                        |
-| `primaryAction`    | `ArchitectureTabsAction`   | `undefined` | false    | Large button in the section title; `{ label, href, trailing?, target? }`. Omitted when absent.                                                                                                                                                |
+| Prop               | Type                    | Default     | Required | JSDoc                                                                                                                                                                                                                                         |
+| ------------------ | ----------------------- | ----------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `anchor`           | `string`                | `''`        | false    | In-page id set on the band so a `#hash` link can scroll to it.                                                                                                                                                                                |
+| `eyebrow`          | `string`                | `''`        | false    | Overline above the section title.                                                                                                                                                                                                             |
+| `title`            | `string`                | `''`        | false    | Headline of the band, rendered by the horizontal section title as its `h2`; the band renders no header when empty.                                                                                                                            |
+| `description`      | `string`                | `''`        | false    | Supporting sentence beside the headline.                                                                                                                                                                                                      |
+| `tabsSide`         | `ArchitectureTabsSide`  | `'top'`     | false    | Side of the diagram the tabs sit on: `top`, `bottom`, `start` or `end`; start and end hold up to three tabs.                                                                                                                                  |
+| `tabs`             | `ArchitectureTabsTab[]` | `[]`        | false    | The architectures, in order; each is `{ value, title, description, diagram, diagramAriaLabel? }` where `diagram` is the name of the diagram drawn while the tab is active and `diagramAriaLabel` replaces the description that diagram ships. |
+| `autoplay`         | `boolean`               | `true`      | false    | Opens the next tab on a timer, with the composed tabs' visible pause control.                                                                                                                                                                 |
+| `autoplayInterval` | `number`                | `6000`      | false    | Milliseconds each tab holds before the next one opens.                                                                                                                                                                                        |
+| `primaryAction`    | `SectionTitleAction`    | `undefined` | false    | Large button in the section title; `{ label, href, trailing?, target? }`. Omitted when absent.                                                                                                                                                |
 
 ## Events
 

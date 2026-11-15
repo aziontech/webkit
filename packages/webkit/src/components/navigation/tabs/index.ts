@@ -18,4 +18,7 @@ const Tabs = Object.assign(TabsRoot, {
 export default Tabs
 export type { TabsValue } from './injection-key'
 export type { TabsActivationMode, TabsProps } from './tabs.vue'
+export type { TabsContentProps } from './tabs-content.vue'
 export type { TabsListAlign } from './tabs-list.vue'
+export type { TabsListProps } from './tabs-list.vue'
+export type { TabsTriggerProps } from './tabs-trigger.vue'

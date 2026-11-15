@@ -8,12 +8,12 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface KeyValueListGroupProps {
     /** The group's term, shown above its Items. */
     title: string
   }
 
-  defineProps<Props>()
+  defineProps<KeyValueListGroupProps>()
 
   defineSlots<{
     /** The group's KeyValueList.Item children. */

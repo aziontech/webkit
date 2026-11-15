@@ -1,11 +1,11 @@
-export interface Country {
+export interface PhoneInputCountry {
   code: string
   dialCode: string
   mask: string | string[]
   label: string
 }
 
-export const defaultCountries: Country[] = [
+export const defaultCountries: PhoneInputCountry[] = [
   { code: 'BR', dialCode: '+55', mask: ['(##) ####-####', '(##) #####-####'], label: 'Brazil' },
   { code: 'US', dialCode: '+1', mask: '(###) ###-####', label: 'United States' },
   { code: 'GB', dialCode: '+44', mask: '#### ######', label: 'United Kingdom' },
@@ -72,26 +72,26 @@ export function slotCount(mask: string): number {
   return n
 }
 
-export function masksOf(country: Country): string[] {
+export function masksOf(country: PhoneInputCountry): string[] {
   const masks = Array.isArray(country.mask) ? country.mask : [country.mask]
   return [...masks].sort((a, b) => slotCount(a) - slotCount(b))
 }
 
-export function maxDigits(country: Country): number {
+export function maxDigits(country: PhoneInputCountry): number {
   const masks = masksOf(country)
   return slotCount(masks[masks.length - 1])
 }
 
-export function maskFor(country: Country, digits: string): string {
+export function maskFor(country: PhoneInputCountry, digits: string): string {
   const masks = masksOf(country)
   return masks.find((mask) => slotCount(mask) >= digits.length) ?? masks[masks.length - 1]
 }
 
-export function formatNational(country: Country, digits: string): string {
+export function formatNational(country: PhoneInputCountry, digits: string): string {
   return applyMask(digits, maskFor(country, digits))
 }
 
-export function placeholderFor(country: Country): string {
+export function placeholderFor(country: PhoneInputCountry): string {
   const masks = masksOf(country)
   return masks[masks.length - 1].replace(/#/g, '9')
 }
@@ -132,6 +132,6 @@ export function flagStyle(code: string, sprite: string): Record<string, string> 
   }
 }
 
-export function isComplete(country: Country, digits: string): boolean {
+export function isComplete(country: PhoneInputCountry, digits: string): boolean {
   return masksOf(country).some((mask) => slotCount(mask) === digits.length)
 }

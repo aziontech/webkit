@@ -2,7 +2,7 @@
   import { computed, ref, useAttrs, watch } from 'vue'
 
   import { useTranslate } from '../../../composables/use-translate'
-  import * as en from '../../../i18n/messages/en'
+  import * as en from '../../../locales/en'
   import Button from '../../actions/button/button.vue'
   import Input from '../../inputs/input/input.vue'
   import Popover from '../../overlay/popover/popover.vue'
@@ -25,14 +25,14 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface OverflowCountProps {
     /** The hidden items. The chip reads a plus sign and the count; an item with `href` opens in a new tab. */
     items?: OverflowCountItem[]
     /** What the items are, for the summary and the trigger's name. Empty uses the catalog (`item` / `items`). */
     noun?: OverflowCountNoun
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<OverflowCountProps>(), {
     items: () => [],
     noun: ''
   })
@@ -46,7 +46,7 @@
   const BATCH = 10
 
   const attrs = useAttrs()
-  const { t, locale } = useTranslate({ overflowCount: en.overflowCount })
+  const { t, locale } = useTranslate({ overflowCount: en.overflowCount, common: en.common })
 
   const testId = computed<string>(
     () => (attrs['data-testid'] as string | undefined) ?? 'content-overflow-count'
@@ -188,7 +188,7 @@
                   class="min-w-0 truncate"
                   >{{ entry.label }}</span
                 >
-                <span class="sr-only">{{ ` ${t('overflowCount.newTab')}` }}</span>
+                <span class="sr-only">{{ ` ${t('common.newTab')}` }}</span>
                 <i
                   class="ai ai-external-link ms-auto shrink-0 text-body-xs leading-none"
                   aria-hidden="true"

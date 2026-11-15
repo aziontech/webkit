@@ -2,7 +2,7 @@
   import { computed, useAttrs } from 'vue'
 
   import { useTranslate } from '../../../composables/use-translate'
-  import * as en from '../../../i18n/messages/en'
+  import * as en from '../../../locales/en'
   import { directionalIconClass } from '../../../utils/directional-icons'
 
   export type LinkSize = 'small' | 'medium' | 'large'
@@ -13,7 +13,7 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface LinkProps {
     /** Visible label, the default slot's fallback. Empty uses the locale catalog (`Learn more`). */
     label?: string
     /** Size token. Affects height, gap, and typography. */
@@ -28,7 +28,7 @@
     target?: LinkTarget
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<LinkProps>(), {
     label: '',
     size: 'large',
     disabled: false,

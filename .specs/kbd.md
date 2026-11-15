@@ -3,9 +3,9 @@ name: kbd
 category: content
 structure: monolithic
 status: implemented
-spec_version: 4
+spec_version: 5
 template: 2
-checksum: e5fe6657c001269fbdab05c14f012e09e279a72e563e152811437c2ec3c4a1c5
+checksum: 947376c18090b711a8bfab969e8f1ed11158f871e7b08524b1fc640042956ecb
 created: 2026-07-23
 last_updated: 2026-11-15
 ---
@@ -54,16 +54,16 @@ Kbd renders keyboard input — a single key or a shortcut combination — as a c
 
 ## Props
 
-| Prop      | Type                                                                                                                                                                          | Default      | Required | JSDoc                                                                                                                                                                                                                         |
-| --------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------ | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `meta`    | `boolean`                                                                                                                                                                     | `false`      | false    | Prepend the meta/command modifier glyph (⌘ on macOS, Ctrl elsewhere).                                                                                                                                                         |
-| `ctrl`    | `boolean`                                                                                                                                                                     | `false`      | false    | Prepend the Control modifier glyph (⌃ on macOS, Ctrl elsewhere).                                                                                                                                                              |
-| `shift`   | `boolean`                                                                                                                                                                     | `false`      | false    | Prepend the Shift modifier glyph (⇧).                                                                                                                                                                                         |
-| `alt`     | `boolean`                                                                                                                                                                     | `false`      | false    | Prepend the Alt/Option modifier glyph (⌥ on macOS, Alt elsewhere).                                                                                                                                                            |
-| `size`    | `'small' \| 'medium'`                                                                                                                                                         | `'medium'`   | false    | Size token; `small` is a denser keycap for menus, command bars, and table cells.                                                                                                                                              |
-| `keyName` | `'' \| 'ctrl' \| 'alt' \| 'shift' \| 'escape' \| 'enter' \| 'space' \| 'tab' \| 'backspace' \| 'delete' \| 'return' \| 'arrow-up' \| 'arrow-down' \| 'arrow-left' \| 'arrow-right'` | `''`         | false    | Named key printed from the locale catalog (`escape` → `Esc`, `enter` → `Enter`); the slot still renders after it.                                                                                                             |
-| `keys`    | `string[]`                                                                                                                                                                    | `[]`         | false    | A key sequence drawn after the modifier props and `keyName`: `meta`/`ctrl`/`alt`/`shift` print their OS-aware glyph, a named key prints from the catalog, a single character is upper-cased, anything else prints as written. |
-| `variant`    | `'combined' \| 'separate'`                                                                                                                                                    | `'combined'` | false    | Visual variant: one keycap holding every key, or one keycap per key.                                                                                                                                                          |
+| Prop      | Type                                                                                                                                                                            | Default      | Required | JSDoc                                                                                                                                                                                                                                                                                                                         |
+| --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------ | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `meta`    | `boolean`                                                                                                                                                                       | `false`      | false    | Prepend the meta/command modifier glyph (⌘ on macOS, Ctrl elsewhere).                                                                                                                                                                                                                                                         |
+| `ctrl`    | `boolean`                                                                                                                                                                       | `false`      | false    | Prepend the Control modifier glyph (⌃ on macOS, Ctrl elsewhere).                                                                                                                                                                                                                                                              |
+| `shift`   | `boolean`                                                                                                                                                                       | `false`      | false    | Prepend the Shift modifier glyph (⇧).                                                                                                                                                                                                                                                                                         |
+| `alt`     | `boolean`                                                                                                                                                                       | `false`      | false    | Prepend the Alt/Option modifier glyph (⌥ on macOS, Alt elsewhere).                                                                                                                                                                                                                                                            |
+| `size`    | `'small' \| 'medium'`                                                                                                                                                           | `'medium'`   | false    | Size token; `small` is a denser keycap for menus, command bars, and table cells.                                                                                                                                                                                                                                              |
+| `keyName` | `'' \| 'ctrl' \| 'alt' \| 'shift' \| 'escape' \| 'enter' \| 'space' \| 'tab' \| 'backspace' \| 'delete' \| 'return' \| 'arrowUp' \| 'arrowDown' \| 'arrowLeft' \| 'arrowRight'` | `''`         | false    | Named key printed from the locale catalog (`escape` → `Esc`, `enter` → `Enter`); the slot still renders after it.                                                                                                                                                                                                             |
+| `keys`    | `string[]`                                                                                                                                                                      | `[]`         | false    | A key sequence drawn after the modifier props and `keyName`: `meta`/`ctrl`/`alt`/`shift` print their OS-aware glyph, a named key prints from the catalog (matched without case or hyphens, so `arrowUp`, `arrow-up` and the DOM's `ArrowUp` are one key), a single character is upper-cased, anything else prints as written. |
+| `variant` | `'combined' \| 'separate'`                                                                                                                                                      | `'combined'` | false    | Visual variant: one keycap holding every key, or one keycap per key.                                                                                                                                                                                                                                                          |
 
 ## Events
 
@@ -95,7 +95,7 @@ _none_
 | surface                                       | `var(--bg-surface)`                    |
 | label                                         | `var(--text-default)`                  |
 | border (keycap outline + thicker bottom edge) | `var(--border-default)`                |
-| shape                                         | `var(--shape-control)`                |
+| shape                                         | `var(--shape-control)`                 |
 | elevation (keycap lift)                       | `var(--shadow-sm)`                     |
 | spacing (medium)                              | `var(--spacing-xs)` horizontal padding |
 | spacing (small)                               | `var(--spacing-xs)` horizontal padding |
@@ -117,7 +117,7 @@ _none_
 
 - Layout: logical utilities only (`ms-`/`me-`, `ps-`/`pe-`, `start-`/`end-`, `text-start`), so the layout mirrors under `dir="rtl"`.
 - Icons: modifier symbols (`⌘`, `⌥`, `⇧`) never mirror.
-- Keyboard: no horizontal arrow-key logic. The arrow glyphs name physical keys, so `arrow-left` stays `←` under `dir="rtl"`.
+- Keyboard: no horizontal arrow-key logic. The arrow glyphs name physical keys, so `arrowLeft` stays `←` under `dir="rtl"`.
 - Isolation: the keycap renders `dir="ltr"`, so a shortcut such as `Ctrl` `K` keeps its order inside right-to-left text; key names come from the locale catalog (`kbd.*`).
 
 ## Internationalization
@@ -127,7 +127,7 @@ _none_
 | `kbd.ctrl` / `kbd.alt` / `kbd.shift` | `Ctrl` / `Alt` / `Shift`                           | —             |
 | `kbd.escape` … `kbd.delete`          | `Esc`, `Enter`, `Space`, `Tab`, `Backspace`, `Del` | —             |
 | `kbd.return`                         | `↵`                                                | —             |
-| `kbd.arrow-up` … `kbd.arrow-right`   | `↑` `↓` `←` `→`                                    | —             |
+| `kbd.arrowUp` … `kbd.arrowRight`     | `↑` `↓` `←` `→`                                    | —             |
 
 - The glyph entries (`return`, arrows) are the same in every locale; they live in the catalog so a consumer can rename them with `messages` like any key name.
 - Literal `keys` entries and the slot are consumer copy.

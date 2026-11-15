@@ -10,14 +10,14 @@
     useId
   } from 'vue'
 
-  import { type AppliedFilter, type TableDensity, TableInjectionKey } from './injection-key'
+  import { type TableAppliedFilter, type TableDensity, TableInjectionKey } from './injection-key'
 
   defineOptions({
     name: 'Table',
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface TableProps {
     /** Max height (CSS length). Vertical scroll engages only when set smaller than the content; horizontal scroll is always automatic. */
     maxHeight?: string
     /** Draw the outer card border around the table (off by default; the table is typically framed by a surrounding surface). */
@@ -28,7 +28,7 @@
     wrapLines?: boolean
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<TableProps>(), {
     maxHeight: '',
     bordered: false,
     density: 'comfortable',
@@ -88,7 +88,7 @@
     applyFilters: noop,
     removeFilter: noop,
     clearFilters: noop,
-    editingFilter: ref<AppliedFilter | null>(null),
+    editingFilter: ref<TableAppliedFilter | null>(null),
     editFilter: noop,
     exportCsv: () => Promise.resolve(),
     reload: noop,

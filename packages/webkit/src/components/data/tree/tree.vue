@@ -3,7 +3,7 @@
 
   import { eventDirection, logicalArrowKey } from '../../../composables/use-direction'
   import { useTranslate } from '../../../composables/use-translate'
-  import * as en from '../../../i18n/messages/en'
+  import * as en from '../../../locales/en'
   import EmptyState from '../../feedback/empty-state/empty-state.vue'
   import Skeleton from '../../feedback/skeleton/skeleton.vue'
   import { useTreeNavigation } from './composables/use-tree-navigation'
@@ -32,7 +32,7 @@
   /** Payload of the rename event: the node and its new, trimmed label. */
   export type TreeRenamePayload = { item: TreeItem; label: string }
 
-  interface Props {
+  export interface TreeProps {
     /** Nodes to render; a node with a non-empty children array is a parent. */
     items?: TreeItem[]
     /** Enables selection: true or single writes one id to v-model:selected; multiple writes ids to v-model:selected-keys. */
@@ -49,7 +49,7 @@
     ariaLabel?: string
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<TreeProps>(), {
     items: () => [],
     selectable: false,
     editable: false,

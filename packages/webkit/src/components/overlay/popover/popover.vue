@@ -4,7 +4,7 @@
   import { useControllable } from '../../../composables/use-controllable'
   import { useOverlayLayer } from '../../../composables/use-overlay-layer'
   import { usePlacement } from '../../../composables/use-placement'
-  import type { PopoverPlacement, PopoverPlacementInput, PopoverSize } from './injection-key'
+  import type { PopoverPlacement, PopoverPlacementSide, PopoverSize } from './injection-key'
   import { PopoverInjectionKey } from './injection-key'
 
   defineOptions({
@@ -19,30 +19,29 @@
     default(): unknown
   }>()
 
-  const props = withDefaults(
-    defineProps<{
-      /** Where the panel opens relative to the trigger: a side, optionally aligned to its start or end, or `'auto'` for the best-fitting vertical corner at open time. */
-      placement?: PopoverPlacementInput
-      /** Pixel gap between the trigger and the panel. */
-      offset?: number
-      /** Prevents the trigger from opening the panel and applies disabled tokens. */
-      disabled?: boolean
-      /** Panel width preset mapped to container tokens: `'small'` (`--container-xs`), `'medium'` (`--container-sm`), `'large'` (`--container-md`). When omitted, the panel sizes fluidly between `--container-3xs` and `--container-xs`. */
-      size?: PopoverSize
-      /** Initial open state when uncontrolled. */
-      defaultOpen?: boolean
-      /** Light-dismiss: when true, the panel closes on outside-click and `Esc`. Set false to keep it open until the trigger or `PopoverClose` closes it. */
-      dismissible?: boolean
-    }>(),
-    {
-      placement: 'bottom-start',
-      offset: 4,
-      disabled: false,
-      size: undefined,
-      defaultOpen: false,
-      dismissible: true
-    }
-  )
+  export interface PopoverProps {
+    /** Where the panel opens relative to the trigger: a side, optionally aligned to its start or end, or `'auto'` for the best-fitting vertical corner at open time. */
+    placement?: PopoverPlacement
+    /** Pixel gap between the trigger and the panel. */
+    offset?: number
+    /** Prevents the trigger from opening the panel and applies disabled tokens. */
+    disabled?: boolean
+    /** Panel width preset mapped to container tokens: `'small'` (`--container-xs`), `'medium'` (`--container-sm`), `'large'` (`--container-md`). When omitted, the panel sizes fluidly between `--container-3xs` and `--container-xs`. */
+    size?: PopoverSize
+    /** Initial open state when uncontrolled. */
+    defaultOpen?: boolean
+    /** Light-dismiss: when true, the panel closes on outside-click and `Esc`. Set false to keep it open until the trigger or `PopoverClose` closes it. */
+    dismissible?: boolean
+  }
+
+  const props = withDefaults(defineProps<PopoverProps>(), {
+    placement: 'bottom-start',
+    offset: 4,
+    disabled: false,
+    size: undefined,
+    defaultOpen: false,
+    dismissible: true
+  })
 
   /** Controlled open state. Use with v-model:open; while unbound the popover is uncontrolled and starts at defaultOpen. */
   const openModel = defineModel<boolean>('open', { default: undefined as never })
@@ -92,7 +91,7 @@
     element: panelEl
   })
 
-  const resolvedPlacementRef = computed(() => resolvedPlacement.value as PopoverPlacement)
+  const resolvedPlacementRef = computed(() => resolvedPlacement.value as PopoverPlacementSide)
 
   function setOpen(value: boolean) {
     if (value && props.disabled) return

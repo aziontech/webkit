@@ -3,18 +3,18 @@
 
   import { eventDirection, logicalArrowKey } from '../../../../composables/use-direction'
   import { useTranslate } from '../../../../composables/use-translate'
-  import * as en from '../../../../i18n/messages/en'
+  import * as en from '../../../../locales/en'
   import { useChartCardContext } from '../composables/use-chart-card-context'
   import type { ChartCardMoveDirection } from '../injection-key'
 
   defineOptions({ name: 'ChartCardDragHandle', inheritAttrs: false })
 
-  interface Props {
+  export interface ChartCardDragHandleProps {
     /** Accessible name of the handle. Empty uses the locale catalog (`Move card`). */
     ariaLabel?: string
   }
 
-  withDefaults(defineProps<Props>(), {
+  withDefaults(defineProps<ChartCardDragHandleProps>(), {
     ariaLabel: ''
   })
 

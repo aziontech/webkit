@@ -21,7 +21,7 @@
     icon?: string
   }
 
-  interface Props {
+  export interface TickerProps {
     /** Whether the strip paints its own ground; band fills it with the page canvas so a textured hero cannot show through the marks, and the floor still reads continuous with the band above it. */
     variant?: TickerVariant
     /** Registry names of the marks rendered in the row, in order; an unregistered name renders as its own typographic wordmark so the row stays complete. */
@@ -38,7 +38,7 @@
     ariaLabel?: string
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<TickerProps>(), {
     variant: 'plain',
     marks: () => [],
     items: () => [],

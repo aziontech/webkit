@@ -6,8 +6,9 @@ status: implemented
 spec_version: 5
 created: 2026-11-04
 last_updated: 2026-11-15
-checksum: a0845973d9d800aae3974993e25b081adc9c81a3e41977dd9ee752176425058d
+checksum: 84b90627dcde11be03732b676f2ef336c63dab96751feb2e12dba770a058f3a5
 ---
+
 # FeatureWidgets — Component Spec
 
 ## Purpose
@@ -40,7 +41,7 @@ The "three ways to start" band of a product page: a centered section title with 
 
 ```vue
 <script setup>
-import FeatureWidgets from '@aziontech/webkit/feature-widgets'
+  import FeatureWidgets from '@aziontech/webkit/feature-widgets'
 </script>
 
 <template>
@@ -52,8 +53,21 @@ import FeatureWidgets from '@aziontech/webkit/feature-widgets'
     :primary-action="{ label: 'Start for free', href: '/signup' }"
     :secondary-action="{ label: 'Docs', href: '/docs', trailing: true }"
     :items="[
-      { title: 'Ask your coding agent', description: 'Connect the Azion MCP servers to your agent.', illustration: 'deploy-secure-mcp-server', copy: { label: 'Copy prompt', text: 'Create a function that answers 401 when a request has no Authorization header.' } },
-      { title: 'Build it in the Console', description: 'Write the handler in the editor and create it.', illustration: 'build-applications', action: { label: 'Docs', href: '/docs' } }
+      {
+        title: 'Ask your coding agent',
+        description: 'Connect the Azion MCP servers to your agent.',
+        illustration: 'deploy-secure-mcp-server',
+        copy: {
+          label: 'Copy prompt',
+          text: 'Create a function that answers 401 when a request has no Authorization header.'
+        }
+      },
+      {
+        title: 'Build it in the Console',
+        description: 'Write the handler in the editor and create it.',
+        illustration: 'build-applications',
+        action: { label: 'Docs', href: '/docs' }
+      }
     ]"
   />
 </template>
@@ -61,18 +75,18 @@ import FeatureWidgets from '@aziontech/webkit/feature-widgets'
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `anchor` | `string` | `''` | false | In-page id set on the band so a `#hash` link can scroll to it. |
-| `eyebrow` | `string` | `''` | false | Overline above the section title. |
-| `title` | `string` | `''` | false | Headline of the band, rendered by the section title as its `h2`, and the accessible name of the band. |
-| `description` | `string` | `''` | false | Supporting sentence under the headline. |
-| `primaryAction` | `FeatureWidgetsAction` | `undefined` | false | First button under the headline; `{ label, href, trailing? }`. Omitted when absent. |
-| `secondaryAction` | `FeatureWidgetsAction` | `undefined` | false | Second, outlined button under the headline; `{ label, href, trailing? }` where `trailing` adds the chevron. Omitted when absent. |
-| `titleVariant` | `SectionTitleVariant` | `'center'` | false | Alignment of the section title over the grid: `center`, `start` or `split`. |
-| `columns` | `FeatureWidgetsColumns` | `2` | false | Column count of the grid from the medium breakpoint up: `2`, `3` or `4`. |
-| `copiedLabel` | `string` | `''` | false | Label a cell's copy button shows for two seconds after a copy; empty uses the catalog's `Copied`. |
-| `items` | `FeatureWidgetsItem[]` | `[]` | false | The cells, in order; each is `{ title, description, scene?, illustration?, action?, copy? }` where `scene` is `{ component, props? }` naming a webkit scene asset drawn in a 20rem window and handed `hover` while the pointer is over the cell, `illustration` is drawn when no scene is set, `action` is `{ label, href }` rendered as an outlined link button and `copy` is `{ label, text }` rendered as a copy button that puts `text` on the clipboard; a cell may carry both. |
+| Prop              | Type                    | Default     | Required | JSDoc                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+| ----------------- | ----------------------- | ----------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `anchor`          | `string`                | `''`        | false    | In-page id set on the band so a `#hash` link can scroll to it.                                                                                                                                                                                                                                                                                                                                                                                                                       |
+| `eyebrow`         | `string`                | `''`        | false    | Overline above the section title.                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+| `title`           | `string`                | `''`        | false    | Headline of the band, rendered by the section title as its `h2`, and the accessible name of the band.                                                                                                                                                                                                                                                                                                                                                                                |
+| `description`     | `string`                | `''`        | false    | Supporting sentence under the headline.                                                                                                                                                                                                                                                                                                                                                                                                                                              |
+| `primaryAction`   | `SectionTitleAction`    | `undefined` | false    | First button under the headline; `{ label, href, trailing? }`. Omitted when absent.                                                                                                                                                                                                                                                                                                                                                                                                  |
+| `secondaryAction` | `SectionTitleAction`    | `undefined` | false    | Second, outlined button under the headline; `{ label, href, trailing? }` where `trailing` adds the chevron. Omitted when absent.                                                                                                                                                                                                                                                                                                                                                     |
+| `titleVariant`    | `SectionTitleVariant`   | `'center'`  | false    | Alignment of the section title over the grid: `center`, `start` or `split`.                                                                                                                                                                                                                                                                                                                                                                                                          |
+| `columns`         | `FeatureWidgetsColumns` | `2`         | false    | Column count of the grid from the medium breakpoint up: `2`, `3` or `4`.                                                                                                                                                                                                                                                                                                                                                                                                             |
+| `copiedLabel`     | `string`                | `''`        | false    | Label a cell's copy button shows for two seconds after a copy; empty uses the catalog's `Copied`.                                                                                                                                                                                                                                                                                                                                                                                    |
+| `items`           | `FeatureWidgetsItem[]`  | `[]`        | false    | The cells, in order; each is `{ title, description, scene?, illustration?, action?, copy? }` where `scene` is `{ component, props? }` naming a webkit scene asset drawn in a 20rem window and handed `hover` while the pointer is over the cell, `illustration` is drawn when no scene is set, `action` is `{ label, href }` rendered as an outlined link button and `copy` is `{ label, text }` rendered as a copy button that puts `text` on the clipboard; a cell may carry both. |
 
 ## Events
 
@@ -97,22 +111,22 @@ _none_
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| typography (cell copy) | `.text-body-md` |
-| cell lead | `var(--text-default)` |
-| cell copy | `var(--text-muted)` |
-| cell inset | `var(--spacing-xl)` |
-| cell rhythm | `var(--spacing-lg)` |
-| action row gap | `var(--spacing-sm)` |
-| frame rules and marks | `var(--border-default)` |
-| scene fade | `var(--bg-surface)` |
+| Region                 | Token (DESIGN.md)       |
+| ---------------------- | ----------------------- |
+| typography (cell copy) | `.text-body-md`         |
+| cell lead              | `var(--text-default)`   |
+| cell copy              | `var(--text-muted)`     |
+| cell inset             | `var(--spacing-xl)`     |
+| cell rhythm            | `var(--spacing-lg)`     |
+| action row gap         | `var(--spacing-sm)`     |
+| frame rules and marks  | `var(--border-default)` |
+| scene fade             | `var(--bg-surface)`     |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 

@@ -18,7 +18,7 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface SettingRowProps {
     /** The setting name; the control takes the same text as its aria-label. */
     title: string
     /** One sentence under the title that says what the setting does. */
@@ -33,7 +33,7 @@
     hint?: string
   }
 
-  withDefaults(defineProps<Props>(), {
+  withDefaults(defineProps<SettingRowProps>(), {
     description: '',
     variant: 'field',
     depth: 0,

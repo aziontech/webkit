@@ -12,12 +12,12 @@
   /** Whether one or several entries can be open at once. */
   export type DocAccordionGroupType = 'single' | 'multiple'
 
-  interface Props {
+  export interface DocAccordionGroupProps {
     /** Whether one or several entries can be open at once. */
     type?: DocAccordionGroupType
   }
 
-  const props = withDefaults(defineProps<Props>(), { type: 'single' })
+  const props = withDefaults(defineProps<DocAccordionGroupProps>(), { type: 'single' })
 
   const slots = defineSlots<{
     /** The `DocAccordionItem` children, in order. */

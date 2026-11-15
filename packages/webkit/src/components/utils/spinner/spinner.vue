@@ -6,12 +6,12 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface SpinnerProps {
     /** Accessible name; when set the spinner renders role status with this name, otherwise it stays aria-hidden. */
     ariaLabel?: string
   }
 
-  withDefaults(defineProps<Props>(), {
+  withDefaults(defineProps<SpinnerProps>(), {
     ariaLabel: ''
   })
 

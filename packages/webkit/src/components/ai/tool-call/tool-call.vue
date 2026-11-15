@@ -2,7 +2,7 @@
   import { computed, useAttrs, useId } from 'vue'
 
   import { useTranslate } from '../../../composables/use-translate'
-  import * as en from '../../../i18n/messages/en'
+  import * as en from '../../../locales/en'
   import type { StatusIndicatorSeverity } from '../../feedback/status-indicator/status-indicator.vue'
   import StatusIndicator from '../../feedback/status-indicator/status-indicator.vue'
 
@@ -13,7 +13,7 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface ToolCallProps {
     /** The tool or command identifier, shown in code font (`list_workloads`). */
     name: string
     /** What the call does in the reader's words (`Listing your workloads`). Empty shows only the name. */
@@ -24,7 +24,7 @@
     defaultOpen?: boolean
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<ToolCallProps>(), {
     title: '',
     status: 'running',
     defaultOpen: false

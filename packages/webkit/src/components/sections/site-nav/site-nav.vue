@@ -12,7 +12,7 @@
   } from 'vue'
 
   import { useTranslate } from '../../../composables/use-translate'
-  import * as en from '../../../i18n/messages/en'
+  import * as en from '../../../locales/en'
   import Button from '../../actions/button/button.vue'
   import IconButton from '../../actions/icon-button/icon-button.vue'
   import SearchTrigger from '../../actions/search-trigger/search-trigger.vue'
@@ -86,7 +86,7 @@
     columns: SiteNavGroup[][]
   }
 
-  interface Props {
+  export interface SiteNavProps {
     /** Where the Azion mark links. */
     home?: string
     /** The mega-menus, in bar order; each is `{ value, label, columns }` where `columns` is an array of columns, each holding groups of `{ label, href?, items }` and each item `{ label, description?, href?, icon? }`. */
@@ -103,7 +103,7 @@
     secondaryActionOnPhones?: boolean
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<SiteNavProps>(), {
     home: '/',
     links: () => [],
     contact: undefined,

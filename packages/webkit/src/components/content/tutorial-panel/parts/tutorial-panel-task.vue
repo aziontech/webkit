@@ -2,9 +2,9 @@
   import { computed, onBeforeUnmount, onMounted, ref, useAttrs } from 'vue'
 
   import { useTranslate } from '../../../../composables/use-translate'
-  import * as en from '../../../../i18n/messages/en'
+  import * as en from '../../../../locales/en'
   import { useTutorialPanelTasksContext } from '../composables/use-tutorial-panel-tasks-context'
-  import type { TutorialTaskStatus } from '../injection-key'
+  import type { TutorialPanelTaskStatus } from '../injection-key'
 
   defineOptions({
     name: 'TutorialPanelTask',
@@ -15,7 +15,7 @@
     /** What the reader does, in their words. */
     title?: string
     /** Whether the reader has done the task; set by the owner from what the real UI confirmed. */
-    status?: TutorialTaskStatus
+    status?: TutorialPanelTaskStatus
     /** The task the reader is on; renders aria-current="step". */
     active?: boolean
   }
@@ -32,7 +32,7 @@
   }>()
 
   const attrs = useAttrs()
-  const { t } = useTranslate({ helpPanel: en.helpPanel })
+  const { t } = useTranslate({ helpPanel: en.helpPanel, tutorialPanel: en.tutorialPanel })
   const context = useTutorialPanelTasksContext()
 
   const id = Symbol('TutorialPanelTask')
@@ -47,9 +47,9 @@
   )
 
   const statusLabel = computed<string>(() => {
-    if (props.active) return t('helpPanel.taskCurrent')
-    if (props.status === 'success') return t('helpPanel.taskComplete')
-    return t('helpPanel.taskNotStarted')
+    if (props.active) return t('tutorialPanel.taskCurrent')
+    if (props.status === 'success') return t('tutorialPanel.taskComplete')
+    return t('tutorialPanel.taskNotStarted')
   })
 </script>
 

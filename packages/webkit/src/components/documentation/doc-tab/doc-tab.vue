@@ -3,12 +3,12 @@
 
   defineOptions({ name: 'DocTab', inheritAttrs: false })
 
-  interface Props {
+  export interface DocTabProps {
     /** The tab label; `DocTabs` reads it to build the strip. */
     title?: string
   }
 
-  withDefaults(defineProps<Props>(), { title: '' })
+  withDefaults(defineProps<DocTabProps>(), { title: '' })
 
   defineSlots<{
     /** The panel body. */

@@ -2,7 +2,7 @@
   import { computed, provide, useAttrs } from 'vue'
 
   import { useTranslate } from '../../../composables/use-translate'
-  import * as en from '../../../i18n/messages/en'
+  import * as en from '../../../locales/en'
   import { cn } from '../../../utils/cn'
   import { formatLogLineText } from './composables/format-log-line-text'
   import type { LogViewLine, LogViewLineLevel } from './injection-key'
@@ -22,7 +22,7 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface LogViewProps {
     /** Log entries (filtered in LogViewContent by search and level). */
     lines?: LogViewLine[]
     /** Draw the outer card border and corner radius around the log shell. On by default; set to false to render flush inside a surface that already frames it. */
@@ -43,7 +43,7 @@
     error?: string
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<LogViewProps>(), {
     lines: () => [],
     bordered: true,
     searchPlaceholder: '',

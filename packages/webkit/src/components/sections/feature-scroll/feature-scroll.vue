@@ -65,7 +65,7 @@
     action?: FeatureScrollAction
   }
 
-  interface Props {
+  export interface FeatureScrollProps {
     /** In-page id set on the band so a `#hash` link can scroll to it. */
     anchor?: string
     /** Overline above the section title. */
@@ -78,7 +78,7 @@
     items?: FeatureScrollItem[]
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<FeatureScrollProps>(), {
     anchor: '',
     eyebrow: '',
     title: '',

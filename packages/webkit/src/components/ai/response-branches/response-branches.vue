@@ -2,7 +2,7 @@
   import { computed, useAttrs } from 'vue'
 
   import { useTranslate } from '../../../composables/use-translate'
-  import * as en from '../../../i18n/messages/en'
+  import * as en from '../../../locales/en'
   import IconButton from '../../actions/icon-button/icon-button.vue'
 
   defineOptions({
@@ -10,7 +10,7 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface ResponseBranchesProps {
     /** How many versions exist. With one or none the pager is not drawn. */
     count: number
     /** Accessible name of the pager group. Empty uses the locale catalog (`Response versions`). */
@@ -19,7 +19,7 @@
     disabled?: boolean
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<ResponseBranchesProps>(), {
     ariaLabel: '',
     disabled: false
   })

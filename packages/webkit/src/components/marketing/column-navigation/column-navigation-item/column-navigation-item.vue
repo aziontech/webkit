@@ -14,7 +14,7 @@
     href: string
   }
 
-  interface Props {
+  export interface ColumnNavigationItemProps {
     /** Icon-font class for the destination's glyph. */
     icon?: string
     /** The destination's name, the row's first line. */
@@ -25,7 +25,7 @@
     href?: string
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<ColumnNavigationItemProps>(), {
     icon: '',
     title: '',
     description: '',

@@ -14,8 +14,8 @@
     toQuery
   } from '../filter-menu-bridge'
   import {
-    type AppliedFilter,
-    type FilterField,
+    type TableAppliedFilter,
+    type TableFilterField,
     type TableFilterType,
     TableInjectionKey
   } from '../injection-key'
@@ -25,24 +25,23 @@
     inheritAttrs: false
   })
 
-  const props = withDefaults(
-    defineProps<{
-      /** Fields to filter on; empty uses the table's `filterFields`. */
-      fields?: FilterField[]
-      /** Trigger text of the menu, accessible name of the property filter. Empty uses the locale catalog. */
-      title?: string
-      /** `menu` hosts FilterMenu (facets picked from known values); `property` hosts PropertyFilter (typed conditions with operators). */
-      type?: TableFilterType
-    }>(),
-    {
-      fields: () => [],
-      title: '',
-      type: 'menu'
-    }
-  )
+  export interface TableFilterProps {
+    /** Fields to filter on; empty uses the table's `filterFields`. */
+    fields?: TableFilterField[]
+    /** Trigger text of the menu, accessible name of the property filter. Empty uses the locale catalog. */
+    title?: string
+    /** `menu` hosts FilterMenu (facets picked from known values); `property` hosts PropertyFilter (typed conditions with operators). */
+    type?: TableFilterType
+  }
+
+  const props = withDefaults(defineProps<TableFilterProps>(), {
+    fields: () => [],
+    title: '',
+    type: 'menu'
+  })
 
   const emit = defineEmits<{
-    apply: [event: Event, filters: AppliedFilter[]]
+    apply: [event: Event, filters: TableAppliedFilter[]]
   }>()
 
   const attrs = useAttrs()
@@ -54,12 +53,12 @@
       (ctx ? `${ctx.testId}__filter` : 'data-table__filter')
   )
 
-  const fields = computed<FilterField[]>(() =>
+  const fields = computed<TableFilterField[]>(() =>
     props.fields.length ? props.fields : (ctx?.filterFields.value ?? [])
   )
-  const local = ref<AppliedFilter[]>([])
-  const applied = computed<AppliedFilter[]>(() => ctx?.appliedFilters.value ?? local.value)
-  const commit = (event: Event, list: AppliedFilter[]): void => {
+  const local = ref<TableAppliedFilter[]>([])
+  const applied = computed<TableAppliedFilter[]>(() => ctx?.appliedFilters.value ?? local.value)
+  const commit = (event: Event, list: TableAppliedFilter[]): void => {
     local.value = list
     ctx?.applyFilters(event, list)
     emit('apply', event, list)

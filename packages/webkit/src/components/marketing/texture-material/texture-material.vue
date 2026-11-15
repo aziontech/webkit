@@ -16,7 +16,7 @@
   export type TextureMaterialFade =
     'none' | 'top' | 'bottom' | 'left' | 'right' | 'edges' | 'vignette'
 
-  interface Props {
+  export interface TextureMaterialProps {
     /** Which texture to paint; `none` renders the layer with no texture at all. */
     variant?: TextureMaterialVariant
     /** Pitch of the tiling — how far apart the cells sit. */
@@ -25,7 +25,7 @@
     fade?: TextureMaterialFade
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<TextureMaterialProps>(), {
     variant: 'dots',
     size: 'medium',
     fade: 'none'

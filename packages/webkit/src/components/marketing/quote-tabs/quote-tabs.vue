@@ -17,7 +17,7 @@
   import { brandMarkLabel, resolveBrandMark } from '../../../assets/brands/registry'
   import { eventDirection, logicalArrowKey } from '../../../composables/use-direction'
   import { useTranslate } from '../../../composables/use-translate'
-  import * as en from '../../../i18n/messages/en'
+  import * as en from '../../../locales/en'
   import IconButton from '../../actions/icon-button/icon-button.vue'
   import FrameBox from '../../layout/frame-box/frame-box.vue'
   import CardGrid from '../card-grid/card-grid.vue'
@@ -52,7 +52,7 @@
 
   type QuoteTabsDirection = 'forward' | 'back'
 
-  interface Props {
+  export interface QuoteTabsProps {
     /** The clients, in wall order; each item is the URL of the client's colour logo, the registry name of its one-ink mark, its name in prose, how tall its mark sits on the card, the quotation, who said it, their role and their likeness. */
     items?: QuoteTabsItem[]
     /** Accessible name for the wall of client cards. */
@@ -65,7 +65,7 @@
     showProgress?: boolean
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<QuoteTabsProps>(), {
     items: () => [],
     ariaLabel: '',
     autoplay: true,
@@ -84,7 +84,7 @@
   const attrs = useAttrs()
   const baseId = useId()
   const reducedMotion = usePreferredReducedMotion()
-  const { t } = useTranslate({ autoplayControl: en.autoplayControl })
+  const { t } = useTranslate({ common: en.common })
 
   const PROGRESS_TICK_MS = 100
 
@@ -137,7 +137,7 @@
   )
 
   const pauseLabel = computed(() =>
-    paused.value ? t('autoplayControl.resumeRotation') : t('autoplayControl.pauseRotation')
+    paused.value ? t('common.resumeRotation') : t('common.pauseRotation')
   )
 
   const progress = computed(() =>

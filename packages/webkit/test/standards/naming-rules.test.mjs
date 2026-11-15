@@ -189,7 +189,7 @@ const FIXTURES = {
     )
   ],
   'i18n-key': [
-    'packages/webkit/src/i18n/messages/en.ts',
+    'packages/webkit/src/locales/en.ts',
     "export const kbd = {\n  'arrow-up': 'Up'\n} as const\nexport const Feedback = {\n  Close: 'x'\n} as const\n",
     "export const kbd = {\n  arrowUp: 'Up'\n} as const\nexport const commandGroup = {\n  label: 'x'\n} as const\n"
   ],

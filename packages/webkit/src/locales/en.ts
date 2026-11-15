@@ -14,7 +14,7 @@ export const appLayout = {
 } as const
 
 export const articleBody = {
-  copiedLink: 'Link copied',
+  linkCopied: 'Link copied',
   copiedFeed: 'Feed link copied',
   copiedPage: 'Page copied as markdown',
   copyFailed: 'Could not copy',
@@ -22,15 +22,10 @@ export const articleBody = {
   assistantPrompt: 'Read {url} so I can ask questions about it.'
 } as const
 
-export const articleCards = {
-  newTab: '(opens in a new tab)'
-} as const
-
 export const articleIndex = {
   search: 'Search',
   searchFacet: 'Search {facet}',
-  empty: 'No results found.',
-  newTab: '(opens in a new tab)'
+  noMatch: 'No results found.'
 } as const
 
 export const attributeEditor = {
@@ -38,7 +33,7 @@ export const attributeEditor = {
   remove: 'Remove item',
   rowAction: '{label} {index}',
   addGroup: 'Add OR group',
-  empty: 'No items yet.',
+  emptyTitle: 'No items yet.',
   remaining: {
     one: 'You can add {count} more item.',
     other: 'You can add {count} more items.'
@@ -197,7 +192,7 @@ export const collectionPreferences = {
 } as const
 
 export const combobox = {
-  empty: 'No matches',
+  noMatch: 'No matches',
   loading: 'Loading options',
   useValue: 'Use "{value}"',
   clear: 'Clear',
@@ -210,7 +205,7 @@ export const combobox = {
 
 export const command = {
   back: 'Back from {page}',
-  empty: 'No results found.',
+  noMatch: 'No results found.',
   placeholder: 'Search everything',
   title: 'Command menu'
 } as const
@@ -219,7 +214,7 @@ export const comparePlans = {
   about: 'About {label}',
   search: 'Search',
   searchPicker: 'Search {picker}',
-  empty: 'No results found.',
+  noMatch: 'No results found.',
   included: 'Included',
   excluded: 'Not included'
 } as const
@@ -234,8 +229,9 @@ export const confirmDialog = {
 } as const
 
 export const copyButton = {
-  copy: 'Copy',
-  copied: 'Copied'
+  fallbackTitle: 'Copy manually',
+  fallbackField: 'Value to copy',
+  fallbackHint: 'Press {keys} to copy.'
 } as const
 
 export const responseBranches = {
@@ -245,7 +241,7 @@ export const responseBranches = {
   position: '{current} of {total}'
 } as const
 
-export const feedbackReason = {
+export const feedbackReasonDialog = {
   title: 'What went wrong?',
   description: 'Your answer helps improve future responses.',
   reason: 'Reason',
@@ -268,27 +264,12 @@ export const conversationHistory = {
   previous7: 'Previous 7 days',
   previous30: 'Previous 30 days',
   older: 'Older',
-  empty: 'No conversations yet.',
-  remove: 'Delete {title}'
-} as const
-
-export const promptInputMenu = {
-  results: {
-    one: '{count} suggestion',
-    other: '{count} suggestions'
-  },
-  noMatches: 'No matches',
-  references: 'References'
+  emptyTitle: 'No conversations yet.',
+  delete: 'Delete {title}'
 } as const
 
 export const qrCode = {
   label: 'QR code'
-} as const
-
-export const copyFallback = {
-  title: 'Copy manually',
-  field: 'Value to copy',
-  hint: 'Press {keys} to copy.'
 } as const
 
 export const datePicker = {
@@ -378,10 +359,6 @@ export const docFrame = {
   close: 'Close'
 } as const
 
-export const docMarkdown = {
-  newTab: '(opens in a new tab)'
-} as const
-
 export const docOnThisPage = {
   title: 'On this page'
 } as const
@@ -404,8 +381,6 @@ export const docPrompt = {
 } as const
 
 export const docProse = {
-  copy: 'Copy',
-  copied: 'Copied',
   copyManually: 'Press {shortcut} to copy'
 } as const
 
@@ -466,7 +441,7 @@ export const fileTokenGroup = {
     one: 'Show {count} more file',
     other: 'Show {count} more files'
   },
-  showFewer: 'Show fewer files'
+  showLess: 'Show fewer files'
 } as const
 
 export const filterMenu = {
@@ -553,12 +528,7 @@ export const globalHeader = {
 
 export const helpPanel = {
   label: 'Help',
-  learnMore: 'Learn more',
-  taskComplete: 'Complete',
-  taskCurrent: 'Current task',
-  taskNotStarted: 'Not started',
-  tutorialCompleted: 'Completed',
-  tutorialProgress: '{complete} of {total} complete'
+  learnMore: 'Learn more'
 } as const
 
 export const heroBand = {
@@ -567,7 +537,7 @@ export const heroBand = {
 
 export const heroForm = {
   search: 'Search',
-  empty: 'No results found.'
+  noMatch: 'No results found.'
 } as const
 
 export const hotspot = {
@@ -593,10 +563,10 @@ export const kbd = {
   backspace: 'Backspace',
   delete: 'Del',
   return: '↵',
-  'arrow-up': '↑',
-  'arrow-down': '↓',
-  'arrow-left': '←',
-  'arrow-right': '→'
+  arrowUp: '↑',
+  arrowDown: '↓',
+  arrowLeft: '←',
+  arrowRight: '→'
 } as const
 
 export const link = {
@@ -644,7 +614,7 @@ export const logoWall = {
   link: 'Read story'
 } as const
 
-export const menu = {
+export const sidebarMenu = {
   label: 'Menu',
   back: 'Back',
   backTo: 'Back to {label}',
@@ -657,7 +627,7 @@ export const menu = {
 } as const
 
 export const multiSelect = {
-  empty: 'No matches',
+  noMatch: 'No matches',
   loading: 'Loading options',
   add: 'Add "{value}"',
   more: '+{count} more',
@@ -693,8 +663,7 @@ export const overflowCount = {
   showAll: 'Show all {count} {noun}',
   search: 'Search',
   noMatch: 'Nothing matches “{query}”',
-  loadMore: 'Load {count} more',
-  newTab: '(opens in a new tab)'
+  loadMore: 'Load {count} more'
 } as const
 
 export const pagination = {
@@ -725,7 +694,7 @@ export const passwordRequirements = {
 export const phoneInput = {
   dialCode: 'Country dial code',
   search: 'Search country',
-  empty: 'No country found.'
+  noMatch: 'No country found.'
 } as const
 
 export const transferList = {
@@ -733,7 +702,7 @@ export const transferList = {
   moveAllToTarget: 'Move all to target',
   moveSelectedToSource: 'Move selected to source',
   moveAllToSource: 'Move all to source',
-  empty: 'No items'
+  emptyTitle: 'No items'
 } as const
 
 export const popover = {
@@ -783,15 +752,12 @@ export const propertyFilter = {
   groupOperation: 'Combine filters in group {index}',
   loadingValues: 'Loading values',
   valuesError: 'Could not load values',
-  valueEditor: 'Value of {property}'
-} as const
-
-export const propertyFilterQuery = {
-  label: 'Query',
-  placeholder: 'Type a query, for example status = Active AND requests > 10',
-  fields: 'Fields',
-  all: 'Every condition matches',
-  any: 'Any condition matches',
+  valueEditor: 'Value of {property}',
+  queryLabel: 'Query',
+  queryPlaceholder: 'Type a query, for example status = Active AND requests > 10',
+  queryFields: 'Fields',
+  queryAll: 'Every condition matches',
+  queryAny: 'Any condition matches',
   unknownField: 'There is no field named “{field}”.',
   unknownOperator: '“{operator}” does not apply to {field}.',
   missingOperator: 'Add an operator after {field}, for example =.',
@@ -867,8 +833,7 @@ export const sidebar = {
 export const siteFooter = {
   label: 'Footer',
   home: 'Azion home',
-  language: 'Language',
-  newTab: '(opens in a new tab)'
+  language: 'Language'
 } as const
 
 export const siteNav = {
@@ -907,10 +872,9 @@ export const stepper = {
 export const storyLibrary = {
   search: 'Search',
   searchFacet: 'Search {facet}',
-  empty: 'No results found.',
+  noMatch: 'No results found.',
   filters: 'Filters',
-  filtersApplied: '{label} ({count})',
-  newTab: '(opens in a new tab)'
+  filtersApplied: '{label} ({count})'
 } as const
 
 export const dataGrid = {
@@ -958,8 +922,7 @@ export const tableCellId = {
 export const tableCellLink = {
   open: 'Open {label}',
   openIn: 'Open {label} in {destination}',
-  newTab: 'Open {label} in a new tab',
-  newTabHint: '(opens in a new tab)',
+  openInNewTab: 'Open {label} in a new tab',
   copy: 'Copy {label}'
 } as const
 
@@ -976,22 +939,6 @@ export const tableCellTime = {
 
 export const tableLiveButton = {
   label: 'Live'
-} as const
-
-export const tableLoadMore = {
-  loading: 'Loading more rows',
-  action: 'Load more',
-  end: 'No more rows'
-} as const
-
-export const tableReorder = {
-  column: 'Order',
-  handle: 'Reorder {name}, position {position} of {total}',
-  hint: 'Drag, or press Arrow Up or Arrow Down to move.',
-  locked: 'Clear the sort to reorder rows.',
-  moved: 'Moved {name} to position {position} of {total}.',
-  dropped: 'Dropped {name} at position {position} of {total}.',
-  cancelled: 'Reorder cancelled.'
 } as const
 
 export const tableSearch = {
@@ -1021,7 +968,7 @@ export const tagEditor = {
   undo: 'Undo',
   undoLabel: 'Undo removal of tag {index}',
   markedForRemoval: 'This tag will be removed when you save.',
-  empty: 'No tags associated with the resource.',
+  emptyTitle: 'No tags associated with the resource.',
   remaining: {
     one: 'You can add {count} more tag.',
     other: 'You can add {count} more tags.'
@@ -1066,7 +1013,7 @@ export const trace = {
   search: 'Search spans',
   noMatch: 'No span matches “{query}”.',
   clearSearch: 'Clear search',
-  empty: 'No spans in this trace.',
+  emptyTitle: 'No spans in this trace.',
   loading: 'Loading spans',
   details: 'Details of {name}',
   close: 'Close',
@@ -1110,7 +1057,7 @@ export const topologyDiagram = {
   existing: 'Existing',
   noOptions: 'No options yet.',
   copy: 'Copy {field}',
-  empty: 'Nothing is connected yet.',
+  emptyTitle: 'Nothing is connected yet.',
   loading: 'Loading the topology'
 } as const
 
@@ -1135,7 +1082,7 @@ export const tutorialPanel = {
   title: 'Tutorials',
   description: 'Learn the product by doing a real task, one step at a time.',
   listLabel: 'Available tutorials',
-  empty: 'No tutorials yet.',
+  emptyTitle: 'No tutorials yet.',
   start: 'Start tutorial',
   restart: 'Restart tutorial',
   exit: 'Exit tutorial',
@@ -1144,7 +1091,11 @@ export const tutorialPanel = {
   completedTitle: 'Tutorial complete',
   completedDescription: 'You finished {title}.',
   taskCount: { one: '{count} task', other: '{count} tasks' },
-  stepCount: { one: '{count} step', other: '{count} steps' }
+  stepCount: { one: '{count} step', other: '{count} steps' },
+  taskComplete: 'Complete',
+  taskCurrent: 'Current task',
+  taskNotStarted: 'Not started',
+  progress: '{complete} of {total} complete'
 } as const
 
 export const wizard = {
@@ -1217,7 +1168,13 @@ export const promptInput = {
   submit: 'Submit',
   stop: 'Stop generating',
   count: '{count}/{max}',
-  overLimit: '{count} characters over the limit'
+  overLimit: '{count} characters over the limit',
+  menuResults: {
+    one: '{count} suggestion',
+    other: '{count} suggestions'
+  },
+  noMatch: 'No matches',
+  menuReferences: 'References'
 } as const
 
 export const reasoning = {
@@ -1268,16 +1225,19 @@ export const runtimeApiCloud = {
   label: 'Globals available in the Azion Runtime'
 } as const
 
-export const customerSpotlight = {
+export const clientMosaicColumns = {
   list: 'Customer stories',
   story: 'Read story'
 } as const
 
-export const autoplayControl = {
+export const common = {
   pauseRotation: 'Pause rotation',
   resumeRotation: 'Resume rotation',
   pauseScrolling: 'Pause scrolling',
-  resumeScrolling: 'Resume scrolling'
+  resumeScrolling: 'Resume scrolling',
+  copy: 'Copy',
+  copied: 'Copied',
+  newTab: '(opens in a new tab)'
 } as const
 
 export const closingCallToActionNewsletter = {
@@ -1318,7 +1278,7 @@ export const consoleLayout = {
   accountMenu: 'Account menu',
   accountMenuFor: '{initials}, account menu',
   searchPlaceholder: 'Search pages and commands',
-  searchEmpty: 'No page or command matches your search.',
+  noMatch: 'No page or command matches your search.',
   pages: 'Pages'
 } as const
 
@@ -1329,7 +1289,7 @@ export const docLayout = {
   badge: 'Docs',
   openNavigation: 'Open documentation navigation',
   search: 'Search docs',
-  searchEmpty: 'No page matches your search.',
+  noMatch: 'No page matches your search.',
   pages: 'Pages',
   root: 'Docs',
   collapseNavigation: 'Collapse navigation',
@@ -1339,8 +1299,21 @@ export const docLayout = {
 
 export const siteLayout = {
   searchPlaceholder: 'Search the site',
-  searchEmpty: 'No page matches your search.',
+  noMatch: 'No page matches your search.',
   pages: 'Pages'
+} as const
+
+export const dataTable = {
+  loadingMore: 'Loading more rows',
+  loadMore: 'Load more',
+  noMoreRows: 'No more rows',
+  reorderColumn: 'Order',
+  reorderHandle: 'Reorder {name}, position {position} of {total}',
+  reorderHint: 'Drag, or press Arrow Up or Arrow Down to move.',
+  reorderLocked: 'Clear the sort to reorder rows.',
+  reorderMoved: 'Moved {name} to position {position} of {total}.',
+  reorderDropped: 'Dropped {name} at position {position} of {total}.',
+  reorderCancelled: 'Reorder cancelled.'
 } as const
 
 export const en = {
@@ -1349,7 +1322,6 @@ export const en = {
   alert,
   appLayout,
   articleBody,
-  articleCards,
   articleIndex,
   artifactCanvas,
   artifactPreview,
@@ -1379,18 +1351,15 @@ export const en = {
   confirmDialog,
   conversation,
   copyButton,
-  copyFallback,
   qrCode,
-  promptInputMenu,
   conversationHistory,
-  feedbackReason,
+  feedbackReasonDialog,
   responseBranches,
   datePicker,
   dateRangePicker,
   dialog,
   docFrame,
   docLayout,
-  docMarkdown,
   docOnThisPage,
   docPageHeader,
   docPrevNext,
@@ -1418,7 +1387,7 @@ export const en = {
   logoWall,
   logView,
   mapChart,
-  menu,
+  sidebarMenu,
   multiSelect,
   navigationMenu,
   numberInput,
@@ -1433,7 +1402,6 @@ export const en = {
   progress,
   promptInput,
   propertyFilter,
-  propertyFilterQuery,
   reasoning,
   resizable,
   schemaForm,
@@ -1462,8 +1430,6 @@ export const en = {
   tableCellTags,
   tableCellTime,
   tableLiveButton,
-  tableLoadMore,
-  tableReorder,
   tableSearch,
   tableSortButton,
   tabs,
@@ -1484,11 +1450,12 @@ export const en = {
   otpInput,
   consolePanel,
   runtimeApiCloud,
-  customerSpotlight,
+  clientMosaicColumns,
   sectionCommand,
   searchTrigger,
   copyPromptButton,
   docAgentCard,
-  autoplayControl,
-  closingCallToActionNewsletter
+  common,
+  closingCallToActionNewsletter,
+  dataTable
 }

@@ -5,12 +5,12 @@
 
   defineOptions({ name: 'DocStep', inheritAttrs: false })
 
-  interface Props {
+  export interface DocStepProps {
     /** The step heading. */
     title?: string
   }
 
-  withDefaults(defineProps<Props>(), {
+  withDefaults(defineProps<DocStepProps>(), {
     title: ''
   })
 

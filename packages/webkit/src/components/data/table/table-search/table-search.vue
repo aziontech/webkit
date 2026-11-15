@@ -2,7 +2,7 @@
   import { computed, inject, useAttrs } from 'vue'
 
   import { useTranslate } from '../../../../composables/use-translate'
-  import * as en from '../../../../i18n/messages/en'
+  import * as en from '../../../../locales/en'
   import Input from '../../../inputs/input/input.vue'
   import { TableInjectionKey } from '../injection-key'
 
@@ -11,18 +11,17 @@
     inheritAttrs: false
   })
 
-  withDefaults(
-    defineProps<{
-      /** Placeholder text for the search input. Empty uses the locale catalog (`Search`). */
-      placeholder?: string
-      /** Accessible name of the search field. Empty uses the locale catalog (`Search the table`). */
-      ariaLabel?: string
-    }>(),
-    {
-      placeholder: '',
-      ariaLabel: ''
-    }
-  )
+  export interface TableSearchProps {
+    /** Placeholder text for the search input. Empty uses the locale catalog (`Search`). */
+    placeholder?: string
+    /** Accessible name of the search field. Empty uses the locale catalog (`Search the table`). */
+    ariaLabel?: string
+  }
+
+  withDefaults(defineProps<TableSearchProps>(), {
+    placeholder: '',
+    ariaLabel: ''
+  })
 
   const attrs = useAttrs()
   const { t } = useTranslate({ tableSearch: en.tableSearch })

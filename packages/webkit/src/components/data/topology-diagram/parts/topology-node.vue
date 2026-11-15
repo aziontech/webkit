@@ -2,7 +2,7 @@
   import { computed, useId } from 'vue'
 
   import { useTranslate } from '../../../../composables/use-translate'
-  import * as en from '../../../../i18n/messages/en'
+  import * as en from '../../../../locales/en'
   import CopyButton from '../../../actions/copy-button/copy-button.vue'
   import IconButton from '../../../actions/icon-button/icon-button.vue'
   import Tag from '../../../content/tag/tag.vue'
@@ -12,7 +12,7 @@
   import DropdownMenuTrigger from '../../../navigation/dropdown-menu/dropdown-menu-trigger/dropdown-menu-trigger.vue'
   import Tooltip from '../../../overlay/tooltip/tooltip.vue'
   import FlowAnchor from '../../flow/flow-anchor/flow-anchor.vue'
-  import type { TopologyNode } from '../types'
+  import type { TopologyDiagramNodeData } from '../types'
 
   defineOptions({
     name: 'TopologyDiagramNode'
@@ -20,7 +20,7 @@
 
   const props = defineProps<{
     /** The node to draw. */
-    node: TopologyNode
+    node: TopologyDiagramNodeData
     /** Whether the body is shown. */
     open: boolean
     /** Base data-testid of the diagram. */

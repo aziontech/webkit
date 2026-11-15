@@ -3,7 +3,7 @@
 
   import { useFieldControl } from '../../../composables/use-field-control'
   import { useTranslate } from '../../../composables/use-translate'
-  import * as en from '../../../i18n/messages/en'
+  import * as en from '../../../locales/en'
 
   export type OtpInputMode = 'numeric' | 'alphanumeric'
 
@@ -12,7 +12,7 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface OtpInputProps {
     /** How many characters the code has; one box each. */
     length?: number
     /** `numeric` keeps digits and opens the number keypad; `alphanumeric` keeps letters and digits, upper case. */
@@ -28,9 +28,7 @@
     /** Focus the field on mount, for a screen whose only task is the code. */
     autofocus?: boolean
   }
-  export type OtpInputProps = Props
-
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<OtpInputProps>(), {
     length: 6,
     mode: 'numeric',
     group: 0,

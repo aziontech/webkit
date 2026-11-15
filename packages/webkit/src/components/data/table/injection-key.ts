@@ -11,7 +11,7 @@ import type { ComputedRef, InjectionKey, Ref } from 'vue'
 export type TableRowRecord = Record<string, unknown>
 
 /** Comparison operators; `within` (a period id such as `7d`) and `between` (epoch-millisecond bounds) back the filter menu's date fields. */
-export type FilterOperator =
+export type TableFilterOperator =
   | 'eq'
   | 'neq'
   | 'contains'
@@ -30,16 +30,16 @@ export type FilterOperator =
   | 'between'
 
 /** A filterable value; arrays back the `in` / `not-in` (multi-select) operators. */
-export type FilterValue = string | number | boolean | Array<string | number>
+export type TableFilterValue = string | number | boolean | Array<string | number>
 
 /** One field `Table.Filter` offers: a facet in the menu, a property in the property filter. */
-export interface FilterField {
+export interface TableFilterField {
   /** Matches a column id / accessorKey so client-side filtering can target the column. */
   id: string
   label: string
   type: 'text' | 'number' | 'select' | 'multi-select' | 'boolean' | 'date'
   /** Allowed operators; defaults are derived from `type` when omitted. */
-  operators?: FilterOperator[]
+  operators?: TableFilterOperator[]
   /** Options for `select` / `multi-select` fields. */
   options?: { label: string; value: string | number | boolean }[]
 }
@@ -48,10 +48,10 @@ export interface FilterField {
 export type TableFilterType = 'menu' | 'property'
 
 /** One committed filter condition (a chip). */
-export interface AppliedFilter {
+export interface TableAppliedFilter {
   field: string
-  operator: FilterOperator
-  value: FilterValue
+  operator: TableFilterOperator
+  value: TableFilterValue
   /** Chip label override; otherwise formatted from field + operator + value. */
   label?: string
 }
@@ -63,7 +63,7 @@ export interface TableStateSnapshot {
   columnVisibility?: VisibilityState
   columnOrder?: ColumnOrderState
   globalFilter?: string
-  filters?: AppliedFilter[]
+  filters?: TableAppliedFilter[]
 }
 
 /** Which rows an export writes. */
@@ -73,7 +73,7 @@ export type TableExportScope = 'page' | 'filtered' | 'all'
 export type TableDensity = 'comfortable' | 'compact'
 
 /** Sort state of a column header and its sort button. */
-export type SortDirection = 'none' | 'ascending' | 'descending'
+export type TableSortDirection = 'none' | 'ascending' | 'descending'
 
 /** Imperative API a Table template ref exposes; type the ref with it, as a generic component has no InstanceType. */
 export interface TableExposed<TRecord extends object = TableRowRecord> {
@@ -111,19 +111,19 @@ export interface TableContext {
   /** Turns the live tail on or off (Table.LiveButton). */
   setLive?: (value: boolean) => void
   /** Fields Table.Filter offers when it has no `fields` of its own. */
-  filterFields: ComputedRef<FilterField[]>
+  filterFields: ComputedRef<TableFilterField[]>
   /** Committed structured filters (backs the `filters` model). */
-  appliedFilters: ComputedRef<AppliedFilter[]>
+  appliedFilters: ComputedRef<TableAppliedFilter[]>
   /** Replace the committed filter set (Apply); the DOM event that committed it comes first. */
-  applyFilters: (event: Event, filters: AppliedFilter[]) => void
+  applyFilters: (event: Event, filters: TableAppliedFilter[]) => void
   /** Remove one committed filter; the DOM event that removed it comes first. */
-  removeFilter: (event: Event, filter: AppliedFilter) => void
+  removeFilter: (event: Event, filter: TableAppliedFilter) => void
   /** Clear structured filters and the global search text. */
   clearFilters: () => void
   /** Filter the user asked to edit; Table.Filter watches this to reopen the menu at its field. */
-  editingFilter: Ref<AppliedFilter | null>
+  editingFilter: Ref<TableAppliedFilter | null>
   /** Request editing a committed filter (sets `editingFilter`). */
-  editFilter: (filter: AppliedFilter) => void
+  editFilter: (filter: TableAppliedFilter) => void
   /** Serialize the visible/ordered columns + filtered rows to CSV and download (or emit `export`); the triggering DOM event is emitted first. */
   exportCsv: (
     options?: {

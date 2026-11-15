@@ -8,7 +8,7 @@
   import type {
     DropdownMenuItemValue,
     DropdownMenuPlacement,
-    DropdownMenuPlacementInput
+    DropdownMenuPlacementSide
   } from './injection-key'
   import { DropdownMenuInjectionKey } from './injection-key'
 
@@ -16,7 +16,7 @@
     DropdownMenuItemType,
     DropdownMenuItemValue,
     DropdownMenuPlacement,
-    DropdownMenuPlacementInput
+    DropdownMenuPlacementSide
   } from './injection-key'
 
   defineOptions({
@@ -30,9 +30,9 @@
     footer(): unknown
   }>()
 
-  interface Props {
+  export interface DropdownMenuProps {
     /** Where the panel opens relative to the trigger. `'auto'` picks the best-fitting corner at open time. */
-    placement?: DropdownMenuPlacementInput
+    placement?: DropdownMenuPlacement
     /** Pixel gap between the trigger and the panel. */
     offset?: number
     /** Prevents the trigger from opening the panel and applies disabled tokens. */
@@ -41,7 +41,7 @@
     defaultOpen?: boolean
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<DropdownMenuProps>(), {
     placement: 'bottom-start',
     offset: 4,
     disabled: false,
@@ -103,7 +103,7 @@
     onDismiss: () => setOpen(false)
   })
 
-  const resolvedPlacementRef = computed(() => resolvedPlacement.value as DropdownMenuPlacement)
+  const resolvedPlacementRef = computed(() => resolvedPlacement.value as DropdownMenuPlacementSide)
 
   function setOpen(value: boolean) {
     if (value && props.disabled) return

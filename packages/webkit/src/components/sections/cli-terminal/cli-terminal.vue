@@ -5,6 +5,7 @@
   import CodeBlock from '../../code/code-block/code-block.vue'
   import FrameBox from '../../layout/frame-box/frame-box.vue'
   import SectionModule from '../../marketing/section-module/section-module.vue'
+  import type { SectionTitleAction } from '../../marketing/section-title/section-title.vue'
   import SectionTitle from '../../marketing/section-title/section-title.vue'
   import TextureMaterial from '../../marketing/texture-material/texture-material.vue'
 
@@ -13,22 +14,12 @@
     inheritAttrs: false
   })
 
-  /** The outlined button in the section title. */
-  export type CliTerminalAction = {
-    /** Visible label of the action. */
-    label: string
-    /** Destination the action links to. */
-    href: string
-    /** Closes the label on a trailing chevron that reads as "go". */
-    trailing?: boolean
-    /** Link target of the action. */
-    target?: '_blank' | '_self'
-  }
+  export type { SectionTitleAction }
 
   /** A recorded Azion CLI session the terminal types. */
   export type CliTerminalScript = 'start' | 'deploy'
 
-  interface Props {
+  export interface CliTerminalProps {
     /** In-page id set on the band so a `#hash` link can scroll to it. */
     anchor?: string
     /** Overline above the section title. */
@@ -44,10 +35,10 @@
     /** Accessible name of the session's copy button; empty keeps the code block's own. */
     copyAriaLabel?: string
     /** Outlined button in the section title; `{ label, href, trailing?, target? }`. Omitted when absent. */
-    primaryAction?: CliTerminalAction
+    primaryAction?: SectionTitleAction
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<CliTerminalProps>(), {
     anchor: '',
     eyebrow: '',
     title: '',

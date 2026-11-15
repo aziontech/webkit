@@ -5,10 +5,10 @@ import { defineComponent, nextTick, ref } from 'vue'
 
 import { expectNoA11yViolations } from '../../../test/axe'
 import { TutorialPanelProvider } from '../tutorial-panel'
-import type { Tutorial } from '../tutorial-panel/injection-key'
+import type { TutorialPanelTutorial } from '../tutorial-panel/injection-key'
 import Hotspot from './hotspot.vue'
 
-const tutorials: Tutorial[] = [
+const tutorials: TutorialPanelTutorial[] = [
   {
     id: 'guide',
     title: 'Guide',

@@ -2,7 +2,7 @@
   import { computed, onMounted, onUnmounted, ref, useAttrs } from 'vue'
 
   import { useTranslate } from '../../../composables/use-translate'
-  import * as en from '../../../i18n/messages/en'
+  import * as en from '../../../locales/en'
   import Button from '../../actions/button/button.vue'
   import IconButton from '../../actions/icon-button/icon-button.vue'
   import { MESSAGE_DISMISS_MS } from './presets/transitions'
@@ -15,7 +15,7 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface AlertProps {
     /** Visual severity variant. */
     severity?: AlertSeverity
     /** Size token. Drives the banner height, inline padding, copy scale, and the trailing control sizes. */
@@ -34,7 +34,7 @@
     life?: number
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<AlertProps>(), {
     severity: 'info',
     size: 'medium',
     label: '',

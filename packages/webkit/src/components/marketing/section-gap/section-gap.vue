@@ -12,14 +12,14 @@
   /** How much vertical air the gap holds. */
   export type SectionGapSize = 'small' | 'medium' | 'large'
 
-  interface Props {
+  export interface SectionGapProps {
     /** How much vertical air the gap holds, as a multiple of the theme's largest spacing step: `small` is one `--spacing-2xl`, `medium` two, `large` three. The token is responsive, so every step scales with the viewport. */
     size?: SectionGapSize
     /** Draw the gap's ruled line texture — fine vertical rules at a fixed pitch. */
     hatch?: boolean
   }
 
-  withDefaults(defineProps<Props>(), {
+  withDefaults(defineProps<SectionGapProps>(), {
     size: 'medium',
     hatch: false
   })

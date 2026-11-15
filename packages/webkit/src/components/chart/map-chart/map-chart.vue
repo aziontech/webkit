@@ -14,7 +14,7 @@
 
   import { logicalArrowKey, useDirection } from '../../../composables/use-direction'
   import { useTranslate } from '../../../composables/use-translate'
-  import * as en from '../../../i18n/messages/en'
+  import * as en from '../../../locales/en'
   import { NETWORK_MAP_LAND, NETWORK_MAP_REGIONS } from '../../content/network-map/network-map-data'
   import Alert from '../../feedback/alert/alert.vue'
   import EmptyState from '../../feedback/empty-state/empty-state.vue'
@@ -58,7 +58,7 @@
     color?: ChartColor
   }
 
-  interface Props {
+  export interface MapChartProps {
     /** Countries shaded by value on a five-step sequential scale. */
     regions?: MapChartRegion[]
     /** Locations drawn as bubbles sized by value. */
@@ -83,7 +83,7 @@
     ariaLabel?: string
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<MapChartProps>(), {
     regions: () => [],
     points: () => [],
     view: 'world',

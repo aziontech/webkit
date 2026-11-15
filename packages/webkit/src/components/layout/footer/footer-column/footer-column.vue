@@ -8,12 +8,12 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface FooterColumnProps {
     /** Column group label, rendered above the links and used as the accessible name of the column landmark. */
     title: string
   }
 
-  defineProps<Props>()
+  defineProps<FooterColumnProps>()
 
   defineSlots<{
     /** The Footer.Link items of this column. */

@@ -10,12 +10,12 @@
 
   export type ItemMediaType = 'default' | 'icon' | 'image'
 
-  interface Props {
+  export interface ItemMediaProps {
     /** ItemMedia region variant (icon frame, image frame). */
     type?: ItemMediaType
   }
 
-  withDefaults(defineProps<Props>(), {
+  withDefaults(defineProps<ItemMediaProps>(), {
     type: 'default'
   })
 

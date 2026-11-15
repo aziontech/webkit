@@ -3,7 +3,7 @@
   import { computed, onMounted, onScopeDispose, ref, useAttrs } from 'vue'
 
   import { useTranslate } from '../../../composables/use-translate'
-  import * as en from '../../../i18n/messages/en'
+  import * as en from '../../../locales/en'
   import EmptyState from '../../feedback/empty-state/empty-state.vue'
   import Skeleton from '../../feedback/skeleton/skeleton.vue'
   import { type ChartColor, colorToken, formatCompact, isFiniteNumber } from '../lib'
@@ -25,7 +25,7 @@
     href?: string
   }
 
-  interface Props {
+  export interface BarListProps {
     /** Rows to rank. An item with href renders as a link. */
     items?: BarListItem[]
     /** Row order; none keeps the order of items. */
@@ -50,7 +50,7 @@
     ariaLabel?: string
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<BarListProps>(), {
     items: () => [],
     sort: 'descending',
     color: 1,

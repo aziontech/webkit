@@ -14,3 +14,6 @@ const FooterRoot = Object.assign(Footer, {
 
 export default FooterRoot
 export type { FooterSignature, FooterVariant } from './footer.vue'
+export type { FooterProps } from './footer.vue'
+export type { FooterColumnProps } from './footer-column/footer-column.vue'
+export type { FooterLinkProps } from './footer-link/footer-link.vue'
