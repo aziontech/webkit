@@ -234,7 +234,7 @@ export const typography = {
     textDecorationLine: 'underline',
     textDecorationColor: 'color-mix(in srgb, currentColor 40%, transparent)',
     textUnderlineOffset: '0.15em',
-    borderRadius: 'var(--shape-elements)',
+    borderRadius: 'var(--shape-control)',
     transition: `all ${duration['fast-02']} ${curve['productive-entrance']}`,
     states: {
       hover: {
