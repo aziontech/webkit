@@ -13,32 +13,33 @@
     inheritAttrs: false
   })
 
-  interface Props {
-    /** Columns in order: id, header, type, options, editable, width, minWidth, align; `type` picks the editor (default text). */
-    columns?: DataGridColumn[]
-    /** Field used as the stable row id (cursor, selection and edits follow it). */
-    rowKey?: string
-    /** Adds a leading checkbox column with Select all. */
-    enableRowSelection?: boolean
-    /** Pins the first data column to the inline start edge while the grid scrolls sideways. */
-    frozenFirstColumn?: boolean
-    /** No cell can be edited; the cursor, range selection and copy still work. */
-    readonly?: boolean
-    /** Max height (CSS length) of the scrolling viewport; the header stays on top. */
-    maxHeight?: string
-    /** Accessible name of the grid when no visible heading names it. */
-    ariaLabel?: string
-  }
-
-  const props = withDefaults(defineProps<Props>(), {
-    columns: () => [],
-    rowKey: 'id',
-    enableRowSelection: false,
-    frozenFirstColumn: false,
-    readonly: false,
-    maxHeight: '',
-    ariaLabel: ''
-  })
+  const props = withDefaults(
+    defineProps<{
+      /** Columns in order: id, header, type, options, editable, width, minWidth, align; `type` picks the editor (default text). */
+      columns?: DataGridColumn[]
+      /** Field used as the stable row id (cursor, selection and edits follow it). */
+      rowKey?: string
+      /** Adds a leading checkbox column with Select all. */
+      enableRowSelection?: boolean
+      /** Pins the first data column to the inline start edge while the grid scrolls sideways. */
+      frozenFirstColumn?: boolean
+      /** No cell can be edited; the cursor, range selection and copy still work. */
+      readonly?: boolean
+      /** Max height (CSS length) of the scrolling viewport; the header stays on top. */
+      maxHeight?: string
+      /** Accessible name of the grid when no visible heading names it. */
+      ariaLabel?: string
+    }>(),
+    {
+      columns: () => [],
+      rowKey: 'id',
+      enableRowSelection: false,
+      frozenFirstColumn: false,
+      readonly: false,
+      maxHeight: '',
+      ariaLabel: ''
+    }
+  )
 
   const emit = defineEmits<{
     change: [event: Event, edit: DataGridCellEdit<TRow>]
