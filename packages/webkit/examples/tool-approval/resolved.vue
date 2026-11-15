@@ -1,20 +1,20 @@
 <script setup>
-  import ActionConfirmation from '@aziontech/webkit/action-confirmation'
+  import ToolApproval from '@aziontech/webkit/tool-approval'
 </script>
 
 <template>
   <div class="flex w-full max-w-(--container-3xl) flex-col gap-(--spacing-sm)">
-    <ActionConfirmation
+    <ToolApproval
       title="Allow `purge_urls`?"
       description="Purges https://www.example.com/styles.css from every edge location."
       state="approved"
     />
-    <ActionConfirmation
+    <ToolApproval
       title="Approve deployment to production?"
       description="Deploys the current build of storefront to production."
       state="denied"
     />
-    <ActionConfirmation
+    <ToolApproval
       title="Allow `delete_cache_rule`?"
       description="Removes the rule that caches images for one day."
       state="expired"

@@ -1,6 +1,6 @@
 <script setup>
-  import ActionConfirmation from '@aziontech/webkit/action-confirmation'
   import CodeBlock from '@aziontech/webkit/code-block'
+  import ToolApproval from '@aziontech/webkit/tool-approval'
   import { ref } from 'vue'
 
   const state = ref('pending')
@@ -8,7 +8,7 @@
 
 <template>
   <div class="w-full max-w-(--container-3xl)">
-    <ActionConfirmation
+    <ToolApproval
       title="Allow `azion deploy --env production`?"
       description="Deploys the current build of storefront to production. The previous version stays available for rollback."
       approve-label="Deploy"
@@ -27,6 +27,6 @@
         ]"
         :line-numbers="false"
       />
-    </ActionConfirmation>
+    </ToolApproval>
   </div>
 </template>

@@ -8,11 +8,11 @@
   import MarkdownInline from '../_lib/markdown-inline'
   import { parseInline } from '../_lib/parse-markdown'
 
-  export type ActionConfirmationState = 'pending' | 'approved' | 'denied' | 'expired'
-  export type ActionConfirmationKind = 'default' | 'danger'
+  export type ToolApprovalState = 'pending' | 'approved' | 'denied' | 'expired'
+  export type ToolApprovalKind = 'default' | 'danger'
 
   defineOptions({
-    name: 'ActionConfirmation',
+    name: 'ToolApproval',
     inheritAttrs: false
   })
 
@@ -22,9 +22,9 @@
     /** One or two sentences on what will happen and to what; backticks render as code. */
     description?: string
     /** `pending` asks; `approved`, `denied` and `expired` replace the buttons with the outcome in text. */
-    state?: ActionConfirmationState
+    state?: ToolApprovalState
     /** `danger` for an action that cannot be undone: the approve button turns destructive. */
-    kind?: ActionConfirmationKind
+    kind?: ToolApprovalKind
     /** A word the reader must type before Approve enables, for irreversible actions (the resource name). Empty asks for no typing. */
     confirmationPhrase?: string
     /** Text of the approve button, the verb of the title (`Deploy`, `Delete`). Empty uses the locale catalog (`Approve`). */
@@ -58,14 +58,14 @@
   }>()
 
   const attrs = useAttrs()
-  const { t } = useTranslate({ actionConfirmation: en.actionConfirmation })
+  const { t } = useTranslate({ toolApproval: en.toolApproval })
   const uid = useId()
   const titleId = `${uid}-title`
   const descriptionId = `${uid}-description`
   const phraseId = `${uid}-phrase`
 
   const testId = computed<string>(
-    () => (attrs['data-testid'] as string | undefined) ?? 'ai-action-confirmation'
+    () => (attrs['data-testid'] as string | undefined) ?? 'ai-tool-approval'
   )
   const heading = ref<HTMLElement | null>(null)
   const typed = ref<string>('')
@@ -75,9 +75,9 @@
     () => !props.confirmationPhrase || typed.value.trim() === props.confirmationPhrase
   )
   const resolvedLabel = computed<string>(() => {
-    if (props.state === 'approved') return t('actionConfirmation.approved')
-    if (props.state === 'denied') return t('actionConfirmation.denied')
-    if (props.state === 'expired') return t('actionConfirmation.expired')
+    if (props.state === 'approved') return t('toolApproval.approved')
+    if (props.state === 'denied') return t('toolApproval.denied')
+    if (props.state === 'expired') return t('toolApproval.expired')
     return ''
   })
   const resolvedSeverity = computed(() => {
@@ -162,7 +162,7 @@
           :for="phraseId"
           class="text-label-sm text-(--text-default)"
         >
-          {{ t('actionConfirmation.confirmLabel', { phrase: confirmationPhrase }) }}
+          {{ t('toolApproval.confirmLabel', { phrase: confirmationPhrase }) }}
         </label>
         <input
           :id="phraseId"
@@ -177,7 +177,7 @@
       </div>
       <div class="flex flex-wrap justify-end gap-(--spacing-xs)">
         <Button
-          :label="denyLabel || t('actionConfirmation.deny')"
+          :label="denyLabel || t('toolApproval.deny')"
           kind="outlined"
           size="medium"
           :disabled="loading"
@@ -185,7 +185,7 @@
           @click="deny"
         />
         <Button
-          :label="approveLabel || t('actionConfirmation.approve')"
+          :label="approveLabel || t('toolApproval.approve')"
           :kind="kind === 'danger' ? 'danger' : 'primary'"
           size="medium"
           :disabled="!confirmed"

@@ -1,5 +1,5 @@
 <script setup>
-  import ActionConfirmation from '@aziontech/webkit/action-confirmation'
+  import ToolApproval from '@aziontech/webkit/tool-approval'
   import { ref } from 'vue'
 
   const state = ref('pending')
@@ -7,7 +7,7 @@
 
 <template>
   <div class="w-full max-w-(--container-3xl)">
-    <ActionConfirmation
+    <ToolApproval
       title="Delete the domain `www.example.com`?"
       description="The domain stops answering at once and its certificate is revoked. This cannot be undone."
       kind="danger"

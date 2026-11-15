@@ -4,34 +4,30 @@ import { describe, expect, it } from 'vitest'
 import { nextTick } from 'vue'
 
 import { expectNoA11yViolations } from '../../../test/axe'
-import ActionConfirmation from './action-confirmation.vue'
+import ToolApproval from './tool-approval.vue'
 
 const base = { title: 'Allow `npm test`?', description: 'Runs the test suite of `storefront`.' }
 
-describe('ActionConfirmation', () => {
+describe('ToolApproval', () => {
   it('renders the fallback data-testid and lets a consumer override it', () => {
+    expect(render(ToolApproval, { props: base }).getByTestId('ai-tool-approval')).toBeTruthy()
     expect(
-      render(ActionConfirmation, { props: base }).getByTestId('ai-action-confirmation')
-    ).toBeTruthy()
-    expect(
-      render(ActionConfirmation, { props: base, attrs: { 'data-testid': 'mine' } }).getByTestId(
-        'mine'
-      )
+      render(ToolApproval, { props: base, attrs: { 'data-testid': 'mine' } }).getByTestId('mine')
     ).toBeTruthy()
   })
 
   it('is a group named by its title, with backticks as code and no HTML', () => {
-    const { getByRole, getByTestId } = render(ActionConfirmation, {
+    const { getByRole, getByTestId } = render(ToolApproval, {
       props: { title: 'Allow `rm <b>x</b>`?' }
     })
     expect(getByRole('group', { name: 'Allow rm <b>x</b>?' })).toBeTruthy()
-    const title = getByTestId('ai-action-confirmation__title')
+    const title = getByTestId('ai-tool-approval__title')
     expect(title.querySelector('code')).toHaveTextContent('rm <b>x</b>')
     expect(title.querySelector('b')).toBeNull()
   })
 
   it('emits approve and deny from the buttons, without stealing focus', async () => {
-    const { getByRole, emitted } = render(ActionConfirmation, { props: base })
+    const { getByRole, emitted } = render(ToolApproval, { props: base })
     expect(document.activeElement).toBe(document.body)
     await userEvent.click(getByRole('button', { name: 'Deny' }))
     await userEvent.click(getByRole('button', { name: 'Approve' }))
@@ -42,22 +38,22 @@ describe('ActionConfirmation', () => {
   })
 
   it('emits deny with the event from the keyboard', async () => {
-    const { getByRole, emitted } = render(ActionConfirmation, { props: base })
+    const { getByRole, emitted } = render(ToolApproval, { props: base })
     getByRole('button', { name: 'Deny' }).focus()
     await userEvent.keyboard('{Enter}')
     expect(emitted('deny')![0]![0]).toBeInstanceOf(Event)
   })
 
   it('uses the approve label and the danger kind', () => {
-    const { getByRole, getByTestId } = render(ActionConfirmation, {
+    const { getByRole, getByTestId } = render(ToolApproval, {
       props: { ...base, kind: 'danger', approveLabel: 'Delete' }
     })
     expect(getByRole('button', { name: 'Delete' })).toBeTruthy()
-    expect(getByTestId('ai-action-confirmation')).toHaveAttribute('data-kind', 'danger')
+    expect(getByTestId('ai-tool-approval')).toHaveAttribute('data-kind', 'danger')
   })
 
   it('keeps Approve disabled until the phrase is typed', async () => {
-    const { getByRole, getByLabelText, emitted } = render(ActionConfirmation, {
+    const { getByRole, getByLabelText, emitted } = render(ToolApproval, {
       props: { ...base, confirmationPhrase: 'storefront' }
     })
     const approve = getByRole('button', { name: 'Approve' })
@@ -69,7 +65,7 @@ describe('ActionConfirmation', () => {
   })
 
   it('emits nothing while loading', async () => {
-    const { getByRole, emitted } = render(ActionConfirmation, { props: { ...base, loading: true } })
+    const { getByRole, emitted } = render(ToolApproval, { props: { ...base, loading: true } })
     await userEvent.click(getByRole('button', { name: 'Deny' }))
     expect(emitted('deny')).toBeUndefined()
   })
@@ -79,17 +75,17 @@ describe('ActionConfirmation', () => {
     ['denied', 'Denied'],
     ['expired', 'Request expired']
   ] as const)('replaces the buttons with the %s outcome in text', async (state, text) => {
-    const { queryByRole, getByTestId, rerender } = render(ActionConfirmation, { props: base })
+    const { queryByRole, getByTestId, rerender } = render(ToolApproval, { props: base })
     await rerender({ ...base, state })
     expect(queryByRole('button')).toBeNull()
-    expect(getByTestId('ai-action-confirmation__outcome')).toHaveTextContent(text)
-    expect(getByTestId('ai-action-confirmation__announcer')).toHaveTextContent(text)
-    expect(getByTestId('ai-action-confirmation')).toHaveAttribute('data-status', state)
+    expect(getByTestId('ai-tool-approval__outcome')).toHaveTextContent(text)
+    expect(getByTestId('ai-tool-approval__announcer')).toHaveTextContent(text)
+    expect(getByTestId('ai-tool-approval')).toHaveAttribute('data-status', state)
   })
 
   it('moves focus to its heading through focus()', async () => {
-    const wrapper = render(ActionConfirmation, { props: base })
-    const heading = wrapper.getByTestId('ai-action-confirmation__title')
+    const wrapper = render(ToolApproval, { props: base })
+    const heading = wrapper.getByTestId('ai-tool-approval__title')
     heading.focus()
     await nextTick()
     expect(document.activeElement).toBe(heading)
@@ -97,13 +93,13 @@ describe('ActionConfirmation', () => {
   })
 
   it('has no axe violations pending and resolved', async () => {
-    const pending = render(ActionConfirmation, {
+    const pending = render(ToolApproval, {
       props: { ...base, confirmationPhrase: 'x' },
       slots: { default: () => 'npm test' }
     })
     await expectNoA11yViolations(pending.container)
     pending.unmount()
-    const resolved = render(ActionConfirmation, { props: { ...base, state: 'approved' } })
+    const resolved = render(ToolApproval, { props: { ...base, state: 'approved' } })
     await expectNoA11yViolations(resolved.container)
   })
 })

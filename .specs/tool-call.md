@@ -3,11 +3,11 @@ name: tool-call
 category: ai
 structure: monolithic
 status: implemented
-spec_version: 3
+spec_version: 4
 template: 2
-checksum: 3628644a3ce63272a2245ea642e8c7d36f016fea07200a98ee3530f22f4b0105
+checksum: 95f60b8c89f7a7a70a9a9c6c566facfbfe83fc0d73f3b0207d6486df9edb54dc
 created: 2026-11-11
-last_updated: 2026-11-14
+last_updated: 2026-11-15
 ---
 
 # ToolCall — Component Spec
@@ -18,7 +18,7 @@ One tool or command the agent invoked, shown in the conversation (AI Elements To
 progressive steps): a row with the tool name in code font, an optional plain description, and a status
 (`Waiting`, `Running…`, `Completed`, `Failed`, `Denied`), with the call's input and output in a
 collapsible panel. It is the record of what the agent did; authorization before it runs is
-`ActionConfirmation`.
+`ToolApproval`.
 
 ## When to use
 
@@ -26,13 +26,13 @@ collapsible panel. It is the record of what the agent did; authorization before 
 
 ## When NOT to use
 
-- Asking the reader to allow a call → `action-confirmation` (then a `tool-call` records it).
+- Asking the reader to allow a call → `tool-approval` (then a `tool-call` records it).
 - The model's reasoning → `reasoning`.
 - A long-running job outside a chat → `progress` / `status-indicator` on the resource.
 
 ## Related
 
-- `action-confirmation` — the authorization step before a sensitive call.
+- `tool-approval` — the authorization step before a sensitive call.
 - `status-indicator` — the status the row shows.
 - `code-block`, `key-value-pairs` — what goes in the input and output slots.
 

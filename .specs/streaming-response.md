@@ -3,11 +3,11 @@ name: streaming-response
 category: ai
 structure: monolithic
 status: implemented
-spec_version: 3
+spec_version: 4
 template: 2
-checksum: 69b444afc1094b38b977b87e0c2aec515a1c6d643d42d714bebbdce3cd1067fa
+checksum: 6f49cf09aae0092a338f75552d6bea4f4205cb954da0b442e04d997bc1f74618
 created: 2026-11-11
-last_updated: 2026-11-14
+last_updated: 2026-11-15
 ---
 
 # StreamingResponse — Component Spec
@@ -80,7 +80,7 @@ Numbered citations `[1]` become `Citation` references resolved against `sources`
 
 _None public. Internals shared by the AI family in `src/components/ai/_lib/`: `parse-markdown.ts`
 (`parseMarkdown`, `parseInline`, `safeHref`, `plainText`) and `markdown-inline.vue` (recursive inline
-renderer, also used by `ActionConfirmation` for backticks in its title). Exports: `"./streaming-response"`. Composed DS
+renderer, also used by `ToolApproval` for backticks in its title). Exports: `"./streaming-response"`. Composed DS
 components: `code-block`, `citation`._
 
 ## Props

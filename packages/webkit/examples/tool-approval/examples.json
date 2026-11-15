@@ -1,6 +1,6 @@
 {
-  "component": "action-confirmation",
-  "title": "Components/Primitives/AI/ActionConfirmation",
+  "component": "tool-approval",
+  "title": "Components/Primitives/AI/ToolApproval",
   "examples": [
     {
       "name": "Command",

@@ -1,16 +1,16 @@
 ---
-name: action-confirmation
+name: tool-approval
 category: ai
 structure: monolithic
 status: implemented
-spec_version: 3
+spec_version: 4
 template: 2
-checksum: 2711be5b6fec21bd406d2205e37a2ded1d89aaca16ffed8b34f0b87a519f7505
+checksum: e7ba0c110070a6ef28f869634afef6ace5d7d880621de00b7223e3b482b52626
 created: 2026-11-11
-last_updated: 2026-11-14
+last_updated: 2026-11-15
 ---
 
-# ActionConfirmation — Component Spec
+# ToolApproval — Component Spec
 
 ## Purpose
 
@@ -28,6 +28,7 @@ focus; `focus()` moves focus to its heading when the owner wants to bring the re
 
 ## When to use
 
+- Use ToolApproval only inside an AI conversation when an agent asks permission to run a tool or command; for a person confirming an action they started use ConfirmDialog.
 - One-time authorization of a consequential action proposed by an agent: a production deployment, a purge, a command.
 - An irreversible action (delete): add `confirmationPhrase`.
 
@@ -57,14 +58,14 @@ focus; `focus()` moves focus to its heading when the owner wants to bring the re
 ```vue
 <script setup>
   import { ref } from 'vue'
-  import ActionConfirmation from '@aziontech/webkit/action-confirmation'
+  import ToolApproval from '@aziontech/webkit/tool-approval'
   import CodeBlock from '@aziontech/webkit/code-block'
 
   const state = ref('pending')
 </script>
 
 <template>
-  <ActionConfirmation
+  <ToolApproval
     title="Allow `azion deploy --env production`?"
     description="Deploys the current build of storefront to production."
     approve-label="Deploy"
@@ -72,29 +73,34 @@ focus; `focus()` moves focus to its heading when the owner wants to bring the re
     @approve="state = 'approved'"
     @deny="state = 'denied'"
   >
-    <CodeBlock :tabs="[{ label: 'Shell', value: 'cmd', code: 'azion deploy --env production', language: 'bash' }]" :line-numbers="false" />
-  </ActionConfirmation>
+    <CodeBlock
+      :tabs="[
+        { label: 'Shell', value: 'cmd', code: 'azion deploy --env production', language: 'bash' }
+      ]"
+      :line-numbers="false"
+    />
+  </ToolApproval>
 </template>
 ```
 
 ## Sub-components
 
-_None. Exports: `"./action-confirmation"`; types `ActionConfirmationState`, `ActionConfirmationKind`.
+_None. Exports: `"./tool-approval"`; types `ToolApprovalState`, `ToolApprovalKind`.
 Composed DS components: `button`, `status-indicator`; the title and description reuse
 `StreamingResponse`'s inline renderer so backticks render as code (no HTML). Exposes `focus()`._
 
 ## Props
 
-| Prop                 | Type                                                 | Default     | Required | JSDoc                                                                                                       |
-| -------------------- | ---------------------------------------------------- | ----------- | -------- | ----------------------------------------------------------------------------------------------------------- |
-| `title`              | `string`                                             | —           | true     | The question, naming the action: ``Allow `npm test`?``, `Approve deployment to production?`. Backticks render as code. |
-| `description`        | `string`                                             | `''`        | false    | One or two sentences on what will happen and to what; backticks render as code.                             |
-| `state`              | `'pending' \| 'approved' \| 'denied' \| 'expired'`   | `'pending'` | false    | `pending` asks; `approved`, `denied` and `expired` replace the buttons with the outcome in text.            |
-| `kind`               | `'default' \| 'danger'`                              | `'default'` | false    | `danger` for an action that cannot be undone: the approve button turns destructive.                         |
-| `confirmationPhrase` | `string`                                             | `''`        | false    | A word the reader must type before Approve enables, for irreversible actions (the resource name). Empty asks for no typing. |
-| `approveLabel`       | `string`                                             | `''`        | false    | Text of the approve button, the verb of the title (`Deploy`, `Delete`). Empty uses the locale catalog (`Approve`). |
-| `denyLabel`          | `string`                                             | `''`        | false    | Text of the deny button. Empty uses the locale catalog (`Deny`).                                            |
-| `loading`            | `boolean`                                            | `false`     | false    | A decision is being sent; both buttons are inert and Approve shows its loading state.                       |
+| Prop                 | Type                                               | Default     | Required | JSDoc                                                                                                                       |
+| -------------------- | -------------------------------------------------- | ----------- | -------- | --------------------------------------------------------------------------------------------------------------------------- |
+| `title`              | `string`                                           | —           | true     | The question, naming the action: ``Allow `npm test`?``, `Approve deployment to production?`. Backticks render as code.      |
+| `description`        | `string`                                           | `''`        | false    | One or two sentences on what will happen and to what; backticks render as code.                                             |
+| `state`              | `'pending' \| 'approved' \| 'denied' \| 'expired'` | `'pending'` | false    | `pending` asks; `approved`, `denied` and `expired` replace the buttons with the outcome in text.                            |
+| `kind`               | `'default' \| 'danger'`                            | `'default'` | false    | `danger` for an action that cannot be undone: the approve button turns destructive.                                         |
+| `confirmationPhrase` | `string`                                           | `''`        | false    | A word the reader must type before Approve enables, for irreversible actions (the resource name). Empty asks for no typing. |
+| `approveLabel`       | `string`                                           | `''`        | false    | Text of the approve button, the verb of the title (`Deploy`, `Delete`). Empty uses the locale catalog (`Approve`).          |
+| `denyLabel`          | `string`                                           | `''`        | false    | Text of the deny button. Empty uses the locale catalog (`Deny`).                                                            |
+| `loading`            | `boolean`                                          | `false`     | false    | A decision is being sent; both buttons are inert and Approve shows its loading state.                                       |
 
 ## Events
 
@@ -105,8 +111,8 @@ Composed DS components: `button`, `status-indicator`; the title and description 
 
 ## Slots
 
-| Slot      | Scope | Notes                                                              |
-| --------- | ----- | ------------------------------------------------------------------ |
+| Slot      | Scope | Notes                                                                     |
+| --------- | ----- | ------------------------------------------------------------------------- |
 | `default` | —     | What exactly will run: a `CodeBlock`, or `KeyValuePairs` with parameters. |
 
 ## States
@@ -121,14 +127,14 @@ _No motion of its own; `Button` handles its loading spinner._
 
 ## Tokens
 
-| Region       | Token                                                              |
-| ------------ | ------------------------------------------------------------------ |
+| Region       | Token                                                                                                      |
+| ------------ | ---------------------------------------------------------------------------------------------------------- |
 | frame        | `var(--bg-surface)`, `var(--border-default)` (danger pending: `var(--danger-border)`), `var(--shape-card)` |
-| title        | `.text-heading-xxs`, `var(--text-default)`                         |
-| description  | `.text-body-sm`, `var(--text-muted)`                               |
-| shield glyph | `var(--text-muted)` / `var(--danger-contrast)`                     |
-| phrase input | `var(--border-default)`, `var(--shape-elements)`, `.text-body-sm`  |
-| padding/gaps | `var(--spacing-md)`, `var(--spacing-sm)`, `var(--spacing-xs)`      |
+| title        | `.text-heading-xxs`, `var(--text-default)`                                                                 |
+| description  | `.text-body-sm`, `var(--text-muted)`                                                                       |
+| shield glyph | `var(--text-muted)` / `var(--danger-contrast)`                                                             |
+| phrase input | `var(--border-default)`, `var(--shape-elements)`, `.text-body-sm`                                          |
+| padding/gaps | `var(--spacing-md)`, `var(--spacing-sm)`, `var(--spacing-xs)`                                              |
 
 ## Theme gaps
 
@@ -142,14 +148,14 @@ _None._
 
 ## Internationalization
 
-| Key                               | English source             | Override prop |
-| --------------------------------- | -------------------------- | ------------- |
-| `actionConfirmation.approve`      | `Approve`                  | `approveLabel`|
-| `actionConfirmation.deny`         | `Deny`                     | `denyLabel`   |
-| `actionConfirmation.approved`     | `Approved`                 | —             |
-| `actionConfirmation.denied`       | `Denied`                   | —             |
-| `actionConfirmation.expired`      | `Request expired`          | —             |
-| `actionConfirmation.confirmLabel` | `Type {phrase} to confirm` | —             |
+| Key                         | English source             | Override prop  |
+| --------------------------- | -------------------------- | -------------- |
+| `toolApproval.approve`      | `Approve`                  | `approveLabel` |
+| `toolApproval.deny`         | `Deny`                     | `denyLabel`    |
+| `toolApproval.approved`     | `Approved`                 | —              |
+| `toolApproval.denied`       | `Denied`                   | —              |
+| `toolApproval.expired`      | `Request expired`          | —              |
+| `toolApproval.confirmLabel` | `Type {phrase} to confirm` | —              |
 
 - Formatting: none.
 
@@ -169,13 +175,13 @@ _None._
 
 ## Performance
 
-- Bundle budget: see `.size-limit.json` (`action-confirmation`).
+- Bundle budget: see `.size-limit.json` (`tool-approval`).
 - Runtime budget: static.
 - Heavy parts: none (body content is the owner's).
 
 ## Examples
 
-_Examples in `packages/webkit/examples/action-confirmation/`: Command (pending), Irreversible (typed phrase), Resolved (approved, denied, expired)._
+_Examples in `packages/webkit/examples/tool-approval/`: Command (pending), Irreversible (typed phrase), Resolved (approved, denied, expired)._
 
 ## Constraints — DO NOT
 
