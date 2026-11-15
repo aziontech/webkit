@@ -167,7 +167,7 @@ _none_ — one `.vue` file. The list is rendered by the component itself (telepo
 </template>
 ```
 
-### Grouped
+### Groups
 
 ```vue
 <script setup>

@@ -231,7 +231,7 @@ packages/webkit/src/components/overlay/command/
 </template>
 ```
 
-### Grouped
+### Groups
 
 ```vue
 <script setup>

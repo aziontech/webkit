@@ -1,7 +1,7 @@
 {
  "examples": [
   {
-   "name": "DefaultLogo",
+   "name": "Default",
    "summary": "The default horizontal Azion logo.",
    "sfc": "<script setup>\n  import Default from '@aziontech/webkit/svg/azion/default'\n</script>\n\n<template>\n  <Default />\n</template>"
   },

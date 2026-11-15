@@ -197,7 +197,7 @@
 </template>
 ```
 
-### NodeKinds
+### Nodes
 
 ```vue
 <script setup>

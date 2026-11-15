@@ -180,7 +180,7 @@
    "sfc": "<script setup>\n  import Combobox from '@aziontech/webkit/combobox'\n  import Field from '@aziontech/webkit/field'\n  import { ref } from 'vue'\n\n  const name = ref('API_URL')\n\n  const options = [\n    { value: 'API_URL', description: 'Suggested' },\n    { value: 'API_TOKEN', description: 'Suggested' },\n    { value: 'NODE_ENV', description: 'System' },\n    { value: 'LOG_LEVEL' },\n    { value: 'CACHE_TTL' }\n  ]\n</script>\n\n<template>\n  <Field class=\"max-w-(--container-xs)\">\n    <Field.Label>Variable name</Field.Label>\n    <Combobox\n      v-model=\"name\"\n      :options=\"options\"\n      placeholder=\"Search or type a name\"\n      clearable\n    />\n    <Field.Description>Pick a known variable or type a new one.</Field.Description>\n  </Field>\n</template>"
   },
   {
-   "name": "Grouped",
+   "name": "Groups",
    "sfc": "<script setup>\n  import Combobox from '@aziontech/webkit/combobox'\n  import Field from '@aziontech/webkit/field'\n  import { ref } from 'vue'\n\n  const header = ref('')\n\n  const options = [\n    { value: 'X-Request-Id', group: 'Recent' },\n    { value: 'X-Tenant', group: 'Recent' },\n    { value: 'Cache-Control', group: 'Standard' },\n    { value: 'Content-Type', group: 'Standard' },\n    { value: 'Authorization', group: 'Standard', disabled: true, description: 'Managed' }\n  ]\n</script>\n\n<template>\n  <Field class=\"max-w-(--container-xs)\">\n    <Field.Label>Request header</Field.Label>\n    <Combobox\n      v-model=\"header\"\n      :options=\"options\"\n      placeholder=\"Header name\"\n    />\n  </Field>\n</template>"
   },
   {

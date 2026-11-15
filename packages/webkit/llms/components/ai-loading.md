@@ -77,7 +77,7 @@ _None. Exports: `"./ai-loading"`; type `AiLoadingKind`. Composed DS components: 
 
 ## Examples
 
-### Inline
+### Default
 
 ```vue
 <script setup>

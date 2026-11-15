@@ -141,7 +141,7 @@
 </template>
 ```
 
-### IconLeft
+### IconLeading
 
 ```vue
 <script setup>

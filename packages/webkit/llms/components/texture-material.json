@@ -67,7 +67,7 @@
    "sfc": "<script setup>\n  import TextureMaterial from '@aziontech/webkit/texture-material'\n</script>\n\n<template>\n  <div class=\"relative h-80 w-full overflow-hidden bg-(--bg-canvas)\">\n    <TextureMaterial\n      kind=\"dots\"\n      size=\"medium\"\n      fade=\"none\"\n    />\n  </div>\n</template>"
   },
   {
-   "name": "Kinds",
+   "name": "Variants",
    "sfc": "<script setup>\n  import TextureMaterial from '@aziontech/webkit/texture-material'\n</script>\n\n<template>\n  <div class=\"grid grid-cols-1 gap-(--spacing-md) sm:grid-cols-2\">\n    <div class=\"relative h-64 overflow-hidden bg-(--bg-canvas)\">\n      <TextureMaterial kind=\"dots\" />\n    </div>\n    <div class=\"relative h-64 overflow-hidden bg-(--bg-canvas)\">\n      <TextureMaterial kind=\"grid\" />\n    </div>\n    <div class=\"relative h-64 overflow-hidden bg-(--bg-canvas)\">\n      <TextureMaterial kind=\"lines\" />\n    </div>\n    <div class=\"relative h-64 overflow-hidden bg-(--bg-canvas)\">\n      <TextureMaterial kind=\"dither\" />\n    </div>\n    <div class=\"relative h-64 overflow-hidden bg-(--bg-canvas)\">\n      <TextureMaterial kind=\"pixelate\" />\n    </div>\n  </div>\n</template>"
   },
   {

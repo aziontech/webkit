@@ -11,7 +11,7 @@
    "sfc": "<script setup>\n  import DocCallout from '@aziontech/webkit/doc-callout'\n</script>\n\n<template>\n  <DocCallout kind=\"warning\">\n    <p>\n      Certificates cross-signed by the retired root stop validating on older devices. It will be\n      necessary to take the following actions:\n    </p>\n    <ul>\n      <li>\n        <strong>Certificates on the retired chain</strong>: migrate to the new chain or to an Azion\n        certificate.\n      </li>\n      <li><strong>Other certificates</strong>: no action needed; they are unaffected.</li>\n    </ul>\n  </DocCallout>\n</template>"
   },
   {
-   "name": "Kinds",
+   "name": "Variants",
    "summary": "The six kinds together. Five carry a severity — they say something about the copy's stakes — and `tip` carries none: it takes the page's own surface and rule so a friendly shortcut is not painted the same green as a confirmed success.",
    "sfc": "<script setup>\n  import DocCallout from '@aziontech/webkit/doc-callout'\n</script>\n\n<template>\n  <div class=\"flex flex-col gap-(--spacing-md)\">\n    <DocCallout kind=\"note\">A neutral aside the reader should not skip.</DocCallout>\n    <DocCallout kind=\"info\">Background that explains why the step exists.</DocCallout>\n    <DocCallout kind=\"tip\"\n      >Run <code>azion deploy --local</code> to skip the remote install.</DocCallout\n    >\n    <DocCallout kind=\"check\">The certificate is issued and renews on its own.</DocCallout>\n    <DocCallout kind=\"warning\"\n      >Changing the preset rebuilds every function in the workload.</DocCallout\n    >\n    <DocCallout kind=\"danger\"\n      >Deleting a workload releases its domain and cannot be undone.</DocCallout\n    >\n  </div>\n</template>"
   }

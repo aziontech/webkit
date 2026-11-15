@@ -114,7 +114,7 @@
  "assets": [],
  "examples": [
   {
-   "name": "Command",
+   "name": "Default",
    "sfc": "<script setup>\n  import CodeBlock from '@aziontech/webkit/code-block'\n  import ToolApproval from '@aziontech/webkit/tool-approval'\n  import { ref } from 'vue'\n\n  const status = ref('pending')\n</script>\n\n<template>\n  <div class=\"w-full max-w-(--container-3xl)\">\n    <ToolApproval\n      title=\"Allow `azion deploy --env production`?\"\n      description=\"Deploys the current build of storefront to production. The previous version stays available for rollback.\"\n      approve-label=\"Deploy\"\n      :status=\"status\"\n      @approve=\"status = 'approved'\"\n      @deny=\"status = 'denied'\"\n    >\n      <CodeBlock\n        :tabs=\"[\n          {\n            label: 'Shell',\n            value: 'cmd',\n            code: 'azion deploy --env production --workload storefront',\n            language: 'bash'\n          }\n        ]\"\n        :show-line-numbers=\"false\"\n      />\n    </ToolApproval>\n  </div>\n</template>"
   },
   {

@@ -162,7 +162,7 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
 </template>
 ```
 
-### WithAddonLeft
+### WithAddonStart
 
 ```vue
 <script setup>

@@ -84,7 +84,7 @@
    "sfc": "<script setup>\n  import DocPrompt from '@aziontech/webkit/doc-prompt'\n</script>\n\n<template>\n  <DocPrompt title=\"AI Assistant\">\n    Deploy this repository to Azion and show me the edge URL when it is live.\n  </DocPrompt>\n</template>"
   },
   {
-   "name": "Kinds",
+   "name": "Variants",
    "sfc": "<script setup>\n  import DocPrompt from '@aziontech/webkit/doc-prompt'\n</script>\n\n<template>\n  <div class=\"flex flex-col gap-(--spacing-lg)\">\n    <DocPrompt\n      kind=\"block\"\n      title=\"AI Assistant\"\n    >\n      Deploy this repository to Azion and show me the edge URL when it is live.\n    </DocPrompt>\n    <DocPrompt\n      kind=\"line\"\n      title=\"AI Assistant\"\n    >\n      Deploy this repository to Azion and show me the edge URL when it is live. Then open the\n      deployment log, find the cold-start figure, and summarise it for me.\n    </DocPrompt>\n  </div>\n</template>"
   },
   {

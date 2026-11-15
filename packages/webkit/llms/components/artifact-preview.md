@@ -102,7 +102,7 @@ _None. Exports: `"./artifact-preview"`. Composed DS components: `button` (Open),
 
 ## Examples
 
-### Code
+### Default
 
 ```vue
 <script setup>

@@ -91,7 +91,7 @@
 
 ## Examples
 
-### DefaultFooter
+### Default
 
 ```vue
 <script setup>

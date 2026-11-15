@@ -1,7 +1,7 @@
 {
  "examples": [
   {
-   "name": "States",
+   "name": "Default",
    "summary": "Every status of a tool call in the order an agent goes through them: waiting for authorization, running, completed, failed and denied, each with its status in text.",
    "sfc": "<script setup>\n  import ToolCall from '@aziontech/webkit/tool-call'\n</script>\n\n<template>\n  <div class=\"flex w-full max-w-(--container-3xl) flex-col gap-(--spacing-xs)\">\n    <ToolCall\n      name=\"purge_urls\"\n      title=\"Purging one URL\"\n      status=\"pending\"\n    />\n    <ToolCall\n      name=\"list_workloads\"\n      title=\"Listing your workloads\"\n      status=\"running\"\n    />\n    <ToolCall\n      name=\"get_cache_settings\"\n      title=\"Reading the cache settings of storefront\"\n      status=\"success\"\n    />\n    <ToolCall\n      name=\"get_metrics\"\n      title=\"Reading the error rate\"\n      status=\"error\"\n    />\n    <ToolCall\n      name=\"delete_domain\"\n      title=\"Deleting www.example.com\"\n      status=\"denied\"\n    />\n  </div>\n</template>"
   },

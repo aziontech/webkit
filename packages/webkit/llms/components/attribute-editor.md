@@ -190,7 +190,7 @@
 </template>
 ```
 
-### Grouped
+### Groups
 
 ```vue
 <script setup>

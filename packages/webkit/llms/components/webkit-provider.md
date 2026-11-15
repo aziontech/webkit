@@ -137,7 +137,7 @@
 </template>
 ```
 
-### RightToLeft
+### Rtl
 
 ```vue
 <script setup>

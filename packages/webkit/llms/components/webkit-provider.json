@@ -97,7 +97,7 @@
    "sfc": "<script setup>\n  import { ptBR } from '@aziontech/webkit/locales/pt-BR'\n  import PaginationRoot from '@aziontech/webkit/pagination-root'\n  import WebkitProvider from '@aziontech/webkit/webkit-provider'\n\n  const messages = {\n    pagination: { info: '{start}–{end} de {total} domínios' }\n  }\n</script>\n\n<template>\n  <WebkitProvider\n    locale=\"pt-BR\"\n    :catalogs=\"{ 'pt-BR': ptBR }\"\n    :messages=\"messages\"\n  >\n    <PaginationRoot :total=\"48\" />\n  </WebkitProvider>\n</template>"
   },
   {
-   "name": "RightToLeft",
+   "name": "Rtl",
    "sfc": "<script setup>\n  import PaginationRoot from '@aziontech/webkit/pagination-root'\n  import WebkitProvider from '@aziontech/webkit/webkit-provider'\n</script>\n\n<template>\n  <WebkitProvider locale=\"ar\">\n    <PaginationRoot :total=\"48\" />\n  </WebkitProvider>\n</template>"
   }
  ],

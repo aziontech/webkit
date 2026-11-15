@@ -107,7 +107,7 @@ Composed DS components: `button`, `status-indicator`; the title and description 
 
 ## Examples
 
-### Command
+### Default
 
 ```vue
 <script setup>

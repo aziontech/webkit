@@ -248,7 +248,7 @@
 </template>
 ```
 
-### WithGroups
+### Groups
 
 ```vue
 <script setup>

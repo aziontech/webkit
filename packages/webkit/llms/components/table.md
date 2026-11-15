@@ -135,7 +135,7 @@
 
 ## Examples
 
-### Composition
+### Default
 
 ```vue
 <script setup>

@@ -99,7 +99,7 @@ _None. Exports: `"./tool-call"`; type `ToolCallStatus`. Composed DS components: 
 
 ## Examples
 
-### States
+### Default
 
 ```vue
 <script setup>

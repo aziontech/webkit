@@ -82,7 +82,7 @@ right-to-left: the start region is on the right there. 6.0 removed the physical 
 
 ## Examples
 
-### DefaultHeader
+### Default
 
 ```vue
 <script setup>

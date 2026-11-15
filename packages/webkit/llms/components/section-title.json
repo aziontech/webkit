@@ -118,7 +118,7 @@
    "sfc": "<script setup>\n  import SectionTitle from '@aziontech/webkit/section-title'\n</script>\n\n<template>\n  <SectionTitle\n    eyebrow=\"Platform\"\n    title=\"Everything runs at the edge\"\n    description=\"One platform for applications, security and observability.\"\n  />\n</template>"
   },
   {
-   "name": "Kinds",
+   "name": "Variants",
    "sfc": "<script setup>\n  import SectionTitle from '@aziontech/webkit/section-title'\n</script>\n\n<template>\n  <div>\n    <SectionTitle\n      kind=\"center\"\n      eyebrow=\"Centered\"\n      title=\"A symmetric section opener\"\n      description=\"Copy capped at the reading width and centered in the frame — the default.\"\n    />\n    <SectionTitle\n      kind=\"start\"\n      eyebrow=\"Left\"\n      title=\"The same stack, at the start edge\"\n      description=\"Same anatomy, aligned to the start — for a section that reads rather than announces.\"\n    />\n    <SectionTitle\n      kind=\"split\"\n      eyebrow=\"Horizontal\"\n      title=\"Headline in the first column\"\n      description=\"The description takes the third column, with the middle one left as air. Below the md breakpoint the grid collapses and this falls back under the headline.\"\n    />\n  </div>\n</template>"
   },
   {

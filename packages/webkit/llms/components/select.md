@@ -185,7 +185,7 @@
 </template>
 ```
 
-### Transparent
+### Ghost
 
 ```vue
 <script setup>

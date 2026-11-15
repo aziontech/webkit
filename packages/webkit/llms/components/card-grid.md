@@ -117,7 +117,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 </template>
 ```
 
-### Kinds
+### Variants
 
 ```vue
 <script setup>

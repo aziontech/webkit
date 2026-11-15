@@ -58,7 +58,7 @@
  "assets": [],
  "examples": [
   {
-   "name": "Inline",
+   "name": "Default",
    "sfc": "<script setup>\n  import AiLoading from '@aziontech/webkit/ai-loading'\n</script>\n\n<template>\n  <div class=\"w-full max-w-(--container-md)\">\n    <AiLoading />\n  </div>\n</template>"
   },
   {

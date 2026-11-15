@@ -87,7 +87,7 @@ types `SuggestionItem`, `SuggestionGroupOrientation`._
 
 ## Examples
 
-### FollowUpQuestions
+### Default
 
 ```vue
 <script setup>

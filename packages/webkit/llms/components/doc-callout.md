@@ -99,7 +99,7 @@
 </template>
 ```
 
-### Kinds
+### Variants
 
 ```vue
 <script setup>

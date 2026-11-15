@@ -10652,7 +10652,7 @@ _None. Exports: `"./ai-loading"`; type `AiLoadingKind`. Composed DS components: 
 
 ## Examples
 
-### Inline
+### Default
 
 ```vue
 <script setup>
@@ -11002,7 +11002,7 @@ _None. Exports: `"./artifact-preview"`. Composed DS components: `button` (Open),
 
 ## Examples
 
-### Code
+### Default
 
 ```vue
 <script setup>
@@ -12580,7 +12580,7 @@ types `SuggestionItem`, `SuggestionGroupOrientation`._
 
 ## Examples
 
-### FollowUpQuestions
+### Default
 
 ```vue
 <script setup>
@@ -12725,7 +12725,7 @@ Composed DS components: `button`, `status-indicator`; the title and description 
 
 ## Examples
 
-### Command
+### Default
 
 ```vue
 <script setup>
@@ -12867,7 +12867,7 @@ _None. Exports: `"./tool-call"`; type `ToolCallStatus`. Composed DS components: 
 
 ## Examples
 
-### States
+### Default
 
 ```vue
 <script setup>
@@ -20512,7 +20512,7 @@ Imperative API (root, `defineExpose`): `open(fieldId?: string, returnFocus?: HTM
 
 ## Examples
 
-### Composition
+### Default
 
 ```vue
 <script setup>
@@ -29521,7 +29521,7 @@ packages/webkit/src/components/layout/console-layout/
 
 ## Examples
 
-### DefaultFooter
+### Default
 
 ```vue
 <script setup>
@@ -29833,7 +29833,7 @@ right-to-left: the start region is on the right there. 6.0 removed the physical 
 
 ## Examples
 
-### DefaultHeader
+### Default
 
 ```vue
 <script setup>
