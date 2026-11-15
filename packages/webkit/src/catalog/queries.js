@@ -891,8 +891,16 @@ function patternCard(id, p, score) {
     variants: (p.variants || []).map((v) => v.name),
     source: p.source,
     surface: p.surface ?? 'product',
+    ...(p.kind === 'fragment' ? { kind: 'fragment', note: FRAGMENT_NOTE } : {}),
     ...(score != null ? { score } : {})
   }
+}
+
+const FRAGMENT_NOTE =
+  'A card, not a page: drop this fragment into the page pattern that needs it; it is never a whole screen.'
+
+function screenIntentOf(nq) {
+  return SCREEN_WORDS.some((w) => hasPhrase(nq, normalize(w)))
 }
 
 function isExactPattern(id, p, q) {
@@ -935,13 +943,15 @@ function surfaceOf(wanted) {
   return wanted ? String(wanted).toLowerCase().trim() : null
 }
 
-export function searchPatterns(catalog, query, { surface } = {}) {
+export function searchPatterns(catalog, query, { surface, fragments } = {}) {
   if (!catalog.available) return NOT_AVAILABLE
   const wantedSurface = surfaceOf(surface)
-  const entries = Object.entries(catalog.patterns || {}).filter(
-    ([, p]) => !wantedSurface || (p.surface ?? 'product') === wantedSurface
-  )
   const raw = String(query || '').trim()
+  const nq = normalize(raw)
+  const hideFragments = fragments === false || (fragments !== true && screenIntentOf(nq))
+  const entries = Object.entries(catalog.patterns || {})
+    .filter(([, p]) => !wantedSurface || (p.surface ?? 'product') === wantedSurface)
+    .filter(([id, p]) => !hideFragments || p.kind !== 'fragment' || isExactPattern(id, p, nq))
   const scope = wantedSurface ? { surface: wantedSurface } : {}
   if (!raw) {
     return {
@@ -1050,6 +1060,7 @@ export function getPattern(catalog, id, { variant } = {}) {
     skills: p.skills || [],
     source: p.source,
     surface: p.surface ?? 'product',
+    ...(p.kind === 'fragment' ? { kind: 'fragment', fragmentNote: FRAGMENT_NOTE } : {}),
     ...(moved ? { movedFrom: moved.from, note: movedNote(moved, p) } : {}),
     variant: chosen ? chosen.name : p.primary,
     sfc: chosen ? chosen.sfc : p.sfc,
@@ -1150,7 +1161,7 @@ export function suggestComponent(catalog, need, { surface } = {}) {
 
   const patterns = searchPatterns(catalog, q, opts)
   const topPattern = patterns.matches?.[0]
-  const screenIntent = SCREEN_WORDS.some((w) => hasPhrase(nq, normalize(w)))
+  const screenIntent = screenIntentOf(nq)
   const exactComponent =
     component.best &&
     (component.best.exact === true ||
@@ -1168,7 +1179,10 @@ export function suggestComponent(catalog, need, { surface } = {}) {
       recommendation: 'pattern',
       pattern: topPattern,
       patternAlternatives: patterns.matches.slice(1, 3),
-      hint: `This is a screen: start from the pattern. Call get_pattern("${topPattern.id}") and copy its SFC; use the components below only for pieces the pattern does not cover.`,
+      hint:
+        topPattern.kind === 'fragment'
+          ? `This is a card, not a page: call get_pattern("${topPattern.id}") and drop its SFC into the page pattern that needs it.`
+          : `This is a screen: start from the pattern. Call get_pattern("${topPattern.id}") and copy its SFC; use the components below only for pieces the pattern does not cover.`,
       best: component.best,
       alternatives: component.alternatives
     }
