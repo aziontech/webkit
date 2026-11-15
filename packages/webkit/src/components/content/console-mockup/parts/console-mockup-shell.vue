@@ -12,7 +12,7 @@
   import Avatar from '../../avatar/avatar.vue'
   import Brand from '../../brand/brand.vue'
   import Kbd from '../../kbd/kbd.vue'
-  import { ConsoleMockupShellInjectionKey } from './injection-key'
+  import { ConsoleMockupShellInjectionKey } from '../injection-key'
 
   defineOptions({ name: 'ConsoleMockupShell', inheritAttrs: false })
 

@@ -8,12 +8,12 @@
   import Separator from '../../../layout/separator/separator.vue'
   import Card from '../../card/card.vue'
   import Tag from '../../tag/tag.vue'
+  import { DEFAULT_DEPLOYMENT_STEPS } from '../lib/deployment-steps'
   import ConsoleMockupShell, {
     type ConsoleMockupShellFade,
     type ConsoleMockupShellVariant
-  } from '../console-mockup-shell/console-mockup-shell.vue'
-  import ConsoleMockupShellItem from '../console-mockup-shell/console-mockup-shell-item/console-mockup-shell-item.vue'
-  import { DEFAULT_DEPLOYMENT_STEPS } from '../lib/deployment-steps'
+  } from '../parts/console-mockup-shell.vue'
+  import ConsoleMockupShellItem from '../parts/console-mockup-shell-item.vue'
   import DeploymentLogs from '../parts/deployment-logs.vue'
 
   defineOptions({ name: 'WorkloadDeployLogsWidget' })

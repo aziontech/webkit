@@ -4,7 +4,7 @@
   import FlowDiagramNode from '../../../data/flow-diagram/flow-diagram-node/flow-diagram-node.vue'
   import FlowDiagramParallel from '../../../data/flow-diagram/flow-diagram-parallel/flow-diagram-parallel.vue'
   import Tag, { type TagSeverity } from '../../tag/tag.vue'
-  import ConsoleMockupShell from '../console-mockup-shell/console-mockup-shell.vue'
+  import ConsoleMockupShell from '../parts/console-mockup-shell.vue'
 
   defineOptions({ name: 'WorkloadTopologyFlowWidget' })
 

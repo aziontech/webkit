@@ -6,7 +6,7 @@
   import IconButton from '../../../components/action/icon-button/icon-button.vue'
   import CodeBlock from '../../../components/code/code-block/code-block.vue'
   import Card from '../../../components/content/card/card.vue'
-  import ConsoleMockupShell from '../../../components/content/console-mockup/console-mockup-shell/console-mockup-shell.vue'
+  import ConsoleMockupShell from '../../../components/content/console-mockup/parts/console-mockup-shell.vue'
   import ItemList from '../../../components/content/item/item-list.vue'
   import Tag from '../../../components/content/tag/tag.vue'
   import DataTable from '../../../components/data/data-table/data-table.vue'

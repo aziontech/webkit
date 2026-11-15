@@ -11,8 +11,8 @@
   import Select from '../../../input/select/index'
   import Switch from '../../../input/switch/switch.vue'
   import { type MockupCursorTarget, useMockupCursor } from '../composables/use-mockup-cursor'
-  import ConsoleMockupShell from '../console-mockup-shell/console-mockup-shell.vue'
-  import ConsoleMockupShellItem from '../console-mockup-shell/console-mockup-shell-item/console-mockup-shell-item.vue'
+  import ConsoleMockupShell from '../parts/console-mockup-shell.vue'
+  import ConsoleMockupShellItem from '../parts/console-mockup-shell-item.vue'
   import MockupCursor from '../parts/mockup-cursor.vue'
 
   defineOptions({ name: 'AiInferenceModelFragment' })

@@ -1,10 +1,8 @@
 <script setup lang="ts">
   import { type Component, computed } from 'vue'
 
-  import ConsoleMockupShell, {
-    type ConsoleMockupShellVariant
-  } from '../console-mockup-shell/console-mockup-shell.vue'
   import type { ConsoleMockupPlating } from '../plates'
+  import ConsoleMockupShell, { type ConsoleMockupShellVariant } from './console-mockup-shell.vue'
 
   defineOptions({ name: 'WidgetPlate' })
 

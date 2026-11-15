@@ -14,8 +14,8 @@
   import Tag, { type TagSeverity } from '../../tag/tag.vue'
   import ConsoleMockupShell, {
     type ConsoleMockupShellFade
-  } from '../console-mockup-shell/console-mockup-shell.vue'
-  import ConsoleMockupShellItem from '../console-mockup-shell/console-mockup-shell-item/console-mockup-shell-item.vue'
+  } from '../parts/console-mockup-shell.vue'
+  import ConsoleMockupShellItem from '../parts/console-mockup-shell-item.vue'
 
   defineOptions({ name: 'WorkloadOverviewWidget' })
 

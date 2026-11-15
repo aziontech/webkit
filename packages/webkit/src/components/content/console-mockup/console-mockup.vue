@@ -2,11 +2,11 @@
   import { type Component, computed, markRaw, provide, shallowRef, useAttrs, watch } from 'vue'
 
   import type { TextureVariant } from '../../marketing/texture/texture.vue'
+  import { ConsoleMockupInjectionKey } from './injection-key'
   import type {
     ConsoleMockupShellFade,
     ConsoleMockupShellVariant
-  } from './console-mockup-shell/console-mockup-shell.vue'
-  import { ConsoleMockupInjectionKey } from './injection-key'
+  } from './parts/console-mockup-shell.vue'
   import type * as Plates from './plates'
   import { resolveConsoleMockup } from './registry'
 
