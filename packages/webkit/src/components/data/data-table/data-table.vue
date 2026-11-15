@@ -190,10 +190,10 @@
     'row-click': [event: MouseEvent, row: TRow]
     'filter-apply': [event: Event, filters: AppliedFilter[]]
     'filter-remove': [event: Event, filter: AppliedFilter]
-    refresh: []
-    export: [rows: TRow[]]
+    refresh: [event: Event]
+    export: [event: Event, rows: TRow[]]
     reorder: [event: KeyboardEvent | PointerEvent, payload: { from: number; to: number; row: TRow }]
-    'load-more': []
+    'load-more': [event: Event]
   }>()
 
   /** Row records; `reorderable` writes the new order back (v-model:data). */
@@ -623,9 +623,9 @@
     editingFilter.value = filter
   }
 
-  const reload = (): void => {
+  const reload = (event: Event = new Event('refresh')): void => {
     if (props.loading) return
-    emit('refresh')
+    emit('refresh', event)
   }
 
   const instance = getCurrentInstance()
@@ -637,8 +637,8 @@
     if (scope === 'page') return rows.value.map((row) => row.original)
     return table.getFilteredRowModel().rows.map((row) => row.original)
   }
-  const writeExport = (data: RowRecord[], filename?: string): void => {
-    emit('export', typed<TRow[]>(data))
+  const writeExport = (event: Event, data: RowRecord[], filename?: string): void => {
+    emit('export', event, typed<TRow[]>(data))
     if (hasExportListener()) return
     const columns = table
       .getVisibleLeafColumns()
@@ -649,11 +649,14 @@
       }))
     downloadCsv(filename || props.exportFilename, toCsv({ columns, rows: data }))
   }
-  const exportCsv = (options?: {
-    filename?: string
-    scope?: TableExportScope
-    rows?: RowRecord[]
-  }): Promise<void> => {
+  const exportCsv = (
+    options?: {
+      filename?: string
+      scope?: TableExportScope
+      rows?: RowRecord[]
+    },
+    event: Event = new Event('export')
+  ): Promise<void> => {
     const scope = options?.scope ?? 'filtered'
     const source =
       options?.rows ??
@@ -661,8 +664,8 @@
         ? typed<RowRecord[] | Promise<RowRecord[]>>(props.exportRows(scope))
         : resolveExportRows(scope))
     if (source instanceof Promise)
-      return source.then((data) => writeExport(data, options?.filename))
-    writeExport(source, options?.filename)
+      return source.then((data) => writeExport(event, data, options?.filename))
+    writeExport(event, source, options?.filename)
     return Promise.resolve()
   }
 
@@ -1165,10 +1168,10 @@
   )
 
   const moreRequested = ref<boolean>(false)
-  const requestMore = (): void => {
+  const requestMore = (event: Event = new Event('load-more')): void => {
     if (!props.moreRows || props.loadingMore || props.loading) return
     moreRequested.value = true
-    emit('load-more')
+    emit('load-more', event)
   }
   const moreShown = computed<boolean>(
     () =>

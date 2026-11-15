@@ -744,7 +744,8 @@ describe('DataTable', () => {
 
       await tableRef.value?.exportCsv({ scope: 'all' })
       expect(exported).toHaveBeenCalledTimes(1)
-      expect((exported.mock.calls[0][0] as unknown[]).length).toBe(10000)
+      expect((exported.mock.calls[0][0] as Event).type).toBe('export')
+      expect((exported.mock.calls[0][1] as unknown[]).length).toBe(10000)
       view.unmount()
       host.remove()
     })
@@ -911,7 +912,10 @@ describe('DataTable', () => {
       expect(view.queryByText('item-01')).toBeNull()
     })
 
-    const exportHarness = (mode: 'client' | 'server', onExport: (rows: unknown[]) => void) =>
+    const exportHarness = (
+      mode: 'client' | 'server',
+      onExport: (event: Event, rows: unknown[]) => void
+    ) =>
       defineComponent({
         setup() {
           const data = Array.from({ length: 30 }, (_, i) => ({
@@ -962,7 +966,8 @@ describe('DataTable', () => {
         await waitFor(() => expect(view.getByText('item-10')).toBeTruthy())
         await fireEvent.click(view.getByTestId('data-data-table__export'))
         await waitFor(() => expect(onExport).toHaveBeenCalled())
-        const exported = onExport.mock.calls[0][0] as { name: string }[]
+        expect(onExport.mock.calls[0][0]).toBeInstanceOf(Event)
+        const exported = onExport.mock.calls[0][1] as { name: string }[]
         expect(exported.map((row) => row.name)).toEqual([
           'item-01',
           ...Array.from({ length: 10 }, (_, i) => `item-1${i}`),
@@ -1428,6 +1433,7 @@ describe('DataTable', () => {
       )
       await fireEvent.click(view.getByRole('button', { name: /refresh/i }))
       expect(refreshes).toHaveLength(1)
+      expect(refreshes[0][0]).toBeInstanceOf(MouseEvent)
     })
 
     it('names Table.Search from the locale catalog and an ariaLabel', () => {

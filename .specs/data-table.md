@@ -3,12 +3,12 @@ name: data-table
 category: data
 structure: monolithic
 status: implemented
-spec_version: 3
+spec_version: 4
 template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2053-7649
   node_id: 2053:7649
-checksum: be1e4b854c38d4724337a0c4ebf4945dd55b55a95523337671fb1b980c4920f4
+checksum: 081707eb9283be760304a989154542a8b2619d8b479e8d0ca52fcb978106735b
 created: 2026-11-15
 last_updated: 2026-11-15
 ---
@@ -240,10 +240,10 @@ For a query language of your own (e.g. AQL), bind `PropertyFilter` in `query` mo
 | `row-click`               | `(event: MouseEvent, row: TRow)`                   | Fires when a rendered row is clicked. `event` is the click; `row` is the clicked record.                                                                                                            |
 | `filter-apply`            | `(event: Event, filters: AppliedFilter[])`         | `Table.Filter` committed a pick or a token — the explicit re-query signal for `manualFiltering`.                                                                                                    |
 | `filter-remove`           | `(event: Event, filter: AppliedFilter)`            | One applied filter was removed (a `FilterMenu.Chips` chip).                                                                                                                                         |
-| `refresh`                 | `—`                                                | Refresh requested (`Table.RefreshButton` or `reload()`); the app refetches.                                                                                                                         |
-| `export`                  | `rows: TRow[]`                                     | Export requested with the resolved rows; a consumer may handle it server-side (otherwise the built-in CSV util downloads).                                                                          |
+| `refresh`                 | `(event: Event)`                                                | Refresh requested; the app refetches. `event` is the click of `Table.RefreshButton`, or `new Event('refresh')` when `reload()` is called.                                                                                                                         |
+| `export`                  | `(event: Event, rows: TRow[])`                                     | Export requested with the resolved rows; `event` is the click of `Table.Export`, or `new Event('export')` when `exportCsv()` is called; a consumer may handle it server-side (otherwise the built-in CSV util downloads).                                                                          |
 | `reorder`                 | `(event: KeyboardEvent \| PointerEvent, payload: { from: number; to: number; row: TRow })` | `reorderable`: a row moved from index `from` to index `to` of `data`.                                                                                                                               |
-| `load-more`               | `—`                                                | `moreRows`: the end of the rows neared the viewport, or the Load more button was pressed; the app appends the next rows and sets `loadingMore` meanwhile. Not repeated while `loadingMore` is true. |
+| `load-more`               | `(event: Event)`                                                | `moreRows`: the end of the rows neared the viewport (`new Event('load-more')`) or the Load more button was pressed (its click); the app appends the next rows and sets `loadingMore` meanwhile. Not repeated while `loadingMore` is true. |
 
 ## Slots
 

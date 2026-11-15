@@ -40,8 +40,8 @@
       (ctx ? `${ctx.testId}__export` : 'data-table__export')
   )
 
-  const onExport = (): void =>
-    void ctx?.exportCsv({ filename: props.filename || undefined, scope: props.scope })
+  const onExport = (event?: Event): void =>
+    void ctx?.exportCsv({ filename: props.filename || undefined, scope: props.scope }, event)
 </script>
 
 <template>

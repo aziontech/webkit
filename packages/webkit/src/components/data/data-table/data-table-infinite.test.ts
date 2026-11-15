@@ -24,6 +24,7 @@ function infiniteHost(initial: Item[], props: Record<string, unknown> = {}) {
   const moreRows = ref(true)
   const loadingMore = ref(false)
   const calls = ref(0)
+  const events: Event[] = []
   const Host = defineComponent({
     setup: () => () =>
       h(DataTable, {
@@ -32,14 +33,15 @@ function infiniteHost(initial: Item[], props: Record<string, unknown> = {}) {
         moreRows: moreRows.value,
         loadingMore: loadingMore.value,
         ariaLabel: 'Items',
-        onLoadMore: () => {
+        onLoadMore: (event: Event) => {
+          events.push(event)
           calls.value += 1
           loadingMore.value = true
         },
         ...props
       })
   })
-  return { Host, data, moreRows, loadingMore, calls }
+  return { Host, data, moreRows, loadingMore, calls, events }
 }
 
 describe('DataTable', () => {
@@ -49,6 +51,7 @@ describe('DataTable', () => {
       const { getByTestId, queryByTestId } = render(host.Host)
 
       await waitFor(() => expect(host.calls.value).toBe(1))
+      expect(host.events[0]?.type).toBe('load-more')
       await nextTick()
       expect(getByTestId('data-data-table__more-loading')).toHaveTextContent('Loading more rows')
       expect(getByTestId('data-data-table__table')).toHaveAttribute('aria-busy', 'true')
@@ -75,6 +78,7 @@ describe('DataTable', () => {
       await nextTick()
       await fireEvent.click(getByTestId('data-data-table__more-button'))
       expect(host.calls.value).toBeGreaterThanOrEqual(2)
+      expect(host.events.some((event) => event instanceof MouseEvent)).toBe(true)
     })
 
     it('renders no load-more band without more rows and none while the table is loading', async () => {

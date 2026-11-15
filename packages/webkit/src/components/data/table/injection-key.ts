@@ -124,14 +124,17 @@ export interface TableContext {
   editingFilter: Ref<AppliedFilter | null>
   /** Request editing a committed filter (sets `editingFilter`). */
   editFilter: (filter: AppliedFilter) => void
-  /** Serialize the visible/ordered columns + filtered rows to CSV and download (or emit `export`). */
-  exportCsv: (options?: {
-    filename?: string
-    scope?: TableExportScope
-    rows?: Record<string, unknown>[]
-  }) => Promise<void>
-  /** Signal a refresh; the root emits `refresh` (the app refetches). */
-  reload: () => void
+  /** Serialize the visible/ordered columns + filtered rows to CSV and download (or emit `export`); the triggering DOM event is emitted first. */
+  exportCsv: (
+    options?: {
+      filename?: string
+      scope?: TableExportScope
+      rows?: Record<string, unknown>[]
+    },
+    event?: Event
+  ) => Promise<void>
+  /** Signal a refresh; the root emits `refresh` with the triggering DOM event (the app refetches). */
+  reload: (event?: Event) => void
   /** Id a `TableCaption` takes, so the table is labelled by it (`aria-labelledby`). */
   captionId?: string
   /** A `TableCaption` registers while mounted; returns the unregister function. */

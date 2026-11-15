@@ -36,7 +36,7 @@
   )
 
   const isDisabled = computed<boolean>(() => props.disabled || (ctx?.loading.value ?? false))
-  const onClick = (): void => ctx?.reload()
+  const onClick = (event: MouseEvent): void => ctx?.reload(event)
 </script>
 
 <template>
