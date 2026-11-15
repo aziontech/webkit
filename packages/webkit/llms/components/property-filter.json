@@ -112,11 +112,11 @@
    "doc": "Tokens mode: tokens go into groups with their own Match all / Match any; Add group starts the next one."
   },
   {
-   "name": "hideOperations",
+   "name": "showOperations",
    "type": "boolean",
-   "default": "false",
+   "default": "true",
    "required": "false",
-   "doc": "Hides the Match all / Match any toggle, so the tokens always combine with AND (a model that holds only AND conditions, such as a table's filters)."
+   "doc": "Shows the Match all / Match any toggle; false keeps the tokens combined with AND (a model that holds only AND conditions, such as a table's filters)."
   },
   {
    "name": "loadValues",
@@ -163,7 +163,7 @@
   },
   {
    "name": "WithCollection",
-   "sfc": "<script setup>\n  import DataTable from '@aziontech/webkit/data-table'\n  import PropertyFilter from '@aziontech/webkit/property-filter'\n  import { useCollection } from '@aziontech/webkit/use-collection'\n\n  const workloads = Array.from({ length: 36 }, (_, i) => ({\n    id: String(1001 + i),\n    name: `workload-${String(i + 1).padStart(2, '0')}`,\n    status: ['Active', 'Inactive', 'Degraded'][i % 3],\n    region: ['sa-east', 'us-east', 'eu-west'][i % 3],\n    requests: (i * 137) % 1000\n  }))\n\n  const properties = [\n    {\n      key: 'status',\n      label: 'Status',\n      options: [{ value: 'Active' }, { value: 'Inactive' }, { value: 'Degraded' }]\n    },\n    {\n      key: 'region',\n      label: 'Region',\n      options: [{ value: 'sa-east' }, { value: 'us-east' }, { value: 'eu-west' }]\n    },\n    { key: 'requests', label: 'Requests', type: 'number' }\n  ]\n\n  const columns = [\n    { accessorKey: 'name', header: 'Name', enableSorting: true },\n    { accessorKey: 'status', header: 'Status', enableSorting: true },\n    { accessorKey: 'region', header: 'Region' },\n    { accessorKey: 'requests', header: 'Requests', enableSorting: true, align: 'end' }\n  ]\n\n  const { propertyFilterProps, tableProps } = useCollection({\n    items: workloads,\n    columns,\n    propertyFiltering: { properties },\n    pagination: { pageSize: 10 }\n  })\n</script>\n\n<template>\n  <div class=\"flex flex-col gap-(--spacing-sm)\">\n    <PropertyFilter v-bind=\"propertyFilterProps\" />\n    <DataTable v-bind=\"tableProps\" />\n  </div>\n</template>"
+   "sfc": "<script setup>\n  import DataTable from '@aziontech/webkit/data-table'\n  import PropertyFilter from '@aziontech/webkit/property-filter'\n  import { useCollection } from '@aziontech/webkit/use-collection'\n\n  const workloads = Array.from({ length: 36 }, (_, i) => ({\n    id: String(1001 + i),\n    name: `workload-${String(i + 1).padStart(2, '0')}`,\n    status: ['Active', 'Inactive', 'Degraded'][i % 3],\n    region: ['sa-east', 'us-east', 'eu-west'][i % 3],\n    requests: (i * 137) % 1000\n  }))\n\n  const properties = [\n    {\n      key: 'status',\n      label: 'Status',\n      options: [{ value: 'Active' }, { value: 'Inactive' }, { value: 'Degraded' }]\n    },\n    {\n      key: 'region',\n      label: 'Region',\n      options: [{ value: 'sa-east' }, { value: 'us-east' }, { value: 'eu-west' }]\n    },\n    { key: 'requests', label: 'Requests', type: 'number' }\n  ]\n\n  const columns = [\n    { accessorKey: 'name', header: 'Name', sortable: true },\n    { accessorKey: 'status', header: 'Status', sortable: true },\n    { accessorKey: 'region', header: 'Region' },\n    { accessorKey: 'requests', header: 'Requests', sortable: true, align: 'end' }\n  ]\n\n  const { propertyFilterProps, tableProps } = useCollection({\n    items: workloads,\n    columns,\n    propertyFiltering: { properties },\n    pagination: { pageSize: 10 }\n  })\n</script>\n\n<template>\n  <div class=\"flex flex-col gap-(--spacing-sm)\">\n    <PropertyFilter v-bind=\"propertyFilterProps\" />\n    <DataTable v-bind=\"tableProps\" />\n  </div>\n</template>"
   },
   {
    "name": "QueryMode",

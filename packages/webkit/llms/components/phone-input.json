@@ -8,7 +8,7 @@
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],
- "purpose": "International phone-number control: an `InputGroup` with a searchable dial-code `Select` on the left and a `type=\"tel\"` input on the right that applies the selected country's mask as the user types and accepts exactly the lengths that country allows. Two v-models (`v-model` for the national digits, `v-model:country` for the ISO 3166-1 alpha-2 code) carry the editable state; the one-way `update:phone` event hands the form the full E.164 number and whether it is complete. It carries no label or helper text: wrap it in a `Field` (`Field.Label` + `PhoneInput` + `Field.Description`), and it picks up `id`, `aria-describedby`, `invalid`, `disabled` and `required` from the Field.",
+ "purpose": "International phone-number control: an `InputGroup` with a searchable dial-code `Select` on the left and a `type=\"tel\"` input on the right that applies the selected country's mask as the user types and accepts exactly the lengths that country allows. Two v-models (`v-model` for the national digits, `v-model:country` for the ISO 3166-1 alpha-2 code) carry the editable state; the one-way `phone-change` event hands the form the full E.164 number and whether it is complete. It carries no label or helper text: wrap it in a `Field` (`Field.Label` + `PhoneInput` + `Field.Description`), and it picks up `id`, `aria-describedby`, `invalid`, `disabled` and `required` from the Field.",
  "setup": null,
  "useWhen": [
   "International phone entry where the user picks a country and types the national number with that country's mask.",
@@ -25,8 +25,8 @@
  ],
  "bestPractices": [
   "Put it in a `Field` with a `Field.Label`; the label targets the tel input.",
-  "v-model` holds the national digits only; read `number` from the `update:phone` payload when you need the E.164 value.",
-  "Use `complete` from `update:phone` to decide `invalid` and the `Field.Error` on submit; the control shows no incomplete-number message of its own.",
+  "v-model` holds the national digits only; read `number` from the `phone-change` payload when you need the E.164 value.",
+  "Use `complete` from `phone-change` to decide `invalid` and the `Field.Error` on submit; the control shows no incomplete-number message of its own.",
   "v-model:country` defaults to `'US'`; seed it with the user's country when you know it.",
   "searchPlaceholder` and `searchEmptyLabel` default to English; pass translated copy in localized UIs."
  ],
@@ -118,7 +118,7 @@
  ],
  "events": [
   {
-   "name": "update:phone",
+   "name": "phone-change",
    "payload": "[value: PhoneNumber]",
    "notes": "One-way snapshot of the number, emitted once on mount and again whenever the digits or the country change. `PhoneNumber` (exported from the component) is `{ country: string; dialCode: string; digits: string; number: string; complete: boolean }`: `number` is the full E.164 number (`dialCode + digits`, e.g. `'+14155550100'`; `''` while empty) and `complete` is true when the digit count is one the selected country allows. Not a v-model — the field never reads it back."
   }
@@ -129,7 +129,7 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import Field from '@aziontech/webkit/field'\n  import PhoneInput from '@aziontech/webkit/phone-input'\n  import { ref } from 'vue'\n\n  const digits = ref('')\n  const country = ref('US')\n  const phone = ref(null)\n</script>\n\n<template>\n  <Field\n    required\n    class=\"max-w-(--container-xs)\"\n  >\n    <Field.Label>Phone</Field.Label>\n    <PhoneInput\n      v-model=\"digits\"\n      v-model:country=\"country\"\n      name=\"phone\"\n      @update:phone=\"phone = $event\"\n    />\n    <Field.Description>We'll use this to send the verification code.</Field.Description>\n  </Field>\n</template>"
+   "sfc": "<script setup>\n  import Field from '@aziontech/webkit/field'\n  import PhoneInput from '@aziontech/webkit/phone-input'\n  import { ref } from 'vue'\n\n  const digits = ref('')\n  const country = ref('US')\n  const phone = ref(null)\n</script>\n\n<template>\n  <Field\n    required\n    class=\"max-w-(--container-xs)\"\n  >\n    <Field.Label>Phone</Field.Label>\n    <PhoneInput\n      v-model=\"digits\"\n      v-model:country=\"country\"\n      name=\"phone\"\n      @phone-change=\"phone = $event\"\n    />\n    <Field.Description>We'll use this to send the verification code.</Field.Description>\n  </Field>\n</template>"
   }
  ],
  "docs": "components/phone-input.md"

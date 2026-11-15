@@ -34,7 +34,7 @@
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `severity` | `'critical' \| 'high' \| 'medium' \| 'low' \| 'info'` | `'info'` | false | Severity level; sets how many glyph bars fill, their colour and the default label. |
+| `severity` | `'critical' \| 'high' \| 'medium' \| 'low' \| 'info'` | `'info'` | false | Severity level on the findings scale (exported as `SeverityTagLevel`, distinct from the shared status `Severity`); sets how many glyph bars fill, their colour and the default label. |
 | `label` | `string` | `''` | false | Text of the tag. Empty uses the locale catalog (`Critical`, `High`, `Medium`, `Low`, `Info`). |
 | `size` | `'small' \| 'medium'` | `'medium'` | false | Size token; `medium` is 24px tall, `small` is 20px. |
 

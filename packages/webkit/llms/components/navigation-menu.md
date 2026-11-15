@@ -57,7 +57,7 @@
 
 | Event | Payload | Notes |
 | --- | --- | --- |
-| `open-change-complete` | `open: boolean` | — |
+| `open-transition-end` | `open: boolean` | Fires when the popup finishes its open or close transition. |
 
 ## Slots
 
@@ -73,10 +73,10 @@
 - `navigation-menu-icon.vue` — Public sub-component `navigation-menu-icon`.
 - `navigation-menu-item.vue` — Public sub-component `navigation-menu-item`.
 - `navigation-menu-link.vue` — Public sub-component `navigation-menu-link`, reached as `NavigationMenu.Link`: a top-level link of the bar (`href`, `active`, `close-on-click`) that renders the same anchor as a trigger with an `href`. Attributes it does not declare still flow to the trigger it renders, so a `NavigationMenu.Link` written as a panel trigger keeps working.
-- `navigation-menu-list.vue` — Public sub-component `navigation-menu-list`.
+- `navigation-menu-list.vue` — Public sub-component `navigation-menu-list`; `show-highlight` (default `true`) shows the sliding highlight on the root horizontal list.
 - `navigation-menu-popup.vue` — Public sub-component `navigation-menu-popup`.
 - `navigation-menu-portal.vue` — Public sub-component `navigation-menu-portal`.
-- `navigation-menu-positioner.vue` — Public sub-component `navigation-menu-positioner`.
+- `navigation-menu-positioner.vue` — Public sub-component `navigation-menu-positioner`; `side` is `top | end | bottom | start` (logical: `start`/`end` follow the reading direction) and `track-anchor` (default `true`) keeps the popup on the active trigger.
 - `navigation-menu-trigger.vue` — Public sub-component `navigation-menu-trigger`.
 - `navigation-menu-viewport.vue` — Public sub-component `navigation-menu-viewport`.
 
@@ -89,7 +89,8 @@
 ## States
 
 - Visual states: `default`, `hover`, `focus-visible`, `active`, `disabled`
-- `data-state` values: `open` | `closed` (where applicable)
+- `data-state` values: `open` | `closed` — on the root, the list, each trigger icon, the content, the popup and the backdrop (no `data-open` / `data-closed`)
+- `data-side` on the positioner and the arrow: `top` | `end` | `bottom` | `start`
 
 ## Accessibility
 

@@ -5,7 +5,7 @@
   "Browsing a hierarchy whose depth is not fixed: bucket objects under folders, the source tree of a deployment, functions grouped by application.",
   "Picking one node out of a hierarchy (`selectable`) to show its detail beside the tree, or several (`selectable=\"multiple\"`) to act on them together (move, delete, download).",
   "A hierarchy too large to send at once: mark unloaded parents `lazy` and fetch their children when they open.",
-  "A file browser where people rename nodes where they are (`editable`) and open a node with a double-click (`item-dblclick`).",
+  "A file browser where people rename nodes where they are (`editable`) and open a node with a double-click (`item-double-click`).",
   "A hierarchy the user expands piece by piece, where showing every level at once would bury the node they are after."
  ],
  "avoidWhen": [
@@ -22,13 +22,13 @@
   "skeleton` — the rows the tree renders while `loading`."
  ],
  "bestPractices": [
-  "Give every node an `id` that is unique across the whole tree, not only among its siblings; `v-model:expanded`, `v-model:selected` and focus are keyed by it.",
-  "Seed `v-model:expanded` with the path to the node the user is most likely after (the open folder, the selected file), not with every parent.",
+  "Give every node an `id` that is unique across the whole tree, not only among its siblings; `v-model:open-keys`, `v-model:selected` and focus are keyed by it.",
+  "Seed `v-model:open-keys` with the path to the node the user is most likely after (the open folder, the selected file), not with every parent.",
   "Keep labels short and put secondary detail (size, count, modified date) in `description` so rows scan as names first.",
   "Use `selectable` only when the selection drives something on the screen (a detail pane, a preview); for a tree whose rows only lead somewhere, listen to `item-click` instead.",
   "Put per-row controls in the `actions` slot (an `IconButton` that opens a `dropdown`), never inside the `item` slot, so they do not take over the row's activation.",
-  "For children loaded on demand, mark the node `lazy`, listen to `update:expanded`, set `loading` on the node while the request runs, then patch `children` in (an empty array when it has none) and clear `loading`.",
+  "For children loaded on demand, mark the node `lazy`, listen to `update:openKeys`, set `loading` on the node while the request runs, then patch `children` in (an empty array when it has none) and clear `loading`.",
   "With `editable`, apply the new label from the `rename` event yourself (the tree does not mutate `items`); offer a `Rename` entry in the row actions that calls the exposed `startRename(id)` so the feature is discoverable beyond F2.",
-  "Use `item-dblclick` for a secondary \"open\" action only; single click and Enter stay `item-click`, so nothing requires a double-click."
+  "Use `item-double-click` for a secondary \"open\" action only; single click and Enter stay `item-click`, so nothing requires a double-click."
  ]
 }

@@ -72,7 +72,7 @@ When `status` is `error`, a danger `Alert` with Retry (bound to the collection's
 
 ## Do
 
-- Run the whole list on one `useCollection` call with `selection: { mode: 'multi' }` and bind `cardListProps`, `paginationProps`, `propertyFilterProps` and `preferencesProps` with `v-bind`.
+- Run the whole list on one `useCollection` call with `selection: { mode: 'multiple' }` and bind `cardListProps`, `paginationProps`, `propertyFilterProps` and `preferencesProps` with `v-bind`.
 - Keep the controls row, the cards and the pagination in one band at the group gap; the heading sits one section step above.
 - Name every card with a link to the resource in the `header` slot, and keep its fields to the few that tell one item from another.
 - Render the fields from `preferences.columns`, so the order and visibility set in the dialog reach every card.
@@ -257,7 +257,7 @@ Each variant is the same screen in another state: `get_block("view/card-view", {
     filtering: { fields: ['name', 'domain', 'owner'] },
     propertyFiltering: { properties },
     pagination: { pageSize: 12, pageSizeOptions: [12, 24, 48] },
-    selection: { mode: 'multi' },
+    selection: { mode: 'multiple' },
     preferences: {
       storageKey: 'applications-cards',
       defaults: { columns: [{ id: 'owner', visible: false }] }
@@ -408,7 +408,7 @@ Each variant is the same screen in another state: `get_block("view/card-view", {
             v-if="status === 'empty'"
             :padded="false"
           >
-            <template #content>
+            <template #default>
               <EmptyState
                 size="medium"
                 icon="ai ai-layout-grid"

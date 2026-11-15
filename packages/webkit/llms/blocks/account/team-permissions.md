@@ -262,9 +262,9 @@ Each variant is the same screen in another state: `get_block("account/team-permi
   )
 
   const columns: TableColumn[] = [
-    { accessorKey: 'name', header: 'Name', enableSorting: true, principal: true, hideable: false },
+    { accessorKey: 'name', header: 'Name', sortable: true, principal: true, hideable: false },
     { accessorKey: 'permissionNames', header: 'Permissions', grow: 2 },
-    { accessorKey: 'members', header: 'Members', enableSorting: true, minWidth: 100 },
+    { accessorKey: 'members', header: 'Members', sortable: true, minWidth: 100 },
     { accessorKey: 'status', header: 'Status', minWidth: 110 },
     { id: 'actions', kind: 'action', hideable: false }
   ]
@@ -386,7 +386,7 @@ Each variant is the same screen in another state: `get_block("account/team-permi
           </div>
           <div class="flex shrink-0 flex-wrap items-center gap-(--spacing-xs)">
             <Tooltip
-              text="Refresh"
+              content="Refresh"
               class="shrink-0"
             >
               <IconButton
@@ -399,7 +399,7 @@ Each variant is the same screen in another state: `get_block("account/team-permi
               />
             </Tooltip>
             <Tooltip
-              text="Download CSV"
+              content="Download CSV"
               class="shrink-0"
             >
               <IconButton
@@ -423,7 +423,7 @@ Each variant is the same screen in another state: `get_block("account/team-permi
           severity="danger"
         >
           The teams could not be loaded. Nothing was changed; try again.
-          <template #action>
+          <template #actions>
             <Button
               label="Retry"
               kind="secondary"
@@ -438,7 +438,7 @@ Each variant is the same screen in another state: `get_block("account/team-permi
           v-else-if="!loading && status === 'empty'"
           :padded="false"
         >
-          <template #content>
+          <template #default>
             <EmptyState
               size="medium"
               icon="ai ai-users"
@@ -463,12 +463,12 @@ Each variant is the same screen in another state: `get_block("account/team-permi
           v-else
           :padded="false"
         >
-          <template #content>
+          <template #default>
             <DataTable
               ref="teamsTableEl"
               v-bind="tableProps"
               :loading="loading || refreshing"
-              enable-sorting
+              sortable
               :bordered="false"
               aria-label="Teams"
             >

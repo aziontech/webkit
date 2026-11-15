@@ -298,7 +298,7 @@ Each variant is the same screen in another state: `get_block("shell/docs", { var
       <DocPageHeader
         title="Getting started"
         description="Create a function, instantiate it in an application, and verify the response from the edge."
-        :breadcrumb="crumbs"
+        :breadcrumbs="crumbs"
       />
       <DocProse>
         <DocHeading
@@ -430,7 +430,7 @@ Each variant is the same screen in another state: `get_block("shell/docs", { var
                 placeholder="Language"
               >
                 <Select.Trigger aria-label="Language">
-                  <template #prefix>
+                  <template #leading>
                     <i
                       class="ai ai-globe text-(--text-muted)"
                       aria-hidden="true"

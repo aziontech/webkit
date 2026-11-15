@@ -13,10 +13,10 @@
 ## Do
 
 - With `filters="category-search"`, list the articles newest first and file every article under at least one of `categories`; keep the category list short enough to scroll on one row.
-- With `filters="facets"`, give every item a `facets` entry per facet `key` it can be filtered by (an item without one never matches a selection on that facet), and keep each facet's `options` to values some item carries.
-- Set `empty` so a reader who filters everything away gets a way back; without it the list just disappears.
+- With `filters="facets"`, give every item a `facets` entry per facet `id` it can be filtered by (an item without one never matches a selection on that facet), and keep each facet's `options` to values some item carries.
+- Set `emptyTitle` (and `emptyActionLabel`) so a reader who filters everything away gets a way back; without it the list just disappears.
 - Set `leading` to the number of entries a highlight band above already shows, so they are not listed twice until the reader filters.
-- Leave `rowKind` unset to get the layout that fits the filter bar: `byline` for `category-search`, `centered` for `facets`.
+- Leave `rowKind` unset to get the layout that fits the filter bar: `byline` for `category-search`, `center` for `facets`.
 
 ## Don’t
 
@@ -38,18 +38,21 @@
 | `anchor` | `string` | `''` | false | In-page id set on the band so a `#hash` link can scroll to it. |
 | `title` | `string` | `''` | false | Headline beside the controls, rendered as the band's `h2`; it also names the band. |
 | `filters` | `ArticleIndexFilters` | `'category-search'` | false | Filter bar: `category-search` draws the category picker and the search field, `facets` draws one dropdown per facet. |
-| `items` | `ArticleIndexItem[]` | `[]` | false | The entries, in order; each is `{ key, href, image?, mark?, meta, title, description?, authors?, byline?, categories?, facets?, external? }`. |
+| `items` | `ArticleIndexItem[]` | `[]` | false | The entries, in order; each is `{ id, href, image?, mark?, meta, title, description?, authors?, byline?, categories?, facets?, target? }`. |
 | `categories` | `string[]` | `[]` | false | Segments of the category picker after the show-all segment (`category-search`); the picker is omitted when empty. |
 | `allLabel` | `string` | `''` | false | Label of the first category segment, which shows every category (`category-search`). |
-| `categoryLabel` | `string` | `''` | false | Accessible name of the category picker (`category-search`). |
-| `search` | `ArticleIndexSearch` | `undefined` | false | The search field's `placeholder` and accessible `label` (`category-search`); the field is omitted when absent. |
-| `facets` | `ArticleIndexFacet[]` | `[]` | false | The facet dropdowns, in order (`facets`); each is `{ key, label, allLabel, options }`. |
+| `categoryAriaLabel` | `string` | `''` | false | Accessible name of the category picker (`category-search`). |
+| `searchPlaceholder` | `string` | `''` | false | Placeholder of the search field (`category-search`); the field is omitted when this and `searchAriaLabel` are both empty. |
+| `searchAriaLabel` | `string` | `''` | false | Accessible name of the search field (`category-search`). |
+| `facets` | `ArticleIndexFacet[]` | `[]` | false | The facet dropdowns, in order (`facets`); each is `{ id, label, allLabel, options }`. |
 | `rowLabel` | `string` | `''` | false | Read cue revealed at the end of a row under hover or focus. |
 | `moreLabel` | `string` | `''` | false | Label of the load-more button under the list; without it every match is listed and no button renders. |
 | `pageSize` | `number` | `12` | false | Rows listed per page when `moreLabel` is set; the load-more button reveals the next page. |
 | `leading` | `number` | `0` | false | Leading entries left out until a filter applies, because a band above already shows them. |
-| `empty` | `ArticleIndexEmpty` | `undefined` | false | Copy of the state when nothing matches: `{ title, description?, action? }`; `action` labels a button that clears every filter. |
-| `rowKind` | `ArticleIndexRowKind` | `undefined` | false | Row layout: `byline` pins the writers to the foot of the copy, `centered` centres the copy; unset, `byline` for `category-search` and `centered` for `facets`. |
+| `emptyTitle` | `string` | `''` | false | Headline of the state when nothing matches; the state renders only with it. |
+| `emptyDescription` | `string` | `''` | false | Sentence under the empty-state headline. |
+| `emptyActionLabel` | `string` | `''` | false | Label of the empty-state button that clears every filter; no button renders without it. |
+| `rowKind` | `ArticleIndexRowKind` | `undefined` | false | Row layout: `byline` pins the writers to the foot of the copy, `center` centres the copy; unset, `byline` for `category-search` and `center` for `facets`. |
 | `categoryParam` | `string` | `''` | false | Name of a URL query parameter that preselects a category on load and scrolls the band into view (`category-search`); off when empty. |
 | `ariaLabel` | `string` | `''` | false | Accessible name of the list. |
 
@@ -58,21 +61,21 @@
 - Visual states: `default`, `hover` (a row lights and its read cue rises in), `focus-visible` (inset ring on the row, the read cue rises in)
 - `data-filters` on the list mirrors `filters`; `category-search` clamps the deck to two lines in `text-body-sm`, `facets` sets it in full in `text-body-lg`
 - Filtered (`category-search`): the selected category keeps the entries whose `categories` hold it, the show-all segment keeps every one; the search matches the title and the description; both combine
-- Filtered (`facets`): each facet keeps the entries whose `facets[key]` holds the selected value; its `allLabel` option keeps every one; the facets combine
+- Filtered (`facets`): each facet keeps the entries whose `facets[id]` holds the selected value; its `allLabel` option keeps every one; the facets combine
 - Option search (`facets`): a dropdown whose `options` number more than seven renders a search field above its options; shorter lists render none
 - Paged: with `moreLabel` set, the first `pageSize` matches render and the load-more button, shown while more remain, adds the next `pageSize`; changing a filter returns to the first page
 - Leading: until a filter applies, the first `leading` entries are skipped
-- Empty: when no entry matches, the list and the load-more button are not rendered; with `empty` set, an `EmptyState` (search icon) renders its title and description, and its `action` button clears every filter
-- `data-kind` on the list mirrors the row layout: `byline` spreads the copy so the byline sits at the foot, `centered` centres it
+- Empty: when no entry matches, the list and the load-more button are not rendered; with `emptyTitle` set, an `EmptyState` (search icon) renders `emptyTitle` and `emptyDescription`, and an `emptyActionLabel` button clears every filter
+- `data-kind` on the list mirrors the row layout: `byline` spreads the copy so the byline sits at the foot, `center` centres it
 - A row with no `image` draws its `mark` (the client's logo, flattened to one ink that inverts in the dark theme); an author with an `avatar` URL shows the photo, otherwise the initials
-- An `external` row opens in a new tab (`target="_blank"`, `rel="noopener"`)
+- A row whose `target` is `_blank` opens in a new tab (with `rel="noopener"`)
 - `categoryParam` (`category-search`): on mount (client only) a query value that matches one of `categories` selects it and scrolls the band into view
 
 ## Accessibility
 
 - Visible focus: the headline link draws an inset ring over the whole row; the picker, field, dropdowns and button own theirs.
 - Keyboard map: `Tab` moves through the filter controls, each row and the load-more button; the category picker owns its arrow-key map and each dropdown owns its keyboard map.
-- ARIA: the band is a `<section>` named by `title` (`aria-label`) when one is set, with the title as its `h2`; the toolbar is a `search` landmark; the category picker is a radio group named by `categoryLabel`, the field named by `search.label`, each dropdown trigger named by its facet `label`; the list is named by `ariaLabel`; each row is an `article` whose headline (`h3`) link covers it; the cover is decorative (`alt=""`), a client mark is named by the client, and the read cue `aria-hidden`; an `external` row appends the visually hidden `(opens in a new tab)` to its link; the empty state is a `status`; an option search with no match announces itself as a `status`.
+- ARIA: the band is a `<section>` named by `title` (`aria-label`) when one is set, with the title as its `h2`; the toolbar is a `search` landmark; the category picker is a radio group named by `categoryAriaLabel`, the field named by `searchAriaLabel`, each dropdown trigger named by its facet `label`; the list is named by `ariaLabel`; each row is an `article` whose headline (`h3`) link covers it; the cover is decorative (`alt=""`), a client mark is named by the client, and the read cue `aria-hidden`; a `_blank` row appends the visually hidden `(opens in a new tab)` to its link; the empty state is a `status`; an option search with no match announces itself as a `status`.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): text uses `--text-default` / `--text-muted`.
 - `motion-reduce:transition-none` on every transition.
 - Touch target ≥40×40 px — every row is a full-row link.
@@ -117,15 +120,16 @@
   <ArticleIndex
     anchor="posts"
     all-label="All articles"
-    category-label="Category"
+    category-aria-label="Category"
     row-label="Read article"
     more-label="Load more"
     aria-label="Articles"
     :categories="['Developers', 'Security', 'Company news', 'Serverless']"
-    :search="{ placeholder: 'Search articles', label: 'Search articles' }"
+    search-placeholder="Search articles"
+    search-aria-label="Search articles"
     :items="[
       {
-        key: 'ship-portfolio-two-commands-azion-cli',
+        id: 'ship-portfolio-two-commands-azion-cli',
         href: '/blog/ship-portfolio-two-commands-azion-cli',
         image: placeholderImage,
         meta: 'Developers • SEP 25, 2026',
@@ -137,7 +141,7 @@
         categories: ['Developers']
       },
       {
-        key: 'how-to-reduce-ai-agent-latency',
+        id: 'how-to-reduce-ai-agent-latency',
         href: '/blog/how-to-reduce-ai-agent-latency',
         image: placeholderImage,
         meta: 'Serverless • SEP 23, 2026',
@@ -149,7 +153,7 @@
         categories: ['Serverless']
       },
       {
-        key: 'cloudflare-alternatives-and-competitors',
+        id: 'cloudflare-alternatives-and-competitors',
         href: '/blog/cloudflare-alternatives-and-competitors',
         image: placeholderImage,
         meta: 'Security • SEP 22, 2026',
@@ -182,13 +186,13 @@
     aria-label="Resources"
     :facets="[
       {
-        key: 'contentType',
+        id: 'contentType',
         label: 'Content type',
         allLabel: 'All content types',
         options: ['E-books', 'Blog', 'Comparisons']
       },
       {
-        key: 'industry',
+        id: 'industry',
         label: 'Industry',
         allLabel: 'All industries',
         options: ['Financial', 'Retail', 'Tech']
@@ -196,7 +200,7 @@
     ]"
     :items="[
       {
-        key: 'security-applications-apis-ai-agents',
+        id: 'security-applications-apis-ai-agents',
         href: 'https://www.azion.com/en/lp/security-applications-apis-ai-agents/',
         image: 'https://www.azion.com/assets/content/blog/uploads/Rich%20contentsdark.png',
         meta: 'E-books • OCT 15, 2026',
@@ -206,7 +210,7 @@
         facets: { contentType: ['E-books'] }
       },
       {
-        key: 'azion-mcp-servers-generally-available',
+        id: 'azion-mcp-servers-generally-available',
         href: 'https://www.azion.com/en/blog/azion-mcp-servers-generally-available/',
         image: 'https://www.azion.com/assets/content/blog/uploads/mcp-ga/Azion-MCP.svg',
         meta: 'Blog • OCT 14, 2026',
@@ -215,7 +219,7 @@
         facets: { contentType: ['Blog'] }
       },
       {
-        key: 'cloudflare-to-azion-alternative-guide',
+        id: 'cloudflare-to-azion-alternative-guide',
         href: 'https://www.azion.com/en/lp/cloudflare-to-azion-alternative-guide/',
         image: 'https://www.azion.com/assets/content/lp/uploads/og-image/og-img-cf-to-azion.png',
         meta: 'Comparisons • OCT 3, 2026',
@@ -241,20 +245,19 @@
     anchor="posts"
     title="All articles"
     all-label="All articles"
-    category-label="Category"
+    category-aria-label="Category"
     row-label="Read article"
     more-label="Load more"
     aria-label="Articles"
     :categories="['Developers', 'Security']"
-    :search="{ placeholder: 'Search articles', label: 'Search articles' }"
-    :empty="{
-      title: 'No articles match these filters',
-      description: 'Try another category or a shorter search.',
-      action: 'View all articles'
-    }"
+    search-placeholder="Search articles"
+    search-aria-label="Search articles"
+    empty-title="No articles match these filters"
+    empty-description="Try another category or a shorter search."
+    empty-action-label="View all articles"
     :items="[
       {
-        key: 'ship-a-site-in-two-commands',
+        id: 'ship-a-site-in-two-commands',
         href: '/blog/ship-a-site-in-two-commands',
         image: placeholderImage,
         meta: 'Developers • SEP 25, 2026',

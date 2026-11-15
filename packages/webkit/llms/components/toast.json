@@ -30,7 +30,7 @@
  "related": [
   "alert` — inline severity banner placed in the page flow; it stays until it is closed.",
   "dialog` — blocking modal for decisions and confirmations.",
-  "spinner` — rendered by the `loading` toast type.",
+  "spinner` — rendered while a toast is `loading`.",
   "progress` — rendered under the copy of a `toast.progress` toast."
  ],
  "bestPractices": [
@@ -84,7 +84,7 @@
   {
    "name": "default",
    "scope": "{ toast, dismiss }",
-   "notes": "Optional override for a single toast's body. `toast` is the store entry (`{ id, severity, message, description?, action?, actions?, duration, progress? }`); `dismiss` dismisses that entry. When omitted, the `Toaster` composes `ToastItem` + `Title`/`Description`/`Action`/`Close` from the entry, rendering one `Action` per entry of `actions` (the first two) or the single `action`, and a `Progress` row when the entry has `progress`."
+   "notes": "Optional override for a single toast's body. `toast` is the store entry (`{ id, severity, loading?, message, description?, action?, actions?, duration, progress? }`); `dismiss` dismisses that entry. When omitted, the `Toaster` composes `ToastItem` + `Title`/`Description`/`Action`/`Close` from the entry, rendering one `Action` per entry of `actions` (the first two) or the single `action`, and a `Progress` row when the entry has `progress`."
   }
  ],
  "styleSeam": false,

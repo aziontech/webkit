@@ -73,7 +73,7 @@
  ],
  "events": [
   {
-   "name": "index-change",
+   "name": "active-index-change",
    "payload": "number",
    "notes": "The open claim changed; the payload is the index now open. Fires on the scroll that moved it and on a reader selecting a claim."
   }

@@ -13,6 +13,6 @@
  ],
  "bestPractices": [
   "Write the body as plain blocks — headings, paragraphs and `-` lists separated by blank lines; inline markdown is rendered as text.",
-  "Mark the last breadcrumb entry `current`."
+  "Mark the last breadcrumb entry `active` (it renders `aria-current=\"page\"`)."
  ]
 }

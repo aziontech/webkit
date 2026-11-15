@@ -44,7 +44,7 @@ _None. Exports: `"./ai-loading"`; type `AiLoadingKind`. Composed DS components: 
 
 ## States
 
-- `data-kind`; `data-visible` once the delay has passed. Before that the `role="status"` region exists but is empty, so the text is announced when it appears.
+- `data-kind`; `data-state="closed"` until the delay has passed, then `data-state="open"`. Before that the `role="status"` region exists but is empty, so the text is announced when it appears.
 
 ## Accessibility
 

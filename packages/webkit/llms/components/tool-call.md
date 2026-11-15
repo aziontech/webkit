@@ -35,7 +35,7 @@
 | --- | --- | --- | --- | --- |
 | `name` | `string` | `—` | true | The tool or command identifier, shown in code font (`list_workloads`). |
 | `title` | `string` | `''` | false | What the call does in the reader's words (`Listing your workloads`). Empty shows only the name. |
-| `state` | `'pending' \| 'running' \| 'success' \| 'error' \| 'denied'` | `'running'` | false | pending` waits for authorization, `running` is in flight, then `success`, `error` or `denied` (the reader refused it). |
+| `status` | `'pending' \| 'running' \| 'success' \| 'error' \| 'denied'` | `'running'` | false | pending` waits for authorization, `running` is in flight, then `success`, `error` or `denied` (the reader refused it). |
 | `defaultOpen` | `boolean` | `false` | false | Initial open state when uncontrolled; details start collapsed. |
 | `open` | `boolean` | `undefined as never` | false | Two-way value (`v-model:open`). |
 
@@ -48,7 +48,7 @@
 
 ## Sub-components
 
-_None. Exports: `"./tool-call"`; type `ToolCallState`. Composed DS components: `status-indicator`._
+_None. Exports: `"./tool-call"`; type `ToolCallStatus`. Composed DS components: `status-indicator`._
 
 ## v-model
 
@@ -58,7 +58,7 @@ _None. Exports: `"./tool-call"`; type `ToolCallState`. Composed DS components: `
 
 ## States
 
-- `data-status` mirrors `state`; `data-state="open|closed"` only when a slot makes it expandable.
+- `data-status` mirrors `status`; `data-state="open|closed"` only when a slot makes it expandable.
 - Status mapping: `pending` neutral, `running` info with spinner, `success` success, `error` danger, `denied` warning.
 - Without `input` / `output` the row is static (no button).
 
@@ -111,27 +111,27 @@ _None. Exports: `"./tool-call"`; type `ToolCallState`. Composed DS components: `
     <ToolCall
       name="purge_urls"
       title="Purging one URL"
-      state="pending"
+      status="pending"
     />
     <ToolCall
       name="list_workloads"
       title="Listing your workloads"
-      state="running"
+      status="running"
     />
     <ToolCall
       name="get_cache_settings"
       title="Reading the cache settings of storefront"
-      state="success"
+      status="success"
     />
     <ToolCall
       name="get_metrics"
       title="Reading the error rate"
-      state="error"
+      status="error"
     />
     <ToolCall
       name="delete_domain"
       title="Deleting www.example.com"
-      state="denied"
+      status="denied"
     />
   </div>
 </template>
@@ -154,31 +154,31 @@ _None. Exports: `"./tool-call"`; type `ToolCallState`. Composed DS components: `
     <ToolCall
       name="get_cache_settings"
       title="Reading the cache settings of storefront"
-      state="success"
+      status="success"
     >
       <template #input>
         <CodeBlock
           :tabs="[{ label: 'JSON', value: 'input', code: input, language: 'json' }]"
-          :line-numbers="false"
+          :show-line-numbers="false"
         />
       </template>
       <template #output>
         <CodeBlock
           :tabs="[{ label: 'JSON', value: 'output', code: output, language: 'json' }]"
-          :line-numbers="false"
+          :show-line-numbers="false"
         />
       </template>
     </ToolCall>
     <ToolCall
       name="get_metrics"
       title="Reading the error rate"
-      state="error"
+      status="error"
       default-open
     >
       <template #output>
         <CodeBlock
           :tabs="[{ label: 'JSON', value: 'error', code: failure, language: 'json' }]"
-          :line-numbers="false"
+          :show-line-numbers="false"
         />
       </template>
     </ToolCall>

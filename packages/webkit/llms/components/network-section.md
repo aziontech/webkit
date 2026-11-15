@@ -1,6 +1,6 @@
 # Network Section
 
-> The infrastructure band of a marketing page: a tall framed panel with the world network map drawn behind a small left-aligned title, a lead line and a row of claim chips, closed by a floor of client outcomes (a quote with its highlights and, when given, the client's mark), benefits (a topic each) or stats (headline figures). It is a page section — the site places it from a `{ _id: 'network-section', props }` entry and binds `props` straight onto it — and it composes `section-module`, `frame-box`, `network-map`, `section-title`, `card-grid`, `quote`, `topic` and `big-numbers`. `kind` picks the floor only: `outcomes` renders the quotes on one column per entry — two at least, four at most; `benefits` renders the topics on up to three columns, balanced so every row is full; `stats` renders the figures as a `big-numbers` row. The band above is the same.
+> The infrastructure band of a marketing page: a tall framed panel with the world network map drawn behind a small start-aligned title, a claims eyebrow and a row of claim chips, closed by a floor of client outcomes (a quote with its highlights and, when given, the client's mark), benefits (a topic each) or stats (headline figures). It is a page section — the site places it from a `{ _id: 'network-section', props }` entry and binds `props` straight onto it — and it composes `section-module`, `frame-box`, `network-map`, `section-title`, `card-grid`, `quote`, `topic` and `big-numbers`. `kind` picks the floor only: `outcomes` renders the quotes on one column per entry — two at least, four at most; `benefits` renders the topics on up to three columns, balanced so every row is full; `stats` renders the figures as a `big-numbers` row. The band above is the same.
 
 - Import: `import NetworkSection from '@aziontech/webkit/network-section'`
 - Category: sections · Surface: site · Structure: monolithic
@@ -40,8 +40,8 @@
 | `anchor` | `string` | `''` | false | In-page id set on the band so a `#hash` link can scroll to it. |
 | `eyebrow` | `string` | `''` | false | Overline above the headline. |
 | `title` | `string` | `''` | false | Headline of the band, rendered by the small section title as its `h2`; the band renders nothing when empty. |
-| `lead` | `string` | `''` | false | Overline-set line above the claims. |
-| `claims` | `(string \| NetworkSectionClaim)[]` | `[]` | false | Short figures rendered as chips under the lead, in order; each is a string or `{ label, mobile? }`, where `mobile: false` hides the chip below the medium breakpoint. |
+| `claimsEyebrow` | `string` | `''` | false | Overline-set line above the claims. |
+| `claims` | `(string \| NetworkSectionClaim)[]` | `[]` | false | Short figures rendered as chips under the claims eyebrow, in order; each is a string or `{ label, mobile? }`, where `mobile: false` hides the chip below the medium breakpoint. |
 | `outcomes` | `NetworkSectionOutcome[]` | `[]` | false | Client results for the `outcomes` floor, in order, one column each up to four; each is `{ logo?, logoAlt?, logoTreatment?, text, highlights? }` where `logo` is the mark URL (the cell renders no mark without it), `logoAlt` names the client, `logoTreatment` is `'monochrome'` or `'as-is'`, and `highlights` are the phrases of `text` set in the accent. |
 | `benefits` | `NetworkSectionBenefit[]` | `[]` | false | Topics for the `benefits` floor, in order, on up to three columns balanced so every row is full; each is `{ title, description, icon? }`, rendered as a topic whose title is an `h3`. |
 | `stats` | `NetworkSectionStat[]` | `[]` | false | Figures for the `stats` floor, in order, rendered by `big-numbers`; each is `{ value, label, prefix?, suffix? }`. |
@@ -63,7 +63,7 @@
 - Visible focus: nothing in the band is interactive.
 - Keyboard map: none.
 - ARIA: the band is a `<section>` named by its title (`aria-label`); the headline is the section title's `h2`; the claims are a real list; the maps are decorative and hidden from assistive technology by `network-map`; each outcome's mark carries the client name as `alt`; benefit topics are `h3`s; the `stats` floor is `big-numbers`, one `figure` per stat with its label as the caption. A claim hidden below the medium breakpoint is `display: none` there, so assistive technology skips it too.
-- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): lead `var(--text-muted)`, claims `var(--text-default)` on a tinted canvas; the map sits at low opacity behind the copy and never under the text column on large screens.
+- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): claims eyebrow `var(--text-muted)`, claims `var(--text-default)` on a tinted canvas; the map sits at low opacity behind the copy and never under the text column on large screens.
 - `motion-reduce:transition-none motion-reduce:transform-none` — the map animation belongs to `network-map`, which carries its own reduced-motion fallback; this band adds no motion.
 - Touch target ≥40×40 px — not applicable, nothing is interactive.
 
@@ -89,11 +89,11 @@
 
 ```vue
 <script setup>
-  import NetworkSection from '@aziontech/webkit/network-section'
   import dafitiExtendedMono from '@aziontech/webkit/assets/dafiti-extended-mono.svg'
   import fourbankExtendedReversed from '@aziontech/webkit/assets/fourbank-extended-reversed.svg'
   import madeiramadeiraExtendedReversed from '@aziontech/webkit/assets/madeiramadeira-extended-reversed.svg'
   import rennerExtendedColor from '@aziontech/webkit/assets/renner-extended-color.svg'
+  import NetworkSection from '@aziontech/webkit/network-section'
 </script>
 
 <template>
@@ -101,7 +101,7 @@
     kind="outcomes"
     eyebrow="Region: Earth."
     title="One distributed infrastructure without the complexity of managing, securing and scaling it"
-    lead="Built around your users. Distributed around your data."
+    claims-eyebrow="Built around your users. Distributed around your data."
     :claims="[
       '100+ data centers',
       '100+ Tbps network capacity',
@@ -159,7 +159,7 @@
       kind="outcomes"
       eyebrow="Region: Earth."
       title="One distributed infrastructure without the complexity of managing, securing and scaling it"
-      lead="Built around your users. Distributed around your data."
+      claims-eyebrow="Built around your users. Distributed around your data."
       :claims="[
         '100+ data centers',
         '100+ Tbps network capacity',
@@ -201,7 +201,7 @@
       kind="benefits"
       eyebrow="Region: Earth."
       title="One distributed infrastructure without the complexity of managing, securing and scaling it"
-      lead="Built around your users. Distributed around your data."
+      claims-eyebrow="Built around your users. Distributed around your data."
       :claims="[
         '100+ data centers',
         '100+ Tbps network capacity',
@@ -231,7 +231,7 @@
       anchor="network-figures"
       eyebrow="Region: Earth."
       title="One distributed infrastructure without the complexity of managing, securing and scaling it"
-      lead="Built around your users. Distributed around your data."
+      claims-eyebrow="Built around your users. Distributed around your data."
       :claims="[
         '100+ data centers',
         '100+ Tbps network capacity',
@@ -333,7 +333,7 @@
       kind="outcomes"
       eyebrow="Region: Earth."
       :title="`${count} outcomes set the floor in ${count} columns`"
-      lead="Built around your users. Distributed around your data."
+      claims-eyebrow="Built around your users. Distributed around your data."
       :claims="claims"
       :outcomes="outcomes.slice(0, count)"
     />
@@ -343,7 +343,7 @@
       kind="benefits"
       eyebrow="Region: Earth."
       :title="`${count} benefits balanced on up to three columns`"
-      lead="Built around your users. Distributed around your data."
+      claims-eyebrow="Built around your users. Distributed around your data."
       :claims="claims"
       :benefits="benefits.slice(0, count)"
     />

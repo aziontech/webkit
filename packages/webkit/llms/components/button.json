@@ -38,7 +38,7 @@
   "kind=\"link\"` has no box: no height, padding or surface, `text-body-sm` in the link colour, underlined on hover. `size` does not apply to it; place it where body text sits (a cell, a summary line, under a section).",
   "Set `loading` while the action resolves: it swaps the icon for a spinner, sets `aria-busy` and suppresses `click`, so the handler needs no extra guard.",
   "Use `iconPosition=\"leading\"` for a glyph that names the action and `\"trailing\"` for one that points where it goes; add `animated` only on marketing CTAs with a trailing icon.",
-  "Put brand or product marks in the `prefix` slot; `icon` takes an Azion icon class.",
+  "Put brand or product marks in the `leading` slot; `icon` takes an Azion icon class.",
   "label` is required and is the accessible name; never pass an empty string to get an icon-only control."
  ],
  "props": [
@@ -134,7 +134,7 @@
    "notes": "The visible label, as shadcn and Radix take children; falls back to `label`. Plain text keeps the button's typography."
   },
   {
-   "name": "prefix",
+   "name": "leading",
    "scope": "—",
    "notes": "A mark drawn before the label, ahead of a leading `icon`. It stays first when `iconPosition=\"trailing\"`, so a brand mark and a trailing chevron can share one control."
   }

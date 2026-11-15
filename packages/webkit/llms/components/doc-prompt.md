@@ -57,7 +57,7 @@
 
 - Visual states: `default`, `focus-visible` (on the `line` shape, which is a scroll container)
 - `data-kind` mirrors the `kind` prop: `block` | `line`
-- `data-expanded` — present on the prompt text when a capped `block` has been opened by the reader
+- `data-state` — `open` | `closed` on the prompt text of a capped `block`: `open` once the reader has opened it
 - `data-capped` — present on the root when a `block` prompt is taller than its four-line cap; absent when it fits, so a prompt that fits earns no disclosure control
 - `data-overflow` — on the `line` shape: `start` | `end` | `both`, whichever edge has text scrolled behind it; absent when the line fits
 - `data-single-line` — on the prompt row when the prompt occupies exactly one line (`line` always; a `block` whose sentence fits its column). The row then centres the prompt against the copy control instead of top-aligning it — the control is 28px and one line of the prompt face is 19.5px, so a top-aligned pair leaves the sentence 4.25px above the control's middle. Absent the moment the prompt wraps.

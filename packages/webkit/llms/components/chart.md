@@ -129,7 +129,7 @@ The root `chart.vue` renders a `<figure>` with a CSS grid: the plot cell (every 
   - Events: _none_.
   - Slots: _none_.
 - `chart-bar/chart-bar.vue` — bars at most 24px thick, a rounded data end and a square baseline, a 2px surface gap between touching bars; grouped or stacked; horizontal when the root is horizontal. `kind="histogram"` draws solid columns instead: each column fills its category band less a 1px gap, stacked segments touch with no surface gap, both ends are square, and the value axis ends at the tallest column (no nice-ceiling headroom) unless the root sets `max`.
-  - Props: `ids?: string[]` (default `[]`), `stacked?: boolean` (default `false`), `labeled?: boolean` (default `false` — the formatted value at each bar end, for ordered bars), `kind?: 'default' | 'histogram'` (default `'default'` — `histogram` for event volume over contiguous time buckets).
+  - Props: `ids?: string[]` (default `[]`), `stacked?: boolean` (default `false`), `showLabels?: boolean` (default `false` — the formatted value at each bar end, for ordered bars), `kind?: 'default' | 'histogram'` (default `'default'` — `histogram` for event volume over contiguous time buckets).
   - Events: _none_.
   - Slots: _none_.
 - `chart-scatter/chart-scatter.vue` — one dot per value (r 4, a 1.5px `var(--bg-surface)` ring), r 6 at the active index; no connecting line. With `labelScale="linear"` the dots sit at their label value, so it reads as a scatter plot.

@@ -20,7 +20,7 @@
   "Title is a question naming the action and target; put tool and command names in backticks (code).",
   "Match the approve label to the title verb (`Deploy`, `Delete`) when it is not a generic tool call.",
   "Never pre-focus or pre-select Approve for a risky action.",
-  "Do not leave a request pending forever: expire it (`state=\"expired\"`) and have the assistant say nothing ran.",
+  "Do not leave a request pending forever: expire it (`status=\"expired\"`) and have the assistant say nothing ran.",
   "After Deny, the assistant acknowledges in the conversation (\"Skipping that step.\")."
  ]
 }

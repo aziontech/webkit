@@ -307,22 +307,22 @@ Each variant is the same screen in another state: `get_block("account/billing", 
   ]
 
   const columns: TableColumn[] = [
-    { accessorKey: 'number', header: 'No.', label: 'Number', enableSorting: true, minWidth: 72 },
+    { accessorKey: 'number', header: 'No.', label: 'Number', sortable: true, minWidth: 72 },
     {
       accessorKey: 'id',
       header: 'Invoice ID',
-      enableSorting: true,
+      sortable: true,
       principal: true,
       hideable: false,
       minWidth: 140
     },
-    { accessorKey: 'plan', header: 'Plan', enableSorting: true, minWidth: 96 },
+    { accessorKey: 'plan', header: 'Plan', sortable: true, minWidth: 96 },
     { accessorKey: 'cycle', header: 'Cycle', minWidth: 100 },
-    { accessorKey: 'seats', header: 'Seats', enableSorting: true, minWidth: 80 },
-    { accessorKey: 'billedAt', header: 'Billing date', enableSorting: true, minWidth: 130 },
-    { accessorKey: 'amount', header: 'Amount', enableSorting: true, minWidth: 110 },
+    { accessorKey: 'seats', header: 'Seats', sortable: true, minWidth: 80 },
+    { accessorKey: 'billedAt', header: 'Billing date', sortable: true, minWidth: 130 },
+    { accessorKey: 'amount', header: 'Amount', sortable: true, minWidth: 110 },
     { accessorKey: 'paymentMethod', header: 'Payment method', grow: 2, minWidth: 200 },
-    { accessorKey: 'status', header: 'Status', enableSorting: true, minWidth: 110 },
+    { accessorKey: 'status', header: 'Status', sortable: true, minWidth: 110 },
     { id: 'actions', kind: 'action', hideable: false }
   ]
 
@@ -344,7 +344,7 @@ Each variant is the same screen in another state: `get_block("account/billing", 
     {
       accessorKey: 'holder',
       header: 'Card holder',
-      enableSorting: true,
+      sortable: true,
       principal: true,
       hideable: false,
       grow: 2
@@ -395,7 +395,7 @@ Each variant is the same screen in another state: `get_block("account/billing", 
             >Updated {{ updatedFormat(UPDATED_AT) }}</span
           >
           <Tooltip
-            text="Refresh"
+            content="Refresh"
             class="shrink-0"
           >
             <IconButton
@@ -435,7 +435,7 @@ Each variant is the same screen in another state: `get_block("account/billing", 
           severity="danger"
         >
           Your billing data could not be loaded. Nothing was charged or changed; try again.
-          <template #action>
+          <template #actions>
             <Button
               label="Retry"
               kind="secondary"
@@ -463,7 +463,7 @@ Each variant is the same screen in another state: `get_block("account/billing", 
                     />
                   </div>
                 </template>
-                <template #content>
+                <template #default>
                   <div class="flex min-w-0 flex-col gap-(--spacing-md)">
                     <div class="flex min-w-0 items-center gap-(--spacing-xs)">
                       <Skeleton
@@ -519,7 +519,7 @@ Each variant is the same screen in another state: `get_block("account/billing", 
                 <template #header>
                   <h2 class="text-heading-xs text-(--text-default)">Upgrade to Enterprise</h2>
                 </template>
-                <template #content>
+                <template #default>
                   <div class="flex min-w-0 flex-col gap-(--spacing-lg)">
                     <p class="text-body-sm text-(--text-muted)">
                       Higher limits, commitments that lower the price and a support team for
@@ -584,7 +584,7 @@ Each variant is the same screen in another state: `get_block("account/billing", 
               </div>
               <div class="flex shrink-0 flex-wrap items-center gap-(--spacing-xs)">
                 <Tooltip
-                  text="Refresh"
+                  content="Refresh"
                   class="shrink-0"
                 >
                   <IconButton
@@ -597,7 +597,7 @@ Each variant is the same screen in another state: `get_block("account/billing", 
                   />
                 </Tooltip>
                 <Tooltip
-                  text="Download CSV"
+                  content="Download CSV"
                   class="shrink-0"
                 >
                   <IconButton
@@ -621,7 +621,7 @@ Each variant is the same screen in another state: `get_block("account/billing", 
               key="invoices-empty"
               :padded="false"
             >
-              <template #content>
+              <template #default>
                 <EmptyState
                   size="medium"
                   icon="ai ai-file"
@@ -647,12 +647,12 @@ Each variant is the same screen in another state: `get_block("account/billing", 
               key="invoices-table"
               :padded="false"
             >
-              <template #content>
+              <template #default>
                 <DataTable
                   ref="invoicesTableEl"
                   v-bind="tableProps"
                   :loading="loading"
-                  enable-sorting
+                  sortable
                   :bordered="false"
                   aria-label="Invoices"
                 >
@@ -698,7 +698,7 @@ Each variant is the same screen in another state: `get_block("account/billing", 
                     <span class="sr-only">Actions</span>
                   </template>
                   <template #cell-actions="{ row }">
-                    <Tooltip text="Download invoice">
+                    <Tooltip content="Download invoice">
                       <IconButton
                         icon="ai ai-file-pdf"
                         kind="outlined"
@@ -750,7 +750,7 @@ Each variant is the same screen in another state: `get_block("account/billing", 
               </template>
             </SectionHeader>
             <Card>
-              <template #content>
+              <template #default>
                 <KeyValuePairs
                   :columns="4"
                   :loading="loading"
@@ -792,13 +792,13 @@ Each variant is the same screen in another state: `get_block("account/billing", 
               </template>
             </SectionHeader>
             <Card :padded="false">
-              <template #content>
+              <template #default>
                 <DataTable
                   :data="paymentMethods"
                   :columns="methodColumns"
                   row-key="id"
                   :loading="loading"
-                  enable-sorting
+                  sortable
                   :bordered="false"
                   aria-label="Payment methods"
                 >

@@ -1,6 +1,6 @@
 # Hero Form
 
-> The opening band of a lead-capture page, where the form is the reason for the page: the hero copy and a list of highlights on one side, the form on the other, above the fold, with the client strip on the floor. It is a page section — the site places it from a `{ _id: 'hero-form', props }` entry and binds `props` straight onto it — and it composes `hero`, `hero-title`, `topic`, `field`, `input`, `select`, `phone-input`, `textarea`, `button` and `alert`. The fields are data: each entry of `fields` picks its control by `kind`, so the Contact page and the Under attack page are the same block with different `fields`. The block never sends: it validates the fields locally (required fields and the email format, with the messages from `messages`) and on a valid submit emits `submit` with the event and the values keyed by field `name`; the site posts them and reports the outcome back through `loading`, `submitted` and `error`.
+> The opening band of a lead-capture page, where the form is the reason for the page: the hero copy and a list of highlights on one side, the form on the other, above the fold, with the client strip on the floor. It is a page section — the site places it from a `{ _id: 'hero-form', props }` entry and binds `props` straight onto it — and it composes `hero`, `hero-title`, `topic`, `field`, `input`, `select`, `phone-input`, `textarea`, `button` and `alert`. The fields are data: each entry of `fields` picks its control by `kind`, so the Contact page and the Under attack page are the same block with different `fields`. The block never sends: it validates the fields locally (required fields and the email format, with the messages from `messages`) and on a valid submit emits `submit` with the event and the values keyed by field `name`; the site posts them and reports the outcome back through `loading`, `submitted` and `failed`.
 
 - Import: `import HeroForm from '@aziontech/webkit/hero-form'`
 - Category: sections · Surface: site · Structure: monolithic
@@ -17,7 +17,7 @@
 - Mark half-width fields in pairs so each row stays full.
 - Set `visuallyHiddenLabel` on a field the page labels by its placeholder alone (azion.com's phone field): the label stays the control's accessible name for assistive tech but is not drawn, so give that field a `placeholder` that says what to type.
 - Keep the headline to a short phrase; the band sets it on a narrower measure than the description (`--container-md`), so "Grow as an Azion Partner" breaks over two lines as on the site. There is no width prop to tune.
-- Set `loading` while the values are sent, then `submitted` or `error` with the outcome.
+- Set `loading` while the values are sent, then `submitted` or `failed` with the outcome.
 
 ## Don’t
 
@@ -36,7 +36,7 @@
 | --- | --- | --- | --- | --- |
 | `messages` | `HeroFormMessages` | `—` | true | Copy of the form outcomes: `{ missing, invalidEmail, success, error }`. |
 | `eyebrow` | `string` | `''` | false | Short overline above the headline. |
-| `highlight` | `string` | `''` | false | Opening words of the headline, painted in the brand accent. |
+| `titleHighlight` | `string` | `''` | false | Opening words of the headline, painted in the brand accent. |
 | `title` | `string` | `''` | false | Page headline, rendered as the page `h1`; the band renders nothing when empty. |
 | `description` | `string` | `''` | false | Sentence under the headline. |
 | `descriptionLink` | `HeroFormLink` | `undefined` | false | A link continuing the description inline, such as a phone line; `{ label, href }`. Omitted when absent. |
@@ -52,7 +52,7 @@
 | `tickerMarks` | `string[]` | `[]` | false | Registry names of the client marks, in order; the ticker renders only when there are marks. |
 | `loading` | `boolean` | `false` | false | The site is sending the values: the button shows its loading state and a submit is ignored. |
 | `submitted` | `boolean` | `false` | false | The site sent the values: the form gives way to `messages.success`. |
-| `error` | `boolean` | `false` | false | The site could not send the values: `messages.error` shows under the form. |
+| `failed` | `boolean` | `false` | false | The site could not send the values: `messages.error` shows under the form. |
 
 ## Events
 
@@ -66,11 +66,11 @@
 
 ## States
 
-- Visual states: `default`, `invalid`, `loading`, `submitted`, `error`
+- Visual states: `default`, `invalid`, `loading`, `submitted`, `failed`
 - `invalid`: on submit, an empty required field shows `messages.missing` and a malformed email `messages.invalidEmail` under the field; focus moves to the first field in error; editing the field clears it; nothing is emitted
 - `loading` (prop): the button shows its loading state, every field is disabled (the scope locks off the one flag) and a submit emits nothing; `data-loading` on the root
 - `submitted` (prop): the form is replaced by a success `Alert` with `messages.success`, which takes focus when focus was in the form; `data-submitted` on the root
-- `error` (prop): a danger `Alert` with `messages.error` shows under the button; the form stays editable; `data-error` on the root
+- `failed` (prop): a danger `Alert` with `messages.error` shows under the button; the form stays editable; `data-failed` on the root
 - A field with `visuallyHiddenLabel` renders its `Field.Label` visually hidden (`sr-only`), so the control keeps its accessible name and the page shows only the placeholder
 - The headline caps at `--container-md` while the description and highlights keep the `lg` column
 - `descriptionLink` renders inline after `description`, underlined, followed by `descriptionAfter`, so the copy reads as one sentence
@@ -261,7 +261,7 @@ No built-in strings: every label, placeholder, message and action is a prop from
 <template>
   <HeroForm
     eyebrow="Sales"
-    highlight=""
+    title-highlight=""
     title="Talk to our sales team"
     description="Get a custom demo, plan your migration, and explore plans and pricing built for your company."
     :items="items"
@@ -377,7 +377,7 @@ No built-in strings: every label, placeholder, message and action is a prop from
 <template>
   <HeroForm
     eyebrow="Under Cyberattack?"
-    highlight=""
+    title-highlight=""
     title="Mitigating Cyberattacks"
     description="Our digital security team is available to provide immediate assistance."
     :items="items"
@@ -544,7 +544,7 @@ No built-in strings: every label, placeholder, message and action is a prop from
 <template>
   <HeroForm
     eyebrow="Sales"
-    highlight=""
+    title-highlight=""
     title="Talk to our sales team"
     description="Get a custom demo, plan your migration, and explore plans and pricing built for your company."
     :items="items"

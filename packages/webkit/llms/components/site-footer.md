@@ -18,7 +18,7 @@
 - **Don't** wrap it in a bordered or padded `div` (`border-t`, `py-*`): the rules double and the frame drifts off the page column.
 - Use `kind: 'site'` under a framed marketing page, so the footer draws the page frame and closes on its bottom rule; the page above must not draw a bottom rule of its own.
 - Keep four link columns so the grid fills at `md`.
-- Set `external: true` on a link that leaves azion.com (Community, Status): it opens in a new tab, draws the external-link glyph after the label and tells assistive tech it opens a new tab. Never add the glyph or `target` yourself.
+- Set `target: '_blank'` on a link that leaves azion.com (Community, Status): it opens in a new tab, draws the external-link glyph after the label and tells assistive tech it opens a new tab. Never add the glyph yourself.
 - Give every social link a `label` that names the network, since the button shows only the glyph.
 
 ## Don’t
@@ -40,7 +40,7 @@
 | `ariaLabel` | `string` | `''` | false | Accessible name of the footer landmark. Empty uses the locale catalog (`Footer`). |
 | `home` | `string` | `''` | false | Destination of the Azion mark; the mark is not rendered when empty. |
 | `homeAriaLabel` | `string` | `''` | false | Accessible name of the Azion mark link. Empty uses the locale catalog (`Azion home`). |
-| `columns` | `SiteFooterColumn[]` | `[]` | false | The link columns, in order; each is `{ title, links }` where every link is `{ label, href, external? }`; an `external` link opens in a new tab and closes on the external-link glyph. |
+| `columns` | `SiteFooterColumn[]` | `[]` | false | The link columns, in order; each is `{ title, links }` where every link is `{ label, href, target? }`; a `_blank` link opens in a new tab and closes on the external-link glyph. |
 | `socials` | `SiteFooterSocial[]` | `[]` | false | The profile icon buttons, in order; each is `{ icon, label, href }` where `label` names the button for assistive tech. They open in a new tab. |
 | `statusLabel` | `string` | `''` | false | Line of the system status indicator; the indicator is not rendered when empty. |
 | `languages` | `string[]` | `[]` | false | Options of the language select, as the reader sees them; the first one is selected until `v-model:language` holds another. The select is not rendered when empty. |
@@ -61,7 +61,7 @@
 - The status indicator sits in the footer's `status` slot and the language select in its `language` slot; below `md` they share the bottom bar at its two ends, from `md` they sit side by side at its end
 - The social buttons are small icon buttons
 - The status indicator, the language select and the Azion mark each render only when their prop is set
-- An `external` link sets `target="_blank"` and `rel="noopener noreferrer"`, draws the `ai ai-external-link` glyph after its label in the label's own colour (hidden from assistive tech) and appends the catalog's “(opens in a new tab)” as screen-reader text
+- A link whose `target` is `_blank` sets `rel="noopener noreferrer"` and `data-external`, draws the `ai ai-external-link` glyph after its label in the label's own colour (hidden from assistive tech) and appends the catalog's “(opens in a new tab)” as screen-reader text
 - Server render and hydration: both marks are always in the DOM and CSS shows one per width (the social-row mark from `lg`, the signature mark below it), so the server HTML, the first client render and every later render are the same tree — nothing moves on mount.
 
 ## Accessibility
@@ -195,7 +195,7 @@
         {
           label: 'Status',
           href: '#',
-          external: true
+          target: '_blank'
         }
       ]
     },

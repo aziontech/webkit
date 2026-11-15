@@ -126,7 +126,7 @@ Each variant is the same screen in another state: `get_block("account/activity-h
   import PageHeader from '@aziontech/webkit/page-header'
   import PropertyFilter from '@aziontech/webkit/property-filter'
   import Table, { type TableColumn, type TableExposed } from '@aziontech/webkit/table'
-  import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
+  import Tag, { type TagSeverity, type TagVariant } from '@aziontech/webkit/tag'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { type FilteringProperty, useCollection } from '@aziontech/webkit/use-collection'
   import { computed, ref } from 'vue'
@@ -233,16 +233,20 @@ Each variant is the same screen in another state: `get_block("account/activity-h
 
   const events = ref(seedEvents)
 
-  const categorySeverity = (category: ActivityCategory): TagSeverity =>
-    (
-      ({
-        'Sign-in': 'info',
-        Security: 'warning',
-        Deploy: 'success',
-        Users: 'neutral',
-        Billing: 'primary'
-      }) as const
-    )[category] ?? 'neutral'
+  const categorySeverity = (category: ActivityCategory): TagSeverity | undefined =>
+    category === 'Billing'
+      ? undefined
+      : ((
+          {
+            'Sign-in': 'info',
+            Security: 'warning',
+            Deploy: 'success',
+            Users: 'neutral'
+          } as const
+        )[category] ?? 'neutral')
+
+  const categoryVariant = (category: ActivityCategory): TagVariant | undefined =>
+    category === 'Billing' ? 'primary' : undefined
 
   const range = ref<DateRangeValue>({
     type: 'relative',
@@ -291,10 +295,10 @@ Each variant is the same screen in another state: `get_block("account/activity-h
 
   const columns: TableColumn[] = [
     { accessorKey: 'event', header: 'Event', principal: true, hideable: false, grow: 2 },
-    { accessorKey: 'category', header: 'Category', enableSorting: true, minWidth: 120 },
-    { accessorKey: 'user', header: 'User', enableSorting: true, minWidth: 200 },
+    { accessorKey: 'category', header: 'Category', sortable: true, minWidth: 120 },
+    { accessorKey: 'user', header: 'User', sortable: true, minWidth: 200 },
     { accessorKey: 'ip', header: 'IP address', minWidth: 150 },
-    { accessorKey: 'at', header: 'Date', enableSorting: true, minWidth: 150 }
+    { accessorKey: 'at', header: 'Date', sortable: true, minWidth: 150 }
   ]
 
   const { tableProps, propertyFilterProps, preferencesProps, status, matchingItems, clearFilters } =
@@ -382,7 +386,7 @@ Each variant is the same screen in another state: `get_block("account/activity-h
               :show-time-zone="false"
             />
             <Tooltip
-              text="Refresh"
+              content="Refresh"
               class="shrink-0"
             >
               <IconButton
@@ -395,7 +399,7 @@ Each variant is the same screen in another state: `get_block("account/activity-h
               />
             </Tooltip>
             <Tooltip
-              text="Download CSV"
+              content="Download CSV"
               class="shrink-0"
             >
               <IconButton
@@ -419,7 +423,7 @@ Each variant is the same screen in another state: `get_block("account/activity-h
           severity="danger"
         >
           The activity could not be loaded. Nothing was changed; try again.
-          <template #action>
+          <template #actions>
             <Button
               label="Retry"
               kind="secondary"
@@ -434,7 +438,7 @@ Each variant is the same screen in another state: `get_block("account/activity-h
           v-else-if="!loading && status === 'empty'"
           :padded="false"
         >
-          <template #content>
+          <template #default>
             <EmptyState
               size="medium"
               icon="ai ai-history"
@@ -465,18 +469,19 @@ Each variant is the same screen in another state: `get_block("account/activity-h
           v-else
           :padded="false"
         >
-          <template #content>
+          <template #default>
             <DataTable
               ref="activityTableEl"
               v-bind="tableProps"
               :loading="loading"
-              enable-sorting
+              sortable
               :bordered="false"
               aria-label="Activity history"
             >
               <template #cell-category="{ value }">
                 <Tag
                   :label="value"
+                  :variant="categoryVariant(value)"
                   :severity="categorySeverity(value)"
                   size="small"
                 />

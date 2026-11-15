@@ -1,6 +1,6 @@
 # Listing Browser
 
-> The full, browsable listing of a page such as the Careers jobs list: a headline over a toolbar (a search field, one select per facet and one for the order) and every row under its group, as a table from the small breakpoint up and as a list of items below it, with an empty state when nothing matches. A row may carry its client's mark, drawn before the name on the table and above it on phones; a pointer click anywhere on a table row follows the row link; the other columns are metadata in the small overline, each cut to one line with its full text as a tooltip; group headings stick under the site header while their rows scroll. Below the large breakpoint the toolbar folds to the search field and a filter button that reveals the selects, with each applied facet listed under it as a removable chip. A select with more than seven options gains an option search. Search, facets and order are local state over the rows the page carries; a facet is seeded from `?<key>=` in the URL when the value is one the page offers. It is a page section — the site places it from a `{ _id: 'listing-browser', props }` entry and binds `props` straight onto it — so its whole API is the props below, and it composes `section-module`, `section-title`, `frame-box`, `input`, `select`, `table`, `item`, `chip`, `empty-state` and `button` rather than owning any anatomy of its own.
+> The full, browsable listing of a page such as the Careers jobs list: a headline over a toolbar (a search field, one select per facet and one for the order) and every row under its group, as a table from the small breakpoint up and as a list of items below it, with an empty state when nothing matches. A row may carry its client's mark, drawn before the name on the table and above it on phones; a pointer click anywhere on a table row follows the row link; the other columns are metadata in the small overline, each cut to one line with its full text as a tooltip; group headings stick under the site header while their rows scroll. Below the large breakpoint the toolbar folds to the search field and a filter button that reveals the selects, with each applied facet listed under it as a removable chip. A select with more than seven options gains an option search. Search, facets and order are local state over the rows the page carries; a facet is seeded from `?<id>=` in the URL when the value is one the page offers. It is a page section — the site places it from a `{ _id: 'listing-browser', props }` entry and binds `props` straight onto it — so its whole API is the props below, and it composes `section-module`, `section-title`, `frame-box`, `input`, `select`, `table`, `item`, `chip`, `empty-state` and `button` rather than owning any anatomy of its own.
 
 - Import: `import ListingBrowser from '@aziontech/webkit/listing-browser'`
 - Category: sections · Surface: site · Structure: monolithic
@@ -14,7 +14,7 @@
 ## Do
 
 - Name the first column after what the row is (`Role`); it is the row's link, and the second column describes the row on phones.
-- Give every row the facet values it carries under the facet's `key`, so the selects narrow it.
+- Give every row the facet values it carries under the facet's `id`, so the selects narrow it.
 - Keep `groups` in the order the reader scans; rows of a group not listed there are not shown.
 - Make the first entry of `sorts` the order the page is authored in, with an empty `by`.
 
@@ -40,24 +40,28 @@
 | `anchor` | `string` | `''` | false | In-page `id` of the band, the target of a `#hash` link. |
 | `title` | `string` | `''` | false | Headline over the listing, rendered by the section title as its `h2` and naming the band. |
 | `columns` | `ListingBrowserColumn[]` | `[]` | false | The columns, left to right; each is `{ key, label, grow?, align? }`. The first names the row and links it, the second describes it on phones. |
-| `rows` | `ListingBrowserRow[]` | `[]` | false | Every row, in source order; each is `{ href, group, values, facets, mark? }` where `values` and `facets` are keyed by column and facet and `mark` is the client's `{ name, logo }`. |
+| `data` | `ListingBrowserRow[]` | `[]` | false | Every row, in source order; each is `{ href, group, values, facets, mark? }` where `values` and `facets` are keyed by column and facet and `mark` is the client's `{ name, logo }`. |
 | `groups` | `string[]` | `[]` | false | The groups the rows are listed under, in order; a group with no matching row is not shown. |
-| `facets` | `ListingBrowserFacet[]` | `[]` | false | The facet selects; each is `{ key, label, allLabel, options }` where `key` matches a row facet and seeds it from `?key=` in the URL, and every option is `{ value, label }`. |
+| `facets` | `ListingBrowserFacet[]` | `[]` | false | The facet selects; each is `{ id, label, allLabel, options }` where `id` matches a row facet and seeds it from `?id=` in the URL, and every option is `{ value, label }`. |
 | `sorts` | `ListingBrowserSort[]` | `[]` | false | The orders, the first the default; each is `{ value, label, by? }` where `by` is the column it sorts on and an empty `by` keeps the source order. |
 | `sortAriaLabel` | `string` | `''` | false | Accessible name of the order select. |
-| `search` | `ListingBrowserSearch` | `undefined` | false | The search field; `{ placeholder, shortPlaceholder, label }` where `shortPlaceholder` is used below the large breakpoint and `label` names the field. Omitted when absent. |
-| `empty` | `ListingBrowserEmpty` | `undefined` | false | The state shown when nothing matches; `{ title, description, clearLabel }` where `clearLabel` is the button that clears the search and every facet. Omitted when absent. |
+| `searchPlaceholder` | `string` | `''` | false | Placeholder of the search field from the large breakpoint up; the field is omitted when this and `searchAriaLabel` are both empty. |
+| `searchShortPlaceholder` | `string` | `''` | false | Shorter placeholder of the search field below the large breakpoint; empty uses `searchPlaceholder`. |
+| `searchAriaLabel` | `string` | `''` | false | Accessible name of the search field. |
+| `emptyTitle` | `string` | `''` | false | Headline of the state shown when nothing matches; the state renders only with it. |
+| `emptyDescription` | `string` | `''` | false | Sentence under the empty-state headline. |
+| `emptyActionLabel` | `string` | `''` | false | Label of the empty-state button that clears the search and every facet; no button renders without it. |
 | `filterLabel` | `string` | `''` | false | Label of the filter button below the large breakpoint; empty uses the locale catalog (`Filters`). |
 
 ## States
 
 - Visual states: `default`, `filtered`, `empty`
 - Filtered: the search matches a row when any of its values contains the query, ignoring case; every facet set to a value keeps only the rows carrying it; the order select sorts on its column or keeps the source order
-- Empty: when the search and facets match no row, `empty-state` replaces the table and the list, and its button clears the search and every facet; without `empty`, nothing is shown in their place
-- Seeded: on mount a facet takes the value of `?<key>=` in the URL when it is one of its options
-- Absent: when `rows` is empty the band renders nothing — not the header, not the toolbar
-- The table renders from the small breakpoint up, the list below it; below the large breakpoint the search field shows `shortPlaceholder`
-- Folded toolbar (below the large breakpoint): a filter button (`aria-expanded`, `aria-controls`) beside the search field shows or hides the facet and order selects, stacked; its label carries the number of applied facets; every facet set to a value renders a removable `chip` (`<facet label>: <option label>`) whose remove clears that facet. From the large breakpoint the selects sit on the toolbar row and the button and chips are hidden (CSS only, so server and client markup match)
+- Empty: when the search and facets match no row, `empty-state` replaces the table and the list, and its `emptyActionLabel` button clears the search and every facet; without `emptyTitle`, nothing is shown in their place
+- Seeded: on mount a facet takes the value of `?<id>=` in the URL when it is one of its options
+- Absent: when `data` is empty the band renders nothing — not the header, not the toolbar
+- The table renders from the small breakpoint up, the list below it; below the large breakpoint the search field shows `searchShortPlaceholder`
+- Folded toolbar (below the large breakpoint): a filter button (`aria-expanded`, `aria-controls`) beside the search field shows or hides the facet and order selects, stacked (the panel carries `data-state="open|closed"`); its label carries the number of applied facets; every facet set to a value renders a removable `chip` (`<facet label>: <option label>`) whose remove clears that facet. From the large breakpoint the selects sit on the toolbar row and the button and chips are hidden (CSS only, so server and client markup match)
 - Option search: a facet or order select with more than seven options renders a search field above its options and a `status` line when nothing matches
 - Marked: a row with `mark` draws the client's logo (flattened to one ink that inverts in the dark theme) before the name in the table and above the title in the list
 - Whole-row navigation: a click on a table row outside its link is forwarded to the link, keeping `ctrl`/`meta`/`shift`/`alt`; a click that ends a text selection is not forwarded
@@ -69,7 +73,7 @@
 
 - Visible focus: owned by the composed `input`, `select` and `button`; each row link draws `focus-visible:ring-2 focus-visible:ring-(--ring-color)`.
 - Keyboard map: `Tab` moves through the filter button (below the large breakpoint), the search field, the selects, the applied-filter chips and the row links in reading order; a select opens on `Enter`, `Space` or `ArrowDown`, moves with the arrows and closes on `Escape` (all `select`'s own); `Enter` follows a row link.
-- ARIA: the band is a `<section>` named by its title (`aria-label`) when one is set; the toolbar is a `role="search"` region; the search field is named by `search.label`, each facet select by its `label` and the order select by `sortAriaLabel`; the filter button reports `aria-expanded` and controls the selects; each applied chip's remove button is named by the chip; a client mark is named by the client; each group is an `h3`; the table is `table`'s `role="table"`, and the phone list is `item`'s `role="list"` of `role="listitem"` rows.
+- ARIA: the band is a `<section>` named by its title (`aria-label`) when one is set; the toolbar is a `role="search"` region; the search field is named by `searchAriaLabel`, each facet select by its `label` and the order select by `sortAriaLabel`; the filter button reports `aria-expanded` and controls the selects; each applied chip's remove button is named by the chip; a client mark is named by the client; each group is an `h3`; the table is `table`'s `role="table"`, and the phone list is `item`'s `role="list"` of `role="listitem"` rows.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): row links and group headings `var(--text-default)`, headers and meta `var(--text-muted)`.
 - `motion-reduce:transition-none motion-reduce:transform-none` — the field, select and button transitions belong to the composed components, which carry their own reduced-motion fallback; this band adds no motion.
 - Touch target ≥40×40 px — the search field, selects and empty-state button are large; each phone row link stretches over its whole item and each table row is a whole-row target.
@@ -119,7 +123,7 @@
       { key: 'team', label: 'Team and location', grow: 2 },
       { key: 'type', label: 'Work type', align: 'end' }
     ]"
-    :rows="[
+    :data="[
       {
         href: '/careers/software-engineer-go',
         group: 'Engineering',
@@ -144,7 +148,7 @@
     :groups="['Engineering', 'Security']"
     :facets="[
       {
-        key: 'area',
+        id: 'area',
         label: 'Department',
         allLabel: 'All departments',
         options: [
@@ -153,7 +157,7 @@
         ]
       },
       {
-        key: 'location',
+        id: 'location',
         label: 'Location',
         allLabel: 'All locations',
         options: [
@@ -167,16 +171,12 @@
       { value: 'title', label: 'Title (A–Z)', by: 'role' }
     ]"
     sort-aria-label="Sort positions"
-    :search="{
-      placeholder: 'Search by title, team, or location',
-      shortPlaceholder: 'Search positions',
-      label: 'Search positions'
-    }"
-    :empty="{
-      title: 'Nothing here yet',
-      description: 'No open positions match your search.',
-      clearLabel: 'View all open positions'
-    }"
+    search-placeholder="Search by title, team, or location"
+    search-short-placeholder="Search positions"
+    search-aria-label="Search positions"
+    empty-title="Nothing here yet"
+    empty-description="No open positions match your search."
+    empty-action-label="View all open positions"
   />
 </template>
 ```

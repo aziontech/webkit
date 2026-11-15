@@ -17,7 +17,7 @@
 ## Do
 
 - Prefer `items`; only `items` mode collapses the middle segments into an overflow menu when its own box is narrower than 768px. The default slot renders only when `items` is empty, and a hand-composed trail never collapses.
-- Let the last entry be the current page — it is treated as current unless its `current` is set to `false`; give every ancestor an `href`.
+- Let the last entry be the current page — it is treated as current unless its `active` is set to `false`; give every ancestor an `href`.
 - Handle routing in `@navigate`, which receives `(event, href)` for ancestor segments; call `event.preventDefault()` when a client-side router takes over.
 - **Vue Router:** a segment has no `to`; put the route's path in `href` (for a named route, `router.resolve(to).href`) and write `@navigate="(event, href) => { event.preventDefault(); router.push(href) }"`. The segment stays a real link, so open-in-new-tab keeps working; leave a modified click (Ctrl, ⌘, Shift, middle button) to the browser.
 - In slot mode, wrap each `Breadcrumb.Item` in an `li`: `Breadcrumb.List` is an `ol` and the item renders an `a` / `span`, while `Breadcrumb.Separator` is already an `li`.
@@ -39,7 +39,7 @@
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `items` | `BreadcrumbItemData[]` | `() => []` | false | Ordered path segments; the last entry is treated as the current page when `current` is omitted on that entry. |
+| `items` | `BreadcrumbItemData[]` | `() => []` | false | Ordered path segments; the last entry is treated as the current page when `active` is omitted on that entry. |
 | `ariaLabel` | `string` | `''` | false | Accessible name of the navigation landmark; empty uses the locale catalog (`Breadcrumb`). |
 
 ## Events
@@ -68,7 +68,7 @@
 ## States
 
 - Visual states: inherited from `BreadcrumbItem` (default, hover, focus-visible, disabled)
-- Last segment in `items` is current when its `current` is not explicitly `false`
+- Last segment in `items` is current when its `active` is not explicitly `false`
 
 #### Responsive contract
 
@@ -105,7 +105,7 @@
     { label: 'Page Name', href: '#' },
     { label: 'Page Name', href: '#' },
     { label: 'Page Name', href: '#' },
-    { label: 'Current Page', current: true }
+    { label: 'Current Page', active: true }
   ]
 </script>
 
@@ -123,17 +123,17 @@
 <script setup>
   import Breadcrumb from '@aziontech/webkit/breadcrumb-root'
 
-  const single = [{ label: 'Page Name', current: true }]
+  const single = [{ label: 'Page Name', active: true }]
   const two = [
     { label: 'Page Name', href: '#' },
-    { label: 'Current Page', current: true }
+    { label: 'Current Page', active: true }
   ]
   const full = [
     { label: 'Page Name', href: '#' },
     { label: 'Page Name', href: '#' },
     { label: 'Page Name', href: '#' },
     { label: 'Page Name', href: '#' },
-    { label: 'Current Page', current: true }
+    { label: 'Current Page', active: true }
   ]
 </script>
 
@@ -154,7 +154,7 @@
 
   const items = [
     { label: 'Page Name', href: '#' },
-    { label: 'production-edge-application-with-a-very-long-configuration-name', current: true }
+    { label: 'production-edge-application-with-a-very-long-configuration-name', active: true }
   ]
 </script>
 

@@ -14,7 +14,7 @@
  "related": [
   "alert` — inline severity banner placed in the page flow; it stays until it is closed.",
   "dialog` — blocking modal for decisions and confirmations.",
-  "spinner` — rendered by the `loading` toast type.",
+  "spinner` — rendered while a toast is `loading`.",
   "progress` — rendered under the copy of a `toast.progress` toast."
  ],
  "bestPractices": [

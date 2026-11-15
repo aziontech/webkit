@@ -1,6 +1,6 @@
 # Data Grid
 
-> An editable, spreadsheet-like grid: rows of records and typed columns where people move a cell cursor with the keyboard, edit cells in place, select ranges and copy them, the way an SQL editor's results and a database table editor work. It shares the table's visual language (header band, row dividers, row selection, a pinned first column, the same tokens) but renders the WAI-ARIA **grid** pattern (`role="grid"`, `gridcell`, one roving tab stop), not a read-only table. **Why a component of its own.** DataGrid is not an `editable` mode of `data-table` and is not composed from `table`'s parts, for three reasons. Table's parts render the **table** pattern (`role="table"`, `cell`, every link and button its own tab stop), while a grid needs `gridcell`s inside one roving tab stop with a cell cursor; switching the roles and the focus model inside the same parts would make every read-only table pay for it. In-cell editors must be borderless and fill the cell, so they are a bare `input` and `select` styled with the tokens, not the package's `Input` and `Select`, whose frames and overlays fight a 40 px cell. And DataGrid needs no sorting, filtering or paging engine: it loads no `@tanstack/vue-table` and no virtualization library, so an editing screen stays at about 9 KB. **The rows are the edited value.** Where `data-table` takes `data` and only emits `update:data` when rows are reordered, DataGrid's rows are what the person edits, so they are its `v-model`: every committed edit writes a new array with a copy of the edited row, and `change` reports the cell, the new value and the previous one. Adding and deleting rows are hooks: the grid emits `row-add` and `row-delete` and the app changes the rows. Thousands of rows scroll natively inside `maxHeight`, each row is laid out lazily with CSS `content-visibility: auto`, and each row re-renders only when its cells, its cursor or its range change.
+> An editable, spreadsheet-like grid: rows of records and typed columns where people move a cell cursor with the keyboard, edit cells in place, select ranges and copy them, the way an SQL editor's results and a database table editor work. It shares the table's visual language (header band, row dividers, row selection, a pinned first column, the same tokens) but renders the WAI-ARIA **grid** pattern (`role="grid"`, `gridcell`, one roving tab stop), not a read-only table. **Why a component of its own.** DataGrid is not an `editable` mode of `data-table` and is not composed from `table`'s parts, for three reasons. Table's parts render the **table** pattern (`role="table"`, `cell`, every link and button its own tab stop), while a grid needs `gridcell`s inside one roving tab stop with a cell cursor; switching the roles and the focus model inside the same parts would make every read-only table pay for it. In-cell editors must be borderless and fill the cell, so they are a bare `input` and `select` styled with the tokens, not the package's `Input` and `Select`, whose frames and overlays fight a 40 px cell. And DataGrid needs no sorting, filtering or paging engine: it loads no `@tanstack/vue-table` and no virtualization library, so an editing screen stays at about 9 KB. **The rows are the edited value.** Where `data-table` takes `data` and only emits `update:data` when rows are reordered, DataGrid's rows are what the person edits, so they are its `v-model`: every committed edit writes a new array with a copy of the edited row, and `change` reports the cell, the new value and the previous one. Adding and deleting rows are hooks: the grid emits `row-add` and `row-remove` and the app changes the rows. Thousands of rows scroll natively inside `maxHeight`, each row is laid out lazily with CSS `content-visibility: auto`, and each row re-renders only when its cells, its cursor or its range change.
 
 - Import: `import DataGrid from '@aziontech/webkit/data-grid'`
 - Category: data · Surface: app · Structure: monolithic
@@ -17,7 +17,7 @@
 - Give every row a stable id under `row-key` (default `'id'`): the cursor, the selection and the edits follow it.
 - Type each column (`text`, `number`, `boolean`, `select`) so the editor matches the value; mark computed or key columns `editable: false`.
 - Freeze the first column (`frozen-first-column`) when it names the row and the grid scrolls sideways.
-- Keep adding and deleting in the app: handle `row-add` and `row-delete`, then write the new rows to the `v-model`. Confirm a delete of more than a few rows in a `confirm-dialog`.
+- Keep adding and deleting in the app: handle `row-add` and `row-remove`, then write the new rows to the `v-model`. Confirm a delete of more than a few rows in a `confirm-dialog`.
 - Use `readonly` while saving or for people who may not edit; the cursor, selection and copy still work.
 
 ## Don’t
@@ -41,7 +41,7 @@
 | --- | --- | --- | --- | --- |
 | `columns` | `DataGridColumn[]` | `[]` | false | Columns in order: `{ id, header, type?, options?, editable?, width?, minWidth?, align? }`; `type` picks the editor (default text). |
 | `rowKey` | `string` | `'id'` | false | Field used as the stable row id (cursor, selection and edits follow it). |
-| `enableRowSelection` | `boolean` | `false` | false | Adds a leading checkbox column with Select all. |
+| `selectable` | `boolean` | `false` | false | Adds a leading checkbox column with Select all. |
 | `frozenFirstColumn` | `boolean` | `false` | false | Pins the first data column to the inline start edge while the grid scrolls sideways. |
 | `readonly` | `boolean` | `false` | false | No cell can be edited; the cursor, range selection and copy still work. |
 | `maxHeight` | `string` | `''` | false | Max height (CSS length) of the scrolling viewport; the header stays on top. |
@@ -55,7 +55,7 @@
 | --- | --- | --- |
 | `change` | `(event: Event, edit: DataGridCellEdit)` | A cell edit was committed (Enter, Tab, blur, a toggle); `edit` is `{ row, columnId, value, previous }`. |
 | `row-add` | `(event: Event)` | The `add` function of the toolbar slot ran; the app appends a row to the `v-model`. |
-| `row-delete` | `(event: Event, rows: TRow[])` | The `remove` function of the toolbar slot ran with rows selected; the app removes them from the `v-model`. |
+| `row-remove` | `(event: Event, rows: TRow[])` | The `remove` function of the toolbar slot ran with rows selected; the app removes them from the `v-model`. |
 | `copy` | `(event: ClipboardEvent, text: string)` | Ctrl+C or Cmd+C copied the selected cell range as tab-separated text (rows by line), also written to the clipboard. |
 
 ## Slots
@@ -192,7 +192,7 @@
   const addRow = () => {
     rows.value = [...rows.value, { id: `r${next++}`, host: '', ttl: 3600, proxied: false }]
   }
-  const deleteRows = (event, removed) => {
+  const removeRows = (event, removed) => {
     const ids = new Set(removed.map((row) => row.id))
     rows.value = rows.value.filter((row) => !ids.has(row.id))
     selection.value = {}
@@ -205,9 +205,9 @@
     v-model:row-selection="selection"
     :columns="columns"
     aria-label="DNS records"
-    enable-row-selection
+    selectable
     @row-add="addRow"
-    @row-delete="deleteRows"
+    @row-remove="removeRows"
   >
     <template #toolbar="{ add, remove, selectedCount }">
       <Button

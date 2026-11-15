@@ -351,7 +351,7 @@ Each variant is the same screen in another state: `get_block("edit/edit-resource
                   anchor="general"
                 >
                   <Card :padded="false">
-                    <template #content>
+                    <template #default>
                       <Item.List>
                         <SettingRow
                           title="Name"
@@ -398,7 +398,7 @@ Each variant is the same screen in another state: `get_block("edit/edit-resource
                   anchor="modules"
                 >
                   <Card :padded="false">
-                    <template #content>
+                    <template #default>
                       <Item.List>
                         <SettingRow
                           v-for="mod in defaultModules"
@@ -424,7 +424,7 @@ Each variant is the same screen in another state: `get_block("edit/edit-resource
                   anchor="subscription-modules"
                 >
                   <Card :padded="false">
-                    <template #content>
+                    <template #default>
                       <Item.List>
                         <SettingRow
                           v-for="mod in subscriptionModules"
@@ -442,7 +442,7 @@ Each variant is the same screen in another state: `get_block("edit/edit-resource
                               >Contact sales</a
                             >
                           </template>
-                          <Tooltip text="Contact sales to activate this module.">
+                          <Tooltip content="Contact sales to activate this module.">
                             <Switch
                               v-model="form.modules[mod.key]"
                               disabled

@@ -13,7 +13,7 @@
 ## Do
 
 - Write the body as plain blocks — headings, paragraphs and `-` lists separated by blank lines; inline markdown is rendered as text.
-- Mark the last breadcrumb entry `current`.
+- Mark the last breadcrumb entry `active` (it renders `aria-current="page"`).
 
 ## Don’t
 
@@ -32,7 +32,7 @@
 | --- | --- | --- | --- | --- |
 | `eyebrow` | `string` | `''` | false | Overline above the headline. |
 | `article` | `ArticleBodyArticle` | `—` | true | The piece being read: its `title` (the page h1), `description`, `date`, `readTime`, canonical `href`, and optionally `author` (the writers' names) and `authors` (each a `name` and an `avatar` photo URL). |
-| `trail` | `ArticleBodyCrumb[]` | `[]` | false | The breadcrumb over the headline, each a `label` and an `href`, the last one marked `current`. |
+| `trail` | `ArticleBodyCrumb[]` | `[]` | false | The breadcrumb over the headline, each a `label` and an `href`, the last one marked `active`. |
 | `body` | `string` | `''` | false | The article as markdown; its `##` and `###` headings feed the outline. |
 | `banner` | `string` | `''` | false | URL of the image over the masthead; the banner frame is omitted when empty. |
 | `share` | `ArticleBodyShare` | `undefined` | false | Labels of the share group: its `title`, `copyLink`, `shareX` and `shareLinkedIn`, optional `copyFeed` with the `feed` URL it copies, and optional toast messages `copiedLink`, `copiedFeed` and `copiedPage`; the group is omitted when absent. |
@@ -118,7 +118,7 @@
     :trail="[
       { label: 'Success cases', href: '/success-cases' },
       { label: 'Retail', href: '/success-cases?industry=Retail' },
-      { label: 'Magalu Ensures High Availability at Scale with Azion', current: true }
+      { label: 'Magalu Ensures High Availability at Scale with Azion', active: true }
     ]"
     :share="{
       title: 'Share this article',

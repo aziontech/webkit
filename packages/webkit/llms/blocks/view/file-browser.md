@@ -34,7 +34,7 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 
 ### A. Surface — `Card`, `DataTable` (required)
 
-One `Card :padded="false"` around a `DataTable :bordered="false"` with `row-key`, `enable-sorting` with `manual-sorting` and `v-model:sorting` (the block orders the rows so `..` and the folders stay first: Size sorts on a numeric `bytes` field and Last modified on the `modifiedAt` timestamp, within folders and within files), `v-model:global-filter`, `paginated` at 50 rows (25, 50, 100), `:loading` and an `export-filename`. Name is the `principal` column; actions are `kind: 'action'` and not hideable. Everything above the rows lives in the table's `#toolbar` slot, so there is no separate page heading.
+One `Card :padded="false"` around a `DataTable :bordered="false"` with `row-key`, `sortable` with `manual-sorting` and `v-model:sorting` (the block orders the rows so `..` and the folders stay first: Size sorts on a numeric `bytes` field and Last modified on the `modifiedAt` timestamp, within folders and within files), `v-model:global-filter`, `paginated` at 50 rows (25, 50, 100), `:loading` and an `export-filename`. Name is the `principal` column; actions are `kind: 'action'` and not hideable. Everything above the rows lives in the table's `#toolbar` slot, so there is no separate page heading.
 
 ### B. Storage title and search — `TableSearch` (required)
 
@@ -88,7 +88,7 @@ When a transfer finishes the page reports it with a toast as well as the card, b
 
 Variant MoveObject only; it adds `Dialog` and its parts, `Field` and `Combobox`.
 
-`enable-row-selection` with `v-model:row-selection` adds the checkbox column, and `:row-selectable="(row) => row.kind === 'file'"` keeps it to files: folders and the `..` row draw no checkbox and Select all skips them; the toolbar slot's `selectedCount`, `selectedRows` and `clearSelection` drive a selection bar (`2 selected`, Clear selection, Move). Every file's row menu gains Move between Download and Delete. Move opens a medium `Dialog` titled `Move index.html` or `Move 2 files`; its description gives the count, the total size and the folder they leave, the files are listed by name and size, and one `Field` holds a large clearable `Combobox` of every folder in the storage (the root first, as `/`) that also accepts a new path (`A folder that does not exist yet is created with the move.`). On Move the path is normalised (one slash between segments, no leading slash, a trailing slash) and validated: printable ASCII only, no `..`, not the folder the files are in; each failure is a `Field.Error` under the field and nothing moves.
+`selectable` with `v-model:row-selection` adds the checkbox column, and `:row-selectable="(row) => row.kind === 'file'"` keeps it to files: folders and the `..` row draw no checkbox and Select all skips them; the toolbar slot's `selectedCount`, `selectedRows` and `clearSelection` drive a selection bar (`2 selected`, Clear selection, Move). Every file's row menu gains Move between Download and Delete. Move opens a medium `Dialog` titled `Move index.html` or `Move 2 files`; its description gives the count, the total size and the folder they leave, the files are listed by name and size, and one `Field` holds a large clearable `Combobox` of every folder in the storage (the root first, as `/`) that also accepts a new path (`A folder that does not exist yet is created with the move.`). On Move the path is normalised (one slash between segments, no leading slash, a trailing slash) and validated: printable ASCII only, no `..`, not the folder the files are in; each failure is a `Field.Error` under the field and nothing moves.
 
 ## Do
 
@@ -280,13 +280,13 @@ Each variant is the same screen in another state: `get_block("view/file-browser"
     {
       accessorKey: 'name',
       header: 'Name',
-      enableSorting: true,
+      sortable: true,
       principal: true,
       hideable: false,
       grow: 3
     },
-    { accessorKey: 'bytes', header: 'Size', enableSorting: true, minWidth: 80 },
-    { accessorKey: 'modifiedAt', header: 'Last modified', enableSorting: true, minWidth: 80 },
+    { accessorKey: 'bytes', header: 'Size', sortable: true, minWidth: 80 },
+    { accessorKey: 'modifiedAt', header: 'Last modified', sortable: true, minWidth: 80 },
     { id: 'actions', kind: 'action', hideable: false }
   ]
 
@@ -431,7 +431,7 @@ Each variant is the same screen in another state: `get_block("view/file-browser"
     <div class="flex h-full min-h-0 flex-col">
       <section class="flex min-h-0 flex-col">
         <Card :padded="false">
-          <template #content>
+          <template #default>
             <DataTable
               ref="tableEl"
               v-model:sorting="sorting"
@@ -439,7 +439,7 @@ Each variant is the same screen in another state: `get_block("view/file-browser"
               :data="sortedRows"
               :columns="columns"
               row-key="id"
-              enable-sorting
+              sortable
               manual-sorting
               paginated
               :page-size="50"
@@ -470,7 +470,7 @@ Each variant is the same screen in another state: `get_block("view/file-browser"
                       />
                     </div>
                     <Tooltip
-                      text="Refresh"
+                      content="Refresh"
                       class="shrink-0"
                     >
                       <IconButton
@@ -483,7 +483,7 @@ Each variant is the same screen in another state: `get_block("view/file-browser"
                       />
                     </Tooltip>
                     <Tooltip
-                      text="Download CSV"
+                      content="Download CSV"
                       class="shrink-0"
                     >
                       <IconButton

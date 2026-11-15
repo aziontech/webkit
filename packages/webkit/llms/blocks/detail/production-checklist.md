@@ -177,7 +177,7 @@ Each variant is the same screen in another state: `get_block("detail/production-
       </div>
 
       <Tooltip
-        text="Expand"
+        content="Expand"
         class="shrink-0"
       >
         <IconButton
@@ -190,7 +190,7 @@ Each variant is the same screen in another state: `get_block("detail/production-
       </Tooltip>
     </template>
 
-    <template #content>
+    <template #default>
       <div
         v-if="!complete"
         class="flex flex-col"
@@ -237,7 +237,7 @@ Each variant is the same screen in another state: `get_block("detail/production-
   <Drawer
     v-model:open="open"
     size="large"
-    side="right"
+    side="end"
   >
     <DrawerContent>
       <PanelHeader class="w-full">

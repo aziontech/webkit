@@ -537,7 +537,7 @@ Each variant is the same screen in another state: `get_block("dashboard/scan-res
       accessorKey: 'name',
       header: 'Name',
       align: 'start',
-      enableSorting: true,
+      sortable: true,
       principal: true,
       grow: 2
     },
@@ -546,7 +546,7 @@ Each variant is the same screen in another state: `get_block("dashboard/scan-res
       accessorKey: 'verdict',
       header: 'Verdict',
       align: 'start',
-      enableSorting: true,
+      sortable: true,
       minWidth: 112
     },
     {
@@ -554,7 +554,7 @@ Each variant is the same screen in another state: `get_block("dashboard/scan-res
       accessorKey: 'category',
       header: 'Category',
       align: 'start',
-      enableSorting: true,
+      sortable: true,
       minWidth: 112
     },
     {
@@ -562,7 +562,7 @@ Each variant is the same screen in another state: `get_block("dashboard/scan-res
       accessorKey: 'score',
       header: 'Score',
       align: 'end',
-      enableSorting: true,
+      sortable: true,
       minWidth: 80
     },
     {
@@ -570,7 +570,7 @@ Each variant is the same screen in another state: `get_block("dashboard/scan-res
       accessorKey: 'type',
       header: 'Type',
       align: 'start',
-      enableSorting: true,
+      sortable: true,
       minWidth: 128
     },
     {
@@ -578,7 +578,7 @@ Each variant is the same screen in another state: `get_block("dashboard/scan-res
       accessorKey: 'size',
       header: 'Size',
       align: 'end',
-      enableSorting: true,
+      sortable: true,
       minWidth: 88
     },
     {
@@ -586,7 +586,7 @@ Each variant is the same screen in another state: `get_block("dashboard/scan-res
       accessorKey: 'source',
       header: 'Source',
       align: 'start',
-      enableSorting: true,
+      sortable: true,
       minWidth: 128
     },
     {
@@ -594,7 +594,7 @@ Each variant is the same screen in another state: `get_block("dashboard/scan-res
       accessorKey: 'submitter',
       header: 'First submitter',
       align: 'start',
-      enableSorting: true,
+      sortable: true,
       minWidth: 128
     },
     {
@@ -602,7 +602,7 @@ Each variant is the same screen in another state: `get_block("dashboard/scan-res
       accessorKey: 'lastSeen',
       header: 'Last seen',
       align: 'start',
-      enableSorting: true,
+      sortable: true,
       minWidth: 136
     }
   ]
@@ -675,7 +675,7 @@ Each variant is the same screen in another state: `get_block("dashboard/scan-res
               :loading="loading"
             >
               <template #aside>
-                <Hint :text="figure.description" />
+                <Hint :content="figure.description" />
               </template>
             </StatTile>
           </li>
@@ -689,7 +689,7 @@ Each variant is the same screen in another state: `get_block("dashboard/scan-res
           <ChartCard.Header>
             <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
               <ChartCard.Title>Verdicts</ChartCard.Title>
-              <Hint text="Every item analyzed in the period, by the verdict it received." />
+              <Hint content="Every item analyzed in the period, by the verdict it received." />
             </span>
           </ChartCard.Header>
           <ChartCard.Content>
@@ -711,7 +711,7 @@ Each variant is the same screen in another state: `get_block("dashboard/scan-res
             <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
               <ChartCard.Title>Sources</ChartCard.Title>
               <Hint
-                text="Where the items came from: scanned inline, sent through the API, uploaded by hand or picked up by a scheduled scan."
+                content="Where the items came from: scanned inline, sent through the API, uploaded by hand or picked up by a scheduled scan."
               />
             </span>
           </ChartCard.Header>
@@ -728,7 +728,7 @@ Each variant is the same screen in another state: `get_block("dashboard/scan-res
 
         <div class="lg:col-span-4">
           <Card title="Held and flagged">
-            <template #content>
+            <template #default>
               <div
                 v-if="loading"
                 aria-busy="true"
@@ -788,7 +788,7 @@ Each variant is the same screen in another state: `get_block("dashboard/scan-res
             <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
               <ChartCard.Title>Submissions</ChartCard.Title>
               <Hint
-                text="Every item sent for analysis, newest first, with its verdict and where it came from."
+                content="Every item sent for analysis, newest first, with its verdict and where it came from."
               />
             </span>
           </ChartCard.Header>
@@ -805,7 +805,7 @@ Each variant is the same screen in another state: `get_block("dashboard/scan-res
                     placeholder="Search by name or submitter"
                     aria-label="Search by name or submitter"
                   >
-                    <template #prefix>
+                    <template #leading>
                       <i
                         class="ai ai-search"
                         aria-hidden="true"
@@ -885,7 +885,7 @@ Each variant is the same screen in another state: `get_block("dashboard/scan-res
                 :data="rows"
                 :columns="submissionColumns"
                 row-key="id"
-                enable-sorting
+                sortable
                 paginated
                 :page-size="10"
                 :page-size-options="[10, 25, 50]"

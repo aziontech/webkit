@@ -86,7 +86,7 @@ Flush (`:padded="false"`), standing in for the page body; the list page's contro
 - Don't render the rail on create, edit or deploy pages.
 - Don't add page actions to the global header; they belong to the page's header, controls row or tab row.
 - Don't hide the avatar when the rail is collapsed or in the drawer.
-- Don't render the account switcher in both `sidebar-header` and `header-start` at once; pick by the slots' `compact`.
+- Don't render the account switcher in both `sidebar-header` and `header-leading` at once; pick by the slots' `compact`.
 - Don't leave an empty account table when the list fails to load; show the danger `Alert` with Retry in its place.
 - Don't open the notifications region as a popover over the page; it is the layout's tools region beside the content.
 
@@ -112,7 +112,7 @@ Flush (`:padded="false"`), standing in for the page body; the list page's contro
 - ListPage: a first-level list page in the `ConsoleLayout` default slot: no breadcrumb on a first level, the page opens on its `PageHeader` (title, description, Documentation and the create action) over the page body. The controls row and the table belong to `view/table-view`, which builds them from the Table toolbar parts; the shell does not draw them.
 - DetailPage: a resource detail page rendered through `ConsoleLayout`. The page body sets its own trail with `ConsoleLayout.Breadcrumbs`: Applications and the application as `items`, then the environment in its slot, a `Select` with `kind="transparent"` and `size="small"` labelled `Switch environment` (a search `Input`, each environment tagged with its deployment policy, a muted line when nothing matches, Add Environment at its foot). The default slot is flush and opens on a full-bleed `PageTabs` (Overview, Deployments, Settings, the outlined Deploy in `#actions`), sticky at the top of the layout's scrolling region so it stays in view while the tab content scrolls under it; no `main` of its own, the layout owns it.
 - Notifications: the ListPage through `ConsoleLayout` with the bell after Create and Agent in the `actions` slot; it toggles the layout's tools region (`v-model:tools-open`, `tools-label="Notifications"`), a region beside the content and a drawer when narrow. The `tools` slot holds the list as `Item.List` of `Item` rows (`Item.Media kind="icon"` toned through `data-kind`, title, description, time, `Item.Actions`), five at a time with `Show older` for the rest: unread items marked with a `New` tag (and a visually hidden `Unread:` prefix), Edit and Redeploy on each deploy, Mark all as read, Clear all (it empties the list and toasts `Notifications cleared.` with Undo, which brings them back), and the EmptyState `You are all caught up` once cleared. The failed deploy also shows as a flash Alert (Edit, Redeploy) in the `notifications` slot above the page. The bell's `aria-label` carries the unread count, `aria-pressed` follows the region, and the `Badge` on it is hidden from assistive technology.
-- AccountSwitch: the ListPage through `ConsoleLayout` with the current account in the `sidebar-header` slot, full width in the rail under the wordmark (square `Avatar` with its initials, the name, a sort glyph), `Switch account (Ctrl+O)` on its tooltip (to the right) and `aria-keyshortcuts`; the rail slot renders nothing while `compact` is true, and the same switcher moves to the `header-start` slot, before the breadcrumbs, with the avatar and the chevron only (the name stays in its `aria-label`). It and the shortcut open a large `Dialog`, rendered beside the layout, with a search `Input` (name, ID or client ID) over a `Table` of the account tree: organizations, groups and workspaces indented by depth, expand and collapse buttons with `aria-expanded`, each name a button that switches, `Current` on the active one, type as `Table.CellStatus`, ID and client ID as `Table.CellId`. Each name is a `Button` with `kind="link"`. The table pages ten rows at a time (`paginated`), and while the list loads on open it shows the `Table` loading rows. Switching closes the dialog and toasts `Switched to <name>.` with the IDs; the footer shows the current account and Account settings. A search with no match shows Clear search. The search `Input` takes its `id` from `useId()` so the dialog can focus it on open.
+- AccountSwitch: the ListPage through `ConsoleLayout` with the current account in the `sidebar-header` slot, full width in the rail under the wordmark (square `Avatar` with its initials, the name, a sort glyph), `Switch account (Ctrl+O)` on its tooltip (to the right) and `aria-keyshortcuts`; the rail slot renders nothing while `compact` is true, and the same switcher moves to the `header-leading` slot, before the breadcrumbs, with the avatar and the chevron only (the name stays in its `aria-label`). It and the shortcut open a large `Dialog`, rendered beside the layout, with a search `Input` (name, ID or client ID) over a `Table` of the account tree: organizations, groups and workspaces indented by depth, expand and collapse buttons with `aria-expanded`, each name a button that switches, `Current` on the active one, type as `Table.CellStatus`, ID and client ID as `Table.CellId`. Each name is a `Button` with `kind="link"`. The table pages ten rows at a time (`paginated`), and while the list loads on open it shows the `Table` loading rows. Switching closes the dialog and toasts `Switched to <name>.` with the IDs; the footer shows the current account and Account settings. A search with no match shows Clear search. The search `Input` takes its `id` from `useId()` so the dialog can focus it on open.
 - AccountSwitchError: the AccountSwitch dialog when the account list fails to load. A danger `Alert` (`The account list could not be loaded.`, action `Retry`) takes the place of the account `Table` under the search; the search, the title and the footer stay. Retry loads the list again and shows the table.
 
 ## Related
@@ -334,7 +334,7 @@ Each variant is the same screen in another state: `get_block("shell/console", { 
     <template #actions="{ compact }">
       <template v-if="compact">
         <Tooltip
-          text="Create"
+          content="Create"
           placement="bottom"
         >
           <IconButton
@@ -345,7 +345,7 @@ Each variant is the same screen in another state: `get_block("shell/console", { 
           />
         </Tooltip>
         <Tooltip
-          text="Agent"
+          content="Agent"
           placement="bottom"
         >
           <IconButton
@@ -374,28 +374,28 @@ Each variant is the same screen in another state: `get_block("shell/console", { 
     <template #search="{ query }">
       <Command.Group
         v-if="!query"
-        heading="Recents"
+        label="Recents"
       >
         <Command.Item
           v-for="row in recents"
           :key="row.id"
           :value="`recent:${row.id}`"
         >
-          <template #prefix>
+          <template #leading>
             <i
               :class="row.icon"
               aria-hidden="true"
             />
           </template>
           {{ row.label }}
-          <template #suffix>
+          <template #trailing>
             <span class="text-label-sm text-(--text-muted)">{{ row.type }}</span>
           </template>
         </Command.Item>
       </Command.Group>
-      <Command.Group heading="Actions">
+      <Command.Group label="Actions">
         <Command.Item value="action:create">
-          <template #prefix>
+          <template #leading>
             <i
               class="ai ai-circle-plus"
               aria-hidden="true"
@@ -404,7 +404,7 @@ Each variant is the same screen in another state: `get_block("shell/console", { 
           Create Application
         </Command.Item>
         <Command.Item value="action:theme">
-          <template #prefix>
+          <template #leading>
             <i
               class="ai ai-moon"
               aria-hidden="true"
@@ -417,7 +417,7 @@ Each variant is the same screen in another state: `get_block("shell/console", { 
 
     <template #account-menu>
       <DropdownMenu.Group>
-        <template #top>
+        <template #header>
           <div class="flex min-w-0 flex-col">
             <span class="truncate text-label-md text-(--text-default)">{{ account.name }}</span>
             <span class="truncate text-body-xs text-(--text-muted)">{{ account.email }}</span>
@@ -524,7 +524,7 @@ Each variant is the same screen in another state: `get_block("shell/console", { 
         </PageHeader>
 
         <Card :padded="false">
-          <template #content>
+          <template #default>
             <div
               class="flex min-h-(--container-3xs) items-center justify-center text-body-sm text-(--text-muted)"
             >

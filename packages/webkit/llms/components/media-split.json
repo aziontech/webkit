@@ -171,9 +171,9 @@
   {
    "name": "align",
    "type": "MediaSplitAlign",
-   "default": "'top'",
+   "default": "'start'",
    "required": "false",
-   "doc": "Where the copy sits down its cell. `top` holds the copy at the cell's top and floors the actions so consecutive bands align on them; `center` gathers the copy and its actions into one block on the cell's vertical middle."
+   "doc": "Where the copy sits down its cell. `start` holds the copy at the cell's top and floors the actions so consecutive bands align on them; `center` gathers the copy and its actions into one block on the cell's vertical middle."
   },
   {
    "name": "size",

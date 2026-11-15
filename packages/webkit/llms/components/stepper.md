@@ -18,7 +18,7 @@
 
 - Give every step a title that names the decision (`Where it runs`), not the control (`Select`).
 - Keep steps reachable backwards and closed forwards: mark a step `disabled` until the one before it is answered.
-- Set `state="error"` only after the reader tried to advance — a step is not wrong while it is unanswered.
+- Set `status="error"` only after the reader tried to advance — a step is not wrong while it is unanswered.
 - One `Stepper` per surface. Two rails on one screen ask the reader which task they are in.
 - The rail is navigation, not the form. Put the fields in the content column, never inside a step's slot.
 
@@ -56,10 +56,10 @@
 
 ## Sub-components
 
-The root ships a **compound API**: an `index.ts` (beside `stepper.vue`) attaches the sub-component to the root so `<Stepper.Step>` resolves from one import; the standalone imports remain the tree-shaking path. The rail has no open/closed state, so there is no `Trigger` / `Content` — the anatomy name is `Step`, which is what the thing is. Numbering and the current step flow through `provide`/`inject` (`injection-key.ts`), so the consumer wires nothing: a step reads its own ordinal from its registration order and its `current` from the root's `v-model`.
+The root ships a **compound API**: an `index.ts` (beside `stepper.vue`) attaches the sub-component to the root so `<Stepper.Step>` resolves from one import; the standalone imports remain the tree-shaking path. The rail has no open/closed state, so there is no `Trigger` / `Content` — the anatomy name is `Step`, which is what the thing is. Numbering and the current step flow through `provide`/`inject` (`injection-key.ts`), so the consumer wires nothing: a step reads its own ordinal from its registration order and whether it is `active` from the root's `v-model`.
 
 - `stepper-step/stepper-step.vue` — One dot, its title and description, and the connector down to the step below it. Registers itself with the root on mount and reads back both its ordinal and whether it is the last step (the last renders no connector). Renders an `<li>` holding a `<button type="button">` that sets the root's `v-model` to its own `value`.
-  - Props: `value?: string` (default `''` — identity of this step; matches the root's `v-model` when it is the current one), `title?: string` (default `''` — what this step asks, in the reader's words), `description?: string` (default `''` — one line under the title saying what the step decides), `state?: 'upcoming' | 'complete' | 'error' | 'loading'` (default `'upcoming'` — what the owner knows about this step; `current` is derived from the root and is never set here), `disabled?: boolean` (default `false` — the step cannot be reached yet; not focusable and not clickable).
+  - Props: `value?: string` (default `''` — identity of this step; matches the root's `v-model` when it is the active one), `title?: string` (default `''` — what this step asks, in the reader's words), `description?: string` (default `''` — one line under the title saying what the step decides), `status?: 'pending' | 'running' | 'success' | 'error'` (default `'pending'` — what the owner knows about this step; the active step is derived from the root and is never set here), `disabled?: boolean` (default `false` — the step cannot be reached yet; not focusable and not clickable).
   - Slot: `default` — optional body under the description, inside the rail. It renders after the step's `button`, in the same `li` and aligned with the title column, so interactive content (a link, a Retry button) is never nested inside the button.
 
 Resulting layout (no per-component `package.json`; the root `packages/webkit/package.json#exports` resolves every path, and `.d.ts` is generated at publish time):
@@ -84,34 +84,36 @@ Exports to add to `packages/webkit/package.json#exports` (flat public names; cat
 "./stepper-step": "./src/components/navigation/stepper/stepper-step/stepper-step.vue"
 ```
 
-`./stepper` and `./stepper-step` export the type `StepperStepState` (`'upcoming' | 'complete' | 'error' | 'loading'`), the type of `Stepper.Step`'s `state` prop, so an owner can type the state it derives.
+`./stepper` and `./stepper-step` export the type `StepperStepStatus` (`'pending' | 'running' | 'success' | 'error'`), the type of `Stepper.Step`'s `status` prop, so an owner can type the status it derives.
 
 ## v-model
 
-| Model     | Type     | Default | Emits               | Notes                                                                                                                                                                                            |
-| --------- | -------- | ------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `v-model` | `string` | `''`    | `update:modelValue` | The `value` of the step the reader is on, two-way through `defineModel`. A step whose `value` matches it derives `data-state="current"`; activating an enabled step writes its own `value` back. |
+| Model     | Type     | Default | Emits               | Notes                                                                                                                                                                                                           |
+| --------- | -------- | ------- | ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `v-model` | `string` | `''`    | `update:modelValue` | The `value` of the step the reader is on, two-way through `defineModel`. A step whose `value` matches it derives `data-active` (`aria-current="step"`); activating an enabled step writes its own `value` back. |
 
 ## States
 
 - Visual states: `default`, `hover`, `focus-visible`, `active`, `disabled`
-- `data-state` values on `Stepper.Step`, in precedence order: `error` | `loading` | `current` | `complete` | `upcoming`
-- `data-current` on the root mirrors `modelValue`
+- `data-status` on `Stepper.Step` mirrors `status`: `pending` | `running` | `success` | `error`
+- `data-active` on the step the reader is on (unless it is `error` or `running`); `data-completed` on a `success` step that is not active
+- `data-active` on the root mirrors `modelValue`
+- Part markers: `data-slot="step-dot"`, `step-disc`, `step-description`, `step-connector`, `step-body`
 - `data-disabled` mirrors the `disabled` prop
 - `data-orientation`: `vertical`
 
-The five dot states, and what each one renders:
+The five dot looks, and what each one renders:
 
-| `data-state` | When                                | Dot                                                         | Connector below      |
-| ------------ | ----------------------------------- | ----------------------------------------------------------- | -------------------- |
-| `upcoming`   | not reached, nothing known          | outlined, muted, shows its number                           | muted track          |
-| `current`    | `value` equals the root's `v-model` | outlined in `--secondary` with a filled inner disc          | muted track          |
-| `complete`   | the owner set `state="complete"`    | filled `--secondary`, `ai ai-check` glyph                   | filled `--secondary` |
-| `error`      | the owner set `state="error"`       | filled `--danger`, `ai ai-triangle-alert` glyph             | muted track          |
-| `loading`    | the owner set `state="loading"`     | outlined in `--secondary`, `Spinner` in place of the number | muted track          |
+| Look                    | When                                | Dot                                                         | Connector below      |
+| ----------------------- | ----------------------------------- | ----------------------------------------------------------- | -------------------- |
+| `data-status="pending"` | not reached, nothing known          | outlined, muted, shows its number                           | muted track          |
+| `data-active`           | `value` equals the root's `v-model` | outlined in `--secondary` with a filled inner disc          | muted track          |
+| `data-completed`        | the owner set `status="success"`    | filled `--secondary`, `ai ai-check` glyph                   | filled `--secondary` |
+| `data-status="error"`   | the owner set `status="error"`      | filled `--danger`, `ai ai-triangle-alert` glyph             | muted track          |
+| `data-status="running"` | the owner set `status="running"`    | outlined in `--secondary`, `Spinner` in place of the number | muted track          |
 
-`error` and `loading` outrank `current`: a step that is both on screen and wrong must say it is wrong.
-`current` outranks `complete`, so returning to an answered step shows where the reader is rather than
+`error` and `running` outrank active: a step that is both on screen and wrong must say it is wrong.
+Active outranks `success`, so returning to an answered step shows where the reader is rather than
 what they already did.
 
 Two fixed measures hold the rail together. The title sits in a band the height of the dot, so a step
@@ -123,7 +125,7 @@ even when the row carries nothing but its title.
 
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`
 - Keyboard map: `Tab` moves to each enabled step in order; `Enter` / `Space` activates the focused step and updates `v-model`. A `disabled` step is skipped by `Tab`. No roving tabindex — the rail is a list of links to steps, not a tablist.
-- ARIA: the root is a `<nav>` with `aria-label` over an `<ol>`; each step is an `<li>` holding a `<button type="button">`. The current step's button carries `aria-current="step"`; a `loading` step carries `aria-busy="true"`; a disabled step is natively `disabled`. The dot glyph and the connector are `aria-hidden="true"`, and each button carries an `sr-only` word naming its state so the rail reads as more than a list of titles.
+- ARIA: the root is a `<nav>` with `aria-label` over an `<ol>`; each step is an `<li>` holding a `<button type="button">`. The active step's button carries `aria-current="step"`; a `running` step carries `aria-busy="true"`; a disabled step is natively `disabled`. The dot glyph and the connector are `aria-hidden="true"`, and each button carries an `sr-only` word naming its state so the rail reads as more than a list of titles.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including the disabled state
 - `motion-reduce:transition-none` on every animated state
 - Touch target ≥40×40 px — the step button is a full-width row at least 40px tall
@@ -149,7 +151,7 @@ even when the row carries nothing but its title.
       value="host"
       title="Where it runs"
       description="The firewall that reads this list."
-      state="complete"
+      status="success"
     />
     <Stepper.Step
       value="configure"
@@ -183,13 +185,13 @@ even when the row carries nothing but its title.
 <template>
   <Stepper
     v-model="step"
-    aria-label="Step states"
+    aria-label="Step statuses"
   >
     <Stepper.Step
       value="host"
       title="Complete"
       description="The owner marked this step as answered."
-      state="complete"
+      status="success"
     />
     <Stepper.Step
       value="configure"
@@ -200,13 +202,13 @@ even when the row carries nothing but its title.
       value="addresses"
       title="Error"
       description="Two addresses are not valid IPv4 ranges."
-      state="error"
+      status="error"
     />
     <Stepper.Step
       value="rules"
       title="Loading"
       description="Checking the rules against the firewall."
-      state="loading"
+      status="running"
     />
     <Stepper.Step
       value="review"

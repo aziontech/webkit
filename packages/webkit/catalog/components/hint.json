@@ -19,7 +19,7 @@
  "bestPractices": [
   "One sentence, ending in a period. If it needs two, it belongs in `helper-text` or a `popover`.",
   "Never hide required information behind a hint — hover is not discoverable on touch, so treat it as an enhancement.",
-  "The `text` doubles as the button's accessible name, so write it as prose a screen reader can read verbatim.",
+  "The `content` doubles as the button's accessible name, so write it as prose a screen reader can read verbatim.",
   "Place it immediately after the thing it explains, not at the end of a row."
  ]
 }

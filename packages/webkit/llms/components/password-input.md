@@ -14,7 +14,7 @@
 ## Do
 
 - Set `autocomplete="new-password"` on sign-up and password-change forms; keep the default `current-password` on login.
-- Leave `toggleable` on; turn it off only when you need the `suffix` slot, which is ignored while the toggle is shown.
+- Leave `toggleable` on; turn it off only when you need the `trailing` slot, which is ignored while the toggle is shown.
 - The field is a fixed 40px tall with no `size` prop; align it with `size="large"` siblings in the same row.
 - Give it an accessible name: a `label` whose `for` matches an `id` passed to the input, or `aria-label`.
 - Set `monospace` on a secret that is code-like: an API token, a client secret, a signing key. Pair it with `autocomplete="off"` and `:spellcheck="false"`, so a revealed token reads character by character (`0`/`O`, `l`/`1`).
@@ -43,7 +43,7 @@
 | `readonly` | `boolean` | `false` | false | Marks the field read-only; value is visible but not editable. Toggle button stays operable. |
 | `required` | `boolean` | `false` | false | Marks the field as required; sets native `required` and `aria-required`. Visual indicator (asterisk) is owned by the wrapping form-field, not by this component. |
 | `invalid` | `boolean` | `false` | false | Applies the invalid border + ring tokens and sets `aria-invalid`. |
-| `toggleable` | `boolean` | `true` | false | When true, renders the visibility toggle button on the trailing edge of the field. When false, the field behaves as a plain password input with no toggle and the `suffix` slot becomes available. |
+| `toggleable` | `boolean` | `true` | false | When true, renders the visibility toggle button on the trailing edge of the field. When false, the field behaves as a plain password input with no toggle and the `trailing` slot becomes available. |
 | `autocomplete` | `'current-password' \| 'new-password' \| 'off'` | `'current-password'` | false | Native `autocomplete` hint for password managers. Use `new-password` for sign-up and password-change flows. |
 | `monospace` | `boolean` | `false` | false | Sets the value and placeholder in the monospace code face (`.text-label-code-sm`) for API tokens, client secrets and keys (`data-monospace`). Same prop as on `Input`. |
 | `modelValue` | `string` | `''` | false | Two-way value (`v-model`). |
@@ -52,8 +52,8 @@
 
 | Slot | Scope | Notes |
 | --- | --- | --- |
-| `prefix` | — | Leading adornment at the inline start of the field. Hidden from assistive tech (`aria-hidden="true"`). Same name as on `input` and `number-input`. |
-| `suffix` | — | Trailing adornment at the inline end. **Only honored when `toggleable=false`** — the visibility toggle sits there when enabled. Hidden from assistive tech (`aria-hidden="true"`). |
+| `leading` | — | Leading adornment at the inline start of the field. Hidden from assistive tech (`aria-hidden="true"`). Same name as on `input` and `number-input`. |
+| `trailing` | — | Trailing adornment at the inline end. **Only honored when `toggleable=false`** — the visibility toggle sits there when enabled. Hidden from assistive tech (`aria-hidden="true"`). |
 
 ## v-model
 
@@ -68,11 +68,11 @@
 - `data-disabled` mirrors the `disabled` prop
 - `data-invalid` mirrors the `invalid` prop
 - `data-required` mirrors the `required` prop; drives the warning-border treatment
-- `data-has-icon-left` mirrors `$slots.prefix` presence
-- `data-has-icon-right` mirrors `$slots.suffix` presence (only relevant when `toggleable=false`)
+- `data-leading` mirrors `$slots.leading` presence
+- `data-trailing` mirrors `$slots.trailing` presence (only relevant when `toggleable=false`)
 - `data-toggleable` mirrors the `toggleable` prop
 - `data-monospace` mirrors the `monospace` prop: the value (masked or revealed) and the placeholder render in `.text-label-code-sm` instead of `.text-label-sm`.
-- `data-visible` on the root mirrors the internal visibility state (`true` when the password is revealed as plain text)
+- `data-revealed` on the root mirrors the internal visibility state (`true` when the password is revealed as plain text)
 - `filled` is detected via the native `:not(:placeholder-shown)` selector — no JS state
 
 ## Accessibility
@@ -157,7 +157,7 @@
       v-model="password"
       placeholder="Enter your password"
     >
-      <template #prefix>
+      <template #leading>
         <i class="ai ai-lock" />
       </template>
     </PasswordInput>

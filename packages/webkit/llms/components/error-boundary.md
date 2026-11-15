@@ -51,7 +51,7 @@
 | Event | Payload | Notes |
 | --- | --- | --- |
 | `error` | `ErrorBoundaryErrorEvent` | Fires once per failure with `{ error, info }`: what was thrown and Vue's description of where. Report it from here. |
-| `retry` | `(event?: Event)` | Fires when the region is mounted again (Retry, the slot's `retry`, or a `resetKey` change). Reset the broken state here. Carries the click event when the built-in Retry button (or a slot `retry(event)` call) triggered it; no argument for a `resetKey` change. |
+| `retry` | `(event: Event)` | Fires when the region is mounted again (Retry, the slot's `retry`, or a `resetKey` change). Reset the broken state here. Carries the click event when the built-in Retry button (or a slot `retry(event)` call) triggered it, an `Event` of type `retry` when the slot calls `retry()` with no event, and an `Event` of type `reset` for a `resetKey` change. |
 
 ## Slots
 
@@ -144,7 +144,7 @@
 <template>
   <div class="flex w-full max-w-[512px] flex-col gap-(--spacing-sm)">
     <Card title="Top services">
-      <template #content>
+      <template #default>
         <ErrorBoundary
           @error="report"
           @retry="recover"
@@ -208,7 +208,7 @@
 <template>
   <div class="flex w-full max-w-[512px] flex-col gap-(--spacing-sm)">
     <Card title="Requests by region">
-      <template #content>
+      <template #default>
         <ErrorBoundary @retry="broken = false">
           <BarList
             :items="items"

@@ -1,6 +1,6 @@
 # Tag
 
-> Use Tag for a read-only category or outcome word on an item (Production, Beta, Allowed) that is not a lifecycle state. The state of a resource is a StatusIndicator, a number is a Badge, a removable or selectable token is a Chip, and a level on the critical → info scale is a SeverityTag. A compact, read-only word on an item, colored by `severity` so the category or outcome reads at a glance (Production in primary, Blocked in danger). It takes an optional leading icon, a pill shape with `rounded`, and two sizes; it is never interactive and never counts.
+> Use Tag for a read-only category or outcome word on an item (Production, Beta, Allowed) that is not a lifecycle state. The state of a resource is a StatusIndicator, a number is a Badge, a removable or selectable token is a Chip, and a level on the critical → info scale is a SeverityTag. A compact, read-only word on an item, colored by its brand look `variant` or its status colour `severity` so the category or outcome reads at a glance (Production in `variant="primary"`, Blocked in `severity="danger"`). It takes an optional leading icon, a pill shape with `rounded`, and two sizes; it is never interactive and never counts.
 
 - Import: `import Tag from '@aziontech/webkit/tag'`
 - Category: content · Surface: app · Structure: monolithic
@@ -9,14 +9,14 @@
 ## When to use
 
 - Label or categorize an item with a short descriptive text, optionally with a leading icon or pill shape.
-- Show a status/category with severity color via `severity`.
-- Mark the one value a list highlights (the Owner role in a users table) with `severity="highlight"`: the brand orange as a tint, orange text on `--primary-mask`, like the success, info and warning tints.
+- Show a status with its colour via `severity` (`neutral`, `info`, `success`, `warning`, `danger`), or a category with a brand look via `variant` (`primary`, `accent`, `contrast`, `highlight`); `severity` wins when both are set.
+- Mark the one value a list highlights (the Owner role in a users table) with `variant="highlight"`: the brand orange as a tint, orange text on `--primary-mask`, like the success, info and warning tints.
 
 ## Do
 
-- Severity comes from `severity`; the optional icon is decorative — keep it `aria-hidden`.
-- Pick the severity by meaning: `success` Active, `warning` Pending, `neutral` Inactive or a neutral category (Developer, Viewer), `info` a second role (Admin), `highlight` the one value to single out (Owner), `primary` a solid brand label. Do not use `danger` for a state that is only off (Inactive): it reads as an error.
-- Do not restyle a Tag with colour classes to get a tint; every tint is a `severity`.
+- Colour comes from `variant` or `severity`; the optional icon is decorative — keep it `aria-hidden`.
+- Pick the severity by meaning: `success` Active, `warning` Pending, `neutral` Inactive or a neutral category (Developer, Viewer), `info` a second role (Admin), `variant="highlight"` the one value to single out (Owner), `primary` a solid brand label. Do not use `danger` for a state that is only off (Inactive): it reads as an error.
+- Do not restyle a Tag with colour classes to get a tint; every tint is a `variant` or a `severity`.
 - Use `rounded` for the pill shape rather than a custom radius.
 
 ## Don’t
@@ -35,7 +35,8 @@
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
 | `label` | `string` | `''` | false | Fallback text when the default slot is empty. |
-| `severity` | `Severity \| 'primary' \| 'accent' \| 'contrast' \| 'highlight'` | `'primary'` | false | Color style for the tag surface and label: the shared `Severity` scale (`neutral`, `info`, `success`, `warning`, `danger`, exported from this component) plus `primary` (solid brand orange), `accent`, `highlight` (the brand orange as a tint) and `contrast` (`var(--bg-contrast)` / `var(--text-contrast)`). |
+| `variant` | `'primary' \| 'accent' \| 'contrast' \| 'highlight'` | `'primary'` | false | Brand look of the tag surface and label, used when `severity` is not set: `primary` (solid brand orange), `accent`, `highlight` (the brand orange as a tint) and `contrast` (`var(--bg-contrast)` / `var(--text-contrast)`). |
+| `severity` | `'neutral' \| 'info' \| 'success' \| 'warning' \| 'danger'` | `—` | false | Status colour of the tag surface and label, the shared `Severity` scale exported from this component; wins over `variant` when set. |
 | `size` | `'small' \| 'medium'` | `'medium'` | false | Size token; `medium` is 24px tall, `small` is 20px. |
 | `rounded` | `boolean` | `false` | false | Pill shape when true. |
 | `icon` | `string` | `''` | false | Azion icon class for the leading icon. |
@@ -53,6 +54,7 @@
 ## States
 
 - Visual states: `default`. A tag is static text: it takes no focus and has no hover or active state.
+- `data-severity` mirrors `severity` when it is set; otherwise `data-variant` mirrors `variant`.
 
 ## Accessibility
 
@@ -82,7 +84,7 @@
 <template>
   <Tag
     label="Label"
-    severity="primary"
+    variant="primary"
     size="medium"
   />
 </template>
@@ -103,11 +105,11 @@
     />
     <Tag
       label="Label"
-      severity="primary"
+      variant="primary"
     />
     <Tag
       label="Label"
-      severity="accent"
+      variant="accent"
     />
     <Tag
       label="Label"
@@ -127,11 +129,11 @@
     />
     <Tag
       label="Label"
-      severity="contrast"
+      variant="contrast"
     />
     <Tag
       label="Label"
-      severity="highlight"
+      variant="highlight"
     />
   </div>
 </template>
@@ -149,24 +151,24 @@
     <div class="flex flex-wrap items-center gap-4">
       <Tag
         label="Label"
-        severity="primary"
+        variant="primary"
         size="medium"
       />
       <Tag
         label="Label"
-        severity="primary"
+        variant="primary"
         size="medium"
         rounded
       />
       <Tag
         label="Label"
-        severity="primary"
+        variant="primary"
         size="medium"
         icon="ai ai-box"
       />
       <Tag
         label="Label"
-        severity="primary"
+        variant="primary"
         size="medium"
         icon="ai ai-box"
         rounded
@@ -175,24 +177,24 @@
     <div class="flex flex-wrap items-center gap-4">
       <Tag
         label="Label"
-        severity="primary"
+        variant="primary"
         size="small"
       />
       <Tag
         label="Label"
-        severity="primary"
+        variant="primary"
         size="small"
         rounded
       />
       <Tag
         label="Label"
-        severity="primary"
+        variant="primary"
         size="small"
         icon="ai ai-box"
       />
       <Tag
         label="Label"
-        severity="primary"
+        variant="primary"
         size="small"
         icon="ai ai-box"
         rounded

@@ -124,7 +124,7 @@ Each variant is the same screen in another state: `get_block("create/deploy-succ
     recommended?: boolean
   }
 
-  const recommendedBadge: CardBadge[] = [{ label: 'Recommended', severity: 'primary' }]
+  const recommendedBadge: CardBadge[] = [{ label: 'Recommended', variant: 'primary' }]
 
   const resources = [
     {
@@ -209,7 +209,7 @@ Each variant is the same screen in another state: `get_block("create/deploy-succ
             class="animate-content-enter motion-reduce:animate-none flex w-full flex-col gap-(--spacing-lg) [--content-enter-delay:var(--transition-duration-fast-01)]"
           >
             <Card>
-              <template #content>
+              <template #default>
                 <div class="flex flex-col gap-(--spacing-md) sm:flex-row">
                   <div
                     aria-hidden="true"
@@ -261,7 +261,7 @@ Each variant is the same screen in another state: `get_block("create/deploy-succ
                           />
                           <div class="min-w-0">
                             <Tooltip
-                              text="Open web-app-k3x9q2.example.com in a new tab"
+                              content="Open web-app-k3x9q2.example.com in a new tab"
                               class="w-full"
                             >
                               <Link
@@ -289,7 +289,7 @@ Each variant is the same screen in another state: `get_block("create/deploy-succ
                           />
                           <div class="min-w-0">
                             <Tooltip
-                              text="Open acme/web-app in a new tab"
+                              content="Open acme/web-app in a new tab"
                               class="w-full"
                             >
                               <Link
@@ -318,7 +318,7 @@ Each variant is the same screen in another state: `get_block("create/deploy-succ
             <section class="flex flex-col gap-(--spacing-sm)">
               <h2 class="text-label-md text-(--text-default)">Resources</h2>
               <Card :padded="false">
-                <template #content>
+                <template #default>
                   <Item.List>
                     <Item
                       v-for="resource in resources"

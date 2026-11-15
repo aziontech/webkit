@@ -232,7 +232,7 @@
   >
     <template #header>
       <SectionTitle
-        kind="left"
+        kind="start"
         size="small"
         :framed="false"
         title="See how to use"

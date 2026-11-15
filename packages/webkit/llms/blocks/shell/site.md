@@ -571,7 +571,7 @@ Each variant is the same screen in another state: `get_block("shell/site", { var
       max-width="site"
     >
       <Hero.Title
-        centered
+        :align="'center'"
         eyebrow="Functions"
         eyebrow-prefix="//"
         title="Run serverless code at the edge"

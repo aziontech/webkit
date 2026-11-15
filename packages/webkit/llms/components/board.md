@@ -52,8 +52,8 @@
 
 | Event | Payload | Notes |
 | --- | --- | --- |
-| `item-move` | `{ id: string; from: number; to: number }` | An item moved, by drop or by the keyboard; zero-based. |
-| `item-resize` | `{ id: string; span: number; height: number \| undefined }` | A resize ended (pointer up or a resize key on the corner). |
+| `item-move` | `(event: KeyboardEvent \| DragEvent, payload: { id: string; from: number; to: number })` | An item moved, by drop or by the keyboard; zero-based. The drop or key event comes first. |
+| `item-resize` | `(event: PointerEvent \| KeyboardEvent, payload: { id: string; span: number; height: number \| undefined })` | A resize ended (pointer up or a resize key on the corner); that event comes first. |
 
 ## Slots
 

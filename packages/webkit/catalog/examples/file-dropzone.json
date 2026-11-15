@@ -13,7 +13,7 @@
   {
    "name": "Overlay",
    "summary": "Hidden at rest. Drag a file over the window and the overlay fades in over its nearest positioned ancestor, here the wrapper around the card.",
-   "sfc": "<script setup>\n  import Card from '@aziontech/webkit/card'\n  import FileDropzone from '@aziontech/webkit/file-dropzone'\n</script>\n\n<template>\n  <div class=\"relative w-full max-w-(--container-md)\">\n    <Card title=\"Project files\">\n      <template #content>\n        <div class=\"flex min-h-48 flex-col gap-(--spacing-xs)\">\n          <p class=\"text-body-sm text-(--text-muted)\">\n            Drag a file from your computer over this window. The drop target covers this card until\n            you drop the file, leave the window or press Escape.\n          </p>\n        </div>\n      </template>\n    </Card>\n    <FileDropzone kind=\"overlay\" />\n  </div>\n</template>"
+   "sfc": "<script setup>\n  import Card from '@aziontech/webkit/card'\n  import FileDropzone from '@aziontech/webkit/file-dropzone'\n</script>\n\n<template>\n  <div class=\"relative w-full max-w-(--container-md)\">\n    <Card title=\"Project files\">\n      <template #default>\n        <div class=\"flex min-h-48 flex-col gap-(--spacing-xs)\">\n          <p class=\"text-body-sm text-(--text-muted)\">\n            Drag a file from your computer over this window. The drop target covers this card until\n            you drop the file, leave the window or press Escape.\n          </p>\n        </div>\n      </template>\n    </Card>\n    <FileDropzone kind=\"overlay\" />\n  </div>\n</template>"
   }
  ]
 }

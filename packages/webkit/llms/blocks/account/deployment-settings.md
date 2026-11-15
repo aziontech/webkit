@@ -481,18 +481,18 @@ Each variant is the same screen in another state: `get_block("account/deployment
   )
 
   const columns: TableColumn[] = [
-    { accessorKey: 'name', header: 'Name', enableSorting: true, principal: true, hideable: false },
+    { accessorKey: 'name', header: 'Name', sortable: true, principal: true, hideable: false },
     { accessorKey: 'services', header: 'Services', minWidth: 170 },
-    { accessorKey: 'type', header: 'Type', enableSorting: true, minWidth: 110 },
-    { accessorKey: 'bindingPolicy', header: 'Binding policy', enableSorting: true, minWidth: 140 },
+    { accessorKey: 'type', header: 'Type', sortable: true, minWidth: 110 },
+    { accessorKey: 'bindingPolicy', header: 'Binding policy', sortable: true, minWidth: 140 },
     {
       accessorKey: 'deploymentPolicy',
       header: 'Deployment policy',
-      enableSorting: true,
+      sortable: true,
       minWidth: 160
     },
-    { accessorKey: 'status', header: 'Status', enableSorting: true, minWidth: 110 },
-    { accessorKey: 'updatedAt', header: 'Last modified', enableSorting: true, minWidth: 170 },
+    { accessorKey: 'status', header: 'Status', sortable: true, minWidth: 110 },
+    { accessorKey: 'updatedAt', header: 'Last modified', sortable: true, minWidth: 170 },
     { id: 'actions', kind: 'action', hideable: false }
   ]
 
@@ -715,7 +715,7 @@ Each variant is the same screen in another state: `get_block("account/deployment
             hint="What the Deployment Setting created with the next service starts with."
           >
             <Card :padded="false">
-              <template #content>
+              <template #default>
                 <Item.List>
                   <SettingRow
                     title="Binding policy"
@@ -795,7 +795,7 @@ Each variant is the same screen in another state: `get_block("account/deployment
             hint="Every service, every environment, and the Deployment Setting each one publishes with."
           >
             <Card :padded="false">
-              <template #content>
+              <template #default>
                 <div
                   v-if="loading"
                   class="flex flex-col gap-(--spacing-sm) p-(--spacing-md)"
@@ -816,11 +816,11 @@ Each variant is the same screen in another state: `get_block("account/deployment
                 <Accordion
                   v-else
                   type="single"
-                  arrow-position="left"
+                  icon-position="leading"
                   collapsible
                 >
                   <Accordion.Item value="all-services">
-                    <Accordion.Trigger :level="3">
+                    <Accordion.Trigger :heading-level="3">
                       <span class="flex flex-1 flex-wrap items-center gap-(--spacing-sm)">
                         <span class="text-label-md text-(--text-default)">All services</span>
                         <span class="text-body-sm text-(--text-muted)">{{
@@ -843,7 +843,7 @@ Each variant is the same screen in another state: `get_block("account/deployment
                           aria-label="Search services or Deployment Settings"
                           class="w-full"
                         >
-                          <template #prefix>
+                          <template #leading>
                             <i
                               class="ai ai-search"
                               aria-hidden="true"
@@ -967,7 +967,7 @@ Each variant is the same screen in another state: `get_block("account/deployment
                 </div>
                 <div class="flex shrink-0 flex-wrap items-center gap-(--spacing-xs)">
                   <Tooltip
-                    text="Refresh"
+                    content="Refresh"
                     class="shrink-0"
                   >
                     <IconButton
@@ -980,7 +980,7 @@ Each variant is the same screen in another state: `get_block("account/deployment
                     />
                   </Tooltip>
                   <Tooltip
-                    text="Download CSV"
+                    content="Download CSV"
                     class="shrink-0"
                   >
                     <IconButton
@@ -1000,12 +1000,12 @@ Each variant is the same screen in another state: `get_block("account/deployment
               </header>
 
               <Card :padded="false">
-                <template #content>
+                <template #default>
                   <DataTable
                     ref="settingsTableEl"
                     v-bind="tableProps"
                     :loading="loading || refreshing"
-                    enable-sorting
+                    sortable
                     :bordered="false"
                     aria-label="Deployment Settings"
                   >
@@ -1023,7 +1023,7 @@ Each variant is the same screen in another state: `get_block("account/deployment
                     </template>
                     <template #cell-services="{ row }">
                       <Tooltip
-                        :text="
+                        :content="
                           row.services.length
                             ? row.services.join(' · ')
                             : 'No environment publishes with this setting yet.'
@@ -1157,7 +1157,7 @@ Each variant is the same screen in another state: `get_block("account/deployment
     <Drawer
       v-model:open="drawerOpen"
       size="large"
-      side="right"
+      side="end"
       :dismissible="!submitting"
       :closable="!submitting"
     >

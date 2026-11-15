@@ -160,7 +160,7 @@
         />
       </StatTileGroup>
       <Card title="Next steps">
-        <template #content>
+        <template #default>
           <ul
             class="flex list-disc flex-col gap-(--spacing-xs) ps-(--spacing-md) text-body-sm text-(--text-muted)"
           >

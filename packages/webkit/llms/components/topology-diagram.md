@@ -18,7 +18,7 @@
 - Mark the last node of each branch `terminal` so no connector leaves it.
 - Give every unbound slot a message that says what happens without it.
 - Give a node `href` when its resource has a page: the name becomes a link that ends in the open glyph (`ai ai-external-link`), as every resource name in the console does.
-- A node that collects many resources and adds to itself, such as Domains (add a domain), puts its `+` in the `actions` slot: an `IconButton` (`ai ai-plus`, `kind="outlined"`, `size="small"`) named `Add domain` inside a `Tooltip`, picked by `node.key`. `bindable` is for a slot that holds one resource (Firewall, Custom Page): it brings its own `+` with the bind menu. Do not hand-draw a node card to get the `+`.
+- A node that collects many resources and adds to itself, such as Domains (add a domain), puts its `+` in the `actions` slot: an `IconButton` (`ai ai-plus`, `kind="outlined"`, `size="small"`) named `Add domain` inside a `Tooltip`, picked by `node.id`. `bindable` is for a slot that holds one resource (Firewall, Custom Page): it brings its own `+` with the bind menu. Do not hand-draw a node card to get the `+`.
 
 ## Don’t
 
@@ -41,15 +41,15 @@
 | `levels` | `TopologyLevel[]` | `[]` | false | Columns of the diagram, from the entry point to the last dependency. |
 | `loading` | `boolean` | `false` | false | Shows placeholder cards while the topology loads. |
 | `ariaLabel` | `string` | `''` | false | Accessible name of the diagram. Empty uses the locale catalog (`Deployment topology`). |
-| `expanded` | `string[]` | `() => []` | false | Two-way value (`v-model:expanded`). |
+| `openKeys` | `string[]` | `() => []` | false | Two-way value (`v-model:openKeys`). |
 
 ## Events
 
 | Event | Payload | Notes |
 | --- | --- | --- |
-| `bind` | `(event: MouseEvent \| KeyboardEvent, binding: { key: string; value: string })` | An existing option was picked in the bind control; `key` is the node's key. |
-| `remove` | `(event: MouseEvent, key: string)` | Remove was activated on a bound, removable node. |
-| `create` | `(event: MouseEvent \| KeyboardEvent, key: string)` | Create was picked in the bind control. |
+| `bind` | `(event: MouseEvent \| KeyboardEvent, binding: { id: string; value: string })` | An existing option was picked in the bind control; `id` is the node's id. |
+| `remove` | `(event: MouseEvent, id: string)` | Remove was activated on a bound, removable node. |
+| `create` | `(event: MouseEvent \| KeyboardEvent, id: string)` | Create was picked in the bind control. |
 
 ## Slots
 
@@ -60,7 +60,7 @@
 
 ## v-model
 
-- **`v-model:expanded`** — `string[]`, default `[]`. Keys of the open node cards; a header click toggles its key.
+- **`v-model:openKeys`** — `string[]`, default `[]`. Ids of the open node cards; a header click toggles its id.
 
 ## States
 
@@ -124,11 +124,11 @@
 
   const levels = [
     {
-      key: 'domains',
+      id: 'domains',
       label: 'Domains',
       nodes: [
         {
-          key: 'domains',
+          id: 'domains',
           type: 'Domains',
           icon: 'ai ai-globe',
           name: 'shop.example.com',
@@ -152,11 +152,11 @@
       ]
     },
     {
-      key: 'project',
+      id: 'project',
       label: 'Project',
       nodes: [
         {
-          key: 'project',
+          id: 'project',
           type: 'Project',
           icon: 'ai ai-folder',
           name: 'web-app',
@@ -171,11 +171,11 @@
       ]
     },
     {
-      key: 'policy',
+      id: 'policy',
       label: 'Policy',
       nodes: [
         {
-          key: 'policy',
+          id: 'policy',
           type: 'Policy',
           icon: 'ai ai-shield',
           name: 'edge-guard',
@@ -191,11 +191,11 @@
       ]
     },
     {
-      key: 'service',
+      id: 'service',
       label: 'Service',
       nodes: [
         {
-          key: 'service',
+          id: 'service',
           type: 'Service',
           icon: 'ai ai-server',
           name: 'web-app',
@@ -205,7 +205,7 @@
           fields: [{ label: 'Version', value: 'AEO25I38' }]
         },
         {
-          key: 'error-page',
+          id: 'error-page',
           type: 'Error page',
           icon: 'ai ai-file',
           terminal: true,
@@ -216,11 +216,11 @@
       ]
     },
     {
-      key: 'cache',
+      id: 'cache',
       label: 'Cache rules',
       nodes: [
         {
-          key: 'cache-static',
+          id: 'cache-static',
           type: 'Cache rule',
           icon: 'ai ai-bolt',
           name: 'static-assets',
@@ -229,7 +229,7 @@
           fields: [{ label: 'Lifetime', value: '30 days' }]
         },
         {
-          key: 'cache-api',
+          id: 'cache-api',
           type: 'Cache rule',
           icon: 'ai ai-bolt',
           name: 'api-bypass',
@@ -240,11 +240,11 @@
       ]
     },
     {
-      key: 'integration',
+      id: 'integration',
       label: 'Integration',
       nodes: [
         {
-          key: 'integration',
+          id: 'integration',
           type: 'Integration',
           icon: 'ai ai-link',
           name: 'web-app-origin',
@@ -257,11 +257,11 @@
       ]
     },
     {
-      key: 'storage',
+      id: 'storage',
       label: 'Storage',
       nodes: [
         {
-          key: 'storage',
+          id: 'storage',
           type: 'Storage',
           icon: 'ai ai-inbox',
           name: 'web-app-assets',
@@ -274,7 +274,7 @@
     }
   ]
 
-  const expanded = ref(['project'])
+  const openKeys = ref(['project'])
   const note = ref('')
 </script>
 
@@ -282,16 +282,16 @@
   <div class="flex flex-col gap-(--spacing-sm)">
     <div class="rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface-raised)">
       <TopologyDiagram
-        v-model:expanded="expanded"
+        v-model:open-keys="openKeys"
         :levels="levels"
-        @bind="(event, { key, value }) => (note = `Bind ${value} to ${key}.`)"
-        @remove="(event, key) => (note = `Remove ${key}.`)"
-        @create="(event, key) => (note = `Create a new ${key}.`)"
+        @bind="(event, { id, value }) => (note = `Bind ${value} to ${id}.`)"
+        @remove="(event, id) => (note = `Remove ${id}.`)"
+        @create="(event, id) => (note = `Create a new ${id}.`)"
       >
         <template #actions="{ node }">
           <Tooltip
-            v-if="node.key === 'domains'"
-            text="Add domain"
+            v-if="node.id === 'domains'"
+            content="Add domain"
           >
             <IconButton
               icon="ai ai-plus"
@@ -341,7 +341,7 @@
 
   const deployed = { policy: 'edge-guard', 'error-page': '' }
   const staged = reactive({})
-  const expanded = ref(['policy'])
+  const openKeys = ref(['policy'])
   const note = ref('')
 
   const slot = (key) => {
@@ -350,7 +350,7 @@
     const removing = pick === ''
     const value = pick === undefined ? deployed[key] : pick
     const base = {
-      key,
+      id: key,
       type: target.type,
       icon: target.icon,
       bindable: true,
@@ -379,10 +379,10 @@
 
   const levels = computed(() => [
     {
-      key: 'project',
+      id: 'project',
       nodes: [
         {
-          key: 'project',
+          id: 'project',
           type: 'Project',
           icon: 'ai ai-folder',
           name: 'web-app',
@@ -391,12 +391,12 @@
         }
       ]
     },
-    { key: 'policy', nodes: [slot('policy')] },
+    { id: 'policy', nodes: [slot('policy')] },
     {
-      key: 'service',
+      id: 'service',
       nodes: [
         {
-          key: 'service',
+          id: 'service',
           type: 'Service',
           icon: 'ai ai-server',
           name: 'web-app',
@@ -410,7 +410,7 @@
 
   const stagedCount = computed(() => Object.keys(staged).length)
 
-  const bind = (event, { key, value }) => {
+  const bind = (event, { id: key, value }) => {
     if (value === deployed[key]) delete staged[key]
     else staged[key] = value
     note.value = `${value} staged on ${targets[key].type.toLowerCase()}.`
@@ -429,7 +429,7 @@
   <div class="flex flex-col gap-(--spacing-sm)">
     <div class="rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface-raised)">
       <TopologyDiagram
-        v-model:expanded="expanded"
+        v-model:open-keys="openKeys"
         :levels="levels"
         @bind="bind"
         @remove="remove"

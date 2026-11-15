@@ -46,7 +46,7 @@
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `navigationLabel` | `string` | `''` | false | Accessible name of the navigation drawer. Empty uses the locale catalog (`Navigation`). |
+| `navigationAriaLabel` | `string` | `''` | false | Accessible name of the navigation drawer. Empty uses the locale catalog (`Navigation`). |
 | `toolsLabel` | `string` | `''` | false | Title of the tools region, shown in its header. Empty uses the locale catalog (`Help`). |
 | `toolsWidth` | `number` | `320` | false | Width of the tools region in pixels while not compact. |
 | `splitPanelTitle` | `string` | `''` | false | Title of the split panel, shown in its header. Empty uses the locale catalog (`Details`). |
@@ -96,7 +96,7 @@ Unbound, each one keeps its own local state.
 
 - Visible focus: the separator shows `var(--accent)` on `focus-visible`; the region buttons are `IconButton` with their own ring.
 - Keyboard map: `Tab` reaches the region controls in DOM order (navigation, header, content, split panel, tools). On the split separator: `ArrowUp` / `ArrowDown` grow and shrink a bottom panel; `ArrowLeft` / `ArrowRight` grow and shrink a side panel (mirrored under RTL); `Shift` makes the step 64 px instead of 16 px; `Home` / `End` go to the minimum / maximum. `Escape` closes a compact drawer (from `Drawer`) and returns focus to the control that opened it. The split panel and tools bodies are focusable scroll regions (`tabindex="0"`, `role="group"` named by their heading), so a keyboard reader can scroll them when they hold no control.
-- ARIA: the tools region and the split panel are `<section aria-labelledby>` their header title (`<h2>`); the separator is `role="separator"` with `aria-orientation`, `aria-valuenow` / `aria-valuemin` / `aria-valuemax` in pixels, `aria-controls` the split panel and an accessible name from the catalog. The compact drawers are named by `navigationLabel` and `toolsLabel`. The layout adds no landmark of its own around the content; the consumer's `<main>` and `Sidebar` `<nav>` are the landmarks.
+- ARIA: the tools region and the split panel are `<section aria-labelledby>` their header title (`<h2>`); the separator is `role="separator"` with `aria-orientation`, `aria-valuenow` / `aria-valuemin` / `aria-valuemax` in pixels, `aria-controls` the split panel and an accessible name from the catalog. The compact drawers are named by `navigationAriaLabel` and `toolsLabel`. The layout adds no landmark of its own around the content; the consumer's `<main>` and `Sidebar` `<nav>` are the landmarks.
 - Contrast ≥4.5:1 for the region titles; ≥3:1 for the separator against the surfaces.
 - `motion-reduce:transition-none` on the separator transition.
 - Touch target: the separator's hit area is 16 px across (a `before:` pseudo-element) over a 4 px line; region buttons are 32 px `IconButton` (40 px on `pointer: coarse` from `IconButton`).
@@ -110,16 +110,16 @@ Unbound, each one keeps its own local state.
 
 ## Internationalization
 
-| Key                          | English source          | Override prop     |
-| ---------------------------- | ----------------------- | ----------------- |
-| `appLayout.navigation`       | Navigation              | `navigationLabel` |
-| `appLayout.tools`            | Help                    | `toolsLabel`      |
-| `appLayout.closeTools`       | Close help              | —                 |
-| `appLayout.splitPanel`       | Details                 | `splitPanelTitle` |
-| `appLayout.closeSplitPanel`  | Close panel             | —                 |
-| `appLayout.resizeSplitPanel` | Resize panel            | —                 |
-| `appLayout.showAtSide`       | Show beside the content | —                 |
-| `appLayout.showAtBottom`     | Show under the content  | —                 |
+| Key                          | English source          | Override prop         |
+| ---------------------------- | ----------------------- | --------------------- |
+| `appLayout.navigation`       | Navigation              | `navigationAriaLabel` |
+| `appLayout.tools`            | Help                    | `toolsLabel`          |
+| `appLayout.closeTools`       | Close help              | —                     |
+| `appLayout.splitPanel`       | Details                 | `splitPanelTitle`     |
+| `appLayout.closeSplitPanel`  | Close panel             | —                     |
+| `appLayout.resizeSplitPanel` | Resize panel            | —                     |
+| `appLayout.showAtSide`       | Show beside the content | —                     |
+| `appLayout.showAtBottom`     | Show under the content  | —                     |
 
 - Formatting: none.
 
@@ -189,7 +189,7 @@ Unbound, each one keeps its own local state.
                 label="Services"
                 icon="ai ai-edge-application"
                 href="#"
-                selected
+                active
               />
               <SidebarMenuItem
                 label="Variables"
@@ -236,7 +236,7 @@ Unbound, each one keeps its own local state.
             <Command.Input placeholder="Search the console" />
             <Command.List>
               <Command.Empty>No page matches your search.</Command.Empty>
-              <Command.Group heading="Pages">
+              <Command.Group label="Pages">
                 <Command.Item
                   v-for="page in searchPages"
                   :key="page"

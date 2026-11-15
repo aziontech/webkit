@@ -53,7 +53,7 @@ The last control of the row. `CollectionPreferences` bound with `v-bind="prefere
 
 ### E. Resource table — `Card`, `DataTable` (required)
 
-`Card :padded="false"` around `DataTable :bordered="false"` bound with `v-bind="tableProps"`, which hands it one page of rows, the ordered and visible columns, the sort, the pagination footer, density, wrap and stripes; the table renders and never filters or slices on its own. `enable-sorting` makes Name, Status and Last modified sortable; `:loading` joins Refresh with the collection's own fetch. The Name column is `principal`; the actions column is `kind: 'action'`. On a phone the table keeps its grid and scrolls sideways inside the card, as the console does; do not set `stackable` on a resource index, whose rows are compared across columns.
+`Card :padded="false"` around `DataTable :bordered="false"` bound with `v-bind="tableProps"`, which hands it one page of rows, the ordered and visible columns, the sort, the pagination footer, density, wrap and stripes; the table renders and never filters or slices on its own. `sortable` makes Name, Status and Last modified sortable; `:loading` joins Refresh with the collection's own fetch. The Name column is `principal`; the actions column is `kind: 'action'`. On a phone the table keeps its grid and scrolls sideways inside the card, as the console does; do not set `stackable` on a resource index, whose rows are compared across columns.
 
 ### F. Cell presets — `Table.CellLink`, `Table.CellId`, `Table.CellStatus`, `Table.CellTime` (optional)
 
@@ -211,11 +211,11 @@ Each variant is the same screen in another state: `get_block("view/table-view", 
   ]
 
   const columns: TableColumn[] = [
-    { accessorKey: 'name', header: 'Name', enableSorting: true, principal: true, hideable: false },
+    { accessorKey: 'name', header: 'Name', sortable: true, principal: true, hideable: false },
     { accessorKey: 'id', header: 'ID', minWidth: 80 },
     { accessorKey: 'domain', header: 'Domains', grow: 2 },
-    { accessorKey: 'status', header: 'Status', enableSorting: true, minWidth: 104 },
-    { accessorKey: 'modifiedAt', header: 'Last modified', enableSorting: true, minWidth: 80 },
+    { accessorKey: 'status', header: 'Status', sortable: true, minWidth: 104 },
+    { accessorKey: 'modifiedAt', header: 'Last modified', sortable: true, minWidth: 80 },
     { id: 'actions', kind: 'action', hideable: false }
   ]
 
@@ -353,7 +353,7 @@ Each variant is the same screen in another state: `get_block("view/table-view", 
             </div>
             <div class="flex shrink-0 items-center gap-(--spacing-xs)">
               <Tooltip
-                text="Refresh"
+                content="Refresh"
                 class="shrink-0"
               >
                 <IconButton
@@ -366,7 +366,7 @@ Each variant is the same screen in another state: `get_block("view/table-view", 
                 />
               </Tooltip>
               <Tooltip
-                text="Download CSV"
+                content="Download CSV"
                 class="shrink-0"
               >
                 <IconButton
@@ -390,7 +390,7 @@ Each variant is the same screen in another state: `get_block("view/table-view", 
               v-if="status === 'empty'"
               :padded="false"
             >
-              <template #content>
+              <template #default>
                 <EmptyState
                   size="medium"
                   icon="ai ai-box"
@@ -430,12 +430,12 @@ Each variant is the same screen in another state: `get_block("view/table-view", 
               v-else
               :padded="false"
             >
-              <template #content>
+              <template #default>
                 <DataTable
                   ref="resourcesTableEl"
                   v-bind="tableProps"
                   :loading="loading || fetching"
-                  enable-sorting
+                  sortable
                   :bordered="false"
                 >
                   <template #cell-name="{ row }">

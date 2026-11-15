@@ -13,7 +13,7 @@
 
 ## Do
 
-- Keep to five tabs with `position` `top` or `bottom`, three with `left` or `right`; tabs past the limit are not rendered.
+- Keep to five tabs with `tabsSide` `top` or `bottom`, three with `start` or `end`; tabs past the limit are not rendered.
 - Give every tab a `diagram` from the diagram library and a stable `value`.
 
 ## Don’t
@@ -35,7 +35,7 @@
 | `eyebrow` | `string` | `''` | false | Overline above the section title. |
 | `title` | `string` | `''` | false | Headline of the band, rendered by the horizontal section title as its `h2`; the band renders no header when empty. |
 | `description` | `string` | `''` | false | Supporting sentence beside the headline. |
-| `position` | `ArchitectureTabsPosition` | `'top'` | false | Side of the diagram the tabs sit on: `top`, `bottom`, `left` or `right`; left and right hold up to three tabs. |
+| `tabsSide` | `ArchitectureTabsSide` | `'top'` | false | Side of the diagram the tabs sit on: `top`, `bottom`, `start` or `end`; start and end hold up to three tabs. |
 | `tabs` | `ArchitectureTabsTab[]` | `[]` | false | The architectures, in order; each is `{ value, title, description, diagram, diagramAriaLabel? }` where `diagram` is the name of the diagram drawn while the tab is active and `diagramAriaLabel` replaces the description that diagram ships. |
 | `autoplay` | `boolean` | `true` | false | Opens the next tab on a timer, with the composed tabs' visible pause control. |
 | `autoplayInterval` | `number` | `6000` | false | Milliseconds each tab holds before the next one opens. |
@@ -118,7 +118,7 @@
     eyebrow="Routing"
     title="Every AI request through one control point"
     description="Every client calls one endpoint. Firewall stops abuse, then a function checks the key, routes the call, and logs it."
-    position="bottom"
+    tabs-side="bottom"
     :autoplay-interval="8000"
     :tabs="tabs"
     :primary-action="primaryAction"

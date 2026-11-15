@@ -33,7 +33,7 @@
  "bestPractices": [
   "Give every step a title that names the decision (`Where it runs`), not the control (`Select`).",
   "Keep steps reachable backwards and closed forwards: mark a step `disabled` until the one before it is answered.",
-  "Set `state=\"error\"` only after the reader tried to advance — a step is not wrong while it is unanswered.",
+  "Set `status=\"error\"` only after the reader tried to advance — a step is not wrong while it is unanswered.",
   "One `Stepper` per surface. Two rails on one screen ask the reader which task they are in.",
   "The rail is navigation, not the form. Put the fields in the content column, never inside a step's slot."
  ],
@@ -66,11 +66,11 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import Stepper from '@aziontech/webkit/stepper'\n  import { ref } from 'vue'\n\n  const step = ref('configure')\n</script>\n\n<template>\n  <Stepper\n    v-model=\"step\"\n    aria-label=\"Create network list\"\n  >\n    <Stepper.Step\n      value=\"host\"\n      title=\"Where it runs\"\n      description=\"The firewall that reads this list.\"\n      state=\"complete\"\n    />\n    <Stepper.Step\n      value=\"configure\"\n      title=\"Configure\"\n      description=\"Name it and add the addresses.\"\n    />\n    <Stepper.Step\n      value=\"rules\"\n      title=\"Rules\"\n      description=\"What the firewall does with a match.\"\n    />\n    <Stepper.Step\n      value=\"review\"\n      title=\"Review\"\n      description=\"Check the list before it goes live.\"\n    />\n  </Stepper>\n</template>"
+   "sfc": "<script setup>\n  import Stepper from '@aziontech/webkit/stepper'\n  import { ref } from 'vue'\n\n  const step = ref('configure')\n</script>\n\n<template>\n  <Stepper\n    v-model=\"step\"\n    aria-label=\"Create network list\"\n  >\n    <Stepper.Step\n      value=\"host\"\n      title=\"Where it runs\"\n      description=\"The firewall that reads this list.\"\n      status=\"success\"\n    />\n    <Stepper.Step\n      value=\"configure\"\n      title=\"Configure\"\n      description=\"Name it and add the addresses.\"\n    />\n    <Stepper.Step\n      value=\"rules\"\n      title=\"Rules\"\n      description=\"What the firewall does with a match.\"\n    />\n    <Stepper.Step\n      value=\"review\"\n      title=\"Review\"\n      description=\"Check the list before it goes live.\"\n    />\n  </Stepper>\n</template>"
   },
   {
    "name": "States",
-   "sfc": "<script setup>\n  import Stepper from '@aziontech/webkit/stepper'\n  import { ref } from 'vue'\n\n  const step = ref('configure')\n</script>\n\n<template>\n  <Stepper\n    v-model=\"step\"\n    aria-label=\"Step states\"\n  >\n    <Stepper.Step\n      value=\"host\"\n      title=\"Complete\"\n      description=\"The owner marked this step as answered.\"\n      state=\"complete\"\n    />\n    <Stepper.Step\n      value=\"configure\"\n      title=\"Current\"\n      description=\"The step the reader is on.\"\n    />\n    <Stepper.Step\n      value=\"addresses\"\n      title=\"Error\"\n      description=\"Two addresses are not valid IPv4 ranges.\"\n      state=\"error\"\n    />\n    <Stepper.Step\n      value=\"rules\"\n      title=\"Loading\"\n      description=\"Checking the rules against the firewall.\"\n      state=\"loading\"\n    />\n    <Stepper.Step\n      value=\"review\"\n      title=\"Upcoming\"\n      description=\"Not reached yet.\"\n    />\n  </Stepper>\n</template>"
+   "sfc": "<script setup>\n  import Stepper from '@aziontech/webkit/stepper'\n  import { ref } from 'vue'\n\n  const step = ref('configure')\n</script>\n\n<template>\n  <Stepper\n    v-model=\"step\"\n    aria-label=\"Step statuses\"\n  >\n    <Stepper.Step\n      value=\"host\"\n      title=\"Complete\"\n      description=\"The owner marked this step as answered.\"\n      status=\"success\"\n    />\n    <Stepper.Step\n      value=\"configure\"\n      title=\"Current\"\n      description=\"The step the reader is on.\"\n    />\n    <Stepper.Step\n      value=\"addresses\"\n      title=\"Error\"\n      description=\"Two addresses are not valid IPv4 ranges.\"\n      status=\"error\"\n    />\n    <Stepper.Step\n      value=\"rules\"\n      title=\"Loading\"\n      description=\"Checking the rules against the firewall.\"\n      status=\"running\"\n    />\n    <Stepper.Step\n      value=\"review\"\n      title=\"Upcoming\"\n      description=\"Not reached yet.\"\n    />\n  </Stepper>\n</template>"
   },
   {
    "name": "Disabled",

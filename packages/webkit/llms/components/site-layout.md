@@ -191,7 +191,7 @@
     :footer="footer"
   >
     <HeroBand
-      kind="centered"
+      kind="center"
       eyebrow="Functions"
       title="Run code where your users are"
       description="Deploy serverless functions to the edge network in seconds."
@@ -295,7 +295,7 @@
     :footer="footer"
   >
     <HeroBand
-      kind="centered"
+      kind="center"
       eyebrow="Functions"
       title="Run code where your users are"
       description="Deploy serverless functions to the edge network in seconds."

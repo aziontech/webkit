@@ -86,9 +86,9 @@
  ],
  "events": [
   {
-   "name": "open-change-complete",
+   "name": "open-transition-end",
    "payload": "open: boolean",
-   "notes": "—"
+   "notes": "Fires when the popup finishes its open or close transition."
   }
  ],
  "slots": [

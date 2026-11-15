@@ -18,9 +18,9 @@
 
 - Give every `Accordion.Item` a unique `value`; the open state is keyed by it, and `default-value` / `v-model` refer to it.
 - Bind `v-model` to a string in `type="single"` and to an array in `type="multiple"`; set `collapsible` to `false` only when one item must always stay open.
-- Set the trigger's `level` to fit the page outline (default `3`) — each trigger is wrapped in a real heading.
+- Set the trigger's `headingLevel` to fit the page outline (default `3`) — each trigger is wrapped in a real heading.
 - Accordion.Content` applies no padding; pad the content you put inside it.
-- Set `size` and `arrow-position` on the root, not per item — they are provided to every item through context.
+- Set `size` and `icon-position` on the root, not per item — they are provided to every item through context.
 
 ## Don’t
 
@@ -43,7 +43,7 @@
 | `defaultValue` | `string \| string[] \| null` | `null` | false | Initial open item(s) when uncontrolled. |
 | `collapsible` | `boolean` | `true` | false | In single mode, lets the open item collapse so that no item is open. |
 | `size` | `'medium' \| 'large'` | `'medium'` | false | Size token; affects header height, padding, and typography. Provided to every item via context. |
-| `arrowPosition` | `'left' \| 'right'` | `'right'` | false | Side of the header the chevron sits on. Provided to every item via context. |
+| `iconPosition` | `'leading' \| 'trailing'` | `'trailing'` | false | Side of the header the chevron sits on. Provided to every item via context. |
 | `modelValue` | `AccordionValue \| undefined` | `undefined` | false | Two-way value (`v-model`). |
 
 ## Slots
@@ -66,7 +66,7 @@ The root ships a **compound API**: an `index.ts` (beside `accordion.vue`) attach
   - Props: `value: string` (**required** — unique identifier used by the open-state model), `disabled?: boolean` (default `false` — prevents this item from toggling; from the Figma component description).
   - Slot: `default` — the item's `Accordion.Trigger` and `Accordion.Content`.
 - `accordion-trigger/accordion-trigger.vue` — The clickable header row (Figma "Header"): renders the title plus the `ai ai-chevron-down` glyph, toggles the item through the injected context, and exposes `aria-expanded` / `aria-controls`. To satisfy the ARIA accordion pattern, the `<button>` is wrapped in a heading element.
-  - Props: `level?: 2 | 3 | 4 | 5 | 6` (default `3` — heading level of the wrapping `<h{level}>` for correct document outline).
+  - Props: `headingLevel?: 2 | 3 | 4 | 5 | 6` (default `3` — heading level of the wrapping `<h{headingLevel}>` for correct document outline).
   - Slot: `default` — header title content.
 - `accordion-content/accordion-content.vue` — The collapsible panel. Mounts only when its item is open, reads the content/trigger ids from context, and exposes `role="region"` + `aria-labelledby`. The container applies no padding — the slotted content owns its own spacing.
   - Slot: `default` — panel body content.
@@ -75,7 +75,7 @@ Resulting layout (no per-component `package.json` — dropped repo-wide; the roo
 
 ```
 packages/webkit/src/components/content/accordion/
-├── accordion.vue                 (root; owns type/modelValue/size/arrowPosition, provides context)
+├── accordion.vue                 (root; owns type/modelValue/size/iconPosition, provides context)
 ├── index.ts                      (compound: attaches Item / Trigger / Content to the root)
 ├── injection-key.ts              (shared AccordionContext)
 ├── accordion-item/
@@ -115,7 +115,7 @@ Exports to add to `packages/webkit/package.json#exports` (flat public names; cat
 
 - Visible focus (Figma has no focus variant; we own it): `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)` on each `Accordion.Trigger`.
 - Keyboard map: `Tab` / `Shift+Tab` move between triggers and into open content; `Enter` / `Space` toggle the focused item; `Arrow Down` / `Arrow Up` move focus to the next / previous trigger; `Home` / `End` move focus to the first / last trigger. The order is the document order of the items, and an item disabled after mount drops out of it at once.
-- ARIA: each trigger is a `<button>` with `aria-expanded` reflecting open state and `aria-controls` referencing its content; the trigger button is wrapped in a heading element (`<h{level}>`, default `h3`); the content panel has `role="region"` and `aria-labelledby` referencing its trigger. A `disabled` item sets `disabled` + `aria-disabled` on its trigger.
+- ARIA: each trigger is a `<button>` with `aria-expanded` reflecting open state and `aria-controls` referencing its content; the trigger button is wrapped in a heading element (`<h{headingLevel}>`, default `h3`); the content panel has `role="region"` and `aria-labelledby` referencing its trigger. A `disabled` item sets `disabled` + `aria-disabled` on its trigger.
 - Contrast ≥4.5:1 for text (title `--text-default`, body `--text-muted` on the surface) / ≥3:1 for the chevron glyph, including the disabled state (`--text-disabled`).
 - `motion-reduce:transition-none motion-reduce:animate-none` on the chevron rotation and content reveal.
 - Touch target: the `large` header is 40px tall and the full-width header row is the hit area (≥40×40). The `medium` header is 32px tall — a justified deviation matching the Figma `medium` size token, mitigated by the full-width clickable row.
@@ -135,7 +135,7 @@ Exports to add to `packages/webkit/package.json#exports` (flat public names; cat
     collapsible
     default-value="overview"
     size="medium"
-    arrow-position="right"
+    icon-position="trailing"
     class="w-full max-w-[40rem]"
   >
     <Accordion.Item value="overview">
@@ -197,7 +197,7 @@ Exports to add to `packages/webkit/package.json#exports` (flat public names; cat
 </template>
 ```
 
-### ArrowPosition
+### IconPosition
 
 ```vue
 <script setup>
@@ -210,7 +210,7 @@ Exports to add to `packages/webkit/package.json#exports` (flat public names; cat
       type="single"
       collapsible
       default-value="overview"
-      arrow-position="right"
+      icon-position="trailing"
     >
       <Accordion.Item value="overview">
         <Accordion.Trigger>What is Azion?</Accordion.Trigger>
@@ -225,7 +225,7 @@ Exports to add to `packages/webkit/package.json#exports` (flat public names; cat
       type="single"
       collapsible
       default-value="overview"
-      arrow-position="left"
+      icon-position="leading"
     >
       <Accordion.Item value="overview">
         <Accordion.Trigger>What is Azion?</Accordion.Trigger>

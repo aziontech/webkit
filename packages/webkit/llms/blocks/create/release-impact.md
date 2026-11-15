@@ -488,7 +488,7 @@ Each variant is the same screen in another state: `get_block("create/release-imp
           severity="danger"
           label="The release wasn't deployed. edge-policy was refused: a rule points at an integration that does not exist. Nothing changed in traffic."
         >
-          <template #action>
+          <template #actions>
             <div class="flex shrink-0 items-center gap-(--spacing-xs)">
               <Button
                 label="Edit"
@@ -512,7 +512,7 @@ Each variant is the same screen in another state: `get_block("create/release-imp
           severity="success"
           :label="`Release deployed. ${releaseLine} serve ${plural(projects.length, 'project', 'projects')} now.`"
         >
-          <template #action>
+          <template #actions>
             <div class="flex shrink-0 items-center gap-(--spacing-xs)">
               <Button
                 label="Edit"
@@ -584,7 +584,7 @@ Each variant is the same screen in another state: `get_block("create/release-imp
                     />
                     <Tooltip
                       v-if="card.canToggle"
-                      :text="
+                      :content="
                         card.enabled
                           ? `Leave ${card.name} out of this release`
                           : `Include ${card.name} in this release`
@@ -599,7 +599,7 @@ Each variant is the same screen in another state: `get_block("create/release-imp
                   </span>
                 </div>
               </template>
-              <template #content>
+              <template #default>
                 <p
                   v-if="!card.enabled"
                   class="p-(--spacing-md) text-body-sm text-(--text-muted)"
@@ -704,7 +704,7 @@ Each variant is the same screen in another state: `get_block("create/release-imp
                       <h3 class="truncate text-label-md text-(--text-default)">Dependencies</h3>
                       <Badge
                         :label="String(dependencyCount(card))"
-                        severity="secondary"
+                        variant="secondary"
                         size="small"
                       />
                     </div>
@@ -730,7 +730,7 @@ Each variant is the same screen in another state: `get_block("create/release-imp
                             </span>
                             <Badge
                               :label="String(group.rows.length)"
-                              severity="secondary"
+                              variant="secondary"
                               size="small"
                             />
                           </span>
@@ -756,7 +756,7 @@ Each variant is the same screen in another state: `get_block("create/release-imp
                                 </span>
                                 <Tooltip
                                   v-if="row.sharedWith?.length"
-                                  :text="`Also referenced by ${row.sharedWith.join(' and ')}.`"
+                                  :content="`Also referenced by ${row.sharedWith.join(' and ')}.`"
                                 >
                                   <span
                                     tabindex="0"
@@ -844,7 +844,7 @@ Each variant is the same screen in another state: `get_block("create/release-imp
                   />
                 </div>
               </template>
-              <template #content>
+              <template #default>
                 <div
                   :aria-busy="impactState === 'loading' || undefined"
                   class="flex min-w-0 flex-col gap-(--spacing-sm)"

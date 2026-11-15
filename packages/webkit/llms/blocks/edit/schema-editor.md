@@ -762,7 +762,7 @@ Each variant is the same screen in another state: `get_block("edit/schema-editor
 <template>
   <div class="flex flex-col gap-(--spacing-md) p-(--spacing-md)">
     <Card :padded="false">
-      <template #content>
+      <template #default>
         <DataTable
           :data="definitionRows"
           :columns="definitionColumns"
@@ -806,7 +806,7 @@ Each variant is the same screen in another state: `get_block("edit/schema-editor
                   @select="onTableAction"
                 >
                   <DropdownMenu.Trigger>
-                    <Tooltip text="Table actions">
+                    <Tooltip content="Table actions">
                       <IconButton
                         icon="ai ai-ellipsis"
                         kind="outlined"
@@ -882,7 +882,7 @@ Each variant is the same screen in another state: `get_block("edit/schema-editor
     <Drawer
       v-model:open="createOpen"
       size="large"
-      side="right"
+      side="end"
     >
       <DrawerContent>
         <form
@@ -1031,7 +1031,7 @@ Each variant is the same screen in another state: `get_block("edit/schema-editor
                         class="w-full"
                       >
                         <Select.Trigger>
-                          <template #prefix>
+                          <template #leading>
                             <span
                               class="shrink-0 font-code text-label-code-sm text-(--text-muted)"
                               aria-hidden="true"
@@ -1212,7 +1212,7 @@ Each variant is the same screen in another state: `get_block("edit/schema-editor
     <Drawer
       v-model:open="columnOpen"
       size="large"
-      side="right"
+      side="end"
     >
       <DrawerContent>
         <form
@@ -1259,7 +1259,7 @@ Each variant is the same screen in another state: `get_block("edit/schema-editor
                       class="w-full"
                     >
                       <Select.Trigger>
-                        <template #prefix>
+                        <template #leading>
                           <span
                             class="shrink-0 font-code text-label-code-sm text-(--text-muted)"
                             aria-hidden="true"
@@ -1370,7 +1370,7 @@ Each variant is the same screen in another state: `get_block("edit/schema-editor
     <Drawer
       v-model:open="rowOpen"
       size="large"
-      side="right"
+      side="end"
     >
       <DrawerContent>
         <form
@@ -1462,7 +1462,7 @@ Each variant is the same screen in another state: `get_block("edit/schema-editor
             class="w-full"
           >
             <Select.Trigger>
-              <template #prefix>
+              <template #leading>
                 <span
                   class="shrink-0 font-code text-label-code-sm text-(--text-muted)"
                   aria-hidden="true"
@@ -1538,7 +1538,7 @@ Each variant is the same screen in another state: `get_block("edit/schema-editor
           language="sql"
           readonly
           height="3rem"
-          :line-numbers="false"
+          :show-line-numbers="false"
           aria-label="Statement that will run"
         />
         <Field>

@@ -16,7 +16,7 @@
 
 ## Do
 
-- Set `track-by` to a unique item field so rows keep stable keys across moves and the selection follows the record when the lists change; without it rows and the selection are keyed by their index.
+- Set `item-key` to a unique item field so rows keep stable keys across moves and the selection follows the record when the lists change; without it rows and the selection are keyed by their index.
 - Set `title` on both `TransferList.Source` and `TransferList.Target`; it is the listbox's accessible name.
 - Listen to `move` for side effects such as saving the assignment instead of diffing `v-model`.
 - Set `:move-on-double-click="false"` when double-click should do something else; `item-double-click` still fires.
@@ -38,7 +38,7 @@
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `trackBy` | `string` | `''` | false | Item field that identifies a record, the same name as `card-list`: each row's render key and the key of the selection, so an external change to the v-model pair keeps the selection on its records. Empty falls back to the index. |
+| `itemKey` | `string` | `''` | false | Item field that identifies a record, the same name as `card-list`: each row's render key and the key of the selection, so an external change to the v-model pair keeps the selection on its records. Empty falls back to the index. |
 | `disabled` | `boolean` | `false` | false | Disables all selection and move controls and applies disabled tokens. |
 | `moveOnDoubleClick` | `boolean` | `true` | false | When true, double-clicking an item moves it to the opposite list. Set false to keep `item-double-click` firing without the move. |
 | `modelValue` | `TransferListValue` | `—` | false | Two-way value (`v-model`). |
@@ -47,7 +47,7 @@
 
 | Event | Payload | Notes |
 | --- | --- | --- |
-| `move` | `{ direction: 'to-target' \| 'to-source'; items: unknown[] }` | Fired after items move between lists, with the moved items. |
+| `move` | `(event: Event, payload: { direction: 'to-target' \| 'to-source'; items: unknown[] })` | Fired after items move between lists; the DOM event of the control (or the double-click) first, then the direction and the moved items. |
 | `item-double-click` | `(event: MouseEvent, payload: { list: 'source' \| 'target'; item: unknown; index: number })` | Fired when an option is double-clicked. `event` is the dblclick; `payload` carries the item, its index, and which list it was in. Fires regardless of `moveOnDoubleClick`, but not while the component is disabled or a list is loading. |
 
 ## Slots
@@ -115,7 +115,7 @@
 <template>
   <TransferList
     v-model="model"
-    track-by="id"
+    item-key="id"
   >
     <TransferList.Source title="Available">
       <template #item="{ item }">{{ item.label }}</template>
@@ -150,7 +150,7 @@
 <template>
   <TransferList
     v-model="model"
-    track-by="id"
+    item-key="id"
     disabled
   >
     <TransferList.Source title="Available">
@@ -186,7 +186,7 @@
 <template>
   <TransferList
     v-model="model"
-    track-by="id"
+    item-key="id"
   >
     <TransferList.Source
       title="Available"

@@ -8,7 +8,7 @@
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],
- "purpose": "The data-driven table: pass `data` + `columns` and it renders the header, rows, selection, sorting, paging, empty / loading / error states and the footer `Pagination` itself, through the same `Table` parts (`Table.Header`, `Table.Row`, `Table.HeadCell`, `Table.Cell`), so its markup, tokens and accessibility are those of [`table`](table.md). The headless **`@tanstack/vue-table`** engine lives here and only here: a hand-composed `Table` never loads it. A top **toolbar band** (`title` / `toolbar` / `filters` slots) sits above the scroll viewport for a title, the context-aware `Table.*` toolbar parts (search, filter, export, refresh, live) and removable filter chips; the `toolbar` and `filters` slots are scoped with the TanStack `table` instance so the consumer can drive filtering, global search and column visibility through the table's own methods. Pairs with [`Pagination`](pagination.md) (rendered automatically in the footer when `paginated`). **Engine.** DataTable is driven by **`@tanstack/vue-table`** (`useVueTable` + `getCoreRowModel` / `getSortedRowModel` / `getFilteredRowModel` / `getPaginationRowModel`), covering sorting, pagination, row selection, column visibility, and global filtering — client- and server-side (`manualSorting` / `manualPagination` / `manualFiltering`). It is a pure-logic library (no markup/styles/positioning/animation), granted narrowly to the table family (this component and the editable `data-grid` that builds on it) per [`.claude/rules/dependencies.md`](https://github.com/aziontech/webkit/blob/main/.claude/rules/dependencies.md) § Exceptions; rendering stays 100% in our primitives. State is exposed via v-model (`sorting`, `rowSelection`, `columnVisibility`, `globalFilter`, `pagination`, plus the structured `filters` model and the aggregate `state` snapshot below). `@tanstack/virtual` remains forbidden: the opt-in `virtual` mode windows the rows itself (spacer padding above and below the rendered slice, sized from a height index: each rendered row is measured with a `ResizeObserver`, rows not yet rendered take the average of the first rows measured, and when a row above the rows in view changes height the scroll position moves by the same amount so the rows in view stay still). Without `virtual`, a list of more than 200 rows renders its first 50 rows and mounts the rest as a spacer below them nears the viewport (an `IntersectionObserver`), so a long page costs what is on screen. **Toolbar & imperative API.** The toolbar band composes context-aware controls that drive the table through the injected context with no wiring: `Table.Filter` (the slot that hosts `FilterMenu` with `kind=\"menu\"`, or `PropertyFilter` with `kind=\"property\"`, over `filterFields`), `FilterMenu.Chips` with no `fields` in the `filters` slot (the applied fields of the menu kind), `CollectionPreferences` with no `columns` (visible columns and their order, written back on Confirm), `Table.Search` (the global text filter), `Table.Export` (CSV download), `Table.RefreshButton` and `Table.LiveButton`. Structured filters are a first-class model (`v-model:filters`, an `AppliedFilter[]` distinct from the free-text `globalFilter`) mapped to the TanStack column filters client-side, or emitted for a server refetch under `manualFiltering`. A `loading` prop renders skeleton rows for dynamic (server-side) data. The root exposes a **curated imperative API** via `defineExpose` (`reload`, `clearFilters`, `exportCsv`, `getState`, `setState`) so controls or logic outside the table can drive it through a template ref, and a serializable `TableStateSnapshot` (`sorting` / `pagination` / `columnVisibility` / `columnOrder` / `globalFilter` / `filters`) is exposed via `v-model:state` + `getState()` / `setState()` + an `initialState` seed — the component stays router-agnostic, so the consuming app owns any URL / localStorage persistence. CSV serialization lives in a pure util at [`@aziontech/webkit/utils/csv`](https://github.com/aziontech/webkit/blob/main/packages/webkit/src/utils/csv.ts) (`toCsv` + `downloadCsv`). **Types** (declared in `injection-key.ts`, re-exported for consumers): `FilterOperator` = `'eq' | 'neq' | 'contains' | 'not-contains' | 'starts-with' | 'ends-with' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'not-in' | 'is-empty' | 'is-not-empty' | 'within' | 'between'` (`within` holds a period id — `24h`, `7d`, `30d`, `3m` — and matches dates inside that window ending now; `between` holds `[start, end]` epoch milliseconds, either one `''` for an open bound; both read the cell as a `Date`, a timestamp or a parseable date string); `TableFilterKind` = `'menu' | 'property'`; `FilterField` = `{ id: string; label: string; type: 'text' | 'number' | 'select' | 'multi-select' | 'boolean' | 'date'; operators?: FilterOperator[]; options?: { label: string; value: string | number | boolean }[] }`; `AppliedFilter` = `{ field: string; operator: FilterOperator; value: string | number | boolean | Array<string | number>; label?: string }`; `TableStateSnapshot` = `{ sorting?: SortingState; pagination?: PaginationState; columnVisibility?: VisibilityState; columnOrder?: string[]; globalFilter?: string; filters?: AppliedFilter[] }` (every field optional so `setState` / `initialState` accept a partial; JSON-serializable). **Collections.** `useCollection` (`@aziontech/webkit/use-collection`) drives DataTable in both client and server modes: `tableProps` binds `data` (one page), `columns` (ordered by the saved preferences), `rowKey`, `loading`, `sorting`, `manualSorting` / `manualFiltering` / `manualPagination`, `paginated`, `pagination`, `rowCount`, `pageSizeOptions`, `enableRowSelection`, `rowSelection`, `columnVisibility` and the three display preferences (`density`, `wrapLines`, `striped`) together with their update handlers, and `exportRows`, in one `v-bind`. The table keeps rendering one page; the composable owns filtering, sorting, paging and selection across pages, so `exportRows` hands `Table.Export` and `exportCsv()` every match rather than the page: in client mode the matching items (or every item for the `all` scope), in server mode what the collection's `exportAll` callback loads (the loaded page when there is none). **Cell presets and reordering.** The six `Table.Cell*` presets render the cells every list repeats, each inside a `#cell-<id>` slot: `Table.CellLink` (a name that leaves the screen: an optional muted leading glyph (`icon`) for the provider or resource type, a 12 px external mark, a tooltip naming the destination, underline on hover, no mark without a destination; optional `+N` overflow through `OverflowCount` and a copy button pinned to the end edge), `Table.CellId` (an identifier with its copy button), `Table.CellStatus` (one semantic `Tag`), `Table.CellTags` (as many tags as fit, the rest behind `+N`), `Table.CellTime` (avatar of the author plus a relative time that updates every minute, or counts from the nearest `WebkitProvider`'s `now`, the absolute time on the tooltip and for screen readers) and `Table.CellActions` (the row menu named after the row). `reorderable` adds a leading grip column: drag a grip with the pointer, or focus it and press Arrow Up, Arrow Down, Home or End; the table emits `update:data` with the reordered records and `reorder` with `{ from, to, row }`, announces every move in a polite status region and locks while a sort is applied; `rowReorderable` keeps chosen rows (a pinned default) in place.",
+ "purpose": "The data-driven table: pass `data` + `columns` and it renders the header, rows, selection, sorting, paging, empty / loading / error states and the footer `Pagination` itself, through the same `Table` parts (`Table.Header`, `Table.Row`, `Table.HeadCell`, `Table.Cell`), so its markup, tokens and accessibility are those of [`table`](table.md). The headless **`@tanstack/vue-table`** engine lives here and only here: a hand-composed `Table` never loads it. A top **toolbar band** (`title` / `toolbar` / `filters` slots) sits above the scroll viewport for a title, the context-aware `Table.*` toolbar parts (search, filter, export, refresh, live) and removable filter chips; the `toolbar` and `filters` slots are scoped with the TanStack `table` instance so the consumer can drive filtering, global search and column visibility through the table's own methods. Pairs with [`Pagination`](pagination.md) (rendered automatically in the footer when `paginated`). **Engine.** DataTable is driven by **`@tanstack/vue-table`** (`useVueTable` + `getCoreRowModel` / `getSortedRowModel` / `getFilteredRowModel` / `getPaginationRowModel`), covering sorting, pagination, row selection, column visibility, and global filtering — client- and server-side (`manualSorting` / `manualPagination` / `manualFiltering`). It is a pure-logic library (no markup/styles/positioning/animation), granted narrowly to the table family (this component and the editable `data-grid` that builds on it) per [`.claude/rules/dependencies.md`](https://github.com/aziontech/webkit/blob/main/.claude/rules/dependencies.md) § Exceptions; rendering stays 100% in our primitives. State is exposed via v-model (`sorting`, `rowSelection`, `columnVisibility`, `globalFilter`, `pagination`, plus the structured `filters` model and the aggregate `state` snapshot below). `@tanstack/virtual` remains forbidden: the opt-in `virtual` mode windows the rows itself (spacer padding above and below the rendered slice, sized from a height index: each rendered row is measured with a `ResizeObserver`, rows not yet rendered take the average of the first rows measured, and when a row above the rows in view changes height the scroll position moves by the same amount so the rows in view stay still). Without `virtual`, a list of more than 200 rows renders its first 50 rows and mounts the rest as a spacer below them nears the viewport (an `IntersectionObserver`), so a long page costs what is on screen. **Toolbar & imperative API.** The toolbar band composes context-aware controls that drive the table through the injected context with no wiring: `Table.Filter` (the slot that hosts `FilterMenu` with `kind=\"menu\"`, or `PropertyFilter` with `kind=\"property\"`, over `filterFields`), `FilterMenu.Chips` with no `fields` in the `filters` slot (the applied fields of the menu kind), `CollectionPreferences` with no `columns` (visible columns and their order, written back on Confirm), `Table.Search` (the global text filter), `Table.Export` (CSV download), `Table.RefreshButton` and `Table.LiveButton`. Structured filters are a first-class model (`v-model:filters`, an `AppliedFilter[]` distinct from the free-text `globalFilter`) mapped to the TanStack column filters client-side, or emitted for a server refetch under `manualFiltering`. A `loading` prop renders skeleton rows for dynamic (server-side) data. The root exposes a **curated imperative API** via `defineExpose` (`reload`, `clearFilters`, `exportCsv`, `getState`, `setState`) so controls or logic outside the table can drive it through a template ref, and a serializable `TableStateSnapshot` (`sorting` / `pagination` / `columnVisibility` / `columnOrder` / `globalFilter` / `filters`) is exposed via `v-model:state` + `getState()` / `setState()` + an `initialState` seed — the component stays router-agnostic, so the consuming app owns any URL / localStorage persistence. CSV serialization lives in a pure util at [`@aziontech/webkit/utils/csv`](https://github.com/aziontech/webkit/blob/main/packages/webkit/src/utils/csv.ts) (`toCsv` + `downloadCsv`). **Types** (declared in `injection-key.ts`, re-exported for consumers): `FilterOperator` = `'eq' | 'neq' | 'contains' | 'not-contains' | 'starts-with' | 'ends-with' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'not-in' | 'is-empty' | 'is-not-empty' | 'within' | 'between'` (`within` holds a period id — `24h`, `7d`, `30d`, `3m` — and matches dates inside that window ending now; `between` holds `[start, end]` epoch milliseconds, either one `''` for an open bound; both read the cell as a `Date`, a timestamp or a parseable date string); `TableFilterKind` = `'menu' | 'property'`; `FilterField` = `{ id: string; label: string; type: 'text' | 'number' | 'select' | 'multi-select' | 'boolean' | 'date'; operators?: FilterOperator[]; options?: { label: string; value: string | number | boolean }[] }`; `AppliedFilter` = `{ field: string; operator: FilterOperator; value: string | number | boolean | Array<string | number>; label?: string }`; `TableStateSnapshot` = `{ sorting?: SortingState; pagination?: PaginationState; columnVisibility?: VisibilityState; columnOrder?: string[]; globalFilter?: string; filters?: AppliedFilter[] }` (every field optional so `setState` / `initialState` accept a partial; JSON-serializable). **Collections.** `useCollection` (`@aziontech/webkit/use-collection`) drives DataTable in both client and server modes: `tableProps` binds `data` (one page), `columns` (ordered by the saved preferences), `rowKey`, `loading`, `sorting`, `manualSorting` / `manualFiltering` / `manualPagination`, `paginated`, `pagination`, `rowCount`, `pageSizeOptions`, `selectable`, `rowSelection`, `columnVisibility` and the three display preferences (`density`, `wrapLines`, `striped`) together with their update handlers, and `exportRows`, in one `v-bind`. The table keeps rendering one page; the composable owns filtering, sorting, paging and selection across pages, so `exportRows` hands `Table.Export` and `exportCsv()` every match rather than the page: in client mode the matching items (or every item for the `all` scope), in server mode what the collection's `exportAll` callback loads (the loaded page when there is none). **Cell presets and reordering.** The six `Table.Cell*` presets render the cells every list repeats, each inside a `#cell-<id>` slot: `Table.CellLink` (a name that leaves the screen: an optional muted leading glyph (`icon`) for the provider or resource type, a 12 px external mark, a tooltip naming the destination, underline on hover, no mark without a destination; optional `+N` overflow through `OverflowCount` and a copy button pinned to the end edge), `Table.CellId` (an identifier with its copy button), `Table.CellStatus` (one semantic `Tag`), `Table.CellTags` (as many tags as fit, the rest behind `+N`), `Table.CellTime` (avatar of the author plus a relative time that updates every minute, or counts from the nearest `WebkitProvider`'s `now`, the absolute time on the tooltip and for screen readers) and `Table.CellActions` (the row menu named after the row). `reorderable` adds a leading grip column: drag a grip with the pointer, or focus it and press Arrow Up, Arrow Down, Home or End; the table emits `update:data` with the reordered records and `reorder` with `{ from, to, row }`, announces every move in a polite status region and locks while a sort is applied; `rowReorderable` keeps chosen rows (a pinned default) in place.",
  "setup": null,
  "useWhen": [
   "Use DataTable for records that share columns — any console list of resources people scan, sort and act on.",
@@ -63,18 +63,11 @@
    "doc": "Draw the outer card border around the table. Off by default (the table is typically framed by a surrounding surface); set `bordered` / `:bordered=\"…\"` to draw the `var(--border-default)` outline. The internal row dividers are unaffected."
   },
   {
-   "name": "data",
-   "type": "TRow[]",
-   "default": "[]",
-   "required": "false",
-   "doc": "row records."
-  },
-  {
    "name": "columns",
    "type": "TableColumn[]",
    "default": "[]",
    "required": "false",
-   "doc": "column definitions (`{ id?, accessorKey?, header?, label?, enableSorting?, grow?, principal?, frozen?, width?, minWidth?, align?, kind?, resizable?, hideable?, orderable? }`; `width` (px) sets a fixed pixel column (also needed when a frozen column precedes another frozen column on the same edge, so sticky offsets can be summed); **`minWidth`** (px) sets a **floor** instead: the table measures the column's own content — its header, including the sort affordance, and every rendered body cell — and pins the column to the larger of the two, as **one** width applied to the header and every body cell (a per-cell `min-width` would let each row size to its own content and drift the header away from the body). It is for a column whose content is a chip or a short token: a fixed `width` there is a bet in both directions — too generous and it reserves space the rest of the row needs, too tight and the chip inside it truncates. The measured width tracks the **rendered page**, so a column can change width when paging or sorting brings longer content into view; `width` wins when both are set, and a user resize wins over both. a `grow` column without `width` keeps a shared fixed basis so the header and body stay aligned and the cell never wraps. A column with no `grow` defaults to weight `2` for the **principal** column and `1` for the rest, so the columns fill the available space proportionally. The principal column is the one flagged `principal: true`, or — when none is flagged — the first non-action column. A `kind: 'action'` column is automatically pinned to the trailing (right) edge — staying reachable while the rest scrolls horizontally — and is never resizable. **`resizable: true`** opts a column into a live mouse/touch drag-to-resize handle on its header (native pointer events; the `@tanstack/vue-table` exception covers sorting/pagination/selection/visibility, not sizing). On the first drag of any divider every flexible column freezes at its current rendered width; from then on dragging changes **only that column** and the table grows (horizontal scroll) — the others are untouched. The drag floor is the column's own content width (header label + visible body cells), so a column never shrinks past its content. Frozen and action columns ignore `resizable`. **`label`** names the column in `CollectionPreferences` when `header` is not a string; **`hideable: false`** lists the column locked in `CollectionPreferences`; **`orderable: true`** opts the column into `columnOrder`."
+   "doc": "column definitions (`{ id?, accessorKey?, header?, label?, sortable?, grow?, principal?, frozen?, width?, minWidth?, align?, kind?, resizable?, hideable?, orderable? }`; `width` (px) sets a fixed pixel column (also needed when a frozen column precedes another frozen column on the same edge, so sticky offsets can be summed); **`minWidth`** (px) sets a **floor** instead: the table measures the column's own content — its header, including the sort affordance, and every rendered body cell — and pins the column to the larger of the two, as **one** width applied to the header and every body cell (a per-cell `min-width` would let each row size to its own content and drift the header away from the body). It is for a column whose content is a chip or a short token: a fixed `width` there is a bet in both directions — too generous and it reserves space the rest of the row needs, too tight and the chip inside it truncates. The measured width tracks the **rendered page**, so a column can change width when paging or sorting brings longer content into view; `width` wins when both are set, and a user resize wins over both. a `grow` column without `width` keeps a shared fixed basis so the header and body stay aligned and the cell never wraps. A column with no `grow` defaults to weight `2` for the **principal** column and `1` for the rest, so the columns fill the available space proportionally. The principal column is the one flagged `principal: true`, or — when none is flagged — the first non-action column. A `kind: 'action'` column is automatically pinned to the trailing (right) edge — staying reachable while the rest scrolls horizontally — and is never resizable. **`resizable: true`** opts a column into a live mouse/touch drag-to-resize handle on its header (native pointer events; the `@tanstack/vue-table` exception covers sorting/pagination/selection/visibility, not sizing). On the first drag of any divider every flexible column freezes at its current rendered width; from then on dragging changes **only that column** and the table grows (horizontal scroll) — the others are untouched. The drag floor is the column's own content width (header label + visible body cells), so a column never shrinks past its content. Frozen and action columns ignore `resizable`. **`label`** names the column in `CollectionPreferences` when `header` is not a string; **`hideable: false`** lists the column locked in `CollectionPreferences`; **`orderable: true`** opts the column into `columnOrder`."
   },
   {
    "name": "rowKey",
@@ -84,18 +77,18 @@
    "doc": "Field used as the stable row id (for selection)."
   },
   {
-   "name": "enableSorting",
+   "name": "sortable",
    "type": "boolean",
    "default": "false",
    "required": "false",
-   "doc": "Enable sorting globally; per-column `enableSorting` overrides."
+   "doc": "Sorts every column on header click; a column's own `sortable` overrides."
   },
   {
-   "name": "enableRowSelection",
+   "name": "selectable",
    "type": "boolean",
    "default": "false",
    "required": "false",
-   "doc": "Add a leading selection-checkbox column."
+   "doc": "Adds a leading selection-checkbox column."
   },
   {
    "name": "rowSelectable",
@@ -109,7 +102,7 @@
    "type": "boolean",
    "default": "false",
    "required": "false",
-   "doc": "clicking a row toggles its selection (requires `enableRowSelection`); interactive cells still own their own click."
+   "doc": "clicking a row toggles its selection (requires `selectable`); interactive cells still own their own click."
   },
   {
    "name": "paginated",
@@ -124,41 +117,6 @@
    "default": "10",
    "required": "false",
    "doc": "Rows per page when paginated."
-  },
-  {
-   "name": "sorting",
-   "type": "SortingState",
-   "default": "undefined",
-   "required": "false",
-   "doc": "v-model:sorting (TanStack SortingState)."
-  },
-  {
-   "name": "rowSelection",
-   "type": "RowSelectionState",
-   "default": "undefined",
-   "required": "false",
-   "doc": "v-model:rowSelection (TanStack RowSelectionState)."
-  },
-  {
-   "name": "columnVisibility",
-   "type": "VisibilityState",
-   "default": "undefined",
-   "required": "false",
-   "doc": "v-model:columnVisibility (TanStack VisibilityState)."
-  },
-  {
-   "name": "globalFilter",
-   "type": "string",
-   "default": "undefined",
-   "required": "false",
-   "doc": "v-model:globalFilter text."
-  },
-  {
-   "name": "pagination",
-   "type": "PaginationState",
-   "default": "undefined",
-   "required": "false",
-   "doc": "v-model:pagination (TanStack PaginationState)."
   },
   {
    "name": "manualSorting",
@@ -210,25 +168,11 @@
    "doc": "message of a failed load, shown in place of the rows in an `alert` region (an `EmptyState` with the error mark and `table.errorTitle`, the message as its description); the `error` slot replaces it. `loading` wins over it. Empty shows the rows."
   },
   {
-   "name": "filters",
-   "type": "AppliedFilter[]",
-   "default": "undefined",
-   "required": "false",
-   "doc": "v-model:filters — structured applied conditions committed by `Table.Filter` (menu picks or property tokens), distinct from `globalFilter`. Client-side they map to TanStack column filters; under `manualFiltering` they are emitted for a server refetch."
-  },
-  {
    "name": "filterFields",
    "type": "FilterField[]",
    "default": "[]",
    "required": "false",
    "doc": "Fields `Table.Filter` offers (id, label, value type, allowed operators, select options): facets for the menu kind, properties for the property kind."
-  },
-  {
-   "name": "state",
-   "type": "TableStateSnapshot",
-   "default": "undefined",
-   "required": "false",
-   "doc": "v-model:state — an aggregate serializable snapshot layered over the per-concern models. A bound per-concern v-model (e.g. `v-model:sorting`) wins over `state` for that concern."
   },
   {
    "name": "initialState",
@@ -315,13 +259,6 @@
    "doc": "tree rows. Returns a row's children (`(row) => row.children`); a row with children gets an expand toggle in the principal column, its children render under it indented one step (`--spacing-md`) per level, and the grid element takes `role=\"treegrid\"`. Sorting and filtering keep each child under its parent; selection is per row (selecting a parent does not select its children). `reorderable` is ignored in tree mode."
   },
   {
-   "name": "expanded",
-   "type": "ExpandedState",
-   "default": "undefined",
-   "required": "false",
-   "doc": "v-model:expanded (TanStack ExpandedState: `true` for every row, or `{ [rowId]: true }`). Uncontrolled it starts collapsed."
-  },
-  {
    "name": "moreRows",
    "type": "boolean",
    "default": "false",
@@ -336,6 +273,69 @@
    "doc": "the next rows are loading; shows a loading line under the rows and holds further `load-more` requests."
   },
   {
+   "name": "data",
+   "type": "TRow[]",
+   "default": "() => []",
+   "required": "false",
+   "doc": "Two-way value (`v-model:data`)."
+  },
+  {
+   "name": "sorting",
+   "type": "SortingState",
+   "default": "undefined",
+   "required": "false",
+   "doc": "Two-way value (`v-model:sorting`)."
+  },
+  {
+   "name": "rowSelection",
+   "type": "RowSelectionState",
+   "default": "undefined",
+   "required": "false",
+   "doc": "Two-way value (`v-model:rowSelection`)."
+  },
+  {
+   "name": "columnVisibility",
+   "type": "VisibilityState",
+   "default": "undefined",
+   "required": "false",
+   "doc": "Two-way value (`v-model:columnVisibility`)."
+  },
+  {
+   "name": "globalFilter",
+   "type": "string",
+   "default": "undefined",
+   "required": "false",
+   "doc": "Two-way value (`v-model:globalFilter`)."
+  },
+  {
+   "name": "pagination",
+   "type": "PaginationState",
+   "default": "undefined",
+   "required": "false",
+   "doc": "Two-way value (`v-model:pagination`)."
+  },
+  {
+   "name": "filters",
+   "type": "AppliedFilter[]",
+   "default": "undefined",
+   "required": "false",
+   "doc": "Two-way value (`v-model:filters`)."
+  },
+  {
+   "name": "state",
+   "type": "TableStateSnapshot",
+   "default": "undefined",
+   "required": "false",
+   "doc": "Two-way value (`v-model:state`)."
+  },
+  {
+   "name": "expanded",
+   "type": "ExpandedState",
+   "default": "undefined",
+   "required": "false",
+   "doc": "Two-way value (`v-model:expanded`)."
+  },
+  {
    "name": "live",
    "type": "boolean",
    "default": "false",
@@ -345,44 +345,9 @@
  ],
  "events": [
   {
-   "name": "update:sorting",
-   "payload": "value: SortingState",
-   "notes": "v-model:sorting."
-  },
-  {
-   "name": "update:rowSelection",
-   "payload": "value: RowSelectionState",
-   "notes": "v-model:rowSelection."
-  },
-  {
-   "name": "update:columnVisibility",
-   "payload": "value: VisibilityState",
-   "notes": "v-model:columnVisibility."
-  },
-  {
-   "name": "update:globalFilter",
-   "payload": "value: string",
-   "notes": "v-model:globalFilter."
-  },
-  {
-   "name": "update:pagination",
-   "payload": "value: PaginationState",
-   "notes": "v-model:pagination."
-  },
-  {
    "name": "row-click",
    "payload": "(event: MouseEvent, row: TRow)",
    "notes": "Fires when a rendered row is clicked. `event` is the click; `row` is the clicked record."
-  },
-  {
-   "name": "update:filters",
-   "payload": "value: AppliedFilter[]",
-   "notes": "v-model:filters."
-  },
-  {
-   "name": "update:state",
-   "payload": "value: TableStateSnapshot",
-   "notes": "v-model:state; debounced so bursts of changes coalesce."
   },
   {
    "name": "filter-apply",
@@ -396,33 +361,23 @@
   },
   {
    "name": "refresh",
-   "payload": "—",
-   "notes": "Refresh requested (`Table.RefreshButton` or `reload()`); the app refetches."
+   "payload": "(event: Event)",
+   "notes": "Refresh requested; the app refetches. `event` is the click of `Table.RefreshButton`, or `new Event('refresh')` when `reload()` is called."
   },
   {
    "name": "export",
-   "payload": "rows: TRow[]",
-   "notes": "Export requested with the resolved rows; a consumer may handle it server-side (otherwise the built-in CSV util downloads)."
-  },
-  {
-   "name": "update:data",
-   "payload": "value: TRow[]",
-   "notes": "reorderable`: the records in their new order; bind `v-model:data`."
+   "payload": "(event: Event, rows: TRow[])",
+   "notes": "Export requested with the resolved rows; `event` is the click of `Table.Export`, or `new Event('export')` when `exportCsv()` is called; a consumer may handle it server-side (otherwise the built-in CSV util downloads)."
   },
   {
    "name": "reorder",
-   "payload": "payload: { from: number; to: number; row: TRow }",
+   "payload": "(event: KeyboardEvent | PointerEvent, payload: { from: number; to: number; row: TRow })",
    "notes": "reorderable`: a row moved from index `from` to index `to` of `data`."
   },
   {
-   "name": "update:expanded",
-   "payload": "value: ExpandedState",
-   "notes": "Tree rows: v-model:expanded, after a toggle by pointer or keyboard."
-  },
-  {
    "name": "load-more",
-   "payload": "—",
-   "notes": "moreRows`: the end of the rows neared the viewport, or the Load more button was pressed; the app appends the next rows and sets `loadingMore` meanwhile. Not repeated while `loadingMore` is true."
+   "payload": "(event: Event)",
+   "notes": "moreRows`: the end of the rows neared the viewport (`new Event('load-more')`) or the Load more button was pressed (its click); the app appends the next rows and sets `loadingMore` meanwhile. Not repeated while `loadingMore` is true."
   }
  ],
  "slots": [
@@ -462,15 +417,15 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import DataTable from '@aziontech/webkit/data-table'\n  import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'\n  import DropdownMenuOption from '@aziontech/webkit/dropdown-menu-option'\n  import DropdownMenuRoot from '@aziontech/webkit/dropdown-menu-root'\n  import DropdownMenuTrigger from '@aziontech/webkit/dropdown-menu-trigger'\n  import IconButton from '@aziontech/webkit/icon-button'\n  import Tag from '@aziontech/webkit/tag'\n  import { ref } from 'vue'\n\n  const rows = [\n    {\n      id: '1001',\n      name: 'Workload Alpha',\n      status: 'Active',\n      editor: 'user1@example.com',\n      modified: 'Jan 1, 2026, 09:00 AM',\n      protocol: 'HTTP & HTTPS',\n      domains: 2,\n      origins: 1,\n      created: 'Dec 1, 2025, 10:00 AM'\n    },\n    {\n      id: '1002',\n      name: 'Workload Bravo',\n      status: 'Inactive',\n      editor: 'user2@example.com',\n      modified: 'Jan 2, 2026, 09:00 AM',\n      protocol: 'HTTP',\n      domains: 1,\n      origins: 2,\n      created: 'Dec 2, 2025, 10:00 AM'\n    },\n    {\n      id: '1003',\n      name: 'Workload Charlie',\n      status: 'Degraded',\n      editor: 'user3@example.com',\n      modified: 'Jan 3, 2026, 09:00 AM',\n      protocol: 'gRPC',\n      domains: 3,\n      origins: 1,\n      created: 'Dec 3, 2025, 10:00 AM'\n    }\n  ]\n\n  const columns = [\n    { accessorKey: 'name', header: 'Name' },\n    { accessorKey: 'id', header: 'ID', enableSorting: false },\n    { accessorKey: 'status', header: 'Status' },\n    { accessorKey: 'editor', header: 'Last Editor', enableSorting: false, grow: 2 },\n    { accessorKey: 'modified', header: 'Last Modified', grow: 2 },\n    { id: 'actions', header: '', kind: 'action', enableSorting: false }\n  ]\n\n  const sorting = ref([])\n\n  const rowActionGroups = [\n    [\n      { value: 'view', label: 'View details', icon: 'ai ai-eye' },\n      { value: 'edit', label: 'Edit', icon: 'ai ai-pencil' },\n      { value: 'duplicate', label: 'Duplicate', icon: 'ai ai-copy' }\n    ],\n    [{ value: 'delete', label: 'Delete', icon: 'ai ai-trash' }]\n  ]\n\n  const statusSeverity = (status) =>\n    status === 'Active' ? 'success' : status === 'Degraded' ? 'warning' : 'danger'\n\n  const onRowClick = (_row) => {}\n  const onRowAction = (_payload) => {}\n</script>\n\n<template>\n  <DataTable\n    :data=\"rows\"\n    :columns=\"columns\"\n    row-key=\"id\"\n    enable-sorting\n    paginated\n    :page-size=\"5\"\n    bordered\n    v-model:sorting=\"sorting\"\n    @row-click=\"onRowClick\"\n  >\n    <template #cell-name=\"{ row, value }\">\n      <a\n        :href=\"'/workloads/' + row.id\"\n        class=\"cursor-pointer truncate text-(--text-default) no-underline hover:underline active:underline\"\n        >{{ value }}</a\n      >\n    </template>\n    <template #cell-status=\"{ value }\">\n      <Tag :severity=\"statusSeverity(value)\">{{ value }}</Tag>\n    </template>\n    <template #header-actions>\n      <span class=\"sr-only\">Actions</span>\n    </template>\n    <template #cell-actions=\"{ row }\">\n      <DropdownMenuRoot @select=\"({ value }) => onRowAction({ id: row.id, action: { value } })\">\n        <DropdownMenuTrigger>\n          <IconButton\n            icon=\"ai ai-ellipsis-vertical\"\n            aria-label=\"Row actions\"\n            kind=\"transparent\"\n            size=\"small\"\n          />\n        </DropdownMenuTrigger>\n        <DropdownMenuGroup\n          v-for=\"(group, gi) in rowActionGroups\"\n          :key=\"gi\"\n        >\n          <DropdownMenuOption\n            v-for=\"option in group\"\n            :key=\"option.value\"\n            :value=\"option.value\"\n            :label=\"option.label\"\n          >\n            <template #leading\n              ><i\n                :class=\"option.icon\"\n                aria-hidden=\"true\"\n            /></template>\n          </DropdownMenuOption>\n        </DropdownMenuGroup>\n      </DropdownMenuRoot>\n    </template>\n  </DataTable>\n</template>"
+   "sfc": "<script setup>\n  import DataTable from '@aziontech/webkit/data-table'\n  import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'\n  import DropdownMenuOption from '@aziontech/webkit/dropdown-menu-option'\n  import DropdownMenuRoot from '@aziontech/webkit/dropdown-menu-root'\n  import DropdownMenuTrigger from '@aziontech/webkit/dropdown-menu-trigger'\n  import IconButton from '@aziontech/webkit/icon-button'\n  import Tag from '@aziontech/webkit/tag'\n  import { ref } from 'vue'\n\n  const rows = [\n    {\n      id: '1001',\n      name: 'Workload Alpha',\n      status: 'Active',\n      editor: 'user1@example.com',\n      modified: 'Jan 1, 2026, 09:00 AM',\n      protocol: 'HTTP & HTTPS',\n      domains: 2,\n      origins: 1,\n      created: 'Dec 1, 2025, 10:00 AM'\n    },\n    {\n      id: '1002',\n      name: 'Workload Bravo',\n      status: 'Inactive',\n      editor: 'user2@example.com',\n      modified: 'Jan 2, 2026, 09:00 AM',\n      protocol: 'HTTP',\n      domains: 1,\n      origins: 2,\n      created: 'Dec 2, 2025, 10:00 AM'\n    },\n    {\n      id: '1003',\n      name: 'Workload Charlie',\n      status: 'Degraded',\n      editor: 'user3@example.com',\n      modified: 'Jan 3, 2026, 09:00 AM',\n      protocol: 'gRPC',\n      domains: 3,\n      origins: 1,\n      created: 'Dec 3, 2025, 10:00 AM'\n    }\n  ]\n\n  const columns = [\n    { accessorKey: 'name', header: 'Name' },\n    { accessorKey: 'id', header: 'ID', sortable: false },\n    { accessorKey: 'status', header: 'Status' },\n    { accessorKey: 'editor', header: 'Last Editor', sortable: false, grow: 2 },\n    { accessorKey: 'modified', header: 'Last Modified', grow: 2 },\n    { id: 'actions', header: '', kind: 'action', sortable: false }\n  ]\n\n  const sorting = ref([])\n\n  const rowActionGroups = [\n    [\n      { value: 'view', label: 'View details', icon: 'ai ai-eye' },\n      { value: 'edit', label: 'Edit', icon: 'ai ai-pencil' },\n      { value: 'duplicate', label: 'Duplicate', icon: 'ai ai-copy' }\n    ],\n    [{ value: 'delete', label: 'Delete', icon: 'ai ai-trash' }]\n  ]\n\n  const statusSeverity = (status) =>\n    status === 'Active' ? 'success' : status === 'Degraded' ? 'warning' : 'danger'\n\n  const onRowClick = (_row) => {}\n  const onRowAction = (_payload) => {}\n</script>\n\n<template>\n  <DataTable\n    :data=\"rows\"\n    :columns=\"columns\"\n    row-key=\"id\"\n    sortable\n    paginated\n    :page-size=\"5\"\n    bordered\n    v-model:sorting=\"sorting\"\n    @row-click=\"onRowClick\"\n  >\n    <template #cell-name=\"{ row, value }\">\n      <a\n        :href=\"'/workloads/' + row.id\"\n        class=\"cursor-pointer truncate text-(--text-default) no-underline hover:underline active:underline\"\n        >{{ value }}</a\n      >\n    </template>\n    <template #cell-status=\"{ value }\">\n      <Tag :severity=\"statusSeverity(value)\">{{ value }}</Tag>\n    </template>\n    <template #header-actions>\n      <span class=\"sr-only\">Actions</span>\n    </template>\n    <template #cell-actions=\"{ row }\">\n      <DropdownMenuRoot @select=\"({ value }) => onRowAction({ id: row.id, action: { value } })\">\n        <DropdownMenuTrigger>\n          <IconButton\n            icon=\"ai ai-ellipsis-vertical\"\n            aria-label=\"Row actions\"\n            kind=\"transparent\"\n            size=\"small\"\n          />\n        </DropdownMenuTrigger>\n        <DropdownMenuGroup\n          v-for=\"(group, gi) in rowActionGroups\"\n          :key=\"gi\"\n        >\n          <DropdownMenuOption\n            v-for=\"option in group\"\n            :key=\"option.value\"\n            :value=\"option.value\"\n            :label=\"option.label\"\n          >\n            <template #leading\n              ><i\n                :class=\"option.icon\"\n                aria-hidden=\"true\"\n            /></template>\n          </DropdownMenuOption>\n        </DropdownMenuGroup>\n      </DropdownMenuRoot>\n    </template>\n  </DataTable>\n</template>"
   },
   {
    "name": "WithCheckboxes",
-   "sfc": "<script setup>\n  import DataTable from '@aziontech/webkit/data-table'\n  import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'\n  import DropdownMenuOption from '@aziontech/webkit/dropdown-menu-option'\n  import DropdownMenuRoot from '@aziontech/webkit/dropdown-menu-root'\n  import DropdownMenuTrigger from '@aziontech/webkit/dropdown-menu-trigger'\n  import IconButton from '@aziontech/webkit/icon-button'\n  import Tag from '@aziontech/webkit/tag'\n  import { ref } from 'vue'\n\n  const rows = [\n    {\n      id: '1001',\n      name: 'Workload Alpha',\n      status: 'Active',\n      editor: 'user1@example.com',\n      modified: 'Jan 1, 2026, 09:00 AM',\n      protocol: 'HTTP & HTTPS',\n      domains: 2,\n      origins: 1,\n      created: 'Dec 1, 2025, 10:00 AM'\n    },\n    {\n      id: '1002',\n      name: 'Workload Bravo',\n      status: 'Inactive',\n      editor: 'user2@example.com',\n      modified: 'Jan 2, 2026, 09:00 AM',\n      protocol: 'HTTP',\n      domains: 1,\n      origins: 2,\n      created: 'Dec 2, 2025, 10:00 AM'\n    },\n    {\n      id: '1003',\n      name: 'Workload Charlie',\n      status: 'Degraded',\n      editor: 'user3@example.com',\n      modified: 'Jan 3, 2026, 09:00 AM',\n      protocol: 'gRPC',\n      domains: 3,\n      origins: 1,\n      created: 'Dec 3, 2025, 10:00 AM'\n    }\n  ]\n\n  const columns = [\n    { accessorKey: 'name', header: 'Name' },\n    { accessorKey: 'id', header: 'ID', enableSorting: false },\n    { accessorKey: 'status', header: 'Status' },\n    { accessorKey: 'editor', header: 'Last Editor', enableSorting: false, grow: 2 },\n    { accessorKey: 'modified', header: 'Last Modified', grow: 2 },\n    { id: 'actions', header: '', kind: 'action', enableSorting: false }\n  ]\n\n  const sorting = ref([])\n  const rowSelection = ref({})\n\n  const rowActionGroups = [\n    [\n      { value: 'view', label: 'View details', icon: 'ai ai-eye' },\n      { value: 'edit', label: 'Edit', icon: 'ai ai-pencil' },\n      { value: 'duplicate', label: 'Duplicate', icon: 'ai ai-copy' }\n    ],\n    [{ value: 'delete', label: 'Delete', icon: 'ai ai-trash' }]\n  ]\n\n  const statusSeverity = (status) =>\n    status === 'Active' ? 'success' : status === 'Degraded' ? 'warning' : 'danger'\n\n  const onRowClick = (_row) => {}\n  const onRowAction = (_payload) => {}\n</script>\n\n<template>\n  <DataTable\n    :data=\"rows\"\n    :columns=\"columns\"\n    row-key=\"id\"\n    enable-sorting\n    enable-row-selection\n    paginated\n    :page-size=\"5\"\n    v-model:row-selection=\"rowSelection\"\n    v-model:sorting=\"sorting\"\n    @row-click=\"onRowClick\"\n  >\n    <template #cell-name=\"{ row, value }\">\n      <a\n        :href=\"'/workloads/' + row.id\"\n        class=\"cursor-pointer truncate text-(--text-default) no-underline hover:underline active:underline\"\n        >{{ value }}</a\n      >\n    </template>\n    <template #cell-status=\"{ value }\">\n      <Tag :severity=\"statusSeverity(value)\">{{ value }}</Tag>\n    </template>\n    <template #header-actions>\n      <span class=\"sr-only\">Actions</span>\n    </template>\n    <template #cell-actions=\"{ row }\">\n      <DropdownMenuRoot @select=\"({ value }) => onRowAction({ id: row.id, action: { value } })\">\n        <DropdownMenuTrigger>\n          <IconButton\n            icon=\"ai ai-ellipsis-vertical\"\n            aria-label=\"Row actions\"\n            kind=\"transparent\"\n            size=\"small\"\n          />\n        </DropdownMenuTrigger>\n        <DropdownMenuGroup\n          v-for=\"(group, gi) in rowActionGroups\"\n          :key=\"gi\"\n        >\n          <DropdownMenuOption\n            v-for=\"option in group\"\n            :key=\"option.value\"\n            :value=\"option.value\"\n            :label=\"option.label\"\n          >\n            <template #leading\n              ><i\n                :class=\"option.icon\"\n                aria-hidden=\"true\"\n            /></template>\n          </DropdownMenuOption>\n        </DropdownMenuGroup>\n      </DropdownMenuRoot>\n    </template>\n  </DataTable>\n</template>"
+   "sfc": "<script setup>\n  import DataTable from '@aziontech/webkit/data-table'\n  import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'\n  import DropdownMenuOption from '@aziontech/webkit/dropdown-menu-option'\n  import DropdownMenuRoot from '@aziontech/webkit/dropdown-menu-root'\n  import DropdownMenuTrigger from '@aziontech/webkit/dropdown-menu-trigger'\n  import IconButton from '@aziontech/webkit/icon-button'\n  import Tag from '@aziontech/webkit/tag'\n  import { ref } from 'vue'\n\n  const rows = [\n    {\n      id: '1001',\n      name: 'Workload Alpha',\n      status: 'Active',\n      editor: 'user1@example.com',\n      modified: 'Jan 1, 2026, 09:00 AM',\n      protocol: 'HTTP & HTTPS',\n      domains: 2,\n      origins: 1,\n      created: 'Dec 1, 2025, 10:00 AM'\n    },\n    {\n      id: '1002',\n      name: 'Workload Bravo',\n      status: 'Inactive',\n      editor: 'user2@example.com',\n      modified: 'Jan 2, 2026, 09:00 AM',\n      protocol: 'HTTP',\n      domains: 1,\n      origins: 2,\n      created: 'Dec 2, 2025, 10:00 AM'\n    },\n    {\n      id: '1003',\n      name: 'Workload Charlie',\n      status: 'Degraded',\n      editor: 'user3@example.com',\n      modified: 'Jan 3, 2026, 09:00 AM',\n      protocol: 'gRPC',\n      domains: 3,\n      origins: 1,\n      created: 'Dec 3, 2025, 10:00 AM'\n    }\n  ]\n\n  const columns = [\n    { accessorKey: 'name', header: 'Name' },\n    { accessorKey: 'id', header: 'ID', sortable: false },\n    { accessorKey: 'status', header: 'Status' },\n    { accessorKey: 'editor', header: 'Last Editor', sortable: false, grow: 2 },\n    { accessorKey: 'modified', header: 'Last Modified', grow: 2 },\n    { id: 'actions', header: '', kind: 'action', sortable: false }\n  ]\n\n  const sorting = ref([])\n  const rowSelection = ref({})\n\n  const rowActionGroups = [\n    [\n      { value: 'view', label: 'View details', icon: 'ai ai-eye' },\n      { value: 'edit', label: 'Edit', icon: 'ai ai-pencil' },\n      { value: 'duplicate', label: 'Duplicate', icon: 'ai ai-copy' }\n    ],\n    [{ value: 'delete', label: 'Delete', icon: 'ai ai-trash' }]\n  ]\n\n  const statusSeverity = (status) =>\n    status === 'Active' ? 'success' : status === 'Degraded' ? 'warning' : 'danger'\n\n  const onRowClick = (_row) => {}\n  const onRowAction = (_payload) => {}\n</script>\n\n<template>\n  <DataTable\n    :data=\"rows\"\n    :columns=\"columns\"\n    row-key=\"id\"\n    sortable\n    selectable\n    paginated\n    :page-size=\"5\"\n    v-model:row-selection=\"rowSelection\"\n    v-model:sorting=\"sorting\"\n    @row-click=\"onRowClick\"\n  >\n    <template #cell-name=\"{ row, value }\">\n      <a\n        :href=\"'/workloads/' + row.id\"\n        class=\"cursor-pointer truncate text-(--text-default) no-underline hover:underline active:underline\"\n        >{{ value }}</a\n      >\n    </template>\n    <template #cell-status=\"{ value }\">\n      <Tag :severity=\"statusSeverity(value)\">{{ value }}</Tag>\n    </template>\n    <template #header-actions>\n      <span class=\"sr-only\">Actions</span>\n    </template>\n    <template #cell-actions=\"{ row }\">\n      <DropdownMenuRoot @select=\"({ value }) => onRowAction({ id: row.id, action: { value } })\">\n        <DropdownMenuTrigger>\n          <IconButton\n            icon=\"ai ai-ellipsis-vertical\"\n            aria-label=\"Row actions\"\n            kind=\"transparent\"\n            size=\"small\"\n          />\n        </DropdownMenuTrigger>\n        <DropdownMenuGroup\n          v-for=\"(group, gi) in rowActionGroups\"\n          :key=\"gi\"\n        >\n          <DropdownMenuOption\n            v-for=\"option in group\"\n            :key=\"option.value\"\n            :value=\"option.value\"\n            :label=\"option.label\"\n          >\n            <template #leading\n              ><i\n                :class=\"option.icon\"\n                aria-hidden=\"true\"\n            /></template>\n          </DropdownMenuOption>\n        </DropdownMenuGroup>\n      </DropdownMenuRoot>\n    </template>\n  </DataTable>\n</template>"
   },
   {
    "name": "CompactHeader",
-   "sfc": "<script setup>\n  import DataTable from '@aziontech/webkit/data-table'\n  import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'\n  import DropdownMenuOption from '@aziontech/webkit/dropdown-menu-option'\n  import DropdownMenuRoot from '@aziontech/webkit/dropdown-menu-root'\n  import DropdownMenuTrigger from '@aziontech/webkit/dropdown-menu-trigger'\n  import IconButton from '@aziontech/webkit/icon-button'\n  import Tag from '@aziontech/webkit/tag'\n  import { ref } from 'vue'\n\n  const rows = [\n    {\n      id: '1001',\n      name: 'Workload Alpha',\n      status: 'Active',\n      editor: 'user1@example.com',\n      modified: 'Jan 1, 2026, 09:00 AM',\n      protocol: 'HTTP & HTTPS',\n      domains: 2,\n      origins: 1,\n      created: 'Dec 1, 2025, 10:00 AM'\n    },\n    {\n      id: '1002',\n      name: 'Workload Bravo',\n      status: 'Inactive',\n      editor: 'user2@example.com',\n      modified: 'Jan 2, 2026, 09:00 AM',\n      protocol: 'HTTP',\n      domains: 1,\n      origins: 2,\n      created: 'Dec 2, 2025, 10:00 AM'\n    },\n    {\n      id: '1003',\n      name: 'Workload Charlie',\n      status: 'Degraded',\n      editor: 'user3@example.com',\n      modified: 'Jan 3, 2026, 09:00 AM',\n      protocol: 'gRPC',\n      domains: 3,\n      origins: 1,\n      created: 'Dec 3, 2025, 10:00 AM'\n    }\n  ]\n\n  const columns = [\n    { accessorKey: 'name', header: 'Name' },\n    { accessorKey: 'id', header: 'ID', enableSorting: false },\n    { accessorKey: 'status', header: 'Status' },\n    { accessorKey: 'editor', header: 'Last Editor', enableSorting: false, grow: 2 },\n    { accessorKey: 'modified', header: 'Last Modified', grow: 2 },\n    { id: 'actions', header: '', kind: 'action', enableSorting: false }\n  ]\n\n  const sorting = ref([])\n\n  const rowActionGroups = [\n    [\n      { value: 'view', label: 'View details', icon: 'ai ai-eye' },\n      { value: 'edit', label: 'Edit', icon: 'ai ai-pencil' },\n      { value: 'duplicate', label: 'Duplicate', icon: 'ai ai-copy' }\n    ],\n    [{ value: 'delete', label: 'Delete', icon: 'ai ai-trash' }]\n  ]\n\n  const statusSeverity = (status) =>\n    status === 'Active' ? 'success' : status === 'Degraded' ? 'warning' : 'danger'\n\n  const onRowClick = (_row) => {}\n  const onRowAction = (_payload) => {}\n</script>\n\n<template>\n  <DataTable\n    :data=\"rows\"\n    :columns=\"columns\"\n    row-key=\"id\"\n    enable-sorting\n    density=\"compact\"\n    v-model:sorting=\"sorting\"\n    @row-click=\"onRowClick\"\n  >\n    <template #cell-name=\"{ row, value }\">\n      <a\n        :href=\"'/workloads/' + row.id\"\n        class=\"cursor-pointer truncate text-(--text-default) no-underline hover:underline active:underline\"\n        >{{ value }}</a\n      >\n    </template>\n    <template #cell-status=\"{ value }\">\n      <Tag :severity=\"statusSeverity(value)\">{{ value }}</Tag>\n    </template>\n    <template #header-actions>\n      <span class=\"sr-only\">Actions</span>\n    </template>\n    <template #cell-actions=\"{ row }\">\n      <DropdownMenuRoot @select=\"({ value }) => onRowAction({ id: row.id, action: { value } })\">\n        <DropdownMenuTrigger>\n          <IconButton\n            icon=\"ai ai-ellipsis-vertical\"\n            aria-label=\"Row actions\"\n            kind=\"transparent\"\n            size=\"small\"\n          />\n        </DropdownMenuTrigger>\n        <DropdownMenuGroup\n          v-for=\"(group, gi) in rowActionGroups\"\n          :key=\"gi\"\n        >\n          <DropdownMenuOption\n            v-for=\"option in group\"\n            :key=\"option.value\"\n            :value=\"option.value\"\n            :label=\"option.label\"\n          >\n            <template #leading\n              ><i\n                :class=\"option.icon\"\n                aria-hidden=\"true\"\n            /></template>\n          </DropdownMenuOption>\n        </DropdownMenuGroup>\n      </DropdownMenuRoot>\n    </template>\n  </DataTable>\n</template>"
+   "sfc": "<script setup>\n  import DataTable from '@aziontech/webkit/data-table'\n  import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'\n  import DropdownMenuOption from '@aziontech/webkit/dropdown-menu-option'\n  import DropdownMenuRoot from '@aziontech/webkit/dropdown-menu-root'\n  import DropdownMenuTrigger from '@aziontech/webkit/dropdown-menu-trigger'\n  import IconButton from '@aziontech/webkit/icon-button'\n  import Tag from '@aziontech/webkit/tag'\n  import { ref } from 'vue'\n\n  const rows = [\n    {\n      id: '1001',\n      name: 'Workload Alpha',\n      status: 'Active',\n      editor: 'user1@example.com',\n      modified: 'Jan 1, 2026, 09:00 AM',\n      protocol: 'HTTP & HTTPS',\n      domains: 2,\n      origins: 1,\n      created: 'Dec 1, 2025, 10:00 AM'\n    },\n    {\n      id: '1002',\n      name: 'Workload Bravo',\n      status: 'Inactive',\n      editor: 'user2@example.com',\n      modified: 'Jan 2, 2026, 09:00 AM',\n      protocol: 'HTTP',\n      domains: 1,\n      origins: 2,\n      created: 'Dec 2, 2025, 10:00 AM'\n    },\n    {\n      id: '1003',\n      name: 'Workload Charlie',\n      status: 'Degraded',\n      editor: 'user3@example.com',\n      modified: 'Jan 3, 2026, 09:00 AM',\n      protocol: 'gRPC',\n      domains: 3,\n      origins: 1,\n      created: 'Dec 3, 2025, 10:00 AM'\n    }\n  ]\n\n  const columns = [\n    { accessorKey: 'name', header: 'Name' },\n    { accessorKey: 'id', header: 'ID', sortable: false },\n    { accessorKey: 'status', header: 'Status' },\n    { accessorKey: 'editor', header: 'Last Editor', sortable: false, grow: 2 },\n    { accessorKey: 'modified', header: 'Last Modified', grow: 2 },\n    { id: 'actions', header: '', kind: 'action', sortable: false }\n  ]\n\n  const sorting = ref([])\n\n  const rowActionGroups = [\n    [\n      { value: 'view', label: 'View details', icon: 'ai ai-eye' },\n      { value: 'edit', label: 'Edit', icon: 'ai ai-pencil' },\n      { value: 'duplicate', label: 'Duplicate', icon: 'ai ai-copy' }\n    ],\n    [{ value: 'delete', label: 'Delete', icon: 'ai ai-trash' }]\n  ]\n\n  const statusSeverity = (status) =>\n    status === 'Active' ? 'success' : status === 'Degraded' ? 'warning' : 'danger'\n\n  const onRowClick = (_row) => {}\n  const onRowAction = (_payload) => {}\n</script>\n\n<template>\n  <DataTable\n    :data=\"rows\"\n    :columns=\"columns\"\n    row-key=\"id\"\n    sortable\n    density=\"compact\"\n    v-model:sorting=\"sorting\"\n    @row-click=\"onRowClick\"\n  >\n    <template #cell-name=\"{ row, value }\">\n      <a\n        :href=\"'/workloads/' + row.id\"\n        class=\"cursor-pointer truncate text-(--text-default) no-underline hover:underline active:underline\"\n        >{{ value }}</a\n      >\n    </template>\n    <template #cell-status=\"{ value }\">\n      <Tag :severity=\"statusSeverity(value)\">{{ value }}</Tag>\n    </template>\n    <template #header-actions>\n      <span class=\"sr-only\">Actions</span>\n    </template>\n    <template #cell-actions=\"{ row }\">\n      <DropdownMenuRoot @select=\"({ value }) => onRowAction({ id: row.id, action: { value } })\">\n        <DropdownMenuTrigger>\n          <IconButton\n            icon=\"ai ai-ellipsis-vertical\"\n            aria-label=\"Row actions\"\n            kind=\"transparent\"\n            size=\"small\"\n          />\n        </DropdownMenuTrigger>\n        <DropdownMenuGroup\n          v-for=\"(group, gi) in rowActionGroups\"\n          :key=\"gi\"\n        >\n          <DropdownMenuOption\n            v-for=\"option in group\"\n            :key=\"option.value\"\n            :value=\"option.value\"\n            :label=\"option.label\"\n          >\n            <template #leading\n              ><i\n                :class=\"option.icon\"\n                aria-hidden=\"true\"\n            /></template>\n          </DropdownMenuOption>\n        </DropdownMenuGroup>\n      </DropdownMenuRoot>\n    </template>\n  </DataTable>\n</template>"
   }
  ],
  "docs": "components/data-table.md"

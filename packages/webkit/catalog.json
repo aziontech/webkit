@@ -1785,6 +1785,16 @@
     ]
    },
    {
+    "concept": "ids of the parts that are open (v-model:openKeys, like selectedKeys)",
+    "canonical": "openKeys",
+    "aliases": [
+     "expandedKeys",
+     "expandedIds",
+     "openIds",
+     "expandedItems"
+    ]
+   },
+   {
     "concept": "page or item you are on (renders aria-current)",
     "canonical": "active",
     "aliases": [
@@ -2046,13 +2056,6 @@
     "secondary": "neutral",
     "alt": "neutral"
    },
-   "variant": {
-    "outlined": "outline",
-    "transparent": "ghost",
-    "text": "ghost",
-    "destructive": "danger",
-    "error": "danger"
-   },
    "status": {
     "done": "success",
     "ok": "success",
@@ -2068,6 +2071,13 @@
     "waiting": "pending",
     "in-progress": "running",
     "progress": "running"
+   },
+   "variant": {
+    "outlined": "outline",
+    "transparent": "ghost",
+    "text": "ghost",
+    "destructive": "danger",
+    "error": "danger"
    }
   },
   "positions": {
@@ -2398,7 +2408,7 @@
      "doc": "One or two sentences on what will happen and to what; backticks render as code."
     },
     {
-     "name": "state",
+     "name": "status",
      "type": "'pending' | 'approved' | 'denied' | 'expired'",
      "default": "'pending'",
      "required": "false",
@@ -2714,11 +2724,11 @@
      "doc": "Time the message was sent, already formatted for display (`10:42`). Added to the accessible name."
     },
     {
-     "name": "state",
-     "type": "'pending' | 'streaming' | 'complete' | 'error'",
-     "default": "'complete'",
+     "name": "status",
+     "type": "'pending' | 'streaming' | 'success' | 'error'",
+     "default": "'success'",
      "required": "false",
-     "doc": "Lifecycle: `pending` shows the loading text, `streaming` marks the content busy, `complete` shows the actions, `error` shows the error line with Try again."
+     "doc": "Lifecycle: `pending` shows the loading text, `streaming` marks the content busy, `success` shows the actions, `error` shows the error line with Try again."
     },
     {
      "name": "grouped",
@@ -2732,14 +2742,14 @@
      "type": "string",
      "default": "''",
      "required": "false",
-     "doc": "Error text shown while `state` is `error`. Empty uses the locale catalog."
+     "doc": "Error text shown while `status` is `error`. Empty uses the locale catalog."
     },
     {
      "name": "loadingLabel",
      "type": "string",
      "default": "''",
      "required": "false",
-     "doc": "Loading text shown while `state` is `pending`. Empty uses `AiLoading`'s own (`Generating a response`)."
+     "doc": "Loading text shown while `status` is `pending`. Empty uses `AiLoading`'s own (`Generating a response`)."
     }
    ],
    "events": [
@@ -2763,7 +2773,7 @@
     {
      "name": "actions",
      "scope": "—",
-     "notes": "Inline actions, usually `ChatMessage.Actions`; shown only when `state` is `complete`."
+     "notes": "Inline actions, usually `ChatMessage.Actions`; shown only when `status` is `success`."
     }
    ],
    "surface": "app",
@@ -2801,11 +2811,11 @@
      "doc": "Time the message was sent, already formatted for display (`10:42`). Added to the accessible name."
     },
     {
-     "name": "state",
-     "type": "'pending' | 'streaming' | 'complete' | 'error'",
-     "default": "'complete'",
+     "name": "status",
+     "type": "'pending' | 'streaming' | 'success' | 'error'",
+     "default": "'success'",
      "required": "false",
-     "doc": "Lifecycle: `pending` shows the loading text, `streaming` marks the content busy, `complete` shows the actions, `error` shows the error line with Try again."
+     "doc": "Lifecycle: `pending` shows the loading text, `streaming` marks the content busy, `success` shows the actions, `error` shows the error line with Try again."
     },
     {
      "name": "grouped",
@@ -2819,14 +2829,14 @@
      "type": "string",
      "default": "''",
      "required": "false",
-     "doc": "Error text shown while `state` is `error`. Empty uses the locale catalog."
+     "doc": "Error text shown while `status` is `error`. Empty uses the locale catalog."
     },
     {
      "name": "loadingLabel",
      "type": "string",
      "default": "''",
      "required": "false",
-     "doc": "Loading text shown while `state` is `pending`. Empty uses `AiLoading`'s own (`Generating a response`)."
+     "doc": "Loading text shown while `status` is `pending`. Empty uses `AiLoading`'s own (`Generating a response`)."
     }
    ],
    "events": [
@@ -2850,7 +2860,7 @@
     {
      "name": "actions",
      "scope": "—",
-     "notes": "Inline actions, usually `ChatMessage.Actions`; shown only when `state` is `complete`."
+     "notes": "Inline actions, usually `ChatMessage.Actions`; shown only when `status` is `success`."
     }
    ],
    "surface": "app",
@@ -2983,7 +2993,7 @@
      "doc": "Accessible name of the message log. Empty uses the locale catalog (`Conversation`)."
     },
     {
-     "name": "alignment",
+     "name": "layout",
      "type": "'split' | 'start'",
      "default": "'split'",
      "required": "false",
@@ -3114,11 +3124,11 @@
      "doc": "Rows the text area grows to before it scrolls."
     },
     {
-     "name": "state",
-     "type": "'ready' | 'submitted' | 'streaming'",
+     "name": "status",
+     "type": "'ready' | 'pending' | 'streaming'",
      "default": "'ready'",
      "required": "false",
-     "doc": "Request lifecycle: `submitted` and `streaming` swap Submit for Stop and block another submit; typing stays allowed."
+     "doc": "Request lifecycle: `pending` and `streaming` swap Submit for Stop and block another submit; typing stays allowed."
     },
     {
      "name": "disabled",
@@ -3464,7 +3474,7 @@
      "doc": "What the call does in the reader's words (`Listing your workloads`). Empty shows only the name."
     },
     {
-     "name": "state",
+     "name": "status",
      "type": "'pending' | 'running' | 'success' | 'error' | 'denied'",
      "default": "'running'",
      "required": "false",
@@ -3601,7 +3611,7 @@
      "notes": "The visible label, as shadcn and Radix take children; falls back to `label`. Plain text keeps the button's typography."
     },
     {
-     "name": "prefix",
+     "name": "leading",
      "scope": "—",
      "notes": "A mark drawn before the label, ahead of a leading `icon`. It stays first when `iconPosition=\"trailing\"`, so a brand mark and a trailing chevron can share one control."
     }
@@ -5719,11 +5729,18 @@
      "doc": "Fallback text when the default slot is empty."
     },
     {
-     "name": "severity",
-     "type": "Severity | 'primary' | 'accent' | 'contrast' | 'highlight'",
+     "name": "variant",
+     "type": "'primary' | 'accent' | 'contrast' | 'highlight'",
      "default": "'primary'",
      "required": "false",
-     "doc": "Color style for the tag surface and label: the shared `Severity` scale (`neutral`, `info`, `success`, `warning`, `danger`, exported from this component) plus `primary` (solid brand orange), `accent`, `highlight` (the brand orange as a tint) and `contrast` (`var(--bg-contrast)` / `var(--text-contrast)`)."
+     "doc": "Brand look of the tag surface and label, used when `severity` is not set: `primary` (solid brand orange), `accent`, `highlight` (the brand orange as a tint) and `contrast` (`var(--bg-contrast)` / `var(--text-contrast)`)."
+    },
+    {
+     "name": "severity",
+     "type": "'neutral' | 'info' | 'success' | 'warning' | 'danger'",
+     "default": "—",
+     "required": "false",
+     "doc": "Status colour of the tag surface and label, the shared `Severity` scale exported from this component; wins over `variant` when set."
     },
     {
      "name": "size",
@@ -5771,7 +5788,7 @@
      "type": "'critical' | 'high' | 'medium' | 'low' | 'info'",
      "default": "'info'",
      "required": "false",
-     "doc": "Severity level; sets how many glyph bars fill, their colour and the default label."
+     "doc": "Severity level on the findings scale (exported as `SeverityTagLevel`, distinct from the shared status `Severity`); sets how many glyph bars fill, their colour and the default label."
     },
     {
      "name": "label",
@@ -5952,11 +5969,18 @@
      "doc": "Fallback text when the default slot is empty."
     },
     {
-     "name": "severity",
-     "type": "'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'neutral'",
+     "name": "variant",
+     "type": "'primary' | 'secondary'",
      "default": "'primary'",
      "required": "false",
-     "doc": "Color style for the badge surface and label; `neutral` uses the `var(--bg-surface)` / `var(--text-default)` surface. The status values come from the shared `Severity` scale (exported from this component)."
+     "doc": "Brand look of the badge surface and label, used when `severity` is not set."
+    },
+    {
+     "name": "severity",
+     "type": "'neutral' | 'info' | 'success' | 'warning' | 'danger'",
+     "default": "—",
+     "required": "false",
+     "doc": "Status colour of the badge surface and label; wins over `variant` when set. `neutral` uses the `var(--bg-surface)` / `var(--text-default)` surface. The values are the shared `Severity` scale (exported from this component)."
     },
     {
      "name": "size",
@@ -6158,9 +6182,9 @@
      "doc": "Size token; affects header height, padding, and typography. Provided to every item via context."
     },
     {
-     "name": "arrowPosition",
-     "type": "'left' | 'right'",
-     "default": "'right'",
+     "name": "iconPosition",
+     "type": "'leading' | 'trailing'",
+     "default": "'trailing'",
      "required": "false",
      "doc": "Side of the header the chevron sits on. Provided to every item via context."
     },
@@ -6224,9 +6248,9 @@
      "doc": "Size token; affects header height, padding, and typography. Provided to every item via context."
     },
     {
-     "name": "arrowPosition",
-     "type": "'left' | 'right'",
-     "default": "'right'",
+     "name": "iconPosition",
+     "type": "'leading' | 'trailing'",
+     "default": "'trailing'",
      "required": "false",
      "doc": "Side of the header the chevron sits on. Provided to every item via context."
     },
@@ -6299,7 +6323,7 @@
      "type": "'default' | 'integration'",
      "default": "'default'",
      "required": "false",
-     "doc": "integration` lays the card out as a catalog tile from `title`, `logo`, `vendor`, `description`, `badges`, `installed` and the `action` slot."
+     "doc": "integration` lays the card out as a catalog tile from `title`, `logo`, `vendor`, `description`, `badges`, `installed` and the `actions` slot."
     },
     {
      "name": "logo",
@@ -6327,7 +6351,7 @@
      "type": "CardBadge[]",
      "default": "[]",
      "required": "false",
-     "doc": "Integration kind: small tags such as the category or the context (`{ label, severity? }`, severity is a `TagSeverity`, `CardBadgeSeverity` is its alias, defaulting to `info`)."
+     "doc": "Integration kind: small tags such as the category or the context (`{ label, variant?, severity? }`, `variant` a `TagVariant` and `severity` a `TagSeverity` (`CardBadgeVariant` and `CardBadgeSeverity`); a badge with neither is `info`, a featured badge with neither is the `primary` variant)."
     },
     {
      "name": "installed",
@@ -6362,10 +6386,10 @@
     {
      "name": "header",
      "scope": "—",
-     "notes": "Replaces the default header layout (title + header-action)."
+     "notes": "Replaces the default header layout (title + header-actions)."
     },
     {
-     "name": "header-action",
+     "name": "header-actions",
      "scope": "—",
      "notes": "Actions aligned to the end of the default header; visible on header hover."
     },
@@ -6373,11 +6397,6 @@
      "name": "default",
      "scope": "—",
      "notes": "Main card body: children passed without a slot name. With `kind=\"integration\"` it renders under the description."
-    },
-    {
-     "name": "content",
-     "scope": "—",
-     "notes": "The named form of `default`; when both are passed, `content` wins."
     },
     {
      "name": "footer",
@@ -6390,7 +6409,7 @@
      "notes": "Integration kind: replaces the logo mark, for an `img` with an empty `alt`."
     },
     {
-     "name": "action",
+     "name": "actions",
      "scope": "—",
      "notes": "Integration kind: one action at the end of the tile, above the stretched title target."
     }
@@ -6443,14 +6462,14 @@
      "doc": "Text of the tag beside the plan name."
     },
     {
-     "name": "aligned",
+     "name": "equalHeight",
      "type": "boolean",
      "default": "false",
      "required": "false",
      "doc": "Reserves the caveat's band so a row of cards aligns row-for-row. Set it on every card in the row."
     },
     {
-     "name": "slotPosition",
+     "name": "actionsPosition",
      "type": "'bottom' | 'middle'",
      "default": "'bottom'",
      "required": "false",
@@ -6813,10 +6832,10 @@
     },
     {
      "name": "kind",
-     "type": "'centered' | 'left' | 'horizontal'",
-     "default": "'centered'",
+     "type": "'center' | 'start' | 'split'",
+     "default": "'center'",
      "required": "false",
-     "doc": "Layout of the header: `centered` stacks and centers the copy, `left` stacks it at the start edge, `horizontal` sets the headline and its description in two columns."
+     "doc": "Layout of the header: `center` stacks and centers the copy, `start` stacks it at the start edge, `split` sets the headline and its description in two columns."
     },
     {
      "name": "size",
@@ -7260,7 +7279,7 @@
      "doc": "Whether this widget is the one showing; it replays its entrance each time it becomes active."
     },
     {
-     "name": "hover",
+     "name": "hovered",
      "type": "boolean",
      "default": "false",
      "required": "false",
@@ -7316,7 +7335,7 @@
      "doc": "Draws the named collaborator cursor a fragment acts its beat with; turn it off for a still console picture. Widgets without a cursor ignore it."
     },
     {
-     "name": "interval",
+     "name": "autoplayInterval",
      "type": "number",
      "default": "undefined",
      "required": "false",
@@ -8091,7 +8110,7 @@
      "doc": "Language of the single `code` snippet (highlighting and the label header)."
     },
     {
-     "name": "lineNumbers",
+     "name": "showLineNumbers",
      "type": "boolean",
      "default": "true",
      "required": "false",
@@ -8334,6 +8353,15 @@
    "kind": "component",
    "treeShakeableImport": "@aziontech/webkit/data-table",
    "models": [
+    "data",
+    "sorting",
+    "rowSelection",
+    "columnVisibility",
+    "globalFilter",
+    "pagination",
+    "filters",
+    "state",
+    "expanded",
     "live"
    ],
    "category": "data",
@@ -8354,18 +8382,11 @@
      "doc": "Draw the outer card border around the table. Off by default (the table is typically framed by a surrounding surface); set `bordered` / `:bordered=\"…\"` to draw the `var(--border-default)` outline. The internal row dividers are unaffected."
     },
     {
-     "name": "data",
-     "type": "TRow[]",
-     "default": "[]",
-     "required": "false",
-     "doc": "row records."
-    },
-    {
      "name": "columns",
      "type": "TableColumn[]",
      "default": "[]",
      "required": "false",
-     "doc": "column definitions (`{ id?, accessorKey?, header?, label?, enableSorting?, grow?, principal?, frozen?, width?, minWidth?, align?, kind?, resizable?, hideable?, orderable? }`; `width` (px) sets a fixed pixel column (also needed when a frozen column precedes another frozen column on the same edge, so sticky offsets can be summed); **`minWidth`** (px) sets a **floor** instead: the table measures the column's own content — its header, including the sort affordance, and every rendered body cell — and pins the column to the larger of the two, as **one** width applied to the header and every body cell (a per-cell `min-width` would let each row size to its own content and drift the header away from the body). It is for a column whose content is a chip or a short token: a fixed `width` there is a bet in both directions — too generous and it reserves space the rest of the row needs, too tight and the chip inside it truncates. The measured width tracks the **rendered page**, so a column can change width when paging or sorting brings longer content into view; `width` wins when both are set, and a user resize wins over both. a `grow` column without `width` keeps a shared fixed basis so the header and body stay aligned and the cell never wraps. A column with no `grow` defaults to weight `2` for the **principal** column and `1` for the rest, so the columns fill the available space proportionally. The principal column is the one flagged `principal: true`, or — when none is flagged — the first non-action column. A `kind: 'action'` column is automatically pinned to the trailing (right) edge — staying reachable while the rest scrolls horizontally — and is never resizable. **`resizable: true`** opts a column into a live mouse/touch drag-to-resize handle on its header (native pointer events; the `@tanstack/vue-table` exception covers sorting/pagination/selection/visibility, not sizing). On the first drag of any divider every flexible column freezes at its current rendered width; from then on dragging changes **only that column** and the table grows (horizontal scroll) — the others are untouched. The drag floor is the column's own content width (header label + visible body cells), so a column never shrinks past its content. Frozen and action columns ignore `resizable`. **`label`** names the column in `CollectionPreferences` when `header` is not a string; **`hideable: false`** lists the column locked in `CollectionPreferences`; **`orderable: true`** opts the column into `columnOrder`."
+     "doc": "column definitions (`{ id?, accessorKey?, header?, label?, sortable?, grow?, principal?, frozen?, width?, minWidth?, align?, kind?, resizable?, hideable?, orderable? }`; `width` (px) sets a fixed pixel column (also needed when a frozen column precedes another frozen column on the same edge, so sticky offsets can be summed); **`minWidth`** (px) sets a **floor** instead: the table measures the column's own content — its header, including the sort affordance, and every rendered body cell — and pins the column to the larger of the two, as **one** width applied to the header and every body cell (a per-cell `min-width` would let each row size to its own content and drift the header away from the body). It is for a column whose content is a chip or a short token: a fixed `width` there is a bet in both directions — too generous and it reserves space the rest of the row needs, too tight and the chip inside it truncates. The measured width tracks the **rendered page**, so a column can change width when paging or sorting brings longer content into view; `width` wins when both are set, and a user resize wins over both. a `grow` column without `width` keeps a shared fixed basis so the header and body stay aligned and the cell never wraps. A column with no `grow` defaults to weight `2` for the **principal** column and `1` for the rest, so the columns fill the available space proportionally. The principal column is the one flagged `principal: true`, or — when none is flagged — the first non-action column. A `kind: 'action'` column is automatically pinned to the trailing (right) edge — staying reachable while the rest scrolls horizontally — and is never resizable. **`resizable: true`** opts a column into a live mouse/touch drag-to-resize handle on its header (native pointer events; the `@tanstack/vue-table` exception covers sorting/pagination/selection/visibility, not sizing). On the first drag of any divider every flexible column freezes at its current rendered width; from then on dragging changes **only that column** and the table grows (horizontal scroll) — the others are untouched. The drag floor is the column's own content width (header label + visible body cells), so a column never shrinks past its content. Frozen and action columns ignore `resizable`. **`label`** names the column in `CollectionPreferences` when `header` is not a string; **`hideable: false`** lists the column locked in `CollectionPreferences`; **`orderable: true`** opts the column into `columnOrder`."
     },
     {
      "name": "rowKey",
@@ -8375,18 +8396,18 @@
      "doc": "Field used as the stable row id (for selection)."
     },
     {
-     "name": "enableSorting",
+     "name": "sortable",
      "type": "boolean",
      "default": "false",
      "required": "false",
-     "doc": "Enable sorting globally; per-column `enableSorting` overrides."
+     "doc": "Sorts every column on header click; a column's own `sortable` overrides."
     },
     {
-     "name": "enableRowSelection",
+     "name": "selectable",
      "type": "boolean",
      "default": "false",
      "required": "false",
-     "doc": "Add a leading selection-checkbox column."
+     "doc": "Adds a leading selection-checkbox column."
     },
     {
      "name": "rowSelectable",
@@ -8400,7 +8421,7 @@
      "type": "boolean",
      "default": "false",
      "required": "false",
-     "doc": "clicking a row toggles its selection (requires `enableRowSelection`); interactive cells still own their own click."
+     "doc": "clicking a row toggles its selection (requires `selectable`); interactive cells still own their own click."
     },
     {
      "name": "paginated",
@@ -8415,41 +8436,6 @@
      "default": "10",
      "required": "false",
      "doc": "Rows per page when paginated."
-    },
-    {
-     "name": "sorting",
-     "type": "SortingState",
-     "default": "undefined",
-     "required": "false",
-     "doc": "v-model:sorting (TanStack SortingState)."
-    },
-    {
-     "name": "rowSelection",
-     "type": "RowSelectionState",
-     "default": "undefined",
-     "required": "false",
-     "doc": "v-model:rowSelection (TanStack RowSelectionState)."
-    },
-    {
-     "name": "columnVisibility",
-     "type": "VisibilityState",
-     "default": "undefined",
-     "required": "false",
-     "doc": "v-model:columnVisibility (TanStack VisibilityState)."
-    },
-    {
-     "name": "globalFilter",
-     "type": "string",
-     "default": "undefined",
-     "required": "false",
-     "doc": "v-model:globalFilter text."
-    },
-    {
-     "name": "pagination",
-     "type": "PaginationState",
-     "default": "undefined",
-     "required": "false",
-     "doc": "v-model:pagination (TanStack PaginationState)."
     },
     {
      "name": "manualSorting",
@@ -8501,25 +8487,11 @@
      "doc": "message of a failed load, shown in place of the rows in an `alert` region (an `EmptyState` with the error mark and `table.errorTitle`, the message as its description); the `error` slot replaces it. `loading` wins over it. Empty shows the rows."
     },
     {
-     "name": "filters",
-     "type": "AppliedFilter[]",
-     "default": "undefined",
-     "required": "false",
-     "doc": "v-model:filters — structured applied conditions committed by `Table.Filter` (menu picks or property tokens), distinct from `globalFilter`. Client-side they map to TanStack column filters; under `manualFiltering` they are emitted for a server refetch."
-    },
-    {
      "name": "filterFields",
      "type": "FilterField[]",
      "default": "[]",
      "required": "false",
      "doc": "Fields `Table.Filter` offers (id, label, value type, allowed operators, select options): facets for the menu kind, properties for the property kind."
-    },
-    {
-     "name": "state",
-     "type": "TableStateSnapshot",
-     "default": "undefined",
-     "required": "false",
-     "doc": "v-model:state — an aggregate serializable snapshot layered over the per-concern models. A bound per-concern v-model (e.g. `v-model:sorting`) wins over `state` for that concern."
     },
     {
      "name": "initialState",
@@ -8606,13 +8578,6 @@
      "doc": "tree rows. Returns a row's children (`(row) => row.children`); a row with children gets an expand toggle in the principal column, its children render under it indented one step (`--spacing-md`) per level, and the grid element takes `role=\"treegrid\"`. Sorting and filtering keep each child under its parent; selection is per row (selecting a parent does not select its children). `reorderable` is ignored in tree mode."
     },
     {
-     "name": "expanded",
-     "type": "ExpandedState",
-     "default": "undefined",
-     "required": "false",
-     "doc": "v-model:expanded (TanStack ExpandedState: `true` for every row, or `{ [rowId]: true }`). Uncontrolled it starts collapsed."
-    },
-    {
      "name": "moreRows",
      "type": "boolean",
      "default": "false",
@@ -8627,6 +8592,69 @@
      "doc": "the next rows are loading; shows a loading line under the rows and holds further `load-more` requests."
     },
     {
+     "name": "data",
+     "type": "TRow[]",
+     "default": "() => []",
+     "required": "false",
+     "doc": "Two-way value (`v-model:data`)."
+    },
+    {
+     "name": "sorting",
+     "type": "SortingState",
+     "default": "undefined",
+     "required": "false",
+     "doc": "Two-way value (`v-model:sorting`)."
+    },
+    {
+     "name": "rowSelection",
+     "type": "RowSelectionState",
+     "default": "undefined",
+     "required": "false",
+     "doc": "Two-way value (`v-model:rowSelection`)."
+    },
+    {
+     "name": "columnVisibility",
+     "type": "VisibilityState",
+     "default": "undefined",
+     "required": "false",
+     "doc": "Two-way value (`v-model:columnVisibility`)."
+    },
+    {
+     "name": "globalFilter",
+     "type": "string",
+     "default": "undefined",
+     "required": "false",
+     "doc": "Two-way value (`v-model:globalFilter`)."
+    },
+    {
+     "name": "pagination",
+     "type": "PaginationState",
+     "default": "undefined",
+     "required": "false",
+     "doc": "Two-way value (`v-model:pagination`)."
+    },
+    {
+     "name": "filters",
+     "type": "AppliedFilter[]",
+     "default": "undefined",
+     "required": "false",
+     "doc": "Two-way value (`v-model:filters`)."
+    },
+    {
+     "name": "state",
+     "type": "TableStateSnapshot",
+     "default": "undefined",
+     "required": "false",
+     "doc": "Two-way value (`v-model:state`)."
+    },
+    {
+     "name": "expanded",
+     "type": "ExpandedState",
+     "default": "undefined",
+     "required": "false",
+     "doc": "Two-way value (`v-model:expanded`)."
+    },
+    {
      "name": "live",
      "type": "boolean",
      "default": "false",
@@ -8636,44 +8664,9 @@
    ],
    "events": [
     {
-     "name": "update:sorting",
-     "payload": "value: SortingState",
-     "notes": "v-model:sorting."
-    },
-    {
-     "name": "update:rowSelection",
-     "payload": "value: RowSelectionState",
-     "notes": "v-model:rowSelection."
-    },
-    {
-     "name": "update:columnVisibility",
-     "payload": "value: VisibilityState",
-     "notes": "v-model:columnVisibility."
-    },
-    {
-     "name": "update:globalFilter",
-     "payload": "value: string",
-     "notes": "v-model:globalFilter."
-    },
-    {
-     "name": "update:pagination",
-     "payload": "value: PaginationState",
-     "notes": "v-model:pagination."
-    },
-    {
      "name": "row-click",
      "payload": "(event: MouseEvent, row: TRow)",
      "notes": "Fires when a rendered row is clicked. `event` is the click; `row` is the clicked record."
-    },
-    {
-     "name": "update:filters",
-     "payload": "value: AppliedFilter[]",
-     "notes": "v-model:filters."
-    },
-    {
-     "name": "update:state",
-     "payload": "value: TableStateSnapshot",
-     "notes": "v-model:state; debounced so bursts of changes coalesce."
     },
     {
      "name": "filter-apply",
@@ -8687,33 +8680,23 @@
     },
     {
      "name": "refresh",
-     "payload": "—",
-     "notes": "Refresh requested (`Table.RefreshButton` or `reload()`); the app refetches."
+     "payload": "(event: Event)",
+     "notes": "Refresh requested; the app refetches. `event` is the click of `Table.RefreshButton`, or `new Event('refresh')` when `reload()` is called."
     },
     {
      "name": "export",
-     "payload": "rows: TRow[]",
-     "notes": "Export requested with the resolved rows; a consumer may handle it server-side (otherwise the built-in CSV util downloads)."
-    },
-    {
-     "name": "update:data",
-     "payload": "value: TRow[]",
-     "notes": "reorderable`: the records in their new order; bind `v-model:data`."
+     "payload": "(event: Event, rows: TRow[])",
+     "notes": "Export requested with the resolved rows; `event` is the click of `Table.Export`, or `new Event('export')` when `exportCsv()` is called; a consumer may handle it server-side (otherwise the built-in CSV util downloads)."
     },
     {
      "name": "reorder",
-     "payload": "payload: { from: number; to: number; row: TRow }",
+     "payload": "(event: KeyboardEvent | PointerEvent, payload: { from: number; to: number; row: TRow })",
      "notes": "reorderable`: a row moved from index `from` to index `to` of `data`."
     },
     {
-     "name": "update:expanded",
-     "payload": "value: ExpandedState",
-     "notes": "Tree rows: v-model:expanded, after a toggle by pointer or keyboard."
-    },
-    {
      "name": "load-more",
-     "payload": "—",
-     "notes": "moreRows`: the end of the rows neared the viewport, or the Load more button was pressed; the app appends the next rows and sets `loadingMore` meanwhile. Not repeated while `loadingMore` is true."
+     "payload": "(event: Event)",
+     "notes": "moreRows`: the end of the rows neared the viewport (`new Event('load-more')`) or the Load more button was pressed (its click); the app appends the next rows and sets `loadingMore` meanwhile. Not repeated while `loadingMore` is true."
     }
    ],
    "slots": [
@@ -8779,7 +8762,7 @@
      "doc": "Field used as the stable row id (cursor, selection and edits follow it)."
     },
     {
-     "name": "enableRowSelection",
+     "name": "selectable",
      "type": "boolean",
      "default": "false",
      "required": "false",
@@ -8840,7 +8823,7 @@
      "notes": "The `add` function of the toolbar slot ran; the app appends a row to the `v-model`."
     },
     {
-     "name": "row-delete",
+     "name": "row-remove",
      "payload": "(event: Event, rows: TRow[])",
      "notes": "The `remove` function of the toolbar slot ran with rows selected; the app removes them from the `v-model`."
     },
@@ -9109,11 +9092,11 @@
      "doc": "Tokens mode: tokens go into groups with their own Match all / Match any; Add group starts the next one."
     },
     {
-     "name": "hideOperations",
+     "name": "showOperations",
      "type": "boolean",
-     "default": "false",
+     "default": "true",
      "required": "false",
-     "doc": "Hides the Match all / Match any toggle, so the tokens always combine with AND (a model that holds only AND conditions, such as a table's filters)."
+     "doc": "Shows the Match all / Match any toggle; false keeps the tokens combined with AND (a model that holds only AND conditions, such as a table's filters)."
     },
     {
      "name": "loadValues",
@@ -9273,7 +9256,7 @@
      "doc": "The items, one card each."
     },
     {
-     "name": "trackBy",
+     "name": "itemKey",
      "type": "string",
      "default": "'id'",
      "required": "false",
@@ -9281,7 +9264,7 @@
     },
     {
      "name": "selectionMode",
-     "type": "'none' | 'single' | 'multi'",
+     "type": "'none' | 'single' | 'multiple'",
      "default": "'none'",
      "required": "false",
      "doc": "No selection, one card, or several cards with a select-all above them."
@@ -9504,7 +9487,7 @@
      "doc": "Button role within the pagination."
     },
     {
-     "name": "selected",
+     "name": "active",
      "type": "boolean",
      "default": "false",
      "required": "false",
@@ -9593,7 +9576,7 @@
    "kind": "component",
    "treeShakeableImport": "@aziontech/webkit/topology-diagram",
    "models": [
-    "expanded"
+    "openKeys"
    ],
    "category": "data",
    "structure": "monolithic",
@@ -9620,27 +9603,27 @@
      "doc": "Accessible name of the diagram. Empty uses the locale catalog (`Deployment topology`)."
     },
     {
-     "name": "expanded",
+     "name": "openKeys",
      "type": "string[]",
      "default": "() => []",
      "required": "false",
-     "doc": "Two-way value (`v-model:expanded`)."
+     "doc": "Two-way value (`v-model:openKeys`)."
     }
    ],
    "events": [
     {
      "name": "bind",
-     "payload": "(event: MouseEvent | KeyboardEvent, binding: { key: string; value: string })",
-     "notes": "An existing option was picked in the bind control; `key` is the node's key."
+     "payload": "(event: MouseEvent | KeyboardEvent, binding: { id: string; value: string })",
+     "notes": "An existing option was picked in the bind control; `id` is the node's id."
     },
     {
      "name": "remove",
-     "payload": "(event: MouseEvent, key: string)",
+     "payload": "(event: MouseEvent, id: string)",
      "notes": "Remove was activated on a bound, removable node."
     },
     {
      "name": "create",
-     "payload": "(event: MouseEvent | KeyboardEvent, key: string)",
+     "payload": "(event: MouseEvent | KeyboardEvent, id: string)",
      "notes": "Create was picked in the bind control."
     }
    ],
@@ -9729,7 +9712,7 @@
    "structure": "composition",
    "props": [
     {
-     "name": "trackBy",
+     "name": "itemKey",
      "type": "string",
      "default": "''",
      "required": "false",
@@ -9760,8 +9743,8 @@
    "events": [
     {
      "name": "move",
-     "payload": "{ direction: 'to-target' | 'to-source'; items: unknown[] }",
-     "notes": "Fired after items move between lists, with the moved items."
+     "payload": "(event: Event, payload: { direction: 'to-target' | 'to-source'; items: unknown[] })",
+     "notes": "Fired after items move between lists; the DOM event of the control (or the double-click) first, then the direction and the moved items."
     },
     {
      "name": "item-double-click",
@@ -9793,7 +9776,7 @@
    "structure": "composition",
    "props": [
     {
-     "name": "trackBy",
+     "name": "itemKey",
      "type": "string",
      "default": "''",
      "required": "false",
@@ -9824,8 +9807,8 @@
    "events": [
     {
      "name": "move",
-     "payload": "{ direction: 'to-target' | 'to-source'; items: unknown[] }",
-     "notes": "Fired after items move between lists, with the moved items."
+     "payload": "(event: Event, payload: { direction: 'to-target' | 'to-source'; items: unknown[] })",
+     "notes": "Fired after items move between lists; the DOM event of the control (or the double-click) first, then the direction and the moved items."
     },
     {
      "name": "item-double-click",
@@ -9873,9 +9856,9 @@
    "kind": "component",
    "treeShakeableImport": "@aziontech/webkit/tree",
    "models": [
-    "expanded",
+    "openKeys",
     "selected",
-    "selectedIds"
+    "selectedKeys"
    ],
    "category": "data",
    "structure": "monolithic",
@@ -9892,7 +9875,7 @@
      "type": "boolean | TreeSelectable",
      "default": "false",
      "required": "false",
-     "doc": "Enables selection: `true` or `'single'` writes one id to `v-model:selected`; `'multiple'` writes ids to `v-model:selected-ids`. Every treeitem then carries `aria-selected`."
+     "doc": "Enables selection: `true` or `'single'` writes one id to `v-model:selected`; `'multiple'` writes ids to `v-model:selected-keys`. Every treeitem then carries `aria-selected`."
     },
     {
      "name": "editable",
@@ -9930,11 +9913,11 @@
      "doc": "Accessible name of the tree. Empty uses the locale catalog (`tree.label`, `Tree`), so the `tree` role always has a name."
     },
     {
-     "name": "expanded",
+     "name": "openKeys",
      "type": "string[]",
      "default": "() => []",
      "required": "false",
-     "doc": "Two-way value (`v-model:expanded`)."
+     "doc": "Two-way value (`v-model:openKeys`)."
     },
     {
      "name": "selected",
@@ -9944,11 +9927,11 @@
      "doc": "Two-way value (`v-model:selected`)."
     },
     {
-     "name": "selectedIds",
+     "name": "selectedKeys",
      "type": "string[]",
      "default": "() => []",
      "required": "false",
-     "doc": "Two-way value (`v-model:selectedIds`)."
+     "doc": "Two-way value (`v-model:selectedKeys`)."
     }
    ],
    "events": [
@@ -9958,7 +9941,7 @@
      "notes": "A node activated: click on its row, or Enter / Space on the focused node. `item` is the consumer's own node object. Fires after `update:selected` when `selectable`. Not fired for a `disabled` node, nor for a click on the chevron, inside the `actions` region or in the rename field. With `selectable=\"multiple\"`, Space toggles selection without firing it."
     },
     {
-     "name": "item-dblclick",
+     "name": "item-double-click",
      "payload": "(event: MouseEvent, item: TreeItem)",
      "notes": "A row was double-clicked, to open or preview the node. Not fired for a `disabled` node, the chevron, the `actions` region or the rename field. The two clicks before it still fire `item-click`."
     },
@@ -10306,7 +10289,7 @@
    "treeShakeableImport": "@aziontech/webkit/doc-layout",
    "models": [
     "searchOpen",
-    "navigationExpanded",
+    "navigationOpen",
     "navigationWidth"
    ],
    "category": "documentation",
@@ -10376,11 +10359,11 @@
      "doc": "Two-way value (`v-model:searchOpen`)."
     },
     {
-     "name": "navigationExpanded",
+     "name": "navigationOpen",
      "type": "boolean",
      "default": "true",
      "required": "false",
-     "doc": "Two-way value (`v-model:navigationExpanded`)."
+     "doc": "Two-way value (`v-model:navigationOpen`)."
     },
     {
      "name": "navigationWidth",
@@ -10536,7 +10519,7 @@
      "doc": "The deck under the title."
     },
     {
-     "name": "breadcrumb",
+     "name": "breadcrumbs",
      "type": "DocCrumb[]",
      "default": "[]",
      "required": "false",
@@ -10559,16 +10542,16 @@
    ],
    "events": [
     {
-     "name": "meta-action",
+     "name": "action-click",
      "payload": "(event: MouseEvent, item: DocPageAction)",
      "notes": "Fired when a meta-line control is activated; `item` is the entry that was picked. Event first, per `event-payloads.md`. A link's default navigation is the consumer's to keep or to prevent."
     }
    ],
    "slots": [
     {
-     "name": "breadcrumb",
+     "name": "breadcrumbs",
      "scope": "—",
-     "notes": "The trail; replaces the built-in `Breadcrumb` fed by the `breadcrumb` prop."
+     "notes": "The trail; replaces the built-in `Breadcrumb` fed by the `breadcrumbs` prop."
     },
     {
      "name": "title",
@@ -11195,13 +11178,13 @@
     },
     {
      "name": "close",
-     "payload": "(event?: Event)",
-     "notes": "Emitted when the message is dismissed, after the fade. Carries the originating event: the close button's `MouseEvent` or the `Escape` `KeyboardEvent`; no argument after `life` expires."
+     "payload": "(event: Event)",
+     "notes": "Emitted when the message is dismissed, after the fade. Carries the originating event: the close button's `MouseEvent`, the `Escape` `KeyboardEvent`, or an `Event` of type `timeout` after `life` expires."
     }
    ],
    "slots": [
     {
-     "name": "action",
+     "name": "actions",
      "scope": "—",
      "notes": "Custom action control; replaces the built-in Button when provided."
     },
@@ -11327,8 +11310,8 @@
     },
     {
      "name": "retry",
-     "payload": "(event?: Event)",
-     "notes": "Fires when the region is mounted again (Retry, the slot's `retry`, or a `resetKey` change). Reset the broken state here. Carries the click event when the built-in Retry button (or a slot `retry(event)` call) triggered it; no argument for a `resetKey` change."
+     "payload": "(event: Event)",
+     "notes": "Fires when the region is mounted again (Retry, the slot's `retry`, or a `resetKey` change). Reset the broken state here. Carries the click event when the built-in Retry button (or a slot `retry(event)` call) triggered it, an `Event` of type `retry` when the slot calls `retry()` with no event, and an `Event` of type `reset` for a `resetKey` change."
     }
    ],
    "slots": [
@@ -11437,7 +11420,7 @@
     {
      "name": "default",
      "scope": "{ toast, dismiss }",
-     "notes": "Optional override for a single toast's body. `toast` is the store entry (`{ id, severity, message, description?, action?, actions?, duration, progress? }`); `dismiss` dismisses that entry. When omitted, the `Toaster` composes `ToastItem` + `Title`/`Description`/`Action`/`Close` from the entry, rendering one `Action` per entry of `actions` (the first two) or the single `action`, and a `Progress` row when the entry has `progress`."
+     "notes": "Optional override for a single toast's body. `toast` is the store entry (`{ id, severity, loading?, message, description?, action?, actions?, duration, progress? }`); `dismiss` dismisses that entry. When omitted, the `Toaster` composes `ToastItem` + `Title`/`Description`/`Action`/`Close` from the entry, rendering one `Action` per entry of `actions` (the first two) or the single `action`, and a `Progress` row when the entry has `progress`."
     }
    ],
    "setup": "One-time app-level wiring before the first toast() call — service (recommended): import { ToastPlugin } from '@aziontech/webkit/toast' and chain .use(ToastPlugin) onto createApp() in the app entry; the plugin mounts the toast region automatically. Alternative: mount a Toaster component once near the app root. `webkit doctor` flags toast usage with no wired region.",
@@ -11494,7 +11477,7 @@
     {
      "name": "default",
      "scope": "{ toast, dismiss }",
-     "notes": "Optional override for a single toast's body. `toast` is the store entry (`{ id, severity, message, description?, action?, actions?, duration, progress? }`); `dismiss` dismisses that entry. When omitted, the `Toaster` composes `ToastItem` + `Title`/`Description`/`Action`/`Close` from the entry, rendering one `Action` per entry of `actions` (the first two) or the single `action`, and a `Progress` row when the entry has `progress`."
+     "notes": "Optional override for a single toast's body. `toast` is the store entry (`{ id, severity, loading?, message, description?, action?, actions?, duration, progress? }`); `dismiss` dismisses that entry. When omitted, the `Toaster` composes `ToastItem` + `Title`/`Description`/`Action`/`Close` from the entry, rendering one `Action` per entry of `actions` (the first two) or the single `action`, and a `Progress` row when the entry has `progress`."
     }
    ],
    "setup": "One-time app-level wiring before the first toast() call — service (recommended): import { ToastPlugin } from '@aziontech/webkit/toast' and chain .use(ToastPlugin) onto createApp() in the app entry; the plugin mounts the toast region automatically. Alternative: mount a Toaster component once near the app root. `webkit doctor` flags toast usage with no wired region.",
@@ -11629,7 +11612,7 @@
    "kind": "component",
    "treeShakeableImport": "@aziontech/webkit/upload-progress",
    "models": [
-    "expanded"
+    "open"
    ],
    "category": "feedback",
    "structure": "monolithic",
@@ -11670,11 +11653,11 @@
      "doc": "Shows Cancel on running and waiting files and Cancel all in the header."
     },
     {
-     "name": "expanded",
+     "name": "open",
      "type": "boolean",
      "default": "undefined as never",
      "required": "false",
-     "doc": "Two-way value (`v-model:expanded`)."
+     "doc": "Two-way value (`v-model:open`)."
     }
    ],
    "events": [
@@ -12329,12 +12312,12 @@
    ],
    "slots": [
     {
-     "name": "prefix",
+     "name": "leading",
      "scope": "",
      "notes": "Hidden from assistive tech (`aria-hidden=\"true\"`). Logical: it sits on the right under `dir=\"rtl\"`."
     },
     {
-     "name": "suffix",
+     "name": "trailing",
      "scope": "",
      "notes": "Hidden from assistive tech (`aria-hidden=\"true\"`)."
     }
@@ -12568,12 +12551,12 @@
    ],
    "slots": [
     {
-     "name": "prefix",
+     "name": "leading",
      "scope": "—",
      "notes": "Content rendered before the input (e.g. `$`)."
     },
     {
-     "name": "suffix",
+     "name": "trailing",
      "scope": "—",
      "notes": "Content rendered after the input, before the spinner buttons (e.g. `%`)."
     }
@@ -12861,7 +12844,7 @@
    ],
    "events": [
     {
-     "name": "update:phone",
+     "name": "phone-change",
      "payload": "[value: PhoneNumber]",
      "notes": "One-way snapshot of the number, emitted once on mount and again whenever the digits or the country change. `PhoneNumber` (exported from the component) is `{ country: string; dialCode: string; digits: string; number: string; complete: boolean }`: `number` is the full E.164 number (`dialCode + digits`, e.g. `'+14155550100'`; `''` while empty) and `complete` is true when the digit count is one the selected country allows. Not a v-model — the field never reads it back."
     }
@@ -12913,7 +12896,7 @@
    "structure": "monolithic",
    "props": [
     {
-     "name": "text",
+     "name": "content",
      "type": "string",
      "default": "''",
      "required": "true",
@@ -13068,7 +13051,7 @@
      "type": "boolean",
      "default": "true",
      "required": "false",
-     "doc": "When true, renders the visibility toggle button on the trailing edge of the field. When false, the field behaves as a plain password input with no toggle and the `suffix` slot becomes available."
+     "doc": "When true, renders the visibility toggle button on the trailing edge of the field. When false, the field behaves as a plain password input with no toggle and the `trailing` slot becomes available."
     },
     {
      "name": "autocomplete",
@@ -13094,12 +13077,12 @@
    ],
    "slots": [
     {
-     "name": "prefix",
+     "name": "leading",
      "scope": "—",
      "notes": "Leading adornment at the inline start of the field. Hidden from assistive tech (`aria-hidden=\"true\"`). Same name as on `input` and `number-input`."
     },
     {
-     "name": "suffix",
+     "name": "trailing",
      "scope": "—",
      "notes": "Trailing adornment at the inline end. **Only honored when `toggleable=false`** — the visibility toggle sits there when enabled. Hidden from assistive tech (`aria-hidden=\"true\"`)."
     }
@@ -14274,12 +14257,12 @@
      "notes": "Place `<DropdownMenu.Trigger>` followed by one or more `<DropdownMenu.Group>`."
     },
     {
-     "name": "top",
+     "name": "header",
      "scope": "—",
      "notes": "Sticky region rendered above the scrollable group list (e.g. search input)."
     },
     {
-     "name": "bottom",
+     "name": "footer",
      "scope": "—",
      "notes": "Sticky region rendered below the scrollable group list (e.g. footer action)."
     }
@@ -14350,12 +14333,12 @@
      "notes": "Place `<DropdownMenu.Trigger>` followed by one or more `<DropdownMenu.Group>`."
     },
     {
-     "name": "top",
+     "name": "header",
      "scope": "—",
      "notes": "Sticky region rendered above the scrollable group list (e.g. search input)."
     },
     {
-     "name": "bottom",
+     "name": "footer",
      "scope": "—",
      "notes": "Sticky region rendered below the scrollable group list (e.g. footer action)."
     }
@@ -15349,7 +15332,7 @@
    "structure": "monolithic",
    "props": [
     {
-     "name": "navigationLabel",
+     "name": "navigationAriaLabel",
      "type": "string",
      "default": "''",
      "required": "false",
@@ -15591,14 +15574,14 @@
      "notes": "The app's header actions, between the search trigger and the avatar; render them icon-only while `compact`; `toggleTools` opens and closes the tools region (a notifications bell)."
     },
     {
-     "name": "header-start",
+     "name": "header-leading",
      "scope": "{ compact: boolean }",
      "notes": "Content at the start of the header, before the breadcrumbs (an account or organization switcher)."
     },
     {
      "name": "sidebar-header",
      "scope": "{ compact: boolean }",
-     "notes": "Content in the rail under the wordmark, above the navigation (a full-width account or organization switcher); `compact` is true when the rail is the compact drawer (render nothing there to keep the switcher in `header-start`). Rendered only when given; a region whose slot renders nothing (a false `v-if`) is hidden."
+     "notes": "Content in the rail under the wordmark, above the navigation (a full-width account or organization switcher); `compact` is true when the rail is the compact drawer (render nothing there to keep the switcher in `header-leading`). Rendered only when given; a region whose slot renders nothing (a false `v-if`) is hidden."
     },
     {
      "name": "breadcrumbs",
@@ -15751,14 +15734,14 @@
      "notes": "The app's header actions, between the search trigger and the avatar; render them icon-only while `compact`; `toggleTools` opens and closes the tools region (a notifications bell)."
     },
     {
-     "name": "header-start",
+     "name": "header-leading",
      "scope": "{ compact: boolean }",
      "notes": "Content at the start of the header, before the breadcrumbs (an account or organization switcher)."
     },
     {
      "name": "sidebar-header",
      "scope": "{ compact: boolean }",
-     "notes": "Content in the rail under the wordmark, above the navigation (a full-width account or organization switcher); `compact` is true when the rail is the compact drawer (render nothing there to keep the switcher in `header-start`). Rendered only when given; a region whose slot renders nothing (a false `v-if`) is hidden."
+     "notes": "Content in the rail under the wordmark, above the navigation (a full-width account or organization switcher); `compact` is true when the rail is the compact drawer (render nothing there to keep the switcher in `header-leading`). Rendered only when given; a region whose slot renders nothing (a false `v-if`) is hidden."
     },
     {
      "name": "breadcrumbs",
@@ -15954,13 +15937,13 @@
    "events": [
     {
      "name": "item-move",
-     "payload": "{ id: string; from: number; to: number }",
-     "notes": "An item moved, by drop or by the keyboard; zero-based."
+     "payload": "(event: KeyboardEvent | DragEvent, payload: { id: string; from: number; to: number })",
+     "notes": "An item moved, by drop or by the keyboard; zero-based. The drop or key event comes first."
     },
     {
      "name": "item-resize",
-     "payload": "{ id: string; span: number; height: number | undefined }",
-     "notes": "A resize ended (pointer up or a resize key on the corner)."
+     "payload": "(event: PointerEvent | KeyboardEvent, payload: { id: string; span: number; height: number | undefined })",
+     "notes": "A resize ended (pointer up or a resize key on the corner); that event comes first."
     }
    ],
    "slots": [
@@ -16046,13 +16029,13 @@
    "events": [
     {
      "name": "item-move",
-     "payload": "{ id: string; from: number; to: number }",
-     "notes": "An item moved, by drop or by the keyboard; zero-based."
+     "payload": "(event: KeyboardEvent | DragEvent, payload: { id: string; from: number; to: number })",
+     "notes": "An item moved, by drop or by the keyboard; zero-based. The drop or key event comes first."
     },
     {
      "name": "item-resize",
-     "payload": "{ id: string; span: number; height: number | undefined }",
-     "notes": "A resize ended (pointer up or a resize key on the corner)."
+     "payload": "(event: PointerEvent | KeyboardEvent, payload: { id: string; span: number; height: number | undefined })",
+     "notes": "A resize ended (pointer up or a resize key on the corner); that event comes first."
     }
    ],
    "slots": [
@@ -16162,7 +16145,7 @@
    "treeShakeableImport": "@aziontech/webkit/resizable-pane",
    "models": [
     "basis",
-    "expanded"
+    "open"
    ],
    "surface": "app"
   },
@@ -16256,7 +16239,7 @@
      "notes": "The actions the page owns, Documentation first and the create action on the outer edge."
     },
     {
-     "name": "breadcrumb",
+     "name": "breadcrumbs",
      "scope": "—",
      "notes": "The trail back to the parent pages, above the title row; usually a `Breadcrumb` with `items`."
     },
@@ -16433,7 +16416,7 @@
      "doc": "Where the control sits relative to the copy."
     },
     {
-     "name": "level",
+     "name": "depth",
      "type": "0 | 1 | 2",
      "default": "0",
      "required": "false",
@@ -17069,9 +17052,9 @@
     {
      "name": "align",
      "type": "MediaSplitAlign",
-     "default": "'top'",
+     "default": "'start'",
      "required": "false",
-     "doc": "Where the copy sits down its cell. `top` holds the copy at the cell's top and floors the actions so consecutive bands align on them; `center` gathers the copy and its actions into one block on the cell's vertical middle."
+     "doc": "Where the copy sits down its cell. `start` holds the copy at the cell's top and floors the actions so consecutive bands align on them; `center` gathers the copy and its actions into one block on the cell's vertical middle."
     },
     {
      "name": "size",
@@ -17652,7 +17635,7 @@
      "type": "HeroAlign",
      "default": "'center'",
      "required": "false",
-     "doc": "Where the content column sits vertically when the band fills a screen."
+     "doc": "Where the content column sits vertically when the band fills a screen (`start` is the top, `end` the bottom)."
     },
     {
      "name": "mediaAlign",
@@ -17812,7 +17795,7 @@
      "type": "HeroAlign",
      "default": "'center'",
      "required": "false",
-     "doc": "Where the content column sits vertically when the band fills a screen."
+     "doc": "Where the content column sits vertically when the band fills a screen (`start` is the top, `end` the bottom)."
     },
     {
      "name": "mediaAlign",
@@ -17926,7 +17909,7 @@
    ],
    "events": [
     {
-     "name": "index-change",
+     "name": "active-index-change",
      "payload": "number",
      "notes": "The open claim changed; the payload is the index now open. Fires on the scroll that moved it and on a reader selecting a claim."
     }
@@ -18054,14 +18037,14 @@
      "type": "MediaTabsItem[]",
      "default": "[]",
      "required": "false",
-     "doc": "The tabs, in order, at most three when `position` is `left` or `right` and five when it is `top` or `bottom`; each item is `{ title, description, src, alt }`. Items past the limit are not rendered."
+     "doc": "The tabs, in order, at most three when `tabsSide` is `start` or `end` and five when it is `top` or `bottom`; each item is `{ title, description, src, alt }`. Items past the limit are not rendered."
     },
     {
-     "name": "position",
-     "type": "'left' | 'right' | 'top' | 'bottom'",
-     "default": "'left'",
+     "name": "tabsSide",
+     "type": "'start' | 'end' | 'top' | 'bottom'",
+     "default": "'start'",
      "required": "false",
-     "doc": "Which side of the media the tabs sit on. Below the `lg` breakpoint every position stacks, with the active tab's media inside its row."
+     "doc": "Which side of the media the tabs sit on. Below the `lg` breakpoint every side stacks, with the active tab's media inside its row."
     },
     {
      "name": "size",
@@ -18333,7 +18316,7 @@
      "type": "BreadcrumbItemData[]",
      "default": "() => []",
      "required": "false",
-     "doc": "Ordered path segments; the last entry is treated as the current page when `current` is omitted on that entry."
+     "doc": "Ordered path segments; the last entry is treated as the current page when `active` is omitted on that entry."
     },
     {
      "name": "ariaLabel",
@@ -18375,7 +18358,7 @@
      "type": "BreadcrumbItemData[]",
      "default": "() => []",
      "required": "false",
-     "doc": "Ordered path segments; the last entry is treated as the current page when `current` is omitted on that entry."
+     "doc": "Ordered path segments; the last entry is treated as the current page when `active` is omitted on that entry."
     },
     {
      "name": "ariaLabel",
@@ -18423,10 +18406,10 @@
      "type": "string",
      "default": "''",
      "required": "false",
-     "doc": "Destination when the segment is a link (ignored when `current` is true); empty renders `#`."
+     "doc": "Destination when the segment is a link (ignored when `active` is true); empty renders `#`."
     },
     {
-     "name": "current",
+     "name": "active",
      "type": "boolean",
      "default": "false",
      "required": "false",
@@ -18458,7 +18441,7 @@
     {
      "name": "click",
      "payload": "(event: MouseEvent, item: { label: string; href: string })",
-     "notes": "Fires when the segment's link is activated (the `current` segment renders a non-interactive `span`). `item` carries the segment's `label` and `href`."
+     "notes": "Fires when the segment's link is activated (the `active` segment renders a non-interactive `span`). `item` carries the segment's `label` and `href`."
     }
    ],
    "surface": "app",
@@ -18550,7 +18533,7 @@
    ],
    "models": [
     "path",
-    "expanded"
+    "openKeys"
    ],
    "category": "navigation",
    "structure": "composition",
@@ -18567,7 +18550,7 @@
      "type": "string",
      "default": "''",
      "required": "false",
-     "doc": "Id of the node rendered as selected in data-driven mode."
+     "doc": "Id of the node rendered as active (`aria-current`) in data-driven mode."
     },
     {
      "name": "enterOnMount",
@@ -18591,11 +18574,11 @@
      "doc": "Two-way value (`v-model:path`)."
     },
     {
-     "name": "expanded",
+     "name": "openKeys",
      "type": "string[]",
      "default": "() => []",
      "required": "false",
-     "doc": "Two-way value (`v-model:expanded`)."
+     "doc": "Two-way value (`v-model:openKeys`)."
     }
    ],
    "events": [
@@ -18624,7 +18607,7 @@
    "treeShakeableImport": "@aziontech/webkit/sidebar-menu-root",
    "models": [
     "path",
-    "expanded"
+    "openKeys"
    ],
    "category": "navigation",
    "structure": "composition",
@@ -18641,7 +18624,7 @@
      "type": "string",
      "default": "''",
      "required": "false",
-     "doc": "Id of the node rendered as selected in data-driven mode."
+     "doc": "Id of the node rendered as active (`aria-current`) in data-driven mode."
     },
     {
      "name": "enterOnMount",
@@ -18665,11 +18648,11 @@
      "doc": "Two-way value (`v-model:path`)."
     },
     {
-     "name": "expanded",
+     "name": "openKeys",
      "type": "string[]",
      "default": "() => []",
      "required": "false",
-     "doc": "Two-way value (`v-model:expanded`)."
+     "doc": "Two-way value (`v-model:openKeys`)."
     }
    ],
    "events": [
@@ -19164,9 +19147,9 @@
    ],
    "events": [
     {
-     "name": "open-change-complete",
+     "name": "open-transition-end",
      "payload": "open: boolean",
-     "notes": "—"
+     "notes": "Fires when the popup finishes its open or close transition."
     }
    ],
    "slots": [
@@ -19237,9 +19220,9 @@
    ],
    "events": [
     {
-     "name": "open-change-complete",
+     "name": "open-transition-end",
      "payload": "open: boolean",
-     "notes": "—"
+     "notes": "Fires when the popup finishes its open or close transition."
     }
    ],
    "slots": [
@@ -19264,7 +19247,7 @@
    "structure": "monolithic",
    "props": [
     {
-     "name": "text",
+     "name": "content",
      "type": "string",
      "default": "—",
      "required": "true",
@@ -19844,9 +19827,9 @@
     {
      "name": "side",
      "type": "DrawerSide",
-     "default": "'right'",
+     "default": "'end'",
      "required": "false",
-     "doc": "Edge the drawer panel slides from."
+     "doc": "Edge the drawer panel slides from, in reading direction (`start` or `end`)."
     },
     {
      "name": "size",
@@ -19917,9 +19900,9 @@
     {
      "name": "side",
      "type": "DrawerSide",
-     "default": "'right'",
+     "default": "'end'",
      "required": "false",
-     "doc": "Edge the drawer panel slides from."
+     "doc": "Edge the drawer panel slides from, in reading direction (`start` or `end`)."
     },
     {
      "name": "size",
@@ -23185,11 +23168,11 @@
      "doc": "Supporting sentence beside the headline."
     },
     {
-     "name": "position",
-     "type": "ArchitectureTabsPosition",
+     "name": "tabsSide",
+     "type": "ArchitectureTabsSide",
      "default": "'top'",
      "required": "false",
-     "doc": "Side of the diagram the tabs sit on: `top`, `bottom`, `left` or `right`; left and right hold up to three tabs."
+     "doc": "Side of the diagram the tabs sit on: `top`, `bottom`, `start` or `end`; start and end hold up to three tabs."
     },
     {
      "name": "tabs",
@@ -23251,7 +23234,7 @@
      "type": "ArticleBodyCrumb[]",
      "default": "[]",
      "required": "false",
-     "doc": "The breadcrumb over the headline, each a `label` and an `href`, the last one marked `current`."
+     "doc": "The breadcrumb over the headline, each a `label` and an `href`, the last one marked `active`."
     },
     {
      "name": "body",
@@ -23318,9 +23301,9 @@
     {
      "name": "kind",
      "type": "ArticleCardsKind",
-     "default": "'left'",
+     "default": "'start'",
      "required": "false",
-     "doc": "Placement of the heading: `left` sets it at the start, `centered` centres it over the cards."
+     "doc": "Placement of the heading: `start` sets it at the start, `center` centres it over the cards."
     },
     {
      "name": "anchor",
@@ -23348,7 +23331,7 @@
      "type": "ArticleCardsItem[]",
      "default": "[]",
      "required": "false",
-     "doc": "The cards, in order; each is `{ key, href, title, description, meta, image?, mark?, external? }`; an `external` card opens in a new tab."
+     "doc": "The cards, in order; each is `{ id, href, title, description, meta, image?, mark?, target? }`; a card whose `target` is `_blank` opens in a new tab."
     },
     {
      "name": "ariaLabel",
@@ -23468,7 +23451,7 @@
      "type": "ArticleIndexItem[]",
      "default": "[]",
      "required": "false",
-     "doc": "The entries, in order; each is `{ key, href, image?, mark?, meta, title, description?, authors?, byline?, categories?, facets?, external? }`."
+     "doc": "The entries, in order; each is `{ id, href, image?, mark?, meta, title, description?, authors?, byline?, categories?, facets?, target? }`."
     },
     {
      "name": "categories",
@@ -23485,25 +23468,32 @@
      "doc": "Label of the first category segment, which shows every category (`category-search`)."
     },
     {
-     "name": "categoryLabel",
+     "name": "categoryAriaLabel",
      "type": "string",
      "default": "''",
      "required": "false",
      "doc": "Accessible name of the category picker (`category-search`)."
     },
     {
-     "name": "search",
-     "type": "ArticleIndexSearch",
-     "default": "undefined",
+     "name": "searchPlaceholder",
+     "type": "string",
+     "default": "''",
      "required": "false",
-     "doc": "The search field's `placeholder` and accessible `label` (`category-search`); the field is omitted when absent."
+     "doc": "Placeholder of the search field (`category-search`); the field is omitted when this and `searchAriaLabel` are both empty."
+    },
+    {
+     "name": "searchAriaLabel",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Accessible name of the search field (`category-search`)."
     },
     {
      "name": "facets",
      "type": "ArticleIndexFacet[]",
      "default": "[]",
      "required": "false",
-     "doc": "The facet dropdowns, in order (`facets`); each is `{ key, label, allLabel, options }`."
+     "doc": "The facet dropdowns, in order (`facets`); each is `{ id, label, allLabel, options }`."
     },
     {
      "name": "rowLabel",
@@ -23534,18 +23524,32 @@
      "doc": "Leading entries left out until a filter applies, because a band above already shows them."
     },
     {
-     "name": "empty",
-     "type": "ArticleIndexEmpty",
-     "default": "undefined",
+     "name": "emptyTitle",
+     "type": "string",
+     "default": "''",
      "required": "false",
-     "doc": "Copy of the state when nothing matches: `{ title, description?, action? }`; `action` labels a button that clears every filter."
+     "doc": "Headline of the state when nothing matches; the state renders only with it."
+    },
+    {
+     "name": "emptyDescription",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Sentence under the empty-state headline."
+    },
+    {
+     "name": "emptyActionLabel",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Label of the empty-state button that clears every filter; no button renders without it."
     },
     {
      "name": "rowKind",
      "type": "ArticleIndexRowKind",
      "default": "undefined",
      "required": "false",
-     "doc": "Row layout: `byline` pins the writers to the foot of the copy, `centered` centres the copy; unset, `byline` for `category-search` and `centered` for `facets`."
+     "doc": "Row layout: `byline` pins the writers to the foot of the copy, `center` centres the copy; unset, `byline` for `category-search` and `center` for `facets`."
     },
     {
      "name": "categoryParam",
@@ -23979,7 +23983,7 @@
      "doc": "The site sent the address: the form gives way to `form.successMessage`."
     },
     {
-     "name": "error",
+     "name": "failed",
      "type": "boolean",
      "default": "false",
      "required": "false",
@@ -24532,9 +24536,9 @@
     {
      "name": "titleKind",
      "type": "SectionTitleKind",
-     "default": "'centered'",
+     "default": "'center'",
      "required": "false",
-     "doc": "Alignment of the section title over the grid: `centered`, `left` or `horizontal`."
+     "doc": "Alignment of the section title over the grid: `center`, `start` or `split`."
     },
     {
      "name": "columns",
@@ -24575,7 +24579,7 @@
      "type": "HeroBandKind",
      "default": "'title-band'",
      "required": "false",
-     "doc": "Layout of the band: `centered` fills a screen over a dot field, `title-band` is a padded band, `centered-band` is a large site-wide band with the copy centered, `compact-band` is a short site-wide band with the copy at the start, `pixel-floor` sets the copy over an animated pixel floor, `copy-beside-art` sets an illustration or an image beside the copy, `copy-on-top-art` fills a screen with the copy centered over a scene in the `top` or `bottom` slot."
+     "doc": "Layout of the band: `center` fills a screen over a dot field, `title-band` is a padded band, `center-band` is a large site-wide band with the copy centered, `compact-band` is a short site-wide band with the copy at the start, `pixel-floor` sets the copy over an animated pixel floor, `copy-beside-art` sets an illustration or an image beside the copy, `copy-on-top-art` fills a screen with the copy centered over a scene in the `top` or `bottom` slot."
     },
     {
      "name": "size",
@@ -24592,7 +24596,7 @@
      "doc": "Short overline above the headline."
     },
     {
-     "name": "highlight",
+     "name": "titleHighlight",
      "type": "string",
      "default": "''",
      "required": "false",
@@ -24694,7 +24698,7 @@
      "type": "boolean",
      "default": "false",
      "required": "false",
-     "doc": "Drops the dot texture of the `centered` layout."
+     "doc": "Drops the dot texture of the `center` layout."
     },
     {
      "name": "levels",
@@ -24794,9 +24798,9 @@
     {
      "name": "titleKind",
      "type": "SectionTitleKind",
-     "default": "'centered'",
+     "default": "'center'",
      "required": "false",
-     "doc": "Layout of the section title: `centered` stacks and centers it, `left` stacks it at the start edge, `horizontal` sets the headline and its description in two columns."
+     "doc": "Layout of the section title: `center` stacks and centers it, `start` stacks it at the start edge, `split` sets the headline and its description in two columns."
     }
    ],
    "surface": "site",
@@ -24821,7 +24825,7 @@
     {
      "name": "titleKind",
      "type": "SectionTitleKind",
-     "default": "'centered'",
+     "default": "'center'",
      "required": "false",
      "doc": "Layout of the headline block."
     },
@@ -24953,7 +24957,7 @@
     {
      "name": "titleKind",
      "type": "SectionTitleKind",
-     "default": "'horizontal'",
+     "default": "'split'",
      "required": "false",
      "doc": "Alignment of the section title over the card row."
     },
@@ -25061,7 +25065,7 @@
      "doc": "Short overline above the headline."
     },
     {
-     "name": "highlight",
+     "name": "titleHighlight",
      "type": "string",
      "default": "''",
      "required": "false",
@@ -25173,7 +25177,7 @@
      "doc": "The site sent the values: the form gives way to `messages.success`."
     },
     {
-     "name": "error",
+     "name": "failed",
      "type": "boolean",
      "default": "false",
      "required": "false",
@@ -25325,7 +25329,7 @@
      "doc": "The site sent the application: the confirmation dialog opens."
     },
     {
-     "name": "error",
+     "name": "failed",
      "type": "boolean",
      "default": "false",
      "required": "false",
@@ -25373,7 +25377,7 @@
      "doc": "The columns, left to right; each is `{ key, label, grow?, align? }`. The first names the row and links it, the second describes it on phones."
     },
     {
-     "name": "rows",
+     "name": "data",
      "type": "ListingBrowserRow[]",
      "default": "[]",
      "required": "false",
@@ -25391,7 +25395,7 @@
      "type": "ListingBrowserFacet[]",
      "default": "[]",
      "required": "false",
-     "doc": "The facet selects; each is `{ key, label, allLabel, options }` where `key` matches a row facet and seeds it from `?key=` in the URL, and every option is `{ value, label }`."
+     "doc": "The facet selects; each is `{ id, label, allLabel, options }` where `id` matches a row facet and seeds it from `?id=` in the URL, and every option is `{ value, label }`."
     },
     {
      "name": "sorts",
@@ -25408,18 +25412,46 @@
      "doc": "Accessible name of the order select."
     },
     {
-     "name": "search",
-     "type": "ListingBrowserSearch",
-     "default": "undefined",
+     "name": "searchPlaceholder",
+     "type": "string",
+     "default": "''",
      "required": "false",
-     "doc": "The search field; `{ placeholder, shortPlaceholder, label }` where `shortPlaceholder` is used below the large breakpoint and `label` names the field. Omitted when absent."
+     "doc": "Placeholder of the search field from the large breakpoint up; the field is omitted when this and `searchAriaLabel` are both empty."
     },
     {
-     "name": "empty",
-     "type": "ListingBrowserEmpty",
-     "default": "undefined",
+     "name": "searchShortPlaceholder",
+     "type": "string",
+     "default": "''",
      "required": "false",
-     "doc": "The state shown when nothing matches; `{ title, description, clearLabel }` where `clearLabel` is the button that clears the search and every facet. Omitted when absent."
+     "doc": "Shorter placeholder of the search field below the large breakpoint; empty uses `searchPlaceholder`."
+    },
+    {
+     "name": "searchAriaLabel",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Accessible name of the search field."
+    },
+    {
+     "name": "emptyTitle",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Headline of the state shown when nothing matches; the state renders only with it."
+    },
+    {
+     "name": "emptyDescription",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Sentence under the empty-state headline."
+    },
+    {
+     "name": "emptyActionLabel",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Label of the empty-state button that clears the search and every facet; no button renders without it."
     },
     {
      "name": "filterLabel",
@@ -25463,7 +25495,7 @@
      "doc": "The columns left to right; each is `{ key, label, grow?, align? }` where `key` picks the row value, `grow` is the flex weight (1, 2 or 3) and `align` is `start` or `end`. The first column names the row and the second describes it on phones."
     },
     {
-     "name": "rows",
+     "name": "data",
      "type": "ListingTableRow[]",
      "default": "[]",
      "required": "false",
@@ -25802,7 +25834,7 @@
      "doc": "Headline of the band, rendered by the small section title as its `h2`; the band renders nothing when empty."
     },
     {
-     "name": "lead",
+     "name": "claimsEyebrow",
      "type": "string",
      "default": "''",
      "required": "false",
@@ -25813,7 +25845,7 @@
      "type": "(string | NetworkSectionClaim)[]",
      "default": "[]",
      "required": "false",
-     "doc": "Short figures rendered as chips under the lead, in order; each is a string or `{ label, mobile? }`, where `mobile: false` hides the chip below the medium breakpoint."
+     "doc": "Short figures rendered as chips under the claims eyebrow, in order; each is a string or `{ label, mobile? }`, where `mobile: false` hides the chip below the medium breakpoint."
     },
     {
      "name": "outcomes",
@@ -26098,7 +26130,7 @@
      "type": "SiteFooterColumn[]",
      "default": "[]",
      "required": "false",
-     "doc": "The link columns, in order; each is `{ title, links }` where every link is `{ label, href, external? }`; an `external` link opens in a new tab and closes on the external-link glyph."
+     "doc": "The link columns, in order; each is `{ title, links }` where every link is `{ label, href, target? }`; a `_blank` link opens in a new tab and closes on the external-link glyph."
     },
     {
      "name": "socials",
@@ -26262,28 +26294,49 @@
      "type": "StoryLibraryItem[]",
      "default": "[]",
      "required": "false",
-     "doc": "The stories, in order; each is `{ key, href, client, category, description, facets?, external? }`; an `external` story opens in a new tab."
+     "doc": "The stories, in order; each is `{ id, href, client, category, description, facets?, target? }`; a story whose `target` is `_blank` opens in a new tab."
     },
     {
      "name": "facets",
      "type": "StoryLibraryFacet[]",
      "default": "[]",
      "required": "false",
-     "doc": "The facet selects, in order; each is `{ key, label, allLabel, options }`."
+     "doc": "The facet selects, in order; each is `{ id, label, allLabel, options }`."
     },
     {
-     "name": "search",
-     "type": "StoryLibrarySearch",
-     "default": "undefined",
+     "name": "searchPlaceholder",
+     "type": "string",
+     "default": "''",
      "required": "false",
-     "doc": "The search field's `placeholder`, optional `shortPlaceholder` (below `lg`) and accessible `label`; the field is omitted when absent."
+     "doc": "Placeholder of the search field; the field is omitted when this and `searchAriaLabel` are both empty."
     },
     {
-     "name": "empty",
-     "type": "StoryLibraryEmpty",
-     "default": "undefined",
+     "name": "searchShortPlaceholder",
+     "type": "string",
+     "default": "''",
      "required": "false",
-     "doc": "The no-match state's `title` and the `action` label of its clear-filters button."
+     "doc": "Shorter placeholder of the search field below `lg`; empty uses `searchPlaceholder`."
+    },
+    {
+     "name": "searchAriaLabel",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Accessible name of the search field."
+    },
+    {
+     "name": "emptyTitle",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Message of the no-match state; the state renders only with it."
+    },
+    {
+     "name": "emptyActionLabel",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Label of the no-match state's button that clears every filter; no button renders without it."
     },
     {
      "name": "linkLabel",
@@ -26318,7 +26371,7 @@
      "type": "boolean",
      "default": "false",
      "required": "false",
-     "doc": "Seeds each facet on mount from the URL query parameter named by its `key` when the value is one of its options."
+     "doc": "Seeds each facet on mount from the URL query parameter named by its `id` when the value is one of its options."
     },
     {
      "name": "ariaLabel",
@@ -26875,7 +26928,7 @@
     {
      "name": "kind",
      "type": "SectionModuleKind",
-     "default": "'left'",
+     "default": "'start'",
      "required": "false",
      "doc": "Layout of the default header row."
     },
@@ -27396,7 +27449,7 @@
     },
     {
      "name": "toggle",
-     "payload": "{ id: string; pressed: boolean }",
+     "payload": "(event: MouseEvent | KeyboardEvent, detail: { id: string; pressed: boolean })",
      "notes": "A toggle was activated; `pressed` is the new state to store."
     }
    ],
@@ -27641,7 +27694,7 @@
      "doc": "Draws the frame: border, corner radius and an offset focus ring. Off, the editor sits flush in its pane."
     },
     {
-     "name": "lineNumbers",
+     "name": "showLineNumbers",
      "type": "boolean",
      "default": "true",
      "required": "false",
@@ -27695,7 +27748,7 @@
      "notes": "The loader rejected; the plain editor stays."
     },
     {
-     "name": "validate",
+     "name": "markers-change",
      "payload": "CodeEditorMarker[]",
      "notes": "The diagnostics Monaco's language services (JSON syntax and `schema`, TypeScript) put on the value, as markers sorted by line, each time they change. The `markers` prop is not echoed back; the plain editor never fires it."
     }

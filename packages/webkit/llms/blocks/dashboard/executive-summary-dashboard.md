@@ -653,7 +653,7 @@ Each variant is the same screen in another state: `get_block("dashboard/executiv
               :loading="loading"
             >
               <template #aside>
-                <Hint :text="figure.description" />
+                <Hint :content="figure.description" />
               </template>
             </StatTile>
           </li>
@@ -673,7 +673,7 @@ Each variant is the same screen in another state: `get_block("dashboard/executiv
             <ChartCard.Header>
               <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
                 <ChartCard.Title>{{ trend.title }}</ChartCard.Title>
-                <Hint :text="trend.description" />
+                <Hint :content="trend.description" />
               </span>
               <ChartCard.Action>
                 <Tag
@@ -714,7 +714,7 @@ Each variant is the same screen in another state: `get_block("dashboard/executiv
 
         <div class="flex min-w-0 flex-col gap-(--spacing-md) xl:col-span-4">
           <Card :title="quarter + ' goals'">
-            <template #content>
+            <template #default>
               <ul
                 v-if="loading"
                 aria-busy="true"
@@ -793,7 +793,7 @@ Each variant is the same screen in another state: `get_block("dashboard/executiv
             title="Commentary"
             :padded="false"
           >
-            <template #content>
+            <template #default>
               <Item.List
                 key="item.list-1"
                 v-if="loading"

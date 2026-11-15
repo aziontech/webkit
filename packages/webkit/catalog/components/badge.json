@@ -2,7 +2,7 @@
  "purpose": "Use Badge only for a number attached to something else (unread count, 12, 99+). For the state of a resource use StatusIndicator, for a category or outcome word use Tag, for a removable or selectable token use Chip, and for the \"+N\" of a truncated list use OverflowCount. Badge is a compact, non-interactive count with severity-based color coding, commonly overlaid on icons, avatars or buttons, or set beside a heading. It differs from its sibling `tag`: `tag` carries words (optional leading icon, optional pill shape, masked surfaces), whereas `badge` carries a number on a fully filled surface with no icon affordance.",
  "useWhen": [
   "A number attached to another element: a bell with its unread count, a section heading with how many items it holds.",
-  "Color the count through `severity` (neutral / success / danger / …) with a fully filled surface."
+  "Color the count through `variant` (the brand look: `primary`, `secondary`) or `severity` (neutral / info / success / warning / danger) with a fully filled surface; `severity` wins when both are set."
  ],
  "avoidWhen": [
   "A status word (Active, Failed, Deploying) → use `status-indicator`.",
@@ -16,6 +16,6 @@
  ],
  "bestPractices": [
   "Keep the content to a number (`12`, `99+`); words belong in `tag` or `status-indicator`.",
-  "Drive color from `severity`, never a hardcoded color or a raw palette class."
+  "Drive color from `variant` or `severity`, never a hardcoded color or a raw palette class."
  ]
 }

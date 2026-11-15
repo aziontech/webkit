@@ -707,7 +707,7 @@ Each variant is the same screen in another state: `get_block("create/deploy-draw
   <Drawer
     v-model:open="open"
     size="large"
-    side="right"
+    side="end"
   >
     <DrawerTrigger>
       <Button
@@ -739,7 +739,7 @@ Each variant is the same screen in another state: `get_block("create/deploy-draw
               hint="The service version this deployment sends live, and the version of every module and integration it references."
             >
               <Card :padded="false">
-                <template #content>
+                <template #default>
                   <template
                     v-for="(row, index) in resources"
                     :key="row.key"
@@ -795,7 +795,7 @@ Each variant is the same screen in another state: `get_block("create/deploy-draw
                               :disabled="!row.versions.length"
                             />
                           </DropdownMenu.Trigger>
-                          <template #top>
+                          <template #header>
                             <div
                               class="flex flex-col gap-(--spacing-xs) px-(--spacing-xs) pb-(--spacing-xs)"
                             >
@@ -808,7 +808,7 @@ Each variant is the same screen in another state: `get_block("create/deploy-draw
                                 placeholder="Search versions"
                                 aria-label="Search versions"
                               >
-                                <template #prefix>
+                                <template #leading>
                                   <i
                                     class="ai ai-search"
                                     aria-hidden="true"
@@ -943,7 +943,7 @@ Each variant is the same screen in another state: `get_block("create/deploy-draw
                                           :disabled="!dependency.versions.length"
                                         />
                                       </DropdownMenu.Trigger>
-                                      <template #top>
+                                      <template #header>
                                         <div
                                           class="flex flex-col gap-(--spacing-xs) px-(--spacing-xs) pb-(--spacing-xs)"
                                         >
@@ -956,7 +956,7 @@ Each variant is the same screen in another state: `get_block("create/deploy-draw
                                             placeholder="Search versions"
                                             aria-label="Search versions"
                                           >
-                                            <template #prefix>
+                                            <template #leading>
                                               <i
                                                 class="ai ai-search"
                                                 aria-hidden="true"
@@ -1049,7 +1049,7 @@ Each variant is the same screen in another state: `get_block("create/deploy-draw
                     class="w-full"
                   />
                 </template>
-                <template #content>
+                <template #default>
                   <div class="flex min-w-0 flex-col gap-(--spacing-sm) p-(--spacing-lg)">
                     <Item
                       kind="outlined"
@@ -1096,7 +1096,7 @@ Each variant is the same screen in another state: `get_block("create/deploy-draw
                             />
                             <div class="flex min-w-0">
                               <Tooltip
-                                :text="`Open ${domainGroup.domains[0]} in a new tab`"
+                                :content="`Open ${domainGroup.domains[0]} in a new tab`"
                                 class="w-full"
                               >
                                 <Link
@@ -1136,7 +1136,7 @@ Each variant is the same screen in another state: `get_block("create/deploy-draw
                                     placeholder="Search domains"
                                     aria-label="Search domains"
                                   >
-                                    <template #prefix>
+                                    <template #leading>
                                       <i
                                         class="ai ai-search"
                                         aria-hidden="true"
@@ -1315,7 +1315,7 @@ Each variant is the same screen in another state: `get_block("create/deploy-draw
                               />
                               <div class="flex min-w-0">
                                 <Tooltip
-                                  :text="`Open ${domainGroup.domains[0]} in a new tab`"
+                                  :content="`Open ${domainGroup.domains[0]} in a new tab`"
                                   class="w-full"
                                 >
                                   <Link
@@ -1355,7 +1355,7 @@ Each variant is the same screen in another state: `get_block("create/deploy-draw
                                       placeholder="Search domains"
                                       aria-label="Search domains"
                                     >
-                                      <template #prefix>
+                                      <template #leading>
                                         <i
                                           class="ai ai-search"
                                           aria-hidden="true"

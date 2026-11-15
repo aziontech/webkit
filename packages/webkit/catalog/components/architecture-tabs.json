@@ -13,7 +13,7 @@
   "diagram` — the named architecture diagram each tab draws."
  ],
  "bestPractices": [
-  "Keep to five tabs with `position` `top` or `bottom`, three with `left` or `right`; tabs past the limit are not rendered.",
+  "Keep to five tabs with `tabsSide` `top` or `bottom`, three with `start` or `end`; tabs past the limit are not rendered.",
   "Give every tab a `diagram` from the diagram library and a stable `value`."
  ]
 }

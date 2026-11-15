@@ -33,7 +33,7 @@ The drawer the Billing page opens from its Subscription Plan card. The user want
 
 ### B. Drawer — `Drawer` (required)
 
-Two drawers, both `side="right"`, `size="large"`. The upgrade drawer opens on top of the plan drawer and, on success, closes both. Each reset to Yearly and to the account's address when reopened.
+Two drawers, both `side="end"`, `size="large"`. The upgrade drawer opens on top of the plan drawer and, on success, closes both. Each reset to Yearly and to the account's address when reopened.
 
 ### C. Drawer panel — `DrawerContent` (required)
 
@@ -539,7 +539,7 @@ Each variant is the same screen in another state: `get_block("account/change-pla
 
   <Drawer
     v-model:open="changePlanOpen"
-    side="right"
+    side="end"
     size="large"
   >
     <DrawerContent aria-label="Change plan">
@@ -565,7 +565,7 @@ Each variant is the same screen in another state: `get_block("account/change-pla
               class="flex max-w-none min-w-0 flex-1"
             >
               <CardPricing
-                aligned
+                equal-height
                 class="w-full"
                 :title="plan.name"
                 :value="plan.value"
@@ -576,7 +576,7 @@ Each variant is the same screen in another state: `get_block("account/change-pla
                 :pricing-details="plan.details"
                 :show-tag="plan.current"
                 tag-label="Current plan"
-                slot-position="bottom"
+                actions-position="bottom"
                 kind="contained"
                 action-label=""
               >
@@ -610,7 +610,7 @@ Each variant is the same screen in another state: `get_block("account/change-pla
   <Drawer
     v-model:open="upgradeOpen"
     size="large"
-    side="right"
+    side="end"
   >
     <DrawerContent>
       <form
@@ -664,7 +664,7 @@ Each variant is the same screen in another state: `get_block("account/change-pla
                     aria-label="Billing period"
                   />
                 </template>
-                <template #content>
+                <template #default>
                   <div class="flex flex-col">
                     <div
                       class="flex flex-col gap-(--spacing-md) px-(--spacing-lg) py-(--spacing-lg)"
@@ -706,7 +706,7 @@ Each variant is the same screen in another state: `get_block("account/change-pla
                 title="Payment method"
                 :padded="false"
               >
-                <template #content>
+                <template #default>
                   <div class="flex flex-col gap-(--spacing-lg) px-(--spacing-lg) py-(--spacing-lg)">
                     <div
                       v-if="!editingCard"
@@ -860,7 +860,7 @@ Each variant is the same screen in another state: `get_block("account/change-pla
                 title="Address information"
                 :padded="false"
               >
-                <template #content>
+                <template #default>
                   <fieldset
                     class="m-0 flex min-w-0 flex-col gap-(--spacing-lg) border-0 px-(--spacing-lg) py-(--spacing-lg)"
                     :disabled="submitting"

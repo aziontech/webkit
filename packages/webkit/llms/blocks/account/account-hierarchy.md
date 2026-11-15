@@ -154,7 +154,7 @@ Each variant is the same screen in another state: `get_block("account/account-hi
   import Select from '@aziontech/webkit/select'
   import Table, { type TableColumn } from '@aziontech/webkit/table'
   import Tabs from '@aziontech/webkit/tabs'
-  import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
+  import Tag, { type TagSeverity, type TagVariant } from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { useLocale } from '@aziontech/webkit/use-locale'
@@ -165,7 +165,8 @@ Each variant is the same screen in another state: `get_block("account/account-hi
   interface ResourceTypeMeta {
     label: string
     icon: string
-    severity: TagSeverity
+    severity?: TagSeverity
+    variant?: TagVariant
   }
   interface Resource {
     id: string
@@ -182,7 +183,7 @@ Each variant is the same screen in another state: `get_block("account/account-hi
   }
 
   const types: Record<ResourceType, ResourceTypeMeta> = {
-    organization: { label: 'Organization', icon: 'ai ai-building', severity: 'accent' },
+    organization: { label: 'Organization', icon: 'ai ai-building', variant: 'accent' },
     group: { label: 'Group', icon: 'ai ai-users', severity: 'info' },
     workspace: { label: 'Workspace', icon: 'ai ai-layout-grid', severity: 'neutral' }
   }
@@ -557,7 +558,7 @@ Each variant is the same screen in another state: `get_block("account/account-hi
           @click="openDelete(selected)"
         />
         <div class="ms-auto flex items-center gap-(--spacing-xs)">
-          <Tooltip text="Refresh">
+          <Tooltip content="Refresh">
             <IconButton
               icon="ai ai-refresh"
               kind="outlined"
@@ -605,7 +606,7 @@ Each variant is the same screen in another state: `get_block("account/account-hi
             severity="danger"
           >
             The resources could not be loaded. Nothing was changed; try again.
-            <template #action>
+            <template #actions>
               <Button
                 label="Retry"
                 kind="secondary"
@@ -620,7 +621,7 @@ Each variant is the same screen in another state: `get_block("account/account-hi
             v-else-if="!loading && !resources.length"
             :padded="false"
           >
-            <template #content>
+            <template #default>
               <EmptyState
                 size="medium"
                 icon="ai ai-sitemap"
@@ -647,7 +648,7 @@ Each variant is the same screen in another state: `get_block("account/account-hi
               aria-label="Search resources"
               class="w-full"
             >
-              <template #prefix>
+              <template #leading>
                 <i
                   class="ai ai-search"
                   aria-hidden="true"
@@ -660,7 +661,7 @@ Each variant is the same screen in another state: `get_block("account/account-hi
               v-if="needle && !visibleTree.length"
               :padded="false"
             >
-              <template #content>
+              <template #default>
                 <EmptyState
                   size="small"
                   icon="ai ai-search"
@@ -684,7 +685,7 @@ Each variant is the same screen in another state: `get_block("account/account-hi
               v-else
               :padded="false"
             >
-              <template #content>
+              <template #default>
                 <DataTable
                   v-model:expanded="tableExpanded"
                   v-model:row-selection="selection"
@@ -695,7 +696,7 @@ Each variant is the same screen in another state: `get_block("account/account-hi
                   :get-sub-rows="(row) => row.children"
                   :loading="loading || refreshing"
                   row-key="id"
-                  enable-row-selection
+                  selectable
                   :bordered="false"
                   :aria-labelledby="`${uid}-resources`"
                 >
@@ -718,7 +719,7 @@ Each variant is the same screen in another state: `get_block("account/account-hi
                       }}</span>
                       <Tooltip
                         v-if="row.id === currentId"
-                        text="Current workspace"
+                        content="Current workspace"
                       >
                         <i
                           class="ai ai-check shrink-0 text-body-xs text-(--text-muted)"
@@ -744,6 +745,7 @@ Each variant is the same screen in another state: `get_block("account/account-hi
                     <Tag
                       :label="types[value].label"
                       :icon="types[value].icon"
+                      :variant="types[value].variant"
                       :severity="types[value].severity"
                       size="small"
                     />
@@ -767,7 +769,7 @@ Each variant is the same screen in another state: `get_block("account/account-hi
                   <template #header-charges>
                     <span class="inline-flex items-center gap-(--spacing-2xs)">
                       Charges
-                      <Tooltip text="Estimated month-to-date charges.">
+                      <Tooltip content="Estimated month-to-date charges.">
                         <i
                           class="ai ai-circle-help text-body-xs text-(--text-muted)"
                           role="img"
@@ -834,7 +836,7 @@ Each variant is the same screen in another state: `get_block("account/account-hi
           class="w-full shrink-0 2xl:w-(--container-xs)"
         >
           <Card>
-            <template #content>
+            <template #default>
               <div class="flex flex-col gap-(--spacing-md)">
                 <h2
                   :id="`${uid}-details-heading`"
@@ -879,6 +881,7 @@ Each variant is the same screen in another state: `get_block("account/account-hi
                             <Tag
                               :label="types[focused.type].label"
                               :icon="types[focused.type].icon"
+                              :variant="types[focused.type].variant"
                               :severity="types[focused.type].severity"
                               size="small"
                             />

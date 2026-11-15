@@ -16,9 +16,9 @@
 ## Do
 
 - Wrap a focusable element. The tooltip opens on the wrapper's `focusin`, and the wrapper itself is not focusable.
-- Keep `text` to a few words. It renders as plain text, with no markup.
+- Keep `content` to a few words. It renders as plain text, with no markup.
 - The tooltip describes its trigger (`aria-describedby`) but does not name it. Icon-only triggers still need their own accessible name.
-- Use `disabled` to suppress the tooltip. An empty `text` also blocks opening, but it reads as a bug.
+- Use `disabled` to suppress the tooltip. An empty `content` also blocks opening, but it reads as a bug.
 - Keep the default `delay` (200 ms) unless a dense toolbar needs a longer one.
 - Bind the open state with `v-model:open`, or `:open` plus an `@update:open` handler typed `(open: boolean) => void`. The payload is always a `boolean`, so the handler needs no cast and no `Boolean(...)`.
 
@@ -41,7 +41,7 @@
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `text` | `string` | `—` | true | Plain text shown inside the tooltip. |
+| `content` | `string` | `—` | true | Plain text shown inside the tooltip. |
 | `placement` | `'top' \| 'right' \| 'bottom' \| 'left' \| 'auto'` | `'top'` | false | Anchor side relative to the trigger; `auto` picks the side with room. |
 | `delay` | `number` | `200` | false | Hover-open delay in milliseconds. |
 | `disabled` | `boolean` | `false` | false | Disables tooltip activation. |
@@ -93,7 +93,7 @@
 
 <template>
   <Tooltip
-    text="This is a Tooltip"
+    content="This is a Tooltip"
     placement="top"
   >
     <Button
@@ -116,7 +116,7 @@
 <template>
   <div class="flex flex-wrap items-center justify-center gap-(--spacing-8) p-(--spacing-8)">
     <Tooltip
-      text="top placement"
+      content="top placement"
       placement="top"
     >
       <IconButton
@@ -127,7 +127,7 @@
       />
     </Tooltip>
     <Tooltip
-      text="right placement"
+      content="right placement"
       placement="right"
     >
       <IconButton
@@ -138,7 +138,7 @@
       />
     </Tooltip>
     <Tooltip
-      text="bottom placement"
+      content="bottom placement"
       placement="bottom"
     >
       <IconButton
@@ -149,7 +149,7 @@
       />
     </Tooltip>
     <Tooltip
-      text="left placement"
+      content="left placement"
       placement="left"
     >
       <IconButton
@@ -182,7 +182,7 @@
 
     <div class="absolute top-(--spacing-md) left-1/2 -translate-x-1/2">
       <Tooltip
-        text="auto placement"
+        content="auto placement"
         placement="auto"
         :default-open="true"
       >
@@ -197,7 +197,7 @@
 
     <div class="absolute bottom-(--spacing-md) left-1/2 -translate-x-1/2">
       <Tooltip
-        text="auto placement"
+        content="auto placement"
         placement="auto"
         :default-open="true"
       >
@@ -212,7 +212,7 @@
 
     <div class="absolute start-(--spacing-md) top-1/2 -translate-y-1/2">
       <Tooltip
-        text="auto placement"
+        content="auto placement"
         placement="auto"
         :default-open="true"
       >
@@ -227,7 +227,7 @@
 
     <div class="absolute end-(--spacing-md) top-1/2 -translate-y-1/2">
       <Tooltip
-        text="auto placement"
+        content="auto placement"
         placement="auto"
         :default-open="true"
       >

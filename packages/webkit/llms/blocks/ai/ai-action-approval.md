@@ -127,13 +127,13 @@ Each variant is the same screen in another state: `get_block("ai/ai-action-appro
   import CopyButton from '@aziontech/webkit/copy-button'
   import PromptInput from '@aziontech/webkit/prompt-input'
   import StreamingResponse from '@aziontech/webkit/streaming-response'
-  import ToolApproval, { type ToolApprovalState } from '@aziontech/webkit/tool-approval'
-  import ToolCall, { type ToolCallState } from '@aziontech/webkit/tool-call'
+  import ToolApproval, { type ToolApprovalStatus } from '@aziontech/webkit/tool-approval'
+  import ToolCall, { type ToolCallStatus } from '@aziontech/webkit/tool-call'
   import { computed, onBeforeUnmount, ref } from 'vue'
 
   const command = 'azion deploy --workload storefront --build b-4821 --env production'
-  const decision = ref<ToolApprovalState>('pending')
-  const run = ref<ToolCallState | ''>('')
+  const decision = ref<ToolApprovalStatus>('pending')
+  const run = ref<ToolCallStatus | ''>('')
   const stopped = ref(false)
   const prompt = ref('')
   let timer: ReturnType<typeof setTimeout> | undefined
@@ -199,7 +199,7 @@ Each variant is the same screen in another state: `get_block("ai/ai-action-appro
         <ToolCall
           name="get_build"
           title="Reading the latest build of storefront"
-          state="success"
+          status="success"
         />
         <StreamingResponse
           content="Build `b-4821` passed its checks 6 minutes ago. Deploying it needs your approval."
@@ -208,20 +208,20 @@ Each variant is the same screen in another state: `get_block("ai/ai-action-appro
           title="Allow `azion deploy --env production`?"
           description="Deploys build `b-4821` of storefront to production. The current version stays available for rollback."
           approve-label="Deploy"
-          :state="decision"
+          :status="decision"
           @approve="approve"
           @deny="deny"
         >
           <CodeBlock
             :tabs="[{ label: 'Shell', value: 'command', code: command, language: 'bash' }]"
-            :line-numbers="false"
+            :show-line-numbers="false"
           />
         </ToolApproval>
         <ToolCall
           v-if="run"
           name="deploy_workload"
           title="Deploying storefront to production"
-          :state="run"
+          :status="run"
         />
       </ChatMessage>
       <ChatMessage
@@ -250,7 +250,7 @@ Each variant is the same screen in another state: `get_block("ai/ai-action-appro
     <footer class="layout-column-content layout-boundary-inline pb-(--spacing-md)">
       <PromptInput
         v-model="prompt"
-        :state="composerState"
+        :status="composerState"
         @stop="stop"
       >
         <template #hint>

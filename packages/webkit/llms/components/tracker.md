@@ -54,7 +54,7 @@
 - `data-loading` mirrors `loading`
 - `data-severity` on each block: `success` | `warning` | `danger` | `info` | `none`
 - `data-active` on the active block; `data-dimmed` on every other block while one is active
-- `data-visible` on the readout while a block is active; `data-moving` while it follows from one block to the next
+- `data-state="open|closed"` on the readout: `open` while a block is active; `data-moving` while it follows from one block to the next
 
 ## Accessibility
 

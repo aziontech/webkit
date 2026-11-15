@@ -55,7 +55,7 @@
 
 | Event | Payload | Notes |
 | --- | --- | --- |
-| `index-change` | `number` | The open claim changed; the payload is the index now open. Fires on the scroll that moved it and on a reader selecting a claim. |
+| `active-index-change` | `number` | The open claim changed; the payload is the index now open. Fires on the scroll that moved it and on a reader selecting a claim. |
 
 ## Slots
 
@@ -69,7 +69,7 @@
 
 - Visual states: `default`, `hover`, `focus-visible` on each claim's title control
 - `data-active` marks the open claim; it holds the plain text tone and shows its description
-- `data-complete` marks every claim already read; they collapse to their title and rest at a muted tone, further dimmed so the read part of the run is legible at a glance, stacked above the open one
+- `data-completed` marks every claim already read; they collapse to their title and rest at a muted tone, further dimmed so the read part of the run is legible at a glance, stacked above the open one
 - `data-size` carries the size token, which is what sets the open claim's height and so the stack's height
 - `data-progress` is present on the root while `showProgress` is on
 - The media frame shows exactly one medium: the outgoing one leaves as the incoming one mounts

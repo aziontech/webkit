@@ -508,7 +508,7 @@ Each variant is the same screen in another state: `get_block("detail/invocations
 
       <div class="layout-section-start flex min-w-0 flex-col gap-(--layout-section-gap)">
         <Card :padded="false">
-          <template #content>
+          <template #default>
             <div
               class="@container/band flex min-h-(--size-14) flex-wrap items-center gap-x-(--spacing-md) gap-y-(--spacing-xs) px-(--spacing-md) py-(--spacing-xs)"
             >
@@ -521,7 +521,7 @@ Each variant is the same screen in another state: `get_block("detail/invocations
                 />
                 <div class="flex min-w-0">
                   <Tooltip
-                    :text="`Open ${FUNCTION.name} in Functions`"
+                    :content="`Open ${FUNCTION.name} in Functions`"
                     class="w-full"
                   >
                     <Link
@@ -567,7 +567,7 @@ Each variant is the same screen in another state: `get_block("detail/invocations
                   @select="(_event, value) => pickRun(String(value))"
                 >
                   <DropdownMenu.Trigger>
-                    <Tooltip text="Pick another invocation of this function">
+                    <Tooltip content="Pick another invocation of this function">
                       <Button
                         label="Recent"
                         kind="outlined"
@@ -596,7 +596,7 @@ Each variant is the same screen in another state: `get_block("detail/invocations
 
                 <DropdownMenu placement="bottom-end">
                   <DropdownMenu.Trigger>
-                    <Tooltip text="Invocation actions">
+                    <Tooltip content="Invocation actions">
                       <IconButton
                         icon="ai ai-ellipsis"
                         kind="outlined"
@@ -740,7 +740,7 @@ Each variant is the same screen in another state: `get_block("detail/invocations
                       v-if="node.spanId"
                       class="ms-auto flex shrink-0 items-center"
                     >
-                      <Tooltip :text="`Show ${node.title} in the trace`">
+                      <Tooltip :content="`Show ${node.title} in the trace`">
                         <IconButton
                           icon="ai ai-align-left"
                           kind="outlined"
