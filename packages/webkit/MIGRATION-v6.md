@@ -28,6 +28,11 @@ It rewrites, in every `.vue`, `.ts` and `.js` file outside `node_modules` and `d
   pair becomes its Azion twin (`pi pi-check` → `ai ai-check`, `pi pi-minus-circle` →
   `ai ai-circle-minus`, `pi pi-twitter` → `ai ai-x`; the map is `src/cli/migrations/v6-icons.json`).
   A `pi-<name>` outside a pair, and a third-party mark with no Azion glyph, is listed to fix by hand.
+- theme tokens and utilities, in every `.vue`, `.ts`, `.js`, `.css`, `.scss` and `.html` file:
+  `--primary-contrast` → `--primary-foreground`, `--spacing-xxs` → `--spacing-2xs`,
+  `text-heading-xxs` → `text-heading-2xs`, `animate-slide-in-left` → `animate-slide-in-start`, and
+  the `@aziontech/theme/texts` / `layouts` imports (the map is `src/cli/migrations/v6-tokens.json`).
+  A removed token (`--line-height-*`, `.azion-dark`, …) is listed to fix by hand.
 
 It prints `MANUAL` for anything it cannot rewrite safely (section 4), and for any import that v6
 does not export.
@@ -261,8 +266,34 @@ The theme that ships with WebKit 6 changes three things your app can see:
   | `--color-surface-*` (and `bg-surface-*` utilities) | the same step of `--color-gray-*` (`--color-surface-0` is `--color-base-white`) |
   | `--height-<n>`                                     | `h-<n>` or `calc(var(--spacing) * <n>)`                                         |
   | `--width-3xs` … `--width-7xl`                      | `--container-3xs` … `--container-7xl`                                           |
-  | `--z-input-popup`                                  | `--z-input-overlay`                                                             |
+  | `--z-input-popup`                                  | `--z-control-overlay`                                                           |
   | `surfacePrimitives` (`@aziontech/theme/colors`)    | `primitives.gray`                                                               |
+
+- **Renamed tokens** (same values; `webkit migrate` rewrites them in `.vue`, `.css`, `.scss`, `.html`,
+  `.ts` and `.js` files, from `src/cli/migrations/v6-tokens.json`):
+
+  | Old                                                                                                                         | New                                                             |
+  | --------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------- |
+  | `--<role>-contrast` (primary, secondary, accent, success, warning, danger, info) and `bg-`/`text-`/`border-<role>-contrast` | `--<role>-foreground`, `bg-`/`text-`/`border-<role>-foreground` |
+  | `--spacing-xxs`, `--spacing-xxl`                                                                                            | `--spacing-2xs`, `--spacing-2xl`                                |
+  | `text-heading-xxs`, `text-body-xxs`                                                                                         | `text-heading-2xs`, `text-body-2xs`                             |
+  | `--code-sintax-*`                                                                                                           | `--code-syntax-*`                                               |
+  | `--border-0` … `--border-4` (widths)                                                                                        | `--border-width-0` … `--border-width-4`                         |
+  | `--shape-elements`                                                                                                          | `--shape-control`                                               |
+  | `--z-input-field`, `--z-input-overlay`                                                                                      | `--z-control`, `--z-control-overlay`                            |
+  | `animate-slide-in-left`, `-out-left`, `-in-right`, `-out-right`                                                             | `animate-slide-in-start`, `-out-start`, `-in-end`, `-out-end`   |
+  | `@aziontech/theme/texts` (`textsData`)                                                                                      | `@aziontech/theme/typography` (`typography`)                    |
+  | `@aziontech/theme/layouts` (`layoutsData`, `layoutsUtilities`)                                                              | `@aziontech/theme/layout` (`layout`, `layoutUtilities`)         |
+
+  The slide animations now flip in right-to-left pages, so drop any `rtl:` class that swapped them by
+  hand (the codemod warns). `--bg-contrast` / `--text-contrast` keep their names.
+
+- **Also removed:** `--line-height-*` (use `--leading-*` or a `rem` length), `--container-px`,
+  `--container-py`, `--container-max-width` and the `.px-container`, `.py-container`,
+  `.max-container-width` helpers (use the `--layout-*` tokens and `layout-column*` utilities), and
+  the `.azion.azion-light` / `.azion.azion-dark` theme classes (set `data-theme` on `<html>`; `.dark`
+  still works). The stylesheet moved from `dist/v4/` to `dist/`: import `@aziontech/theme` and
+  `@aziontech/theme/fonts.css`, never a `dist/` path.
 
 Two additions need nothing from you: `--border-input` is the outline token of every form field (same
 value as `--border-default`), and dark mode has its own, visible elevation shadows (`--shadow-*`).
