@@ -30,12 +30,6 @@
     shape?: LogoWallShape
   }
 
-  /** @deprecated since 6.0 — use `LogoWallShape`. Removed in 7.0. */
-  export type LogoShape = LogoWallShape
-
-  /** @deprecated since 6.0 — use `LogoWallItem`. Removed in 7.0. */
-  export type LogoItem = LogoWallItem
-
   interface Props {
     /** The cell's proportion; `rectangle` sets every cell at 3:2, keeps three columns below `sm`, and holds three columns beside `aside` from `lg`. */
     kind?: LogoWallKind

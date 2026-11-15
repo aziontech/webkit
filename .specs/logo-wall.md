@@ -3,8 +3,8 @@ name: logo-wall
 category: marketing
 structure: monolithic
 status: implemented
-spec_version: 4
-checksum: 0f3a5e5a2ea01b30a324440f5ea04716d6ea67f3b5e72f7ede00fc7f20187369
+spec_version: 5
+checksum: 6d33afc77643e9c4fc3dcf4282a53fa4b178da79d4e34009153c2161340fd94c
 created: 2026-09-22
 last_updated: 2026-11-15
 ---
@@ -95,7 +95,7 @@ The cells are `card-grid` frame cells, so the wall draws the same hairlines and 
 | `ariaLabel` | `string`         | `''`       | false    | Accessible name for the group of marks, announced instead of an unnamed region.                                                                                                                                                                          |
 | `linkLabel` | `string`         | `''`       | false    | Words revealed under a linked mark on hover and focus, and the lead of that link's accessible name. Empty uses the locale catalog (`Read story`).                                                                                                        |
 
-`LogoWallItem` is `{ src: string; alt: string; href?: string; shape?: LogoWallShape }`, `LogoWallShape` is `'wide' | 'compact'` (`wide` when omitted), and `LogoWallKind` is `'square' | 'rectangle'`. All three types are exported; the v5-era names `LogoItem` and `LogoShape` stay exported as aliases, @deprecated since 6.0 — use `LogoWallItem` / `LogoWallShape`. Removed in 7.0.
+`LogoWallItem` is `{ src: string; alt: string; href?: string; shape?: LogoWallShape }`, `LogoWallShape` is `'wide' | 'compact'` (`wide` when omitted), and `LogoWallKind` is `'square' | 'rectangle'`. All three types are exported.
 
 ## Events
 

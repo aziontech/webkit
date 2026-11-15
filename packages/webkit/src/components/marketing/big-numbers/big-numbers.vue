@@ -26,9 +26,6 @@
   /** Size token; picks the big-number scale the figures are set at. */
   export type BigNumbersSize = 'small' | 'medium' | 'large'
 
-  /** @deprecated since 6.0 — use `BigNumbersItem`. Removed in 7.0. */
-  export type BigNumberItem = BigNumbersItem
-
   interface Props {
     /** The figures rendered as cells, in order; each item is a value, a label, and an optional prefix and suffix — the figure, its caption, and the qualifier and unit set beside it. */
     items?: BigNumbersItem[]
