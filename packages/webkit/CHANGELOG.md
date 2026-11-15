@@ -4,6 +4,27 @@
 
 - [Inputs] normalize z-index across all inputs (ENG-46735) ([#783](https://github.com/aziontech/webkit/issues/783)) ([25d201d](https://github.com/aziontech/webkit/commit/25d201d5ae0e6054b9189bc81c76b7d9fc8c5055))
 
+## [5.12.3](https://github.com/aziontech/webkit/compare/@aziontech/webkit@5.12.2...@aziontech/webkit@5.12.3) (2026-11-12)
+
+
+### Bug Fixes
+
+* **webkit:** add titleLength to HeroBand and register the azion-highlight scene ([#1181](https://github.com/aziontech/webkit/issues/1181)) ([29ddf9e](https://github.com/aziontech/webkit/commit/29ddf9ec0bc545bc5a597c009c45a98d0d6b80da))
+
+## [5.12.2](https://github.com/aziontech/webkit/compare/@aziontech/webkit@5.12.1...@aziontech/webkit@5.12.2) (2026-11-12)
+
+
+### Bug Fixes
+
+* **webkit:** [ENG-50197] fit and center portrait images in media-split-stack ([#1178](https://github.com/aziontech/webkit/issues/1178)) ([7db47da](https://github.com/aziontech/webkit/commit/7db47dab19d56018d8977826200957e44e62b658))
+
+## [5.12.1](https://github.com/aziontech/webkit/compare/@aziontech/webkit@5.12.0...@aziontech/webkit@5.12.1) (2026-11-12)
+
+
+### Bug Fixes
+
+* **webkit:** use the canonical token shorthand in the readme ([#1176](https://github.com/aziontech/webkit/issues/1176)) ([eac370c](https://github.com/aziontech/webkit/commit/eac370c43c5134aa03a72d2fb2e0073aa2dec321))
+
 ## [5.12.0](https://github.com/aziontech/webkit/compare/@aziontech/webkit@5.11.1...@aziontech/webkit@5.12.0) (2026-11-11)
 
 
