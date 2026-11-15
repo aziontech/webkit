@@ -52,7 +52,7 @@ Pick one per form; don't mix row-fields and stacked-fields in the same section.
 
 webkit ships **one** form-field component, `Field` (`@aziontech/webkit/field`), and wraps **any** control
 in it: `Input`, `Textarea`, `Select`, `MultiSelect`, `NumberInput`, `PasswordInput`, `PhoneInput`,
-`InputGroup` (with `InputGroup.Input`), `Checkbox`, `RadioButton`, `Switch`, `Slider`. **Default to a
+`InputGroup` (with `InputGroup.Input`), `Checkbox`, `RadioGroup`, `Switch`, `Slider`. **Default to a
 `Field`**; leave a control bare only when no label belongs next to it.
 
 - **`Field` (preferred):** `<Field>` + `<Field.Label>` + the control + `<Field.Description>` /
@@ -61,9 +61,12 @@ in it: `Input`, `Textarea`, `Select`, `MultiSelect`, `NumberInput`, `PasswordInp
   points `for` at the control and shows the Required tag; `Field.Description` takes the helper tone
   (disabled → invalid → required → helper) from the Field. The accessible-name / error-association rules
   below are satisfied **by construction**.
-- **Checkbox, radio, switch:** `<Field orientation="horizontal">` with the control first and a
+- **Checkbox, switch:** `<Field orientation="horizontal">` with the control first and a
   `<Field.Content>` holding `Field.Label` + `Field.Description`.
-- **Choice cards** (a bordered option with a title and description): `<Field.Label>` wrapping a
+- **One of a few (radios):** always `<RadioGroup v-model>` with a `RadioGroup.Item` per option
+  (`description` for the line under it); `kind="card"` for bordered option cards. Never compose a
+  radio by hand inside `Field.Label`.
+- **Checkbox and switch cards** (a bordered option with a title and description): `<Field.Label>` wrapping a
   horizontal `<Field>` with the control and `<Field.Content>` (`Field.Title` + `Field.Description`).
   Group cards with `<Field.Set>` + `<Field.Legend>`, never inside another `Field`.
 - **Loose (the bare control):** only when the label lives elsewhere — a control in an `Item.Actions`
@@ -754,7 +757,7 @@ Parts of the `Field` compound (ask the webkit MCP `suggest_component`, or read
 `Field.Error`, `Field.Group`, `Field.Set`, `Field.Legend`, `Field.Content`, `Field.Title`,
 `Field.Separator`. Controls: `input`, `textarea`, `select`, `multi-select`, `number-input`,
 `password-input` (+ `password-requirements` for the rules row), `phone-input`, `input-group` (+
-`InputGroup.Input`), `checkbox`, `radio-button`, `switch`, `slider`.
+`InputGroup.Input`), `checkbox`, `radio-group`, `switch`, `slider`.
 
 Rules:
 
@@ -817,8 +820,9 @@ attribute, which is how you lock the scope on submit.
 Rules:
 
 - **`<legend>` is the fieldset's first child**, and `sr-only` when a visible title already shows it.
-- **Related radios/checkboxes are their own group** — a set of radios is a `<fieldset>` whose
-  `<legend>` is the question; the choice cards are the options. `Field.Set` + `Field.Legend` render that
+- **Related radios/checkboxes are their own group** — a set of checkboxes is a `<fieldset>` whose
+  `<legend>` is the question; the choice cards are the options. A set of radios is one `RadioGroup`
+  (a `radiogroup` named by `aria-label`, or by the `Field.Legend` of the `Field.Set` around it). `Field.Set` + `Field.Legend` render that
   native `<fieldset>` + `<legend>` without browser chrome.
 
 ## Native input hints — autofill, keyboards, paste
@@ -1145,8 +1149,8 @@ End with: `form is accessible` or `N gaps — fix before polish`.
 ## Definition of Done
 
 - [ ] Every labelled control sits in a `Field` (`Field.Label` + control + `Field.Description` /
-      `Field.Error`, state on the `Field`); checkboxes/radios/switches use `orientation="horizontal"`,
-      choice cards are `Field.Label` wrapping a horizontal `Field`; a bare control is used only when its
+      `Field.Error`, state on the `Field`); checkboxes/switches use `orientation="horizontal"`,
+      their cards are `Field.Label` wrapping a horizontal `Field`, radios are one `RadioGroup` (`kind="card"` for cards); a bare control is used only when its
       label lives elsewhere, and then the `aria-label` + `aria-describedby` are wired by hand.
 - [ ] The form type fits the flow (Drawer / nested Drawer / Dialog / ItemGroup settings / Card with
       independent saves), and the **save model follows partitioning**: one save for a logical unit (Drawer,
