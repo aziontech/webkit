@@ -2,6 +2,7 @@
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import CollectionPreferences from '@aziontech/webkit/collection-preferences'
+  import DataTable from '@aziontech/webkit/data-table'
   import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'
   import DropdownMenuOption from '@aziontech/webkit/dropdown-menu-option'
   import EmptyState from '@aziontech/webkit/empty-state'
@@ -9,7 +10,6 @@
   import PageHeader from '@aziontech/webkit/page-header'
   import PropertyFilter from '@aziontech/webkit/property-filter'
   import Table from '@aziontech/webkit/table'
-  import DataTable from '@aziontech/webkit/data-table'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { useCollection } from '@aziontech/webkit/use-collection'
   import { ref } from 'vue'
@@ -92,7 +92,7 @@
         <template #actions>
           <Button
             label="Documentation"
-            icon="pi pi-book"
+            icon="ai ai-book"
             kind="outlined"
             size="medium"
             href="https://example.com/docs/resources"
@@ -100,7 +100,7 @@
           />
           <Button
             label="Create Resource"
-            icon="pi pi-plus"
+            icon="ai ai-plus"
             kind="primary"
             size="large"
             @click="router.push('/resources/new')"
@@ -123,7 +123,7 @@
                 class="shrink-0"
               >
                 <IconButton
-                  icon="pi pi-refresh"
+                  icon="ai ai-refresh"
                   kind="outlined"
                   size="medium"
                   :loading="loading"
@@ -136,7 +136,7 @@
                 class="shrink-0"
               >
                 <IconButton
-                  icon="pi pi-download"
+                  icon="ai ai-download"
                   kind="outlined"
                   size="medium"
                   :disabled="!matchingItems.length"
@@ -159,7 +159,7 @@
               <template #content>
                 <EmptyState
                   size="medium"
-                  icon="pi pi-box"
+                  icon="ai ai-box"
                   title="No resources yet"
                   description="Create a resource to start serving traffic on your domains."
                 >
@@ -167,14 +167,14 @@
                     <div class="flex flex-wrap items-center justify-center gap-(--spacing-xs)">
                       <Button
                         label="Create Resource"
-                        icon="pi pi-plus"
+                        icon="ai ai-plus"
                         kind="secondary"
                         size="small"
                         @click="router.push('/resources/new')"
                       />
                       <Button
                         label="Documentation"
-                        icon="pi pi-book"
+                        icon="ai ai-book"
                         kind="outlined"
                         size="small"
                         href="https://example.com/docs/resources"
@@ -246,7 +246,7 @@
                         >
                           <template #leading
                             ><i
-                              class="pi pi-cloud-upload"
+                              class="ai ai-cloud-upload"
                               aria-hidden="true"
                           /></template>
                         </DropdownMenuOption>
@@ -256,7 +256,7 @@
                         >
                           <template #leading
                             ><i
-                              class="pi pi-eye"
+                              class="ai ai-eye"
                               aria-hidden="true"
                           /></template>
                         </DropdownMenuOption>
@@ -266,7 +266,7 @@
                         >
                           <template #leading
                             ><i
-                              class="pi pi-clone"
+                              class="ai ai-clone"
                               aria-hidden="true"
                           /></template>
                         </DropdownMenuOption>
@@ -278,7 +278,7 @@
                         >
                           <template #leading
                             ><i
-                              class="pi pi-trash"
+                              class="ai ai-trash"
                               aria-hidden="true"
                           /></template>
                         </DropdownMenuOption>
@@ -288,7 +288,7 @@
                   <template #empty>
                     <EmptyState
                       size="medium"
-                      icon="pi pi-filter-slash"
+                      icon="ai ai-filter-slash"
                       title="No matching resources"
                       description="No resource matches these filters."
                     >

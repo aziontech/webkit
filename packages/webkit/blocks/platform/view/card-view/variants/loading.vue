@@ -48,7 +48,7 @@
         <template #actions>
           <Button
             label="Documentation"
-            icon="pi pi-book"
+            icon="ai ai-book"
             kind="outlined"
             size="medium"
             href="https://example.com/docs/applications"
@@ -56,7 +56,7 @@
           />
           <Button
             label="Create Application"
-            icon="pi pi-plus"
+            icon="ai ai-plus"
             kind="primary"
             size="large"
           />
@@ -76,7 +76,7 @@
             <div class="flex shrink-0 items-center gap-(--spacing-xs)">
               <Button
                 label="Delete"
-                icon="pi pi-trash"
+                icon="ai ai-trash"
                 kind="outlined"
                 size="medium"
                 disabled

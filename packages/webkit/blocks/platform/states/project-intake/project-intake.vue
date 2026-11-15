@@ -30,7 +30,7 @@
         label="Choose a folder"
         kind="outlined"
         size="medium"
-        icon="pi pi-folder-open"
+        icon="ai ai-folder-open"
         @click="chooseFolder"
       />
       <input

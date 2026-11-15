@@ -81,25 +81,25 @@
     {
       title: 'Build your application',
       href: '/docs/build-your-application',
-      icon: 'pi pi-box',
+      icon: 'ai ai-box',
       text: 'Deploy from a template, a repo, or the CLI.'
     },
     {
       title: 'Accelerate your application',
       href: '/docs/accelerate-your-application',
-      icon: 'pi pi-gauge',
+      icon: 'ai ai-gauge',
       text: 'Cache responses so your origin stops repeating itself.'
     },
     {
       title: 'Secure your application',
       href: '/docs/secure-your-application',
-      icon: 'pi pi-shield',
+      icon: 'ai ai-shield',
       text: 'A firewall in front, with a block rule you can verify.'
     },
     {
       title: 'Execute AI inference',
       href: '/docs/execute-ai-inference',
-      icon: 'pi pi-sparkles',
+      icon: 'ai ai-sparkles',
       text: 'A hosted model behind an OpenAI-compatible endpoint.'
     }
   ]
@@ -117,37 +117,37 @@
     {
       title: 'Add a firewall',
       href: '/docs/add-a-firewall',
-      icon: 'pi pi-shield',
+      icon: 'ai ai-shield',
       text: 'Bind it to your workload and prove a deny rule with curl.'
     },
     {
       title: 'Block injection attacks',
       href: '/docs/block-injection-attacks',
-      icon: 'pi pi-filter',
+      icon: 'ai ai-filter',
       text: 'A SQL Injection rule set, with the blocks visible in events.'
     },
     {
       title: 'Tune false positives',
       href: '/docs/tune-false-positives',
-      icon: 'pi pi-list-check',
+      icon: 'ai ai-list-check',
       text: 'Turn WAF false positives into allowed rules.'
     },
     {
       title: 'Deny bad bots',
       href: '/docs/deny-bad-bots',
-      icon: 'pi pi-microchip',
+      icon: 'ai ai-microchip',
       text: 'Deny automated requests that score above your threshold.'
     },
     {
       title: 'Network blocklists',
       href: '/docs/network-blocklists',
-      icon: 'pi pi-map',
+      icon: 'ai ai-map',
       text: 'Drop unwanted traffic before it reaches your application.'
     },
     {
       title: 'Install TLS certificates',
       href: '/docs/install-tls-certificates',
-      icon: 'pi pi-key',
+      icon: 'ai ai-key',
       text: 'Upload a certificate and key, then check the handshake.'
     }
   ]
@@ -155,37 +155,37 @@
     {
       title: 'Shared Responsibility Model',
       href: '/docs/shared-responsibility-model',
-      icon: 'pi pi-verified',
+      icon: 'ai ai-verified',
       text: 'What Azion covers, and what stays yours.'
     },
     {
       title: 'Governance, Risk and Compliance',
       href: '/docs/governance-risk-and-compliance',
-      icon: 'pi pi-id-card',
+      icon: 'ai ai-id-card',
       text: 'The tools and certifications behind your compliance work.'
     },
     {
       title: 'PCI DSS compliance',
       href: '/docs/pci-dss-compliance',
-      icon: 'pi pi-wallet',
+      icon: 'ai ai-wallet',
       text: 'PCI DSS 4.0 Level 1, and what it covers for cardholder data.'
     },
     {
       title: 'SOC compliance',
       href: '/docs/soc-compliance',
-      icon: 'pi pi-lock',
+      icon: 'ai ai-lock',
       text: 'SOC 2 Type 2 and SOC 3 reports, twice a year.'
     },
     {
       title: 'Activity History',
       href: '/docs/activity-history',
-      icon: 'pi pi-history',
+      icon: 'ai ai-history',
       text: 'The audit trail: who changed what, and when.'
     },
     {
       title: 'Security Response Team',
       href: '/docs/security-response-team',
-      icon: 'pi pi-users',
+      icon: 'ai ai-users',
       text: 'Azion security specialists to analyze threats and investigate attacks.'
     }
   ]
@@ -193,13 +193,13 @@
     {
       title: 'Release notes',
       href: '/docs/release-notes',
-      icon: 'pi pi-megaphone',
+      icon: 'ai ai-megaphone',
       text: 'What changed in Azion products, as it ships.'
     },
     {
       title: 'Blog',
       href: 'https://www.azion.com/en/blog/',
-      icon: 'pi pi-book',
+      icon: 'ai ai-book',
       text: 'Engineering posts and how customers run on Azion.',
       link: 'Read the blog',
       target: '_blank' as const
@@ -207,7 +207,7 @@
     {
       title: 'YouTube',
       href: 'https://www.youtube.com/aziontech',
-      icon: 'pi pi-youtube',
+      icon: 'ai ai-youtube',
       text: 'Walkthroughs, demos, and recorded sessions.',
       link: 'Watch on YouTube',
       target: '_blank' as const
@@ -215,7 +215,7 @@
     {
       title: 'Discord',
       href: 'https://discord.gg/azion',
-      icon: 'pi pi-discord',
+      icon: 'ai ai-discord',
       text: 'Ask questions and compare notes with other builders.',
       link: 'Join the Discord',
       target: '_blank' as const
@@ -310,7 +310,7 @@
               <div class="sm:col-span-2">
                 <DocCard
                   title="Explore use cases"
-                  icon="pi pi-sitemap"
+                  icon="ai ai-sitemap"
                   href="/docs/use-cases"
                   >Validated designs that show how Azion products combine to solve each use case,
                   grouped by solution.</DocCard
@@ -430,7 +430,7 @@
               <div class="lg:col-span-2">
                 <DocCard
                   title="Style guide"
-                  icon="pi pi-pencil"
+                  icon="ai ai-pencil"
                   href="/docs/style-guide"
                   >How Azion writes documentation: voice, structure, and conventions.</DocCard
                 >
@@ -446,7 +446,7 @@
 
     <template #actions>
       <IconButton
-        icon="pi pi-github"
+        icon="ai ai-github"
         kind="outlined"
         size="medium"
         aria-label="Azion on GitHub"

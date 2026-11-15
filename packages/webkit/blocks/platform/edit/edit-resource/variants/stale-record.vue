@@ -219,7 +219,7 @@
                       label="Reload"
                       kind="secondary"
                       size="medium"
-                      icon="pi pi-refresh"
+                      icon="ai ai-refresh"
                       :disabled="saving"
                       @click="reload"
                     />

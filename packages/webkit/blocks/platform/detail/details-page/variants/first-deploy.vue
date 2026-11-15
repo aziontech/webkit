@@ -46,7 +46,7 @@
         >
           <div class="flex min-w-0 flex-1 basis-(--container-2xs) items-center gap-(--spacing-xs)">
             <i
-              class="pi pi-globe shrink-0 text-body-lg text-(--text-muted)"
+              class="ai ai-globe shrink-0 text-body-lg text-(--text-muted)"
               aria-hidden="true"
             />
             <span class="truncate text-body-sm text-(--text-muted)">Not deployed yet</span>
@@ -57,7 +57,7 @@
               <DropdownMenu.Trigger>
                 <Tooltip text="Resource actions">
                   <IconButton
-                    icon="pi pi-ellipsis-h"
+                    icon="ai ai-ellipsis-h"
                     kind="outlined"
                     size="medium"
                     aria-label="Resource actions"
@@ -72,7 +72,7 @@
                 >
                   <template #leading>
                     <i
-                      class="pi pi-cog"
+                      class="ai ai-cog"
                       aria-hidden="true"
                     />
                   </template>
@@ -124,7 +124,7 @@
               </a>
               <div class="flex min-w-0 items-center gap-(--spacing-xxs)">
                 <i
-                  class="pi pi-cloud-upload shrink-0 text-(--text-muted)"
+                  class="ai ai-cloud-upload shrink-0 text-(--text-muted)"
                   aria-hidden="true"
                 />
                 <span class="truncate text-body-sm text-(--text-default)">Project upload</span>
@@ -163,7 +163,7 @@
               label="Documentation"
               kind="outlined"
               size="medium"
-              icon="pi pi-book"
+              icon="ai ai-book"
               href="https://example.com/docs/cli"
               target="_blank"
             />
@@ -183,7 +183,7 @@
         >
           <div class="flex min-w-0 flex-1 basis-(--container-2xs) items-center gap-(--spacing-xs)">
             <i
-              class="pi pi-globe shrink-0 text-body-lg text-(--text-muted)"
+              class="ai ai-globe shrink-0 text-body-lg text-(--text-muted)"
               aria-hidden="true"
             />
             <div class="flex min-w-0">
@@ -202,7 +202,7 @@
                   }}</span>
                   <span class="sr-only">{{ ' (opens in a new tab)' }}</span>
                   <i
-                    class="pi pi-external-link shrink-0 text-body-xs leading-none"
+                    class="ai ai-external-link shrink-0 text-body-xs leading-none"
                     aria-hidden="true"
                   />
                 </a>
@@ -215,7 +215,7 @@
               label="Visit"
               kind="secondary"
               size="medium"
-              icon="pi pi-external-link"
+              icon="ai ai-external-link"
               :href="`https://${service.domain}`"
               target="_blank"
             />
@@ -224,7 +224,7 @@
               <DropdownMenu.Trigger>
                 <Tooltip text="Service actions">
                   <IconButton
-                    icon="pi pi-ellipsis-h"
+                    icon="ai ai-ellipsis-h"
                     kind="outlined"
                     size="medium"
                     aria-label="Service actions"
@@ -239,7 +239,7 @@
                 >
                   <template #leading>
                     <i
-                      class="pi pi-copy"
+                      class="ai ai-copy"
                       aria-hidden="true"
                     />
                   </template>
@@ -253,7 +253,7 @@
                 >
                   <template #leading>
                     <i
-                      class="pi pi-cog"
+                      class="ai ai-cog"
                       aria-hidden="true"
                     />
                   </template>

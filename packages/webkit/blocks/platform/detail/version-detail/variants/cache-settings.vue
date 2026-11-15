@@ -60,7 +60,7 @@
       id: 'ADA8FMMR',
       name: 'ADA8FMMR',
       state: 'draft',
-      tag: { label: 'Draft', severity: 'warning', icon: 'pi pi-file-edit' },
+      tag: { label: 'Draft', severity: 'warning', icon: 'ai ai-file-edit' },
       comment: 'Cache static assets for 30 days',
       author: 'John Smith',
       createdAgo: '14 hours ago'
@@ -124,7 +124,7 @@
     id: 'ADA8FMMR',
     name: 'ADA8FMMR',
     state: 'draft',
-    tag: { label: 'Draft', severity: 'warning', icon: 'pi pi-file-edit' },
+    tag: { label: 'Draft', severity: 'warning', icon: 'ai ai-file-edit' },
     comment: 'Cache static assets for 30 days',
     author: 'John Smith',
     createdAgo: '14 hours ago'
@@ -466,7 +466,7 @@
             >
               <template #prefix>
                 <i
-                  class="pi pi-search"
+                  class="ai ai-search"
                   aria-hidden="true"
                 />
               </template>
@@ -502,7 +502,7 @@
             >
               <span class="flex items-center gap-(--spacing-xs)">
                 <i
-                  class="pi pi-plus-circle"
+                  class="ai ai-plus-circle"
                   aria-hidden="true"
                 />
                 Add Version
@@ -518,7 +518,7 @@
     >
       <Tooltip text="Back to web-app versions">
         <IconButton
-          icon="pi pi-arrow-left"
+          icon="ai ai-arrow-left"
           kind="transparent"
           size="medium"
           href="/resources/1784552864?tab=versions"
@@ -550,7 +550,7 @@
               >
                 <template #prefix>
                   <i
-                    class="pi pi-search"
+                    class="ai ai-search"
                     aria-hidden="true"
                   />
                 </template>
@@ -586,7 +586,7 @@
               >
                 <span class="flex items-center gap-(--spacing-xs)">
                   <i
-                    class="pi pi-plus-circle"
+                    class="ai ai-plus-circle"
                     aria-hidden="true"
                   />
                   Add Version
@@ -615,7 +615,7 @@
                 <Tag
                   label="Draft"
                   severity="warning"
-                  icon="pi pi-file-edit"
+                  icon="ai ai-file-edit"
                   size="medium"
                 />
                 <DropdownMenu
@@ -624,7 +624,7 @@
                 >
                   <DropdownMenu.Trigger>
                     <IconButton
-                      icon="pi pi-ellipsis-h"
+                      icon="ai ai-ellipsis-h"
                       kind="transparent"
                       size="small"
                       aria-label="Version actions"
@@ -637,7 +637,7 @@
                     >
                       <template #leading>
                         <i
-                          class="pi pi-pencil"
+                          class="ai ai-pencil"
                           aria-hidden="true"
                         />
                       </template>
@@ -648,7 +648,7 @@
                     >
                       <template #leading>
                         <i
-                          class="pi pi-history"
+                          class="ai ai-history"
                           aria-hidden="true"
                         />
                       </template>
@@ -680,7 +680,7 @@
                           label="Add Cache Settings"
                           kind="outlined"
                           size="medium"
-                          icon="pi pi-plus"
+                          icon="ai ai-plus"
                           @click="openSetting()"
                         />
                       </template>
@@ -700,7 +700,7 @@
                           >
                             <template #prefix>
                               <i
-                                class="pi pi-search"
+                                class="ai ai-search"
                                 aria-hidden="true"
                               />
                             </template>
@@ -712,7 +712,7 @@
                             class="shrink-0"
                           >
                             <IconButton
-                              icon="pi pi-refresh"
+                              icon="ai ai-refresh"
                               kind="outlined"
                               size="medium"
                               :loading="loading"
@@ -725,7 +725,7 @@
                             class="shrink-0"
                           >
                             <IconButton
-                              icon="pi pi-download"
+                              icon="ai ai-download"
                               kind="outlined"
                               size="medium"
                               :disabled="!tableRef"
@@ -799,7 +799,7 @@
                                 key="empty-state-1"
                                 v-if="search.trim()"
                                 size="medium"
-                                icon="pi pi-search"
+                                icon="ai ai-search"
                                 title="No matching cache settings"
                                 :description="`Nothing matches ${search.trim()}.`"
                               >
@@ -816,14 +816,14 @@
                                 key="empty-state-2"
                                 v-else
                                 size="medium"
-                                icon="pi pi-database"
+                                icon="ai ai-database"
                                 title="No cache settings yet"
                                 description="Add the first one to this version."
                               >
                                 <template #actions>
                                   <Button
                                     label="Add Cache Settings"
-                                    icon="pi pi-plus"
+                                    icon="ai ai-plus"
                                     kind="secondary"
                                     size="small"
                                     @click="openSetting()"
@@ -1269,7 +1269,7 @@
                 <div class="layout-section-start">
                   <EmptyState
                     size="medium"
-                    icon="pi pi-external-link"
+                    icon="ai ai-external-link"
                     :title="tabLabel"
                     :description="`${tabLabel} opens on its own page.`"
                   >
@@ -1302,7 +1302,7 @@
                     class="hidden size-8 shrink-0 items-center justify-center rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface-raised) md:flex"
                     aria-hidden="true"
                   >
-                    <i class="pi pi-file-edit text-body-sm text-(--text-default)" />
+                    <i class="ai ai-file-edit text-body-sm text-(--text-default)" />
                   </span>
                   <div
                     class="flex min-w-0 flex-1 flex-col"
@@ -1329,7 +1329,7 @@
                   <div class="flex shrink-0 items-center gap-(--spacing-xs)">
                     <SplitButton
                       :label="saveOptions.find((option) => option.value === saveAction)?.label"
-                      :icon="saveAction === 'deploy' ? 'pi pi-cloud-upload' : ''"
+                      :icon="saveAction === 'deploy' ? 'ai ai-cloud-upload' : ''"
                       kind="primary"
                       size="medium"
                       :items="saveOptions"
@@ -1370,7 +1370,7 @@
                 Version history
               </h2>
               <IconButton
-                icon="pi pi-times"
+                icon="ai ai-times"
                 kind="transparent"
                 size="small"
                 aria-label="Close version history"
@@ -1388,7 +1388,7 @@
                     class="relative flex size-7 shrink-0 items-center justify-center rounded-full bg-(--accent) text-(--accent-contrast)"
                     aria-hidden="true"
                   >
-                    <i class="pi pi-file-edit text-body-xs" />
+                    <i class="ai ai-file-edit text-body-xs" />
                   </span>
                   <div class="flex min-w-0 flex-1 flex-col gap-(--spacing-xxs) pt-0.5">
                     <div class="flex min-w-0 items-center gap-(--spacing-xs)">
@@ -1407,7 +1407,7 @@
                         class="ms-auto shrink-0"
                       >
                         <IconButton
-                          icon="pi pi-pencil"
+                          icon="ai ai-pencil"
                           kind="transparent"
                           size="small"
                           aria-label="Edit version info"
@@ -1520,7 +1520,7 @@
                       class="relative flex size-7 shrink-0 items-center justify-center rounded-full border border-(--border-default) bg-(--bg-surface) text-(--text-default)"
                       aria-hidden="true"
                     >
-                      <i class="pi pi-code text-body-xs" />
+                      <i class="ai ai-code text-body-xs" />
                     </span>
                     <span class="flex min-w-0 flex-1 flex-col gap-(--spacing-xxs) pt-0.5">
                       <span class="flex min-w-0 items-center gap-(--spacing-xs)">

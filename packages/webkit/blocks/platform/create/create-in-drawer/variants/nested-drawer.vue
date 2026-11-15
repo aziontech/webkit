@@ -105,7 +105,7 @@
       <template #actions>
         <Button
           label="Add Rule"
-          icon="pi pi-plus"
+          icon="ai ai-plus"
           kind="outlined"
           size="medium"
           @click="openParent"
@@ -230,7 +230,7 @@
                                 <template #footer>
                                   <Select.Option
                                     :value="CREATE_ORIGIN"
-                                    icon="pi pi-plus-circle"
+                                    icon="ai ai-plus-circle"
                                     class="w-full"
                                   >
                                     Create Origin

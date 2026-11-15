@@ -11,8 +11,8 @@
   const rootName = 'acme-assets'
   const pathCrumbs = [{ label: rootName, href: '0' }]
   const addToFilesActions = [
-    { label: 'Upload file', value: 'upload', icon: 'pi pi-upload' },
-    { label: 'Add folder', value: 'folder', icon: 'pi pi-folder-plus' }
+    { label: 'Upload file', value: 'upload', icon: 'ai ai-upload' },
+    { label: 'Add folder', value: 'folder', icon: 'ai ai-folder-plus' }
   ]
 </script>
 
@@ -25,7 +25,7 @@
             <div class="flex w-full flex-col gap-(--spacing-sm)">
               <div class="flex min-w-0 items-center gap-(--spacing-xs)">
                 <i
-                  class="pi pi-database shrink-0 text-body-lg text-(--text-muted)"
+                  class="ai ai-database shrink-0 text-body-lg text-(--text-muted)"
                   aria-hidden="true"
                 />
                 <h1 class="min-w-0 truncate text-heading-xxs text-(--text-default)">
@@ -42,7 +42,7 @@
                 <div class="flex shrink-0 items-center gap-(--spacing-xs)">
                   <Tooltip text="Refresh">
                     <IconButton
-                      icon="pi pi-refresh"
+                      icon="ai ai-refresh"
                       kind="outlined"
                       size="medium"
                       aria-label="Refresh"
@@ -51,7 +51,7 @@
                   </Tooltip>
                   <SplitButton
                     label="Add to files"
-                    icon="pi pi-plus"
+                    icon="ai ai-plus"
                     kind="primary"
                     size="medium"
                     :items="addToFilesActions"

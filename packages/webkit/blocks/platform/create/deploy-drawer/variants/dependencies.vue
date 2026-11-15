@@ -85,7 +85,7 @@
     key: `${prefix}:module-auth-gateway`,
     label: 'Module',
     name: 'auth-gateway',
-    icon: 'pi pi-code',
+    icon: 'ai ai-code',
     note: '',
     sharedWith: ['checkout-api', 'account-api'],
     total: 8,
@@ -100,7 +100,7 @@
     key: `${prefix}:integration-payments-api`,
     label: 'Integration',
     name: 'payments-api',
-    icon: 'pi pi-link',
+    icon: 'ai ai-link',
     note: 'Not versioned. Deploys with its current settings.',
     sharedWith: [],
     total: 0,
@@ -111,7 +111,7 @@
     key: `${prefix}:module-geo-redirect`,
     label: 'Module',
     name: 'geo-redirect',
-    icon: 'pi pi-code',
+    icon: 'ai ai-code',
     note: '',
     sharedWith: [],
     total: ready ? 11 : 0,
@@ -134,7 +134,7 @@
       key: 'service',
       label: 'Service',
       name: 'web-app',
-      icon: 'pi pi-server',
+      icon: 'ai ai-server',
       note: '',
       total: 6,
       versions: [
@@ -150,7 +150,7 @@
       key: 'config',
       label: 'Resource',
       name: 'web-app-config',
-      icon: 'pi pi-box',
+      icon: 'ai ai-box',
       note: '',
       total: 2,
       versions: [
@@ -569,7 +569,7 @@
           label="Deploy"
           kind="outlined"
           size="medium"
-          icon="pi pi-cloud-upload"
+          icon="ai ai-cloud-upload"
         />
       </DrawerTrigger>
 
@@ -645,7 +645,7 @@
                                 :aria-label="`Change version of ${row.name}`"
                                 kind="outlined"
                                 size="small"
-                                icon="pi pi-chevron-down"
+                                icon="ai ai-chevron-down"
                                 icon-position="trailing"
                                 :disabled="!row.versions.length"
                               />
@@ -665,7 +665,7 @@
                                 >
                                   <template #prefix>
                                     <i
-                                      class="pi pi-search"
+                                      class="ai ai-search"
                                       aria-hidden="true"
                                     />
                                   </template>
@@ -821,7 +821,7 @@
                                                 label="Shared"
                                                 severity="info"
                                                 size="small"
-                                                icon="pi pi-link"
+                                                icon="ai ai-link"
                                               />
                                             </span>
                                           </Tooltip>
@@ -861,7 +861,7 @@
                                               :aria-label="`Change version of ${dependency.name}`"
                                               kind="outlined"
                                               size="small"
-                                              icon="pi pi-chevron-down"
+                                              icon="ai ai-chevron-down"
                                               icon-position="trailing"
                                               :disabled="!dependency.versions.length"
                                             />
@@ -881,7 +881,7 @@
                                               >
                                                 <template #prefix>
                                                   <i
-                                                    class="pi pi-search"
+                                                    class="ai ai-search"
                                                     aria-hidden="true"
                                                   />
                                                 </template>
@@ -988,7 +988,7 @@
                             class="flex size-7 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
                           >
                             <i
-                              class="pi pi-box text-body-xs text-(--text-default)"
+                              class="ai ai-box text-body-xs text-(--text-default)"
                               aria-hidden="true"
                             />
                           </span>
@@ -1066,7 +1066,7 @@
                                     >
                                       <template #prefix>
                                         <i
-                                          class="pi pi-search"
+                                          class="ai ai-search"
                                           aria-hidden="true"
                                         />
                                       </template>
@@ -1123,7 +1123,7 @@
                                 label="Change"
                                 kind="outlined"
                                 size="small"
-                                icon="pi pi-chevron-down"
+                                icon="ai ai-chevron-down"
                                 icon-position="trailing"
                               />
                             </DropdownMenu.Trigger>
@@ -1213,7 +1213,7 @@
                               class="flex size-7 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
                             >
                               <i
-                                class="pi pi-box text-body-xs text-(--text-default)"
+                                class="ai ai-box text-body-xs text-(--text-default)"
                                 aria-hidden="true"
                               />
                             </span>
@@ -1285,7 +1285,7 @@
                                       >
                                         <template #prefix>
                                           <i
-                                            class="pi pi-search"
+                                            class="ai ai-search"
                                             aria-hidden="true"
                                           />
                                         </template>
@@ -1355,7 +1355,7 @@
                   class="flex min-w-0 items-start gap-(--spacing-xs) text-body-sm text-(--warning-contrast)"
                 >
                   <i
-                    class="pi pi-exclamation-triangle mt-0.5 shrink-0 text-body-xs"
+                    class="ai ai-exclamation-triangle mt-0.5 shrink-0 text-body-xs"
                     aria-hidden="true"
                   />
                   <span>{{ blocker }}</span>

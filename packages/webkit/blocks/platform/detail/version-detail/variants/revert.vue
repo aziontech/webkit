@@ -46,7 +46,7 @@
       id: 'ADA8FMMR',
       name: 'ADA8FMMR',
       state: 'draft',
-      tag: { label: 'Draft', severity: 'warning', icon: 'pi pi-file-edit' },
+      tag: { label: 'Draft', severity: 'warning', icon: 'ai ai-file-edit' },
       comment: 'Cache static assets for 30 days',
       author: 'John Smith',
       createdAgo: '14 hours ago'
@@ -328,7 +328,7 @@
             >
               <template #prefix>
                 <i
-                  class="pi pi-search"
+                  class="ai ai-search"
                   aria-hidden="true"
                 />
               </template>
@@ -364,7 +364,7 @@
             >
               <span class="flex items-center gap-(--spacing-xs)">
                 <i
-                  class="pi pi-plus-circle"
+                  class="ai ai-plus-circle"
                   aria-hidden="true"
                 />
                 Add Version
@@ -380,7 +380,7 @@
     >
       <Tooltip text="Back to web-app versions">
         <IconButton
-          icon="pi pi-arrow-left"
+          icon="ai ai-arrow-left"
           kind="transparent"
           size="medium"
           href="/resources/1784552864?tab=versions"
@@ -412,7 +412,7 @@
               >
                 <template #prefix>
                   <i
-                    class="pi pi-search"
+                    class="ai ai-search"
                     aria-hidden="true"
                   />
                 </template>
@@ -448,7 +448,7 @@
               >
                 <span class="flex items-center gap-(--spacing-xs)">
                   <i
-                    class="pi pi-plus-circle"
+                    class="ai ai-plus-circle"
                     aria-hidden="true"
                   />
                   Add Version
@@ -488,7 +488,7 @@
                 >
                   <DropdownMenu.Trigger>
                     <IconButton
-                      icon="pi pi-ellipsis-h"
+                      icon="ai ai-ellipsis-h"
                       kind="transparent"
                       size="small"
                       aria-label="Version actions"
@@ -501,7 +501,7 @@
                     >
                       <template #leading>
                         <i
-                          class="pi pi-history"
+                          class="ai ai-history"
                           aria-hidden="true"
                         />
                       </template>
@@ -627,7 +627,7 @@
                                       >
                                         Contact sales
                                         <i
-                                          class="pi pi-external-link shrink-0 text-body-sm leading-none"
+                                          class="ai ai-external-link shrink-0 text-body-sm leading-none"
                                           aria-hidden="true"
                                         />
                                       </a>
@@ -659,7 +659,7 @@
                 <div class="layout-section-start">
                   <EmptyState
                     size="medium"
-                    icon="pi pi-external-link"
+                    icon="ai ai-external-link"
                     :title="tabLabel"
                     :description="`${tabLabel} opens on its own page.`"
                   >
@@ -704,7 +704,7 @@
                         <Tag
                           label="Read-only"
                           severity="neutral"
-                          icon="pi pi-lock"
+                          icon="ai ai-lock"
                           size="small"
                         />
                       </span>
@@ -726,7 +726,7 @@
                         label="Add Version"
                         kind="outlined"
                         size="medium"
-                        icon="pi pi-plus"
+                        icon="ai ai-plus"
                       />
                     </span>
                     <Button
@@ -734,7 +734,7 @@
                       label="Redeploy"
                       kind="outlined"
                       size="medium"
-                      icon="pi pi-refresh"
+                      icon="ai ai-refresh"
                       @click="run"
                     />
                     <ConfirmDialog
@@ -752,7 +752,7 @@
                           :label="`Revert to ${VIEWED}`"
                           kind="primary"
                           size="medium"
-                          icon="pi pi-undo"
+                          icon="ai ai-undo"
                           :loading="reverting"
                         />
                       </template>
@@ -788,7 +788,7 @@
                                 <span class="text-(--text-muted) line-through">{{
                                   change.from
                                 }}</span>
-                                <i class="pi pi-arrow-right text-body-xs text-(--text-muted)" />
+                                <i class="ai ai-arrow-right text-body-xs text-(--text-muted)" />
                                 <span class="text-(--text-default)">{{ change.to }}</span>
                               </span>
                             </li>
@@ -835,7 +835,7 @@
                 Version history
               </h2>
               <IconButton
-                icon="pi pi-times"
+                icon="ai ai-times"
                 kind="transparent"
                 size="small"
                 aria-label="Close version history"
@@ -853,7 +853,7 @@
                     class="relative flex size-7 shrink-0 items-center justify-center rounded-full bg-(--accent) text-(--accent-contrast)"
                     aria-hidden="true"
                   >
-                    <i class="pi pi-code text-body-xs" />
+                    <i class="ai ai-code text-body-xs" />
                   </span>
                   <div class="flex min-w-0 flex-1 flex-col gap-(--spacing-xxs) pt-0.5">
                     <div class="flex min-w-0 items-center gap-(--spacing-xs)">
@@ -911,7 +911,7 @@
                       class="relative flex size-7 shrink-0 items-center justify-center rounded-full border border-(--border-default) bg-(--bg-surface) text-(--text-default)"
                       aria-hidden="true"
                     >
-                      <i class="pi pi-code text-body-xs" />
+                      <i class="ai ai-code text-body-xs" />
                     </span>
                     <span class="flex min-w-0 flex-1 flex-col gap-(--spacing-xxs) pt-0.5">
                       <span class="flex min-w-0 items-center gap-(--spacing-xs)">

@@ -248,7 +248,7 @@
           label="Documentation"
           kind="outlined"
           size="medium"
-          icon="pi pi-book"
+          icon="ai ai-book"
           href="/docs"
         />
       </GlobalHeader.End>
@@ -371,7 +371,7 @@
                           <div class="flex items-center gap-(--spacing-sm)">
                             <Tooltip text="Change email">
                               <IconButton
-                                icon="pi pi-chevron-left"
+                                icon="ai ai-chevron-left"
                                 aria-label="Change email"
                                 kind="outlined"
                                 size="small"
@@ -419,7 +419,7 @@
                           <div class="flex items-center gap-(--spacing-sm)">
                             <Tooltip text="Back to sign in">
                               <IconButton
-                                icon="pi pi-chevron-left"
+                                icon="ai ai-chevron-left"
                                 aria-label="Back to sign in"
                                 kind="outlined"
                                 size="small"

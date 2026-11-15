@@ -325,7 +325,7 @@
           label="Redeploy"
           kind="primary"
           size="medium"
-          icon="pi pi-refresh"
+          icon="ai ai-refresh"
           :loading="redeploying"
           @click="redeploy"
         />

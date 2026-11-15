@@ -186,7 +186,7 @@
     <GlobalHeader aria-label="Console">
       <GlobalHeader.Start>
         <IconButton
-          icon="pi pi-chevron-left"
+          icon="ai ai-chevron-left"
           aria-label="Back to console"
           kind="outlined"
           size="small"
@@ -365,7 +365,7 @@
                             label="Owner"
                             severity="primary"
                             size="medium"
-                            icon="pi pi-key"
+                            icon="ai ai-key"
                           />
                           <Tag
                             label="Active"
@@ -420,7 +420,7 @@
                 v-model:open="advancedOpen"
                 title="Advanced"
                 hint="Stored with the organization and used to shape what we recommend inside it."
-                icon="pi pi-cog"
+                icon="ai ai-cog"
                 collapsible
               >
                 <Card :padded="false">

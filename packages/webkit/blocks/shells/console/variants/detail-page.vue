@@ -135,7 +135,7 @@
         {
           id: 'settings',
           label: 'Settings',
-          icon: 'pi pi-cog',
+          icon: 'ai ai-cog',
           kind: 'drill',
           groups: [
             {
@@ -244,7 +244,7 @@
           placement="bottom"
         >
           <IconButton
-            icon="pi pi-plus-circle"
+            icon="ai ai-plus-circle"
             kind="primary"
             size="medium"
             aria-label="Create"
@@ -267,7 +267,7 @@
           label="Create"
           kind="primary"
           size="medium"
-          icon="pi pi-plus-circle"
+          icon="ai ai-plus-circle"
         />
         <ButtonHighlight
           label="Agent"
@@ -303,7 +303,7 @@
         <Command.Item value="action:create">
           <template #prefix>
             <i
-              class="pi pi-plus-circle"
+              class="ai ai-plus-circle"
               aria-hidden="true"
             />
           </template>
@@ -312,7 +312,7 @@
         <Command.Item value="action:theme">
           <template #prefix>
             <i
-              class="pi pi-moon"
+              class="ai ai-moon"
               aria-hidden="true"
             />
           </template>
@@ -335,7 +335,7 @@
         >
           <template #trailing>
             <i
-              class="pi pi-cog"
+              class="ai ai-cog"
               aria-hidden="true"
             />
           </template>
@@ -346,7 +346,7 @@
         >
           <template #trailing>
             <i
-              class="pi pi-key"
+              class="ai ai-key"
               aria-hidden="true"
             />
           </template>
@@ -370,7 +370,7 @@
         >
           <template #trailing>
             <i
-              class="pi pi-book"
+              class="ai ai-book"
               aria-hidden="true"
             />
           </template>
@@ -381,7 +381,7 @@
         >
           <template #trailing>
             <i
-              class="pi pi-sign-out"
+              class="ai ai-sign-out"
               aria-hidden="true"
             />
           </template>
@@ -426,7 +426,7 @@
             >
               <template #prefix>
                 <i
-                  class="pi pi-search"
+                  class="ai ai-search"
                   aria-hidden="true"
                 />
               </template>
@@ -461,7 +461,7 @@
             >
               <span class="flex items-center gap-(--spacing-xs)">
                 <i
-                  class="pi pi-plus-circle"
+                  class="ai ai-plus-circle"
                   aria-hidden="true"
                 />
                 Add Environment
@@ -485,7 +485,7 @@
             label="Deploy"
             kind="outlined"
             size="medium"
-            icon="pi pi-cloud-upload"
+            icon="ai ai-cloud-upload"
           />
         </template>
       </PageTabs>

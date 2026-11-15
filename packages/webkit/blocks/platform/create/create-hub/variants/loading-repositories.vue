@@ -51,11 +51,11 @@
     { name: 'observability-dashboard', age: '6 days ago', icon: 'ai-cor ai-svelte' },
     { name: 'marketing-landing', age: '2 weeks ago', icon: 'ai-cor ai-nuxt' },
     { name: 'internal-admin', age: 'last month', icon: 'ai-cor ai-angular' },
-    { name: 'image-resizer', age: 'last month', icon: 'pi pi-image' },
+    { name: 'image-resizer', age: 'last month', icon: 'ai ai-image' },
     { name: 'status-page', age: '2 months ago', icon: 'ai-cor ai-astro' },
-    { name: 'auth-gateway', age: '2 months ago', icon: 'pi pi-lock' },
+    { name: 'auth-gateway', age: '2 months ago', icon: 'ai ai-lock' },
     { name: 'blog', age: '3 months ago', icon: 'ai-cor ai-nuxt' },
-    { name: 'design-tokens', age: '5 months ago', icon: 'pi pi-palette' }
+    { name: 'design-tokens', age: '5 months ago', icon: 'ai ai-palette' }
   ]
   const REPO_PAGE = 10
   const sections: HubSection[] = [
@@ -139,7 +139,7 @@
           title: 'Static Site',
           description: 'Publish a folder of built files and serve it as-is.',
           vendor: 'Acme',
-          icon: 'pi pi-file',
+          icon: 'ai ai-file',
           markClass: ''
         },
         {
@@ -147,7 +147,7 @@
           title: 'Reverse Proxy',
           description: 'Front an origin you already run and pass its traffic on.',
           vendor: 'Acme',
-          icon: 'pi pi-server',
+          icon: 'ai ai-server',
           markClass: ''
         },
         {
@@ -155,7 +155,7 @@
           title: 'API Service',
           description: 'Run a small HTTP API with routing and JSON responses.',
           vendor: 'Acme',
-          icon: 'pi pi-code',
+          icon: 'ai ai-code',
           markClass: ''
         },
         {
@@ -163,7 +163,7 @@
           title: 'Scheduled Job',
           description: 'Run a task on a schedule, with its runs and logs kept.',
           vendor: 'Acme',
-          icon: 'pi pi-clock',
+          icon: 'ai ai-clock',
           markClass: ''
         },
         {
@@ -171,7 +171,7 @@
           title: 'AI Inference',
           description: 'Serve a model behind an endpoint that streams its answers.',
           vendor: 'Acme',
-          icon: 'pi pi-bolt',
+          icon: 'ai ai-bolt',
           markClass: ''
         },
         {
@@ -179,7 +179,7 @@
           title: 'Image Optimization',
           description: 'Resize and compress images on request, cached after the first.',
           vendor: 'Acme',
-          icon: 'pi pi-image',
+          icon: 'ai ai-image',
           markClass: ''
         },
         {
@@ -187,7 +187,7 @@
           title: 'Storefront',
           description: 'A server-rendered commerce storefront with cart and checkout.',
           vendor: 'Acme',
-          icon: 'pi pi-shopping-cart',
+          icon: 'ai ai-shopping-cart',
           markClass: ''
         },
         {
@@ -195,7 +195,7 @@
           title: 'Multi-tenant App',
           description: 'One codebase that serves each tenant on its own domain.',
           vendor: 'Acme',
-          icon: 'pi pi-users',
+          icon: 'ai ai-users',
           markClass: ''
         },
         {
@@ -203,7 +203,7 @@
           title: 'Auth Gateway',
           description: 'Check a token before a request reaches the service behind it.',
           vendor: 'Acme',
-          icon: 'pi pi-lock',
+          icon: 'ai ai-lock',
           markClass: ''
         },
         {
@@ -211,7 +211,7 @@
           title: 'Database App',
           description: 'A starter wired to a database, with a table and its queries.',
           vendor: 'Acme',
-          icon: 'pi pi-database',
+          icon: 'ai ai-database',
           markClass: ''
         },
         {
@@ -219,7 +219,7 @@
           title: 'Blog',
           description: 'A content site with posts, tags and a feed.',
           vendor: 'Community',
-          icon: 'pi pi-pencil',
+          icon: 'ai ai-pencil',
           markClass: ''
         },
         {
@@ -227,7 +227,7 @@
           title: 'Landing Page',
           description: 'A single page with a hero, features and a sign-up form.',
           vendor: 'Community',
-          icon: 'pi pi-desktop',
+          icon: 'ai ai-desktop',
           markClass: ''
         },
         {
@@ -235,7 +235,7 @@
           title: 'Documentation Site',
           description: 'Searchable docs with versioned sections.',
           vendor: 'Community',
-          icon: 'pi pi-book',
+          icon: 'ai ai-book',
           markClass: ''
         },
         {
@@ -243,7 +243,7 @@
           title: 'Status Page',
           description: 'Publish uptime and incidents for the services you run.',
           vendor: 'Community',
-          icon: 'pi pi-chart-line',
+          icon: 'ai ai-chart-line',
           markClass: ''
         }
       ]
@@ -266,7 +266,7 @@
           title: 'Nitro Starter',
           description: 'Deploy a Nitro server build, the engine behind Nuxt, on its own.',
           vendor: '',
-          icon: 'pi pi-server',
+          icon: 'ai ai-server',
           markClass: ''
         },
         {
@@ -338,7 +338,7 @@
           title: 'Stencil Starter',
           description: 'Build framework-agnostic web components with Stencil.',
           vendor: '',
-          icon: 'pi pi-code',
+          icon: 'ai ai-code',
           markClass: ''
         },
         {
@@ -370,7 +370,7 @@
           title: 'Rust WASM Starter',
           description: 'Compile Rust to WebAssembly and run it.',
           vendor: '',
-          icon: 'pi pi-microchip',
+          icon: 'ai ai-microchip',
           markClass: ''
         },
         {
@@ -378,7 +378,7 @@
           title: 'Emscripten Starter',
           description: 'Bring C or C++, compiled to WebAssembly with Emscripten.',
           vendor: '',
-          icon: 'pi pi-microchip',
+          icon: 'ai ai-microchip',
           markClass: ''
         }
       ]
@@ -494,7 +494,7 @@
     <GlobalHeader aria-label="Console">
       <GlobalHeader.Start>
         <IconButton
-          icon="pi pi-chevron-left"
+          icon="ai ai-chevron-left"
           aria-label="Back to Home"
           kind="outlined"
           size="small"
@@ -678,7 +678,7 @@
                           </Select.Option>
                           <Select.Option
                             value="__add-account__"
-                            icon="pi pi-plus-circle"
+                            icon="ai ai-plus-circle"
                           >
                             Add GitHub account
                           </Select.Option>
@@ -695,7 +695,7 @@
                         class="w-full"
                       >
                         <template #prefix>
-                          <i class="pi pi-search" />
+                          <i class="ai ai-search" />
                         </template>
                       </Input>
                     </div>
@@ -793,7 +793,7 @@
                                       class="flex items-center gap-(--spacing-xxs) text-body-xs"
                                     >
                                       <i
-                                        class="pi pi-history"
+                                        class="ai ai-history"
                                         aria-hidden="true"
                                       />
                                       {{ repo.age }}
@@ -825,7 +825,7 @@
                           <EmptyState
                             v-else
                             size="small"
-                            icon="pi pi-search"
+                            icon="ai ai-search"
                             title="No repositories match"
                             :description="`Nothing in ${scope} is named like “${search}”.`"
                           >
@@ -866,7 +866,7 @@
                       class="w-full"
                     >
                       <template #prefix>
-                        <i class="pi pi-search" />
+                        <i class="ai ai-search" />
                       </template>
                     </Input>
                   </div>
@@ -884,7 +884,7 @@
                       <EmptyState
                         v-if="!filteredSections.length"
                         size="small"
-                        icon="pi pi-search"
+                        icon="ai ai-search"
                         title="No templates match"
                         :description="`Nothing is named like “${templateSearch}”.`"
                       >

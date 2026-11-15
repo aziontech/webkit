@@ -218,7 +218,7 @@
         <template #actions>
           <Button
             label="Documentation"
-            icon="pi pi-book"
+            icon="ai ai-book"
             kind="outlined"
             size="medium"
             href="https://example.com/docs/templates"
@@ -239,7 +239,7 @@
         <EmptyState
           v-if="status === 'no-match'"
           size="medium"
-          icon="pi pi-filter-slash"
+          icon="ai ai-filter-slash"
           title="No matching templates"
           description="No template matches this search. Remove a filter to widen the results."
         >
@@ -369,7 +369,7 @@ npm run dev</code></pre>
           <div class="flex w-full flex-wrap items-center justify-end gap-(--spacing-sm)">
             <Button
               label="View repository"
-              icon="pi pi-external-link"
+              icon="ai ai-external-link"
               icon-position="trailing"
               kind="outlined"
               size="medium"
@@ -378,7 +378,7 @@ npm run dev</code></pre>
             />
             <Button
               label="Deploy"
-              icon="pi pi-cloud-upload"
+              icon="ai ai-cloud-upload"
               kind="primary"
               size="medium"
               :href="`/create/deploy?template=${selected.id}`"

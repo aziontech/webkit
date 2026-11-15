@@ -146,7 +146,7 @@
     <GlobalHeader aria-label="Console">
       <GlobalHeader.Start>
         <IconButton
-          icon="pi pi-chevron-left"
+          icon="ai ai-chevron-left"
           aria-label="Back to Services"
           kind="outlined"
           size="small"

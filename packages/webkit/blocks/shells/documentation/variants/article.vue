@@ -72,12 +72,12 @@
   ]
 
   const metaActions = [
-    { value: 'copy', label: 'Copy as Markdown', icon: 'pi pi-copy' },
-    { value: 'markdown', label: 'View as Markdown', icon: 'pi pi-eye' },
+    { value: 'copy', label: 'Copy as Markdown', icon: 'ai ai-copy' },
+    { value: 'markdown', label: 'View as Markdown', icon: 'ai ai-eye' },
     {
       value: 'agent-setup',
       label: 'Agent setup',
-      icon: 'pi pi-microchip-ai',
+      icon: 'ai ai-microchip-ai',
       href: '/docs/agent-setup'
     }
   ]
@@ -95,18 +95,18 @@
     {
       label: 'GitHub',
       links: [
-        { label: 'Azion Docs', href: 'https://github.com/aziontech', icon: 'pi pi-github' },
+        { label: 'Azion Docs', href: 'https://github.com/aziontech', icon: 'ai ai-github' },
         {
           label: 'Contribute to this page',
           href: 'https://github.com/aziontech/azion',
-          icon: 'pi pi-pencil'
+          icon: 'ai ai-pencil'
         }
       ]
     },
     {
       label: 'Community',
       links: [
-        { label: 'Discord', href: 'https://discord.gg/azion', icon: 'pi pi-discord' },
+        { label: 'Discord', href: 'https://discord.gg/azion', icon: 'ai ai-discord' },
         { label: 'X', href: 'https://x.com/aziontech', icon: 'ai ai-x' }
       ]
     }
@@ -136,19 +136,19 @@
   const related = [
     {
       title: 'Applications',
-      icon: 'pi pi-th-large',
+      icon: 'ai ai-th-large',
       href: '/docs/applications',
       text: 'Route requests, cache responses and run code with rules.'
     },
     {
       title: 'Functions',
-      icon: 'pi pi-code',
+      icon: 'ai ai-code',
       href: '/docs/functions',
       text: 'Serverless code that runs close to your users.'
     },
     {
       title: 'Azion CLI',
-      icon: 'pi pi-desktop',
+      icon: 'ai ai-desktop',
       href: '/docs/azion-cli',
       text: 'Build and deploy from your terminal.'
     }
@@ -189,19 +189,19 @@
         <DocCardGroup :columns="3">
           <DocCard
             title="Deploy a template"
-            icon="pi pi-th-large"
+            icon="ai ai-th-large"
             href="#deploy-a-template"
             >A ready-made project, live in a few clicks.</DocCard
           >
           <DocCard
             title="Import from GitHub"
-            icon="pi pi-github"
+            icon="ai ai-github"
             href="/docs/get-started/import-from-github"
             >Connect a repository; every push deploys.</DocCard
           >
           <DocCard
             title="Deploy with CLI"
-            icon="pi pi-desktop"
+            icon="ai ai-desktop"
             href="#deploy-with-cli"
             >Build and deploy from your terminal.</DocCard
           >
@@ -278,19 +278,19 @@
         <DocCardGroup :columns="3">
           <DocCard
             title="Go live"
-            icon="pi pi-globe"
+            icon="ai ai-globe"
             href="/docs/get-started/go-live"
             >Point your own domain at the workload.</DocCard
           >
           <DocCard
             title="Secure your application"
-            icon="pi pi-shield"
+            icon="ai ai-shield"
             href="/docs/secure"
             >Add a firewall and WAF rules.</DocCard
           >
           <DocCard
             title="Observe your application"
-            icon="pi pi-chart-line"
+            icon="ai ai-chart-line"
             href="/docs/observe"
             >Read metrics and events in real time.</DocCard
           >
@@ -322,7 +322,7 @@
 
     <template #actions>
       <IconButton
-        icon="pi pi-github"
+        icon="ai ai-github"
         kind="outlined"
         size="medium"
         aria-label="Azion on GitHub"

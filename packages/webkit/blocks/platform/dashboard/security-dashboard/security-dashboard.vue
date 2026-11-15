@@ -231,7 +231,7 @@
   const attention: AttentionEntry[] = [
     {
       id: 'log-only',
-      icon: 'pi pi-eye',
+      icon: 'ai ai-eye',
       title: 'A rule set logs requests it does not block',
       description: 'The shop service runs its rule set in log-only mode: 1.2K requests passed.',
       severity: 'warning',
@@ -240,7 +240,7 @@
     },
     {
       id: 'spike',
-      icon: 'pi pi-chart-line',
+      icon: 'ai ai-chart-line',
       title: 'Attack spike on api.example.com',
       description: 'SQL injection against the API rose 64% in the last hour.',
       severity: 'danger',
@@ -249,7 +249,7 @@
     },
     {
       id: 'no-rules',
-      icon: 'pi pi-shield',
+      icon: 'ai ai-shield',
       title: 'Service without a rule set',
       description: 'The docs service has no security rule set attached.',
       severity: 'warning',
@@ -497,12 +497,12 @@
                   label="Sum"
                   severity="neutral"
                   size="small"
-                  icon="pi pi-calculator"
+                  icon="ai ai-calculator"
                 />
                 <Tag
                   label="+19.01%"
                   severity="danger"
-                  icon="pi pi-arrow-up-right"
+                  icon="ai ai-arrow-up-right"
                   size="small"
                 />
                 <ToggleGroup
@@ -514,7 +514,7 @@
               </span>
               <Tooltip text="Expand">
                 <IconButton
-                  icon="pi pi-window-maximize"
+                  icon="ai ai-window-maximize"
                   kind="transparent"
                   size="small"
                   aria-label="Expand Matched requests over time"
@@ -527,7 +527,7 @@
               >
                 <DropdownMenu.Trigger>
                   <IconButton
-                    icon="pi pi-ellipsis-h"
+                    icon="ai ai-ellipsis-h"
                     kind="transparent"
                     size="small"
                     aria-label="More options for Matched requests over time"
@@ -635,18 +635,18 @@
                   label="Sum"
                   severity="neutral"
                   size="small"
-                  icon="pi pi-calculator"
+                  icon="ai ai-calculator"
                 />
                 <Tag
                   label="-0.03%"
                   severity="success"
-                  icon="pi pi-arrow-down-left"
+                  icon="ai ai-arrow-down-left"
                   size="small"
                 />
               </span>
               <Tooltip text="Expand">
                 <IconButton
-                  icon="pi pi-window-maximize"
+                  icon="ai ai-window-maximize"
                   kind="transparent"
                   size="small"
                   aria-label="Expand Blocked requests by attack category"
@@ -659,7 +659,7 @@
               >
                 <DropdownMenu.Trigger>
                   <IconButton
-                    icon="pi pi-ellipsis-h"
+                    icon="ai ai-ellipsis-h"
                     kind="transparent"
                     size="small"
                     aria-label="More options for Blocked requests by attack category"
@@ -701,18 +701,18 @@
                   label="Sum"
                   severity="neutral"
                   size="small"
-                  icon="pi pi-calculator"
+                  icon="ai ai-calculator"
                 />
                 <Tag
                   label="+9.33%"
                   severity="danger"
-                  icon="pi pi-arrow-up-right"
+                  icon="ai ai-arrow-up-right"
                   size="small"
                 />
               </span>
               <Tooltip text="Expand">
                 <IconButton
-                  icon="pi pi-window-maximize"
+                  icon="ai ai-window-maximize"
                   kind="transparent"
                   size="small"
                   aria-label="Expand Blocked requests by country"
@@ -725,7 +725,7 @@
               >
                 <DropdownMenu.Trigger>
                   <IconButton
-                    icon="pi pi-ellipsis-h"
+                    icon="ai ai-ellipsis-h"
                     kind="transparent"
                     size="small"
                     aria-label="More options for Blocked requests by country"
@@ -768,18 +768,18 @@
                   label="Sum"
                   severity="neutral"
                   size="small"
-                  icon="pi pi-calculator"
+                  icon="ai ai-calculator"
                 />
                 <Tag
                   label="-6.79%"
                   severity="success"
-                  icon="pi pi-arrow-down-left"
+                  icon="ai ai-arrow-down-left"
                   size="small"
                 />
               </span>
               <Tooltip text="Expand">
                 <IconButton
-                  icon="pi pi-window-maximize"
+                  icon="ai ai-window-maximize"
                   kind="transparent"
                   size="small"
                   aria-label="Expand Top source IPs by blocked requests"
@@ -792,7 +792,7 @@
               >
                 <DropdownMenu.Trigger>
                   <IconButton
-                    icon="pi pi-ellipsis-h"
+                    icon="ai ai-ellipsis-h"
                     kind="transparent"
                     size="small"
                     aria-label="More options for Top source IPs by blocked requests"
@@ -823,7 +823,7 @@
                   >
                     <template #prefix>
                       <i
-                        class="pi pi-search"
+                        class="ai ai-search"
                         aria-hidden="true"
                       />
                     </template>
@@ -845,7 +845,7 @@
                 <template #empty>
                   <EmptyState
                     size="small"
-                    icon="pi pi-search"
+                    icon="ai ai-search"
                     title="No matching rows"
                     description="Change the search."
                   />
@@ -924,7 +924,7 @@
               <template #empty>
                 <EmptyState
                   size="small"
-                  icon="pi pi-shield"
+                  icon="ai ai-shield"
                   title="No blocked requests in this period"
                   description="Nothing was recorded in this period."
                 />

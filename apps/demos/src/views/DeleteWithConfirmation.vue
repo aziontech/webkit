@@ -92,7 +92,7 @@
           >
             <span class="truncate">{{ name }}</span>
             <i
-              :class="copied ? 'pi pi-check' : 'pi pi-copy'"
+              :class="copied ? 'ai ai-check' : 'ai ai-copy'"
               class="ms-(--spacing-xxs) shrink-0 text-body-xs text-(--text-default)"
               aria-hidden="true"
             />

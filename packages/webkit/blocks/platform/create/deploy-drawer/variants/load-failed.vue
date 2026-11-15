@@ -31,7 +31,7 @@
         label="Deploy"
         kind="outlined"
         size="medium"
-        icon="pi pi-cloud-upload"
+        icon="ai ai-cloud-upload"
       />
     </DrawerTrigger>
 
@@ -101,7 +101,7 @@
                 label="Retry"
                 kind="outlined"
                 size="small"
-                icon="pi pi-refresh"
+                icon="ai ai-refresh"
                 @click="retrying = true"
               />
             </div>

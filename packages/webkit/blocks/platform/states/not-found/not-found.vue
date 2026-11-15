@@ -33,7 +33,7 @@
             <Button
               label="Docs"
               kind="outlined"
-              icon="pi pi-book"
+              icon="ai ai-book"
               size="medium"
               href="https://example.com/docs"
               target="_blank"

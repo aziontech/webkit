@@ -264,12 +264,12 @@
     requests: {
       label: '+10.03%',
       severity: 'success',
-      icon: 'pi pi-arrow-up-right'
+      icon: 'ai ai-arrow-up-right'
     },
     statusCodes: {
       label: '+14.66%',
       severity: 'success',
-      icon: 'pi pi-arrow-up-right'
+      icon: 'ai ai-arrow-up-right'
     }
   }
 
@@ -524,7 +524,7 @@
                   label="Sum"
                   severity="neutral"
                   size="small"
-                  icon="pi pi-calculator"
+                  icon="ai ai-calculator"
                 />
                 <Tag
                   v-if="variations.requests"
@@ -542,7 +542,7 @@
               </span>
               <Tooltip text="Expand">
                 <IconButton
-                  icon="pi pi-window-maximize"
+                  icon="ai ai-window-maximize"
                   kind="transparent"
                   size="small"
                   aria-label="Expand Requests over time"
@@ -556,7 +556,7 @@
               >
                 <DropdownMenu.Trigger>
                   <IconButton
-                    icon="pi pi-ellipsis-h"
+                    icon="ai ai-ellipsis-h"
                     kind="transparent"
                     size="small"
                     aria-label="More options for Requests over time"
@@ -612,7 +612,7 @@
                   label="Sum"
                   severity="neutral"
                   size="small"
-                  icon="pi pi-calculator"
+                  icon="ai ai-calculator"
                 />
                 <Tag
                   v-if="variations.statusCodes"
@@ -630,7 +630,7 @@
               </span>
               <Tooltip text="Expand">
                 <IconButton
-                  icon="pi pi-window-maximize"
+                  icon="ai ai-window-maximize"
                   kind="transparent"
                   size="small"
                   aria-label="Expand Status codes"
@@ -644,7 +644,7 @@
               >
                 <DropdownMenu.Trigger>
                   <IconButton
-                    icon="pi pi-ellipsis-h"
+                    icon="ai ai-ellipsis-h"
                     kind="transparent"
                     size="small"
                     aria-label="More options for Status codes"
@@ -703,12 +703,12 @@
                   label="Sum"
                   severity="neutral"
                   size="small"
-                  icon="pi pi-calculator"
+                  icon="ai ai-calculator"
                 />
               </span>
               <Tooltip text="Expand">
                 <IconButton
-                  icon="pi pi-window-maximize"
+                  icon="ai ai-window-maximize"
                   kind="transparent"
                   size="small"
                   aria-label="Expand Requests by country"
@@ -722,7 +722,7 @@
               >
                 <DropdownMenu.Trigger>
                   <IconButton
-                    icon="pi pi-ellipsis-h"
+                    icon="ai ai-ellipsis-h"
                     kind="transparent"
                     size="small"
                     aria-label="More options for Requests by country"
@@ -777,12 +777,12 @@
                   label="Sum"
                   severity="neutral"
                   size="small"
-                  icon="pi pi-calculator"
+                  icon="ai ai-calculator"
                 />
               </span>
               <Tooltip text="Expand">
                 <IconButton
-                  icon="pi pi-window-maximize"
+                  icon="ai ai-window-maximize"
                   kind="transparent"
                   size="small"
                   aria-label="Expand Top hosts"
@@ -796,7 +796,7 @@
               >
                 <DropdownMenu.Trigger>
                   <IconButton
-                    icon="pi pi-ellipsis-h"
+                    icon="ai ai-ellipsis-h"
                     kind="transparent"
                     size="small"
                     aria-label="More options for Top hosts"
@@ -828,7 +828,7 @@
                   >
                     <template #prefix>
                       <i
-                        class="pi pi-search"
+                        class="ai ai-search"
                         aria-hidden="true"
                       />
                     </template>
@@ -854,7 +854,7 @@
                     key="empty-state-1"
                     v-if="!hosts.length"
                     size="small"
-                    icon="pi pi-chart-line"
+                    icon="ai ai-chart-line"
                     title="No traffic yet"
                     description="Metrics appear here once a service serves requests."
                   />
@@ -862,7 +862,7 @@
                     key="empty-state-2"
                     v-else
                     size="small"
-                    icon="pi pi-search"
+                    icon="ai ai-search"
                     title="No matching rows"
                     description="Change the search."
                   />
@@ -973,7 +973,7 @@
               <template #empty>
                 <EmptyState
                   size="small"
-                  icon="pi pi-chart-line"
+                  icon="ai ai-chart-line"
                   title="No traffic yet"
                   description="Metrics appear here once a service serves requests."
                 />

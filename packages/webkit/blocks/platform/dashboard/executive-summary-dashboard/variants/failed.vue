@@ -201,7 +201,7 @@
             label="Export"
             kind="outlined"
             size="medium"
-            icon="pi pi-download"
+            icon="ai ai-download"
             disabled
           />
         </template>

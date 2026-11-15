@@ -278,7 +278,7 @@
                 placement="top"
               >
                 <IconButton
-                  icon="pi pi-times"
+                  icon="ai ai-times"
                   kind="transparent"
                   size="small"
                   aria-label="Dismiss agent setup"
@@ -313,7 +313,7 @@
               :href="panel.path"
               :label="panel.label"
               size="small"
-              icon="pi pi-chevron-right"
+              icon="ai ai-chevron-right"
             />
             <span v-else>{{ panel.label }}</span>
           </h2>
@@ -343,7 +343,7 @@
                         class="flex shrink-0 items-center justify-center"
                         aria-hidden="true"
                       >
-                        <i class="pi pi-history text-body-xs leading-none text-(--text-muted)" />
+                        <i class="ai ai-history text-body-xs leading-none text-(--text-muted)" />
                       </span>
                       <span class="min-w-(--size-24) shrink-0 text-body-sm text-(--text-muted)"
                         >{{ resource.typeLabel }} /</span
@@ -370,7 +370,7 @@
 
                 <Item.Actions>
                   <i
-                    class="pi pi-chevron-right shrink-0 text-body-xs text-(--text-muted)"
+                    class="ai ai-chevron-right shrink-0 text-body-xs text-(--text-muted)"
                     aria-hidden="true"
                   />
                 </Item.Actions>

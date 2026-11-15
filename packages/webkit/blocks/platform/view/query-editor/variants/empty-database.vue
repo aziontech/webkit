@@ -325,7 +325,7 @@
       id: 'create-table',
       title: 'Create table',
       description: 'Create a basic customers table with auto-increment ID and timestamp',
-      icon: 'pi pi-table',
+      icon: 'ai ai-table',
       sql: `CREATE TABLE IF NOT EXISTS customers (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   name TEXT NOT NULL,
@@ -337,7 +337,7 @@
       id: 'insert-data',
       title: 'Insert data',
       description: 'Insert sample customer records into the customers table',
-      icon: 'pi pi-plus-circle',
+      icon: 'ai ai-plus-circle',
       sql: `INSERT INTO customers (name, email) VALUES
   ('Jane Doe', 'jane.doe@example.com'),
   ('John Smith', 'john.smith@example.com'),
@@ -347,7 +347,7 @@
       id: 'select-all',
       title: 'Select all',
       description: 'Retrieve all records from customers table with limit',
-      icon: 'pi pi-list',
+      icon: 'ai ai-list',
       sql: `SELECT id, name, email, created_at
 FROM customers
 ORDER BY created_at DESC
@@ -357,14 +357,14 @@ LIMIT 100;`
       id: 'count-records',
       title: 'Count records',
       description: 'Count total number of records in customers table',
-      icon: 'pi pi-hashtag',
+      icon: 'ai ai-hashtag',
       sql: 'SELECT COUNT(*) AS total_customers FROM customers;'
     },
     {
       id: 'related-table',
       title: 'Related table',
       description: 'Create an orders table that references the customers table',
-      icon: 'pi pi-box',
+      icon: 'ai ai-box',
       sql: `CREATE TABLE IF NOT EXISTS orders (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   customer_id INTEGER NOT NULL REFERENCES customers (id),
@@ -375,7 +375,7 @@ LIMIT 100;`
       id: 'insert-related',
       title: 'Insert related rows',
       description: 'Insert sample orders for existing customers',
-      icon: 'pi pi-arrow-right-arrow-left',
+      icon: 'ai ai-arrow-right-arrow-left',
       sql: `INSERT INTO orders (customer_id, total) VALUES
   (1, 42.50),
   (3, 18.00);`
@@ -384,7 +384,7 @@ LIMIT 100;`
       id: 'join-tables',
       title: 'Join tables',
       description: 'List every order with the name of the customer who placed it',
-      icon: 'pi pi-search',
+      icon: 'ai ai-search',
       sql: `SELECT orders.id, customers.name, orders.total
 FROM orders
 JOIN customers ON customers.id = orders.customer_id
@@ -394,7 +394,7 @@ ORDER BY orders.id DESC;`
       id: 'create-index',
       title: 'Create index',
       description: 'Create an index to speed up lookups of orders by customer',
-      icon: 'pi pi-sitemap',
+      icon: 'ai ai-sitemap',
       sql: `CREATE INDEX IF NOT EXISTS orders_customer_id_idx
 ON orders (customer_id);`
     },
@@ -402,7 +402,7 @@ ON orders (customer_id);`
       id: 'top-customers',
       title: 'Top customers',
       description: 'Find the 3 customers with the highest order totals',
-      icon: 'pi pi-sort-amount-down',
+      icon: 'ai ai-sort-amount-down',
       sql: `SELECT customers.name, SUM(orders.total) AS total_spent
 FROM customers
 JOIN orders ON orders.customer_id = customers.id
@@ -466,7 +466,7 @@ LIMIT 3;`
                 <div class="flex items-center gap-(--spacing-xxs)">
                   <Tooltip text="Refresh tables">
                     <IconButton
-                      icon="pi pi-refresh"
+                      icon="ai ai-refresh"
                       kind="outlined"
                       size="small"
                       aria-label="Refresh tables"
@@ -474,7 +474,7 @@ LIMIT 3;`
                   </Tooltip>
                   <Tooltip text="Create Table">
                     <IconButton
-                      icon="pi pi-plus"
+                      icon="ai ai-plus"
                       kind="outlined"
                       size="small"
                       aria-label="Create Table"
@@ -491,7 +491,7 @@ LIMIT 3;`
               >
                 <template #prefix>
                   <i
-                    class="pi pi-search"
+                    class="ai ai-search"
                     aria-hidden="true"
                   />
                 </template>
@@ -508,7 +508,7 @@ LIMIT 3;`
             <EmptyState
               v-else-if="!filteredTables.length"
               size="small"
-              icon="pi pi-search"
+              icon="ai ai-search"
               :title="`No tables match “${tableSearch}”`"
             >
               <template #actions>
@@ -538,7 +538,7 @@ LIMIT 3;`
                 >
                   <span class="flex min-w-0 flex-1 items-center gap-(--spacing-xs)">
                     <i
-                      class="pi pi-table shrink-0 text-(--text-muted)"
+                      class="ai ai-table shrink-0 text-(--text-muted)"
                       aria-hidden="true"
                     />
                     <span class="min-w-0 truncate text-label-sm">{{ table.name }}</span>
@@ -548,7 +548,7 @@ LIMIT 3;`
                   <DropdownMenu.Trigger>
                     <Tooltip :text="`Actions for ${table.name}`">
                       <IconButton
-                        icon="pi pi-ellipsis-h"
+                        icon="ai ai-ellipsis-h"
                         kind="transparent"
                         size="small"
                         :aria-label="`Actions for ${table.name}`"
@@ -562,7 +562,7 @@ LIMIT 3;`
                     >
                       <template #leading
                         ><i
-                          class="pi pi-trash"
+                          class="ai ai-trash"
                           aria-hidden="true"
                       /></template>
                     </DropdownMenu.Item>
@@ -582,7 +582,7 @@ LIMIT 3;`
           <EmptyState
             bordered
             size="medium"
-            icon="pi pi-table"
+            icon="ai ai-table"
             title="No tables yet"
             description="Create your first table to store your data."
             class="w-full max-w-(--container-2xl)"
@@ -591,7 +591,7 @@ LIMIT 3;`
               <div class="w-full md:w-fit">
                 <Button
                   label="Create Table"
-                  icon="pi pi-plus"
+                  icon="ai ai-plus"
                   kind="secondary"
                   size="medium"
                   class="w-full"
@@ -610,7 +610,7 @@ LIMIT 3;`
           >
             <div class="flex min-w-0 items-center gap-(--spacing-xs)">
               <i
-                class="pi pi-table shrink-0 text-(--text-muted)"
+                class="ai ai-table shrink-0 text-(--text-muted)"
                 aria-hidden="true"
               />
               <span class="truncate text-heading-xxs text-(--text-default)">{{
@@ -641,7 +641,7 @@ LIMIT 3;`
                 >
                   <template #prefix>
                     <i
-                      class="pi pi-search"
+                      class="ai ai-search"
                       aria-hidden="true"
                     />
                   </template>
@@ -652,11 +652,11 @@ LIMIT 3;`
                   label="Sort"
                   kind="outlined"
                   size="medium"
-                  icon="pi pi-sort-alt"
+                  icon="ai ai-sort-alt"
                 />
                 <Tooltip text="Refresh">
                   <IconButton
-                    icon="pi pi-refresh"
+                    icon="ai ai-refresh"
                     kind="outlined"
                     size="medium"
                     aria-label="Refresh"
@@ -666,7 +666,7 @@ LIMIT 3;`
                   label="Insert"
                   kind="primary"
                   size="medium"
-                  icon="pi pi-plus"
+                  icon="ai ai-plus"
                 />
               </div>
             </div>
@@ -696,7 +696,7 @@ LIMIT 3;`
                     <span class="shrink-0 text-body-xs text-(--text-muted)">{{ column.type }}</span>
                     <i
                       v-if="column.primaryKey"
-                      class="pi pi-key shrink-0 text-(--primary)"
+                      class="ai ai-key shrink-0 text-(--primary)"
                       role="img"
                       aria-label="Primary key"
                     />
@@ -716,7 +716,7 @@ LIMIT 3;`
                 <template #cell-__actions="{ row }">
                   <Tooltip :text="`Delete row ${row['id'] ?? row.__k}`">
                     <IconButton
-                      icon="pi pi-trash"
+                      icon="ai ai-trash"
                       kind="transparent"
                       size="small"
                       :aria-label="`Delete row ${row['id'] ?? row.__k}`"
@@ -729,7 +729,7 @@ LIMIT 3;`
                     key="empty-state-1"
                     v-if="!tableRows.length"
                     size="small"
-                    icon="pi pi-table"
+                    icon="ai ai-table"
                     title="This table is empty"
                     description="Insert a row, import a CSV file or drop one here."
                   >
@@ -739,13 +739,13 @@ LIMIT 3;`
                           label="Insert row"
                           kind="secondary"
                           size="medium"
-                          icon="pi pi-plus"
+                          icon="ai ai-plus"
                         />
                         <Button
                           label="Import data from CSV"
                           kind="outlined"
                           size="medium"
-                          icon="pi pi-upload"
+                          icon="ai ai-upload"
                         />
                       </div>
                     </template>
@@ -754,7 +754,7 @@ LIMIT 3;`
                     key="empty-state-2"
                     v-else
                     size="small"
-                    icon="pi pi-search"
+                    icon="ai ai-search"
                     :title="`No rows match “${rowFilter}”`"
                     description="Change the filter to see the rows."
                   >
@@ -782,7 +782,7 @@ LIMIT 3;`
                 label="Add column"
                 kind="outlined"
                 size="medium"
-                icon="pi pi-plus"
+                icon="ai ai-plus"
               />
             </div>
             <Card :padded="false">
@@ -841,7 +841,7 @@ LIMIT 3;`
               >
                 <template #prefix>
                   <i
-                    class="pi pi-search"
+                    class="ai ai-search"
                     aria-hidden="true"
                   />
                 </template>
@@ -889,7 +889,7 @@ LIMIT 3;`
                   <DropdownMenu.Trigger>
                     <Tooltip :text="`Actions for ${oneLine(item.sql)}`">
                       <IconButton
-                        icon="pi pi-ellipsis-h"
+                        icon="ai ai-ellipsis-h"
                         kind="transparent"
                         size="small"
                         :aria-label="`Actions for ${oneLine(item.sql)}`"
@@ -903,7 +903,7 @@ LIMIT 3;`
                     >
                       <template #leading
                         ><i
-                          class="pi pi-play"
+                          class="ai ai-play"
                           aria-hidden="true"
                       /></template>
                     </DropdownMenu.Item>
@@ -913,7 +913,7 @@ LIMIT 3;`
                     >
                       <template #leading
                         ><i
-                          class="pi pi-trash"
+                          class="ai ai-trash"
                           aria-hidden="true"
                       /></template>
                     </DropdownMenu.Item>
@@ -933,7 +933,7 @@ LIMIT 3;`
             label="Run query"
             kind="primary"
             size="medium"
-            icon="pi pi-play"
+            icon="ai ai-play"
             :loading="running"
             @click="runQuery"
           />
@@ -942,14 +942,14 @@ LIMIT 3;`
               label="Prettify"
               kind="outlined"
               size="medium"
-              icon="pi pi-align-left"
+              icon="ai ai-align-left"
               :disabled="running"
             />
             <Button
               label="Templates"
               kind="outlined"
               size="medium"
-              icon="pi pi-bolt"
+              icon="ai ai-bolt"
               :disabled="running"
               @click="templatesOpen = true"
             />
@@ -984,7 +984,7 @@ LIMIT 3;`
               >
                 <template #prefix>
                   <i
-                    class="pi pi-search"
+                    class="ai ai-search"
                     aria-hidden="true"
                   />
                 </template>
@@ -998,7 +998,7 @@ LIMIT 3;`
               />
               <Tooltip text="Refresh results">
                 <IconButton
-                  icon="pi pi-refresh"
+                  icon="ai ai-refresh"
                   kind="outlined"
                   size="medium"
                   aria-label="Refresh results"
@@ -1008,7 +1008,7 @@ LIMIT 3;`
               </Tooltip>
               <Tooltip text="Download results">
                 <IconButton
-                  icon="pi pi-download"
+                  icon="ai ai-download"
                   kind="outlined"
                   size="medium"
                   aria-label="Download results"
@@ -1017,7 +1017,7 @@ LIMIT 3;`
               </Tooltip>
               <Tooltip text="Toggle columns">
                 <IconButton
-                  icon="pi pi-table"
+                  icon="ai ai-table"
                   kind="outlined"
                   size="medium"
                   aria-label="Toggle columns"
@@ -1111,7 +1111,7 @@ LIMIT 3;`
             >
               <template #prefix>
                 <i
-                  class="pi pi-search"
+                  class="ai ai-search"
                   aria-hidden="true"
                 />
               </template>
@@ -1145,7 +1145,7 @@ LIMIT 3;`
             <EmptyState
               v-else
               size="small"
-              icon="pi pi-search"
+              icon="ai ai-search"
               :title="`No templates match “${templateQuery}”`"
               description="Try another name or statement."
             >

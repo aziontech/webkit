@@ -269,7 +269,7 @@
           label="Documentation"
           kind="outlined"
           size="medium"
-          icon="pi pi-book"
+          icon="ai ai-book"
           href="https://example.com/docs"
         />
       </GlobalHeader.End>
@@ -405,7 +405,7 @@
                                           class="flex items-start gap-(--spacing-xs) rounded-(--shape-elements) px-(--spacing-xs) py-(--spacing-xs) odd:bg-(--bg-mask)"
                                         >
                                           <i
-                                            class="pi pi-check mt-0.5 shrink-0 text-body-xs leading-none text-(--success-contrast)"
+                                            class="ai ai-check mt-0.5 shrink-0 text-body-xs leading-none text-(--success-contrast)"
                                             aria-hidden="true"
                                           />
                                           <span class="flex min-w-0 flex-col gap-(--spacing-xxs)">

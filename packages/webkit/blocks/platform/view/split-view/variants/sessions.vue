@@ -1151,7 +1151,7 @@
         </div>
         <Tooltip text="New investigation">
           <IconButton
-            icon="pi pi-plus"
+            icon="ai ai-plus"
             kind="transparent"
             size="small"
             aria-label="New investigation"
@@ -1166,7 +1166,7 @@
           <DropdownMenu.Trigger>
             <Tooltip text="Investigation actions">
               <IconButton
-                icon="pi pi-ellipsis-h"
+                icon="ai ai-ellipsis-h"
                 kind="transparent"
                 size="small"
                 :aria-label="`Actions for ${currentSession.name}`"
@@ -1238,7 +1238,7 @@
             >
               <template #prefix>
                 <i
-                  class="pi pi-search"
+                  class="ai ai-search"
                   aria-hidden="true"
                 />
               </template>
@@ -1251,7 +1251,7 @@
             class="shrink-0"
           >
             <IconButton
-              icon="pi pi-refresh"
+              icon="ai ai-refresh"
               kind="outlined"
               size="medium"
               :loading="loading"
@@ -1265,7 +1265,7 @@
             class="shrink-0"
           >
             <IconButton
-              icon="pi pi-download"
+              icon="ai ai-download"
               kind="outlined"
               size="medium"
               :disabled="!tableRef"
@@ -1321,7 +1321,7 @@
                     >
                       <template #prefix>
                         <i
-                          class="pi pi-search"
+                          class="ai ai-search"
                           aria-hidden="true"
                         />
                       </template>
@@ -1403,7 +1403,7 @@
                               </span>
                               <i
                                 v-if="isValueApplied(field.id, entry.value)"
-                                class="pi pi-check shrink-0 text-(--primary)"
+                                class="ai ai-check shrink-0 text-(--primary)"
                                 aria-hidden="true"
                               />
                             </span>
@@ -1524,7 +1524,7 @@
                                       </span>
                                       <i
                                         v-if="isValueApplied(field.id, entry.value)"
-                                        class="pi pi-check shrink-0 text-(--primary)"
+                                        class="ai ai-check shrink-0 text-(--primary)"
                                         aria-hidden="true"
                                       />
                                     </span>
@@ -1648,7 +1648,7 @@
 
                     <template #cell-detail="{ row }">
                       <IconButton
-                        :icon="row.id === selectedId ? 'pi pi-angle-down' : 'pi pi-angle-right'"
+                        :icon="row.id === selectedId ? 'ai ai-angle-down' : 'ai ai-angle-right'"
                         kind="transparent"
                         size="small"
                         :aria-label="`Open event ${row.id}`"
@@ -1705,7 +1705,7 @@
                         v-if="!events.length"
                         key="no-traffic"
                         size="small"
-                        icon="pi pi-inbox"
+                        icon="ai ai-inbox"
                         title="No events yet"
                         description="Events appear here as soon as traffic reaches this workspace's resources."
                       />
@@ -1713,7 +1713,7 @@
                         v-else-if="search.trim()"
                         key="no-match"
                         size="small"
-                        icon="pi pi-search"
+                        icon="ai ai-search"
                         title="No events match this search"
                         description="Clear the search, or widen the period to cover more of the log."
                       />
@@ -1721,7 +1721,7 @@
                         v-else
                         key="no-events"
                         size="small"
-                        icon="pi pi-filter-slash"
+                        icon="ai ai-filter-slash"
                         title="No events in this window"
                         description="Widen the period or clear a filter to see more of the log."
                       />
@@ -1760,7 +1760,7 @@
               </h2>
               <Tooltip text="Close">
                 <IconButton
-                  icon="pi pi-times"
+                  icon="ai ai-times"
                   kind="transparent"
                   size="small"
                   aria-label="Close the event document"

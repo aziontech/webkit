@@ -231,7 +231,7 @@
         label="Show artifact"
         kind="transparent"
         size="small"
-        icon="pi pi-window-maximize"
+        icon="ai ai-window-maximize"
         @click="openCanvas"
       />
     </header>
@@ -267,7 +267,7 @@
                       :title="ARTIFACT"
                       :description="`Version ${turn.version + 1}`"
                       meta="SQL"
-                      icon="pi pi-code"
+                      icon="ai ai-code"
                       openable
                       @open="((version = turn.version), openCanvas($event))"
                     />

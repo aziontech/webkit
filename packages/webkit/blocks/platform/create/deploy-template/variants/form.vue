@@ -132,7 +132,7 @@
     <GlobalHeader aria-label="Console">
       <GlobalHeader.Start>
         <IconButton
-          icon="pi pi-chevron-left"
+          icon="ai ai-chevron-left"
           aria-label="Back to Creation Center"
           kind="outlined"
           size="small"
@@ -215,7 +215,7 @@
                       class="flex h-5 items-center gap-(--spacing-xxs) text-label-sm text-(--text-muted)"
                     >
                       <i
-                        class="pi pi-folder text-[length:inherit] leading-none"
+                        class="ai ai-folder text-[length:inherit] leading-none"
                         aria-hidden="true"
                       />
                       templates/nuxt-ecommerce
@@ -425,7 +425,7 @@
                                     >
                                       <IconButton
                                         :icon="
-                                          revealed[field.name] ? 'pi pi-eye-slash' : 'pi pi-eye'
+                                          revealed[field.name] ? 'ai ai-eye-slash' : 'ai ai-eye'
                                         "
                                         kind="outlined"
                                         size="large"
@@ -452,7 +452,7 @@
                                             :id="`${field.name}-secret`"
                                           />
                                           <i
-                                            class="pi pi-lock text-body-xs"
+                                            class="ai ai-lock text-body-xs"
                                             aria-hidden="true"
                                           />
                                         </span>

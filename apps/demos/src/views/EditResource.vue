@@ -267,7 +267,7 @@
                             >
                               Contact sales
                               <i
-                                class="pi pi-external-link shrink-0 text-body-sm leading-none"
+                                class="ai ai-external-link shrink-0 text-body-sm leading-none"
                                 aria-hidden="true"
                               />
                             </a>

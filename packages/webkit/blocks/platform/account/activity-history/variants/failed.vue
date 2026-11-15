@@ -247,7 +247,7 @@
         <template #actions>
           <Button
             label="Documentation"
-            icon="pi pi-book"
+            icon="ai ai-book"
             kind="outlined"
             size="medium"
             href="https://example.com/docs/activity-history"
@@ -277,7 +277,7 @@
               class="shrink-0"
             >
               <IconButton
-                icon="pi pi-refresh"
+                icon="ai ai-refresh"
                 kind="outlined"
                 size="medium"
                 :loading="loading"
@@ -290,7 +290,7 @@
               class="shrink-0"
             >
               <IconButton
-                icon="pi pi-download"
+                icon="ai ai-download"
                 kind="outlined"
                 size="medium"
                 :disabled="!matchingItems.length"
@@ -328,7 +328,7 @@
           <template #content>
             <EmptyState
               size="medium"
-              icon="pi pi-history"
+              icon="ai ai-history"
               title="No activity in this period"
               :description="
                 widerRange
@@ -400,7 +400,7 @@
               <template #empty>
                 <EmptyState
                   size="small"
-                  icon="pi pi-search"
+                  icon="ai ai-search"
                   title="No matching events"
                   description="No event in this period matches these filters."
                 >

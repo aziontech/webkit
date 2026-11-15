@@ -255,7 +255,7 @@
     <GlobalHeader aria-label="Console">
       <GlobalHeader.Start>
         <IconButton
-          icon="pi pi-chevron-left"
+          icon="ai ai-chevron-left"
           aria-label="Back to Teams and permissions"
           kind="outlined"
           size="small"
@@ -366,7 +366,7 @@
                             label="Add"
                             kind="outlined"
                             size="medium"
-                            icon="pi pi-plus"
+                            icon="ai ai-plus"
                             @click="addMember"
                           />
                         </div>
@@ -404,7 +404,7 @@
                           </span>
                           <IconButton
                             :id="`team-member-remove-${email}`"
-                            icon="pi pi-times"
+                            icon="ai ai-times"
                             kind="transparent"
                             size="small"
                             :aria-label="`Remove ${userByEmail(email)?.name ?? email}`"
@@ -441,7 +441,7 @@
                           >
                             <template #prefix>
                               <i
-                                class="pi pi-search"
+                                class="ai ai-search"
                                 aria-hidden="true"
                               />
                             </template>
@@ -473,7 +473,7 @@
                       <EmptyState
                         v-if="!visibleGroups.length"
                         size="small"
-                        icon="pi pi-search"
+                        icon="ai ai-search"
                         title="No matching permissions"
                         :description="`No permission matches “${query}”.`"
                       >
@@ -590,7 +590,7 @@
                         label="Delete team"
                         kind="danger"
                         size="medium"
-                        icon="pi pi-trash"
+                        icon="ai ai-trash"
                         @click="deleteOpen = true"
                       />
                     </div>

@@ -321,7 +321,7 @@
     <GlobalHeader aria-label="Console">
       <GlobalHeader.Start>
         <IconButton
-          icon="pi pi-chevron-left"
+          icon="ai ai-chevron-left"
           aria-label="Back to Access Lists"
           kind="outlined"
           size="small"
@@ -401,7 +401,7 @@
                   >
                     <Item.Media>
                       <i
-                        class="pi pi-shield text-body-md leading-none text-(--text-muted)"
+                        class="ai ai-shield text-body-md leading-none text-(--text-muted)"
                         aria-hidden="true"
                       />
                     </Item.Media>
@@ -417,7 +417,7 @@
                       />
                       <i
                         v-if="choice === option.value"
-                        class="pi pi-check text-body-sm leading-none text-(--text-default)"
+                        class="ai ai-check text-body-sm leading-none text-(--text-default)"
                         aria-hidden="true"
                       />
                     </Item.Actions>

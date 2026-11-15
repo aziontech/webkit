@@ -95,7 +95,7 @@
       <template #actions>
         <Button
           label="Add Origin"
-          icon="pi pi-plus"
+          icon="ai ai-plus"
           kind="outlined"
           size="medium"
           @click="openCreate"

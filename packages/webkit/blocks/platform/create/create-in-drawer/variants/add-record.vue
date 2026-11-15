@@ -122,7 +122,7 @@
       <div class="w-full md:w-fit">
         <Button
           label="Add Record"
-          icon="pi pi-plus"
+          icon="ai ai-plus"
           kind="outlined"
           size="medium"
           class="w-full"

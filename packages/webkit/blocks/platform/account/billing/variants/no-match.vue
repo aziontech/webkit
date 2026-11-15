@@ -156,10 +156,10 @@
   const methodLabel = (method: PaymentMethod): string => `${method.brand} •••• ${method.last4}`
 
   const enterprisePerks = [
-    { icon: 'pi pi-chart-line', label: 'On-demand pricing' },
-    { icon: 'pi pi-arrow-down', label: 'Cut costs with commitments' },
-    { icon: 'pi pi-calendar', label: 'Savings Plan available' },
-    { icon: 'pi pi-headphones', label: 'Advanced support available' }
+    { icon: 'ai ai-chart-line', label: 'On-demand pricing' },
+    { icon: 'ai ai-arrow-down', label: 'Cut costs with commitments' },
+    { icon: 'ai ai-calendar', label: 'Savings Plan available' },
+    { icon: 'ai ai-headphones', label: 'Advanced support available' }
   ]
 
   const statusSeverity = (status: InvoiceStatus): TagSeverity =>
@@ -269,7 +269,7 @@
             class="shrink-0"
           >
             <IconButton
-              icon="pi pi-refresh"
+              icon="ai ai-refresh"
               kind="outlined"
               size="medium"
               :loading="loading"
@@ -279,7 +279,7 @@
           </Tooltip>
           <Button
             label="Documentation"
-            icon="pi pi-book"
+            icon="ai ai-book"
             kind="outlined"
             size="medium"
             href="https://example.com/docs/billing"
@@ -458,7 +458,7 @@
                   class="shrink-0"
                 >
                   <IconButton
-                    icon="pi pi-refresh"
+                    icon="ai ai-refresh"
                     kind="outlined"
                     size="medium"
                     :loading="loading"
@@ -471,7 +471,7 @@
                   class="shrink-0"
                 >
                   <IconButton
-                    icon="pi pi-download"
+                    icon="ai ai-download"
                     kind="outlined"
                     size="medium"
                     :disabled="!matchingItems.length"
@@ -494,7 +494,7 @@
               <template #content>
                 <EmptyState
                   size="medium"
-                  icon="pi pi-file"
+                  icon="ai ai-file"
                   title="No invoices yet"
                   description="Your first invoice appears here when the first billing cycle closes."
                 >
@@ -503,7 +503,7 @@
                       label="How billing works"
                       kind="outlined"
                       size="small"
-                      icon="pi pi-external-link"
+                      icon="ai ai-external-link"
                       href="https://example.com/docs/billing"
                       target="_blank"
                     />
@@ -570,7 +570,7 @@
                   <template #cell-actions="{ row }">
                     <Tooltip text="Download invoice">
                       <IconButton
-                        icon="pi pi-file-pdf"
+                        icon="ai ai-file-pdf"
                         kind="outlined"
                         size="small"
                         :href="`https://example.com/invoices/${row.id}.pdf`"
@@ -582,7 +582,7 @@
                   <template #empty>
                     <EmptyState
                       size="small"
-                      icon="pi pi-search"
+                      icon="ai ai-search"
                       title="No matching invoices"
                       description="No invoice matches these filters."
                     >
@@ -653,7 +653,7 @@
               <template #actions>
                 <Button
                   label="Add payment method"
-                  icon="pi pi-plus"
+                  icon="ai ai-plus"
                   kind="outlined"
                   size="medium"
                   href="/account/billing/payment-methods/new"

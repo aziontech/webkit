@@ -114,7 +114,7 @@
       slug: 'codex',
       name: 'Codex',
       vendor: 'OpenAI',
-      icon: 'pi pi-code',
+      icon: 'ai ai-code',
       logo: codexMark,
       mono: true,
       workflows: ['Terminal'],
@@ -144,7 +144,7 @@
       slug: 'opencode',
       name: 'OpenCode',
       vendor: 'SST',
-      icon: 'pi pi-desktop',
+      icon: 'ai ai-desktop',
       logo: opencodeMark,
       mono: true,
       workflows: ['Terminal'],
@@ -189,8 +189,8 @@
   const crumbs = [{ label: 'Dev tools', href: '/docs/dev-tools' }, { label: 'Agent setup' }]
 
   const metaActions = [
-    { value: 'copy', label: 'Copy as Markdown', icon: 'pi pi-copy' },
-    { value: 'markdown', label: 'View as Markdown', icon: 'pi pi-eye' }
+    { value: 'copy', label: 'Copy as Markdown', icon: 'ai ai-copy' },
+    { value: 'markdown', label: 'View as Markdown', icon: 'ai ai-eye' }
   ]
 
   const outline = [
@@ -206,11 +206,11 @@
     {
       label: 'GitHub',
       links: [
-        { label: 'Azion Docs', href: 'https://github.com/aziontech', icon: 'pi pi-github' },
+        { label: 'Azion Docs', href: 'https://github.com/aziontech', icon: 'ai ai-github' },
         {
           label: 'Contribute to this page',
           href: 'https://github.com/aziontech/azion',
-          icon: 'pi pi-pencil'
+          icon: 'ai ai-pencil'
         }
       ]
     }
@@ -275,22 +275,22 @@
   const workflowTypes = [
     {
       title: 'Terminal',
-      icon: 'pi pi-desktop',
+      icon: 'ai ai-desktop',
       description: 'Runs in a shell. Best for automation, scripting and CI pipelines.'
     },
     {
       title: 'IDE',
-      icon: 'pi pi-code',
+      icon: 'ai ai-code',
       description: 'A full editor with the agent first-class: visual diffs and multi-file edits.'
     },
     {
       title: 'Extension',
-      icon: 'pi pi-th-large',
+      icon: 'ai ai-th-large',
       description: 'Plugs into the editor you already use. Lightest install, keeps your setup.'
     },
     {
       title: 'Cloud',
-      icon: 'pi pi-cloud',
+      icon: 'ai ai-cloud',
       description: 'Hosted, with no local install. Suited to asynchronous, long-running work.'
     }
   ]
@@ -298,25 +298,25 @@
   const keyConcepts = [
     {
       title: 'MCP',
-      icon: 'pi pi-server',
+      icon: 'ai ai-server',
       description:
         'The Model Context Protocol, the standard that lets an agent call external tools. Azion ships one MCP server, and every agent on this page speaks it.'
     },
     {
       title: 'Agent context',
-      icon: 'pi pi-file',
+      icon: 'ai ai-file',
       description:
         'The files an agent reads before it answers: llms.txt for the documentation index, AGENTS.md for your project conventions.'
     },
     {
       title: 'Model flexibility',
-      icon: 'pi pi-sliders-h',
+      icon: 'ai ai-sliders-h',
       description:
         'Locked ties you to the maker’s own models. BYOK takes your provider key. Multi-provider switches between several.'
     },
     {
       title: 'Context',
-      icon: 'pi pi-database',
+      icon: 'ai ai-database',
       description:
         'Session forgets at the end of a conversation. Project memory persists in a file you commit. Indexed codebase keeps a searchable index of the repository.'
     }
@@ -325,25 +325,25 @@
   const tradeoffs = [
     {
       title: 'Cloud vs. local',
-      icon: 'pi pi-cloud-upload',
+      icon: 'ai ai-cloud-upload',
       description:
         'Cloud runs long tasks without holding your machine, and sends your code somewhere. Local keeps everything on disk, and stops when your laptop does.'
     },
     {
       title: 'Proprietary vs. open source',
-      icon: 'pi pi-github',
+      icon: 'ai ai-github',
       description:
         'Open source can be audited, forked and self-hosted. Proprietary tends to ship the newest capability first.'
     },
     {
       title: 'Locked model vs. BYOK',
-      icon: 'pi pi-key',
+      icon: 'ai ai-key',
       description:
         'A locked model is tuned for its own agent and priced as one subscription. BYOK lets you choose the model per task and pay per token.'
     },
     {
       title: 'Session vs. indexed codebase',
-      icon: 'pi pi-search',
+      icon: 'ai ai-search',
       description:
         'An index answers questions about code nobody opened, at the cost of a copy of the repository. A session only knows what it was shown.'
     }
@@ -464,8 +464,8 @@
               #[`cell-${column}`]="{ value }"
             >
               <i
-                :class="value ? 'pi-check text-(--primary)' : 'pi-minus text-(--text-muted)'"
-                class="pi text-label-md"
+                :class="value ? 'ai-check text-(--primary)' : 'ai-minus text-(--text-muted)'"
+                class="ai text-label-md"
                 aria-hidden="true"
               />
               <span class="sr-only">{{ value ? 'Yes' : 'No' }}</span>
@@ -545,7 +545,7 @@
 
     <template #actions>
       <IconButton
-        icon="pi pi-github"
+        icon="ai ai-github"
         kind="outlined"
         size="medium"
         aria-label="Azion on GitHub"

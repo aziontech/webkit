@@ -125,7 +125,7 @@
               <template #actions>
                 <Button
                   label="Documentation"
-                  icon="pi pi-book"
+                  icon="ai ai-book"
                   kind="outlined"
                   href="https://example.com/docs/security-policies"
                   target="_blank"

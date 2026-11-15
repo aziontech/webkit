@@ -144,7 +144,7 @@
       id: 'web-app',
       rank: 1,
       name: 'web-app',
-      icon: 'pi pi-server',
+      icon: 'ai ai-server',
       category: 'Compute',
       amount: 6200,
       share: 16.1,
@@ -154,7 +154,7 @@
       id: 'worker-pool',
       rank: 2,
       name: 'worker-pool',
-      icon: 'pi pi-server',
+      icon: 'ai ai-server',
       category: 'Compute',
       amount: 5900,
       share: 15.3,
@@ -164,7 +164,7 @@
       id: 'orders-db',
       rank: 3,
       name: 'orders-db',
-      icon: 'pi pi-database',
+      icon: 'ai ai-database',
       category: 'Database',
       amount: 5400,
       share: 14,
@@ -174,7 +174,7 @@
       id: 'api-service',
       rank: 4,
       name: 'api-service',
-      icon: 'pi pi-server',
+      icon: 'ai ai-server',
       category: 'Compute',
       amount: 4800,
       share: 12.5,
@@ -184,7 +184,7 @@
       id: 'analytics-warehouse',
       rank: 5,
       name: 'analytics-warehouse',
-      icon: 'pi pi-database',
+      icon: 'ai ai-database',
       category: 'Database',
       amount: 4000,
       share: 10.4,
@@ -194,7 +194,7 @@
       id: 'media-files',
       rank: 6,
       name: 'media-files',
-      icon: 'pi pi-folder',
+      icon: 'ai ai-folder',
       category: 'Storage',
       amount: 3700,
       share: 9.6,
@@ -204,7 +204,7 @@
       id: 'public-egress',
       rank: 7,
       name: 'public-egress',
-      icon: 'pi pi-globe',
+      icon: 'ai ai-globe',
       category: 'Networking',
       amount: 2600,
       share: 6.8,
@@ -214,7 +214,7 @@
       id: 'backups',
       rank: 8,
       name: 'backups',
-      icon: 'pi pi-folder',
+      icon: 'ai ai-folder',
       category: 'Storage',
       amount: 2300,
       share: 6,
@@ -224,7 +224,7 @@
       id: 'logs-pipeline',
       rank: 9,
       name: 'logs-pipeline',
-      icon: 'pi pi-chart-line',
+      icon: 'ai ai-chart-line',
       category: 'Monitoring',
       amount: 2100,
       share: 5.5,
@@ -234,7 +234,7 @@
       id: 'load-balancer',
       rank: 10,
       name: 'load-balancer',
-      icon: 'pi pi-globe',
+      icon: 'ai ai-globe',
       category: 'Networking',
       amount: 1500,
       share: 3.9,
@@ -438,7 +438,7 @@
           </div>
           <Button
             label="Export CSV"
-            icon="pi pi-download"
+            icon="ai ai-download"
             kind="outlined"
             size="medium"
             :disabled="loading"
@@ -494,7 +494,7 @@
               >
                 <DropdownMenu.Trigger>
                   <IconButton
-                    icon="pi pi-ellipsis-h"
+                    icon="ai ai-ellipsis-h"
                     kind="transparent"
                     size="small"
                     aria-label="More options for Spend by category"
@@ -550,7 +550,7 @@
               >
                 <DropdownMenu.Trigger>
                   <IconButton
-                    icon="pi pi-ellipsis-h"
+                    icon="ai ai-ellipsis-h"
                     kind="transparent"
                     size="small"
                     aria-label="More options for Current split"
@@ -594,7 +594,7 @@
               >
                 <DropdownMenu.Trigger>
                   <IconButton
-                    icon="pi pi-ellipsis-h"
+                    icon="ai ai-ellipsis-h"
                     kind="transparent"
                     size="small"
                     aria-label="More options for Top contributors"
@@ -623,7 +623,7 @@
               <template #empty>
                 <EmptyState
                   size="small"
-                  icon="pi pi-chart-bar"
+                  icon="ai ai-chart-bar"
                   title="No spend in this range"
                   description="Nothing was billed to the organization in the selected period."
                 />
@@ -675,10 +675,10 @@
                   :severity="row.change > 0 ? 'danger' : row.change < 0 ? 'success' : 'neutral'"
                   :icon="
                     row.change > 0
-                      ? 'pi pi-arrow-up-right'
+                      ? 'ai ai-arrow-up-right'
                       : row.change < 0
-                        ? 'pi pi-arrow-down-right'
-                        : 'pi pi-minus'
+                        ? 'ai ai-arrow-down-right'
+                        : 'ai ai-minus'
                   "
                   size="small"
                 />

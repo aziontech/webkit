@@ -18,7 +18,7 @@
   const steps = [
     {
       id: 'domain',
-      icon: 'pi pi-globe',
+      icon: 'ai ai-globe',
       title: 'Add a custom domain',
       description:
         'Serve this service on a domain of your own, with a free HTTPS certificate, instead of the generated hostname.',
@@ -28,7 +28,7 @@
     },
     {
       id: 'policy',
-      icon: 'pi pi-shield',
+      icon: 'ai ai-shield',
       title: 'Enable a security policy',
       description:
         'Attach a policy so requests are inspected before they reach the service. Rate limiting, access rules, and IP allowlists.',
@@ -38,7 +38,7 @@
     },
     {
       id: 'customPage',
-      icon: 'pi pi-file',
+      icon: 'ai ai-file',
       title: 'Set custom error pages',
       description: 'Answer 4xx and 5xx with your own page instead of the default response.',
       actionLabel: 'Add Error Page',
@@ -73,7 +73,7 @@
         class="shrink-0"
       >
         <IconButton
-          icon="pi pi-window-maximize"
+          icon="ai ai-window-maximize"
           aria-label="Expand the production checklist"
           kind="outlined"
           size="small"
@@ -115,7 +115,7 @@
             <Item.Actions>
               <i
                 v-if="step.done"
-                class="pi pi-check text-body-sm leading-none text-(--primary)"
+                class="ai ai-check text-body-sm leading-none text-(--primary)"
                 aria-hidden="true"
               />
               <span class="sr-only">{{ step.done ? 'Done' : 'Not started' }}</span>
@@ -163,7 +163,7 @@
                 aria-hidden="true"
               >
                 <i
-                  :class="step.done ? 'pi pi-check' : step.icon"
+                  :class="step.done ? 'ai ai-check' : step.icon"
                   class="text-body-sm leading-none"
                 />
               </span>
@@ -184,7 +184,7 @@
                 class="flex min-w-0 flex-wrap items-center gap-(--spacing-xs)"
               >
                 <Tag
-                  icon="pi pi-check"
+                  icon="ai ai-check"
                   label="Done"
                   severity="neutral"
                   size="medium"

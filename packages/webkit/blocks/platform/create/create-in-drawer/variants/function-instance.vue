@@ -276,7 +276,7 @@
         label="Add Function Instance"
         kind="outlined"
         size="medium"
-        icon="pi pi-plus"
+        icon="ai ai-plus"
         @click="openFor()"
       />
     </div>
@@ -294,7 +294,7 @@
             </Item.Content>
             <Item.Actions>
               <IconButton
-                icon="pi pi-pencil"
+                icon="ai ai-pencil"
                 kind="transparent"
                 size="medium"
                 :aria-label="`Edit ${instance.name}`"

@@ -154,7 +154,7 @@
           placement="bottom"
         >
           <IconButton
-            icon="pi pi-chevron-left"
+            icon="ai ai-chevron-left"
             aria-label="Back to Services"
             kind="outlined"
             size="small"
@@ -204,7 +204,7 @@
             >
               <template #trailing>
                 <i
-                  class="pi pi-cog"
+                  class="ai ai-cog"
                   aria-hidden="true"
                 />
               </template>
@@ -217,7 +217,7 @@
             >
               <template #trailing>
                 <i
-                  class="pi pi-book"
+                  class="ai ai-book"
                   aria-hidden="true"
                 />
               </template>
@@ -228,7 +228,7 @@
             >
               <template #trailing>
                 <i
-                  class="pi pi-sign-out"
+                  class="ai ai-sign-out"
                   aria-hidden="true"
                 />
               </template>

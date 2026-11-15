@@ -964,7 +964,7 @@
       id: 'incident-03',
       name: 'Video calls',
       scope: 'Application',
-      icon: 'pi pi-th-large',
+      icon: 'ai ai-th-large',
       devices: 34,
       share: 12,
       cause: 'Packet loss',
@@ -979,7 +979,7 @@
       id: 'incident-02',
       name: 'Travel',
       scope: 'Location',
-      icon: 'pi pi-map-marker',
+      icon: 'ai ai-map-marker',
       devices: 9,
       share: 31,
       cause: 'High latency',
@@ -994,7 +994,7 @@
       id: 'incident-01',
       name: 'File storage',
       scope: 'Application',
-      icon: 'pi pi-th-large',
+      icon: 'ai ai-th-large',
       devices: 18,
       share: 7,
       cause: 'Slow server response',
@@ -1203,7 +1203,7 @@
             <EmptyState
               v-else
               size="small"
-              icon="pi pi-chart-bar"
+              icon="ai ai-chart-bar"
               :title="'No samples in ' + phrase"
               description="Each application gets a row once its first sample arrives. Select a longer period."
             />
@@ -1287,7 +1287,7 @@
           >
             <EmptyState
               size="small"
-              icon="pi pi-check-circle"
+              icon="ai ai-check-circle"
               :title="'No open incidents in ' + phrase"
               description="An incident opens when an application or a location stays poor for several samples in a row."
             />

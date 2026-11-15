@@ -70,7 +70,7 @@
       'request-signer',
       'Request Signer',
       'Acme',
-      'pi pi-key',
+      'ai ai-key',
       'Access control',
       'firewall',
       'Sign every request with a rotating key, so the origin only answers traffic that passed through.',
@@ -80,7 +80,7 @@
       'waiting-room',
       'Waiting Room',
       'Acme',
-      'pi pi-hourglass',
+      'ai ai-hourglass',
       'Traffic management',
       'application',
       'Queue visitors during a traffic surge and let them in as capacity frees up.',
@@ -90,7 +90,7 @@
       'bot-score',
       'Bot Score',
       'Acme',
-      'pi pi-shield',
+      'ai ai-shield',
       'Bot management',
       'firewall',
       'Score each request on known bot behaviour and block the ones above your threshold.',
@@ -100,7 +100,7 @@
       'split-traffic',
       'Split Traffic',
       'Azion',
-      'pi pi-sitemap',
+      'ai ai-sitemap',
       'Testing',
       'application',
       'Send a share of visitors to a second version of a page and keep each one on theirs.'
@@ -109,7 +109,7 @@
       'geo-content',
       'Geo Content',
       'Azion',
-      'pi pi-globe',
+      'ai ai-globe',
       'Personalization',
       'application',
       'Serve a regional version of a page from the visitor’s country, with a fallback.'
@@ -118,7 +118,7 @@
       'signed-urls',
       'Signed URLs',
       'Azion',
-      'pi pi-link',
+      'ai ai-link',
       'Access control',
       'firewall',
       'Issue links that expire, so protected files can only be fetched for a limited time.',
@@ -128,7 +128,7 @@
       'rate-guard',
       'Rate Guard',
       'Acme',
-      'pi pi-sliders-h',
+      'ai ai-sliders-h',
       'Access control',
       'firewall',
       'Limit how many requests one client can make in a window, per path or per key.'
@@ -137,7 +137,7 @@
       'payload-limit',
       'Payload Limit',
       'Azion',
-      'pi pi-box',
+      'ai ai-box',
       'Traffic management',
       'firewall',
       'Refuse request bodies above a size you set, before they reach the origin.'
@@ -146,7 +146,7 @@
       'request-id',
       'Request ID',
       'Azion',
-      'pi pi-hashtag',
+      'ai ai-hashtag',
       'Observability',
       'application',
       'Add a unique identifier header to every request, to trace it across services.'
@@ -155,7 +155,7 @@
       'phone-check',
       'Phone Check',
       'Acme',
-      'pi pi-phone',
+      'ai ai-phone',
       'Fraud prevention',
       'firewall',
       'Validate phone numbers on sign-up forms and flag numbers linked to fraud.'
@@ -164,7 +164,7 @@
       'queue-writer',
       'Queue Writer',
       'Azion',
-      'pi pi-inbox',
+      'ai ai-inbox',
       'Messaging',
       'application',
       'Write each request to a queue for processing later, and answer the client right away.'
@@ -173,7 +173,7 @@
       'schedule-block',
       'Scheduled Block',
       'Azion',
-      'pi pi-calendar-times',
+      'ai ai-calendar-times',
       'Access control',
       'firewall',
       'Close an application to traffic on a schedule, such as outside business hours.'
@@ -323,7 +323,7 @@
         <template #actions>
           <Button
             label="Documentation"
-            icon="pi pi-book"
+            icon="ai ai-book"
             kind="outlined"
             size="medium"
             href="https://example.com/docs/marketplace"
@@ -386,7 +386,7 @@
             <EmptyState
               v-if="status === 'no-match'"
               size="medium"
-              icon="pi pi-filter-slash"
+              icon="ai ai-filter-slash"
               title="No matching integrations"
               description="No integration matches this search. Remove a filter to widen the results."
             >
@@ -551,7 +551,7 @@
                     class="flex items-center gap-(--spacing-sm) text-body-sm text-(--text-muted)"
                   >
                     <i
-                      class="pi pi-check shrink-0 text-(--success-contrast)"
+                      class="ai ai-check shrink-0 text-(--success-contrast)"
                       aria-hidden="true"
                     />
                     {{ permission }}
@@ -613,7 +613,7 @@
               <Button
                 v-if="selected.installedOn.length"
                 label="Configure"
-                icon="pi pi-cog"
+                icon="ai ai-cog"
                 kind="outlined"
                 size="medium"
                 :href="`/marketplace/${selected.id}/configure`"

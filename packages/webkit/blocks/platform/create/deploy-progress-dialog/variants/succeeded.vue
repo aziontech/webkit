@@ -253,7 +253,7 @@
         label="Show progress"
         kind="outlined"
         size="medium"
-        icon="pi pi-list"
+        icon="ai ai-list"
         @click="open = true"
       />
     </div>
@@ -326,7 +326,7 @@
                   />
                   <i
                     v-else
-                    class="pi pi-sliders-h text-(--text-muted)"
+                    class="ai ai-sliders-h text-(--text-muted)"
                     aria-hidden="true"
                   />
                 </Item.Media>
@@ -358,7 +358,7 @@
             <EmptyState
               v-else
               size="small"
-              icon="pi pi-filter"
+              icon="ai ai-filter"
               :title="emptyLabel"
             />
             <span
@@ -381,7 +381,7 @@
                 label="Retry failed"
                 kind="outlined"
                 size="medium"
-                icon="pi pi-refresh"
+                icon="ai ai-refresh"
                 @click="retryFailed"
               />
             </div>

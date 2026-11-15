@@ -14,14 +14,14 @@
   import { computed, onBeforeUnmount, reactive, ref } from 'vue'
 
   const supportPrompts = [
-    { id: 'purge', label: 'How do I purge the cache of one URL?', icon: 'pi pi-bolt' },
+    { id: 'purge', label: 'How do I purge the cache of one URL?', icon: 'ai ai-bolt' },
     {
       id: 'errors',
       label: 'Why is storefront answering with 502 errors?',
-      icon: 'pi pi-exclamation-triangle'
+      icon: 'ai ai-exclamation-triangle'
     },
-    { id: 'deploy', label: 'Deploy a Next.js app from GitHub', icon: 'pi pi-github' },
-    { id: 'waf', label: 'Protect my site with a WAF', icon: 'pi pi-shield' }
+    { id: 'deploy', label: 'Deploy a Next.js app from GitHub', icon: 'ai ai-github' },
+    { id: 'waf', label: 'Protect my site with a WAF', icon: 'ai ai-shield' }
   ]
 
   const turns = ref([])
@@ -214,7 +214,7 @@
         label="New chat"
         kind="transparent"
         size="small"
-        icon="pi pi-plus"
+        icon="ai ai-plus"
         :disabled="!turns.length"
         @click="newChat"
       />
@@ -284,7 +284,7 @@
                 :value="turn.content"
               />
               <IconButton
-                icon="pi pi-refresh"
+                icon="ai ai-refresh"
                 aria-label="Regenerate response"
                 kind="transparent"
                 size="small"

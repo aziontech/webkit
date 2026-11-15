@@ -260,7 +260,7 @@
         <template #actions>
           <Button
             label="Documentation"
-            icon="pi pi-book"
+            icon="ai ai-book"
             kind="outlined"
             size="medium"
             href="https://example.com/docs/personal-tokens"
@@ -268,7 +268,7 @@
           />
           <Button
             label="Create Personal Token"
-            icon="pi pi-plus"
+            icon="ai ai-plus"
             kind="primary"
             size="large"
             @click="openCreate"
@@ -294,7 +294,7 @@
               class="shrink-0"
             >
               <IconButton
-                icon="pi pi-refresh"
+                icon="ai ai-refresh"
                 kind="outlined"
                 size="medium"
                 :loading="refreshing"
@@ -307,7 +307,7 @@
               class="shrink-0"
             >
               <IconButton
-                icon="pi pi-download"
+                icon="ai ai-download"
                 kind="outlined"
                 size="medium"
                 :disabled="!matchingItems.length"
@@ -345,14 +345,14 @@
           <template #content>
             <EmptyState
               size="medium"
-              icon="pi pi-key"
+              icon="ai ai-key"
               title="No personal tokens yet"
               description="Create a token to call the API from a script, a CI job or the CLI."
             >
               <template #actions>
                 <Button
                   label="Create Personal Token"
-                  icon="pi pi-plus"
+                  icon="ai ai-plus"
                   kind="secondary"
                   size="small"
                   @click="openCreate"
@@ -445,7 +445,7 @@
               <template #empty>
                 <EmptyState
                   size="small"
-                  icon="pi pi-search"
+                  icon="ai ai-search"
                   title="No matching tokens"
                   description="No token matches these filters."
                 >

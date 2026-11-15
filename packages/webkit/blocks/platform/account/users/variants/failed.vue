@@ -347,7 +347,7 @@
         <template #actions>
           <Button
             label="Documentation"
-            icon="pi pi-book"
+            icon="ai ai-book"
             kind="outlined"
             size="medium"
             href="https://example.com/docs/users"
@@ -355,7 +355,7 @@
           />
           <Button
             label="Invite User"
-            icon="pi pi-user-plus"
+            icon="ai ai-user-plus"
             kind="primary"
             size="large"
             @click="openInvite"
@@ -381,7 +381,7 @@
               class="shrink-0"
             >
               <IconButton
-                icon="pi pi-refresh"
+                icon="ai ai-refresh"
                 kind="outlined"
                 size="medium"
                 :loading="refreshing"
@@ -394,7 +394,7 @@
               class="shrink-0"
             >
               <IconButton
-                icon="pi pi-download"
+                icon="ai ai-download"
                 kind="outlined"
                 size="medium"
                 :disabled="!matchingItems.length"
@@ -554,7 +554,7 @@
               <template #empty>
                 <EmptyState
                   size="small"
-                  icon="pi pi-search"
+                  icon="ai ai-search"
                   title="No matching users"
                   description="No user matches these filters."
                 >
@@ -575,14 +575,14 @@
         <EmptyState
           v-if="alone && !loadFailed"
           size="small"
-          icon="pi pi-users"
+          icon="ai ai-users"
           title="You are the only user"
           description="Invite the people you work with and choose the teams that give them access."
         >
           <template #actions>
             <Button
               label="Invite User"
-              icon="pi pi-user-plus"
+              icon="ai ai-user-plus"
               kind="secondary"
               size="small"
               @click="openInvite"
@@ -682,7 +682,7 @@
                 type="submit"
                 label="Send invitation"
                 kind="primary"
-                icon="pi pi-send"
+                icon="ai ai-send"
                 :loading="sending"
               />
             </div>

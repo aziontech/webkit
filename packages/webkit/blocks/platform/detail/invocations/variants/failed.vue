@@ -79,7 +79,7 @@
           parentId: 'root',
           name: 'parse-request',
           service: 'Compute',
-          icon: 'pi pi-code',
+          icon: 'ai ai-code',
           start: 4,
           duration: 12
         },
@@ -88,7 +88,7 @@
           parentId: 'root',
           name: 'fetch-origin',
           service: 'Network',
-          icon: 'pi pi-send',
+          icon: 'ai ai-send',
           start: 16,
           duration: 186
         },
@@ -97,7 +97,7 @@
           parentId: 'origin',
           name: 'dns-lookup',
           service: 'Network',
-          icon: 'pi pi-send',
+          icon: 'ai ai-send',
           start: 16,
           duration: 14
         },
@@ -106,7 +106,7 @@
           parentId: 'origin',
           name: 'tls-handshake',
           service: 'Security',
-          icon: 'pi pi-lock',
+          icon: 'ai ai-lock',
           start: 30,
           duration: 31
         },
@@ -115,7 +115,7 @@
           parentId: 'origin',
           name: 'origin-response',
           service: 'Network',
-          icon: 'pi pi-send',
+          icon: 'ai ai-send',
           start: 61,
           duration: 141
         },
@@ -124,7 +124,7 @@
           parentId: 'root',
           name: 'decode',
           service: 'Compute',
-          icon: 'pi pi-code',
+          icon: 'ai ai-code',
           start: 202,
           duration: 54
         },
@@ -133,7 +133,7 @@
           parentId: 'root',
           name: 'transform',
           service: 'Compute',
-          icon: 'pi pi-code',
+          icon: 'ai ai-code',
           start: 256,
           duration: 92
         },
@@ -181,7 +181,7 @@
           parentId: 'root',
           name: 'parse-request',
           service: 'Compute',
-          icon: 'pi pi-code',
+          icon: 'ai ai-code',
           start: 4,
           duration: 11
         },
@@ -190,7 +190,7 @@
           parentId: 'root',
           name: 'fetch-origin',
           service: 'Network',
-          icon: 'pi pi-send',
+          icon: 'ai ai-send',
           start: 15,
           duration: 1201,
           status: 'error'
@@ -200,7 +200,7 @@
           parentId: 'origin',
           name: 'dns-lookup',
           service: 'Network',
-          icon: 'pi pi-send',
+          icon: 'ai ai-send',
           start: 15,
           duration: 12
         },
@@ -209,7 +209,7 @@
           parentId: 'origin',
           name: 'tls-handshake',
           service: 'Security',
-          icon: 'pi pi-lock',
+          icon: 'ai ai-lock',
           start: 27,
           duration: 34
         },
@@ -218,7 +218,7 @@
           parentId: 'origin',
           name: 'origin-response',
           service: 'Network',
-          icon: 'pi pi-send',
+          icon: 'ai ai-send',
           start: 61,
           duration: 1155,
           status: 'error',
@@ -255,7 +255,7 @@
           parentId: 'root',
           name: 'parse-request',
           service: 'Compute',
-          icon: 'pi pi-code',
+          icon: 'ai ai-code',
           start: 3,
           duration: 10
         },
@@ -264,7 +264,7 @@
           parentId: 'root',
           name: 'fetch-origin',
           service: 'Network',
-          icon: 'pi pi-send',
+          icon: 'ai ai-send',
           start: 13,
           duration: 155,
           status: 'running'
@@ -303,7 +303,7 @@
       {
         key: 'service',
         eyebrow: 'Service',
-        icon: 'pi pi-globe',
+        icon: 'ai ai-globe',
         title: 'storefront-prod',
         label: 'Live',
         severity: 'success',
@@ -316,7 +316,7 @@
       {
         key: 'resource',
         eyebrow: 'Resource',
-        icon: 'pi pi-box',
+        icon: 'ai ai-box',
         title: 'storefront',
         label: 'Active',
         severity: 'success',
@@ -342,7 +342,7 @@
       {
         key: 'origin',
         eyebrow: 'Origin',
-        icon: 'pi pi-server',
+        icon: 'ai ai-server',
         title: 'origin-assets',
         label: failed ? 'Timed out' : running.value ? 'Waiting' : 'Answered',
         severity: failed ? 'danger' : running.value ? 'warning' : 'success',
@@ -448,7 +448,7 @@
                   label="Replay"
                   kind="secondary"
                   size="medium"
-                  icon="pi pi-replay"
+                  icon="ai ai-replay"
                   :disabled="running"
                   @click="replay"
                 />
@@ -463,7 +463,7 @@
                         label="Recent"
                         kind="outlined"
                         size="medium"
-                        icon="pi pi-history"
+                        icon="ai ai-history"
                       />
                     </Tooltip>
                   </DropdownMenu.Trigger>
@@ -489,7 +489,7 @@
                   <DropdownMenu.Trigger>
                     <Tooltip text="Invocation actions">
                       <IconButton
-                        icon="pi pi-ellipsis-h"
+                        icon="ai ai-ellipsis-h"
                         kind="outlined"
                         size="medium"
                         aria-label="Invocation actions"
@@ -515,7 +515,7 @@
                     >
                       <template #leading>
                         <i
-                          class="pi pi-cog"
+                          class="ai ai-cog"
                           aria-hidden="true"
                         />
                       </template>
@@ -550,7 +550,7 @@
               >
                 <i
                   :data-severity="severity"
-                  class="pi pi-arrow-right shrink-0 text-(--text-muted) data-[severity=danger]:text-(--danger-contrast)"
+                  class="ai ai-arrow-right shrink-0 text-(--text-muted) data-[severity=danger]:text-(--danger-contrast)"
                   aria-hidden="true"
                 />
                 <span class="truncate text-label-code-sm text-(--text-muted)">{{
@@ -633,7 +633,7 @@
                     >
                       <Tooltip :text="`Show ${node.title} in the trace`">
                         <IconButton
-                          icon="pi pi-align-left"
+                          icon="ai ai-align-left"
                           kind="outlined"
                           size="small"
                           :aria-label="`Show ${node.title} in the trace`"

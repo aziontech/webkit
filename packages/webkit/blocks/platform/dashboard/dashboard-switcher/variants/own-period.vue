@@ -999,7 +999,7 @@
               <Select.Trigger aria-label="Dashboard">
                 <template #prefix>
                   <i
-                    class="pi pi-chart-bar text-(--text-muted)"
+                    class="ai ai-chart-bar text-(--text-muted)"
                     aria-hidden="true"
                   />
                 </template>
@@ -1041,7 +1041,7 @@
           <div class="ms-auto flex shrink-0 items-center">
             <Tooltip text="Refresh">
               <IconButton
-                icon="pi pi-refresh"
+                icon="ai ai-refresh"
                 kind="outlined"
                 size="medium"
                 aria-label="Refresh"

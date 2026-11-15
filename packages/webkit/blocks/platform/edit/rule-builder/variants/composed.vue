@@ -537,7 +537,7 @@
     <DrawerTrigger>
       <Button
         label="Edit Rule"
-        icon="pi pi-pencil"
+        icon="ai ai-pencil"
         kind="outlined"
         size="medium"
       />
@@ -777,7 +777,7 @@
                                 >
                                   <template #prefix>
                                     <i
-                                      class="pi pi-search"
+                                      class="ai ai-search"
                                       aria-hidden="true"
                                     />
                                   </template>

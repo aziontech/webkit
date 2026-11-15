@@ -166,7 +166,7 @@
               <template #actions>
                 <Button
                   label="Documentation"
-                  icon="pi pi-book"
+                  icon="ai ai-book"
                   kind="outlined"
                   size="medium"
                   href="https://example.com/docs/private-access"
@@ -174,7 +174,7 @@
                 />
                 <Button
                   :label="`Add ${current.noun}`"
-                  icon="pi pi-plus"
+                  icon="ai ai-plus"
                   kind="outlined"
                   size="medium"
                 />
@@ -194,7 +194,7 @@
                   class="shrink-0"
                 >
                   <IconButton
-                    icon="pi pi-refresh"
+                    icon="ai ai-refresh"
                     kind="outlined"
                     size="medium"
                     :loading="loading"
@@ -241,14 +241,14 @@
                         key="empty-state-1"
                         v-if="status !== 'no-match'"
                         size="medium"
-                        icon="pi pi-inbox"
+                        icon="ai ai-inbox"
                         :title="`No ${current.label.toLowerCase()} yet`"
                         :description="`Add the first ${current.noun.toLowerCase()} to this policy.`"
                       >
                         <template #actions>
                           <Button
                             :label="`Add ${current.noun}`"
-                            icon="pi pi-plus"
+                            icon="ai ai-plus"
                             kind="secondary"
                             size="small"
                           />
@@ -258,7 +258,7 @@
                         key="empty-state-2"
                         v-else
                         size="medium"
-                        icon="pi pi-filter-slash"
+                        icon="ai ai-filter-slash"
                         :title="`No matching ${current.label.toLowerCase()}`"
                         description="Nothing matches these filters."
                       >
@@ -288,7 +288,7 @@
         <div class="layout-section-start">
           <EmptyState
             size="medium"
-            icon="pi pi-external-link"
+            icon="ai ai-external-link"
             :title="tabLabel"
             :description="`${tabLabel} opens on its own page of the acme-default policy.`"
           >

@@ -23,7 +23,7 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 
 ### A. Figure — `LineFigure` (`@aziontech/webkit/line-figure`)
 
-The 404 is the `azion-404` line figure in the `EmptyState` icon slot, 256 px wide on phones and 320 px from `sm`, with `play` so it walks through its answer on its own until a pointer or focus arrives (a still frame under reduced motion). It is decorative: the `EmptyState` icon wrapper is `aria-hidden`, and the hidden `h1` names the code. Forbidden uses the `Error403` numeral art (`@aziontech/webkit/svg/error-403`). ServerError and ResourceNotFound use the `EmptyState` icon tile (`pi pi-exclamation-triangle`, `pi pi-search`) because no numeral art exists for them.
+The 404 is the `azion-404` line figure in the `EmptyState` icon slot, 256 px wide on phones and 320 px from `sm`, with `play` so it walks through its answer on its own until a pointer or focus arrives (a still frame under reduced motion). It is decorative: the `EmptyState` icon wrapper is `aria-hidden`, and the hidden `h1` names the code. Forbidden uses the `Error403` numeral art (`@aziontech/webkit/svg/error-403`). ServerError and ResourceNotFound use the `EmptyState` icon tile (`ai ai-exclamation-triangle`, `ai ai-search`) because no numeral art exists for them.
 
 ### B. Message — `EmptyState` (required)
 

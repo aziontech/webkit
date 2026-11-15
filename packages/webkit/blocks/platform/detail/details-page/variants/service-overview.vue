@@ -87,7 +87,7 @@
   const productionSteps: ProductionStep[] = [
     {
       id: 'domain',
-      icon: 'pi pi-globe',
+      icon: 'ai ai-globe',
       title: 'Add a custom domain',
       description:
         'Serve this service on a domain of your own, with a free HTTPS certificate, instead of the generated hostname.',
@@ -96,7 +96,7 @@
     },
     {
       id: 'policy',
-      icon: 'pi pi-shield',
+      icon: 'ai ai-shield',
       title: 'Enable a security policy',
       description:
         'Bind a policy so requests are inspected before they reach the resource. Rate limiting, request inspection, and IP filtering.',
@@ -105,7 +105,7 @@
     },
     {
       id: 'errorPage',
-      icon: 'pi pi-file',
+      icon: 'ai ai-file',
       title: 'Set custom error pages',
       description: 'Answer 4xx and 5xx with your own page instead of the default response.',
       actionLabel: 'Bind Error Page',
@@ -120,7 +120,7 @@
   const targets: Record<string, Target> = {
     policy: {
       kind: 'Policy',
-      icon: 'pi pi-shield',
+      icon: 'ai ai-shield',
       options: [
         { value: 'payments-api', label: 'payments-api' },
         { value: 'api-hardening', label: 'api-hardening' },
@@ -132,7 +132,7 @@
     },
     errorPage: {
       kind: 'Error Page',
-      icon: 'pi pi-file',
+      icon: 'ai ai-file',
       options: [
         { value: 'Branded 404', label: 'Branded 404' },
         { value: 'Maintenance window', label: 'Maintenance window' },
@@ -144,7 +144,7 @@
     },
     origin: {
       kind: 'Origin',
-      icon: 'pi pi-link',
+      icon: 'ai ai-link',
       options: [
         { value: 'web-app-storage', label: 'web-app-storage' },
         { value: 'api-primary', label: 'api-primary' },
@@ -217,7 +217,7 @@
         {
           key: 'domains',
           type: 'Domains',
-          icon: 'pi pi-globe',
+          icon: 'ai ai-globe',
           name: 'service-01.example.com',
           status: '1 domain',
           severity: 'neutral',
@@ -238,7 +238,7 @@
         {
           key: 'service',
           type: 'Service',
-          icon: 'pi pi-server',
+          icon: 'ai ai-server',
           name: SERVICE.name,
           status: 'Live',
           severity: 'success',
@@ -263,7 +263,7 @@
         {
           key: 'resource',
           type: 'Resource',
-          icon: 'pi pi-box',
+          icon: 'ai ai-box',
           name: 'web-app',
           status: 'Active',
           severity: 'success',
@@ -284,7 +284,7 @@
         {
           key: 'storage',
           type: 'Storage',
-          icon: 'pi pi-inbox',
+          icon: 'ai ai-inbox',
           name: 'web-app-assets',
           status: 'Public',
           severity: 'info',
@@ -415,7 +415,7 @@
             >
               <template #prefix>
                 <i
-                  class="pi pi-search"
+                  class="ai ai-search"
                   aria-hidden="true"
                 />
               </template>
@@ -450,7 +450,7 @@
             >
               <span class="flex items-center gap-(--spacing-xs)">
                 <i
-                  class="pi pi-plus-circle"
+                  class="ai ai-plus-circle"
                   aria-hidden="true"
                 />
                 Add Environment
@@ -480,7 +480,7 @@
               label="Deploy"
               kind="outlined"
               size="medium"
-              icon="pi pi-cloud-upload"
+              icon="ai ai-cloud-upload"
               :loading="deploying"
               @click="deployOpen = true"
             />
@@ -505,7 +505,7 @@
                     class="flex min-w-0 flex-1 basis-(--container-2xs) items-center gap-(--spacing-xs)"
                   >
                     <i
-                      class="pi pi-globe shrink-0 text-body-lg text-(--text-muted)"
+                      class="ai ai-globe shrink-0 text-body-lg text-(--text-muted)"
                       aria-hidden="true"
                     />
                     <div class="flex min-w-0">
@@ -525,7 +525,7 @@
                           >
                           <span class="sr-only">{{ ' (opens in a new tab)' }}</span>
                           <i
-                            class="pi pi-external-link shrink-0 text-body-xs leading-none"
+                            class="ai ai-external-link shrink-0 text-body-xs leading-none"
                             aria-hidden="true"
                           />
                         </a>
@@ -565,7 +565,7 @@
                           >
                             <span class="truncate">{{ domain }}</span>
                             <i
-                              class="pi pi-external-link ms-auto shrink-0 text-body-xs leading-none"
+                              class="ai ai-external-link ms-auto shrink-0 text-body-xs leading-none"
                               aria-hidden="true"
                             />
                           </a>
@@ -587,7 +587,7 @@
                       target="_blank"
                       kind="secondary"
                       size="medium"
-                      icon="pi pi-external-link"
+                      icon="ai ai-external-link"
                     />
 
                     <div class="contents md:hidden">
@@ -612,7 +612,7 @@
                               />
                               <span class="truncate">{{ environment }}</span>
                               <i
-                                class="pi pi-chevron-down shrink-0 text-(--text-muted)"
+                                class="ai ai-chevron-down shrink-0 text-(--text-muted)"
                                 aria-hidden="true"
                               />
                             </span>
@@ -635,7 +635,7 @@
                             >
                               <template #leading>
                                 <i
-                                  class="pi pi-plus"
+                                  class="ai ai-plus"
                                   aria-hidden="true"
                                 />
                               </template>
@@ -649,7 +649,7 @@
                       <DropdownMenu.Trigger>
                         <Tooltip text="Service actions">
                           <IconButton
-                            icon="pi pi-ellipsis-h"
+                            icon="ai ai-ellipsis-h"
                             kind="outlined"
                             size="medium"
                             aria-label="Service actions"
@@ -664,7 +664,7 @@
                         >
                           <template #leading>
                             <i
-                              class="pi pi-copy"
+                              class="ai ai-copy"
                               aria-hidden="true"
                             />
                           </template>
@@ -678,7 +678,7 @@
                         >
                           <template #leading>
                             <i
-                              class="pi pi-globe"
+                              class="ai ai-globe"
                               aria-hidden="true"
                             />
                           </template>
@@ -689,7 +689,7 @@
                         >
                           <template #leading>
                             <i
-                              class="pi pi-cog"
+                              class="ai ai-cog"
                               aria-hidden="true"
                             />
                           </template>
@@ -707,7 +707,7 @@
                       <span class="text-label-sm text-(--text-muted)">Custom domains</span>
                       <Tooltip text="Add a custom domain">
                         <IconButton
-                          icon="pi pi-plus-circle"
+                          icon="ai ai-plus-circle"
                           kind="transparent"
                           size="small"
                           aria-label="Add a custom domain"
@@ -801,7 +801,7 @@
                                   acme-production
                                 </span>
                                 <i
-                                  class="pi pi-external-link shrink-0 text-body-xs leading-none"
+                                  class="ai ai-external-link shrink-0 text-body-xs leading-none"
                                   aria-hidden="true"
                                 />
                               </a>
@@ -905,7 +905,7 @@
                 </div>
 
                 <IconButton
-                  icon="pi pi-window-maximize"
+                  icon="ai ai-window-maximize"
                   aria-label="Expand the production checklist"
                   kind="outlined"
                   size="small"
@@ -946,7 +946,7 @@
                       <Item.Actions>
                         <i
                           v-if="step.done"
-                          class="pi pi-check text-body-sm leading-none text-(--primary)"
+                          class="ai ai-check text-body-sm leading-none text-(--primary)"
                           aria-hidden="true"
                         />
                         <span class="sr-only">{{ step.done ? 'Done' : 'Not started' }}</span>
@@ -999,7 +999,7 @@
                           aria-hidden="true"
                         >
                           <i
-                            :class="step.done ? 'pi pi-check' : step.icon"
+                            :class="step.done ? 'ai ai-check' : step.icon"
                             class="text-body-sm leading-none"
                           />
                         </span>
@@ -1017,7 +1017,7 @@
                       <Item.Footer>
                         <Tag
                           v-if="step.done"
-                          icon="pi pi-check"
+                          icon="ai ai-check"
                           :label="step.doneNote || 'Done'"
                           severity="neutral"
                           size="medium"
@@ -1072,7 +1072,7 @@
                       text="Add domain"
                     >
                       <IconButton
-                        icon="pi pi-plus"
+                        icon="ai ai-plus"
                         kind="outlined"
                         size="small"
                         aria-label="Add domain"
@@ -1103,7 +1103,7 @@
         <div class="layout-section-start">
           <EmptyState
             size="medium"
-            icon="pi pi-external-link"
+            icon="ai ai-external-link"
             :title="tabLabel"
             :description="`${tabLabel} opens on its own page.`"
           >
@@ -1179,7 +1179,7 @@
             <Button
               label="Deploy"
               kind="primary"
-              icon="pi pi-cloud-upload"
+              icon="ai ai-cloud-upload"
               @click="runDeploy"
             />
           </div>

@@ -257,7 +257,7 @@ mr+L2DBwFXtW2qJfNedf/9rU
       <div class="w-full md:w-fit">
         <Button
           label="Create Certificate"
-          icon="pi pi-plus"
+          icon="ai ai-plus"
           kind="primary"
           size="large"
           class="w-full"
@@ -329,7 +329,7 @@ mr+L2DBwFXtW2qJfNedf/9rU
                     <Button
                       type="button"
                       label="Upload file"
-                      icon="pi pi-upload"
+                      icon="ai ai-upload"
                       kind="outlined"
                       size="small"
                       @click="fileInput?.click()"

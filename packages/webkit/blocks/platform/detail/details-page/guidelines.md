@@ -52,7 +52,7 @@ For a resource made from the CLI, the `platform/detail/get-started` section foll
 - Bind, create and remove act on staged state only. Nothing reaches Production until Deploy, and the deploy drawer lists every staged change before it runs.
 - Show the staged count on the tab row next to Deploy, so it stays visible from every tab.
 - Report the deploy through the async-submit toast (Edit and Redeploy) and clear the staged marks once it succeeds.
-- A node that collects many resources adds to itself through the diagram's `actions` slot: the Domains node of ServiceOverview carries an outlined small `IconButton` (`pi pi-plus`) named Add domain inside a `Tooltip`, picked by `node.key === 'domains'`. Never hand-draw a node card to get the `+`.
+- A node that collects many resources adds to itself through the diagram's `actions` slot: the Domains node of ServiceOverview carries an outlined small `IconButton` (`ai ai-plus`) named Add domain inside a `Tooltip`, picked by `node.key === 'domains'`. Never hand-draw a node card to get the `+`.
 
 ## Do
 

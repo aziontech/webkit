@@ -29,7 +29,7 @@
     >
       <template #content>
         <EmptyState
-          icon="pi pi-box"
+          icon="ai ai-box"
           title="Create your first resource"
           description="Start from scratch, from a template or by importing your code."
         >
@@ -68,7 +68,7 @@
             <Item>
               <Item.Media kind="icon">
                 <i
-                  class="pi pi-code text-body-lg leading-none text-(--text-default)"
+                  class="ai ai-code text-body-lg leading-none text-(--text-default)"
                   aria-hidden="true"
                 />
               </Item.Media>
@@ -107,7 +107,7 @@
             <Item>
               <Item.Media kind="icon">
                 <i
-                  class="pi pi-globe text-body-lg leading-none text-(--text-default)"
+                  class="ai ai-globe text-body-lg leading-none text-(--text-default)"
                   aria-hidden="true"
                 />
               </Item.Media>
@@ -188,7 +188,7 @@
             </span>
 
             <i
-              class="pi pi-external-link absolute end-(--spacing-md) top-(--spacing-md) text-body-sm leading-none text-(--text-muted) transition-colors duration-moderate-01 ease-productive-entrance motion-reduce:transition-none group-hover:text-(--text-default)"
+              class="ai ai-external-link absolute end-(--spacing-md) top-(--spacing-md) text-body-sm leading-none text-(--text-muted) transition-colors duration-moderate-01 ease-productive-entrance motion-reduce:transition-none group-hover:text-(--text-default)"
               aria-hidden="true"
             />
             <span class="sr-only">(opens in a new tab)</span>

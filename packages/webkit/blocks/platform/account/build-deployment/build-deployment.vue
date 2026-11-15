@@ -557,7 +557,7 @@
         <template #actions>
           <Button
             label="Documentation"
-            icon="pi pi-book"
+            icon="ai ai-book"
             kind="outlined"
             size="medium"
             href="https://example.com/docs/deployment-settings"
@@ -565,7 +565,7 @@
           />
           <Button
             label="Create Deployment Setting"
-            icon="pi pi-plus"
+            icon="ai ai-plus"
             kind="primary"
             size="large"
             @click="openCreate"
@@ -684,7 +684,7 @@
                 <EmptyState
                   v-else-if="!services.length"
                   size="small"
-                  icon="pi pi-server"
+                  icon="ai ai-server"
                   title="No services yet"
                   description="Each environment of a new service is linked to a matching Deployment Setting automatically."
                 />
@@ -720,7 +720,7 @@
                         >
                           <template #prefix>
                             <i
-                              class="pi pi-search"
+                              class="ai ai-search"
                               aria-hidden="true"
                             />
                           </template>
@@ -731,7 +731,7 @@
                         >
                           <EmptyState
                             size="small"
-                            icon="pi pi-search"
+                            icon="ai ai-search"
                             title="No matching services"
                             :description="`No service or setting matches “${serviceFilterProps.modelValue}”.`"
                           >
@@ -846,7 +846,7 @@
                     class="shrink-0"
                   >
                     <IconButton
-                      icon="pi pi-refresh"
+                      icon="ai ai-refresh"
                       kind="outlined"
                       size="medium"
                       :loading="refreshing"
@@ -859,7 +859,7 @@
                     class="shrink-0"
                   >
                     <IconButton
-                      icon="pi pi-download"
+                      icon="ai ai-download"
                       kind="outlined"
                       size="medium"
                       :disabled="!matchingItems.length"
@@ -978,7 +978,7 @@
                     <template #empty>
                       <EmptyState
                         size="small"
-                        icon="pi pi-search"
+                        icon="ai ai-search"
                         title="No matching Deployment Settings"
                         description="No setting matches these filters."
                       >

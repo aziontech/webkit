@@ -101,7 +101,7 @@
           label="Documentation"
           kind="outlined"
           size="medium"
-          icon="pi pi-book"
+          icon="ai ai-book"
           href="/docs"
         />
       </GlobalHeader.End>

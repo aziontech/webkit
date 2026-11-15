@@ -136,7 +136,7 @@
           </div>
           <Button
             label="Export CSV"
-            icon="pi pi-download"
+            icon="ai ai-download"
             kind="outlined"
             size="medium"
             disabled
@@ -188,7 +188,7 @@
               <DropdownMenu placement="bottom-end">
                 <DropdownMenu.Trigger>
                   <IconButton
-                    icon="pi pi-ellipsis-h"
+                    icon="ai ai-ellipsis-h"
                     kind="transparent"
                     size="small"
                     aria-label="More options for Spend by category"
@@ -224,7 +224,7 @@
               <DropdownMenu placement="bottom-end">
                 <DropdownMenu.Trigger>
                   <IconButton
-                    icon="pi pi-ellipsis-h"
+                    icon="ai ai-ellipsis-h"
                     kind="transparent"
                     size="small"
                     aria-label="More options for Current split"
@@ -262,7 +262,7 @@
               <DropdownMenu placement="bottom-end">
                 <DropdownMenu.Trigger>
                   <IconButton
-                    icon="pi pi-ellipsis-h"
+                    icon="ai ai-ellipsis-h"
                     kind="transparent"
                     size="small"
                     aria-label="More options for Top contributors"

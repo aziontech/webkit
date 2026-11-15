@@ -217,7 +217,7 @@
       change: {
         label: '+25.2%',
         severity: 'success',
-        icon: 'pi pi-arrow-up-right'
+        icon: 'ai ai-arrow-up-right'
       },
       series: [
         {
@@ -240,7 +240,7 @@
       change: {
         label: '+30.8%',
         severity: 'success',
-        icon: 'pi pi-arrow-up-right'
+        icon: 'ai ai-arrow-up-right'
       },
       series: [
         {
@@ -263,7 +263,7 @@
       change: {
         label: '+5.7%',
         severity: 'success',
-        icon: 'pi pi-arrow-up-right'
+        icon: 'ai ai-arrow-up-right'
       },
       series: [
         {
@@ -283,7 +283,7 @@
       change: {
         label: '+23.7%',
         severity: 'success',
-        icon: 'pi pi-arrow-up-right'
+        icon: 'ai ai-arrow-up-right'
       },
       series: [
         {
@@ -303,7 +303,7 @@
       change: {
         label: '+0.05%',
         severity: 'success',
-        icon: 'pi pi-arrow-up-right'
+        icon: 'ai ai-arrow-up-right'
       },
       series: [
         {
@@ -325,7 +325,7 @@
       change: {
         label: '−25.0%',
         severity: 'success',
-        icon: 'pi pi-arrow-down-right'
+        icon: 'ai ai-arrow-down-right'
       },
       series: [
         {
@@ -473,7 +473,7 @@
             label="Export"
             kind="outlined"
             size="medium"
-            icon="pi pi-download"
+            icon="ai ai-download"
             :disabled="loading"
             @click="exportCsv('executive-summary')"
           />
@@ -628,7 +628,7 @@
               <EmptyState
                 v-else
                 size="small"
-                icon="pi pi-flag"
+                icon="ai ai-flag"
                 :title="'No goal results for ' + quarter"
                 description="Progress appears once the quarter reports its first month."
               />
@@ -699,7 +699,7 @@
               <EmptyState
                 v-else
                 size="small"
-                icon="pi pi-comment"
+                icon="ai ai-comment"
                 :title="'No notes for ' + quarter"
                 description="Leads add notes here when they review the quarter."
               />

@@ -72,7 +72,7 @@
               label="Delete resource"
               kind="danger"
               size="medium"
-              icon="pi pi-trash"
+              icon="ai ai-trash"
             />
           </template>
           <div class="flex flex-col gap-(--spacing-md)">

@@ -78,12 +78,12 @@
   const LATEST = 'latest'
 
   const resourceTypes: Record<ResourceType, ResourceTypeMeta> = {
-    service: { label: 'Service', icon: 'pi pi-server' },
-    policy: { label: 'Policy', icon: 'pi pi-shield' },
-    storage: { label: 'Storage', icon: 'pi pi-inbox' },
-    errorPage: { label: 'Error page', icon: 'pi pi-file' },
-    module: { label: 'Modules', icon: 'pi pi-code' },
-    integration: { label: 'Integrations', icon: 'pi pi-link' }
+    service: { label: 'Service', icon: 'ai ai-server' },
+    policy: { label: 'Policy', icon: 'ai ai-shield' },
+    storage: { label: 'Storage', icon: 'ai ai-inbox' },
+    errorPage: { label: 'Error page', icon: 'ai ai-file' },
+    module: { label: 'Modules', icon: 'ai ai-code' },
+    integration: { label: 'Integrations', icon: 'ai ai-link' }
   }
 
   const cards = reactive<ResourceCard[]>([
@@ -364,7 +364,7 @@
                 label="Redeploy"
                 kind="outlined"
                 size="small"
-                icon="pi pi-refresh"
+                icon="ai ai-refresh"
                 @click="startRun"
               />
             </div>
@@ -388,7 +388,7 @@
                 label="Redeploy"
                 kind="outlined"
                 size="small"
-                icon="pi pi-refresh"
+                icon="ai ai-refresh"
                 @click="startRun"
               />
             </div>
@@ -436,7 +436,7 @@
                       v-if="card.readonly"
                       label="Read-only"
                       severity="neutral"
-                      icon="pi pi-lock"
+                      icon="ai ai-lock"
                       size="small"
                     />
                     <Tag
@@ -506,7 +506,7 @@
                         <Select.Content>
                           <Select.Option
                             :value="LATEST"
-                            icon="pi pi-sync"
+                            icon="ai ai-sync"
                           >
                             Track latest Ready
                             <template #tag>
@@ -554,7 +554,7 @@
                     label="Build a version"
                     kind="transparent"
                     size="small"
-                    icon="pi pi-external-link"
+                    icon="ai ai-external-link"
                     href="/services/edge-policy/versions"
                   />
 
@@ -629,7 +629,7 @@
                                     <Tag
                                       label="Shared"
                                       severity="info"
-                                      icon="pi pi-link"
+                                      icon="ai ai-link"
                                       size="small"
                                     />
                                   </span>
@@ -648,7 +648,7 @@
                                 <Select.Content>
                                   <Select.Option
                                     :value="LATEST"
-                                    icon="pi pi-sync"
+                                    icon="ai ai-sync"
                                   >
                                     Track latest Ready
                                   </Select.Option>
@@ -693,7 +693,7 @@
                 <div class="flex min-w-0 flex-1 items-center justify-between gap-(--spacing-xs)">
                   <h2 class="flex min-w-0 items-center gap-(--spacing-xs)">
                     <i
-                      class="pi pi-bullseye shrink-0 text-(--text-muted)"
+                      class="ai ai-bullseye shrink-0 text-(--text-muted)"
                       aria-hidden="true"
                     />
                     <span class="truncate text-label-md text-(--text-default)">Impact</span>
@@ -751,7 +751,7 @@
                       label="Retry"
                       kind="outlined"
                       size="small"
-                      icon="pi pi-refresh"
+                      icon="ai ai-refresh"
                       @click="loadImpact"
                     />
                   </div>
@@ -779,7 +779,7 @@
                         >
                           <span class="flex min-w-0 items-center gap-(--spacing-xs)">
                             <i
-                              class="pi pi-sliders-h shrink-0 text-(--text-muted)"
+                              class="ai ai-sliders-h shrink-0 text-(--text-muted)"
                               aria-hidden="true"
                             />
                             <span class="truncate text-label-md text-(--text-default)">
@@ -810,7 +810,7 @@
                             >
                               <span class="flex min-w-0 items-center gap-(--spacing-xs)">
                                 <i
-                                  class="pi pi-sitemap shrink-0 text-(--text-muted)"
+                                  class="ai ai-sitemap shrink-0 text-(--text-muted)"
                                   aria-hidden="true"
                                 />
                                 <span class="truncate text-label-md text-(--text-default)">
@@ -832,7 +832,7 @@
                                 >
                                   <span class="flex min-w-0 items-center gap-(--spacing-xs)">
                                     <i
-                                      class="pi pi-folder shrink-0 text-(--text-muted)"
+                                      class="ai ai-folder shrink-0 text-(--text-muted)"
                                       aria-hidden="true"
                                     />
                                     <span class="truncate text-body-sm text-(--text-default)">
@@ -867,7 +867,7 @@
                         >
                           <span class="flex min-w-0 items-center gap-(--spacing-xs)">
                             <i
-                              class="pi pi-sliders-h shrink-0 text-(--text-muted)"
+                              class="ai ai-sliders-h shrink-0 text-(--text-muted)"
                               aria-hidden="true"
                             />
                             <span class="truncate text-label-md text-(--text-default)">
@@ -879,7 +879,7 @@
                           </span>
                         </span>
                         <i
-                          class="pi pi-arrow-right hidden shrink-0 text-body-xs text-(--text-muted) sm:block"
+                          class="ai ai-arrow-right hidden shrink-0 text-body-xs text-(--text-muted) sm:block"
                           aria-hidden="true"
                         />
                         <span
@@ -900,7 +900,7 @@
                           >
                             <span class="flex min-w-0 items-center gap-(--spacing-xs)">
                               <i
-                                class="pi pi-sitemap shrink-0 text-(--text-muted)"
+                                class="ai ai-sitemap shrink-0 text-(--text-muted)"
                                 aria-hidden="true"
                               />
                               <span class="truncate text-label-md text-(--text-default)">
@@ -918,7 +918,7 @@
                               class="flex min-w-0 items-center gap-(--spacing-xs)"
                             >
                               <i
-                                class="pi pi-folder shrink-0 text-(--text-muted)"
+                                class="ai ai-folder shrink-0 text-(--text-muted)"
                                 aria-hidden="true"
                               />
                               <span class="truncate text-body-sm text-(--text-muted)">
@@ -961,7 +961,7 @@
             class="flex items-center gap-(--spacing-xs) text-body-sm text-(--warning-contrast)"
           >
             <i
-              class="pi pi-exclamation-triangle shrink-0"
+              class="ai ai-exclamation-triangle shrink-0"
               aria-hidden="true"
             />
             {{ blocker }}
@@ -993,7 +993,7 @@
                   :label="deploying ? 'Deploying…' : 'Deploy release'"
                   kind="primary"
                   size="medium"
-                  icon="pi pi-cloud-upload"
+                  icon="ai ai-cloud-upload"
                   :disabled="!canDeploy"
                   :loading="deploying"
                 />

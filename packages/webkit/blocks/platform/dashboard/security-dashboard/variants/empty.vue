@@ -105,7 +105,7 @@
       <EmptyState
         title="No security rules protect your services"
         description="Security metrics and the Needs attention list appear once a rule set protects a service."
-        icon="pi pi-shield"
+        icon="ai ai-shield"
         bordered
       >
         <template #actions>
@@ -113,7 +113,7 @@
             label="Add rule set"
             kind="primary"
             size="medium"
-            icon="pi pi-plus"
+            icon="ai ai-plus"
             href="/security/rules"
           />
         </template>

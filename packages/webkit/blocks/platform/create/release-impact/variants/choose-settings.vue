@@ -177,7 +177,7 @@
             >
               <template #prefix>
                 <i
-                  class="pi pi-search"
+                  class="ai ai-search"
                   aria-hidden="true"
                 />
               </template>
@@ -209,7 +209,7 @@
           <EmptyState
             v-if="!visibleGroups.length"
             size="small"
-            icon="pi pi-search"
+            icon="ai ai-search"
             title="No Deployment Settings match"
             :description="`Nothing is named like “${search}”.`"
           >
@@ -258,7 +258,7 @@
                         <Field.Title>
                           <span class="flex min-w-0 items-center gap-(--spacing-xs)">
                             <i
-                              class="pi pi-sitemap shrink-0 text-(--text-muted)"
+                              class="ai ai-sitemap shrink-0 text-(--text-muted)"
                               aria-hidden="true"
                             />
                             <span class="truncate">{{ entry.name }}</span>
@@ -321,7 +321,7 @@
                 >
                   <span class="flex min-w-0 items-center gap-(--spacing-xs)">
                     <i
-                      class="pi pi-exclamation-circle shrink-0 text-(--warning-contrast)"
+                      class="ai ai-exclamation-circle shrink-0 text-(--warning-contrast)"
                       aria-hidden="true"
                     />
                     <span class="truncate text-label-md text-(--text-default)">
@@ -340,7 +340,7 @@
                     :href="group.href ?? ''"
                     kind="transparent"
                     size="small"
-                    icon="pi pi-external-link"
+                    icon="ai ai-external-link"
                   />
                 </div>
               </template>
@@ -373,7 +373,7 @@
             label="Continue"
             kind="primary"
             size="medium"
-            icon="pi pi-arrow-right"
+            icon="ai ai-arrow-right"
             icon-position="trailing"
             :disabled="!selected.length"
             aria-describedby="release-impact-settings-hint"

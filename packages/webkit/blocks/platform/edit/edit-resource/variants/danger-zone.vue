@@ -302,7 +302,7 @@
                             label="Delete project"
                             kind="danger"
                             size="medium"
-                            icon="pi pi-trash"
+                            icon="ai ai-trash"
                             data-testid="danger-zone-delete"
                             @click="deleteOpen = true"
                           />

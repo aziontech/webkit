@@ -625,7 +625,7 @@
         <EmptyState
           v-else
           size="small"
-          icon="pi pi-check-circle"
+          icon="ai ai-check-circle"
           title="No open alerts"
           description="Alerts appear here when a service crosses a threshold."
         />

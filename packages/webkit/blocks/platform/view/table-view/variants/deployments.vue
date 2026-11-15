@@ -227,7 +227,7 @@
         <template #actions>
           <Button
             label="Documentation"
-            icon="pi pi-book"
+            icon="ai ai-book"
             kind="outlined"
             size="medium"
             href="https://example.com/docs/deployments"
@@ -251,7 +251,7 @@
                 class="shrink-0"
               >
                 <IconButton
-                  icon="pi pi-refresh"
+                  icon="ai ai-refresh"
                   kind="outlined"
                   size="medium"
                   :loading="loading"
@@ -264,7 +264,7 @@
                 class="shrink-0"
               >
                 <IconButton
-                  icon="pi pi-download"
+                  icon="ai ai-download"
                   kind="outlined"
                   size="medium"
                   :disabled="!matchingItems.length"
@@ -287,14 +287,14 @@
               <template #content>
                 <EmptyState
                   size="medium"
-                  icon="pi pi-cloud-upload"
+                  icon="ai ai-cloud-upload"
                   title="No deployments yet"
                   description="Deploy a project and every run shows up here, with its version, status and environment."
                 >
                   <template #actions>
                     <Button
                       label="Documentation"
-                      icon="pi pi-book"
+                      icon="ai ai-book"
                       kind="outlined"
                       size="small"
                       href="https://example.com/docs/deployments"
@@ -328,7 +328,7 @@
                         label="Current"
                         severity="info"
                         size="small"
-                        icon="pi pi-arrow-circle-up"
+                        icon="ai ai-arrow-circle-up"
                         class="shrink-0"
                       />
                     </span>
@@ -359,7 +359,7 @@
                       :label="row.project"
                       :to="`/projects/${row.projectId}`"
                       destination="Projects"
-                      icon="pi pi-box"
+                      icon="ai ai-box"
                     />
                   </template>
                   <template #cell-environment="{ value }">
@@ -388,7 +388,7 @@
                         >
                           <template #leading
                             ><i
-                              class="pi pi-eye"
+                              class="ai ai-eye"
                               aria-hidden="true"
                           /></template>
                         </DropdownMenuOption>
@@ -398,7 +398,7 @@
                         >
                           <template #leading
                             ><i
-                              class="pi pi-refresh"
+                              class="ai ai-refresh"
                               aria-hidden="true"
                           /></template>
                         </DropdownMenuOption>
@@ -409,7 +409,7 @@
                         >
                           <template #leading
                             ><i
-                              class="pi pi-arrow-circle-up"
+                              class="ai ai-arrow-circle-up"
                               aria-hidden="true"
                           /></template>
                         </DropdownMenuOption>
@@ -419,7 +419,7 @@
                   <template #empty>
                     <EmptyState
                       size="medium"
-                      icon="pi pi-filter-slash"
+                      icon="ai ai-filter-slash"
                       title="No matching deployments"
                       description="No deployment matches these filters."
                     >

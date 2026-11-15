@@ -22,19 +22,19 @@
   const scopes = [
     {
       id: 'profile',
-      icon: 'pi pi-user',
+      icon: 'ai ai-user',
       title: 'Read your profile',
       description: 'Your name, email address and avatar.'
     },
     {
       id: 'workloads:read',
-      icon: 'pi pi-globe',
+      icon: 'ai ai-globe',
       title: 'Read your workloads',
       description: 'Names, domains and status. Not their settings or secrets.'
     },
     {
       id: 'applications:deploy',
-      icon: 'pi pi-upload',
+      icon: 'ai ai-upload',
       title: 'Deploy your applications',
       description: 'Create and publish new versions of the applications in this account.'
     }
@@ -78,7 +78,7 @@
           label="Documentation"
           kind="outlined"
           size="medium"
-          icon="pi pi-book"
+          icon="ai ai-book"
           href="/docs"
         />
       </GlobalHeader.End>

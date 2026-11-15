@@ -1,10 +1,7 @@
 import '@aziontech/theme'
 import '@aziontech/theme/fonts.css'
 import './styles/main.css'
-// eslint-disable-next-line import/no-duplicates
 import '@aziontech/icons'
-// eslint-disable-next-line import/no-duplicates
-import '@aziontech/icons/primeicons'
 import '@aziontech/webkit/styles/country-flags'
 
 import { ViteSSG } from 'vite-ssg'

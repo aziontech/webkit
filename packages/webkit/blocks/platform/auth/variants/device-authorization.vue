@@ -26,13 +26,13 @@
   const scopes = [
     {
       id: 'workloads:read',
-      icon: 'pi pi-globe',
+      icon: 'ai ai-globe',
       title: 'Read your workloads',
       description: 'Names, domains and status.'
     },
     {
       id: 'applications:deploy',
-      icon: 'pi pi-upload',
+      icon: 'ai ai-upload',
       title: 'Deploy your applications',
       description: 'Create and publish new versions from the terminal.'
     }
@@ -122,7 +122,7 @@
           label="Documentation"
           kind="outlined"
           size="medium"
-          icon="pi pi-book"
+          icon="ai ai-book"
           href="/docs"
         />
       </GlobalHeader.End>

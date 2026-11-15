@@ -105,7 +105,7 @@
     <GlobalHeader aria-label="Console">
       <GlobalHeader.Start>
         <IconButton
-          icon="pi pi-chevron-left"
+          icon="ai ai-chevron-left"
           aria-label="Back to Creation Center"
           kind="outlined"
           size="small"
@@ -188,7 +188,7 @@
                       class="flex h-5 items-center gap-(--spacing-xxs) text-label-sm text-(--text-muted)"
                     >
                       <i
-                        class="pi pi-folder text-[length:inherit] leading-none"
+                        class="ai ai-folder text-[length:inherit] leading-none"
                         aria-hidden="true"
                       />
                       templates/nuxt-ecommerce
@@ -279,7 +279,7 @@
                     >
                       <Item.Media>
                         <i
-                          class="pi pi-server text-body-md leading-none text-(--text-muted)"
+                          class="ai ai-server text-body-md leading-none text-(--text-muted)"
                           aria-hidden="true"
                         />
                       </Item.Media>
@@ -290,7 +290,7 @@
                       <Item.Actions>
                         <i
                           v-if="service === option.value"
-                          class="pi pi-check text-body-sm leading-none text-(--text-default)"
+                          class="ai ai-check text-body-sm leading-none text-(--text-default)"
                           aria-hidden="true"
                         />
                       </Item.Actions>
@@ -316,7 +316,7 @@
                     >
                       <Item.Media>
                         <i
-                          class="pi pi-plus text-body-sm leading-none text-(--text-muted)"
+                          class="ai ai-plus text-body-sm leading-none text-(--text-muted)"
                           aria-hidden="true"
                         />
                       </Item.Media>

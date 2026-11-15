@@ -128,7 +128,7 @@
   > = {
     firewall: {
       kind: 'Firewall',
-      icon: 'pi pi-shield',
+      icon: 'ai ai-shield',
       options: [
         { value: 'edge-guard', label: 'edge-guard' },
         { value: 'strict-waf', label: 'strict-waf' }
@@ -137,7 +137,7 @@
     },
     function: {
       kind: 'Function instance',
-      icon: 'pi pi-code',
+      icon: 'ai ai-code',
       options: [
         { value: 'geo-redirect', label: 'geo-redirect' },
         { value: 'ab-split', label: 'ab-split' }
@@ -192,7 +192,7 @@
         {
           key: 'domain',
           type: 'Domain',
-          icon: 'pi pi-globe',
+          icon: 'ai ai-globe',
           name: 'shop.example.com',
           status: 'Live',
           severity: 'success'
@@ -205,7 +205,7 @@
         {
           key: 'workload',
           type: 'Workload',
-          icon: 'pi pi-sitemap',
+          icon: 'ai ai-sitemap',
           name: 'storefront',
           status: 'Active',
           severity: 'success'
@@ -219,7 +219,7 @@
         {
           key: 'application',
           type: 'Application',
-          icon: 'pi pi-box',
+          icon: 'ai ai-box',
           name: APP.name,
           status: 'Active',
           severity: 'success'
@@ -321,7 +321,7 @@
               label="Deploy"
               kind="outlined"
               size="medium"
-              icon="pi pi-cloud-upload"
+              icon="ai ai-cloud-upload"
               :loading="deploying"
               @click="deployOpen = true"
             />
@@ -345,7 +345,7 @@
                   class="flex min-w-0 flex-1 basis-(--container-2xs) items-center gap-(--spacing-xs)"
                 >
                   <i
-                    class="pi pi-box shrink-0 text-body-lg text-(--text-muted)"
+                    class="ai ai-box shrink-0 text-body-lg text-(--text-muted)"
                     aria-hidden="true"
                   />
                   <div class="flex min-w-0">
@@ -364,7 +364,7 @@
                         }}</span>
                         <span class="sr-only">{{ ' (opens in a new tab)' }}</span>
                         <i
-                          class="pi pi-external-link shrink-0 text-body-xs leading-none"
+                          class="ai ai-external-link shrink-0 text-body-xs leading-none"
                           aria-hidden="true"
                         />
                       </a>
@@ -378,13 +378,13 @@
                     target="_blank"
                     kind="secondary"
                     size="medium"
-                    icon="pi pi-external-link"
+                    icon="ai ai-external-link"
                   />
                   <DropdownMenu placement="bottom-end">
                     <DropdownMenu.Trigger>
                       <Tooltip text="Application actions">
                         <IconButton
-                          icon="pi pi-ellipsis-h"
+                          icon="ai ai-ellipsis-h"
                           kind="outlined"
                           size="medium"
                           aria-label="Application actions"
@@ -487,7 +487,7 @@
                 label="Add Version"
                 kind="outlined"
                 size="medium"
-                icon="pi pi-plus"
+                icon="ai ai-plus"
               />
             </template>
           </SectionHeader>
@@ -524,7 +524,7 @@
                 <template #empty>
                   <EmptyState
                     size="medium"
-                    icon="pi pi-history"
+                    icon="ai ai-history"
                     title="No versions yet"
                     description="Every deploy creates a version of this application."
                   />
@@ -562,7 +562,7 @@
                 <template #empty>
                   <EmptyState
                     size="medium"
-                    icon="pi pi-cloud-upload"
+                    icon="ai ai-cloud-upload"
                     title="No deployments yet"
                     description="Deploy this application and each run lands here."
                   />
@@ -661,7 +661,7 @@
             <Button
               label="Deploy"
               kind="primary"
-              icon="pi pi-cloud-upload"
+              icon="ai ai-cloud-upload"
               @click="runDeploy"
             />
           </div>

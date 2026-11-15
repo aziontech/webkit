@@ -77,7 +77,7 @@
                 <template #actions>
                   <Button
                     label="Deploy"
-                    icon="pi pi-cloud-upload"
+                    icon="ai ai-cloud-upload"
                     kind="outlined"
                     size="medium"
                   />
@@ -306,7 +306,7 @@
         <div class="layout-section-start">
           <EmptyState
             size="medium"
-            icon="pi pi-external-link"
+            icon="ai ai-external-link"
             :title="tabLabel"
             :description="`${tabLabel} opens on its own page.`"
           >

@@ -84,7 +84,7 @@
       >
         <template #actions>
           <IconButton
-            icon="pi pi-refresh"
+            icon="ai ai-refresh"
             kind="outlined"
             size="medium"
             aria-label="Refresh"

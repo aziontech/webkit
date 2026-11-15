@@ -266,7 +266,7 @@
       <div class="w-full md:w-fit">
         <Button
           label="Create Network List"
-          icon="pi pi-plus"
+          icon="ai ai-plus"
           kind="primary"
           size="large"
           class="w-full"
@@ -333,7 +333,7 @@
                     v-if="copy"
                     ref="pasteToggle"
                     label="Paste list"
-                    icon="pi pi-clipboard"
+                    icon="ai ai-clipboard"
                     kind="outlined"
                     size="medium"
                     :aria-expanded="pasteOpen"

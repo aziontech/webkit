@@ -72,7 +72,7 @@
     <GlobalHeader aria-label="Console">
       <GlobalHeader.Start>
         <IconButton
-          icon="pi pi-chevron-left"
+          icon="ai ai-chevron-left"
           aria-label="Back to Creation Center"
           kind="outlined"
           size="small"
@@ -120,7 +120,7 @@
                 class="flex size-10 shrink-0 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
               >
                 <i
-                  class="pi pi-arrow-right-arrow-left text-body-lg leading-none text-(--text-default)"
+                  class="ai ai-arrow-right-arrow-left text-body-lg leading-none text-(--text-default)"
                   aria-hidden="true"
                 />
               </span>
@@ -144,7 +144,7 @@
                     class="flex h-5 items-center gap-(--spacing-xxs) text-label-sm text-(--text-default)"
                   >
                     <i
-                      class="pi pi-server text-[length:inherit] leading-none"
+                      class="ai ai-server text-[length:inherit] leading-none"
                       aria-hidden="true"
                     />
                     {{ service }}
@@ -221,7 +221,7 @@
                       class="flex size-8 shrink-0 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
                     >
                       <i
-                        class="pi pi-sliders-h text-body-md leading-none text-(--text-default)"
+                        class="ai ai-sliders-h text-body-md leading-none text-(--text-default)"
                         aria-hidden="true"
                       />
                     </span>

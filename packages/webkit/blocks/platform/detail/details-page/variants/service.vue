@@ -35,7 +35,7 @@
       >
         <div class="flex min-w-0 flex-1 basis-(--container-2xs) items-center gap-(--spacing-xs)">
           <i
-            class="pi pi-globe shrink-0 text-body-lg text-(--text-muted)"
+            class="ai ai-globe shrink-0 text-body-lg text-(--text-muted)"
             aria-hidden="true"
           />
           <div class="flex min-w-0">
@@ -55,7 +55,7 @@
                 >
                 <span class="sr-only">{{ ' (opens in a new tab)' }}</span>
                 <i
-                  class="pi pi-external-link shrink-0 text-body-xs leading-none"
+                  class="ai ai-external-link shrink-0 text-body-xs leading-none"
                   aria-hidden="true"
                 />
               </a>
@@ -95,7 +95,7 @@
                 >
                   <span class="truncate">{{ domain }}</span>
                   <i
-                    class="pi pi-external-link ms-auto shrink-0 text-body-xs leading-none"
+                    class="ai ai-external-link ms-auto shrink-0 text-body-xs leading-none"
                     aria-hidden="true"
                   />
                 </a>
@@ -117,7 +117,7 @@
             target="_blank"
             kind="secondary"
             size="medium"
-            icon="pi pi-external-link"
+            icon="ai ai-external-link"
           />
 
           <div class="contents md:hidden">
@@ -142,7 +142,7 @@
                     />
                     <span class="truncate">{{ environment }}</span>
                     <i
-                      class="pi pi-chevron-down shrink-0 text-(--text-muted)"
+                      class="ai ai-chevron-down shrink-0 text-(--text-muted)"
                       aria-hidden="true"
                     />
                   </span>
@@ -165,7 +165,7 @@
                   >
                     <template #leading>
                       <i
-                        class="pi pi-plus"
+                        class="ai ai-plus"
                         aria-hidden="true"
                       />
                     </template>
@@ -179,7 +179,7 @@
             <DropdownMenu.Trigger>
               <Tooltip text="Service actions">
                 <IconButton
-                  icon="pi pi-ellipsis-h"
+                  icon="ai ai-ellipsis-h"
                   kind="outlined"
                   size="medium"
                   aria-label="Service actions"
@@ -194,7 +194,7 @@
               >
                 <template #leading>
                   <i
-                    class="pi pi-copy"
+                    class="ai ai-copy"
                     aria-hidden="true"
                   />
                 </template>
@@ -208,7 +208,7 @@
               >
                 <template #leading>
                   <i
-                    class="pi pi-globe"
+                    class="ai ai-globe"
                     aria-hidden="true"
                   />
                 </template>
@@ -219,7 +219,7 @@
               >
                 <template #leading>
                   <i
-                    class="pi pi-cog"
+                    class="ai ai-cog"
                     aria-hidden="true"
                   />
                 </template>
@@ -237,7 +237,7 @@
             <span class="text-label-sm text-(--text-muted)">Custom domains</span>
             <Tooltip text="Add a custom domain">
               <IconButton
-                icon="pi pi-plus-circle"
+                icon="ai ai-plus-circle"
                 kind="transparent"
                 size="small"
                 aria-label="Add a custom domain"
@@ -325,7 +325,7 @@
                         acme-production
                       </span>
                       <i
-                        class="pi pi-external-link shrink-0 text-body-xs leading-none"
+                        class="ai ai-external-link shrink-0 text-body-xs leading-none"
                         aria-hidden="true"
                       />
                     </a>

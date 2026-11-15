@@ -549,7 +549,7 @@
                             >
                               <template #prefix>
                                 <i
-                                  class="pi pi-search"
+                                  class="ai ai-search"
                                   aria-hidden="true"
                                 />
                               </template>
@@ -582,7 +582,7 @@
                             >
                               <span class="flex items-center gap-(--spacing-xs)">
                                 <i
-                                  class="pi pi-upload"
+                                  class="ai ai-upload"
                                   aria-hidden="true"
                                 />
                                 Upload certificate

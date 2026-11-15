@@ -23,7 +23,7 @@
     {
       key: 'resource',
       kind: 'Resource',
-      icon: 'pi pi-box',
+      icon: 'ai ai-box',
       name: 'analytics-app',
       state: 'created',
       reference: '1650382274'
@@ -32,7 +32,7 @@
 
   const nextSteps: NextStep[] = [
     {
-      icon: 'pi pi-cloud-upload',
+      icon: 'ai ai-cloud-upload',
       title: 'Deploy this resource',
       description:
         'Provision a service for it and deploy, without leaving this flow. The platform names the domain, and you can change it after.',
@@ -40,7 +40,7 @@
       recommended: true
     },
     {
-      icon: 'pi pi-server',
+      icon: 'ai ai-server',
       title: 'Deploy using a new service',
       description:
         'Name the service, put a policy in front of it, and compose the release yourself.',

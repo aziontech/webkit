@@ -3,45 +3,45 @@ import type { ConsoleLayoutNavGroup } from '@aziontech/webkit/console-layout-roo
 export const navigation: ConsoleLayoutNavGroup[] = [
   {
     items: [
-      { id: 'home', label: 'Home', icon: 'pi pi-home', href: '/onboarding' },
-      { id: 'projects', label: 'Projects', icon: 'pi pi-folder' },
-      { id: 'deployments', label: 'Deployments', icon: 'pi pi-cloud-upload' }
+      { id: 'home', label: 'Home', icon: 'ai ai-home', href: '/onboarding' },
+      { id: 'projects', label: 'Projects', icon: 'ai ai-folder' },
+      { id: 'deployments', label: 'Deployments', icon: 'ai ai-cloud-upload' }
     ]
   },
   {
     label: 'Build',
     items: [
-      { id: 'resources', label: 'Resources', icon: 'pi pi-box', href: '/resources' },
-      { id: 'services', label: 'Services', icon: 'pi pi-server' },
-      { id: 'variables', label: 'Variables', icon: 'pi pi-sliders-h' },
-      { id: 'integrations', label: 'Integrations', icon: 'pi pi-link' },
-      { id: 'templates', label: 'Templates', icon: 'pi pi-clone' }
+      { id: 'resources', label: 'Resources', icon: 'ai ai-box', href: '/resources' },
+      { id: 'services', label: 'Services', icon: 'ai ai-server' },
+      { id: 'variables', label: 'Variables', icon: 'ai ai-sliders-h' },
+      { id: 'integrations', label: 'Integrations', icon: 'ai ai-link' },
+      { id: 'templates', label: 'Templates', icon: 'ai ai-clone' }
     ]
   },
   {
     label: 'Security',
     items: [
-      { id: 'domains', label: 'Domains', icon: 'pi pi-globe' },
-      { id: 'policies', label: 'Policies', icon: 'pi pi-shield' },
-      { id: 'rule-sets', label: 'Rule sets', icon: 'pi pi-list' },
-      { id: 'keys', label: 'Keys', icon: 'pi pi-key' }
+      { id: 'domains', label: 'Domains', icon: 'ai ai-globe' },
+      { id: 'policies', label: 'Policies', icon: 'ai ai-shield' },
+      { id: 'rule-sets', label: 'Rule sets', icon: 'ai ai-list' },
+      { id: 'keys', label: 'Keys', icon: 'ai ai-key' }
     ]
   },
   {
     label: 'Data',
     items: [
-      { id: 'databases', label: 'Databases', icon: 'pi pi-database', tagValue: 'Preview' },
-      { id: 'storage', label: 'Storage', icon: 'pi pi-inbox' }
+      { id: 'databases', label: 'Databases', icon: 'ai ai-database', tagValue: 'Preview' },
+      { id: 'storage', label: 'Storage', icon: 'ai ai-inbox' }
     ]
   },
   {
     label: 'Observability',
     items: [
-      { id: 'logs', label: 'Logs', icon: 'pi pi-file' },
+      { id: 'logs', label: 'Logs', icon: 'ai ai-file' },
       {
         id: 'metrics-module',
         label: 'Metrics',
-        icon: 'pi pi-chart-bar',
+        icon: 'ai ai-chart-bar',
         kind: 'drill',
         groups: [
           { items: [{ id: 'metrics', label: 'Overview' }] },
@@ -70,17 +70,17 @@ export const navigation: ConsoleLayoutNavGroup[] = [
           }
         ]
       },
-      { id: 'events', label: 'Events', icon: 'pi pi-bolt' }
+      { id: 'events', label: 'Events', icon: 'ai ai-bolt' }
     ]
   },
   {
     label: 'More',
     items: [
-      { id: 'catalog', label: 'Catalog', icon: 'pi pi-th-large' },
+      { id: 'catalog', label: 'Catalog', icon: 'ai ai-th-large' },
       {
         id: 'settings',
         label: 'Settings',
-        icon: 'pi pi-cog',
+        icon: 'ai ai-cog',
         kind: 'drill',
         groups: [
           {

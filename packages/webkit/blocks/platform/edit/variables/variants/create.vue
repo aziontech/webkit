@@ -366,7 +366,7 @@
       <div class="w-full md:w-fit">
         <Button
           label="Create Variable"
-          icon="pi pi-plus"
+          icon="ai ai-plus"
           kind="primary"
           size="large"
           class="w-full"
@@ -404,7 +404,7 @@
                 <div class="flex items-center gap-(--spacing-xs) self-end">
                   <Button
                     label="Upload"
-                    icon="pi pi-upload"
+                    icon="ai ai-upload"
                     kind="outlined"
                     size="medium"
                     @click="fileInput?.click()"
@@ -469,7 +469,7 @@
                               text="Remove variable"
                             >
                               <IconButton
-                                icon="pi pi-trash"
+                                icon="ai ai-trash"
                                 kind="outlined"
                                 size="large"
                                 :aria-label="removeLabel"
@@ -516,7 +516,7 @@
                               :text="entries[index].visible ? 'Hide value' : 'Show value'"
                             >
                               <IconButton
-                                :icon="entries[index].visible ? 'pi pi-eye-slash' : 'pi pi-eye'"
+                                :icon="entries[index].visible ? 'ai ai-eye-slash' : 'ai ai-eye'"
                                 kind="outlined"
                                 size="large"
                                 :aria-label="entries[index].visible ? 'Hide value' : 'Show value'"
@@ -644,7 +644,7 @@
                             >
                               <template #prefix>
                                 <i
-                                  class="pi pi-search"
+                                  class="ai ai-search"
                                   aria-hidden="true"
                                 />
                               </template>

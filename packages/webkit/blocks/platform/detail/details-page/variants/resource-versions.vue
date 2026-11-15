@@ -213,7 +213,7 @@
               <template #actions>
                 <Button
                   label="Add Version"
-                  icon="pi pi-plus"
+                  icon="ai ai-plus"
                   kind="outlined"
                   size="medium"
                 />
@@ -228,7 +228,7 @@
                       label="Filter"
                       kind="outlined"
                       size="medium"
-                      icon="pi pi-filter"
+                      icon="ai ai-filter"
                     />
                   </div>
                   <div class="flex min-w-36 grow basis-(--container-2xs)">
@@ -241,7 +241,7 @@
                     >
                       <template #prefix>
                         <i
-                          class="pi pi-search"
+                          class="ai ai-search"
                           aria-hidden="true"
                         />
                       </template>
@@ -254,7 +254,7 @@
                     class="shrink-0"
                   >
                     <IconButton
-                      icon="pi pi-refresh"
+                      icon="ai ai-refresh"
                       kind="outlined"
                       size="medium"
                       :loading="loading"
@@ -267,7 +267,7 @@
                     class="shrink-0"
                   >
                     <IconButton
-                      icon="pi pi-download"
+                      icon="ai ai-download"
                       kind="outlined"
                       size="medium"
                       :disabled="!tableRef"
@@ -354,7 +354,7 @@
                         <DropdownMenu.Trigger>
                           <Tooltip text="Version actions">
                             <IconButton
-                              icon="pi pi-ellipsis-h"
+                              icon="ai ai-ellipsis-h"
                               kind="outlined"
                               size="small"
                               aria-label="Version actions"
@@ -368,7 +368,7 @@
                           >
                             <template #leading>
                               <i
-                                class="pi pi-eye"
+                                class="ai ai-eye"
                                 aria-hidden="true"
                               />
                             </template>
@@ -380,7 +380,7 @@
                           >
                             <template #leading>
                               <i
-                                class="pi pi-cloud-upload"
+                                class="ai ai-cloud-upload"
                                 aria-hidden="true"
                               />
                             </template>
@@ -404,7 +404,7 @@
         <div class="layout-section-start">
           <EmptyState
             size="medium"
-            icon="pi pi-external-link"
+            icon="ai ai-external-link"
             :title="tabLabel"
             :description="`${tabLabel} opens on its own page.`"
           >

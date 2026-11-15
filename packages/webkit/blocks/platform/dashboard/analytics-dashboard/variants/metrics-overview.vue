@@ -418,7 +418,7 @@
           </Select>
           <Tooltip text="Refresh">
             <IconButton
-              icon="pi pi-refresh"
+              icon="ai ai-refresh"
               kind="outlined"
               size="medium"
               aria-label="Refresh metrics"
@@ -473,7 +473,7 @@
                     label="Sum"
                     severity="neutral"
                     size="small"
-                    icon="pi pi-calculator"
+                    icon="ai ai-calculator"
                   />
                   <ToggleGroup
                     v-model="forms[card.id]"
@@ -484,7 +484,7 @@
                 </span>
                 <Tooltip text="Expand">
                   <IconButton
-                    icon="pi pi-window-maximize"
+                    icon="ai ai-window-maximize"
                     kind="transparent"
                     size="small"
                     :aria-label="`Expand ${card.title}`"
@@ -497,7 +497,7 @@
                 >
                   <DropdownMenu.Trigger>
                     <IconButton
-                      icon="pi pi-ellipsis-h"
+                      icon="ai ai-ellipsis-h"
                       kind="transparent"
                       size="small"
                       :aria-label="`More options for ${card.title}`"

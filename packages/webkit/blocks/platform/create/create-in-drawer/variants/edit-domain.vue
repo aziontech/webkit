@@ -196,7 +196,7 @@
     <DropdownMenuTrigger>
       <Tooltip text="Row actions">
         <IconButton
-          icon="pi pi-ellipsis-h"
+          icon="ai ai-ellipsis-h"
           kind="outlined"
           size="small"
           aria-label="Actions for www.example.com"
@@ -210,7 +210,7 @@
       >
         <template #leading
           ><i
-            class="pi pi-pencil"
+            class="ai ai-pencil"
             aria-hidden="true"
         /></template>
       </DropdownMenuOption>
@@ -222,7 +222,7 @@
       >
         <template #leading
           ><i
-            class="pi pi-trash"
+            class="ai ai-trash"
             aria-hidden="true"
         /></template>
       </DropdownMenuOption>

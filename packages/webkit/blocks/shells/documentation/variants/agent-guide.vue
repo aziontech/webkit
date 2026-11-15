@@ -83,7 +83,7 @@
       slug: 'codex',
       name: 'Codex',
       vendor: 'OpenAI',
-      icon: 'pi pi-code',
+      icon: 'ai ai-code',
       logo: codexMark,
       mono: true,
       description: 'Terminal agent that runs commands in a sandbox and reads AGENTS.md natively.'
@@ -101,7 +101,7 @@
       slug: 'opencode',
       name: 'OpenCode',
       vendor: 'SST',
-      icon: 'pi pi-desktop',
+      icon: 'ai ai-desktop',
       logo: opencodeMark,
       mono: true,
       description: 'Open source, provider-agnostic terminal agent, whichever model you choose.'
@@ -143,8 +143,8 @@
   ]
 
   const metaActions = [
-    { value: 'copy', label: 'Copy as Markdown', icon: 'pi pi-copy' },
-    { value: 'markdown', label: 'View as Markdown', icon: 'pi pi-eye' }
+    { value: 'copy', label: 'Copy as Markdown', icon: 'ai ai-copy' },
+    { value: 'markdown', label: 'View as Markdown', icon: 'ai ai-eye' }
   ]
 
   const facts = ['Terminal', 'Subscription', 'Locked', 'Project memory']
@@ -176,11 +176,11 @@
     {
       label: 'GitHub',
       links: [
-        { label: 'Azion Docs', href: 'https://github.com/aziontech', icon: 'pi pi-github' },
+        { label: 'Azion Docs', href: 'https://github.com/aziontech', icon: 'ai ai-github' },
         {
           label: 'Contribute to this page',
           href: 'https://github.com/aziontech/azion',
-          icon: 'pi pi-pencil'
+          icon: 'ai ai-pencil'
         }
       ]
     }
@@ -283,19 +283,19 @@
   const docLinks = [
     {
       title: 'llms.txt',
-      icon: 'pi pi-list',
+      icon: 'ai ai-list',
       href: 'https://www.azion.com/llms.txt',
       description: 'Machine-readable index of the whole documentation.'
     },
     {
       title: 'For AI agents',
-      icon: 'pi pi-sparkles',
+      icon: 'ai ai-sparkles',
       href: 'https://www.azion.com/en/documentation/devtools/for-ai-agents/',
       description: 'Canonical facts: current product names, API base URL, auth format.'
     },
     {
       title: 'AGENTS.md',
-      icon: 'pi pi-file-edit',
+      icon: 'ai ai-file-edit',
       href: '/docs/get-started/first-deploy',
       description:
         'Your own conventions, committed at the repository root: workload names, what not to touch.'
@@ -417,7 +417,7 @@
                 >
                   {{ link.label }}
                   <i
-                    class="pi pi-arrow-up-right text-body-xs"
+                    class="ai ai-arrow-up-right text-body-xs"
                     aria-hidden="true"
                   />
                 </a>
@@ -543,7 +543,7 @@
         <p>No MCP support in the tool you are using? Prime it by hand, once per session:</p>
         <DocPrompt
           title="Any assistant"
-          icon="pi pi-comment"
+          icon="ai ai-comment"
           >{{ browserPrimer }}</DocPrompt
         >
 
@@ -644,7 +644,7 @@
 
     <template #actions>
       <IconButton
-        icon="pi pi-github"
+        icon="ai ai-github"
         kind="outlined"
         size="medium"
         aria-label="Azion on GitHub"

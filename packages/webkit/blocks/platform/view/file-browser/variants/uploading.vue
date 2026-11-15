@@ -111,17 +111,17 @@
   ]
 
   const GLYPHS: Record<string, string> = {
-    svg: 'pi pi-image',
-    webp: 'pi pi-image',
-    png: 'pi pi-image',
-    mp4: 'pi pi-video',
-    js: 'pi pi-code',
-    css: 'pi pi-code',
-    html: 'pi pi-code',
-    json: 'pi pi-database',
-    woff2: 'pi pi-star',
-    log: 'pi pi-align-left',
-    txt: 'pi pi-file'
+    svg: 'ai ai-image',
+    webp: 'ai ai-image',
+    png: 'ai ai-image',
+    mp4: 'ai ai-video',
+    js: 'ai ai-code',
+    css: 'ai ai-code',
+    html: 'ai ai-code',
+    json: 'ai ai-database',
+    woff2: 'ai ai-star',
+    log: 'ai ai-align-left',
+    txt: 'ai ai-file'
   }
 
   const columns: TableColumn[] = [
@@ -139,9 +139,9 @@
   ]
 
   const addToFilesActions = [
-    { label: 'Upload file', value: 'upload', icon: 'pi pi-upload' },
-    { label: 'Upload folder', value: 'upload-folder', icon: 'pi pi-folder-open' },
-    { label: 'Add folder', value: 'folder', icon: 'pi pi-folder-plus' }
+    { label: 'Upload file', value: 'upload', icon: 'ai ai-upload' },
+    { label: 'Upload folder', value: 'upload-folder', icon: 'ai ai-folder-open' },
+    { label: 'Add folder', value: 'folder', icon: 'ai ai-folder-plus' }
   ]
 
   const referenceTime = Date.UTC(2026, 10, 10, 12)
@@ -212,7 +212,7 @@
         id: name,
         name,
         kind: 'file',
-        icon: GLYPHS[entry.ext] ?? 'pi pi-file',
+        icon: GLYPHS[entry.ext] ?? 'ai ai-file',
         size: entry.size,
         bytes: sizeBytes(entry.size),
         modifiedAt: entry.lastModified,
@@ -512,7 +512,7 @@
                 <div class="flex w-full flex-col gap-(--spacing-sm)">
                   <div class="flex min-w-0 items-center gap-(--spacing-xs)">
                     <i
-                      class="pi pi-database shrink-0 text-body-lg text-(--text-muted)"
+                      class="ai ai-database shrink-0 text-body-lg text-(--text-muted)"
                       aria-hidden="true"
                     />
                     <h1 class="min-w-0 truncate text-heading-xxs text-(--text-default)">
@@ -533,7 +533,7 @@
                       class="shrink-0"
                     >
                       <IconButton
-                        icon="pi pi-refresh"
+                        icon="ai ai-refresh"
                         kind="outlined"
                         size="large"
                         :loading="loading"
@@ -546,7 +546,7 @@
                       class="shrink-0"
                     >
                       <IconButton
-                        icon="pi pi-download"
+                        icon="ai ai-download"
                         kind="outlined"
                         size="large"
                         :disabled="!tableRef"
@@ -574,7 +574,7 @@
                     >
                       <SplitButton
                         label="Add to files"
-                        icon="pi pi-plus"
+                        icon="ai ai-plus"
                         kind="primary"
                         size="medium"
                         :items="addToFilesActions"
@@ -590,12 +590,12 @@
                 <div class="flex min-w-0 items-center gap-(--spacing-xs)">
                   <i
                     v-if="row.kind === 'parent'"
-                    class="pi pi-folder-open shrink-0 text-body-lg text-(--text-muted)"
+                    class="ai ai-folder-open shrink-0 text-body-lg text-(--text-muted)"
                     aria-hidden="true"
                   />
                   <i
                     v-else-if="row.kind === 'folder'"
-                    class="pi pi-folder shrink-0 text-body-lg text-(--text-link)"
+                    class="ai ai-folder shrink-0 text-body-lg text-(--text-link)"
                     aria-hidden="true"
                   />
                   <i
@@ -655,7 +655,7 @@
                     >
                       <template #leading
                         ><i
-                          class="pi pi-folder-open"
+                          class="ai ai-folder-open"
                           aria-hidden="true"
                       /></template>
                     </DropdownMenuOption>
@@ -667,7 +667,7 @@
                     >
                       <template #leading
                         ><i
-                          class="pi pi-download"
+                          class="ai ai-download"
                           aria-hidden="true"
                       /></template>
                     </DropdownMenuOption>
@@ -679,7 +679,7 @@
                     >
                       <template #leading
                         ><i
-                          class="pi pi-trash"
+                          class="ai ai-trash"
                           aria-hidden="true"
                       /></template>
                     </DropdownMenuOption>
@@ -692,7 +692,7 @@
                   key="empty-state-1"
                   v-if="search"
                   size="medium"
-                  icon="pi pi-search"
+                  icon="ai ai-search"
                   title="No matching files"
                   :description="`Nothing in this folder matches “${search}”.`"
                 >
@@ -715,7 +715,7 @@
                   <template #actions>
                     <SplitButton
                       label="Add to files"
-                      icon="pi pi-plus"
+                      icon="ai ai-plus"
                       kind="secondary"
                       size="medium"
                       :items="addToFilesActions"
@@ -808,7 +808,7 @@
                 label="Browse folder"
                 kind="secondary"
                 size="medium"
-                icon="pi pi-folder-open"
+                icon="ai ai-folder-open"
                 @click="folderInput?.click()"
               />
               <Button
@@ -859,7 +859,7 @@
               :label="pickable.length > 1 ? `Upload ${pickable.length} files` : 'Upload file'"
               kind="primary"
               size="medium"
-              icon="pi pi-upload"
+              icon="ai ai-upload"
               :disabled="!pickable.length"
               @click="startUpload"
             />

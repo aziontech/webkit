@@ -285,7 +285,7 @@
         label="Deploy a folder"
         kind="outlined"
         size="medium"
-        icon="pi pi-upload"
+        icon="ai ai-upload"
         @click="dropOpen = true"
       />
     </div>
@@ -322,7 +322,7 @@
             >
               <div class="flex min-w-0 items-center gap-(--spacing-sm)">
                 <i
-                  class="pi pi-folder shrink-0 text-(--text-muted)"
+                  class="ai ai-folder shrink-0 text-(--text-muted)"
                   aria-hidden="true"
                 />
                 <div class="flex min-w-0 flex-col">
@@ -341,7 +341,7 @@
                   class="flex min-w-0 items-center gap-(--spacing-sm) rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface-raised) px-(--spacing-sm) py-(--spacing-xs)"
                 >
                   <i
-                    class="pi pi-file shrink-0 text-(--text-muted)"
+                    class="ai ai-file shrink-0 text-(--text-muted)"
                     aria-hidden="true"
                   />
                   <span
@@ -383,7 +383,7 @@
                 label="Deploy to Production"
                 kind="primary"
                 size="medium"
-                icon="pi pi-cloud-upload"
+                icon="ai ai-cloud-upload"
                 @click="deployDropped"
               />
             </div>
@@ -460,7 +460,7 @@
                   />
                   <i
                     v-else
-                    class="pi pi-sliders-h text-(--text-muted)"
+                    class="ai ai-sliders-h text-(--text-muted)"
                     aria-hidden="true"
                   />
                 </Item.Media>
@@ -492,7 +492,7 @@
             <EmptyState
               v-else
               size="small"
-              icon="pi pi-filter"
+              icon="ai ai-filter"
               :title="emptyLabel"
             />
             <span
@@ -515,7 +515,7 @@
                 label="Retry failed"
                 kind="outlined"
                 size="medium"
-                icon="pi pi-refresh"
+                icon="ai ai-refresh"
                 @click="retryFailed"
               />
             </div>

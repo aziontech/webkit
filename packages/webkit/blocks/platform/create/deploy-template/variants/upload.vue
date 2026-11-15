@@ -29,13 +29,13 @@
   ]
 
   const files: ProjectFile[] = [
-    { path: 'about.html', bytes: 4301, glyph: 'pi pi-code' },
-    { path: 'pricing.html', bytes: 6963, glyph: 'pi pi-code' },
-    { path: 'robots.txt', bytes: 68, glyph: 'pi pi-file' },
-    { path: 'assets/app.js', bytes: 31744, glyph: 'pi pi-code' },
-    { path: 'assets/logo.svg', bytes: 2150, glyph: 'pi pi-image' },
-    { path: 'assets/styles.css', bytes: 12698, glyph: 'pi pi-palette' },
-    { path: 'images/hero.webp', bytes: 188928, glyph: 'pi pi-image' }
+    { path: 'about.html', bytes: 4301, glyph: 'ai ai-code' },
+    { path: 'pricing.html', bytes: 6963, glyph: 'ai ai-code' },
+    { path: 'robots.txt', bytes: 68, glyph: 'ai ai-file' },
+    { path: 'assets/app.js', bytes: 31744, glyph: 'ai ai-code' },
+    { path: 'assets/logo.svg', bytes: 2150, glyph: 'ai ai-image' },
+    { path: 'assets/styles.css', bytes: 12698, glyph: 'ai ai-palette' },
+    { path: 'images/hero.webp', bytes: 188928, glyph: 'ai ai-image' }
   ]
 
   const FILE_LIMIT = 100
@@ -105,7 +105,7 @@
     <GlobalHeader aria-label="Console">
       <GlobalHeader.Start>
         <IconButton
-          icon="pi pi-chevron-left"
+          icon="ai ai-chevron-left"
           aria-label="Back to Creation Center"
           kind="outlined"
           size="small"
@@ -153,7 +153,7 @@
                 class="flex size-10 shrink-0 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
               >
                 <i
-                  class="pi pi-folder text-body-lg leading-none text-(--text-default)"
+                  class="ai ai-folder text-body-lg leading-none text-(--text-default)"
                   aria-hidden="true"
                 />
               </span>
@@ -230,7 +230,7 @@
                         class="flex size-8 shrink-0 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface)"
                       >
                         <i
-                          class="pi pi-folder-open text-body-md leading-none text-(--text-default)"
+                          class="ai ai-folder-open text-body-md leading-none text-(--text-default)"
                           aria-hidden="true"
                         />
                       </span>

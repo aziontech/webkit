@@ -637,7 +637,7 @@
       <template #actions>
         <Button
           label="Documentation"
-          icon="pi pi-book"
+          icon="ai ai-book"
           kind="outlined"
           href="https://example.com/docs/variables"
           target="_blank"
@@ -645,7 +645,7 @@
         />
         <Button
           label="Create Variable"
-          icon="pi pi-plus"
+          icon="ai ai-plus"
           kind="primary"
           size="large"
           @click="openCreate"
@@ -669,7 +669,7 @@
               class="shrink-0"
             >
               <IconButton
-                icon="pi pi-refresh"
+                icon="ai ai-refresh"
                 kind="outlined"
                 size="medium"
                 :loading="loading"
@@ -682,7 +682,7 @@
               class="shrink-0"
             >
               <IconButton
-                icon="pi pi-download"
+                icon="ai ai-download"
                 kind="outlined"
                 size="medium"
                 :disabled="!matchingItems.length"
@@ -706,7 +706,7 @@
             <template #content>
               <EmptyState
                 size="medium"
-                icon="pi pi-key"
+                icon="ai ai-key"
                 title="No variables yet"
                 description="Create a variable to store a value your services read at runtime."
               >
@@ -714,14 +714,14 @@
                   <div class="flex flex-wrap items-center justify-center gap-(--spacing-xs)">
                     <Button
                       label="Create Variable"
-                      icon="pi pi-plus"
+                      icon="ai ai-plus"
                       kind="secondary"
                       size="small"
                       @click="openCreate"
                     />
                     <Button
                       label="Documentation"
-                      icon="pi pi-book"
+                      icon="ai ai-book"
                       kind="outlined"
                       size="small"
                       href="https://example.com/docs/variables"
@@ -748,7 +748,7 @@
                 <template #cell-key="{ value }">
                   <div class="flex min-w-0 items-center gap-(--spacing-xs)">
                     <i
-                      class="pi pi-key shrink-0 text-body-lg text-(--text-muted)"
+                      class="ai ai-key shrink-0 text-body-lg text-(--text-muted)"
                       aria-hidden="true"
                     />
                     <span class="min-w-0 truncate">{{ value }}</span>
@@ -820,7 +820,7 @@
                       >
                         <template #leading>
                           <i
-                            class="pi pi-pencil"
+                            class="ai ai-pencil"
                             aria-hidden="true"
                           />
                         </template>
@@ -831,7 +831,7 @@
                       >
                         <template #leading>
                           <i
-                            class="pi pi-clone"
+                            class="ai ai-clone"
                             aria-hidden="true"
                           />
                         </template>
@@ -845,7 +845,7 @@
                       >
                         <template #leading>
                           <i
-                            class="pi pi-trash"
+                            class="ai ai-trash"
                             aria-hidden="true"
                           />
                         </template>
@@ -857,7 +857,7 @@
                 <template #empty>
                   <EmptyState
                     size="medium"
-                    icon="pi pi-filter-slash"
+                    icon="ai ai-filter-slash"
                     title="No matching variables"
                     description="No variable matches these filters."
                   >
@@ -927,7 +927,7 @@
                   >
                     <Button
                       label="Upload"
-                      icon="pi pi-upload"
+                      icon="ai ai-upload"
                       kind="outlined"
                       size="medium"
                       @click="fileInput?.click()"
@@ -995,7 +995,7 @@
                                 text="Remove variable"
                               >
                                 <IconButton
-                                  icon="pi pi-trash"
+                                  icon="ai ai-trash"
                                   kind="outlined"
                                   size="large"
                                   :aria-label="removeLabel"
@@ -1042,7 +1042,7 @@
                                 :text="entries[index].visible ? 'Hide value' : 'Show value'"
                               >
                                 <IconButton
-                                  :icon="entries[index].visible ? 'pi pi-eye-slash' : 'pi pi-eye'"
+                                  :icon="entries[index].visible ? 'ai ai-eye-slash' : 'ai ai-eye'"
                                   kind="outlined"
                                   size="large"
                                   :aria-label="entries[index].visible ? 'Hide value' : 'Show value'"
@@ -1176,7 +1176,7 @@
                               >
                                 <template #prefix>
                                   <i
-                                    class="pi pi-search"
+                                    class="ai ai-search"
                                     aria-hidden="true"
                                   />
                                 </template>

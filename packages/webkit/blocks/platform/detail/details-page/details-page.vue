@@ -173,7 +173,7 @@ jobs:
                       class="flex min-w-0 flex-1 basis-(--container-2xs) items-center gap-(--spacing-xs)"
                     >
                       <i
-                        class="pi pi-globe shrink-0 text-body-lg text-(--text-muted)"
+                        class="ai ai-globe shrink-0 text-body-lg text-(--text-muted)"
                         aria-hidden="true"
                       />
                       <div class="flex min-w-0">
@@ -193,7 +193,7 @@ jobs:
                             >
                             <span class="sr-only">{{ ' (opens in a new tab)' }}</span>
                             <i
-                              class="pi pi-external-link shrink-0 text-body-xs leading-none"
+                              class="ai ai-external-link shrink-0 text-body-xs leading-none"
                               aria-hidden="true"
                             />
                           </a>
@@ -208,14 +208,14 @@ jobs:
                         target="_blank"
                         kind="secondary"
                         size="medium"
-                        icon="pi pi-external-link"
+                        icon="ai ai-external-link"
                       />
 
                       <DropdownMenu placement="bottom-end">
                         <DropdownMenu.Trigger>
                           <Tooltip text="Resource actions">
                             <IconButton
-                              icon="pi pi-ellipsis-h"
+                              icon="ai ai-ellipsis-h"
                               kind="outlined"
                               size="medium"
                               aria-label="Resource actions"
@@ -230,7 +230,7 @@ jobs:
                           >
                             <template #leading>
                               <i
-                                class="pi pi-copy"
+                                class="ai ai-copy"
                                 aria-hidden="true"
                               />
                             </template>
@@ -244,7 +244,7 @@ jobs:
                           >
                             <template #leading>
                               <i
-                                class="pi pi-cog"
+                                class="ai ai-cog"
                                 aria-hidden="true"
                               />
                             </template>
@@ -301,7 +301,7 @@ jobs:
                               >
                               <span class="sr-only">{{ ' (opens in a new tab)' }}</span>
                               <i
-                                class="pi pi-external-link shrink-0 text-body-xs leading-none"
+                                class="ai ai-external-link shrink-0 text-body-xs leading-none"
                                 aria-hidden="true"
                               />
                             </a>
@@ -379,7 +379,7 @@ jobs:
                         label="Documentation"
                         kind="outlined"
                         size="medium"
-                        icon="pi pi-book"
+                        icon="ai ai-book"
                         href="https://example.com/docs/cli"
                         target="_blank"
                       />
@@ -470,7 +470,7 @@ jobs:
         <div class="layout-section-start">
           <EmptyState
             size="medium"
-            icon="pi pi-external-link"
+            icon="ai ai-external-link"
             :title="tabLabel"
             :description="`${tabLabel} opens on its own page.`"
           >

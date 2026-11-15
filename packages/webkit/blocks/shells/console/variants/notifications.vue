@@ -137,7 +137,7 @@
         {
           id: 'settings',
           label: 'Settings',
-          icon: 'pi pi-cog',
+          icon: 'ai ai-cog',
           kind: 'drill',
           groups: [
             {
@@ -207,9 +207,9 @@
   }
 
   const icons: Record<NotificationKind, string> = {
-    'deploy-failed': 'pi pi-times-circle',
-    'deploy-succeeded': 'pi pi-check-circle',
-    info: 'pi pi-info-circle'
+    'deploy-failed': 'ai ai-times-circle',
+    'deploy-succeeded': 'ai ai-check-circle',
+    info: 'ai ai-info-circle'
   }
 
   const PAGE_SIZE = 5
@@ -297,7 +297,7 @@
           placement="bottom"
         >
           <IconButton
-            icon="pi pi-plus-circle"
+            icon="ai ai-plus-circle"
             kind="primary"
             size="medium"
             aria-label="Create"
@@ -320,7 +320,7 @@
           label="Create"
           kind="primary"
           size="medium"
-          icon="pi pi-plus-circle"
+          icon="ai ai-plus-circle"
         />
         <ButtonHighlight
           label="Agent"
@@ -334,7 +334,7 @@
           placement="bottom"
         >
           <IconButton
-            icon="pi pi-bell"
+            icon="ai ai-bell"
             kind="outlined"
             size="medium"
             :aria-label="bellLabel"
@@ -382,7 +382,7 @@
         <Command.Item value="action:create">
           <template #prefix>
             <i
-              class="pi pi-plus-circle"
+              class="ai ai-plus-circle"
               aria-hidden="true"
             />
           </template>
@@ -391,7 +391,7 @@
         <Command.Item value="action:theme">
           <template #prefix>
             <i
-              class="pi pi-moon"
+              class="ai ai-moon"
               aria-hidden="true"
             />
           </template>
@@ -414,7 +414,7 @@
         >
           <template #trailing>
             <i
-              class="pi pi-cog"
+              class="ai ai-cog"
               aria-hidden="true"
             />
           </template>
@@ -425,7 +425,7 @@
         >
           <template #trailing>
             <i
-              class="pi pi-key"
+              class="ai ai-key"
               aria-hidden="true"
             />
           </template>
@@ -449,7 +449,7 @@
         >
           <template #trailing>
             <i
-              class="pi pi-book"
+              class="ai ai-book"
               aria-hidden="true"
             />
           </template>
@@ -460,7 +460,7 @@
         >
           <template #trailing>
             <i
-              class="pi pi-sign-out"
+              class="ai ai-sign-out"
               aria-hidden="true"
             />
           </template>
@@ -503,7 +503,7 @@
               label="Redeploy"
               kind="primary"
               size="small"
-              icon="pi pi-refresh"
+              icon="ai ai-refresh"
             />
           </div>
         </template>
@@ -583,7 +583,7 @@
                   label="Redeploy"
                   kind="outlined"
                   size="small"
-                  icon="pi pi-refresh"
+                  icon="ai ai-refresh"
                   @click="markRead(item.id)"
                 />
               </Item.Actions>
@@ -609,7 +609,7 @@
           <EmptyState
             title="You are all caught up"
             description="Deploys, invitations and alerts for this account show up here."
-            icon="pi pi-bell"
+            icon="ai ai-bell"
             size="small"
           />
         </div>
@@ -625,7 +625,7 @@
           <template #actions>
             <Button
               label="Documentation"
-              icon="pi pi-book"
+              icon="ai ai-book"
               kind="outlined"
               size="medium"
               href="https://www.azion.com/en/documentation/"
@@ -633,7 +633,7 @@
             />
             <Button
               label="Create Application"
-              icon="pi pi-plus"
+              icon="ai ai-plus"
               kind="outlined"
               size="medium"
             />

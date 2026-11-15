@@ -222,7 +222,7 @@
                     label="Copy prompt"
                     kind="outlined"
                     size="medium"
-                    icon="pi pi-copy"
+                    icon="ai ai-copy"
                   />
                 </div>
               </div>

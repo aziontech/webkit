@@ -164,7 +164,7 @@
     <GlobalHeader aria-label="Console">
       <GlobalHeader.Start>
         <IconButton
-          icon="pi pi-chevron-left"
+          icon="ai ai-chevron-left"
           aria-label="Back to Teams and permissions"
           kind="outlined"
           size="small"
@@ -264,7 +264,7 @@
                           >
                             <template #prefix>
                               <i
-                                class="pi pi-search"
+                                class="ai ai-search"
                                 aria-hidden="true"
                               />
                             </template>
@@ -296,7 +296,7 @@
                       <EmptyState
                         v-if="!visibleGroups.length"
                         size="small"
-                        icon="pi pi-search"
+                        icon="ai ai-search"
                         title="No matching permissions"
                         :description="`No permission matches “${query}”.`"
                       >

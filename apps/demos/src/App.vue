@@ -29,7 +29,7 @@
     resources.value.slice(0, 3).map((resource) => ({
       id: resource.id,
       label: resource.name,
-      icon: 'pi pi-box',
+      icon: 'ai ai-box',
       type: 'Resource'
     }))
   )
@@ -76,7 +76,7 @@
             placement="bottom"
           >
             <IconButton
-              icon="pi pi-plus-circle"
+              icon="ai ai-plus-circle"
               kind="primary"
               size="medium"
               ariaLabel="Create"
@@ -101,7 +101,7 @@
             label="Create"
             kind="primary"
             size="medium"
-            icon="pi pi-plus-circle"
+            icon="ai ai-plus-circle"
             @click="router.push('/resources/new')"
           />
           <ButtonHighlight
@@ -139,7 +139,7 @@
           <Command.Item value="action:create">
             <template #prefix>
               <i
-                class="pi pi-plus-circle"
+                class="ai ai-plus-circle"
                 aria-hidden="true"
               />
             </template>
@@ -148,7 +148,7 @@
           <Command.Item value="action:theme">
             <template #prefix>
               <i
-                class="pi pi-moon"
+                class="ai ai-moon"
                 aria-hidden="true"
               />
             </template>
@@ -171,7 +171,7 @@
           >
             <template #trailing>
               <i
-                class="pi pi-cog"
+                class="ai ai-cog"
                 aria-hidden="true"
               />
             </template>
@@ -182,7 +182,7 @@
           >
             <template #trailing>
               <i
-                class="pi pi-key"
+                class="ai ai-key"
                 aria-hidden="true"
               />
             </template>
@@ -208,7 +208,7 @@
           >
             <template #trailing>
               <i
-                class="pi pi-book"
+                class="ai ai-book"
                 aria-hidden="true"
               />
             </template>
@@ -219,7 +219,7 @@
           >
             <template #trailing>
               <i
-                class="pi pi-sign-out"
+                class="ai ai-sign-out"
                 aria-hidden="true"
               />
             </template>

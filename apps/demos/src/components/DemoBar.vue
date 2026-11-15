@@ -55,18 +55,18 @@
   const first = computed(() => resources.value[0]?.id ?? '')
 
   const flows = computed(() => [
-    { value: '/resources', label: t.value.list, icon: 'pi pi-list' },
-    { value: '/resources/new', label: t.value.create, icon: 'pi pi-plus' },
-    { value: `/resources/${first.value}`, label: t.value.detail, icon: 'pi pi-eye' },
-    { value: `/resources/${first.value}/edit`, label: t.value.edit, icon: 'pi pi-pencil' },
-    { value: `/resources/${first.value}/delete`, label: t.value.remove, icon: 'pi pi-trash' },
+    { value: '/resources', label: t.value.list, icon: 'ai ai-list' },
+    { value: '/resources/new', label: t.value.create, icon: 'ai ai-plus' },
+    { value: `/resources/${first.value}`, label: t.value.detail, icon: 'ai ai-eye' },
+    { value: `/resources/${first.value}/edit`, label: t.value.edit, icon: 'ai ai-pencil' },
+    { value: `/resources/${first.value}/delete`, label: t.value.remove, icon: 'ai ai-trash' },
     {
       value: `/resources/${first.value}/deploy`,
       label: t.value.deploy,
-      icon: 'pi pi-cloud-upload'
+      icon: 'ai ai-cloud-upload'
     },
-    { value: '/settings', label: t.value.settings, icon: 'pi pi-cog' },
-    { value: '/onboarding', label: t.value.onboarding, icon: 'pi pi-flag' },
+    { value: '/settings', label: t.value.settings, icon: 'ai ai-cog' },
+    { value: '/onboarding', label: t.value.onboarding, icon: 'ai ai-flag' },
     { value: '/assistant', label: t.value.assistant, icon: 'ai ai-ask-azion' }
   ])
 
@@ -90,7 +90,7 @@
       <DropdownMenu.Trigger>
         <Tooltip :text="t.flows">
           <IconButton
-            icon="pi pi-compass"
+            icon="ai ai-compass"
             kind="outlined"
             size="medium"
             :aria-label="t.flows"
@@ -115,7 +115,7 @@
     </DropdownMenu>
     <Tooltip :text="settings.theme === 'dark' ? t.light : t.dark">
       <IconButton
-        :icon="settings.theme === 'dark' ? 'pi pi-sun' : 'pi pi-moon'"
+        :icon="settings.theme === 'dark' ? 'ai ai-sun' : 'ai ai-moon'"
         kind="outlined"
         size="medium"
         :aria-label="settings.theme === 'dark' ? t.light : t.dark"
@@ -124,7 +124,7 @@
     </Tooltip>
     <Tooltip :text="settings.dir === 'rtl' ? t.ltr : t.rtl">
       <IconButton
-        icon="pi pi-arrow-right-arrow-left"
+        icon="ai ai-arrow-right-arrow-left"
         kind="outlined"
         size="medium"
         :aria-label="settings.dir === 'rtl' ? t.ltr : t.rtl"
@@ -141,7 +141,7 @@
         <Select.Trigger :aria-label="t.language">
           <template #prefix>
             <i
-              class="pi pi-globe text-(--text-muted)"
+              class="ai ai-globe text-(--text-muted)"
               aria-hidden="true"
             />
           </template>

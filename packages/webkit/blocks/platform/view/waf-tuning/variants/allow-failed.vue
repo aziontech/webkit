@@ -204,7 +204,7 @@
         <template #actions>
           <Button
             label="Export to CSV"
-            icon="pi pi-download"
+            icon="ai ai-download"
             kind="outlined"
             size="medium"
             :disabled="!rows.length || loading || loadFailed"
@@ -212,7 +212,7 @@
           />
           <Button
             :label="selected.length ? `Allow ${selected.length} selected` : 'Allow selected'"
-            icon="pi pi-check"
+            icon="ai ai-check"
             kind="outlined"
             size="medium"
             :disabled="!selected.length || loading"
@@ -277,7 +277,7 @@
             >
               <template #prefix>
                 <i
-                  class="pi pi-search"
+                  class="ai ai-search"
                   aria-hidden="true"
                 />
               </template>
@@ -285,7 +285,7 @@
           </div>
           <Tooltip text="Refresh">
             <IconButton
-              icon="pi pi-refresh"
+              icon="ai ai-refresh"
               kind="outlined"
               size="medium"
               aria-label="Refresh matched requests"
@@ -309,7 +309,7 @@
           <template #content>
             <EmptyState
               v-if="!INITIAL_ROWS.length"
-              icon="pi pi-shield"
+              icon="ai ai-shield"
               title="No matches yet"
               description="This rule set has not matched any request. Matches appear here as traffic arrives."
             />
@@ -357,7 +357,7 @@
                   key="empty-state-1"
                   v-if="search.trim()"
                   size="small"
-                  icon="pi pi-search"
+                  icon="ai ai-search"
                   title="No matching rules"
                   :description="`No rule, IP address, country or path matches “${search.trim()}”.`"
                 >

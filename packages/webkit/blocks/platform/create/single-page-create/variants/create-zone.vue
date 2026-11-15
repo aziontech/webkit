@@ -230,7 +230,7 @@
     <GlobalHeader aria-label="Console">
       <GlobalHeader.Start>
         <IconButton
-          icon="pi pi-chevron-left"
+          icon="ai ai-chevron-left"
           aria-label="Back to Edge DNS"
           kind="outlined"
           size="small"
@@ -379,7 +379,7 @@
                         </Item.Content>
                         <Item.Actions>
                           <IconButton
-                            icon="pi pi-times"
+                            icon="ai ai-times"
                             kind="transparent"
                             size="medium"
                             :aria-label="`Remove ${record.type} record ${record.name}`"
@@ -418,7 +418,7 @@
               <SettingsSection
                 title="Advanced"
                 v-model:open="advancedOpen"
-                icon="pi pi-cog"
+                icon="ai ai-cog"
                 collapsible
               >
                 <Card :padded="false">
@@ -458,7 +458,7 @@
                   label="Import"
                   kind="outlined"
                   size="medium"
-                  icon="pi pi-upload"
+                  icon="ai ai-upload"
                   @click="openImport"
                 />
                 <p class="min-w-0 text-body-sm text-(--text-muted)">

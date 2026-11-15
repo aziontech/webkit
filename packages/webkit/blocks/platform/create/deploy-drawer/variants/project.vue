@@ -46,7 +46,7 @@
       key: 'service',
       label: 'Service',
       name: 'project-01-web',
-      icon: 'pi pi-server',
+      icon: 'ai ai-server',
       note: '',
       total: 12,
       versions: [
@@ -88,7 +88,7 @@
           key: 'service@AWPT11GA:module-image-optimizer',
           label: 'Module',
           name: 'image-optimizer',
-          icon: 'pi pi-code',
+          icon: 'ai ai-code',
           note: '',
           total: 6,
           versions: [
@@ -128,7 +128,7 @@
           key: 'service@AWPT11GA:integration-search-index',
           label: 'Integration',
           name: 'search-index',
-          icon: 'pi pi-link',
+          icon: 'ai ai-link',
           note: '',
           total: 3,
           versions: [
@@ -158,7 +158,7 @@
       key: 'storage',
       label: 'Storage',
       name: 'project-01-storage',
-      icon: 'pi pi-database',
+      icon: 'ai ai-database',
       note: 'Not versioned',
       total: 0,
       versions: [],
@@ -230,7 +230,7 @@
         label="Deploy"
         kind="outlined"
         size="medium"
-        icon="pi pi-cloud-upload"
+        icon="ai ai-cloud-upload"
       />
     </DrawerTrigger>
 
@@ -309,7 +309,7 @@
                               :aria-label="`Change version of ${row.name}`"
                               kind="outlined"
                               size="small"
-                              icon="pi pi-chevron-down"
+                              icon="ai ai-chevron-down"
                               icon-position="trailing"
                               :disabled="!row.versions.length"
                             />
@@ -329,7 +329,7 @@
                               >
                                 <template #prefix>
                                   <i
-                                    class="pi pi-search"
+                                    class="ai ai-search"
                                     aria-hidden="true"
                                   />
                                 </template>
@@ -457,7 +457,7 @@
                                           :aria-label="`Change version of ${dependency.name}`"
                                           kind="outlined"
                                           size="small"
-                                          icon="pi pi-chevron-down"
+                                          icon="ai ai-chevron-down"
                                           icon-position="trailing"
                                           :disabled="!dependency.versions.length"
                                         />
@@ -477,7 +477,7 @@
                                           >
                                             <template #prefix>
                                               <i
-                                                class="pi pi-search"
+                                                class="ai ai-search"
                                                 aria-hidden="true"
                                               />
                                             </template>

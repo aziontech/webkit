@@ -385,7 +385,7 @@
               <EmptyState
                 v-else
                 size="small"
-                icon="pi pi-check-circle"
+                icon="ai ai-check-circle"
                 title="No open alerts"
                 description="Every alert raised in the period has been closed."
               />
@@ -454,7 +454,7 @@
             <EmptyState
               v-else
               size="small"
-              icon="pi pi-users"
+              icon="ai ai-users"
               title="No entities at risk yet"
               description="Entities appear here once an alert names them."
             />
@@ -498,7 +498,7 @@
             <EmptyState
               v-else
               size="small"
-              icon="pi pi-bell"
+              icon="ai ai-bell"
               title="No open alerts"
               description="Alerts appear here when a detection rule matches. Select a longer period to see closed ones."
             />

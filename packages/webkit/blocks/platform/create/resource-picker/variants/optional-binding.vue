@@ -237,7 +237,7 @@
                   >
                     <template #prefix>
                       <i
-                        class="pi pi-search"
+                        class="ai ai-search"
                         aria-hidden="true"
                       />
                     </template>
@@ -277,7 +277,7 @@
                       <Item.Actions>
                         <i
                           v-if="option.value === firewallPicker.chosen"
-                          class="pi pi-check shrink-0 text-(--text-default)"
+                          class="ai ai-check shrink-0 text-(--text-default)"
                           aria-hidden="true"
                         />
                       </Item.Actions>

@@ -510,13 +510,13 @@
                   label="Sum"
                   severity="neutral"
                   size="small"
-                  icon="pi pi-calculator"
+                  icon="ai ai-calculator"
                 />
                 <Tag
                   v-if="comparison.delta !== null"
                   :label="(comparison.delta > 0 ? '+' : '') + comparison.delta.toFixed(2) + '%'"
                   :severity="comparison.delta > 0 ? 'success' : 'danger'"
-                  :icon="comparison.delta > 0 ? 'pi pi-arrow-up-right' : 'pi pi-arrow-down-left'"
+                  :icon="comparison.delta > 0 ? 'ai ai-arrow-up-right' : 'ai ai-arrow-down-left'"
                   size="small"
                 />
                 <ToggleGroup
@@ -528,7 +528,7 @@
               </span>
               <Tooltip text="Expand">
                 <IconButton
-                  icon="pi pi-window-maximize"
+                  icon="ai ai-window-maximize"
                   kind="transparent"
                   size="small"
                   aria-label="Expand Data transferred, this period vs previous"
@@ -542,7 +542,7 @@
               >
                 <DropdownMenu.Trigger>
                   <IconButton
-                    icon="pi pi-ellipsis-h"
+                    icon="ai ai-ellipsis-h"
                     kind="transparent"
                     size="small"
                     aria-label="More options for Data transferred, this period vs previous"
@@ -601,12 +601,12 @@
                   label="Sum"
                   severity="neutral"
                   size="small"
-                  icon="pi pi-calculator"
+                  icon="ai ai-calculator"
                 />
               </span>
               <Tooltip text="Expand">
                 <IconButton
-                  icon="pi pi-window-maximize"
+                  icon="ai ai-window-maximize"
                   kind="transparent"
                   size="small"
                   aria-label="Expand Data transferred by project"
@@ -620,7 +620,7 @@
               >
                 <DropdownMenu.Trigger>
                   <IconButton
-                    icon="pi pi-ellipsis-h"
+                    icon="ai ai-ellipsis-h"
                     kind="transparent"
                     size="small"
                     aria-label="More options for Data transferred by project"
@@ -674,12 +674,12 @@
                   label="Sum"
                   severity="neutral"
                   size="small"
-                  icon="pi pi-calculator"
+                  icon="ai ai-calculator"
                 />
               </span>
               <Tooltip text="Expand">
                 <IconButton
-                  icon="pi pi-window-maximize"
+                  icon="ai ai-window-maximize"
                   kind="transparent"
                   size="small"
                   aria-label="Expand Usage by project"
@@ -693,7 +693,7 @@
               >
                 <DropdownMenu.Trigger>
                   <IconButton
-                    icon="pi pi-ellipsis-h"
+                    icon="ai ai-ellipsis-h"
                     kind="transparent"
                     size="small"
                     aria-label="More options for Usage by project"
@@ -725,7 +725,7 @@
                   >
                     <template #prefix>
                       <i
-                        class="pi pi-search"
+                        class="ai ai-search"
                         aria-hidden="true"
                       />
                     </template>
@@ -751,7 +751,7 @@
                     key="empty-state-1"
                     v-if="!rows.length"
                     size="small"
-                    icon="pi pi-chart-line"
+                    icon="ai ai-chart-line"
                     title="No usage yet"
                     description="Usage appears here once a project serves requests."
                   />
@@ -759,7 +759,7 @@
                     key="empty-state-2"
                     v-else
                     size="small"
-                    icon="pi pi-search"
+                    icon="ai ai-search"
                     title="No matching rows"
                     description="Change the search."
                   />
@@ -849,7 +849,7 @@
               <template #empty>
                 <EmptyState
                   size="small"
-                  icon="pi pi-chart-line"
+                  icon="ai ai-chart-line"
                   title="No usage yet"
                   description="Usage appears here once a project serves requests."
                 />

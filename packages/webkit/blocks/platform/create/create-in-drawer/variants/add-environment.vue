@@ -200,7 +200,7 @@
           :label="selectedEnvironment"
           kind="outlined"
           size="medium"
-          icon="pi pi-chevron-down"
+          icon="ai ai-chevron-down"
           icon-position="trailing"
         />
       </DropdownMenuTrigger>
@@ -220,7 +220,7 @@
         >
           <template #leading
             ><i
-              class="pi pi-plus"
+              class="ai ai-plus"
               aria-hidden="true"
           /></template>
         </DropdownMenuOption>

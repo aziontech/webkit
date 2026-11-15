@@ -70,7 +70,7 @@
       <div class="layout-section-start">
         <EmptyState
           bordered
-          icon="pi pi-cloud-upload"
+          icon="ai ai-cloud-upload"
           title="No deployment running"
           description="Deploy web-app to build it and publish it to production. It takes about 25 seconds, and you can leave this page while it runs."
         >
@@ -79,7 +79,7 @@
               label="Deploy"
               kind="primary"
               size="medium"
-              icon="pi pi-play"
+              icon="ai ai-play"
               :loading="running"
               @click="deploy"
             />

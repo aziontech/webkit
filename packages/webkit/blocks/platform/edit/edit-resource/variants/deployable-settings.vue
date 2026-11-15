@@ -295,7 +295,7 @@
             >
               <template #prefix>
                 <i
-                  class="pi pi-search"
+                  class="ai ai-search"
                   aria-hidden="true"
                 />
               </template>
@@ -330,7 +330,7 @@
             >
               <span class="flex items-center gap-(--spacing-xs)">
                 <i
-                  class="pi pi-plus-circle"
+                  class="ai ai-plus-circle"
                   aria-hidden="true"
                 />
                 Add Environment
@@ -353,7 +353,7 @@
             label="Deploy"
             kind="outlined"
             size="medium"
-            icon="pi pi-cloud-upload"
+            icon="ai ai-cloud-upload"
           />
         </template>
       </PageTabs>
@@ -459,7 +459,7 @@
                         <template #cell-certificate="{ value }">
                           <span class="inline-flex min-w-0 items-center gap-(--spacing-xxs)">
                             <i
-                              class="pi pi-verified shrink-0 text-(--text-muted)"
+                              class="ai ai-verified shrink-0 text-(--text-muted)"
                               aria-hidden="true"
                             />
                             <span class="min-w-0 truncate">{{ value }}</span>
@@ -473,7 +473,7 @@
                             <DropdownMenu.Trigger>
                               <Tooltip text="Row actions">
                                 <IconButton
-                                  icon="pi pi-ellipsis-h"
+                                  icon="ai ai-ellipsis-h"
                                   kind="outlined"
                                   size="small"
                                   :disabled="saving"
@@ -488,7 +488,7 @@
                               >
                                 <template #leading
                                   ><i
-                                    class="pi pi-pencil"
+                                    class="ai ai-pencil"
                                     aria-hidden="true"
                                 /></template>
                               </DropdownMenu.Item>
@@ -500,7 +500,7 @@
                               >
                                 <template #leading
                                   ><i
-                                    class="pi pi-trash"
+                                    class="ai ai-trash"
                                     aria-hidden="true"
                                 /></template>
                               </DropdownMenu.Item>
@@ -521,7 +521,7 @@
                           label="Add Domain"
                           kind="outlined"
                           size="medium"
-                          icon="pi pi-plus"
+                          icon="ai ai-plus"
                           :disabled="saving"
                         />
                       </div>
@@ -939,7 +939,7 @@
                               label="Delete resource"
                               kind="danger"
                               size="medium"
-                              icon="pi pi-trash"
+                              icon="ai ai-trash"
                             />
                           </template>
                           <div class="flex flex-col gap-(--spacing-md)">

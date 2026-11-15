@@ -215,7 +215,7 @@
             >
               <template #prefix>
                 <i
-                  class="pi pi-search"
+                  class="ai ai-search"
                   aria-hidden="true"
                 />
               </template>
@@ -243,7 +243,7 @@
                     class="flex size-8 shrink-0 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
                   >
                     <i
-                      class="pi pi-box text-body-md leading-none text-(--text-default)"
+                      class="ai ai-box text-body-md leading-none text-(--text-default)"
                       aria-hidden="true"
                     />
                   </span>
@@ -255,7 +255,7 @@
                 <Item.Actions>
                   <i
                     v-if="option.value === projectPicker.chosen"
-                    class="pi pi-check shrink-0 text-(--text-default)"
+                    class="ai ai-check shrink-0 text-(--text-default)"
                     aria-hidden="true"
                   />
                 </Item.Actions>

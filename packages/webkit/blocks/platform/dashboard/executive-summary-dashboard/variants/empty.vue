@@ -265,7 +265,7 @@
             label="Export"
             kind="outlined"
             size="medium"
-            icon="pi pi-download"
+            icon="ai ai-download"
             disabled
           />
         </template>
@@ -419,7 +419,7 @@
               <EmptyState
                 v-else
                 size="small"
-                icon="pi pi-flag"
+                icon="ai ai-flag"
                 :title="'No goal results for ' + quarter"
                 description="Progress appears once the quarter reports its first month."
               />
@@ -490,7 +490,7 @@
               <EmptyState
                 v-else
                 size="small"
-                icon="pi pi-comment"
+                icon="ai ai-comment"
                 :title="'No notes for ' + quarter"
                 description="Leads add notes here when they review the quarter."
               />

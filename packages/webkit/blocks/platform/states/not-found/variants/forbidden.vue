@@ -28,7 +28,7 @@
             <Button
               label="Switch account"
               kind="outlined"
-              icon="pi pi-sync"
+              icon="ai ai-sync"
               size="medium"
             />
           </div>

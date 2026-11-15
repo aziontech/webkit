@@ -491,7 +491,7 @@
       >
         <template #actions>
           <IconButton
-            icon="pi pi-refresh"
+            icon="ai ai-refresh"
             kind="outlined"
             size="medium"
             aria-label="Refresh"
@@ -647,7 +647,7 @@
                   >
                     <template #prefix>
                       <i
-                        class="pi pi-search"
+                        class="ai ai-search"
                         aria-hidden="true"
                       />
                     </template>
@@ -736,7 +736,7 @@
                 <template #empty>
                   <EmptyState
                     size="small"
-                    icon="pi pi-search"
+                    icon="ai ai-search"
                     title="No matching items"
                     description="Change the search or the filters."
                   />
@@ -744,7 +744,7 @@
                 <template #cell-name="{ row }">
                   <div class="flex min-w-0 items-center gap-(--spacing-xs)">
                     <i
-                      class="pi pi-file shrink-0 text-body-lg text-(--text-muted)"
+                      class="ai ai-file shrink-0 text-body-lg text-(--text-muted)"
                       aria-hidden="true"
                     />
                     <span class="truncate">{{ row.name }}</span>
@@ -777,7 +777,7 @@
             <EmptyState
               v-else
               size="small"
-              icon="pi pi-file"
+              icon="ai ai-file"
               title="No items yet"
               description="Items sent for analysis inline or through the API appear here."
             />

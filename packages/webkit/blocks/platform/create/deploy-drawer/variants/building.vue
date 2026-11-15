@@ -335,7 +335,7 @@
         label="Deploy"
         kind="outlined"
         size="medium"
-        icon="pi pi-cloud-upload"
+        icon="ai ai-cloud-upload"
       />
     </DrawerTrigger>
 
@@ -369,7 +369,7 @@
                     class="flex size-7 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
                   >
                     <i
-                      class="pi pi-server text-body-xs text-(--text-default)"
+                      class="ai ai-server text-body-xs text-(--text-default)"
                       aria-hidden="true"
                     />
                   </span>
@@ -427,7 +427,7 @@
                           class="flex size-7 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
                         >
                           <i
-                            class="pi pi-box text-body-xs text-(--text-default)"
+                            class="ai ai-box text-body-xs text-(--text-default)"
                             aria-hidden="true"
                           />
                         </span>
@@ -505,7 +505,7 @@
                                   >
                                     <template #prefix>
                                       <i
-                                        class="pi pi-search"
+                                        class="ai ai-search"
                                         aria-hidden="true"
                                       />
                                     </template>
@@ -562,7 +562,7 @@
                               label="Change"
                               kind="outlined"
                               size="small"
-                              icon="pi pi-chevron-down"
+                              icon="ai ai-chevron-down"
                               icon-position="trailing"
                             />
                           </DropdownMenu.Trigger>
@@ -656,7 +656,7 @@
                             class="flex size-7 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
                           >
                             <i
-                              class="pi pi-box text-body-xs text-(--text-default)"
+                              class="ai ai-box text-body-xs text-(--text-default)"
                               aria-hidden="true"
                             />
                           </span>
@@ -728,7 +728,7 @@
                                     >
                                       <template #prefix>
                                         <i
-                                          class="pi pi-search"
+                                          class="ai ai-search"
                                           aria-hidden="true"
                                         />
                                       </template>

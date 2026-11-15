@@ -97,7 +97,7 @@
             label="Deploy"
             kind="primary"
             size="medium"
-            icon="pi pi-play"
+            icon="ai ai-play"
             :loading="running"
             :disabled="running"
             @click="deploy"
@@ -133,7 +133,7 @@
                 label="Redeploy"
                 kind="secondary"
                 size="medium"
-                icon="pi pi-refresh"
+                icon="ai ai-refresh"
                 @click="deploy"
               />
             </div>
@@ -161,7 +161,7 @@
                 label="Redeploy"
                 kind="secondary"
                 size="medium"
-                icon="pi pi-refresh"
+                icon="ai ai-refresh"
                 @click="deploy"
               />
             </div>
@@ -175,7 +175,7 @@
       >
         <EmptyState
           bordered
-          icon="pi pi-cloud-upload"
+          icon="ai ai-cloud-upload"
           :title="running ? 'Deployment running' : 'No deployment running'"
           :description="
             running

@@ -147,7 +147,7 @@
         {
           id: 'settings',
           label: 'Settings',
-          icon: 'pi pi-cog',
+          icon: 'ai ai-cog',
           kind: 'drill',
           groups: [
             {
@@ -227,9 +227,9 @@
   }
 
   const accountTypes: Record<AccountType, AccountTypeMeta> = {
-    organization: { label: 'Organization', icon: 'pi pi-building', severity: 'primary' },
-    group: { label: 'Group', icon: 'pi pi-users', severity: 'info' },
-    workspace: { label: 'Workspace', icon: 'pi pi-th-large', severity: 'neutral' }
+    organization: { label: 'Organization', icon: 'ai ai-building', severity: 'primary' },
+    group: { label: 'Group', icon: 'ai ai-users', severity: 'info' },
+    workspace: { label: 'Workspace', icon: 'ai ai-th-large', severity: 'neutral' }
   }
 
   const accounts: Account[] = [
@@ -380,7 +380,7 @@
               currentAccount.name
             }}</span>
             <i
-              class="pi pi-sort shrink-0 text-body-xs text-(--text-muted)"
+              class="ai ai-sort shrink-0 text-body-xs text-(--text-muted)"
               aria-hidden="true"
             />
           </button>
@@ -407,7 +407,7 @@
               kind="square"
             />
             <i
-              class="pi pi-chevron-down shrink-0 text-body-xs text-(--text-muted)"
+              class="ai ai-chevron-down shrink-0 text-body-xs text-(--text-muted)"
               aria-hidden="true"
             />
           </button>
@@ -421,7 +421,7 @@
             placement="bottom"
           >
             <IconButton
-              icon="pi pi-plus-circle"
+              icon="ai ai-plus-circle"
               kind="primary"
               size="medium"
               aria-label="Create"
@@ -444,7 +444,7 @@
             label="Create"
             kind="primary"
             size="medium"
-            icon="pi pi-plus-circle"
+            icon="ai ai-plus-circle"
           />
           <ButtonHighlight
             label="Agent"
@@ -480,7 +480,7 @@
           <Command.Item value="action:create">
             <template #prefix>
               <i
-                class="pi pi-plus-circle"
+                class="ai ai-plus-circle"
                 aria-hidden="true"
               />
             </template>
@@ -489,7 +489,7 @@
           <Command.Item value="action:theme">
             <template #prefix>
               <i
-                class="pi pi-moon"
+                class="ai ai-moon"
                 aria-hidden="true"
               />
             </template>
@@ -512,7 +512,7 @@
           >
             <template #trailing>
               <i
-                class="pi pi-cog"
+                class="ai ai-cog"
                 aria-hidden="true"
               />
             </template>
@@ -523,7 +523,7 @@
           >
             <template #trailing>
               <i
-                class="pi pi-key"
+                class="ai ai-key"
                 aria-hidden="true"
               />
             </template>
@@ -549,7 +549,7 @@
           >
             <template #trailing>
               <i
-                class="pi pi-book"
+                class="ai ai-book"
                 aria-hidden="true"
               />
             </template>
@@ -560,7 +560,7 @@
           >
             <template #trailing>
               <i
-                class="pi pi-sign-out"
+                class="ai ai-sign-out"
                 aria-hidden="true"
               />
             </template>
@@ -593,7 +593,7 @@
             <template #actions>
               <Button
                 label="Documentation"
-                icon="pi pi-book"
+                icon="ai ai-book"
                 kind="outlined"
                 size="medium"
                 href="https://www.azion.com/en/documentation/"
@@ -601,7 +601,7 @@
               />
               <Button
                 label="Create Application"
-                icon="pi pi-plus"
+                icon="ai ai-plus"
                 kind="outlined"
                 size="medium"
               />
@@ -642,7 +642,7 @@
             >
               <template #prefix>
                 <i
-                  class="pi pi-search"
+                  class="ai ai-search"
                   aria-hidden="true"
                 />
               </template>
@@ -676,7 +676,7 @@
                     >
                       <IconButton
                         v-if="row.hasChildren"
-                        :icon="row.expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
+                        :icon="row.expanded ? 'ai ai-chevron-down' : 'ai ai-chevron-right'"
                         kind="transparent"
                         size="small"
                         :aria-label="row.expanded ? `Collapse ${row.name}` : `Expand ${row.name}`"
@@ -732,7 +732,7 @@
                   <template #empty>
                     <EmptyState
                       size="small"
-                      icon="pi pi-search"
+                      icon="ai ai-search"
                       title="No accounts match your search"
                       :description="`Nothing in this tree matches “${accountQuery}”.`"
                     >

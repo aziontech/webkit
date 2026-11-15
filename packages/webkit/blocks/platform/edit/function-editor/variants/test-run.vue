@@ -501,7 +501,7 @@ export async function handleRequest(request, args = {}) {
                     label="Run test"
                     kind="secondary"
                     size="medium"
-                    icon="pi pi-play"
+                    icon="ai ai-play"
                     :loading="running"
                     @click="runTest"
                   />
@@ -586,7 +586,7 @@ export async function handleRequest(request, args = {}) {
 
                           <div class="flex min-w-0 flex-wrap items-center gap-(--spacing-xs)">
                             <i
-                              class="pi pi-arrow-right shrink-0 text-(--text-muted) rtl:-scale-x-100"
+                              class="ai ai-arrow-right shrink-0 text-(--text-muted) rtl:-scale-x-100"
                               aria-hidden="true"
                             />
                             <span class="truncate text-label-code-sm text-(--text-default)">{{
@@ -670,7 +670,7 @@ export async function handleRequest(request, args = {}) {
                           label="Add field"
                           kind="outlined"
                           size="medium"
-                          icon="pi pi-plus"
+                          icon="ai ai-plus"
                           :disabled="saving"
                           @click="addField"
                         />
@@ -678,7 +678,7 @@ export async function handleRequest(request, args = {}) {
                           label="Remove form"
                           kind="outlined"
                           size="medium"
-                          icon="pi pi-times"
+                          icon="ai ai-times"
                           :disabled="saving"
                           @click="removeForm"
                         />
@@ -723,7 +723,7 @@ export async function handleRequest(request, args = {}) {
                             <div class="flex min-h-0 flex-1">
                               <EmptyState
                                 bordered
-                                icon="pi pi-plus-circle"
+                                icon="ai ai-plus-circle"
                                 title="This form has no fields"
                                 description="Add the first argument the service reads."
                                 class="w-full"
@@ -733,7 +733,7 @@ export async function handleRequest(request, args = {}) {
                                     label="Add field"
                                     kind="secondary"
                                     size="medium"
-                                    icon="pi pi-plus"
+                                    icon="ai ai-plus"
                                     @click="addField"
                                   />
                                   <Link
@@ -776,7 +776,7 @@ export async function handleRequest(request, args = {}) {
                                             >
                                               <IconButton
                                                 :id="`${formId}-up-${field.id}`"
-                                                icon="pi pi-arrow-up"
+                                                icon="ai ai-arrow-up"
                                                 kind="transparent"
                                                 size="small"
                                                 :disabled="index === 0"
@@ -785,7 +785,7 @@ export async function handleRequest(request, args = {}) {
                                               />
                                               <IconButton
                                                 :id="`${formId}-down-${field.id}`"
-                                                icon="pi pi-arrow-down"
+                                                icon="ai ai-arrow-down"
                                                 kind="transparent"
                                                 size="small"
                                                 :disabled="index === fields.length - 1"
@@ -827,7 +827,7 @@ export async function handleRequest(request, args = {}) {
                                               />
                                               <Tooltip text="Duplicate this field">
                                                 <IconButton
-                                                  icon="pi pi-clone"
+                                                  icon="ai ai-clone"
                                                   kind="outlined"
                                                   size="small"
                                                   :aria-label="
@@ -838,7 +838,7 @@ export async function handleRequest(request, args = {}) {
                                               </Tooltip>
                                               <Tooltip text="Remove this field">
                                                 <IconButton
-                                                  icon="pi pi-trash"
+                                                  icon="ai ai-trash"
                                                   kind="outlined"
                                                   size="small"
                                                   :aria-label="
@@ -850,8 +850,8 @@ export async function handleRequest(request, args = {}) {
                                               <IconButton
                                                 :icon="
                                                   isExpanded(field.id)
-                                                    ? 'pi pi-chevron-up'
-                                                    : 'pi pi-chevron-down'
+                                                    ? 'ai ai-chevron-up'
+                                                    : 'ai ai-chevron-down'
                                                 "
                                                 kind="outlined"
                                                 size="small"
@@ -1267,7 +1267,7 @@ export async function handleRequest(request, args = {}) {
                         >
                           <template #suffix>
                             <i
-                              class="pi pi-lock"
+                              class="ai ai-lock"
                               aria-hidden="true"
                             />
                           </template>

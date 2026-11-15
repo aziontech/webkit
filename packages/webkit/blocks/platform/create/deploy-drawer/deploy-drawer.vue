@@ -73,7 +73,7 @@
       key: 'service',
       label: 'Service',
       name: 'web-app',
-      icon: 'pi pi-server',
+      icon: 'ai ai-server',
       note: '',
       total: 6,
       versions: [
@@ -110,7 +110,7 @@
           key: 'service@AG1VVDJP:module-auth-gateway',
           label: 'Module',
           name: 'auth-gateway',
-          icon: 'pi pi-code',
+          icon: 'ai ai-code',
           note: '',
           total: 8,
           versions: [
@@ -150,7 +150,7 @@
           key: 'service@AG1VVDJP:module-geo-redirect',
           label: 'Module',
           name: 'geo-redirect',
-          icon: 'pi pi-code',
+          icon: 'ai ai-code',
           note: '',
           total: 11,
           versions: [
@@ -190,7 +190,7 @@
           key: 'service@AG1VVDJP:integration-payments-api',
           label: 'Integration',
           name: 'payments-api',
-          icon: 'pi pi-link',
+          icon: 'ai ai-link',
           note: '',
           total: 11,
           versions: [
@@ -551,7 +551,7 @@
         label="Deploy"
         kind="outlined"
         size="medium"
-        icon="pi pi-cloud-upload"
+        icon="ai ai-cloud-upload"
       />
     </DrawerTrigger>
 
@@ -627,7 +627,7 @@
                               :aria-label="`Change version of ${row.name}`"
                               kind="outlined"
                               size="small"
-                              icon="pi pi-chevron-down"
+                              icon="ai ai-chevron-down"
                               icon-position="trailing"
                               :disabled="!row.versions.length"
                             />
@@ -647,7 +647,7 @@
                               >
                                 <template #prefix>
                                   <i
-                                    class="pi pi-search"
+                                    class="ai ai-search"
                                     aria-hidden="true"
                                   />
                                 </template>
@@ -775,7 +775,7 @@
                                           :aria-label="`Change version of ${dependency.name}`"
                                           kind="outlined"
                                           size="small"
-                                          icon="pi pi-chevron-down"
+                                          icon="ai ai-chevron-down"
                                           icon-position="trailing"
                                           :disabled="!dependency.versions.length"
                                         />
@@ -795,7 +795,7 @@
                                           >
                                             <template #prefix>
                                               <i
-                                                class="pi pi-search"
+                                                class="ai ai-search"
                                                 aria-hidden="true"
                                               />
                                             </template>
@@ -897,7 +897,7 @@
                           class="flex size-7 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
                         >
                           <i
-                            class="pi pi-box text-body-xs text-(--text-default)"
+                            class="ai ai-box text-body-xs text-(--text-default)"
                             aria-hidden="true"
                           />
                         </span>
@@ -975,7 +975,7 @@
                                   >
                                     <template #prefix>
                                       <i
-                                        class="pi pi-search"
+                                        class="ai ai-search"
                                         aria-hidden="true"
                                       />
                                     </template>
@@ -1032,7 +1032,7 @@
                               label="Change"
                               kind="outlined"
                               size="small"
-                              icon="pi pi-chevron-down"
+                              icon="ai ai-chevron-down"
                               icon-position="trailing"
                             />
                           </DropdownMenu.Trigger>
@@ -1122,7 +1122,7 @@
                             class="flex size-7 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
                           >
                             <i
-                              class="pi pi-box text-body-xs text-(--text-default)"
+                              class="ai ai-box text-body-xs text-(--text-default)"
                               aria-hidden="true"
                             />
                           </span>
@@ -1194,7 +1194,7 @@
                                     >
                                       <template #prefix>
                                         <i
-                                          class="pi pi-search"
+                                          class="ai ai-search"
                                           aria-hidden="true"
                                         />
                                       </template>
@@ -1262,7 +1262,7 @@
               class="flex min-w-0 items-center gap-(--spacing-xxs) text-body-xs text-(--text-muted)"
             >
               <i
-                class="pi pi-info-circle shrink-0"
+                class="ai ai-info-circle shrink-0"
                 aria-hidden="true"
               />
               <span class="truncate">{{ changeSummary }}</span>

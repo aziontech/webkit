@@ -55,12 +55,12 @@
   const crumbs = [{ label: 'Applications', href: '/docs/applications' }, { label: 'Overview' }]
 
   const metaActions = [
-    { value: 'copy', label: 'Copy as Markdown', icon: 'pi pi-copy' },
-    { value: 'markdown', label: 'View as Markdown', icon: 'pi pi-eye' },
+    { value: 'copy', label: 'Copy as Markdown', icon: 'ai ai-copy' },
+    { value: 'markdown', label: 'View as Markdown', icon: 'ai ai-eye' },
     {
       value: 'agent-setup',
       label: 'Agent setup',
-      icon: 'pi pi-microchip-ai',
+      icon: 'ai ai-microchip-ai',
       href: '/docs/agent-setup'
     }
   ]
@@ -76,18 +76,18 @@
     {
       label: 'GitHub',
       links: [
-        { label: 'Azion Docs', href: 'https://github.com/aziontech', icon: 'pi pi-github' },
+        { label: 'Azion Docs', href: 'https://github.com/aziontech', icon: 'ai ai-github' },
         {
           label: 'Contribute to this page',
           href: 'https://github.com/aziontech/azion',
-          icon: 'pi pi-pencil'
+          icon: 'ai ai-pencil'
         }
       ]
     },
     {
       label: 'Community',
       links: [
-        { label: 'Discord', href: 'https://discord.gg/azion', icon: 'pi pi-discord' },
+        { label: 'Discord', href: 'https://discord.gg/azion', icon: 'ai ai-discord' },
         { label: 'X', href: 'https://x.com/aziontech', icon: 'ai ai-x' }
       ]
     }
@@ -208,13 +208,13 @@
         <DocCardGroup :columns="2">
           <DocCard
             title="Quickstart"
-            icon="pi pi-bolt"
+            icon="ai ai-bolt"
             href="/docs/applications/quickstart"
             >Create an application and bind it to a workload.</DocCard
           >
           <DocCard
             title="Rules Engine"
-            icon="pi pi-sliders-h"
+            icon="ai ai-sliders-h"
             href="/docs/applications/rules-engine"
             >Criteria and behaviors, phase by phase.</DocCard
           >
@@ -225,7 +225,7 @@
 
     <template #actions>
       <IconButton
-        icon="pi pi-github"
+        icon="ai ai-github"
         kind="outlined"
         size="medium"
         aria-label="Azion on GitHub"

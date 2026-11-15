@@ -638,7 +638,7 @@
             <div class="flex w-full flex-wrap items-center gap-(--spacing-xs)">
               <div class="flex min-w-0 items-center gap-(--spacing-xs)">
                 <i
-                  class="pi pi-table shrink-0 text-(--text-muted)"
+                  class="ai ai-table shrink-0 text-(--text-muted)"
                   aria-hidden="true"
                 />
                 <span class="truncate text-heading-xxs text-(--text-default)">{{
@@ -655,14 +655,14 @@
                   label="Add column"
                   kind="outlined"
                   size="medium"
-                  icon="pi pi-plus"
+                  icon="ai ai-plus"
                   @click="openColumn"
                 />
                 <Button
                   label="Insert row"
                   kind="primary"
                   size="medium"
-                  icon="pi pi-plus"
+                  icon="ai ai-plus"
                   @click="openRow"
                 />
                 <DropdownMenu
@@ -672,7 +672,7 @@
                   <DropdownMenu.Trigger>
                     <Tooltip text="Table actions">
                       <IconButton
-                        icon="pi pi-ellipsis-h"
+                        icon="ai ai-ellipsis-h"
                         kind="outlined"
                         size="medium"
                         aria-label="Table actions"
@@ -686,7 +686,7 @@
                     >
                       <template #leading
                         ><i
-                          class="pi pi-plus"
+                          class="ai ai-plus"
                           aria-hidden="true"
                       /></template>
                     </DropdownMenu.Item>
@@ -698,7 +698,7 @@
                     >
                       <template #leading
                         ><i
-                          class="pi pi-eraser"
+                          class="ai ai-eraser"
                           aria-hidden="true"
                       /></template>
                     </DropdownMenu.Item>
@@ -732,7 +732,7 @@
                 >
                   <template #leading
                     ><i
-                      class="pi pi-pencil"
+                      class="ai ai-pencil"
                       aria-hidden="true"
                   /></template>
                 </DropdownMenu.Item>
@@ -861,7 +861,7 @@
                       label="About data types"
                       kind="outlined"
                       size="small"
-                      icon="pi pi-external-link"
+                      icon="ai ai-external-link"
                       href="https://www.azion.com/en/documentation/"
                       target="_blank"
                     />

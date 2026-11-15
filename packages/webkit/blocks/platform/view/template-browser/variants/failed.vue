@@ -25,7 +25,7 @@
         <template #actions>
           <Button
             label="Documentation"
-            icon="pi pi-book"
+            icon="ai ai-book"
             kind="outlined"
             size="medium"
             href="https://example.com/docs/templates"
@@ -49,7 +49,7 @@
         />
         <EmptyState
           size="medium"
-          icon="pi pi-th-large"
+          icon="ai ai-th-large"
           title="Templates are unavailable"
           description="The catalog shows here once it loads. You can still deploy from your own repository."
         >

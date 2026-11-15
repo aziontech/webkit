@@ -535,7 +535,7 @@
                             :icon="
                               provider.connected || !provider.href.startsWith('http')
                                 ? undefined
-                                : 'pi pi-external-link'
+                                : 'ai ai-external-link'
                             "
                             :href="provider.href"
                             :target="provider.href.startsWith('http') ? '_blank' : undefined"
@@ -629,7 +629,7 @@
                           label="Delete account"
                           kind="danger"
                           size="medium"
-                          icon="pi pi-trash"
+                          icon="ai ai-trash"
                           @click="openDelete"
                         />
                       </SettingRow>

@@ -1039,7 +1039,7 @@
                     :label="panel.aggregation"
                     severity="neutral"
                     size="small"
-                    icon="pi pi-calculator"
+                    icon="ai ai-calculator"
                   />
                 </span>
                 <DropdownMenu
@@ -1048,7 +1048,7 @@
                 >
                   <DropdownMenu.Trigger>
                     <IconButton
-                      icon="pi pi-ellipsis-h"
+                      icon="ai ai-ellipsis-h"
                       kind="transparent"
                       size="small"
                       :aria-label="`More options for ${panel.title}`"
@@ -1108,7 +1108,7 @@
                     label="Sum"
                     severity="neutral"
                     size="small"
-                    icon="pi pi-calculator"
+                    icon="ai ai-calculator"
                   />
                 </span>
                 <DropdownMenu
@@ -1117,7 +1117,7 @@
                 >
                   <DropdownMenu.Trigger>
                     <IconButton
-                      icon="pi pi-ellipsis-h"
+                      icon="ai ai-ellipsis-h"
                       kind="transparent"
                       size="small"
                       :aria-label="`More options for ${breakdown.title}`"
@@ -1148,7 +1148,7 @@
                     >
                       <template #prefix>
                         <i
-                          class="pi pi-search"
+                          class="ai ai-search"
                           aria-hidden="true"
                         />
                       </template>
@@ -1179,7 +1179,7 @@
                   <template #empty>
                     <EmptyState
                       size="small"
-                      icon="pi pi-search"
+                      icon="ai ai-search"
                       title="No matching rows"
                       :description="
                         breakdown.classes

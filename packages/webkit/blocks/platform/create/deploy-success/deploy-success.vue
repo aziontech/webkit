@@ -21,14 +21,14 @@
     {
       key: 'service',
       kind: 'Service',
-      icon: 'pi pi-server',
+      icon: 'ai ai-server',
       name: 'web-app',
       reference: '1482736015'
     },
     {
       key: 'resource',
       kind: 'Resource',
-      icon: 'pi pi-box',
+      icon: 'ai ai-box',
       name: 'web-app',
       state: 'created',
       reference: '1739204418'
@@ -36,14 +36,14 @@
     {
       key: 'integration',
       kind: 'Integration',
-      icon: 'pi pi-link',
+      icon: 'ai ai-link',
       name: 'web-app-storage',
       reference: '1215583907'
     },
     {
       key: 'storage',
       kind: 'Storage',
-      icon: 'pi pi-inbox',
+      icon: 'ai ai-inbox',
       name: 'web-app-assets',
       reference: '24 files · 1.2 MB'
     }
@@ -51,21 +51,21 @@
 
   const nextSteps: NextStep[] = [
     {
-      icon: 'pi pi-globe',
+      icon: 'ai ai-globe',
       title: 'Customize domain',
       description:
         'Associate a custom domain and subdomains with this service to handle user access.',
       href: 'https://example.com/docs'
     },
     {
-      icon: 'pi pi-sitemap',
+      icon: 'ai ai-sitemap',
       title: 'Point traffic',
       description:
         'Redirect the traffic of a domain to the platform and take advantage of the distributed network.',
       href: 'https://example.com/docs'
     },
     {
-      icon: 'pi pi-chart-line',
+      icon: 'ai ai-chart-line',
       title: 'View analytics',
       description: 'Gain powerful insights into your performance, availability, and security.',
       href: 'https://example.com/docs'
@@ -110,7 +110,7 @@
                       class="relative flex size-10 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface)"
                     >
                       <i
-                        class="pi pi-globe text-body-md leading-none text-(--text-default)"
+                        class="ai ai-globe text-body-md leading-none text-(--text-default)"
                         aria-hidden="true"
                       />
                     </span>
@@ -136,7 +136,7 @@
                         label="Visit site"
                         kind="outlined"
                         size="medium"
-                        icon="pi pi-external-link"
+                        icon="ai ai-external-link"
                         icon-position="trailing"
                         href="https://web-app-k3x9q2.example.com"
                         target="_blank"
@@ -147,7 +147,7 @@
                       <li class="flex min-h-7 min-w-0 flex-wrap items-center gap-x-(--spacing-md)">
                         <span class="flex min-w-0 items-center gap-(--spacing-xs)">
                           <i
-                            class="pi pi-globe shrink-0 text-(--text-muted)"
+                            class="ai ai-globe shrink-0 text-(--text-muted)"
                             aria-hidden="true"
                           />
                           <div class="min-w-0">
@@ -168,7 +168,7 @@
                           label="Add custom domain"
                           kind="link"
                           size="small"
-                          icon="pi pi-plus-circle"
+                          icon="ai ai-plus-circle"
                           href="/services/1482736015?name=web-app&tab=settings"
                         />
                       </li>

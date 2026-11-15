@@ -75,7 +75,7 @@
           <template #cell-certificate="{ value }">
             <span class="inline-flex min-w-0 items-center gap-(--spacing-xxs)">
               <i
-                class="pi pi-verified shrink-0 text-(--text-muted)"
+                class="ai ai-verified shrink-0 text-(--text-muted)"
                 aria-hidden="true"
               />
               <span class="min-w-0 truncate">{{ value }}</span>
@@ -93,7 +93,7 @@
                 >
                   <template #leading
                     ><i
-                      class="pi pi-pencil"
+                      class="ai ai-pencil"
                       aria-hidden="true"
                   /></template>
                 </DropdownMenuOption>
@@ -105,7 +105,7 @@
                 >
                   <template #leading
                     ><i
-                      class="pi pi-trash"
+                      class="ai ai-trash"
                       aria-hidden="true"
                   /></template>
                 </DropdownMenuOption>
@@ -123,7 +123,7 @@
             label="Add Domain"
             kind="outlined"
             size="medium"
-            icon="pi pi-plus"
+            icon="ai ai-plus"
           />
         </div>
       </div>

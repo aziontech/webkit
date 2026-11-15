@@ -75,7 +75,7 @@ Names the icon-only back control: `Change email` on the password step, `Back to 
 
 ### K. Back control — `IconButton` (password and reset steps)
 
-`pi pi-chevron-left`, `kind="outlined"`, `size="small"`, with an `aria-label` equal to its tooltip. On the password step it sits beside the email being used, so the user can see and change which account they are signing in to; going back clears the password.
+`ai ai-chevron-left`, `kind="outlined"`, `size="small"`, with an `aria-label` equal to its tooltip. On the password step it sits beside the email being used, so the user can see and change which account they are signing in to; going back clears the password.
 
 ### L. Password field — `Field` (password and new-password steps)
 

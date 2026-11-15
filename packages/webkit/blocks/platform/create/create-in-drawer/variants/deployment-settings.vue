@@ -87,7 +87,7 @@
       <div class="w-full md:w-fit">
         <Button
           label="Create Deployment Settings"
-          icon="pi pi-plus"
+          icon="ai ai-plus"
           kind="outlined"
           size="medium"
           class="w-full"

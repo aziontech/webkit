@@ -102,7 +102,7 @@
     <GlobalHeader aria-label="Console">
       <GlobalHeader.Start>
         <IconButton
-          icon="pi pi-chevron-left"
+          icon="ai ai-chevron-left"
           aria-label="Back to Domains"
           kind="outlined"
           size="small"
@@ -224,7 +224,7 @@
               <SettingsSection
                 title="Advanced"
                 v-model:open="advancedOpen"
-                icon="pi pi-cog"
+                icon="ai ai-cog"
                 collapsible
               >
                 <Card :padded="false">

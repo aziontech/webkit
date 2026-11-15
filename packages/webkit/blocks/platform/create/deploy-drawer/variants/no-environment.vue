@@ -26,7 +26,7 @@
         label="Deploy"
         kind="outlined"
         size="medium"
-        icon="pi pi-cloud-upload"
+        icon="ai ai-cloud-upload"
       />
     </DrawerTrigger>
 
@@ -62,7 +62,7 @@
             <EmptyState
               bordered
               size="small"
-              icon="pi pi-link"
+              icon="ai ai-link"
               title="No environment on this project"
               description="project-01 has no environment yet, so there is nowhere to deploy it. Add a domain and the environment it answers in, then deploy."
             >
@@ -71,7 +71,7 @@
                   label="Add environment"
                   kind="outlined"
                   size="small"
-                  icon="pi pi-plus"
+                  icon="ai ai-plus"
                 />
               </template>
             </EmptyState>

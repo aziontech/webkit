@@ -727,7 +727,7 @@
             >
               <template #prefix>
                 <i
-                  class="pi pi-search"
+                  class="ai ai-search"
                   aria-hidden="true"
                 />
               </template>
@@ -740,7 +740,7 @@
             class="shrink-0"
           >
             <IconButton
-              icon="pi pi-refresh"
+              icon="ai ai-refresh"
               kind="outlined"
               size="medium"
               :loading="loading"
@@ -754,7 +754,7 @@
             class="shrink-0"
           >
             <IconButton
-              icon="pi pi-download"
+              icon="ai ai-download"
               kind="outlined"
               size="medium"
               :disabled="!tableRef"
@@ -810,7 +810,7 @@
                     >
                       <template #prefix>
                         <i
-                          class="pi pi-search"
+                          class="ai ai-search"
                           aria-hidden="true"
                         />
                       </template>
@@ -892,7 +892,7 @@
                               </span>
                               <i
                                 v-if="isValueApplied(field.id, entry.value)"
-                                class="pi pi-check shrink-0 text-(--primary)"
+                                class="ai ai-check shrink-0 text-(--primary)"
                                 aria-hidden="true"
                               />
                             </span>
@@ -1013,7 +1013,7 @@
                                       </span>
                                       <i
                                         v-if="isValueApplied(field.id, entry.value)"
-                                        class="pi pi-check shrink-0 text-(--primary)"
+                                        class="ai ai-check shrink-0 text-(--primary)"
                                         aria-hidden="true"
                                       />
                                     </span>
@@ -1091,7 +1091,7 @@
               </h2>
               <Tooltip text="Close">
                 <IconButton
-                  icon="pi pi-times"
+                  icon="ai ai-times"
                   kind="transparent"
                   size="small"
                   aria-label="Close the event document"

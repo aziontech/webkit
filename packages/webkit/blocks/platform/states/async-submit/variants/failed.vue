@@ -338,7 +338,7 @@
                 label="Redeploy"
                 kind="secondary"
                 size="medium"
-                icon="pi pi-refresh"
+                icon="ai ai-refresh"
                 @click="redeploy"
               />
             </div>

@@ -299,7 +299,7 @@
               label="Redeploy"
               kind="secondary"
               size="medium"
-              icon="pi pi-refresh"
+              icon="ai ai-refresh"
             />
           </template>
         </Alert>
@@ -315,7 +315,7 @@
                 label="Visit"
                 kind="secondary"
                 size="medium"
-                icon="pi pi-external-link"
+                icon="ai ai-external-link"
                 disabled
                 target="_blank"
               />
@@ -325,7 +325,7 @@
               <DropdownMenu.Trigger>
                 <Tooltip text="Deployment actions">
                   <IconButton
-                    icon="pi pi-ellipsis-h"
+                    icon="ai ai-ellipsis-h"
                     kind="outlined"
                     size="medium"
                     aria-label="Deployment actions"
@@ -339,7 +339,7 @@
                 >
                   <template #leading>
                     <i
-                      class="pi pi-align-left"
+                      class="ai ai-align-left"
                       aria-hidden="true"
                     />
                   </template>
@@ -350,7 +350,7 @@
                 >
                   <template #leading>
                     <i
-                      class="pi pi-arrow-right-arrow-left"
+                      class="ai ai-arrow-right-arrow-left"
                       aria-hidden="true"
                     />
                   </template>
@@ -363,7 +363,7 @@
                 >
                   <template #leading>
                     <i
-                      class="pi pi-refresh"
+                      class="ai ai-refresh"
                       aria-hidden="true"
                     />
                   </template>
@@ -405,7 +405,7 @@
               <span class="text-label-sm text-(--text-muted)">Duration</span>
               <div class="flex min-w-0 items-center gap-(--spacing-xs)">
                 <i
-                  class="pi pi-clock shrink-0 text-(--text-muted)"
+                  class="ai ai-clock shrink-0 text-(--text-muted)"
                   aria-hidden="true"
                 />
                 <span class="truncate text-body-sm text-(--text-default)"> 48s </span>
@@ -432,7 +432,7 @@
                     web-app
                   </span>
                   <i
-                    class="pi pi-external-link shrink-0 text-body-xs leading-none"
+                    class="ai ai-external-link shrink-0 text-body-xs leading-none"
                     aria-hidden="true"
                   />
                 </a>
@@ -449,7 +449,7 @@
                     web-app
                   </span>
                   <i
-                    class="pi pi-external-link shrink-0 text-body-xs leading-none"
+                    class="ai ai-external-link shrink-0 text-body-xs leading-none"
                     aria-hidden="true"
                   />
                 </a>
@@ -462,7 +462,7 @@
                   <Tag
                     severity="neutral"
                     size="medium"
-                    icon="pi pi-desktop"
+                    icon="ai ai-desktop"
                     label="Console"
                   />
                 </Tooltip>
@@ -475,7 +475,7 @@
                   <Tag
                     severity="neutral"
                     size="medium"
-                    icon="pi pi-wrench"
+                    icon="ai ai-wrench"
                     label="vue"
                   />
                 </Tooltip>
@@ -487,7 +487,7 @@
                 class="flex min-w-0 flex-wrap items-center gap-(--spacing-xs) text-body-sm text-(--text-default)"
               >
                 <i
-                  class="pi pi-inbox shrink-0 text-(--text-muted)"
+                  class="ai ai-inbox shrink-0 text-(--text-muted)"
                   aria-hidden="true"
                 />
                 <span class="truncate">web-app-assets</span>
@@ -503,7 +503,7 @@
               <span class="text-label-sm text-(--text-muted)">Domains</span>
               <div class="flex min-w-0 items-center gap-(--spacing-xs)">
                 <i
-                  class="pi pi-globe shrink-0 text-body-lg text-(--text-muted)"
+                  class="ai ai-globe shrink-0 text-body-lg text-(--text-muted)"
                   aria-hidden="true"
                 />
                 <Tooltip text="Open web-app-mh2saq.example.com in a new tab">
@@ -517,7 +517,7 @@
                       web-app-mh2saq.example.com
                     </span>
                     <i
-                      class="pi pi-external-link shrink-0 text-body-xs leading-none"
+                      class="ai ai-external-link shrink-0 text-body-xs leading-none"
                       aria-hidden="true"
                     />
                   </a>
@@ -562,7 +562,7 @@
                             Default
                           </span>
                           <i
-                            class="pi pi-external-link shrink-0 text-body-xs leading-none"
+                            class="ai ai-external-link shrink-0 text-body-xs leading-none"
                             aria-hidden="true"
                           />
                         </a>

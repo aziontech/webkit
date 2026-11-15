@@ -59,10 +59,10 @@
     {
       id: 'errors',
       label: 'Why is storefront answering with 502 errors?',
-      icon: 'pi pi-exclamation-triangle'
+      icon: 'ai ai-exclamation-triangle'
     },
-    { id: 'purge', label: 'How do I purge the cache of one URL?', icon: 'pi pi-bolt' },
-    { id: 'domains', label: 'Which domains does storefront answer on?', icon: 'pi pi-globe' }
+    { id: 'purge', label: 'How do I purge the cache of one URL?', icon: 'ai ai-bolt' },
+    { id: 'domains', label: 'Which domains does storefront answer on?', icon: 'ai ai-globe' }
   ]
 
   const turns = ref<Turn[]>([
@@ -313,7 +313,7 @@
             </div>
             <div class="flex items-center gap-(--spacing-xxs)">
               <IconButton
-                icon="pi pi-plus"
+                icon="ai ai-plus"
                 aria-label="New chat"
                 kind="transparent"
                 size="small"
@@ -389,7 +389,7 @@
                       :value="turn.content"
                     />
                     <IconButton
-                      icon="pi pi-refresh"
+                      icon="ai ai-refresh"
                       aria-label="Regenerate response"
                       kind="transparent"
                       size="small"

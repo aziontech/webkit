@@ -223,7 +223,7 @@
           </div>
           <Button
             label="Export CSV"
-            icon="pi pi-download"
+            icon="ai ai-download"
             kind="outlined"
             size="medium"
             disabled
@@ -275,7 +275,7 @@
               <DropdownMenu placement="bottom-end">
                 <DropdownMenu.Trigger>
                   <IconButton
-                    icon="pi pi-ellipsis-h"
+                    icon="ai ai-ellipsis-h"
                     kind="transparent"
                     size="small"
                     aria-label="More options for Spend by category"
@@ -328,7 +328,7 @@
               <DropdownMenu placement="bottom-end">
                 <DropdownMenu.Trigger>
                   <IconButton
-                    icon="pi pi-ellipsis-h"
+                    icon="ai ai-ellipsis-h"
                     kind="transparent"
                     size="small"
                     aria-label="More options for Current split"
@@ -369,7 +369,7 @@
               <DropdownMenu placement="bottom-end">
                 <DropdownMenu.Trigger>
                   <IconButton
-                    icon="pi pi-ellipsis-h"
+                    icon="ai ai-ellipsis-h"
                     kind="transparent"
                     size="small"
                     aria-label="More options for Top contributors"
@@ -398,7 +398,7 @@
               <template #empty>
                 <EmptyState
                   size="small"
-                  icon="pi pi-chart-bar"
+                  icon="ai ai-chart-bar"
                   title="No spend in this range"
                   description="Nothing was billed to the organization in the selected period."
                 />
@@ -450,10 +450,10 @@
                   :severity="row.change > 0 ? 'danger' : row.change < 0 ? 'success' : 'neutral'"
                   :icon="
                     row.change > 0
-                      ? 'pi pi-arrow-up-right'
+                      ? 'ai ai-arrow-up-right'
                       : row.change < 0
-                        ? 'pi pi-arrow-down-right'
-                        : 'pi pi-minus'
+                        ? 'ai ai-arrow-down-right'
+                        : 'ai ai-minus'
                   "
                   size="small"
                 />

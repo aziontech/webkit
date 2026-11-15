@@ -47,7 +47,7 @@
         <template #actions>
           <Button
             label="Documentation"
-            icon="pi pi-book"
+            icon="ai ai-book"
             kind="outlined"
             size="medium"
             href="https://example.com/docs/resources"
@@ -55,7 +55,7 @@
           />
           <Button
             label="Create Resource"
-            icon="pi pi-plus"
+            icon="ai ai-plus"
             kind="primary"
             size="large"
           />
@@ -78,7 +78,7 @@
                 class="shrink-0"
               >
                 <IconButton
-                  icon="pi pi-refresh"
+                  icon="ai ai-refresh"
                   kind="outlined"
                   size="medium"
                   aria-label="Refresh"
@@ -90,7 +90,7 @@
                 class="shrink-0"
               >
                 <IconButton
-                  icon="pi pi-download"
+                  icon="ai ai-download"
                   kind="outlined"
                   size="medium"
                   disabled

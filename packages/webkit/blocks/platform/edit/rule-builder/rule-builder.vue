@@ -524,7 +524,7 @@
       <div class="w-full md:w-fit">
         <Button
           label="Add Rule"
-          icon="pi pi-plus"
+          icon="ai ai-plus"
           kind="outlined"
           size="medium"
           class="w-full"
@@ -766,7 +766,7 @@
                                 >
                                   <template #prefix>
                                     <i
-                                      class="pi pi-search"
+                                      class="ai ai-search"
                                       aria-hidden="true"
                                     />
                                   </template>

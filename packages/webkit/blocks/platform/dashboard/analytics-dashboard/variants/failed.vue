@@ -247,7 +247,7 @@
                   label="Sum"
                   severity="neutral"
                   size="small"
-                  icon="pi pi-calculator"
+                  icon="ai ai-calculator"
                 />
                 <Tag
                   v-if="variations.requests"
@@ -265,7 +265,7 @@
               </span>
               <Tooltip text="Expand">
                 <IconButton
-                  icon="pi pi-window-maximize"
+                  icon="ai ai-window-maximize"
                   kind="transparent"
                   size="small"
                   aria-label="Expand Requests over time"
@@ -278,7 +278,7 @@
               >
                 <DropdownMenu.Trigger>
                   <IconButton
-                    icon="pi pi-ellipsis-h"
+                    icon="ai ai-ellipsis-h"
                     kind="transparent"
                     size="small"
                     aria-label="More options for Requests over time"
@@ -322,7 +322,7 @@
                   label="Sum"
                   severity="neutral"
                   size="small"
-                  icon="pi pi-calculator"
+                  icon="ai ai-calculator"
                 />
                 <Tag
                   v-if="variations.statusCodes"
@@ -340,7 +340,7 @@
               </span>
               <Tooltip text="Expand">
                 <IconButton
-                  icon="pi pi-window-maximize"
+                  icon="ai ai-window-maximize"
                   kind="transparent"
                   size="small"
                   aria-label="Expand Status codes"
@@ -353,7 +353,7 @@
               >
                 <DropdownMenu.Trigger>
                   <IconButton
-                    icon="pi pi-ellipsis-h"
+                    icon="ai ai-ellipsis-h"
                     kind="transparent"
                     size="small"
                     aria-label="More options for Status codes"
@@ -397,12 +397,12 @@
                   label="Sum"
                   severity="neutral"
                   size="small"
-                  icon="pi pi-calculator"
+                  icon="ai ai-calculator"
                 />
               </span>
               <Tooltip text="Expand">
                 <IconButton
-                  icon="pi pi-window-maximize"
+                  icon="ai ai-window-maximize"
                   kind="transparent"
                   size="small"
                   aria-label="Expand Requests by country"
@@ -415,7 +415,7 @@
               >
                 <DropdownMenu.Trigger>
                   <IconButton
-                    icon="pi pi-ellipsis-h"
+                    icon="ai ai-ellipsis-h"
                     kind="transparent"
                     size="small"
                     aria-label="More options for Requests by country"
@@ -460,12 +460,12 @@
                   label="Sum"
                   severity="neutral"
                   size="small"
-                  icon="pi pi-calculator"
+                  icon="ai ai-calculator"
                 />
               </span>
               <Tooltip text="Expand">
                 <IconButton
-                  icon="pi pi-window-maximize"
+                  icon="ai ai-window-maximize"
                   kind="transparent"
                   size="small"
                   aria-label="Expand Top hosts"
@@ -478,7 +478,7 @@
               >
                 <DropdownMenu.Trigger>
                   <IconButton
-                    icon="pi pi-ellipsis-h"
+                    icon="ai ai-ellipsis-h"
                     kind="transparent"
                     size="small"
                     aria-label="More options for Top hosts"

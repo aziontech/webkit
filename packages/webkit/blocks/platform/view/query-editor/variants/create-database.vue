@@ -110,7 +110,7 @@
     <GlobalHeader aria-label="Console">
       <GlobalHeader.Start>
         <IconButton
-          icon="pi pi-chevron-left"
+          icon="ai ai-chevron-left"
           aria-label="Back to Databases"
           kind="outlined"
           size="small"
@@ -210,7 +210,7 @@
               <SettingsSection
                 v-model:open="advancedOpen"
                 title="Advanced"
-                icon="pi pi-cog"
+                icon="ai ai-cog"
                 collapsible
               >
                 <Card :padded="false">
