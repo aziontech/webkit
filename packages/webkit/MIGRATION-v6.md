@@ -70,57 +70,130 @@ component.
 
 ## 3. Renamed props and values
 
-| Component         | v5                 | v6                   |
-| ----------------- | ------------------ | -------------------- |
-| `accordion`       | `value`            | `modelValue`         |
-| `alert`           | `severity="error"` | `severity="danger"`  |
-| `badge`           | `severity=default` | `severity=neutral`   |
-| `button`          | `kind="text"`      | `kind="transparent"` |
-| `card-pricing`    | `planTitle`        | `title`              |
-| `checkbox`        | `inputId`          | `id`                 |
-| `code-block`      | `border`           | `bordered`           |
-| `code-block`      | `value`            | `modelValue`         |
-| `doc-card-group`  | `cols`             | `columns`            |
-| `doc-card-group`  | `mobileCols`       | `mobileColumns`      |
-| `doc-card`        | `link`             | `linkLabel`          |
-| `doc-card`        | `overline`         | `eyebrow`            |
-| `item`            | `kind="outline"`   | `kind="outlined"`    |
-| `log-view`        | `border`           | `bordered`           |
-| `log-view`        | `showCopy`         | `copyable`           |
-| `media-tabs`      | `autoPlayInterval` | `autoplayInterval`   |
-| `media-tabs`      | `autoPlay`         | `autoplay`           |
-| `navigation-menu` | `value`            | `modelValue`         |
-| `overline`        | `showCursor`       | `cursor`             |
-| `popover`         | `width`            | `size`               |
-| `progress`        | `shape`            | `kind`               |
-| `quote-tabs`      | `autoPlayInterval` | `autoplayInterval`   |
-| `quote-tabs`      | `autoPlay`         | `autoplay`           |
-| `severity-tag`    | `level`            | `severity`           |
-| `skeleton`        | `kind="shape"`     | `kind="rectangle"`   |
-| `split-button`    | `model`            | `items`              |
-| `table`           | `border`           | `bordered`           |
-| `tabs`            | `value`            | `modelValue`         |
-| `textarea`        | `resizable`        | `resize`             |
-| `theme-switcher`  | `value`            | `modelValue`         |
+| Component          | v5                 | v6                   |
+| ------------------ | ------------------ | -------------------- |
+| `accordion`        | `value`            | `modelValue`         |
+| `alert`            | `severity="error"` | `severity="danger"`  |
+| `attribute-editor` | `empty`            | `emptyTitle`         |
+| `badge`            | `severity=default` | `severity=neutral`   |
+| `button`           | `kind="text"`      | `kind="transparent"` |
+| `card-pricing`     | `planTitle`        | `title`              |
+| `checkbox`         | `inputId`          | `id`                 |
+| `code-block`       | `border`           | `bordered`           |
+| `code-block`       | `value`            | `modelValue`         |
+| `doc-card-group`   | `cols`             | `columns`            |
+| `doc-card-group`   | `mobileCols`       | `mobileColumns`      |
+| `doc-card`         | `link`             | `linkLabel`          |
+| `doc-card`         | `overline`         | `eyebrow`            |
+| `item`             | `kind="outline"`   | `kind="outlined"`    |
+| `log-view`         | `border`           | `bordered`           |
+| `log-view`         | `showCopy`         | `copyable`           |
+| `media-tabs`       | `autoPlayInterval` | `autoplayInterval`   |
+| `media-tabs`       | `autoPlay`         | `autoplay`           |
+| `multi-select`     | `emptyText`        | `emptyTitle`         |
+| `navigation-menu`  | `value`            | `modelValue`         |
+| `overline`         | `showCursor`       | `cursor`             |
+| `popover`          | `width`            | `size`               |
+| `progress`         | `shape`            | `kind`               |
+| `quote-tabs`       | `autoPlayInterval` | `autoplayInterval`   |
+| `quote-tabs`       | `autoPlay`         | `autoplay`           |
+| `severity-tag`     | `level`            | `severity`           |
+| `skeleton`         | `kind="shape"`     | `kind="rectangle"`   |
+| `split-button`     | `model`            | `items`              |
+| `table`            | `border`           | `bordered`           |
+| `tabs`             | `value`            | `modelValue`         |
+| `textarea`         | `resizable`        | `resize`             |
+| `theme-switcher`   | `value`            | `modelValue`         |
 
-### Deprecated in 6.0, removed in 7.0
+### Renamed types
 
-These old names keep working through v6 and are marked `@deprecated` in the types; the codemod
-rewrites the prop renames, the rest are listed here so you can move at your own pace.
+The codemod rewrites these where you import them, together with the component they belong to (the
+types this guide names elsewhere are left out):
 
-- None: each name this list carried is removed in 6.0 (see the sections below), and `pick-list`
-  `dataKey` is `transfer-list` `trackBy` (see "Input controls: one name per job").
+| v5 type                                | v6 type                                 |
+| -------------------------------------- | --------------------------------------- |
+| `ArticleIndexBlogAuthor`               | `ArticleIndexAuthor`                    |
+| `ArticleIndexBlogEmpty`                | `ArticleIndexEmpty`                     |
+| `ArticleIndexBlogMark`                 | `ArticleIndexMark`                      |
+| `ArticleIndexBlogRowKind`              | `ArticleIndexRowKind`                   |
+| `ArticleIndexBlogSearch`               | `ArticleIndexSearch`                    |
+| `ArticleIndexResourceHubEmpty`         | `ArticleIndexEmpty`                     |
+| `ArticleIndexResourceHubFacet`         | `ArticleIndexFacet`                     |
+| `ArticleIndexResourceHubItem`          | `ArticleIndexItem`                      |
+| `ArticleIndexResourceHubMark`          | `ArticleIndexMark`                      |
+| `ArticleIndexResourceHubRowKind`       | `ArticleIndexRowKind`                   |
+| `BoxGridSelectionItem`                 | `RadioGroupOption`                      |
+| `CalendarMonth`                        | `DatePickerMonth`                       |
+| `CalendarOrientation`                  | `DatePickerOrientation`                 |
+| `CalendarProps`                        | `DatePickerProps`                       |
+| `CalendarSize`                         | `DatePickerSize`                        |
+| `CalendarValue`                        | `DatePickerValue`                       |
+| `CardsItemSlotProps`                   | `CardListItemSlotProps`                 |
+| `CardsSelectionMode`                   | `CardListSelectionMode`                 |
+| `ClosingCallToActionAgentsAction`      | `ClosingCallToActionAudienceAction`     |
+| `ClosingCallToActionAgentsActionKind`  | `ClosingCallToActionAudienceActionKind` |
+| `ClosingCallToActionAgentsAudience`    | `ClosingCallToActionAudience`           |
+| `ClosingCallToActionAgentsCopy`        | `ClosingCallToActionAudienceCopy`       |
+| `ClosingCallToActionTemplatesAction`   | `TemplateGalleryAction`                 |
+| `ClosingCallToActionTemplatesTemplate` | `TemplateGalleryTemplate`               |
+| `CodeSplitAction`                      | `MediaSplitBandAction`                  |
+| `CodeSplitActionKind`                  | `MediaSplitBandActionKind`              |
+| `CollectionCardsProps`                 | `CollectionCardListProps`               |
+| `CommandMenuContext`                   | `CommandContext`                        |
+| `CommandMenuItemValue`                 | `CommandItemValue`                      |
+| `CommandMenuRegisteredItem`            | `CommandRegisteredItem`                 |
+| `CompareSupportTiersAction`            | `ComparePlansAction`                    |
+| `CompareSupportTiersRow`               | `ComparePlansRow`                       |
+| `CompareSupportTiersSection`           | `ComparePlansSection`                   |
+| `CompareSupportTiersTier`              | `ComparePlansPlan`                      |
+| `CompareSupportTiersValue`             | `ComparePlansValue`                     |
+| `ContentColumnsItem`                   | `CapabilityGridItem`                    |
+| `DocCardGroupCols`                     | `DocCardGroupColumns`                   |
+| `DropdownContext`                      | `DropdownMenuContext`                   |
+| `DropdownOptionValue`                  | `DropdownMenuOptionValue`               |
+| `DropdownPlacement`                    | `DropdownMenuPlacement`                 |
+| `DropdownPlacementInput`               | `DropdownMenuPlacementInput`            |
+| `HeroCopyOnTopArtAction`               | `HeroBandAction`                        |
+| `HeroCopyOnTopArtLevel`                | `HeroBandLevel`                         |
+| `HeroCopyOnTopArtNode`                 | `HeroBandNode`                          |
+| `HeroWithOpeningAction`                | `HeroBandAction`                        |
+| `HeroWithOpeningItem`                  | `HeroBandItem`                          |
+| `HeroWithOpeningTitleLength`           | `HeroBandTitleLength`                   |
+| `InputNumberSize`                      | `NumberInputSize`                       |
+| `InputPasswordAutocomplete`            | `PasswordInputAutocomplete`             |
+| `InputTextSize`                        | `InputSize`                             |
+| `InputTextType`                        | `InputType`                             |
+| `MessageSeverity`                      | `AlertSeverity`                         |
+| `MessageSize`                          | `AlertSize`                             |
+| `PaginatorContext`                     | `PaginationContext`                     |
+| `PickListContext`                      | `TransferListContext`                   |
+| `PickListItems`                        | `TransferListItems`                     |
+| `PickListSide`                         | `TransferListSide`                      |
+| `PickListValue`                        | `TransferListValue`                     |
+| `ProgressBarShape`                     | `ProgressKind`                          |
+| `ProgressBarSize`                      | `ProgressSize`                          |
+| `ResizablePanelContext`                | `ResizableContext`                      |
+| `ResizablePanelOrientation`            | `ResizableOrientation`                  |
+| `ResizablePanelPaneApi`                | `ResizablePaneApi`                      |
+| `ResourceGridAction`                   | `CapabilityGridAction`                  |
+| `ResourceGridItem`                     | `CapabilityGridItem`                    |
+| `SegmentedButtonSize`                  | `ToggleGroupSize`                       |
+| `StickyScrollCodeAction`               | `FeatureScrollAction`                   |
+| `StickyScrollCodeActionKind`           | `FeatureScrollActionKind`               |
+| `StickyScrollCodeItem`                 | `FeatureScrollItem`                     |
+| `StickyScrollCodeSample`               | `FeatureScrollCode`                     |
+| `TabViewContext`                       | `TabsContext`                           |
+| `TabViewSlideDirection`                | `TabsSlideDirection`                    |
+| `TabViewTabRegistration`               | `TabsTabRegistration`                   |
+| `TabViewValue`                         | `TabsValue`                             |
+| `UseCaseLinksItem`                     | `CapabilityGridItem`                    |
 
-These also keep working in 6.x and are marked `@deprecated` in the types:
+### Old illustration names
 
-- None: `card-pricing` `planTitle`, `overline` `showCursor` and `doc-card-group` `cols` (with the
-  `DocCardGroupCols` type) are removed in 6.0; the codemod writes the new names, and a Markdown
-  `<CardGroup cols>` still works through `DocMarkdown`.
+`Illustration` still resolves eight old scene names to the renamed scenes, so page data written
+before the rename keeps rendering. Write the new name in code:
 
-`Illustration` keeps eight retired scene names as aliases of the renamed scenes; `name` resolves
-them through 6.x and they are removed in 7.0:
-
-| Deprecated `name`                                       | Use instead                    |
+| Old `name`                                              | Use instead                    |
 | ------------------------------------------------------- | ------------------------------ |
 | `build-databases-from-code`                             | `sql-sdk-code-cards`           |
 | `distributed-sql-for-resilient-global-reads`            | `globe-with-sql-nodes`         |
@@ -184,11 +257,11 @@ containing `//` on a component (`href="https://…"`) as a ref ("Property 'value
 `webkit init` pins `vue-tsc` to 3.3.13 when your range admits 3.3.14, and `webkit doctor` warns
 when 3.3.14 is installed.
 
-### `vee-validate` is no longer a dependency; `@aziontech/webkit/vite` is deprecated
+### `vee-validate` is no longer a dependency; `@aziontech/webkit/vite` is removed
 
 Nothing in WebKit imports `vee-validate`, so v6 drops it from `dependencies`. An app that uses it
 installs it itself (`npm install vee-validate@^4`). `@aziontech/webkit/vite` (`webkitViteConfig`),
-which only pre-bundled `vee-validate`, still works but is deprecated and removed in 7.0: put
+which only pre-bundled `vee-validate`, is removed (the codemod lists the import as `MANUAL`): put
 `optimizeDeps: { include: ['vee-validate'] }` in your own Vite config, or drop the import if you do
 not use `vee-validate`.
 
@@ -248,6 +321,9 @@ New pieces that came out of the old wrappers: `PhoneInput` (`@aziontech/webkit/p
 renders the `<Tooltip tip title linkLabel href>` tag as one, so Markdown sources need no change. In
 an SFC, compose `<HoverCard><HoverCard.Trigger>…</HoverCard.Trigger><HoverCard.Content>…</HoverCard.Content></HoverCard>`.
 The codemod lists the import as `MANUAL`.
+
+`DocCardGroup` takes `columns` (was `cols`); in Markdown, `DocMarkdown` still reads
+`<CardGroup cols>` as `columns`, so existing docs sources render unchanged.
 
 `doc-pagination` is now `doc-prev-next` (`DocPrevNext`); the codemod rewrites it. Its locale catalog
 key and test id moved with it: override `docPrevNext.*` instead of `docPagination.*`, and select
@@ -432,7 +508,7 @@ rewrite this, because the replacement depends on whether the child was a link or
 
 ### Removed in 6.0: feedback, content, code and chart names
 
-These names were deprecated during the 6.0 cycle and are gone in 6.0 itself. The codemod rewrites
+These names are removed in 6.0, with no alias. The codemod rewrites
 the prop renames of section 3 (`skeleton` `kind="shape"`, `progress` `shape`, `badge`
 `severity="default"`, `overline` `showCursor`, `card-pricing` `planTitle`, `code-block`
 `showLineNumbers`, `flow-anchor` `type`, `toast-item` `type`) and the type names; the rest need a
@@ -603,7 +679,7 @@ the old look.
 
 ### Marketing names removed in 6.0
 
-The names marked deprecated earlier in the 6.0 cycle are gone. `webkit migrate` rewrites the prop
+These names are removed in 6.0, with no alias. `webkit migrate` rewrites the prop
 renames marked with a codemod; move the rest by hand.
 
 | Component                | Removed                                      | Use                                    | Codemod |
@@ -795,21 +871,17 @@ catalog, so an empty string no longer removes the label; `HelpPanel.Links` `titl
 (`1,200`, `1.200` in Portuguese). `useLocale()` from `@aziontech/webkit/use-locale` gives your own
 components the same locale, `t()` and `Intl` helpers.
 
-### Deprecated names (still working, removed in 7.0)
+### Layout: one name for the rail and the pane state
 
-These old names keep working through v6 and are marked `@deprecated` in the types and the specs.
-Move to the new name when you touch the code; they are removed in 7.0.
-
-| Component        | Deprecated          | Use instead                   | Codemod                     |
-| ---------------- | ------------------- | ----------------------------- | --------------------------- |
-| `Resizable.Pane` | `v-model:collapsed` | `v-model:expanded` (inverted) | no, the bound value inverts |
+`Resizable.Pane` drops `v-model:collapsed`: bind `v-model:expanded` instead, with the value inverted
+(`expanded = !collapsed`). The codemod lists it as `MANUAL`, because the bound value inverts.
 
 The navigation rail now has one name across the layouts: `open` on `Sidebar` and `navigationOpen`
 on `AppLayout` and `ConsoleLayout`. `@aziontech/webkit/sidebar` is now the compound
 (`Sidebar.Header`, `Sidebar.Group`, `Sidebar.Footer`); `@aziontech/webkit/sidebar-root` is the
 standalone root.
 
-### Changed defaults and deprecated names in the input and action controls
+### Changed defaults in the input and action controls
 
 - `TagEditor` reserves no key prefix by default (`reservedPrefix` was `'azion:'`). Pass
   `reserved-prefix="azion:"` where the platform reserves it.
@@ -827,8 +899,7 @@ Optional text props that defaulted to `undefined` now default to `''`, and an em
 - `StatTile`: `trend` accepts `null` entries (`(number | null)[]`) for gaps in the sparkline. Arrays
   of numbers keep working; a typed `number[]` variable still assigns to it.
 
-These old names keep working in v6, marked `@deprecated`, and go in 7.0. The codemod rewrites the
-props in section 3; move the rest by hand:
+Two behaviour changes need a hand edit:
 
 - `SplitButton`: read or restore the mirrored action with `v-model:selected`.
 - `ToggleGroup`: a disabled option no longer shows the lock by itself; set `locked: true` on the
@@ -848,7 +919,7 @@ The codemod rewrites the renamed paths and bindings and prints `MANUAL` for a re
 - `action-confirmation` → `tool-approval` (`ActionConfirmation` → `ToolApproval`, types
   `ToolApprovalState`, `ToolApprovalKind`, test id `ai-tool-approval`, locale key `toolApproval.*`):
   it is only an agent's request to run a tool; a person confirming their own action uses `ConfirmDialog`.
-- Removed deprecated names (no alias): `Link` `showIcon` (set `icon`), `Tabs.Item` `selected`
+- Removed names (no alias): `Link` `showIcon` (set `icon`), `Tabs.Item` `selected`
   (`ToggleGroup`), `SplitButton` `model` (`items`), `DropdownMenu.Option` (`DropdownMenu.Item`) and
   the item `#left` / `#right` slots (`#leading` / `#trailing`), `NavigationMenu.Trigger`
   `native-button`, `Tooltip` `@show` / `@hide` (`@update:open`), `Popover` `width` and `PopoverWidth`
@@ -898,7 +969,7 @@ bindings and prints `MANUAL` for everything below that it cannot rewrite.
   `#tag="{ option }"`. `RadioCardsItem` → `RadioGroupOption`.
 - **`PickList` → `TransferList`.** `@aziontech/webkit/pick-list` and its parts become
   `transfer-list` (`TransferList.Source`, `.Target`, `.Controls`), the test id
-  `data-transfer-list`, the catalog group `transferList`; the deprecated `dataKey` is gone (the
+  `data-transfer-list`, the catalog group `transferList`; `dataKey` is gone (the
   codemod writes `trackBy`).
 
 ## 5. Field report: Azion Console

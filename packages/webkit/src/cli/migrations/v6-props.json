@@ -538,6 +538,11 @@
   "radio-group": {
     "items": "options"
   },
+  "resizable-pane": {
+    "collapsed": {
+      "removed": "use v-model:expanded, inverted: expanded = !collapsed"
+    }
+  },
   "select": {
     "multiple": {
       "removed": "use MultiSelect (same options, same array v-model)"
@@ -558,5 +563,14 @@
   },
   "transfer-list-root": {
     "dataKey": "trackBy"
+  },
+  "attribute-editor": {
+    "empty": "emptyTitle"
+  },
+  "multi-select": {
+    "emptyText": "emptyTitle"
+  },
+  "multi-select-root": {
+    "emptyText": "emptyTitle"
   }
 }
