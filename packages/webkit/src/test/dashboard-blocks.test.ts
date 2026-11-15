@@ -2,23 +2,23 @@ import { cleanup, fireEvent, render, waitFor } from '@testing-library/vue'
 import { afterEach, describe, expect, it } from 'vitest'
 import { userEvent } from 'vitest/browser'
 
-import Analytics from '../../blocks/platform/dashboard/analytics-dashboard/analytics-dashboard.vue'
-import AnalyticsUsage from '../../blocks/platform/dashboard/analytics-dashboard/variants/usage.vue'
-import Composition from '../../blocks/platform/dashboard/composition-dashboard/composition-dashboard.vue'
-import CompositionEmpty from '../../blocks/platform/dashboard/composition-dashboard/variants/empty.vue'
-import Switcher from '../../blocks/platform/dashboard/dashboard-switcher/dashboard-switcher.vue'
-import SwitcherEmpty from '../../blocks/platform/dashboard/dashboard-switcher/variants/empty.vue'
-import SwitcherFailed from '../../blocks/platform/dashboard/dashboard-switcher/variants/failed.vue'
-import SwitcherOwnPeriod from '../../blocks/platform/dashboard/dashboard-switcher/variants/own-period.vue'
-import Executive from '../../blocks/platform/dashboard/executive-summary-dashboard/executive-summary-dashboard.vue'
-import Health from '../../blocks/platform/dashboard/health-score-dashboard/health-score-dashboard.vue'
-import HealthEmpty from '../../blocks/platform/dashboard/health-score-dashboard/variants/empty.vue'
-import HealthRealUser from '../../blocks/platform/dashboard/health-score-dashboard/variants/real-user.vue'
-import Home from '../../blocks/platform/dashboard/home-dashboard/home-dashboard.vue'
-import HomeFailed from '../../blocks/platform/dashboard/home-dashboard/variants/failed.vue'
-import Security from '../../blocks/platform/dashboard/security-dashboard/security-dashboard.vue'
-import SecurityByActor from '../../blocks/platform/dashboard/security-dashboard/variants/by-actor.vue'
-import ServiceMonitoring from '../../blocks/platform/dashboard/service-monitoring-dashboard/service-monitoring-dashboard.vue'
+import Analytics from '../../blocks/dashboard/analytics-dashboard/analytics-dashboard.vue'
+import AnalyticsUsage from '../../blocks/dashboard/analytics-dashboard/variants/usage.vue'
+import Composition from '../../blocks/dashboard/breakdown-dashboard/breakdown-dashboard.vue'
+import CompositionEmpty from '../../blocks/dashboard/breakdown-dashboard/variants/empty.vue'
+import Switcher from '../../blocks/dashboard/dashboard-switcher/dashboard-switcher.vue'
+import SwitcherEmpty from '../../blocks/dashboard/dashboard-switcher/variants/empty.vue'
+import SwitcherFailed from '../../blocks/dashboard/dashboard-switcher/variants/error.vue'
+import SwitcherOwnPeriod from '../../blocks/dashboard/dashboard-switcher/variants/own-period.vue'
+import Executive from '../../blocks/dashboard/executive-summary-dashboard/executive-summary-dashboard.vue'
+import Health from '../../blocks/dashboard/health-score-dashboard/health-score-dashboard.vue'
+import HealthEmpty from '../../blocks/dashboard/health-score-dashboard/variants/empty.vue'
+import HealthRealUser from '../../blocks/dashboard/health-score-dashboard/variants/real-user.vue'
+import Home from '../../blocks/dashboard/home-dashboard/home-dashboard.vue'
+import HomeFailed from '../../blocks/dashboard/home-dashboard/variants/error.vue'
+import Security from '../../blocks/dashboard/security-dashboard/security-dashboard.vue'
+import SecurityByActor from '../../blocks/dashboard/security-dashboard/variants/by-actor.vue'
+import ServiceMonitoring from '../../blocks/dashboard/service-monitoring-dashboard/service-monitoring-dashboard.vue'
 import { useToastRegion } from './toast-region'
 
 useToastRegion()
@@ -33,10 +33,10 @@ const buttonByText = (text: string, root: Document | HTMLElement = document) =>
     (button) => button.textContent?.trim() === text
   ) as HTMLButtonElement | undefined
 
-describe('platform/dashboard blocks', () => {
+describe('dashboard blocks', () => {
   it('ships one block per data shape, with no merged or off-domain dashboard left', () => {
-    const ids = Object.keys(import.meta.glob('../../blocks/platform/dashboard/*/block.json')).map(
-      (path) => path.split('/').at(-2)
+    const ids = Object.keys(import.meta.glob('../../blocks/dashboard/*/block.json')).map((path) =>
+      path.split('/').at(-2)
     )
     for (const removed of [
       'data-dashboard',
@@ -49,7 +49,7 @@ describe('platform/dashboard blocks', () => {
   })
 })
 
-describe('platform/dashboard/dashboard-switcher', () => {
+describe('dashboard/dashboard-switcher', () => {
   it('sets the shared period with FilterMenu and shows it as a removable chip', async () => {
     const view = render(Switcher)
     const trigger = byTestId('data-filter-menu', view.container)
@@ -89,7 +89,7 @@ describe('platform/dashboard/dashboard-switcher', () => {
   })
 })
 
-describe('platform/dashboard/home-dashboard', () => {
+describe('dashboard/home-dashboard', () => {
   it('links every resource row and panel heading to a real destination', () => {
     const view = render(Home)
     const rows = view.getAllByRole('link', { name: /marketing-site/ })
@@ -116,7 +116,7 @@ describe('platform/dashboard/home-dashboard', () => {
   })
 })
 
-describe('platform/dashboard/health-score-dashboard', () => {
+describe('dashboard/health-score-dashboard', () => {
   it('renders the overall score as a StatTile out of 100', () => {
     const view = render(Health)
     const tile = byTestId('chart-stat-tile', view.container)!
@@ -150,7 +150,7 @@ describe.each([
   ['analytics-dashboard', Analytics],
   ['analytics-dashboard#Usage', AnalyticsUsage],
   ['security-dashboard', Security]
-])('platform/dashboard/%s period', (_name, Block) => {
+])('dashboard/%s period', (_name, Block) => {
   it('drives the delta comparison from the Period Select in the header', async () => {
     const view = render(Block)
     expect(view.container.textContent).toContain('vs previous 24 hours')
@@ -180,8 +180,8 @@ const pickMenuOption = async (trigger: HTMLElement, label: string) => {
   await userEvent.click(option)
 }
 
-describe('platform/dashboard exports', () => {
-  it.each([['composition-dashboard', Composition, 'More options for Current split']])(
+describe('dashboard exports', () => {
+  it.each([['breakdown-dashboard', Composition, 'More options for Current split']])(
     '%s exports a card as CSV from its menu',
     async (_name, Block, trigger) => {
       const view = render(Block)
@@ -212,7 +212,7 @@ describe('platform/dashboard exports', () => {
   })
 })
 
-describe('platform/dashboard/security-dashboard#ByActor', () => {
+describe('dashboard/security-dashboard#ByActor', () => {
   it('narrows the log by destination and offers Clear filters when nothing matches', async () => {
     const view = render(SecurityByActor)
     const table = () => byTestId('data-data-table', view.container)
@@ -245,7 +245,7 @@ describe('platform/dashboard/security-dashboard#ByActor', () => {
   })
 })
 
-describe('platform/dashboard/service-monitoring-dashboard', () => {
+describe('dashboard/service-monitoring-dashboard', () => {
   it('titles the page and drives every tile from the one window in the header', async () => {
     const view = render(ServiceMonitoring)
     expect(view.getByRole('heading', { level: 1, name: 'Service monitoring' })).toBeTruthy()

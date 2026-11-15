@@ -1,24 +1,24 @@
 import { cleanup, fireEvent, render, waitFor, within } from '@testing-library/vue'
 import { afterEach, describe, expect, it } from 'vitest'
 
-import DeploymentLogs from '../../blocks/platform/detail/deployment-logs/deployment-logs.vue'
-import DeploymentDetail from '../../blocks/platform/detail/deployment-logs/variants/deployment-detail.vue'
-import DeploymentFailed from '../../blocks/platform/detail/deployment-logs/variants/deployment-failed.vue'
-import DeploymentQueued from '../../blocks/platform/detail/deployment-logs/variants/deployment-queued.vue'
-import DeploymentLogsFailed from '../../blocks/platform/detail/deployment-logs/variants/failed.vue'
-import InCreateFlow from '../../blocks/platform/detail/deployment-logs/variants/in-create-flow.vue'
-import InCreateFlowFailed from '../../blocks/platform/detail/deployment-logs/variants/in-create-flow-failed.vue'
-import DetailsPage from '../../blocks/platform/detail/details-page/details-page.vue'
-import Service from '../../blocks/platform/detail/details-page/variants/service.vue'
-import Running from '../../blocks/platform/detail/invocations/variants/running.vue'
-import ProductionChecklist from '../../blocks/platform/detail/production-checklist/production-checklist.vue'
-import Records from '../../blocks/platform/detail/record-table/variants/records.vue'
-import SectionedResource from '../../blocks/platform/detail/sectioned-resource/sectioned-resource.vue'
-import FewSiblings from '../../blocks/platform/detail/sectioned-resource/variants/few-siblings.vue'
-import DeviceGroups from '../../blocks/platform/detail/version-detail/variants/device-groups.vue'
-import Revert from '../../blocks/platform/detail/version-detail/variants/revert.vue'
-import AsyncSubmitFailed from '../../blocks/platform/states/async-submit/variants/failed.vue'
-import AsyncSubmitRunning from '../../blocks/platform/states/async-submit/variants/running.vue'
+import DeploymentLogs from '../../blocks/detail/deployment-logs/deployment-logs.vue'
+import DeploymentDetail from '../../blocks/detail/deployment-logs/variants/deployment-detail.vue'
+import DeploymentError from '../../blocks/detail/deployment-logs/variants/deployment-error.vue'
+import DeploymentQueued from '../../blocks/detail/deployment-logs/variants/deployment-queued.vue'
+import DeploymentLogsFailed from '../../blocks/detail/deployment-logs/variants/error.vue'
+import InCreateFlow from '../../blocks/detail/deployment-logs/variants/in-create-flow.vue'
+import InCreateFlowError from '../../blocks/detail/deployment-logs/variants/in-create-flow-error.vue'
+import Records from '../../blocks/detail/dns-zone-detail/variants/records.vue'
+import Running from '../../blocks/detail/invocations/variants/running.vue'
+import ProductionChecklist from '../../blocks/detail/production-checklist/production-checklist.vue'
+import DetailsPage from '../../blocks/detail/resource-detail/resource-detail.vue'
+import Service from '../../blocks/detail/resource-detail/variants/service.vue'
+import SectionedResource from '../../blocks/detail/sectioned-resource/sectioned-resource.vue'
+import FewSiblings from '../../blocks/detail/sectioned-resource/variants/few-siblings.vue'
+import DeviceGroups from '../../blocks/detail/version-detail/variants/device-groups.vue'
+import Revert from '../../blocks/detail/version-detail/variants/revert.vue'
+import AsyncSubmitFailed from '../../blocks/state/async-submit/variants/error.vue'
+import AsyncSubmitRunning from '../../blocks/state/async-submit/variants/running.vue'
 import { useToastRegion } from './toast-region'
 
 useToastRegion()
@@ -36,7 +36,7 @@ const filterBy = async (root: HTMLElement, name: string, text: string) => {
   await fireEvent.keyDown(input, { key: 'Enter' })
 }
 
-describe('platform/detail/record-table', () => {
+describe('detail/dns-zone-detail', () => {
   it('filters records through the property filter and clears a no-match', async () => {
     const view = render(Records)
     const root = view.container as HTMLElement
@@ -55,7 +55,7 @@ describe('platform/detail/record-table', () => {
   })
 })
 
-describe('platform/detail/sectioned-resource', () => {
+describe('detail/sectioned-resource', () => {
   it('offers Add on a page with no entries and Clear filters on a no-match', async () => {
     const view = render(FewSiblings)
     const root = view.container as HTMLElement
@@ -78,7 +78,7 @@ describe('platform/detail/sectioned-resource', () => {
   })
 })
 
-describe('platform/detail/invocations', () => {
+describe('detail/invocations', () => {
   it('keeps the printed lines of a running invocation on screen while it streams', async () => {
     const view = render(Running)
     await waitFor(() =>
@@ -97,7 +97,7 @@ describe('platform/detail/invocations', () => {
   })
 })
 
-describe('platform/detail/production-checklist', () => {
+describe('detail/production-checklist', () => {
   it('opens the drawer from a step row and from the expand button', async () => {
     const view = render(ProductionChecklist)
     await fireEvent.click(view.getByRole('button', { name: /Enable a security policy/ }))
@@ -112,7 +112,7 @@ describe('platform/detail/production-checklist', () => {
   })
 })
 
-describe('platform/detail/deployment-logs', () => {
+describe('detail/deployment-logs', () => {
   it('derives the progress from the steps and shows no time for steps that never ran', () => {
     const view = render(DeploymentLogs)
     const root = view.container as HTMLElement
@@ -135,9 +135,9 @@ describe('platform/detail/deployment-logs', () => {
   it.each([
     ['Running', DeploymentLogs],
     ['Failed', DeploymentLogsFailed],
-    ['InCreateFlowFailed', InCreateFlowFailed],
+    ['InCreateFlowError', InCreateFlowError],
     ['DeploymentDetail', DeploymentDetail],
-    ['DeploymentFailed', DeploymentFailed],
+    ['DeploymentError', DeploymentError],
     ['async-submit Running', AsyncSubmitRunning],
     ['async-submit Failed', AsyncSubmitFailed]
   ])('%s composes LogView.Steps for its phased steps', (_name, block) => {
@@ -162,8 +162,8 @@ describe('platform/detail/deployment-logs', () => {
     expect(view.container.textContent).toContain('Cloning')
   })
 
-  it('InCreateFlowFailed ends a failure with Edit and Redeploy', async () => {
-    const view = render(InCreateFlowFailed)
+  it('InCreateFlowError ends a failure with Edit and Redeploy', async () => {
+    const view = render(InCreateFlowError)
     expect(view.getByRole('link', { name: 'Edit' })).toBeTruthy()
     expect(view.getAllByLabelText('Log view')).toHaveLength(1)
     await fireEvent.click(view.getByRole('button', { name: 'Redeploy' }))
@@ -178,7 +178,7 @@ describe('platform/detail/deployment-logs', () => {
   })
 })
 
-describe('platform/detail/details-page', () => {
+describe('detail/resource-detail', () => {
   it('gives Visit the live address and links the tabs that live on another route', async () => {
     const view = render(DetailsPage)
     const visit = view.getByRole('link', { name: /Visit/ })
@@ -197,7 +197,7 @@ describe('platform/detail/details-page', () => {
   })
 })
 
-describe('platform/detail/version-detail', () => {
+describe('detail/version-detail', () => {
   it('opens earlier versions as links and marks the viewed one as the current page', () => {
     render(Revert)
     const history = document.querySelector('[aria-current="page"]') as HTMLAnchorElement

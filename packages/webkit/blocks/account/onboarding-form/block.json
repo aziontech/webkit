@@ -1,0 +1,45 @@
+{
+  "id": "account/onboarding-form",
+  "name": "OnboardingForm",
+  "title": "Blocks/Account/OnboardingForm",
+  "surface": "app",
+  "summary": "The /signup/onboarding screen, frame included: the signed-out `GlobalHeader` over a two-column grid whose left column is a `Card` holding a `Wizard` (the step line, the step heading, the step's fields and the Cancel / Previous / Next footer, Next gated on the required answers), and whose right column, from `lg` up, is a wireframe of the app the new organization will open into. The three steps live in one component; each story here opens on one of them. Built from `Wizard`, `Field` with `Input`, `RadioGroup` with `kind=\"card\"` in a `fieldset` under a `Field.Legend` with a `HelperText`, a `Field.Label` choice card around a `Switch`, `Tag`, `Avatar` and `Button`; picking a paid plan opens the upgrade `Drawer` with `ToggleGroup`, `Field` with `Input`, `Select` and `Checkbox`, `Link` and `Alert`. A full page routed outside ConsoleLayout.",
+  "preview": {
+    "layout": "fullscreen",
+    "background": "dark"
+  },
+  "intents": [
+    "onboarding",
+    "onboarding form",
+    "signup onboarding",
+    "create organization",
+    "organization setup",
+    "choose plan step",
+    "multi-step onboarding",
+    "onboarding wizard",
+    "welcome flow",
+    "first access setup",
+    "cadastro da organização",
+    "criar organização",
+    "onboarding da conta",
+    "onboarding stepper"
+  ],
+  "skills": ["webkit-form", "webkit-errors", "webkit-microcopy"],
+  "steps": ["organization", "plan", "profile"],
+  "primary": {
+    "name": "Organization",
+    "file": "onboarding-form.vue"
+  },
+  "variants": [
+    {
+      "name": "Plan",
+      "summary": "Step 2 of 3: the three plans as full-width rows; Free selects directly, while Pro or Enterprise opens the upgrade drawer (the `account/change-plan-drawer#Checkout` form, What's included as a `FeatureList`) and only selects once Upgrade is pressed.",
+      "file": "variants/plan.vue"
+    },
+    {
+      "name": "Profile",
+      "summary": "Step 3 of 3: the usage and role questions, the onboarding-session switch and the Create Organization action, which asks for both answers first.",
+      "file": "variants/profile.vue"
+    }
+  ]
+}

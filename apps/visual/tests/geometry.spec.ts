@@ -107,9 +107,9 @@ for (const theme of THEMES) {
   }
 
   for (const [id, state] of [
-    ['platform/account/team-permissions', 'default'],
-    ['platform/account/tokens', 'created'],
-    ['shells/console', 'account-switch']
+    ['account/team-permissions', 'default'],
+    ['account/personal-tokens', 'created'],
+    ['shell/console', 'account-switch']
   ] as const) {
     for (const mode of [
       { theme, width: 320 },

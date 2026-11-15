@@ -14,7 +14,7 @@ body:
     id: component
     attributes:
       label: Component or block
-      description: The name as the docs site shows it (e.g. `button`, `platform/auth/login`).
+      description: The name as the docs site shows it (e.g. `button`, `auth/sign-in/login`).
     validations:
       required: true
   - type: input

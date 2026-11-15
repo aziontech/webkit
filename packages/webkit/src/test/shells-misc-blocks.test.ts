@@ -2,28 +2,28 @@ import { cleanup, fireEvent, render, waitFor } from '@testing-library/vue'
 import { afterEach, describe, expect, it } from 'vitest'
 import { userEvent } from 'vitest/browser'
 
-import ApprovalFailed from '../../blocks/platform/ai/ai-action-approval/variants/failed.vue'
-import AiChatDrawer from '../../blocks/platform/ai/ai-chat-drawer/ai-chat-drawer.vue'
-import Login from '../../blocks/platform/auth/auth.vue'
-import CheckInbox from '../../blocks/platform/auth/variants/check-inbox.vue'
-import EmailAlreadyRegistered from '../../blocks/platform/auth/variants/email-already-registered.vue'
-import IncorrectCredentials from '../../blocks/platform/auth/variants/incorrect-credentials.vue'
-import ServerError from '../../blocks/platform/auth/variants/server-error.vue'
-import Submitting from '../../blocks/platform/auth/variants/submitting.vue'
-import DeleteWithConfirmation from '../../blocks/platform/delete/delete-with-confirmation/delete-with-confirmation.vue'
-import DeleteFailed from '../../blocks/platform/delete/delete-with-confirmation/variants/failed.vue'
-import SettingsForm from '../../blocks/platform/settings/settings-form/settings-form.vue'
-import AsyncSubmit from '../../blocks/platform/states/async-submit/async-submit.vue'
-import FirstUse from '../../blocks/platform/states/first-use/first-use.vue'
-import SectionRejected from '../../blocks/platform/states/form-validation/variants/section-rejected.vue'
-import ProjectIntake from '../../blocks/platform/states/project-intake/project-intake.vue'
-import Initializing from '../../blocks/platform/states/project-intake/variants/initializing.vue'
-import UploadFailed from '../../blocks/platform/states/project-intake/variants/upload-failed.vue'
-import ConsoleShell from '../../blocks/shells/console/console.vue'
-import AccountSwitch from '../../blocks/shells/console/variants/account-switch.vue'
-import Notifications from '../../blocks/shells/console/variants/notifications.vue'
-import AuthBar from '../../blocks/top-bars/auth-bar/auth-bar.vue'
-import CreationBar from '../../blocks/top-bars/creation-bar/creation-bar.vue'
+import ApprovalFailed from '../../blocks/ai/ai-action-approval/variants/error.vue'
+import AiChatDrawer from '../../blocks/ai/ai-chat-drawer/ai-chat-drawer.vue'
+import Login from '../../blocks/auth/sign-in/sign-in.vue'
+import CheckInbox from '../../blocks/auth/sign-in/variants/check-inbox.vue'
+import EmailAlreadyRegistered from '../../blocks/auth/sign-in/variants/email-already-registered.vue'
+import IncorrectCredentials from '../../blocks/auth/sign-in/variants/incorrect-credentials.vue'
+import ServerError from '../../blocks/auth/sign-in/variants/server-error.vue'
+import Submitting from '../../blocks/auth/sign-in/variants/submitting.vue'
+import DeleteWithConfirmation from '../../blocks/edit/delete-dialog/delete-dialog.vue'
+import DeleteFailed from '../../blocks/edit/delete-dialog/variants/error.vue'
+import SettingsForm from '../../blocks/settings/settings-form/settings-form.vue'
+import ConsoleShell from '../../blocks/shell/console/console.vue'
+import AccountSwitch from '../../blocks/shell/console/variants/account-switch.vue'
+import Notifications from '../../blocks/shell/console/variants/notifications.vue'
+import AsyncSubmit from '../../blocks/state/async-submit/async-submit.vue'
+import FirstUse from '../../blocks/state/first-use/first-use.vue'
+import SectionRejected from '../../blocks/state/form-validation/variants/section-rejected.vue'
+import ProjectIntake from '../../blocks/state/project-intake/project-intake.vue'
+import Initializing from '../../blocks/state/project-intake/variants/initializing.vue'
+import UploadError from '../../blocks/state/project-intake/variants/upload-error.vue'
+import AuthBar from '../../blocks/top-bar/auth-bar/auth-bar.vue'
+import CreationBar from '../../blocks/top-bar/creation-bar/creation-bar.vue'
 
 afterEach(() => cleanup())
 
@@ -32,7 +32,7 @@ const buttonByText = (text: string, root: Document | HTMLElement = document) =>
     (button) => button.textContent?.trim() === text
   ) as HTMLButtonElement | undefined
 
-describe('top-bars/creation-bar', () => {
+describe('top-bar/creation-bar', () => {
   it('makes the back control a link to the list it came from', () => {
     const view = render(CreationBar)
     const back = view.getByRole('link', { name: 'Back to Resources' })
@@ -40,7 +40,7 @@ describe('top-bars/creation-bar', () => {
   })
 })
 
-describe('top-bars/auth-bar', () => {
+describe('top-bar/auth-bar', () => {
   it('offers Documentation and no account control', () => {
     const view = render(AuthBar)
     expect(view.getByRole('link', { name: 'Azion home' })).toBeTruthy()
@@ -48,7 +48,7 @@ describe('top-bars/auth-bar', () => {
   })
 })
 
-describe('shells/console', () => {
+describe('shell/console', () => {
   it('leaves the list controls row to table-view', () => {
     const view = render(ConsoleShell)
     expect(view.queryByRole('button', { name: 'Download CSV' })).toBeNull()
@@ -99,7 +99,7 @@ describe('shells/console', () => {
   })
 })
 
-describe('platform/auth', () => {
+describe('auth/sign-in', () => {
   it('locks the step and shows the primary loading while Sign in is in flight', async () => {
     const view = render(Login)
     await fireEvent.update(view.getByLabelText('Email'), 'jane.doe@example.com')
@@ -162,7 +162,7 @@ describe('platform/auth', () => {
   })
 })
 
-describe('platform/delete/delete-with-confirmation', () => {
+describe('edit/delete-dialog', () => {
   const confirmPanel = () =>
     waitFor(() => {
       const found = Array.from(document.querySelectorAll('[role="alertdialog"]')).find((el) =>
@@ -196,7 +196,7 @@ describe('platform/delete/delete-with-confirmation', () => {
   })
 })
 
-describe('platform/settings/settings-form', () => {
+describe('settings/settings-form', () => {
   it('renders each topic as a section heading', () => {
     const view = render(SettingsForm)
     for (const name of ['General', 'Preferences', 'Notifications'])
@@ -216,7 +216,7 @@ describe('platform/settings/settings-form', () => {
   })
 })
 
-describe('platform/ai', () => {
+describe('ai', () => {
   it('ai-action-approval Failed: says what failed and offers Retry', async () => {
     const view = render(ApprovalFailed)
     await waitFor(() =>
@@ -236,7 +236,7 @@ describe('platform/ai', () => {
   })
 })
 
-describe('platform/states/project-intake', () => {
+describe('state/project-intake', () => {
   it('offers Choose a folder as the keyboard way in', () => {
     const view = render(ProjectIntake)
     expect(view.getByRole('button', { name: 'Choose a folder' })).toBeTruthy()
@@ -254,8 +254,8 @@ describe('platform/states/project-intake', () => {
     expect(view.container.querySelector('[aria-live="polite"]:not([data-testid])')).toBeNull()
   })
 
-  it('UploadFailed: Retry clears the failure', async () => {
-    const view = render(UploadFailed)
+  it('UploadError: Retry clears the failure', async () => {
+    const view = render(UploadError)
     expect(view.container.textContent).toContain('1 file could not be uploaded')
     const alertRetry = Array.from(
       view.container.querySelectorAll('[role="alert"] button, [role="status"] button')
@@ -267,7 +267,7 @@ describe('platform/states/project-intake', () => {
   })
 })
 
-describe('platform/states/first-use', () => {
+describe('state/first-use', () => {
   it('makes both promos links and copies the real CLI command', () => {
     const view = render(FirstUse)
     const catalog = view.getByRole('link', { name: /Start from a Catalog template/ })
@@ -279,7 +279,7 @@ describe('platform/states/first-use', () => {
   })
 })
 
-describe('platform/states async-submit and form-validation', () => {
+describe('state async-submit and form-validation', () => {
   it('async-submit: no simulation panel, and Deploy starts the run', async () => {
     const view = render(AsyncSubmit)
     expect(view.queryByRole('complementary', { name: 'Scenario simulation' })).toBeNull()

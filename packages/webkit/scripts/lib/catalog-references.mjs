@@ -4,7 +4,20 @@ const PROSE_KEYS = ['purpose', 'useWhen', 'avoidWhen', 'bestPractices']
 const KEBAB = /^[a-z][a-z0-9]*(-[a-z0-9]+)*$/
 const PATH = /^[a-z][a-z0-9-]*(\/[a-z0-9-]+)+$/
 const ATTRIBUTE = /^(data|aria|v)-/
-const BLOCK_ROOTS = ['headers', 'platform', 'shells', 'top-bars', 'marketing']
+const BLOCK_ROOTS = [
+  'account',
+  'ai',
+  'auth',
+  'create',
+  'dashboard',
+  'detail',
+  'edit',
+  'settings',
+  'state',
+  'view',
+  'shell',
+  'top-bar'
+]
 
 export function retiredReferenceNames(migration, blockAliases = {}) {
   return new Set([

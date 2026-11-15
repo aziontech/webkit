@@ -83,7 +83,7 @@ await page.route('**/api/workloads', (r) => r.fulfill({ json: [] })) // empty
 
   The message names both controls (by their accessible name) and the route. The fix is the rule's:
   keep the destination in one level, reach the resource's pages through the resource (block
-  `platform/detail/sectioned-resource`), never through rail rows.
+  `detail/sectioned-resource`), never through rail rows.
 
 ```bash
 npx @aziontech/webkit check --no-lint --url http://localhost:5173/policies/acme/access-rules,http://localhost:5173/workloads

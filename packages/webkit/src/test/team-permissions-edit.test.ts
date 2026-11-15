@@ -2,7 +2,7 @@ import { render, waitFor } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 import { userEvent } from 'vitest/browser'
 
-import EditTeam from '../../blocks/platform/account/team-permissions/variants/edit-team.vue'
+import EditTeam from '../../blocks/account/team-permissions/variants/edit-team.vue'
 import { useToastRegion } from './toast-region'
 
 useToastRegion()
@@ -12,7 +12,7 @@ const memberNames = () =>
     item.querySelector('[data-member-name]')?.textContent?.trim()
   )
 
-describe('platform/account/team-permissions EditTeam', () => {
+describe('account/team-permissions EditTeam', () => {
   it('starts from the saved team with Save changes disabled', () => {
     const view = render(EditTeam)
     expect(view.getByRole('heading', { name: 'Edit Team' })).toBeTruthy()

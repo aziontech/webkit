@@ -1,11 +1,11 @@
 import { fireEvent, render, waitFor } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
-import RulesList from '../../blocks/platform/view/rules-list/rules-list.vue'
-import EditRule from '../../blocks/platform/view/rules-list/variants/edit-rule.vue'
-import LoadFailed from '../../blocks/platform/view/rules-list/variants/load-failed.vue'
-import ReviewChanges from '../../blocks/platform/view/rules-list/variants/review-changes.vue'
-import Searching from '../../blocks/platform/view/rules-list/variants/searching.vue'
+import RulesList from '../../blocks/view/rule-list/rule-list.vue'
+import EditRule from '../../blocks/view/rule-list/variants/edit-rule.vue'
+import LoadError from '../../blocks/view/rule-list/variants/load-error.vue'
+import ReviewChanges from '../../blocks/view/rule-list/variants/review-changes.vue'
+import Searching from '../../blocks/view/rule-list/variants/searching.vue'
 import { useToastRegion } from './toast-region'
 
 useToastRegion()
@@ -18,7 +18,7 @@ const namesIn = (root: HTMLElement, phase: string) =>
 const requestNames = (root: HTMLElement) =>
   Array.from(root.querySelectorAll('[data-rule-name]')).map((a) => a.textContent?.trim())
 
-describe('platform/view/rules-list block', () => {
+describe('view/rule-list block', () => {
   it('moves a rule with the arrow keys on its Table grip, announces it and keeps focus on the moved rule', async () => {
     const view = render(RulesList)
     const grip = view.getByRole('button', { name: 'Reorder Docs rewrite, position 5 of 5' })
@@ -71,7 +71,7 @@ describe('platform/view/rules-list block', () => {
       'Maintenance page'
     ])
     await waitFor(() =>
-      expect(view.getByTestId('rules-list__announcer').textContent).toContain(
+      expect(view.getByTestId('rule-list__announcer').textContent).toContain(
         'Maintenance page moved to position 3 of 5 in the Request phase.'
       )
     )
@@ -90,7 +90,7 @@ describe('platform/view/rules-list block', () => {
     expect(view.queryByRole('button', { name: 'Review changes' })).toBeNull()
     expect(namesIn(view.container, 're-c')).toEqual(['Cache bypass', 'Compress assets'])
     await waitFor(() =>
-      expect(view.getByTestId('rules-list__announcer').textContent).toContain('Changes discarded.')
+      expect(view.getByTestId('rule-list__announcer').textContent).toContain('Changes discarded.')
     )
   })
 
@@ -131,7 +131,7 @@ describe('platform/view/rules-list block', () => {
       'Maintenance page'
     ])
     await waitFor(() =>
-      expect(view.getByTestId('rules-list__announcer').textContent).toContain(
+      expect(view.getByTestId('rule-list__announcer').textContent).toContain(
         'Docs rewrite moved to position 2 of 5 in the Request phase.'
       )
     )
@@ -177,7 +177,7 @@ describe('platform/view/rules-list block', () => {
     const grips = Array.from(document.querySelectorAll('[data-reorder-handle]'))
     expect(grips.length).toBeGreaterThan(0)
     expect(grips.every((grip) => grip.hasAttribute('disabled'))).toBe(true)
-    expect(view.getByTestId('rules-list__count-response').textContent?.trim()).toBe('1 of 3')
+    expect(view.getByTestId('rule-list__count-response').textContent?.trim()).toBe('1 of 3')
   })
 
   it('opens the rule builder as Edit Rule from a name and as Add Rule from the header (EditRule)', async () => {
@@ -223,7 +223,7 @@ describe('platform/view/rules-list block', () => {
   })
 
   it('replaces the phases with a danger alert whose Retry emits retry when the rules fail to load', async () => {
-    const view = render(LoadFailed)
+    const view = render(LoadError)
     expect(view.getByRole('button', { name: 'Add Rule' }).hasAttribute('disabled')).toBe(true)
     await fireEvent.click(view.getByRole('button', { name: 'Retry' }))
     expect(view.emitted('retry')).toHaveLength(1)

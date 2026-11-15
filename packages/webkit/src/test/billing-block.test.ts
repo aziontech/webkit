@@ -1,9 +1,9 @@
 import { cleanup, fireEvent, render, waitFor } from '@testing-library/vue'
 import { afterEach, describe, expect, it } from 'vitest'
 
-import Billing from '../../blocks/platform/account/billing/billing.vue'
-import NoMatch from '../../blocks/platform/account/billing/variants/no-match.vue'
-import PaymentMethods from '../../blocks/platform/account/billing/variants/payment-methods.vue'
+import Billing from '../../blocks/account/billing/billing.vue'
+import NoMatch from '../../blocks/account/billing/variants/no-match.vue'
+import PaymentMethods from '../../blocks/account/billing/variants/payment-methods.vue'
 import { useToastRegion } from './toast-region'
 
 useToastRegion()
@@ -18,7 +18,7 @@ const buttonByText = (text: string, root: Document | HTMLElement = document) =>
     (button) => button.textContent?.trim() === text
   ) as HTMLButtonElement
 
-describe('platform/account/billing', () => {
+describe('account/billing', () => {
   it('switches between the Bills and Payment methods tabs', async () => {
     const view = render(Billing)
     expect(view.getByRole('table', { name: 'Invoices' })).toBeTruthy()

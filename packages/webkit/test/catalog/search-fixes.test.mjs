@@ -12,7 +12,7 @@ const P = '@aziontech/webkit/'
 const component = (name, extra = {}) => ({
   import: `${P}${name}`,
   kind: 'component',
-  surface: 'product',
+  surface: 'app',
   ...extra
 })
 
@@ -31,21 +31,21 @@ function fixture() {
       }),
       'bar-list': component('bar-list', { purpose: 'Ranked bars.' }),
       'feature-list': component('feature-list', {
-        surface: 'marketing',
+        surface: 'site',
         purpose: 'Ranked bars.'
       }),
       table: component('table', { purpose: 'Records in rows.' }),
       'table-search': { import: `${P}table-search`, kind: 'subcomponent', parent: 'table' }
     },
     patterns: {
-      'platform/view/table-view': {
+      'view/table-view': {
         name: 'TableView',
         summary: 'A list page.',
         intents: ['resource list page', 'checklist'],
         imports: [`${P}table`, `${P}bar-list`],
         source: 'x'
       },
-      'platform/detail/production-checklist': {
+      'detail/production-checklist': {
         name: 'ProductionChecklist',
         kind: 'fragment',
         summary: 'A go-live card.',
@@ -106,12 +106,12 @@ test('a v6 rename answers with the new export, a v6 removal with its replacement
 
 test('a fragment is labelled a card and left out when the request asks for a page', () => {
   const plain = searchPatterns(catalog, 'go-live checklist').matches
-  assert.equal(plain[0].id, 'platform/detail/production-checklist')
+  assert.equal(plain[0].id, 'detail/production-checklist')
   assert.equal(plain[0].kind, 'fragment')
   assert.match(plain[0].note, /A card, not a page/)
   const page = searchPatterns(catalog, 'checklist page').matches.map((m) => m.id)
-  assert.ok(!page.includes('platform/detail/production-checklist'))
+  assert.ok(!page.includes('detail/production-checklist'))
   const asked = searchPatterns(catalog, 'checklist page', { fragments: true }).matches
-  assert.ok(asked.some((m) => m.id === 'platform/detail/production-checklist'))
+  assert.ok(asked.some((m) => m.id === 'detail/production-checklist'))
   assert.equal(getPattern(catalog, 'production-checklist').kind, 'fragment')
 })

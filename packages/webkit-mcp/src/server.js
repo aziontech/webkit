@@ -66,7 +66,7 @@ async function main() {
       description:
         'List every renderable @aziontech/webkit component (compact cards: name, category, ' +
         'surface, structure, import, tree-shakeable import, PascalCase binding). Optionally filter ' +
-        'by category or by surface: "product" (console and apps), "marketing" (the azion.com site: ' +
+        'by category or by surface: "app" (console and apps), "site" (the azion.com site: ' +
         'sections, bands, brand assets) or "docs" (the documentation site).',
       inputSchema: {
         category: z
@@ -74,9 +74,9 @@ async function main() {
           .optional()
           .describe('Restrict to one category (e.g. "actions", "data", "inputs", "feedback").'),
         surface: z
-          .enum(['product', 'marketing', 'docs'])
+          .enum(['app', 'site', 'docs'])
           .optional()
-          .describe('Restrict to one surface. Console screens use "product" only.')
+          .describe('Restrict to one surface. Console screens use "app" only.')
       }
     },
     async ({ category, surface }) => json(listComponents(catalog, { category, surface }))
@@ -197,9 +197,9 @@ async function main() {
           .string()
           .describe('Free-text query in en, pt-BR or es, e.g. "dropdown", "date picker", "botão".'),
         surface: z
-          .enum(['product', 'marketing', 'docs'])
+          .enum(['app', 'site', 'docs'])
           .optional()
-          .describe('Restrict to one surface. Console screens use "product" only.')
+          .describe('Restrict to one surface. Console screens use "app" only.')
       }
     },
     async ({ query, surface }) => json(searchComponents(catalog, query, { surface }))
@@ -219,9 +219,9 @@ async function main() {
           .string()
           .describe('What you are trying to build, e.g. "a searchable paginated table".'),
         surface: z
-          .enum(['product', 'marketing', 'docs'])
+          .enum(['app', 'site', 'docs'])
           .optional()
-          .describe('Restrict to one surface. Console screens use "product" only.')
+          .describe('Restrict to one surface. Console screens use "app" only.')
       }
     },
     async ({ need, surface }) => json(suggestComponent(catalog, need, { surface }))
@@ -244,9 +244,9 @@ async function main() {
             'The screen you need, in plain words (en, pt-BR or es), e.g. "login page", "cadastro".'
           ),
         surface: z
-          .enum(['product', 'marketing', 'docs'])
+          .enum(['app', 'site', 'docs'])
           .optional()
-          .describe('Restrict to one surface. Console screens use "product" only.'),
+          .describe('Restrict to one surface. Console screens use "app" only.'),
         fragments: z
           .boolean()
           .optional()
@@ -270,9 +270,7 @@ async function main() {
         'accessibility). Read the guidelines, copy the SFC and change only the content. A pre-v6 id (e.g. ' +
         '"platform/lists/table-view") resolves to its new block and carries a `note`.',
       inputSchema: {
-        id: z
-          .string()
-          .describe('Pattern id from search_patterns, e.g. "platform/view/table-view".'),
+        id: z.string().describe('Pattern id from search_patterns, e.g. "view/table-view".'),
         variant: z
           .string()
           .optional()

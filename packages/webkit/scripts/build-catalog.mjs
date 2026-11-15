@@ -23,6 +23,7 @@ import {
 } from './lib/catalog-references.mjs'
 import { buildAliases, buildRenamed, removedNames, retiredNames } from './lib/naming.mjs'
 import { SURFACES, surfaceFromTarget } from './lib/surfaces.mjs'
+import { sameVariant } from '../src/catalog/queries.js'
 import { iconKeywords } from '../../icons/scripts/icon-keywords.mjs'
 import {
   animate as themeAnimate,
@@ -698,7 +699,11 @@ function readPatternAliases(patterns) {
     const p = patterns[id]
     if (patterns[from.split('#')[0]]) broken.push(`${from}: old id still names a block`)
     else if (!p) broken.push(`${from} -> ${to}: no block "${id}"`)
-    else if (variant && variant !== p.primary && !p.variants.some((v) => v.name === variant))
+    else if (
+      variant &&
+      !sameVariant(variant, p.primary) &&
+      !p.variants.some((v) => sameVariant(v.name, variant))
+    )
       broken.push(`${from} -> ${to}: block "${id}" has no variant "${variant}"`)
   }
   if (broken.length) throw new Error(`src/cli/migrations/v6-blocks.json:\n  ${broken.join('\n  ')}`)

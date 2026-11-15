@@ -16,9 +16,9 @@ const EVERY_STATE: Mode[] = [
   { theme: 'dark', width: 1280, dir: 'rtl' }
 ]
 
-const ALL_STATES = /^platform\/ai\//
+const ALL_STATES = /^ai\//
 
-const DOCS_PAGES = /^shells\/documentation$/
+const DOCS_PAGES = /^shell\/docs$/
 
 const DOCS_MODES: Mode[] = [
   { theme: 'light', width: 1440 },
@@ -51,14 +51,14 @@ for (const block of blocks()) {
 }
 
 for (const mode of DOCS_MODES) {
-  test(`block shells/documentation landing agent card ${label(mode)}`, async ({ page }) => {
+  test(`block shell/docs landing agent card ${label(mode)}`, async ({ page }) => {
     await prepare(page, mode)
-    await page.goto(`${DOCS}/frame/landing/shells/documentation${query(mode)}`)
+    await page.goto(`${DOCS}/frame/landing/shell/docs${query(mode)}`)
     await settle(page)
     await page.getByTestId('documentation-doc-agent-card').scrollIntoViewIfNeeded()
     await settle(page)
     await expect(page).toHaveScreenshot(
-      shot(`blocks/shells/documentation/landing-agent-card--${label(mode)}.png`)
+      shot(`blocks/shell/docs/landing-agent-card--${label(mode)}.png`)
     )
   })
 }

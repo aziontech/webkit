@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 3
 template: 2
-checksum: 4abac895ea0fe852329e55464638d4da9196e8134dcfd36790c4ce0c04c80ce0
+checksum: 5d09e0bb8ee555c9ba1cbf9cd316fa774e8079da87917024eb489e318b253188
 created: 2026-11-12
 last_updated: 2026-11-15
 ---
@@ -33,7 +33,7 @@ The documentation chrome, composed once in the app: a sticky header (the Azion D
 - `DocPageHeader`, `DocProse`, `DocPagination` — the article parts rendered in the default slot.
 - `Sidebar`, `SidebarMenu` — the navigation rail; `navigation` is mapped onto `SidebarMenu` groups.
 - `SearchTrigger`, `Command` — the header search and the palette it opens.
-- `shells/documentation` — the block that shows this layout with a sample docs tree.
+- `shell/docs` — the block that shows this layout with a sample docs tree.
 
 ## Best practices
 

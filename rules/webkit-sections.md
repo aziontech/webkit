@@ -22,7 +22,7 @@ JSON. Never rebuild a band from primitives when a section exists.
 - Compose the site chrome once: `SiteLayout` (`@aziontech/webkit/site-layout`) in `App.vue`, with
   the `SiteNav` data as `navigation` and the `SiteFooter` data as `footer`, around `RouterView`. It
   places `SiteNav` first and `SiteFooter` last, unwrapped, and opens the ⌘K palette from the bar's
-  search. A page is only its sections, in the layout's slot. The `shells/website` block is this
+  search. A page is only its sections, in the layout's slot. The `shell/site` block is this
   layout with the azion.com data: copy it as the app shell, never per page.
   `SiteNav` drops Login from the bar on a phone, as azion.com does; leave
   `secondaryActionOnPhones` off. `SiteFooter` draws its own top rule, frame and closing bottom rule.
@@ -32,7 +32,7 @@ JSON. Never rebuild a band from primitives when a section exists.
 - End the page column on a closing section (`ClosingCallToAction` and its `-newsletter`,
   `-agents`, `-templates` variants) with nothing after it: it draws the hatched closing frame
   itself. A page that ends on any other band closes with `SectionGap hatch` + the closing
-  `FrameBox` of `shells/website`.
+  `FrameBox` of `shell/site`.
 - Reach for the section's own switches before anything else: `ClientQuotes` `autoplay` /
   `autoplayInterval` / `v-model`, `ArticleHighlight` `v-model`, `CapabilityGrid` `titleKind`,
   `MediaSplitBand` action `kind` (`transparent` for a "Learn more" text button beside `codeTabs`), `SiteFooter` link

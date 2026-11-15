@@ -1,8 +1,8 @@
 import { fireEvent, render, screen, waitFor, within } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
-import InstallIntegration from '../../blocks/platform/create/deploy-template/variants/install-integration.vue'
-import WhereItRuns from '../../blocks/platform/create/deploy-template/variants/where-it-runs.vue'
+import InstallIntegration from '../../blocks/create/deploy-template/variants/install-integration.vue'
+import WhereItRuns from '../../blocks/create/deploy-template/variants/where-it-runs.vue'
 import { expectNoA11yViolations } from './axe'
 
 describe('deploy-template#WhereItRuns', () => {

@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 2
 template: 2
-checksum: 41b90a3dd5cfc9b8f367f5ede4a4f7ef15e6c7bfa2eb171b9f0673dffee8a4d8
+checksum: 28b5d9a1c06d600f58ec34842104087360897a8d17a0edf02c98d096db237869
 created: 2026-11-12
 last_updated: 2026-11-15
 ---
@@ -19,7 +19,7 @@ The masthead of a documentation home: a display-size `h1`, a deck capped at a re
 ## When to use
 
 - Use DocHero only on the documentation home; marketing page openings use HeroBand.
-- The top of a documentation home or a docs section landing (`shells/documentation`, variant `Landing`).
+- The top of a documentation home or a docs section landing (`shell/docs`, variant `Landing`).
 
 ## When NOT to use
 

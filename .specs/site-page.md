@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 4
 template: 2
-checksum: 8b31d8b9be564874b9a79e836185f07f955d3ae79cc080ed8cf3c10577f21952
+checksum: fb84f1477ef209f6e04b84a9bbff1fbdeb5fbb33b99e9192353d6292d689b069
 created: 2026-11-12
 last_updated: 2026-11-15
 ---
@@ -18,7 +18,7 @@ The page renderer of the marketing site: it takes a page as data — the page JS
 
 It reverses the earlier rule in `.claude/docs/SECTIONS.md` ("the package ships no registry and no dispatcher"): the owner decided to ship the renderer (ROADMAP M2.10 row 44), and that doc is updated with it.
 
-**Section registry.** `src/components/marketing/site-page/site-page-sections.ts`, beside the component, maps every folder in `src/components/sections/` except `site-nav` and `site-footer` (the frame, which `shells/website` owns) to a `() => import('../../sections/<name>/<name>.vue')` thunk, keyed by the folder name, which is the `_id`. The component test fails when a section folder has no entry.
+**Section registry.** `src/components/marketing/site-page/site-page-sections.ts`, beside the component, maps every folder in `src/components/sections/` except `site-nav` and `site-footer` (the frame, which `shell/site` owns) to a `() => import('../../sections/<name>/<name>.vue')` thunk, keyed by the folder name, which is the `_id`. The component test fails when a section folder has no entry.
 
 **Retired `_id` aliases.** Page JSON lives outside this repo, so an `_id` retired by a 6.0 merge keeps rendering: `sitePageSectionAliases` in the same file maps each retired id to the section that absorbed it and an optional transform of its props (`'hero-copy-on-top-art'` and `'hero-with-opening'` → `hero-band`; `'closing-call-to-action-agents'` → `closing-call-to-action` `kind: 'primary'`; `'closing-call-to-action-templates'` → `template-gallery` `closing: true`; `'customer-spotlight'` → `client-mosaic-columns` `reveal: 'hover'` (`items` → `cells`, `description` → `story`); `'sticky-carousel'` → `process-scroll` `pinned` (`items` → `steps`); `'sticky-scroll-code'` → `feature-scroll`; `'compare-support-tiers'` → `compare-plans` (`tiers` → `plans`); `'article-index-blog'` / `'article-index-resource-hub'` → `article-index` `filters: 'category-search' | 'facets'`; `'use-case-links'` / `'resource-grid'` → `capability-grid`; `'code-split'` → `media-split-band`). `resolveSectionEntry(id, props)` applies it before the section is resolved and before the closing rules read the entry, and no warning is raised; the entry handed back on `submit` is the page's own. This is the only alias the package keeps: no retired export or prop is re-exported.
 
@@ -35,7 +35,7 @@ It reverses the earlier rule in `.claude/docs/SECTIONS.md` ("the package ships n
 ## When NOT to use
 
 - A page that composes marketing primitives by hand (`Hero`, `MediaSplit`, `CardGrid`) — write the SFC with `SectionContainer` / `SectionGap` instead.
-- A console screen or a docs page — use `shells/console` or `shells/documentation`.
+- A console screen or a docs page — use `shell/console` or `shell/docs`.
 - One section on its own — import that section (`@aziontech/webkit/<name>`) and bind its props.
 
 ## Related
@@ -43,7 +43,7 @@ It reverses the earlier rule in `.claude/docs/SECTIONS.md` ("the package ships n
 - `section-container` — the column the renderer lays `sections` in.
 - `section-gap` — the hatched break it draws before each band.
 - The page sections (`hero-band`, `use-cases`, `faq-section`, …) — what each `_id` names.
-- `shells/website` — the nav and footer frame a page renders inside.
+- `shell/site` — the nav and footer frame a page renders inside.
 
 ## Best practices
 

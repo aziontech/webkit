@@ -101,7 +101,7 @@ text-body-* > text-label-* > text-overline-*`). See `/webkit-baseline-ui`.
     a tooltip on two of twelve. The tell is a `<template>` you could paste into another file
     unchanged; extract it instead. Details in `/webkit-tables`.
 11. **One navigation per level** — the rail, `PageTabs`, and at most one local navigation (the
-    `platform/detail/sectioned-resource` block, only past 7 sibling pages). A destination appears
+    `detail/sectioned-resource` block, only past 7 sibling pages). A destination appears
     once per screen, the rail never routes into a resource, and every level's active row agrees with
     the route. Details in `/webkit-navigation` (rule `webkit-navigation-levels`).
 

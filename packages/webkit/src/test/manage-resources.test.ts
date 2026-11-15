@@ -2,8 +2,8 @@ import { render, waitFor } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 import { userEvent } from 'vitest/browser'
 
-import ManageResources from '../../blocks/platform/account/manage-resources/manage-resources.vue'
-import Selected from '../../blocks/platform/account/manage-resources/variants/selected.vue'
+import ManageResources from '../../blocks/account/account-hierarchy/account-hierarchy.vue'
+import Selected from '../../blocks/account/account-hierarchy/variants/selected.vue'
 import { useToastRegion } from './toast-region'
 
 useToastRegion()
@@ -17,7 +17,7 @@ const row = (id: string): HTMLElement =>
 const checkboxOf = (id: string): HTMLElement =>
   row(id).querySelector<HTMLElement>('[role="checkbox"], input[type="checkbox"]') as HTMLElement
 
-describe('platform/account/manage-resources', () => {
+describe('account/account-hierarchy', () => {
   it('shows the hierarchy as a treegrid with the first branch open', () => {
     const view = render(ManageResources)
     expect(view.getByRole('treegrid', { name: 'Resources' })).toBeTruthy()

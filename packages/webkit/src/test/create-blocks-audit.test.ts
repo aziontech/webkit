@@ -1,29 +1,29 @@
 import { fireEvent, render, screen, waitFor, within } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
-import CreateHub from '../../blocks/platform/create/create-hub/create-hub.vue'
-import CreateHubConnected from '../../blocks/platform/create/create-hub/variants/connected.vue'
-import CreateHubLoadFailed from '../../blocks/platform/create/create-hub/variants/load-failed.vue'
-import CreateHubLoading from '../../blocks/platform/create/create-hub/variants/loading-repositories.vue'
-import CreateInDrawer from '../../blocks/platform/create/create-in-drawer/create-in-drawer.vue'
-import CreateInDrawerSaveFailed from '../../blocks/platform/create/create-in-drawer/variants/save-failed.vue'
-import DeployDrawer from '../../blocks/platform/create/deploy-drawer/deploy-drawer.vue'
-import DeployProgressDialog from '../../blocks/platform/create/deploy-progress-dialog/deploy-progress-dialog.vue'
-import DeploySuccess from '../../blocks/platform/create/deploy-success/deploy-success.vue'
-import DeploySuccessCli from '../../blocks/platform/create/deploy-success/variants/cli-created.vue'
-import DeployTemplate from '../../blocks/platform/create/deploy-template/deploy-template.vue'
-import DeployTemplateUpload from '../../blocks/platform/create/deploy-template/variants/upload.vue'
-import MultipageCreate from '../../blocks/platform/create/multipage-create/multipage-create.vue'
-import MultipageCreateAndDeploy from '../../blocks/platform/create/multipage-create/variants/create-and-deploy.vue'
-import MultipageListSettings from '../../blocks/platform/create/multipage-create/variants/list-settings.vue'
-import MultipageReview from '../../blocks/platform/create/multipage-create/variants/review.vue'
-import ReleaseImpact from '../../blocks/platform/create/release-impact/release-impact.vue'
-import ReleaseImpactSettings from '../../blocks/platform/create/release-impact/variants/choose-settings.vue'
-import ResourcePicker from '../../blocks/platform/create/resource-picker/resource-picker.vue'
-import ResourcePickerEmpty from '../../blocks/platform/create/resource-picker/variants/empty.vue'
-import SinglePageCreate from '../../blocks/platform/create/single-page-create/single-page-create.vue'
-import CreatePurge from '../../blocks/platform/create/single-page-create/variants/create-purge.vue'
-import CreateService from '../../blocks/platform/create/single-page-create/variants/create-service.vue'
+import CreateInDrawer from '../../blocks/create/create-drawer/create-drawer.vue'
+import CreateInDrawerSaveFailed from '../../blocks/create/create-drawer/variants/save-error.vue'
+import CreateHub from '../../blocks/create/create-hub/create-hub.vue'
+import CreateHubConnected from '../../blocks/create/create-hub/variants/connected.vue'
+import CreateHubLoadFailed from '../../blocks/create/create-hub/variants/load-error.vue'
+import CreateHubLoading from '../../blocks/create/create-hub/variants/repositories-loading.vue'
+import SinglePageCreate from '../../blocks/create/create-page/create-page.vue'
+import CreatePurge from '../../blocks/create/create-page/variants/create-purge.vue'
+import CreateService from '../../blocks/create/create-page/variants/create-service.vue'
+import MultipageCreate from '../../blocks/create/create-wizard/create-wizard.vue'
+import MultipageCreateAndDeploy from '../../blocks/create/create-wizard/variants/create-and-deploy.vue'
+import MultipageListSettings from '../../blocks/create/create-wizard/variants/list-settings.vue'
+import MultipageReview from '../../blocks/create/create-wizard/variants/review.vue'
+import DeployDrawer from '../../blocks/create/deploy-drawer/deploy-drawer.vue'
+import DeployProgressDialog from '../../blocks/create/deploy-progress-dialog/deploy-progress-dialog.vue'
+import DeploySuccess from '../../blocks/create/deploy-success/deploy-success.vue'
+import DeploySuccessCli from '../../blocks/create/deploy-success/variants/cli-created.vue'
+import DeployTemplate from '../../blocks/create/deploy-template/deploy-template.vue'
+import DeployTemplateUpload from '../../blocks/create/deploy-template/variants/upload.vue'
+import ReleaseImpact from '../../blocks/create/release-impact/release-impact.vue'
+import ReleaseImpactSettings from '../../blocks/create/release-impact/variants/choose-settings.vue'
+import ResourcePicker from '../../blocks/create/resource-picker/resource-picker.vue'
+import ResourcePickerEmpty from '../../blocks/create/resource-picker/variants/empty.vue'
 import { expectNoA11yViolations } from './axe'
 import { useToastRegion } from './toast-region'
 
@@ -115,7 +115,7 @@ describe('create-hub', () => {
   })
 })
 
-describe('create-in-drawer', () => {
+describe('create-drawer', () => {
   it('marks the fields required up front and shows Field.Error alerts after an empty submit', async () => {
     render(CreateInDrawer)
     await fireEvent.click(screen.getByRole('button', { name: 'Add Domain' }))
@@ -228,7 +228,7 @@ describe('resource-picker', () => {
   })
 })
 
-describe('multipage-create#CreateAndDeploy', () => {
+describe('create-wizard#CreateAndDeploy', () => {
   it('gates Next on the project, then shows the loading state on Create and deploy', async () => {
     render(MultipageCreateAndDeploy)
     expect(screen.getByTestId('navigation-wizard')).toBeTruthy()
@@ -248,7 +248,7 @@ describe('multipage-create#CreateAndDeploy', () => {
   })
 })
 
-describe('single-page-create', () => {
+describe('create-page', () => {
   it('creates the domain with a loading submit and a toast, and offers no inert Import', async () => {
     render(SinglePageCreate)
     expect(screen.queryByRole('button', { name: 'Import' })).toBeNull()
@@ -302,7 +302,7 @@ describe('release-impact', () => {
   })
 })
 
-describe('multipage-create', () => {
+describe('create-wizard', () => {
   it('moves from List settings to Review with Next, so every flow reaches the create', async () => {
     render(MultipageListSettings)
     expect(screen.queryByRole('button', { name: 'Create Access List' })).toBeNull()

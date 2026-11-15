@@ -1,8 +1,8 @@
 import { fireEvent, render, waitFor, within } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
-import SchemaEditor from '../../blocks/platform/edit/schema-editor/schema-editor.vue'
-import ImportCsv from '../../blocks/platform/edit/schema-editor/variants/import-csv.vue'
+import SchemaEditor from '../../blocks/edit/schema-editor/schema-editor.vue'
+import ImportCsv from '../../blocks/edit/schema-editor/variants/import-csv.vue'
 import { useToastRegion } from './toast-region'
 
 useToastRegion()
@@ -11,7 +11,7 @@ const drawer = () => document.querySelector('[role="dialog"]') as HTMLElement
 const columnNames = () =>
   Array.from(drawer().querySelectorAll<HTMLInputElement>('input[placeholder="column_name"]'))
 
-describe('platform/edit/schema-editor Create Table', () => {
+describe('edit/schema-editor Create Table', () => {
   it('reads a CSV into columns with guessed types and previews the rows', async () => {
     render(ImportCsv)
     await waitFor(() => expect(drawer()).not.toBeNull())

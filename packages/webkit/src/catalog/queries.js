@@ -490,7 +490,7 @@ const NORMALIZED_PAGE_GENERIC = new Set(MARKETING_PAGE_GENERIC.map(normalize))
 
 export function marketingPageIntent(query, surface) {
   const nq = normalize(query)
-  if (!nq || (surface && surface !== 'marketing')) return null
+  if (!nq || (surface && surface !== 'site')) return null
   if (NORMALIZED_PAGE_NOT.some((w) => hasPhrase(nq, w))) return null
   const pages = NORMALIZED_PAGES.filter((page) => page.terms.some((t) => hasPhrase(nq, t)))
   if (!pages.length) return null
@@ -542,7 +542,7 @@ export function searchComponents(catalog, query, { surface } = {}) {
       ...(wantedSurface ? { surface: wantedSurface } : {}),
       count: matches.length,
       matches,
-      hint: 'A marketing page is the shells/website block (get_pattern("shells/website")) filled with page sections: import each from its flat subpath, bind it with v-bind="section.props" and place it inside SectionContainer and SectionGap (rule webkit-sections).'
+      hint: 'A marketing page is the shell/site block (get_pattern("shell/site")) filled with page sections: import each from its flat subpath, bind it with v-bind="section.props" and place it inside SectionContainer and SectionGap (rule webkit-sections).'
     }
   }
   const aliases = aliasHits(catalog, q)
@@ -635,7 +635,7 @@ function tieBreak(catalog, a, b) {
 }
 
 function isProductEntry(entry) {
-  return (entry?.surface ?? 'product') === 'product'
+  return (entry?.surface ?? 'app') === 'app'
 }
 
 function componentSuggestion(catalog, need, opts) {
@@ -838,6 +838,14 @@ export function validateUsage(catalog, { import: importPath, classes, component 
   return { ok: problems.length === 0, available: true, problems }
 }
 
+export function sameVariant(a, b) {
+  const key = (s) =>
+    String(s || '')
+      .toLowerCase()
+      .replace(/[^a-z0-9]/g, '')
+  return Boolean(a) && key(a) === key(b)
+}
+
 function normalize(text) {
   return String(text || '')
     .toLowerCase()
@@ -895,7 +903,7 @@ function patternCard(id, p, score) {
     ...(p.steps ? { steps: p.steps } : {}),
     variants: (p.variants || []).map((v) => v.name),
     source: p.source,
-    surface: p.surface ?? 'product',
+    surface: p.surface ?? 'app',
     ...(p.kind === 'fragment' ? { kind: 'fragment', note: FRAGMENT_NOTE } : {}),
     ...(score != null ? { score } : {})
   }
@@ -957,7 +965,7 @@ export function searchPatterns(catalog, query, { surface, fragments } = {}) {
   const nq = normalize(raw)
   const hideFragments = fragments === false || (fragments !== true && screenIntentOf(nq))
   const entries = Object.entries(catalog.patterns || {})
-    .filter(([, p]) => !wantedSurface || (p.surface ?? 'product') === wantedSurface)
+    .filter(([, p]) => !wantedSurface || (p.surface ?? 'app') === wantedSurface)
     .filter(([id, p]) => !hideFragments || p.kind !== 'fragment' || isExactPattern(id, p, nq))
   const scope = wantedSurface ? { surface: wantedSurface } : {}
   if (!raw) {
@@ -973,7 +981,7 @@ export function searchPatterns(catalog, query, { surface, fragments } = {}) {
   const expanded = expandQuery(raw)
   const page = marketingPageIntent(raw, wantedSurface)
   const pageBoost = (id, p) =>
-    page && (p.surface ?? 'product') === 'marketing' ? 120 + (id.startsWith('shells/') ? 40 : 0) : 0
+    page && (p.surface ?? 'app') === 'site' ? 120 + (id.startsWith('shell/') ? 40 : 0) : 0
   const matches = entries
     .map(([id, p]) => ({ id, p, score: scorePattern(id, p, expanded) + pageBoost(id, p) }))
     .filter((r) => r.score > 0)
@@ -1002,7 +1010,13 @@ function movedPattern(catalog, key, variant) {
         (old) => !old.includes('#') && normalize(old.split('/').pop()) === n
       )
   if (!from) return null
-  const renamed = variant ? aliases[`${from}#${variant}`] : null
+  const variantAlias = variant
+    ? Object.keys(aliases).find((old) => {
+        const [base, state] = old.split('#')
+        return base === from && state && sameVariant(state, variant)
+      })
+    : null
+  const renamed = variantAlias ? aliases[variantAlias] : null
   const [id, state] = (renamed || aliases[from]).split('#')
   return { from, id, variant: renamed ? state : variant || state || null }
 }
@@ -1041,8 +1055,9 @@ export function getPattern(catalog, id, { variant } = {}) {
     }
   }
   const p = catalog.pattern(resolved)
-  const isPrimary = variant === p.primary
-  const chosen = variant && !isPrimary ? (p.variants || []).find((v) => v.name === variant) : null
+  const isPrimary = sameVariant(variant, p.primary)
+  const chosen =
+    variant && !isPrimary ? (p.variants || []).find((v) => sameVariant(v.name, variant)) : null
   if (variant && !isPrimary && !chosen) {
     return {
       ok: false,
@@ -1066,7 +1081,7 @@ export function getPattern(catalog, id, { variant } = {}) {
     imports: p.imports || [],
     skills: p.skills || [],
     source: p.source,
-    surface: p.surface ?? 'product',
+    surface: p.surface ?? 'app',
     ...(p.kind === 'fragment' ? { kind: 'fragment', fragmentNote: FRAGMENT_NOTE } : {}),
     ...(moved ? { movedFrom: moved.from, note: movedNote(moved, p) } : {}),
     variant: chosen ? chosen.name : p.primary,
@@ -1116,7 +1131,7 @@ export function suggestComponent(catalog, need, { surface } = {}) {
   const wantedSurface = surfaceOf(surface)
   const opts = wantedSurface ? { surface: wantedSurface } : {}
   const isMarketing =
-    wantedSurface === 'marketing' ||
+    wantedSurface === 'site' ||
     (!wantedSurface && MARKETING_WORDS.some((w) => hasPhrase(nq, normalize(w))))
   const component = componentSuggestion(catalog, q, opts)
 

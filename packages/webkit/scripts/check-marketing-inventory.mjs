@@ -7,15 +7,15 @@ const PKG = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 export const INVENTORY_PATH = resolve(PKG, 'scripts/marketing-inventory.json')
 const CATALOG_PATH = resolve(PKG, 'catalog.json')
 
-const SITE_PATTERN = /^(headers\/(site|docs)-header|shells\/(website|documentation)|marketing\/)/
+const SITE_PATTERN = /^(shell\/(site|docs)|marketing\/)/
 
 export function currentItems(catalog) {
   const exports = Object.entries(catalog.imports || {})
-    .filter(([, e]) => e.surface === 'marketing' || e.surface === 'docs')
+    .filter(([, e]) => e.surface === 'site' || e.surface === 'docs')
     .map(([sub, e]) => ({ id: sub, surface: e.surface }))
   const patterns = Object.keys(catalog.patterns || {})
     .filter((id) => SITE_PATTERN.test(id))
-    .map((id) => ({ id: `pattern:${id}`, surface: id.includes('doc') ? 'docs' : 'marketing' }))
+    .map((id) => ({ id: `pattern:${id}`, surface: id.includes('doc') ? 'docs' : 'site' }))
   return [...exports, ...patterns].sort((a, b) => a.id.localeCompare(b.id))
 }
 

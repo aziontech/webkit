@@ -2,14 +2,14 @@ import { fireEvent, render, within } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 import { userEvent } from 'vitest/browser'
 
-import OnboardingForm from '../../blocks/platform/account/onboarding-form/onboarding-form.vue'
-import Plan from '../../blocks/platform/account/onboarding-form/variants/plan.vue'
-import Profile from '../../blocks/platform/account/onboarding-form/variants/profile.vue'
+import OnboardingForm from '../../blocks/account/onboarding-form/onboarding-form.vue'
+import Plan from '../../blocks/account/onboarding-form/variants/plan.vue'
+import Profile from '../../blocks/account/onboarding-form/variants/profile.vue'
 import { useToastRegion } from './toast-region'
 
 useToastRegion()
 
-describe('platform/account/onboarding-form', () => {
+describe('account/onboarding-form', () => {
   it('renders the step card on the layout column, with the Wizard holding the step', async () => {
     const view = render(OnboardingForm)
     const column = view.container.querySelector('.layout-column.layout-boundary')

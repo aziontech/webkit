@@ -4,7 +4,7 @@ import { readFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
-const BLOCKS = join(dirname(fileURLToPath(import.meta.url)), '../../blocks/platform/account')
+const BLOCKS = join(dirname(fileURLToPath(import.meta.url)), '../../blocks/account')
 
 const TOKENS = {
   'Postal code': 'postal-code',

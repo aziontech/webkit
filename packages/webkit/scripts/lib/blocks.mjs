@@ -48,7 +48,7 @@ export function readBlocks(pkgRoot) {
       name: block.name,
       title: block.title,
       source: `blocks/${block.id}/${block.primary.file}`,
-      surface: block.surface || 'product',
+      surface: block.surface || 'app',
       ...(block.kind === 'fragment' ? { kind: 'fragment' } : {}),
       summary: block.summary || '',
       intents: block.intents || [],

@@ -736,12 +736,12 @@
     {
       "tool": "suggest",
       "query": "sign-in screen",
-      "top1": "platform/auth"
+      "top1": "auth/sign-in"
     },
     {
       "tool": "suggest",
       "query": "list of domains with filters",
-      "top1": "platform/view/table-view"
+      "top1": "view/table-view"
     }
   ]
 }

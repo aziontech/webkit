@@ -1,30 +1,28 @@
 export const SURFACES = {
-  product: 'Product UI (the console and other apps). The default for components.',
-  marketing: 'The marketing site (azion.com): page sections, bands, brand and client assets.',
+  app: 'Product UI (the console and other apps). The default for components.',
+  site: 'The marketing site (azion.com): page sections, bands, brand and client assets.',
   docs: 'The documentation site: doc page chrome, callouts, steps, on-this-page.'
 }
 
 const BY_COMPONENT_FOLDER = {
-  marketing: 'marketing',
-  sections: 'marketing',
+  marketing: 'site',
+  sections: 'site',
   documentation: 'docs'
 }
 
 const BY_COMPONENT = {
-  'layout/frame-box': 'marketing',
-  'layout/site-layout': 'marketing'
+  'layout/frame-box': 'site',
+  'layout/site-layout': 'site'
 }
 
 export function surfaceFromTarget(target) {
   const component = String(target).match(/^\.\/src\/components\/([^/]+)\/([^/]+)\//)
   if (component) {
     return (
-      BY_COMPONENT[`${component[1]}/${component[2]}`] ??
-      BY_COMPONENT_FOLDER[component[1]] ??
-      'product'
+      BY_COMPONENT[`${component[1]}/${component[2]}`] ?? BY_COMPONENT_FOLDER[component[1]] ?? 'app'
     )
   }
-  if (/^\.\/src\/assets\/(logos|illustrations|globe|scenes)\//.test(target)) return 'marketing'
-  if (/^\.\/src\/assets\/diagrams\//.test(target)) return 'marketing'
+  if (/^\.\/src\/assets\/(logos|illustrations|globe|scenes)\//.test(target)) return 'site'
+  if (/^\.\/src\/assets\/diagrams\//.test(target)) return 'site'
   return null
 }

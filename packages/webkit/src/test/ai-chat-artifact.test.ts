@@ -2,12 +2,12 @@ import { render, waitFor } from '@testing-library/vue'
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 import { page, userEvent } from 'vitest/browser'
 
-import Artifact from '../../blocks/platform/ai/ai-chat/variants/artifact.vue'
+import Artifact from '../../blocks/ai/ai-chat/variants/artifact.vue'
 
 const content = () =>
   document.querySelector<HTMLElement>('[role="region"][aria-label="top-orders.sql content"]')!
 
-describe('platform/ai/ai-chat Artifact', () => {
+describe('ai/ai-chat Artifact', () => {
   describe('wide', () => {
     beforeEach(async () => {
       await page.viewport(1280, 900)

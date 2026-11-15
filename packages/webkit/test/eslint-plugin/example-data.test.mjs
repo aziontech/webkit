@@ -68,7 +68,7 @@ test('invented-brand fires on invented companies, not on Acme', () => {
 
 test('exampleDataApplies skips tests, translated catalogs and the country list', () => {
   assert.ok(exampleDataApplies('packages/webkit/examples/hero-form/default.vue'))
-  assert.ok(exampleDataApplies('packages/webkit/blocks/platform/settings/settings-form/variants/profile.vue'))
+  assert.ok(exampleDataApplies('packages/webkit/blocks/settings/settings-form/variants/profile.vue'))
   assert.ok(exampleDataApplies('skills/webkit-forms/SKILL.md'))
   assert.ok(!exampleDataApplies('packages/webkit/src/components/inputs/chip/chip.test.ts'))
   assert.ok(!exampleDataApplies('packages/webkit/src/i18n/messages/pt-BR.ts'))

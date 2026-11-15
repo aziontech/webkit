@@ -1,11 +1,11 @@
 import { fireEvent, render, waitFor, within } from '@testing-library/vue'
 import { afterEach, describe, expect, it } from 'vitest'
 
-import Marketplace from '../../blocks/platform/view/marketplace/marketplace.vue'
-import InstallFailed from '../../blocks/platform/view/marketplace/variants/install-failed.vue'
-import Installed from '../../blocks/platform/view/marketplace/variants/installed.vue'
-import NoMatch from '../../blocks/platform/view/marketplace/variants/no-match.vue'
-import TemplateBrowser from '../../blocks/platform/view/template-browser/template-browser.vue'
+import Marketplace from '../../blocks/view/marketplace/marketplace.vue'
+import InstallError from '../../blocks/view/marketplace/variants/install-error.vue'
+import Installed from '../../blocks/view/marketplace/variants/installed.vue'
+import NoMatch from '../../blocks/view/marketplace/variants/no-match.vue'
+import TemplateBrowser from '../../blocks/view/template-browser/template-browser.vue'
 import { useToastRegion } from './toast-region'
 
 useToastRegion()
@@ -19,7 +19,7 @@ afterEach(() => {
   window.history.replaceState(null, '', window.location.pathname)
 })
 
-describe('platform/view/marketplace block', () => {
+describe('view/marketplace block', () => {
   it('lists integrations only, with no tabs and no template tiles', () => {
     const view = render(Marketplace)
     expect(view.queryAllByRole('tab')).toEqual([])
@@ -66,7 +66,7 @@ describe('platform/view/marketplace block', () => {
   })
 
   it('reports a failed install inline and in a permanent toast with Edit and Reinstall', async () => {
-    const view = render(InstallFailed)
+    const view = render(InstallError)
     const drawer = await waitFor(() => view.getByRole('dialog'))
     await waitFor(() =>
       expect(within(drawer).getByText(/wasn't installed on checkout/)).toBeTruthy()
@@ -90,7 +90,7 @@ describe('platform/view/marketplace block', () => {
   })
 })
 
-describe('platform/view/template-browser block', () => {
+describe('view/template-browser block', () => {
   it('opens the preview from a tile and leads Deploy into the deploy template flow', async () => {
     const view = render(TemplateBrowser)
     await fireEvent.click(view.getByRole('button', { name: 'Astro Blog' }))

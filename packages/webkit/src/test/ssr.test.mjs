@@ -135,7 +135,7 @@ describe('trigger ARIA is in the server HTML', () => {
 
 describe('trigger ARIA reaches controls behind a Tooltip and leaf components', () => {
   test('a Tooltip-wrapped IconButton trigger carries the ARIA on the button', async () => {
-    const file = 'blocks/platform/create/create-in-drawer/variants/edit-domain.vue'
+    const file = 'blocks/create/create-drawer/variants/edit-domain.vue'
     const mod = await server.ssrLoadModule(join(PKG, file))
     const html = await renderToString(createSSRApp(mod.default))
     const trigger = html.match(

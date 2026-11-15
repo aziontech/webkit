@@ -2,9 +2,9 @@ import { cleanup, fireEvent, render, waitFor } from '@testing-library/vue'
 import { afterEach, describe, expect, it } from 'vitest'
 import { userEvent } from 'vitest/browser'
 
-import BuildDeployment from '../../blocks/platform/account/build-deployment/build-deployment.vue'
-import Empty from '../../blocks/platform/account/build-deployment/variants/empty.vue'
-import UnsavedChanges from '../../blocks/platform/account/build-deployment/variants/unsaved-changes.vue'
+import BuildDeployment from '../../blocks/account/deployment-settings/deployment-settings.vue'
+import Empty from '../../blocks/account/deployment-settings/variants/empty.vue'
+import UnsavedChanges from '../../blocks/account/deployment-settings/variants/unsaved-changes.vue'
 import { expectNoA11yViolations } from './axe'
 import { useToastRegion } from './toast-region'
 
@@ -19,7 +19,7 @@ const buttonByText = (text: string, root: Document | HTMLElement = document) =>
     (button) => button.textContent?.trim() === text
   ) as HTMLButtonElement | undefined
 
-describe('platform/account/build-deployment', () => {
+describe('account/deployment-settings', () => {
   it('shows the SaveBar after a default changes, and Discard restores it', async () => {
     const view = render(UnsavedChanges)
     expect(view.container.textContent).toContain('You have unsaved changes.')

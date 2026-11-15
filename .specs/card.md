@@ -8,7 +8,7 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=562-6473
   node_id: 562:6473
-checksum: 44fe2bcef2db5cf8fb6ecc9ccc12c9ebe12a26f0e5794027dd99caab714388a6
+checksum: e1678685a2a407ac6ab8180f52b02f9cd3d4c586fc2ef4505828cd1a945f153c
 created: 2026-05-22
 last_updated: 2026-11-15
 ---
@@ -36,7 +36,7 @@ A bordered surface that groups related content under a title, with a header, a b
 - It is a framed cell or band of a marketing page → use `frame-box` or `card-grid`.
 - It is a single row of title, description, media and actions → use `item`.
 - It is one record of a resource list shown as cards, with selection and fields → use `card-list` (with `useCollection`).
-- It is a template tile in a gallery with no vendor, badge or install state → keep `kind="default"` with a `content` slot (see `platform/view/template-browser`).
+- It is a template tile in a gallery with no vendor, badge or install state → keep `kind="default"` with a `content` slot (see `view/template-browser`).
 
 ## Related
 

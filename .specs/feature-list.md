@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 3
 template: 2
-checksum: 381e2b95758cd5b8ddc5990f2f23929368a51e1f2c24b4e8938b1006a850daba
+checksum: 21a262a5e1c14f6413c13d989f927717fb08ff5688db82a5d5b721a0a4cc03a6
 created: 2026-11-12
 last_updated: 2026-11-15
 ---
@@ -156,7 +156,7 @@ No built-in strings: every visible text comes from `items`, and the accessible n
 Self-review by the lane agent acting as `spec-reviewer` (`.claude/agents/spec-reviewer.md`), 2026-11-12:
 
 1. Naming — `feature-list`, kebab, singular concept, flat export `./feature-list`; no collision in `catalog.json` (the marketing `feature-*` sections are page bands, not lists). Pass.
-2. Reuse — `item` rows carry padding and a media slot for navigable rows; `key-value-pairs` is label/value; `outcome-mark` states an outcome; `card-pricing` / `pricing-plans` are site sections with their own lists. No export draws an included-feature list; the design sample (`console/pages/account/panels/Billing.vue`, `components/billing/PlanUpgradeDrawer.vue`) and WebKit's own `platform/account/change-plan-drawer` block hand-write it three times. Pass.
+2. Reuse — `item` rows carry padding and a media slot for navigable rows; `key-value-pairs` is label/value; `outcome-mark` states an outcome; `card-pricing` / `pricing-plans` are site sections with their own lists. No export draws an included-feature list; the design sample (`console/pages/account/panels/Billing.vue`, `components/billing/PlanUpgradeDrawer.vue`) and WebKit's own `account/change-plan-drawer` block hand-write it three times. Pass.
 3. Prop vocabulary — `items` (data), `columns` (same name and meaning as `key-value-pairs`), `ariaLabel`. No banned alias. Pass.
 4. States — static list; empty renders nothing, stated. Pass.
 5. Internationalization — no built-in strings. Pass.

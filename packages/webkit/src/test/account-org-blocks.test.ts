@@ -2,14 +2,14 @@ import { cleanup, fireEvent, render, waitFor, within } from '@testing-library/vu
 import { afterEach, describe, expect, it } from 'vitest'
 import { userEvent } from 'vitest/browser'
 
-import ChangePlanDrawer from '../../blocks/platform/account/change-plan-drawer/change-plan-drawer.vue'
-import Checkout from '../../blocks/platform/account/change-plan-drawer/variants/checkout.vue'
-import TeamPermissions from '../../blocks/platform/account/team-permissions/team-permissions.vue'
-import CreateTeam from '../../blocks/platform/account/team-permissions/variants/create-team.vue'
-import Tokens from '../../blocks/platform/account/tokens/tokens.vue'
-import MfaCode from '../../blocks/platform/auth/variants/mfa-code.vue'
-import MfaSetup from '../../blocks/platform/auth/variants/mfa-setup.vue'
-import AccountSwitch from '../../blocks/shells/console/variants/account-switch.vue'
+import ChangePlanDrawer from '../../blocks/account/change-plan-drawer/change-plan-drawer.vue'
+import Checkout from '../../blocks/account/change-plan-drawer/variants/checkout.vue'
+import Tokens from '../../blocks/account/personal-tokens/personal-tokens.vue'
+import TeamPermissions from '../../blocks/account/team-permissions/team-permissions.vue'
+import CreateTeam from '../../blocks/account/team-permissions/variants/create-team.vue'
+import MfaCode from '../../blocks/auth/sign-in/variants/mfa-code.vue'
+import MfaSetup from '../../blocks/auth/sign-in/variants/mfa-setup.vue'
+import AccountSwitch from '../../blocks/shell/console/variants/account-switch.vue'
 import { expectNoA11yViolations } from './axe'
 import { useToastRegion } from './toast-region'
 
@@ -201,7 +201,7 @@ describe('team-permissions#CreateTeam', () => {
   })
 })
 
-describe('shells/console#AccountSwitch', () => {
+describe('shell/console#AccountSwitch', () => {
   it('opens with Ctrl+O, searches the tree and switches', async () => {
     const view = render(AccountSwitch)
     const trigger = view.getByRole('button', { name: /Account: Storefront EU/ })

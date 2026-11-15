@@ -20,7 +20,7 @@ const MENU_HOST = /^(?:sidebar|console-layout|doc-layout|app-layout)(?:-|$)/
 const PAGE_PATH = /(?:^|\/)(?:views|pages)\//
 
 const SECTIONED_RESOURCE =
-  /(?:^|\/)blocks\/platform\/detail\/sectioned-resource\/|(?:^|\/)platform__detail__sectioned-resource__/
+  /(?:^|\/)blocks\/detail\/sectioned-resource\/|(?:^|\/)detail__sectioned-resource__/
 
 const MARKER = /\/\*\s*webkit-local-navigation\s*\*\/|<!--\s*webkit-local-navigation\s*-->/
 
@@ -55,12 +55,12 @@ export default {
     type: 'suggestion',
     docs: {
       description:
-        'Warn when a page body (a file under views/ or pages/, or one that imports PageHeader or PageTabs) renders a Menu outside a navigation host (Sidebar, ConsoleLayout, DocLayout, AppLayout): a free in-page Menu repeats the rail or the page tabs. Local navigation inside a tab is the platform/detail/sectioned-resource block.'
+        'Warn when a page body (a file under views/ or pages/, or one that imports PageHeader or PageTabs) renders a Menu outside a navigation host (Sidebar, ConsoleLayout, DocLayout, AppLayout): a free in-page Menu repeats the rail or the page tabs. Local navigation inside a tab is the detail/sectioned-resource block.'
     },
     schema: [],
     messages: {
       pageMenu:
-        "'{{source}}' in a page body: a screen shows one navigation per level (rail, page tabs, at most one local navigation), and a free Menu in the page repeats their destinations. Drop it and reach these pages through the rail or the resource's PageTabs; when a tab holds more than 7 sibling pages, use the `platform/detail/sectioned-resource` block (rule `webkit-navigation-levels`). An intended local navigation carries the `webkit-local-navigation` marker comment."
+        "'{{source}}' in a page body: a screen shows one navigation per level (rail, page tabs, at most one local navigation), and a free Menu in the page repeats their destinations. Drop it and reach these pages through the rail or the resource's PageTabs; when a tab holds more than 7 sibling pages, use the `detail/sectioned-resource` block (rule `webkit-navigation-levels`). An intended local navigation carries the `webkit-local-navigation` marker comment."
     }
   },
   create(context) {

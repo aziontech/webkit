@@ -23,7 +23,7 @@ const ROOT = resolve(PKG, '../..')
 export const USAGE = [
   'usage: node scripts/usage-check.mjs <component-or-block> "<intent prompt>" [options]',
   '',
-  '  <component-or-block>  an export subpath (date-picker) or a block id (platform/auth, auth)',
+  '  <component-or-block>  an export subpath (date-picker) or a block id (auth/sign-in, sign-in)',
   '  "<intent prompt>"     what a product team would ask for, without naming the component',
   '',
   'options:',

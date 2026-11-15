@@ -1,27 +1,27 @@
 import { fireEvent, render, waitFor } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
-import CardView from '../../blocks/platform/view/card-view/card-view.vue'
-import CardViewFailed from '../../blocks/platform/view/card-view/variants/failed.vue'
-import CardViewLoading from '../../blocks/platform/view/card-view/variants/loading.vue'
-import FileBrowser from '../../blocks/platform/view/file-browser/file-browser.vue'
-import InsideAFolder from '../../blocks/platform/view/file-browser/variants/inside-a-folder.vue'
-import QueryEditor from '../../blocks/platform/view/query-editor/query-editor.vue'
-import QueryEditorQuery from '../../blocks/platform/view/query-editor/variants/query.vue'
-import SplitView from '../../blocks/platform/view/split-view/split-view.vue'
-import SplitViewFiltered from '../../blocks/platform/view/split-view/variants/filtered.vue'
-import TableView from '../../blocks/platform/view/table-view/table-view.vue'
-import TableViewFailed from '../../blocks/platform/view/table-view/variants/failed.vue'
-import TableViewLoading from '../../blocks/platform/view/table-view/variants/loading.vue'
-import WafLoadFailed from '../../blocks/platform/view/waf-tuning/variants/load-failed.vue'
-import WafTuning from '../../blocks/platform/view/waf-tuning/waf-tuning.vue'
+import CardView from '../../blocks/view/card-view/card-view.vue'
+import CardViewFailed from '../../blocks/view/card-view/variants/error.vue'
+import CardViewLoading from '../../blocks/view/card-view/variants/loading.vue'
+import FileBrowser from '../../blocks/view/file-browser/file-browser.vue'
+import InsideAFolder from '../../blocks/view/file-browser/variants/inside-a-folder.vue'
+import QueryEditor from '../../blocks/view/query-editor/query-editor.vue'
+import QueryEditorQuery from '../../blocks/view/query-editor/variants/query.vue'
+import SplitView from '../../blocks/view/split-view/split-view.vue'
+import SplitViewFiltered from '../../blocks/view/split-view/variants/filtered.vue'
+import TableView from '../../blocks/view/table-view/table-view.vue'
+import TableViewFailed from '../../blocks/view/table-view/variants/error.vue'
+import TableViewLoading from '../../blocks/view/table-view/variants/loading.vue'
+import WafLoadFailed from '../../blocks/view/waf-tuning/variants/load-error.vue'
+import WafTuning from '../../blocks/view/waf-tuning/waf-tuning.vue'
 
 const resourceNames = (root: HTMLElement) =>
   Array.from(root.querySelectorAll('[role=row] a'))
     .map((a) => a.textContent?.trim() ?? '')
     .filter((text) => /^resource-\d+$/.test(text))
 
-describe('platform/view/table-view block', () => {
+describe('view/table-view block', () => {
   it('sorts Last modified on the timestamp, not on a relative string', async () => {
     const view = render(TableView)
     const head = Array.from(view.container.querySelectorAll('[role=columnheader]')).find((th) =>
@@ -56,7 +56,7 @@ describe('platform/view/table-view block', () => {
   })
 })
 
-describe('platform/view/query-editor block', () => {
+describe('view/query-editor block', () => {
   it('marks the open table as pressed and NULL cells with data-null', () => {
     const view = render(QueryEditor)
     const options = Array.from(
@@ -88,7 +88,7 @@ const firstCells = (root: HTMLElement) =>
     .map((row) => row.querySelector('[role=rowheader], [role=cell]')?.textContent?.trim() ?? '')
     .filter(Boolean)
 
-describe('platform/view/file-browser block', () => {
+describe('view/file-browser block', () => {
   it('sorts Size on bytes and keeps the parent row and the folders first', async () => {
     const view = render(InsideAFolder)
     const head = Array.from(view.container.querySelectorAll('[role=columnheader]')).find((th) =>
@@ -122,7 +122,7 @@ describe('platform/view/file-browser block', () => {
   })
 })
 
-describe('platform/view/waf-tuning block', () => {
+describe('view/waf-tuning block', () => {
   it('says No matching rules with Clear search for a search miss', async () => {
     const view = render(WafTuning)
     await fireEvent.update(
@@ -151,7 +151,7 @@ describe('platform/view/waf-tuning block', () => {
   })
 })
 
-describe('platform/view/card-view block', () => {
+describe('view/card-view block', () => {
   it('names each card with a Link to the application', () => {
     const view = render(CardView)
     expect(view.getByRole('link', { name: 'storefront' })).toHaveAttribute(
@@ -170,7 +170,7 @@ describe('platform/view/card-view block', () => {
   })
 })
 
-describe('platform/view/split-view block', () => {
+describe('view/split-view block', () => {
   it('opens an event from its detail button, a keyboard path to the document', async () => {
     const view = render(SplitView)
     const [open] = await waitFor(() => view.getAllByRole('button', { name: /^Open event / }))

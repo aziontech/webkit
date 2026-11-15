@@ -2,11 +2,11 @@ import { fireEvent, render, screen, waitFor, within } from '@testing-library/vue
 import { afterEach, describe, expect, it } from 'vitest'
 import { nextTick } from 'vue'
 
-import CreateEnvironment from '../../blocks/platform/create/create-in-drawer/variants/create-environment.vue'
-import FunctionInstance from '../../blocks/platform/create/create-in-drawer/variants/function-instance.vue'
-import CreateOrganization from '../../blocks/platform/create/single-page-create/variants/create-organization.vue'
-import CreateZone from '../../blocks/platform/create/single-page-create/variants/create-zone.vue'
-import WafSettings from '../../blocks/platform/edit/edit-resource/variants/waf-settings.vue'
+import CreateEnvironment from '../../blocks/create/create-drawer/variants/create-environment.vue'
+import FunctionInstance from '../../blocks/create/create-drawer/variants/function-instance.vue'
+import CreateOrganization from '../../blocks/create/create-page/variants/create-organization.vue'
+import CreateZone from '../../blocks/create/create-page/variants/create-zone.vue'
+import WafSettings from '../../blocks/edit/edit-resource/variants/waf-settings.vue'
 import { expectNoA11yViolations } from './axe'
 import { useToastRegion } from './toast-region'
 
@@ -22,7 +22,7 @@ afterEach(() => {
 const recordRows = () =>
   within(screen.getByRole('list', { name: 'Imported records' })).queryAllByRole('listitem')
 
-describe('single-page-create#CreateZone', () => {
+describe('create-page#CreateZone', () => {
   it('lists the imported records with Import in the bar, without axe findings', async () => {
     const view = render(CreateZone)
     expect(screen.getByRole('heading', { name: 'Create Zone' })).toBeTruthy()
@@ -68,7 +68,7 @@ describe('single-page-create#CreateZone', () => {
   })
 })
 
-describe('single-page-create#CreateOrganization', () => {
+describe('create-page#CreateOrganization', () => {
   it('renders General, Owner, First workspace and Advanced without axe findings', async () => {
     const view = render(CreateOrganization)
     for (const name of ['General', 'Owner', 'First workspace', 'Advanced'])
@@ -113,7 +113,7 @@ describe('single-page-create#CreateOrganization', () => {
 const dialogs = () => Array.from(document.querySelectorAll<HTMLElement>('[role="dialog"]'))
 const lastDialog = () => dialogs()[dialogs().length - 1] as HTMLElement
 
-describe('create-in-drawer#CreateEnvironment', () => {
+describe('create-drawer#CreateEnvironment', () => {
   it('reveals the allowlist and branch fields and checks them only on submit', async () => {
     render(CreateEnvironment)
     await fireEvent.click(screen.getByRole('button', { name: 'Create Environment' }))
@@ -160,7 +160,7 @@ describe('create-in-drawer#CreateEnvironment', () => {
   })
 })
 
-describe('create-in-drawer#FunctionInstance', () => {
+describe('create-drawer#FunctionInstance', () => {
   it('builds the argument fields from the chosen function and flags required ones after submit', async () => {
     render(FunctionInstance)
     await fireEvent.click(screen.getByRole('button', { name: 'Add Function Instance' }))

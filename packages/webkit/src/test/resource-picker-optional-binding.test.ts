@@ -1,7 +1,7 @@
 import { fireEvent, render, screen } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
-import OptionalBinding from '../../blocks/platform/create/resource-picker/variants/optional-binding.vue'
+import OptionalBinding from '../../blocks/create/resource-picker/variants/optional-binding.vue'
 import { expectNoA11yViolations } from './axe'
 
 describe('resource-picker#OptionalBinding', () => {

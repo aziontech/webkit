@@ -87,8 +87,8 @@
     "quote-carousel": "client-quotes"
   },
   "removed": {
-    "pattern:headers/docs-header": "DocLayout already renders the documentation bar; the shells/documentation block shows it (dup plan BL-8)",
-    "pattern:headers/site-header": "SiteLayout and SiteNav already render the marketing bar; the shells/website block shows it (dup plan BL-8)",
+    "pattern:headers/docs-header": "DocLayout already renders the documentation bar; the shell/docs block shows it (dup plan BL-8)",
+    "pattern:headers/site-header": "SiteLayout and SiteNav already render the marketing bar; the shell/site block shows it (dup plan BL-8)",
     "doc-tooltip": "HoverCard; DocMarkdown renders the MDX <Tooltip> tag as one (dup plan DO-1)",
     "sample:shared/ui/banners/map-framing": "the deck slide crop; decks are product tooling and are not ported (m2.9-inventory section 6)",
     "sample:shared/ui/line-figure/LineFigureBench": "a development bench for tuning figures; the line-figure examples (default, play, gallery) replace it"
@@ -96,1643 +96,1643 @@
   "items": [
     {
       "id": "architecture-tabs",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "article-body",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "article-cards",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "article-highlight",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "article-index-blog",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "article-index-resource-hub",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/agi-extended-color.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/agibank-extended-color.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/agibank-extended-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/agibank-extended-reversed.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/ai-gateway.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/akamai-extended-color.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/akamai-extended-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/akamai-extended-reversed.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/akamai-symbol-color.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/akamai-symbol-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/akamai-symbol-reversed.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/alpargatas-extended-color.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/alpargatas-extended-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/americamovil-extended-color.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/americanas-extended-color.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/americanas-extended-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/americanas-extended-reversed.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/angeloni-extended-color.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/angular-symbol-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/anthropic-extended-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/arezzo-extended-color.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/arezzo-extended-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/arezzo-extended-reversed.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/astro-symbol-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/aws-extended-color.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/aws-extended-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/aws-extended-reversed.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/axur-extended-color.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/axur-extended-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/axur-extended-reversed.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/ayko-extended-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/azion-highlight.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/azion-rest-api.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/azure-symbol-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/b2w-extended-color.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/b2w-extended-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/b2w-extended-reversed.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/banco-de-la-nacion-extended-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/branches.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/brand-globe-scene",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/browserless-symbol-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/browserless-symbol-reversed.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/caixa-extended-color.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/caixa-extended-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/caixa-extended-reversed.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/caixa-symbol-color.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/calvinklein-extended-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/calvinklein-extended-reversed.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/ccpa-symbol-color.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/claude-symbol-color.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/client-registry",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/cloudflare-extended-color.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/cloudflare-extended-reversed.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/cloudflare-symbol-color.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/cloudflare-symbol-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/cloudflare-symbol-reversed.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/cobasi-extended-color.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/cocacola-extended-color.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/cocacola-extended-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/cocacola-extended-reversed.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/codex-symbol-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/combine-data-and-vector-search.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/competitor-registry",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/console-application-scene",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/console-trace-scene",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/contabilizei-extended-color.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/contabilizei-extended-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/contabilizei-extended-reversed.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/contabilizei-symbol-color.png",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/copilot-symbol-color.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/cpra-symbol-color.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/crateandbarrel-extended-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/crateandbarrel-extended-reversed.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/crefisa-extended-color.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/crefisa-extended-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/crefisa-extended-reversed.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/csu-digital-extended-color.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/cursor-symbol-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/dafiti-extended-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/dafiti-extended-reversed.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/datadog-symbol-color.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/datadome-extended-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/datadome-extended-reversed.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/ddos-protection.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/digiplus-extended-color.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/digiplus-extended-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/digiplus-extended-reversed.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/distributed-apis-tile.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/docusaurus-symbol-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/drizzle-extended-color.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/elastic-symbol-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/eleventy-symbol-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/embratel-extended-color.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/embratel-extended-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/embratel-extended-reversed.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/equinix-extended-color.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/exame-extended-color.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/exame-extended-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/exame-extended-reversed.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/fam-extended-color.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/fam-extended-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/fam-extended-reversed.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/fastly-extended-color.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/fastly-extended-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/fastly-extended-reversed.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/fastly-symbol-color.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/fastly-symbol-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/fastly-symbol-reversed.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/fauna-extended-color.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/fauna-extended-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/fauna-extended-reversed.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/forrester-extended-color.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/forrester-extended-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/forrester-extended-reversed.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/fourbank-extended-color.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/fourbank-extended-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/fourbank-extended-reversed.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/frost-and-sullivan-extended-color.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/frost-and-sullivan-extended-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/frost-and-sullivan-extended-reversed.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/g2-symbol-color.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/gartner-extended-color.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/gartner-extended-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/gartner-extended-reversed.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/gatsby-symbol-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/gcp-symbol-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/gdpr-symbol-color.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/gemini-symbol-color.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/getninjas-extended-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/getninjas-extended-reversed.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/gfg-extended-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/gfg-extended-reversed.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/gigaom-extended-color.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/gigaom-extended-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/gigaom-extended-reversed.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/github-symbol-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/google-symbol-color.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/gpa-extended-color.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/gpa-extended-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/gpa-extended-reversed.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/gpa-photo.jpg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/gpa-symbol-color.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/grafana-symbol-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/graphql-symbol-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/grendene-extended-color.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/groq-extended-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/gru-airport-extended-color.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/gruposabemi-extended-color.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/gruposabemi-extended-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/gruposabemi-extended-reversed.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/hdi-extended-color.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/hdi-extended-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/hdi-extended-reversed.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/herospark-extended-color.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/herospark-extended-reversed.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/herospark-symbol-reversed.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/hexo-symbol-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/hono-symbol-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/hugo-symbol-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/ibero-extended-color.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/ibero-extended-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/ibero-extended-reversed.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/ietf-extended-color.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/ifood-extended-color.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/ifood-extended-reversed.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/ifood-symbol-color.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/incognia-extended-color.png",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/infoblox-extended-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/ipiranga-extended-color.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/ipiranga-extended-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/ipiranga-extended-reversed.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/itau-extended-color.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/itau-extended-reversed.webp",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/itau-symbol-color.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/jamstack-symbol-color.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/javascript-symbol-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/jekyll-symbol-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/kafka-extended-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/kalunga-extended-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/kalunga-extended-reversed.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/kroton-extended-color.png",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/lendico-extended-color.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/lendico-extended-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/lendico-extended-reversed.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/lgpd-symbol-color.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/locaweb-extended-color.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/lojadomecanico-extended-color.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/lojadomecanico-extended-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/lojadomecanico-extended-reversed.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/lojaintegrada-extended-color.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/lojaintegrada-extended-reversed.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/madeiramadeira-extended-color.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/madeiramadeira-extended-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/madeiramadeira-extended-reversed.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/madeiramadeira-symbol-color.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/madeiramadeira-symbol-reversed.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/magalu-extended-color.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/magalu-extended-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/magalu-extended-reversed.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/magalu-symbol-color.png",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/marisa-extended-color.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/marisa-extended-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/marisa-extended-reversed.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/meliuz-extended-color.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/mobiauto-extended-color.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/mobiauto-extended-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/mobiauto-extended-reversed.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/monashees-extended-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/monashees-extended-reversed.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/mongodb-symbol-color.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/motorola-extended-color.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/motorola-extended-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/motorola-extended-reversed.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/mysql-symbol-reversed.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/neogrid-extended-color.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/neon-extended-color.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/neon-extended-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/neon-extended-reversed.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/netshoes-extended-color.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/netshoes-extended-reversed.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/netshoes-photo.jpg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/newbalance-extended-color.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/newbalance-extended-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/newbalance-extended-reversed.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/nextjs-symbol-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/nodejs-symbol-color.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/nuxt-extended-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/nzn-extended-color.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/nzn-extended-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/nzn-extended-reversed.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/omelete-extended-color.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/omelete-extended-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/omelete-extended-reversed.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/omeleteco-extended-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/omeleteco-extended-reversed.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/onnx-symbol-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/openai-symbol-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/opencode-symbol-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/panasonic-extended-color.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/panasonic-extended-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/panasonic-extended-reversed.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/panvel-extended-color.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/panvel-extended-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/panvel-extended-reversed.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/pci-dss-symbol-color.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/pernambucanas-extended-color.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/pernambucanas-extended-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/pernambucanas-extended-reversed.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/personal-tokens.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/petz-extended-color.png",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/petz-extended-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/petz-extended-reversed.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/planetscale-symbol-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/portobello-extended-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/portocred-extended-color.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/portocred-extended-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/portocred-extended-reversed.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/postgresql-symbol-color.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/preact-symbol-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/primevideo-extended-color.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/primevideo-extended-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/primevideo-extended-reversed.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/prisma-symbol-reversed.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/provu-extended-color.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/provu-extended-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/provu-extended-reversed.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/qualcomm-extended-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/qualcomm-extended-reversed.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/queroquero-extended-color.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/queroquero-extended-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/queroquero-extended-reversed.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/quick-start-with-templates.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/qwik-symbol-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/radware-extended-color.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/radware-extended-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/radware-extended-reversed.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/rbs-extended-color.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/rbs-extended-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/rbs-extended-reversed.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/react-symbol-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/real-time-metrics-error-rate.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/real-time-metrics-status-codes.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/redis-symbol-color.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/remix-symbol-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/renner-extended-color.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/renner-extended-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/renner-extended-reversed.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/renner-symbol-reversed.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/resend-extended-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/resend-extended-reversed.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/rico-extended-color.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/rico-extended-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/rico-extended-reversed.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/rocketchat-extended-color.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/rocketchat-extended-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/rocketchat-extended-reversed.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/runtime-api-cloud",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/runtime-api-scene",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/saffe-extended-color.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/saffe-extended-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/saffe-extended-reversed.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/samsung-extended-color.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/samsung-extended-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/samsung-extended-reversed.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/saraiva-extended-color.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/saraiva-extended-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/saraiva-extended-reversed.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/serverless-symbol-color.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/shoptime-extended-color.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/shoptime-extended-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/shoptime-extended-reversed.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/sky-extended-color.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/sky-extended-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/sky-extended-reversed.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/soc-symbol-color.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/spinning-globe",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/sqlite-symbol-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/stone-extended-color.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/stripe-extended-color.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/stripe-extended-reversed.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/submarino-extended-color.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/submarino-extended-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/submarino-extended-reversed.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/supabase-symbol-color.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/svelte-symbol-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/tc39-symbol-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/telefonica-extended-color.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/telefonica-extended-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/telefonica-extended-reversed.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/terraform-symbol-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/todocartoes-extended-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/todocartoes-extended-reversed.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/topazio-extended-color.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/topazio-extended-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/topazio-extended-reversed.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/tray-symbol-color.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/turso-symbol-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/unicesumar-extended-color.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/unicesumar-extended-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/unicesumar-extended-reversed.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/unicred-extended-color.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/unicred-extended-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/unicred-extended-reversed.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/uninter-extended-color.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/uninter-extended-reversed.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/upstash-symbol-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/usage-chart.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/vercel-extended-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/vercel-extended-reversed.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/vite-symbol-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/vitepress-symbol-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/vtex-extended-color.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/vtex-extended-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/vtex-extended-reversed.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/vue-symbol-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/vuepress-symbol-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/w3c-symbol-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/walmart-extended-color.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/walmart-extended-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/walmart-extended-reversed.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/webassembly-symbol-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/windsurf-symbol-mono.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/workers-cf-symbol-color.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "assets/zoop-extended-color.svg",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "band-stack",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "banner",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "banner-art",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "bento-grid",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "bento-grid-cell",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "bento-grid-root",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "big-numbers",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "call-to-action",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "capability-grid",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "card-carousel",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "card-grid",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "card-grid-cell",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "card-grid-root",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "carousel",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "carousel-item",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "carousel-next",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "carousel-previous",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "carousel-root",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "cli-terminal",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "client-mosaic",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "client-mosaic-columns",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "client-quotes",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "closing-call-to-action",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "closing-call-to-action-agents",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "closing-call-to-action-newsletter",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "closing-call-to-action-templates",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "code-split",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "column-navigation",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "column-navigation-column",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "column-navigation-item",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "column-navigation-root",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "compare-plans",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "compare-support-tiers",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "comparison-table",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "compliance-badges",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "console-panel",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "contact-hub",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "content-columns",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "customer-spotlight",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "diagram",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "doc-accordion-group",
@@ -1820,107 +1820,107 @@
     },
     {
       "id": "embed",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "faq",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "faq-section",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "feature-scroll",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "feature-tabs",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "feature-tiles",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "feature-widgets",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "hero",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "hero-band",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "hero-copy-on-top-art",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "hero-form",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "hero-root",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "hero-title",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "hero-with-opening",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "investor-marks",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "job-posting",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "listing-browser",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "listing-table",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "logo-wall",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "logo-wall-quote",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "media-split",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "media-split-band",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "media-split-stack",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "media-tabs",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "media-tile",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "network-section",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "pattern:headers/docs-header",
@@ -1928,127 +1928,127 @@
     },
     {
       "id": "pattern:headers/site-header",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
-      "id": "pattern:shells/documentation",
+      "id": "pattern:shell/docs",
       "surface": "docs"
     },
     {
-      "id": "pattern:shells/website",
-      "surface": "marketing"
+      "id": "pattern:shell/site",
+      "surface": "site"
     },
     {
       "id": "photo-marquee",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "platform-directory",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "pricing-plans",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "process-scroll",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "quote",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "quote-carousel",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "quote-tabs",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "recognition-marquee",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "resource-grid",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "section-command",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "section-container",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "section-gap",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "section-module",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "section-title",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "site-footer",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "site-nav",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "stats-band",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "sticky-carousel",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "sticky-scroll-code",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "sticky-stack",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "story-library",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "subject-library",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "template-gallery",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "texture-material",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "ticker",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "topic",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "use-case-links",
-      "surface": "marketing"
+      "surface": "site"
     },
     {
       "id": "use-cases",
-      "surface": "marketing"
+      "surface": "site"
     }
   ]
 }

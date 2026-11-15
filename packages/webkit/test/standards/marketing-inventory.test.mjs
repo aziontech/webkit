@@ -16,22 +16,22 @@ test('an item that leaves the catalog is lost unless renamed or removed is recor
     renamed: { 'old-band': 'new-band' },
     removed: { 'dead-band': 'unused by the site; use media-split' },
     items: [
-      { id: 'old-band', surface: 'marketing' },
-      { id: 'dead-band', surface: 'marketing' },
-      { id: 'gone-band', surface: 'marketing' },
-      { id: 'pattern:shells/website', surface: 'marketing' }
+      { id: 'old-band', surface: 'site' },
+      { id: 'dead-band', surface: 'site' },
+      { id: 'gone-band', surface: 'site' },
+      { id: 'pattern:shell/site', surface: 'site' }
     ]
   }
   const catalog = catalogWith(
-    { 'new-band': { surface: 'marketing' }, button: { surface: 'product' } },
-    { 'shells/website': {} }
+    { 'new-band': { surface: 'site' }, button: { surface: 'app' } },
+    { 'shell/site': {} }
   )
   assert.deepEqual(findLost(inventory, catalog), ['gone-band'])
 })
 
 test('update adds new marketing and docs items and never drops one', () => {
-  const inventory = { renamed: {}, removed: {}, items: [{ id: 'kept', surface: 'marketing' }] }
-  const catalog = catalogWith({ 'doc-card': { surface: 'docs' }, button: { surface: 'product' } })
+  const inventory = { renamed: {}, removed: {}, items: [{ id: 'kept', surface: 'site' }] }
+  const catalog = catalogWith({ 'doc-card': { surface: 'docs' }, button: { surface: 'app' } })
   const ids = updateInventory(inventory, catalog).items.map((i) => i.id)
   assert.deepEqual(ids, ['doc-card', 'kept'])
   assert.deepEqual(

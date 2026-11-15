@@ -1,13 +1,13 @@
 import { cleanup, fireEvent, render, waitFor } from '@testing-library/vue'
 import { afterEach, describe, expect, it } from 'vitest'
 
-import Login from '../../blocks/platform/auth/auth.vue'
-import ProvidersLoading from '../../blocks/platform/auth/variants/providers-loading.vue'
+import Login from '../../blocks/auth/sign-in/sign-in.vue'
+import ProvidersLoading from '../../blocks/auth/sign-in/variants/providers-loading.vue'
 import { expectNoA11yViolations } from './axe'
 
 afterEach(() => cleanup())
 
-describe('platform/auth#ProvidersLoading', () => {
+describe('auth/sign-in#ProvidersLoading', () => {
   it('holds the provider buttons place with a named status region', async () => {
     const view = render(ProvidersLoading)
     const status = view.getByRole('status', { name: 'Preparing sign-in providers' })
@@ -29,7 +29,7 @@ describe('platform/auth#ProvidersLoading', () => {
   })
 })
 
-describe('platform/auth#Login', () => {
+describe('auth/sign-in#Login', () => {
   it('shows the provider buttons and walks from the email to the password step', async () => {
     const view = render(Login)
 

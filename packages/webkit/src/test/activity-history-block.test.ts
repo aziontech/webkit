@@ -1,10 +1,10 @@
 import { fireEvent, render, waitFor } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
-import ActivityHistory from '../../blocks/platform/account/activity-history/activity-history.vue'
-import Empty from '../../blocks/platform/account/activity-history/variants/empty.vue'
+import ActivityHistory from '../../blocks/account/activity-history/activity-history.vue'
+import Empty from '../../blocks/account/activity-history/variants/empty.vue'
 
-describe('platform/account/activity-history', () => {
+describe('account/activity-history', () => {
   it('draws the category as a Tag, not a status', () => {
     const view = render(ActivityHistory)
     const table = view.getByRole('table', { name: 'Activity history' })

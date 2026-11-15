@@ -2,8 +2,8 @@ import { cleanup, fireEvent, render, waitFor, within } from '@testing-library/vu
 import { afterEach, describe, expect, it } from 'vitest'
 import { defineComponent, h } from 'vue'
 
-import AccountSwitch from '../../blocks/shells/console/variants/account-switch.vue'
-import AccountSwitchFailed from '../../blocks/shells/console/variants/account-switch-failed.vue'
+import AccountSwitch from '../../blocks/shell/console/variants/account-switch.vue'
+import AccountSwitchError from '../../blocks/shell/console/variants/account-switch-error.vue'
 import { expectNoA11yViolations } from './axe'
 import { useToastRegion } from './toast-region'
 
@@ -20,7 +20,7 @@ const at = (component: object, width: number) =>
     })
   )
 
-describe('shells/console#AccountSwitch placement', () => {
+describe('shell/console#AccountSwitch placement', () => {
   it('puts the switcher in the rail under the wordmark on a wide layout', () => {
     const view = at(AccountSwitch, 1280)
     const rail = view.getByTestId('layout-console-layout__sidebar-header')
@@ -43,9 +43,9 @@ describe('shells/console#AccountSwitch placement', () => {
   })
 })
 
-describe('shells/console#AccountSwitchFailed', () => {
+describe('shell/console#account-switch-error', () => {
   it('replaces the account table with a danger alert and loads the list on Retry', async () => {
-    at(AccountSwitchFailed, 1280)
+    at(AccountSwitchError, 1280)
     const panel = await waitFor(() => {
       expect(dialog()?.textContent).toContain('Switch account')
       return dialog() as HTMLElement

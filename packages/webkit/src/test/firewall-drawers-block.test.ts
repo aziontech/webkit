@@ -2,10 +2,10 @@ import { fireEvent, render, waitFor } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 import { userEvent } from 'vitest/browser'
 
-import Certificate from '../../blocks/platform/create/create-in-drawer/variants/certificate.vue'
-import NetworkList from '../../blocks/platform/edit/variables/variants/network-list.vue'
-import RulesReview from '../../blocks/platform/view/rules-list/variants/review-changes.vue'
-import WafAllow from '../../blocks/platform/view/waf-tuning/variants/allow.vue'
+import Certificate from '../../blocks/create/create-drawer/variants/certificate.vue'
+import NetworkList from '../../blocks/edit/variables/variants/network-list.vue'
+import RulesReview from '../../blocks/view/rule-list/variants/review-changes.vue'
+import WafAllow from '../../blocks/view/waf-tuning/variants/allow.vue'
 import { expectNoA11yViolations } from './axe'
 import { useToastRegion } from './toast-region'
 
@@ -49,7 +49,7 @@ describe('variables#NetworkList', () => {
   })
 })
 
-describe('create-in-drawer#Certificate', () => {
+describe('create-drawer#Certificate', () => {
   it('reads the pasted certificate and flags the missing private key only after Save', async () => {
     render(Certificate)
     const panel = await openDrawer(/Create Certificate/)
@@ -72,7 +72,7 @@ describe('create-in-drawer#Certificate', () => {
 })
 
 describe('open dialogs of the firewall-rules blocks', () => {
-  it('rules-list review dialog has no axe violations', async () => {
+  it('rule-list review dialog has no axe violations', async () => {
     render(RulesReview)
     await waitFor(() => expect(dialog()).not.toBeNull())
     await expectNoA11yViolations(dialog() as HTMLElement)

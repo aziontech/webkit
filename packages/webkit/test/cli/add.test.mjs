@@ -6,7 +6,7 @@ import { join } from 'node:path'
 import { checksum } from '../../src/cli/blocks.js'
 import { cleanup, cli, cliJson, makeProject, PKG_ROOT } from './_helpers/cli-project.mjs'
 
-const BLOCK = 'platform/create/create-hub'
+const BLOCK = 'create/create-hub'
 const canonical = (file) => readFileSync(join(PKG_ROOT, 'blocks', BLOCK, file), 'utf8')
 
 test('add copies the primary SFC into src/views and records it in the manifest', () => {

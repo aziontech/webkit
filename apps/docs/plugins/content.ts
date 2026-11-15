@@ -163,7 +163,7 @@ export function buildIndex(catalog: Catalog = readCatalog(), foundationSlugs: st
         parent?.category ??
         titlePath[titlePath.length - 2]?.toLowerCase() ??
         'other',
-      surface: entry.surface ?? 'product',
+      surface: entry.surface ?? 'app',
       purpose: firstSentence(entry.purpose ?? (parent?.purpose as string | undefined) ?? ''),
       import: entry.import ?? `@aziontech/webkit/${name}`,
       exampleDir: examples?.dir ?? null,
@@ -177,7 +177,7 @@ export function buildIndex(catalog: Catalog = readCatalog(), foundationSlugs: st
     name: block.name,
     title: block.name.replace(/([a-z0-9])([A-Z])/g, '$1 $2'),
     group: block.dir.split('/').slice(0, -1).join('/') || block.dir,
-    surface: block.surface ?? 'product',
+    surface: block.surface ?? 'app',
     summary: firstSentence(block.summary ?? ''),
     states: block.states,
     dir: block.dir,
@@ -247,7 +247,7 @@ export async function buildComponent(name: string, catalog: Catalog = readCatalo
     name,
     import: entry.import,
     kind: entry.kind,
-    surface: entry.surface ?? 'product',
+    surface: entry.surface ?? 'app',
     structure: entry.structure ?? null,
     purpose: inline(entry.purpose),
     useWhen: ((entry.useWhen as string[]) ?? []).map(inline),

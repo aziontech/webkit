@@ -2,12 +2,12 @@ import { fireEvent, render, screen, waitFor, within } from '@testing-library/vue
 import { afterEach, describe, expect, it } from 'vitest'
 import { type Component, defineComponent, h } from 'vue'
 
-import Review from '../../blocks/platform/create/multipage-create/variants/review.vue'
-import Application from '../../blocks/platform/detail/details-page/variants/application.vue'
-import ImportZoneFile from '../../blocks/platform/detail/record-table/variants/import-zone-file.vue'
-import EnvironmentCrumb from '../../blocks/platform/detail/version-detail/variants/environment-crumb.vue'
-import CacheSettings from '../../blocks/platform/edit/edit-resource/variants/cache-settings.vue'
-import Protocols from '../../blocks/platform/edit/edit-resource/variants/protocols.vue'
+import Review from '../../blocks/create/create-wizard/variants/review.vue'
+import ImportZoneFile from '../../blocks/detail/dns-zone-detail/variants/import-zone-file.vue'
+import Application from '../../blocks/detail/resource-detail/variants/application.vue'
+import EnvironmentCrumb from '../../blocks/detail/version-detail/variants/environment-crumb.vue'
+import CacheSettings from '../../blocks/edit/edit-resource/variants/cache-settings.vue'
+import Protocols from '../../blocks/edit/edit-resource/variants/protocols.vue'
 import ConsoleLayout from '../components/layout/console-layout/console-layout.vue'
 import { expectNoA11yViolations } from './axe'
 import { useToastRegion } from './toast-region'
@@ -31,7 +31,7 @@ afterEach(() => {
   document.body.style.overflow = ''
 })
 
-describe('details-page#Application', () => {
+describe('resource-detail#Application', () => {
   it('switches to the Topology tab and draws the diagram without axe findings', async () => {
     render(inConsoleLayout(Application))
     await fireEvent.click(screen.getByRole('tab', { name: 'Topology' }))
@@ -118,7 +118,7 @@ describe('version-detail#EnvironmentCrumb', () => {
   })
 })
 
-describe('multipage-create#Review', () => {
+describe('create-wizard#Review', () => {
   it('shows what gets created and jumps back to a step with Edit', async () => {
     render(Review)
     expect(screen.getByText('Runs on acme-production.')).toBeTruthy()
@@ -129,7 +129,7 @@ describe('multipage-create#Review', () => {
   })
 })
 
-describe('record-table#ImportZoneFile', () => {
+describe('dns-zone-detail#ImportZoneFile', () => {
   it('previews each line with its status and reason', async () => {
     render(ImportZoneFile)
     const drawer = await screen.findByRole('dialog', { name: 'Import zone file' })

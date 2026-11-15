@@ -78,7 +78,7 @@ export function blockGroups(): NavGroup[] {
     groups.set(block.group, list)
   }
   return [...groups.entries()].map(([group, items]) => ({
-    label: titleCase(group.replace(/^platform\//, '')),
+    label: titleCase(group),
     items
   }))
 }

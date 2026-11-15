@@ -1,10 +1,10 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
-import ApplicationBuild from '../../blocks/platform/detail/details-page/variants/application-build.vue'
-import Invocations from '../../blocks/platform/detail/invocations/invocations.vue'
-import Failed from '../../blocks/platform/detail/invocations/variants/failed.vue'
-import DeviceGroups from '../../blocks/platform/detail/version-detail/variants/device-groups.vue'
+import Invocations from '../../blocks/detail/invocations/invocations.vue'
+import Failed from '../../blocks/detail/invocations/variants/error.vue'
+import ApplicationBuild from '../../blocks/detail/resource-detail/variants/application-build.vue'
+import DeviceGroups from '../../blocks/detail/version-detail/variants/device-groups.vue'
 
 const selectedSpan = () =>
   document.querySelector<HTMLElement>('[data-testid="code-trace__row"][aria-selected="true"]')
@@ -34,7 +34,7 @@ describe('invocations', () => {
   })
 })
 
-describe('details-page#ApplicationBuild', () => {
+describe('resource-detail#ApplicationBuild', () => {
   it('raises the drop target while files hover and opens the deploy drawer on drop', async () => {
     const { container } = render(ApplicationBuild)
     const root = container.firstElementChild as HTMLElement

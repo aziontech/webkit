@@ -43,7 +43,7 @@ Requires Node ≥ 22. `@modelcontextprotocol/sdk`, `zod` and `@aziontech/webkit`
 
 ### Search
 
-`search_patterns`, `search_components` and `suggest_component` understand English, Portuguese and Spanish: a query is matched against each block's intents and name first (an exact id or name ranks first), then against synonyms (`@aziontech/webkit` `src/catalog/search-lexicon.js`: "cadastro" and "crear cuenta" reach sign-up, "botão" and "botón" reach `button`), then against the summary. All three take an optional `surface` (`product`, `marketing`, `docs`). The fixed query set `packages/webkit/test/catalog/search-queries.json` (en, pt-BR, es; expected first result and acceptable first three) runs in CI through `packages/webkit/test/catalog/search-quality.test.mjs`; add a query there whenever a search answers wrong, then fix the lexicon or the intents.
+`search_patterns`, `search_components` and `suggest_component` understand English, Portuguese and Spanish: a query is matched against each block's intents and name first (an exact id or name ranks first), then against synonyms (`@aziontech/webkit` `src/catalog/search-lexicon.js`: "cadastro" and "crear cuenta" reach sign-up, "botão" and "botón" reach `button`), then against the summary. All three take an optional `surface` (`app`, `site`, `docs`). The fixed query set `packages/webkit/test/catalog/search-queries.json` (en, pt-BR, es; expected first result and acceptable first three) runs in CI through `packages/webkit/test/catalog/search-quality.test.mjs`; add a query there whenever a search answers wrong, then fix the lexicon or the intents.
 
 ### Without the MCP
 

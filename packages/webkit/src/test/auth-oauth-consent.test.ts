@@ -2,13 +2,13 @@ import { cleanup, fireEvent, render, waitFor } from '@testing-library/vue'
 import { afterEach, describe, expect, it } from 'vitest'
 import { userEvent } from 'vitest/browser'
 
-import DeviceAuthorization from '../../blocks/platform/auth/variants/device-authorization.vue'
-import OauthConsent from '../../blocks/platform/auth/variants/oauth-consent.vue'
+import DeviceAuthorization from '../../blocks/auth/sign-in/variants/device-authorization.vue'
+import OauthConsent from '../../blocks/auth/sign-in/variants/oauth-consent.vue'
 import { expectNoA11yViolations } from './axe'
 
 afterEach(() => cleanup())
 
-describe('platform/auth#OauthConsent', () => {
+describe('auth/sign-in#OauthConsent', () => {
   it('names the app, the account and every requested scope', async () => {
     const view = render(OauthConsent)
 
@@ -51,7 +51,7 @@ describe('platform/auth#OauthConsent', () => {
   })
 })
 
-describe('platform/auth#DeviceAuthorization', () => {
+describe('auth/sign-in#DeviceAuthorization', () => {
   it('shows the code to compare with the request details', async () => {
     const view = render(DeviceAuthorization)
 

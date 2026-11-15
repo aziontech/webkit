@@ -2,14 +2,14 @@ import { fireEvent, render, waitFor, within } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 import { userEvent } from 'vitest/browser'
 
-import Profile from '../../blocks/platform/settings/settings-form/variants/profile.vue'
-import Failed from '../../blocks/platform/settings/settings-form/variants/profile-failed.vue'
-import Loading from '../../blocks/platform/settings/settings-form/variants/profile-loading.vue'
+import Profile from '../../blocks/settings/settings-form/variants/profile.vue'
+import Failed from '../../blocks/settings/settings-form/variants/profile-error.vue'
+import Loading from '../../blocks/settings/settings-form/variants/profile-loading.vue'
 import { useToastRegion } from './toast-region'
 
 useToastRegion()
 
-describe('platform/settings/settings-form · Profile', () => {
+describe('settings/settings-form · Profile', () => {
   it('links to MFA management instead of a second enforcement switch', () => {
     const view = render(Profile)
     expect(view.queryByRole('switch', { name: /multi-factor/i })).toBeNull()

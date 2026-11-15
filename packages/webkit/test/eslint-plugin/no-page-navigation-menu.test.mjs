@@ -32,7 +32,7 @@ test('no-page-navigation-menu', () => {
       { code: sfc(PAGE_TABS), filename: 'src/views/PolicyView.vue' },
       {
         code: sfc(`${MENU}\n${PAGE_TABS}`),
-        filename: 'packages/webkit/blocks/platform/detail/sectioned-resource/sectioned-resource.vue'
+        filename: 'packages/webkit/blocks/detail/sectioned-resource/sectioned-resource.vue'
       },
       {
         code: sfc(`/* webkit-local-navigation */\n${MENU}`),

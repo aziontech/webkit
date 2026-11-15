@@ -2,10 +2,10 @@ import { fireEvent, render, waitFor, within } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 import { userEvent } from 'vitest/browser'
 
-import MfaManagement from '../../blocks/platform/account/mfa-management/mfa-management.vue'
-import Users from '../../blocks/platform/account/users/users.vue'
-import EditRole from '../../blocks/platform/account/users/variants/edit-role.vue'
-import Invite from '../../blocks/platform/account/users/variants/invite.vue'
+import MfaManagement from '../../blocks/account/mfa-settings/mfa-settings.vue'
+import Users from '../../blocks/account/users/users.vue'
+import EditRole from '../../blocks/account/users/variants/edit-role.vue'
+import Invite from '../../blocks/account/users/variants/invite.vue'
 import { useToastRegion } from './toast-region'
 
 useToastRegion()
@@ -17,7 +17,7 @@ const button = (root: HTMLElement, label: string) =>
     (item) => item.textContent?.trim() === label
   ) as HTMLButtonElement
 
-describe('platform/account/users', () => {
+describe('account/users', () => {
   it('validates the invitation after Send, then adds the person as Invited', async () => {
     const view = render(Invite)
     await waitFor(() => expect(dialog()).not.toBeNull())
@@ -65,7 +65,7 @@ describe('platform/account/users', () => {
   })
 })
 
-describe('platform/account/mfa-management', () => {
+describe('account/mfa-settings', () => {
   it('warns about password-only people and confirms before requiring MFA', async () => {
     const view = render(MfaManagement)
     expect(view.container.textContent).toMatch(/2 of 5 people sign in with a password only/)

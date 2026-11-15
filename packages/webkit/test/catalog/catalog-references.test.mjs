@@ -9,7 +9,7 @@ import {
 
 const catalog = {
   aliases: { sheet: 'drawer' },
-  patterns: { 'platform/create/deploy-success': {} },
+  patterns: { 'create/deploy-success': {} },
   imports: {
     drawer: { kind: 'component', purpose: 'Use `drawer`, a `sheet` or `deploy-success`.' },
     tooltip: {
@@ -22,7 +22,7 @@ const catalog = {
       purpose: 'Replaces `field-text`; pairs with `mfa-setup-block` and `copy-on-top-art`.',
       related: ['field-password` — the old wrapper.', '`drawer` — a side sheet.']
     },
-    'table-search': { kind: 'subcomponent', avoidWhen: ['Use `platform/create/deploy-success`.'] }
+    'table-search': { kind: 'subcomponent', avoidWhen: ['Use `create/deploy-success`.'] }
   }
 }
 
@@ -30,7 +30,7 @@ const retired = retiredReferenceNames({ removed: { 'field-text': 'Field', 'field
 
 test('a reference to an export, an alias or a pattern id resolves', () => {
   const refs = staleReferences(catalog, { retired }).map((p) => p.ref)
-  for (const ok of ['drawer', 'sheet', 'deploy-success', 'platform/create/deploy-success']) {
+  for (const ok of ['drawer', 'sheet', 'deploy-success', 'create/deploy-success']) {
     assert.ok(!refs.includes(ok), ok)
   }
 })

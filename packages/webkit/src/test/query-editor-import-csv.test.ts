@@ -2,7 +2,7 @@ import { render, waitFor } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 import { userEvent } from 'vitest/browser'
 
-import ImportCsv from '../../blocks/platform/view/query-editor/variants/import-csv.vue'
+import ImportCsv from '../../blocks/view/query-editor/variants/import-csv.vue'
 import { useToastRegion } from './toast-region'
 
 useToastRegion()
@@ -15,7 +15,7 @@ const button = (name: RegExp) =>
     name.test(item.textContent?.trim() ?? '')
   )!
 
-describe('platform/view/query-editor Import data from CSV', () => {
+describe('view/query-editor Import data from CSV', () => {
   it('maps by header name, skips the rest and lists the errors per line', async () => {
     render(ImportCsv)
     await waitFor(() => expect(drawer()).not.toBeNull())

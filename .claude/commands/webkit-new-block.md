@@ -16,10 +16,12 @@ the differences are written here.
 A screen built only from `@aziontech/webkit` components, which agents copy through the MCP
 (`search_patterns` → `get_pattern`). It lives in one folder:
 
-| Category                                                                                           | Folder                                               |
-| -------------------------------------------------------------------------------------------------- | ---------------------------------------------------- |
-| `auth`, `account`, `create`, `view`, `detail`, `edit`, `delete`, `settings`, `states`, `dashboard` | `packages/webkit/blocks/platform/<category>/<name>/` |
-| `shell`                                                                                            | `packages/webkit/blocks/shells/<name>/`              |
+| Group                                                                                                             | Folder                                   |
+| ----------------------------------------------------------------------------------------------------------------- | ---------------------------------------- |
+| `account`, `ai`, `auth`, `create`, `dashboard`, `detail`, `edit`, `settings`, `state`, `view`, `shell`, `top-bar` | `packages/webkit/blocks/<group>/<name>/` |
+
+The group is the job, never the surface: `block.json#surface` says where the screen lives (`app`,
+`docs` or `site`).
 
 ```
 <folder>/
@@ -36,7 +38,7 @@ A screen built only from `@aziontech/webkit` components, which agents copy throu
 The catalog (`catalog:build`), the MCP (`get_pattern` returns `guidelines.md` with the SFC),
 `patterns:check` (consumer lint on every SFC, and `guidelines.md` against the SFC), the
 docs site (`apps/docs`, one page per block and one frame per state), the styled visual suite
-(`apps/visual`, the primary state; every state for `platform/ai`) and the browser test
+(`apps/visual`, the primary state; every state for `ai`) and the browser test
 that mounts every SFC (`src/test/copyable-sfcs.test.ts`) all read these files.
 
 ## Step 1 — Read the request
@@ -60,7 +62,7 @@ present. Create the branch with `/create-branch new block <name> #<n>`.
 Write the brief to the run log: the draft `block.json` (no files in `blocks/` yet), one line per
 region naming the components that render it, the variant list from the issue's states, the sample
 content, and the draft `guidelines.md` in the shared format (see any
-`packages/webkit/blocks/platform/view/table-view/guidelines.md`: `# <Block name>`, the purpose
+`packages/webkit/blocks/view/table-view/guidelines.md`: `# <Block name>`, the purpose
 paragraph, `## When to use`, `## When not to use`, `## Building blocks` with
 ``### A. <Element> — `Component` ``, `## Do`, `## Don't`, `## Copy`, `## Accessibility`,
 `## States`, `## Related`), written against the consumer skills the block lists. Every component named exists in `packages/webkit/package.json#exports` (check it
