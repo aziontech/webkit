@@ -1,4 +1,4 @@
-name: Publish @aziontech/icons to NPM
+name: Publish @aziontech/icons to npm
 
 on:
   release:
@@ -72,7 +72,7 @@ jobs:
 
       - name: Build
         working-directory: packages/icons
-        run: node scripts/build.mjs
+        run: node scripts/build-icons.mjs
 
       - name: Publish to npm
         working-directory: packages/icons

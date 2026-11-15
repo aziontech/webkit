@@ -1,4 +1,4 @@
-name: Deploy Application Icons Gallery
+name: Deploy icons gallery
 
 on:
   push:
@@ -48,7 +48,7 @@ jobs:
           sudo mv azionlinux /usr/bin/azion
           sudo chmod u+x /usr/bin/azion
 
-      - name: CLI version
+      - name: Show the Azion CLI version
         run: azion --version
 
       - name: Configure token
@@ -56,14 +56,14 @@ jobs:
           azion -t ${{ secrets.AZION_PERSONAL_TOKEN }}
           azion whoami
 
-      - name: Building workspace @aziontech/icons
+      - name: Build @aziontech/icons
         run: |
-          npm run icons:build
+          npm run build:icons
 
-      - name: Azion Build
+      - name: Build with Azion
         run: |
-          npm run icons:gallery:build:azion
+          npm run build-azion:icons-gallery
 
-      - name: Azion Deploy
+      - name: Deploy with Azion
         run: |
-          npm run icons:gallery:publish
+          npm run deploy:icons-gallery
