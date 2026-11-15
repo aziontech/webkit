@@ -9,7 +9,9 @@ export const LOCALES = [
 ]
 
 export const settings = reactive({
-  theme: 'dark' as Theme,
+  theme: (globalThis.matchMedia?.('(prefers-color-scheme: dark)').matches
+    ? 'dark'
+    : 'light') as Theme,
   locale: 'en',
   dir: 'ltr' as Direction
 })

@@ -19,6 +19,9 @@
     &:where([data-theme=system], [data-theme=system] *) {
       @slot;
     }
+    &:where(:root:not([data-theme=light], .azion-light), :root:not([data-theme=light], .azion-light) *):not(:where([data-theme=light], .azion-light, [data-theme=light] *, .azion-light *)) {
+      @slot;
+    }
   }
 }
 
@@ -966,7 +969,7 @@
 }
 
 @media (prefers-color-scheme: dark) {
-  [data-theme=system] {
+  :root:not([data-theme=light], .azion-light), [data-theme=system] {
     color-scheme: dark;
     --primary: #F3652B;
     --primary-mask: #FE601F33;

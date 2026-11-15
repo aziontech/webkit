@@ -1,8 +1,7 @@
 <!doctype html>
 <html
   lang="en"
-  class="azion azion-dark"
-  data-theme="dark"
+  class="azion"
 >
   <head>
     <meta charset="UTF-8" />
@@ -22,7 +21,7 @@
       ;(function () {
         try {
           var params = new URLSearchParams(location.search)
-          var stored = params.get('theme') || localStorage.getItem('webkit-docs:theme') || 'dark'
+          var stored = params.get('theme') || localStorage.getItem('webkit-docs:theme') || 'system'
           var dark =
             stored === 'dark' ||
             (stored === 'system' && matchMedia('(prefers-color-scheme: dark)').matches)

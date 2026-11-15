@@ -153,17 +153,18 @@ test('an existing postcss config is advised, not overwritten', () => {
   }
 })
 
-test('planInit advises the LIGHT default + data-theme dark opt-in', () => {
+test('planInit advises the device default and how to pin light or dark', () => {
   const dir = makeProject()
   try {
     const plan = planInit(dir, {})
     const advise = plan.find(
       (a) =>
         a.type === 'advise' &&
-        /defaults to LIGHT/.test(a.message) &&
+        /follows the device/.test(a.message) &&
+        /data-theme="light"/.test(a.message) &&
         /data-theme="dark"/.test(a.message)
     )
-    assert.ok(advise, 'expected a theme-selection advice mentioning the dark opt-in')
+    assert.ok(advise, 'expected a theme-selection advice naming the device default and both pins')
   } finally {
     rmSync(dir, { recursive: true, force: true })
   }

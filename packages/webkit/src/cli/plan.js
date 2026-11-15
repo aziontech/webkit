@@ -560,7 +560,7 @@ export function planInit(projectDir, opts = {}) {
   actions.push({
     type: 'advise',
     message:
-      'Theme: the design system defaults to LIGHT. For dark mode set <html data-theme="dark"> (or toggle it at runtime); the tokens also respond to the `.dark` class.'
+      'Theme: the design system follows the device setting (light or dark) by default. To pin one, set <html data-theme="light"> or <html data-theme="dark"> (or toggle it at runtime); the tokens also respond to the `.dark` class.'
   })
 
   return actions

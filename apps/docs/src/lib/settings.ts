@@ -3,7 +3,7 @@ import { reactive, watch } from 'vue'
 export type ThemeSetting = 'system' | 'dark' | 'light'
 
 export const settings = reactive({
-  theme: 'dark' as ThemeSetting,
+  theme: 'system' as ThemeSetting,
   locale: 'en',
   dir: 'ltr' as 'ltr' | 'rtl'
 })

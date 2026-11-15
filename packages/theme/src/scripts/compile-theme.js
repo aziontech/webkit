@@ -140,13 +140,15 @@ const fmt = (vars, indent = '  ') =>
 export const LIGHT_SELECTOR = ':root, [data-theme=light], .azion.azion-light'
 export const DARK_SELECTOR = '[data-theme=dark], .dark, .azion.azion-dark'
 export const SYSTEM_SELECTOR = '[data-theme=system]'
+export const UNPINNED_ROOT = ':root:not([data-theme=light], .azion-light)'
+export const LIGHT_PIN = '[data-theme=light], .azion-light'
 
 export const compileThemeCss = () => {
   const { light, dark } = compileThemeCssVars()
   return [
     `${LIGHT_SELECTOR} {\n  color-scheme: light;\n${fmt(light)}\n}`,
     `${DARK_SELECTOR} {\n  color-scheme: dark;\n${fmt(dark)}\n}`,
-    `@media (prefers-color-scheme: dark) {\n  ${SYSTEM_SELECTOR} {\n    color-scheme: dark;\n${fmt(dark, '    ')}\n  }\n}`
+    `@media (prefers-color-scheme: dark) {\n  ${UNPINNED_ROOT}, ${SYSTEM_SELECTOR} {\n    color-scheme: dark;\n${fmt(dark, '    ')}\n  }\n}`
   ].join('\n\n')
 }
 

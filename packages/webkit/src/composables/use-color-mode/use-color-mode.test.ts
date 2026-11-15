@@ -1,3 +1,4 @@
+import { compileThemeVars, injectThemeCss } from '@aziontech/theme/theme-colors'
 import { fireEvent, render } from '@testing-library/vue'
 import { afterEach, describe, expect, it } from 'vitest'
 import { commands } from 'vitest/browser'
@@ -70,5 +71,29 @@ describe('useColorMode', () => {
     localStorage.removeItem(COLOR_MODE_STORAGE_KEY)
     new Function(colorModeScript)()
     expect(document.documentElement.getAttribute('data-theme')).toBe('system')
+  })
+})
+
+describe('the theme stylesheet', () => {
+  it('follows the device when nothing is pinned, and data-theme pins light or dark', async () => {
+    const style = injectThemeCss()
+    const root = document.documentElement
+    const canvas = () => getComputedStyle(root).getPropertyValue('--bg-canvas').trim()
+    const { light, dark } = compileThemeVars()
+    try {
+      await commands.emulateMedia({ colorScheme: 'dark' })
+      expect(canvas()).toBe(dark['--bg-canvas'])
+      root.setAttribute('data-theme', 'light')
+      expect(canvas()).toBe(light['--bg-canvas'])
+      root.setAttribute('data-theme', 'system')
+      expect(canvas()).toBe(dark['--bg-canvas'])
+      root.removeAttribute('data-theme')
+      await commands.emulateMedia({ colorScheme: 'light' })
+      expect(canvas()).toBe(light['--bg-canvas'])
+      root.setAttribute('data-theme', 'dark')
+      expect(canvas()).toBe(dark['--bg-canvas'])
+    } finally {
+      style.remove()
+    }
   })
 })

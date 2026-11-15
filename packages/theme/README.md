@@ -48,7 +48,23 @@ The main import provides:
 
 ### 2. Switch themes
 
-Light is the default (`:root`). Dark mode activates on any of these hooks:
+With no theme pinned, the page follows the device: light tokens by default, dark tokens while
+`prefers-color-scheme: dark` matches. This is CSS alone, so there is no flash of the wrong theme and no
+script. Pin a theme with one attribute on `<html>`:
+
+```html
+<html data-theme="light">
+  <!-- always light, whatever the device says -->
+</html>
+<html data-theme="dark">
+  <!-- always dark -->
+</html>
+<html data-theme="system">
+  <!-- follow the device (same as no attribute) -->
+</html>
+```
+
+Dark mode also activates on the older hooks:
 
 ```html
 <html data-theme="dark">
@@ -65,14 +81,14 @@ Light is the default (`:root`). Dark mode activates on any of these hooks:
 document.documentElement.dataset.theme = 'dark' // or 'light'
 ```
 
-Light-mode selectors: `:root`, `[data-theme='light']`, `.azion.azion-light`.
-Dark-mode selectors: `[data-theme='dark']`, `.dark`, `.azion.azion-dark`.
+Light-mode selectors: `:root`, `[data-theme='light']`, `.azion.azion-light` (the last two pin light).
+Dark-mode selectors: `[data-theme='dark']`, `.dark`, `.azion.azion-dark`, and, on a dark device,
+`:root` without a light pin and `[data-theme='system']`.
 
-To follow the operating system, set `data-theme="system"`: the dark tokens apply while
-`prefers-color-scheme: dark` matches, in CSS alone, with no flash and no script. Each theme also sets
-`color-scheme`, so native scrollbars and form controls match, and Tailwind's `dark:` variant follows the
-same hooks (`data-theme="dark"`, `.dark`, and `data-theme="system"` on a dark OS). In a Vue app,
-`useColorMode()` from `@aziontech/webkit/use-color-mode` stores the choice and drives a `ThemeSwitcher`.
+Each theme also sets `color-scheme`, so native scrollbars and form controls match, and Tailwind's
+`dark:` variant follows the same rules. In a Vue app, `useColorMode()` from
+`@aziontech/webkit/use-color-mode` stores the choice (`system` by default) and drives a
+`ThemeSwitcher`.
 
 Derived tokens reference their source (`--border-selected: var(--primary)`), so overriding `--primary`
 rebrands them too.

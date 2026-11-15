@@ -11,8 +11,10 @@ import { compilePrimitivesVars } from './compile-primitives.js';
 import {
   compileThemeCss,
   compileThemeVars,
+  LIGHT_PIN,
   LIGHT_SELECTOR,
   SYSTEM_SELECTOR,
+  UNPINNED_ROOT,
 } from './compile-theme.js';
 import { codeData } from '../tokens/semantic/code.data.js';
 import { containersData } from '../tokens/semantic/containers.data.js';
@@ -275,6 +277,9 @@ const DARK_VARIANT = [
   '  }',
   '  @media (prefers-color-scheme: dark) {',
   `    &:where(${SYSTEM_SELECTOR}, ${SYSTEM_SELECTOR} *) {`,
+  '      @slot;',
+  '    }',
+  `    &:where(${UNPINNED_ROOT}, ${UNPINNED_ROOT} *):not(:where(${LIGHT_PIN}, ${LIGHT_PIN.split(', ').map((s) => `${s} *`).join(', ')})) {`,
   '      @slot;',
   '    }',
   '  }',

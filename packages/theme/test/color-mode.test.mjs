@@ -21,11 +21,11 @@ test('each theme declares its color-scheme so native controls and scrollbars fol
   assert.match(block(css, '[data-theme=dark], .dark, .azion.azion-dark'), /color-scheme: dark;/)
 })
 
-test('data-theme="system" takes the dark tokens when the OS prefers dark', () => {
+test('with no pinned theme, or data-theme="system", the dark tokens follow the device', () => {
   const media = css.slice(css.indexOf('@media (prefers-color-scheme: dark)'))
   assert.match(
     media,
-    /^@media \(prefers-color-scheme: dark\) \{\n {2}\[data-theme=system\] \{\n {4}color-scheme: dark;/
+    /^@media \(prefers-color-scheme: dark\) \{\n {2}:root:not\(\[data-theme=light\], \.azion-light\), \[data-theme=system\] \{\n {4}color-scheme: dark;/
   )
   const { dark } = compileThemeVars()
   assert.ok(media.includes(`    --bg-canvas: ${dark['--bg-canvas']};`))
@@ -47,6 +47,10 @@ test('the Tailwind dark variant follows data-theme, .dark and the system theme',
   assert.match(
     variant,
     /@media \(prefers-color-scheme: dark\) \{\n {4}&:where\(\[data-theme=system\], \[data-theme=system\] \*\)/
+  )
+  assert.match(
+    variant,
+    /&:where\(:root:not\(\[data-theme=light\], \.azion-light\), :root:not\(\[data-theme=light\], \.azion-light\) \*\):not\(:where\(\[data-theme=light\], \.azion-light, \[data-theme=light\] \*, \.azion-light \*\)\)/
   )
 })
 
