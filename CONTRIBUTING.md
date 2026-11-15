@@ -72,7 +72,9 @@ from step 2, with the existing spec:
 
 ### Deprecate
 
-Follow [`.claude/rules/deprecation.md`](./.claude/rules/deprecation.md):
+Follow [`.claude/rules/deprecation.md`](./.claude/rules/deprecation.md). 6.0 was the one clean
+break: it removed every old name outright, and apps migrate once with `MIGRATION-v6.md` and
+`webkit migrate`. From 6.0 on, a removal goes through this cycle:
 
 1. Mark the part `@deprecated` in its JSDoc (a prop) or on `defineOptions` (a component), naming
    the **replacement** and the **removal version**:

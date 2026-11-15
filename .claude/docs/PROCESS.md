@@ -430,7 +430,9 @@ major ahead; `doctor` reports the resolved versions to pin.
 <details>
 <summary><b>▸ Details — deprecation policy and staying current</b></summary>
 
-- Per [deprecation](../rules/deprecation.md): a renamed/removed API ships one
+- 6.0 is the clean-break major: it removed every old name outright, and an app migrates
+  once with `MIGRATION-v6.md` and `webkit migrate v6`.
+- From 6.0 on, per [deprecation](../rules/deprecation.md): a renamed/removed API ships one
   major with a `@deprecated` JSDoc naming the replacement and the removal version; the
   consumer lint flags usage of deprecated members, so migration happens before the removal
   major lands.

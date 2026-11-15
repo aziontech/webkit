@@ -60,6 +60,13 @@ describe('AttributeEditor', () => {
     expect(view.getByTestId('input-attribute-editor__empty').textContent).toContain('No items yet.')
   })
 
+  it('shows emptyTitle in place of the catalog text', () => {
+    const view = render(Harness([], { emptyTitle: 'No variables yet.' }))
+    expect(view.getByTestId('input-attribute-editor__empty').textContent).toContain(
+      'No variables yet.'
+    )
+  })
+
   it('edits a cell through update:items', async () => {
     const view = render(Harness([{ key: 'A', value: '1' }]))
     await fireEvent.update(view.getByLabelText('Value'), '2')

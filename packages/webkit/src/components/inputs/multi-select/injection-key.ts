@@ -56,7 +56,7 @@ export interface MultiSelectContext {
   allowCustom: ComputedRef<boolean>
   loading: ComputedRef<boolean>
   error: ComputedRef<string>
-  emptyText: ComputedRef<string>
+  emptyTitle: ComputedRef<string>
   /** The typed text of a searchable trigger. */
   query: Ref<string>
   setQuery: (text: string) => void

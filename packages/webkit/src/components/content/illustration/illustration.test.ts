@@ -248,7 +248,7 @@ describe('Illustration', () => {
     warn.mockRestore()
   })
 
-  it('keeps every deprecated name as an alias of a registered scene, never as a scene of its own', () => {
+  it('keeps every retired page-data name as an alias of a registered scene, never as a scene of its own', () => {
     for (const [retired, current] of Object.entries(illustrationAssetAliases)) {
       expect(illustrationAssetNames).toContain(current)
       expect(illustrationAssetNames).not.toContain(retired)
@@ -259,7 +259,7 @@ describe('Illustration', () => {
   })
 
   it.each(Object.entries(illustrationAssetAliases))(
-    'still draws the renamed scene for the deprecated name %s',
+    'still draws the renamed scene for the retired page-data name %s',
     async (retired, current) => {
       const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
       const view = render(Illustration, { props: { name: retired } })

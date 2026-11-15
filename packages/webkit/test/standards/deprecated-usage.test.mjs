@@ -15,27 +15,27 @@ const FIXTURE = join(HERE, 'deprecated-usage.vue')
 
 test('deprecationsOfSource reads deprecated props, models, slots, events, members and types', () => {
   const source = `
-    /** @deprecated since 6.0 — use \`NewKind\`. Removed in 7.0. */
+    /** @deprecated since 6.1 — use \`NewKind\`. Removed in 7.0. */
     export type OldKind = NewKind
     interface Props {
-      /** @deprecated since 6.0 — use \`size\`. Removed in 7.0. */
+      /** @deprecated since 6.1 — use \`size\`. Removed in 7.0. */
       width?: string
       size?: string
     }
     const emit = defineEmits<{
-      /** @deprecated since 6.0 — listen to \`remove\`. Removed in 7.0. */
+      /** @deprecated since 6.1 — listen to \`remove\`. Removed in 7.0. */
       dismiss: [event: MouseEvent]
       remove: [event: MouseEvent]
     }>()
-    /** @deprecated since 6.0 — use \`v-model:open\`. Removed in 7.0. */
+    /** @deprecated since 6.1 — use \`v-model:open\`. Removed in 7.0. */
     const collapsed = defineModel<boolean>('collapsed', { default: false })
     defineSlots<{
       prefix(): unknown
-      /** @deprecated since 6.0 — use the prefix slot. Removed in 7.0. */
+      /** @deprecated since 6.1 — use the prefix slot. Removed in 7.0. */
       iconLeft(): unknown
     }>()
     interface Statics {
-      /** @deprecated since 6.0 — use Item. Removed in 7.0. */
+      /** @deprecated since 6.1 — use Item. Removed in 7.0. */
       Option: typeof Item
     }
   `
@@ -51,7 +51,7 @@ test('deprecationsOfSource reads deprecated props, models, slots, events, member
 
 test('deprecationsOfSource flags a whole component deprecated on its defineOptions', () => {
   const found = deprecationsOfSource(
-    "/** @deprecated since 6.0 — use `Next`. Removed in 7.0. */\ndefineOptions({ name: 'Old' })"
+    "/** @deprecated since 6.1 — use `Next`. Removed in 7.0. */\ndefineOptions({ name: 'Old' })"
   )
   assert.equal(found.component, true)
 })

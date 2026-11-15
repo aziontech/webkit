@@ -3,12 +3,12 @@ name: multi-select
 category: inputs
 structure: composition
 status: implemented
-spec_version: 9
+spec_version: 10
 template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3899-29362
   node_id: 3899:29362
-checksum: 05d13e58029d1ffcc18bb383e8cf1bea0d06ea062a83ab212d999aa1cd1d1af7
+checksum: a3d69214751a0b0cfcdbf998d35321328ded1cb9187859ce5cde792c33b8e3c5
 created: 2026-06-25
 last_updated: 2026-11-15
 ---
@@ -17,7 +17,7 @@ last_updated: 2026-11-15
 
 ## Purpose
 
-Select control specialised for choosing many options from a list. The trigger field mirrors `Input`'s visual API (size, hover/focus/filled/disabled/invalid/required states) so a MultiSelect sits next to other form fields without visual drift. The dropdown panel is teleported to `body` and anchored to the trigger by the shared `usePlacement` composable — no `@floating-ui` runtime. Every option row carries a checkbox indicator (the `Checkbox` webkit component), optionally a leading slot/icon and a trailing tag. Search and "Create new" footer are exposed as slots on `<MultiSelectContent>`. Since spec v4 the trigger can also show the selection as removable chips (`kind="chips"`, capped by `chipLimit` with a `+N more` chip), take typed text to filter the options in place (`searchable`), offer an `Add "…"` row for a typed value that matches no option (`allowCustom`, emits `create`), and render its own loading, error and empty list states (`loading`, `error`, `emptyText`) — the same vocabulary as `combobox`. MultiSelect is the one multi-pick field (`Select` picks exactly one): `modelValue` is always an array and the indicator is always a checkbox.
+Select control specialised for choosing many options from a list. The trigger field mirrors `Input`'s visual API (size, hover/focus/filled/disabled/invalid/required states) so a MultiSelect sits next to other form fields without visual drift. The dropdown panel is teleported to `body` and anchored to the trigger by the shared `usePlacement` composable — no `@floating-ui` runtime. Every option row carries a checkbox indicator (the `Checkbox` webkit component), optionally a leading slot/icon and a trailing tag. Search and "Create new" footer are exposed as slots on `<MultiSelectContent>`. Since spec v4 the trigger can also show the selection as removable chips (`kind="chips"`, capped by `chipLimit` with a `+N more` chip), take typed text to filter the options in place (`searchable`), offer an `Add "…"` row for a typed value that matches no option (`allowCustom`, emits `create`), and render its own loading, error and empty list states (`loading`, `error`, `emptyTitle`) — the same vocabulary as `combobox`. MultiSelect is the one multi-pick field (`Select` picks exactly one): `modelValue` is always an array and the indicator is always a checkbox.
 
 Aligned with Figma frame `3899:29362` (options panel). The trigger reuses the `Input`/`Select` trigger visuals.
 
@@ -44,7 +44,7 @@ Aligned with Figma frame `3899:29362` (options panel). The trigger reuses the `I
 - `field` — wraps this control with its label, description and error; it hands the trigger its id and state.
 - `transfer-list` — dual-list transfer for building larger subsets.
 - `checkbox` — the indicator every option row renders.
-- `combobox` — single-value field with typed text; `searchable`, `allowCustom`, `filter`, `loading` and `emptyText` share its meaning.
+- `combobox` — single-value field with typed text; `searchable`, `allowCustom`, `filter`, `loading` and `emptyTitle` share its meaning.
 - `chip` — each selected value in `kind="chips"`.
 
 ## Best practices
@@ -136,7 +136,7 @@ Chips, typed filter and a create row:
 ## Sub-components
 
 - `multi-select-trigger/multi-select-trigger.vue` — With the default `kind="summary"` and no `searchable`, a bordered trigger button; otherwise a bordered field (`min-h` of the size, wrapping) that holds the chips (`kind="chips"`: one removable `Chip` of size `small` per selected value, the first `chipLimit` of them followed by a non-removable `+N more` chip when `chipLimit` > 0), then the combobox control — an `input` when `searchable` (its placeholder is the selection summary when `kind="summary"`), else a button — then the chevron. A click anywhere on the field but a chip's remove button opens the panel and focuses the control. The default trigger: bordered trigger field with an optional `#prefix` slot (typed with `defineSlots`), selected-value label (comma-joined option labels, or `displayValue`). Each option records its label text with the root when it mounts; on mount `MultiSelectContent` renders only the selected options (and any group without a `value`) once inside a `hidden` container so their labels are known before the panel first opens, then drops it, and chevron-down. Mirrors `Input` size/state visuals.
-- `multi-select-content/multi-select-content.vue` — Popover panel teleported to `body` and anchored with `usePlacement`; exposes `default` (the options), `#search` and `#footer` slots, typed with `defineSlots`, and scrolls its option list when content exceeds `max-h-[320px]`. It owns the list states: `loading` replaces the options with a spinner row (`Loading options`), a non-empty `error` replaces them with the message, and when no option is visible it shows `emptyText` (or `No matches`). With `allowCustom` and typed text that equals no option label, it appends an `Add "…"` option row after the options. A visually hidden polite status region next to the panel announces the loading, error, empty and match-count states.
+- `multi-select-content/multi-select-content.vue` — Popover panel teleported to `body` and anchored with `usePlacement`; exposes `default` (the options), `#search` and `#footer` slots, typed with `defineSlots`, and scrolls its option list when content exceeds `max-h-[320px]`. It owns the list states: `loading` replaces the options with a spinner row (`Loading options`), a non-empty `error` replaces them with the message, and when no option is visible it shows `emptyTitle` (or `No matches`). With `allowCustom` and typed text that equals no option label, it appends an `Add "…"` option row after the options. A visually hidden polite status region next to the panel announces the loading, error, empty and match-count states.
 - `multi-select-group/multi-select-group.vue` — Section wrapper for a labelled group of options; hidden while the typed filter hides every one of its options; renders a `text-label-sm` heading in `--text-muted` when `label` is set. Groups never sit flush: `--spacing-sm` above every group but the first — the same rhythm DropdownMenu puts around its group divider and Command puts between two bare groups. No hairline: unlike DropdownMenu, this panel separates groups by space alone.
 - `multi-select-option/multi-select-option.vue` — Selectable option row; hidden (`v-show`) while `searchable` + `filter` and its label text does not contain the typed text (case and accent insensitive, in the active locale); with a checkbox indicator (the `Checkbox` webkit component), an optional `icon` (PrimeIcons), an optional leading `#left` slot, the option label, and an optional trailing `#tag` slot. **One leading column for the whole list**: as soon as any option in the panel has an `icon` or a `#left` slot, _every_ option reserves the leading box (a fixed `size-4`), so a list mixing iconed and icon-less options keeps a single label edge instead of a ragged one. A panel where no option has either reserves nothing and pays no indent. The reservation is pure CSS — the list carries `group/options`, each option with a glyph carries `data-leading`, and `group-has-[[data-leading]]/options` turns the column on for all of them — so no option registry is needed.
 
@@ -153,14 +153,14 @@ Chips, typed filter and a create row:
 | `invalid`      | `boolean`                        | `false`     | false    | Applies the invalid border + ring tokens and sets `aria-invalid` on the trigger.                                                                                                                                                                                     |
 | `displayValue` | `(value: TValue[]) => string`    | `undefined` | false    | Custom formatter used by the trigger to render the selected labels; receives the current `modelValue` array.                                                                                                                                                         |
 | `name`         | `string`                         | `''`        | false    | Form field name. Set, the root renders one hidden input per selected value so a native `form` and `FormData` submit every selection under that name; `required` then adds a hidden required proxy that blocks an empty submit, and `disabled` leaves the values out. |
-| `kind`         | `'summary' \| 'chips'`           | `'summary'` | false    | How the trigger shows the selection: `summary` joins the labels (or `displayValue`), `chips` renders one removable chip per value.                           |
-| `chipLimit`    | `number`                         | `0`         | false    | With `kind="chips"`, the most chips shown before a `+N more` chip; `0` shows every chip and wraps.                                                        |
-| `searchable`   | `boolean`                        | `false`     | false    | Types in the trigger: the text filters the options, `Backspace` in an empty field removes the last value.                                                 |
-| `filter`       | `boolean`                        | `true`      | false    | With `searchable`, hides the options whose label does not contain the typed text. Turn off when the server filters on `search`.                           |
-| `allowCustom`  | `boolean`                        | `false`     | false    | With `searchable`, offers typed text that matches no option as an `Add "…"` row that emits `create`.                                                      |
-| `loading`      | `boolean`                        | `false`     | false    | Shows the loading row in place of the options while they are fetched.                                                                                     |
-| `error`        | `string`                         | `''`        | false    | Message shown in place of the options when they failed to load; empty shows the options.                                                                  |
-| `emptyText`    | `string`                         | `''`        | false    | Text of the list when no option is visible. Empty uses the locale catalog.                                                                                |
+| `kind`         | `'summary' \| 'chips'`           | `'summary'` | false    | How the trigger shows the selection: `summary` joins the labels (or `displayValue`), `chips` renders one removable chip per value.                                                                                                                                   |
+| `chipLimit`    | `number`                         | `0`         | false    | With `kind="chips"`, the most chips shown before a `+N more` chip; `0` shows every chip and wraps.                                                                                                                                                                   |
+| `searchable`   | `boolean`                        | `false`     | false    | Types in the trigger: the text filters the options, `Backspace` in an empty field removes the last value.                                                                                                                                                            |
+| `filter`       | `boolean`                        | `true`      | false    | With `searchable`, hides the options whose label does not contain the typed text. Turn off when the server filters on `search`.                                                                                                                                      |
+| `allowCustom`  | `boolean`                        | `false`     | false    | With `searchable`, offers typed text that matches no option as an `Add "…"` row that emits `create`.                                                                                                                                                                 |
+| `loading`      | `boolean`                        | `false`     | false    | Shows the loading row in place of the options while they are fetched.                                                                                                                                                                                                |
+| `error`        | `string`                         | `''`        | false    | Message shown in place of the options when they failed to load; empty shows the options.                                                                                                                                                                             |
+| `emptyTitle`   | `string`                         | `''`        | false    | Text of the list when no option is visible. Empty uses the locale catalog.                                                                                                                                                                                           |
 
 **Generic.** The root is generic over `TValue` (default `unknown`), the item type of the bound `modelValue`: with a `string[]` model, `displayValue` takes `(value: string[]) => string` and `update:modelValue` sends a `string[]`, so a handler needs no cast. `@aziontech/webkit/multi-select` exports the types `MultiSelectSize` and `MultiSelectKind`.
 
@@ -268,7 +268,7 @@ Chips, typed filter and a create row:
 
 | Key                   | English source                                | Override prop |
 | --------------------- | --------------------------------------------- | ------------- |
-| `multiSelect.empty`   | `No matches`                                  | `emptyText`   |
+| `multiSelect.empty`   | `No matches`                                  | `emptyTitle`  |
 | `multiSelect.loading` | `Loading options`                             | —             |
 | `multiSelect.add`     | `Add "{value}"`                               | —             |
 | `multiSelect.more`    | `+{count} more`                               | —             |

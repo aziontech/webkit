@@ -53,7 +53,7 @@
       /** Message shown in place of the options when they failed to load; empty shows the options. */
       error?: string
       /** Text of the list when no option is visible. Empty uses the locale catalog. */
-      emptyText?: string
+      emptyTitle?: string
     }>(),
     {
       defaultOpen: false,
@@ -72,7 +72,7 @@
       allowCustom: false,
       loading: false,
       error: '',
-      emptyText: ''
+      emptyTitle: ''
     }
   )
 
@@ -244,7 +244,7 @@
     allowCustom: computed(() => props.allowCustom),
     loading: computed(() => props.loading),
     error: computed(() => props.error),
-    emptyText: computed(() => props.emptyText),
+    emptyTitle: computed(() => props.emptyTitle),
     query,
     setQuery,
     matches,

@@ -965,7 +965,7 @@
                     size="large"
                     add-button-label="Add foreign key"
                     remove-button-label="Remove foreign key"
-                    empty="No foreign keys."
+                    empty-title="No foreign keys."
                     aria-label="Foreign keys"
                   >
                     <template #cell-column="{ index, invalid }">

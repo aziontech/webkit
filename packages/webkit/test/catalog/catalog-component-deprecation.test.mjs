@@ -16,9 +16,9 @@ const SPECS = resolve(PKG_ROOT, '../../.specs')
 const exportsMap = JSON.parse(readFileSync(join(PKG_ROOT, 'package.json'), 'utf-8')).exports
 
 test('componentDeprecation reads the @deprecated JSDoc on defineOptions, and only there', () => {
-  const deprecated = `<script setup lang="ts">\n  /** @deprecated since 6.0 — use \`Other\`. Removed in 7.0. */\n  defineOptions({ name: 'Old' })\n</script>`
-  assert.equal(componentDeprecation(deprecated), 'since 6.0 — use `Other`. Removed in 7.0.')
-  const propOnly = `<script setup lang="ts">\n  defineOptions({ name: 'Live' })\n  interface Props {\n    /** @deprecated since 6.0 — use \`b\`. */\n    a?: string\n  }\n</script>`
+  const deprecated = `<script setup lang="ts">\n  /** @deprecated since 6.1 — use \`Other\`. Removed in 7.0. */\n  defineOptions({ name: 'Old' })\n</script>`
+  assert.equal(componentDeprecation(deprecated), 'since 6.1 — use `Other`. Removed in 7.0.')
+  const propOnly = `<script setup lang="ts">\n  defineOptions({ name: 'Live' })\n  interface Props {\n    /** @deprecated since 6.1 — use \`b\`. */\n    a?: string\n  }\n</script>`
   assert.equal(componentDeprecation(propOnly), null)
 })
 
@@ -52,7 +52,7 @@ test('a component the catalog marks deprecated trips no-deprecated-component', a
       assert.ok(catalog.imports[entry.replacedBy], `${subpath}: replacedBy is not in the catalog`)
     }
   }
-  const source = `<script setup lang="ts">\n  /** @deprecated since 6.0 — use \`Button\`. Removed in 7.0. */\n  defineOptions({ name: 'OldButton' })\n</script>`
+  const source = `<script setup lang="ts">\n  /** @deprecated since 6.1 — use \`Button\`. Removed in 7.0. */\n  defineOptions({ name: 'OldButton' })\n</script>`
   catalog.imports['old-button'] = {
     ...catalog.imports.button,
     deprecated: true,
@@ -87,7 +87,7 @@ test('a component the catalog marks deprecated trips no-deprecated-component', a
 
   const noted = lint("import OldLink from '@aziontech/webkit/old-link'\n")
   assert.equal(noted.length, 1)
-  assert.match(noted[0].message, /Since 6\.0 — use `Button`/)
+  assert.match(noted[0].message, /Since 6\.1 — use `Button`/)
 
   assert.equal(lint("import Button from '@aziontech/webkit/button'\n").length, 0)
 })

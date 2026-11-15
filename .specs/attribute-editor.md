@@ -3,9 +3,9 @@ name: attribute-editor
 category: inputs
 structure: monolithic
 status: implemented
-spec_version: 6
+spec_version: 7
 template: 2
-checksum: 0ca17d9ef8bd82b57c1bf1086e33bd3360dbc33869d6a01cca25b7f5623e4ec1
+checksum: 2621419f08ee86f2612113cdf04e9da7d53635e57f9746fc88e61cf3842d4df4
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -90,7 +90,7 @@ An editable list of rows with the same fields, after Cloudscape's attribute edit
 | `addButtonLabel`    | `string`                         | `''`        | false    | Label of the Add button. Empty uses the locale catalog.                                                                                                                                                                                                                                                 |
 | `removeButtonLabel` | `string`                         | `''`        | false    | Accessible name of the Remove button, followed by the row number. Empty uses the locale catalog.                                                                                                                                                                                                        |
 | `addGroupLabel`     | `string`                         | `''`        | false    | Label of the Add group button in grouped mode. Empty uses the locale catalog.                                                                                                                                                                                                                           |
-| `empty`             | `string`                         | `''`        | false    | Text shown when there are no rows. Empty uses the locale catalog.                                                                                                                                                                                                                                       |
+| `emptyTitle`        | `string`                         | `''`        | false    | Text shown when there are no rows. Empty uses the locale catalog.                                                                                                                                                                                                                                       |
 | `limit`             | `number`                         | `undefined` | false    | Most rows allowed (per group in grouped mode); Add is disabled at the limit and the rows left are announced.                                                                                                                                                                                            |
 | `groupLimit`        | `number`                         | `undefined` | false    | Most groups allowed in grouped mode.                                                                                                                                                                                                                                                                    |
 | `minItems`          | `number`                         | `0`         | false    | Fewest rows kept; rows at the minimum lose their Remove button.                                                                                                                                                                                                                                         |
@@ -180,7 +180,7 @@ Rows appear and leave without animation; the controls keep their own transitions
 | `attributeEditor.remove`        | Remove item                                    | `removeButtonLabel` |
 | `attributeEditor.rowAction`     | {label} {index}                                | —                   |
 | `attributeEditor.addGroup`      | Add OR group                                   | `addGroupLabel`     |
-| `attributeEditor.empty`         | No items yet.                                  | `empty`             |
+| `attributeEditor.empty`         | No items yet.                                  | `emptyTitle`        |
 | `attributeEditor.remaining`     | You can add {count} more item(s) (plural)      | —                   |
 | `attributeEditor.limitReached`  | You have reached the limit of {limit} items.   | —                   |
 | `attributeEditor.added`         | Item {index} added.                            | —                   |

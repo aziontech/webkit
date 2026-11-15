@@ -160,7 +160,8 @@
     "sticky-scroll-code": "FeatureScroll from @aziontech/webkit/feature-scroll; items keep title, description, code and action",
     "shell-mockup": "ProductWidget from @aziontech/webkit/product-widget with the registry name of the console screen; the frame is internal",
     "shell-mockup-root": "ProductWidget from @aziontech/webkit/product-widget with the registry name of the console screen; the frame is internal",
-    "shell-mockup-part": "ProductWidget from @aziontech/webkit/product-widget; the frame and its parts are internal"
+    "shell-mockup-part": "ProductWidget from @aziontech/webkit/product-widget; the frame and its parts are internal",
+    "vite": "delete the webkitViteConfig import and its mergeConfig call; an app that uses vee-validate sets optimizeDeps: { include: ['vee-validate'] } in its own Vite config"
   },
   "types": {
     "BoxGridSelectionItem": "RadioGroupOption",

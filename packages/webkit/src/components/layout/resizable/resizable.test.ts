@@ -87,7 +87,7 @@ describe('Resizable', () => {
   })
 
   it('renders a collapsed pane at zero length without unmounting its content', () => {
-    const { getAllByTestId, getByText } = render(group({ collapsed: true, collapsible: true }))
+    const { getAllByTestId, getByText } = render(group({ expanded: false, collapsible: true }))
     const sized = getAllByTestId('layout-resizable__pane')[1]
     expect(sized.dataset.collapsed).toBe('true')
     expect(sized.style.width).toBe('0px')
@@ -110,7 +110,6 @@ describe('Resizable keyboard and models', () => {
   const setup = async (paneProps: Record<string, unknown> = {}, dir = 'ltr') => {
     const basis: number[] = []
     const expanded: boolean[] = []
-    const collapsed: boolean[] = []
     const size = ref(300)
     const view = render({
       render: () =>
@@ -122,13 +121,12 @@ describe('Resizable keyboard and models', () => {
               basis.push(value)
             },
             'onUpdate:expanded': (value: boolean) => expanded.push(value),
-            'onUpdate:collapsed': (value: boolean) => collapsed.push(value),
             ...paneProps
           })
         ])
     })
     await nextTick()
-    return { ...view, handle: view.getByRole('separator'), basis, expanded, collapsed }
+    return { ...view, handle: view.getByRole('separator'), basis, expanded }
   }
 
   it('ArrowLeft grows the pane after the handle and ArrowRight shrinks it (ltr)', async () => {
@@ -161,17 +159,20 @@ describe('Resizable keyboard and models', () => {
     expect(handle.getAttribute('aria-valuenow')).toBe('600')
   })
 
-  it('Enter collapses a collapsible pane and restores it, emitting expanded and the deprecated collapsed', async () => {
-    const { handle, expanded, collapsed, getAllByTestId } = await setup({ collapsible: true })
+  it('Enter collapses a collapsible pane and restores it, emitting expanded', async () => {
+    const { handle, expanded, getAllByTestId } = await setup({ collapsible: true })
     const pane = getAllByTestId('layout-resizable__pane')[1]
     await fireEvent.keyDown(handle, { key: 'Enter' })
     expect(expanded.at(-1)).toBe(false)
-    expect(collapsed.at(-1)).toBe(true)
     expect(pane.dataset.collapsed).toBe('true')
     await fireEvent.keyDown(handle, { key: 'Enter' })
     expect(expanded.at(-1)).toBe(true)
-    expect(collapsed.at(-1)).toBe(false)
     expect(pane.dataset.collapsed).toBeUndefined()
+  })
+
+  it('has no collapsed model: only expanded drives the pane', async () => {
+    const { getAllByTestId } = await setup({ collapsed: true, collapsible: true })
+    expect(getAllByTestId('layout-resizable__pane')[1].dataset.collapsed).toBeUndefined()
   })
 
   it('Enter does nothing on a pane that is not collapsible', async () => {

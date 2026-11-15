@@ -73,26 +73,18 @@ export const illustrationAssets = {
 export type IllustrationAssetName = keyof typeof illustrationAssets
 
 export const illustrationAssetAliases = {
-  /** @deprecated since 6.0 — use `sql-sdk-code-cards` instead. Removed in 7.0. */
   'build-databases-from-code': 'sql-sdk-code-cards',
-  /** @deprecated since 6.0 — use `globe-with-sql-nodes` instead. Removed in 7.0. */
   'distributed-sql-for-resilient-global-reads': 'globe-with-sql-nodes',
-  /** @deprecated since 6.0 — use `waf-threat-families-panel` instead. Removed in 7.0. */
   'enable-owasp-protection-with-customizable-rules': 'waf-threat-families-panel',
-  /** @deprecated since 6.0 — use `reputation-rings-hub` instead. Removed in 7.0. */
   'reputation-intelligence-for-enhanced-protection': 'reputation-rings-hub',
-  /** @deprecated since 6.0 — use `azion-to-commerce-tiles` instead. Removed in 7.0. */
   'saas-platforms': 'azion-to-commerce-tiles',
-  /** @deprecated since 6.0 — use `traffic-and-cost-bar-chart` instead. Removed in 7.0. */
   'stay-in-control': 'traffic-and-cost-bar-chart',
-  /** @deprecated since 6.0 — use `data-stream-destinations-map` instead. Removed in 7.0. */
   'stream-security-events-for-investigation-and-response': 'data-stream-destinations-map',
-  /** @deprecated since 6.0 — use `chat-and-headset-tiles` instead. Removed in 7.0. */
   'white-gloves-when-it-matters': 'chat-and-headset-tiles'
 } as const satisfies Record<string, IllustrationAssetName>
 
-/** A retired scene name that still resolves to its renamed scene until 7.0. */
-export type DeprecatedIllustrationAssetName = keyof typeof illustrationAssetAliases
+/** An old scene name kept so page data written before the rename still renders; it resolves to its renamed scene. */
+export type RetiredIllustrationAssetName = keyof typeof illustrationAssetAliases
 
 export const illustrationAssetNames = Object.keys(
   illustrationAssets
@@ -101,7 +93,7 @@ export const illustrationAssetNames = Object.keys(
 export function resolveIllustrationAssetName(name: string): IllustrationAssetName | null {
   if (Object.hasOwn(illustrationAssets, name)) return name as IllustrationAssetName
   if (Object.hasOwn(illustrationAssetAliases, name)) {
-    return illustrationAssetAliases[name as DeprecatedIllustrationAssetName]
+    return illustrationAssetAliases[name as RetiredIllustrationAssetName]
   }
   return null
 }
