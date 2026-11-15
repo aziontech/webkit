@@ -4,6 +4,7 @@ import { fileURLToPath } from 'node:url'
 import test from 'node:test'
 
 import {
+  NAMING_STAGED_BLOCKS,
   RULES,
   addedViolations,
   checkFile,
@@ -469,10 +470,11 @@ test('the catalog vocabulary stamps the 6.0 standard', () => {
   assert.ok(!snap.props.some((p) => p.aliases.includes('status')))
 })
 
-test('only staged rules wait for the switch; enforced rules always block', () => {
+test('the switch is on: every rule blocks, staged and enforced alike', () => {
+  assert.equal(NAMING_STAGED_BLOCKS, true)
   assert.equal(isBlocking('export-kebab'), true)
-  assert.equal(isBlocking('prop-name'), false)
-  assert.equal(isBlocking('prop-name', { strict: true }), true)
+  assert.equal(isBlocking('prop-name'), true)
+  assert.equal(isBlocking('css-variable'), true)
 })
 
 test('addedViolations counts only what a write adds', () => {
@@ -482,11 +484,10 @@ test('addedViolations counts only what a write adds', () => {
   assert.deepEqual(addedViolations([a, a], [a]), [])
 })
 
-test('the repo scan reports by rule (report mode on the current tree)', () => {
+test('the repo scan is clean on every rule', () => {
   const counts = countByRule(scanRepo(ROOT, loadContext(ROOT)))
   assert.deepEqual(Object.keys(counts).sort(), Object.keys(RULES).sort())
-  for (const id of ['export-kebab', 'export-synonym', 'export-retired', 'block-id'])
-    assert.equal(counts[id], 0, `${id} is enforced and must be clean`)
+  for (const [id, n] of Object.entries(counts)) assert.equal(n, 0, `${id} must be clean`)
 })
 
 const hook = (input, env = {}) =>
@@ -497,7 +498,7 @@ const hook = (input, env = {}) =>
     env: { ...process.env, ...env }
   })
 
-test('validate-naming hook: blocks an added enforced violation, passes staged ones until the switch', () => {
+test('validate-naming hook: blocks an added violation of any rule', () => {
   const add = {
     tool_name: 'Edit',
     tool_input: {
@@ -516,10 +517,14 @@ test('validate-naming hook: blocks an added enforced violation, passes staged on
       content: sfc('function handleClick() {}')
     }
   }
-  assert.equal(hook(write).status, 0)
-  const strict = hook(write, { WEBKIT_NAMING_STRICT: '1' })
-  assert.equal(strict.status, 2)
-  assert.match(strict.stderr, /\[handler-name\]/)
+  const staged = hook(write)
+  assert.equal(staged.status, 2)
+  assert.match(staged.stderr, /\[handler-name\]/)
+  const clean = {
+    ...write,
+    tool_input: { ...write.tool_input, content: sfc('function onClick() {}') }
+  }
+  assert.equal(hook(clean).status, 0)
 })
 
 test('validate-naming hook: an edit that keeps existing debt is not blocked, and bad input fails open', () => {

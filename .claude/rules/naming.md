@@ -470,8 +470,10 @@ Frontmatter is governed by [`authoring-docs.md`](./authoring-docs.md).
 
 ## How it is checked
 
-One engine checks every rule that a machine can decide. The four `enforced` rules block
-today; the `staged` rules are reported now and block once the rename lanes have merged.
+One engine checks every rule that a machine can decide, and every rule blocks: the four
+`enforced` rules from the start, the `staged` ones since the rename lanes merged
+(`NAMING_STAGED_BLOCKS` is `true`). The write-time hook blocks a violation a write adds, and
+`check:naming` fails CI on any violation in the tree.
 
 | Rule id            | Checks                                                                         | Decision       |
 | ------------------ | ------------------------------------------------------------------------------ | -------------- |

@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // PreToolUse hook (Write|Edit|MultiEdit): runs the naming standard (.claude/rules/naming.md)
 // on the file a write produces and blocks only the violations the write ADDS. Rules in
-// the "staged" stage block once NAMING_STAGED_BLOCKS is true in
+// the "staged" stage block too while NAMING_STAGED_BLOCKS is true in
 // packages/webkit/scripts/lib/naming-rules.mjs (or WEBKIT_NAMING_STRICT=1). The engine is
 // the same one the CI gate (scripts/check-naming.mjs) runs. Fail-open on any error.
 

@@ -16,7 +16,7 @@ import {
 } from '../../../../.claude/hooks/lib/spec.mjs'
 import { checkSubpaths, checkSynonyms, retiredNames } from './naming.mjs'
 
-export const NAMING_STAGED_BLOCKS = false
+export const NAMING_STAGED_BLOCKS = true
 
 export const RULE_DOC = '.claude/rules/naming.md'
 
