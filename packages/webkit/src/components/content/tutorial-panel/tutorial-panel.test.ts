@@ -5,7 +5,7 @@ import { defineComponent, nextTick, ref } from 'vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import HelpPanel from '../help-panel/help-panel.vue'
 import Hotspot from '../hotspot/hotspot.vue'
-import { useTutorialTasksContext } from './composables/use-tutorial-tasks-context'
+import { useTutorialPanelTasksContext } from './composables/use-tutorial-panel-tasks-context'
 import TutorialPanel, { type Tutorial, TutorialPanelProvider } from './index'
 import TutorialPanelTask from './tutorial-panel-task/tutorial-panel-task.vue'
 import TutorialPanelTasks from './tutorial-panel-tasks/tutorial-panel-tasks.vue'
@@ -361,11 +361,11 @@ describe('TutorialPanel task list', () => {
   })
 })
 
-describe('useTutorialTasksContext', () => {
+describe('useTutorialPanelTasksContext', () => {
   it('throws when resolved outside a TutorialPanel task list', () => {
     const Loose = defineComponent({
       setup() {
-        useTutorialTasksContext()
+        useTutorialPanelTasksContext()
         return () => null
       }
     })

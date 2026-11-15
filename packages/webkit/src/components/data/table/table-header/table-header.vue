@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, inject, provide, reactive, useAttrs } from 'vue'
 
-  import { type TableDensity, TableInjectionKey, TableRowGroupKey } from '../injection-key'
+  import { type TableDensity, TableInjectionKey, TableRowGroupInjectionKey } from '../injection-key'
 
   defineOptions({
     name: 'TableHeader',
@@ -21,7 +21,7 @@
   })
 
   provide(
-    TableRowGroupKey,
+    TableRowGroupInjectionKey,
     reactive({
       hoverable: false,
       compact: computed(() => props.density === 'compact')

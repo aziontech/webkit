@@ -9,7 +9,7 @@ export interface ItemContext {
   size: ItemSize
 }
 
-export const ItemInjectionKey: InjectionKey<ItemContext> = Symbol('ItemContext')
+export const ItemInjectionKey: InjectionKey<ItemContext> = Symbol('Item')
 
 /**
  * Provided by list containers (ItemGroup, ItemList) to force every descendant Item to a single
@@ -20,7 +20,6 @@ export interface ItemContainerContext {
   forceKind: ItemKind
 }
 
-export const ItemContainerInjectionKey: InjectionKey<ItemContainerContext> =
-  Symbol('ItemContainerContext')
+export const ItemContainerInjectionKey: InjectionKey<ItemContainerContext> = Symbol('ItemContainer')
 
 export const ItemListMemberInjectionKey: InjectionKey<boolean> = Symbol('ItemListMember')

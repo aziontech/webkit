@@ -2,7 +2,7 @@
   import { computed, inject, useAttrs } from 'vue'
 
   import { useListboxTrigger } from '../../../../composables/use-listbox'
-  import { selectContextKey } from '../injection-key'
+  import { SelectInjectionKey } from '../injection-key'
 
   defineOptions({
     name: 'SelectTrigger',
@@ -22,7 +22,7 @@
     prefix(): unknown
   }>()
 
-  const ctx = inject(selectContextKey)
+  const ctx = inject(SelectInjectionKey)
   if (!ctx) {
     throw new Error('SelectTrigger must be used inside <Select>.')
   }

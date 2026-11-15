@@ -29,6 +29,6 @@ export interface DrawerContext {
   side: DrawerSide
 }
 
-export const DrawerInjectionKey: InjectionKey<DrawerContext> = Symbol('DrawerContext')
+export const DrawerInjectionKey: InjectionKey<DrawerContext> = Symbol('Drawer')
 
 export const DrawerPanelScrollInjectionKey: InjectionKey<boolean> = Symbol('DrawerPanelScroll')

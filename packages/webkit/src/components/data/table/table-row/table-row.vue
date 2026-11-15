@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { inject } from 'vue'
 
-  import { TableInjectionKey, TableRowGroupKey } from '../injection-key'
+  import { TableInjectionKey, TableRowGroupInjectionKey } from '../injection-key'
 
   defineOptions({
     name: 'TableRow',
@@ -25,7 +25,7 @@
   }>()
 
   const ctx = inject(TableInjectionKey, null)
-  const group = inject(TableRowGroupKey, { hoverable: true })
+  const group = inject(TableRowGroupInjectionKey, { hoverable: true })
   const fallbackTestId = ctx ? `${ctx.testId}__row` : 'data-table__row'
 </script>
 

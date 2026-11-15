@@ -16,14 +16,14 @@
   import { usePortalLocale } from '../../../../composables/use-locale/use-translate'
   import { usePlacement } from '../../../../composables/use-placement'
   import ScrollArea from '../../../layout/scroll-area/scroll-area.vue'
-  import { selectContextKey } from '../injection-key'
+  import { SelectInjectionKey } from '../injection-key'
 
   defineOptions({
     name: 'SelectContent',
     inheritAttrs: false
   })
 
-  const ctx = inject(selectContextKey)
+  const ctx = inject(SelectInjectionKey)
   if (!ctx) {
     throw new Error('SelectContent must be used inside <Select>.')
   }

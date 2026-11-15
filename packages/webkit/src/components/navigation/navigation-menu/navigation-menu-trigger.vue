@@ -2,13 +2,13 @@
   import { computed, onMounted, onUnmounted, ref, useAttrs, watch } from 'vue'
 
   import { cn } from '../../../utils/cn'
-  import { resolveHostElement } from './composables/resolve-host-element'
   import {
-    useNavigationMenuRoot,
-    useOptionalNavigationMenuItem
+    useNavigationMenuContext,
+    useOptionalNavigationMenuItemContext
   } from './composables/use-navigation-menu-context'
-  import { useNavigationMenuListHighlight } from './composables/use-navigation-menu-list-highlight-context'
+  import { useNavigationMenuListHighlightContext } from './composables/use-navigation-menu-list-highlight-context'
   import { createChangeEventDetails } from './composables/use-navigation-menu-root'
+  import { resolveHostElement } from './lib/host-element'
 
   defineOptions({ name: 'NavigationMenuTrigger', inheritAttrs: false })
 
@@ -39,9 +39,9 @@
     () => (attrs['data-testid'] as string | undefined) ?? 'navigation-navigation-menu__trigger'
   )
 
-  const root = useNavigationMenuRoot()
-  const listHighlight = useNavigationMenuListHighlight()
-  const itemContext = useOptionalNavigationMenuItem()
+  const root = useNavigationMenuContext()
+  const listHighlight = useNavigationMenuListHighlightContext()
+  const itemContext = useOptionalNavigationMenuItemContext()
   const controlRef = ref<HTMLElement | null>(null)
 
   const isLink = computed(() => props.href !== '')
@@ -109,7 +109,7 @@
   }
 
   const onPointerLeave = (event: globalThis.PointerEvent) => {
-    listHighlight?.handleTargetPointerLeave(event, resolveElement())
+    listHighlight?.onTargetPointerleave(event, resolveElement())
 
     if (isLink.value) {
       return

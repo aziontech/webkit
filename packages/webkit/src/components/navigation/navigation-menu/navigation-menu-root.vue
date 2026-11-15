@@ -5,10 +5,10 @@
   import { useTranslate } from '../../../composables/use-locale/use-translate'
   import * as en from '../../../i18n/messages/en'
   import { cn } from '../../../utils/cn'
-  import { provideNavigationMenuRoot } from './composables/use-navigation-menu-context'
+  import { provideNavigationMenuContext } from './composables/use-navigation-menu-context'
   import {
     type NavigationMenuRootEmit,
-    useNavigationMenuRootState
+    useNavigationMenuRoot
   } from './composables/use-navigation-menu-root'
 
   defineOptions({ name: 'NavigationMenu', inheritAttrs: false })
@@ -57,13 +57,13 @@
   )
 
   const ROOT_CLASS =
-    'relative [--webkit-nav-selector:color-mix(in_srgb,var(--bg-hover)_60%,transparent)]'
+    'relative [--navigation-menu-highlight-background:color-mix(in_srgb,var(--bg-hover)_60%,transparent)]'
 
   const internalValue = ref(props.defaultValue)
   const isControlled = computed(() => model.value !== undefined)
   const controlledValue = computed(() => (isControlled.value ? (model.value ?? null) : null))
 
-  const rootState = useNavigationMenuRootState(
+  const rootState = useNavigationMenuRoot(
     controlledValue,
     isControlled,
     internalValue,
@@ -76,7 +76,7 @@
     emit as unknown as NavigationMenuRootEmit
   )
 
-  provideNavigationMenuRoot(rootState)
+  provideNavigationMenuContext(rootState)
 
   defineExpose({
     unmount: rootState.unmount

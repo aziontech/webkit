@@ -4,9 +4,9 @@
   import { useFieldControl } from '../../../composables/use-field-control'
   import type { ListboxFocusIntent } from '../../../composables/use-listbox'
   import { FormValue } from '../../../utils/form-value'
-  import { fieldContextKey } from '../field/injection-key'
+  import { FieldInjectionKey } from '../field/injection-key'
   import {
-    selectContextKey,
+    SelectInjectionKey,
     type SelectKind,
     type SelectSize,
     type SelectValue
@@ -79,7 +79,7 @@
     required: () => props.required
   })
 
-  provide(fieldContextKey, null)
+  provide(FieldInjectionKey, null)
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'input-select')
 
@@ -128,7 +128,7 @@
       .join(', ')
   })
 
-  provide(selectContextKey, {
+  provide(SelectInjectionKey, {
     contentId: `select-${useId()}`,
     triggerRef: ref<globalThis.HTMLElement | null>(null),
     open: openState,

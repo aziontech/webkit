@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, inject, useAttrs } from 'vue'
 
-  import { CommandPageKey, useCommandMenuContext } from '../injection-key'
+  import { CommandPageInjectionKey, useCommandMenuContext } from '../injection-key'
 
   defineOptions({
     name: 'CommandSeparator',
@@ -10,7 +10,7 @@
 
   const attrs = useAttrs()
   const ctx = useCommandMenuContext()
-  const separatorPage = inject(CommandPageKey, '')
+  const separatorPage = inject(CommandPageInjectionKey, '')
 
   const isVisible = computed(() => !ctx.ranking.value && ctx.page.value === separatorPage)
 

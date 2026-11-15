@@ -6,7 +6,7 @@
   import { useSelectSearch } from '../../../composables/use-select-search'
   import * as en from '../../../i18n/messages/en'
   import { FormValue } from '../../../utils/form-value'
-  import { fieldContextKey } from '../field/injection-key'
+  import { FieldInjectionKey } from '../field/injection-key'
   import Input from '../input/input.vue'
   import InputGroup from '../input-group/input-group.vue'
   import Select from '../select/select.vue'
@@ -112,7 +112,7 @@
     required: () => props.required
   })
 
-  provide(fieldContextKey, null)
+  provide(FieldInjectionKey, null)
 
   const resolvedInputId = computed(() => controlId.value ?? generatedId)
 

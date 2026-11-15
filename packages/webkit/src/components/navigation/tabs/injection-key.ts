@@ -29,4 +29,4 @@ export interface TabsContext {
   unregisterPanel: (value: TabsValue) => void
 }
 
-export const TabsInjectionKey: InjectionKey<TabsContext> = Symbol('TabsContext')
+export const TabsInjectionKey: InjectionKey<TabsContext> = Symbol('Tabs')

@@ -5,14 +5,14 @@
   import { useTranslate } from '../../../../composables/use-locale/use-translate'
   import * as en from '../../../../i18n/messages/en'
   import Chip from '../../chip/chip.vue'
-  import { multiSelectContextKey } from '../injection-key'
+  import { MultiSelectInjectionKey } from '../injection-key'
 
   defineOptions({
     name: 'MultiSelectTrigger',
     inheritAttrs: false
   })
 
-  const ctx = inject(multiSelectContextKey)
+  const ctx = inject(MultiSelectInjectionKey)
   if (!ctx) {
     throw new Error('MultiSelectTrigger must be used inside MultiSelect.')
   }

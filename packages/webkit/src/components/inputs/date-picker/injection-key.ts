@@ -71,4 +71,4 @@ export interface DatePickerContext {
   changeMonth: (month: DatePickerMonth) => void
 }
 
-export const DatePickerInjectionKey: InjectionKey<DatePickerContext> = Symbol('DatePickerContext')
+export const DatePickerInjectionKey: InjectionKey<DatePickerContext> = Symbol('DatePicker')

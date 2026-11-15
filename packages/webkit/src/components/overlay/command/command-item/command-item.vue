@@ -17,9 +17,9 @@
   import Kbd, { type KbdKeyName } from '../../../content/kbd/kbd.vue'
   import { matchCommand, splitByRanges } from '../command-match'
   import {
-    CommandGroupIdKey,
+    CommandGroupInjectionKey,
     type CommandItemValue,
-    CommandPageKey,
+    CommandPageInjectionKey,
     useCommandMenuContext
   } from '../injection-key'
 
@@ -57,8 +57,8 @@
 
   const attrs = useAttrs()
   const ctx = useCommandMenuContext()
-  const groupId = inject(CommandGroupIdKey, null)
-  const itemPage = inject(CommandPageKey, '')
+  const groupId = inject(CommandGroupInjectionKey, null)
+  const itemPage = inject(CommandPageInjectionKey, '')
   const slots = useSlots()
 
   const itemId = useId()

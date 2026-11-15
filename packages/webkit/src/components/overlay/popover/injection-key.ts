@@ -59,7 +59,7 @@ export interface PopoverContext {
   hasDescription: Ref<boolean>
 }
 
-export const PopoverInjectionKey: InjectionKey<PopoverContext> = Symbol('PopoverContext')
+export const PopoverInjectionKey: InjectionKey<PopoverContext> = Symbol('Popover')
 
 export function usePopoverContext(): PopoverContext {
   const ctx = inject(PopoverInjectionKey)

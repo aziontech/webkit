@@ -25,4 +25,4 @@ export interface DialogContext {
   returnFocusRef: Ref<HTMLElement | null>
 }
 
-export const DialogInjectionKey: InjectionKey<DialogContext> = Symbol('DialogContext')
+export const DialogInjectionKey: InjectionKey<DialogContext> = Symbol('Dialog')

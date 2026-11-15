@@ -2,9 +2,9 @@
   import { computed, type CSSProperties, provide, ref, useAttrs, watch } from 'vue'
 
   import { cn } from '../../../utils/cn'
-  import { useNavigationMenuRoot } from './composables/use-navigation-menu-context'
+  import { useNavigationMenuContext } from './composables/use-navigation-menu-context'
   import { useNavigationMenuPositioner } from './composables/use-navigation-menu-positioner'
-  import { NAVIGATION_MENU_POSITIONER_KEY } from './composables/use-navigation-menu-positioner-context'
+  import { NavigationMenuPositionerInjectionKey } from './injection-key'
 
   defineOptions({ name: 'NavigationMenuPositioner', inheritAttrs: false })
 
@@ -50,7 +50,7 @@
     () => (attrs['data-testid'] as string | undefined) ?? 'navigation-navigation-menu__positioner'
   )
 
-  const root = useNavigationMenuRoot()
+  const root = useNavigationMenuContext()
   const positionerRef = ref<HTMLElement | null>(null)
   const arrowRef = ref<HTMLElement | null>(null)
 
@@ -94,7 +94,7 @@
     }
   )
 
-  provide(NAVIGATION_MENU_POSITIONER_KEY, {
+  provide(NavigationMenuPositionerInjectionKey, {
     setArrowEl: (element) => {
       arrowRef.value = element
     },
@@ -117,8 +117,10 @@
   const positionerStyle = computed((): CSSProperties => ({
     ...floatingStyles.value,
     '--popup-origin': popupOrigin.value,
-    '--available-width': availableWidth.value === null ? '100vw' : `${availableWidth.value}px`,
-    '--available-height': availableHeight.value === null ? '100vh' : `${availableHeight.value}px`,
+    '--navigation-menu-available-width':
+      availableWidth.value === null ? '100vw' : `${availableWidth.value}px`,
+    '--navigation-menu-available-height':
+      availableHeight.value === null ? '100vh' : `${availableHeight.value}px`,
     ...(root.menuOpen.value ? {} : { pointerEvents: 'none' })
   }))
 

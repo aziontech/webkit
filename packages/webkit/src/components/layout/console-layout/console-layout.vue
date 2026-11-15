@@ -61,7 +61,7 @@
   import {
     ConsoleLayoutInjectionKey,
     type ConsoleLayoutTrail,
-    ConsoleLayoutTrailsKey
+    ConsoleLayoutTrailsInjectionKey
   } from './injection-key'
 
   defineOptions({
@@ -182,7 +182,7 @@
 
   const trails = shallowRef<ConsoleLayoutTrail[]>([])
 
-  provide(ConsoleLayoutTrailsKey, {
+  provide(ConsoleLayoutTrailsInjectionKey, {
     add: (trail) => {
       trails.value = [...trails.value.filter((entry) => entry !== trail), trail]
     },

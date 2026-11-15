@@ -2,7 +2,7 @@
   import { computed, inject, ref, useAttrs, watch } from 'vue'
 
   import { cn } from '../../../utils/cn'
-  import { NAVIGATION_MENU_POSITIONER_KEY } from './composables/use-navigation-menu-positioner-context'
+  import { NavigationMenuPositionerInjectionKey } from './injection-key'
 
   defineOptions({ name: 'NavigationMenuArrow', inheritAttrs: false })
 
@@ -11,7 +11,7 @@
     () => (attrs['data-testid'] as string | undefined) ?? 'navigation-navigation-menu__arrow'
   )
 
-  const positioner = inject(NAVIGATION_MENU_POSITIONER_KEY, null)
+  const positioner = inject(NavigationMenuPositionerInjectionKey, null)
   const arrowEl = ref<HTMLElement | null>(null)
 
   const ROOT_CLASS =

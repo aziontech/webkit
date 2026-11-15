@@ -9,4 +9,4 @@ export interface FlowContext {
   align: ComputedRef<FlowAlign>
 }
 
-export const FlowInjectionKey: InjectionKey<FlowContext> = Symbol('FlowContext')
+export const FlowInjectionKey: InjectionKey<FlowContext> = Symbol('Flow')

@@ -12,7 +12,7 @@
   import PopoverHeader from '../../overlay/popover/popover-header/popover-header.vue'
   import PopoverTitle from '../../overlay/popover/popover-title/popover-title.vue'
   import PopoverTrigger from '../../overlay/popover/popover-trigger/popover-trigger.vue'
-  import { useOptionalTutorialContext } from '../tutorial-panel/composables/use-tutorial-context'
+  import { useOptionalTutorialPanelContext } from '../tutorial-panel/composables/use-tutorial-panel-context'
 
   defineOptions({
     name: 'Hotspot',
@@ -40,7 +40,7 @@
 
   const attrs = useAttrs()
   const { t } = useTranslate({ hotspot: en.hotspot })
-  const context = useOptionalTutorialContext()
+  const context = useOptionalTutorialPanelContext()
 
   const testId = computed<string>(
     () => (attrs['data-testid'] as string | undefined) ?? 'content-hotspot'

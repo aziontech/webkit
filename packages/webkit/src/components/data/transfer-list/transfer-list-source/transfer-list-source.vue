@@ -6,7 +6,7 @@
   import EmptyState from '../../../feedback/empty-state/empty-state.vue'
   import Spinner from '../../../utils/spinner/spinner.vue'
   import { useTransferListSide } from '../composables/use-transfer-list-side'
-  import { transferListContextKey, type TransferListSide } from '../injection-key'
+  import { TransferListInjectionKey, type TransferListSide } from '../injection-key'
   import { getItemTransitionStyle, transferListItemTransitionClasses } from '../presets/transitions'
 
   defineOptions({
@@ -33,7 +33,7 @@
 
   const side: TransferListSide = 'source'
 
-  const ctx = inject(transferListContextKey)
+  const ctx = inject(TransferListInjectionKey)
   if (!ctx) {
     throw new Error('TransferListSource must be used inside <TransferList>.')
   }

@@ -8,7 +8,7 @@
   import HelpPanel from '../help-panel/help-panel.vue'
   import HelpPanelHeader from '../help-panel/help-panel-header/help-panel-header.vue'
   import Tag from '../tag/tag.vue'
-  import { useTutorialContext } from './composables/use-tutorial-context'
+  import { useTutorialPanelContext } from './composables/use-tutorial-panel-context'
   import type { Tutorial, TutorialTaskStatus } from './injection-key'
   import TutorialPanelTask from './tutorial-panel-task/tutorial-panel-task.vue'
   import TutorialPanelTasks from './tutorial-panel-tasks/tutorial-panel-tasks.vue'
@@ -43,7 +43,7 @@
 
   const attrs = useAttrs()
   const { t } = useTranslate({ tutorialPanel: en.tutorialPanel })
-  const context = useTutorialContext()
+  const context = useTutorialPanelContext()
   const uid = useId()
 
   const testId = computed<string>(

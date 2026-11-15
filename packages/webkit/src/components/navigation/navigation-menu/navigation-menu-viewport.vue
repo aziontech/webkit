@@ -2,8 +2,8 @@
   import { computed, ref, useAttrs, watch } from 'vue'
 
   import { cn } from '../../../utils/cn'
-  import { resolveHostElement } from './composables/resolve-host-element'
-  import { useNavigationMenuRoot } from './composables/use-navigation-menu-context'
+  import { useNavigationMenuContext } from './composables/use-navigation-menu-context'
+  import { resolveHostElement } from './lib/host-element'
 
   defineOptions({ name: 'NavigationMenuViewport', inheritAttrs: false })
 
@@ -14,7 +14,7 @@
     () => (attrs['data-testid'] as string | undefined) ?? 'navigation-navigation-menu__viewport'
   )
 
-  const root = useNavigationMenuRoot()
+  const root = useNavigationMenuContext()
   const viewportTargetRef = ref<HTMLElement | null>(null)
 
   const ROOT_CLASS =
@@ -36,7 +36,7 @@
   >
     <div
       ref="viewportTargetRef"
-      class="relative h-full w-[var(--viewport-width,100%)]"
+      class="relative h-full w-[var(--navigation-menu-viewport-width,100%)]"
       :data-testid="`${testId}__target`"
     >
       <slot />

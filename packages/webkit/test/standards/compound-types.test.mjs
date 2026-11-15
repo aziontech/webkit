@@ -151,11 +151,11 @@ test('every type a compound root exports is re-exported by its compound index.ts
 
 test('surfaceTypes reads type imports a public declaration uses, and skips internal ones', () => {
   const script = [
-    "import { selectContextKey, type SelectSize, type SelectContext } from './injection-key'",
+    "import { SelectInjectionKey, type SelectSize, type SelectContext } from './injection-key'",
     "import type { StepState } from './step'",
     'interface Props { size?: SelectSize }',
     "const emit = defineEmits<{ 'update:state': [value: StepState] }>()",
-    'const ctx = inject(selectContextKey) as SelectContext'
+    'const ctx = inject(SelectInjectionKey) as SelectContext'
   ].join('\n')
   assert.deepEqual(surfaceTypes(script).sort(), ['SelectSize', 'StepState'])
 })

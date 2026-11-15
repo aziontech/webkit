@@ -40,8 +40,7 @@ export interface DropdownMenuSubContext {
 
 export const DropdownMenuGroupInjectionKey: InjectionKey<true> = Symbol('DropdownMenuGroup')
 
-export const DropdownMenuInjectionKey: InjectionKey<DropdownMenuContext> =
-  Symbol('DropdownMenuContext')
+export const DropdownMenuInjectionKey: InjectionKey<DropdownMenuContext> = Symbol('DropdownMenu')
 
 export const DropdownMenuSubInjectionKey: InjectionKey<DropdownMenuSubContext> =
   Symbol('DropdownMenuSub')

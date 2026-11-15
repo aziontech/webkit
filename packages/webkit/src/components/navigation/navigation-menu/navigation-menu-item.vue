@@ -3,8 +3,8 @@
 
   import { cn } from '../../../utils/cn'
   import {
-    provideNavigationMenuItem,
-    useNavigationMenuRoot
+    provideNavigationMenuItemContext,
+    useNavigationMenuContext
   } from './composables/use-navigation-menu-context'
   import { createChangeEventDetails } from './composables/use-navigation-menu-root'
 
@@ -49,13 +49,13 @@
     () => (attrs['data-testid'] as string | undefined) ?? 'navigation-navigation-menu__item'
   )
 
-  const root = useNavigationMenuRoot()
+  const root = useNavigationMenuContext()
   const autoId = useId()
   const itemValue = computed(() => props.value ?? autoId)
   const open = computed(() => root.isItemOpen(itemValue.value))
   const isEntry = computed(() => props.layout === 'entry')
 
-  provideNavigationMenuItem({
+  provideNavigationMenuItemContext({
     itemValue,
     open,
     contentId: `${autoId}-content`

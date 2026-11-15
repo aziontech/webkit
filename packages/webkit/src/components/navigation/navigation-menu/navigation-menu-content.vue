@@ -2,12 +2,12 @@
   import { computed, type CSSProperties, nextTick, ref, useAttrs, watch } from 'vue'
 
   import { cn } from '../../../utils/cn'
-  import { resolveHostElement } from './composables/resolve-host-element'
   import {
-    useNavigationMenuItem,
-    useNavigationMenuRoot
+    useNavigationMenuContext,
+    useNavigationMenuItemContext
   } from './composables/use-navigation-menu-context'
   import { useTransitionStatus } from './composables/use-transition-status'
+  import { resolveHostElement } from './lib/host-element'
   import { waitForCloseTransition } from './presets/animations'
 
   defineOptions({ name: 'NavigationMenuContent', inheritAttrs: false })
@@ -28,8 +28,8 @@
     () => (attrs['data-testid'] as string | undefined) ?? 'navigation-navigation-menu__content'
   )
 
-  const root = useNavigationMenuRoot()
-  const item = useNavigationMenuItem()
+  const root = useNavigationMenuContext()
+  const item = useNavigationMenuItemContext()
   const contentRef = ref<HTMLElement | null>(null)
 
   const contentOpen = computed(() => root.menuPopupMounted.value && item.itemOpen.value)

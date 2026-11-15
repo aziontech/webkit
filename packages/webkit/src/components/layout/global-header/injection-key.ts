@@ -4,5 +4,4 @@ export interface GlobalHeaderContext {
   testId: string
 }
 
-export const GlobalHeaderInjectionKey: InjectionKey<GlobalHeaderContext> =
-  Symbol('GlobalHeaderContext')
+export const GlobalHeaderInjectionKey: InjectionKey<GlobalHeaderContext> = Symbol('GlobalHeader')

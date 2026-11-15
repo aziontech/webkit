@@ -5,4 +5,4 @@ export interface PaginationContext {
   testId: string
 }
 
-export const PaginationInjectionKey: InjectionKey<PaginationContext> = Symbol('PaginationContext')
+export const PaginationInjectionKey: InjectionKey<PaginationContext> = Symbol('Pagination')

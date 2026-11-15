@@ -1,6 +1,6 @@
 import { computed, type ComputedRef, inject, type MaybeRefOrGetter, toValue } from 'vue'
 
-import { type FieldContext, fieldContextKey } from '../../components/inputs/field/injection-key'
+import { type FieldContext, FieldInjectionKey } from '../../components/inputs/field/injection-key'
 
 export interface UseFieldControlOptions {
   id?: MaybeRefOrGetter<string | undefined>
@@ -22,7 +22,7 @@ export interface UseFieldControlReturn {
 }
 
 export function useFieldControl(options: UseFieldControlOptions = {}): UseFieldControlReturn {
-  const field = inject(fieldContextKey, null)
+  const field = inject(FieldInjectionKey, null)
 
   return {
     field,

@@ -12,7 +12,7 @@
   import Avatar from '../../avatar/avatar.vue'
   import Brand from '../../brand/brand.vue'
   import Kbd from '../../kbd/kbd.vue'
-  import { SHELL_MOCKUP_KEY } from './injection-key'
+  import { ShellMockupInjectionKey } from './injection-key'
 
   defineOptions({ name: 'ShellMockup', inheritAttrs: false })
 
@@ -237,7 +237,7 @@
     }
   }
 
-  provide(SHELL_MOCKUP_KEY, { entered: readonly(entered), beatStyle })
+  provide(ShellMockupInjectionKey, { entered: readonly(entered), beatStyle })
 </script>
 
 <template>

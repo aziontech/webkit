@@ -1,14 +1,14 @@
 <script setup lang="ts">
   import { computed, inject, provide, useAttrs } from 'vue'
 
-  import { TableInjectionKey, TableRowGroupKey } from '../injection-key'
+  import { TableInjectionKey, TableRowGroupInjectionKey } from '../injection-key'
 
   defineOptions({
     name: 'TableBody',
     inheritAttrs: false
   })
 
-  provide(TableRowGroupKey, { hoverable: true })
+  provide(TableRowGroupInjectionKey, { hoverable: true })
 
   defineSlots<{
     default(): unknown

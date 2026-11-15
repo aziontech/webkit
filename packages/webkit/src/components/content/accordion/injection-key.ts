@@ -46,7 +46,7 @@ export interface AccordionContext {
   contentId: (value: string) => string
 }
 
-export const AccordionInjectionKey: InjectionKey<AccordionContext> = Symbol('AccordionContext')
+export const AccordionInjectionKey: InjectionKey<AccordionContext> = Symbol('Accordion')
 
 export interface AccordionItemContext {
   /** This item's unique identifier. */
@@ -61,5 +61,4 @@ export interface AccordionItemContext {
   contentId: ComputedRef<string>
 }
 
-export const AccordionItemInjectionKey: InjectionKey<AccordionItemContext> =
-  Symbol('AccordionItemContext')
+export const AccordionItemInjectionKey: InjectionKey<AccordionItemContext> = Symbol('AccordionItem')

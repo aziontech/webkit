@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, onBeforeUnmount, provide, toRef, useAttrs } from 'vue'
 
-  import { CommandPageKey, useCommandMenuContext } from '../injection-key'
+  import { CommandPageInjectionKey, useCommandMenuContext } from '../injection-key'
 
   defineOptions({
     name: 'CommandPage',
@@ -27,7 +27,7 @@
   const attrs = useAttrs()
   const ctx = useCommandMenuContext()
 
-  provide(CommandPageKey, props.name)
+  provide(CommandPageInjectionKey, props.name)
 
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? `${ctx.testId}__page`

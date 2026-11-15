@@ -20,14 +20,14 @@
   import * as en from '../../../../i18n/messages/en'
   import ScrollArea from '../../../layout/scroll-area/scroll-area.vue'
   import Spinner from '../../../utils/spinner/spinner.vue'
-  import { multiSelectContextKey } from '../injection-key'
+  import { MultiSelectInjectionKey } from '../injection-key'
 
   defineOptions({
     name: 'MultiSelectContent',
     inheritAttrs: false
   })
 
-  const ctx = inject(multiSelectContextKey)
+  const ctx = inject(MultiSelectInjectionKey)
   if (!ctx) {
     throw new Error('MultiSelectContent must be used inside MultiSelect.')
   }

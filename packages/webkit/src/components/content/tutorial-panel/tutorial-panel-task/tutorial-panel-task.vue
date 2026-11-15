@@ -3,7 +3,7 @@
 
   import { useTranslate } from '../../../../composables/use-locale/use-translate'
   import * as en from '../../../../i18n/messages/en'
-  import { useTutorialTasksContext } from '../composables/use-tutorial-tasks-context'
+  import { useTutorialPanelTasksContext } from '../composables/use-tutorial-panel-tasks-context'
   import type { TutorialTaskStatus } from '../injection-key'
 
   defineOptions({
@@ -30,7 +30,7 @@
 
   const attrs = useAttrs()
   const { t } = useTranslate({ helpPanel: en.helpPanel })
-  const context = useTutorialTasksContext()
+  const context = useTutorialPanelTasksContext()
 
   const id = Symbol('TutorialPanelTask')
   const { index } = context.register(id, () => props.status)

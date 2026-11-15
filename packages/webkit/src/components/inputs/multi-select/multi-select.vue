@@ -5,10 +5,10 @@
   import type { ListboxFocusIntent } from '../../../composables/use-listbox'
   import { useTranslate } from '../../../composables/use-locale/use-translate'
   import { FormValue } from '../../../utils/form-value'
-  import { fieldContextKey } from '../field/injection-key'
+  import { FieldInjectionKey } from '../field/injection-key'
   import {
     type MultiSelectCommitEvent,
-    multiSelectContextKey,
+    MultiSelectInjectionKey,
     type MultiSelectKind,
     type MultiSelectSize
   } from './injection-key'
@@ -107,7 +107,7 @@
     required: () => props.required
   })
 
-  provide(fieldContextKey, null)
+  provide(FieldInjectionKey, null)
 
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? 'input-multi-select'
@@ -213,7 +213,7 @@
     return current.map(labelOf).join(', ')
   })
 
-  provide(multiSelectContextKey, {
+  provide(MultiSelectInjectionKey, {
     contentId: `multi-select-${useId()}`,
     triggerRef,
     open: openState,

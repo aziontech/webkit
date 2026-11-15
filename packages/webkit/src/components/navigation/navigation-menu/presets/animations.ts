@@ -1,4 +1,4 @@
-import { NAVIGATION_MENU_DURATION_MS } from '../composables/navigation-menu-css-vars'
+import { NAVIGATION_MENU_DURATION_MS } from '../lib/css-vars'
 
 const STARTING_STYLE_ATTR = 'data-starting-style'
 const ENDING_STYLE_ATTR = 'data-ending-style'

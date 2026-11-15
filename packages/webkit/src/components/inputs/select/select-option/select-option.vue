@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, inject, onMounted, onUpdated, ref, useAttrs } from 'vue'
 
-  import { selectContextKey } from '../injection-key'
+  import { SelectInjectionKey } from '../injection-key'
 
   defineOptions({
     name: 'SelectOption',
@@ -29,7 +29,7 @@
     tag(): unknown
   }>()
 
-  const ctx = inject(selectContextKey)
+  const ctx = inject(SelectInjectionKey)
   if (!ctx) {
     throw new Error('SelectOption must be used inside <Select>.')
   }

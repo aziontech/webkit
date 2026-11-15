@@ -7,4 +7,4 @@ export interface ShellMockupContext {
   beatStyle: (order: number) => Record<string, string>
 }
 
-export const SHELL_MOCKUP_KEY: InjectionKey<ShellMockupContext> = Symbol('ShellMockup')
+export const ShellMockupInjectionKey: InjectionKey<ShellMockupContext> = Symbol('ShellMockup')

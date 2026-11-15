@@ -64,4 +64,4 @@ export interface SelectContext {
   labelsPending: ComputedRef<boolean>
 }
 
-export const selectContextKey: InjectionKey<SelectContext> = Symbol('SelectContext')
+export const SelectInjectionKey: InjectionKey<SelectContext> = Symbol('Select')

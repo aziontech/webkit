@@ -42,7 +42,7 @@ export interface UseTranslateReturn {
   t: (key: MessageKey, params?: MessageParams) => string
 }
 
-export const LocaleInjectionKey: InjectionKey<LocaleContext> = Symbol('WebkitLocale')
+export const LocaleInjectionKey: InjectionKey<LocaleContext> = Symbol('Locale')
 
 export const DEFAULT_LOCALE = 'en'
 

@@ -2,7 +2,7 @@
   import { computed, inject, onBeforeUnmount, onMounted, onUpdated, ref, useAttrs } from 'vue'
 
   import Checkbox from '../../checkbox/checkbox.vue'
-  import { multiSelectContextKey, multiSelectGroupContextKey } from '../injection-key'
+  import { MultiSelectGroupInjectionKey, MultiSelectInjectionKey } from '../injection-key'
 
   defineOptions({
     name: 'MultiSelectOption',
@@ -30,7 +30,7 @@
     tag(): unknown
   }>()
 
-  const ctx = inject(multiSelectContextKey)
+  const ctx = inject(MultiSelectInjectionKey)
   if (!ctx) {
     throw new Error('MultiSelectOption must be used inside MultiSelect.')
   }
@@ -41,7 +41,7 @@
     () => (attrs['data-testid'] as string | undefined) ?? 'multi-select-option'
   )
 
-  const group = inject(multiSelectGroupContextKey, null)
+  const group = inject(MultiSelectGroupInjectionKey, null)
 
   const id = Symbol('MultiSelectOption')
   const labelRef = ref<globalThis.HTMLElement | null>(null)

@@ -77,7 +77,7 @@ export interface MultiSelectContext {
   navigate: Ref<((key: string) => void) | null>
 }
 
-export const multiSelectContextKey: InjectionKey<MultiSelectContext> = Symbol('MultiSelectContext')
+export const MultiSelectInjectionKey: InjectionKey<MultiSelectContext> = Symbol('MultiSelect')
 
 export interface MultiSelectGroupContext {
   /** Records whether one option of the group passes the typed filter. */
@@ -85,5 +85,5 @@ export interface MultiSelectGroupContext {
   unregister: (id: symbol) => void
 }
 
-export const multiSelectGroupContextKey: InjectionKey<MultiSelectGroupContext> =
+export const MultiSelectGroupInjectionKey: InjectionKey<MultiSelectGroupContext> =
   Symbol('MultiSelectGroup')

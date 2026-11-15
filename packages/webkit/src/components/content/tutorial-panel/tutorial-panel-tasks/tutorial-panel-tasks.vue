@@ -6,7 +6,7 @@
   import { hasRenderedContent } from '../../../../utils/rendered-content'
   import Tag from '../../tag/tag.vue'
   import type { TutorialTaskHandle, TutorialTaskStatus } from '../injection-key'
-  import { TutorialTasksInjectionKey } from '../injection-key'
+  import { TutorialPanelTasksInjectionKey } from '../injection-key'
 
   defineOptions({
     name: 'TutorialPanelTasks',
@@ -83,7 +83,7 @@
     if (at !== -1) tasks.value.splice(at, 1)
   }
 
-  provide(TutorialTasksInjectionKey, {
+  provide(TutorialPanelTasksInjectionKey, {
     register,
     attach,
     unregister,

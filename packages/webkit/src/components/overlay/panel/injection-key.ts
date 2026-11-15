@@ -4,7 +4,7 @@ export interface PanelContext {
   testId: string
 }
 
-export const PanelInjectionKey: InjectionKey<PanelContext> = Symbol('PanelContext')
+export const PanelInjectionKey: InjectionKey<PanelContext> = Symbol('Panel')
 
 export type PanelSize = 'small' | 'medium' | 'large'
 

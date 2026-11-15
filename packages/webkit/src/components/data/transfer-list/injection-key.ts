@@ -38,5 +38,4 @@ export interface TransferListContext {
   setLoading: (side: TransferListSide, value: boolean) => void
 }
 
-export const transferListContextKey: InjectionKey<TransferListContext> =
-  Symbol('TransferListContext')
+export const TransferListInjectionKey: InjectionKey<TransferListContext> = Symbol('TransferList')
