@@ -46,7 +46,9 @@ Pick the path by what you are about to do.
    one per job with its states as variants; an id from before v6 still resolves, with a `note`
    naming the new one.
 3. A single piece: `suggest_component`, then `get_component`.
-4. Follow the `webkit-usage` skill, which points to the skill for each case.
+4. Follow the `webkit-usage` skill, which points to the skill for each case. Building a console:
+   read [`webkit-navigation`](./skills/webkit-navigation/SKILL.md) before the first screen. It fixes
+   the shell, the navigation levels and where a drawer may open (never as the way into a resource).
 5. Before you hand it over: `npx @aziontech/webkit check` (the CI gate: setup, v5 names, imports,
    lint, blocks drifting from the canonical copy) and the `webkit-ui-verify` skill.
 

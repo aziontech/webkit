@@ -12,6 +12,10 @@ the extra column squeezes the content.
 
 The breadcrumb is not a level: it names where the reader is.
 
+A drawer is not a level either. It has no route, and it opens only at the end of the path, over the
+screen that owns its item: `rail → module list → resource page → tab → drawer (large) → nested
+drawer (medium)`.
+
 ## Do
 
 - Give each level one control. A screen shows the rail, at most one `PageTabs`, and at most one
@@ -29,6 +33,15 @@ The breadcrumb is not a level: it names where the reader is.
 - Derive every active row from the route. Each level marks exactly one row `aria-current="page"`,
   the marked rows of all levels describe the same place, and a level whose rows do not hold the
   current page marks none.
+- Navigate to the resource's page when the reader opens, configures or edits a product or a
+  resource (Configure, Settings, Edit), on the tab that holds it (`?tab=settings`).
+- Open a drawer only over the screen that owns its item: a tab of the resource, or the list that
+  holds it. The first drawer is `size="large"`; a nested drawer is `size="medium"`, and there is at
+  most one. The AI assistant drawer (`platform/ai/ai-chat-drawer`) is the one first drawer that
+  stays `medium`.
+- Offer `Create <noun>` on every field that needs a resource that may not exist yet. It opens a
+  drawer with that resource's create form over the form that needs it (`large` from a page, `medium`
+  from a drawer), and saving selects the new resource. This holds for first-level resources too.
 
 ## Do not
 
@@ -38,6 +51,14 @@ The breadcrumb is not a level: it names where the reader is.
 - Do not add a fourth level, or a second local navigation in one tab.
 - Do not set an active row by hand (`activeId`, a hard-coded `aria-current`) on a page whose route
   already matches a row.
+- Do not open a drawer as the first surface of a product or a resource, or over a screen that does
+  not own its item (configuring a product from the product list, a dashboard or the rail).
+- Do not stack a third drawer, or a nested drawer as wide as its parent. A flow that needs a third
+  layer is a page: open it in a new tab.
+- Do not send the reader to another page to create a missing resource and come back. Only a create
+  of several steps opens its page, in a new tab, with a `Refresh` on the field.
+- Do not put `PageTabs`, a breadcrumb or a local navigation inside a drawer. A drawer that needs one
+  is a page.
 
 ## Correct
 

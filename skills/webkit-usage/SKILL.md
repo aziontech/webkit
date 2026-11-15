@@ -3,7 +3,7 @@ name: webkit-usage
 description: Entry point for building UI on @aziontech/webkit. Use when adding or reviewing UI in a project that depends on @aziontech/webkit — compose the app layout once (ConsoleLayout, SiteLayout, DocLayout) and start each screen from a pattern, find the right component, import it with the flat path, style with @aziontech/theme tokens, keep bundles small, and pick the focused skill for each task (forms, tables, lists, errors, states, layout, copy, polish, verification).
 scope: general
 status: active
-last_updated: 2026-11-12
+last_updated: 2026-11-15
 enforced_by: [webkit-imports, webkit-tokens, webkit-style-override, webkit-prefer-over-custom, webkit-performance]
 ---
 
@@ -97,7 +97,8 @@ Structure and states first, polish last:
 
 - **Structure:** `/webkit-ux-heuristics` (right component per moment) · `/webkit-ui-states` (loading,
   empty, error, async) · `/webkit-form` · `/webkit-create-surface` (page vs drawer) · `/webkit-errors`
-  (where a failure goes) · `/webkit-tables` · `/webkit-lists` · `/webkit-navigation`
+  (where a failure goes) · `/webkit-tables` · `/webkit-lists` · `/webkit-navigation` (shells,
+  levels, breadcrumb, and drawers: never the way into a resource; `large`, then at most one `medium`)
 - **Layout:** `/webkit-layout` · **Words:** `/webkit-microcopy`
 - **Foundation:** `/webkit-baseline-ui` (tokens, typography, spacing rhythm)
 - **Cross-cutting:** `/webkit-theming-dark-mode` · `/webkit-data-viz` · `/webkit-genai` (AI chat
