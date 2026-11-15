@@ -3,8 +3,8 @@ name: tree
 category: data
 structure: monolithic
 status: implemented
-checksum: bdd779224ebac3833fe3a772ec044d0a7441cf2ac4de6c50e3b8aa74301fbb47
-spec_version: 4
+checksum: ec645673eec38370a0a335b705b39f280cb03d584cd5e444850c00d7dbf878fd
+spec_version: 5
 template: 2
 created: 2026-11-10
 last_updated: 2026-11-15
@@ -146,7 +146,7 @@ Exported types (declared in `tree.vue` with `export type`): `TreeItem` = `{ id: 
 - Collapsed children are not rendered (`v-if`), so they cost nothing and are out of the accessibility tree.
 - A disabled node can still be focused (arrow keys) and, if it is a parent, expanded and collapsed; it cannot be selected, renamed, or emit `item-click` / `item-dblclick`.
 - `data-testid`: the root falls back to `data-tree` (a consumer `data-testid` wins); parts derive from the resolved root id — `<testId>__item` on every treeitem, `<testId>__toggle` on every chevron. Each treeitem also carries `data-item-id="<item.id>"` so a test reaches one node without depending on DOM order.
-- Loading renders five Skeleton rows (`kind="shape"`, row height, descending widths) at top level.
+- Loading renders five Skeleton rows (`kind="rectangle"`, row height, descending widths) at top level.
 
 ## Motion & Animations
 

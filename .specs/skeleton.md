@@ -3,13 +3,13 @@ name: skeleton
 category: feedback
 structure: monolithic
 status: implemented
-spec_version: 2
+spec_version: 3
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=479-881
   node_id: 479:881
-checksum: 0af81b9fc3d9e0815a565735ae649ac9e5d552804a1401d6a6e4633499710c51
+checksum: c02a9c2514b773651581de51c7765d870cf4966d10bc6e16d55fbefd26587018
 created: 2026-06-23
-last_updated: 2026-11-14
+last_updated: 2026-11-15
 ---
 
 # Skeleton — Component Spec
@@ -68,7 +68,7 @@ A loading placeholder that reserves the space of content while it loads, gently 
 
 | Prop       | Type                  | Default   | Required | JSDoc                                                        |
 | ---------- | --------------------- | --------- | -------- | ------------------------------------------------------------ |
-| `kind`     | `'rectangle' \| 'circle' \| 'shape'` | `'rectangle'` | false    | Geometry: a rounded rectangular block (`rectangle`) or a circle. The value `shape` is **@deprecated since 6.0 — use `rectangle`. Removed in 7.0.** and renders as `rectangle`. |
+| `kind`     | `'rectangle' \| 'circle'` | `'rectangle'` | false    | Geometry: a rounded rectangular block (`rectangle`) or a circle. |
 | `width`    | `string`              | `'100%'`  | false    | CSS width (any length).                                      |
 | `height`   | `string`              | `'1rem'`  | false    | CSS height (any length); for a circle, set equal to `width`. |
 | `animated` | `boolean`             | `true`    | false    | Shimmer while loading; suppressed under reduced motion.      |
@@ -84,7 +84,7 @@ A loading placeholder that reserves the space of content while it loads, gently 
 ## States
 
 - Visual states: `default` (a single decorative placeholder; no hover/focus/active — it is not interactive)
-- `data-kind` mirrors the resolved geometry (`rectangle` | `circle`; the deprecated `shape` resolves to `rectangle`)
+- `data-kind` mirrors `kind` (`rectangle` | `circle`)
 - `data-animated` is present when `animated` is true (drives the shimmer)
 
 ## Motion & Animations

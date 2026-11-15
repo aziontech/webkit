@@ -199,7 +199,7 @@
         class="m-0 flex min-h-8 list-none items-center gap-(--spacing-xs) px-(--spacing-xs) ps-[calc(var(--spacing-xs)+1rem+var(--spacing-xs))]"
       >
         <Skeleton
-          kind="shape"
+          kind="rectangle"
           width="60%"
           height="1rem"
           aria-hidden="true"

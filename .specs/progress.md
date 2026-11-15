@@ -3,8 +3,8 @@ name: progress
 category: feedback
 structure: monolithic
 status: implemented
-spec_version: 3
-checksum: 94c9641add86bb297dee97398ffbe8701029ce6f94d9651bbe60c3ba92b0e3e3
+spec_version: 4
+checksum: feebb6724dfe30a558c274d2c39ea18ed8169ec66c8e47d2112014cc55201665
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=479-870
   node_id: 479:870
@@ -64,8 +64,7 @@ quantity.
 | --------------- | --------------------------------------- | ---------------------------------- | -------- | --------------------------------------------------------------------------------------- |
 | `value`         | `number`                                | `0`                                | false    | Current progress, relative to `max`.                                                    |
 | `max`           | `number`                                | `100`                              | false    | Upper bound; percentage = `value / max * 100`.                                          |
-| `kind`          | `ProgressKind` (`'rounded' \| 'flat'`)  | `undefined` (resolves to `'flat'`) | false    | Track and fill corner-radius variant.                                                   |
-| `shape`         | `ProgressShape` (`'rounded' \| 'flat'`) | `undefined`                        | false    | **@deprecated since 6.0 — use `kind`. Removed in 7.0.** Read only when `kind` is unset. |
+| `kind`          | `ProgressKind` (`'rounded' \| 'flat'`)  | `'flat'`                           | false    | Track and fill corner-radius variant.                                                   |
 | `size`          | `'small' \| 'medium' \| 'large'`        | `'medium'`                         | false    | Bar height token.                                                                       |
 | `indeterminate` | `boolean`                               | `false`                            | false    | Loading state; animates a sliding segment and ignores `value`.                          |
 
@@ -80,7 +79,7 @@ quantity.
 ## States
 
 - Visual states: `default`, `indeterminate`
-- `data-kind` mirrors the resolved `kind` (`kind`, else the deprecated `shape`, else `flat`): `rounded` | `flat`. The legacy `data-shape` carries the same value until 7.0.
+- `data-kind` mirrors `kind`: `rounded` | `flat`.
 - `data-size` mirrors the `size` prop: `small` | `medium` | `large`
 - `data-indeterminate` is present while `indeterminate` is `true`
 
