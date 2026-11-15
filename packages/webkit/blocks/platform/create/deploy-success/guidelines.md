@@ -81,7 +81,6 @@ One full-width secondary large `Button`, "Manage service", at the end of the col
 
 - `platform/detail/deployment-logs` — the run this screen follows (InCreateFlow).
 - `platform/create/deploy-template` — a flow that ends here.
-- `platform/create/source-wizard` — a wizard that ends here.
 - `platform/create/multipage-create` — its CreateAndDeploy variant ends here with its own title.
 - `platform/detail/get-started` — the source of the CLI and GitHub Actions steps the CliCreated state embeds; CliCreated copies its section verbatim, so change the command copy there first and copy it here.
 - `platform/detail/details-page` — where Manage leads.

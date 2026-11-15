@@ -4,15 +4,16 @@ A focused page, outside the console shell, where the user turns a template into 
 
 ## When to use
 
+- Use deploy-template for the configure-and-deploy step once the source (repository, template or uploaded folder) is chosen.
 - The user picked a template, a Git import or an upload from `platform/create/create-hub`, and the next step is to deploy it.
 - The flow creates a repository from a source in the user's Git account and deploys from it on every push.
 - The template needs a few settings (tokens, a domain) before its first build can run.
+- The project must first say which service it runs on (WhereItRuns), or the template is an integration that adds records and a rule to a service instead of cloning code (InstallIntegration).
 
 ## When not to use
 
 - Choosing what to start from: use `platform/create/create-hub`.
 - A first-level resource created from a form with no source code: use `platform/create/single-page-create`.
-- A source that needs several steps (where it runs, how it builds): use `platform/create/source-wizard`.
 - Provisioning a resource and binding it to another: use `platform/create/multipage-create` (CreateAndDeploy).
 
 ## Building blocks
@@ -28,6 +29,10 @@ Above the step, a preview `Card` names the template, its one-sentence descriptio
 **Advanced settings (when the source builds).** Under the template settings, two collapsible groups, each a large single `Accordion` with the chevron on the start side inside a bordered frame. **Build and output settings** holds the build fields filled with their defaults (root directory, install command), led by a Build preset `Select` when the framework was detected or must be picked. **Environment variables** holds one row pair per variable: a disabled Key row with the variable name, then a Value row with a show or hide `IconButton` for a secret and a locked Secret `Checkbox` whose `Tooltip` says whether the template keeps it secret. A group opens on its own when it holds a required value. Deploy checks the form: each missing required value shows its `Field.Error` and the group that holds it opens.
 
 **Uploaded project (Upload only).** Reached from a dropped folder there is no Git: the form asks for the project name and a Build preset, then a Project files card shows the folder summary (name, file count and total size, formatted with `Intl.NumberFormat` from the files themselves) and a scrollable list with each file's glyph, monospace path and size. The list shows the first 100 files and an "and N more" line counts the rest; its scroll region is focusable so a keyboard can scroll it. A static project with no `index.html` adds a required Root (/) `Select` of the top-level files, and Deploy waits for it.
+
+**Where it runs (WhereItRuns).** When the project must be bound to a service, the flow opens on a `Card` headed Where it runs: a large search `Input` over the services, up to six small `clickable` `Item` rows (native `button`s with `aria-pressed`, a check on the chosen one), an "N more. Type to narrow the list." line or a no-match line, and a Create Service row that opens an inline New service `Field` with focus in it (Enter on a search with no match opens it prefilled). Continue without a service sits under the card as a transparent small `Button`. Picking a row answers the step; the Git step that follows names the service it deploys to.
+
+**Integration template (InstallIntegration).** An integration template clones nothing and builds nothing: the preview card says which service it adds to, a Configure `Card` lists the template's settings as `Field`s (the required ones flagged only after the action is pressed), and a flush What gets added `Card` previews the origin record, the rule (an `Item` with a Request phase `Tag`) and its behaviors as `Tag`s, updating as the user types. The footer action names the service, e.g. Add to service-01.
 
 ### C. Browse templates — `Button` (optional)
 
@@ -84,6 +89,8 @@ An outlined medium `Button` under the step that returns to the template list. It
 - LoadingSettings: the template settings loading as Skeleton bands, Deploy disabled.
 - ImportFromGit: a repository imported from GitHub; scope and repository name over one collapsed Build and output settings group.
 - Upload: a dropped folder; project name and build preset, the Project files card and a required Root (/) for a static project with no index.
+- WhereItRuns: the service chooser before the Git step, with search, Create Service and Continue without a service.
+- InstallIntegration: the Origin Proxy integration on service-01; its settings, What gets added and Add to service-01, which shows the required origin message.
 
 ## Related
 

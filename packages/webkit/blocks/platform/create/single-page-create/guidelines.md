@@ -13,6 +13,7 @@ The page a first-level resource is created on when everything it needs fits on o
 
 - The fields split into steps that unlock in order, or one answer adds a step: use `platform/create/multipage-create`.
 - The resource binds another one and then deploys: use `platform/create/multipage-create` (CreateAndDeploy).
+- Deploying a repository, a template or an uploaded folder: start at `platform/create/create-hub` and deploy with `platform/create/deploy-template` (ImportFromGit covers a Git import).
 - The thing is created inside another resource (a record in a zone, a rule in an application): use `platform/create/create-in-drawer`.
 - The settings page of an existing resource, with the save bar that mounts only after a change: use `platform/edit/edit-resource`.
 - Never put a create form in a dialog.
@@ -41,7 +42,7 @@ On/off settings use `SettingRow kind="compact"` with a `Switch` hard right at it
 
 ### F. Commit bar — `SaveBar`, `Button` (required)
 
-`SaveBar kind="centered"`, a raised card centred at the bottom of the form that stays on screen while the form scrolls under it, at every width. It is the last child of the scrolling region, so the last field always scrolls clear of it. Its `#leading` slot holds what sits at the start, when there is something: an outlined Import `Button` and one muted line on the domain form, nothing on the others. Its `#actions` slot holds outlined Cancel and the primary submit, both medium `Button`s. The submit is the form's only `type="submit"`. A long create uses the same bar; the Import from Git form instead ends with one Deploy `Button` at the end of the column.
+`SaveBar kind="centered"`, a raised card centred at the bottom of the form that stays on screen while the form scrolls under it, at every width. It is the last child of the scrolling region, so the last field always scrolls clear of it. Its `#leading` slot holds what sits at the start, when there is something: an outlined Import `Button` and one muted line on the domain form, nothing on the others. Its `#actions` slot holds outlined Cancel and the primary submit, both medium `Button`s. The submit is the form's only `type="submit"`. A long create uses the same bar.
 
 ## Do
 
@@ -90,8 +91,6 @@ On/off settings use `SettingRow kind="compact"` with a `Switch` hard right at it
 - CreatePurge: a Target band of radio choice cards for Layer and Purge type, an Arguments textarea that follows the type, a warning alert and a bar with Cancel and Purge.
 - CreateService: a long create with a small `PageHeader` (Create Service, breadcrumb Services / Create Service) and five groups of rows, each under an `h2`, under the same centred `SaveBar` with Cancel and Save.
 - RequiredFields: Create Service after Save on the empty form; Name and Address show "This field is required." until edited.
-- ImportFromGit: the same job as a page body for `ConsoleLayout` (the layout owns the rail, the header and the `main`) with standalone field stacks under plain headings, an acknowledgement checkbox and one Deploy button at the end of the column.
-- ImportFromGitSubmitted: Import from Git after Deploy on the untouched form; every required field shows its required state and message.
 
 ## Related
 

@@ -21,7 +21,10 @@
     "central de criação",
     "novo projeto",
     "importar repositório",
-    "começar de um template"
+    "começar de um template",
+    "create project",
+    "where to start",
+    "começar um projeto"
   ],
   "skills": ["webkit-create-surface", "webkit-ui-states", "webkit-microcopy"],
   "primary": {
