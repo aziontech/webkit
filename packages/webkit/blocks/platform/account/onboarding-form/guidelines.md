@@ -25,7 +25,7 @@ In the bar, linked home with `aria-label="Azion home"`.
 
 ### C. Actions — `Button` (required)
 
-Documentation in the bar. The step's actions are the `Wizard` footer: Cancel, Previous from step 2 on, and Next, which becomes `Create Organization` on the last step.
+Documentation in the bar. The step's actions are the `Wizard` footer: Cancel, Previous from step 2 on, and Next, which becomes `Create Organization` on the last step. Cancel clears every answer and returns to the first step; an app that has somewhere to send the person back to (the sign-in page) routes there in the `cancel` handler instead.
 
 ### D. Step card — `Card` (required)
 

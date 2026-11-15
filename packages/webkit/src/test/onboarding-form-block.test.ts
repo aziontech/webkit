@@ -35,6 +35,23 @@ describe('platform/account/onboarding-form', () => {
     expect(view.getByText('Select a plan to continue.')).toBeTruthy()
   })
 
+  it('Cancel clears the answers and starts over on the first step', async () => {
+    const view = render(Profile)
+    expect(view.getByRole('heading', { level: 2, name: 'Tell us about your work' })).toBeTruthy()
+    await fireEvent.click(view.getByRole('button', { name: 'Cancel' }))
+    expect(
+      await view.findByRole('heading', { level: 2, name: 'Create your organization' })
+    ).toBeTruthy()
+    expect(
+      (view.getByRole('textbox', { name: /Your full name/ }) as globalThis.HTMLInputElement).value
+    ).toBe('')
+    expect(
+      (view.getByRole('textbox', { name: /Organization name/ }) as globalThis.HTMLInputElement)
+        .value
+    ).toBe('')
+    expect(view.queryByText('This field is required.')).toBeNull()
+  })
+
   it('lists what the upgrade includes with FeatureList', async () => {
     const view = render(Plan)
     await userEvent.click(view.getByRole('radio', { name: /Pro plan/ }))

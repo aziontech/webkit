@@ -407,6 +407,21 @@
       if (!plan.value) event.preventDefault()
     }
   }
+
+  const startOver = () => {
+    fullName.value = ''
+    organizationName.value = ''
+    accent.value = 'orange'
+    organizationSubmitted.value = false
+    plan.value = undefined
+    planSubmitted.value = false
+    usage.value = undefined
+    role.value = undefined
+    session.value = false
+    profileSubmitted.value = false
+    outcome.value = ''
+    step.value = 0
+  }
 </script>
 
 <template>
@@ -458,6 +473,7 @@
                   :loading="creating"
                   @next="onNext"
                   @submit="createOrganization"
+                  @cancel="startOver"
                 >
                   <Wizard.Step
                     title="Create your organization"
