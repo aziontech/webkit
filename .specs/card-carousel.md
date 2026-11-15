@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 2
 template: 2
-checksum: dd06883c3440ce6b7eff57d3e934deb1a9037bc7d6a73cf7ab67df59d80fca6f
+checksum: 04558193f5b29007993d296cff92d9b12be7dd2183cdff9dd93e5a2235e4f00b
 created: 2026-11-12
 last_updated: 2026-11-15
 ---
@@ -26,7 +26,7 @@ It is a page section — the site places it from a `{ _id: 'card-carousel', prop
 ## When NOT to use
 
 - When every case must be visible, or there are three or six of equal weight → use `capability-grid` (linked grid) or `use-cases` (grid with one action).
-- For a quote or testimonial row → use `quote-carousel` or `client-quotes`.
+- For a quote or testimonial row → use `client-quotes`.
 - For numbered principles pinned while the page scrolls → use `process-scroll` with `pinned`.
 - For articles with images → use `article-cards`.
 

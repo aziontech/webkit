@@ -3,10 +3,10 @@ name: client-quotes
 category: sections
 structure: monolithic
 status: implemented
-spec_version: 3
+spec_version: 4
 created: 2026-11-04
-last_updated: 2026-11-14
-checksum: 9aa83b6bfb2d09efa0fd1ae3c451752a99524172f849277e2ab478fee68fd8ef
+last_updated: 2026-11-15
+checksum: 47aae198dc86fdba0a73c904535b57208089407c6e67fad9d709727434f526f6
 ---
 
 # ClientQuotes — Component Spec
@@ -17,6 +17,7 @@ The client-stories band: a framed `quote-tabs` carousel of customer quotes, each
 
 ## When to use
 
+- Use ClientQuotes for a band of customer quotes the reader browses by client.
 - To let several customers speak in turn, one at a time, near the end of a page's argument.
 
 ## When NOT to use

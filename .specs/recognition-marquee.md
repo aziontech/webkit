@@ -3,10 +3,10 @@ name: recognition-marquee
 category: sections
 structure: monolithic
 status: implemented
-spec_version: 2
+spec_version: 3
 created: 2026-11-04
-last_updated: 2026-11-14
-checksum: 621ee55c1674dd5c41dac4b843423886680a07312cb1d0d65f5cb9ad5d952374
+last_updated: 2026-11-15
+checksum: 038f1c3b58c0159b5bc7994f0b67d9b8e839619554f98ffe4770b7e881d0611a
 template: 2
 ---
 
@@ -18,6 +18,7 @@ The analyst-recognition band: a section title over a framed strip of signed quot
 
 ## When to use
 
+- Use RecognitionMarquee only for a looping row of analyst or press quotes.
 - To list analyst reports and awards on a page that needs third-party proof.
 
 ## When NOT to use

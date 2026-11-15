@@ -3,13 +3,13 @@ name: quote-tabs
 category: marketing
 structure: monolithic
 status: implemented
-spec_version: 2
-checksum: 4e877f6534dd5084b5f11f417d43a48e73e5176f3c9c45890507f60156797a5e
+spec_version: 3
+checksum: 76fa618b89ab19601496c253feaca9d6b960043bdbc2e601a67f13909661d074
 figma:
   url: https://www.figma.com/design/aerxJReCkLz3x3z29IERE9/Assets?node-id=2240-47648
   node_id: 2240:47648
 created: 2026-09-30
-last_updated: 2026-11-14
+last_updated: 2026-11-15
 ---
 
 # Quote Tabs — Component Spec
@@ -22,13 +22,14 @@ The band owns the selection and nothing else. The featured quotation is `quote` 
 
 ## When to use
 
+- Use QuoteTabs in a hand-built SFC that needs the `#actions` slot.
 - To feature one client quotation at a time out of three to twelve peers, with every other client one click away on the wall below.
 - As a success-story band where the wall of customers and the quotation are the same content, not two lists.
 
 ## When NOT to use
 
 - For one quotation on its own → use `quote` with `kind="highlight"`.
-- For several quotations read side by side or swiped through → use `quote-carousel`.
+- For a band of customer quotes the reader browses by client → use `client-quotes`.
 - For a wall whose cards link to each customer's story → use `logo-wall`.
 - For a moving strip of marks with no links → use `ticker`.
 - For switching a page's content between views → use `tabs`.
@@ -39,7 +40,7 @@ The band owns the selection and nothing else. The featured quotation is `quote` 
 - `logo-wall` — the same framed client cells, as links out rather than as a selector.
 - `card-grid` — the framed grid the cards are laid out on.
 - `frame-box` — the registration frame the quotation panel is drawn in, with the same corner marks as the cards below it; also what a page wraps the band in to close its outer edges.
-- `quote-carousel` — the same testimonials as a row the reader scrolls through, every one visible.
+- `client-quotes` — the page-section band of customer quotes browsed by client.
 - `media-tabs` — the same timer and progress hairline, for claims paired with a medium.
 
 ## Best practices

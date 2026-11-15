@@ -510,7 +510,7 @@ const ASSET_KINDS = {
   brandMarks: {
     title: 'Brand marks',
     summary:
-      'Client, analyst and framework marks drawn as theme-aware SVG. Pass the name where a component asks for a mark (`Ticker` `marks`, `QuoteTabs` and `QuoteCarousel` `mark`, `ClientQuotes` `mark`); the label is the accessible name.',
+      'Client, analyst and framework marks drawn as theme-aware SVG. Pass the name where a component asks for a mark (`Ticker` `marks`, `QuoteTabs` `mark`, `ClientQuotes` `mark`); the label is the accessible name.',
     markers: ['svg/brands/registry.ts'],
     registry: 'src/svg/brands/registry.ts',
     unknown:
