@@ -11,4 +11,4 @@ const StepperRoot = Object.assign(Stepper, {
 
 export default StepperRoot
 export { StepperStep }
-export type { StepperStepState } from './stepper-step/stepper-step.vue'
+export type { StepperStepStatus } from './stepper-step/stepper-step.vue'

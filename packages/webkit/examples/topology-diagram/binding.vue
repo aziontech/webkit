@@ -31,7 +31,7 @@
     const removing = pick === ''
     const value = pick === undefined ? deployed[key] : pick
     const base = {
-      key,
+      id: key,
       type: target.type,
       icon: target.icon,
       bindable: true,
@@ -60,10 +60,10 @@
 
   const levels = computed(() => [
     {
-      key: 'project',
+      id: 'project',
       nodes: [
         {
-          key: 'project',
+          id: 'project',
           type: 'Project',
           icon: 'ai ai-folder',
           name: 'web-app',
@@ -72,12 +72,12 @@
         }
       ]
     },
-    { key: 'policy', nodes: [slot('policy')] },
+    { id: 'policy', nodes: [slot('policy')] },
     {
-      key: 'service',
+      id: 'service',
       nodes: [
         {
-          key: 'service',
+          id: 'service',
           type: 'Service',
           icon: 'ai ai-server',
           name: 'web-app',
@@ -91,7 +91,7 @@
 
   const stagedCount = computed(() => Object.keys(staged).length)
 
-  const bind = (event, { key, value }) => {
+  const bind = (event, { id: key, value }) => {
     if (value === deployed[key]) delete staged[key]
     else staged[key] = value
     note.value = `${value} staged on ${targets[key].type.toLowerCase()}.`

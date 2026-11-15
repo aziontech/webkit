@@ -20,16 +20,16 @@ const menu = () => document.body.querySelector<HTMLElement>('[role="menu"]') as 
 
 const levels: TopologyLevel[] = [
   {
-    key: 'project',
+    id: 'project',
     nodes: [
-      { key: 'project', type: 'Project', name: 'web-app', status: 'Live', severity: 'success' }
+      { id: 'project', type: 'Project', name: 'web-app', status: 'Live', severity: 'success' }
     ]
   },
   {
-    key: 'policy',
+    id: 'policy',
     nodes: [
       {
-        key: 'policy',
+        id: 'policy',
         type: 'Policy',
         name: 'edge-guard',
         boundValue: 'edge-guard',
@@ -43,10 +43,10 @@ const levels: TopologyLevel[] = [
     ]
   },
   {
-    key: 'page',
+    id: 'page',
     nodes: [
       {
-        key: 'page',
+        id: 'page',
         type: 'Error page',
         bindable: true,
         terminal: true,
@@ -88,14 +88,14 @@ describe('TopologyDiagram', () => {
     expect(view.getByRole('button', { name: 'Change Policy' })).toBeTruthy()
   })
 
-  it('emits bind, create and remove with the DOM event first and the node key', async () => {
+  it('emits bind, create and remove with the DOM event first and the node id', async () => {
     const view = render(TopologyDiagram, { props: { levels } })
     await fireEvent.click(view.getByRole('button', { name: 'Change Policy' }))
     await settle()
     await fireEvent.click(within(menu()).getByRole('menuitem', { name: /strict-waf/ }))
     const bind = view.emitted()['bind']?.[0] as unknown[]
     expect(bind[0]).toBeInstanceOf(MouseEvent)
-    expect(bind[1]).toEqual({ key: 'policy', value: 'strict-waf' })
+    expect(bind[1]).toEqual({ id: 'policy', value: 'strict-waf' })
     await fireEvent.click(view.getByRole('button', { name: 'Bind Error page' }))
     await settle()
     expect(within(menu()).getByText('No options yet.')).toBeTruthy()
@@ -179,10 +179,10 @@ describe('TopologyDiagram', () => {
       props: {
         levels: [
           {
-            key: 'one',
+            id: 'one',
             nodes: [
-              { key: 'a', type: 'Workload', name: 'storefront' },
-              { key: 'b', kind: 'Firewall', name: 'edge-rules' } as TopologyNode
+              { id: 'a', type: 'Workload', name: 'storefront' },
+              { id: 'b', kind: 'Firewall', name: 'edge-rules' } as TopologyNode
             ]
           }
         ]

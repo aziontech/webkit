@@ -12,11 +12,11 @@
 
   const levels = [
     {
-      key: 'domains',
+      id: 'domains',
       label: 'Domains',
       nodes: [
         {
-          key: 'domains',
+          id: 'domains',
           type: 'Domains',
           icon: 'ai ai-globe',
           name: 'shop.example.com',
@@ -40,11 +40,11 @@
       ]
     },
     {
-      key: 'project',
+      id: 'project',
       label: 'Project',
       nodes: [
         {
-          key: 'project',
+          id: 'project',
           type: 'Project',
           icon: 'ai ai-folder',
           name: 'web-app',
@@ -59,11 +59,11 @@
       ]
     },
     {
-      key: 'policy',
+      id: 'policy',
       label: 'Policy',
       nodes: [
         {
-          key: 'policy',
+          id: 'policy',
           type: 'Policy',
           icon: 'ai ai-shield',
           name: 'edge-guard',
@@ -79,11 +79,11 @@
       ]
     },
     {
-      key: 'service',
+      id: 'service',
       label: 'Service',
       nodes: [
         {
-          key: 'service',
+          id: 'service',
           type: 'Service',
           icon: 'ai ai-server',
           name: 'web-app',
@@ -93,7 +93,7 @@
           fields: [{ label: 'Version', value: 'AEO25I38' }]
         },
         {
-          key: 'error-page',
+          id: 'error-page',
           type: 'Error page',
           icon: 'ai ai-file',
           terminal: true,
@@ -104,11 +104,11 @@
       ]
     },
     {
-      key: 'cache',
+      id: 'cache',
       label: 'Cache rules',
       nodes: [
         {
-          key: 'cache-static',
+          id: 'cache-static',
           type: 'Cache rule',
           icon: 'ai ai-bolt',
           name: 'static-assets',
@@ -117,7 +117,7 @@
           fields: [{ label: 'Lifetime', value: '30 days' }]
         },
         {
-          key: 'cache-api',
+          id: 'cache-api',
           type: 'Cache rule',
           icon: 'ai ai-bolt',
           name: 'api-bypass',
@@ -128,11 +128,11 @@
       ]
     },
     {
-      key: 'integration',
+      id: 'integration',
       label: 'Integration',
       nodes: [
         {
-          key: 'integration',
+          id: 'integration',
           type: 'Integration',
           icon: 'ai ai-link',
           name: 'web-app-origin',
@@ -145,11 +145,11 @@
       ]
     },
     {
-      key: 'storage',
+      id: 'storage',
       label: 'Storage',
       nodes: [
         {
-          key: 'storage',
+          id: 'storage',
           type: 'Storage',
           icon: 'ai ai-inbox',
           name: 'web-app-assets',
@@ -172,13 +172,13 @@
       <TopologyDiagram
         v-model:expanded="expanded"
         :levels="levels"
-        @bind="(event, { key, value }) => (note = `Bind ${value} to ${key}.`)"
-        @remove="(event, key) => (note = `Remove ${key}.`)"
-        @create="(event, key) => (note = `Create a new ${key}.`)"
+        @bind="(event, { id, value }) => (note = `Bind ${value} to ${id}.`)"
+        @remove="(event, id) => (note = `Remove ${id}.`)"
+        @create="(event, id) => (note = `Create a new ${id}.`)"
       >
         <template #actions="{ node }">
           <Tooltip
-            v-if="node.key === 'domains'"
+            v-if="node.id === 'domains'"
             text="Add domain"
           >
             <IconButton

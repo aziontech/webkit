@@ -203,14 +203,14 @@
   <div
     v-bind="passthroughAttrs"
     :data-testid="testId"
-    :data-border="bordered || null"
+    :data-bordered="bordered || null"
     :data-disabled="disabled || null"
     :data-loading="loading || null"
     :data-error="error ? true : null"
     :data-level="level || null"
     :class="
       cn(
-        'flex h-fit min-h-0 w-full min-w-0 max-w-full flex-col overflow-hidden data-[border]:rounded-(--shape-control) data-[border]:border data-[border]:border-(--border-muted)',
+        'flex h-fit min-h-0 w-full min-w-0 max-w-full flex-col overflow-hidden data-[bordered]:rounded-(--shape-control) data-[bordered]:border data-[bordered]:border-(--border-muted)',
         attrs.class
       )
     "

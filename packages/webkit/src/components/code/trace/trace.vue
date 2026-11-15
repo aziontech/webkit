@@ -11,7 +11,7 @@
   import Skeleton from '../../feedback/skeleton/skeleton.vue'
   import Input from '../../inputs/input/input.vue'
 
-  export type TraceSpanStatus = 'ok' | 'error' | 'running'
+  export type TraceSpanStatus = 'success' | 'error' | 'running'
 
   export interface TraceSpanEvent {
     /** Milliseconds from the start of the trace. */
@@ -38,7 +38,7 @@
     start: number
     /** Milliseconds the span lasted. */
     duration: number
-    /** Outcome of the span. Unset reads as ok. */
+    /** Outcome of the span. Unset reads as success. */
     status?: TraceSpanStatus
     /** One line about the outcome, shown in the details of a failed span. */
     message?: string
@@ -56,7 +56,8 @@
     expanded: boolean
     posinset: number
     setsize: number
-    tone: 'root' | 'ok' | 'error' | 'running'
+    status: TraceSpanStatus
+    root: boolean
     offset: number
     width: number
     wide: boolean
@@ -211,9 +212,8 @@
         const marks = (span.events ?? [])
           .map((event, order) => ({ key: `${order}`, at: (event.at - low) / length }))
           .filter((mark) => mark.at >= 0 && mark.at <= 1)
-        let tone: Row['tone'] = depth === 0 ? 'root' : 'ok'
-        if (span.status === 'error') tone = 'error'
-        if (span.status === 'running') tone = 'running'
+        const status: TraceSpanStatus = span.status ?? 'success'
+        const root = depth === 0 && status === 'success'
         out.push({
           span,
           depth,
@@ -222,7 +222,8 @@
           expanded,
           posinset: index + 1,
           setsize: siblings.length,
-          tone,
+          status,
+          root,
           offset,
           width,
           wide: width >= 0.14,
@@ -295,12 +296,12 @@
     const ordered = [...props.spans].sort((a, b) => a.start - b.start)
     const count = Math.max(1, ordered.length)
     return ordered.map((span, index) => {
-      let tone: Row['tone'] = span.parentId && known.value.has(span.parentId) ? 'ok' : 'root'
-      if (span.status === 'error') tone = 'error'
-      if (span.status === 'running') tone = 'running'
+      const status: TraceSpanStatus = span.status ?? 'success'
+      const root = !(span.parentId && known.value.has(span.parentId)) && status === 'success'
       return {
         id: span.id,
-        tone,
+        status,
+        root,
         style: {
           '--line-offset': String(span.start / total.value),
           '--line-width': String(span.duration / total.value),
@@ -610,10 +611,11 @@
           <span
             v-for="line in minimapLines"
             :key="line.id"
-            :data-tone="line.tone"
+            :data-status="line.status"
+            :data-root="line.root || null"
             :style="line.style"
             aria-hidden="true"
-            class="pointer-events-none absolute start-[calc(var(--line-offset)*100%)] top-[calc(var(--line-top)*100%)] h-[max(1px,calc(var(--line-height)*100%))] w-[max(1px,calc(var(--line-width)*100%))] rounded-full data-[tone=error]:bg-(--danger-border) data-[tone=ok]:bg-(--success-border) data-[tone=root]:bg-(--info-border) data-[tone=running]:bg-(--warning-border)"
+            class="pointer-events-none absolute start-[calc(var(--line-offset)*100%)] top-[calc(var(--line-top)*100%)] h-[max(1px,calc(var(--line-height)*100%))] w-[max(1px,calc(var(--line-width)*100%))] rounded-full data-[status=error]:bg-(--danger-border) data-[status=success]:bg-(--success-border) data-root:data-[status=success]:bg-(--info-border) data-[status=running]:bg-(--warning-border)"
           />
           <span
             :style="windowStyle"
@@ -770,16 +772,18 @@
           >
             <span class="relative h-(--size-6) w-full">
               <span
-                :data-tone="row.tone"
+                :data-status="row.status"
+                :data-root="row.root || null"
                 :data-outside="row.outside || null"
                 :data-testid="`${testId}__bar`"
-                class="absolute inset-y-0 start-[calc(var(--span-offset)*100%)] w-[calc(var(--span-width)*100%)] rounded-(--shape-button) border data-outside:hidden data-[tone=error]:border-(--danger-border) data-[tone=error]:bg-(--danger) data-[tone=ok]:border-(--success-border) data-[tone=ok]:bg-(--success) data-[tone=root]:border-(--info-border) data-[tone=root]:bg-(--info) data-[tone=running]:border-(--warning-border) data-[tone=running]:bg-(--warning)"
+                class="absolute inset-y-0 start-[calc(var(--span-offset)*100%)] w-[calc(var(--span-width)*100%)] rounded-(--shape-button) border data-outside:hidden data-[status=error]:border-(--danger-border) data-[status=error]:bg-(--danger) data-[status=success]:border-(--success-border) data-[status=success]:bg-(--success) data-root:data-[status=success]:border-(--info-border) data-root:data-[status=success]:bg-(--info) data-[status=running]:border-(--warning-border) data-[status=running]:bg-(--warning)"
               >
                 <span
-                  :data-tone="row.tone"
+                  :data-status="row.status"
+                  :data-root="row.root || null"
                   :data-wide="row.wide || null"
                   :data-flip="row.flip || null"
-                  class="pointer-events-none absolute start-full top-1/2 ms-(--spacing-2xs) -translate-y-1/2 text-label-sm whitespace-nowrap tabular-nums data-flip:start-auto data-flip:end-full data-flip:ms-0 data-flip:me-(--spacing-2xs) data-wide:start-(--spacing-xs) data-wide:ms-0 data-[tone=error]:text-(--danger-foreground) data-[tone=ok]:text-(--success-foreground) data-[tone=root]:text-(--info-foreground) data-[tone=running]:text-(--warning-foreground)"
+                  class="pointer-events-none absolute start-full top-1/2 ms-(--spacing-2xs) -translate-y-1/2 text-label-sm whitespace-nowrap tabular-nums data-flip:start-auto data-flip:end-full data-flip:ms-0 data-flip:me-(--spacing-2xs) data-wide:start-(--spacing-xs) data-wide:ms-0 data-[status=error]:text-(--danger-foreground) data-[status=success]:text-(--success-foreground) data-root:data-[status=success]:text-(--info-foreground) data-[status=running]:text-(--warning-foreground)"
                   aria-hidden="true"
                   >{{ formatDuration(row.span.duration) }}</span
                 >

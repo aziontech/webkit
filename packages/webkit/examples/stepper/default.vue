@@ -14,7 +14,7 @@
       value="host"
       title="Where it runs"
       description="The firewall that reads this list."
-      state="complete"
+      status="success"
     />
     <Stepper.Step
       value="configure"

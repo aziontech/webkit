@@ -3,9 +3,9 @@ name: trace
 category: code
 structure: monolithic
 status: implemented
-spec_version: 4
+spec_version: 5
 template: 2
-checksum: 5a4d4e8d10095c6a39bbbdb102df793ba8a4fc4e9502bbf6d885f1120c3632a8
+checksum: d1918fd9f31467da9d8ad411db14b8d978ec2cd5f778f35b8b8a9720d51ef41c
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -90,7 +90,7 @@ A span waterfall: one row per span of a run (a function invocation, a request th
 | `zoomable`         | `boolean`     | `false` | false    | Shows a minimap under the axis to zoom the waterfall into a window of the run. Supports v-model:range.                                |
 | `highlightSlowest` | `boolean`     | `false` | false    | Flags the span that took longest, other than the root, in its row and its details.                                                    |
 
-Types (exported from the component): `TraceSpan = { id: string; parentId?: string; name: string; service?: string; icon?: string; start: number; duration: number; status?: 'ok' | 'error' | 'running'; message?: string; attributes?: Record<string, string | number>; events?: TraceSpanEvent[] }`, `TraceSpanEvent = { at: number; name: string }` (`at` in milliseconds from the start of the trace), `TraceRange = [number, number]` (start and end of the visible window, in milliseconds).
+Types (exported from the component): `TraceSpan = { id: string; parentId?: string; name: string; service?: string; icon?: string; start: number; duration: number; status?: 'success' | 'error' | 'running'; message?: string; attributes?: Record<string, string | number>; events?: TraceSpanEvent[] }`, `TraceSpanEvent = { at: number; name: string }` (`at` in milliseconds from the start of the trace), `TraceRange = [number, number]` (start and end of the visible window, in milliseconds).
 
 ## v-model
 
@@ -110,7 +110,7 @@ _none_ — the search, the axis, the rows and the details are fixed parts.
 ## States
 
 - Visual states: `default`, `hover` (row), `focus-visible` (row), `selected` (row and details band), `collapsed` / `expanded` (parent rows), `searching` (rows narrowed, every match's ancestors shown), `loading` (placeholder rows in a `role="status"` region, `aria-busy` on the root, search disabled, no details), `empty` (the package `EmptyState`, small: no spans, or no match with a Clear search action).
-- Bar tones on `data-tone`: `root` (info), `ok` (success), `error` (danger), `running` (warning).
+- Bar colour on `data-status` (`success`, `error`, `running`) plus `data-root` on a successful root span: root (info), `success`, `error` (danger), `running` (warning).
 - `data-selected` on the selected row; `aria-expanded` on parent rows; `data-bordered` and `data-loading` on the root mirror their props.
 - `zoomed` (a window narrower than the run): the axis, the bars and the event markers are placed against the window; a bar outside it is hidden (`data-outside`) while its row stays; the minimap shows the window and Reset zoom.
 - `data-slowest` on the slowest span's row (with `highlightSlowest`).
@@ -151,7 +151,7 @@ _none_ — the search, the axis, the rows and the details are fixed parts.
 - Event markers are decorative; a row with events is named with their count, and the details list each event with its time. The slowest flag is named in the row (`Slowest`) and shown as a Tag in the details.
 - Rows are 36 px high (44 px on `pointer: coarse`).
 - Colour is never the only signal: a failed span also carries an icon in the row and a Failed tag in the details.
-- Contrast ≥4.5:1 from the semantic text tokens; duration labels use the `-contrast` tokens of their tone.
+- Contrast ≥4.5:1 from the semantic text tokens; duration labels use the `-foreground` tokens of their status.
 
 ## Internationalization
 

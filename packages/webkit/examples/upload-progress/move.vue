@@ -2,19 +2,19 @@
   import UploadProgress from '@aziontech/webkit/upload-progress'
   import { ref } from 'vue'
 
-  const expanded = ref(false)
+  const open = ref(false)
 
   const items = [
-    { id: 'a', name: 'reports/2026-10.csv', size: 18_200, status: 'done' },
+    { id: 'a', name: 'reports/2026-10.csv', size: 18_200, status: 'success' },
     { id: 'b', name: 'reports/2026-11.csv', size: 19_400, status: 'running', progress: 40 },
-    { id: 'c', name: 'reports/summary.pdf', size: 402_000, status: 'queued' }
+    { id: 'c', name: 'reports/summary.pdf', size: 402_000, status: 'pending' }
   ]
 </script>
 
 <template>
   <div class="w-full max-w-(--container-xs)">
     <UploadProgress
-      v-model:expanded="expanded"
+      v-model:open="open"
       :items="items"
       operation="move"
       :floating="false"

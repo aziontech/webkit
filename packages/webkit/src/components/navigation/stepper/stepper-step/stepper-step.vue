@@ -11,18 +11,18 @@
     inheritAttrs: false
   })
 
-  /** What the owner knows about a step. The current step is derived from the root. */
-  export type StepperStepState = 'upcoming' | 'complete' | 'error' | 'loading'
+  /** What the owner knows about a step. The active step is derived from the root. */
+  export type StepperStepStatus = 'pending' | 'running' | 'success' | 'error'
 
   interface Props {
-    /** Identity of this step; matches the root's v-model when it is the current one. */
+    /** Identity of this step; matches the root's v-model when it is the active one. */
     value?: string
     /** What this step asks, in the reader's words. */
     title?: string
     /** One line under the title saying what the step decides. */
     description?: string
     /** What the owner knows about this step. */
-    state?: StepperStepState
+    status?: StepperStepStatus
     /** The step cannot be reached yet: not focusable and not clickable. */
     disabled?: boolean
   }
@@ -31,7 +31,7 @@
     value: '',
     title: '',
     description: '',
-    state: 'upcoming',
+    status: 'pending',
     disabled: false
   })
 
@@ -55,19 +55,17 @@
     () => (attrs['data-testid'] as string | undefined) ?? 'navigation-stepper-step'
   )
 
-  const dataState = computed<'upcoming' | 'complete' | 'error' | 'loading' | 'current'>(() => {
-    if (props.state === 'error') return 'error'
-    if (props.state === 'loading') return 'loading'
-    if (context.current.value === props.value) return 'current'
-    if (props.state === 'complete') return 'complete'
-    return 'upcoming'
+  const shown = computed<StepperStepStatus | 'active'>(() => {
+    if (props.status === 'error' || props.status === 'running') return props.status
+    if (context.active.value === props.value) return 'active'
+    return props.status
   })
 
-  const stateLabel = computed<string>(() => {
-    if (dataState.value === 'error') return t('stepper.error')
-    if (dataState.value === 'loading') return t('stepper.loading')
-    if (dataState.value === 'current') return t('stepper.current')
-    if (dataState.value === 'complete') return t('stepper.complete')
+  const statusLabel = computed<string>(() => {
+    if (shown.value === 'error') return t('stepper.error')
+    if (shown.value === 'running') return t('stepper.loading')
+    if (shown.value === 'active') return t('stepper.current')
+    if (shown.value === 'success') return t('stepper.complete')
     return t('stepper.upcoming')
   })
 
@@ -79,7 +77,9 @@
     ref="root"
     v-bind="$attrs"
     :data-testid="testId"
-    :data-state="dataState"
+    :data-status="status"
+    :data-active="shown === 'active' || null"
+    :data-completed="shown === 'success' || null"
     :data-disabled="disabled || null"
     :data-has-body="$slots['default'] ? '' : null"
     class="group/step relative w-full"
@@ -87,8 +87,8 @@
     <button
       type="button"
       :disabled="disabled"
-      :aria-current="dataState === 'current' ? 'step' : undefined"
-      :aria-busy="dataState === 'loading' ? 'true' : undefined"
+      :aria-current="shown === 'active' ? 'step' : undefined"
+      :aria-busy="shown === 'running' ? 'true' : undefined"
       class="flex min-h-10 w-full items-stretch gap-(--spacing-sm) rounded-(--shape-control) px-(--spacing-sm) py-(--spacing-xs) text-start transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) focus-visible:outline-none disabled:cursor-not-allowed disabled:hover:bg-transparent motion-reduce:transition-none"
       @click="activate"
     >
@@ -97,26 +97,26 @@
         aria-hidden="true"
       >
         <span
-          data-step-dot
-          class="relative flex size-6 shrink-0 items-center justify-center rounded-(--radius-full) border border-(--border-default) bg-(--bg-surface) text-label-sm text-(--text-muted) transition-colors duration-fast-02 ease-productive-entrance group-data-[state=complete]/step:border-(--secondary) group-data-[state=complete]/step:bg-(--secondary) group-data-[state=complete]/step:text-(--secondary-foreground) group-data-[state=current]/step:border-(--secondary) group-data-[state=error]/step:border-(--danger-border) group-data-[state=error]/step:bg-(--danger) group-data-[state=error]/step:text-(--danger-foreground) group-data-[state=loading]/step:border-(--secondary) group-data-[state=loading]/step:text-(--secondary) group-data-[disabled]/step:text-(--text-disabled) motion-reduce:transition-none"
+          data-slot="step-dot"
+          class="relative flex size-6 shrink-0 items-center justify-center rounded-(--radius-full) border border-(--border-default) bg-(--bg-surface) text-label-sm text-(--text-muted) transition-colors duration-fast-02 ease-productive-entrance group-data-[completed]/step:border-(--secondary) group-data-[completed]/step:bg-(--secondary) group-data-[completed]/step:text-(--secondary-foreground) group-data-[active]/step:border-(--secondary) group-data-[status=error]/step:border-(--danger-border) group-data-[status=error]/step:bg-(--danger) group-data-[status=error]/step:text-(--danger-foreground) group-data-[status=running]/step:border-(--secondary) group-data-[status=running]/step:text-(--secondary) group-data-[disabled]/step:text-(--text-disabled) motion-reduce:transition-none"
         >
           <span
-            data-step-disc
-            class="pointer-events-none absolute inset-0 m-auto size-2 scale-0 rounded-(--radius-full) bg-(--secondary) transition-[scale] duration-fast-02 ease-productive-entrance group-data-[state=current]/step:scale-100 motion-reduce:transition-none"
+            data-slot="step-disc"
+            class="pointer-events-none absolute inset-0 m-auto size-2 scale-0 rounded-(--radius-full) bg-(--secondary) transition-[scale] duration-fast-02 ease-productive-entrance group-data-[active]/step:scale-100 motion-reduce:transition-none"
           />
           <Spinner
-            v-if="dataState === 'loading'"
+            v-if="shown === 'running'"
             class="size-3"
           />
           <span
-            v-else-if="dataState === 'complete'"
+            v-else-if="shown === 'success'"
             class="ai ai-check text-label-sm"
           />
           <span
-            v-else-if="dataState === 'error'"
+            v-else-if="shown === 'error'"
             class="ai ai-triangle-alert text-label-sm"
           />
-          <span v-else-if="dataState !== 'current'">{{ index }}</span>
+          <span v-else-if="shown !== 'active'">{{ index }}</span>
         </span>
         <span
           v-if="!isLast"
@@ -125,10 +125,10 @@
       </span>
       <span class="flex min-w-0 flex-1 flex-col pb-(--spacing-sm) group-data-[has-body]/step:pb-0">
         <span
-          class="flex min-h-6 items-center text-label-md text-(--text-muted) transition-colors duration-fast-02 ease-productive-entrance group-data-[state=complete]/step:text-(--text-default) group-data-[state=current]/step:text-(--text-default) group-data-[disabled]/step:text-(--text-disabled) motion-reduce:transition-none"
+          class="flex min-h-6 items-center text-label-md text-(--text-muted) transition-colors duration-fast-02 ease-productive-entrance group-data-[completed]/step:text-(--text-default) group-data-[active]/step:text-(--text-default) group-data-[disabled]/step:text-(--text-disabled) motion-reduce:transition-none"
           >{{ title }}</span
         >
-        <span class="sr-only">{{ stateLabel }}</span>
+        <span class="sr-only">{{ statusLabel }}</span>
         <Transition
           enter-active-class="transition-[grid-template-rows,opacity] duration-moderate-01 ease-productive-entrance motion-reduce:transition-none"
           enter-from-class="grid-rows-[0fr] opacity-0"
@@ -139,7 +139,7 @@
         >
           <span
             v-if="description"
-            data-step-description
+            data-slot="step-description"
             class="grid"
           >
             <span
@@ -152,17 +152,17 @@
     </button>
     <span
       v-if="!isLast"
-      data-step-connector
+      data-slot="step-connector"
       aria-hidden="true"
       class="pointer-events-none absolute start-[calc(var(--spacing-sm)+0.75rem-0.5px)] top-[calc(var(--spacing-xs)*2+1.5rem)] bottom-(--spacing-xs) min-h-6 w-px bg-(--border-default) transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none"
     >
       <span
-        class="absolute inset-0 origin-top scale-y-0 bg-(--secondary) transition-[scale] duration-moderate-02 ease-productive-entrance group-data-[state=complete]/step:scale-y-100 motion-reduce:transition-none"
+        class="absolute inset-0 origin-top scale-y-0 bg-(--secondary) transition-[scale] duration-moderate-02 ease-productive-entrance group-data-[completed]/step:scale-y-100 motion-reduce:transition-none"
       />
     </span>
     <div
       v-if="$slots['default']"
-      data-step-body
+      data-slot="step-body"
       class="ps-[calc(var(--spacing-sm)*2+1.5rem)] pe-(--spacing-sm) pb-[calc(var(--spacing-sm)+var(--spacing-xs))]"
     >
       <slot />

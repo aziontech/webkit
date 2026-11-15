@@ -3,9 +3,9 @@ name: topology-diagram
 category: data
 structure: monolithic
 status: implemented
-spec_version: 5
+spec_version: 6
 template: 2
-checksum: 8a78156cc57fbd9e21163eb2ec6c07f6935c8ef287a5d99ca592758d4eb79446
+checksum: 633d454174dda7bd88d759f258596853e9298d30c575a38d7b7a94e56eeb4da6
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -41,7 +41,7 @@ The deployment topology of a resource as a left-to-right diagram: each column is
 - Mark the last node of each branch `terminal` so no connector leaves it.
 - Give every unbound slot a message that says what happens without it.
 - Give a node `href` when its resource has a page: the name becomes a link that ends in the open glyph (`ai ai-external-link`), as every resource name in the console does.
-- A node that collects many resources and adds to itself, such as Domains (add a domain), puts its `+` in the `actions` slot: an `IconButton` (`ai ai-plus`, `kind="outlined"`, `size="small"`) named `Add domain` inside a `Tooltip`, picked by `node.key`. `bindable` is for a slot that holds one resource (Firewall, Custom Page): it brings its own `+` with the bind menu. Do not hand-draw a node card to get the `+`.
+- A node that collects many resources and adds to itself, such as Domains (add a domain), puts its `+` in the `actions` slot: an `IconButton` (`ai ai-plus`, `kind="outlined"`, `size="small"`) named `Add domain` inside a `Tooltip`, picked by `node.id`. `bindable` is for a slot that holds one resource (Firewall, Custom Page): it brings its own `+` with the bind menu. Do not hand-draw a node card to get the `+`.
 
 ## Usage
 
@@ -54,10 +54,10 @@ The deployment topology of a resource as a left-to-right diagram: each column is
 
   const levels = [
     {
-      key: 'domains',
+      id: 'domains',
       nodes: [
         {
-          key: 'domains',
+          id: 'domains',
           type: 'Domains',
           icon: 'ai ai-globe',
           name: 'web-app.azion.app',
@@ -66,10 +66,10 @@ The deployment topology of a resource as a left-to-right diagram: each column is
       ]
     },
     {
-      key: 'project',
+      id: 'project',
       nodes: [
         {
-          key: 'project',
+          id: 'project',
           type: 'Project',
           name: 'web-app',
           href: '/projects/web-app',
@@ -79,10 +79,10 @@ The deployment topology of a resource as a left-to-right diagram: each column is
       ]
     },
     {
-      key: 'policy',
+      id: 'policy',
       nodes: [
         {
-          key: 'policy',
+          id: 'policy',
           type: 'Policy',
           bindable: true,
           bindOptions: [{ value: 'edge-guard', label: 'edge-guard' }],
@@ -98,11 +98,11 @@ The deployment topology of a resource as a left-to-right diagram: each column is
   <TopologyDiagram
     v-model:expanded="expanded"
     :levels="levels"
-    @bind="(event, { key, value }) => {}"
+    @bind="(event, { id, value }) => {}"
   >
     <template #actions="{ node }">
       <Tooltip
-        v-if="node.key === 'domains'"
+        v-if="node.id === 'domains'"
         text="Add domain"
       >
         <IconButton
@@ -125,19 +125,19 @@ The deployment topology of a resource as a left-to-right diagram: each column is
 | `loading`   | `boolean`         | `false` | false    | Shows placeholder cards while the topology loads.                                      |
 | `ariaLabel` | `string`          | `''`    | false    | Accessible name of the diagram. Empty uses the locale catalog (`Deployment topology`). |
 
-Types: `TopologyLevel = { key: string; label?: string; nodes: TopologyNode[] }`; `TopologyNode = { key: string; type?: string; icon?: string; name?: string; status?: string; severity?: TopologyNodeSeverity; dashed?: boolean; message?: string; fields?: TopologyNodeField[]; href?: string; terminal?: boolean; bindable?: boolean; bindOptions?: TopologyBindOption[]; boundValue?: string; removable?: boolean }`; `TopologyNodeField = { label: string; value: string; href?: string; copyable?: boolean }`; `TopologyBindOption = { value: string; label: string }`; `TopologyNodeSeverity = 'success' | 'info' | 'warning' | 'danger' | 'neutral'`. `type` is the resource type shown in the node header (`Policy`).
+Types: `TopologyLevel = { id: string; label?: string; nodes: TopologyNode[] }`; `TopologyNode = { id: string; type?: string; icon?: string; name?: string; status?: string; severity?: TopologyNodeSeverity; dashed?: boolean; message?: string; fields?: TopologyNodeField[]; href?: string; terminal?: boolean; bindable?: boolean; bindOptions?: TopologyBindOption[]; boundValue?: string; removable?: boolean }`; `TopologyNodeField = { label: string; value: string; href?: string; copyable?: boolean }`; `TopologyBindOption = { value: string; label: string }`; `TopologyNodeSeverity = 'success' | 'info' | 'warning' | 'danger' | 'neutral'`. `type` is the resource type shown in the node header (`Policy`).
 
 ## v-model
 
-- **`v-model:expanded`** — `string[]`, default `[]`. Keys of the open node cards; a header click toggles its key.
+- **`v-model:expanded`** — `string[]`, default `[]`. Ids of the open node cards; a header click toggles its id.
 
 ## Events
 
-| Event    | Payload                                                                         | Notes                                                                       |
-| -------- | ------------------------------------------------------------------------------- | --------------------------------------------------------------------------- |
-| `bind`   | `(event: MouseEvent \| KeyboardEvent, binding: { key: string; value: string })` | An existing option was picked in the bind control; `key` is the node's key. |
-| `remove` | `(event: MouseEvent, key: string)`                                              | Remove was activated on a bound, removable node.                            |
-| `create` | `(event: MouseEvent \| KeyboardEvent, key: string)`                             | Create was picked in the bind control.                                      |
+| Event    | Payload                                                                        | Notes                                                                     |
+| -------- | ------------------------------------------------------------------------------ | ------------------------------------------------------------------------- |
+| `bind`   | `(event: MouseEvent \| KeyboardEvent, binding: { id: string; value: string })` | An existing option was picked in the bind control; `id` is the node's id. |
+| `remove` | `(event: MouseEvent, id: string)`                                              | Remove was activated on a bound, removable node.                          |
+| `create` | `(event: MouseEvent \| KeyboardEvent, id: string)`                             | Create was picked in the bind control.                                    |
 
 ## Slots
 

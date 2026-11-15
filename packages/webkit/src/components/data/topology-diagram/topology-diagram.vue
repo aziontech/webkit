@@ -44,12 +44,12 @@
     /** An existing option was picked in a node's bind control. */
     bind: [
       event: globalThis.MouseEvent | globalThis.KeyboardEvent,
-      binding: { key: string; value: string }
+      binding: { id: string; value: string }
     ]
     /** The remove control of a bound node was activated. */
-    remove: [event: globalThis.MouseEvent, key: string]
+    remove: [event: globalThis.MouseEvent, id: string]
     /** Create was picked in a node's bind control. */
-    create: [event: globalThis.MouseEvent | globalThis.KeyboardEvent, key: string]
+    create: [event: globalThis.MouseEvent | globalThis.KeyboardEvent, id: string]
   }>()
 
   defineSlots<{
@@ -71,13 +71,13 @@
   const label = computed<string>(() => props.ariaLabel || t('topologyDiagram.label'))
 
   const PLACEHOLDER: TopologyLevel[] = [
-    { key: 'a', nodes: [{ key: 'a', type: '' }] },
-    { key: 'b', nodes: [{ key: 'b', type: '' }] },
+    { id: 'a', nodes: [{ id: 'a', type: '' }] },
+    { id: 'b', nodes: [{ id: 'b', type: '' }] },
     {
-      key: 'c',
+      id: 'c',
       nodes: [
-        { key: 'c', type: '' },
-        { key: 'd', type: '', terminal: true }
+        { id: 'c', type: '' },
+        { id: 'd', type: '', terminal: true }
       ]
     }
   ]
@@ -166,7 +166,7 @@
         >
           <li
             v-for="level in shown"
-            :key="level.key"
+            :key="level.id"
             data-flow-kind="parallel"
             :data-testid="`${testId}__level`"
             class="flex min-w-(--size-56) flex-1 flex-col items-start gap-(--spacing-md)"
@@ -178,7 +178,7 @@
             >
             <div
               v-for="node in level.nodes"
-              :key="node.key"
+              :key="node.id"
               data-flow-kind="node"
               :data-flow-terminal="node.terminal ? 'true' : null"
               class="relative z-1 w-full"
@@ -200,12 +200,12 @@
               <TopologyDiagramNode
                 v-else
                 :node="node"
-                :open="isOpen(node.key)"
+                :open="isOpen(node.id)"
                 :test-id="testId"
-                @toggle="toggle(node.key)"
-                @bind="(event, value) => emit('bind', event, { key: node.key, value })"
-                @remove="(event) => emit('remove', event, node.key)"
-                @create="(event) => emit('create', event, node.key)"
+                @toggle="() => toggle(node.id)"
+                @bind="(event, value) => emit('bind', event, { id: node.id, value })"
+                @remove="(event) => emit('remove', event, node.id)"
+                @create="(event) => emit('create', event, node.id)"
               >
                 <template
                   v-if="$slots['actions']"

@@ -22,7 +22,7 @@ export interface TopologyBindOption {
 /** One resource in the topology. A node without `name` is an unbound slot. */
 export interface TopologyNode {
   /** Stable identity, used by `expanded` and the bind events. */
-  key: string
+  id: string
   /** Resource type shown in the header, e.g. `Policy`. */
   type?: string
   /** Icon class of the kind. */
@@ -55,7 +55,8 @@ export interface TopologyNode {
 
 /** One column of the diagram: the nodes that sit at the same depth. */
 export interface TopologyLevel {
-  key: string
+  /** Stable identity of the column. */
+  id: string
   /** Name of the column for assistive technology. */
   label?: string
   nodes: TopologyNode[]

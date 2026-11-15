@@ -11,7 +11,7 @@
 
   export type UploadProgressOperation = 'upload' | 'move' | 'delete'
 
-  export type UploadProgressStatus = 'queued' | 'running' | 'done' | 'error' | 'canceled'
+  export type UploadProgressStatus = 'pending' | 'running' | 'success' | 'error' | 'canceled'
 
   export interface UploadProgressItem {
     id: string
@@ -45,8 +45,8 @@
     cancelable: true
   })
 
-  /** Shows the file list; false hides it. While unbound the card starts expanded. */
-  const expanded = defineModel<boolean>('expanded', { default: undefined as never })
+  /** Shows the file list; false hides it. While unbound the card starts open. */
+  const open = defineModel<boolean>('open', { default: undefined as never })
 
   const emit = defineEmits<{
     /** Cancel on one file (its `id`) or Cancel all (no `id`). The parent stops the transfer. */
@@ -76,19 +76,19 @@
   )
 
   const isFinished = (item: UploadProgressItem): boolean =>
-    item.status === 'done' || item.status === 'error' || item.status === 'canceled'
+    item.status === 'success' || item.status === 'error' || item.status === 'canceled'
 
   const total = computed<number>(() => props.items.length)
   const finished = computed<number>(() => props.items.filter(isFinished).length)
   const succeeded = computed<number>(
-    () => props.items.filter((item) => item.status === 'done').length
+    () => props.items.filter((item) => item.status === 'success').length
   )
   const failed = computed<number>(
     () => props.items.filter((item) => item.status === 'error').length
   )
 
-  const state = computed<'running' | 'done' | 'failed'>(() =>
-    finished.value < total.value ? 'running' : failed.value > 0 ? 'failed' : 'done'
+  const status = computed<'running' | 'success' | 'error'>(() =>
+    finished.value < total.value ? 'running' : failed.value > 0 ? 'error' : 'success'
   )
 
   const percent = computed<number>(() => {
@@ -111,7 +111,7 @@
 
   const heading = computed<string>(() => {
     if (props.title) return props.title
-    if (state.value === 'running') {
+    if (status.value === 'running') {
       return t(`uploadProgress.${RUNNING_KEY[props.operation]}`, {
         done: finished.value,
         count: total.value
@@ -128,8 +128,8 @@
   )
 
   const rowStatusText = (item: UploadProgressItem): string => {
-    if (item.status === 'queued') return t('uploadProgress.queued')
-    if (item.status === 'done') return t('uploadProgress.done')
+    if (item.status === 'pending') return t('uploadProgress.queued')
+    if (item.status === 'success') return t('uploadProgress.done')
     if (item.status === 'canceled') return t('uploadProgress.canceled')
     if (item.status === 'running' && typeof item.progress === 'number') {
       return formatNumber(item.progress / 100, { style: 'percent' })
@@ -140,13 +140,13 @@
   const { split, observe } = useLazyChunks({ rowHeight: 56 })
   const chunks = computed(() => split(props.items))
 
-  const isCollapsed = computed<boolean>(() => expanded.value === false)
+  const isCollapsed = computed<boolean>(() => open.value === false)
 
   const toggleList = () => {
-    expanded.value = isCollapsed.value
+    open.value = isCollapsed.value
   }
 
-  const showActions = () => state.value !== 'running' && Boolean(slots['actions'])
+  const showActions = () => status.value !== 'running' && Boolean(slots['actions'])
 </script>
 
 <template>
@@ -154,9 +154,9 @@
     v-bind="rootAttrs"
     :aria-label="t('uploadProgress.label')"
     :data-testid="testId"
-    :data-state="state"
+    :data-status="status"
+    :data-state="isCollapsed ? 'closed' : 'open'"
     :data-floating="floating || null"
-    :data-collapsed="isCollapsed || null"
     class="group/up z-40 flex w-full flex-col gap-(--spacing-sm) rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface-raised) p-(--spacing-md) shadow-(--shadow-sm) animate-popup-scale-in motion-reduce:animate-none data-[floating]:fixed data-[floating]:inset-x-(--spacing-md) data-[floating]:bottom-(--spacing-md) sm:data-[floating]:inset-x-auto sm:data-[floating]:end-(--spacing-md) sm:data-[floating]:w-(--container-xs)"
   >
     <span
@@ -166,8 +166,8 @@
     >
     <div class="flex min-w-0 items-center gap-(--spacing-xs)">
       <OutcomeMark
-        v-if="state !== 'running'"
-        :severity="state === 'done' ? 'success' : 'danger'"
+        v-if="status !== 'running'"
+        :severity="status === 'success' ? 'success' : 'danger'"
         size="medium"
         animated
       />
@@ -185,7 +185,7 @@
         {{ heading }}
       </p>
       <span
-        v-if="state === 'running'"
+        v-if="status === 'running'"
         class="shrink-0 text-label-sm text-(--text-muted)"
         >{{ percentText }}</span
       >
@@ -200,7 +200,7 @@
         @click="toggleList"
       />
       <IconButton
-        v-if="state !== 'running'"
+        v-if="status !== 'running'"
         icon="ai ai-x"
         kind="transparent"
         size="small"
@@ -211,7 +211,7 @@
     </div>
 
     <Progress
-      v-if="state === 'running'"
+      v-if="status === 'running'"
       :value="percent"
       size="small"
       kind="rounded"
@@ -277,7 +277,7 @@
               </div>
               <IconButton
                 key="icon-button-2"
-                v-if="cancelable && (item.status === 'queued' || item.status === 'running')"
+                v-if="cancelable && (item.status === 'pending' || item.status === 'running')"
                 icon="ai ai-x"
                 kind="transparent"
                 size="small"
@@ -296,7 +296,7 @@
                 @click="emit('retry', $event, item.id)"
               />
               <i
-                v-else-if="item.status === 'done'"
+                v-else-if="item.status === 'success'"
                 class="ai ai-check shrink-0 px-(--spacing-xs) text-(--text-muted)"
                 aria-hidden="true"
               />
@@ -315,11 +315,11 @@
     </ul>
 
     <div
-      v-if="(state === 'running' && cancelable) || state === 'failed' || showActions()"
+      v-if="(status === 'running' && cancelable) || status === 'error' || showActions()"
       class="flex flex-wrap items-center justify-end gap-(--spacing-xs)"
     >
       <Button
-        v-if="state === 'running' && cancelable"
+        v-if="status === 'running' && cancelable"
         :label="t('uploadProgress.cancelAll')"
         kind="outlined"
         size="small"
@@ -328,7 +328,7 @@
       />
       <Button
         key="button-2"
-        v-if="state === 'failed'"
+        v-if="status === 'error'"
         :label="t('uploadProgress.retryFailed')"
         icon="ai ai-refresh"
         kind="outlined"
@@ -337,7 +337,7 @@
         @click="emit('retry', $event)"
       />
       <slot
-        v-if="state !== 'running'"
+        v-if="status !== 'running'"
         name="actions"
       />
     </div>

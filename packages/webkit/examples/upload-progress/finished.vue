@@ -3,10 +3,10 @@
   import UploadProgress from '@aziontech/webkit/upload-progress'
 
   const items = [
-    { id: 'logo', name: 'logo.svg', size: 4210, status: 'done' },
-    { id: 'app', name: 'app.js', size: 248_320, status: 'done' },
+    { id: 'logo', name: 'logo.svg', size: 4210, status: 'success' },
+    { id: 'app', name: 'app.js', size: 248_320, status: 'success' },
     { id: 'video', name: 'intro.mp4', size: 96_400_000, status: 'error', error: 'Connection lost' },
-    { id: 'styles', name: 'styles.css', size: 52_100, status: 'done' }
+    { id: 'styles', name: 'styles.css', size: 52_100, status: 'success' }
   ]
 </script>
 

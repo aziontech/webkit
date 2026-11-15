@@ -28,7 +28,7 @@
   }>()
 
   const emit = defineEmits<{
-    toggle: []
+    toggle: [event: globalThis.MouseEvent]
     bind: [event: globalThis.MouseEvent | globalThis.KeyboardEvent, value: string]
     remove: [event: globalThis.MouseEvent]
     create: [event: globalThis.MouseEvent | globalThis.KeyboardEvent]
@@ -84,7 +84,7 @@
         :data-state="open ? 'open' : 'closed'"
         :data-testid="`${testId}__node-trigger`"
         class="group flex w-full items-center gap-(--spacing-2xs) rounded-t-(--shape-card) px-(--spacing-md) pt-(--spacing-sm) pb-(--spacing-2xs) text-start outline-none transition-colors duration-moderate-01 ease-productive-entrance hover:bg-(--bg-hover) focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset motion-reduce:transition-none"
-        @click="emit('toggle')"
+        @click="(event: globalThis.MouseEvent) => emit('toggle', event)"
       >
         <i
           v-if="node.icon"

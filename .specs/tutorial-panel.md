@@ -3,9 +3,9 @@ name: tutorial-panel
 category: content
 structure: composition
 status: implemented
-spec_version: 5
+spec_version: 6
 template: 2
-checksum: e2016d65d54dbbe33fea6d08600388788d0d7b2d52b60b4a76d337a1f55d10eb
+checksum: dfb322cd166a045ea8bf7d6e96fa3d9d21a138de4a8c35cc0df56b1058bd7a75
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -56,7 +56,7 @@ Cloudscape's tutorial panel, hotspot and annotation context, rebuilt on WebKit p
 - Keep tutorials as data (`Tutorial[]`): the panel lists them and the hotspots on the page read the same steps. This is the one place a config array is right — the step content is shown away from where it is declared.
 - One step, one control. Write the step title as the action (`Name the service`) and the content as one or two sentences.
 - Place every `Hotspot` a tutorial names on the page that runs it. A step whose hotspot is missing still shows in the panel, and focus moves to it there.
-- Set `completed` on a tutorial from what the product recorded (the `finish` event), not from a click.
+- Set `completed` on a tutorial from what the product recorded (the `complete` event), not from a click.
 - Bind `v-model:active` and `v-model:step` and persist them when a tutorial must survive a navigation.
 
 ## Usage
@@ -140,11 +140,11 @@ the optional variant, which returns null so a hotspot outside a provider renders
 - `tutorial-panel-provider/tutorial-panel-provider.vue` — Holds the tutorials, the running tutorial (`v-model:active`), the current step (`v-model:step`, flat across tasks), whether the reader dismissed the current step, and the hotspots on the page. Renders only its slot (no element).
   - Props: `tutorials?: Tutorial[]` (default `[]`).
   - Models (`defineModel`): `v-model:active` (`string \| null`, default `null` — the parent owns it when bound, the provider keeps it locally when not), `v-model:step` (`number`, default `0`, same rule; equals the step count once the tutorial is finished).
-  - Events: `update:active` (`string \| null`) and `update:step` (`number`) from the models; `start` (`string` — the tutorial id, on Start and Restart), `exit` (`string` — on Exit or Back to tutorials), `finish` (`string` — on Finish of the last step). `start`, `exit` and `finish` are tutorial state events, not activation events: they report what the tutorial did, reached through the context from the panel's buttons, and carry no DOM event by design.
+  - Events: `update:active` (`string \| null`) and `update:step` (`number`) from the models; `start` (`(event: Event, id: string)` — the tutorial id, on Start and Restart), `exit` (`(event: Event, id: string)` — on Exit or Back to tutorials), `complete` (`(event: Event, id: string)` — on Finish of the last step). Each fires from a button the reader activated (in the panel or a `Hotspot` popover, through the context), so the DOM event comes first and the tutorial id second.
   - Slot: `default` — the page, with the panel and every hotspot inside.
 
 - `tutorial-panel-tasks/tutorial-panel-tasks.vue` — internal, not exported: a tutorial's title, description, a progress line derived from the registered tasks (`2 of 3 complete`, `aria-live="polite"`), the ordered task `<ol>` and an actions row. Provides the task registry (`TutorialTasksInjectionKey`) to its tasks. `data-testid` fallback `content-tutorial-panel-tasks`; the panel passes `<testId>__tutorial`. `data-completed` mirrors its `completed` prop.
-- `tutorial-panel-task/tutorial-panel-task.vue` — internal, not exported: one task, a numbered marker, a title and its steps. An `<li>` that registers with the task list on mount (ordinal + `status`), `data-status` mirrors `status` (`upcoming` / `current` / `complete`), the `current` task carries `aria-current="step"`, and an `sr-only` status word (`Not started`, `Current task`, `Complete`). Throws outside the task list. `data-testid` fallback `content-tutorial-panel-task`.
+- `tutorial-panel-task/tutorial-panel-task.vue` — internal, not exported: one task, a numbered marker, a title and its steps. An `<li>` that registers with the task list on mount (ordinal + `status`), `data-status` mirrors `status` (`pending` / `success`), the `active` task (boolean prop) carries `data-active` and `aria-current="step"`, and an `sr-only` status word (`Not started`, `Current task`, `Complete`). Throws outside the task list. `data-testid` fallback `content-tutorial-panel-task`.
 
 Exported types: `Tutorial` (`id`, `title`, `description?`, `completed?`, `tasks`), `TutorialTask` (`title`, `steps`), `TutorialStep` (`title`, `content`, `hotspotId`).
 
@@ -186,7 +186,7 @@ Composed DS components (relative imports): `help-panel` (root, `Header`), `butto
 
 ## Events
 
-_No events on the panel — every action goes through the provider, which emits `start`, `exit`, `finish`, `update:active` and `update:step`._
+_No events on the panel — every action goes through the provider, which emits `start`, `exit`, `complete`, `update:active` and `update:step`._
 
 ## Slots
 
@@ -199,7 +199,7 @@ _No events on the panel — every action goes through the provider, which emits 
 - Visual states: `list`, `running`, `complete`, `empty` (no tutorials, rendered by a small `EmptyState` titled with `tutorialPanel.empty`), `loading`
 - `data-view` on the root: `list` | `running` | `complete`
 - `data-completed` on each list item mirrors the tutorial's `completed`
-- In `running`, each task's status is derived from the current step: `complete` when every step of the task is behind it, `current` when it holds the current step, `upcoming` otherwise. The current step's row carries `aria-current="step"`.
+- In `running`, each task's status is derived from the current step: `success` when every step of the task is behind it, `pending` otherwise; the task that holds the current step is `active`. The current step's row carries `aria-current="step"`.
 - `complete` shows a completion section (check icon, `Tutorial complete`, `You finished <title>.`, the `completion` slot, Restart and Back to tutorials) above the task list, every task complete.
 
 ## Motion & Animations

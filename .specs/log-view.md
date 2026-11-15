@@ -3,12 +3,12 @@ name: log-view
 category: code
 structure: composition
 status: implemented
-spec_version: 9
+spec_version: 10
 template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3950-34695
   node_id: 3950:34695
-checksum: 934ec04a36522b8797050945ce4f65140d409ed2d99077aaf56a7f8d8b645d5a
+checksum: 3ca4cc262b54ed6515d96931ae28d44eaf0c1f7800996de6fd574251064ace42
 created: 2026-05-26
 last_updated: 2026-11-15
 ---
@@ -48,7 +48,7 @@ Use LogView for build, deploy or runtime log lines, and LogView.Steps when the r
 - Bind `v-model:search` and `v-model:level` when the app needs the filter state; otherwise leave them unbound and the header manages them.
 - Set `:bordered="false"` when the log sits inside a surface that already frames it (an accordion panel, a drawer).
 - The copy control hides while `disabled` or `loading`, or when there is nothing to copy; listen to `@copy` for the copied text instead of reading the clipboard.
-- Use the header's `left` / `right` / `search` slots and the footer's default slot to add actions, rather than rebuilding the toolbar.
+- Use the header's `start` / `end` / `search` slots and the footer's default slot to add actions, rather than rebuilding the toolbar.
 
 ## Usage
 
@@ -98,8 +98,8 @@ Use LogView for build, deploy or runtime log lines, and LogView.Steps when the r
   import LogView from '@aziontech/webkit/log-view'
 
   const steps = [
-    { key: 'build', title: 'Build', status: 'done', duration: '9s', lines: buildLines },
-    { key: 'publish', title: 'Publish', status: 'running', lines: publishLines }
+    { id: 'build', title: 'Build', status: 'success', duration: '9s', lines: buildLines },
+    { id: 'publish', title: 'Publish', status: 'running', lines: publishLines }
   ]
 </script>
 
@@ -117,10 +117,10 @@ Use LogView for build, deploy or runtime log lines, and LogView.Steps when the r
 
 LogView ships its sub-components attached to the root (`LogView.Header`, `LogView.Content`, `LogView.Footer`, `LogView.Steps`, via `index.ts`) and individually importable (each from its own `@aziontech/webkit/log-view-*` entry); every sub-component reads the root's shared state through the injected context, so the consumer wires nothing.
 
-- `log-view-header.vue` (`LogView.Header`) — Default 48px toolbar: line count, warning filter (a native button that toggles `level` between `warn` and every level, 32 px, 44 px on coarse pointers), the level filter (one toggle per entry of `levels`, with its line count) and a search field. Slots: `left`, `right`, `search`.
+- `log-view-header.vue` (`LogView.Header`) — Default 48px toolbar: line count, warning filter (a native button that toggles `level` between `warn` and every level, 32 px, 44 px on coarse pointers), the level filter (one toggle per entry of `levels`, with its line count) and a search field. Slots: `start`, `end`, `search`.
 - `log-view-content.vue` (`LogView.Content`) — Scrollable log body with per-`type` line rendering, search highlighting, `ScrollArea`'s `fade` on the log body (the edges that still have lines beyond them fade out), and the copy-to-clipboard control (a `CopyButton` pinned top-right over the log content, shown when `copyable` is set). When `loading` is set, it replaces the log body with a centered `Spinner` (`@aziontech/webkit/spinner`) and the `loadingLabel` text (`role="status"`). When `error` is set, it replaces the body with a danger `Alert` holding the message. With no line to show, it renders the package `EmptyState` (small): "No log lines yet." for an empty log, "No line matches “query”" with a Clear search action for a search with no result, and "No log lines match the current filters." for a level or warnings filter with no result. Slot: `empty` (replaces the EmptyState).
 - `log-view-footer.vue` (`LogView.Footer`) — Optional footer region for actions (download, follow live, pagination). Slot: `default`.
-- `log-view-steps.vue` (`LogView.Steps`) — A run with known steps, standalone (it renders its own `LogView` per step and needs no parent `LogView`). An optional toolbar row (`__toolbar`, shown when the `header` slot is filled or `viewSwitch` is on) holds the `header` slot at the start and, with `viewSwitch`, a `ToggleGroup` (`__view-switch`, named `Log view`) switching **Phased** and **Complete** at the end. Phased renders an `Accordion` (`type="single"`, collapsible) with one item per step (`__step`, `data-status`): the trigger shows the status glyph (done: a success check; failed: a danger cross; skipped: a muted minus; running: a `Spinner`; pending: a dashed circle), the status in words for assistive technology (`sr-only`), the title, the `step-meta` slot, the description (danger text when failed, a shimmer while running) and the duration; the panel holds a borderless `LogView` + `LogView.Content` over the step's lines, loading with `Waiting to start…` while the step is pending, and the `step-empty` slot in place of the empty state (a skipped step defaults to `Never ran.`). Complete renders every step's lines as one borderless `LogView` (`__complete`; line ids are prefixed with the step key). With `progress`, a flush, small, flat `Progress` (`__progress`, named `Run progress`) sits on the bottom edge; its value is the share of steps done. Props: `steps?: LogViewStep[]` (default `[]`), `copyable?: boolean` (default `true`, forwarded to each log), `viewSwitch?: boolean` (default `true`), `progress?: boolean` (default `false`). Models: `v-model:view` (`LogViewStepsView` = `'phased' | 'complete'`, default `'phased'`), `v-model:open-step` (`string`, the key of the open step; unbound, the running step opens, else the failed one, else none). Slots: `header`, `step-meta({ step })`, `step-empty({ step })`. Test ids: `code-log-view__steps` (a consumer `data-testid` wins) and `__toolbar`, `__view-switch`, `__step`, `__complete`, `__progress` under it.
+- `log-view-steps.vue` (`LogView.Steps`) — A run with known steps, standalone (it renders its own `LogView` per step and needs no parent `LogView`). An optional toolbar row (`__toolbar`, shown when the `header` slot is filled or `viewSwitch` is on) holds the `header` slot at the start and, with `viewSwitch`, a `ToggleGroup` (`__view-switch`, named `Log view`) switching **Phased** and **Complete** at the end. Phased renders an `Accordion` (`type="single"`, collapsible) with one item per step (`__step`, `data-status`): the trigger shows the status glyph (success: a success check; error: a danger cross; skipped: a muted minus; running: a `Spinner`; pending: a dashed circle), the status in words for assistive technology (`sr-only`), the title, the `step-meta` slot, the description (danger text on error, a shimmer while running) and the duration; the panel holds a borderless `LogView` + `LogView.Content` over the step's lines, loading with `Waiting to start…` while the step is pending, and the `step-empty` slot in place of the empty state (a skipped step defaults to `Never ran.`). Complete renders every step's lines as one borderless `LogView` (`__complete`; line ids are prefixed with the step id). With `progress`, a flush, small, flat `Progress` (`__progress`, named `Run progress`) sits on the bottom edge; its value is the share of steps that succeeded. Props: `steps?: LogViewStep[]` (default `[]`), `copyable?: boolean` (default `true`, forwarded to each log), `viewSwitch?: boolean` (default `true`), `progress?: boolean` (default `false`). Models: `v-model:view` (`LogViewStepsView` = `'phased' | 'complete'`, default `'phased'`), `v-model:open-step` (`string`, the id of the open step; unbound, the running step opens, else the one in error, else none). Slots: `header`, `step-meta({ step })`, `step-empty({ step })`. Test ids: `code-log-view__steps` (a consumer `data-testid` wins) and `__toolbar`, `__view-switch`, `__step`, `__complete`, `__progress` under it.
 
 ## Props
 
@@ -177,17 +177,17 @@ LogView ships its sub-components attached to the root (`LogView.Header`, `LogVie
 
 | Field         | Type                                                          | Notes                                          |
 | ------------- | ------------------------------------------------------------- | ---------------------------------------------- |
-| `key`         | `string`                                                      | Stable step key; `v-model:open-step` holds it. |
+| `id`          | `string`                                                      | Stable step id; `v-model:open-step` holds it. |
 | `title`       | `string`                                                      | Step name.                                     |
 | `description` | `string`                                                      | Optional one-line summary or failure reason.   |
-| `status`      | `'done' \| 'running' \| 'failed' \| 'skipped' \| 'pending'` | `LogViewStepStatus`; drives the glyph.         |
+| `status`      | `'success' \| 'running' \| 'error' \| 'skipped' \| 'pending'` | `LogViewStepStatus`; drives the glyph.         |
 | `duration`    | `string`                                                      | Optional time label (`4s`).                    |
 | `lines`       | `LogViewLine[]`                                               | The step's own log lines.                      |
 
 ## States
 
 - Visual states: `default`, `hover` (per log line), `focus-visible`, `disabled`, `loading`, `error`, `empty`
-- `data-disabled` / `data-level` / `data-loading` / `data-error` / `data-border` on the LogView root
+- `data-disabled` / `data-level` / `data-loading` / `data-error` / `data-bordered` on the LogView root
 - `level` is the one severity axis: the warnings filter, the warning count and the level toggles all read `level`; the warning filter is the `warn` level toggle (it sets and clears `v-model:level`)
 - `error` state: LogViewContent renders a danger `Alert` with the message in place of the log body; copy is hidden
 - `empty` state: the package `EmptyState` (see LogViewContent above)
