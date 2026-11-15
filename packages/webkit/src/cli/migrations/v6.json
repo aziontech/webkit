@@ -504,7 +504,6 @@
     "SelectOptionProps": "SelectItemProps",
     "MultiSelectOptionProps": "MultiSelectItemProps",
     "KeyValuePairsColumns": "KeyValueListColumns",
-    "TabsRootProps": "TabsRootProps",
     "CopyPromptAgent": "CopyPromptButtonAgent",
     "FeedbackReason": "FeedbackReasonDialogReason",
     "FeedbackReasonPayload": "FeedbackReasonDialogPayload",
@@ -579,8 +578,7 @@
     "ToasterProps": "ToastProps",
     "FilterMenuChipsProps": "FilterMenuChipGroupProps",
     "DropdownMenuOptionProps": "DropdownMenuItemProps",
-    "ConsoleLayoutBreadcrumbsProps": "ConsoleLayoutBreadcrumbProps",
-    "TabsProps": "TabsRootProps"
+    "ConsoleLayoutBreadcrumbsProps": "ConsoleLayoutBreadcrumbProps"
   },
   "legacy": {
     "major": 3,

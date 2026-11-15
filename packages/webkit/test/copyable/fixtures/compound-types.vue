@@ -1,19 +1,19 @@
 <script setup lang="ts">
   import Accordion, { type AccordionValue } from '@aziontech/webkit/accordion'
   import type { PopoverPlacement } from '@aziontech/webkit/popover'
-  import Stepper, { type StepperStepState } from '@aziontech/webkit/stepper'
+  import Stepper, { type StepperStepStatus } from '@aziontech/webkit/stepper'
   import type { TableSortDirection, TableStateSnapshot } from '@aziontech/webkit/table'
   import { ref } from 'vue'
 
   const open = ref<AccordionValue>(null)
   const step = ref<string>('domain')
-  const stateOf = (value: string): StepperStepState =>
-    value === 'domain' ? 'complete' : 'upcoming'
+  const statusOf = (value: string): StepperStepStatus =>
+    value === 'domain' ? 'success' : 'pending'
   const placement: PopoverPlacement = 'auto'
   const direction: TableSortDirection = 'ascending'
   const snapshot: TableStateSnapshot = { globalFilter: '' }
-  // @ts-expect-error a step state is one of the four states
-  const wrong: StepperStepState = 'done'
+  // @ts-expect-error a step status is one of the four statuses
+  const wrong: StepperStepStatus = 'done'
 </script>
 
 <template>
@@ -28,7 +28,7 @@
   <Stepper v-model="step">
     <Stepper.Step
       value="domain"
-      :state="stateOf('domain')"
+      :status="statusOf('domain')"
     />
   </Stepper>
 </template>
