@@ -102,7 +102,7 @@ Run the minimum relevant validations for the scope of your change.
 - Any change in `packages/webkit/src/components/**`:
   - `pnpm lint:webkit`
   - `pnpm typecheck:webkit`
-  - `pnpm type-coverage:webkit`
+  - `pnpm check:webkit:type-coverage`
   - `pnpm --filter @aziontech/webkit test:ssr`
 
 If a full validation is too expensive, run targeted checks and document what was/was not validated.
@@ -232,7 +232,7 @@ renders each beside its source; the first is screenshotted in light and dark by 
 ```bash
 pnpm lint:webkit
 pnpm typecheck:webkit
-pnpm type-coverage:webkit
+pnpm check:webkit:type-coverage
 pnpm --filter @aziontech/webkit test:ssr
 ```
 

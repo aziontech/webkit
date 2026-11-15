@@ -255,7 +255,7 @@ Two mechanisms, verified in CI (`governance.yml` → build job):
 | `pnpm test:webkit:ui`                        | Vitest UI with a **headed** browser (debugging)                      |
 | `pnpm test:webkit:coverage`                  | suite + V8 coverage report (`text` + `lcov`)                         |
 | `pnpm test:visual`                           | styled screenshots vs baselines (after `build:docs` + `build:demos`) |
-| `pnpm regenerate:baselines`                  | dispatch the baseline workflow for this branch                       |
+| `pnpm update:baselines`                  | dispatch the baseline workflow for this branch                       |
 | `pnpm --filter @aziontech/webkit check:pack` | assert no test file leaks into the npm tarball                       |
 
 ---

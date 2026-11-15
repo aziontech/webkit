@@ -28,10 +28,10 @@ All examples follow the repo's own conventions (PascalCase components, `<script 
 | Command (repo root)                                | What it checks                                               |
 | -------------------------------------------------- | ------------------------------------------------------------ |
 | `pnpm lint:webkit` / `lint:webkit:fix`             | ESLint (§2–§6), zero warnings / with auto-fix                |
-| `pnpm lint-style:webkit` / `lint-style:webkit:fix` | Stylelint (§7) / with auto-fix                               |
-| `pnpm check-format:webkit` / `format:webkit`       | Prettier (§8) check / write                                  |
+| `pnpm lint:webkit:style` / `lint:webkit:style:fix` | Stylelint (§7) / with auto-fix                               |
+| `pnpm check:webkit:format` / `format:webkit`       | Prettier (§8) check / write                                  |
 | `pnpm typecheck:webkit`                            | `vue-tsc --noEmit` (§9)                                      |
-| `pnpm type-coverage:webkit`                        | type-coverage ≥ 95% (§9)                                     |
+| `pnpm check:webkit:type-coverage`                        | type-coverage ≥ 95% (§9)                                     |
 | `pnpm gates`                                       | lint + typecheck + format check + audit — local mirror of CI |
 
 On `git commit`, husky runs lint-staged (ESLint/Stylelint/Prettier with auto-fix on staged files) and commitlint (§10). Never bypass with `--no-verify` — forbidden by [`git-workflow.md`](../rules/git-workflow.md).
@@ -1169,7 +1169,7 @@ The same selector twice in one sheet is a merge waiting to happen.
 
 ### `order/properties-alphabetical-order`
 
-Properties always alphabetical — declaration diffs stay minimal. Auto-fixable (`pnpm lint-style:webkit:fix`).
+Properties always alphabetical — declaration diffs stay minimal. Auto-fixable (`pnpm lint:webkit:style:fix`).
 
 **❌ Wrong**
 
@@ -1465,7 +1465,7 @@ const config = JSON.parse(raw) as ThemeConfig
 config.theme.colors.primary // fully typed
 ```
 
-Run `pnpm type-coverage:webkit` — `--detail` lists every offending expression.
+Run `pnpm check:webkit:type-coverage` — `--detail` lists every offending expression.
 
 ---
 

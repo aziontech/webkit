@@ -209,8 +209,8 @@ Comprehensive npm scripts for local development and CI/CD.
 | Script              | Reason                                                                                                                                                                                                             |
 | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | **`prepare`**       | Runs `husky` to initialize Git hooks after `pnpm install`. Ensures hooks are set up on every machine.                                                                                                              |
-| **`<verb>:webkit`** | Delegation scripts (`lint:webkit`, `typecheck:webkit`, `check-format:webkit`, `test:webkit`, …) via `pnpm --filter @aziontech/webkit`, so any check runs from the repo root — these are the entry points CI calls. |
-| **`gates`**         | Unified command running all static checks: `lint:webkit` + `lint-style:webkit` + `check-format:webkit` + `typecheck:webkit` + `type-coverage:webkit` + `audit`. Single command to reproduce CI locally.            |
+| **`<verb>:webkit`** | Delegation scripts (`lint:webkit`, `typecheck:webkit`, `check:webkit:format`, `test:webkit`, …) via `pnpm --filter @aziontech/webkit`, so any check runs from the repo root — these are the entry points CI calls. |
+| **`gates`**         | Unified command running all static checks: `lint:webkit` + `lint:webkit:style` + `check:webkit:format` + `typecheck:webkit` + `check:webkit:type-coverage` + `audit`. Single command to reproduce CI locally.            |
 | **`audit`**         | Runs plain **`pnpm audit`** — any severity fails (deliberately stricter than `--audit-level=high`). Accepted-risk overrides live in `pnpm-workspace.yaml`, not in a lowered threshold.                             |
 
 ### Design Decisions
@@ -439,8 +439,8 @@ pnpm run gates
 # Individual checks
 pnpm run lint:webkit
 pnpm run typecheck:webkit
-pnpm run check-format:webkit
-pnpm run audit
+pnpm run check:webkit:format
+pnpm run check:audit
 
 # Functional tests (Vitest browser mode)
 pnpm run test:browser-webkit
@@ -518,7 +518,7 @@ pnpm run prepare  # Re-initialize hooks
 #### Type Coverage Too Low
 
 ```bash
-pnpm run type-coverage:webkit  # See detailed report
+pnpm run check:webkit:type-coverage  # See detailed report
 ```
 
 #### CI Job Failing Locally

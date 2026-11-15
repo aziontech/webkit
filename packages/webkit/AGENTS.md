@@ -37,7 +37,7 @@ Component creation under `components/**` is **always** driven by the pipeline at
 ```bash
 pnpm lint:webkit
 pnpm typecheck:webkit
-pnpm type-coverage:webkit
+pnpm check:webkit:type-coverage
 pnpm --filter @aziontech/webkit test:ssr
 ```
 

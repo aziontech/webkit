@@ -2,7 +2,7 @@ name: Visual baselines
 
 # The committed baselines in apps/visual/baselines are the CI contract. They are taken in the
 # same container image the visual job runs in, so fonts and rasterization match. Dispatch this
-# on a branch (pnpm regenerate:baselines) after an intended visual change, review the uploaded
+# on a branch (pnpm update:baselines) after an intended visual change, review the uploaded
 # images (the visual-baseline-review artifact shows each changed file before and after), then
 # commit them to the branch.
 

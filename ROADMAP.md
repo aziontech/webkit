@@ -345,7 +345,7 @@ foundations (color, typography, spacing, radius, shadows, motion, z-index parsed
 `/llms/` (plus `/llms.txt`) and every component, block and foundation page links its `.md` as
 "View as Markdown". Marketing examples' `/marketing-components/…` URLs resolve to the package's
 `assets/*` exports. Use `pnpm docs:dev`,
-`docs:build`, `docs:preview`, `docs:smoke` (Playwright over every route, console errors and axe on a
+`docs:build`, `docs:preview`, `test:docs:smoke` (Playwright over every route, console errors and axe on a
 sample in both themes, WebKit findings already in `a11y-known.json` counted as known); how pages are generated and how to deploy statically is in
 `apps/docs/README.md`.
 

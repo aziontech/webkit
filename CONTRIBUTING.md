@@ -266,10 +266,10 @@ Before opening a PR, all of these must pass:
 
 ```bash
 pnpm lint:webkit            # ESLint, max-warnings 0
-pnpm lint-style:webkit      # Stylelint
+pnpm lint:webkit:style      # Stylelint
 pnpm typecheck:webkit      # vue-tsc --noEmit
-pnpm type-coverage:webkit   # type-coverage >= 95%
-pnpm check-format:webkit    # Prettier
+pnpm check:webkit:type-coverage   # type-coverage >= 95%
+pnpm check:webkit:format    # Prettier
 pnpm --filter @aziontech/webkit test:ssr   # renders every block and example (SFC compile errors invisible to vue-tsc)
 pnpm build:docs             # the docs site, every route prerendered
 ```
@@ -324,7 +324,7 @@ pnpm test:visual             # compare with apps/visual/baselines
 step is the baseline. Baselines are committed and are valid only when taken in
 `mcr.microsoft.com/playwright:v1.62.0-noble` (the image the CI `visual` job runs in): dispatch
 `.github/workflows/visual-baselines.yml` with `update_baselines=true`
-(`pnpm regenerate:baselines`), review the `visual-baselines` artifact and commit it
+(`pnpm update:baselines`), review the `visual-baselines` artifact and commit it
 (`/baselines-regenerate`). Failed comparisons upload the Playwright report (with diffs) as an artifact.
 
 ## Commit convention
