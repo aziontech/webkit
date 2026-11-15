@@ -4,9 +4,9 @@ category: marketing
 structure: monolithic
 status: implemented
 spec_version: 2
-checksum: 884a18a46ab75b7b09c6c3bea1a589d113b0d467333f2a351476ed8b7cdada05
+checksum: 3071c466f05079e6010e1083ba61e990034aad099e7d7f4419ff902f66f27431
 created: 2026-09-22
-last_updated: 2026-11-11
+last_updated: 2026-11-15
 ---
 
 # Media Split — Component Spec
@@ -35,7 +35,7 @@ Whether the band ever splits is `orientation`'s call. `horizontal` is the band p
 ## When NOT to use
 
 - For copy with no media → use `section-title`, which is the header band.
-- For the closing ask → use `call-to-action`; for a mid-page announcement → use `banner`.
+- For the closing ask → use `call-to-action`; for a mid-page announcement → use `call-to-action` with `kind="announcement"`.
 - For several short claims side by side → use `topic` in a `card-grid`.
 - For a picture with no explanation → use `illustration` directly.
 

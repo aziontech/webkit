@@ -18,6 +18,11 @@
       "file": "types.vue"
     },
     {
+      "name": "Announcement",
+      "summary": "The loud mid-page announcement: the eyebrow, the headline and its action in a wide leading column on the surface, and the supporting note set large on a raised trailing column a third of the band wide from `md` up. The note comes from the default slot here because it carries a link; a plain note is the `description`.",
+      "file": "announcement.vue"
+    },
+    {
       "name": "Primary",
       "summary": "The loud close. The band keeps the canvas ground and owns the light: it moves the resting pools of the composed pixelate out of frame and runs its two waves at triple gain and double pace, so bright and dark bands of the primary colour keep travelling across the headline instead of a still glow. What is drawn is composed in: a pixelated `TextureMaterial` through `background`, and a benefits `Ticker` through `bottom`. The waves stand still under reduced motion.",
       "file": "primary.vue"

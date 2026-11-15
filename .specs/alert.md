@@ -8,7 +8,7 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=478-892
   node_id: 478:892
-checksum: b52868a1bb5bd53a60635fb0682e69869b8df261cdadba47125ce7f2279446d8
+checksum: 974e6cf15358aa107771352f26d2ba8f194a89d3f215b42bbe5fac3a9caefc90
 created: 2026-05-22
 last_updated: 2026-11-15
 ---
@@ -30,7 +30,7 @@ Inline feedback banner that communicates status, alerts, or progress. Presents a
 - A transient confirmation of an action → use `toast`.
 - Validation feedback under one form field → use `helper-text`.
 - An admonition inside documentation prose → use `doc-callout`.
-- A promotional band between page sections → use `banner`.
+- A promotional band between page sections → use `call-to-action` with `kind="announcement"`.
 
 ## Related
 

@@ -4,7 +4,7 @@ category: marketing
 structure: composition
 status: implemented
 spec_version: 5
-checksum: 38d8a7345c745ae91d4526d18d40ebdada1f1e1ead6b1ab2c55541fdadf6fd7a
+checksum: 167331da0c41efdee530da4fadfbc2c93f6807554d92fb0cd17381db789fcd7d
 created: 2026-09-22
 last_updated: 2026-11-15
 ---
@@ -27,7 +27,7 @@ The opening band of a page: a full-bleed section spanning the whole viewport wid
 - For the framed column of bands below the opening → use `section-container`.
 - For one band inside that column → use `section-module`.
 - For a section header further down the page → use `section-title`, which renders an `h2`.
-- For a mid-page announcement → use `banner`; for the closing ask → use `call-to-action`.
+- For a mid-page announcement → use `call-to-action` with `kind="announcement"`; for the closing ask → use `call-to-action`.
 - For a copy-and-media pairing that is not the page opening → use `media-split`.
 
 ## Related
@@ -36,7 +36,7 @@ The opening band of a page: a full-bleed section spanning the whole viewport wid
 - `section-module` — the brick stacked inside that column.
 - `texture-material` — the backdrop the `texture` and `floorTexture` props paint, at the pitch `textureSize` and `floorTextureSize` set; reach for the `background` slot only when the layer needs more than kind, size and fade.
 - `media-split` — the same copy-beside-media shape at section scale, rendering an `h2`.
-- `banner` — the mid-page announcement band.
+- `call-to-action` — the mid-page announcement band (`kind="announcement"`) and the closing ask.
 
 ## Best practices
 

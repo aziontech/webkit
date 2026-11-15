@@ -3,10 +3,10 @@ name: call-to-action
 category: marketing
 structure: monolithic
 status: implemented
-spec_version: 3
-checksum: 664aaa09e197ed557abe302326ac71f04b4c9faef591e4e694df50af54e86786
+spec_version: 4
+checksum: b482f506c6e958d4564cd60fb389684134004f05b88a845845ee525fac05711c
 created: 2026-09-22
-last_updated: 2026-11-14
+last_updated: 2026-11-15
 ---
 
 # Call To Action — Component Spec
@@ -19,22 +19,27 @@ Four registers. `panel` sets the copy and its controls on one surface, as a row 
 
 `lead` is that lead cell standing alone: the same raised surface, the same two-tone headline, with the supporting line moved under it and every control in one row on the band's floor. It is the register for a close that has no second, quieter path to describe — the band states the ask once and offers its actions together, rather than dividing them across two cells of unequal weight.
 
+`announcement` is the loud mid-page interruption: the announcement, its eyebrow and its actions in a wide leading column on the surface, and a short supporting note set large on a raised trailing column (a third of the band from `md` up, stacked under it below). The note is the `description`, or the default slot when it carries a link.
+
 `primary` is the loud close: one centred ask standing alone as a billboard, on the page canvas lit from above by the brand. The texture composed into the band — a pixelated layer whose two waves travel across it in the primary colour — is lit by its waves alone and carries the band's colour, so the ground stays the canvas and the copy keeps its ordinary ink. The texture is composed in through the `background` slot and the strip along the floor through `bottom`, so the band owns the light and the page owns what is drawn on it.
 
 ## When to use
 
+- Use CallToAction (primitive) for an ask panel inside a hand-built SFC, mid-page or closing; set `kind="announcement"` for a loud mid-page announcement.
+- Rendering page JSON, or you need a whole band with no custom content → the section (`closing-call-to-action`). Building an SFC by hand, needing slots, or nesting inside another band → this primitive.
 - At the end of a marketing page or section, to carry the reader into signup, docs or sales.
 - Whenever a page needs one visually separated block whose whole job is the action.
 - Between two sections, as a mid-page ask that should not read as a new section header.
 - In `split`, when the ask has two paths of unequal weight — a primary one to start and a secondary one to talk to someone.
 - In `primary`, when the page ends on a single ask and the close should be the most lit band on the page, with benefits or proof running along its floor.
 - In `lead`, when the band's actions are peers and belong in one row, so an aside cell would have nothing of its own to carry.
+- In `announcement`, to announce a launch, programme or offer part-way down a marketing page, with its actions in a wide leading column and a short supporting note on a raised trailing column. Once per page.
 
 ## When NOT to use
 
 - To open a section with a headline and optional actions → use `section-title`, which draws a header rule rather than a panel.
 - For the page's leading statement and primary CTAs → use `hero`, whose `Hero.Title` owns the `h1`.
-- For a dismissible or time-bound announcement → use `alert`.
+- For a dismissible or time-bound notice inside the product → use `alert`.
 - For a close that sits quietly in the column → use `split` or `panel`; `primary` fills a whole brand-coloured band and should appear once per page.
 - For a plan's call to action inside pricing → use `card-pricing`, which owns its own action row.
 
@@ -157,9 +162,9 @@ import Button from '@aziontech/webkit/button'
 |---|---|---|---|---|
 | `title` | `string` | `—` | true | Headline of the band, rendered as its `h2`. |
 | `titleMuted` | `string` | `''` | false | Second line of the headline, set in muted ink; rendered as a second span of the same `h2`. |
-| `description` | `string` | `''` | false | Supporting sentence — under the headline in `panel` and `lead`, in the aside cell in `split`; overridden by the default slot. |
+| `description` | `string` | `''` | false | Supporting sentence — under the headline in `panel` and `lead`, in the aside cell in `split`, on the raised trailing column in `announcement`; overridden by the default slot. |
 | `eyebrow` | `string` | `''` | false | Short uppercase overline rendered above the headline. |
-| `kind` | `CallToActionKind` | `'panel'` | false | Layout of the band: `panel` sets the copy and its controls on one surface, `split` divides it into a raised lead cell and an aside that each floor their own control, `lead` is that lead cell standing alone with every control in it, `primary` is a centred ask on the canvas lit by a pixelated, waving primary texture, with a floor. |
+| `kind` | `CallToActionKind` | `'panel'` | false | Layout of the band: `panel` sets the copy and its controls on one surface, `split` divides it into a raised lead cell and an aside that each floor their own control, `lead` is that lead cell standing alone with every control in it, `primary` is a centred ask on the canvas lit by a pixelated, waving primary texture, with a floor, `announcement` is a mid-page announcement with its actions in a wide leading column and the supporting note on a raised trailing column. |
 | `framed` | `boolean` | `false` | false | Draw the band's own registration frame. Turn it off when the page already wraps the band in a frame. |
 
 ## Events
@@ -172,14 +177,14 @@ import Button from '@aziontech/webkit/button'
 |---|---|---|
 | `default` | — | Description body; replaces the `description` prop when provided. |
 | `actions` | — | The controls the band exists to offer; in `split`, the lead cell's primary control. |
-| `aside` | — | The aside cell's control in `split`; ignored in `panel`, `lead` and `primary`, where every control belongs in `actions`. |
+| `aside` | — | The aside cell's control in `split`; ignored in `panel`, `lead`, `primary` and `announcement`, where every control belongs in `actions`. |
 | `background` | — | Decoration drawn behind the copy in `primary`, such as a `texture-material`; ignored in the other registers. |
 | `bottom` | — | The strip that floors the band in `primary`, such as a `ticker`, under a hairline; ignored in the other registers. |
 
 ## States
 
 - Visual states: `default`
-- Register: `data-kind="panel" | "split" | "lead" | "primary"` on the root
+- Register: `data-kind="panel" | "split" | "lead" | "primary" | "announcement"` on the root
 - The band holds no state of its own; controls composed into `actions` / `aside` keep theirs
 
 ## Motion & Animations
@@ -233,6 +238,7 @@ _none_
 
 - Default
 - Types — the `panel`, `split` and `lead` registers, one under the other
+- Announcement — the mid-page announcement register with its note on the raised trailing column (justified: the one register that splits the band one-third for a note and is not a close)
 - Primary — the canvas-lit register with a pixelated texture and a ticker on the floor (justified: it is the one register that composes two other components through slots, and no arg on the Default story reaches `background` or `bottom`)
 - WithEyebrow — the overline above the headline (justified: `eyebrow` is absent from the default args and changes the panel's vertical rhythm)
 

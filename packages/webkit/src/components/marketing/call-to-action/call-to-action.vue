@@ -11,18 +11,18 @@
   })
 
   /** Layout of the band. */
-  export type CallToActionKind = 'panel' | 'split' | 'lead' | 'primary'
+  export type CallToActionKind = 'panel' | 'split' | 'lead' | 'primary' | 'announcement'
 
   interface Props {
     /** Headline of the band, rendered as its `h2`. */
     title: string
     /** Second line of the headline, set in muted ink; rendered as a second span of the same `h2`. */
     titleMuted?: string
-    /** Supporting sentence — under the headline in `panel`, in the aside cell in `split`; overridden by the default slot. */
+    /** Supporting sentence — under the headline in `panel` and `lead`, in the aside cell in `split`, on the raised trailing column in `announcement`; overridden by the default slot. */
     description?: string
     /** Short uppercase overline rendered above the headline. */
     eyebrow?: string
-    /** Layout of the band: `panel` sets the copy and its controls on one surface, `split` divides it into a raised lead cell and an aside that each floor their own control, `lead` is that lead cell standing alone with every control in it, `primary` is a centred ask on the canvas lit by a pixelated, waving primary texture, with a floor. */
+    /** Layout of the band: `panel` sets the copy and its controls on one surface, `split` divides it into a raised lead cell and an aside that each floor their own control, `lead` is that lead cell standing alone with every control in it, `primary` is a centred ask on the canvas lit by a pixelated, waving primary texture, with a floor, `announcement` is a mid-page announcement with its actions in a wide leading column and the supporting note on a raised trailing column. */
     kind?: CallToActionKind
     /** Draw the band's own registration frame. Turn it off when the page already wraps the band in a frame. */
     framed?: boolean
@@ -41,7 +41,7 @@
     default?(): unknown
     /** The controls the band exists to offer; in `split`, the lead cell's primary control. */
     actions?(): unknown
-    /** The aside cell's control in `split`; ignored in `panel`, `lead` and `primary`, where every control belongs in `actions`. */
+    /** The aside cell's control in `split`; ignored in `panel`, `lead`, `primary` and `announcement`, where every control belongs in `actions`. */
     aside?(): unknown
     /** Decoration drawn behind the copy in `primary`, such as a texture; ignored in the other registers. */
     background?(): unknown
@@ -206,6 +206,38 @@
           class="relative z-10 border-t border-(--border-default) py-(--spacing-lg)"
         >
           <slot name="bottom" />
+        </div>
+      </div>
+
+      <div
+        v-else-if="kind === 'announcement'"
+        class="flex flex-col md:flex-row"
+      >
+        <div
+          class="flex flex-col justify-between gap-(--spacing-xl) bg-(--bg-surface) p-(--spacing-xxl) md:basis-2/3 md:grow"
+        >
+          <SectionTitle
+            :framed="false"
+            kind="left"
+            :title="title"
+            :eyebrow="eyebrow"
+          />
+
+          <div
+            v-if="slots.actions"
+            class="flex w-full flex-col items-stretch gap-(--spacing-sm) [&>*]:w-full md:w-auto md:flex-row md:items-center md:[&>*]:w-auto"
+          >
+            <slot name="actions" />
+          </div>
+        </div>
+
+        <div
+          v-if="hasDescription()"
+          class="bg-(--bg-surface-raised) p-(--spacing-xxl) md:basis-1/3 md:shrink-0"
+        >
+          <p class="m-0 text-pretty text-heading-sm text-(--text-muted)">
+            <slot>{{ description }}</slot>
+          </p>
         </div>
       </div>
 
