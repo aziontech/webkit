@@ -99,23 +99,14 @@ describe('Switch', () => {
     })
   })
 
-  describe('data-focused', () => {
-    it('sets data-focused when focused is true', () => {
+  describe('focused (removed in 6.0)', () => {
+    it('neither marks data-focused nor moves focus when focused is passed', () => {
       const { getByTestId } = render(Switch, {
-        props: { focused: true },
-        attrs: { 'aria-label': 'Toggle setting' }
-      })
-
-      expect(getByTestId('input-switch').getAttribute('data-focused')).toBe('true')
-    })
-
-    it('omits data-focused when focused is false', () => {
-      const { getByTestId } = render(Switch, {
-        props: { focused: false },
-        attrs: { 'aria-label': 'Toggle setting' }
+        attrs: { focused: true, 'aria-label': 'Toggle setting' }
       })
 
       expect(getByTestId('input-switch').getAttribute('data-focused')).toBeNull()
+      expect(document.activeElement).not.toBe(getByTestId('input-switch'))
     })
   })
 

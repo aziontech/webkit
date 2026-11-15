@@ -20,8 +20,6 @@
   defineSlots<{
     /** Leading adornment before the value (an icon). */
     prefix(): unknown
-    /** @deprecated since 6.0 — use the prefix slot. Removed in 7.0. */
-    iconLeft(): unknown
   }>()
 
   const attrs = useAttrs()
@@ -172,7 +170,7 @@
     @click="onClick"
     @keydown="onKeydown"
   >
-    <slot name="prefix"><slot name="iconLeft" /></slot>
+    <slot name="prefix" />
     <span
       class="flex-1 truncate text-start data-[filled=false]:text-(--text-muted) group-data-[disabled]:text-(--text-disabled)"
       :data-filled="ctx.filled.value"
@@ -211,7 +209,7 @@
     @click="onFieldClick"
     @keydown="onFieldKeydown"
   >
-    <slot name="prefix"><slot name="iconLeft" /></slot>
+    <slot name="prefix" />
     <template v-if="ctx.kind.value === 'chips'">
       <Chip
         v-for="value in shownChips"

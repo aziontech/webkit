@@ -3,10 +3,10 @@ name: checkbox
 category: inputs
 structure: monolithic
 status: implemented
-spec_version: 6
-checksum: fd635b75300b4f8c2c6d87314a2fae1b46659ed7970fb5bed5fec11b57c40e39
+spec_version: 7
+checksum: b29f8b5a6a9cccfa0511f37cfd098fb75ac24303b6ec656be3a2f90cf96f57f6
 created: 2026-05-22
-last_updated: 2026-11-14
+last_updated: 2026-11-15
 ---
 
 # Checkbox — Component Spec
@@ -17,6 +17,7 @@ Binary selection control. Supports a single boolean (no `value`), a scalar paire
 
 ## When to use
 
+- Use a Checkbox per option inside Field.Set for two to five options that all fit on screen; use Checkbox alone for an on/off choice submitted with a form. For a longer list use MultiSelect; for an on/off setting that applies at once use Switch.
 - A bare boolean control whose label lives outside it: a table row-selection cell, an option row in a list, a settings matrix.
 - Picking several values from a short set: give each box its own `value` and bind them all to one array `v-model`.
 - A "select all" control over a partial selection: set `indeterminate` while only some children are checked.
@@ -26,7 +27,7 @@ Binary selection control. Supports a single boolean (no `value`), a scalar paire
 - A form field that needs its own label, description, or helper text → wrap it in a horizontal `field` (`Field orientation="horizontal"` + `Field.Content`).
 - Each option needs a bordered card with a label and description → use a `field` choice card (`Field.Label` wrapping a horizontal `Field`).
 - An on/off setting that applies as soon as it flips → use `switch`.
-- Only one option of the set may be chosen → use `radio-button`.
+- Only one option of the set may be chosen → use `radio-group`.
 
 ## Related
 
@@ -64,14 +65,11 @@ Binary selection control. Supports a single boolean (no `value`), a scalar paire
 | Prop            | Type      | Default     | Required | JSDoc                                                                                                                                                 |
 | --------------- | --------- | ----------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `value`         | `unknown` | `undefined` | false    | Identifier for this checkbox in a group: compared against a scalar model, or added to and removed from an array model. Unset, the model is a boolean. |
-| `binary`        | `boolean` | `false`     | false    | `@deprecated since 6.0 — leave value unset for a boolean model. Removed in 7.0.` Forces the boolean model even with a `value`.                        |
 | `indeterminate` | `boolean` | `false`     | false    | Renders the indeterminate visual (horizontal bar). Does not affect `modelValue`; the parent owns the tri-state logic.                                 |
 | `disabled`      | `boolean` | `false`     | false    | Disables interaction and applies disabled tokens.                                                                                                     |
 | `readonly`      | `boolean` | `false`     | false    | Marks the field read-only; value is visible but cannot change via interaction.                                                                        |
 | `invalid`       | `boolean` | `false`     | false    | Marks the control invalid: sets `aria-invalid` and the danger border (unchecked). An enclosing `Field`'s `invalid` sets it too.                       |
-| `inputId`       | `string`  | `''`        | false    | `@deprecated since 6.0 — pass id (or let the enclosing Field set it). Removed in 7.0.` Wins over `id` while it is set.                                |
 | `name`          | `string`  | `''`        | false    | HTML name for form submission.                                                                                                                        |
-| `tabindex`      | `number`  | `0`         | false    | `@deprecated since 6.0 — pass the tabindex attribute; it falls through to the input. Removed in 7.0.`                                                 |
 
 **Generic.** The component is generic over `TModel` (default `unknown`), the type of the bound `modelValue`: `v-model` on a `Ref<boolean>` (no `value`) or a `Ref<string[]>` (with `value`) sends `update:modelValue` as that same type, so a handler needs no narrowing. Bind the shape the mode emits: a boolean with no `value`, an array or a scalar with one.
 
@@ -79,7 +77,7 @@ Binary selection control. Supports a single boolean (no `value`), a scalar paire
 
 | Model     | Type     | Default     | Emits               | Notes                                                                                                                                                                                                                                                                           |
 | --------- | -------- | ----------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `v-model` | `TModel` | `undefined` | `update:modelValue` | The bound value via `defineModel`: a boolean when `value` is unset (or `binary`); with `value`, an array (adds or removes `value`; an undefined model counts as an empty array) or a scalar (set to `value` when checked, to `null` when unchecked). Uncontrolled when unbound. |
+| `v-model` | `TModel` | `undefined` | `update:modelValue` | The bound value via `defineModel`: a boolean when `value` is unset; with `value`, an array (adds or removes `value`; an undefined model counts as an empty array) or a scalar (set to `value` when checked, to `null` when unchecked). Uncontrolled when unbound. |
 
 ## Events
 

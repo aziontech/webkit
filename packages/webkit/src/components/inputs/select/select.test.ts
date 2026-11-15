@@ -958,7 +958,7 @@ describe('Select labels, typeahead and slots', () => {
     expect(document.activeElement).toBe(options[1])
   })
 
-  it('renders the prefix slot, and the deprecated iconLeft slot as its fallback', () => {
+  it('renders the prefix slot and ignores the removed iconLeft slot', () => {
     const view = render({
       components: { Select, SelectTrigger },
       template: `<Select><SelectTrigger aria-label="Pick"><template #prefix><i data-testid="p" /></template></SelectTrigger></Select>`
@@ -969,7 +969,7 @@ describe('Select labels, typeahead and slots', () => {
       components: { Select, SelectTrigger },
       template: `<Select><SelectTrigger aria-label="Pick"><template #iconLeft><i data-testid="l" /></template></SelectTrigger></Select>`
     })
-    expect(legacy.getByTestId('l')).toBeTruthy()
+    expect(legacy.queryByTestId('l')).toBeNull()
   })
 })
 

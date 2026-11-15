@@ -11,7 +11,7 @@ const disabled = instance.getEnum('disabled', {
 })
 
 export default {
-  example: figma.code`<Checkbox v-model="checked" binary${disabled ? figma.code` disabled` : ''} />`,
+  example: figma.code`<Checkbox v-model="checked"${disabled ? figma.code` disabled` : ''} />`,
   imports: ["import Checkbox from '@aziontech/webkit/checkbox'"],
   id: 'checkbox',
   metadata: { nestable: true }

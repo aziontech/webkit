@@ -223,7 +223,7 @@ describe('Field', () => {
   it('toggles a checkbox through a horizontal field label', async () => {
     const checked = ref(false)
     const { getByText } = mount(
-      '<Field orientation="horizontal"><Checkbox v-model="checked" binary /><FieldContent><FieldLabel>Terms</FieldLabel></FieldContent></Field>',
+      '<Field orientation="horizontal"><Checkbox v-model="checked" /><FieldContent><FieldLabel>Terms</FieldLabel></FieldContent></Field>',
       () => ({ checked })
     )
     await fireEvent.click(getByText('Terms'))

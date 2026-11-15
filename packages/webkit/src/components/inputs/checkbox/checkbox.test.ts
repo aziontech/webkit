@@ -12,7 +12,7 @@ describe('Checkbox', () => {
   describe('data-testid', () => {
     it('renders the input-checkbox fallback testid on the root, input, and icon', () => {
       const { getByTestId } = render(Checkbox, {
-        props: { binary: true, modelValue: true }
+        props: { modelValue: true }
       })
 
       expect(getByTestId('input-checkbox')).toBeTruthy()
@@ -23,7 +23,7 @@ describe('Checkbox', () => {
 
     it('honors a consumer-supplied data-testid on all three parts', () => {
       const { getByTestId } = render(Checkbox, {
-        props: { binary: true, modelValue: true },
+        props: { modelValue: true },
         attrs: { 'data-testid': 'my-box' }
       })
 
@@ -47,7 +47,7 @@ describe('Checkbox', () => {
   describe('binary mode — update:modelValue', () => {
     it('emits the negated boolean when toggling from false', async () => {
       const { getByTestId, emitted } = render(Checkbox, {
-        props: { binary: true, modelValue: false }
+        props: { modelValue: false }
       })
 
       await fireEvent.click(getByTestId('input-checkbox__input'))
@@ -58,7 +58,7 @@ describe('Checkbox', () => {
 
     it('emits false when toggling from true', async () => {
       const { getByTestId, emitted } = render(Checkbox, {
-        props: { binary: true, modelValue: true }
+        props: { modelValue: true }
       })
 
       await fireEvent.click(getByTestId('input-checkbox__input'))
@@ -91,7 +91,7 @@ describe('Checkbox', () => {
 
   describe('v-model', () => {
     it('toggles its own checked state when unbound (uncontrolled)', async () => {
-      const { getByTestId, emitted } = render(Checkbox, { props: { binary: true } })
+      const { getByTestId, emitted } = render(Checkbox, { props: {} })
       const root = getByTestId('input-checkbox')
 
       expect(root.getAttribute('data-state')).toBe('unchecked')
@@ -129,8 +129,7 @@ describe('Checkbox', () => {
 
     it('stays on the parent value when a controlled parent refuses the change', async () => {
       const Host = defineComponent({
-        setup: () => () =>
-          h(Checkbox, { binary: true, modelValue: false, 'onUpdate:modelValue': () => {} })
+        setup: () => () => h(Checkbox, { modelValue: false, 'onUpdate:modelValue': () => {} })
       })
       const { getByTestId } = render(Host)
 
@@ -178,7 +177,7 @@ describe('Checkbox', () => {
   describe('checked state derivation', () => {
     it('is checked in binary mode when modelValue is truthy', () => {
       const { getByTestId } = render(Checkbox, {
-        props: { binary: true, modelValue: true }
+        props: { modelValue: true }
       })
 
       const input = getByTestId('input-checkbox__input') as HTMLInputElement
@@ -190,7 +189,7 @@ describe('Checkbox', () => {
 
     it('is unchecked in binary mode when modelValue is falsy', () => {
       const { getByTestId } = render(Checkbox, {
-        props: { binary: true, modelValue: false }
+        props: { modelValue: false }
       })
 
       const input = getByTestId('input-checkbox__input') as HTMLInputElement
@@ -223,7 +222,7 @@ describe('Checkbox', () => {
   describe('indeterminate', () => {
     it('sets the native indeterminate property, data-state and data-indeterminate, and renders the bar icon', () => {
       const { getByTestId } = render(Checkbox, {
-        props: { binary: true, modelValue: false, indeterminate: true }
+        props: { modelValue: false, indeterminate: true }
       })
 
       const root = getByTestId('input-checkbox')
@@ -239,20 +238,20 @@ describe('Checkbox', () => {
 
     it('reflects the native input.indeterminate DOM property when indeterminate turns on after mount', async () => {
       const { getByTestId, rerender } = render(Checkbox, {
-        props: { binary: true, modelValue: false, indeterminate: false }
+        props: { modelValue: false, indeterminate: false }
       })
 
       const input = getByTestId('input-checkbox__input') as HTMLInputElement
       expect(input.indeterminate).toBe(false)
 
-      await rerender({ binary: true, modelValue: false, indeterminate: true })
+      await rerender({ modelValue: false, indeterminate: true })
 
       expect(input.indeterminate).toBe(true)
     })
 
     it('does not change modelValue itself — toggling still emits the binary negation', async () => {
       const { getByTestId, emitted } = render(Checkbox, {
-        props: { binary: true, modelValue: false, indeterminate: true }
+        props: { modelValue: false, indeterminate: true }
       })
 
       await fireEvent.click(getByTestId('input-checkbox__input'))
@@ -265,7 +264,7 @@ describe('Checkbox', () => {
   describe('disabled suppresses interaction', () => {
     it('sets the native disabled + data-disabled and does not emit on click', async () => {
       const { getByTestId, emitted } = render(Checkbox, {
-        props: { binary: true, modelValue: false, disabled: true }
+        props: { modelValue: false, disabled: true }
       })
 
       const input = getByTestId('input-checkbox__input') as HTMLInputElement
@@ -281,7 +280,7 @@ describe('Checkbox', () => {
   describe('readonly suppresses interaction', () => {
     it('sets data-readonly and does not emit on change', async () => {
       const { getByTestId, emitted } = render(Checkbox, {
-        props: { binary: true, modelValue: false, readonly: true }
+        props: { modelValue: false, readonly: true }
       })
 
       expect(getByTestId('input-checkbox').getAttribute('data-readonly')).toBe('true')
@@ -305,15 +304,10 @@ describe('Checkbox', () => {
   })
 
   describe('forwarded input attributes', () => {
-    it('forwards inputId, name, and tabindex to the inner input', () => {
+    it('forwards the id and tabindex attributes and the name prop to the inner input', () => {
       const { getByTestId } = render(Checkbox, {
-        props: {
-          binary: true,
-          modelValue: false,
-          inputId: 'agree',
-          name: 'terms',
-          tabindex: -1
-        }
+        props: { modelValue: false, name: 'terms' },
+        attrs: { id: 'agree', tabindex: -1 }
       })
 
       const input = getByTestId('input-checkbox__input') as HTMLInputElement
@@ -321,13 +315,25 @@ describe('Checkbox', () => {
       expect(input.getAttribute('name')).toBe('terms')
       expect(input.getAttribute('tabindex')).toBe('-1')
     })
+
+    it('has no inputId or binary props: inputId does not set the id and binary does not force a boolean model', async () => {
+      const { getByTestId, emitted } = render(Checkbox, {
+        props: { value: 'a', modelValue: [] },
+        attrs: { inputId: 'legacy', binary: true }
+      })
+
+      const input = getByTestId('input-checkbox__input') as HTMLInputElement
+      expect(input.id).not.toBe('legacy')
+      await fireEvent.click(input)
+      expect(emitted('update:modelValue')?.[0]).toEqual([['a']])
+    })
   })
 
   describe('a11y', () => {
     it('has no violations when checked with an accessible name', async () => {
       const { container } = render(Checkbox, {
-        props: { binary: true, modelValue: true, inputId: 'a11y-checked' },
-        attrs: { 'aria-label': 'Accept terms' }
+        props: { modelValue: true },
+        attrs: { id: 'a11y-checked', 'aria-label': 'Accept terms' }
       })
 
       await expectNoA11yViolations(container)
@@ -335,8 +341,8 @@ describe('Checkbox', () => {
 
     it('has no violations when unchecked with an accessible name', async () => {
       const { container } = render(Checkbox, {
-        props: { binary: true, modelValue: false, inputId: 'a11y-unchecked' },
-        attrs: { 'aria-label': 'Accept terms' }
+        props: { modelValue: false },
+        attrs: { id: 'a11y-unchecked', 'aria-label': 'Accept terms' }
       })
 
       await expectNoA11yViolations(container)
@@ -345,9 +351,9 @@ describe('Checkbox', () => {
 
   describe('smoke over boolean state props', () => {
     it.each([
-      ['checked', { binary: true, modelValue: true }, 'checked'],
-      ['unchecked', { binary: true, modelValue: false }, 'unchecked'],
-      ['indeterminate', { binary: true, modelValue: false, indeterminate: true }, 'indeterminate']
+      ['checked', { modelValue: true }, 'checked'],
+      ['unchecked', { modelValue: false }, 'unchecked'],
+      ['indeterminate', { modelValue: false, indeterminate: true }, 'indeterminate']
     ] as const)('renders data-state=%s', (_label, props, expectedState) => {
       const { getByTestId } = render(Checkbox, { props })
       expect(getByTestId('input-checkbox').getAttribute('data-state')).toBe(expectedState)

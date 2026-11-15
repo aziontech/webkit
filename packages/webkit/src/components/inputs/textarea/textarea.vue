@@ -25,8 +25,6 @@
     required?: boolean
     /** Which axes the user can drag to resize the field, named after the CSS resize property. */
     resize?: TextareaResize
-    /** @deprecated since 6.0 — use `resize`. Removed in 7.0. */
-    resizable?: TextareaResize
     /** Sets the value and placeholder in the monospace code face, for pasted zone files, certificates, JSON and lists of IPs. */
     monospace?: boolean
     /** Grows the field with its content instead of a fixed height; turns the drag handle off. */
@@ -45,7 +43,6 @@
     invalid: false,
     required: false,
     resize: 'vertical',
-    resizable: 'vertical',
     monospace: false,
     autoResize: false,
     minRows: 1,
@@ -75,9 +72,7 @@
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'input-textarea')
   const isFilled = computed(() => (model.value ?? '').length > 0)
 
-  const resizeAxis = computed(() =>
-    props.autoResize ? 'none' : props.resize !== 'vertical' ? props.resize : props.resizable
-  )
+  const resizeAxis = computed(() => (props.autoResize ? 'none' : props.resize))
   const maxRows = computed(() => (props.autoResize && props.maxRows > 0 ? props.maxRows : null))
   const sizing = computed<StyleValue>(() =>
     props.autoResize

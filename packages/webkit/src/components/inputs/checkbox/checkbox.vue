@@ -12,8 +12,6 @@
     defineProps<{
       /** Identifier for this checkbox in a group. Compared against a scalar model, or added to and removed from an array model. Unset, the model is a boolean. */
       value?: unknown
-      /** @deprecated since 6.0 — leave `value` unset for a boolean model. Removed in 7.0. */
-      binary?: boolean
       /** Renders the indeterminate visual (horizontal bar). Does not affect modelValue; the parent owns the tri-state logic. */
       indeterminate?: boolean
       /** Disables interaction and applies disabled tokens. */
@@ -22,23 +20,16 @@
       readonly?: boolean
       /** Marks the control invalid: sets aria-invalid and the danger border. An enclosing Field's invalid sets it too. */
       invalid?: boolean
-      /** @deprecated since 6.0 — pass `id` (or let the enclosing Field set it). Removed in 7.0. */
-      inputId?: string
       /** HTML name for form submission. */
       name?: string
-      /** @deprecated since 6.0 — pass the `tabindex` attribute; it falls through to the input. Removed in 7.0. */
-      tabindex?: number
     }>(),
     {
       value: undefined,
-      binary: false,
       indeterminate: false,
       disabled: false,
       readonly: false,
       invalid: false,
-      inputId: '',
-      name: '',
-      tabindex: 0
+      name: ''
     }
   )
 
@@ -55,7 +46,7 @@
     disabled: isDisabled,
     required: isRequired
   } = useFieldControl({
-    id: () => props.inputId || (attrs['id'] as string | undefined),
+    id: () => attrs['id'] as string | undefined,
     describedBy: () => attrs['aria-describedby'] as string | undefined,
     labelledBy: () => attrs['aria-labelledby'] as string | undefined,
     invalid: () => props.invalid,
@@ -73,7 +64,7 @@
     return rest
   })
 
-  const isBinary = computed(() => props.binary || props.value === undefined)
+  const isBinary = computed(() => props.value === undefined)
 
   const isChecked = computed(() => {
     if (isBinary.value) {
@@ -161,7 +152,6 @@
       :disabled="isDisabled"
       :readonly="readonly"
       :aria-readonly="readonly || undefined"
-      :tabindex="tabindex"
       :data-testid="`${testId}__input`"
       v-bind="passthroughAttrs"
       @click="handleClick"

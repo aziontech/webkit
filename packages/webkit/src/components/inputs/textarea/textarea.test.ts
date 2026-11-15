@@ -62,21 +62,13 @@ describe('Textarea', () => {
     expect(control).toHaveAttribute('name', 'message')
   })
 
-  describe('resizable', () => {
+  describe('resize', () => {
     it('defaults data-resize to vertical', () => {
       const { getByTestId } = render(Textarea)
 
       expect(getByTestId('input-textarea')).toHaveAttribute('data-resize', 'vertical')
     })
 
-    it.each(['vertical', 'horizontal', 'both', 'none'] as const)(
-      'maps resizable="%s" onto data-resize',
-      (resizable) => {
-        const { getByTestId } = render(Textarea, { props: { resizable } })
-
-        expect(getByTestId('input-textarea')).toHaveAttribute('data-resize', resizable)
-      }
-    )
     it.each(['vertical', 'horizontal', 'both', 'none'] as const)(
       'maps resize="%s" onto data-resize',
       (resize) => {
@@ -85,6 +77,12 @@ describe('Textarea', () => {
         expect(getByTestId('input-textarea')).toHaveAttribute('data-resize', resize)
       }
     )
+
+    it('ignores the removed resizable prop', () => {
+      const { getByTestId } = render(Textarea, { attrs: { resizable: 'none' } })
+
+      expect(getByTestId('input-textarea')).toHaveAttribute('data-resize', 'vertical')
+    })
   })
 
   describe('v-model / update:modelValue', () => {
@@ -388,7 +386,7 @@ describe('Textarea — autoResize', () => {
   })
 
   it('keeps the fixed field and the chosen resize axis by default', () => {
-    const { getByTestId } = render(Textarea, { props: { resizable: 'both', maxRows: 4 } })
+    const { getByTestId } = render(Textarea, { props: { resize: 'both', maxRows: 4 } })
 
     const control = getByTestId('input-textarea')
     expect(control).not.toHaveAttribute('data-auto-resize')
@@ -398,7 +396,7 @@ describe('Textarea — autoResize', () => {
 
   it('marks the field, turns the drag handle off and passes the row bounds', () => {
     const { getByTestId } = render(Textarea, {
-      props: { autoResize: true, resizable: 'both', minRows: 2, maxRows: 5 }
+      props: { autoResize: true, resize: 'both', minRows: 2, maxRows: 5 }
     })
 
     const control = getByTestId('input-textarea')

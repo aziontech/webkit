@@ -3,12 +3,12 @@ name: textarea
 category: inputs
 structure: monolithic
 status: implemented
-spec_version: 8
+spec_version: 9
 template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4722-6730
   node_id: 4722:6730
-checksum: 2affcac0679a4c09ba6cbe7e00a13e7d3439e220b1dfc70b7df65eeb4600b303
+checksum: ed385afc4fb127c8f0fdff9323b1c48b91b96a46c4a316a44c1498ee4a3a4418
 created: 2026-06-23
 last_updated: 2026-11-15
 ---
@@ -17,7 +17,7 @@ last_updated: 2026-11-15
 
 ## Purpose
 
-Collects multi-line free-form text from the user. Sibling of `input` in the `inputs` category; renders a fixed-size (`large`) multi-line field with a minimum height of 80px. The resize axis is controlled by the `resize` prop (defaults to `vertical`; `resizable` is its deprecated name until 7.0). With `autoResize` the field instead grows with its content between `minRows` and `maxRows` lines. Native textarea attributes (`rows`, `maxlength`, `name`, etc.) flow through via attribute fallthrough.
+Collects multi-line free-form text from the user. Sibling of `input` in the `inputs` category; renders a fixed-size (`large`) multi-line field with a minimum height of 80px. The resize axis is controlled by the `resize` prop (defaults to `vertical`). With `autoResize` the field instead grows with its content between `minRows` and `maxRows` lines. Native textarea attributes (`rows`, `maxlength`, `name`, etc.) flow through via attribute fallthrough.
 
 ## When to use
 
@@ -91,7 +91,6 @@ Collects multi-line free-form text from the user. Sibling of `input` in the `inp
 | `invalid`     | `boolean`                                        | `false`      | false    | Applies invalid styling and sets `aria-invalid`. Combined with `required`, switches to warning border tone.                                                                                                                                                          |
 | `required`    | `boolean`                                        | `false`      | false    | Marks the field as required and sets `aria-required`.                                                                                                                                                                                                                |
 | `resize`      | `'vertical' \| 'horizontal' \| 'both' \| 'none'` | `'vertical'` | false    | Which axes the user can drag to resize the field, named after the CSS `resize` property (`TextareaResize`, exported). `none` locks the size; `vertical` keeps the default behavior. |
-| `resizable`   | `'vertical' \| 'horizontal' \| 'both' \| 'none'` | `'vertical'` | false    | `@deprecated since 6.0 — use resize. Removed in 7.0.` Read when `resize` is left at `vertical`. |
 | `monospace`   | `boolean`                                        | `false`      | false    | Sets the value and placeholder in the monospace code face (`.text-body-code-sm`, which wraps) for pasted zone files, certificates, JSON and lists of IPs (`data-monospace`). Same prop as on `Input`.                                                                |
 | `autoResize`  | `boolean`                                        | `false`      | false    | Grows the field with its content instead of a fixed height (`data-auto-resize`): CSS `field-sizing: content`, with a measured height where the browser lacks it. Turns the drag handle off.                                                                          |
 | `minRows`     | `number`                                         | `1`          | false    | Lines the field shows when empty while `autoResize` is on. Ignored without `autoResize`.                                                                                                                                                                             |
@@ -126,7 +125,7 @@ _No slots._
 - `data-readonly` mirrors the `readonly` prop: a read-only textarea keeps the editable field's fill (`var(--bg-surface)`) and solid `var(--border-default)` border, as `Input` does and the design sample draws it; it only drops the hover border and takes a default cursor. The value keeps `var(--text-default)` and the textarea stays focusable. Why the value cannot change is said by the field's description, not by a different chrome.
 - `data-monospace` mirrors the `monospace` prop: the value and the placeholder render in `.text-body-code-sm` instead of `.text-body-xs`.
 - `data-filled` mirrors whether `modelValue` is non-empty
-- `data-resize` on the native `<textarea>` mirrors the `resize` prop (or the deprecated `resizable`) and drives the `resize-*` Tailwind variant; with `autoResize` it is `none`, since the content sets the height
+- `data-resize` on the native `<textarea>` mirrors the `resize` prop and drives the `resize-*` Tailwind variant; with `autoResize` it is `none`, since the content sets the height
 - `data-auto-resize` mirrors the `autoResize` prop: the field takes `field-sizing: content` and a minimum height of `minRows` lines (`--textarea-min-rows`) in place of the fixed 80 px; in a browser without `field-sizing` the component sets the height from `scrollHeight` on mount and on every value change
 - `data-max-rows` is set to `maxRows` when `autoResize` is on and `maxRows` is above 0: the field stops growing at that many lines (`--textarea-max-rows`) and scrolls its content
 
