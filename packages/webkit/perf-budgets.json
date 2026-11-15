@@ -245,6 +245,11 @@
       "mount": 360,
       "update": 60,
       "update_is": "change the provider time zone of 1k timestamps"
+    },
+    "data-grid-1k": {
+      "mount": 600,
+      "update": 340,
+      "update_is": "move the cell cursor 40 times with the arrow keys over 1,000 rows x 8 columns"
     }
   }
 }

@@ -94,23 +94,37 @@ describe('DataGrid', () => {
     expect(cell(0, 'name').getAttribute('tabindex')).toBe('0')
     expect(cell(0, 'plan').getAttribute('tabindex')).toBe('-1')
     expect(cell(1, 'seats').getAttribute('aria-colindex')).toBe('3')
+    expect(grid.getAttribute('aria-multiselectable')).toBe('true')
+    expect(cell(1, 'seats').getAttribute('aria-selected')).toBe('false')
+    expect(cell(0, 'name').getAttribute('aria-selected')).toBe('true')
     expect(cell(0, 'id').getAttribute('aria-readonly')).toBe('true')
     expect(cell(0, 'plan').textContent).toContain('Pro')
     expect(cell(1, 'active').textContent).toContain('No')
     await expectNoA11yViolations(view.container)
   })
 
-  it('lets a consumer data-testid win', () => {
-    const view = render(DataGrid, {
-      props: { columns, modelValue: seed() },
-      attrs: { 'data-testid': 'grid' }
-    })
-    expect(view.getByTestId('grid')).toBeTruthy()
-    expect(view.getByTestId('grid__grid').getAttribute('role')).toBe('grid')
+  it('lets a consumer data-testid win and forwards aria-labelledby to the grid', () => {
+    const view = render(
+      defineComponent({
+        setup: () => () => [
+          h('h2', { id: 'title' }, 'Invoices'),
+          h(DataGrid, {
+            columns,
+            modelValue: seed(),
+            'data-testid': 'grid',
+            'aria-labelledby': 'title',
+            'aria-describedby': 'title'
+          })
+        ]
+      })
+    )
+    expect(view.getByTestId('grid').hasAttribute('aria-labelledby')).toBe(false)
+    expect(view.getByTestId('grid__grid').getAttribute('aria-describedby')).toBe('title')
+    expect(view.getByRole('grid', { name: 'Invoices' })).toBe(view.getByTestId('grid__grid'))
   })
 
-  it('moves the cursor with the arrows, Home, End and Tab', async () => {
-    const { cell } = mount()
+  it('moves the cursor with the arrows, Home and End, into the header, and Tab leaves the grid', async () => {
+    const { view, cell } = mount()
     cell(0, 'name').focus()
     await userEvent.keyboard('{ArrowRight}')
     expect(document.activeElement).toBe(cell(0, 'plan'))
@@ -120,12 +134,36 @@ describe('DataGrid', () => {
     expect(cell(0, 'name').getAttribute('tabindex')).toBe('-1')
     await userEvent.keyboard('{End}')
     expect(document.activeElement).toBe(cell(1, 'id'))
-    await userEvent.keyboard('{Tab}')
-    expect(document.activeElement).toBe(cell(2, 'name'))
-    await userEvent.keyboard('{Shift>}{Tab}{/Shift}')
-    expect(document.activeElement).toBe(cell(1, 'id'))
     await userEvent.keyboard('{Control>}{Home}{/Control}')
     expect(document.activeElement).toBe(cell(0, 'name'))
+    await userEvent.keyboard('{ArrowUp}')
+    const head = view.getByTestId('data-data-grid__head-name')
+    expect(document.activeElement).toBe(head)
+    expect(head.getAttribute('tabindex')).toBe('0')
+    expect(cell(0, 'name').getAttribute('tabindex')).toBe('-1')
+    await userEvent.keyboard('{ArrowDown}')
+    expect(document.activeElement).toBe(cell(0, 'name'))
+    const grid = view.getByRole('grid')
+    expect(grid.querySelectorAll('[tabindex="0"]')).toHaveLength(1)
+    await userEvent.tab()
+    expect(grid.contains(document.activeElement)).toBe(false)
+    await userEvent.tab({ shift: true })
+    expect(document.activeElement).toBe(cell(0, 'name'))
+    await userEvent.tab({ shift: true })
+    expect(grid.contains(document.activeElement)).toBe(false)
+  })
+
+  it('reaches a resize handle with Enter on its header and returns with Escape', async () => {
+    const { view } = mount()
+    const head = view.getByTestId('data-data-grid__head-seats')
+    const handle = view.getByTestId('data-data-grid__resize-seats')
+    expect(handle.getAttribute('tabindex')).toBe('-1')
+    head.focus()
+    await userEvent.keyboard('{Enter}')
+    expect(document.activeElement).toBe(handle)
+    await userEvent.keyboard('{ArrowRight}{Escape}')
+    expect(handle.getAttribute('aria-valuenow')).toBe('176')
+    await waitFor(() => expect(document.activeElement).toBe(head))
   })
 
   it('follows the reading direction under rtl', async () => {
@@ -159,6 +197,12 @@ describe('DataGrid', () => {
     await userEvent.keyboard('{Tab}')
     expect(rows.value[1]?.seats).toBe(7)
     await waitFor(() => expect(document.activeElement).toBe(cell(1, 'active')))
+    cell(1, 'id').focus()
+    await userEvent.keyboard('{ArrowLeft}{ArrowLeft}{Enter}')
+    const wrap = (await view.findByTestId('data-data-grid__editor')) as HTMLInputElement
+    await userEvent.keyboard('{Shift>}{Tab}{/Shift}')
+    expect(wrap.isConnected).toBe(false)
+    await waitFor(() => expect(document.activeElement).toBe(cell(1, 'plan')))
     cell(0, 'name').focus()
     await userEvent.keyboard('X{Escape}')
     expect(rows.value[0]?.name).toBe('Acme Inc.')
@@ -172,6 +216,10 @@ describe('DataGrid', () => {
     await userEvent.keyboard('{Enter}')
     const select = (await view.findByTestId('data-data-grid__editor')) as HTMLSelectElement
     await userEvent.selectOptions(select, 'free')
+    expect(rows.value[0]?.plan).toBe('pro')
+    expect(view.getByTestId('data-data-grid__editor')).toBe(select)
+    select.focus()
+    await userEvent.keyboard('{Enter}')
     expect(rows.value[0]?.plan).toBe('free')
     cell(1, 'active').focus()
     await userEvent.keyboard(' ')
@@ -198,13 +246,44 @@ describe('DataGrid', () => {
     expect(editable.view.queryByTestId('data-data-grid__editor')).toBeNull()
   })
 
+  it('keeps an invalid number in its editor with a message and commits nothing', async () => {
+    const { view, rows, events, cell } = mount()
+    cell(0, 'seats').focus()
+    await userEvent.keyboard('{Enter}')
+    const editor = (await view.findByTestId('data-data-grid__editor')) as HTMLInputElement
+    await userEvent.clear(editor)
+    await userEvent.type(editor, 'twelve{Enter}')
+    expect(rows.value[0]?.seats).toBe(12)
+    expect(events['change']).toBeUndefined()
+    expect(editor.isConnected).toBe(true)
+    expect(editor.getAttribute('aria-invalid')).toBe('true')
+    expect(cell(0, 'seats').hasAttribute('data-invalid')).toBe(true)
+    const message = view.getByTestId('data-data-grid__error')
+    expect(message.textContent).toBe('Enter a number')
+    expect(editor.getAttribute('aria-describedby')).toBe(message.id)
+    await userEvent.clear(editor)
+    await userEvent.type(editor, '14{Enter}')
+    expect(rows.value[0]?.seats).toBe(14)
+    expect(view.queryByTestId('data-data-grid__error')).toBeNull()
+  })
+
+  it('copies the range with a real Ctrl+C key press', async () => {
+    const { events, cell } = mount()
+    cell(1, 'name').focus()
+    await userEvent.keyboard('{Shift>}{ArrowRight}{/Shift}')
+    await userEvent.keyboard('{Control>}c{/Control}')
+    const [event, text] = events['copy']?.at(-1) ?? []
+    expect(event).toBeInstanceOf(KeyboardEvent)
+    expect(text).toBe('Jane Doe\tfree')
+  })
+
   it('selects a range with Shift and copies it as tab-separated text', async () => {
     const { view, events, cell } = mount()
     cell(0, 'name').focus()
     await userEvent.keyboard('{Shift>}{ArrowDown}{ArrowRight}{/Shift}')
     expect(cell(1, 'plan').getAttribute('aria-selected')).toBe('true')
     expect(cell(0, 'plan').getAttribute('aria-selected')).toBe('true')
-    expect(cell(2, 'name').hasAttribute('aria-selected')).toBe(false)
+    expect(cell(2, 'name').getAttribute('aria-selected')).toBe('false')
     const copy = new ClipboardEvent('copy', {
       bubbles: true,
       cancelable: true,
@@ -219,7 +298,9 @@ describe('DataGrid', () => {
 
   it('selects rows with the checkbox column, Space and Select all', async () => {
     const { view, selection } = mount({ enableRowSelection: true })
-    expect(view.getByRole('grid').getAttribute('aria-multiselectable')).toBe('true')
+    expect(
+      within(view.getByTestId('data-data-grid__select-1')).getByRole('checkbox')
+    ).toHaveAccessibleName('Select row Jane Doe')
     view.getByTestId('data-data-grid__select-0').focus()
     await userEvent.keyboard(' ')
     expect(selection.value).toEqual({ '1': true })
@@ -251,6 +332,7 @@ describe('DataGrid', () => {
     expect(handle.getAttribute('role')).toBe('separator')
     expect(handle).toHaveAccessibleName('Resize Name')
     expect(handle.getAttribute('aria-valuenow')).toBe('160')
+    expect(handle.getAttribute('aria-valuemax')).toBe('960')
     handle.focus()
     await userEvent.keyboard('{ArrowRight}{ArrowRight}')
     expect(handle.getAttribute('aria-valuenow')).toBe('192')
@@ -264,6 +346,9 @@ describe('DataGrid', () => {
     expect(cell(0, 'plan').hasAttribute('data-frozen')).toBe(false)
     const empty = render(DataGrid, { props: { columns, modelValue: [], ariaLabel: 'Empty' } })
     expect(empty.getByTestId('data-data-grid__empty').textContent).toContain('No rows yet')
+    const grid = within(empty.container).getByRole('grid')
+    expect(grid.getAttribute('aria-rowcount')).toBe('1')
+    expect(within(grid).getAllByRole('row')).toHaveLength(1)
     await expectNoA11yViolations(empty.container)
   })
 

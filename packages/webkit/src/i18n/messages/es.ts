@@ -939,8 +939,9 @@ export const es: Messages = {
   },
   dataGrid: {
     selectAll: 'Seleccionar todas las filas',
-    selectRow: 'Seleccionar fila',
+    selectRow: 'Seleccionar la fila {row}',
     resize: 'Cambiar el ancho de {column}',
+    invalidNumber: 'Escribe un número',
     emptyTitle: 'Todavía no hay filas',
     emptyDescription: 'Agrega una fila para empezar a editar.',
     true: 'Sí',

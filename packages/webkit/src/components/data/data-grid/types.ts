@@ -1,6 +1,9 @@
 /** The editor a column uses. */
 export type DataGridColumnType = 'text' | 'number' | 'boolean' | 'select'
 
+/** Alignment of a column's header and cells. */
+export type DataGridColumnAlign = 'start' | 'end'
+
 /** A column of the grid. */
 export interface DataGridColumn {
   /** Field read from and written to each row. */
@@ -18,7 +21,7 @@ export interface DataGridColumn {
   /** Narrowest width a resize reaches, in px (64 when unset). */
   minWidth?: number
   /** Cell alignment. */
-  align?: 'start' | 'end'
+  align?: DataGridColumnAlign
 }
 
 /** One committed cell edit. */

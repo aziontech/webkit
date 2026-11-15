@@ -3,11 +3,11 @@ name: table
 category: data
 structure: composition
 status: implemented
-spec_version: 13
+spec_version: 14
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2053-7649
   node_id: 2053:7649
-checksum: 1a565aa60d27a3555e5f5cf26137e6724cbe232de6514c29fcd9f147e5d0bdbd
+checksum: b45fba6a9b2f5822a70aea0e69cb53b193a6ef803a5f6a926cbd310554fa92fa
 created: 2026-06-16
 last_updated: 2026-11-15
 ---
@@ -43,7 +43,7 @@ The table's parts and its markup-only root. Compose the anatomy by hand (`Table.
 ## Related
 
 - `data-table` — the data-driven table (`data` + `columns`, TanStack engine) that renders through these parts.
-- `data-grid` — the editable, spreadsheet-like grid built on these parts.
+- `data-grid` — the editable, spreadsheet-like grid; a separate grid (`role="grid"`, one roving tab stop, in-cell editors) that shares these tokens, not built on these parts.
 - `pagination` — the page strip; put it in a `Table.Footer` in the `footer` slot.
 - `empty-state` — compose it in a full-width row when a hand-composed table has no rows.
 - `item` — list rows without a column structure.

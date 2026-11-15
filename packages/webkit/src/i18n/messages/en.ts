@@ -915,8 +915,9 @@ export const storyLibrary = {
 
 export const dataGrid = {
   selectAll: 'Select all rows',
-  selectRow: 'Select row',
+  selectRow: 'Select row {row}',
   resize: 'Resize {column}',
+  invalidNumber: 'Enter a number',
   emptyTitle: 'No rows yet',
   emptyDescription: 'Add a row to start editing.',
   true: 'Yes',

@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 6
 template: 2
-checksum: faf997b1fb8a22b65bbae48512d6940a0059e4a92172e6dd20bc6314f15ab840
+checksum: 0ca17d9ef8bd82b57c1bf1086e33bd3360dbc33869d6a01cca25b7f5623e4ec1
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -28,7 +28,8 @@ An editable list of rows with the same fields, after Cloudscape's attribute edit
 
 - Key and value tags with limits, reserved prefixes and removal of saved tags → use `tag-editor`, which is built on this component.
 - A fixed set of named settings on one resource → use `field` controls in a form.
-- Many records the user browses, filters and acts on → use `table` with row actions.
+- Many records the user browses, filters and acts on → use `data-table` with row actions.
+- Many cells of many records edited in place, spreadsheet-style → use `data-grid`.
 - An ordered list of actions whose argument fields change per type → compose it by hand as in the behaviors of the `platform/edit/rule-builder` block.
 
 ## Related
@@ -109,15 +110,15 @@ Types (exported from `@aziontech/webkit/attribute-editor`): `AttributeEditorItem
 
 | Model            | Type                     | Default     | Emits           | Notes                                                                                                                                                                         |
 | ---------------- | ------------------------ | ----------- | --------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `v-model:items`  | `TItem[]`                | `[]`        | `update:items`  | Rows in list mode, via `defineModel('items')`. A row added, removed, edited or moved goes out as the new array; unbound, the editor keeps its own rows.                         |
+| `v-model:items`  | `TItem[]`                | `[]`        | `update:items`  | Rows in list mode, via `defineModel('items')`. A row added, removed, edited or moved goes out as the new array; unbound, the editor keeps its own rows.                       |
 | `v-model:groups` | `TItem[][] \| undefined` | `undefined` | `update:groups` | Rows in grouped mode, via `defineModel('groups')`: every inner array is an AND group, groups are joined by OR. Setting it (even to `[]`) switches the editor to grouped mode. |
 
 ## Events
 
-| Event           | Payload                                                                                             | Notes                                                               |
-| --------------- | --------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------- |
-| `add`           | `(event: MouseEvent, detail: { index: number; groupIndex?: number })`                               | After a row is added; `groupIndex` only in grouped mode.            |
-| `remove`        | `(event: MouseEvent \| KeyboardEvent, detail: { index: number; item: TItem; groupIndex?: number })` | After a row is removed.                                             |
+| Event    | Payload                                                                                             | Notes                                                    |
+| -------- | --------------------------------------------------------------------------------------------------- | -------------------------------------------------------- |
+| `add`    | `(event: MouseEvent, detail: { index: number; groupIndex?: number })`                               | After a row is added; `groupIndex` only in grouped mode. |
+| `remove` | `(event: MouseEvent \| KeyboardEvent, detail: { index: number; item: TItem; groupIndex?: number })` | After a row is removed.                                  |
 
 ## Slots
 
