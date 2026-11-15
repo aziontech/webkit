@@ -18,10 +18,10 @@ describe('AiLoading', () => {
   it('is a status region that stays empty until the delay passes', async () => {
     const { getByRole } = render(AiLoading, { props: { delay: 60 } })
     const status = getByRole('status')
-    expect(status).not.toHaveAttribute('data-visible')
+    expect(status).toHaveAttribute('data-state', 'closed')
     expect(status).toHaveTextContent('')
     await wait(120)
-    expect(status).toHaveAttribute('data-visible')
+    expect(status).toHaveAttribute('data-state', 'open')
     expect(status).toHaveTextContent('Generating a response')
   })
 

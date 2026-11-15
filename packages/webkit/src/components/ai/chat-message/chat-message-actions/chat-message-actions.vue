@@ -26,7 +26,7 @@
 
   const attrs = useAttrs()
   const { t } = useTranslate({ chatMessage: en.chatMessage })
-  const { state } = useChatMessageContext()
+  const { status } = useChatMessageContext()
 
   const testId = computed<string>(
     () => (attrs['data-testid'] as string | undefined) ?? 'ai-chat-message-actions'
@@ -35,7 +35,7 @@
 
 <template>
   <div
-    v-if="state === 'complete'"
+    v-if="status === 'success'"
     v-bind="$attrs"
     role="group"
     :aria-label="ariaLabel || t('chatMessage.actions')"

@@ -61,25 +61,26 @@ describe('ChatMessage', () => {
 
   it('renders loading text while pending and is busy while pending or streaming', async () => {
     const { getByTestId, queryByTestId, getByRole, rerender } = render(ChatMessage, {
-      props: { state: 'pending' },
+      props: { status: 'pending' },
       slots: { default: () => 'Answer', actions: () => h('button', 'Copy') }
     })
     expect(getByRole('article')).toHaveAttribute('aria-busy', 'true')
     expect(getByTestId('ai-chat-message__loading')).toHaveTextContent('Generating a response')
     expect(queryByTestId('ai-chat-message__content')).toBeNull()
     expect(queryByTestId('ai-chat-message__actions')).toBeNull()
-    await rerender({ state: 'streaming' })
+    await rerender({ status: 'streaming' })
     expect(getByRole('article')).toHaveAttribute('aria-busy', 'true')
     expect(getByTestId('ai-chat-message__content')).toHaveTextContent('Answer')
     expect(queryByTestId('ai-chat-message__actions')).toBeNull()
-    await rerender({ state: 'complete' })
+    await rerender({ status: 'success' })
     expect(getByRole('article')).not.toHaveAttribute('aria-busy')
+    expect(getByRole('article')).toHaveAttribute('data-status', 'success')
     expect(getByTestId('ai-chat-message__actions')).toHaveTextContent('Copy')
   })
 
   it('shows the error line and emits retry', async () => {
     const { getByTestId, getByRole, emitted } = render(ChatMessage, {
-      props: { state: 'error', errorMessage: 'Connection lost.' },
+      props: { status: 'error', errorMessage: 'Connection lost.' },
       slots: { default: () => 'Partial' }
     })
     expect(getByTestId('ai-chat-message__content')).toHaveTextContent('Partial')
@@ -89,24 +90,24 @@ describe('ChatMessage', () => {
     expect(emitted('retry')![0]![0]).toBeInstanceOf(MouseEvent)
   })
 
-  it('provides from and state to its parts, and Actions render only when complete', async () => {
+  it('provides from and status to its parts, and Actions render only when success', async () => {
     const seen: string[] = []
     const Probe = defineComponent({
       setup() {
-        const { from, state } = useChatMessageContext()
+        const { from, status } = useChatMessageContext()
         return () => {
-          seen.push(`${from.value}:${state.value}`)
+          seen.push(`${from.value}:${status.value}`)
           return null
         }
       }
     })
-    const state = ref<'streaming' | 'complete'>('streaming')
+    const status = ref<'streaming' | 'success'>('streaming')
     const { queryByRole } = render(
       defineComponent({
         setup: () => () =>
           h(
             ChatMessage,
-            { from: 'assistant', state: state.value },
+            { from: 'assistant', status: status.value },
             {
               default: () => h(Probe),
               actions: () => h(ChatMessageActions, null, { default: () => h('button', 'Copy') })
@@ -116,9 +117,9 @@ describe('ChatMessage', () => {
     )
     expect(seen.at(-1)).toBe('assistant:streaming')
     expect(queryByRole('group', { name: 'Message actions' })).toBeNull()
-    state.value = 'complete'
+    status.value = 'success'
     await nextTick()
-    expect(seen.at(-1)).toBe('assistant:complete')
+    expect(seen.at(-1)).toBe('assistant:success')
     expect(queryByRole('group', { name: 'Message actions' })).toBeTruthy()
   })
 
@@ -195,7 +196,7 @@ describe('ChatMessage', () => {
       const { queryByTestId } = render({
         components: { ChatMessage },
         setup: () => ({ shown }),
-        template: `<ChatMessage state="complete">Answer.<template v-if="shown" #actions><span data-testid="probe">Slotted</span></template></ChatMessage>`
+        template: `<ChatMessage status="success">Answer.<template v-if="shown" #actions><span data-testid="probe">Slotted</span></template></ChatMessage>`
       })
       expect(queryByTestId('ai-chat-message__actions')).toBeNull()
 

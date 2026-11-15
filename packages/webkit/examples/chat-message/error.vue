@@ -3,16 +3,16 @@
   import StreamingResponse from '@aziontech/webkit/streaming-response'
   import { ref } from 'vue'
 
-  const state = ref('error')
+  const status = ref('error')
   const content = ref('Your workload storefront has two domains. The first one,')
 
   function retry() {
-    state.value = 'pending'
+    status.value = 'pending'
     content.value = ''
     setTimeout(() => {
       content.value =
         'Your workload storefront has two domains: **www.example.com** and **shop.example.com**.'
-      state.value = 'complete'
+      status.value = 'success'
     }, 1200)
   }
 </script>
@@ -20,7 +20,7 @@
 <template>
   <div class="w-full max-w-(--container-3xl)">
     <ChatMessageRoot
-      :state="state"
+      :status="status"
       error-message="The connection was interrupted before the response finished."
       @retry="retry"
     >

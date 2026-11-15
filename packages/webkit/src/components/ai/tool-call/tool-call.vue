@@ -6,7 +6,7 @@
   import type { StatusIndicatorSeverity } from '../../feedback/status-indicator/status-indicator.vue'
   import StatusIndicator from '../../feedback/status-indicator/status-indicator.vue'
 
-  export type ToolCallState = 'pending' | 'running' | 'success' | 'error' | 'denied'
+  export type ToolCallStatus = 'pending' | 'running' | 'success' | 'error' | 'denied'
 
   defineOptions({
     name: 'ToolCall',
@@ -19,14 +19,14 @@
     /** What the call does in the reader's words (`Listing your workloads`). Empty shows only the name. */
     title?: string
     /** `pending` waits for authorization, `running` is in flight, then `success`, `error` or `denied` (the reader refused it). */
-    state?: ToolCallState
+    status?: ToolCallStatus
     /** Initial open state when uncontrolled; details start collapsed. */
     defaultOpen?: boolean
   }
 
   const props = withDefaults(defineProps<Props>(), {
     title: '',
-    state: 'running',
+    status: 'running',
     defaultOpen: false
   })
 
@@ -52,10 +52,10 @@
   const expandable = () => Boolean(slots.input || slots.output)
 
   const severity = computed<StatusIndicatorSeverity>(() => {
-    if (props.state === 'success') return 'success'
-    if (props.state === 'error') return 'danger'
-    if (props.state === 'denied') return 'warning'
-    if (props.state === 'running') return 'info'
+    if (props.status === 'success') return 'success'
+    if (props.status === 'error') return 'danger'
+    if (props.status === 'denied') return 'warning'
+    if (props.status === 'running') return 'info'
     return 'neutral'
   })
 
@@ -68,7 +68,7 @@
   <div
     v-bind="$attrs"
     :data-testid="testId"
-    :data-status="state"
+    :data-status="status"
     :data-state="expandable() ? (isOpen ? 'open' : 'closed') : undefined"
     class="flex w-full flex-col rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface)"
   >
@@ -129,8 +129,8 @@
       >
         <StatusIndicator
           :severity="severity"
-          :loading="state === 'running'"
-          :label="t(`toolCall.${state}`)"
+          :loading="status === 'running'"
+          :label="t(`toolCall.${status}`)"
           :data-testid="`${testId}__status`"
         />
       </span>

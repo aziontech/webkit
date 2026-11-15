@@ -74,13 +74,13 @@ describe('ToolApproval', () => {
     ['approved', 'Approved'],
     ['denied', 'Denied'],
     ['expired', 'Request expired']
-  ] as const)('replaces the buttons with the %s outcome in text', async (state, text) => {
+  ] as const)('replaces the buttons with the %s outcome in text', async (status, text) => {
     const { queryByRole, getByTestId, rerender } = render(ToolApproval, { props: base })
-    await rerender({ ...base, state })
+    await rerender({ ...base, status })
     expect(queryByRole('button')).toBeNull()
     expect(getByTestId('ai-tool-approval__outcome')).toHaveTextContent(text)
     expect(getByTestId('ai-tool-approval__announcer')).toHaveTextContent(text)
-    expect(getByTestId('ai-tool-approval')).toHaveAttribute('data-status', state)
+    expect(getByTestId('ai-tool-approval')).toHaveAttribute('data-status', status)
   })
 
   it('moves focus to its heading through focus()', async () => {
@@ -99,7 +99,7 @@ describe('ToolApproval', () => {
     })
     await expectNoA11yViolations(pending.container)
     pending.unmount()
-    const resolved = render(ToolApproval, { props: { ...base, state: 'approved' } })
+    const resolved = render(ToolApproval, { props: { ...base, status: 'approved' } })
     await expectNoA11yViolations(resolved.container)
   })
 })

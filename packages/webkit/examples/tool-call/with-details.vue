@@ -12,7 +12,7 @@
     <ToolCall
       name="get_cache_settings"
       title="Reading the cache settings of storefront"
-      state="success"
+      status="success"
     >
       <template #input>
         <CodeBlock
@@ -30,7 +30,7 @@
     <ToolCall
       name="get_metrics"
       title="Reading the error rate"
-      state="error"
+      status="error"
       default-open
     >
       <template #output>

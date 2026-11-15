@@ -22,9 +22,9 @@ describe('ToolCall', () => {
     ['success', 'Completed'],
     ['error', 'Failed'],
     ['denied', 'Denied']
-  ] as const)('shows %s as text in a status region', (state, text) => {
-    const { getByTestId, getByRole } = render(ToolCall, { props: { name: 'purge_urls', state } })
-    expect(getByTestId('ai-tool-call')).toHaveAttribute('data-status', state)
+  ] as const)('shows %s as text in a status region', (status, text) => {
+    const { getByTestId, getByRole } = render(ToolCall, { props: { name: 'purge_urls', status } })
+    expect(getByTestId('ai-tool-call')).toHaveAttribute('data-status', status)
     expect(getByRole('status')).toHaveTextContent(text)
   })
 
@@ -44,7 +44,7 @@ describe('ToolCall', () => {
 
   it('expands input and output by keyboard', async () => {
     const { getByRole, getByTestId, emitted } = render(ToolCall, {
-      props: { name: 'get_settings', state: 'success' },
+      props: { name: 'get_settings', status: 'success' },
       slots: { input: () => '{ "id": 1 }', output: () => '{ "ttl": 60 }' }
     })
     const trigger = getByRole('button')
@@ -73,7 +73,7 @@ describe('ToolCall', () => {
 
   it('has no axe violations', async () => {
     const { container } = render(ToolCall, {
-      props: { name: 'get_settings', state: 'error', defaultOpen: true },
+      props: { name: 'get_settings', status: 'error', defaultOpen: true },
       slots: { output: () => 'metrics_unavailable' }
     })
     await expectNoA11yViolations(container)

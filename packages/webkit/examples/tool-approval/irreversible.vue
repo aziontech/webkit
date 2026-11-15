@@ -2,7 +2,7 @@
   import ToolApproval from '@aziontech/webkit/tool-approval'
   import { ref } from 'vue'
 
-  const state = ref('pending')
+  const status = ref('pending')
 </script>
 
 <template>
@@ -13,9 +13,9 @@
       kind="danger"
       confirmation-phrase="www.example.com"
       approve-label="Delete"
-      :state="state"
-      @approve="state = 'approved'"
-      @deny="state = 'denied'"
+      :status="status"
+      @approve="status = 'approved'"
+      @deny="status = 'denied'"
     />
   </div>
 </template>

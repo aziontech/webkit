@@ -3,9 +3,9 @@ name: prompt-input
 category: ai
 structure: monolithic
 status: implemented
-spec_version: 4
+spec_version: 5
 template: 2
-checksum: febc1aa35fd5f8d4f69fb95417c1de50e8e122238d5e9a559d2f42c06e0506f3
+checksum: 92e6a5e34c92bb316c05d17643191406f1d1d4857cdca8fc784142d1f6b4be18
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -21,7 +21,7 @@ text, an optional character limit with a counter, and constraint text under it (
 shortcuts it accepts). Enter submits; Shift+Enter adds a line; an IME composition never submits.
 
 It is controlled: the owner holds the text, receives `submit` with the trimmed prompt, and clears it.
-While `state` is `submitted` or `streaming` the reader can keep typing the next prompt, but cannot
+While `status` is `pending` or `streaming` the reader can keep typing the next prompt, but cannot
 submit it until the response ends or they press Stop.
 
 ## When to use
@@ -46,7 +46,7 @@ submit it until the response ends or they press Stop.
 
 - Placeholder is a suggested question with no end punctuation (`Ask a question`); never the only instruction.
 - Put the disclaimer and the shortcuts in `hint`, not in the placeholder.
-- Set `state` from the request so Submit turns into Stop; wire `stop` to abort it.
+- Set `status` from the request so Submit turns into Stop; wire `stop` to abort it.
 - Clear `v-model` in the `submit` handler and keep focus in the input.
 - Use `maxLength` only when the backend has a limit; the counter is the warning.
 
@@ -58,20 +58,20 @@ submit it until the response ends or they press Stop.
   import PromptInput from '@aziontech/webkit/prompt-input'
 
   const prompt = ref('')
-  const state = ref('ready')
+  const status = ref('ready')
   function send(event, { value, references }) {
     prompt.value = ''
-    state.value = 'submitted'
+    status.value = 'pending'
   }
 </script>
 
 <template>
   <PromptInput
     v-model="prompt"
-    :state="state"
+    :status="status"
     :max-length="4000"
     @submit="send"
-    @stop="state = 'ready'"
+    @stop="status = 'ready'"
   >
     <template #hint>The AI assistant can make mistakes. Check important information.</template>
   </PromptInput>
@@ -81,7 +81,7 @@ submit it until the response ends or they press Stop.
 ## Sub-components
 
 _None — monolithic with slots. Exports: `"./prompt-input": "./src/components/ai/prompt-input/prompt-input.vue"`.
-Exported type: `PromptInputState = 'ready' | 'submitted' | 'streaming'`. Composed DS components:
+Exported type: `PromptInputStatus = 'ready' | 'pending' | 'streaming'`. Composed DS components:
 `icon-button` (Submit, Stop). Exposes `focus()`._
 
 ## Props
@@ -93,7 +93,7 @@ Exported type: `PromptInputState = 'ready' | 'submitted' | 'streaming'`. Compose
 | `maxLength`   | `number`                                | `0`       | false    | Character limit; shows an `n/max` counter and blocks submit over it. `0` means no limit.                                                                                                       |
 | `minRows`     | `number`                                | `1`       | false    | Rows shown while empty.                                                                                                                                                                        |
 | `maxRows`     | `number`                                | `6`       | false    | Rows the text area grows to before it scrolls.                                                                                                                                                 |
-| `state`       | `'ready' \| 'submitted' \| 'streaming'` | `'ready'` | false    | Request lifecycle: `submitted` and `streaming` swap Submit for Stop and block another submit; typing stays allowed.                                                                            |
+| `status`      | `'ready' \| 'pending' \| 'streaming'`   | `'ready'` | false    | Request lifecycle: `pending` and `streaming` swap Submit for Stop and block another submit; typing stays allowed.                                                                            |
 | `disabled`    | `boolean`                               | `false`   | false    | Disables the text area, the submit control and every control in the slots' row.                                                                                                                |
 | `menus`       | `PromptInputMenu[]`                     | `[]`      | false    | Shortcut menus opened by a trigger character at the start of a word: `/` for commands, `@` for things to reference. Choosing an option inserts `<trigger><label>` and adds it to `references`. |
 
@@ -110,8 +110,8 @@ Types: `PromptInputMenu = { trigger: string; label: string; options: PromptInput
 
 | Event    | Payload                                                                                                   | When                                                                                                                                                                                                                                 |
 | -------- | --------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `submit` | `(event: MouseEvent \| KeyboardEvent, payload: { value: string; references: PromptInputReference[] })` | Enter (without Shift, outside an IME composition) or Submit, with a non-empty prompt within the limit while `state` is `ready`. `event` is the Enter keydown or the Submit click; `payload.value` is trimmed; `payload.references` holds the references whose `<trigger><label>` is still in the text. |
-| `stop`   | `(event: MouseEvent)`                                                                                     | Stop pressed while `submitted` or `streaming`.                                                                                                                                                                                       |
+| `submit` | `(event: MouseEvent \| KeyboardEvent, payload: { value: string; references: PromptInputReference[] })` | Enter (without Shift, outside an IME composition) or Submit, with a non-empty prompt within the limit while `status` is `ready`. `event` is the Enter keydown or the Submit click; `payload.value` is trimmed; `payload.references` holds the references whose `<trigger><label>` is still in the text. |
+| `stop`   | `(event: MouseEvent)`                                                                                     | Stop pressed while `pending` or `streaming`.                                                                                                                                                                                       |
 
 ## Slots
 
@@ -123,9 +123,9 @@ Types: `PromptInputMenu = { trigger: string; label: string; options: PromptInput
 
 ## States
 
-- `data-status` mirrors `state`; `data-disabled`; `data-invalid` while over `maxLength`.
+- `data-status` mirrors `status`; `data-disabled`; `data-invalid` while over `maxLength`.
 - `ready`: Submit (primary `IconButton`, `ai ai-arrow-up`), disabled while the prompt is empty, over the limit or `disabled`.
-- `submitted` / `streaming`: Stop (secondary `IconButton`, `ai ai-stop`) replaces Submit; Enter does nothing.
+- `pending` / `streaming`: Stop (secondary `IconButton`, `ai ai-stop`) replaces Submit; Enter does nothing.
 - Over the limit: border turns `--danger-border`, the counter turns danger, `aria-invalid="true"`, and a polite live region says how many characters are over.
 
 ## Motion & Animations

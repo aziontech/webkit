@@ -3,7 +3,7 @@
   import ToolApproval from '@aziontech/webkit/tool-approval'
   import { ref } from 'vue'
 
-  const state = ref('pending')
+  const status = ref('pending')
 </script>
 
 <template>
@@ -12,9 +12,9 @@
       title="Allow `azion deploy --env production`?"
       description="Deploys the current build of storefront to production. The previous version stays available for rollback."
       approve-label="Deploy"
-      :state="state"
-      @approve="state = 'approved'"
-      @deny="state = 'denied'"
+      :status="status"
+      @approve="status = 'approved'"
+      @deny="status = 'denied'"
     >
       <CodeBlock
         :tabs="[

@@ -4,7 +4,7 @@
   "examples": [
     {
       "name": "States",
-      "summary": "Every state of a tool call in the order an agent goes through them: waiting for authorization, running, completed, failed and denied, each with its status in text.",
+      "summary": "Every status of a tool call in the order an agent goes through them: waiting for authorization, running, completed, failed and denied, each with its status in text.",
       "file": "states.vue"
     },
     {
