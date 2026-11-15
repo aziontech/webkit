@@ -10,9 +10,20 @@ const BY_COMPONENT_FOLDER = {
   documentation: 'docs'
 }
 
+const BY_COMPONENT = {
+  'layout/frame-box': 'marketing',
+  'layout/site-layout': 'marketing'
+}
+
 export function surfaceFromTarget(target) {
-  const component = String(target).match(/^\.\/src\/components\/([^/]+)\//)
-  if (component) return BY_COMPONENT_FOLDER[component[1]] ?? 'product'
+  const component = String(target).match(/^\.\/src\/components\/([^/]+)\/([^/]+)\//)
+  if (component) {
+    return (
+      BY_COMPONENT[`${component[1]}/${component[2]}`] ??
+      BY_COMPONENT_FOLDER[component[1]] ??
+      'product'
+    )
+  }
   if (/^\.\/src\/assets\/(logos|illustrations|globe|scenes)\//.test(target)) return 'marketing'
   if (/^\.\/src\/assets\/diagrams\//.test(target)) return 'marketing'
   return null
