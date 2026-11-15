@@ -1055,6 +1055,18 @@ bindings and prints `MANUAL` for everything below that it cannot rewrite.
   `data-transfer-list`, the catalog group `transferList`; `dataKey` is gone (the
   codemod writes `trackBy`).
 
+### AI skills renamed
+
+Four skills in the AI bundle have plain names. `npx @aziontech/webkit sync` writes them under the
+new folders and reports the old ones as orphans; delete the old folders in `.claude/skills/`.
+
+| 5.x skill                  | 6.0 skill              |
+| -------------------------- | ---------------------- |
+| `webkit-ds-adoption`       | `webkit-adoption`      |
+| `webkit-genai`             | `webkit-ai-surfaces`   |
+| `webkit-baseline-ui`       | `webkit-quick-cleanup` |
+| `webkit-impeccable-polish` | `webkit-final-polish`  |
+
 ## 5. Field report: Azion Console
 
 The codemod ran on a copy of `azion-console-kit` (November 2026). The console declares
