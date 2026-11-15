@@ -178,7 +178,7 @@ packages/webkit/src/components/actions/button/
      isOpen: Readonly<Ref<boolean>>
    }
 
-   export const DialogInjectionKey: InjectionKey<DialogContext> = Symbol('DialogContext')
+   export const DialogInjectionKey: InjectionKey<DialogContext> = Symbol('Dialog')
    ```
 
    Root `.vue` imports it via `import { DialogInjectionKey } from './injection-key'`. Sub-components import it via `import { DialogInjectionKey } from '../injection-key'`.

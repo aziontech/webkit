@@ -119,7 +119,7 @@
     flip.value = flipTransform(from, image.getBoundingClientRect())
   }
 
-  const onZoomTransitionEnd = (event: TransitionEvent) => {
+  const onZoomTransitionend = (event: TransitionEvent) => {
     if (event.target !== zoomImageRef.value || event.propertyName !== 'transform') return
     if (flip.value) zoomed.value = false
   }
@@ -253,7 +253,7 @@
           :style="{ transform: flip }"
           :data-flip="armed ? 'armed' : 'start'"
           class="pointer-events-none relative block max-h-full max-w-full rounded-(--shape-elements) object-contain data-[flip=armed]:transition-[transform] data-[flip=armed]:duration-moderate-02 data-[flip=armed]:ease-expressive-entrance motion-reduce:transition-none!"
-          @transitionend="onZoomTransitionEnd"
+          @transitionend="onZoomTransitionend"
         />
       </div>
     </Teleport>

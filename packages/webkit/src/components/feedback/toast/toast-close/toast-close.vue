@@ -20,7 +20,7 @@
     () => (attrs['data-testid'] as string | undefined) ?? 'feedback-toast__close'
   )
 
-  const handleClick = (event: MouseEvent) => emit('click', event)
+  const onClick = (event: MouseEvent) => emit('click', event)
 </script>
 
 <template>
@@ -31,6 +31,6 @@
     size="small"
     :ariaLabel="t('toast.close')"
     :data-testid="testId"
-    @click="handleClick"
+    @click="onClick"
   />
 </template>

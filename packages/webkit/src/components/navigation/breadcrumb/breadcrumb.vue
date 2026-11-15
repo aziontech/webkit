@@ -78,7 +78,7 @@
     () => resolvedItems.value.length > 1 && firstItem.value !== lastItem.value
   )
 
-  const handleItemClick = (event: MouseEvent, href: string) => {
+  const onItemClick = (event: MouseEvent, href: string) => {
     emit('navigate', event, href)
   }
 
@@ -88,7 +88,7 @@
   ) => {
     const href = typeof value === 'string' ? value : undefined
     if (href) {
-      handleItemClick(event as MouseEvent, href)
+      onItemClick(event as MouseEvent, href)
     }
   }
 </script>
@@ -119,7 +119,7 @@
                 :show-icon="item.showIcon"
                 :icon="item.icon"
                 :data-testid="`${testId}__item-${index}`"
-                @click="(event) => !item.current && handleItemClick(event, item.href ?? '#')"
+                @click="(event) => !item.current && onItemClick(event, item.href ?? '#')"
               />
             </li>
             <BreadcrumbSeparator
@@ -141,9 +141,7 @@
               :show-icon="firstItem.showIcon"
               :icon="firstItem.icon"
               :data-testid="`${testId}__item-0`"
-              @click="
-                (event) => !firstItem.current && handleItemClick(event, firstItem.href ?? '#')
-              "
+              @click="(event) => !firstItem.current && onItemClick(event, firstItem.href ?? '#')"
             />
           </li>
 
@@ -208,9 +206,7 @@
                 :icon="lastItem.icon"
                 class="text-(--text-default)"
                 :data-testid="`${testId}__item-last`"
-                @click="
-                  (event) => !lastItem.current && handleItemClick(event, lastItem.href ?? '#')
-                "
+                @click="(event) => !lastItem.current && onItemClick(event, lastItem.href ?? '#')"
               />
             </li>
           </template>

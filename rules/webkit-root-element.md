@@ -71,10 +71,10 @@ inside class strings is enforced separately by the stylelint config and the
 ```vue
 <script setup lang="ts">
   import { ref } from 'vue'
-  const inputRef = ref<HTMLInputElement | null>(null)
+  const inputEl = ref<HTMLInputElement | null>(null)
   defineExpose({
     /** Move focus to the field. */
-    focus: () => inputRef.value?.focus()
+    focus: () => inputEl.value?.focus()
   })
 </script>
 ```

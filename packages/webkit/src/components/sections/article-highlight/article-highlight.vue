@@ -159,11 +159,11 @@
     elapsed.value = 0
   })
 
-  const onFocusIn = (event: FocusEvent): void => {
+  const onFocusin = (event: FocusEvent): void => {
     focusInside.value = (event.target as Element | null)?.matches(':focus-visible') ?? false
   }
 
-  const onFocusOut = (): void => {
+  const onFocusout = (): void => {
     focusInside.value = false
   }
 
@@ -218,8 +218,8 @@
           class="group/highlight relative flex flex-col lg:data-[fill]:h-[calc(100dvh-var(--layout-header-height)-var(--spacing-xxl)*2)]"
           @pointerenter="pointerInside = true"
           @pointerleave="pointerInside = false"
-          @focusin="onFocusIn"
-          @focusout="onFocusOut"
+          @focusin="onFocusin"
+          @focusout="onFocusout"
         >
           <IconButton
             v-if="autoplaying"

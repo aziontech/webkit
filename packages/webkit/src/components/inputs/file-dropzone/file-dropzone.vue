@@ -99,9 +99,9 @@
     }
   )
 
-  useEventListener('dragenter', onWindowDragEnter)
-  useEventListener('dragleave', onWindowDragLeave)
-  useEventListener('dragover', onWindowDragOver)
+  useEventListener('dragenter', onWindowDragenter)
+  useEventListener('dragleave', onWindowDragleave)
+  useEventListener('dragover', onWindowDragover)
   useEventListener('drop', onWindowDrop)
   useEventListener('dragend', onWindowReset)
   useEventListener('keydown', onWindowKeydown)
@@ -134,17 +134,17 @@
     if (rejected.length > 0) emit('reject', event, rejected)
   }
 
-  function onRootDragEnter(event: DragEvent): void {
+  function onRootDragenter(event: DragEvent): void {
     if (!isInline.value || isDisabled.value || !carriesFiles(event)) return
     depth.value += 1
   }
 
-  function onRootDragLeave(event: DragEvent): void {
+  function onRootDragleave(event: DragEvent): void {
     if (!isInline.value || !carriesFiles(event)) return
     depth.value = Math.max(0, depth.value - 1)
   }
 
-  function onRootDragOver(event: DragEvent): void {
+  function onRootDragover(event: DragEvent): void {
     if (!carriesFiles(event)) return
     if (!isInline.value && !isActive.value) return
     event.preventDefault()
@@ -160,17 +160,17 @@
     deliver(event)
   }
 
-  function onWindowDragEnter(event: DragEvent): void {
+  function onWindowDragenter(event: DragEvent): void {
     if (!isOverlayLive.value || !carriesFiles(event)) return
     depth.value += 1
   }
 
-  function onWindowDragLeave(event: DragEvent): void {
+  function onWindowDragleave(event: DragEvent): void {
     if (!isOverlayLive.value || !carriesFiles(event)) return
     depth.value = Math.max(0, depth.value - 1)
   }
 
-  function onWindowDragOver(event: DragEvent): void {
+  function onWindowDragover(event: DragEvent): void {
     if (!isOverlayLive.value || !isActive.value || event.defaultPrevented) return
     event.preventDefault()
     if (event.dataTransfer) event.dataTransfer.dropEffect = 'none'
@@ -214,9 +214,9 @@
       :aria-describedby="isInline ? descriptionIds : undefined"
       :aria-hidden="isInline ? undefined : 'true'"
       class="group flex flex-col rounded-(--shape-card) data-[kind=inline]:w-full data-[kind=inline]:border data-[kind=inline]:border-dashed data-[kind=inline]:border-(--border-strong) data-[kind=inline]:bg-(--bg-surface) data-[kind=inline]:p-(--spacing-lg) data-[kind=inline]:transition-[background-color,border-color] data-[kind=inline]:duration-fast-02 data-[kind=inline]:ease-productive-entrance motion-reduce:transition-none data-[kind=inline]:data-[state=active]:border-(--border-selected) data-[kind=inline]:data-[state=active]:bg-(--bg-selected) data-[kind=inline]:data-[state=idle]:data-[invalid]:not-data-[disabled]:border-(--danger-border) data-[kind=inline]:data-[disabled]:border-(--border-default) data-[kind=inline]:data-[disabled]:bg-(--bg-disabled) data-[disabled]:cursor-not-allowed data-[kind=overlay]:absolute data-[kind=overlay]:inset-0 data-[kind=overlay]:border-2 data-[kind=overlay]:border-dashed data-[kind=overlay]:border-(--border-selected) data-[kind=overlay]:bg-(--bg-canvas) data-[kind=overlay]:data-[state=idle]:pointer-events-none"
-      @dragenter="onRootDragEnter"
-      @dragleave="onRootDragLeave"
-      @dragover="onRootDragOver"
+      @dragenter="onRootDragenter"
+      @dragleave="onRootDragleave"
+      @dragover="onRootDragover"
       @drop="onRootDrop"
     >
       <div

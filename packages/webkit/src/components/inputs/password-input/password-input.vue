@@ -97,7 +97,7 @@
   )
   const toggleIcon = computed(() => (visible.value ? 'ai ai-eye-slash' : 'ai ai-eye'))
 
-  const handleInput = (event: globalThis.Event) => {
+  const onInput = (event: globalThis.Event) => {
     const target = event.target as globalThis.HTMLInputElement
     model.value = target.value
   }
@@ -162,7 +162,7 @@
       dir="auto"
       class="relative z-(--z-input-field) w-full min-w-0 border-0 bg-transparent py-0 pe-0 ps-(--spacing-md) group-data-[has-icon-left]:ps-0 outline-none text-label-sm group-data-[monospace]:text-label-code-sm text-(--text-default) placeholder:text-(--text-muted) disabled:cursor-not-allowed disabled:text-(--text-disabled) read-only:cursor-default transition-opacity duration-150 ease-out motion-reduce:transition-none"
       v-bind="passthroughAttrs"
-      @input="handleInput"
+      @input="onInput"
     />
 
     <span

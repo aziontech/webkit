@@ -58,7 +58,7 @@
     return rest
   })
 
-  const handleClick = (event: MouseEvent) => {
+  const onClick = (event: MouseEvent) => {
     if (props.disabled) {
       event.preventDefault()
       return
@@ -80,7 +80,7 @@
     :aria-current="current ? 'page' : undefined"
     :aria-disabled="disabled ? true : undefined"
     :tabindex="current || disabled ? -1 : undefined"
-    @click="handleClick"
+    @click="onClick"
   >
     <i
       v-if="showIcon"

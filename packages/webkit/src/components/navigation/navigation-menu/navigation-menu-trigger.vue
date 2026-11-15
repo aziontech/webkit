@@ -93,7 +93,7 @@
     }
   }
 
-  const onPointerEnter = (event: globalThis.PointerEvent) => {
+  const onPointerenter = (event: globalThis.PointerEvent) => {
     listHighlight?.setTarget(resolveElement())
 
     if (isLink.value) {
@@ -108,7 +108,7 @@
     )
   }
 
-  const onPointerLeave = (event: globalThis.PointerEvent) => {
+  const onPointerleave = (event: globalThis.PointerEvent) => {
     listHighlight?.onTargetPointerleave(event, resolveElement())
 
     if (isLink.value) {
@@ -190,8 +190,8 @@
     :data-active="isLink && active ? '' : undefined"
     :data-popup-open="!isLink && itemOpen ? '' : undefined"
     :data-pressed="!isLink && itemOpen ? '' : undefined"
-    @pointerenter="onPointerEnter"
-    @pointerleave="onPointerLeave"
+    @pointerenter="onPointerenter"
+    @pointerleave="onPointerleave"
     @click="onClick"
     @keydown="onKeydown"
   >

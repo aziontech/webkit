@@ -164,17 +164,17 @@
   const hasFiles = (event: DragEvent) =>
     Array.from(event.dataTransfer?.types ?? []).includes('Files')
 
-  const onDragEnter = (event: DragEvent) => {
+  const onDragenter = (event: DragEvent) => {
     if (!hasFiles(event)) return
     event.preventDefault()
     dragDepth.value += 1
   }
 
-  const onDragOver = (event: DragEvent) => {
+  const onDragover = (event: DragEvent) => {
     if (hasFiles(event)) event.preventDefault()
   }
 
-  const onDragLeave = (event: DragEvent) => {
+  const onDragleave = (event: DragEvent) => {
     if (!hasFiles(event)) return
     dragDepth.value = Math.max(0, dragDepth.value - 1)
   }
@@ -234,9 +234,9 @@
 <template>
   <div
     class="flex min-h-0 flex-1 flex-col"
-    @dragenter="onDragEnter"
-    @dragover="onDragOver"
-    @dragleave="onDragLeave"
+    @dragenter="onDragenter"
+    @dragover="onDragover"
+    @dragleave="onDragleave"
     @drop="onDrop"
   >
     <div class="sticky top-0 z-1 bg-(--bg-canvas)">

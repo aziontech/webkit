@@ -136,14 +136,14 @@
     closeTimer.value = setTimeout(closeTooltip, wait)
   }
 
-  function onPointerDown(event: globalThis.PointerEvent) {
+  function onPointerdown(event: globalThis.PointerEvent) {
     if (event.pointerType !== 'touch' || props.disabled || !props.text) return
     clearPressTimer()
     clearCloseTimer()
     pressTimer.value = setTimeout(() => setOpen(true), LONG_PRESS_MS)
   }
 
-  function onPointerUp(event: globalThis.PointerEvent) {
+  function onPointerup(event: globalThis.PointerEvent) {
     if (event.pointerType !== 'touch') return
     clearPressTimer()
     if (isOpen.value) scheduleClose(TOUCH_HIDE_MS)
@@ -157,7 +157,7 @@
     }
   }
 
-  function onFocusOut(event: globalThis.FocusEvent) {
+  function onFocusout(event: globalThis.FocusEvent) {
     const trigger = triggerRef.value
     const next = event.relatedTarget as Node | null
     if (trigger?.contains(next)) return
@@ -217,11 +217,11 @@
     :data-placement="resolvedPlacementRef"
     @mouseenter="scheduleOpen"
     @mouseleave="scheduleClose()"
-    @pointerdown="onPointerDown"
-    @pointerup="onPointerUp"
-    @pointercancel="onPointerUp"
+    @pointerdown="onPointerdown"
+    @pointerup="onPointerup"
+    @pointercancel="onPointerup"
     @focusin="setOpen(true)"
-    @focusout="onFocusOut"
+    @focusout="onFocusout"
   >
     <slot />
   </span>

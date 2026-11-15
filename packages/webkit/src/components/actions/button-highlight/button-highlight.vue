@@ -100,7 +100,7 @@
     'data-[size=small]:px-(--spacing-xs) data-[size=small]:text-button-md ' +
     'group-data-[inactive]/highlight:text-(--text-disabled)'
 
-  const handleClick = (event: MouseEvent) => {
+  const onClick = (event: MouseEvent) => {
     if (isInactive.value) {
       event.preventDefault()
       return
@@ -126,7 +126,7 @@
     :data-loading="loading ? '' : undefined"
     :data-inactive="isInactive ? '' : undefined"
     :data-testid="testId"
-    @click="handleClick"
+    @click="onClick"
   >
     <span
       aria-hidden="true"
@@ -172,7 +172,7 @@
     :data-loading="loading ? '' : undefined"
     :data-inactive="isInactive ? '' : undefined"
     :data-testid="testId"
-    @click="handleClick"
+    @click="onClick"
   >
     <span
       aria-hidden="true"

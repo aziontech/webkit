@@ -258,12 +258,12 @@
     if (focusedPosition.value === null) store.resume()
   }
 
-  const onFocusIn = (position: ToastPosition) => {
+  const onFocusin = (position: ToastPosition) => {
     focusedPosition.value = position
     store.pause()
   }
 
-  const onFocusOut = (event: FocusEvent) => {
+  const onFocusout = (event: FocusEvent) => {
     const region = event.currentTarget as HTMLElement
     if (event.relatedTarget instanceof Node && region.contains(event.relatedTarget)) return
     focusedPosition.value = null
@@ -457,8 +457,8 @@
         class="transition-[height] duration-moderate-02 ease-productive-entrance motion-reduce:transition-none"
         @mouseenter="onEnter(region.position)"
         @mouseleave="onLeave"
-        @focusin="onFocusIn(region.position)"
-        @focusout="onFocusOut"
+        @focusin="onFocusin(region.position)"
+        @focusout="onFocusout"
         @keydown="onRegionKeydown"
       >
         <div

@@ -52,7 +52,7 @@
     return t('tableSortButton.unsorted')
   })
 
-  const handleClick = () => {
+  const onClick = () => {
     emit('toggle', props.direction === 'ascending' ? 'descending' : 'ascending')
   }
 </script>
@@ -67,6 +67,6 @@
     :data-visible="visible"
     :data-direction="direction"
     class="data-[visible=false]:invisible data-[visible=false]:pointer-events-none"
-    @click="handleClick"
+    @click="onClick"
   />
 </template>

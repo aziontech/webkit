@@ -482,7 +482,7 @@
     return undefined
   }
 
-  const onFocusOut = (node: SchemaFormNode, event: globalThis.FocusEvent) => {
+  const onFocusout = (node: SchemaFormNode, event: globalThis.FocusEvent) => {
     const next = event.relatedTarget as HTMLElement | null
     const field = event.currentTarget as HTMLElement | null
     if (next && (field?.contains(next) || next.closest('[role="listbox"]'))) return
@@ -597,7 +597,7 @@
         :data-path="node.path"
         :data-widget="node.widget"
         :data-testid="`${testId}__set`"
-        @focusout="onFocusOut(node, $event)"
+        @focusout="onFocusout(node, $event)"
       >
         <FieldLegend>{{ node.label }}</FieldLegend>
         <FieldDescription v-if="node.description && !errorOf(node)">{{
@@ -666,7 +666,7 @@
         :required="node.required"
         :invalid="Boolean(errorOf(node))"
         :disabled="isDisabled(node)"
-        @focusout="onFocusOut(node, $event)"
+        @focusout="onFocusout(node, $event)"
       >
         <FieldLabel>{{ node.label }}</FieldLabel>
         <slot

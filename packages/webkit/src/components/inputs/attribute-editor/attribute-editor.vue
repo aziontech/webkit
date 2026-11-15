@@ -367,7 +367,7 @@
     armed.value = ''
   }
 
-  const onDragStart = (
+  const onDragstart = (
     event: DragEvent,
     scope: DragScope,
     key: string,
@@ -387,7 +387,7 @@
     drag.value.scope === scope &&
     (scope === 'group' || drag.value.groupIndex === groupIndex)
 
-  const onDragOver = (
+  const onDragover = (
     event: DragEvent,
     scope: DragScope,
     index: number,
@@ -401,7 +401,7 @@
     drop.value = { index, groupIndex: scope === 'group' ? undefined : groupIndex, edge }
   }
 
-  const onDragEnd = () => {
+  const onDragend = () => {
     drag.value = null
     drop.value = null
     disarm()
@@ -413,7 +413,7 @@
     const from = drag.value.index
     let to = drop.value.index + (drop.value.edge === 'after' ? 1 : 0)
     if (from < to) to -= 1
-    onDragEnd()
+    onDragend()
     if (scope === 'group') moveGroup(from, to)
     else moveRow(from, groupIndex, to)
   }
@@ -490,11 +490,11 @@
           :draggable="grouped && armed === groupKey(group) ? 'true' : undefined"
           :data-testid="grouped ? `${testId}__group` : undefined"
           @dragstart="
-            grouped && onDragStart($event, 'group', groupKey(group), groupIndex, undefined)
+            grouped && onDragstart($event, 'group', groupKey(group), groupIndex, undefined)
           "
-          @dragover="grouped && onDragOver($event, 'group', groupIndex, undefined)"
+          @dragover="grouped && onDragover($event, 'group', groupIndex, undefined)"
           @drop="grouped && onDrop($event, 'group', undefined)"
-          @dragend="onDragEnd"
+          @dragend="onDragend"
         >
           <div
             v-if="groupReorderShown"
@@ -590,11 +590,11 @@
                 :data-testid="`${testId}__row`"
                 @keydown="onRowKeydown($event, index, grouped ? groupIndex : undefined)"
                 @dragstart="
-                  onDragStart($event, 'row', rowKey(item), index, grouped ? groupIndex : undefined)
+                  onDragstart($event, 'row', rowKey(item), index, grouped ? groupIndex : undefined)
                 "
-                @dragover="onDragOver($event, 'row', index, grouped ? groupIndex : undefined)"
+                @dragover="onDragover($event, 'row', index, grouped ? groupIndex : undefined)"
                 @drop="onDrop($event, 'row', grouped ? groupIndex : undefined)"
-                @dragend="onDragEnd"
+                @dragend="onDragend"
               >
                 <span
                   v-if="grouped && index > 0"

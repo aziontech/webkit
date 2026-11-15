@@ -497,7 +497,7 @@
     return category.value.indexAt(offset)
   }
 
-  function onPointerDown(event: globalThis.PointerEvent) {
+  function onPointerdown(event: globalThis.PointerEvent) {
     if (!hasBrush.value || event.button !== 0) return
     const index = indexAtPointer(event)
     if (index === null) return
@@ -510,22 +510,22 @@
     }
   }
 
-  function onPointerMove(event: globalThis.PointerEvent) {
+  function onPointermove(event: globalThis.PointerEvent) {
     const index = indexAtPointer(event)
     if (index === null) return
     if (draft.value) draft.value = [draft.value[0], index]
     setActiveIndex(index)
   }
 
-  function onPointerUp() {
+  function onPointerup() {
     if (draft.value) commitRange(draft.value)
   }
 
-  function onPointerCancel() {
+  function onPointercancel() {
     draft.value = null
   }
 
-  function onPointerLeave() {
+  function onPointerleave() {
     if (!draft.value) setActiveIndex(null)
   }
 
@@ -742,11 +742,11 @@
         :data-brush="hasBrush || null"
         :style="{ minHeight: `${height}px` }"
         class="col-start-1 row-start-1 min-h-0 min-w-0 cursor-crosshair rounded-(--shape-elements) outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) data-[brush]:touch-pan-y"
-        @pointerdown="onPointerDown"
-        @pointermove="onPointerMove"
-        @pointerup="onPointerUp"
-        @pointercancel="onPointerCancel"
-        @pointerleave="onPointerLeave"
+        @pointerdown="onPointerdown"
+        @pointermove="onPointermove"
+        @pointerup="onPointerup"
+        @pointercancel="onPointercancel"
+        @pointerleave="onPointerleave"
         @click="onClick"
         @keydown="onKeydown"
       />

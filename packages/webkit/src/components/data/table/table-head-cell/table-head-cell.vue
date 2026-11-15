@@ -91,13 +91,13 @@
     props.sortable ? props.sortDirection : undefined
   )
 
-  const handleSort = (direction: 'ascending' | 'descending') => {
+  const onSort = (direction: 'ascending' | 'descending') => {
     emit('sort', direction)
   }
 
   const toggleSort = () => {
     if (!props.sortable) return
-    handleSort(props.sortDirection === 'ascending' ? 'descending' : 'ascending')
+    onSort(props.sortDirection === 'ascending' ? 'descending' : 'ascending')
   }
 </script>
 
@@ -141,7 +141,7 @@
         <TableSortButton
           :direction="sortDirection"
           :aria-labelledby="`${sortById} ${labelId}`"
-          @toggle="handleSort"
+          @toggle="onSort"
         />
       </span>
     </template>

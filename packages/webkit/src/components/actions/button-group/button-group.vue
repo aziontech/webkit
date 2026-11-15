@@ -182,7 +182,7 @@
       rootRef.value?.querySelectorAll<HTMLElement>('[data-button-group-item]') ?? []
     ).filter((el) => !el.hasAttribute('disabled'))
 
-  const onFocusIn = (event: FocusEvent) => {
+  const onFocusin = (event: FocusEvent) => {
     const id = (event.target as HTMLElement | null)
       ?.closest('[data-button-group-item]')
       ?.getAttribute('data-button-group-item')
@@ -216,7 +216,7 @@
     :data-kind="kind"
     :data-size="size"
     class="inline-flex max-w-full min-w-0 flex-wrap items-center gap-(--spacing-xxs)"
-    @focusin="onFocusIn"
+    @focusin="onFocusin"
     @keydown="onKeydown"
   >
     <template

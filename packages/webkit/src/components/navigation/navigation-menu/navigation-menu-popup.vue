@@ -76,11 +76,11 @@
     root.setValue(null, createChangeEventDetails('outside-press', event, undefined))
   })
 
-  const onPointerEnter = () => {
+  const onPointerenter = () => {
     root.cancelTimers()
   }
 
-  const onPointerLeave = (event: globalThis.PointerEvent) => {
+  const onPointerleave = (event: globalThis.PointerEvent) => {
     root.scheduleClose(createChangeEventDetails('trigger-hover', event, undefined))
   }
 </script>
@@ -94,8 +94,8 @@
     :data-testid="testId"
     v-bind="popupDataAttrs"
     role="navigation"
-    @pointerenter="onPointerEnter"
-    @pointerleave="onPointerLeave"
+    @pointerenter="onPointerenter"
+    @pointerleave="onPointerleave"
     @keydown="root.onPopupKeydown"
   >
     <slot />

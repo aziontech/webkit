@@ -62,7 +62,7 @@
     passwordManagerHints({ autocomplete: props.autocomplete, readonly: props.readonly })
   )
 
-  const handleInput = (event: globalThis.Event) => {
+  const onInput = (event: globalThis.Event) => {
     model.value = (event.target as globalThis.HTMLInputElement).value
   }
 </script>
@@ -83,6 +83,6 @@
     :data-testid="testId"
     v-bind="{ ...autofillHints, ...$attrs }"
     class="h-full w-full min-w-0 flex-1 border-0 bg-transparent px-(--spacing-sm) text-label-sm text-(--text-default) outline-none placeholder:text-(--text-muted) focus:ring-0 disabled:cursor-not-allowed disabled:text-(--text-disabled)"
-    @input="handleInput"
+    @input="onInput"
   />
 </template>

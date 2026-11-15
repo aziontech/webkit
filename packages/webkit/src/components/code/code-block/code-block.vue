@@ -450,7 +450,7 @@
     })
   }
 
-  const onContentTransitionEnd = (event: globalThis.TransitionEvent) => {
+  const onContentTransitionend = (event: globalThis.TransitionEvent) => {
     const el = contentRef.value
 
     if (el && event.propertyName === 'height' && event.target === el) {
@@ -588,7 +588,7 @@
     }
   }
 
-  const handleCopy = (event: MouseEvent, code: string) => {
+  const onCopy = (event: MouseEvent, code: string) => {
     emit('copy', event, code)
   }
 
@@ -798,7 +798,7 @@
       ref="contentRef"
       class="relative flex max-h-[var(--code-block-max-height,320px)] min-h-0 shrink flex-col overflow-hidden transition-[height] duration-moderate-02 ease-productive-entrance motion-reduce:transition-none"
       :data-testid="`${testId}__content`"
-      @transitionend="onContentTransitionEnd"
+      @transitionend="onContentTransitionend"
     >
       <div
         v-if="canCopy"
@@ -812,7 +812,7 @@
           kind="outlined"
           size="small"
           :data-testid="`${testId}__copy`"
-          @copy="handleCopy"
+          @copy="onCopy"
         />
       </div>
 

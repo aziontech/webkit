@@ -561,7 +561,7 @@ Some components may require Vue Router for navigation or routing features.
   const instance = getCurrentInstance()
   const router = instance?.appContext.config.globalProperties.$router
 
-  const handleClick = () => {
+  const onClick = () => {
     if (router) {
       router.push('/path')
     } else {
@@ -633,7 +633,7 @@ interface Props {
 - **Boolean states** are exposed without `is`/`has` prefix on the prop (`disabled`, `loading`, `open`, `selected`, `expanded`, `readonly`). Internal computeds may use `isInactive` etc.
 - **Events** are emitted in kebab-case (`update:open`, `before-close`) and typed via `defineEmits<{ 'update:open': [value: boolean] }>()`.
 - **v-model** follows Vue 3 standard via `defineModel<T>('propName')`.
-- **Refs / composables** use descriptive prefixes (`triggerRef`, `panelRef`, `useFocusTrap`).
+- **Internal names** follow [`component-structure.md`](../rules/component-structure.md) § "Internal names": event handlers `onX` with the DOM event spelled as Vue compiles it (`onClick`, `onKeydown`, `onPointerdown`), template refs to elements or component instances `xEl` / `xEls` (`triggerEl`, `panelEl`, `optionEls`), composables `use-x.ts` exporting `useX` (`useFocusTrap`), injection keys `<Component>[<Part>]InjectionKey`.
 
 ### 2.3. Estados controlados vs não-controlados
 

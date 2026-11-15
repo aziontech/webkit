@@ -127,7 +127,7 @@
     event.preventDefault()
   }
 
-  function onPointerMove(event: globalThis.PointerEvent) {
+  function onPointermove(event: globalThis.PointerEvent) {
     const strip = stripRef.value
     if (!strip || !count.value) return
     const rect = strip.getBoundingClientRect()
@@ -138,7 +138,7 @@
     )
   }
 
-  function onPointerLeave() {
+  function onPointerleave() {
     setActiveIndex(null)
   }
 </script>
@@ -192,8 +192,8 @@
         ref="stripRef"
         :data-testid="`${testId}__strip`"
         class="flex h-8 w-full gap-0.5"
-        @pointermove="onPointerMove"
-        @pointerleave="onPointerLeave"
+        @pointermove="onPointermove"
+        @pointerleave="onPointerleave"
       >
         <span
           v-for="(block, index) in blocks"

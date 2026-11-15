@@ -119,21 +119,21 @@
     visible.value = false
   }
 
-  const handleAfterLeave = () => {
+  const onAfterLeave = () => {
     if (dismissEvent) emit('close', dismissEvent)
     else emit('close')
   }
 
-  const handleAction = (event: MouseEvent) => {
+  const onAction = (event: MouseEvent) => {
     emit('action', event)
   }
 
-  const handleClose = (event: MouseEvent) => {
+  const onClose = (event: MouseEvent) => {
     event.stopPropagation()
     dismiss(event)
   }
 
-  const handleEscape = (event: KeyboardEvent) => {
+  const onEscape = (event: KeyboardEvent) => {
     if (props.closable && event.key === 'Escape') {
       dismiss(event)
     }
@@ -156,7 +156,7 @@
     leave-from-class="opacity-100"
     leave-to-class="opacity-0"
     leave-active-class="transition-opacity duration-fast-02 ease-productive-exit motion-reduce:transition-none"
-    @after-leave="handleAfterLeave"
+    @after-leave="onAfterLeave"
   >
     <div
       v-if="visible"
@@ -169,7 +169,7 @@
       :data-titled="title ? true : null"
       tabindex="-1"
       class="@container/alert relative box-border flex w-full flex-wrap items-center gap-(--spacing-sm) break-words rounded-(--shape-button) border border-[length:var(--border-width-default,1px)] py-1.5 shadow-(--shadow-xs) data-[size=small]:min-h-8 data-[size=small]:px-(--spacing-xs) data-[size=medium]:min-h-9 data-[size=medium]:px-(--spacing-sm) data-[trailing]:pe-(--spacing-xs) data-[severity=info]:border-(--info-border) data-[severity=info]:bg-(--info) data-[severity=success]:border-(--success-border) data-[severity=success]:bg-(--success) data-[severity=warning]:border-(--warning-border) data-[severity=warning]:bg-(--warning) data-[severity=danger]:border-(--danger-border) data-[severity=danger]:bg-(--danger)"
-      @keydown="handleEscape"
+      @keydown="onEscape"
     >
       <div class="flex min-w-0 flex-1 items-start gap-(--spacing-sm)">
         <span
@@ -213,7 +213,7 @@
             :size="size"
             :label="actionLabel"
             :data-testid="`${testId}__action`"
-            @click="handleAction"
+            @click="onAction"
           />
         </slot>
       </div>
@@ -224,7 +224,7 @@
         :size="size"
         :ariaLabel="t('alert.close')"
         :data-testid="`${testId}__close`"
-        @click="handleClose"
+        @click="onClose"
       />
     </div>
   </Transition>

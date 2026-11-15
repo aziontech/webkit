@@ -155,7 +155,7 @@ describe('Tooltip (overlay: Teleport, data-state, hover/focus/Escape)', () => {
       await settle()
       expect(panel()).not.toBeNull()
 
-      // onFocusOut closes when relatedTarget is not inside the trigger.
+      // onFocusout closes when relatedTarget is not inside the trigger.
       await fireEvent.focusOut(trigger, { relatedTarget: document.body })
       await settle()
 

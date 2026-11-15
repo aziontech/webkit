@@ -189,7 +189,7 @@
     })
   }
 
-  const handlePrimary = () => {
+  const onPrimary = () => {
     if (verifying.value) return
     cardNotice.value = null
     if (step.value === 'email') {
@@ -279,7 +279,7 @@
                       aria-label="Sign in to your account"
                       :aria-busy="verifying || undefined"
                       novalidate
-                      @submit.prevent="handlePrimary"
+                      @submit.prevent="onPrimary"
                     >
                       <PageHeader
                         :title="heading.title"

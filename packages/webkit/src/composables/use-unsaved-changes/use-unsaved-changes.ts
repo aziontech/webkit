@@ -160,15 +160,15 @@ export function useUnsavedChanges<T>(
   }))
 
   if (options.beforeUnload !== false && typeof window !== 'undefined') {
-    const onBeforeUnload = (event: BeforeUnloadEvent) => {
+    const onBeforeunload = (event: BeforeUnloadEvent) => {
       if (!enabled() || !isDirty.value) return
       event.preventDefault()
       event.returnValue = ''
     }
-    window.addEventListener('beforeunload', onBeforeUnload)
+    window.addEventListener('beforeunload', onBeforeunload)
     if (getCurrentScope()) {
       onScopeDispose(() => {
-        window.removeEventListener('beforeunload', onBeforeUnload)
+        window.removeEventListener('beforeunload', onBeforeunload)
         release?.(false)
       })
     }

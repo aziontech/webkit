@@ -178,7 +178,7 @@ describe('Breadcrumb (composition, data-driven root)', () => {
       // click — userEvent fires pointerdown/up so @select -> onOverflowSelect runs.
       await userEvent.click(option)
 
-      // DropdownMenu select -> onOverflowSelect -> handleItemClick -> navigate(event, '/projects').
+      // DropdownMenu select -> onOverflowSelect -> onItemClick -> navigate(event, '/projects').
       const navigate = emitted().navigate as Array<[unknown, string]>
       expect(navigate).toBeTruthy()
       expect(navigate[0][1]).toBe('/projects')

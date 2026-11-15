@@ -1361,11 +1361,11 @@
   const leadingCells = computed<number>(
     () => (props.enableRowSelection ? 1 : 0) + (reorderActive.value ? 1 : 0)
   )
-  const handleFrozen = computed<boolean>(
+  const reorderHandleFrozen = computed<boolean>(
     () => reorderActive.value && leftFrozenCols.value.length > 0
   )
   const selectionStyle = computed<Record<string, string> | undefined>(() =>
-    handleFrozen.value && selectionFrozen.value && !stacked.value
+    reorderHandleFrozen.value && selectionFrozen.value && !stacked.value
       ? { insetInlineStart: `${SELECTION_WIDTH}px` }
       : undefined
   )
@@ -1388,7 +1388,7 @@
     const value = record && key ? record[key] : undefined
     return value === undefined || value === null || value === '' ? id : String(value)
   }
-  const handleLabelOf = (id: string, index: number): string =>
+  const reorderHandleLabelOf = (id: string, index: number): string =>
     t('tableReorder.handle', {
       name: rowNameOf(id),
       position: index + 1,
@@ -1465,7 +1465,7 @@
   }
 
   const REORDER_EDGE = 32
-  const onHandlePointerDown = (event: PointerEvent, id: string): void => {
+  const onHandlePointerdown = (event: PointerEvent, id: string): void => {
     if (reorderLocked.value || event.button !== 0 || !canMoveId(id)) return
     const handle = event.currentTarget as HTMLElement
     if (event.isTrusted) handle.setPointerCapture(event.pointerId)
@@ -1474,7 +1474,7 @@
     dragId.value = id
     overId.value = id
   }
-  const onHandlePointerMove = (event: PointerEvent): void => {
+  const onHandlePointermove = (event: PointerEvent): void => {
     if (!dragId.value) return
     const hit = globalThis.document
       .elementFromPoint(event.clientX, event.clientY)
@@ -1487,14 +1487,14 @@
     if (event.clientY < box.top + REORDER_EDGE) viewport.scrollTop -= REORDER_EDGE / 2
     else if (event.clientY > box.bottom - REORDER_EDGE) viewport.scrollTop += REORDER_EDGE / 2
   }
-  const onHandlePointerUp = (): void => {
+  const onHandlePointerup = (): void => {
     const id = dragId.value
     const target = overId.value
     dragId.value = null
     overId.value = null
     if (id && target && target !== id) moveRow(id, target, 'dropped')
   }
-  const onHandlePointerCancel = (): void => {
+  const onHandlePointercancel = (): void => {
     dragId.value = null
     overId.value = null
   }
@@ -1771,7 +1771,7 @@
                   v-if="reorderActive"
                   key="reorder"
                   kind="checkbox"
-                  :frozen="handleFrozen ? 'start' : undefined"
+                  :frozen="reorderHandleFrozen ? 'start' : undefined"
                   data-reorder-cell
                 >
                   <span class="sr-only">{{ t('tableReorder.column') }}</span>
@@ -1836,7 +1836,7 @@
                   v-if="reorderActive"
                   key="reorder"
                   kind="checkbox"
-                  :frozen="handleFrozen ? 'start' : undefined"
+                  :frozen="reorderHandleFrozen ? 'start' : undefined"
                   :class="stacked ? 'static! before:hidden! after:hidden!' : undefined"
                 />
                 <TableCell
@@ -1940,7 +1940,7 @@
                     v-if="reorderActive"
                     key="reorder"
                     kind="checkbox"
-                    :frozen="handleFrozen ? 'start' : undefined"
+                    :frozen="reorderHandleFrozen ? 'start' : undefined"
                     data-reorder-cell
                     :class="stacked ? 'static! before:hidden! after:hidden!' : undefined"
                   >
@@ -1948,7 +1948,7 @@
                       icon="ai ai-bars"
                       kind="outlined"
                       size="small"
-                      :ariaLabel="handleLabelOf(row.id, windowStart + index)"
+                      :ariaLabel="reorderHandleLabelOf(row.id, windowStart + index)"
                       :aria-describedby="reorderHintId"
                       :disabled="reorderLocked || !canMoveId(row.id)"
                       :data-reorder-handle="row.id"
@@ -1956,10 +1956,10 @@
                       class="cursor-grab touch-none active:cursor-grabbing"
                       @click.stop
                       @keydown="(event: KeyboardEvent) => onHandleKeydown(event, row.id)"
-                      @pointerdown="(event: PointerEvent) => onHandlePointerDown(event, row.id)"
-                      @pointermove="onHandlePointerMove"
-                      @pointerup="onHandlePointerUp"
-                      @pointercancel="onHandlePointerCancel"
+                      @pointerdown="(event: PointerEvent) => onHandlePointerdown(event, row.id)"
+                      @pointermove="onHandlePointermove"
+                      @pointerup="onHandlePointerup"
+                      @pointercancel="onHandlePointercancel"
                     />
                   </TableCell>
                   <TableCell

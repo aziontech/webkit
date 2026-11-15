@@ -124,7 +124,7 @@
     ...(root.menuOpen.value ? {} : { pointerEvents: 'none' })
   }))
 
-  const onPointerEnter = () => {
+  const onPointerenter = () => {
     root.cancelTimers()
   }
 </script>
@@ -144,7 +144,7 @@
     :data-side="resolvedSide"
     :data-align="resolvedAlign"
     :data-constrained="constrained ? '' : undefined"
-    @pointerenter="onPointerEnter"
+    @pointerenter="onPointerenter"
   >
     <slot />
   </div>

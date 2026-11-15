@@ -25,7 +25,7 @@
   const { t } = useTranslate({ drawer: en.drawer })
   const ctx = inject(DrawerInjectionKey)
 
-  const handleClick = () => {
+  const onClick = () => {
     ctx?.close()
   }
 </script>
@@ -39,6 +39,6 @@
     :ariaLabel="props.ariaLabel || t('drawer.close')"
     :data-testid="`${ctx.testId}__close`"
     :class="attrs.class"
-    @click="handleClick"
+    @click="onClick"
   />
 </template>

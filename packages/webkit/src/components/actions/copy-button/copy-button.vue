@@ -63,7 +63,7 @@
       : props.ariaLabel || t('copyButton.copy')
   )
 
-  async function handleCopy(event: MouseEvent) {
+  async function onCopy(event: MouseEvent) {
     event.stopPropagation()
 
     if (props.disabled || !props.value || typeof globalThis.navigator === 'undefined') return
@@ -117,7 +117,7 @@
         :size="size"
         :disabled="disabled"
         iconTransition
-        @click="handleCopy"
+        @click="onCopy"
       />
     </Tooltip>
     <span

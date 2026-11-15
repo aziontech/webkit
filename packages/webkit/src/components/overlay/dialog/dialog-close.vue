@@ -25,7 +25,7 @@
   const { t } = useTranslate({ dialog: en.dialog })
   const ctx = inject(DialogInjectionKey)
 
-  const handleClick = () => {
+  const onClick = () => {
     ctx?.close()
   }
 </script>
@@ -39,6 +39,6 @@
     :ariaLabel="props.ariaLabel || t('dialog.close')"
     :data-testid="`${ctx.testId}__close`"
     :class="attrs.class"
-    @click="handleClick"
+    @click="onClick"
   />
 </template>

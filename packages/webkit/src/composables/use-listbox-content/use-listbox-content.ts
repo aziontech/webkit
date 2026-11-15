@@ -138,7 +138,7 @@ export function useListboxContent(options: UseListboxContentOptions): UseListbox
     moveFocus(key)
   }
 
-  const onDocumentPointerDown = (event: globalThis.PointerEvent) => {
+  const onDocumentPointerdown = (event: globalThis.PointerEvent) => {
     if (!isOpen()) return
     const el = root.value
     const target = event.target as globalThis.Node | null
@@ -183,10 +183,10 @@ export function useListboxContent(options: UseListboxContentOptions): UseListbox
       if (next) {
         await nextTick()
         await focusInitial()
-        document.addEventListener('pointerdown', onDocumentPointerDown, true)
+        document.addEventListener('pointerdown', onDocumentPointerdown, true)
       } else {
         const hadFocus = !!root.value?.contains(document.activeElement)
-        document.removeEventListener('pointerdown', onDocumentPointerDown, true)
+        document.removeEventListener('pointerdown', onDocumentPointerdown, true)
         if (hadFocus) {
           await nextTick()
           focusBack()
@@ -196,11 +196,11 @@ export function useListboxContent(options: UseListboxContentOptions): UseListbox
   )
 
   onMounted(() => {
-    if (isOpen()) document.addEventListener('pointerdown', onDocumentPointerDown, true)
+    if (isOpen()) document.addEventListener('pointerdown', onDocumentPointerdown, true)
   })
 
   onScopeDispose(() => {
-    document.removeEventListener('pointerdown', onDocumentPointerDown, true)
+    document.removeEventListener('pointerdown', onDocumentPointerdown, true)
   })
 
   return { onKeydown, navigate }

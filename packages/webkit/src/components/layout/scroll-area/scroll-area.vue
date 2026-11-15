@@ -51,7 +51,7 @@
 
   const scrollStep = 40
 
-  const handleKeyDown = (event: globalThis.KeyboardEvent) => {
+  const onKeydown = (event: globalThis.KeyboardEvent) => {
     const viewport = viewportRef.value
     if (!viewport) return
 
@@ -117,7 +117,7 @@
     :data-testid="testId"
     :aria-label="ariaLabel || undefined"
     :tabindex="tabIndex"
-    @keydown="handleKeyDown"
+    @keydown="onKeydown"
   >
     <slot />
   </div>

@@ -105,7 +105,7 @@
     highlightIndex.value = index
   }
 
-  function handleListLeave(event: PointerEvent) {
+  function onListLeave(event: PointerEvent) {
     const related = event.relatedTarget as Node | null
     if (related && listRef.value?.contains(related)) return
     highlighting.value = false
@@ -238,7 +238,7 @@
         <ul
           ref="listRef"
           class="relative m-0 flex list-none flex-col p-0 ps-[17px]"
-          @pointerleave="handleListLeave"
+          @pointerleave="onListLeave"
         >
           <li
             v-for="(item, index) in items"
