@@ -1,6 +1,7 @@
 {
-  "_id": "closing-call-to-action-agents",
+  "_id": "closing-call-to-action",
   "props": {
+    "kind": "primary",
     "anchor": "contact",
     "title": "Built by you, or your agents.",
     "typedLead": "Drive one platform from the",

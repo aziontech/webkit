@@ -4,7 +4,7 @@ The templates band of a solution page. Copy on one side invites the reader to st
 
 Each template card is a mark, a title, one line and a `Deploy now` action. Retail, Web Apps, AI Workloads, Security, Performance and Streaming use it.
 
-The band is the `TemplateGallery` component from `@aziontech/webkit/template-gallery`; it composes `SectionModule`, `MediaSplit`, `ScrollArea`, `CardGrid`, `Button`, `FrameBox` and `Ticker`.
+The band is the `TemplateGallery` component from `@aziontech/webkit/template-gallery`; it composes `SectionModule`, `MediaSplit`, `ScrollArea`, `CardGrid`, `Button`, `FrameBox` and `Ticker` (and `TextureMaterial` on the closing frame with `closing`).
 
 ## Examples
 
@@ -29,3 +29,20 @@ Add this entry to the `sections` array of the page JSON. `_id` picks the block a
 Example:
 
 Site JSON: [`site-default.json`](./site-default.json)
+
+### Closing
+
+The close that starts from a template: the same band, set last on the page with `closing`, so the tall hatched closing frame follows it and nothing else does (no trailing `SectionGap`). Turn `hatch` off when another closing band stacks right under it and draws the page's one closing frame.
+
+Example: [`site-closing.vue`](./site-closing.vue)
+
+##### Use it on the site
+
+Add this entry, last, to the `sections` array of the page JSON. It takes the props of the Default entry plus:
+
+- `closing: true` makes it the page's closing band.
+- `hatch: false` drops its closing frame when another closing band follows it directly.
+
+Example:
+
+Site JSON: [`site-closing.json`](./site-closing.json)

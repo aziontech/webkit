@@ -1,5 +1,8 @@
 <script setup>
-  import ClosingCallToActionTemplates from '@aziontech/webkit/closing-call-to-action-templates'
+  import ClosingCallToAction from '@aziontech/webkit/closing-call-to-action'
+  import SectionContainer from '@aziontech/webkit/section-container'
+  import SectionGap from '@aziontech/webkit/section-gap'
+  import TemplateGallery from '@aziontech/webkit/template-gallery'
 
   const primaryAction = {
     label: 'Start for free',
@@ -68,14 +71,28 @@
 </script>
 
 <template>
-  <ClosingCallToActionTemplates
-    anchor="contact"
-    title="Start from a template. Ship it today."
-    description="Deploy a ready-made starter in seconds, then make it yours."
-    :primary-action="primaryAction"
-    :secondary-action="secondaryAction"
-    :templates="templates"
-    deploy-label="Deploy"
-    templates-aria-label="Templates you can deploy"
-  />
+  <SectionContainer max-width="site">
+    <SectionGap hatch />
+
+    <TemplateGallery
+      closing
+      anchor="contact"
+      title="Start from a template. Ship it today."
+      description="Deploy a ready-made starter in seconds, then make it yours."
+      :primary-action="primaryAction"
+      :secondary-action="secondaryAction"
+      :templates="templates"
+      deploy-label="Deploy"
+      templates-aria-label="Templates you can deploy"
+      :hatch="false"
+    />
+    <SectionGap hatch />
+
+    <ClosingCallToAction
+      kind="panel"
+      title="Ready to talk?"
+      description="Tell us what you are building and a specialist will reach out."
+      :primary-action="{ label: 'Talk to a specialist', href: '/contact', trailing: true }"
+    />
+  </SectionContainer>
 </template>

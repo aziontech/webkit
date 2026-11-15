@@ -3,10 +3,10 @@ name: closing-call-to-action-newsletter
 category: sections
 structure: monolithic
 status: implemented
-spec_version: 3
+spec_version: 4
 created: 2026-11-05
-last_updated: 2026-11-14
-checksum: a2d529fc32cd07d81a12d99a8c255333ecdc9e057e7d932f9c937f9127e6f54d
+last_updated: 2026-11-15
+checksum: c9ee76255e6d7ddc43800549d7e512638eadfb30d57b6550544308d8e48ffd6d
 template: 2
 ---
 
@@ -18,11 +18,13 @@ The closing band whose ask is a newsletter sign-up: the overline and a large hea
 
 ## When to use
 
+- Use ClosingCallToActionNewsletter when the closing ask is an email field.
 - To close the Blog or the Resource Hub on a newsletter subscription.
 
 ## When NOT to use
 
-- For a close on one or two link actions → use `closing-call-to-action`.
+- For a close on one or two link actions or a command → use `closing-call-to-action`.
+- For a close that lists deployable templates → use `template-gallery` with `closing`.
 - For a lead form with several fields → use `hero-form`.
 
 ## Related

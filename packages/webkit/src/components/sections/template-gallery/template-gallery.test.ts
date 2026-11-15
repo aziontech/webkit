@@ -215,4 +215,30 @@ describe('TemplateGallery', () => {
 
     await expectNoA11yViolations(container)
   })
+
+  it('draws no closing frame unless the band is closing', () => {
+    const { getByTestId } = render(TemplateGallery, { props: { title: 'Start', templates } })
+
+    expect(getByTestId(TESTID).querySelector('[data-hatch="true"]')).toBeNull()
+  })
+
+  it('draws the closing frame under a closing band and drops it when hatch is off', () => {
+    const on = render(TemplateGallery, { props: { title: 'Start', templates, closing: true } })
+    expect(on.getByTestId(TESTID).querySelector('[data-hatch="true"]')).not.toBeNull()
+    on.unmount()
+
+    const off = render(TemplateGallery, {
+      props: { title: 'Start', templates, closing: true, hatch: false }
+    })
+    expect(off.getByTestId(TESTID).querySelector('[data-hatch="true"]')).toBeNull()
+    expect(off.getByRole('heading', { level: 2, name: 'Start' })).toBeInTheDocument()
+  })
+
+  it('draws no closing frame when no template carries a title', () => {
+    const { getByTestId } = render(TemplateGallery, {
+      props: { title: 'Start', templates: [], closing: true }
+    })
+
+    expect(getByTestId(TESTID).children).toHaveLength(0)
+  })
 })

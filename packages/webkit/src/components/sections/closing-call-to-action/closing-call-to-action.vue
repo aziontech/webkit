@@ -25,6 +25,43 @@
     trailing?: boolean
   }
 
+  /** Visual weight of an audience action. */
+  export type ClosingCallToActionAudienceActionKind = 'secondary' | 'outlined'
+
+  /** One action of an audience. */
+  export type ClosingCallToActionAudienceAction = {
+    /** Visible label of the action. */
+    label: string
+    /** Destination the action links to. */
+    href: string
+    /** Visual weight: `secondary` is the white pill, `outlined` the quiet one; defaults to `outlined`. */
+    kind?: ClosingCallToActionAudienceActionKind
+    /** Closes the label on a trailing chevron that reads as "go". */
+    trailing?: boolean
+  }
+
+  /** The copyable line of an audience. */
+  export type ClosingCallToActionAudienceCopy = {
+    /** Accessible name of the copy button. */
+    label: string
+    /** Line shown in the read-only field and copied as is. */
+    text: string
+    /** Draws the `$` shell prompt before the line, so a command reads apart from a prompt meant for an agent. */
+    shell?: boolean
+  }
+
+  /** One way in, picked by the audience switch. */
+  export type ClosingCallToActionAudience = {
+    /** Stable value of the audience in the switch. */
+    value: string
+    /** Visible label of the audience in the switch. */
+    label: string
+    /** Copyable line shown beside the actions. */
+    copy?: ClosingCallToActionAudienceCopy
+    /** The actions of the audience, in order. */
+    actions?: ClosingCallToActionAudienceAction[]
+  }
+
   interface Props {
     /** Layout of the band: `split` is a raised lead cell beside an aside cell over a tall closing frame, `panel` one surface over a short closing frame, `primary` a centred ask under a pixelated texture over a tall closing frame, `frame` the tall closing frame alone. */
     kind?: ClosingCallToActionKind
@@ -46,6 +83,16 @@
     command?: string
     /** Draws the hatched closing frame under the band; turn it off when another closing band stacks directly below and draws the shared frame. */
     hatch?: boolean
+    /** The ways in of the `primary` close, in switch order; each is `{ value, label, copy?, actions? }` (`copy` is `{ label, text, shell? }`, `shell` drawing the `$` prompt; an action is `{ label, href, kind?, trailing? }`) and the first one opens. Replaces the command and the two actions; the switch renders only with two or more. */
+    audiences?: ClosingCallToActionAudience[]
+    /** Fixed opening of the typed line under the audiences, before the typed word. */
+    typedLead?: string
+    /** Words typed, held, erased and typed again in order after `typedLead`; the typed line renders only with `audiences` and words. */
+    typedWords?: string[]
+    /** Accessible name of the audience switch. */
+    audiencesAriaLabel?: string
+    /** Accessible name of the read-only field that shows an audience's copyable line. */
+    lineAriaLabel?: string
   }
 
   const props = withDefaults(defineProps<Props>(), {
@@ -58,11 +105,20 @@
     primaryAction: undefined,
     secondaryAction: undefined,
     command: '',
-    hatch: true
+    hatch: true,
+    audiences: () => [],
+    typedLead: '',
+    typedWords: () => [],
+    audiencesAriaLabel: '',
+    lineAriaLabel: ''
   })
 
   const SectionCommand = defineAsyncComponent(
     () => import('../section-command/section-command.vue')
+  )
+
+  const ClosingCallToActionAudiences = defineAsyncComponent(
+    () => import('./closing-call-to-action-audiences/closing-call-to-action-audiences.vue')
   )
 
   const attrs = useAttrs()
@@ -79,8 +135,15 @@
 
   const bandKind = computed(() => (props.kind === 'frame' ? 'split' : props.kind))
 
+  const hasAudiences = computed(() => isPrimary.value && props.audiences.length > 0)
+
   const hasActions = computed(() =>
-    Boolean(props.command || props.primaryAction || (!isSplit.value && props.secondaryAction))
+    Boolean(
+      hasAudiences.value ||
+      props.command ||
+      props.primaryAction ||
+      (!isSplit.value && props.secondaryAction)
+    )
   )
 </script>
 
@@ -103,7 +166,7 @@
           :eyebrow="isPrimary ? '' : eyebrow"
           :title="title"
           :title-muted="isSplit ? titleMuted : ''"
-          :description="description"
+          :description="hasAudiences ? '' : description"
         >
           <template
             v-if="isPrimary"
@@ -119,31 +182,42 @@
             v-if="hasActions"
             #actions
           >
-            <SectionCommand
-              v-if="command"
-              :value="command"
+            <ClosingCallToActionAudiences
+              v-if="hasAudiences"
+              :audiences="audiences"
+              :typed-lead="typedLead"
+              :typed-words="typedWords"
+              :description="description"
+              :audiences-aria-label="audiencesAriaLabel"
+              :line-aria-label="lineAriaLabel"
             />
-            <Button
-              v-if="primaryAction"
-              :label="primaryAction.label"
-              :href="primaryAction.href"
-              kind="secondary"
-              size="large"
-              :icon="primaryAction.trailing ? 'pi pi-chevron-right' : ''"
-              icon-position="trailing"
-              :animated="Boolean(primaryAction.trailing)"
-            />
-            <Button
-              key="button-2"
-              v-if="!isSplit && secondaryAction"
-              :label="secondaryAction.label"
-              :href="secondaryAction.href"
-              kind="outlined"
-              size="large"
-              :icon="secondaryAction.trailing ? 'pi pi-chevron-right' : ''"
-              icon-position="trailing"
-              :animated="Boolean(secondaryAction.trailing)"
-            />
+            <template v-else>
+              <SectionCommand
+                v-if="command"
+                :value="command"
+              />
+              <Button
+                v-if="primaryAction"
+                :label="primaryAction.label"
+                :href="primaryAction.href"
+                kind="secondary"
+                size="large"
+                :icon="primaryAction.trailing ? 'pi pi-chevron-right' : ''"
+                icon-position="trailing"
+                :animated="Boolean(primaryAction.trailing)"
+              />
+              <Button
+                key="button-2"
+                v-if="!isSplit && secondaryAction"
+                :label="secondaryAction.label"
+                :href="secondaryAction.href"
+                kind="outlined"
+                size="large"
+                :icon="secondaryAction.trailing ? 'pi pi-chevron-right' : ''"
+                icon-position="trailing"
+                :animated="Boolean(secondaryAction.trailing)"
+              />
+            </template>
           </template>
           <template
             v-if="isSplit && secondaryAction"

@@ -1,5 +1,5 @@
 {
-  "_id": "closing-call-to-action-templates",
+  "_id": "template-gallery",
   "props": {
     "anchor": "contact",
     "title": "Start from a template. Ship it today.",
@@ -67,6 +67,7 @@
       }
     ],
     "deployLabel": "Deploy",
-    "templatesAriaLabel": "Templates you can deploy"
+    "templatesAriaLabel": "Templates you can deploy",
+    "closing": true
   }
 }

@@ -1,7 +1,7 @@
 <script setup>
-  import ClosingCallToActionTemplates from '@aziontech/webkit/closing-call-to-action-templates'
   import SectionContainer from '@aziontech/webkit/section-container'
   import SectionGap from '@aziontech/webkit/section-gap'
+  import TemplateGallery from '@aziontech/webkit/template-gallery'
 
   const primaryAction = {
     label: 'Start for free',
@@ -73,7 +73,8 @@
   <SectionContainer max-width="site">
     <SectionGap hatch />
 
-    <ClosingCallToActionTemplates
+    <TemplateGallery
+      closing
       anchor="contact"
       title="Start from a template. Ship it today."
       description="Deploy a ready-made starter in seconds, then make it yours."

@@ -1,5 +1,7 @@
 <script setup>
-  import ClosingCallToActionAgents from '@aziontech/webkit/closing-call-to-action-agents'
+  import ClosingCallToAction from '@aziontech/webkit/closing-call-to-action'
+  import SectionContainer from '@aziontech/webkit/section-container'
+  import SectionGap from '@aziontech/webkit/section-gap'
 
   const typedWords = ['Console', 'CLI', 'MCP server']
 
@@ -42,14 +44,19 @@
 </script>
 
 <template>
-  <ClosingCallToActionAgents
-    anchor="contact"
-    title="Built by you, or your agents."
-    typed-lead="Drive one platform from the"
-    :typed-words="typedWords"
-    description="A person and an agent ship the same way."
-    audiences-aria-label="Audience"
-    line-aria-label="Prompt"
-    :audiences="audiences"
-  />
+  <SectionContainer max-width="site">
+    <SectionGap hatch />
+
+    <ClosingCallToAction
+      kind="primary"
+      anchor="contact"
+      title="Built by you, or your agents."
+      typed-lead="Drive one platform from the"
+      :typed-words="typedWords"
+      description="A person and an agent ship the same way."
+      audiences-aria-label="Audience"
+      line-aria-label="Prompt"
+      :audiences="audiences"
+    />
+  </SectionContainer>
 </template>
