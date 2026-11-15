@@ -257,6 +257,11 @@ function aliasHits(catalog, query) {
     if (nq === phrase) hits.set(to, { alias, boost: 100 })
     else if (!hits.has(to) && hasPhrase(nq, phrase)) hits.set(to, { alias, boost: 30 })
   }
+  for (const [from, to] of Object.entries(catalog.renamed || {})) {
+    if (catalog.getEntry(to) && nq === normalize(from) && !hits.has(to)) {
+      hits.set(to, { alias: from, boost: 100, renamed: true })
+    }
+  }
   return hits
 }
 
@@ -562,8 +567,8 @@ export function searchComponents(catalog, query, { surface } = {}) {
         ? {
             ...card,
             exact: hit.boost === 100,
-            aliasOf: hit.alias,
-            note: aliasNote(hit.alias, r.sub)
+            ...(hit.renamed ? { renamedFrom: hit.alias } : { aliasOf: hit.alias }),
+            note: hit.renamed ? retiredNote(catalog, hit.alias).note : aliasNote(hit.alias, r.sub)
           }
         : card
     })
@@ -903,6 +908,8 @@ function screenIntentOf(nq) {
   return SCREEN_WORDS.some((w) => hasPhrase(nq, normalize(w)))
 }
 
+const EXACT_PATTERN_SCORE = 1000
+
 function isExactPattern(id, p, q) {
   return [id, id.split('/').pop(), p.name].some((s) => normalize(s) === q)
 }
@@ -924,7 +931,7 @@ function scorePattern(id, p, { q, groups, generic, words }) {
   }
   const genericScreen = (phrase) =>
     NORMALIZED_SCREEN_WORDS.some((w) => intents.includes(`${phrase} ${w}`))
-  let score = isExactPattern(id, p, q) ? 1000 : 0
+  let score = isExactPattern(id, p, q) ? EXACT_PATTERN_SCORE : 0
   score += phraseScore(q, 160)
   for (const group of groups) {
     score += 0.8 * Math.max(0, ...group.map((t) => phraseScore(t)))
@@ -1157,10 +1164,12 @@ export function suggestComponent(catalog, need, { surface } = {}) {
     component.best &&
     (component.best.exact === true ||
       normalize(component.best.name) === nq ||
-      normalize(component.best.aliasOf ?? '') === nq)
+      normalize(component.best.aliasOf ?? component.best.renamedFrom ?? '') === nq)
+  const exactPattern = topPattern && topPattern.score >= EXACT_PATTERN_SCORE
   if (
     topPattern &&
-    (screenIntent ? topPattern.score >= 25 : topPattern.score >= 60 && !exactComponent)
+    (exactPattern || !exactComponent) &&
+    (screenIntent ? topPattern.score >= 25 : topPattern.score >= 60)
   ) {
     return {
       ok: true,

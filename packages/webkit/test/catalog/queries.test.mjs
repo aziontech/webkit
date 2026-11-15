@@ -475,7 +475,7 @@ test('searchComponents ranks the aliased component first and marks it', () => {
     ['modal', 'dialog'],
     ['sheet', 'drawer'],
     ['message', 'alert'],
-    ['tiles', 'radio-cards']
+    ['tiles', 'radio-group']
   ]) {
     const res = searchComponents(catalog, query)
     assert.equal(res.matches[0].name, name, `${query} should resolve to ${name}`)
@@ -490,13 +490,18 @@ test('suggestComponent answers an alias with the current component, not a patter
     ['modal', 'dialog'],
     ['segmented control', 'toggle-group'],
     ['paginator', 'pagination'],
-    ['tiles', 'radio-cards'],
+    ['tiles', 'radio-group'],
     ['message', 'alert']
   ]) {
     const res = suggestComponent(catalog, need)
     assert.equal(res.recommendation, 'component', need)
     assert.equal(res.best.name, name, need)
-    assert.match(res.note, new RegExp(`another name for "${name}"`))
+    assert.match(
+      res.note,
+      new RegExp(
+        `another name for "${name}"|renamed in WebKit v6: import @aziontech/webkit/${name}`
+      )
+    )
   }
 })
 

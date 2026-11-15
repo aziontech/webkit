@@ -389,7 +389,17 @@ export const COMPONENT_TERMS = {
   textarea: ['text area', 'multiline input', 'área de texto'],
   avatar: ['user picture', 'foto de perfil'],
   'empty-state': ['estado vazio', 'estado vacío', 'empty list', 'no results'],
-  alert: ['alerta', 'aviso', 'banner', 'info banner', 'notice', 'warning message', 'page banner'],
+  alert: [
+    'alerta',
+    'aviso',
+    'banner',
+    'info banner',
+    'notice',
+    'warning message',
+    'error message',
+    'page banner'
+  ],
+  separator: ['divider', 'horizontal rule', 'separador', 'divisor'],
   accordion: ['acordeão', 'acordeón', 'collapsible section'],
   stepper: ['etapas', 'pasos', 'progress steps'],
   sidebar: ['menu lateral', 'barra lateral'],
