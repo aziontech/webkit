@@ -14,16 +14,10 @@
   import RadioButton from '../../inputs/radio-button/radio-button.vue'
   import Switch from '../../inputs/switch/switch.vue'
   import Dialog from '../../overlay/dialog/dialog.vue'
-  import DialogClose from '../../overlay/dialog/dialog-close.vue'
   import DialogContent from '../../overlay/dialog/dialog-content.vue'
-  import DialogOverlay from '../../overlay/dialog/dialog-overlay.vue'
-  import DialogPortal from '../../overlay/dialog/dialog-portal.vue'
   import DialogTitle from '../../overlay/dialog/dialog-title.vue'
   import Drawer from '../../overlay/drawer/drawer.vue'
-  import DrawerClose from '../../overlay/drawer/drawer-close.vue'
   import DrawerContent from '../../overlay/drawer/drawer-content.vue'
-  import DrawerOverlay from '../../overlay/drawer/drawer-overlay.vue'
-  import DrawerPortal from '../../overlay/drawer/drawer-portal.vue'
   import DrawerTitle from '../../overlay/drawer/drawer-title.vue'
   import PanelContent from '../../overlay/panel/panel-content.vue'
   import PanelFooter from '../../overlay/panel/panel-footer.vue'
@@ -219,11 +213,8 @@
   }
 
   const Root = computed(() => (props.container === 'drawer' ? Drawer : Dialog))
-  const Portal = computed(() => (props.container === 'drawer' ? DrawerPortal : DialogPortal))
-  const Overlay = computed(() => (props.container === 'drawer' ? DrawerOverlay : DialogOverlay))
   const Content = computed(() => (props.container === 'drawer' ? DrawerContent : DialogContent))
   const Title = computed(() => (props.container === 'drawer' ? DrawerTitle : DialogTitle))
-  const Close = computed(() => (props.container === 'drawer' ? DrawerClose : DialogClose))
 </script>
 
 <template>
@@ -256,187 +247,183 @@
       :data-testid="`${testId}__panel`"
       size="medium"
     >
-      <component :is="Portal">
-        <component :is="Overlay" />
-        <component :is="Content">
-          <PanelHeader class="w-full">
-            <component :is="Title">{{ heading }}</component>
-            <component :is="Close" />
-          </PanelHeader>
-          <PanelContent>
-            <div
-              :data-testid="`${testId}__sections`"
-              class="@container/preferences flex flex-col gap-(--spacing-lg)"
+      <component :is="Content">
+        <PanelHeader class="w-full">
+          <component :is="Title">{{ heading }}</component>
+        </PanelHeader>
+        <PanelContent>
+          <div
+            :data-testid="`${testId}__sections`"
+            class="@container/preferences flex flex-col gap-(--spacing-lg)"
+          >
+            <template
+              v-for="section in ordered"
+              :key="section"
             >
-              <template
-                v-for="section in ordered"
-                :key="section"
+              <fieldset
+                v-if="section === 'page-size'"
+                :data-testid="`${testId}__page-size`"
+                class="flex min-w-0 flex-col gap-(--spacing-xs)"
               >
-                <fieldset
-                  v-if="section === 'page-size'"
-                  :data-testid="`${testId}__page-size`"
-                  class="flex min-w-0 flex-col gap-(--spacing-xs)"
-                >
-                  <legend class="mb-(--spacing-xs) text-label-md text-(--text-default)">
-                    {{ t('collectionPreferences.pageSize') }}
-                  </legend>
-                  <label
-                    v-for="size in pageSizeOptions"
-                    :key="size"
-                    class="flex min-h-8 cursor-pointer items-center gap-(--spacing-sm) text-body-sm text-(--text-default) pointer-coarse:min-h-11"
-                  >
-                    <RadioButton
-                      :model-value="String(draftPageSize)"
-                      :value="String(size)"
-                      :name="`${uid}-page-size`"
-                      @update:model-value="draftPageSize = size"
-                    />
-                    <span>{{ t('collectionPreferences.pageSizeOption', { count: size }) }}</span>
-                  </label>
-                </fieldset>
-
-                <fieldset
-                  v-else-if="section === 'columns'"
-                  :data-testid="`${testId}__columns`"
-                  :aria-describedby="`${uid}-columns-description`"
-                  class="flex min-w-0 flex-col gap-(--spacing-xs)"
-                >
-                  <legend class="text-label-md text-(--text-default)">
-                    {{ t('collectionPreferences.columns') }}
-                  </legend>
-                  <p
-                    :id="`${uid}-columns-description`"
-                    class="mb-(--spacing-xs) text-body-sm text-(--text-muted)"
-                  >
-                    {{ t('collectionPreferences.columnsDescription') }}
-                  </p>
-                  <ul class="flex flex-col gap-(--spacing-xxs)">
-                    <li
-                      v-for="(column, index) in draftColumns"
-                      :id="`${uid}-column-${column.id}`"
-                      :key="column.id"
-                      :data-testid="`${testId}__column`"
-                      class="flex min-h-10 items-center gap-(--spacing-sm) rounded-(--shape-elements) border border-(--border-default) px-(--spacing-sm) py-(--spacing-xxs)"
-                    >
-                      <label
-                        :data-locked="locked(column.id) || null"
-                        class="flex min-w-0 flex-1 cursor-pointer items-center gap-(--spacing-sm) text-body-sm text-(--text-default) data-[locked]:cursor-default data-[locked]:text-(--text-muted)"
-                      >
-                        <Switch
-                          :model-value="locked(column.id) || column.visible"
-                          :disabled="locked(column.id)"
-                          @update:model-value="(value: boolean) => setVisible(column.id, value)"
-                        />
-                        <span class="min-w-0 truncate">{{ columnLabel(column.id) }}</span>
-                        <span
-                          v-if="locked(column.id)"
-                          class="ms-auto shrink-0 text-body-xs text-(--text-muted)"
-                          >{{ t('collectionPreferences.alwaysShown') }}</span
-                        >
-                      </label>
-                      <IconButton
-                        icon="pi pi-arrow-up"
-                        kind="transparent"
-                        size="small"
-                        data-move="up"
-                        :ariaLabel="
-                          t('collectionPreferences.moveUp', { column: columnLabel(column.id) })
-                        "
-                        :disabled="index === 0"
-                        @click="move(index, -1)"
-                      />
-                      <IconButton
-                        icon="pi pi-arrow-down"
-                        kind="transparent"
-                        size="small"
-                        data-move="down"
-                        :ariaLabel="
-                          t('collectionPreferences.moveDown', { column: columnLabel(column.id) })
-                        "
-                        :disabled="index === draftColumns.length - 1"
-                        @click="move(index, 1)"
-                      />
-                    </li>
-                  </ul>
-                </fieldset>
-
+                <legend class="mb-(--spacing-xs) text-label-md text-(--text-default)">
+                  {{ t('collectionPreferences.pageSize') }}
+                </legend>
                 <label
-                  v-else-if="section === 'wrap-lines'"
-                  :data-testid="`${testId}__wrap-lines`"
-                  class="flex cursor-pointer items-start gap-(--spacing-sm)"
+                  v-for="size in pageSizeOptions"
+                  :key="size"
+                  class="flex min-h-8 cursor-pointer items-center gap-(--spacing-sm) text-body-sm text-(--text-default) pointer-coarse:min-h-11"
                 >
-                  <Switch v-model="draftWrap" />
-                  <span class="flex min-w-0 flex-col gap-(--spacing-xxs)">
-                    <span class="text-label-md text-(--text-default)">{{
-                      t('collectionPreferences.wrapLines')
-                    }}</span>
-                    <span class="text-body-sm text-(--text-muted)">{{
-                      t('collectionPreferences.wrapLinesDescription')
-                    }}</span>
-                  </span>
-                </label>
-
-                <label
-                  v-else-if="section === 'striped'"
-                  :data-testid="`${testId}__striped`"
-                  class="flex cursor-pointer items-start gap-(--spacing-sm)"
-                >
-                  <Switch v-model="draftStriped" />
-                  <span class="flex min-w-0 flex-col gap-(--spacing-xxs)">
-                    <span class="text-label-md text-(--text-default)">{{
-                      t('collectionPreferences.striped')
-                    }}</span>
-                    <span class="text-body-sm text-(--text-muted)">{{
-                      t('collectionPreferences.stripedDescription')
-                    }}</span>
-                  </span>
-                </label>
-
-                <div
-                  v-else-if="section === 'density'"
-                  :data-testid="`${testId}__density`"
-                  class="flex flex-col gap-(--spacing-xs)"
-                >
-                  <span
-                    :id="`${uid}-density`"
-                    class="text-label-md text-(--text-default)"
-                    >{{ t('collectionPreferences.density') }}</span
-                  >
-                  <ToggleGroup
-                    :model-value="draftDensity"
-                    :options="densityOptions"
-                    :aria-labelledby="`${uid}-density`"
-                    size="medium"
-                    class="self-start"
-                    @update:model-value="setDensity"
+                  <RadioButton
+                    :model-value="String(draftPageSize)"
+                    :value="String(size)"
+                    :name="`${uid}-page-size`"
+                    @update:model-value="draftPageSize = size"
                   />
-                </div>
-              </template>
-            </div>
-          </PanelContent>
-          <PanelFooter>
-            <div class="@container/preferences-actions w-full">
-              <div
-                class="flex w-full flex-col gap-(--spacing-sm) @md/preferences-actions:flex-row @md/preferences-actions:items-center @md/preferences-actions:justify-end"
+                  <span>{{ t('collectionPreferences.pageSizeOption', { count: size }) }}</span>
+                </label>
+              </fieldset>
+
+              <fieldset
+                v-else-if="section === 'columns'"
+                :data-testid="`${testId}__columns`"
+                :aria-describedby="`${uid}-columns-description`"
+                class="flex min-w-0 flex-col gap-(--spacing-xs)"
               >
-                <Button
-                  :label="t('collectionPreferences.cancel')"
-                  :data-testid="`${testId}__cancel`"
-                  kind="transparent"
+                <legend class="text-label-md text-(--text-default)">
+                  {{ t('collectionPreferences.columns') }}
+                </legend>
+                <p
+                  :id="`${uid}-columns-description`"
+                  class="mb-(--spacing-xs) text-body-sm text-(--text-muted)"
+                >
+                  {{ t('collectionPreferences.columnsDescription') }}
+                </p>
+                <ul class="flex flex-col gap-(--spacing-xxs)">
+                  <li
+                    v-for="(column, index) in draftColumns"
+                    :id="`${uid}-column-${column.id}`"
+                    :key="column.id"
+                    :data-testid="`${testId}__column`"
+                    class="flex min-h-10 items-center gap-(--spacing-sm) rounded-(--shape-elements) border border-(--border-default) px-(--spacing-sm) py-(--spacing-xxs)"
+                  >
+                    <label
+                      :data-locked="locked(column.id) || null"
+                      class="flex min-w-0 flex-1 cursor-pointer items-center gap-(--spacing-sm) text-body-sm text-(--text-default) data-[locked]:cursor-default data-[locked]:text-(--text-muted)"
+                    >
+                      <Switch
+                        :model-value="locked(column.id) || column.visible"
+                        :disabled="locked(column.id)"
+                        @update:model-value="(value: boolean) => setVisible(column.id, value)"
+                      />
+                      <span class="min-w-0 truncate">{{ columnLabel(column.id) }}</span>
+                      <span
+                        v-if="locked(column.id)"
+                        class="ms-auto shrink-0 text-body-xs text-(--text-muted)"
+                        >{{ t('collectionPreferences.alwaysShown') }}</span
+                      >
+                    </label>
+                    <IconButton
+                      icon="pi pi-arrow-up"
+                      kind="transparent"
+                      size="small"
+                      data-move="up"
+                      :ariaLabel="
+                        t('collectionPreferences.moveUp', { column: columnLabel(column.id) })
+                      "
+                      :disabled="index === 0"
+                      @click="move(index, -1)"
+                    />
+                    <IconButton
+                      icon="pi pi-arrow-down"
+                      kind="transparent"
+                      size="small"
+                      data-move="down"
+                      :ariaLabel="
+                        t('collectionPreferences.moveDown', { column: columnLabel(column.id) })
+                      "
+                      :disabled="index === draftColumns.length - 1"
+                      @click="move(index, 1)"
+                    />
+                  </li>
+                </ul>
+              </fieldset>
+
+              <label
+                v-else-if="section === 'wrap-lines'"
+                :data-testid="`${testId}__wrap-lines`"
+                class="flex cursor-pointer items-start gap-(--spacing-sm)"
+              >
+                <Switch v-model="draftWrap" />
+                <span class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+                  <span class="text-label-md text-(--text-default)">{{
+                    t('collectionPreferences.wrapLines')
+                  }}</span>
+                  <span class="text-body-sm text-(--text-muted)">{{
+                    t('collectionPreferences.wrapLinesDescription')
+                  }}</span>
+                </span>
+              </label>
+
+              <label
+                v-else-if="section === 'striped'"
+                :data-testid="`${testId}__striped`"
+                class="flex cursor-pointer items-start gap-(--spacing-sm)"
+              >
+                <Switch v-model="draftStriped" />
+                <span class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+                  <span class="text-label-md text-(--text-default)">{{
+                    t('collectionPreferences.striped')
+                  }}</span>
+                  <span class="text-body-sm text-(--text-muted)">{{
+                    t('collectionPreferences.stripedDescription')
+                  }}</span>
+                </span>
+              </label>
+
+              <div
+                v-else-if="section === 'density'"
+                :data-testid="`${testId}__density`"
+                class="flex flex-col gap-(--spacing-xs)"
+              >
+                <span
+                  :id="`${uid}-density`"
+                  class="text-label-md text-(--text-default)"
+                  >{{ t('collectionPreferences.density') }}</span
+                >
+                <ToggleGroup
+                  :model-value="draftDensity"
+                  :options="densityOptions"
+                  :aria-labelledby="`${uid}-density`"
                   size="medium"
-                  @click="cancel"
-                />
-                <Button
-                  :label="t('collectionPreferences.confirm')"
-                  :data-testid="`${testId}__confirm`"
-                  kind="primary"
-                  size="medium"
-                  @click="confirm"
+                  class="self-start"
+                  @update:model-value="setDensity"
                 />
               </div>
+            </template>
+          </div>
+        </PanelContent>
+        <PanelFooter>
+          <div class="@container/preferences-actions w-full">
+            <div
+              class="flex w-full flex-col gap-(--spacing-sm) @md/preferences-actions:flex-row @md/preferences-actions:items-center @md/preferences-actions:justify-end"
+            >
+              <Button
+                :label="t('collectionPreferences.cancel')"
+                :data-testid="`${testId}__cancel`"
+                kind="transparent"
+                size="medium"
+                @click="cancel"
+              />
+              <Button
+                :label="t('collectionPreferences.confirm')"
+                :data-testid="`${testId}__confirm`"
+                kind="primary"
+                size="medium"
+                @click="confirm"
+              />
             </div>
-          </PanelFooter>
-        </component>
+          </div>
+        </PanelFooter>
       </component>
     </component>
   </span>

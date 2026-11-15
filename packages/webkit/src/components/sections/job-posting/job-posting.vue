@@ -17,11 +17,8 @@
   import SectionModule from '../../marketing/section-module/section-module.vue'
   import SectionTitle from '../../marketing/section-title/section-title.vue'
   import Dialog from '../../overlay/dialog/dialog.vue'
-  import DialogClose from '../../overlay/dialog/dialog-close.vue'
   import DialogContent from '../../overlay/dialog/dialog-content.vue'
   import DialogDescription from '../../overlay/dialog/dialog-description.vue'
-  import DialogOverlay from '../../overlay/dialog/dialog-overlay.vue'
-  import DialogPortal from '../../overlay/dialog/dialog-portal.vue'
   import DialogTitle from '../../overlay/dialog/dialog-title.vue'
   import PanelContent from '../../overlay/panel/panel-content.vue'
   import PanelFooter from '../../overlay/panel/panel-footer.vue'
@@ -583,38 +580,34 @@
         size="small"
         :data-testid="`${testId}__dialog`"
       >
-        <DialogPortal>
-          <DialogOverlay />
-          <DialogContent>
-            <PanelHeader class="w-full">
-              <DialogTitle>{{ messages.successTitle }}</DialogTitle>
-              <DialogClose />
-            </PanelHeader>
-            <PanelContent>
-              <DialogDescription class="m-0 text-body-sm text-(--text-muted)">
-                {{ messages.successDescription }}
-              </DialogDescription>
-            </PanelContent>
-            <PanelFooter class="flex-col md:flex-row md:justify-end">
-              <Button
-                v-if="secondaryAction"
-                class="w-full md:w-auto"
-                :label="secondaryAction.label"
-                :href="secondaryAction.href"
-                kind="outlined"
-                size="medium"
-              />
-              <Button
-                class="w-full md:w-auto"
-                type="button"
-                :label="messages.done"
-                kind="primary"
-                size="medium"
-                @click="confirming = false"
-              />
-            </PanelFooter>
-          </DialogContent>
-        </DialogPortal>
+        <DialogContent>
+          <PanelHeader class="w-full">
+            <DialogTitle>{{ messages.successTitle }}</DialogTitle>
+          </PanelHeader>
+          <PanelContent>
+            <DialogDescription class="m-0 text-body-sm text-(--text-muted)">
+              {{ messages.successDescription }}
+            </DialogDescription>
+          </PanelContent>
+          <PanelFooter class="flex-col md:flex-row md:justify-end">
+            <Button
+              v-if="secondaryAction"
+              class="w-full md:w-auto"
+              :label="secondaryAction.label"
+              :href="secondaryAction.href"
+              kind="outlined"
+              size="medium"
+            />
+            <Button
+              class="w-full md:w-auto"
+              type="button"
+              :label="messages.done"
+              kind="primary"
+              size="medium"
+              @click="confirming = false"
+            />
+          </PanelFooter>
+        </DialogContent>
       </Dialog>
     </template>
   </div>

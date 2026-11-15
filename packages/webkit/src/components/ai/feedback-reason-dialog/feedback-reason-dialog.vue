@@ -12,11 +12,8 @@
   import RadioButton from '../../inputs/radio-button/radio-button.vue'
   import Textarea from '../../inputs/textarea/textarea.vue'
   import Dialog from '../../overlay/dialog/dialog.vue'
-  import DialogClose from '../../overlay/dialog/dialog-close.vue'
   import DialogContent from '../../overlay/dialog/dialog-content.vue'
   import DialogDescription from '../../overlay/dialog/dialog-description.vue'
-  import DialogOverlay from '../../overlay/dialog/dialog-overlay.vue'
-  import DialogPortal from '../../overlay/dialog/dialog-portal.vue'
   import DialogTitle from '../../overlay/dialog/dialog-title.vue'
   import PanelContent from '../../overlay/panel/panel-content.vue'
   import PanelFooter from '../../overlay/panel/panel-footer.vue'
@@ -117,81 +114,77 @@
     size="small"
     :data-testid="testId"
   >
-    <DialogPortal>
-      <DialogOverlay />
-      <DialogContent>
-        <PanelHeader class="w-full">
-          <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
-            <DialogTitle>{{ title || t('feedbackReason.title') }}</DialogTitle>
-            <DialogDescription>{{ t('feedbackReason.description') }}</DialogDescription>
-          </div>
-          <DialogClose />
-        </PanelHeader>
-        <form
-          novalidate
-          class="flex min-h-0 flex-1 flex-col"
-          :data-testid="`${testId}__form`"
-          @submit.prevent="send"
-        >
-          <PanelContent>
-            <div class="flex flex-col gap-(--spacing-lg)">
-              <FieldSet
-                :aria-describedby="missing ? `${uid}-error` : undefined"
-                :disabled="loading"
-              >
-                <FieldLegend kind="label">{{ t('feedbackReason.reason') }}</FieldLegend>
-                <div class="flex flex-col gap-(--spacing-sm)">
-                  <Field
-                    v-for="option in options"
-                    :key="option.value"
-                    orientation="horizontal"
-                    :invalid="missing"
-                    :disabled="loading"
-                  >
-                    <RadioButton
-                      v-model="reason"
-                      :value="option.value"
-                      :name="`${uid}-reason`"
-                      :id="`${uid}-${option.value}`"
-                    />
-                    <FieldLabel :for="`${uid}-${option.value}`">{{ option.label }}</FieldLabel>
-                  </Field>
-                </div>
-                <FieldError
-                  v-if="missing"
-                  :id="`${uid}-error`"
-                  >{{ t('feedbackReason.required') }}</FieldError
-                >
-              </FieldSet>
-              <Field :disabled="loading">
-                <FieldLabel>{{ t('feedbackReason.details') }}</FieldLabel>
-                <Textarea
-                  v-model="details"
-                  :placeholder="t('feedbackReason.detailsPlaceholder')"
-                  :data-testid="`${testId}__details`"
-                />
-              </Field>
-            </div>
-          </PanelContent>
-          <PanelFooter class="flex-col md:flex-row md:justify-end">
-            <Button
-              class="w-full md:w-auto"
-              type="button"
-              :label="t('feedbackReason.cancel')"
-              kind="outlined"
+    <DialogContent>
+      <PanelHeader class="w-full">
+        <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+          <DialogTitle>{{ title || t('feedbackReason.title') }}</DialogTitle>
+          <DialogDescription>{{ t('feedbackReason.description') }}</DialogDescription>
+        </div>
+      </PanelHeader>
+      <form
+        novalidate
+        class="flex min-h-0 flex-1 flex-col"
+        :data-testid="`${testId}__form`"
+        @submit.prevent="send"
+      >
+        <PanelContent>
+          <div class="flex flex-col gap-(--spacing-lg)">
+            <FieldSet
+              :aria-describedby="missing ? `${uid}-error` : undefined"
               :disabled="loading"
-              @click="open = false"
-            />
-            <Button
-              class="w-full md:w-auto"
-              type="submit"
-              :label="t('feedbackReason.send')"
-              kind="primary"
-              :loading="loading"
-            />
-          </PanelFooter>
-        </form>
-      </DialogContent>
-    </DialogPortal>
+            >
+              <FieldLegend kind="label">{{ t('feedbackReason.reason') }}</FieldLegend>
+              <div class="flex flex-col gap-(--spacing-sm)">
+                <Field
+                  v-for="option in options"
+                  :key="option.value"
+                  orientation="horizontal"
+                  :invalid="missing"
+                  :disabled="loading"
+                >
+                  <RadioButton
+                    v-model="reason"
+                    :value="option.value"
+                    :name="`${uid}-reason`"
+                    :id="`${uid}-${option.value}`"
+                  />
+                  <FieldLabel :for="`${uid}-${option.value}`">{{ option.label }}</FieldLabel>
+                </Field>
+              </div>
+              <FieldError
+                v-if="missing"
+                :id="`${uid}-error`"
+                >{{ t('feedbackReason.required') }}</FieldError
+              >
+            </FieldSet>
+            <Field :disabled="loading">
+              <FieldLabel>{{ t('feedbackReason.details') }}</FieldLabel>
+              <Textarea
+                v-model="details"
+                :placeholder="t('feedbackReason.detailsPlaceholder')"
+                :data-testid="`${testId}__details`"
+              />
+            </Field>
+          </div>
+        </PanelContent>
+        <PanelFooter class="flex-col md:flex-row md:justify-end">
+          <Button
+            class="w-full md:w-auto"
+            type="button"
+            :label="t('feedbackReason.cancel')"
+            kind="outlined"
+            :disabled="loading"
+            @click="open = false"
+          />
+          <Button
+            class="w-full md:w-auto"
+            type="submit"
+            :label="t('feedbackReason.send')"
+            kind="primary"
+            :loading="loading"
+          />
+        </PanelFooter>
+      </form>
+    </DialogContent>
   </Dialog>
 </template>

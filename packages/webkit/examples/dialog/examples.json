@@ -4,7 +4,7 @@
   "examples": [
     {
       "name": "Default",
-      "summary": "Medium modal with a trigger, overlay backdrop, and header/body/footer panel regions.",
+      "summary": "Medium modal with a trigger and header/body/footer panel regions. `Dialog.Content` renders the overlay and the header gets the close button on its own.",
       "file": "default.vue"
     },
     {

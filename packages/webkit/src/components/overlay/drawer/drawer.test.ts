@@ -6,16 +6,15 @@ import { defineComponent, h, nextTick, ref } from 'vue'
 import Default from '../../../../examples/drawer/default.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import ConfirmDialog from '../confirm-dialog/confirm-dialog.vue'
+import PanelHeader from '../panel/panel-header.vue'
 import Drawer from './drawer.vue'
 import DrawerClose from './drawer-close.vue'
 import DrawerContent from './drawer-content.vue'
 import DrawerDescription from './drawer-description.vue'
-import DrawerOverlay from './drawer-overlay.vue'
-import DrawerPortal from './drawer-portal.vue'
 import DrawerTitle from './drawer-title.vue'
 import DrawerTrigger from './drawer-trigger.vue'
 
-// The panel + backdrop are Teleported to <body> by DrawerPortal, so they escape
+// The panel + backdrop are Teleported to <body> by DrawerContent, so they escape
 // the render container. Query them from document.body, not the utils container.
 // A couple of frames lets onMounted (trigger registration) + the motion rAF and
 // the delayed portal unmount settle.
@@ -33,21 +32,18 @@ const backdrop = () => byTestId('overlay-drawer__backdrop')
 
 /**
  * A realistic composed tree wired like the Default example: Root > Trigger
- * (button-like) + Portal > Overlay + Content (Title / Description / Close).
- * Slots take plain strings so the assertions stay grounded in the drawer
- * sub-components under test (DrawerContent still wraps its internal Panel).
+ * (button-like) + Content (header with the Title, Description). The Content
+ * renders the overlay and the header gets the close button on its own.
  */
 const composed = (props: Record<string, unknown> = {}) =>
   defineComponent({
     components: {
       Drawer,
       DrawerTrigger,
-      DrawerPortal,
-      DrawerOverlay,
       DrawerContent,
       DrawerTitle,
       DrawerDescription,
-      DrawerClose
+      PanelHeader
     },
     setup() {
       const open = ref<boolean>(Boolean(props.defaultOpen ?? false))
@@ -58,14 +54,10 @@ const composed = (props: Record<string, unknown> = {}) =>
         <DrawerTrigger>
           <button type="button">Open drawer</button>
         </DrawerTrigger>
-        <DrawerPortal>
-          <DrawerOverlay />
-          <DrawerContent>
-            <DrawerTitle>Edit settings</DrawerTitle>
-            <DrawerDescription>Update the workspace configuration.</DrawerDescription>
-            <DrawerClose />
-          </DrawerContent>
-        </DrawerPortal>
+        <DrawerContent>
+          <PanelHeader><DrawerTitle>Edit settings</DrawerTitle></PanelHeader>
+          <DrawerDescription>Update the workspace configuration.</DrawerDescription>
+        </DrawerContent>
       </Drawer>
     `
   })
@@ -79,8 +71,6 @@ describe('Drawer (overlay: composition sub-components + provide/inject)', () => 
     it('every drawer sub-component is a mountable Vue component', () => {
       for (const sub of [
         DrawerTrigger,
-        DrawerPortal,
-        DrawerOverlay,
         DrawerContent,
         DrawerTitle,
         DrawerDescription,
@@ -98,7 +88,7 @@ describe('Drawer (overlay: composition sub-components + provide/inject)', () => 
       const { getByTestId } = render(composed())
       await settle()
 
-      // The Root + Trigger render in-place; DrawerPortal renders nothing until open.
+      // The Root + Trigger render in-place; DrawerContent teleports nothing until open.
       expect(getByTestId('overlay-drawer').getAttribute('data-state')).toBe('closed')
       const trigger = getByTestId('overlay-drawer__trigger')
       expect(trigger.hasAttribute('role')).toBe(false)
@@ -179,7 +169,7 @@ describe('Drawer (overlay: composition sub-components + provide/inject)', () => 
     it('a controlled parent drives open; DrawerClose emits update:open(false)', async () => {
       const onUpdate = vi.fn()
       const Wrapper = defineComponent({
-        components: { Drawer, DrawerTrigger, DrawerPortal, DrawerContent, DrawerClose },
+        components: { Drawer, DrawerTrigger, DrawerContent, DrawerClose },
         setup() {
           const open = ref(true)
           const onUpd = (v: boolean) => {
@@ -191,11 +181,9 @@ describe('Drawer (overlay: composition sub-components + provide/inject)', () => 
         template: `
           <Drawer :open="open" @update:open="onUpd">
             <DrawerTrigger><button>Open</button></DrawerTrigger>
-            <DrawerPortal>
-              <DrawerContent>
-                <DrawerClose />
-              </DrawerContent>
-            </DrawerPortal>
+            <DrawerContent>
+              <DrawerClose />
+            </DrawerContent>
           </Drawer>
         `
       })
@@ -274,7 +262,7 @@ describe('Drawer (overlay: composition sub-components + provide/inject)', () => 
   })
 
   describe('dismissible=false suppresses dismissal', () => {
-    it('Escape and backdrop click do NOT close, and DrawerClose is disabled', async () => {
+    it('Escape and backdrop click do NOT close; the close button still closes', async () => {
       const { getByTestId } = render(composed({ dismissible: false }))
       await settle()
 
@@ -292,9 +280,11 @@ describe('Drawer (overlay: composition sub-components + provide/inject)', () => 
       await settle()
       expect(getByTestId('overlay-drawer').getAttribute('data-state')).toBe('open')
 
-      // DrawerClose reflects !dismissible via disabled.
       const close = byTestId('overlay-drawer__close')!
-      expect(close.hasAttribute('disabled')).toBe(true)
+      expect(close.hasAttribute('disabled')).toBe(false)
+      await fireEvent.click(close)
+      await settle()
+      expect(getByTestId('overlay-drawer').getAttribute('data-state')).toBe('closed')
     })
   })
 
@@ -349,8 +339,6 @@ describe('Drawer (overlay: composition sub-components + provide/inject)', () => 
         components: {
           Drawer,
           DrawerTrigger,
-          DrawerPortal,
-          DrawerOverlay,
           DrawerContent,
           DrawerTitle,
           DrawerDescription,
@@ -359,14 +347,11 @@ describe('Drawer (overlay: composition sub-components + provide/inject)', () => 
         template: `
           <Drawer default-open>
             <DrawerTrigger>Open drawer</DrawerTrigger>
-            <DrawerPortal>
-              <DrawerOverlay />
-              <DrawerContent>
-                <DrawerTitle>Edit settings</DrawerTitle>
-                <DrawerDescription>Update the workspace configuration.</DrawerDescription>
-                <DrawerClose />
-              </DrawerContent>
-            </DrawerPortal>
+            <DrawerContent>
+              <DrawerTitle>Edit settings</DrawerTitle>
+              <DrawerDescription>Update the workspace configuration.</DrawerDescription>
+              <DrawerClose />
+            </DrawerContent>
           </Drawer>
         `
       })
@@ -399,7 +384,7 @@ describe('Drawer (overlay: composition sub-components + provide/inject)', () => 
 
 describe('keyboard map (spec)', () => {
   const twoActions = defineComponent({
-    components: { Drawer, DrawerTrigger, DrawerPortal, DrawerOverlay, DrawerContent, DrawerTitle },
+    components: { Drawer, DrawerTrigger, DrawerContent, DrawerTitle },
     setup() {
       const open = ref(false)
       return { open }
@@ -409,14 +394,11 @@ describe('keyboard map (spec)', () => {
         <DrawerTrigger>
           <button type="button">Open drawer</button>
         </DrawerTrigger>
-        <DrawerPortal>
-          <DrawerOverlay />
-          <DrawerContent>
-            <DrawerTitle>Edit</DrawerTitle>
-            <button type="button" data-testid="first-action">First</button>
-            <button type="button" data-testid="last-action">Last</button>
-          </DrawerContent>
-        </DrawerPortal>
+        <DrawerContent>
+          <DrawerTitle>Edit</DrawerTitle>
+          <button type="button" data-testid="first-action">First</button>
+          <button type="button" data-testid="last-action">Last</button>
+        </DrawerContent>
       </Drawer>
     `
   })
@@ -467,31 +449,85 @@ describe('keyboard map (spec)', () => {
   })
 })
 
-describe('DrawerPortal data-testid', () => {
-  it('derives the portal testid from the root and lets a consumer override it', async () => {
-    const { unmount } = render(composed({ defaultOpen: true }))
+describe('portal and overlay (rendered by DrawerContent)', () => {
+  it('teleports the panel inside a portal wrapper derived from the root testid', async () => {
+    render(composed({ defaultOpen: true }))
     await settle()
     const portal = byTestId('overlay-drawer__portal')
     expect(portal).not.toBeNull()
+    expect(portal!.parentElement).toBe(document.body)
     expect(portal!.contains(panel())).toBe(true)
-    unmount()
-    await settle()
+  })
 
+  it('renders the overlay behind every open drawer with no hand-assembled parts', async () => {
     render(
       defineComponent({
-        components: { Drawer, DrawerPortal, DrawerContent, DrawerTitle },
-        template: `
-          <Drawer default-open>
-            <DrawerPortal data-testid="custom-portal">
-              <DrawerContent><DrawerTitle>Title</DrawerTitle></DrawerContent>
-            </DrawerPortal>
-          </Drawer>
-        `
+        components: { Drawer, DrawerContent, DrawerTitle },
+        template: `<Drawer default-open><DrawerContent><DrawerTitle>Title</DrawerTitle></DrawerContent></Drawer>`
       })
     )
     await settle()
-    expect(byTestId('custom-portal')).not.toBeNull()
-    expect(byTestId('overlay-drawer__portal')).toBeNull()
+    const bd = backdrop()
+    expect(bd).not.toBeNull()
+    expect(bd!.getAttribute('aria-hidden')).toBe('true')
+    expect(byTestId('overlay-drawer__portal')!.contains(bd)).toBe(true)
+    expect(panel()!.getAttribute('aria-modal')).toBe('true')
+  })
+})
+
+describe('modal', () => {
+  const nonModal = () =>
+    defineComponent({
+      components: { Drawer, DrawerTrigger, DrawerContent, DrawerTitle, PanelHeader },
+      setup() {
+        const open = ref(false)
+        return { open }
+      },
+      template: `
+        <div>
+          <Drawer v-model:open="open" :modal="false">
+            <DrawerTrigger><button type="button">Open assistant</button></DrawerTrigger>
+            <DrawerContent>
+              <PanelHeader><DrawerTitle>Assistant</DrawerTitle></PanelHeader>
+              <button type="button">Ask</button>
+            </DrawerContent>
+          </Drawer>
+          <button type="button">Page action</button>
+        </div>
+      `
+    })
+
+  it('false renders no overlay, no scroll lock and aria-modal false', async () => {
+    const view = render(nonModal())
+    await settle()
+    await fireEvent.click(view.getByRole('button', { name: 'Open assistant' }))
+    await settle()
+    expect(panel()).not.toBeNull()
+    expect(backdrop()).toBeNull()
+    expect(panel()!.getAttribute('aria-modal')).toBe('false')
+    expect(document.body.style.overflow).not.toBe('hidden')
+  })
+
+  it('false moves focus in, does not trap Tab, and Escape still closes and restores focus', async () => {
+    const view = render(nonModal())
+    await settle()
+    const opener = view.getByRole('button', { name: 'Open assistant' })
+    opener.focus()
+    await userEvent.keyboard('{Enter}')
+    await settle()
+    expect(panel()!.contains(document.activeElement)).toBe(true)
+
+    const lastInPanel = Array.from(panel()!.querySelectorAll<HTMLElement>('button')).pop()!
+    lastInPanel.focus()
+    const tab = new KeyboardEvent('keydown', { key: 'Tab', bubbles: true, cancelable: true })
+    document.dispatchEvent(tab)
+    expect(tab.defaultPrevented).toBe(false)
+
+    await fireEvent.keyDown(document, { key: 'Escape' })
+    await settle()
+    await vi.waitFor(() => {
+      expect(document.activeElement).toBe(opener)
+    })
   })
 })
 
@@ -541,9 +577,9 @@ describe('audit fixes', () => {
     const open = ref(true)
     render(
       defineComponent({
-        components: { Drawer, DrawerPortal, DrawerContent, DrawerTitle },
+        components: { Drawer, DrawerContent, DrawerTitle },
         setup: () => ({ dismissible, open }),
-        template: `<Drawer v-model:open="open" :dismissible="dismissible"><DrawerPortal><DrawerContent><DrawerTitle>T</DrawerTitle><button type="button">Act</button></DrawerContent></DrawerPortal></Drawer>`
+        template: `<Drawer v-model:open="open" :dismissible="dismissible"><DrawerContent><DrawerTitle>T</DrawerTitle><button type="button">Act</button></DrawerContent></Drawer>`
       })
     )
     await settle()
@@ -563,9 +599,9 @@ describe('audit fixes', () => {
     const side = ref<'left' | 'right'>('right')
     render(
       defineComponent({
-        components: { Drawer, DrawerPortal, DrawerContent, DrawerTitle },
+        components: { Drawer, DrawerContent, DrawerTitle },
         setup: () => ({ side }),
-        template: `<Drawer :side="side" :default-open="true" id="details"><DrawerPortal><DrawerContent><DrawerTitle>T</DrawerTitle></DrawerContent></DrawerPortal></Drawer>`
+        template: `<Drawer :side="side" :default-open="true" id="details"><DrawerContent><DrawerTitle>T</DrawerTitle></DrawerContent></Drawer>`
       })
     )
     await settle()
@@ -585,16 +621,14 @@ describe('nested overlays', () => {
     const confirmOpen = ref(false)
     render(
       defineComponent({
-        components: { Drawer, DrawerPortal, DrawerContent, DrawerTitle, ConfirmDialog },
+        components: { Drawer, DrawerContent, DrawerTitle, ConfirmDialog },
         setup: () => ({ drawerOpen, confirmOpen }),
         template: `
           <Drawer v-model:open="drawerOpen">
-            <DrawerPortal>
-              <DrawerContent>
-                <DrawerTitle>Edit</DrawerTitle>
-                <button type="button" data-testid="discard" @click="confirmOpen = true">Discard</button>
-              </DrawerContent>
-            </DrawerPortal>
+            <DrawerContent>
+              <DrawerTitle>Edit</DrawerTitle>
+              <button type="button" data-testid="discard" @click="confirmOpen = true">Discard</button>
+            </DrawerContent>
           </Drawer>
           <ConfirmDialog v-model:open="confirmOpen" title="Discard changes?" />
         `
@@ -614,11 +648,11 @@ describe('nested overlays', () => {
     const drawerOpen = ref(true)
     render(
       defineComponent({
-        components: { Drawer, DrawerPortal, DrawerContent, DrawerTitle, ConfirmDialog },
+        components: { Drawer, DrawerContent, DrawerTitle, ConfirmDialog },
         setup: () => ({ drawerOpen }),
         template: `
           <Drawer v-model:open="drawerOpen">
-            <DrawerPortal><DrawerContent><DrawerTitle>Edit</DrawerTitle><button type="button">Act</button></DrawerContent></DrawerPortal>
+            <DrawerContent><DrawerTitle>Edit</DrawerTitle><button type="button">Act</button></DrawerContent>
           </Drawer>
           <ConfirmDialog :open="true" :loading="true" title="Deleting" />
         `
@@ -631,11 +665,18 @@ describe('nested overlays', () => {
   })
 })
 
-describe('closable (explicit close, separate from light-dismiss)', () => {
-  it('dismissible false with closable true: Escape and overlay stay shut, the close button closes', async () => {
-    const { getByTestId } = render(
-      composed({ defaultOpen: true, dismissible: false, closable: true })
-    )
+describe('closable (the close button, separate from light-dismiss)', () => {
+  it('renders the close button at the end of the header by default', async () => {
+    render(composed({ defaultOpen: true }))
+    await settle()
+    const close = byTestId('overlay-drawer__close')!
+    expect(close).not.toBeNull()
+    expect(close.closest('header')).toBe(byTestId('overlay-drawer__panel-shell__header'))
+    expect(close.hasAttribute('disabled')).toBe(false)
+  })
+
+  it('dismissible false: Escape and overlay stay shut, the close button closes', async () => {
+    const { getByTestId } = render(composed({ defaultOpen: true, dismissible: false }))
     await settle()
     await settle()
 
@@ -644,43 +685,32 @@ describe('closable (explicit close, separate from light-dismiss)', () => {
     await settle()
     expect(getByTestId('overlay-drawer').getAttribute('data-state')).toBe('open')
 
-    const close = byTestId('overlay-drawer__close')!
-    expect(close.hasAttribute('disabled')).toBe(false)
-    await fireEvent.click(close)
+    await fireEvent.click(byTestId('overlay-drawer__close')!)
     await settle()
     expect(getByTestId('overlay-drawer').getAttribute('data-state')).toBe('closed')
   })
 
-  it('closable false keeps light-dismiss and disables the close button', async () => {
+  it('closable false removes the close button and keeps light-dismiss', async () => {
     const { getByTestId } = render(composed({ defaultOpen: true, closable: false }))
     await settle()
     await settle()
 
-    expect(byTestId('overlay-drawer__close')!.hasAttribute('disabled')).toBe(true)
+    expect(byTestId('overlay-drawer__close')).toBeNull()
     await fireEvent.keyDown(document, { key: 'Escape' })
     await settle()
     expect(getByTestId('overlay-drawer').getAttribute('data-state')).toBe('closed')
-  })
-
-  it('unset closable still follows dismissible (6.x compatibility)', async () => {
-    render(composed({ defaultOpen: true, dismissible: false }))
-    await settle()
-    await settle()
-
-    expect(byTestId('overlay-drawer__close')!.hasAttribute('disabled')).toBe(true)
   })
 })
 
 describe('compound API (index.ts)', () => {
   it('attaches every part and the Panel regions for dot-notation', async () => {
     const { default: Compound } = await import('./index')
-    const PanelHeader = (await import('../panel/panel-header.vue')).default
     const PanelContent = (await import('../panel/panel-content.vue')).default
     const PanelFooter = (await import('../panel/panel-footer.vue')).default
     expect(Compound).toBe(Drawer)
     expect(Compound.Trigger).toBe(DrawerTrigger)
-    expect(Compound.Portal).toBe(DrawerPortal)
-    expect(Compound.Overlay).toBe(DrawerOverlay)
+    expect('Portal' in Compound).toBe(false)
+    expect('Overlay' in Compound).toBe(false)
     expect(Compound.Content).toBe(DrawerContent)
     expect(Compound.Title).toBe(DrawerTitle)
     expect(Compound.Description).toBe(DrawerDescription)

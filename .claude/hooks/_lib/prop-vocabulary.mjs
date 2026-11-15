@@ -18,8 +18,8 @@ export const CONCEPTS = [
   },
   {
     // Light-dismiss (overlay closes on outside-click / Esc) — Dialog/Drawer/Popover.
-    // Distinct from `closable` (an explicit close affordance / X button — Alert/Toast/
-    // TabsItem), which stays a valid, separate name and is NOT an alias here.
+    // Distinct from `closable` (an explicit close affordance / X button — Dialog/Drawer/
+    // Alert/Toast/TabsItem), which stays a valid, separate name and is NOT an alias here.
     concept: 'light-dismiss (closes on outside-click / Esc)',
     canonical: 'dismissible',
     aliases: ['dismissable', 'closeable']
@@ -107,6 +107,14 @@ export const SIZE = {
   prop: 'size',
   canonical: ['small', 'medium', 'large'],
   bannedTokens: ['xs', 'sm', 'md', 'lg', 'xl']
+}
+
+// The `closable` house default: modal overlays always show a way out, so the X renders by
+// default there; on every other component it is an opt-in affordance.
+export const CLOSABLE = {
+  prop: 'closable',
+  defaultTrue: ['dialog', 'drawer'],
+  default: false
 }
 
 // Positive-boolean rule: a negated boolean reads backwards (`:hidden="false"` to show).
@@ -272,6 +280,7 @@ export function vocabularySnapshot() {
       aliases: c.aliases
     })),
     size: { canonical: SIZE.canonical, bannedTokens: SIZE.bannedTokens },
+    closable: { defaultTrue: CLOSABLE.defaultTrue, default: CLOSABLE.default },
     booleanPrefixes: { banned: ['is', 'has'] },
     negativeBooleans: NEGATIVE_BOOLEANS,
     values: VALUES,

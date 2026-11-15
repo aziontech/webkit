@@ -19,8 +19,10 @@
       defaultOpen?: boolean
       /** Light-dismiss: when true, overlay click and Escape close the drawer. It does not govern the close button; see `closable`. */
       dismissible?: boolean
-      /** Whether the close button (DrawerClose) and the context close() close the drawer; false renders the close button disabled. Escape and overlay click follow `dismissible`. Unset, it follows `dismissible` for 6.x compatibility (deprecated coupling: set it explicitly; from 7.0 unset means true). */
+      /** Shows the close (X) button at the end of the drawer header. False removes it; Escape and overlay click still follow `dismissible`. */
       closable?: boolean
+      /** Renders the overlay, traps focus and locks page scroll. False leaves the page beside the drawer usable: no overlay, no focus trap, no scroll lock, aria-modal false; Escape, the close button and focus restore still work. */
+      modal?: boolean
       /** Edge the drawer panel slides from. */
       side?: DrawerSide
       /** Panel max-width preset (`small` `--container-sm`, `medium` `--container-xl`, `large` `--container-4xl`). Height is always 100% viewport. */
@@ -29,7 +31,8 @@
     {
       defaultOpen: false,
       dismissible: true,
-      closable: undefined,
+      closable: true,
+      modal: true,
       side: 'right',
       size: 'medium'
     }
@@ -60,10 +63,7 @@
     isOpen.set(true)
   }
 
-  const isClosable = computed(() => props.closable ?? props.dismissible)
-
   const closeDrawer = () => {
-    if (!isClosable.value) return
     isOpen.set(false)
   }
 
@@ -89,7 +89,10 @@
       return props.dismissible
     },
     get closable() {
-      return isClosable.value
+      return props.closable
+    },
+    get modal() {
+      return props.modal
     },
     size: toRef(props, 'size'),
     open: openDrawer,

@@ -37,10 +37,7 @@
   import CommandItem from '../../overlay/command/command-item/command-item.vue'
   import CommandList from '../../overlay/command/command-list/command-list.vue'
   import Drawer from '../../overlay/drawer/drawer.vue'
-  import DrawerClose from '../../overlay/drawer/drawer-close.vue'
   import DrawerContent from '../../overlay/drawer/drawer-content.vue'
-  import DrawerOverlay from '../../overlay/drawer/drawer-overlay.vue'
-  import DrawerPortal from '../../overlay/drawer/drawer-portal.vue'
   import DrawerTitle from '../../overlay/drawer/drawer-title.vue'
   import PanelFooter from '../../overlay/panel/panel-footer.vue'
   import PanelHeader from '../../overlay/panel/panel-header.vue'
@@ -437,34 +434,30 @@
       side="left"
       size="small"
     >
-      <DrawerPortal>
-        <DrawerOverlay />
-        <DrawerContent>
-          <PanelHeader class="w-full">
-            <DrawerTitle>{{ ariaLabel || t('docLayout.navigation') }}</DrawerTitle>
-            <DrawerClose />
-          </PanelHeader>
-          <ScrollArea class="min-h-0 w-full min-w-0 flex-1">
-            <Menu
-              v-model:path="menuPath"
-              v-model:expanded="menuExpanded"
-              :groups="menuGroups"
-              :active-id="currentId"
-              :aria-label="ariaLabel || t('docLayout.navigation')"
-              class="w-full p-(--spacing-md)"
-              @navigate="onMenuNavigate"
-            >
-              <MenuBack :label="backLabel" />
-            </Menu>
-          </ScrollArea>
-          <PanelFooter
-            v-if="$slots['navigation-footer']"
-            class="w-full px-(--spacing-md)"
+      <DrawerContent>
+        <PanelHeader class="w-full">
+          <DrawerTitle>{{ ariaLabel || t('docLayout.navigation') }}</DrawerTitle>
+        </PanelHeader>
+        <ScrollArea class="min-h-0 w-full min-w-0 flex-1">
+          <Menu
+            v-model:path="menuPath"
+            v-model:expanded="menuExpanded"
+            :groups="menuGroups"
+            :active-id="currentId"
+            :aria-label="ariaLabel || t('docLayout.navigation')"
+            class="w-full p-(--spacing-md)"
+            @navigate="onMenuNavigate"
           >
-            <slot name="navigation-footer" />
-          </PanelFooter>
-        </DrawerContent>
-      </DrawerPortal>
+            <MenuBack :label="backLabel" />
+          </Menu>
+        </ScrollArea>
+        <PanelFooter
+          v-if="$slots['navigation-footer']"
+          class="w-full px-(--spacing-md)"
+        >
+          <slot name="navigation-footer" />
+        </PanelFooter>
+      </DrawerContent>
     </Drawer>
 
     <Command

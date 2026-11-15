@@ -18,46 +18,39 @@ export default {
   <DialogTrigger>
     <Button label="Open dialog" />
   </DialogTrigger>
-  <DialogPortal>
-    <DialogOverlay />
-    <DialogContent>${
-      showHeader
+  <DialogContent>${
+    showHeader
+      ? figma.code`
+    <PanelHeader>
+      <DialogTitle>${title}</DialogTitle>
+    </PanelHeader>`
+      : ''
+  }
+    <PanelContent>${
+      content
         ? figma.code`
-      <PanelHeader>
-        <DialogTitle>${title}</DialogTitle>
-        <DialogClose />
-      </PanelHeader>`
+      ${content}`
         : ''
     }
-      <PanelContent>${
-        content
-          ? figma.code`
-        ${content}`
-          : ''
-      }
-      </PanelContent>${
-        showFooter
-          ? figma.code`
-      <PanelFooter>${
-        footer
-          ? figma.code`
-        ${footer}`
-          : ''
-      }
-      </PanelFooter>`
-          : ''
-      }
-    </DialogContent>
-  </DialogPortal>
+    </PanelContent>${
+      showFooter
+        ? figma.code`
+    <PanelFooter>${
+      footer
+        ? figma.code`
+      ${footer}`
+        : ''
+    }
+    </PanelFooter>`
+        : ''
+    }
+  </DialogContent>
 </Dialog>`,
   imports: [
     "import Dialog from '@aziontech/webkit/dialog'",
     "import DialogTrigger from '@aziontech/webkit/dialog-trigger'",
-    "import DialogPortal from '@aziontech/webkit/dialog-portal'",
-    "import DialogOverlay from '@aziontech/webkit/dialog-overlay'",
     "import DialogContent from '@aziontech/webkit/dialog-content'",
     "import DialogTitle from '@aziontech/webkit/dialog-title'",
-    "import DialogClose from '@aziontech/webkit/dialog-close'",
     "import PanelHeader from '@aziontech/webkit/panel-header'",
     "import PanelContent from '@aziontech/webkit/panel-content'",
     "import PanelFooter from '@aziontech/webkit/panel-footer'",

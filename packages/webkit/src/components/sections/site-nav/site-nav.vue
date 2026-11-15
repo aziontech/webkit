@@ -38,10 +38,7 @@
   import NavigationMenuTrigger from '../../navigation/navigation-menu/navigation-menu-trigger.vue'
   import NavigationMenuViewport from '../../navigation/navigation-menu/navigation-menu-viewport.vue'
   import Drawer from '../../overlay/drawer/drawer.vue'
-  import DrawerClose from '../../overlay/drawer/drawer-close.vue'
   import DrawerContent from '../../overlay/drawer/drawer-content.vue'
-  import DrawerOverlay from '../../overlay/drawer/drawer-overlay.vue'
-  import DrawerPortal from '../../overlay/drawer/drawer-portal.vue'
   import DrawerTitle from '../../overlay/drawer/drawer-title.vue'
   import PanelFooter from '../../overlay/panel/panel-footer.vue'
   import PanelHeader from '../../overlay/panel/panel-header.vue'
@@ -374,50 +371,46 @@
       side="left"
       size="small"
     >
-      <DrawerPortal>
-        <DrawerOverlay />
-        <DrawerContent>
-          <PanelHeader class="hidden w-full md:flex">
-            <DrawerTitle>{{ t('siteNav.menu') }}</DrawerTitle>
-            <DrawerClose />
-          </PanelHeader>
+      <DrawerContent>
+        <PanelHeader class="hidden w-full md:flex">
+          <DrawerTitle>{{ t('siteNav.menu') }}</DrawerTitle>
+        </PanelHeader>
 
-          <ScrollArea class="min-h-0 w-full min-w-0 flex-1">
-            <Menu
-              v-model:path="navPath"
-              :groups="navGroups"
-              aria-label="Azion"
-              class="w-full p-(--spacing-md)"
-              @navigate="onNavigate"
-            >
-              <MenuBack />
-            </Menu>
-          </ScrollArea>
-
-          <PanelFooter
-            v-if="primaryAction || secondaryAction"
-            class="w-full flex-col items-stretch px-(--spacing-md)"
+        <ScrollArea class="min-h-0 w-full min-w-0 flex-1">
+          <Menu
+            v-model:path="navPath"
+            :groups="navGroups"
+            aria-label="Azion"
+            class="w-full p-(--spacing-md)"
+            @navigate="onNavigate"
           >
-            <Button
-              v-if="secondaryAction"
-              :label="secondaryAction.label"
-              kind="outlined"
-              size="medium"
-              class="w-full"
-              :href="secondaryAction.href"
-            />
-            <Button
-              key="button-2"
-              v-if="primaryAction"
-              :label="primaryAction.label"
-              kind="primary"
-              size="medium"
-              class="w-full"
-              :href="primaryAction.href"
-            />
-          </PanelFooter>
-        </DrawerContent>
-      </DrawerPortal>
+            <MenuBack />
+          </Menu>
+        </ScrollArea>
+
+        <PanelFooter
+          v-if="primaryAction || secondaryAction"
+          class="w-full flex-col items-stretch px-(--spacing-md)"
+        >
+          <Button
+            v-if="secondaryAction"
+            :label="secondaryAction.label"
+            kind="outlined"
+            size="medium"
+            class="w-full"
+            :href="secondaryAction.href"
+          />
+          <Button
+            key="button-2"
+            v-if="primaryAction"
+            :label="primaryAction.label"
+            kind="primary"
+            size="medium"
+            class="w-full"
+            :href="primaryAction.href"
+          />
+        </PanelFooter>
+      </DrawerContent>
     </Drawer>
   </div>
 </template>

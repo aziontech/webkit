@@ -8,8 +8,6 @@
   import IconButton from '../../actions/icon-button/icon-button.vue'
   import Drawer from '../../overlay/drawer/drawer.vue'
   import DrawerContent from '../../overlay/drawer/drawer-content.vue'
-  import DrawerOverlay from '../../overlay/drawer/drawer-overlay.vue'
-  import DrawerPortal from '../../overlay/drawer/drawer-portal.vue'
   import DrawerTitle from '../../overlay/drawer/drawer-title.vue'
 
   defineOptions({
@@ -521,19 +519,16 @@
       size="small"
       :data-testid="`${testId}__navigation-drawer`"
     >
-      <DrawerPortal>
-        <DrawerOverlay />
-        <DrawerContent>
-          <DrawerTitle class="sr-only">
-            {{ navigationLabel || t('appLayout.navigation') }}
-          </DrawerTitle>
-          <slot
-            name="navigation"
-            :drawer="true"
-            :close-navigation="closeNavigation"
-          />
-        </DrawerContent>
-      </DrawerPortal>
+      <DrawerContent>
+        <DrawerTitle class="sr-only">
+          {{ navigationLabel || t('appLayout.navigation') }}
+        </DrawerTitle>
+        <slot
+          name="navigation"
+          :drawer="true"
+          :close-navigation="closeNavigation"
+        />
+      </DrawerContent>
     </Drawer>
 
     <Drawer
@@ -544,15 +539,12 @@
       size="small"
       :data-testid="`${testId}__tools-drawer`"
     >
-      <DrawerPortal>
-        <DrawerOverlay />
-        <DrawerContent>
-          <DrawerTitle>
-            {{ toolsLabel || t('appLayout.tools') }}
-          </DrawerTitle>
-          <slot name="tools" />
-        </DrawerContent>
-      </DrawerPortal>
+      <DrawerContent>
+        <DrawerTitle>
+          {{ toolsLabel || t('appLayout.tools') }}
+        </DrawerTitle>
+        <slot name="tools" />
+      </DrawerContent>
     </Drawer>
   </div>
 </template>

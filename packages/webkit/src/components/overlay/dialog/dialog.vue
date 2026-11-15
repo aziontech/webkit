@@ -19,7 +19,7 @@
       defaultOpen?: boolean
       /** Light-dismiss: when true, overlay click and Escape close the dialog. It does not govern the close button; see `closable`. */
       dismissible?: boolean
-      /** Whether the close button (DialogClose) and the context close() close the dialog; false renders the close button disabled. Escape and overlay click follow `dismissible`. Unset, it follows `dismissible` for 6.x compatibility (deprecated coupling: set it explicitly; from 7.0 unset means true). */
+      /** Shows the close (X) button at the end of the dialog header. False removes it; Escape and overlay click still follow `dismissible`. */
       closable?: boolean
       /** Panel max-width preset passed to the inner Panel. */
       size?: DialogSize
@@ -27,7 +27,7 @@
     {
       defaultOpen: false,
       dismissible: true,
-      closable: undefined,
+      closable: true,
       size: 'medium'
     }
   )
@@ -57,10 +57,7 @@
     isOpen.set(true)
   }
 
-  const isClosable = computed(() => props.closable ?? props.dismissible)
-
   const closeDialog = () => {
-    if (!isClosable.value) return
     isOpen.set(false)
   }
 
@@ -86,7 +83,7 @@
       return props.dismissible
     },
     get closable() {
-      return isClosable.value
+      return props.closable
     },
     get size() {
       return props.size

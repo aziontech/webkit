@@ -5,15 +5,11 @@ import Drawer from './drawer.vue'
 import DrawerClose from './drawer-close.vue'
 import DrawerContent from './drawer-content.vue'
 import DrawerDescription from './drawer-description.vue'
-import DrawerOverlay from './drawer-overlay.vue'
-import DrawerPortal from './drawer-portal.vue'
 import DrawerTitle from './drawer-title.vue'
 import DrawerTrigger from './drawer-trigger.vue'
 
 export default Object.assign(Drawer, {
   Trigger: DrawerTrigger,
-  Portal: DrawerPortal,
-  Overlay: DrawerOverlay,
   Content: DrawerContent,
   Header: PanelHeader,
   Title: DrawerTitle,
@@ -23,13 +19,5 @@ export default Object.assign(Drawer, {
   Footer: PanelFooter
 })
 
-export {
-  DrawerClose,
-  DrawerContent,
-  DrawerDescription,
-  DrawerOverlay,
-  DrawerPortal,
-  DrawerTitle,
-  DrawerTrigger
-}
+export { DrawerClose, DrawerContent, DrawerDescription, DrawerTitle, DrawerTrigger }
 export type { DrawerSide, DrawerSize } from './injection-key'

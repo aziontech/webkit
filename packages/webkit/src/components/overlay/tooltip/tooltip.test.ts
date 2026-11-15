@@ -116,20 +116,17 @@ describe('Tooltip (overlay: Teleport, data-state, hover/focus/Escape)', () => {
 
     it('inside an open Dialog, Escape closes only the tooltip', async () => {
       const { default: Dialog } = await import('../dialog/dialog.vue')
-      const { default: DialogPortal } = await import('../dialog/dialog-portal.vue')
       const { default: DialogContent } = await import('../dialog/dialog-content.vue')
       const { default: DialogTitle } = await import('../dialog/dialog-title.vue')
       render(
         defineComponent({
-          components: { Dialog, DialogPortal, DialogContent, DialogTitle, Tooltip },
+          components: { Dialog, DialogContent, DialogTitle, Tooltip },
           template: `
             <Dialog :default-open="true" data-testid="host-dialog">
-              <DialogPortal>
-                <DialogContent>
-                  <DialogTitle>Settings</DialogTitle>
-                  <Tooltip text="Delete domain"><button type="button">Delete</button></Tooltip>
-                </DialogContent>
-              </DialogPortal>
+              <DialogContent>
+                <DialogTitle>Settings</DialogTitle>
+                <Tooltip text="Delete domain"><button type="button">Delete</button></Tooltip>
+              </DialogContent>
             </Dialog>
           `
         })

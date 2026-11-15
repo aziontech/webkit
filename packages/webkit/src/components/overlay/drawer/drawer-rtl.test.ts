@@ -7,14 +7,11 @@ import { h, nextTick } from 'vue'
 
 import Drawer from './drawer.vue'
 import DrawerContent from './drawer-content.vue'
-import DrawerPortal from './drawer-portal.vue'
 import DrawerTitle from './drawer-title.vue'
 
 const closedTranslate = async (side: 'left' | 'right') => {
   const view = render(() =>
-    h(Drawer, { open: true, side }, () =>
-      h(DrawerPortal, () => h(DrawerContent, () => h(DrawerTitle, () => 'Settings')))
-    )
+    h(Drawer, { open: true, side }, () => h(DrawerContent, () => h(DrawerTitle, () => 'Settings')))
   )
   await nextTick()
   await nextTick()

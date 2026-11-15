@@ -3,17 +3,17 @@ name: drawer
 category: overlay
 structure: composition
 status: implemented
-spec_version: 4
+spec_version: 5
 checksum: 29c059f9dfdd0f7f0660b63ef7979f64f1f5c43399b3a559d987f0c66cfd5c3f
 created: 2026-05-22
-last_updated: 2026-11-14
+last_updated: 2026-11-15
 ---
 
 # Drawer — Component Spec
 
 ## Purpose
 
-A panel that slides in from an edge of the screen and keeps the page behind it in view. It holds secondary work that is too large or too long-lived for a dialog: filters, a long form, the details of a row, a navigation list. It traps focus while open, closes on Escape and on an overlay click when `dismissible`, and returns focus to its trigger.
+A panel that slides in from an edge of the screen and keeps the page behind it in view. It holds secondary work that is too large or too long-lived for a dialog: filters, a long form, the details of a row, a navigation list. `Drawer.Content` is the whole modal: it teleports to `body`, renders the dimmed overlay, traps focus and scroll-locks the page, so the page behind cannot be clicked or tabbed to while it is open. The header gets the close (X) button on its own unless `closable` is false. It closes on Escape and on an overlay click when `dismissible`, and returns focus to its trigger. `:modal="false"` is the one opt-out: no overlay, no focus trap, no scroll lock, for a side panel that works next to the page it talks about (as Radix `modal={false}`).
 
 ## When to use
 
@@ -33,7 +33,9 @@ A panel that slides in from an edge of the screen and keeps the page behind it i
 ## Best practices
 
 - Pick the edge (side) intentionally and keep it consistent across the app.
-- Trap focus while open and provide an obvious close affordance.
+- Do not add an overlay, a portal or a close button by hand: `Drawer.Content` renders the overlay and the portal, and the header renders the close button while `closable` is true (the default).
+- Keep the drawer modal (the default). Use `:modal="false"` only when the reader must keep reading or using the page beside the drawer, such as an assistant that answers questions about the page.
+- While an action is in flight, set `:dismissible="false"` and `:closable="false"` together so nothing can close it.
 - Bind the open state with `v-model:open`, or `:open` plus an `@update:open` handler typed `(open: boolean) => void`. The payload is always a `boolean`, so the handler needs no cast and no `Boolean(...)`.
 
 ## Usage
@@ -61,59 +63,55 @@ The compound import leads: every part hangs off the root (`Drawer.Trigger`, `Dra
         kind="primary"
       />
     </Drawer.Trigger>
-    <Drawer.Portal>
-      <Drawer.Overlay />
-      <Drawer.Content>
-        <Drawer.Header>
-          <Drawer.Title>Add origin</Drawer.Title>
-          <Drawer.Close />
-        </Drawer.Header>
-        <Drawer.Body>
-          <Drawer.Description>
-            Point the application at the server that holds the original content.
-          </Drawer.Description>
-        </Drawer.Body>
-        <Drawer.Footer>
-          <Button
-            label="Cancel"
-            kind="outlined"
-            @click="open = false"
-          />
-          <Button
-            label="Save"
-            kind="primary"
-          />
-        </Drawer.Footer>
-      </Drawer.Content>
-    </Drawer.Portal>
+    <Drawer.Content>
+      <Drawer.Header>
+        <Drawer.Title>Add origin</Drawer.Title>
+      </Drawer.Header>
+      <Drawer.Body>
+        <Drawer.Description>
+          Point the application at the server that holds the original content.
+        </Drawer.Description>
+      </Drawer.Body>
+      <Drawer.Footer>
+        <Button
+          label="Cancel"
+          kind="outlined"
+          @click="open = false"
+        />
+        <Button
+          label="Save"
+          kind="primary"
+        />
+      </Drawer.Footer>
+    </Drawer.Content>
   </Drawer>
 </template>
 ```
 
-Tree-shaking: `@aziontech/webkit/drawer-root` is the root alone (nothing attached), and every part keeps its own path (`@aziontech/webkit/drawer-trigger`, `-portal`, `-overlay`, `-content`, `-title`, `-description`, `-close`, and `@aziontech/webkit/panel-header`, `panel-content`, `panel-footer` for the regions), so code written against the per-part imports keeps working unchanged.
+Tree-shaking: `@aziontech/webkit/drawer-root` is the root alone (nothing attached), and every part keeps its own path (`@aziontech/webkit/drawer-trigger`, `-content`, `-title`, `-description`, `-close`, and `@aziontech/webkit/panel-header`, `panel-content`, `panel-footer` for the regions). There is no portal or overlay part: `drawer-content` renders both.
 
 ## Sub-components
 
-- `index.ts` — the compound: the root with every part attached by `Object.assign` (`Drawer.Trigger`, `.Portal`, `.Overlay`, `.Content`, `.Title`, `.Description`, `.Close`), plus the shared Panel regions as `Drawer.Header` (`panel-header`), `Drawer.Body` (`panel-content`) and `Drawer.Footer` (`panel-footer`). It adds no component of its own. Exported at `@aziontech/webkit/drawer`; the root alone is `@aziontech/webkit/drawer-root`. The parts stay in the root folder (flat) for 6.x path stability; per-part export paths are unchanged.
-- `drawer-close.vue` — Public sub-component `drawer-close`.
-- `drawer-content.vue` — Public sub-component `drawer-content`.
+- `index.ts` — the compound: the root with every part attached by `Object.assign` (`Drawer.Trigger`, `.Content`, `.Title`, `.Description`, `.Close`), plus the shared Panel regions as `Drawer.Header` (`panel-header`), `Drawer.Body` (`panel-content`) and `Drawer.Footer` (`panel-footer`). It adds no component of its own. Exported at `@aziontech/webkit/drawer`; the root alone is `@aziontech/webkit/drawer-root`. The parts stay in the root folder (flat).
+- `drawer-close.vue` — Public sub-component `drawer-close`: the close (X) `IconButton`. `Drawer.Content` puts one at the end of its `PanelHeader` while `closable` is true, so a consumer places it by hand only in a custom header with `:closable="false"`. It always closes the drawer.
+- `drawer-content.vue` — Public sub-component `drawer-content`: the drawer itself. It teleports to `body` (kept mounted through the exit transition), renders the overlay while `modal` (`aria-hidden`, `__backdrop` test id; a click on it closes the drawer when `dismissible`) and the `role="dialog"` panel, traps focus and scroll-locks the page while `modal`, and restores focus on close.
 - `drawer-description.vue` — Public sub-component `drawer-description`.
-- `drawer-overlay.vue` — Public sub-component `drawer-overlay`.
-- `drawer-portal.vue` — Public sub-component `drawer-portal`.
 - `drawer-title.vue` — Public sub-component `drawer-title`.
 - `drawer-trigger.vue` — Public sub-component `drawer-trigger`. As-child trigger: a non-interactive inline wrapper (no `role`, no `tabindex`) that opens the drawer on the bubbling `click` and gives `aria-haspopup="dialog"` and `aria-expanded` to the slotted control, which is the one tab stop and the element focus returns to on close. When the first node in the slot is a WebKit `Button` / `IconButton` or a native control (`button`, `a[href]`, form controls, `[role=button]`, `[tabindex]` ≥ 0), or one of those as the first node inside a `Tooltip` (the trigger looks through the `Tooltip` to its slotted control), the ARIA and `id` are merged into that control at render, so server-rendered HTML already carries them on the control; for anything else (a control nested in another component) the trigger forwards them onto the first focusable element in its slot after mount and on every update. When the slot holds no focusable element (plain text, an icon, an `Avatar`, or a `Badge` / `Tag` / `SeverityTag` without slot content), the wrapper itself becomes the control: `role="button"`, `tabindex="0"`, opening on `Enter` / `Space`; for these and for native elements this is in the server HTML too.
 
 ## Props
 
-| Prop          | Type         | Default    | Required | JSDoc                                                                                                   |
-| ------------- | ------------ | ---------- | -------- | ------------------------------------------------------------------------------------------------------- |
-| `defaultOpen` | `boolean`    | `false`    | false    | Initial open state when uncontrolled.                                                                   |
-| `closable` | `boolean` | `undefined` | false | Whether the close button (DrawerClose) and the context close() close the drawer; false renders the close button disabled. Escape and overlay click follow `dismissible`. Unset, it follows `dismissible` for 6.x compatibility (deprecated coupling: set it explicitly; from 7.0 unset means true). |
-| `dismissible` | `boolean` | `true` | false | Light-dismiss: when true, overlay click and Escape close the drawer. It does not govern the close button; see `closable`. |
-| `side`        | `DrawerSide` | `'right'`  | false    | Edge the drawer panel slides from.                                                                      |
-| `size`        | `DrawerSize` | `'medium'` | false    | Panel max-width preset (`small` `--container-sm`, `medium` `--container-xl`, `large` `--container-4xl`). Height is always 100% viewport. |
+| Prop          | Type         | Default    | Required | JSDoc                                                                                                                                                                                                                         |
+| ------------- | ------------ | ---------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `defaultOpen` | `boolean`    | `false`    | false    | Initial open state when uncontrolled.                                                                                                                                                                                         |
+| `closable`    | `boolean`    | `true`     | false    | Shows the close (X) button at the end of the drawer header. False removes it; Escape and overlay click still follow `dismissible`.                                                                                            |
+| `dismissible` | `boolean`    | `true`     | false    | Light-dismiss: when true, overlay click and Escape close the drawer. It does not govern the close button; see `closable`.                                                                                                     |
+| `modal`       | `boolean`    | `true`     | false    | Renders the overlay, traps focus and locks page scroll. False leaves the page beside the drawer usable: no overlay, no focus trap, no scroll lock, `aria-modal` false; Escape, the close button and focus restore still work. |
+| `side`        | `DrawerSide` | `'right'`  | false    | Edge the drawer panel slides from.                                                                                                                                                                                            |
+| `size`        | `DrawerSize` | `'medium'` | false    | Panel max-width preset (`small` `--container-sm`, `medium` `--container-xl`, `large` `--container-4xl`). Height is always 100% viewport.                                                                                      |
 
-- Two close paths: `dismissible` gates the light-dismiss paths only (`Esc`, overlay click); `closable` gates the explicit close (`DrawerClose` and the context `close()`), as Radix and the prop vocabulary separate them. `:dismissible="false" :closable="true"` is a drawer that only its close button or a footer action closes. For 6.x compatibility an unset `closable` follows `dismissible`, so an existing `:dismissible="false"` still disables the close button; that coupling is deprecated and from 7.0 an unset `closable` means `true`. Tests: `drawer.test.ts` › closable.
+- Two close paths: `dismissible` gates the light-dismiss paths (`Esc`, overlay click); `closable` shows or removes the close (X) button, as Radix and the prop vocabulary separate them. `Drawer.Close` and the context `close()` always close. Tests: `drawer.test.ts` › closable.
+- `modal` (default `true`) is the only way to drop the overlay. Tests: `drawer.test.ts` › modal.
 
 ## v-model
 
@@ -142,10 +140,10 @@ Tree-shaking: `@aziontech/webkit/drawer-root` is the root alone (nothing attache
 
 ## Motion & Animations
 
-| Trigger              | Animation / Transition                                                                                                   | Token                                                                                     | Reduced-motion fallback         |
-| -------------------- | ------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------- | ------------------------------- |
+| Trigger              | Animation / Transition                                                                                                                                      | Token                                                                                                       | Reduced-motion fallback         |
+| -------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- | ------------------------------- |
 | panel open / close   | `transition-[translate] duration-slow-02 ease-expressive-entrance`, closing `data-[state=closed]:duration-slow-01 data-[state=closed]:ease-expressive-exit` | `duration['slow-02']` / `duration['slow-01']` + `curve['expressive-entrance']` / `curve['expressive-exit']` | `motion-reduce:transition-none` |
-| overlay open / close | `transition-opacity duration-slow-01 ease-productive-entrance`, closing `data-[state=closed]:duration-slow-02 data-[state=closed]:ease-productive-exit` | `duration['slow-01']` / `duration['slow-02']` + `curve['productive-entrance']` / `curve['productive-exit']` | `motion-reduce:transition-none` |
+| overlay open / close | `transition-opacity duration-slow-01 ease-productive-entrance`, closing `data-[state=closed]:duration-slow-02 data-[state=closed]:ease-productive-exit`     | `duration['slow-01']` / `duration['slow-02']` + `curve['productive-entrance']` / `curve['productive-exit']` | `motion-reduce:transition-none` |
 
 No element sets an inline `transition`, so `motion-reduce:transition-none` wins and the panel appears in place under `prefers-reduced-motion` (pinned by `dialog-motion.test.ts`).
 
@@ -172,11 +170,12 @@ No element sets an inline `transition`, so `motion-reduce:transition-none` wins 
 
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`
 - Keyboard map: `Enter`/`Space` on the trigger opens the drawer and moves focus to its first focusable control. Focus is trapped: `Tab` on the last control wraps to the first and `Shift+Tab` on the first wraps to the last. `Escape` closes it and focus returns to the trigger, or, when opened without a `Drawer.Trigger`, to the element that held focus when it opened. Tests: `drawer.test.ts` › keyboard map (spec).
-- ARIA: the panel is `role="dialog"` with `aria-modal="true"`, `aria-labelledby` on the `DrawerTitle` id, and `aria-describedby` on the `DrawerDescription` id only while a `DrawerDescription` is mounted.
+- ARIA: the panel is `role="dialog"` with `aria-modal="true"` (`false` with `:modal="false"`, where focus moves in on open but `Tab` is not trapped), `aria-labelledby` on the `DrawerTitle` id, and `aria-describedby` on the `DrawerDescription` id only while a `DrawerDescription` is mounted.
 - Nested overlays: every open `DrawerContent` joins the shared overlay layer stack, so only the top layer handles `Escape` and `Tab` trapping: `Escape` in a `ConfirmDialog` opened from the drawer closes the confirm and leaves the drawer open. Tests: `drawer.test.ts` › nested overlays.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state.
 - `motion-reduce:transition-none` on every animated element.
 - Touch target ≥40×40 px where the control is interactive.
+- Overlay: a modal drawer (the default) always renders its overlay, so the page behind is never clickable while it is open. Tests: `drawer.test.ts` › overlay.
 - Teleported content: the portal wraps its content (overlay and panel) in a `display: contents` element that binds `dir` and `lang` from the nearest `WebkitProvider` (`usePortalLocale`), so it keeps the provider's direction and language although it renders under `body`. With no provider nothing is set and the document's own `dir` and `lang` apply.
 
 ## Examples
