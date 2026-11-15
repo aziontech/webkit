@@ -83,7 +83,7 @@ jobs:
       - name: Build the before/after page
         if: ${{ github.event.inputs.update_baselines == 'true' }}
         run: >-
-          node apps/visual/scripts/baseline-review.mjs
+          node apps/visual/scripts/review-baselines.mjs
           --before "$RUNNER_TEMP/before/baselines"
           --after apps/visual/baselines
           --out "$RUNNER_TEMP/review"

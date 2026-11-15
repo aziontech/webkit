@@ -45,7 +45,7 @@ export const GATES = [
   },
   {
     id: 'blocks',
-    label: 'Blocks have intents, real skills and a lint-clean SFC',
+    label: 'Blocks',
     steps: [['node', 'scripts/check-blocks.mjs']]
   },
   {
