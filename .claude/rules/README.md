@@ -13,8 +13,8 @@ This table is the human-readable summary of that registry — when in doubt, the
 | Rule | Scope | Fixes | Blocks via |
 |---|---|---|---|
 | [no-invention](./no-invention.md) | webkit | Nothing beyond the spec | spec-compliance · references · ratchet |
-| [prop-vocabulary](./prop-vocabulary.md) | general | One name/type/default per concept | spec-compliance · ratchet |
-| [naming](./naming.md) | webkit | One kebab name across 6 surfaces | spec-compliance · ratchet |
+| [prop-vocabulary](./prop-vocabulary.md) | general | One name/type/value set per concept | spec-compliance · ratchet · naming gate |
+| [naming](./naming.md) | webkit | One standard for every name; old names never come back | naming gate · validate-naming · prop-vocabulary · no-deprecated-name |
 | [imports](./imports.md) | webkit | Flat public name; category in the folder only | references · 5 lint rules |
 | [compound-api](./compound-api.md) | webkit | `index.ts` compound + tree-shakeable `-root` | catalog-drift · review |
 | [styling](./styling.md) | general | Inline classes on the root; variants via `data-*` | validate-tokens · ratchet · lints |

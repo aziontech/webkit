@@ -1,28 +1,568 @@
-# Rule: one name, everywhere
+# Rule: naming — one standard for every name, old names never come back
 
-A component has **one** name. That name appears on six surfaces, and they must all agree. A component called singular in one place and plural in another (`import Chip from '@aziontech/webkit/chips'`) is a bug — and the kind of bug a guardrail must make impossible, not a thing reviewers chase by eye.
+Every name in WebKit follows one written standard: components, parts, blocks, examples, props
+and their values, events, slots, types, data attributes, test ids, i18n keys, internal code,
+tokens, icons, files, scripts, CLI and MCP names, lint rules, the AI bundle and CI. The owner
+approved it on 2026-11-15 as decisions N1–N18 of the 6.0 naming change. 6.0 is the one clean
+break: a renamed name is removed outright, `webkit migrate` rewrites apps from the
+`packages/webkit/src/cli/migrations/v6*.json` maps, and the naming check makes sure the old
+name never comes back.
 
-## The single source of truth
+The standard reuses the words people and AI assistants already type. When a word is open, we
+take the one Supabase and shadcn use (`variant`, `outline`, `ghost`, the part words,
+`-foreground`, "block"), and keep our own only where it reads better and nothing would break
+(`small | medium | large`, `danger`).
 
-The **kebab-case name** is canonical. Everything else is derived from it:
+## The rule
 
-| Surface | Form | Example (`chip`) |
-|---|---|---|
-| spec file + `name:` frontmatter | kebab | `.specs/chip.md`, `name: chip` |
-| component folder + `.vue` file | kebab | `inputs/chip/chip.vue` |
-| export subpath in `packages/webkit/package.json#exports` | kebab | `"./chip": ".../chip/chip.vue"` |
-| `defineOptions({ name })` | **PascalCase** | `name: 'Chip'` |
-| `data-testid` fallback | `input-<name>` (inputs) / `<category>-<name>` | `'input-chip'` |
-| import binding + tag in an example or block | **PascalCase** of the export subpath | `import Chip from '@aziontech/webkit/chip'` → `<Chip>` |
+> A thing has **one name**. The **kebab-case** form is canonical and every other form derives
+> from it. Words come from the **closed lists** below; an abbreviation, a plural spelling, a
+> synonym or a retired v6 name is a naming bug, and the naming check reports it.
 
-PascalCase is the kebab name with each `-`-segment capitalized: `chip` → `Chip`, `empty-state` → `EmptyState`, `icon-button` → `IconButton`. Plurality is part of the name — pick one (`chip`, singular, for a single token) and use it on every surface. A container for many is a *different* component (`chip-group`), not a plural spelling of the same one.
+## 1. Components — one name on every surface
 
-## What enforces it
+The kebab name is the single source. Six surfaces must agree:
 
-- **Component internals** — [`validate-spec-compliance.mjs`](../hooks/validate-spec-compliance.mjs) already blocks a `.vue` whose `defineOptions.name` ≠ `PascalCase(spec name)` or whose `data-testid` fallback ≠ `<category>-<name>` (`input-<name>` for inputs). So spec ↔ file ↔ `defineOptions` ↔ testid cannot drift.
+| Surface                                     | Form                     | Example (`empty-state`)                                  |
+| ------------------------------------------- | ------------------------ | -------------------------------------------------------- |
+| spec file + `name:` frontmatter             | kebab                    | `.specs/empty-state.md`, `name: empty-state`             |
+| component folder + `.vue` file              | kebab                    | `content/empty-state/empty-state.vue`                    |
+| export subpath in `package.json#exports`    | kebab, flat              | `"./empty-state"`                                        |
+| `defineOptions({ name })`                   | PascalCase               | `name: 'EmptyState'`                                     |
+| `data-testid` fallback                      | the kebab name itself    | `'empty-state'`                                          |
+| import binding + tag in examples and blocks | PascalCase of the export | `import EmptyState from '@aziontech/webkit/empty-state'` |
 
-Between the two, all six surfaces are locked together. To rename a component you change the canonical kebab name and propagate to every surface — the hooks reject any partial rename.
+- **English, singular, whole words.** `chip`, not `chips`; `navigation`, not `nav`; `button`,
+  not `btn`. A container of many is a different component (`chip-group`), never a plural.
+- **Modifier first, noun last.** `pricing-card`, `highlight-button`, `icon-button` — every card
+  ends in `card`, every button in `button`.
+- **A marketing page section that wraps a primitive ends in `-section`** (`hero-section`,
+  `stats-section`, `media-split-section`); the primitive keeps the bare name (`hero`, `stats`).
+  `-band`, `-stack` and the other wrapper words are not used.
+- **No synonym of an existing export.** One overlay is `dialog` (never `modal`), the side panel
+  is `drawer` (never `sheet`), the moving strip is `marquee` (never `ticker`).
 
-## When importing / migrating
+| ✅               | ❌                                       |
+| ---------------- | ---------------------------------------- |
+| `pricing-card`   | `card-pricing` (noun first)              |
+| `site-header`    | `site-nav` (abbreviation)                |
+| `eyebrow`        | `overline` (banned word)                 |
+| `marquee`        | `ticker` (synonym of an existing family) |
+| `key-value-list` | `key-value-pairs` (plural root)          |
+| `hero-section`   | `hero-band` (sections end in `-section`) |
 
-Per [`migration.md`](./migration.md), a name inherited from another system is rewritten to ours, not carried over. The kebab name drives the rest; never introduce a binding that disagrees with the export path "to match the source."
+Near-duplicate words the check knows (`ABBREVIATIONS` and `SYNONYMS` in the engine):
+abbreviations `btn`→`button`, `img`/`pic`→`image`, `nav`→`navigation`, `cols`/`col`→`columns`,
+`desc`→`description`, `msg`→`message`, `prev`→`previous`, `num`→`number`, `txt`→`text`,
+`dlg`→`dialog`, `ctx`→`context`, `attr(s)`→`attribute(s)`, `sel`→`select`, `util`/`utils`→`lib`,
+`regen`, `genai`, `ds`; synonyms `modal`→`dialog`, `sheet`→`drawer`, `popup`→`popover`,
+`snackbar`/`notification`→`toast`, `loader`→`spinner`, `ticker`→`marquee`, `overline`→`eyebrow`,
+`helper`→`description`; and an export that is the plural of another export (`chips` next to
+`chip`; `tabs`, `settings`, `stats` are the allowed plural roots). The whole-name market aliases
+(`modal`, `sheet`, `callout`, `kebab`…) are `MARKET_ALIASES` in `scripts/lib/naming.mjs`.
+
+> Supabase and shadcn name atoms with one plain singular noun from the WAI-ARIA vocabulary.
+> Supabase also shows the cost of not doing it: `Modal` next to `Dialog` for one overlay.
+
+## 2. Parts — a closed list of part words
+
+A part is `<Root><Part>` (file and export `<root>-<part>`), and the part word comes from one
+closed list, the shadcn set:
+
+**Trigger, Content, Header, Body, Footer, Title, Description, Close, Item, Group, Label,
+Separator, List**
+
+plus the domain parts a root declares in `DOMAIN_PARTS` (in the engine), where the anatomy
+really is a table, a chart or a field: `table` declares Row, Cell, Body, Caption, Toolbar,
+Search, Filter, Export…; `chart` declares Axis, Legend, Tooltip, Grid, Line, Area, Bar…;
+`input-group` declares Addon and Input; `resizable` Handle and Pane; `stepper` and `wizard`
+Step. A new domain part is a one-line entry in `DOMAIN_PARTS`, reviewed like any API change.
+The check reads the part's last word (`table-head-cell` → `cell`, `table-sort-button` →
+`button`).
+
+- **Every part is importable on its own** — `dialog-header` next to `Dialog.Header`.
+- **`Body` only for the scrolling middle** of `dialog`, `drawer` and `panel`.
+- **Tabs has List, Trigger, Content only.** Select, MultiSelect and DropdownMenu say `Item`.
+- **Removed words:** `Option` → `Item`, `Panel` → `Content` (Tabs) or `Body` (overlays),
+  `Overlay` and `Portal` are gone (Content renders both), `Tabs.Item` → `Tabs.Trigger`.
+
+| ✅                             | ❌                                           |
+| ------------------------------ | -------------------------------------------- |
+| `Select.Item` · `select-item`  | `Select.Option` · `select-option`            |
+| `Tabs.Trigger`, `Tabs.Content` | `Tabs.Item`, `Tabs.Panel`                    |
+| `Dialog.Body` · `dialog-body`  | `Dialog.Body` that is a file `panel-content` |
+| `Table.SortButton`             | `Table.Trigger` (opens nothing)              |
+
+A `Trigger` exists only on a part that opens a paired `Content` (`data-state="open|closed"`);
+see [`compound-api.md`](./compound-api.md).
+
+> Supabase reuses the same dozen part words across Dialog, Drawer and Popover, so knowing one
+> teaches the rest. Material's part names vary per component — the thing we avoid.
+
+## 3. Blocks and block groups
+
+"Block" is the only word for a copyable screen — never "pattern" or "template": folder
+`packages/webkit/blocks/`, `catalog.json#blocks`, `blockAliases`, `catalog/blocks/`, MCP
+`search_blocks` / `get_block`, titles `Blocks/<Group>/<Name>`.
+
+- **Path:** `blocks/<group>/<block>/` — two levels, no surface level. The surface (`app`,
+  `docs`, `site`) is a `surface` field in `block.json` and the catalog.
+- **Groups are singular job words, from a closed list:** `account`, `ai`, `auth`, `create`,
+  `dashboard`, `detail`, `edit`, `settings`, `state`, `view`, `shell`, `top-bar`.
+- **The block id is its folder path** (`create/create-hub`), kebab, English.
+
+| ✅                          | ❌                                                   |
+| --------------------------- | ---------------------------------------------------- |
+| `blocks/create/create-hub`  | `blocks/platform/create/create-hub` (surface level)  |
+| `blocks/state/async-submit` | `blocks/platform/states/async-submit` (plural group) |
+| `blocks/shell/console`      | `blocks/shells/console`                              |
+| `search_blocks`             | `search_patterns`                                    |
+| `Blocks/Create/CreateHub`   | `Templates/Platform/Create/CreateHub`                |
+
+### Block variant states
+
+A variant file is named after the state it shows: **`loading`, `empty`, `error`, `success`**,
+or `<subject>-<state>` (`deploy-error`, `repositories-loading`), or `no-<thing>` for a
+specific empty (`no-invoices`). Banned: `failed`, `failure`, `fail`, `done`, `finished`,
+`succeeded`, `ok`, `complete`, `completed`.
+
+| ✅                     | ❌                                    |
+| ---------------------- | ------------------------------------- |
+| `variants/error.vue`   | `variants/failed.vue`                 |
+| `repositories-loading` | `loading-repositories` (state first)  |
+| `#deploy-error`        | `#DeployFailed` (PascalCase fragment) |
+
+## 4. Example files
+
+The first example of every component is **`default.vue`**; the others are named after what
+they show, usually the prop: `variants.vue`, `sizes.vue`, `severities.vue`, `statuses.vue`,
+`disabled.vue`, `readonly.vue`, `loading.vue`, `empty.vue`, `error.vue`, `groups.vue`,
+`with-<thing>.vue` (`with-addon-start.vue`).
+
+Banned file names: `types`, `kinds`, `basic`, `overview`, `playground`, `demo`, `sample`,
+`example`, `usage`, `simple`, `read-only` (→ `readonly`), `grouped` (→ `groups`), `levels`
+(→ `severities`), and any file word that is a retired vocabulary word: `kind`, `outlined`,
+`transparent`, `prefix`, `suffix`, `left`, `right`, `current`, `expanded`, `failed`.
+
+| ✅                     | ❌                                        |
+| ---------------------- | ----------------------------------------- |
+| `default.vue` first    | `default-footer.vue` / `inline.vue` first |
+| `variants.vue`         | `types.vue`, `kinds.vue`                  |
+| `with-addon-start.vue` | `with-addon-left.vue`                     |
+| `readonly.vue`         | `read-only.vue`                           |
+
+## 5. Props
+
+The full dictionary (concept → canonical name, banned aliases, values) is
+[`prop-vocabulary.md`](./prop-vocabulary.md), with its machine side
+`.claude/hooks/_lib/prop-vocabulary.mjs`. The decisions it encodes:
+
+- **The look is `variant`** (N1). Where `kind` meant "which sort of part" (a table cell that is
+  a checkbox, a page button that means "next", a chart axis), it is `type`.
+- **Job and step status is `status`** (N5); colour meaning stays `severity`.
+- **`active`** = the page or item you are on (renders `aria-current`); **`selected`** = picked
+  items (`v-model:selected`, `v-model:selectedKeys`); **`open`** = anything that opens
+  (`v-model:open`). No `current`, `activated`, `expanded`, `visible`, `show`, `opened` (N6).
+- **`<part>Position`** takes `leading | trailing` (`iconPosition`); sides and alignment take
+  `start | end` (`align: 'start' | 'center' | 'end'`) (N7).
+- **Booleans are positive and unprefixed**: no `is`/`has`, no `hide*` (→ `show<Part>`), no
+  `enable*` (→ the `-able` adjective: `sortable`), no `disable*` except `disabled`.
+- **camelCase** in `defineProps`; consumers write kebab attributes (`aria-label`, `icon-position`).
+
+| ✅                                | ❌                                |
+| --------------------------------- | --------------------------------- |
+| `variant="outline"`               | `kind="outlined"`                 |
+| `<Pagination.Button type="next">` | `<Pagination.Button kind="next">` |
+| `status="running"`                | `state="running"`                 |
+| `<NavigationMenu.Link active>`    | `<NavigationMenu.Link current>`   |
+| `v-model:open`                    | `v-model:expanded`                |
+| `icon-position="trailing"`        | `icon-position="right"`           |
+| `showOperations`                  | `hideOperations`                  |
+
+> Supabase and shadcn both call the look `variant`; people and AI type it by habit, which is
+> why our old check had to ban it. Material splits it four ways (element per look,
+> `appearance`, `color`, `variant`) — the drift we end.
+
+## 6. Value sets
+
+| Concept          | Values                                                                                 |
+| ---------------- | -------------------------------------------------------------------------------------- |
+| Look (`variant`) | `primary · secondary · outline · ghost · danger · link` (a subset per component)       |
+| Size (`size`)    | `small · medium · large`; `tiny` / `xlarge` only for a real 4th step                   |
+| Severity         | `neutral · info · success · warning · danger`                                          |
+| Status           | `pending · running · success · error · canceled · skipped` (+ `streaming` for AI text) |
+| Position         | `leading · trailing`                                                                   |
+| Side, align      | `start · center · end`                                                                 |
+| Selection mode   | `none · single · multiple`                                                             |
+| Logo treatment   | `color · monochrome · knockout`                                                        |
+| Scale steps      | `2xs · xs · sm · md · lg · xl · 2xl · 3xl` (tokens and utilities only)                 |
+
+| ✅                               | ❌                                                           |
+| -------------------------------- | ------------------------------------------------------------ |
+| `'outline' \| 'ghost'`           | `'outlined' \| 'transparent' \| 'text'`                      |
+| `'danger'`                       | `'destructive'`, `'error'` as a look or severity             |
+| `'success'`                      | `'done' \| 'ok' \| 'complete' \| 'completed' \| 'succeeded'` |
+| `'canceled'`                     | `'cancelled'`                                                |
+| `'small' \| 'medium' \| 'large'` | `'sm' \| 'md' \| 'lg'`, a reordered union                    |
+| `'multiple'`                     | `'multi'`                                                    |
+
+> `outline`, `ghost` and `link` are the shadcn and Supabase words. We keep `danger` over
+> shadcn's `destructive`: it matches our colour names. We keep whole size words like
+> Supabase (`tiny … xlarge`) instead of shadcn's `sm | lg`.
+
+## 7. Events
+
+- **kebab-case**, typed tuple `defineEmits` ([`emits.md`](./emits.md)); `update:<prop>` for a
+  model; no `<x>-change` echo of `update:<x>`.
+- **Present-tense words shared with the status values:** `complete` (never `finish`,
+  `finished`, `done`), `error` (never `failed`, `fail`), `close` (never `dismiss`), `remove`
+  (never `delete`), `double-click` (never `dblclick`).
+
+| ✅                  | ❌              |
+| ------------------- | --------------- |
+| `item-click`        | `itemClick`     |
+| `item-double-click` | `item-dblclick` |
+| `row-remove`        | `row-delete`    |
+| `complete`          | `finished`      |
+
+## 8. Slots
+
+kebab-case, typed `defineSlots` ([`slots.md`](./slots.md)). Adornments before and after the
+content are **`leading` / `trailing`**; sides of a bar are **`start` / `end`**. Plural slots
+for plural content (`actions`, `breadcrumbs`).
+
+| ✅                      | ❌                                         |
+| ----------------------- | ------------------------------------------ |
+| `#leading`, `#trailing` | `#prefix`, `#suffix`, `#left`, `#right`    |
+| `#header-actions`       | `#header-action`                           |
+| `#breadcrumbs`          | `#breadcrumb`                              |
+| `#header-leading`       | `#header-start` (an adornment, not a side) |
+
+> Material uses leading/trailing for in-component positions and start/end for sides, and both
+> flip correctly in right-to-left; `left`/`right` do not.
+
+## 9. Types
+
+- **`<Component>Variant`**, **`<Component>Type`**, **`<Component>Size`**,
+  **`<Component>Props`** — every exported type starts with its component's PascalCase name.
+- Never a `*Kind` type, never a bare exported `Props`.
+
+| ✅                            | ❌                         |
+| ----------------------------- | -------------------------- |
+| `ButtonVariant`               | `ButtonKind`               |
+| `TableFilterField`            | `FilterField` (from table) |
+| `export interface FieldProps` | `export interface Props`   |
+
+## 10. Data attributes
+
+kebab-case and mirror the prop (see [`styling.md`](./styling.md)): `data-variant`,
+`data-type`, `data-size`, `data-status`, `data-severity`, `data-bordered`. Disclosure state is
+one attribute, `data-state="open|closed"`. Part markers are `data-slot="<part>"`. Transient
+states are past participles: `data-focused`, `data-hovered`, `data-highlighted`.
+
+| ✅                       | ❌                                                                           |
+| ------------------------ | ---------------------------------------------------------------------------- |
+| `data-variant="outline"` | `data-kind="outlined"`                                                       |
+| `data-state="open"`      | `data-open`, `data-expanded`, `data-collapsed`, `data-shown`, `data-visible` |
+| `data-active`            | `data-current`                                                               |
+| `data-bordered`          | `data-border`                                                                |
+| `data-leading`           | `data-has-icon-left`                                                         |
+| `data-slot="tree-row"`   | `data-part="tree-row"`                                                       |
+
+> shadcn v4 marks every part with `data-slot`; Supabase does the same (`page-header-title`).
+
+## 11. Test ids
+
+The `data-testid` fallback is **the component's own kebab name**, no category: `button`,
+`dialog`, `dialog-header` (a part is its own component). Inner elements a test must reach are
+`${testId}__<part>` (two underscores). The consumer's `data-testid` always wins
+([`testid.md`](./testid.md)).
+
+| ✅                       | ❌                                         |
+| ------------------------ | ------------------------------------------ |
+| `'button'`               | `'actions-button'` (category prefix)       |
+| `'dialog-header'`        | the parent's `'dialog'` reused on the part |
+| `` `${testId}__label` `` | `` `${testId}-label` `` (single dash)      |
+
+Moving a component between category folders no longer changes its test id — the same reason
+imports are flat ([`imports.md`](./imports.md)).
+
+## 12. Category folders
+
+Singular, from a closed list: `action`, `ai`, `chart`, `code`, `content`, `data`,
+`documentation`, `feedback`, `input`, `layout`, `marketing`, `navigation`, `overlay`,
+`section`, `provider`. `utils` dissolves (spinner → `feedback`, webkit-provider →
+`provider`). The category never appears in an export key or a test id.
+
+| ✅                              | ❌                               |
+| ------------------------------- | -------------------------------- |
+| `src/components/action/button/` | `src/components/actions/button/` |
+| `"./button"`                    | `"./action/button"`              |
+
+## 13. i18n keys
+
+The namespace is the **camelCase component name** (`feedbackReasonDialog` for
+`feedback-reason-dialog`); keys are **camelCase**, nested by part when needed.
+
+| ✅                           | ❌                                                               |
+| ---------------------------- | ---------------------------------------------------------------- |
+| `kbd.arrowUp`                | `kbd['arrow-up']`                                                |
+| `feedbackReasonDialog.title` | `feedbackReason.title` (not the component)                       |
+| `articleBody.linkCopied`     | `articleBody.copiedLink` next to `linkCopied` elsewhere (review) |
+
+## 14. Internal code — composables, injection keys, handlers, refs, helpers
+
+| Thing            | Shape                                                             | ✅                                      | ❌                                                             |
+| ---------------- | ----------------------------------------------------------------- | --------------------------------------- | -------------------------------------------------------------- |
+| Composable       | file `use-x.ts` exporting `useX`                                  | `use-toast-store.ts` → `useToastStore`  | `useToastStore.ts`, `toast-store.ts` exporting `useToastStore` |
+| Injection key    | `<Component>[<Part>]InjectionKey = Symbol('<Component>[<Part>]')` | `SelectInjectionKey = Symbol('Select')` | `selectContextKey`, `Symbol('SelectContext')`                  |
+| Event handler    | `onX`, Vue's DOM casing                                           | `onClick`, `onKeydown`, `onPointerdown` | `handleClick`, `onKeyDown`, `onPointerDown`                    |
+| DOM template ref | `xEl` (one) / `xEls` (list)                                       | `triggerEl`, `optionEls`                | `triggerRef`, `trigger`, `options`                             |
+| Private helper   | a module in the component's `lib/`                                | `navigation-menu/lib/css-dimensions.ts` | `_lib/`, `utils/`, `helpers/` inside a component               |
+
+Composables live in the component's `composables/` (or `src/composables/use-x/` when shared) —
+see [`composables.md`](./composables.md).
+
+## 15. CSS variables
+
+A component's own custom property is **`--<component>-<part>-<property>`**, whole words.
+
+| ✅                       | ❌                 |
+| ------------------------ | ------------------ |
+| `--texture-material-row` | `--row`            |
+| `--card-grid-columns`    | `--card-grid-cols` |
+| `--trace-tick-at`        | `--tick-at`        |
+
+## 16. Tokens and utilities
+
+- Scale steps `2xs`, `2xl`, `3xl` — never `xxs`, `xxl`, `xxxl` (`--spacing-2xs`,
+  `text-heading-2xs`).
+- Every fill colour has a **`-foreground`** text pair: `--primary` / `--primary-foreground`.
+  The `-contrast` suffix is gone.
+- Correct English: `code-syntax`, never `code-sintax`.
+
+| ✅                      | ❌                      |
+| ----------------------- | ----------------------- |
+| `--spacing-2xs`         | `--spacing-xxs`         |
+| `--primary-foreground`  | `--primary-contrast`    |
+| `--code-syntax-keyword` | `--code-sintax-keyword` |
+
+> `X` / `X-foreground` is the shadcn and Supabase pair; Material writes the same idea as
+> `primary` / `on-primary`. Tailwind writes `2xs` / `2xl`.
+
+## 17. Icons
+
+The class is `ai ai-<name>`; the colour set is `ai-color ai-<name>`. Names come from the icons
+package (`packages/icons/src/svg-raw/ai`, colour set `ai-color`), are Lucide-style words and
+spell brands out.
+
+| ✅                   | ❌                           |
+| -------------------- | ---------------------------- |
+| `ai ai-x`            | `ai ai-times`, `pi pi-times` |
+| `ai ai-menu`         | `ai ai-bars`                 |
+| `ai ai-settings`     | `ai ai-cog`                  |
+| `ai ai-chevron-down` | `ai ai-angle-down`           |
+| `ai-color ai-openai` | `ai-cor ai-open`             |
+| `ai ai-scissors`     | `ai ai-scizors` (typo)       |
+
+The PrimeIcons set is removed; `v6-icons.json` maps every old name.
+
+> Supabase uses Lucide (`x`, `menu`, `settings`); Material says `close` — we follow Lucide
+> because that is the set agents and designers reach for.
+
+## 18. Files and folders
+
+kebab-case everywhere, apps included. Allowed exceptions: `UPPER_SNAKE.md` docs (`README.md`,
+`MIGRATION_V6.md`), dotfiles, and the config names tools require (`vite.config.ts`,
+`package.json`, `tsconfig.json`).
+
+| ✅                 | ❌                |
+| ------------------ | ----------------- |
+| `api-table.vue`    | `ApiTable.vue`    |
+| `brand-marks.json` | `brandMarks.json` |
+
+## 19. Scripts
+
+`package.json` scripts read **`<verb>:<target>`**. Verbs: `build`, `check`, `test`, `lint`,
+`format`, `dev`, `preview`, `serve`, `clean`, `update`, `generate`, `release`, `publish`,
+`pack`, `sync`, `run`, `deploy`, `typecheck`, `start`, `watch` (and `gates`, the one script
+that runs every gate). A bare npm lifecycle name is fine (`prepare`,
+`prepack`, `postpack`, `prepublishOnly`, `preinstall`, `install`, `postinstall`, `pretest`,
+`posttest`, `start`, `test`, `build`, `dev`, `lint`, `format`, `clean`, `release`, `preview`).
+A script that runs `node scripts/<file>.mjs` with no arguments is named after the file
+(`check:naming` runs `check-naming.mjs`). `pnpm --filter` takes the full package name.
+
+| ✅                                     | ❌                                  |
+| -------------------------------------- | ----------------------------------- |
+| `build:catalog`, `check:catalog`       | `catalog:build`, `catalog:check`    |
+| `check:naming` → `check-naming.mjs`    | `naming:check` → `check-naming.mjs` |
+| `pnpm --filter @aziontech/webkit test` | `pnpm --filter webkit test`         |
+
+> Supabase and Material both write `build:catalog`-style verb-first scripts.
+
+## 20. CLI and MCP names
+
+- CLI commands are one lowercase word: `add`, `check`, `diff`, `doctor`, `migrate`, `search`.
+- MCP tools are snake_case `<verb>_<noun>` with verbs `list`, `get`, `search`, `suggest`,
+  `check`, `validate`, `explain`; never "pattern" or "template".
+
+| ✅                           | ❌                               |
+| ---------------------------- | -------------------------------- |
+| `search_blocks`, `get_block` | `search_patterns`, `get_pattern` |
+| `list_components`            | `components`, `listComponents`   |
+
+## 21. ESLint rules
+
+A rule name starts with a verb prefix: `no-`, `prefer-`, `require-`, `valid-` or
+`consistent-`.
+
+| ✅                               | ❌                       |
+| -------------------------------- | ------------------------ |
+| `webkit/require-accessible-name` | `webkit/accessible-name` |
+| `webkit/no-deprecated-name`      | `webkit/deprecated-name` |
+
+## 22. Skills, agents, hooks
+
+- **Internal skills and commands:** kebab, object first, verb last (`<object>-<verb>`):
+  `component-create`, `spec-validate`, `baselines-regenerate`, `branch-create`. The verb comes
+  from `SKILL_VERBS` in the engine (add, audit, create, decide, extract, fix, map, new, open,
+  regenerate, report, review, scaffold, validate, verify, write…). Whole words only (no `ds`,
+  `genai`, `regen`).
+- **Consumer skills:** `webkit-<kebab>`, whole words.
+- **Agents:** end in an agent noun (`-er` / `-or`), the skill they run plus the suffix:
+  `figma-extract` → `figma-extractor`, `spec-create` → `spec-creator`.
+- **Hooks:** `validate-<x>.mjs` (checks content), `enforce-<x>.mjs` (requires a step) or
+  `check-<x>.mjs`; a data module is not a hook and lives in `.claude/hooks/_lib/`.
+
+| ✅                        | ❌                      |
+| ------------------------- | ----------------------- |
+| `webkit-adoption`         | `webkit-ds-adoption`    |
+| `baselines-regenerate`    | `regen-baselines`       |
+| `figma-extractor` (agent) | `figma-extract` (agent) |
+| `validate-naming.mjs`     | `naming-hook.mjs`       |
+
+Frontmatter is governed by [`authoring-docs.md`](./authoring-docs.md).
+
+## 23. CI workflows and jobs
+
+- Workflow files are lowercase kebab `.yml` and say what they do (`publish-webkit.yml`).
+- Workflow, job and step names are **sentence case**, with no milestone codes (`G1`, `2.7`,
+  `M1.3`) and no Storybook or Chromatic words.
+- **Required status checks keep their display names:** "OSSF Scorecard" and "Governance Gate"
+  are referenced by the branch ruleset and are exempt.
+
+| ✅                                 | ❌                                      |
+| ---------------------------------- | --------------------------------------- |
+| `Publish @aziontech/icons to npm`  | `Publish @aziontech/icons to NPM`       |
+| `Naming`                           | `Naming (2.7) — kebab-case English ids` |
+| `Blocks — every block has intents` | `Patterns (G1) — every template story`  |
+
+## How it is checked
+
+One engine checks every rule that a machine can decide. The four `enforced` rules block
+today; the `staged` rules are reported now and block once the rename lanes have merged.
+
+| Rule id            | Checks                                                                         | Decision       |
+| ------------------ | ------------------------------------------------------------------------------ | -------------- |
+| `export-kebab`     | export subpaths and block ids are kebab-case English                           | N18            |
+| `block-id`         | a block's `id` equals its folder path                                          | N9             |
+| `export-synonym`   | no export is a market alias or synonym of another export                       | N12            |
+| `export-retired`   | no retired v6 name (`v6.json`) comes back as an export                         | N12            |
+| `near-duplicate`   | abbreviations, plurals and synonyms in exports, blocks, folders, examples      | N12, N18       |
+| `export-category`  | no category segment in an export key                                           | N11            |
+| `category-folder`  | category folders are singular and in the closed list                           | N11            |
+| `block-path`       | `blocks/<group>/<block>/`, group in the closed list, no surface level          | N9             |
+| `block-word`       | "block", never "pattern" or "template", in titles, catalog keys and MCP tools  | N9             |
+| `block-state`      | block variant names use the state words                                        | N10            |
+| `part-word`        | part suffix in the closed list or a declared domain part; `Body` placement     | N8             |
+| `part-export`      | every part folder has its `<root>-<part>` export                               | N8             |
+| `section-suffix`   | a page section that wraps a primitive (or says band/stack) ends in `-section`  | N12            |
+| `example-file`     | first example is `default.vue`; no banned example file names                   | N13            |
+| `prop-name`        | prop names against the vocabulary (specs and `.vue`)                           | N1, N5, N6     |
+| `prop-value`       | union members against the shared value sets                                    | N2, N3, N5, N7 |
+| `event-name`       | kebab events, no echo, the shared event words                                  | N5             |
+| `slot-name`        | kebab slots; `leading`/`trailing`, never `prefix`/`suffix`/`left`/`right`      | N7             |
+| `type-name`        | no `*Kind` type, no bare `Props`, exported types prefixed by the component     | N1             |
+| `data-attribute`   | kebab `data-*`, no banned attributes                                           | N1, N6, N7     |
+| `testid`           | fallback is the own name; inner parts `__part`; no category prefix             | N11            |
+| `i18n-key`         | camelCase namespaces and keys                                                  | N16            |
+| `injection-key`    | `<Component>[<Part>]InjectionKey` and its `Symbol` description                 | N16            |
+| `composable-file`  | `use-x.ts` exports `useX`                                                      | N16            |
+| `handler-name`     | `onX` handlers in Vue DOM casing, no `handleX`                                 | N16            |
+| `dom-ref-name`     | element refs end in `El` / `Els`                                               | N16            |
+| `private-folder`   | a component's private helpers in `lib/`, never `_lib`, `utils`, `helpers`      | N16            |
+| `css-variable`     | component CSS variables carry the component prefix, no abbreviations           | N16            |
+| `token-name`       | `2xs`/`2xl`, `-foreground`, `code-syntax`, every fill has a foreground pair    | N4, N15        |
+| `icon-name`        | used icon names exist in the icons package; no legacy or PrimeIcons names      | N14            |
+| `file-name`        | kebab files and folders in packages and apps                                   | N18            |
+| `script-name`      | `<verb>:<target>` scripts named after their script file                        | N17            |
+| `filter-name`      | `pnpm --filter` with the full package name                                     | N17            |
+| `workflow-name`    | kebab workflow files; sentence-case names without milestone codes or Storybook | N17            |
+| `eslint-rule-name` | lint rule names start with a verb prefix                                       | N18            |
+| `tooling-name`     | skills, agents and hooks name shapes                                           | N18            |
+| `cli-name`         | CLI commands one word; MCP tools `<verb>_<noun>`                               | N9, N18        |
+
+## Review-only
+
+These cannot be decided by a machine; the reviewer holds them.
+
+- **Look or sort of part** (`variant` vs `type`) — both are string unions; only the meaning
+  tells whether the value changes the look or the kind of part.
+- **Severity or status** — `success` and `error` are valid in both sets; whether the value is a
+  colour or a job outcome is a meaning question.
+- **`active` or `selected`** — "you are here" and "picked" are both booleans on an item.
+- **A 4th size step** — `tiny` / `xlarge` are allowed tokens; whether the component truly needs
+  one is design judgment.
+- **An example name says what it shows** — the check bans the known bad words, not every vague
+  one.
+- **The subject word of a block variant** (`deploy-error` vs `build-error`) — domain language.
+- **i18n leaf synonyms** (`copiedLink` vs `linkCopied`) — both are valid camelCase.
+- **A new component name's meaning** — a synonym not yet in the near-duplicate list passes
+  until someone adds it; add it to the list when review finds one.
+- **Sentence case beyond the heuristic** — proper nouns and acronyms (npm, OSSF, MCP) keep their
+  case; the check only flags obvious Title Case.
+
+## Hard prohibitions
+
+- Do not introduce a name that breaks a rule above, and do not bring back a retired v6 name.
+- Do not rename a component on one surface only; the six surfaces change together.
+- Do not add a part word outside the closed list without declaring it as a domain part in the
+  engine, in the same PR.
+- Do not keep an old name as an alias: 6.0 removes it and maps it in `v6*.json`.
+- Do not rename the required status checks "OSSF Scorecard" and "Governance Gate" here; they
+  change only together with the ruleset.
+- Do not edit this rule without the engine (and vice versa): the lists here and in
+  `naming-rules.mjs` are one source in two forms.
+
+## Enforcement
+
+- **One engine**, `packages/webkit/scripts/lib/naming-rules.mjs`: the rule registry (id,
+  decision, stage) and every check above.
+- **CI:** `packages/webkit/scripts/check-naming.mjs` (`check:naming`, gate `naming` in
+  `scripts/gates.mjs`, the `toolkit` job). It fails on `enforced` rules and reports `staged`
+  ones; `--strict` blocks staged rules too; `--rule <id> --all` lists one rule; `--json` prints
+  every violation.
+- **Write time:** `.claude/hooks/validate-naming.mjs` (PreToolUse on `Write|Edit|MultiEdit`)
+  runs the same engine on the file being written and blocks only violations the write adds.
+  It fails open on any error.
+- **Vocabulary:** prop, value, event, slot and data-attribute words live in
+  `.claude/hooks/_lib/prop-vocabulary.mjs`, shared with `validate-spec-compliance` (see
+  [`prop-vocabulary.md`](./prop-vocabulary.md)).
+- **Consumers:** the ESLint rule `webkit/no-deprecated-name` reads
+  `src/cli/migrations/v6*.json` and flags retired component imports, renamed props on WebKit
+  tags and retired icon classes; `npx @aziontech/webkit migrate` rewrites them.
+- **The switch:** `NAMING_STAGED_BLOCKS` in `naming-rules.mjs` is `false` while the rename
+  lanes land; the lead sets it to `true` after they merge, and every staged rule blocks.
+- **Old → new pairs** come from the `v6*.json` maps, so the check and `webkit migrate` always
+  agree on what a name became.
+
+## Why this rule exists
+
+The same idea had drifted into several names at once: `kind` and `variant` for the look,
+`state` and `status` for a job, `current`, `active` and `selected` for "you are here",
+`expanded`, `data-open` and `open` for "open", `prefix`, `leading` and `left` for an
+adornment, `xxs` next to `2xl`, `handleX` next to `onX`, `catalog:build` next to
+`build:tokens`, and "block", "pattern" and "template" for one kind of thing. Every pair made a
+person or an agent guess. The old check covered export ids only, so everything else drifted
+unseen. One written standard with a machine check for every rule that can be checked keeps
+6.0 clean after the rename, and keeps it clean on the next component.
