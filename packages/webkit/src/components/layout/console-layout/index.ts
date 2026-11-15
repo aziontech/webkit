@@ -15,8 +15,10 @@ export { ConsoleLayoutBreadcrumbs }
 
 export type { DropdownMenuOptionValue } from '../../navigation/dropdown-menu/injection-key'
 export type {
+  BreadcrumbItemData,
   ConsoleLayoutAccount,
-  ConsoleLayoutCrumb,
   ConsoleLayoutNavGroup,
   ConsoleLayoutNavItem
 } from './console-layout.vue'
+export type { ConsoleLayoutProps } from './console-layout.vue'
+export type { ConsoleLayoutBreadcrumbsProps } from './console-layout-breadcrumbs/console-layout-breadcrumbs.vue'

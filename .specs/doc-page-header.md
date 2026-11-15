@@ -4,7 +4,7 @@ category: documentation
 structure: monolithic
 status: implemented
 spec_version: 5
-checksum: f8587aa7785e41c099bdedbb3288ef3b97bcd20daf52b67be632ba23827a35ee
+checksum: bc1bc0192cdfb7372b99d5b381ce31636190a773cd0160aebccbf87f27e57886
 created: 2026-08-22
 last_updated: 2026-11-15
 ---
@@ -75,19 +75,19 @@ The masthead of a documentation page: where the reader is (the breadcrumb), what
 
 ## Props
 
-| Prop          | Type              | Default | Required | JSDoc                                                                   |
-| ------------- | ----------------- | ------- | -------- | ----------------------------------------------------------------------- |
-| `title`       | `string`          | `''`    | false    | The page title.                                                         |
-| `description` | `string`          | `''`    | false    | The deck under the title.                                               |
-| `breadcrumbs` | `DocCrumb[]`      | `[]`    | false    | Ancestor trail, current page last.                                      |
-| `lastUpdated` | `string`          | `''`    | false    | When the page's content last changed. ISO date, or a ready-made string. |
-| `metaActions` | `DocPageAction[]` | `[]`    | false    | The controls on the meta line, in reading order.                        |
+| Prop          | Type                    | Default | Required | JSDoc                                                                   |
+| ------------- | ----------------------- | ------- | -------- | ----------------------------------------------------------------------- |
+| `title`       | `string`                | `''`    | false    | The page title.                                                         |
+| `description` | `string`                | `''`    | false    | The deck under the title.                                               |
+| `breadcrumbs` | `BreadcrumbItemData[]`  | `[]`    | false    | Ancestor trail, current page last.                                      |
+| `lastUpdated` | `string`                | `''`    | false    | When the page's content last changed. ISO date, or a ready-made string. |
+| `metaActions` | `DocPageHeaderAction[]` | `[]`    | false    | The controls on the meta line, in reading order.                        |
 
 ## Events
 
-| Event          | Payload                                    | Notes                                                                                                                                                                                        |
-| -------------- | ------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `action-click` | `(event: MouseEvent, item: DocPageAction)` | Fired when a meta-line control is activated; `item` is the entry that was picked. Event first, per `event-payloads.md`. A link's default navigation is the consumer's to keep or to prevent. |
+| Event          | Payload                                          | Notes                                                                                                                                                                                        |
+| -------------- | ------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `action-click` | `(event: MouseEvent, item: DocPageHeaderAction)` | Fired when a meta-line control is activated; `item` is the entry that was picked. Event first, per `event-payloads.md`. A link's default navigation is the consumer's to keep or to prevent. |
 
 ## Slots
 

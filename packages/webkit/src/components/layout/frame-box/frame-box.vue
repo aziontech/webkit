@@ -16,7 +16,7 @@
   export type FrameBoxMarks =
     'all' | 'none' | 'top' | 'bottom' | 'left' | 'right' | FrameBoxCorner | FrameBoxCorner[]
 
-  interface Props {
+  export interface FrameBoxProps {
     /** Which of the frame's own rules to draw. Takes a keyword (`all`, `none`, `x`, `y`), one side, or a list of sides. */
     borders?: FrameBoxSides
     /** Which corner registration squares to draw. Takes a keyword (`all`, `none`, `top`, `bottom`, `left`, `right`), one corner, or a list of corners. */
@@ -27,7 +27,7 @@
     flush?: boolean | FrameBoxSides
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<FrameBoxProps>(), {
     borders: 'all',
     marks: 'all',
     hatch: false,

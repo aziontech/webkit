@@ -15,14 +15,14 @@
   /** Column count on a phone. */
   export type DocCardGroupMobileColumns = 1 | 2
 
-  interface Props {
+  export interface DocCardGroupProps {
     /** Column count at the large breakpoint. */
     columns?: DocCardGroupColumns
     /** Column count on a phone. Two only pays when the cells are a mark plus a word. */
     mobileColumns?: DocCardGroupMobileColumns
   }
 
-  withDefaults(defineProps<Props>(), {
+  withDefaults(defineProps<DocCardGroupProps>(), {
     columns: 2,
     mobileColumns: 1
   })

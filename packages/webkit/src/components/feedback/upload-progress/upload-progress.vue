@@ -24,7 +24,7 @@
 
   defineOptions({ name: 'UploadProgress', inheritAttrs: false })
 
-  interface Props {
+  export interface UploadProgressProps {
     /** The files in the transfer, in order, with their state and progress. */
     items?: UploadProgressItem[]
     /** What the transfer does; picks the header wording and the glyph. */
@@ -37,7 +37,7 @@
     cancelable?: boolean
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<UploadProgressProps>(), {
     items: () => [],
     operation: 'upload',
     title: '',

@@ -6,10 +6,10 @@ import type {
   MenuPlacement
 } from '../../../composables/use-menu-root'
 
-export type DropdownMenuPlacement = MenuPlacement
+export type DropdownMenuPlacementSide = MenuPlacement
 
 /** Prop-level placement; `'auto'` lets the dropdown pick the best fit at open time. */
-export type DropdownMenuPlacementInput = DropdownMenuPlacement | 'auto'
+export type DropdownMenuPlacement = DropdownMenuPlacementSide | 'auto'
 
 export type DropdownMenuOptionValue = MenuOptionValue
 

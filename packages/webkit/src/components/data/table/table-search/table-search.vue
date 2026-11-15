@@ -11,18 +11,17 @@
     inheritAttrs: false
   })
 
-  withDefaults(
-    defineProps<{
-      /** Placeholder text for the search input. Empty uses the locale catalog (`Search`). */
-      placeholder?: string
-      /** Accessible name of the search field. Empty uses the locale catalog (`Search the table`). */
-      ariaLabel?: string
-    }>(),
-    {
-      placeholder: '',
-      ariaLabel: ''
-    }
-  )
+  export interface TableSearchProps {
+    /** Placeholder text for the search input. Empty uses the locale catalog (`Search`). */
+    placeholder?: string
+    /** Accessible name of the search field. Empty uses the locale catalog (`Search the table`). */
+    ariaLabel?: string
+  }
+
+  withDefaults(defineProps<TableSearchProps>(), {
+    placeholder: '',
+    ariaLabel: ''
+  })
 
   const attrs = useAttrs()
   const { t } = useTranslate({ tableSearch: en.tableSearch })

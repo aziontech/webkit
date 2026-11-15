@@ -75,7 +75,7 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface TraceProps {
     /** Spans of the trace, each `{ id, parentId?, name, service?, icon?, start, duration, status?, message?, attributes? }` in milliseconds. */
     spans?: TraceSpan[]
     /** Accessible name of the waterfall. Empty uses the locale catalog. */
@@ -90,7 +90,7 @@
     highlightSlowest?: boolean
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<TraceProps>(), {
     spans: () => [],
     ariaLabel: '',
     bordered: true,

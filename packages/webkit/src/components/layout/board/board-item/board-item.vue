@@ -10,14 +10,14 @@
 
   defineOptions({ name: 'BoardItem', inheritAttrs: false })
 
-  interface Props {
+  export interface BoardItemProps {
     /** The `id` of this item's entry in the board's layout. */
     itemId: string
     /** The name the live region announces when the item moves or resizes. Empty uses `Item <position>`. */
     label?: string
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<BoardItemProps>(), {
     label: ''
   })
 

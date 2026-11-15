@@ -11,15 +11,13 @@
     inheritAttrs: false
   })
 
-  export interface Props {
+  export interface FieldLabelProps {
     /** Short explanation appended as a Hint glyph that reveals it on hover or focus. Empty renders no glyph. */
     hint?: string
     /** Shows the Required marker without an enclosing Field, for a label set apart from its control. An enclosing Field's required sets it too. */
     required?: boolean
   }
-  export type FieldLabelProps = Props
-
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<FieldLabelProps>(), {
     hint: '',
     required: false
   })

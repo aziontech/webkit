@@ -11,12 +11,12 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface SidebarMenuBackProps {
     /** Names the destination Back returns to, overriding the level below it on the stack. Set it to name the menu root, which has no trigger to name itself. */
     label?: string
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<SidebarMenuBackProps>(), {
     label: ''
   })
 

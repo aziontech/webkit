@@ -50,7 +50,7 @@
   /** Overlay the panel opens in. */
   export type CollectionPreferencesContainer = 'dialog' | 'drawer'
 
-  interface Props {
+  export interface CollectionPreferencesProps {
     /** Columns to show, hide and order. Empty reads the enclosing DataTable's columns, or hides the columns section outside one. */
     columns?: CollectionPreferencesColumn[]
     /** Page sizes offered. Empty hides the page size section. */
@@ -67,7 +67,7 @@
     defaultOpen?: boolean
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<CollectionPreferencesProps>(), {
     columns: () => [],
     pageSizeOptions: () => [],
     sections: () => ['page-size', 'columns', 'wrap-lines', 'striped', 'density'],

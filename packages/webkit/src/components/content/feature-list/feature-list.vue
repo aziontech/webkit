@@ -17,7 +17,7 @@
   /** Columns when the list's own box is at least the md container. */
   export type FeatureListColumns = 1 | 2
 
-  interface Props {
+  export interface FeatureListProps {
     /** The features, in order; each item is a label with an optional description. */
     items?: FeatureListItem[]
     /** Columns when the list's own box is at least the md container; a narrower box always shows one column. */
@@ -26,7 +26,7 @@
     ariaLabel?: string
   }
 
-  withDefaults(defineProps<Props>(), {
+  withDefaults(defineProps<FeatureListProps>(), {
     items: () => [],
     columns: 1,
     ariaLabel: ''

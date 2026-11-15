@@ -8,12 +8,12 @@
 
   defineOptions({ name: 'ChartTooltip', inheritAttrs: false })
 
-  interface Props {
+  export interface ChartTooltipProps {
     /** Adds a Total row that sums the visible series at the active index. */
     total?: boolean
   }
 
-  withDefaults(defineProps<Props>(), {
+  withDefaults(defineProps<ChartTooltipProps>(), {
     total: false
   })
 

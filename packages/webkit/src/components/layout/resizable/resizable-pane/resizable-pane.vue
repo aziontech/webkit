@@ -5,7 +5,7 @@
 
   defineOptions({ name: 'ResizablePane', inheritAttrs: false })
 
-  interface Props {
+  export interface ResizablePaneProps {
     /** Smallest length in pixels a drag may set. */
     min?: number
     /** Largest length in pixels a drag may set. */
@@ -16,7 +16,7 @@
     ariaLabel?: string
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<ResizablePaneProps>(), {
     min: 96,
     max: 720,
     collapsible: false,

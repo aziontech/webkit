@@ -10,7 +10,7 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface ReasoningProps {
     /** The model is still reasoning: the label reads `Thinking` and pulses; when it turns false the label shows how long it took. */
     streaming?: boolean
     /** Seconds the reasoning took, when the server reports it. Without it the component measures from `streaming` turning on to turning off. */
@@ -21,7 +21,7 @@
     skippable?: boolean
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<ReasoningProps>(), {
     streaming: false,
     duration: undefined,
     defaultOpen: false,

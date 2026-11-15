@@ -1,8 +1,8 @@
 /** Colour of a node's status tag. */
-export type TopologyNodeSeverity = 'success' | 'info' | 'warning' | 'danger' | 'neutral'
+export type TopologyDiagramNodeSeverity = 'success' | 'info' | 'warning' | 'danger' | 'neutral'
 
 /** One labelled value in the expanded body of a node. */
-export interface TopologyNodeField {
+export interface TopologyDiagramNodeField {
   /** Field name, e.g. `ID` or `Domain`. */
   label: string
   /** Field value. */
@@ -14,13 +14,13 @@ export interface TopologyNodeField {
 }
 
 /** An existing resource a bindable node can be bound to. */
-export interface TopologyBindOption {
+export interface TopologyDiagramBindOption {
   value: string
   label: string
 }
 
 /** One resource in the topology. A node without `name` is an unbound slot. */
-export interface TopologyNode {
+export interface TopologyDiagramNodeData {
   /** Stable identity, used by `openKeys` and the bind events. */
   id: string
   /** Resource type shown in the header, e.g. `Policy`. */
@@ -32,13 +32,13 @@ export interface TopologyNode {
   /** Status tag label. Empty on an unbound node uses the locale catalog (`Not bound`). */
   status?: string
   /** Colour of the status tag. */
-  severity?: TopologyNodeSeverity
+  severity?: TopologyDiagramNodeSeverity
   /** Dashed outline, for a staged change or an unbound slot. */
   dashed?: boolean
   /** One sentence in the expanded body. */
   message?: string
   /** Labelled values in the expanded body. */
-  fields?: TopologyNodeField[]
+  fields?: TopologyDiagramNodeField[]
   /** Links the name. */
   href?: string
   /** Ends the branch: the node gets an incoming connector and originates none. */
@@ -46,7 +46,7 @@ export interface TopologyNode {
   /** Shows the bind control (bind, change, create). */
   bindable?: boolean
   /** Existing resources the bind control offers. */
-  bindOptions?: TopologyBindOption[]
+  bindOptions?: TopologyDiagramBindOption[]
   /** The option the node is bound to; marks it selected in the menu. */
   boundValue?: string
   /** Shows the remove control on a bound, bindable node. */
@@ -54,10 +54,10 @@ export interface TopologyNode {
 }
 
 /** One column of the diagram: the nodes that sit at the same depth. */
-export interface TopologyLevel {
+export interface TopologyDiagramLevel {
   /** Stable identity of the column. */
   id: string
   /** Name of the column for assistive technology. */
   label?: string
-  nodes: TopologyNode[]
+  nodes: TopologyDiagramNodeData[]
 }

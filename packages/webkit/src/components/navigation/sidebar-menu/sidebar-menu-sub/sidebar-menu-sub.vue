@@ -10,12 +10,12 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface SidebarMenuSubProps {
     /** Initial state when uncontrolled; ignored for a drill trigger, whose visibility is the root's stack. */
     defaultOpen?: boolean
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<SidebarMenuSubProps>(), {
     defaultOpen: false
   })
 

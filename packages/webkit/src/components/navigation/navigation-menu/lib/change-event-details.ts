@@ -1,4 +1,4 @@
-export type ChangeReason =
+export type NavigationMenuChangeReason =
   | 'trigger-press'
   | 'trigger-hover'
   | 'outside-press'
@@ -9,7 +9,7 @@ export type ChangeReason =
   | 'none'
 
 export interface NavigationMenuChangeEventDetails {
-  readonly reason: ChangeReason
+  readonly reason: NavigationMenuChangeReason
   readonly event: Event
   readonly trigger: Element | undefined
   cancel: () => void
@@ -19,7 +19,7 @@ export interface NavigationMenuChangeEventDetails {
 }
 
 export function createChangeEventDetails(
-  reason: ChangeReason,
+  reason: NavigationMenuChangeReason,
   event: Event,
   trigger: Element | undefined
 ): NavigationMenuChangeEventDetails {

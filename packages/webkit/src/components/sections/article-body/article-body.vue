@@ -16,6 +16,7 @@
   import HeroTitle from '../../marketing/hero/hero-title/hero-title.vue'
   import SectionContainer from '../../marketing/section-container/section-container.vue'
   import SectionModule from '../../marketing/section-module/section-module.vue'
+  import type { BreadcrumbItemData } from '../../navigation/breadcrumb/breadcrumb.vue'
   import Breadcrumb from '../../navigation/breadcrumb/breadcrumb.vue'
   import Tooltip from '../../overlay/tooltip/tooltip.vue'
 
@@ -23,6 +24,8 @@
     name: 'ArticleBody',
     inheritAttrs: false
   })
+
+  export type { BreadcrumbItemData }
 
   /** One writer of the article, drawn as an avatar in the byline. */
   export type ArticleBodyAuthor = {
@@ -48,16 +51,6 @@
     author?: string
     /** The writers, drawn as overlapping avatars leading the byline. */
     authors?: ArticleBodyAuthor[]
-  }
-
-  /** One breadcrumb entry. */
-  export type ArticleBodyCrumb = {
-    /** Visible label of the entry. */
-    label: string
-    /** Destination of the entry. */
-    href?: string
-    /** Marks the entry as the page you are on; it renders `aria-current`. */
-    active?: boolean
   }
 
   /** Labels of the share group. */
@@ -120,13 +113,13 @@
     | { kind: 'paragraph'; text: string; runs?: ArticleBodyRun[] }
     | { kind: 'code'; text: string; lang?: string }
 
-  interface Props {
+  export interface ArticleBodyProps {
     /** Overline above the headline. */
     eyebrow?: string
     /** The piece being read: its `title` (the page h1), `description`, `date`, `readTime` and canonical `href`. */
     article: ArticleBodyArticle
     /** The breadcrumb over the headline, each a `label` and an `href`, the last one marked `active`. */
-    trail?: ArticleBodyCrumb[]
+    trail?: BreadcrumbItemData[]
     /** The article as markdown; its `##` and `###` headings feed the outline. */
     body?: string
     /** URL of the image over the masthead; the banner frame is omitted when empty. */
@@ -143,7 +136,7 @@
     anchor?: string
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<ArticleBodyProps>(), {
     eyebrow: '',
     trail: () => [],
     body: '',

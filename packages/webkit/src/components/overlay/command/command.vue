@@ -32,21 +32,20 @@
     inheritAttrs: false
   })
 
-  const props = withDefaults(
-    defineProps<{
-      /** Initial open state when uncontrolled. */
-      defaultOpen?: boolean
-      /** When true, backdrop click and Escape close the palette. */
-      dismissible?: boolean
-      /** Global `'+'`-delimited shortcut that toggles the palette (matched against Ctrl on non-macOS). */
-      shortcut?: string
-    }>(),
-    {
-      defaultOpen: false,
-      dismissible: true,
-      shortcut: 'meta+k'
-    }
-  )
+  export interface CommandProps {
+    /** Initial open state when uncontrolled. */
+    defaultOpen?: boolean
+    /** When true, backdrop click and Escape close the palette. */
+    dismissible?: boolean
+    /** Global `'+'`-delimited shortcut that toggles the palette (matched against Ctrl on non-macOS). */
+    shortcut?: string
+  }
+
+  const props = withDefaults(defineProps<CommandProps>(), {
+    defaultOpen: false,
+    dismissible: true,
+    shortcut: 'meta+k'
+  })
 
   const emit = defineEmits<{
     select: [event: globalThis.MouseEvent | globalThis.KeyboardEvent, value: CommandItemValue]

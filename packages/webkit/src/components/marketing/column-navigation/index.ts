@@ -18,4 +18,7 @@ export type {
   ColumnNavigationColumns,
   ColumnNavigationMobileColumns
 } from './column-navigation.vue'
+export type { ColumnNavigationProps } from './column-navigation.vue'
+export type { ColumnNavigationColumnProps } from './column-navigation-column/column-navigation-column.vue'
 export type { ColumnNavigationItemTarget } from './column-navigation-item/column-navigation-item.vue'
+export type { ColumnNavigationItemProps } from './column-navigation-item/column-navigation-item.vue'

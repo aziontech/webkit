@@ -5,7 +5,7 @@ structure: composition
 status: implemented
 spec_version: 3
 template: 2
-checksum: 6bb302d11f06bfcb5962f598eef2fc0b697f5a5c9d92f1a6a741af98e983ab35
+checksum: cb864fbd8d9538b22076c5878596a68f0d01c18e7c17c089fa141f702a10ad96
 created: 2026-11-14
 last_updated: 2026-11-15
 ---
@@ -85,14 +85,14 @@ Tree-shaking alternative — the same sub-components as standalone imports:
 
 ## Props
 
-| Prop          | Type                                                                            | Default    | Required | JSDoc                                                                                                   |
-| ------------- | ------------------------------------------------------------------------------- | ---------- | -------- | ------------------------------------------------------------------------------------------------------- |
-| `placement`   | `HoverCardPlacementInput` (a side with optional `-start` / `-end`, or `'auto'`) | `'bottom'` | false    | Side of the trigger the card opens on, flipped when it does not fit; `'auto'` picks the side with room. |
-| `offset`      | `number`                                                                        | `8`        | false    | Pixel gap between the trigger and the card.                                                             |
-| `openDelay`   | `number`                                                                        | `500`      | false    | Milliseconds the pointer or focus must stay on the trigger before the card opens.                       |
-| `closeDelay`  | `number`                                                                        | `300`      | false    | Milliseconds after the pointer or focus leaves the trigger and the card before the card closes.         |
-| `disabled`    | `boolean`                                                                       | `false`    | false    | Never opens the card.                                                                                   |
-| `defaultOpen` | `boolean`                                                                       | `false`    | false    | Initial open state while `v-model:open` is unbound.                                                     |
+| Prop          | Type                                                                       | Default    | Required | JSDoc                                                                                                   |
+| ------------- | -------------------------------------------------------------------------- | ---------- | -------- | ------------------------------------------------------------------------------------------------------- |
+| `placement`   | `HoverCardPlacement` (a side with optional `-start` / `-end`, or `'auto'`) | `'bottom'` | false    | Side of the trigger the card opens on, flipped when it does not fit; `'auto'` picks the side with room. |
+| `offset`      | `number`                                                                   | `8`        | false    | Pixel gap between the trigger and the card.                                                             |
+| `openDelay`   | `number`                                                                   | `500`      | false    | Milliseconds the pointer or focus must stay on the trigger before the card opens.                       |
+| `closeDelay`  | `number`                                                                   | `300`      | false    | Milliseconds after the pointer or focus leaves the trigger and the card before the card closes.         |
+| `disabled`    | `boolean`                                                                  | `false`    | false    | Never opens the card.                                                                                   |
+| `defaultOpen` | `boolean`                                                                  | `false`    | false    | Initial open state while `v-model:open` is unbound.                                                     |
 
 ## v-model
 

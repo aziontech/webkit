@@ -7,7 +7,7 @@ spec_version: 4
 template: 2
 created: 2026-11-05
 last_updated: 2026-11-15
-checksum: 443061ac085538a48b6aa1718a05b9d04959e06020bfe2a1115ae34acd52a478
+checksum: 5455f7b619414a41cf48293a48a43ec89b66b2c54f8c536ec9ebb69a9b9062d6
 ---
 
 # ArticleBody — Component Spec
@@ -74,7 +74,7 @@ The reading page of an article. A brand banner sits over a three-column grid: th
 | ------------ | ------------------------ | ----------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `eyebrow`    | `string`                 | `''`        | false    | Overline above the headline.                                                                                                                                                                                                                    |
 | `article`    | `ArticleBodyArticle`     | `—`         | true     | The piece being read: its `title` (the page h1), `description`, `date`, `readTime`, canonical `href`, and optionally `author` (the writers' names) and `authors` (each a `name` and an `avatar` photo URL).                                     |
-| `trail`      | `ArticleBodyCrumb[]`     | `[]`        | false    | The breadcrumb over the headline, each a `label` and an `href`, the last one marked `active`.                                                                                                                                                   |
+| `trail`      | `BreadcrumbItemData[]`   | `[]`        | false    | The breadcrumb over the headline, each a `label` and an `href`, the last one marked `active`.                                                                                                                                                   |
 | `body`       | `string`                 | `''`        | false    | The article as markdown; its `##` and `###` headings feed the outline.                                                                                                                                                                          |
 | `banner`     | `string`                 | `''`        | false    | URL of the image over the masthead; the banner frame is omitted when empty.                                                                                                                                                                     |
 | `share`      | `ArticleBodyShare`       | `undefined` | false    | Labels of the share group: its `title`, `copyLink`, `shareX` and `shareLinkedIn`, optional `copyFeed` with the `feed` URL it copies, and optional toast messages `copiedLink`, `copiedFeed` and `copiedPage`; the group is omitted when absent. |

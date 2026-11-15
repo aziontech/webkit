@@ -34,7 +34,7 @@
     invalidMessage: string
   }
 
-  interface Props {
+  export interface ClosingCallToActionNewsletterProps {
     /** Copy of the subscribe form: `{ placeholder, submitLabel, successMessage, errorMessage, requiredMessage, invalidMessage }`. */
     form: ClosingCallToActionNewsletterForm
     /** In-page id set on the band so a `#hash` link can scroll to it. */
@@ -55,7 +55,7 @@
     hatch?: boolean
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<ClosingCallToActionNewsletterProps>(), {
     anchor: '',
     eyebrow: '',
     title: '',

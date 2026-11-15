@@ -11,7 +11,7 @@
   /** Register of the tile. */
   export type MediaTileKind = 'frame' | 'plain'
 
-  interface Props {
+  export interface MediaTileProps {
     /** Register of the tile: frame draws the page's frame around the media alone, plain draws no rules and makes the tile itself the cell a divider grid separates. */
     kind?: MediaTileKind
     /** The caption's run-in lead, naming what the panel above it shows. */
@@ -30,7 +30,7 @@
     mediaScale?: number
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<MediaTileProps>(), {
     kind: 'frame',
     description: '',
     src: '',

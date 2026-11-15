@@ -10,7 +10,7 @@
   /** Bar form: `default` draws separate rounded bars, `histogram` solid columns that fill their bucket. */
   export type ChartBarKind = 'default' | 'histogram'
 
-  interface Props {
+  export interface ChartBarProps {
     /** Ids of the series drawn as bars; empty draws every visible series. */
     ids?: string[]
     /** Stacks the series in one bar per category instead of grouping them side by side. */
@@ -21,7 +21,7 @@
     kind?: ChartBarKind
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<ChartBarProps>(), {
     ids: () => [],
     stacked: false,
     showLabels: false,

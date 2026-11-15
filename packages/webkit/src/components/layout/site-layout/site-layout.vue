@@ -70,7 +70,7 @@
     href: string
   }
 
-  interface Props {
+  export interface SiteLayoutProps {
     /** The bar, bound onto `SiteNav`. */
     navigation: SiteLayoutNavigation
     /** The footer, bound onto `SiteFooter`; `kind` defaults to `site`. No footer when absent. */
@@ -81,7 +81,7 @@
     navOverlay?: boolean
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<SiteLayoutProps>(), {
     footer: undefined,
     searchPlaceholder: '',
     navOverlay: false

@@ -4,9 +4,9 @@
   import { useTranslate } from '../../../../composables/use-translate'
   import * as en from '../../../../locales/en'
   import {
-    type SortDirection,
     TableInjectionKey,
-    TableRowGroupInjectionKey
+    TableRowGroupInjectionKey,
+    type TableSortDirection
   } from '../injection-key'
   import TableSortButton from '../table-sort-button/table-sort-button.vue'
 
@@ -14,20 +14,20 @@
   export type TableHeadCellAlign = 'start' | 'center' | 'end'
   export type TableHeadCellGrow = 1 | 2 | 3
   export type TableHeadCellFrozen = 'start' | 'end'
-  export type { SortDirection }
+  export type { TableSortDirection }
 
   defineOptions({
     name: 'TableHeadCell',
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface TableHeadCellProps {
     /** checkbox = select-all column; action = 40px header matching an action body cell; slot = free-form. */
     kind?: TableHeadCellKind
     /** Renders the sort button and the sort affordance. */
     sortable?: boolean
     /** Current sort direction; controlled. */
-    sortDirection?: SortDirection
+    sortDirection?: TableSortDirection
     /** Text alignment. */
     align?: TableHeadCellAlign
     /** Flex weight; the principal column uses 2 (see `principal`). */
@@ -43,9 +43,7 @@
     /** Pointer handler (mousedown/touchstart) that starts the resize drag. */
     resizeHandler?: (event: MouseEvent | globalThis.TouchEvent) => void
   }
-  export type TableHeadCellProps = Props
-
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<TableHeadCellProps>(), {
     kind: 'default',
     sortable: false,
     sortDirection: 'none',
@@ -87,7 +85,7 @@
       : (props.grow ?? (props.principal ? 2 : 1))
   )
 
-  const ariaSort = computed<SortDirection | undefined>(() =>
+  const ariaSort = computed<TableSortDirection | undefined>(() =>
     props.sortable ? props.sortDirection : undefined
   )
 

@@ -9,12 +9,12 @@
 
   defineOptions({ name: 'ChartCardDragHandle', inheritAttrs: false })
 
-  interface Props {
+  export interface ChartCardDragHandleProps {
     /** Accessible name of the handle. Empty uses the locale catalog (`Move card`). */
     ariaLabel?: string
   }
 
-  withDefaults(defineProps<Props>(), {
+  withDefaults(defineProps<ChartCardDragHandleProps>(), {
     ariaLabel: ''
   })
 

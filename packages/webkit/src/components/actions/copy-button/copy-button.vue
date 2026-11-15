@@ -12,7 +12,7 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface CopyButtonProps {
     /** Text copied to the clipboard on activation. */
     value: string
     /** Accessible name while idle. Empty uses the locale catalog (`Copy`). */
@@ -27,7 +27,7 @@
     disabled?: boolean
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<CopyButtonProps>(), {
     ariaLabel: '',
     copiedLabel: '',
     kind: 'transparent',

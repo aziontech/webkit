@@ -1,5 +1,5 @@
 /** One password rule: its stable key, its label, and the test evaluated against the current value. */
-export interface PasswordRequirement {
+export interface PasswordRequirementsRule {
   /** Stable id, independent of the localizable label; a consumer removes or replaces a rule by key. */
   key?: string
   /** Text shown inside the chip. */
@@ -9,9 +9,12 @@ export interface PasswordRequirement {
 }
 
 /** A built-in rule: always keyed, always a pattern, so rule.test.test(value) needs no narrowing. */
-export type PasswordPatternRequirement = PasswordRequirement & { key: string; test: RegExp }
+export type PasswordRequirementsPatternRule = PasswordRequirementsRule & {
+  key: string
+  test: RegExp
+}
 
-export const DEFAULT_PASSWORD_REQUIREMENTS: PasswordPatternRequirement[] = [
+export const DEFAULT_PASSWORD_REQUIREMENTS: PasswordRequirementsPatternRule[] = [
   { key: 'length', label: '8-128 characters', test: /^.{8,128}$/ },
   { key: 'uppercase', label: 'Uppercase letter', test: /[A-Z]/ },
   { key: 'special', label: 'Special character', test: /[^A-Za-z0-9]/ },

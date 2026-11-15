@@ -14,7 +14,6 @@
   import SelectOption from '../select/select-option/select-option.vue'
   import SelectTrigger from '../select/select-trigger/select-trigger.vue'
   import {
-    type Country,
     defaultCountries,
     flagStyle,
     formatNational,
@@ -22,6 +21,7 @@
     isComplete,
     loadFlagSprite,
     maxDigits,
+    type PhoneInputCountry,
     placeholderFor,
     stripToDigits
   } from './countries'
@@ -35,7 +35,7 @@
   export type PhoneInputSize = 'small' | 'medium' | 'large'
 
   /** Snapshot of the number emitted by phone-change. */
-  export interface PhoneNumber {
+  export interface PhoneInputValue {
     /** ISO 3166-1 alpha-2 code of the selected country. */
     country: string
     /** Dial code of the selected country, such as +1. */
@@ -48,9 +48,9 @@
     complete: boolean
   }
 
-  interface Props {
+  export interface PhoneInputProps {
     /** Countries offered by the dial-code Select. When omitted, uses the built-in curated list. */
-    countries?: Country[]
+    countries?: PhoneInputCountry[]
     /** Placeholder forwarded to the internal input. Falls back to the selected country's mask when empty. */
     placeholder?: string
     /** Size forwarded to the InputGroup and the dial-code Select trigger. Heights: small=28px, medium=32px, large=40px. */
@@ -70,9 +70,7 @@
     /** Shown in the dial-code list when no country matches the search. Empty uses the locale catalog (`No country found.`). */
     searchEmptyLabel?: string
   }
-  export type PhoneInputProps = Props
-
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<PhoneInputProps>(), {
     countries: () => defaultCountries,
     placeholder: '',
     size: 'medium',
@@ -86,7 +84,7 @@
   })
 
   const emit = defineEmits<{
-    'phone-change': [value: PhoneNumber]
+    'phone-change': [value: PhoneInputValue]
   }>()
 
   const model = defineModel<string>({ default: '' })
@@ -125,7 +123,7 @@
   })
   const triggerId = `${generatedId}-trigger`
 
-  const selectedCountry = computed<Country>(
+  const selectedCountry = computed<PhoneInputCountry>(
     () => props.countries.find((c) => c.code === country.value) ?? props.countries[0]
   )
 
@@ -135,7 +133,7 @@
     () => props.placeholder || placeholderFor(selectedCountry.value)
   )
 
-  const phone = computed<PhoneNumber>(() => {
+  const phone = computed<PhoneInputValue>(() => {
     const { code, dialCode } = selectedCountry.value
     const digits = model.value
     return {

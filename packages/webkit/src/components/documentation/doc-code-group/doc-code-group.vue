@@ -7,7 +7,7 @@
   defineOptions({ name: 'DocCodeGroup', inheritAttrs: false })
 
   /** One sample in the group. */
-  export type DocCodeSample = {
+  export type DocCodeGroupSample = {
     /** Tab label, and the block's label header when the group has one sample; falls back to the language name (Shell, JavaScript). */
     label?: string
     /** Language id used for highlighting and for the label. */
@@ -20,9 +20,9 @@
     output?: string
   }
 
-  interface Props {
+  export interface DocCodeGroupProps {
     /** The samples, in tab order: one renders a plain block, several render a joined tab strip. */
-    samples?: DocCodeSample[]
+    samples?: DocCodeGroupSample[]
     /** Shows the line-number gutter. */
     showLineNumbers?: boolean
     /** Shows the label header (the sample label or the language name) on a single sample. */
@@ -31,7 +31,7 @@
     kind?: CodeBlockKind
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<DocCodeGroupProps>(), {
     samples: () => [],
     showLineNumbers: false,
     showLabel: true,

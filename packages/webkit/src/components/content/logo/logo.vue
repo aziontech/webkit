@@ -12,10 +12,21 @@
   /** How the mark is inked: its own colours, one theme silhouette, the surrounding text colour, or black pinned for a coloured fill. */
   export type LogoKind = 'color' | 'monochrome' | 'current' | 'knockout'
 
+  /** How a section inks a client mark: its own colours, one theme silhouette, or black pinned for a coloured fill (the `color`, `monochrome` and `knockout` looks of the mark). */
+  export type LogoTreatment = 'color' | 'monochrome' | 'knockout'
+
+  /** A client's mark as sections list it: the client's name (the alternative text) and the URL of its logo. */
+  export type LogoMark = {
+    /** The client's name, the mark's alternative text. */
+    name: string
+    /** URL of the client's logo, drawn in one ink that follows the theme. */
+    logo: string
+  }
+
   /** Height of the mark: `small` 16 px, `medium` 24 px, `large` 32 px. */
   export type LogoSize = 'small' | 'medium' | 'large'
 
-  interface Props {
+  export interface LogoProps {
     /** The company or product the mark belongs to; the accessible name, and the typographic wordmark drawn when no file is set. */
     name: string
     /** URL of the mark; on its own it serves both themes, and with `srcLight` it is the dark-theme file. Empty draws the wordmark. */
@@ -34,7 +45,7 @@
     decorative?: boolean
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<LogoProps>(), {
     src: '',
     srcLight: '',
     artwork: 'color',

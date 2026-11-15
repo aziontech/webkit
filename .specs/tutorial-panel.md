@@ -5,7 +5,7 @@ structure: composition
 status: implemented
 spec_version: 6
 template: 2
-checksum: a94baaf8c82315ed521835625a9f5de88df1bc805d989036d76d454c43e86575
+checksum: 8bd8e5ce57a2ae46087cbaea14125439d7d733b29c42eacb74cbda75152ee369
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -22,7 +22,7 @@ wraps the whole page (the content and the tools region), holds the running tutor
 step, and is what the panel and every `Hotspot` read.
 
 It is the stateful layer over `help-panel`: the panel is a `HelpPanel` with its `Header`, and draws
-each tutorial with its own internal task list (6.0 moved the former `HelpPanel.Tutorial` and
+each tutorial with its own internal task list (6.0 moved the former `HelpPanel.TutorialPanelTutorial` and
 `HelpPanel.Task` here; `HelpPanel` no longer has a tutorial mode). Design call (M2.9, WP
 app-layout): neither the design sample nor the Console Kit has a guided tutorial, so the model is
 Cloudscape's tutorial panel, hotspot and annotation context, rebuilt on WebKit parts.
@@ -53,7 +53,7 @@ Cloudscape's tutorial panel, hotspot and annotation context, rebuilt on WebKit p
 ## Best practices
 
 - Wrap the whole page in `TutorialPanel.Provider`, so the panel and every hotspot share one state.
-- Keep tutorials as data (`Tutorial[]`): the panel lists them and the hotspots on the page read the same steps. This is the one place a config array is right — the step content is shown away from where it is declared.
+- Keep tutorials as data (`TutorialPanelTutorial[]`): the panel lists them and the hotspots on the page read the same steps. This is the one place a config array is right — the step content is shown away from where it is declared.
 - One step, one control. Write the step title as the action (`Name the service`) and the content as one or two sentences.
 - Place every `Hotspot` a tutorial names on the page that runs it. A step whose hotspot is missing still shows in the panel, and focus moves to it there.
 - Set `completed` on a tutorial from what the product recorded (the `complete` event), not from a click.
@@ -138,7 +138,7 @@ that hosts it owns that), so there is no `Trigger` / `Content`. State flows thro
 the optional variant, which returns null so a hotspot outside a provider renders only its content.
 
 - `tutorial-panel-provider/tutorial-panel-provider.vue` — Holds the tutorials, the running tutorial (`v-model:active`), the current step (`v-model:step`, flat across tasks), whether the reader dismissed the current step, and the hotspots on the page. Renders only its slot (no element).
-  - Props: `tutorials?: Tutorial[]` (default `[]`).
+  - Props: `tutorials?: TutorialPanelTutorial[]` (default `[]`).
   - Models (`defineModel`): `v-model:active` (`string \| null`, default `null` — the parent owns it when bound, the provider keeps it locally when not), `v-model:step` (`number`, default `0`, same rule; equals the step count once the tutorial is finished).
   - Events: `update:active` (`string \| null`) and `update:step` (`number`) from the models; `start` (`(event: Event, id: string)` — the tutorial id, on Start and Restart), `exit` (`(event: Event, id: string)` — on Exit or Back to tutorials), `complete` (`(event: Event, id: string)` — on Finish of the last step). Each fires from a button the reader activated (in the panel or a `Hotspot` popover, through the context), so the DOM event comes first and the tutorial id second.
   - Slot: `default` — the page, with the panel and every hotspot inside.
@@ -146,7 +146,7 @@ the optional variant, which returns null so a hotspot outside a provider renders
 - `tutorial-panel-tasks/tutorial-panel-tasks.vue` — internal, not exported: a tutorial's title, description, a progress line derived from the registered tasks (`2 of 3 complete`, `aria-live="polite"`), the ordered task `<ol>` and an actions row. Provides the task registry (`TutorialTasksInjectionKey`) to its tasks. `data-testid` fallback `content-tutorial-panel-tasks`; the panel passes `<testId>__tutorial`. `data-completed` mirrors its `completed` prop.
 - `tutorial-panel-task/tutorial-panel-task.vue` — internal, not exported: one task, a numbered marker, a title and its steps. An `<li>` that registers with the task list on mount (ordinal + `status`), `data-status` mirrors `status` (`pending` / `success`), the `active` task (boolean prop) carries `data-active` and `aria-current="step"`, and an `sr-only` status word (`Not started`, `Current task`, `Complete`). Throws outside the task list. `data-testid` fallback `content-tutorial-panel-task`.
 
-Exported types: `Tutorial` (`id`, `title`, `description?`, `completed?`, `tasks`), `TutorialTask` (`title`, `steps`), `TutorialStep` (`title`, `content`, `hotspotId`).
+Exported types: `TutorialPanelTutorial` (`id`, `title`, `description?`, `completed?`, `tasks`), `TutorialPanelTaskData` (`title`, `steps`), `TutorialPanelStep` (`title`, `content`, `hotspotId`).
 
 ```
 packages/webkit/src/components/content/tutorial-panel/
@@ -190,9 +190,9 @@ _No events on the panel — every action goes through the provider, which emits 
 
 ## Slots
 
-| Slot         | Scope                    | Notes                                                            |
-| ------------ | ------------------------ | ---------------------------------------------------------------- |
-| `completion` | `{ tutorial: Tutorial }` | Extra content on the completion screen, such as a feedback link. |
+| Slot         | Scope                                 | Notes                                                            |
+| ------------ | ------------------------------------- | ---------------------------------------------------------------- |
+| `completion` | `{ tutorial: TutorialPanelTutorial }` | Extra content on the completion screen, such as a feedback link. |
 
 ## States
 
@@ -200,7 +200,7 @@ _No events on the panel — every action goes through the provider, which emits 
 - `data-view` on the root: `list` | `running` | `complete`
 - `data-completed` on each list item mirrors the tutorial's `completed`
 - In `running`, each task's status is derived from the current step: `success` when every step of the task is behind it, `pending` otherwise; the task that holds the current step is `active`. The current step's row carries `aria-current="step"`.
-- `complete` shows a completion section (check icon, `Tutorial complete`, `You finished <title>.`, the `completion` slot, Restart and Back to tutorials) above the task list, every task complete.
+- `complete` shows a completion section (check icon, `TutorialPanelTutorial complete`, `You finished <title>.`, the `completion` slot, Restart and Back to tutorials) above the task list, every task complete.
 
 ## Motion & Animations
 
@@ -232,7 +232,7 @@ _None._
 ## Accessibility (WCAG 2.1 AA)
 
 - Visible focus: the composed `Button`s carry the standard ring; focus targets that are not controls (the list heading, the completion heading, the current step row) take `tabindex="-1"` and `outline-none` because they receive focus only programmatically.
-- Keyboard map: `Tab` moves through Start / Restart, Exit, Restart and Back. Focus management: Start moves focus to the current step's popover (through its hotspot) or, when that hotspot is not on the page, to the step's row in the panel; Finish moves focus to the `Tutorial complete` heading; Exit and Back move focus to the list's heading.
+- Keyboard map: `Tab` moves through Start / Restart, Exit, Restart and Back. Focus management: Start moves focus to the current step's popover (through its hotspot) or, when that hotspot is not on the page, to the step's row in the panel; Finish moves focus to the `TutorialPanelTutorial complete` heading; Exit and Back move focus to the list's heading.
 - ARIA: the panel is a `HelpPanel` complementary landmark named by `ariaLabel` or the title. Each list item's Start button is described by its tutorial's heading (`aria-describedby`), so repeated buttons are distinct. The task progress line is `aria-live="polite"`. The current step row carries `aria-current="step"`.
 - Contrast ≥4.5:1 on muted ink over `--bg-surface` in both themes.
 - Touch target: the composed `Button`s (small) meet 24 px; the panel adds no other control.
@@ -250,7 +250,7 @@ _None._
 | `tutorialPanel.exit`                 | `Exit tutorial`                                               | —             |
 | `tutorialPanel.back`                 | `Back to tutorials`                                           | —             |
 | `tutorialPanel.completed`            | `Completed`                                                   | —             |
-| `tutorialPanel.completedTitle`       | `Tutorial complete`                                           | —             |
+| `tutorialPanel.completedTitle`       | `TutorialPanelTutorial complete`                              | —             |
 | `tutorialPanel.completedDescription` | `You finished {title}.`                                       | —             |
 | `tutorialPanel.taskCount`            | `{count} task` / `{count} tasks`                              | —             |
 | `tutorialPanel.stepCount`            | `{count} step` / `{count} steps`                              | —             |

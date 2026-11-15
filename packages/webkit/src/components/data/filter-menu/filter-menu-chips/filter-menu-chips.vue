@@ -21,12 +21,12 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface FilterMenuChipsProps {
     /** The fields the linked menu receives; chips reopen the menu that shares this array. Empty inside a DataTable reads the table's filter fields and filters. */
     fields?: FilterMenuField[]
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<FilterMenuChipsProps>(), {
     fields: () => []
   })
 

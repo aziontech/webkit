@@ -14,7 +14,7 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface WizardProps {
     /** Label of the primary action on the last step, where Next becomes the submit action. Empty uses the locale catalog (`Create`). */
     submitLabel?: string
     /** Submit in progress: the primary action shows its loading state, and Cancel, Previous and every rail step are disabled. */
@@ -23,7 +23,7 @@
     ariaLabel?: string
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<WizardProps>(), {
     submitLabel: '',
     loading: false,
     ariaLabel: ''

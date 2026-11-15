@@ -23,3 +23,4 @@ const GlobalHeader = Object.assign(GlobalHeaderRoot, {
 
 export default GlobalHeader
 export type { GlobalHeaderKind } from './global-header.vue'
+export type { GlobalHeaderProps } from './global-header.vue'

@@ -13,7 +13,7 @@
   /** Layout of the band. */
   export type CallToActionKind = 'panel' | 'split' | 'lead' | 'primary' | 'announcement'
 
-  interface Props {
+  export interface CallToActionProps {
     /** Headline of the band, rendered as its `h2`. */
     title: string
     /** Second line of the headline, set in muted ink; rendered as a second span of the same `h2`. */
@@ -28,7 +28,7 @@
     framed?: boolean
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<CallToActionProps>(), {
     titleMuted: '',
     description: '',
     eyebrow: '',

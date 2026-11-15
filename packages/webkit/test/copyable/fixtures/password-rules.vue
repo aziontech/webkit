@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import PasswordRequirements, {
     DEFAULT_PASSWORD_REQUIREMENTS,
-    type PasswordRequirement
+    type PasswordRequirementsRule
   } from '@aziontech/webkit/password-requirements'
   import { computed, ref } from 'vue'
 
@@ -10,7 +10,7 @@
     DEFAULT_PASSWORD_REQUIREMENTS.every((rule) => rule.test.test(password.value))
   )
   const keys = DEFAULT_PASSWORD_REQUIREMENTS.map((rule) => rule.key.toUpperCase())
-  const custom: PasswordRequirement[] = [
+  const custom: PasswordRequirementsRule[] = [
     ...DEFAULT_PASSWORD_REQUIREMENTS,
     { label: 'No spaces', test: (value) => !value.includes(' ') }
   ]

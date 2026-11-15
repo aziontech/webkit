@@ -4,7 +4,7 @@ category: documentation
 structure: monolithic
 status: implemented
 spec_version: 3
-checksum: 4de1139e089fa7333ca9cb77c961dc322a552d3bbedb430a70df22931525ff5d
+checksum: 138dc4c70546c06947d2cb90015200a2222a2c50803e64503d1a06f91d7bd3f9
 created: 2026-08-22
 last_updated: 2026-11-15
 ---
@@ -55,20 +55,20 @@ The previous / next pair that closes a documentation page. Each side is a link c
 
 ## Props
 
-| Prop            | Type                  | Default | Required | JSDoc                                                                       |
-| --------------- | --------------------- | ------- | -------- | --------------------------------------------------------------------------- |
-| `previous`      | `DocPageLink \| null` | `null`  | false    | The page before this one.                                                   |
-| `next`          | `DocPageLink \| null` | `null`  | false    | The page after this one.                                                    |
-| `previousLabel` | `string`              | `''`    | false    | Eyebrow over the previous link. Empty uses the locale catalog (`Previous`). |
-| `nextLabel`     | `string`              | `''`    | false    | Eyebrow over the next link. Empty uses the locale catalog (`Next`).         |
+| Prop            | Type                      | Default | Required | JSDoc                                                                       |
+| --------------- | ------------------------- | ------- | -------- | --------------------------------------------------------------------------- |
+| `previous`      | `DocPrevNextLink \| null` | `null`  | false    | The page before this one.                                                   |
+| `next`          | `DocPrevNextLink \| null` | `null`  | false    | The page after this one.                                                    |
+| `previousLabel` | `string`                  | `''`    | false    | Eyebrow over the previous link. Empty uses the locale catalog (`Previous`). |
+| `nextLabel`     | `string`                  | `''`    | false    | Eyebrow over the next link. Empty uses the locale catalog (`Next`).         |
 
-`DocPageLink`: `{ label: string; href: string }` — `label` is the destination page title shown on the link.
+`DocPrevNextLink`: `{ label: string; href: string }` — `label` is the destination page title shown on the link.
 
 ## Events
 
-| Event      | Payload                                  | Notes                                                                                                                |
-| ---------- | ---------------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
-| `navigate` | `(event: MouseEvent, page: DocPageLink)` | Fired when either neighbour is activated; `page` is the side that was clicked. Event first, per `event-payloads.md`. |
+| Event      | Payload                                      | Notes                                                                                                                |
+| ---------- | -------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| `navigate` | `(event: MouseEvent, page: DocPrevNextLink)` | Fired when either neighbour is activated; `page` is the side that was clicked. Event first, per `event-payloads.md`. |
 
 ## Slots
 

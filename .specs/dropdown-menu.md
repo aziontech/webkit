@@ -8,7 +8,7 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3775-16746&m=dev
   node_id: 3775:16746
-checksum: f0671a461e3fca9d0c62d52b3cd02d369dd8ccc5d1c0d12cc3fc3060ed70ccce
+checksum: f510e96ab3241983173ddbc7216c0848f5287a6cb94f8e9d489417f5cded696a
 created: 2026-06-26
 last_updated: 2026-11-15
 ---
@@ -214,7 +214,7 @@ Sub-menus and checkable options:
 | -------- | ---------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `select` | `(event: MouseEvent \| KeyboardEvent, value: DropdownMenuOptionValue)` | Fires when an enabled option is activated (click, `Enter`/`Space`, or a `command` shortcut). `event` is the activation event; `value` is the activated option's identifier. The panel closes automatically and focus returns to the trigger when activated from inside the open panel, except for `kind="checkbox"` / `kind="radio"` options, which keep it open. Options inside a sub-menu emit on the same root event. |
 
-**Types.** `@aziontech/webkit/dropdown-menu` (and `-root`) export `DropdownMenuOptionValue` (`string | number`, the `select` payload and `DropdownMenu.Item`'s `value`), `DropdownMenuPlacement` and `DropdownMenuPlacementInput` (the `placement` prop), so a `select` handler is typed without a local alias.
+**Types.** `@aziontech/webkit/dropdown-menu` (and `-root`) export `DropdownMenuOptionValue` (`string | number`, the `select` payload and `DropdownMenu.Item`'s `value`), `DropdownMenuPlacementSide` and `DropdownMenuPlacement` (the `placement` prop), so a `select` handler is typed without a local alias.
 
 ## Slots
 

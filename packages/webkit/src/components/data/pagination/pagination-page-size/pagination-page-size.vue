@@ -10,12 +10,12 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface PaginationPageSizeProps {
     /** Available page-size options. */
     options?: number[]
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<PaginationPageSizeProps>(), {
     options: () => [10, 25, 50, 100]
   })
 

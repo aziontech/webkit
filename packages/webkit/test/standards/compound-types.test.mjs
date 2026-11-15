@@ -48,7 +48,10 @@ function scripts(vue) {
   return [...vue.matchAll(/<script\b[^>]*>([\s\S]*?)<\/script>/g)].map((m) => m[1]).join('\n')
 }
 
-const SURFACE = [/\binterface\s+Props\b[^{]*/g, /\bdefine(?:Props|Emits|Slots|Model)\s*</g]
+const SURFACE = [
+  /\b(?:export\s+)?interface\s+\w*Props\b[^{]*/g,
+  /\bdefine(?:Props|Emits|Slots|Model)\s*</g
+]
 
 function balanced(source, from) {
   const open = source.indexOf('{', from)

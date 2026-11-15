@@ -5,7 +5,7 @@
 
   defineOptions({ name: 'DocHeading', inheritAttrs: false })
 
-  interface Props {
+  export interface DocHeadingProps {
     /** Heading level; drives the tag and the prose type scale. */
     level?: 1 | 2 | 3 | 4
     /** In-page anchor: the heading's id, what the page rail's entry and the copied URL point at. */
@@ -14,7 +14,7 @@
     label?: string
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<DocHeadingProps>(), {
     level: 2,
     anchor: '',
     label: ''

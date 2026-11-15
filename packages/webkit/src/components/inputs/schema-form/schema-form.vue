@@ -79,7 +79,7 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface SchemaFormProps {
     /** JSON schema of an object (draft-07 subset); each property becomes a Field. */
     schema: SchemaFormSchema
     /** Server or external messages by field path; a field shows its message until it is edited. */
@@ -93,8 +93,6 @@
     /** Shows every value without letting it change. */
     readonly?: boolean
   }
-  export type SchemaFormProps = Props
-
   /** Scope of a `field:<path>` slot, which replaces that field's control. */
   export interface SchemaFormFieldSlotProps {
     path: string
@@ -108,7 +106,7 @@
     readonly: boolean
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<SchemaFormProps>(), {
     errors: () => ({}),
     ui: () => ({}),
     validateOn: 'blur',

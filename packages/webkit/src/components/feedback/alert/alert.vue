@@ -15,7 +15,7 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface AlertProps {
     /** Visual severity variant. */
     severity?: AlertSeverity
     /** Size token. Drives the banner height, inline padding, copy scale, and the trailing control sizes. */
@@ -34,7 +34,7 @@
     life?: number
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<AlertProps>(), {
     severity: 'info',
     size: 'medium',
     label: '',

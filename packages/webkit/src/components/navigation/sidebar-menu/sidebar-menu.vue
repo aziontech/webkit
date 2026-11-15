@@ -35,7 +35,7 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface SidebarMenuProps {
     /** Data-driven tree of groups and items; leave empty to compose the parts in the default slot. */
     groups?: SidebarMenuGroupNode[]
     /** Id of the node rendered as the current page. */
@@ -46,7 +46,7 @@
     ariaLabel?: string
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<SidebarMenuProps>(), {
     groups: () => [],
     activeId: '',
     enterOnMount: false,

@@ -17,7 +17,7 @@
 
   export type { ItemKind, ItemSize }
 
-  interface Props {
+  export interface ItemProps {
     /** Item root surface variant. `inline` removes the outer padding for inline placement and divided in-card lists; `option` is a compact chooser row that fills when pressed or selected. */
     kind?: ItemKind
     /** Item root density (padding and gap). */
@@ -28,7 +28,7 @@
     clickable?: boolean
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<ItemProps>(), {
     kind: 'default',
     size: 'medium',
     href: '',

@@ -67,7 +67,7 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface ButtonGroupProps {
     /** Actions, toggles and menus, in reading order. */
     items?: ButtonGroupItem[]
     /** Accessible name of the toolbar; write it as the aria-label attribute. Leave it empty only when aria-labelledby names the toolbar. */
@@ -82,7 +82,7 @@
     overflowLabel?: string
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<ButtonGroupProps>(), {
     items: () => [],
     ariaLabel: '',
     kind: 'transparent',

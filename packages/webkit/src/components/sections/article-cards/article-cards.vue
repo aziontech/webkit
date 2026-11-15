@@ -3,6 +3,7 @@
 
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
+  import type { LogoMark } from '../../content/logo/logo.vue'
   import FrameBox from '../../layout/frame-box/frame-box.vue'
   import CardGrid from '../../marketing/card-grid/card-grid.vue'
   import CardGridCell from '../../marketing/card-grid/card-grid-cell/card-grid-cell.vue'
@@ -14,16 +15,10 @@
     inheritAttrs: false
   })
 
+  export type { LogoMark }
+
   /** Placement of the band heading. */
   export type ArticleCardsKind = 'start' | 'center'
-
-  /** The client mark drawn in the media cell of a card that has no cover. */
-  export type ArticleCardsMark = {
-    /** The client's name, the mark's alternative text. */
-    name: string
-    /** URL of the client's logo, drawn in one ink that follows the theme. */
-    logo: string
-  }
 
   /** One linked article card. */
   export type ArticleCardsItem = {
@@ -40,12 +35,12 @@
     /** URL of the cover drawn in the media cell. */
     image?: string
     /** Client mark drawn in the media cell when there is no cover. */
-    mark?: ArticleCardsMark
+    mark?: LogoMark
     /** Where the destination opens; `_blank` opens it in a new tab. */
     target?: '_blank' | '_self'
   }
 
-  interface Props {
+  export interface ArticleCardsProps {
     /** Placement of the heading: `start` sets it at the start, `center` centres it over the cards. */
     kind?: ArticleCardsKind
     /** Id set on the band so an in-page hash link can target it. */
@@ -60,7 +55,7 @@
     ariaLabel?: string
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<ArticleCardsProps>(), {
     kind: 'start',
     anchor: '',
     eyebrow: '',

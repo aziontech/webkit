@@ -8,14 +8,14 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface TableRowProps {
     /** Applies the selected row surface and aria-selected. */
     selected?: boolean
     /** Sticks the row to the top of the scroll container (pinned row). */
     frozen?: boolean
   }
 
-  withDefaults(defineProps<Props>(), {
+  withDefaults(defineProps<TableRowProps>(), {
     selected: false,
     frozen: false
   })

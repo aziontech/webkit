@@ -21,7 +21,7 @@
     description: string
   }
 
-  interface Props {
+  export interface ProcessScrollProps {
     /** In-page id set on the band so a hash link can target it. */
     anchor?: string
     /** Overline above the title. */
@@ -44,7 +44,7 @@
     headerOffset?: string
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<ProcessScrollProps>(), {
     anchor: '',
     eyebrow: '',
     titleKind: 'split',

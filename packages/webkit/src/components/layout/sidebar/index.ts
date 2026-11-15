@@ -16,3 +16,4 @@ export default Sidebar
 
 export { SidebarFooter, SidebarHeader }
 export type { SidebarCollapsible } from './sidebar.vue'
+export type { SidebarProps } from './sidebar.vue'

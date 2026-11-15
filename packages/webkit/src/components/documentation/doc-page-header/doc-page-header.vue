@@ -5,16 +5,16 @@
   import * as en from '../../../locales/en'
   import Button from '../../actions/button/button.vue'
   import Separator from '../../layout/separator/separator.vue'
+  import type { BreadcrumbItemData } from '../../navigation/breadcrumb/breadcrumb.vue'
   import Breadcrumb from '../../navigation/breadcrumb/breadcrumb.vue'
   import Tooltip from '../../overlay/tooltip/tooltip.vue'
 
   defineOptions({ name: 'DocPageHeader', inheritAttrs: false })
 
-  /** One breadcrumb segment. */
-  export type DocCrumb = { label: string; href?: string }
+  export type { BreadcrumbItemData }
 
   /** One control on the meta line. */
-  export type DocPageAction = {
+  export type DocPageHeaderAction = {
     /** The control's words. Two or three; the sentence goes in `tip`. */
     label: string
     /** Azion icon class for the leading glyph. */
@@ -29,20 +29,20 @@
     tip?: string
   }
 
-  interface Props {
+  export interface DocPageHeaderProps {
     /** The page title. */
     title?: string
     /** The deck under the title. */
     description?: string
     /** Ancestor trail, current page last. */
-    breadcrumbs?: DocCrumb[]
+    breadcrumbs?: BreadcrumbItemData[]
     /** When the page's content last changed. ISO date, or a ready-made string. */
     lastUpdated?: string
     /** The controls on the meta line, in reading order. */
-    metaActions?: DocPageAction[]
+    metaActions?: DocPageHeaderAction[]
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<DocPageHeaderProps>(), {
     title: '',
     description: '',
     breadcrumbs: () => [],
@@ -52,7 +52,7 @@
 
   const emit = defineEmits<{
     /** A meta-line control was activated; a link's default navigation is the consumer's to keep or prevent. */
-    'action-click': [event: MouseEvent, item: DocPageAction]
+    'action-click': [event: MouseEvent, item: DocPageHeaderAction]
   }>()
 
   defineSlots<{

@@ -20,12 +20,12 @@
   import PanelFooter from '../../overlay/panel/panel-footer.vue'
   import PanelHeader from '../../overlay/panel/panel-header.vue'
 
-  export interface FeedbackReason {
+  export interface FeedbackReasonDialogReason {
     value: string
     label: string
   }
 
-  export interface FeedbackReasonPayload {
+  export interface FeedbackReasonDialogPayload {
     reason: string
     details: string
   }
@@ -35,9 +35,9 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface FeedbackReasonDialogProps {
     /** Reasons offered, in order. Empty uses the catalog's five: inaccurate, not helpful, did not follow the request, unsafe or harmful, other. */
-    reasons?: FeedbackReason[]
+    reasons?: FeedbackReasonDialogReason[]
     /** The feedback is being sent: Send feedback shows a spinner and the form is locked. */
     loading?: boolean
     /** Dialog title. Empty uses the locale catalog (`What went wrong?`). */
@@ -46,7 +46,7 @@
     defaultOpen?: boolean
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<FeedbackReasonDialogProps>(), {
     reasons: () => [],
     loading: false,
     title: '',
@@ -63,7 +63,7 @@
   })
 
   const emit = defineEmits<{
-    submit: [event: SubmitEvent, payload: FeedbackReasonPayload]
+    submit: [event: SubmitEvent, payload: FeedbackReasonDialogPayload]
   }>()
 
   const attrs = useAttrs()
@@ -74,7 +74,7 @@
     () => (attrs['data-testid'] as string | undefined) ?? 'ai-feedback-reason-dialog'
   )
 
-  const options = computed<FeedbackReason[]>(() =>
+  const options = computed<FeedbackReasonDialogReason[]>(() =>
     props.reasons.length
       ? props.reasons
       : (['inaccurate', 'notHelpful', 'ignoredRequest', 'unsafe', 'other'] as const).map(

@@ -10,7 +10,7 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface WizardStepProps {
     /** What this step decides, in the reader's words; shown in the rail and as the step heading. */
     title?: string
     /** One line under the heading saying what the step is for; omitted when empty. */
@@ -21,7 +21,7 @@
     invalid?: boolean
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<WizardStepProps>(), {
     title: '',
     description: '',
     optional: false,

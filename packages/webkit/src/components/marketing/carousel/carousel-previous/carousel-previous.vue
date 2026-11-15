@@ -10,12 +10,12 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface CarouselPreviousProps {
     /** Accessible name for the control that steps the track back. Empty uses the locale catalog (`Previous slide`). */
     ariaLabel?: string
   }
 
-  withDefaults(defineProps<Props>(), {
+  withDefaults(defineProps<CarouselPreviousProps>(), {
     ariaLabel: ''
   })
 

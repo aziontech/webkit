@@ -12,7 +12,7 @@
   /** Size token. */
   export type SeverityTagSize = 'small' | 'medium'
 
-  interface Props {
+  export interface SeverityTagProps {
     /** Severity level; sets how many glyph bars fill, their colour and the default label. */
     severity?: SeverityTagLevel
     /** Text of the tag. Empty uses the locale catalog (`Critical`, `High`, `Medium`, `Low`, `Info`). */
@@ -21,7 +21,7 @@
     size?: SeverityTagSize
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<SeverityTagProps>(), {
     severity: 'info',
     label: '',
     size: 'medium'

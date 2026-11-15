@@ -12,8 +12,10 @@ const BentoGridRoot = Object.assign(BentoGrid, {
 export default BentoGridRoot
 export { BentoGridCell }
 export type { BentoGridColumns, BentoGridMobileColumns } from './bento-grid.vue'
+export type { BentoGridProps } from './bento-grid.vue'
 export type {
   BentoGridCellKind,
   BentoGridCellRows,
   BentoGridCellSpan
 } from './bento-grid-cell/bento-grid-cell.vue'
+export type { BentoGridCellProps } from './bento-grid-cell/bento-grid-cell.vue'

@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 5
 template: 2
-checksum: a465f8e4d88432345f879cda07b474ae3aeb11d2083b76788dd4b3a277642760
+checksum: 2558278b7cba4dc42e4553a3e50a34d905a54f122efcd1e42bad9774c7c9148d
 created: 2026-11-14
 last_updated: 2026-11-15
 ---
@@ -116,7 +116,7 @@ The body of a careers posting page, under the posting's title band: the descript
 | `facets`          | `JobPostingFacet[]`   | `[]`        | false    | Facts about the posting listed in the rail, in order; each is `{ label, icon? }`.                                                                                                                                                                                             |
 | `applyLabel`      | `string`              | `''`        | false    | Label of the rail button that links to the application form; the button is left out when empty.                                                                                                                                                                               |
 | `sections`        | `JobPostingSection[]` | `[]`        | false    | The description, one row per section in order; each is `{ title, blocks }` where a block is `{ kind: 'text', text }` or `{ kind: 'list', items }`.                                                                                                                            |
-| `secondaryAction` | `JobPostingAction`    | `undefined` | false    | Link in the confirmation dialog back to the open positions; `{ label, href }`. Omitted when absent.                                                                                                                                                                           |
+| `secondaryAction` | `SectionTitleAction`  | `undefined` | false    | Link in the confirmation dialog back to the open positions; `{ label, href }`. Omitted when absent.                                                                                                                                                                           |
 | `loading`         | `boolean`             | `false`     | false    | The site is sending the application: the submit button shows its loading state, every control is disabled and a submit is ignored.                                                                                                                                            |
 | `submitted`       | `boolean`             | `false`     | false    | The site sent the application: the confirmation dialog opens.                                                                                                                                                                                                                 |
 | `failed`          | `boolean`             | `false`     | false    | The site could not send the application: `messages.error` shows under the submit button.                                                                                                                                                                                      |

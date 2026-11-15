@@ -6,11 +6,14 @@
   import CardPricing from '../../content/card-pricing/card-pricing.vue'
   import FrameBox from '../../layout/frame-box/frame-box.vue'
   import CardGrid from '../../marketing/card-grid/card-grid.vue'
+  import type { SectionTitleAction } from '../../marketing/section-title/section-title.vue'
 
   defineOptions({
     name: 'PricingPlans',
     inheritAttrs: false
   })
+
+  export type { SectionTitleAction }
 
   /** One option of the billing-period toggle. */
   export type PricingPlansPeriod = {
@@ -42,14 +45,6 @@
     label: string
   }
 
-  /** The card button of a plan. */
-  export type PricingPlansAction = {
-    /** Visible label of the button; the button is dropped without one. */
-    label: string
-    /** Destination the button links to; the button is dropped without one. */
-    href: string
-  }
-
   /** One plan card. */
   export type PricingPlansPlan = {
     /** Plan name heading the card; a plan without one is dropped. */
@@ -67,10 +62,10 @@
     /** What the plan includes, in order. */
     features?: PricingPlansFeature[]
     /** The card button; `{ label, href }`. */
-    action?: PricingPlansAction
+    action?: SectionTitleAction
   }
 
-  interface Props {
+  export interface PricingPlansProps {
     /** In-page id set on the band so a hash link can target it. */
     anchor?: string
     /** The billing periods of the toggle, in order; each is `{ label, value }`. The toggle shows with two or more and opens on the first. */
@@ -81,7 +76,7 @@
     plans?: PricingPlansPlan[]
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<PricingPlansProps>(), {
     anchor: '',
     periods: () => [],
     periodsAriaLabel: '',

@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { inject, onActivated, onBeforeUnmount, onDeactivated, onMounted } from 'vue'
 
-  import type { ConsoleLayoutCrumb } from '../console-layout.vue'
+  import type { BreadcrumbItemData } from '../console-layout.vue'
   import { type ConsoleLayoutTrail, ConsoleLayoutTrailsInjectionKey } from '../injection-key'
 
   defineOptions({
@@ -10,12 +10,12 @@
     render: () => null
   })
 
-  interface Props {
+  export interface ConsoleLayoutBreadcrumbsProps {
     /** The page's crumbs; without a control crumb the last one is the current page. */
-    items?: ConsoleLayoutCrumb[]
+    items?: BreadcrumbItemData[]
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<ConsoleLayoutBreadcrumbsProps>(), {
     items: () => []
   })
 

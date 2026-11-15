@@ -28,10 +28,10 @@
   import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
   import TopologyDiagram, {
-    type TopologyBindOption,
-    type TopologyLevel,
-    type TopologyNode,
-    type TopologyNodeField
+    type TopologyDiagramBindOption,
+    type TopologyDiagramLevel,
+    type TopologyDiagramNodeData,
+    type TopologyDiagramNodeField
   } from '@aziontech/webkit/topology-diagram'
   import { computed, onBeforeUnmount, reactive, ref } from 'vue'
 
@@ -47,11 +47,11 @@
   type Target = {
     kind: string
     icon: string
-    options: TopologyBindOption[]
+    options: TopologyDiagramBindOption[]
     unbound?: string
     bound?: string
     removable?: boolean
-    fields?: TopologyNodeField[]
+    fields?: TopologyDiagramNodeField[]
   }
 
   const environments = [
@@ -173,7 +173,7 @@
   const stagedCount = computed(() => Object.keys(staged).length)
   const stagedNote = ref('')
 
-  const slotNode = (key: string): TopologyNode => {
+  const slotNode = (key: string): TopologyDiagramNodeData => {
     const target = targets[key]
     const pick = staged[key]
     const removing = pick === ''
@@ -210,7 +210,7 @@
     }
   }
 
-  const topologyLevels = computed<TopologyLevel[]>(() => [
+  const topologyLevels = computed<TopologyDiagramLevel[]>(() => [
     {
       id: 'domains',
       nodes: [

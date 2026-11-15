@@ -4,14 +4,14 @@
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
   import Button from '../../actions/button/button.vue'
-  import type { CopyPromptAgent } from '../../actions/copy-prompt-button/copy-prompt-button.vue'
+  import type { CopyPromptButtonAgent } from '../../actions/copy-prompt-button/copy-prompt-button.vue'
   import CopyPromptButton from '../../actions/copy-prompt-button/copy-prompt-button.vue'
   import FrameBox from '../../layout/frame-box/frame-box.vue'
   import TextureMaterial from '../../marketing/texture-material/texture-material.vue'
 
   defineOptions({ name: 'DocAgentCard', inheritAttrs: false })
 
-  interface Props {
+  export interface DocAgentCardProps {
     /** The prompt `CopyPromptButton` copies. */
     prompt: string
     /** Card heading (an `h3`); empty uses the catalog's `Your AI agent, fluent in Azion`. */
@@ -19,7 +19,7 @@
     /** One or two sentences on what the prompt gives the agent; empty uses the catalog's. */
     description?: string
     /** The agents whose marks the copy button shows; unset keeps the button's default list. */
-    agents?: CopyPromptAgent[]
+    agents?: CopyPromptButtonAgent[]
     /** Question over the guided action; empty uses the catalog's `Prefer the guided route?`. */
     asideTitle?: string
     /** Label of the guided action; empty uses the catalog's `Agent setup`. */
@@ -28,7 +28,7 @@
     actionHref?: string
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<DocAgentCardProps>(), {
     title: '',
     description: '',
     agents: undefined,

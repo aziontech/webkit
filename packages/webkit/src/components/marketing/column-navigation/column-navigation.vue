@@ -11,7 +11,7 @@
   /** How many columns the directory holds below the small breakpoint. */
   export type ColumnNavigationMobileColumns = 1 | 2
 
-  interface Props {
+  export interface ColumnNavigationProps {
     /** Accessible name for the navigation landmark; a page carrying more than one needs each of them named. */
     ariaLabel?: string
     /** How many columns the directory fans out to at the large breakpoint. */
@@ -20,7 +20,7 @@
     mobileColumns?: ColumnNavigationMobileColumns
   }
 
-  withDefaults(defineProps<Props>(), {
+  withDefaults(defineProps<ColumnNavigationProps>(), {
     ariaLabel: '',
     columns: 4,
     mobileColumns: 1

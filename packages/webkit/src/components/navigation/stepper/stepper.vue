@@ -11,15 +11,14 @@
     inheritAttrs: false
   })
 
-  withDefaults(
-    defineProps<{
-      /** Accessible name for the step rail. Empty uses the locale catalog (`Steps`). */
-      ariaLabel?: string
-    }>(),
-    {
-      ariaLabel: ''
-    }
-  )
+  export interface StepperProps {
+    /** Accessible name for the step rail. Empty uses the locale catalog (`Steps`). */
+    ariaLabel?: string
+  }
+
+  withDefaults(defineProps<StepperProps>(), {
+    ariaLabel: ''
+  })
 
   defineSlots<{
     /** The Stepper.Step children, in the order they are numbered. */

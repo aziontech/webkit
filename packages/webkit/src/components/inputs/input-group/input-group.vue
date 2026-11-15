@@ -8,7 +8,7 @@
 
   export type InputGroupSize = 'small' | 'medium' | 'large'
 
-  export interface Props {
+  export interface InputGroupProps {
     /** Size token; affects the root's height and inner addon padding. Heights: small=28px, medium=32px, large=40px. Matches the sibling input primitives — set the same size on child controls to keep them visually aligned. */
     size?: InputGroupSize
     /** Renders the error border and marks the controls inside invalid (aria-invalid on InputGroup.Input and the other field controls). */
@@ -18,9 +18,7 @@
     /** Renders the disabled visual, sets aria-disabled on the root and disables the field controls inside (InputGroup.Input, Input, Select and the other controls that read the Field context). A Button or IconButton inside needs its own disabled. */
     disabled?: boolean
   }
-  export type InputGroupProps = Props
-
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<InputGroupProps>(), {
     size: 'medium',
     invalid: false,
     required: false,

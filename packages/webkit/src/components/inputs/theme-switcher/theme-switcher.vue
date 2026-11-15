@@ -14,15 +14,13 @@
 
   export type ThemeSwitcherValue = 'system' | 'dark' | 'light'
 
-  interface Props {
+  export interface ThemeSwitcherProps {
     /** Disables the whole control and applies disabled tokens. */
     disabled?: boolean
     /** Accessible name for the icon-only segmented group. Empty uses the locale catalog (`Theme`). */
     ariaLabel?: string
   }
-  export type ThemeSwitcherProps = Props
-
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<ThemeSwitcherProps>(), {
     disabled: false,
     ariaLabel: ''
   })

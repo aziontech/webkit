@@ -14,18 +14,17 @@
     inheritAttrs: false
   })
 
-  const props = withDefaults(
-    defineProps<{
-      /** The row's name, for the trigger's accessible name (`Actions for edge-app`). Empty uses `Row actions`. */
-      name?: string
-      /** Disables the trigger. */
-      disabled?: boolean
-    }>(),
-    {
-      name: '',
-      disabled: false
-    }
-  )
+  export interface TableCellActionsProps {
+    /** The row's name, for the trigger's accessible name (`Actions for edge-app`). Empty uses `Row actions`. */
+    name?: string
+    /** Disables the trigger. */
+    disabled?: boolean
+  }
+
+  const props = withDefaults(defineProps<TableCellActionsProps>(), {
+    name: '',
+    disabled: false
+  })
 
   const emit = defineEmits<{
     /** An option was chosen; `value` is the option's `value`. */

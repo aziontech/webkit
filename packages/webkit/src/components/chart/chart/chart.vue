@@ -49,7 +49,7 @@
 
   defineOptions({ name: 'Chart', inheritAttrs: false })
 
-  interface Props {
+  export interface ChartProps {
     /** Series to plot. The first six take the fixed categorical slots in order; the rest fold into Other. */
     series?: ChartSeries[]
     /** One category label per index: a string, a number, or a Date. */
@@ -90,7 +90,7 @@
     ariaLabel?: string
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<ChartProps>(), {
     series: () => [],
     labels: () => [],
     orientation: 'vertical',

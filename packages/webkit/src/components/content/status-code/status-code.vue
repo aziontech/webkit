@@ -12,7 +12,7 @@
   export type StatusCodeClass =
     'informational' | 'success' | 'redirect' | 'client-error' | 'server-error' | 'invalid'
 
-  interface Props {
+  export interface StatusCodeProps {
     /** HTTP status, as a number or a string (`404`, `'404'`). 1xx to 3xx render neutral, 4xx warning, 5xx danger; anything else renders muted as written, empty a dash. */
     code?: number | string
     /** Request method shown before the code (`GET`, `POST`), upper-cased. Empty shows the code alone. */
@@ -21,7 +21,7 @@
     size?: StatusCodeSize
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<StatusCodeProps>(), {
     code: '',
     method: '',
     size: 'medium'

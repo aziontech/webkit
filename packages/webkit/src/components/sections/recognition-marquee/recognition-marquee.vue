@@ -28,7 +28,7 @@
     logoLight?: string
   }
 
-  interface Props {
+  export interface RecognitionMarqueeProps {
     /** Overline above the section title. */
     eyebrow?: string
     /** Headline of the band, rendered by the section title as its `h2`; the band renders no header when empty. */
@@ -43,7 +43,7 @@
     anchor?: string
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<RecognitionMarqueeProps>(), {
     eyebrow: '',
     title: '',
     ariaLabel: '',

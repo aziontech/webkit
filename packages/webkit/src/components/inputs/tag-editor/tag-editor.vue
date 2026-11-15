@@ -27,7 +27,7 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface TagEditorProps {
     /** Keys offered while typing a key, for example the keys already used in the account. */
     keySuggestions?: string[]
     /** Values offered per key while typing a value. */
@@ -47,9 +47,7 @@
     /** Accessible name of the list of tags. Empty uses the locale catalog. */
     ariaLabel?: string
   }
-  export type TagEditorProps = Props
-
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<TagEditorProps>(), {
     keySuggestions: () => [],
     valueSuggestions: () => ({}),
     limit: 50,

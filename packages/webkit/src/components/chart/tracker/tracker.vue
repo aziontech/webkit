@@ -20,7 +20,7 @@
     label: string
   }
 
-  interface Props {
+  export interface TrackerProps {
     /** One block per period, oldest first; each item is { id?: string; severity?: ChartStatus; label: string }. No severity renders a neutral no-data block. */
     items?: TrackerItem[]
     /** Renders a Skeleton strip in place of the blocks. */
@@ -31,7 +31,7 @@
     ariaLabel?: string
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<TrackerProps>(), {
     items: () => [],
     loading: false,
     error: '',

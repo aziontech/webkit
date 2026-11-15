@@ -29,7 +29,7 @@
   /** Where the media slot sits in its column. */
   export type HeroMediaAlign = 'center' | 'end'
 
-  interface Props {
+  export interface HeroProps {
     /** Height of the band; `screen` fills one viewport minus `--hero-banner-offset`. */
     kind?: HeroKind
     /** Width the inner column is capped at; `site` is the marketing measure, `full` keeps only the inset. */
@@ -66,7 +66,7 @@
     tickerLabel?: string
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<HeroProps>(), {
     kind: 'band',
     maxWidth: '7xl',
     bordered: true,

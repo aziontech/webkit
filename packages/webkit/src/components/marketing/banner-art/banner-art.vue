@@ -10,14 +10,14 @@
   /** The backdrop drawn behind a band: `globe` hangs a globe half past the page's inline-end rule over the dot lattice, `map` insets the world map beside the copy, `network` lays the map full bleed with its PoPs lit, traffic crossing between them and a scrim over the copy column. */
   export type BannerArtKind = 'globe' | 'map' | 'network'
 
-  interface Props {
+  export interface BannerArtProps {
     /** Which backdrop to draw. */
     kind?: BannerArtKind
     /** Spins the globe or pulses the PoPs; a still frame when false or under reduced motion. */
     animated?: boolean
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<BannerArtProps>(), {
     kind: 'map',
     animated: true
   })

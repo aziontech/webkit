@@ -25,7 +25,7 @@
     href?: string
   }
 
-  interface Props {
+  export interface BarListProps {
     /** Rows to rank. An item with href renders as a link. */
     items?: BarListItem[]
     /** Row order; none keeps the order of items. */
@@ -50,7 +50,7 @@
     ariaLabel?: string
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<BarListProps>(), {
     items: () => [],
     sort: 'descending',
     color: 1,

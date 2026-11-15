@@ -6,7 +6,7 @@
 
   defineOptions({ name: 'ChartReference', inheritAttrs: false })
 
-  interface Props {
+  export interface ChartReferenceProps {
     /** Value the reference line is drawn at. Leave unset and set `from` and `to` for a band. */
     value?: number
     /** One bound of a reference band, used when `value` is unset. */
@@ -19,7 +19,7 @@
     severity?: ChartThresholdSeverity
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<ChartReferenceProps>(), {
     value: undefined,
     from: undefined,
     to: undefined,

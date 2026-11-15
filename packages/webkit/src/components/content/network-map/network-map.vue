@@ -35,7 +35,7 @@
   /** Axis the map fades out along, so it meets content without a hard edge. */
   export type NetworkMapFade = 'none' | 'top' | 'bottom' | 'left' | 'right' | 'edges' | 'vignette'
 
-  interface Props {
+  export interface NetworkMapProps {
     /** Which part of the world has its PoPs lit; the map always frames the whole world. */
     region?: NetworkMapRegion
     /** How many PoPs are lit, from `none` to `high`. */
@@ -58,7 +58,7 @@
     traffic?: boolean
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<NetworkMapProps>(), {
     region: 'world',
     density: 'medium',
     animated: false,

@@ -10,12 +10,12 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface HelpPanelLinksProps {
     /** The heading over the links. Absent uses the locale catalog (`Learn more`); an empty string renders no heading. */
     title?: string
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<HelpPanelLinksProps>(), {
     title: undefined
   })
 

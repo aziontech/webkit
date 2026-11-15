@@ -91,10 +91,10 @@ describe('LogoWallQuote', () => {
     )
   })
 
-  it('reflects logoTreatment on the mark, defaulting to as-is', () => {
+  it('reflects logoTreatment on the mark, defaulting to color', () => {
     const { getByRole } = band()
 
-    expect(getByRole('img', { name: 'Magalu' })).toHaveAttribute('data-treatment', 'as-is')
+    expect(getByRole('img', { name: 'Magalu' })).toHaveAttribute('data-treatment', 'color')
     expect(getByRole('img', { name: 'Banco' })).toHaveAttribute('data-treatment', 'monochrome')
   })
 
@@ -109,16 +109,16 @@ describe('LogoWallQuote', () => {
     ).toEqual(['/logos/agibank-reversed.svg', '/logos/agibank-color.svg'])
   })
 
-  it('draws a monochrome treatment in the theme ink and maps invert-light to light artwork', () => {
+  it('draws a monochrome treatment in the theme ink and pins a knockout mark black', () => {
     const { getByRole } = band({
       logos: [
         ...logos,
-        { name: 'Itau', logo: '/logos/itau.svg', logoTreatment: 'invert-light', href: '/itau' }
+        { name: 'Itau', logo: '/logos/itau.svg', logoTreatment: 'knockout', href: '/itau' }
       ]
     })
 
     expect(getByRole('img', { name: 'Banco' })).toHaveAttribute('data-kind', 'monochrome')
-    expect(getByRole('img', { name: 'Itau' })).toHaveAttribute('data-artwork', 'light')
+    expect(getByRole('img', { name: 'Itau' })).toHaveAttribute('data-kind', 'knockout')
   })
 
   it('takes the registry artwork of a single-file mark', () => {

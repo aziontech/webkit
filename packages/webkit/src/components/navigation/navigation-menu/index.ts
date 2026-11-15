@@ -51,3 +51,4 @@ export type {
   NavigationMenuSide
 } from './navigation-menu-positioner.vue'
 export type { NavigationMenuOrientation, NavigationMenuValue } from './navigation-menu-root.vue'
+export type { NavigationMenuProps } from './navigation-menu-root.vue'

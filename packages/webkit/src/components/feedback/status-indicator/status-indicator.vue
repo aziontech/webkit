@@ -15,7 +15,7 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface StatusIndicatorProps {
     /** Severity token driving the status dot color. */
     severity?: StatusIndicatorSeverity
     /** Transitional state: a spinner replaces the dot and the label gains a trailing ellipsis, so pass the bare verb (Deploying); a trailing ellipsis or three periods already in the label are not doubled. */
@@ -24,7 +24,7 @@
     label?: string
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<StatusIndicatorProps>(), {
     severity: 'success',
     loading: false,
     label: ''

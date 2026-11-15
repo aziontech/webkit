@@ -21,7 +21,7 @@ Add this entry to the `sections` array of the page JSON. `_id` picks the block a
 - `eyebrow` and `title` fill the section title.
 - `logos[]` takes a `name`, a `logo` file and an optional `href` to the success case.
 - `logoLight` adds a second file for the light theme.
-- `logoTreatment` is `as-is`, `monochrome` (a one-ink logo drawn in the theme's ink) or `invert-light` (a reversed logo flipped on the light theme).
+- `logoTreatment` is `color`, `monochrome` (a one-ink logo drawn in the theme's ink) or `knockout` (black, for a coloured fill); a reversed logo sets `artwork: 'light'` so it flips on the light theme.
 - `quote` takes `text`, `name`, `jobTitle`, `logo` and `logoAlt`; `primaryAction` is its button, with `label`, `href`, `trailing` and an optional `target`.
 - No site page uses this block yet, so this entry is built from the Solutions story.
 

@@ -15,7 +15,7 @@
   /** Whether the card draws its own surface. */
   export type CardPricingKind = 'contained' | 'transparent'
 
-  interface CardPricingProps {
+  export interface CardPricingProps {
     /** Plan name shown as the card heading. */
     title?: string
     /** Caveat under the price, such as the billing terms. */

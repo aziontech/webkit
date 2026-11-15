@@ -62,7 +62,7 @@
   /** How the field edits the query. */
   export type PropertyFilterMode = 'tokens' | 'query'
 
-  interface Props {
+  export interface PropertyFilterProps {
     /** Properties the suggestions offer, with their operators and values. */
     properties?: FilteringProperty[]
     /** Items that match the query, announced next to the tokens. Hidden when unset. */
@@ -89,7 +89,7 @@
     showOperations?: boolean
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<PropertyFilterProps>(), {
     properties: () => [],
     totalCount: undefined,
     placeholder: '',

@@ -28,7 +28,7 @@
   export type MediaSplitBandScene = {
     /** The webkit scene asset to draw. */
     component: MediaSplitBandSceneName
-    /** Props bound onto the scene. */
+    /** MediaSplitBandProps bound onto the scene. */
     props?: Record<string, unknown>
   }
 
@@ -83,7 +83,7 @@
     icon?: string
   }
 
-  interface Props {
+  export interface MediaSplitBandProps {
     /** In-page id set on the band so a `#hash` link can scroll to it. */
     anchor?: string
     /** Short overline above the headline. */
@@ -124,7 +124,7 @@
     secondaryAction?: MediaSplitBandAction
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<MediaSplitBandProps>(), {
     anchor: '',
     eyebrow: '',
     title: '',

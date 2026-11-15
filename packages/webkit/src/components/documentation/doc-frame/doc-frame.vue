@@ -10,7 +10,7 @@
 
   defineOptions({ name: 'DocFrame', inheritAttrs: false })
 
-  interface Props {
+  export interface DocFrameProps {
     /** Caption under the frame, centered; plain-text fallback for the caption slot. */
     caption?: string
     /** Lead-in above the frame, left aligned; plain-text fallback for the hint slot. */
@@ -23,7 +23,7 @@
     autoplay?: boolean
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<DocFrameProps>(), {
     caption: '',
     hint: '',
     src: '',

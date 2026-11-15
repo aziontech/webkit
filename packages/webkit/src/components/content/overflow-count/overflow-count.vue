@@ -25,14 +25,14 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface OverflowCountProps {
     /** The hidden items. The chip reads a plus sign and the count; an item with `href` opens in a new tab. */
     items?: OverflowCountItem[]
     /** What the items are, for the summary and the trigger's name. Empty uses the catalog (`item` / `items`). */
     noun?: OverflowCountNoun
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<OverflowCountProps>(), {
     items: () => [],
     noun: ''
   })

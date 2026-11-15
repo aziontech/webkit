@@ -32,7 +32,7 @@
   /** How a collapsed sidebar leaves the layout: entirely, or down to an icon rail. */
   export type SidebarCollapsible = 'offcanvas' | 'icon'
 
-  interface Props {
+  export interface SidebarProps {
     ariaLabel?: string
     resizable?: boolean
     /** Adds the collapse trigger; true or offcanvas takes a collapsed sidebar out of the layout, icon keeps an icon rail. */
@@ -46,7 +46,7 @@
     resizeAriaLabel?: string
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<SidebarProps>(), {
     ariaLabel: '',
     resizable: false,
     collapsible: false,

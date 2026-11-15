@@ -7,19 +7,19 @@
   import type { TextureMaterialKind } from '../../../marketing/texture-material/texture-material.vue'
   import Tag from '../../tag/tag.vue'
   import LegacySwitch from '../parts/legacy-switch.vue'
-  import ShellMockup, { type ShellMockupFade } from '../shell-mockup/shell-mockup.vue'
+  import ShellMockup, { type ProductWidgetShellMockupFade } from '../shell-mockup/shell-mockup.vue'
   import ShellMockupPart from '../shell-mockup/shell-mockup-part/shell-mockup-part.vue'
 
   defineOptions({ name: 'ApplicationVersionWidget' })
 
-  export type ApplicationVersionTab =
+  export type ProductWidgetApplicationVersionTab =
     'main-settings' | 'cache-settings' | 'device-groups' | 'functions' | 'rules-engine'
 
   interface Props {
     /** Tab of the version editor on show. */
-    tab?: ApplicationVersionTab
+    tab?: ProductWidgetApplicationVersionTab
     /** Edge the mockup fades out along. */
-    fade?: ShellMockupFade
+    fade?: ProductWidgetShellMockupFade
     /** Texture the frame is grounded with. */
     texture?: TextureMaterialKind
     /** Whether this widget is the one showing. */

@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 6
 template: 2
-checksum: d135ef0749e08e051db7f02aa12cab8dff8ee834119723cca45482ec5bc71402
+checksum: 025319420163c851fd03fa9857313e726defb8e15ecd67c4182906b14fff2f1f
 created: 2026-11-12
 last_updated: 2026-11-15
 ---
@@ -70,14 +70,14 @@ The "Copy prompt" button of a docs or product home: one dark chip that copies a 
 
 ## Props
 
-| Prop          | Type                | Default                         | Required | JSDoc                                                                                                                                                                                             |
-| ------------- | ------------------- | ------------------------------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `value`       | `string`            | —                               | true     | The prompt copied to the clipboard on activation.                                                                                                                                                 |
-| `label`       | `string`            | `''`                            | false    | Visible text and accessible name while idle; empty uses the catalog's `Copy prompt`.                                                                                                              |
-| `copiedLabel` | `string`            | `''`                            | false    | Visible text announced after a copy; empty uses the catalog's `Copied`.                                                                                                                           |
-| `agents`      | `CopyPromptAgent[]` | Claude, ChatGPT, Gemini, Cursor | false    | The agents whose marks follow the label, in order; each is `{ name, icon?, logo? }`, drawn from `logo` through `Logo` when set and from the `icon` glyph otherwise; an empty list draws no marks. |
-| `disabled`    | `boolean`           | `false`                         | false    | Disables the button; `copy` is not emitted.                                                                                                                                                       |
-| `closable`    | `boolean`           | `false`                         | false    | Shows a dismiss button beside the chip; activating it removes both from the layout and emits `close`.                                                                                             |
+| Prop          | Type                      | Default                         | Required | JSDoc                                                                                                                                                                                             |
+| ------------- | ------------------------- | ------------------------------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `value`       | `string`                  | —                               | true     | The prompt copied to the clipboard on activation.                                                                                                                                                 |
+| `label`       | `string`                  | `''`                            | false    | Visible text and accessible name while idle; empty uses the catalog's `Copy prompt`.                                                                                                              |
+| `copiedLabel` | `string`                  | `''`                            | false    | Visible text announced after a copy; empty uses the catalog's `Copied`.                                                                                                                           |
+| `agents`      | `CopyPromptButtonAgent[]` | Claude, ChatGPT, Gemini, Cursor | false    | The agents whose marks follow the label, in order; each is `{ name, icon?, logo? }`, drawn from `logo` through `Logo` when set and from the `icon` glyph otherwise; an empty list draws no marks. |
+| `disabled`    | `boolean`                 | `false`                         | false    | Disables the button; `copy` is not emitted.                                                                                                                                                       |
+| `closable`    | `boolean`                 | `false`                         | false    | Shows a dismiss button beside the chip; activating it removes both from the layout and emits `close`.                                                                                             |
 
 ## v-model
 

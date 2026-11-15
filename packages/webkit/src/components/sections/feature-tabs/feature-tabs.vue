@@ -8,6 +8,7 @@
   import FrameBox from '../../layout/frame-box/frame-box.vue'
   import MediaTabs from '../../marketing/media-tabs/media-tabs.vue'
   import SectionModule from '../../marketing/section-module/section-module.vue'
+  import type { SectionTitleAction } from '../../marketing/section-title/section-title.vue'
   import SectionTitle from '../../marketing/section-title/section-title.vue'
   import Link from '../../navigation/link/link.vue'
 
@@ -16,17 +17,7 @@
     inheritAttrs: false
   })
 
-  /** The action of the band: a button in the section title, or a small link under the frame when there is no title. */
-  export type FeatureTabsAction = {
-    /** Visible label of the link. */
-    label: string
-    /** Destination the link points to. */
-    href: string
-    /** Closes the label on a trailing chevron that reads as "go". */
-    trailing?: boolean
-    /** Link target of the action. */
-    target?: '_blank' | '_self'
-  }
+  export type { SectionTitleAction }
 
   /** A code file a tab opens as its media. */
   export type FeatureTabsCode = CodeBlockTab
@@ -50,7 +41,7 @@
     illustrationLabel?: string
   }
 
-  interface Props {
+  export interface FeatureTabsProps {
     /** In-page id set on the band so a `#hash` link can scroll to it. */
     anchor?: string
     /** Overline above the section title. */
@@ -70,10 +61,10 @@
     /** Accessible name of the copy button on each tab's code file; empty keeps the code block's own. */
     copyAriaLabel?: string
     /** Button in the section title, beside the headline (under the frame when the band has no title); `{ label, href, trailing?, target? }` where `trailing` adds the chevron. Omitted when absent. */
-    primaryAction?: FeatureTabsAction
+    primaryAction?: SectionTitleAction
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<FeatureTabsProps>(), {
     anchor: '',
     eyebrow: '',
     title: '',

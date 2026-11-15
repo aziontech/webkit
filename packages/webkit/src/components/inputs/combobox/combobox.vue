@@ -41,7 +41,7 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface ComboboxProps {
     /** Suggestions: `{ value, label?, description?, group?, disabled? }`. */
     options?: ComboboxOption[]
     /** Placeholder of the field. */
@@ -71,9 +71,7 @@
     /** Initial open state of the list when uncontrolled (v-model:open unbound). */
     defaultOpen?: boolean
   }
-  export type ComboboxProps = Props
-
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<ComboboxProps>(), {
     options: () => [],
     placeholder: '',
     ariaLabel: '',

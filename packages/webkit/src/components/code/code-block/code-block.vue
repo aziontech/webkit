@@ -69,7 +69,7 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface CodeBlockProps {
     /** Tab definitions with label, value, code, and optional language, filename, diff, or highlight metadata. */
     tabs?: CodeBlockTab[]
     /** Initial active tab when uncontrolled. */
@@ -98,7 +98,7 @@
     diffView?: CodeBlockDiffView
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<CodeBlockProps>(), {
     tabs: () => [],
     defaultValue: undefined,
     code: '',

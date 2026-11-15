@@ -6,7 +6,7 @@ status: implemented
 spec_version: 5
 created: 2026-11-04
 last_updated: 2026-11-15
-checksum: 3d0157a051800aacd625786ed9b363d4f2cf4d2b6e551ff391e2467a2109cacc
+checksum: 8db7d7ec7a291f60fa73bb396e33c2d41f559c9b7849e6569694f33058b0ff36
 ---
 
 # ClientQuotes — Component Spec
@@ -78,7 +78,7 @@ The client-stories band: a framed `quote-tabs` carousel of customer quotes, each
 | `anchor`           | `string`             | `''`        | false    | In-page id set on the band so a hash link can target it.                                                                                                                        |
 | `ariaLabel`        | `string`             | `''`        | false    | Accessible name of the quote carousel.                                                                                                                                          |
 | `items`            | `ClientQuotesItem[]` | `[]`        | false    | The quotes, in order; each is `{ text, name?, jobTitle?, mark?, logo?, clientName?, photo? }` where `mark` is a registry mark name and `logo` a mark URL named by `clientName`. |
-| `primaryAction`    | `ClientQuotesAction` | `undefined` | false    | Button under the quotes; `{ label, href, trailing? }`. Omitted when absent.                                                                                                     |
+| `primaryAction`    | `SectionTitleAction` | `undefined` | false    | Button under the quotes; `{ label, href, trailing? }`. Omitted when absent.                                                                                                     |
 | `autoplay`         | `boolean`            | `true`      | false    | Advances to the next quote on a timer, as `quote-tabs` does, with its visible pause control; pauses under the pointer or keyboard focus and never runs under reduced motion.    |
 | `autoplayInterval` | `number`             | `5000`      | false    | Milliseconds each quote is held before the band advances.                                                                                                                       |
 

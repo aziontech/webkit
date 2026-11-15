@@ -8,12 +8,12 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface AccordionTriggerProps {
     /** Heading level of the wrapping heading element for correct document outline. */
     headingLevel?: 2 | 3 | 4 | 5 | 6
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<AccordionTriggerProps>(), {
     headingLevel: 3
   })
 

@@ -26,3 +26,4 @@ ContextMenu.SubContent = DropdownMenuSubContent
 export default ContextMenu
 export { ContextMenuTrigger }
 export type { DropdownMenuOptionKind, DropdownMenuOptionValue } from './context-menu.vue'
+export type { ContextMenuProps } from './context-menu.vue'

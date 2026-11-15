@@ -4,6 +4,7 @@
   import { clientBrand } from '../../../assets/logos/clients/brands'
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
+  import type { LogoTreatment } from '../../content/logo/logo.vue'
   import FrameBox from '../../layout/frame-box/frame-box.vue'
   import LogoWall from '../../marketing/logo-wall/logo-wall.vue'
   import SectionModule from '../../marketing/section-module/section-module.vue'
@@ -13,8 +14,7 @@
     inheritAttrs: false
   })
 
-  /** How a client mark is inked on its brand face: `monochrome` flattens it, `knockout` drops it to black, `as-is` keeps its colours. */
-  export type ClientMosaicColumnsLogoTreatment = 'monochrome' | 'knockout' | 'as-is'
+  export type { LogoTreatment }
 
   /** When a column shows its story: `always` under the face, `hover` only while the card is hovered or focused. */
   export type ClientMosaicColumnsReveal = 'always' | 'hover'
@@ -44,26 +44,26 @@
     story: string
     /** Brand colours painting the face; defaults to the client registry's colours for `name`. */
     brand?: ClientMosaicColumnsBrand
-    /** How the mark is inked on the face; defaults to `as-is`. */
-    logoTreatment?: ClientMosaicColumnsLogoTreatment
+    /** How the mark is inked on the face; defaults to `color`. */
+    logoTreatment?: LogoTreatment
     /** Width of the mark as a share of the card, such as `35%`; read by `reveal="hover"`. */
     logoWidth?: string
   }
 
-  interface Props {
+  export interface ClientMosaicColumnsProps {
     /** In-page id set on the band so a hash link can target it. */
     anchor?: string
     /** Accessible name of the list of stories. */
     ariaLabel?: string
     /** Label the mark face reveals on hover and the link's accessible name. */
     linkLabel?: string
-    /** The stories, in order; each is `{ name, logo, href, story, brand?, logoTreatment? }` where `brand` is `{ base, glow, ink? }`, defaulting to the client registry's colours for `name`, and `logoTreatment` is `monochrome`, `knockout` or `as-is`. */
+    /** The stories, in order; each is `{ name, logo, href, story, brand?, logoTreatment? }` where `brand` is `{ base, glow, ink? }`, defaulting to the client registry's colours for `name`, and `logoTreatment` is `color`, `monochrome` or `knockout`. */
     cells?: ClientMosaicColumnsCell[]
     /** When the story shows: `always` under each face, or `hover`, where each card opens to reveal it while hovered or focused and stays open below the large breakpoint. */
     reveal?: ClientMosaicColumnsReveal
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<ClientMosaicColumnsProps>(), {
     anchor: '',
     ariaLabel: '',
     linkLabel: '',
@@ -258,7 +258,7 @@
                     :src="cell.logo"
                     :alt="cell.name"
                     decoding="async"
-                    :data-treatment="cell.logoTreatment ?? 'as-is'"
+                    :data-treatment="cell.logoTreatment ?? 'color'"
                     class="h-7 w-auto max-w-full object-contain sm:max-w-40 data-[treatment=monochrome]:brightness-0 [[data-theme=dark]_&[data-treatment=monochrome]]:invert data-[treatment=knockout]:brightness-0"
                   />
                 </template>

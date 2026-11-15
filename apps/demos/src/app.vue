@@ -2,7 +2,7 @@
   import Button from '@aziontech/webkit/button'
   import ButtonHighlight from '@aziontech/webkit/button-highlight'
   import Command from '@aziontech/webkit/command'
-  import ConsoleLayout, { type ConsoleLayoutCrumb } from '@aziontech/webkit/console-layout-root'
+  import ConsoleLayout, { type BreadcrumbItemData } from '@aziontech/webkit/console-layout-root'
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
   import IconButton from '@aziontech/webkit/icon-button'
   import { ptBR } from '@aziontech/webkit/locales/pt-BR'
@@ -23,7 +23,7 @@
   const route = useRoute()
   const router = useRouter()
   const focused = computed(() => route.meta.shell === 'focused')
-  const breadcrumbs = computed(() => (route.meta.breadcrumbs ?? []) as ConsoleLayoutCrumb[])
+  const breadcrumbs = computed(() => (route.meta.breadcrumbs ?? []) as BreadcrumbItemData[])
 
   const recents = computed(() =>
     resources.value.slice(0, 3).map((resource) => ({

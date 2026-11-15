@@ -15,14 +15,14 @@
   /** Layout of the row: one ruled strip, or standalone cards with a gutter. */
   export type CarouselKind = CarouselLayout
 
-  interface Props {
+  export interface CarouselProps {
     /** Accessible name for the scrollable track, announced before its contents. */
     ariaLabel?: string
     /** Layout of the row: `strip` sets the cards edge to edge as one ruled strip, `cards` separates them with a gutter and rounds each card. */
     kind?: CarouselKind
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<CarouselProps>(), {
     ariaLabel: '',
     kind: 'strip'
   })

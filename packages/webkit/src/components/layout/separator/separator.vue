@@ -8,7 +8,7 @@
 
   type SeparatorOrientation = 'horizontal' | 'vertical'
 
-  interface Props {
+  export interface SeparatorProps {
     /** Layout axis of the separator line. */
     orientation?: SeparatorOrientation
     /** Fallback centered text shown when the default slot is empty. */
@@ -17,7 +17,7 @@
     decorative?: boolean
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<SeparatorProps>(), {
     orientation: 'horizontal',
     label: '',
     decorative: false

@@ -17,7 +17,7 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface AccordionProps {
     /** Whether one or multiple items can be open at the same time. */
     type?: AccordionType
     /** Initial open item(s) when uncontrolled. */
@@ -30,7 +30,7 @@
     iconPosition?: AccordionIconPosition
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<AccordionProps>(), {
     type: 'single',
     defaultValue: null,
     collapsible: true,

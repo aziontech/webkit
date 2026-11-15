@@ -14,12 +14,12 @@
     footer(): unknown
   }>()
 
-  interface Props {
+  export interface DropdownMenuGroupProps {
     /** Section label rendered above the options. Omit for an unlabeled group. */
     label?: string
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<DropdownMenuGroupProps>(), {
     label: ''
   })
 

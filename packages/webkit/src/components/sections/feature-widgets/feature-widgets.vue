@@ -12,6 +12,7 @@
   import BentoGridCell from '../../marketing/bento-grid/bento-grid-cell/bento-grid-cell.vue'
   import SectionModule from '../../marketing/section-module/section-module.vue'
   import SectionTitle, {
+    type SectionTitleAction,
     type SectionTitleKind
   } from '../../marketing/section-title/section-title.vue'
 
@@ -20,15 +21,7 @@
     inheritAttrs: false
   })
 
-  /** A call to action under the headline. */
-  export type FeatureWidgetsAction = {
-    /** Visible label of the action. */
-    label: string
-    /** Destination the action links to. */
-    href: string
-    /** Closes the label on a trailing chevron that reads as "go". */
-    trailing?: boolean
-  }
+  export type { SectionTitleAction }
 
   /** The copy affordance of a cell: a button that puts a prompt on the clipboard. */
   export type FeatureWidgetsCopy = {
@@ -55,12 +48,12 @@
     /** Name of the illustration drawn above the sentence when no scene is set. */
     illustration?: string
     /** Outlined link button rendered at the foot of the cell; `{ label, href }`. */
-    action?: FeatureWidgetsAction
+    action?: SectionTitleAction
     /** Copy button rendered at the foot of the cell; `{ label, text }` where `text` goes to the clipboard. */
     copy?: FeatureWidgetsCopy
   }
 
-  interface Props {
+  export interface FeatureWidgetsProps {
     /** In-page id set on the band so a `#hash` link can scroll to it. */
     anchor?: string
     /** Overline above the section title. */
@@ -70,9 +63,9 @@
     /** Supporting sentence under the headline. */
     description?: string
     /** First button under the headline; `{ label, href, trailing? }`. Omitted when absent. */
-    primaryAction?: FeatureWidgetsAction
+    primaryAction?: SectionTitleAction
     /** Second, outlined button under the headline; `{ label, href, trailing? }` where `trailing` adds the chevron. Omitted when absent. */
-    secondaryAction?: FeatureWidgetsAction
+    secondaryAction?: SectionTitleAction
     /** Alignment of the section title over the grid: `center`, `start` or `split`. */
     titleKind?: SectionTitleKind
     /** Column count of the grid from the medium breakpoint up: `2`, `3` or `4`. */
@@ -83,7 +76,7 @@
     items?: FeatureWidgetsItem[]
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<FeatureWidgetsProps>(), {
     anchor: '',
     eyebrow: '',
     title: '',

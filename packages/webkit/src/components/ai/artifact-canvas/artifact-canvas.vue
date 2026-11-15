@@ -14,7 +14,7 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface ArtifactCanvasProps {
     /** File name or title of the artifact (`top-orders.sql`); names the panel. */
     title: string
     /** Facts that help recognize it, after the title: language, size, rows (`SQL · 12 lines`). */
@@ -31,7 +31,7 @@
     streaming?: boolean
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<ArtifactCanvasProps>(), {
     meta: '',
     kind: 'document',
     versions: 1,

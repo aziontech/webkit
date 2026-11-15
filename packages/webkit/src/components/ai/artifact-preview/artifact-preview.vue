@@ -12,7 +12,7 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface ArtifactPreviewProps {
     /** File name or title of what was generated (`cache-rules.json`). */
     title: string
     /** One line on what it is or does. */
@@ -29,7 +29,7 @@
     openable?: boolean
   }
 
-  withDefaults(defineProps<Props>(), {
+  withDefaults(defineProps<ArtifactPreviewProps>(), {
     description: '',
     meta: '',
     icon: 'ai ai-file',

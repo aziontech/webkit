@@ -3,19 +3,19 @@
 
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
-  import type { AiSource } from './types'
+  import type { SourcesItem } from './types'
   import { sourceAnchor } from './types'
 
-  export type { AiSource }
+  export type { SourcesItem }
 
   defineOptions({
     name: 'Sources',
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface SourcesProps {
     /** The sources behind the response, in citation order; item `n` is what `[n]` points at. */
-    items?: AiSource[]
+    items?: SourcesItem[]
     /** Id prefix of the list items (`<anchor>-source-<n>`); pass the same value to `StreamingResponse` so its citations link here. */
     anchor?: string
     /** Heading of the disclosure. Empty uses the locale catalog (`3 sources`). */
@@ -24,7 +24,7 @@
     defaultOpen?: boolean
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<SourcesProps>(), {
     items: () => [],
     anchor: '',
     title: '',

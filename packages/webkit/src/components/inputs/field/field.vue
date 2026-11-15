@@ -8,7 +8,7 @@
     inheritAttrs: false
   })
 
-  export interface Props {
+  export interface FieldProps {
     /** Layout axis: label above the control, beside it, or beside it once the enclosing container (a FieldGroup, Card, drawer or dialog body) is wide enough. */
     orientation?: FieldOrientation
     /** Marks the field invalid: the control sets aria-invalid and FieldDescription switches to the invalid tone. */
@@ -18,9 +18,7 @@
     /** Shows the Required marker on FieldLabel and sets required on the wrapped control. */
     required?: boolean
   }
-  export type FieldProps = Props
-
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<FieldProps>(), {
     orientation: 'vertical',
     invalid: false,
     disabled: false,

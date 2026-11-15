@@ -8,7 +8,7 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface EmptyStateProps {
     /** Primary heading announcing the empty resource. */
     title: string
     /** Supporting body copy below the title. */
@@ -21,7 +21,7 @@
     bordered?: boolean
   }
 
-  withDefaults(defineProps<Props>(), {
+  withDefaults(defineProps<EmptyStateProps>(), {
     description: '',
     icon: '',
     size: 'medium',

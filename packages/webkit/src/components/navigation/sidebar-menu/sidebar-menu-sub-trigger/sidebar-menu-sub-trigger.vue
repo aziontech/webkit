@@ -24,7 +24,7 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface SidebarMenuSubTriggerProps {
     /** Visible row text. */
     label?: string
     /** Whether the children expand in place or replace the menu. */
@@ -37,7 +37,7 @@
     disabled?: boolean
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<SidebarMenuSubTriggerProps>(), {
     label: '',
     kind: 'inline',
     icon: '',

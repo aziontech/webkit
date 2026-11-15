@@ -18,7 +18,7 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface BadgeProps {
     /** Fallback text when the default slot is empty. */
     label?: string
     /** Brand look of the badge surface and label, used when `severity` is not set. */
@@ -29,7 +29,7 @@
     size?: BadgeSize
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<BadgeProps>(), {
     label: '',
     variant: 'primary',
     severity: undefined,

@@ -12,12 +12,12 @@
     default(): unknown
   }>()
 
-  interface Props {
+  export interface DropdownMenuSubProps {
     /** Opens the sub-menu when its parent panel opens; the user can still close it. */
     defaultOpen?: boolean
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<DropdownMenuSubProps>(), {
     defaultOpen: false
   })
 

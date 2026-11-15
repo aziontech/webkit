@@ -39,7 +39,13 @@ export type {
   SidebarMenuNode,
   SidebarMenuSubKind
 } from './injection-key'
+export type { SidebarMenuProps } from './sidebar-menu.vue'
+export type { SidebarMenuBackProps } from './sidebar-menu-back/sidebar-menu-back.vue'
+export type { SidebarMenuGroupProps } from './sidebar-menu-group/sidebar-menu-group.vue'
 export type {
   SidebarMenuItemTagSeverity,
   SidebarMenuItemTagVariant
 } from './sidebar-menu-item/sidebar-menu-item.vue'
+export type { SidebarMenuItemProps } from './sidebar-menu-item/sidebar-menu-item.vue'
+export type { SidebarMenuSubProps } from './sidebar-menu-sub/sidebar-menu-sub.vue'
+export type { SidebarMenuSubTriggerProps } from './sidebar-menu-sub-trigger/sidebar-menu-sub-trigger.vue'

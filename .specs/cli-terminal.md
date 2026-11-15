@@ -6,8 +6,9 @@ status: implemented
 spec_version: 3
 created: 2026-11-05
 last_updated: 2026-11-15
-checksum: 3497fd0070670c9466a48b5d3120f2e3a4ddf063daa4b1508a55d232054a7a76
+checksum: 246cd37fea138fb49ef355a537c23aefb9a683545b6a13072051a5ccf63d6dbf
 ---
+
 # CliTerminal — Component Spec
 
 ## Purpose
@@ -40,7 +41,7 @@ The Azion CLI band of a product page: a horizontal section title with one outlin
 
 ```vue
 <script setup>
-import CliTerminal from '@aziontech/webkit/cli-terminal'
+  import CliTerminal from '@aziontech/webkit/cli-terminal'
 </script>
 
 <template>
@@ -57,16 +58,16 @@ import CliTerminal from '@aziontech/webkit/cli-terminal'
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `anchor` | `string` | `''` | false | In-page id set on the band so a `#hash` link can scroll to it. |
-| `eyebrow` | `string` | `''` | false | Overline above the section title. |
-| `title` | `string` | `''` | false | Headline of the band, rendered by the horizontal section title as its `h2`; the band renders no header when empty. |
-| `description` | `string` | `''` | false | Supporting sentence beside the headline. |
-| `script` | `CliTerminalScript` | `undefined` | false | Recorded Azion CLI session the terminal types live: `start` or `deploy`; wins over `session`. |
-| `session` | `string` | `''` | false | The terminal session shown under the header when no `script` is set, commands and their output verbatim, highlighted as bash; the band renders nothing when neither is set. |
-| `copyAriaLabel` | `string` | `''` | false | Accessible name of the session's copy button; empty keeps the code block's own. |
-| `primaryAction` | `CliTerminalAction` | `undefined` | false | Outlined button in the section title; `{ label, href, trailing?, target? }`. Omitted when absent. |
+| Prop            | Type                 | Default     | Required | JSDoc                                                                                                                                                                       |
+| --------------- | -------------------- | ----------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `anchor`        | `string`             | `''`        | false    | In-page id set on the band so a `#hash` link can scroll to it.                                                                                                              |
+| `eyebrow`       | `string`             | `''`        | false    | Overline above the section title.                                                                                                                                           |
+| `title`         | `string`             | `''`        | false    | Headline of the band, rendered by the horizontal section title as its `h2`; the band renders no header when empty.                                                          |
+| `description`   | `string`             | `''`        | false    | Supporting sentence beside the headline.                                                                                                                                    |
+| `script`        | `CliTerminalScript`  | `undefined` | false    | Recorded Azion CLI session the terminal types live: `start` or `deploy`; wins over `session`.                                                                               |
+| `session`       | `string`             | `''`        | false    | The terminal session shown under the header when no `script` is set, commands and their output verbatim, highlighted as bash; the band renders nothing when neither is set. |
+| `copyAriaLabel` | `string`             | `''`        | false    | Accessible name of the session's copy button; empty keeps the code block's own.                                                                                             |
+| `primaryAction` | `SectionTitleAction` | `undefined` | false    | Outlined button in the section title; `{ label, href, trailing?, target? }`. Omitted when absent.                                                                           |
 
 ## Events
 
@@ -85,30 +86,30 @@ import CliTerminal from '@aziontech/webkit/cli-terminal'
 
 ## Motion & Animations
 
-| Trigger | Animation / Transition | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback |
-| --- | --- | --- | --- |
-| `script` stage scrolls into view | `transition-[translate,scale,opacity] duration-slow-02 ease-expressive-entrance`, from `translate-y-(--spacing-xl) scale-95 opacity-0` to rest on `data-entered` | `slow-02` · `expressive-entrance` | `motion-reduce:transition-none`, drawn at rest (`motion-reduce:translate-y-0 motion-reduce:scale-100 motion-reduce:opacity-100`) |
+| Trigger                          | Animation / Transition                                                                                                                                           | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback                                                                                                          |
+| -------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| `script` stage scrolls into view | `transition-[translate,scale,opacity] duration-slow-02 ease-expressive-entrance`, from `translate-y-(--spacing-xl) scale-95 opacity-0` to rest on `data-entered` | `slow-02` · `expressive-entrance`                 | `motion-reduce:transition-none`, drawn at rest (`motion-reduce:translate-y-0 motion-reduce:scale-100 motion-reduce:opacity-100`) |
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| session shape | `var(--shape-control)` |
-| session shadow | `var(--shadow-2xl)` |
-| session width | `var(--container-4xl)` |
-| headline width | `var(--container-xl)` |
-| frame inset | `var(--spacing-xl)` |
-| frame top air | `var(--spacing-16)`, `var(--spacing-32)` |
-| session bleed | `var(--spacing-xs)` |
-| script stage height | `var(--size-72)`, `var(--size-96)` |
-| script stage rise | `var(--spacing-xl)` |
-| anchor scroll offset | `var(--spacing-2xl)` |
+| Region               | Token (DESIGN.md)                        |
+| -------------------- | ---------------------------------------- |
+| session shape        | `var(--shape-control)`                   |
+| session shadow       | `var(--shadow-2xl)`                      |
+| session width        | `var(--container-4xl)`                   |
+| headline width       | `var(--container-xl)`                    |
+| frame inset          | `var(--spacing-xl)`                      |
+| frame top air        | `var(--spacing-16)`, `var(--spacing-32)` |
+| session bleed        | `var(--spacing-xs)`                      |
+| script stage height  | `var(--size-72)`, `var(--size-96)`       |
+| script stage rise    | `var(--spacing-xl)`                      |
+| anchor scroll offset | `var(--spacing-2xl)`                     |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 

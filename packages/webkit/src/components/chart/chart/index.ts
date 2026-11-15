@@ -65,5 +65,14 @@ export type {
   ChartThreshold,
   ChartThresholdSeverity
 } from '../lib'
+export type { ChartProps } from './chart.vue'
+export type { ChartAreaProps } from './chart-area/chart-area.vue'
+export type { ChartAxisProps } from './chart-axis/chart-axis.vue'
 export type { ChartBarKind } from './chart-bar/chart-bar.vue'
+export type { ChartBarProps } from './chart-bar/chart-bar.vue'
+export type { ChartLegendProps } from './chart-legend/chart-legend.vue'
+export type { ChartLineProps } from './chart-line/chart-line.vue'
+export type { ChartReferenceProps } from './chart-reference/chart-reference.vue'
+export type { ChartScatterProps } from './chart-scatter/chart-scatter.vue'
+export type { ChartTooltipProps } from './chart-tooltip/chart-tooltip.vue'
 export type { ChartAxisKind, ChartOrientation } from './injection-key'

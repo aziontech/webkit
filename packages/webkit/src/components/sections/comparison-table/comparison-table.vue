@@ -56,7 +56,7 @@
     rows: ComparisonTableRow[]
   }
 
-  interface Props {
+  export interface ComparisonTableProps {
     /** In-page id set on the band so a hash link can target it. */
     anchor?: string
     /** Overline above the section title. */
@@ -79,7 +79,7 @@
     groups?: ComparisonTableGroup[]
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<ComparisonTableProps>(), {
     anchor: '',
     eyebrow: '',
     title: '',

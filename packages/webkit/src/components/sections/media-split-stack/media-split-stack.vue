@@ -9,6 +9,7 @@
   import type { DiagramName } from '../../marketing/diagram/diagram.vue'
   import MediaSplit from '../../marketing/media-split/media-split.vue'
   import SectionModule from '../../marketing/section-module/section-module.vue'
+  import type { SectionTitleAction } from '../../marketing/section-title/section-title.vue'
   import SectionTitle from '../../marketing/section-title/section-title.vue'
 
   defineOptions({
@@ -16,16 +17,10 @@
     inheritAttrs: false
   })
 
+  export type { SectionTitleAction }
+
   /** Layout of the run. */
   export type MediaSplitStackKind = 'media-end' | 'alternating'
-
-  /** The outlined button of a band, and the link the whole band follows. */
-  export type MediaSplitStackAction = {
-    /** Visible label of the button. */
-    label: string
-    /** Destination the button and the band link to. */
-    href: string
-  }
 
   /** A live scene drawn in a band's media cell. */
   export type MediaSplitStackScene = SceneRef
@@ -57,10 +52,10 @@
     /** Accessible name of the illustration; empty keeps it decorative. */
     illustrationLabel?: string
     /** The outlined button, whose `href` the whole band follows when the band has none; `{ label, href }`. Omitted when absent. */
-    action?: MediaSplitStackAction
+    action?: SectionTitleAction
   }
 
-  interface Props {
+  export interface MediaSplitStackProps {
     /** Layout of the run: `media-end` sets every picture at the closing end, `alternating` starts it at the opening end and swaps sides band by band. */
     kind?: MediaSplitStackKind
     /** In-page id set on the run so a `#hash` link can scroll to it. */
@@ -75,7 +70,7 @@
     bands?: MediaSplitStackBand[]
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<MediaSplitStackProps>(), {
     kind: 'media-end',
     anchor: '',
     eyebrow: '',

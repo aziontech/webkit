@@ -12,7 +12,7 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface AiLoadingProps {
     /** Visible loading text, `[Generating|Loading] <what>` with no end punctuation. Empty uses the locale catalog (`Generating a response`). */
     label?: string
     /** `inline` pulses three dots beside the text (text responses); `bar` draws an indeterminate bar under it, where a table, list or code block is about to appear. */
@@ -21,7 +21,7 @@
     delay?: number
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<AiLoadingProps>(), {
     label: '',
     kind: 'inline',
     delay: 1000

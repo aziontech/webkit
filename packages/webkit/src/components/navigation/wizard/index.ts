@@ -11,3 +11,5 @@ const WizardRoot = Object.assign(Wizard, {
 
 export default WizardRoot
 export { WizardStep }
+export type { WizardProps } from './wizard.vue'
+export type { WizardStepProps } from './wizard-step/wizard-step.vue'

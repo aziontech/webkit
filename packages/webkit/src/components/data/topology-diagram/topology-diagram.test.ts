@@ -9,7 +9,7 @@ import Empty from '../../../../examples/topology-diagram/empty.vue'
 import Loading from '../../../../examples/topology-diagram/loading.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import TopologyDiagram from './topology-diagram.vue'
-import type { TopologyLevel, TopologyNode } from './types'
+import type { TopologyDiagramLevel, TopologyDiagramNodeData } from './types'
 
 const settle = async () => {
   await nextTick()
@@ -18,7 +18,7 @@ const settle = async () => {
 
 const menu = () => document.body.querySelector<HTMLElement>('[role="menu"]') as HTMLElement
 
-const levels: TopologyLevel[] = [
+const levels: TopologyDiagramLevel[] = [
   {
     id: 'project',
     nodes: [
@@ -182,7 +182,7 @@ describe('TopologyDiagram', () => {
             id: 'one',
             nodes: [
               { id: 'a', type: 'Workload', name: 'storefront' },
-              { id: 'b', kind: 'Firewall', name: 'edge-rules' } as TopologyNode
+              { id: 'b', kind: 'Firewall', name: 'edge-rules' } as TopologyDiagramNodeData
             ]
           }
         ]

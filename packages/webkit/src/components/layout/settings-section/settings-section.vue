@@ -10,7 +10,7 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface SettingsSectionProps {
     /** The band title, rendered as an h2. */
     title: string
     /** One-sentence guidance shown in a Hint glyph beside the title. */
@@ -23,7 +23,7 @@
     icon?: string
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<SettingsSectionProps>(), {
     hint: '',
     anchor: '',
     collapsible: false,

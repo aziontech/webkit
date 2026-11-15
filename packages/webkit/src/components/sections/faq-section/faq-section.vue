@@ -17,7 +17,7 @@
     answer: string
   }
 
-  interface Props {
+  export interface FaqSectionProps {
     /** In-page id set on the band so a `#hash` link can scroll to it. */
     anchor?: string
     /** Headline of the band, rendered by the FAQ as its `h2` in the left column. */
@@ -26,7 +26,7 @@
     items?: FaqSectionItem[]
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<FaqSectionProps>(), {
     anchor: '',
     title: '',
     items: () => []

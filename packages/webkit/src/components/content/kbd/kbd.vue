@@ -12,7 +12,7 @@
 
   export type KbdKind = 'combined' | 'separate'
 
-  interface Props {
+  export interface KbdProps {
     /** Prepend the meta/command modifier glyph (⌘ on macOS, Ctrl elsewhere). */
     meta?: boolean
     /** Prepend the Control modifier glyph (⌃ on macOS, Ctrl elsewhere). */
@@ -31,7 +31,7 @@
     kind?: KbdKind
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<KbdProps>(), {
     meta: false,
     ctrl: false,
     shift: false,

@@ -18,8 +18,11 @@ const TransferListRoot = Object.assign(TransferList, {
 export default TransferListRoot
 export { TransferListControls, TransferListSource, TransferListTarget }
 export type {
-  MoveDirection,
   TransferListItems,
+  TransferListMoveDirection,
   TransferListSide,
   TransferListValue
 } from './injection-key'
+export type { TransferListProps } from './transfer-list.vue'
+export type { TransferListSourceProps } from './transfer-list-source/transfer-list-source.vue'
+export type { TransferListTargetProps } from './transfer-list-target/transfer-list-target.vue'

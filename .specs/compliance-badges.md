@@ -6,7 +6,7 @@ status: implemented
 spec_version: 2
 created: 2026-11-04
 last_updated: 2026-11-15
-checksum: c2d1e45e71a328fda0f0256a3fb0d531f775f58863a5b76a93cffadb8a0d753e
+checksum: 4ee4e44bbaed60915ecbb7e41b02b80fdc4520a6b4143f8022cb289dd1afffca
 template: 2
 ---
 
@@ -63,7 +63,7 @@ The compliance band: a framed media split whose copy states the certifications a
 | `description`    | `string`                          | `''`        | false    | Supporting sentence under the headline.                                                                           |
 | `ariaLabel`      | `string`                          | `''`        | false    | Accessible name of the badge list.                                                                                |
 | `certifications` | `ComplianceBadgesCertification[]` | `[]`        | false    | The badges, in order; each is `{ label, badge, alt }` where `badge` is the picture URL and `label` the pill text. |
-| `primaryAction`  | `ComplianceBadgesAction`          | `undefined` | false    | The closing "see more" cell; `{ label, href }`. Omitted when absent.                                              |
+| `primaryAction`  | `SectionTitleAction`              | `undefined` | false    | The closing "see more" cell; `{ label, href }`. Omitted when absent.                                              |
 | `anchor`         | `string`                          | `''`        | false    | In-page id set on the band so a `#hash` link can scroll to it.                                                    |
 
 ## Events

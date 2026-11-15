@@ -6,14 +6,14 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface HelpPanelHeaderProps {
     /** The topic's name, rendered as the panel's heading. */
     title?: string
     /** One line under the title saying what the topic covers; not rendered when empty. */
     description?: string
   }
 
-  withDefaults(defineProps<Props>(), {
+  withDefaults(defineProps<HelpPanelHeaderProps>(), {
     title: '',
     description: ''
   })

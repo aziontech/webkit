@@ -40,7 +40,7 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface PromptInputProps {
     /** Hint shown while empty, a suggested question with no end punctuation. Empty uses the locale catalog (`Ask a question`). */
     placeholder?: string
     /** Accessible name of the text area; the input has no visible label. Empty uses the locale catalog (`Prompt`). */
@@ -59,7 +59,7 @@
     menus?: PromptInputMenu[]
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<PromptInputProps>(), {
     placeholder: '',
     ariaLabel: '',
     maxLength: 0,

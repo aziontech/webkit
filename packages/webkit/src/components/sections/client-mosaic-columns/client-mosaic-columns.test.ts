@@ -80,9 +80,9 @@ describe('ClientMosaicColumns', () => {
   it('renders one mark per cell by its client name, with its treatment', () => {
     const { getByAltText } = columns()
 
-    expect(getByAltText('Magalu').getAttribute('data-treatment')).toBe('as-is')
+    expect(getByAltText('Magalu').getAttribute('data-treatment')).toBe('color')
     expect(getByAltText('Dafiti').getAttribute('data-treatment')).toBe('knockout')
-    expect(getByAltText('MadeiraMadeira').getAttribute('data-treatment')).toBe('as-is')
+    expect(getByAltText('MadeiraMadeira').getAttribute('data-treatment')).toBe('color')
   })
 
   it('renders the story text of every cell', () => {

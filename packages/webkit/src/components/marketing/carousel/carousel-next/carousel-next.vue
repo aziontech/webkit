@@ -10,12 +10,12 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface CarouselNextProps {
     /** Accessible name for the control that steps the track forward. Empty uses the locale catalog (`Next slide`). */
     ariaLabel?: string
   }
 
-  withDefaults(defineProps<Props>(), {
+  withDefaults(defineProps<CarouselNextProps>(), {
     ariaLabel: ''
   })
 

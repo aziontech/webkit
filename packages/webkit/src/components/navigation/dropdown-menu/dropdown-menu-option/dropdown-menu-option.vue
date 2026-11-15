@@ -15,7 +15,7 @@
     trailing(): unknown
   }>()
 
-  interface Props {
+  export interface DropdownMenuOptionProps {
     /** Identifier emitted on the root select event when this option is activated. */
     value: string | number
     /** Plain-text label; falls back to the default slot when omitted. */
@@ -36,7 +36,7 @@
     kind?: DropdownMenuOptionKind
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<DropdownMenuOptionProps>(), {
     label: '',
     command: '',
     disabled: false,

@@ -29,7 +29,7 @@
 
   defineOptions({ name: 'FileTokenGroup', inheritAttrs: false })
 
-  interface Props {
+  export interface FileTokenGroupProps {
     /** The files, in order; each with its optional upload state, error and warning. */
     items?: FileTokenGroupItem[]
     /** Vertical stacks full-width tokens; horizontal wraps compact tokens in rows. */
@@ -45,9 +45,7 @@
     /** Accessible name of the list. Empty uses the locale catalog (`Files`). */
     ariaLabel?: string
   }
-  export type FileTokenGroupProps = Props
-
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<FileTokenGroupProps>(), {
     items: () => [],
     orientation: 'vertical',
     limit: 0,

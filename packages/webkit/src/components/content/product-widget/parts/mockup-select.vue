@@ -5,7 +5,7 @@
 
   defineOptions({ name: 'MockupSelect' })
 
-  export type MockupSelectSide = 'bottom' | 'top'
+  export type ProductWidgetMockupSelectSide = 'bottom' | 'top'
 
   interface Props {
     /** The committed value the trigger shows and the list marks as selected. */
@@ -19,7 +19,7 @@
     /** Whether the trigger shows its focus ring. */
     focused?: boolean
     /** Which side of the trigger the list opens on. */
-    side?: MockupSelectSide
+    side?: ProductWidgetMockupSelectSide
     /** Accessible name of the trigger. */
     ariaLabel?: string
     /** Id of the trigger, for a label that points at it. */

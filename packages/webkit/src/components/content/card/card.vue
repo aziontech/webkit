@@ -26,7 +26,7 @@
     severity?: CardBadgeSeverity
   }
 
-  interface Props {
+  export interface CardProps {
     /** Heading rendered in the header when the `header` slot is empty; with `kind="integration"`, the item name. */
     title?: string
     /** Pads the content region. Set false for flush, edge-to-edge content such as an ItemList with full-width dividers. */
@@ -49,7 +49,7 @@
     featured?: boolean
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<CardProps>(), {
     title: '',
     padded: true,
     kind: 'default',

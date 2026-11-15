@@ -58,7 +58,7 @@
     color?: ChartColor
   }
 
-  interface Props {
+  export interface MapChartProps {
     /** Countries shaded by value on a five-step sequential scale. */
     regions?: MapChartRegion[]
     /** Locations drawn as bubbles sized by value. */
@@ -83,7 +83,7 @@
     ariaLabel?: string
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<MapChartProps>(), {
     regions: () => [],
     points: () => [],
     view: 'world',

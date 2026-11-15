@@ -36,4 +36,9 @@ export {
   CommandPage,
   CommandSeparator
 }
+export type { CommandProps } from './command.vue'
+export type { CommandGroupProps } from './command-group/command-group.vue'
+export type { CommandInputProps } from './command-input/command-input.vue'
+export type { CommandItemProps } from './command-item/command-item.vue'
+export type { CommandPageProps } from './command-page/command-page.vue'
 export type { CommandItemValue } from './injection-key'

@@ -14,7 +14,7 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface WebkitProviderProps {
     /** BCP 47 locale of everything below the provider; picks the catalog from `catalogs` (English is built in) and the `Intl` formats. Empty follows the device locale, `en-US` on the server and until mount. */
     locale?: string
     /** Extra catalogs keyed by locale tag, imported from `@aziontech/webkit/locales/<tag>` (`{ 'pt-BR': ptBR, es }`); a locale with no catalog falls back to English. */
@@ -29,7 +29,7 @@
     timeZone?: string
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<WebkitProviderProps>(), {
     locale: '',
     catalogs: undefined,
     messages: undefined,

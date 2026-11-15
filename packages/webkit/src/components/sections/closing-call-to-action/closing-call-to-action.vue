@@ -5,6 +5,7 @@
   import FrameBox from '../../layout/frame-box/frame-box.vue'
   import CallToAction from '../../marketing/call-to-action/call-to-action.vue'
   import SectionModule from '../../marketing/section-module/section-module.vue'
+  import type { SectionTitleAction } from '../../marketing/section-title/section-title.vue'
   import TextureMaterial from '../../marketing/texture-material/texture-material.vue'
 
   defineOptions({
@@ -12,18 +13,10 @@
     inheritAttrs: false
   })
 
+  export type { SectionTitleAction }
+
   /** Layout of the band. */
   export type ClosingCallToActionKind = 'split' | 'panel' | 'primary' | 'frame'
-
-  /** One call to action of the band. */
-  export type ClosingCallToActionAction = {
-    /** Visible label of the action. */
-    label: string
-    /** Destination the action links to. */
-    href: string
-    /** Closes the label on a trailing chevron that reads as "go". */
-    trailing?: boolean
-  }
 
   /** Visual weight of an audience action. */
   export type ClosingCallToActionAudienceActionKind = 'secondary' | 'outlined'
@@ -62,7 +55,7 @@
     actions?: ClosingCallToActionAudienceAction[]
   }
 
-  interface Props {
+  export interface ClosingCallToActionProps {
     /** Layout of the band: `split` is a raised lead cell beside an aside cell over a tall closing frame, `panel` one surface over a short closing frame, `primary` a centred ask under a pixelated texture over a tall closing frame, `frame` the tall closing frame alone. */
     kind?: ClosingCallToActionKind
     /** In-page id set on the band so a `#hash` link can scroll to it. */
@@ -76,9 +69,9 @@
     /** Supporting sentence: in the aside cell in `split`, under the headline in `panel`. */
     description?: string
     /** The white button of the band, under the headline in `split`; `{ label, href, trailing? }` where `trailing` adds the chevron. Omitted when absent. */
-    primaryAction?: ClosingCallToActionAction
+    primaryAction?: SectionTitleAction
     /** The outlined button of the band, in the aside cell in `split` and beside the primary one in `panel` and `primary`; `{ label, href, trailing? }`. Omitted when absent. */
-    secondaryAction?: ClosingCallToActionAction
+    secondaryAction?: SectionTitleAction
     /** Shell command on a copyable line before the actions, copied as written; drawn in `split`, `panel` and `primary`. */
     command?: string
     /** Draws the hatched closing frame under the band; turn it off when another closing band stacks directly below and draws the shared frame. */
@@ -95,7 +88,7 @@
     lineAriaLabel?: string
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<ClosingCallToActionProps>(), {
     kind: 'split',
     anchor: '',
     eyebrow: '',

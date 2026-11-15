@@ -8,17 +8,16 @@
     inheritAttrs: false
   })
 
-  const props = withDefaults(
-    defineProps<{
-      /** Identifier an item opens with its `page` prop. */
-      name: string
-      /** Page title shown in the back control. Empty falls back to `name`. */
-      title?: string
-    }>(),
-    {
-      title: ''
-    }
-  )
+  export interface CommandPageProps {
+    /** Identifier an item opens with its `page` prop. */
+    name: string
+    /** Page title shown in the back control. Empty falls back to `name`. */
+    title?: string
+  }
+
+  const props = withDefaults(defineProps<CommandPageProps>(), {
+    title: ''
+  })
 
   defineSlots<{
     default(): unknown

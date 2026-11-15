@@ -7,6 +7,7 @@
   import CardGrid from '../../marketing/card-grid/card-grid.vue'
   import CardGridCell from '../../marketing/card-grid/card-grid-cell/card-grid-cell.vue'
   import SectionModule from '../../marketing/section-module/section-module.vue'
+  import type { SectionTitleAction } from '../../marketing/section-title/section-title.vue'
   import Topic from '../../marketing/topic/topic.vue'
 
   defineOptions({
@@ -14,15 +15,7 @@
     inheritAttrs: false
   })
 
-  /** The button on a lane's floor that reaches its team. */
-  export type ContactHubAction = {
-    /** Visible label of the action. */
-    label: string
-    /** Destination the action links to. */
-    href: string
-    /** Closes the label on a trailing chevron that reads as "go". */
-    trailing?: boolean
-  }
+  export type { SectionTitleAction }
 
   /** The system status link beside a lane's action. */
   export type ContactHubStatusLink = {
@@ -43,9 +36,9 @@
     /** One sentence stating what the team handles. */
     description: string
     /** The button that reaches the team; `{ label, href, trailing? }`. Omitted when absent. */
-    action?: ContactHubAction
+    action?: SectionTitleAction
     /** A second, outlined button after the action; `{ label, href, trailing? }`. Omitted when absent. */
-    secondaryAction?: ContactHubAction
+    secondaryAction?: SectionTitleAction
     /** The system status link beside the action; `{ label, href, target? }`. Omitted when absent. */
     statusLink?: ContactHubStatusLink
   }
@@ -64,7 +57,7 @@
     target?: string
   }
 
-  interface Props {
+  export interface ContactHubProps {
     /** In-page id set on the band so a `#hash` link can scroll to it. */
     anchor?: string
     /** The team lanes side by side, in order; each is `{ icon, title, description, action?, secondaryAction?, statusLink? }` where `action` is the lane's leading button, `secondaryAction` an outlined button after it, and `statusLink` the system status link beside them. */
@@ -73,7 +66,7 @@
     channels?: ContactHubChannel[]
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<ContactHubProps>(), {
     anchor: '',
     lanes: () => [],
     channels: () => []

@@ -5,19 +5,14 @@
   import CardGridCell from '../../marketing/card-grid/card-grid-cell/card-grid-cell.vue'
   import MediaSplit from '../../marketing/media-split/media-split.vue'
   import SectionModule from '../../marketing/section-module/section-module.vue'
+  import type { SectionTitleAction } from '../../marketing/section-title/section-title.vue'
 
   defineOptions({
     name: 'ComplianceBadges',
     inheritAttrs: false
   })
 
-  /** The closing "see more" cell. */
-  export type ComplianceBadgesAction = {
-    /** Visible label of the link. */
-    label: string
-    /** Destination the link points to. */
-    href: string
-  }
+  export type { SectionTitleAction }
 
   /** One certification badge in the grid. */
   export type ComplianceBadgesCertification = {
@@ -29,7 +24,7 @@
     alt: string
   }
 
-  interface Props {
+  export interface ComplianceBadgesProps {
     /** Overline above the headline. */
     eyebrow?: string
     /** Headline of the band, rendered by the media split as its `h2`; the band renders nothing when empty. */
@@ -41,12 +36,12 @@
     /** The badges, in order; each is `{ label, badge, alt }`. */
     certifications?: ComplianceBadgesCertification[]
     /** The closing "see more" cell; `{ label, href }`. Omitted when absent. */
-    primaryAction?: ComplianceBadgesAction
+    primaryAction?: SectionTitleAction
     /** In-page id set on the band so a `#hash` link can scroll to it. */
     anchor?: string
   }
 
-  withDefaults(defineProps<Props>(), {
+  withDefaults(defineProps<ComplianceBadgesProps>(), {
     eyebrow: '',
     title: '',
     description: '',

@@ -8,14 +8,14 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface AccordionItemProps {
     /** Unique identifier used by the open-state model. */
     value: string
     /** Prevents this item from toggling. */
     disabled?: boolean
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<AccordionItemProps>(), {
     disabled: false
   })
 

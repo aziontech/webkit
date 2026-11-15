@@ -18,4 +18,6 @@ export type {
   CardGridLayout,
   CardGridMobileColumns
 } from './card-grid.vue'
+export type { CardGridProps } from './card-grid.vue'
 export type { CardGridCellKind } from './card-grid-cell/card-grid-cell.vue'
+export type { CardGridCellProps } from './card-grid-cell/card-grid-cell.vue'

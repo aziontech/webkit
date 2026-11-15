@@ -6,7 +6,7 @@
 
   defineOptions({ name: 'LineFigure', inheritAttrs: false })
 
-  interface Props {
+  export interface LineFigureProps {
     /** Registered figure to draw; an unknown or empty name draws nothing. */
     name?: LineFigureName | ''
     /** How strongly the figure answers the pointer, from 0 (subtle) to 1 (strong). */
@@ -17,7 +17,7 @@
     ariaLabel?: string
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<LineFigureProps>(), {
     name: '',
     intensity: 0.5,
     play: false,

@@ -9,14 +9,14 @@
 
   defineOptions({ name: 'SectionCommand', inheritAttrs: false })
 
-  interface Props {
+  export interface SectionCommandProps {
     /** Text on the line, copied as written. */
     value: string
     /** Draws the shell prompt before the text; turn off for a prompt meant for an agent. */
     shell?: boolean
   }
 
-  const props = withDefaults(defineProps<Props>(), { shell: true })
+  const props = withDefaults(defineProps<SectionCommandProps>(), { shell: true })
 
   const attrs = useAttrs()
   const { t } = useTranslate({ sectionCommand: en.sectionCommand })

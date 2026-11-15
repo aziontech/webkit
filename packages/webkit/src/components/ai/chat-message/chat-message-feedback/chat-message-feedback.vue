@@ -14,12 +14,12 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface ChatMessageFeedbackProps {
     /** The choice is being sent; both thumbs are inert and the status line reads `Submitting feedback`. */
     loading?: boolean
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<ChatMessageFeedbackProps>(), {
     loading: false
   })
 

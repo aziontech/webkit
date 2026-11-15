@@ -8,15 +8,13 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface HelperTextProps {
     /** Fallback text when the default slot is empty. */
     label?: string
     /** Visual variant; `disabled` also prepends a ai ai-lock icon. */
     kind?: HelperTextKind
   }
-  export type HelperTextProps = Props
-
-  withDefaults(defineProps<Props>(), {
+  withDefaults(defineProps<HelperTextProps>(), {
     label: '',
     kind: 'helper'
   })

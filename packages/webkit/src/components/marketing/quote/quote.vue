@@ -11,7 +11,7 @@
   /** Register of the quote. */
   export type QuoteKind = 'inline' | 'signed' | 'highlight'
 
-  interface Props {
+  export interface QuoteProps {
     /** The quotation itself, rendered as the `blockquote` body; overridden by the default slot. */
     text: string
     /** Who said it — the attribution's lead, set in the accent. */
@@ -30,7 +30,7 @@
     kind?: QuoteKind
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<QuoteProps>(), {
     name: '',
     jobTitle: '',
     photo: '',

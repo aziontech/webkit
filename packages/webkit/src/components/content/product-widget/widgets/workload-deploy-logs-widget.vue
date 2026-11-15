@@ -11,7 +11,7 @@
   import { DEFAULT_DEPLOYMENT_STEPS } from '../lib/deployment-steps'
   import DeploymentLogs from '../parts/deployment-logs.vue'
   import ShellMockup, {
-    type ShellMockupFade,
+    type ProductWidgetShellMockupFade,
     type ShellMockupKind
   } from '../shell-mockup/shell-mockup.vue'
   import ShellMockupPart from '../shell-mockup/shell-mockup-part/shell-mockup-part.vue'
@@ -26,7 +26,7 @@
     /** Design width of the frame from `md` up. */
     width?: number
     /** Edge the mockup fades out along. */
-    fade?: ShellMockupFade
+    fade?: ProductWidgetShellMockupFade
     /** Whether this widget is the one showing; the deployment streams only while it is and is on screen. */
     active?: boolean
     /** Milliseconds between revealed log lines. */

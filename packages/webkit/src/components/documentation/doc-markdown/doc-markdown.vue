@@ -21,7 +21,7 @@
   import DocCallout from '../doc-callout/doc-callout.vue'
   import DocCard from '../doc-card/doc-card.vue'
   import DocCardGroup from '../doc-card-group/doc-card-group.vue'
-  import type { DocCodeSample } from '../doc-code-group/doc-code-group.vue'
+  import type { DocCodeGroupSample } from '../doc-code-group/doc-code-group.vue'
   import DocHeading from '../doc-heading/doc-heading.vue'
   import DocStep from '../doc-step/doc-step.vue'
   import DocSteps from '../doc-steps/doc-steps.vue'
@@ -190,7 +190,7 @@
     return bare || lang || undefined
   }
 
-  const toSample = (node: Extract<DocMarkdownNode, { type: 'code' }>): DocCodeSample => ({
+  const toSample = (node: Extract<DocMarkdownNode, { type: 'code' }>): DocCodeGroupSample => ({
     label: sampleLabel(node.meta, node.lang),
     language: node.lang || undefined,
     fileName: typeof node.meta['title'] === 'string' ? node.meta['title'] : undefined,

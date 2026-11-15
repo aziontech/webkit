@@ -6,11 +6,11 @@ import { expectNoA11yViolations } from '../../../test/axe'
 import HelpPanel from '../help-panel/help-panel.vue'
 import Hotspot from '../hotspot/hotspot.vue'
 import { useTutorialPanelTasksContext } from './composables/use-tutorial-panel-tasks-context'
-import TutorialPanel, { type Tutorial, TutorialPanelProvider } from './index'
+import TutorialPanel, { TutorialPanelProvider, type TutorialPanelTutorial } from './index'
 import TutorialPanelTask from './tutorial-panel-task/tutorial-panel-task.vue'
 import TutorialPanelTasks from './tutorial-panel-tasks/tutorial-panel-tasks.vue'
 
-const tutorials: Tutorial[] = [
+const tutorials: TutorialPanelTutorial[] = [
   {
     id: 'first-site',
     title: 'Put your first site online',

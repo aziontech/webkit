@@ -12,15 +12,14 @@
     default(): unknown
   }>()
 
-  const props = withDefaults(
-    defineProps<{
-      /** Section label rendered above the items. Omit for an unlabeled group. */
-      label?: string
-    }>(),
-    {
-      label: ''
-    }
-  )
+  export interface CommandGroupProps {
+    /** Section label rendered above the items. Omit for an unlabeled group. */
+    label?: string
+  }
+
+  const props = withDefaults(defineProps<CommandGroupProps>(), {
+    label: ''
+  })
 
   const attrs = useAttrs()
   const ctx = useCommandMenuContext()

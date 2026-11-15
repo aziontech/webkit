@@ -18,7 +18,7 @@
   /** Where the split panel sits relative to the content. */
   export type AppLayoutSplitPanelPosition = 'bottom' | 'side'
 
-  interface Props {
+  export interface AppLayoutProps {
     /** Accessible name of the navigation drawer. Empty uses the locale catalog (`Navigation`). */
     navigationAriaLabel?: string
     /** Title of the tools region, shown in its header. Empty uses the locale catalog (`Help`). */
@@ -33,7 +33,7 @@
     compactBelow?: number
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<AppLayoutProps>(), {
     navigationAriaLabel: '',
     toolsLabel: '',
     toolsWidth: 320,

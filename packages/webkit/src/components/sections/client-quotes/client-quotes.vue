@@ -5,21 +5,14 @@
   import FrameBox from '../../layout/frame-box/frame-box.vue'
   import QuoteTabs from '../../marketing/quote-tabs/quote-tabs.vue'
   import SectionModule from '../../marketing/section-module/section-module.vue'
+  import type { SectionTitleAction } from '../../marketing/section-title/section-title.vue'
 
   defineOptions({
     name: 'ClientQuotes',
     inheritAttrs: false
   })
 
-  /** The call to action rendered under the quotes. */
-  export type ClientQuotesAction = {
-    /** Visible label of the action. */
-    label: string
-    /** Destination the action links to. */
-    href: string
-    /** Adds a trailing chevron that reads as "go". */
-    trailing?: boolean
-  }
+  export type { SectionTitleAction }
 
   /** One client quotation, featured while its client card is selected. */
   export type ClientQuotesItem = {
@@ -39,7 +32,7 @@
     photo?: string
   }
 
-  interface Props {
+  export interface ClientQuotesProps {
     /** In-page id set on the band so a hash link can target it. */
     anchor?: string
     /** Accessible name of the quote carousel. */
@@ -47,14 +40,14 @@
     /** The quotes, in order. */
     items?: ClientQuotesItem[]
     /** Button under the quotes; omitted when absent. */
-    primaryAction?: ClientQuotesAction
+    primaryAction?: SectionTitleAction
     /** Advances to the next quote on a timer, as QuoteTabs does, with its visible pause control; pauses under the pointer or keyboard focus and never runs under reduced motion. */
     autoplay?: boolean
     /** Milliseconds each quote is held before the band advances. */
     autoplayInterval?: number
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<ClientQuotesProps>(), {
     anchor: '',
     ariaLabel: '',
     items: () => [],

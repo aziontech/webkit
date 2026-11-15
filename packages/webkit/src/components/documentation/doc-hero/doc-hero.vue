@@ -3,14 +3,14 @@
 
   defineOptions({ name: 'DocHero', inheritAttrs: false })
 
-  interface Props {
+  export interface DocHeroProps {
     /** The page title, set at display size as the page's `h1`. */
     title?: string
     /** The deck under the title: what the docs cover, in one or two sentences. */
     description?: string
   }
 
-  withDefaults(defineProps<Props>(), {
+  withDefaults(defineProps<DocHeroProps>(), {
     title: '',
     description: ''
   })

@@ -49,7 +49,7 @@
     kind?: ConsolePanelActionKind
   }
 
-  interface Props {
+  export interface ConsolePanelProps {
     /** What the panel frames. */
     kind?: ConsolePanelKind
     /** Layout of the headline block. */
@@ -82,7 +82,7 @@
     secondaryAction?: ConsolePanelAction
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<ConsolePanelProps>(), {
     kind: 'console',
     titleKind: 'center',
     titlePadding: 'medium',

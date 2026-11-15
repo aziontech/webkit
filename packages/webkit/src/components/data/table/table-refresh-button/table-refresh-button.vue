@@ -12,18 +12,17 @@
     inheritAttrs: false
   })
 
-  const props = withDefaults(
-    defineProps<{
-      /** Disables the control (in addition to the injected loading state). */
-      disabled?: boolean
-      /** Spins the glyph while a refresh runs and the current rows stay on screen; the control cannot fire again meanwhile. */
-      loading?: boolean
-    }>(),
-    {
-      disabled: false,
-      loading: false
-    }
-  )
+  export interface TableRefreshButtonProps {
+    /** Disables the control (in addition to the injected loading state). */
+    disabled?: boolean
+    /** Spins the glyph while a refresh runs and the current rows stay on screen; the control cannot fire again meanwhile. */
+    loading?: boolean
+  }
+
+  const props = withDefaults(defineProps<TableRefreshButtonProps>(), {
+    disabled: false,
+    loading: false
+  })
 
   const attrs = useAttrs()
   const { t } = useTranslate({ tableRefreshButton: en.tableRefreshButton })

@@ -13,12 +13,12 @@
   /** The page column the tab row lines up with. */
   export type PageTabsColumn = 'full' | 'data' | 'form' | 'focused'
 
-  interface Props {
+  export interface PageTabsProps {
     /** The page column the tab row lines up with: the full width, or the data, form or focused column below it. */
     column?: PageTabsColumn
   }
 
-  withDefaults(defineProps<Props>(), {
+  withDefaults(defineProps<PageTabsProps>(), {
     column: 'full'
   })
 

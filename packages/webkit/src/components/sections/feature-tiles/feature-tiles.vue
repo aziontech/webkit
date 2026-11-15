@@ -33,7 +33,7 @@
     scale?: number
   }
 
-  interface Props {
+  export interface FeatureTilesProps {
     /** Layout of the grid: `artwork` is four columns with marks on every corner, `illustrated` three columns with marks on the bottom rule. */
     kind?: FeatureTilesKind
     /** In-page id set on the band so a `#hash` link can scroll to it. */
@@ -48,7 +48,7 @@
     tiles?: FeatureTilesTile[]
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<FeatureTilesProps>(), {
     kind: 'artwork',
     anchor: '',
     eyebrow: '',

@@ -9,12 +9,12 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface SaveBarProps {
     /** How the bar sits at the bottom of its scroll region. */
     kind?: SaveBarKind
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<SaveBarProps>(), {
     kind: 'floating'
   })
 

@@ -13,24 +13,23 @@
     default(): unknown
   }>()
 
-  const props = withDefaults(
-    defineProps<{
-      /** Initial open state when uncontrolled. */
-      defaultOpen?: boolean
-      /** Light-dismiss: when true, overlay click and Escape close the dialog. It does not govern the close button; see `closable`. */
-      dismissible?: boolean
-      /** Shows the close (X) button at the end of the dialog header. False removes it; Escape and overlay click still follow `dismissible`. */
-      closable?: boolean
-      /** Panel max-width preset passed to the inner Panel. */
-      size?: DialogSize
-    }>(),
-    {
-      defaultOpen: false,
-      dismissible: true,
-      closable: true,
-      size: 'medium'
-    }
-  )
+  export interface DialogProps {
+    /** Initial open state when uncontrolled. */
+    defaultOpen?: boolean
+    /** Light-dismiss: when true, overlay click and Escape close the dialog. It does not govern the close button; see `closable`. */
+    dismissible?: boolean
+    /** Shows the close (X) button at the end of the dialog header. False removes it; Escape and overlay click still follow `dismissible`. */
+    closable?: boolean
+    /** Panel max-width preset passed to the inner Panel. */
+    size?: DialogSize
+  }
+
+  const props = withDefaults(defineProps<DialogProps>(), {
+    defaultOpen: false,
+    dismissible: true,
+    closable: true,
+    size: 'medium'
+  })
 
   /** Controlled open state. Use with v-model:open; while unbound the dialog starts at defaultOpen. */
   const openModel = defineModel<boolean>('open', { default: undefined as never })

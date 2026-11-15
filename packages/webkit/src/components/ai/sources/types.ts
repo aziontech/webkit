@@ -1,5 +1,5 @@
 /** One source a response drew on; its 1-based position is the number its inline citations show. */
-export interface AiSource {
+export interface SourcesItem {
   /** Title of the page or document, shown as the link text. */
   title: string
   /** Where the source lives; external links open in a new tab. */

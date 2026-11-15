@@ -8,13 +8,11 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface MultiSelectGroupProps {
     /** Heading text rendered above the grouped options. */
     label?: string
   }
-  export type MultiSelectGroupProps = Props
-
-  withDefaults(defineProps<Props>(), {
+  withDefaults(defineProps<MultiSelectGroupProps>(), {
     label: ''
   })
 

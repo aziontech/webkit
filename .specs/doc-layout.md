@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 4
 template: 2
-checksum: 9751b6df5780b9847d2dbf6f65bfcf7cdc1504151954305cd31dbb2ae68c4591
+checksum: 00c64c54c527ce6efb3cb15923e5e150cb2cd5751752cf6b00a0a7a24d8ed75f
 created: 2026-11-12
 last_updated: 2026-11-15
 ---
@@ -71,16 +71,16 @@ The documentation chrome, composed once in the app: a sticky header (the Azion D
 
 ## Props
 
-| Prop            | Type                  | Default | Required | JSDoc                                                                                                                                                                            |
-| --------------- | --------------------- | ------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `navigation`    | `DocLayoutNavGroup[]` | `[]`    | false    | The docs tree: groups of rows, each `{ id, label, icon?, href?, tagValue?, disabled?, kind?, defaultOpen?, children? }`; an in-app `href` is followed with the router.           |
-| `activeId`      | `string`              | `''`    | false    | Id of the current row. Empty matches the current route against each row's `href`.                                                                                                |
-| `sections`      | `DocLayoutSection[]`  | `[]`    | false    | The header's section links (`Reference`, `Guides`), each `{ label, href? }`; shown from `lg`.                                                                                    |
-| `home`          | `string`              | `'/'`   | false    | Where the Azion Docs mark links.                                                                                                                                                 |
-| `outline`       | `DocTocItem[]`        | `[]`    | false    | The article's headings for the "On this page" rail, each `{ id, text, depth }`; the rail is not rendered when empty and the `aside` slot is unused.                              |
-| `outlineGroups` | `DocTocGroup[]`       | `[]`    | false    | Complementary link groups under the outline (GitHub, Community).                                                                                                                 |
-| `ariaLabel`     | `string`              | `''`    | false    | Accessible name of the navigation landmark. Empty uses the locale catalog (`Documentation`).                                                                                     |
-| `rootLabel`     | `string`              | `''`    | false    | Names the top of the docs tree in the rail's Back button on the first drill level (`Back to Docs`); deeper levels name their parent row. Empty uses the locale catalog (`Docs`). |
+| Prop            | Type                   | Default | Required | JSDoc                                                                                                                                                                            |
+| --------------- | ---------------------- | ------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `navigation`    | `DocLayoutNavGroup[]`  | `[]`    | false    | The docs tree: groups of rows, each `{ id, label, icon?, href?, tagValue?, disabled?, kind?, defaultOpen?, children? }`; an in-app `href` is followed with the router.           |
+| `activeId`      | `string`               | `''`    | false    | Id of the current row. Empty matches the current route against each row's `href`.                                                                                                |
+| `sections`      | `DocLayoutSection[]`   | `[]`    | false    | The header's section links (`Reference`, `Guides`), each `{ label, href? }`; shown from `lg`.                                                                                    |
+| `home`          | `string`               | `'/'`   | false    | Where the Azion Docs mark links.                                                                                                                                                 |
+| `outline`       | `DocOnThisPageItem[]`  | `[]`    | false    | The article's headings for the "On this page" rail, each `{ id, text, depth }`; the rail is not rendered when empty and the `aside` slot is unused.                              |
+| `outlineGroups` | `DocOnThisPageGroup[]` | `[]`    | false    | Complementary link groups under the outline (GitHub, Community).                                                                                                                 |
+| `ariaLabel`     | `string`               | `''`    | false    | Accessible name of the navigation landmark. Empty uses the locale catalog (`Documentation`).                                                                                     |
+| `rootLabel`     | `string`               | `''`    | false    | Names the top of the docs tree in the rail's Back button on the first drill level (`Back to Docs`); deeper levels name their parent row. Empty uses the locale catalog (`Docs`). |
 
 ## v-model
 

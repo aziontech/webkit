@@ -25,7 +25,7 @@ Add this entry to the `sections` array of the page JSON. `_id` picks the block a
 - `anchor` sets the band's id, so a page can link to it with a `#hash`.
 - With `kind` set to `stats`, `stats[]` fill the floor with headline figures, each a `value`, a `label` and an optional `prefix` and `suffix`.
 - `outcomes[]` fill the floor, one column each: two to four fill the row. `highlights` are phrases of `text` kept in full color, copied exactly.
-- `logoTreatment` is `as-is` or `monochrome` (one ink that follows the theme). Empty means as-is.
+- `logoTreatment` is `color` or `monochrome` (one ink that follows the theme). Empty means `color`.
 
 Example:
 

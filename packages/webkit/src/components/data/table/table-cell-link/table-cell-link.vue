@@ -16,39 +16,38 @@
     inheritAttrs: false
   })
 
-  const props = withDefaults(
-    defineProps<{
-      /** The resource name shown in the cell. */
-      label?: string
-      /** An address outside the app; opens in a new tab. */
-      href?: string
-      /** An in-app route; rendered with the app's `RouterLink` when one is registered, otherwise as a plain link. */
-      to?: string | Record<string, unknown>
-      /** Where an in-app link leads (`Workloads`), for the tooltip `Open <label> in <destination>`. */
-      destination?: string
-      /** Glyph class drawn before the name, muted (the provider or resource type: `ai ai-github`, `ai ai-workloads`). */
-      icon?: string
-      /** Adds a copy button pinned to the cell's end edge. */
-      copyable?: boolean
-      /** Text the copy button copies; defaults to `label`. */
-      copyValue?: string
-      /** More values of the same kind, shown as a `+N` chip after the name. */
-      more?: OverflowCountItem[]
-      /** What the `more` values are (`{ one: 'domain', other: 'domains' }`), the same name as CellTags. */
-      noun?: OverflowCountNoun
-    }>(),
-    {
-      label: '',
-      href: '',
-      to: undefined,
-      destination: '',
-      icon: '',
-      copyable: false,
-      copyValue: '',
-      more: () => [],
-      noun: undefined
-    }
-  )
+  export interface TableCellLinkProps {
+    /** The resource name shown in the cell. */
+    label?: string
+    /** An address outside the app; opens in a new tab. */
+    href?: string
+    /** An in-app route; rendered with the app's `RouterLink` when one is registered, otherwise as a plain link. */
+    to?: string | Record<string, unknown>
+    /** Where an in-app link leads (`Workloads`), for the tooltip `Open <label> in <destination>`. */
+    destination?: string
+    /** Glyph class drawn before the name, muted (the provider or resource type: `ai ai-github`, `ai ai-workloads`). */
+    icon?: string
+    /** Adds a copy button pinned to the cell's end edge. */
+    copyable?: boolean
+    /** Text the copy button copies; defaults to `label`. */
+    copyValue?: string
+    /** More values of the same kind, shown as a `+N` chip after the name. */
+    more?: OverflowCountItem[]
+    /** What the `more` values are (`{ one: 'domain', other: 'domains' }`), the same name as CellTags. */
+    noun?: OverflowCountNoun
+  }
+
+  const props = withDefaults(defineProps<TableCellLinkProps>(), {
+    label: '',
+    href: '',
+    to: undefined,
+    destination: '',
+    icon: '',
+    copyable: false,
+    copyValue: '',
+    more: () => [],
+    noun: undefined
+  })
 
   const attrs = useAttrs()
   const { t } = useTranslate({ tableCellLink: en.tableCellLink, common: en.common })

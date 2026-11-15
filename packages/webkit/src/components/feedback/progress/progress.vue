@@ -12,7 +12,7 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface ProgressProps {
     /** Current progress, relative to `max`. */
     value?: number
     /** Upper bound; percentage = `value / max * 100`. */
@@ -25,7 +25,7 @@
     indeterminate?: boolean
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<ProgressProps>(), {
     value: 0,
     max: 100,
     kind: 'flat',

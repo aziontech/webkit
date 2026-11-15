@@ -34,7 +34,7 @@
     items: PlatformDirectoryItem[]
   }
 
-  interface Props {
+  export interface PlatformDirectoryProps {
     /** In-page id set on the band so a `#hash` link can scroll to it. */
     anchor?: string
     /** Short label above the headline; shown only with a title. */
@@ -49,7 +49,7 @@
     groups?: PlatformDirectoryGroup[]
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<PlatformDirectoryProps>(), {
     anchor: '',
     eyebrow: '',
     title: '',

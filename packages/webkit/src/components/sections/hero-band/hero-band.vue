@@ -10,11 +10,14 @@
   import HeroTitle, {
     type HeroTitleEyebrowPrefix
   } from '../../marketing/hero/hero-title/hero-title.vue'
+  import type { SectionTitleAction } from '../../marketing/section-title/section-title.vue'
 
   defineOptions({
     name: 'HeroBand',
     inheritAttrs: false
   })
+
+  export type { SectionTitleAction }
 
   /** Layout of the opening band. */
   export type HeroBandKind =
@@ -31,18 +34,6 @@
 
   /** Vertical rhythm of the band. */
   export type HeroBandSize = 'medium' | 'large'
-
-  /** A call to action under the headline. */
-  export type HeroBandAction = {
-    /** Visible label of the action. */
-    label: string
-    /** Destination the action links to. */
-    href: string
-    /** Closes the label on a trailing chevron that reads as "go". */
-    trailing?: boolean
-    /** Link target of the action. */
-    target?: '_blank' | '_self'
-  }
 
   /** An image set beside the copy instead of an illustration. */
   export type HeroBandImage = {
@@ -99,7 +90,7 @@
     centered?: boolean
   }
 
-  interface Props {
+  export interface HeroBandProps {
     /** Layout of the band: `center` fills a screen over a dot field, `title-band` is a padded band, `center-band` is a large site-wide band with the copy centered, `compact-band` is a short site-wide band with the copy at the start, `pixel-floor` sets the copy over an animated pixel floor, `copy-beside-art` sets an illustration or an image beside the copy, `copy-on-top-art` fills a screen with the copy centered over a scene in the `top` or `bottom` slot. */
     kind?: HeroBandKind
     /** Vertical rhythm of the band; `large` is the opening a product page leads with. */
@@ -113,9 +104,9 @@
     /** Sentence under the headline. */
     description?: string
     /** First button under the headline; `{ label, href, trailing?, target? }`. Shown only with a label and a link. */
-    primaryAction?: HeroBandAction
+    primaryAction?: SectionTitleAction
     /** Second, outlined button beside the first; `{ label, href, trailing?, target? }`. Shown only with a label and a link. */
-    secondaryAction?: HeroBandAction
+    secondaryAction?: SectionTitleAction
     /** Overline above the client ticker; empty uses the locale catalog (`Proven on mission-critical workloads`). */
     tickerLabel?: string
     /** Registry names of the client marks on the band floor, in order; the ticker renders only when it has marks. */
@@ -142,7 +133,7 @@
     items?: HeroBandItem[]
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<HeroBandProps>(), {
     kind: 'title-band',
     size: 'medium',
     eyebrow: '',

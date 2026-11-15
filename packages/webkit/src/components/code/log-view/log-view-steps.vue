@@ -21,24 +21,23 @@
     inheritAttrs: false
   })
 
-  const props = withDefaults(
-    defineProps<{
-      /** The steps of the run, in order, each with its own log lines. */
-      steps?: LogViewStep[]
-      /** Shows the copy control on each step's log and on the complete log. */
-      copyable?: boolean
-      /** Shows the Phased or Complete switch at the end of the toolbar row. */
-      viewSwitch?: boolean
-      /** Shows a flush progress bar on the bottom edge, valued by the share of steps done. */
-      progress?: boolean
-    }>(),
-    {
-      steps: () => [],
-      copyable: true,
-      viewSwitch: true,
-      progress: false
-    }
-  )
+  export interface LogViewStepsProps {
+    /** The steps of the run, in order, each with its own log lines. */
+    steps?: LogViewStep[]
+    /** Shows the copy control on each step's log and on the complete log. */
+    copyable?: boolean
+    /** Shows the Phased or Complete switch at the end of the toolbar row. */
+    viewSwitch?: boolean
+    /** Shows a flush progress bar on the bottom edge, valued by the share of steps done. */
+    progress?: boolean
+  }
+
+  const props = withDefaults(defineProps<LogViewStepsProps>(), {
+    steps: () => [],
+    copyable: true,
+    viewSwitch: true,
+    progress: false
+  })
 
   /** Phased shows one collapsible log per step; complete shows every line in one log. */
   const view = defineModel<LogViewStepsView>('view', { default: 'phased' })

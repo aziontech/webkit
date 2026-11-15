@@ -14,7 +14,7 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface BrandProps {
     /** Brand lockup to render: `default` (AZION wordmark), `reduced` (the "A" glyph for tight spaces), `extended` (wordmark with the "move to the edge technologies" tagline). */
     kind?: BrandKind
     /** Size token; sets the lockup height (16 / 24 / 32 px) while width scales automatically so each `kind` keeps its own aspect ratio. */
@@ -23,7 +23,7 @@
     decorative?: boolean
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<BrandProps>(), {
     kind: 'default',
     size: 'medium',
     decorative: false

@@ -12,7 +12,7 @@
 
   type ResizeAxis = 'width' | 'height' | 'both'
 
-  interface Props {
+  export interface BrowserFrameProps {
     /** Read-only URL shown in the chrome's address bar; the address bar is not rendered when empty. */
     address?: string
     /** Smallest viewport width the resize handles can reach, in pixels. */
@@ -33,7 +33,7 @@
     heightHandleAriaLabel?: string
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<BrowserFrameProps>(), {
     address: '',
     minWidth: 320,
     maxWidth: 1920,

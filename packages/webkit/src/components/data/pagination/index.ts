@@ -16,4 +16,7 @@ const PaginationRoot = Object.assign(Pagination, {
 }) as CompoundPagination
 
 export default PaginationRoot
+export type { PaginationProps } from './pagination.vue'
 export type { PaginationButtonKind } from './pagination-button/pagination-button.vue'
+export type { PaginationButtonProps } from './pagination-button/pagination-button.vue'
+export type { PaginationPageSizeProps } from './pagination-page-size/pagination-page-size.vue'

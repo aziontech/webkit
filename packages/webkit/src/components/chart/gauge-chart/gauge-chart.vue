@@ -17,7 +17,7 @@
 
   export type { ChartThreshold, ChartThresholdSeverity } from '../lib'
 
-  interface Props {
+  export interface GaugeChartProps {
     /** The reading. Null or absent renders the empty state. */
     value?: number | null
     /** Start of the scale. */
@@ -46,7 +46,7 @@
     ariaLabel?: string
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<GaugeChartProps>(), {
     value: null,
     min: 0,
     max: 100,

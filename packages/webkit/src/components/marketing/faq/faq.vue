@@ -22,7 +22,7 @@
     answer: string
   }
 
-  interface Props {
+  export interface FaqProps {
     /** Headline of the band, rendered as its h2 in the left column. */
     title?: string
     /** The questions and their answers, in order; each item is a value, a question, and an answer, where the value is the item's stable key. */
@@ -31,7 +31,7 @@
     framed?: boolean
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<FaqProps>(), {
     title: '',
     items: () => [],
     framed: false

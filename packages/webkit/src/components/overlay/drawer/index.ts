@@ -20,4 +20,6 @@ export default Object.assign(Drawer, {
 })
 
 export { DrawerClose, DrawerContent, DrawerDescription, DrawerTitle, DrawerTrigger }
+export type { DrawerProps } from './drawer.vue'
+export type { DrawerCloseProps } from './drawer-close.vue'
 export type { DrawerSide, DrawerSize } from './injection-key'

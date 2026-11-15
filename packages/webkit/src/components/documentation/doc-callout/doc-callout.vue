@@ -8,14 +8,14 @@
   /** The admonition flavours an MDX author can write. */
   export type DocCalloutKind = 'note' | 'info' | 'tip' | 'check' | 'warning' | 'danger'
 
-  interface Props {
+  export interface DocCalloutProps {
     /** Which admonition this is; drives the severity color and the icon. */
     kind?: DocCalloutKind
     /** Fallback copy when the default slot is empty. */
     label?: string
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<DocCalloutProps>(), {
     kind: 'note',
     label: ''
   })

@@ -5,7 +5,7 @@
   import * as en from '../../../../locales/en'
   import { hasRenderedContent } from '../../../../utils/rendered-content'
   import Tag from '../../tag/tag.vue'
-  import type { TutorialTaskHandle, TutorialTaskStatus } from '../injection-key'
+  import type { TutorialPanelTaskHandle, TutorialPanelTaskStatus } from '../injection-key'
   import { TutorialPanelTasksInjectionKey } from '../injection-key'
 
   defineOptions({
@@ -41,7 +41,7 @@
   const headingId = useId()
 
   const tasks = ref<symbol[]>([])
-  const statuses = new Map<symbol, () => TutorialTaskStatus>()
+  const statuses = new Map<symbol, () => TutorialPanelTaskStatus>()
   const elements = new Map<symbol, globalThis.HTMLElement>()
 
   const ordered = computed(() =>
@@ -62,7 +62,7 @@
     () => tasks.value.filter((id) => statuses.get(id)?.() === 'success').length
   )
 
-  const register = (id: symbol, status: () => TutorialTaskStatus): TutorialTaskHandle => {
+  const register = (id: symbol, status: () => TutorialPanelTaskStatus): TutorialPanelTaskHandle => {
     statuses.set(id, status)
     tasks.value.push(id)
     return {

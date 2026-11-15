@@ -11,3 +11,4 @@ export default Object.assign(Panel, {
 
 export { PanelContent, PanelFooter, PanelHeader }
 export type { PanelSize } from './injection-key'
+export type { PanelProps } from './panel.vue'

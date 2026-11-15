@@ -52,7 +52,7 @@
 
   type QuoteTabsDirection = 'forward' | 'back'
 
-  interface Props {
+  export interface QuoteTabsProps {
     /** The clients, in wall order; each item is the URL of the client's colour logo, the registry name of its one-ink mark, its name in prose, how tall its mark sits on the card, the quotation, who said it, their role and their likeness. */
     items?: QuoteTabsItem[]
     /** Accessible name for the wall of client cards. */
@@ -65,7 +65,7 @@
     showProgress?: boolean
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<QuoteTabsProps>(), {
     items: () => [],
     ariaLabel: '',
     autoplay: true,

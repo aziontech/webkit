@@ -13,7 +13,7 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface PasswordInputProps {
     /** Placeholder shown when the field is empty. */
     placeholder?: string
     /** Native maxlength — maximum number of characters allowed. */
@@ -33,9 +33,7 @@
     /** Sets the value and placeholder in the monospace code face, for API tokens, client secrets and keys. */
     monospace?: boolean
   }
-  export type PasswordInputProps = Props
-
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<PasswordInputProps>(), {
     placeholder: '',
     maxLength: undefined,
     disabled: false,

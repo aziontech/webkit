@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 4
 template: 2
-checksum: 1bea8b1852042a7ac7b49ef47bfa315cf5644c49115f242576217eb75964acc6
+checksum: a58be53b8463d4b8d25b39d50a76850c140d63535616812d4ffaf2038dcbae6a
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -65,22 +65,22 @@ and the owner either sends it or places it in the prompt input to edit.
 ## Sub-components
 
 _None. Data-driven (`items`), like Cloudscape's support prompt group. Exports: `"./suggestion-group"`;
-types `SuggestionItem`, `SuggestionGroupOrientation`._
+types `SuggestionGroupItem`, `SuggestionGroupOrientation`._
 
 ## Props
 
-| Prop          | Type                           | Default        | Required | JSDoc                                                                                                                   |
-| ------------- | ------------------------------ | -------------- | -------- | ----------------------------------------------------------------------------------------------------------------------- |
-| `items`       | `SuggestionItem[]`             | `[]`           | false    | Up to five prompts, most likely first.                                                                                  |
-| `ariaLabel`   | `string`                       | `''`           | false    | Accessible name of the group. Empty uses the locale catalog (`Suggested prompts`).                                     |
-| `orientation` | `'horizontal' \| 'vertical'`   | `'horizontal'` | false    | `horizontal` wraps chips in a row (follow-up questions under a response); `vertical` stacks them (support prompts on an empty conversation). |
-| `disabled`    | `boolean`                      | `false`        | false    | Disables every prompt, while a response is being generated.                                                             |
+| Prop          | Type                         | Default        | Required | JSDoc                                                                                                                                        |
+| ------------- | ---------------------------- | -------------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| `items`       | `SuggestionGroupItem[]`      | `[]`           | false    | Up to five prompts, most likely first.                                                                                                       |
+| `ariaLabel`   | `string`                     | `''`           | false    | Accessible name of the group. Empty uses the locale catalog (`Suggested prompts`).                                                           |
+| `orientation` | `'horizontal' \| 'vertical'` | `'horizontal'` | false    | `horizontal` wraps chips in a row (follow-up questions under a response); `vertical` stacks them (support prompts on an empty conversation). |
+| `disabled`    | `boolean`                    | `false`        | false    | Disables every prompt, while a response is being generated.                                                                                  |
 
 ## Events
 
-| Event    | Payload                                       | When                                                                     |
-| -------- | --------------------------------------------- | ------------------------------------------------------------------------ |
-| `select` | `(event: MouseEvent, item: SuggestionItem)`   | A prompt was chosen by pointer or keyboard (not while disabled).         |
+| Event    | Payload                                          | When                                                             |
+| -------- | ------------------------------------------------ | ---------------------------------------------------------------- |
+| `select` | `(event: MouseEvent, item: SuggestionGroupItem)` | A prompt was chosen by pointer or keyboard (not while disabled). |
 
 ## Slots
 
@@ -92,17 +92,17 @@ _No slots._
 
 ## Motion & Animations
 
-| Trigger | Animation / Transition                                   | Token     | Reduced-motion fallback         |
-| ------- | -------------------------------------------------------- | --------- | ------------------------------- |
+| Trigger | Animation / Transition                                        | Token     | Reduced-motion fallback         |
+| ------- | ------------------------------------------------------------- | --------- | ------------------------------- |
 | hover   | `transition-colors duration-fast-02 ease-productive-entrance` | `fast-02` | `motion-reduce:transition-none` |
 
 ## Tokens
 
-| Region   | Token                                                                    |
-| -------- | ------------------------------------------------------------------------ |
-| prompt   | `var(--bg-surface)`, `var(--border-default)` → hover `var(--border-strong)` / `var(--bg-hover)`, `var(--shape-button)` |
-| text     | `.text-label-sm`, `var(--text-default)`; icon `var(--text-muted)`; disabled `var(--text-disabled)` |
-| gaps     | `var(--spacing-xs)`, padding `var(--spacing-sm)` / `var(--spacing-2xs)`  |
+| Region | Token                                                                                                                  |
+| ------ | ---------------------------------------------------------------------------------------------------------------------- |
+| prompt | `var(--bg-surface)`, `var(--border-default)` → hover `var(--border-strong)` / `var(--bg-hover)`, `var(--shape-button)` |
+| text   | `.text-label-sm`, `var(--text-default)`; icon `var(--text-muted)`; disabled `var(--text-disabled)`                     |
+| gaps   | `var(--spacing-xs)`, padding `var(--spacing-sm)` / `var(--spacing-2xs)`                                                |
 
 ## Theme gaps
 

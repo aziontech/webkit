@@ -8,25 +8,25 @@
     type MarkdownParse,
     parseMarkdownIncremental
   } from '../lib/parse-markdown'
-  import type { AiSource } from '../sources/types'
+  import type { SourcesItem } from '../sources/types'
 
   defineOptions({
     name: 'StreamingResponse',
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface StreamingResponseProps {
     /** The model's Markdown so far. Parsed into elements, never injected as HTML: raw tags render as text and only http(s), mailto, relative and hash links survive. */
     content?: string
     /** Tokens are still arriving: shows the caret, marks the region busy and keeps an unclosed code fence as plain text until it closes. */
     streaming?: boolean
     /** Sources the `[n]` citations in the content resolve against (title in the tooltip and the accessible name). */
-    sources?: AiSource[]
+    sources?: SourcesItem[]
     /** The `anchor` of the `Sources` list under the response; citations link to its items. Empty renders unlinked numbers. */
     anchor?: string
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<StreamingResponseProps>(), {
     content: '',
     streaming: false,
     sources: () => [],

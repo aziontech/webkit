@@ -13,18 +13,17 @@
     default(): unknown
   }>()
 
-  const props = withDefaults(
-    defineProps<{
-      /** Max width of the panel shell. */
-      size?: PanelSize
-      /** When true, `size` max-width applies from `md` up only (dialog mobile bottom sheet). */
-      sizeAtMd?: boolean
-    }>(),
-    {
-      size: 'medium',
-      sizeAtMd: false
-    }
-  )
+  export interface PanelProps {
+    /** Max width of the panel shell. */
+    size?: PanelSize
+    /** When true, `size` max-width applies from `md` up only (dialog mobile bottom sheet). */
+    sizeAtMd?: boolean
+  }
+
+  const props = withDefaults(defineProps<PanelProps>(), {
+    size: 'medium',
+    sizeAtMd: false
+  })
 
   const attrs = useAttrs()
 

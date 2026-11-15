@@ -12,12 +12,12 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface KeyValuePairsItemProps {
     /** The key, rendered in the term. */
     label: string
   }
 
-  defineProps<Props>()
+  defineProps<KeyValuePairsItemProps>()
 
   defineSlots<{
     /** The value: text or composed components. Shows the empty-value marker when omitted or empty. */

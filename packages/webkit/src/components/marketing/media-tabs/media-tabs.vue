@@ -36,7 +36,7 @@
   /** Height each row is held to beside the media, and the title scale of a row of tabs. */
   export type MediaTabsSize = 'small' | 'medium' | 'large'
 
-  interface Props {
+  export interface MediaTabsProps {
     /** The tabs, in order, at most three when the tabs side is start or end and five when it is top or bottom; each item is a title, its description, and the image shown while it is active. Items past the limit are not rendered. */
     items?: MediaTabsItem[]
     /** Which side of the media the tabs sit on. Below the large breakpoint every side stacks, with the active tab's media inside its row. */
@@ -59,7 +59,7 @@
     textureFade?: TextureMaterialFade
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<MediaTabsProps>(), {
     items: () => [],
     tabsSide: 'start',
     size: 'medium',

@@ -11,7 +11,7 @@
   /** Layout of the default header row. */
   export type SectionModuleKind = 'center' | 'start' | 'split'
 
-  interface Props {
+  export interface SectionModuleProps {
     /** Headline of the module's header row, rendered as its `h2`. */
     title?: string
     /** Supporting sentence under the headline. */
@@ -26,7 +26,7 @@
     padded?: boolean
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<SectionModuleProps>(), {
     title: '',
     description: '',
     eyebrow: '',

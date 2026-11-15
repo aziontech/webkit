@@ -17,4 +17,7 @@ Accordion.Content = AccordionContent
 export default Accordion
 export { AccordionContent, AccordionItem, AccordionTrigger }
 export type { AccordionValue } from './accordion.vue'
+export type { AccordionProps } from './accordion.vue'
+export type { AccordionItemProps } from './accordion-item/accordion-item.vue'
+export type { AccordionTriggerProps } from './accordion-trigger/accordion-trigger.vue'
 export type { AccordionIconPosition, AccordionSize, AccordionType } from './injection-key'

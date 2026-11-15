@@ -17,7 +17,7 @@
   /** Figure face: the big-number mono figure or the large heading figure. */
   export type StatTileKind = 'mono' | 'sans'
 
-  interface Props {
+  export interface StatTileProps {
     /** Metric name, in sentence case. Fallback for the default slot. */
     label?: string
     /** The current value. It counts up from the previous value on change; null renders a dash. */
@@ -40,7 +40,7 @@
     loading?: boolean
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<StatTileProps>(), {
     label: '',
     value: null,
     formatValue: formatCompact,

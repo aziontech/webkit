@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 2
 template: 2
-checksum: bac732f14470ea80a28420785cc5cb229ff290cfa48cb4c4785d2479b7faabb0
+checksum: 1096b3978a2f74a1ff913b191ff3fda050becf0fa7ac6931c32a023b32ed8a6a
 created: 2026-11-14
 last_updated: 2026-11-15
 ---
@@ -56,14 +56,14 @@ The closing offer of a documentation page, parked at the foot of the "On this pa
 
 ## Props
 
-| Prop              | Type                    | Default     | Required | JSDoc                                                                        |
-| ----------------- | ----------------------- | ----------- | -------- | ---------------------------------------------------------------------------- |
-| `title`           | `string`                | `''`        | false    | The offer's headline; names the complementary landmark.                      |
-| `label`           | `string`                | `''`        | false    | Fallback copy when the default slot is empty.                                |
-| `primaryAction`   | `DocCallToActionAction` | `undefined` | false    | The primary action, `{ label, href }`; unset or an empty label renders none. |
-| `secondaryAction` | `DocCallToActionAction` | `undefined` | false    | The outlined secondary action, `{ label, href }`; unset renders none.        |
+| Prop              | Type                 | Default     | Required | JSDoc                                                                        |
+| ----------------- | -------------------- | ----------- | -------- | ---------------------------------------------------------------------------- |
+| `title`           | `string`             | `''`        | false    | The offer's headline; names the complementary landmark.                      |
+| `label`           | `string`             | `''`        | false    | Fallback copy when the default slot is empty.                                |
+| `primaryAction`   | `SectionTitleAction` | `undefined` | false    | The primary action, `{ label, href }`; unset or an empty label renders none. |
+| `secondaryAction` | `SectionTitleAction` | `undefined` | false    | The outlined secondary action, `{ label, href }`; unset renders none.        |
 
-`DocCallToActionAction` is exported: `{ label: string; href: string }`.
+`SectionTitleAction` is exported: `{ label: string; href: string }`.
 
 ## Events
 

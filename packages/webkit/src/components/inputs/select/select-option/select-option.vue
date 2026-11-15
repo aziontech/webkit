@@ -8,7 +8,7 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface SelectOptionProps {
     /** Stable value that identifies this option in the selection. */
     value: unknown
     /** Azion icon class for the leading decorative icon. */
@@ -16,9 +16,7 @@
     /** Disables this single option; does not affect the parent select. */
     disabled?: boolean
   }
-  export type SelectOptionProps = Props
-
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<SelectOptionProps>(), {
     icon: '',
     disabled: false
   })

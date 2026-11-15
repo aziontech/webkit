@@ -50,7 +50,7 @@
     href: string
   }
 
-  interface Props {
+  export interface SiteFooterProps {
     /** Where the footer sits: `site` closes a framed marketing page and draws its frame, `content` runs the bands full bleed. */
     kind?: SiteFooterKind
     /** Accessible name of the footer landmark. Empty uses the locale catalog (`Footer`). */
@@ -71,7 +71,7 @@
     languageAriaLabel?: string
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<SiteFooterProps>(), {
     kind: 'site',
     ariaLabel: '',
     home: '',

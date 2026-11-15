@@ -27,7 +27,7 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface SplitButtonProps {
     /** Visible label text on the primary command button. */
     label?: string
     /** Azion icon class for the primary button's leading icon. */
@@ -46,7 +46,7 @@
     updateLabelOnSelect?: boolean
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<SplitButtonProps>(), {
     label: '',
     icon: '',
     items: () => [],

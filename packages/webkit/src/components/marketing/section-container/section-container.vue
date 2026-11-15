@@ -9,7 +9,7 @@
   /** Width the column is capped at. */
   export type SectionContainerWidth = '3xl' | '4xl' | '5xl' | '6xl' | '7xl' | 'site'
 
-  interface Props {
+  export interface SectionContainerProps {
     /** Width the column is capped at; `site` is the marketing measure every band of that page frame shares. */
     maxWidth?: SectionContainerWidth
     /** Draw the column's two vertical rules. */
@@ -18,7 +18,7 @@
     padded?: boolean
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<SectionContainerProps>(), {
     maxWidth: '7xl',
     bordered: true,
     padded: false

@@ -23,7 +23,7 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface ConfirmDialogProps {
     /** The question or the outcome, as the dialog title. */
     title: string
     /** One sentence that says what happens on confirm. */
@@ -44,7 +44,7 @@
     defaultOpen?: boolean
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<ConfirmDialogProps>(), {
     description: '',
     confirmLabel: '',
     cancelLabel: '',

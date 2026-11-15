@@ -7,14 +7,14 @@
 
   defineOptions({ name: 'ChartAxis', inheritAttrs: false })
 
-  interface Props {
+  export interface ChartAxisProps {
     /** Which axis this is: the category axis or the value axis, by orientation. */
     kind: ChartAxisKind
     /** The most category labels drawn; the rest are thinned. */
     ticks?: number
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<ChartAxisProps>(), {
     ticks: 6
   })
 

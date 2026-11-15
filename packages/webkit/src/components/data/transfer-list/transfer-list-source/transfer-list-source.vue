@@ -14,14 +14,14 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface TransferListSourceProps {
     /** Heading text for the list; also its accessible name. */
     title?: string
     /** Shows a spinner in place of options and locks this list's controls while data loads. */
     loading?: boolean
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<TransferListSourceProps>(), {
     title: '',
     loading: false
   })

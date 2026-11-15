@@ -42,8 +42,8 @@
   import PanelFooter from '../../overlay/panel/panel-footer.vue'
   import PanelHeader from '../../overlay/panel/panel-header.vue'
   import DocOnThisPage, {
-    type DocTocGroup,
-    type DocTocItem
+    type DocOnThisPageGroup,
+    type DocOnThisPageItem
   } from '../doc-on-this-page/doc-on-this-page.vue'
 
   defineOptions({
@@ -65,7 +65,7 @@
     href?: string
   }
 
-  interface Props {
+  export interface DocLayoutProps {
     /** The docs tree: groups of rows, each with an id, a label and an `href`. */
     navigation?: DocLayoutNavGroup[]
     /** Id of the current row. Empty matches the current route against each row's `href`. */
@@ -75,16 +75,16 @@
     /** Where the Azion Docs mark links. */
     home?: string
     /** The article's headings for the On this page rail; the rail is not rendered when empty. */
-    outline?: DocTocItem[]
+    outline?: DocOnThisPageItem[]
     /** Complementary link groups under the outline. */
-    outlineGroups?: DocTocGroup[]
+    outlineGroups?: DocOnThisPageGroup[]
     /** Accessible name of the navigation landmark. Empty uses the locale catalog (`Documentation`). */
     ariaLabel?: string
     /** Names the top of the docs tree in the rail's Back button when a drill level is open. Empty uses the locale catalog (Docs). */
     rootLabel?: string
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<DocLayoutProps>(), {
     navigation: () => [],
     activeId: '',
     sections: () => [],

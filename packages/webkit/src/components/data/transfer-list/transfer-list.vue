@@ -2,9 +2,9 @@
   import { computed, provide, ref, useAttrs } from 'vue'
 
   import {
-    type MoveDirection,
     TransferListInjectionKey,
     type TransferListItems,
+    type TransferListMoveDirection,
     type TransferListSide,
     type TransferListValue
   } from './injection-key'
@@ -14,7 +14,7 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface TransferListProps {
     /** Item field that uniquely identifies a record (the same name as Cards); keys the selection and the rows. */
     itemKey?: string
     /** Disables all selection and move controls and applies disabled tokens. */
@@ -23,14 +23,17 @@
     moveOnDoubleClick?: boolean
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<TransferListProps>(), {
     itemKey: '',
     disabled: false,
     moveOnDoubleClick: true
   })
 
   const emit = defineEmits<{
-    move: [event: Event, payload: { direction: MoveDirection; items: TransferListItems }]
+    move: [
+      event: Event,
+      payload: { direction: TransferListMoveDirection; items: TransferListItems }
+    ]
     'item-double-click': [
       event: MouseEvent,
       payload: { list: TransferListSide; item: unknown; index: number }
@@ -42,8 +45,8 @@
 
   defineSlots<{
     default(props: {
-      move: (event: Event, direction: MoveDirection) => void
-      moveAll: (event: Event, direction: MoveDirection) => void
+      move: (event: Event, direction: TransferListMoveDirection) => void
+      moveAll: (event: Event, direction: TransferListMoveDirection) => void
       hasSelection: (side: TransferListSide) => boolean
       count: (side: TransferListSide) => number
       disabled: boolean
@@ -123,7 +126,7 @@
       .map((_, index) => index)
       .filter((index) => isSelected(side, index))
 
-  const move = (event: Event, direction: MoveDirection): void => {
+  const move = (event: Event, direction: TransferListMoveDirection): void => {
     if (props.disabled || anyLoading.value) return
     const fromSide: TransferListSide = direction === 'to-target' ? 'source' : 'target'
     const indexes = pickSelectedIndexes(fromSide)
@@ -146,7 +149,7 @@
     emit('move', event, { direction, items: moved })
   }
 
-  const moveAll = (event: Event, direction: MoveDirection): void => {
+  const moveAll = (event: Event, direction: TransferListMoveDirection): void => {
     if (props.disabled || anyLoading.value) return
     const fromSide: TransferListSide = direction === 'to-target' ? 'source' : 'target'
     const from = direction === 'to-target' ? [...sourceItems.value] : [...targetItems.value]

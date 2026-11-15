@@ -489,6 +489,29 @@ test('renamed exported types are rewritten where the consumer imports them', () 
   assert.equal(migrateSource(source, v6).source, source)
 })
 
+test('type renames apply at once, so a swap does not chain', () => {
+  const v6 = loadMigration(6)
+  const swap = {
+    ...v6,
+    types: {
+      ...v6.types,
+      TooltipPlacement: 'TooltipPlacementSide',
+      TooltipPlacementInput: 'TooltipPlacement'
+    }
+  }
+  const sfc = [
+    '<script setup lang="ts">',
+    "import type { TooltipPlacementInput, TooltipPlacement } from '@aziontech/webkit/tooltip'",
+    'const a: TooltipPlacementInput = "auto"',
+    'const b: TooltipPlacement = "top"',
+    '</script>'
+  ].join('\n')
+  const { source } = migrateSource(sfc, swap)
+  assert.match(source, /import type \{ TooltipPlacement, TooltipPlacementSide \}/)
+  assert.match(source, /const a: TooltipPlacement = "auto"/)
+  assert.match(source, /const b: TooltipPlacementSide = "top"/)
+})
+
 test('every type in the shipped types map is exported under its new name and not its old one', () => {
   const { types } = loadMigration(6)
   assert.ok(Object.keys(types).length >= 28)

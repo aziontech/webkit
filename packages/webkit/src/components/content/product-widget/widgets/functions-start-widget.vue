@@ -11,11 +11,11 @@
   defineOptions({ name: 'FunctionsStartWidget' })
 
   /** Start path the widget draws. */
-  export type FunctionsStartWidgetTab = 'agents' | 'console' | 'cli'
+  export type ProductWidgetFunctionsStartTab = 'agents' | 'console' | 'cli'
 
   interface Props {
     /** Start path the widget draws: a coding agent, the Console editor, or the terminal. */
-    tab?: FunctionsStartWidgetTab
+    tab?: ProductWidgetFunctionsStartTab
     /** Whether this widget is the one showing. */
     active?: boolean
     /** Whether the pointer is over the host. */

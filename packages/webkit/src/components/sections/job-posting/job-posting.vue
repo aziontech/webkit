@@ -15,6 +15,7 @@
   import PhoneInput from '../../inputs/phone-input/phone-input.vue'
   import FrameBox from '../../layout/frame-box/frame-box.vue'
   import SectionModule from '../../marketing/section-module/section-module.vue'
+  import type { SectionTitleAction } from '../../marketing/section-title/section-title.vue'
   import SectionTitle from '../../marketing/section-title/section-title.vue'
   import Dialog from '../../overlay/dialog/dialog.vue'
   import DialogContent from '../../overlay/dialog/dialog-content.vue'
@@ -28,6 +29,8 @@
     name: 'JobPosting',
     inheritAttrs: false
   })
+
+  export type { SectionTitleAction }
 
   /** One fact about the posting, listed in the rail. */
   export type JobPostingFacet = {
@@ -125,15 +128,7 @@
     browse: string
   }
 
-  /** A link: a label and where it goes. */
-  export type JobPostingAction = {
-    /** Visible label of the link. */
-    label: string
-    /** Destination of the link. */
-    href: string
-  }
-
-  interface Props {
+  export interface JobPostingProps {
     /** The application form: `{ title, description?, submitLabel, anchor?, ariaLabel?, fields }`, where `anchor` is the id of the apply section the rail button links to and a field is `{ name, kind, label, required?, helper?, placeholder?, accept?, autocomplete?, country? }`. */
     form: JobPostingForm
     /** Copy of the form and its outcomes: `{ missing, invalidEmail, invalidUrl, error, successTitle, successDescription, done, browse }`. */
@@ -151,7 +146,7 @@
     /** The description, one row per section in order; each is `{ title, blocks }` where a block is `{ kind: 'text', text }` or `{ kind: 'list', items }`. */
     sections?: JobPostingSection[]
     /** Link in the confirmation dialog back to the open positions; `{ label, href }`. Omitted when absent. */
-    secondaryAction?: JobPostingAction
+    secondaryAction?: SectionTitleAction
     /** The site is sending the application: the submit button shows its loading state, every control is disabled and a submit is ignored. */
     loading?: boolean
     /** The site sent the application: the confirmation dialog opens. */
@@ -160,7 +155,7 @@
     failed?: boolean
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<JobPostingProps>(), {
     anchor: '',
     area: '',
     title: '',

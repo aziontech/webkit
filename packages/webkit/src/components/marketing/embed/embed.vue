@@ -9,7 +9,7 @@
   /** Aspect ratio the frame holds while it scales. */
   export type EmbedRatio = 'video' | 'square' | 'wide'
 
-  interface Props {
+  export interface EmbedProps {
     /** URL of the document to embed. */
     src: string
     /** Accessible name for the embedded document, announced before its content. */
@@ -18,7 +18,7 @@
     ratio?: EmbedRatio
   }
 
-  withDefaults(defineProps<Props>(), {
+  withDefaults(defineProps<EmbedProps>(), {
     ratio: 'video'
   })
 

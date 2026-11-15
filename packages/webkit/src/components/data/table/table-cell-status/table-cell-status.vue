@@ -9,21 +9,20 @@
     inheritAttrs: false
   })
 
-  withDefaults(
-    defineProps<{
-      /** The status text. Empty renders a muted dash. */
-      label?: string
-      /** Semantic colour of the status; keep it from one shared helper per status set. */
-      severity?: TagSeverity
-      /** Azion icon class for a leading glyph. */
-      icon?: string
-    }>(),
-    {
-      label: '',
-      severity: 'neutral',
-      icon: undefined
-    }
-  )
+  export interface TableCellStatusProps {
+    /** The status text. Empty renders a muted dash. */
+    label?: string
+    /** Semantic colour of the status; keep it from one shared helper per status set. */
+    severity?: TagSeverity
+    /** Azion icon class for a leading glyph. */
+    icon?: string
+  }
+
+  withDefaults(defineProps<TableCellStatusProps>(), {
+    label: '',
+    severity: 'neutral',
+    icon: undefined
+  })
 
   const attrs = useAttrs()
   const ctx = inject(TableInjectionKey, null)

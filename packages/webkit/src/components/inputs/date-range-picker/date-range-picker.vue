@@ -63,7 +63,7 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface DateRangePickerProps {
     /** Quick ranges listed on the Relative tab. */
     relativeOptions?: RelativeOption[]
     /** Zones offered by the selector. Empty falls back to the zones `Intl` supports. */
@@ -95,9 +95,7 @@
     /** Size token of the trigger and the panel controls. */
     size?: RangeSize
   }
-  export type DateRangePickerProps = Props
-
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<DateRangePickerProps>(), {
     relativeOptions: () => DEFAULT_RELATIVE_OPTIONS,
     timeZones: () => [],
     showTimeZone: true,

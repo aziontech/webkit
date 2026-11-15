@@ -19,3 +19,5 @@ const Breadcrumb = Object.assign(BreadcrumbRoot, {
 
 export default Breadcrumb
 export type { BreadcrumbItemData } from './breadcrumb.vue'
+export type { BreadcrumbProps } from './breadcrumb.vue'
+export type { BreadcrumbItemProps } from './breadcrumb-item/breadcrumb-item.vue'

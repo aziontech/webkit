@@ -24,7 +24,7 @@
   /** Height the open claim is held to, and so the height of the whole stack. */
   export type StickyStackSize = 'small' | 'medium' | 'large'
 
-  interface Props {
+  export interface StickyStackProps {
     /** The claims, in reading order; each item is a title, the sentence that opens with it, and the image shown while it is open. */
     items?: StickyStackItem[]
     /** Height the open claim is held to, and so the height of the whole stack beside the media. */
@@ -35,7 +35,7 @@
     showProgress?: boolean
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<StickyStackProps>(), {
     items: () => [],
     size: 'medium',
     dwell: 0.7,

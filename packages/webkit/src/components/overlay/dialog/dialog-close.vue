@@ -11,15 +11,14 @@
     inheritAttrs: false
   })
 
-  const props = withDefaults(
-    defineProps<{
-      /** Accessible label for the close control. Empty uses the locale catalog (`Close`). */
-      ariaLabel?: string
-    }>(),
-    {
-      ariaLabel: ''
-    }
-  )
+  export interface DialogCloseProps {
+    /** Accessible label for the close control. Empty uses the locale catalog (`Close`). */
+    ariaLabel?: string
+  }
+
+  const props = withDefaults(defineProps<DialogCloseProps>(), {
+    ariaLabel: ''
+  })
 
   const attrs = useAttrs()
   const { t } = useTranslate({ dialog: en.dialog })

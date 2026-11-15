@@ -13,7 +13,7 @@
   /** Number of columns at full width. */
   export type KeyValuePairsColumns = 1 | 2 | 3 | 4
 
-  interface Props {
+  export interface KeyValuePairsProps {
     /** How each pair is laid out: `stacked` puts the label over the value, `split` puts the label at the start and the value at the end of one row. */
     kind?: KeyValuePairsKind
     /** Columns at full width; collapses to one column below md and to two at md when set to 3 or 4. */
@@ -24,7 +24,7 @@
     ariaLabel?: string
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<KeyValuePairsProps>(), {
     kind: 'stacked',
     columns: 1,
     loading: false,

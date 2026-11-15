@@ -14,14 +14,14 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface ConversationProps {
     /** Accessible name of the message log. Empty uses the locale catalog (`Conversation`). */
     ariaLabel?: string
     /** `split` puts the user's messages at the inline end (a full chat page); `start` keeps every message at the inline start (a side panel or drawer). */
     layout?: ConversationLayout
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<ConversationProps>(), {
     ariaLabel: '',
     layout: 'split'
   })

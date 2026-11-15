@@ -8,7 +8,7 @@
 
   export type InputGroupInputType = 'text' | 'email' | 'number' | 'password'
 
-  export interface Props {
+  export interface InputGroupInputProps {
     /** Native input type: the restricted set of Input, plus password to mask a secret value. */
     type?: InputGroupInputType
     /** Placeholder shown when the input is empty. */
@@ -24,9 +24,7 @@
     /** Sets aria-invalid. */
     invalid?: boolean
   }
-  export type InputGroupInputProps = Props
-
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<InputGroupInputProps>(), {
     type: 'text',
     placeholder: '',
     autocomplete: undefined,

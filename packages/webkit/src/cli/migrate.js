@@ -442,20 +442,30 @@ export function migrateSource(input, migration, { fromMajor = null, declaredMajo
     }
   }
 
-  for (const [from, to] of typeRenames) {
+  const alternation = (names) =>
+    [...names]
+      .sort((a, b) => b.length - a.length)
+      .map(escapeRe)
+      .join('|')
+
+  if (typeRenames.length) {
+    const aliased = new Map(typeRenames)
     out = out.replace(
-      new RegExp(`(\\{[^}]*?)(?<![\\w$])${escapeRe(from)}(?=\\s+as\\s)`, 'g'),
-      (all, head) => `${head}${to}`
+      new RegExp(`(?<=\\{[^}]*?)(?<![\\w$])(${alternation(aliased.keys())})(?=\\s+as\\s)`, 'g'),
+      (name) => aliased.get(name)
     )
-    changes.push(`${from} → ${to}`)
+    for (const [from, to] of typeRenames) changes.push(`${from} → ${to}`)
+  }
+
+  if (identifierRenames.size) {
+    out = replaceOutsideComments(
+      out,
+      new RegExp(`(?<![\\w$.-])(${alternation(identifierRenames.keys())})(?![\\w$])`, 'g'),
+      (name) => identifierRenames.get(name)
+    )
   }
 
   for (const [from, to] of identifierRenames) {
-    out = replaceOutsideComments(
-      out,
-      new RegExp(`(?<![\\w$.-])${escapeRe(from)}(?![\\w$])`, 'g'),
-      () => to
-    )
     out = replaceOutsideComments(
       out,
       new RegExp(`(</?)${escapeRe(kebab(from))}(?=[\\s/>])`, 'g'),

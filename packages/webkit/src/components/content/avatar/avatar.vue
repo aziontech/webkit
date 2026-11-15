@@ -15,7 +15,7 @@
   /** Generated fallback drawn when there is no image. */
   export type AvatarPattern = 'marble'
 
-  interface Props {
+  export interface AvatarProps {
     /** Image URL. When set, renders a photo and takes precedence over label and icon. */
     src?: string
     /** Accessible name: the image's alt with `src`, and the name of the initials or icon fallback without it. */
@@ -34,7 +34,7 @@
     colors?: string[]
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<AvatarProps>(), {
     src: '',
     alt: '',
     label: '',

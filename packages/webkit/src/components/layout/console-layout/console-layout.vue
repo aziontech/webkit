@@ -35,6 +35,7 @@
   import SearchTrigger from '../../actions/search-trigger/search-trigger.vue'
   import Avatar from '../../content/avatar/avatar.vue'
   import Brand from '../../content/brand/brand.vue'
+  import type { BreadcrumbItemData } from '../../navigation/breadcrumb/breadcrumb.vue'
   import Breadcrumb from '../../navigation/breadcrumb/breadcrumb.vue'
   import BreadcrumbItem from '../../navigation/breadcrumb/breadcrumb-item/breadcrumb-item.vue'
   import BreadcrumbList from '../../navigation/breadcrumb/breadcrumb-list.vue'
@@ -69,19 +70,13 @@
     inheritAttrs: false
   })
 
+  export type { BreadcrumbItemData }
+
   /** One row of the console navigation; an in-app `href` is followed with the app's router. */
   export type ConsoleLayoutNavItem = AppNavItem
 
   /** A titled section of the console navigation. */
   export type ConsoleLayoutNavGroup = AppNavGroup
-
-  /** One segment of the header trail; the last one is the current page. */
-  export type ConsoleLayoutCrumb = {
-    /** Visible segment text. */
-    label: string
-    /** Where the segment leads; an in-app path is followed with the app's router. */
-    href?: string
-  }
 
   /** The signed-in account. */
   export type ConsoleLayoutAccount = {
@@ -93,13 +88,13 @@
     src?: string
   }
 
-  interface Props {
+  export interface ConsoleLayoutProps {
     /** The navigation tree: groups of rows, each with an id, a label and an `href`. */
     navigation?: ConsoleLayoutNavGroup[]
     /** Id of the current row. Empty matches the current route against each row's `href`. */
     activeId?: string
     /** The trail shown in the header on wide layouts; the last one is the current page. */
-    breadcrumbs?: ConsoleLayoutCrumb[]
+    breadcrumbs?: BreadcrumbItemData[]
     /** Where the brand mark links. */
     home?: string
     /** The signed-in account, shown at the foot of the rail and as the header avatar. */
@@ -112,7 +107,7 @@
     toolsLabel?: string
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<ConsoleLayoutProps>(), {
     navigation: () => [],
     activeId: '',
     breadcrumbs: () => [],
@@ -426,7 +421,7 @@
     if (crumb) follow(event, crumb)
   }
 
-  const onPageCrumbClick = (event: globalThis.MouseEvent, crumb: ConsoleLayoutCrumb) => {
+  const onPageCrumbClick = (event: globalThis.MouseEvent, crumb: BreadcrumbItemData) => {
     if (hrefOf(crumb)) follow(event, crumb)
   }
 

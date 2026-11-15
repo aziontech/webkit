@@ -9,21 +9,20 @@
     inheritAttrs: false
   })
 
-  const props = withDefaults(
-    defineProps<{
-      /** Marks the step as disabled; adjacent connectors render at reduced opacity. */
-      disabled?: boolean
-      /** Drops the default node box so the slot content defines the node's appearance. */
-      unstyled?: boolean
-      /** Ends its branch: the node receives an incoming connector but originates none. */
-      terminal?: boolean
-    }>(),
-    {
-      disabled: false,
-      unstyled: false,
-      terminal: false
-    }
-  )
+  export interface FlowNodeProps {
+    /** Marks the step as disabled; adjacent connectors render at reduced opacity. */
+    disabled?: boolean
+    /** Drops the default node box so the slot content defines the node's appearance. */
+    unstyled?: boolean
+    /** Ends its branch: the node receives an incoming connector but originates none. */
+    terminal?: boolean
+  }
+
+  const props = withDefaults(defineProps<FlowNodeProps>(), {
+    disabled: false,
+    unstyled: false,
+    terminal: false
+  })
 
   defineSlots<{
     default(): unknown

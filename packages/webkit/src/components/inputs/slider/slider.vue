@@ -6,7 +6,7 @@
 
   defineOptions({ name: 'Slider', inheritAttrs: false })
 
-  interface Props {
+  export interface SliderProps {
     /** Lowest selectable value; the start end of the track (left in LTR, right in RTL). */
     min?: number
     /** Highest selectable value; the end of the track (right in LTR, left in RTL). */
@@ -28,9 +28,7 @@
     /** Text appended verbatim to the reference labels and to the announced value. */
     unit?: string
   }
-  export type SliderProps = Props
-
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<SliderProps>(), {
     min: 0,
     max: 100,
     step: 1,

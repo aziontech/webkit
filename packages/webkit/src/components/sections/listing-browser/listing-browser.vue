@@ -11,6 +11,7 @@
   import ItemDescription from '../../content/item/item-description.vue'
   import ItemList from '../../content/item/item-list.vue'
   import ItemTitle from '../../content/item/item-title.vue'
+  import type { LogoMark } from '../../content/logo/logo.vue'
   import Table from '../../data/table/table.vue'
   import TableBody from '../../data/table/table-body/table-body.vue'
   import TableCell from '../../data/table/table-cell/table-cell.vue'
@@ -32,6 +33,8 @@
     inheritAttrs: false
   })
 
+  export type { LogoMark }
+
   /** Horizontal alignment of a column. */
   export type ListingBrowserColumnAlign = 'start' | 'end'
 
@@ -47,14 +50,6 @@
     align?: ListingBrowserColumnAlign
   }
 
-  /** The client mark drawn beside a row's name. */
-  export type ListingBrowserMark = {
-    /** The client's name, the mark's alternative text. */
-    name: string
-    /** URL of the client's logo, drawn in one ink that follows the theme. */
-    logo: string
-  }
-
   /** One row of the listing, linked by its first column. */
   export type ListingBrowserRow = {
     /** Destination of the row. */
@@ -66,7 +61,7 @@
     /** The facet values the row carries, keyed by facet. */
     facets?: Record<string, string[]>
     /** Client mark drawn before the name on the table and above it on phones. */
-    mark?: ListingBrowserMark
+    mark?: LogoMark
   }
 
   /** One option of a facet select. */
@@ -99,7 +94,7 @@
     by?: string
   }
 
-  interface Props {
+  export interface ListingBrowserProps {
     /** In-page `id` of the band, the target of a `#hash` link. */
     anchor?: string
     /** Headline over the listing, rendered by the section title as its `h2` and naming the band. */
@@ -132,7 +127,7 @@
     filterLabel?: string
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<ListingBrowserProps>(), {
     anchor: '',
     title: '',
     columns: () => [],

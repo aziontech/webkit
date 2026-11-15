@@ -12,7 +12,7 @@
   /** Visual variant of the switch. */
   export type SwitchKind = 'default' | 'privacy'
 
-  interface Props {
+  export interface SwitchProps {
     /** Visual variant. Privacy renders a lock icon inside the handle. */
     kind?: SwitchKind
     /** Moves focus to the switch once, when it mounts. */
@@ -24,9 +24,7 @@
     /** Form field name: while on, a hidden input submits `on` under this name, like a native checkbox. */
     name?: string
   }
-  export type SwitchProps = Props
-
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<SwitchProps>(), {
     kind: 'default',
     autofocus: false,
     disabled: false,

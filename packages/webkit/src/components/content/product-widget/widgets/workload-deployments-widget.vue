@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import Button from '../../../actions/button/button.vue'
   import Tag, { type TagSeverity } from '../../tag/tag.vue'
-  import ShellMockup, { type ShellMockupFade } from '../shell-mockup/shell-mockup.vue'
+  import ShellMockup, { type ProductWidgetShellMockupFade } from '../shell-mockup/shell-mockup.vue'
   import ShellMockupPart from '../shell-mockup/shell-mockup-part/shell-mockup-part.vue'
 
   defineOptions({ name: 'WorkloadDeploymentsWidget' })
@@ -10,7 +10,7 @@
     /** Design width of the frame from `md` up. */
     width?: number
     /** Edge the mockup fades out along. */
-    fade?: ShellMockupFade
+    fade?: ProductWidgetShellMockupFade
     /** Whether this widget is the one showing. */
     active?: boolean
   }

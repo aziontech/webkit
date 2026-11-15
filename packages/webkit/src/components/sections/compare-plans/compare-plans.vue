@@ -13,6 +13,7 @@
   import SelectOption from '../../inputs/select/select-option/select-option.vue'
   import SelectTrigger from '../../inputs/select/select-trigger/select-trigger.vue'
   import SectionModule from '../../marketing/section-module/section-module.vue'
+  import type { SectionTitleAction } from '../../marketing/section-title/section-title.vue'
   import Link from '../../navigation/link/link.vue'
   import Popover from '../../overlay/popover/popover.vue'
   import PopoverContent from '../../overlay/popover/popover-content/popover-content.vue'
@@ -26,13 +27,7 @@
     inheritAttrs: false
   })
 
-  /** A link or button target: a label and where it goes. */
-  export type ComparePlansAction = {
-    /** Visible label of the action. */
-    label: string
-    /** Destination the action links to. */
-    href: string
-  }
+  export type { SectionTitleAction }
 
   /** One plan column. */
   export type ComparePlansPlan = {
@@ -45,7 +40,7 @@
     /** One line under the name saying who the plan is for. */
     description?: string
     /** The button under the plan name. */
-    action: ComparePlansAction
+    action: SectionTitleAction
   }
 
   /** One cell value: `true` or a tick is included, a dash is not included, other text shows as written, empty is blank. */
@@ -76,10 +71,10 @@
     /** The feature rows, in order. */
     rows: ComparePlansRow[]
     /** Link closing the band, opened in a new tab; `{ label, href }`. */
-    action?: ComparePlansAction
+    action?: SectionTitleAction
   }
 
-  interface Props {
+  export interface ComparePlansProps {
     /** In-page id set on the band so a hash link can target it. */
     anchor?: string
     /** Screen-reader caption naming the table. */
@@ -97,10 +92,10 @@
     /** The product bands, in order; each is `{ eyebrow, title, description, rows, action? }` (`action` closes the band, `{ label, href }`) and a row is `{ label, values, group?, hint?, tag? }` with one value per plan: `true` or a tick is included, a dash is not included, other text shows as written, empty is blank; `hint` defines the label in a popover. */
     sections?: ComparePlansSection[]
     /** Closing link under the table, opened in a new tab; `{ label, href }`. Omitted when absent. */
-    primaryAction?: ComparePlansAction
+    primaryAction?: SectionTitleAction
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<ComparePlansProps>(), {
     anchor: '',
     caption: '',
     columnLabel: '',

@@ -20,7 +20,7 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface ConversationHistoryProps {
     /** Conversations, any order; they are sorted newest first inside their group. */
     items?: ConversationHistoryItem[]
     /** Reference time for the groups. Empty uses the nearest WebkitProvider now, then the current time; set either when the list is rendered on the server. */
@@ -33,7 +33,7 @@
     ariaLabel?: string
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<ConversationHistoryProps>(), {
     items: () => [],
     now: undefined,
     removable: false,

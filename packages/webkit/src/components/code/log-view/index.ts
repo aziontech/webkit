@@ -21,3 +21,5 @@ const LogViewRoot = Object.assign(LogView, {
 export default LogViewRoot
 export type { LogViewStep, LogViewStepStatus, LogViewStepsView } from './injection-key'
 export type { LogViewLine, LogViewLineLevel, LogViewLineType } from './log-view.vue'
+export type { LogViewProps } from './log-view.vue'
+export type { LogViewStepsProps } from './log-view-steps.vue'

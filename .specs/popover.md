@@ -7,7 +7,7 @@ spec_version: 9
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=482-954
   node_id: 482:954
-checksum: 9cc8fa3055e57032035ba19201c594202f9d2f84108b6e2e9c137a8071381af9
+checksum: bfcc983d7ff1119150cfc9e71e9cb23513d4c19badaed0103df1b8cbb1d97dc5
 created: 2026-06-30
 last_updated: 2026-11-15
 ---
@@ -46,7 +46,7 @@ Anchored, **non-modal** overlay that opens from a consumer-supplied trigger and 
 - Include a `Popover.Title`. The panel takes its accessible name from it through `aria-labelledby`.
 - Set `size` for forms and filter builders so the panel doesn't resize as content changes. Without it, the panel sizes fluidly between the `--container-3xs` and `--container-xs` tokens.
 - Use `placement="auto"` for triggers that can sit near a viewport edge.
-- Use a side placement (`right-start`, `left-start`, …) for a trigger in a narrow column or a sidebar, where the panel should open beside the trigger instead of covering the content below it. Type a placement held in a variable with the exported `PopoverPlacement` (or `PopoverPlacementInput` when it can be `'auto'`), never a cast.
+- Use a side placement (`right-start`, `left-start`, …) for a trigger in a narrow column or a sidebar, where the panel should open beside the trigger instead of covering the content below it. Type a placement held in a variable with the exported `PopoverPlacement` (`PopoverPlacementSide` when it cannot be `'auto'`), never a cast.
 - Bind the open state with `v-model:open` (or `:open` + `@update:open`, whose handler receives a `boolean`).
 - Set `dismissible` to `false` only when an outside click would discard input. Then give the user a way out: `Popover.Close` or a footer action.
 
@@ -170,14 +170,14 @@ export default Object.assign(Popover, {
 
 | Prop          | Type                                             | Default          | Required | JSDoc                                                                                                                                                                                                                                                                                                                                         |
 | ------------- | ------------------------------------------------ | ---------------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `placement`   | `PopoverPlacementInput`                          | `'bottom-start'` | false    | Where the panel opens relative to the trigger: a side (`top`, `right`, `bottom`, `left`), optionally aligned to its `start` or `end`, or `'auto'`, which picks the best-fitting of the four vertical corners at open time based on available viewport space. A placement that does not fit flips to the opposite side, keeping its alignment. |
+| `placement`   | `PopoverPlacement`                               | `'bottom-start'` | false    | Where the panel opens relative to the trigger: a side (`top`, `right`, `bottom`, `left`), optionally aligned to its `start` or `end`, or `'auto'`, which picks the best-fitting of the four vertical corners at open time based on available viewport space. A placement that does not fit flips to the opposite side, keeping its alignment. |
 | `offset`      | `number`                                         | `4`              | false    | Pixel gap between the trigger and the panel.                                                                                                                                                                                                                                                                                                  |
 | `disabled`    | `boolean`                                        | `false`          | false    | Prevents the trigger from opening the panel and applies disabled tokens.                                                                                                                                                                                                                                                                      |
 | `size`        | `PopoverSize` (`'small' \| 'medium' \| 'large'`) | `undefined`      | false    | Panel width preset mapped to container tokens: `'small'` (`var(--container-xs)`), `'medium'` (`var(--container-sm)`), `'large'` (`var(--container-md)`). When omitted, the panel sizes fluidly between `var(--container-3xs)` and `var(--container-xs)`. Same name as the size preset of `Dialog`, `Drawer` and `ConfirmDialog`.              |
 | `defaultOpen` | `boolean`                                        | `false`          | false    | Initial open state when uncontrolled (`v-model:open` unbound).                                                                                                                                                                                                                                                                                |
 | `dismissible` | `boolean`                                        | `true`           | false    | Light-dismiss: when `true`, the panel closes on outside-click and `Esc`. Set `false` to keep it open until the trigger or `PopoverClose` closes it.                                                                                                                                                                                           |
 
-Types (exported from `@aziontech/webkit/popover`): `PopoverPlacement` is `'top' | 'top-start' | 'top-end' | 'right' | 'right-start' | 'right-end' | 'bottom' | 'bottom-start' | 'bottom-end' | 'left' | 'left-start' | 'left-end'`; `PopoverPlacementInput` is `PopoverPlacement | 'auto'`.
+Types (exported from `@aziontech/webkit/popover`): `PopoverPlacementSide` is `'top' | 'top-start' | 'top-end' | 'right' | 'right-start' | 'right-end' | 'bottom' | 'bottom-start' | 'bottom-end' | 'left' | 'left-start' | 'left-end'`; `PopoverPlacement` is `PopoverPlacementSide | 'auto'`.
 
 ## v-model
 
@@ -203,7 +203,7 @@ _No events of its own: `update:open` comes from `v-model:open` (see v-model abov
 - Cursor: the trigger wrapper shows `pointer`, and `not-allowed` with `data-disabled`
 - `data-size` on the floating panel mirrors `size`
 - `data-placement` on the root mirrors the `placement` prop (`'auto'` stays as `'auto'`)
-- `data-placement` on the floating panel mirrors the resolved placement (any `PopoverPlacement`; `'auto'` resolves to one of `'bottom-start' | 'bottom-end' | 'top-start' | 'top-end'`)
+- `data-placement` on the floating panel mirrors the resolved placement (any `PopoverPlacementSide`; `'auto'` resolves to one of `'bottom-start' | 'bottom-end' | 'top-start' | 'top-end'`)
 
 ## Motion & Animations
 

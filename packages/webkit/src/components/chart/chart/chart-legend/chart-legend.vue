@@ -5,12 +5,12 @@
 
   defineOptions({ name: 'ChartLegend', inheritAttrs: false })
 
-  interface Props {
+  export interface ChartLegendProps {
     /** Shows each series total beside its name (the same name as ChartTooltip). */
     total?: boolean
   }
 
-  withDefaults(defineProps<Props>(), {
+  withDefaults(defineProps<ChartLegendProps>(), {
     total: false
   })
 

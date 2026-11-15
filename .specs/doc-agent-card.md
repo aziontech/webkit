@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 2
 template: 2
-checksum: 0957e5c880b38e2c073c359f7daa55288fd61bf9fa80625e0f6a6319f093c8ee
+checksum: 33b3e7b75c0dde066d07a701f4e8baa8607af52eb481e6d92de97c8485d23659
 created: 2026-11-12
 last_updated: 2026-11-15
 ---
@@ -57,15 +57,15 @@ The "Your AI agent, fluent in Azion" card that opens the first section of a docu
 
 ## Props
 
-| Prop          | Type                | Default     | Required | JSDoc                                                                                    |
-| ------------- | ------------------- | ----------- | -------- | ---------------------------------------------------------------------------------------- |
-| `prompt`      | `string`            | —           | true     | The prompt `CopyPromptButton` copies.                                                    |
-| `title`       | `string`            | `''`        | false    | Card heading (an `h3`); empty uses the catalog's `Your AI agent, fluent in Azion`.       |
-| `description` | `string`            | `''`        | false    | One or two sentences on what the prompt gives the agent; empty uses the catalog's.       |
-| `agents`      | `CopyPromptAgent[]` | `undefined` | false    | The agents whose marks the copy button shows; unset keeps the button's default list.     |
-| `asideTitle`  | `string`            | `''`        | false    | Question over the guided action; empty uses the catalog's `Prefer the guided route?`.    |
-| `actionLabel` | `string`            | `''`        | false    | Label of the guided action; empty uses the catalog's `Agent setup`.                      |
-| `actionHref`  | `string`            | `''`        | false    | Destination of the guided action; empty renders it as a button that only emits `action`. |
+| Prop          | Type                      | Default     | Required | JSDoc                                                                                    |
+| ------------- | ------------------------- | ----------- | -------- | ---------------------------------------------------------------------------------------- |
+| `prompt`      | `string`                  | —           | true     | The prompt `CopyPromptButton` copies.                                                    |
+| `title`       | `string`                  | `''`        | false    | Card heading (an `h3`); empty uses the catalog's `Your AI agent, fluent in Azion`.       |
+| `description` | `string`                  | `''`        | false    | One or two sentences on what the prompt gives the agent; empty uses the catalog's.       |
+| `agents`      | `CopyPromptButtonAgent[]` | `undefined` | false    | The agents whose marks the copy button shows; unset keeps the button's default list.     |
+| `asideTitle`  | `string`                  | `''`        | false    | Question over the guided action; empty uses the catalog's `Prefer the guided route?`.    |
+| `actionLabel` | `string`                  | `''`        | false    | Label of the guided action; empty uses the catalog's `Agent setup`.                      |
+| `actionHref`  | `string`                  | `''`        | false    | Destination of the guided action; empty renders it as a button that only emits `action`. |
 
 ## Events
 

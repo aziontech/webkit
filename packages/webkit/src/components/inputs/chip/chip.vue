@@ -13,7 +13,7 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface ChipProps {
     /** Fallback text when the default slot is empty. */
     label?: string
     /** Visual variant. Filled (grey fill) is an applied value, outlined an available one, dashed the control that adds one. */
@@ -29,9 +29,7 @@
     /** Suppresses activation, toggling and removal. */
     disabled?: boolean
   }
-  export type ChipProps = Props
-
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<ChipProps>(), {
     label: '',
     kind: 'filled',
     size: 'medium',

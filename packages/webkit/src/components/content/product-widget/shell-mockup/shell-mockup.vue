@@ -19,24 +19,24 @@
   /** How the mockup is plated: a bordered console window, or bare parts floating on the host's surface. */
   export type ShellMockupKind = 'window' | 'bare'
   /** Console generation the shell draws: the current one, or the previous one with its top bar. */
-  export type ShellMockupShell = 'console' | 'legacy'
+  export type ProductWidgetShellMockupShell = 'console' | 'legacy'
   /** Edge the mockup fades out along; y fades top and bottom. */
-  export type ShellMockupFade = 'none' | 'bottom' | 'top' | 'left' | 'right' | 'y'
+  export type ProductWidgetShellMockupFade = 'none' | 'bottom' | 'top' | 'left' | 'right' | 'y'
   /** Duration tokens the entrance timing can be set to. */
-  export type ShellMockupDuration =
+  export type ProductWidgetShellMockupDuration =
     'fast-01' | 'fast-02' | 'moderate-01' | 'moderate-02' | 'slow-01' | 'slow-02'
 
   interface Props {
     /** How the mockup is plated: a bordered console window, or bare parts floating on the host's surface. */
     kind?: ShellMockupKind
     /** Console generation the shell draws: the current one, or the previous one with its top bar. */
-    shell?: ShellMockupShell
+    shell?: ProductWidgetShellMockupShell
     /** Design width of the frame from `md` up; the frame scales to fit its host. */
     width?: number
     /** Design width of the frame below `md`. */
     mobileWidth?: number
     /** Edge the mockup fades out along; `y` fades top and bottom. */
-    fade?: ShellMockupFade
+    fade?: ProductWidgetShellMockupFade
     /** Draws the console bar over the body. */
     chrome?: boolean
     /** Module label on the console bar; with a rail, `›` splits it into breadcrumbs. */
@@ -48,9 +48,9 @@
     /** How the frame's texture fades out before its edges. */
     textureFade?: TextureMaterialFade
     /** Duration token of each part's travel. */
-    travel?: ShellMockupDuration
+    travel?: ProductWidgetShellMockupDuration
     /** Duration token of the gap between one part's beat and the next. */
-    beat?: ShellMockupDuration
+    beat?: ProductWidgetShellMockupDuration
     /** Whether this mockup is the one showing; parts replay their entrance each time it becomes active. */
     active?: boolean
     /** Lets the viewer operate the controls inside instead of drawing them as an inert picture. */

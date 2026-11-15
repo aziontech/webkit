@@ -16,7 +16,7 @@
   export type NavigationMenuOrientation = 'horizontal' | 'vertical'
   export type NavigationMenuValue = string | number | null
 
-  interface Props {
+  export interface NavigationMenuProps {
     /** Uncontrolled initial open item value. */
     defaultValue?: NavigationMenuValue
     /** Hover-open delay in milliseconds. */
@@ -29,7 +29,7 @@
     ariaLabel?: string
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<NavigationMenuProps>(), {
     defaultValue: null,
     delay: 50,
     closeDelay: 300,

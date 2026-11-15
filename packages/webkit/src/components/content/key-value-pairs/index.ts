@@ -15,3 +15,6 @@ const KeyValuePairsRoot = Object.assign(KeyValuePairs, {
 export default KeyValuePairsRoot
 export { KeyValuePairsGroup, KeyValuePairsItem }
 export type { KeyValuePairsColumns, KeyValuePairsKind } from './key-value-pairs.vue'
+export type { KeyValuePairsProps } from './key-value-pairs.vue'
+export type { KeyValuePairsGroupProps } from './key-value-pairs-group/key-value-pairs-group.vue'
+export type { KeyValuePairsItemProps } from './key-value-pairs-item/key-value-pairs-item.vue'

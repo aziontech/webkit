@@ -12,7 +12,7 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface ButtonHighlightProps {
     /** Visible label text. Required — use IconButton for icon-only controls. */
     label: string
     /** Size token; affects height, padding, and typography. */
@@ -29,7 +29,7 @@
     target?: ButtonHighlightTarget
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<ButtonHighlightProps>(), {
     size: 'large',
     disabled: false,
     loading: false,

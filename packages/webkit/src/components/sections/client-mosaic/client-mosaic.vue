@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
-  import Logo, { type LogoKind } from '../../content/logo/logo.vue'
+  import Logo, { type LogoKind, type LogoTreatment } from '../../content/logo/logo.vue'
   import FrameBox from '../../layout/frame-box/frame-box.vue'
   import BentoGrid from '../../marketing/bento-grid/bento-grid.vue'
   import BentoGridCell from '../../marketing/bento-grid/bento-grid-cell/bento-grid-cell.vue'
@@ -13,11 +13,10 @@
     inheritAttrs: false
   })
 
+  export type { LogoTreatment }
+
   /** The fill of a cell face. */
   export type ClientMosaicFill = 'canvas' | 'surface' | 'white' | 'primary'
-
-  /** How a client mark is inked against its fill. */
-  export type ClientMosaicLogoTreatment = 'monochrome' | 'knockout' | 'as-is'
 
   /** A story cell: a photograph, the client mark, one line of its result and a case study link. */
   export type ClientMosaicStory = {
@@ -34,7 +33,7 @@
     /** Fill of the cell face. */
     fill?: ClientMosaicFill
     /** How the client mark is inked. */
-    logoTreatment?: ClientMosaicLogoTreatment
+    logoTreatment?: LogoTreatment
   }
 
   /** A mark cell: only the client's linked logo on a chosen fill. */
@@ -48,7 +47,7 @@
     /** Fill of the cell face. */
     fill?: ClientMosaicFill
     /** How the client mark is inked. */
-    logoTreatment?: ClientMosaicLogoTreatment
+    logoTreatment?: LogoTreatment
   }
 
   /** How many grid tracks a cell spans across or down. */
@@ -73,12 +72,12 @@
     /** Fill of the cell face; defaults to `canvas`. */
     fill?: ClientMosaicFill
     /** How the client mark is inked; defaults to `knockout` on a `white` or `primary` fill and `monochrome` on the others. */
-    logoTreatment?: ClientMosaicLogoTreatment
+    logoTreatment?: LogoTreatment
     /** Draws the mark one step taller, for a stacked lockup that is squarer than a wordmark. */
     stacked?: boolean
   }
 
-  interface Props {
+  export interface ClientMosaicProps {
     /** In-page id set on the band so a hash link can target it. */
     anchor?: string
     /** Accessible name of the grid. */
@@ -93,7 +92,7 @@
     cells?: ClientMosaicCell[]
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<ClientMosaicProps>(), {
     anchor: '',
     ariaLabel: '',
     linkLabel: '',
@@ -123,13 +122,12 @@
 
   const hasContent = computed(() => placed.value.length > 0)
 
-  const treatmentOf = (cell: ClientMosaicCell): ClientMosaicLogoTreatment =>
+  const treatmentOf = (cell: ClientMosaicCell): LogoTreatment =>
     cell.logoTreatment ??
     (cell.fill === 'white' || cell.fill === 'primary' ? 'knockout' : 'monochrome')
 
   const inkOf = (cell: ClientMosaicCell): LogoKind => {
-    const treatment = treatmentOf(cell)
-    return treatment === 'as-is' ? 'color' : treatment
+    return treatmentOf(cell)
   }
 </script>
 

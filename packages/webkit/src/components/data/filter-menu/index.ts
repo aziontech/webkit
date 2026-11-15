@@ -10,6 +10,8 @@ FilterMenu.Chips = FilterMenuChips
 
 export default FilterMenu
 export { FilterMenuChips }
+export type { FilterMenuProps } from './filter-menu.vue'
+export type { FilterMenuChipsProps } from './filter-menu-chips/filter-menu-chips.vue'
 export type {
   FilterMenuField,
   FilterMenuFieldKind,

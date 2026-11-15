@@ -20,7 +20,7 @@
   /** How the prompt occupies its row: a wrapping paragraph, or one unbroken line. */
   export type DocPromptKind = 'block' | 'line'
 
-  interface Props {
+  export interface DocPromptProps {
     /** Wrapping paragraph capped at four lines, or one line that scrolls sideways. */
     kind?: DocPromptKind
     /** What the block is, in a word or two. Renders as a titled row above the prompt. */
@@ -31,7 +31,7 @@
     label?: string
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<DocPromptProps>(), {
     kind: 'block',
     title: '',
     icon: 'ai ai-sparkles',

@@ -8,14 +8,14 @@
   import Skeleton from '../../feedback/skeleton/skeleton.vue'
   import { useFlowConnectors } from '../flow/connectors'
   import TopologyDiagramNode from './topology-node/topology-node.vue'
-  import type { TopologyLevel, TopologyNode } from './types'
+  import type { TopologyDiagramLevel, TopologyDiagramNodeData } from './types'
 
   export type {
-    TopologyBindOption,
-    TopologyLevel,
-    TopologyNode,
-    TopologyNodeField,
-    TopologyNodeSeverity
+    TopologyDiagramBindOption,
+    TopologyDiagramLevel,
+    TopologyDiagramNodeData,
+    TopologyDiagramNodeField,
+    TopologyDiagramNodeSeverity
   } from './types'
 
   defineOptions({
@@ -23,16 +23,16 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface TopologyDiagramProps {
     /** Columns of the diagram, from the entry point to the last dependency. */
-    levels?: TopologyLevel[]
+    levels?: TopologyDiagramLevel[]
     /** Shows placeholder cards while the topology loads. */
     loading?: boolean
     /** Accessible name of the diagram. Empty uses the locale catalog (`Deployment topology`). */
     ariaLabel?: string
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<TopologyDiagramProps>(), {
     levels: () => [],
     loading: false,
     ariaLabel: ''
@@ -54,7 +54,7 @@
 
   defineSlots<{
     /** Extra controls in a node's identity row, before the bind control. */
-    actions(props: { node: TopologyNode }): unknown
+    actions(props: { node: TopologyDiagramNodeData }): unknown
     /** Replaces the line shown when there are no levels. */
     empty(): unknown
   }>()
@@ -70,7 +70,7 @@
   )
   const label = computed<string>(() => props.ariaLabel || t('topologyDiagram.label'))
 
-  const PLACEHOLDER: TopologyLevel[] = [
+  const PLACEHOLDER: TopologyDiagramLevel[] = [
     { id: 'a', nodes: [{ id: 'a', type: '' }] },
     { id: 'b', nodes: [{ id: 'b', type: '' }] },
     {
@@ -81,7 +81,7 @@
       ]
     }
   ]
-  const shown = computed<TopologyLevel[]>(() => (props.loading ? PLACEHOLDER : props.levels))
+  const shown = computed<TopologyDiagramLevel[]>(() => (props.loading ? PLACEHOLDER : props.levels))
 
   const scrollEl = ref<HTMLElement | null>(null)
   const containerEl = ref<HTMLElement | null>(null)

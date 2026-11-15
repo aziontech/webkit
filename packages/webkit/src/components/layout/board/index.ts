@@ -10,4 +10,6 @@ Board.Item = BoardItem
 
 export default Board
 export { BoardItem }
+export type { BoardProps } from './board.vue'
+export type { BoardItemProps } from './board-item/board-item.vue'
 export type { BoardLayoutItem, BoardMoveDirection } from './injection-key'

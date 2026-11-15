@@ -5,7 +5,10 @@
   import { ProductWidgetInjectionKey } from './injection-key'
   import type * as Plates from './plates'
   import { resolveProductWidget } from './registry'
-  import type { ShellMockupFade, ShellMockupKind } from './shell-mockup/shell-mockup.vue'
+  import type {
+    ProductWidgetShellMockupFade,
+    ShellMockupKind
+  } from './shell-mockup/shell-mockup.vue'
 
   defineOptions({ name: 'ProductWidget', inheritAttrs: false })
 
@@ -94,7 +97,7 @@
     | 'functions'
     | 'rules-engine'
 
-  interface Props {
+  export interface ProductWidgetProps {
     /** Name of the console widget to draw. */
     name: ProductWidgetName
     /** Whether this widget is the one showing; it replays its entrance each time it becomes active. */
@@ -108,7 +111,7 @@
     /** Design width of a workload screen from md up; fragments keep their own width, and unset keeps the widget's own. */
     width?: number
     /** Edge a workload screen, workload-overview or application-version fades out along; fragments keep their own fade. */
-    fade?: ShellMockupFade
+    fade?: ProductWidgetShellMockupFade
     /** Texture a full-screen widget is grounded with. */
     texture?: TextureMaterialKind
     /** Tab a tabbed widget plays (workload-overview, application-version, functions-start); other widgets ignore it, and unset plays the first tab. */
@@ -119,7 +122,7 @@
     autoplayInterval?: number
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<ProductWidgetProps>(), {
     active: true,
     hovered: false,
     kind: undefined,

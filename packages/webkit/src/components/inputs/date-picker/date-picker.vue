@@ -24,7 +24,7 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface DatePickerProps {
     /** Size token; affects the trigger, day-cell hit-area, and typography. */
     size?: DatePickerSize
     /** Earliest selectable date; earlier days render disabled. */
@@ -54,9 +54,7 @@
     /** Renders the trigger as a split control with a separate chevron affordance. */
     split?: boolean
   }
-  export type DatePickerProps = Props
-
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<DatePickerProps>(), {
     size: 'medium',
     min: undefined,
     max: undefined,

@@ -12,7 +12,7 @@
   /** Axes the user can drag to resize the field. */
   export type TextareaResize = 'vertical' | 'horizontal' | 'both' | 'none'
 
-  interface Props {
+  export interface TextareaProps {
     /** Placeholder shown when the field is empty. */
     placeholder?: string
     /** Disables interaction and applies disabled tokens. */
@@ -34,9 +34,7 @@
     /** Lines the field grows to before it scrolls while autoResize is on; 0 sets no limit. */
     maxRows?: number
   }
-  export type TextareaProps = Props
-
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<TextareaProps>(), {
     placeholder: '',
     disabled: false,
     readonly: false,

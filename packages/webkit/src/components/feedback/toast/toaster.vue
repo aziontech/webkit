@@ -31,27 +31,26 @@
     inheritAttrs: false
   })
 
-  const props = withDefaults(
-    defineProps<{
-      /** Default corner (or edge-center) toasts anchor to; a per-toast `position` overrides it. */
-      position?: ToastPosition
-      /** Default auto-dismiss time in ms each toast inherits; a per-toast `duration` overrides it, and `0` keeps the toast until dismissed. */
-      duration?: number
-      /** Maximum simultaneously visible toasts per corner before the rest queue behind. */
-      max?: number
-      /** Keep the stack permanently expanded (otherwise it expands on hover). */
-      expand?: boolean
-      /** Show an always-visible close control on every toast; a per-toast `closable` option overrides it. */
-      closable?: boolean
-    }>(),
-    {
-      position: 'bottom-right',
-      duration: 4000,
-      max: 3,
-      expand: false,
-      closable: false
-    }
-  )
+  export interface ToasterProps {
+    /** Default corner (or edge-center) toasts anchor to; a per-toast `position` overrides it. */
+    position?: ToastPosition
+    /** Default auto-dismiss time in ms each toast inherits; a per-toast `duration` overrides it, and `0` keeps the toast until dismissed. */
+    duration?: number
+    /** Maximum simultaneously visible toasts per corner before the rest queue behind. */
+    max?: number
+    /** Keep the stack permanently expanded (otherwise it expands on hover). */
+    expand?: boolean
+    /** Show an always-visible close control on every toast; a per-toast `closable` option overrides it. */
+    closable?: boolean
+  }
+
+  const props = withDefaults(defineProps<ToasterProps>(), {
+    position: 'bottom-right',
+    duration: 4000,
+    max: 3,
+    expand: false,
+    closable: false
+  })
 
   defineSlots<{
     default(props: { toast: ToastEntry; dismiss: () => void }): unknown

@@ -23,7 +23,7 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface PaymentBrandProps {
     /** The card network as the payment API names it (`visa`, `mastercard`, `amex`, `American Express`, `diners`, `jcb`, `discover`, `elo`, `hipercard`, `unionpay`…). Unknown values draw the generic card glyph. */
     brand?: string
     /** Plate size: `small` 20 × 32 px for dense tables, `medium` 28 × 40 px for rows and forms. */
@@ -34,7 +34,7 @@
     decorative?: boolean
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<PaymentBrandProps>(), {
     brand: '',
     size: 'medium',
     ariaLabel: '',

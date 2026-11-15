@@ -9,7 +9,7 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface PageHeaderProps {
     /** The page title, rendered as the page h1. */
     title: string
     /** One sentence under the title that says what the page is for. */
@@ -20,7 +20,7 @@
     titleId?: string
   }
 
-  withDefaults(defineProps<Props>(), {
+  withDefaults(defineProps<PageHeaderProps>(), {
     description: '',
     size: 'medium',
     titleId: ''

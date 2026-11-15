@@ -11,15 +11,14 @@
     inheritAttrs: false
   })
 
-  const props = withDefaults(
-    defineProps<{
-      /** Vertical alignment of nodes within the diagram. */
-      align?: FlowAlign
-    }>(),
-    {
-      align: 'start'
-    }
-  )
+  export interface FlowProps {
+    /** Vertical alignment of nodes within the diagram. */
+    align?: FlowAlign
+  }
+
+  const props = withDefaults(defineProps<FlowProps>(), {
+    align: 'start'
+  })
 
   defineSlots<{
     default(): unknown

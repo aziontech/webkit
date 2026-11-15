@@ -6,6 +6,7 @@
   import Diagram, { type DiagramName } from '../../marketing/diagram/diagram.vue'
   import MediaTabs from '../../marketing/media-tabs/media-tabs.vue'
   import SectionModule from '../../marketing/section-module/section-module.vue'
+  import type { SectionTitleAction } from '../../marketing/section-title/section-title.vue'
   import SectionTitle from '../../marketing/section-title/section-title.vue'
 
   defineOptions({
@@ -13,20 +14,10 @@
     inheritAttrs: false
   })
 
+  export type { SectionTitleAction }
+
   /** Side of the diagram the tabs sit on. */
   export type ArchitectureTabsSide = 'top' | 'bottom' | 'start' | 'end'
-
-  /** The large button in the section title. */
-  export type ArchitectureTabsAction = {
-    /** Visible label of the action. */
-    label: string
-    /** Destination the action links to. */
-    href: string
-    /** Closes the label on a trailing chevron that reads as "go". */
-    trailing?: boolean
-    /** Link target of the action. */
-    target?: '_blank' | '_self'
-  }
 
   /** One architecture of the band: a tab and the diagram it draws. */
   export type ArchitectureTabsTab = {
@@ -42,7 +33,7 @@
     diagramAriaLabel?: string
   }
 
-  interface Props {
+  export interface ArchitectureTabsProps {
     /** In-page id set on the band so a `#hash` link can scroll to it. */
     anchor?: string
     /** Overline above the section title. */
@@ -60,10 +51,10 @@
     /** Milliseconds each tab holds before the next one opens. */
     autoplayInterval?: number
     /** Large button in the section title; `{ label, href, trailing?, target? }`. Omitted when absent. */
-    primaryAction?: ArchitectureTabsAction
+    primaryAction?: SectionTitleAction
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<ArchitectureTabsProps>(), {
     anchor: '',
     eyebrow: '',
     title: '',

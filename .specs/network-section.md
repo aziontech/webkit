@@ -7,7 +7,7 @@ status: implemented
 spec_version: 4
 created: 2026-11-04
 last_updated: 2026-11-15
-checksum: c2f073f92dfea4989678a53f6c3c00950a9c9c47eda96569ec4dd50e911022bd
+checksum: 255d33ae118873fb0793506e3e9dcfae51cbb0b3b6ba5ba483beba73b4171af9
 ---
 
 # NetworkSection — Component Spec
@@ -39,7 +39,7 @@ The infrastructure band of a marketing page: a tall framed panel with the world 
 - Four `stats` on the `stats` floor, each a `value` and a `label`, with an optional `prefix` and `suffix`.
 - Give the band an `anchor` when a page links to it with a `#hash`.
 - Leave `logo` out of an outcome when the site shows the figure alone; the cell then renders no mark row.
-- Use `logoTreatment: 'monochrome'` for a dark mark that must invert in the dark theme; leave `as-is` for a colour mark.
+- Use `logoTreatment: 'monochrome'` for a dark mark that must invert in the dark theme; leave `color` for a colour mark.
 
 ## Usage
 
@@ -71,7 +71,7 @@ The infrastructure band of a marketing page: a tall framed panel with the world 
       {
         logo: '/logos/renner.svg',
         logoAlt: 'Renner',
-        logoTreatment: 'as-is',
+        logoTreatment: 'color',
         text: '67% saved on data transfer, even during massive traffic spikes.',
         highlights: ['67% saved']
       }
@@ -82,17 +82,17 @@ The infrastructure band of a marketing page: a tall framed panel with the world 
 
 ## Props
 
-| Prop       | Type                                | Default      | Required | JSDoc                                                                                                                                                                                                                                                                                                                                                         |
-| ---------- | ----------------------------------- | ------------ | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `kind`     | `NetworkSectionKind`                | `'outcomes'` | false    | Which floor closes the band: `outcomes` renders the client quotes, `benefits` the benefit topics on up to three columns, `stats` the headline figures.                                                                                                                                                                                                        |
-| `anchor`   | `string`                            | `''`         | false    | In-page id set on the band so a `#hash` link can scroll to it.                                                                                                                                                                                                                                                                                                |
-| `eyebrow`  | `string`                            | `''`         | false    | Overline above the headline.                                                                                                                                                                                                                                                                                                                                  |
-| `title`    | `string`                            | `''`         | false    | Headline of the band, rendered by the small section title as its `h2`; the band renders nothing when empty.                                                                                                                                                                                                                                                   |
-| `claimsEyebrow` | `string`                            | `''`         | false    | Overline-set line above the claims.                                                                                                                                                                                                                                                                                                                           |
-| `claims`   | `(string \| NetworkSectionClaim)[]` | `[]`         | false    | Short figures rendered as chips under the claims eyebrow, in order; each is a string or `{ label, mobile? }`, where `mobile: false` hides the chip below the medium breakpoint.                                                                                                                                                                                         |
-| `outcomes` | `NetworkSectionOutcome[]`           | `[]`         | false    | Client results for the `outcomes` floor, in order, one column each up to four; each is `{ logo?, logoAlt?, logoTreatment?, text, highlights? }` where `logo` is the mark URL (the cell renders no mark without it), `logoAlt` names the client, `logoTreatment` is `'monochrome'` or `'as-is'`, and `highlights` are the phrases of `text` set in the accent. |
-| `benefits` | `NetworkSectionBenefit[]`           | `[]`         | false    | Topics for the `benefits` floor, in order, on up to three columns balanced so every row is full; each is `{ title, description, icon? }`, rendered as a topic whose title is an `h3`.                                                                                                                                                                         |
-| `stats`    | `NetworkSectionStat[]`              | `[]`         | false    | Figures for the `stats` floor, in order, rendered by `big-numbers`; each is `{ value, label, prefix?, suffix? }`.                                                                                                                                                                                                                                             |
+| Prop            | Type                                | Default      | Required | JSDoc                                                                                                                                                                                                                                                                                                                                                                                              |
+| --------------- | ----------------------------------- | ------------ | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `kind`          | `NetworkSectionKind`                | `'outcomes'` | false    | Which floor closes the band: `outcomes` renders the client quotes, `benefits` the benefit topics on up to three columns, `stats` the headline figures.                                                                                                                                                                                                                                             |
+| `anchor`        | `string`                            | `''`         | false    | In-page id set on the band so a `#hash` link can scroll to it.                                                                                                                                                                                                                                                                                                                                     |
+| `eyebrow`       | `string`                            | `''`         | false    | Overline above the headline.                                                                                                                                                                                                                                                                                                                                                                       |
+| `title`         | `string`                            | `''`         | false    | Headline of the band, rendered by the small section title as its `h2`; the band renders nothing when empty.                                                                                                                                                                                                                                                                                        |
+| `claimsEyebrow` | `string`                            | `''`         | false    | Overline-set line above the claims.                                                                                                                                                                                                                                                                                                                                                                |
+| `claims`        | `(string \| NetworkSectionClaim)[]` | `[]`         | false    | Short figures rendered as chips under the claims eyebrow, in order; each is a string or `{ label, mobile? }`, where `mobile: false` hides the chip below the medium breakpoint.                                                                                                                                                                                                                    |
+| `outcomes`      | `NetworkSectionOutcome[]`           | `[]`         | false    | Client results for the `outcomes` floor, in order, one column each up to four; each is `{ logo?, logoAlt?, logoTreatment?, text, highlights? }` where `logo` is the mark URL (the cell renders no mark without it), `logoAlt` names the client, `logoTreatment` is `'monochrome'` or `'color'` (`LogoTreatment` without `knockout`), and `highlights` are the phrases of `text` set in the accent. |
+| `benefits`      | `NetworkSectionBenefit[]`           | `[]`         | false    | Topics for the `benefits` floor, in order, on up to three columns balanced so every row is full; each is `{ title, description, icon? }`, rendered as a topic whose title is an `h3`.                                                                                                                                                                                                              |
+| `stats`         | `NetworkSectionStat[]`              | `[]`         | false    | Figures for the `stats` floor, in order, rendered by `big-numbers`; each is `{ value, label, prefix?, suffix? }`.                                                                                                                                                                                                                                                                                  |
 
 ## Events
 
@@ -122,9 +122,9 @@ _none_
 
 | Region                            | Token (DESIGN.md)                                        |
 | --------------------------------- | -------------------------------------------------------- |
-| typography (claims eyebrow)                 | `.text-overline-md`                                      |
+| typography (claims eyebrow)       | `.text-overline-md`                                      |
 | typography (claim chip)           | `.text-label-sm`, `.text-label-md` from `sm`             |
-| claims eyebrow text                       | `var(--text-muted)`                                      |
+| claims eyebrow text               | `var(--text-muted)`                                      |
 | claim text                        | `var(--text-default)`                                    |
 | claim chip border                 | `var(--primary)`                                         |
 | band and cell fill                | `var(--bg-canvas)`                                       |

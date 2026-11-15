@@ -9,7 +9,7 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface SkeletonProps {
     /** Geometry: a rounded rectangular block (`rectangle`) or a circle. */
     kind?: SkeletonKind
     /** CSS width (any length). */
@@ -20,7 +20,7 @@
     animated?: boolean
   }
 
-  withDefaults(defineProps<Props>(), {
+  withDefaults(defineProps<SkeletonProps>(), {
     kind: 'rectangle',
     width: '100%',
     height: '1rem',

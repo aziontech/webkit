@@ -13,7 +13,7 @@
     inheritAttrs: false
   })
 
-  interface Props {
+  export interface SectionHeaderProps {
     /** The band title, rendered as an h2. */
     title: string
     /** One sentence under the title. */
@@ -24,7 +24,7 @@
     anchor?: string
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<SectionHeaderProps>(), {
     description: '',
     size: 'medium',
     anchor: ''

@@ -38,7 +38,7 @@
     readTime: string
   }
 
-  interface Props {
+  export interface ArticleHighlightProps {
     /** In-page id set on the band so a `#hash` link can scroll to it. */
     anchor?: string
     /** The highlight articles in wall order, the one at the bound index (the first by default) selected on load; each is `{ key, href, image, highlightImage?, meta, title, description, readTime }`. */
@@ -55,7 +55,7 @@
     fill?: boolean
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<ArticleHighlightProps>(), {
     anchor: '',
     items: () => [],
     actionLabel: '',

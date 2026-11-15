@@ -12,18 +12,17 @@
     inheritAttrs: false
   })
 
-  const props = withDefaults(
-    defineProps<{
-      /** Download filename; falls back to the table's `exportFilename`. */
-      filename?: string
-      /** Which rows to export. */
-      scope?: TableExportScope
-    }>(),
-    {
-      filename: '',
-      scope: 'filtered'
-    }
-  )
+  export interface TableExportProps {
+    /** Download filename; falls back to the table's `exportFilename`. */
+    filename?: string
+    /** Which rows to export. */
+    scope?: TableExportScope
+  }
+
+  const props = withDefaults(defineProps<TableExportProps>(), {
+    filename: '',
+    scope: 'filtered'
+  })
 
   defineSlots<{
     /** Replace the default download control; receives the `export` action. */

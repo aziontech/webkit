@@ -13,7 +13,7 @@
   /** Placement of the drop target. */
   export type FileDropzoneKind = 'inline' | 'overlay'
 
-  interface Props {
+  export interface FileDropzoneProps {
     /** Placement. Inline is an always-visible dashed region; overlay stays hidden until files are dragged over the window, then covers its nearest positioned ancestor. */
     kind?: FileDropzoneKind
     /** Instruction shown under the icon. Empty uses the locale catalog (`Drop files to upload`). */
@@ -33,9 +33,7 @@
     /** Azion icon class for the glyph above the title. Empty draws the cloud-upload glyph. */
     icon?: string
   }
-  export type FileDropzoneProps = Props
-
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<FileDropzoneProps>(), {
     kind: 'inline',
     title: '',
     description: '',

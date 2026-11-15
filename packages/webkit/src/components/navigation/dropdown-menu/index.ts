@@ -37,5 +37,10 @@ export type {
   DropdownMenuOptionKind,
   DropdownMenuOptionValue,
   DropdownMenuPlacement,
-  DropdownMenuPlacementInput
+  DropdownMenuPlacementSide
 } from './dropdown-menu.vue'
+export type { DropdownMenuProps } from './dropdown-menu.vue'
+export type { DropdownMenuGroupProps } from './dropdown-menu-group/dropdown-menu-group.vue'
+export type { DropdownMenuOptionProps } from './dropdown-menu-option/dropdown-menu-option.vue'
+export type { DropdownMenuSubProps } from './dropdown-menu-sub/dropdown-menu-sub.vue'
+export type { DropdownMenuSubTriggerProps } from './dropdown-menu-sub-trigger/dropdown-menu-sub-trigger.vue'
