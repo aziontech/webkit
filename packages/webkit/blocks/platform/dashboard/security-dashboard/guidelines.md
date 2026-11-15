@@ -105,9 +105,9 @@ Each chart keeps its box (`No matched requests in this period` / `Nothing was re
 says `No matching rows` / `Change the search.` When no rule set exists at all, the Empty variant
 replaces the whole grid with one bordered `EmptyState` and its `Add rule set` button.
 
-### Q. Request activity by actor — `PageHeader`, `Select`, `IconButton`, `FilterMenu`, `Input`, `Button`, `StatTile`, `Hint`, `ChartCard`, `Chart`, `BarList`, `DataTable`, `Table`, `Tag`, `SeverityTag`, `EmptyState` (optional)
+### Q. Request activity by actor — `PageHeader`, `Select`, `IconButton`, `Input`, `StatTile`, `Hint`, `ChartCard`, `Chart`, `BarList`, `DataTable`, `Tag`, `EmptyState` (optional)
 
-Variant ByActor only: the same blocked and allowed data, pivoted per known actor, with the rule that
+Variant ByActor only; it adds `FilterMenu`, `Button`, `Table` and `SeverityTag` to the page: the same blocked and allowed data, pivoted per known actor, with the rule that
 decided each request. Title `Request activity`. The heading's actions hold the time range `Select`
 (named `Time range`) and a Refresh `IconButton` (`aria-label="Refresh"`, the block emits `refresh`).
 Under it, one `FilterMenu` with three multi-choice fields (Actor, Outcome, Category) in a container
