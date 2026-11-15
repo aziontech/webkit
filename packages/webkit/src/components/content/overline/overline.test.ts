@@ -81,15 +81,6 @@ describe('Overline', () => {
     expect(container.querySelector('.animate-blink')).toHaveAttribute('aria-hidden', 'true')
   })
 
-  it('still shows the cursor for the deprecated showCursor prop', () => {
-    const { getByTestId } = render(Overline, {
-      props: { showCursor: true, singleLine: false },
-      slots: { default: 'LEGACY' }
-    })
-    expect(getByTestId('content-overline')).toHaveAttribute('data-cursor')
-    expect(getByTestId('content-overline')).not.toHaveAttribute('data-single-line')
-  })
-
   it('renders prefix and cursor together', () => {
     const { getByText, container } = render(Overline, {
       props: { prefix: '//', cursor: true },

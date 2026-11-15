@@ -19,23 +19,17 @@ describe('CardPricing', () => {
     expect(root.tagName).toBe('ARTICLE')
   })
 
-  it('renders planTitle inside the title sub-element', () => {
-    const { getByTestId } = render(CardPricing, { props: { planTitle: 'Enterprise' } })
+  it('renders title inside the title sub-element', () => {
+    const { getByTestId } = render(CardPricing, { props: { title: 'Enterprise' } })
 
     const title = getByTestId(`${ROOT}__title`)
     expect(title).toHaveTextContent('Enterprise')
     expect(getByTestId(`${ROOT}__header`)).toContainElement(title)
   })
 
-  it('renders title, which wins over the deprecated planTitle', () => {
-    const { getByTestId } = render(CardPricing, { props: { title: 'Team', planTitle: 'Old' } })
-    expect(getByTestId(`${ROOT}__title`)).toHaveTextContent('Team')
-    expect(getByTestId(`${ROOT}__title`)).not.toHaveTextContent('Old')
-  })
-
-  it('uses the default planTitle "Pro" when unset', () => {
+  it('has no built-in plan name: the heading is empty until title is set', () => {
     const { getByTestId } = render(CardPricing, { props: {} })
-    expect(getByTestId(`${ROOT}__title`)).toHaveTextContent('Pro')
+    expect(getByTestId(`${ROOT}__title`).textContent?.trim()).toBe('')
   })
 
   it("has no description band at all — the caveat is the card's only prose region", () => {
@@ -153,7 +147,7 @@ describe('CardPricing', () => {
 
   it('honors a consumer-supplied data-testid on the root and derives every sub-testid from it', () => {
     const { getByTestId } = render(CardPricing, {
-      props: { showTag: true, tagLabel: 'Popular', pricingDetails: 'details' },
+      props: { title: 'Pro', showTag: true, tagLabel: 'Popular', pricingDetails: 'details' },
       attrs: { 'data-testid': 'my-card' }
     })
 
@@ -177,14 +171,18 @@ describe('CardPricing', () => {
 
   it('has no accessibility violations for the default (bottom, contained) render', async () => {
     const { container } = render(CardPricing, {
-      props: { description: 'A plan description.', pricingDetails: 'Billed annually.' }
+      props: {
+        title: 'Pro',
+        description: 'A plan description.',
+        pricingDetails: 'Billed annually.'
+      }
     })
     await expectNoA11yViolations(container)
   })
 
   it('has no accessibility violations for the middle slot position with a filled slot', async () => {
     const { container } = render(CardPricing, {
-      props: { slotPosition: 'middle', showTag: true, description: 'Middle layout.' },
+      props: { title: 'Pro', slotPosition: 'middle', showTag: true, description: 'Middle layout.' },
       slots: { default: '<ul><li>Feature one</li><li>Feature two</li></ul>' }
     })
     await expectNoA11yViolations(container)
@@ -225,7 +223,7 @@ describe('CardPricing', () => {
 
     const root = getByTestId(ROOT)
     expect(root).toBeInTheDocument()
-    // meta args: planTitle "Pro", value "20", prefix "$", suffix "per month", actionLabel "Label"
+    // meta args: title "Pro", value "20", prefix "$", suffix "per month", actionLabel "Label"
     expect(getByTestId(`${ROOT}__title`)).toHaveTextContent('Pro')
     expect(getByTestId(`${ROOT}__currency__value`)).toHaveTextContent('20')
     expect(getByTestId(`${ROOT}__action`)).toHaveTextContent('Label')
@@ -252,7 +250,7 @@ describe('CardPricing', () => {
   })
 
   it('has no accessibility violations when animated', async () => {
-    const { container } = render(CardPricing, { props: { animated: true } })
+    const { container } = render(CardPricing, { props: { title: 'Pro', animated: true } })
     await expectNoA11yViolations(container)
   })
 })
