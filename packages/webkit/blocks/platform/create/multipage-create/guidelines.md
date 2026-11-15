@@ -117,6 +117,6 @@ The last step, read-only: three bands under small `SectionHeader`s (Where it run
 - `platform/create/single-page-create` — the same job when the fields fit one screen.
 - `platform/create/source-wizard` — a step wizard that starts from a code source and deploys.
 - `platform/create/provision-wizard` — a two-step wizard that binds a project and deploys.
-- `platform/edit/code-editor` — the editor a code resource can use as one step.
+- `platform/edit/function-editor` — the editor a code resource can use as one step.
 - `platform/states/form-validation` — required and invalid states on Next.
 - `Stepper` — the step rail; see `skills/webkit-form`.

@@ -1,9 +1,10 @@
-# Code editor
+# Function editor
 
 The editing page of a service whose behavior lives in source code. The user writes and saves the code, defines the argument form each instance of the service asks for (its fields, types and defaults), and adjusts the service's settings. The editor fills the page so the code has room, and one save bar commits code, arguments and settings together. It is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header with the Services breadcrumb, the ⌘K palette and the `main`. The editor pins its own panes, so its root carries `data-layout-fill`: the layout's `main` stops scrolling and the root fills it (`h-dvh` only sizes a standalone preview).
 
 ## When to use
 
+- Use the function-editor block for the code and arguments page of a function; the editor itself is the CodeEditor component.
 - A resource is mainly a document the user edits as text: function code, a schema, a configuration file.
 - The document comes with a structured companion (an argument form) that is easier to edit as fields than as JSON, and the user wants both views side by side.
 - The same resource also has a few settings, shown on a second tab of the same page.
@@ -13,7 +14,7 @@ The editing page of a service whose behavior lives in source code. The user writ
 
 - A resource made only of settings: use `platform/edit/edit-resource`.
 - Ordered conditions and actions the user composes without code: use `platform/edit/rule-builder`.
-- Free key and value pairs such as environment variables: use `platform/edit/attribute-editor`.
+- Free key and value pairs such as environment variables: use `platform/edit/variables`.
 - Running queries and reading results: use `platform/view/query-editor`.
 
 ## Building blocks

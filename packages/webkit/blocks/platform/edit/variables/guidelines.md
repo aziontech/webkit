@@ -1,9 +1,10 @@
-# Attribute editor
+# Variables
 
 A list of key and value pairs and the drawer that edits them, here environment variables. The user scans the variables already defined, then opens Create Variable to type or paste several pairs at once, mark the sensitive ones as secret, and select where they apply (the whole account, or specific environments, projects, services or policies) before saving them in one step. It is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header, the ⌘K palette and the `main`.
 
 ## When to use
 
+- Use the variables block for a list of key/value variables with a create/edit drawer; the key/value field itself is the AttributeEditor component.
 - Users define many free-form pairs of a name and a value (environment variables, headers, metadata, tags) and often bring them from a file.
 - Some values are sensitive and must be masked and write-only once saved.
 - Each pair applies to a scope the user picks from existing resources.
@@ -13,7 +14,7 @@ A list of key and value pairs and the drawer that edits them, here environment v
 - Conditions and actions evaluated in order: use `platform/edit/rule-builder`.
 - A fixed set of named settings on one resource: use `platform/edit/edit-resource` or `platform/settings/settings-form`.
 - A short read-only list of related records inside a settings tab: use `platform/detail/attached-resources`.
-- A long document or code the user edits as text: use `platform/edit/code-editor`.
+- A long document or code the user edits as text: use `platform/edit/function-editor`.
 
 ## Building blocks
 

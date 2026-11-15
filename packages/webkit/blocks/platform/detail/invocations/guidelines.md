@@ -10,7 +10,7 @@ The page a user opens to understand one run of a function: did it work, how long
 
 ## When not to use
 
-- Testing code you are still editing: use the TestRun variant of `platform/edit/code-editor`.
+- Testing code you are still editing: use the TestRun variant of `platform/edit/function-editor`.
 - Searching many requests or events across products: use an event log table, e.g. `platform/view/table-view`.
 - The overview of the function itself, its versions or deployments: use `platform/detail/details-page`.
 - Following a deployment as it builds: use `platform/detail/deployment-logs`.
@@ -78,7 +78,7 @@ A small `SectionHeader` over a copyable `LogView` whose lines are timed from the
 
 ## Related
 
-- `platform/edit/code-editor` — its TestRun variant runs the function before it ships, with the same trace and logs.
+- `platform/edit/function-editor` — its TestRun variant runs the function before it ships, with the same trace and logs.
 - `platform/detail/details-page` — its Invocation variant is the summary card on its own.
 - `platform/detail/deployment-logs` — the step logs of a deployment.
 - `shells/console` — the `ConsoleLayout` this page body renders in; see `skills/webkit-layout`.

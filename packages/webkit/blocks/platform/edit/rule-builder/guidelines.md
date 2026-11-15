@@ -10,10 +10,10 @@ A drawer where the user writes one rule of a rules engine: when it runs (the pha
 
 ## When not to use
 
-- Free-form pairs of a name and a value: use `platform/edit/attribute-editor`.
+- Free-form pairs of a name and a value: use `platform/edit/variables`.
 - A short create form of three fields or fewer: use `platform/create/create-in-drawer`.
 - A resource's own settings: use `platform/edit/edit-resource`.
-- Logic the user would rather write as code: use `platform/edit/code-editor`.
+- Logic the user would rather write as code: use `platform/edit/function-editor`.
 
 ## Building blocks
 
@@ -90,7 +90,7 @@ A flush `Card` with an `Item.List` holding one `SettingRow` titled Active with a
 ## Related
 
 - `platform/create/create-in-drawer` — the simpler drawer create this one extends.
-- `platform/edit/attribute-editor` — a drawer for free key and value pairs; `AttributeEditor` is the component the criteria are built on.
+- `platform/edit/variables` — a drawer for free key and value pairs; `AttributeEditor` is the component the criteria are built on.
 - `platform/view/rules-list` — the list of rules by phase this drawer opens from.
 - `platform/states/form-validation` — when errors appear after Save.
 - `platform/edit/edit-resource` — the resource settings that sit beside the Rules tab.

@@ -12,7 +12,7 @@ A short list of the things one resource is attached to, shown in place inside it
 
 - The related records are many and need search, filters or columns: use the list of `platform/view/table-view`, scoped to the resource.
 - A first-level list of one resource type reached from the sidebar: use `platform/view/table-view`.
-- Pairs of keys and values the user types in place: use `platform/edit/attribute-editor`.
+- Pairs of keys and values the user types in place: use `platform/edit/variables`.
 - Choosing one existing resource inside a form: use `platform/create/resource-picker`.
 
 ## Building blocks
