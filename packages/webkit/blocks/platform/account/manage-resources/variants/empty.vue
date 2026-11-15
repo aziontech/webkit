@@ -724,7 +724,7 @@
                         label="Labels"
                       />
                     </Tabs.List>
-                    <Tabs.Content>
+                    <div class="relative isolate w-full">
                       <Tabs.Panel value="permissions">
                         <EmptyState
                           v-if="!focused"
@@ -820,7 +820,7 @@
                           />
                         </div>
                       </Tabs.Panel>
-                    </Tabs.Content>
+                    </div>
                   </div>
                 </Tabs.Root>
               </div>

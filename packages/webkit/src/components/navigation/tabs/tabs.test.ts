@@ -29,11 +29,9 @@ const Tree = defineComponent({
         <TabsItem value="tab-2" label="Second" :disabled="disableSecond" />
         <TabsItem value="tab-3" label="Third" />
       </TabsList>
-      <TabsContent>
-        <TabsPanel value="tab-1">Content one</TabsPanel>
-        <TabsPanel value="tab-2">Content two</TabsPanel>
-        <TabsPanel value="tab-3">Content three</TabsPanel>
-      </TabsContent>
+      <TabsContent value="tab-1">Content one</TabsContent>
+      <TabsPanel value="tab-2">Content two</TabsPanel>
+      <TabsPanel value="tab-3">Content three</TabsPanel>
     </Tabs>
   `
 })
@@ -83,14 +81,14 @@ describe('Tabs (composition)', () => {
 
   describe('structure, roles, and context-derived ids', () => {
     it('renders root/list/content with their testids and tablist role', () => {
-      const { getByTestId } = render(Tree)
+      const { getByTestId, getAllByTestId } = render(Tree)
 
       // Root testid supplied by the consumer (data-testid="tv"); List/Content
       // derive their testids from the injected context.testId.
       expect(getByTestId('tv')).toBeTruthy()
       const list = getByTestId('tv__list')
       expect(list.getAttribute('role')).toBe('tablist')
-      expect(getByTestId('tv__content')).toBeTruthy()
+      expect(getAllByTestId('tv__panel')[0]?.getAttribute('role')).toBe('tabpanel')
     })
 
     // The horizontal-scroll affordance (overflow-x + edge-fade overlays) is a
@@ -322,10 +320,8 @@ describe('Tabs (composition)', () => {
                 <TabsItem value="tab-2" label="Second" />
                 <TabsItem value="tab-3" label="Third" />
               </TabsList>
-              <TabsContent>
-                <TabsPanel value="tab-1">One</TabsPanel>
-                <TabsPanel value="tab-3">Three</TabsPanel>
-              </TabsContent>
+              <TabsContent value="tab-1">One</TabsContent>
+              <TabsPanel value="tab-3">Three</TabsPanel>
             </Tabs>
           </div>
         `
@@ -554,9 +550,7 @@ describe('Tabs audit fixes', () => {
         template: `
           <Tabs id="tabs-root" dir="ltr" aria-describedby="hint" data-track="tabs" default-value="a">
             <TabsList><TabsItem value="a" label="A" data-track="tab-a" /></TabsList>
-            <TabsContent id="wrapper" data-track="wrapper">
-              <TabsPanel value="a" data-track="panel-a">Panel A</TabsPanel>
-            </TabsContent>
+            <TabsContent value="a" data-track="panel-a">Panel A</TabsContent>
           </Tabs>
         `
       })
@@ -567,8 +561,6 @@ describe('Tabs audit fixes', () => {
     expect(root).toHaveAttribute('aria-describedby', 'hint')
     expect(root).toHaveAttribute('data-track', 'tabs')
     expect(root).toHaveAttribute('data-tabs-root', '')
-    expect(getByTestId('navigation-tabs__content')).toHaveAttribute('data-track', 'wrapper')
-    expect(getByTestId('navigation-tabs__content').id).toBe('wrapper')
     expect(getByRole('tab')).toHaveAttribute('data-track', 'tab-a')
     expect(getByRole('tabpanel')).toHaveAttribute('data-track', 'panel-a')
   })

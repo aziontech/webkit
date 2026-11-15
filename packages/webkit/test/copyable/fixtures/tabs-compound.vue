@@ -31,9 +31,9 @@
         @close="(_event, value) => closeTab(value)"
       />
     </Tabs.List>
-    <Tabs.Content>
+    <div class="relative isolate w-full">
       <Tabs.Panel value="overview">Overview</Tabs.Panel>
-    </Tabs.Content>
+    </div>
   </Tabs.Root>
 
   <!-- @vue-expect-error a tab value is a string or a number -->
