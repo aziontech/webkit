@@ -6,8 +6,11 @@
   import Tag from '../../../content/tag/tag.vue'
   import { SidebarInjectionKey } from '../../../layout/sidebar/injection-key'
 
-  export type SidebarMenuItemTagSeverity =
-    'primary' | 'neutral' | 'success' | 'info' | 'warning' | 'danger' | 'accent'
+  /** Status colour of the trailing Tag. */
+  export type SidebarMenuItemTagSeverity = 'neutral' | 'success' | 'info' | 'warning' | 'danger'
+
+  /** Brand look of the trailing Tag. */
+  export type SidebarMenuItemTagVariant = 'primary' | 'accent'
 
   defineOptions({
     name: 'SidebarMenuItem',
@@ -29,7 +32,9 @@
     target?: '_self' | '_blank'
     /** Short text rendered in a trailing Tag when set. */
     tagValue?: string
-    /** Severity token for the optional trailing Tag. */
+    /** Brand look of the optional trailing Tag, used when `tagSeverity` is not set. */
+    tagVariant?: SidebarMenuItemTagVariant
+    /** Status colour of the optional trailing Tag; wins over `tagVariant`. With neither set the Tag is `info`. */
     tagSeverity?: SidebarMenuItemTagSeverity
   }
 
@@ -41,7 +46,8 @@
     href: '',
     target: '_self',
     tagValue: '',
-    tagSeverity: 'info'
+    tagVariant: undefined,
+    tagSeverity: undefined
   })
 
   const emit = defineEmits<{
@@ -160,7 +166,8 @@
           <slot name="tag">
             <Tag
               :label="tagValue"
-              :severity="tagSeverity"
+              :variant="tagVariant"
+              :severity="tagSeverity ?? (tagVariant ? undefined : 'info')"
               rounded
             />
           </slot>
@@ -206,7 +213,8 @@
           <slot name="tag">
             <Tag
               :label="tagValue"
-              :severity="tagSeverity"
+              :variant="tagVariant"
+              :severity="tagSeverity ?? (tagVariant ? undefined : 'info')"
               rounded
             />
           </slot>

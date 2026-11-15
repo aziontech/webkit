@@ -11,7 +11,7 @@
   import PageHeader from '@aziontech/webkit/page-header'
   import PageTabs from '@aziontech/webkit/page-tabs'
   import Tabs from '@aziontech/webkit/tabs'
-  import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
+  import Tag, { type TagSeverity, type TagVariant } from '@aziontech/webkit/tag'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, ref } from 'vue'
 
@@ -159,8 +159,11 @@
     }
   ]
 
-  const versionStates: Record<string, { label: string; severity: TagSeverity }> = {
-    active: { label: 'Deployed', severity: 'primary' },
+  const versionStates: Record<
+    string,
+    { label: string; severity?: TagSeverity; variant?: TagVariant }
+  > = {
+    active: { label: 'Deployed', variant: 'primary' },
     ready: { label: 'Ready', severity: 'success' },
     archived: { label: 'Archived', severity: 'neutral' }
   }
@@ -328,6 +331,7 @@
                     <template #cell-state="{ value }">
                       <Tag
                         :label="versionStates[value].label"
+                        :variant="versionStates[value].variant"
                         :severity="versionStates[value].severity"
                         size="medium"
                       />

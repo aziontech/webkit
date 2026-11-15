@@ -568,7 +568,7 @@
                       <h3 class="truncate text-label-md text-(--text-default)">Dependencies</h3>
                       <Badge
                         :label="String(dependencyCount(card))"
-                        severity="secondary"
+                        variant="secondary"
                         size="small"
                       />
                     </div>
@@ -594,7 +594,7 @@
                             </span>
                             <Badge
                               :label="String(group.rows.length)"
-                              severity="secondary"
+                              variant="secondary"
                               size="small"
                             />
                           </span>

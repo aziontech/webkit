@@ -3,12 +3,12 @@ name: card
 category: content
 structure: monolithic
 status: implemented
-spec_version: 8
+spec_version: 9
 template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=562-6473
   node_id: 562:6473
-checksum: 2fa31302a5d3a5dece7a1a64774de8814e375a81b7b25b1ec736404784cd9c66
+checksum: 49887518dcc87d577eddf0a0da460a4440b1fac19c9ad5883b1ad1228e30e0ae
 created: 2026-05-22
 last_updated: 2026-11-15
 ---
@@ -127,7 +127,7 @@ A bordered surface that groups related content under a title, with a header, a b
 | `logo`        | `string`                     | `''`        | false    | Integration kind: icon class for the logo mark. The `logo` slot takes an image instead.                                                                                         |
 | `vendor`      | `string`                     | `''`        | false    | Integration kind: who publishes the item, shown as "by {vendor}".                                                                                                               |
 | `description` | `string`                     | `''`        | false    | Integration kind: one or two sentences on what the item does.                                                                                                                   |
-| `badges`      | `CardBadge[]`                | `[]`        | false    | Integration kind: small tags such as the category or the context (`{ label, severity? }`, severity is a `TagSeverity`, `CardBadgeSeverity` is its alias, defaulting to `info`). |
+| `badges`      | `CardBadge[]`                | `[]`        | false    | Integration kind: small tags such as the category or the context (`{ label, variant?, severity? }`, `variant` a `TagVariant` and `severity` a `TagSeverity` (`CardBadgeVariant` and `CardBadgeSeverity`); a badge with neither is `info`, a featured badge with neither is the `primary` variant). |
 | `installed`   | `boolean`                    | `false`     | false    | Integration kind: shows the Installed tag.                                                                                                                                      |
 | `href`        | `string`                     | `''`        | false    | Integration kind: the title links here; without it the title is a button that emits `select`.                                                                                   |
 | `featured`    | `boolean`                    | `false`     | false    | Integration kind: the featured layout, centred on a raised surface with a primary glow at the top and the badges in the top end corner.                                         |

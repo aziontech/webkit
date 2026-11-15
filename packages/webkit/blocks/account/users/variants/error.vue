@@ -28,7 +28,7 @@
   import PropertyFilter from '@aziontech/webkit/property-filter'
   import Select from '@aziontech/webkit/select'
   import Table, { type TableColumn, type TableExposed } from '@aziontech/webkit/table'
-  import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
+  import Tag, { type TagSeverity, type TagVariant } from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { type FilteringProperty, useCollection } from '@aziontech/webkit/use-collection'
@@ -65,10 +65,12 @@
     { value: 'Developer', hint: 'Works on the resources their teams reach; no account settings.' },
     { value: 'Viewer', hint: 'Reads the resources their teams reach; changes nothing.' }
   ]
-  const roleSeverity = (value: UserRole): TagSeverity =>
-    (({ Owner: 'highlight', Admin: 'info', Developer: 'neutral', Viewer: 'neutral' }) as const)[
-      value
-    ] ?? 'neutral'
+  const roleSeverity = (value: UserRole): TagSeverity | undefined =>
+    value === 'Owner'
+      ? undefined
+      : (({ Admin: 'info', Developer: 'neutral', Viewer: 'neutral' } as const)[value] ?? 'neutral')
+  const roleVariant = (value: UserRole): TagVariant | undefined =>
+    value === 'Owner' ? 'highlight' : undefined
 
   const DAY = 86_400_000
   const REFERENCE = Date.UTC(2026, 10, 10, 12)
@@ -461,6 +463,7 @@
               <template #cell-role="{ value }">
                 <Tag
                   :label="value"
+                  :variant="roleVariant(value)"
                   :severity="roleSeverity(value)"
                   size="small"
                 />
@@ -722,6 +725,7 @@
               <KeyValuePairs.Item label="Role">
                 <Tag
                   :label="pending.role"
+                  :variant="roleVariant(pending.role)"
                   :severity="roleSeverity(pending.role)"
                   size="small"
                 />

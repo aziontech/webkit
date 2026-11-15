@@ -21,7 +21,7 @@
   import PanelHeader from '@aziontech/webkit/panel-header'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
   import Table from '@aziontech/webkit/table'
-  import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
+  import Tag, { type TagSeverity, type TagVariant } from '@aziontech/webkit/tag'
   import ThemeSwitcher from '@aziontech/webkit/theme-switcher'
   import { toast, Toaster } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
@@ -206,7 +206,12 @@
 
   type AccountType = 'organization' | 'group' | 'workspace'
 
-  type AccountTypeMeta = { label: string; icon: string; severity: TagSeverity }
+  type AccountTypeMeta = {
+    label: string
+    icon: string
+    severity?: TagSeverity
+    variant?: TagVariant
+  }
 
   type Account = {
     id: string
@@ -222,11 +227,12 @@
     expanded: boolean
     typeLabel: string
     typeIcon: string
-    typeSeverity: TagSeverity
+    typeSeverity?: TagSeverity
+    typeVariant?: TagVariant
   }
 
   const accountTypes: Record<AccountType, AccountTypeMeta> = {
-    organization: { label: 'Organization', icon: 'ai ai-building', severity: 'primary' },
+    organization: { label: 'Organization', icon: 'ai ai-building', variant: 'primary' },
     group: { label: 'Group', icon: 'ai ai-users', severity: 'info' },
     workspace: { label: 'Workspace', icon: 'ai ai-layout-grid', severity: 'neutral' }
   }
@@ -283,7 +289,8 @@
           expanded,
           typeLabel: accountTypes[entry.type].label,
           typeIcon: accountTypes[entry.type].icon,
-          typeSeverity: accountTypes[entry.type].severity
+          typeSeverity: accountTypes[entry.type].severity,
+          typeVariant: accountTypes[entry.type].variant
         })
         if (hasChildren && expanded) walk(entry.id, depth + 1)
       }
@@ -713,6 +720,7 @@
                     <Table.CellStatus
                       :label="row.typeLabel"
                       :icon="row.typeIcon"
+                      :variant="row.typeVariant"
                       :severity="row.typeSeverity"
                     />
                   </template>

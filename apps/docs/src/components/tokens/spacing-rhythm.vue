@@ -70,7 +70,7 @@
             <Tag
               v-if="isLive(token, column)"
               :label="t.live"
-              severity="highlight"
+              variant="highlight"
               size="small"
             />
           </span>

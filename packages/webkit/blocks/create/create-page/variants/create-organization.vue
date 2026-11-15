@@ -363,7 +363,7 @@
                         <Item.Actions>
                           <Tag
                             label="Owner"
-                            severity="primary"
+                            variant="primary"
                             size="medium"
                             icon="ai ai-key"
                           />

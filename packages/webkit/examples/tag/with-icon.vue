@@ -6,7 +6,7 @@
   <div class="flex flex-wrap items-center gap-4">
     <Tag
       label="Label"
-      severity="primary"
+      variant="primary"
       icon="ai ai-box"
     />
     <Tag
@@ -16,7 +16,7 @@
     />
     <Tag
       label="Label"
-      severity="accent"
+      variant="accent"
       icon="ai ai-box"
     />
     <Tag
@@ -41,7 +41,7 @@
     />
     <Tag
       label="Label"
-      severity="contrast"
+      variant="contrast"
       icon="ai ai-box"
     />
   </div>

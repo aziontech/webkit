@@ -201,6 +201,23 @@ describe('SidebarMenuItem', () => {
     expect(tag.textContent).toContain('Beta')
   })
 
+  it('colours the trailing tag info by default, by tagSeverity, or by tagVariant', () => {
+    const look = (props: Record<string, unknown>) => {
+      const { getByTestId, unmount } = render(SidebarMenuItem, {
+        props: { label: 'Home', tagValue: 'Beta', ...props }
+      })
+      const tag = getByTestId('navigation-sidebar-menu-item__tag').querySelector(
+        '[data-testid="content-tag"]'
+      )
+      const out = [tag?.getAttribute('data-severity'), tag?.getAttribute('data-variant')]
+      unmount()
+      return out
+    }
+    expect(look({})).toEqual(['info', null])
+    expect(look({ tagSeverity: 'warning' })).toEqual(['warning', null])
+    expect(look({ tagVariant: 'primary' })).toEqual([null, 'primary'])
+  })
+
   it('renders custom tag slot content in place of the default tag', () => {
     const { getByTestId } = render(SidebarMenuItem, {
       props: { label: 'Home' },

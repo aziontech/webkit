@@ -16,7 +16,7 @@
   import PageHeader from '@aziontech/webkit/page-header'
   import PropertyFilter from '@aziontech/webkit/property-filter'
   import Table, { type TableColumn, type TableExposed } from '@aziontech/webkit/table'
-  import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
+  import Tag, { type TagSeverity, type TagVariant } from '@aziontech/webkit/tag'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { type FilteringProperty, useCollection } from '@aziontech/webkit/use-collection'
   import { computed, ref } from 'vue'
@@ -123,16 +123,20 @@
 
   const events = ref<ActivityEvent[]>([])
 
-  const categorySeverity = (category: ActivityCategory): TagSeverity =>
-    (
-      ({
-        'Sign-in': 'info',
-        Security: 'warning',
-        Deploy: 'success',
-        Users: 'neutral',
-        Billing: 'primary'
-      }) as const
-    )[category] ?? 'neutral'
+  const categorySeverity = (category: ActivityCategory): TagSeverity | undefined =>
+    category === 'Billing'
+      ? undefined
+      : ((
+          {
+            'Sign-in': 'info',
+            Security: 'warning',
+            Deploy: 'success',
+            Users: 'neutral'
+          } as const
+        )[category] ?? 'neutral')
+
+  const categoryVariant = (category: ActivityCategory): TagVariant | undefined =>
+    category === 'Billing' ? 'primary' : undefined
 
   const range = ref<DateRangeValue>({
     type: 'relative',
@@ -367,6 +371,7 @@
               <template #cell-category="{ value }">
                 <Tag
                   :label="value"
+                  :variant="categoryVariant(value)"
                   :severity="categorySeverity(value)"
                   size="small"
                 />

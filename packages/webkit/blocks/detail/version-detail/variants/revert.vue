@@ -18,7 +18,7 @@
   import SettingsSection from '@aziontech/webkit/settings-section'
   import Switch from '@aziontech/webkit/switch'
   import Tabs from '@aziontech/webkit/tabs'
-  import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
+  import Tag, { type TagSeverity, type TagVariant } from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, onBeforeUnmount, reactive, ref } from 'vue'
@@ -27,7 +27,7 @@
     id: string
     name: string
     state: string
-    tag: { label: string; severity: TagSeverity; icon: string }
+    tag: { label: string; severity?: TagSeverity; variant?: TagVariant; icon: string }
     comment: string
     author: string
     createdAgo: string
@@ -55,7 +55,7 @@
       id: 'AEO25I38',
       name: 'AEO25I38',
       state: 'active',
-      tag: { label: 'Deployed', severity: 'primary', icon: '' },
+      tag: { label: 'Deployed', variant: 'primary', icon: '' },
       comment: 'Remove rule"Legacy load balancer"',
       author: 'Sam Lee',
       createdAgo: '1 day ago'
@@ -110,7 +110,7 @@
     id: 'AEO25I38',
     name: 'AEO25I38',
     state: 'active',
-    tag: { label: 'Deployed', severity: 'primary', icon: '' },
+    tag: { label: 'Deployed', variant: 'primary', icon: '' },
     comment: 'Remove rule"Legacy load balancer"',
     author: 'Sam Lee',
     createdAgo: '1 day ago'
@@ -231,7 +231,7 @@
   const tagFor = (entry: VersionEntry): VersionEntry['tag'] => {
     if (entry.state === 'draft') return entry.tag
     return entry.id === deployedId.value
-      ? { label: 'Deployed', severity: 'primary', icon: '' }
+      ? { label: 'Deployed', variant: 'primary', icon: '' }
       : { label: 'Ready', severity: 'success', icon: '' }
   }
   const viewedDeployed = computed(() => deployedId.value === VIEWED)
@@ -479,7 +479,8 @@
                 </span>
                 <Tag
                   :label="viewedDeployed ? 'Deployed' : 'Ready'"
-                  :severity="viewedDeployed ? 'primary' : 'success'"
+                  :variant="viewedDeployed ? 'primary' : undefined"
+                  :severity="viewedDeployed ? undefined : 'success'"
                   size="medium"
                 />
                 <DropdownMenu

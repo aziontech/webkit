@@ -178,7 +178,7 @@
             />
             <Badge
               label="1"
-              severity="primary"
+              variant="primary"
               size="small"
               aria-hidden="true"
               class="pointer-events-none absolute -top-2 -end-2 min-w-5"

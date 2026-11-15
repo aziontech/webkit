@@ -22,7 +22,7 @@
   import Select, { type SelectOptionItem } from '@aziontech/webkit/select'
   import Separator from '@aziontech/webkit/separator'
   import Switch from '@aziontech/webkit/switch'
-  import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
+  import Tag, { type TagSeverity, type TagVariant } from '@aziontech/webkit/tag'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
   import Wizard from '@aziontech/webkit/wizard'
   import { computed, reactive, ref, watch } from 'vue'
@@ -108,7 +108,8 @@
     description: string
     ariaLabel: string
     name: string
-    severity: TagSeverity
+    severity?: TagSeverity
+    variant?: TagVariant
     price: string
   }
 
@@ -139,7 +140,7 @@
       description: 'Start free for personal projects and experimentation',
       ariaLabel: "I'm working on personal projects. Free plan, Free.",
       name: 'Free',
-      severity: 'contrast',
+      variant: 'contrast',
       price: 'Free'
     },
     {
@@ -157,7 +158,7 @@
       description: 'Optimize costs with usage or spend commitments',
       ariaLabel: "I'm running production at scale. Enterprise plan, From $2,000/mo.",
       name: 'Enterprise',
-      severity: 'primary',
+      variant: 'primary',
       price: 'From $2,000/mo'
     }
   ]
@@ -583,6 +584,7 @@
                                 <div class="flex shrink-0 flex-col items-end gap-(--spacing-2xs)">
                                   <Tag
                                     :label="option.name"
+                                    :variant="option.variant"
                                     :severity="option.severity"
                                     size="small"
                                     rounded

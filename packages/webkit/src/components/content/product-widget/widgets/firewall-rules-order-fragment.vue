@@ -188,7 +188,7 @@
           <span class="absolute -top-2 -end-2 flex">
             <Badge
               :label="String(alteredCount)"
-              severity="secondary"
+              variant="secondary"
               size="small"
             />
           </span>

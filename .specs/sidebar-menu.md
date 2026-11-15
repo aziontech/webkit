@@ -3,11 +3,11 @@ name: sidebar-menu
 category: navigation
 structure: composition
 status: implemented
-spec_version: 9
+spec_version: 10
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=5993-33335
   node_id: '5993:33335'
-checksum: 1cfbe8e0442cd0895f1fa6014c50dd4f00e792c62cc36e0806b170bd290c3e26
+checksum: 6632a7edc9f1f9882726ec0980ea999d14e60bae14b3fc5440cbbd2c3f60d2b2
 created: 2026-08-03
 last_updated: 2026-11-15
 ---
@@ -177,7 +177,7 @@ element instead of three.
   - **Two changes made to it**, both fixing drift against the rows around it:
     1. The leading icon box renders **only when `icon` is set**. An empty `size-8` box reserved a column the row did not use, pushing an icon-less row's label off the column its siblings hold and leaving the rail anchored to blank space.
     2. Its **two branches now share one label class**. The anchor branch was `.text-label-sm` (12 px) and the button branch `.text-body-sm` (14 px), so the same menu rendered two sizes depending on whether a row happened to carry an `href` — children came out _smaller than their parents_. Both are now `.text-label-md`.
-  - Props: `label?: string` (default `''` — visible text of the row), `active?: boolean` (default `false` — marks the page you are on: applies the selected surface and `aria-current="page"`), `disabled?: boolean` (default `false` — blocks interaction), `icon?: string` (default `''` — Azion icon class for the leading glyph; empty renders **no icon box at all**), `href?: string` (default `''` — renders an anchor instead of a button when set on an enabled row), `target?: '_self' | '_blank'` (default `'_self'` — link target when `href` is set), `tagValue?: string` (default `''` — short text rendered in a trailing `Tag`; empty renders none), `tagSeverity?: SidebarMenuItemTagSeverity` (default `'info'` — severity token for that trailing `Tag`, one of `primary | neutral | success | info | warning | danger | accent`).
+  - Props: `label?: string` (default `''` — visible text of the row), `active?: boolean` (default `false` — marks the page you are on: applies the selected surface and `aria-current="page"`), `disabled?: boolean` (default `false` — blocks interaction), `icon?: string` (default `''` — Azion icon class for the leading glyph; empty renders **no icon box at all**), `href?: string` (default `''` — renders an anchor instead of a button when set on an enabled row), `target?: '_self' | '_blank'` (default `'_self'` — link target when `href` is set), `tagValue?: string` (default `''` — short text rendered in a trailing `Tag`; empty renders none), `tagVariant?: SidebarMenuItemTagVariant` (default unset — brand look of that trailing `Tag`, `primary | accent`), `tagSeverity?: SidebarMenuItemTagSeverity` (default unset — status colour of that `Tag`, `neutral | success | info | warning | danger`, wins over `tagVariant`; with neither set the `Tag` is `info`).
   - Events: `click` — `(event: MouseEvent, item: { label: string; href: string })`. `item` carries the row's `label` and `href`, identifying which row was activated (event-first per `event-payloads.md`).
   - Slots: `default` — replaces the label text; `tag` — replaces the trailing `Tag` (its presence alone renders the tag region, with or without `tagValue`).
   - **This spec is menu-item's only spec.** It previously carried its own `.specs/menu-item.md`, which is removed with this change: a sub-component of a compound is documented in the compound's spec, the way `sidebar-menu-sub` and `sidebar-menu-group` already are. The `./menu-item` export path stays public, so its API lives here (that is what `build-catalog.mjs` reads to give the path an entry in `catalog.json`).

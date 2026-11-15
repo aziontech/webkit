@@ -61,7 +61,7 @@
               icon="ai ai-edge-sql"
               href="/sql-database"
               tag-value="Preview"
-              tag-severity="primary"
+              tag-variant="primary"
             />
           </SidebarMenuGroup>
           <SidebarMenuGroup label="Account">

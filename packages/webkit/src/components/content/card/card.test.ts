@@ -198,6 +198,25 @@ describe('Card', () => {
       expect(view.queryByTestId('content-card__installed')).toBeNull()
     })
 
+    it('renders a badge as info by default, by its severity, or by its brand variant', () => {
+      const view = render(Card, {
+        props: {
+          ...integration,
+          badges: [
+            { label: 'Firewall' },
+            { label: 'Paid', severity: 'warning' as const },
+            { label: 'New', variant: 'primary' as const }
+          ]
+        }
+      })
+
+      const tagOf = (label: string) => view.getByText(label).closest('[data-testid="content-tag"]')
+      expect(tagOf('Firewall')?.getAttribute('data-severity')).toBe('info')
+      expect(tagOf('Paid')?.getAttribute('data-severity')).toBe('warning')
+      expect(tagOf('New')?.getAttribute('data-variant')).toBe('primary')
+      expect(tagOf('New')?.hasAttribute('data-severity')).toBe(false)
+    })
+
     it('emits select from the title button, by click and by keyboard', async () => {
       const view = render(Card, { props: integration })
       const target = view.getByRole('button', { name: 'Request Signer' })

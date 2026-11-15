@@ -4,7 +4,7 @@
   import { useTranslate } from '../../../composables/use-locale/use-translate'
   import * as en from '../../../i18n/messages/en'
   import { cn } from '../../../utils/cn'
-  import Tag, { type TagSeverity } from '../tag/tag.vue'
+  import Tag, { type TagSeverity, type TagVariant } from '../tag/tag.vue'
 
   defineOptions({
     name: 'Card',
@@ -14,11 +14,15 @@
   /** Layout of the card. */
   export type CardKind = 'default' | 'integration'
 
-  /** Color of an integration badge; the `Tag` severity it renders. */
+  /** Status colour of an integration badge; the `Tag` severity it renders. */
   export type CardBadgeSeverity = TagSeverity
+
+  /** Brand look of an integration badge; the `Tag` variant it renders. */
+  export type CardBadgeVariant = TagVariant
 
   export interface CardBadge {
     label: string
+    variant?: CardBadgeVariant
     severity?: CardBadgeSeverity
   }
 
@@ -166,7 +170,8 @@
             v-for="badge in badges"
             :key="badge.label"
             :label="badge.label"
-            :severity="badge.severity ?? 'primary'"
+            :variant="badge.variant"
+            :severity="badge.severity"
             size="small"
           />
         </div>
@@ -243,7 +248,8 @@
               v-for="badge in badges"
               :key="badge.label"
               :label="badge.label"
-              :severity="badge.severity ?? 'info'"
+              :variant="badge.variant"
+              :severity="badge.severity ?? (badge.variant ? undefined : 'info')"
               size="small"
             />
           </template>

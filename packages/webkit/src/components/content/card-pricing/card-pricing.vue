@@ -111,7 +111,7 @@
           </h3>
           <Tag
             v-if="showTag"
-            severity="primary"
+            variant="primary"
             :label="tagLabel"
             :data-testid="`${testId}__tag`"
           />

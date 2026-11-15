@@ -17,7 +17,7 @@
     recommended?: boolean
   }
 
-  const recommendedBadge: CardBadge[] = [{ label: 'Recommended', severity: 'primary' }]
+  const recommendedBadge: CardBadge[] = [{ label: 'Recommended', variant: 'primary' }]
 
   const resources = [
     {

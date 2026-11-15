@@ -14,7 +14,7 @@
   import Skeleton from '@aziontech/webkit/skeleton'
   import Spinner from '@aziontech/webkit/spinner'
   import Tabs from '@aziontech/webkit/tabs'
-  import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
+  import Tag, { type TagSeverity, type TagVariant } from '@aziontech/webkit/tag'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, ref } from 'vue'
 
@@ -22,7 +22,7 @@
     id: string
     name: string
     state: string
-    tag: { label: string; severity: TagSeverity; icon: string }
+    tag: { label: string; severity?: TagSeverity; variant?: TagVariant; icon: string }
     comment: string
     author: string
     createdAgo: string
@@ -50,7 +50,7 @@
       id: 'AEO25I38',
       name: 'AEO25I38',
       state: 'active',
-      tag: { label: 'Deployed', severity: 'primary', icon: '' },
+      tag: { label: 'Deployed', variant: 'primary', icon: '' },
       comment: 'Remove rule"Legacy load balancer"',
       author: 'Sam Lee',
       createdAgo: '1 day ago'
@@ -105,7 +105,7 @@
     id: 'AEO25I38',
     name: 'AEO25I38',
     state: 'active',
-    tag: { label: 'Deployed', severity: 'primary', icon: '' },
+    tag: { label: 'Deployed', variant: 'primary', icon: '' },
     comment: 'Remove rule"Legacy load balancer"',
     author: 'Sam Lee',
     createdAgo: '1 day ago'
@@ -238,6 +238,7 @@
               <template #tag>
                 <Tag
                   :label="entry.tag.label"
+                  :variant="entry.tag.variant"
                   :severity="entry.tag.severity"
                   :icon="entry.tag.icon"
                   size="small"
@@ -322,6 +323,7 @@
                 <template #tag>
                   <Tag
                     :label="entry.tag.label"
+                    :variant="entry.tag.variant"
                     :severity="entry.tag.severity"
                     :icon="entry.tag.icon"
                     size="small"
@@ -373,7 +375,7 @@
                 </span>
                 <Tag
                   label="Deployed"
-                  severity="primary"
+                  variant="primary"
                   size="medium"
                 />
                 <DropdownMenu
@@ -617,6 +619,7 @@
                       <span class="flex shrink-0">
                         <Tag
                           :label="version.tag.label"
+                          :variant="version.tag.variant"
                           :severity="version.tag.severity"
                           size="small"
                         />
@@ -676,6 +679,7 @@
                         <span class="flex shrink-0">
                           <Tag
                             :label="entry.tag.label"
+                            :variant="entry.tag.variant"
                             :severity="entry.tag.severity"
                             size="small"
                           />

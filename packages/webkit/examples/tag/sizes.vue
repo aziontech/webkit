@@ -7,24 +7,24 @@
     <div class="flex flex-wrap items-center gap-4">
       <Tag
         label="Label"
-        severity="primary"
+        variant="primary"
         size="medium"
       />
       <Tag
         label="Label"
-        severity="primary"
+        variant="primary"
         size="medium"
         rounded
       />
       <Tag
         label="Label"
-        severity="primary"
+        variant="primary"
         size="medium"
         icon="ai ai-box"
       />
       <Tag
         label="Label"
-        severity="primary"
+        variant="primary"
         size="medium"
         icon="ai ai-box"
         rounded
@@ -33,24 +33,24 @@
     <div class="flex flex-wrap items-center gap-4">
       <Tag
         label="Label"
-        severity="primary"
+        variant="primary"
         size="small"
       />
       <Tag
         label="Label"
-        severity="primary"
+        variant="primary"
         size="small"
         rounded
       />
       <Tag
         label="Label"
-        severity="primary"
+        variant="primary"
         size="small"
         icon="ai ai-box"
       />
       <Tag
         label="Label"
-        severity="primary"
+        variant="primary"
         size="small"
         icon="ai ai-box"
         rounded

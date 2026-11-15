@@ -5,7 +5,7 @@
 <template>
   <Tag
     label="Label"
-    severity="primary"
+    variant="primary"
     size="medium"
   />
 </template>

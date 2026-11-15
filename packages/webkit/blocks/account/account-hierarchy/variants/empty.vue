@@ -24,7 +24,7 @@
   import Select from '@aziontech/webkit/select'
   import Table, { type TableColumn } from '@aziontech/webkit/table'
   import Tabs from '@aziontech/webkit/tabs'
-  import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
+  import Tag, { type TagSeverity, type TagVariant } from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { useLocale } from '@aziontech/webkit/use-locale'
@@ -35,7 +35,8 @@
   interface ResourceTypeMeta {
     label: string
     icon: string
-    severity: TagSeverity
+    severity?: TagSeverity
+    variant?: TagVariant
   }
   interface Resource {
     id: string
@@ -52,7 +53,7 @@
   }
 
   const types: Record<ResourceType, ResourceTypeMeta> = {
-    organization: { label: 'Organization', icon: 'ai ai-building', severity: 'accent' },
+    organization: { label: 'Organization', icon: 'ai ai-building', variant: 'accent' },
     group: { label: 'Group', icon: 'ai ai-users', severity: 'info' },
     workspace: { label: 'Workspace', icon: 'ai ai-layout-grid', severity: 'neutral' }
   }
@@ -614,6 +615,7 @@
                     <Tag
                       :label="types[value].label"
                       :icon="types[value].icon"
+                      :variant="types[value].variant"
                       :severity="types[value].severity"
                       size="small"
                     />
@@ -749,6 +751,7 @@
                             <Tag
                               :label="types[focused.type].label"
                               :icon="types[focused.type].icon"
+                              :variant="types[focused.type].variant"
                               :severity="types[focused.type].severity"
                               size="small"
                             />

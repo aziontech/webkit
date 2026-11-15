@@ -387,7 +387,7 @@ tag on the version that is live (`Current`). If two chips both survive that test
 are restating one fact.
 
 The one highlighted value of a set (the `Owner` role among Admin / Member) is
-`severity="highlight"`, the orange tint; an `Inactive` state is `neutral`, never `danger` — nothing
+`variant="highlight"`, the orange tint; an `Inactive` state is `neutral`, never `danger` — nothing
 failed.
 
 **A CATEGORY chip is one `rounded` tag in one severity.** A category says _which kind_, not _how it

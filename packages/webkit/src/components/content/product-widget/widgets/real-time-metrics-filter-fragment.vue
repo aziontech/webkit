@@ -149,7 +149,7 @@
             <span class="pointer-events-none absolute -top-2 -end-2 flex">
               <Badge
                 label="1"
-                severity="primary"
+                variant="primary"
                 size="small"
               />
             </span>

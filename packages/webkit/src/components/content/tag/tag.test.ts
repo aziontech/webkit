@@ -6,28 +6,19 @@ import Types from '../../../../examples/tag/types.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Tag from './tag.vue'
 
-const SEVERITIES = [
-  'neutral',
-  'primary',
-  'success',
-  'info',
-  'warning',
-  'danger',
-  'accent',
-  'contrast',
-  'highlight'
-] as const
+const SEVERITIES = ['neutral', 'success', 'info', 'warning', 'danger'] as const
+const VARIANTS = ['primary', 'accent', 'contrast', 'highlight'] as const
 
 const SIZES = ['small', 'medium'] as const
 
 describe('Tag', () => {
-  it('renders with the default testid, default severity and default size', () => {
+  it('renders with the default testid, default variant and default size', () => {
     const { getByTestId } = render(Tag, { props: { label: 'Label' } })
 
     const root = getByTestId('content-tag')
     expect(root).toBeTruthy()
-    // Defaults from withDefaults: severity primary, size medium.
-    expect(root.getAttribute('data-severity')).toBe('primary')
+    expect(root.getAttribute('data-variant')).toBe('primary')
+    expect(root.hasAttribute('data-severity')).toBe(false)
     expect(root.getAttribute('data-size')).toBe('medium')
     // rounded defaults to false → attribute is null (rendered via `rounded || null`).
     expect(root.getAttribute('data-rounded')).toBeNull()
@@ -72,12 +63,22 @@ describe('Tag', () => {
     }
   })
 
-  it('falls back to primary when severity is undefined', () => {
+  it('reflects the variant prop on data-variant for every brand look', () => {
+    for (const variant of VARIANTS) {
+      const { getByTestId, unmount } = render(Tag, { props: { label: 'Label', variant } })
+      expect(getByTestId('content-tag').getAttribute('data-variant')).toBe(variant)
+      unmount()
+    }
+  })
+
+  it('lets severity win over variant when both are set', () => {
     const { getByTestId } = render(Tag, {
-      props: { label: 'Label', severity: undefined }
+      props: { label: 'Label', variant: 'highlight', severity: 'danger' }
     })
 
-    expect(getByTestId('content-tag').getAttribute('data-severity')).toBe('primary')
+    const root = getByTestId('content-tag')
+    expect(root.getAttribute('data-severity')).toBe('danger')
+    expect(root.hasAttribute('data-variant')).toBe(false)
   })
 
   it('reflects the size prop on data-size for every option', () => {
@@ -148,28 +149,26 @@ describe('Tag', () => {
     await expectNoA11yViolations(container)
   })
 
-  it('falls back to primary for a severity outside the union', () => {
-    const { getByTestId } = render(Tag, {
-      props: { label: 'Inactive', severity: 'bogus' as never }
-    })
-
-    expect(getByTestId('content-tag').getAttribute('data-severity')).toBe('primary')
+  it('falls back to the primary variant for a severity outside the scale', () => {
+    for (const severity of ['bogus', 'primary', 'secondary']) {
+      const { getByTestId, unmount } = render(Tag, {
+        props: { label: 'Inactive', severity: severity as never }
+      })
+      const root = getByTestId('content-tag')
+      expect(root.hasAttribute('data-severity')).toBe(false)
+      expect(root.getAttribute('data-variant')).toBe('primary')
+      unmount()
+    }
   })
 
-  it('no longer accepts secondary, which v6 folds into neutral', () => {
-    const { getByTestId } = render(Tag, {
-      props: { label: 'Viewer', severity: 'secondary' as never }
-    })
-
-    expect(getByTestId('content-tag').getAttribute('data-severity')).toBe('primary')
-  })
-
-  it('renders every severity in the Types example, highlight included', () => {
+  it('renders every variant and every severity in the Types example', () => {
     const { getAllByTestId } = render(Types)
 
-    const severities = getAllByTestId('content-tag').map((tag) => tag.getAttribute('data-severity'))
+    const looks = getAllByTestId('content-tag').map(
+      (tag) => tag.getAttribute('data-severity') ?? tag.getAttribute('data-variant')
+    )
 
-    expect([...severities].sort()).toEqual([...SEVERITIES].sort())
+    expect([...looks].sort()).toEqual([...SEVERITIES, ...VARIANTS].sort())
   })
 
   it('renders the Default story fixture cleanly', async () => {
