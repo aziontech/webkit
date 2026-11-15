@@ -4,7 +4,7 @@ category: data
 structure: composition
 status: implemented
 spec_version: 6
-checksum: b90c699ff8eb07d7214c52469a58e4c5c3e9b0e189f725847104c7284734138a
+checksum: 2590087f49ec493b77ffe7ac623d21ee3aa6c856170722c623dd37e787105d79
 created: 2026-06-25
 last_updated: 2026-11-15
 ---
@@ -13,7 +13,7 @@ last_updated: 2026-11-15
 
 ## Purpose
 
-Dual-list transfer control: a labelled **source** listbox and a labelled **target** listbox with a control column to move items between them. Use it when the consumer needs to build a subset from a pool of options where both the chosen set and the remaining pool stay visible. Named after the MUI Transfer List (Ant Design calls it Transfer; it was PickList before 6.0), derived from the PrimeVue PickList behavior but rewritten to our conventions (no Figma); the visual surface is a best-effort first draft to validate.
+Dual-list transfer control: a labelled **source** listbox and a labelled **target** listbox with a control column to move items between them. Use it when the consumer needs to build a subset from a pool of options where both the chosen set and the remaining pool stay visible. Named after the MUI Transfer List (Ant Design calls it Transfer; it was PickList before 6.0), written to our conventions (no Figma); the visual surface is a best-effort first draft to validate.
 
 Compound, composition API: the root (`<TransferList>`) owns the bound data (`v-model` = `[sourceItems, targetItems]`) and the shared selection/move state, and provides it through `provide`/`inject`. The consumer composes the anatomy — `<TransferList.Source>`, `<TransferList.Controls>`, `<TransferList.Target>` — and the context-aware `<TransferList.Controls>` wires the move buttons with no props. Each list is data-driven: items come from the root's bound pair and render through the list's `#item` slot (repeated data stays as props, not hand-authored rows). Double-clicking an option moves it to the opposite list (emitting `item-double-click`); this auto-move can be turned off with `move-on-double-click`. The two lists sit side by side on wider viewports and stack vertically (with the controls as a horizontal row between them) on narrow ones; the move arrows point left/right side-by-side and up/down when stacked.
 
@@ -214,7 +214,7 @@ The root also **exposes** `move`, `moveAll`, `hasSelection`, and `count` on its 
 - Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `.claude/rules/migration.md`.
 - Do not add Figma references to examples. No Figma URLs or node IDs in `examples/<name>/` files or `examples.json`. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
 - Do not add examples beyond Default + Types + Sizes + state examples (`Loading`, `Disabled`) for the props the component actually declares, unless the spec's "Examples" section explicitly justifies the addition. Do not split Types/Sizes into one-example-per-variant — the composite examples are the canonical pattern.
-- Do not edit `.claude/docs/DESIGN.md`, `.claude/docs/COMPONENT_REQUIREMENTS.md`, or `.claude/docs/PRIMEVUE_ABSTRACTION.md`.
+- Do not edit `.claude/docs/DESIGN.md` or `.claude/docs/COMPONENT_REQUIREMENTS.md`.
 - Do not edit the root `package.json` or `.github/workflows/*`.
 - Do not change `structure` after `status: approved`. To change structure, bump `spec_version` and re-author the spec.
 - Do not create files outside the paths declared by your task (the orchestrator tells you exactly which files to write).

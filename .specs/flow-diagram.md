@@ -7,7 +7,7 @@ spec_version: 7
 figma:
   url: https://www.figma.com/design/y38AUdg5uXuMeXofUkOxv6/Illustrations?node-id=129-2056
   node_id: 129:2056
-checksum: 3da89627461f213488689c5e6d0958d23e094bf255c4997b66ebcb01cf670f6f
+checksum: 998e7e951afa169fe2892d7de6e928aa2a558c33f7a223bf564f8d634890bbff
 created: 2026-06-25
 last_updated: 2026-11-15
 ---
@@ -214,7 +214,7 @@ Composite stories are justified below because FlowDiagram is a composition compo
 - Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `.claude/rules/migration.md`.
 - Do not add Figma references to examples. No Figma URLs or node IDs in `examples/<name>/` files or `examples.json`. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
 - Do not add examples beyond Default + Types + Sizes + state examples (`Loading`, `Disabled`) for the props the component actually declares, unless the spec's "Examples" section explicitly justifies the addition. Do not split Types/Sizes into one-example-per-variant — the composite examples are the canonical pattern.
-- Do not edit `.claude/docs/DESIGN.md`, `.claude/docs/COMPONENT_REQUIREMENTS.md`, or `.claude/docs/PRIMEVUE_ABSTRACTION.md`.
+- Do not edit `.claude/docs/DESIGN.md` or `.claude/docs/COMPONENT_REQUIREMENTS.md`.
 - Do not edit the root `package.json` or `.github/workflows/*`.
 - Do not change `structure` after `status: approved`. To change structure, bump `spec_version` and re-author the spec.
 - Do not create files outside the paths declared by your task (the orchestrator tells you exactly which files to write).

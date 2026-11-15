@@ -3,7 +3,7 @@ name: page-tabs
 category: navigation
 structure: monolithic
 status: implemented
-checksum: 67a0616952deefdf394fb5013cdb868ea5c811d705aec833fd4148e4c8c4679d
+checksum: 5fada3de2e92c62ba9de425f7b4d54a5c2d3f24a8b9be9a877ca457bfef7fa81
 spec_version: 7
 template: 2
 created: 2026-11-10
@@ -172,7 +172,7 @@ No built-in strings: the tab labels and the actions come from the consumer's slo
 - Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `.claude/rules/migration.md`.
 - Do not add Figma references to examples. No Figma URLs or node IDs in `examples/<name>/` files or `examples.json`. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
 - Do not add examples beyond Default + per `variant` + per `size` + Disabled, unless the spec's "Examples" section explicitly justifies the addition.
-- Do not edit `.claude/docs/DESIGN.md`, `.claude/docs/COMPONENT_REQUIREMENTS.md`, or `.claude/docs/PRIMEVUE_ABSTRACTION.md`.
+- Do not edit `.claude/docs/DESIGN.md` or `.claude/docs/COMPONENT_REQUIREMENTS.md`.
 - Do not edit the root `package.json` or `.github/workflows/*`.
 - Do not change `structure` after `status: approved`. To change structure, bump `spec_version` and re-author the spec.
 - Do not create files outside the paths declared by your task (the orchestrator tells you exactly which files to write).
