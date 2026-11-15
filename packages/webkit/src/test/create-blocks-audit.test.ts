@@ -99,15 +99,19 @@ describe('create-hub', () => {
   })
 
   it('announces loading with one status line and hides the skeletons', () => {
-    render(CreateHubLoading)
-    expect(screen.getByRole('status').textContent).toContain('Loading repositories')
+    const view = render(CreateHubLoading)
+    expect(within(view.container as HTMLElement).getByRole('status').textContent).toContain(
+      'Loading repositories'
+    )
   })
 
   it('replaces the list with a Retry alert when the repositories fail to load', async () => {
-    render(CreateHubLoadFailed)
+    const view = render(CreateHubLoadFailed)
     expect(screen.getByText(/didn't load/)).toBeTruthy()
     await fireEvent.click(screen.getByRole('button', { name: 'Retry' }))
-    expect(screen.getByRole('status').textContent).toContain('Loading repositories')
+    expect(within(view.container as HTMLElement).getByRole('status').textContent).toContain(
+      'Loading repositories'
+    )
   })
 })
 
