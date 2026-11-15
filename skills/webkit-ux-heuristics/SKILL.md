@@ -1,6 +1,6 @@
 ---
 name: webkit-ux-heuristics
-description: Component-map discovery pass — for each UX moment (loading→Skeleton, destructive→Dialog confirm, field error→Field/Alert inline, overlay→shipped focus-trap, empty→one action) name the @aziontech/webkit component that already serves it, so the flow is sound before polish. Also owns three usability rules every surface follows — an external resource link opens in a new tab and says so (trailing pi-external-link + new-tab hint), every long list (a "+N" Tag opening a Popover, an inline picker of existing resources in a create flow, a Select of existing resources) carries a count, search and Load more, and any list of options longer than 7 turns search on. State rendering + async behavior lives in /webkit-ui-states.
+description: Component-map discovery pass — for each UX moment (loading→Skeleton, destructive→Dialog confirm, field error→Field/Alert inline, overlay→shipped focus-trap, empty→one action) name the @aziontech/webkit component that already serves it, so the flow is sound before polish. Also owns three usability rules every surface follows — an external resource link opens in a new tab and says so (trailing ai-external-link + new-tab hint), every long list (a "+N" Tag opening a Popover, an inline picker of existing resources in a create flow, a Select of existing resources) carries a count, search and Load more, and any list of options longer than 7 turns search on. State rendering + async behavior lives in /webkit-ui-states.
 status: active
 last_updated: 2026-11-12
 scope: general
@@ -54,7 +54,7 @@ component for the moment; don't re-derive the principle.
 | Side surface                      | `@aziontech/webkit/panel`, `@aziontech/webkit/drawer`                                                                   | a fixed div without focus management                  |
 | Tooltip help                      | `@aziontech/webkit/tooltip`                                                                                             | `title` attribute only                                |
 | Field label                       | `@aziontech/webkit/label`                                                                                               | placeholder-as-label                                  |
-| Link to an external resource      | `@aziontech/webkit/link` with `target="_blank"` (trailing `pi-external-link`) — see rule 1 below                        | a bare `<a>`, a `ButtonMini`, or a silent new tab     |
+| Link to an external resource      | `@aziontech/webkit/link` with `target="_blank"` (trailing `ai-external-link`) — see rule 1 below                        | a bare `<a>`, a `ButtonMini`, or a silent new tab     |
 | More items than the space holds   | first item + `+N` `@aziontech/webkit/tag` opening a `@aziontech/webkit/popover` with search and Load more — rule 2      | a wrapped inline list, or every item rendered at once |
 | Picking from more than 7 options  | `@aziontech/webkit/select` with an `Input` in `Select.Content`'s `#search` slot, or one above the overlay list — rule 3 | a long list the user has to scroll to scan            |
 
@@ -75,7 +75,7 @@ repository, a status page, a vendor console. A link to one:
 
 - **Opens in a new tab** — `target="_blank"` with `rel="noopener noreferrer"`. The user keeps their
   place in the app; losing a half-filled form to a docs link is the failure this prevents.
-- **Carries the trailing `pi-external-link` mark** at a fixed 12px (`text-body-xs leading-none
+- **Carries the trailing `ai-external-link` mark** at a fixed 12px (`text-body-xs leading-none
 shrink-0`), never sized from the surrounding text. The mark is how the user knows before the click.
 - **Tells assistive tech too.** The mark is `aria-hidden`, so the new-tab fact is said in text: an
   `aria-label` ending in `(opens in a new tab)`, or a `sr-only` span after the label.
@@ -123,7 +123,7 @@ The anatomy, top to bottom, the same in all three:
 
 1. **Summary** — `text-label-sm text-(--text-muted)`: `12 domains`, and while paged or searched
    `10 of 34 domains` / `3 of 34 domains`. The user always knows whether the list is complete.
-2. **Search** — an `Input` with a leading `pi pi-search`, only when the list passes the rule-3
+2. **Search** — an `Input` with a leading `ai ai-search`, only when the list passes the rule-3
    threshold (more than 7 items).
 3. **List** — scrolls inside the popover (`max-h-(--container-xs) overflow-auto
 overscroll-contain`). Each entry truncates; an entry that is an external resource follows rule 1.
@@ -153,7 +153,7 @@ Behavior:
     <div class="flex flex-col gap-(--spacing-xs) border-b border-(--border-default) px-(--spacing-sm) pb-(--spacing-xs) pt-(--spacing-sm)">
       <p class="text-label-sm text-(--text-muted)">{{ summary }}</p>
       <Input v-if="items.length > 7" v-model="query" size="medium" placeholder="Search domains" aria-label="Search domains">
-        <template #prefix><i class="pi pi-search" aria-hidden="true" /></template>
+        <template #prefix><i class="ai ai-search" aria-hidden="true" /></template>
       </Input>
     </div>
     <div class="max-h-(--container-xs) overflow-auto overscroll-contain p-(--spacing-xxs)">
@@ -181,7 +181,7 @@ search box is only noise.
   `v-if`, and filter the `Select.Option` list by it.
 - An inline picker in a create flow: the `Input` sits above the rows, inside the band.
 - An overlay list you compose (Popover, DropdownMenu content): an `Input` with a leading
-  `pi pi-search` above the list.
+  `ai ai-search` above the list.
 - Count the **full** set, not the loaded batch — a paged list of 40 searches even while 10 show.
 - The threshold is computed from the data, never hard-coded per screen, so a list that grows past 7
   gains search without an edit.
@@ -206,7 +206,7 @@ one renders, and how the async sequence behaves, lives in `/webkit-ui-states`.
   error.
 - Overlays trap and restore focus via the shipped focus-trap composable; never hand-roll focus/escape.
 - Labels are literal; use `label`, never placeholder-as-label; never block paste.
-- External resources open in a new tab, carry the 12px `pi-external-link` mark, and say "opens in a
+- External resources open in a new tab, carry the 12px `ai-external-link` mark, and say "opens in a
   new tab" to assistive tech; in-app links stay in the tab.
 - A long list — overflow `Popover`, create-flow picker, or `Select` — carries a count, search past 7,
   and Load more; overflow is never a wrapped inline list.
@@ -234,7 +234,7 @@ End with: `flow sound` or `N gaps — fix before polish`.
 - [ ] Every fetch/submit surface has loading + empty + error states (rendered per `/webkit-ui-states`).
 - [ ] Destructive actions confirm; field errors sit next to their cause; paste is never blocked.
 - [ ] Overlays trap and restore focus via the shipped focus-trap composable (import resolved via the MCP/catalog).
-- [ ] Every external resource link opens in a new tab with the `pi-external-link` mark and a new-tab hint for screen readers.
+- [ ] Every external resource link opens in a new tab with the `ai-external-link` mark and a new-tab hint for screen readers.
 - [ ] Every overflow is a `+N` Tag → Popover, and every pick of an existing resource is an inline picker or a `Select` — each with a count, search (past 7), Load more, and a no-match line.
 - [ ] Every pickable list longer than 7 options has search; none at 7 or fewer.
 - [ ] No motion or delight added here (structure only).

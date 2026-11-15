@@ -405,7 +405,7 @@ colour _is_ the information.
   <Tag
     severity="neutral"
     size="medium"
-    icon="pi pi-github"
+    icon="ai ai-github"
     rounded
     class="max-w-full"
   >
@@ -426,7 +426,7 @@ detail panel alike. It carries three rules, and each is a real bug when a hand-m
    names what it leaves for**, so the reader decides before the click. In-app (`to` plus
    `destination`) reads `Open <name> in <Module>`; off-app (`href`) reads `Open <name> in a new tab`
    and adds a visually hidden `(opens in a new tab)`.
-2. **The mark is a fixed 12px `pi-external-link`**, never sized from the text around it.
+2. **The mark is a fixed 12px `ai-external-link`**, never sized from the text around it.
 3. **No destination, no mark, no tooltip.** Without `href` or `to` it renders plain truncating text.
 
 ```vue
@@ -597,7 +597,7 @@ visually hidden header (`#header-actions` → `<span class="sr-only">Actions</sp
 - [ ] Toolbar order: Filter · Search (`flex-1`) · Refresh · Export · CollectionPreferences; `#filters` → `FilterMenu.Chips` (menu kind).
 - [ ] Body scrolls internally: `min-h-0 flex-1` parent → `Card h-full` → `Table max-height="100%" class="h-full"` — the page doesn't scroll.
 - [ ] Principal column names the **whole** (the unit a reader owns and opens), not an artifact inside it with a second column chipping that artifact's kind.
-- [ ] Every name that leaves the screen is `Table.CellLink` (12px `pi-external-link`, a tooltip naming the destination, underline on hover, **no mark** without a destination); no hand-made copy.
+- [ ] Every name that leaves the screen is `Table.CellLink` (12px `ai-external-link`, a tooltip naming the destination, underline on hover, **no mark** without a destination); no hand-made copy.
 - [ ] Only **one** status chip per row (plus at most one category chip and a `Current` marker), and a category chip is one `rounded` tag in one severity from a shared helper — branching colour is reserved for real status.
 - [ ] Domain cell = `Table.CellLink` with `copyable` (and `more` for the other domains); copy buttons align across rows.
 - [ ] In a 320 px box the grid scrolls sideways inside the table (no `stackable` on a console list) and the toolbar wraps.

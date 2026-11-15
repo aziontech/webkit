@@ -49,8 +49,8 @@ const navigation = [
   {
     label: 'Security',
     items: [
-      { id: 'policies', label: 'Policies', icon: 'pi pi-shield', href: '/policies' },
-      { id: 'certificates', label: 'Certificates', icon: 'pi pi-lock', href: '/certificates' }
+      { id: 'policies', label: 'Policies', icon: 'ai ai-shield', href: '/policies' },
+      { id: 'certificates', label: 'Certificates', icon: 'ai ai-lock', href: '/certificates' }
     ]
   }
 ]
@@ -69,7 +69,7 @@ const navigation = [
       {
         id: 'private-access',
         label: 'Private access',
-        icon: 'pi pi-lock',
+        icon: 'ai ai-lock',
         kind: 'drill',
         groups: [
           {

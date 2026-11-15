@@ -98,27 +98,27 @@ Once the project is wired, import components by path:
   <Button
     kind="primary"
     label="Button"
-    icon="pi pi-arrow-right"
+    icon="ai ai-arrow-right"
   />
   <Button
     kind="secondary"
     label="Button"
-    icon="pi pi-arrow-right"
+    icon="ai ai-arrow-right"
   />
   <Button
     kind="outlined"
     label="Button"
-    icon="pi pi-arrow-right"
+    icon="ai ai-arrow-right"
   />
   <Button
     kind="transparent"
     label="Button"
-    icon="pi pi-arrow-right"
+    icon="ai ai-arrow-right"
   />
   <Button
     kind="danger"
     label="Button"
-    icon="pi pi-trash"
+    icon="ai ai-trash"
   />
 
   <!-- statment buttons -->
@@ -143,7 +143,7 @@ Once the project is wired, import components by path:
 ### Live previews
 
 - **Docs site** — `apps/docs` (`pnpm docs:dev`) — every component's API and examples beside their source, every block in every state, the foundations. It replaces the Storybook that <https://webkit.azion.app/> served; publishing it there is pending (ROADMAP M2.10).
-- **Icon catalog** — <https://icons-gallery.azion.app/> — Searchable browser for the Azion + Prime icon sets used by `@aziontech/icons`.
+- **Icon catalog** — <https://icons-gallery.azion.app/> — Searchable browser for the icon sets of `@aziontech/icons`.
 
 Run them locally with `pnpm docs:dev`, `pnpm demos:dev` and `pnpm icons:gallery:serve`.
 
@@ -164,7 +164,7 @@ Designers file the issue forms and review screenshots: see
 
 - `@aziontech/webkit`: Vue component library and UI building blocks.
 - `@aziontech/theme`: design token system, CSS variables, and Tailwind integration.
-- `@aziontech/icons`: Azion + Prime icon fonts as CSS/woff2 assets.
+- `@aziontech/icons`: the Azion icon font (plus the legacy PrimeIcons entry) as CSS/woff2 assets.
 - `@aziontech/webkit-mcp`: the MCP server that gives AI tools the WebKit catalog (`npx -y @aziontech/webkit-mcp`).
 - Docs site (`apps/docs`), demos (`apps/demos`) and the styled visual suite (`apps/visual`).
 - Icons Gallery app for icon exploration and QA.
@@ -202,7 +202,7 @@ If you are new (human or AI), open these in order — together they describe the
 
 | Package                                                                      | Description                                                    | CI                                                                                                                                                                                                                            | Version                                                                                                                       |
 | ---------------------------------------------------------------------------- | -------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
-| [@aziontech/icons](https://www.npmjs.com/package/@aziontech/icons)           | Azion and Prime icon fonts used across products.               | [![Package Icons](https://github.com/aziontech/webkit/actions/workflows/package-icons.yml/badge.svg?branch=main)](https://github.com/aziontech/webkit/actions/workflows/package-icons.yml?query=branch%3Amain)                | [![npm version](https://img.shields.io/npm/v/@aziontech/icons.svg)](https://www.npmjs.com/package/@aziontech/icons)           |
+| [@aziontech/icons](https://www.npmjs.com/package/@aziontech/icons)           | The Azion icon font used across products.                      | [![Package Icons](https://github.com/aziontech/webkit/actions/workflows/package-icons.yml/badge.svg?branch=main)](https://github.com/aziontech/webkit/actions/workflows/package-icons.yml?query=branch%3Amain)                | [![npm version](https://img.shields.io/npm/v/@aziontech/icons.svg)](https://www.npmjs.com/package/@aziontech/icons)           |
 | [@aziontech/theme](https://www.npmjs.com/package/@aziontech/theme)           | Theme configuration, semantic tokens, and styling foundations. | [![Package Theme](https://github.com/aziontech/webkit/actions/workflows/package-theme.yml/badge.svg?branch=main)](https://github.com/aziontech/webkit/actions/workflows/package-theme.yml?query=branch%3Amain)                | [![npm version](https://img.shields.io/npm/v/@aziontech/theme.svg)](https://www.npmjs.com/package/@aziontech/theme)           |
 | [@aziontech/webkit](https://www.npmjs.com/package/@aziontech/webkit)         | Reusable UI components and design system utilities.            | [![Package Webkit](https://github.com/aziontech/webkit/actions/workflows/package-webkit.yml/badge.svg?branch=main)](https://github.com/aziontech/webkit/actions/workflows/package-webkit.yml?query=branch%3Amain)             | [![npm version](https://img.shields.io/npm/v/@aziontech/webkit.svg)](https://www.npmjs.com/package/@aziontech/webkit)         |
 | [@aziontech/webkit-mcp](https://www.npmjs.com/package/@aziontech/webkit-mcp) | MCP server that gives AI tools the WebKit catalog.             | [![Package Webkit MCP](https://github.com/aziontech/webkit/actions/workflows/package-webkit-mcp.yml/badge.svg?branch=main)](https://github.com/aziontech/webkit/actions/workflows/package-webkit-mcp.yml?query=branch%3Amain) | [![npm version](https://img.shields.io/npm/v/@aziontech/webkit-mcp.svg)](https://www.npmjs.com/package/@aziontech/webkit-mcp) |
