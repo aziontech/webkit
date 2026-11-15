@@ -32,7 +32,7 @@ describe('InputGroup', () => {
         slots: { default: LABELLED_INPUT }
       })
 
-      const root = getByTestId('input-group')
+      const root = getByTestId('input-input-group')
       expect(root.tagName).toBe('DIV')
       expect(root.getAttribute('role')).toBe('group')
       expect(getByPlaceholderText('domain')).toBeTruthy()
@@ -55,7 +55,7 @@ describe('InputGroup', () => {
         }
       })
 
-      const children = Array.from(getByTestId('input-group').children)
+      const children = Array.from(getByTestId('input-input-group').children)
       expect(children).toHaveLength(3)
       expect(children[0]).toBe(getByTestId('first'))
       expect(children[2]).toBe(getByTestId('last'))
@@ -69,7 +69,7 @@ describe('InputGroup', () => {
         slots: { default: LABELLED_INPUT }
       })
 
-      const root = getByTestId('input-group')
+      const root = getByTestId('input-input-group')
       expect(root.getAttribute('data-invalid')).toBe('true')
       expect(root.getAttribute('aria-invalid')).toBeNull()
     })
@@ -85,7 +85,7 @@ describe('InputGroup', () => {
     it('omits both attributes when invalid is false', () => {
       const { getByTestId } = render(InputGroup, { slots: { default: LABELLED_INPUT } })
 
-      const root = getByTestId('input-group')
+      const root = getByTestId('input-input-group')
       expect(root.getAttribute('data-invalid')).toBeNull()
       expect(root.getAttribute('aria-invalid')).toBeNull()
     })
@@ -98,7 +98,7 @@ describe('InputGroup', () => {
         slots: { default: LABELLED_INPUT }
       })
 
-      const root = getByTestId('input-group')
+      const root = getByTestId('input-input-group')
       expect(root.getAttribute('data-required')).toBe('true')
       expect(root.getAttribute('aria-required')).toBeNull()
     })
@@ -106,7 +106,7 @@ describe('InputGroup', () => {
     it('omits both attributes when required is false', () => {
       const { getByTestId } = render(InputGroup, { slots: { default: LABELLED_INPUT } })
 
-      const root = getByTestId('input-group')
+      const root = getByTestId('input-input-group')
       expect(root.getAttribute('data-required')).toBeNull()
       expect(root.getAttribute('aria-required')).toBeNull()
     })
@@ -115,7 +115,7 @@ describe('InputGroup', () => {
   describe('size', () => {
     it('defaults data-size to "medium" on the root', () => {
       const { getByTestId } = render(InputGroup, { slots: { default: LABELLED_INPUT } })
-      expect(getByTestId('input-group').getAttribute('data-size')).toBe('medium')
+      expect(getByTestId('input-input-group').getAttribute('data-size')).toBe('medium')
     })
 
     it.each(['small', 'medium', 'large'] as const)(
@@ -125,7 +125,7 @@ describe('InputGroup', () => {
           props: { size },
           slots: { default: LABELLED_INPUT }
         })
-        expect(getByTestId('input-group').getAttribute('data-size')).toBe(size)
+        expect(getByTestId('input-input-group').getAttribute('data-size')).toBe(size)
       }
     )
 
@@ -136,7 +136,7 @@ describe('InputGroup', () => {
           default: `<span data-testid="addon-l">$</span>${LABELLED_INPUT}`
         }
       })
-      expect(getByTestId('input-group').getAttribute('data-size')).toBe('large')
+      expect(getByTestId('input-input-group').getAttribute('data-size')).toBe('large')
     })
   })
 
@@ -145,7 +145,7 @@ describe('InputGroup', () => {
       const { getByTestId } = render(InputGroup, {
         slots: { default: LABELLED_INPUT }
       })
-      const root = getByTestId('input-group')
+      const root = getByTestId('input-input-group')
       const cls = root.getAttribute('class') ?? ''
       expect(cls).toContain('[&_*]:focus-visible:!ring-0')
       expect(cls).toContain('[&_*]:focus-within:!ring-0')
@@ -160,7 +160,7 @@ describe('InputGroup', () => {
         slots: { default: LABELLED_INPUT }
       })
 
-      const root = getByTestId('input-group')
+      const root = getByTestId('input-input-group')
       expect(root.getAttribute('data-disabled')).toBe('true')
       expect(root.getAttribute('aria-disabled')).toBe('true')
     })
@@ -223,7 +223,7 @@ describe('InputGroup', () => {
         slots: { default: 'https://' }
       })
 
-      const addon = getByTestId('input-group-addon')
+      const addon = getByTestId('input-input-group-addon')
       expect(addon.tagName).toBe('SPAN')
       expect(addon.textContent).toBe('https://')
     })
@@ -243,7 +243,7 @@ describe('InputGroup', () => {
         slots: { default: '$' }
       })
 
-      expect(getByTestId('input-group-addon').getAttribute('aria-hidden')).toBe('true')
+      expect(getByTestId('input-input-group-addon').getAttribute('aria-hidden')).toBe('true')
     })
   })
 
@@ -286,14 +286,14 @@ describe('InputGroup', () => {
     it('renders the Default story with the middle input inside the group', () => {
       const { getByTestId, getByPlaceholderText } = render(Default)
 
-      expect(getByTestId('input-group')).toBeTruthy()
+      expect(getByTestId('input-input-group')).toBeTruthy()
       expect(getByPlaceholderText('domain')).toBeTruthy()
     })
 
     it('renders the BothAddons story with two addons around the input', () => {
       const { getAllByTestId } = render(BothAddons)
 
-      const addons = getAllByTestId('input-group-addon')
+      const addons = getAllByTestId('input-input-group-addon')
       expect(addons).toHaveLength(2)
       expect(addons[0].textContent).toBe('https://')
       expect(addons[1].textContent).toBe('.com')
@@ -304,7 +304,7 @@ describe('InputGroup', () => {
 
       const button = getByTestId('actions-button')
       expect(button.textContent).toContain('Search')
-      expect(button.closest('[data-testid="input-group"]')).not.toBeNull()
+      expect(button.closest('[data-testid="input-input-group"]')).not.toBeNull()
     })
 
     it('renders the WithSelect story with a closed combobox trigger showing USD', () => {
@@ -318,24 +318,24 @@ describe('InputGroup', () => {
 
     it('renders the Sizes story with one group per size, each carrying data-size', () => {
       const { getAllByTestId } = render(Sizes)
-      const groups = getAllByTestId('input-group')
+      const groups = getAllByTestId('input-input-group')
       expect(groups).toHaveLength(3)
       expect(groups.map((g) => g.getAttribute('data-size'))).toEqual(['small', 'medium', 'large'])
     })
 
     it('renders the Invalid story with data-invalid on the root', () => {
       const { getByTestId } = render(Invalid)
-      expect(getByTestId('input-group').getAttribute('data-invalid')).toBe('true')
+      expect(getByTestId('input-input-group').getAttribute('data-invalid')).toBe('true')
     })
 
     it('renders the Required story with data-required on the root', () => {
       const { getByTestId } = render(Required)
-      expect(getByTestId('input-group').getAttribute('data-required')).toBe('true')
+      expect(getByTestId('input-input-group').getAttribute('data-required')).toBe('true')
     })
 
     it('renders the Disabled story with data-disabled on the root', () => {
       const { getByTestId } = render(Disabled)
-      expect(getByTestId('input-group').getAttribute('data-disabled')).toBe('true')
+      expect(getByTestId('input-input-group').getAttribute('data-disabled')).toBe('true')
     })
   })
 })

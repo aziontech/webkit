@@ -9,7 +9,9 @@
 
   const attrs = useAttrs()
 
-  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'input-group-addon')
+  const testId = computed(
+    () => (attrs['data-testid'] as string | undefined) ?? 'input-input-group-addon'
+  )
 </script>
 
 <template>

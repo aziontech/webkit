@@ -78,7 +78,9 @@
   const visible = ref(false)
   const inputRef = ref<globalThis.HTMLInputElement | null>(null)
 
-  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'password-input')
+  const testId = computed(
+    () => (attrs['data-testid'] as string | undefined) ?? 'input-password-input'
+  )
 
   const passthroughAttrs = computed(() => {
     const rest: Record<string, unknown> = { ...attrs }

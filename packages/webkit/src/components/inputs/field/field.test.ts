@@ -108,7 +108,7 @@ describe('Field', () => {
   it('keeps the Required marker when its own required is set and the Field is not required', () => {
     const { getByTestId } = mount('<Field><FieldLabel required>Key</FieldLabel><Input /></Field>')
     expect(getByTestId('input-field-label__required')).toBeTruthy()
-    expect(getByTestId('input').hasAttribute('required')).toBe(false)
+    expect(getByTestId('input-input').hasAttribute('required')).toBe(false)
   })
 
   it('keeps an explicit id on the control and for on the label', () => {
@@ -232,7 +232,7 @@ describe('Field', () => {
       '<Field invalid><FieldLabel>Domain</FieldLabel><InputGroup><InputGroupInput /></InputGroup></Field>'
     )
     expect(getByLabelText('Domain').getAttribute('aria-invalid')).toBe('true')
-    expect(getByTestId('input-group').getAttribute('data-invalid')).not.toBeNull()
+    expect(getByTestId('input-input-group').getAttribute('data-invalid')).not.toBeNull()
   })
 
   it('toggles a checkbox through a horizontal field label', async () => {

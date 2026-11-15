@@ -56,7 +56,7 @@
     register: (kind, id) => parentField?.register(kind, id) ?? (() => {})
   })
 
-  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'input-group')
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'input-input-group')
 </script>
 
 <template>

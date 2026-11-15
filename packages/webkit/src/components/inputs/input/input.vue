@@ -87,7 +87,7 @@
     required: () => props.required
   })
 
-  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'input')
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'input-input')
 
   const passthroughAttrs = computed(() => {
     const rest: Record<string, unknown> = { ...attrs }

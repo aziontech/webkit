@@ -54,7 +54,9 @@
     required: () => props.required
   })
 
-  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'input-group-input')
+  const testId = computed(
+    () => (attrs['data-testid'] as string | undefined) ?? 'input-input-group-input'
+  )
 
   const autofillHints = computed(() =>
     passwordManagerHints({ autocomplete: props.autocomplete, readonly: props.readonly })

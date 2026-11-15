@@ -20,7 +20,7 @@ const getOptions = () =>
 const optionText = (option: HTMLElement) =>
   [
     option.querySelector('.truncate'),
-    option.querySelector('[data-testid="phone-input__dial-code"]')
+    option.querySelector('[data-testid="input-phone-input__dial-code"]')
   ]
     .map((el) => el?.textContent?.trim())
     .join(' ')
@@ -43,8 +43,8 @@ describe('PhoneInput', () => {
     it('defaults to medium on the root, the group and the dial-code trigger', () => {
       const { getByTestId, getByRole } = render(PhoneInput, {})
 
-      expect(getByTestId('phone-input').dataset.size).toBe('medium')
-      expect(getByTestId('phone-input').dataset.size).toBe('medium')
+      expect(getByTestId('input-phone-input').dataset.size).toBe('medium')
+      expect(getByTestId('input-phone-input').dataset.size).toBe('medium')
       expect(getByRole('combobox', { name: 'Country dial code' }).dataset.size).toBe('medium')
     })
 
@@ -55,8 +55,8 @@ describe('PhoneInput', () => {
           props: { size }
         })
 
-        expect(getByTestId('phone-input').dataset.size).toBe(size)
-        expect(getByTestId('phone-input').dataset.size).toBe(size)
+        expect(getByTestId('input-phone-input').dataset.size).toBe(size)
+        expect(getByTestId('input-phone-input').dataset.size).toBe(size)
         expect(getByRole('combobox', { name: 'Country dial code' }).dataset.size).toBe(size)
       }
     )
@@ -191,7 +191,7 @@ describe('PhoneInput', () => {
       expect(getByTestId('input-select-trigger').getAttribute('aria-label')).toBe(
         'Country dial code'
       )
-      expect(getByTestId('phone-input__country').getAttribute('aria-label')).toBeNull()
+      expect(getByTestId('input-phone-input__country').getAttribute('aria-label')).toBeNull()
     })
 
     it("shows the selected country's dial code in the trigger", () => {
@@ -201,10 +201,12 @@ describe('PhoneInput', () => {
 
     it('keeps the number and the dial codes left-to-right on an RTL page', async () => {
       const { getByTestId } = render(PhoneInput, {})
-      expect(getByTestId('phone-input__input').getAttribute('dir')).toBe('ltr')
+      expect(getByTestId('input-phone-input__input').getAttribute('dir')).toBe('ltr')
       await fireEvent.click(getByTestId('input-select-trigger'))
       expect(
-        getOptions()[0].querySelector('[data-testid="phone-input__dial-code"]')?.getAttribute('dir')
+        getOptions()[0]
+          .querySelector('[data-testid="input-phone-input__dial-code"]')
+          ?.getAttribute('dir')
       ).toBe('ltr')
     })
 
@@ -228,13 +230,13 @@ describe('PhoneInput', () => {
       const options = getOptions()
       expect(options).toHaveLength(defaultCountries.length)
       const us = options[1]
-      const flag = us.querySelector('[data-testid="phone-input__flag"]')
+      const flag = us.querySelector('[data-testid="input-phone-input__flag"]')
       expect(flag?.getAttribute('data-country')).toBe('US')
       expect(flag?.getAttribute('aria-hidden')).toBe('true')
       expect(us.querySelector('.truncate')?.textContent?.trim()).toBe('United States')
-      expect(us.querySelector('[data-testid="phone-input__dial-code"]')?.textContent?.trim()).toBe(
-        '+1'
-      )
+      expect(
+        us.querySelector('[data-testid="input-phone-input__dial-code"]')?.textContent?.trim()
+      ).toBe('+1')
     })
 
     it('keeps the check on the selected country, after the dial code', async () => {
@@ -242,7 +244,7 @@ describe('PhoneInput', () => {
       await fireEvent.click(getByTestId('input-select-trigger'))
 
       const br = getOptions()[0]
-      const dialCode = br.querySelector('[data-testid="phone-input__dial-code"]')
+      const dialCode = br.querySelector('[data-testid="input-phone-input__dial-code"]')
       const check = br.querySelector('[data-testid="input-select-option__check"]')
       expect(check).not.toBeNull()
       expect(dialCode?.compareDocumentPosition(check as Node)).toBe(
@@ -369,7 +371,9 @@ describe('PhoneInput', () => {
 
   describe('dial-code search', () => {
     const getSearch = () =>
-      document.body.querySelector('[data-testid="phone-input__search"]') as HTMLInputElement | null
+      document.body.querySelector(
+        '[data-testid="input-phone-input__search"]'
+      ) as HTMLInputElement | null
 
     it('focuses the search box when the list opens', async () => {
       const { getByTestId } = render(PhoneInput, {})
@@ -410,7 +414,7 @@ describe('PhoneInput', () => {
 
       expect(getOptions()).toHaveLength(0)
       expect(
-        document.body.querySelector('[data-testid="phone-input__search-empty"]')?.textContent
+        document.body.querySelector('[data-testid="input-phone-input__search-empty"]')?.textContent
       ).toContain('Nenhum país')
     })
 
@@ -517,8 +521,8 @@ describe('PhoneInput', () => {
       const input = getByRole('textbox') as HTMLInputElement
       expect(input.required).toBe(true)
       expect(input.getAttribute('aria-required')).toBe('true')
-      expect(getByTestId('phone-input').getAttribute('data-required')).toBe('true')
-      expect(getByTestId('phone-input').getAttribute('data-required')).toBe('true')
+      expect(getByTestId('input-phone-input').getAttribute('data-required')).toBe('true')
+      expect(getByTestId('input-phone-input').getAttribute('data-required')).toBe('true')
     })
 
     it('marks input, root and group for the invalid state', () => {
@@ -527,8 +531,8 @@ describe('PhoneInput', () => {
       })
 
       expect(getByRole('textbox').getAttribute('aria-invalid')).toBe('true')
-      expect(getByTestId('phone-input').getAttribute('data-invalid')).toBe('true')
-      expect(getByTestId('phone-input').getAttribute('data-invalid')).toBe('true')
+      expect(getByTestId('input-phone-input').getAttribute('data-invalid')).toBe('true')
+      expect(getByTestId('input-phone-input').getAttribute('data-invalid')).toBe('true')
     })
 
     it('disables the native input and marks root and group when disabled', () => {
@@ -537,8 +541,8 @@ describe('PhoneInput', () => {
       })
 
       expect((getByRole('textbox') as HTMLInputElement).disabled).toBe(true)
-      expect(getByTestId('phone-input').getAttribute('data-disabled')).toBe('true')
-      expect(getByTestId('phone-input').getAttribute('data-disabled')).toBe('true')
+      expect(getByTestId('input-phone-input').getAttribute('data-disabled')).toBe('true')
+      expect(getByTestId('input-phone-input').getAttribute('data-disabled')).toBe('true')
     })
   })
 
@@ -578,7 +582,7 @@ describe('PhoneInput', () => {
       const { getByTestId, getByLabelText } = render(Default)
       const input = getByLabelText(/Phone/) as HTMLInputElement
 
-      expect(getByTestId('phone-input')).toBeTruthy()
+      expect(getByTestId('input-phone-input')).toBeTruthy()
       expect(getByTestId('input-select-trigger').getAttribute('role')).toBe('combobox')
       expect(input.getAttribute('placeholder')).toBe('(999) 999-9999')
 
@@ -591,11 +595,11 @@ describe('PhoneInput', () => {
 describe('PhoneInput test ids', () => {
   it('falls back to phone-input on the root and lets a passed data-testid win', () => {
     const view = render(PhoneInput)
-    expect(view.getByTestId('phone-input')).toBeTruthy()
+    expect(view.getByTestId('input-phone-input')).toBeTruthy()
     view.unmount()
     const custom = render(PhoneInput, { attrs: { 'data-testid': 'contact-phone' } })
     expect(custom.getByTestId('contact-phone')).toBeTruthy()
-    expect(custom.queryByTestId('phone-input')).toBeNull()
+    expect(custom.queryByTestId('input-phone-input')).toBeNull()
   })
 })
 
@@ -608,6 +612,6 @@ describe('PhoneInput — native form submit', () => {
     })
     const form = getByTestId('form') as HTMLFormElement
     expect(new FormData(form).getAll('phone')).toEqual(['+14155550100'])
-    expect(getByTestId('phone-input__input').hasAttribute('name')).toBe(false)
+    expect(getByTestId('input-phone-input__input').hasAttribute('name')).toBe(false)
   })
 })

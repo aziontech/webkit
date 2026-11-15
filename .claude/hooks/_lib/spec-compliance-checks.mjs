@@ -100,14 +100,9 @@ function normalizeDefault(raw) {
   return null // arrow/factory/object default — not comparable
 }
 
-/** inputs category: `input-<name>`, except when name already starts with `input-`. */
+/** inputs category: `input-<name>`; every other category: `<category>-<name>`. */
 export function testIdFallback(category, name) {
-  if (category === 'inputs') {
-    return name === 'input' || name.startsWith('input-') || name.endsWith('-input')
-      ? name
-      : `input-${name}`
-  }
-  return `${category}-${name}`
+  return category === 'inputs' ? `input-${name}` : `${category}-${name}`
 }
 
 /**

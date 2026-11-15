@@ -46,8 +46,8 @@ describe('variables#List', () => {
   it('draws the key and value fields with InputGroupInput and uppercases the key', async () => {
     render(VariablesList)
     const { key, value } = await openCreate()
-    expect(key.dataset.testid).toBe('input-group-input')
-    expect(value.dataset.testid).toBe('input-group-input')
+    expect(key.dataset.testid).toBe('input-input-group-input')
+    expect(value.dataset.testid).toBe('input-input-group-input')
     await userEvent.type(key, 'new key')
     expect(key.value).toBe('NEW_KEY')
   })
