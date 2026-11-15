@@ -22,6 +22,7 @@ export const RULE_PURPOSE = {
   'no-physical-direction': 'physical left/right utility that does not mirror under RTL',
   'prefer-tree-shakeable-root': 'compound entry imported where the root would do',
   'no-deprecated-component': 'component marked deprecated in the catalog',
+  'no-deprecated-name': 'component, prop, value or icon name WebKit 6.0 renamed or removed',
   'prefer-webkit-component': 'foreign UI library where a webkit component exists',
   'prefer-define-model': 'hand-rolled modelValue + update:modelValue pair',
   'no-style-override': 'class/style on a webkit component — restyling it',

@@ -230,7 +230,8 @@ const CI_ENFORCERS = new Set([
   'check-complete',
   'check-size-ratchet',
   'check-spec-integrity',
-  'check-api-diff'
+  'check-api-diff',
+  'check-naming'
 ])
 
 test("every 'ci' enforcer is a known gate (no free-form/fictional names)", () => {
@@ -263,4 +264,52 @@ test('every shipped eslint rule is claimed by a standard (no orphan gates)', asy
       `eslint rule "${name}" is not claimed by any standard (add it to enforce[] or ORPHAN_OK)`
     )
   }
+})
+
+test('naming: hook, CI gate and consumer lint share one engine and the migrate maps', () => {
+  const ENGINE = 'packages/webkit/scripts/lib/naming-rules.mjs'
+  assert.ok(existsSync(join(ROOT, ENGINE)), 'naming engine missing')
+  const shim = readFileSync(join(ROOT, '.claude/hooks/_lib/naming-checks.mjs'), 'utf-8')
+  assert.match(
+    shim,
+    /packages\/webkit\/scripts\/lib\/naming-rules\.mjs/,
+    'shim does not re-export the engine'
+  )
+  const hook = readFileSync(join(ROOT, '.claude/hooks/validate-naming.mjs'), 'utf-8')
+  assert.match(hook, /_lib\/naming-checks\.mjs/, 'validate-naming does not import the shim')
+  const gate = readFileSync(join(ROOT, 'packages/webkit/scripts/check-naming.mjs'), 'utf-8')
+  assert.match(gate, /lib\/naming-rules\.mjs/, 'check-naming does not run the engine')
+  const gatesFile = ['scripts/gates.mjs', 'scripts/run-gates.mjs']
+    .map((f) => join(ROOT, 'packages/webkit', f))
+    .find((f) => existsSync(f))
+  assert.match(
+    readFileSync(gatesFile, 'utf-8'),
+    /check-naming\.mjs/,
+    'no CI gate runs check-naming'
+  )
+  const lint = readFileSync(
+    join(ROOT, 'packages/webkit/src/eslint-plugin/rules/no-deprecated-name.js'),
+    'utf-8'
+  )
+  assert.match(lint, /cli\/migrate\.js/, 'no-deprecated-name does not read the webkit migrate maps')
+  const vocab = readFileSync(join(ROOT, ENGINE), 'utf-8')
+  assert.match(vocab, /_lib\/prop-vocabulary\.mjs/, 'the engine does not check the prop vocabulary')
+})
+
+test('naming: every engine rule id is documented in naming.md, and every documented id exists', async () => {
+  const { RULES } = await import('../../scripts/lib/naming-rules.mjs')
+  const doc = readFileSync(join(ROOT, '.claude/rules/naming.md'), 'utf-8')
+  const section = doc.split(/^## How it is checked/m)[1]?.split(/^## /m)[0] ?? ''
+  const documented = new Set([...section.matchAll(/^\|\s*`([a-z0-9-]+)`/gm)].map((m) => m[1]))
+  const ids = Object.keys(RULES)
+  assert.deepEqual(
+    ids.filter((id) => !documented.has(id)),
+    [],
+    'engine rules missing from naming.md § How it is checked'
+  )
+  assert.deepEqual(
+    [...documented].filter((id) => !ids.includes(id)),
+    [],
+    'naming.md documents rule ids the engine does not have'
+  )
 })

@@ -25,18 +25,27 @@ export const STANDARDS = [
     scope: 'general',
     enforce: [
       { surface: 'write-time', by: 'validate-spec-compliance' },
+      { surface: 'write-time', by: 'validate-naming' },
       { surface: 'ci', by: 'check-authoring' },
-      { surface: 'lint', by: 'prefer-href-in-menu-node' }
-    ]
+      { surface: 'ci', by: 'check-naming' },
+      { surface: 'lint', by: 'prefer-href-in-menu-node' },
+      { surface: 'lint', by: 'no-deprecated-name' }
+    ],
+    note: 'One machine source, _lib/prop-vocabulary.mjs: its `aliases` block today in validate-spec-compliance and the check-authoring ratchet; its `staged` aliases, values, slots, event words and data attributes (the 6.0 standard) are reported by check-naming and validate-naming and block once NAMING_STAGED_BLOCKS flips. no-deprecated-name flags the renamed props on WebKit tags in consumer code from v6-props.json.'
   },
   {
     id: 'naming',
     kind: 'foundational',
     scope: 'webkit',
     enforce: [
+      { surface: 'write-time', by: 'validate-naming' },
       { surface: 'write-time', by: 'validate-spec-compliance' },
-      { surface: 'ci', by: 'check-authoring' }
-    ]
+      { surface: 'ci', by: 'check-naming' },
+      { surface: 'ci', by: 'check-authoring' },
+      { surface: 'lint', by: 'no-deprecated-name' },
+      { surface: 'review', by: 'required-approval' }
+    ],
+    note: 'One engine, packages/webkit/scripts/lib/naming-rules.mjs (RULES registry, one id per checkable rule of decisions N1-N18): check-naming runs it in CI (gate `naming`, toolkit job) and validate-naming write-time on the file a write produces (only added violations block). Enforced rules (export-kebab, block-id, export-synonym, export-retired) block now; staged rules are reported until the rename lanes merge, then NAMING_STAGED_BLOCKS flips. no-deprecated-name carries the old→new maps (src/cli/migrations/v6*.json, the ones webkit migrate applies) to consumer code. What a machine cannot decide is listed review-only in naming.md.'
   },
   {
     id: 'imports',

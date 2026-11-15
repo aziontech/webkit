@@ -4,6 +4,7 @@ import composableScopeCleanup from './rules/composable-scope-cleanup.js'
 import noBarrelImport from './rules/no-barrel-import.js'
 import noDeepInternalImport from './rules/no-deep-internal-import.js'
 import noDeprecatedComponent from './rules/no-deprecated-component.js'
+import noDeprecatedName from './rules/no-deprecated-name.js'
 import noDroppedChildren from './rules/no-dropped-children.js'
 import noGapAfterClosingSection from './rules/no-gap-after-closing-section.js'
 import noHardcodedColor from './rules/no-hardcoded-color.js'
@@ -37,6 +38,7 @@ const rules = {
   'no-physical-direction': noPhysicalDirection,
   'prefer-tree-shakeable-root': preferTreeShakeableRoot,
   'no-deprecated-component': noDeprecatedComponent,
+  'no-deprecated-name': noDeprecatedName,
   'prefer-webkit-component': preferWebkitComponent,
   'prefer-define-model': preferDefineModel,
   'no-style-override': noStyleOverride,
@@ -92,6 +94,7 @@ const RECOMMENDED = {
   'no-deep-internal-import': 'error',
   'no-barrel-import': 'error',
   'no-deprecated-component': 'error',
+  'no-deprecated-name': 'error',
   'no-hardcoded-color': 'error',
   'no-hardcoded-motion': 'error',
   'no-physical-direction': 'error',

@@ -145,7 +145,7 @@ Behavior:
 - `@click.stop` on `Popover.Trigger` and `Popover.Content` when the badge sits in a clickable row.
 
 ```vue
-<Popover v-model:open="open" placement="bottom-start" width="small">
+<Popover v-model:open="open" placement="bottom-start" size="small">
   <Popover.Trigger @click.stop>
     <Tag :label="`+${count}`" severity="neutral" size="small" class="shrink-0" />
   </Popover.Trigger>
