@@ -243,7 +243,7 @@ function treeMultiSelectCase(): Case {
       render: () =>
         h(Tree, {
           items,
-          expanded: ['f0', 'f1', 'f2', 'f3', 'f4', 'f5', 'f6', 'f7', 'f8', 'f9'],
+          openKeys: ['f0', 'f1', 'f2', 'f3', 'f4', 'f5', 'f6', 'f7', 'f8', 'f9'],
           selectable: 'multiple',
           selectedKeys: selectedKeys.value,
           'onUpdate:selectedKeys': (v: string[]) => (selectedKeys.value = v),
@@ -847,7 +847,7 @@ function commandCase(): Case {
               h(CommandInput, { placeholder: 'Search' }),
               h(CommandList, null, () =>
                 Array.from({ length: 20 }, (_, g) =>
-                  h(CommandGroup, { key: g, heading: `Group ${g}` }, () =>
+                  h(CommandGroup, { key: g, label: `Group ${g}` }, () =>
                     Array.from({ length: 50 }, (_, i) =>
                       h(CommandItem, { key: i, value: `g${g}-i${i}` }, () => `Page ${g}.${i}`)
                     )
@@ -979,10 +979,11 @@ function listingBrowserCase(): Case {
       h(ListingBrowser, {
         title: 'Customers',
         columns,
-        rows,
+        data: rows,
         groups,
         facets,
-        search: { placeholder: 'Search customers', label: 'Search customers' }
+        searchPlaceholder: 'Search customers',
+        searchAriaLabel: 'Search customers'
       })
   })
   return {
