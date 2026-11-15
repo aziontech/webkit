@@ -233,9 +233,11 @@
   })
 
   const referenceList = computed(() =>
-    [...references.values()]
-      .map((read) => read())
-      .filter((entry): entry is ChartReferenceRegistration => entry !== null)
+    mounted.value
+      ? [...references.values()]
+          .map((read) => read())
+          .filter((entry): entry is ChartReferenceRegistration => entry !== null)
+      : []
   )
   const referenceMax = computed(() => maxOf(referenceList.value.map((entry) => entry.high)))
   const extentMax = computed(() => Math.max(dataMax.value, referenceMax.value))
