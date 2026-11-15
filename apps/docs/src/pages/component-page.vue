@@ -7,16 +7,16 @@
   import { computed } from 'vue'
   import { useRoute } from 'vue-router'
 
-  import ApiTable from '../components/ApiTable.vue'
-  import ExampleCard from '../components/ExampleCard.vue'
-  import OnThisPage from '../components/OnThisPage.vue'
-  import RawHtml from '../components/RawHtml.vue'
+  import ApiTable from '../components/api-table.vue'
+  import ExampleCard from '../components/example-card.vue'
+  import OnThisPage from '../components/on-this-page.vue'
+  import RawHtml from '../components/raw-html.vue'
   import { componentMarkdown, copyText } from '../lib/copy'
   import { cached, index, keys } from '../lib/data'
   import { messages } from '../lib/i18n'
   import { titleCase } from '../lib/nav'
   import type { ComponentDoc } from '../lib/types'
-  import NotFound from './NotFound.vue'
+  import NotFound from './not-found-page.vue'
 
   const route = useRoute()
   const t = messages

@@ -2,7 +2,7 @@
   import Table from '@aziontech/webkit/table'
 
   import type { Row } from '../lib/types'
-  import RawHtml from './RawHtml.vue'
+  import RawHtml from './raw-html.vue'
 
   defineProps<{
     columns: { key: string; label: string; code?: boolean; html?: boolean }[]

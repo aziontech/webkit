@@ -5,9 +5,9 @@
   import { messages } from '../../lib/i18n'
   import { tailwindClass, type TokenKind } from '../../lib/tokens'
   import type { Token } from '../../lib/types'
-  import CopyChip from './CopyChip.vue'
-  import InlineCode from './InlineCode.vue'
-  import TokenSample from './TokenSample.vue'
+  import CopyChip from './copy-chip.vue'
+  import InlineCode from './inline-code.vue'
+  import TokenSample from './token-sample.vue'
 
   const props = defineProps<{
     tokens: Token[]

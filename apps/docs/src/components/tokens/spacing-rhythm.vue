@@ -7,7 +7,7 @@
   import { messages } from '../../lib/i18n'
   import { BREAKPOINT_ORDER, tailwindClass } from '../../lib/tokens'
   import type { Token } from '../../lib/types'
-  import CopyChip from './CopyChip.vue'
+  import CopyChip from './copy-chip.vue'
 
   const props = defineProps<{ tokens: Token[] }>()
 

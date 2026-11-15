@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { useHead } from '@unhead/vue'
 
-  import CardIndex from '../components/CardIndex.vue'
+  import CardIndex from '../components/card-index.vue'
   import { FOUNDATIONS } from '../lib/foundations'
   import { messages } from '../lib/i18n'
 

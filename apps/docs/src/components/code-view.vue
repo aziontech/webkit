@@ -2,7 +2,7 @@
   import CopyButton from '@aziontech/webkit/copy-button'
 
   import type { Highlighted } from '../lib/types'
-  import RawHtml from './RawHtml.vue'
+  import RawHtml from './raw-html.vue'
 
   withDefaults(defineProps<{ source: Highlighted; label?: string; tall?: boolean }>(), {
     label: '',

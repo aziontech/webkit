@@ -7,7 +7,7 @@
   import { index } from '../lib/data'
   import { format, messages } from '../lib/i18n'
   import { CATEGORY_LEADS, componentGroups } from '../lib/nav'
-  import LivePreview from './LivePreview.vue'
+  import LivePreview from './live-preview.vue'
 
   const t = messages
   const query = ref('')

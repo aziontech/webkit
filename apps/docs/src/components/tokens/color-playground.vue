@@ -8,8 +8,8 @@
   import { resolvedTheme, settings } from '../../lib/settings'
   import { tailwindClass } from '../../lib/tokens'
   import type { Token } from '../../lib/types'
-  import CopyChip from './CopyChip.vue'
-  import InlineCode from './InlineCode.vue'
+  import CopyChip from './copy-chip.vue'
+  import InlineCode from './inline-code.vue'
 
   type Category = 'theme' | 'background' | 'text' | 'border'
 

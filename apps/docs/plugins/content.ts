@@ -98,8 +98,9 @@ function llmsFile(files: string[], kind: 'components' | 'blocks', id: string): s
 
 const FOUNDATION_LLMS: Record<string, string> = {
   'getting-started': 'usage',
+  icon: 'icons',
   radius: 'tokens',
-  shadows: 'tokens',
+  shadow: 'tokens',
   'z-index': 'tokens'
 }
 

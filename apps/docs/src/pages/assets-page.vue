@@ -8,7 +8,7 @@
   import assets from 'virtual:docs-assets'
   import { computed } from 'vue'
 
-  import CopyChip from '../components/tokens/CopyChip.vue'
+  import CopyChip from '../components/tokens/copy-chip.vue'
   import { index } from '../lib/data'
   import { messages } from '../lib/i18n'
 
@@ -192,7 +192,7 @@
         :label="t.openIcons"
         kind="secondary"
         size="medium"
-        href="/foundations/icons"
+        href="/foundations/icon"
         icon="ai ai-arrow-right"
         icon-position="trailing"
       />

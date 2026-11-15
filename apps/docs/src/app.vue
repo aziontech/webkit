@@ -5,7 +5,7 @@
   import { getCurrentInstance, onMounted, useSSRContext } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
 
-  import DocsShell from './layouts/DocsShell.vue'
+  import DocsShell from './components/docs-shell.vue'
   import { persistSettings, restoreSettings, settings } from './lib/settings'
 
   const catalogs = { 'pt-BR': ptBR, es }

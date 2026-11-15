@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import Brand from '@aziontech/webkit/brand'
-  import Drawer from '@aziontech/webkit/drawer-root'
   import DrawerContent from '@aziontech/webkit/drawer-content'
+  import Drawer from '@aziontech/webkit/drawer-root'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
   import GlobalHeader from '@aziontech/webkit/global-header'
   import IconButton from '@aziontech/webkit/icon-button'
@@ -16,10 +16,10 @@
   import { computed, ref, watch } from 'vue'
   import { useRoute } from 'vue-router'
 
-  import SearchCommand from '../components/SearchCommand.vue'
-  import SideNav from '../components/SideNav.vue'
   import { LOCALES, messages } from '../lib/i18n'
   import { settings } from '../lib/settings'
+  import SearchCommand from './search-command.vue'
+  import SideNav from './side-nav.vue'
 
   const route = useRoute()
   const t = messages

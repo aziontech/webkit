@@ -3,8 +3,8 @@
 
   import { cached, keys } from '../lib/data'
   import type { Highlighted } from '../lib/types'
-  import CodeView from './CodeView.vue'
-  import RawHtml from './RawHtml.vue'
+  import CodeView from './code-view.vue'
+  import RawHtml from './raw-html.vue'
 
   const props = defineProps<{
     dir: string

@@ -2,7 +2,7 @@
   import { useHead } from '@unhead/vue'
   import { computed } from 'vue'
 
-  import CardIndex from '../components/CardIndex.vue'
+  import CardIndex from '../components/card-index.vue'
   import { index } from '../lib/data'
   import { messages } from '../lib/i18n'
   import { blockGroups } from '../lib/nav'

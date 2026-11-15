@@ -8,16 +8,16 @@
   import { computed, ref, watch } from 'vue'
   import { useRoute } from 'vue-router'
 
-  import BlockFrame from '../components/BlockFrame.vue'
-  import CodeView from '../components/CodeView.vue'
-  import OnThisPage from '../components/OnThisPage.vue'
-  import RawHtml from '../components/RawHtml.vue'
+  import BlockFrame from '../components/block-frame.vue'
+  import CodeView from '../components/code-view.vue'
+  import OnThisPage from '../components/on-this-page.vue'
+  import RawHtml from '../components/raw-html.vue'
   import { blockMarkdown, copyText } from '../lib/copy'
   import { cached, findBlock, index, keys } from '../lib/data'
   import { messages } from '../lib/i18n'
   import { titleCase } from '../lib/nav'
   import type { GuidelinesDoc, Highlighted } from '../lib/types'
-  import NotFound from './NotFound.vue'
+  import NotFound from './not-found-page.vue'
 
   const route = useRoute()
   const t = messages
@@ -256,7 +256,7 @@
         />
         <BlockFrame
           v-if="state"
-          :src="`/frame/${state.slug}/${block.id}/`"
+          :src="`/frame/block/${block.id}/${state.slug}/`"
           :title="`${block.title}: ${state.name}`"
         />
       </section>

@@ -9,9 +9,10 @@
   const route = useRoute()
   const mounted = ref(false)
 
-  const path = computed(() => String(route.query.path ?? '').split('/'))
-  const dir = computed(() => (path.value.length === 2 ? path.value[0] : ''))
-  const example = computed(() => (path.value.length === 2 ? path.value[1] : ''))
+  const param = (value: unknown) =>
+    (Array.isArray(value) ? value.join('/') : String(value ?? '')).replace(/\/+$/, '')
+  const dir = computed(() => param(route.params.name))
+  const example = computed(() => param(route.params.file))
   const file = computed(() => `${example.value}.vue`)
   const live = computed(() =>
     mounted.value ? cached<Component>(keys.example(dir.value, file.value)) : undefined

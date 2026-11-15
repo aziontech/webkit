@@ -8,7 +8,7 @@
   import { ref } from 'vue'
 
   import { LOCALES } from '../lib/i18n'
-  import TokenTable from './tokens/TokenTable.vue'
+  import TokenTable from './tokens/token-table.vue'
 
   defineProps<{ kind: 'locale' | 'direction' | 'devices' }>()
 

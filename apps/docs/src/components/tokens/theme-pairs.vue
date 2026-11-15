@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { messages } from '../../lib/i18n'
   import type { Token } from '../../lib/types'
-  import CopyChip from './CopyChip.vue'
+  import CopyChip from './copy-chip.vue'
 
   defineProps<{ tokens: Token[] }>()
 
