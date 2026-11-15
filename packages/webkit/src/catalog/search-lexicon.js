@@ -409,7 +409,7 @@ export const COMPONENT_TERMS = {
   'console-layout': ['app shell', 'layout', 'console layout', 'page shell'],
   'log-view': ['logs', 'show logs', 'build output', 'deploy logs', 'terminal output'],
   item: ['list', 'list of items', 'row list'],
-  'key-value-pairs': ['description list', 'details', 'properties', 'metadata'],
+  'key-value-list': ['description list', 'details', 'properties', 'metadata'],
   'collection-preferences': ['column selector', 'visible columns', 'table preferences'],
   brand: ['azion logo'],
   'hover-card': ['hover card', 'preview on hover', 'link preview', 'user card'],

@@ -1104,10 +1104,6 @@
       "types": "./types/components/inputs/password-requirements/index.d.ts",
       "default": "./src/components/inputs/password-requirements/index.ts"
     },
-    "./password-requirements-root": {
-      "types": "./types/components/inputs/password-requirements/password-requirements.vue.d.ts",
-      "default": "./src/components/inputs/password-requirements/password-requirements.vue"
-    },
     "./radio-group": {
       "types": "./types/components/inputs/radio-group/index.d.ts",
       "default": "./src/components/inputs/radio-group/index.ts"
@@ -3254,9 +3250,6 @@
       ],
       "password-requirements": [
         "./types/components/inputs/password-requirements/index.d.ts"
-      ],
-      "password-requirements-root": [
-        "./types/components/inputs/password-requirements/password-requirements.vue.d.ts"
       ],
       "radio-group": [
         "./types/components/inputs/radio-group/index.d.ts"

@@ -74,7 +74,7 @@
     {
       "tool": "components",
       "query": "metadata",
-      "top1": "key-value-pairs"
+      "top1": "key-value-list"
     },
     {
       "tool": "components",
@@ -507,12 +507,12 @@
     {
       "tool": "components",
       "query": "key value details",
-      "top1": "key-value-pairs"
+      "top1": "key-value-list"
     },
     {
       "tool": "components",
       "query": "description list",
-      "top1": "key-value-pairs"
+      "top1": "key-value-list"
     },
     {
       "tool": "components",

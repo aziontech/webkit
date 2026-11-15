@@ -161,11 +161,6 @@
     "limit": "3.9 KB"
   },
   {
-    "name": "password-requirements-root",
-    "path": "src/components/inputs/password-requirements/password-requirements.vue",
-    "limit": "3.85 KB"
-  },
-  {
     "name": "chip",
     "path": "src/components/inputs/chip/chip.vue",
     "limit": "7.45 KB"

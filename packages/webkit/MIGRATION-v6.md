@@ -404,7 +404,7 @@ A part name comes from one closed list (Trigger, Content, Header, Body, Footer, 
 | `NavigationMenu.Portal` > `Positioner` > `Popup` > `Arrow` > `Viewport`, `NavigationMenu.Backdrop` | one `<NavigationMenu.Viewport>` with the positioner props, `kind`, `arrow` and `backdrop` (manual: the codemod reports it) |
 | `NavigationMenu.Icon` inside a trigger                                                             | delete it: `NavigationMenu.Trigger` renders its own chevron (manual: the codemod reports it)                               |
 
-New standalone paths: `tabs-list`, `tabs-trigger`, `tabs-content`, `dialog-header`, `dialog-body`, `dialog-footer`, `drawer-header`, `drawer-body`, `drawer-footer`, `navigation-menu-list`, `-item`, `-trigger`, `-content`, `-link`, `-viewport` and `password-requirements-root`. Test ids follow the part file names (`input-select-option` → `input-select-item`, `navigation-tabs-item` → `navigation-tabs-trigger`, `content-key-value-pairs` → `content-key-value-list`, `data-filter-menu-chips` → `data-filter-menu-chip-group`, `content-help-panel-section` / `-links` → `content-help-panel-group` / `-footer`).
+New standalone paths: `tabs-list`, `tabs-trigger`, `tabs-content`, `dialog-header`, `dialog-body`, `dialog-footer`, `drawer-header`, `drawer-body`, `drawer-footer`, `navigation-menu-list`, `-item`, `-trigger`, `-content`, `-link` and `-viewport`. Test ids follow the part file names (`input-select-option` → `input-select-item`, `navigation-tabs-item` → `navigation-tabs-trigger`, `content-key-value-pairs` → `content-key-value-list`, `data-filter-menu-chips` → `data-filter-menu-chip-group`, `content-help-panel-section` / `-links` → `content-help-panel-group` / `-footer`).
 
 #### Slots
 
